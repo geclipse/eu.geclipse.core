@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.views">
+      <view
+            name="%view.name.0"
+            icon="icons/favicon.bmp"
+            category="eu.geclipse.ui.viewcategory"
+            class="eu.geclipse.webview.views.WebView"
+            id="eu.geclipse.webview.views.WebView">
+      </view>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension targetID="eu.geclipse.ui.gEclipsePerspective">
+         <view
+               closeable="true"
+               id="eu.geclipse.webview.views.WebView"
+               moveable="true"
+               ratio="1.0"
+               relationship="stack"
+               relative="eu.geclipse.ui.gEclipsePerspective.main"
+               showTitle="true"
+               visible="true"/>
+      </perspectiveExtension>
+   </extension>
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="eu.geclipse.ui.internal.preference.GEclipsePreferencePage"
+            class="eu.geclipse.webview.preferences.WebviewPreferencePage"
+            id="eu.geclipse.webview.preferences.WebviewPreferencePage"
+            name="%page.name.0"/>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer class="eu.geclipse.webview.preferences.PreferenceInitializer"/>
+   </extension>
+</plugin>
