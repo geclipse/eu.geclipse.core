@@ -1,0 +1,13 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %Bundle-Name
+Bundle-SymbolicName: eu.geclipse.core.test
+Bundle-Version: 0.5.0.qualifier
+Bundle-Activator: eu.geclipse.core.internal.Activator
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.core.runtime,
+ org.junit4,
+ eu.geclipse.core,
+ org.eclipse.compare
+Eclipse-LazyStart: true
+Bundle-Vendor: %Bundle-Vendor
