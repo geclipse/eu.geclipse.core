@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <description url="http://www.geclipse.eu/updates/">
+      This is the Eclipse update site for the g-Eclipse project.
+   </description>
+   <feature url="features/eu.geclipse_0.5.0.jar" id="eu.geclipse" version="0.5.0">
+      <category name="g-Eclipse"/>
+   </feature>
+   <feature url="features/eu.geclipse.add_on_0.5.0.jar" id="eu.geclipse.add_on" version="0.5.0">
+      <category name="g-Eclipse Add-ons"/>
+   </feature>
+   <feature url="features/at.jku.gup.gvid.codec.xvid_1.0.0.jar" id="at.jku.gup.gvid.codec.xvid" version="1.0.0">
+      <category name="g-Eclipse Add-ons"/>
+   </feature>
+   <category-def name="g-Eclipse" label="g-Eclipse"/>
+   <category-def name="g-Eclipse Add-ons" label="g-Eclipse Add-ons">
+      <description>
+         This features contains additional tools and features.
+      </description>
+   </category-def>
+</site>
