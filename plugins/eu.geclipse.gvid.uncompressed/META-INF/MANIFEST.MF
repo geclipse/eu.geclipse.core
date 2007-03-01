@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %Bundle-Name
+Bundle-SymbolicName: eu.geclipse.gvid.codec.uncompressed;singleton:=true
+Bundle-Version: 0.5.0.qualifier
+Bundle-Activator: eu.geclipse.gvid.codec.uncompressed.Activator
+Bundle-Vendor: %Bundle-Vendor
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.core.runtime,
+ eu.geclipse.gvid
+Eclipse-LazyStart: true
+Export-Package: eu.geclipse.gvid.codec.uncompressed;x-friends:="eu.geclipse.gvid.uncompressed.test"

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         id="uncompressed"
+         name="%extension.gvidUncompressedCodec"
+         point="eu.geclipse.gvid.codec">
+      <codec
+         name="uncompressed"
+         decoderClass="eu.geclipse.gvid.codec.uncompressed.UncompressedDecoder">
+      </codec>
+   </extension>
+
+</plugin>
