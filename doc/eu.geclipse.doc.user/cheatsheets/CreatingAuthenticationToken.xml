@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cheatsheet title="Creating an Authentication Token">
+   <intro href="/eu.geclipse.doc.user/html/gettingstarted/AuthenticationTokens.html">
+      <description>
+          This cheat sheet will show you how to create your authentication token.<br/>
+      </description>
+   </intro>
+   <item title="Open the g-Eclipse perspective" skip="true">
+      <description>
+          If you're not already in the g-Eclipse user perspective, in the main menu
+          select <b>Window &gt; Open Perspective &gt; g-Eclipse (User)</b> or click
+          on the &quot;Click to Perform&quot; link below.
+      </description>
+	  <action
+	          pluginId="org.eclipse.ui.cheatsheets"
+			  class="org.eclipse.ui.internal.cheatsheets.actions.OpenPerspective"
+			  param1="eu.geclipse.ui.userPerspective"/>
+   </item>
+   <item title="Select the Authentication Tokens View" skip="true">
+      <description>
+          Select the <b>Authentication Tokens</b> tab in the bottom panel view.<br/>
+      </description>
+      <command serialization="org.eclipse.ui.views.showView(org.eclipse.ui.views.showView.viewId=eu.geclipse.ui.views.authenticationTokenView)"/>
+   </item>
+   <item title="Click the New icon" dialog="true" skip="true">
+      <description>
+          Click the <b>New</b> icon located in the top right corner of the 
+          <b>Authentication Tokens</b> panel view.<br/>
+      </description>
+      <action confirm="true"
+          pluginId="eu.geclipse.ui"
+		  class="eu.geclipse.ui.cheatsheets.OpenAuthTokenDialogAction"/>
+   </item>
+   <item title="Choose the Token Type" >
+      <description>
+          Once you clicked the new icon, a <b>New Authentication Token</b> window 
+          will appear. Make your selection by choosing between <b>Grid Proxy</b> 
+          and <b>VOMS Proxy</b> and click the <b>Next</b> button. <br/>Note 
+          that you may bypass this dialog box if you carefully click the downward 
+          pointing arrow of the <b>New</b> icon. In this case, the kinds of proxy 
+          appear in a pull down menu, allowing you to make the selection directly 
+          from here.<br/>
+      </description>
+   </item>
+   <item perform-when="true" title="Grid Proxy: Locate Your Certificate">
+      <description>
+          After clicking the <b>Next</b> button, the <b>Grid Proxy</b> dialog box 
+          will appear. Specify the location of your key and certificate and enter 
+          your key passphrase. In this dialog box, you may also adjust how long 
+          will the proxy be valid. By default, this <b>Proxy Lifetime</b> value 
+          is set to 1 day.<br/>
+      </description>
+   </item>
+   <item perform-when="true" title="VOMS Proxy: Locate Your Certificate">
+      <description>
+          Sorry, not yet implemented.
+      </description>
+   </item>
+   <item title="Create Your Token">
+      <description>
+          Press finish and your proxy will be validated and will appear as an entry 
+          in the <b>Authentication Tokens</b> panel view. <br/>
+      </description>
+   </item>
+   <item title="Activate Your Token">
+      <description>  
+          Activate this token by first clicing on the token entry in the 
+          <b>Activation Tokens</b> panel view (this makes button with a 
+          pedlock icon visible) and then click the <b>Activation</b> button on the top right
+          of this panel view.<br/>
+      </description>
+   </item>
+</cheatsheet>
+      

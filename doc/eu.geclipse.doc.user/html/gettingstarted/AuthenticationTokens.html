@@ -1,0 +1,51 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css"> 
+	<LINK REL="STYLESHEET" HREF="../../book.css" CHARSET="ISO-8859-1" TYPE="text/css"> 
+	<title>g-Eclipse - Authentication Tokens </title>
+    <script language="JavaScript" src="PLUGINS_ROOT/org.eclipse.help/livehelp.js"> </script>
+</head>
+
+<body BGCOLOR="#ffffff">
+<h1>g-Eclipse - Authentication Tokens</h1>
+
+<p>To create an authentication token, first select the
+<a class="command-link" href='javascript:executeCommand("org.eclipse.ui.views.showView(org.eclipse.ui.views.showView.viewId=eu.geclipse.ui.views.authenticationTokenView)")'>
+<img src="PLUGINS_ROOT/org.eclipse.help/command_link.png">
+<b>Authentication Tokens</b></a>
+view from the lower part of the Eclipse window. Then click on the
+<a class="command-link" href='javascript:liveAction("eu.geclipse.ui", 
+"eu.geclipse.ui.cheatsheets.OpenAuthTokenDialogAction","")'>
+<img src="PLUGINS_ROOT/org.eclipse.help/command_link.png">
+<b>new icon</b></a> in 
+the top right of this view <br><br><img src="images/newIcon.jpg"><br> <br>
+and you will be presented with the following window.<br><br>
+<img src="images/authToken.jpg"><br><br>
+You may choose to create a <a href="#grid">Grid proxy</a> or a <a href="#voms">
+VOMS proxy</a> for the token type. </p>
+<p><b><a name="grid">Grid proxy</a></b><br>
+Click next and you will be presented with the following dialog box. <br><br>
+<img src="images/gridProxy.jpg"><br><br>Specify the user 
+certificate, the user key and the key passphrase. By default your proxy will 
+be valid for one day since activation. You may change this by specifying different proxy lifetime. 
+Finally, press finish and your proxy will be validated and will appear as an entry 
+in the Authentication Tokens view. To activate this token press the activation 
+button on the top right of this view.
+</p>
+<p><b><a name="voms">VOMS proxy</a></b><br>
+Not yet implemented.
+</p>
+
+<p><b>Note on creating authentication tokens:</b><br>If you decide to submit a new 
+job without first creating your authentication token, you will be 
+notified by the application and offered that a token be created. Accepting this 
+will take you directly to the grid proxy dialog where you can complete the token 
+creation. The new job will be started only after successful creation of your token.</p>
+
+<p><a href="../gettingstarted/maintopic.html">Back to Getting Started</a></p>
+<p><a href="../gettingstarted/VO-Declaration.html">Continue to Declare the Virtual Organisations</a></p>
+</body>
+</html>

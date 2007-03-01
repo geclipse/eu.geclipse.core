@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<compositeCheatsheet name="gEclipse Cheatsheets">
+    <taskGroup skip="true" name= "Getting Started With gEclipse" kind="sequence">
+         <intro href="/org.eclipse.platform.doc.user/reference/ref-cheatsheets.htm">
+         This set of cheat sheets will guide you through the set up process of 
+         using gEclipse.<br/><br/>You can select a task to work on, either by following 
+         the hyperlink offered below, or by selecting a task after expanding the tree
+         above.<br/><br/>The second set of tasks <b>Grid Project View Set Up</b> of this cheat 
+         sheet group depends on the first set <b>Preliminary Set Up</b>. If you have not 
+         completed the first set, you should do so before moving on to the second set. 
+         <br/>Otherwise, if you are not allowed to move on even though your gEclipse is 
+         already set up, i.e. if you have restared <b>Getting Started With gEclipse</b> 
+         cheat sheet set, you may advance by skipping the individual tasks of the set 
+         separately or skipping the whole set at once.
+         </intro>
+         <onCompletion>Congratulations you have completed all the tasks that were required 
+         before you could start interacting with the Grid.</onCompletion>
+         
+		<taskGroup skip="true" name= "Preliminary Set Up" kind = "set">
+			<intro> First you will learn how to set up gEclipse environment. 
+			<br/><br/>The tasks in this group may be started in any order.</intro>
+			<onCompletion>Congratulations you have completed the set up 
+			of gEclipse environment.</onCompletion>
+			<task skip="true" kind="cheatsheet" name= "Downloading CA Certificates">
+				<param name="id" value = "eu.geclipse.doc.user.downloadingCAcertificates"/>
+				<param name="showIntro" value = "true"/>
+				<intro>This cheat sheet walks through the process of downloading 
+				CA certificates.</intro>
+				<onCompletion>Congratulations you have succeeded in downloading 
+				CA certificates.</onCompletion>
+			</task>
+			<task skip="true" kind="cheatsheet" name= "Creating an Authentication Token">
+				<param name="showIntro" value = "true"/>
+				<param name = "id" value = "eu.geclipse.doc.user.creatingAuthenticationToken" />
+				<intro>This cheat sheet walks you through the process of creating
+				Authentication Token.<br/></intro>
+				<onCompletion>Congratulations you have succeeded in creating your
+				authentication token.</onCompletion>           
+			</task>
+		</taskGroup>
+             
+		<taskGroup skip="true" name= "Grid Project View Set Up" kind = "sequence">
+			<intro> Next you will learn how to set up your gEclipse project view. 
+			<br/><br/>This task group is a sequence which means that
+             if you click on the subtask "Creating a Grid Job" it will not let that 
+             task be started until "Create a java project" has been completed.</intro>
+			<onCompletion>Congratulations you have succeeded in seting up your 
+              grid project view.</onCompletion>
+			<task skip="true" kind="cheatsheet" name= "Creating a Grid Project">
+				<param name="showIntro" value = "true"/>
+				<param name = "id" value = "eu.geclipse.doc.user.creatingAGridProject" />
+				<intro>This cheat sheet guides you in the process of creating 
+				a new grid project.</intro>
+				<onCompletion>Congratulations you have succeeded in creating 
+				a new grid project.</onCompletion>           
+			</task>   
+			<task skip="true" kind="cheatsheet" name= "Creating a Grid Job">
+				<param name="showIntro" value = "true"/>
+				<param name = "id" value = "eu.geclipse.doc.user.creatingAJob" />
+				<intro>This cheat sheet guides you in the process of creating
+				a grid job.</intro>
+				<onCompletion>Congratulations you have succeeded in creating 
+				a grid job.</onCompletion>           
+			</task>     
+		</taskGroup>
+		
+    </taskGroup>
+</compositeCheatsheet>
