@@ -1,0 +1,152 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="eu.geclipse.core">
+<annotation>
+      <appInfo>
+         <meta.schema plugin="eu.geclipse.core" id="authenticationTokenManagement" name="Authentication Token Management"/>
+      </appInfo>
+      <documentation>
+         This extension point is used to plug in new security mechanism specific authentication token management facilities.
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <complexType>
+         <sequence>
+            <element ref="token"/>
+            <element ref="provider"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  A unique id that will be used to reference this authentication token management.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  A translatable name that will be used to present this authentication token management extension in the UI.
+               </documentation>
+               <appInfo>
+                  <meta.attribute translatable="true"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="token">
+      <complexType>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  A unique id that will be used to reference this token.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  A translatable name that will be used to present this token in the UI.
+               </documentation>
+               <appInfo>
+                  <meta.attribute translatable="true"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="description" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn="eu.geclipse.core.auth.IAuthenticationTokenDescription"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="wizard" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="provider">
+      <complexType>
+         <attribute name="class" type="string" use="required">
+            <annotation>
+               <documentation>
+                  A fully qualified name of the Java class that implements the &lt;samp&gt;eu.geclipse.core.auth.IAuthTokenProvider&lt;/samp&gt; interface.
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn="eu.geclipse.core.auth.IAuthTokenProvider"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="priority" type="string" use="required">
+            <annotation>
+               <documentation>
+                  A priority that is used to choose the auth token provider with the currently highest priority. Normally the UIAuthTokenProvider should be the token provider with the highest priority.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="since"/>
+      </appInfo>
+      <documentation>
+         &lt;b&gt;This extension point is part of an interim API that is still under development and expected to change significantly before reaching stability. It is being made available at this early stage to solicit feedback from pioneering adopters on the understanding that any code that uses this API will almost certainly be broken (repeatedly) as the API evolves.&lt;/b&gt;
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="examples"/>
+      </appInfo>
+      <documentation>
+         [Enter extension point usage example here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="apiInfo"/>
+      </appInfo>
+      <documentation>
+         Plug-ins that want to extend this extension point have to implement  &lt;samp&gt;eu.geclipse.core.auth.IAuthenticationTokenDescription&lt;/samp&gt; and/or the &lt;samp&gt;eu.geclipse.core.auth.IAuthTokenProvider&lt;/samp&gt;. Alternatively it is also possible to extend the abstract core classes that implement those interfaces.
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="implementation"/>
+      </appInfo>
+      <documentation>
+         [Enter information about supplied implementation of this extension point.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="copyright"/>
+      </appInfo>
+      <documentation>
+         
+      </documentation>
+   </annotation>
+
+</schema>

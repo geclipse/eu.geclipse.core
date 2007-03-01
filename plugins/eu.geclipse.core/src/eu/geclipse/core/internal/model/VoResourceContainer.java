@@ -1,0 +1,170 @@
+/*****************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
+
+package eu.geclipse.core.internal.model;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+import eu.geclipse.core.model.IGridContainer;
+import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridInfoService;
+import eu.geclipse.core.model.IVirtualOrganization;
+
+/**
+ * This class represents a virtual grid container that holds
+ * VO-specific information. This information is either fetched
+ * from the {@link IGridInfoService} of the specified VO or from
+ * the VO itself. The type of information the container holds is
+ * determined by the type of the container
+ * (i.e. {@link ResourceType}). 
+ */
+public class VoResourceContainer
+    extends VirtualGridContainer {
+  
+  /**
+   * This field determines the type of information that is contained
+   * in this container.
+   */
+  public static enum ResourceType {
+    
+    /**
+     * Computing element type.
+     */
+    Computing,
+    
+    /**
+     * Storage element type. 
+     */
+    Storage,
+    
+    /**
+     * Service type. 
+     */
+    Service
+    
+  }
+  
+  /**
+   * The type of this container.
+   */
+  private ResourceType type;
+  
+  private IVirtualOrganization vo;
+  
+  /**
+   * Construct a new <code>VoResourceContainer</code> of the
+   * specified type and for the specified VO.
+   * 
+   * @param parent The VO this container belongs to.
+   * 
+   * @param type The type of this container.
+   */
+  protected VoResourceContainer( final IGridContainer parent,
+                                 final IVirtualOrganization vo,
+                                 final ResourceType type ) {
+    super( parent, getName( type ) );
+    this.vo = vo;
+    this.type = type;
+  }
+  
+  /**
+   * Get the type of this container.
+   * 
+   * @return The type of this container. This determines the
+   * information that is contained in the container.
+   */
+  public ResourceType getType() {
+    return this.type;
+  }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.internal.model.VirtualGridElement#isLocal()
+   */
+  @Override
+  public boolean isLocal() {
+    return false;
+  }
+
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.internal.model.VirtualGridElement#isVirtual()
+   */
+  @Override
+  public boolean isVirtual() {
+    return true;
+  }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.internal.model.VirtualGridContainer#fetchChildren()
+   */
+  @Override
+  protected void fetchChildren( final IProgressMonitor monitor ) {
+    
+    IGridElement[] children = null;
+    
+    // Fetch the information
+    if ( this.type == ResourceType.Service ) {
+      children = this.vo.getServices();
+    } else {
+      IGridInfoService infoService = getVo().getInfoService();
+      if ( infoService != null ) {
+        if ( this.type == ResourceType.Computing ) {
+          children = infoService.fetchComputing( this, this.vo, monitor );
+        } else if ( this.type == ResourceType.Storage ) {
+          children = infoService.fetchStorage( this, this.vo, monitor );
+        }
+      }
+    }
+    
+    // Add children to the container
+    if ( children != null ) {
+      for ( IGridElement child : children ) {
+        addElement( child );
+      }
+    }
+    
+  }
+  
+  /**
+   * Convenience method to get the VO.
+   * 
+   * @return The casted parent of this container.
+   */
+  protected IVirtualOrganization getVo() {
+    return this.vo;
+  }
+  
+  /**
+   * Generate a name out of the type.
+   * 
+   * @param type The type.
+   * @return A name that denotes the type.
+   */
+  private static String getName( final ResourceType type ) {
+    // TODO mathias internationalization
+    String name = null;
+    switch ( type ) {
+      case Computing:
+        name = "Computing"; //$NON-NLS-1$
+        break;
+      case Storage:
+        name = "Storage"; //$NON-NLS-1$
+        break;
+      case Service:
+        name = "Services"; //$NON-NLS-1$
+        break;
+    }
+    return name;
+  }
+  
+}
