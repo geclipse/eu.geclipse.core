@@ -1,0 +1,12 @@
+#Thu Feb 01 15:30:01 CET 2007
+eclipse.preferences.version=1
+encoding//src/eu/geclipse/ui/dialogs/messages.properties=8859_1
+encoding//src/eu/geclipse/ui/editors/messages.properties=8859_1
+encoding//src/eu/geclipse/ui/internal/actions/messages.properties=8859_1
+encoding//src/eu/geclipse/ui/internal/dialogs/messages.properties=8859_1
+encoding//src/eu/geclipse/ui/internal/preference/messages.properties=8859_1
+encoding//src/eu/geclipse/ui/messages.properties=8859_1
+encoding//src/eu/geclipse/ui/views/gexplorer/messages.properties=8859_1
+encoding//src/eu/geclipse/ui/views/messages.properties=8859_1
+encoding//src/eu/geclipse/ui/widgets/messages.properties=8859_1
+encoding//src/eu/geclipse/ui/wizards/messages.properties=8859_1
