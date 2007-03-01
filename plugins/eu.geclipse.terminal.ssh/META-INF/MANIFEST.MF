@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %Bundle-Name
+Bundle-SymbolicName: eu.geclipse.terminal.ssh;singleton:=true
+Bundle-Version: 0.5.0.qualifier
+Bundle-Activator: eu.geclipse.terminal.ssh.internal.Activator
+Bundle-Vendor: %Bundle-Vendor
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.team.cvs.ssh2,
+ com.jcraft.jsch,
+ eu.geclipse.core,
+ eu.geclipse.ui,
+ eu.geclipse.terminal
+Eclipse-LazyStart: true
+Import-Package: eu.geclipse.terminal
