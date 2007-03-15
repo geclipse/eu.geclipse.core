@@ -21,6 +21,8 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.forms.FormColors;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -50,6 +52,12 @@ public class Activator extends AbstractUIPlugin {
    */
   public static final String ID_AUTH_VIEW
     = "eu.geclipse.ui.views.authenticationTokenView"; //$NON-NLS-1$
+  
+  /**
+   * The id of the connection view.
+   */
+  public static final String ID_CONNECTION_VIEW
+    = "eu.geclipse.ui.views.connectionView"; //$NON-NLS-1$
   
   /**
    * The id of the gExplorer view.
@@ -109,6 +117,12 @@ public class Activator extends AbstractUIPlugin {
    * The shared instance.
    */
   private static Activator plugin;
+  
+
+  /**
+   * Handles Form Colors that share colors between editors.
+   */
+  private FormColors formColors;
   
   
   /**
@@ -179,30 +193,37 @@ public class Activator extends AbstractUIPlugin {
     store.setDefault( VOS_PREFERENCE, DEFAULT_VOS );
     store.setDefault( SEL_VO_PREFERENCE, DEFAULT_SEL_VO );
   }
+  
+  public FormColors getFormColors( final Display display) {
+    if (this.formColors == null) {
+        this.formColors = new FormColors(display);
+        this.formColors.markShared();
+    }
+    return this.formColors;
+}
 
   @Override
   protected void initializeImageRegistry( final ImageRegistry reg )
   {
     String[][] images = {
-      { "activestate", "icons/activestate.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
-      { "computing", "icons/computing.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
-      { "filesystem", "icons/filesystem.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
-      { "geclipse_logo_prefs", "icons/geclipse_logo_prefs.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
-      { "inactivestate", "icons/inactivestate.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
-      { "invalidelement", "icons/invalidelement.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
-      { "job", "icons/job.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
-      { "jobdescription", "icons/jobdescription.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
-      { "keylock", "icons/keylock.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
-      { "lightbulb_green", "icons/lightbulb_green_16.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
-      { "lightbulb_red", "icons/lightbulb_red_16.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
-      { "lightbulb_white", "icons/lightbulb_white_16.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
-      { "refresh", "icons/refresh.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
-      { "service", "icons/service.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
-      { "storage", "icons/storage.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
-      { "solution", "icons/quickassist_obj.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
-      { "virtualfile", "icons/virtualfile.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
-      { "virtualfolder", "icons/virtualfolder.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
-      { "vo", "icons/vo.gif" } //$NON-NLS-1$ //$NON-NLS-2$
+      { "activestate", "icons/elcl16/activate.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
+      { "computing", "icons/obj16/computing_obj.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
+      { "filesystem", "icons/obj16/filesystem_obj.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
+      { "geclipse_logo_prefs", "icons/extras/geclipse_logo_prefs.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
+      { "inactivestate", "icons/elcl16/deactivate.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
+      { "invalidelement", "icons/obj16/invalid_element_obj.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
+//      { "lightbulb_green", "icons/lightbulb_green_16.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
+//      { "lightbulb_red", "icons/lightbulb_red_16.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
+//      { "lightbulb_white", "icons/lightbulb_white_16.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
+      { "refresh", "icons/elcl16/refresh_nav.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
+      { "service", "icons/obj16/service_obj.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
+      { "storage", "icons/obj16/storage_obj.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
+      { "solution", "icons/obj16/quickassist_obj.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
+//      { "view_flat", "icons/view_flat.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
+//      { "view_hierarchical", "icons/view_hierarchical.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
+      { "virtualfile", "icons/obj16/virtual_file_obj.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
+      { "virtualfolder", "icons/obj16/virtual_folder_obj.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
+      { "vo", "icons/obj16/vo_obj.gif" } //$NON-NLS-1$ //$NON-NLS-2$
     };
     
     ImageDescriptor imgDsc = null;

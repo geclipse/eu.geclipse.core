@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: PosixItemProviderAdapterFactory.java,v 1.1 2007/01/25 15:29:06 emstamou Exp $
+ * $Id: PosixItemProviderAdapterFactory.java,v 1.2 2007/03/01 09:16:02 emstamou Exp $
  */
 package eu.geclipse.jsdl.posix.provider;
 
@@ -36,348 +36,380 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
  * <!-- end-user-doc -->
  * @generated
  */
-public class PosixItemProviderAdapterFactory extends PosixAdapterFactory implements ComposeableAdapterFactory, IChangeNotifier, IDisposable {
-	/**
-	 * This keeps track of the root adapter factory that delegates to this adapter factory.
-	 * <!-- begin-user-doc -->
+public class PosixItemProviderAdapterFactory extends PosixAdapterFactory implements ComposeableAdapterFactory, IChangeNotifier, IDisposable 
+{
+  /**
+   * This keeps track of the root adapter factory that delegates to this adapter factory.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	protected ComposedAdapterFactory parentAdapterFactory;
 
-	/**
-	 * This is used to implement {@link org.eclipse.emf.edit.provider.IChangeNotifier}.
-	 * <!-- begin-user-doc -->
+  /**
+   * This is used to implement {@link org.eclipse.emf.edit.provider.IChangeNotifier}.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	protected IChangeNotifier changeNotifier = new ChangeNotifier();
 
-	/**
-	 * This keeps track of all the supported types checked by {@link #isFactoryForType isFactoryForType}.
-	 * <!-- begin-user-doc -->
+  /**
+   * This keeps track of all the supported types checked by {@link #isFactoryForType isFactoryForType}.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	protected Collection supportedTypes = new ArrayList();
 
-	/**
-	 * This constructs an instance.
-	 * <!-- begin-user-doc -->
+  /**
+   * This constructs an instance.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public PosixItemProviderAdapterFactory() {
-		supportedTypes.add(IEditingDomainItemProvider.class);
-		supportedTypes.add(IStructuredItemContentProvider.class);
-		supportedTypes.add(ITreeItemContentProvider.class);
-		supportedTypes.add(IItemLabelProvider.class);
-		supportedTypes.add(IItemPropertySource.class);		
-	}
+   * @generated
+   */
+	public PosixItemProviderAdapterFactory()
+  {
+    supportedTypes.add(IEditingDomainItemProvider.class);
+    supportedTypes.add(IStructuredItemContentProvider.class);
+    supportedTypes.add(ITreeItemContentProvider.class);
+    supportedTypes.add(IItemLabelProvider.class);
+    supportedTypes.add(IItemPropertySource.class);		
+  }
 
-	/**
-	 * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.posix.ArgumentType} instances.
-	 * <!-- begin-user-doc -->
+  /**
+   * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.posix.ArgumentType} instances.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	protected ArgumentTypeItemProvider argumentTypeItemProvider;
 
-	/**
-	 * This creates an adapter for a {@link eu.geclipse.jsdl.posix.ArgumentType}.
-	 * <!-- begin-user-doc -->
+  /**
+   * This creates an adapter for a {@link eu.geclipse.jsdl.posix.ArgumentType}.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Adapter createArgumentTypeAdapter() {
-		if (argumentTypeItemProvider == null) {
-			argumentTypeItemProvider = new ArgumentTypeItemProvider(this);
-		}
+   * @generated
+   */
+	public Adapter createArgumentTypeAdapter()
+  {
+    if (argumentTypeItemProvider == null)
+    {
+      argumentTypeItemProvider = new ArgumentTypeItemProvider(this);
+    }
 
-		return argumentTypeItemProvider;
-	}
+    return argumentTypeItemProvider;
+  }
 
-	/**
-	 * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.posix.DirectoryNameType} instances.
-	 * <!-- begin-user-doc -->
+  /**
+   * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.posix.DirectoryNameType} instances.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	protected DirectoryNameTypeItemProvider directoryNameTypeItemProvider;
 
-	/**
-	 * This creates an adapter for a {@link eu.geclipse.jsdl.posix.DirectoryNameType}.
-	 * <!-- begin-user-doc -->
+  /**
+   * This creates an adapter for a {@link eu.geclipse.jsdl.posix.DirectoryNameType}.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Adapter createDirectoryNameTypeAdapter() {
-		if (directoryNameTypeItemProvider == null) {
-			directoryNameTypeItemProvider = new DirectoryNameTypeItemProvider(this);
-		}
+   * @generated
+   */
+	public Adapter createDirectoryNameTypeAdapter()
+  {
+    if (directoryNameTypeItemProvider == null)
+    {
+      directoryNameTypeItemProvider = new DirectoryNameTypeItemProvider(this);
+    }
 
-		return directoryNameTypeItemProvider;
-	}
+    return directoryNameTypeItemProvider;
+  }
 
-	/**
-	 * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.posix.DocumentRoot} instances.
-	 * <!-- begin-user-doc -->
+  /**
+   * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.posix.DocumentRoot} instances.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	protected DocumentRootItemProvider documentRootItemProvider;
 
-	/**
-	 * This creates an adapter for a {@link eu.geclipse.jsdl.posix.DocumentRoot}.
-	 * <!-- begin-user-doc -->
+  /**
+   * This creates an adapter for a {@link eu.geclipse.jsdl.posix.DocumentRoot}.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Adapter createDocumentRootAdapter() {
-		if (documentRootItemProvider == null) {
-			documentRootItemProvider = new DocumentRootItemProvider(this);
-		}
+   * @generated
+   */
+	public Adapter createDocumentRootAdapter()
+  {
+    if (documentRootItemProvider == null)
+    {
+      documentRootItemProvider = new DocumentRootItemProvider(this);
+    }
 
-		return documentRootItemProvider;
-	}
+    return documentRootItemProvider;
+  }
 
-	/**
-	 * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.posix.EnvironmentType} instances.
-	 * <!-- begin-user-doc -->
+  /**
+   * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.posix.EnvironmentType} instances.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	protected EnvironmentTypeItemProvider environmentTypeItemProvider;
 
-	/**
-	 * This creates an adapter for a {@link eu.geclipse.jsdl.posix.EnvironmentType}.
-	 * <!-- begin-user-doc -->
+  /**
+   * This creates an adapter for a {@link eu.geclipse.jsdl.posix.EnvironmentType}.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Adapter createEnvironmentTypeAdapter() {
-		if (environmentTypeItemProvider == null) {
-			environmentTypeItemProvider = new EnvironmentTypeItemProvider(this);
-		}
+   * @generated
+   */
+	public Adapter createEnvironmentTypeAdapter()
+  {
+    if (environmentTypeItemProvider == null)
+    {
+      environmentTypeItemProvider = new EnvironmentTypeItemProvider(this);
+    }
 
-		return environmentTypeItemProvider;
-	}
+    return environmentTypeItemProvider;
+  }
 
-	/**
-	 * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.posix.FileNameType} instances.
-	 * <!-- begin-user-doc -->
+  /**
+   * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.posix.FileNameType} instances.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	protected FileNameTypeItemProvider fileNameTypeItemProvider;
 
-	/**
-	 * This creates an adapter for a {@link eu.geclipse.jsdl.posix.FileNameType}.
-	 * <!-- begin-user-doc -->
+  /**
+   * This creates an adapter for a {@link eu.geclipse.jsdl.posix.FileNameType}.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Adapter createFileNameTypeAdapter() {
-		if (fileNameTypeItemProvider == null) {
-			fileNameTypeItemProvider = new FileNameTypeItemProvider(this);
-		}
+   * @generated
+   */
+	public Adapter createFileNameTypeAdapter()
+  {
+    if (fileNameTypeItemProvider == null)
+    {
+      fileNameTypeItemProvider = new FileNameTypeItemProvider(this);
+    }
 
-		return fileNameTypeItemProvider;
-	}
+    return fileNameTypeItemProvider;
+  }
 
-	/**
-	 * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.posix.GroupNameType} instances.
-	 * <!-- begin-user-doc -->
+  /**
+   * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.posix.GroupNameType} instances.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	protected GroupNameTypeItemProvider groupNameTypeItemProvider;
 
-	/**
-	 * This creates an adapter for a {@link eu.geclipse.jsdl.posix.GroupNameType}.
-	 * <!-- begin-user-doc -->
+  /**
+   * This creates an adapter for a {@link eu.geclipse.jsdl.posix.GroupNameType}.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Adapter createGroupNameTypeAdapter() {
-		if (groupNameTypeItemProvider == null) {
-			groupNameTypeItemProvider = new GroupNameTypeItemProvider(this);
-		}
+   * @generated
+   */
+	public Adapter createGroupNameTypeAdapter()
+  {
+    if (groupNameTypeItemProvider == null)
+    {
+      groupNameTypeItemProvider = new GroupNameTypeItemProvider(this);
+    }
 
-		return groupNameTypeItemProvider;
-	}
+    return groupNameTypeItemProvider;
+  }
 
-	/**
-	 * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.posix.LimitsType} instances.
-	 * <!-- begin-user-doc -->
+  /**
+   * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.posix.LimitsType} instances.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	protected LimitsTypeItemProvider limitsTypeItemProvider;
 
-	/**
-	 * This creates an adapter for a {@link eu.geclipse.jsdl.posix.LimitsType}.
-	 * <!-- begin-user-doc -->
+  /**
+   * This creates an adapter for a {@link eu.geclipse.jsdl.posix.LimitsType}.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Adapter createLimitsTypeAdapter() {
-		if (limitsTypeItemProvider == null) {
-			limitsTypeItemProvider = new LimitsTypeItemProvider(this);
-		}
+   * @generated
+   */
+	public Adapter createLimitsTypeAdapter()
+  {
+    if (limitsTypeItemProvider == null)
+    {
+      limitsTypeItemProvider = new LimitsTypeItemProvider(this);
+    }
 
-		return limitsTypeItemProvider;
-	}
+    return limitsTypeItemProvider;
+  }
 
-	/**
-	 * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.posix.POSIXApplicationType} instances.
-	 * <!-- begin-user-doc -->
+  /**
+   * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.posix.POSIXApplicationType} instances.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	protected POSIXApplicationTypeItemProvider posixApplicationTypeItemProvider;
 
-	/**
-	 * This creates an adapter for a {@link eu.geclipse.jsdl.posix.POSIXApplicationType}.
-	 * <!-- begin-user-doc -->
+  /**
+   * This creates an adapter for a {@link eu.geclipse.jsdl.posix.POSIXApplicationType}.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Adapter createPOSIXApplicationTypeAdapter() {
-		if (posixApplicationTypeItemProvider == null) {
-			posixApplicationTypeItemProvider = new POSIXApplicationTypeItemProvider(this);
-		}
+   * @generated
+   */
+	public Adapter createPOSIXApplicationTypeAdapter()
+  {
+    if (posixApplicationTypeItemProvider == null)
+    {
+      posixApplicationTypeItemProvider = new POSIXApplicationTypeItemProvider(this);
+    }
 
-		return posixApplicationTypeItemProvider;
-	}
+    return posixApplicationTypeItemProvider;
+  }
 
-	/**
-	 * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.posix.UserNameType} instances.
-	 * <!-- begin-user-doc -->
+  /**
+   * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.posix.UserNameType} instances.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	protected UserNameTypeItemProvider userNameTypeItemProvider;
 
-	/**
-	 * This creates an adapter for a {@link eu.geclipse.jsdl.posix.UserNameType}.
-	 * <!-- begin-user-doc -->
+  /**
+   * This creates an adapter for a {@link eu.geclipse.jsdl.posix.UserNameType}.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Adapter createUserNameTypeAdapter() {
-		if (userNameTypeItemProvider == null) {
-			userNameTypeItemProvider = new UserNameTypeItemProvider(this);
-		}
+   * @generated
+   */
+	public Adapter createUserNameTypeAdapter()
+  {
+    if (userNameTypeItemProvider == null)
+    {
+      userNameTypeItemProvider = new UserNameTypeItemProvider(this);
+    }
 
-		return userNameTypeItemProvider;
-	}
+    return userNameTypeItemProvider;
+  }
 
-	/**
-	 * This returns the root adapter factory that contains this factory.
-	 * <!-- begin-user-doc -->
+  /**
+   * This returns the root adapter factory that contains this factory.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ComposeableAdapterFactory getRootAdapterFactory() {
-		return parentAdapterFactory == null ? this : parentAdapterFactory.getRootAdapterFactory();
-	}
+   * @generated
+   */
+	public ComposeableAdapterFactory getRootAdapterFactory()
+  {
+    return parentAdapterFactory == null ? this : parentAdapterFactory.getRootAdapterFactory();
+  }
 
-	/**
-	 * This sets the composed adapter factory that contains this factory.
-	 * <!-- begin-user-doc -->
+  /**
+   * This sets the composed adapter factory that contains this factory.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setParentAdapterFactory(ComposedAdapterFactory parentAdapterFactory) {
-		this.parentAdapterFactory = parentAdapterFactory;
-	}
+   * @generated
+   */
+	public void setParentAdapterFactory(ComposedAdapterFactory parentAdapterFactory)
+  {
+    this.parentAdapterFactory = parentAdapterFactory;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isFactoryForType(Object type) {
-		return supportedTypes.contains(type) || super.isFactoryForType(type);
-	}
+   * @generated
+   */
+	public boolean isFactoryForType(Object type)
+  {
+    return supportedTypes.contains(type) || super.isFactoryForType(type);
+  }
 
-	/**
-	 * This implementation substitutes the factory itself as the key for the adapter.
-	 * <!-- begin-user-doc -->
+  /**
+   * This implementation substitutes the factory itself as the key for the adapter.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Adapter adapt(Notifier notifier, Object type) {
-		return super.adapt(notifier, this);
-	}
+   * @generated
+   */
+	public Adapter adapt(Notifier notifier, Object type)
+  {
+    return super.adapt(notifier, this);
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Object adapt(Object object, Object type) {
-		if (isFactoryForType(type)) {
-			Object adapter = super.adapt(object, type);
-			if (!(type instanceof Class) || (((Class)type).isInstance(adapter))) {
-				return adapter;
-			}
-		}
+   * @generated
+   */
+	public Object adapt(Object object, Object type)
+  {
+    if (isFactoryForType(type))
+    {
+      Object adapter = super.adapt(object, type);
+      if (!(type instanceof Class) || (((Class)type).isInstance(adapter)))
+      {
+        return adapter;
+      }
+    }
 
-		return null;
-	}
+    return null;
+  }
 
-	/**
-	 * This adds a listener.
-	 * <!-- begin-user-doc -->
+  /**
+   * This adds a listener.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void addListener(INotifyChangedListener notifyChangedListener) {
-		changeNotifier.addListener(notifyChangedListener);
-	}
+   * @generated
+   */
+	public void addListener(INotifyChangedListener notifyChangedListener)
+  {
+    changeNotifier.addListener(notifyChangedListener);
+  }
 
-	/**
-	 * This removes a listener.
-	 * <!-- begin-user-doc -->
+  /**
+   * This removes a listener.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void removeListener(INotifyChangedListener notifyChangedListener) {
-		changeNotifier.removeListener(notifyChangedListener);
-	}
+   * @generated
+   */
+	public void removeListener(INotifyChangedListener notifyChangedListener)
+  {
+    changeNotifier.removeListener(notifyChangedListener);
+  }
 
-	/**
-	 * This delegates to {@link #changeNotifier} and to {@link #parentAdapterFactory}.
-	 * <!-- begin-user-doc -->
+  /**
+   * This delegates to {@link #changeNotifier} and to {@link #parentAdapterFactory}.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void fireNotifyChanged(Notification notification) {
-		changeNotifier.fireNotifyChanged(notification);
+   * @generated
+   */
+	public void fireNotifyChanged(Notification notification)
+  {
+    changeNotifier.fireNotifyChanged(notification);
 
-		if (parentAdapterFactory != null) {
-			parentAdapterFactory.fireNotifyChanged(notification);
-		}
-	}
+    if (parentAdapterFactory != null)
+    {
+      parentAdapterFactory.fireNotifyChanged(notification);
+    }
+  }
 
-	/**
-	 * This disposes all of the item providers created by this factory. 
-	 * <!-- begin-user-doc -->
+  /**
+   * This disposes all of the item providers created by this factory. 
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void dispose() {
-		if (argumentTypeItemProvider != null) argumentTypeItemProvider.dispose();
-		if (directoryNameTypeItemProvider != null) directoryNameTypeItemProvider.dispose();
-		if (documentRootItemProvider != null) documentRootItemProvider.dispose();
-		if (environmentTypeItemProvider != null) environmentTypeItemProvider.dispose();
-		if (fileNameTypeItemProvider != null) fileNameTypeItemProvider.dispose();
-		if (groupNameTypeItemProvider != null) groupNameTypeItemProvider.dispose();
-		if (limitsTypeItemProvider != null) limitsTypeItemProvider.dispose();
-		if (posixApplicationTypeItemProvider != null) posixApplicationTypeItemProvider.dispose();
-		if (userNameTypeItemProvider != null) userNameTypeItemProvider.dispose();
-	}
+   * @generated
+   */
+	public void dispose()
+  {
+    if (argumentTypeItemProvider != null) argumentTypeItemProvider.dispose();
+    if (directoryNameTypeItemProvider != null) directoryNameTypeItemProvider.dispose();
+    if (documentRootItemProvider != null) documentRootItemProvider.dispose();
+    if (environmentTypeItemProvider != null) environmentTypeItemProvider.dispose();
+    if (fileNameTypeItemProvider != null) fileNameTypeItemProvider.dispose();
+    if (groupNameTypeItemProvider != null) groupNameTypeItemProvider.dispose();
+    if (limitsTypeItemProvider != null) limitsTypeItemProvider.dispose();
+    if (posixApplicationTypeItemProvider != null) posixApplicationTypeItemProvider.dispose();
+    if (userNameTypeItemProvider != null) userNameTypeItemProvider.dispose();
+  }
 
 }

@@ -6,6 +6,9 @@ import eu.geclipse.core.SolutionRegistry;
 
 public class UISolutionRegistry extends SolutionRegistry {
   
+  public static final int LOG_EXCEPTION
+    = uniqueID();
+  
   private static UISolutionRegistry singleton;
   
   private Shell shell;

@@ -15,7 +15,8 @@
 
 package eu.geclipse.core.auth;
 
-import java.io.File;
+import java.io.IOException;
+import eu.geclipse.core.util.SecureFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -57,9 +58,16 @@ public abstract class AbstractAuthenticationToken implements IAuthenticationToke
       location = location.addTrailingSeparator();
     }
     location = location.append( ".tokens" ); //$NON-NLS-1$
-    File file = location.toFile();
+    SecureFile file = new SecureFile( location.toOSString() );
+    // TODO: deal with errors
     if ( !file.exists() ) {
       file.mkdir();
+    } else {
+      try {
+        file.setSecure();        
+      } catch( IOException ioe ) {
+        //
+      }
     }
     return location;
   }

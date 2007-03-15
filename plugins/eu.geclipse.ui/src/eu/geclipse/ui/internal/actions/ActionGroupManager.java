@@ -56,11 +56,11 @@ public class ActionGroupManager extends ActionGroup {
     }
   }
  
-  protected void addGroup( final ActionGroup group ) {
+  public void addGroup( final ActionGroup group ) {
     this.groups.add( group );
   }
   
-  protected List< ActionGroup > getGroups() {
+  public List< ActionGroup > getGroups() {
     return this.groups;
   }
   

@@ -1,78 +1,140 @@
+/*****************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.core.model.impl;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import eu.geclipse.core.Extensions;
-import eu.geclipse.core.internal.Activator;
+import eu.geclipse.core.internal.model.GridModelEvent;
+import eu.geclipse.core.internal.model.GridRoot;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
+import eu.geclipse.core.model.GridModelProblems;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
+import eu.geclipse.core.model.IGridElementManager;
+import eu.geclipse.core.model.IGridModelEvent;
+import eu.geclipse.core.model.IManageable;
 
 /**
- * Base implementation of the {@link IGridContainer} interface
+ * Base implementation of the {@link IGridContainer} interface that
+ * implements basic functionalities of a grid container.
  */
 public abstract class AbstractGridContainer
     extends AbstractGridElement
     implements IGridContainer {
   
+  /**
+   * List of currently know children.
+   */
   private List< IGridElement > children
     = new ArrayList< IGridElement >();
   
+  /**
+   * Dirty flag of this container.
+   */
   private boolean dirty;
-  
-  protected AbstractGridContainer( final IResource resource ) {
-    super( resource );
-    if ( !isLazy() ) {
-      fetchChildren( null );
-    } else {
-      setDirty();
-    }
+
+  protected AbstractGridContainer() {
+    setDirty();
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridContainer#canContain(eu.geclipse.core.model.IGridElement)
+   */
+  public boolean canContain( final IGridElement element ) {
+    return true;
+  }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridContainer#contains(eu.geclipse.core.model.IGridElement)
+   */
   public boolean contains( final IGridElement element ) {
     return this.children.contains( element  );
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridContainer#create(eu.geclipse.core.model.IGridElementCreator)
+   */
   public IGridElement create( final IGridElementCreator creator )
       throws GridModelException {
-    IGridElement newChild = creator.create( this );
-    IGridElement addedElement = addElement( newChild );    
-    return addedElement;
+    IGridElement element = creator.create( this );
+    element = addElement( element );    
+    return element;
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridContainer#delete(eu.geclipse.core.model.IGridElement)
+   */
   public void delete( final IGridElement child ) {
-    this.children.remove( child );
+    removeElement( child );
+    if ( child instanceof IManageable ) {
+      IGridElementManager manager
+        = ( ( IManageable ) child ).getManager();
+      manager.removeElement( child );
+    }
     child.dispose();
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.impl.AbstractGridElement#dispose()
+   */
   @Override
   public void dispose() {
     deleteAll();
     super.dispose();
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridContainer#getChildCount()
+   */
   public int getChildCount() {
-    return this.children.size();
+    int result;
+    if ( isLazy() && isDirty() ) {
+      result = 1;
+    } else {
+      result = this.children.size();
+    }
+    return result;
   }
 
-  public IGridElement[] getChildren( final IProgressMonitor monitor ) {
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridContainer#getChildren(org.eclipse.core.runtime.IProgressMonitor)
+   */
+  public IGridElement[] getChildren( final IProgressMonitor monitor )
+      throws GridModelException {
     if ( isLazy() && isDirty() ) {
-      fetchChildren( monitor );
+      deleteAll();
+      boolean result = fetchChildren( monitor );
+      setDirty( !result );
     }
     return this.children.toArray( new IGridElement[this.children.size()] );
   }
 
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridContainer#hasChildren()
+   */
   public boolean hasChildren() {
     return isLazy() || !this.children.isEmpty();
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridContainer#findChild(java.lang.String)
+   */
   public IGridElement findChild( final String name ) {
     IGridElement result = null;
     for ( IGridElement child : this.children ) {
@@ -84,12 +146,14 @@ public abstract class AbstractGridContainer
     return result;
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridContainer#findChildWithResource(java.lang.String)
+   */
   public IGridElement findChildWithResource( final String resourceName ) {
     IGridElement result = null;
     for ( IGridElement child : this.children ) {
-      IResource resource = child.getResource();
-      if ( resource != null ) {
-        if ( resource.getName().equals( resourceName ) ) {
+      if ( !child.isVirtual() ) {
+        if ( child.getResource().getName().equals( resourceName ) ) {
           result = child;
           break;
         }
@@ -98,103 +162,129 @@ public abstract class AbstractGridContainer
     return result;
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridContainer#isDirty()
+   */
   public boolean isDirty() {
     return this.dirty;
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridContainer#setDirty()
+   */
   public void setDirty() {
     setDirty( true );
   }
   
-  protected IGridElement addElement( final IGridElement element ) {
+  /**
+   * Add an element as child to this container. If a child with the same
+   * name is already contained in this contained this old child will
+   * be deleted.
+   * 
+   * @param element The new child of this container or <code>null</code>
+   * if an error occures.
+   * @return The newly added element.
+   */
+  protected IGridElement addElement( final IGridElement element )
+      throws GridModelException {
     if ( element != null ) {
+      testCanContain( element );
       IGridElement oldChild = findChild( element.getName() );
       if ( oldChild != null ) {
         delete( oldChild );
       }
       this.children.add( element );
+      GridRoot.registerElement( element );
+      GridRoot gridRoot = GridRoot.getRoot();
+      if ( gridRoot != null ) {
+        IGridModelEvent event
+          = new GridModelEvent( IGridModelEvent.ELEMENTS_ADDED,
+                                this,
+                                new IGridElement[] { element } );
+        gridRoot.fireGridModelEvent( event );
+      }
     }
     return element;
   }
   
-  protected boolean fetchChildren( final IProgressMonitor monitor ) {
-    
-    IProgressMonitor localMonitor
-      = monitor != null
-      ? monitor
-      : new NullProgressMonitor();
-    
-    boolean result = false;
-    deleteAll();
-    IResource resource = getResource();
-    if ( ( resource != null ) && ( resource instanceof IContainer ) ) {
-      try {
-        IResource[] members = ( ( IContainer ) resource ).members();
-        localMonitor.beginTask( "Loading children", members.length );
-        for ( IResource member : members ) {
-
-          IGridElementCreator creator = findCreator( member );
-          if ( creator != null ) {
-            create( creator );
-          }
-          
-          localMonitor.worked( 1 );
-          if ( localMonitor.isCanceled() ) {
-            break;
-          }
-          
-        }
-        result = true;
-      } catch ( CoreException cExc ) {
-        Activator.logException( cExc );
-      }
-    }
-    
-    localMonitor.done();
-    setDirty( !result );
-    
-    return result;
-    
-  }
-  
+  /**
+   * Remove all children from this container and call their
+   * {@link #dispose()} methods.
+   */
   protected void deleteAll() {
-    for ( IGridElement child : this.children ) {
-      child.dispose();
+    if ( ( this.children != null ) && !this.children.isEmpty() ) {
+      for ( IGridElement child : this.children ) {
+        child.dispose();
+      }
+      IGridElement[] elements
+        = this.children.toArray( new IGridElement[ this.children.size() ] );
+      GridRoot gridRoot = GridRoot.getRoot();
+      if ( gridRoot != null ) {
+        IGridModelEvent event
+          = new GridModelEvent( IGridModelEvent.ELEMENTS_REMOVED,
+                                this,
+                                elements );
+        gridRoot.fireGridModelEvent( event );
+      }
+      this.children.clear();
     }
-    this.children.clear();
   }
   
-  protected IGridElementCreator findCreator( final IResource resource ) {
-    IGridElementCreator result = null;
-    List<IGridElementCreator> creators
-      = Extensions.getRegisteredElementCreators();
-    for ( IGridElementCreator creator : creators ) {
-      if ( creator.canCreate( resource ) ) {
-        result = creator;
-        break;
+  /**
+   * Fetch the children of this container. For a non-lazy container
+   * the children are fetched when the container is constructed. For
+   * lazy containers the children are fetched by the
+   * {@link #getChildren(IProgressMonitor)} method if the container is
+   * dirty.
+   * 
+   * @param monitor A progress monitor to monitor the progress of this
+   * maybe long running method.
+   * @return True if the operation was successful.
+   */
+  @SuppressWarnings("unused")
+  protected boolean fetchChildren( @SuppressWarnings("unused")
+                                   final IProgressMonitor monitor )
+      throws GridModelException {
+    return true;
+  }
+  
+  protected void removeElement( final IGridElement element ) {
+    boolean result = this.children.remove( element );
+    if ( result ) {
+      GridRoot gridRoot = GridRoot.getRoot();
+      if ( gridRoot != null ) {
+        IGridModelEvent event
+          = new GridModelEvent( IGridModelEvent.ELEMENTS_REMOVED,
+                                this,
+                                new IGridElement[] { element } );
+        gridRoot.fireGridModelEvent( event );
       }
     }
-    if ( result == null ) {
-      result = findStandardCreator( resource );
-    }
-    return result;
   }
-  
-  protected IGridElementCreator findStandardCreator( final IResource resource ) {
-    IGridElementCreator result = null;
-    List< IGridElementCreator > standardCreators
-      = GridModel.getStandardCreators();
-    for ( IGridElementCreator creator : standardCreators ) {
-      if ( creator.canCreate( resource ) ) {
-        result = creator;
-        break;
-      }
-    }
-    return result;
-  }
-  
+    
+  /**
+   * Set the dirty flag of this container.
+   * 
+   * @param d The new value of the container's dirty flag.
+   */
   protected void setDirty( final boolean d ) {
     this.dirty = d;
   }
-
+  
+  /**
+   * Test if this container can contain the specified element
+   * and throw a {@link GridModelException} if this is not the
+   * case.
+   * 
+   * @param element The element to be tested.
+   * @throws GridModelException Thrown if {@link #canContain(IGridElement)}
+   * returns false for the specified element.
+   */
+  private void testCanContain( final IGridElement element )
+      throws GridModelException {
+    if ( !canContain( element ) ) {
+      throw new GridModelException( GridModelProblems.CONTAINER_CAN_NOT_CONTAIN );
+    }
+  }
+  
 }

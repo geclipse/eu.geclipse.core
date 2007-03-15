@@ -6,8 +6,8 @@ import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.actions.ActionGroup;
-import org.eclipse.ui.actions.DeleteResourceAction;
 import org.eclipse.ui.navigator.ICommonMenuConstants;
+import eu.geclipse.ui.views.GridModelViewPart;
 
 public class FileActions extends ActionGroup {
   
@@ -19,19 +19,19 @@ public class FileActions extends ActionGroup {
   
   private PasteAction pasteAction;
   
-  private DeleteResourceAction deleteAction;
+  private DeleteElementAction deleteAction;
   
-  public FileActions( final IWorkbenchSite site ) {
+  public FileActions( final GridModelViewPart view ) {
     
-    this.site = site;
-    Shell shell = site.getShell();
-    ISelectionProvider provider = site.getSelectionProvider();
+    this.site = view.getSite();
+    Shell shell = this.site.getShell();
+    ISelectionProvider provider = this.site.getSelectionProvider();
     
     this.clipboard = new Clipboard( shell.getDisplay() );
     
     this.copyAction = new CopyAction( this.clipboard );
-    this.pasteAction = new PasteAction( this.clipboard );
-    this.deleteAction = new DeleteResourceAction( shell );
+    this.pasteAction = new PasteAction( view, this.clipboard );
+    this.deleteAction = new DeleteElementAction( view );
     
     provider.addSelectionChangedListener( this.copyAction );
     provider.addSelectionChangedListener( this.pasteAction );

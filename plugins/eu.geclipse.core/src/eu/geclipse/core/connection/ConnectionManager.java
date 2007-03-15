@@ -13,6 +13,7 @@
  *    Katarzyna Bylec - initial API and implementation
  *    Mathias Stuempert
  *****************************************************************************/
+
 package eu.geclipse.core.connection;
 
 import java.io.BufferedReader;

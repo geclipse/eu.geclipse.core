@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: JobIdentificationTypeImpl.java,v 1.1 2007/01/25 15:26:29 emstamou Exp $
+ * $Id: JobIdentificationTypeImpl.java,v 1.2 2007/03/01 09:15:17 emstamou Exp $
  */
 package eu.geclipse.jsdl.impl;
 
@@ -45,341 +45,367 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class JobIdentificationTypeImpl extends EObjectImpl implements JobIdentificationType {
-	/**
-	 * The default value of the '{@link #getJobName() <em>Job Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
+public class JobIdentificationTypeImpl extends EObjectImpl implements JobIdentificationType 
+{
+  /**
+   * The default value of the '{@link #getJobName() <em>Job Name</em>}' attribute.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getJobName()
-	 * @generated
-	 * @ordered
-	 */
+   * @see #getJobName()
+   * @generated
+   * @ordered
+   */
 	protected static final String JOB_NAME_EDEFAULT = null;
 
-	/**
-	 * The cached value of the '{@link #getJobName() <em>Job Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
+  /**
+   * The cached value of the '{@link #getJobName() <em>Job Name</em>}' attribute.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getJobName()
-	 * @generated
-	 * @ordered
-	 */
+   * @see #getJobName()
+   * @generated
+   * @ordered
+   */
 	protected String jobName = JOB_NAME_EDEFAULT;
 
-	/**
-	 * The default value of the '{@link #getDescription() <em>Description</em>}' attribute.
-	 * <!-- begin-user-doc -->
+  /**
+   * The default value of the '{@link #getDescription() <em>Description</em>}' attribute.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getDescription()
-	 * @generated
-	 * @ordered
-	 */
+   * @see #getDescription()
+   * @generated
+   * @ordered
+   */
 	protected static final String DESCRIPTION_EDEFAULT = null;
 
-	/**
-	 * The cached value of the '{@link #getDescription() <em>Description</em>}' attribute.
-	 * <!-- begin-user-doc -->
+  /**
+   * The cached value of the '{@link #getDescription() <em>Description</em>}' attribute.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getDescription()
-	 * @generated
-	 * @ordered
-	 */
+   * @see #getDescription()
+   * @generated
+   * @ordered
+   */
 	protected String description = DESCRIPTION_EDEFAULT;
 
-	/**
-	 * The cached value of the '{@link #getJobAnnotation() <em>Job Annotation</em>}' attribute list.
-	 * <!-- begin-user-doc -->
+  /**
+   * The cached value of the '{@link #getJobAnnotation() <em>Job Annotation</em>}' attribute list.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getJobAnnotation()
-	 * @generated
-	 * @ordered
-	 */
+   * @see #getJobAnnotation()
+   * @generated
+   * @ordered
+   */
 	protected EList jobAnnotation = null;
 
-	/**
-	 * The cached value of the '{@link #getJobProject() <em>Job Project</em>}' attribute list.
-	 * <!-- begin-user-doc -->
+  /**
+   * The cached value of the '{@link #getJobProject() <em>Job Project</em>}' attribute list.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getJobProject()
-	 * @generated
-	 * @ordered
-	 */
+   * @see #getJobProject()
+   * @generated
+   * @ordered
+   */
 	protected EList jobProject = null;
 
-	/**
-	 * The cached value of the '{@link #getAny() <em>Any</em>}' attribute list.
-	 * <!-- begin-user-doc -->
+  /**
+   * The cached value of the '{@link #getAny() <em>Any</em>}' attribute list.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getAny()
-	 * @generated
-	 * @ordered
-	 */
+   * @see #getAny()
+   * @generated
+   * @ordered
+   */
 	protected FeatureMap any = null;
 
-	/**
-	 * The cached value of the '{@link #getAnyAttribute() <em>Any Attribute</em>}' attribute list.
-	 * <!-- begin-user-doc -->
+  /**
+   * The cached value of the '{@link #getAnyAttribute() <em>Any Attribute</em>}' attribute list.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getAnyAttribute()
-	 * @generated
-	 * @ordered
-	 */
+   * @see #getAnyAttribute()
+   * @generated
+   * @ordered
+   */
 	protected FeatureMap anyAttribute = null;
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected JobIdentificationTypeImpl() {
-		super();
-	}
+   * @generated
+   */
+	protected JobIdentificationTypeImpl()
+  {
+    super();
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected EClass eStaticClass() {
-		return JsdlPackage.Literals.JOB_IDENTIFICATION_TYPE;
-	}
+   * @generated
+   */
+	protected EClass eStaticClass()
+  {
+    return JsdlPackage.Literals.JOB_IDENTIFICATION_TYPE;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String getJobName() {
-		return jobName;
-	}
+   * @generated
+   */
+	public String getJobName()
+  {
+    return jobName;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setJobName(String newJobName) {
-		String oldJobName = jobName;
-		jobName = newJobName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_NAME, oldJobName, jobName));
-	}
+   * @generated
+   */
+	public void setJobName(String newJobName)
+  {
+    String oldJobName = jobName;
+    jobName = newJobName;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_NAME, oldJobName, jobName));
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String getDescription() {
-		return description;
-	}
+   * @generated
+   */
+	public String getDescription()
+  {
+    return description;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setDescription(String newDescription) {
-		String oldDescription = description;
-		description = newDescription;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, JsdlPackage.JOB_IDENTIFICATION_TYPE__DESCRIPTION, oldDescription, description));
-	}
+   * @generated
+   */
+	public void setDescription(String newDescription)
+  {
+    String oldDescription = description;
+    description = newDescription;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, JsdlPackage.JOB_IDENTIFICATION_TYPE__DESCRIPTION, oldDescription, description));
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EList getJobAnnotation() {
-		if (jobAnnotation == null) {
-			jobAnnotation = new EDataTypeEList(String.class, this, JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_ANNOTATION);
-		}
-		return jobAnnotation;
-	}
+   * @generated
+   */
+	public EList getJobAnnotation()
+  {
+    if (jobAnnotation == null)
+    {
+      jobAnnotation = new EDataTypeEList(String.class, this, JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_ANNOTATION);
+    }
+    return jobAnnotation;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EList getJobProject() {
-		if (jobProject == null) {
-			jobProject = new EDataTypeEList(String.class, this, JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_PROJECT);
-		}
-		return jobProject;
-	}
+   * @generated
+   */
+	public EList getJobProject()
+  {
+    if (jobProject == null)
+    {
+      jobProject = new EDataTypeEList(String.class, this, JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_PROJECT);
+    }
+    return jobProject;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public FeatureMap getAny() {
-		if (any == null) {
-			any = new BasicFeatureMap(this, JsdlPackage.JOB_IDENTIFICATION_TYPE__ANY);
-		}
-		return any;
-	}
+   * @generated
+   */
+	public FeatureMap getAny()
+  {
+    if (any == null)
+    {
+      any = new BasicFeatureMap(this, JsdlPackage.JOB_IDENTIFICATION_TYPE__ANY);
+    }
+    return any;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public FeatureMap getAnyAttribute() {
-		if (anyAttribute == null) {
-			anyAttribute = new BasicFeatureMap(this, JsdlPackage.JOB_IDENTIFICATION_TYPE__ANY_ATTRIBUTE);
-		}
-		return anyAttribute;
-	}
+   * @generated
+   */
+	public FeatureMap getAnyAttribute()
+  {
+    if (anyAttribute == null)
+    {
+      anyAttribute = new BasicFeatureMap(this, JsdlPackage.JOB_IDENTIFICATION_TYPE__ANY_ATTRIBUTE);
+    }
+    return anyAttribute;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case JsdlPackage.JOB_IDENTIFICATION_TYPE__ANY:
-				return ((InternalEList)getAny()).basicRemove(otherEnd, msgs);
-			case JsdlPackage.JOB_IDENTIFICATION_TYPE__ANY_ATTRIBUTE:
-				return ((InternalEList)getAnyAttribute()).basicRemove(otherEnd, msgs);
-		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
-	}
+   * @generated
+   */
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+  {
+    switch (featureID)
+    {
+      case JsdlPackage.JOB_IDENTIFICATION_TYPE__ANY:
+        return ((InternalEList)getAny()).basicRemove(otherEnd, msgs);
+      case JsdlPackage.JOB_IDENTIFICATION_TYPE__ANY_ATTRIBUTE:
+        return ((InternalEList)getAnyAttribute()).basicRemove(otherEnd, msgs);
+    }
+    return super.eInverseRemove(otherEnd, featureID, msgs);
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
-		switch (featureID) {
-			case JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_NAME:
-				return getJobName();
-			case JsdlPackage.JOB_IDENTIFICATION_TYPE__DESCRIPTION:
-				return getDescription();
-			case JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_ANNOTATION:
-				return getJobAnnotation();
-			case JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_PROJECT:
-				return getJobProject();
-			case JsdlPackage.JOB_IDENTIFICATION_TYPE__ANY:
-				if (coreType) return getAny();
-				return ((FeatureMap.Internal)getAny()).getWrapper();
-			case JsdlPackage.JOB_IDENTIFICATION_TYPE__ANY_ATTRIBUTE:
-				if (coreType) return getAnyAttribute();
-				return ((FeatureMap.Internal)getAnyAttribute()).getWrapper();
-		}
-		return super.eGet(featureID, resolve, coreType);
-	}
+   * @generated
+   */
+	public Object eGet(int featureID, boolean resolve, boolean coreType)
+  {
+    switch (featureID)
+    {
+      case JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_NAME:
+        return getJobName();
+      case JsdlPackage.JOB_IDENTIFICATION_TYPE__DESCRIPTION:
+        return getDescription();
+      case JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_ANNOTATION:
+        return getJobAnnotation();
+      case JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_PROJECT:
+        return getJobProject();
+      case JsdlPackage.JOB_IDENTIFICATION_TYPE__ANY:
+        if (coreType) return getAny();
+        return ((FeatureMap.Internal)getAny()).getWrapper();
+      case JsdlPackage.JOB_IDENTIFICATION_TYPE__ANY_ATTRIBUTE:
+        if (coreType) return getAnyAttribute();
+        return ((FeatureMap.Internal)getAnyAttribute()).getWrapper();
+    }
+    return super.eGet(featureID, resolve, coreType);
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void eSet(int featureID, Object newValue) {
-		switch (featureID) {
-			case JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_NAME:
-				setJobName((String)newValue);
-				return;
-			case JsdlPackage.JOB_IDENTIFICATION_TYPE__DESCRIPTION:
-				setDescription((String)newValue);
-				return;
-			case JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_ANNOTATION:
-				getJobAnnotation().clear();
-				getJobAnnotation().addAll((Collection)newValue);
-				return;
-			case JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_PROJECT:
-				getJobProject().clear();
-				getJobProject().addAll((Collection)newValue);
-				return;
-			case JsdlPackage.JOB_IDENTIFICATION_TYPE__ANY:
-				((FeatureMap.Internal)getAny()).set(newValue);
-				return;
-			case JsdlPackage.JOB_IDENTIFICATION_TYPE__ANY_ATTRIBUTE:
-				((FeatureMap.Internal)getAnyAttribute()).set(newValue);
-				return;
-		}
-		super.eSet(featureID, newValue);
-	}
+   * @generated
+   */
+	public void eSet(int featureID, Object newValue)
+  {
+    switch (featureID)
+    {
+      case JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_NAME:
+        setJobName((String)newValue);
+        return;
+      case JsdlPackage.JOB_IDENTIFICATION_TYPE__DESCRIPTION:
+        setDescription((String)newValue);
+        return;
+      case JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_ANNOTATION:
+        getJobAnnotation().clear();
+        getJobAnnotation().addAll((Collection)newValue);
+        return;
+      case JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_PROJECT:
+        getJobProject().clear();
+        getJobProject().addAll((Collection)newValue);
+        return;
+      case JsdlPackage.JOB_IDENTIFICATION_TYPE__ANY:
+        ((FeatureMap.Internal)getAny()).set(newValue);
+        return;
+      case JsdlPackage.JOB_IDENTIFICATION_TYPE__ANY_ATTRIBUTE:
+        ((FeatureMap.Internal)getAnyAttribute()).set(newValue);
+        return;
+    }
+    super.eSet(featureID, newValue);
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void eUnset(int featureID) {
-		switch (featureID) {
-			case JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_NAME:
-				setJobName(JOB_NAME_EDEFAULT);
-				return;
-			case JsdlPackage.JOB_IDENTIFICATION_TYPE__DESCRIPTION:
-				setDescription(DESCRIPTION_EDEFAULT);
-				return;
-			case JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_ANNOTATION:
-				getJobAnnotation().clear();
-				return;
-			case JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_PROJECT:
-				getJobProject().clear();
-				return;
-			case JsdlPackage.JOB_IDENTIFICATION_TYPE__ANY:
-				getAny().clear();
-				return;
-			case JsdlPackage.JOB_IDENTIFICATION_TYPE__ANY_ATTRIBUTE:
-				getAnyAttribute().clear();
-				return;
-		}
-		super.eUnset(featureID);
-	}
+   * @generated
+   */
+	public void eUnset(int featureID)
+  {
+    switch (featureID)
+    {
+      case JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_NAME:
+        setJobName(JOB_NAME_EDEFAULT);
+        return;
+      case JsdlPackage.JOB_IDENTIFICATION_TYPE__DESCRIPTION:
+        setDescription(DESCRIPTION_EDEFAULT);
+        return;
+      case JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_ANNOTATION:
+        getJobAnnotation().clear();
+        return;
+      case JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_PROJECT:
+        getJobProject().clear();
+        return;
+      case JsdlPackage.JOB_IDENTIFICATION_TYPE__ANY:
+        getAny().clear();
+        return;
+      case JsdlPackage.JOB_IDENTIFICATION_TYPE__ANY_ATTRIBUTE:
+        getAnyAttribute().clear();
+        return;
+    }
+    super.eUnset(featureID);
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean eIsSet(int featureID) {
-		switch (featureID) {
-			case JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_NAME:
-				return JOB_NAME_EDEFAULT == null ? jobName != null : !JOB_NAME_EDEFAULT.equals(jobName);
-			case JsdlPackage.JOB_IDENTIFICATION_TYPE__DESCRIPTION:
-				return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
-			case JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_ANNOTATION:
-				return jobAnnotation != null && !jobAnnotation.isEmpty();
-			case JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_PROJECT:
-				return jobProject != null && !jobProject.isEmpty();
-			case JsdlPackage.JOB_IDENTIFICATION_TYPE__ANY:
-				return any != null && !any.isEmpty();
-			case JsdlPackage.JOB_IDENTIFICATION_TYPE__ANY_ATTRIBUTE:
-				return anyAttribute != null && !anyAttribute.isEmpty();
-		}
-		return super.eIsSet(featureID);
-	}
+   * @generated
+   */
+	public boolean eIsSet(int featureID)
+  {
+    switch (featureID)
+    {
+      case JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_NAME:
+        return JOB_NAME_EDEFAULT == null ? jobName != null : !JOB_NAME_EDEFAULT.equals(jobName);
+      case JsdlPackage.JOB_IDENTIFICATION_TYPE__DESCRIPTION:
+        return DESCRIPTION_EDEFAULT == null ? description != null : !DESCRIPTION_EDEFAULT.equals(description);
+      case JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_ANNOTATION:
+        return jobAnnotation != null && !jobAnnotation.isEmpty();
+      case JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_PROJECT:
+        return jobProject != null && !jobProject.isEmpty();
+      case JsdlPackage.JOB_IDENTIFICATION_TYPE__ANY:
+        return any != null && !any.isEmpty();
+      case JsdlPackage.JOB_IDENTIFICATION_TYPE__ANY_ATTRIBUTE:
+        return anyAttribute != null && !anyAttribute.isEmpty();
+    }
+    return super.eIsSet(featureID);
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String toString() {
-		if (eIsProxy()) return super.toString();
+   * @generated
+   */
+	public String toString()
+  {
+    if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (jobName: ");
-		result.append(jobName);
-		result.append(", description: ");
-		result.append(description);
-		result.append(", jobAnnotation: ");
-		result.append(jobAnnotation);
-		result.append(", jobProject: ");
-		result.append(jobProject);
-		result.append(", any: ");
-		result.append(any);
-		result.append(", anyAttribute: ");
-		result.append(anyAttribute);
-		result.append(')');
-		return result.toString();
-	}
+    StringBuffer result = new StringBuffer(super.toString());
+    result.append(" (jobName: ");
+    result.append(jobName);
+    result.append(", description: ");
+    result.append(description);
+    result.append(", jobAnnotation: ");
+    result.append(jobAnnotation);
+    result.append(", jobProject: ");
+    result.append(jobProject);
+    result.append(", any: ");
+    result.append(any);
+    result.append(", anyAttribute: ");
+    result.append(anyAttribute);
+    result.append(')');
+    return result.toString();
+  }
 
 } //JobIdentificationTypeImpl

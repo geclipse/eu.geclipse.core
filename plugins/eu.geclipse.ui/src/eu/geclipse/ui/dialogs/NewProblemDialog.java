@@ -1,7 +1,9 @@
 package eu.geclipse.ui.dialogs;
 
 import java.util.List;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.resource.ImageRegistry;
@@ -20,6 +22,7 @@ import eu.geclipse.core.GridException;
 import eu.geclipse.core.IProblem;
 import eu.geclipse.core.ISolution;
 import eu.geclipse.core.SolutionRegistry;
+import eu.geclipse.ui.LogExceptionSolution;
 import eu.geclipse.ui.UISolutionRegistry;
 import eu.geclipse.ui.internal.Activator;
 
@@ -29,19 +32,24 @@ public class NewProblemDialog extends ErrorDialog {
    * Return code determining that a solution was chosen.
    */
   public static final int SOLVE = 2;
+
+  static int result;
   
   final IProblem problem;
   
   private SolutionRegistry solutionRegistry;
   
-  public NewProblemDialog( final Shell parentShell,
-                           final String dialogTitle,
-                           final String message,
-                           final GridException gExc,
-                           final SolutionRegistry solutionRegistry ) {
-    super( parentShell, dialogTitle, message, gExc.getStatus(),
+  private NewProblemDialog( final Shell parentShell,
+                            final String dialogTitle,
+                            final String message,
+                            final Throwable throwable,
+                            final SolutionRegistry solutionRegistry ) {
+    super( parentShell, dialogTitle, message, getStatus( throwable ),
            IStatus.OK | IStatus.INFO | IStatus.WARNING | IStatus.ERROR );
-    this.problem = gExc.getProblem();
+    this.problem
+      = ( throwable instanceof GridException )
+      ? ( ( GridException ) throwable ).getProblem()
+      : null;
     this.solutionRegistry = solutionRegistry;
     if ( this.solutionRegistry == null ) {
       this.solutionRegistry = UISolutionRegistry.getRegistry( this.getShell() );
@@ -51,8 +59,15 @@ public class NewProblemDialog extends ErrorDialog {
   public static int openProblem( final Shell parent,
                                  final String dialogTitle,
                                  final String message,
-                                 final GridException gExc ) {
-    return openProblem( parent, dialogTitle, message, gExc, null );
+                                 final Throwable throwable ) {
+    final NewProblemDialog dialog
+      = new NewProblemDialog( parent, dialogTitle, message, throwable, null );
+    parent.getDisplay().syncExec( new Runnable() {
+      public void run() {
+        result = dialog.open();
+      }
+    } );
+    return result;
   }
   
   public static int openProblem( final Shell parent,
@@ -60,9 +75,14 @@ public class NewProblemDialog extends ErrorDialog {
                                  final String message,
                                  final GridException gExc,
                                  final SolutionRegistry solutionRegistry ) {
-    NewProblemDialog dialog
+    final NewProblemDialog dialog
       = new NewProblemDialog( parent, dialogTitle, message, gExc, solutionRegistry );
-    return dialog.open();
+    parent.getDisplay().syncExec( new Runnable() {
+      public void run() {
+        result = dialog.open();
+      }
+    } );
+    return result;
   }
   
   /* (non-Javadoc)
@@ -99,52 +119,61 @@ public class NewProblemDialog extends ErrorDialog {
       this.messageLabel.setLayoutData( gData );
     }
     
-    List< ISolution > solutions
-      = this.problem.getSolutions( this.solutionRegistry );
+    if ( this.problem != null ) {
     
-    if ( ( solutions != null ) && ( solutions.size() != 0) ) {
+      List< ISolution > solutions
+        = this.problem.getSolutions( this.solutionRegistry );
       
-      ImageRegistry imgReg = Activator.getDefault().getImageRegistry();
-      Image solutionImage = imgReg.get( "solution" ); //$NON-NLS-1$
+      Throwable exc = this.problem.getException();
+      if ( exc != null ) {
+        solutions.add( new LogExceptionSolution( getShell(), exc ) );
+      }
       
-      Composite solutionComposite = new Composite( composite, SWT.NONE );
-      solutionComposite.setLayout( new GridLayout( 2, false ) );
-      
-      Label solutionLabel = new Label( solutionComposite, SWT.NONE );
-      solutionLabel.setText( Messages.getString( "ProblemDialog.solutions_label" ) ); //$NON-NLS-1$
-      gData = new GridData();
-      gData.horizontalAlignment = GridData.BEGINNING;
-      gData.horizontalSpan = 2;
-      solutionLabel.setLayoutData( gData );
-      
-      for ( final ISolution solution : solutions ) {
+      if ( ( solutions != null ) && ( solutions.size() != 0) ) {
         
-        Label imgLabel = new Label( solutionComposite, SWT.NONE );
-        imgLabel.setImage( solutionImage );
-        gData = new GridData();
-        gData.horizontalAlignment = GridData.CENTER;
-        gData.verticalAlignment = GridData.CENTER;
-        imgLabel.setLayoutData( gData );
+        ImageRegistry imgReg = Activator.getDefault().getImageRegistry();
+        Image solutionImage = imgReg.get( "solution" ); //$NON-NLS-1$
         
-        Link link = new Link( solutionComposite, SWT.NONE );
-        String text = solution.getText();
-        if ( solution.isActive() ) {
-          link.setText( "<a>" + text + "</a>" ); //$NON-NLS-1$ //$NON-NLS-2$
-        } else {
-          link.setText( text );
-        }
+        Composite solutionComposite = new Composite( composite, SWT.NONE );
+        solutionComposite.setLayout( new GridLayout( 2, false ) );
+        
+        Label solutionLabel = new Label( solutionComposite, SWT.NONE );
+        solutionLabel.setText( Messages.getString( "ProblemDialog.solutions_label" ) ); //$NON-NLS-1$
         gData = new GridData();
         gData.horizontalAlignment = GridData.BEGINNING;
-        link.setLayoutData( gData );
-        link.addSelectionListener( new SelectionAdapter() {
-          @SuppressWarnings("synthetic-access")
-          @Override
-          public void widgetSelected( final SelectionEvent e ) {
-            setReturnCode( SOLVE );
-            close();
-            solution.solve();
+        gData.horizontalSpan = 2;
+        solutionLabel.setLayoutData( gData );
+        
+        for ( final ISolution solution : solutions ) {
+          
+          Label imgLabel = new Label( solutionComposite, SWT.NONE );
+          imgLabel.setImage( solutionImage );
+          gData = new GridData();
+          gData.horizontalAlignment = GridData.CENTER;
+          gData.verticalAlignment = GridData.CENTER;
+          imgLabel.setLayoutData( gData );
+          
+          Link link = new Link( solutionComposite, SWT.NONE );
+          String text = solution.getText();
+          if ( solution.isActive() ) {
+            link.setText( "<a>" + text + "</a>" ); //$NON-NLS-1$ //$NON-NLS-2$
+          } else {
+            link.setText( text );
           }
-        } );
+          gData = new GridData();
+          gData.horizontalAlignment = GridData.BEGINNING;
+          link.setLayoutData( gData );
+          link.addSelectionListener( new SelectionAdapter() {
+            @SuppressWarnings("synthetic-access")
+            @Override
+            public void widgetSelected( final SelectionEvent e ) {
+              setReturnCode( SOLVE );
+              close();
+              solution.solve();
+            }
+          } );
+          
+        }
         
       }
       
@@ -152,6 +181,24 @@ public class NewProblemDialog extends ErrorDialog {
     
     return composite;
     
+  }
+  
+  private static IStatus getStatus( final Throwable throwable ) {
+    IStatus result = null;
+    if ( throwable instanceof CoreException ) {
+      result = ( ( CoreException ) throwable ).getStatus();
+    } else {
+      String message = throwable.getMessage();
+      if ( message == null ) {
+        message = "An unknown error occured";
+      }
+      result = new Status( IStatus.ERROR,
+                           Activator.PLUGIN_ID,
+                           IStatus.OK,
+                           message,
+                           throwable );
+    }
+    return result;
   }
   
 }

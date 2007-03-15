@@ -11,7 +11,6 @@ import org.eclipse.jface.viewers.OpenEvent;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.actions.ActionGroup;
-import org.eclipse.ui.actions.OpenFileAction;
 import org.eclipse.ui.navigator.ICommonMenuConstants;
 
 public class OpenActions extends ActionGroup {

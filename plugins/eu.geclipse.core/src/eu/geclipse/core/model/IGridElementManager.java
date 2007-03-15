@@ -35,7 +35,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * Note that dedicated managers are always singletons!
  */
 public interface IGridElementManager
-    extends IGridContainer, IContentChangeNotifier {
+    extends IGridContainer, IGridModelNotifier {
 
   /**
    * Determines if this manager is able to manage the specified
@@ -49,5 +49,9 @@ public interface IGridElementManager
    * grid element.
    */
   public boolean canManage( final IGridElement element );
+  
+  public boolean addElement( final IGridElement element ) throws GridModelException;
+  
+  public boolean removeElement( final IGridElement element );
   
 }

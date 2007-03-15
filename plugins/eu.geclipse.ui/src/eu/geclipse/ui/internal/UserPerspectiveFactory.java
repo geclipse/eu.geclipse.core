@@ -24,7 +24,8 @@ import org.eclipse.ui.progress.IProgressConstants;
  * that are contributed with the
  * <code>org.eclipse.ui.perspectiveExtensions</code> extension point.
  */
-public class UserPerspectiveFactory implements IPerspectiveFactory {
+public class UserPerspectiveFactory
+    implements IPerspectiveFactory {
 
   /*private static final String GECLIPSE_PERSPECTIVE_ID 
     =   Activator.getDefault().getBundle().getSymbolicName()

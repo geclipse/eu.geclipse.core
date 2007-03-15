@@ -26,7 +26,7 @@ import org.eclipse.ui.actions.SelectionListenerAction;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridJobCreator;
 import eu.geclipse.core.model.IGridJobDescription;
-import eu.geclipse.ui.wizards.JobSubmissionWizard;
+import eu.geclipse.ui.wizards.jobsubmission.JobCreatorSelectionWizard;
 
 public class SubmitJobAction extends SelectionListenerAction {
   
@@ -43,9 +43,8 @@ public class SubmitJobAction extends SelectionListenerAction {
 
   @Override
   public void run() {
-    JobSubmissionWizard wizard
-      = new JobSubmissionWizard( this.jobDescriptions,
-                                 this.jobCreators );
+    JobCreatorSelectionWizard wizard
+      = new JobCreatorSelectionWizard( this.jobDescriptions, this.jobCreators );
     WizardDialog dialog = new WizardDialog( this.site.getShell(), wizard );
     dialog.open();
     

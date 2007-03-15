@@ -15,27 +15,31 @@
 
 package eu.geclipse.core.auth;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IStatus;
+import eu.geclipse.core.GridException;
 
 /**
- * This exception or one of its subclasses is thrown by methods
- * dealing with security tokens.
+ * This exception is thrown by methods dealing with security tokens.
  * 
  * @author stuempert-m
  */
-public class AuthenticationException extends CoreException {
-
-  private static final long serialVersionUID = 870794359732379699L;
+public class AuthenticationException
+    extends GridException {
+  
+  /**
+   * The serial version uid.
+   */
+  private static final long serialVersionUID = 2736623942948428527L;
 
   /**
-   * Create a new <code>AuthenticationTokenException</code> from the
-   * specified status.
-   * 
-   * @param status The status that describes the exception.
+   * @param problemID
    */
-  public AuthenticationException( final IStatus status ) {
-    super( status );
+  public AuthenticationException( final int problemID ) {
+    super( problemID );
+  }
+
+  public AuthenticationException( final int problemID,
+                                  final Throwable exc ) {
+    super( problemID, exc );
   }
 
 }

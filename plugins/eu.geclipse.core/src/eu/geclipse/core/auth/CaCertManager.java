@@ -37,12 +37,14 @@ import java.util.List;
 import java.util.zip.GZIPInputStream;
 import org.eclipse.compare.IContentChangeListener;
 import org.eclipse.compare.IContentChangeNotifier;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.Path;
 import com.ice.tar.TarEntry;
 import com.ice.tar.TarInputStream;
+import eu.geclipse.core.CoreProblems;
 import eu.geclipse.core.GridException;
 import eu.geclipse.core.Preferences;
 import eu.geclipse.core.ProblemRegistry;
@@ -440,7 +442,7 @@ public class CaCertManager implements IContentChangeNotifier {
       try {
         connection.connect();
       } catch ( SocketTimeoutException toExc ) {
-        throw new GridException( ProblemRegistry.CONNECTION_TIMEOUT, toExc );
+        throw new GridException( CoreProblems.CONNECTION_TIMEOUT, toExc );
       }
       InputStream iStream = connection.getInputStream();
       InputStreamReader iReader = new InputStreamReader( iStream );
@@ -464,7 +466,7 @@ public class CaCertManager implements IContentChangeNotifier {
         index = endIndex;
       }
     } catch ( IOException ioExc ) {
-      throw new GridException( ProblemRegistry.CONNECTION_FAILED, ioExc );
+      throw new GridException( CoreProblems.CONNECTION_FAILED, ioExc );
     }
     return files;
   }
@@ -485,7 +487,7 @@ public class CaCertManager implements IContentChangeNotifier {
       try {
         connection.connect();
       } catch ( SocketTimeoutException toExc ) {
-        throw new GridException( ProblemRegistry.CONNECTION_TIMEOUT, toExc );
+        throw new GridException( CoreProblems.CONNECTION_TIMEOUT, toExc );
       }
       InputStream iStream = connection.getInputStream();
       BufferedInputStream bStream = new BufferedInputStream( iStream );
@@ -502,7 +504,7 @@ public class CaCertManager implements IContentChangeNotifier {
         }
       }
     } catch ( IOException ioExc ) {
-      throw new GridException( ProblemRegistry.CONNECTION_FAILED, ioExc );
+      throw new GridException( CoreProblems.CONNECTION_FAILED, ioExc );
     }
   }
   

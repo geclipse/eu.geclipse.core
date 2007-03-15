@@ -11,10 +11,6 @@ import eu.geclipse.info.glue.GlueSite;
  */
 public interface IGlueInfoStore {
 	/**
-	 * @return a list of all Glue-sites
-	 */
-	public ArrayList<GlueSite> getGlueSiteList();
-	/**
 	 * @param listener
 	 * @param objectName
 	 */

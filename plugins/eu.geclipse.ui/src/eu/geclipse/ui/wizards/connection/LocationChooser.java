@@ -18,9 +18,9 @@ package eu.geclipse.ui.wizards.connection;
 
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
-import java.net.URI;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.swt.SWT;
@@ -32,18 +32,19 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import eu.geclipse.core.connection.ConnectionManager;
-import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridProject;
 
 /**
  * @author katis
  */
 public class LocationChooser extends WizardNewFileCreationPage
-  implements IConnectionWizardPage, Listener, IConnectionFirstPage
+  implements Listener, IConnectionFirstPage
 {
 
   private IStructuredSelection iniSelection;
   private String iniText;
+  private boolean validate = false;
 
   /**
    * Method to create new {@link LocationChooser} page
@@ -58,15 +59,6 @@ public class LocationChooser extends WizardNewFileCreationPage
     this.setDescription( Messages.getString( "LocationChooser.location_chooser_description" ) ); //$NON-NLS-1$
     this.setTitle( Messages.getString( "LocationChooser.location_chooser_title" ) ); //$NON-NLS-1$
     this.iniSelection = selection;
-    isInGridProjectView();
-  }
-
-  public URI finish() {
-    return null;
-  }
-
-  public boolean isLastPage() {
-    return false;
   }
 
   @Override
@@ -80,29 +72,20 @@ public class LocationChooser extends WizardNewFileCreationPage
   {
     if( isInGridProjectView() ) {
       Object obj = this.iniSelection.getFirstElement();
-      IGridContainer container = null;
-      IGridContainer child = null;
-      if( obj instanceof IGridContainer ) {
-        container = ( IGridContainer )obj;
-        while( container.getParent() != null ) {
-          if( child != null ) {
-            if( child.getName().equals( "Filesystems" ) ) { //$NON-NLS-1$
-              break;
-            }
-          }
-          child = container;
-          container = container.getParent();
-        }
-        if( !child.getName().equals( "Filesystems" ) ) { //$NON-NLS-1$
-          for( IGridElement element : child.getChildren( null ) ) {
-            if( element.getName().equals( "Filesystems" ) //$NON-NLS-1$
-                && element instanceof IGridContainer )
-            {
-              child = ( IGridContainer )element;
+      if( obj instanceof IGridElement ) {
+        IGridElement element = ( IGridElement ) obj;
+        IGridProject project = element.getProject();
+        if ( project != null ) {
+          IGridElement connections = project.findChild( IGridProject.DIR_MOUNTS );
+          if ( connections != null ) {
+            IPath cPath = connections.getPath();
+            IPath ePath = element.getPath();
+            if ( !cPath.isPrefixOf( ePath ) ) {
+              element = connections;
             }
           }
         }
-        super.setContainerFullPath( child.getPath() );
+        super.setContainerFullPath( element.getPath() );
       } else {
         super.initialPopulateContainerNameField();
       }
@@ -134,14 +117,19 @@ public class LocationChooser extends WizardNewFileCreationPage
                                                 | GridData.HORIZONTAL_ALIGN_FILL ) );
     bottomTopLevel.setFont( parent.getFont() );
     super.createControl( bottomTopLevel );
+    
     initialPopulateContainerNameField();
+    
     setControl( mostTopLevel );
+    
+    this.validate = true;
   }
 
   @Override
   protected boolean validatePage()
   {
     boolean result = false;
+    
     String message = null;
     if( !isInGridProjectView() ) {
       if( this.getFileName().equals( "" ) ) { //$NON-NLS-1$
@@ -158,6 +146,7 @@ public class LocationChooser extends WizardNewFileCreationPage
       }
     } else {
       result = super.validatePage();
+    
       if( this.getFileName().equalsIgnoreCase( "" ) ) { //$NON-NLS-1$
         result = false;
         message = Messages.getString( "LocationChooser.connection_name_empty" ); //$NON-NLS-1$
@@ -173,15 +162,21 @@ public class LocationChooser extends WizardNewFileCreationPage
           result = true;
         }
       }
+    
     }
-    this.setMessage( message );
+    this.setErrorMessage( message );
+    
+    
     return result;
   }
 
   @Override
   public void handleEvent( final Event event )
   {
-    super.handleEvent( event );
+//    validate = true;
+    if ( this.validate ){
+      super.handleEvent( event );
+    }
   }
 
   /**
@@ -213,15 +208,11 @@ public class LocationChooser extends WizardNewFileCreationPage
   // eu.geclipse.ui.internal.Activator.getDefault().getBundle()
   // .getSymbolicName(), IStatus.OK, "", null); //$NON-NLS-1$
   // }
-  public boolean isInGridProjectView() {
+  private boolean isInGridProjectView() {
     return ( this.iniSelection instanceof TreeSelection );
   }
 
   public String getConnectionName() {
     return getFileName();
-  }
-
-  public boolean isInGridProjectView( final IStructuredSelection selection ) {
-    return ( selection instanceof TreeSelection );
   }
 }

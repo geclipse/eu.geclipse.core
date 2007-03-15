@@ -42,6 +42,7 @@ public class FilesInputNewJobWizardPage extends WizardPage {
   Text stdin;
   Text stdout;
   Text stderr;
+  Text stdInName;
   /**
    * Button to add files to {@link FilesInputNewJobWizardPage#stdin}
    */
@@ -61,7 +62,7 @@ public class FilesInputNewJobWizardPage extends WizardPage {
   public void createControl( final Composite parent ) {
     initializeDialogUnits( parent );
     Composite mainComp = new Composite( parent, SWT.NONE );
-    GridLayout layout = new GridLayout( 3, false );
+    GridLayout layout = new GridLayout( 4, false );
     layout.verticalSpacing = 10;
     layout.horizontalSpacing = 12;
     layout.marginHeight = 0;
@@ -73,6 +74,13 @@ public class FilesInputNewJobWizardPage extends WizardPage {
                           | GridData.HORIZONTAL_ALIGN_BEGINNING );
     stdinLabel.setLayoutData( gData );
     stdinLabel.setText( Messages.getString( "FilesInputNewJobWizardPage.stdin_label" ) ); //$NON-NLS-1$
+    this.stdInName = new Text (mainComp, SWT.NONE | SWT.BORDER);
+    gData = new GridData( GridData.FILL_HORIZONTAL
+                          | GridData.GRAB_HORIZONTAL
+                          | GridData.VERTICAL_ALIGN_CENTER
+                          | GridData.HORIZONTAL_ALIGN_CENTER );
+    this.stdInName.setText( "name" );
+    this.stdInName.setLayoutData( gData );
     // chosen only by picking up file in GridDialog
     this.stdin = new Text( mainComp, SWT.NONE | SWT.BORDER );
     gData = new GridData( GridData.FILL_HORIZONTAL
@@ -100,7 +108,7 @@ public class FilesInputNewJobWizardPage extends WizardPage {
                           | GridData.GRAB_HORIZONTAL
                           | GridData.VERTICAL_ALIGN_CENTER
                           | GridData.HORIZONTAL_ALIGN_CENTER );
-    // gData.horizontalSpan = 2;
+     gData.horizontalSpan = 2;
     this.stdout.setLayoutData( gData );
     this.stdout.setText( Messages.getString( "FilesInputNewJobWizardPage.stdin_info" ) ); //$NON-NLS-1$
     this.stdout.setEnabled( false );
@@ -109,6 +117,7 @@ public class FilesInputNewJobWizardPage extends WizardPage {
     gData = new GridData( GridData.HORIZONTAL_ALIGN_FILL
                           | GridData.VERTICAL_ALIGN_FILL
                           | GridData.VERTICAL_ALIGN_CENTER );
+//    gData.horizontalSpan = 2;
     outButton.setLayoutData( gData );
     Label stderrLabel = new Label( mainComp, SWT.NONE );
     gData = new GridData( GridData.VERTICAL_ALIGN_CENTER
@@ -120,7 +129,7 @@ public class FilesInputNewJobWizardPage extends WizardPage {
                           | GridData.HORIZONTAL_ALIGN_CENTER
                           | GridData.GRAB_HORIZONTAL
                           | GridData.FILL_HORIZONTAL );
-    // gData.horizontalSpan = 2;
+     gData.horizontalSpan = 2;
     this.stderr.setLayoutData( gData );
     this.stderr.setText( Messages.getString( "FilesInputNewJobWizardPage.stdin_info" ) ); //$NON-NLS-1$
     this.stderr.setEnabled( false );
@@ -194,5 +203,9 @@ public class FilesInputNewJobWizardPage extends WizardPage {
    */
   public String getStdout() {
     return this.stdout.getText();
+  }
+
+  public String getStdinName() {
+    return this.stdInName.getText();
   }
 }

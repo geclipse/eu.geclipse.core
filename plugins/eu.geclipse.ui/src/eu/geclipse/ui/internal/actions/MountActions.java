@@ -6,6 +6,7 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.search.ui.IContextMenuConstants;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.actions.ActionGroup;
+import eu.geclipse.core.model.IGridStorage;
 
 public class MountActions extends ActionGroup {
   
@@ -13,7 +14,7 @@ public class MountActions extends ActionGroup {
   
   private MountMenu mountMenu;
   
-  protected MountActions( final IWorkbenchPartSite site ) {
+  public MountActions( final IWorkbenchPartSite site ) {
     this.site = site;
     this.mountMenu = new MountMenu();
     ISelectionProvider selectionProvider

@@ -218,7 +218,7 @@ public class AuthTokenInfoDialog extends IconAndMessageDialog {
   protected void configureShell( final Shell shell ) {
     super.configureShell( shell );
     String tokenType = this.token.getDescription().getTokenTypeName();
-    shell.setText( tokenType+" Info" ); //$NON-NLS-1$
+    shell.setText( tokenType+" Info" );
   }
 
 }

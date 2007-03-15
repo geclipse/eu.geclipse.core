@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: PosixResourceFactoryImpl.java,v 1.1 2007/01/25 15:26:30 emstamou Exp $
+ * $Id: PosixResourceFactoryImpl.java,v 1.2 2007/03/01 09:15:18 emstamou Exp $
  */
 package eu.geclipse.jsdl.posix.util;
 
@@ -21,35 +21,38 @@ import org.eclipse.emf.ecore.xmi.XMLResource;
  * @see eu.geclipse.jsdl.posix.util.PosixResourceImpl
  * @generated
  */
-public class PosixResourceFactoryImpl extends ResourceFactoryImpl {
-	/**
-	 * Creates an instance of the resource factory.
-	 * <!-- begin-user-doc -->
+public class PosixResourceFactoryImpl extends ResourceFactoryImpl 
+{
+  /**
+   * Creates an instance of the resource factory.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public PosixResourceFactoryImpl() {
-		super();
-	}
+   * @generated
+   */
+	public PosixResourceFactoryImpl()
+  {
+    super();
+  }
 
-	/**
-	 * Creates an instance of the resource.
-	 * <!-- begin-user-doc -->
+  /**
+   * Creates an instance of the resource.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Resource createResource(URI uri) {
-		XMLResource result = new PosixResourceImpl(uri);
-		result.getDefaultSaveOptions().put(XMLResource.OPTION_EXTENDED_META_DATA, Boolean.TRUE);
-		result.getDefaultLoadOptions().put(XMLResource.OPTION_EXTENDED_META_DATA, Boolean.TRUE);
+   * @generated
+   */
+	public Resource createResource(URI uri)
+  {
+    XMLResource result = new PosixResourceImpl(uri);
+    result.getDefaultSaveOptions().put(XMLResource.OPTION_EXTENDED_META_DATA, Boolean.TRUE);
+    result.getDefaultLoadOptions().put(XMLResource.OPTION_EXTENDED_META_DATA, Boolean.TRUE);
 
-		result.getDefaultSaveOptions().put(XMLResource.OPTION_SCHEMA_LOCATION, Boolean.TRUE);
+    result.getDefaultSaveOptions().put(XMLResource.OPTION_SCHEMA_LOCATION, Boolean.TRUE);
 
-		result.getDefaultLoadOptions().put(XMLResource.OPTION_USE_ENCODED_ATTRIBUTE_STYLE, Boolean.TRUE);
-		result.getDefaultSaveOptions().put(XMLResource.OPTION_USE_ENCODED_ATTRIBUTE_STYLE, Boolean.TRUE);
+    result.getDefaultLoadOptions().put(XMLResource.OPTION_USE_ENCODED_ATTRIBUTE_STYLE, Boolean.TRUE);
+    result.getDefaultSaveOptions().put(XMLResource.OPTION_USE_ENCODED_ATTRIBUTE_STYLE, Boolean.TRUE);
 
-		result.getDefaultLoadOptions().put(XMLResource.OPTION_USE_LEXICAL_HANDLER, Boolean.TRUE);
-		return result;
-	}
+    result.getDefaultLoadOptions().put(XMLResource.OPTION_USE_LEXICAL_HANDLER, Boolean.TRUE);
+    return result;
+  }
 
 } //PosixResourceFactoryImpl

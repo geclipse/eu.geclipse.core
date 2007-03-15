@@ -16,12 +16,10 @@
 
 package eu.geclipse.ui.wizards.jobs;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -30,9 +28,13 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
+import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridProject;
+import eu.geclipse.core.model.impl.JSDLJobDescription;
 import eu.geclipse.ui.wizards.jobs.internal.FileType;
+
 
 /**
  * Wizard for creating new jsdl file
@@ -44,11 +46,12 @@ public class NewJobWizard extends Wizard implements INewWizard {
   private IStructuredSelection selection;
   private WizardNewFileCreationPage firstPage;
   private IFile file;
-  private EnvNewJobWizardPage envPage;
+//  private EnvNewJobWizardPage envPage;
   private FilesInputNewJobWizardPage inputFilesPage;
   private ExecutableNewJobWizardPage executablePage;
   private FilesOutputNewJobWizardPage outputFilesPage;
 
+  
   @Override
   public void addPages()
   {
@@ -64,10 +67,10 @@ public class NewJobWizard extends Wizard implements INewWizard {
     addPage( this.inputFilesPage );
     this.outputFilesPage = new FilesOutputNewJobWizardPage( Messages.getString( "NewJobWizard.files_output_new_job_page_name" ) ); //$NON-NLS-1$;
     addPage( this.outputFilesPage );
-    this.envPage = new EnvNewJobWizardPage( Messages.getString( "NewJobWizard.env_page_name" ) ); //$NON-NLS-1$
-    addPage( this.envPage );
-    // TabTestPage page = new TabTestPage("cos"); //$NON-NLS-1$
-    // addPage( page );
+    
+//    this.envPage = new EnvNewJobWizardPage( Messages.getString( "NewJobWizard.env_page_name" ) ); //$NON-NLS-1$
+//    addPage( this.envPage );
+    
   }
 
   public void init( final IWorkbench workbench, final IStructuredSelection sel )
@@ -79,11 +82,6 @@ public class NewJobWizard extends Wizard implements INewWizard {
   @Override
   public boolean performFinish()
   {
-    // IFile file = firstPage.createNewFile();
-    // if (file == null) {
-    // return false;
-    // }
-    // return true;
     boolean result = false;
     IRunnableWithProgress op = new IRunnableWithProgress() {
 
@@ -92,8 +90,6 @@ public class NewJobWizard extends Wizard implements INewWizard {
       {
         try {
           createFile( monitor );
-        } catch( CoreException e ) {
-          throw new InvocationTargetException( e );
         } finally {
           monitor.done();
         }
@@ -114,23 +110,37 @@ public class NewJobWizard extends Wizard implements INewWizard {
   }
 
   protected void createFile( final IProgressMonitor monitor )
-    throws CoreException
   {
     monitor.beginTask( Messages.getString( "NewJobWizard.creating_task" ) + this.firstPage.getFileName(), 2 ); //$NON-NLS-1$
     this.file = this.firstPage.createNewFile();
+    
+    JSDLJobDescription jsdlJobDescription = null;
+    IGridElement element = GridModel.getRoot().findElement( this.file );
+    if (element instanceof JSDLJobDescription){
+      jsdlJobDescription = (JSDLJobDescription) element;
+    }
+    
+    
     monitor.worked( 1 );
     monitor.setTaskName( Messages.getString( "NewJobWizard.setting_contents_task" ) + this.firstPage.getFileName() ); //$NON-NLS-1$
-    this.file.setContents( getInitialStream(), true, true, monitor );
+//    this.file.setContents( getInitialStream(), true, true, monitor );
+    if (jsdlJobDescription != null){
+      setInitialModel( jsdlJobDescription );
+      jsdlJobDescription.save(this.file);
+    }
     // jsdl -> jdl translation test
-    // JSDLJobDescription descr = new JSDLJobDescription(file);
-    // try {
-    // WMSClient a = new WMSClient(new
-    // URL("https://wms1.cyf-kr.edu.pl:7443/glite_wms_wmproxy_server"));
-    // System.out.println(a.translateJSDLtoJDL( descr ));
-    // } catch( MalformedURLException e ) {
-    // // TODO Auto-generated catch block
-    // e.printStackTrace();
-    // }
+//     JSDLJobDescription descr = new JSDLJobDescription(file);
+//     try {
+//     WMSClient a = new WMSClient(new
+//     URL("https://wms1.cyf-kr.edu.pl:7443/glite_wms_wmproxy_server"));
+//     System.out.println(a.translateJSDLtoJDL( jsdlJobDescription ));
+//     } catch( MalformedURLException e ) {
+//     // TODO Auto-generated catch block
+//     e.printStackTrace();
+//     } catch( ServiceException e ) {
+//      // TODO Auto-generated catch block
+//      e.printStackTrace();
+//    }
     // end of test
     // catch( ServiceException e ) {
     // // TODO Auto-generated catch block
@@ -138,72 +148,48 @@ public class NewJobWizard extends Wizard implements INewWizard {
     // }
     monitor.worked( 1 );
   }
-
-  private InputStream getInitialStream() {
-    String input = "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n"; //$NON-NLS-1$
-    input = input
-            + "<jsdl:JobDefinition xmlns=\"http://www.example.org/\" xmlns:jsdl=\"http://schemas.ggf.org/jsdl/2005/11/jsdl\" xmlns:jsdl-posix=\"http://schemas.ggf.org/jsdl/2005/11/jsdl-posix\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\">\n"; //$NON-NLS-1$
-    String executableFile = this.executablePage.getExecutableFile();
-    String jobName = this.executablePage.getJobName();
-    String jobDescription = this.executablePage.getJobDescription();
-    input = input + "<jsdl:JobDescription>\n"; //$NON-NLS-1$
-    input = input + " <jsdl:JobIdentification>\n"; //$NON-NLS-1$
-    input = input + "  <jsdl:JobName>" + jobName + "</jsdl:JobName>\n"; //$NON-NLS-1$ //$NON-NLS-2$
-    input = input + "  <jsdl:Description>" + jobDescription; //$NON-NLS-1$
-    input = input + "  </jsdl:Description>\n"; //$NON-NLS-1$
-    input = input + " </jsdl:JobIdentification>\n"; //$NON-NLS-1$
-    input = input + " <jsdl:Application>\n"; //$NON-NLS-1$
-    input = input
-            + "  <jsdl:ApplicationName>" + executableFile + "</jsdl:ApplicationName>\n"; //$NON-NLS-1$ //$NON-NLS-2$
-    input = input + "  <jsdl-posix:POSIXApplication>\n"; //$NON-NLS-1$
-    input = input + "   <jsdl-posix:Executable>\n" + executableFile + "\n"; //$NON-NLS-1$ //$NON-NLS-2$
-    input = input + "   </jsdl-posix:Executable>\n"; //$NON-NLS-1$
-    input = input
-            + "   <jsdl-posix:Input>\n" + this.inputFilesPage.getStdin() + "\n"; //$NON-NLS-1$ //$NON-NLS-2$
-    input = input + "   </jsdl-posix:Input>\n"; //$NON-NLS-1$
-    input = input
-            + "   <jsdl-posix:Output>\n" + this.inputFilesPage.getStdout() + "\n"; //$NON-NLS-1$//$NON-NLS-2$
-    input = input + "   </jsdl-posix:Output>\n"; //$NON-NLS-1$
-    input = input + "  </jsdl-posix:POSIXApplication>\n"; //$NON-NLS-1$
-    input = input + " </jsdl:Application>\n"; //$NON-NLS-1$
+  
+  
+  private void setInitialModel(final JSDLJobDescription jsdl){
+    jsdl.createRoot();
+    jsdl.addJobDescription();
+    jsdl.addJobIdentification(this.executablePage.getJobName(), this.executablePage.getJobDescription());
+    if (! this.executablePage.getExecutableFile().equals( "" )){ //$NON-NLS-1$
+      jsdl.addApplication();
+      String in = this.inputFilesPage.getStdin();
+      String out = this.inputFilesPage.getStdout();
+      if (in.equals( Messages.getString( "FilesInputNewJobWizardPage.stdin_info" ) )){ //$NON-NLS-1$
+        in = null;
+      }
+      if (out.equals( Messages.getString( "FilesInputNewJobWizardPage.stdin_info" ) )){ //$NON-NLS-1$
+        out = null;
+      }
+      jsdl.addPOSIXApplicationDetails(this.executablePage.getApplicationName(), this.executablePage.getExecutableFile(), in, out);
+    }
     HashMap<String, String> outFiles = this.outputFilesPage.getFiles( FileType.OUTPUT );
     if( !outFiles.isEmpty() ) {
       for( String name : outFiles.keySet() ) {
-        input = input + " <jsdl:DataStaging>\n"; //$NON-NLS-1$
-        input = input + "  <jsdl:FileName>" + name + "</jsdl:FileName>\n"; //$NON-NLS-1$//$NON-NLS-2$
-        input = input + "  <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"; //$NON-NLS-1$
-        input = input
-                + "  <jsdl:DeleteOnTermination>true</jsdl:DeleteOnTermination>\n"; //$NON-NLS-1$
-        input = input + "  <jsdl:Source>\n"; //$NON-NLS-1$
-        input = input
-                + "    <jsdl:URI>" + outFiles.get( name ) + "</jsdl:URI>\n"; //$NON-NLS-1$ //$NON-NLS-2$
-        input = input + "  </jsdl:Source>\n"; //$NON-NLS-1$
-        input = input + " </jsdl:DataStaging>\n"; //$NON-NLS-1$
+        jsdl.setOutDataStaging(name, outFiles.get( name ));
       }
     }
     outFiles = this.outputFilesPage.getFiles( FileType.INPUT );
     if( !outFiles.isEmpty() ) {
       for( String name : outFiles.keySet() ) {
-        input = input + " <jsdl:DataStaging>\n"; //$NON-NLS-1$
-        input = input + "  <jsdl:FileName>" + name + "</jsdl:FileName>\n"; //$NON-NLS-1$//$NON-NLS-2$
-        input = input + "  <jsdl:CreationFlag>overwrite</jsdl:CreationFlag>\n"; //$NON-NLS-1$
-        input = input
-                + "  <jsdl:DeleteOnTermination>true</jsdl:DeleteOnTermination>\n"; //$NON-NLS-1$
-        input = input + "  <jsdl:Target>\n"; //$NON-NLS-1$
-        input = input
-                + "    <jsdl:URI>" + outFiles.get( name ) + "</jsdl:URI>\n"; //$NON-NLS-1$ //$NON-NLS-2$
-        input = input + "  </jsdl:Target>\n"; //$NON-NLS-1$
-        input = input + " </jsdl:DataStaging>\n"; //$NON-NLS-1$
+        jsdl.setInDataStaging(name, outFiles.get( name ));
       }
     }
-    input = input + "</jsdl:JobDescription>\n"; //$NON-NLS-1$
-    input = input + "</jsdl:JobDefinition>"; //$NON-NLS-1$
-    return new ByteArrayInputStream( input.getBytes() );
   }
+
+  
   class FirstPage extends WizardNewFileCreationPage {
 
     private IStructuredSelection iniSelection;
 
+    /**
+     * Creates new instance of {@link FirstPage}
+     * @param pageName name of this page
+     * @param selection selection to be pass to new instance
+     */
     public FirstPage( final String pageName, final IStructuredSelection selection ) {
       super( pageName, selection );
       this.iniSelection = selection;
@@ -214,29 +200,20 @@ public class NewJobWizard extends Wizard implements INewWizard {
     {
       {
         Object obj = this.iniSelection.getFirstElement();
-        IGridContainer container = null;
-        IGridContainer child = null;
         if( obj instanceof IGridContainer ) {
-          container = ( IGridContainer )obj;
-          while( container.getParent() != null ) {
-            if( child != null ) {
-              if( child.getName().equals( "Job Descriptions" ) ) { //$NON-NLS-1$
-                break;
-              }
-            }
-            child = container;
-            container = container.getParent();
-          }
-          if( !child.getName().equals( "Job Descriptions" ) ) { //$NON-NLS-1$
-            for( IGridElement element : child.getChildren( null ) ) {
-              if( element.getName().equals( "Job Descriptions" ) //$NON-NLS-1$
-                  && element instanceof IGridContainer )
-              {
-                child = ( IGridContainer )element;
+          IGridElement element = ( IGridElement ) obj;
+          IGridProject project = element.getProject();
+          if ( project != null ) {
+            IGridElement descriptions = project.findChild( IGridProject.DIR_JOBDESCRIPTIONS );
+            if ( descriptions != null ) {
+              IPath cPath = descriptions.getPath();
+              IPath ePath = element.getPath();
+              if ( !cPath.isPrefixOf( ePath ) ) {
+                element = descriptions;
               }
             }
           }
-          super.setContainerFullPath( child.getPath() );
+          super.setContainerFullPath( element.getPath() );
         } else {
           super.initialPopulateContainerNameField();
         }

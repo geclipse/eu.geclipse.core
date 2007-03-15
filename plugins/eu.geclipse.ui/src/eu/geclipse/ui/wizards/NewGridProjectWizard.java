@@ -33,7 +33,7 @@ public class NewGridProjectWizard extends Wizard implements INewWizard {
 
   public void init( final IWorkbench workbench, final IStructuredSelection selection ) {
     setWindowTitle( Messages.getString("NewGridProjectWizard.windowTitle") ); //$NON-NLS-1$
-    URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/newgridprjwizard.gif" ); //$NON-NLS-1$
+    URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/wizban/newgridprj_wiz.gif" ); //$NON-NLS-1$
     setDefaultPageImageDescriptor( ImageDescriptor.createFromURL( imgUrl ) );
   }
   

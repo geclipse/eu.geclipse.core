@@ -4,23 +4,36 @@ import java.util.List;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.dnd.Clipboard;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.ResourceTransfer;
-import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.core.model.IGridContainer;
+import eu.geclipse.ui.internal.Activator;
+import eu.geclipse.ui.views.GridModelViewPart;
 
 public class PasteAction extends TransferAction {
   
-  public PasteAction(  final Clipboard clipboard  ) {
-    super( "Paste", clipboard );
+  GridModelViewPart view;
+  
+  public PasteAction( final GridModelViewPart view,
+                      final Clipboard clipboard ) {
+    super( "&Paste@Ctrl+V", clipboard );
+    ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
+    ImageDescriptor pasteImage 
+        = sharedImages.getImageDescriptor( ISharedImages.IMG_TOOL_PASTE );
+    setImageDescriptor( pasteImage );
+    this.view = view;
   }
   
   @Override
   public void run() {
     IStructuredSelection selection = getStructuredSelection();
     if ( selection.size() == 1 ) {
-      Object element = selection.getFirstElement();
+      final Object element = selection.getFirstElement();
       if ( isDropTarget( element ) ) {
         IContainer destination
           = ( IContainer )( ( IGridContainer ) element ).getResource();
@@ -35,6 +48,14 @@ public class PasteAction extends TransferAction {
             Activator.logException( cExc );
           }
         }
+        Display display = PasteAction.this.view.getSite().getShell().getDisplay();
+        display.syncExec( new Runnable() {
+          public void run() {
+            IGridContainer container = ( IGridContainer ) element;
+            container.setDirty();
+            PasteAction.this.view.refreshViewer( container );
+          }
+        } );
       }
     }
   }

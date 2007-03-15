@@ -20,8 +20,8 @@ import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
 import eu.geclipse.core.model.IGridContainer;
-import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IGridResource;
+import eu.geclipse.core.model.impl.AbstractGridElement;
 import eu.geclipse.info.glue.AbstractGlueTable;
 
 /**
@@ -30,7 +30,9 @@ import eu.geclipse.info.glue.AbstractGlueTable;
  * is marked as abstract. Instead of using it directly the developer should
  * implement subclasses that are specific for a certain glue element type.  
  */
-public abstract class GridGlueElement implements IGridResource {
+public abstract class GridGlueElement
+    extends AbstractGridElement
+    implements IGridResource {
   
   /**
    * The parent of this element.
@@ -54,21 +56,6 @@ public abstract class GridGlueElement implements IGridResource {
     this.parent = parent;
     this.glueTable = glueTable;
   }
-  
-  /* (non-Javadoc)
-   * @see eu.geclipse.core.model.IGridElement#dispose()
-   */
-  public void dispose() {
-    // empty implementation
-  }
-  
-  /* (non-Javadoc)
-   * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
-   */
-  @SuppressWarnings("unchecked")
-  public Object getAdapter( final Class adapter ) {
-    return null;
-  }  
   
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridElement#getFileStore()
@@ -103,17 +90,6 @@ public abstract class GridGlueElement implements IGridResource {
   }
 
   /* (non-Javadoc)
-   * @see eu.geclipse.core.model.IGridElement#getProject()
-   */
-  public IGridProject getProject() {
-    IGridContainer par = getParent();
-    while ( ( par != null ) && !(par instanceof IGridProject ) ) {
-      par = par.getParent();
-    }
-    return ( IGridProject ) par;
-  }
-
-  /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridElement#getResource()
    */
   public IResource getResource() {
@@ -125,13 +101,6 @@ public abstract class GridGlueElement implements IGridResource {
    */
   public boolean isLocal() {
     return false;
-  }
-
-  /* (non-Javadoc)
-   * @see eu.geclipse.core.model.IGridElement#isVirtual()
-   */
-  public boolean isVirtual() {
-    return true;
   }
 
 }

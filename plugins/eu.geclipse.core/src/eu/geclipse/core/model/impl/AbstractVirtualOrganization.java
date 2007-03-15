@@ -20,10 +20,14 @@ import java.util.List;
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.internal.model.VoManager;
 import eu.geclipse.core.model.GridModelException;
+import eu.geclipse.core.model.GridModelProblems;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridInfoService;
@@ -39,11 +43,26 @@ public abstract class AbstractVirtualOrganization
     extends AbstractGridContainer
     implements IVirtualOrganization {
   
+  /**
+   * Create a new VO.
+   */
   protected AbstractVirtualOrganization() {
-    super( null );
+    super();
   }
   
   @Override
+  public void dispose() {
+    IFileStore fileStore = getFileStore();
+    try {
+      fileStore.delete( EFS.NONE, null );
+    } catch( CoreException cExc ) {
+      Activator.logException( cExc );
+    }
+  }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.impl.AbstractGridElement#getFileStore()
+   */
   public IFileStore getFileStore() {
     IFileStore fileStore = VoManager.getVoManagerStore().getChild( getName() );
     IFileInfo fileInfo = fileStore.fetchInfo();
@@ -57,7 +76,11 @@ public abstract class AbstractVirtualOrganization
     return fileStore;
   }
   
-  public IGridInfoService getInfoService() {
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IVirtualOrganization#getInfoService()
+   */
+  public IGridInfoService getInfoService()
+      throws GridModelException {
     IGridInfoService infoService = null;
     IGridElement[] children = getChildren( null );
     for ( IGridElement child : children ) {
@@ -69,12 +92,33 @@ public abstract class AbstractVirtualOrganization
     return infoService;
   }
   
-  @Override
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.impl.AbstractGridElement#getParent()
+   */
   public IGridContainer getParent() {
     return VoManager.getManager();
   }
   
-  public IGridService[] getServices() {
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.impl.AbstractGridElement#getPath()
+   */
+  public IPath getPath() {
+    IPath path = new Path( VoManager.NAME );
+    return path.append( getName() );
+  }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridElement#getResource()
+   */
+  public IResource getResource() {
+    return null;
+  }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IVirtualOrganization#getServices()
+   */
+  public IGridService[] getServices()
+      throws GridModelException {
     List< IGridService > services = new ArrayList< IGridService >();
     IGridElement[] children = getChildren( null );
     for ( IGridElement child : children ) {
@@ -91,14 +135,10 @@ public abstract class AbstractVirtualOrganization
   public boolean isLocal() {
     return true;
   }
-
-  /* (non-Javadoc)
-   * @see eu.geclipse.core.model.IGridElement#isVirtual()
-   */
-  public boolean isVirtual() {
-    return true;
-  }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IStorableElement#load()
+   */
   public void load() throws GridModelException {
     deleteAll();
     IFileStore fileStore = getFileStore();
@@ -111,10 +151,13 @@ public abstract class AbstractVirtualOrganization
         }
       }
     } catch ( CoreException cExc ) {
-      throw new GridModelException( cExc );
+      throw new GridModelException( GridModelProblems.ELEMENT_LOAD_FAILED, cExc );
     }
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IStorableElement#save()
+   */
   public void save() throws GridModelException {
     IGridElement[] children = getChildren( null );
     for ( IGridElement child : children ) {
@@ -124,6 +167,13 @@ public abstract class AbstractVirtualOrganization
     }
   }
   
+  /**
+   * Load a child with the given name.
+   * 
+   * @param childName The child's name.
+   * @return The element that was loaded or null if no such element
+   * could be loaded.
+   */
   protected abstract IGridElement loadChild( final String childName );
   
 }

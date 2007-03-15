@@ -26,7 +26,7 @@ public interface IConnectionDescription {
   /**
    * Method creating new connection from this description
    * 
-   * @return
+   * @return The newly created connection.
    */
   public AbstractConnection createConnection();
 
@@ -34,7 +34,7 @@ public interface IConnectionDescription {
    * Method returning the URI of resource to which {@link IConnection} created
    * from this description should be established
    * 
-   * @return
+   * @return The URI of the target of the connection.
    */
   public URI getFileSystemURI();
 }

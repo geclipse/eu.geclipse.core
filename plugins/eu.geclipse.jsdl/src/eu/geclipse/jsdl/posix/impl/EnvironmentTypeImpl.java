@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: EnvironmentTypeImpl.java,v 1.1 2007/01/25 15:26:29 emstamou Exp $
+ * $Id: EnvironmentTypeImpl.java,v 1.2 2007/03/01 09:15:17 emstamou Exp $
  */
 package eu.geclipse.jsdl.posix.impl;
 
@@ -38,287 +38,309 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class EnvironmentTypeImpl extends EObjectImpl implements EnvironmentType {
-	/**
-	 * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
-	 * <!-- begin-user-doc -->
+public class EnvironmentTypeImpl extends EObjectImpl implements EnvironmentType 
+{
+  /**
+   * The default value of the '{@link #getValue() <em>Value</em>}' attribute.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getValue()
-	 * @generated
-	 * @ordered
-	 */
+   * @see #getValue()
+   * @generated
+   * @ordered
+   */
 	protected static final String VALUE_EDEFAULT = null;
 
-	/**
-	 * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
-	 * <!-- begin-user-doc -->
+  /**
+   * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getValue()
-	 * @generated
-	 * @ordered
-	 */
+   * @see #getValue()
+   * @generated
+   * @ordered
+   */
 	protected String value = VALUE_EDEFAULT;
 
-	/**
-	 * The default value of the '{@link #getFilesystemName() <em>Filesystem Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
+  /**
+   * The default value of the '{@link #getFilesystemName() <em>Filesystem Name</em>}' attribute.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getFilesystemName()
-	 * @generated
-	 * @ordered
-	 */
+   * @see #getFilesystemName()
+   * @generated
+   * @ordered
+   */
 	protected static final String FILESYSTEM_NAME_EDEFAULT = null;
 
-	/**
-	 * The cached value of the '{@link #getFilesystemName() <em>Filesystem Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
+  /**
+   * The cached value of the '{@link #getFilesystemName() <em>Filesystem Name</em>}' attribute.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getFilesystemName()
-	 * @generated
-	 * @ordered
-	 */
+   * @see #getFilesystemName()
+   * @generated
+   * @ordered
+   */
 	protected String filesystemName = FILESYSTEM_NAME_EDEFAULT;
 
-	/**
-	 * The default value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
+  /**
+   * The default value of the '{@link #getName() <em>Name</em>}' attribute.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
+   * @see #getName()
+   * @generated
+   * @ordered
+   */
 	protected static final String NAME_EDEFAULT = null;
 
-	/**
-	 * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
-	 * <!-- begin-user-doc -->
+  /**
+   * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getName()
-	 * @generated
-	 * @ordered
-	 */
+   * @see #getName()
+   * @generated
+   * @ordered
+   */
 	protected String name = NAME_EDEFAULT;
 
-	/**
-	 * The cached value of the '{@link #getAnyAttribute() <em>Any Attribute</em>}' attribute list.
-	 * <!-- begin-user-doc -->
+  /**
+   * The cached value of the '{@link #getAnyAttribute() <em>Any Attribute</em>}' attribute list.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getAnyAttribute()
-	 * @generated
-	 * @ordered
-	 */
+   * @see #getAnyAttribute()
+   * @generated
+   * @ordered
+   */
 	protected FeatureMap anyAttribute = null;
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected EnvironmentTypeImpl() {
-		super();
-	}
+   * @generated
+   */
+	protected EnvironmentTypeImpl()
+  {
+    super();
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected EClass eStaticClass() {
-		return PosixPackage.Literals.ENVIRONMENT_TYPE;
-	}
+   * @generated
+   */
+	protected EClass eStaticClass()
+  {
+    return PosixPackage.Literals.ENVIRONMENT_TYPE;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String getValue() {
-		return value;
-	}
+   * @generated
+   */
+	public String getValue()
+  {
+    return value;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setValue(String newValue) {
-		String oldValue = value;
-		value = newValue;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PosixPackage.ENVIRONMENT_TYPE__VALUE, oldValue, value));
-	}
+   * @generated
+   */
+	public void setValue(String newValue)
+  {
+    String oldValue = value;
+    value = newValue;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, PosixPackage.ENVIRONMENT_TYPE__VALUE, oldValue, value));
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String getFilesystemName() {
-		return filesystemName;
-	}
+   * @generated
+   */
+	public String getFilesystemName()
+  {
+    return filesystemName;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setFilesystemName(String newFilesystemName) {
-		String oldFilesystemName = filesystemName;
-		filesystemName = newFilesystemName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PosixPackage.ENVIRONMENT_TYPE__FILESYSTEM_NAME, oldFilesystemName, filesystemName));
-	}
+   * @generated
+   */
+	public void setFilesystemName(String newFilesystemName)
+  {
+    String oldFilesystemName = filesystemName;
+    filesystemName = newFilesystemName;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, PosixPackage.ENVIRONMENT_TYPE__FILESYSTEM_NAME, oldFilesystemName, filesystemName));
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String getName() {
-		return name;
-	}
+   * @generated
+   */
+	public String getName()
+  {
+    return name;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setName(String newName) {
-		String oldName = name;
-		name = newName;
-		if (eNotificationRequired())
-			eNotify(new ENotificationImpl(this, Notification.SET, PosixPackage.ENVIRONMENT_TYPE__NAME, oldName, name));
-	}
+   * @generated
+   */
+	public void setName(String newName)
+  {
+    String oldName = name;
+    name = newName;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, PosixPackage.ENVIRONMENT_TYPE__NAME, oldName, name));
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public FeatureMap getAnyAttribute() {
-		if (anyAttribute == null) {
-			anyAttribute = new BasicFeatureMap(this, PosixPackage.ENVIRONMENT_TYPE__ANY_ATTRIBUTE);
-		}
-		return anyAttribute;
-	}
+   * @generated
+   */
+	public FeatureMap getAnyAttribute()
+  {
+    if (anyAttribute == null)
+    {
+      anyAttribute = new BasicFeatureMap(this, PosixPackage.ENVIRONMENT_TYPE__ANY_ATTRIBUTE);
+    }
+    return anyAttribute;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs) {
-		switch (featureID) {
-			case PosixPackage.ENVIRONMENT_TYPE__ANY_ATTRIBUTE:
-				return ((InternalEList)getAnyAttribute()).basicRemove(otherEnd, msgs);
-		}
-		return super.eInverseRemove(otherEnd, featureID, msgs);
-	}
+   * @generated
+   */
+	public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+  {
+    switch (featureID)
+    {
+      case PosixPackage.ENVIRONMENT_TYPE__ANY_ATTRIBUTE:
+        return ((InternalEList)getAnyAttribute()).basicRemove(otherEnd, msgs);
+    }
+    return super.eInverseRemove(otherEnd, featureID, msgs);
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
-		switch (featureID) {
-			case PosixPackage.ENVIRONMENT_TYPE__VALUE:
-				return getValue();
-			case PosixPackage.ENVIRONMENT_TYPE__FILESYSTEM_NAME:
-				return getFilesystemName();
-			case PosixPackage.ENVIRONMENT_TYPE__NAME:
-				return getName();
-			case PosixPackage.ENVIRONMENT_TYPE__ANY_ATTRIBUTE:
-				if (coreType) return getAnyAttribute();
-				return ((FeatureMap.Internal)getAnyAttribute()).getWrapper();
-		}
-		return super.eGet(featureID, resolve, coreType);
-	}
+   * @generated
+   */
+	public Object eGet(int featureID, boolean resolve, boolean coreType)
+  {
+    switch (featureID)
+    {
+      case PosixPackage.ENVIRONMENT_TYPE__VALUE:
+        return getValue();
+      case PosixPackage.ENVIRONMENT_TYPE__FILESYSTEM_NAME:
+        return getFilesystemName();
+      case PosixPackage.ENVIRONMENT_TYPE__NAME:
+        return getName();
+      case PosixPackage.ENVIRONMENT_TYPE__ANY_ATTRIBUTE:
+        if (coreType) return getAnyAttribute();
+        return ((FeatureMap.Internal)getAnyAttribute()).getWrapper();
+    }
+    return super.eGet(featureID, resolve, coreType);
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void eSet(int featureID, Object newValue) {
-		switch (featureID) {
-			case PosixPackage.ENVIRONMENT_TYPE__VALUE:
-				setValue((String)newValue);
-				return;
-			case PosixPackage.ENVIRONMENT_TYPE__FILESYSTEM_NAME:
-				setFilesystemName((String)newValue);
-				return;
-			case PosixPackage.ENVIRONMENT_TYPE__NAME:
-				setName((String)newValue);
-				return;
-			case PosixPackage.ENVIRONMENT_TYPE__ANY_ATTRIBUTE:
-				((FeatureMap.Internal)getAnyAttribute()).set(newValue);
-				return;
-		}
-		super.eSet(featureID, newValue);
-	}
+   * @generated
+   */
+	public void eSet(int featureID, Object newValue)
+  {
+    switch (featureID)
+    {
+      case PosixPackage.ENVIRONMENT_TYPE__VALUE:
+        setValue((String)newValue);
+        return;
+      case PosixPackage.ENVIRONMENT_TYPE__FILESYSTEM_NAME:
+        setFilesystemName((String)newValue);
+        return;
+      case PosixPackage.ENVIRONMENT_TYPE__NAME:
+        setName((String)newValue);
+        return;
+      case PosixPackage.ENVIRONMENT_TYPE__ANY_ATTRIBUTE:
+        ((FeatureMap.Internal)getAnyAttribute()).set(newValue);
+        return;
+    }
+    super.eSet(featureID, newValue);
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void eUnset(int featureID) {
-		switch (featureID) {
-			case PosixPackage.ENVIRONMENT_TYPE__VALUE:
-				setValue(VALUE_EDEFAULT);
-				return;
-			case PosixPackage.ENVIRONMENT_TYPE__FILESYSTEM_NAME:
-				setFilesystemName(FILESYSTEM_NAME_EDEFAULT);
-				return;
-			case PosixPackage.ENVIRONMENT_TYPE__NAME:
-				setName(NAME_EDEFAULT);
-				return;
-			case PosixPackage.ENVIRONMENT_TYPE__ANY_ATTRIBUTE:
-				getAnyAttribute().clear();
-				return;
-		}
-		super.eUnset(featureID);
-	}
+   * @generated
+   */
+	public void eUnset(int featureID)
+  {
+    switch (featureID)
+    {
+      case PosixPackage.ENVIRONMENT_TYPE__VALUE:
+        setValue(VALUE_EDEFAULT);
+        return;
+      case PosixPackage.ENVIRONMENT_TYPE__FILESYSTEM_NAME:
+        setFilesystemName(FILESYSTEM_NAME_EDEFAULT);
+        return;
+      case PosixPackage.ENVIRONMENT_TYPE__NAME:
+        setName(NAME_EDEFAULT);
+        return;
+      case PosixPackage.ENVIRONMENT_TYPE__ANY_ATTRIBUTE:
+        getAnyAttribute().clear();
+        return;
+    }
+    super.eUnset(featureID);
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean eIsSet(int featureID) {
-		switch (featureID) {
-			case PosixPackage.ENVIRONMENT_TYPE__VALUE:
-				return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
-			case PosixPackage.ENVIRONMENT_TYPE__FILESYSTEM_NAME:
-				return FILESYSTEM_NAME_EDEFAULT == null ? filesystemName != null : !FILESYSTEM_NAME_EDEFAULT.equals(filesystemName);
-			case PosixPackage.ENVIRONMENT_TYPE__NAME:
-				return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-			case PosixPackage.ENVIRONMENT_TYPE__ANY_ATTRIBUTE:
-				return anyAttribute != null && !anyAttribute.isEmpty();
-		}
-		return super.eIsSet(featureID);
-	}
+   * @generated
+   */
+	public boolean eIsSet(int featureID)
+  {
+    switch (featureID)
+    {
+      case PosixPackage.ENVIRONMENT_TYPE__VALUE:
+        return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
+      case PosixPackage.ENVIRONMENT_TYPE__FILESYSTEM_NAME:
+        return FILESYSTEM_NAME_EDEFAULT == null ? filesystemName != null : !FILESYSTEM_NAME_EDEFAULT.equals(filesystemName);
+      case PosixPackage.ENVIRONMENT_TYPE__NAME:
+        return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+      case PosixPackage.ENVIRONMENT_TYPE__ANY_ATTRIBUTE:
+        return anyAttribute != null && !anyAttribute.isEmpty();
+    }
+    return super.eIsSet(featureID);
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String toString() {
-		if (eIsProxy()) return super.toString();
+   * @generated
+   */
+	public String toString()
+  {
+    if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (value: ");
-		result.append(value);
-		result.append(", filesystemName: ");
-		result.append(filesystemName);
-		result.append(", name: ");
-		result.append(name);
-		result.append(", anyAttribute: ");
-		result.append(anyAttribute);
-		result.append(')');
-		return result.toString();
-	}
+    StringBuffer result = new StringBuffer(super.toString());
+    result.append(" (value: ");
+    result.append(value);
+    result.append(", filesystemName: ");
+    result.append(filesystemName);
+    result.append(", name: ");
+    result.append(name);
+    result.append(", anyAttribute: ");
+    result.append(anyAttribute);
+    result.append(')');
+    return result.toString();
+  }
 
 } //EnvironmentTypeImpl

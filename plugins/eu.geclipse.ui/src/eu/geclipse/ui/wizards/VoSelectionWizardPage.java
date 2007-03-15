@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.window.Window;
+import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -24,7 +25,9 @@ import eu.geclipse.core.model.IGridInfoService;
 import eu.geclipse.core.model.IGridService;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.IVoManager;
+import eu.geclipse.ui.dialogs.NewProblemDialog;
 import eu.geclipse.ui.internal.Activator;
+import eu.geclipse.ui.wizards.wizardselection.ExtPointWizardSelectionListPage;
 
 public class VoSelectionWizardPage extends WizardPage {
   
@@ -34,10 +37,10 @@ public class VoSelectionWizardPage extends WizardPage {
   
   public VoSelectionWizardPage() {
     super( "voOPage", //$NON-NLS-1$
-           "VO Selection Page", //$NON-NLS-1$
+           "VO Selection Page",
            null );
-    setDescription( "Specify the VO that should be used in the project" );
-    URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/authtokenwizard.gif" ); //$NON-NLS-1$
+    setDescription( "Specify the VO that should be used" );
+    URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/wizban/newtoken_wiz.gif" ); //$NON-NLS-1$
     setImageDescriptor( ImageDescriptor.createFromURL( imgUrl ) );
   }
 
@@ -118,7 +121,7 @@ public class VoSelectionWizardPage extends WizardPage {
     IVirtualOrganization selectedVo = null;
     String[] selection = this.voList.getSelection();
     if ( ( selection != null ) && ( selection.length != 0 ) ) {
-      IVoManager voManager = GridModel.getRoot().getVoManager();
+      IVoManager voManager = GridModel.getVoManager();
       selectedVo =  ( IVirtualOrganization ) voManager.findChild( selection[0] );
     }
     if ( selectedVo == null ) {
@@ -130,20 +133,31 @@ public class VoSelectionWizardPage extends WizardPage {
   }
   
   protected void createNewVO() {
-    GridElementCreatorWizard wizard
-      = new GridElementCreatorWizard( IVirtualOrganization.class );
-    WizardDialog dialog = new WizardDialog( this.getShell(),
-                                            wizard );
+    URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/wizban/newtoken_wiz.gif" ); //$NON-NLS-1$
+    Wizard wizard = new Wizard() {
+      @Override
+      public void addPages() {
+        ExtPointWizardSelectionListPage page = new ExtPointWizardSelectionListPage(
+            "pagename",
+            "eu.geclipse.ui.newVoWizards",
+            "Create a new VO",
+            "Create a new Virtual Organization of the selected type." );
+        addPage( page );
+      }
+      
+      @Override
+      public boolean performFinish() {
+        return false;
+      }
+    };
+    wizard.setForcePreviousAndNextButtons( true );
     wizard.setNeedsProgressMonitor( true );
-    wizard.setFirstPageComboLabel( "Type of the new Virtual Organization:" );
-    wizard.setFirstPageDescription( "Create a new Virtual Organization of the selected type." );
-    wizard.setFirstPageTitle( "Create a new VO" );
     wizard.setWindowTitle( "Create a new VO" );
-    URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/authtokenwizard.gif" ); //$NON-NLS-1$
-    wizard.setFirstPageImage( ImageDescriptor.createFromURL( imgUrl ) );
+    wizard.setDefaultPageImageDescriptor( ImageDescriptor.createFromURL( imgUrl ) );
+    WizardDialog dialog = new WizardDialog( this.getShell(), wizard );
     if ( dialog.open() == Window.OK ) {
       try {
-        GridModel.getRoot().getVoManager().saveElements();
+        GridModel.getVoManager().saveElements();
       } catch( GridModelException gmExc ) {
         setErrorMessage( "Error while saving new element: "
                          + gmExc.getLocalizedMessage() );
@@ -154,33 +168,34 @@ public class VoSelectionWizardPage extends WizardPage {
   protected void showSelectedInfo() {
     IVirtualOrganization vo = getSelectedVo();
     if ( vo != null ) {
-      String text = new String();
-      text += "Name:\n\t" + vo.getName() + "\n";
-      text += "Type:\n\t" + vo.getTypeName() + "\n";
-      IGridInfoService infoService = vo.getInfoService();
-      if ( infoService != null ) {
-        text += "\nInformation Service:\n\tName:\n\t\t" + infoService.getName();
-        text += "\n\tURI:\n\t\t" + infoService.getURI().toString(); 
-      }
-      IGridService[] services = vo.getServices();
-      text += "\n\nOther Services:";
-      if ( services.length > 1 ) {
-        for ( IGridService service : services ) {
-          if ( service != infoService ) {
-            text += "\n\tName:\n\t\t" + service.getName();
-            text += "\n\tURI:\n\t\t" + service.getURI().toString();
-          }
+      try {
+        String text = new String();
+        text += "Name:\n\t" + vo.getName() + '\n';
+        text += "Type:\n\t" + vo.getTypeName() + '\n';
+        IGridInfoService infoService = vo.getInfoService();
+        if ( infoService != null ) {
+          text += "\nInformation Service:\n\tName:\n\t\t" + infoService.getName();
+          text += "\n\tURI:\n\t\t" + infoService.getURI().toString(); 
         }
-      } else {
-        text += "\n\tNone";
+        IGridService[] services = vo.getServices();
+        text += "\n\nOther Services:";
+        if ( services.length > 1 ) {
+          for ( IGridService service : services ) {
+            if ( service != infoService ) {
+              text += "\n\tName:\n\t\t" + service.getName();
+              text += "\n\tURI:\n\t\t" + service.getURI().toString();
+            }
+          }
+        } else {
+          text += "\n\tNone";
+        }
+        this.infoText.setText( text );
+      } catch ( GridModelException gmExc ) {
+        NewProblemDialog.openProblem( getShell(),
+                                      "VO info problem",
+                                      "Unable to query services for VO " + vo.getName(),
+                                      gmExc );
       }
-      /*int fieldCount = description.getFieldCount();
-      for ( int i = 0 ; i < fieldCount ; i++ ) {
-        String fieldName = description.getFieldName( i );
-        String fieldValue = description.getFieldValue( fieldName );
-        text += fieldName + ":\t" + fieldValue + "\n";
-      }*/
-      this.infoText.setText( text );
     } else {
       this.infoText.setText( "" ); //$NON-NLS-1$
     }
@@ -188,21 +203,28 @@ public class VoSelectionWizardPage extends WizardPage {
   
   protected void updateVoList() {
     this.voList.removeAll();
-    IVoManager manager = GridModel.getRoot().getVoManager();
-    IGridElement[] vos = manager.getChildren( null );
-    java.util.List< String > nameList = new ArrayList< String >();
-    for ( IGridElement vo : vos ) {
-      nameList.add( vo.getName() );
-    }
-    Collections.sort( nameList );
-    for ( String name : nameList ) {
-      this.voList.add( name );
-    }
-    IGridElement defaultVo = manager.getDefault();
-    if ( defaultVo != null ) {
-      this.voList.setSelection( new String[] { defaultVo.getName() } );
-    } else if ( this.voList.getItemCount() > 0 ){
-      this.voList.setSelection( 0 );
+    IVoManager manager = GridModel.getVoManager();
+    try {
+      IGridElement[] vos = manager.getChildren( null );
+      java.util.List< String > nameList = new ArrayList< String >();
+      for ( IGridElement vo : vos ) {
+        nameList.add( vo.getName() );
+      }
+      Collections.sort( nameList );
+      for ( String name : nameList ) {
+        this.voList.add( name );
+      }
+      IGridElement defaultVo = manager.getDefault();
+      if ( defaultVo != null ) {
+        this.voList.setSelection( new String[] { defaultVo.getName() } );
+      } else if ( this.voList.getItemCount() > 0 ){
+        this.voList.setSelection( 0 );
+      }
+    } catch ( GridModelException gmExc ) {
+      NewProblemDialog.openProblem( getShell(),
+                                    "VO list problem",
+                                    "Unable to query registered VOs",
+                                    gmExc );
     }
   }
   

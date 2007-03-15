@@ -22,7 +22,7 @@
          point="org.eclipse.ui.views">
       <view
             name="GVid"
-            icon="icons/geclipse.gif"
+            icon="icons/eview16/gvid.gif"
             category="eu.geclipse.ui.viewcategory"
             class="eu.geclipse.gvid.internal.views.GVidView"
             id="eu.geclipse.gvid.views.GVidView">

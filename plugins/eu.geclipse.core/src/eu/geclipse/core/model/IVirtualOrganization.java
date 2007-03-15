@@ -31,16 +31,20 @@ public interface IVirtualOrganization
    * 
    * @return The info service tha can be queried for VO related
    * information. 
+   * @throws GridModelException If an error occures while the service
+   * is fetched.
    */
-  public IGridInfoService getInfoService();
+  public IGridInfoService getInfoService() throws GridModelException;
   
   /**
    * Get all services that are registered within this VO.
    * 
    * @return All services that are currently available for
    * this VO.
+   * @throws GridModelException If an error occures while the services
+   * are fetched.
    */
-  public IGridService[] getServices();
+  public IGridService[] getServices() throws GridModelException;
   
   /**
    * Get a string that denotes the type of this VO. This string

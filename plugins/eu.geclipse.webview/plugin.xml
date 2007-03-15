@@ -6,7 +6,7 @@
          point="org.eclipse.ui.views">
       <view
             name="%view.name.0"
-            icon="icons/favicon.bmp"
+            icon="icons/eview16/web.gif"
             category="eu.geclipse.ui.viewcategory"
             class="eu.geclipse.webview.views.WebView"
             id="eu.geclipse.webview.views.WebView">

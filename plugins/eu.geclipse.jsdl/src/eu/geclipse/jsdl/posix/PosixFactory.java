@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: PosixFactory.java,v 1.1 2007/01/25 15:26:28 emstamou Exp $
+ * $Id: PosixFactory.java,v 1.2 2007/03/01 09:15:16 emstamou Exp $
  */
 package eu.geclipse.jsdl.posix;
 
@@ -16,103 +16,104 @@ import org.eclipse.emf.ecore.EFactory;
  * @see eu.geclipse.jsdl.posix.PosixPackage
  * @generated
  */
-public interface PosixFactory extends EFactory {
-	/**
-	 * The singleton instance of the factory.
-	 * <!-- begin-user-doc -->
+public interface PosixFactory extends EFactory
+{
+  /**
+   * The singleton instance of the factory.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	PosixFactory eINSTANCE = eu.geclipse.jsdl.posix.impl.PosixFactoryImpl.init();
 
-	/**
-	 * Returns a new object of class '<em>Argument Type</em>'.
-	 * <!-- begin-user-doc -->
+  /**
+   * Returns a new object of class '<em>Argument Type</em>'.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Argument Type</em>'.
-	 * @generated
-	 */
+   * @return a new object of class '<em>Argument Type</em>'.
+   * @generated
+   */
 	ArgumentType createArgumentType();
 
-	/**
-	 * Returns a new object of class '<em>Directory Name Type</em>'.
-	 * <!-- begin-user-doc -->
+  /**
+   * Returns a new object of class '<em>Directory Name Type</em>'.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Directory Name Type</em>'.
-	 * @generated
-	 */
+   * @return a new object of class '<em>Directory Name Type</em>'.
+   * @generated
+   */
 	DirectoryNameType createDirectoryNameType();
 
-	/**
-	 * Returns a new object of class '<em>Document Root</em>'.
-	 * <!-- begin-user-doc -->
+  /**
+   * Returns a new object of class '<em>Document Root</em>'.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Document Root</em>'.
-	 * @generated
-	 */
+   * @return a new object of class '<em>Document Root</em>'.
+   * @generated
+   */
 	DocumentRoot createDocumentRoot();
 
-	/**
-	 * Returns a new object of class '<em>Environment Type</em>'.
-	 * <!-- begin-user-doc -->
+  /**
+   * Returns a new object of class '<em>Environment Type</em>'.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Environment Type</em>'.
-	 * @generated
-	 */
+   * @return a new object of class '<em>Environment Type</em>'.
+   * @generated
+   */
 	EnvironmentType createEnvironmentType();
 
-	/**
-	 * Returns a new object of class '<em>File Name Type</em>'.
-	 * <!-- begin-user-doc -->
+  /**
+   * Returns a new object of class '<em>File Name Type</em>'.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>File Name Type</em>'.
-	 * @generated
-	 */
+   * @return a new object of class '<em>File Name Type</em>'.
+   * @generated
+   */
 	FileNameType createFileNameType();
 
-	/**
-	 * Returns a new object of class '<em>Group Name Type</em>'.
-	 * <!-- begin-user-doc -->
+  /**
+   * Returns a new object of class '<em>Group Name Type</em>'.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Group Name Type</em>'.
-	 * @generated
-	 */
+   * @return a new object of class '<em>Group Name Type</em>'.
+   * @generated
+   */
 	GroupNameType createGroupNameType();
 
-	/**
-	 * Returns a new object of class '<em>Limits Type</em>'.
-	 * <!-- begin-user-doc -->
+  /**
+   * Returns a new object of class '<em>Limits Type</em>'.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>Limits Type</em>'.
-	 * @generated
-	 */
+   * @return a new object of class '<em>Limits Type</em>'.
+   * @generated
+   */
 	LimitsType createLimitsType();
 
-	/**
-	 * Returns a new object of class '<em>POSIX Application Type</em>'.
-	 * <!-- begin-user-doc -->
+  /**
+   * Returns a new object of class '<em>POSIX Application Type</em>'.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>POSIX Application Type</em>'.
-	 * @generated
-	 */
+   * @return a new object of class '<em>POSIX Application Type</em>'.
+   * @generated
+   */
 	POSIXApplicationType createPOSIXApplicationType();
 
-	/**
-	 * Returns a new object of class '<em>User Name Type</em>'.
-	 * <!-- begin-user-doc -->
+  /**
+   * Returns a new object of class '<em>User Name Type</em>'.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return a new object of class '<em>User Name Type</em>'.
-	 * @generated
-	 */
+   * @return a new object of class '<em>User Name Type</em>'.
+   * @generated
+   */
 	UserNameType createUserNameType();
 
-	/**
-	 * Returns the package supported by this factory.
-	 * <!-- begin-user-doc -->
+  /**
+   * Returns the package supported by this factory.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @return the package supported by this factory.
-	 * @generated
-	 */
+   * @return the package supported by this factory.
+   * @generated
+   */
 	PosixPackage getPosixPackage();
 
 } //PosixFactory

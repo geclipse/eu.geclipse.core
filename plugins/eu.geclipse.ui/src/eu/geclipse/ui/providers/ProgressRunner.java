@@ -4,8 +4,11 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
+import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
+import eu.geclipse.ui.dialogs.NewProblemDialog;
 
 
 public class ProgressRunner implements Runnable {
@@ -39,17 +42,32 @@ public class ProgressRunner implements Runnable {
 
   public void run() {
     synchronized ( this.container ) {
-      this.container.getChildren( this.monitor );
+      
+      try {
+        this.container.getChildren( this.monitor );
+      } catch( GridModelException gmExc ) {
+        Shell shell = this.monitor.getTreeViewer().getControl().getShell();
+        NewProblemDialog.openProblem( shell,
+                                      "Problem while fetching children",
+                                      "Unable to fetch children of " + this.container.getName(),
+                                      gmExc );
+      }
+      
       if ( !this.container.isDirty() ) {
-        final TreeViewer viewer = this.monitor.getTreeViewer();
-        Control control = viewer.getControl();
-        if ( !control.isDisposed() ) {
-          Display display = control.getDisplay();
-          display.asyncExec( new Runnable() {
-            public void run() {
-              viewer.refresh( ProgressRunner.this.container );
-            }
-          } );
+        if ( this.container.hasChildren() ) {
+          final TreeViewer viewer = this.monitor.getTreeViewer();
+          Control control = viewer.getControl();
+          if ( !control.isDisposed() ) {
+            Display display = control.getDisplay();
+            display.asyncExec( new Runnable() {
+              public void run() {
+                viewer.refresh( ProgressRunner.this.container );
+              }
+            } );
+          }
+        } else {
+          this.monitor.setTaskName( "Folder is currently empty" );
+          this.monitor.done();
         }
       } else {
         this.monitor.setError( "Unable to fetch children" );

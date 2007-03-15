@@ -1,12 +1,11 @@
 package eu.geclipse.core;
 
-import eu.geclipse.core.internal.CoreProblem;
+import java.util.List;
+import eu.geclipse.core.internal.Activator;
 
 public class ProblemRegistry {
-  
-  public static final int CONNECTION_FAILED = uniqueID();
-  
-  public static final int CONNECTION_TIMEOUT = uniqueID();
+
+  public static final int UNKNOWN_PROBLEM = -1;
 
   private static int lastUniqueID = 0;
   
@@ -23,43 +22,53 @@ public class ProblemRegistry {
     return singleton;
   }
   
+  public static IProblem createProblem( final int id,
+                                        final String text,
+                                        final Throwable exc,
+                                        int[] solutionIDs,
+                                        final String pluginID ) {
+    IProblem problem = new AbstractProblem( id, text, exc ) {
+      @Override
+      protected String getPluginID() {
+        return pluginID;
+      }
+    };
+    if ( solutionIDs != null ) {
+      for ( int solutionID : solutionIDs ) {
+        problem.addSolution( solutionID );
+      }
+    }
+    return problem;
+  }
+  
   public IProblem getProblem( final int problemID,
                               final Throwable exc ) {
     IProblem problem = findProblem( problemID, exc );
     if ( problem == null ) {
-      problem = new CoreProblem( -1, "Unknown problem occured (id = " + problemID + ")" );
+      problem = createProblem( UNKNOWN_PROBLEM,
+                               "Unknown problem occured (id = " + problemID + ")",
+                               exc,
+                               null,
+                               Activator.PLUGIN_ID );
     }
     return problem;
   }
   
   protected IProblem findProblem( final int problemID,
                                   final Throwable exc ) {
-    
     IProblem problem = null;
-    SolutionRegistry sReg = SolutionRegistry.getRegistry();
-    
-    if ( problemID == CONNECTION_TIMEOUT ) {
-      problem = new CoreProblem( CONNECTION_TIMEOUT,
-                                 "A timeout has occurred on a socket read or accept",
-                                 exc );
-      problem.addSolution( SolutionRegistry.SERVER_DOWN );
-      problem.addSolution( SolutionRegistry.CHECK_TIMEOUT_SETTINGS );
+    List<IProblemProvider> providers
+      = Extensions.getRegisteredProblemProviders();
+    for ( IProblemProvider provider : providers ) {
+      problem = provider.getProblem( problemID, exc );
+      if ( problem != null ) {
+        break;
+      }
     }
-    
-    else if ( problemID == CONNECTION_FAILED ) {
-      problem = new CoreProblem( CONNECTION_FAILED,
-                                 "Unable to establish connection",
-                                 exc );
-      problem.addSolution( SolutionRegistry.CHECK_INTERNET_CONNECTION );
-      problem.addSolution( SolutionRegistry.CHECK_SERVER_URL );
-      problem.addSolution( SolutionRegistry.CHECK_PROXY_SETTINGS );
-    }
-    
     return problem;
-    
   }
   
-  private static int uniqueID() {
+  public static int uniqueID() {
     return ++lastUniqueID;
   }
   

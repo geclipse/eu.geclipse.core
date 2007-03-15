@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: JsdlItemProviderAdapterFactory.java,v 1.1 2007/01/25 15:29:06 emstamou Exp $
+ * $Id: JsdlItemProviderAdapterFactory.java,v 1.2 2007/03/01 09:16:01 emstamou Exp $
  */
 package eu.geclipse.jsdl.provider;
 
@@ -36,532 +36,580 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
  * <!-- end-user-doc -->
  * @generated
  */
-public class JsdlItemProviderAdapterFactory extends JsdlAdapterFactory implements ComposeableAdapterFactory, IChangeNotifier, IDisposable {
-	/**
-	 * This keeps track of the root adapter factory that delegates to this adapter factory.
-	 * <!-- begin-user-doc -->
+public class JsdlItemProviderAdapterFactory extends JsdlAdapterFactory implements ComposeableAdapterFactory, IChangeNotifier, IDisposable 
+{
+  /**
+   * This keeps track of the root adapter factory that delegates to this adapter factory.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	protected ComposedAdapterFactory parentAdapterFactory;
 
-	/**
-	 * This is used to implement {@link org.eclipse.emf.edit.provider.IChangeNotifier}.
-	 * <!-- begin-user-doc -->
+  /**
+   * This is used to implement {@link org.eclipse.emf.edit.provider.IChangeNotifier}.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	protected IChangeNotifier changeNotifier = new ChangeNotifier();
 
-	/**
-	 * This keeps track of all the supported types checked by {@link #isFactoryForType isFactoryForType}.
-	 * <!-- begin-user-doc -->
+  /**
+   * This keeps track of all the supported types checked by {@link #isFactoryForType isFactoryForType}.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	protected Collection supportedTypes = new ArrayList();
 
-	/**
-	 * This constructs an instance.
-	 * <!-- begin-user-doc -->
+  /**
+   * This constructs an instance.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public JsdlItemProviderAdapterFactory() {
-		supportedTypes.add(IEditingDomainItemProvider.class);
-		supportedTypes.add(IStructuredItemContentProvider.class);
-		supportedTypes.add(ITreeItemContentProvider.class);
-		supportedTypes.add(IItemLabelProvider.class);
-		supportedTypes.add(IItemPropertySource.class);		
-	}
+   * @generated
+   */
+	public JsdlItemProviderAdapterFactory()
+  {
+    supportedTypes.add(IEditingDomainItemProvider.class);
+    supportedTypes.add(IStructuredItemContentProvider.class);
+    supportedTypes.add(ITreeItemContentProvider.class);
+    supportedTypes.add(IItemLabelProvider.class);
+    supportedTypes.add(IItemPropertySource.class);		
+  }
 
-	/**
-	 * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.ApplicationType} instances.
-	 * <!-- begin-user-doc -->
+  /**
+   * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.ApplicationType} instances.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	protected ApplicationTypeItemProvider applicationTypeItemProvider;
 
-	/**
-	 * This creates an adapter for a {@link eu.geclipse.jsdl.ApplicationType}.
-	 * <!-- begin-user-doc -->
+  /**
+   * This creates an adapter for a {@link eu.geclipse.jsdl.ApplicationType}.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Adapter createApplicationTypeAdapter() {
-		if (applicationTypeItemProvider == null) {
-			applicationTypeItemProvider = new ApplicationTypeItemProvider(this);
-		}
+   * @generated
+   */
+	public Adapter createApplicationTypeAdapter()
+  {
+    if (applicationTypeItemProvider == null)
+    {
+      applicationTypeItemProvider = new ApplicationTypeItemProvider(this);
+    }
 
-		return applicationTypeItemProvider;
-	}
+    return applicationTypeItemProvider;
+  }
 
-	/**
-	 * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.BoundaryType} instances.
-	 * <!-- begin-user-doc -->
+  /**
+   * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.BoundaryType} instances.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	protected BoundaryTypeItemProvider boundaryTypeItemProvider;
 
-	/**
-	 * This creates an adapter for a {@link eu.geclipse.jsdl.BoundaryType}.
-	 * <!-- begin-user-doc -->
+  /**
+   * This creates an adapter for a {@link eu.geclipse.jsdl.BoundaryType}.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Adapter createBoundaryTypeAdapter() {
-		if (boundaryTypeItemProvider == null) {
-			boundaryTypeItemProvider = new BoundaryTypeItemProvider(this);
-		}
+   * @generated
+   */
+	public Adapter createBoundaryTypeAdapter()
+  {
+    if (boundaryTypeItemProvider == null)
+    {
+      boundaryTypeItemProvider = new BoundaryTypeItemProvider(this);
+    }
 
-		return boundaryTypeItemProvider;
-	}
+    return boundaryTypeItemProvider;
+  }
 
-	/**
-	 * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.CandidateHostsType} instances.
-	 * <!-- begin-user-doc -->
+  /**
+   * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.CandidateHostsType} instances.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	protected CandidateHostsTypeItemProvider candidateHostsTypeItemProvider;
 
-	/**
-	 * This creates an adapter for a {@link eu.geclipse.jsdl.CandidateHostsType}.
-	 * <!-- begin-user-doc -->
+  /**
+   * This creates an adapter for a {@link eu.geclipse.jsdl.CandidateHostsType}.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Adapter createCandidateHostsTypeAdapter() {
-		if (candidateHostsTypeItemProvider == null) {
-			candidateHostsTypeItemProvider = new CandidateHostsTypeItemProvider(this);
-		}
+   * @generated
+   */
+	public Adapter createCandidateHostsTypeAdapter()
+  {
+    if (candidateHostsTypeItemProvider == null)
+    {
+      candidateHostsTypeItemProvider = new CandidateHostsTypeItemProvider(this);
+    }
 
-		return candidateHostsTypeItemProvider;
-	}
+    return candidateHostsTypeItemProvider;
+  }
 
-	/**
-	 * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.CPUArchitectureType} instances.
-	 * <!-- begin-user-doc -->
+  /**
+   * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.CPUArchitectureType} instances.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	protected CPUArchitectureTypeItemProvider cpuArchitectureTypeItemProvider;
 
-	/**
-	 * This creates an adapter for a {@link eu.geclipse.jsdl.CPUArchitectureType}.
-	 * <!-- begin-user-doc -->
+  /**
+   * This creates an adapter for a {@link eu.geclipse.jsdl.CPUArchitectureType}.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Adapter createCPUArchitectureTypeAdapter() {
-		if (cpuArchitectureTypeItemProvider == null) {
-			cpuArchitectureTypeItemProvider = new CPUArchitectureTypeItemProvider(this);
-		}
+   * @generated
+   */
+	public Adapter createCPUArchitectureTypeAdapter()
+  {
+    if (cpuArchitectureTypeItemProvider == null)
+    {
+      cpuArchitectureTypeItemProvider = new CPUArchitectureTypeItemProvider(this);
+    }
 
-		return cpuArchitectureTypeItemProvider;
-	}
+    return cpuArchitectureTypeItemProvider;
+  }
 
-	/**
-	 * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.DataStagingType} instances.
-	 * <!-- begin-user-doc -->
+  /**
+   * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.DataStagingType} instances.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	protected DataStagingTypeItemProvider dataStagingTypeItemProvider;
 
-	/**
-	 * This creates an adapter for a {@link eu.geclipse.jsdl.DataStagingType}.
-	 * <!-- begin-user-doc -->
+  /**
+   * This creates an adapter for a {@link eu.geclipse.jsdl.DataStagingType}.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Adapter createDataStagingTypeAdapter() {
-		if (dataStagingTypeItemProvider == null) {
-			dataStagingTypeItemProvider = new DataStagingTypeItemProvider(this);
-		}
+   * @generated
+   */
+	public Adapter createDataStagingTypeAdapter()
+  {
+    if (dataStagingTypeItemProvider == null)
+    {
+      dataStagingTypeItemProvider = new DataStagingTypeItemProvider(this);
+    }
 
-		return dataStagingTypeItemProvider;
-	}
+    return dataStagingTypeItemProvider;
+  }
 
-	/**
-	 * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.DocumentRoot} instances.
-	 * <!-- begin-user-doc -->
+  /**
+   * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.DocumentRoot} instances.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	protected DocumentRootItemProvider documentRootItemProvider;
 
-	/**
-	 * This creates an adapter for a {@link eu.geclipse.jsdl.DocumentRoot}.
-	 * <!-- begin-user-doc -->
+  /**
+   * This creates an adapter for a {@link eu.geclipse.jsdl.DocumentRoot}.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Adapter createDocumentRootAdapter() {
-		if (documentRootItemProvider == null) {
-			documentRootItemProvider = new DocumentRootItemProvider(this);
-		}
+   * @generated
+   */
+	public Adapter createDocumentRootAdapter()
+  {
+    if (documentRootItemProvider == null)
+    {
+      documentRootItemProvider = new DocumentRootItemProvider(this);
+    }
 
-		return documentRootItemProvider;
-	}
+    return documentRootItemProvider;
+  }
 
-	/**
-	 * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.ExactType} instances.
-	 * <!-- begin-user-doc -->
+  /**
+   * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.ExactType} instances.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	protected ExactTypeItemProvider exactTypeItemProvider;
 
-	/**
-	 * This creates an adapter for a {@link eu.geclipse.jsdl.ExactType}.
-	 * <!-- begin-user-doc -->
+  /**
+   * This creates an adapter for a {@link eu.geclipse.jsdl.ExactType}.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Adapter createExactTypeAdapter() {
-		if (exactTypeItemProvider == null) {
-			exactTypeItemProvider = new ExactTypeItemProvider(this);
-		}
+   * @generated
+   */
+	public Adapter createExactTypeAdapter()
+  {
+    if (exactTypeItemProvider == null)
+    {
+      exactTypeItemProvider = new ExactTypeItemProvider(this);
+    }
 
-		return exactTypeItemProvider;
-	}
+    return exactTypeItemProvider;
+  }
 
-	/**
-	 * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.FileSystemType} instances.
-	 * <!-- begin-user-doc -->
+  /**
+   * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.FileSystemType} instances.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	protected FileSystemTypeItemProvider fileSystemTypeItemProvider;
 
-	/**
-	 * This creates an adapter for a {@link eu.geclipse.jsdl.FileSystemType}.
-	 * <!-- begin-user-doc -->
+  /**
+   * This creates an adapter for a {@link eu.geclipse.jsdl.FileSystemType}.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Adapter createFileSystemTypeAdapter() {
-		if (fileSystemTypeItemProvider == null) {
-			fileSystemTypeItemProvider = new FileSystemTypeItemProvider(this);
-		}
+   * @generated
+   */
+	public Adapter createFileSystemTypeAdapter()
+  {
+    if (fileSystemTypeItemProvider == null)
+    {
+      fileSystemTypeItemProvider = new FileSystemTypeItemProvider(this);
+    }
 
-		return fileSystemTypeItemProvider;
-	}
+    return fileSystemTypeItemProvider;
+  }
 
-	/**
-	 * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.JobDefinitionType} instances.
-	 * <!-- begin-user-doc -->
+  /**
+   * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.JobDefinitionType} instances.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	protected JobDefinitionTypeItemProvider jobDefinitionTypeItemProvider;
 
-	/**
-	 * This creates an adapter for a {@link eu.geclipse.jsdl.JobDefinitionType}.
-	 * <!-- begin-user-doc -->
+  /**
+   * This creates an adapter for a {@link eu.geclipse.jsdl.JobDefinitionType}.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Adapter createJobDefinitionTypeAdapter() {
-		if (jobDefinitionTypeItemProvider == null) {
-			jobDefinitionTypeItemProvider = new JobDefinitionTypeItemProvider(this);
-		}
+   * @generated
+   */
+	public Adapter createJobDefinitionTypeAdapter()
+  {
+    if (jobDefinitionTypeItemProvider == null)
+    {
+      jobDefinitionTypeItemProvider = new JobDefinitionTypeItemProvider(this);
+    }
 
-		return jobDefinitionTypeItemProvider;
-	}
+    return jobDefinitionTypeItemProvider;
+  }
 
-	/**
-	 * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.JobDescriptionType} instances.
-	 * <!-- begin-user-doc -->
+  /**
+   * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.JobDescriptionType} instances.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	protected JobDescriptionTypeItemProvider jobDescriptionTypeItemProvider;
 
-	/**
-	 * This creates an adapter for a {@link eu.geclipse.jsdl.JobDescriptionType}.
-	 * <!-- begin-user-doc -->
+  /**
+   * This creates an adapter for a {@link eu.geclipse.jsdl.JobDescriptionType}.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Adapter createJobDescriptionTypeAdapter() {
-		if (jobDescriptionTypeItemProvider == null) {
-			jobDescriptionTypeItemProvider = new JobDescriptionTypeItemProvider(this);
-		}
+   * @generated
+   */
+	public Adapter createJobDescriptionTypeAdapter()
+  {
+    if (jobDescriptionTypeItemProvider == null)
+    {
+      jobDescriptionTypeItemProvider = new JobDescriptionTypeItemProvider(this);
+    }
 
-		return jobDescriptionTypeItemProvider;
-	}
+    return jobDescriptionTypeItemProvider;
+  }
 
-	/**
-	 * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.JobIdentificationType} instances.
-	 * <!-- begin-user-doc -->
+  /**
+   * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.JobIdentificationType} instances.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	protected JobIdentificationTypeItemProvider jobIdentificationTypeItemProvider;
 
-	/**
-	 * This creates an adapter for a {@link eu.geclipse.jsdl.JobIdentificationType}.
-	 * <!-- begin-user-doc -->
+  /**
+   * This creates an adapter for a {@link eu.geclipse.jsdl.JobIdentificationType}.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Adapter createJobIdentificationTypeAdapter() {
-		if (jobIdentificationTypeItemProvider == null) {
-			jobIdentificationTypeItemProvider = new JobIdentificationTypeItemProvider(this);
-		}
+   * @generated
+   */
+	public Adapter createJobIdentificationTypeAdapter()
+  {
+    if (jobIdentificationTypeItemProvider == null)
+    {
+      jobIdentificationTypeItemProvider = new JobIdentificationTypeItemProvider(this);
+    }
 
-		return jobIdentificationTypeItemProvider;
-	}
+    return jobIdentificationTypeItemProvider;
+  }
 
-	/**
-	 * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.OperatingSystemType} instances.
-	 * <!-- begin-user-doc -->
+  /**
+   * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.OperatingSystemType} instances.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	protected OperatingSystemTypeItemProvider operatingSystemTypeItemProvider;
 
-	/**
-	 * This creates an adapter for a {@link eu.geclipse.jsdl.OperatingSystemType}.
-	 * <!-- begin-user-doc -->
+  /**
+   * This creates an adapter for a {@link eu.geclipse.jsdl.OperatingSystemType}.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Adapter createOperatingSystemTypeAdapter() {
-		if (operatingSystemTypeItemProvider == null) {
-			operatingSystemTypeItemProvider = new OperatingSystemTypeItemProvider(this);
-		}
+   * @generated
+   */
+	public Adapter createOperatingSystemTypeAdapter()
+  {
+    if (operatingSystemTypeItemProvider == null)
+    {
+      operatingSystemTypeItemProvider = new OperatingSystemTypeItemProvider(this);
+    }
 
-		return operatingSystemTypeItemProvider;
-	}
+    return operatingSystemTypeItemProvider;
+  }
 
-	/**
-	 * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.OperatingSystemTypeType} instances.
-	 * <!-- begin-user-doc -->
+  /**
+   * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.OperatingSystemTypeType} instances.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	protected OperatingSystemTypeTypeItemProvider operatingSystemTypeTypeItemProvider;
 
-	/**
-	 * This creates an adapter for a {@link eu.geclipse.jsdl.OperatingSystemTypeType}.
-	 * <!-- begin-user-doc -->
+  /**
+   * This creates an adapter for a {@link eu.geclipse.jsdl.OperatingSystemTypeType}.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Adapter createOperatingSystemTypeTypeAdapter() {
-		if (operatingSystemTypeTypeItemProvider == null) {
-			operatingSystemTypeTypeItemProvider = new OperatingSystemTypeTypeItemProvider(this);
-		}
+   * @generated
+   */
+	public Adapter createOperatingSystemTypeTypeAdapter()
+  {
+    if (operatingSystemTypeTypeItemProvider == null)
+    {
+      operatingSystemTypeTypeItemProvider = new OperatingSystemTypeTypeItemProvider(this);
+    }
 
-		return operatingSystemTypeTypeItemProvider;
-	}
+    return operatingSystemTypeTypeItemProvider;
+  }
 
-	/**
-	 * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.RangeType} instances.
-	 * <!-- begin-user-doc -->
+  /**
+   * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.RangeType} instances.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	protected RangeTypeItemProvider rangeTypeItemProvider;
 
-	/**
-	 * This creates an adapter for a {@link eu.geclipse.jsdl.RangeType}.
-	 * <!-- begin-user-doc -->
+  /**
+   * This creates an adapter for a {@link eu.geclipse.jsdl.RangeType}.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Adapter createRangeTypeAdapter() {
-		if (rangeTypeItemProvider == null) {
-			rangeTypeItemProvider = new RangeTypeItemProvider(this);
-		}
+   * @generated
+   */
+	public Adapter createRangeTypeAdapter()
+  {
+    if (rangeTypeItemProvider == null)
+    {
+      rangeTypeItemProvider = new RangeTypeItemProvider(this);
+    }
 
-		return rangeTypeItemProvider;
-	}
+    return rangeTypeItemProvider;
+  }
 
-	/**
-	 * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.RangeValueType} instances.
-	 * <!-- begin-user-doc -->
+  /**
+   * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.RangeValueType} instances.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	protected RangeValueTypeItemProvider rangeValueTypeItemProvider;
 
-	/**
-	 * This creates an adapter for a {@link eu.geclipse.jsdl.RangeValueType}.
-	 * <!-- begin-user-doc -->
+  /**
+   * This creates an adapter for a {@link eu.geclipse.jsdl.RangeValueType}.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Adapter createRangeValueTypeAdapter() {
-		if (rangeValueTypeItemProvider == null) {
-			rangeValueTypeItemProvider = new RangeValueTypeItemProvider(this);
-		}
+   * @generated
+   */
+	public Adapter createRangeValueTypeAdapter()
+  {
+    if (rangeValueTypeItemProvider == null)
+    {
+      rangeValueTypeItemProvider = new RangeValueTypeItemProvider(this);
+    }
 
-		return rangeValueTypeItemProvider;
-	}
+    return rangeValueTypeItemProvider;
+  }
 
-	/**
-	 * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.ResourcesType} instances.
-	 * <!-- begin-user-doc -->
+  /**
+   * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.ResourcesType} instances.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	protected ResourcesTypeItemProvider resourcesTypeItemProvider;
 
-	/**
-	 * This creates an adapter for a {@link eu.geclipse.jsdl.ResourcesType}.
-	 * <!-- begin-user-doc -->
+  /**
+   * This creates an adapter for a {@link eu.geclipse.jsdl.ResourcesType}.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Adapter createResourcesTypeAdapter() {
-		if (resourcesTypeItemProvider == null) {
-			resourcesTypeItemProvider = new ResourcesTypeItemProvider(this);
-		}
+   * @generated
+   */
+	public Adapter createResourcesTypeAdapter()
+  {
+    if (resourcesTypeItemProvider == null)
+    {
+      resourcesTypeItemProvider = new ResourcesTypeItemProvider(this);
+    }
 
-		return resourcesTypeItemProvider;
-	}
+    return resourcesTypeItemProvider;
+  }
 
-	/**
-	 * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.SourceTargetType} instances.
-	 * <!-- begin-user-doc -->
+  /**
+   * This keeps track of the one adapter used for all {@link eu.geclipse.jsdl.SourceTargetType} instances.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
+   * @generated
+   */
 	protected SourceTargetTypeItemProvider sourceTargetTypeItemProvider;
 
-	/**
-	 * This creates an adapter for a {@link eu.geclipse.jsdl.SourceTargetType}.
-	 * <!-- begin-user-doc -->
+  /**
+   * This creates an adapter for a {@link eu.geclipse.jsdl.SourceTargetType}.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Adapter createSourceTargetTypeAdapter() {
-		if (sourceTargetTypeItemProvider == null) {
-			sourceTargetTypeItemProvider = new SourceTargetTypeItemProvider(this);
-		}
+   * @generated
+   */
+	public Adapter createSourceTargetTypeAdapter()
+  {
+    if (sourceTargetTypeItemProvider == null)
+    {
+      sourceTargetTypeItemProvider = new SourceTargetTypeItemProvider(this);
+    }
 
-		return sourceTargetTypeItemProvider;
-	}
+    return sourceTargetTypeItemProvider;
+  }
 
-	/**
-	 * This returns the root adapter factory that contains this factory.
-	 * <!-- begin-user-doc -->
+  /**
+   * This returns the root adapter factory that contains this factory.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ComposeableAdapterFactory getRootAdapterFactory() {
-		return parentAdapterFactory == null ? this : parentAdapterFactory.getRootAdapterFactory();
-	}
+   * @generated
+   */
+	public ComposeableAdapterFactory getRootAdapterFactory()
+  {
+    return parentAdapterFactory == null ? this : parentAdapterFactory.getRootAdapterFactory();
+  }
 
-	/**
-	 * This sets the composed adapter factory that contains this factory.
-	 * <!-- begin-user-doc -->
+  /**
+   * This sets the composed adapter factory that contains this factory.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void setParentAdapterFactory(ComposedAdapterFactory parentAdapterFactory) {
-		this.parentAdapterFactory = parentAdapterFactory;
-	}
+   * @generated
+   */
+	public void setParentAdapterFactory(ComposedAdapterFactory parentAdapterFactory)
+  {
+    this.parentAdapterFactory = parentAdapterFactory;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean isFactoryForType(Object type) {
-		return supportedTypes.contains(type) || super.isFactoryForType(type);
-	}
+   * @generated
+   */
+	public boolean isFactoryForType(Object type)
+  {
+    return supportedTypes.contains(type) || super.isFactoryForType(type);
+  }
 
-	/**
-	 * This implementation substitutes the factory itself as the key for the adapter.
-	 * <!-- begin-user-doc -->
+  /**
+   * This implementation substitutes the factory itself as the key for the adapter.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Adapter adapt(Notifier notifier, Object type) {
-		return super.adapt(notifier, this);
-	}
+   * @generated
+   */
+	public Adapter adapt(Notifier notifier, Object type)
+  {
+    return super.adapt(notifier, this);
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Object adapt(Object object, Object type) {
-		if (isFactoryForType(type)) {
-			Object adapter = super.adapt(object, type);
-			if (!(type instanceof Class) || (((Class)type).isInstance(adapter))) {
-				return adapter;
-			}
-		}
+   * @generated
+   */
+	public Object adapt(Object object, Object type)
+  {
+    if (isFactoryForType(type))
+    {
+      Object adapter = super.adapt(object, type);
+      if (!(type instanceof Class) || (((Class)type).isInstance(adapter)))
+      {
+        return adapter;
+      }
+    }
 
-		return null;
-	}
+    return null;
+  }
 
-	/**
-	 * This adds a listener.
-	 * <!-- begin-user-doc -->
+  /**
+   * This adds a listener.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void addListener(INotifyChangedListener notifyChangedListener) {
-		changeNotifier.addListener(notifyChangedListener);
-	}
+   * @generated
+   */
+	public void addListener(INotifyChangedListener notifyChangedListener)
+  {
+    changeNotifier.addListener(notifyChangedListener);
+  }
 
-	/**
-	 * This removes a listener.
-	 * <!-- begin-user-doc -->
+  /**
+   * This removes a listener.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void removeListener(INotifyChangedListener notifyChangedListener) {
-		changeNotifier.removeListener(notifyChangedListener);
-	}
+   * @generated
+   */
+	public void removeListener(INotifyChangedListener notifyChangedListener)
+  {
+    changeNotifier.removeListener(notifyChangedListener);
+  }
 
-	/**
-	 * This delegates to {@link #changeNotifier} and to {@link #parentAdapterFactory}.
-	 * <!-- begin-user-doc -->
+  /**
+   * This delegates to {@link #changeNotifier} and to {@link #parentAdapterFactory}.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void fireNotifyChanged(Notification notification) {
-		changeNotifier.fireNotifyChanged(notification);
+   * @generated
+   */
+	public void fireNotifyChanged(Notification notification)
+  {
+    changeNotifier.fireNotifyChanged(notification);
 
-		if (parentAdapterFactory != null) {
-			parentAdapterFactory.fireNotifyChanged(notification);
-		}
-	}
+    if (parentAdapterFactory != null)
+    {
+      parentAdapterFactory.fireNotifyChanged(notification);
+    }
+  }
 
-	/**
-	 * This disposes all of the item providers created by this factory. 
-	 * <!-- begin-user-doc -->
+  /**
+   * This disposes all of the item providers created by this factory. 
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void dispose() {
-		if (applicationTypeItemProvider != null) applicationTypeItemProvider.dispose();
-		if (boundaryTypeItemProvider != null) boundaryTypeItemProvider.dispose();
-		if (candidateHostsTypeItemProvider != null) candidateHostsTypeItemProvider.dispose();
-		if (cpuArchitectureTypeItemProvider != null) cpuArchitectureTypeItemProvider.dispose();
-		if (dataStagingTypeItemProvider != null) dataStagingTypeItemProvider.dispose();
-		if (documentRootItemProvider != null) documentRootItemProvider.dispose();
-		if (exactTypeItemProvider != null) exactTypeItemProvider.dispose();
-		if (fileSystemTypeItemProvider != null) fileSystemTypeItemProvider.dispose();
-		if (jobDefinitionTypeItemProvider != null) jobDefinitionTypeItemProvider.dispose();
-		if (jobDescriptionTypeItemProvider != null) jobDescriptionTypeItemProvider.dispose();
-		if (jobIdentificationTypeItemProvider != null) jobIdentificationTypeItemProvider.dispose();
-		if (operatingSystemTypeItemProvider != null) operatingSystemTypeItemProvider.dispose();
-		if (operatingSystemTypeTypeItemProvider != null) operatingSystemTypeTypeItemProvider.dispose();
-		if (rangeTypeItemProvider != null) rangeTypeItemProvider.dispose();
-		if (rangeValueTypeItemProvider != null) rangeValueTypeItemProvider.dispose();
-		if (resourcesTypeItemProvider != null) resourcesTypeItemProvider.dispose();
-		if (sourceTargetTypeItemProvider != null) sourceTargetTypeItemProvider.dispose();
-	}
+   * @generated
+   */
+	public void dispose()
+  {
+    if (applicationTypeItemProvider != null) applicationTypeItemProvider.dispose();
+    if (boundaryTypeItemProvider != null) boundaryTypeItemProvider.dispose();
+    if (candidateHostsTypeItemProvider != null) candidateHostsTypeItemProvider.dispose();
+    if (cpuArchitectureTypeItemProvider != null) cpuArchitectureTypeItemProvider.dispose();
+    if (dataStagingTypeItemProvider != null) dataStagingTypeItemProvider.dispose();
+    if (documentRootItemProvider != null) documentRootItemProvider.dispose();
+    if (exactTypeItemProvider != null) exactTypeItemProvider.dispose();
+    if (fileSystemTypeItemProvider != null) fileSystemTypeItemProvider.dispose();
+    if (jobDefinitionTypeItemProvider != null) jobDefinitionTypeItemProvider.dispose();
+    if (jobDescriptionTypeItemProvider != null) jobDescriptionTypeItemProvider.dispose();
+    if (jobIdentificationTypeItemProvider != null) jobIdentificationTypeItemProvider.dispose();
+    if (operatingSystemTypeItemProvider != null) operatingSystemTypeItemProvider.dispose();
+    if (operatingSystemTypeTypeItemProvider != null) operatingSystemTypeTypeItemProvider.dispose();
+    if (rangeTypeItemProvider != null) rangeTypeItemProvider.dispose();
+    if (rangeValueTypeItemProvider != null) rangeValueTypeItemProvider.dispose();
+    if (resourcesTypeItemProvider != null) resourcesTypeItemProvider.dispose();
+    if (sourceTargetTypeItemProvider != null) sourceTargetTypeItemProvider.dispose();
+  }
 
 }

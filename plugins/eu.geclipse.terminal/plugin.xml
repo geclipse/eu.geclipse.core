@@ -7,7 +7,7 @@
          point="org.eclipse.ui.views">
       <view
             name="%view.name.0"
-            icon="icons/terminal.png"
+            icon="icons/eview16/terminal.gif"
             category="eu.geclipse.ui.viewcategory"
             class="eu.geclipse.terminal.internal.TerminalView"
             id="eu.geclipse.terminal.views.TerminalView">

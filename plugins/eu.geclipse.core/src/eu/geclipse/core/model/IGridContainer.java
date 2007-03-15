@@ -24,7 +24,18 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public interface IGridContainer extends IGridElement {
   
   /**
-   * Determines if that container holds the specified element
+   * Determines if this may contain the specified element.
+   * This method works type specific, i.e. a container may
+   * or may not contain elements of a specified type.
+   * 
+   * @param element The element that may be contained in
+   * this container.
+   * @return If this container may contain the specified element.
+   */
+  public boolean canContain( final IGridElement element );
+  
+  /**
+   * Determines if this container holds the specified element
    * as child.
    * 
    * @param element The element to be checked if it is contained
@@ -97,8 +108,10 @@ public interface IGridContainer extends IGridElement {
    * @param monitor A progress monitor that is used to indicate progress
    * for lazy containers. May be null. 
    * @return This container's children.
+   * @throws GridModelException If this is a lazy container it may be
+   * possible that an exception occures while the children are fetched.
    */
-  public IGridElement[] getChildren( final IProgressMonitor monitor );
+  public IGridElement[] getChildren( final IProgressMonitor monitor ) throws GridModelException;
   
   /**
    * Determine if this container contains any children.

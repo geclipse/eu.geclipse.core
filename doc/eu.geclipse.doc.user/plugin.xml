@@ -41,6 +41,7 @@
             composite="false"
             contentFile="cheatsheets/CreatingAuthenticationToken.xml"
             id="eu.geclipse.doc.user.creatingAuthenticationToken"
+            listener="eu.geclipse.ui.UIAuthTokenProvider"
             name="Creating Authentication Token">
          <description>
             This cheat sheet will show you how to create your Authentication Token.

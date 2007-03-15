@@ -77,6 +77,8 @@ public class ProgressTreeNode
    */
   private boolean canceled;
   
+  private boolean done;
+  
   private TreeViewer treeViewer;
   
   private ProgressNodeUpdater updater;
@@ -97,12 +99,14 @@ public class ProgressTreeNode
       this.tWork = totalWork;
       this.worked = 0;
       this.canceled = false;
+      this.done = false;
     }
     update();
   }
 
   public void done() {
     this.worked = this.tWork;
+    this.done = true;
     update();
   }
 
@@ -113,6 +117,10 @@ public class ProgressTreeNode
 
   public boolean isCanceled() {
     return this.canceled;
+  }
+  
+  public boolean isDone() {
+    return this.done;
   }
 
   public void setCanceled( final boolean value ) {
@@ -140,7 +148,7 @@ public class ProgressTreeNode
   }
 
   public void handleEvent( final Event event ) {
-    if ( event.item instanceof TreeItem ) {
+    if ( ( event.item instanceof TreeItem ) && ( event.index == 0 ) ) {
       Object data = ( ( TreeItem ) event.item ).getData();
       if ( data == this ) {
         switch ( event.type ) {
@@ -217,6 +225,7 @@ public class ProgressTreeNode
     Color white = display.getSystemColor( SWT.COLOR_WHITE );
     Color red = display.getSystemColor( SWT.COLOR_RED );
     Color yellow = display.getSystemColor( SWT.COLOR_YELLOW );
+    Color blue = display.getSystemColor( SWT.COLOR_BLUE );
     Color bg = event.gc.getBackground();
     
     long progress = getProgressPercent();
@@ -224,17 +233,23 @@ public class ProgressTreeNode
     event.gc.fillRectangle( event.x, event.y, event.width, event.height );
     
     event.gc.setForeground( black );
-    event.gc.setBackground( bg );
+    event.gc.setBackground( isDone() ?  blue : bg );
     event.gc.drawRectangle( event.x + 1, event.y + 1, progBarWidth + 1, event.height - 3 );
-    event.gc.setClipping( event.x + 2, event.y + 2,
-                          ( int )( progBarWidth * progress / 100. ),
-                          event.height-4 );
-    event.gc.setForeground( red );
-    event.gc.setBackground( yellow );
-    event.gc.fillGradientRectangle( event.x + 2, event.y + 2, progBarWidth, event.height - 4, false );
-    event.gc.setClipping( ( Rectangle ) null );
+    if ( isDone() ) {
+      event.gc.fillRectangle( event.x + 1, event.y + 1, progBarWidth + 1, event.height - 3 );
+    }
+    event.gc.drawRectangle( event.x + 1, event.y + 1, progBarWidth + 1, event.height - 3 );
+    if ( !isDone() ) {
+      event.gc.setClipping( event.x + 2, event.y + 2,
+                            ( int )( progBarWidth * progress / 100. ),
+                            event.height-4 );
+      event.gc.setForeground( red );
+      event.gc.setBackground( yellow );
+      event.gc.fillGradientRectangle( event.x + 2, event.y + 2, progBarWidth, event.height - 4, false );
+      event.gc.setClipping( ( Rectangle ) null );
+    }
     
-    String progressString = String.valueOf( progress )+"%"; //$NON-NLS-1$
+    String progressString = isDone() ? "done" : String.valueOf( progress )+"%"; //$NON-NLS-1$
     Point progressExtend = event.gc.textExtent( progressString );
     int progressX = event.x + 2 + ( progBarWidth - progressExtend.x ) / 2;
     event.gc.setForeground( white );
@@ -242,14 +257,13 @@ public class ProgressTreeNode
     event.gc.setForeground( black );
     event.gc.drawText( progressString, progressX, event.y + 1, true );
 
-    if ( tName != null ) {
-      int textX = event.x + 2 + progBarWidth + DEFAULT_TEXT_GAP;
-      if ( this.errorString != null ) {
-        event.gc.setForeground( red );
-        event.gc.drawText( this.errorString, textX, event.y + 1, true );
-      } else {
-        event.gc.drawText( tName, textX, event.y + 1, true );
-      }
+    int textX = event.x + 2 + progBarWidth + DEFAULT_TEXT_GAP;
+    if ( this.errorString != null ) {
+      event.gc.setForeground( red );
+      event.gc.drawText( this.errorString, textX, event.y + 1, true );
+    } else if ( tName != null ) {
+      event.gc.setForeground( black );
+      event.gc.drawText( tName, textX, event.y + 1, true );
     }
     
   }

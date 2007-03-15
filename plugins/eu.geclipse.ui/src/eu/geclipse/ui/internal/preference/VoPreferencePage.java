@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
-import org.eclipse.compare.IContentChangeListener;
-import org.eclipse.compare.IContentChangeNotifier;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -36,6 +34,7 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
@@ -51,6 +50,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IWorkbench;
@@ -58,10 +58,13 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridModelEvent;
+import eu.geclipse.core.model.IGridModelListener;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.IVoManager;
+import eu.geclipse.ui.dialogs.NewProblemDialog;
 import eu.geclipse.ui.internal.Activator;
-import eu.geclipse.ui.wizards.GridElementCreatorWizard;
+import eu.geclipse.ui.wizards.wizardselection.ExtPointWizardSelectionListPage;
 
 /**
  * This class represents a preference page that is contributed to the
@@ -75,21 +78,34 @@ import eu.geclipse.ui.wizards.GridElementCreatorWizard;
  */
 public class VoPreferencePage
     extends PreferencePage
-    implements IWorkbenchPreferencePage, IContentChangeListener {
+    implements IWorkbenchPreferencePage, IGridModelListener {
   
   class VoContentProvider implements IStructuredContentProvider {
+    
+    private Shell shell;
 
     public Object[] getElements( final Object inputElement ) {
       IGridElement[] result = null;
       if ( inputElement instanceof IVoManager ) {
         IVoManager manager = ( IVoManager ) inputElement;
-        result = manager.getChildren( null );
-        Arrays.sort( result, new Comparator< IGridElement >() {
-          public int compare( final IGridElement vo1,
-                              final IGridElement vo2 ) {
-            return vo1.getName().compareTo( vo2.getName() );
+        try {
+          result = manager.getChildren( null );
+          Arrays.sort( result, new Comparator< IGridElement >() {
+            public int compare( final IGridElement vo1,
+                                final IGridElement vo2 ) {
+              return vo1.getName().compareTo( vo2.getName() );
+            }
+          } );
+        } catch ( GridModelException gmExc ) {
+          if ( this.shell != null ) {
+            NewProblemDialog.openProblem( this.shell,
+                                          "Content provider problem",
+                                          "Unable to query VOs",
+                                          gmExc );
+          } else {
+            Activator.logException( gmExc );
           }
-        } );
+        }
       }
       return result;
     }
@@ -101,7 +117,9 @@ public class VoPreferencePage
     public void inputChanged( final Viewer viewer,
                               final Object oldInput,
                               final Object newInput ) {
-      // empty implementation
+      if ( viewer != null ) {
+        this.shell = viewer.getControl().getShell();
+      }
     }
     
   }
@@ -163,7 +181,7 @@ public class VoPreferencePage
    */
   @Override
   public void dispose() {
-    GridModel.getRoot().getVoManager().removeContentChangeListener( this );
+    GridModel.getVoManager().removeGridModelListener( this );
   }
   
   /*
@@ -210,7 +228,10 @@ public class VoPreferencePage
     voTable.addMouseListener( new MouseAdapter() {
       @Override
       public void mouseDoubleClick( final MouseEvent e ) {
-        editSelectedVO();
+        IVirtualOrganization selectedVo = getSelectedVo();
+        if ( selectedVo != null ) {
+          editVO( selectedVo );
+        }
       }
     } );
     voTable.addKeyListener( new KeyAdapter() {
@@ -229,7 +250,7 @@ public class VoPreferencePage
     typeColumn.setText( "Type" );
     typeColumn.setWidth( 100 );
     
-    final IVoManager manager = GridModel.getRoot().getVoManager();
+    final IVoManager manager = GridModel.getVoManager();
     this.voViewer = new CheckboxTableViewer( voTable );
     this.voViewer.setLabelProvider( new VoLabelProvider() );
     this.voViewer.setContentProvider( new VoContentProvider() );
@@ -239,7 +260,7 @@ public class VoPreferencePage
         updateButtons();
       }
     } );
-    manager.addContentChangeListener( this );
+    manager.addGridModelListener( this );
     IVirtualOrganization defaultVo
       = ( IVirtualOrganization ) manager.getDefault();
     if ( defaultVo != null ) {
@@ -295,13 +316,16 @@ public class VoPreferencePage
     this.addButton.addSelectionListener( new SelectionAdapter() {
       @Override
       public void widgetSelected( final SelectionEvent e ) {
-        addNewVO();
+        editVO( null );
       }
     } );
     this.editButton.addSelectionListener( new SelectionAdapter() {
       @Override
       public void widgetSelected( final SelectionEvent e ) {
-        editSelectedVO();
+        IVirtualOrganization selectedVo = getSelectedVo();
+        if ( selectedVo != null ) {
+          editVO( selectedVo );
+        }
       }
     } );
     this.removeButton.addSelectionListener( new SelectionAdapter() {
@@ -313,16 +337,6 @@ public class VoPreferencePage
     
     updateButtons();
     
-    /*
-    this.voDescriptors.add( new VODescriptor( "geclipse", //$NON-NLS-1$
-                                         "dgrid-voms.fzk.de", //$NON-NLS-1$
-                                         15009,
-                                         "/O=GermanGrid/OU=FZK/CN=host/dgrid-voms.fzk.de", //$NON-NLS-1$
-                                         ldap://bdii101.grid.ucy.ac.cy:2170
-                                         "http://dgi.d-grid.de/fileadmin/user_upload/documents/DGI-FG1.4/files/dgrid-voms.fzk.de" ) ); //$NON-NLS-1$
-                                         https://www.d-grid.de/fileadmin/user_upload/documents/DGI-FG1.4/files/dgrid-voms.fzk.de
-    */
-
     return parent;
 
   }
@@ -363,45 +377,35 @@ public class VoPreferencePage
   }
   
   /**
-   * Trigger the new VO wizard to pop up in order to create
-   * a new VO.
+   * Trigger the new VO wizard to pop up in order to create a new VO if vo
+   * parameter is null or edit existing vo if vo parameter is specified.
    */
-  public void addNewVO() {
-    GridElementCreatorWizard wizard
-      = new GridElementCreatorWizard( IVirtualOrganization.class );
-    WizardDialog dialog = new WizardDialog( this.getShell(),
-                                            wizard );
-    wizard.setNeedsProgressMonitor( true );
-    wizard.setFirstPageComboLabel( "Type of the new Virtual Organization:" );
-    wizard.setFirstPageDescription( "Create a new Virtual Organization of the selected type." );
-    wizard.setFirstPageTitle( "Create a new VO" );
-    wizard.setWindowTitle( "Create a new VO" );
+  public void editVO( final IVirtualOrganization vo ) {
     URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/authtokenwizard.gif" ); //$NON-NLS-1$
-    wizard.setFirstPageImage( ImageDescriptor.createFromURL( imgUrl ) );
+    Wizard wizard = new Wizard() {
+      @Override
+      public void addPages() {
+        ExtPointWizardSelectionListPage page = new ExtPointWizardSelectionListPage(
+            "pagename",
+            "eu.geclipse.ui.newVoWizards",
+            "Create a new VO",
+            "Create a new Virtual Organization of the selected type." );
+        page.setInitData( vo );
+        // TODO select vo wizard type by vo type when editing an existing vo
+        addPage( page );
+      }
+      
+      @Override
+      public boolean performFinish() {
+        return false;
+      }
+    };
+    wizard.setForcePreviousAndNextButtons( true );
+    wizard.setNeedsProgressMonitor( true );
+    wizard.setWindowTitle( "Create a new VO" );
+    wizard.setDefaultPageImageDescriptor( ImageDescriptor.createFromURL( imgUrl ) );
+    WizardDialog dialog = new WizardDialog( this.getShell(), wizard );
     dialog.open();
-  }
-  
-  /**
-   * Trigger the new VO wizard to pop up in order to edit an
-   * existing VO.
-   */
-  public void editSelectedVO() {
-    IVirtualOrganization selectedVo = getSelectedVo();
-    if ( selectedVo != null ) {
-      GridElementCreatorWizard wizard
-        = new GridElementCreatorWizard( IVirtualOrganization.class );
-      wizard.setNeedsProgressMonitor( true );
-      wizard.setFirstPageComboLabel( "Type of the new Virtual Organization:" );
-      wizard.setFirstPageDescription( "Create a new Virtual Organization of the selected type." );
-      wizard.setFirstPageTitle( "Create a new VO" );
-      wizard.setInitialData( selectedVo );
-      wizard.setWindowTitle( "Edit VO" );
-      URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/authtokenwizard.gif" ); //$NON-NLS-1$
-      wizard.setFirstPageImage( ImageDescriptor.createFromURL( imgUrl ) );
-      WizardDialog dialog = new WizardDialog( this.getShell(),
-                                              wizard );
-      dialog.open();
-    }
   }
   
   /**
@@ -414,7 +418,7 @@ public class VoPreferencePage
                                                     "Delete VOs",
                                                     "Do you really want to delete the selected VOs?" );
       if ( !confirm ) {
-        IVoManager manager = GridModel.getRoot().getVoManager();
+        IVoManager manager = GridModel.getVoManager();
         for ( IVirtualOrganization vo : vos ) {
           manager.delete( vo );
         }
@@ -445,9 +449,9 @@ public class VoPreferencePage
   /* (non-Javadoc)
    * @see org.eclipse.compare.IContentChangeListener#contentChanged(org.eclipse.compare.IContentChangeNotifier)
    */
-  public void contentChanged( final IContentChangeNotifier source ) {
+  public void gridModelChanged( final IGridModelEvent source ) {
     this.voViewer.refresh();
-    IVoManager manager = GridModel.getRoot().getVoManager();
+    IVoManager manager = GridModel.getVoManager();
     IGridElement defaultVo = manager.getDefault();
     if ( defaultVo != null ) {
       this.voViewer.setCheckedElements( new Object[] { defaultVo } );
@@ -461,7 +465,7 @@ public class VoPreferencePage
   @Override
   public boolean performOk() {
     try {
-      GridModel.getRoot().getVoManager().saveElements();
+      GridModel.getVoManager().saveElements();
     } catch( GridModelException gmExc ) {
       // TODO mathias
       Activator.logException( gmExc );
@@ -475,7 +479,7 @@ public class VoPreferencePage
   @Override
   protected void performDefaults() {
     try {
-      GridModel.getRoot().getVoManager().loadElements();
+      GridModel.getVoManager().loadElements();
     } catch( GridModelException gmExc ) {
       // TODO mathias
       Activator.logException( gmExc );

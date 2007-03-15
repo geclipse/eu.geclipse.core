@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: PosixFactoryImpl.java,v 1.1 2007/01/25 15:26:29 emstamou Exp $
+ * $Id: PosixFactoryImpl.java,v 1.3 2007/03/07 10:41:40 nickl Exp $
  */
 package eu.geclipse.jsdl.posix.impl;
 
@@ -22,164 +22,183 @@ import org.eclipse.emf.ecore.plugin.EcorePlugin;
  * <!-- end-user-doc -->
  * @generated
  */
-public class PosixFactoryImpl extends EFactoryImpl implements PosixFactory {
-	/**
-	 * Creates the default factory implementation.
-	 * <!-- begin-user-doc -->
+public class PosixFactoryImpl extends EFactoryImpl implements PosixFactory 
+{
+  /**
+   * Creates the default factory implementation.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public static PosixFactory init() {
-		try {
-			PosixFactory thePosixFactory = (PosixFactory)EPackage.Registry.INSTANCE.getEFactory("http://eu/geclipse/jsdl/posix"); 
-			if (thePosixFactory != null) {
-				return thePosixFactory;
-			}
-		}
-		catch (Exception exception) {
-			EcorePlugin.INSTANCE.log(exception);
-		}
-		return new PosixFactoryImpl();
-	}
+   * @generated
+   */
+	public static PosixFactory init()
+  {
+    try
+    {
+      PosixFactory thePosixFactory = (PosixFactory)EPackage.Registry.INSTANCE.getEFactory("http://schemas.ggf.org/jsdl/2005/11/jsdl-posix"); 
+      if (thePosixFactory != null)
+      {
+        return thePosixFactory;
+      }
+    }
+    catch (Exception exception)
+    {
+      EcorePlugin.INSTANCE.log(exception);
+    }
+    return new PosixFactoryImpl();
+  }
 
-	/**
-	 * Creates an instance of the factory.
-	 * <!-- begin-user-doc -->
+  /**
+   * Creates an instance of the factory.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public PosixFactoryImpl() {
-		super();
-	}
+   * @generated
+   */
+	public PosixFactoryImpl()
+  {
+    super();
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EObject create(EClass eClass) {
-		switch (eClass.getClassifierID()) {
-			case PosixPackage.ARGUMENT_TYPE: return createArgumentType();
-			case PosixPackage.DIRECTORY_NAME_TYPE: return createDirectoryNameType();
-			case PosixPackage.DOCUMENT_ROOT: return createDocumentRoot();
-			case PosixPackage.ENVIRONMENT_TYPE: return createEnvironmentType();
-			case PosixPackage.FILE_NAME_TYPE: return createFileNameType();
-			case PosixPackage.GROUP_NAME_TYPE: return createGroupNameType();
-			case PosixPackage.LIMITS_TYPE: return createLimitsType();
-			case PosixPackage.POSIX_APPLICATION_TYPE: return createPOSIXApplicationType();
-			case PosixPackage.USER_NAME_TYPE: return createUserNameType();
-			default:
-				throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
-		}
-	}
+   * @generated
+   */
+	public EObject create(EClass eClass)
+  {
+    switch (eClass.getClassifierID())
+    {
+      case PosixPackage.ARGUMENT_TYPE: return createArgumentType();
+      case PosixPackage.DIRECTORY_NAME_TYPE: return createDirectoryNameType();
+      case PosixPackage.DOCUMENT_ROOT: return createDocumentRoot();
+      case PosixPackage.ENVIRONMENT_TYPE: return createEnvironmentType();
+      case PosixPackage.FILE_NAME_TYPE: return createFileNameType();
+      case PosixPackage.GROUP_NAME_TYPE: return createGroupNameType();
+      case PosixPackage.LIMITS_TYPE: return createLimitsType();
+      case PosixPackage.POSIX_APPLICATION_TYPE: return createPOSIXApplicationType();
+      case PosixPackage.USER_NAME_TYPE: return createUserNameType();
+      default:
+        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+    }
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public ArgumentType createArgumentType() {
-		ArgumentTypeImpl argumentType = new ArgumentTypeImpl();
-		return argumentType;
-	}
+   * @generated
+   */
+	public ArgumentType createArgumentType()
+  {
+    ArgumentTypeImpl argumentType = new ArgumentTypeImpl();
+    return argumentType;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public DirectoryNameType createDirectoryNameType() {
-		DirectoryNameTypeImpl directoryNameType = new DirectoryNameTypeImpl();
-		return directoryNameType;
-	}
+   * @generated
+   */
+	public DirectoryNameType createDirectoryNameType()
+  {
+    DirectoryNameTypeImpl directoryNameType = new DirectoryNameTypeImpl();
+    return directoryNameType;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public DocumentRoot createDocumentRoot() {
-		DocumentRootImpl documentRoot = new DocumentRootImpl();
-		return documentRoot;
-	}
+   * @generated
+   */
+	public DocumentRoot createDocumentRoot()
+  {
+    DocumentRootImpl documentRoot = new DocumentRootImpl();
+    return documentRoot;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EnvironmentType createEnvironmentType() {
-		EnvironmentTypeImpl environmentType = new EnvironmentTypeImpl();
-		return environmentType;
-	}
+   * @generated
+   */
+	public EnvironmentType createEnvironmentType()
+  {
+    EnvironmentTypeImpl environmentType = new EnvironmentTypeImpl();
+    return environmentType;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public FileNameType createFileNameType() {
-		FileNameTypeImpl fileNameType = new FileNameTypeImpl();
-		return fileNameType;
-	}
+   * @generated
+   */
+	public FileNameType createFileNameType()
+  {
+    FileNameTypeImpl fileNameType = new FileNameTypeImpl();
+    return fileNameType;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public GroupNameType createGroupNameType() {
-		GroupNameTypeImpl groupNameType = new GroupNameTypeImpl();
-		return groupNameType;
-	}
+   * @generated
+   */
+	public GroupNameType createGroupNameType()
+  {
+    GroupNameTypeImpl groupNameType = new GroupNameTypeImpl();
+    return groupNameType;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public LimitsType createLimitsType() {
-		LimitsTypeImpl limitsType = new LimitsTypeImpl();
-		return limitsType;
-	}
+   * @generated
+   */
+	public LimitsType createLimitsType()
+  {
+    LimitsTypeImpl limitsType = new LimitsTypeImpl();
+    return limitsType;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public POSIXApplicationType createPOSIXApplicationType() {
-		POSIXApplicationTypeImpl posixApplicationType = new POSIXApplicationTypeImpl();
-		return posixApplicationType;
-	}
+   * @generated
+   */
+	public POSIXApplicationType createPOSIXApplicationType()
+  {
+    POSIXApplicationTypeImpl posixApplicationType = new POSIXApplicationTypeImpl();
+    return posixApplicationType;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public UserNameType createUserNameType() {
-		UserNameTypeImpl userNameType = new UserNameTypeImpl();
-		return userNameType;
-	}
+   * @generated
+   */
+	public UserNameType createUserNameType()
+  {
+    UserNameTypeImpl userNameType = new UserNameTypeImpl();
+    return userNameType;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public PosixPackage getPosixPackage() {
-		return (PosixPackage)getEPackage();
-	}
+   * @generated
+   */
+	public PosixPackage getPosixPackage()
+  {
+    return (PosixPackage)getEPackage();
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @deprecated
-	 * @generated
-	 */
-	public static PosixPackage getPackage() {
-		return PosixPackage.eINSTANCE;
-	}
+   * @deprecated
+   * @generated
+   */
+	public static PosixPackage getPackage()
+  {
+    return PosixPackage.eINSTANCE;
+  }
 
 } //PosixFactoryImpl

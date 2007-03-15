@@ -1,5 +1,22 @@
+/*****************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.core.internal.model;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
@@ -13,15 +30,38 @@ import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
+import eu.geclipse.core.model.IGridElementManager;
+import eu.geclipse.core.model.IGridModelEvent;
+import eu.geclipse.core.model.IGridModelListener;
 import eu.geclipse.core.model.IGridRoot;
-import eu.geclipse.core.model.IVoManager;
-import eu.geclipse.core.model.impl.AbstractGridContainer;
+import eu.geclipse.core.model.IManageable;
+import eu.geclipse.core.model.impl.ResourceGridContainer;
 
+/**
+ * Core implementation of the {@link IGridRoot} interface.
+ * This Grid root is associated with the underlying
+ * {@link org.eclipse.core.resources.IWorkspaceRoot}. 
+ */
 public class GridRoot
-    extends AbstractGridContainer
+    extends ResourceGridContainer
     implements IGridRoot {
   
-  public GridRoot() {
+  /**
+   * The singleton instance.
+   */
+  private static GridRoot singleton;
+  
+  /**
+   * The list of {@link IGridModelListener}s.
+   */
+  private List< IGridModelListener > listeners
+    = new ArrayList< IGridModelListener >();
+  
+  /**
+   * Private constructor to ensure to have only one instance of
+   * this class. This can be obtained by {@link #getInstance()}.
+   */
+  private GridRoot() {
     super( ResourcesPlugin.getWorkspace().getRoot() );
     ResourcesPlugin.getWorkspace().addResourceChangeListener(
       new IResourceChangeListener() {
@@ -32,6 +72,34 @@ public class GridRoot
     );
   }
   
+  /**
+   * Get the singleton instance of this Grid root.
+   * 
+   * @return The singleton instance.
+   */
+  public static GridRoot getInstance() {
+    if ( singleton == null ) {
+      singleton = new GridRoot();
+    }
+    return singleton;
+  }
+  
+  public static GridRoot getRoot() {
+    return singleton;
+  }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridModelNotifier#addGridModelListener(eu.geclipse.core.model.IGridModelListener)
+   */
+  public void addGridModelListener( final IGridModelListener listener ) {
+    if ( !this.listeners.contains( listener ) ) {
+      this.listeners.add( listener );
+    }
+  }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridRoot#findElement(org.eclipse.core.runtime.IPath)
+   */
   public IGridElement findElement( final IPath path ) {
     IGridElement element = null;
     String[] segments = path.segments();
@@ -47,6 +115,9 @@ public class GridRoot
     return element;
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridRoot#findElement(org.eclipse.core.resources.IResource)
+   */
   public IGridElement findElement( final IResource resource ) {
     IGridElement result = null;
     IPath path = resource.getFullPath();
@@ -67,23 +138,24 @@ public class GridRoot
     return result;
   }
   
-  public IVoManager getVoManager() {
-    return VoManager.getManager();
+  /**
+   * Distribute the specified event to all registered
+   * {@link IGridModelListener}s.
+   * 
+   * @param event The event to be distributed.
+   */
+  public void fireGridModelEvent( final IGridModelEvent event ) {
+    for ( IGridModelListener listener : this.listeners ) {
+      listener.gridModelChanged( event );
+    }
   }
   
-  public boolean isLazy() {
-    return false;
-  }
-
-  public boolean isLocal() {
-    return true;
-  }
-
-  public boolean isVirtual() {
-    return false;
-  }
-
-  public void handleResourceChange( final IResourceChangeEvent event ) {
+  /**
+   * Handle a resource change event.
+   * 
+   * @param event The event to be handled.
+   */
+  protected void handleResourceChange( final IResourceChangeEvent event ) {
     switch ( event.getType() ) {
       case IResourceChangeEvent.POST_CHANGE:
         handlePostChange( event.getDelta() );
@@ -91,6 +163,11 @@ public class GridRoot
     }
   }
   
+  /**
+   * Handle a post change.
+   * 
+   * @param delta The corresponding resource delta.
+   */
   protected void handlePostChange( final IResourceDelta delta ) {
     switch ( delta.getKind() ) {
       case IResourceDelta.ADDED:
@@ -106,6 +183,37 @@ public class GridRoot
     }
   }
   
+  /**
+   * This method is used to register any new element appearing in the model.
+   * It takes care that managed elements are added to their manager.
+   * 
+   * @param element The element that appeared somewhere in the model.
+   */
+  public static void registerElement( final IGridElement element ) {
+    if ( element instanceof IManageable ) {
+      IGridElementManager manager
+        = ( ( IManageable ) element ).getManager();
+      try {
+        manager.addElement( element );
+      } catch( GridModelException gmExc ) {
+        // Should never happen, therefore take no special measures
+        Activator.logException( gmExc );
+      }
+    }
+  }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridModelNotifier#removeGridModelListener(eu.geclipse.core.model.IGridModelListener)
+   */
+  public void removeGridModelListener( final IGridModelListener listener ) {
+    this.listeners.remove( listener );
+  }
+  
+  /**
+   * Handle a resource added change.
+   * 
+   * @param resource The added resource.
+   */
   protected void resourceAdded( final IResource resource ) {
     if ( resource != null ) {
       IGridElementCreator creator = findCreator( resource );
@@ -125,6 +233,11 @@ public class GridRoot
     }
   }
   
+  /**
+   * Handle a resource removed change.
+   * 
+   * @param resource The removed resource.
+   */
   protected void resourceRemoved( final IResource resource ) {
     if ( resource != null ) {
       IGridElement element = findElement( resource );

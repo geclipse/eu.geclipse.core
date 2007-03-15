@@ -17,12 +17,13 @@ package eu.geclipse.gvid.internal.views;
 
 import java.net.URL;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 import eu.geclipse.gvid.Activator;
 import eu.geclipse.gvid.IGVidView;
 import eu.geclipse.ui.widgets.DropDownExtensionAction;
-import eu.geclipse.ui.wizards.WizardSelectionWizard;
+import eu.geclipse.ui.wizards.wizardselection.ExtPointWizardSelectionListPage;
 
 class NewGVidDropDownAction extends DropDownExtensionAction<IGVidView> {
   /**
@@ -36,7 +37,8 @@ class NewGVidDropDownAction extends DropDownExtensionAction<IGVidView> {
    */
   public static final String EXT_ID_GVID_DROP_DOWN 
     = "eu.geclipse.gvid.dropDownEntry"; //$NON-NLS-1$
-  private IGVidView gvidView;
+
+  IGVidView gvidView;
   
   /**
    * Id of the extension point for the entries of the drop down.
@@ -50,19 +52,29 @@ class NewGVidDropDownAction extends DropDownExtensionAction<IGVidView> {
 
   @Override
   public void run() {
-    URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/gvidwizard.png" ); //$NON-NLS-1$
+    URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/wizban/newconn_wiz.gif" ); //$NON-NLS-1$
 
-    WizardDialog wizardDialog = new WizardDialog(
-        Display.getCurrent().getActiveShell(),
-        new WizardSelectionWizard<IGVidView>(
-            this.gvidView,
-            EXT_ID_NEW_GVID_WIZARD,
+    Wizard wizard =  new Wizard() {
+      @Override
+      public boolean performFinish() {
+        return false;
+      }
+      
+      @Override
+      public void addPages() {
+        ExtPointWizardSelectionListPage page = new ExtPointWizardSelectionListPage(
             Messages.getString( "NewGVidDropDownAction.selectConnectionType" ), //$NON-NLS-1$
+            EXT_ID_NEW_GVID_WIZARD,
             Messages.getString( "NewGVidDropDownAction.title" ), //$NON-NLS-1$
-            Messages.getString( "NewGVidDropDownAction.description" ), //$NON-NLS-1$
-            Messages.getString( "NewGVidDropDownAction.newGVidSession" ), //$NON-NLS-1$
-            ImageDescriptor.createFromURL( imgUrl )
-            ) );
+            Messages.getString( "NewGVidDropDownAction.description" ) ); //$NON-NLS-1$
+        page.setInitData( NewGVidDropDownAction.this.gvidView );
+        addPage( page );
+      }
+    };
+    wizard.setForcePreviousAndNextButtons( true );
+    wizard.setDefaultPageImageDescriptor( ImageDescriptor.createFromURL( imgUrl ) );
+    wizard.setWindowTitle( Messages.getString( "NewGVidDropDownAction.newGVidSession" ) ); //$NON-NLS-1$
+    WizardDialog wizardDialog = new WizardDialog( Display.getCurrent().getActiveShell(), wizard );
     wizardDialog.open();
   }
 }

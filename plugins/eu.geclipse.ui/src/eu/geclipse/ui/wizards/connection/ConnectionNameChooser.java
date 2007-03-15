@@ -1,24 +1,6 @@
 package eu.geclipse.ui.wizards.connection;
 
-import java.net.URI;
 import org.eclipse.core.resources.IFile;
-/******************************************************************************
- * Copyright (c) 2006 g-Eclipse consortium 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Initial development of the original code was made for
- * project g-Eclipse founded by European Union
- * project number: FP6-IST-034327  http://www.geclipse.eu/
- *
- * Contributor(s):
- *     PSNC - Katarzyna Bylec
- *           
- *****************************************************************************/
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -38,8 +20,7 @@ import eu.geclipse.core.connection.ConnectionManager;
  * @author katis
  */
 public class ConnectionNameChooser extends WizardPage
-  implements IConnectionFirstPage, IConnectionWizardPage, ModifyListener
-{
+  implements IConnectionFirstPage, ModifyListener {
 
   private Text connectionName;
 
@@ -59,10 +40,6 @@ public class ConnectionNameChooser extends WizardPage
       result = this.connectionName.getText();
     }
     return result;
-  }
-
-  public boolean isInGridProjectView( final IStructuredSelection selection ) {
-    return ( selection instanceof TreeSelection );
   }
 
   public void setFileName( final String name ) {
@@ -92,8 +69,7 @@ public class ConnectionNameChooser extends WizardPage
   }
 
   @Override
-  public boolean canFlipToNextPage()
-  {
+  public boolean canFlipToNextPage() {
     boolean result = false;
     String message = null;
     if( this.getConnectionName().equals( "" ) ) { //$NON-NLS-1$
@@ -110,14 +86,6 @@ public class ConnectionNameChooser extends WizardPage
     }
     this.setMessage( message );
     return result;
-  }
-
-  public URI finish() {
-    return null;
-  }
-
-  public boolean isLastPage() {
-    return false;
   }
 
   public void modifyText( final ModifyEvent e ) {

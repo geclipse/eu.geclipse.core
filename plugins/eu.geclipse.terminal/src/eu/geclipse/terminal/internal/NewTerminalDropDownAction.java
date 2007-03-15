@@ -17,11 +17,12 @@ package eu.geclipse.terminal.internal;
 
 import java.net.URL;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 import eu.geclipse.terminal.ITerminalView;
 import eu.geclipse.ui.widgets.DropDownExtensionAction;
-import eu.geclipse.ui.wizards.WizardSelectionWizard;
+import eu.geclipse.ui.wizards.wizardselection.ExtPointWizardSelectionListPage;
 
 class NewTerminalDropDownAction extends DropDownExtensionAction<ITerminalView> {
   /**
@@ -36,7 +37,7 @@ class NewTerminalDropDownAction extends DropDownExtensionAction<ITerminalView> {
   public static final String EXT_ID_TERMINAL_DROP_DOWN 
     = "eu.geclipse.terminal.dropDownEntry"; //$NON-NLS-1$
   
-  private ITerminalView terminalView;
+  ITerminalView terminalView;
 
   NewTerminalDropDownAction( final ITerminalView terminalView ) {
     super( terminalView, EXT_ID_TERMINAL_DROP_DOWN );
@@ -47,19 +48,29 @@ class NewTerminalDropDownAction extends DropDownExtensionAction<ITerminalView> {
   
   @Override
   public void run() {
-    URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/terminalwizard.png" ); //$NON-NLS-1$
+    URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/wizban/newconn_wiz.gif" ); //$NON-NLS-1$
 
-    WizardDialog wizardDialog = new WizardDialog(
-        Display.getCurrent().getActiveShell(),
-        new WizardSelectionWizard<ITerminalView>(
-            this.terminalView,
-            EXT_ID_NEW_TERMINAL_WIZARD,
+    Wizard wizard =  new Wizard() {
+      @Override
+      public boolean performFinish() {
+        return false;
+      }
+      
+      @Override
+      public void addPages() {
+        ExtPointWizardSelectionListPage page = new ExtPointWizardSelectionListPage(
             Messages.getString( "NewTerminalDropDownAction.selectConnectionType" ), //$NON-NLS-1$
+            EXT_ID_NEW_TERMINAL_WIZARD,
             Messages.getString( "NewTerminalDropDownAction.title" ), //$NON-NLS-1$
-            Messages.getString( "NewTerminalDropDownAction.description" ), //$NON-NLS-1$
-            Messages.getString( "NewTerminalDropDownAction.newTerminalSession" ), //$NON-NLS-1$
-            ImageDescriptor.createFromURL( imgUrl )
-            ) );
+            Messages.getString( "NewTerminalDropDownAction.description" ) ); //$NON-NLS-1$
+        page.setInitData( NewTerminalDropDownAction.this.terminalView );
+        addPage( page );
+      }
+    };
+    wizard.setForcePreviousAndNextButtons( true );
+    wizard.setDefaultPageImageDescriptor( ImageDescriptor.createFromURL( imgUrl ) );
+    wizard.setWindowTitle( Messages.getString( "NewTerminalDropDownAction.newTerminalSession" ) ); //$NON-NLS-1$
+    WizardDialog wizardDialog = new WizardDialog( Display.getCurrent().getActiveShell(), wizard );
     wizardDialog.open();
   }
 }

@@ -1,3 +1,18 @@
+/*****************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.core.model;
 
 import org.eclipse.core.filesystem.IFileStore;
@@ -14,7 +29,8 @@ import org.eclipse.core.runtime.IPath;
  * that is local, i.e. contained somewhere on the local machine,
  * the element itself is called to be local.
  */
-public interface IGridElement extends IAdaptable {
+public interface IGridElement
+    extends IAdaptable {
   
   /**
    * Clean up all resources that this element uses internally.

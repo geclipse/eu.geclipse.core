@@ -28,7 +28,6 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -168,14 +167,14 @@ public class GridFileDialog extends Dialog implements Listener{
     Label fileExtensionLabel = new Label( parent, SWT.LEFT );
     fileExtensionLabel.setText( Messages.getString( "GridFileDialog.extension_label" ) ); //$NON-NLS-1$
     // TODO add filter to a tree
-    fileExtension = new StoredCombo( parent, SWT.LEFT | SWT.BORDER );
+    this.fileExtension = new StoredCombo( parent, SWT.LEFT | SWT.BORDER );
     IPreferenceStore prefs = Activator.getDefault().getPreferenceStore();
-    fileExtension.setPreferences( prefs, EXTENSIONS_ID );
-    fileExtension.setText( "*" ); //$NON-NLS-1$
+    this.fileExtension.setPreferences( prefs, EXTENSIONS_ID );
+    this.fileExtension.setText( "*" ); //$NON-NLS-1$
     gridData = new GridData( GridData.FILL_HORIZONTAL
                              | GridData.GRAB_HORIZONTAL );
-    fileExtension.setLayoutData( gridData );
-    fileExtension.addListener( SWT.KeyDown, this );
+    this.fileExtension.setLayoutData( gridData );
+    this.fileExtension.addListener( SWT.KeyDown, this );
 //    fileExtension.addModifyListener( this );
     Button cancelButton = new Button( parent, SWT.NONE );
     gridData = new GridData( GridData.HORIZONTAL_ALIGN_BEGINNING
@@ -272,6 +271,7 @@ public class GridFileDialog extends Dialog implements Listener{
         ((ResourcePatternFilter)filter).setPatterns( patterns );
       }
     }
+    ResourcePatternFilter a;
     nodes = FileSystemsProvider.getFileSystems();
     if( this.newViewer.getInput() == null ) {
       ResourceNode[] c = new ResourceNode[ nodes.size() ];
@@ -289,7 +289,5 @@ public class GridFileDialog extends Dialog implements Listener{
     refresh();
   }
 
-  public void modifyText( final ModifyEvent event ) {
-    refresh();
-  }
+  
 }

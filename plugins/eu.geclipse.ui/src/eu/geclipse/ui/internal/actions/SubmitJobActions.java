@@ -13,7 +13,7 @@ public class SubmitJobActions extends ActionGroup {
   
   private SubmitJobAction submitAction;
   
-  protected SubmitJobActions( final IWorkbenchSite site ) {
+  public SubmitJobActions( final IWorkbenchSite site ) {
     this.site = site;
     ISelectionProvider provider = site.getSelectionProvider();
     this.submitAction = new SubmitJobAction( site );

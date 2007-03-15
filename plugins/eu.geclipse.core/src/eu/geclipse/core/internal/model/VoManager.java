@@ -19,23 +19,22 @@ import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IStatus;
+import eu.geclipse.core.Preferences;
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
+import eu.geclipse.core.model.GridModelProblems;
 import eu.geclipse.core.model.IGridElement;
-import eu.geclipse.core.model.IGridModelStatus;
 import eu.geclipse.core.model.IStorableElement;
 import eu.geclipse.core.model.IStorableElementCreator;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.IVoManager;
-import eu.geclipse.core.model.impl.GridModelStatus;
 
 /**
  * Internal implementation of the
  * {@link eu.geclipse.core.model.IVoManager} interface.
  * This is not intended to be accessible from the outside. Instead
- * the {@link eu.geclipse.core.model.IGridRoot#getVoManager()}
+ * the {@link eu.geclipse.core.model.GridModel#getVoManager()}
  * method should be used.
  * 
  * This class is used as a singleton.
@@ -44,13 +43,20 @@ public class VoManager
     extends AbstractDefaultGridElementManager
     implements IVoManager {
   
-  private static final String NAME = ".vos"; //$NON-NLS-1$
+  /**
+   * The name of this manager. This is also used as the storage area.
+   */
+  public static final String NAME = ".vos"; //$NON-NLS-1$
   
   /**
    * The singleton.
    */
   private static VoManager singleton;
     
+  /**
+   * Private constructor to ensure to have only one instance of
+   * this class. This can be obtained by {@link #getManager()}.
+   */
   private VoManager() {
     try {
       loadElements();
@@ -72,10 +78,10 @@ public class VoManager
   }
   
   /**
-   * Get the {@link IFileStore} were the vo managers stores its data.
+   * Static implementation of the {@link #getFileStore()} method that
+   * is needed to avoid cyclic dependencies when the model is created.
    * 
-   * @return The file store were the vo manager will save its
-   * data to.
+   * @return The managers file store.
    */
   public static IFileStore getVoManagerStore() {
     IFileStore managerStore = getManagerStore();
@@ -99,21 +105,12 @@ public class VoManager
   }
   
   /* (non-Javadoc)
-   * @see eu.geclipse.core.model.impl.AbstractGridElement#getFileStore()
-   */
-  @Override
-  public IFileStore getFileStore() {
-    return getVoManagerStore();
-  }
-  
-  /* (non-Javadoc)
    * @see eu.geclipse.core.internal.model.AbstractGridElementManager#getName()
    */
-  @Override
   public String getName() {
     return NAME;
   }
-
+  
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IStorableElementManager#loadElements()
    */
@@ -125,13 +122,7 @@ public class VoManager
     try {
       childStores = fileStore.childStores( EFS.NONE, null );
     } catch( CoreException cExc ) {
-      IGridModelStatus status = new GridModelStatus(
-        IStatus.ERROR,
-        IStatus.CANCEL,
-        "Unable to open the manager's file store.",
-        cExc
-      );
-      throw new GridModelException( status );
+      throw new GridModelException( GridModelProblems.ELEMENT_LOAD_FAILED, cExc );
     }
     
     for ( IFileStore childStore : childStores ) {
@@ -142,9 +133,14 @@ public class VoManager
       }
     }
     
+    String defaultVoName = Preferences.getDefaultVoName();
+    if ( defaultVoName != null ) {
+      IGridElement defaultVo = findChild( defaultVoName );
+      setDefault( defaultVo );
+    }
+    
     if ( hasChildren() ) {
       updateDefault();
-      fireContentChanged();
     }
     
   }
@@ -153,12 +149,21 @@ public class VoManager
    * @see eu.geclipse.core.model.IStorableElementManager#saveElements()
    */
   public void saveElements() throws GridModelException {
+    
     IGridElement[] elements = getChildren( null );
     for ( IGridElement element : elements ) {
       if ( element instanceof IStorableElement ) {
         ( ( IStorableElement ) element ).save();  
       }
     }
+    
+    IVirtualOrganization defaultVo
+      = ( IVirtualOrganization ) getDefault();
+    if ( defaultVo != null ) {
+      Preferences.setDefaultVoName( defaultVo.getName() );
+      Preferences.save();
+    }
+    
   }
   
 }

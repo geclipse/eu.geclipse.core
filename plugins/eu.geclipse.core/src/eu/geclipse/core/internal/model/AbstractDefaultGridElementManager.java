@@ -46,32 +46,39 @@ public abstract class AbstractDefaultGridElementManager
       addElement( element );
       this.defaultElement = element;
       updateDefault();
-      fireContentChanged();
     }
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.internal.model.AbstractGridElementManager#addElement(eu.geclipse.core.model.IGridElement)
+   */
   @Override
-  protected boolean addElement( final IGridElement element ) throws GridModelException {
+  public boolean addElement( final IGridElement element ) throws GridModelException {
     boolean result = super.addElement( element );
     if ( result ) {
-      if ( updateDefault() ) {
-        fireContentChanged();
-      }
+      updateDefault();
     }
     return result;
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.internal.model.AbstractGridElementManager#removeElement(eu.geclipse.core.model.IGridElement)
+   */
   @Override
-  protected boolean removeElement( final IGridElement element ) {
+  public boolean removeElement( final IGridElement element ) {
     boolean result = super.removeElement( element );
     if ( result ) {
-      if ( updateDefault() ) {
-        fireContentChanged();
-      }
+      updateDefault();
     }
     return result;
   }
   
+  /**
+   * Update the default element.
+   * 
+   * @return True if the default element has changed during this
+   * operation.
+   */
   protected boolean updateDefault() {
     boolean changed = false;
     if ( ( this.defaultElement != null )

@@ -15,15 +15,23 @@
 
 package eu.geclipse.core.internal.model;
 
+import java.io.InputStream;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ProjectScope;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.preferences.IScopeContext;
+import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
+import eu.geclipse.core.internal.Activator;
+import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IVirtualOrganization;
-import eu.geclipse.core.model.impl.AbstractGridContainer;
+import eu.geclipse.core.model.impl.ResourceGridContainer;
 
 /**
  * This is the grid model class that represents any project in the
@@ -32,9 +40,15 @@ import eu.geclipse.core.model.impl.AbstractGridContainer;
  * grid project.
  */
 public class GridProject
-    extends AbstractGridContainer
+    extends ResourceGridContainer
     implements IGridProject {
-
+  
+  private static final String TEMP_FOLDER = ".temp"; //$NON-NLS-1$
+  
+  private static final String PROJECT_NODE = "eu.geclipse.core"; //$NON-NLS-1$
+  
+  private static final String VO_ATTRIBUTE = "vo"; //$NON-NLS-1$
+  
   /**
    * Default constructor that constructs a grid project out of an
    * ordinary <code>IProject</code> object.
@@ -46,15 +60,52 @@ public class GridProject
     super( project );
     loadProjectProperties( project );
   }
+    
+  public IFile createTempFile( final String name, final InputStream contents ) throws CoreException {
+    IFolder folder = getTempFolder();
+    IFile file = folder.getFile( name );
+    if ( file.exists() ) {
+      file.delete( IResource.NONE, null );
+    }
+    file.create( contents, true, null );
+    return file;
+  }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.impl.AbstractGridContainer#getChildren(org.eclipse.core.runtime.IProgressMonitor)
+   */
   @Override
-  public IGridElement[] getChildren( final IProgressMonitor monitor ) {
-    IGridElement[] children = super.getChildren( monitor );
-    if ( !hasVo( children ) ) {
-      loadProjectProperties( ( IProject ) getResource() );
+  public IGridElement[] getChildren( final IProgressMonitor monitor )
+      throws GridModelException {
+    IGridElement[] children = new IGridElement[0];
+    if ( isOpen() ) {
       children = super.getChildren( monitor );
+      if ( !hasVo( children ) ) {
+        loadProjectProperties( ( IProject ) getResource() );
+        children = super.getChildren( monitor );
+      }
     }
     return children;
+  }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.impl.AbstractGridContainer#getChildCount()
+   */
+  @Override
+  public int getChildCount() {
+    int result = 0;
+    if ( isOpen() ) {
+      result = super.getChildCount();
+    }
+    return result;
+  }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.impl.AbstractGridElement#getProject()
+   */
+  @Override
+  public IGridProject getProject() {
+    return this;
   }
 
   /* (non-Javadoc)
@@ -65,29 +116,32 @@ public class GridProject
     return false;
   }
   
-  public boolean isLazy() {
-    return false;
-  }
-
-  /* (non-Javadoc)
-   * @see eu.geclipse.core.model.IGridElement#isLocal()
-   */
-  public boolean isLocal() {
-    return true;
-  }
-
-  /* (non-Javadoc)
-   * @see eu.geclipse.core.model.IGridElement#isVirtual()
-   */
-  public boolean isVirtual() {
-    return false;
-  }
-  
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridProject#isOpen()
    */
   public boolean isOpen() {
     return ( ( IProject ) getResource() ).isOpen();
+  }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.impl.AbstractGridContainer#fetchChildren(org.eclipse.core.runtime.IProgressMonitor)
+   */
+  @Override
+  protected boolean fetchChildren( final IProgressMonitor monitor ) {
+    boolean result = false;
+    if ( isOpen() ) {
+      result = super.fetchChildren( monitor );
+    }
+    return result;
+  }
+  
+  private IFolder getTempFolder() throws CoreException {
+    IProject project = ( IProject ) getResource();
+    IFolder folder = project.getFolder( TEMP_FOLDER );
+    if ( !folder.exists() ) {
+      folder.create( IResource.NONE, true, null );
+    }
+    return folder;
   }
   
   private boolean hasVo( final IGridElement[] children ) {
@@ -103,15 +157,22 @@ public class GridProject
   
   private void loadProjectProperties( final IProject project ) {
     IScopeContext projectScope = new ProjectScope( project );
-    Preferences projectNode = projectScope.getNode( "eu.geclipse.core" );
-    String voName = projectNode.get( "vo", null );
-    IVirtualOrganization vo = null;
-    VoManager voManager = VoManager.getManager();
-    if ( voName != null ) {
-      vo = ( IVirtualOrganization ) voManager.findChild( voName );
-      if ( vo != null ) {
-        addElement( new VoWrapper( this, vo ) );
+    Preferences projectNode = projectScope.getNode( PROJECT_NODE );
+    try {
+      projectNode.sync();
+      String voName = projectNode.get( VO_ATTRIBUTE, null );
+      IVirtualOrganization vo = null;
+      VoManager voManager = VoManager.getManager();
+      if ( voName != null ) {
+        vo = ( IVirtualOrganization ) voManager.findChild( voName );
+        if ( vo != null ) {
+          addElement( new VoWrapper( this, vo ) );
+        }
       }
+    } catch( BackingStoreException bsExc ) {
+      Activator.logException( bsExc );
+    } catch ( GridModelException gmExc ) {
+      Activator.logException( gmExc );
     }
   }
 

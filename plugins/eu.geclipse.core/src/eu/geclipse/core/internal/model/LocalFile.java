@@ -16,7 +16,7 @@
 package eu.geclipse.core.internal.model;
 
 import org.eclipse.core.resources.IFile;
-import eu.geclipse.core.model.IGridContainer;
+import eu.geclipse.core.model.impl.ResourceGridElement;
 
 /**
  * This class represents local files in the workspace. Each
@@ -26,7 +26,7 @@ import eu.geclipse.core.model.IGridContainer;
  * <code>IFile</code> is visible within the
  * {@link eu.geclipse.core.model.GridModel}. 
  */
-public class LocalFile extends LocalResource {
+public class LocalFile extends ResourceGridElement {
   
   /**
    * Construct a new local file from the specified <code>IFile</code>.
@@ -34,9 +34,8 @@ public class LocalFile extends LocalResource {
    * @param parent The parent element of this local file.
    * @param file The corresponding <code>IFile</code>.
    */
-  LocalFile( final IGridContainer parent,
-             final IFile file ) {
-    super( parent, file );
+  LocalFile( final IFile file ) {
+    super( file );
   }
   
   /**

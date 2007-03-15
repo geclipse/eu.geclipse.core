@@ -15,27 +15,32 @@
 
 package eu.geclipse.core.internal.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
+import java.util.List;
 import org.eclipse.compare.IContentChangeListener;
 import org.eclipse.core.filesystem.EFS;
+import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.ListenerList;
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
+import eu.geclipse.core.model.GridModelProblems;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.core.model.IGridElementManager;
-import eu.geclipse.core.model.IGridModelStatus;
+import eu.geclipse.core.model.IGridModelEvent;
+import eu.geclipse.core.model.IGridModelListener;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.impl.AbstractGridElement;
-import eu.geclipse.core.model.impl.GridModelStatus;
 
 /**
  * Internal abstract implementation of an {@link IGridElementManager}.  
@@ -47,17 +52,36 @@ public abstract class AbstractGridElementManager
   /**
    * The internal element table that holds the managed elements.
    */
-  private Hashtable< String, IGridElement > elements
-    = new Hashtable< String, IGridElement >();
+  private Hashtable< IPath, IGridElement > elements
+    = new Hashtable< IPath, IGridElement >();
   
-  private ListenerList ccListeners
-    = new ListenerList();
+  /**
+   * The list of {@link IGridModelListener}s.
+   */
+  private List< IGridModelListener > listeners
+    = new ArrayList< IGridModelListener >();
   
   /**
    * Standard constructor.
    */
   protected AbstractGridElementManager() {
-    super( null );
+    super();
+  }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridModelNotifier#addGridModelListener(eu.geclipse.core.model.IGridModelListener)
+   */
+  public void addGridModelListener( final IGridModelListener listener ) {
+    if ( !this.listeners.contains( listener ) ) {
+      this.listeners.add( listener );
+    }
+  }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridContainer#canContain(eu.geclipse.core.model.IGridElement)
+   */
+  public boolean canContain( final IGridElement element ) {
+    return canManage( element );
   }
   
   /* (non-Javadoc)
@@ -91,7 +115,25 @@ public abstract class AbstractGridElementManager
    * @see eu.geclipse.core.model.IGridContainer#findChild(java.lang.String)
    */
   public IGridElement findChild( final String name ) {
-    return this.elements.get( name );
+    IGridElement result = null;
+    for ( IGridElement element : this.elements.values() ) {
+      if ( element.getName().equals( name ) ) {
+        result = element;
+        break;
+      }
+    } 
+    return result;
+  }
+  
+  /**
+   * Try to find the element with the specified path.
+   * 
+   * @param path The path of the element.
+   * @return The element matching the specified path or
+   * <code>null</code> if no such element could be found.
+   */
+  public IGridElement findChild( final IPath path ) {
+    return this.elements.get( path );
   }
 
   /* (non-Javadoc)
@@ -140,6 +182,23 @@ public abstract class AbstractGridElementManager
     return false;
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridElement#getFileStore()
+   */
+  public IFileStore getFileStore() {
+    IFileStore managerStore = getManagerStore();
+    IFileStore childStore = managerStore.getChild( getName() );
+    IFileInfo childInfo = childStore.fetchInfo();
+    if ( !childInfo.exists() ) {
+      try {
+        childStore.mkdir( EFS.NONE, null );
+      } catch( CoreException cExc ) {
+        Activator.logException( cExc );
+      }
+    }
+    return childStore;
+  }
+  
   /**
    * Get the {@link IFileStore} were managers store their data.
    * 
@@ -151,13 +210,9 @@ public abstract class AbstractGridElementManager
     return EFS.getLocalFileSystem().getStore( statePath );
   }
   
-  @Override
-  public abstract String getName();
-  
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.impl.AbstractGridElement#getParent()
    */
-  @Override
   public IGridContainer getParent() {
     return GridModel.getRoot();
   }
@@ -165,10 +220,10 @@ public abstract class AbstractGridElementManager
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.impl.AbstractGridElement#getPath()
    */
-  @Override
   public IPath getPath() {
-    IPath parentPath = getParent().getPath();
-    return parentPath.append( getName() );
+    IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+    IPath rootPath = root.getFullPath();
+    return rootPath.append( getName() );
   }
 
   /* (non-Javadoc)
@@ -182,7 +237,6 @@ public abstract class AbstractGridElementManager
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.impl.AbstractGridElement#getResource()
    */
-  @Override
   public IResource getResource() {
     return null;
   }
@@ -202,13 +256,6 @@ public abstract class AbstractGridElementManager
   }
 
   /* (non-Javadoc)
-   * @see eu.geclipse.core.model.IGridElement#isVirtual()
-   */
-  public boolean isVirtual() {
-    return true;
-  }
-
-  /* (non-Javadoc)
    * @see eu.geclipse.core.model.impl.AbstractGridElement#getAdapter(java.lang.Class)
    */
   @Override
@@ -217,59 +264,91 @@ public abstract class AbstractGridElementManager
     return null;
   }
   
-  public void addContentChangeListener( final IContentChangeListener listener ) {
-    this.ccListeners.add( listener );
-  }
-
-  public void removeContentChangeListener( final IContentChangeListener listener ) {
-    this.ccListeners.remove( listener );
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridModelNotifier#removeGridModelListener(eu.geclipse.core.model.IGridModelListener)
+   */
+  public void removeGridModelListener( final IGridModelListener listener ) {
+    this.listeners.remove( listener );
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridContainer#setDirty()
+   */
   public void setDirty() {
     // empty implementation
   }
   
-  protected boolean addElement( final IGridElement element ) throws GridModelException {
+  /**
+   * Add the specified element to the managed elements of this manager.
+   * If an old element with the same name exists this old element will
+   * be deleted before the new one is added.
+   * 
+   * @param element The element to be added.
+   * @return True if the operation was successful. 
+   * @throws GridModelException If an error occures.
+   */
+  public boolean addElement( final IGridElement element ) throws GridModelException {
     boolean result = false;
     testCanManage( element );
-    String name = element.getName();
-    IGridElement oldElement = findChild( name );
+    IPath path = element.getPath();
+    IGridElement oldElement = findChild( path );
     if ( element != oldElement ) {
       if ( oldElement != null ) {
         delete( oldElement );
       }
-      this.elements.put( name, element );
+      this.elements.put( path, element );
+      IGridModelEvent event
+        = new GridModelEvent( IGridModelEvent.ELEMENTS_ADDED,
+                              this,
+                              new IGridElement[] { element } );
+      fireGridModelEvent( event );
       result = true;
-      fireContentChanged();
     }
     return result;
   }
   
-  protected boolean removeElement( final IGridElement element ) {
-    String name = element.getName();
-    boolean removed = ( this.elements.remove( name ) != null);
+  /**
+   * Remove the specified element from this manager.
+   * 
+   * @param element The element to be removed.
+   * @return True if the element was found and could be removed.
+   */
+  public boolean removeElement( final IGridElement element ) {
+    IPath path = element.getPath();
+    boolean removed = ( this.elements.remove( path ) != null);
     if ( removed ) {
-      fireContentChanged();
+      IGridModelEvent event
+        = new GridModelEvent( IGridModelEvent.ELEMENTS_REMOVED,
+                              this,
+                              new IGridElement[] { element } );
+      fireGridModelEvent( event );
     }
     return removed;
   }
   
-  protected void fireContentChanged() {
-    Object[] listeners = this.ccListeners.getListeners();
-    for ( int i = 0 ; i < listeners.length ; i++ ) {
-      ( ( IContentChangeListener ) listeners[i] ).contentChanged( this );
+  /**
+   * Distribute the specified event to all registered
+   * {@link IGridModelListener}s.
+   * 
+   * @param event The event to be distributed.
+   */
+  protected void fireGridModelEvent( final IGridModelEvent event ) {
+    for ( IGridModelListener listener : this.listeners ) {
+      listener.gridModelChanged( event );
     }
   }
   
+  /**
+   * Test if the specified element can be managed by this manager.
+   * Throw an exception if this is not the case.
+   * 
+   * @param element The element to be tested.
+   * @throws GridModelException If the tested element can not be
+   * managed by this manager.
+   */
   protected void testCanManage( final IGridElement element ) throws GridModelException {
     if ( !canManage( element ) ) {
-      IGridModelStatus status = new GridModelStatus(
-        IStatus.ERROR,
-        IStatus.CANCEL,
-        "The specified element can not be managed by this manager",
-        null
-      );
-      throw new GridModelException( status );
+      throw new GridModelException( GridModelProblems.ELEMENT_NOT_MANAGEABLE );
     }
   }
   

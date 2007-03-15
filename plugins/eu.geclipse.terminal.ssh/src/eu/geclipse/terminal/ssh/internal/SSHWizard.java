@@ -19,13 +19,13 @@ import java.net.URL;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.Wizard;
 import eu.geclipse.terminal.ITerminalView;
-import eu.geclipse.ui.wizards.INewWizard;
 import eu.geclipse.ui.wizards.portforward.PortForwardOptionsWizardPage;
+import eu.geclipse.ui.wizards.wizardselection.IInitalizableWizard;
 
 /**
  * A "new terminal wizard" for creating SSH terminal sessions.
  */
-public class SSHWizard extends Wizard implements INewWizard<ITerminalView> {
+public class SSHWizard extends Wizard implements IInitalizableWizard {
   private SSHConnectionWizardPage mainPage;
   private SSHConnectionInfo info = null;
   private ITerminalView termView;
@@ -62,9 +62,14 @@ public class SSHWizard extends Wizard implements INewWizard<ITerminalView> {
     return this.info;  
   }
 
-  public void init( final ITerminalView terminalView ) {
-    this.termView = terminalView;
-    URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/sshwizard.png" ); //$NON-NLS-1$
-    setDefaultPageImageDescriptor( ImageDescriptor.createFromURL( imgUrl ) );
+  public boolean init( final Object data ) {
+    boolean result = false;
+    if ( data instanceof ITerminalView ) {
+      this.termView = ( ITerminalView ) data;
+      URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/wizban/newconn_wiz.gif" ); //$NON-NLS-1$
+      setDefaultPageImageDescriptor( ImageDescriptor.createFromURL( imgUrl ) );
+      result = true;
+    }
+    return result;
   }
 }

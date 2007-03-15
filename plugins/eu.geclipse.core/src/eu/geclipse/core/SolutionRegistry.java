@@ -75,7 +75,7 @@ public class SolutionRegistry {
     
   }
   
-  private static int uniqueID() {
+  protected static int uniqueID() {
     return ++lastUniqueID;
   }
   

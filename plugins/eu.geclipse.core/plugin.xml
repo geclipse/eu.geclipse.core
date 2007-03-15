@@ -4,6 +4,7 @@
    <extension-point id="authenticationTokenManagement" name="%extension-point.authenticationTokenManagement" schema="schema/authenticationTokenManagement.exsd"/>
    <extension-point id="connectionManagement" name="%extension-point.connectionManagement" schema="schema/connectionManagement.exsd"/>
    <extension-point id="gridElementCreator" name="%extension-point.gridElementCreator" schema="schema/gridElementCreator.exsd"/>
+   <extension-point id="problemProvider" name="Problem Provider" schema="schema/problemProvider.exsd"/>
    <extension
          point="eu.geclipse.core.connectionManagement"
          id="eu.geclipse.core.connectionProtocol.gridftp">
@@ -66,5 +67,12 @@
       <scope
             class="eu.geclipse.core.project.GridProjectScope"
             name="eu.geclipse.core.projectScope"/>
+   </extension>
+   <extension
+         point="eu.geclipse.core.problemProvider">
+      <provider class="eu.geclipse.core.CoreProblems"/>
+      <provider class="eu.geclipse.core.auth.AuthenticationProblems"/>
+      <provider class="eu.geclipse.core.security.GridGSSProblems"/>
+      <provider class="eu.geclipse.core.model.GridModelProblems"/>
    </extension>
 </plugin>

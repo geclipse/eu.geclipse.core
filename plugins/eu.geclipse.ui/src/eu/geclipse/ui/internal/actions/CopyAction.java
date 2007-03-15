@@ -3,15 +3,22 @@ package eu.geclipse.ui.internal.actions;
 import java.util.List;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.PlatformUI;
 import eu.geclipse.core.model.IGridElement;
 
 public class CopyAction extends TransferAction {
   
   protected CopyAction( final Clipboard clipboard ) {
-    super( "Copy", clipboard );
+    super( "&Copy@Ctrl+C", clipboard );
+    ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
+    ImageDescriptor pasteImage 
+        = sharedImages.getImageDescriptor( ISharedImages.IMG_TOOL_COPY );
+    setImageDescriptor( pasteImage );
   }
   
   @Override

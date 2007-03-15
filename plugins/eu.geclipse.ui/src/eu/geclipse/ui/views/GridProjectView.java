@@ -1,187 +1,174 @@
+/*****************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.ui.views;
 
-import org.eclipse.compare.IContentChangeListener;
-import org.eclipse.compare.IContentChangeNotifier;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
-import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.jface.action.GroupMarker;
-import org.eclipse.jface.action.IMenuListener;
-import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.action.MenuManager;
-import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.viewers.DoubleClickEvent;
-import org.eclipse.jface.viewers.IDoubleClickListener;
-import org.eclipse.jface.viewers.IOpenListener;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.OpenEvent;
+import org.eclipse.jface.viewers.IBaseLabelProvider;
+import org.eclipse.jface.viewers.IContentProvider;
+import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Menu;
-import org.eclipse.ui.actions.ActionContext;
-import org.eclipse.ui.navigator.ICommonMenuConstants;
-import org.eclipse.ui.part.ViewPart;
-import eu.geclipse.core.connection.ConnectionManager;
+import org.eclipse.ui.IPartListener2;
+import org.eclipse.ui.IWorkbenchPartSite;
+import org.eclipse.ui.IWorkbenchWindow;
 import eu.geclipse.core.model.GridModel;
-import eu.geclipse.ui.internal.actions.GridProjectActions;
+import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridModelEvent;
+import eu.geclipse.core.model.IGridModelListener;
+import eu.geclipse.core.model.IGridStorage;
+import eu.geclipse.ui.internal.actions.ActionGroupManager;
+import eu.geclipse.ui.internal.actions.BuildActions;
+import eu.geclipse.ui.internal.actions.EditorActions;
+import eu.geclipse.ui.internal.actions.MountActions;
+import eu.geclipse.ui.internal.actions.NewWizardActions;
+import eu.geclipse.ui.internal.actions.ProjectActions;
+import eu.geclipse.ui.internal.actions.SubmitJobActions;
 import eu.geclipse.ui.providers.GridModelContentProvider;
 import eu.geclipse.ui.providers.GridModelLabelProvider;
 
-public class GridProjectView extends ViewPart
-    implements IResourceChangeListener, IContentChangeListener {
+/**
+ * The grid project view is the central view of the g-Eclipse
+ * framework. With its help the user may manage his projects,
+ * especially his grid projects that are contained in the grid model.
+ * Therefore the root element of the grid project view is the
+ * {@link eu.geclipse.core.model.IGridRoot} itself.
+ */
+public class GridProjectView
+    extends TreeControlViewPart
+    implements IGridModelListener {
   
-  protected TreeViewer treeViewer;
+  private EditorActions editorActions;
   
-  private GridProjectActions actions;
+  private IPartListener2 partListener;
   
-  @Override
-  public void dispose() {
-    
-    if ( this.actions != null ) {
-      this.actions.dispose();
-    }
-    
-    ResourcesPlugin.getWorkspace().removeResourceChangeListener( this );
-    ConnectionManager.getManager().removeContentChangeListener( this );
-    
-    super.dispose();
- 
-  }
-
+  /* (non-Javadoc)
+   * @see eu.geclipse.ui.views.GridModelViewPart#createPartControl(org.eclipse.swt.widgets.Composite)
+   */
   @Override
   public void createPartControl( final Composite parent ) {
     
-    IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
+    super.createPartControl( parent );
     
-    this.treeViewer = new TreeViewer( parent, SWT.VIRTUAL | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER );
-    this.getSite().setSelectionProvider( this.treeViewer );
-      
-    //LazyTreeContentProvider contentProvider = new LazyTreeContentProvider();
-    /*GridProjectContentProvider contentProvider = new GridProjectContentProvider();//new LazyTreeContentProvider();
-    contentProvider.setComparator( new FileStoreComparator() );*/
-    GridModelContentProvider contentProvider = new GridModelContentProvider();
-    this.treeViewer.setContentProvider( contentProvider );
+    //ResourcesPlugin.getWorkspace().addResourceChangeListener( this );
+    GridModel.getRoot().addGridModelListener( this );
     
-    /*TreeNodeLabelProvider labelProvider = new TreeNodeLabelProvider();
-    labelProvider.addProvider( new FileStoreLabelProvider() );
-    labelProvider.addProvider( new ResourceLabelProvider() );*/
-    GridModelLabelProvider labelProvider = new GridModelLabelProvider();
-    this.treeViewer.setLabelProvider( labelProvider );
+    this.partListener = new GridProjectPartListener( this.editorActions );
+    getSite().getPage().addPartListener( this.partListener );
     
-    this.treeViewer.setInput( GridModel.getRoot() );
-    this.treeViewer.addDoubleClickListener( new IDoubleClickListener() {
-      public void doubleClick( final DoubleClickEvent event ) {
-        handleDoubleClick( event );
-      }
-    } );
-    this.treeViewer.addOpenListener( new IOpenListener() {
-      public void open( final OpenEvent event ) {
-        handleOpen( event );
-      }
-    } );
-    
-    createActions();
-    createContextMenu();
-    
-    ResourcesPlugin.getWorkspace().addResourceChangeListener( this );
-    ConnectionManager.getManager().addContentChangeListener( this );
-    
-  }
-
-  @Override
-  public void setFocus() {
-    this.treeViewer.getControl().setFocus();
   }
   
-  /**
-   * Fill the context menu belonging to the token table.
-   * 
-   * @param menu The manager that takes responsible for the context menu.
+  /* (non-Javadoc)
+   * @see eu.geclipse.ui.views.GridModelViewPart#dispose()
    */
-  protected void fillContextMenu( final IMenuManager menu ) {
-    createMenuGroups( menu );
-    this.actions.setContext( new ActionContext( this.treeViewer.getSelection() ) );
-    this.actions.fillContextMenu( menu );
-    this.actions.setContext( null );
+  @Override
+  public void dispose() {
+    //ResourcesPlugin.getWorkspace().removeResourceChangeListener( this );
+    GridModel.getRoot().removeGridModelListener( this );
+    getSite().getPage().removePartListener( this.partListener );
   }
   
-  private void createMenuGroups( final IMenuManager menu ) {
-    menu.add( new Separator( ICommonMenuConstants.GROUP_NEW ) );
-    menu.add( new GroupMarker( ICommonMenuConstants.GROUP_GOTO ) );
-    menu.add( new GroupMarker( ICommonMenuConstants.GROUP_OPEN ) );
-    menu.add( new GroupMarker( ICommonMenuConstants.GROUP_OPEN_WITH ) );
-    menu.add( new Separator( ICommonMenuConstants.GROUP_EDIT ) );
-    menu.add( new GroupMarker( ICommonMenuConstants.GROUP_SHOW ) );
-    menu.add( new GroupMarker( ICommonMenuConstants.GROUP_REORGANIZE ) );
-    menu.add( new GroupMarker( ICommonMenuConstants.GROUP_PORT ) );
-    menu.add( new Separator( ICommonMenuConstants.GROUP_GENERATE ) );
-    menu.add( new Separator( ICommonMenuConstants.GROUP_SEARCH ) );
-    menu.add( new Separator( ICommonMenuConstants.GROUP_BUILD ) );
-    menu.add( new Separator( ICommonMenuConstants.GROUP_ADDITIONS ) );
-    menu.add( new Separator( ICommonMenuConstants.GROUP_PROPERTIES ) );
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridModelListener#gridModelChanged(eu.geclipse.core.model.IGridModelEvent)
+   */
+  public void gridModelChanged( final IGridModelEvent event ) {
+    IGridElement source = event.getSource();
+    refreshViewer( source );
+  }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.ui.views.GridModelViewPart#isDragSource(eu.geclipse.core.model.IGridElement)
+   */
+  @Override
+  public boolean isDragSource( final IGridElement element ) {
+    return super.isDragSource( element ) || ( element instanceof IGridStorage );
   }
   
   /* (non-Javadoc)
    * @see org.eclipse.core.resources.IResourceChangeListener#resourceChanged(org.eclipse.core.resources.IResourceChangeEvent)
    */
-  public void resourceChanged( final IResourceChangeEvent event ) {
-    refresh();
+  /*public void resourceChanged( final IResourceChangeEvent event ) {
+    refreshViewer();
+  }*/
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.ui.views.GridModelViewPart#contributeAdditionalActions(eu.geclipse.ui.internal.actions.ActionGroupManager)
+   */
+  @Override
+  protected void contributeAdditionalActions( final ActionGroupManager groups ) {
+    
+    IWorkbenchPartSite site = getSite();
+    IWorkbenchWindow window = site.getWorkbenchWindow();
+    
+    NewWizardActions newWizardActions = new NewWizardActions( window );
+    groups.addGroup( newWizardActions );
+    
+    SubmitJobActions submitJobActions = new SubmitJobActions( site );
+    groups.addGroup( submitJobActions );
+    
+    MountActions mountActions = new MountActions( site );
+    groups.addGroup( mountActions );
+    
+    ProjectActions projectActions = new ProjectActions( site );
+    groups.addGroup( projectActions );
+    
+    BuildActions  buildActions = new BuildActions( site );
+    groups.addGroup( buildActions );
+    
+    this.editorActions = new EditorActions( this );
+    groups.addGroup( this.editorActions );
+    
   }
 
-  public void contentChanged( final IContentChangeNotifier source ) {
-    refresh();
-  }
-  
-  protected void refresh() {
-    if ( this.treeViewer != null ) {
-      this.getSite().getShell().getDisplay().syncExec( new Runnable() {
-        public void run() {
-          GridProjectView.this.treeViewer.refresh();
-        }
-      } );
-    }
-  }
-  
-  protected void handleDoubleClick( final DoubleClickEvent event ) {
-    ISelection selection = event.getSelection();
-    if ( selection instanceof IStructuredSelection ) {
-      Object element
-        = ( ( IStructuredSelection ) selection ).getFirstElement();
-      if ( this.treeViewer.isExpandable( element ) ) {
-        boolean state = this.treeViewer.getExpandedState( element );
-        this.treeViewer.setExpandedState( element, !state );
-      }
-    }
-  }
-  
-  protected void handleOpen( final OpenEvent event ) {
-    this.actions.delegateOpenEvent( event );
-  }
-  
-  /**
-   * Create the actions of this view.
+  /* (non-Javadoc)
+   * @see eu.geclipse.ui.views.GridModelViewPart#createContentProvider()
    */
-  private void createActions() {
-    this.actions = new GridProjectActions( this );
-  }
-  
-  /**
-   * Create the context menu for the tree.
-   */
-  private void createContextMenu() {
-    MenuManager manager = new MenuManager();
-    manager.setRemoveAllWhenShown( true );
-    manager.addMenuListener( new IMenuListener() {
-      public void menuAboutToShow( final IMenuManager mgr ) {
-        fillContextMenu( mgr );
-      }
-    } );
-    Menu menu = manager.createContextMenu( this.treeViewer.getControl() );
-    this.treeViewer.getControl().setMenu(menu);
-    getSite().registerContextMenu( manager, this.treeViewer );
+  @Override
+  protected IContentProvider createContentProvider() {
+    IContentProvider contentProvider = new GridModelContentProvider();
+    return contentProvider;
   }
 
+  /* (non-Javadoc)
+   * @see eu.geclipse.ui.views.GridModelViewPart#createLabelProvider()
+   */
+  @Override
+  protected IBaseLabelProvider createLabelProvider() {
+    IBaseLabelProvider labelProvider = new GridModelLabelProvider();
+    return labelProvider;
+  }
+
+  /* (non-Javadoc)
+   * @see eu.geclipse.ui.views.GridModelViewPart#createViewer(org.eclipse.swt.widgets.Composite)
+   */
+  @Override
+  protected StructuredViewer createViewer( final Composite parent ) {
+    StructuredViewer sViewer = new TreeViewer( parent, SWT.VIRTUAL | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL );
+    return sViewer;
+  }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.ui.views.GridModelViewPart#getRootElement()
+   */
+  @Override
+  protected IGridElement getRootElement() {
+    IGridElement rootElement = GridModel.getRoot();
+    return rootElement;
+  }
+  
 }

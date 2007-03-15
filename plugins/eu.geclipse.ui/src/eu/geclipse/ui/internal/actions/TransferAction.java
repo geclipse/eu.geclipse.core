@@ -86,10 +86,12 @@ public class TransferAction extends SelectionListenerAction {
       localFile = file;
     }
     
-    String name = localFile.getName();
-    IFile newFile = destination.getFile( new Path( name ) );
-    InputStream contents = localFile.getContents();
-    newFile.create( contents, IResource.NONE, null );
+    if ( localFile != null ) {
+      String name = localFile.getName();
+      IFile newFile = destination.getFile( new Path( name ) );
+      InputStream contents = localFile.getContents();
+      newFile.create( contents, IResource.NONE, null );
+    }
     
   }
   

@@ -29,22 +29,19 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import eu.geclipse.ui.widgets.StoredCombo;
-import eu.geclipse.ui.wizards.connection.IConnectionWizardPage;
-
 
 /**
  * Wizard Page used in NewConnectionWizard for creating new connection to local file system
  * @author katis
  *
  */
-public class LocalConnectionWizardPage extends WizardPage implements IConnectionWizardPage, ModifyListener {
+public class LocalConnectionWizardPage extends WizardPage implements ModifyListener {
 
   private static final String separator = System.getProperty( "file.separator" ); //$NON-NLS-1$
   
   private static String KEY_MNTPOINS_ID = "key_mntpoins"; //$NON-NLS-1$
 
   private StoredCombo mntPointCombo;
-
   
   protected LocalConnectionWizardPage( final String pageName ) {
     super( pageName );
@@ -52,7 +49,7 @@ public class LocalConnectionWizardPage extends WizardPage implements IConnection
     setDescription( Messages.getString("LocalConnectionWizardPage.page_description") ); //$NON-NLS-1$
   }
 
-  public URI finish()  {
+  URI finish() {
     URI result= null;
     String mnt = this.mntPointCombo.getText();
     try {
@@ -69,20 +66,8 @@ public class LocalConnectionWizardPage extends WizardPage implements IConnection
     return result;
   }
   
-
-  public boolean isLastPage() {
-    return true;
-  }
-  
   @Override
-  public boolean canFlipToNextPage(){
-    return false;
-  }
- 
-
-  @Override
-  public boolean isPageComplete()
-  {
+  public boolean isPageComplete() {
     boolean result = false;
     String errorMessage = null;
     if (this.mntPointCombo.getText().equals( "" )){ //$NON-NLS-1$
@@ -129,7 +114,5 @@ public class LocalConnectionWizardPage extends WizardPage implements IConnection
   public void modifyText( final ModifyEvent e ) {
     getContainer().updateButtons();
     getContainer().updateMessage();
-  }
-
-  
+  }  
 }

@@ -34,7 +34,6 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import eu.geclipse.ui.widgets.NumberVerifier;
 import eu.geclipse.ui.widgets.StoredCombo;
-import eu.geclipse.ui.wizards.connection.IConnectionWizardPage;
 
 /**
  * Wizard Page for GridFTP connection
@@ -42,8 +41,7 @@ import eu.geclipse.ui.wizards.connection.IConnectionWizardPage;
  * @author katis
  */
 public class GridFTPConnectionWizardPage extends WizardPage
-  implements IConnectionWizardPage, Listener, ModifyListener
-{
+  implements Listener, ModifyListener {
 
   private static String KEY_HOSTS_ID = "key_hosts"; //$NON-NLS-1$
   private static String KEY_PATH_ID = "key_path"; //$NON-NLS-1$
@@ -69,7 +67,7 @@ public class GridFTPConnectionWizardPage extends WizardPage
   /**
    * performs finish when Wizard's Finish button is pressed
    */
-  public URI finish() {
+  URI finish() {
     URI result = null;
     try {
       String validPath = this.pathCombo.getText().replaceAll( " ", "%20" ); //$NON-NLS-1$ //$NON-NLS-2$
@@ -93,8 +91,7 @@ public class GridFTPConnectionWizardPage extends WizardPage
    *         int value
    */
   @Override
-  public boolean isPageComplete()
-  {
+  public boolean isPageComplete() {
     this.errorMessage = null;
     boolean result = true;
     if( "".equals( this.hostCombo.getText() ) //$NON-NLS-1$
@@ -116,27 +113,20 @@ public class GridFTPConnectionWizardPage extends WizardPage
   }
 
   /**
-   * @return true if user can finish after providing information required by
-   *         this page
-   */
-  public boolean isLastPage() {
-    return true;
-  }
-
-  /**
    * creates controls on this page
    */
   public void createControl( final Composite parent ) {
     IPreferenceStore prefStore = eu.geclipse.ui.internal.Activator.getDefault()
       .getPreferenceStore();
     Composite mainComp = new Composite( parent, SWT.NONE );
-    mainComp.setLayout( new GridLayout( 2, false ) );
+    mainComp.setLayout( new GridLayout( 5, false ) );
     GridData gData = new GridData();
     Label hostLabel = new Label( mainComp, SWT.LEFT );
     hostLabel.setText( Messages.getString("GridFTPConnectionWizardPage.host_label") ); //$NON-NLS-1$
     gData.horizontalAlignment = GridData.BEGINNING;
     hostLabel.setLayoutData( gData );
     gData = new GridData( GridData.FILL_HORIZONTAL );
+    gData.horizontalSpan = 4;
     this.hostCombo = new StoredCombo( mainComp, SWT.LEFT | SWT.SINGLE | SWT.BORDER );
     this.hostCombo.setPreferences( prefStore, KEY_HOSTS_ID );
     this.hostCombo.setLayoutData( gData );
@@ -148,6 +138,7 @@ public class GridFTPConnectionWizardPage extends WizardPage
     pathLabel.setLayoutData( gData );
     gData = new GridData( GridData.FILL_HORIZONTAL );
     this.pathCombo = new StoredCombo( mainComp, SWT.LEFT | SWT.SINGLE | SWT.BORDER );
+    gData.horizontalSpan = 4;
     this.pathCombo.setLayoutData( gData );
     this.pathCombo.setPreferences( prefStore, KEY_PATH_ID );
     this.pathCombo.setText( "/" ); //$NON-NLS-1$
@@ -157,14 +148,14 @@ public class GridFTPConnectionWizardPage extends WizardPage
     portLabel.setText( Messages.getString("GridFTPConnectionWizardPage.port_label") ); //$NON-NLS-1$
     gData.horizontalAlignment = GridData.BEGINNING;
     portLabel.setLayoutData( gData );
-    gData = new GridData();
-    gData.horizontalAlignment = GridData.GRAB_HORIZONTAL;
-    gData.grabExcessHorizontalSpace = true;
+    gData = new GridData( GridData.FILL_HORIZONTAL );
     this.portText = new Text( mainComp, SWT.LEFT | SWT.SINGLE | SWT.BORDER );
-    this.portText.setText( "2811" ); //$NON-NLS-1$
     this.portText.setLayoutData( gData );
+    this.portText.setText( "2811" ); //$NON-NLS-1$
     this.portText.addModifyListener( this );
     this.portText.addListener( SWT.Verify, new NumberVerifier() );
+
+    
     setControl( mainComp );
   }
 
@@ -181,11 +172,5 @@ public class GridFTPConnectionWizardPage extends WizardPage
    */
   public void handleEvent( final Event event ) {
     // do nothing
-  }
-
-  @Override
-  public boolean canFlipToNextPage()
-  {
-    return false;
   }
 }

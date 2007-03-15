@@ -16,9 +16,13 @@
 package eu.geclipse.core.internal.model;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import eu.geclipse.core.model.GridModelException;
+import eu.geclipse.core.model.IGridComputing;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridInfoService;
+import eu.geclipse.core.model.IGridService;
+import eu.geclipse.core.model.IGridStorage;
 import eu.geclipse.core.model.IVirtualOrganization;
 
 /**
@@ -78,6 +82,22 @@ public class VoResourceContainer
     this.type = type;
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.internal.model.VirtualGridContainer#canContain(eu.geclipse.core.model.IGridElement)
+   */
+  @Override
+  public boolean canContain( final IGridElement element ) {
+    boolean result = false;
+    if ( this.type == ResourceType.Computing ) {
+      result = element instanceof IGridComputing;
+    } else if ( this.type == ResourceType.Service ) {
+      result = element instanceof IGridService;
+    } else if ( this.type == ResourceType.Storage ) {
+      result = element instanceof IGridStorage;
+    }
+    return result;
+  }
+  
   /**
    * Get the type of this container.
    * 
@@ -91,7 +111,6 @@ public class VoResourceContainer
   /* (non-Javadoc)
    * @see eu.geclipse.core.internal.model.VirtualGridElement#isLocal()
    */
-  @Override
   public boolean isLocal() {
     return false;
   }
@@ -108,7 +127,8 @@ public class VoResourceContainer
    * @see eu.geclipse.core.internal.model.VirtualGridContainer#fetchChildren()
    */
   @Override
-  protected void fetchChildren( final IProgressMonitor monitor ) {
+  protected boolean fetchChildren( final IProgressMonitor monitor )
+      throws GridModelException {
     
     IGridElement[] children = null;
     
@@ -132,6 +152,8 @@ public class VoResourceContainer
         addElement( child );
       }
     }
+    
+    return true;
     
   }
   

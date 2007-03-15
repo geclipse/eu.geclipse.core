@@ -41,7 +41,7 @@ public class MountAction extends Action {
   
   protected InputStream createContents( final IGridStorage source ) {
     URI accessToken = findAccessToken( this.accessProtocol, source );
-    String accessString = accessToken.toString() + "/";
+    String accessString = accessToken.toString() + '/';
     byte[] bytes = accessString.getBytes();
     ByteArrayInputStream biStream = new ByteArrayInputStream( bytes );
     return biStream;
@@ -84,11 +84,10 @@ public class MountAction extends Action {
     return result;
   }
   
-  @SuppressWarnings("nls")
   protected String getMountName( final IGridStorage source ) {
-    String[] parts = this.accessProtocol.split( ":" );
-    String name = "." + parts[0] + "." + source.getName()
-      + "." + parts[1] + ".fs";
+    String[] parts = this.accessProtocol.split( ":" ); //$NON-NLS-1$
+    String name = '.' + parts[0] + '.' + source.getName()
+      + '.' + parts[1] + ".fs"; //$NON-NLS-1$
     return name;
   }
   

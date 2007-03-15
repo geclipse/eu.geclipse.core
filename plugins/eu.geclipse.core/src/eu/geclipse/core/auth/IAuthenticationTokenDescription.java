@@ -46,4 +46,5 @@ public interface IAuthenticationTokenDescription {
    */
   public String getTokenTypeName();
   
+  public String getWizardId();
 }

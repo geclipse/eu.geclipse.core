@@ -8,13 +8,14 @@
       <dropDownEntry
             class="eu.geclipse.terminal.ssh.internal.SshShell"
             label="SSH"
-            icon="icons/ssh.png"/>
+            icon="icons/obj16/ssh.png"/>
    </extension>
    <extension
          point="eu.geclipse.terminal.newTerminalWizards">
       <wizard
             class="eu.geclipse.terminal.ssh.internal.SSHWizard"
+            id="eu.geclipse.terminal.ssh.internal.SSHWizard"
             name="SSH"
-            icon="icons/ssh.png"/>
+            icon="icons/obj16/ssh.png"/>
    </extension>
 </plugin>

@@ -45,6 +45,9 @@ public class Extensions {
   public static final String GRID_ELEMENT_CREATOR_POINT
     = "eu.geclipse.core.gridElementCreator"; //$NON-NLS-1$
   
+  public static final String PROBLEM_PROVIDER_POINT
+    = "eu.geclipse.core.problemProvider"; //$NON-NLS-1$
+  
   /**
    * The ID of the authentication token configuration element contained
    * in the authentication token management extension point. 
@@ -84,6 +87,12 @@ public class Extensions {
     = "creator"; //$NON-NLS-1$
   
   public static final String GRID_ELEMENT_CREATOR_EXECUTABLE
+    = "class"; //$NON-NLS-1$
+  
+  public static final String PROBLEM_PROVIDER_ELEMENT
+    = "provider"; //$NON-NLS-1$
+
+  public static final String PROBLEM_PROVIDER_EXECUTABLE
     = "class"; //$NON-NLS-1$
   
   /**
@@ -144,6 +153,22 @@ public class Extensions {
     for ( Object o : objectList ) {
       if ( o instanceof IGridElementCreator ) {
         resultList.add( ( IGridElementCreator ) o );
+      }
+    }
+    return resultList;
+  }
+  
+  public static List< IProblemProvider > getRegisteredProblemProviders() {
+    List< IProblemProvider > resultList
+      = new ArrayList< IProblemProvider >();
+    ExtensionManager manager = new ExtensionManager();
+    List< Object > objectList
+      = manager.getExecutableExtensions( PROBLEM_PROVIDER_POINT,
+                                         PROBLEM_PROVIDER_ELEMENT,
+                                         PROBLEM_PROVIDER_EXECUTABLE );
+    for ( Object o : objectList ) {
+      if ( o instanceof IProblemProvider ) {
+        resultList.add( ( IProblemProvider ) o );
       }
     }
     return resultList;

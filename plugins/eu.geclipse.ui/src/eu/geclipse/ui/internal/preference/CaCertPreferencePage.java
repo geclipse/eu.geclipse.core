@@ -237,8 +237,8 @@ public class CaCertPreferencePage extends PreferencePage implements IWorkbenchPr
           gExc.getProblem().addSolution( solution );
           int result = 
             NewProblemDialog.openProblem( getShell(),
-                                          Messages.getString( "CaCertPreferencePage.cert_error" ),
-                                          Messages.getString( "CaCertPreferencePage.unable_load_cert_rep_error" ),
+                                          Messages.getString( "CaCertPreferencePage.cert_error" ), //$NON-NLS-1$
+                                          Messages.getString( "CaCertPreferencePage.unable_load_cert_rep_error" ), //$NON-NLS-1$
                                           gExc );
           updateList = result != NewProblemDialog.SOLVE;
         }

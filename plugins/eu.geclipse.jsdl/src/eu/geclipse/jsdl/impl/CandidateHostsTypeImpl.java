@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: CandidateHostsTypeImpl.java,v 1.1 2007/01/25 15:26:30 emstamou Exp $
+ * $Id: CandidateHostsTypeImpl.java,v 1.2 2007/03/01 09:15:18 emstamou Exp $
  */
 package eu.geclipse.jsdl.impl;
 
@@ -32,115 +32,129 @@ import org.eclipse.emf.ecore.util.EDataTypeEList;
  *
  * @generated
  */
-public class CandidateHostsTypeImpl extends EObjectImpl implements CandidateHostsType {
-	/**
-	 * The cached value of the '{@link #getHostName() <em>Host Name</em>}' attribute list.
-	 * <!-- begin-user-doc -->
+public class CandidateHostsTypeImpl extends EObjectImpl implements CandidateHostsType 
+{
+  /**
+   * The cached value of the '{@link #getHostName() <em>Host Name</em>}' attribute list.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @see #getHostName()
-	 * @generated
-	 * @ordered
-	 */
+   * @see #getHostName()
+   * @generated
+   * @ordered
+   */
 	protected EList hostName = null;
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected CandidateHostsTypeImpl() {
-		super();
-	}
+   * @generated
+   */
+	protected CandidateHostsTypeImpl()
+  {
+    super();
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected EClass eStaticClass() {
-		return JsdlPackage.Literals.CANDIDATE_HOSTS_TYPE;
-	}
+   * @generated
+   */
+	protected EClass eStaticClass()
+  {
+    return JsdlPackage.Literals.CANDIDATE_HOSTS_TYPE;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public EList getHostName() {
-		if (hostName == null) {
-			hostName = new EDataTypeEList(String.class, this, JsdlPackage.CANDIDATE_HOSTS_TYPE__HOST_NAME);
-		}
-		return hostName;
-	}
+   * @generated
+   */
+	public EList getHostName()
+  {
+    if (hostName == null)
+    {
+      hostName = new EDataTypeEList(String.class, this, JsdlPackage.CANDIDATE_HOSTS_TYPE__HOST_NAME);
+    }
+    return hostName;
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public Object eGet(int featureID, boolean resolve, boolean coreType) {
-		switch (featureID) {
-			case JsdlPackage.CANDIDATE_HOSTS_TYPE__HOST_NAME:
-				return getHostName();
-		}
-		return super.eGet(featureID, resolve, coreType);
-	}
+   * @generated
+   */
+	public Object eGet(int featureID, boolean resolve, boolean coreType)
+  {
+    switch (featureID)
+    {
+      case JsdlPackage.CANDIDATE_HOSTS_TYPE__HOST_NAME:
+        return getHostName();
+    }
+    return super.eGet(featureID, resolve, coreType);
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void eSet(int featureID, Object newValue) {
-		switch (featureID) {
-			case JsdlPackage.CANDIDATE_HOSTS_TYPE__HOST_NAME:
-				getHostName().clear();
-				getHostName().addAll((Collection)newValue);
-				return;
-		}
-		super.eSet(featureID, newValue);
-	}
+   * @generated
+   */
+	public void eSet(int featureID, Object newValue)
+  {
+    switch (featureID)
+    {
+      case JsdlPackage.CANDIDATE_HOSTS_TYPE__HOST_NAME:
+        getHostName().clear();
+        getHostName().addAll((Collection)newValue);
+        return;
+    }
+    super.eSet(featureID, newValue);
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public void eUnset(int featureID) {
-		switch (featureID) {
-			case JsdlPackage.CANDIDATE_HOSTS_TYPE__HOST_NAME:
-				getHostName().clear();
-				return;
-		}
-		super.eUnset(featureID);
-	}
+   * @generated
+   */
+	public void eUnset(int featureID)
+  {
+    switch (featureID)
+    {
+      case JsdlPackage.CANDIDATE_HOSTS_TYPE__HOST_NAME:
+        getHostName().clear();
+        return;
+    }
+    super.eUnset(featureID);
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public boolean eIsSet(int featureID) {
-		switch (featureID) {
-			case JsdlPackage.CANDIDATE_HOSTS_TYPE__HOST_NAME:
-				return hostName != null && !hostName.isEmpty();
-		}
-		return super.eIsSet(featureID);
-	}
+   * @generated
+   */
+	public boolean eIsSet(int featureID)
+  {
+    switch (featureID)
+    {
+      case JsdlPackage.CANDIDATE_HOSTS_TYPE__HOST_NAME:
+        return hostName != null && !hostName.isEmpty();
+    }
+    return super.eIsSet(featureID);
+  }
 
-	/**
-	 * <!-- begin-user-doc -->
+  /**
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public String toString() {
-		if (eIsProxy()) return super.toString();
+   * @generated
+   */
+	public String toString()
+  {
+    if (eIsProxy()) return super.toString();
 
-		StringBuffer result = new StringBuffer(super.toString());
-		result.append(" (hostName: ");
-		result.append(hostName);
-		result.append(')');
-		return result.toString();
-	}
+    StringBuffer result = new StringBuffer(super.toString());
+    result.append(" (hostName: ");
+    result.append(hostName);
+    result.append(')');
+    return result.toString();
+  }
 
 } //CandidateHostsTypeImpl

@@ -18,9 +18,11 @@ package eu.geclipse.ui.views;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import org.eclipse.compare.IContentChangeListener;
 import org.eclipse.compare.IContentChangeNotifier;
+import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -70,6 +72,8 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.CompoundContributionItem;
 import org.eclipse.ui.part.ViewPart;
+import eu.geclipse.core.ExtensionManager;
+import eu.geclipse.core.Extensions;
 import eu.geclipse.core.auth.AuthenticationException;
 import eu.geclipse.core.auth.AuthenticationTokenManager;
 import eu.geclipse.core.auth.IAuthenticationToken;
@@ -350,7 +354,7 @@ public class AuthTokenView extends ViewPart implements IContentChangeListener {
   @Override
   public void createPartControl( final Composite parent ) {
     
-    this.tokenTable = new Table( parent, SWT.CHECK | SWT.BORDER | SWT.MULTI | SWT.FULL_SELECTION );
+    this.tokenTable = new Table( parent, SWT.CHECK | SWT.MULTI | SWT.FULL_SELECTION );
     this.tokenTable.setHeaderVisible( true );
     this.tokenTable.setLinesVisible( true );
     
@@ -706,19 +710,26 @@ public class AuthTokenView extends ViewPart implements IContentChangeListener {
     this.newWizardMenu = new CompoundContributionItem() {
       @Override
       protected IContributionItem[] getContributionItems() {
-        List< String > names = eu.geclipse.core.Extensions.getRegisteredAuthTokenNames();
-        List< IContributionItem > itemList = new ArrayList< IContributionItem >();
-        for ( String name : names ) {
-          Action action = new Action() {
-            @Override
-            public void run() {
-              UIAuthTokenProvider tokenProvider
-                = new UIAuthTokenProvider( getSite().getShell() );
-              tokenProvider.showNewTokenWizard( getText() );
-            }
-          };
-          action.setText( name );
-          itemList.add( new ActionContributionItem( action ) );
+        List<IContributionItem> itemList = new LinkedList<IContributionItem>();
+        ExtensionManager manager = new ExtensionManager();
+        List< IConfigurationElement > cElements
+          = manager.getConfigurationElements( Extensions.AUTH_TOKEN_MANAGEMENT_POINT,
+                                              Extensions.AUTH_TOKEN_ELEMENT );
+        for ( IConfigurationElement element : cElements ) {
+          final String name = element.getAttribute( "name" ); //$NON-NLS-1$
+          final String wizardId = element.getAttribute( "wizard" ); //$NON-NLS-1$
+          if ( name != null && wizardId != null ) {
+            Action action = new Action() {
+              @Override
+              public void run() {
+                UIAuthTokenProvider tokenProvider
+                  = new UIAuthTokenProvider( getSite().getShell() );
+                tokenProvider.showNewTokenWizard( wizardId );
+              }
+            };
+            action.setText( name );
+            itemList.add( new ActionContributionItem( action ) );
+          }
         }
         return itemList.toArray( new  IContributionItem[0] );
       }

@@ -18,7 +18,7 @@ public class GridProjectActions extends ActionGroupManager {
     
     addGroup( new NewWizardActions( window ) );
     addGroup( new OpenActions( site ) );
-    addGroup( new FileActions( site ) );
+    //addGroup( new FileActions( view ) );
     addGroup( new SubmitJobActions( site ) );
     addGroup( new MountActions( site ) );
     addGroup( new ProjectActions( site ) );

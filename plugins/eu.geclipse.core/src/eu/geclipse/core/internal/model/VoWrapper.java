@@ -1,7 +1,9 @@
 package eu.geclipse.core.internal.model;
 
 import org.eclipse.core.filesystem.IFileStore;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
+import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
@@ -12,6 +14,10 @@ import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.IWrappedElement;
 import eu.geclipse.core.model.impl.AbstractGridContainer;
 
+/**
+ * Wrapper of a VO in order to map the VO from the manager to a
+ * project.
+ */
 public class VoWrapper
     extends AbstractGridContainer
     implements IVirtualOrganization, IWrappedElement {
@@ -22,12 +28,21 @@ public class VoWrapper
   
   protected VoWrapper( final IGridProject project,
                        final IVirtualOrganization vo ) {
-    super( null );
+    super();
     this.project = project;
     this.vo = vo;
-    addElement( new VoResourceContainer( this, vo, VoResourceContainer.ResourceType.Service ) );
-    addElement( new VoResourceContainer( this, vo, VoResourceContainer.ResourceType.Computing ) );
-    addElement( new VoResourceContainer( this, vo, VoResourceContainer.ResourceType.Storage ) );
+    try {
+      addElement( new VoResourceContainer( this, vo, VoResourceContainer.ResourceType.Service ) );
+      addElement( new VoResourceContainer( this, vo, VoResourceContainer.ResourceType.Computing ) );
+      addElement( new VoResourceContainer( this, vo, VoResourceContainer.ResourceType.Storage ) );
+    } catch ( GridModelException gmExc ) {
+      Activator.logException( gmExc );
+    }
+  }
+  
+  @Override
+  public boolean canContain( final IGridElement element ) {
+    return element instanceof VoResourceContainer;
   }
 
   public String getTypeName() {
@@ -39,26 +54,23 @@ public class VoWrapper
     this.vo.dispose();
   }
 
-  @Override
   public IFileStore getFileStore() {
     return getProject().getFileStore().getChild( getName() );
   }
   
-  public IGridInfoService getInfoService() {
+  public IGridInfoService getInfoService()
+      throws GridModelException {
     return this.vo.getInfoService();
   }
 
-  @Override
   public String getName() {
     return this.vo.getName();
   }
 
-  @Override
   public IGridContainer getParent() {
     return this.project;
   }
 
-  @Override
   public IPath getPath() {
     return this.project.getPath().append( getName() );
   }
@@ -68,7 +80,12 @@ public class VoWrapper
     return this.project;
   }
   
-  public IGridService[] getServices() {
+  public IResource getResource() {
+    return null;
+  }
+  
+  public IGridService[] getServices()
+      throws GridModelException {
     return this.vo.getServices();
   }
   
@@ -84,10 +101,7 @@ public class VoWrapper
     return true;
   }
 
-  public boolean isVirtual() {
-    return true;
-  }
-
+  @SuppressWarnings("unchecked")
   @Override
   public Object getAdapter( final Class adapter ) {
     return null;

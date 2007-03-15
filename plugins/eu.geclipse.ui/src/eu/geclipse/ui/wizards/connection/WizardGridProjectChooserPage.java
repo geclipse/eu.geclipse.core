@@ -16,7 +16,6 @@
 
 package eu.geclipse.ui.wizards.connection;
 
-import java.net.URI;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IAdaptable;
@@ -41,7 +40,7 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
  * @author katis
  */
 public class WizardGridProjectChooserPage extends WizardPage
-  implements IConnectionWizardPage, Listener
+  implements Listener
 {
 
   private TreeViewer newViewer;
@@ -120,14 +119,6 @@ public class WizardGridProjectChooserPage extends WizardPage
     }
     setErrorMessage( message );
     return result;
-  }
-
-  public URI finish() {
-    return null;
-  }
-
-  public boolean isLastPage() {
-    return false;
   }
 
   public void handleEvent( final Event event ) {

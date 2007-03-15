@@ -108,14 +108,7 @@ public class NetworkPreferencePage extends PreferencePage implements IWorkbenchP
     initializeDialogUnits( parent );
     GridData gData;
     
-    Composite mainComp = new Composite( parent, SWT.NONE );
-    mainComp.setLayout( new GridLayout( 1, false ) );
-    gData = new GridData( GridData.FILL_HORIZONTAL );
-    gData.grabExcessHorizontalSpace = true;
-    gData.verticalAlignment = GridData.BEGINNING;
-    mainComp.setLayoutData( gData );
-    
-    Group connectionGroup = new Group( mainComp, SWT.SHADOW_NONE );
+    Group connectionGroup = new Group( parent, SWT.SHADOW_NONE );
     connectionGroup.setLayout( new GridLayout( 2, false ) );
     connectionGroup.setText( "Connections" );
     gData = new GridData( GridData.FILL_HORIZONTAL );
@@ -133,7 +126,7 @@ public class NetworkPreferencePage extends PreferencePage implements IWorkbenchP
     gData.grabExcessHorizontalSpace = true;
     this.connectionTimeoutText.setLayoutData( gData );
     
-    Group proxyGroup = new Group( mainComp, SWT.SHADOW_NONE );
+    Group proxyGroup = new Group( parent, SWT.SHADOW_NONE );
     proxyGroup.setLayout( new GridLayout( 2, false ) );
     proxyGroup.setText( Messages.getString( "NetworkPreferencePage.proxy_group_title" ) ); //$NON-NLS-1$
     gData = new GridData( GridData.FILL_HORIZONTAL );
@@ -192,6 +185,11 @@ public class NetworkPreferencePage extends PreferencePage implements IWorkbenchP
     gData = new GridData( GridData.FILL_HORIZONTAL );
     gData.grabExcessHorizontalSpace = true;
     this.proxyAuthPwText.setLayoutData( gData );
+    
+    Label spacer = new Label( parent, SWT.NONE );
+    gData = new GridData( GridData.FILL_HORIZONTAL );
+    gData.grabExcessVerticalSpace = true;
+    spacer.setLayoutData(gData);
     
     this.connectionTimeoutText.addModifyListener( new ModifyListener() {
       public void modifyText( final ModifyEvent e ) {

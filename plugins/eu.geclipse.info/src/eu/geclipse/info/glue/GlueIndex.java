@@ -48,11 +48,15 @@ public abstract class GlueIndex implements java.io.Serializable {
   }
 
   private static IPath getGridInfoLocation() {
-    IPath location = eu.geclipse.info.Activator.getDefault().getStateLocation();
-    if( !location.hasTrailingSeparator() ) {
-      location = location.addTrailingSeparator();
+    Activator activator= eu.geclipse.info.Activator.getDefault();
+    IPath location = null;
+    if(activator!=null){
+      location = activator.getStateLocation();
+      if( !location.hasTrailingSeparator() ) {
+        location = location.addTrailingSeparator();
+      }
+      location = location.append( ".gridinfo" ); //$NON-NLS-1$
     }
-    location = location.append( ".gridinfo" ); //$NON-NLS-1$
     return location;
   }
 
@@ -75,15 +79,20 @@ public abstract class GlueIndex implements java.io.Serializable {
 
   private static GlueIndex loadInstance() throws IOException {
     IPath serPath = getGridInfoLocation();
-    try {
-      FileInputStream fis;
-      fis = new FileInputStream( serPath.toFile() );
-      ObjectInputStream ois = new ObjectInputStream( fis );
-      return ( GlueIndex )ois.readObject();
-    } catch( ClassNotFoundException e ) {
-      e.printStackTrace();
+    GlueIndex gi=null;
+    if(serPath!=null){
+      try {
+        FileInputStream fis;
+        fis = new FileInputStream( serPath.toFile() );
+        ObjectInputStream ois = new ObjectInputStream( fis );
+        gi= ( GlueIndex )ois.readObject();
+      } catch( ClassNotFoundException e ) {
+        e.printStackTrace();
+      }
+    }else{
+      throw new IOException("Could not load cache."); //$NON-NLS-1$
     }
-    return null;
+    return gi;
   }
 
   /**

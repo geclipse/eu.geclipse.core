@@ -1,8 +1,8 @@
 package eu.geclipse.ui.providers;
 
 import java.util.Comparator;
+import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridElement;
-import eu.geclipse.core.model.IGridMount;
 
 public class GridModelComparator implements Comparator< Object > {
   
@@ -32,8 +32,8 @@ public class GridModelComparator implements Comparator< Object > {
   
   private boolean isFolder( final IGridElement element ) {
     boolean result = false;
-    if ( element instanceof IGridMount ) {
-      result = ( ( IGridMount ) element ).isFolder();
+    if ( element instanceof IGridConnectionElement ) {
+      result = ( ( IGridConnectionElement ) element ).isFolder();
     }/* else if ( element instanceof IGridContainer ) {
       result = true;
     }*/

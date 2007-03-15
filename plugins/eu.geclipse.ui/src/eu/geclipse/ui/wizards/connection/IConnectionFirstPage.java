@@ -16,9 +16,7 @@
 package eu.geclipse.ui.wizards.connection;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
-import org.eclipse.jface.viewers.TreeSelection;
 
 /**
  * First page of {@link ConnectionWizard} must implement this interface.
@@ -26,15 +24,6 @@ import org.eclipse.jface.viewers.TreeSelection;
  * @author katis
  */
 public interface IConnectionFirstPage extends IWizardPage {
-
-  /**
-   * Method to check whether {@link ConnectionWizard} was run from Grid Project
-   * View
-   * 
-   * @param selection selection made when launching ConnectionWizard
-   * @return true if selection is instance of {@link TreeSelection}
-   */
-  public abstract boolean isInGridProjectView( IStructuredSelection selection );
 
   /**
    * Method to access connection's name

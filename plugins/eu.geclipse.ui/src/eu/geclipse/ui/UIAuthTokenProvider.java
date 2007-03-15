@@ -21,19 +21,23 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.window.Window;
+import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.cheatsheets.CheatSheetListener;
+import org.eclipse.ui.cheatsheets.ICheatSheetEvent;
+import org.eclipse.ui.cheatsheets.ICheatSheetManager;
 import eu.geclipse.core.auth.AuthenticationException;
 import eu.geclipse.core.auth.CoreAuthTokenProvider;
 import eu.geclipse.core.auth.IAuthTokenProvider;
 import eu.geclipse.core.auth.IAuthenticationToken;
 import eu.geclipse.core.auth.IAuthenticationTokenDescription;
 import eu.geclipse.ui.internal.Activator;
-import eu.geclipse.ui.wizards.ExtensionWizard;
+import eu.geclipse.ui.wizards.wizardselection.ExtPointWizardSelectionListPage;
 
 /**
  * The
@@ -45,7 +49,7 @@ import eu.geclipse.ui.wizards.ExtensionWizard;
  *  
  * @author stuempert-m
  */
-public class UIAuthTokenProvider implements IAuthTokenProvider {
+public class UIAuthTokenProvider extends CheatSheetListener implements IAuthTokenProvider {
 
   private class Runner implements Runnable {
     
@@ -66,8 +70,8 @@ public class UIAuthTokenProvider implements IAuthTokenProvider {
                                                      Messages.getString( "UIAuthTokenProvider.req_token_title" ), //$NON-NLS-1$
                                                      Messages.getString( "UIAuthTokenProvider.new_token_question" ) ); //$NON-NLS-1$
         if( result ) {
-          String tokenName = this.description.getTokenTypeName();
-          if ( showNewTokenWizard( tokenName ) ) {
+          String tokenWizardId = this.description.getWizardId();
+          if ( showNewTokenWizard( tokenWizardId ) ) {
             this.token = cProvider.requestToken( this.description );
           }
         }
@@ -110,6 +114,9 @@ public class UIAuthTokenProvider implements IAuthTokenProvider {
   /**
    * The <code>Shell</code> that is used to create dialogs, error dialogs...
    */
+
+  private static ICheatSheetManager cheatSheetManager;
+  
   protected Shell shell;
   
   protected Display display;
@@ -182,22 +189,35 @@ public class UIAuthTokenProvider implements IAuthTokenProvider {
    * will be started with the token type page as starting page where the user can choose
    * the type of the he wants to create.
    * 
-   * @param tokenName The name of the token type that should be created or null.
+   * @param tokenWizardId The ID of the token type that should be created or null.
    */
-  public boolean showNewTokenWizard( final String tokenName ) {
-    ExtensionWizard wizard = new ExtensionWizard( eu.geclipse.core.Extensions.AUTH_TOKEN_MANAGEMENT_POINT, 
-                                                  eu.geclipse.core.Extensions.AUTH_TOKEN_ELEMENT,
-                                                  tokenName );
+  public boolean showNewTokenWizard( final String tokenWizardId ) {
+    URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/wizban/newtoken_wiz.gif" ); //$NON-NLS-1$
+
+    Wizard wizard =  new Wizard() {
+      @Override
+      public boolean performFinish() {
+        return false;
+      }
+  
+      @Override
+      public void addPages() {
+        ExtPointWizardSelectionListPage page = new ExtPointWizardSelectionListPage(
+            "pagename",
+            eu.geclipse.core.Extensions.AUTH_TOKEN_MANAGEMENT_POINT,
+            Messages.getString( "UIAuthTokenProvider.wizard_first_page_title" ), //$NON-NLS-1$
+            Messages.getString( "UIAuthTokenProvider.wizard_first_page_description" ) ); //$NON-NLS-1$
+        page.setPreselectedId( tokenWizardId );
+        page.setCheatSheetManager(cheatSheetManager);
+        addPage( page );
+      }
+    };
+
     wizard.setNeedsProgressMonitor( true );
-    wizard.setFirstPageComboLabel( Messages.getString("UIAuthTokenProvider.wizard_first_page_combo_label") ); //$NON-NLS-1$
-    wizard.setFirstPageDescription( Messages.getString("UIAuthTokenProvider.wizard_first_page_description") ); //$NON-NLS-1$
-    wizard.setFirstPageTitle( Messages.getString("UIAuthTokenProvider.wizard_first_page_title") ); //$NON-NLS-1$
+    wizard.setForcePreviousAndNextButtons( true );
     wizard.setWindowTitle( Messages.getString("UIAuthTokenProvider.wizard_title") ); //$NON-NLS-1$
-    URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/authtokenwizard.gif" ); //$NON-NLS-1$
-    wizard.setFirstPageImage( ImageDescriptor.createFromURL( imgUrl ) );
-    WizardDialog dialog = new WizardDialog(
-      this.shell,
-      wizard );
+    wizard.setDefaultPageImageDescriptor( ImageDescriptor.createFromURL( imgUrl ) );
+    WizardDialog dialog = new WizardDialog( this.shell, wizard );
     return dialog.open() == Window.OK;
   }
 
@@ -255,6 +275,16 @@ public class UIAuthTokenProvider implements IAuthTokenProvider {
         }
       }
     } );
+  }
+
+  @Override
+  public void cheatSheetEvent( final ICheatSheetEvent event )
+  {
+      cheatSheetManager = event.getCheatSheetManager();
+      if ( cheatSheetManager.getData( "var1" ) == null ) {
+        cheatSheetManager.setData( "var1", "null" );
+        cheatSheetManager.setData( "var2", "null" );
+      }
   }
 
 }

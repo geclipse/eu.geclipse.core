@@ -10,7 +10,8 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributor(s):
- *     PSNC - Katarzyna Bylec
+ *     PSNC: 
+ *      - Katarzyna Bylec (katis@man.poznan.pl)
  *           
  *****************************************************************************/
 
@@ -21,6 +22,8 @@ import java.net.URISyntaxException;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -41,7 +44,7 @@ import eu.geclipse.ui.widgets.StoredCombo;
  * @author katis
  *
  */
-public class ExecutableNewJobWizardPage extends WizardPage {
+public class ExecutableNewJobWizardPage extends WizardPage implements ModifyListener{
 
   /**
    * Key for the executable file preference.
@@ -67,15 +70,30 @@ public class ExecutableNewJobWizardPage extends WizardPage {
    * Holds description of the job
    */
   private Text jobDescription;
-
+  
+  /**
+   * Holds name of the application
+   */
+  private Text applicationName;
+  
+//  private Combo application;
+  
+//  private Composite parentP;
+  
+//  private Map<String, String> appsWithExtraAttributes;
+  
+//  private ArrayList<WizardPage> internalPages;
+  
   /**
    * Creates new wizard page
    * @param pageName name of the page
+   * @param internalPages 
    */
   protected ExecutableNewJobWizardPage( final String pageName ) {
     super( pageName );
     setTitle( Messages.getString( "ExecutableNewJobWizardPage.title" ) ); //$NON-NLS-1$
     setDescription( Messages.getString( "ExecutableNewJobWizardPage.description" ) ); //$NON-NLS-1$
+//    this.appsWithExtraAttributes = Extensions.getApplicationParametersXMLMap();
   }
 
   public void createControl( final Composite parent ) {
@@ -102,7 +120,38 @@ public class ExecutableNewJobWizardPage extends WizardPage {
     layout.horizontalAlignment = GridData.FILL;
     layout.horizontalSpan = 2;
     this.jobName.setLayoutData( layout );
+  
+    Label applicationNameLabel = new Label( mainComp, GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_CENTER );
+    applicationNameLabel.setText( Messages.getString("ExecutableNewJobWizardPage.application_name_label"));  //$NON-NLS-1$
+    layout = new GridData();
+    layout.horizontalAlignment = GridData.FILL;
+    nameLabel.setLayoutData( layout );
     
+    this.applicationName = new Text(mainComp, GridData.HORIZONTAL_ALIGN_BEGINNING
+                                        | GridData.VERTICAL_ALIGN_CENTER | SWT.BORDER );
+    layout = new GridData();
+    layout.horizontalAlignment = GridData.FILL;
+    layout.horizontalSpan = 2;
+    this.applicationName.setLayoutData( layout );
+    //label and combo for infromation from plugins
+    //label
+//    Label pluginNameLabel = new Label(mainComp, GridData.HORIZONTAL_ALIGN_BEGINNING | GridData.VERTICAL_ALIGN_CENTER);
+//    layout = new GridData();
+//    layout.horizontalAlignment = GridData.FILL;
+//    pluginNameLabel.setText( "Plug-in name" );
+//    pluginNameLabel.setLayoutData( layout );
+//    //combo
+//    application = new Combo(mainComp, SWT.SINGLE);
+//    for (String value: this.appsWithExtraAttributes.values()){
+//      application.add( value.toString() );
+//    }
+//    layout = new GridData( GridData.HORIZONTAL_ALIGN_FILL );
+//    layout.horizontalSpan = 2;
+//    layout.grabExcessHorizontalSpace = true;
+//    application.setLayoutData( layout );
+//    application.addModifyListener( this );
+    //end
+        
     Label inputLabel = new Label( mainComp, GridData.HORIZONTAL_ALIGN_BEGINNING
                                             | GridData.VERTICAL_ALIGN_CENTER );
     inputLabel.setText( Messages.getString( "ExecutableNewJobWizardPage.exe_input_label" ) ); //$NON-NLS-1$
@@ -192,5 +241,36 @@ public class ExecutableNewJobWizardPage extends WizardPage {
   public String getJobDescription() {
     return this.jobDescription.getText();
   }
+  
+  /**
+   * Returns application name to be run on the grid
+   * @return name of the application
+   */
+  String getApplicationName(){
+    return this.applicationName.getText();
+  }
+
+//  @Override
+//  public IWizardPage getNextPage()
+//  {
+//    IWizardPage result = super.getNextPage();
+//    if (! appsWithExtraAttributes.containsValue( application.getText())){
+//      ApplicationSpecificPage appSP = ApplicationSpecificPageFactory.getApplicationSpecificPage( "aaa", this.parentP ); 
+//      result.setPreviousPage( appSP );
+//      result = appSP;
+//      //tworzenie ApplicationSpecificPage()
+//      result.setPreviousPage( this );
+//      
+////      result = ApplciationSpecificPage
+//    }
+//    return result;
+//  }
+
+  public void modifyText( final ModifyEvent e ) {
+    this.getContainer().updateButtons();
+  }
+
+  
+  
   
 }

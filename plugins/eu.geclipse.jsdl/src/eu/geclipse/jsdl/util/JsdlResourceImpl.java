@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: JsdlResourceImpl.java,v 1.1 2007/01/25 15:26:30 emstamou Exp $
+ * $Id: JsdlResourceImpl.java,v 1.2 2007/03/01 09:15:18 emstamou Exp $
  */
 package eu.geclipse.jsdl.util;
 
@@ -17,16 +17,18 @@ import org.eclipse.emf.ecore.xmi.impl.XMLResourceImpl;
  * @see eu.geclipse.jsdl.util.JsdlResourceFactoryImpl
  * @generated
  */
-public class JsdlResourceImpl extends XMLResourceImpl {
-	/**
-	 * Creates an instance of the resource.
-	 * <!-- begin-user-doc -->
+public class JsdlResourceImpl extends XMLResourceImpl 
+{
+  /**
+   * Creates an instance of the resource.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @param uri the URI of the new resource.
-	 * @generated
-	 */
-	public JsdlResourceImpl(URI uri) {
-		super(uri);
-	}
+   * @param uri the URI of the new resource.
+   * @generated
+   */
+	public JsdlResourceImpl(URI uri)
+  {
+    super(uri);
+  }
 
 } //JsdlResourceImpl

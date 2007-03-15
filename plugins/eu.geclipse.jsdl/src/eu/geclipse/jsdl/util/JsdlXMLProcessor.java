@@ -2,7 +2,7 @@
  * <copyright>
  * </copyright>
  *
- * $Id: JsdlXMLProcessor.java,v 1.1 2007/01/25 15:26:30 emstamou Exp $
+ * $Id: JsdlXMLProcessor.java,v 1.2 2007/03/01 09:15:18 emstamou Exp $
  */
 package eu.geclipse.jsdl.util;
 
@@ -20,31 +20,35 @@ import org.eclipse.emf.ecore.xmi.util.XMLProcessor;
  * <!-- end-user-doc -->
  * @generated
  */
-public class JsdlXMLProcessor extends XMLProcessor {
-	/**
-	 * Public constructor to instantiate the helper.
-	 * <!-- begin-user-doc -->
+public class JsdlXMLProcessor extends XMLProcessor 
+{
+  /**
+   * Public constructor to instantiate the helper.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	public JsdlXMLProcessor() {
-		super((EPackage.Registry.INSTANCE));
-		JsdlPackage.eINSTANCE.eClass();
-	}
-	
-	/**
-	 * Register for "*" and "xml" file extensions the JsdlResourceFactoryImpl factory.
-	 * <!-- begin-user-doc -->
+   * @generated
+   */
+	public JsdlXMLProcessor()
+  {
+    super((EPackage.Registry.INSTANCE));
+    JsdlPackage.eINSTANCE.eClass();
+  }
+  
+  /**
+   * Register for "*" and "xml" file extensions the JsdlResourceFactoryImpl factory.
+   * <!-- begin-user-doc -->
 	 * <!-- end-user-doc -->
-	 * @generated
-	 */
-	protected Map getRegistrations() {
-		if (registrations == null) {
-			super.getRegistrations();
-			registrations.put(XML_EXTENSION, new JsdlResourceFactoryImpl());
-			registrations.put(STAR_EXTENSION, new JsdlResourceFactoryImpl());
-		}
-		return registrations;
-	}
+   * @generated
+   */
+	protected Map getRegistrations()
+  {
+    if (registrations == null)
+    {
+      super.getRegistrations();
+      registrations.put(XML_EXTENSION, new JsdlResourceFactoryImpl());
+      registrations.put(STAR_EXTENSION, new JsdlResourceFactoryImpl());
+    }
+    return registrations;
+  }
 
 } //JsdlXMLProcessor

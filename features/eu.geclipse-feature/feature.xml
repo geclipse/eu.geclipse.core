@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <feature
       id="eu.geclipse"
       label="Eclipse g-Eclipse"
@@ -43,7 +42,9 @@ project number: FP5-IST-034327  http://www.geclipse.eu/
       <import plugin="org.eclipse.search"/>
       <import plugin="org.eclipse.ui.ide"/>
       <import plugin="org.eclipse.ui.navigator"/>
+      <import plugin="org.eclipse.help"/>
       <import plugin="org.eclipse.debug.core"/>
+      <import plugin="org.eclipse.text"/>
       <import plugin="org.eclipse.ui.editors"/>
       <import plugin="org.eclipse.team.cvs.ssh2"/>
       <import plugin="com.jcraft.jsch"/>
@@ -54,8 +55,6 @@ project number: FP5-IST-034327  http://www.geclipse.eu/
       <import plugin="org.eclipse.ui.workbench.texteditor"/>
       <import plugin="com.ice.tar"/>
       <import plugin="org.apache.jakarta_log4j"/>
-      <import plugin="org.eclipse.help"/>
-      <import plugin="org.eclipse.text"/>
    </requires>
 
    <plugin

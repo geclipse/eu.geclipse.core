@@ -17,8 +17,8 @@
 package eu.geclipse.ui.wizards.connection;
 
 import java.lang.reflect.InvocationTargetException;
+import java.net.URI;
 import java.net.URL;
-import java.util.Hashtable;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -32,10 +32,11 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import eu.geclipse.core.connection.ConnectionManager;
 import eu.geclipse.core.connection.impl.ConnectionDescription;
+import eu.geclipse.ui.Extensions;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.dialogs.Solution;
 import eu.geclipse.ui.internal.Activator;
-import eu.geclipse.ui.wizards.connection.managers.AbstractConnectionWizardManager;
+import eu.geclipse.ui.wizards.wizardselection.ExtPointWizardSelectionListPage;
 
 /**
  * Implementation of a wizard to create new connection to a file system.
@@ -54,7 +55,7 @@ public class ConnectionWizard extends Wizard implements INewWizard {
   protected IFile propertiesFile;
   IConnectionFirstPage firstPage;
   IStructuredSelection selection;
-  private ConnectionStartPage startPage;
+  private ExtPointWizardSelectionListPage startPage;
   
   
   /**
@@ -66,13 +67,12 @@ public class ConnectionWizard extends Wizard implements INewWizard {
     setForcePreviousAndNextButtons( true );
     setNeedsProgressMonitor( true );
     setWindowTitle( Messages.getString( "ConnectionWizard.window_title" ) ); //$NON-NLS-1$
-    URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/connectionwizard.gif" ); //$NON-NLS-1$
+    URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/wizban/newconn_wiz.gif" ); //$NON-NLS-1$
     setDefaultPageImageDescriptor( ImageDescriptor.createFromURL( imgUrl ) );
   }
 
   public void init( final IWorkbench workbench,
-                    final IStructuredSelection selectionS )
-  {
+                    final IStructuredSelection selectionS ) {
     this.selection = selectionS;
     // if( selection != null ) {
     // Object obj = selection.getFirstElement();
@@ -95,49 +95,50 @@ public class ConnectionWizard extends Wizard implements INewWizard {
     // }
   }
 
+  boolean isInGridProjectView( final IStructuredSelection structurdSelection ) {
+    return ( structurdSelection instanceof TreeSelection );
+  }
+  
   @Override
-  public void addPages()
-  {
-    Hashtable<String, AbstractConnectionWizardManager> connectionManagers = eu.geclipse.ui.Extensions.getRegisteredConnectionWizardManagers();
+  public void addPages() {
     //locationPage is different when Wizard is started from Grid Poject View or from gExplorer View
     this.firstPage = null;
-    if (this.selection instanceof TreeSelection){
+    if ( isInGridProjectView( this.selection ) ) {
       this.firstPage = new LocationChooser( Messages.getString( "ConnectionWizard.location_page_name" ), this.selection ); //$NON-NLS-1$
     } else {
       this.firstPage = new ConnectionNameChooser( Messages.getString( "ConnectionWizard.name_page_name" )); //$NON-NLS-1$
     }
     addPage( this.firstPage );
-    this.startPage = new ConnectionStartPage( Messages.getString( "ConnectionWizard.start_page_name" ), connectionManagers ); //$NON-NLS-1$
-    this.startPage.setDescription( Messages.getString( "ConnectionWizard.start_page_description" ) ); //$NON-NLS-1$
-    this.startPage.setTitle( Messages.getString( "ConnectionWizard.start_page_title" ) ); //$NON-NLS-1$
+    this.startPage = new ExtPointWizardSelectionListPage(
+        Messages.getString( "ConnectionWizard.start_page_name" ), //$NON-NLS-1$
+        Extensions.CONNECTION_WIZARD_POINT, 
+        Messages.getString( "ConnectionWizard.start_page_title" ), //$NON-NLS-1$
+        Messages.getString( "ConnectionWizard.start_page_description" ) ); //$NON-NLS-1$
+    this.startPage.setInitData( this );
     addPage( this.startPage );
-    // get all connectionWizardPagesManagers and Pages they're managing
-    for( AbstractConnectionWizardManager manager : connectionManagers.values() )
-    {
-      for( IConnectionWizardPage page : manager.getPagesList() ) {
-        page.setWizard( this );
-        addPage( page );
-      }
-    }
   }
 
   @Override
-  public boolean performFinish()
-  {
+  public boolean performFinish() {
+    return false;
+  }
+  
+  /**
+   * Operations for connection creation common to all connection types.
+   * @param fileSystemUri URI of the new connection
+   * @return true if successful, false otherwise
+   */
+  public boolean commonPerformFinish( final URI fileSystemUri ) {
     boolean result = true;
     try {
       getContainer().run( false, false, new IRunnableWithProgress() {
-
         public void run( final IProgressMonitor monitor )
-          throws InvocationTargetException, InterruptedException
-        {
-          ConnectionDescription desc = new ConnectionDescription( ( ( IConnectionWizardPage )getContainer().getCurrentPage() ).finish(),
-                                                                  null );
-          ConnectionManager manager = ConnectionManager.getManager();
-          if( ConnectionWizard.this.firstPage.isInGridProjectView(ConnectionWizard.this.selection) ) {
-            ConnectionWizard.this.firstPage.setFileName( "." + ConnectionWizard.this.firstPage.getConnectionName() + ".fs" ); //$NON-NLS-1$ //$NON-NLS-2$
-            ConnectionWizard.this.firstPage.setInitialText( desc.getFileSystemURI()
-              .toString() );
+          throws InvocationTargetException, InterruptedException  {
+          if( isInGridProjectView(ConnectionWizard.this.selection) ) {
+            ConnectionWizard.this.firstPage.setFileName(
+                "." + ConnectionWizard.this.firstPage.getConnectionName() + ".fs" ); //$NON-NLS-1$ //$NON-NLS-2$
+            ConnectionWizard.this.firstPage.setInitialText(
+                fileSystemUri.toString() );
             ConnectionWizard.this.firstPage.createNewFile();
             // File cont =
             // ConnectionWizard.this.localizationPage.getContainerFullPath().toFile();
@@ -146,6 +147,8 @@ public class ConnectionWizard extends Wizard implements INewWizard {
             // ConnectionWizard.this.propertiesFile,
             // ConnectionWizard.this.localizationPage.getFileName() );
           } else {
+            ConnectionDescription desc = new ConnectionDescription( fileSystemUri, null );
+            ConnectionManager manager = ConnectionManager.getManager();
             manager.createAndSaveConnection( desc,
                                              ConnectionWizard.this.propertiesFile,
                                              ConnectionWizard.this.firstPage.getConnectionName() );
@@ -168,19 +171,10 @@ public class ConnectionWizard extends Wizard implements INewWizard {
       // "Connection cannot be created", //$NON-NLS-1$
       // status );
       eu.geclipse.ui.internal.Activator.logException( itExc );
-      result = false;
     } catch( InterruptedException intExc ) {
       // do nothing just log
       eu.geclipse.ui.internal.Activator.logException( intExc );
     }
     return result;
-  }
-
-  @Override
-  public boolean canFinish()
-  {
-    IConnectionWizardPage page = ( IConnectionWizardPage )getContainer().getCurrentPage();
-    return page.isLastPage() && page.isPageComplete();
-  }
-  
+  } 
 }

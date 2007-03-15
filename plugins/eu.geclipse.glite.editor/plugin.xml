@@ -8,7 +8,7 @@
             contributorClass="eu.geclipse.glite.editor.JdlEditorContributor"
             default="false"
             extensions="jdl"
-            icon="icons/jdlfile.gif"
+            icon="icons/obj16/jdl_file_obj.gif"
             id="eu.geclipse.glite.editor.jdleditor"
             name="eu.geclipse.glite.editor.jdleditor"/>
    </extension>

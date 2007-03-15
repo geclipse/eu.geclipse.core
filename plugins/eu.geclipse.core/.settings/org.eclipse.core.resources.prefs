@@ -1,3 +1,5 @@
-#Wed Jan 31 13:30:45 CET 2007
+#Tue Mar 13 11:08:46 CET 2007
 eclipse.preferences.version=1
 encoding//src/eu/geclipse/core/internal/messages.properties=8859_1
+encoding//src/eu/geclipse/core/internal/model/messages.properties=8859_1
+encoding//src/eu/geclipse/core/messages.properties=8859_1
