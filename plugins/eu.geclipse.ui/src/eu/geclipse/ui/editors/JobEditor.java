@@ -137,10 +137,10 @@ public class JobEditor extends MultiPageEditorPart {
     void refresh( final IGridJob gridJob )
     {
       setValue( jobNameText, gridJob.getName() );
-      setValue( jobIdText, gridJob.getID() );
-      IGridJobStatus status = gridJob.getStatus();
+      setValue( jobIdText, gridJob.getID().getJobID() );
+      IGridJobStatus status = gridJob.getJobStatus();
       if( status != null ) {
-        setValue( jobStatusText, gridJob.getStatus().getName() );
+        setValue( jobStatusText, gridJob.getJobStatus().getName() );
       } else {
         setValue( jobStatusText, "" ); //$NON-NLS-1$;    
       }
