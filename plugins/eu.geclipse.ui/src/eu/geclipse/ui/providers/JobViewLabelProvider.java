@@ -22,10 +22,10 @@ public class JobViewLabelProvider
       IGridJob job = ( IGridJob ) element;
       switch ( columnIndex ) {
         case 2:
-          text = job.getID();
+          text = job.getID().getJobID();
           break;
         case 3:
-          IGridJobStatus status = job.getStatus();
+          IGridJobStatus status = job.getJobStatus();
           text = status.getName();
           break;
       }
