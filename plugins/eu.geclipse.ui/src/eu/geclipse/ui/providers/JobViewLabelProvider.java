@@ -25,7 +25,7 @@ public class JobViewLabelProvider
           text = job.getID().getJobID();
           break;
         case 3:
-          IGridJobStatus status = job.getStatus();
+          IGridJobStatus status = job.getJobStatus();
           text = status.getName();
           break;
       }
