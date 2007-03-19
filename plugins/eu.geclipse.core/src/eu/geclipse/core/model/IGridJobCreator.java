@@ -16,6 +16,8 @@
 
 package eu.geclipse.core.model;
 
+import eu.geclipse.core.GridException;
+
 /**
  * Specialised interface for the creation of jobs for the grid.
  * Offers also the possibility for submitting the job.
@@ -47,7 +49,7 @@ public interface IGridJobCreator extends IGridElementCreator {
    * @return TODO pawel
    * @throws GridModelException TODO pawel
    */
-  public IGridJobID submitJob( final IGridJobDescription parent ) throws GridModelException;
+  public IGridJobID submitJob( final IGridJobDescription parent ) throws GridException;
 
   /**
    * TODO pawel
@@ -57,7 +59,7 @@ public interface IGridJobCreator extends IGridElementCreator {
    * @return TODO pawel
    * @throws GridModelException TODO pawel
    */
-  public IGridJobID submitJob( final IGridJobDescription parent, final String destination ) throws GridModelException;
+  public IGridJobID submitJob( final IGridJobDescription parent, final String destination ) throws GridException;
   
   /**
    * TODO pawel

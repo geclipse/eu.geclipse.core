@@ -16,7 +16,6 @@
 
 package eu.geclipse.core.model;
 
-import java.io.InputStream;
 
 /**
  * Base interface for all middleware specific implementations of
@@ -35,7 +34,16 @@ public interface IGridJob
    * 
    * @return This job's current status.
    */
-  public IGridJobStatus getStatus();
+  public IGridJobStatus getJobStatus();
+  
+
+  /**
+   * Update job status. implementation of this method should
+   * ask middleware for the fresh job status
+   * 
+   * @return This job's current status.
+   */
+  public IGridJobStatus updateJobStatus();
   
   /**
    * Get the unique id of this job. This id may be used to query
@@ -52,18 +60,5 @@ public interface IGridJob
    */
   public IGridJobDescription getJobDescription();
 
-  /**
-   * Get the stream used for standard output.
-   * 
-   * @return The standard output stream.
-   */
-  public InputStream getStdOutStream();
-
-  /**
-   * Get the stream used for standard error.
-   * 
-   * @return The standard error stream.
-   */
-  public InputStream getStdErrStream();
   
 }

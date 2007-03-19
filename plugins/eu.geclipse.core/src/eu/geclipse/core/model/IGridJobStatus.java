@@ -22,6 +22,14 @@ package eu.geclipse.core.model;
  */
 public interface IGridJobStatus {
 
+  public final static int UNKNOWN=0; 
+  public final static int RUNNING=1; 
+  public final static int SUBMITTED=2; 
+  public final static int DONE=3; 
+  public final static int ABORTED=4; 
+  public final static int ABANDONED=-1; 
+  public final static int WAITING=5; 
+  
   /**
    * Return true if the status of the job can be changed
    * in the future yet. Return false if status if final
@@ -54,5 +62,17 @@ public interface IGridJobStatus {
    * @return Name of the status
    */
   public String getName();
+  
+  /**
+   * Returns the type of the status. This is integer value and defines 
+   * the meaning of the status. This value will be used for filtering 
+   * job list to those with a given status type. Type can be also used 
+   * by user interface to mark jobs belonging to the same type with the 
+   * same grahpical elements (e.g. icons, colors)  
+   * 
+   * @return Name of the status
+   */
+  public int getType();
+
   
 }
