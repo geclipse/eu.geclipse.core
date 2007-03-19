@@ -12,6 +12,7 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.IWizardContainer;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
+import eu.geclipse.core.GridException;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
@@ -28,7 +29,7 @@ public abstract class JobSubmissionWizardBase extends Wizard implements IInitali
   protected IGridJobCreator creator;
   protected List< IGridJobDescription > jobDescriptions;
 
-  protected IGridJobID submitJob( final IGridJobDescription description ) throws GridModelException {
+  protected IGridJobID submitJob( final IGridJobDescription description ) throws GridException {
     return this.creator.submitJob( description );
   }
   
