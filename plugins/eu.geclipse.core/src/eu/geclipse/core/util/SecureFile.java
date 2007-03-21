@@ -25,7 +25,7 @@ import java.net.URI;
 /**
  * This class is an extension of java.io.File providing creation of 
  * files and folders with secure permissions, if supported by the 
- * underlying OS. Sadly there is no way to manage file/folder permissions
+ * underlying OS! Sadly there is no way to manage file/folder permissions
  * in Java <= 5 or in Eclipse itself. This class should go away with
  * the use of Java 6...
  * 
@@ -107,8 +107,7 @@ public class SecureFile extends File {
     
     /*
      * UNIX specific, using a library call could be more efficient but
-     *   less portable, at least exec'ing chmod should work on all
-     *   unixes, including Mac OS X...
+     *   less portable, at least exec'ing chmod should work on all unixes...
      */
     String mode = "600";
     SecureFile f = new SecureFile( path );
