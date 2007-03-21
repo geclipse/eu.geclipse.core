@@ -14,6 +14,12 @@ public interface IGlueInfoStore {
 	 * @param listener
 	 * @param objectName
 	 */
-	public void addListener(IGlueStoreChangeListerner listener, String objectName);
-	public void removeListener(IGlueStoreChangeListerner listener, String resourceTypeName);
+    public void addListener(IGlueStoreChangeListerner listener, String objectName);
+
+    public void removeListener(IGlueStoreChangeListerner listener, String resourceTypeName);
+    
+    public void addStateListener(IGlueStoreStateChangeListerner listener);
+
+    public void removeStateListener(IGlueStoreStateChangeListerner listener);
+    
 }
