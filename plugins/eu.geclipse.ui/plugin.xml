@@ -65,8 +65,14 @@
             allowMultiple="true"
             category="eu.geclipse.ui.viewcategory"
             class="eu.geclipse.ui.views.GridConnectionView"
-            id="eu.geclipse.ui.views.connectionView"
+            id="eu.geclipse.ui.views.GridConnectionView"
             name="Connections"/>
+      <view
+            allowMultiple="true"
+            category="eu.geclipse.ui.viewcategory"
+            class="eu.geclipse.ui.views.GridJobDetailsView"
+            id="eu.geclipse.ui.views.GridJobDetailsView"
+            name="%view.jobDetails"/>
    </extension>
    <extension
          point="org.eclipse.ui.perspectives">

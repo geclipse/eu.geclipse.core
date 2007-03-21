@@ -13,19 +13,24 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.OpenFileAction;
 import eu.geclipse.core.model.IGridConnectionElement;
+import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.ui.internal.Activator;
+import eu.geclipse.ui.views.GridJobDetailsView;
 
 public class OpenElementAction
     extends Action
     implements ISelectionChangedListener {
   
   private OpenFileAction openFileAction;
+  final IWorkbenchPage workbenchPage;
   
   protected OpenElementAction( final IWorkbenchPage page ) {
     super( "&Open@F3" );
+    workbenchPage = page;
     this.openFileAction = new OpenFileAction( page );
   }
   
@@ -46,21 +51,9 @@ public class OpenElementAction
     this.openFileAction.selectionChanged( selection );
     setEnabled( this.openFileAction.isEnabled() );
   }
-  
-  protected boolean containsGridMounts( final IStructuredSelection selection ) {
-    boolean result = false;
-    for ( Object obj : selection.toArray() ) {
-      if ( obj instanceof IGridConnectionElement ) {
-        result = true;
-        break;
-      }
-    }
-    return result;
-  }
-  
+    
   protected IStructuredSelection remapSelection( final IStructuredSelection selection ) {
-    IStructuredSelection result = selection;
-    if ( containsGridMounts( selection ) ) {
+    IStructuredSelection result = selection;    
       List< Object > list = new ArrayList< Object >();
       for ( Object obj : selection.toArray() ) {
         if ( obj instanceof IGridConnectionElement ) {
@@ -69,11 +62,14 @@ public class OpenElementAction
           } catch( CoreException cExc ) {
             Activator.logException( cExc );
           }
-        }
-        list.add( obj );
+          list.add( obj );
+        } else if( obj instanceof IGridJob  ){
+          openJob( ( IGridJob )obj );
+        } else {
+          list.add( obj );
+        }        
       }
       result = new StructuredSelection( list );
-    }
     return result;
   }
   
@@ -93,5 +89,13 @@ public class OpenElementAction
     }
     return file;
   }
-  
+
+  private void openJob( final IGridJob job ){
+    try {
+      GridJobDetailsView view = ( GridJobDetailsView )this.workbenchPage.showView( GridJobDetailsView.ID, job.getPath().toString(), IWorkbenchPage.VIEW_ACTIVATE );
+      view.setInputJob( job );
+    } catch( PartInitException e ) {
+      e.printStackTrace();
+    }
+  }
 }
