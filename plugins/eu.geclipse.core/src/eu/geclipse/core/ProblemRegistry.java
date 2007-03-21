@@ -68,7 +68,7 @@ public class ProblemRegistry {
     return problem;
   }
   
-  public static int uniqueID() {
+  public static synchronized int uniqueID() {
     return ++lastUniqueID;
   }
   
