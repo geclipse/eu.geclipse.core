@@ -17,7 +17,7 @@
 package eu.geclipse.ui.views;
 
 import java.util.LinkedList;
-import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
@@ -40,7 +40,7 @@ public class GridJobDetailsView extends ViewPart {
    */
   static final public String ID = "eu.geclipse.ui.views.GridJobDetailsView"; //$NON-NLS-1$
   
-  private final AbstractSection[] sections = new AbstractSection[1];
+  private final AbstractSection[] sections = new AbstractSection[4];
   private Composite topComposite = null;
   private FormToolkit formToolkit = null;
   private IGridJob inputJob = null;
@@ -49,12 +49,15 @@ public class GridJobDetailsView extends ViewPart {
   public void createPartControl( final Composite parentComposite )
   {
     int sectionIndex = 0;
-    
+
     this.topComposite = getFormToolkit().createComposite( parentComposite );
     this.topComposite.setLayout( new GridLayout( 1, false ) );
     this.topComposite.setBackground( getFormToolkit().getColors().getBackground() );
 
     this.sections[ sectionIndex++ ] = new GeneralSection( this.topComposite );
+    this.sections[ sectionIndex++ ] = new IdentificationSection( this.topComposite );
+    this.sections[ sectionIndex++ ] = new ApplicationSection( this.topComposite );
+    this.sections[ sectionIndex++ ] = new PosixApplicationSection( this.topComposite );
     this.topComposite.layout();
   }
 
@@ -123,9 +126,14 @@ public class GridJobDetailsView extends ViewPart {
       super();
       this.section = getFormToolkit().createSection( parentComposite,
                                                        ExpandableComposite.TWISTIE | ExpandableComposite.TITLE_BAR );
+      
+      GridData gridData = new GridData();
+      gridData.horizontalAlignment = GridData.FILL;
+      this.section.setLayoutData( gridData );
+      
       this.section.setText( nameString );
       this.section.setExpanded( true );
-      this.clientComposite = getFormToolkit().createComposite( this.section, SWT.NONE );
+      this.clientComposite = getFormToolkit().createComposite( this.section );
       this.clientComposite.setLayout( new GridLayout( 2, false ) );
       this.section.setClient( this.clientComposite );
     }
@@ -192,6 +200,75 @@ public class GridJobDetailsView extends ViewPart {
        }
       
       safeSetItemValue( this.jobRefreshedAtLabel, "TODO" ); //TODO mariusz jobRefreshedAtLabel 
+    }    
+  }
+  
+  private class IdentificationSection extends AbstractSection {
+    private Label descriptionLabel;
+    private Label annotationLabel;
+    private Label projectLabel;
+
+    IdentificationSection( final Composite parentComposite ) {
+      super( parentComposite, Messages.getString( "GridJobDetailsView.sectionIdentification" ) ); //$NON-NLS-1$
+      
+      this.descriptionLabel = addSectionItem( Messages.getString( "GridJobDetailsView.labelDescription" ) );  //$NON-NLS-1$
+      this.annotationLabel = addSectionItem( Messages.getString( "GridJobDetailsView.labelAnnotation" ) );  //$NON-NLS-1$
+      this.projectLabel = addSectionItem( Messages.getString( "GridJobDetailsView.labelProject" ) ); //$NON-NLS-1$
+    }
+
+    @Override
+    protected void refresh( final IGridJob gridJob )
+    {
+      // TODO Auto-generated method stub      
+    }    
+  }
+  
+  private class ApplicationSection extends AbstractSection {
+    private Label nameLabel;
+    private Label versionLabel;
+    private Label descriptionLabel;
+
+    ApplicationSection( final Composite parentComposite ) {
+      super( parentComposite, Messages.getString( "GridJobDetailsView.sectionApplication" ) ); //$NON-NLS-1$
+      
+      this.nameLabel = addSectionItem( Messages.getString( "GridJobDetailsView.labelAppName" ) );  //$NON-NLS-1$
+      this.versionLabel = addSectionItem( Messages.getString( "GridJobDetailsView.labelAppVersion" ) );  //$NON-NLS-1$
+      this.descriptionLabel = addSectionItem( Messages.getString( "GridJobDetailsView.labelAppDesc" ) );  //$NON-NLS-1$
+    }
+
+    @Override
+    protected void refresh( final IGridJob gridJob )
+    {
+      // TODO Auto-generated method stub      
+    }
+    
+  }
+  
+  private class PosixApplicationSection extends AbstractSection {
+    private Label applicationLabel;
+    private Label executableLabel;
+    private Label argumentLabel;
+    private Label inputLabel;
+    private Label outputLabel;
+    private Label errorLabel;
+    private Label envLabel;
+
+    PosixApplicationSection( Composite parentComposite ) {
+      super( parentComposite, Messages.getString( "GridJobDetailsView.sectionPosixApplication" ) );
+      
+      this.applicationLabel = addSectionItem( Messages.getString( "GridJobDetailsView.labelPosixApp" ) );  //$NON-NLS-1$
+      this.executableLabel = addSectionItem( Messages.getString( "GridJobDetailsView.labelPosixExe" ) );  //$NON-NLS-1$
+      this.argumentLabel = addSectionItem( Messages.getString( "GridJobDetailsView.labelPosixArgument" ) );  //$NON-NLS-1$
+      this.inputLabel = addSectionItem( Messages.getString( "GridJobDetailsView.labelPosixInput" ) );  //$NON-NLS-1$
+      this.outputLabel = addSectionItem( Messages.getString( "GridJobDetailsView.labelPosixOutput" ) );  //$NON-NLS-1$
+      this.errorLabel = addSectionItem( Messages.getString( "GridJobDetailsView.labelPosixError" ) );  //$NON-NLS-1$
+      this.envLabel = addSectionItem( Messages.getString( "GridJobDetailsView.labelPosixEnv" ) );  //$NON-NLS-1$
+    }
+
+    @Override
+    protected void refresh( IGridJob gridJob )
+    {
+      // TODO Auto-generated method stub      
     }    
   }
 }
