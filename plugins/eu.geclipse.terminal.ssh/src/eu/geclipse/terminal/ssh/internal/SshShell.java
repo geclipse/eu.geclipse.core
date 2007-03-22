@@ -149,12 +149,12 @@ public class SshShell implements IDropDownEntry<ITerminalView>, ITerminalListene
       };
 
       this.channel = (ChannelShell) session.openChannel( "shell" ); //$NON-NLS-1$
+      this.channel.connect();
       this.terminal = terminalView.addTerminal( connection, this );
       this.terminal.setTabName( this.userInfo.getHostname() );
       this.terminal.setDescription( Messages.formatMessage( "SshShell.descriptionWithoutWinTitle", //$NON-NLS-1$
                                                             this.userInfo.getUsername(),
                                                             this.userInfo.getHostname() ) );
-      this.channel.connect();
     } catch ( JSchException exception ) {
       String message = exception.getLocalizedMessage();
       if ( message == null ) message = exception.getClass().getName();
