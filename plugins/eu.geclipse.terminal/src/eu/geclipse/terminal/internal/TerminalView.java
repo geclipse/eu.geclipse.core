@@ -108,7 +108,7 @@ public class TerminalView extends ViewPart implements ITerminalView {
     page.setConnection( connection );
     page.setTerminalListener( termListener );
     cTabItem.setControl( page );
-    this.cTabFolder.showItem( cTabItem );
+    this.cTabFolder.setSelection( cTabItem );
     return page;
   }
 }
