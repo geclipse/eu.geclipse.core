@@ -35,11 +35,27 @@ public class GridModelException extends GridException {
   
   /**
    * Construct a new grid model exception from the specified
-   * {@link IGridModelStatus}.
+   * {@link CoreException} with additional explanation text. 
+   */
+  public GridModelException( final int problemID, final String description ) {
+    super( problemID, description );
+  }
+
+  /**
+   * Construct a new grid model exception from the specified
+   * {@link IGridModelStatus}
    */
   public GridModelException( final int problemID,
                              final Throwable exc ) {
     super( problemID, exc );
   }
   
+  /**
+   * Construct a new grid model exception from the specified
+   * {@link IGridModelStatus} with additional explanatory text
+   */
+  public GridModelException( final int problemID,
+                             final Throwable exc, final String description ) {
+    super( problemID, exc, description );
+  }
 }

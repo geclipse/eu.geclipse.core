@@ -22,6 +22,8 @@ public abstract class AbstractProblem implements IProblem {
   
   private String text;
   
+  private String reason;
+  
   protected AbstractProblem( final int id,
                              final String text ) {
     this( id, text, null );
@@ -73,6 +75,10 @@ public abstract class AbstractProblem implements IProblem {
     return resultList;
   }
   
+  public void setReason(final String reason){
+    this.reason=reason;
+  }
+  
   public IStatus getStatus() {
     if ( this.status == null ) {
       this.status = new Status(
@@ -87,7 +93,11 @@ public abstract class AbstractProblem implements IProblem {
   }
 
   public String getText() {
-    return this.text;
+    String message=text;
+    if(reason==null){
+      message+="\""+reason;
+    }
+    return message;
   }
   
   protected abstract String getPluginID();
@@ -102,5 +112,6 @@ public abstract class AbstractProblem implements IProblem {
     }
     return solution;
   }
+  
   
 }

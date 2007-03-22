@@ -19,4 +19,12 @@ public interface IProblem {
   
   public String getText();
   
+  /**
+   * This method allow to set specific text for already created problem.
+   * Typical usage is to get predefined problem from ProblemRegistry and 
+   * than set text explaining specific reason of the problem 
+   * @param reason
+   */
+  public void setReason(String reason);
+  
 }

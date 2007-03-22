@@ -10,6 +10,12 @@ public class CoreProblems implements IProblemProvider {
   public static final int CONNECTION_TIMEOUT
     = ProblemRegistry.uniqueID();
   
+  public static final int MALFORMED_URL
+  = ProblemRegistry.uniqueID();
+
+  public static final int JOB_SUBMISSION_FAILED
+  = ProblemRegistry.uniqueID();
+
   public static final int UNSPECIFIED_IO_PROBLEM
     = ProblemRegistry.uniqueID();
 
@@ -45,7 +51,22 @@ public class CoreProblems implements IProblemProvider {
                                exc,
                                null );
     }
+
+    else if ( problemID == JOB_SUBMISSION_FAILED ) {
+      problem = createProblem( problemID,
+                               "Job Submission failed",
+                               exc,
+                               null );
+    }
     
+    else if ( problemID == MALFORMED_URL ) {
+      problem = createProblem( problemID,
+                               "URL is not correct",
+                               exc,
+                               new int[] {
+                               SolutionRegistry.CHECK_SERVER_URL,
+      } );
+    }
     return problem;
     
   }
