@@ -24,19 +24,30 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EventObject;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IResourceChangeEvent;
+import org.eclipse.core.resources.IResourceChangeListener;
+import org.eclipse.core.resources.IResourceDelta;
+import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.command.BasicCommandStack;
+import org.eclipse.emf.common.command.Command;
+import org.eclipse.emf.common.command.CommandStack;
+import org.eclipse.emf.common.command.CommandStackListener;
+import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.common.ui.MarkerHelper;
 import org.eclipse.emf.common.ui.editor.ProblemEditorPart;
 import org.eclipse.emf.common.util.BasicDiagnostic;
@@ -45,16 +56,22 @@ import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.util.EContentAdapter;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.edit.domain.AdapterFactoryEditingDomain;
 import org.eclipse.emf.edit.domain.EditingDomain;
+import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
 import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.util.EditUIMarkerHelper;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
@@ -63,10 +80,10 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.dialogs.SaveAsDialog;
+import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.FileEditorInput;
-import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.jsdl.ApplicationType;
 import eu.geclipse.jsdl.JobDefinitionType;
 import eu.geclipse.jsdl.JobDescriptionType;
@@ -74,32 +91,42 @@ import eu.geclipse.jsdl.JobIdentificationType;
 import eu.geclipse.jsdl.posix.POSIXApplicationType;
 import eu.geclipse.jsdl.posix.provider.PosixItemProviderAdapterFactory;
 import eu.geclipse.jsdl.provider.JsdlItemProviderAdapterFactory;
+import eu.geclipse.ui.internal.Activator;
+import eu.geclipse.ui.jsdl.editor.pages.DataStagingPage;
 import eu.geclipse.ui.jsdl.editor.pages.JobApplicationPage;
 import eu.geclipse.ui.jsdl.editor.pages.JobDefinitionPage;
+import eu.geclipse.ui.jsdl.editor.pages.ResourcesPage;
 
 
 
-public class JsdlMultiPageEditor extends FormEditor {
+public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainProvider{
   
   public static final JsdlMultiPageEditor INSTANCE = new JsdlMultiPageEditor();
   
   protected AdapterFactoryEditingDomain editingDomain;
-  protected Collection savedResources = new ArrayList();
-  protected Map resourceToDiagnosticMap = new LinkedHashMap();
+  protected Collection<Resource> savedResources = new ArrayList<Resource>();
+  protected Viewer currentViewer;
+  protected Collection<Resource> removedResources = new ArrayList<Resource>();
+  protected Collection<Resource> changedResources = new ArrayList<Resource>();
+  protected ISelection editorSelection = StructuredSelection.EMPTY;
+  protected Map<Resource, Diagnostic> resourceToDiagnosticMap = new LinkedHashMap<Resource, Diagnostic>();
   protected boolean updateProblemIndication = true;
   protected MarkerHelper markerHelper = new EditUIMarkerHelper();
-  
   protected ComposedAdapterFactory adapterFactory;
   protected JobDefinitionType jobDefType;
-  
   protected ArrayList<EObject> jobDefList = new ArrayList<EObject>();
   protected ArrayList<EObject> applList = new ArrayList<EObject>();
   protected ArrayList<EObject> posixApplList = new ArrayList<EObject>();
+  protected ArrayList<EObject> dataStagingList = new ArrayList<EObject>();
+  protected ArrayList<EObject> resourcesList = new ArrayList<EObject>();
+  private TextEditor editor=null;
+  private int sourcePageIndex;
+//JobDefinitionPage jobDefPage;
   
   public JsdlMultiPageEditor(){
     // Create an adapter factory that yields item providers.
     //
-    List factories = new ArrayList();
+    List<AdapterFactoryImpl> factories = new ArrayList<AdapterFactoryImpl>();
     factories.add(new ResourceItemProviderAdapterFactory());
     factories.add(new JsdlItemProviderAdapterFactory());
     factories.add(new PosixItemProviderAdapterFactory());
@@ -110,21 +137,59 @@ public class JsdlMultiPageEditor extends FormEditor {
     // Create the command stack that will notify this editor as commands are executed.
     //
     BasicCommandStack commandStack = new BasicCommandStack();
+    
+    // Add a listener to set the most recent command's affected objects to be the selection of the viewer with focus.
+    //
+    commandStack.addCommandStackListener
+      (new CommandStackListener()
+       {
+         public void commandStackChanged(final EventObject event)
+         {
+           getContainer().getDisplay().asyncExec
+             (new Runnable()
+              {
+                public void run()
+                {
+                  firePropertyChange(IEditorPart.PROP_DIRTY);
+
+                  // Try to select the affected objects.
+                  //
+                  Command mostRecentCommand = ((CommandStack)event.getSource()).getMostRecentCommand();
+//                  if (mostRecentCommand != null)
+//                  {
+//                    setSelectionToViewer(mostRecentCommand.getAffectedObjects());
+//                  }
+//                  if (jobDefPage != null && !jobDefPage.getControl().isDisposed())
+//                  {
+//                    jobDefPage.refresh();
+//                  }
+                }
+              });
+         }
+       });
+    
+    
    
     // Create the editing domain with a special command stack.
     //
-    this.editingDomain = new AdapterFactoryEditingDomain(this.adapterFactory, commandStack, new HashMap());
-    
-    
+    this.editingDomain = new AdapterFactoryEditingDomain(this.adapterFactory, commandStack, new HashMap<Object, Object>());
+        
       }
+  
 
   @Override
   protected void addPages()
   {
     createJsdlModel();
+    
+   
+    
      try {
-      addPage(new JobDefinitionPage(this,this.jobDefList,this.editingDomain));
+      addPage(new JobDefinitionPage(this,this.jobDefList));
       addPage(new JobApplicationPage(this,this.applList,this.posixApplList));
+      addPage(new ResourcesPage(this,this.resourcesList));
+      addPage(new DataStagingPage(this,this.dataStagingList));
+      addSourcePage();
          }
    catch (PartInitException e) {
     //
@@ -132,6 +197,25 @@ public class JsdlMultiPageEditor extends FormEditor {
     
   }
  
+  public void addSourcePage()throws PartInitException{
+    
+    this.sourcePageIndex = addPage(getSourceEditor(), getEditorInput());
+    
+    setPageText(this.sourcePageIndex, getEditorInput().getName());
+
+    getSourceEditor().setInput(getEditorInput());
+    
+  }
+   
+
+  private TextEditor getSourceEditor()
+  {  
+     if (this.editor == null)
+      {
+          this.editor = new TextEditor();
+      }
+      return this.editor;
+  }
 
   
   @Override
@@ -139,9 +223,196 @@ public class JsdlMultiPageEditor extends FormEditor {
     setSite(site);
     setInputWithNotify(editorInput);
     setPartName(editorInput.getName());
-   
+    ResourcesPlugin.getWorkspace().addResourceChangeListener(resourceChangeListener, IResourceChangeEvent.POST_CHANGE);
 }
 
+  protected IResourceChangeListener resourceChangeListener =
+    new IResourceChangeListener()
+    {
+      public void resourceChanged(final IResourceChangeEvent event)
+      {
+        // Only listening to these.
+        // if (event.getType() == IResourceDelta.POST_CHANGE)
+        {
+          IResourceDelta delta = event.getDelta();
+          try
+          {
+            class ResourceDeltaVisitor implements IResourceDeltaVisitor
+            {
+              protected ResourceSet resourceSet = editingDomain.getResourceSet();
+              protected Collection changedResources = new ArrayList();
+              protected Collection removedResources = new ArrayList();
+
+              public boolean visit(final IResourceDelta delta)
+              {
+                if (delta.getFlags() != IResourceDelta.MARKERS 
+                    &&
+                    delta.getResource().getType() == IResource.FILE)
+                {
+                  if ((delta.getKind() & (IResourceDelta.CHANGED | IResourceDelta.REMOVED)) != 0)
+                  {
+                    Resource resource = resourceSet.getResource(URI.createURI(delta.getFullPath().toString()), false);
+                    if (resource != null)
+                    {
+                      if ((delta.getKind() & IResourceDelta.REMOVED) != 0)
+                      {
+                        removedResources.add(resource);
+                      }
+                      else if (!savedResources.remove(resource))
+                      {
+                        changedResources.add(resource);
+                      }
+                    }
+                  }
+                }
+
+                return true;
+              }
+
+              public Collection getChangedResources()
+              {
+                return this.changedResources;
+              }
+
+              public Collection getRemovedResources()
+              {
+                return this.removedResources;
+              }
+            }
+
+            ResourceDeltaVisitor visitor = new ResourceDeltaVisitor();
+            delta.accept(visitor);
+
+            if (!visitor.getRemovedResources().isEmpty())
+            {
+              removedResources.addAll(visitor.getRemovedResources());
+              if (!isDirty())
+              {
+                getSite().getShell().getDisplay().asyncExec
+                  (new Runnable()
+                   {
+                     public void run()
+                     {
+                       getSite().getPage().closeEditor(JsdlMultiPageEditor.this, false);
+                       JsdlMultiPageEditor.this.dispose();
+                     }
+                   });
+              }
+            }
+
+            if (!visitor.getChangedResources().isEmpty())
+            {
+              changedResources.addAll(visitor.getChangedResources());
+              if (getSite().getPage().getActiveEditor() == JsdlMultiPageEditor.this)
+              {
+                getSite().getShell().getDisplay().asyncExec
+                  (new Runnable()
+                   {
+                     public void run()
+                     {
+                       handleActivate();
+                     }
+                   });
+              }
+            }
+          }
+          catch (CoreException exception)
+          {
+            Activator.logException( exception);
+          }
+        }
+      }
+    };
+  
+    protected void handleActivate()
+      {
+        // Recompute the read only state.
+        //
+        if (this.editingDomain.getResourceToReadOnlyMap() != null)
+        {
+          this.editingDomain.getResourceToReadOnlyMap().clear();
+
+          // Refresh any actions that may become enabled or disabled.
+          //
+          setSelection(getSelection());
+        }
+
+        if (!this.removedResources.isEmpty())
+        {
+          if (handleDirtyConflict())
+          {
+            getSite().getPage().closeEditor(JsdlMultiPageEditor.this, false);
+            JsdlMultiPageEditor.this.dispose();
+          }
+          else
+          {
+            this.removedResources.clear();
+            this.changedResources.clear();
+            this.savedResources.clear();
+          }
+        }
+        else if (!this.changedResources.isEmpty())
+        {
+          this.changedResources.removeAll(this.savedResources);
+          handleChangedResources();
+          this.changedResources.clear();
+          this.savedResources.clear();
+        }
+      }
+    
+    protected void handleChangedResources()
+      {
+        if (!this.changedResources.isEmpty() && (!isDirty() || handleDirtyConflict()))
+        {
+          this.editingDomain.getCommandStack().flush();
+
+          this.updateProblemIndication = false;
+          for (Iterator i = this.changedResources.iterator(); i.hasNext(); )
+          {
+            Resource resource = (Resource)i.next();
+            if (resource.isLoaded())
+            {
+              resource.unload();
+              try
+              {
+                resource.load(Collections.EMPTY_MAP);
+              }
+              catch (IOException exception)
+              {
+                if (!this.resourceToDiagnosticMap.containsKey(resource))
+                {
+                  this.resourceToDiagnosticMap.put(resource, analyzeResourceProblems(resource, exception));
+                }
+              }
+            }
+          }
+          this.updateProblemIndication = true;
+          updateProblemIndication();
+        }
+      }
+
+    protected boolean handleDirtyConflict()
+      {
+        return
+          MessageDialog.openQuestion
+            (getSite().getShell(),
+             "_UI_FileConflict_label",
+             "_WARN_FileConflict");
+      }
+  
+    public ISelection getSelection()
+      {
+        return this.editorSelection;
+      }
+    
+    public void setSelection(final ISelection selection)
+      {
+        this.editorSelection = selection;
+
+      }
+        
+    
+    
   @Override
   public void doSave(final IProgressMonitor monitor )
   {
@@ -151,7 +422,7 @@ public class JsdlMultiPageEditor extends FormEditor {
       new WorkspaceModifyOperation()
       {
         // This is the method that gets invoked when the operation runs.
-        //
+        
         public void execute(final IProgressMonitor monitor)
         {
           // Save the resources to the file system.
@@ -160,16 +431,16 @@ public class JsdlMultiPageEditor extends FormEditor {
           for (Iterator i = JsdlMultiPageEditor.this.editingDomain.getResourceSet().getResources().iterator(); i.hasNext(); )
           {
             Resource resource = (Resource)i.next();
-            if ((first || !resource.getContents().isEmpty() || isPersisted(resource)) && !editingDomain.isReadOnly(resource))
+            if ((first || !resource.getContents().isEmpty() || isPersisted(resource)) && !JsdlMultiPageEditor.this.editingDomain.isReadOnly(resource))
             {
               try
               {
-                savedResources.add(resource);
+                JsdlMultiPageEditor.this.savedResources.add(resource);
                 resource.save(Collections.EMPTY_MAP);
               }
               catch (Exception exception)
               {
-                resourceToDiagnosticMap.put(resource, analyzeResourceProblems(resource, exception));
+                JsdlMultiPageEditor.this.resourceToDiagnosticMap.put(resource, analyzeResourceProblems(resource, exception));
               }
               first = false;
             }
@@ -370,9 +641,6 @@ public class JsdlMultiPageEditor extends FormEditor {
     };
   
   
-  
-    
-  
   public void createJsdlModel(){
     
     // Assumes that the input is a file object.
@@ -396,9 +664,9 @@ public class JsdlMultiPageEditor extends FormEditor {
     Diagnostic diagnostic = analyzeResourceProblems(resource, exception);
     if (diagnostic.getSeverity() != Diagnostic.OK)
     {
-      resourceToDiagnosticMap.put(resource,  analyzeResourceProblems(resource, exception));
+      this.resourceToDiagnosticMap.put(resource,  analyzeResourceProblems(resource, exception));
     }
-      editingDomain.getResourceSet().eAdapters().add(problemIndicationAdapter);
+      this.editingDomain.getResourceSet().eAdapters().add(this.problemIndicationAdapter);
     
     getImpl(resource);
     
@@ -434,7 +702,7 @@ public class JsdlMultiPageEditor extends FormEditor {
          this.posixApplList.add(testType);
        }
        else {
-         // Do Nothing
+         //do nothing
        }
      
       }
@@ -475,6 +743,7 @@ public class JsdlMultiPageEditor extends FormEditor {
         }
       }
   
+  
   public EditingDomain getEditingDomain()
   {
     return this.editingDomain;
@@ -510,6 +779,30 @@ public class JsdlMultiPageEditor extends FormEditor {
       
       }
     
-    
+    public class ReverseAdapterFactoryContentProvider extends AdapterFactoryContentProvider 
+    {
+        public ReverseAdapterFactoryContentProvider(AdapterFactory adapterFactory) {
+            super(adapterFactory);
+        }
+
+        public Object [] getElements(Object object) {
+            Object parent = super.getParent(object);
+            return (parent == null ? Collections.EMPTY_SET : Collections.singleton(parent)).toArray();
+        }
+
+        public Object [] getChildren(Object object) {
+            Object parent = super.getParent(object);
+            return (parent == null ? Collections.EMPTY_SET : Collections.singleton(parent)).toArray();
+        }
+
+        public boolean hasChildren(Object object) {
+            Object parent = super.getParent(object);
+            return parent != null;
+        }
+
+        public Object getParent(Object object) {
+            return null;
+        }
+    }
   
 }
