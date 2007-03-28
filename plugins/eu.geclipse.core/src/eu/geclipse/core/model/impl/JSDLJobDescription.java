@@ -206,7 +206,6 @@ public class JSDLJobDescription
     this.documentRoot = this.jsdlFactory.createDocumentRoot();
     this.jobDefinition = this.jsdlFactory.createJobDefinitionType();
     this.documentRoot.setJobDefinition( this.jobDefinition );
-    this.getDescription();
   }
 
   /**
