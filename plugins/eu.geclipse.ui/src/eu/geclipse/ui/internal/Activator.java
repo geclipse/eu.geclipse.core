@@ -25,6 +25,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.FormColors;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+import eu.geclipse.ui.properties.PropertiesAdapterFactory;
 
 
 /**
@@ -140,6 +141,7 @@ public class Activator extends AbstractUIPlugin {
   public void start( final BundleContext context ) throws Exception
   {
     super.start( context );
+    PropertiesAdapterFactory.register();
   }
   
   /*
@@ -149,6 +151,7 @@ public class Activator extends AbstractUIPlugin {
   @Override
   public void stop( final BundleContext context ) throws Exception
   {
+    PropertiesAdapterFactory.unregister();
     plugin = null;
     super.stop( context );
   }
