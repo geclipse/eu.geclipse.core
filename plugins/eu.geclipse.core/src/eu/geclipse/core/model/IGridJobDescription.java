@@ -17,12 +17,28 @@
 
 package eu.geclipse.core.model;
 
+import java.util.List;
+
 /**
  * A grid element that describes a job on the Grid. Such descriptions are
  * used to create and/or submit jobs to the Grid.
  */
 public interface IGridJobDescription extends IGridContainer {
   
-  // empty implementation
+  /**
+   * @return free text user's description for job 
+   */
+  String getDescription();
+  
+  /**
+   * @return name of executable file executed by job
+   */
+  String getExecutable();
+  
+  /**
+   * @return arguments for executable file
+   */
+  List<String> getExecutableArguments();
+  
   
 }
