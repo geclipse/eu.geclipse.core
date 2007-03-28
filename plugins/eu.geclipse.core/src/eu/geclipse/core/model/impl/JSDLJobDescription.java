@@ -22,7 +22,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.URI;
@@ -32,6 +34,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
+import org.eclipse.emf.ecore.util.FeatureMap;
 import org.eclipse.emf.ecore.util.FeatureMap.Entry;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMLMapImpl;
@@ -46,10 +49,12 @@ import eu.geclipse.jsdl.JobIdentificationType;
 import eu.geclipse.jsdl.JsdlFactory;
 import eu.geclipse.jsdl.JsdlPackage;
 import eu.geclipse.jsdl.SourceTargetType;
+import eu.geclipse.jsdl.posix.ArgumentType;
 import eu.geclipse.jsdl.posix.FileNameType;
 import eu.geclipse.jsdl.posix.POSIXApplicationType;
 import eu.geclipse.jsdl.posix.PosixFactory;
 import eu.geclipse.jsdl.posix.PosixPackage;
+import eu.geclipse.jsdl.posix.impl.POSIXApplicationTypeImpl;
 import eu.geclipse.jsdl.util.JsdlResourceFactoryImpl;
 
 /**
@@ -201,6 +206,7 @@ public class JSDLJobDescription
     this.documentRoot = this.jsdlFactory.createDocumentRoot();
     this.jobDefinition = this.jsdlFactory.createJobDefinitionType();
     this.documentRoot.setJobDefinition( this.jobDefinition );
+    this.getDescription();
   }
 
   /**
@@ -327,4 +333,69 @@ public class JSDLJobDescription
     dataOut.setTarget( sourceDataOut );
     this.jobDescription.getDataStaging().add( dataOut );
   }
+  
+  protected DocumentRoot getDocumentRoot(){
+    if ( this.documentRoot == null ){
+      this.loadModel( (IFile) this.getResource() );
+    }
+    return this.documentRoot;
+  }
+  
+  protected POSIXApplicationType getPosixApplication(){
+    POSIXApplicationType result = null;
+    DocumentRoot dRoot = getDocumentRoot();
+    if ( dRoot != null && dRoot.getJobDefinition() != null && dRoot.getJobDefinition().getJobDescription() != null && dRoot.getJobDefinition().getJobDescription().getApplication() != null){
+//      dRoot.getJobDefinition().getJobDescription().getApplication().getAny().get( eClass.getEStructuralFeature( "pOSIXApplication" ), true );
+      FeatureMap anyMap = dRoot.getJobDefinition().getJobDescription().getApplication().getAny();
+      for (int i = 0; i < anyMap.size(); i++ ){
+        if (anyMap.getValue( i ) instanceof POSIXApplicationTypeImpl){
+          result = ( POSIXApplicationTypeImpl ) anyMap.getValue( i );
+        }
+      }    
+    }
+    return result;
+  }
+  
+  /**
+   * Accesses value of jsdl-posix:Executable element in jsdl-posix:Application
+   * @return value of element jsdl-posix:Executable or null if not defined
+   */
+  public String getExecutable(){
+    String result = null;
+    POSIXApplicationType posixApp = getPosixApplication();
+    if (posixApp != null){
+      result = posixApp.getExecutable().getValue();
+    }
+    return result;
+  }
+  
+  /**
+   * Accesses value of jsdl:Description element
+   * @return value of jsdl:Description element, or null if not defined
+   */
+  public String getDescription(){
+    String result = null;
+    DocumentRoot dRoot = getDocumentRoot();
+    if ( dRoot != null && dRoot.getJobDefinition() != null && dRoot.getJobDefinition().getJobDescription() != null && dRoot.getJobDefinition().getJobDescription().getJobIdentification() != null ){
+              result = dRoot.getJobDefinition().getJobDescription().getJobIdentification().getDescription();
+    }
+    return result;
+  }
+  
+  /**
+   * Retruns list of values of jsdl-posix:Argument elements in jsdl-posix:Application
+   * @return list of values of jsdl-posix:Argument or null if no jsdl-posix:Argument elements are defined
+   */
+  public List<String> getExecutableArguments(){
+    ArrayList<String> result = null;
+    POSIXApplicationType posixApp = getPosixApplication();
+    if (posixApp != null && ! posixApp.getArgument().isEmpty()){
+      result = new ArrayList<String>();
+      for (Object arg: posixApp.getArgument()){
+        result.add( ( ( ArgumentType )arg ).getValue() );
+      }
+    }
+    return result;
+  }
+  
 }
