@@ -175,5 +175,15 @@ public class GridConnection
   public void save() throws GridModelException {
     // TODO mathias
   }
+
+  public URI getURI() {
+    URI result = null;
+    try {
+      return this.getConnectionFileStore().toURI();
+    } catch( CoreException ex ) {
+      // FIXME Log error
+    }
+    return result;
+  }
   
 }

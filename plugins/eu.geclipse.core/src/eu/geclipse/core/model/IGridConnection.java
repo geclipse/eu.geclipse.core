@@ -1,8 +1,9 @@
 package eu.geclipse.core.model;
 
+import java.net.URI;
+
 public interface IGridConnection
     extends IGridConnectionElement, IManageable, IStorableElement {
   
-  // empty implementation
-  
+    URI getURI(); 
 }
