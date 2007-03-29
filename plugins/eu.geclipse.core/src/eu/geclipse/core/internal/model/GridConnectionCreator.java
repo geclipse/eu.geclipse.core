@@ -61,21 +61,22 @@ public class GridConnectionCreator extends AbstractGridElementCreator {
    */
   protected IGridConnection createGridConnection( final IGridContainer parent,
                                                   final IFile fsFile )
-      throws GridModelException {
-    URI uri
-      = fsFile.getLocationURI();
-    IFileSystem localFileSystem
-      = EFS.getLocalFileSystem();
-    IFileStore fsFileStore
-      = localFileSystem.getStore( uri );
-    IFileStore fileStore
-      = GridConnection.loadFromFsFile( fsFileStore );
-    IGridConnection connection
-      = new GridConnection( parent, fileStore, fsFile.getName() );
+    throws GridModelException
+  {
+    URI uri = fsFile.getLocationURI();
+    IFileSystem localFileSystem = EFS.getLocalFileSystem();
+    IFileStore fsFileStore = localFileSystem.getStore( uri );
+    IFileStore fileStore = GridConnection.loadFromFsFile( fsFileStore );
+    IGridConnection connection = null;
+    if( fileStore != null ) {
+      connection = new GridConnection( parent, fileStore, fsFile.getName() );
+    }
     return connection;
   }
   
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see eu.geclipse.core.model.impl.AbstractGridElementCreator#internalCanCreate(java.lang.Object)
    */
   @Override

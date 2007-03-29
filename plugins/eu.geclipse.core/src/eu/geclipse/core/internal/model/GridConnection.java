@@ -28,6 +28,7 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
+import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.GridModelProblems;
@@ -129,37 +130,43 @@ public class GridConnection
    * for the new file store.
    */
   protected static IFileStore loadFromFsFile( final IFileStore fsFileStore )
-      throws GridModelException {
-    
+    throws GridModelException
+  {
     IFileStore result = null;
-    
     try {
       InputStream iStream = fsFileStore.openInputStream( EFS.NONE, null );
       InputStreamReader iReader = new InputStreamReader( iStream );
       BufferedReader bReader = new BufferedReader( iReader );
       String line = bReader.readLine();
-      while ( ( line != null )
-          && ( line.trim().length() == 0 )
-          && !line.trim().startsWith( "#" ) ) { //$NON-NLS-1$
+      while( ( line != null )
+             && ( line.trim().length() == 0 )
+             && !line.trim().startsWith( "#" ) ) { //$NON-NLS-1$
         line = bReader.readLine();
       }
       bReader.close();
-      if ( line != null ) {
+      if( line != null ) {
         URI uri = new URI( line );
         String scheme = uri.getScheme();
         IFileSystem fileSystem = EFS.getFileSystem( scheme );
         result = fileSystem.getStore( uri );
       }
-    } catch ( CoreException cExc ) {
+    } catch( CoreException cExc ) {
       throw new GridModelException( GridModelProblems.ELEMENT_LOAD_FAILED, cExc );
-    } catch ( IOException ioExc ) {
-      throw new GridModelException( GridModelProblems.ELEMENT_LOAD_FAILED, ioExc );
+    } catch( IOException ioExc ) {
+      throw new GridModelException( GridModelProblems.ELEMENT_LOAD_FAILED,
+                                    ioExc );
     } catch( URISyntaxException usExc ) {
-      throw new GridModelException( GridModelProblems.ELEMENT_LOAD_FAILED, usExc );
+      throw new GridModelException( GridModelProblems.ELEMENT_LOAD_FAILED,
+                                    usExc );
+    } catch( NullPointerException nullExc ) {
+      /*
+       * Message from Kasia: In this case new GridModelException cannot be
+       * thrown, because, when an exception is thrown no other Grid Elements
+       * will be created (in current project)
+       */
+      Activator.logException( nullExc );
     }
-    
     return result;
-    
   }
 
   /* (non-Javadoc)
