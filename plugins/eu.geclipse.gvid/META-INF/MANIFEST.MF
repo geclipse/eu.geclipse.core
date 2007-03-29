@@ -15,3 +15,4 @@ Export-Package: eu.geclipse.gvid,
  eu.geclipse.gvid.internal;x-friends:="eu.geclipse.gvid.test,eu.geclipse.gvid.uncompressed.test",
  eu.geclipse.gvid.internal.preferences;x-friends:="eu.geclipse.gvid.test",
  eu.geclipse.gvid.internal.views;x-friends:="eu.geclipse.gvid.test"
+Bundle-RequiredExecutionEnvironment: J2SE-1.5

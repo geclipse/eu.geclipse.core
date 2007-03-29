@@ -13,3 +13,4 @@ Eclipse-LazyStart: true
 Bundle-Activator: eu.geclipse.terminal.internal.Activator
 Export-Package: eu.geclipse.terminal,
  eu.geclipse.terminal.internal;x-friends:="eu.geclipse.terminal.test"
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
