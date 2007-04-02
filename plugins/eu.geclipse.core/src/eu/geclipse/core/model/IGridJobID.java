@@ -15,6 +15,8 @@
 
 package eu.geclipse.core.model;
 
+import java.io.Serializable;
+
 /**
  * TODO pawel
  */

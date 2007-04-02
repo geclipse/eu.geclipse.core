@@ -76,7 +76,14 @@ public class GridModel {
    * @see GridRoot#getInstance()
    */
   public static IGridRoot getRoot() {
-    return GridRoot.getInstance();
+    IGridRoot root=null;
+    try{
+    root=GridRoot.getInstance();
+    }catch(RuntimeException e){
+      e.printStackTrace();
+      throw e;
+    }
+    return root;
   }
   
   /**

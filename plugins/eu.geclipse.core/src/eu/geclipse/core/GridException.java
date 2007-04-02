@@ -23,8 +23,7 @@ public class GridException extends CoreException {
   
   public GridException( final int problemID,
                         final Throwable exc, final String description ) {
-    this( ProblemRegistry.getRegistry().getProblem( problemID, exc ) );
-    problem.setReason( description );
+    this(ProblemRegistry.getRegistry().getProblem( problemID, exc, description ));
   }
 
   public GridException( final IProblem problem ) {
@@ -32,12 +31,6 @@ public class GridException extends CoreException {
     this.problem = problem;
   }
   
-  public GridException( final IProblem problem, String description ) {
-    super( problem.getStatus() );
-    this.problem = problem;
-    problem.setReason( description );
-  }
-
   public IProblem getProblem() {
     return this.problem;
   }

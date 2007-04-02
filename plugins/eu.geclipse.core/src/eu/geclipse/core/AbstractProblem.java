@@ -94,7 +94,7 @@ public abstract class AbstractProblem implements IProblem {
 
   public String getText() {
     String message=text;
-    if(reason==null){
+    if(reason!=null){
       message+="\""+reason;
     }
     return message;

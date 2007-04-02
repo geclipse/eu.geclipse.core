@@ -42,6 +42,14 @@ public class ProblemRegistry {
   }
   
   public IProblem getProblem( final int problemID,
+                              final Throwable exc, 
+                              String description ) {
+    IProblem problem = getProblem(problemID, exc);
+    problem.setReason( description );
+    return problem;
+    
+  }
+  public IProblem getProblem( final int problemID,
                               final Throwable exc ) {
     IProblem problem = findProblem( problemID, exc );
     if ( problem == null ) {

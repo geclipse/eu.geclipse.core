@@ -94,7 +94,7 @@ public class JSDLJobDescription
    * 
    * @param file The file from which to create the description.
    */
-  protected JSDLJobDescription( final IFile file ) {
+  public JSDLJobDescription( final IFile file ) {
     super( file );
   }
 

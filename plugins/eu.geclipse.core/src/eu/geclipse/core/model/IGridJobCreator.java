@@ -33,33 +33,6 @@ public interface IGridJobCreator extends IGridElementCreator {
    */
   public boolean canCreate( final IGridJobDescription description );
   
-  /**
-   * TODO pawel
-   * 
-   * @return TODO pawel
-   */
-  public String getJobLabel();
-  
-  public String getJobSubmissionWizardId();
-
-  /**
-   * TODO pawel
-   * 
-   * @param parent TODO pawel
-   * @return TODO pawel
-   * @throws GridModelException TODO pawel
-   */
-  public IGridJobID submitJob( final IGridJobDescription parent ) throws GridException;
-
-  /**
-   * TODO pawel
-   * 
-   * @param parent TODO pawel
-   * @param destination TODO pawel
-   * @return TODO pawel
-   * @throws GridModelException TODO pawel
-   */
-  public IGridJobID submitJob( final IGridJobDescription parent, final String destination ) throws GridException;
   
   /**
    * TODO pawel
