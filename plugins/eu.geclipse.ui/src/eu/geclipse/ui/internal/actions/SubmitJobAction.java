@@ -48,66 +48,6 @@ public class SubmitJobAction extends SelectionListenerAction {
     WizardDialog dialog = new WizardDialog( this.site.getShell(), wizard );
     dialog.open();
     
-    /*List< ? > jsdls = getSelectedResources();
-    IFile file = ( IFile )jsdls.get( 0 );
-    String jsdl=""; //$NON-NLS-1$
-    String line=null;
-    
-    InputStream jsdlStream=null;
-    try {
-      jsdlStream = file.getContents();
-      Reader reader=new InputStreamReader(jsdlStream);
-      BufferedReader jsdlReader=new BufferedReader(reader);
-      
-      while(null != (line = jsdlReader.readLine())) {
-        jsdl+=line;
-     }
-      IGridJobDescription desc=new GliteJobDescription( jsdl );    
-
-      //FIXME pawelw - change direct access to gLite with something more proper
-      //It should be extension point for different gridManagers.
-      //The wizzard should be started here for choosing grid and RB
-     IGridJob job=GliteJobManager.getManager().submitJob( desc );
-     Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
-     MessageBox message=new MessageBox(shell, SWT.ICON_INFORMATION);
-     String jobId = job.getJobId();
-     message.setText( Messages.getString("SubmitJobAction.job_id") + jobId ); //$NON-NLS-1$
-     
-    } catch (GridJobException e){
-      String message = Messages.getString("SubmitJobAction.job_submit_error"); //$NON-NLS-1$
-      IStatus status = new Status( IStatus.ERROR,
-                                   Activator.PLUGIN_ID,
-                                   IStatus.OK,
-                                   message,
-                                   e );
-      Activator.logStatus( status ); 
-      Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
-      ProblemDialog dialog = new ProblemDialog( shell, Messages.getString("SubmitJobAction.submission_title"), message, status ); //$NON-NLS-1$
-      dialog.open();
-      
-    }catch( CoreException e ) {
-      String message = Messages.getString("SubmitJobAction.jdsl_error"); //$NON-NLS-1$
-      IStatus status = new Status( IStatus.ERROR,
-                                   Activator.PLUGIN_ID,
-                                   IStatus.OK,
-                                   message,
-                                   e );
-      Activator.logStatus( status );
-      Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
-      ProblemDialog dialog = new ProblemDialog( shell, Messages.getString("SubmitJobAction.jsdl_title"), message, status ); //$NON-NLS-1$
-      dialog.open();
-    } catch( IOException e ) {
-      String message = Messages.getString("SubmitJobAction.jsdl_read_error"); //$NON-NLS-1$
-      IStatus status = new Status( IStatus.ERROR,
-                                   Activator.PLUGIN_ID,
-                                   IStatus.OK,
-                                   message,
-                                   e );
-      Activator.logStatus( status );
-      Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
-      ProblemDialog dialog = new ProblemDialog( shell, Messages.getString("SubmitJobAction.jsdl_read_title"), message, status ); //$NON-NLS-1$
-      dialog.open();
-    }*/
     
   }
 
