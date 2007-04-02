@@ -77,12 +77,7 @@ public class GridModel {
    */
   public static IGridRoot getRoot() {
     IGridRoot root=null;
-    try{
     root=GridRoot.getInstance();
-    }catch(RuntimeException e){
-      e.printStackTrace();
-      throw e;
-    }
     return root;
   }
   
