@@ -85,6 +85,7 @@ import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.FileEditorInput;
 import eu.geclipse.jsdl.ApplicationType;
+import eu.geclipse.jsdl.DataStagingType;
 import eu.geclipse.jsdl.JobDefinitionType;
 import eu.geclipse.jsdl.JobDescriptionType;
 import eu.geclipse.jsdl.JobIdentificationType;
@@ -697,10 +698,10 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
          this.jobDefList.add(testType);
        } else if (testType instanceof ApplicationType){
          this.applList.add(testType);
-       }
-         else if (testType instanceof POSIXApplicationType){
+       } else if (testType instanceof POSIXApplicationType){
          this.posixApplList.add(testType);
        }
+        
        else {
          //do nothing
        }

@@ -41,33 +41,28 @@ import eu.geclipse.jsdl.JobDescriptionType;
 import eu.geclipse.jsdl.JobIdentificationType;
 
 public class JobDefinitionPage extends FormPage {
-  
-  
+
   Text txtId = null;
   Text txtDescription = null;
-  
   Composite jobDefComposite;
   Composite jobIdentComposite;
-
   JobDefinitionType jobDefType = null;
   JobDescriptionType jobDescrType = null;
   JobIdentificationType jobIdentType = null;
   private Button btnADD;
   private Button btnDel;
 
- 
+  
   public JobDefinitionPage( final FormEditor editor, 
                             final ArrayList<EObject> list) {   
     
            super(editor, Messages.JobDefinitionPage_jobDefinitionId, 
                                 Messages.JobDefinitionPage_JobDefinitionTitle);
            
-           
-           breakTypes(list);
           
-                    
-           
-           }
+           breakTypes(list);
+ 
+  }
   
   private void breakTypes(final ArrayList<EObject> list){
    Iterator<EObject> it = list.iterator();
@@ -83,13 +78,10 @@ public class JobDefinitionPage extends FormPage {
       this.jobDescrType = (JobDescriptionType) type;  
     }else if (type instanceof JobIdentificationType){
       this.jobIdentType = (JobIdentificationType) type;  
-    } 
-    
-   } 
-   
-   }
+    }    
+   }  
+  }
 
-  
   @Override
   
   // This method is used to create the Forms content by
@@ -100,6 +92,7 @@ public class JobDefinitionPage extends FormPage {
         
     ScrolledForm form = managedForm.getForm();
     form.setText(Messages.JobDefinitionPage_JobDefinitionPageTitle); 
+    
   
     ColumnLayout layout = new ColumnLayout();
     
@@ -183,7 +176,7 @@ public class JobDefinitionPage extends FormPage {
         //
       }
     } );
-  
+    
     gd = new GridData();
     gd.widthHint = 300;
     this.txtId.setLayoutData(gd);
@@ -204,27 +197,28 @@ public class JobDefinitionPage extends FormPage {
                                                    final String title, 
                                                    final String desc)
   {
-   
     Composite client = createSection(mform, title, desc, 3);
     FormToolkit toolkit = mform.getToolkit();
        
     
     GridData gd ;
     GridData lblgd;
-    
     lblgd = new GridData();
     gd = new GridData();
     gd.widthHint = 300;
     
+    //Create the Label and Text for the Job Name Element
     toolkit.createLabel(client, Messages.JobDefinitionPage_JobName);
-    
     GridData gridData = new GridData();
     gridData.horizontalAlignment = GridData.FILL;
     gridData.horizontalSpan = 2;
     Text txtJobName = toolkit.createText(client, this.jobIdentType.getJobName(), SWT.BORDER); 
     txtJobName.setLayoutData(gridData);
+
+    txtJobName.setLayoutData(gridData);
     
     
+    //Create the Label and Text for the Job Description Element
     Label lblJobDescripiton = toolkit.createLabel (client,
                                            Messages.JobDefinitionPage_JobDescr);
     lblgd = new GridData();
@@ -255,6 +249,7 @@ public class JobDefinitionPage extends FormPage {
     } );
     
     
+    //Create the Label and List for Job Annotation Element
     Label lblJobAnnotation = toolkit.createLabel(client,
                                       Messages.JobDefinitionPage_JobAnnotation); 
     lblgd = new GridData();
@@ -267,16 +262,19 @@ public class JobDefinitionPage extends FormPage {
     gridData.horizontalSpan = 1;
     gridData.widthHint = 300;
     gridData.heightHint = 150;
-    List lstJobAnnotation = new List(client,SWT.MULTI| SWT.BORDER);      
+    final List lstJobAnnotation = new List(client,SWT.MULTI| SWT.BORDER);      
     lstJobAnnotation.setLayoutData( gridData );
 
+    //Create Button ADD
     gd = new GridData();
     gd.verticalSpan = 2;
     gd.verticalAlignment = GridData.END;
     gd.widthHint = 40;
-    this.btnADD = toolkit.createButton(client, Messages.JobDefinitionPage_ButtADD, SWT.PUSH); 
+    this.btnADD = toolkit.createButton(client, Messages.JobDefinitionPage_ButtADD, SWT.PUSH);
     this.btnADD.setLayoutData( gd );
-    
+
+    //Create Button DEL
+
     gd = new GridData();
     gd.verticalSpan = 1;
     gd.verticalAlignment = GridData.BEGINNING;
@@ -287,7 +285,8 @@ public class JobDefinitionPage extends FormPage {
     for (int i=0; i<this.jobIdentType.getJobAnnotation().size(); i++){
       lstJobAnnotation.add( this.jobIdentType.getJobAnnotation().get( i ).toString() );
     }
-   
+    
+    //Create the Label and List for Job Project Element
      Label lblJobProject = toolkit.createLabel(client,
                                        Messages.JobDefinitionPage_JobProject);
      lblgd = new GridData();
@@ -301,7 +300,8 @@ public class JobDefinitionPage extends FormPage {
      gridData.heightHint = 150;
      List lstJobProject = new List(client,SWT.MULTI| SWT.BORDER);      
      lstJobProject.setLayoutData( gridData );
-
+     
+     //Create Button ADD
      gd = new GridData();
      gd.verticalAlignment = GridData.END;
      gd.verticalSpan = 2;
@@ -309,13 +309,14 @@ public class JobDefinitionPage extends FormPage {
      this.btnADD = toolkit.createButton(client, Messages.JobDefinitionPage_ButtADD , SWT.PUSH); 
      this.btnADD.setLayoutData( gd );
      
+     //Create Button DEL
      gd = new GridData();
      gd.verticalSpan = 1;
      gd.verticalAlignment = GridData.BEGINNING;
      gd.widthHint = 40;
      this.btnDel = toolkit.createButton(client, Messages.JobDefinitionPage_ButtDEL, SWT.PUSH); 
      this.btnDel.setLayoutData( gd );
-     
+
     for (int i=0; i<this.jobIdentType.getJobProject().size(); i++){
       lstJobProject.add( this.jobIdentType.getJobProject().get( i ).toString() );
     }
@@ -323,7 +324,10 @@ public class JobDefinitionPage extends FormPage {
     return client;
      
   }
-}
+
+ }
+  
+
     
   
   
