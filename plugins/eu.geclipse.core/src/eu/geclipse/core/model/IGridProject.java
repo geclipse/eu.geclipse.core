@@ -56,6 +56,8 @@ public interface IGridProject extends IGridContainer {
    */
   public IFile createTempFile( final String name, final InputStream contents ) throws CoreException;
   
+  public IVirtualOrganization getVO();
+  
   /**
    * Returns true of this is a Grid project and false if it is any
    * other type of project.

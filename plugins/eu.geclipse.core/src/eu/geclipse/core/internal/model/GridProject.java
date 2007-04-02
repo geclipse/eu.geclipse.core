@@ -49,6 +49,8 @@ public class GridProject
   
   private static final String VO_ATTRIBUTE = "vo"; //$NON-NLS-1$
   
+  private IVirtualOrganization vo;
+  
   /**
    * Default constructor that constructs a grid project out of an
    * ordinary <code>IProject</code> object.
@@ -107,6 +109,13 @@ public class GridProject
   public IGridProject getProject() {
     return this;
   }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridProject#getVO()
+   */
+  public IVirtualOrganization getVO() {
+    return this.vo;
+  }
 
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridProject#isGridProject()
@@ -161,12 +170,12 @@ public class GridProject
     try {
       projectNode.sync();
       String voName = projectNode.get( VO_ATTRIBUTE, null );
-      IVirtualOrganization vo = null;
+      this.vo = null;
       VoManager voManager = VoManager.getManager();
       if ( voName != null ) {
-        vo = ( IVirtualOrganization ) voManager.findChild( voName );
-        if ( vo != null ) {
-          addElement( new VoWrapper( this, vo ) );
+        this.vo = ( IVirtualOrganization ) voManager.findChild( voName );
+        if ( this.vo != null ) {
+          addElement( new VoWrapper( this, this.vo ) );
         }
       }
     } catch( BackingStoreException bsExc ) {
