@@ -48,6 +48,7 @@ import eu.geclipse.jsdl.JobDescriptionType;
 import eu.geclipse.jsdl.JobIdentificationType;
 import eu.geclipse.jsdl.JsdlFactory;
 import eu.geclipse.jsdl.JsdlPackage;
+import eu.geclipse.jsdl.RangeValueType;
 import eu.geclipse.jsdl.SourceTargetType;
 import eu.geclipse.jsdl.posix.ArgumentType;
 import eu.geclipse.jsdl.posix.FileNameType;
@@ -397,4 +398,80 @@ public class JSDLJobDescription
     return result;
   }
   
+  /**
+   * @return required cpu
+   */
+  public String getCpuArchitectureName() {
+    String architectureNameString = null;
+    DocumentRoot dRoot = getDocumentRoot();
+    if( dRoot != null
+        && dRoot.getCPUArchitecture() != null
+        && dRoot.getCPUArchitecture().getCPUArchitectureName() != null )
+    {
+      architectureNameString = dRoot.getCPUArchitecture()
+        .getCPUArchitectureName()
+        .getName();
+    }
+    return architectureNameString;
+  }
+
+  /**
+   * @return name of required filesystem
+   */
+  public String getFilesystemType() {
+    String typeString = null;
+    DocumentRoot dRoot = getDocumentRoot();
+    if( dRoot != null && dRoot.getFileSystemType() != null ) {
+      typeString = dRoot.getFileSystemType().getName();
+    }
+    return typeString;
+  }
+
+  /**
+   * @return requirements for filesystem mount point
+   */
+  public String getFilesystemMountPoint() {
+    String mountPointString = null;
+    DocumentRoot dRoot = getDocumentRoot();
+    if( dRoot != null ) {
+      mountPointString = getDocumentRoot().getMountPoint();
+    }
+    return mountPointString;
+  }
+
+  /**
+   * @return requirements for diskspace
+   */
+  public RangeValueType getFilesystemDiskSpace() {
+    RangeValueType diskSpaceValue = null;
+    DocumentRoot dRoot = getDocumentRoot();
+    if( dRoot != null && dRoot.getFileSystem() != null ) {
+      diskSpaceValue = dRoot.getFileSystem().getDiskSpace();
+    }
+    return diskSpaceValue;
+  }
+
+  /**
+   * @return name of required operating system
+   */
+  public String getOSTypeName() {
+    String nameString = null;
+    DocumentRoot dRoot = getDocumentRoot();
+    if( dRoot != null && dRoot.getOperatingSystemName() != null ) {
+      dRoot.getOperatingSystemName().getName();
+    }
+    return nameString;
+  }
+
+  /**
+   * @return version of required operating system
+   */
+  public String getOSVersion() {
+    String versionString = null;
+    DocumentRoot dRoot = getDocumentRoot();
+    if( dRoot != null ) {
+      versionString = dRoot.getOperatingSystemVersion();
+    }
+    return versionString;
+  }
 }
