@@ -55,7 +55,7 @@ public class UserPerspectiveFactory
     
     IFolderLayout bottomFolder
       = layout.createFolder( "bottom", IPageLayout.BOTTOM, 0.75f, editorArea ); //$NON-NLS-1$
-    bottomFolder.addView( eu.geclipse.ui.internal.Activator.ID_GEXPLORER_VIEW );
+    bottomFolder.addView( eu.geclipse.ui.internal.Activator.ID_CONNECTION_VIEW );
     bottomFolder.addView( eu.geclipse.ui.internal.Activator.ID_AUTH_VIEW );
     bottomFolder.addView( eu.geclipse.ui.internal.Activator.ID_WEB_VIEW );
     bottomFolder.addPlaceholder( IPageLayout.ID_PROBLEM_VIEW );

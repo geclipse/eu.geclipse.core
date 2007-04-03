@@ -61,12 +61,6 @@ public class Activator extends AbstractUIPlugin {
     = "eu.geclipse.ui.views.connectionView"; //$NON-NLS-1$
   
   /**
-   * The id of the gExplorer view.
-   */
-  public static final String ID_GEXPLORER_VIEW
-    = "eu.geclipse.ui.views.gExplorer"; //$NON-NLS-1$
-  
-  /**
    * The id of the GlueInfoViewer.
    */
   public static final String ID_GLUE_INFO_VIEW

@@ -25,11 +25,11 @@ public class OperatorPerspectiveFactory implements IPerspectiveFactory {
 
     IFolderLayout leftLeftFolder
       = layout.createFolder( "leftleft", IPageLayout.LEFT, 0.5f, editorArea ); //$NON-NLS-1$
-    leftLeftFolder.addView( eu.geclipse.ui.internal.Activator.ID_GEXPLORER_VIEW );
+    leftLeftFolder.addView( eu.geclipse.ui.internal.Activator.ID_CONNECTION_VIEW );
     leftLeftFolder.addPlaceholder( IPageLayout.ID_RES_NAV );
     
     IFolderLayout leftRightFolder
-      = layout.createFolder( "leftright", IPageLayout.RIGHT, 0.5f, eu.geclipse.ui.internal.Activator.ID_GEXPLORER_VIEW ); //$NON-NLS-1$
+      = layout.createFolder( "leftright", IPageLayout.RIGHT, 0.5f, eu.geclipse.ui.internal.Activator.ID_CONNECTION_VIEW ); //$NON-NLS-1$
     leftRightFolder.addView( eu.geclipse.ui.internal.Activator.ID_GLUE_INFO_VIEW );
       
     IFolderLayout bottomFolder
