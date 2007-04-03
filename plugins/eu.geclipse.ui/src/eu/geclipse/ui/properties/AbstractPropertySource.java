@@ -16,6 +16,8 @@
 
 package eu.geclipse.ui.properties;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
 import eu.geclipse.core.model.IGridElement;
@@ -27,7 +29,8 @@ import eu.geclipse.core.model.IGridElement;
  */
 abstract class AbstractPropertySource implements IPropertySource {
 
-  private IPropertyDescriptor[] propertyDescriptors;
+  private IPropertyDescriptor[] propertyDescriptors;    // descriptors used for IPropertySource
+  private IProperty[] properties;                       // g-eclipse properties
 
   /**
    * 
@@ -38,19 +41,27 @@ abstract class AbstractPropertySource implements IPropertySource {
 
   /**
    * Create {@link AbstractProperty} objects
-   * @return table of {@link IPropertyDescriptor} obtained from {@link AbstractProperty#getDescriptor()}
+   * @return table of {@link IProperty}
    */
-  abstract protected IPropertyDescriptor[] createPropertyDescriptors();
+  abstract protected IProperty[] createProperties();
 
   public IPropertyDescriptor[] getPropertyDescriptors() {
-    if( this.propertyDescriptors == null ) {
-      this.propertyDescriptors = createPropertyDescriptors();
+    if( this.propertyDescriptors == null ) {      
+      this.propertyDescriptors = createDescriptors( getProperties() );
     }
     return this.propertyDescriptors;
   }
-
+  
+  protected IProperty[] getProperties() {
+    if( this.properties == null ) {
+      this.properties = createProperties();
+    }
+    
+    return this.properties;
+  }
+   
   public Object getEditableValue() {
-    // TODO Auto-generated method stub
+    // Edit not supported
     return null;
   }
 
@@ -58,23 +69,55 @@ abstract class AbstractPropertySource implements IPropertySource {
    * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
    */
   public Object getPropertyValue( final Object id ) {
-    String valueString = null;
+    Object value = null;
     if( id instanceof AbstractProperty ) {
-      valueString = ( ( AbstractProperty )id ).getValue();
+      AbstractProperty property = ( AbstractProperty )id;
+      if( property.isComplex() ) {
+        value = property.getComplexPropertySource();
+      } else {
+        value = property.getValue();
+      }
     }
-    return valueString;
+    return value;
   }
 
   public boolean isPropertySet( final Object id ) {
-    // TODO Auto-generated method stub
+    //  Edit not supported
     return false;
   }
 
   public void resetPropertyValue( final Object id ) {
-    // TODO Auto-generated method stub
+    //  Edit not supported
   }
 
   public void setPropertyValue( final Object id, final Object value ) {
-    // TODO Auto-generated method stub
+    //  Edit not supported
   }
+
+  private IPropertyDescriptor[] createDescriptors( final IProperty[] prop ) {
+    IPropertyDescriptor [] descriptors = new IPropertyDescriptor[ prop.length ];
+    
+    for( int index = 0; index < prop.length; index++ ) {
+      descriptors[ index ] = prop[ index ].getDescriptor();
+    }
+    
+    return descriptors;
+  }  
+  
+  /**
+   * Usefull method when one PropertySource uses other PropertySource
+   * e.g. {@link JobPropertySource} uses properties from {@link JobDescPropertySource}
+   * @param firstProperties
+   * @param secondProperties
+   * @return joined properties
+   */
+  protected IProperty[] joinProperties( final IProperty[] firstProperties, final IProperty[] secondProperties )
+  {
+    ArrayList<IProperty> result = new ArrayList<IProperty>( firstProperties.length + secondProperties.length );
+    result.addAll( Arrays.asList( firstProperties ) );
+    result.addAll( Arrays.asList( secondProperties ) );
+    return result.toArray( new IProperty[0] );
+  }
+  
+  
 }

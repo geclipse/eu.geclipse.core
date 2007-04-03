@@ -15,9 +15,6 @@
  *****************************************************************************/
 package eu.geclipse.ui.properties;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import eu.geclipse.core.model.IGridJob;
 
 
@@ -44,30 +41,18 @@ public class JobPropertySource extends AbstractPropertySource {
    * @see eu.geclipse.ui.properties.AbstractPropertySource#createPropertyDescriptors()
    */
   @Override
-  protected IPropertyDescriptor[] createPropertyDescriptors()
+  protected IProperty[] createProperties()
   {
-    IPropertyDescriptor[] result = new IPropertyDescriptor[]{
-      createPropertyName().getDescriptor(),
-      createPropertyId().getDescriptor(),
-      createPropertyApplication().getDescriptor(),
-      createPropertyRequirements().getDescriptor(),
-      createPropertyStatus().getDescriptor()
+    IProperty[] result = new IProperty[]{
+      createPropertyName(),
+      createPropertyId(),      
+      createPropertyStatus()
     };
     if( this.gridJob.getJobDescription() != null ) {
-      result = addJobDescriptionProperties( result );
+      JobDescPropertySource jobDescPropertySource = new JobDescPropertySource( this.gridJob.getJobDescription() );
+      result = joinProperties( result, jobDescPropertySource.getProperties() );
     }
     return result;
-  }
-
-  private IPropertyDescriptor[] addJobDescriptionProperties( final IPropertyDescriptor[] jobProperties )
-  {
-    JobDescPropertySource jobDescPropertySource = new JobDescPropertySource( this.gridJob.getJobDescription() );
-    IPropertyDescriptor[] jobDescProperties = jobDescPropertySource.getPropertyDescriptors();
-    ArrayList<IPropertyDescriptor> result = new ArrayList<IPropertyDescriptor>( jobProperties.length
-                                                                                + jobDescProperties.length );
-    result.addAll( Arrays.asList( jobProperties ) );
-    result.addAll( Arrays.asList( jobDescProperties ) );
-    return ( IPropertyDescriptor[] )result.toArray();
   }
 
   private IProperty createPropertyName() {
@@ -90,26 +75,6 @@ public class JobPropertySource extends AbstractPropertySource {
           valueString = JobPropertySource.this.gridJob.getID().getJobID();
         }
         return valueString;
-      }
-    };
-  }
-
-  private IProperty createPropertyApplication() {
-    return new AbstractProperty( Messages.getString( "JobPropertySource.propertyApplication" ), //$NON-NLS-1$
-                                 Messages.getString( "JobPropertySource.categoryGeneral" ) ) { //$NON-NLS-1$
-
-      public String getValue() {
-        return null; // TODO mariusz
-      }
-    };
-  }
-
-  private IProperty createPropertyRequirements() {
-    return new AbstractProperty( Messages.getString( "JobPropertySource.propertyRequirements" ), //$NON-NLS-1$
-                                 Messages.getString( "JobPropertySource.categoryGeneral" ) ) { //$NON-NLS-1$
-
-      public String getValue() {
-        return null; // TODO mariusz
       }
     };
   }

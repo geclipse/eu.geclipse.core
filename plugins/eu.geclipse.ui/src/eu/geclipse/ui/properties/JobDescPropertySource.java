@@ -15,8 +15,8 @@
  *****************************************************************************/
 package eu.geclipse.ui.properties;
 
-import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import eu.geclipse.core.model.IGridJobDescription;
+import eu.geclipse.core.model.impl.JSDLJobDescription;
 
 /**
  * Property source for {@link IGridJobDescription}
@@ -34,13 +34,20 @@ public class JobDescPropertySource extends AbstractPropertySource {
   }
 
   @Override
-  protected IPropertyDescriptor[] createPropertyDescriptors()
+  protected IProperty[] createProperties()
   {
-    return new IPropertyDescriptor[]{
-      createPropertyDescription().getDescriptor(),
-      createPropertyExecutable().getDescriptor(),
-      createPropertyExecutableArg().getDescriptor()
+    IProperty[] properties =  new IProperty[]{
+      createPropertyDescription(),
+      createPropertyExecutable(),
+      createPropertyExecutableArg()
     };
+    
+    if( this.jobDescription instanceof JSDLJobDescription ) {
+      JsdlPropertySource jsdlPropertySource = new JsdlPropertySource( ( JSDLJobDescription ) this.jobDescription );
+      properties = joinProperties( properties, jsdlPropertySource.getProperties() );
+    }
+
+    return properties;
   }
 
   IProperty createPropertyDescription() {

@@ -16,7 +16,6 @@
 
 package eu.geclipse.ui.properties;
 
-import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import eu.geclipse.core.model.IGridElement;
 
 /**
@@ -36,10 +35,10 @@ public class GridElementPropertySource extends AbstractPropertySource {
   }
 
   @Override
-  protected IPropertyDescriptor[] createPropertyDescriptors()
+  protected IProperty[] createProperties()
   {
-    return new IPropertyDescriptor[]{
-      createPropName().getDescriptor()
+    return new IProperty[]{
+      createPropName()
     };
   }
 
