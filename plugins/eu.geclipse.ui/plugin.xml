@@ -65,7 +65,7 @@
             allowMultiple="true"
             category="eu.geclipse.ui.viewcategory"
             class="eu.geclipse.ui.views.GridConnectionView"
-            id="eu.geclipse.ui.views.GridConnectionView"
+            id="eu.geclipse.ui.views.connectionView"
             name="Connections"/>
       <view
             allowMultiple="true"
