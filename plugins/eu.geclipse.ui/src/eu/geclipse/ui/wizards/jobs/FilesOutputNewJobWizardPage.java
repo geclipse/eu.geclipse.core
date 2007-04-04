@@ -50,6 +50,7 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
    * Special component to keep record of variables user provided
    */
   IOFilesTab tab;
+  private boolean isCreated = false;
 
   /**
    * Method to create new instance of EnvNewJobWizardPage
@@ -60,6 +61,7 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
     super( pageName );
     setDescription( Messages.getString( "FilesOutputNewJobWizardPage.page_description" ) ); //$NON-NLS-1$
     setTitle( Messages.getString( "FilesOutputNewJobWizardPage.page_title" ) ); //$NON-NLS-1$
+//    setPageComplete( false );
   }
 
   public void createControl( final Composite parent ) {
@@ -76,6 +78,8 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
                                new IOFileLabelProvider(),
                                map );
     this.tab.createControl( mainComp );
+//    setPageComplete( true );
+    this.isCreated = true;
     setControl( mainComp );
   }
   class IOFilesTab extends TabComponent<OutputFile> {
@@ -277,14 +281,17 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
   
   /**
    * Method to access String values kept by table
+   * 
    * @param type Type of a files wchich values should be extracted from table
    * @return Map with file names as a keys and their location as a value
    */
   public HashMap<String, String> getFiles( final FileType type ) {
     HashMap<String, String> result = new HashMap<String, String>();
-    for (OutputFile file: this.tab.getInput()){
-      if (file.getType().equals( type )){
-        result.put( file.getName(), file.getLocation() );
+    if( this.tab != null ) {
+      for( OutputFile file : this.tab.getInput() ) {
+        if( file.getType().equals( type ) ) {
+          result.put( file.getName(), file.getLocation() );
+        }
       }
     }
     return result;
@@ -382,5 +389,9 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
   {
     // TODO Auto-generated method stub
     return super.getNextPage();
+  }
+
+  public boolean isCreated() {
+    return this.isCreated ;
   }
 }

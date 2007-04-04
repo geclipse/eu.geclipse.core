@@ -1,5 +1,6 @@
-#Tue Mar 27 12:08:37 CEST 2007
+#Wed Apr 04 12:08:42 CEST 2007
 eclipse.preferences.version=1
+encoding//schema/ui_definition.xsd=UnicodeLittle
 encoding//src/eu/geclipse/ui/dialogs/messages.properties=8859_1
 encoding//src/eu/geclipse/ui/editors/messages.properties=8859_1
 encoding//src/eu/geclipse/ui/internal/actions/messages.properties=8859_1

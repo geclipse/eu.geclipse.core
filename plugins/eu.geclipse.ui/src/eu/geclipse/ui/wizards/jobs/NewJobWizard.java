@@ -17,7 +17,9 @@
 package eu.geclipse.ui.wizards.jobs;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -25,6 +27,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
@@ -61,12 +64,22 @@ public class NewJobWizard extends Wizard implements INewWizard {
     this.firstPage.setDescription( Messages.getString( "NewJobWizard.first_page_description" ) ); //$NON-NLS-1$
     this.firstPage.setFileName( Messages.getString( "NewJobWizard.first_page_default_new_file_name" ) ); //$NON-NLS-1$
     addPage( this.firstPage );
-    this.executablePage = new ExecutableNewJobWizardPage( Messages.getString( "NewJobWizard.executablePageName" ) ); //$NON-NLS-1$
-    addPage( this.executablePage );
+    
+    ArrayList<WizardPage> internal = new ArrayList<WizardPage>(); 
     this.inputFilesPage = new FilesInputNewJobWizardPage( Messages.getString( "NewJobWizard.files_input_new_job_page_name" ) ); //$NON-NLS-1$
-    addPage( this.inputFilesPage );
+    
+//    addPage( this.inputFilesPage );
+    internal.add( this.inputFilesPage );
     this.outputFilesPage = new FilesOutputNewJobWizardPage( Messages.getString( "NewJobWizard.files_output_new_job_page_name" ) ); //$NON-NLS-1$;
-    addPage( this.outputFilesPage );
+//    addPage( this.outputFilesPage );
+    internal.add( this.outputFilesPage );
+    
+    this.executablePage = new ExecutableNewJobWizardPage( Messages.getString( "NewJobWizard.executablePageName" ), internal); //$NON-NLS-1$
+    addPage( this.executablePage );
+//    this.inputFilesPage = new FilesInputNewJobWizardPage( Messages.getString( "NewJobWizard.files_input_new_job_page_name" ) ); //$NON-NLS-1$
+//    addPage( this.inputFilesPage );
+//    this.outputFilesPage = new FilesOutputNewJobWizardPage( Messages.getString( "NewJobWizard.files_output_new_job_page_name" ) ); //$NON-NLS-1$;
+//    addPage( this.outputFilesPage );
     
 //    this.envPage = new EnvNewJobWizardPage( Messages.getString( "NewJobWizard.env_page_name" ) ); //$NON-NLS-1$
 //    addPage( this.envPage );
@@ -151,31 +164,55 @@ public class NewJobWizard extends Wizard implements INewWizard {
   
   
   private void setInitialModel(final JSDLJobDescription jsdl){
+    
+    this.executablePage.getApplicationSpecificPage();
     jsdl.createRoot();
     jsdl.addJobDescription();
-    jsdl.addJobIdentification(this.executablePage.getJobName(), this.executablePage.getJobDescription());
-    if (! this.executablePage.getExecutableFile().equals( "" )){ //$NON-NLS-1$
+    jsdl.addJobIdentification( this.executablePage.getJobName(),
+                               this.executablePage.getJobDescription() );
+    if( !this.executablePage.getExecutableFile().equals( "" ) ) { //$NON-NLS-1$
       jsdl.addApplication();
-      String in = this.inputFilesPage.getStdin();
-      String out = this.inputFilesPage.getStdout();
-      if (in.equals( Messages.getString( "FilesInputNewJobWizardPage.stdin_info" ) )){ //$NON-NLS-1$
-        in = null;
+      String in = null;
+      String out = null;
+      String inName = null;
+      if( this.inputFilesPage.isCreated() ) {
+        in = this.inputFilesPage.getStdin();
+        out = this.inputFilesPage.getStdout();
+        if( in.equals( Messages.getString( "FilesInputNewJobWizardPage.stdin_info" ) ) ) { //$NON-NLS-1$
+          in = null;
+        } else {
+          inName = this.inputFilesPage.getStdinName();
+        }
+        if( out.equals( Messages.getString( "FilesInputNewJobWizardPage.stdin_info" ) ) ) { //$NON-NLS-1$
+          out = null;
+        }
       }
-      if (out.equals( Messages.getString( "FilesInputNewJobWizardPage.stdin_info" ) )){ //$NON-NLS-1$
-        out = null;
-      }
-      jsdl.addPOSIXApplicationDetails(this.executablePage.getApplicationName(), this.executablePage.getExecutableFile(), in, out);
+      jsdl.addPOSIXApplicationDetails( this.executablePage.getApplicationName(),
+                                       this.executablePage.getExecutableFile(),
+                                       in,
+                                       inName,
+                                       out );
     }
-    HashMap<String, String> outFiles = this.outputFilesPage.getFiles( FileType.OUTPUT );
-    if( !outFiles.isEmpty() ) {
-      for( String name : outFiles.keySet() ) {
-        jsdl.setOutDataStaging(name, outFiles.get( name ));
+    if( this.outputFilesPage.isCreated() ) {
+      HashMap<String, String> outFiles = this.outputFilesPage.getFiles( FileType.OUTPUT );
+      if( !outFiles.isEmpty() ) {
+        for( String name : outFiles.keySet() ) {
+          jsdl.setOutDataStaging( name, outFiles.get( name ) );
+        }
+      }
+      outFiles = this.outputFilesPage.getFiles( FileType.INPUT );
+      if( !outFiles.isEmpty() ) {
+        for( String name : outFiles.keySet() ) {
+          jsdl.setInDataStaging( name, outFiles.get( name ) );
+        }
       }
     }
-    outFiles = this.outputFilesPage.getFiles( FileType.INPUT );
-    if( !outFiles.isEmpty() ) {
-      for( String name : outFiles.keySet() ) {
-        jsdl.setInDataStaging(name, outFiles.get( name ));
+    // adding specific arguments
+    if( this.executablePage.getApplicationSpecificPage() != null ) {
+      Map<String, ArrayList<String>> arguments = this.executablePage.getApplicationSpecificPage()
+        .getParametersValues();
+      for( String argName : arguments.keySet() ) {
+        jsdl.addArgumentForPosixApplication( argName, arguments.get( argName ) );
       }
     }
   }
@@ -194,6 +231,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
       super( pageName, selection );
       this.iniSelection = selection;
     }
+    
 
     @Override
     protected void initialPopulateContainerNameField()

@@ -43,6 +43,7 @@ public class FilesInputNewJobWizardPage extends WizardPage {
   Text stdout;
   Text stderr;
   Text stdInName;
+  private boolean isCreated = false;
   /**
    * Button to add files to {@link FilesInputNewJobWizardPage#stdin}
    */
@@ -57,6 +58,7 @@ public class FilesInputNewJobWizardPage extends WizardPage {
     super( pageName );
     setDescription( Messages.getString( "FilesInputNewJobWizardPage.page_description" ) ); //$NON-NLS-1$
     setTitle( Messages.getString( "FilesInputNewJobWizardPage.page_title" ) ); //$NON-NLS-1$
+//    setPageComplete( false );
   }
 
   public void createControl( final Composite parent ) {
@@ -175,9 +177,20 @@ public class FilesInputNewJobWizardPage extends WizardPage {
         }
       }
     } );
+//    this.setPageComplete( true );
+    this.isCreated = true;
+    this.getContainer().updateButtons();
     setControl( mainComp );
   }
 
+  /**
+   * 
+   * @return true if controls on this wizard page were created
+   */
+  public boolean isCreated(){
+    return this.isCreated;
+  }
+  
   /**
    * Method to access text form {@link FilesInputNewJobWizardPage#stderr}
    * 
