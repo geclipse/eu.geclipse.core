@@ -75,17 +75,8 @@ public abstract class GridModelViewPart extends ViewPart {
   
   private OpenActions openActions;
   
-  public int acceptDrop( final IGridContainer target,
-                         final IGridElement[] elements ) {
+  public int acceptDrop( final IGridContainer target ) {
     int result = DND.DROP_COPY | DND.DROP_MOVE;
-    for ( IGridElement element : elements ) {
-      if ( !target.canContain( element )
-          || ( target == element )
-          || ( target == element.getParent() ) ) {
-        result = DND.DROP_NONE;
-        break;
-      }
-    }
     return result;
   }
   

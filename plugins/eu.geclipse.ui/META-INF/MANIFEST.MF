@@ -23,7 +23,8 @@ Require-Bundle: org.eclipse.core.filesystem,
  org.eclipse.ui.forms,
  org.eclipse.emf.edit.ui,
  eu.geclipse.jsdl.edit,
- org.apache.axis
+ org.apache.axis,
+ eu.geclipse.voms
 Eclipse-LazyStart: true
 Export-Package: eu.geclipse.ui,
  eu.geclipse.ui.cheatsheets,

@@ -21,20 +21,14 @@ public class GridConnectionView extends ElementManagerViewPart {
    * @see eu.geclipse.ui.views.GridModelViewPart#acceptDrop(eu.geclipse.core.model.IGridContainer, eu.geclipse.core.model.IGridElement[])
    */
   @Override
-  public int acceptDrop( final IGridContainer target,
-                         final IGridElement[] elements ) {
-    int result = super.acceptDrop( target, elements );
+  public int acceptDrop( final IGridContainer target ) {
+    int result = super.acceptDrop( target );
     if ( result != DND.DROP_NONE ) {
       if ( target instanceof IGridConnectionElement ) {
         if ( !( ( IGridConnectionElement ) target ).isFolder() ) {
           result = DND.DROP_NONE;
         } else {
-          for ( IGridElement element : elements ) {
-            if ( element instanceof IGridConnection ) {
-              result = DND.DROP_NONE;
-              break;
-            }
-          }
+          result = DND.DROP_COPY;
         }
       } else {
         result = DND.DROP_NONE;

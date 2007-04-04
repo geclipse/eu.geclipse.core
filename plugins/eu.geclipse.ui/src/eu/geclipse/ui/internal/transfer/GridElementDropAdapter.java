@@ -25,7 +25,7 @@ public class GridElementDropAdapter
   }
   
   public void dragEnter( final DropTargetEvent event ) {
-    handleDrag( event );
+    validateDrop( event );
   }
 
   public void dragLeave( final DropTargetEvent event ) {
@@ -37,7 +37,7 @@ public class GridElementDropAdapter
   }
 
   public void dragOver( final DropTargetEvent event ) {
-    handleDrag( event );
+    validateDrop( event );
   }
 
   public void drop( final DropTargetEvent event ) {
@@ -54,7 +54,7 @@ public class GridElementDropAdapter
   }
 
   public void dropAccept( final DropTargetEvent event ) {
-    handleDrag( event );
+    validateDrop( event );
   }
   
   public Transfer getTransfer() {
@@ -62,7 +62,15 @@ public class GridElementDropAdapter
   }
 
   public boolean isEnabled( final DropTargetEvent event ) {
-    return true;
+    boolean result = false;
+    Widget item = event.item;
+    if ( item != null ) {
+      Object target = item.getData();
+      if ( ( target != null ) && ( target instanceof IGridElement) ) {
+        result = true;
+      }
+    }
+    return result;
   }
   
   protected void copyElements( final IGridContainer target,
@@ -88,7 +96,7 @@ public class GridElementDropAdapter
     }
   }
   
-  protected void handleDrag( final DropTargetEvent event ) {
+  protected void validateDrop( final DropTargetEvent event ) {
     
     Widget item = event.item;
     event.detail = DND.DROP_NONE;
@@ -96,13 +104,8 @@ public class GridElementDropAdapter
     if ( item != null ) {
       Object data = item.getData();
       if ( data instanceof IGridContainer ) {
-        IGridContainer container
-          = ( IGridContainer ) data;
-        GridElementTransfer geTransfer
-          = GridElementTransfer.getInstance();
-        IGridElement[] elements
-          = ( IGridElement[] ) geTransfer.nativeToJava( event.currentDataType );
-        event.detail = this.view.acceptDrop( container, elements );
+        IGridContainer container = ( IGridContainer ) data;
+        event.detail = this.view.acceptDrop( container );
       }
     }
     

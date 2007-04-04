@@ -75,12 +75,12 @@ public class JobDescPropertySource extends AbstractPropertySource {
                                  Messages.getString( "JobDescPropertySource.categoryDescription" ) ) { //$NON-NLS-1$
 
       public String getValue() {
+        String argString = null;
         if( JobDescPropertySource.this.jobDescription.getExecutableArguments() != null )
         {
-          JobDescPropertySource.this.jobDescription.getExecutableArguments()
-            .toString();
+          argString = JobDescPropertySource.this.jobDescription.getExecutableArguments().toString();
         }
-        return null;
+        return argString;
       }
     };
   }

@@ -9,6 +9,7 @@ import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobDescription;
+import eu.geclipse.core.model.IVirtualOrganization;
 
 
 /**
@@ -39,7 +40,9 @@ public class PropertiesAdapterFactory implements IAdapterFactory {
         propertySource = new JobDescPropertySource( ( IGridJobDescription )adaptableObject );
       } else if( adaptableObject instanceof IGridConnection ) {
         propertySource = new ConnectionPropertySource( (IGridConnection)adaptableObject );
-      } 
+      } else if( adaptableObject instanceof IVirtualOrganization ) {
+        propertySource = new VOPropertySource( ( IVirtualOrganization ) adaptableObject );
+      }
       // Check elements inherited from IGridElement above this line!
       else if( adaptableObject instanceof IGridElement ) {
         IGridElement gridElement = ( IGridElement ) adaptableObject; 

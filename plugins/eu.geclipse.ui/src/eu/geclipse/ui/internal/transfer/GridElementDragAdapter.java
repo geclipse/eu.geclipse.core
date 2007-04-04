@@ -10,7 +10,8 @@ import org.eclipse.swt.dnd.Transfer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.ui.views.GridModelViewPart;
 
-public class GridElementDragAdapter implements TransferDragSourceListener {
+public class GridElementDragAdapter
+    implements TransferDragSourceListener {
   
   private GridModelViewPart view;
   
