@@ -27,6 +27,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -250,12 +251,13 @@ public class JSDLJobDescription
    * @param applicationName
    * @param executableFile
    * @param stdin
+   * @param stdinName 
    * @param stdout 
    */
   @SuppressWarnings("unchecked")
   public void addPOSIXApplicationDetails( final String applicationName,
                                           final String executableFile,
-                                          final String stdin, final String stdout )
+                                          final String stdin, final String stdinName, final String stdout )
   {
     this.jobDescription.getApplication().setApplicationName( applicationName );
     POSIXApplicationType posixApp = this.posixFactory.createPOSIXApplicationType();
@@ -282,7 +284,7 @@ public class JSDLJobDescription
       DataStagingType dataIn = this.jsdlFactory.createDataStagingType();
       dataIn.setCreationFlag( CreationFlagEnumeration.OVERWRITE_LITERAL );
       dataIn.setDeleteOnTermination( true );
-      dataIn.setFileName( stdin );
+      dataIn.setFileName( stdinName );
       SourceTargetType sourceDataIn = this.jsdlFactory.createSourceTargetType();
       sourceDataIn.setURI( stdin );
       dataIn.setSource( sourceDataIn );
@@ -474,4 +476,27 @@ public class JSDLJobDescription
     }
     return versionString;
   }
+  
+  /**
+   * Adds sequence of jsdl-posix:Argument elements as a children of jsdl-posix:Application
+   * @param argName name of the argument
+   * @param argValues list of values of the argument
+   */
+  @SuppressWarnings("unchecked")
+  public void addArgumentForPosixApplication( final String argName, final ArrayList<String> argValues ){
+    POSIXApplicationType posixApp = getPosixApplication();
+    ArgumentType arg;
+    if ( posixApp != null ){
+      EList argumentList = posixApp.getArgument();
+      arg = this.posixFactory.createArgumentType();
+      arg.setValue( argName );
+      argumentList.add( arg );
+      for ( String value: argValues ){
+        arg = this.posixFactory.createArgumentType();
+        arg.setValue( value );
+        argumentList.add( arg );
+      }
+    }
+  }
+  
 }
