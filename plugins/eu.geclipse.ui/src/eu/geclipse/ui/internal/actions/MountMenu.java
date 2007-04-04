@@ -22,6 +22,10 @@ public class MountMenu
   
   private List< IGridStorage > sources
     = new ArrayList< IGridStorage >();
+  
+  protected MountMenu() {
+    checkVisible();
+  }
 
   public void selectionChanged( final SelectionChangedEvent event ) {
     this.protocols = null;
@@ -39,12 +43,12 @@ public class MountMenu
         }
       }
     }
-    setVisible( ( this.protocols != null ) && !this.protocols.isEmpty() );
+    checkVisible();
   }
   
   @Override
   protected IContributionItem[] getContributionItems() {
-    IContributionItem[] result = null;
+    IContributionItem[] result = new IContributionItem[ 0 ];
     if ( !this.protocols.isEmpty() ) {
       result = new IContributionItem[ this.protocols.size() ];
       for ( int i = 0 ; i < this.protocols.size() ; i++ ) {
@@ -71,6 +75,10 @@ public class MountMenu
       }
     }
     return result;
+  }
+  
+  private void checkVisible() {
+    setVisible( ( this.protocols != null ) && !this.protocols.isEmpty() );
   }
   
   private void mergeProtocols( final List< String > toMerge ) {
