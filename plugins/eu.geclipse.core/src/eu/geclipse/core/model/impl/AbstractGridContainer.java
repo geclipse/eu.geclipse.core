@@ -20,7 +20,6 @@ import java.util.List;
 import org.eclipse.core.runtime.IProgressMonitor;
 import eu.geclipse.core.internal.model.GridModelEvent;
 import eu.geclipse.core.internal.model.GridRoot;
-import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.GridModelProblems;
 import eu.geclipse.core.model.IGridContainer;

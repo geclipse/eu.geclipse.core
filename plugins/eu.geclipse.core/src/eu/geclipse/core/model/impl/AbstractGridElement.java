@@ -15,14 +15,10 @@
 
 package eu.geclipse.core.model.impl;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.PlatformObject;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
-import eu.geclipse.core.model.IGridModelEvent;
-import eu.geclipse.core.model.IGridModelListener;
 import eu.geclipse.core.model.IGridProject;
 
 /**

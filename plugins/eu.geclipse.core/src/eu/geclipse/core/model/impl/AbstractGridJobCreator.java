@@ -15,38 +15,8 @@
 
 package eu.geclipse.core.model.impl;
 
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.StringWriter;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.TransformerFactoryConfigurationError;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.xml.sax.SAXException;
-import eu.geclipse.core.GridException;
-import eu.geclipse.core.internal.Activator;
-import eu.geclipse.core.model.GridModelException;
-import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridJobCreator;
 import eu.geclipse.core.model.IGridJobDescription;
-import eu.geclipse.core.model.IGridJobID;
 
 /**
  * Abstract implementation of the {@link IGridJobCreator} interface
@@ -97,10 +67,5 @@ public abstract class AbstractGridJobCreator
    * job from the specified description.
    */
   protected abstract boolean internalCanCreate( final IGridJobDescription description );
-
-  
-  
-
-
   
 }

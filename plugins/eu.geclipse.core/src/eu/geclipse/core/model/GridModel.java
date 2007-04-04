@@ -21,7 +21,6 @@ import org.eclipse.core.filesystem.IFileStore;
 import eu.geclipse.core.Extensions;
 import eu.geclipse.core.internal.model.ConnectionManager;
 import eu.geclipse.core.internal.model.GridConnectionCreator;
-import eu.geclipse.core.internal.model.GridModelEvent;
 import eu.geclipse.core.internal.model.GridProjectCreator;
 import eu.geclipse.core.internal.model.GridRoot;
 import eu.geclipse.core.internal.model.JobManager;
