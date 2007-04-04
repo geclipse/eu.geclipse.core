@@ -47,7 +47,6 @@ import com.ice.tar.TarInputStream;
 import eu.geclipse.core.CoreProblems;
 import eu.geclipse.core.GridException;
 import eu.geclipse.core.Preferences;
-import eu.geclipse.core.ProblemRegistry;
 import eu.geclipse.core.internal.Activator;
 
 /**

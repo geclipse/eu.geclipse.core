@@ -16,10 +16,10 @@
 package eu.geclipse.core.auth;
 
 import java.io.IOException;
-import eu.geclipse.core.util.SecureFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import eu.geclipse.core.util.SecureFile;
 
 /**
  * Abstract implementation of the {@link IAuthenticationToken} interface.
