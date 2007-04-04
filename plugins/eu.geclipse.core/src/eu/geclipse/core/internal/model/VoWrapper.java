@@ -104,7 +104,7 @@ public class VoWrapper
   @SuppressWarnings("unchecked")
   @Override
   public Object getAdapter( final Class adapter ) {
-    return null;
+    return this.vo.getAdapter( adapter );
   }
 
   public void load() throws GridModelException {
