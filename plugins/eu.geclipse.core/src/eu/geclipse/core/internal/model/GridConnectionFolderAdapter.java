@@ -203,4 +203,8 @@ public class GridConnectionFolderAdapter
     notYetImplemented();
   }
   
+  @Override
+  public int getType() {
+    return IResource.FOLDER;
+  }
 }
