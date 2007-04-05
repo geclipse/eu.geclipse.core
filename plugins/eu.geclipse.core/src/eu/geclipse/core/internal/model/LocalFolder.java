@@ -16,6 +16,7 @@
 package eu.geclipse.core.internal.model;
 
 import org.eclipse.core.resources.IFolder;
+import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
 
 /**
@@ -38,6 +39,14 @@ public class LocalFolder
    */
   LocalFolder( final IFolder folder ) {
     super( folder );
+  }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.impl.AbstractGridContainer#canContain(eu.geclipse.core.model.IGridElement)
+   */
+  @Override
+  public boolean canContain( final IGridElement element ) {
+    return true;
   }
   
   /**

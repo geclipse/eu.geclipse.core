@@ -101,7 +101,10 @@ public class GridConnectionElement
    */
   @Override
   public boolean canContain( final IGridElement element ) {
-    return !element.isVirtual() && !( element instanceof IGridConnection );
+    return
+      isFolder()
+      && !element.isVirtual()
+      && !( element instanceof IGridConnection );
   }
   
   /* (non-Javadoc)
@@ -245,6 +248,7 @@ public class GridConnectionElement
   protected boolean fetchChildren( final IProgressMonitor monitor ) {
     this.fetchError = null;
     try {
+      setProcessEvents( false );
       IFileStore fs = getConnectionFileStore();
       if ( fs != null ) {
         IFileStore[] childStores
@@ -261,6 +265,8 @@ public class GridConnectionElement
     } catch( CoreException cExc ) {
       this.fetchError = cExc;
       Activator.logException( cExc );
+    } finally {
+      setProcessEvents( true );
     }
     return this.fetchError == null;
   }

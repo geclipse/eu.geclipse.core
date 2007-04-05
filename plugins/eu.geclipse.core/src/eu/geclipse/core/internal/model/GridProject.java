@@ -62,6 +62,14 @@ public class GridProject
     super( project );
     loadProjectProperties( project );
   }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.impl.AbstractGridContainer#canContain(eu.geclipse.core.model.IGridElement)
+   */
+  @Override
+  public boolean canContain( final IGridElement element ) {
+    return true;
+  }
     
   public IFile createTempFile( final String name, final InputStream contents ) throws CoreException {
     IFolder folder = getTempFolder();

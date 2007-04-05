@@ -703,16 +703,38 @@ public class GridConnectionResourceAdapter
    * @see org.eclipse.core.runtime.jobs.ISchedulingRule#contains(org.eclipse.core.runtime.jobs.ISchedulingRule)
    */
   public boolean contains( final ISchedulingRule rule ) {
-    // TODO mathias
-    return false;
+    
+    boolean result = false;
+    
+    if ( rule == this ) {
+      result = true;
+    } else if ( rule instanceof IResource ){
+      IPath thisPath = getFullPath();
+      IPath otherPath = ( ( IResource ) rule ).getFullPath();
+      result = thisPath.isPrefixOf( otherPath );
+    }
+    
+    return result;
+    
   }
 
   /* (non-Javadoc)
    * @see org.eclipse.core.runtime.jobs.ISchedulingRule#isConflicting(org.eclipse.core.runtime.jobs.ISchedulingRule)
    */
   public boolean isConflicting( final ISchedulingRule rule ) {
-    // TODO mathias
-    return false;
+    
+    boolean result = false;
+    
+    if ( rule instanceof IResource ) {
+      IPath thisPath = getFullPath();
+      IPath otherPath = ( ( IResource ) rule ).getFullPath();
+      result
+        = thisPath.isPrefixOf( otherPath )
+        || otherPath.isPrefixOf( thisPath );
+    }
+    
+    return result;
+    
   }
   
   protected static void checkExists( final IResource resource )

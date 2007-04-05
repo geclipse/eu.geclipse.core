@@ -16,7 +16,9 @@
 package eu.geclipse.core.model.impl;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 import org.eclipse.core.runtime.IProgressMonitor;
 import eu.geclipse.core.internal.model.GridModelEvent;
 import eu.geclipse.core.internal.model.GridRoot;
@@ -37,6 +39,11 @@ public abstract class AbstractGridContainer
     extends AbstractGridElement
     implements IGridContainer {
   
+  private int processEventsPolicy = 0;
+  
+  private Hashtable< Integer, List< IGridElement > > eventQueue
+    = new Hashtable< Integer, List< IGridElement > >();
+  
   /**
    * List of currently know children.
    */
@@ -56,7 +63,7 @@ public abstract class AbstractGridContainer
    * @see eu.geclipse.core.model.IGridContainer#canContain(eu.geclipse.core.model.IGridElement)
    */
   public boolean canContain( final IGridElement element ) {
-    return true;
+    return false;
   }
   
   /* (non-Javadoc)
@@ -194,14 +201,7 @@ public abstract class AbstractGridContainer
       }
       this.children.add( element );
       GridRoot.registerElement( element );
-      GridRoot gridRoot = GridRoot.getRoot();
-      if ( gridRoot != null ) {
-        IGridModelEvent event
-          = new GridModelEvent( IGridModelEvent.ELEMENTS_ADDED,
-                                this,
-                                new IGridElement[] { element } );
-        gridRoot.fireGridModelEvent( event );
-      }
+      fireGridModelEvent( IGridModelEvent.ELEMENTS_ADDED, element );
     }
     return element;
   }
@@ -217,14 +217,7 @@ public abstract class AbstractGridContainer
       }
       IGridElement[] elements
         = this.children.toArray( new IGridElement[ this.children.size() ] );
-      GridRoot gridRoot = GridRoot.getRoot();
-      if ( gridRoot != null ) {
-        IGridModelEvent event
-          = new GridModelEvent( IGridModelEvent.ELEMENTS_REMOVED,
-                                this,
-                                elements );
-        gridRoot.fireGridModelEvent( event );
-      }
+      fireGridModelEvent( IGridModelEvent.ELEMENTS_REMOVED, elements );
       this.children.clear();
     }
   }
@@ -250,14 +243,7 @@ public abstract class AbstractGridContainer
   protected void removeElement( final IGridElement element ) {
     boolean result = this.children.remove( element );
     if ( result ) {
-      GridRoot gridRoot = GridRoot.getRoot();
-      if ( gridRoot != null ) {
-        IGridModelEvent event
-          = new GridModelEvent( IGridModelEvent.ELEMENTS_REMOVED,
-                                this,
-                                new IGridElement[] { element } );
-        gridRoot.fireGridModelEvent( event );
-      }
+      fireGridModelEvent( IGridModelEvent.ELEMENTS_REMOVED, element );
     }
   }
     
@@ -268,6 +254,69 @@ public abstract class AbstractGridContainer
    */
   protected void setDirty( final boolean d ) {
     this.dirty = d;
+  }
+  
+  protected void setProcessEvents( final boolean enabled ) {
+    
+    if ( enabled && ( this.processEventsPolicy > 0) ) {
+      this.processEventsPolicy--;
+    } else if ( !enabled ) {
+      this.processEventsPolicy++;
+    }
+    
+    if ( this.processEventsPolicy == 0 ) {
+      processEvents();
+    }
+  }
+  
+  private void fireGridModelEvent( final int type,
+                                   final IGridElement element ) {
+    fireGridModelEvent( type, new IGridElement[] { element } );
+  }
+  
+  private void fireGridModelEvent( final int type,
+                                   final IGridElement[] elements ) {
+    queueEvent( type, elements );
+  }
+  
+  private void processEvents() {
+    GridRoot gridRoot = GridRoot.getRoot();
+    if ( gridRoot != null ) {
+      for ( Map.Entry< Integer, List< IGridElement > > entry : this.eventQueue.entrySet() ) {
+        int type = entry.getKey().intValue();
+        List< IGridElement > elementList = entry.getValue();
+        IGridElement[] elements = elementList.toArray( new IGridElement[ elementList.size() ] );
+        IGridModelEvent event
+          = new GridModelEvent( type,
+                                this,
+                                elements );
+        gridRoot.fireGridModelEvent( event );
+      }
+    }
+    this.eventQueue.clear();
+  }
+  
+  private void queueEvent( final int type,
+                           final IGridElement[] elements ) {
+    
+    Integer iType = new Integer( type );
+    List< IGridElement > elementList = this.eventQueue.get( iType );
+    
+    if ( elementList == null ) {
+      elementList = new ArrayList< IGridElement >();
+      this.eventQueue.put( iType, elementList );
+    }
+    
+    for ( IGridElement element : elements ) {
+      if ( !elementList.contains( element ) ) {
+        elementList.add( element );
+      }
+    }
+    
+    if ( this.processEventsPolicy == 0 ) {
+      processEvents();
+    }
+    
   }
   
   /**

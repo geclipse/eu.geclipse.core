@@ -50,6 +50,14 @@ public abstract class AbstractVirtualOrganization
     super();
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.impl.AbstractGridContainer#canContain(eu.geclipse.core.model.IGridElement)
+   */
+  @Override
+  public boolean canContain( final IGridElement element ) {
+    return element instanceof IGridService;
+  }
+  
   @Override
   public void dispose() {
     IFileStore fileStore = getFileStore();

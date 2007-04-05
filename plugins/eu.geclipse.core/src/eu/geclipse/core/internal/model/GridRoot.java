@@ -33,6 +33,7 @@ import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.core.model.IGridElementManager;
 import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridModelListener;
+import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IGridRoot;
 import eu.geclipse.core.model.IManageable;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
@@ -73,7 +74,8 @@ public class GridRoot
   }
   
   /**
-   * Get the singleton instance of this Grid root.
+   * Get the singleton instance of this Grid root. If the singleton is
+   * not yet instantiated this method will instantiate it.
    * 
    * @return The singleton instance.
    */
@@ -84,6 +86,13 @@ public class GridRoot
     return singleton;
   }
   
+  /**
+   * Get the singleton instance of this Grid root. If the singleton is
+   * not yet instantiated this method will return <code>null</code>.
+   * 
+   * @return The singleton instance or <code>null</code> if the
+   * singleton was not yet instatiated.
+   */
   public static GridRoot getRoot() {
     return singleton;
   }
@@ -95,6 +104,14 @@ public class GridRoot
     if ( !this.listeners.contains( listener ) ) {
       this.listeners.add( listener );
     }
+  }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.impl.AbstractGridContainer#canContain(eu.geclipse.core.model.IGridElement)
+   */
+  @Override
+  public boolean canContain( final IGridElement element ) {
+    return element instanceof IGridProject;
   }
   
   /* (non-Javadoc)
