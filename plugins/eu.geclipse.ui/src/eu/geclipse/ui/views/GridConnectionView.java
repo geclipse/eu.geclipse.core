@@ -17,26 +17,6 @@ import eu.geclipse.ui.providers.ConnectionViewLabelProvider;
 
 public class GridConnectionView extends ElementManagerViewPart {
 
-  /* (non-Javadoc)
-   * @see eu.geclipse.ui.views.GridModelViewPart#acceptDrop(eu.geclipse.core.model.IGridContainer, eu.geclipse.core.model.IGridElement[])
-   */
-  @Override
-  public int acceptDrop( final IGridContainer target ) {
-    int result = super.acceptDrop( target );
-    if ( result != DND.DROP_NONE ) {
-      if ( target instanceof IGridConnectionElement ) {
-        if ( !( ( IGridConnectionElement ) target ).isFolder() ) {
-          result = DND.DROP_NONE;
-        } else {
-          result = DND.DROP_COPY;
-        }
-      } else {
-        result = DND.DROP_NONE;
-      }
-    }
-    return result;
-  }
-  
   @Override
   protected IGridElementManager getManager() {
     return GridModel.getConnectionManager();

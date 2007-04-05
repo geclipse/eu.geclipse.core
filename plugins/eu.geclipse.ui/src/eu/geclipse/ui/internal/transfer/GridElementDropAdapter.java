@@ -76,7 +76,7 @@ public class GridElementDropAdapter
   protected void copyElements( final IGridContainer target,
                                final IGridElement[] elements,
                                final boolean move ) {
-    IProgressService progressService
+    /*IProgressService progressService
       = PlatformUI.getWorkbench().getProgressService();
     WorkspaceModifyOperation op
       = new GridElementCopyOperation( target, elements, move );
@@ -93,7 +93,7 @@ public class GridElementDropAdapter
                                     exc );
     } catch( InterruptedException intExc ) {
       Activator.logException( intExc );
-    }
+    }*/
   }
   
   protected void validateDrop( final DropTargetEvent event ) {
@@ -105,7 +105,7 @@ public class GridElementDropAdapter
       Object data = item.getData();
       if ( data instanceof IGridContainer ) {
         IGridContainer container = ( IGridContainer ) data;
-        event.detail = this.view.acceptDrop( container );
+        //event.detail = event.operations & this.view.acceptDrop( container );
       }
     }
     

@@ -43,6 +43,7 @@ import org.eclipse.ui.actions.ActionGroup;
 import org.eclipse.ui.dialogs.PropertyDialogAction;
 import org.eclipse.ui.navigator.ICommonMenuConstants;
 import org.eclipse.ui.part.ViewPart;
+import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.ui.internal.actions.ActionGroupManager;
@@ -51,6 +52,8 @@ import eu.geclipse.ui.internal.actions.OpenActions;
 import eu.geclipse.ui.internal.actions.TreeViewerActions;
 import eu.geclipse.ui.internal.transfer.GridElementDragAdapter;
 import eu.geclipse.ui.internal.transfer.GridElementDropAdapter;
+import eu.geclipse.ui.internal.transfer.SelectionTransferDragAdapter;
+import eu.geclipse.ui.internal.transfer.SelectionTransferDropAdapter;
 
 /**
  * Abstract superclass of all views that show
@@ -74,11 +77,6 @@ public abstract class GridModelViewPart extends ViewPart {
   private ActionGroup actions;
   
   private OpenActions openActions;
-  
-  public int acceptDrop( final IGridContainer target ) {
-    int result = DND.DROP_COPY | DND.DROP_MOVE;
-    return result;
-  }
   
   /* (non-Javadoc)
    * @see org.eclipse.ui.part.WorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
@@ -171,11 +169,11 @@ public abstract class GridModelViewPart extends ViewPart {
   }
   
   protected void addDragSourceListeners( final DelegatingDragAdapter adapter ) {
-    adapter.addDragSourceListener( new GridElementDragAdapter( this ) );
+    adapter.addDragSourceListener( new SelectionTransferDragAdapter( this ) );
   }
   
   protected void addDropTargetListeners( final DelegatingDropAdapter adapter ) {
-    adapter.addDropTargetListener( new GridElementDropAdapter( this ) );
+    adapter.addDropTargetListener( new SelectionTransferDropAdapter() );
   }
   
   protected ActionGroup createActions() {
@@ -367,14 +365,14 @@ public abstract class GridModelViewPart extends ViewPart {
   }
   
   protected void initDrag( final StructuredViewer sViewer ) {
-    int operations = DND.DROP_MOVE | DND.DROP_COPY;
+    int operations = DND.DROP_MOVE | DND.DROP_COPY | DND.DROP_DEFAULT;
     DelegatingDragAdapter adapter = new DelegatingDragAdapter();
     addDragSourceListeners( adapter );
     sViewer.addDragSupport( operations, adapter.getTransfers(), adapter );
   }
   
   protected void initDrop( final StructuredViewer sViewer ) {
-    int operations = DND.DROP_MOVE | DND.DROP_COPY;
+    int operations = DND.DROP_MOVE | DND.DROP_COPY | DND.DROP_DEFAULT;
     DelegatingDropAdapter adapter = new DelegatingDropAdapter();
     addDropTargetListeners( adapter );
     sViewer.addDropSupport( operations, adapter.getTransfers(), adapter );

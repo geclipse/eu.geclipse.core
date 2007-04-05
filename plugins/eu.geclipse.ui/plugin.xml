@@ -214,4 +214,10 @@
       <executablePath path="some/path/example"/>
       <parametersSchema path="src/eu/geclipse/ui/wizards/jobs/internal/example/appParametersSchema.xml"/>
    </extension>
+   <extension
+         id="eu.geclipse.ui.problemProvider"
+         name="UIProblems"
+         point="eu.geclipse.core.problemProvider">
+      <provider class="eu.geclipse.ui.UIProblems"/>
+   </extension>
 </plugin>

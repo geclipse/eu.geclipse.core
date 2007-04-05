@@ -15,7 +15,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.DeleteResourceAction;
-import eu.geclipse.core.model.IGridConnection;
+import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.ui.views.GridModelViewPart;
 
@@ -44,6 +44,7 @@ public class DeleteElementAction
   }
 
   public void actionFinished() {
+    /*
     IStructuredSelection selection
       = this.deleteResourceAction.getStructuredSelection();
     final List< IGridContainer > dirtyContainers
@@ -65,6 +66,7 @@ public class DeleteElementAction
     };
     refreshJob.setPriority( Job.DECORATE );
     refreshJob.schedule();
+    */
   }
   
   public void selectionChanged( final SelectionChangedEvent event ) {
@@ -81,9 +83,9 @@ public class DeleteElementAction
     List< IGridContainer > result
       = new ArrayList< IGridContainer >();
     for ( Object obj : selection.toArray() ) {
-      if ( obj instanceof IGridConnection ) {
-        IGridContainer parent = ( ( IGridConnection ) obj ).getParent();
-        if ( ( parent instanceof IGridConnection ) && !result.contains( parent ) ) {
+      if ( obj instanceof IGridConnectionElement ) {
+        IGridContainer parent = ( ( IGridConnectionElement ) obj ).getParent();
+        if ( ( parent instanceof IGridConnectionElement ) && !result.contains( parent ) ) {
           result.add( parent );
         }
       }

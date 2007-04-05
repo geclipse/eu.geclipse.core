@@ -88,6 +88,7 @@ public class GridProjectView
    */
   public void gridModelChanged( final IGridModelEvent event ) {
     IGridElement source = event.getSource();
+    System.out.println( source.getName() );
     refreshViewer( source );
   }
   
