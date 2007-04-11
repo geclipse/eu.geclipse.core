@@ -53,7 +53,7 @@ import eu.geclipse.core.model.IGridProject;
  * {@link IResource} implementation in order to wrap
  * {@link GridConnectionElement}s.
  */
-public class GridConnectionResourceAdapter
+abstract public class GridConnectionResourceAdapter
     implements IResource {
   
   /**
@@ -426,13 +426,6 @@ public class GridConnectionResourceAdapter
   }
 
   /* (non-Javadoc)
-   * @see org.eclipse.core.resources.IResource#getType()
-   */
-  public int getType() {
-    return IResource.FILE;
-  }
-
-  /* (non-Javadoc)
    * @see org.eclipse.core.resources.IResource#getWorkspace()
    */
   public IWorkspace getWorkspace() {
@@ -765,4 +758,10 @@ public class GridConnectionResourceAdapter
     throw exc;
   }
 
+  public int findMaxProblemSeverity( final String type,
+                                     final boolean includeSubtypes,
+                                     final int depth ) throws CoreException {
+    // TODO required for eclipse 3.3
+    return 0;
+  }
 }

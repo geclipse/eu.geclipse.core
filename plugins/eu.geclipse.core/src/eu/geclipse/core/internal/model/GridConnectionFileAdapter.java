@@ -263,4 +263,7 @@ public class GridConnectionFileAdapter
                  monitor );
   }
 
+  public int getType() {
+    return IResource.FILE;
+  }
 }
