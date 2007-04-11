@@ -13,8 +13,8 @@ public class GlueHostRemoteFileSystem extends AbstractGlueTable implements java.
   public GlueSubCluster glueSubCluster; //GlueSubClusterUniqueID
   public String Name; //PK
   public String Root;
-  public Integer Size;
-  public Integer AvailableSpace;
+  public Long Size;
+  public Long AvailableSpace;
   public String ReadOnly;
   public String Type;
   public Date MeasurementDate;

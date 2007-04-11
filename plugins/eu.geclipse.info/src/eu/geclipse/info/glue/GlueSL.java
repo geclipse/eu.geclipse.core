@@ -15,7 +15,7 @@ public class GlueSL extends AbstractGlueTable implements java.io.Serializable{
   public GlueSE glueSE; //GlueSEUniqueID
   public String Name;
   public String ArchitectureType;
-  public Integer MaxIOCapacity;
+  public Long MaxIOCapacity;
   public String InformationServiceURL;
   public Date MeasurementDate;
   public Date MeasurementTime;

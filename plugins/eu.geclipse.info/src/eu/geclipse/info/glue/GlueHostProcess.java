@@ -13,15 +13,15 @@ public class GlueHostProcess extends AbstractGlueTable implements java.io.Serial
   public GlueHost glueHost; //GlueHostUniqueID
   public String Name; //PK
   public String Command;
-  public Integer FirstStarted;
-  public Integer LastStarted;
-  public Integer MemUsageOneMax;
-  public Integer MemUsageAverage;
-  public Integer CPUUsageOneMax;
-  public Integer CPUUsageAll;
-  public Integer TimeUsageOneMax;
-  public Integer TimeUsageAll;
-  public Integer NumberOfInstances;
+  public Long FirstStarted;
+  public Long LastStarted;
+  public Long MemUsageOneMax;
+  public Long MemUsageAverage;
+  public Long CPUUsageOneMax;
+  public Long CPUUsageAll;
+  public Long TimeUsageOneMax;
+  public Long TimeUsageAll;
+  public Long NumberOfInstances;
   public String Status;
   public Date MeasurementDate;
   public Date MeasurementTime;

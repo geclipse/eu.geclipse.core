@@ -56,8 +56,8 @@ public class GridGlueStorage
         for ( int i = 0 ; i < list.size() ; i++ ) {
           String scheme
             = ( String ) list.get( i ).getFieldByName( "Type" );
-          Integer port
-            = ( Integer ) list.get( i ).getFieldByName( "Port" );
+          Long port
+            = ( Long ) list.get( i ).getFieldByName( "Port" );
           result[ i ] = new URI( scheme, null, host, port.intValue(), null, null, null );
         }
       }

@@ -14,9 +14,9 @@ public class GlueSEAccessProtocol extends AbstractGlueTable implements java.io.S
   public String keyName = "UniqueID";
   public GlueSE glueSE; //GlueSEUniqueID
   public String Type;
-  public Integer Port;
+  public Long Port;
   public String Version;
-  public Integer AccessTime;
+  public Long AccessTime;
   public String LocalID;
   public String Endpoint;
   public Date MeasurementDate;

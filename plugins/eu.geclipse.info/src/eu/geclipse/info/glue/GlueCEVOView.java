@@ -14,16 +14,16 @@ public class GlueCEVOView extends AbstractGlueTable implements java.io.Serializa
   public String keyName = "UniqueID";
   public GlueCE glueCE; //GlueCEUniqueID
   public String LocalID;
-  public Integer RunningJobs;
-  public Integer WaitingJobs;
-  public Integer TotalJobs;
-  public Integer FreeJobSlots;
-  public Integer EstimatedResponseTime;
-  public Integer WorstResponseTime;
+  public Long RunningJobs;
+  public Long WaitingJobs;
+  public Long TotalJobs;
+  public Long FreeJobSlots;
+  public Long EstimatedResponseTime;
+  public Long WorstResponseTime;
   public String DefaultSE;
   public String ApplicationDir;
   public String DataDir;
-  public Integer FreeCpus;
+  public Long FreeCpus;
   public Date MeasurementDate;
   public Date MeasurementTime;
   public ArrayList<GlueCEVOViewAccessControlBaseRule> glueCEVOViewAccessControlBaseRuleList = new ArrayList<GlueCEVOViewAccessControlBaseRule>();

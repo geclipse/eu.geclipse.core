@@ -12,13 +12,13 @@ public class GlueBatchSystem extends AbstractGlueTable implements java.io.Serial
 
   public GlueHost glueHost; //GlueHostUniqueID
   public String Type; //PK
-  public Integer TotalJobSlots;
-  public Integer FreeJobSlots;
-  public Integer NodeCount;
+  public Long TotalJobSlots;
+  public Long FreeJobSlots;
+  public Long NodeCount;
   public Double CPULoadAvg;
-  public Integer RAMTotal;
-  public Integer RAMUsed;
-  public Integer NodeDownCount;
+  public Long RAMTotal;
+  public Long RAMUsed;
+  public Long NodeDownCount;
   public String NodeDownList;
   public Date MeasurementDate;
   public Date MeasurementTime;

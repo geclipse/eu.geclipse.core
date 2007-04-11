@@ -13,9 +13,9 @@ public class GlueHostNetworkAdapter extends AbstractGlueTable implements java.io
   public GlueHost glueHost; //GlueHostUniqueID
   public String Name; //PK
   public String IPAddress;
-  public Integer MTU;
-  public Integer TXRate;
-  public Integer RXRate;
+  public Long MTU;
+  public Long TXRate;
+  public Long RXRate;
   public String LastOctetsTX;
   public String LastOctetsRX;
   public String OutboundIP;

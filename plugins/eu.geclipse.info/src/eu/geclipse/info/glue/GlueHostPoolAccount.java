@@ -13,8 +13,8 @@ public class GlueHostPoolAccount extends AbstractGlueTable implements java.io.Se
   public GlueHost glueHost; //GlueHostUniqueID
   public String Prefix; //PK
   public String AssignedTo;
-  public Integer Total;
-  public Integer Free;
+  public Long Total;
+  public Long Free;
   public Date MeasurementDate;
   public Date MeasurementTime;
 

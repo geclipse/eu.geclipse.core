@@ -11,7 +11,7 @@ public class GlueCESEBind extends AbstractGlueTable implements java.io.Serializa
   public GlueSE glueSE; //GlueSEUniqueID
   public String Accesspoint;
   public String MountInfo;
-  public Integer Weight;
+  public Long Weight;
   public Date MeasurementDate;
   public Date MeasurementTime;
 

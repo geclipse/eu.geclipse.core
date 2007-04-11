@@ -14,11 +14,11 @@ public class GlueHostLocalFileSystem extends AbstractGlueTable implements java.i
   public String Name; //PK
   public String Root;
   public String Type;
-  public Integer Size;
-  public Integer AvailableSpace;
+  public Long Size;
+  public Long AvailableSpace;
   public String ReadOnly;
-  public Integer INodeTotal;
-  public Integer INodeFree;
+  public Long INodeTotal;
+  public Long INodeFree;
   public String GlueHostStorageExtentName;
   public String GlueHostStorageExtentSize;
   public String GlueHostStorageExtentReadRate;

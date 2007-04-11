@@ -14,7 +14,7 @@ public class GlueBatchJob extends AbstractGlueTable implements java.io.Serializa
 
   public String GlueBatchJobGlobalID; //PK
   public GlueHost glueHost; //GlueHostUniqueID
-  public Integer LocalID;
+  public Long LocalID;
   public String Status;
   public String Name;
   public String LocalOwner;
