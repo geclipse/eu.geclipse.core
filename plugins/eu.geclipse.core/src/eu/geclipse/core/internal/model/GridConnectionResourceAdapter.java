@@ -758,10 +758,14 @@ abstract public class GridConnectionResourceAdapter
     throw exc;
   }
 
+  /* (non-javadoc)
+   * @see org.eclipse.core.resources.IResource#findMaxProblemSeverity(String, boolean, int)
+   */
   public int findMaxProblemSeverity( final String type,
                                      final boolean includeSubtypes,
-                                     final int depth ) throws CoreException {
-    // TODO required for eclipse 3.3
-    return 0;
+                                     final int depth) throws CoreException {
+    // TODO ariel - This method was added to the Interface in v3.3
+    notYetImplemented();
+    return -1;
   }
 }
