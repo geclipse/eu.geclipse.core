@@ -261,7 +261,11 @@ public class GridRoot
       if ( element != null ) {
         IGridContainer parent = element.getParent();
         if ( parent != null ) {
-          parent.delete( element );
+          try {
+            parent.delete( element );
+          } catch( GridModelException gmExc ) {
+            Activator.logException( gmExc );
+          }
         }
       }
     }

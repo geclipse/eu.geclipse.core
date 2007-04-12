@@ -86,7 +86,8 @@ public abstract class AbstractGridContainer
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridContainer#delete(eu.geclipse.core.model.IGridElement)
    */
-  public void delete( final IGridElement child ) {
+  public void delete( final IGridElement child )
+      throws GridModelException {
     removeElement( child );
     if ( child instanceof IManageable ) {
       IGridElementManager manager

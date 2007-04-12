@@ -201,10 +201,12 @@ abstract public class GridConnectionResourceAdapter
   public void delete( final int updateFlags,
                       final IProgressMonitor monitor )
       throws CoreException {
-    IFileStore fileStore = getFileStore();
+    IGridContainer parent = this.connection.getParent();
+    parent.delete( this.connection );
+    /*IFileStore fileStore = getFileStore();
     if ( fileStore != null ) {
       fileStore.delete( EFS.NONE, monitor );
-    }
+    }*/
   }
 
   /* (non-Javadoc)

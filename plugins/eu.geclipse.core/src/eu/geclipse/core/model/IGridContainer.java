@@ -72,7 +72,7 @@ public interface IGridContainer extends IGridElement {
    * @param child The element to be deleted.
    * @see IGridElement#dispose()
    */
-  public void delete( final IGridElement child );
+  public void delete( final IGridElement child ) throws GridModelException;
   
   /**
    * Search for a child with the specified name and return it.

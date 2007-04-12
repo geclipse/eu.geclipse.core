@@ -10,6 +10,9 @@ public class CoreProblems implements IProblemProvider {
   public static final int CONNECTION_TIMEOUT
     = ProblemRegistry.uniqueID();
   
+  public static final int ELEMENT_DELETION_FAILED
+    = ProblemRegistry.uniqueID();
+  
   public static final int MALFORMED_URL
   = ProblemRegistry.uniqueID();
 
@@ -43,6 +46,13 @@ public class CoreProblems implements IProblemProvider {
                                  SolutionRegistry.CHECK_SERVER_URL,
                                  SolutionRegistry.CHECK_PROXY_SETTINGS
                                } );
+    }
+    
+    else if ( problemID == ELEMENT_DELETION_FAILED ) {
+      problem = createProblem( problemID,
+                               "Error while deleting model element",
+                               exc,
+                               null );
     }
     
     else if ( problemID == UNSPECIFIED_IO_PROBLEM ) {
