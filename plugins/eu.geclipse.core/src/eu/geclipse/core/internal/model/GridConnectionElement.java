@@ -168,15 +168,19 @@ public class GridConnectionElement
   @Override
   public void delete( final IGridElement child )
       throws GridModelException {
-    IFileStore fs = child.getFileStore();
-    if ( fs != null ) {
-      try {
-        fs.delete( EFS.NONE, null );
-      } catch( CoreException cExc ) {
-        throw new GridModelException( CoreProblems.ELEMENT_DELETION_FAILED, cExc );
+    try {
+      IFileStore fs = ( ( IGridConnectionElement ) child ).getConnectionFileStore();
+      if ( fs != null ) {
+        try {
+          fs.delete( EFS.NONE, null );
+        } catch( CoreException cExc ) {
+          throw new GridModelException( CoreProblems.ELEMENT_DELETION_FAILED, cExc );
+        }
       }
+      super.delete( child );
+    } catch ( CoreException cExc ) {
+      throw new GridModelException( CoreProblems.ELEMENT_DELETION_FAILED, cExc );
     }
-    super.delete( child );
   }
   
   /* (non-Javadoc)
@@ -285,6 +289,11 @@ public class GridConnectionElement
       setProcessEvents( true );
     }
     return this.fetchError == null;
+  }
+  
+  void addChild( final GridConnectionElement child )
+      throws GridModelException {
+    addElement( child );
   }
   
 }

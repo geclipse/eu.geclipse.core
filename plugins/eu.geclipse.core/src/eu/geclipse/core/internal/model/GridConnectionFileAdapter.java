@@ -38,8 +38,10 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.content.IContentDescription;
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.GridModel;
+import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridRoot;
+import eu.geclipse.core.model.impl.AbstractGridContainer;
 
 /**
  * {@link IFile} implementation in order to wrap
@@ -121,6 +123,15 @@ public class GridConnectionFileAdapter
                                    Messages.getString("GridConnectionFileAdapter.create_failed"), //$NON-NLS-1$
                                    ioExc );
       throw new CoreException( status );
+    }
+    GridConnectionElement child = getGridConnection();
+    IGridContainer parent = child.getParent();
+    if ( parent instanceof GridConnectionElement ) {
+      GridConnectionElement gce = ( GridConnectionElement ) parent;
+      gce.addChild( child );
+    } else {
+      parent.setDirty();
+      parent.getChildren( monitor );
     }
   }
 
