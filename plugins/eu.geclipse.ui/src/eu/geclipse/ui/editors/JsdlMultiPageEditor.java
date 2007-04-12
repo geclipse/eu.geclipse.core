@@ -173,7 +173,8 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
    
     // Create the editing domain with a special command stack.
     //
-    this.editingDomain = new AdapterFactoryEditingDomain(this.adapterFactory, commandStack, new HashMap<Object, Object>());
+    this.editingDomain = new AdapterFactoryEditingDomain(this.adapterFactory, 
+      commandStack, new HashMap<Resource, Boolean>()); 
         
       }
   
