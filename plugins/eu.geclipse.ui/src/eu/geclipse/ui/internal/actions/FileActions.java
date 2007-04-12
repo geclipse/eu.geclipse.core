@@ -6,6 +6,7 @@ import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.actions.ActionGroup;
+import org.eclipse.ui.actions.DeleteResourceAction;
 import org.eclipse.ui.navigator.ICommonMenuConstants;
 import eu.geclipse.ui.views.GridModelViewPart;
 
@@ -19,7 +20,7 @@ public class FileActions extends ActionGroup {
   
   private PasteAction pasteAction;
   
-  private DeleteElementAction deleteAction;
+  private DeleteResourceAction deleteAction;
   
   public FileActions( final GridModelViewPart view ) {
     
@@ -31,7 +32,7 @@ public class FileActions extends ActionGroup {
     
     this.copyAction = new CopyAction( this.clipboard );
     this.pasteAction = new PasteAction( view, this.clipboard );
-    this.deleteAction = new DeleteElementAction( view );
+    this.deleteAction = new DeleteResourceAction( shell );
     
     provider.addSelectionChangedListener( this.copyAction );
     provider.addSelectionChangedListener( this.pasteAction );

@@ -43,15 +43,11 @@ import org.eclipse.ui.actions.ActionGroup;
 import org.eclipse.ui.dialogs.PropertyDialogAction;
 import org.eclipse.ui.navigator.ICommonMenuConstants;
 import org.eclipse.ui.part.ViewPart;
-import eu.geclipse.core.model.IGridConnectionElement;
-import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.ui.internal.actions.ActionGroupManager;
 import eu.geclipse.ui.internal.actions.FileActions;
 import eu.geclipse.ui.internal.actions.OpenActions;
 import eu.geclipse.ui.internal.actions.TreeViewerActions;
-import eu.geclipse.ui.internal.transfer.GridElementDragAdapter;
-import eu.geclipse.ui.internal.transfer.GridElementDropAdapter;
 import eu.geclipse.ui.internal.transfer.SelectionTransferDragAdapter;
 import eu.geclipse.ui.internal.transfer.SelectionTransferDropAdapter;
 

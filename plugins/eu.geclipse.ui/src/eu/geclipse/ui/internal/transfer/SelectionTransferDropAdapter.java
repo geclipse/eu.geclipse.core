@@ -273,7 +273,7 @@ public class SelectionTransferDropAdapter
   }
   
   private void runOperation( final GridElementTransferOperation op,
-                                final Shell shell ) {
+                             final Shell shell ) {
     IProgressService progressService
       = PlatformUI.getWorkbench().getProgressService();
     try {
