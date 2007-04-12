@@ -16,39 +16,58 @@
 
 package eu.geclipse.ui.properties;
 
+import java.util.ArrayList;
+import java.util.List;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import eu.geclipse.core.model.IGridElement;
 
 /**
  * Simple property source for GridElement.
  * Used when specialized property source is not defined for objects inherited from {@link IGridElement} 
  */
-public class GridElementPropertySource extends AbstractPropertySource {
-
-  final IGridElement gridElement;
+public class GridElementPropertySource extends AbstractPropertySource<IGridElement> {
+  static private IPropertyDescriptor[] staticDescriptors;
 
   /**
    * @param gridElement - object from which properties will be displayed
    */
   public GridElementPropertySource( final IGridElement gridElement ) {
-    super();
-    this.gridElement = gridElement;
+    super( gridElement );
+  }
+
+  /* (non-Javadoc)
+   * @see eu.geclipse.ui.properties.AbstractPropertySource#getPropertySourceClass()
+   */
+  @Override
+  protected Class<? extends AbstractPropertySource<?>> getPropertySourceClass()
+  {
+    return GridElementPropertySource.class;
   }
 
   @Override
-  protected IProperty[] createProperties()
+  protected IPropertyDescriptor[] getStaticDescriptors()
   {
-    return new IProperty[]{
-      createPropName()
-    };
+    if( staticDescriptors == null ) {
+      staticDescriptors = AbstractPropertySource.createDescriptors( createProperties(), getPropertySourceClass() );    
+    }
+    
+    return staticDescriptors;
   }
-
-  private AbstractProperty createPropName() {
-    return new AbstractProperty( Messages.getString( "GridElementPropertySource.propertyName" ), //$NON-NLS-1$
-                                 Messages.getString( "GridElementPropertySource.categoryGeneral" ) ) //$NON-NLS-1$ 
+  
+  static private List<IProperty<IGridElement>> createProperties() {
+    List<IProperty<IGridElement>> propertiesList = new ArrayList<IProperty<IGridElement>>( 1 );
+    propertiesList.add( createPropName() );
+    return propertiesList;
+  }
+  
+  static private IProperty<IGridElement> createPropName() {
+    return new AbstractProperty<IGridElement>( Messages.getString( "GridElementPropertySource.propertyName" ), //$NON-NLS-1$
+                                 null )
     {
-
-      public String getValue() {
-        return GridElementPropertySource.this.gridElement.getName();
+      @Override
+      public Object getValue( final IGridElement gridElement )
+      {
+        return gridElement.getName();
       }
     };
   }

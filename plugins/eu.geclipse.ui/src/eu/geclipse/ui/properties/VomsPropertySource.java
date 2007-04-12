@@ -15,6 +15,9 @@
  *****************************************************************************/
 package eu.geclipse.ui.properties;
 
+import java.util.ArrayList;
+import java.util.List;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.voms.vo.VomsVirtualOrganization;
 import eu.geclipse.voms.vo.VomsVoProperties;
@@ -22,95 +25,104 @@ import eu.geclipse.voms.vo.VomsVoProperties;
 
 /**
  * Properties for {@link VomsVirtualOrganization}
- *
  */
-public class VomsPropertySource extends AbstractPropertySource {
-  
-  VomsVirtualOrganization voms;
+public class VomsPropertySource
+  extends AbstractPropertySource<VomsVirtualOrganization>
+{
+
+  static private IPropertyDescriptor[] staticDescriptors;
 
   /**
    * @param voms - voms which properties will be displayed
    */
   VomsPropertySource( final VomsVirtualOrganization voms ) {
-    super();
-    this.voms = voms;
+    super( voms );
   }
 
   @Override
-  protected IProperty[] createProperties()
-  {    
-    return new IProperty[] {
-      createHost(),
-      createHostDN(),
-      createPort()
-    };
+  protected Class<? extends AbstractPropertySource<?>> getPropertySourceClass()
+  {
+    return VomsPropertySource.class;
   }
-    
-  private IProperty createHost() {
-    return new AbstractProperty( Messages.getString("VomsPropertySource.propertyHost"),     //$NON-NLS-1$
-                                 Messages.getString("VomsPropertySource.categoryHost") ) {  //$NON-NLS-1$
 
-      public String getValue() {
+  @Override
+  protected IPropertyDescriptor[] getStaticDescriptors()
+  {
+    if( staticDescriptors == null ) {
+      staticDescriptors = AbstractPropertySource.createDescriptors( createProperties(),
+                                                                    getPropertySourceClass() );
+    }
+    return staticDescriptors;
+  }
+
+  static private List<IProperty<VomsVirtualOrganization>> createProperties() {
+    List<IProperty<VomsVirtualOrganization>> propertiesList = new ArrayList<IProperty<VomsVirtualOrganization>>( 1 );
+    propertiesList.add( createHost() );
+    propertiesList.add( createHostDN() );
+    propertiesList.add( createPort() );
+    return propertiesList;
+  }
+
+  static private IProperty<VomsVirtualOrganization> createHost() {
+    return new AbstractProperty<VomsVirtualOrganization>( Messages.getString( "VomsPropertySource.propertyHost" ), //$NON-NLS-1$
+                                                          Messages.getString( "VomsPropertySource.categoryHost" ) ) { //$NON-NLS-1$
+
+      @Override
+      public Object getValue( final VomsVirtualOrganization sourceObject )
+      {
         String valueString = null;
-        
         try {
-          VomsVoProperties vomsProperties = VomsPropertySource.this.voms.getProperties();
-          
+          VomsVoProperties vomsProperties = sourceObject.getProperties();
           if( vomsProperties != null ) {
             valueString = vomsProperties.getHost();
           }
         } catch( GridModelException e ) {
           valueString = e.getMessage();
         }
-        
         return valueString;
       }
-      
     };
   }
-  
-  private IProperty createHostDN() {
-    return new AbstractProperty( Messages.getString("VomsPropertySource.propertyHostDN"),   //$NON-NLS-1$ 
-                                 Messages.getString("VomsPropertySource.categoryHost") ) {  //$NON-NLS-1$
 
-      public String getValue() {
+  static private IProperty<VomsVirtualOrganization> createHostDN() {
+    return new AbstractProperty<VomsVirtualOrganization>( Messages.getString( "VomsPropertySource.propertyHostDN" ), //$NON-NLS-1$
+                                                          Messages.getString( "VomsPropertySource.categoryHost" ) ) { //$NON-NLS-1$
+
+      @Override
+      public Object getValue( final VomsVirtualOrganization sourceObject )
+      {
         String valueString = null;
-        
         try {
-          VomsVoProperties vomsProperties = VomsPropertySource.this.voms.getProperties();
-          
+          VomsVoProperties vomsProperties = sourceObject.getProperties();
           if( vomsProperties != null ) {
             valueString = vomsProperties.getHostDN();
           }
         } catch( GridModelException e ) {
           valueString = e.getMessage();
         }
-        
         return valueString;
       }
     };
   }
-  
-  private IProperty createPort() {
-    return new AbstractProperty( Messages.getString("VomsPropertySource.propertyPort"),     //$NON-NLS-1$
-                                 Messages.getString("VomsPropertySource.categoryHost") ) {  //$NON-NLS-1$
 
-      public String getValue() {
+  static private IProperty<VomsVirtualOrganization> createPort() {
+    return new AbstractProperty<VomsVirtualOrganization>( Messages.getString( "VomsPropertySource.propertyPort" ), //$NON-NLS-1$
+                                                          Messages.getString( "VomsPropertySource.categoryHost" ) ) { //$NON-NLS-1$
+
+      @Override
+      public Object getValue( final VomsVirtualOrganization sourceObject )
+      {
         String valueString = null;
-        
         try {
-          VomsVoProperties vomsProperties = VomsPropertySource.this.voms.getProperties();
-          
+          VomsVoProperties vomsProperties = sourceObject.getProperties();
           if( vomsProperties != null ) {
             valueString = String.valueOf( vomsProperties.getPort() );
           }
         } catch( GridModelException e ) {
           valueString = e.getMessage();
         }
-        
         return valueString;
       }
     };
   }
-  
 }

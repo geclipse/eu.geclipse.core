@@ -10,6 +10,7 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IVirtualOrganization;
+import eu.geclipse.glite.info.BDIIService;
 
 
 /**
@@ -35,19 +36,20 @@ public class PropertiesAdapterFactory implements IAdapterFactory {
     IPropertySource propertySource = null;
     if( adapterType == IPropertySource.class ) {
       if( adaptableObject instanceof IGridJob ) {
-        propertySource = new JobPropertySource( ( IGridJob )adaptableObject );
+        propertySource = new GridJobSource( ( IGridJob )adaptableObject );
       } else if( adaptableObject instanceof IGridJobDescription ) {
-        propertySource = new JobDescPropertySource( ( IGridJobDescription )adaptableObject );
+        propertySource = new GridJobDescSource( ( IGridJobDescription )adaptableObject );
       } else if( adaptableObject instanceof IGridConnection ) {
-        propertySource = new ConnectionPropertySource( (IGridConnection)adaptableObject );
+        propertySource = new ConnectionPropertySource( ( IGridConnection )adaptableObject );
       } else if( adaptableObject instanceof IVirtualOrganization ) {
-        propertySource = new VOPropertySource( ( IVirtualOrganization ) adaptableObject );
+        propertySource = new VOPropertySource( ( IVirtualOrganization )adaptableObject );
+      } else if( adaptableObject instanceof BDIIService ) {
+        propertySource = new BDIIServicePropertySource( ( BDIIService )adaptableObject );
       }
       // Check elements inherited from IGridElement above this line!
       else if( adaptableObject instanceof IGridElement ) {
-        IGridElement gridElement = ( IGridElement ) adaptableObject; 
+        IGridElement gridElement = ( IGridElement )adaptableObject;
         IResource resource = gridElement.getResource();
-        
         if( resource == null ) {
           propertySource = new GridElementPropertySource( ( IGridElement )adaptableObject );
         } else {

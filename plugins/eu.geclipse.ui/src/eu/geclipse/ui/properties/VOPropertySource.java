@@ -15,8 +15,10 @@
  *****************************************************************************/
 package eu.geclipse.ui.properties;
 
+import java.util.ArrayList;
+import java.util.List;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import eu.geclipse.core.model.IVirtualOrganization;
-import eu.geclipse.core.model.IWrappedElement;
 import eu.geclipse.voms.vo.VomsVirtualOrganization;
 
 
@@ -24,66 +26,62 @@ import eu.geclipse.voms.vo.VomsVirtualOrganization;
  * Properties for {@link IVirtualOrganization}
  *
  */
- class VOPropertySource extends AbstractPropertySource {
-  IVirtualOrganization virtualOrganization;
+class VOPropertySource extends AbstractPropertySource<IVirtualOrganization> {
+   static private IPropertyDescriptor[] staticDescriptors;
   
   /**
    * @param virtualOrganization - vo for which properties be displayed
    */
   public VOPropertySource( final IVirtualOrganization virtualOrganization ) {
-    super();
-    this.virtualOrganization = virtualOrganization;
+    super( virtualOrganization );
+    
+    if( virtualOrganization instanceof VomsVirtualOrganization ) {
+      addChildSource( new VomsPropertySource( ( VomsVirtualOrganization )virtualOrganization ) );
+    }
+  }
+  
+  @Override
+  protected Class<? extends AbstractPropertySource<?>> getPropertySourceClass()
+  {
+    return VOPropertySource.class;
   }
 
   @Override
-  protected IProperty[] createProperties()
+  protected IPropertyDescriptor[] getStaticDescriptors()
   {
-    IProperty[] properties = new IProperty[] {
-      createName(),
-      createType()      
-    };
-    
-    VomsVirtualOrganization voms = getVomsVO();
-    
-    if( voms != null ) {
-      IProperty[] vomsProperties = new VomsPropertySource( voms ).getProperties();
-      properties = joinProperties( properties, vomsProperties );
+    if( staticDescriptors == null ) {
+      staticDescriptors = AbstractPropertySource.createDescriptors( createProperties(), getPropertySourceClass() );    
     }
-
-    return properties;
-  }
-  
-  VomsVirtualOrganization getVomsVO() {
-    VomsVirtualOrganization voms = null;
-    if( this.virtualOrganization instanceof VomsVirtualOrganization ) {
-      voms = ( VomsVirtualOrganization )this.virtualOrganization;
-    } else if( this.virtualOrganization instanceof IWrappedElement ) {
-      IWrappedElement wrapper = ( IWrappedElement ) this.virtualOrganization;      
-      
-      if( wrapper.getWrappedElement() instanceof VomsVirtualOrganization ) {
-        voms = ( VomsVirtualOrganization ) wrapper.getWrappedElement();
-      }
-    }  
     
-    return voms;
+    return staticDescriptors;
   }
   
-  private IProperty createName() {
-    return new AbstractProperty( Messages.getString("VOPropertySource.propertyName"),   //$NON-NLS-1$
+  static private List<IProperty<IVirtualOrganization>> createProperties() {
+    List<IProperty<IVirtualOrganization>> propertiesList = new ArrayList<IProperty<IVirtualOrganization>>( 1 );
+    propertiesList.add( createName() );
+    propertiesList.add( createType() );
+    return propertiesList;
+  }
+  
+  static private IProperty<IVirtualOrganization> createName() {
+    return new AbstractProperty<IVirtualOrganization>( Messages.getString("VOPropertySource.propertyName"),   //$NON-NLS-1$
                                  Messages.getString("VOPropertySource.categoryGeneral") ) { //$NON-NLS-1$
-      public String getValue() {
-        return VOPropertySource.this.virtualOrganization.getName();
-      }
+      @Override
+      public Object getValue( final IVirtualOrganization vo )
+      {
+        return vo.getName();
+      } 
     };
   }
-    
-  private IProperty createType() {
-    return new AbstractProperty( Messages.getString("VOPropertySource.propertyType"),   //$NON-NLS-1$ 
-                                 Messages.getString("VOPropertySource.categoryGeneral") ) { //$NON-NLS-1$
-      public String getValue() {
-        return VOPropertySource.this.virtualOrganization.getTypeName();
-      }
-    }; 
-  }
   
+  static private IProperty<IVirtualOrganization> createType() {
+    return new AbstractProperty<IVirtualOrganization>( Messages.getString("VOPropertySource.propertyType"),   //$NON-NLS-1$
+                                 Messages.getString("VOPropertySource.categoryGeneral") ) { //$NON-NLS-1$
+      @Override
+      public Object getValue( final IVirtualOrganization vo )
+      {
+        return vo.getTypeName();
+      } 
+    };
+  }
 }

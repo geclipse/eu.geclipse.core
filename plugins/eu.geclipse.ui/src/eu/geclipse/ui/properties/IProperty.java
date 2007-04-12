@@ -15,25 +15,30 @@
  *****************************************************************************/
 package eu.geclipse.ui.properties;
 
-import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 
 /**
  * Property shown in Properties view 
  *
  */
-interface IProperty {
+interface IProperty <ESourceType> {
 
   /**
-   * 
    * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(Object)
-   * @return property value
+   * 
+   * @param sourceObject Object, for which property will be displayed  
+   * 
+   * @return Property value
    */
-  String getValue();
-
+  Object getValue( final ESourceType sourceObject );
+  
   /**
-   * Return descriptor
-   * @return property descriptor
+   * @return Property name
    */
-  IPropertyDescriptor getDescriptor();
+  String getName();
+  
+  /**
+   * @return Property category. May be null
+   */
+  String getCategory();  
 }

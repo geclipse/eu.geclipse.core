@@ -18,36 +18,36 @@ package eu.geclipse.ui.properties;
 import java.util.ArrayList;
 import java.util.List;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
-import eu.geclipse.core.model.IGridConnection;
+import eu.geclipse.glite.info.BDIIService;
 
 
 /**
- * Properties for {@link IGridConnection}
+ * Properties for BDIIService
  */
-public class ConnectionPropertySource
-  extends AbstractPropertySource<IGridConnection>
+public class BDIIServicePropertySource
+  extends AbstractPropertySource<BDIIService>
 {
 
   static private IPropertyDescriptor[] staticDescriptors;
 
   /**
-   * @param gridConnection - connection, for which properties will be shown
+   * @param bdiiService - service, for which properties will be shown
    */
-  public ConnectionPropertySource( final IGridConnection gridConnection ) {
-    super( gridConnection );
-    if( gridConnection.getURI() != null ) {
-      addChildSource( new URIPropertySource( gridConnection.getURI() ) );
+  public BDIIServicePropertySource( final BDIIService bdiiService ) {
+    super( bdiiService );
+    if( bdiiService.getURI() != null ) {
+      addChildSource( new URIPropertySource( bdiiService.getURI() ) );
     }
   }
 
   @Override
   protected Class<? extends AbstractPropertySource<?>> getPropertySourceClass()
   {
-    return ConnectionPropertySource.class;
+    return BDIIServicePropertySource.class;
   }
 
   @Override
-  public IPropertyDescriptor[] getStaticDescriptors()
+  protected IPropertyDescriptor[] getStaticDescriptors()
   {
     if( staticDescriptors == null ) {
       staticDescriptors = AbstractPropertySource.createDescriptors( createProperties(),
@@ -56,8 +56,20 @@ public class ConnectionPropertySource
     return staticDescriptors;
   }
 
-  static private List<IProperty<IGridConnection>> createProperties() {
-    List<IProperty<IGridConnection>> propertiesList = new ArrayList<IProperty<IGridConnection>>( 5 );
-    return propertiesList; // return only URIPropertySource as child property-source (see constructor)
+  static private List<IProperty<BDIIService>> createProperties() {
+    List<IProperty<BDIIService>> propertiesList = new ArrayList<IProperty<BDIIService>>( 5 );
+    propertiesList.add( createName() );
+    return propertiesList;
+  }
+
+  static private IProperty<BDIIService> createName() {
+    return new AbstractProperty<BDIIService>( Messages.getString( "BDIIServicePropertySource.propertyName" ), null ) { //$NON-NLS-1$
+
+      @Override
+      public Object getValue( final BDIIService bdiiService )
+      {
+        return bdiiService.getName();
+      }
+    };
   }
 }
