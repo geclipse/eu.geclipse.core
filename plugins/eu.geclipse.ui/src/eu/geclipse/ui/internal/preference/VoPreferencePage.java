@@ -420,7 +420,15 @@ public class VoPreferencePage
       if ( !confirm ) {
         IVoManager manager = GridModel.getVoManager();
         for ( IVirtualOrganization vo : vos ) {
-          manager.delete( vo );
+          try {
+            manager.delete( vo );
+          } catch( GridModelException gmExc ) {
+            NewProblemDialog.openProblem( this.getShell(),
+                                          "Error",
+                                          "Error while deleting VO " + vo.getName(),
+                                          gmExc,
+                                          null );
+          }
         }
         updateButtons();
       }
