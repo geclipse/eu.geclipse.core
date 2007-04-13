@@ -105,11 +105,13 @@ public class GridConnectionFileAdapter
                       final int updateFlags,
                       final IProgressMonitor monitor )
       throws CoreException {
+    
     BufferedInputStream biStream = new BufferedInputStream( source );
     IFileStore fileStore = getFileStore();
     OutputStream oStream = fileStore.openOutputStream( EFS.NONE, monitor );
     BufferedOutputStream boStream = new BufferedOutputStream( oStream );
     int b;
+    
     try {
       while ( ( b = biStream.read() ) != -1 ) {
         boStream.write( b );
@@ -124,6 +126,7 @@ public class GridConnectionFileAdapter
                                    ioExc );
       throw new CoreException( status );
     }
+    
     GridConnectionElement child = getGridConnection();
     IGridContainer parent = child.getParent();
     if ( parent instanceof GridConnectionElement ) {
@@ -133,6 +136,7 @@ public class GridConnectionFileAdapter
       parent.setDirty();
       parent.getChildren( monitor );
     }
+    
   }
 
   public void createLink( final IPath localLocation,
