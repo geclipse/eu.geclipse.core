@@ -26,11 +26,26 @@ public class GridElementCopyOperation
                                   final IGridElement element,
                                   final IProgressMonitor monitor )
       throws CoreException {
+    
+    IResource resource = element.getResource();
+    String name = resource.getName();
+    
+    if ( target.isLazy() && target.isDirty() ) {
+      target.getChildren( monitor );
+    }
+    
+    if ( target.findChild( name ) != null ) {
+      IStatus status = new Status( IStatus.ERROR,
+                                   Activator.PLUGIN_ID,
+                                   IStatus.CANCEL,
+                                   "A child with the same name (" + name + ") already exists",
+                                   null );
+      throw new CoreException( status );
+    }
+    
     if ( element.isLocal() && !target.isLocal() ) {
       transferFromLocalToRemote( target, element, monitor );
     } else {
-      IResource resource = element.getResource();
-      String name = resource.getName();
       IPath destination = target.getPath().append( name );
       resource.copy( destination, IResource.NONE, monitor );
     }
