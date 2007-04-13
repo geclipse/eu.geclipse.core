@@ -137,17 +137,19 @@ public class ResourceGridContainer
         IResource[] members = ( ( IContainer ) this.resource ).members();
         localMonitor.beginTask( Messages.getString( "AbstractGridContainer.load_progress" ), members.length ); //$NON-NLS-1$
         for ( IResource member : members ) {
-
-          IGridElementCreator creator = findCreator( member );
-          if ( creator != null ) {
-            create( creator );
+          try {
+            IGridElementCreator creator = findCreator( member );
+            if ( creator != null ) {
+              create( creator );
+            }
+  
+            localMonitor.worked( 1 );
+            if ( localMonitor.isCanceled() ) {
+              break;
+            }
+          } catch ( Exception exception ) {
+            Activator.logException( exception );
           }
-
-          localMonitor.worked( 1 );
-          if ( localMonitor.isCanceled() ) {
-            break;
-          }
-
         }
         result = true;
       } catch ( CoreException cExc ) {
