@@ -13,13 +13,13 @@
  *     PSNC - Katarzyna Bylec
  *           
  *****************************************************************************/
-
 package eu.geclipse.ui.wizards.jobs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.jface.wizard.IWizardNode;
+import org.eclipse.jface.wizard.WizardSelectionPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
@@ -28,51 +28,38 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 import org.w3c.dom.Element;
 import eu.geclipse.ui.internal.wizards.jobs.ApplicationSpecificControlsFactory;
+import eu.geclipse.ui.wizards.jobs.wizardnodes.BasicWizardPart;
 import eu.geclipse.ui.wizards.jobs.wizardnodes.SpecificWizardPart;
 
 /**
- * Wizard page used in {@link SpecificWizardPart} (but not as a last page)
- * 
- * @see ApplicationSpecificLastPage
+ * The last page in {@link SpecificWizardPart}, holding {@link BasicWizardPart}
+ * wizard node. There should be only one instance of this class per wizard
  */
-public class ApplicationSpecificPage extends WizardPage
+public class ApplicationSpecificLastPage extends WizardSelectionPage
   implements IApplicationSpecificPage
 {
 
-  private Composite parent;
-  private ArrayList<Text> textFieldsWithFileChooser = new ArrayList<Text>();
-  // holds map with controls as a keys and parameter name as a value
-  private HashMap<Control, String> controlsParametersNames = new HashMap<Control, String>();
   private Element pageElement;
+  private ArrayList<Text> textFieldsWithFileChooser;
+  private HashMap<Control, String> controlsParametersNames;
 
   /**
-   * Creates new instance of {@link ApplicationSpecificLastPage}
+   * Method to create an instance of {@link ApplicationSpecificLastPage}
    * 
-   * @param pageName name of the new page
-   * @param element page element form xml file that describes this page
+   * @param pageName name of the page
+   * @param element element form the xml holding information about this page
+   * @param node wizard node of next wizard (its pages will be displayed after
+   *          this page)
    */
-  public ApplicationSpecificPage( final String pageName, final Element element )
+  public ApplicationSpecificLastPage( final String pageName,
+                                      final Element element,
+                                      final IWizardNode node )
   {
     super( pageName );
     this.pageElement = element;
-  }
-
-  public void createControl( final Composite parentP ) {
-    Composite mainComp = new Composite( parentP, SWT.NONE );
-    GridLayout gLayout = new GridLayout( 3, false );
-    mainComp.setLayout( gLayout );
-    ApplicationSpecificControlsFactory factory = new ApplicationSpecificControlsFactory();
-    factory.createControls( this.pageElement,
-                            mainComp,
-                            this.textFieldsWithFileChooser,
-                            this.controlsParametersNames );
-    this.parent = mainComp;
-    setControl( mainComp );
-    setPageComplete( true );
-  }
-
-  Composite getParent() {
-    return this.parent;
+    this.setSelectedNode( node );
+    this.textFieldsWithFileChooser = new ArrayList<Text>();
+    this.controlsParametersNames = new HashMap<Control, String>();
   }
 
   public Map<String, ArrayList<String>> getParametersValues() {
@@ -100,5 +87,19 @@ public class ApplicationSpecificPage extends WizardPage
       }
     }
     return result;
+  }
+
+  public void createControl( final Composite parent ) {
+    Composite mainComp = new Composite( parent, SWT.NONE );
+    GridLayout gLayout = new GridLayout( 3, false );
+    mainComp.setLayout( gLayout );
+    ApplicationSpecificControlsFactory factory = new ApplicationSpecificControlsFactory();
+    factory.createControls( this.pageElement,
+                            mainComp,
+                            this.textFieldsWithFileChooser,
+                            this.controlsParametersNames );
+    setControl( mainComp );
+    setPageComplete( true );
+    this.getContainer().updateButtons();
   }
 }

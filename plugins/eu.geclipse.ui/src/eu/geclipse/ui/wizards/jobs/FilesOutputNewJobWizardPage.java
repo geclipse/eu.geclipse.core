@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2006 g-Eclipse consortium 
+ * Copyright (c) 2006, 2007 g-Eclipse consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -35,8 +35,8 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import eu.geclipse.ui.internal.dialogs.MultipleInputDialog;
+import eu.geclipse.ui.internal.wizards.jobs.FileType;
 import eu.geclipse.ui.widgets.TabComponent;
-import eu.geclipse.ui.wizards.jobs.internal.FileType;
 
 /**
  * Wizard page used by {@link NewJobWizard}. Allows user to set input and
@@ -61,7 +61,7 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
     super( pageName );
     setDescription( Messages.getString( "FilesOutputNewJobWizardPage.page_description" ) ); //$NON-NLS-1$
     setTitle( Messages.getString( "FilesOutputNewJobWizardPage.page_title" ) ); //$NON-NLS-1$
-//    setPageComplete( false );
+    // setPageComplete( false );
   }
 
   public void createControl( final Composite parent ) {
@@ -78,7 +78,7 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
                                new IOFileLabelProvider(),
                                map );
     this.tab.createControl( mainComp );
-//    setPageComplete( true );
+    // setPageComplete( true );
     this.isCreated = true;
     setControl( mainComp );
   }
@@ -124,7 +124,6 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
       {
         OutputFile of = new OutputFile( name.trim(), value.trim(), type );
         addVariable( of );
-        // updateAppendReplace();
       }
     }
 
@@ -278,7 +277,7 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
       return null;
     }
   }
-  
+
   /**
    * Method to access String values kept by table
    * 
@@ -296,7 +295,6 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
     }
     return result;
   }
-  
   class OutputFile {
 
     private String location;
@@ -305,11 +303,15 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
 
     /**
      * Creates new instance of IOFile
+     * 
      * @param name name of the IOFile
      * @param location location of the IOFile (String in form of URI)
      * @param type type of the IOFile
      */
-    public OutputFile( final String name, final String location, final FileType type ) {
+    public OutputFile( final String name,
+                       final String location,
+                       final FileType type )
+    {
       this.name = name;
       this.location = location;
       this.type = type;
@@ -317,6 +319,7 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
 
     /**
      * Getter method to access the name of the IOFile
+     * 
      * @return name of the IOFile
      */
     public String getName() {
@@ -325,6 +328,7 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
 
     /**
      * Setter method to set name of the IOFile
+     * 
      * @param name name of the IOFile
      */
     public void setName( final String name ) {
@@ -333,6 +337,7 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
 
     /**
      * Getter method to access the location of IOFile
+     * 
      * @return location of IOFile (String in form of URI)
      */
     public String getLocation() {
@@ -341,24 +346,25 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
 
     /**
      * Setter method to set location of IOFile
-     * @param location of IOFile (String in form of URI) 
+     * 
+     * @param location of IOFile (String in form of URI)
      */
     public void setLocation( final String location ) {
       this.location = location;
     }
 
-    
     /**
      * Getter method to access type of IOFile
+     * 
      * @return type of IOFile
      */
     public FileType getType() {
       return this.type;
     }
 
-    
     /**
      * Setter method to set type of IOFile
+     * 
      * @param type type of IOFile
      */
     public void setType( final FileType type ) {
@@ -369,18 +375,17 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
     public boolean equals( final Object argument )
     {
       boolean result = false;
-      if ( super.equals( argument )){
+      if( super.equals( argument ) ) {
         result = true;
-      }else{
-       if (argument instanceof OutputFile){
-         OutputFile of = (OutputFile) argument;
-         if (of.getName().equals( this.getName() )){
-           result = true;
-         }
-       }
+      } else {
+        if( argument instanceof OutputFile ) {
+          OutputFile of = ( OutputFile )argument;
+          if( of.getName().equals( this.getName() ) ) {
+            result = true;
+          }
+        }
       }
       return result;
-        
     }
   }
 
@@ -391,7 +396,14 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
     return super.getNextPage();
   }
 
+  /**
+   * Method to fnd out if this page was created
+   * 
+   * @return true if method
+   *         {@link FilesOutputNewJobWizardPage#createControl(Composite)} was
+   *         invoked
+   */
   public boolean isCreated() {
-    return this.isCreated ;
+    return this.isCreated;
   }
 }

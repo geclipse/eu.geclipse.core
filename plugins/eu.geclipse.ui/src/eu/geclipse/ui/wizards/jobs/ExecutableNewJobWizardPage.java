@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2006 g-Eclipse consortium 
+ * Copyright (c) 2006, 2007 g-Eclipse consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -17,15 +17,14 @@
 
 package eu.geclipse.ui.wizards.jobs;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Map;
+import javax.xml.parsers.ParserConfigurationException;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardNode;
-import org.eclipse.jface.wizard.IWizardPage;
-import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.jface.wizard.WizardSelectionPage;
 import org.eclipse.swt.SWT;
@@ -34,7 +33,6 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -44,15 +42,17 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
+import org.xml.sax.SAXException;
 import eu.geclipse.ui.Extensions;
 import eu.geclipse.ui.dialogs.gexplorer.GridFileDialog;
 import eu.geclipse.ui.widgets.StoredCombo;
+import eu.geclipse.ui.wizards.jobs.wizardnodes.BasicWizardPart;
+import eu.geclipse.ui.wizards.jobs.wizardnodes.SpecificWizardPart;
 
 /**
  * Wizard page that allows user to choose an executable for the grid job, name
  * of the job and its description
  * 
- * @author katis
  */
 public class ExecutableNewJobWizardPage extends WizardSelectionPage
   implements ModifyListener
@@ -87,10 +87,9 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
    * Holds name of the application
    */
   private Combo applicationName;
-//  private Combo application;
   private Map<String, String> appsWithExtraAttributes;
   private ArrayList<WizardPage> internalPages;
-  private InternalWizard nodeInternal;
+  private BasicWizardPart basicNode;
   
   
   /**
@@ -109,21 +108,12 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     this.internalPages = internalPages;
   }
   
-  @Override
-  public IWizardPage getNextPage()
-  {
-    // TODO Auto-generated method stub
-    return super.getNextPage();
-  }
-
-  
 
   @Override
   public boolean isPageComplete()
   {
     return true;
   }
-
   
 
   public void createControl( final Composite parent ) {
@@ -166,26 +156,6 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     layout.horizontalSpan = 2;
     this.applicationName.setLayoutData( layout );
     this.applicationName.addModifyListener( this );
-    // label and combo for infromation from plugins
-    // label
-//    Label pluginNameLabel = new Label( mainComp,
-//                                       GridData.HORIZONTAL_ALIGN_BEGINNING
-//                                           | GridData.VERTICAL_ALIGN_CENTER );
-//    layout = new GridData();
-//    layout.horizontalAlignment = GridData.FILL;
-//    pluginNameLabel.setText( "Plug-in name" );
-//    pluginNameLabel.setLayoutData( layout );
-    // combo
-//    this.application = new Combo( mainComp, SWT.SINGLE );
-//    for( String value : this.appsWithExtraAttributes.values() ) {
-//      this.application.add( value.toString() );
-//    }
-//    layout = new GridData( GridData.HORIZONTAL_ALIGN_FILL );
-//    layout.horizontalSpan = 2;
-//    layout.grabExcessHorizontalSpace = true;
-//    this.application.setLayoutData( layout );
-//    this.application.addModifyListener( this );
-    // end
     Label inputLabel = new Label( mainComp, GridData.HORIZONTAL_ALIGN_BEGINNING
                                             | GridData.VERTICAL_ALIGN_CENTER );
     inputLabel.setText( Messages.getString( "ExecutableNewJobWizardPage.exe_input_label" ) ); //$NON-NLS-1$
@@ -289,62 +259,31 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     return this.applicationName.getText();
   }
 
-  // @Override
-  // public IWizardPage getNextPage()
-  // {
-  // IWizardPage result = super.getNextPage();
-  // if (! appsWithExtraAttributes.containsValue( application.getText())){
-  // ApplicationSpecificPage appSP =
-  // ApplicationSpecificPageFactory.getApplicationSpecificPage( "aaa",
-  // this.parentP );
-  // result.setPreviousPage( appSP );
-  // result = appSP;
-  // //tworzenie ApplicationSpecificPage()
-  // result.setPreviousPage( this );
-  //      
-  // // result = ApplciationSpecificPage
-  // }
-  // return result;
-  // }
   public void modifyText( final ModifyEvent e ) {
     this.getContainer().updateButtons();
-    if( this.nodeInternal == null ) {
-      this.nodeInternal = new InternalWizard( this.internalPages, this.getWizard() );
+    if( this.basicNode == null ) {
+      this.basicNode = new BasicWizardPart( this.internalPages, this.getWizard() );
     }
-    String newValue = null;
-    if( this.appsWithExtraAttributes.containsValue( this.applicationName.getText() ) )
-    {
-      // for testing of DOM
-      for( String el : this.appsWithExtraAttributes.keySet() ) {
-        if( this.appsWithExtraAttributes.get( el )
-          .equals( this.applicationName.getText() ) )
-        {
-          newValue = el;
-          // ApplicationSpecificControlsFactory factory = new
-          // ApplicationSpecificControlsFactory( Extensions.getXMLPath( el
-          // ).toString() );
-          // factory.parse();
-          this.executableFile.setText( Extensions.getJSDLExtensionExecutable( el ) );
+    if (this.appsWithExtraAttributes.values().contains( this.applicationName.getText())){
+      try {
+        for (String bundleId: this.appsWithExtraAttributes.keySet()){
+          if (this.appsWithExtraAttributes.get( bundleId ).equals( this.applicationName.getText() )){
+            setSelectedNode( new SpecificWizardPart(this.basicNode, this.getWizard(), bundleId ));
+          }
         }
+      } catch( SAXException e1 ) {
+        // TODO Auto-generated catch block
+        e1.printStackTrace();
+      } catch( ParserConfigurationException e1 ) {
+        // TODO Auto-generated catch block
+        e1.printStackTrace();
+      } catch( IOException e1 ) {
+        // TODO Auto-generated catch block
+        e1.printStackTrace();
       }
-      
-      // end testing of DOM
-      // newValue = this.application.getText();
     } else {
-      this.executableFile.setText( "" );
+      setSelectedNode( this.basicNode );
     }
-    this.nodeInternal.changeFirstPage( newValue );
-    this.setSelectedNode( this.nodeInternal );
-    // this.getContainer().updateButtons();
-    // if( this.appsWithExtraAttributes.containsValue(
-    // this.application.getText() ) )
-    // {
-    // if( this.node == null ) {
-    // this.node = new InternalWizard( this.internalPages, this.getWizard() );
-    // }
-    // }
-    // this.node.changeFirstPage( this.application.getText() );
-    // this.setSelectedNode( this.node );
   }
 
   /**
@@ -355,13 +294,6 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
    */
   public ApplicationSpecificPage getApplicationSpecificPage() {
     ApplicationSpecificPage result = null;
-    IWizardNode n = this.getSelectedNode();
-    if( n instanceof InternalWizard ) {
-      IWizardPage page = ( ( InternalWizard )n ).getInternalStartingPage();
-      if( page instanceof ApplicationSpecificPage ) {
-        result = ( ApplicationSpecificPage )page;
-      }
-    }
     return result;
   }
 
@@ -370,141 +302,5 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
   {
     super.setSelectedNode( node );
   }
-  class InternalWizard extends Wizard implements IWizardNode {
-
-    boolean isCreated = false;
-    private ArrayList<WizardPage> internalPagesI;
-    private IWizard parentWizard;
-    private String extensionPointId;
-    private ApplicationSpecificPage asp;
-    // private boolean firstTime = true;
-    private IWizardPage startingPage;
-    
-
-    /**
-     * Creates instance of {@link InternalWizard}
-     * 
-     * @param internalPages pages to display after optional firts
-     *          {@link ApplicationSpecificPage}
-     * @param parentWizard parent Wizard containing this IWizardNode
-     */
-    public InternalWizard( final ArrayList<WizardPage> internalPages,
-                           final IWizard parentWizard )
-    {
-      super();
-      this.internalPagesI = internalPages;
-      this.parentWizard = parentWizard;
-      this.addPages();
-      this.isCreated = true;
-      
-      
-    }
-
-    @Override
-    public boolean performFinish()
-    {
-      return this.parentWizard.performFinish();
-    }
-
-    @Override
-    public void addPages()
-    {
-      this.asp = new ApplicationSpecificPage( "asp" );
-      // asp.createControl( ExecutableNewJobWizardPage.this.parentP );
-      // asp.setText("cos");
-      this.addPage( this.asp );
-      // asp.setExtensionPointId( this.extensionPointId );
-      for( WizardPage page : this.internalPagesI ) {
-        this.addPage( page );
-      }
-      this.isCreated = true;
-      
-    }
-
-    public Point getExtent() {
-      // TODO Auto-generated method stub
-      return null;
-    }
-
-    public IWizard getWizard() {
-      return this;
-    }
-
-    public boolean isContentCreated() {
-      return this.isCreated;
-    }
-
-    /**
-     * Method to change first page of this wizard
-     * 
-     * @param id id of extension point providing description of first page or
-     *          null
-     */
-    public void changeFirstPage( final String id ) {
-      if( id != null ) {
-        if( this.extensionPointId != null ) {
-          if( !this.extensionPointId.equals( id ) ) {
-            this.extensionPointId = id;
-          }
-        } else {
-          this.extensionPointId = id;
-        }
-        this.asp.setExtensionPointId( this.extensionPointId );
-//        this.asp.setRebuild( true );
-      } else {
-        this.extensionPointId = null;
-        this.asp.setExtensionPointId( this.extensionPointId );
-      }
-      // this.firstTime = true;
-    }
-
-    // @Override
-    // public IWizardPage getNextPage( final IWizardPage page )
-    // {
-    // IWizardPage result = super.getNextPage( page );
-    // if ( this.extensionPointId == null && this.firstTime ){
-    // result = this.getStartingPage();
-    // }
-    // return result;
-    // }
-    //
-    // @Override
-    // public IWizardPage getStartingPage()
-    // {
-    // IWizardPage result = super.getStartingPage();
-    // if ( this.extensionPointId == null && this.firstTime ){
-    // result = this.internalPages.get( 0 );
-    // this.firstTime = false;
-    // }
-    // this.startingPage = result;
-    // return result;
-    // }
-    @Override
-    public IWizardPage getStartingPage()
-    {
-      IWizardPage result = super.getStartingPage();
-      if( this.extensionPointId == null ) {
-        result = this.internalPagesI.get( 0 );
-      }
-      this.startingPage = result;
-      return result;
-    }
-
-    @Override
-    public IWizardPage getNextPage( final IWizardPage page )
-    {
-      // TODO Auto-generated method stub
-      return super.getNextPage( page );
-    }
-
-    /**
-     * Method to access first page of this wizard
-     * 
-     * @return forst page to show in this wizard
-     */
-    public IWizardPage getInternalStartingPage() {
-      this.getStartingPage();
-      return this.startingPage;
-    }
-  }
+  
 }
