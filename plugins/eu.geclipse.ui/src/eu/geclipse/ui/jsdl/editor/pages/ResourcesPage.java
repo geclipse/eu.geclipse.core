@@ -65,8 +65,8 @@ public class ResourcesPage extends FormPage {
   private Text txtTotResCount;
   
   // Constructor
-  public ResourcesPage( final FormEditor editor, 
-                             final ArrayList<EObject> list)
+  public ResourcesPage( final FormEditor editor
+                        )
                             
    {
     

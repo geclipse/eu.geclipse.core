@@ -25,10 +25,8 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -42,9 +40,8 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
-import org.eclipse.ui.forms.widgets.TableWrapData;
-import org.eclipse.ui.forms.widgets.TableWrapLayout;
 import eu.geclipse.jsdl.ApplicationType;
+import eu.geclipse.jsdl.JsdlFactory;
 import eu.geclipse.jsdl.posix.DirectoryNameType;
 import eu.geclipse.jsdl.posix.FileNameType;
 import eu.geclipse.jsdl.posix.GroupNameType;
@@ -52,22 +49,19 @@ import eu.geclipse.jsdl.posix.LimitsType;
 import eu.geclipse.jsdl.posix.POSIXApplicationType;
 import eu.geclipse.jsdl.posix.PosixFactory;
 import eu.geclipse.jsdl.posix.UserNameType;
-import eu.geclipse.jsdl.posix.impl.FileNameTypeImpl;
 
 public class JobApplicationPage extends FormPage {
   
   Composite aS = null;
   Composite pS = null;
   Composite apS = null ;
-  ApplicationType applType = null;
   Text txtApplicationVersion = null;
   Text txtDescription = null;
   Hashtable< String, Text > widgetMap = new Hashtable< String, Text >();
   private Button btnTest;
   private Text txtExecutable;
   private Text txtPosixName;
-  private Text txtOutput;
-  private POSIXApplicationType posixApplType = null;
+  private Text txtOutput;  
   private Text txtApplicationName = null;
   private Text txtWallTimeLimit;
   private Text txtFileSizeLimit;
@@ -87,19 +81,21 @@ public class JobApplicationPage extends FormPage {
   private Text txtWorkingDirectory;
   private Button btnDel;
   
+  private ApplicationType applType = JsdlFactory.eINSTANCE
+                                                      .createApplicationType();
+  private POSIXApplicationType posixApplType = PosixFactory.eINSTANCE
+                                                 .createPOSIXApplicationType();
  
   // Constructor
-  public JobApplicationPage( final FormEditor editor, 
+  public JobApplicationPage( final FormEditor editor
+                             /*, 
                              final ArrayList<EObject> list,
-                             final ArrayList<EObject> plist 
+                             final ArrayList<EObject> plist */
                              ) {
     
     super(editor,Messages.JobApplicationPage_pageId , 
           Messages.JobApplicationPage_PageTitle);
-    
-    breakTypes(list);
    
-    breakpTypes(plist);
    
     }
   
@@ -151,7 +147,7 @@ public class JobApplicationPage extends FormPage {
                                        Messages.JobApplicationPage_ApplicationDescription,
                                        this.applType);  
     
-    populateAttributes(this.applType);
+    //populateAttributes(this.applType);
 
     
     this.apS = createAdditionalPosixSection(managedForm, 
@@ -166,7 +162,7 @@ public class JobApplicationPage extends FormPage {
                                   this.posixApplType);
            
        
-    populateAttributes(this.posixApplType);
+    //populateAttributes(this.posixApplType);
  
 //    form.getBody().setBackground(form.getBody().getDisplay().
 //                                 getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
@@ -216,7 +212,7 @@ public class JobApplicationPage extends FormPage {
                                                final ApplicationType object)
    {
     
-    String prefix = object.eClass().getName().toString();
+    String prefix = applType.eClass().getName().toString();
 
     GridData gd ;
     
@@ -300,7 +296,7 @@ public class JobApplicationPage extends FormPage {
                                           final String desc,
                                           final POSIXApplicationType object)
      {
-    String prefix = object.eClass().getName().toString();
+    String prefix = posixApplType.eClass().getName().toString();
     
     GridData lblgd;
     GridData gd;
@@ -761,4 +757,6 @@ public class JobApplicationPage extends FormPage {
       }
     }
   }
+
+  
 }

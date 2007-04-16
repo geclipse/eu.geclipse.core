@@ -17,8 +17,11 @@
 
 package eu.geclipse.ui.jsdl.editor.pages;
 
-import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.Iterator;
+import org.eclipse.emf.common.util.TreeIterator;
+import org.eclipse.emf.ecore.EAttribute;
+import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -39,48 +42,129 @@ import org.eclipse.ui.forms.widgets.Section;
 import eu.geclipse.jsdl.JobDefinitionType;
 import eu.geclipse.jsdl.JobDescriptionType;
 import eu.geclipse.jsdl.JobIdentificationType;
+import eu.geclipse.jsdl.JsdlFactory;
 
 public class JobDefinitionPage extends FormPage {
 
   Text txtId = null;
   Text txtDescription = null;
-  Composite jobDefComposite;
-  Composite jobIdentComposite;
-  JobDefinitionType jobDefType = null;
-  JobDescriptionType jobDescrType = null;
-  JobIdentificationType jobIdentType = null;
-  private Button btnADD;
-  private Button btnDel;
-
+  Text txtJobName = null;
+  Label lblJobId = null;
+  Label lblJobDescripiton = null;
+  Label lblJobAnnotation = null;
+  Label lblJobProject = null;
+  Button btnADD = null;
+  Button btnDel = null;
+  Button btnTest = null;
+  Composite jobDefComposite = null;
+  Composite jobIdentComposite = null;
   
-  public JobDefinitionPage( final FormEditor editor, 
-                            final ArrayList<EObject> list) {   
-    
-           super(editor, Messages.JobDefinitionPage_jobDefinitionId, 
-                                Messages.JobDefinitionPage_JobDefinitionTitle);
-           
-          
-           breakTypes(list);
+  
  
+  Hashtable< String, Text > widgetFeaturesMap = new Hashtable< String, Text >();
+  
+  
+  JobDefinitionType jobDefType = JsdlFactory.eINSTANCE.createJobDefinitionType();
+  JobDescriptionType jobDescrType = JsdlFactory.eINSTANCE.createJobDescriptionType();
+  JobIdentificationType jobIdentType = JsdlFactory.eINSTANCE.createJobIdentificationType();
+ 
+  private boolean contentRefreshed = false;
+  
+  public JobDefinitionPage( final FormEditor editor/*, 
+                            final ArrayList<EObject> list*/) {
+   
+    
+    super(editor, Messages.JobDefinitionPage_jobDefinitionId, 
+                                Messages.JobDefinitionPage_JobDefinitionTitle);
+    
   }
   
-  private void breakTypes(final ArrayList<EObject> list){
-   Iterator<EObject> it = list.iterator();
-   EObject type;
-   
-   
-   while (it.hasNext()){
-    type = (EObject) it.next();
+  public void setActive(final boolean active) {
     
-    if (type instanceof JobDefinitionType){
-      this.jobDefType = (JobDefinitionType) type;
-    }else if (type instanceof JobDescriptionType){
-      this.jobDescrType = (JobDescriptionType) type;  
-    }else if (type instanceof JobIdentificationType){
-      this.jobIdentType = (JobIdentificationType) type;  
+    if (isContentRefreshed()){
+      populateAttributes( jobDefType );
+      populateAttributes( jobIdentType );
     }    
-   }  
   }
+  
+  // Checks if the content of the model for this page is refreshed.
+  private boolean isContentRefreshed(){          
+    return this.contentRefreshed;
+     }
+
+  // Responsible for setting the content to this page.
+  public void setPageContent(final EObject rootJsdlElement, 
+                             final boolean refreshStatus){
+    
+    TreeIterator iterator = rootJsdlElement.eAllContents();
+    
+    if (refreshStatus) {
+      this.contentRefreshed = true;
+    }
+    // Get the Job Definition Element...which is actually the root
+    // element.
+    this.jobDefType = (JobDefinitionType) rootJsdlElement;
+    
+    while ( iterator.hasNext (  )  )  {  
+     
+      EObject testType = (EObject) iterator.next();
+          
+      if ( testType instanceof JobIdentificationType ) {
+        this.jobIdentType = (JobIdentificationType) testType;
+      } //end if JobIdentificationType
+      else {
+        // do Nothing
+      }
+        
+    } //End while   
+
+    
+  } // End void getPageContent()    
+  
+  /*
+   * Responsible for populating the attributes of the elements to each 
+   * associated widget in the form.
+   */
+  private void populateAttributes (final EObject object)
+  {
+    
+    Text widgetName = null;
+    //EDataType dataType = null;
+    
+    // Test if eObject is not empty.
+    if(object != null) {
+      EClass eClass = object.eClass();
+             
+        
+      for (Iterator iter = eClass.getEAllAttributes().iterator(); iter.hasNext();) {      
+        EAttribute attribute = (EAttribute) iter.next();
+        //get Attribute Data Type.
+        //dataType = attribute.getEAttributeType();
+        
+        //Get Prefix
+        String prefix = attribute.getContainerClass().getSimpleName().toString();
+        
+        //Get Attribute Name.
+        String attributeName = prefix + "_" + attribute.getName(); //$NON-NLS-1$
+                                      
+        //Get Attribute Value.
+        Object value = object.eGet( attribute );        
+      System.out.println(attributeName+" " + value.toString());
+        //Check if Attribute has any value
+        if (object.eIsSet( attribute )){          
+           widgetName = this.widgetFeaturesMap.get( attributeName );
+                 
+         //FIXME - any check should be removed..check cause of it.
+         if (attribute.getName().toString() != "any"){ //$NON-NLS-1$
+           System.out.println(widgetName.toString());
+           widgetName.setText(value.toString());
+         } //end if
+                   
+        } //end if
+      } //end for
+    } //end if
+  } // End void populateAttributes()
+    
 
   @Override
   
@@ -108,11 +192,18 @@ public class JobDefinitionPage extends FormPage {
                                  Messages.JobDefinitionPage_JobDefinitionTitle, 
                                  Messages.JobDefinitionPage_JobDefinitionDescr);  
            
-   
+   if (!this.jobDefType.equals( null )){
+     populateAttributes( this.jobDefType );
+   }
+     
 
     this.jobIdentComposite = createJobIdentificationSection(managedForm, 
                              Messages.JobDefinitionPage_JobIdentificationTitle, 
-                             Messages.JobDefinitionPage_JobIdentificationDescr); 
+                             Messages.JobDefinitionPage_JobIdentificationDescr);
+    
+    if (!this.jobIdentType.equals( null )){
+      populateAttributes( this.jobIdentType );
+    }
 
   }
   
@@ -158,15 +249,18 @@ public class JobDefinitionPage extends FormPage {
                                           final String title, final String desc)
   {
    
+    String prefix = this.jobDefType.eClass().getName().toString();
+    
     Composite client = createSection(mform, title, desc, 2);
     FormToolkit toolkit = mform.getToolkit();
     GridData gd = new GridData();
     //gd.horizontalSpan = 2;
-    
-    Label lblJobId = toolkit.createLabel(client,
+   
+    this.lblJobId = toolkit.createLabel(client,
                                     Messages.JobDefinitionPage_JobDefinitionId);
     
-    this.txtId = toolkit.createText(client, this.jobDefType.getId(), SWT.BORDER);
+    this.txtId = toolkit.createText(client,"", SWT.BORDER);
+    this.widgetFeaturesMap.put( prefix + "_id", this.txtId ); //$NON-NLS-1$
     this.txtId.addFocusListener( new org.eclipse.swt.events.FocusListener() {
       public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
         JobDefinitionPage.this.jobDefType.setId(JobDefinitionPage.this.
@@ -200,6 +294,7 @@ public class JobDefinitionPage extends FormPage {
     Composite client = createSection(mform, title, desc, 3);
     FormToolkit toolkit = mform.getToolkit();
        
+    String prefix = this.jobIdentType.eClass().getName().toString();
     
     GridData gd ;
     GridData lblgd;
@@ -212,22 +307,23 @@ public class JobDefinitionPage extends FormPage {
     GridData gridData = new GridData();
     gridData.horizontalAlignment = GridData.FILL;
     gridData.horizontalSpan = 2;
-    Text txtJobName = toolkit.createText(client, this.jobIdentType.getJobName(), SWT.BORDER); 
+    this.txtJobName = toolkit.createText(client,"", SWT.BORDER); 
+    this.widgetFeaturesMap.put( prefix + "_jobName", this.txtJobName ); //$NON-NLS-1$
     txtJobName.setLayoutData(gridData);
 
     txtJobName.setLayoutData(gridData);
     
     
     //Create the Label and Text for the Job Description Element
-    Label lblJobDescripiton = toolkit.createLabel (client,
+    this.lblJobDescripiton = toolkit.createLabel (client,
                                            Messages.JobDefinitionPage_JobDescr);
     lblgd = new GridData();
     lblgd.verticalSpan = 1;
     lblJobDescripiton.setLayoutData (lblgd);
     
-    this.txtDescription = toolkit.createText(client, 
-             this.jobIdentType.getDescription(),SWT.BORDER | SWT.MULTI 
-                                             | SWT.V_SCROLL | SWT.WRAP); 
+    this.txtDescription = toolkit.createText(client,"",SWT.BORDER | SWT.MULTI 
+                                                   | SWT.V_SCROLL | SWT.WRAP);
+    
   
     gridData = new GridData();
     gridData.verticalAlignment = GridData.FILL;
@@ -238,6 +334,7 @@ public class JobDefinitionPage extends FormPage {
     gridData.heightHint = 150;
     this.txtDescription.setLayoutData(gridData);
     
+    this.widgetFeaturesMap.put( prefix + "_description", this.txtDescription ); //$NON-NLS-1$
     this.txtDescription.addFocusListener( new org.eclipse.swt.events.FocusListener() {
       public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
         JobDefinitionPage.this.jobIdentType.setDescription( JobDefinitionPage.
@@ -250,7 +347,7 @@ public class JobDefinitionPage extends FormPage {
     
     
     //Create the Label and List for Job Annotation Element
-    Label lblJobAnnotation = toolkit.createLabel(client,
+    this.lblJobAnnotation = toolkit.createLabel(client,
                                       Messages.JobDefinitionPage_JobAnnotation); 
     lblgd = new GridData();
     lblgd.verticalSpan = 3;
@@ -287,7 +384,7 @@ public class JobDefinitionPage extends FormPage {
     }
     
     //Create the Label and List for Job Project Element
-     Label lblJobProject = toolkit.createLabel(client,
+     this.lblJobProject = toolkit.createLabel(client,
                                        Messages.JobDefinitionPage_JobProject);
      lblgd = new GridData();
      lblgd.verticalSpan = 3;
@@ -324,6 +421,8 @@ public class JobDefinitionPage extends FormPage {
     return client;
      
   }
+  
+  
 
  }
   

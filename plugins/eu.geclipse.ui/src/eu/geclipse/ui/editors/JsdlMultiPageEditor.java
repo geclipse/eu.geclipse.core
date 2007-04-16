@@ -72,7 +72,6 @@ import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
@@ -82,14 +81,8 @@ import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.forms.editor.FormEditor;
-import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.FileEditorInput;
-import eu.geclipse.jsdl.ApplicationType;
-import eu.geclipse.jsdl.DataStagingType;
 import eu.geclipse.jsdl.JobDefinitionType;
-import eu.geclipse.jsdl.JobDescriptionType;
-import eu.geclipse.jsdl.JobIdentificationType;
-import eu.geclipse.jsdl.posix.POSIXApplicationType;
 import eu.geclipse.jsdl.posix.provider.PosixItemProviderAdapterFactory;
 import eu.geclipse.jsdl.provider.JsdlItemProviderAdapterFactory;
 import eu.geclipse.ui.internal.Activator;
@@ -114,15 +107,14 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
   protected boolean updateProblemIndication = true;
   protected MarkerHelper markerHelper = new EditUIMarkerHelper();
   protected ComposedAdapterFactory adapterFactory;
-  protected JobDefinitionType jobDefType;
-  protected ArrayList<EObject> jobDefList = new ArrayList<EObject>();
-  protected ArrayList<EObject> applList = new ArrayList<EObject>();
-  protected ArrayList<EObject> posixApplList = new ArrayList<EObject>();
-  protected ArrayList<EObject> dataStagingList = new ArrayList<EObject>();
-  protected ArrayList<EObject> resourcesList = new ArrayList<EObject>();
-  private TextEditor editor=null;
+  protected JobDefinitionType jobDefType = null;  
+  private TextEditor editor = null;
   private int sourcePageIndex;
-//JobDefinitionPage jobDefPage;
+  private JobDefinitionPage jobDefPage = new JobDefinitionPage(this);
+  private JobApplicationPage jobApplicationPage = new JobApplicationPage(this);
+  private DataStagingPage dataStagingPage = new DataStagingPage(this);
+  private ResourcesPage resourcesPage = new ResourcesPage(this);
+  private boolean refreshedModel = false;
   
   public JsdlMultiPageEditor(){
     // Create an adapter factory that yields item providers.
@@ -156,14 +148,7 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
                   // Try to select the affected objects.
                   //
                   Command mostRecentCommand = ((CommandStack)event.getSource()).getMostRecentCommand();
-//                  if (mostRecentCommand != null)
-//                  {
-//                    setSelectionToViewer(mostRecentCommand.getAffectedObjects());
-//                  }
-//                  if (jobDefPage != null && !jobDefPage.getControl().isDisposed())
-//                  {
-//                    jobDefPage.refresh();
-//                  }
+
                 }
               });
          }
@@ -182,24 +167,46 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
   @Override
   protected void addPages()
   {
-    createJsdlModel();
-    
+    getJsdlModel();
    
-    
+      
      try {
-      addPage(new JobDefinitionPage(this,this.jobDefList));
-      addPage(new JobApplicationPage(this,this.applList,this.posixApplList));
-      addPage(new ResourcesPage(this,this.resourcesList));
-      addPage(new DataStagingPage(this,this.dataStagingList));
-      addSourcePage();
+      addPage(this.jobDefPage);      
+      addPage(this.jobApplicationPage);
+      addPage(this.resourcesPage);
+      addPage(this.dataStagingPage);
+      addResourceEditorPage();
+      pushContentToPages();
          }
    catch (PartInitException e) {
-    //
+      Activator.logException( e );
    }
     
   }
+  
+  /*
+   * This method is responsible for pushing content to the 
+   * pages. The content pushed is actually the JobDefinition
+   * element, which is the root element.
+   */
+  private void pushContentToPages(){    
+    this.jobDefPage.setPageContent( this.jobDefType, isModelRefreshed());
+  }
+  
+  /*
+   * Returns true if the Model was refreshed/changed.
+   * This could be caused by an external editor
+  */ 
+  public boolean isModelRefreshed(){
+     
+    return refreshedModel;
+  }
+  
  
-  public void addSourcePage()throws PartInitException{
+  /*
+   * This method adds the Resource Editor Page to the Multi-page editior
+   */
+  private void addResourceEditorPage()throws PartInitException{
     
     this.sourcePageIndex = addPage(getSourceEditor(), getEditorInput());
     
@@ -209,6 +216,9 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
     
   }
    
+  /*
+   * This method returns a Text Editor for addResourceEditorPage method.
+   */
 
   private TextEditor getSourceEditor()
   {  
@@ -227,6 +237,7 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
     setPartName(editorInput.getName());
     ResourcesPlugin.getWorkspace().addResourceChangeListener(resourceChangeListener, IResourceChangeEvent.POST_CHANGE);
 }
+
 
   protected IResourceChangeListener resourceChangeListener =
     new IResourceChangeListener()
@@ -258,11 +269,11 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
                     {
                       if ((delta.getKind() & IResourceDelta.REMOVED) != 0)
                       {
-                        removedResources.add(resource);
+                        this.removedResources.add(resource);
                       }
                       else if (!savedResources.remove(resource))
                       {
-                        changedResources.add(resource);
+                        this.changedResources.add(resource);
                       }
                     }
                   }
@@ -389,7 +400,8 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
             }
           }
           this.updateProblemIndication = true;
-          updateProblemIndication();
+          updateProblemIndication();          
+          getJsdlModel();          
         }
       }
 
@@ -510,12 +522,7 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
     // TODO Auto-generated method stub
     return true;
   }
-  
-  @Override
-  protected FormToolkit createToolkit(final Display display) {
-    // Create a toolkit that shares colors between editors.
-    return new FormToolkit(Activator.getDefault().getFormColors(display));
-   }
+ 
  
   protected void updateProblemIndication()
   {
@@ -643,7 +650,13 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
     };
   
   
-  public void createJsdlModel(){
+    
+    /*
+     * Responsible for de-serializing the model from the resource file.
+     * The resource is passed to the getResourceRoot method.     * 
+     * 
+     */
+  public void getJsdlModel(){
     
     // Assumes that the input is a file object.
     //
@@ -669,8 +682,15 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
       this.resourceToDiagnosticMap.put(resource,  analyzeResourceProblems(resource, exception));
     }
       this.editingDomain.getResourceSet().eAdapters().add(this.problemIndicationAdapter);
+
+    getResourceRoot(resource); 
     
-    getImpl(resource);
+    // This means the file was edited from an external editor so
+    // push the new JSDL model to the pages.
+    if (!this.changedResources.isEmpty()){      
+      this.refreshedModel = true;
+      pushContentToPages();
+    }
     
   }
     
@@ -680,7 +700,7 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
    appear. Each JSDL type is then passed as a reference parameter (EList) in the 
    appropriate page of the JSDL editor.   
   */
-  private void getImpl(final Resource resource){
+  private void getResourceRoot(final Resource resource){
    
     // Get an iterator to iterate through all contents of the resource.
     TreeIterator iterator = resource.getAllContents();
@@ -691,18 +711,9 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
 
        // Instaceof checks for each EObject that appears in the resource.
       
-       if (testType instanceof JobDefinitionType){
-         this.jobDefList.add(testType);
-       } else if (testType instanceof JobDescriptionType){
-         this.jobDefList.add(testType);
-       } else if (testType instanceof JobIdentificationType){
-         this.jobDefList.add(testType);
-       } else if (testType instanceof ApplicationType){
-         this.applList.add(testType);
-       } else if (testType instanceof POSIXApplicationType){
-         this.posixApplList.add(testType);
-       }
-        
+       if (testType instanceof JobDefinitionType){         
+         this.jobDefType = (JobDefinitionType) testType;
+       }       
        else {
          //do nothing
        }
@@ -758,6 +769,8 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
     {
       InputStream stream = this.editingDomain.getResourceSet().getURIConverter().createInputStream(resource.getURI());
       if (stream != null)
+        
+
       {
         result = true;
         stream.close();
@@ -770,41 +783,41 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
     return result;
   }
   
-  
+  // Method triggered when there are changes between the form pages.
     @Override
     protected void pageChange(final int pageIndex)
-      {
-        super.pageChange(pageIndex);
+     {      
+        super.pageChange(pageIndex);        
         IProgressMonitor progressMonitor = new NullProgressMonitor();
-        doSave(progressMonitor);
-       
-      
-      }
+        doSave(progressMonitor);     
+     }
+    
     
     public class ReverseAdapterFactoryContentProvider extends AdapterFactoryContentProvider 
     {
-        public ReverseAdapterFactoryContentProvider(AdapterFactory adapterFactory) {
+        public ReverseAdapterFactoryContentProvider(final AdapterFactory adapterFactory) {
             super(adapterFactory);
         }
 
-        public Object [] getElements(Object object) {
+        public Object [] getElements(final Object object) {
             Object parent = super.getParent(object);
             return (parent == null ? Collections.EMPTY_SET : Collections.singleton(parent)).toArray();
         }
 
-        public Object [] getChildren(Object object) {
+        public Object [] getChildren(final Object object) {
             Object parent = super.getParent(object);
             return (parent == null ? Collections.EMPTY_SET : Collections.singleton(parent)).toArray();
         }
 
-        public boolean hasChildren(Object object) {
+        public boolean hasChildren(final Object object) {
             Object parent = super.getParent(object);
             return parent != null;
         }
 
-        public Object getParent(Object object) {
+        public Object getParent(final Object object) {
             return null;
         }
     }
+    
   
-}
+} // End Class

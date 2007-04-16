@@ -17,8 +17,6 @@
 
 package eu.geclipse.ui.jsdl.editor.pages;
 
-import java.util.ArrayList;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -45,8 +43,7 @@ public class DataStagingPage extends FormPage{
   private Text txtTarget;
   
   // Constructor
-  public DataStagingPage( final FormEditor editor, 
-                             final ArrayList<EObject> list)
+  public DataStagingPage( final FormEditor editor )
                             
    {
     
