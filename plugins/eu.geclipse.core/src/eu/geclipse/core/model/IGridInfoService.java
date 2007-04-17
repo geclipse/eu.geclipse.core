@@ -56,7 +56,11 @@ public interface IGridInfoService extends IGridService {
    * VO is <code>null</code>.
    */
   public IGridStorage[] fetchStorage( final IGridContainer parent,
-                                      final IVirtualOrganization vo,
-                                      final IProgressMonitor monitor );
+          final IVirtualOrganization vo,
+          final IProgressMonitor monitor );
   
+  public IGridService[] fetchServices( final IGridContainer parent,
+          final IVirtualOrganization vo,
+          final IProgressMonitor monitor );
+
 }

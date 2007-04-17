@@ -133,17 +133,17 @@ public class VoResourceContainer
     IGridElement[] children = null;
     
     // Fetch the information
-    if ( this.type == ResourceType.Service ) {
-      children = this.vo.getServices();
-    } else {
-      IGridInfoService infoService = getVo().getInfoService();
-      if ( infoService != null ) {
-        if ( this.type == ResourceType.Computing ) {
+    IGridInfoService infoService = getVo().getInfoService();
+    if ( infoService != null ) {
+    	if ( this.type == ResourceType.Service ) {
+    	  children = infoService.fetchServices( this, this.vo, monitor );
+   	    } else if ( this.type == ResourceType.Computing ) {
           children = infoService.fetchComputing( this, this.vo, monitor );
         } else if ( this.type == ResourceType.Storage ) {
           children = infoService.fetchStorage( this, this.vo, monitor );
-        }
-      }
+        } 
+    }else if ( this.type == ResourceType.Service ) {
+        children = this.vo.getServices();
     }
     
     // Add children to the container
