@@ -22,6 +22,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.net.URI;
+import java.text.DecimalFormat;
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IContainer;
@@ -41,7 +42,6 @@ import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridRoot;
-import eu.geclipse.core.model.impl.AbstractGridContainer;
 
 /**
  * {@link IFile} implementation in order to wrap
@@ -106,35 +106,54 @@ public class GridConnectionFileAdapter
                       final IProgressMonitor monitor )
       throws CoreException {
     
-    BufferedInputStream biStream = new BufferedInputStream( source );
-    IFileStore fileStore = getFileStore();
-    OutputStream oStream = fileStore.openOutputStream( EFS.NONE, monitor );
-    BufferedOutputStream boStream = new BufferedOutputStream( oStream );
-    int b;
-    
+    IProgressMonitor localMonitor
+      = monitor == null
+      ? new NullProgressMonitor()
+      : monitor;
+      
+    localMonitor.beginTask( "Creating " + getName(), 1 );
+
     try {
-      while ( ( b = biStream.read() ) != -1 ) {
-        boStream.write( b );
-      }
-      boStream.close();
-      biStream.close();
-    } catch ( IOException ioExc ) {
-      IStatus status = new Status( IStatus.ERROR,
-                                   Activator.PLUGIN_ID,
-                                   IStatus.CANCEL,
-                                   Messages.getString("GridConnectionFileAdapter.create_failed"), //$NON-NLS-1$
-                                   ioExc );
-      throw new CoreException( status );
-    }
     
-    GridConnectionElement child = getGridConnection();
-    IGridContainer parent = child.getParent();
-    if ( parent instanceof GridConnectionElement ) {
-      GridConnectionElement gce = ( GridConnectionElement ) parent;
-      gce.addChild( child );
-    } else {
-      parent.setDirty();
-      parent.getChildren( monitor );
+      BufferedInputStream biStream = new BufferedInputStream( source );
+      IFileStore fileStore = getFileStore();
+      OutputStream oStream = fileStore.openOutputStream( EFS.NONE, monitor );
+      BufferedOutputStream boStream = new BufferedOutputStream( oStream );
+      int b;
+      long bcount = 0;
+      
+      try {
+        while ( ( b = biStream.read() ) != -1 ) {
+          boStream.write( b );
+          bcount++;
+          handleProgress( localMonitor, bcount );
+          if ( localMonitor.isCanceled() ) break;
+        }
+        boStream.close();
+        biStream.close();
+      } catch ( IOException ioExc ) {
+        IStatus status = new Status( IStatus.ERROR,
+                                     Activator.PLUGIN_ID,
+                                     IStatus.CANCEL,
+                                     Messages.getString("GridConnectionFileAdapter.create_failed"), //$NON-NLS-1$
+                                     ioExc );
+        throw new CoreException( status );
+      }
+      
+      localMonitor.worked( 1 );
+      
+      GridConnectionElement child = getGridConnection();
+      IGridContainer parent = child.getParent();
+      if ( parent instanceof GridConnectionElement ) {
+        GridConnectionElement gce = ( GridConnectionElement ) parent;
+        gce.addChild( child );
+      } else {
+        parent.setDirty();
+        parent.getChildren( monitor );
+      }
+      
+    } finally {
+      localMonitor.done();
     }
     
   }
@@ -281,4 +300,21 @@ public class GridConnectionFileAdapter
   public int getType() {
     return IResource.FILE;
   }
+  
+  private void handleProgress( final IProgressMonitor monitor,
+                               final long bytes ) {
+    final long kb = 1024;
+    final long mb = 1024*kb;
+    final long gb = 1024*mb;
+    if ( bytes < 1024 ) {
+      monitor.subTask( getName() + " (" + bytes + "B transfered)" );
+    } else if ( ( bytes < 1048576 ) && ( ( bytes % 1024 ) == 0 ) ) {
+      monitor.subTask( getName() + " (" + ( bytes/1024 ) + "kB transfered)" );
+    } else if ( ( bytes % ( 1048576/10 ) ) == 0 ) {
+      DecimalFormat format = new DecimalFormat("#,###,##0.0");
+      String mbstring = format.format( bytes/1048576. );
+      monitor.subTask( getName() + " (" + mbstring + "MB transfered)" );
+    }
+  }
+  
 }
