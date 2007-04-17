@@ -43,7 +43,7 @@ import eu.geclipse.core.model.impl.ResourceGridContainer;
  * This Grid root is associated with the underlying
  * {@link org.eclipse.core.resources.IWorkspaceRoot}. 
  */
-public class GridRoot
+public final class GridRoot
     extends ResourceGridContainer
     implements IGridRoot {
   
@@ -79,7 +79,7 @@ public class GridRoot
    * 
    * @return The singleton instance.
    */
-  public static GridRoot getInstance() {
+  public final static GridRoot getInstance() {
     if ( singleton == null ) {
       singleton = new GridRoot();
     }
@@ -93,7 +93,7 @@ public class GridRoot
    * @return The singleton instance or <code>null</code> if the
    * singleton was not yet instatiated.
    */
-  public static GridRoot getRoot() {
+  public final static GridRoot getRoot() {
     return singleton;
   }
   
@@ -117,7 +117,7 @@ public class GridRoot
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridRoot#findElement(org.eclipse.core.runtime.IPath)
    */
-  public IGridElement findElement( final IPath path ) {
+  public final IGridElement findElement( final IPath path ) {
     IGridElement element = null;
     String[] segments = path.segments();
     IGridContainer container = this;
@@ -135,7 +135,7 @@ public class GridRoot
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridRoot#findElement(org.eclipse.core.resources.IResource)
    */
-  public IGridElement findElement( final IResource resource ) {
+  public final IGridElement findElement( final IResource resource ) {
     IGridElement result = null;
     IPath path = resource.getFullPath();
     if ( ( path.segmentCount() == 0 ) && !path.isEmpty() ) {
