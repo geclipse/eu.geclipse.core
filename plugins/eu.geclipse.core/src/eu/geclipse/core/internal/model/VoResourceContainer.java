@@ -135,13 +135,13 @@ public class VoResourceContainer
     // Fetch the information
     IGridInfoService infoService = getVo().getInfoService();
     if ( infoService != null ) {
-    	if ( this.type == ResourceType.Service ) {
-    	  children = infoService.fetchServices( this, this.vo, monitor );
-   	    } else if ( this.type == ResourceType.Computing ) {
-          children = infoService.fetchComputing( this, this.vo, monitor );
-        } else if ( this.type == ResourceType.Storage ) {
-          children = infoService.fetchStorage( this, this.vo, monitor );
-        } 
+      if ( this.type == ResourceType.Service ) {
+        children = infoService.fetchServices( this, this.vo, monitor );
+      } else if ( this.type == ResourceType.Computing ) {
+        children = infoService.fetchComputing( this, this.vo, monitor );
+      } else if ( this.type == ResourceType.Storage ) {
+        children = infoService.fetchStorage( this, this.vo, monitor );
+      } 
     }else if ( this.type == ResourceType.Service ) {
         children = this.vo.getServices();
     }
