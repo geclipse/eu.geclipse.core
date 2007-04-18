@@ -14,6 +14,7 @@ import eu.geclipse.core.model.IGridComputing;
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridService;
 import eu.geclipse.core.model.IGridStorage;
 import eu.geclipse.core.model.IVirtualOrganization;
@@ -33,6 +34,8 @@ public class GridModelLabelProvider
   
   private Image serviceImage;
   
+  private Image jobImage;
+
   private Image storageImage;
   
   private Image virtualFileImage;
@@ -85,6 +88,8 @@ public class GridModelLabelProvider
       resultImage = getStorageImage();
     } else if ( element instanceof IGridService ) {
       resultImage = getServiceImage();
+//    } else if ( element instanceof IGridJob ) {
+//      resultImage = getJobImage();
     }
     return resultImage;
   }
@@ -171,6 +176,14 @@ public class GridModelLabelProvider
         = Activator.getDefault().getImageRegistry().get( "service" ); //$NON-NLS-1$
     }
     return this.serviceImage;
+  }
+
+  private Image getJobImage() {
+    if ( this.jobImage == null ) {
+      this.jobImage
+        = Activator.getDefault().getImageRegistry().get( "job" ); //$NON-NLS-1$
+    }
+    return this.jobImage;
   }
 
   private Image getStorageImage() {

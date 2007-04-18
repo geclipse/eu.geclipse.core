@@ -11,6 +11,7 @@
  *
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
+ *    Pawel Wolniewicz, PSNC 
  *****************************************************************************/
 
 package eu.geclipse.core;
@@ -95,6 +96,17 @@ public class Extensions {
   public static final String PROBLEM_PROVIDER_EXECUTABLE
     = "class"; //$NON-NLS-1$
   
+  
+    public static List< IGridElementCreator > elementCreators=null;
+
+    private static List<IAuthenticationTokenDescription> authTokenDescriptions;
+
+    private static List<IProblemProvider> problemProviders;
+
+    private static List<String> authTokenNames;
+    
+  
+  
   /**
    * Get a list with the names of all registered authentication tokens.
    * The list will be sorted alphabetically.
@@ -103,7 +115,8 @@ public class Extensions {
    * currently available tokens.
    */
   public static List< String > getRegisteredAuthTokenNames() {
-    List< String > resultList = new ArrayList< String >();
+    if( authTokenNames == null ) {
+List< String > resultList = new ArrayList< String >();
     ExtensionManager manager = new ExtensionManager();
     List< IConfigurationElement > cElements
       = manager.getConfigurationElements( AUTH_TOKEN_MANAGEMENT_POINT,
@@ -115,7 +128,9 @@ public class Extensions {
       }
     }
     Collections.sort( resultList );
-    return resultList;
+    authTokenNames=resultList;
+    }
+    return authTokenNames;
   }
   
   /**
@@ -127,6 +142,7 @@ public class Extensions {
    * configuration elements.
    */
   public static List< IAuthenticationTokenDescription > getRegisteredAuthTokenDescriptions() {
+    if( authTokenDescriptions == null ) {
     List< IAuthenticationTokenDescription > resultList
       = new ArrayList< IAuthenticationTokenDescription >();
     ExtensionManager manager = new ExtensionManager();
@@ -139,26 +155,30 @@ public class Extensions {
         resultList.add( ( IAuthenticationTokenDescription ) o );
       }
     }
-    return resultList;
+    authTokenDescriptions=resultList;
+    }
+    return authTokenDescriptions;
   }
   
-  public static List< IGridElementCreator > getRegisteredElementCreators() {
-    List< IGridElementCreator > resultList
-      = new ArrayList< IGridElementCreator >();
-    ExtensionManager manager = new ExtensionManager();
-    List< Object > objectList
-      = manager.getExecutableExtensions( GRID_ELEMENT_CREATOR_POINT,
-                                         GRID_ELEMENT_CREATOR_ELEMENT,
-                                         GRID_ELEMENT_CREATOR_EXECUTABLE );
-    for ( Object o : objectList ) {
-      if ( o instanceof IGridElementCreator ) {
-        resultList.add( ( IGridElementCreator ) o );
+  public static List<IGridElementCreator> getRegisteredElementCreators() {
+    if( elementCreators == null ) {
+      List<IGridElementCreator> resultList = new ArrayList<IGridElementCreator>();
+      ExtensionManager manager = new ExtensionManager();
+      List<Object> objectList = manager.getExecutableExtensions( GRID_ELEMENT_CREATOR_POINT,
+                                                                 GRID_ELEMENT_CREATOR_ELEMENT,
+                                                                 GRID_ELEMENT_CREATOR_EXECUTABLE );
+      for( Object o : objectList ) {
+        if( o instanceof IGridElementCreator ) {
+          resultList.add( ( IGridElementCreator )o );
+        }
       }
+      elementCreators=resultList;
     }
-    return resultList;
+    return elementCreators;
   }
   
   public static List< IProblemProvider > getRegisteredProblemProviders() {
+    if( problemProviders == null ) {
     List< IProblemProvider > resultList
       = new ArrayList< IProblemProvider >();
     ExtensionManager manager = new ExtensionManager();
@@ -171,7 +191,8 @@ public class Extensions {
         resultList.add( ( IProblemProvider ) o );
       }
     }
-    return resultList;
+    problemProviders=resultList;
   }
-  
+  return problemProviders;
+}
 }

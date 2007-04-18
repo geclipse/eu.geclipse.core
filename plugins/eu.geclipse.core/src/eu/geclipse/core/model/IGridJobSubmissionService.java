@@ -20,7 +20,7 @@ package eu.geclipse.core.model;
 import eu.geclipse.core.GridException;
 
 
-public interface IGridJobSubmitter {
+public interface IGridJobSubmissionService extends IGridService{
   /**
    * TODO pawel
    * 
@@ -30,13 +30,13 @@ public interface IGridJobSubmitter {
    */
   public IGridJobID submitJob( final IGridJobDescription parent ) throws GridException;
 
-  /**
-   * TODO pawel
-   * 
-   * @param parent TODO pawel
-   * @param destination TODO pawel
-   * @return TODO pawel
-   * @throws GridModelException TODO pawel
-   */
-  public IGridJobID submitJob( final IGridJobDescription parent, final String destination ) throws GridException;
+//  /**
+//   * TODO pawel
+//   * 
+//   * @param parent TODO pawel
+//   * @param destination TODO pawel
+//   * @return TODO pawel
+//   * @throws GridModelException TODO pawel
+//   */
+//  public IGridJobID submitJob( final IGridJobDescription parent, final String destination ) throws GridException;
 }

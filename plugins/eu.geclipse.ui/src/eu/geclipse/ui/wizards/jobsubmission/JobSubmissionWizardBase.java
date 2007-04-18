@@ -22,7 +22,7 @@ import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridJobCreator;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridJobID;
-import eu.geclipse.core.model.IGridJobSubmitter;
+import eu.geclipse.core.model.IGridJobSubmissionService;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.ui.UISolutionRegistry;
 import eu.geclipse.ui.dialogs.NewProblemDialog;
@@ -31,7 +31,6 @@ import eu.geclipse.ui.wizards.wizardselection.IInitalizableWizard;
 
 public abstract class JobSubmissionWizardBase extends Wizard implements IInitalizableWizard, IExecutableExtension {
   protected IGridJobCreator creator;
-  protected IGridJobSubmitter submitter;
   protected List< IGridJobDescription > jobDescriptions;
 
   @Override
@@ -48,13 +47,17 @@ public abstract class JobSubmissionWizardBase extends Wizard implements IInitali
               if ( JobSubmissionWizardBase.this.creator.canCreate( description ) ) {
                 try {
                   IGridContainer parent = buildPath( description );
-                  String destination=getDestination();
+                  IGridJobSubmissionService service=getSubmissionService();
                   IGridJobID jobId=null;
-                  if(destination==null){
-                    jobId = JobSubmissionWizardBase.this.submitter.submitJob( description );
+                  if(service!=null){
+                    jobId = service.submitJob( description );
                   }
                   else{
-                    jobId = JobSubmissionWizardBase.this.submitter.submitJob( description, destination );
+                    NewProblemDialog.openProblem( getShell(),
+                                                  "Job submission failed",
+                                                  "Cannot find a Job Submission Service to submit job to.",
+                                                  null,
+                                                  UISolutionRegistry.getRegistry() );
                   }
                   JobSubmissionWizardBase.this.creator.create( parent, jobId );
                 } catch( GridModelException gmExc ) {
@@ -75,6 +78,7 @@ public abstract class JobSubmissionWizardBase extends Wizard implements IInitali
             monitor.done();
           }
 
+
         } );
       } catch( InvocationTargetException itExc ) {
         Throwable cause = itExc.getCause();
@@ -94,12 +98,10 @@ public abstract class JobSubmissionWizardBase extends Wizard implements IInitali
 
   /**
    * Method called when wizzard is finished, and job should be submitted
-   * Dectination string is passed to submitJob method of IGridJobSubmitter
+   * Submission service is then asked to submit job using submitJob method
    * @return
    */
-  protected abstract String getDestination();
-
-  
+  protected abstract IGridJobSubmissionService getSubmissionService();  
   
   private IGridContainer buildPath( final IGridJobDescription description ) throws CoreException {
     IGridContainer result = null;
@@ -154,14 +156,14 @@ public abstract class JobSubmissionWizardBase extends Wizard implements IInitali
         }
         creator=( IGridJobCreator )obj;
       }
-      if("job_submitter".equals( element.getName())){
-        Object obj=element.createExecutableExtension( "class" );
-        if(!(obj instanceof IGridJobSubmitter)){
-          Status status=new Status(Status.ERROR, Activator.PLUGIN_ID, Status.OK, "Job Creator configured in class atribute for job_submitter element in eu.geclipse.ou.jobSubmissionWizzard is not implementing IGridJobSubmitter interface",null);
-          throw new CoreException(status);
-        }
-        submitter=( IGridJobSubmitter )obj;
-      }
+//      if("job_submitter".equals( element.getName())){
+//        Object obj=element.createExecutableExtension( "class" );
+//        if(!(obj instanceof IGridJobSubmissionService)){
+//          Status status=new Status(Status.ERROR, Activator.PLUGIN_ID, Status.OK, "Job Creator configured in class atribute for job_submitter element in eu.geclipse.ou.jobSubmissionWizzard is not implementing IGridJobSubmitter interface",null);
+//          throw new CoreException(status);
+//        }
+//        submitter=( IGridJobSubmissionService )obj;
+//      }
     }
   }
 }
