@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: %pluginName
+Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: eu.geclipse.jsdl; singleton:=true
 Bundle-Version: 0.5.0.qualifier
 Bundle-ClassPath: .
-Bundle-Vendor: %providerName
+Bundle-Vendor: %Bundle-Vendor
 Bundle-Localization: plugin
 Export-Package: eu.geclipse.jsdl,
  eu.geclipse.jsdl.impl,
