@@ -43,10 +43,12 @@ public abstract class GridElementTransferOperation
       : monitor;
       
     String errors = ""; //$NON-NLS-1$
-    localMonitor.beginTask( "Transfering elements", this.elements.length );
+    localMonitor.beginTask( "Transfering elements ... ", this.elements.length );
     try {
       
       for ( IGridElement element : this.elements ) {
+        
+        localMonitor.subTask( element.getName() );
         
         IProgressMonitor subMonitor = new SubProgressMonitor( localMonitor, 1 );
         try {
@@ -58,7 +60,7 @@ public abstract class GridElementTransferOperation
           subMonitor.done();
         }
         
-        if ( monitor.isCanceled() ) {
+        if ( localMonitor.isCanceled() ) {
           throw new OperationCanceledException();
         }
         

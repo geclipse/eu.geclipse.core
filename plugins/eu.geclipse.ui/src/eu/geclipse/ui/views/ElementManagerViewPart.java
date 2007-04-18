@@ -66,8 +66,7 @@ public abstract class ElementManagerViewPart
   }
   
   @Override
-  protected void contributeAdditionalActions( @SuppressWarnings("unused")
-                                              final ActionGroupManager groups ) {
+  protected void contributeAdditionalActions( final ActionGroupManager groups ) {
     ActionGroup group = new ViewModeActions( this );
     groups.addGroup( group );
   }

@@ -2,21 +2,33 @@ package eu.geclipse.ui.views;
 
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
+import org.eclipse.ui.IWorkbenchWindow;
 import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridConnectionElement;
-import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementManager;
+import eu.geclipse.ui.internal.actions.ActionGroupManager;
+import eu.geclipse.ui.internal.actions.ConnectionViewActions;
 import eu.geclipse.ui.providers.ConfigurableContentProvider;
 import eu.geclipse.ui.providers.ConnectionViewContentProvider;
 import eu.geclipse.ui.providers.ConnectionViewLabelProvider;
 
 public class GridConnectionView extends ElementManagerViewPart {
 
+  @Override
+  protected void contributeAdditionalActions( final ActionGroupManager groups ) {
+    
+    
+    IWorkbenchWindow workbenchWindow = this.getSite().getWorkbenchWindow();
+    ConnectionViewActions cActions = new ConnectionViewActions( workbenchWindow );
+    groups.addGroup( cActions );
+     
+    super.contributeAdditionalActions( groups );
+    
+  }
+  
   @Override
   protected IGridElementManager getManager() {
     return GridModel.getConnectionManager();
@@ -27,7 +39,7 @@ public class GridConnectionView extends ElementManagerViewPart {
     ConfigurableContentProvider provider
       = new ConnectionViewContentProvider();
     return provider;
-  };
+  }
   
   /* (non-Javadoc)
    * @see eu.geclipse.ui.views.GridModelViewPart#createLabelProvider()

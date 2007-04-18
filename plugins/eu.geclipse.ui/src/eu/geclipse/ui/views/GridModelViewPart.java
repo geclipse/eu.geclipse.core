@@ -43,7 +43,10 @@ import org.eclipse.ui.actions.ActionGroup;
 import org.eclipse.ui.dialogs.PropertyDialogAction;
 import org.eclipse.ui.navigator.ICommonMenuConstants;
 import org.eclipse.ui.part.ViewPart;
+import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridModelEvent;
+import eu.geclipse.core.model.IGridModelListener;
 import eu.geclipse.ui.internal.actions.ActionGroupManager;
 import eu.geclipse.ui.internal.actions.FileActions;
 import eu.geclipse.ui.internal.actions.OpenActions;
@@ -63,7 +66,9 @@ import eu.geclipse.ui.internal.transfer.SelectionTransferDropAdapter;
  * {@link #createContentProvider()} and {@link #createLabelProvider()}
  * methods.
  */
-public abstract class GridModelViewPart extends ViewPart {
+public abstract class GridModelViewPart
+    extends ViewPart
+    implements IGridModelListener {
   
   /**
    * The viewer that is used to render the data.
@@ -89,15 +94,22 @@ public abstract class GridModelViewPart extends ViewPart {
     this.actions = createActions();
     fillActionBars( this.actions );
     createContextMenu( this.viewer );
+    
+    GridModel.getRoot().addGridModelListener( this );
         
   }
   
   @Override
   public void dispose() {
+    
     if ( this.actions != null ) {
       this.actions.dispose();
     }
+    
+    GridModel.getRoot().removeGridModelListener( this );
+    
     super.dispose();
+    
   }
   
   /**
@@ -109,6 +121,14 @@ public abstract class GridModelViewPart extends ViewPart {
    */
   public StructuredViewer getViewer() {
     return this.viewer;
+  }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridModelListener#gridModelChanged(eu.geclipse.core.model.IGridModelEvent)
+   */
+  public void gridModelChanged( final IGridModelEvent event ) {
+    IGridElement source = event.getSource();
+    refreshViewer( source );
   }
   
   /**
@@ -174,8 +194,8 @@ public abstract class GridModelViewPart extends ViewPart {
   
   protected ActionGroup createActions() {
     ActionGroupManager manager = new ActionGroupManager();
-    contributeStandardActions( manager );
     contributeAdditionalActions( manager );
+    contributeStandardActions( manager );
     return manager;
   }
   

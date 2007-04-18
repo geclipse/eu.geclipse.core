@@ -47,8 +47,7 @@ import eu.geclipse.ui.providers.GridModelLabelProvider;
  * {@link eu.geclipse.core.model.IGridRoot} itself.
  */
 public class GridProjectView
-    extends TreeControlViewPart
-    implements IGridModelListener {
+    extends TreeControlViewPart {
   
   private EditorActions editorActions;
   
@@ -62,9 +61,6 @@ public class GridProjectView
     
     super.createPartControl( parent );
     
-    //ResourcesPlugin.getWorkspace().addResourceChangeListener( this );
-    GridModel.getRoot().addGridModelListener( this );
-    
     this.partListener = new GridProjectPartListener( this.editorActions );
     getSite().getPage().addPartListener( this.partListener );
     
@@ -75,16 +71,7 @@ public class GridProjectView
    */
   @Override
   public void dispose() {
-    GridModel.getRoot().removeGridModelListener( this );
     getSite().getPage().removePartListener( this.partListener );
-  }
-  
-  /* (non-Javadoc)
-   * @see eu.geclipse.core.model.IGridModelListener#gridModelChanged(eu.geclipse.core.model.IGridModelEvent)
-   */
-  public void gridModelChanged( final IGridModelEvent event ) {
-    IGridElement source = event.getSource();
-    refreshViewer( source );
   }
   
   /* (non-Javadoc)
@@ -107,6 +94,8 @@ public class GridProjectView
    */
   @Override
   protected void contributeAdditionalActions( final ActionGroupManager groups ) {
+    
+    super.contributeAdditionalActions( groups );
     
     IWorkbenchPartSite site = getSite();
     IWorkbenchWindow window = site.getWorkbenchWindow();
