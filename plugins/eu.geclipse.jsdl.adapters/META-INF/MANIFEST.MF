@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Jsdl Adapters Plug-in
+Bundle-SymbolicName: eu.geclipse.jsdl.adapters; singleton:=true
+Bundle-Version: 1.0.0
+Bundle-Activator: eu.geclipse.jsdl.adapters.internal.JsdlAdaptersPlugin
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.core.runtime,
+ eu.geclipse.jsdl,
+ org.eclipse.emf.edit,
+ org.eclipse.swt,
+ org.eclipse.ui.forms
+Eclipse-LazyStart: true
+Export-Package: eu.geclipse.jsdl.adapters.jsdl,
+ eu.geclipse.jsdl.adapters.posix
