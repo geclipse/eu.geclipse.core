@@ -25,7 +25,8 @@ Require-Bundle: org.eclipse.core.filesystem,
  eu.geclipse.jsdl.edit,
  org.apache.axis,
  eu.geclipse.voms,
- eu.geclipse.glite.info
+ eu.geclipse.glite.info,
+ eu.geclipse.jsdl.adapters
 Eclipse-LazyStart: true
 Export-Package: eu.geclipse.ui,
  eu.geclipse.ui.cheatsheets,

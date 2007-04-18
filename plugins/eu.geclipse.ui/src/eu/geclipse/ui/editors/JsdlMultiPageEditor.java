@@ -12,7 +12,7 @@
   * Contributor(s):
   *     UCY (http://www.ucy.cs.ac.cy)
   *      - Nicholas Loulloudes (loulloudes.n@cs.ucy.ac.cy)
-  *      - Emilia Stamou (emstamou@cs.ucy.ac.cy)
+  *      
   *****************************************************************************/
 
 
@@ -191,6 +191,7 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
    */
   private void pushContentToPages(){    
     this.jobDefPage.setPageContent( this.jobDefType, isModelRefreshed());
+    this.jobApplicationPage.setPageContent( this.jobDefType, isModelRefreshed());
   }
   
   /*
@@ -690,6 +691,7 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
     if (!this.changedResources.isEmpty()){      
       this.refreshedModel = true;
       pushContentToPages();
+      this.refreshedModel = false;
     }
     
   }
