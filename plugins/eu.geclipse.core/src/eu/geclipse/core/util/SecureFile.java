@@ -21,6 +21,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.net.URI;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import eu.geclipse.core.internal.Activator;
 
 /**
  * This class is an extension of java.io.File providing creation of 
@@ -33,7 +36,13 @@ import java.net.URI;
  * @see    java.io.File
  */
 public class SecureFile extends File {
-    
+
+  private static final String SECURE_PERMISSIONS_FAILED 
+    = "Failed to set secure permissions: ";
+  
+  /** Declare some serialVersionUID */
+  private static final long serialVersionUID = 101010123456789010L;
+
   /**
    * Creates a new <code>SecureFile</code> instance by converting the
    * given pathname string into an abstract pathname. Never forget to
@@ -44,7 +53,7 @@ public class SecureFile extends File {
    * @see   java.io.File#File(String)
    * @param pathname A pathname string
    */
-  public SecureFile( String pathname ) {
+  public SecureFile( final String pathname ) {
     super( pathname );
   }
 
@@ -59,7 +68,7 @@ public class SecureFile extends File {
    * @param parent The parent abstract pathname
    * @param child  The child pathname string
    */
-  public SecureFile( String parent, String child ) {
+  public SecureFile( final String parent, final String child ) {
     super( parent, child );
   }
 
@@ -74,7 +83,7 @@ public class SecureFile extends File {
    * @param parent The parent abstract pathname
    * @param child  The child pathname string
    */
-  public SecureFile( File parent, String child ) {
+  public SecureFile( final File parent, final String child ) {
     super( parent, child );
   }
 
@@ -88,7 +97,7 @@ public class SecureFile extends File {
    * @see   java.io.File#File(URI)
    * @param uri A URI
    */
-  public SecureFile( URI uri ) {
+  public SecureFile( final URI uri ) {
     super( uri );
   }
 
@@ -96,12 +105,12 @@ public class SecureFile extends File {
   /**
    * Private method for setting the secure permissions
    */
-  private static boolean protect( String path ) {
+  private static boolean protect( final String path ) {
     int retVal = 0;
 
     // TODO: implement this for Windows. This is insecure, but keeps
     //       the current behaviour until it is implemented!
-    if ( System.getProperty( "os.name" ).contains( "Windows" ) ) {
+    if ( System.getProperty( "os.name" ).contains( "Windows" ) ) { //$NON-NLS-1$ //$NON-NLS-2$
       return true;
     }
     
@@ -109,10 +118,10 @@ public class SecureFile extends File {
      * UNIX specific, using a library call could be more efficient but
      *   less portable, at least exec'ing chmod should work on all unixes...
      */
-    String mode = "600";
+    String mode = "600"; //$NON-NLS-1$
     SecureFile f = new SecureFile( path );
     if ( f.isDirectory() ) {
-      mode = "700";
+      mode = "700"; //$NON-NLS-1$
     }
     String[] cmd = { "chmod", mode, path };
     String[] env = { "PATH=/bin;/usr/bin;/usr/local/bin" };
@@ -139,11 +148,16 @@ public class SecureFile extends File {
     } catch ( InterruptedException ie ) {
       // Something went wrong
       retVal = 1;
-      System.out.println( "Failed to set secure permissions:"
-                          + "Exception running chmod:" + ie.toString() );
+      String msg =   SECURE_PERMISSIONS_FAILED
+                   + "Exception running chmod";
+      IStatus status = new Status( IStatus.WARNING, 
+                                   Activator.PLUGIN_ID, IStatus.OK, 
+                                   msg, 
+                                   ie );
+      Activator.logStatus( status );
     }
     if ( retVal != 0 ) {
-      System.out.println( "Failed to set secure permissions: " );
+      System.out.println( SECURE_PERMISSIONS_FAILED );
       String line = null;
       try {
         while ( (line = eB.readLine()) != null ) {
@@ -170,7 +184,7 @@ public class SecureFile extends File {
     String filePath = getPath();
     boolean ret = protect( filePath );
     if ( ret != true ) {
-      throw new IOException( "Could not set secure permissions on file" + filePath );
+      throw new IOException( SECURE_PERMISSIONS_FAILED + filePath );
     }
     return ret;
   }
@@ -183,7 +197,7 @@ public class SecureFile extends File {
    *         permissions; <code>false</code> otherwise
    */
   public boolean isSecure() {
-    String filePath = getPath();
+    // String filePath = getPath();
     // TODO: implement this. Right now we just return false, so
     //       setSecure() will be called in any case.
     return false;
@@ -198,6 +212,7 @@ public class SecureFile extends File {
    *         if the named file already exists
    * @throws IOException if setting the permissions failed
    */
+  @Override
   public boolean createNewFile() throws IOException {
     if ( super.createNewFile() == false ) {
       return false;
@@ -211,7 +226,7 @@ public class SecureFile extends File {
       dfile.delete();
       // TODO: check this method's policy regarding return value and
       //       exception throwing in the superclass...
-      throw new IOException( "Could not set secure permissions on file" + filePath );
+      throw new IOException( SECURE_PERMISSIONS_FAILED + filePath );
     }
     return ret;
   }
@@ -226,8 +241,10 @@ public class SecureFile extends File {
    * @see    java.io.File#createTempFile(String, String)
    * @return An abstract pathname denoting a new empty protected file
    */
-  public static SecureFile createTempFile(String prefix, String suffix)
-    throws IOException {
+  public static SecureFile createTempFile( final String prefix,
+                                           final String suffix )
+    throws IOException
+  {
     
     return createTempFile(prefix, suffix, null);
   }
@@ -239,8 +256,11 @@ public class SecureFile extends File {
    * @see    java.io.File#createTempFile(String, String, File)
    * @return An abstract pathname denoting a new empty protected file
    */
-  public static SecureFile createTempFile(String prefix, String suffix, File directory)
-    throws IOException {
+  public static SecureFile createTempFile( final String prefix,
+                                           final String suffix,
+                                           final File directory )
+    throws IOException
+  {
     
     File file = File.createTempFile(prefix, suffix, directory);
     String filePath = file.getPath();
@@ -248,7 +268,7 @@ public class SecureFile extends File {
     SecureFile secFile = new SecureFile( filePath );
     
     if ( protect( filePath ) != true ) {
-      throw new IOException( "Could not set secure permissions on file" + filePath);
+      throw new IOException( SECURE_PERMISSIONS_FAILED + filePath);
     }
     return secFile;
   }
@@ -260,7 +280,8 @@ public class SecureFile extends File {
    * @return <code>true</code> if and only if the renaming succeeded;
    *         <code>false</code> otherwise
    */
-  public boolean renameTo( File dest ) {
+  @Override
+  public boolean renameTo( final File dest ) {
     return super.renameTo( dest ) && protect( getPath() );
   }
 
@@ -271,6 +292,7 @@ public class SecureFile extends File {
    * @return <code>true</code> if and only if the directory was
    *         created with secure permissions; <code>false</code> otherwise
    */
+  @Override
   public boolean mkdir() {
     return super.mkdir() && protect( getPath() );
   }
@@ -284,11 +306,9 @@ public class SecureFile extends File {
    *         with secure permissions, along with all necessary parent
    *         directories; <code>false</code> otherwise
    */
+  @Override
   public boolean mkdirs() {
     return super.mkdirs() && protect( getPath() );
   }
-
-  /** Declare some serialVersionUID */
-  private static final long serialVersionUID = 101010123456789010L;
 
 }
