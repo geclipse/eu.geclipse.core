@@ -40,5 +40,15 @@ public interface IGridJobDescription extends IGridContainer {
    */
   List<String> getExecutableArguments();
   
+  /**
+   * @return standard output for job
+   */
+  String getInput();
+  
+  /**
+   * @return standard input for job
+   */
+  String getOutput();
+  
   
 }

@@ -498,5 +498,29 @@ public class JSDLJobDescription
       }
     }
   }
+
+  public String getInput() {
+    String inputString = null;
+    POSIXApplicationType posixApp = getPosixApplication();
+    
+    if( posixApp != null
+        && posixApp.getInput() != null ) {      
+      inputString = posixApp.getInput().getValue();
+    }
+    
+    return inputString;
+  }
+
+  public String getOutput() {
+    String outputString= null;
+    POSIXApplicationType posixApp = getPosixApplication();
+    
+    if( posixApp != null
+        && posixApp.getOutput() != null ) {
+      outputString = posixApp.getOutput().getValue();
+    }
+    
+    return outputString;  
+  }
   
 }
