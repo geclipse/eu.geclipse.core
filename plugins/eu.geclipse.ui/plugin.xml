@@ -73,6 +73,11 @@
             class="eu.geclipse.ui.views.GridJobDetailsView"
             id="eu.geclipse.ui.views.GridJobDetailsView"
             name="%view.jobDetails"/>
+      <view
+            category="eu.geclipse.ui.viewcategory"
+            class="eu.geclipse.ui.views.GridTransferView"
+            id="eu.geclipse.ui.views.transferView"
+            name="Transfers"/>
    </extension>
    <extension
          point="org.eclipse.ui.perspectives">

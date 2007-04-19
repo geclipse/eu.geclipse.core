@@ -17,9 +17,10 @@ package eu.geclipse.ui.properties;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import eu.geclipse.core.model.IVirtualOrganization;
-import eu.geclipse.voms.vo.VomsVirtualOrganization;
 
 
 /**
@@ -27,17 +28,13 @@ import eu.geclipse.voms.vo.VomsVirtualOrganization;
  *
  */
 class VOPropertySource extends AbstractPropertySource<IVirtualOrganization> {
-   static private IPropertyDescriptor[] staticDescriptors;
+   static private List<IPropertyDescriptor> staticDescriptors;
   
   /**
    * @param virtualOrganization - vo for which properties be displayed
    */
   public VOPropertySource( final IVirtualOrganization virtualOrganization ) {
     super( virtualOrganization );
-    
-    if( virtualOrganization instanceof VomsVirtualOrganization ) {
-      addChildSource( new VomsPropertySource( ( VomsVirtualOrganization )virtualOrganization ) );
-    }
   }
   
   @Override
@@ -47,7 +44,7 @@ class VOPropertySource extends AbstractPropertySource<IVirtualOrganization> {
   }
 
   @Override
-  protected IPropertyDescriptor[] getStaticDescriptors()
+  protected List<IPropertyDescriptor> getStaticDescriptors()
   {
     if( staticDescriptors == null ) {
       staticDescriptors = AbstractPropertySource.createDescriptors( createProperties(), getPropertySourceClass() );    
@@ -82,6 +79,26 @@ class VOPropertySource extends AbstractPropertySource<IVirtualOrganization> {
       {
         return vo.getTypeName();
       } 
+    };
+  }
+  
+  static ILabelProvider getLabelProvider() {
+    return new LabelProvider() {
+
+      /* (non-Javadoc)
+       * @see org.eclipse.jface.viewers.LabelProvider#getText(java.lang.Object)
+       */
+      @Override
+      public String getText( final Object element )
+      {
+        String string = null;
+        
+        if( element instanceof IVirtualOrganization ) {
+          string = ( ( IVirtualOrganization ) element ).getName();
+        }
+ 
+        return string;
+      }      
     };
   }
 }

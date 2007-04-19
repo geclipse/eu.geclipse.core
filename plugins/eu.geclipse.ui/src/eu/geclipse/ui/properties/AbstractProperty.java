@@ -16,7 +16,10 @@
 
 package eu.geclipse.ui.properties;
 
+import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
+import org.eclipse.ui.views.properties.PropertyDescriptor;
 
 /**
  * Abstract class for read-only property
@@ -26,9 +29,9 @@ import org.eclipse.ui.views.properties.IPropertySource;
 abstract public class AbstractProperty<ESourceType>
   implements IProperty<ESourceType>
 {
-
   private String nameString;
   private String categoryString;
+  private ILabelProvider labelProvider;
 
   /**
    * @param name Property name
@@ -43,7 +46,7 @@ abstract public class AbstractProperty<ESourceType>
   /**
    * Have to be implemented in every property. In most cases return property
    * value as String, but it may also return {@link IPropertySource} for complex
-   * property For details
+   * property
    * 
    * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(Object)
    * @param sourceObject Object, for which property will be displayed
@@ -51,21 +54,26 @@ abstract public class AbstractProperty<ESourceType>
    */
   abstract public Object getValue( final ESourceType sourceObject );
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see eu.geclipse.ui.properties.IProperty#getCategory()
-   */
-  public String getCategory() {
-    return this.categoryString;
+  protected String getName() {
+    return this.nameString;
+  }
+  
+  void setLabelProvider( final ILabelProvider provider ) {
+    this.labelProvider = provider;
+  }
+  
+  public IPropertyDescriptor getDescriptor( final PropertyId<ESourceType> propertyId )
+  {
+    PropertyDescriptor descriptor = createDescriptor( propertyId,
+                                                      this.nameString );
+    descriptor.setCategory( this.categoryString );
+    descriptor.setLabelProvider( this.labelProvider );
+    return descriptor;
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see eu.geclipse.ui.properties.IProperty#getName()
-   */
-  public String getName() {
-    return this.nameString;
+  protected PropertyDescriptor createDescriptor( final PropertyId<ESourceType> propertyId,
+                                                 final String name )
+  {
+    return new PropertyDescriptor( propertyId, name );
   }
 }

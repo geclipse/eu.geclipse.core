@@ -1,16 +1,11 @@
 package eu.geclipse.ui.properties;
 
-import org.eclipse.core.resources.IResource;
+import java.util.List;
 import org.eclipse.core.runtime.IAdapterFactory;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.ui.views.properties.IPropertySource;
-import org.eclipse.ui.views.properties.ResourcePropertySource;
-import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridElement;
-import eu.geclipse.core.model.IGridJob;
-import eu.geclipse.core.model.IGridJobDescription;
-import eu.geclipse.core.model.IVirtualOrganization;
-import eu.geclipse.glite.info.BDIIService;
+import eu.geclipse.ui.Extensions;
 
 
 /**
@@ -35,27 +30,12 @@ public class PropertiesAdapterFactory implements IAdapterFactory {
   {
     IPropertySource propertySource = null;
     if( adapterType == IPropertySource.class ) {
-      if( adaptableObject instanceof IGridJob ) {
-        propertySource = new GridJobSource( ( IGridJob )adaptableObject );
-      } else if( adaptableObject instanceof IGridJobDescription ) {
-        propertySource = new GridJobDescSource( ( IGridJobDescription )adaptableObject );
-      } else if( adaptableObject instanceof IGridConnection ) {
-        propertySource = new ConnectionPropertySource( ( IGridConnection )adaptableObject );
-      } else if( adaptableObject instanceof IVirtualOrganization ) {
-        propertySource = new VOPropertySource( ( IVirtualOrganization )adaptableObject );
-      } else if( adaptableObject instanceof BDIIService ) {
-        propertySource = new BDIIServicePropertySource( ( BDIIService )adaptableObject );
-      }
-      // Check elements inherited from IGridElement above this line!
-      else if( adaptableObject instanceof IGridElement ) {
-        IGridElement gridElement = ( IGridElement )adaptableObject;
-        IResource resource = gridElement.getResource();
-        if( resource == null ) {
-          propertySource = new GridElementPropertySource( ( IGridElement )adaptableObject );
-        } else {
-          propertySource = new ResourcePropertySource( resource );
-        }
-      }
+      // TODO mariusz add factories caching
+      List<IPropertiesFactory> factoriesList = Extensions.getPropertiesFactories( adaptableObject.getClass() );
+      
+      if( !factoriesList.isEmpty() ) {
+        propertySource = new PropertySourceProxy( factoriesList, adaptableObject );
+      }      
     }
     return propertySource;
   }
@@ -80,4 +60,6 @@ public class PropertiesAdapterFactory implements IAdapterFactory {
       singleton = null;
     }
   }
+  
+  
 }

@@ -17,13 +17,10 @@
 package eu.geclipse.ui.properties;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
-import org.eclipse.ui.views.properties.IPropertySource;
-import org.eclipse.ui.views.properties.PropertyDescriptor;
 
 
 /**
@@ -32,15 +29,16 @@ import org.eclipse.ui.views.properties.PropertyDescriptor;
  * 
  * If {@link AbstractPropertySource#sourceObject} contains also properties defined in another class inherited from {@link AbstractPropertySource},
  * then just add these properties using {@link AbstractPropertySource#addChildSource(AbstractPropertySource)} 
+ * @param <ESourceType> type of object, for which properties will be shown
  */
-abstract class AbstractPropertySource<ESourceType> implements IPropertySource {
+abstract public class AbstractPropertySource<ESourceType> {
   private ESourceType sourceObject;
   private List<AbstractPropertySource<?>> childPropSourceList = new LinkedList<AbstractPropertySource<?>>();
 
   /**
    * All descriptors, also from child property sources
    */
-  private IPropertyDescriptor[] descriptors = null; 
+  private List<IPropertyDescriptor> descriptors = null; 
 
   /**
    * @param sourceObject Object, for which properties will be displayed
@@ -59,21 +57,13 @@ abstract class AbstractPropertySource<ESourceType> implements IPropertySource {
   /**
    * @return Property descriptors defined as static member, without child properties
    */
-  abstract protected IPropertyDescriptor[] getStaticDescriptors();
-
-  /* (non-Javadoc)
-   * @see org.eclipse.ui.views.properties.IPropertySource#getEditableValue()
-   */
-  public Object getEditableValue() {    
-    return null;    // Editable properties not supported   
-  }
+  abstract protected List<IPropertyDescriptor> getStaticDescriptors();
 
   /** 
-   * Returns descriptors for all properties valid for current {@link AbstractPropertySource#sourceObject} 
+   * @return descriptors for all properties valid for current {@link AbstractPropertySource#sourceObject}
    * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyDescriptors()
    */
-  public IPropertyDescriptor[] getPropertyDescriptors() {
-    
+  public List<IPropertyDescriptor> getPropertyDescriptors() {
     if( this.descriptors == null ) {      
 
       if( this.childPropSourceList == null
@@ -82,92 +72,59 @@ abstract class AbstractPropertySource<ESourceType> implements IPropertySource {
         this.descriptors = getStaticDescriptors();
       }
       else {
-        int descriptorsSize = getStaticDescriptors().length;
+        int descriptorsSize = getStaticDescriptors().size();
         
         for( AbstractPropertySource<?> source : this.childPropSourceList ) {
-          descriptorsSize += source.getPropertyDescriptors().length;
+          descriptorsSize += source.getPropertyDescriptors().size();
         }
                 
         ArrayList<IPropertyDescriptor> descList = new ArrayList<IPropertyDescriptor>( descriptorsSize );
         
-        descList.addAll( Arrays.asList( getStaticDescriptors() ) );
+        descList.addAll( getStaticDescriptors() );
         
         for( AbstractPropertySource<?> source : this.childPropSourceList ) {
-          descList.addAll( Arrays.asList( source.getPropertyDescriptors() ) );
+          descList.addAll( source.getPropertyDescriptors() );
         }
         
-        this.descriptors = descList.toArray( new IPropertyDescriptor[ descriptorsSize ] );
+        this.descriptors = descList;
       }
     }
     
     return this.descriptors;
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(java.lang.Object)
-   */
   @SuppressWarnings("unchecked")
-  public Object getPropertyValue( final Object id )
+  Object getPropertyValue( final IProperty property )
   {
-    Object result = null;
-    if( id instanceof PropertyId ) {
-      PropertyId<?> propertyId = ( PropertyId )id;
-      if( propertyId.getSourceClass() == getPropertySourceClass() ) {   // get value from this source
-        PropertyId<ESourceType> thisPropertyId = ( PropertyId<ESourceType> )propertyId;
-        result = thisPropertyId.getProperty().getValue( this.sourceObject );
-      } else {  // get value from child sources
-        Iterator<AbstractPropertySource<?>> iterator = this.childPropSourceList.iterator();
-        while( iterator.hasNext() && result == null ) {
-          AbstractPropertySource<?> childSource = iterator.next();
-          if( propertyId.getSourceClass() == childSource.getPropertySourceClass() )
-          {
-            result = childSource.getPropertyValue( propertyId );
-          }
-        }
+    return property.getValue( this.sourceObject );
+  }
+  
+  AbstractPropertySource<?> getPropertySourceInstanceFor( final Class<? extends AbstractPropertySource<?>> propertySourceClass )
+  {
+    AbstractPropertySource<?> propertySource = null;
+    if( this.getPropertySourceClass() == propertySourceClass ) {
+      propertySource = this;
+    } else {
+      Iterator<AbstractPropertySource<?>> iterator = this.childPropSourceList.iterator();
+      while( iterator.hasNext() && propertySource == null ) {
+        AbstractPropertySource<?> childSource = iterator.next();
+        propertySource = childSource.getPropertySourceInstanceFor( propertySourceClass );
       }
     }
-    return result;
+    return propertySource;
   }
 
-  /*
-   * (non-Javadoc)
-   * 
-   * @see org.eclipse.ui.views.properties.IPropertySource#isPropertySet(java.lang.Object)
-   */
-  public boolean isPropertySet( final Object id ) {
-    return false;   // Editable properties not supported
-  }
-
-  /* (non-Javadoc)
-   * @see org.eclipse.ui.views.properties.IPropertySource#resetPropertyValue(java.lang.Object)
-   * Editable properties not supported
-   */
-  public void resetPropertyValue( final Object id ) {
-    //  Editable properties not supported
-  }
-
-  /* (non-Javadoc)
-   * @see org.eclipse.ui.views.properties.IPropertySource#setPropertyValue(java.lang.Object, java.lang.Object)
-   */
-  public void setPropertyValue( final Object id, final Object value ) {
-    // Editable properties not supported    
-  } 
-
-  protected static <ESourceType> IPropertyDescriptor[] createDescriptors( final List<IProperty<ESourceType>> properties, 
-                                                                              final Class<? extends AbstractPropertySource<?>> propSourceClass ) {
+  protected static <ESourceType> List<IPropertyDescriptor> createDescriptors( final List<IProperty<ESourceType>> properties,
+                                                                              final Class<? extends AbstractPropertySource<?>> propSourceClass )
+  {
     ArrayList<IPropertyDescriptor> descriptors = new ArrayList<IPropertyDescriptor>( properties.size() );
-    
-    for( IProperty<ESourceType> property : properties ) {      
-      PropertyId<ESourceType> id = new PropertyId<ESourceType>( propSourceClass, property );
-      PropertyDescriptor descriptor = new PropertyDescriptor( id, property.getName() );
-      descriptor.setCategory( property.getCategory() );
-      descriptors.add( descriptor );
+    for( IProperty<ESourceType> property : properties ) {
+      PropertyId<ESourceType> id = new PropertyId<ESourceType>( propSourceClass,
+                                                                property );
+      descriptors.add( property.getDescriptor( id ) );
     }
-    
-    return descriptors.toArray( new IPropertyDescriptor[ descriptors.size() ] );
-  }  
+    return descriptors;
+  }
   
   protected void addChildSource( final AbstractPropertySource<?> childPropertySource ) {
     this.childPropSourceList.add( childPropertySource );

@@ -26,7 +26,7 @@ import eu.geclipse.core.model.IGridJob;
  */
 public class GridJobSource extends AbstractPropertySource<IGridJob> {
 
-  static private IPropertyDescriptor[] staticDescriptors;
+  static private List<IPropertyDescriptor> staticDescriptors;
 
   /**
    * @param gridJob - job for which properties will be shown
@@ -45,7 +45,7 @@ public class GridJobSource extends AbstractPropertySource<IGridJob> {
   }
 
   @Override
-  protected IPropertyDescriptor[] getStaticDescriptors()
+  protected List<IPropertyDescriptor> getStaticDescriptors()
   {
     if( staticDescriptors == null ) {
       staticDescriptors = AbstractPropertySource.createDescriptors( createProperties(),

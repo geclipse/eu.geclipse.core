@@ -28,7 +28,7 @@ public class ConnectionPropertySource
   extends AbstractPropertySource<IGridConnection>
 {
 
-  static private IPropertyDescriptor[] staticDescriptors;
+  static private List<IPropertyDescriptor> staticDescriptors;
 
   /**
    * @param gridConnection - connection, for which properties will be shown
@@ -47,7 +47,7 @@ public class ConnectionPropertySource
   }
 
   @Override
-  public IPropertyDescriptor[] getStaticDescriptors()
+  public List<IPropertyDescriptor> getStaticDescriptors()
   {
     if( staticDescriptors == null ) {
       staticDescriptors = AbstractPropertySource.createDescriptors( createProperties(),

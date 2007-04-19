@@ -15,29 +15,16 @@
  *****************************************************************************/
 package eu.geclipse.ui.properties;
 
-import org.eclipse.ui.views.properties.IPropertyDescriptor;
-
+import java.util.List;
 
 
 /**
- * Property shown in Properties view 
- * @param <ESourceType> type of object, for which property is shown
- *
+ * Factory, which creates and returns {@link AbstractPropertySource} objects, for object
  */
-public interface IProperty <ESourceType> {
-
+public interface IPropertiesFactory {
   /**
-   * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyValue(Object)
-   * 
-   * @param sourceObject Object, for which property will be displayed  
-   * 
-   * @return Property value
+   * @param sourceObject object, for which properties will be shown  
+   * @return list of property sources, which handles properties for sourceObject
    */
-  Object getValue( final ESourceType sourceObject );
-
-  /**
-   * @param propertyId 
-   * @return property descriptor
-   */
-  IPropertyDescriptor getDescriptor( final PropertyId<ESourceType> propertyId );
+  List<AbstractPropertySource<?>> getPropertySources( final Object sourceObject );
 }

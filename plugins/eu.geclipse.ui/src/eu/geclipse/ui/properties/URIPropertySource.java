@@ -26,7 +26,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
  */
 public class URIPropertySource extends AbstractPropertySource<URI> {
 
-  static private IPropertyDescriptor[] staticDescriptors;
+  static private List<IPropertyDescriptor> staticDescriptors;
 
   /**
    * @param uri - URI for which properties will be displayed
@@ -42,7 +42,7 @@ public class URIPropertySource extends AbstractPropertySource<URI> {
   }
 
   @Override
-  protected IPropertyDescriptor[] getStaticDescriptors()
+  protected List<IPropertyDescriptor> getStaticDescriptors()
   {
     if( staticDescriptors == null ) {
       staticDescriptors = AbstractPropertySource.createDescriptors( createProperties(),

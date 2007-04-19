@@ -23,6 +23,15 @@ public class UIProblems implements IProblemProvider {
                                null );
     }
     
+    else if ( problemID == ProblemRegistry.UNKNOWN_PROBLEM ) {
+      problem = createProblem( ProblemRegistry.UNKNOWN_PROBLEM,
+                               "Unknown problem occured (id = " + problemID + ")",
+                               exc,
+                               new int[] {
+                                 UISolutionRegistry.LOG_EXCEPTION        
+                               } );
+    }
+    
     return problem;
     
   }

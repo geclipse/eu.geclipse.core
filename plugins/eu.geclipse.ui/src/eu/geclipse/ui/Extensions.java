@@ -24,11 +24,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.Status;
 import eu.geclipse.core.ExtensionManager;
+import eu.geclipse.ui.internal.Activator;
+import eu.geclipse.ui.properties.IPropertiesFactory;
 import eu.geclipse.ui.wizards.jobs.NewJobWizard;
 
 /**
@@ -97,6 +102,12 @@ public class Extensions {
    * point)
    */
   public static final String JSDL_PARAMETERS_EXECUTABLE_ELEMENT_PATH_ATTRIBUTE = "path"; //$NON-NLS-1$
+  
+  private static final String PROPERTIES_FACTORY_POINT = "eu.geclipse.ui.propertiesFactory";  //$NON-NLS-1$
+  private static final String PROPERTIES_FACTORY_ELEMENT = "PropertiesFactory";
+  private static final String PROPERTIES_FACTORY_SOURCECLASS_ATTR = "sourceObjectClass";
+  private static final String PROPERTIES_FACTORY_CLASS_ATTR = "class";
+  
   /**
    * Get a list of all currently registered authentication token ui factories.
    * 
@@ -212,5 +223,41 @@ public class Extensions {
       
     }
     return result;
+  }
+  
+  static public List<IPropertiesFactory> getPropertiesFactories( final Class<?> sourceObjectClass )
+  {
+    List<IPropertiesFactory> propertiesFactoryList = new ArrayList<IPropertiesFactory>();
+    ExtensionManager extManager = new ExtensionManager();
+    List<IConfigurationElement> confElementsList = extManager.getConfigurationElements( PROPERTIES_FACTORY_POINT,
+                                                                                        PROPERTIES_FACTORY_ELEMENT );
+    for( IConfigurationElement element : confElementsList ) {
+      String currentSourceObjectString = element.getAttribute( PROPERTIES_FACTORY_SOURCECLASS_ATTR );
+      if( currentSourceObjectString != null ) {        
+        try {          
+          Class<?> sourceClass = Class.forName( currentSourceObjectString );
+          
+          if( sourceClass != null
+              && sourceClass.isAssignableFrom( sourceObjectClass ) )
+          {
+            IPropertiesFactory factory = ( IPropertiesFactory )element.createExecutableExtension( PROPERTIES_FACTORY_CLASS_ATTR );
+            propertiesFactoryList.add( factory );
+          }          
+        } catch( ClassNotFoundException exception ) {
+          // don't log, because extension can support properties for objects from plugins, which were not loaded yet
+        } catch( CoreException exception ) {
+          Activator.logException( exception );
+        }
+      } else {
+        Activator.logStatus( new Status( IStatus.ERROR,
+                                         Activator.PLUGIN_ID,
+                                         IStatus.ERROR,
+                                         "Attribute " //$NON-NLS-1$
+                                             + PROPERTIES_FACTORY_SOURCECLASS_ATTR
+                                             + " not found", //$NON-NLS-1$
+                                         null ) );
+      }
+    }
+    return propertiesFactoryList;
   }
 }

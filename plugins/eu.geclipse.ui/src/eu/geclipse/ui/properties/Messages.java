@@ -23,7 +23,7 @@ import java.util.ResourceBundle;
  * Externalized messages
  *
  */
-public class Messages {
+class Messages {
 
   private static final String BUNDLE_NAME = "eu.geclipse.ui.properties.messages"; //$NON-NLS-1$
   private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( BUNDLE_NAME );

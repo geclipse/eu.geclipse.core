@@ -19,28 +19,23 @@ import java.util.ArrayList;
 import java.util.List;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import eu.geclipse.core.model.IGridJobDescription;
-import eu.geclipse.core.model.impl.JSDLJobDescription;
 
 
 /**
  * Properties for {@link IGridJobDescription}
  */
 public class GridJobDescSource extends AbstractPropertySource<IGridJobDescription> {
-  static private IPropertyDescriptor[] staticDescriptors;
+  static private List<IPropertyDescriptor> staticDescriptors;
 
   /**
    * @param source Object, for which properties will be shown
    */
   public GridJobDescSource( final IGridJobDescription source ) {
     super( source );
-    
-    if( source instanceof JSDLJobDescription ) {
-      addChildSource( new JsdlJobDescSource( (JSDLJobDescription)source ) );
-    }
   }
   
   @Override
-  public IPropertyDescriptor[] getStaticDescriptors() {
+  public List<IPropertyDescriptor> getStaticDescriptors() {
     if( staticDescriptors == null ) {
       staticDescriptors = AbstractPropertySource.createDescriptors( createProperties(), getPropertySourceClass() );    
     }
@@ -59,12 +54,14 @@ public class GridJobDescSource extends AbstractPropertySource<IGridJobDescriptio
     propertiesList.add( createDescription() );
     propertiesList.add( createPropertyExecutable() );
     propertiesList.add( createPropertyExecutableArg() );
+    propertiesList.add( createPropertyInput() ); 
+    propertiesList.add( createPropertyOutput() );
     return propertiesList;
   }
   
   static private IProperty<IGridJobDescription> createDescription() {
-    return new AbstractProperty<IGridJobDescription>( Messages.getString( "GridJobDescSource.propertyDescription" ), //$NON-NLS-1$ 
-                                                      Messages.getString( "GridJobDescSource.categoryDescription" ) ) { //$NON-NLS-1$
+    return new MultilineProperty<IGridJobDescription>( Messages.getString( "GridJobDescSource.propertyDescription" ), //$NON-NLS-1$ 
+                                                      Messages.getString( "GridJobDescSource.categoryApplication" ) ) { //$NON-NLS-1$
 
       @Override
       public Object getValue( final IGridJobDescription source )
@@ -76,7 +73,7 @@ public class GridJobDescSource extends AbstractPropertySource<IGridJobDescriptio
   
   static private IProperty<IGridJobDescription> createPropertyExecutable() {
     return new AbstractProperty<IGridJobDescription>( Messages.getString( "GridJobDescSource.propertyExecutable" ), //$NON-NLS-1$ 
-                                                      Messages.getString( "GridJobDescSource.categoryDescription" ) ) { //$NON-NLS-1$
+                                                      Messages.getString( "GridJobDescSource.categoryApplication" ) ) { //$NON-NLS-1$
 
       @Override
       public Object getValue( final IGridJobDescription source )
@@ -88,18 +85,48 @@ public class GridJobDescSource extends AbstractPropertySource<IGridJobDescriptio
   
   static private IProperty<IGridJobDescription> createPropertyExecutableArg() {
     return new AbstractProperty<IGridJobDescription>( Messages.getString( "GridJobDescSource.propertyExecArgs" ), //$NON-NLS-1$ 
-                                                      Messages.getString( "GridJobDescSource.categoryDescription" ) ) { //$NON-NLS-1$
+                                                      Messages.getString( "GridJobDescSource.categoryApplication" ) ) { //$NON-NLS-1$
 
       @Override
       public Object getValue( final IGridJobDescription jobDescription )
       {
-        String argString = null;
+        StringBuilder stringBuilder = new StringBuilder();
         if( jobDescription.getExecutableArguments() != null ) {
-          argString = jobDescription.getExecutableArguments().toString();
+          List<String> argList = jobDescription.getExecutableArguments();
+          for( String argString : argList ) {
+            if( stringBuilder.length() > 0 ) {
+              stringBuilder.append( ", " ); //$NON-NLS-1$
+            }
+            stringBuilder.append( argString );
+          }
         }
-        return argString;
+        return stringBuilder.toString();
       }
     };
   }
+  
+  static private IProperty<IGridJobDescription> createPropertyInput() {
+    return new AbstractProperty<IGridJobDescription>( Messages.getString( "GridJobDescSource.propertyInput" ), //$NON-NLS-1$
+        Messages.getString( "GridJobDescSource.categoryApplication" ) ) { //$NON-NLS-1$
+
+          @Override
+          public Object getValue( final IGridJobDescription jobDescription )
+          {
+            return jobDescription.getInput();
+          }      
+    };
+  }
+  
+  static private IProperty<IGridJobDescription> createPropertyOutput() {
+    return new AbstractProperty<IGridJobDescription>( Messages.getString( "GridJobDescSource.propertyOutput" ), //$NON-NLS-1$
+        Messages.getString( "GridJobDescSource.categoryApplication" ) ) { //$NON-NLS-1$
+
+          @Override
+          public Object getValue( final IGridJobDescription jobDescription )
+          {
+            return jobDescription.getOutput();
+          }      
+    };
+  }  
   
 }

@@ -30,7 +30,7 @@ public class JsdlJobDescSource
   extends AbstractPropertySource<JSDLJobDescription>
 {
 
-  static private IPropertyDescriptor[] staticDescriptors;
+  static private List<IPropertyDescriptor> staticDescriptors;
 
   /**
    * @param sourceObject - job description object, for which properties will be
@@ -47,7 +47,7 @@ public class JsdlJobDescSource
   }
 
   @Override
-  protected IPropertyDescriptor[] getStaticDescriptors()
+  protected List<IPropertyDescriptor> getStaticDescriptors()
   {
     if( staticDescriptors == null ) {
       staticDescriptors = AbstractPropertySource.createDescriptors( createProperties(),
