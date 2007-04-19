@@ -25,7 +25,7 @@ public class ProblemRegistry {
   public static IProblem createProblem( final int id,
                                         final String text,
                                         final Throwable exc,
-                                        int[] solutionIDs,
+                                        final int[] solutionIDs,
                                         final String pluginID ) {
     IProblem problem = new AbstractProblem( id, text, exc ) {
       @Override
@@ -43,7 +43,7 @@ public class ProblemRegistry {
   
   public IProblem getProblem( final int problemID,
                               final Throwable exc, 
-                              String description ) {
+                              final String description ) {
     IProblem problem = getProblem(problemID, exc);
     problem.setReason( description );
     return problem;

@@ -66,7 +66,7 @@ public class GridModelProblems implements IProblemProvider {
                                null );
     }
     
-    return null;
+    return problem;
     
   }
   

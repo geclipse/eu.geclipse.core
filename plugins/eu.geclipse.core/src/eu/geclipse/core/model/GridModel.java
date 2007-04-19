@@ -25,6 +25,7 @@ import eu.geclipse.core.internal.model.GridProjectCreator;
 import eu.geclipse.core.internal.model.GridRoot;
 import eu.geclipse.core.internal.model.JobManager;
 import eu.geclipse.core.internal.model.LocalResourceCreator;
+import eu.geclipse.core.internal.model.TransferManager;
 import eu.geclipse.core.internal.model.VoManager;
 
 /**
@@ -227,6 +228,17 @@ public class GridModel {
       }
     }
     return resultList;
+  }
+  
+  /**
+   * Get the manager that is dedicated to the management of
+   * {@link IGridTransfer}s.
+   * 
+   * @return The core implementation of the {@link ITransferManager}
+   * interface.
+   */
+  public static ITransferManager getTransferManager() {
+    return TransferManager.getManager();
   }
   
   /**
