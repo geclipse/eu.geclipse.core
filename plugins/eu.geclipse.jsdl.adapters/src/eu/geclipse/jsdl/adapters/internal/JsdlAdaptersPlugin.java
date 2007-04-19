@@ -8,8 +8,8 @@ import org.osgi.framework.BundleContext;
  */
 public class JsdlAdaptersPlugin extends Plugin {
 
-  // The plug-in ID
-  public static final String PLUGIN_ID = "eu.geclipse.jsdl.adapters";
+  /** The plug-in ID */
+  public static final String PLUGIN_ID = "eu.geclipse.jsdl.adapters"; //$NON-NLS-1$
   // The shared instance
   private static JsdlAdaptersPlugin plugin;
 
@@ -25,7 +25,8 @@ public class JsdlAdaptersPlugin extends Plugin {
    * 
    * @see org.eclipse.core.runtime.Plugins#start(org.osgi.framework.BundleContext)
    */
-  public void start( BundleContext context ) throws Exception {
+  @Override
+  public void start( final BundleContext context ) throws Exception {
     super.start( context );
   }
 
@@ -34,7 +35,8 @@ public class JsdlAdaptersPlugin extends Plugin {
    * 
    * @see org.eclipse.core.runtime.Plugin#stop(org.osgi.framework.BundleContext)
    */
-  public void stop( BundleContext context ) throws Exception {
+  @Override
+  public void stop( final BundleContext context ) throws Exception {
     plugin = null;
     super.stop( context );
   }
