@@ -15,7 +15,9 @@
 
 package eu.geclipse.webview.views;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Preferences;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -71,7 +73,12 @@ public class WebView extends ViewPart {
       gridData.grabExcessVerticalSpace = true;
       this.browser.setLayoutData( gridData );
     } catch( SWTException swtException ) {
-      System.out.println( Messages.WebView_initializeError );
+      IStatus status = new Status( IStatus.ERROR,
+                                   Activator.PLUGIN_ID,
+                                   IStatus.OK,
+                                   Messages.WebView_initializeError,
+                                   swtException );
+      Activator.getDefault().getLog().log( status );
     }
     createActions();
     contributeToActionBars();
