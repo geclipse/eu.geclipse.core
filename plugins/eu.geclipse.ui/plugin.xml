@@ -10,6 +10,7 @@
    <extension-point id="newVoWizards" name="eu.geclipse.ui.newVoWizards" schema="schema/newVoWizards.exsd"/>
    <extension-point id="jobSubmissionWizard" name="jobSubmissionWizard" schema="schema/jobSubmissionWizard.exsd"/>
    <extension-point id="eu.geclipse.ui.jsdlApplicationParameters" name="jsdlApplicationParameters" schema="schema/jsdlApplicationParameters.exsd"/>
+   <extension-point id="propertiesFactory" name="propertiesFactory" schema="schema/PropertiesFactory.exsd"/>
 
    <extension
          point="org.eclipse.ui.preferencePages">
@@ -218,5 +219,12 @@
          name="UIProblems"
          point="eu.geclipse.core.problemProvider">
       <provider class="eu.geclipse.ui.UIProblems"/>
+   </extension>
+   <extension
+         point="eu.geclipse.ui.propertiesFactory">
+      <PropertiesFactory
+            class="eu.geclipse.ui.properties.PropertiesFactory"
+            id="eu.geclipse.ui.properties.PropertiesFactory"
+            sourceObjectClass="java.lang.Object"/>
    </extension>
 </plugin>
