@@ -15,13 +15,13 @@ import eu.geclipse.ui.internal.Activator;
 public class GridElementMoveOperation
     extends GridElementTransferOperation {
   
-  public GridElementMoveOperation( final IGridContainer target,
-                                   final IGridElement[] elements ) {
-    super( target, elements );
+  public GridElementMoveOperation( final IGridElement[] elements,
+                                   final IGridContainer target ) {
+    super( elements, target, true );
   }
   
-  protected void transferElement( final IGridContainer target,
-                                  final IGridElement element,
+  protected void transferElement( final IGridElement element,
+                                  final IGridContainer target,
                                   final IProgressMonitor monitor )
       throws CoreException {
     

@@ -19,13 +19,13 @@ import eu.geclipse.ui.internal.Activator;
 public class GridElementCopyOperation
     extends GridElementTransferOperation {
   
-  public GridElementCopyOperation( final IGridContainer target,
-                                   final IGridElement[] elements ) {
-    super( target, elements );
+  public GridElementCopyOperation( final IGridElement[] elements,
+                                   final IGridContainer target ) {
+    super( elements, target, false );
   }
   
-  protected void transferElement( final IGridContainer target,
-                                  final IGridElement element,
+  protected void transferElement( final IGridElement element,
+                                  final IGridContainer target,
                                   final IProgressMonitor monitor )
       throws CoreException {
     

@@ -4,6 +4,11 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -93,15 +98,16 @@ public class SelectionTransferDropAdapter
     
     switch ( event.detail ) {
       case DND.DROP_COPY:
-        op = new GridElementCopyOperation( target, elements );
+        op = new GridElementTransferOperation( elements, target, false );
         break;
       case DND.DROP_MOVE:
-        op = new GridElementMoveOperation( target, elements );
+        op = new GridElementTransferOperation( elements, target, true );
         break;
     }
     
     if ( op != null ) {
-      runOperation( op, event.display.getActiveShell() );
+      op.setUser( true );
+      op.schedule();
     } else {
       event.detail = DND.DROP_NONE;
     }
@@ -271,25 +277,5 @@ public class SelectionTransferDropAdapter
     }
     return result;
   }
-  
-  private void runOperation( final GridElementTransferOperation op,
-                             final Shell shell ) {
-    IProgressService progressService
-      = PlatformUI.getWorkbench().getProgressService();
-    try {
-      progressService.run( true, true, op );
-    } catch( InvocationTargetException itExc ) {
-      Throwable exc = itExc.getCause();
-      if ( exc == null ) {
-        exc = itExc;
-      }
-      NewProblemDialog.openProblem( shell,
-                                    "Transfer problem",
-                                    "A problem occured during a drag'n'drop operation",
-                                    exc );
-    } catch( InterruptedException e ) {
-      // has not to be handled
-    }
-  }
-  
+
 }

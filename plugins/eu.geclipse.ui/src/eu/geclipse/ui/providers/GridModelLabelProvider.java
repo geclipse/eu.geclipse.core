@@ -14,9 +14,9 @@ import eu.geclipse.core.model.IGridComputing;
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
-import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridService;
 import eu.geclipse.core.model.IGridStorage;
+import eu.geclipse.core.model.IGridTransfer;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.ui.internal.Activator;
 
@@ -79,6 +79,13 @@ public class GridModelLabelProvider
         resultImage = getFolderImage( true );
       } else {
         resultImage = getFileImage( true );
+      }
+    } else if ( element instanceof IGridTransfer ) {
+      IGridTransfer transfer = ( IGridTransfer ) element;
+      if ( transfer.isAtomic() ) {
+        resultImage = getFileImage( false );
+      } else {
+        resultImage = getFolderImage( false );
       }
     } else if ( element instanceof IVirtualOrganization ) {
       resultImage = getVoImage();
