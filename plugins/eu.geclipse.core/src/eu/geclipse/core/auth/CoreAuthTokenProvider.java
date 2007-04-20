@@ -42,6 +42,7 @@ public class CoreAuthTokenProvider extends AbstractAuthTokenProvider {
     if ( ( token != null ) && ( description != null ) ) {
       IAuthenticationTokenDescription tDesc = token.getDescription();
       if ( !description.getClass().isAssignableFrom( tDesc.getClass() ) ) {
+        token = null;
         for( IAuthenticationToken t : manager.getTokens() ) {
           tDesc = t.getDescription();
           if( description.getClass().isAssignableFrom( tDesc.getClass() ) ) {
