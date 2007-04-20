@@ -65,5 +65,12 @@
         class = "eu.geclipse.jsdl.posix.presentation.PosixEditor" 
         contributorClass="eu.geclipse.jsdl.posix.presentation.PosixActionBarContributor" >
     </editor>
+  </extension>
+  <extension
+        point="eu.geclipse.ui.propertiesFactory">
+     <PropertiesFactory
+           class="eu.geclipse.jsdl.properties.PropertiesFactory"
+           id="eu.geclipse.jsdl.properties.PropertiesFactory"
+           sourceObjectClass="eu.geclipse.core.model.impl.JSDLJobDescription"/>
   </extension>    
 </plugin>
