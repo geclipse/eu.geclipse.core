@@ -19,10 +19,10 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import eu.geclipse.core.model.IGridConnection;
+import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IVirtualOrganization;
-import eu.geclipse.core.model.impl.JSDLJobDescription;
 
 
 /**
@@ -49,16 +49,16 @@ public class PropertiesFactory implements IPropertiesFactory {
       sourcesList.add( new GridJobDescSource( ( IGridJobDescription )sourceObject ) );
     }
     
-    if( sourceObject instanceof JSDLJobDescription ) {
-      sourcesList.add( new JsdlJobDescSource( ( JSDLJobDescription )sourceObject ) );
-    }
-    
     if( sourceObject instanceof IGridProject ) {
       sourcesList.add( new GridProjectSource( (IGridProject)sourceObject ) );
     }
     
     if( sourceObject instanceof IGridConnection ) {
       sourcesList.add( new ConnectionPropertySource( (IGridConnection) sourceObject ) );
+    }
+    
+    if( sourceObject instanceof IGridJob ) {
+      sourcesList.add( new GridJobSource( ( IGridJob ) sourceObject ) );
     }
     
     return sourcesList;

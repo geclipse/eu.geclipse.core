@@ -104,9 +104,9 @@ public class Extensions {
   public static final String JSDL_PARAMETERS_EXECUTABLE_ELEMENT_PATH_ATTRIBUTE = "path"; //$NON-NLS-1$
   
   private static final String PROPERTIES_FACTORY_POINT = "eu.geclipse.ui.propertiesFactory";  //$NON-NLS-1$
-  private static final String PROPERTIES_FACTORY_ELEMENT = "PropertiesFactory";
-  private static final String PROPERTIES_FACTORY_SOURCECLASS_ATTR = "sourceObjectClass";
-  private static final String PROPERTIES_FACTORY_CLASS_ATTR = "class";
+  private static final String PROPERTIES_FACTORY_ELEMENT = "PropertiesFactory"; //$NON-NLS-1$
+  private static final String PROPERTIES_FACTORY_SOURCECLASS_ATTR = "sourceObjectClass"; //$NON-NLS-1$
+  private static final String PROPERTIES_FACTORY_CLASS_ATTR = "class"; //$NON-NLS-1$
   
   /**
    * Get a list of all currently registered authentication token ui factories.
@@ -225,6 +225,13 @@ public class Extensions {
     return result;
   }
   
+  /**
+   * Scan registered plugins and return all {@link IPropertiesFactory}, which support properties for 
+   * class <code>sourceObjectClass</code>, or for <code>sourceObjectClass</code> base classes, or for
+   *  <code>sourceObjectClass</code> interfaces.   
+   * @param sourceObjectClass class of object, for which we need properties 
+   * @return all factories, which can produces properties for sourceObjectClass 
+   */
   static public List<IPropertiesFactory> getPropertiesFactories( final Class<?> sourceObjectClass )
   {
     List<IPropertiesFactory> propertiesFactoryList = new ArrayList<IPropertiesFactory>();
@@ -233,18 +240,12 @@ public class Extensions {
                                                                                         PROPERTIES_FACTORY_ELEMENT );
     for( IConfigurationElement element : confElementsList ) {
       String currentSourceObjectString = element.getAttribute( PROPERTIES_FACTORY_SOURCECLASS_ATTR );
-      if( currentSourceObjectString != null ) {        
-        try {          
-          Class<?> sourceClass = Class.forName( currentSourceObjectString );
-          
-          if( sourceClass != null
-              && sourceClass.isAssignableFrom( sourceObjectClass ) )
-          {
+      if( currentSourceObjectString != null ) {
+        try {
+          if( isInstanceOf( sourceObjectClass, currentSourceObjectString ) ) {
             IPropertiesFactory factory = ( IPropertiesFactory )element.createExecutableExtension( PROPERTIES_FACTORY_CLASS_ATTR );
             propertiesFactoryList.add( factory );
-          }          
-        } catch( ClassNotFoundException exception ) {
-          // don't log, because extension can support properties for objects from plugins, which were not loaded yet
+          }
         } catch( CoreException exception ) {
           Activator.logException( exception );
         }
@@ -259,5 +260,46 @@ public class Extensions {
       }
     }
     return propertiesFactoryList;
+  }
+  
+  /**
+   * Make the same what {@link Class#isAssignableFrom(Class)}
+   * <p>
+   * Why we cannot use {@link Class#isAssignableFrom(Class)}?<br>
+   * {@link Class#isAssignableFrom(Class)} needs instance of Class as parameter.
+   * Unfortunatelly we have only full class name, and we don't want to load this
+   * class if wasn't loaded yet. So, instead to compare {@link Class} objects,
+   * we just compare class name. Similar solution was used in Eclipse. See:
+   * <code>TabbedPropertyRegistryClassSectionFilter.appliesToEffectiveType()</code>
+   * 
+   * @param checkedObjectClass
+   * @param fullyClassNameString
+   * @return true if: <br>
+   *         checkedObjectClass is instance of fullyClassNameString <br>
+   *         or checkedObjectClass inherit fullyClassNameString <br>
+   *         or checkedObjectClass implement interface fullyClassNameString <br>
+   */
+  static private boolean isInstanceOf( final Class<?> checkedObjectClass,
+                                       final String fullyClassNameString )
+  {
+    boolean isInstance = false;
+    if( checkedObjectClass.getName().equals( fullyClassNameString ) ) {
+      isInstance = true;
+    } else {
+      // check interfaces
+      Class<?>[] interfaces = checkedObjectClass.getInterfaces();
+      for( int index = 0; index < interfaces.length && isInstance == false; index++ )
+      {
+        if( interfaces[ index ].getName().equals( fullyClassNameString ) ) {
+          isInstance = true;
+        }
+      }
+    }
+    // check base class
+    if( isInstance == false && checkedObjectClass.getSuperclass() != null ) {
+      isInstance = isInstanceOf( checkedObjectClass.getSuperclass(),
+                                 fullyClassNameString );
+    }
+    return isInstance;
   }
 }
