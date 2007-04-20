@@ -264,6 +264,13 @@ public abstract class AbstractGridElementManager
   }
   
   /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridContainer#refresh(org.eclipse.core.runtime.IProgressMonitor)
+   */
+  public void refresh( final IProgressMonitor monitor ) {
+    // empty implementation
+  }
+  
+  /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridModelNotifier#removeGridModelListener(eu.geclipse.core.model.IGridModelListener)
    */
   public void removeGridModelListener( final IGridModelListener listener ) {

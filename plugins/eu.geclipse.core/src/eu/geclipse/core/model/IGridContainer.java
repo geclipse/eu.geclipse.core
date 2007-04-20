@@ -152,6 +152,8 @@ public interface IGridContainer extends IGridElement {
    */
   public boolean isLazy();
   
+  public void refresh( final IProgressMonitor monitor ) throws GridModelException;
+  
   /**
    * Mark this container as dirty. A dirty and lazy container will
    * reload its children when {@link #getChildren(IProgressMonitor monitor)}

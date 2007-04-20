@@ -19,6 +19,9 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import eu.geclipse.core.internal.model.GridModelEvent;
 import eu.geclipse.core.internal.model.GridRoot;
@@ -174,6 +177,30 @@ public abstract class AbstractGridContainer
    */
   public boolean isDirty() {
     return this.dirty;
+  }
+  
+  public void refresh( final IProgressMonitor monitor )
+      throws GridModelException {
+    setProcessEvents( false );
+    try {
+      if ( isLocal() ) {
+        IContainer container = ( IContainer ) getResource();
+        try {
+          container.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+        } catch( CoreException cExc ) {
+          throw new GridModelException( GridModelProblems.REFRESH_FAILED, cExc );
+        }
+      } else {
+        setDirty();
+        try {
+          getChildren( monitor );
+        } catch ( GridModelException gmExc ) {
+          throw new GridModelException( GridModelProblems.REFRESH_FAILED, gmExc );
+        }
+      }
+    } finally {
+      setProcessEvents( true );
+    }
   }
   
   /* (non-Javadoc)

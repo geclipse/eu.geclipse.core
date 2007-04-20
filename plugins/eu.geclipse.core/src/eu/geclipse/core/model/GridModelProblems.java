@@ -25,6 +25,9 @@ public class GridModelProblems implements IProblemProvider {
   
   public static final int JOB_SUBMIT_FAILED
     = ProblemRegistry.uniqueID();
+  
+  public static final int REFRESH_FAILED
+    = ProblemRegistry.uniqueID();
 
   public IProblem getProblem( final int problemID,
                               final Throwable exc ) {
@@ -62,6 +65,13 @@ public class GridModelProblems implements IProblemProvider {
     else if ( problemID == JOB_SUBMIT_FAILED ) {
       problem = createProblem( problemID,
                                "Failed to submit job",
+                               exc,
+                               null );
+    }
+    
+    else if ( problemID == REFRESH_FAILED ) {
+      problem = createProblem( problemID,
+                               "Failed to refresh container",
                                exc,
                                null );
     }

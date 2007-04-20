@@ -149,10 +149,13 @@ public class VoResourceContainer
     // Add children to the container
     if ( children != null ) {
       setProcessEvents( false );
-      for ( IGridElement child : children ) {
-        addElement( child );
+      try {
+        for ( IGridElement child : children ) {
+          addElement( child );
+        }
+      } finally {
+        setProcessEvents( true );
       }
-      setProcessEvents( true );
     }
     
     return true;
