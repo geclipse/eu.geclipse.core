@@ -24,6 +24,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import eu.geclipse.core.model.IGridElement;
 
 /**
  * {@link IFolder} implementation in order to wrap
@@ -185,9 +186,20 @@ public class GridConnectionFolderAdapter
 
   public IResource[] members( final int memberFlags )
       throws CoreException {
-    // TODO mathias
-    notYetImplemented();
-    return null;
+    
+    IResource[] members = null;
+    
+    GridConnectionElement connection = getGridConnection();
+    IGridElement[] children = connection.getChildren( null );
+    if ( children != null ) {
+      members = new IResource[ children.length ];
+      for ( int i = 0 ; i < children.length ; i++ ) {
+        members[ i ] = children[ i ].getResource();
+      }
+    }
+    
+    return members;
+    
   }
 
   public void setDefaultCharset( final String charset )
