@@ -27,12 +27,12 @@ public class SRMConnectionWizardPage extends WizardPage implements ModifyListene
    */
   private String errorMessage;
   
-  protected SRMConnectionWizardPage( String pageName ) {
+  protected SRMConnectionWizardPage( final String pageName ) {
     super( pageName );  
   }
   
 
-  public void createControl( Composite parent ) {
+  public void createControl( final Composite parent ) {
     Composite mainComp = new Composite( parent, SWT.NONE );
     mainComp.setLayout( new GridLayout( 2, false ) );
     

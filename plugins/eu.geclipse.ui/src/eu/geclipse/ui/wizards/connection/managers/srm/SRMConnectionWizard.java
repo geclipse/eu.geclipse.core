@@ -11,7 +11,7 @@ public class SRMConnectionWizard extends Wizard implements IInitalizableWizard {
   private ConnectionWizard wizard;
   private SRMConnectionWizardPage page;
   
-  public boolean init( Object data ) {
+  public boolean init( final Object data ) {
     boolean result = false;
     if ( data instanceof ConnectionWizard ) {
       this.wizard = ( ConnectionWizard ) data;
@@ -24,7 +24,7 @@ public class SRMConnectionWizard extends Wizard implements IInitalizableWizard {
   public void addPages()
   {
     this.page = new SRMConnectionWizardPage("name");
-    this.addPage( page );
+    this.addPage( this.page );
   }
   
   @Override

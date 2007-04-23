@@ -3,7 +3,9 @@ package eu.geclipse.ui.wizards.connection.managers.srm;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-
+/**
+ * Returns the localised messages for this package.
+ */
 public class Messages {
   
   private static final String BUNDLE_NAME = "eu.geclipse.ui.wizards.connection.managers.srm.messages"; //$NON-NLS-1$

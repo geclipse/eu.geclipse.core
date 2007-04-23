@@ -18,8 +18,8 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.cheatsheets.ICheatSheetManager;
 
 public class WizardSelectionListPage extends WizardSelectionPage implements IPageChangedListener {
-  protected IWizardSelectionNode[] wizardSelectionNodes;
   protected static ICheatSheetManager cheatSheetManager = null;
+  protected IWizardSelectionNode[] wizardSelectionNodes;
   IWizardNode preselectedNode;
   private String title;
   private String desc;
