@@ -3,19 +3,30 @@ package eu.geclipse.core;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+/**
+ * Returns the localised messages for this package.
+ */
 public class Messages {
-
   private static final String BUNDLE_NAME = "eu.geclipse.core.messages"; //$NON-NLS-1$
   private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( BUNDLE_NAME );
 
   private Messages() {
+    // not instanceable
   }
 
-  public static String getString( String key ) {
+  /**
+   * Returns a localised version of a message.
+   * 
+   * @param key key for the message.
+   * @return the localised string.
+   */
+  public static String getString( final String key ) {
+    String message;
     try {
-      return RESOURCE_BUNDLE.getString( key );
-    } catch( MissingResourceException e ) {
-      return '!' + key + '!';
+      message = RESOURCE_BUNDLE.getString( key );
+    } catch( final MissingResourceException exception ) {
+      message = '!' + key + '!';
     }
+    return message;
   }
 }
