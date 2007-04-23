@@ -31,12 +31,20 @@ public class AuthenticationException
   private static final long serialVersionUID = 2736623942948428527L;
 
   /**
-   * @param problemID
+   * Create a new Authentication Exception with the specified problem ID.
+   * 
+   * @param problemID The unique ID of the corresponding problem.
    */
   public AuthenticationException( final int problemID ) {
     super( problemID );
   }
 
+  /**
+   * Create a new Authentication Exception with the specified problem ID.
+   * 
+   * @param problemID The unique ID of the corresponding problem.
+   * @param exc The exception that caused the problem.
+   */
   public AuthenticationException( final int problemID,
                                   final Throwable exc ) {
     super( problemID, exc );

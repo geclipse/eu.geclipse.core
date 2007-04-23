@@ -207,7 +207,7 @@ abstract public class GridConnectionResourceAdapter
       ? new NullProgressMonitor()
       : monitor;
     
-    localMonitor.beginTask( "Deleting", 1 );
+    localMonitor.beginTask( "Deleting", 1 ); //$NON-NLS-1$
       
     try {
       localMonitor.setTaskName( getName() );
@@ -771,12 +771,19 @@ abstract public class GridConnectionResourceAdapter
     throw exc;
   }
 
-  /* (non-javadoc)
-   * @see org.eclipse.core.resources.IResource#findMaxProblemSeverity(String, boolean, int)
+  /**
+   * Method from Eclipse 3.3, documentation follows.
+   * 
+   * @param type Type.
+   * @param includeSubtypes Include subtypes.
+   * @param depth Depth.
+   * @return Max problem severity.
+   * @throws CoreException
    */
-  public int findMaxProblemSeverity( final String type,
-                                     final boolean includeSubtypes,
-                                     final int depth) throws CoreException {
+  public int findMaxProblemSeverity( @SuppressWarnings("unused") final String type,
+                                     @SuppressWarnings("unused") final boolean includeSubtypes,
+                                     @SuppressWarnings("unused") final int depth )
+      throws CoreException {
     // TODO ariel - This method was added to the Interface in v3.3
     notYetImplemented();
     return -1;

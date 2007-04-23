@@ -1,3 +1,18 @@
+/*****************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.core.internal.model;
 
 import org.eclipse.core.filesystem.IFileStore;
@@ -12,15 +27,31 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridTransfer;
 import eu.geclipse.core.model.impl.AbstractGridContainer;
 
-
+/**
+ * Core implementation of the {@link IGridTransfer} interface. This
+ * is a very preliminary implementation and may for sure change in
+ * the future.
+ */
 public class GridTransfer
     extends AbstractGridContainer
     implements IGridTransfer {
   
+  /**
+   * The parent element of this Grid transfer.
+   */
   private IGridTransfer parent;
   
+  /**
+   * The source element of this transfer.
+   */
   private IGridElement source;
   
+  /**
+   * Construct a new Grid transfer with the specified parent and source.
+   * 
+   * @param parent The parent element of this transfer element.
+   * @param source The source element that should be transfered.
+   */
   protected GridTransfer( final GridTransfer parent,
                           final IGridElement source ) {
     this.parent = parent;
@@ -113,7 +144,7 @@ public class GridTransfer
       ? new NullProgressMonitor()
       : monitor;
       
-    localMonitor.beginTask( "Preparing transfer for " + getName(), 10 );
+    localMonitor.beginTask( Messages.getString("GridTransfer.preparing_transfer_progress") + getName(), 10 ); //$NON-NLS-1$
     
     try {
     

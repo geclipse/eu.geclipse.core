@@ -31,7 +31,7 @@ public interface IGridInfoService extends IGridService {
    * @param vo The virtual organization for which to fetch the
    * computing elements. This may be <code>null</code>. In that
    * case all available computing elements should be returned.
-   * @param monitor A {@link IProgressMonitor} to monitor the
+   * @param monitor An {@link IProgressMonitor} to monitor the
    * progress of the operation. 
    * @return The available computing elements for the
    * specified VO or all available elements if the specified
@@ -49,7 +49,7 @@ public interface IGridInfoService extends IGridService {
    * @param vo The virtual organization for which to fetch the
    * storage elements. This may be <code>null</code>. In that
    * case all available storage elements should be returned.
-   * @param monitor A {@link IProgressMonitor} to monitor the
+   * @param monitor An {@link IProgressMonitor} to monitor the
    * progress of the operation.
    * @return The available storage elements for the
    * specified VO or all available elements if the specified
@@ -59,8 +59,22 @@ public interface IGridInfoService extends IGridService {
           final IVirtualOrganization vo,
           final IProgressMonitor monitor );
   
+  /**
+   * Fetch all available services from the underlying database
+   * for the specified virtual organization.
+   * 
+   * @param parent The parent of this element.
+   * @param vo The virtual organization for which to fetch the
+   * storage elements. This may be <code>null</code>. In that
+   * case all available services should be returned.
+   * @param monitor An {@link IProgressMonitor} to monitor the
+   * progress of the operation.
+   * @return The available services for the
+   * specified VO or all available services if the specified
+   * VO is <code>null</code>.
+   */
   public IGridService[] fetchServices( final IGridContainer parent,
-          final IVirtualOrganization vo,
-          final IProgressMonitor monitor );
+                                       final IVirtualOrganization vo,
+                                       final IProgressMonitor monitor );
 
 }

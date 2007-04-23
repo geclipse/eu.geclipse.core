@@ -111,7 +111,7 @@ public class GridConnectionFileAdapter
       ? new NullProgressMonitor()
       : monitor;
       
-    localMonitor.beginTask( "Creating " + getName(), 1 );
+    localMonitor.beginTask( "Creating " + getName(), 1 ); //$NON-NLS-1$
 
     try {
     
@@ -303,17 +303,14 @@ public class GridConnectionFileAdapter
   
   private void handleProgress( final IProgressMonitor monitor,
                                final long bytes ) {
-    final long kb = 1024;
-    final long mb = 1024*kb;
-    final long gb = 1024*mb;
     if ( bytes < 1024 ) {
-      monitor.subTask( getName() + " (" + bytes + "B transfered)" );
+      monitor.subTask( getName() + " (" + bytes + "B transfered)" ); //$NON-NLS-1$ //$NON-NLS-2$
     } else if ( ( bytes < 1048576 ) && ( ( bytes % 1024 ) == 0 ) ) {
-      monitor.subTask( getName() + " (" + ( bytes/1024 ) + "kB transfered)" );
+      monitor.subTask( getName() + " (" + ( bytes/1024 ) + "kB transfered)" ); //$NON-NLS-1$ //$NON-NLS-2$
     } else if ( ( bytes % ( 1048576/10 ) ) == 0 ) {
-      DecimalFormat format = new DecimalFormat("#,###,##0.0");
+      DecimalFormat format = new DecimalFormat("#,###,##0.0"); //$NON-NLS-1$
       String mbstring = format.format( bytes/1048576. );
-      monitor.subTask( getName() + " (" + mbstring + "MB transfered)" );
+      monitor.subTask( getName() + " (" + mbstring + "MB transfered)" ); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
   

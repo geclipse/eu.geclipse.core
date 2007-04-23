@@ -15,35 +15,46 @@
 
 package eu.geclipse.core.model;
 
-import org.eclipse.core.runtime.CoreException;
 import eu.geclipse.core.GridException;
 
 /**
- * Initial implementation. Will soon be replaced or completely reimplemented.
+ * Grid exception that is specific for problems occuring in the model.
  */
 public class GridModelException extends GridException {
 
+  /**
+   * The serial version UID.
+   */
   private static final long serialVersionUID = 271834096070966136L;
   
   /**
-   * Construct a new grid model exception from the specified
-   * {@link CoreException}.
+   * Construct a new <code>GridModelException</code> with the specified
+   * problem ID.
+   * 
+   * @param problemID The unique ID of the problem tha occured.
    */
   public GridModelException( final int problemID ) {
     super( problemID );
   }
   
   /**
-   * Construct a new grid model exception from the specified
-   * {@link CoreException} with additional explanation text. 
+   * Construct a new <code>GridModelException</code> with the specified
+   * problem ID and a specific problem description.
+   * 
+   * @param problemID The unique ID of the problem tha occured.
+   * @param description A more detailed description of the problem. 
    */
-  public GridModelException( final int problemID, final String description ) {
+  public GridModelException( final int problemID,
+                             final String description ) {
     super( problemID, description );
   }
 
   /**
-   * Construct a new grid model exception from the specified
-   * {@link IGridModelStatus}
+   * Construct a new <code>GridModelException</code> with the specified
+   * problem ID and an exception that caused this problem.
+   * 
+   * @param problemID The unique ID of the problem tha occured.
+   * @param exc The exception that caused this problem. 
    */
   public GridModelException( final int problemID,
                              final Throwable exc ) {
@@ -51,11 +62,18 @@ public class GridModelException extends GridException {
   }
   
   /**
-   * Construct a new grid model exception from the specified
-   * {@link IGridModelStatus} with additional explanatory text
+   * Construct a new <code>GridModelException</code> with the specified
+   * problem ID, an exception that caused this problem and a specific
+   * problem description.
+   * 
+   * @param problemID The unique ID of the problem tha occured.
+   * @param exc The exception that caused this problem.
+   * @param description A more detailed description of the problem.
    */
   public GridModelException( final int problemID,
-                             final Throwable exc, final String description ) {
+                             final Throwable exc,
+                             final String description ) {
     super( problemID, exc, description );
   }
+  
 }

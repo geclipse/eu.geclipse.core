@@ -56,6 +56,11 @@ public interface IGridProject extends IGridContainer {
    */
   public IFile createTempFile( final String name, final InputStream contents ) throws CoreException;
   
+  /**
+   * Get the virtual organisation that is associated with this project.
+   * 
+   * @return The associated {@link IVirtualOrganization}.
+   */
   public IVirtualOrganization getVO();
   
   /**

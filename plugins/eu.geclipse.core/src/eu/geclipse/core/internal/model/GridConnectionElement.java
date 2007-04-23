@@ -30,9 +30,9 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import eu.geclipse.core.CoreProblems;
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.GridModelException;
+import eu.geclipse.core.model.GridModelProblems;
 import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridContainer;
@@ -174,12 +174,12 @@ public class GridConnectionElement
         try {
           fs.delete( EFS.NONE, null );
         } catch( CoreException cExc ) {
-          throw new GridModelException( CoreProblems.ELEMENT_DELETION_FAILED, cExc );
+          throw new GridModelException( GridModelProblems.ELEMENT_DELETE_FAILED, cExc );
         }
       }
       super.delete( child );
     } catch ( CoreException cExc ) {
-      throw new GridModelException( CoreProblems.ELEMENT_DELETION_FAILED, cExc );
+      throw new GridModelException( GridModelProblems.ELEMENT_DELETE_FAILED, cExc );
     }
   }
   

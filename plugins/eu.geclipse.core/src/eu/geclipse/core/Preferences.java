@@ -280,8 +280,20 @@ public class Preferences {
     return proxy;
   }
   
+  /**
+   * Get an {@link URLConnection} that is initialised with the current proxy and
+   * timeout settings.
+   * 
+   * @param url The {@link URL} from which to create the connection.
+   * @return The connection created from the specified URL and initialised
+   * with the current proxy and timeout settings.
+   * @throws IOException If an IO-error occures while this connection is
+   * created. 
+   */
   static public URLConnection getURLConnection( final URL url )
       throws IOException {
+    
+    // TODO mathias replace IOException with GridException
     
     Proxy proxy = getProxy();
     int timeout = getConnectionTimeout() * 1000;
@@ -300,17 +312,31 @@ public class Preferences {
     
   }
   
+  /**
+   * Set the name of the current default VO.
+   * 
+   * @param defaultVoName The name of the default VO.
+   */
   static public void setDefaultVoName( final String defaultVoName ) {
     org.eclipse.core.runtime.Preferences preferenceStore = getPreferenceStore();
     preferenceStore.setValue( PreferenceConstants.DEFAULT_VO_ID, defaultVoName );
   }
   
+  /**
+   * Get the name of the current default VO.
+   * 
+   * @return The name of the default VO.
+   */
   static public String getDefaultVoName() {
     org.eclipse.core.runtime.Preferences preferenceStore = getPreferenceStore();
     String defaultVoName = preferenceStore.getString( PreferenceConstants.DEFAULT_VO_ID );
     return defaultVoName;
   }
   
+  /**
+   * Save these preferences to the preference store. This method just calls
+   * <code>Activator.getDefault().savePluginPreferences();</code>.
+   */
   static public void save() {
     Activator.getDefault().savePluginPreferences();
   }

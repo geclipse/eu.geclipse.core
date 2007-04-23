@@ -43,9 +43,15 @@ public class Extensions {
   public static final String CONNECTION_MANAGEMENT_POINT
     = "eu.geclipse.core.connectionManagement"; //$NON-NLS-1$
   
+  /**
+   * The ID of the grid element creator extension point.
+   */
   public static final String GRID_ELEMENT_CREATOR_POINT
     = "eu.geclipse.core.gridElementCreator"; //$NON-NLS-1$
   
+  /**
+   * The ID of the problem provider extension point.
+   */
   public static final String PROBLEM_PROVIDER_POINT
     = "eu.geclipse.core.problemProvider"; //$NON-NLS-1$
   
@@ -84,25 +90,53 @@ public class Extensions {
   public static final String CONNECTION_PROTOCOL_EXECUTABLE
     = "class"; //$NON-NLS-1$
   
+  /**
+   * The ID of the Grid element creator configuration element
+   * contained in the Grid element creator extension point.
+   */
   public static final String GRID_ELEMENT_CREATOR_ELEMENT
     = "creator"; //$NON-NLS-1$
   
+  /**
+   * The ID of the executable extension of the Grid element creator
+   * configuration element.
+   */
   public static final String GRID_ELEMENT_CREATOR_EXECUTABLE
     = "class"; //$NON-NLS-1$
   
+  /**
+   * The ID of the problem provider configuration element
+   * contained in the problem provider extension point.
+   */
   public static final String PROBLEM_PROVIDER_ELEMENT
     = "provider"; //$NON-NLS-1$
 
+  /**
+   * The ID of the executable extension of the problem provider
+   * configuration element.
+   */
   public static final String PROBLEM_PROVIDER_EXECUTABLE
     = "class"; //$NON-NLS-1$
   
   
-    public static List< IGridElementCreator > elementCreators=null;
+    /**
+     * List that holds all known element creators.
+     */
+    private static List< IGridElementCreator > elementCreators = null;
 
+    /**
+     * List that holds all known authentication token descriptions.
+     */
     private static List<IAuthenticationTokenDescription> authTokenDescriptions;
 
+    /**
+     * List that holds all known problem providers.
+     */
     private static List<IProblemProvider> problemProviders;
 
+    /**
+     * List containing the names of all known authentication token.
+     */
     private static List<String> authTokenNames;
     
   
@@ -116,19 +150,19 @@ public class Extensions {
    */
   public static List< String > getRegisteredAuthTokenNames() {
     if( authTokenNames == null ) {
-List< String > resultList = new ArrayList< String >();
-    ExtensionManager manager = new ExtensionManager();
-    List< IConfigurationElement > cElements
-      = manager.getConfigurationElements( AUTH_TOKEN_MANAGEMENT_POINT,
-                                          AUTH_TOKEN_ELEMENT );
-    for ( IConfigurationElement element : cElements ) {
-      String name = element.getAttribute( "name" ); //$NON-NLS-1$
-      if ( name != null ) {
-        resultList.add( name );
+      List< String > resultList = new ArrayList< String >();
+      ExtensionManager manager = new ExtensionManager();
+      List< IConfigurationElement > cElements
+        = manager.getConfigurationElements( AUTH_TOKEN_MANAGEMENT_POINT,
+                                            AUTH_TOKEN_ELEMENT );
+      for ( IConfigurationElement element : cElements ) {
+        String name = element.getAttribute( "name" ); //$NON-NLS-1$
+        if ( name != null ) {
+          resultList.add( name );
+        }
       }
-    }
-    Collections.sort( resultList );
-    authTokenNames=resultList;
+      Collections.sort( resultList );
+      authTokenNames = resultList;
     }
     return authTokenNames;
   }
@@ -143,23 +177,29 @@ List< String > resultList = new ArrayList< String >();
    */
   public static List< IAuthenticationTokenDescription > getRegisteredAuthTokenDescriptions() {
     if( authTokenDescriptions == null ) {
-    List< IAuthenticationTokenDescription > resultList
+      List< IAuthenticationTokenDescription > resultList
       = new ArrayList< IAuthenticationTokenDescription >();
-    ExtensionManager manager = new ExtensionManager();
-    List< Object > objectList
+      ExtensionManager manager = new ExtensionManager();
+      List< Object > objectList
       = manager.getExecutableExtensions( AUTH_TOKEN_MANAGEMENT_POINT,
                                          AUTH_TOKEN_ELEMENT,
                                          AUTH_TOKEN_DESCRIPTION_EXECUTABLE );
-    for ( Object o : objectList ) {
-      if ( o instanceof IAuthenticationTokenDescription ) {
-        resultList.add( ( IAuthenticationTokenDescription ) o );
+      for ( Object o : objectList ) {
+        if ( o instanceof IAuthenticationTokenDescription ) {
+          resultList.add( ( IAuthenticationTokenDescription ) o );
+        }
       }
-    }
-    authTokenDescriptions=resultList;
+      authTokenDescriptions = resultList;
     }
     return authTokenDescriptions;
   }
   
+  /**
+   * Get a list of all currently registered Grid element creators.
+   * 
+   * @return A list containing instances of all currently registered
+   * extensions of the Grid element creator configuration elements.
+   */
   public static List<IGridElementCreator> getRegisteredElementCreators() {
     if( elementCreators == null ) {
       List<IGridElementCreator> resultList = new ArrayList<IGridElementCreator>();
@@ -172,27 +212,34 @@ List< String > resultList = new ArrayList< String >();
           resultList.add( ( IGridElementCreator )o );
         }
       }
-      elementCreators=resultList;
+      elementCreators = resultList;
     }
     return elementCreators;
   }
   
+  /**
+   * Get a list of all currently registered problem providers.
+   * 
+   * @return A list containing instances of all currently registered
+   * extensions of the problem provider configuration elements.
+   */
   public static List< IProblemProvider > getRegisteredProblemProviders() {
     if( problemProviders == null ) {
-    List< IProblemProvider > resultList
+      List< IProblemProvider > resultList
       = new ArrayList< IProblemProvider >();
-    ExtensionManager manager = new ExtensionManager();
-    List< Object > objectList
+      ExtensionManager manager = new ExtensionManager();
+      List< Object > objectList
       = manager.getExecutableExtensions( PROBLEM_PROVIDER_POINT,
                                          PROBLEM_PROVIDER_ELEMENT,
                                          PROBLEM_PROVIDER_EXECUTABLE );
-    for ( Object o : objectList ) {
-      if ( o instanceof IProblemProvider ) {
-        resultList.add( ( IProblemProvider ) o );
+      for ( Object o : objectList ) {
+        if ( o instanceof IProblemProvider ) {
+          resultList.add( ( IProblemProvider ) o );
+        }
       }
+      problemProviders = resultList;
     }
-    problemProviders=resultList;
+    return problemProviders;
   }
-  return problemProviders;
-}
+  
 }

@@ -1,3 +1,18 @@
+/*****************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.core.internal.model;
 
 import org.eclipse.core.filesystem.EFS;
@@ -6,13 +21,14 @@ import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.runtime.CoreException;
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.GridModelException;
-import eu.geclipse.core.model.GridModelProblems;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridTransfer;
 import eu.geclipse.core.model.ITransferManager;
 
-
+/**
+ * Internal implementation of the {@link ITransferManager} interface. 
+ */
 public class TransferManager
     extends AbstractGridElementManager
     implements ITransferManager {
@@ -27,6 +43,9 @@ public class TransferManager
    */
   private static TransferManager singleton;
   
+  /**
+   * Private constructor.
+   */
   private TransferManager() {
     try {
       loadElements();
@@ -85,24 +104,7 @@ public class TransferManager
    * @see eu.geclipse.core.model.IStorableElementManager#loadElements()
    */
   public void loadElements() throws GridModelException {
-
-    IFileStore fileStore = getFileStore();
-    
-    IFileStore[] childStores;
-    try {
-      childStores = fileStore.childStores( EFS.NONE, null );
-    } catch( CoreException cExc ) {
-      throw new GridModelException( GridModelProblems.ELEMENT_LOAD_FAILED, cExc );
-    }
-    
-    for ( IFileStore childStore : childStores ) {
-      /*IFileStore remoteStore
-        = GridConnection.loadFromFsFile( childStore );
-      IGridConnection connection
-        = new GridConnection( this, remoteStore, childStore.getName() );
-      addElement( connection );*/
-    }
-        
+    // TODO mathias
   }
   
   /* (non-Javadoc)
@@ -112,6 +114,9 @@ public class TransferManager
     // TODO mathias
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.ITransferManager#queueTransfer(eu.geclipse.core.model.IGridElement[], eu.geclipse.core.model.IGridContainer)
+   */
   public void queueTransfer( final IGridElement[] sources,
                              final IGridContainer target )
       throws GridModelException {

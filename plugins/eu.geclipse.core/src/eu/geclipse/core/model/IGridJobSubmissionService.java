@@ -14,19 +14,21 @@
  *    Pawel Wolniewicz
  *****************************************************************************/
 
-
 package eu.geclipse.core.model;
 
 import eu.geclipse.core.GridException;
 
-
+/**
+ * TODO pawel
+ */
 public interface IGridJobSubmissionService extends IGridService{
+
   /**
    * TODO pawel
    * 
    * @param parent TODO pawel
    * @return TODO pawel
-   * @throws GridModelException TODO pawel
+   * @throws GridException TODO pawel
    */
   public IGridJobID submitJob( final IGridJobDescription parent ) throws GridException;
 
@@ -39,4 +41,5 @@ public interface IGridJobSubmissionService extends IGridService{
 //   * @throws GridModelException TODO pawel
 //   */
 //  public IGridJobID submitJob( final IGridJobDescription parent, final String destination ) throws GridException;
+  
 }

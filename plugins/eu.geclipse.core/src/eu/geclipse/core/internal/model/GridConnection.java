@@ -176,12 +176,15 @@ public class GridConnection
     // TODO mathias
   }
 
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridConnection#getURI()
+   */
   public URI getURI() {
     URI result = null;
     try {
       result = this.getConnectionFileStore().toURI();
     } catch( CoreException ex ) {
-      // FIXME Log error
+      // TODO pawel Log error
     }
     return result;
   }

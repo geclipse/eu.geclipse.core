@@ -1,3 +1,18 @@
+/*****************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.core.model;
 
 import org.eclipse.core.filesystem.IFileInfo;
@@ -6,10 +21,25 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
+/**
+ * Base interface for elements of a filesystem mount.
+ */
 public interface IGridConnectionElement extends IGridResource, IGridContainer {
   
+  /**
+   * Get the {@link IFileStore} object corresponding to this connection.
+   * 
+   * @return The file store of this connection.
+   * @throws CoreException If a problem occures when creating the file store.
+   */
   public IFileStore getConnectionFileStore() throws CoreException;
   
+  /**
+   * Get the {@link IFileInfo} object corresponding to this connection.
+   * May be <code>null</code>.
+   * 
+   * @return The file info or <code>null</code>.
+   */
   public IFileInfo getConnectionFileInfo();
   
   /**
@@ -21,6 +51,14 @@ public interface IGridConnectionElement extends IGridResource, IGridContainer {
    */
   public String getError();
   
+  /**
+   * This method is not intended for public use. It may disappear in the near
+   * future.
+   * 
+   * @param monitor Progress monitor.
+   * @return A local {@link IResource}.
+   * @throws CoreException
+   */
   public IResource createLocalCopy( final IProgressMonitor monitor ) throws CoreException;
   
   /**
