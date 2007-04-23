@@ -16,6 +16,7 @@
 
 package eu.geclipse.core.model;
 
+
 /**
  * Specialised interface for the creation of jobs for the grid.
  * Offers also the possibility for submitting the job.

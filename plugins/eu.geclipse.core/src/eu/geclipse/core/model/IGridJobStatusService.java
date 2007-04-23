@@ -13,13 +13,16 @@
  *    Pawel Wolniewicz
  *****************************************************************************/
 
-
 package eu.geclipse.core.model;
 
 import eu.geclipse.core.GridException;
 
 
+/**
+ * TODO pawel
+ */
 public interface IGridJobStatusService extends IGridService{
+  
   /**
    * TODO pawel
    * 

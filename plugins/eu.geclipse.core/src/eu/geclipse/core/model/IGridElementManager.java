@@ -49,8 +49,25 @@ public interface IGridElementManager
    */
   public boolean canManage( final IGridElement element );
   
+  /**
+   * Add the specified element to the list of managed elements.
+   * 
+   * @param element The element to be added.
+   * @return True if the element could be added successfully,
+   * false otherwise.
+   * @throws GridModelException If the element could not be added
+   * due to a problem, e.g. the element could not be managed by
+   * this manager.
+   */
   public boolean addElement( final IGridElement element ) throws GridModelException;
   
+  /**
+   * Remove the specified element from the list of managed elements.
+   * 
+   * @param element The element to be removed. 
+   * @return True if the element was contained in this container and
+   * could be successfully removed. 
+   */
   public boolean removeElement( final IGridElement element );
   
 }
