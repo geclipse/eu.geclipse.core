@@ -83,7 +83,7 @@ public class GridModelProblems implements IProblemProvider {
   private IProblem createProblem( final int id,
                                   final String text,
                                   final Throwable exc,
-                                  int[] solutionIDs ) {
+                                  final int[] solutionIDs ) {
     return ProblemRegistry.createProblem( id, text, exc, solutionIDs, Activator.PLUGIN_ID );
   }
   

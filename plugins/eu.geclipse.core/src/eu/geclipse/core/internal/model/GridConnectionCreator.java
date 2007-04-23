@@ -70,6 +70,12 @@ public class GridConnectionCreator extends AbstractGridElementCreator {
     IGridConnection connection = null;
     if( fileStore != null ) {
       connection = new GridConnection( parent, fileStore, fsFile.getName() );
+/*      try {
+        ((IFolder)parent.getResource()).getFolder( connection.getName() ).createLink( connection.getURI(), IResource.ALLOW_MISSING_LOCAL | IResource.REPLACE , null );
+      } catch( CoreException e ) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }*/
     }
     return connection;
   }

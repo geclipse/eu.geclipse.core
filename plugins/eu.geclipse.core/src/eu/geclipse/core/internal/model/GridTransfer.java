@@ -30,6 +30,7 @@ public class GridTransfer
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.impl.AbstractGridContainer#canContain(eu.geclipse.core.model.IGridElement)
    */
+  @Override
   public boolean canContain( final IGridElement element ) {
     return element instanceof IGridTransfer;
   }

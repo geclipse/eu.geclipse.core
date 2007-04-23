@@ -15,7 +15,6 @@
 
 package eu.geclipse.core.model;
 
-import org.eclipse.compare.IContentChangeNotifier;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 /**

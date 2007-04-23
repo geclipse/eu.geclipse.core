@@ -46,5 +46,10 @@ public interface IAuthenticationTokenDescription {
    */
   public String getTokenTypeName();
   
+  /**
+   * Returns the id of the wizard to be shown in the WizardSelectionPage of
+   * the authorization token wizard.
+   * @return the wizard for this token type.
+   */
   public String getWizardId();
 }

@@ -179,7 +179,7 @@ public class GridConnection
   public URI getURI() {
     URI result = null;
     try {
-      return this.getConnectionFileStore().toURI();
+      result = this.getConnectionFileStore().toURI();
     } catch( CoreException ex ) {
       // FIXME Log error
     }

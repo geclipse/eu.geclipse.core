@@ -4,7 +4,6 @@ import org.ietf.jgss.GSSException;
 import eu.geclipse.core.IProblem;
 import eu.geclipse.core.IProblemProvider;
 import eu.geclipse.core.ProblemRegistry;
-import eu.geclipse.core.SolutionRegistry;
 import eu.geclipse.core.internal.Activator;
 
 public class GridGSSProblems implements IProblemProvider {
