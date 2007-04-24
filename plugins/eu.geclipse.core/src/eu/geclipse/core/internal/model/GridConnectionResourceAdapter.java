@@ -767,7 +767,7 @@ abstract public class GridConnectionResourceAdapter
                                  "Mathias says: Method not yet implemented", //$NON-NLS-1$
                                  null );
     CoreException exc = new CoreException( status );
-    exc.printStackTrace();
+    Activator.logException( exc );
     throw exc;
   }
 

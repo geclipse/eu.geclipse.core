@@ -39,6 +39,7 @@ import org.eclipse.emf.ecore.util.FeatureMap;
 import org.eclipse.emf.ecore.util.FeatureMap.Entry;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMLMapImpl;
+import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.jsdl.ApplicationType;
 import eu.geclipse.jsdl.CreationFlagEnumeration;
@@ -120,8 +121,7 @@ public class JSDLJobDescription
       this.documentRoot = ( DocumentRoot )resourceA.getContents().get( 0 );
       this.documentRoot.getJobDefinition();
     } catch( IOException e ) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      Activator.logException( e );
     }
   }
 
@@ -184,8 +184,7 @@ public class JSDLJobDescription
     }
     // Catch exceptions.
     catch( Exception exception ) {
-      // Activator.logException( exception );
-      exception.printStackTrace();
+      Activator.logException( exception );
     }
   }
 

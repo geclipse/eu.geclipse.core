@@ -210,8 +210,7 @@ public class ConnectionManager implements IContentChangeNotifier {
       try {
         file.createNewFile();
       } catch( IOException e ) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
+        Activator.logException( e );
       }
       FileWriter reader;
       try {
