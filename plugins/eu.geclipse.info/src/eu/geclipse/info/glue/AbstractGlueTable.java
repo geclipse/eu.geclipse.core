@@ -3,7 +3,6 @@ package eu.geclipse.info.glue;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import eu.geclipse.core.model.IGridContainer;
 
 /**
  * @author George Tsouloupas

@@ -3,8 +3,11 @@ package eu.geclipse.info.glue;
 import java.util.Date;
 
 public class GlueCESEBind extends AbstractGlueTable implements java.io.Serializable{
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
   public GlueIndex glueIndex;
-  private String key;
   public void setID(String id){ key=id;}
   
   public GlueCE glueCE; //GlueCEUniqueID

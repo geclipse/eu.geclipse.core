@@ -1,11 +1,7 @@
 package eu.geclipse.info.glue;
 
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Hashtable;
-
-import eu.geclipse.info.IGlueInfoStore;
 
 public class GlueQuery {
 	
@@ -28,6 +24,13 @@ public class GlueQuery {
 				GlueSE se=(GlueSE) table;
 				if(seSupportsVO(se, vo)){
 					outArray.add(se);
+				}
+			}
+		}else if(tableName.equals("GlueService")){ //$NON-NLS-1$
+			for (AbstractGlueTable table : inArray) {
+				GlueService service=(GlueService) table;
+				if(serviceSupportsVO(service, vo)){
+					outArray.add(service);
 				}
 			}
 		}else if(tableName.equals("GlueSite")){ //$NON-NLS-1$
@@ -76,6 +79,18 @@ public class GlueQuery {
 		}
 		return found;
 	}
+	
+	public static boolean serviceSupportsVO(GlueService service, String vo){
+		boolean found=false;
+		for (GlueServiceAccessControlRule rule : service.glueServiceAccessControlRuleList) {
+			if(rule.value.equals(vo)){ 
+				found=true;
+				break;
+			}
+		}
+		return found;
+	}
+	
     public static boolean saSupportsVO(GlueSA sa, String vo){
         boolean found=false;
         for (GlueSAAccessControlBaseRule rule : sa.glueSAAccessControlBaseRuleList) {

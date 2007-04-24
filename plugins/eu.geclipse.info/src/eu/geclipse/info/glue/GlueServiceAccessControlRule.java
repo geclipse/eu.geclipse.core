@@ -1,14 +1,15 @@
 package eu.geclipse.info.glue;
 
 import java.util.Date;
-import java.util.ArrayList;
-import java.util.Hashtable;
 public class GlueServiceAccessControlRule extends AbstractGlueTable implements java.io.Serializable{
-  private String key;
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
   public void setID(String id){ key=id;}
   
   public GlueService glueService; //GlueServiceUniqueID
-  public String Value;
+  public String value;
   public Date MeasurementDate;
   public Date MeasurementTime;
 

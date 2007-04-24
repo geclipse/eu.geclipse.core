@@ -23,6 +23,9 @@ public abstract class GlueIndex implements java.io.Serializable {
   private static GlueIndex glueIndexInstance;
 
   protected abstract String getTag();
+  
+  //Used for invalidating the cache 
+  public String voListString;
 
   /**
    * @return the singleton instance to the Glue information datastructure

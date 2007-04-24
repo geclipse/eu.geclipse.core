@@ -2,22 +2,22 @@ package eu.geclipse.info.glue;
 
 import java.util.Date;
 import java.util.ArrayList;
-import java.util.Hashtable;
+
 public class GlueService extends AbstractGlueTable implements java.io.Serializable{
-  public GlueIndex glueIndex;
+  private static final long serialVersionUID = 1L;
+  public String getID(){return uniqueId;}
+  public void setID(String id){ uniqueId=id;}
 
-  public String getID(){return UniqueId;}
-
-  public void setID(String id){ UniqueId=id;}
-
-  public String UniqueId; //PK
-  public String keyName = "UniqueId";
-  public String Name;
-  public String Type;
-  public String Version;
-  public String Endpoint;
-  public String WSDL;
-  public String Semantics;
+  public String uniqueId; //PK
+  public String name;
+  public String type;
+  public String version;
+  public String endpoint;
+  public String wsdl;
+  public String semantics;
+  public String uri;
+  public String status;
+  
   public GlueSite glueSite; //GlueSite_UniqueId
   public Date MeasurementDate;
   public Date MeasurementTime;

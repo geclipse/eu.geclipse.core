@@ -3,10 +3,6 @@
  */
 package eu.geclipse.info;
 
-import java.util.ArrayList;
-
-import eu.geclipse.info.glue.GlueSite;
-
 /**
  * @author George Tsouloupas
  *

@@ -4,6 +4,10 @@ import java.util.Date;
 import java.util.ArrayList;
 
 public class GlueCE extends AbstractGlueTable implements java.io.Serializable{
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
   public GlueIndex glueIndex;
 
   public String getID(){return UniqueID;}

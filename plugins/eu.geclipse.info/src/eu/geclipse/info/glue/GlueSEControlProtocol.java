@@ -2,8 +2,11 @@ package eu.geclipse.info.glue;
 
 import java.util.Date;
 import java.util.ArrayList;
-import java.util.Hashtable;
 public class GlueSEControlProtocol extends AbstractGlueTable implements java.io.Serializable{
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
   public GlueIndex glueIndex;
 
   public String getID(){return UniqueID;}

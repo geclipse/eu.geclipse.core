@@ -44,7 +44,7 @@ public class GridGlueService
   @Override
   public String getName() {
 	  GlueService gs=(GlueService) getGlueElement();
-	  return (gs.Endpoint!=null)?gs.Endpoint:gs.getID()+" (endpoint missing)";
+	  return (gs.endpoint!=null)?gs.endpoint:gs.getID()+" (endpoint missing)";
   }
 
 
@@ -52,7 +52,7 @@ public class GridGlueService
 	  GlueService gs=(GlueService) getGlueElement();
 	  URI uri=null;
 	  try {
-		  uri=new URI(gs.Endpoint);
+		  uri=new URI(gs.endpoint);
 	  } catch (URISyntaxException e) {
 		  uri=null;
 	  }

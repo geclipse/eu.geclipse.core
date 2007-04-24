@@ -4,6 +4,10 @@ import java.util.Date;
 
 
 public class GlueBatchJob extends AbstractGlueTable implements java.io.Serializable{
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
   /* (non-Javadoc)
    * @see eu.geclipse.info.glue.AbstractGlueTable#getID()
    */
