@@ -12,6 +12,11 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.cheatsheets.ICheatSheetManager;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
+/**
+ * Wizard page for providing a list of other wizards which can be used for the
+ * next steps in the wizard. The wizard list is built querying an extension
+ * point.
+ */
 public class ExtPointWizardSelectionListPage extends WizardSelectionListPage {
   static final String EXT_CLASS = "class"; //$NON-NLS-1$
   static final String EXT_WIZARD = "wizard"; //$NON-NLS-1$
@@ -19,6 +24,15 @@ public class ExtPointWizardSelectionListPage extends WizardSelectionListPage {
   static final String EXT_ICON = "icon"; //$NON-NLS-1$
   static final String EXT_ID = "id"; //$NON-NLS-1$
 
+  /**
+   * Creates a wizard page which allows to select a wizard for the next steps.
+   * The wizard list is queried from an extension point.
+   * @param pageName Name of the wizard page.
+   * @param extensionPointId Id of the extension point to query the wizard list
+   *                         from.
+   * @param title Title of the page.
+   * @param desc Description text of the page.
+   */
   public ExtPointWizardSelectionListPage( final String pageName,
                                           final String extensionPointId,
                                           final String title,
@@ -29,6 +43,18 @@ public class ExtPointWizardSelectionListPage extends WizardSelectionListPage {
            desc );
   }
 
+  /**
+   * Creates a wizard page which allows to select a wizard for the next steps.
+   * The wizard list is queried from an extension point.
+   * @param pageName Name of the wizard page.
+   * @param extensionPointId Id of the extension point to query the wizard list
+   *                         from.
+   * @param filterList List of wizard Ids of wizards which are allowed to be
+   *                   displayed in the wizard list, if the Id of a wizard is
+   *                   not in the list it won't be displayed in the list.
+   * @param title Title of the page.
+   * @param desc Description text of the page.
+   */
   public ExtPointWizardSelectionListPage( final String pageName,
                                           final String extensionPointId,
                                           final List<String> filterList,
@@ -40,12 +66,21 @@ public class ExtPointWizardSelectionListPage extends WizardSelectionListPage {
            desc );
   }
 
-  public void setPreselectedId( final String id ) {
+  /**
+   * Sets the Id of the wizard which should be preselected. If set the
+   * WizardSelectionListPage will be skiped and the first page of the
+   * preselected wizard will be displayed.
+   * @param id Id representing the wizard to be preselected.
+   * @param hidePrevPage true if it should not be possible to go back to the
+   *                     WizardSelectionListPage to select another wizard,
+   *                     false otherwise.
+   */
+  public void setPreselectedId( final String id, final boolean hidePrevPage ) {
     if ( id != null ) {
       for ( IWizardSelectionNode node : this.wizardSelectionNodes ) {
         ExtPointWizardSelectionNode extPointNode = ( ExtPointWizardSelectionNode ) node;
         if ( id.equals( extPointNode.getId() ) ) {
-          setPreselectedNode( extPointNode );
+          setPreselectedNode( extPointNode, hidePrevPage );
         }
       }
     }

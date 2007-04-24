@@ -67,8 +67,6 @@ class ExtPointWizardSelectionNode implements IWizardSelectionNode {
         }
       } catch( CoreException coreEx ) {
         Activator.logException( coreEx );
-        // TODO Auto-generated catch block
-        coreEx.printStackTrace();
       }
     }
     return this.wizard;

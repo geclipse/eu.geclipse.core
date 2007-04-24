@@ -245,7 +245,7 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
             eu.geclipse.core.Extensions.AUTH_TOKEN_MANAGEMENT_POINT,
             Messages.getString( "UIAuthTokenProvider.wizard_first_page_title" ), //$NON-NLS-1$
             Messages.getString( "UIAuthTokenProvider.wizard_first_page_description" ) ); //$NON-NLS-1$
-        page.setPreselectedId( tokenWizardId );
+        page.setPreselectedId( tokenWizardId, true );
         page.setCheatSheetManager(cheatSheetManager);
         addPage( page );
       }

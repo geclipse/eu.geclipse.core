@@ -17,6 +17,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.cheatsheets.ICheatSheetManager;
 
+/**
+ * Wizard page for providing a list of other wizards which can be used for the
+ * next steps in the wizard.
+ */
 public class WizardSelectionListPage extends WizardSelectionPage implements IPageChangedListener {
   protected static ICheatSheetManager cheatSheetManager = null;
   protected IWizardSelectionNode[] wizardSelectionNodes;
@@ -27,10 +31,18 @@ public class WizardSelectionListPage extends WizardSelectionPage implements IPag
   private Object initData;
   private boolean hidePrev;
 
-  WizardSelectionListPage( final String pageName,
-                           final IWizardSelectionNode[] wizardSelectionNodes,
-                           final String title,
-                           final String desc ) {
+  /**
+   * Creates a wizard page which allows to select a wizard for the next steps.
+   * @param pageName Name of the wizard page.
+   * @param wizardSelectionNodes list of the IWizardSelectionNodes to be
+   *                             displayed in the WizardSelectionListPage.
+   * @param title Title of the page.
+   * @param desc Description text of the page.
+   */
+  public WizardSelectionListPage( final String pageName,
+                                  final IWizardSelectionNode[] wizardSelectionNodes,
+                                  final String title,
+                                  final String desc ) {
     super( pageName );
     this.wizardSelectionNodes = wizardSelectionNodes;
     this.title = title;
@@ -40,13 +52,27 @@ public class WizardSelectionListPage extends WizardSelectionPage implements IPag
     }
   }
 
+  /**
+   * Sets the data to initialize a selected wizard with in case the wizard
+   * implements {@link IInitalizableWizard}.
+   * @param initData the data to initialize the wizard with.
+   */
   public void setInitData( final Object initData ) {
     this.initData = initData;
   }
     
-  public void setPreselectedNode( final IWizardNode node ) {
+  /**
+   * Sets the node of the wizard which should be preselected. If set the
+   * WizardSelectionListPage will be skiped and the first page of the
+   * preselected wizard will be displayed.
+   * @param node IWizardNode representing the wizard to be preselected.
+   * @param hidePrevPage true if it should not be possible to go back to the
+   *                     WizardSelectionListPage to select another wizard,
+   *                     false otherwise.
+   */
+  public void setPreselectedNode( final IWizardNode node, final boolean hidePrevPage ) {
     this.preselectedNode = node;
-    this.hidePrev = true;
+    this.hidePrev = hidePrevPage;
   }
 
   @Override
