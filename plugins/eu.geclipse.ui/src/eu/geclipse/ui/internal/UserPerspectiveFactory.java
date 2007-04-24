@@ -1,9 +1,13 @@
-/*******************************************************************************
- * Copyright (c) 2006 g-Eclipse Consortium.
+/*****************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributors:
  *    Markus Knauer - initial implementation
@@ -20,20 +24,10 @@ import org.eclipse.ui.progress.IProgressConstants;
 
 
 /**
- * Temporary perspective for the g-Eclipse project. It can contain several views
- * that are contributed with the
- * <code>org.eclipse.ui.perspectiveExtensions</code> extension point.
+ * Perspective factory for the g-Eclipse user perspective. 
  */
 public class UserPerspectiveFactory
     implements IPerspectiveFactory {
-
-  /*private static final String GECLIPSE_PERSPECTIVE_ID 
-    =   Activator.getDefault().getBundle().getSymbolicName()
-      + ".gEclipsePerspective"; //$NON-NLS-1$*/
-  
-  public UserPerspectiveFactory() {
-    super();
-  }
 
   /*
    * (non-Javadoc)

@@ -80,10 +80,20 @@ public class VoPreferencePage
     extends PreferencePage
     implements IWorkbenchPreferencePage, IGridModelListener {
   
-  class VoContentProvider implements IStructuredContentProvider {
+  /**
+   * Content provider for the {@link VoPreferencePage}.
+   */
+  class VoContentProvider
+      implements IStructuredContentProvider {
     
+    /**
+     * The shell of the input.
+     */
     private Shell shell;
 
+    /* (non-Javadoc)
+     * @see org.eclipse.jface.viewers.IStructuredContentProvider#getElements(java.lang.Object)
+     */
     public Object[] getElements( final Object inputElement ) {
       IGridElement[] result = null;
       if ( inputElement instanceof IVoManager ) {
@@ -99,8 +109,8 @@ public class VoPreferencePage
         } catch ( GridModelException gmExc ) {
           if ( this.shell != null ) {
             NewProblemDialog.openProblem( this.shell,
-                                          "Content provider problem",
-                                          "Unable to query VOs",
+                                          Messages.getString("VoPreferencePage.content_provider_problem"), //$NON-NLS-1$
+                                          Messages.getString("VoPreferencePage.query_vo_failed"), //$NON-NLS-1$
                                           gmExc );
           } else {
             Activator.logException( gmExc );
@@ -110,10 +120,16 @@ public class VoPreferencePage
       return result;
     }
 
+    /* (non-Javadoc)
+     * @see org.eclipse.jface.viewers.IContentProvider#dispose()
+     */
     public void dispose() {
       // empty implementation
     }
 
+    /* (non-Javadoc)
+     * @see org.eclipse.jface.viewers.IContentProvider#inputChanged(org.eclipse.jface.viewers.Viewer, java.lang.Object, java.lang.Object)
+     */
     public void inputChanged( final Viewer viewer,
                               final Object oldInput,
                               final Object newInput ) {
@@ -124,12 +140,23 @@ public class VoPreferencePage
     
   }
   
-  class VoLabelProvider extends LabelProvider implements ITableLabelProvider {
+  /**
+   * Label provider for the {@link VoPreferencePage}.
+   */
+  class VoLabelProvider
+      extends LabelProvider
+      implements ITableLabelProvider {
 
+    /* (non-Javadoc)
+     * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnImage(java.lang.Object, int)
+     */
     public Image getColumnImage( final Object element, final int columnIndex ) {
       return null;
     }
 
+    /* (non-Javadoc)
+     * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnText(java.lang.Object, int)
+     */
     public String getColumnText( final Object element,
                                  final int columnIndex ) {
       String text = null;
@@ -244,10 +271,10 @@ public class VoPreferencePage
     }); 
     
     TableColumn nameColumn = new TableColumn( voTable, SWT.LEFT );
-    nameColumn.setText( "Name" );
+    nameColumn.setText( Messages.getString("VoPreferencePage.name_column_text") ); //$NON-NLS-1$
     nameColumn.setWidth( 100 );
     TableColumn typeColumn = new TableColumn( voTable, SWT.CENTER );
-    typeColumn.setText( "Type" );
+    typeColumn.setText( Messages.getString("VoPreferencePage.type_column_text") ); //$NON-NLS-1$
     typeColumn.setWidth( 100 );
     
     final IVoManager manager = GridModel.getVoManager();
@@ -379,6 +406,8 @@ public class VoPreferencePage
   /**
    * Trigger the new VO wizard to pop up in order to create a new VO if vo
    * parameter is null or edit existing vo if vo parameter is specified.
+   * 
+   * @param vo To {@link IVirtualOrganization} to be edited. 
    */
   public void editVO( final IVirtualOrganization vo ) {
     URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/authtokenwizard.gif" ); //$NON-NLS-1$
@@ -386,10 +415,10 @@ public class VoPreferencePage
       @Override
       public void addPages() {
         ExtPointWizardSelectionListPage page = new ExtPointWizardSelectionListPage(
-            "pagename",
-            "eu.geclipse.ui.newVoWizards",
-            "Create a new VO",
-            "Create a new Virtual Organization of the selected type." );
+            "pagename", //$NON-NLS-1$
+            "eu.geclipse.ui.newVoWizards", //$NON-NLS-1$
+            Messages.getString("VoPreferencePage.create_new_vo"), //$NON-NLS-1$
+            Messages.getString("VoPreferencePage.create_new_vo_long") ); //$NON-NLS-1$
         page.setInitData( vo );
         // TODO select vo wizard type by vo type when editing an existing vo
         addPage( page );
@@ -402,7 +431,7 @@ public class VoPreferencePage
     };
     wizard.setForcePreviousAndNextButtons( true );
     wizard.setNeedsProgressMonitor( true );
-    wizard.setWindowTitle( "Create a new VO" );
+    wizard.setWindowTitle( Messages.getString("VoPreferencePage.create_new_vo") ); //$NON-NLS-1$
     wizard.setDefaultPageImageDescriptor( ImageDescriptor.createFromURL( imgUrl ) );
     WizardDialog dialog = new WizardDialog( this.getShell(), wizard );
     dialog.open();
@@ -415,8 +444,8 @@ public class VoPreferencePage
     List< IVirtualOrganization > vos = getSelectedVos();
     if ( !vos.isEmpty() ) {
       boolean confirm = !MessageDialog.openConfirm( getShell(),
-                                                    "Delete VOs",
-                                                    "Do you really want to delete the selected VOs?" );
+                                                    Messages.getString("VoPreferencePage.delete_vos"), //$NON-NLS-1$
+                                                    Messages.getString("VoPreferencePage.really_delete_vos") ); //$NON-NLS-1$
       if ( !confirm ) {
         IVoManager manager = GridModel.getVoManager();
         for ( IVirtualOrganization vo : vos ) {
@@ -424,8 +453,8 @@ public class VoPreferencePage
             manager.delete( vo );
           } catch( GridModelException gmExc ) {
             NewProblemDialog.openProblem( this.getShell(),
-                                          "Error",
-                                          "Error while deleting VO " + vo.getName(),
+                                          Messages.getString("VoPreferencePage.error"), //$NON-NLS-1$
+                                          Messages.getString("VoPreferencePage.delete_vo_failed") + " " + vo.getName(), //$NON-NLS-1$ //$NON-NLS-2$
                                           gmExc,
                                           null );
           }

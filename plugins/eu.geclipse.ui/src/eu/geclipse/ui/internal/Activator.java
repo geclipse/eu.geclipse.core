@@ -1,24 +1,22 @@
-/******************************************************************************
-  * Copyright (c) 2006 g-Eclipse consortium
-  * All rights reserved. This program and the accompanying materials
-  * are made available under the terms of the Eclipse Public License v1.0
-  * which accompanies this distribution, and is available at
-  * http://www.eclipse.org/legal/epl-v10.html
-  *
-  * Initialial development of the original code was made for
-  * project g-Eclipse founded by European Union
-  * project number: FP6-IST-034327  http://www.geclipse.eu/
-  *
-  * Contributor(s):
-  *     FZK (http://www.fzk.de)
-  *      - Mathias Stuempert (mathias.stuempert@iwr.fzk.de)
-  *****************************************************************************/
+/*****************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
 
 package eu.geclipse.ui.internal;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.widgets.Display;
@@ -33,14 +31,10 @@ import eu.geclipse.ui.properties.PropertiesAdapterFactory;
  */
 public class Activator extends AbstractUIPlugin {
 
-  /** The plug-in ID of g-Eclipse UI */
+  /**
+   * The plug-in ID of g-Eclipse UI
+   * */
   public static final String PLUGIN_ID = "eu.geclipse.ui"; //$NON-NLS-1$
-  
-  public static final String VOS_PREFERENCE = "vos"; //$NON-NLS-1$
-  public static final String SEL_VO_PREFERENCE = "vosel"; //$NON-NLS-1$
-  
-  public static final String DEFAULT_VOS = ""; //$NON-NLS-1$
-  public static final String DEFAULT_SEL_VO = ""; //$NON-NLS-1$
   
   /**
    * The id of the id project view.
@@ -184,20 +178,19 @@ public class Activator extends AbstractUIPlugin {
     getDefault().getLog().log( status );
   }
   
-  @Override
-  protected void initializeDefaultPreferences( final IPreferenceStore store )
-  {
-    store.setDefault( VOS_PREFERENCE, DEFAULT_VOS );
-    store.setDefault( SEL_VO_PREFERENCE, DEFAULT_SEL_VO );
-  }
-  
+  /**
+   * Get the form colors for the specified display.
+   * 
+   * @param display The {@link Display} for which to create the form colors.
+   * @return The {@link FormColors} for the specified display.
+   */
   public FormColors getFormColors( final Display display) {
     if (this.formColors == null) {
-        this.formColors = new FormColors(display);
-        this.formColors.markShared();
+      this.formColors = new FormColors(display);
+      this.formColors.markShared();
     }
     return this.formColors;
-}
+  }
 
   @Override
   protected void initializeImageRegistry( final ImageRegistry reg )

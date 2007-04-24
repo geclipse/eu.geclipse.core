@@ -1,3 +1,18 @@
+/*****************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.ui.internal.preference;
 
 import java.io.File;
@@ -38,16 +53,36 @@ import eu.geclipse.ui.dialogs.NewCaCertDialog;
 import eu.geclipse.ui.dialogs.NewProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 
-public class CaCertPreferencePage extends PreferencePage implements IWorkbenchPreferencePage {
+/**
+ * Preference page to import and manage CA certificates. 
+ */
+public class CaCertPreferencePage
+    extends PreferencePage
+    implements IWorkbenchPreferencePage {
   
+  /**
+   * The list containing all currently available CA certificates.
+   */
   protected List caList;
   
+  /**
+   * Button to delete the selected certificates.
+   */
   protected Button deleteButton;
   
+  /**
+   * Button to add certificates from a local directory.
+   */
   private Button addFromDirButton;
   
+  /**
+   * Button to add certificates from a remote repository.
+   */
   private Button addFromRepoButton;
   
+  /**
+   * Construct a new CA certificate preference page.
+   */
   public CaCertPreferencePage() {
     super();
     setDescription( Messages.getString( "CaCertPreferencePage.description" ) ); //$NON-NLS-1$
@@ -157,6 +192,28 @@ public class CaCertPreferencePage extends PreferencePage implements IWorkbenchPr
     setPreferenceStore( Activator.getDefault().getPreferenceStore() );
   }
   
+  /**
+   * Synchonize the UI list with the {@link CaCertManager}.
+   */
+  public void updateCaList() {
+    this.caList.removeAll();
+    CaCertManager manager = CaCertManager.getManager();
+    ICaCertificate[] certs = manager.getCertificates();
+    Arrays.sort( certs, new Comparator< ICaCertificate >() {
+      public int compare( final ICaCertificate c1, final ICaCertificate c2 ) {
+        return c1.getID().compareTo( c2.getID() );
+      }
+    } );
+    for ( ICaCertificate cert : certs ) {
+      this.caList.add( cert.getID() );
+    }
+    this.deleteButton.setEnabled( this.caList.getSelectionCount() > 0 );
+  }
+  
+  /**
+   * Triggered by the corresponding button in the UI. Adds certificated from
+   * a local directory.
+   */
   protected void addFromDirectory() {
     NewCaCertDialog dialog = new NewCaCertDialog( NewCaCertDialog.FROM_DIRECTORY, getShell() );
     if ( dialog.open() == Window.OK ) {
@@ -201,6 +258,10 @@ public class CaCertPreferencePage extends PreferencePage implements IWorkbenchPr
     }
   }
   
+  /**
+   * Triggered by the corresponding button in the UI. Adds certificated from
+   * a remote repository.
+   */
   protected void addFromRepository() {
     NewCaCertDialog dialog = new NewCaCertDialog( NewCaCertDialog.FROM_REPOSITORY, getShell() );
     if ( dialog.open() == Window.OK ) {
@@ -248,34 +309,15 @@ public class CaCertPreferencePage extends PreferencePage implements IWorkbenchPr
       if ( updateList ) {
         updateCaList();
       }
-      
-/*      if ( status != null ) {
-        Solution[] solutions = {
-          new Solution( Messages.getString( "CaCertPreferencePage.inet_connection_solution" ) ), //$NON-NLS-1$
-          new Solution( Messages.getString( "CaCertPreferencePage.check_url_solution" ) ) { //$NON-NLS-1$
-            @Override
-            protected void solve() {
-              addFromRepository();
-            }
-          },
-          new PreferenceSolution( Messages.getString( "CaCertPreferencePage.check_proxy_solution" ), //$NON-NLS-1$
-                                  "eu.geclipse.ui.internal.preference.NetworkPreferencePage", //$NON-NLS-1$
-                                  getShell() )
-        };
-        int result = ProblemDialog.openProblem( getShell(),
-                                                Messages.getString( "CaCertPreferencePage.cert_error" ), //$NON-NLS-1$
-                                                Messages.getString( "CaCertPreferencePage.unable_load_cert_rep_error" ),  //$NON-NLS-1$
-                                                status,
-                                                solutions );
-        if ( result != ProblemDialog.SOLVE ) {
-          updateCaList();
-        }
-      } else {
-        updateCaList();
-      }*/
+
     }
   }
   
+  /**
+   * Delete the currently selected certificates from the certificate manager.
+   * 
+   * @see CaCertManager#deleteCertificate(String)
+   */
   protected void deleteSelected() {
     final String[] selected = this.caList.getSelection();
     if ( selected.length > 0 ) {
@@ -328,19 +370,4 @@ public class CaCertPreferencePage extends PreferencePage implements IWorkbenchPr
     }
   }
   
-  public void updateCaList() {
-    this.caList.removeAll();
-    CaCertManager manager = CaCertManager.getManager();
-    ICaCertificate[] certs = manager.getCertificates();
-    Arrays.sort( certs, new Comparator< ICaCertificate >() {
-      public int compare( final ICaCertificate c1, final ICaCertificate c2 ) {
-        return c1.getID().compareTo( c2.getID() );
-      }
-    } );
-    for ( ICaCertificate cert : certs ) {
-      this.caList.add( cert.getID() );
-    }
-    this.deleteButton.setEnabled( this.caList.getSelectionCount() > 0 );
-  }
-
 }
