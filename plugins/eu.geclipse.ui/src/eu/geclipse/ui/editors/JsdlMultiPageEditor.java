@@ -147,7 +147,7 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
 
                   // Try to select the affected objects.
                   //
-                  Command mostRecentCommand = ((CommandStack)event.getSource()).getMostRecentCommand();
+                  ((CommandStack)event.getSource()).getMostRecentCommand();
 
                 }
               });
@@ -253,9 +253,9 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
           {
             class ResourceDeltaVisitor implements IResourceDeltaVisitor
             {
-              protected ResourceSet resourceSet = editingDomain.getResourceSet();
-              protected Collection changedResources = new ArrayList();
-              protected Collection removedResources = new ArrayList();
+              protected ResourceSet resourceSet = JsdlMultiPageEditor.this.editingDomain.getResourceSet();
+              protected Collection< Resource > changedResources = new ArrayList< Resource >();
+              protected Collection< Resource > removedResources = new ArrayList< Resource >();
 
               public boolean visit(final IResourceDelta delta)
               {
@@ -265,14 +265,14 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
                 {
                   if ((delta.getKind() & (IResourceDelta.CHANGED | IResourceDelta.REMOVED)) != 0)
                   {
-                    Resource resource = resourceSet.getResource(URI.createURI(delta.getFullPath().toString()), false);
+                    Resource resource = this.resourceSet.getResource(URI.createURI(delta.getFullPath().toString()), false);
                     if (resource != null)
                     {
                       if ((delta.getKind() & IResourceDelta.REMOVED) != 0)
                       {
                         this.removedResources.add(resource);
                       }
-                      else if (!savedResources.remove(resource))
+                      else if (!JsdlMultiPageEditor.this.savedResources.remove(resource))
                       {
                         this.changedResources.add(resource);
                       }
@@ -283,12 +283,12 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
                 return true;
               }
 
-              public Collection getChangedResources()
+              public Collection< Resource > getChangedResources()
               {
                 return this.changedResources;
               }
 
-              public Collection getRemovedResources()
+              public Collection< Resource > getRemovedResources()
               {
                 return this.removedResources;
               }
@@ -299,7 +299,7 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
 
             if (!visitor.getRemovedResources().isEmpty())
             {
-              removedResources.addAll(visitor.getRemovedResources());
+              JsdlMultiPageEditor.this.removedResources.addAll(visitor.getRemovedResources());
               if (!isDirty())
               {
                 getSite().getShell().getDisplay().asyncExec
@@ -316,7 +316,7 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
 
             if (!visitor.getChangedResources().isEmpty())
             {
-              changedResources.addAll(visitor.getChangedResources());
+              JsdlMultiPageEditor.this.changedResources.addAll(visitor.getChangedResources());
               if (getSite().getPage().getActiveEditor() == JsdlMultiPageEditor.this)
               {
                 getSite().getShell().getDisplay().asyncExec
@@ -381,9 +381,9 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
           this.editingDomain.getCommandStack().flush();
 
           this.updateProblemIndication = false;
-          for (Iterator i = this.changedResources.iterator(); i.hasNext(); )
+          for (Iterator< Resource > i = this.changedResources.iterator(); i.hasNext(); )
           {
-            Resource resource = (Resource)i.next();
+            Resource resource = i.next();
             if (resource.isLoaded())
             {
               resource.unload();
@@ -438,12 +438,13 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
       {
         // This is the method that gets invoked when the operation runs.
         
+        @Override
         public void execute(final IProgressMonitor monitor)
         {
           // Save the resources to the file system.
           //
           boolean first = true;
-          for (Iterator i = JsdlMultiPageEditor.this.editingDomain.getResourceSet().getResources().iterator(); i.hasNext(); )
+          for (Iterator<?> i = JsdlMultiPageEditor.this.editingDomain.getResourceSet().getResources().iterator(); i.hasNext(); )
           {
             Resource resource = (Resource)i.next();
             if ((first || !resource.getContents().isEmpty() || isPersisted(resource)) && !JsdlMultiPageEditor.this.editingDomain.isReadOnly(resource))
@@ -536,9 +537,9 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
            0,
            null,
            new Object [] { this.editingDomain.getResourceSet() });
-      for (Iterator i = this.resourceToDiagnosticMap.values().iterator(); i.hasNext(); )
+      for (Iterator<Diagnostic> i = this.resourceToDiagnosticMap.values().iterator(); i.hasNext(); )
       {
-        Diagnostic childDiagnostic = (Diagnostic)i.next();
+        Diagnostic childDiagnostic = i.next();
         if (childDiagnostic.getSeverity() != Diagnostic.OK)
         {
           diagnostic.add(childDiagnostic);

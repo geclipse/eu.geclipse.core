@@ -1,3 +1,18 @@
+/*****************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.ui.dialogs;
 
 import java.io.File;
@@ -21,21 +36,59 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import eu.geclipse.ui.widgets.StoredCombo;
 
-
+/**
+ * Dialog that is used by the CA certificate preference page in
+ * order to import CA certificates. Currently this dialog supports
+ * two ways of importing certificates, i.e. from a local directory or
+ * from a remote repository. 
+ */
 public class NewCaCertDialog extends IconAndMessageDialog {
   
+  /**
+   * Source field determining that the dialog should be used to load
+   * CA certificates from a local directory.
+   */
   public static final int FROM_DIRECTORY = 1;
   
+  /**
+   * Source field determining that the dialog should be used to load
+   * CA certificates from a remote repository.
+   */
   public static final int FROM_REPOSITORY = 2;
   
+  /**
+   * The default remote repository from which to import the certificates.
+   */
   private static final String DEFAULT_REPOSITORY = "http://www.eugridpma.org/distribution/igtf/current/accredited/tgz"; //$NON-NLS-1$
   
+  /**
+   * Combo where either the local directory of the remote
+   * repository location may be edited.
+   */
   protected StoredCombo resultCombo;
   
+  /**
+   * The source of the import, either {@link #FROM_DIRECTORY}
+   * of {@link #FROM_REPOSITORY}.
+   */
   private int source;
   
+  /**
+   * The result of this dialog. Either a local file or the URL
+   * of a remote repository.
+   */
   private String result;
 
+  /**
+   * Construct a new <code>NewCaCertDialog</code> that will try to import
+   * the certificates from either a local directory (if {@link #FROM_DIRECTORY}
+   * is specified as source) or from a remote repository (if
+   * {@link #FROM_REPOSITORY} is specified as source).
+   * 
+   * @param source The source from which to import the certificates,
+   * i.e. either {@link #FROM_DIRECTORY} or {@link #FROM_REPOSITORY}.
+   * @param parentShell The parent {@link Shell} of the dialog.
+   */
   public NewCaCertDialog( final int source, final Shell parentShell ) {
     super( parentShell );
     this.source = source;
@@ -49,6 +102,14 @@ public class NewCaCertDialog extends IconAndMessageDialog {
     }
   }
   
+  /**
+   * Get the result of the dialog, i.e. either a local file (if {@link #FROM_DIRECTORY}
+   * was specified as source) or the URL of a remote repository (if
+   * {@link #FROM_REPOSITORY} was specified as source).
+   * 
+   * @return The result of this dialog or <code>null</code> if the dialog was
+   * not closed with status <code>OK</code>.
+   */
   public String getResult() {
     return this.result;
   }
@@ -93,6 +154,12 @@ public class NewCaCertDialog extends IconAndMessageDialog {
     
   }
   
+  /**
+   * Initializes this dialog for fetching certificates from a remote
+   * repository.
+   * 
+   * @param comp The composite holding the controls of this dialog.
+   */
   protected void initFromRepository( final Composite comp ) {
     
     GridData gData;
@@ -121,6 +188,12 @@ public class NewCaCertDialog extends IconAndMessageDialog {
     
   }
   
+  /**
+   * Initializes this dialog for fetching certificates from a local
+   * directory.
+   * 
+   * @param comp The composite holding the controls of this dialog.
+   */
   protected void initFromDirectory( final Composite comp ) {
     
     GridData gData;
@@ -185,6 +258,9 @@ public class NewCaCertDialog extends IconAndMessageDialog {
     return selected;
   }
 
+  /* (non-Javadoc)
+   * @see org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets.Shell)
+   */
   @Override
   protected void configureShell( final Shell newShell ) {
     super.configureShell( newShell );
@@ -197,4 +273,5 @@ public class NewCaCertDialog extends IconAndMessageDialog {
         break;
     }
   }
+  
 }

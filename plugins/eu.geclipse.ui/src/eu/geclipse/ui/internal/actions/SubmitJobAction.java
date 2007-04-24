@@ -28,8 +28,14 @@ import eu.geclipse.core.model.IGridJobCreator;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.ui.wizards.jobsubmission.JobCreatorSelectionWizard;
 
+/**
+ * Action dedicated to the submission of Grid jobs.
+ */
 public class SubmitJobAction extends SelectionListenerAction {
   
+  /**
+   * The workbench site this action belongs to.
+   */
   private IWorkbenchSite site;
   
   private List< IGridJobDescription > jobDescriptions;
@@ -41,16 +47,20 @@ public class SubmitJobAction extends SelectionListenerAction {
     this.site = site;
   }
 
+  /* (non-Javadoc)
+   * @see org.eclipse.jface.action.Action#run()
+   */
   @Override
   public void run() {
     JobCreatorSelectionWizard wizard
       = new JobCreatorSelectionWizard( this.jobDescriptions, this.jobCreators );
     WizardDialog dialog = new WizardDialog( this.site.getShell(), wizard );
     dialog.open();
-    
-    
   }
 
+  /* (non-Javadoc)
+   * @see org.eclipse.ui.actions.BaseSelectionListenerAction#updateSelection(org.eclipse.jface.viewers.IStructuredSelection)
+   */
   @Override
   protected boolean updateSelection( final IStructuredSelection selection ) {
     this.jobCreators = null;

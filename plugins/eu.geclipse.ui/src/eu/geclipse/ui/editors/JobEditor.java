@@ -40,9 +40,9 @@ public class JobEditor extends MultiPageEditorPart {
   protected void createPages()
   {
     int index = 0;
-    pages = new Page[ 2 ];
-    pages[ index++ ] = new PageGeneral();
-    pages[ index++ ] = new PageDescription();
+    this.pages = new Page[ 2 ];
+    this.pages[ index++ ] = new PageGeneral();
+    this.pages[ index++ ] = new PageDescription();
     refresh();
   }
 
@@ -66,15 +66,13 @@ public class JobEditor extends MultiPageEditorPart {
   abstract class Page {
 
     private Composite pageComposite;
-    private Composite contentComposite; // contains controls showing job-data on
-                                        // page
-
+    
     protected Page() {
       super();
-      pageComposite = new Composite( getContainer(), SWT.NULL );
-      pageComposite.setLayout( new FillLayout( SWT.VERTICAL ) );
-      contentComposite = createContent( pageComposite );
-      int pageIndex = addPage( pageComposite );
+      this.pageComposite = new Composite( getContainer(), SWT.NULL );
+      this.pageComposite.setLayout( new FillLayout( SWT.VERTICAL ) );
+      createContent( this.pageComposite );
+      int pageIndex = addPage( this.pageComposite );
       setPageText( pageIndex, getPageName() );
     }
 
@@ -88,7 +86,8 @@ public class JobEditor extends MultiPageEditorPart {
      * @param gridJob
      */
     abstract void refresh( final IGridJob gridJob );
-  };
+  }
+  
   class PageGeneral extends Page {
 
     private Text jobNameText;
@@ -108,14 +107,14 @@ public class JobEditor extends MultiPageEditorPart {
     {
       Composite composite = new Composite( parentComposite, SWT.NULL );
       composite.setLayout( new GridLayout( 2, false ) );
-      jobNameText = createControlPair( composite,
-                                       Messages.getString( "JobEditor.label_jobname" ) ); //$NON-NLS-1$
-      jobIdText = createControlPair( composite,
-                                     Messages.getString( "JobEditor.label_id" ) ); //$NON-NLS-1$
-      jobStatusText = createControlPair( composite,
-                                         Messages.getString( "JobEditor.label_status" ) ); //$NON-NLS-1$
-      jobStatusRefreshedText = createControlPair( composite,
-                                                  Messages.getString( "JobEditor.label_status_refresed" ) ); //$NON-NLS-1$
+      this.jobNameText = createControlPair( composite,
+                                            Messages.getString( "JobEditor.label_jobname" ) ); //$NON-NLS-1$
+      this.jobIdText = createControlPair( composite,
+                                          Messages.getString( "JobEditor.label_id" ) ); //$NON-NLS-1$
+      this.jobStatusText = createControlPair( composite,
+                                              Messages.getString( "JobEditor.label_status" ) ); //$NON-NLS-1$
+      this.jobStatusRefreshedText = createControlPair( composite,
+                                                       Messages.getString( "JobEditor.label_status_refresed" ) ); //$NON-NLS-1$
       return composite;
     }
 
@@ -136,15 +135,15 @@ public class JobEditor extends MultiPageEditorPart {
     @Override
     void refresh( final IGridJob gridJob )
     {
-      setValue( jobNameText, gridJob.getName() );
-      setValue( jobIdText, gridJob.getID().getJobID() );
+      setValue( this.jobNameText, gridJob.getName() );
+      setValue( this.jobIdText, gridJob.getID().getJobID() );
       IGridJobStatus status = gridJob.getJobStatus();
       if( status != null ) {
-        setValue( jobStatusText, gridJob.getJobStatus().getName() );
+        setValue( this.jobStatusText, gridJob.getJobStatus().getName() );
       } else {
-        setValue( jobStatusText, "" ); //$NON-NLS-1$;    
+        setValue( this.jobStatusText, "" ); //$NON-NLS-1$;    
       }
-      jobStatusRefreshedText.setText( DateFormat.getDateTimeInstance()
+      this.jobStatusRefreshedText.setText( DateFormat.getDateTimeInstance()
         .format( Calendar.getInstance().getTime() ) ); // TODO read from
                                                         // IStatus
     }
@@ -171,15 +170,15 @@ public class JobEditor extends MultiPageEditorPart {
     {
       Composite contentComposite = new Composite( parentComposite, SWT.NONE );
       contentComposite.setLayout( new FillLayout() );
-      descriptionTable = new Table( contentComposite, SWT.BORDER
+      this.descriptionTable = new Table( contentComposite, SWT.BORDER
                                                       | SWT.FULL_SELECTION
                                                       | SWT.V_SCROLL );
-      descriptionTable.setLinesVisible( true );
-      descriptionTable.setHeaderVisible( true );
-      TableColumn nameColumn = new TableColumn( descriptionTable, SWT.NONE );
-      nameColumn.setText( "Property" );
-      TableColumn valueColumn = new TableColumn( descriptionTable, SWT.NONE );
-      valueColumn.setText( "Value" );
+      this.descriptionTable.setLinesVisible( true );
+      this.descriptionTable.setHeaderVisible( true );
+      TableColumn nameColumn = new TableColumn( this.descriptionTable, SWT.NONE );
+      nameColumn.setText( Messages.getString("JobEditor.property_column_text") ); //$NON-NLS-1$
+      TableColumn valueColumn = new TableColumn( this.descriptionTable, SWT.NONE );
+      valueColumn.setText( Messages.getString("JobEditor.value_column_text") ); //$NON-NLS-1$
       return contentComposite;
     }
 
@@ -203,7 +202,7 @@ public class JobEditor extends MultiPageEditorPart {
       IFileEditorInput fileEditorInput = ( IFileEditorInput )editorInput;
       IGridJob gridJob = getGridJob( fileEditorInput );
       if( gridJob != null ) {
-        for( Page page : pages ) {
+        for( Page page : this.pages ) {
           page.refresh( gridJob );
         }
       }

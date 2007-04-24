@@ -1,3 +1,18 @@
+/*****************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.ui.internal.actions;
 
 import java.io.InputStream;
@@ -17,20 +32,44 @@ import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 
+/**
+ * Base class for the copy/paste mechanism. Will be reimplemented soon.
+ */
 public class TransferAction extends SelectionListenerAction {
   
+  /**
+   * The clipboard used for the transfer.
+   */
   private Clipboard clipboard;
   
+  /**
+   * Construct a new trasnfer action with the specified title that
+   * uses the specified clipboard.
+   * 
+   * @param text The title of the action.
+   * @param clipboard The {@link Clipboard} to be used for transfers.
+   */
   protected TransferAction( final String text,
                             final Clipboard clipboard ) {
     super( text );
     this.clipboard = clipboard;
   }
   
+  /**
+   * Get the clipboard that is used for transfer within this action.
+   * 
+   * @return The {@link Clipboard} used for transfers.
+   */
   public Clipboard getClipboard() {
     return this.clipboard;
   }
   
+  /**
+   * Determine if the specified object is a drag source.
+   * 
+   * @param obj The object to be tested.
+   * @return True if the specified object may be dragged.
+   */
   public boolean isDragSource( final Object obj ) {
     boolean result = false;
     if ( obj instanceof IGridElement ) {
@@ -42,6 +81,12 @@ public class TransferAction extends SelectionListenerAction {
     return result;
   }
   
+  /**
+   * Determine if the specified object is a drop target.
+   * 
+   * @param obj The object to be tested.
+   * @return True if the specified object is a target for drop operations.
+   */
   public boolean isDropTarget( final Object obj ) {
     boolean result = false;
     if ( obj instanceof IGridContainer ) {

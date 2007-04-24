@@ -1,3 +1,18 @@
+/*****************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.ui.internal.actions;
 
 import org.eclipse.core.resources.IncrementalProjectBuilder;
@@ -14,14 +29,33 @@ import org.eclipse.ui.actions.RefreshAction;
 import org.eclipse.ui.navigator.ICommonMenuConstants;
 import eu.geclipse.ui.internal.Activator;
 
+/**
+ * An {@link ActionGroup} that holds all build related actions.
+ */
 public class BuildActions extends ActionGroup {
   
+  /**
+   * Workbench site that is used to create the build actions.
+   */
   private IWorkbenchSite site;
   
+  /**
+   * The build action itself.
+   */
   private BuildAction buildAction;
   
+  /**
+   * The refresh action.
+   */
   private RefreshAction refreshAction;
   
+  /**
+   * Construct a new build actions group for the specified
+   * workbench site.
+   * 
+   * @param site The {@link IWorkbenchSite} for which to create
+   * this build action group.
+   */
   public BuildActions( final IWorkbenchSite site ) {
     
     this.site = site;
@@ -30,7 +64,7 @@ public class BuildActions extends ActionGroup {
     
     this.buildAction = new BuildAction( shell, IncrementalProjectBuilder.INCREMENTAL_BUILD );
     this.refreshAction = new RefreshAction( shell );
-    this.refreshAction.setText( "Re&fresh@F5" );
+    //this.refreshAction.setText( "Re&fresh@F5" );
 
     ImageRegistry imgReg = Activator.getDefault().getImageRegistry();
     Image image = imgReg.get( "refresh" ); //$NON-NLS-1$
@@ -42,6 +76,9 @@ public class BuildActions extends ActionGroup {
     
   }
   
+  /* (non-Javadoc)
+   * @see org.eclipse.ui.actions.ActionGroup#dispose()
+   */
   @Override
   public void dispose() {
     ISelectionProvider provider = this.site.getSelectionProvider();
@@ -49,6 +86,9 @@ public class BuildActions extends ActionGroup {
     provider.removeSelectionChangedListener( this.refreshAction );
   }
   
+  /* (non-Javadoc)
+   * @see org.eclipse.ui.actions.ActionGroup#fillContextMenu(org.eclipse.jface.action.IMenuManager)
+   */
   @Override
   public void fillContextMenu( final IMenuManager menu ) {
     if ( this.buildAction.isEnabled() ) {

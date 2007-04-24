@@ -38,7 +38,7 @@ public class CollapseAllAction extends Action {
    * @param viewer The tree viewer that is the target of this action. 
    */
   public CollapseAllAction( final TreeViewer viewer ) {
-    super( "Collapse All" );
+    super( Messages.getString("CollapseAllAction.collapse_all_action_text") ); //$NON-NLS-1$
     this.viewer = viewer;
     URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/elcl16/collapseall.gif" ); //$NON-NLS-1$
     setImageDescriptor( ImageDescriptor.createFromURL( imgUrl ) );

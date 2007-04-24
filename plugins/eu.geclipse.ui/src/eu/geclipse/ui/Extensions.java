@@ -208,6 +208,13 @@ public class Extensions {
     return result;
   }
   
+  /**
+   * Get all currently registered extension executable for the JSDL
+   * application parameter extension point.
+   *   
+   * @param bundleId The ID of the bundle for which to get the executables.
+   * @return The JSDL extension executables.
+   */
   static public String getJSDLExtensionExecutable( final String bundleId ){
     String result = null;
     ExtensionManager eManager = new ExtensionManager();

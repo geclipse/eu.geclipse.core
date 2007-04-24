@@ -263,11 +263,11 @@ public class GridFileDialog extends Dialog implements Listener{
       if (filter instanceof ResourcePatternFilter){
         String extension = null;
         if (this.fileExtension == null){
-          extension = "*";
+          extension = "*"; //$NON-NLS-1$
         } else {
           extension = this.fileExtension.getText();
         }
-        String[] patterns = { "*." + extension};
+        String[] patterns = { "*." + extension}; //$NON-NLS-1$
         ((ResourcePatternFilter)filter).setPatterns( patterns );
       }
     }

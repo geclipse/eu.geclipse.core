@@ -1,3 +1,18 @@
+/*****************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.ui.internal.actions;
 
 import java.util.List;
@@ -11,16 +26,28 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import eu.geclipse.core.model.IGridElement;
 
+/**
+ * Copy action for the copy/paste machanism.
+ */
 public class CopyAction extends TransferAction {
   
+  /**
+   * Create a new copy action using the specified clipboard.
+   * 
+   * @param clipboard The {@link Clipboard} used by this copy
+   * action.
+   */
   protected CopyAction( final Clipboard clipboard ) {
-    super( "&Copy@Ctrl+C", clipboard );
+    super( Messages.getString("CopyAction.copy_action_text"), clipboard ); //$NON-NLS-1$
     ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
     ImageDescriptor pasteImage 
         = sharedImages.getImageDescriptor( ISharedImages.IMG_TOOL_COPY );
     setImageDescriptor( pasteImage );
   }
   
+  /* (non-Javadoc)
+   * @see org.eclipse.jface.action.Action#run()
+   */
   @Override
   public void run() {
     List< ? > data = getStructuredSelection().toList();
@@ -29,6 +56,9 @@ public class CopyAction extends TransferAction {
     getClipboard().setContents( dataArray, dataTypes );
   }
   
+  /* (non-Javadoc)
+   * @see org.eclipse.ui.actions.BaseSelectionListenerAction#updateSelection(org.eclipse.jface.viewers.IStructuredSelection)
+   */
   @Override
   protected boolean updateSelection( final IStructuredSelection selection ) {
     
@@ -68,6 +98,14 @@ public class CopyAction extends TransferAction {
     
   }
   
+  /**
+   * Get the location in the workspace of the specified object. Works for {@link IResource}
+   * and {@link IGridElement}.
+   * 
+   * @param obj The object for which to retrieve the location. 
+   * @return The location in the workspace for the specified object or <code>null</code>
+   * if the specified object is neither an {@link IResource} nor an {@link IGridElement}.
+   */
   private IPath getLocation( final Object obj ) {
     IPath location = null;
     if ( obj instanceof IResource ) {

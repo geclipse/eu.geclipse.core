@@ -1,12 +1,17 @@
-/*******************************************************************************
- * Copyright (c) 2006 g-Eclipse consortium All rights reserved. This program and
- * the accompanying materials are made available under the terms of the Eclipse
- * Public License v1.0 which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html Initialial development of the
- * original code was made for project g-Eclipse founded by European Union
- * project number: FP6-IST-034327 http://www.geclipse.eu/ Contributor(s): FZK
- * (http://www.fzk.de) - Mathias Stuempert (mathias.stuempert@iwr.fzk.de)
- ******************************************************************************/
+/*****************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
 
 package eu.geclipse.ui;
 
@@ -40,27 +45,46 @@ import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.wizards.wizardselection.ExtPointWizardSelectionListPage;
 
 /**
- * The
- * <code>UIAuthTokenProvider</auth> is the main point were Plugins should request their
+ * The <code>UIAuthTokenProvider</auth> is the main point were Plugins should request their
  * authentication tokens. It should be used instead of the <code>AuthenticationTokenManager</code>
  * whenever possible. It provides methods to request any token or tokens of a special type. It also
  * takes responsibility for the user interactions with respect to new token wizards, question
  * dialogs and error dialogs. Therefore it makes the request for a new token very easy.
- *  
- * @author stuempert-m
  */
 public class UIAuthTokenProvider extends CheatSheetListener implements IAuthTokenProvider {
 
+  /**
+   * Runnable implementation that is executed in the UI thread in
+   * order to retrieve an existing token or to create a new token.
+   * This has to run in the UI thread in order to allow the popup
+   * of error dialogs or token wizards. 
+   */
   private class Runner implements Runnable {
     
+    /**
+     * The token description for which to retrieve a token.
+     */
     IAuthenticationTokenDescription description;
     
+    /**
+     * The token that was found or created.
+     */
     IAuthenticationToken token;
     
+    /**
+     * Construct a new Runner used to find a token for the specified
+     * token description.
+     * 
+     * @param description The {@link IAuthenticationTokenDescription} for
+     * which to find an {@link IAuthenticationToken}.
+     */
     public Runner( final IAuthenticationTokenDescription description ) {
       this.description = description;
     }
     
+    /* (non-Javadoc)
+     * @see java.lang.Runnable#run()
+     */
     public void run() {
       CoreAuthTokenProvider cProvider = new CoreAuthTokenProvider();
       this.token = cProvider.requestToken( this.description );
@@ -112,15 +136,28 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
   }
   
   /**
+   * A manager used for cheat sheet automation.
+   */
+  protected static ICheatSheetManager cheatSheetManager;
+  
+  /**
+   * Key for the auth token wizard.
+   */
+  private static final String WIZARD_PAGE_NAME = "pagename"; //$NON-NLS-1$
+
+  /**
    * The <code>Shell</code> that is used to create dialogs, error dialogs...
    */
-
-  private static ICheatSheetManager cheatSheetManager;
-  
   protected Shell shell;
   
+  /**
+   * The display used to synchronously run the token creation process.
+   */
   protected Display display;
   
+  /**
+   * Standard constructor for the <code>UIAuthTokenProvider</code>.
+   */
   public UIAuthTokenProvider() {
     this( null );
   }
@@ -190,6 +227,7 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
    * the type of the he wants to create.
    * 
    * @param tokenWizardId The ID of the token type that should be created or null.
+   * @return True if the token dialog was closed with status {@link Window#OK}.
    */
   public boolean showNewTokenWizard( final String tokenWizardId ) {
     URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/wizban/newtoken_wiz.gif" ); //$NON-NLS-1$
@@ -203,7 +241,7 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
       @Override
       public void addPages() {
         ExtPointWizardSelectionListPage page = new ExtPointWizardSelectionListPage(
-            "pagename",
+            WIZARD_PAGE_NAME,
             eu.geclipse.core.Extensions.AUTH_TOKEN_MANAGEMENT_POINT,
             Messages.getString( "UIAuthTokenProvider.wizard_first_page_title" ), //$NON-NLS-1$
             Messages.getString( "UIAuthTokenProvider.wizard_first_page_description" ) ); //$NON-NLS-1$
@@ -277,14 +315,16 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
     } );
   }
 
+  /* (non-Javadoc)
+   * @see org.eclipse.ui.cheatsheets.CheatSheetListener#cheatSheetEvent(org.eclipse.ui.cheatsheets.ICheatSheetEvent)
+   */
   @Override
-  public void cheatSheetEvent( final ICheatSheetEvent event )
-  {
-      cheatSheetManager = event.getCheatSheetManager();
-      if ( cheatSheetManager.getData( "var1" ) == null ) {
-        cheatSheetManager.setData( "var1", "null" );
-        cheatSheetManager.setData( "var2", "null" );
-      }
+  public void cheatSheetEvent( final ICheatSheetEvent event ) {
+    cheatSheetManager = event.getCheatSheetManager();
+    if ( cheatSheetManager.getData( "var1" ) == null ) { //$NON-NLS-1$
+      cheatSheetManager.setData( "var1", "null" ); //$NON-NLS-1$ //$NON-NLS-2$
+      cheatSheetManager.setData( "var2", "null" ); //$NON-NLS-1$ //$NON-NLS-2$
+    }
   }
 
 }

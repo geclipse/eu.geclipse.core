@@ -41,7 +41,7 @@ public class LinkWithEditorAction extends Action {
   private GridModelViewPart view;
   
   protected LinkWithEditorAction( final GridModelViewPart view ) {
-    super( "Link with Editor", IAction.AS_CHECK_BOX );
+    super( Messages.getString("LinkWithEditorAction.link_with_editor_action_text"), IAction.AS_CHECK_BOX ); //$NON-NLS-1$
     this.view = view;
     URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/elcl16/synced.gif" ); //$NON-NLS-1$
     setImageDescriptor( ImageDescriptor.createFromURL( imgUrl ) );

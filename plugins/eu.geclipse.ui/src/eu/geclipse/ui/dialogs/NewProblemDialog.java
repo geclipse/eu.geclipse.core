@@ -1,3 +1,18 @@
+/*****************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.ui.dialogs;
 
 import java.util.List;
@@ -26,6 +41,15 @@ import eu.geclipse.ui.LogExceptionSolution;
 import eu.geclipse.ui.UISolutionRegistry;
 import eu.geclipse.ui.internal.Activator;
 
+/**
+ * The <code>ProblemDialog</code> is the graphical front-end for the
+ * g-Eclipse problem reporting mechanism. It essentially behaves like
+ * the Eclipse {@link ErrorDialog} but offers the user solutions that
+ * come with a specified problem. Nevertheless the
+ * <code>ProblemDialog</code> may also be used with ordinary
+ * {@link CoreException}s, so it may completely replace the
+ * {@link ErrorDialog}.
+ */
 public class NewProblemDialog extends ErrorDialog {
   
   /**
@@ -33,12 +57,37 @@ public class NewProblemDialog extends ErrorDialog {
    */
   public static final int SOLVE = 2;
 
+  /**
+   * The result type of the dialog execution.
+   */
   static int result;
   
+  /**
+   * The problem that should be displayed.
+   */
   final IProblem problem;
   
+  /**
+   * The solution registry used to map solution IDs.
+   */
   private SolutionRegistry solutionRegistry;
   
+  /**
+   * Create a new problem dialog from the specfied parameters.
+   * 
+   * @param parentShell The dialog's parent {@link Shell}.
+   * @param dialogTitle The title of the dialog.
+   * @param message The message that will be primarily displayed
+   * to the user. 
+   * @param throwable Any type of exception to be shown to the
+   * user. If this is a {@link GridException} the associated
+   * {@link IProblem} will be used to build up the dialog. If
+   * this is a {@link CoreException} the associated {@link IStatus}
+   * will be used to build up the dialog.
+   * @param solutionRegistry The {@link SolutionRegistry} that is
+   * used to map solution IDs to solutions. If this is <code>null</code>
+   * the {@link UISolutionRegistry} is taken as default.
+   */
   private NewProblemDialog( final Shell parentShell,
                             final String dialogTitle,
                             final String message,
@@ -56,6 +105,22 @@ public class NewProblemDialog extends ErrorDialog {
     }
   }
   
+  /**
+   * Static helper method to open a <code>ProblemDialog</code>.
+   * 
+   * @param parent The dialog's parent {@link Shell}.
+   * @param dialogTitle The title of the dialog.
+   * @param message The message that will be primarily displayed
+   * to the user. 
+   * @param throwable Any type of exception to be shown to the
+   * user. If this is a {@link GridException} the associated
+   * {@link IProblem} will be used to build up the dialog. If
+   * this is a {@link CoreException} the associated {@link IStatus}
+   * will be used to build up the dialog.
+   * @return The return code of the dialog. This may be one of the
+   * {@link ErrorDialog}'s standard return codes or {@link #SOLVE}
+   * if the dialog was closed with the action of a solution. 
+   */
   public static int openProblem( final Shell parent,
                                  final String dialogTitle,
                                  final String message,
@@ -70,6 +135,22 @@ public class NewProblemDialog extends ErrorDialog {
     return result;
   }
   
+  /**
+   * Static helper method to open a <code>ProblemDialog</code>.
+   * 
+   * @param parent The dialog's parent {@link Shell}.
+   * @param dialogTitle The title of the dialog.
+   * @param message The message that will be primarily displayed
+   * to the user. 
+   * @param gExc A {@link GridException} that will be used to build
+   * up the dialog.
+   * @param solutionRegistry The {@link SolutionRegistry} that is
+   * used to map solution IDs to solutions. If this is <code>null</code>
+   * the {@link UISolutionRegistry} is taken as default.
+   * @return The return code of the dialog. This may be one of the
+   * {@link ErrorDialog}'s standard return codes or {@link #SOLVE}
+   * if the dialog was closed with the action of a solution. 
+   */
   public static int openProblem( final Shell parent,
                                  final String dialogTitle,
                                  final String message,
@@ -98,7 +179,7 @@ public class NewProblemDialog extends ErrorDialog {
       this.imageLabel = new Label( parent, SWT.NULL );
       image.setBackground( this.imageLabel.getBackground() );
       this.imageLabel.setImage( image );
-      // XXX addAccessibleListeners missing
+      // TODO mathias addAccessibleListeners missing
       this.imageLabel.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_CENTER
                                                    | GridData.VERTICAL_ALIGN_BEGINNING) );
     }
@@ -126,7 +207,7 @@ public class NewProblemDialog extends ErrorDialog {
       
       Throwable exc = this.problem.getException();
       if ( exc != null ) {
-        solutions.add( new LogExceptionSolution( getShell(), exc ) );
+        solutions.add( new LogExceptionSolution( exc ) );
       }
       
       if ( ( solutions != null ) && ( solutions.size() != 0) ) {
@@ -184,21 +265,21 @@ public class NewProblemDialog extends ErrorDialog {
   }
   
   private static IStatus getStatus( final Throwable throwable ) {
-    IStatus result = null;
+    IStatus res = null;
     if ( throwable instanceof CoreException ) {
-      result = ( ( CoreException ) throwable ).getStatus();
+      res = ( ( CoreException ) throwable ).getStatus();
     } else {
       String message = throwable.getMessage();
       if ( message == null ) {
-        message = "An unknown error occured";
+        message = Messages.getString("NewProblemDialog.no_further_info"); //$NON-NLS-1$
       }
-      result = new Status( IStatus.ERROR,
+      res = new Status( IStatus.ERROR,
                            Activator.PLUGIN_ID,
                            IStatus.OK,
                            message,
                            throwable );
     }
-    return result;
+    return res;
   }
   
 }

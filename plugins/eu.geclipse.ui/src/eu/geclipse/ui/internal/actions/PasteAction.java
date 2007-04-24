@@ -1,3 +1,18 @@
+/*****************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.ui.internal.actions;
 
 import java.util.List;
@@ -15,13 +30,26 @@ import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.views.GridModelViewPart;
 
+/**
+ * Paste action for the copy/paste machanism.
+ */
 public class PasteAction extends TransferAction {
   
+  /**
+   * The {@link GridModelViewPart} this action belongs to.
+   */
   GridModelViewPart view;
   
+  /**
+   * Create a new paste action for the specified view using the specified
+   * clipboard.
+   * 
+   * @param view The {@link GridModelViewPart} for which to create this action.
+   * @param clipboard The {@link Clipboard} used for the copy/paste operation.
+   */
   public PasteAction( final GridModelViewPart view,
                       final Clipboard clipboard ) {
-    super( "&Paste@Ctrl+V", clipboard );
+    super( Messages.getString("PasteAction.paste_action_text"), clipboard ); //$NON-NLS-1$
     ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
     ImageDescriptor pasteImage 
         = sharedImages.getImageDescriptor( ISharedImages.IMG_TOOL_PASTE );
@@ -29,6 +57,9 @@ public class PasteAction extends TransferAction {
     this.view = view;
   }
   
+  /* (non-Javadoc)
+   * @see org.eclipse.jface.action.Action#run()
+   */
   @Override
   public void run() {
     IStructuredSelection selection = getStructuredSelection();
@@ -60,6 +91,9 @@ public class PasteAction extends TransferAction {
     }
   }
   
+  /* (non-Javadoc)
+   * @see org.eclipse.ui.actions.BaseSelectionListenerAction#updateSelection(org.eclipse.jface.viewers.IStructuredSelection)
+   */
   @Override
   protected boolean updateSelection( final IStructuredSelection selection ) {
     
