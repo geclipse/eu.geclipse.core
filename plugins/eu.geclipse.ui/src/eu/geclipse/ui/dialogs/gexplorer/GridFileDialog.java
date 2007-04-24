@@ -271,7 +271,6 @@ public class GridFileDialog extends Dialog implements Listener{
         ((ResourcePatternFilter)filter).setPatterns( patterns );
       }
     }
-    ResourcePatternFilter a;
     nodes = FileSystemsProvider.getFileSystems();
     if( this.newViewer.getInput() == null ) {
       ResourceNode[] c = new ResourceNode[ nodes.size() ];

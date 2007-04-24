@@ -30,7 +30,6 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import eu.geclipse.jsdl.ApplicationType;
 import eu.geclipse.jsdl.JsdlFactory;
 import eu.geclipse.jsdl.JsdlPackage;
-import eu.geclipse.jsdl.adapters.posix.LimitsTypeAdapter;
 
 
 /**

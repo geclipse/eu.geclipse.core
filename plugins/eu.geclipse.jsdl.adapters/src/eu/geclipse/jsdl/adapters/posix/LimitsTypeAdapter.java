@@ -20,9 +20,7 @@ import java.util.Hashtable;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.widgets.Text;
-import eu.geclipse.jsdl.posix.LimitsType;
 import eu.geclipse.jsdl.posix.POSIXApplicationType;
-import eu.geclipse.jsdl.posix.PosixFactory;
 
 
 /**
@@ -31,7 +29,6 @@ import eu.geclipse.jsdl.posix.PosixFactory;
  */
 public class LimitsTypeAdapter {
 
-  private LimitsType limitsType;
   private POSIXApplicationType parent = null;
   Hashtable< Integer, Text > widgetFeaturesMap = new Hashtable< Integer, Text >();
 
@@ -43,22 +40,15 @@ public class LimitsTypeAdapter {
     getLimitsType(parent);
   }
   
-  
   private void getLimitsType (final POSIXApplicationType parent){
   
     TreeIterator iterator = parent.eAllContents();
     
     while (iterator.hasNext()){
-      
       EObject testType = (EObject) iterator.next();
-      
       System.out.println(testType.eContainingFeature().toString());
-      
-      
-      
     }
-      
-    
+
   }
-  
+
 }

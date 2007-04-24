@@ -17,8 +17,6 @@
 
 package eu.geclipse.ui.jsdl.editor.pages;
 
-import java.util.ArrayList;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;

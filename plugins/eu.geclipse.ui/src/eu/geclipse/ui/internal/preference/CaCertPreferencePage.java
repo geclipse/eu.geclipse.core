@@ -204,7 +204,6 @@ public class CaCertPreferencePage extends PreferencePage implements IWorkbenchPr
   protected void addFromRepository() {
     NewCaCertDialog dialog = new NewCaCertDialog( NewCaCertDialog.FROM_REPOSITORY, getShell() );
     if ( dialog.open() == Window.OK ) {
-      IStatus status = null;
       boolean updateList = true;
       final String repoString = dialog.getResult();
       try {

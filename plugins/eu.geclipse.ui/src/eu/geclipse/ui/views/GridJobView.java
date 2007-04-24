@@ -20,10 +20,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.IGridConnectionElement;
-import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementManager;
-import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IJobManager;
 import eu.geclipse.ui.providers.JobViewLabelProvider;
 

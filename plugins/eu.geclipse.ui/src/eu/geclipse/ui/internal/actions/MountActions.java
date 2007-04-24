@@ -6,7 +6,6 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.search.ui.IContextMenuConstants;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.actions.ActionGroup;
-import eu.geclipse.core.model.IGridStorage;
 
 public class MountActions extends ActionGroup {
   
