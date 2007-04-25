@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <description url="http://www.geclipse.eu/updates/">
+   <description url="http://www.geclipse.eu/update/">
       This is the Eclipse update site for the g-Eclipse project.
    </description>
    <feature url="features/eu.geclipse_0.5.0.jar" id="eu.geclipse" version="0.5.0">

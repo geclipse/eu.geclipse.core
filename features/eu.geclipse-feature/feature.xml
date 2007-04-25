@@ -28,7 +28,7 @@ project number: FP5-IST-034327  http://www.geclipse.eu/
    </license>
 
    <url>
-      <update label="g-Eclipse Updates" url="http://www.geclipse.eu/updates/site.xml"/>
+      <update label="g-Eclipse Updates" url="http://www.geclipse.eu/update/site.xml"/>
    </url>
 
    <requires>
@@ -43,18 +43,21 @@ project number: FP5-IST-034327  http://www.geclipse.eu/
       <import plugin="org.eclipse.ui.ide"/>
       <import plugin="org.eclipse.ui.navigator"/>
       <import plugin="org.eclipse.help"/>
+      <import plugin="org.eclipse.emf.ecore"/>
+      <import plugin="org.eclipse.ui.forms"/>
+      <import plugin="org.eclipse.emf.edit.ui"/>
+      <import plugin="org.apache.axis"/>
       <import plugin="org.eclipse.debug.core"/>
-      <import plugin="org.eclipse.text"/>
+      <import plugin="org.eclipse.ui.cheatsheets"/>
       <import plugin="org.eclipse.ui.editors"/>
       <import plugin="org.eclipse.team.cvs.ssh2"/>
       <import plugin="com.jcraft.jsch"/>
-      <import plugin="org.eclipse.emf.ecore"/>
       <import plugin="org.eclipse.emf.ecore.xmi"/>
       <import plugin="org.eclipse.emf.edit"/>
-      <import plugin="org.eclipse.emf.edit.ui"/>
       <import plugin="org.eclipse.ui.workbench.texteditor"/>
       <import plugin="com.ice.tar"/>
       <import plugin="org.apache.jakarta_log4j"/>
+      <import plugin="org.eclipse.swt"/>
    </requires>
 
    <plugin
