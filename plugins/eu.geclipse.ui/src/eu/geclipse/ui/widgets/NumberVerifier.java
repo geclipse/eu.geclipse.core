@@ -19,20 +19,20 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 
 /**
- * Verifier for Text widgets. Allows to only enter (positive) numbers.
- * 
- * Usage: textWidget.addListener( SWT.Verify, new NumberVerifier() );
+ * Verifier for Text widgets. Allows to only enter (positive) numbers. Usage:
+ * textWidget.addListener( SWT.Verify, new NumberVerifier() );
  */
 public class NumberVerifier implements Listener {
-  /* (non-Javadoc)
+
+  /*
+   * (non-Javadoc)
+   * 
    * @see org.eclipse.swt.widgets.Listener#handleEvent(org.eclipse.swt.widgets.Event)
    */
   public void handleEvent( final Event event ) {
-    String string = event.text;
-    char[] chars = new char [ string.length() ];
-    string.getChars ( 0, chars.length, chars, 0 );
-    for ( int i = 0; i < chars.length; i++ ) {
-      if ( !( '0' <= chars[i] && chars[i] <= '9' ) ) {
+    String eventText = event.text;
+    for( int ii = 0; ii < eventText.length(); ++ii ) {
+      if( !Character.isDigit( eventText.charAt( ii ) ) ) {
         event.doit = false;
         return;
       }
