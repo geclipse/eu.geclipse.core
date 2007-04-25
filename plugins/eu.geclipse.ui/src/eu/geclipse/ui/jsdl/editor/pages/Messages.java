@@ -19,9 +19,11 @@ package eu.geclipse.ui.jsdl.editor.pages;
 
 import org.eclipse.osgi.util.NLS;
 
+/**
+ * Returns the localised messages for this package.
+ */
 public class Messages extends NLS {
 
-  private static final String BUNDLE_NAME = "eu.geclipse.ui.jsdl.editor.pages.messages"; //$NON-NLS-1$
   public static String DataStagingPage_1;
   public static String DataStagingPage_append;
   public static String DataStagingPage_CreationFlag;
@@ -133,11 +135,13 @@ public class Messages extends NLS {
   public static String ResourcesPage_true;
   public static String ResourcesPage_UpBoundRange;
   public static String ResourcesPage_VirtualMem;
+  private static final String BUNDLE_NAME = "eu.geclipse.ui.jsdl.editor.pages.messages"; //$NON-NLS-1$
   static {
     // initialize resource bundle
     NLS.initializeMessages( BUNDLE_NAME, Messages.class );
   }
 
   private Messages() {
+    // not instanceable
   }
 }

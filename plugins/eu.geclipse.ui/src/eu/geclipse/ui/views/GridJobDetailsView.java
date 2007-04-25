@@ -253,7 +253,7 @@ public class GridJobDetailsView extends ViewPart {
     private Label errorLabel;
     private Label envLabel;
 
-    PosixApplicationSection( Composite parentComposite ) {
+    PosixApplicationSection( final Composite parentComposite ) {
       super( parentComposite, Messages.getString( "GridJobDetailsView.sectionPosixApplication" ) );
       
       this.applicationLabel = addSectionItem( Messages.getString( "GridJobDetailsView.labelPosixApp" ) );  //$NON-NLS-1$
@@ -266,7 +266,7 @@ public class GridJobDetailsView extends ViewPart {
     }
 
     @Override
-    protected void refresh( IGridJob gridJob )
+    protected void refresh( final IGridJob gridJob )
     {
       // TODO Auto-generated method stub      
     }    

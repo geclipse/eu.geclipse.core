@@ -16,7 +16,7 @@ import eu.geclipse.ui.widgets.NumberVerifier;
 import eu.geclipse.ui.wizards.connection.managers.gridftp.Messages;
 
 
-public class SRMConnectionWizardPage extends WizardPage implements ModifyListener {
+class SRMConnectionWizardPage extends WizardPage implements ModifyListener {
 
   private Text host;
   private Text port;

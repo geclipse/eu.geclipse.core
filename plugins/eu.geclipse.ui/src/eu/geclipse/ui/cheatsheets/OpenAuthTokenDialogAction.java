@@ -36,7 +36,7 @@ public class OpenAuthTokenDialogAction extends Action implements
     // not needed
   }
 
-  public void run( String[] params, ICheatSheetManager manager ) {
+  public void run( final String[] params, final ICheatSheetManager manager ) {
     Display.getDefault().syncExec( new Runnable() {
       public void run() {
         UIAuthTokenProvider tokenProvider

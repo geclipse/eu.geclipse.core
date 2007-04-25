@@ -26,8 +26,6 @@ import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.IWorkbenchWindow;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridElement;
-import eu.geclipse.core.model.IGridModelEvent;
-import eu.geclipse.core.model.IGridModelListener;
 import eu.geclipse.core.model.IGridStorage;
 import eu.geclipse.ui.internal.actions.ActionGroupManager;
 import eu.geclipse.ui.internal.actions.BuildActions;
