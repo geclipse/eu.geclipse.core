@@ -30,7 +30,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.GridModelProblems;
 import eu.geclipse.core.model.IGridConnection;
@@ -265,8 +264,11 @@ public class GridConnectionElement
    * @see eu.geclipse.core.internal.model.VirtualGridContainer#fetchChildren(org.eclipse.core.runtime.IProgressMonitor)
    */
   @Override
-  protected boolean fetchChildren( final IProgressMonitor monitor ) {
+  protected boolean fetchChildren( final IProgressMonitor monitor )
+      throws GridModelException {
+    
     this.fetchError = null;
+    
     try {
       setProcessEvents( false );
       IFileStore fs = getConnectionFileStore();
@@ -282,13 +284,16 @@ public class GridConnectionElement
       } else {
         // TODO mathias
       }
-    } catch( CoreException cExc ) {
-      this.fetchError = cExc;
-      Activator.logException( cExc );
+    } catch ( GridModelException gmExc ) {
+      throw gmExc;
+    } catch ( CoreException cExc ) {
+      throw new GridModelException( GridModelProblems.FETCH_CHILDREN_FAILED, cExc, getName() );
     } finally {
       setProcessEvents( true );
     }
+    
     return this.fetchError == null;
+    
   }
   
   void addChild( final GridConnectionElement child )

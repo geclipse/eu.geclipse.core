@@ -18,6 +18,7 @@ package eu.geclipse.core.model;
 import eu.geclipse.core.IProblem;
 import eu.geclipse.core.IProblemProvider;
 import eu.geclipse.core.ProblemRegistry;
+import eu.geclipse.core.SolutionRegistry;
 import eu.geclipse.core.internal.Activator;
 
 /**
@@ -59,6 +60,12 @@ public class GridModelProblems implements IProblemProvider {
    * Unique ID for the element save failed problem.
    */
   public static final int ELEMENT_SAVE_FAILED
+    = ProblemRegistry.uniqueID();
+  
+  /**
+   * Unique ID for the fetching children failed problem.
+   */
+  public static final int FETCH_CHILDREN_FAILED
     = ProblemRegistry.uniqueID();
   
   /**
@@ -114,6 +121,16 @@ public class GridModelProblems implements IProblemProvider {
                                Messages.getString("GridModelProblems.element_save_failed"), //$NON-NLS-1$
                                exc,
                                null );
+    }
+    
+    else if ( problemID == FETCH_CHILDREN_FAILED ) {
+      problem = createProblem( problemID,
+                               Messages.getString("GridModelProblems.fetch_children_failed"), //$NON-NLS-1$
+                               exc,
+                               new int[] {
+                                 SolutionRegistry.CHECK_CA_CERTIFICATES,
+                                 SolutionRegistry.CHECK_AUTH_TOKENS
+                               } );
     }
     
     else if ( problemID == JOB_SUBMIT_FAILED ) {

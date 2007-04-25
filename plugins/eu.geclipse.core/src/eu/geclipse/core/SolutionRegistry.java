@@ -27,6 +27,16 @@ import eu.geclipse.core.internal.Activator;
 public class SolutionRegistry {
   
   /**
+   * Unique ID of the check authentication tokens solution.
+   */
+  public static final int CHECK_AUTH_TOKENS = uniqueID();
+  
+  /**
+   * Unique ID of the check CA certificates solution.
+   */
+  public static final int CHECK_CA_CERTIFICATES = uniqueID();
+  
+  /**
    * Unique ID of the check internet connection solution.
    */
   public static final int CHECK_INTERNET_CONNECTION = uniqueID();
@@ -116,11 +126,19 @@ public class SolutionRegistry {
     
     ISolution solution = null;
     
-    if ( solutionID == CHECK_INTERNET_CONNECTION ) {
+    if ( solutionID == CHECK_AUTH_TOKENS ) {
+      solution = new Solution( CHECK_AUTH_TOKENS, Messages.getString("SolutionRegistry.check_auth_tokens") ); //$NON-NLS-1$
+    }
+    
+    else if ( solutionID == CHECK_CA_CERTIFICATES ) {
+      solution = new Solution( CHECK_CA_CERTIFICATES, Messages.getString("SolutionRegistry.check_ca_certificates") ); //$NON-NLS-1$
+    }
+    
+    else if ( solutionID == CHECK_INTERNET_CONNECTION ) {
       solution = new Solution( CHECK_INTERNET_CONNECTION, Messages.getString("SolutionRegistry.check_internet_connection") ); //$NON-NLS-1$
     }
     
-    if ( solutionID == CHECK_PROXY_SETTINGS ) {
+    else if ( solutionID == CHECK_PROXY_SETTINGS ) {
       solution = new Solution( CHECK_PROXY_SETTINGS, Messages.getString("SolutionRegistry.check_proxy_settings") ); //$NON-NLS-1$
     }
 
