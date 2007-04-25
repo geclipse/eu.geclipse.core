@@ -18,8 +18,11 @@ package eu.geclipse.ui.wizards.jobs;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -38,7 +41,6 @@ import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.impl.JSDLJobDescription;
 import eu.geclipse.ui.internal.wizards.jobs.FileType;
 
-
 /**
  * Wizard for creating new jsdl file
  * 
@@ -49,12 +51,13 @@ public class NewJobWizard extends Wizard implements INewWizard {
   private IStructuredSelection selection;
   private WizardNewFileCreationPage firstPage;
   private IFile file;
-//  private EnvNewJobWizardPage envPage;
+  // private EnvNewJobWizardPage envPage;
   private FilesInputNewJobWizardPage inputFilesPage;
   private ExecutableNewJobWizardPage executablePage;
   private FilesOutputNewJobWizardPage outputFilesPage;
+  private ResourcesNewJobWizardPage resourcesPage;
+  private HostsNewJobWizardPage hostsPage;
 
-  
   @Override
   public void addPages()
   {
@@ -64,26 +67,20 @@ public class NewJobWizard extends Wizard implements INewWizard {
     this.firstPage.setDescription( Messages.getString( "NewJobWizard.first_page_description" ) ); //$NON-NLS-1$
     this.firstPage.setFileName( Messages.getString( "NewJobWizard.first_page_default_new_file_name" ) ); //$NON-NLS-1$
     addPage( this.firstPage );
-    
-    ArrayList<WizardPage> internal = new ArrayList<WizardPage>(); 
+    ArrayList<WizardPage> internal = new ArrayList<WizardPage>();
     this.inputFilesPage = new FilesInputNewJobWizardPage( Messages.getString( "NewJobWizard.files_input_new_job_page_name" ) ); //$NON-NLS-1$
-    
-//    addPage( this.inputFilesPage );
+    // addPage( this.inputFilesPage );
     internal.add( this.inputFilesPage );
     this.outputFilesPage = new FilesOutputNewJobWizardPage( Messages.getString( "NewJobWizard.files_output_new_job_page_name" ) ); //$NON-NLS-1$;
-//    addPage( this.outputFilesPage );
+    // addPage( this.outputFilesPage );
     internal.add( this.outputFilesPage );
-    
-    this.executablePage = new ExecutableNewJobWizardPage( Messages.getString( "NewJobWizard.executablePageName" ), internal); //$NON-NLS-1$
+    this.hostsPage = new HostsNewJobWizardPage("Host page", JSDLJobDescription.getOSTypes(), JSDLJobDescription.getCPUArchitectures());
+    internal.add( this.hostsPage );
+//    this.resourcesPage = new ResourcesNewJobWizardPage( "Job resources", JSDLJobDescription.getOSTypes(), JSDLJobDescription.getCPUArchitectures() );
+//    internal.add( this.resourcesPage );
+    this.executablePage = new ExecutableNewJobWizardPage( Messages.getString( "NewJobWizard.executablePageName" ), internal ); //$NON-NLS-1$
     addPage( this.executablePage );
-//    this.inputFilesPage = new FilesInputNewJobWizardPage( Messages.getString( "NewJobWizard.files_input_new_job_page_name" ) ); //$NON-NLS-1$
-//    addPage( this.inputFilesPage );
-//    this.outputFilesPage = new FilesOutputNewJobWizardPage( Messages.getString( "NewJobWizard.files_output_new_job_page_name" ) ); //$NON-NLS-1$;
-//    addPage( this.outputFilesPage );
-    
-//    this.envPage = new EnvNewJobWizardPage( Messages.getString( "NewJobWizard.env_page_name" ) ); //$NON-NLS-1$
-//    addPage( this.envPage );
-    
+  
   }
 
   public void init( final IWorkbench workbench, final IStructuredSelection sel )
@@ -122,55 +119,32 @@ public class NewJobWizard extends Wizard implements INewWizard {
     return result;
   }
 
-  protected void createFile( final IProgressMonitor monitor )
-  {
+  protected void createFile( final IProgressMonitor monitor ) {
     monitor.beginTask( Messages.getString( "NewJobWizard.creating_task" ) + this.firstPage.getFileName(), 2 ); //$NON-NLS-1$
     this.file = this.firstPage.createNewFile();
-    
     JSDLJobDescription jsdlJobDescription = null;
     IGridElement element = GridModel.getRoot().findElement( this.file );
-    if (element instanceof JSDLJobDescription){
-      jsdlJobDescription = (JSDLJobDescription) element;
+    if( element instanceof JSDLJobDescription ) {
+      jsdlJobDescription = ( JSDLJobDescription )element;
     }
-    
-    
     monitor.worked( 1 );
     monitor.setTaskName( Messages.getString( "NewJobWizard.setting_contents_task" ) + this.firstPage.getFileName() ); //$NON-NLS-1$
-//    this.file.setContents( getInitialStream(), true, true, monitor );
-    if (jsdlJobDescription != null){
+    // this.file.setContents( getInitialStream(), true, true, monitor );
+    if( jsdlJobDescription != null ) {
       setInitialModel( jsdlJobDescription );
-      jsdlJobDescription.save(this.file);
+      jsdlJobDescription.save( this.file );
     }
-    // jsdl -> jdl translation test
-//     JSDLJobDescription descr = new JSDLJobDescription(file);
-//     try {
-//     WMSClient a = new WMSClient(new
-//     URL("https://wms1.cyf-kr.edu.pl:7443/glite_wms_wmproxy_server"));
-//     System.out.println(a.translateJSDLtoJDL( jsdlJobDescription ));
-//     } catch( MalformedURLException e ) {
-//     // TODO Auto-generated catch block
-//     e.printStackTrace();
-//     } catch( ServiceException e ) {
-//      // TODO Auto-generated catch block
-//      e.printStackTrace();
-//    }
-    // end of test
-    // catch( ServiceException e ) {
-    // // TODO Auto-generated catch block
-    // e.printStackTrace();
-    // }
+
     monitor.worked( 1 );
   }
-  
-  
-  private void setInitialModel(final JSDLJobDescription jsdl){
-    
+
+  private void setInitialModel( final JSDLJobDescription jsdl ) {
     this.executablePage.getApplicationSpecificPage();
     jsdl.createRoot();
     jsdl.addJobDescription();
     jsdl.addJobIdentification( this.executablePage.getJobName(),
                                this.executablePage.getJobDescription() );
-    if( !this.executablePage.getExecutableFile().equals( "" ) ) { //$NON-NLS-1$
+    if( !this.executablePage.getApplicationName().equals( "" ) ) { //$NON-NLS-1$
       jsdl.addApplication();
       String in = null;
       String out = null;
@@ -187,11 +161,13 @@ public class NewJobWizard extends Wizard implements INewWizard {
           out = null;
         }
       }
-      jsdl.addPOSIXApplicationDetails( this.executablePage.getApplicationName(),
-                                       this.executablePage.getExecutableFile(),
-                                       in,
-                                       inName,
-                                       out );
+      if( !this.executablePage.getExecutableFile().equals( "" ) ) {
+        jsdl.addPOSIXApplicationDetails( this.executablePage.getApplicationName(),
+                                         this.executablePage.getExecutableFile(),
+                                         in,
+                                         inName,
+                                         out );
+      }
     }
     if( this.outputFilesPage.isCreated() ) {
       HashMap<String, String> outFiles = this.outputFilesPage.getFiles( FileType.OUTPUT );
@@ -207,31 +183,80 @@ public class NewJobWizard extends Wizard implements INewWizard {
         }
       }
     }
-    // adding specific arguments
-    if( this.executablePage.getApplicationSpecificPage() != null ) {
-      Map<String, ArrayList<String>> arguments = this.executablePage.getApplicationSpecificPage()
-        .getParametersValues();
-      for( String argName : arguments.keySet() ) {
-        jsdl.addArgumentForPosixApplication( argName, arguments.get( argName ) );
+    
+    List<IApplicationSpecificPage> aspList = this.executablePage.getApplicationSpecificPages();
+    Map<String, ArrayList<String>> arguments;
+    if( aspList != null ) {
+      for( IApplicationSpecificPage asp : aspList ) {
+        arguments = asp.getParametersValues();
+        if( arguments != null ) {
+          for( String argName : arguments.keySet() ) {
+            jsdl.addArgumentForPosixApplication( argName,
+                                                 arguments.get( argName ) );
+          }
+        }
+        Map<String, Properties> stagingIn = asp.getStageInFiles();
+        if( stagingIn != null ) {
+          for( String argName : stagingIn.keySet() ) {
+            // add agument
+            Enumeration vals = stagingIn.get( argName ).propertyNames();
+            ArrayList<String> values = new ArrayList<String>();
+            while( vals.hasMoreElements() ) {
+              values.add( ( String )vals.nextElement() );
+            }
+            jsdl.addArgumentForPosixApplication( argName, values );
+            for( String value : values ) {
+              jsdl.setInDataStaging( value, stagingIn.get( argName )
+                .getProperty( value ) );
+            }
+          }
+           Map<String, Properties> stagingOut = asp.getStageOutFiles();
+          if( stagingOut != null ) {
+            for( String argName : stagingOut.keySet() ) {
+              // add agument
+              Enumeration vals = stagingOut.get( argName ).propertyNames();
+              ArrayList<String> values = new ArrayList<String>();
+              while( vals.hasMoreElements() ) {
+                values.add( ( String )vals.nextElement() );
+              }
+              jsdl.addArgumentForPosixApplication( argName, values );
+              for( String value : values ) {
+                jsdl.setOutDataStaging( value, stagingOut.get( argName )
+                  .getProperty( value ) );
+              }
+            }
+          }
+        }
       }
     }
+//    if (! this.resourcesPage.getCpuList().equals( "" )){
+//      jsdl.setCPUArchitecture( this.resourcesPage.getCpuList());
+//    }
+    if (! this.hostsPage.getOS().equals( "" )){
+      jsdl.setOS( this.hostsPage.getOS());
+    }
+    if (! this.hostsPage.getArch().equals( "" )){
+      jsdl.setCPUArchitecture( this.hostsPage.getArch());
+    }
+    jsdl.addCandidateHosts( this.hostsPage.getCandidateHosts() );
+   
   }
-
-  
   class FirstPage extends WizardNewFileCreationPage {
 
     private IStructuredSelection iniSelection;
 
     /**
      * Creates new instance of {@link FirstPage}
+     * 
      * @param pageName name of this page
      * @param selection selection to be pass to new instance
      */
-    public FirstPage( final String pageName, final IStructuredSelection selection ) {
+    public FirstPage( final String pageName,
+                      final IStructuredSelection selection )
+    {
       super( pageName, selection );
       this.iniSelection = selection;
     }
-    
 
     @Override
     protected void initialPopulateContainerNameField()
@@ -239,14 +264,14 @@ public class NewJobWizard extends Wizard implements INewWizard {
       {
         Object obj = this.iniSelection.getFirstElement();
         if( obj instanceof IGridContainer ) {
-          IGridElement element = ( IGridElement ) obj;
+          IGridElement element = ( IGridElement )obj;
           IGridProject project = element.getProject();
-          if ( project != null ) {
+          if( project != null ) {
             IGridElement descriptions = project.findChild( IGridProject.DIR_JOBDESCRIPTIONS );
-            if ( descriptions != null ) {
+            if( descriptions != null ) {
               IPath cPath = descriptions.getPath();
               IPath ePath = element.getPath();
-              if ( !cPath.isPrefixOf( ePath ) ) {
+              if( !cPath.isPrefixOf( ePath ) ) {
                 element = descriptions;
               }
             }

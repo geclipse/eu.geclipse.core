@@ -17,7 +17,10 @@
 package eu.geclipse.ui.wizards.jobs;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+import eu.geclipse.ui.internal.wizards.jobs.DataStageData;
 import eu.geclipse.ui.wizards.jobs.wizardnodes.SpecificWizardPart;
 
 /**
@@ -32,5 +35,21 @@ public interface IApplicationSpecificPage {
    * @return map of parameter's names and their values
    */
   Map<String, ArrayList<String>> getParametersValues();
+  
+  /**
+   * Returns multidimensional map of parameters whose values are files local to
+   * execution host, but that need to be transferred from remote location
+   * (staged in). In this map keys are parameters names and inner maps are
+   * values. Those inner map structure is: key - file name (local for execution
+   * host), value - URI path to remote location
+   * 
+   * @return multidemensional map - keys are parameters names and inner maps are
+   *         values. Those inner maps structure is: key - file name (local for
+   *         execution host), value - URI path to remote location
+   */
+  Map<String, Properties> getStageInFiles();
+
+  
+  Map<String, Properties> getStageOutFiles();
   
 }

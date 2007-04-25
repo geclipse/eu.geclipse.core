@@ -17,7 +17,9 @@ package eu.geclipse.ui.wizards.jobs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import org.eclipse.jface.wizard.IWizardNode;
 import org.eclipse.jface.wizard.WizardSelectionPage;
 import org.eclipse.swt.SWT;
@@ -28,6 +30,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Text;
 import org.w3c.dom.Element;
 import eu.geclipse.ui.internal.wizards.jobs.ApplicationSpecificControlsFactory;
+import eu.geclipse.ui.internal.wizards.jobs.DataStageControlsData;
+import eu.geclipse.ui.internal.wizards.jobs.DataStageData;
 import eu.geclipse.ui.wizards.jobs.wizardnodes.BasicWizardPart;
 import eu.geclipse.ui.wizards.jobs.wizardnodes.SpecificWizardPart;
 
@@ -42,6 +46,8 @@ public class ApplicationSpecificLastPage extends WizardSelectionPage
   private Element pageElement;
   private ArrayList<Text> textFieldsWithFileChooser;
   private HashMap<Control, String> controlsParametersNames;
+  private ArrayList<DataStageControlsData> controlsDataStagingIn = new ArrayList<DataStageControlsData>();
+  private ArrayList<DataStageControlsData> controlsDataStagingOut = new ArrayList<DataStageControlsData>();
 
   /**
    * Method to create an instance of {@link ApplicationSpecificLastPage}
@@ -78,7 +84,9 @@ public class ApplicationSpecificLastPage extends WizardSelectionPage
         if( !result.containsKey( this.controlsParametersNames.get( control ) ) )
         {
           ArrayList<String> values = new ArrayList<String>();
-          values.add( controlText );
+          if (controlText != null && ! controlText.equals( "" )){
+            values.add( controlText );
+          }
           result.put( this.controlsParametersNames.get( control ), values );
         } else {
           result.get( this.controlsParametersNames.get( control ) )
@@ -97,9 +105,56 @@ public class ApplicationSpecificLastPage extends WizardSelectionPage
     factory.createControls( this.pageElement,
                             mainComp,
                             this.textFieldsWithFileChooser,
-                            this.controlsParametersNames );
+                            this.controlsParametersNames, this.controlsDataStagingIn, this.controlsDataStagingOut );
     setControl( mainComp );
     setPageComplete( true );
     this.getContainer().updateButtons();
   }
+
+  public Map<String, Properties> getStageInFiles() {
+    Map<String, Properties> result = null;
+    if (this.controlsDataStagingIn != null && ! this.controlsDataStagingIn.isEmpty()){
+      result = new HashMap<String, Properties>();
+      for (DataStageControlsData controlsData: this.controlsDataStagingIn ){
+        //1st need to check if this control is simple text or multiple list
+        if (controlsData.isMultipleList()){
+          //multiple list data processing
+        } else {
+          if (result.containsKey( controlsData.getArgName() )){
+            result.get( controlsData.getArgName() ).setProperty( ((Text)(controlsData.getNameControl())).getText(), ((Text)(controlsData.getURIControl())).getText() );
+          } else {
+            Properties prop = new Properties();
+            prop.setProperty( ((Text)(controlsData.getNameControl())).getText(), ((Text)(controlsData.getURIControl())).getText() );
+            result.put( controlsData.getArgName(), prop );   
+          }
+        }
+      }
+    }
+    return result;
+  }
+
+  public Map<String, Properties> getStageOutFiles() {
+    Map<String, Properties> result = null;
+    if (this.controlsDataStagingOut != null && ! this.controlsDataStagingOut.isEmpty()){
+      result = new HashMap<String, Properties>();
+      for (DataStageControlsData controlsData: this.controlsDataStagingOut ){
+        //1st need to check if this control is simple text or multiple list
+        if (controlsData.isMultipleList()){
+          //multiple list data processing
+        } else {
+          if (result.containsKey( controlsData.getArgName() )){
+            result.get( controlsData.getArgName() ).setProperty( ((Text)(controlsData.getNameControl())).getText(), ((Text)(controlsData.getURIControl())).getText() );
+          } else {
+            Properties prop = new Properties();
+            prop.setProperty( ((Text)(controlsData.getNameControl())).getText(), ((Text)(controlsData.getURIControl())).getText() );
+            result.put( controlsData.getArgName(), prop );   
+          }
+        }
+      }
+    }
+    return result;
+  }
+  
+  
+  
 }

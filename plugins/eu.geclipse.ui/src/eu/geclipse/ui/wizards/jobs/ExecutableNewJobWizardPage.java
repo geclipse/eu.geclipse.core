@@ -21,10 +21,12 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import javax.xml.parsers.ParserConfigurationException;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.wizard.IWizardNode;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.jface.wizard.WizardSelectionPage;
 import org.eclipse.swt.SWT;
@@ -269,6 +271,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
         for (String bundleId: this.appsWithExtraAttributes.keySet()){
           if (this.appsWithExtraAttributes.get( bundleId ).equals( this.applicationName.getText() )){
             setSelectedNode( new SpecificWizardPart(this.basicNode, this.getWizard(), bundleId ));
+            this.executableFile.setText( Extensions.getJSDLExtensionExecutable( bundleId ) );
           }
         }
       } catch( SAXException e1 ) {
@@ -297,10 +300,24 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     return result;
   }
 
+  
+  
   @Override
   protected void setSelectedNode( final IWizardNode node )
   {
     super.setSelectedNode( node );
+  }
+
+
+  public List<IApplicationSpecificPage> getApplicationSpecificPages() {
+    List<IApplicationSpecificPage> result = new ArrayList<IApplicationSpecificPage>();
+    if ( this.getSelectedNode() != null && this.getSelectedNode() != this.basicNode ){
+      SpecificWizardPart specificNode = (SpecificWizardPart) this.getSelectedNode();
+      for ( IWizardPage asp: specificNode.getPages() ){
+        result.add( ( IApplicationSpecificPage ) asp );
+      }
+    }
+    return result;
   }
   
 }
