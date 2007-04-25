@@ -1,4 +1,4 @@
-package eu.geclipse.ui.test;
+package eu.geclipse.ui.internal;
 
 import org.eclipse.core.runtime.Plugin;
 import org.osgi.framework.BundleContext;
