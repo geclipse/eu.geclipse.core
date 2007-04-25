@@ -48,6 +48,9 @@ public class Forward implements IForward {
     this.port = port;
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.portforward.IForward#getBindPort()
+   */
   public int getBindPort() {
     return this.bindPort;
   }
@@ -60,6 +63,9 @@ public class Forward implements IForward {
     this.bindPort = bindPort;
   }
 
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.portforward.IForward#getHostname()
+   */
   public String getHostname() {
     return this.hostname;
   }
@@ -86,6 +92,9 @@ public class Forward implements IForward {
     this.port = port;
   }
 
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.portforward.IForward#getType()
+   */
   public ForwardType getType() {
     return this.type;
   }

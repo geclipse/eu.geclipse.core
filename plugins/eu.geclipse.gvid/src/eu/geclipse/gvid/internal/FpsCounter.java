@@ -28,16 +28,16 @@ class FpsCounter {
   }
 
   /**
-   * @brief Increments frame count. This method has to be called for every frame
-   *        processed.
+   * Increments frame count. This method has to be called for every frame
+   * processed.
    */
   void incFrameCount() {
     this.frameNr++;
   }
 
   /**
-   * @brief Returns frames per second value. Returns the number of frames which
-   *        where processed in the last second.
+   * Returns frames per second value. Returns the number of frames which
+   * where processed in the last second.
    * @return frames per second value.
    */
   int getFps() {

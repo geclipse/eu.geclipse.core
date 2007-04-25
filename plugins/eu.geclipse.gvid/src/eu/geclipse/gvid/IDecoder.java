@@ -49,14 +49,14 @@ public interface IDecoder {
   public void init( final IConnection connection, final IEvents events );
 
   /**
-   * @brief Returns the current width of the XviD stream.
-   * @return current width of the XviD stream in pixels.
+   * @brief Returns the current width of the video stream.
+   * @return current width of the video stream in pixels.
    */
   public int getXSize();
 
   /**
-   * @brief Returns the current height of the XviD stream.
-   * @return current height of the XviD stream in pixels.
+   * @brief Returns the current height of the video stream.
+   * @return current height of the video stream in pixels.
    */
   public int getYSize();
 

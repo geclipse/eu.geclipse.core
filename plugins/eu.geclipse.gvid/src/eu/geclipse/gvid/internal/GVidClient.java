@@ -132,6 +132,9 @@ public class GVidClient extends Component implements Runnable {
     return this.running;
   }
 
+  /* (non-Javadoc)
+   * @see java.awt.Component#getPreferredSize()
+   */
   @Override
   public Dimension getPreferredSize() {
     return new Dimension( this.lastImage.getWidth(), this.lastImage.getHeight() );
@@ -155,11 +158,17 @@ public class GVidClient extends Component implements Runnable {
     // frame.removeWindowListener(awtEventConverter);
   }
 
+  /* (non-Javadoc)
+   * @see java.awt.Component#getFocusTraversalKeysEnabled()
+   */
   @Override
   public boolean getFocusTraversalKeysEnabled() {
     return false;
   }
 
+  /* (non-Javadoc)
+   * @see java.lang.Runnable#run()
+   */
   public void run() {
     boolean initialSizeSet = false;
     if( this.decoder == null )
@@ -234,6 +243,9 @@ public class GVidClient extends Component implements Runnable {
     }
   }
   
+  /* (non-Javadoc)
+   * @see java.awt.Component#paint(java.awt.Graphics)
+   */
   @Override
   public void paint( final Graphics g ) {
     g.drawImage( this.lastImage, 0, 0, null );

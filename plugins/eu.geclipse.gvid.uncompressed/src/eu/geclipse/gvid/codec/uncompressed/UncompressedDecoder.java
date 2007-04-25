@@ -48,6 +48,9 @@ public class UncompressedDecoder implements IDecoder {
     this.framesDecoded = 0;
   }
 
+  /* (non-Javadoc)
+   * @see eu.geclipse.gvid.IDecoder#decodeNextFrame()
+   */
   public boolean decodeNextFrame() throws IOException {
     boolean result = false;
     int x, y;
@@ -88,18 +91,30 @@ public class UncompressedDecoder implements IDecoder {
     return result;
   }
 
+  /* (non-Javadoc)
+   * @see eu.geclipse.gvid.IDecoder#getImage()
+   */
   public BufferedImage getImage() {
     return this.image;
   }
 
+  /* (non-Javadoc)
+   * @see eu.geclipse.gvid.IDecoder#getXSize()
+   */
   public int getXSize() {
     return this.image.getWidth();
   }
 
+  /* (non-Javadoc)
+   * @see eu.geclipse.gvid.IDecoder#getYSize()
+   */
   public int getYSize() {
     return this.image.getHeight();
   }
 
+  /* (non-Javadoc)
+   * @see eu.geclipse.gvid.IDecoder#init(eu.geclipse.gvid.IConnection, eu.geclipse.gvid.IEvents)
+   */
   public void init( final IConnection conn, final IEvents ev ) {
     this.connection = conn;
     this.events = ev;

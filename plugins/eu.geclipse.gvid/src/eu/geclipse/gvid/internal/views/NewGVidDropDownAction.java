@@ -50,6 +50,9 @@ class NewGVidDropDownAction extends DropDownExtensionAction<IGVidView> {
     setToolTipText( Messages.getString( "NewGVidDropDownAction.openNewGVidTab" ) ); //$NON-NLS-1$
   }
 
+  /* (non-Javadoc)
+   * @see org.eclipse.jface.action.Action#run()
+   */
   @Override
   public void run() {
     URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/wizban/newconn_wiz.gif" ); //$NON-NLS-1$

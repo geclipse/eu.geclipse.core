@@ -21,23 +21,18 @@ import eu.geclipse.gvid.Activator;
 import eu.geclipse.gvid.IEvents;
 
 class ActiveEvent {
-  // /< ACTIVE_EVENT
   /** 0 if window isn't active anymore, other value if window gained activeness */
   byte gain;
 }
 
-// Keyboard event struct.
 class KeyboardEvent {
-  // /< KEY_PRESS_EVENT or KEY_RELEASE_EVENT
   /** Keycode. */
   short key;
   /** Bitmask containing modifier information. */
   short modifier;
 }
 
-// Mouse motion event struct.
 class MouseMotionEvent {
-  // /< MOUSE_MOVE_EVENT
   /** Bitmask containing the state of the mouse buttons. */
   byte state;
   /** New x position of cursor in window. */
@@ -50,9 +45,7 @@ class MouseMotionEvent {
   short yrel;
 }
 
-// Mouse button event struct.
 class MouseButtonEvent {
-  // /< MOUSE_PRESS_EVENT or MOUSE_RELEASE_EVENT
   /** Mouse button number. */
   byte button;
   /** X position of the mouse cursor. */
@@ -61,9 +54,7 @@ class MouseButtonEvent {
   short y;
 }
 
-// Window resize event struct.
 class ResizeEvent {
-  // /< VIDEO_RESIZE_EVENT
   /** New width of window. */
   short w;
   /** New height of window. */
@@ -71,7 +62,6 @@ class ResizeEvent {
 }
 
 class FrameFinishedEvent {
-  // /< FRAME_FINISHED
   /** Number of frame. */
   int frame_num;
   /** Encryption time in usec */
@@ -240,41 +230,41 @@ public class Events implements IEvents {
       sendBuffer[ pos++ ] = event.type;
       switch( event.type ) {
         case QUIT_EVENT:
-        break;
+          break;
         case VIDEO_RESIZE_EVENT:
           pos = putUint16( pos, sendBuffer, event.resize.w );
           pos = putUint16( pos, sendBuffer, event.resize.h );
-        break;
+          break;
         case ACTIVE_EVENT:
           sendBuffer[ pos++ ] = event.active.gain;
-        break;
+          break;
         case KEY_PRESS_EVENT:
         case KEY_RELEASE_EVENT:
           pos = putUint16( pos, sendBuffer, event.key.key );
           pos = putUint16( pos, sendBuffer, event.key.modifier );
-        break;
+          break;
         case MOUSE_MOVE_EVENT:
           sendBuffer[ pos++ ] = event.motion.state;
           pos = putUint16( pos, sendBuffer, event.motion.x );
           pos = putUint16( pos, sendBuffer, event.motion.y );
           pos = putUint16( pos, sendBuffer, event.motion.xrel );
           pos = putUint16( pos, sendBuffer, event.motion.yrel );
-        break;
+          break;
         case MOUSE_PRESS_EVENT:
         case MOUSE_RELEASE_EVENT:
           sendBuffer[ pos++ ] = event.button.button;
           pos = putUint16( pos, sendBuffer, event.button.x );
           pos = putUint16( pos, sendBuffer, event.button.y );
-        break;
+          break;
         case FRAME_FINISHED:
           pos = putUint32( pos, sendBuffer, event.frame_finished.frame_num );
           pos = putUint32( pos, sendBuffer, event.frame_finished.enc_time );
           pos = putUint32( pos, sendBuffer, event.frame_finished.comp_time );
-        break;
+          break;
         case REDRAW:
-        break;
+          break;
         case NO_EVENT:
-        break;
+          break;
         default:
           pos = 0;
           Activator.logMessage( IStatus.ERROR, 
@@ -313,9 +303,9 @@ public class Events implements IEvents {
   }
 
   /**
-   * @brief Sends all events which are buffered. Mouse motion events can be
-   *        buffered because successive mouse motion events get merged together
-   *        to a single one.
+   * Sends all events which are buffered. Mouse motion events can be
+   * buffered because successive mouse motion events get merged together
+   * to a single one.
    */
   void flush() throws IOException {
     synchronized( this.connection ) {
