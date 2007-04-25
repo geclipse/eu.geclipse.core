@@ -878,7 +878,7 @@ triggerRedraw();*/
           this.wraparound = true;
           break;
         case 8: // Auto repeat On
-          // XXX check of auto repeat keyboard events in SWT possible?
+          // XXX check if auto repeat keyboard events in SWT are possible?
           Activator.logMessage( IStatus.WARNING,
                                 Messages.getString("Terminal.autoRepeatOnNotSupported") ); //$NON-NLS-1$
           break;
