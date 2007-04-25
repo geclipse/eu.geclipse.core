@@ -42,20 +42,13 @@ import eu.geclipse.ui.wizards.jobs.IApplicationSpecificPage;
  */
 public class ApplicationSpecificControlsFactory {
 
-  protected static final String TEXT_ELEMENT = "text"; //$NON-NLS-1$
-  protected static final String LIST_ELEMENT = "list"; //$NON-NLS-1$
-  protected static final String TEXT_WITH_FILE_CHOOSER_ELEMENT = "textWithFileChooser"; //$NON-NLS-1$
-  protected static final String TEXT_NAME_ELEMENT = "name"; //$NON-NLS-1$
-  protected static final String TEXT_ENABLED_ELEMENT = "enabled"; //$NON-NLS-1$
-  protected static final String TEXT_HINT_ELEMENT = "hint"; //$NON-NLS-1$
-  protected static final String TEXT_PARAM_NAME_ELEMENT = "paramName"; //$NON-NLS-1$
-  protected static final String TEXT_PARAM_PREFIX_ELEMENT = "paramPrefix"; //$NON-NLS-1$
-  protected static final String LIST_VALUE_ELEMENT = "value"; //$NON-NLS-1$
-  protected static final String LIST_WRITABLE_ELEMENT = "writable"; //$NON-NLS-1$
+
   ArrayList<Text> textFieldsFromParent;
   ArrayList<Text> textFieldsFromParentPositions;
   ArrayList<SelectionAdapter> adapters = new ArrayList<SelectionAdapter>();
   private HashMap<Control, String> parentControlsParametersNames;
+  private ArrayList<DataStageControlsData> parentStagingInControls;
+  private ArrayList<DataStageControlsData> parentStagingOutControls;
 
   /**
    * Creates controls from xml file defined in extension of
@@ -66,15 +59,19 @@ public class ApplicationSpecificControlsFactory {
    *          access from GridFileDialog is required
    * @param controlsParametersNames map used by wizard containing application
    *          specific page (for which controls are created by this factory), to
-   *          bind value held by control with parameter name in JSDL
+   *          bind value held by control with parameter name in JSDL 
    */
   public void createControls( final Element element,
                               final Composite composite,
                               final ArrayList<Text> textFieldsWithFileChooser,
-                              final HashMap<Control, String> controlsParametersNames )
+                              final HashMap<Control, String> controlsParametersNames,
+                              ArrayList<DataStageControlsData> stagingIn,
+                              ArrayList<DataStageControlsData> stagingOut )
   {
     this.textFieldsFromParent = textFieldsWithFileChooser;
     this.parentControlsParametersNames = controlsParametersNames;
+    this.parentStagingInControls = stagingIn;
+    this.parentStagingOutControls = stagingOut;
     try {
       FirstLevelElements currentFirstLevelElement = FirstLevelElements.NULL;
       HashMap<ChildrenElements, String> parametersMap = new HashMap<ChildrenElements, String>();
@@ -130,6 +127,28 @@ public class ApplicationSpecificControlsFactory {
             listValues = new ArrayList<String>();
             currentFirstLevelElement = FirstLevelElements.MULTIPLE_ARGUMENTS;
           break;
+          case TEXT_DATA_STAGING:
+            if( !currentFirstLevelElement.equals( FirstLevelElements.NULL ) ) {
+              createControl( currentFirstLevelElement,
+                             composite,
+                             parametersMap,
+                             listValues );
+            }
+            parametersMap = new HashMap<ChildrenElements, String>();
+            listValues = new ArrayList<String>();
+            currentFirstLevelElement = FirstLevelElements.TEXT_DATA_STAGING;
+          break;
+          case MULTIPLE_DATA_STAGING:
+            if( !currentFirstLevelElement.equals( FirstLevelElements.NULL ) ) {
+              createControl( currentFirstLevelElement,
+                             composite,
+                             parametersMap,
+                             listValues );
+            }
+            parametersMap = new HashMap<ChildrenElements, String>();
+            listValues = new ArrayList<String>();
+            currentFirstLevelElement = FirstLevelElements.MULTIPLE_DATA_STAGING;
+          break;
           case NULL:
             switch( ChildrenElements.valueOfAlias( name ) ) {
               case ENABLED:
@@ -172,6 +191,10 @@ public class ApplicationSpecificControlsFactory {
                 parametersMap.put( ChildrenElements.MIN_ARGUMENTS_COUNT,
                                    el.getTextContent() );
               break;
+              case FILE:
+                parametersMap.put( ChildrenElements.FILE,
+                                   el.getTextContent() );
+              break;
               default:
                 // do nothing
               break;
@@ -205,15 +228,91 @@ public class ApplicationSpecificControlsFactory {
         createListControl( composite, parametersMap, listValues );
       break;
       case TEXT_WITH_FILE_CHOOSER:
-        createTextWithFileChooser( composite, parametersMap );
+        createTextWithFileChooserControl( composite, parametersMap );
       break;
       case MULTIPLE_ARGUMENTS:
-        createMultipleArgumentsList( composite, parametersMap );
+        createMultipleArgumentsListControl( composite, parametersMap );
       break;
+      case TEXT_DATA_STAGING:
+        createTextDataStagingControl ( composite, parametersMap );
+      break;
+//      case MULTIPLE_DATA_STAGING:
+//        createMultipleDataStagingControl ( composite, parametersMap );
+//      break;
       default:
         // do nothing
       break;
     }
+  }
+
+  private void createTextDataStagingControl( final Composite composite, final HashMap<ChildrenElements, String> parametersMap ) {
+    GridData layout = new GridData();
+    Label textLabel = new Label( composite, SWT.NONE );
+    if( parametersMap.containsKey( ChildrenElements.LABEL ) ) {
+      textLabel.setText( parametersMap.get( ChildrenElements.LABEL ) );
+    }
+    layout.horizontalAlignment = GridData.BEGINNING;
+    layout.verticalAlignment = GridData.CENTER;
+    textLabel.setLayoutData( layout );
+    
+    layout = new GridData();
+    layout.verticalAlignment = GridData.CENTER;
+    layout.horizontalAlignment = GridData.FILL;
+    layout.horizontalSpan = 2;
+    layout.grabExcessHorizontalSpace = true;
+    
+    Label nameLabel = new Label ( composite, SWT.NONE );
+    nameLabel.setText( "Local file name" );
+    Text textControlName = new Text( composite, SWT.BORDER );
+    
+    Label URILabel = new Label ( composite, SWT.NONE );
+    URILabel.setText( "Remote location" );
+    Text textControlURI = new Text( composite, SWT.BORDER );
+    
+    String paramName = "";
+    FileType fileType = FileType.NULL;
+    for( ChildrenElements child : parametersMap.keySet() ) {
+      switch( child ) {
+        case ENABLED:
+          boolean enabled = false;
+          if( parametersMap.get( child )
+            .compareToIgnoreCase( Boolean.TRUE.toString() ) == 0 )
+          {
+            enabled = true;
+          }
+          textControlName.setEnabled( enabled );
+          textControlURI.setEnabled( enabled );
+        break;
+        case HINT:
+          textControlName.setToolTipText( parametersMap.get( child ) );
+          textControlURI.setToolTipText( parametersMap.get( child ) );
+        break;
+        case PARAM_NAME:
+          paramName = parametersMap.get( child );
+//          this.parentControlsParametersNames.put( textControl,
+//                                                  parametersMap.get( child ) );
+        break;
+        case FILE:
+          fileType = FileType.valueOfAlias( parametersMap.get( child ) );
+//        default:
+//        break;
+      }
+    }
+    switch ( fileType ){
+      case INPUT:
+        this.parentStagingInControls.add( new DataStageControlsData(paramName, textControlName, textControlURI) );
+      break;
+      case OUTPUT:
+        this.parentStagingOutControls.add( new DataStageControlsData(paramName, textControlName, textControlURI) );
+      break;
+      case NULL:
+        //do nothing
+      break;
+    }
+    textControlName.setLayoutData( layout );
+    textControlURI.setLayoutData( layout );
+
+    
   }
 
   private void createTextControl( final Composite composite,
@@ -318,7 +417,7 @@ public class ApplicationSpecificControlsFactory {
     listControl.setLayoutData( layout );
   }
 
-  private void createTextWithFileChooser( final Composite composite,
+  private void createTextWithFileChooserControl( final Composite composite,
                                           final HashMap<ChildrenElements, String> parametersMap )
   {
     GridData layout = new GridData();
@@ -392,7 +491,7 @@ public class ApplicationSpecificControlsFactory {
     fileButton.setLayoutData( layout );
   }
 
-  private void createMultipleArgumentsList( final Composite composite,
+  private void createMultipleArgumentsListControl( final Composite composite,
                                             final HashMap<ChildrenElements, String> parametersMap )
   {
     GridData layout = new GridData();

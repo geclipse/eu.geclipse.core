@@ -62,6 +62,11 @@ public enum ChildrenElements {
    */
   MAX_ARGUMENTS_COUNT ("maxArgumentsCount"), //$NON-NLS-1$
   /**
+   * File element (child of {@link FirstLevelElements#TEXT_DATA_STAGING} and
+   * {@link FirstLevelElements#MULTIPLE_DATA_STAGING} elements)
+   */
+  FILE("file"), //$NON-NLS-1$
+  /**
    * Value for any other value that is not a value of children elements
    * defined in this enum
    */

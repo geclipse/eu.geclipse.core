@@ -39,9 +39,17 @@ public enum FirstLevelElements {
    */
   MULTIPLE_ARGUMENTS("multipleArguments"), //$NON-NLS-1$
   /**
-   * Value for any other value than {@link FirstLevelElements#TEXT},
-   * {@link FirstLevelElements#LIST} or
-   * {@link FirstLevelElements#TEXT_WITH_FILE_CHOOSER}
+   * Text field holding value of parameter that is local file on execution host,
+   * but that needs to be transferred to or from remote location
+   */
+  TEXT_DATA_STAGING("textDataStaging"), //$NON-NLS-1$
+  /**
+   * Element to gather multiple element values. Those values are local files on
+   * execution host, but need to be transferred to or from some remote host(s)
+   */
+  MULTIPLE_DATA_STAGING("multipleDataStaging"), //$NON-NLS-1$
+  /**
+   * Value for any other value than those defined above
    */
   NULL("null"); //$NON-NLS-1$
 
