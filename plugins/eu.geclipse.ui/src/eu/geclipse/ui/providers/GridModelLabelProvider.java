@@ -32,7 +32,6 @@ public class GridModelLabelProvider extends LabelProvider
   private Image folderImage;
   private Image invalidElementImage;
   private Image serviceImage;
-  private Image jobImage;
   private Image storageImage;
   private Image virtualFileImage;
   private Image virtualFolderImage;
