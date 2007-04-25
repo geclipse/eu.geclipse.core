@@ -25,6 +25,7 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceProxy;
 import org.eclipse.core.resources.IResourceProxyVisitor;
 import org.eclipse.core.resources.IResourceVisitor;
@@ -389,7 +390,16 @@ public class GridConnectionRootAdapter
 
   @Override
   public int getType() {
-    return getFsFile().getType();
+    
+    int result = IResource.FOLDER;
+    
+    IFile fsFile = getFsFile();
+    if ( fsFile != null ) {
+      result = fsFile.getType();
+    }
+    
+    return result;
+    
   }
 
   @Override
