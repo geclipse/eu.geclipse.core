@@ -26,9 +26,11 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -42,6 +44,8 @@ import org.eclipse.emf.ecore.xmi.impl.XMLMapImpl;
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.jsdl.ApplicationType;
+import eu.geclipse.jsdl.CPUArchitectureType;
+import eu.geclipse.jsdl.CandidateHostsType;
 import eu.geclipse.jsdl.CreationFlagEnumeration;
 import eu.geclipse.jsdl.DataStagingType;
 import eu.geclipse.jsdl.DocumentRoot;
@@ -50,8 +54,14 @@ import eu.geclipse.jsdl.JobDescriptionType;
 import eu.geclipse.jsdl.JobIdentificationType;
 import eu.geclipse.jsdl.JsdlFactory;
 import eu.geclipse.jsdl.JsdlPackage;
+import eu.geclipse.jsdl.OperatingSystemType;
+import eu.geclipse.jsdl.OperatingSystemTypeEnumeration;
+import eu.geclipse.jsdl.OperatingSystemTypeType;
+import eu.geclipse.jsdl.ProcessorArchitectureEnumeration;
 import eu.geclipse.jsdl.RangeValueType;
+import eu.geclipse.jsdl.ResourcesType;
 import eu.geclipse.jsdl.SourceTargetType;
+import eu.geclipse.jsdl.impl.ResourcesTypeImpl;
 import eu.geclipse.jsdl.posix.ArgumentType;
 import eu.geclipse.jsdl.posix.FileNameType;
 import eu.geclipse.jsdl.posix.POSIXApplicationType;
@@ -314,7 +324,7 @@ public class JSDLJobDescription
     dataIn.setFileName( name );
     SourceTargetType sourceDataIn = this.jsdlFactory.createSourceTargetType();
     sourceDataIn.setURI( path );
-    dataIn.setSource( sourceDataIn );
+    dataIn.setTarget( sourceDataIn );
     this.jobDescription.getDataStaging().add( dataIn );
   }
 
@@ -331,7 +341,7 @@ public class JSDLJobDescription
     dataOut.setFileName( name );
     SourceTargetType sourceDataOut = this.jsdlFactory.createSourceTargetType();
     sourceDataOut.setURI( path );
-    dataOut.setTarget( sourceDataOut );
+    dataOut.setSource( sourceDataOut );
     this.jobDescription.getDataStaging().add( dataOut );
   }
   
@@ -482,19 +492,27 @@ public class JSDLJobDescription
    * @param argValues list of values of the argument
    */
   @SuppressWarnings("unchecked")
-  public void addArgumentForPosixApplication( final String argName, final ArrayList<String> argValues ){
+  public void addArgumentForPosixApplication( final String argName,
+                                              final ArrayList<String> argValues )
+  {
     POSIXApplicationType posixApp = getPosixApplication();
     ArgumentType arg;
-    if ( posixApp != null ){
+    if (argValues != null && ! argValues.isEmpty()){
+    if( posixApp != null ) {
       EList argumentList = posixApp.getArgument();
-      arg = this.posixFactory.createArgumentType();
-      arg.setValue( argName );
-      argumentList.add( arg );
-      for ( String value: argValues ){
+      if( argName != null && !argName.equals( "" ) ) {
         arg = this.posixFactory.createArgumentType();
-        arg.setValue( value );
+        arg.setValue( argName );
         argumentList.add( arg );
       }
+      for( String value : argValues ) {
+        if( !value.equals( "" ) ) {
+          arg = this.posixFactory.createArgumentType();
+          arg.setValue( value );
+          argumentList.add( arg );
+        }
+      }
+    }
     }
   }
 
@@ -521,5 +539,87 @@ public class JSDLJobDescription
     
     return outputString;  
   }
+
+
+  public static List<String> getOSTypes() {
+    ArrayList<String> result = new ArrayList<String>();
+    for( Object value: OperatingSystemTypeEnumeration.VALUES){
+      result.add( value.toString() );
+    }
+    return result;
+  }
+
+
+  public static List<String> getCPUArchitectures() {
+    ArrayList<String> result = new ArrayList<String>();
+    for( Object value: ProcessorArchitectureEnumeration.VALUES){
+      result.add( value.toString() );
+    }
+    return result;
+  }
   
+  public void setCPUArchitecture(String cpu){
+    DocumentRoot dRoot = getDocumentRoot();
+    if ( dRoot != null && dRoot.getJobDefinition() != null && dRoot.getJobDefinition().getJobDescription() != null){
+      ResourcesType resources = dRoot.getJobDefinition().getJobDescription().getResources();
+      if (resources == null){
+        resources = this.jsdlFactory.createResourcesType();
+        dRoot.getJobDefinition().getJobDescription().setResources( resources );
+      }
+      CPUArchitectureType cpuArch = this.jsdlFactory.createCPUArchitectureType();
+      cpuArch.setCPUArchitectureName( ProcessorArchitectureEnumeration.getByName( cpu ) );
+      resources.setCPUArchitecture( cpuArch );
+    }
+  }
+  
+  public void setTotalCPUCount(int count){
+    DocumentRoot dRoot = getDocumentRoot();
+    if ( dRoot != null && dRoot.getJobDefinition() != null && dRoot.getJobDefinition().getJobDescription() != null){
+      ResourcesType resources = dRoot.getJobDefinition().getJobDescription().getResources();
+      if (resources == null){
+        resources = this.jsdlFactory.createResourcesType();
+        dRoot.getJobDefinition().getJobDescription().setResources( resources );
+      }
+      //???
+    }
+  }
+  
+  public void addCandidateHosts(List<String> hostsList){
+    DocumentRoot dRoot = getDocumentRoot();
+    if ( dRoot != null && dRoot.getJobDefinition() != null && dRoot.getJobDefinition().getJobDescription() != null){
+      ResourcesType resources = dRoot.getJobDefinition().getJobDescription().getResources();
+      if (resources == null){
+        resources = this.jsdlFactory.createResourcesType();
+        dRoot.getJobDefinition().getJobDescription().setResources( resources );
+      }
+      CandidateHostsType candidateHosts = resources.getCandidateHosts();
+      if (candidateHosts == null){
+        candidateHosts = this.jsdlFactory.createCandidateHostsType();
+        resources.setCandidateHosts( candidateHosts );
+      }
+      for (String hostName: hostsList){
+        candidateHosts.getHostName().add( hostName );
+      }
+     }
+  }
+
+
+  public void setOS( String cpuList ) {
+    DocumentRoot dRoot = getDocumentRoot();
+    if ( dRoot != null && dRoot.getJobDefinition() != null && dRoot.getJobDefinition().getJobDescription() != null){
+      ResourcesType resources = dRoot.getJobDefinition().getJobDescription().getResources();
+      if (resources == null){
+        resources = this.jsdlFactory.createResourcesType();
+        dRoot.getJobDefinition().getJobDescription().setResources( resources );
+      }
+      OperatingSystemType osType = resources.getOperatingSystem();
+      if (osType == null){
+        osType = this.jsdlFactory.createOperatingSystemType();
+        resources.setOperatingSystem( osType );
+      }
+      OperatingSystemTypeType osInstance = this.jsdlFactory.createOperatingSystemTypeType();
+      osInstance.setOperatingSystemName( OperatingSystemTypeEnumeration.getByName( cpuList ) );
+      osType.setOperatingSystemType( osInstance );
+    }
+  }
 }
