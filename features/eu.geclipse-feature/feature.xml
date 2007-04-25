@@ -153,4 +153,11 @@ project number: FP5-IST-034327  http://www.geclipse.eu/
          install-size="0"
          version="0.0.0"/>
 
+   <plugin
+         id="eu.geclipse.jsdl.adapters"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
 </feature>
