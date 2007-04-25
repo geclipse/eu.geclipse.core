@@ -15,11 +15,6 @@
 
 package eu.geclipse.ui;
 
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
 import eu.geclipse.ui.internal.Activator;
 
 /**
@@ -27,7 +22,7 @@ import eu.geclipse.ui.internal.Activator;
  * log and to bring the log view to front. 
  */
 public class LogExceptionSolution
-    extends UISolution {
+    extends ShowViewSolution {
   
   /**
    * The ID of the PDE log view.
@@ -47,7 +42,9 @@ public class LogExceptionSolution
    * @param exc The exception to be logged.
    */
   public LogExceptionSolution( final Throwable exc ) {
-    super( UISolutionRegistry.LOG_EXCEPTION, Messages.getString("LogExceptionSolution.log_exception"), null ); //$NON-NLS-1$
+    super( UISolutionRegistry.LOG_EXCEPTION,
+           Messages.getString("LogExceptionSolution.log_exception"), //$NON-NLS-1$
+           LOG_VIEW_ID );
     this.exc = exc;
   }
 
@@ -57,17 +54,7 @@ public class LogExceptionSolution
   @Override
   public void solve() {
     Activator.logException( this.exc );
-    IWorkbench workbench
-      = PlatformUI.getWorkbench();
-    IWorkbenchWindow window
-      = workbench.getActiveWorkbenchWindow();
-    IWorkbenchPage page
-      = window.getActivePage();
-    try {
-      page.showView( LOG_VIEW_ID );
-    } catch( PartInitException piExc ) {
-      Activator.logException( piExc );
-    }
+    super.solve();
   }
   
 }

@@ -18,6 +18,7 @@ package eu.geclipse.ui;
 import org.eclipse.swt.widgets.Shell;
 import eu.geclipse.core.ISolution;
 import eu.geclipse.core.SolutionRegistry;
+import eu.geclipse.ui.internal.Activator;
 
 /**
  * Solution registry for all general solutions related to the UI.
@@ -70,7 +71,18 @@ public class UISolutionRegistry extends SolutionRegistry {
 
     ISolution solution = super.findSolution( solutionID );
     
-    if ( solutionID == SolutionRegistry.CHECK_PROXY_SETTINGS ) {
+    if ( solutionID == SolutionRegistry.CHECK_AUTH_TOKENS ) {
+      solution = new ShowViewSolution( solution,
+                                       Activator.ID_AUTH_VIEW );
+    }
+    
+    else if ( solutionID == SolutionRegistry.CHECK_CA_CERTIFICATES ) {
+      solution = new PreferenceSolution( solution,
+                                         this.shell,
+                                         PreferenceSolution.CA_CERT_PREFERENCE_PAGE );
+    }
+    
+    else if ( solutionID == SolutionRegistry.CHECK_PROXY_SETTINGS ) {
       solution = new PreferenceSolution( solution,
                                          this.shell,
                                          PreferenceSolution.NETWORK_PREFERENCE_PAGE );

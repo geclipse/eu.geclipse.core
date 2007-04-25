@@ -45,12 +45,22 @@ public class ProgressRunner implements Runnable {
       
       try {
         this.container.getChildren( this.monitor );
-      } catch( GridModelException gmExc ) {
-        Shell shell = this.monitor.getTreeViewer().getControl().getShell();
-        NewProblemDialog.openProblem( shell,
-                                      "Problem while fetching children",
-                                      "Unable to fetch children of " + this.container.getName(),
-                                      gmExc );
+      } catch( final GridModelException gmExc ) {
+        final TreeViewer viewer = this.monitor.getTreeViewer();
+        Control control = viewer.getControl();
+        if ( !control.isDisposed() ) {
+          Display display = control.getDisplay();
+          display.syncExec( new Runnable() {
+            public void run() {
+              Shell shell = ProgressRunner.this.monitor.getTreeViewer().getControl().getShell();
+              NewProblemDialog.openProblem( shell,
+                                            "Problem while fetching children",
+                                            "Unable to fetch children of "
+                                            + ProgressRunner.this.container.getName(),
+                                            gmExc );
+            }
+          } );
+        }
       }
       
       if ( !this.container.isDirty() ) {

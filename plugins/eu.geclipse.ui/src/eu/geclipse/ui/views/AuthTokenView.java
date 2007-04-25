@@ -24,8 +24,6 @@ import org.eclipse.compare.IContentChangeListener;
 import org.eclipse.compare.IContentChangeNotifier;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.GroupMarker;
@@ -82,7 +80,7 @@ import eu.geclipse.ui.IAuthTokenUIFactory;
 import eu.geclipse.ui.UIAuthTokenProvider;
 import eu.geclipse.ui.cheatsheets.OpenAuthTokenDialogAction;
 import eu.geclipse.ui.dialogs.AuthTokenInfoDialog;
-import eu.geclipse.ui.dialogs.ProblemDialog;
+import eu.geclipse.ui.dialogs.NewProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 
 /**
@@ -514,9 +512,14 @@ public class AuthTokenView extends ViewPart implements IContentChangeListener {
     }
     
     if ( exc != null ) {
-      String errMsg = active
+      String errMsg
+        = active
         ? Messages.getString("AuthTokenView.token_activation_error") //$NON-NLS-1$
         : Messages.getString("AuthTokenView.token_deactivation_error"); //$NON-NLS-1$
+      NewProblemDialog.openProblem( getSite().getShell(),
+                                    Messages.getString("AuthTokenView.token_activation_error_title"),
+                                    errMsg, exc );
+      /*
       IStatus status = new Status(
         IStatus.ERROR,
         Activator.PLUGIN_ID,
@@ -530,7 +533,7 @@ public class AuthTokenView extends ViewPart implements IContentChangeListener {
         errMsg,
         status,
         null );
-      Activator.logException( exc );
+      Activator.logException( exc );*/
     }
     
   }
