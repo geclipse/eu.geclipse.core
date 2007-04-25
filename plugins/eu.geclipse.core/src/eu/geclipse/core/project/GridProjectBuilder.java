@@ -34,8 +34,15 @@ public class GridProjectBuilder extends IncrementalProjectBuilder {
    */
   @SuppressWarnings("unchecked")
   @Override
-  protected IProject[] build( final int kind, final Map args, final IProgressMonitor monitor ) throws CoreException {
-    // TODO Auto-generated method stub
+  protected IProject[] build( final int kind,
+                              final Map args,
+                              final IProgressMonitor monitor )
+    throws CoreException
+  {
+    /* TODO
+     * What does make sense for Grid projects? There is nothing to build yet,
+     * but e.g. we could update the status of running jobs, token lifetime,...
+     */
     return null;
   }
   
