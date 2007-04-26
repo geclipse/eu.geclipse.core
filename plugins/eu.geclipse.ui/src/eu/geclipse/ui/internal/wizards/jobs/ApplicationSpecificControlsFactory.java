@@ -263,14 +263,23 @@ public class ApplicationSpecificControlsFactory {
     layout.grabExcessHorizontalSpace = true;
     textLabel.setLayoutData( layout );
     Label nameLabel = new Label( composite, SWT.NONE );
+    layout = new GridData();
+    layout.horizontalIndent = 30;
+    nameLabel.setLayoutData( layout );
     nameLabel.setText( Messages.getString( "ApplicationSpecificControlsFactory.0" ) ); //$NON-NLS-1$
     Text textControlName = new Text( composite, SWT.BORDER );
     layout = new GridData();
     layout.horizontalSpan = 2;
+    layout.horizontalAlignment = GridData.FILL;
     textControlName.setLayoutData( layout );
     Label URILabel = new Label( composite, SWT.NONE );
+    layout = new GridData();
+    layout.horizontalIndent = 30;
+    URILabel.setLayoutData( layout );
     URILabel.setText( Messages.getString( "ApplicationSpecificControlsFactory.1" ) ); //$NON-NLS-1$
     Text textControlURI = new Text( composite, SWT.BORDER );
+    layout = new GridData();
+    layout.horizontalAlignment = GridData.FILL;
     String paramName = Messages.getString( "ApplicationSpecificControlsFactory.2" ); //$NON-NLS-1$
     FileType fileType = FileType.NULL;
     this.intFile = 0;
@@ -322,9 +331,7 @@ public class ApplicationSpecificControlsFactory {
     ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
     Image fileImage = sharedImages.getImage( ISharedImages.IMG_OBJ_FILE );
     fileButton.setImage( fileImage );
-    layout = new GridData( GridData.HORIZONTAL_ALIGN_FILL
-                           | GridData.VERTICAL_ALIGN_FILL
-                           | GridData.VERTICAL_ALIGN_CENTER );
+    layout = new GridData();
     this.adapters.add( new SelectionAdapter() {
 
       @Override
