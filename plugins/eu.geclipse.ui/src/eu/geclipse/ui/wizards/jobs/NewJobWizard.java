@@ -149,6 +149,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
       String in = null;
       String out = null;
       String inName = null;
+      String outName = null;
       if( this.inputFilesPage.isCreated() ) {
         in = this.inputFilesPage.getStdin();
         out = this.inputFilesPage.getStdout();
@@ -159,6 +160,8 @@ public class NewJobWizard extends Wizard implements INewWizard {
         }
         if( out.equals( Messages.getString( "FilesInputNewJobWizardPage.stdin_info" ) ) ) { //$NON-NLS-1$
           out = null;
+        } else {
+          outName = this.inputFilesPage.getStdOutName();
         }
       }
       if( !this.executablePage.getExecutableFile().equals( "" ) ) { //$NON-NLS-1$
@@ -166,7 +169,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
                                          this.executablePage.getExecutableFile(),
                                          in,
                                          inName,
-                                         out );
+                                         out, outName );
       }
     }
     if( this.outputFilesPage.isCreated() ) {

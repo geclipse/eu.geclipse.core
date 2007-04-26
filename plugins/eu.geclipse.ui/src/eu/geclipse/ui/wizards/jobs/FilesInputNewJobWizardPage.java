@@ -116,7 +116,7 @@ public class FilesInputNewJobWizardPage extends WizardPage {
                           | GridData.GRAB_HORIZONTAL
                           | GridData.VERTICAL_ALIGN_CENTER
                           | GridData.HORIZONTAL_ALIGN_CENTER );
-     gData.horizontalSpan = 2;
+//     gData.horizontalSpan = 2;
     this.stdout.setLayoutData( gData );
     this.stdout.setText( Messages.getString( "FilesInputNewJobWizardPage.stdin_info" ) ); //$NON-NLS-1$
     this.stdout.setEnabled( false );
@@ -143,7 +143,7 @@ public class FilesInputNewJobWizardPage extends WizardPage {
                           | GridData.HORIZONTAL_ALIGN_CENTER
                           | GridData.GRAB_HORIZONTAL
                           | GridData.FILL_HORIZONTAL );
-     gData.horizontalSpan = 2;
+//     gData.horizontalSpan = 2;
     this.stderr.setLayoutData( gData );
     this.stderr.setText( Messages.getString( "FilesInputNewJobWizardPage.stdin_info" ) ); //$NON-NLS-1$
     this.stderr.setEnabled( false );

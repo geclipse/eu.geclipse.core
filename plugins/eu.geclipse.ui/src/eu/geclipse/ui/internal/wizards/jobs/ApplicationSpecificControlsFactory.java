@@ -1,18 +1,11 @@
-/******************************************************************************
- * Copyright (c) 2007 g-Eclipse consortium 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Initial development of the original code was made for
- * project g-Eclipse founded by European Union
- * project number: FP6-IST-034327  http://www.geclipse.eu/
- *
- * Contributor(s):
- *     PSNC - Katarzyna Bylec
- *           
- *****************************************************************************/
+/*******************************************************************************
+ * Copyright (c) 2007 g-Eclipse consortium All rights reserved. This program and
+ * the accompanying materials are made available under the terms of the Eclipse
+ * Public License v1.0 which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html Initial development of the original
+ * code was made for project g-Eclipse founded by European Union project number:
+ * FP6-IST-034327 http://www.geclipse.eu/ Contributor(s): PSNC - Katarzyna Bylec
+ ******************************************************************************/
 package eu.geclipse.ui.internal.wizards.jobs;
 
 import java.util.ArrayList;
@@ -48,6 +41,7 @@ public class ApplicationSpecificControlsFactory {
   private HashMap<Control, String> parentControlsParametersNames;
   private ArrayList<DataStageControlsData> parentStagingInControls;
   private ArrayList<DataStageControlsData> parentStagingOutControls;
+  private int intFile;
 
   /**
    * Creates controls from xml file defined in extension of
@@ -169,7 +163,8 @@ public class ApplicationSpecificControlsFactory {
                                    el.getTextContent() );
               break;
               case PARAM_PREFIX:
-                // TODO katis - how to pass this information to Wizard???
+                // TODO katis - how to pass this information to
+                // Wizard???
                 parametersMap.put( ChildrenElements.PARAM_PREFIX,
                                    el.getTextContent() );
               break;
@@ -264,16 +259,21 @@ public class ApplicationSpecificControlsFactory {
     layout = new GridData();
     layout.verticalAlignment = GridData.CENTER;
     layout.horizontalAlignment = GridData.FILL;
-    layout.horizontalSpan = 2;
+    layout.horizontalSpan = 3;
     layout.grabExcessHorizontalSpace = true;
+    textLabel.setLayoutData( layout );
     Label nameLabel = new Label( composite, SWT.NONE );
     nameLabel.setText( Messages.getString( "ApplicationSpecificControlsFactory.0" ) ); //$NON-NLS-1$
     Text textControlName = new Text( composite, SWT.BORDER );
+    layout = new GridData();
+    layout.horizontalSpan = 2;
+    textControlName.setLayoutData( layout );
     Label URILabel = new Label( composite, SWT.NONE );
     URILabel.setText( Messages.getString( "ApplicationSpecificControlsFactory.1" ) ); //$NON-NLS-1$
     Text textControlURI = new Text( composite, SWT.BORDER );
     String paramName = Messages.getString( "ApplicationSpecificControlsFactory.2" ); //$NON-NLS-1$
     FileType fileType = FileType.NULL;
+    this.intFile = 0;
     for( ChildrenElements child : parametersMap.keySet() ) {
       switch( child ) {
         case ENABLED:
@@ -306,18 +306,50 @@ public class ApplicationSpecificControlsFactory {
         this.parentStagingInControls.add( new DataStageControlsData( paramName,
                                                                      textControlName,
                                                                      textControlURI ) );
+        this.intFile = 1;
       break;
       case OUTPUT:
         this.parentStagingOutControls.add( new DataStageControlsData( paramName,
                                                                       textControlName,
                                                                       textControlURI ) );
+        this.intFile = -1;
       break;
       case NULL:
         // do nothing
       break;
     }
-    textControlName.setLayoutData( layout );
-    textControlURI.setLayoutData( layout );
+    Button fileButton = new Button( composite, SWT.PUSH );
+    ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
+    Image fileImage = sharedImages.getImage( ISharedImages.IMG_OBJ_FILE );
+    fileButton.setImage( fileImage );
+    layout = new GridData( GridData.HORIZONTAL_ALIGN_FILL
+                           | GridData.VERTICAL_ALIGN_FILL
+                           | GridData.VERTICAL_ALIGN_CENTER );
+    this.adapters.add( new SelectionAdapter() {
+
+      @Override
+      public void widgetSelected( final SelectionEvent e )
+      {
+        GridFileDialog dialog = new GridFileDialog( PlatformUI.getWorkbench()
+          .getActiveWorkbenchWindow()
+          .getShell() );
+        String filename = dialog.open();
+        if( filename != null ) {
+          if( intFile == 1 ) {
+            Text con = ( Text )ApplicationSpecificControlsFactory.this.parentStagingInControls.get( ApplicationSpecificControlsFactory.this.adapters.indexOf( this ) )
+              .getURIControl();
+            con.setText( filename );
+            // fileButton.setText( filename );
+          } else {
+            Text con = ( Text )ApplicationSpecificControlsFactory.this.parentStagingOutControls.get( ApplicationSpecificControlsFactory.this.adapters.indexOf( this ) )
+              .getURIControl();
+            con.setText( filename );
+          }
+        }
+      }
+    } );
+    fileButton.addSelectionListener( this.adapters.get( this.adapters.size() - 1 ) );
+    fileButton.setLayoutData( layout );
   }
 
   private void createTextControl( final Composite composite,
