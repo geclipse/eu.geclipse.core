@@ -221,4 +221,10 @@
             id="eu.geclipse.ui.properties.PropertiesFactory"
             sourceObjectClass="java.lang.Object"/>
    </extension>
+   <extension
+         point="eu.geclipse.ui.jsdlApplicationParameters">
+      <applicationName name="grep"/>
+      <executablePath path="/usr/local/bin/grep"/>
+      <parametersSchema path="schema/page.xml"/>
+   </extension>
 </plugin>
