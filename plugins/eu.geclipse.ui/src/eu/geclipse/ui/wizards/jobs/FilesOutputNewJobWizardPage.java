@@ -96,7 +96,7 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
                        final ITableLabelProvider labelProvider,
                        final HashMap<String, String> propertiesVsHearders )
     {
-      super( contentProvider, labelProvider, propertiesVsHearders, 50, 30 );
+      super( contentProvider, labelProvider, propertiesVsHearders, 350, 100 );
     }
 
     @Override
