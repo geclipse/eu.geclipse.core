@@ -26,11 +26,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.swing.text.html.HTMLDocument.HTMLReader.IsindexAction;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
-import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
@@ -64,8 +62,6 @@ import eu.geclipse.jsdl.RangeType;
 import eu.geclipse.jsdl.RangeValueType;
 import eu.geclipse.jsdl.ResourcesType;
 import eu.geclipse.jsdl.SourceTargetType;
-import eu.geclipse.jsdl.impl.BoundaryTypeImpl;
-import eu.geclipse.jsdl.impl.ResourcesTypeImpl;
 import eu.geclipse.jsdl.posix.ArgumentType;
 import eu.geclipse.jsdl.posix.FileNameType;
 import eu.geclipse.jsdl.posix.POSIXApplicationType;
@@ -378,7 +374,8 @@ public class JSDLJobDescription
   public String getExecutable(){
     String result = null;
     POSIXApplicationType posixApp = getPosixApplication();
-    if (posixApp != null){
+    if (posixApp != null
+        && posixApp.getExecutable() != null ){
       result = posixApp.getExecutable().getValue();
     }
     return result;
@@ -504,13 +501,13 @@ public class JSDLJobDescription
     if (argValues != null && ! argValues.isEmpty()){
     if( posixApp != null ) {
       EList argumentList = posixApp.getArgument();
-      if( argName != null && !argName.equals( "" ) ) {
+      if( argName != null && !argName.equals( "" ) ) { //$NON-NLS-1$
         arg = this.posixFactory.createArgumentType();
         arg.setValue( argName );
         argumentList.add( arg );
       }
       for( String value : argValues ) {
-        if( !value.equals( "" ) ) {
+        if( !value.equals( "" ) ) { //$NON-NLS-1$
           arg = this.posixFactory.createArgumentType();
           arg.setValue( value );
           argumentList.add( arg );
@@ -545,6 +542,9 @@ public class JSDLJobDescription
   }
 
 
+  /**
+   * @return list of possible OS
+   */
   public static List<String> getOSTypes() {
     ArrayList<String> result = new ArrayList<String>();
     for( Object value: OperatingSystemTypeEnumeration.VALUES){
@@ -554,6 +554,9 @@ public class JSDLJobDescription
   }
 
 
+  /**
+   * @return list of possible CPU architectures
+   */
   public static List<String> getCPUArchitectures() {
     ArrayList<String> result = new ArrayList<String>();
     for( Object value: ProcessorArchitectureEnumeration.VALUES){
@@ -562,21 +565,30 @@ public class JSDLJobDescription
     return result;
   }
   
-  public void setCPUArchitecture(String cpu){
-    DocumentRoot dRoot = getDocumentRoot();
+  /**
+   * @param cpu - required cpu architecture
+   */
+  public void setCPUArchitecture(final String cpu){
+    final DocumentRoot dRoot = getDocumentRoot();
     if ( dRoot != null && dRoot.getJobDefinition() != null && dRoot.getJobDefinition().getJobDescription() != null){
       ResourcesType resources = dRoot.getJobDefinition().getJobDescription().getResources();
       if (resources == null){
         resources = this.jsdlFactory.createResourcesType();
         dRoot.getJobDefinition().getJobDescription().setResources( resources );
       }
-      CPUArchitectureType cpuArch = this.jsdlFactory.createCPUArchitectureType();
+      final CPUArchitectureType cpuArch = this.jsdlFactory.createCPUArchitectureType();
       cpuArch.setCPUArchitectureName( ProcessorArchitectureEnumeration.getByName( cpu ) );
       resources.setCPUArchitecture( cpuArch );
     }
   }
   
-  public void setTotalCPUCount(double start, double end, boolean exclusive){
+  /**
+   * @param start - minimum number of cpu
+   * @param end - maximum number of cpu
+   * @param exclusive - treat above range as closed (valid value can be also start or end)
+   */
+  @SuppressWarnings("unchecked")
+  public void setTotalCPUCount( final double start, final double end, final boolean exclusive ){
     DocumentRoot dRoot = getDocumentRoot();
     if ( dRoot != null && dRoot.getJobDefinition() != null && dRoot.getJobDefinition().getJobDescription() != null){
       ResourcesType resources = dRoot.getJobDefinition().getJobDescription().getResources();
@@ -602,7 +614,11 @@ public class JSDLJobDescription
     }
   }
   
-  public void addCandidateHosts(List<String> hostsList){
+  /**
+   * @param hostsList - list of hosts, which are candidate to run jub
+   */
+  @SuppressWarnings("unchecked")
+  public void addCandidateHosts(final List<String> hostsList){
     DocumentRoot dRoot = getDocumentRoot();
     if ( dRoot != null && dRoot.getJobDefinition() != null && dRoot.getJobDefinition().getJobDescription() != null){
       ResourcesType resources = dRoot.getJobDefinition().getJobDescription().getResources();
@@ -622,8 +638,11 @@ public class JSDLJobDescription
   }
 
 
-  public void setOS( String cpuList ) {
-    DocumentRoot dRoot = getDocumentRoot();
+  /**
+   * @param osList - list of operating systems, on which job can run
+   */
+  public void setOS( final String osList ) {
+    final DocumentRoot dRoot = getDocumentRoot();
     if ( dRoot != null && dRoot.getJobDefinition() != null && dRoot.getJobDefinition().getJobDescription() != null){
       ResourcesType resources = dRoot.getJobDefinition().getJobDescription().getResources();
       if (resources == null){
@@ -635,14 +654,20 @@ public class JSDLJobDescription
         osType = this.jsdlFactory.createOperatingSystemType();
         resources.setOperatingSystem( osType );
       }
-      OperatingSystemTypeType osInstance = this.jsdlFactory.createOperatingSystemTypeType();
-      osInstance.setOperatingSystemName( OperatingSystemTypeEnumeration.getByName( cpuList ) );
+      final OperatingSystemTypeType osInstance = this.jsdlFactory.createOperatingSystemTypeType();
+      osInstance.setOperatingSystemName( OperatingSystemTypeEnumeration.getByName( osList ) );
       osType.setOperatingSystemType( osInstance );
     }
   }
 
 
-  public void setInidividialCPUSpeedRange( double start, double end, boolean exclusive ) {
+  /**
+   * @param start - minimum CPU speed
+   * @param end - maximum CPU speed 
+   * @param exclusive - should above range be trated as closed (start / end value is valid value)
+   */
+  @SuppressWarnings("unchecked")
+  public void setInidividialCPUSpeedRange( final double start, final double end, final boolean exclusive ) {
     DocumentRoot dRoot = getDocumentRoot();
     if ( dRoot != null && dRoot.getJobDefinition() != null && dRoot.getJobDefinition().getJobDescription() != null){
       ResourcesType resources = dRoot.getJobDefinition().getJobDescription().getResources();
@@ -669,7 +694,13 @@ public class JSDLJobDescription
   }
 
 
-  public void setTotalPhysicalMemory( double start, double end, boolean exclusive ) {
+  /**
+   * @param start - minimum amount of memory
+   * @param end - maximum amount of memory
+   * @param exclusive - should above range be closed (then start and end value is valid value)
+   */
+  @SuppressWarnings("unchecked")
+  public void setTotalPhysicalMemory( final double start, final double end, final boolean exclusive ) {
     DocumentRoot dRoot = getDocumentRoot();
     if ( dRoot != null && dRoot.getJobDefinition() != null && dRoot.getJobDefinition().getJobDescription() != null){
       ResourcesType resources = dRoot.getJobDefinition().getJobDescription().getResources();
@@ -697,8 +728,14 @@ public class JSDLJobDescription
   }
 
 
-  public void setIndividualCPUSpeedValue( double value, double epsilon ) {
-    DocumentRoot dRoot = getDocumentRoot();
+  /**
+   * Set required CPU to: value +/- epsilon  
+   * @param value - CPU speed
+   * @param epsilon - value of which CPU speed can be bigger or smaller
+   */
+  @SuppressWarnings("unchecked")
+  public void setIndividualCPUSpeedValue( final double value, final double epsilon ) {
+    final DocumentRoot dRoot = getDocumentRoot();
     if ( dRoot != null && dRoot.getJobDefinition() != null && dRoot.getJobDefinition().getJobDescription() != null){
       ResourcesType resources = dRoot.getJobDefinition().getJobDescription().getResources();
       if (resources == null){
@@ -711,7 +748,7 @@ public class JSDLJobDescription
         resources.setIndividualCPUSpeed( rangeValue );
       }
       
-      ExactType exact = this.jsdlFactory.createExactType();
+      final ExactType exact = this.jsdlFactory.createExactType();
       exact.setValue( value );
       exact.setEpsilon( epsilon );
       rangeValue.getExact().add( exact );
@@ -721,7 +758,13 @@ public class JSDLJobDescription
   }
 
 
-  public void setTotalCPUCountValue( double value, double epsilon ) {
+  /**
+   * Set valid CPU count to: value +/- epsilon
+   * @param value - how many cpu are required to start job
+   * @param epsilon - how much cpu can differs from value
+   */
+  @SuppressWarnings("unchecked")
+  public void setTotalCPUCountValue( final double value, final double epsilon ) {
     DocumentRoot dRoot = getDocumentRoot();
     if ( dRoot != null && dRoot.getJobDefinition() != null && dRoot.getJobDefinition().getJobDescription() != null){
       ResourcesType resources = dRoot.getJobDefinition().getJobDescription().getResources();
@@ -743,7 +786,13 @@ public class JSDLJobDescription
   }
 
 
-  public void setTotalPhysicalMemoryValue( double value, double epsilon ) {
+  /**
+   * Set valid memory amount to: value +/- epsilon
+   * @param value
+   * @param epsilon
+   */
+  @SuppressWarnings("unchecked")
+  public void setTotalPhysicalMemoryValue( final double value, final double epsilon ) {
     DocumentRoot dRoot = getDocumentRoot();
     if ( dRoot != null && dRoot.getJobDefinition() != null && dRoot.getJobDefinition().getJobDescription() != null){
       ResourcesType resources = dRoot.getJobDefinition().getJobDescription().getResources();
