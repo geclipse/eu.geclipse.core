@@ -7,7 +7,7 @@
    </intro>
    <item title="Open the g-Eclipse user perspective" skip="true">
       <description>
-          If you're not already in the g-Eclipse user perspective, in the main menu
+          If you are not already in the g-Eclipse user perspective, in the main menu
           select <b>Window &gt; Open Perspective &gt; g-Eclipse (User)</b> or click
           on the &quot;Click to Perform&quot; link below.
       </description>
@@ -29,7 +29,7 @@
       <command confirm="true" serialization="org.eclipse.ui.newWizard(newWizardId=eu.geclipse.ui.wizards.gridProjectWizard)"/>
    </item>
    <item title="Basic Information">
-   	  <description>Step through the pages in the Gird Project Wizard.</description>
+   	  <description>Step through the pages in the Grid Project Wizard.</description>
       <subitem label="Name and Location">
       	  Specify the name you want your grid project to be called and the location where you want to 
           store it's settings on your local harddisk. For the location you may accept 
@@ -40,9 +40,9 @@
       	  Or, if you have no VO available in the list, you can create a new one by clicking on 
       	  the <b>New VO</b> button, selecting the type of VO and clicking the <b>Next</b> button.
       	<subitem label="New VO">
-      	  Enter the name for your VO, host, port, host DN, information system endpoint, 
-      	  and the VO server URL and click the <b>Finish</b> Button. Then select your VO for the list
-      	  and click <b>Next</b> to get to a last page of this wizard.
+      	  Enter the name for your VO, host, port, host DN, Information System Endpoint, 
+      	  and the VO server URL and click the <b>Finish</b> Button. Then select your VO from the list
+      	  and click <b>Next</b> to get to the last page of this wizard.
       	</subitem>
       </subitem>
       <subitem label="Referenced Project">

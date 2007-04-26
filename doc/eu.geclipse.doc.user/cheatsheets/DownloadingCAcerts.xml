@@ -3,13 +3,13 @@
    <intro href="/eu.geclipse.doc.user/html/gettingstarted/downloadCAcerts.html">
       <description>
           This cheat sheet will show you how to download and install 
-          CA certificates into gEclipse.<br/>
+          CA certificates into g-Eclipse.<br/>
       </description>
    </intro>
    <item title="Open the CA Certificates Dialog Box" dialog="true" skip="true">
       <description>
           Go to <b>Window &gt; Preferences</b>, expand the g-Eclipse sub-tree 
-          and double-click the CA Certificates.
+          and select CA Certificates.
           You can click the <b>Click to Perform</b> button to have the 
        	  Preferences dialog box open automatically.<br/>
       </description>
