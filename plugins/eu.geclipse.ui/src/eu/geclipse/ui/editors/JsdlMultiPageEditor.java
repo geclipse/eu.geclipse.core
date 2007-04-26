@@ -42,8 +42,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.command.BasicCommandStack;
-import org.eclipse.emf.common.command.Command;
-import org.eclipse.emf.common.command.CommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
@@ -147,7 +145,7 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
 
                   // Try to select the affected objects.
                   //
-                  ((CommandStack)event.getSource()).getMostRecentCommand();
+                  //Command mostRecentCommand = ((CommandStack)event.getSource()).getMostRecentCommand();
 
                 }
               });
@@ -192,6 +190,7 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
   private void pushContentToPages(){    
     this.jobDefPage.setPageContent( this.jobDefType, isModelRefreshed());
     this.jobApplicationPage.setPageContent( this.jobDefType, isModelRefreshed());
+    //this.dataStagingPage.setPageContent( this.jobDefType, isModelRefreshed());
   }
   
   /*
@@ -593,7 +592,7 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
   
  
     
-  protected EContentAdapter problemIndicationAdapter = 
+   protected EContentAdapter problemIndicationAdapter = 
     new EContentAdapter()
     {
       @Override
@@ -728,7 +727,6 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
  
   // Returns a dignostic describing the errors and warnings listed in the resource
   // and the specified exception
-  //FIXME - Change the Diagnostics ERROR....get plugin properties file.
   public Diagnostic analyzeResourceProblems(final Resource resource, final Exception exception) 
       {
         if (!resource.getErrors().isEmpty() || !resource.getWarnings().isEmpty())

@@ -12,7 +12,7 @@
   * Contributor(s):
   *     UCY (http://www.ucy.cs.ac.cy)
   *      - Nicholas Loulloudes (loulloudes.n@cs.ucy.ac.cy)
-  *      - Emilia Stamou (emstamou@cs.ucy.ac.cy)
+  *      
   *****************************************************************************/
 
 package eu.geclipse.ui.jsdl.editor.pages;
@@ -39,6 +39,30 @@ import org.eclipse.ui.forms.widgets.Section;
 public class ResourcesPage extends FormPage {
   
   Composite jobRescComposite;
+  Label lblDescr;
+  Label lblMountPoint;
+  Label lblMountSource;
+  Label lblDiskSpace;
+  Label lblFileSystemType;
+  Label lblOperSystType;
+  Label lblOperSystVer;
+  Label lblDescrip;
+  Label lblCPUArchName;
+  Label lblIndCPUSpl;
+  Label lblIndCPUTime;
+  Label lblIndCPUCount;
+  Label lblIndNetBand;
+  Label lblPhysMem;
+  Label lblVirtMem;
+  Label lblIndDiskSpac;
+  Label lblCPUTime;
+  Label lblCPUCount;
+  Label lblTotPhMem;
+  Label lblTotVirtMem;
+  Label lblTotDiskSp;
+  Label lblTotResCount;
+ 
+  
   private Text txtDescr;
   private Text txtMountPoint;
   private Text txtMountSource;
@@ -61,6 +85,10 @@ public class ResourcesPage extends FormPage {
   private Text txtTotVirtMem;
   private Text txtTotDiskSp;
   private Text txtTotResCount;
+  
+
+  
+  
   
   // Constructor
   public ResourcesPage( final FormEditor editor
@@ -137,33 +165,7 @@ public class ResourcesPage extends FormPage {
    return client;
    
    }
-  
-//  // This method is used to create the expandable sections
-//  private Composite createExpSection(final Composite composite, final IManagedForm mform,
-//                                     final String title, final String desc, 
-//                                     final int numColumns,final int width,final int height) 
-//  {
-//    
-//    FormToolkit toolkit = mform.getToolkit();
-//    
-//    Section expSection = toolkit.createSection(composite, Section.DESCRIPTION|Section.TITLE_BAR
-//                                         |Section.TWISTIE|Section.EXPANDED);    
-//    expSection.setText(title);
-//    expSection.setDescription(desc);
-//    GridData gd = new GridData();
-//    gd.widthHint = width;
-//    gd.heightHint = height;
-//    expSection.setLayoutData( gd );
-//    
-//    Composite clientExpSection = toolkit.createComposite(expSection);
-//    GridLayout gridlayout = new GridLayout();
-//    gridlayout.numColumns = numColumns;
-//    clientExpSection.setLayout(gridlayout);
-//    
-//    expSection.setClient( clientExpSection );
-//
-//    return clientExpSection;
-//  }
+ 
   
   // This method is used to create the individual sections which contain the elements and their attributes 
   private Composite createsubSection(final Composite composite, final IManagedForm mform,
@@ -251,8 +253,10 @@ public class ResourcesPage extends FormPage {
      //Create the expandable section for File System
      Composite sectionFileSyst = createsubSection (client,mform,Messages.ResourcesPage_FileSystem, 
                          Messages.ResourcesPage_FileSystemDesc,2,550,300);      
+     
+     
      //Create the Label and Text boxes for the elements that File System supports
-     Label lblDescr = toolkit.createLabel(sectionFileSyst,Messages.ResourcesPage_Description); 
+     this.lblDescr = toolkit.createLabel(sectionFileSyst,Messages.ResourcesPage_Description); 
      this.txtDescr = toolkit.createText(sectionFileSyst, "", SWT.BORDER  //$NON-NLS-1$
                          |SWT.H_SCROLL|SWT.V_SCROLL| SWT.WRAP); 
      GridData gdBtxt = new GridData();
@@ -260,22 +264,22 @@ public class ResourcesPage extends FormPage {
      gdBtxt.heightHint=100;
      this.txtDescr.setLayoutData(gdBtxt);
      
-     Label lblMountPoint = toolkit.createLabel(sectionFileSyst,Messages.ResourcesPage_MountPoint);
+     this.lblMountPoint = toolkit.createLabel(sectionFileSyst,Messages.ResourcesPage_MountPoint);
      this.txtMountPoint = toolkit.createText(sectionFileSyst, "", SWT.BORDER); //$NON-NLS-1$
      GridData gdstxt = new GridData();
      gdstxt.widthHint = 300;
      this.txtMountPoint.setLayoutData(gdstxt);
      
-     Label lblMountSource = toolkit.createLabel(sectionFileSyst,Messages.ResourcesPage_MountSource);
+     this.lblMountSource = toolkit.createLabel(sectionFileSyst,Messages.ResourcesPage_MountSource);
      this.txtMountSource = toolkit.createText(sectionFileSyst, "", SWT.BORDER); //$NON-NLS-1$
      this.txtMountSource.setLayoutData(gdstxt);
      
      
-     Label lblDiskSpace = toolkit.createLabel(sectionFileSyst,Messages.ResourcesPage_DiskSpace);
+     this.lblDiskSpace = toolkit.createLabel(sectionFileSyst,Messages.ResourcesPage_DiskSpace);
      this.txtDiskSpace = toolkit.createText(sectionFileSyst, "", SWT.BORDER); //$NON-NLS-1$
      this.txtDiskSpace.setLayoutData(gdstxt);
      
-     Label lblFileSystemType = toolkit.createLabel(sectionFileSyst,Messages.ResourcesPage_FileSysType);
+     this.lblFileSystemType = toolkit.createLabel(sectionFileSyst,Messages.ResourcesPage_FileSysType);
      this.txtFileSystemType = toolkit.createText(sectionFileSyst, "", SWT.BORDER); //$NON-NLS-1$
      this.txtFileSystemType.setLayoutData(gdstxt);
     
@@ -295,15 +299,15 @@ public class ResourcesPage extends FormPage {
      Composite sectionOperSyst = createsubSection (client,mform,
              Messages.ResourcesPage_OperSyst,Messages.ResourcesPage_OperSystDescr,2,550,300);
      
-     Label lblOperSystType = toolkit.createLabel(sectionOperSyst,Messages.ResourcesPage_OperSystType);
+     this.lblOperSystType = toolkit.createLabel(sectionOperSyst,Messages.ResourcesPage_OperSystType);
      this.txtOperSystType = toolkit.createText(sectionOperSyst, "", SWT.BORDER); //$NON-NLS-1$
      this.txtOperSystType.setLayoutData(gdstxt);
      
-     Label lblOperSystVer = toolkit.createLabel(sectionOperSyst,Messages.ResourcesPage_OperSystVersion);
+     this.lblOperSystVer = toolkit.createLabel(sectionOperSyst,Messages.ResourcesPage_OperSystVersion);
      this.txtOperSystVer = toolkit.createText(sectionOperSyst, "", SWT.BORDER); //$NON-NLS-1$
      this.txtOperSystVer.setLayoutData(gdstxt);
      
-     Label lblDescrip = toolkit.createLabel(sectionOperSyst,Messages.ResourcesPage_DEscr);
+     this.lblDescrip = toolkit.createLabel(sectionOperSyst,Messages.ResourcesPage_DEscr);
      this.txtDescrip = toolkit.createText(sectionOperSyst, "", SWT.BORDER//$NON-NLS-1$
                          |SWT.H_SCROLL|SWT.V_SCROLL| SWT.WRAP);  
      this.txtDescrip.setLayoutData(gdBtxt);
@@ -312,7 +316,7 @@ public class ResourcesPage extends FormPage {
      Composite sectionCPUArch = createsubSection (client,mform,
     Messages.ResourcesPage_CPUArch,Messages.ResourcesPage_CPUArchDescr,2,550,300);
      
-     Label lblCPUArchName = toolkit.createLabel(sectionCPUArch,Messages.ResourcesPage_CPUArchName);
+     this.lblCPUArchName = toolkit.createLabel(sectionCPUArch,Messages.ResourcesPage_CPUArchName);
      this.txtCPUArchName = toolkit.createText(sectionCPUArch, "", SWT.BORDER); //$NON-NLS-1$
      this.txtCPUArchName.setLayoutData(gdstxt);
 
@@ -320,69 +324,69 @@ public class ResourcesPage extends FormPage {
      Composite sectionRangeValue_Type = createsubSection (client,mform,
      Messages.ResourcesPage_AddElementRangeVal,Messages.ResourcesPage_AddElementsRangeValueDescr,3,620,500);
    
-     Label lblIndCPUSp = toolkit.createLabel(sectionRangeValue_Type,Messages.ResourcesPage_IndCPUSpeed);
+     this.lblIndCPUSpl = toolkit.createLabel(sectionRangeValue_Type,Messages.ResourcesPage_IndCPUSpeed);
      createCombo (sectionRangeValue_Type);
      GridData gdstxt1 = new GridData();
      gdstxt1.widthHint = 200;
      this.txtIndCPUSp = toolkit.createText(sectionRangeValue_Type, "", SWT.BORDER); //$NON-NLS-1$
      this.txtIndCPUSp.setLayoutData(gdstxt1);
      
-     Label lblIndCPUTime = toolkit.createLabel(sectionRangeValue_Type,Messages.ResourcesPage_IndCPUTime);
+     this.lblIndCPUTime = toolkit.createLabel(sectionRangeValue_Type,Messages.ResourcesPage_IndCPUTime);
      createCombo (sectionRangeValue_Type);
      this.txtIndCPUTime = toolkit.createText(sectionRangeValue_Type, "", SWT.BORDER); //$NON-NLS-1$
      this.txtIndCPUTime.setLayoutData(gdstxt1);
 
-     Label lblIndCPUCount = toolkit.createLabel(sectionRangeValue_Type,Messages.ResourcesPage_IndCPUCount);
+     this.lblIndCPUCount = toolkit.createLabel(sectionRangeValue_Type,Messages.ResourcesPage_IndCPUCount);
      createCombo (sectionRangeValue_Type);
      this.txtIndCPUCount = toolkit.createText(sectionRangeValue_Type, "", SWT.BORDER); //$NON-NLS-1$
      this.txtIndCPUCount.setLayoutData(gdstxt1);
      
-     Label lblIndNetBand = toolkit.createLabel(sectionRangeValue_Type,Messages.ResourcesPage_IndNetwBandwidth);
+     this.lblIndNetBand = toolkit.createLabel(sectionRangeValue_Type,Messages.ResourcesPage_IndNetwBandwidth);
      createCombo (sectionRangeValue_Type);
      this.txtIndNetBand = toolkit.createText(sectionRangeValue_Type, "", SWT.BORDER); //$NON-NLS-1$
      this.txtIndNetBand.setLayoutData(gdstxt1);
 
-     Label lblPhysMem = toolkit.createLabel(sectionRangeValue_Type,Messages.ResourcesPage_PhysMem);
+     this.lblPhysMem = toolkit.createLabel(sectionRangeValue_Type,Messages.ResourcesPage_PhysMem);
      createCombo (sectionRangeValue_Type);
      this.txtPhysMem = toolkit.createText(sectionRangeValue_Type, "", SWT.BORDER); //$NON-NLS-1$
      this.txtPhysMem.setLayoutData(gdstxt1);
      
-     Label lblVirtMem = toolkit.createLabel(sectionRangeValue_Type,Messages.ResourcesPage_VirtualMem);
+     this.lblVirtMem = toolkit.createLabel(sectionRangeValue_Type,Messages.ResourcesPage_VirtualMem);
      createCombo (sectionRangeValue_Type);
      this.txtVirtMem = toolkit.createText(sectionRangeValue_Type, "", SWT.BORDER); //$NON-NLS-1$
      this.txtVirtMem.setLayoutData(gdstxt1);
      
-     Label lblIndDiskSpac = toolkit.createLabel(sectionRangeValue_Type,Messages.ResourcesPage_IndDiskSpace);
+     this.lblIndDiskSpac = toolkit.createLabel(sectionRangeValue_Type,Messages.ResourcesPage_IndDiskSpace);
      createCombo (sectionRangeValue_Type);
      this.txtIndDiskSpac = toolkit.createText(sectionRangeValue_Type, "", SWT.BORDER); //$NON-NLS-1$
      this.txtIndDiskSpac.setLayoutData(gdstxt1);
 
-     Label lblCPUTime = toolkit.createLabel(sectionRangeValue_Type,Messages.ResourcesPage_CPUTime);
+     this.lblCPUTime = toolkit.createLabel(sectionRangeValue_Type,Messages.ResourcesPage_CPUTime);
      createCombo (sectionRangeValue_Type);
      this.txtCPUTime = toolkit.createText(sectionRangeValue_Type, "", SWT.BORDER); //$NON-NLS-1$
      this.txtCPUTime.setLayoutData(gdstxt1);
 
-     Label lblCPUCount = toolkit.createLabel(sectionRangeValue_Type,Messages.ResourcesPage_TotCPUCount);
+     this.lblCPUCount = toolkit.createLabel(sectionRangeValue_Type,Messages.ResourcesPage_TotCPUCount);
      createCombo (sectionRangeValue_Type);
      this.txtCPUCount = toolkit.createText(sectionRangeValue_Type, "", SWT.BORDER); //$NON-NLS-1$
      this.txtCPUCount.setLayoutData(gdstxt1);
 
-     Label lblTotPhMem = toolkit.createLabel(sectionRangeValue_Type,Messages.ResourcesPage_TotPhysMem);
+     this.lblTotPhMem = toolkit.createLabel(sectionRangeValue_Type,Messages.ResourcesPage_TotPhysMem);
      createCombo (sectionRangeValue_Type);
      this.txtTotPhMem = toolkit.createText(sectionRangeValue_Type, "", SWT.BORDER); //$NON-NLS-1$
      this.txtTotPhMem.setLayoutData(gdstxt1);
 
-     Label lblTotVirtMem = toolkit.createLabel(sectionRangeValue_Type,Messages.ResourcesPage_TotVirtualMem);
+     this.lblTotVirtMem = toolkit.createLabel(sectionRangeValue_Type,Messages.ResourcesPage_TotVirtualMem);
      createCombo (sectionRangeValue_Type);
      this.txtTotVirtMem = toolkit.createText(sectionRangeValue_Type, "", SWT.BORDER); //$NON-NLS-1$
      this.txtTotVirtMem.setLayoutData(gdstxt1);
     
-     Label lblTotDiskSp = toolkit.createLabel(sectionRangeValue_Type,Messages.ResourcesPage_TotDiskSpace);
+     this.lblTotDiskSp = toolkit.createLabel(sectionRangeValue_Type,Messages.ResourcesPage_TotDiskSpace);
      createCombo (sectionRangeValue_Type);
      this.txtTotDiskSp = toolkit.createText(sectionRangeValue_Type, "", SWT.BORDER); //$NON-NLS-1$
      this.txtTotDiskSp.setLayoutData(gdstxt1);
 
-     Label lblTotResCount = toolkit.createLabel(sectionRangeValue_Type,Messages.ResourcesPage_TotRescCount);
+     this.lblTotResCount = toolkit.createLabel(sectionRangeValue_Type,Messages.ResourcesPage_TotRescCount);
      createCombo (sectionRangeValue_Type);
      this.txtTotResCount = toolkit.createText(sectionRangeValue_Type, "", SWT.BORDER); //$NON-NLS-1$
      this.txtTotResCount.setLayoutData(gdstxt1);
