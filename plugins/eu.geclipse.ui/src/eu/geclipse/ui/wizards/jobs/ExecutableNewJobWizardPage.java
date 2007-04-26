@@ -309,6 +309,10 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
   }
 
 
+  /**
+   * Returns list of pages created from parsing XML with description of additional pages specific to application
+   * @return list of application specific pages
+   */
   public List<IApplicationSpecificPage> getApplicationSpecificPages() {
     List<IApplicationSpecificPage> result = new ArrayList<IApplicationSpecificPage>();
     if ( this.getSelectedNode() != null && this.getSelectedNode() != this.basicNode ){

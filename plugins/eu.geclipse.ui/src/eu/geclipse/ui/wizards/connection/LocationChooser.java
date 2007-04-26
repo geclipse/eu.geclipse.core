@@ -36,7 +36,7 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridProject;
 
 /**
- * @author katis
+ * Class to set value of location in New Connection Wizard
  */
 public class LocationChooser extends WizardNewFileCreationPage
   implements Listener, IConnectionFirstPage
@@ -75,15 +75,15 @@ public class LocationChooser extends WizardNewFileCreationPage
       if( obj instanceof IGridElement ) {
         IGridElement element = ( IGridElement ) obj;
         IGridProject project = element.getProject();
-        if ( project != null ) {
+        if ( project != null && project.findChild( IGridProject.DIR_MOUNTS ) != null) {
           IGridElement connections = project.findChild( IGridProject.DIR_MOUNTS );
-          if ( connections != null ) {
+          
             IPath cPath = connections.getPath();
             IPath ePath = element.getPath();
             if ( !cPath.isPrefixOf( ePath ) ) {
               element = connections;
             }
-          }
+          
         }
         super.setContainerFullPath( element.getPath() );
       } else {
@@ -195,19 +195,7 @@ public class LocationChooser extends WizardNewFileCreationPage
     return new ByteArrayInputStream( this.iniText.getBytes() );
   }
 
-  // @Override
-  // protected void createAdvancedControls( final Composite parent )
-  // {
-  // //empty method
-  // }
-  //
-  // @Override
-  // protected IStatus validateLinkedResource()
-  // {
-  // return new Status(IStatus.OK,
-  // eu.geclipse.ui.internal.Activator.getDefault().getBundle()
-  // .getSymbolicName(), IStatus.OK, "", null); //$NON-NLS-1$
-  // }
+ 
   private boolean isInGridProjectView() {
     return ( this.iniSelection instanceof TreeSelection );
   }

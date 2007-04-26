@@ -13,7 +13,6 @@
  *     PSNC - Katarzyna Bylec
  *           
  *****************************************************************************/
-
 package eu.geclipse.ui.wizards.jobs;
 
 import java.lang.reflect.InvocationTargetException;
@@ -58,8 +57,6 @@ public class NewJobWizard extends Wizard implements INewWizard {
   private FilesOutputNewJobWizardPage outputFilesPage;
   private ResourcesNewJobWizardPage resourcesPage;
   private HostsNewJobWizardPage hostsPage;
-  
-  
 
   @Override
   public void addPages()
@@ -77,13 +74,12 @@ public class NewJobWizard extends Wizard implements INewWizard {
     this.outputFilesPage = new FilesOutputNewJobWizardPage( Messages.getString( "NewJobWizard.files_output_new_job_page_name" ) ); //$NON-NLS-1$;
     // addPage( this.outputFilesPage );
     internal.add( this.outputFilesPage );
-    this.hostsPage = new HostsNewJobWizardPage("Host page", JSDLJobDescription.getOSTypes(), JSDLJobDescription.getCPUArchitectures());
+    this.hostsPage = new HostsNewJobWizardPage( Messages.getString( "NewJobWizard.host_page" ), JSDLJobDescription.getOSTypes(), JSDLJobDescription.getCPUArchitectures() ); //$NON-NLS-1$
     internal.add( this.hostsPage );
-    this.resourcesPage = new ResourcesNewJobWizardPage( "Job resources" );
+    this.resourcesPage = new ResourcesNewJobWizardPage( Messages.getString( "NewJobWizard.job_resources" ) ); //$NON-NLS-1$
     internal.add( this.resourcesPage );
     this.executablePage = new ExecutableNewJobWizardPage( Messages.getString( "NewJobWizard.executablePageName" ), internal ); //$NON-NLS-1$
     addPage( this.executablePage );
-  
   }
 
   public void init( final IWorkbench workbench, final IStructuredSelection sel )
@@ -137,11 +133,12 @@ public class NewJobWizard extends Wizard implements INewWizard {
       setInitialModel( jsdlJobDescription );
       jsdlJobDescription.save( this.file );
     }
-
     monitor.worked( 1 );
   }
 
-  private void setInitialModel( final JSDLJobDescription jsdl ) {
+  @SuppressWarnings("unchecked")
+  private void setInitialModel( final JSDLJobDescription jsdl )
+  {
     this.executablePage.getApplicationSpecificPage();
     jsdl.createRoot();
     jsdl.addJobDescription();
@@ -164,7 +161,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
           out = null;
         }
       }
-      if( !this.executablePage.getExecutableFile().equals( "" ) ) {
+      if( !this.executablePage.getExecutableFile().equals( "" ) ) { //$NON-NLS-1$
         jsdl.addPOSIXApplicationDetails( this.executablePage.getApplicationName(),
                                          this.executablePage.getExecutableFile(),
                                          in,
@@ -186,7 +183,6 @@ public class NewJobWizard extends Wizard implements INewWizard {
         }
       }
     }
-    
     List<IApplicationSpecificPage> aspList = this.executablePage.getApplicationSpecificPages();
     Map<String, ArrayList<String>> arguments;
     if( aspList != null ) {
@@ -213,7 +209,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
                 .getProperty( value ) );
             }
           }
-           Map<String, Properties> stagingOut = asp.getStageOutFiles();
+          Map<String, Properties> stagingOut = asp.getStageOutFiles();
           if( stagingOut != null ) {
             for( String argName : stagingOut.keySet() ) {
               // add agument
@@ -232,41 +228,37 @@ public class NewJobWizard extends Wizard implements INewWizard {
         }
       }
     }
-//    if (! this.resourcesPage.getCpuList().equals( "" )){
-//      jsdl.setCPUArchitecture( this.resourcesPage.getCpuList());
-//    }
-    if (! this.hostsPage.getOS().equals( "" )){
-      jsdl.setOS( this.hostsPage.getOS());
+    // if (! this.resourcesPage.getCpuList().equals( "" )){
+    // jsdl.setCPUArchitecture( this.resourcesPage.getCpuList());
+    // }
+    if( !this.hostsPage.getOS().equals( "" ) ) { //$NON-NLS-1$
+      jsdl.setOS( this.hostsPage.getOS() );
     }
-    if (! this.hostsPage.getArch().equals( "" )){
-      jsdl.setCPUArchitecture( this.hostsPage.getArch());
+    if( !this.hostsPage.getArch().equals( "" ) ) { //$NON-NLS-1$
+      jsdl.setCPUArchitecture( this.hostsPage.getArch() );
     }
     jsdl.addCandidateHosts( this.hostsPage.getCandidateHosts() );
-    
-    for (Range range: this.resourcesPage.getIndividualCPUSpeedRanges()){
-      jsdl.setInidividialCPUSpeedRange(range.getStart(), range.getEnd(), true);
+    for( Range range : this.resourcesPage.getIndividualCPUSpeedRanges() ) {
+      jsdl.setInidividialCPUSpeedRange( range.getStart(), range.getEnd(), true );
     }
-    
-    for (ValueWithEpsilon value: this.resourcesPage.getIndividualCPUSValues()){
-      jsdl.setIndividualCPUSpeedValue(value.getValue(), value.getEpsilon());
+    for( ValueWithEpsilon value : this.resourcesPage.getIndividualCPUSValues() )
+    {
+      jsdl.setIndividualCPUSpeedValue( value.getValue(), value.getEpsilon() );
     }
-   
-    for (Range range: this.resourcesPage.getTotalCPUCount()){
+    for( Range range : this.resourcesPage.getTotalCPUCount() ) {
       jsdl.setTotalCPUCount( range.getStart(), range.getEnd(), true );
     }
-    
-    for (ValueWithEpsilon value: this.resourcesPage.getTotalCPUCountValues()){
-      jsdl.setTotalCPUCountValue(value.getValue(), value.getEpsilon());
+    for( ValueWithEpsilon value : this.resourcesPage.getTotalCPUCountValues() )
+    {
+      jsdl.setTotalCPUCountValue( value.getValue(), value.getEpsilon() );
     }
-    
-    for (Range range: this.resourcesPage.getTotalPhysicalMemory()){
+    for( Range range : this.resourcesPage.getTotalPhysicalMemory() ) {
       jsdl.setTotalPhysicalMemory( range.getStart(), range.getEnd(), true );
     }
-    
-    for (ValueWithEpsilon value: this.resourcesPage.getTotalPhysicalMemoryValues()){
-      jsdl.setTotalPhysicalMemoryValue(value.getValue(), value.getEpsilon());
+    for( ValueWithEpsilon value : this.resourcesPage.getTotalPhysicalMemoryValues() )
+    {
+      jsdl.setTotalPhysicalMemoryValue( value.getValue(), value.getEpsilon() );
     }
-    
   }
   class FirstPage extends WizardNewFileCreationPage {
 

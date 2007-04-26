@@ -2,7 +2,6 @@ package eu.geclipse.ui.wizards.jobs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
@@ -15,15 +14,16 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Text;
 import eu.geclipse.ui.internal.wizards.jobs.JSDLExactValueTab;
 import eu.geclipse.ui.internal.wizards.jobs.JSDLRangesTab;
 import eu.geclipse.ui.internal.wizards.jobs.Range;
 import eu.geclipse.ui.internal.wizards.jobs.ValueWithEpsilon;
 
+/**
+ * Page of New Job Wizard for job resources details
+ */
 public class ResourcesNewJobWizardPage extends WizardPage {
 
   
@@ -39,73 +39,51 @@ public class ResourcesNewJobWizardPage extends WizardPage {
   {
     super( pageName );
     
-    this.setTitle( "Resources" );
-    this.setDescription( "Set details of resources required by your job to execute." );
+    this.setTitle( Messages.getString("ResourcesNewJobWizardPage.resources_title") ); //$NON-NLS-1$
+    this.setDescription( Messages.getString("ResourcesNewJobWizardPage.resources_description") ); //$NON-NLS-1$
   }
 
-  public void createControl( Composite parent ) {
+  public void createControl( final Composite parent ) {
     Composite mainComp = new Composite( parent, SWT.NONE );
     GridLayout gLayout = new GridLayout( 3, false );
     gLayout.horizontalSpacing = 10;
     gLayout.verticalSpacing = 12;
     mainComp.setLayout( gLayout );
     GridData layout = new GridData();
-    // Label cpuLabel = new Label( mainComp, GridData.HORIZONTAL_ALIGN_BEGINNING
-    // | GridData.VERTICAL_ALIGN_CENTER | SWT.BOLD );
-    // cpuLabel.setText( "CPU" );
-    // layout.horizontalAlignment = GridData.FILL;
-    // layout.horizontalSpan = 3;
-    // cpuLabel.setLayoutData( layout );
-    //    
-    // Label cpuArch = new Label(mainComp, GridData.HORIZONTAL_ALIGN_BEGINNING
-    // | GridData.VERTICAL_ALIGN_CENTER );
-    // cpuArch.setText( "Architecture" );
-    // layout = new GridData();
-    // layout.horizontalAlignment = GridData.FILL;
-    // layout.horizontalIndent = 20;
-    // cpuArch.setLayoutData( layout );
-    //    
-    // this.cpuList = new Combo ( mainComp, SWT.SINGLE );
-    // for (String cpu: this.cpuArchs){
-    // this.cpuList.add( cpu );
-    // }
-    // layout = new GridData();
-    // layout.horizontalAlignment = GridData.FILL;
-    // layout.horizontalSpan = 2;
-    // this.cpuList.setLayoutData( layout );
+    
     Label cpuSpeedLabel = new Label( mainComp,
                                      GridData.HORIZONTAL_ALIGN_BEGINNING
                                          | GridData.VERTICAL_ALIGN_CENTER );
-    cpuSpeedLabel.setText( "Individual CPU speed" );
+    cpuSpeedLabel.setText( Messages.getString("ResourcesNewJobWizardPage.individual_cpu_speed_label") ); //$NON-NLS-1$
     layout = new GridData();
     layout.horizontalAlignment = GridData.FILL;
     layout.horizontalIndent = 20;
     
     cpuSpeedLabel.setLayoutData( layout );
     HashMap<String, String> temp = new HashMap<String, String>();
-    temp.put( "Start", "Start" );
-    temp.put( "End", "End" );
+    temp.put( Messages.getString("ResourcesNewJobWizardPage.range_start_collumn"), Messages.getString("ResourcesNewJobWizardPage.range_start_collumn") ); //$NON-NLS-1$ //$NON-NLS-2$
+    temp.put( Messages.getString("ResourcesNewJobWizardPage.range_end_collumn"), Messages.getString("ResourcesNewJobWizardPage.range_end_collumn") ); //$NON-NLS-1$ //$NON-NLS-2$
     this.tab = new JSDLRangesTab( new RangeContentProvider(),
                                   new RangeLabelProvider(),
                                   temp,
                                   30,
                                   50 );
-    tab.createControl( mainComp );
+    this.tab.createControl( mainComp );
     
     HashMap<String, String> temp1 = new HashMap<String, String>();
-    temp1.put( "Value", "Value" );
-    temp1.put( "Epsilon", "Epsilon" );
+    temp1.put( Messages.getString("ResourcesNewJobWizardPage.value_collumn"), Messages.getString("ResourcesNewJobWizardPage.value_collumn") ); //$NON-NLS-1$ //$NON-NLS-2$
+    temp1.put( Messages.getString("ResourcesNewJobWizardPage.epsilon_collumn"), Messages.getString("ResourcesNewJobWizardPage.epsilon_collumn") ); //$NON-NLS-1$ //$NON-NLS-2$
     this.tabVal = new JSDLExactValueTab( new ValueWithEpsilonContentProvider(),
                                   new ValueWithEpsilonLabelProvider(),
                                   temp1,
                                   30,
                                   50 );
-    tabVal.createControl( mainComp );
+    this.tabVal.createControl( mainComp );
     
     Label totalCPUCountLabel = new Label( mainComp,
                                           GridData.HORIZONTAL_ALIGN_BEGINNING
                                               | GridData.VERTICAL_ALIGN_CENTER );
-    totalCPUCountLabel.setText( "Total CPU Count" );
+    totalCPUCountLabel.setText( Messages.getString("ResourcesNewJobWizardPage.total_cpu_count_label") ); //$NON-NLS-1$
     layout = new GridData();
     layout.horizontalAlignment = GridData.FILL;
     layout.horizontalIndent = 20;
@@ -127,7 +105,7 @@ public class ResourcesNewJobWizardPage extends WizardPage {
     Label totalPhysicalMemoryLabel = new Label( mainComp,
                                           GridData.HORIZONTAL_ALIGN_BEGINNING
                                               | GridData.VERTICAL_ALIGN_CENTER );
-    totalPhysicalMemoryLabel.setText( "Total physical memory" );
+    totalPhysicalMemoryLabel.setText( Messages.getString("ResourcesNewJobWizardPage.total_physical_memory_label") ); //$NON-NLS-1$
     layout = new GridData();
     layout.horizontalAlignment = GridData.FILL;
     layout.horizontalIndent = 20;
@@ -151,31 +129,55 @@ public class ResourcesNewJobWizardPage extends WizardPage {
     setControl( mainComp );
   }
 
-  @SuppressWarnings("unchecked")
+  /**
+   * Method to access ranges of indvidual CPU speed
+   * @return ranges list of individual CPU speed
+   */
+  @SuppressWarnings("unchecked") 
   public ArrayList<Range> getIndividualCPUSpeedRanges() {
     return this.tab.getInput();
   }
   
+  /**
+   * Method to access ranges of total CPU count
+   * @return ranges list of total CPU count
+   */
   @SuppressWarnings("unchecked")
   public ArrayList<Range> getTotalCPUCount(){
     return this.tabCPUCount.getInput();
   }
   
+  /**
+   * Method to access ranges of total physical memory 
+   * @return ranges list of total physical memory
+   */
   @SuppressWarnings("unchecked")
   public ArrayList<Range> getTotalPhysicalMemory(){
     return this.totalPhysicalMemory.getInput();
   }
   
+  /**
+   * Method to access exact values of individual CPU speed
+   * @return list of exact values of individual CPU speed
+   */
   @SuppressWarnings("unchecked")
   public ArrayList<ValueWithEpsilon> getIndividualCPUSValues(){
     return this.tabVal.getInput();
   }
   
+  /**
+   * Method to access exact values of total CPU count
+   * @return list of exact values of total CPU count
+   */
   @SuppressWarnings("unchecked")
   public ArrayList<ValueWithEpsilon> getTotalCPUCountValues(){
     return this.tabCPUCountValues.getInput();
   }
   
+  /**
+   * Method to access exact values of total physical memory
+   * @return list of exact values of total physical memory
+   */
   @SuppressWarnings("unchecked")
   public ArrayList<ValueWithEpsilon> getTotalPhysicalMemoryValues(){
     return this.totalPhysicalMemoryValues.getInput();
@@ -226,10 +228,7 @@ public class ResourcesNewJobWizardPage extends WizardPage {
                   result = -1;
                 } else if( element2 == null ) {
                   result = 1;
-                } // else {
-                // result = ( ( Range )element1 ).getName()
-                // .compareToIgnoreCase( ( ( Range )element2 ).getName() );
-                // }
+                } 
                 return result;
               }
             } );

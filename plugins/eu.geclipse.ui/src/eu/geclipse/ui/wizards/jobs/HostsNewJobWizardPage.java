@@ -1,6 +1,5 @@
 package eu.geclipse.ui.wizards.jobs;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -11,14 +10,13 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import eu.geclipse.ui.internal.wizards.jobs.ChildrenElements;
 import eu.geclipse.ui.internal.wizards.jobs.MultipleArgumentList;
 import eu.geclipse.ui.internal.wizards.jobs.StringLabelProvider;
-import eu.geclipse.ui.wizards.jobs.FilesOutputNewJobWizardPage.IOFileContentProvider;
-import eu.geclipse.ui.wizards.jobs.FilesOutputNewJobWizardPage.IOFileLabelProvider;
-import eu.geclipse.ui.wizards.jobs.FilesOutputNewJobWizardPage.IOFilesTab;
 
 
+/**
+ * Page fo parameters specific for execution host
+ */
 public class HostsNewJobWizardPage extends WizardPage {
 
   private MultipleArgumentList tab;
@@ -28,15 +26,15 @@ public class HostsNewJobWizardPage extends WizardPage {
   private Combo cpuList;
   
   
-  protected HostsNewJobWizardPage( String pageName, List<String> OSList, List<String> namesArch) {
+  protected HostsNewJobWizardPage( final String pageName, final List<String> OSList, final List<String> namesArch) {
     super( pageName );
     this.osTypes = OSList;
     this.namesArch = namesArch;
-    this.setTitle( "Execution hosts" );
-    this.setDescription( "Choose operating system type for execution host and candidate host to execute your job." );
+    this.setTitle( Messages.getString("HostsNewJobWizardPage.execution_host") ); //$NON-NLS-1$
+    this.setDescription( Messages.getString("HostsNewJobWizardPage.execution_host_page_description") ); //$NON-NLS-1$
   }
 
-  public void createControl( Composite parent ) {
+  public void createControl( final Composite parent ) {
     Composite mainComp = new Composite( parent, SWT.NONE );
     
     GridLayout gLayout = new GridLayout( 3, false );
@@ -48,7 +46,7 @@ public class HostsNewJobWizardPage extends WizardPage {
     
     Label osLabel = new Label(mainComp, GridData.HORIZONTAL_ALIGN_BEGINNING
                               | GridData.VERTICAL_ALIGN_CENTER );
-    osLabel.setText( "Operating system" );
+    osLabel.setText( Messages.getString("HostsNewJobWizardPage.os") ); //$NON-NLS-1$
     layout = new GridData();
     layout.horizontalAlignment = GridData.FILL;
     layout.horizontalSpan = 3;
@@ -66,7 +64,7 @@ public class HostsNewJobWizardPage extends WizardPage {
     
     Label cpuArch = new Label(mainComp, GridData.HORIZONTAL_ALIGN_BEGINNING
                               | GridData.VERTICAL_ALIGN_CENTER );
-    cpuArch.setText( "Architecture" );
+    cpuArch.setText( Messages.getString("HostsNewJobWizardPage.cpu_architecture") ); //$NON-NLS-1$
     layout = new GridData();
     layout.horizontalAlignment = GridData.FILL;
     layout.horizontalSpan = 3;
@@ -84,14 +82,14 @@ public class HostsNewJobWizardPage extends WizardPage {
     
     Label hostLabel = new Label(mainComp, GridData.HORIZONTAL_ALIGN_BEGINNING
                               | GridData.VERTICAL_ALIGN_CENTER );
-    hostLabel.setText( "Candidate hosts" );
+    hostLabel.setText( Messages.getString("HostsNewJobWizardPage.candidate_hosts") ); //$NON-NLS-1$
     layout = new GridData();
 //    layout.horizontalAlignment = GridData.FILL;
     layout.horizontalSpan = 3;
     hostLabel.setLayoutData( layout );
     
     HashMap<String, String> temp = new HashMap<String, String>();
-    temp.put( "Candidate host", "Candidate host" );
+    temp.put( Messages.getString("HostsNewJobWizardPage.candidate_host"), Messages.getString("HostsNewJobWizardPage.candidate_host") ); //$NON-NLS-1$ //$NON-NLS-2$
     this.tab = new MultipleArgumentList( new ArrayContentProvider(),
                                          new StringLabelProvider(),
                                          temp );
@@ -100,14 +98,29 @@ public class HostsNewJobWizardPage extends WizardPage {
     setControl( mainComp );
   }
 
+  /**
+   * Method to access list of candidate hosts
+   * @return list of addresses of cnadidate hosts to execute job
+   */
   public List<String> getCandidateHosts() {
-    return tab.getInput();
+    return this/**
+     * @return
+     */
+    .tab.getInput();
   }
 
+  /**
+   * Method to access name of the preffered OS
+   * @return name of the OS on execution host
+   */
   public String getOS() {
     return this.osList.getText();
   }
   
+  /**
+   * Metod to access CPU architecture of execution host
+   * @return CPU architecture
+   */
   public String getArch(){
     return this.cpuList.getText();
   }

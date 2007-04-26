@@ -49,6 +49,9 @@ public class SpecificWizardPart extends Wizard implements IWizardNode {
    *          {@link NewJobWizard})
    * @param extensionPointIdName id of extension point that defines pages of
    *          this wizard
+   * @throws SAXException in case of SAX problems
+   * @throws ParserConfigurationException in case of bad parser configuration
+   * @throws IOException in case of problems with files
    */
   public SpecificWizardPart( final IWizardNode nextWizard,
                              final IWizard parentWizard,

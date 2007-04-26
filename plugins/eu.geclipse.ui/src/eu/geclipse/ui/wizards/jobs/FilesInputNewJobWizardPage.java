@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2006 g-Eclipse consortium 
+ * Copyright (c) 2006, 2007 g-Eclipse consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -35,7 +35,6 @@ import eu.geclipse.ui.dialogs.gexplorer.GridFileDialog;
  * Wizard page that allows user to specify stdIn, stdOut and stdErr files for
  * job to be run on the Grid
  * 
- * @author katis
  */
 public class FilesInputNewJobWizardPage extends WizardPage {
 
@@ -48,6 +47,8 @@ public class FilesInputNewJobWizardPage extends WizardPage {
    * Button to add files to {@link FilesInputNewJobWizardPage#stdin}
    */
   private Button chooseButton;
+  private Text stdOutName;
+  private Text stdErrName;
 
   /**
    * Creates new FilesNewJobWizardPage
@@ -58,7 +59,6 @@ public class FilesInputNewJobWizardPage extends WizardPage {
     super( pageName );
     setDescription( Messages.getString( "FilesInputNewJobWizardPage.page_description" ) ); //$NON-NLS-1$
     setTitle( Messages.getString( "FilesInputNewJobWizardPage.page_title" ) ); //$NON-NLS-1$
-//    setPageComplete( false );
   }
 
   public void createControl( final Composite parent ) {
@@ -81,9 +81,8 @@ public class FilesInputNewJobWizardPage extends WizardPage {
                           | GridData.GRAB_HORIZONTAL
                           | GridData.VERTICAL_ALIGN_CENTER
                           | GridData.HORIZONTAL_ALIGN_CENTER );
-    this.stdInName.setText( "name" );
+    this.stdInName.setText( "stdIn" ); //$NON-NLS-1$
     this.stdInName.setLayoutData( gData );
-    // chosen only by picking up file in GridDialog
     this.stdin = new Text( mainComp, SWT.NONE | SWT.BORDER );
     gData = new GridData( GridData.FILL_HORIZONTAL
                           | GridData.GRAB_HORIZONTAL
@@ -105,6 +104,13 @@ public class FilesInputNewJobWizardPage extends WizardPage {
                           | GridData.HORIZONTAL_ALIGN_BEGINNING );
     stdoutLabel.setLayoutData( gData );
     stdoutLabel.setText( Messages.getString( "FilesInputNewJobWizardPage.stdout_label" ) ); //$NON-NLS-1$
+    this.stdOutName = new Text (mainComp, SWT.NONE | SWT.BORDER);
+    gData = new GridData( GridData.FILL_HORIZONTAL
+                          | GridData.GRAB_HORIZONTAL
+                          | GridData.VERTICAL_ALIGN_CENTER
+                          | GridData.HORIZONTAL_ALIGN_CENTER );
+    this.stdOutName.setText( "stdOut" ); //$NON-NLS-1$
+    this.stdOutName.setLayoutData( gData );
     this.stdout = new Text( mainComp, SWT.NONE | SWT.BORDER );
     gData = new GridData( GridData.FILL_HORIZONTAL
                           | GridData.GRAB_HORIZONTAL
@@ -119,13 +125,19 @@ public class FilesInputNewJobWizardPage extends WizardPage {
     gData = new GridData( GridData.HORIZONTAL_ALIGN_FILL
                           | GridData.VERTICAL_ALIGN_FILL
                           | GridData.VERTICAL_ALIGN_CENTER );
-//    gData.horizontalSpan = 2;
     outButton.setLayoutData( gData );
     Label stderrLabel = new Label( mainComp, SWT.NONE );
     gData = new GridData( GridData.VERTICAL_ALIGN_CENTER
                           | GridData.HORIZONTAL_ALIGN_BEGINNING );
     stderrLabel.setLayoutData( gData );
     stderrLabel.setText( Messages.getString( "FilesInputNewJobWizardPage.stderr_label" ) ); //$NON-NLS-1$
+    this.stdErrName = new Text (mainComp, SWT.NONE | SWT.BORDER);
+    gData = new GridData( GridData.FILL_HORIZONTAL
+                          | GridData.GRAB_HORIZONTAL
+                          | GridData.VERTICAL_ALIGN_CENTER
+                          | GridData.HORIZONTAL_ALIGN_CENTER );
+    this.stdErrName.setText( "stdErr" ); //$NON-NLS-1$
+    this.stdErrName.setLayoutData( gData );
     this.stderr = new Text( mainComp, SWT.NONE | SWT.BORDER );
     gData = new GridData( GridData.VERTICAL_ALIGN_CENTER
                           | GridData.HORIZONTAL_ALIGN_CENTER
@@ -177,7 +189,6 @@ public class FilesInputNewJobWizardPage extends WizardPage {
         }
       }
     } );
-//    this.setPageComplete( true );
     this.isCreated = true;
     this.getContainer().updateButtons();
     setControl( mainComp );
@@ -218,7 +229,27 @@ public class FilesInputNewJobWizardPage extends WizardPage {
     return this.stdout.getText();
   }
 
+  /**
+   * Returns name of stdin file (name local on execution host)
+   * @return name of stdin file
+   */
   public String getStdinName() {
     return this.stdInName.getText();
+  }
+  
+  /**
+   * Returns name of stdout file (name local on execution host)
+   * @return name of stdout file
+   */
+  public String getStdOutName() {
+    return this.stdOutName.getText();
+  }
+  
+  /**
+   * Returns name of stderr file (name local on execution host)
+   * @return name of stderr file
+   */
+  public String getStdErrName() {
+    return this.stdErrName.getText();
   }
 }

@@ -1,3 +1,18 @@
+/******************************************************************************
+ * Copyright (c) 2007 g-Eclipse consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for
+ * project g-Eclipse founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributor(s):
+ *     PSNC - Katarzyna Bylec
+ *           
+ *****************************************************************************/
 package eu.geclipse.ui.wizards.connection.managers.srm;
 
 import java.net.URI;
@@ -40,11 +55,11 @@ class SRMConnectionWizardPage extends WizardPage implements ModifyListener {
     
     gData.horizontalSpan = 2;
     Label title = new Label(mainComp, SWT.NONE);
-    title.setText( "WebService point" );
+    title.setText( Messages.getString("SRMConnectionWizardPage.web_service_point") ); //$NON-NLS-1$
     title.setLayoutData( gData );
     
     Label hostLabel = new Label( mainComp, SWT.NONE );
-    hostLabel.setText( "Host" );
+    hostLabel.setText( Messages.getString("SRMConnectionWizardPage.host") ); //$NON-NLS-1$
     
     gData = new GridData( GridData.FILL_HORIZONTAL );
     gData.grabExcessHorizontalSpace = true;
@@ -52,7 +67,7 @@ class SRMConnectionWizardPage extends WizardPage implements ModifyListener {
     this.host.setLayoutData( gData );
     
     Label portLabel = new Label( mainComp, SWT.NONE );
-    portLabel.setText( "Port" );
+    portLabel.setText( Messages.getString("SRMConnectionWizardPage.port") ); //$NON-NLS-1$
     
     gData = new GridData( GridData.FILL_HORIZONTAL );
     gData.grabExcessHorizontalSpace = true;
@@ -60,7 +75,7 @@ class SRMConnectionWizardPage extends WizardPage implements ModifyListener {
     this.port.setLayoutData( gData );
     
     Label pathLabel = new Label( mainComp, SWT.NONE );
-    pathLabel.setText( "Path" );
+    pathLabel.setText( Messages.getString("SRMConnectionWizardPage.path") ); //$NON-NLS-1$
     
     gData = new GridData( GridData.FILL_HORIZONTAL );
     gData.grabExcessHorizontalSpace = true;
@@ -68,13 +83,13 @@ class SRMConnectionWizardPage extends WizardPage implements ModifyListener {
     this.path.setLayoutData( gData );
     
     Label srmVersionLabel = new Label(mainComp, SWT.NONE);
-    srmVersionLabel.setText( "SRM version" );
+    srmVersionLabel.setText( Messages.getString("SRMConnectionWizardPage.version") ); //$NON-NLS-1$
         
     List list = new List(mainComp, SWT.SINGLE);
-    list.add( "1.0" );
-    list.add( "2.0" );
-    list.add( "2.1.1" );
-    list.add( "3.0" );
+    list.add( Messages.getString("SRMConnectionWizardPage.ver_1_0") ); //$NON-NLS-1$
+    list.add( Messages.getString("SRMConnectionWizardPage.ver_2_0") ); //$NON-NLS-1$
+    list.add( Messages.getString("SRMConnectionWizardPage.ver_2_1_1") ); //$NON-NLS-1$
+    list.add( Messages.getString("SRMConnectionWizardPage.ver_3_0") ); //$NON-NLS-1$
     
     
     this.port.addListener( SWT.Verify, new NumberVerifier() );
