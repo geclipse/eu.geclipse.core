@@ -71,8 +71,9 @@
       <view
             allowMultiple="true"
             category="eu.geclipse.ui.viewcategory"
-            class="eu.geclipse.ui.views.GridJobDetailsView"
-            id="eu.geclipse.ui.views.GridJobDetailsView"
+            class="eu.geclipse.ui.views.jobdetails.JobDetailsView"
+            icon="icons/job.gif"
+            id="eu.geclipse.ui.views.jobdetails.JobDetailsView"
             name="%view.jobDetails"/>
       <view
             category="eu.geclipse.ui.viewcategory"

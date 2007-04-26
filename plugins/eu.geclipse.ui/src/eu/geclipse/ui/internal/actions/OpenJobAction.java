@@ -20,7 +20,7 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.BaseSelectionListenerAction;
 import eu.geclipse.core.model.IGridJob;
-import eu.geclipse.ui.views.GridJobDetailsView;
+import eu.geclipse.ui.views.jobdetails.JobDetailsView;
 
 /**
  * Dedicated action for opening {@link IGridJob}s.
@@ -53,9 +53,9 @@ public class OpenJobAction
       = getStructuredSelection().getFirstElement();
     if ( ( element != null ) && ( element instanceof IGridJob ) ) {
       IGridJob job = ( IGridJob ) element;
-      GridJobDetailsView view;
+      JobDetailsView view;
       try {
-        view = ( GridJobDetailsView ) this.workbenchPage.showView( GridJobDetailsView.ID,
+        view = ( JobDetailsView ) this.workbenchPage.showView( JobDetailsView.ID,
                                                               job.getPath().toString(),
                                                               IWorkbenchPage.VIEW_ACTIVATE );
         view.setInputJob( job );
