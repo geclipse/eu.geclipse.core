@@ -1,3 +1,18 @@
+/******************************************************************************
+ * Copyright (c) 2007 g-Eclipse consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for
+ * project g-Eclipse founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributor(s):
+ *     PSNC - Katarzyna Bylec
+ *           
+ *****************************************************************************/
 package eu.geclipse.ui.internal.wizards.jobs;
 
 import java.util.ArrayList;
@@ -10,12 +25,23 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.window.Window;
 import eu.geclipse.ui.internal.dialogs.MultipleInputDialog;
 import eu.geclipse.ui.widgets.TabComponent;
-import eu.geclipse.ui.wizards.jobs.Messages;
 
 
+/**
+ * Table to keep exact values for ranges of JSDL resources
+ */
+@SuppressWarnings("unchecked") 
 public class JSDLExactValueTab extends TabComponent {
 
-  public JSDLExactValueTab( IStructuredContentProvider contentProvider, ITableLabelProvider labelProvider, HashMap propertiesVsHearders, int hight, int width ) {
+  /**
+   * Creates new instance of this class
+   * @param contentProvider content provider for table viewer
+   * @param labelProvider label provider for table viewer
+   * @param propertiesVsHearders headers for table
+   * @param hight hight of this control
+   * @param width width of collumn in table
+   */
+  public JSDLExactValueTab( final IStructuredContentProvider contentProvider, final ITableLabelProvider labelProvider, final HashMap propertiesVsHearders, final int hight, final int width ) {
     super( contentProvider, labelProvider, propertiesVsHearders, hight, width );
   }
 
@@ -23,22 +49,19 @@ public class JSDLExactValueTab extends TabComponent {
   protected void handleAddButtonSelected()
   {
     MultipleInputDialog dialog = new MultipleInputDialog( getShell(),
-                                                          "New value" );
-    dialog.addTextField( "Value", null, false );
-    dialog.addTextField( "Epsilon", null, false );
-    // dialog.addVariablesField(
-    // Messages.getString("EnvNewJobWizardPage.new_env_dialog_value_field"),
-    // null, true ); //$NON-NLS-1$
+                                                          eu.geclipse.ui.internal.wizards.jobs.Messages.getString("JSDLExactValueTab.new_value") ); //$NON-NLS-1$
+    dialog.addTextField( eu.geclipse.ui.internal.wizards.jobs.Messages.getString("JSDLExactValueTab.value"), null, false ); //$NON-NLS-1$
+    dialog.addTextField( eu.geclipse.ui.internal.wizards.jobs.Messages.getString("JSDLExactValueTab.epsilon"), null, false ); //$NON-NLS-1$
     if( dialog.open() != Window.OK ) {
       return;
     }
-    String val = dialog.getStringValue( "Value" );
-    String eps = dialog.getStringValue( "Epsilon" );
+    String val = dialog.getStringValue( eu.geclipse.ui.internal.wizards.jobs.Messages.getString("JSDLExactValueTab.value") ); //$NON-NLS-1$
+    String eps = dialog.getStringValue( eu.geclipse.ui.internal.wizards.jobs.Messages.getString("JSDLExactValueTab.epsilon") ); //$NON-NLS-1$
     try{
     ValueWithEpsilon value = new ValueWithEpsilon( Double.valueOf( val ).doubleValue(), Double.valueOf( eps ).doubleValue() );
     addVariable( value );
     } catch (NumberFormatException exc){
-      MessageDialog.openError( getShell(), "Bad number format", "Bad number format");
+      MessageDialog.openError( getShell(), eu.geclipse.ui.internal.wizards.jobs.Messages.getString("JSDLExactValueTab.bad_number_format"), eu.geclipse.ui.internal.wizards.jobs.Messages.getString("JSDLExactValueTab.bad_number_format")); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 
@@ -53,19 +76,19 @@ public class JSDLExactValueTab extends TabComponent {
       String oldStart = Double.valueOf( var.getValue() ).toString();
       String oldEnd = Double.valueOf( var.getEpsilon() ).toString();
       MultipleInputDialog dialog = new MultipleInputDialog( getShell(),
-                                                            Messages.getString( "OutputFilesTab.edit_output_file_settings_dialog_title" ) ); //$NON-NLS-1$
+                                                            eu.geclipse.ui.internal.wizards.jobs.Messages.getString("JSDLExactValueTab.edit_title") ); //$NON-NLS-1$
       ArrayList<String> comboData = new ArrayList<String>();
       for( FileType fileType : FileType.values() ) {
         comboData.add( fileType.toString() );
       }
-      dialog.addTextField( "Value", oldStart, false ); //$NON-NLS-1$
-      dialog.addTextField( "Epsilon", oldEnd, false );
+      dialog.addTextField( eu.geclipse.ui.internal.wizards.jobs.Messages.getString("JSDLExactValueTab.value"), oldStart, false );  //$NON-NLS-1$
+      dialog.addTextField( eu.geclipse.ui.internal.wizards.jobs.Messages.getString("JSDLExactValueTab.epsilon"), oldEnd, false ); //$NON-NLS-1$
       if( dialog.open() != Window.OK ) {
         // do nothing;
       } else {
         try {
-          String newStart = dialog.getStringValue( "Value" );
-          String newEnd = dialog.getStringValue( "Epsilon" );
+          String newStart = dialog.getStringValue( eu.geclipse.ui.internal.wizards.jobs.Messages.getString("JSDLExactValueTab.value") ); //$NON-NLS-1$
+          String newEnd = dialog.getStringValue( eu.geclipse.ui.internal.wizards.jobs.Messages.getString("JSDLExactValueTab.epsilon") ); //$NON-NLS-1$
           if( !oldStart.equals( newStart ) || !oldEnd.equals( newEnd ) ) {
             ValueWithEpsilon newRange = new ValueWithEpsilon( Double.valueOf( newStart ).doubleValue(),
                                         Double.valueOf( newEnd ).doubleValue() );
@@ -79,7 +102,7 @@ public class JSDLExactValueTab extends TabComponent {
             updateLaunchConfigurationDialog();
           }
         } catch( NumberFormatException exc ) {
-          MessageDialog.openError( getShell(), "Bad number format", "Bad number format");
+          MessageDialog.openError( getShell(), eu.geclipse.ui.internal.wizards.jobs.Messages.getString("JSDLExactValueTab.bad_number_format"), eu.geclipse.ui.internal.wizards.jobs.Messages.getString("JSDLExactValueTab.bad_number_format")); //$NON-NLS-1$ //$NON-NLS-2$
         }
       }
     }
@@ -102,8 +125,8 @@ public class JSDLExactValueTab extends TabComponent {
   @Override
   protected void setLabels()
   {
-    this.addButton.setText( "Add" );
-    this.editButton.setText( "Edit" );
-    this.removeButton.setText( "Remove" );
+    this.addButton.setText( eu.geclipse.ui.internal.wizards.jobs.Messages.getString("JSDLExactValueTab.add_button") ); //$NON-NLS-1$
+    this.editButton.setText( eu.geclipse.ui.internal.wizards.jobs.Messages.getString("JSDLExactValueTab.edit_button") ); //$NON-NLS-1$
+    this.removeButton.setText( eu.geclipse.ui.internal.wizards.jobs.Messages.getString("JSDLExactValueTab.rmove_button") ); //$NON-NLS-1$
   }
 }

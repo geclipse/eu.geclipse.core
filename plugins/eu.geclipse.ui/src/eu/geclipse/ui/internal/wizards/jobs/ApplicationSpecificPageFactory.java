@@ -33,11 +33,13 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.wizard.IWizardNode;
 import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.ui.PlatformUI;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 import eu.geclipse.ui.Extensions;
+import eu.geclipse.ui.dialogs.NewProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.wizards.jobs.ApplicationSpecificLastPage;
 import eu.geclipse.ui.wizards.jobs.ApplicationSpecificPage;
@@ -73,9 +75,16 @@ public class ApplicationSpecificPageFactory {
                                     null );
     try {
       fileURL = FileLocator.toFileURL( fileURL );
-    } catch( IOException e1 ) {
-      // TODO Auto-generated catch block
-      e1.printStackTrace();
+    } catch( IOException ioException ) {
+      NewProblemDialog.openProblem( PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+                                    Messages.getString("ApplicationSpecificPageFactory.XML_problems_title"), //$NON-NLS-1$
+                                    Messages.getString("ApplicationSpecificPageFactory.XML_problems_text"),  //$NON-NLS-1$
+                                    ioException );
+    } catch(NullPointerException nullExc){
+      NewProblemDialog.openProblem( PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+                                    Messages.getString("ApplicationSpecificPageFactory.XML_problems_title"), //$NON-NLS-1$
+                                    Messages.getString("ApplicationSpecificPageFactory.XML_problems_text"),  //$NON-NLS-1$
+                                    nullExc );
     }
     String temp = fileURL.toString();
     temp = temp.substring( temp.indexOf( fileURL.getProtocol() )
@@ -89,9 +98,11 @@ public class ApplicationSpecificPageFactory {
       Validator validator = schema.newValidator();
       Source source = new StreamSource( pathToXML );
       validator.validate( source );
-    } catch( IOException e ) {
-      // TODO katis log
-      e.printStackTrace();
+    } catch( IOException ioException ) {
+      NewProblemDialog.openProblem( PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
+                                    Messages.getString("ApplicationSpecificPageFactory.XML_problems_title"), //$NON-NLS-1$
+                                    Messages.getString("ApplicationSpecificPageFactory.XML_problems_text"),  //$NON-NLS-1$
+                                    ioException );
     }
   }
 
@@ -102,6 +113,9 @@ public class ApplicationSpecificPageFactory {
    * @param extensionId an id of extension in which xml file is defined
    * @param node node of xml file to parse
    * @return list of wzard pages contained in {@link SpecificWizardPart}
+   * @throws SAXException when there is problem with XML
+   * @throws ParserConfigurationException when XML parser is not configured well
+   * @throws IOException when thre are problems with reading the file
    */
   public static List<WizardPage> getPagesFromXML( final String extensionId,
                                                   final IWizardNode node )
@@ -115,16 +129,16 @@ public class ApplicationSpecificPageFactory {
     DocumentBuilder builder;
     builder = factoryDOM.newDocumentBuilder();
     Document document = builder.parse( new File( path ) );
-    NodeList pageElements = document.getElementsByTagName( "page" );
+    NodeList pageElements = document.getElementsByTagName( "page" ); //$NON-NLS-1$
     // very important thing is that
     // last page needs special treatment
     // ... so first I create pages... but the last page is different!!!
     for( int i = 0; i < pageElements.getLength() - 1; i++ ) {
-      result.add( new ApplicationSpecificPage( "",
+      result.add( new ApplicationSpecificPage( "", //$NON-NLS-1$
                                                ( Element )( pageElements.item( i ) ) ) );
     }
     // and now - create last page!
-    result.add( new ApplicationSpecificLastPage( ( "" ),
+    result.add( new ApplicationSpecificLastPage( ( "" ), //$NON-NLS-1$
                                                  ( Element )( pageElements.item( pageElements.getLength() - 1 ) ),
                                                  node ) );
     return result;

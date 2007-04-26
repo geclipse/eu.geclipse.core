@@ -65,13 +65,12 @@ public class MultipleArgumentList extends TabComponent<String> {
   protected void handleAddButtonSelected()
   {
     MultipleInputDialog dialog = new MultipleInputDialog( getShell(),
-                                                          "New value" );
-    dialog.addTextField( "New value", null, false );
-//    dialog.addVariablesField( Messages.getString("EnvNewJobWizardPage.new_env_dialog_value_field"), null, true ); //$NON-NLS-1$
+                                                          Messages.getString("MultipleArgumentList.new_value") ); //$NON-NLS-1$
+    dialog.addTextField( Messages.getString("MultipleArgumentList.new_value"), null, false ); //$NON-NLS-1$
     if( dialog.open() != Window.OK ) {
       return;
     }
-    String name = dialog.getStringValue( "New value" );    
+    String name = dialog.getStringValue( Messages.getString("MultipleArgumentList.new_value") );     //$NON-NLS-1$
     if( name != null
         && name.length() > 0 )
     {
@@ -89,16 +88,13 @@ public class MultipleArgumentList extends TabComponent<String> {
       // do nothing;
     } else {
       String originalName = var;
-//      String value = var.getValue();
       MultipleInputDialog dialog = new MultipleInputDialog( getShell(),
-                                                            "Editing..." );
-      dialog.addTextField( "New value", originalName, false ); 
-//      dialog.addVariablesField( Messages.getString("EnvNewJobWizardPage.new_env_dialog_value_field"), value, true ); //$NON-NLS-1$
+                                                            Messages.getString("MultipleArgumentList.edit_title") ); //$NON-NLS-1$
+      dialog.addTextField( Messages.getString("MultipleArgumentList.new_value"), originalName, false );  //$NON-NLS-1$
       if( dialog.open() != Window.OK ) {
         // do nothing;
       } else {
-        String name = dialog.getStringValue( "New value" ); 
-//        String value = dialog.getStringValue( Messages.getString("EnvNewJobWizardPage.new_env_dialog_value_field") ); //$NON-NLS-1$
+        String name = dialog.getStringValue( Messages.getString("MultipleArgumentList.new_value") );  //$NON-NLS-1$
         if( !originalName.equals( name ) ) {
           if( addVariable( new String( name ) ) ) {
             this.table.remove( var );
@@ -122,15 +118,14 @@ public class MultipleArgumentList extends TabComponent<String> {
       this.table.remove( var );
     }
     this.table.getControl().setRedraw( true );
-    // updateAppendReplace();
     updateLaunchConfigurationDialog();
   }
 
   @Override
   protected void setLabels()
   {
-    this.addButton.setText( "Add..." ); 
-    this.editButton.setText( "Edit..." );
-    this.removeButton.setText( "Remove" );
+    this.addButton.setText( Messages.getString("MultipleArgumentList.add_button") );  //$NON-NLS-1$
+    this.editButton.setText( Messages.getString("MultipleArgumentList.edit_button") ); //$NON-NLS-1$
+    this.removeButton.setText( Messages.getString("MultipleArgumentList.remove_button") ); //$NON-NLS-1$
   }
 }

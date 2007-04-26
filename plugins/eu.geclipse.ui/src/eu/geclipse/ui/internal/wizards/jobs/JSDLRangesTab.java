@@ -1,31 +1,54 @@
+/******************************************************************************
+ * Copyright (c) 2007 g-Eclipse consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for
+ * project g-Eclipse founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributor(s):
+ *     PSNC - Katarzyna Bylec
+ *           
+ *****************************************************************************/
 package eu.geclipse.ui.internal.wizards.jobs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.Map;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.jface.window.Window;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.TableItem;
 import eu.geclipse.ui.internal.dialogs.MultipleInputDialog;
 import eu.geclipse.ui.widgets.TabComponent;
 import eu.geclipse.ui.wizards.jobs.Messages;
 
-public class JSDLRangesTab extends TabComponent {
+/**
+ * Table to keep ranges for JSDL resources
+ */
+@SuppressWarnings("unchecked")
+public class JSDLRangesTab extends TabComponent
+{
 
-  public JSDLRangesTab( IStructuredContentProvider contentProvider,
-                        ITableLabelProvider labelProvider,
-                        HashMap propertiesVsHearders,
-                        int hight,
-                        int width )
+  /**
+   * Creates new instance of this class
+   * 
+   * @param contentProvider content provider for table viewer
+   * @param labelProvider label provider for table viewer
+   * @param propertiesVsHearders headers for table
+   * @param hight hight of this control
+   * @param width width of collumn in table
+   */
+  public JSDLRangesTab( final IStructuredContentProvider contentProvider,
+                        final ITableLabelProvider labelProvider,
+                        final HashMap propertiesVsHearders,
+                        final int hight,
+                        final int width )
   {
     super( contentProvider, labelProvider, propertiesVsHearders, hight, width );
   }
@@ -34,22 +57,21 @@ public class JSDLRangesTab extends TabComponent {
   protected void handleAddButtonSelected()
   {
     MultipleInputDialog dialog = new MultipleInputDialog( getShell(),
-                                                          "New value" );
-    dialog.addTextField( "Range start", null, false );
-    dialog.addTextField( "Range end", null, false );
-    // dialog.addVariablesField(
-    // Messages.getString("EnvNewJobWizardPage.new_env_dialog_value_field"),
-    // null, true ); //$NON-NLS-1$
+                                                          Messages.getString( "JSDLRangesTab.new_value" ) ); //$NON-NLS-1$
+    dialog.addTextField( Messages.getString( "JSDLRangesTab.range_start" ), null, false ); //$NON-NLS-1$
+    dialog.addTextField( Messages.getString( "JSDLRangesTab.range_end" ), null, false ); //$NON-NLS-1$
     if( dialog.open() != Window.OK ) {
       return;
     }
-    String start = dialog.getStringValue( "Range start" );
-    String end = dialog.getStringValue( "Range end" );
-    try{
-    Range range = new Range( Double.valueOf( start ).doubleValue(), Double.valueOf( end ).doubleValue() );
-    addVariable( range );
-    } catch (NumberFormatException exc){
-      MessageDialog.openError( getShell(), "Bad range format", "Bad range format");
+    String start = dialog.getStringValue( Messages.getString( "JSDLRangesTab.range_start" ) ); //$NON-NLS-1$
+    String end = dialog.getStringValue( Messages.getString( "JSDLRangesTab.range_end" ) ); //$NON-NLS-1$
+    try {
+      Range range = new Range( Double.valueOf( start ).doubleValue(),
+                               Double.valueOf( end ).doubleValue() );
+      addVariable( range );
+    } catch( IllegalArgumentException exc ) {
+      MessageDialog.openError( getShell(),
+                               Messages.getString( "JSDLRangesTab.bad_range_format" ), Messages.getString( "JSDLRangesTab.bad_range_format" ) ); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 
@@ -70,16 +92,16 @@ public class JSDLRangesTab extends TabComponent {
         comboData.add( fileType.toString() );
       }
       dialog.addTextField( "Range start", oldStart, false ); //$NON-NLS-1$
-      dialog.addTextField( "Range end", oldEnd, false );
+      dialog.addTextField( Messages.getString( "JSDLRangesTab.range_end" ), oldEnd, false ); //$NON-NLS-1$
       if( dialog.open() != Window.OK ) {
         // do nothing;
       } else {
         try {
-          String newStart = dialog.getStringValue( "Range start" );
-          String newEnd = dialog.getStringValue( "Range end" );
+          String newStart = dialog.getStringValue( Messages.getString( "JSDLRangesTab.range_start" ) ); //$NON-NLS-1$
+          String newEnd = dialog.getStringValue( Messages.getString( "JSDLRangesTab.range_end" ) ); //$NON-NLS-1$
           if( !oldStart.equals( newStart ) || !oldEnd.equals( newEnd ) ) {
-            Range newRange = new Range( Double.valueOf( newStart ).doubleValue(),
-                                        Double.valueOf( newEnd ).doubleValue() );
+            Range newRange = new Range( Double.valueOf( newStart )
+              .doubleValue(), Double.valueOf( newEnd ).doubleValue() );
             if( addVariable( newRange ) ) {
               this.table.remove( var );
             }
@@ -89,8 +111,9 @@ public class JSDLRangesTab extends TabComponent {
             this.table.update( var, null );
             updateLaunchConfigurationDialog();
           }
-        } catch( NumberFormatException exc ) {
-          MessageDialog.openError( getShell(), "Bad range format", "Bad range format");
+        } catch( IllegalArgumentException exc ) {
+          MessageDialog.openError( getShell(),
+                                   Messages.getString( "JSDLRangesTab.bad_range_format" ), Messages.getString( "JSDLRangesTab.bad_range_format" ) ); //$NON-NLS-1$ //$NON-NLS-2$
         }
       }
     }
@@ -113,9 +136,9 @@ public class JSDLRangesTab extends TabComponent {
   @Override
   protected void setLabels()
   {
-    this.addButton.setText( "Add" );
-    this.editButton.setText( "Edit" );
-    this.removeButton.setText( "Remove" );
+    this.addButton.setText( Messages.getString( "JSDLRangesTab.add_button" ) ); //$NON-NLS-1$
+    this.editButton.setText( Messages.getString( "JSDLRangesTab.edit_button" ) ); //$NON-NLS-1$
+    this.removeButton.setText( Messages.getString( "JSDLRangesTab.remove_button" ) ); //$NON-NLS-1$
   }
 
   protected boolean addVariable( final Range variable ) {
@@ -124,42 +147,43 @@ public class JSDLRangesTab extends TabComponent {
     for( int i = 0; i < items.length; i++ ) {
       Range existingVariable = ( Range )items[ i ].getData();
       if( existingVariable.equals( variable ) ) {
+        // this will be changed to NewProblemDialog
         MessageDialog.openError( getShell(),
-                                 "Range conflict",
-                                 "Range you provided is in conflict with range ("
+                                 Messages.getString( "JSDLRangesTab.rnage_conflict" ), //$NON-NLS-1$
+                                 Messages.getString( "JSDLRangesTab.conflict_message" ) //$NON-NLS-1$
                                      + existingVariable.getStart()
-                                     + ", "
+                                     + ", " //$NON-NLS-1$
                                      + existingVariable.getEnd()
-                                     + ")" );
+                                     + ")" ); //$NON-NLS-1$
+        result = false;
+        break;
+      } else if( existingVariable.getStart() >= variable.getStart()
+                 && existingVariable.getStart() < variable.getEnd() )
+      {
+        // this will be changed to NewProblemDialog
+        MessageDialog.openError( getShell(),
+                                 Messages.getString( "JSDLRangesTab.range_conflict" ), //$NON-NLS-1$
+                                 Messages.getString( "JSDLRangesTab.conflict_message_1" ) //$NON-NLS-1$
+                                     + existingVariable.getStart()
+                                     + ", " //$NON-NLS-1$
+                                     + existingVariable.getEnd()
+                                     + ")" ); //$NON-NLS-1$
         result = false;
         break;
       } else {
-        if( existingVariable.getStart() >= variable.getStart()
-            && existingVariable.getStart() < variable.getEnd() )
+        if( variable.getStart() >= existingVariable.getStart()
+            && variable.getStart() < existingVariable.getEnd() )
         {
+          // this will be changed to NewProblemDialog
           MessageDialog.openError( getShell(),
-                                   "Range conflict",
-                                   "Range you provided is in conflict with range ("
+                                   Messages.getString( "JSDLRangesTab.range_conflict" ), //$NON-NLS-1$
+                                   Messages.getString( "JSDLRangesTab.conflict_message_1" ) //$NON-NLS-1$
                                        + existingVariable.getStart()
-                                       + ", "
+                                       + ", " //$NON-NLS-1$
                                        + existingVariable.getEnd()
-                                       + ")" );
+                                       + ")" ); //$NON-NLS-1$
           result = false;
           break;
-        } else {
-          if( variable.getStart() >= existingVariable.getStart()
-              && variable.getStart() < existingVariable.getEnd() )
-          {
-            MessageDialog.openError( getShell(),
-                                     "Range conflict",
-                                     "Range you provided is in conflict with range ("
-                                         + existingVariable.getStart()
-                                         + ", "
-                                         + existingVariable.getEnd()
-                                         + ")" );
-            result = false;
-            break;
-          }
         }
       }
     }
