@@ -24,6 +24,7 @@ public class HostsNewJobWizardPage extends WizardPage {
   private List<String> namesArch;
   private Combo osList;
   private Combo cpuList;
+  private boolean isCreated = false;
   
   
   protected HostsNewJobWizardPage( final String pageName, final List<String> OSList, final List<String> namesArch) {
@@ -95,6 +96,8 @@ public class HostsNewJobWizardPage extends WizardPage {
                                          temp );
     this.tab.createControl( mainComp );
     
+    this.isCreated = true;
+    
     setControl( mainComp );
   }
 
@@ -124,4 +127,16 @@ public class HostsNewJobWizardPage extends WizardPage {
   public String getArch(){
     return this.cpuList.getText();
   }
+  
+  /**
+   * Method to fnd out if this page was created
+   * 
+   * @return true if method
+   *         {@link FilesOutputNewJobWizardPage#createControl(Composite)} was
+   *         invoked
+   */
+  public boolean isCreated() {
+    return this.isCreated;
+  }
+  
 }

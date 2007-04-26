@@ -33,6 +33,7 @@ public class ResourcesNewJobWizardPage extends WizardPage {
   private JSDLExactValueTab tabVal;
   private JSDLExactValueTab tabCPUCountValues;
   private JSDLExactValueTab totalPhysicalMemoryValues;
+  private boolean isCreated = false;
 
   protected ResourcesNewJobWizardPage( final String pageName
                                         )
@@ -125,6 +126,7 @@ public class ResourcesNewJobWizardPage extends WizardPage {
                                                     50 );
     this.totalPhysicalMemoryValues.createControl( mainComp );
     
+    this.isCreated = true;
     
     setControl( mainComp );
   }
@@ -349,6 +351,17 @@ public class ResourcesNewJobWizardPage extends WizardPage {
       }
       return null;
     }
+  }
+  
+  /**
+   * Method to fnd out if this page was created
+   * 
+   * @return true if method
+   *         {@link FilesOutputNewJobWizardPage#createControl(Composite)} was
+   *         invoked
+   */
+  public boolean isCreated() {
+    return this.isCreated;
   }
   
 }

@@ -1,18 +1,12 @@
-/******************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse consortium 
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Initial development of the original code was made for
- * project g-Eclipse founded by European Union
- * project number: FP6-IST-034327  http://www.geclipse.eu/
- *
- * Contributor(s):
- *     PSNC - Katarzyna Bylec
- *           
- *****************************************************************************/
+/*******************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse consortium All rights reserved. This
+ * program and the accompanying materials are made available under the terms of
+ * the Eclipse Public License v1.0 which accompanies this distribution, and is
+ * available at http://www.eclipse.org/legal/epl-v10.html Initial development of
+ * the original code was made for project g-Eclipse founded by European Union
+ * project number: FP6-IST-034327 http://www.geclipse.eu/ Contributor(s): PSNC -
+ * Katarzyna Bylec
+ ******************************************************************************/
 package eu.geclipse.ui.wizards.jobs;
 
 import java.lang.reflect.InvocationTargetException;
@@ -169,7 +163,8 @@ public class NewJobWizard extends Wizard implements INewWizard {
                                          this.executablePage.getExecutableFile(),
                                          in,
                                          inName,
-                                         out, outName );
+                                         out,
+                                         outName );
       }
     }
     if( this.outputFilesPage.isCreated() ) {
@@ -234,33 +229,39 @@ public class NewJobWizard extends Wizard implements INewWizard {
     // if (! this.resourcesPage.getCpuList().equals( "" )){
     // jsdl.setCPUArchitecture( this.resourcesPage.getCpuList());
     // }
-    if( !this.hostsPage.getOS().equals( "" ) ) { //$NON-NLS-1$
-      jsdl.setOS( this.hostsPage.getOS() );
+    if( this.hostsPage.isCreated() ) {
+      if( !this.hostsPage.getOS().equals( "" ) ) { //$NON-NLS-1$
+        jsdl.setOS( this.hostsPage.getOS() );
+      }
+      if( !this.hostsPage.getArch().equals( "" ) ) { //$NON-NLS-1$
+        jsdl.setCPUArchitecture( this.hostsPage.getArch() );
+      }
+      jsdl.addCandidateHosts( this.hostsPage.getCandidateHosts() );
+      for( Range range : this.resourcesPage.getIndividualCPUSpeedRanges() ) {
+        jsdl.setInidividialCPUSpeedRange( range.getStart(),
+                                          range.getEnd(),
+                                          true );
+      }
     }
-    if( !this.hostsPage.getArch().equals( "" ) ) { //$NON-NLS-1$
-      jsdl.setCPUArchitecture( this.hostsPage.getArch() );
-    }
-    jsdl.addCandidateHosts( this.hostsPage.getCandidateHosts() );
-    for( Range range : this.resourcesPage.getIndividualCPUSpeedRanges() ) {
-      jsdl.setInidividialCPUSpeedRange( range.getStart(), range.getEnd(), true );
-    }
-    for( ValueWithEpsilon value : this.resourcesPage.getIndividualCPUSValues() )
-    {
-      jsdl.setIndividualCPUSpeedValue( value.getValue(), value.getEpsilon() );
-    }
-    for( Range range : this.resourcesPage.getTotalCPUCount() ) {
-      jsdl.setTotalCPUCount( range.getStart(), range.getEnd(), true );
-    }
-    for( ValueWithEpsilon value : this.resourcesPage.getTotalCPUCountValues() )
-    {
-      jsdl.setTotalCPUCountValue( value.getValue(), value.getEpsilon() );
-    }
-    for( Range range : this.resourcesPage.getTotalPhysicalMemory() ) {
-      jsdl.setTotalPhysicalMemory( range.getStart(), range.getEnd(), true );
-    }
-    for( ValueWithEpsilon value : this.resourcesPage.getTotalPhysicalMemoryValues() )
-    {
-      jsdl.setTotalPhysicalMemoryValue( value.getValue(), value.getEpsilon() );
+    if( this.resourcesPage.isCreated() ) {
+      for( ValueWithEpsilon value : this.resourcesPage.getIndividualCPUSValues() )
+      {
+        jsdl.setIndividualCPUSpeedValue( value.getValue(), value.getEpsilon() );
+      }
+      for( Range range : this.resourcesPage.getTotalCPUCount() ) {
+        jsdl.setTotalCPUCount( range.getStart(), range.getEnd(), true );
+      }
+      for( ValueWithEpsilon value : this.resourcesPage.getTotalCPUCountValues() )
+      {
+        jsdl.setTotalCPUCountValue( value.getValue(), value.getEpsilon() );
+      }
+      for( Range range : this.resourcesPage.getTotalPhysicalMemory() ) {
+        jsdl.setTotalPhysicalMemory( range.getStart(), range.getEnd(), true );
+      }
+      for( ValueWithEpsilon value : this.resourcesPage.getTotalPhysicalMemoryValues() )
+      {
+        jsdl.setTotalPhysicalMemoryValue( value.getValue(), value.getEpsilon() );
+      }
     }
   }
   class FirstPage extends WizardNewFileCreationPage {
