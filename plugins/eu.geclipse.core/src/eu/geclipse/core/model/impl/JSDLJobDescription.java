@@ -262,11 +262,12 @@ public class JSDLJobDescription
    * @param stdin
    * @param stdinName 
    * @param stdout 
+   * @param outName 
    */
   @SuppressWarnings("unchecked")
   public void addPOSIXApplicationDetails( final String applicationName,
                                           final String executableFile,
-                                          final String stdin, final String stdinName, final String stdout )
+                                          final String stdin, final String stdinName, final String stdout, String outName )
   {
     this.jobDescription.getApplication().setApplicationName( applicationName );
     POSIXApplicationType posixApp = this.posixFactory.createPOSIXApplicationType();
@@ -303,7 +304,7 @@ public class JSDLJobDescription
       DataStagingType dataOut = this.jsdlFactory.createDataStagingType();
       dataOut.setCreationFlag( CreationFlagEnumeration.OVERWRITE_LITERAL );
       dataOut.setDeleteOnTermination( true );
-      dataOut.setFileName( stdin );
+      dataOut.setFileName( outName );
       SourceTargetType sourceDataOut = this.jsdlFactory.createSourceTargetType();
       sourceDataOut.setURI( stdout );
       dataOut.setTarget( sourceDataOut );
