@@ -23,6 +23,8 @@ import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.swt.widgets.Text;
 import eu.geclipse.jsdl.posix.FileNameType;
 import eu.geclipse.jsdl.posix.POSIXApplicationType;
@@ -36,8 +38,8 @@ import eu.geclipse.jsdl.posix.PosixPackage;
  */
 public class PosixApplicationTypeAdapter {
   
-  private POSIXApplicationType posixApplicationType;
   Hashtable< Integer, Text > widgetFeaturesMap = new Hashtable< Integer, Text >();
+  private POSIXApplicationType posixApplicationType;  
   private FileNameType fileName = null;
   
   /*
@@ -65,7 +67,7 @@ public class PosixApplicationTypeAdapter {
          
      if ( testType instanceof POSIXApplicationType ) {
        this.posixApplicationType = (POSIXApplicationType) testType;  
-//       //FIXME - Just a check.       
+      
 //       LimitsTypeAdapter lt = new LimitsTypeAdapter(posixApplicationType);
      } 
      
@@ -75,14 +77,17 @@ public class PosixApplicationTypeAdapter {
  
   
   
- 
+ /*
+  * Method of setting the content of the Adapter.
+  */
  public void setContent(final EObject rootJsdlElement){
     
    getTypeForAdapter( rootJsdlElement );   
    
   } // End setContent()
   
-  
+ 
+ 
   public void attachPosixApplicationName(final Text widget){    
     this.widgetFeaturesMap.put( PosixPackage.POSIX_APPLICATION_TYPE__NAME, widget );    
         
@@ -93,6 +98,8 @@ public class PosixApplicationTypeAdapter {
       public void focusGained(final org.eclipse.swt.events.FocusEvent e ) { }
     } );
   }
+  
+  
   
   public void attachPosixApplicationExecutable(final Text widget){    
     this.widgetFeaturesMap.put( PosixPackage.POSIX_APPLICATION_TYPE__EXECUTABLE, widget );    
@@ -106,6 +113,8 @@ public class PosixApplicationTypeAdapter {
     } );
   }
   
+  
+  
   public void attachPosixApplicationInput(final Text widget){    
     this.widgetFeaturesMap.put( PosixPackage.POSIX_APPLICATION_TYPE__INPUT, widget );
     fileName = PosixFactory.eINSTANCE.createFileNameType();    
@@ -118,6 +127,8 @@ public class PosixApplicationTypeAdapter {
     } );
   }
 
+  
+  
   public void attachPosixApplicationOutput(final Text widget){    
     this.widgetFeaturesMap.put( PosixPackage.POSIX_APPLICATION_TYPE__OUTPUT, widget );
     fileName = PosixFactory.eINSTANCE.createFileNameType();    
@@ -129,6 +140,7 @@ public class PosixApplicationTypeAdapter {
       public void focusGained(final org.eclipse.swt.events.FocusEvent e ) { }
     } );   
   }
+  
   
   
   public void attachPosixApplicationError(final Text widget){    
@@ -144,6 +156,9 @@ public class PosixApplicationTypeAdapter {
   }
   
   
+  /*
+   * Method of checking if the adapter is Empty..
+   */
   public boolean isEmpty(){
     boolean status = false;
 
@@ -155,67 +170,90 @@ public class PosixApplicationTypeAdapter {
   } //End isEmpty()
   
   
+  
   public void load()
   {
     EObject object = this.posixApplicationType;
-    Text widgetName2 = null;
     Text widgetName = null;
-    //EDataType dataType = null;
-    
+     
     // Test if eObject is not empty.
     if(object != null) {
       EClass eClass = object.eClass();
       
-
-             
+      for (Iterator iterRef = eClass.getEAllStructuralFeatures().iterator(); iterRef.hasNext();){
         
-      for (Iterator iter = eClass.getEAllAttributes().iterator(); iter.hasNext();) {      
-        EAttribute attribute = (EAttribute) iter.next();
-                                               
-        //Get Attribute Value.
-        Object value = object.eGet( attribute );        
-             
-        Integer featureID = attribute.getFeatureID();        
+        EStructuralFeature eStructuralFeature = (EStructuralFeature) iterRef.next();
               
-        //Check if Attribute has any value
-        if (object.eIsSet( attribute )){          
-           widgetName = this.widgetFeaturesMap.get( featureID );
-                            
-         //FIXME - any check should be removed..check cause of it.
-           if (attribute.getName().toString() != "any"){ //$NON-NLS-1$
-             widgetName.setText(value.toString());
-         } //end if
-                   
-        } //end if
-      } //end for
-      
-      
-      
-      for (Iterator iterRef = eClass.getEAllReferences().iterator(); iterRef.hasNext();){
-        EReference reference = (EReference) iterRef.next();
+        if (eStructuralFeature instanceof EReference) {
+
+          //Check for the features Multiplicity.
+          
+          if (object.eIsSet( eStructuralFeature ) 
+            && eStructuralFeature.getUpperBound() 
+            != EStructuralFeature.UNBOUNDED_MULTIPLICITY ){
         
-        Object valueRef = object.eGet(reference);       
+           EObject eObject = (EObject) object.eGet( eStructuralFeature );
+                
+           Object eStrFeatValue = null;
+          
+           if (ExtendedMetaData.INSTANCE.getContentKind(eObject.eClass()) == ExtendedMetaData.SIMPLE_CONTENT){
+             eStrFeatValue = eObject.eGet(ExtendedMetaData.INSTANCE.getSimpleFeature(eObject.eClass())); 
+            
+           }
+                
+           Integer featureID = eStructuralFeature.getFeatureID();
+           
+           // Check if Reference has been set.
+           if (object.eIsSet( eStructuralFeature ) 
+               && eStructuralFeature.getName().toString() != "anyAttribute" ){          
+             widgetName = this.widgetFeaturesMap.get( featureID );
+             widgetName.setText(eStrFeatValue.toString());            
+             
+           }
+          } // End UNBOUNDED_MULTIPLICITY
+          else {
+//            EReference eObject = (EReference) object.eGet( eStructuralFeature );
+//            System.out.println(eObject.getName().toString());
+//                       
+//            TreeIterator ti2 = eObject.eAllContents(); 
+//            while (ti2.hasNext()){
+//              EObject tiO = (EObject) ti2.next();
+//              System.out.println("  "+tiO.toString());
+//              
+//            }
+            
+          } // End Else
+        } // End else EReference
         
-        Integer referenceID = reference.getFeatureID();
-                          
-        if (object.eIsSet( reference )){          
-          widgetName2 = this.widgetFeaturesMap.get( referenceID );
-                         
-//        //FIXME - any check should be removed..check cause of it.
-          if (reference.getName().toString() != "any"){ //$NON-NLS-1$
-            widgetName2.setText(valueRef.toString());            
-          }
+        // Then this is an attribute.
+        else if (eStructuralFeature instanceof EAttribute) {
+          
+          // Get Attribute Value.
+          Object value = object.eGet( eStructuralFeature );        
                
+          Integer featureID = eStructuralFeature.getFeatureID();
+                
+          // Check if Attribute has any value
+          if (object.eIsSet( eStructuralFeature )){          
+             widgetName = this.widgetFeaturesMap.get( featureID );
+             
+             if (eStructuralFeature.getName().toString() != "any"){ //$NON-NLS-1$
+               widgetName.setText(value.toString());
+           } // End if
+          
+          } // End if for eIsSet
+
+        } // End else attribute
+        
+        else{
+          //Do Nothing.
         }
 
-     }
+     } // End Iterator.
       
       
-      
-      
-    } //end if    
+    } // End if    
   } // End void load()
-  
-  
+    
   
 } // End Class

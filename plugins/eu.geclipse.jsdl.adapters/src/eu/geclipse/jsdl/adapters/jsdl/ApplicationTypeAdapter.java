@@ -38,10 +38,9 @@ import eu.geclipse.jsdl.JsdlPackage;
  */
 public class ApplicationTypeAdapter {
   
-  private ApplicationType applicationType;
- 
   Hashtable< Integer, Text > widgetFeaturesMap = new Hashtable< Integer, Text >();
-  
+  private ApplicationType applicationType; 
+    
   /*
    * Class Constructor
    */
@@ -96,7 +95,7 @@ public class ApplicationTypeAdapter {
       public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
         applicationType.setApplicationName(widget.getText());    
       }
-      public void focusGained( FocusEvent e ) { }
+      public void focusGained( final FocusEvent e ) { }
      
     } );
   }
@@ -114,7 +113,7 @@ public class ApplicationTypeAdapter {
       public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
         applicationType.setApplicationVersion(widget.getText());    
       }
-      public void focusGained( FocusEvent e ) { }
+      public void focusGained(final FocusEvent e ) { }
      
     } );
   }
@@ -132,7 +131,7 @@ public class ApplicationTypeAdapter {
       public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
         applicationType.setDescription(widget.getText());    
       }
-      public void focusGained( FocusEvent e ) { }
+      public void focusGained( final FocusEvent e ) { }
      
     } );
   }
@@ -141,7 +140,7 @@ public class ApplicationTypeAdapter {
   public void attachToApplicationSection(final ExpandableComposite section){    
            
      section.addExpansionListener( new ExpansionAdapter() {
-       public void expansionStateChanged(ExpansionEvent e) {
+       public void expansionStateChanged(final ExpansionEvent e) {
             if (e.data.equals(true)) {
               System.out.println("Expanded");
               createApplicationType();

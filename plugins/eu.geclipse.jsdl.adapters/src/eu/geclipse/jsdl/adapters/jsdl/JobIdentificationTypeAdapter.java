@@ -36,11 +36,11 @@ import eu.geclipse.jsdl.JsdlPackage;
 
 public class JobIdentificationTypeAdapter {
   
+  Hashtable< Integer, Text > widgetFeaturesMap = new Hashtable< Integer, Text >();
+  
   private JobIdentificationType jobIdentificationType = 
                             JsdlFactory.eINSTANCE.createJobIdentificationType();
                                 
-  Hashtable< Integer, Text > widgetFeaturesMap = new Hashtable< Integer, Text >();
-  
   
   public JobIdentificationTypeAdapter(final EObject rootJsdlElement) {
     getTypeForAdapter(rootJsdlElement);
@@ -76,7 +76,7 @@ public class JobIdentificationTypeAdapter {
       public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
         jobIdentificationType.setJobName(widget.getText());    
       }
-      public void focusGained( FocusEvent e ) { }
+      public void focusGained(final FocusEvent e ) { }
      
     } );
   }
@@ -89,7 +89,7 @@ public class JobIdentificationTypeAdapter {
       public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
         jobIdentificationType.setDescription(widget.getText());    
       }
-      public void focusGained( FocusEvent e ) { }
+      public void focusGained(final FocusEvent e ) { }
      
     } );
   }
@@ -116,8 +116,7 @@ public class JobIdentificationTypeAdapter {
         //Check if Attribute has any value
         if (object.eIsSet( attribute )){          
            widgetName = this.widgetFeaturesMap.get( featureID );
-                 
-         //FIXME - any check should be removed..check cause of it.
+         
            if (attribute.getName().toString() != "any"){ //$NON-NLS-1$
              widgetName.setText(value.toString());
          } //end if

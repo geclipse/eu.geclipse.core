@@ -28,27 +28,34 @@ import eu.geclipse.jsdl.posix.POSIXApplicationType;
  *
  */
 public class LimitsTypeAdapter {
-
-  private POSIXApplicationType parent = null;
+  
   Hashtable< Integer, Text > widgetFeaturesMap = new Hashtable< Integer, Text >();
+  private POSIXApplicationType parent = null;  
 
   /*
    * Class Constructor.
    */
-  public LimitsTypeAdapter (final POSIXApplicationType parent ){
-    this.parent = parent;
-    getLimitsType(parent);
+  public LimitsTypeAdapter (final POSIXApplicationType lParent ){
+    this.parent = lParent;
+    getLimitsType(this.parent);
   }
   
-  private void getLimitsType (final POSIXApplicationType parent){
   
-    TreeIterator iterator = parent.eAllContents();
+  private void getLimitsType (final POSIXApplicationType posixParent){
+  
+    TreeIterator iterator = posixParent.eAllContents();
     
     while (iterator.hasNext()){
+      
       EObject testType = (EObject) iterator.next();
+      
       System.out.println(testType.eContainingFeature().toString());
+      
+      
+      
     }
-
+      
+    
   }
-
+  
 }

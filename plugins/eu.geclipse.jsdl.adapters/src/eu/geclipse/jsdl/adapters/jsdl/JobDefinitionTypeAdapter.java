@@ -34,9 +34,9 @@ import eu.geclipse.jsdl.JsdlPackage;
 
 
 public class JobDefinitionTypeAdapter extends JsdlAdapters {
-     
-  private JobDefinitionType jobDefinitionType = JsdlFactory.eINSTANCE.createJobDefinitionType();
+  
   Hashtable< Integer, Text > widgetFeaturesMap = new Hashtable< Integer, Text >();
+  private JobDefinitionType jobDefinitionType = JsdlFactory.eINSTANCE.createJobDefinitionType(); 
   
   
   public JobDefinitionTypeAdapter(final EObject rootJsdlElement) {
