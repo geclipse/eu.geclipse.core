@@ -419,12 +419,12 @@ public class ApplicationSpecificControlsFactory {
     layout.horizontalSpan = 2;
     layout.grabExcessHorizontalSpace = true;
     // according to xsd list is read-only by default
-    boolean isReadOnly = false;
+    boolean isReadOnly = true;
     if( parametersMap.containsKey( ChildrenElements.WRITEABLE ) ) {
       if( parametersMap.get( ChildrenElements.WRITEABLE )
         .equalsIgnoreCase( Boolean.TRUE.toString() ) )
       {
-        isReadOnly = true;
+        isReadOnly = false;
       }
     }
     Combo listControl;
