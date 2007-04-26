@@ -44,11 +44,13 @@ import org.eclipse.emf.ecore.xmi.impl.XMLMapImpl;
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.jsdl.ApplicationType;
+import eu.geclipse.jsdl.BoundaryType;
 import eu.geclipse.jsdl.CPUArchitectureType;
 import eu.geclipse.jsdl.CandidateHostsType;
 import eu.geclipse.jsdl.CreationFlagEnumeration;
 import eu.geclipse.jsdl.DataStagingType;
 import eu.geclipse.jsdl.DocumentRoot;
+import eu.geclipse.jsdl.ExactType;
 import eu.geclipse.jsdl.JobDefinitionType;
 import eu.geclipse.jsdl.JobDescriptionType;
 import eu.geclipse.jsdl.JobIdentificationType;
@@ -58,9 +60,11 @@ import eu.geclipse.jsdl.OperatingSystemType;
 import eu.geclipse.jsdl.OperatingSystemTypeEnumeration;
 import eu.geclipse.jsdl.OperatingSystemTypeType;
 import eu.geclipse.jsdl.ProcessorArchitectureEnumeration;
+import eu.geclipse.jsdl.RangeType;
 import eu.geclipse.jsdl.RangeValueType;
 import eu.geclipse.jsdl.ResourcesType;
 import eu.geclipse.jsdl.SourceTargetType;
+import eu.geclipse.jsdl.impl.BoundaryTypeImpl;
 import eu.geclipse.jsdl.impl.ResourcesTypeImpl;
 import eu.geclipse.jsdl.posix.ArgumentType;
 import eu.geclipse.jsdl.posix.FileNameType;
@@ -572,7 +576,7 @@ public class JSDLJobDescription
     }
   }
   
-  public void setTotalCPUCount(int count){
+  public void setTotalCPUCount(double start, double end, boolean exclusive){
     DocumentRoot dRoot = getDocumentRoot();
     if ( dRoot != null && dRoot.getJobDefinition() != null && dRoot.getJobDefinition().getJobDescription() != null){
       ResourcesType resources = dRoot.getJobDefinition().getJobDescription().getResources();
@@ -580,7 +584,21 @@ public class JSDLJobDescription
         resources = this.jsdlFactory.createResourcesType();
         dRoot.getJobDefinition().getJobDescription().setResources( resources );
       }
-      //???
+      RangeValueType rangeValue = resources.getTotalCPUCount();
+      if (rangeValue == null){
+        rangeValue = this.jsdlFactory.createRangeValueType();
+        resources.setTotalCPUCount( rangeValue );
+      }
+      RangeType range = this.jsdlFactory.createRangeType();
+      BoundaryType bl = this.jsdlFactory.createBoundaryType();
+      bl.setExclusiveBound( exclusive );
+      bl.setValue( start );
+      range.setLowerBound( bl );
+      bl = this.jsdlFactory.createBoundaryType();
+      bl.setExclusiveBound( exclusive );
+      bl.setValue( end );
+      range.setUpperBound( bl );
+      rangeValue.getRange().add( range );
     }
   }
   
@@ -621,5 +639,128 @@ public class JSDLJobDescription
       osInstance.setOperatingSystemName( OperatingSystemTypeEnumeration.getByName( cpuList ) );
       osType.setOperatingSystemType( osInstance );
     }
+  }
+
+
+  public void setInidividialCPUSpeedRange( double start, double end, boolean exclusive ) {
+    DocumentRoot dRoot = getDocumentRoot();
+    if ( dRoot != null && dRoot.getJobDefinition() != null && dRoot.getJobDefinition().getJobDescription() != null){
+      ResourcesType resources = dRoot.getJobDefinition().getJobDescription().getResources();
+      if (resources == null){
+        resources = this.jsdlFactory.createResourcesType();
+        dRoot.getJobDefinition().getJobDescription().setResources( resources );
+      }
+      RangeValueType rangeValue = resources.getIndividualCPUSpeed();
+      if (rangeValue == null){
+        rangeValue = this.jsdlFactory.createRangeValueType();
+        resources.setIndividualCPUSpeed( rangeValue );
+      }
+      RangeType range = this.jsdlFactory.createRangeType();
+      BoundaryType bl = this.jsdlFactory.createBoundaryType();
+      bl.setExclusiveBound( exclusive );
+      bl.setValue( start );
+      range.setLowerBound( bl );
+      bl = this.jsdlFactory.createBoundaryType();
+      bl.setExclusiveBound( exclusive );
+      bl.setValue( end );
+      range.setUpperBound( bl );
+      rangeValue.getRange().add( range );
+    }
+  }
+
+
+  public void setTotalPhysicalMemory( double start, double end, boolean exclusive ) {
+    DocumentRoot dRoot = getDocumentRoot();
+    if ( dRoot != null && dRoot.getJobDefinition() != null && dRoot.getJobDefinition().getJobDescription() != null){
+      ResourcesType resources = dRoot.getJobDefinition().getJobDescription().getResources();
+      if (resources == null){
+        resources = this.jsdlFactory.createResourcesType();
+        dRoot.getJobDefinition().getJobDescription().setResources( resources );
+      }
+      RangeValueType rangeValue = resources.getTotalPhysicalMemory();
+      if (rangeValue == null){
+        rangeValue = this.jsdlFactory.createRangeValueType();
+        resources.setTotalPhysicalMemory( rangeValue );
+      }
+      RangeType range = this.jsdlFactory.createRangeType();
+      BoundaryType bl = this.jsdlFactory.createBoundaryType();
+      bl.setExclusiveBound( exclusive );
+      bl.setValue( start );
+      range.setLowerBound( bl );
+      bl = this.jsdlFactory.createBoundaryType();
+      bl.setExclusiveBound( exclusive );
+      bl.setValue( end );
+      range.setUpperBound( bl );
+      rangeValue.getRange().add( range );
+    }
+    
+  }
+
+
+  public void setIndividualCPUSpeedValue( double value, double epsilon ) {
+    DocumentRoot dRoot = getDocumentRoot();
+    if ( dRoot != null && dRoot.getJobDefinition() != null && dRoot.getJobDefinition().getJobDescription() != null){
+      ResourcesType resources = dRoot.getJobDefinition().getJobDescription().getResources();
+      if (resources == null){
+        resources = this.jsdlFactory.createResourcesType();
+        dRoot.getJobDefinition().getJobDescription().setResources( resources );
+      }
+      RangeValueType rangeValue = resources.getIndividualCPUSpeed();
+      if (rangeValue == null){
+        rangeValue = this.jsdlFactory.createRangeValueType();
+        resources.setIndividualCPUSpeed( rangeValue );
+      }
+      
+      ExactType exact = this.jsdlFactory.createExactType();
+      exact.setValue( value );
+      exact.setEpsilon( epsilon );
+      rangeValue.getExact().add( exact );
+    }
+
+    
+  }
+
+
+  public void setTotalCPUCountValue( double value, double epsilon ) {
+    DocumentRoot dRoot = getDocumentRoot();
+    if ( dRoot != null && dRoot.getJobDefinition() != null && dRoot.getJobDefinition().getJobDescription() != null){
+      ResourcesType resources = dRoot.getJobDefinition().getJobDescription().getResources();
+      if (resources == null){
+        resources = this.jsdlFactory.createResourcesType();
+        dRoot.getJobDefinition().getJobDescription().setResources( resources );
+      }
+      RangeValueType rangeValue = resources.getTotalCPUCount();
+      if (rangeValue == null){
+        rangeValue = this.jsdlFactory.createRangeValueType();
+        resources.setTotalCPUCount( rangeValue );
+      }
+      
+      ExactType exact = this.jsdlFactory.createExactType();
+      exact.setValue( value );
+      exact.setEpsilon( epsilon );
+      rangeValue.getExact().add( exact );
+  }
+  }
+
+
+  public void setTotalPhysicalMemoryValue( double value, double epsilon ) {
+    DocumentRoot dRoot = getDocumentRoot();
+    if ( dRoot != null && dRoot.getJobDefinition() != null && dRoot.getJobDefinition().getJobDescription() != null){
+      ResourcesType resources = dRoot.getJobDefinition().getJobDescription().getResources();
+      if (resources == null){
+        resources = this.jsdlFactory.createResourcesType();
+        dRoot.getJobDefinition().getJobDescription().setResources( resources );
+      }
+      RangeValueType rangeValue = resources.getTotalPhysicalMemory();
+      if (rangeValue == null){
+        rangeValue = this.jsdlFactory.createRangeValueType();
+        resources.setTotalPhysicalMemory( rangeValue );
+      }
+      
+      ExactType exact = this.jsdlFactory.createExactType();
+      exact.setValue( value );
+      exact.setEpsilon( epsilon );
+      rangeValue.getExact().add( exact );
+  }
   }
 }

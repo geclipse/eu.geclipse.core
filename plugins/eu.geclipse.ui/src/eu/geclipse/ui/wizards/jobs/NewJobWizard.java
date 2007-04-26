@@ -40,6 +40,8 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.impl.JSDLJobDescription;
 import eu.geclipse.ui.internal.wizards.jobs.FileType;
+import eu.geclipse.ui.internal.wizards.jobs.Range;
+import eu.geclipse.ui.internal.wizards.jobs.ValueWithEpsilon;
 
 /**
  * Wizard for creating new jsdl file
@@ -51,12 +53,13 @@ public class NewJobWizard extends Wizard implements INewWizard {
   private IStructuredSelection selection;
   private WizardNewFileCreationPage firstPage;
   private IFile file;
-  // private EnvNewJobWizardPage envPage;
   private FilesInputNewJobWizardPage inputFilesPage;
   private ExecutableNewJobWizardPage executablePage;
   private FilesOutputNewJobWizardPage outputFilesPage;
   private ResourcesNewJobWizardPage resourcesPage;
   private HostsNewJobWizardPage hostsPage;
+  
+  
 
   @Override
   public void addPages()
@@ -76,8 +79,8 @@ public class NewJobWizard extends Wizard implements INewWizard {
     internal.add( this.outputFilesPage );
     this.hostsPage = new HostsNewJobWizardPage("Host page", JSDLJobDescription.getOSTypes(), JSDLJobDescription.getCPUArchitectures());
     internal.add( this.hostsPage );
-//    this.resourcesPage = new ResourcesNewJobWizardPage( "Job resources", JSDLJobDescription.getOSTypes(), JSDLJobDescription.getCPUArchitectures() );
-//    internal.add( this.resourcesPage );
+    this.resourcesPage = new ResourcesNewJobWizardPage( "Job resources" );
+    internal.add( this.resourcesPage );
     this.executablePage = new ExecutableNewJobWizardPage( Messages.getString( "NewJobWizard.executablePageName" ), internal ); //$NON-NLS-1$
     addPage( this.executablePage );
   
@@ -239,7 +242,31 @@ public class NewJobWizard extends Wizard implements INewWizard {
       jsdl.setCPUArchitecture( this.hostsPage.getArch());
     }
     jsdl.addCandidateHosts( this.hostsPage.getCandidateHosts() );
+    
+    for (Range range: this.resourcesPage.getIndividualCPUSpeedRanges()){
+      jsdl.setInidividialCPUSpeedRange(range.getStart(), range.getEnd(), true);
+    }
+    
+    for (ValueWithEpsilon value: this.resourcesPage.getIndividualCPUSValues()){
+      jsdl.setIndividualCPUSpeedValue(value.getValue(), value.getEpsilon());
+    }
    
+    for (Range range: this.resourcesPage.getTotalCPUCount()){
+      jsdl.setTotalCPUCount( range.getStart(), range.getEnd(), true );
+    }
+    
+    for (ValueWithEpsilon value: this.resourcesPage.getTotalCPUCountValues()){
+      jsdl.setTotalCPUCountValue(value.getValue(), value.getEpsilon());
+    }
+    
+    for (Range range: this.resourcesPage.getTotalPhysicalMemory()){
+      jsdl.setTotalPhysicalMemory( range.getStart(), range.getEnd(), true );
+    }
+    
+    for (ValueWithEpsilon value: this.resourcesPage.getTotalPhysicalMemoryValues()){
+      jsdl.setTotalPhysicalMemoryValue(value.getValue(), value.getEpsilon());
+    }
+    
   }
   class FirstPage extends WizardNewFileCreationPage {
 

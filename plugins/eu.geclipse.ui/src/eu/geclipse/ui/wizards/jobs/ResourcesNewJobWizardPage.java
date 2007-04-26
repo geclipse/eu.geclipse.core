@@ -1,243 +1,355 @@
 package eu.geclipse.ui.wizards.jobs;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import org.eclipse.jface.preference.IPreferenceStore;
+import java.util.Map;
+import org.eclipse.jface.viewers.IStructuredContentProvider;
+import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
-import eu.geclipse.ui.dialogs.gexplorer.GridFileDialog;
-import eu.geclipse.ui.widgets.NumberVerifier;
-import eu.geclipse.ui.widgets.StoredCombo;
+import eu.geclipse.ui.internal.wizards.jobs.JSDLExactValueTab;
+import eu.geclipse.ui.internal.wizards.jobs.JSDLRangesTab;
+import eu.geclipse.ui.internal.wizards.jobs.Range;
+import eu.geclipse.ui.internal.wizards.jobs.ValueWithEpsilon;
 
+public class ResourcesNewJobWizardPage extends WizardPage {
 
-public class ResourcesNewJobWizardPage extends WizardPage{
-
-  private List<String> OSNames;
-  private List<String> cpuArchs;
   
-  private Combo cpuList;
-  private Text cpuIndivdSpeed;
-  private Text cpuTotalCount;
-  private Text diskSpaceIndividual;
-  private Text diskSpaceTotal;
-  private Text physicalMemory;
-  private Text network;
+  private JSDLRangesTab tab;
+  private JSDLRangesTab tabCPUCount;
+  private JSDLRangesTab totalPhysicalMemory;
+  private JSDLExactValueTab tabVal;
+  private JSDLExactValueTab tabCPUCountValues;
+  private JSDLExactValueTab totalPhysicalMemoryValues;
 
-  protected ResourcesNewJobWizardPage( String pageName, List<String> names, List<String> cpuArchitectures) {
+  protected ResourcesNewJobWizardPage( final String pageName
+                                        )
+  {
     super( pageName );
-    this.OSNames = names;
-    this.cpuArchs = cpuArchitectures;
+    
     this.setTitle( "Resources" );
     this.setDescription( "Set details of resources required by your job to execute." );
   }
 
   public void createControl( Composite parent ) {
     Composite mainComp = new Composite( parent, SWT.NONE );
-           
     GridLayout gLayout = new GridLayout( 3, false );
     gLayout.horizontalSpacing = 10;
     gLayout.verticalSpacing = 12;
     mainComp.setLayout( gLayout );
-    
     GridData layout = new GridData();
-    Label cpuLabel = new Label( mainComp, GridData.HORIZONTAL_ALIGN_BEGINNING
-                                           | GridData.VERTICAL_ALIGN_CENTER | SWT.BOLD );
-    cpuLabel.setText( "CPU" ); 
-    layout.horizontalAlignment = GridData.FILL;
-    layout.horizontalSpan = 3;
-    cpuLabel.setLayoutData( layout );
-    
-    Label cpuArch = new Label(mainComp, GridData.HORIZONTAL_ALIGN_BEGINNING
-                              | GridData.VERTICAL_ALIGN_CENTER );
-    cpuArch.setText( "Architecture" );
+    // Label cpuLabel = new Label( mainComp, GridData.HORIZONTAL_ALIGN_BEGINNING
+    // | GridData.VERTICAL_ALIGN_CENTER | SWT.BOLD );
+    // cpuLabel.setText( "CPU" );
+    // layout.horizontalAlignment = GridData.FILL;
+    // layout.horizontalSpan = 3;
+    // cpuLabel.setLayoutData( layout );
+    //    
+    // Label cpuArch = new Label(mainComp, GridData.HORIZONTAL_ALIGN_BEGINNING
+    // | GridData.VERTICAL_ALIGN_CENTER );
+    // cpuArch.setText( "Architecture" );
+    // layout = new GridData();
+    // layout.horizontalAlignment = GridData.FILL;
+    // layout.horizontalIndent = 20;
+    // cpuArch.setLayoutData( layout );
+    //    
+    // this.cpuList = new Combo ( mainComp, SWT.SINGLE );
+    // for (String cpu: this.cpuArchs){
+    // this.cpuList.add( cpu );
+    // }
+    // layout = new GridData();
+    // layout.horizontalAlignment = GridData.FILL;
+    // layout.horizontalSpan = 2;
+    // this.cpuList.setLayoutData( layout );
+    Label cpuSpeedLabel = new Label( mainComp,
+                                     GridData.HORIZONTAL_ALIGN_BEGINNING
+                                         | GridData.VERTICAL_ALIGN_CENTER );
+    cpuSpeedLabel.setText( "Individual CPU speed" );
     layout = new GridData();
     layout.horizontalAlignment = GridData.FILL;
     layout.horizontalIndent = 20;
-    cpuArch.setLayoutData( layout );
     
-    this.cpuList = new Combo ( mainComp, SWT.SINGLE );
-    for (String cpu: this.cpuArchs){
-      this.cpuList.add( cpu );
-    }
-    layout = new GridData();
-    layout.horizontalAlignment = GridData.FILL;
-    layout.horizontalSpan = 2;
-    this.cpuList.setLayoutData( layout );
-    
-    Label cpuSpeedLabel = new Label(mainComp, GridData.HORIZONTAL_ALIGN_BEGINNING
-                                    | GridData.VERTICAL_ALIGN_CENTER );
-    cpuSpeedLabel.setText( "Individual speed" );
-    layout = new GridData();
-    layout.horizontalAlignment = GridData.FILL;
-    layout.horizontalIndent = 20;
     cpuSpeedLabel.setLayoutData( layout );
+    HashMap<String, String> temp = new HashMap<String, String>();
+    temp.put( "Start", "Start" );
+    temp.put( "End", "End" );
+    this.tab = new JSDLRangesTab( new RangeContentProvider(),
+                                  new RangeLabelProvider(),
+                                  temp,
+                                  30,
+                                  50 );
+    tab.createControl( mainComp );
     
-    this.cpuIndivdSpeed = new Text(mainComp, SWT.BORDER);
-    layout = new GridData();
-    layout.horizontalAlignment = GridData.FILL;
-    layout.horizontalSpan = 2;
-    this.cpuIndivdSpeed.setLayoutData( layout );
-    this.cpuIndivdSpeed.addListener( SWT.Verify, new NumberVerifier() );
+    HashMap<String, String> temp1 = new HashMap<String, String>();
+    temp1.put( "Value", "Value" );
+    temp1.put( "Epsilon", "Epsilon" );
+    this.tabVal = new JSDLExactValueTab( new ValueWithEpsilonContentProvider(),
+                                  new ValueWithEpsilonLabelProvider(),
+                                  temp1,
+                                  30,
+                                  50 );
+    tabVal.createControl( mainComp );
     
-    Label cpuCountLabel = new Label(mainComp, GridData.HORIZONTAL_ALIGN_BEGINNING
-                                    | GridData.VERTICAL_ALIGN_CENTER );
-    cpuCountLabel.setText( "Total count" );
-    layout = new GridData();
-    layout.horizontalAlignment = GridData.FILL;
-    layout.horizontalIndent = 20;
-    cpuCountLabel.setLayoutData( layout );
-        
-    
-    this.cpuTotalCount = new Text(mainComp, SWT.BORDER);
-    layout = new GridData();
-    layout.horizontalAlignment = GridData.FILL;
-    layout.horizontalSpan = 2;
-    this.cpuTotalCount.setLayoutData( layout );
-    this.cpuTotalCount.addListener( SWT.Verify, new NumberVerifier() );
-    
-    Label separator1 = new Label(mainComp, SWT.SEPARATOR | SWT.HORIZONTAL);
-    layout = new GridData();
-    layout.horizontalAlignment = GridData.FILL;
-    layout.horizontalSpan = 3;
-    separator1.setLayoutData( layout );
-    
-    
-    
-    
-    
-    Label diskSpaceLabel = new Label(mainComp, GridData.HORIZONTAL_ALIGN_BEGINNING
-                                     | GridData.VERTICAL_ALIGN_CENTER );
-    diskSpaceLabel.setText( "Disk space" );
-    layout = new GridData();
-    layout.horizontalAlignment = GridData.FILL;
-    layout.horizontalSpan = 3;
-    diskSpaceLabel.setLayoutData( layout );
-    
-    Label diskSpaceIndividualLabel = new Label(mainComp, GridData.HORIZONTAL_ALIGN_BEGINNING
-                                               | GridData.VERTICAL_ALIGN_CENTER );
-    diskSpaceIndividualLabel.setText( "Individual" );
+    Label totalCPUCountLabel = new Label( mainComp,
+                                          GridData.HORIZONTAL_ALIGN_BEGINNING
+                                              | GridData.VERTICAL_ALIGN_CENTER );
+    totalCPUCountLabel.setText( "Total CPU Count" );
     layout = new GridData();
     layout.horizontalAlignment = GridData.FILL;
     layout.horizontalIndent = 20;
-    diskSpaceIndividualLabel.setLayoutData( layout );
+    totalCPUCountLabel.setLayoutData( layout );
+    this.tabCPUCount = new JSDLRangesTab( new RangeContentProvider(),
+                                          new RangeLabelProvider(),
+                                          temp,
+                                          30,
+                                          50 );
+    this.tabCPUCount.createControl( mainComp );
     
-    this.diskSpaceIndividual = new Text(mainComp, SWT.BORDER);
-    layout = new GridData();
-    layout.horizontalAlignment = GridData.FILL;
-    layout.horizontalSpan = 2;
-    this.diskSpaceIndividual.setLayoutData( layout );
-    this.diskSpaceIndividual.addListener( SWT.Verify, new NumberVerifier() );
+    this.tabCPUCountValues = new JSDLExactValueTab( new ValueWithEpsilonContentProvider(),
+                                                    new ValueWithEpsilonLabelProvider(),
+                                                    temp1,
+                                                    30,
+                                                    50 );
+    this.tabCPUCountValues.createControl( mainComp );
     
-    Label diskSpaceTotalLabel = new Label(mainComp, GridData.HORIZONTAL_ALIGN_BEGINNING
-                                          | GridData.VERTICAL_ALIGN_CENTER );
-    diskSpaceTotalLabel.setText( "Total" );
-    layout = new GridData();
-    layout.horizontalAlignment = GridData.FILL;
-    layout.horizontalIndent = 20;
-    diskSpaceTotalLabel.setLayoutData( layout );
-    
-    this.diskSpaceTotal = new Text(mainComp, SWT.BORDER);
-    layout = new GridData();
-    layout.horizontalAlignment = GridData.FILL;
-    layout.horizontalSpan = 2;
-    this.diskSpaceTotal.setLayoutData( layout );
-    this.diskSpaceTotal.addListener( SWT.Verify, new NumberVerifier() );
-    
-    Label separator2 = new Label(mainComp, SWT.SEPARATOR | SWT.HORIZONTAL);
-    layout = new GridData();
-    layout.horizontalAlignment = GridData.FILL;
-    layout.horizontalSpan = 3;
-    separator2.setLayoutData( layout );
-    
-    
-    Label otherLabel = new Label( mainComp, GridData.HORIZONTAL_ALIGN_BEGINNING
-                                           | GridData.VERTICAL_ALIGN_CENTER  );
-    otherLabel.setText( "Other" );
-    layout = new GridData();
-    layout.horizontalAlignment = GridData.FILL;
-    layout.horizontalSpan = 3;
-    otherLabel.setLayoutData( layout );
-    
-    Label physicalMemoryLabel = new Label(mainComp, GridData.HORIZONTAL_ALIGN_BEGINNING
-                                          | GridData.VERTICAL_ALIGN_CENTER );
-    physicalMemoryLabel.setText( "Toatal physical memory" );
+    Label totalPhysicalMemoryLabel = new Label( mainComp,
+                                          GridData.HORIZONTAL_ALIGN_BEGINNING
+                                              | GridData.VERTICAL_ALIGN_CENTER );
+    totalPhysicalMemoryLabel.setText( "Total physical memory" );
     layout = new GridData();
     layout.horizontalAlignment = GridData.FILL;
     layout.horizontalIndent = 20;
-    physicalMemoryLabel.setLayoutData( layout );
+    totalPhysicalMemoryLabel.setLayoutData( layout );
     
-    this.physicalMemory = new Text(mainComp, SWT.BORDER);
-    layout = new GridData();
-    layout.horizontalAlignment = GridData.FILL;
-    layout.horizontalSpan = 2;
-    this.physicalMemory.setLayoutData( layout );
-    this.physicalMemory.addListener( SWT.Verify, new NumberVerifier() );
+    this.totalPhysicalMemory = new JSDLRangesTab( new RangeContentProvider(),
+                                          new RangeLabelProvider(),
+                                          temp,
+                                          30,
+                                          50 );
+    this.totalPhysicalMemory.createControl( mainComp );
     
-    Label networkLabel = new Label(mainComp, GridData.HORIZONTAL_ALIGN_BEGINNING
-                                   | GridData.VERTICAL_ALIGN_CENTER );
-    networkLabel.setText( "Individual Network Bandwidth" );
-    layout = new GridData();
-    layout.horizontalAlignment = GridData.FILL;
-    layout.horizontalIndent = 20;
-    networkLabel.setLayoutData( layout );
+    this.totalPhysicalMemoryValues = new JSDLExactValueTab( new ValueWithEpsilonContentProvider(),
+                                                    new ValueWithEpsilonLabelProvider(),
+                                                    temp1,
+                                                    30,
+                                                    50 );
+    this.totalPhysicalMemoryValues.createControl( mainComp );
     
-    this.network = new Text(mainComp, SWT.BORDER);
-    layout = new GridData();
-    layout.horizontalAlignment = GridData.FILL;
-    layout.horizontalSpan = 2;
-    this.network.setLayoutData( layout );
-    this.network.addListener( SWT.Verify, new NumberVerifier() );
     
     setControl( mainComp );
-    
   }
 
-  
-  public String getCpuIndivdSpeed() {
-    return this.cpuIndivdSpeed.getText();
+  @SuppressWarnings("unchecked")
+  public ArrayList<Range> getIndividualCPUSpeedRanges() {
+    return this.tab.getInput();
   }
+  
+  @SuppressWarnings("unchecked")
+  public ArrayList<Range> getTotalCPUCount(){
+    return this.tabCPUCount.getInput();
+  }
+  
+  @SuppressWarnings("unchecked")
+  public ArrayList<Range> getTotalPhysicalMemory(){
+    return this.totalPhysicalMemory.getInput();
+  }
+  
+  @SuppressWarnings("unchecked")
+  public ArrayList<ValueWithEpsilon> getIndividualCPUSValues(){
+    return this.tabVal.getInput();
+  }
+  
+  @SuppressWarnings("unchecked")
+  public ArrayList<ValueWithEpsilon> getTotalCPUCountValues(){
+    return this.tabCPUCountValues.getInput();
+  }
+  
+  @SuppressWarnings("unchecked")
+  public ArrayList<ValueWithEpsilon> getTotalPhysicalMemoryValues(){
+    return this.totalPhysicalMemoryValues.getInput();
+  }
+  
+  protected class RangeContentProvider implements IStructuredContentProvider {
 
-  
-  public String getCpuList() {
-    return this.cpuList.getText();
-  }
+    public Object[] getElements( final Object inputElement ) {
+      Range[] elements = new Range[ 0 ];
+      Map<String, String> m = new HashMap<String, String>();
+      if( !m.isEmpty() ) {
+        elements = new Range[ m.size() ];
+        String[] varStarts = new String[ m.size() ];
+        m.keySet().toArray( varStarts );
+        for( int i = 0; i < m.size(); i++ ) {
+          // elements[ i ] = new OutputFile( varNames[ i ],
+          // m.get( varNames[ i ] ) );
+        }
+      }
+      return elements;
+    }
 
-  
-  public String getCpuTotalCount() {
-    return this.cpuTotalCount.getText();
-  }
+    public void dispose() {
+      // nothing
+    }
 
-  
-  public String getDiskSpaceIndividual() {
-    return this.diskSpaceIndividual.getText();
-  }
+    public void inputChanged( final Viewer viewer,
+                              final Object oldInput,
+                              final Object newInput )
+    {
+      if( newInput == null ) {
+        // do nothing
+      } else {
+        if( viewer instanceof TableViewer ) {
+          TableViewer tableViewer = ( TableViewer )viewer;
+          if( tableViewer.getTable().isDisposed() ) {
+            // do nothing
+          } else {
+            tableViewer.setSorter( new ViewerSorter() {
 
-  
-  public String getDiskSpaceTotal() {
-    return this.diskSpaceTotal.getText();
+              @Override
+              public int compare( final Viewer iviewer,
+                                  final Object element1,
+                                  final Object element2 )
+              {
+                int result = -1;
+                if( element1 == null ) {
+                  result = -1;
+                } else if( element2 == null ) {
+                  result = 1;
+                } // else {
+                // result = ( ( Range )element1 ).getName()
+                // .compareToIgnoreCase( ( ( Range )element2 ).getName() );
+                // }
+                return result;
+              }
+            } );
+          }
+        }
+      }
+    }
   }
+  class RangeLabelProvider extends LabelProvider implements ITableLabelProvider
+  {
 
-  
-  public String getNetwork() {
-    return this.network.getText();
-  }
+    public String getColumnText( final Object element, final int columnIndex ) {
+      String result = null;
+      if( element != null ) {
+        Range var = ( Range )element;
+        switch( columnIndex ) {
+          case 0: // type
+            result = Double.valueOf( var.getStart() ).toString();
+          break;
+          case 1: // name
+            result = Double.valueOf( var.getEnd() ).toString();
+          break;
+        }
+      }
+      return result;
+    }
 
-  
-  public String getPhysicalMemory() {
-    return this.physicalMemory.getText();
+    public Image getColumnImage( final Object element, final int columnIndex ) {
+      if( columnIndex == 0 ) {
+        // return
+        // DebugPluginImages.getImage(IDebugUIConstants.IMG_OBJS_ENV_VAR);
+      }
+      return null;
+    }
   }
   
+  //////providewrs for ValueWithEpsilon
+  protected class ValueWithEpsilonContentProvider implements IStructuredContentProvider {
+
+    public Object[] getElements( final Object inputElement ) {
+      ValueWithEpsilon[] elements = new ValueWithEpsilon[ 0 ];
+      Map<String, String> m = new HashMap<String, String>();
+      if( !m.isEmpty() ) {
+        elements = new ValueWithEpsilon[ m.size() ];
+        String[] varStarts = new String[ m.size() ];
+        m.keySet().toArray( varStarts );
+        for( int i = 0; i < m.size(); i++ ) {
+          // elements[ i ] = new OutputFile( varNames[ i ],
+          // m.get( varNames[ i ] ) );
+        }
+      }
+      return elements;
+    }
+
+    public void dispose() {
+      // nothing
+    }
+
+    public void inputChanged( final Viewer viewer,
+                              final Object oldInput,
+                              final Object newInput )
+    {
+      if( newInput == null ) {
+        // do nothing
+      } else {
+        if( viewer instanceof TableViewer ) {
+          TableViewer tableViewer = ( TableViewer )viewer;
+          if( tableViewer.getTable().isDisposed() ) {
+            // do nothing
+          } else {
+            tableViewer.setSorter( new ViewerSorter() {
+
+              @Override
+              public int compare( final Viewer iviewer,
+                                  final Object element1,
+                                  final Object element2 )
+              {
+                int result = -1;
+                if( element1 == null ) {
+                  result = -1;
+                } else if( element2 == null ) {
+                  result = 1;
+                } // else {
+                // result = ( ( Range )element1 ).getName()
+                // .compareToIgnoreCase( ( ( Range )element2 ).getName() );
+                // }
+                return result;
+              }
+            } );
+          }
+        }
+      }
+    }
+  }
+  class ValueWithEpsilonLabelProvider extends LabelProvider implements ITableLabelProvider
+  {
+
+    public String getColumnText( final Object element, final int columnIndex ) {
+      String result = null;
+      if( element != null ) {
+        ValueWithEpsilon var = ( ValueWithEpsilon )element;
+        switch( columnIndex ) {
+          case 0: // type
+            result = Double.valueOf( var.getValue() ).toString();
+          break;
+          case 1: // name
+            result = Double.valueOf( var.getEpsilon() ).toString();
+          break;
+        }
+      }
+      return result;
+    }
+
+    public Image getColumnImage( final Object element, final int columnIndex ) {
+      if( columnIndex == 0 ) {
+        // return
+        // DebugPluginImages.getImage(IDebugUIConstants.IMG_OBJS_ENV_VAR);
+      }
+      return null;
+    }
+  }
   
 }

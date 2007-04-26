@@ -63,24 +63,26 @@ public abstract class TabComponent<T> extends AbstractLaunchConfigurationTab{
   private ITableLabelProvider labelProvider;
   private String[] tabColumnsHeaders ;
   private String[] tabColumnsProperties;
-    
+  private int tabHeight;
+  private int tabWidth;
 
   /**
    * @param contentProvider
    * @param labelProvider
    * @param propertiesVsHearders
    */
-  public TabComponent(final IStructuredContentProvider contentProvider, final ITableLabelProvider labelProvider, final HashMap<String, String> propertiesVsHearders) {
+  public TabComponent(final IStructuredContentProvider contentProvider, final ITableLabelProvider labelProvider, final HashMap<String, String> propertiesVsHearders, final int hight, final int width) {
     this.contentProvider = contentProvider;
+    this.tabHeight = hight;
+    this.tabWidth = width;
     this.labelProvider = labelProvider;
     this.tabColumnsHeaders = new String [ propertiesVsHearders.size() ];
     this.tabColumnsProperties = new String [ propertiesVsHearders.size() ]; 
     this.tabColumnsHeaders = propertiesVsHearders.values().toArray(this.tabColumnsHeaders);
     this.tabColumnsProperties = propertiesVsHearders.keySet().toArray(this.tabColumnsProperties);
-    //TODO katis - ??
     this.tabColumnsLayouts = new ColumnLayoutData[ this.tabColumnsHeaders.length ];
     for (int i = 0; i < this.tabColumnsHeaders.length; i++){
-      this.tabColumnsLayouts[ i ] = new ColumnWeightData( 50 );
+      this.tabColumnsLayouts[ i ] = new ColumnWeightData( 50, this.tabWidth, false );
     }
   }
 
@@ -94,13 +96,14 @@ public abstract class TabComponent<T> extends AbstractLaunchConfigurationTab{
     mainComposite.setLayoutData( gridData );
     mainComposite.setFont( parent.getFont() );
     createTable( mainComposite );
+    
     createTableButtons( mainComposite );
     setLabels();
     Dialog.applyDialogFont( mainComposite );
     
   }
 
-
+  
  private void createTable( final Composite parent ) {
     Font font = parent.getFont();
     // Create table composite
@@ -109,8 +112,9 @@ public abstract class TabComponent<T> extends AbstractLaunchConfigurationTab{
     layout.marginHeight = 0;
     layout.marginWidth = 0;
     layout.numColumns = 1;
-    GridData gridData = new GridData( GridData.FILL_BOTH );
-    gridData.heightHint = 350;
+    GridData gridData = new GridData( GridData.FILL_VERTICAL );
+    gridData.heightHint = this.tabHeight;
+    gridData.widthHint = ( this.tabColumnsHeaders.length * this.tabWidth ) + 30;
     tableComposite.setLayout( layout );
     tableComposite.setLayoutData( gridData );
     tableComposite.setFont( font );
