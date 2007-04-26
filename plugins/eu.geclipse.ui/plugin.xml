@@ -166,14 +166,7 @@
             priority="999"/>
    </extension>
    <extension
-         point="org.eclipse.ui.editors">
-      <editor
-            class="eu.geclipse.ui.editors.JobDescriptionEditor"
-            default="true"
-            extensions="jsdl"
-            icon="icons/obj16/jsdl_file_obj.gif"
-            id="eu.geclipse.ui.jobdescriptioneditor"
-            name="%editor.gridJobDescriptionEditor"/>
+         point="org.eclipse.ui.editors">     
  	  <editor
             name="JSDL Multi-Page Editor"
             extensions="jsdl"
