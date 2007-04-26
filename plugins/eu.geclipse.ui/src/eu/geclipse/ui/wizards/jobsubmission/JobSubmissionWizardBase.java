@@ -80,16 +80,17 @@ public abstract class JobSubmissionWizardBase extends Wizard implements IInitali
 
         } );
       } catch( InvocationTargetException itExc ) {
-        Throwable cause = itExc.getCause();
-        String message = cause.getMessage();
-        ( ( WizardPage ) container.getCurrentPage() ).setErrorMessage( message );
+        NewProblemDialog.openProblem( getShell(),
+                                      "Job submission failed",
+                                      "Job submission failed",
+                                      itExc.getCause() );
         result = false;
-        Activator.logException( itExc );
       } catch( InterruptedException intExc ) {
-        String message = intExc.getMessage();
-        ( ( WizardPage ) container.getCurrentPage() ).setErrorMessage( message );
+        NewProblemDialog.openProblem( getShell(),
+                                      "Job submission interrupted",
+                                      "Job submission interrupted",
+                                      intExc );
         result = false;
-        Activator.logException( intExc );
       }
     }
     return result;
@@ -109,7 +110,7 @@ public abstract class JobSubmissionWizardBase extends Wizard implements IInitali
     descPath = descPath.removeFirstSegments( projPath.segmentCount() );
 
     IPath jobPath = projPath.append( IGridProject.DIR_JOBS );
-    if ( descPath.segment( 0 ).equals( IGridProject.DIR_JOBDESCRIPTIONS ) ) {
+    if ( IGridProject.DIR_JOBDESCRIPTIONS.equals( descPath.segment( 0 ) ) ) {
       jobPath = jobPath.append( descPath.removeFirstSegments( 1 ) );
     }
 

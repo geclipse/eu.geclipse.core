@@ -15,6 +15,7 @@
 
 package eu.geclipse.ui.dialogs;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IStatus;
@@ -72,6 +73,8 @@ public class NewProblemDialog extends ErrorDialog {
    */
   private SolutionRegistry solutionRegistry;
   
+  private Throwable throwable;
+  
   /**
    * Create a new problem dialog from the specfied parameters.
    * 
@@ -96,9 +99,10 @@ public class NewProblemDialog extends ErrorDialog {
     super( parentShell, dialogTitle, message, getStatus( throwable ),
            IStatus.OK | IStatus.INFO | IStatus.WARNING | IStatus.ERROR );
     this.problem
-      = ( throwable instanceof GridException )
+      = ( throwable != null ) && ( throwable instanceof GridException )
       ? ( ( GridException ) throwable ).getProblem()
       : null;
+    this.throwable = throwable;
     this.solutionRegistry = solutionRegistry;
     if ( this.solutionRegistry == null ) {
       this.solutionRegistry = UISolutionRegistry.getRegistry( this.getShell() );
@@ -200,12 +204,18 @@ public class NewProblemDialog extends ErrorDialog {
       this.messageLabel.setLayoutData( gData );
     }
     
-    if ( this.problem != null ) {
+    if ( ( this.problem != null ) || ( this.throwable != null )) {
     
       List< ISolution > solutions
-        = this.problem.getSolutions( this.solutionRegistry );
+        = this.problem != null
+        ? this.problem.getSolutions( this.solutionRegistry )
+        : new ArrayList< ISolution >();
       
-      Throwable exc = this.problem.getException();
+      Throwable exc
+        = this.problem != null
+        ? this.problem.getException()
+        : this.throwable;
+        
       if ( exc != null ) {
         solutions.add( new LogExceptionSolution( exc ) );
       }
@@ -274,10 +284,10 @@ public class NewProblemDialog extends ErrorDialog {
         message = Messages.getString("NewProblemDialog.no_further_info"); //$NON-NLS-1$
       }
       res = new Status( IStatus.ERROR,
-                           Activator.PLUGIN_ID,
-                           IStatus.OK,
-                           message,
-                           throwable );
+                        Activator.PLUGIN_ID,
+                        IStatus.OK,
+                        message,
+                        throwable );
     }
     return res;
   }
