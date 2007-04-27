@@ -396,7 +396,7 @@ public class JSDLJobDescription
   }
   
   /**
-   * Retruns list of values of jsdl-posix:Argument elements in jsdl-posix:Application
+   * Returns list of values of jsdl-posix:Argument elements in jsdl-posix:Application
    * @return list of values of jsdl-posix:Argument or null if no jsdl-posix:Argument elements are defined
    */
   public List<String> getExecutableArguments(){
@@ -417,14 +417,21 @@ public class JSDLJobDescription
   public String getCpuArchitectureName() {
     String architectureNameString = null;
     DocumentRoot dRoot = getDocumentRoot();
+    
     if( dRoot != null
-        && dRoot.getCPUArchitecture() != null
-        && dRoot.getCPUArchitecture().getCPUArchitectureName() != null )
-    {
-      architectureNameString = dRoot.getCPUArchitecture()
+    && dRoot.getJobDefinition() != null
+    && dRoot.getJobDefinition().getJobDescription() != null
+    && dRoot.getJobDefinition().getJobDescription().getResources() != null
+    && dRoot.getJobDefinition().getJobDescription().getResources().getCPUArchitecture() != null
+    && dRoot.getJobDefinition().getJobDescription().getResources().getCPUArchitecture().getCPUArchitectureName() != null ) {
+      architectureNameString = dRoot.getJobDefinition()
+        .getJobDescription()
+        .getResources()
+        .getCPUArchitecture()
         .getCPUArchitectureName()
         .getName();
     }
+    
     return architectureNameString;
   }
 
@@ -437,6 +444,7 @@ public class JSDLJobDescription
     if( dRoot != null && dRoot.getFileSystemType() != null ) {
       typeString = dRoot.getFileSystemType().getName();
     }
+
     return typeString;
   }
 
@@ -470,9 +478,24 @@ public class JSDLJobDescription
   public String getOSTypeName() {
     String nameString = null;
     DocumentRoot dRoot = getDocumentRoot();
-    if( dRoot != null && dRoot.getOperatingSystemName() != null ) {
-      dRoot.getOperatingSystemName().getName();
+    
+    if( dRoot != null
+        && dRoot.getJobDefinition() != null
+        && dRoot.getJobDefinition().getJobDescription() != null
+        && dRoot.getJobDefinition().getJobDescription().getResources() != null
+        && dRoot.getJobDefinition().getJobDescription().getResources().getOperatingSystem() != null
+        && dRoot.getJobDefinition().getJobDescription().getResources().getOperatingSystem().getOperatingSystemType() != null
+        && dRoot.getJobDefinition().getJobDescription().getResources().getOperatingSystem().getOperatingSystemType().getOperatingSystemName() != null )
+    {
+      nameString = dRoot.getJobDefinition()
+        .getJobDescription()
+        .getResources()
+        .getOperatingSystem()
+        .getOperatingSystemType()
+        .getOperatingSystemName()
+        .getName(); 
     }
+    
     return nameString;
   }
 
@@ -482,9 +505,19 @@ public class JSDLJobDescription
   public String getOSVersion() {
     String versionString = null;
     DocumentRoot dRoot = getDocumentRoot();
-    if( dRoot != null ) {
-      versionString = dRoot.getOperatingSystemVersion();
+    
+    if( dRoot != null
+        && dRoot.getJobDefinition() != null
+        && dRoot.getJobDefinition().getJobDescription() != null
+        && dRoot.getJobDefinition().getJobDescription().getResources() != null
+        && dRoot.getJobDefinition().getJobDescription().getResources().getOperatingSystem() != null )
+    {
+      versionString = dRoot.getJobDefinition()
+      .getJobDescription()
+      .getResources()
+      .getOperatingSystem().getOperatingSystemVersion();
     }
+
     return versionString;
   }
   
