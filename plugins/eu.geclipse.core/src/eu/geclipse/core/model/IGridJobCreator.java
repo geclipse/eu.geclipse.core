@@ -13,33 +13,30 @@
  *    Mathias Stuempert - initial API and implementation
  *    Pawel Wolniewicz
  *****************************************************************************/
-
 package eu.geclipse.core.model;
 
-
 /**
- * Specialised interface for the creation of jobs for the grid.
- * Offers also the possibility for submitting the job.
+ * Specialised interface for the creation of jobs for the grid. Offers also the
+ * possibility for submitting the job.
  */
 public interface IGridJobCreator extends IGridElementCreator {
-  
+
   /**
-   * Test if this creator can create a job from the specified job
-   * description.
+   * Test if this creator can create a job from the specified job description.
    * 
    * @param description The description from which to create the job.
    * @return True if a job can be created from the specified description.
    */
   public boolean canCreate( final IGridJobDescription description );
-  
-  
-  /**
-   * TODO pawel
-   * 
-   * @param parent TODO pawel
-   * @param id TODO pawel
-   * @throws GridModelException TODO pawel
-   */
-  public void create( final IGridContainer parent, IGridJobID id ) throws GridModelException;
 
+  /**
+   * Creates GridJob and add this to GridProjectView. This method is called
+   * after successfull job submission.
+   * 
+   * @param parent - The porent node in GridProjectView
+   * @param id - Identifier of job
+   * @throws GridModelException
+   */
+  public void create( final IGridContainer parent, IGridJobID id )
+    throws GridModelException;
 }
