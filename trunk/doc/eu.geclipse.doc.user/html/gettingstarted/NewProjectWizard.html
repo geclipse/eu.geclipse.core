@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css"> 
+	<LINK REL="STYLESHEET" HREF="../../book.css" CHARSET="ISO-8859-1" TYPE="text/css"> 
+	<title>g-Eclipse - Create a new Grid Project </title>
+    <script language="JavaScript" src="PLUGINS_ROOT/org.eclipse.help/livehelp.js"> </script>
+</head>
+
+<body BGCOLOR="#ffffff">
+<h1>g-Eclipse - Create a new Grid Project </h1>
+After your personal preferences have been completed in the previous step
+and you have provided g-Eclipse with information on how you want to 
+authenticate yourself on the Grid, you are ready to create your first Grid Project.
+
+<p>
+Your Desktop might look similar to the image in figure 1. Once you complete the
+steps described here the leftmost pane (see figure 6) will contain a tree-view of your 
+created project called the 
+<a class="command-link" href='javascript:executeCommand("org.eclipse.ui.views.showView(org.eclipse.ui.views.showView.viewId=eu.geclipse.ui.views.gridProjectView)")'>
+<img src="PLUGINS_ROOT/org.eclipse.help/command_link.png">
+<b>Grid Project</b></a> view.<br><br>
+<img src="images/gEclipseStartState.jpg" alt="A screenshot of the empty g-Eclipse perspective" width="800">
+<br>Figure 1: A screenshot of the empty g-Eclipse perspective<br><br>
+</p>
+
+<p> "Right Click" into that view and select
+<a class="command-link" href='javascript:executeCommand("org.eclipse.ui.newWizard(newWizardId=eu.geclipse.ui.wizards.gridProjectWizard)")'>
+<img src="PLUGINS_ROOT/org.eclipse.help/command_link.png">
+<b>New &gt; Grid Project</b></a> to launch the <b>New Grid Project Wizard</b>, 
+which is shown in figure 2. This wizard will help you create your first 
+g-Eclipse project.<br><br>
+<img src="images/wizard_NewGridProject.jpg" 
+alt="New Grid Project Wizard" width="500">
+<br>Figure 2: The New Grid Project Wizard<br>
+</p>
+
+<p>On the first page of the <b>New Grid-Project Wizard</b>, specify the name 
+you want your grid project to be called and the location where you want to 
+store its files on your local harddisk. For the location you may accept 
+the default settings. Then click the <b>Next</b> button to get to the 
+following page, shown in figure 3.</p>
+<br>
+<img src="images/wizard_NewGridProject_whenVOFinished.jpg" 
+alt="New Grid Project Wizard" width="500">
+<br>Figure 3: The New Grid Project Wizard<br>
+<p>This page asks you to choose your Virtual Organization (VO). 
+Select your VO from the list and click the <b>Next</b> button.
+If you have no VO available in the list, you can create a new one by clicking on 
+the <b>New VO</b> button, selecting the type of VO and clicking <b>Next</b>.
+<br><br><br>
+
+<img src="images/wizard_NewGridProject_specifyAttribsForNewVO.jpg" 
+alt="Attributes for VO" width="650">
+<br>Figure 4: Attributes for creating a new Virtual Organization<br><br>
+As figure 4 shows, for a new VO you are asked to provide the following information: 
+the Name , Host, Port, Host DN, Information System Endpoint, and the VO server URL. </p>
+Clicking the <b>Finish</b> Button will take you back to the VO specification 
+page where you can select from a list of available VO's. At this point you should see 
+something similar to figure 3. 
+
+<br><br> Click <b>Finish</b> and your newly created project will appear in the 
+"Grid Projects" View as shown in figure 6.<br><br>
+</p>
+<p>
+<img src="images/view_GridProjects_newProjectCreated.jpg" alt="New Grid Project tree appears in the 
+left side panel view" width="250">
+<br>Figure 6: New Grid Project tree in the panel view<br><br>
+</p>
+<p>
+It will contain three subfolders
+<ul>
+<li><b>Filesystems</b> - this directory will contain filesystems you will use from your grid jobs</li>
+<li><b>Job Descriptions</b> - this directory will contain descriptions of your jobs, which can be created with 
+the <a href="CreatingaJob.html">New Job Wizard</a> </li>
+<li><b>Jobs</b> - this directory will contain information about your past and present jobs running on the Grid</li>
+</ul>
+</p>
+
+<p><a href="../gettingstarted/maintopic.html">Back to Getting Started</a></p>
+<p><a href="../gettingstarted/CreatingaJob.html">Continue to Create a New Grid Job</a></p>
+
+</body>
+</html>
