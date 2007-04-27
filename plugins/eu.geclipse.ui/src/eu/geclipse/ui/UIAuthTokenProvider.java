@@ -18,9 +18,6 @@ package eu.geclipse.ui;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -41,6 +38,7 @@ import eu.geclipse.core.auth.CoreAuthTokenProvider;
 import eu.geclipse.core.auth.IAuthTokenProvider;
 import eu.geclipse.core.auth.IAuthenticationToken;
 import eu.geclipse.core.auth.IAuthenticationTokenDescription;
+import eu.geclipse.ui.dialogs.NewProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.wizards.wizardselection.ExtPointWizardSelectionListPage;
 
@@ -118,17 +116,11 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
         } catch( InterruptedException intExc ) {
           thr = intExc;
         }
-        if( thr != null ) {
-          IStatus status = new Status( IStatus.ERROR,
-                                       eu.geclipse.ui.internal.Activator.PLUGIN_ID,
-                                       IStatus.OK,
-                                       thr.getLocalizedMessage(),
-                                       thr );
-          ErrorDialog.openError( UIAuthTokenProvider.this.shell,
-                                 Messages.getString( "UIAuthTokenProvider.auth_token_error" ), //$NON-NLS-1$
-                                 Messages.getString( "UIAuthTokenProvider.token_activation_error" ), //$NON-NLS-1$
-                                 status );
-          eu.geclipse.ui.internal.Activator.logStatus( status );
+        if ( thr != null ) {
+          NewProblemDialog.openProblem( shell,
+                                        "Token activation error",
+                                        "Error while activating the current token",
+                                        thr );
         }
       }
     }
