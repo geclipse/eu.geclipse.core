@@ -63,8 +63,8 @@ public class Activator extends AbstractUIPlugin {
   /**
    * The id of the Grid3DView.
    */
-  public static final String ID_GRID_3D_VIEW
-    = "eu.geclipse.gridbench.views.Grid3DView"; //$NON-NLS-1$
+  //public static final String ID_GRID_3D_VIEW
+  //  = "eu.geclipse.gridbench.views.Grid3DView"; //$NON-NLS-1$
   
   /**
    * The id of the GVid view.
