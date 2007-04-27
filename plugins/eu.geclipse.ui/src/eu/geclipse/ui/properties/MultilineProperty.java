@@ -124,7 +124,7 @@ abstract public class MultilineProperty<ESourceType>
       Composite dlgComposite = ( Composite )super.createDialogArea( parent );
       this.valueText = new Text( dlgComposite, SWT.READ_ONLY
                                                | SWT.BORDER
-                                               | SWT.MULTI
+                                               | SWT.WRAP
                                                | SWT.H_SCROLL
                                                | SWT.V_SCROLL );
       if( this.valueString != null ) {
@@ -179,9 +179,17 @@ abstract public class MultilineProperty<ESourceType>
 
       private String removeNewLineChars( final String valueString ) {
         String result = valueString;
-        int newLineIndex = valueString.indexOf( "\r" ); //$NON-NLS-1$
-        if( newLineIndex > -1 ) {
-          result = valueString.substring( 0, newLineIndex ) + "..."; //$NON-NLS-1$
+        int nlIndex = -1;
+        
+        for( int index = 0; index < valueString.length() && nlIndex == -1 ; index++ ) {
+          if( valueString.charAt( index ) == '\r'
+            || valueString.charAt( index ) == '\n' ) {
+            nlIndex = index;
+          }
+        }
+        
+        if( nlIndex > -1 ) {
+          result = valueString.substring( 0, nlIndex ) + "..."; //$NON-NLS-1$
         }
         return result;
       }

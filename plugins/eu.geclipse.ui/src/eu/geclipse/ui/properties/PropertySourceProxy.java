@@ -90,7 +90,7 @@ class PropertySourceProxy implements IPropertySource {
     //  Editable properties not supported    
   }
   
-  AbstractPropertySource<?> findPropertySource( final Class<? extends AbstractPropertySource<?>> propertySourceClass ) {
+  private AbstractPropertySource<?> findPropertySource( final Class<? extends AbstractPropertySource<?>> propertySourceClass ) {
     AbstractPropertySource<?> propertySource = null;    
     Iterator<AbstractPropertySource<?>> iterator = this.propertySourcesList.iterator();    
     
