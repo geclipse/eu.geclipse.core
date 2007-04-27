@@ -168,11 +168,12 @@
    <extension
          point="org.eclipse.ui.editors">     
  	  <editor
-            name="JSDL Multi-Page Editor"
-            extensions="jsdl"
-            icon="icons/jsdlfile.gif"
-            class="eu.geclipse.ui.editors.JsdlMultiPageEditor"
-            id="eu.geclips.jsdl.multiedit.editors.JsdlMultiPageEditor"/>      
+          class="eu.geclipse.ui.editors.JsdlMultiPageEditor"
+          default="true"
+          extensions="jsdl"
+          icon="icons/jsdlfile.gif"
+          id="eu.geclips.jsdl.multiedit.editors.JsdlMultiPageEditor"
+          name="JSDL Multi-Page Editor"/>      
       <editor
             class="eu.geclipse.ui.editors.JobEditor"
             default="true"
