@@ -53,11 +53,6 @@
             name="%view.gridProject"/>
       <view
             category="eu.geclipse.ui.viewcategory"
-            class="eu.geclipse.ui.views.gexplorer.GExplorerView"
-            id="eu.geclipse.ui.views.gExplorer"
-            name="%view.gExplorer"/>
-      <view
-            category="eu.geclipse.ui.viewcategory"
             class="eu.geclipse.ui.views.GridJobView"
             icon="icons/eview16/jobs.gif"
             id="eu.geclipse.ui.views.jobView"
@@ -75,11 +70,6 @@
             icon="icons/job.gif"
             id="eu.geclipse.ui.views.jobdetails.JobDetailsView"
             name="%view.jobDetails"/>
-      <view
-            category="eu.geclipse.ui.viewcategory"
-            class="eu.geclipse.ui.views.GridTransferView"
-            id="eu.geclipse.ui.views.transferView"
-            name="Transfers"/>
    </extension>
    <extension
          point="org.eclipse.ui.perspectives">
@@ -168,11 +158,12 @@
    <extension
          point="org.eclipse.ui.editors">     
  	  <editor
-            name="JSDL Multi-Page Editor"
-            extensions="jsdl"
-            icon="icons/jsdlfile.gif"
-            class="eu.geclipse.ui.editors.JsdlMultiPageEditor"
-            id="eu.geclips.jsdl.multiedit.editors.JsdlMultiPageEditor"/>      
+          class="eu.geclipse.ui.editors.JsdlMultiPageEditor"
+          default="true"
+          extensions="jsdl"
+          icon="icons/jsdlfile.gif"
+          id="eu.geclips.jsdl.multiedit.editors.JsdlMultiPageEditor"
+          name="JSDL Multi-Page Editor"/>      
       <editor
             class="eu.geclipse.ui.editors.JobEditor"
             default="true"

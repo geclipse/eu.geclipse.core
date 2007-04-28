@@ -38,6 +38,11 @@ public class AuthenticationException
   public AuthenticationException( final int problemID ) {
     super( problemID );
   }
+  
+  public AuthenticationException( final int problemID,
+                                  final String description ) {
+    super( problemID, description );
+  }
 
   /**
    * Create a new Authentication Exception with the specified problem ID.
