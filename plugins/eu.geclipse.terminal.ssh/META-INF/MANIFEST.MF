@@ -8,7 +8,7 @@ Bundle-Vendor: %Bundle-Vendor
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
- org.eclipse.team.cvs.ssh2,
+ org.eclipse.jsch.core,
  com.jcraft.jsch,
  eu.geclipse.core,
  eu.geclipse.ui,

@@ -20,17 +20,20 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
+
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Preferences;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.wizard.WizardDialog;
+import org.eclipse.jsch.internal.core.IConstants;
+import org.eclipse.jsch.internal.core.JSchCorePlugin;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.team.internal.ccvs.ssh2.CVSSSH2Plugin;
-import org.eclipse.team.internal.ccvs.ssh2.ISSHContants;
+
 import com.jcraft.jsch.ChannelShell;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
+
 import eu.geclipse.core.IBidirectionalConnection;
 import eu.geclipse.core.portforward.ForwardType;
 import eu.geclipse.core.portforward.IForward;
@@ -43,11 +46,6 @@ import eu.geclipse.ui.widgets.IDropDownEntry;
 
 /**
  * A terminal factory which allows to open SSH connected terminals.
- * 
- * NOTE: Access rules have been defined to be able to access
- * org.eclipse.team.internal.ccvs.ssh2.CVSSSH2Plugin and
- * org.eclipse.team.internal.ccvs.ssh2.ISSHContants without warning which are
- * exports of the SSH2 CVS plugin but are in an internal package.
  */
 public class SshShell implements IDropDownEntry<ITerminalView>, ITerminalListener {
   private static final String SSH_HOME_DEFAULT = null;
@@ -60,9 +58,9 @@ public class SshShell implements IDropDownEntry<ITerminalView>, ITerminalListene
   }
 
   private void loadPrivateKeys( final JSch jsch ) {
-    IPreferenceStore store = CVSSSH2Plugin.getDefault().getPreferenceStore();
-    String privateKeys = store.getString( ISSHContants.KEY_PRIVATEKEY );
-    String sshHome = store.getString( ISSHContants.KEY_SSH2HOME );
+    Preferences preferences = JSchCorePlugin.getPlugin().getPluginPreferences();
+    String privateKeys = preferences.getString( IConstants.KEY_PRIVATEKEY );
+    String sshHome = preferences.getString( IConstants.KEY_SSH2HOME );
     String[] keyFilenames = privateKeys.split( "," ); //$NON-NLS-1$
     for( String keyFilename : keyFilenames ) {
       File file = new File( keyFilename );
@@ -80,10 +78,12 @@ public class SshShell implements IDropDownEntry<ITerminalView>, ITerminalListene
   }
 
   private void loadKnownHosts( final JSch jsch ) {                                                                                                                                                                                                             
-    IPreferenceStore store = CVSSSH2Plugin.getDefault().getPreferenceStore();
-    String sshHome = store.getString( ISSHContants.KEY_SSH2HOME );
+    Preferences preferences = JSchCorePlugin.getPlugin().getPluginPreferences();
+    String sshHome = preferences.getString( IConstants.KEY_SSH2HOME );
 
-    if ( sshHome.length() == 0 ) sshHome = SSH_HOME_DEFAULT;
+    if ( sshHome.length() == 0 ) {
+      sshHome = SSH_HOME_DEFAULT;
+    }
 
     try {
       File file;
