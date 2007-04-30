@@ -4,7 +4,7 @@
    <extension-point id="authenticationTokenManagement" name="%extension-point.authenticationTokenManagement" schema="schema/authenticationTokenManagement.exsd"/>
    <extension-point id="connectionManagement" name="%extension-point.connectionManagement" schema="schema/connectionManagement.exsd"/>
    <extension-point id="gridElementCreator" name="%extension-point.gridElementCreator" schema="schema/gridElementCreator.exsd"/>
-   <extension-point id="problemProvider" name="Problem Provider" schema="schema/problemProvider.exsd"/>
+   <extension-point id="problemProvider" name="%extension-point.problemProvider" schema="schema/problemProvider.exsd"/>
    <extension
          point="eu.geclipse.core.connectionManagement"
          id="eu.geclipse.core.connectionProtocol.gridftp">
