@@ -90,6 +90,7 @@ public class VoSelectionWizardPage extends WizardPage {
         createNewVO();
         updateVoList();
         showSelectedInfo();
+        setPageComplete( getSelectedVo() != null );
       }
     } );
     
