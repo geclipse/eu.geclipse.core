@@ -52,9 +52,20 @@ public class SshShell implements IDropDownEntry<ITerminalView>, ITerminalListene
   ChannelShell channel;
   private ITerminalPage terminal;
   private SSHConnectionInfo userInfo;
+  private int preConnectCols = -1;
+  private int preConnectLines;
+  private int preConnectXPix;
+  private int preConnectYPix;
 
   public void windowSizeChanged( final int cols, final int lines, final int xPixels, final int yPixels ) {
-    this.channel.setPtySize( cols, lines, xPixels, yPixels );
+    if ( this.channel.isConnected() ) {
+      this.channel.setPtySize( cols, lines, xPixels, yPixels );
+    } else {
+      this.preConnectCols = cols;
+      this.preConnectLines = lines;
+      this.preConnectXPix = xPixels;
+      this.preConnectYPix = yPixels;
+    }
   }
 
   private void loadPrivateKeys( final JSch jsch ) {
@@ -118,9 +129,9 @@ public class SshShell implements IDropDownEntry<ITerminalView>, ITerminalListene
       JSch jsch = new JSch();
       loadKnownHosts( jsch );
       loadPrivateKeys( jsch );
-      Session session = jsch.getSession( this.userInfo.getUsername(),
-                                         this.userInfo.getHostname(),
-                                         this.userInfo.getPort() );
+      final Session session = jsch.getSession( this.userInfo.getUsername(),
+                                               this.userInfo.getHostname(),
+                                               this.userInfo.getPort() );
       session.setUserInfo( this.userInfo );
       if ( forwards != null ) {
         for ( IForward forward : forwards ) {
@@ -139,6 +150,7 @@ public class SshShell implements IDropDownEntry<ITerminalView>, ITerminalListene
       IBidirectionalConnection connection = new IBidirectionalConnection() {
         public void close() {
           SshShell.this.channel.disconnect();
+          session.disconnect();
         }
         public InputStream getInputStream() throws IOException {
           return SshShell.this.channel.getInputStream();
@@ -149,12 +161,16 @@ public class SshShell implements IDropDownEntry<ITerminalView>, ITerminalListene
       };
 
       this.channel = (ChannelShell) session.openChannel( "shell" ); //$NON-NLS-1$
-      this.channel.connect();
       this.terminal = terminalView.addTerminal( connection, this );
       this.terminal.setTabName( this.userInfo.getHostname() );
       this.terminal.setDescription( Messages.formatMessage( "SshShell.descriptionWithoutWinTitle", //$NON-NLS-1$
                                                             this.userInfo.getUsername(),
                                                             this.userInfo.getHostname() ) );
+      this.channel.connect();
+      if ( this.preConnectCols != -1 ) {
+        windowSizeChanged( this.preConnectCols, this.preConnectLines,
+                           this.preConnectXPix, this.preConnectYPix );
+      }
     } catch ( JSchException exception ) {
       String message = exception.getLocalizedMessage();
       if ( message == null ) message = exception.getClass().getName();
