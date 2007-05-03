@@ -26,10 +26,14 @@ import java.util.SortedSet;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.TextTransfer;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.GC;
@@ -39,6 +43,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Menu;
+import org.eclipse.swt.widgets.MenuItem;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.PlatformUI;
 import eu.geclipse.terminal.ITerminalListener;
 
 
@@ -93,9 +101,10 @@ public class Terminal extends Canvas {
    * @param initBgColor default background color.
    */
   public Terminal(final Composite parent, final int style, final Color initFgColor, final Color initBgColor) {
-    super(parent, style | SWT.NO_BACKGROUND /*| SWT.NO_MERGE_PAINTS*/);
-    initSystemColorTable();
+    super(parent, style | SWT.NO_BACKGROUND );
     this.clipboard = new Clipboard( getDisplay() );
+    initMenu();
+    initSystemColorTable();    
     if ( initBgColor != null ) this.defaultBgColor = initBgColor;
     if ( initFgColor != null ) this.defaultFgColor = initFgColor;
     this.cursor = new Cursor( this.defaultFgColor, this.defaultBgColor );
@@ -199,6 +208,23 @@ public class Terminal extends Canvas {
       }
     } );
     reset();
+  }
+
+  private void initMenu() {
+    Menu popUpMenu = new Menu( getShell(), SWT.POP_UP );
+    MenuItem pasteItem = new MenuItem( popUpMenu, SWT.PUSH );
+    pasteItem.setText( Messages.getString( "Terminal.paste" ) ); //$NON-NLS-1$
+    ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
+    ImageDescriptor pasteImage 
+        = sharedImages.getImageDescriptor( ISharedImages.IMG_TOOL_PASTE );
+    pasteItem.setImage( pasteImage.createImage() );
+    pasteItem.addSelectionListener( new SelectionAdapter() {
+      @Override
+      public void widgetSelected( final SelectionEvent event ) {
+        paste();
+      }
+    } );
+    setMenu( popUpMenu );    
   }
 
   private Object getClipboardContent( final  int clipboardType ) {
