@@ -45,6 +45,11 @@ public interface IGridProject extends IGridContainer {
   public static final String DIR_JOBS = Messages.getString( "IGridProject.dir_jobs" ); //$NON-NLS-1$
   
   /**
+   * The name of the workflows directory contained in a grid project.
+   */
+  public static final String DIR_WORKFLOWS = Messages.getString( "IGridProject.dir_workflows" ); //$NON-NLS-1$
+  
+  /**
    * Create a temporary file that is hidden withing the grid project.
    * This is a first implementation that will change in the future so
    * do not rely on this method.
