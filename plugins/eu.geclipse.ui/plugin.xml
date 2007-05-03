@@ -185,11 +185,12 @@
             class="eu.geclipse.ui.wizards.connection.managers.gridftp.GridFTPConnectionWizard"
             id="eu.geclipse.ui.wizards.connection.managers.gridftp.GridFTPConnectionWizard"
             name="GridFTP"
-            icon="icons/gridftp.gif"/>
+            icon="icons/obj16/fslink_obj.gif"/>
       <wizard
             class="eu.geclipse.ui.wizards.connection.managers.srm.SRMConnectionWizard"
             id="eu.geclipse.ui.connection.managers.srm.SRMConnectionWizard"
-            name="SRM"/>
+            name="SRM"
+            icon="icons/obj16/fslink_obj.gif"/>
    </extension>
    <extension
          point="eu.geclipse.ui.connectionWizard">
@@ -197,7 +198,7 @@
             class="eu.geclipse.ui.wizards.connection.managers.local.LocalConnectionWizard"
             id="eu.geclipse.ui.wizards.connection.managers.local.LocalConnectionWizard"
             name="Local"
-            icon="icons/local.gif"/>
+            icon="icons/obj16/fslink_obj.gif"/>
    </extension>
    <extension
          id="eu.geclipse.ui.problemProvider"
