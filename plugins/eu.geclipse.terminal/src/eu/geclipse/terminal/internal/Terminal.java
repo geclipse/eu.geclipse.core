@@ -27,10 +27,14 @@ import java.util.StringTokenizer;
 import java.util.TreeSet;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.dnd.Clipboard;
+import org.eclipse.swt.dnd.DND;
+import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
+import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
@@ -41,7 +45,7 @@ import eu.geclipse.terminal.ITerminalListener;
 /**
  * VT100 terminal emulator widget.
  */
-public class Terminal extends Composite {
+public class Terminal extends Canvas {
   private static final int BEL = 7;
   private static final int FF = 12;
   private static final int SO = 14;
@@ -78,6 +82,7 @@ public class Terminal extends Composite {
   private boolean wraparound;
   private boolean reverseWraparound;
   private boolean running;
+  private Clipboard clipboard;
 
   /**
    * Creates a new terminal widget.
@@ -90,6 +95,7 @@ public class Terminal extends Composite {
   public Terminal(final Composite parent, final int style, final Color initFgColor, final Color initBgColor) {
     super(parent, style | SWT.NO_BACKGROUND /*| SWT.NO_MERGE_PAINTS*/);
     initSystemColorTable();
+    this.clipboard = new Clipboard( getDisplay() );
     if ( initBgColor != null ) this.defaultBgColor = initBgColor;
     if ( initFgColor != null ) this.defaultFgColor = initFgColor;
     this.cursor = new Cursor( this.defaultFgColor, this.defaultBgColor );
@@ -193,6 +199,26 @@ public class Terminal extends Composite {
       }
     } );
     reset();
+  }
+
+  private Object getClipboardContent( final  int clipboardType ) {
+    TextTransfer plainTextTransfer = TextTransfer.getInstance();
+    return this.clipboard.getContents(plainTextTransfer, clipboardType);
+  }
+  
+  /**
+   * Triggers paste from the clipboard into the terminal.
+   */
+  public void paste() {
+    checkWidget();  
+    String text = (String) getClipboardContent( DND.CLIPBOARD );
+    if ( text != null && text.length() > 0 ) {
+      for ( int i = 0; i < text.length(); i++ ) {
+        Event event = new Event();
+        event.character = text.charAt( i );
+        notifyListeners( SWT.KeyDown, event );
+      }
+    }
   }
 
   /**

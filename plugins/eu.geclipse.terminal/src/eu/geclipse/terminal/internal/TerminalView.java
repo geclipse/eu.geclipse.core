@@ -16,6 +16,7 @@
 package eu.geclipse.terminal.internal;
 
 import java.io.IOException;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -27,6 +28,7 @@ import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
 import eu.geclipse.core.IBidirectionalConnection;
 import eu.geclipse.terminal.ITerminalListener;
@@ -38,8 +40,8 @@ import eu.geclipse.terminal.ITerminalView;
  * a terminal factory plugin.
  */
 public class TerminalView extends ViewPart implements ITerminalView {
+  CTabFolder cTabFolder = null;
   private NewTerminalDropDownAction newTerminalAction;
-  private CTabFolder cTabFolder = null;
 
   /**
    * This is a callback that will allow us to create the viewer and initialize
@@ -57,19 +59,29 @@ public class TerminalView extends ViewPart implements ITerminalView {
     this.cTabFolder = new CTabFolder( parent, SWT.FLAT | SWT.BOTTOM );
     this.cTabFolder.setLayoutData( gridData );
     this.cTabFolder.addFocusListener( new FocusAdapter () {
-        @Override
-        public void focusGained( final FocusEvent event ) {
-            CTabFolder folder = (CTabFolder) event.widget;
-            CTabItem item = folder.getSelection();
-            if( item != null && item.getControl() != null ) {
-              item.getControl().setFocus();
-            }
-        }
+      @Override
+      public void focusGained( final FocusEvent event ) {
+          CTabFolder folder = (CTabFolder) event.widget;
+          CTabItem item = folder.getSelection();
+          if( item != null && item.getControl() != null ) {
+            item.getControl().setFocus();
+          }
+      }
     } );
     this.cTabFolder.addCTabFolder2Listener( new CTabFolder2Adapter() {
       @Override
       public void close( final CTabFolderEvent event ) {
         ((TerminalPage)((CTabItem)event.item).getControl()).closeConnection();
+      }
+    } );
+    IActionBars actionBars = getViewSite().getActionBars();
+    actionBars.setGlobalActionHandler( ActionFactory.PASTE.getId(), new Action() {
+      @Override
+      public void run() {
+        CTabItem item = TerminalView.this.cTabFolder.getSelection();
+        if( item != null && item.getControl() != null ) {
+          ((TerminalPage)item.getControl()).paste();
+        }
       }
     } );
   }

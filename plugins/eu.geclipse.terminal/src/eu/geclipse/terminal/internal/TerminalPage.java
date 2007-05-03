@@ -45,6 +45,10 @@ class TerminalPage extends Composite implements ITerminalPage {
     createPartControl();
   }
 
+  void paste() {
+    this.terminal.paste();
+  }
+
   /* (non-Javadoc)
    * @see eu.geclipse.terminal.views.ITerminalPage#setTabName(java.lang.String)
    */
