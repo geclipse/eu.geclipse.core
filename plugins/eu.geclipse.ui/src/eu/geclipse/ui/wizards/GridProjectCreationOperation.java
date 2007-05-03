@@ -140,6 +140,7 @@ public class GridProjectCreationOperation implements IRunnableWithProgress {
     createProjectDirectory( project, IGridProject.DIR_MOUNTS );
     createProjectDirectory( project, IGridProject.DIR_JOBDESCRIPTIONS );
     createProjectDirectory( project, IGridProject.DIR_JOBS );
+    createProjectDirectory( project, IGridProject.DIR_WORKFLOWS );
   }
   
   private void setProjectProperties( final IProject project,
