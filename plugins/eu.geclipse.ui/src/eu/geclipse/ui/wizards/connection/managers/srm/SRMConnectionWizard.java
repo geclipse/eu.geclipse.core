@@ -38,15 +38,18 @@ public class SRMConnectionWizard extends Wizard implements IInitalizableWizard {
   }
 
   @Override
-  public void addPages()
-  {
-    this.page = new SRMConnectionWizardPage( Messages.getString( "SRMConnectionWizard.srm_wizard_name" ) ); //$NON-NLS-1$
+  public String getWindowTitle() {
+    return Messages.getString("SRMConnectionWizard.windowTitle"); //$NON-NLS-1$
+  }
+
+  @Override
+  public void addPages() {
+    this.page = new SRMConnectionWizardPage( "" ); //$NON-NLS-1$
     this.addPage( this.page );
   }
 
   @Override
-  public boolean performFinish()
-  {
+  public boolean performFinish() {
     URI fileSystemUri = this.page.finish();
     return this.wizard.commonPerformFinish( fileSystemUri );
   }

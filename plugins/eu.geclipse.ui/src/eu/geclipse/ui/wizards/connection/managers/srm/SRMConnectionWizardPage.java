@@ -28,8 +28,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
 import eu.geclipse.ui.widgets.NumberVerifier;
-import eu.geclipse.ui.wizards.connection.managers.gridftp.Messages;
-
 
 class SRMConnectionWizardPage extends WizardPage implements ModifyListener {
 
@@ -43,7 +41,9 @@ class SRMConnectionWizardPage extends WizardPage implements ModifyListener {
   private String errorMessage;
   
   protected SRMConnectionWizardPage( final String pageName ) {
-    super( pageName );  
+    super( pageName );
+    this.setTitle( Messages.getString("SRMConnectionWizardPage.page_title") ); //$NON-NLS-1$
+    this.setDescription( Messages.getString("SRMConnectionWizardPage.page_description") ); //$NON-NLS-1$
   }
   
 
@@ -134,13 +134,13 @@ class SRMConnectionWizardPage extends WizardPage implements ModifyListener {
         || "".equals( this.path.getText() ) ) //$NON-NLS-1$
     {
       result = false;
-      this.errorMessage = Messages.getString("GridFTPConnectionWizardPage.fields_are_empty_error"); //$NON-NLS-1$
+      this.errorMessage = Messages.getString("SRMConnectionWizardPage.fields_are_empty_error"); //$NON-NLS-1$
     } else {
       String separator = "/"; //$NON-NLS-1$
       if( !this.path.getText().endsWith( separator ) )    
       {
         result = false;
-        this.errorMessage = Messages.getString("GridFTPConnectionWizardPage.directory_path_empty_error") + separator; //$NON-NLS-1$
+        this.errorMessage = Messages.getString("SRMConnectionWizardPage.directory_path_empty_error") + separator; //$NON-NLS-1$
       }
     }
     setErrorMessage( this.errorMessage );
