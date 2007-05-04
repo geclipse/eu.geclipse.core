@@ -83,6 +83,7 @@ class NewPortForwardComposite extends Composite {
     this.bindPortLabel = new Label(this, SWT.NONE);
     this.bindPortLabel.setText(Messages.getString("NewPortForwardComposite.bindPort")); //$NON-NLS-1$
     this.bindPortText = new Text(this, SWT.BORDER);
+    bindPortText.setTextLimit(5);
     this.bindPortText.setLayoutData(bindPortTextGridData);
     this.hostnameLabel = new Label(this, SWT.NONE);
     this.hostnameLabel.setText(Messages.getString("NewPortForwardComposite.hostname")); //$NON-NLS-1$
@@ -91,6 +92,7 @@ class NewPortForwardComposite extends Composite {
     this.portLabel = new Label(this, SWT.NONE);
     this.portLabel.setText(Messages.getString("NewPortForwardComposite.port")); //$NON-NLS-1$
     this.portText = new Text(this, SWT.BORDER);
+    portText.setTextLimit(5);
     this.portText.setLayoutData(portTextGridData);
   }
 

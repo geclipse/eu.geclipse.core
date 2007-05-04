@@ -98,7 +98,7 @@ public class LocationChooser extends WizardNewFileCreationPage
   protected String getNewFileLabel()
   {
     // TODO Auto-generated method stub
-    return Messages.getString( "LocalizationChooser.new_connection_label" ); //$NON-NLS-1$
+    return Messages.getString( "LocationChooser.new_connection_label" ); //$NON-NLS-1$
   }
 
   @Override

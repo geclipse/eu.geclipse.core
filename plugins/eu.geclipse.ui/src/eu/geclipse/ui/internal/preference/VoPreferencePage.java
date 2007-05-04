@@ -321,15 +321,15 @@ public class VoPreferencePage
     buttons.setLayout( gLayout );
     
     this.addButton = new Button( buttons, SWT.PUSH );
-    this.addButton.setText( "Add..." ); //$NON-NLS-1$
+    this.addButton.setText( "&Add..." );
     gData = new GridData( GridData.FILL_HORIZONTAL );
     this.addButton.setLayoutData( gData );
     this.editButton = new Button( buttons, SWT.PUSH );
-    this.editButton.setText( "Edit..." ); //$NON-NLS-1$
+    this.editButton.setText( "&Edit..." );
     gData = new GridData( GridData.FILL_HORIZONTAL );
     this.editButton.setLayoutData( gData );
     this.removeButton = new Button( buttons, SWT.PUSH );
-    this.removeButton.setText( "Remove" ); //$NON-NLS-1$
+    this.removeButton.setText( "&Remove" );
     gData = new GridData( GridData.FILL_HORIZONTAL );
     this.removeButton.setLayoutData( gData );
     

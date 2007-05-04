@@ -140,6 +140,7 @@ public class GridFTPConnectionWizardPage extends WizardPage
     this.portText.setLayoutData( gData );
     this.portText.setText( "2811" ); //$NON-NLS-1$
     this.portText.addModifyListener( this );
+    this.portText.setTextLimit( 5 );
     this.portText.addListener( SWT.Verify, new NumberVerifier() );
     gData = new GridData();
     Label pathLabel = new Label( mainComp, SWT.LEFT );

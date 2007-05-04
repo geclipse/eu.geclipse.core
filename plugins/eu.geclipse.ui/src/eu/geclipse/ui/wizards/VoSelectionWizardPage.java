@@ -79,7 +79,7 @@ public class VoSelectionWizardPage extends WizardPage {
     } );
     
     Button newButton = new Button( voGroup, SWT.PUSH );
-    newButton.setText( "New VO..." );
+    newButton.setText( "New &VO..." );
     gData = new GridData();
     gData.horizontalAlignment = GridData.BEGINNING;
     gData.verticalAlignment = GridData.BEGINNING;

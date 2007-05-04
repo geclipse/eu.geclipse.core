@@ -27,6 +27,8 @@ public class ConnectionNameChooser extends WizardPage
   protected ConnectionNameChooser( final String pageName )
   {
     super( pageName );
+    setTitle( "New filesystem connection" );
+    setDescription( "Enter a name for the new connection" );
   }
 
   public IFile createNewFile() {
@@ -59,7 +61,7 @@ public class ConnectionNameChooser extends WizardPage
                                               | GridData.HORIZONTAL_ALIGN_FILL ) );
     mostTopLevel.setFont( parent.getFont() );
     Label connectionNameLabel = new Label( mostTopLevel, SWT.NONE );
-    connectionNameLabel.setText( Messages.getString( "LocalizationChooser.new_connection_label" ) ); //$NON-NLS-1$
+    connectionNameLabel.setText( Messages.getString( "ConnectionNameChooser.new_connection_label" ) ); //$NON-NLS-1$
     GridData layout = new GridData( GridData.FILL_HORIZONTAL
                                     | GridData.GRAB_HORIZONTAL );
     this.connectionName = new Text( mostTopLevel, SWT.BORDER | SWT.SINGLE );
@@ -73,13 +75,13 @@ public class ConnectionNameChooser extends WizardPage
     boolean result = false;
     String message = null;
     if( this.getConnectionName().equals( "" ) ) { //$NON-NLS-1$
-      message = Messages.getString( "LocationChooser.connection_name_empty" ); //$NON-NLS-1$
+//      message = Messages.getString( "ConnectionNameChooser.connection_name_empty" ); //$NON-NLS-1$
     } else {
       if( ConnectionManager.getManager()
         .getConnectionNames()
         .contains( this.getConnectionName() ) )
       {
-        message = Messages.getString( "LocationChooser.connection_already_exists" ); //$NON-NLS-1$
+        message = Messages.getString( "ConnectionNameChooser.connection_already_exists" ); //$NON-NLS-1$
       } else {
         result = true;
       }
