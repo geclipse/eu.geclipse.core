@@ -73,6 +73,8 @@ class SRMConnectionWizardPage extends WizardPage implements ModifyListener {
     gData.grabExcessHorizontalSpace = true;
     this.port = new Text( mainComp, SWT.BORDER );
     this.port.setLayoutData( gData );
+    this.port.setTextLimit( 5 );
+    this.port.setText( "8443" ); //$NON-NLS-1$
     
     Label pathLabel = new Label( mainComp, SWT.NONE );
     pathLabel.setText( Messages.getString("SRMConnectionWizardPage.path") ); //$NON-NLS-1$
@@ -82,10 +84,10 @@ class SRMConnectionWizardPage extends WizardPage implements ModifyListener {
     this.path = new Text( mainComp, SWT.BORDER );
     this.path.setLayoutData( gData );
     
-    Label srmVersionLabel = new Label(mainComp, SWT.NONE);
+    Label srmVersionLabel = new Label( mainComp, SWT.NONE );
     srmVersionLabel.setText( Messages.getString("SRMConnectionWizardPage.version") ); //$NON-NLS-1$
         
-    List list = new List(mainComp, SWT.SINGLE);
+    List list = new List( mainComp, SWT.SINGLE | SWT.BORDER );
     list.add( Messages.getString("SRMConnectionWizardPage.ver_1_0") ); //$NON-NLS-1$
     list.add( Messages.getString("SRMConnectionWizardPage.ver_2_0") ); //$NON-NLS-1$
     list.add( Messages.getString("SRMConnectionWizardPage.ver_2_1_1") ); //$NON-NLS-1$
