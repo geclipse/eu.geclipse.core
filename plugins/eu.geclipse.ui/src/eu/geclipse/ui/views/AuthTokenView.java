@@ -517,7 +517,7 @@ public class AuthTokenView extends ViewPart implements IContentChangeListener {
         ? Messages.getString("AuthTokenView.token_activation_error") //$NON-NLS-1$
         : Messages.getString("AuthTokenView.token_deactivation_error"); //$NON-NLS-1$
       NewProblemDialog.openProblem( getSite().getShell(),
-                                    Messages.getString("AuthTokenView.token_activation_error_title"),
+                                    Messages.getString("AuthTokenView.token_activation_error_title"), //$NON-NLS-1$
                                     errMsg, exc );
       /*
       IStatus status = new Status(
