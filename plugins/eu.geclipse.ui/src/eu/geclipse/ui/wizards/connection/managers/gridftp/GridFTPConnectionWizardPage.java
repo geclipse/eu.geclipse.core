@@ -119,30 +119,17 @@ public class GridFTPConnectionWizardPage extends WizardPage
     IPreferenceStore prefStore = eu.geclipse.ui.internal.Activator.getDefault()
       .getPreferenceStore();
     Composite mainComp = new Composite( parent, SWT.NONE );
-    mainComp.setLayout( new GridLayout( 5, false ) );
+    mainComp.setLayout( new GridLayout( 2, false ) );
     GridData gData = new GridData();
     Label hostLabel = new Label( mainComp, SWT.LEFT );
     hostLabel.setText( Messages.getString("GridFTPConnectionWizardPage.host_label") ); //$NON-NLS-1$
     gData.horizontalAlignment = GridData.BEGINNING;
     hostLabel.setLayoutData( gData );
     gData = new GridData( GridData.FILL_HORIZONTAL );
-    gData.horizontalSpan = 4;
     this.hostCombo = new StoredCombo( mainComp, SWT.LEFT | SWT.SINGLE | SWT.BORDER );
     this.hostCombo.setPreferences( prefStore, KEY_HOSTS_ID );
     this.hostCombo.setLayoutData( gData );
     this.hostCombo.addModifyListener( this );
-    gData = new GridData();
-    Label pathLabel = new Label( mainComp, SWT.LEFT );
-    pathLabel.setText( Messages.getString("GridFTPConnectionWizardPage.path_label") ); //$NON-NLS-1$
-    gData.horizontalAlignment = GridData.BEGINNING;
-    pathLabel.setLayoutData( gData );
-    gData = new GridData( GridData.FILL_HORIZONTAL );
-    this.pathCombo = new StoredCombo( mainComp, SWT.LEFT | SWT.SINGLE | SWT.BORDER );
-    gData.horizontalSpan = 4;
-    this.pathCombo.setLayoutData( gData );
-    this.pathCombo.setPreferences( prefStore, KEY_PATH_ID );
-    this.pathCombo.setText( "/" ); //$NON-NLS-1$
-    this.pathCombo.addModifyListener( this );
     gData = new GridData();
     Label portLabel = new Label( mainComp, SWT.LEFT );
     portLabel.setText( Messages.getString("GridFTPConnectionWizardPage.port_label") ); //$NON-NLS-1$
@@ -154,8 +141,18 @@ public class GridFTPConnectionWizardPage extends WizardPage
     this.portText.setText( "2811" ); //$NON-NLS-1$
     this.portText.addModifyListener( this );
     this.portText.addListener( SWT.Verify, new NumberVerifier() );
+    gData = new GridData();
+    Label pathLabel = new Label( mainComp, SWT.LEFT );
+    pathLabel.setText( Messages.getString("GridFTPConnectionWizardPage.path_label") ); //$NON-NLS-1$
+    gData.horizontalAlignment = GridData.BEGINNING;
+    pathLabel.setLayoutData( gData );
+    gData = new GridData( GridData.FILL_HORIZONTAL );
+    this.pathCombo = new StoredCombo( mainComp, SWT.LEFT | SWT.SINGLE | SWT.BORDER );
+    this.pathCombo.setLayoutData( gData );
+    this.pathCombo.setPreferences( prefStore, KEY_PATH_ID );
+    this.pathCombo.setText( "/" ); //$NON-NLS-1$
+    this.pathCombo.addModifyListener( this );
 
-    
     setControl( mainComp );
   }
 
