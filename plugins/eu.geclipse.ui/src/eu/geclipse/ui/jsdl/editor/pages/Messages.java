@@ -26,7 +26,6 @@ public class Messages extends NLS {
 
   public static String DataStagingPage_Section;
   public static String DataStagingPage_SectionDesc;
-  public static String DataStagingPage_1;
   public static String DataStagingPage_append;
   public static String DataStagingPage_CreationFlag;
   public static String DataStagingPage_DataStagingDescr;

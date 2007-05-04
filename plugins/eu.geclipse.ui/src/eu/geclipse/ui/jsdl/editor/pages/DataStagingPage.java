@@ -95,7 +95,7 @@ public class DataStagingPage extends FormPage{
                                  Messages.DataStagingPage_DataStagingDescr);  
    
    
-   this.dataStagingAdapter.load();
+  // this.dataStagingAdapter.load();
   }
   
 public void setActive(final boolean active) {
