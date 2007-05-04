@@ -28,11 +28,6 @@
             class="eu.geclipse.ui.internal.preference.CaCertPreferencePage"
             id="eu.geclipse.ui.internal.preference.CaCertPreferencePage"
             name="%page.caCertificates"/>
-      <page
-            category="eu.geclipse.ui.internal.preference.GEclipsePreferencePage"
-            class="eu.geclipse.ui.internal.preference.NetworkPreferencePage"
-            id="eu.geclipse.ui.internal.preference.NetworkPreferencePage"
-            name="%page.network"/>
    </extension>
    <extension
          point="org.eclipse.ui.views">

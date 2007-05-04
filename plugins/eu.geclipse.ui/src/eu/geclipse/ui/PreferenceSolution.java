@@ -37,7 +37,7 @@ public class PreferenceSolution extends UISolution {
    * ID of the network preference page.
    */
   public static final String NETWORK_PREFERENCE_PAGE
-    = "eu.geclipse.ui.internal.preference.NetworkPreferencePage"; //$NON-NLS-1$
+    = "org.eclipse.net.ui.NetPreferences"; //$NON-NLS-1$
   
   /**
    * The id of the preference page that should be opened.
