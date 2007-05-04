@@ -23,12 +23,6 @@ package eu.geclipse.core.internal;
 public class PreferenceConstants {
 
   /**
-   * The id for the connection timeout setting.
-   */
-  public static final String CONNECTION_TIMEOUT
-    = "connectiontimeout"; //$NON-NLS-1$
-  
-  /**
    * The id for the defined VOs.
    */
   public static final String DEFINED_VOS_ID
@@ -39,41 +33,5 @@ public class PreferenceConstants {
    */
   public static final String DEFAULT_VO_ID
     = "def_vo"; //$NON-NLS-1$
-  
-  /**
-   * The id of the proxy enabled setting.
-   */
-  public static final String HTTP_PROXY_ENABLED
-    = "http_proxy_enabled"; //$NON-NLS-1$
-  
-  /**
-   * The id of the proxy host setting.
-   */
-  public static final String HTTP_PROXY_HOST
-    = "http_proxy_host"; //$NON-NLS-1$
-  
-  /**
-   * The id of the proxy port setting.
-   */
-  public static final String HTTP_PROXY_PORT
-    = "http_proxy_port"; //$NON-NLS-1$
-  
-  /**
-   * The id of the proxy authentication required setting.
-   */
-  public static final String HTTP_PROXY_AUTH_REQUIRED
-    = "http_proxy_auth_required"; //$NON-NLS-1$
-  
-  /**
-   * The id of the proxy authentication login setting.
-   */
-  public static final String HTTP_PROXY_AUTH_LOGIN
-    = "http_proxy_auth_login"; //$NON-NLS-1$
-  
-  /**
-   * The id of the proxy authentication password setting.
-   */
-  public static final String HTTP_PROXY_AUTH_PW
-    = "http_proxy_auth_pw"; //$NON-NLS-1$
   
 }

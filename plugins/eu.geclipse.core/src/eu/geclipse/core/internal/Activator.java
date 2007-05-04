@@ -15,10 +15,12 @@
 
 package eu.geclipse.core.internal;
 
+import org.eclipse.core.net.proxy.IProxyService;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 import org.osgi.framework.BundleContext;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -30,12 +32,24 @@ public class Activator extends Plugin {
   
   /** The shared instance */
   private static Activator plugin;
+  
+  private ServiceTracker tracker;
 
   /**
    * The constructor
    */
   public Activator() {
     plugin = this;
+  }
+  
+  /**
+   * Return the {@link IProxyService} or <code>null</code> if the service is
+   * not available.
+   * 
+   * @return the {@link IProxyService} or <code>null</code>
+   */
+  public IProxyService getProxyService() {
+    return (IProxyService) this.tracker.getService();
   }
 
   /*
@@ -46,6 +60,10 @@ public class Activator extends Plugin {
   @Override
   public void start( final BundleContext context ) throws Exception {
     super.start( context );
+    this.tracker = new ServiceTracker( getBundle().getBundleContext(),
+                                       IProxyService.class.getName(),
+                                       null );
+    this.tracker.open();
   }
 
   /*
@@ -57,6 +75,7 @@ public class Activator extends Plugin {
   public void stop( final BundleContext context ) throws Exception {
     plugin = null;
     super.stop( context );
+    this.tracker.close();
   }
 
   /**

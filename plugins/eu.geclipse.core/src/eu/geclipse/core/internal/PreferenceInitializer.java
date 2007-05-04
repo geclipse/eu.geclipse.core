@@ -32,14 +32,8 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
    */
   @Override
   public void initializeDefaultPreferences() {
-    Preferences node = new DefaultScope().getNode( Activator.PLUGIN_ID );
-    node.putInt( PreferenceConstants.CONNECTION_TIMEOUT, 20 );
-    node.putBoolean( PreferenceConstants.HTTP_PROXY_ENABLED, false );
-    node.put( PreferenceConstants.HTTP_PROXY_HOST, "" ); //$NON-NLS-1$
-    node.putInt( PreferenceConstants.HTTP_PROXY_PORT, 0 );
-    node.putBoolean( PreferenceConstants.HTTP_PROXY_AUTH_REQUIRED, false );
-    node.put( PreferenceConstants.HTTP_PROXY_AUTH_LOGIN, "" ); //$NON-NLS-1$
-    node.put( PreferenceConstants.HTTP_PROXY_AUTH_PW, "" ); //$NON-NLS-1$
+    // Currently empty implementation
+    //Preferences node = new DefaultScope().getNode( Activator.PLUGIN_ID );
   }
   
 }
