@@ -16,10 +16,13 @@
 package eu.geclipse.ui.internal.actions;
 
 import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchSite;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionGroup;
 import org.eclipse.ui.actions.DeleteResourceAction;
 import org.eclipse.ui.navigator.ICommonMenuConstants;
@@ -73,6 +76,10 @@ public class FileActions extends ActionGroup {
     this.copyAction = new CopyAction( this.clipboard );
     this.pasteAction = new PasteAction( view, this.clipboard );
     this.deleteAction = new DeleteResourceAction( shell );
+    ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
+    ImageDescriptor deleteImage 
+        = sharedImages.getImageDescriptor( ISharedImages.IMG_TOOL_DELETE );
+    this.deleteAction.setImageDescriptor( deleteImage );
     
     provider.addSelectionChangedListener( this.copyAction );
     provider.addSelectionChangedListener( this.pasteAction );
