@@ -16,8 +16,6 @@
 package eu.geclipse.core.internal;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
-import org.eclipse.core.runtime.preferences.DefaultScope;
-import org.osgi.service.prefs.Preferences;
 
 /**
  * This preference initializer is intended to initialize the preferences
