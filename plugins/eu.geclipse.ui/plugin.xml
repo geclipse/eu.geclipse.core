@@ -56,6 +56,7 @@
             allowMultiple="true"
             category="eu.geclipse.ui.viewcategory"
             class="eu.geclipse.ui.views.GridConnectionView"
+            icon="icons/eview16/connections.gif"
             id="eu.geclipse.ui.views.connectionView"
             name="Connections"/>
       <view
