@@ -39,6 +39,13 @@ public class AuthenticationException
     super( problemID );
   }
   
+  /**
+   * Create a new Authentication Exception with the specified problem ID and
+   * a string that contains the description.
+   * 
+   * @param problemID The unique ID of the corresponding problem.
+   * @param description Description string of the problem
+   */
   public AuthenticationException( final int problemID,
                                   final String description ) {
     super( problemID, description );
