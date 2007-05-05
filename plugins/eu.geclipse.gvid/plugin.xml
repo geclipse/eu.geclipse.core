@@ -3,6 +3,7 @@
 <plugin>
    <extension-point id="codec" name="GVid Video Codec" schema="schema/codec.exsd"/>
    <extension-point id="newGVidWizards" name="newGVidWizards" schema="schema/newGVidWizards.exsd"/>
+   <extension-point id="dropDownEntry" name="GVid connection factory" schema="schema/dropDownEntry.exsd"/>
    <extension
          point="org.eclipse.ui.preferencePages">
       <page
