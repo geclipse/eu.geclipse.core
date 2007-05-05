@@ -16,10 +16,12 @@
 package eu.geclipse.core.model;
 
 import java.util.List;
+
 import org.eclipse.core.resources.IFile;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
 import eu.geclipse.core.model.impl.JSDLJobDescription;
 
 /**
@@ -29,12 +31,11 @@ public class GridModel_PDETest {
   
   /**
    * Initialize the Grid model.
-   *  
-   * @throws Exception If any error occures.
+   * 
+   * @throws Exception if error occures.
    */
   @Before
-  public void setUp() throws Exception
-  {
+  public void setUp() throws Exception {
     GridModel.getRoot();
   }
 
@@ -42,8 +43,7 @@ public class GridModel_PDETest {
    * Tests the {@link GridModel#getConnectionManager()}-method.
    */
   @Test
-  public void testGetConnectionManager()
-  {
+  public void testGetConnectionManager() {
     IConnectionManager connectionManager = GridModel.getConnectionManager();
     Assert.assertNotNull( connectionManager );
   }
@@ -52,8 +52,7 @@ public class GridModel_PDETest {
    * Tests the {@link GridModel#getJobManager()}-method.
    */
   @Test
-  public void testGetJobManager()
-  {
+  public void testGetJobManager() {
     IJobManager jobManager = GridModel.getJobManager();
     Assert.assertNotNull( jobManager );
   }
@@ -62,8 +61,7 @@ public class GridModel_PDETest {
    * Tests the {@link GridModel#getRoot()}-method.
    */
   @Test
-  public void testGetRoot()
-  {
+  public void testGetRoot() {
     IGridRoot root = GridModel.getRoot();
     Assert.assertNotNull( root );
   }
@@ -72,11 +70,9 @@ public class GridModel_PDETest {
    * Tests the {@link GridModel#getStandardCreators()}-method.
    */
   @Test
-  public void testGetStandardCreators()
-  {
-    List< IGridElementCreator > standardCreators = GridModel.getStandardCreators();
-    Assert.assertNotNull( standardCreators );
-    Assert.assertTrue( !standardCreators.isEmpty() );
+  public void testGetStandardCreators() {
+    List<IGridElementCreator> standardCreators = GridModel.getStandardCreators();
+    Assert.assertFalse( standardCreators.isEmpty() );
   }
 
   /**
@@ -86,62 +82,53 @@ public class GridModel_PDETest {
   public void testGetElementCreators()
   {
     List< IGridElementCreator > elementCreators = GridModel.getElementCreators();
-    Assert.assertNotNull( elementCreators );
-    Assert.assertTrue( !elementCreators.isEmpty() );
+    Assert.assertFalse( elementCreators.isEmpty() );
   }
 
   /**
    * Tests the {@link GridModel#getElementCreators(Class)}-method.
    */
   @Test
-  public void testGetElementCreatorsClassOfQextendsIGridElement()
-  {
+  public void testGetElementCreatorsClassOfQextendsIGridElement() {
     List<IGridElementCreator> elementCreators = GridModel.getElementCreators( IGridElement.class );
-    Assert.assertNotNull( elementCreators );
-    Assert.assertTrue( !elementCreators.isEmpty() );
+    Assert.assertFalse( elementCreators.isEmpty() );
   }
 
   /**
    * Tests the {@link GridModel#getStorableElementCreators()}-method.
    */
   @Test
-  public void testGetStorableElementCreators()
-  {
+  public void testGetStorableElementCreators() {
     List<IStorableElementCreator> storableElementCreators = GridModel.getStorableElementCreators();
-    Assert.assertNotNull( storableElementCreators );
-    Assert.assertTrue( !storableElementCreators.isEmpty() );
+    Assert.assertFalse( storableElementCreators.isEmpty() );
   }
 
   /**
    * Tests the {@link GridModel#getJobCreators()}-method.
    */
   @Test
-  public void testGetJobCreators()
-  {
+  public void testGetJobCreators() {
     List<IGridJobCreator> jobCreators = GridModel.getJobCreators();
-    Assert.assertNotNull( jobCreators );
-    Assert.assertTrue( !jobCreators.isEmpty() );
+    Assert.assertFalse( jobCreators.isEmpty() );
   }
 
   /**
    * Tests the {@link GridModel#getJobCreators(IGridJobDescription)}-method.
    */
   @Test
-  public void testGetJobCreatorsIGridJobDescription()
-  {
+  public void testGetJobCreatorsIGridJobDescription() {
     // TODO mathias create a valid JSDL file since the null approach breaks
-    IGridJobDescription jobDescription = new JSDLJobDescription( ( IFile ) null );
+    IGridJobDescription jobDescription = new JSDLJobDescription( ( IFile )null );
     List<IGridJobCreator> jobCreators = GridModel.getJobCreators( jobDescription );
     Assert.assertNotNull( jobCreators );
-    Assert.assertTrue( !jobCreators.isEmpty() );
+    Assert.assertFalse( jobCreators.isEmpty() );
   }
 
   /**
    * Tests the {@link GridModel#getTransferManager()}-method.
    */
   @Test
-  public void testGetTransferManager()
-  {
+  public void testGetTransferManager() {
     ITransferManager transferManager = GridModel.getTransferManager();
     Assert.assertNotNull( transferManager );
   }
@@ -150,8 +137,7 @@ public class GridModel_PDETest {
    * Tests the {@link GridModel#getVoManager()}-method.
    */
   @Test
-  public void testGetVoManager()
-  {
+  public void testGetVoManager() {
     IVoManager voManager = GridModel.getVoManager();
     Assert.assertNotNull( voManager );
   }

@@ -23,8 +23,6 @@ import org.junit.Test;
 /**
  * Test for the <code>eu.geclipse.core.auth.AuthenticationTokenManager</code>
  * class.
- * 
- * @author markus
  */
 public class AuthenticationTokenManager_Test {
 
@@ -32,8 +30,7 @@ public class AuthenticationTokenManager_Test {
    * @throws java.lang.Exception
    */
   @Before
-  public void setUp() throws Exception
-  {
+  public void setUp() throws Exception {
     // TODO mknauer
   }
 
@@ -41,8 +38,7 @@ public class AuthenticationTokenManager_Test {
    * @throws java.lang.Exception
    */
   @After
-  public void tearDown() throws Exception
-  {
+  public void tearDown() throws Exception {
     // TODO mknauer
   }
 
@@ -51,8 +47,7 @@ public class AuthenticationTokenManager_Test {
    * {@link eu.geclipse.core.auth.AuthenticationTokenManager#getManager()}.
    */
   @Test
-  public void testGetManager()
-  {
+  public void testGetManager() {
     assertNotNull( AuthenticationTokenManager.getManager() );
   }
 
@@ -61,8 +56,7 @@ public class AuthenticationTokenManager_Test {
    * {@link eu.geclipse.core.auth.AuthenticationTokenManager#createToken(eu.geclipse.core.auth.IAuthenticationTokenDescription)}.
    */
   @Test
-  public void testCreateToken()
-  {
+  public void testCreateToken() {
     fail( "Not yet implemented" ); // TODO //$NON-NLS-1$
   }
 
@@ -71,8 +65,7 @@ public class AuthenticationTokenManager_Test {
    * {@link eu.geclipse.core.auth.AuthenticationTokenManager#findToken(eu.geclipse.core.auth.IAuthenticationTokenDescription)}.
    */
   @Test
-  public void testFindToken()
-  {
+  public void testFindToken() {
     fail( "Not yet implemented" ); // TODO //$NON-NLS-1$
   }
 
@@ -81,8 +74,7 @@ public class AuthenticationTokenManager_Test {
    * {@link eu.geclipse.core.auth.AuthenticationTokenManager#getTokens()}.
    */
   @Test
-  public void testGetTokens()
-  {
+  public void testGetTokens() {
     fail( "Not yet implemented" ); // TODO //$NON-NLS-1$
   }
 
@@ -91,8 +83,7 @@ public class AuthenticationTokenManager_Test {
    * {@link eu.geclipse.core.auth.AuthenticationTokenManager#destroyToken(eu.geclipse.core.auth.IAuthenticationToken)}.
    */
   @Test
-  public void testDestroyToken()
-  {
+  public void testDestroyToken() {
     fail( "Not yet implemented" ); // TODO //$NON-NLS-1$
   }
 
@@ -101,8 +92,7 @@ public class AuthenticationTokenManager_Test {
    * {@link eu.geclipse.core.auth.AuthenticationTokenManager#getTokenCount()}.
    */
   @Test
-  public void testGetTokenCount()
-  {
+  public void testGetTokenCount() {
     fail( "Not yet implemented" ); // TODO //$NON-NLS-1$
   }
 
@@ -111,8 +101,7 @@ public class AuthenticationTokenManager_Test {
    * {@link eu.geclipse.core.auth.AuthenticationTokenManager#isEmpty()}.
    */
   @Test
-  public void testIsEmpty()
-  {
+  public void testIsEmpty() {
     fail( "Not yet implemented" ); // TODO //$NON-NLS-1$
   }
 
@@ -121,8 +110,7 @@ public class AuthenticationTokenManager_Test {
    * {@link eu.geclipse.core.auth.AuthenticationTokenManager#setDefaultToken(eu.geclipse.core.auth.IAuthenticationToken)}.
    */
   @Test
-  public void testSetDefaultToken()
-  {
+  public void testSetDefaultToken() {
     fail( "Not yet implemented" ); // TODO //$NON-NLS-1$
   }
 
@@ -131,8 +119,7 @@ public class AuthenticationTokenManager_Test {
    * {@link eu.geclipse.core.auth.AuthenticationTokenManager#getDefaultToken()}.
    */
   @Test
-  public void testGetDefaultToken()
-  {
+  public void testGetDefaultToken() {
     fail( "Not yet implemented" ); // TODO //$NON-NLS-1$
   }
 
@@ -141,8 +128,7 @@ public class AuthenticationTokenManager_Test {
    * {@link eu.geclipse.core.auth.AuthenticationTokenManager#addContentChangeListener(org.eclipse.compare.IContentChangeListener)}.
    */
   @Test
-  public void testAddContentChangeListener()
-  {
+  public void testAddContentChangeListener() {
     fail( "Not yet implemented" ); // TODO //$NON-NLS-1$
   }
 
@@ -151,8 +137,7 @@ public class AuthenticationTokenManager_Test {
    * {@link eu.geclipse.core.auth.AuthenticationTokenManager#removeContentChangeListener(org.eclipse.compare.IContentChangeListener)}.
    */
   @Test
-  public void testRemoveContentChangeListener()
-  {
+  public void testRemoveContentChangeListener() {
     fail( "Not yet implemented" ); // TODO //$NON-NLS-1$
   }
 
@@ -161,8 +146,7 @@ public class AuthenticationTokenManager_Test {
    * {@link eu.geclipse.core.auth.AuthenticationTokenManager#addToken(eu.geclipse.core.auth.IAuthenticationToken)}.
    */
   @Test
-  public void testAddToken()
-  {
+  public void testAddToken() {
     fail( "Not yet implemented" ); // TODO //$NON-NLS-1$
   }
 
@@ -171,8 +155,7 @@ public class AuthenticationTokenManager_Test {
    * {@link eu.geclipse.core.auth.AuthenticationTokenManager#removeToken(eu.geclipse.core.auth.IAuthenticationToken)}.
    */
   @Test
-  public void testRemoveToken()
-  {
+  public void testRemoveToken() {
     fail( "Not yet implemented" ); // TODO //$NON-NLS-1$
   }
 
@@ -181,8 +164,7 @@ public class AuthenticationTokenManager_Test {
    * {@link eu.geclipse.core.auth.AuthenticationTokenManager#fireContentChanged()}.
    */
   @Test
-  public void testFireContentChanged()
-  {
+  public void testFireContentChanged() {
     fail( "Not yet implemented" ); // TODO //$NON-NLS-1$
   }
 }

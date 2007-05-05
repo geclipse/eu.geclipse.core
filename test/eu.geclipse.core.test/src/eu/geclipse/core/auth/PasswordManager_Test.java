@@ -16,12 +16,11 @@ public class PasswordManager_Test {
 
   /**
    * Tests the {@link PasswordManager#getPassword(String)}-method by
-   * registering a password and afterwards retrieving this password
-   * and comparing it with the original one.
+   * registering a password and afterwards retrieving this password and
+   * comparing it with the original one.
    */
   @Test
-  public void testGetPassword()
-  {
+  public void testGetPassword() {
     PasswordManager.registerPassword( PWUID, PW_1 );
     String pw = PasswordManager.getPassword( PWUID );
     Assert.assertSame( pw, PW_1 );
@@ -30,11 +29,10 @@ public class PasswordManager_Test {
   /**
    * Test the {@link PasswordManager#registerPassword(String, String)}-method
    * by registering a password, registering another password, retrieving the
-   * password and afterwards comparing the password with the second registered. 
+   * password and afterwards comparing the password with the second registered.
    */
   @Test
-  public void testRegisterPassword()
-  {
+  public void testRegisterPassword() {
     PasswordManager.registerPassword( PWUID, PW_1 );
     PasswordManager.registerPassword( PWUID, PW_2 );
     String pw = PasswordManager.getPassword( PWUID );
@@ -42,14 +40,13 @@ public class PasswordManager_Test {
   }
 
   /**
-   * Test the {@link PasswordManager#erasePassword(String)}-method
-   * by registering a password, retrieving this password and verifying that
-   * it was registered successfully, erasing the password and verifying that
-   * it is <code>null</code> afterwards.
+   * Test the {@link PasswordManager#erasePassword(String)}-method by
+   * registering a password, retrieving this password and verifying that it was
+   * registered successfully, erasing the password and verifying that it is
+   * <code>null</code> afterwards.
    */
   @Test
-  public void testErasePassword()
-  {
+  public void testErasePassword() {
     PasswordManager.registerPassword( PWUID, PW_1 );
     String pw = PasswordManager.getPassword( PWUID );
     Assert.assertSame( pw, PW_1 );
@@ -57,5 +54,4 @@ public class PasswordManager_Test {
     pw = PasswordManager.getPassword( PWUID );
     Assert.assertNull( pw );
   }
-
 }

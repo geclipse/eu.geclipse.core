@@ -14,13 +14,6 @@
  *****************************************************************************/
 package eu.geclipse.core;
 
-import java.io.IOException;
-import java.net.InetSocketAddress;
-import java.net.MalformedURLException;
-import java.net.Proxy;
-import java.net.SocketAddress;
-import java.net.URL;
-import java.net.URLConnection;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -29,32 +22,29 @@ import org.junit.Test;
  * This class tests the functionality of each method in the class Preferences.
  * In most cases, the test is associated with both Set and Get methods
  */
-
 public class Preferences_Test {
+
   private Preferences preferences;
 
+  /**
+   * Setup of the test environment with the Preferences
+   */
   @Before
-  public void setUp() throws Exception
-  {
-    this.preferences = new Preferences ();
+  public void setUp() {
+    this.preferences = new Preferences();
   }
   
   /**
    * Test for the <code>eu.geclipse.core.Preferences#setDefaultVoName/code>
    * and <code>eu.geclipse.core.Preferences#getDefaultVoName/code>.
    * The set and got values must be identical!
-   * @author jie
    */
-  
   @Test
-  public void testSet_GetDefaultVoName()
-  {
+  public void testSet_GetDefaultVoName() {
     String vo_set = "geclipse"; //$NON-NLS-1$  
-    String vo_get;
     Preferences.setDefaultVoName( vo_set );
-    vo_get = Preferences.getDefaultVoName();
+    String vo_get = Preferences.getDefaultVoName();
     Assert.assertNotNull( vo_get );
-    Assert.assertEquals( vo_get,vo_set );
+    Assert.assertEquals( vo_get, vo_set );
   }
-  
 }
