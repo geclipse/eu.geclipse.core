@@ -33,9 +33,11 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.Resource.Factory.Registry;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.util.FeatureMap;
+import org.eclipse.emf.ecore.util.FeatureMapUtil;
 import org.eclipse.emf.ecore.util.FeatureMap.Entry;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMLMapImpl;
@@ -74,9 +76,11 @@ import eu.geclipse.jsdl.util.JsdlResourceFactoryImpl;
  * Concrete implementation of an {@link IGridJobDescription} for the JSDL
  * language.
  */
-public class JSDLJobDescription
-    extends ResourceGridContainer
-    implements IGridJobDescription {
+public class JSDLJobDescription extends ResourceGridContainer
+  implements IGridJobDescription
+{
+
+  private static final String UTF_8 = "UTF-8"; //$NON-NLS-1$
 
   /**
    * This caches an instance of the model package. <!-- begin-user-doc --> <!--
@@ -85,7 +89,9 @@ public class JSDLJobDescription
    * @generated
    */
   protected JsdlPackage jsdlPackage = JsdlPackage.eINSTANCE;
+
   protected PosixPackage posixPackage = PosixPackage.eINSTANCE;
+
   /**
    * This caches an instance of the model factory. <!-- begin-user-doc --> <!--
    * end-user-doc -->
@@ -93,8 +99,11 @@ public class JSDLJobDescription
    * @generated
    */
   protected JsdlFactory jsdlFactory = this.jsdlPackage.getJsdlFactory();
+
   protected PosixFactory posixFactory = this.posixPackage.getPosixFactory();
+
   private Resource resource = null;
+
   // This are declarations for each element.
   // The root element is jobDefinition.
   private JobDefinitionType jobDefinition;
@@ -113,7 +122,6 @@ public class JSDLJobDescription
 
 
   /**
-   * 
    * @param file
    */
   public void loadModel( final IFile file ) {
@@ -130,13 +138,14 @@ public class JSDLJobDescription
       resourceA.load( options );
       this.documentRoot = ( DocumentRoot )resourceA.getContents().get( 0 );
       this.documentRoot.getJobDefinition();
-    } catch( IOException e ) {
-      Activator.logException( e );
+    } catch( IOException ioEx ) {
+      Activator.logException( ioEx );
     }
   }
 
   /**
    * Saves file to JSDL model.
+   * 
    * @param file file to be saved
    */
   public void save( final IFile file ) {
@@ -167,35 +176,33 @@ public class JSDLJobDescription
   // It get's as parameters the JobDefinition and the file name.
   // You can get the file name from the wizard.
   @SuppressWarnings("unchecked")
-  private void writeModelToFile( final EObject jsdlRoot, final IFile file )
-  {
-    try {
+  private void writeModelToFile( final EObject jsdlRoot, final IFile file ) {
       // Here you have to get the File's path...
       // This is where i couldn't do it , but with the
       // wizard this is easy to do.
       String filePath = file.getFullPath().toString();
       URI fileURI = URI.createPlatformResourceURI( filePath );
+
       // Create resource set.
       ResourceSet resourceSet = new ResourceSetImpl();
-      
-      resourceSet.getResourceFactoryRegistry()
-        .getExtensionToFactoryMap()
-        .put( "jsdl", //$NON-NLS-1$
-         new JsdlResourceFactoryImpl() );
+      Registry factoryRegistry = resourceSet.getResourceFactoryRegistry();
+      Map<String, Object> map = factoryRegistry.getExtensionToFactoryMap();
+      map.put( "jsdl", //$NON-NLS-1$
+               new JsdlResourceFactoryImpl() );
       
       this.resource = resourceSet.createResource( fileURI );
       if( jsdlRoot != null ) {
         this.resource.getContents().add( jsdlRoot );
       }
+
       // Setting XML encoding.. This could be changed later.
       Map options = new HashMap();
-      options.put( XMLResource.OPTION_ENCODING, "UTF-8" ); //$NON-NLS-1$
-      this.resource.save( options );
-    }
-    // Catch exceptions.
-    catch( Exception exception ) {
-      Activator.logException( exception );
-    }
+      options.put( XMLResource.OPTION_ENCODING, UTF_8 );
+      try {
+        this.resource.save( options );
+      } catch( IOException ioEx ) {
+        Activator.logException( ioEx );
+      }
   }
 
   protected void addContent() {
@@ -203,15 +210,17 @@ public class JSDLJobDescription
     this.jobIdentification = this.jsdlFactory.createJobIdentificationType();
     this.jobDescription = this.jsdlFactory.createJobDescriptionType();
     this.jobDefinition = this.jsdlFactory.createJobDefinitionType();
+
     // Associate child element with parent element.
-    // Remeber that JobDescription is contained within JobDefinition
+    // Remember that JobDescription is contained within JobDefinition
     // and that JobIdentification is contained within JobDescription.
     this.jobDefinition.setJobDescription( this.jobDescription );
     this.jobDescription.setJobIdentification( this.jobIdentification );
   }
 
   /**
-   * Method to create document root of JSDL file. This method should be called once, after JSDL is created.
+   * Method to create document root of JSDL file. This method should be called
+   * once, after JSDL is created.
    */
   public void createRoot() {
     this.documentRoot = this.jsdlFactory.createDocumentRoot();
@@ -220,7 +229,8 @@ public class JSDLJobDescription
   }
 
   /**
-   * Method to add job description element to JSDL. This method must not be called before calling {@link JSDLJobDescription#createRoot()}
+   * Method to add job description element to JSDL. This method must not be
+   * called before calling {@link JSDLJobDescription#createRoot()}
    */
   public void addJobDescription() {
     this.jobDescription = this.jsdlFactory.createJobDescriptionType();
@@ -228,18 +238,22 @@ public class JSDLJobDescription
   }
 
   /**
-   * Method to add job identyfication element to JSDL. This method must not be called before calling {@link JSDLJobDescription#jobIdentification}
+   * Method to add job identyfication element to JSDL. This method must not be
+   * called before calling {@link JSDLJobDescription#jobIdentification}
+   * 
    * @param jobName
    * @param description
    */
-  public void addJobIdentification( final String jobName, final String description ) {
+  public void addJobIdentification( final String jobName,
+                                    final String description )
+  {
     JobIdentificationType identyfication = this.jsdlFactory.createJobIdentificationType();
-    if( !description.equals( "" ) ) { //$NON-NLS-1$
+    if( !"".equals( description ) ) { //$NON-NLS-1$
       identyfication.setDescription( description );
     } else {
       identyfication.setDescription( "default description" ); //$NON-NLS-1$
     }
-    if( !jobName.equals( "" ) ) { //$NON-NLS-1$
+    if( !"".equals( jobName ) ) { //$NON-NLS-1$
       identyfication.setJobName( jobName );
     } else {
       identyfication.setJobName( "default job name" ); //$NON-NLS-1$
@@ -248,7 +262,8 @@ public class JSDLJobDescription
   }
 
   /**
-   * Method to add application element to JSDL. This method must no be called before calling {@link JSDLJobDescription#jobDescription}
+   * Method to add application element to JSDL. This method must no be called
+   * before calling {@link JSDLJobDescription#jobDescription}
    */
   public void addApplication() {
     ApplicationType app = this.jsdlFactory.createApplicationType();
@@ -256,38 +271,46 @@ public class JSDLJobDescription
   }
 
   /**
-   * Method to add POSIX-specific information to created JSDL. This method must not be called before calling {@link JSDLJobDescription#addApplication()}
+   * Method to add POSIX-specific information to created JSDL. This method must
+   * not be called before calling {@link JSDLJobDescription#addApplication()}
+   * 
    * @param applicationName
    * @param executableFile
    * @param stdin
-   * @param stdinName 
-   * @param stdout 
-   * @param outName 
+   * @param stdinName
+   * @param stdout
+   * @param outName
    */
   @SuppressWarnings("unchecked")
   public void addPOSIXApplicationDetails( final String applicationName,
                                           final String executableFile,
-                                          final String stdin, final String stdinName, final String stdout, String outName )
+                                          final String stdin,
+                                          final String stdinName,
+                                          final String stdout,
+                                          final String outName )
   {
     this.jobDescription.getApplication().setApplicationName( applicationName );
     POSIXApplicationType posixApp = this.posixFactory.createPOSIXApplicationType();
     FileNameType execFile = this.posixFactory.createFileNameType();
     execFile.setValue( executableFile );
     posixApp.setExecutable( execFile );
+
     if( stdin != null ) {
       FileNameType inputFile = this.posixFactory.createFileNameType();
       inputFile.setValue( stdin );
       posixApp.setInput( inputFile );
     }
+
     if( stdout != null ) {
       FileNameType outputFile = this.posixFactory.createFileNameType();
       outputFile.setValue( stdout );
       posixApp.setOutput( outputFile );
     }
+    
     ApplicationType app = this.jobDescription.getApplication();
     EClass eClass = ExtendedMetaData.INSTANCE.getDocumentRoot( this.posixPackage );
-    Entry e = org.eclipse.emf.ecore.util.FeatureMapUtil.createEntry( eClass.getEStructuralFeature( "pOSIXApplication" ), //$NON-NLS-1$
-                                                                     posixApp );
+    Entry e = FeatureMapUtil.createEntry( eClass.getEStructuralFeature( "pOSIXApplication" ), //$NON-NLS-1$
+                                          posixApp );
     app.getAny().add( e );
     // when adding files for input and output - add them also to data staging
     if( stdin != null ) {
@@ -313,7 +336,9 @@ public class JSDLJobDescription
   }
 
   /**
-   * Method to add data staging element to JSDL with source element added to it as one of its children
+   * Method to add data staging element to JSDL with source element added to it
+   * as one of its children
+   * 
    * @param name
    * @param path
    */
@@ -330,7 +355,9 @@ public class JSDLJobDescription
   }
 
   /**
-   * Method to add data staging element to JSDL with target element added to it as one of its children
+   * Method to add data staging element to JSDL with target element added to it
+   * as one of its children
+   * 
    * @param name
    * @param path
    */
@@ -346,37 +373,41 @@ public class JSDLJobDescription
     this.jobDescription.getDataStaging().add( dataOut );
   }
   
-  protected DocumentRoot getDocumentRoot(){
-    if ( this.documentRoot == null ){
-      this.loadModel( (IFile) this.getResource() );
+  protected DocumentRoot getDocumentRoot() {
+    if( this.documentRoot == null ) {
+      this.loadModel( ( IFile )this.getResource() );
     }
     return this.documentRoot;
   }
   
-  protected POSIXApplicationType getPosixApplication(){
+  protected POSIXApplicationType getPosixApplication() {
     POSIXApplicationType result = null;
     DocumentRoot dRoot = getDocumentRoot();
-    if ( dRoot != null && dRoot.getJobDefinition() != null && dRoot.getJobDefinition().getJobDescription() != null && dRoot.getJobDefinition().getJobDescription().getApplication() != null){
+    if(    getJobDescription( dRoot ) != null
+        && getJobDescription( dRoot ).getApplication() != null )
+    {
 //      dRoot.getJobDefinition().getJobDescription().getApplication().getAny().get( eClass.getEStructuralFeature( "pOSIXApplication" ), true );
-      FeatureMap anyMap = dRoot.getJobDefinition().getJobDescription().getApplication().getAny();
-      for (int i = 0; i < anyMap.size(); i++ ){
-        if (anyMap.getValue( i ) instanceof POSIXApplicationTypeImpl){
-          result = ( POSIXApplicationTypeImpl ) anyMap.getValue( i );
+      FeatureMap anyMap 
+        = getJobDescription( dRoot ).getApplication().getAny();
+      for( int i = 0; i < anyMap.size(); i++ ) {
+        if( anyMap.getValue( i ) instanceof POSIXApplicationTypeImpl ) {
+          result = ( POSIXApplicationTypeImpl )anyMap.getValue( i );
         }
-      }    
+      }
     }
     return result;
   }
   
   /**
    * Accesses value of jsdl-posix:Executable element in jsdl-posix:Application
+   * 
    * @return value of element jsdl-posix:Executable or null if not defined
    */
   public String getExecutable(){
     String result = null;
     POSIXApplicationType posixApp = getPosixApplication();
-    if (posixApp != null
-        && posixApp.getExecutable() != null ){
+    if(    posixApp != null 
+        && posixApp.getExecutable() != null ) {
       result = posixApp.getExecutable().getValue();
     }
     return result;
@@ -384,20 +415,27 @@ public class JSDLJobDescription
   
   /**
    * Accesses value of jsdl:Description element
+   * 
    * @return value of jsdl:Description element, or null if not defined
    */
   public String getDescription(){
     String result = null;
     DocumentRoot dRoot = getDocumentRoot();
-    if ( dRoot != null && dRoot.getJobDefinition() != null && dRoot.getJobDefinition().getJobDescription() != null && dRoot.getJobDefinition().getJobDescription().getJobIdentification() != null ){
-              result = dRoot.getJobDefinition().getJobDescription().getJobIdentification().getDescription();
+    if( getJobDescription( dRoot ) != null
+        && getJobDescription( dRoot ).getJobIdentification() != null )
+    {
+      result 
+        = getJobDescription( dRoot ).getJobIdentification().getDescription();
     }
     return result;
   }
   
   /**
-   * Returns list of values of jsdl-posix:Argument elements in jsdl-posix:Application
-   * @return list of values of jsdl-posix:Argument or null if no jsdl-posix:Argument elements are defined
+   * Returns list of values of jsdl-posix:Argument elements in
+   * jsdl-posix:Application
+   * 
+   * @return list of values of jsdl-posix:Argument or null if no
+   *         jsdl-posix:Argument elements are defined
    */
   public List<String> getExecutableArguments(){
     ArrayList<String> result = null;
@@ -412,24 +450,18 @@ public class JSDLJobDescription
   }
   
   /**
-   * @return required cpu
+   * @return required CPU architecture
    */
   public String getCpuArchitectureName() {
     String architectureNameString = null;
     DocumentRoot dRoot = getDocumentRoot();
     
-    if( dRoot != null
-    && dRoot.getJobDefinition() != null
-    && dRoot.getJobDefinition().getJobDescription() != null
-    && dRoot.getJobDefinition().getJobDescription().getResources() != null
-    && dRoot.getJobDefinition().getJobDescription().getResources().getCPUArchitecture() != null
-    && dRoot.getJobDefinition().getJobDescription().getResources().getCPUArchitecture().getCPUArchitectureName() != null ) {
-      architectureNameString = dRoot.getJobDefinition()
-        .getJobDescription()
-        .getResources()
-        .getCPUArchitecture()
-        .getCPUArchitectureName()
-        .getName();
+    if(    getJobDescription( dRoot ) != null
+        && getJobDescription( dRoot ).getResources() != null
+        && getJobDescription( dRoot ).getResources().getCPUArchitecture() != null
+        && getJobDescription( dRoot ).getResources().getCPUArchitecture().getCPUArchitectureName() != null ) {
+      architectureNameString 
+        = getJobDescription( dRoot ).getResources().getCPUArchitecture().getCPUArchitectureName().getName();
     }
     
     return architectureNameString;
@@ -484,7 +516,7 @@ public class JSDLJobDescription
         && dRoot.getJobDefinition().getJobDescription() != null
         && dRoot.getJobDefinition().getJobDescription().getResources() != null
         && dRoot.getJobDefinition().getJobDescription().getResources().getOperatingSystem() != null
-        && dRoot.getJobDefinition().getJobDescription().getResources().getOperatingSystem().getOperatingSystemType() != null
+        && getJobDescription( dRoot ).getResources().getOperatingSystem().getOperatingSystemType() != null
         && dRoot.getJobDefinition().getJobDescription().getResources().getOperatingSystem().getOperatingSystemType().getOperatingSystemName() != null )
     {
       nameString = dRoot.getJobDefinition()
@@ -499,6 +531,7 @@ public class JSDLJobDescription
     return nameString;
   }
 
+
   /**
    * @return version of required operating system
    */
@@ -506,23 +539,26 @@ public class JSDLJobDescription
     String versionString = null;
     DocumentRoot dRoot = getDocumentRoot();
     
-    if( dRoot != null
+    if(    dRoot != null
         && dRoot.getJobDefinition() != null
         && dRoot.getJobDefinition().getJobDescription() != null
         && dRoot.getJobDefinition().getJobDescription().getResources() != null
         && dRoot.getJobDefinition().getJobDescription().getResources().getOperatingSystem() != null )
     {
       versionString = dRoot.getJobDefinition()
-      .getJobDescription()
-      .getResources()
-      .getOperatingSystem().getOperatingSystemVersion();
+        .getJobDescription()
+        .getResources()
+        .getOperatingSystem()
+        .getOperatingSystemVersion();
     }
 
     return versionString;
   }
   
   /**
-   * Adds sequence of jsdl-posix:Argument elements as a children of jsdl-posix:Application
+   * Adds sequence of jsdl-posix:Argument elements as a children of
+   * jsdl-posix:Application
+   * 
    * @param argName name of the argument
    * @param argValues list of values of the argument
    */
@@ -567,7 +603,7 @@ public class JSDLJobDescription
     String outputString= null;
     POSIXApplicationType posixApp = getPosixApplication();
     
-    if( posixApp != null
+    if(    posixApp != null
         && posixApp.getOutput() != null ) {
       outputString = posixApp.getOutput().getValue();
     }
@@ -604,7 +640,10 @@ public class JSDLJobDescription
    */
   public void setCPUArchitecture(final String cpu){
     final DocumentRoot dRoot = getDocumentRoot();
-    if ( dRoot != null && dRoot.getJobDefinition() != null && dRoot.getJobDefinition().getJobDescription() != null){
+    if(    dRoot != null
+        && dRoot.getJobDefinition() != null
+        && dRoot.getJobDefinition().getJobDescription() != null )
+    {
       ResourcesType resources = dRoot.getJobDefinition().getJobDescription().getResources();
       if (resources == null){
         resources = this.jsdlFactory.createResourcesType();
@@ -619,19 +658,26 @@ public class JSDLJobDescription
   /**
    * @param start - minimum number of cpu
    * @param end - maximum number of cpu
-   * @param exclusive - treat above range as closed (valid value can be also start or end)
+   * @param exclusive - treat above range as closed (valid value can be also
+   *            start or end)
    */
   @SuppressWarnings("unchecked")
-  public void setTotalCPUCount( final double start, final double end, final boolean exclusive ){
+  public void setTotalCPUCount( final double start,
+                                final double end,
+                                final boolean exclusive )
+  {
     DocumentRoot dRoot = getDocumentRoot();
-    if ( dRoot != null && dRoot.getJobDefinition() != null && dRoot.getJobDefinition().getJobDescription() != null){
+    if(    dRoot != null
+        && dRoot.getJobDefinition() != null
+        && dRoot.getJobDefinition().getJobDescription() != null )
+    {
       ResourcesType resources = dRoot.getJobDefinition().getJobDescription().getResources();
-      if (resources == null){
+      if( resources == null ) {
         resources = this.jsdlFactory.createResourcesType();
         dRoot.getJobDefinition().getJobDescription().setResources( resources );
       }
       RangeValueType rangeValue = resources.getTotalCPUCount();
-      if (rangeValue == null){
+      if( rangeValue == null ) {
         rangeValue = this.jsdlFactory.createRangeValueType();
         resources.setTotalCPUCount( rangeValue );
       }
@@ -652,23 +698,26 @@ public class JSDLJobDescription
    * @param hostsList - list of hosts, which are candidate to run jub
    */
   @SuppressWarnings("unchecked")
-  public void addCandidateHosts(final List<String> hostsList){
+  public void addCandidateHosts( final List<String> hostsList ) {
     DocumentRoot dRoot = getDocumentRoot();
-    if ( dRoot != null && dRoot.getJobDefinition() != null && dRoot.getJobDefinition().getJobDescription() != null){
+    if(    dRoot != null
+        && dRoot.getJobDefinition() != null
+        && dRoot.getJobDefinition().getJobDescription() != null )
+    {
       ResourcesType resources = dRoot.getJobDefinition().getJobDescription().getResources();
-      if (resources == null){
+      if( resources == null ) {
         resources = this.jsdlFactory.createResourcesType();
         dRoot.getJobDefinition().getJobDescription().setResources( resources );
       }
       CandidateHostsType candidateHosts = resources.getCandidateHosts();
-      if (candidateHosts == null){
+      if( candidateHosts == null ) {
         candidateHosts = this.jsdlFactory.createCandidateHostsType();
         resources.setCandidateHosts( candidateHosts );
       }
-      for (String hostName: hostsList){
+      for( String hostName : hostsList ) {
         candidateHosts.getHostName().add( hostName );
       }
-     }
+    }
   }
 
 
@@ -677,14 +726,17 @@ public class JSDLJobDescription
    */
   public void setOS( final String osList ) {
     final DocumentRoot dRoot = getDocumentRoot();
-    if ( dRoot != null && dRoot.getJobDefinition() != null && dRoot.getJobDefinition().getJobDescription() != null){
+    if(    dRoot != null
+        && dRoot.getJobDefinition() != null
+        && dRoot.getJobDefinition().getJobDescription() != null )
+    {
       ResourcesType resources = dRoot.getJobDefinition().getJobDescription().getResources();
-      if (resources == null){
+      if( resources == null ) {
         resources = this.jsdlFactory.createResourcesType();
         dRoot.getJobDefinition().getJobDescription().setResources( resources );
       }
       OperatingSystemType osType = resources.getOperatingSystem();
-      if (osType == null){
+      if( osType == null ) {
         osType = this.jsdlFactory.createOperatingSystemType();
         resources.setOperatingSystem( osType );
       }
@@ -703,14 +755,17 @@ public class JSDLJobDescription
   @SuppressWarnings("unchecked")
   public void setInidividialCPUSpeedRange( final double start, final double end, final boolean exclusive ) {
     DocumentRoot dRoot = getDocumentRoot();
-    if ( dRoot != null && dRoot.getJobDefinition() != null && dRoot.getJobDefinition().getJobDescription() != null){
+    if(    dRoot != null
+        && dRoot.getJobDefinition() != null
+        && dRoot.getJobDefinition().getJobDescription() != null )
+    {
       ResourcesType resources = dRoot.getJobDefinition().getJobDescription().getResources();
-      if (resources == null){
+      if( resources == null ) {
         resources = this.jsdlFactory.createResourcesType();
         dRoot.getJobDefinition().getJobDescription().setResources( resources );
       }
       RangeValueType rangeValue = resources.getIndividualCPUSpeed();
-      if (rangeValue == null){
+      if( rangeValue == null ) {
         rangeValue = this.jsdlFactory.createRangeValueType();
         resources.setIndividualCPUSpeed( rangeValue );
       }
@@ -736,14 +791,17 @@ public class JSDLJobDescription
   @SuppressWarnings("unchecked")
   public void setTotalPhysicalMemory( final double start, final double end, final boolean exclusive ) {
     DocumentRoot dRoot = getDocumentRoot();
-    if ( dRoot != null && dRoot.getJobDefinition() != null && dRoot.getJobDefinition().getJobDescription() != null){
+    if(    dRoot != null
+        && dRoot.getJobDefinition() != null
+        && dRoot.getJobDefinition().getJobDescription() != null )
+    {
       ResourcesType resources = dRoot.getJobDefinition().getJobDescription().getResources();
-      if (resources == null){
+      if( resources == null ) {
         resources = this.jsdlFactory.createResourcesType();
         dRoot.getJobDefinition().getJobDescription().setResources( resources );
       }
       RangeValueType rangeValue = resources.getTotalPhysicalMemory();
-      if (rangeValue == null){
+      if( rangeValue == null ) {
         rangeValue = this.jsdlFactory.createRangeValueType();
         resources.setTotalPhysicalMemory( rangeValue );
       }
@@ -758,26 +816,30 @@ public class JSDLJobDescription
       range.setUpperBound( bl );
       rangeValue.getRange().add( range );
     }
-    
   }
 
 
   /**
-   * Set required CPU to: value +/- epsilon  
+   * Set required CPU to: value +/- epsilon
+   * 
    * @param value - CPU speed
    * @param epsilon - value of which CPU speed can be bigger or smaller
    */
   @SuppressWarnings("unchecked")
   public void setIndividualCPUSpeedValue( final double value, final double epsilon ) {
     final DocumentRoot dRoot = getDocumentRoot();
-    if ( dRoot != null && dRoot.getJobDefinition() != null && dRoot.getJobDefinition().getJobDescription() != null){
-      ResourcesType resources = dRoot.getJobDefinition().getJobDescription().getResources();
-      if (resources == null){
+    if(    dRoot != null
+        && dRoot.getJobDefinition() != null
+        && dRoot.getJobDefinition().getJobDescription() != null )
+    {
+      ResourcesType resources 
+        = dRoot.getJobDefinition().getJobDescription().getResources();
+      if( resources == null ) {
         resources = this.jsdlFactory.createResourcesType();
         dRoot.getJobDefinition().getJobDescription().setResources( resources );
       }
       RangeValueType rangeValue = resources.getIndividualCPUSpeed();
-      if (rangeValue == null){
+      if( rangeValue == null ) {
         rangeValue = this.jsdlFactory.createRangeValueType();
         resources.setIndividualCPUSpeed( rangeValue );
       }
@@ -787,8 +849,6 @@ public class JSDLJobDescription
       exact.setEpsilon( epsilon );
       rangeValue.getExact().add( exact );
     }
-
-    
   }
 
 
@@ -798,9 +858,13 @@ public class JSDLJobDescription
    * @param epsilon - how much cpu can differs from value
    */
   @SuppressWarnings("unchecked")
-  public void setTotalCPUCountValue( final double value, final double epsilon ) {
+  public void setTotalCPUCountValue( final double value, final double epsilon )
+  {
     DocumentRoot dRoot = getDocumentRoot();
-    if ( dRoot != null && dRoot.getJobDefinition() != null && dRoot.getJobDefinition().getJobDescription() != null){
+    if(    dRoot != null
+        && dRoot.getJobDefinition() != null
+        && dRoot.getJobDefinition().getJobDescription() != null )
+    {
       ResourcesType resources = dRoot.getJobDefinition().getJobDescription().getResources();
       if (resources == null){
         resources = this.jsdlFactory.createResourcesType();
@@ -845,5 +909,16 @@ public class JSDLJobDescription
       exact.setEpsilon( epsilon );
       rangeValue.getExact().add( exact );
   }
+  }
+  
+  // helping methods
+  //////////////////
+
+  private JobDescriptionType getJobDescription( final DocumentRoot dRoot ) {
+    JobDescriptionType result = null;
+    if( dRoot != null && dRoot.getJobDescription() != null ) {
+      result = dRoot.getJobDefinition().getJobDescription();
+    }
+    return result;
   }
 }
