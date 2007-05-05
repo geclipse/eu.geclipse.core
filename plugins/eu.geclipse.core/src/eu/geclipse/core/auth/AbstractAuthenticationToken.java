@@ -19,6 +19,8 @@ import java.io.IOException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+
+import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.util.SecureFile;
 
 /**
@@ -53,7 +55,7 @@ public abstract class AbstractAuthenticationToken implements IAuthenticationToke
    * where all activated tokens are saved.
    */
   static public IPath getTokenLocation() {
-    IPath location = eu.geclipse.core.internal.Activator.getDefault().getStateLocation();
+    IPath location = Activator.getDefault().getStateLocation();
     if ( !location.hasTrailingSeparator() ) {
       location = location.addTrailingSeparator();
     }
@@ -66,7 +68,7 @@ public abstract class AbstractAuthenticationToken implements IAuthenticationToke
       try {
         file.setSecure();        
       } catch( IOException ioe ) {
-        //
+        // do nothing if not supported
       }
     }
     return location;
