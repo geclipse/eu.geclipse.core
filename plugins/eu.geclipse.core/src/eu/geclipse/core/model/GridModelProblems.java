@@ -129,7 +129,8 @@ public class GridModelProblems implements IProblemProvider {
                                exc,
                                new int[] {
                                  SolutionRegistry.CHECK_CA_CERTIFICATES,
-                                 SolutionRegistry.CHECK_AUTH_TOKENS
+                                 SolutionRegistry.CHECK_AUTH_TOKENS,
+                                 SolutionRegistry.CHECK_PROXY_SETTINGS
                                } );
     }
     
