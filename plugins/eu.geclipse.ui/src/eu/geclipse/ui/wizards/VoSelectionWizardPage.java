@@ -35,13 +35,16 @@ public class VoSelectionWizardPage extends WizardPage {
   
   private Text infoText;
   
-  public VoSelectionWizardPage() {
+  private boolean allowMultiSelection;
+  
+  public VoSelectionWizardPage( final boolean allowMultiSelection ) {
     super( "voOPage", //$NON-NLS-1$
            "VO Selection Page",
            null );
     setDescription( "Specify the VO that should be used" );
     URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/wizban/newtoken_wiz.gif" ); //$NON-NLS-1$
     setImageDescriptor( ImageDescriptor.createFromURL( imgUrl ) );
+    this.allowMultiSelection = allowMultiSelection;
   }
 
   public void createControl( final Composite parent ) {
@@ -64,7 +67,14 @@ public class VoSelectionWizardPage extends WizardPage {
     gData.heightHint = 120;
     voGroup.setLayoutData( gData );
     
-    this.voList = new List( voGroup, SWT.BORDER | SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL );
+    int style = SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL;
+    if ( this.allowMultiSelection ) {
+      style |= SWT.MULTI;
+    } else {
+      style |= SWT.SINGLE;
+    }
+    
+    this.voList = new List( voGroup, style );
     gData = new GridData( GridData.FILL_BOTH );
     gData.grabExcessHorizontalSpace = true;
     gData.grabExcessVerticalSpace = true;
@@ -73,7 +83,7 @@ public class VoSelectionWizardPage extends WizardPage {
       @Override
       public void widgetSelected( final SelectionEvent e ) {
         showSelectedInfo();
-        IVirtualOrganization selectedVo = getSelectedVo();
+        IVirtualOrganization[] selectedVo = getSelectedVos();
         setPageComplete( selectedVo != null );
       }
     } );
@@ -90,7 +100,7 @@ public class VoSelectionWizardPage extends WizardPage {
         createNewVO();
         updateVoList();
         showSelectedInfo();
-        setPageComplete( getSelectedVo() != null );
+        setPageComplete( getSelectedVos() != null );
       }
     } );
     
@@ -112,25 +122,39 @@ public class VoSelectionWizardPage extends WizardPage {
     
     updateVoList();
     showSelectedInfo();
-    setPageComplete( getSelectedVo() != null );
+    setPageComplete( getSelectedVos() != null );
     
     setControl( mainComp );
     
   }
   
-  public IVirtualOrganization getSelectedVo() {
-    IVirtualOrganization selectedVo = null;
+  public IVirtualOrganization[] getSelectedVos() {
+    
+    java.util.List< IVirtualOrganization > selectedVos = new ArrayList< IVirtualOrganization >();
     String[] selection = this.voList.getSelection();
+    
     if ( ( selection != null ) && ( selection.length != 0 ) ) {
       IVoManager voManager = GridModel.getVoManager();
-      selectedVo =  ( IVirtualOrganization ) voManager.findChild( selection[0] );
+      for ( String voName : selection ) {
+        IVirtualOrganization vo
+          = ( IVirtualOrganization ) voManager.findChild( selection[0] );
+        if ( vo != null ) {
+          selectedVos.add( vo );
+        }
+      }
     }
-    if ( selectedVo == null ) {
+    
+    if ( selectedVos.isEmpty() ) {
       setErrorMessage( "No valid VO is selected" );
     } else {
       setErrorMessage( null );
     }
-    return selectedVo;
+    
+    return
+      selectedVos.isEmpty()
+      ? null
+      : selectedVos.toArray( new IVirtualOrganization[ selectedVos.size() ] );
+    
   }
   
   protected void createNewVO() {
@@ -167,18 +191,18 @@ public class VoSelectionWizardPage extends WizardPage {
   }
   
   protected void showSelectedInfo() {
-    IVirtualOrganization vo = getSelectedVo();
-    if ( vo != null ) {
+    IVirtualOrganization[] vos = getSelectedVos();
+    if ( vos != null ) {
       try {
         String text = new String();
-        text += "Name:\n\t" + vo.getName() + '\n';
-        text += "Type:\n\t" + vo.getTypeName() + '\n';
-        IGridInfoService infoService = vo.getInfoService();
+        text += "Name:\n\t" + vos[0].getName() + '\n';
+        text += "Type:\n\t" + vos[0].getTypeName() + '\n';
+        IGridInfoService infoService = vos[0].getInfoService();
         if ( infoService != null ) {
           text += "\nInformation Service:\n\tName:\n\t\t" + infoService.getName();
           text += "\n\tURI:\n\t\t" + infoService.getURI().toString(); 
         }
-        IGridService[] services = vo.getServices();
+        IGridService[] services = vos[0].getServices();
         text += "\n\nOther Services:";
         if ( services.length > 1 ) {
           for ( IGridService service : services ) {
@@ -194,7 +218,7 @@ public class VoSelectionWizardPage extends WizardPage {
       } catch ( GridModelException gmExc ) {
         NewProblemDialog.openProblem( getShell(),
                                       "VO info problem",
-                                      "Unable to query services for VO " + vo.getName(),
+                                      "Unable to query services for VO " + vos[0].getName(),
                                       gmExc );
       }
     } else {
