@@ -137,7 +137,7 @@ public class VoSelectionWizardPage extends WizardPage {
       IVoManager voManager = GridModel.getVoManager();
       for ( String voName : selection ) {
         IVirtualOrganization vo
-          = ( IVirtualOrganization ) voManager.findChild( selection[0] );
+          = ( IVirtualOrganization ) voManager.findChild( voName );
         if ( vo != null ) {
           selectedVos.add( vo );
         }
