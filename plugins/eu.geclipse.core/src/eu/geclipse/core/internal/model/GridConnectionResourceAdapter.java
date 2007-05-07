@@ -38,6 +38,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.PlatformObject;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
@@ -54,6 +55,7 @@ import eu.geclipse.core.model.IGridProject;
  * {@link GridConnectionElement}s.
  */
 abstract public class GridConnectionResourceAdapter
+    extends PlatformObject
     implements IResource {
   
   /**
@@ -695,14 +697,6 @@ abstract public class GridConnectionResourceAdapter
       throws CoreException {
     // TODO mathias
     notYetImplemented();
-  }
-
-  /* (non-Javadoc)
-   * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
-   */
-  @SuppressWarnings("unchecked")
-  public Object getAdapter( final Class adapter ) {
-    return null;
   }
 
   /* (non-Javadoc)
