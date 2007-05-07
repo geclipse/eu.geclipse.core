@@ -22,7 +22,7 @@ import org.junit.Test;
  * This class tests the functionality of each method in the class Preferences.
  * In most cases, the test is associated with both Set and Get methods
  */
-public class Preferences_Test {
+public class Preferences_PDETest {
 
   private Preferences preferences;
 
