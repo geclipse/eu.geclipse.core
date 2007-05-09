@@ -40,6 +40,12 @@ public class PreferenceSolution extends UISolution {
     = "org.eclipse.net.ui.NetPreferences"; //$NON-NLS-1$
   
   /**
+   * ID of the VO preference page.
+   */
+  public static final String VO_PREFERENCE_PAGE
+    = "eu.geclipse.ui.internal.preference.VOPreferencePage"; //$NON-NLS-1$
+  
+  /**
    * The id of the preference page that should be opened.
    */
   private String preferencePageId;

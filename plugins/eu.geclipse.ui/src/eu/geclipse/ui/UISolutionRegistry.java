@@ -93,6 +93,12 @@ public class UISolutionRegistry extends SolutionRegistry {
                                          this.shell,
                                          PreferenceSolution.NETWORK_PREFERENCE_PAGE );
     }
+    
+    else if ( solutionID == SolutionRegistry.CHECK_VO_SETTINGS ) {
+      solution = new PreferenceSolution( solution,
+                                         this.shell,
+                                         PreferenceSolution.VO_PREFERENCE_PAGE );
+    }
 
     return solution;
 
