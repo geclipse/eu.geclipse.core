@@ -57,6 +57,11 @@ public class SolutionRegistry {
   public static final int CHECK_SERVER_URL = uniqueID();
   
   /**
+   * Unique ID of the check VO settings solution.
+   */
+  public static final int CHECK_VO_SETTINGS = uniqueID();
+  
+  /**
    * Unique ID of the server may be down solution.
    */
   public static final int SERVER_DOWN = uniqueID();
@@ -148,6 +153,10 @@ public class SolutionRegistry {
     
     else if ( solutionID == CHECK_TIMEOUT_SETTINGS ) {
       solution = new Solution( CHECK_TIMEOUT_SETTINGS, Messages.getString("SolutionRegistry.check_timeout_settings") ); //$NON-NLS-1$
+    }
+    
+    else if ( solutionID == CHECK_VO_SETTINGS ) {
+      solution = new Solution( CHECK_VO_SETTINGS, "Check your VO settings" );
     }
     
     else if ( solutionID == SERVER_DOWN ) {
