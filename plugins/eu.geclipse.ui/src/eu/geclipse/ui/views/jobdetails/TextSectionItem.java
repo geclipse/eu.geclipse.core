@@ -5,7 +5,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
-
 /**
  * Section item shown as simple text
  * 
@@ -15,7 +14,7 @@ abstract public class TextSectionItem<ESourceType>
   extends AbstractSectionItem<ESourceType>
 {
 
-  Label valueLabel;
+  private Label valueLabel;
 
   /**
    * @param nameString section name
@@ -32,11 +31,18 @@ abstract public class TextSectionItem<ESourceType>
     return this.valueLabel;
   }
 
-  @Override
-  public void refresh( final ESourceType sourceObject )
-  {
-    String valueString = getValue( sourceObject );
-    this.valueLabel.setText( valueString == null
-                                                ? "" : valueString ); //$NON-NLS-1$
+  public boolean refresh( final ESourceType sourceObject ) {
+    boolean valueSpecified = false;
+    String valueString = null;
+    if( sourceObject != null ) {
+      valueString = getValue( sourceObject );
+    }
+    if( valueString == null ) {
+      this.valueLabel.setText( "" ); //$NON-NLS-1$ 
+    } else {
+      this.valueLabel.setText( valueString );
+      valueSpecified = valueString.length() > 0;
+    }
+    return valueSpecified;
   }
 }

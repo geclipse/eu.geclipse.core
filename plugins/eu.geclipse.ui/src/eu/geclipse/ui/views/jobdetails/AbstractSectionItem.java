@@ -31,6 +31,8 @@ abstract class AbstractSectionItem<ESourceType>
 {
 
   private String nameString;
+  private Label label;
+  private Control valueControl;
 
   /**
    * @param nameString item name, which will be shown in view
@@ -43,17 +45,33 @@ abstract class AbstractSectionItem<ESourceType>
   public void createWidgets( final Composite parentComposite,
                              final FormToolkit formToolkit )
   {
-    Label label = formToolkit.createLabel( parentComposite, this.nameString
-                                                            + ":" ); //$NON-NLS-1$
-    label.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true ) );
-    Control valueControl = createValueControl( parentComposite, formToolkit );
-    valueControl.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true ) );
+    this.label = formToolkit.createLabel( parentComposite, this.nameString
+                                                           + ":" ); //$NON-NLS-1$
+    this.label.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true ) );
+    this.valueControl = createValueControl( parentComposite, formToolkit );
+    this.valueControl.setLayoutData( new GridData( SWT.FILL,
+                                                   SWT.FILL,
+                                                   true,
+                                                   true ) );
+    setVisible( false ); // just created view has no input gridObject, so all
+                          // sections are created as not visibled
+  }
+
+  public void setVisible( final boolean visible ) {
+    setVisible( this.label, visible );
+    setVisible( this.valueControl, visible );
+  }
+
+  private void setVisible( final Control control, final boolean visible ) {
+    GridData layoutData = ( GridData )control.getLayoutData();
+    if( layoutData != null ) {
+      layoutData.exclude = !visible;
+    }
+    control.setVisible( visible );
   }
 
   protected abstract String getValue( final ESourceType sourceObject );
 
   protected abstract Control createValueControl( final Composite parentComposite,
                                                  final FormToolkit formToolkit );
-
-  public abstract void refresh( final ESourceType sourceObject );
 }

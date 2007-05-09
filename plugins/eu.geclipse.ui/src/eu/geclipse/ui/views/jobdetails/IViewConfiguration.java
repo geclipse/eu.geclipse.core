@@ -15,28 +15,13 @@
  *****************************************************************************/
 package eu.geclipse.ui.views.jobdetails;
 
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.forms.widgets.FormToolkit;
-import eu.geclipse.core.model.IGridJob;
-
 /**
- * Interface for section in job details view
+ * Interface, which returns information about current configuration of view 
  */
-interface ISection {
+public interface IViewConfiguration {
 
   /**
-   * Creates all widgets for visualisation of section
-   * 
-   * @param parentComposite
-   * @param formToolkit
+   * @return true if items with empty value should be hidden
    */
-  void createWidgets( final Composite parentComposite,
-                      final FormToolkit formToolkit );
-
-  /**
-   * Refresh values showed in this section
-   * 
-   * @param gridJob - object containg job data
-   */
-  void refresh( final IGridJob gridJob );
+  boolean isShowEmptyEnabled();
 }

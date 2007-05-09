@@ -9,6 +9,16 @@ public class Messages extends NLS {
   /**
    * 
    */
+  public static String JobDetailsView_actionShowEmptyVals;
+
+  /**
+   * 
+   */
+  public static String JobDetailsView_EmptyJobDesc;
+
+  /**
+   * 
+   */
   public static String JobDetailsView_name;
 
   /**

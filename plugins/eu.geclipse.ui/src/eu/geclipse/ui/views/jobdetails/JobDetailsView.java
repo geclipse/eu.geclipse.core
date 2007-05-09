@@ -17,26 +17,38 @@ package eu.geclipse.ui.views.jobdetails;
 
 import java.util.ArrayList;
 import java.util.List;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.part.ViewPart;
+import eu.geclipse.core.model.GridModel;
+import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridJob;
-
+import eu.geclipse.ui.views.jobdetails.jsdl.SectionRequirements;
 
 /**
  * View showing details about submitted job
  */
-public class JobDetailsView extends ViewPart {
+public class JobDetailsView extends ViewPart implements IViewConfiguration {
 
   /**
    * View identifier
    */
   static final public String ID = "eu.geclipse.ui.views.jobdetails.JobDetailsView"; //$NON-NLS-1$
-  private List<ISection<? extends IGridJob>> sectionsList;
+  protected IGridJob gridJob;
+  private List<ISection> sectionsList;
   private FormToolkit formToolkit;
   private Composite topComposite;
+  private IAction showEmptyValuesAction;
+  private Label emptyJobDescLabel;
 
   /**
    * 
@@ -45,11 +57,12 @@ public class JobDetailsView extends ViewPart {
     super();
   }
 
-  List<ISection<? extends IGridJob>> getSections() {
+  List<ISection> getSections() {
     if( this.sectionsList == null ) {
-      this.sectionsList = new ArrayList<ISection<? extends IGridJob>>();
-      this.sectionsList.add( new SectionGeneral() );
-      this.sectionsList.add( new SectionDescription() );
+      this.sectionsList = new ArrayList<ISection>();
+      this.sectionsList.add( new SectionGeneral( this ) );
+      this.sectionsList.add( new SectionDescription( this ) );
+      this.sectionsList.add( new SectionRequirements( this ) );
     }
     return this.sectionsList;
   }
@@ -69,40 +82,98 @@ public class JobDetailsView extends ViewPart {
   @Override
   public void createPartControl( final Composite parentComposite )
   {
+    registerContextMenu();
     this.topComposite = getFormToolkit().createComposite( parentComposite );
     this.topComposite.setLayout( new GridLayout( 2, false ) );
     this.topComposite.setBackground( getFormToolkit().getColors()
       .getBackground() );
-    for( ISection<? extends IGridJob> section : getSections() ) {
+    for( ISection section : getSections() ) {
       section.createWidgets( this.topComposite, getFormToolkit() );
     }
-    this.topComposite.layout();
+    setInputJob( findJob() );
   }
 
   @Override
   public void setFocus()
   {
-    // TODO Auto-generated method stub
+    // empty implementation
   }
 
   /**
-   * @param gridJob object containg job data
+   * @param job object containg job data
    */
-  public void setInputJob( final IGridJob gridJob ) {
-    refresh( gridJob );
+  public void setInputJob( final IGridJob job ) {
+    this.gridJob = job;
+    refresh();
   }
 
-  @SuppressWarnings("unchecked")
-  private void refresh( final IGridJob gridJob )
-  {
-    setPartName( gridJob.getName() == null
-                                          ? Messages.JobDetailsView_name
-                                          : gridJob.getName() );
+  protected void refresh() {
+    refreshEmptyJobDesc();
+    setPartName( this.gridJob == null || this.gridJob.getName() == null
+                                                                       ? Messages.JobDetailsView_name
+                                                                       : this.gridJob.getName() );
     for( ISection section : this.getSections() ) {
-      section.refresh( gridJob );
+      section.refresh( this.gridJob );
     }
     if( this.topComposite != null ) {
       this.topComposite.layout();
     }
+  }
+
+  private void registerContextMenu() {
+    IMenuManager manager = getViewSite().getActionBars().getMenuManager();
+    manager.add( createShowEmptyAction() );
+  }
+
+  IAction createShowEmptyAction() {
+    this.showEmptyValuesAction = new Action( Messages.JobDetailsView_actionShowEmptyVals,
+                                             IAction.AS_CHECK_BOX )
+    {
+
+      /*
+       * (non-Javadoc)
+       * 
+       * @see org.eclipse.jface.action.Action#run()
+       */
+      @Override
+      public void run()
+      {
+        refresh();
+      }
+    };
+    return this.showEmptyValuesAction;
+  }
+
+  public boolean isShowEmptyEnabled() {
+    return this.showEmptyValuesAction.isChecked();
+  }
+
+  private void refreshEmptyJobDesc() {
+    if( this.gridJob == null && this.emptyJobDescLabel == null ) {
+      this.emptyJobDescLabel = getFormToolkit().createLabel( this.topComposite,
+                                                             Messages.JobDetailsView_EmptyJobDesc );
+    } else if( this.gridJob != null && this.emptyJobDescLabel != null ) {
+      this.emptyJobDescLabel.dispose();
+      this.emptyJobDescLabel = null;
+    }
+  }
+
+  private IGridJob findJob() {
+    IGridJob foundJob = null;
+    IViewSite viewSite = getViewSite();
+    if( viewSite != null ) {
+      String jobPathString = viewSite.getSecondaryId();
+      if( jobPathString != null ) {
+        IPath path = new Path( jobPathString );
+        GridModel.getRoot(); // force to download jobs
+        IGridElement element = null;//GridModel.getJobManager().findChild( path );
+        if( element != null ) {
+          if( element instanceof IGridJob ) {
+            foundJob = ( IGridJob )element;
+          }
+        }
+      }
+    }
+    return foundJob;
   }
 }

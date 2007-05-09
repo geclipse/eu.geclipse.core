@@ -19,14 +19,13 @@ import java.util.ArrayList;
 import java.util.List;
 import eu.geclipse.core.model.IGridJob;
 
-
 /**
  *
  */
 public class SectionDescription extends AbstractSection<IGridJob> {
 
-  SectionDescription() {
-    super( Messages.SectionDescription_name );
+  SectionDescription( final IViewConfiguration viewConfiguration ) {
+    super( Messages.SectionDescription_name, viewConfiguration );
   }
 
   /* (non-Javadoc)
@@ -125,10 +124,16 @@ public class SectionDescription extends AbstractSection<IGridJob> {
       {
         String valueString = null;
         if( gridJob.getJobDescription() != null ) {
-          valueString = gridJob.getJobDescription().getDescription(); 
+          valueString = gridJob.getJobDescription().getDescription();
         }
         return valueString;
       }
     };
+  }
+
+  @Override
+  protected IGridJob getSourceObject( final IGridJob gridJob )
+  {
+    return gridJob;
   }
 }

@@ -2,9 +2,12 @@ package eu.geclipse.ui.views.jobdetails;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import eu.geclipse.core.model.IGridJob;
 
-interface ISectionItem<ESourceType> {
+/**
+ *
+ * @param <ESourceType> type of object, from which data for this item will be obtained
+ */
+public interface ISectionItem<ESourceType> {
 
   /**
    * Creates widgets for visualization of item in section
@@ -16,10 +19,13 @@ interface ISectionItem<ESourceType> {
                       final FormToolkit formToolkit );
 
   /**
-   * Refresh value shown in item
-   * 
-   * @param sourceObject {@link IGridJob} or inherited (depends of ESourceType)
-   *          cointaing job data
+   * @param sourceObject
+   * @return true if value is specified (is not null)
    */
-  void refresh( final ESourceType sourceObject );
+  boolean refresh( final ESourceType sourceObject );
+
+  /**
+   * @param visible true if item should be shown
+   */
+  void setVisible( final boolean visible );
 }

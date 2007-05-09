@@ -58,7 +58,6 @@ public class OpenJobAction
         view = ( JobDetailsView ) this.workbenchPage.showView( JobDetailsView.ID,
                                                               job.getPath().toString(),
                                                               IWorkbenchPage.VIEW_ACTIVATE );
-        view.setInputJob( job );
       } catch( PartInitException e ) {
         // Just ignore this exception and do not open the job
       }

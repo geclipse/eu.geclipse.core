@@ -19,14 +19,13 @@ import java.util.ArrayList;
 import java.util.List;
 import eu.geclipse.core.model.IGridJob;
 
-
 /**
  *
  */
 public class SectionGeneral extends AbstractSection<IGridJob> {
 
-  SectionGeneral() {
-    super( Messages.SectionGeneral_general );
+  SectionGeneral( final IViewConfiguration viewConfiguration ) {
+    super( Messages.SectionGeneral_general, viewConfiguration );
   }
 
   /* (non-Javadoc)
@@ -81,5 +80,11 @@ public class SectionGeneral extends AbstractSection<IGridJob> {
         return valueString;
       }
     };
+  }
+
+  @Override
+  protected IGridJob getSourceObject( final IGridJob gridJob )
+  {
+    return gridJob;
   }
 }
