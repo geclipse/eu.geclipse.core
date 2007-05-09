@@ -14,25 +14,46 @@
  *****************************************************************************/
 package eu.geclipse.core;
 
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLConnection;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 /**
  * This class tests the functionality of each method in the class Preferences.
- * In most cases, the test is associated with both Set and Get methods
+ * The test is associated with both Set and Get methods
  */
 public class Preferences_PDETest {
-
-  private Preferences preferences;
 
   /**
    * Setup of the test environment with the Preferences
    */
   @Before
   public void setUp() {
-    this.preferences = new Preferences();
+    // currently no setup
   }
+  
+  /**
+   * Test for the <code>eu.geclipse.core.Preferences#getURLConnection/code>
+   * method.
+   * @throws IOException
+   * @author jie
+   */
+  
+  @Test
+  public void testGetURLConnection() throws IOException
+  {
+    URL url = new URL( "http://www.geclipse.eu/" ); //$NON-NLS-1$
+    URLConnection urlconnect;
+    urlconnect = Preferences.getURLConnection( url );
+    Assert.assertNotNull( urlconnect );
+    Assert.assertEquals( urlconnect.getURL(), url );
+    urlconnect.setConnectTimeout( 20 );
+    Assert.assertEquals( new Integer( 20 ),new Integer( urlconnect.getConnectTimeout()));
+  }
+  
   
   /**
    * Test for the <code>eu.geclipse.core.Preferences#setDefaultVoName/code>
