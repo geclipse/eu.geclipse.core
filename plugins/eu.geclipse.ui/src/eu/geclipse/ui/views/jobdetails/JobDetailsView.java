@@ -165,8 +165,7 @@ public class JobDetailsView extends ViewPart implements IViewConfiguration {
       String jobPathString = viewSite.getSecondaryId();
       if( jobPathString != null ) {
         IPath path = new Path( jobPathString );
-        GridModel.getRoot(); // force to download jobs
-        IGridElement element = null;//GridModel.getJobManager().findChild( path );
+        IGridElement element = GridModel.getRoot().findElement( path );
         if( element != null ) {
           if( element instanceof IGridJob ) {
             foundJob = ( IGridJob )element;
