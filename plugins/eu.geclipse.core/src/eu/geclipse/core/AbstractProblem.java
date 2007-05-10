@@ -126,8 +126,9 @@ public abstract class AbstractProblem implements IProblem {
    */
   public List< ISolution > getSolutions( final SolutionRegistry registry ) {
     List< ISolution > resultList = new ArrayList< ISolution >(); 
-    for ( int i = 0 ; i < this.solutionIDs.size() ; i++ ) {
-      int solutionID = this.solutionIDs.get( i ).intValue();
+    List<Integer> sIDs = getSolutionIDs();
+    for ( int i = 0 ; i < sIDs.size() ; i++ ) {
+      int solutionID = sIDs.get( i ).intValue();
       ISolution solution = findSolution( solutionID );
       if ( solution == null ) {
         solution = registry.findSolution( solutionID );
@@ -137,6 +138,30 @@ public abstract class AbstractProblem implements IProblem {
       }
     }
     return resultList;
+  }
+  
+  public List< Integer > getSolutionIDs() {
+    
+    List< Integer > ids = new ArrayList< Integer >();
+    for ( Integer id : this.solutionIDs ) {
+      if ( ! ids.contains( id ) ) {
+        ids.add( id );
+      }
+    }
+    
+    Throwable exc = getException();
+    if ( exc instanceof GridException ) {
+      IProblem problem = ( ( GridException ) exc ).getProblem();
+      List< Integer > sids = ( ( AbstractProblem ) problem ).getSolutionIDs();
+      for ( Integer id : sids ) {
+        if ( ! ids.contains( id ) ) {
+          ids.add( id );
+        }
+      }
+    }
+    
+    return ids;
+    
   }
   
   /* (non-Javadoc)

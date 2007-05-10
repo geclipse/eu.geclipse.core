@@ -31,7 +31,7 @@ public interface IProblem {
    * Add a solution with the specified ID to this problem.
    * 
    * @param solutionID The ID of the solution that should be added. This ID has
-   * to be defined a any registered {@link IProblemProvider}.
+   * to be defined at any registered {@link IProblemProvider}.
    */
   public void addSolution( final int solutionID );
   
