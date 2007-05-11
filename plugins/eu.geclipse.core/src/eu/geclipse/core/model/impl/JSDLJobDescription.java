@@ -916,7 +916,7 @@ public class JSDLJobDescription extends ResourceGridContainer
 
   private JobDescriptionType getJobDescription( final DocumentRoot dRoot ) {
     JobDescriptionType result = null;
-    if( dRoot != null && dRoot.getJobDescription() != null ) {
+    if( dRoot != null && dRoot.getJobDefinition() != null ) {
       result = dRoot.getJobDefinition().getJobDescription();
     }
     return result;
