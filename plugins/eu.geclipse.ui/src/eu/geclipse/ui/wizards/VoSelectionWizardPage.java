@@ -37,7 +37,14 @@ public class VoSelectionWizardPage extends WizardPage {
   
   private boolean allowMultiSelection;
   
+  private Class voType;
+  
   public VoSelectionWizardPage( final boolean allowMultiSelection ) {
+    this( allowMultiSelection, null );
+  }
+  
+  public VoSelectionWizardPage( final boolean allowMultiSelection,
+                                final Class voType ) {
     super( "voOPage", //$NON-NLS-1$
            "VO Selection Page",
            null );
@@ -45,6 +52,7 @@ public class VoSelectionWizardPage extends WizardPage {
     URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/wizban/newtoken_wiz.gif" ); //$NON-NLS-1$
     setImageDescriptor( ImageDescriptor.createFromURL( imgUrl ) );
     this.allowMultiSelection = allowMultiSelection;
+    this.voType = voType;
   }
 
   public void createControl( final Composite parent ) {
@@ -233,14 +241,16 @@ public class VoSelectionWizardPage extends WizardPage {
       IGridElement[] vos = manager.getChildren( null );
       java.util.List< String > nameList = new ArrayList< String >();
       for ( IGridElement vo : vos ) {
-        nameList.add( vo.getName() );
+        if ( ( this.voType == null ) || this.voType.isAssignableFrom( vo.getClass() ) ) {
+          nameList.add( vo.getName() );
+        }
       }
       Collections.sort( nameList );
       for ( String name : nameList ) {
         this.voList.add( name );
       }
       IGridElement defaultVo = manager.getDefault();
-      if ( defaultVo != null ) {
+      if ( ( defaultVo != null ) && ( ( this.voType == null ) || voType.isAssignableFrom( defaultVo.getClass() ) ) ) {
         this.voList.setSelection( new String[] { defaultVo.getName() } );
       } else if ( this.voList.getItemCount() > 0 ){
         this.voList.setSelection( 0 );
