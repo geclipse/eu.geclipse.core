@@ -36,11 +36,6 @@ abstract public class AbstractPropertySource<ESourceType> {
   private List<AbstractPropertySource<?>> childPropSourceList = new LinkedList<AbstractPropertySource<?>>();
 
   /**
-   * All descriptors, also from child property sources
-   */
-  private List<IPropertyDescriptor> descriptors = null; 
-
-  /**
    * @param sourceObject Object, for which properties will be displayed
    */
   public AbstractPropertySource( final ESourceType sourceObject ) {
@@ -53,44 +48,17 @@ abstract public class AbstractPropertySource<ESourceType> {
    * Used to recognize, which of child {@link AbstractPropertySource} should return property value
    */
   abstract protected Class<? extends AbstractPropertySource<?>> getPropertySourceClass();
-  
-  /**
-   * @return Property descriptors defined as static member, without child properties
-   */
-  abstract protected List<IPropertyDescriptor> getStaticDescriptors();
+
+  abstract protected List<IProperty<ESourceType>> getStaticProperties();
 
   /** 
    * @return descriptors for all properties valid for current {@link AbstractPropertySource#sourceObject}
    * @see org.eclipse.ui.views.properties.IPropertySource#getPropertyDescriptors()
    */
   public List<IPropertyDescriptor> getPropertyDescriptors() {
-    if( this.descriptors == null ) {      
-
-      if( this.childPropSourceList == null
-        || this.childPropSourceList.isEmpty() )   
-      {
-        this.descriptors = getStaticDescriptors();
-      }
-      else {
-        int descriptorsSize = getStaticDescriptors().size();
-        
-        for( AbstractPropertySource<?> source : this.childPropSourceList ) {
-          descriptorsSize += source.getPropertyDescriptors().size();
-        }
-                
-        ArrayList<IPropertyDescriptor> descList = new ArrayList<IPropertyDescriptor>( descriptorsSize );
-        
-        descList.addAll( getStaticDescriptors() );
-        
-        for( AbstractPropertySource<?> source : this.childPropSourceList ) {
-          descList.addAll( source.getPropertyDescriptors() );
-        }
-        
-        this.descriptors = descList;
-      }
-    }
-    
-    return this.descriptors;
+    List<IPropertyDescriptor> descriptorsList = new ArrayList<IPropertyDescriptor>();    
+    appendDescriptors( descriptorsList );    
+    return descriptorsList;
   }
 
   @SuppressWarnings("unchecked")
@@ -114,16 +82,20 @@ abstract public class AbstractPropertySource<ESourceType> {
     return propertySource;
   }
 
-  protected static <ESourceType> List<IPropertyDescriptor> createDescriptors( final List<IProperty<ESourceType>> properties,
-                                                                              final Class<? extends AbstractPropertySource<?>> propSourceClass )
+  protected void appendDescriptors( final List<IPropertyDescriptor> descriptorsList )
   {
-    ArrayList<IPropertyDescriptor> descriptors = new ArrayList<IPropertyDescriptor>( properties.size() );
-    for( IProperty<ESourceType> property : properties ) {
-      PropertyId<ESourceType> id = new PropertyId<ESourceType>( propSourceClass,
-                                                                property );
-      descriptors.add( property.getDescriptor( id ) );
+    for( IProperty<ESourceType> property : getStaticProperties() ) {
+      if( property.isShowEmptyValue() 
+          || property.getValue( this.sourceObject ) != null ) {
+        descriptorsList.add( property.getDescriptor( getPropertySourceClass() ) );
+      }      
     }
-    return descriptors;
+    
+    if( this.childPropSourceList != null ) {
+     for( AbstractPropertySource<?> childPropertySource : this.childPropSourceList ) {
+       childPropertySource.appendDescriptors( descriptorsList );
+     }
+    }   
   }
   
   protected void addChildSource( final AbstractPropertySource<?> childPropertySource ) {

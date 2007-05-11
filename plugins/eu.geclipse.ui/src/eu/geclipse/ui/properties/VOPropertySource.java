@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import eu.geclipse.core.model.IVirtualOrganization;
 
 
@@ -28,7 +27,7 @@ import eu.geclipse.core.model.IVirtualOrganization;
  *
  */
 class VOPropertySource extends AbstractPropertySource<IVirtualOrganization> {
-   static private List<IPropertyDescriptor> staticDescriptors;
+   static private List<IProperty<IVirtualOrganization>> staticDescriptors;
   
   /**
    * @param virtualOrganization - vo for which properties be displayed
@@ -44,10 +43,10 @@ class VOPropertySource extends AbstractPropertySource<IVirtualOrganization> {
   }
 
   @Override
-  protected List<IPropertyDescriptor> getStaticDescriptors()
+  protected List<IProperty<IVirtualOrganization>> getStaticProperties()
   {
     if( staticDescriptors == null ) {
-      staticDescriptors = AbstractPropertySource.createDescriptors( createProperties(), getPropertySourceClass() );    
+      staticDescriptors = createProperties();
     }
     
     return staticDescriptors;
@@ -101,4 +100,5 @@ class VOPropertySource extends AbstractPropertySource<IVirtualOrganization> {
       }      
     };
   }
+
 }

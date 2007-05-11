@@ -17,7 +17,6 @@ package eu.geclipse.ui.properties;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import eu.geclipse.core.model.IGridProject;
 
 
@@ -26,7 +25,7 @@ import eu.geclipse.core.model.IGridProject;
  *
  */
 public class GridProjectSource extends AbstractPropertySource<IGridProject>{
-  static private List<IPropertyDescriptor> staticDescriptors;
+  static private List<IProperty<IGridProject>> staticProperties;
   
   /**
    * @param gridProject The project, for which properties will be displayed 
@@ -42,13 +41,12 @@ public class GridProjectSource extends AbstractPropertySource<IGridProject>{
   }
 
   @Override
-  public List<IPropertyDescriptor> getStaticDescriptors()
+  protected List<IProperty<IGridProject>> getStaticProperties()
   {
-    if( staticDescriptors == null ) {
-      staticDescriptors = AbstractPropertySource.createDescriptors( createProperties(),
-                                                                    getPropertySourceClass() );
+    if( staticProperties == null ) {
+      staticProperties = createProperties();
     }
-    return staticDescriptors;
+    return staticProperties;
   }
   
   static private List<IProperty<IGridProject>> createProperties() {
@@ -78,7 +76,7 @@ public class GridProjectSource extends AbstractPropertySource<IGridProject>{
         Object value = null;
         
         if( gridProject.getVO() != null ) {
-          value =  gridProject.getVO().getName();
+          value = gridProject.getVO().getName();
         }
         
         return value;
@@ -87,5 +85,4 @@ public class GridProjectSource extends AbstractPropertySource<IGridProject>{
     
     return property;
   }
-
 }

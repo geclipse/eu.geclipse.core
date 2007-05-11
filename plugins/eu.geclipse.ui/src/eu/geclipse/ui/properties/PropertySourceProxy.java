@@ -48,15 +48,10 @@ class PropertySourceProxy implements IPropertySource {
   }
 
   public IPropertyDescriptor[] getPropertyDescriptors() {
-    int descriptorsSize = 0;
-    for( AbstractPropertySource<?> propertySource : this.propertySourcesList ) {
-      descriptorsSize = propertySource.getPropertyDescriptors().size();
-    }
-    
-    List<IPropertyDescriptor> descriptors = new ArrayList<IPropertyDescriptor>( descriptorsSize );
+    List<IPropertyDescriptor> descriptors = new ArrayList<IPropertyDescriptor>();
     
     for( AbstractPropertySource<?> propertySource : this.propertySourcesList ) {
-      descriptors.addAll( propertySource.getPropertyDescriptors() );      
+      descriptors.addAll( propertySource.getPropertyDescriptors() );
     }
 
     return descriptors.toArray( new IPropertyDescriptor[descriptors.size()] );

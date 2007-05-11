@@ -17,7 +17,6 @@ package eu.geclipse.ui.properties;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import eu.geclipse.core.model.IGridConnection;
 
 
@@ -27,8 +26,7 @@ import eu.geclipse.core.model.IGridConnection;
 public class ConnectionPropertySource
   extends AbstractPropertySource<IGridConnection>
 {
-
-  static private List<IPropertyDescriptor> staticDescriptors;
+  static private List<IProperty<IGridConnection>> staticProperties;
 
   /**
    * @param gridConnection - connection, for which properties will be shown
@@ -47,17 +45,16 @@ public class ConnectionPropertySource
   }
 
   @Override
-  public List<IPropertyDescriptor> getStaticDescriptors()
+  protected List<IProperty<IGridConnection>> getStaticProperties()
   {
-    if( staticDescriptors == null ) {
-      staticDescriptors = AbstractPropertySource.createDescriptors( createProperties(),
-                                                                    getPropertySourceClass() );
+    if( staticProperties == null ) {
+      staticProperties = createProperties();
     }
-    return staticDescriptors;
+    return staticProperties;
   }
 
   static private List<IProperty<IGridConnection>> createProperties() {
     List<IProperty<IGridConnection>> propertiesList = new ArrayList<IProperty<IGridConnection>>( 5 );
-    return propertiesList; // return only URIPropertySource as child property-source (see constructor)
+    return propertiesList;
   }
 }

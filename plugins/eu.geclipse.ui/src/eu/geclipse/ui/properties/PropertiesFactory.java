@@ -19,6 +19,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import eu.geclipse.core.model.IGridConnection;
+import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridProject;
@@ -59,6 +60,10 @@ public class PropertiesFactory implements IPropertiesFactory {
     
     if( sourceObject instanceof IGridJob ) {
       sourcesList.add( new GridJobSource( ( IGridJob ) sourceObject ) );
+    }
+    
+    if( sourceObject instanceof IGridConnectionElement ) {
+      sourcesList.add( new GridConnectionElementSource( ( IGridConnectionElement ) sourceObject ) );
     }
     
     return sourcesList;

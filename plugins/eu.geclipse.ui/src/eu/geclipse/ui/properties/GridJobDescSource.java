@@ -17,7 +17,6 @@ package eu.geclipse.ui.properties;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import eu.geclipse.core.model.IGridJobDescription;
 
 
@@ -25,7 +24,7 @@ import eu.geclipse.core.model.IGridJobDescription;
  * Properties for {@link IGridJobDescription}
  */
 public class GridJobDescSource extends AbstractPropertySource<IGridJobDescription> {
-  static private List<IPropertyDescriptor> staticDescriptors;
+  static private List<IProperty<IGridJobDescription>> staticProperties;
 
   /**
    * @param source Object, for which properties will be shown
@@ -35,12 +34,12 @@ public class GridJobDescSource extends AbstractPropertySource<IGridJobDescriptio
   }
   
   @Override
-  public List<IPropertyDescriptor> getStaticDescriptors() {
-    if( staticDescriptors == null ) {
-      staticDescriptors = AbstractPropertySource.createDescriptors( createProperties(), getPropertySourceClass() );    
+  protected List<IProperty<IGridJobDescription>> getStaticProperties() {
+    if( staticProperties == null ) {
+      staticProperties = createProperties();    
     }
     
-    return staticDescriptors;
+    return staticProperties;
   }
   
   @Override

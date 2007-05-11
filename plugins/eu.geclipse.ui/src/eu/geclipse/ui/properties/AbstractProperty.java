@@ -16,6 +16,8 @@
 
 package eu.geclipse.ui.properties;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
@@ -32,15 +34,27 @@ abstract public class AbstractProperty<ESourceType>
   private String nameString;
   private String categoryString;
   private ILabelProvider labelProvider;
+  private boolean showEmptyValue;
+  private PropertyDescriptor descriptor;
 
+  /**
+   * @param name Property name
+   * @param category Property category. May be null
+   * @param showEmptyValue if false, then property will be hidden when its value is empty 
+   */
+  public AbstractProperty( final String name, final String category, final boolean showEmptyValue ) {
+    super();
+    this.nameString = name;
+    this.categoryString = category;
+    this.showEmptyValue = showEmptyValue;
+  }
+  
   /**
    * @param name Property name
    * @param category Property category. May be null
    */
   public AbstractProperty( final String name, final String category ) {
-    super();
-    this.nameString = name;
-    this.categoryString = category;
+    this( name, category, true );
   }
 
   /**
@@ -62,18 +76,52 @@ abstract public class AbstractProperty<ESourceType>
     this.labelProvider = provider;
   }
   
-  public IPropertyDescriptor getDescriptor( final PropertyId<ESourceType> propertyId )
+  public IPropertyDescriptor getDescriptor( final Class<? extends AbstractPropertySource<?>> propSourceClass )
   {
-    PropertyDescriptor descriptor = createDescriptor( propertyId,
-                                                      this.nameString );
-    descriptor.setCategory( this.categoryString );
-    descriptor.setLabelProvider( this.labelProvider );
-    return descriptor;
+    if( this.descriptor == null ) {
+      this.descriptor = createDescriptor( new PropertyId<ESourceType>( propSourceClass, this ), this.nameString );
+      this.descriptor.setCategory( this.categoryString );
+      this.descriptor.setLabelProvider( this.labelProvider );
+    }
+    
+    return this.descriptor;
   }
 
   protected PropertyDescriptor createDescriptor( final PropertyId<ESourceType> propertyId,
                                                  final String name )
   {
     return new PropertyDescriptor( propertyId, name );
+  }
+  
+  /**
+   * Formats number of bytes (e.g. file length ) as pretty looking String
+   * @param value number of bytes
+   * @return formatted String
+   */
+  protected String getBytesFormattedString( final double value ) {
+    String formattedString;
+    double smallerValue = value;
+    ArrayList<String> suffixList = new ArrayList<String>( 5 );
+    suffixList.add( "B" );  //$NON-NLS-1$
+    suffixList.add( "kB" );  //$NON-NLS-1$
+    suffixList.add( "MB" );  //$NON-NLS-1$
+    suffixList.add( "GB" );  //$NON-NLS-1$
+    suffixList.add( "TB" );  //$NON-NLS-1$
+    Iterator<String> iterator = suffixList.iterator();
+    String suffixString = iterator.next();
+    while( iterator.hasNext() && smallerValue > 1024 ) {
+      suffixString = iterator.next();
+      smallerValue /= 1024;
+    }
+    if( ( ( int )smallerValue ) == smallerValue ) {
+      formattedString = String.format( "%d", Integer.valueOf( ( int )smallerValue ) );  //$NON-NLS-1$
+    } else {
+      formattedString = String.format( "%.2f", Double.valueOf( smallerValue ) );  //$NON-NLS-1$
+    }
+    return formattedString + ' ' + suffixString;
+  }
+  
+  public boolean isShowEmptyValue() {
+    return this.showEmptyValue;
   }
 }

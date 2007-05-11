@@ -36,8 +36,13 @@ public interface IProperty <ESourceType> {
   Object getValue( final ESourceType sourceObject );
 
   /**
-   * @param propertyId 
+   * @param propSourceClass property source in which this {@link IProperty} object is 
    * @return property descriptor
    */
-  IPropertyDescriptor getDescriptor( final PropertyId<ESourceType> propertyId );
+  IPropertyDescriptor getDescriptor( final Class<? extends AbstractPropertySource<?>> propSourceClass );
+  
+  /**
+   * @return true if property containg null value should be shown
+   */
+  boolean isShowEmptyValue();
 }

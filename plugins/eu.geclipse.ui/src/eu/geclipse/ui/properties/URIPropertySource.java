@@ -18,7 +18,6 @@ package eu.geclipse.ui.properties;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
-import org.eclipse.ui.views.properties.IPropertyDescriptor;
 
 
 /**
@@ -26,7 +25,7 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
  */
 public class URIPropertySource extends AbstractPropertySource<URI> {
 
-  static private List<IPropertyDescriptor> staticDescriptors;
+  static private List<IProperty<URI>> staticProperties;
 
   /**
    * @param uri - URI for which properties will be displayed
@@ -42,13 +41,12 @@ public class URIPropertySource extends AbstractPropertySource<URI> {
   }
 
   @Override
-  protected List<IPropertyDescriptor> getStaticDescriptors()
+  protected List<IProperty<URI>> getStaticProperties()
   {
-    if( staticDescriptors == null ) {
-      staticDescriptors = AbstractPropertySource.createDescriptors( createProperties(),
-                                                                    getPropertySourceClass() );
+    if( staticProperties == null ) {
+      staticProperties = createProperties();
     }
-    return staticDescriptors;
+    return staticProperties;
   }
 
   static private List<IProperty<URI>> createProperties() {
