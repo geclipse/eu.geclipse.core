@@ -51,7 +51,7 @@ public class ConnectionNameChooser extends WizardPage
   }
 
   public void setInitialText( final String text ) {
-    // TODO katis not usable here right now
+    //nothing to do here
   }
 
   public void createControl( final Composite parent ) {

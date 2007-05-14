@@ -43,6 +43,10 @@ public class LocalConnectionWizardPage extends WizardPage implements ModifyListe
 
   private StoredCombo mntPointCombo;
   
+  private boolean thisPageCompete = false;
+  
+  private boolean validate = false;
+  
   protected LocalConnectionWizardPage( final String pageName ) {
     super( pageName );
     setTitle( Messages.getString("LocalConnectionWizardPage.page_title") ); //$NON-NLS-1$
@@ -68,24 +72,7 @@ public class LocalConnectionWizardPage extends WizardPage implements ModifyListe
   
   @Override
   public boolean isPageComplete() {
-    boolean result = false;
-    String errorMessage = null;
-    if (this.mntPointCombo.getText().equals( "" )){ //$NON-NLS-1$
-      result = false;
-      errorMessage = Messages.getString("LocalConnectionWizardPage.empty_mount_error"); //$NON-NLS-1$
-    }
-    else{
-      if( !this.mntPointCombo.getText().endsWith( separator ) ) 
-      {
-        result = false;
-        errorMessage = Messages.getString("LocalConnectionWizardPage.dir_path_end_error") + separator; //$NON-NLS-1$
-      }
-      else{
-        result = true;
-      }
-    }
-    setErrorMessage( errorMessage );
-    return result;
+    return this.thisPageCompete;
   }
 
   public void createControl( final Composite parent ) {
@@ -107,12 +94,45 @@ public class LocalConnectionWizardPage extends WizardPage implements ModifyListe
     this.mntPointCombo.setToolTipText( Messages.getString("LocalConnectionWizardPage.mount_point_tooltip") ); //$NON-NLS-1$
     this.mntPointCombo.addModifyListener( this );
     
+    
+    this.validate = true;
     setControl( mainComp );
     
   }
+  
+  /**
+   * Method used to find out if this page has all the fields complete (holding
+   * proper values)
+   * 
+   * @return true if there are proper values in all page's fields, false - if
+   *         one or more is malformed or missing
+   */
+  public boolean checkPageCompleteness(){
+    boolean result = false;
+    String errorMessage = null;
+    if (this.mntPointCombo.getText().equals( "" )){ //$NON-NLS-1$
+      result = false;
+      errorMessage = Messages.getString("LocalConnectionWizardPage.empty_mount_error"); //$NON-NLS-1$
+    }
+    else{
+      if( !this.mntPointCombo.getText().endsWith( separator ) ) 
+      {
+        result = false;
+        errorMessage = Messages.getString("LocalConnectionWizardPage.dir_path_end_error") + separator; //$NON-NLS-1$
+      }
+      else{
+        result = true;
+      }
+    }
+    setErrorMessage( errorMessage );
+    return result;
+  }
 
   public void modifyText( final ModifyEvent e ) {
-    getContainer().updateButtons();
-    getContainer().updateMessage();
+//    getContainer().updateButtons();
+//    getContainer().updateMessage();
+    if (this.validate){
+      checkPageCompleteness();
+    }
   }  
 }
