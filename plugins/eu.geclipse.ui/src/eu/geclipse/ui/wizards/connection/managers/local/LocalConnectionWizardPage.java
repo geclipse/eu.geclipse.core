@@ -73,6 +73,7 @@ public class LocalConnectionWizardPage extends WizardPage implements ModifyListe
   @Override
   public boolean isPageComplete() {
     return this.thisPageCompete;
+//    return true;
   }
 
   public void createControl( final Composite parent ) {
@@ -125,6 +126,7 @@ public class LocalConnectionWizardPage extends WizardPage implements ModifyListe
       }
     }
     setErrorMessage( errorMessage );
+    this.thisPageCompete = result;
     return result;
   }
 
@@ -133,6 +135,7 @@ public class LocalConnectionWizardPage extends WizardPage implements ModifyListe
 //    getContainer().updateMessage();
     if (this.validate){
       checkPageCompleteness();
+      getContainer().updateButtons();
     }
   }  
 }

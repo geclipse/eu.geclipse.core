@@ -177,6 +177,7 @@ public class GridFTPConnectionWizardPage extends WizardPage
       // getContainer().updateButtons();
       // getContainer().updateMessage();
       setPageComplete( checkPageCompleteness() );
+      getContainer().updateButtons();
     }
   }
 
