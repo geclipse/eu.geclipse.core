@@ -103,8 +103,10 @@ public abstract class AbstractProblem implements IProblem {
     ISolution oldSolution = findSolution( solution.getID() );
     if ( oldSolution != null ) {
       this.solutions.remove( oldSolution );
+      this.solutionIDs.remove( oldSolution.getID() );
     }
     this.solutions.add( solution );
+    this.solutionIDs.add( new Integer( solution.getID() ) );
   }
   
   /* (non-Javadoc)
@@ -143,9 +145,9 @@ public abstract class AbstractProblem implements IProblem {
   public List< Integer > getSolutionIDs() {
     
     List< Integer > ids = new ArrayList< Integer >();
-    for ( Integer id : this.solutionIDs ) {
-      if ( ! ids.contains( id ) ) {
-        ids.add( id );
+    for ( Integer sid : this.solutionIDs ) {
+      if ( ! ids.contains( sid ) ) {
+        ids.add( sid );
       }
     }
     
@@ -153,9 +155,9 @@ public abstract class AbstractProblem implements IProblem {
     if ( exc instanceof GridException ) {
       IProblem problem = ( ( GridException ) exc ).getProblem();
       List< Integer > sids = ( ( AbstractProblem ) problem ).getSolutionIDs();
-      for ( Integer id : sids ) {
-        if ( ! ids.contains( id ) ) {
-          ids.add( id );
+      for ( Integer sid : sids ) {
+        if ( ! ids.contains( sid ) ) {
+          ids.add( sid );
         }
       }
     }
