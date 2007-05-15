@@ -27,6 +27,11 @@ import eu.geclipse.core.internal.Activator;
 public class SolutionRegistry {
   
   /**
+   * Unique ID of the check authentication data solution.
+   */
+  public static final int CHECK_AUTH_DATA = uniqueID();
+  
+  /**
    * Unique ID of the check authentication tokens solution.
    */
   public static final int CHECK_AUTH_TOKENS = uniqueID();
@@ -131,7 +136,11 @@ public class SolutionRegistry {
     
     ISolution solution = null;
     
-    if ( solutionID == CHECK_AUTH_TOKENS ) {
+    if ( solutionID == CHECK_AUTH_DATA ) {
+      solution = new Solution( CHECK_AUTH_DATA, "Check your authentication data" ); //$NON-NLS-1$
+    }
+    
+    else if ( solutionID == CHECK_AUTH_TOKENS ) {
       solution = new Solution( CHECK_AUTH_TOKENS, Messages.getString("SolutionRegistry.check_auth_tokens") ); //$NON-NLS-1$
     }
     
