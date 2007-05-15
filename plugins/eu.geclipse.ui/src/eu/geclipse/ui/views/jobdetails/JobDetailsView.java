@@ -22,12 +22,15 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.part.ViewPart;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridElement;
@@ -45,10 +48,11 @@ public class JobDetailsView extends ViewPart implements IViewConfiguration {
   static final public String ID = "eu.geclipse.ui.views.jobdetails.JobDetailsView"; //$NON-NLS-1$
   protected IGridJob gridJob;
   private List<ISection> sectionsList;
-  private FormToolkit formToolkit;
-  private Composite topComposite;
+  private FormToolkit formToolkit;  
   private IAction showEmptyValuesAction;
   private Label emptyJobDescLabel;
+  private ScrolledForm scrolledForm;
+  
 
   /**
    * 
@@ -83,12 +87,12 @@ public class JobDetailsView extends ViewPart implements IViewConfiguration {
   public void createPartControl( final Composite parentComposite )
   {
     registerContextMenu();
-    this.topComposite = getFormToolkit().createComposite( parentComposite );
-    this.topComposite.setLayout( new GridLayout( 2, false ) );
-    this.topComposite.setBackground( getFormToolkit().getColors()
+    this.scrolledForm = getFormToolkit().createScrolledForm( parentComposite );        
+    this.scrolledForm.getBody().setLayout( new GridLayout( 2, false ) );
+    this.scrolledForm.setBackground( getFormToolkit().getColors()
       .getBackground() );
     for( ISection section : getSections() ) {
-      section.createWidgets( this.topComposite, getFormToolkit() );
+      section.createWidgets( this.scrolledForm.getBody(), getFormToolkit() );
     }
     setInputJob( findJob() );
   }
@@ -115,8 +119,8 @@ public class JobDetailsView extends ViewPart implements IViewConfiguration {
     for( ISection section : this.getSections() ) {
       section.refresh( this.gridJob );
     }
-    if( this.topComposite != null ) {
-      this.topComposite.layout();
+    if( this.scrolledForm != null ) {
+      this.scrolledForm.reflow( true );
     }
   }
 
@@ -150,8 +154,9 @@ public class JobDetailsView extends ViewPart implements IViewConfiguration {
 
   private void refreshEmptyJobDesc() {
     if( this.gridJob == null && this.emptyJobDescLabel == null ) {
-      this.emptyJobDescLabel = getFormToolkit().createLabel( this.topComposite,
+      this.emptyJobDescLabel = getFormToolkit().createLabel( this.scrolledForm.getBody(),
                                                              Messages.JobDetailsView_EmptyJobDesc );
+      this.emptyJobDescLabel.setLayoutData( new GridData( SWT.CENTER, SWT.TOP, false, false, 2, 1 ) );
     } else if( this.gridJob != null && this.emptyJobDescLabel != null ) {
       this.emptyJobDescLabel.dispose();
       this.emptyJobDescLabel = null;

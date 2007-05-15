@@ -25,7 +25,6 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.Section;
 import eu.geclipse.core.model.IGridJob;
 
-
 /**
  * Abstract class for jobdetails sections
  * @param <ESourceType> type of object, from which data for this section will be obtained
@@ -50,7 +49,7 @@ public abstract class AbstractSection<ESourceType> implements ISection {
   }
 
   abstract protected List<ISectionItem<ESourceType>> createSectionItems();
-  
+
   abstract protected ESourceType getSourceObject( final IGridJob gridJob );
 
   protected List<ISectionItem<ESourceType>> getSectionItems() {
@@ -81,15 +80,13 @@ public abstract class AbstractSection<ESourceType> implements ISection {
     setVisible( false );
   }
 
-  
-
   /**
    * Refresh view section fields during initialization of when job was changed
    * 
    * @param gridJob - source object containing job data
    */
   public void refresh( final IGridJob gridJob ) {
-    boolean anyValueSpecified = false, valueSpecified;
+    boolean anyValueSpecified = false, valueSpecified = false;
     boolean showEmptyValues = this.viewConfiguration.isShowEmptyEnabled();
     ESourceType source = null;
     if( gridJob != null ) {
@@ -105,5 +102,7 @@ public abstract class AbstractSection<ESourceType> implements ISection {
 
   void setVisible( final boolean visible ) {
     this.section.setVisible( visible );
+    GridData gridData = ( GridData )this.section.getLayoutData();
+    gridData.exclude = !visible;
   }
 }
