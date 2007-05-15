@@ -53,7 +53,7 @@ public abstract class AbstractAuthTokenUIFactory implements IAuthTokenUIFactory 
     List< IAuthTokenUIFactory > factories = Extensions.getRegisteredAuthTokenUIFactories();
     for ( IAuthTokenUIFactory factory : factories ) {
       IAuthenticationTokenDescription desc = factory.getSupportedDescription();
-      if ( desc.getClass().isInstance( description ) ) {
+      if ( desc.getClass().equals( description.getClass() ) ) {
         resultFactory = factory;
         break;
       }
