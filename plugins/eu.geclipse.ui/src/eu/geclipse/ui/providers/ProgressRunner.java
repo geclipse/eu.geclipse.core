@@ -72,6 +72,7 @@ public class ProgressRunner implements Runnable {
             display.asyncExec( new Runnable() {
               public void run() {
                 viewer.refresh( ProgressRunner.this.container );
+                viewer.expandToLevel( ProgressRunner.this.container, 1 );
               }
             } );
           }
