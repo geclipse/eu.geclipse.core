@@ -93,7 +93,7 @@ public class HostsNewJobWizardPage extends WizardPage {
     temp.put( Messages.getString("HostsNewJobWizardPage.candidate_host"), Messages.getString("HostsNewJobWizardPage.candidate_host") ); //$NON-NLS-1$ //$NON-NLS-2$
     this.tab = new MultipleArgumentList( new ArrayContentProvider(),
                                          new StringLabelProvider(),
-                                         temp );
+                                         null );
     this.tab.createControl( mainComp );
     
     this.isCreated = true;

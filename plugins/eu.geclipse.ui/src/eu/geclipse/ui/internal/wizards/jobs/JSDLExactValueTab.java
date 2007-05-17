@@ -42,7 +42,7 @@ public class JSDLExactValueTab extends TabComponent {
    * @param width width of collumn in table
    */
   public JSDLExactValueTab( final IStructuredContentProvider contentProvider, final ITableLabelProvider labelProvider, final HashMap propertiesVsHearders, final int hight, final int width ) {
-    super( contentProvider, labelProvider, propertiesVsHearders, hight, width );
+    super( contentProvider, labelProvider, null, hight, width );
   }
 
   @Override

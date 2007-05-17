@@ -50,7 +50,7 @@ public class JSDLRangesTab extends TabComponent
                         final int hight,
                         final int width )
   {
-    super( contentProvider, labelProvider, propertiesVsHearders, hight, width );
+    super( contentProvider, labelProvider, null, hight, width );
   }
 
   @Override

@@ -44,7 +44,7 @@ public class MultipleArgumentList extends TabComponent<String> {
    */
   public MultipleArgumentList( final IStructuredContentProvider contentProvider,
                      final ITableLabelProvider labelProvider,
-                     final HashMap<String, String> propertiesVsHearders )
+                     final List<String> propertiesVsHearders )
   {
     super( contentProvider, labelProvider, propertiesVsHearders, 230, 200 );
   }

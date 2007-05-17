@@ -1,30 +1,33 @@
-/******************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse consortium 
+/*******************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Initial development of the original code was made for
- * project g-Eclipse founded by European Union
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
- * Contributor(s):
- *     PSNC - Katarzyna Bylec
- *           
- *****************************************************************************/
-
+ * Contributors:
+ *    Katarzyna Bylec - initial API and implementation
+ ******************************************************************************/
 package eu.geclipse.ui.wizards.jobs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
+import org.eclipse.jface.viewers.ComboBoxCellEditor;
+import org.eclipse.jface.viewers.DialogCellEditor;
+import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.jface.window.Window;
@@ -34,6 +37,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.TableItem;
+import eu.geclipse.ui.dialogs.gexplorer.GridFileDialog;
 import eu.geclipse.ui.internal.dialogs.MultipleInputDialog;
 import eu.geclipse.ui.internal.wizards.jobs.FileType;
 import eu.geclipse.ui.widgets.TabComponent;
@@ -67,13 +73,13 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
   public void createControl( final Composite parent ) {
     Composite mainComp = new Composite( parent, SWT.NONE );
     mainComp.setLayout( new GridLayout() );
-    HashMap<String, String> map = new HashMap<String, String>();
-    String message = Messages.getString( "FilesOutputNewJobWizardPage.table_type_header" ); //$NON-NLS-1$
-    map.put( message, message );
+    ArrayList<String> map = new ArrayList<String>();
+    String message = Messages.getString( "FilesOutputNewJobWizardPage.table_source_header" ); //$NON-NLS-1$
+    map.add( message );
     message = Messages.getString( "FilesOutputNewJobWizardPage.table_name_header" ); //$NON-NLS-1$
-    map.put( message, message );
-    message = Messages.getString( "FilesOutputNewJobWizardPage.table_location_header" ); //$NON-NLS-1$
-    map.put( message, message );
+    map.add( message );
+    message = Messages.getString( "FilesOutputNewJobWizardPage.table_target_header" ); //$NON-NLS-1$
+    map.add( message );
     this.tab = new IOFilesTab( new IOFileContentProvider(),
                                new IOFileLabelProvider(),
                                map );
@@ -82,7 +88,7 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
     this.isCreated = true;
     setControl( mainComp );
   }
-  class IOFilesTab extends TabComponent<OutputFile> {
+  class IOFilesTab extends TabComponent<DataStaging> implements ICellModifier {
 
     /**
      * Creates IOFilesTab composite
@@ -94,7 +100,7 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
      */
     public IOFilesTab( final IStructuredContentProvider contentProvider,
                        final ITableLabelProvider labelProvider,
-                       final HashMap<String, String> propertiesVsHearders )
+                       final List<String> propertiesVsHearders )
     {
       super( contentProvider, labelProvider, propertiesVsHearders, 350, 100 );
     }
@@ -109,20 +115,25 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
         comboData.add( fileType.toString() );
       }
       dialog.addTextField( Messages.getString( "OutputFilesTab.new_dialog_file_name_label" ), null, false ); //$NON-NLS-1$
-      dialog.addBrowseField( Messages.getString( "OutputFilesTab.new_dialog_file_location_label" ), null, true ); //$NON-NLS-1$
-      dialog.addComboField( Messages.getString( "OutputFilesTab.new_dialog_file_type_label" ), comboData, null ); //$NON-NLS-1$
+      dialog.addBrowseField( Messages.getString( "OutputFilesTab.new_dialog_file_target_label" ), null, true ); //$NON-NLS-1$
+      dialog.addBrowseField( Messages.getString( "OutputFilesTab.new_dialog_file_source_label" ), null, true ); //$NON-NLS-1$
       if( dialog.open() != Window.OK ) {
         return;
       }
       String name = dialog.getStringValue( Messages.getString( "OutputFilesTab.new_dialog_file_name_label" ) ); //$NON-NLS-1$
-      String value = dialog.getStringValue( Messages.getString( "OutputFilesTab.new_dialog_file_location_label" ) ); //$NON-NLS-1$
-      FileType type = FileType.valueOf( ( dialog.getStringValue( Messages.getString( "OutputFilesTab.new_dialog_file_type_label" ) ) ).toUpperCase() ); //$NON-NLS-1$
+      String target = dialog.getStringValue( Messages.getString( "OutputFilesTab.new_dialog_file_target_label" ) ); //$NON-NLS-1$
+      String source = dialog.getStringValue( Messages.getString( "OutputFilesTab.new_dialog_file_source_label" ) );
+      // FileType type = FileType.valueOf( ( dialog.getStringValue(
+      // Messages.getString( "OutputFilesTab.new_dialog_file_source_label" ) )
+      // ).toUpperCase() ); //$NON-NLS-1$
       if( name != null
-          && value != null
+          && target != null
           && name.length() > 0
-          && value.length() > 0 )
+          && target.length() > 0 )
       {
-        OutputFile of = new OutputFile( name.trim(), value.trim(), type );
+        DataStaging of = new DataStaging( name.trim(),
+                                          target.trim(),
+                                          source.trim() );
         addVariable( of );
       }
     }
@@ -131,13 +142,13 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
     protected void handleEditButtonSelected()
     {
       IStructuredSelection sel = ( IStructuredSelection )this.table.getSelection();
-      OutputFile var = ( OutputFile )sel.getFirstElement();
+      DataStaging var = ( DataStaging )sel.getFirstElement();
       if( var == null ) {
         // do nothing;
       } else {
         String originalName = var.getName();
-        String value = var.getLocation();
-        FileType originalType = var.getType();
+        String orginalTarget = var.getTargetLocation();
+        String orginalSource = var.getSourceLocation();
         MultipleInputDialog dialog = new MultipleInputDialog( getShell(),
                                                               Messages.getString( "OutputFilesTab.edit_output_file_settings_dialog_title" ) ); //$NON-NLS-1$
         ArrayList<String> comboData = new ArrayList<String>();
@@ -145,21 +156,24 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
           comboData.add( fileType.toString() );
         }
         dialog.addTextField( Messages.getString( "OutputFilesTab.new_dialog_file_name_label" ), originalName, false ); //$NON-NLS-1$
-        dialog.addBrowseField( Messages.getString( "OutputFilesTab.new_dialog_file_location_label" ), value, true ); //$NON-NLS-1$
-        dialog.addComboField( Messages.getString( "OutputFilesTab.new_dialog_file_type_label" ), comboData, originalType.name() ); //$NON-NLS-1$
+        dialog.addBrowseField( Messages.getString( "OutputFilesTab.new_dialog_file_source_label" ), orginalSource, true ); //$NON-NLS-1$
+        dialog.addBrowseField( Messages.getString( "OutputFilesTab.new_dialog_file_target_label" ), orginalTarget, true ); //$NON-NLS-1$
         if( dialog.open() != Window.OK ) {
           // do nothing;
         } else {
           String name = dialog.getStringValue( Messages.getString( "OutputFilesTab.new_dialog_file_name_label" ) ); //$NON-NLS-1$
-          value = dialog.getStringValue( Messages.getString( "OutputFilesTab.new_dialog_file_location_label" ) ); //$NON-NLS-1$
-          FileType type = FileType.valueOf( dialog.getStringValue( Messages.getString( "OutputFilesTab.new_dialog_file_type_label" ) ) ); //$NON-NLS-1$
+          orginalTarget = dialog.getStringValue( Messages.getString( "OutputFilesTab.new_dialog_file_target_label" ) ); //$NON-NLS-1$
+          String source = dialog.getStringValue( Messages.getString( "OutputFilesTab.new_dialog_file_source_label" ) ); //$NON-NLS-1$
           if( !originalName.equals( name ) ) {
-            if( addVariable( new OutputFile( name, value, type ) ) ) {
+            if( addVariable( new DataStaging( name,
+                                              orginalTarget,
+                                              orginalSource ) ) )
+            {
               this.table.remove( var );
             }
           } else {
-            var.setLocation( value );
-            var.setType( type );
+            var.setTargetLocation( orginalTarget );
+            var.setSourceLocation( source );
             this.table.update( var, null );
             updateLaunchConfigurationDialog();
           }
@@ -173,7 +187,7 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
       IStructuredSelection sel = ( IStructuredSelection )this.table.getSelection();
       this.table.getControl().setRedraw( false );
       for( Iterator<?> i = sel.iterator(); i.hasNext(); ) {
-        OutputFile var = ( OutputFile )i.next();
+        DataStaging var = ( DataStaging )i.next();
         this.table.remove( var );
       }
       this.table.getControl().setRedraw( true );
@@ -188,14 +202,135 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
       this.editButton.setText( Messages.getString( "OutputFilesTab.replace_file_button" ) ); //$NON-NLS-1$
       this.removeButton.setText( Messages.getString( "OutputFilesTab.remove_file_button" ) ); //$NON-NLS-1$
     }
+
+    public boolean canModify( Object element, String property ) {
+      return true;
+    }
+
+    public Object getValue( Object element, String property ) {
+      int columnIndex = -1;
+      if( property.equals( Messages.getString( "FilesOutputNewJobWizardPage.table_source_header" ) ) ) { //$NON-NLS-1$
+        columnIndex = 0;
+      }
+      if( property.equals( Messages.getString( "FilesOutputNewJobWizardPage.table_name_header" ) ) ) { //$NON-NLS-1$
+        columnIndex = 1;
+      }
+      if( property.equals( Messages.getString( "FilesOutputNewJobWizardPage.table_target_header" ) ) ) { //$NON-NLS-1$
+        columnIndex = 2;
+      }
+      Object result = null;
+      DataStaging task = ( DataStaging )element;
+      switch( columnIndex ) {
+        case 0: // COMPLETED_COLUMN
+          result = task.getSourceLocation();
+        break;
+        case 1: // DESCRIPTION_COLUMN
+          result = task.getName();
+        break;
+        case 2: // OWNER_COLUMN
+          result = task.getTargetLocation();
+        break;
+        default:
+          result = "";
+      }
+      return result;
+    }
+
+    public void modify( Object element, String property, Object value ) {
+      int columnIndex = -1;
+      if( property.equals( Messages.getString( "FilesOutputNewJobWizardPage.table_source_header" ) ) ) { //$NON-NLS-1$
+        columnIndex = 0;
+      }
+      if( property.equals( Messages.getString( "FilesOutputNewJobWizardPage.table_name_header" ) ) ) { //$NON-NLS-1$
+        columnIndex = 1;
+      }
+      if( property.equals( Messages.getString( "FilesOutputNewJobWizardPage.table_target_header" ) ) ) { //$NON-NLS-1$
+        columnIndex = 2;
+      }
+      TableItem item = ( TableItem )element;
+      DataStaging taskOld = ( DataStaging )item.getData();
+      DataStaging task = new DataStaging( taskOld.getName(),
+                                          taskOld.getTargetLocation(),
+                                          taskOld.getSourceLocation() );
+      switch( columnIndex ) {
+        case 0: // COMPLETED_COLUMN
+          task.setSourceLocation( ( String )value );
+          if( !task.getName().equals( taskOld.getName() ) ) {
+            if( addVariable( task ) ) {
+              this.table.remove( taskOld );
+            }
+          } else {
+            taskOld.setSourceLocation( task.getSourceLocation() );
+            this.table.update( taskOld, null );
+            updateLaunchConfigurationDialog();
+          }
+        break;
+        case 1: // DESCRIPTION_COLUMN
+          task.setName( ( String )value );
+          if( !task.getName().equals( taskOld.getName() ) ) {
+            if( addVariable( task ) ) {
+              this.table.remove( taskOld );
+            }
+          } else {
+            this.table.update( taskOld, null );
+            updateLaunchConfigurationDialog();
+          }
+        break;
+        case 2: // OWNER_COLUMN
+          task.setTargetLocation( ( String )value );
+          if( !task.getName().equals( taskOld.getName() ) ) {
+            if( addVariable( task ) ) {
+              this.table.remove( taskOld );
+            }
+          } else {
+            taskOld.setTargetLocation( task.getTargetLocation() );
+            this.table.update( taskOld, null );
+            updateLaunchConfigurationDialog();
+          }
+        break;
+      }
+    }
+
+    @Override
+    protected void addEditors()
+    {
+      String[] filesTypesString = new String[ FileType.values().length ];
+      int i = 0;
+      for( FileType type : FileType.values() ) {
+        filesTypesString[ i ] = type.getAlias();
+        i++;
+      }
+      addEditor( new DialogCellEditor() {
+
+        @Override
+        protected Object openDialogBox( Control cellEditorWindow )
+        {
+          GridFileDialog dialog = new GridFileDialog( getShell() );
+          String filename = dialog.open();
+          return filename;
+        }
+      } );
+      addEditor( new TextCellEditor() );
+      addEditor( new DialogCellEditor() {
+
+        @Override
+        protected Object openDialogBox( Control cellEditorWindow )
+        {
+          GridFileDialog dialog = new GridFileDialog( getShell() );
+          String filename = dialog.open();
+          return filename;
+        }
+      } );
+      setCellModifier( this );
+    }
   }
   protected class IOFileContentProvider implements IStructuredContentProvider {
 
     public Object[] getElements( final Object inputElement ) {
-      OutputFile[] elements = new OutputFile[ 0 ];
+      DataStaging[] elements = new DataStaging[ 0 ];
       Map<String, String> m = new HashMap<String, String>();
       if( !m.isEmpty() ) {
-        elements = new OutputFile[ m.size() ];
+        elements = new DataStaging[ m.size() ];
         String[] varNames = new String[ m.size() ];
         m.keySet().toArray( varNames );
         for( int i = 0; i < m.size(); i++ ) {
@@ -235,8 +370,8 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
                 } else if( element2 == null ) {
                   result = 1;
                 } else {
-                  result = ( ( OutputFile )element1 ).getName()
-                    .compareToIgnoreCase( ( ( OutputFile )element2 ).getName() );
+                  result = ( ( DataStaging )element1 ).getName()
+                    .compareToIgnoreCase( ( ( DataStaging )element2 ).getName() );
                 }
                 return result;
               }
@@ -253,16 +388,16 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
     public String getColumnText( final Object element, final int columnIndex ) {
       String result = null;
       if( element != null ) {
-        OutputFile var = ( OutputFile )element;
+        DataStaging var = ( DataStaging )element;
         switch( columnIndex ) {
           case 0: // type
-            result = var.getType().toString();
+            result = var.getSourceLocation();
           break;
           case 1: // name
             result = var.getName();
           break;
           case 2: // value
-            result = var.getLocation();
+            result = var.getTargetLocation();
           break;
         }
       }
@@ -287,19 +422,35 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
   public HashMap<String, String> getFiles( final FileType type ) {
     HashMap<String, String> result = new HashMap<String, String>();
     if( this.tab != null ) {
-      for( OutputFile file : this.tab.getInput() ) {
-        if( file.getType().equals( type ) ) {
-          result.put( file.getName(), file.getLocation() );
-        }
+      switch (type){
+        case INPUT:
+          for ( DataStaging file: this.tab.getInput() ){
+            if ( !file.getSourceLocation().equals( "" ) ){
+              result.put( file.getName(), file.getSourceLocation() );
+            }
+          }
+        break;
+        case OUTPUT:
+          for ( DataStaging file: this.tab.getInput() ){
+            if ( !file.getTargetLocation().equals( "" ) ){
+              result.put( file.getName(), file.getTargetLocation() );
+            }
+          }
+        break;
+      }
+      for( DataStaging file : this.tab.getInput() ) {
+//        if( file.getType().equals( type ) ) {
+//          result.put( file.getName(), file.getLocation() );
+//        }
       }
     }
     return result;
   }
-  class OutputFile {
+  class DataStaging {
 
-    private String location;
+    private String sourceLocation;
     private String name;
-    private FileType type;
+    private String targetLocation;
 
     /**
      * Creates new instance of IOFile
@@ -308,13 +459,13 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
      * @param location location of the IOFile (String in form of URI)
      * @param type type of the IOFile
      */
-    public OutputFile( final String name,
-                       final String location,
-                       final FileType type )
+    public DataStaging( final String name,
+                        final String targetLocation,
+                        final String sourceLocation )
     {
       this.name = name;
-      this.location = location;
-      this.type = type;
+      this.sourceLocation = sourceLocation;
+      this.targetLocation = targetLocation;
     }
 
     /**
@@ -336,39 +487,39 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
     }
 
     /**
-     * Getter method to access the location of IOFile
+     * Getter method to access the source location of data staging in
      * 
-     * @return location of IOFile (String in form of URI)
+     * @return source loaction
      */
-    public String getLocation() {
-      return this.location;
+    public String getSourceLocation() {
+      return this.sourceLocation;
     }
 
     /**
-     * Setter method to set location of IOFile
+     * Setter method to set source location of data staging in
      * 
-     * @param location of IOFile (String in form of URI)
+     * @param location source location of data staging in
      */
-    public void setLocation( final String location ) {
-      this.location = location;
+    public void setSourceLocation( final String location ) {
+      this.sourceLocation = location;
     }
 
     /**
-     * Getter method to access type of IOFile
+     * Getter method to access the target location of data staging out
      * 
      * @return type of IOFile
      */
-    public FileType getType() {
-      return this.type;
+    public String getTargetLocation() {
+      return this.targetLocation;
     }
 
     /**
-     * Setter method to set type of IOFile
+     * Setter method to set target location of data staging out
      * 
-     * @param type type of IOFile
+     * @param target location
      */
-    public void setType( final FileType type ) {
-      this.type = type;
+    public void setTargetLocation( final String target ) {
+      this.targetLocation = target;
     }
 
     @Override
@@ -378,8 +529,8 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
       if( super.equals( argument ) ) {
         result = true;
       } else {
-        if( argument instanceof OutputFile ) {
-          OutputFile of = ( OutputFile )argument;
+        if( argument instanceof DataStaging ) {
+          DataStaging of = ( DataStaging )argument;
           if( of.getName().equals( this.getName() ) ) {
             result = true;
           }

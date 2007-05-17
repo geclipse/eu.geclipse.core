@@ -113,7 +113,7 @@ public class EnvNewJobWizardPage extends WizardPage {
                        final ITableLabelProvider labelProvider,
                        final HashMap<String, String> propertiesVsHearders )
     {
-      super( contentProvider, labelProvider, propertiesVsHearders, 50, 30 );
+      super( contentProvider, labelProvider, null, 50, 30 );
     }
 
     /**

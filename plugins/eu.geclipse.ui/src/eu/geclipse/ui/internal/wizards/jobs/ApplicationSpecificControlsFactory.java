@@ -551,10 +551,9 @@ public class ApplicationSpecificControlsFactory {
     layout.horizontalAlignment = GridData.FILL;
     layout.horizontalSpan = 2;
     layout.grabExcessHorizontalSpace = true;
-    HashMap<String, String> temp = new HashMap<String, String>();
+    ArrayList<String> temp = new ArrayList <String>();
     if( parametersMap.containsKey( ChildrenElements.LABEL ) ) {
-      temp.put( parametersMap.get( ChildrenElements.LABEL ),
-                parametersMap.get( ChildrenElements.LABEL ) );
+      temp.add( parametersMap.get( ChildrenElements.LABEL ) );
     } else {
       // temp.put( "value", "value" );
     }
