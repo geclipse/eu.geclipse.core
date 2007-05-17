@@ -35,7 +35,6 @@ import org.eclipse.emf.ecore.util.FeatureMapUtil;
 import org.eclipse.emf.ecore.util.FeatureMap.Entry;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMLMapImpl;
-import com.sun.org.apache.xerces.internal.impl.dv.xs.DayDV;
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.jsdl.ApplicationType;
