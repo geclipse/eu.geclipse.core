@@ -13,7 +13,7 @@
    <element name="extension">
       <complexType>
          <sequence>
-            <element ref="wizard" minOccurs="1" maxOccurs="unbounded"/>
+            <element ref="wizard"/>
             <element ref="job_creator"/>
          </sequence>
          <attribute name="point" type="string" use="required">

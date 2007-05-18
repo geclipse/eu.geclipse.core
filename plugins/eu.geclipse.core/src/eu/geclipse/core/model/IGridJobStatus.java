@@ -16,6 +16,8 @@
 
 package eu.geclipse.core.model;
 
+import java.util.Date;
+
 /**
  * This interface defines some informational fields related to the status
  * of jobs in the Grid.
@@ -107,5 +109,12 @@ public interface IGridJobStatus {
    */
   public int getType();
 
+  /**
+   * Returns the date of last status update. It should be the time of last contact 
+   * with middleware service and not the time of last status change.
+   * @return time of last update
+   */
+  public Date getLastUpdateTime();
+  
   
 }

@@ -28,9 +28,11 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.IWizardContainer;
 import org.eclipse.jface.wizard.Wizard;
+import eu.geclipse.core.JobStatusUpdater;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
+import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobCreator;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridJobID;
@@ -187,17 +189,6 @@ public abstract class JobSubmissionWizardBase extends Wizard
         }
         creator = ( IGridJobCreator )obj;
       }
-      // if("job_submitter".equals( element.getName())){
-      // Object obj=element.createExecutableExtension( "class" );
-      // if(!(obj instanceof IGridJobSubmissionService)){
-      // Status status=new Status(Status.ERROR, Activator.PLUGIN_ID, Status.OK,
-      // "Job Creator configured in class atribute for job_submitter element in
-      // eu.geclipse.ou.jobSubmissionWizzard is not implementing
-      // IGridJobSubmitter interface",null);
-      // throw new CoreException(status);
-      // }
-      // submitter=( IGridJobSubmissionService )obj;
-      // }
     }
   }
 }

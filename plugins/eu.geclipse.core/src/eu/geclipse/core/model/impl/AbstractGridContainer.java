@@ -23,6 +23,7 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import eu.geclipse.core.JobStatusUpdater;
 import eu.geclipse.core.internal.model.GridModelEvent;
 import eu.geclipse.core.internal.model.GridRoot;
 import eu.geclipse.core.model.GridModelException;
@@ -31,6 +32,7 @@ import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.core.model.IGridElementManager;
+import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IManageable;
 
@@ -82,7 +84,12 @@ public abstract class AbstractGridContainer
   public IGridElement create( final IGridElementCreator creator )
       throws GridModelException {
     IGridElement element = creator.create( this );
-    element = addElement( element );    
+    element = addElement( element ); 
+    if(element instanceof IGridJob){
+      JobStatusUpdater updater = new JobStatusUpdater ((IGridJob)element);
+      updater.setSystem( true );
+      updater.schedule(10000);
+    }
     return element;
   }
   

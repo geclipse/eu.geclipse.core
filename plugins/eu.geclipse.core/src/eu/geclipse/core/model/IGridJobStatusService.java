@@ -23,6 +23,7 @@ import eu.geclipse.core.GridException;
  */
 public interface IGridJobStatusService extends IGridService{
   
+  
   /**
    * TODO pawel
    * 
