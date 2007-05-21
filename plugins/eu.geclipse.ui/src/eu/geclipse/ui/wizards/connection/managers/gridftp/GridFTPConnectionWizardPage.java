@@ -87,7 +87,13 @@ public class GridFTPConnectionWizardPage extends WizardPage
   @Override
   public boolean isPageComplete()
   {
-    return this.isValisThis;
+    boolean result = false;
+    if (! this.validate){
+      result = checkPageCompleteness();
+    } else {
+      result = this.isValisThis;
+    }
+    return result;
   }
 
   /**
@@ -99,24 +105,25 @@ public class GridFTPConnectionWizardPage extends WizardPage
    */
   public boolean checkPageCompleteness() {
     boolean result = true;
-    if( this.validate ) {
-      this.errorMessage = null;
-      if( "".equals( this.hostCombo.getText() ) //$NON-NLS-1$
-          || "".equals( this.portText.getText() ) //$NON-NLS-1$
-          || "".equals( this.pathCombo.getText() ) ) //$NON-NLS-1$
-      {
+    this.errorMessage = null;
+    if( "".equals( this.hostCombo.getText() ) //$NON-NLS-1$
+        || "".equals( this.portText.getText() ) //$NON-NLS-1$
+        || "".equals( this.pathCombo.getText() ) ) //$NON-NLS-1$
+    {
+      result = false;
+      this.errorMessage = Messages.getString( "GridFTPConnectionWizardPage.fields_are_empty_error" ); //$NON-NLS-1$
+    } else {
+      String separator = "/"; //$NON-NLS-1$
+      if( !this.pathCombo.getText().endsWith( separator ) ) {
         result = false;
-        this.errorMessage = Messages.getString( "GridFTPConnectionWizardPage.fields_are_empty_error" ); //$NON-NLS-1$
-      } else {
-        String separator = "/"; //$NON-NLS-1$
-        if( !this.pathCombo.getText().endsWith( separator ) ) {
-          result = false;
-          this.errorMessage = Messages.getString( "GridFTPConnectionWizardPage.directory_path_empty_error" ) + separator; //$NON-NLS-1$
-        }
+        this.errorMessage = Messages.getString( "GridFTPConnectionWizardPage.directory_path_empty_error" ) + separator; //$NON-NLS-1$
       }
+    }
+    if( this.validate ) {
       setErrorMessage( this.errorMessage );
     }
     this.isValisThis = result;
+    
     return result;
   }
 
@@ -166,7 +173,8 @@ public class GridFTPConnectionWizardPage extends WizardPage
     this.pathCombo.setText( "/" ); //$NON-NLS-1$
     this.pathCombo.addModifyListener( this );
     setControl( mainComp );
-    this.validate = true;
+    getContainer().updateButtons();
+    this.validate = true;  
   }
 
   /**
@@ -174,8 +182,6 @@ public class GridFTPConnectionWizardPage extends WizardPage
    */
   public void modifyText( final ModifyEvent e ) {
     if( this.validate ) {
-      // getContainer().updateButtons();
-      // getContainer().updateMessage();
       setPageComplete( checkPageCompleteness() );
       getContainer().updateButtons();
     }

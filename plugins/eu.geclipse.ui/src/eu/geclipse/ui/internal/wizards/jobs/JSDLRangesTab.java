@@ -16,8 +16,8 @@
 package eu.geclipse.ui.internal.wizards.jobs;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -40,17 +40,17 @@ public class JSDLRangesTab extends TabComponent
    * 
    * @param contentProvider content provider for table viewer
    * @param labelProvider label provider for table viewer
-   * @param propertiesVsHearders headers for table
+   * @param columnsProperties headers for table
    * @param hight hight of this control
    * @param width width of collumn in table
    */
   public JSDLRangesTab( final IStructuredContentProvider contentProvider,
                         final ITableLabelProvider labelProvider,
-                        final HashMap propertiesVsHearders,
+                        final List<String> columnsProperties,
                         final int hight,
                         final int width )
   {
-    super( contentProvider, labelProvider, null, hight, width );
+    super( contentProvider, labelProvider, columnsProperties, hight, width );
   }
 
   @Override

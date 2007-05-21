@@ -27,8 +27,8 @@ public class ConnectionNameChooser extends WizardPage
   protected ConnectionNameChooser( final String pageName )
   {
     super( pageName );
-    setTitle( "New filesystem connection" );
-    setDescription( "Enter a name for the new connection" );
+    setTitle( Messages.getString("ConnectionNameChooser.page_title") ); //$NON-NLS-1$
+    setDescription( Messages.getString("ConnectionNameChooser.page_description") ); //$NON-NLS-1$
   }
 
   public IFile createNewFile() {

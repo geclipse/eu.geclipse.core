@@ -72,8 +72,13 @@ public class LocalConnectionWizardPage extends WizardPage implements ModifyListe
   
   @Override
   public boolean isPageComplete() {
-    return this.thisPageCompete;
-//    return true;
+    boolean result = false;
+    if (! this.validate){
+      result = checkPageCompleteness();
+    } else {
+      result = this.thisPageCompete;
+    }
+    return result;
   }
 
   public void createControl( final Composite parent ) {
@@ -95,7 +100,7 @@ public class LocalConnectionWizardPage extends WizardPage implements ModifyListe
     this.mntPointCombo.setToolTipText( Messages.getString("LocalConnectionWizardPage.mount_point_tooltip") ); //$NON-NLS-1$
     this.mntPointCombo.addModifyListener( this );
     
-    
+    getContainer().updateButtons();
     this.validate = true;
     setControl( mainComp );
     
@@ -125,14 +130,14 @@ public class LocalConnectionWizardPage extends WizardPage implements ModifyListe
         result = true;
       }
     }
-    setErrorMessage( errorMessage );
+    if (this.validate){
+      setErrorMessage( errorMessage );
+    }
     this.thisPageCompete = result;
     return result;
   }
 
   public void modifyText( final ModifyEvent e ) {
-//    getContainer().updateButtons();
-//    getContainer().updateMessage();
     if (this.validate){
       checkPageCompleteness();
       getContainer().updateButtons();

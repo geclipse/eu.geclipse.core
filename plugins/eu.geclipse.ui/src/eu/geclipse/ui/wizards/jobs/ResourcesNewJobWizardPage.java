@@ -61,9 +61,9 @@ public class ResourcesNewJobWizardPage extends WizardPage {
     layout.horizontalIndent = 20;
     
     cpuSpeedLabel.setLayoutData( layout );
-    HashMap<String, String> temp = new HashMap<String, String>();
-    temp.put( Messages.getString("ResourcesNewJobWizardPage.range_start_collumn"), Messages.getString("ResourcesNewJobWizardPage.range_start_collumn") ); //$NON-NLS-1$ //$NON-NLS-2$
-    temp.put( Messages.getString("ResourcesNewJobWizardPage.range_end_collumn"), Messages.getString("ResourcesNewJobWizardPage.range_end_collumn") ); //$NON-NLS-1$ //$NON-NLS-2$
+    ArrayList<String> temp = new ArrayList<String>();
+    temp.add( Messages.getString("ResourcesNewJobWizardPage.range_start_collumn")); //$NON-NLS-1$
+    temp.add( Messages.getString("ResourcesNewJobWizardPage.range_end_collumn")); //$NON-NLS-1$
     this.tab = new JSDLRangesTab( new RangeContentProvider(),
                                   new RangeLabelProvider(),
                                   temp,
@@ -71,9 +71,9 @@ public class ResourcesNewJobWizardPage extends WizardPage {
                                   50 );
     this.tab.createControl( mainComp );
     
-    HashMap<String, String> temp1 = new HashMap<String, String>();
-    temp1.put( Messages.getString("ResourcesNewJobWizardPage.value_collumn"), Messages.getString("ResourcesNewJobWizardPage.value_collumn") ); //$NON-NLS-1$ //$NON-NLS-2$
-    temp1.put( Messages.getString("ResourcesNewJobWizardPage.epsilon_collumn"), Messages.getString("ResourcesNewJobWizardPage.epsilon_collumn") ); //$NON-NLS-1$ //$NON-NLS-2$
+    ArrayList<String> temp1 = new ArrayList<String>();
+    temp1.add( Messages.getString("ResourcesNewJobWizardPage.value_collumn")); //$NON-NLS-1$
+    temp1.add( Messages.getString("ResourcesNewJobWizardPage.epsilon_collumn")); //$NON-NLS-1$
     this.tabVal = new JSDLExactValueTab( new ValueWithEpsilonContentProvider(),
                                   new ValueWithEpsilonLabelProvider(),
                                   temp1,

@@ -12,9 +12,9 @@
  * Contributor(s):
  *     PSNC - Katarzyna Bylec
  *****************************************************************************/
-
 package eu.geclipse.ui.wizards.jobs;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -63,12 +63,14 @@ public class EnvNewJobWizardPage extends WizardPage {
   public void createControl( final Composite parent ) {
     Composite mainComp = new Composite( parent, SWT.NONE );
     mainComp.setLayout( new GridLayout() );
-    HashMap<String, String> map = new HashMap<String, String>();
+    ArrayList<String> headers = new ArrayList<String>();
     String message = Messages.getString( "EnvNewJobWizardPage.table_name_header" ); //$NON-NLS-1$
-    map.put( message, message );
+    headers.add( message );
     message = Messages.getString( "EnvNewJobWizardPage.table_value_header" ); //$NON-NLS-1$
-    map.put( message, message );
-    this.tab = new EnvironmentVariablesTab(new VariableContentProvider(), new VariableLabelProvider(), map);
+    headers.add( message );
+    this.tab = new EnvironmentVariablesTab( new VariableContentProvider(),
+                                            new VariableLabelProvider(),
+                                            headers );
     this.tab.createControl( mainComp );
     setControl( mainComp );
   }
@@ -98,7 +100,6 @@ public class EnvNewJobWizardPage extends WizardPage {
     result = this.tab.getVariables();
     return result;
   }
-  
   class EnvironmentVariablesTab extends TabComponent<EnvironmentVariable> {
 
     /**
@@ -106,24 +107,26 @@ public class EnvNewJobWizardPage extends WizardPage {
      * 
      * @param contentProvider content provider for table holding IOFiles
      * @param labelProvider label provider for file holding IOFiles
-     * @param propertiesVsHearders map containing properties and headers of
-     *          table columns
+     * @param headers headers of table columns
      */
     public EnvironmentVariablesTab( final IStructuredContentProvider contentProvider,
-                       final ITableLabelProvider labelProvider,
-                       final HashMap<String, String> propertiesVsHearders )
+                                    final ITableLabelProvider labelProvider,
+                                    final ArrayList<String> headers )
     {
-      super( contentProvider, labelProvider, null, 50, 30 );
+      super( contentProvider, labelProvider, headers, 50, 30 );
     }
 
     /**
-     * Returns values describing variables kept in {@link EnvironmentVariablesTab}
-     * @return Map containing variable's name as a key and it's value as a map's value
+     * Returns values describing variables kept in
+     * {@link EnvironmentVariablesTab}
+     * 
+     * @return Map containing variable's name as a key and it's value as a map's
+     *         value
      */
     public HashMap<String, String> getVariables() {
       HashMap<String, String> result = new HashMap<String, String>();
       EnvironmentVariable var;
-      for ( TableItem item: this.table.getTable().getItems() ){
+      for( TableItem item : this.table.getTable().getItems() ) {
         var = ( EnvironmentVariable )item.getData();
         result.put( var.getName(), var.getValue() );
       }
@@ -134,14 +137,14 @@ public class EnvNewJobWizardPage extends WizardPage {
     protected void handleAddButtonSelected()
     {
       MultipleInputDialog dialog = new MultipleInputDialog( getShell(),
-                                                            Messages.getString("EnvNewJobWizardPage.new_var_dialog_title") ); //$NON-NLS-1$
-      dialog.addTextField( Messages.getString("EnvNewJobWizardPage.new_env_dialog_name_field"), null, false ); //$NON-NLS-1$
-      dialog.addVariablesField( Messages.getString("EnvNewJobWizardPage.new_env_dialog_value_field"), null, true ); //$NON-NLS-1$
+                                                            Messages.getString( "EnvNewJobWizardPage.new_var_dialog_title" ) ); //$NON-NLS-1$
+      dialog.addTextField( Messages.getString( "EnvNewJobWizardPage.new_env_dialog_name_field" ), null, false ); //$NON-NLS-1$
+      dialog.addVariablesField( Messages.getString( "EnvNewJobWizardPage.new_env_dialog_value_field" ), null, true ); //$NON-NLS-1$
       if( dialog.open() != Window.OK ) {
         return;
       }
-      String name = dialog.getStringValue( Messages.getString("EnvNewJobWizardPage.new_env_dialog_name_field") ); //$NON-NLS-1$
-      String value = dialog.getStringValue( Messages.getString("EnvNewJobWizardPage.new_env_dialog_value_field") ); //$NON-NLS-1$
+      String name = dialog.getStringValue( Messages.getString( "EnvNewJobWizardPage.new_env_dialog_name_field" ) ); //$NON-NLS-1$
+      String value = dialog.getStringValue( Messages.getString( "EnvNewJobWizardPage.new_env_dialog_value_field" ) ); //$NON-NLS-1$
       if( name != null
           && value != null
           && name.length() > 0
@@ -163,14 +166,14 @@ public class EnvNewJobWizardPage extends WizardPage {
         String originalName = var.getName();
         String value = var.getValue();
         MultipleInputDialog dialog = new MultipleInputDialog( getShell(),
-                                                              Messages.getString("EnvNewJobWizardPage.edit_var_dialog_title") ); //$NON-NLS-1$
-        dialog.addTextField( Messages.getString("EnvNewJobWizardPage.new_env_dialog_name_field"), originalName, false ); //$NON-NLS-1$
-        dialog.addVariablesField( Messages.getString("EnvNewJobWizardPage.new_env_dialog_value_field"), value, true ); //$NON-NLS-1$
+                                                              Messages.getString( "EnvNewJobWizardPage.edit_var_dialog_title" ) ); //$NON-NLS-1$
+        dialog.addTextField( Messages.getString( "EnvNewJobWizardPage.new_env_dialog_name_field" ), originalName, false ); //$NON-NLS-1$
+        dialog.addVariablesField( Messages.getString( "EnvNewJobWizardPage.new_env_dialog_value_field" ), value, true ); //$NON-NLS-1$
         if( dialog.open() != Window.OK ) {
           // do nothing;
         } else {
-          String name = dialog.getStringValue( Messages.getString("EnvNewJobWizardPage.new_env_dialog_name_field") ); //$NON-NLS-1$
-          value = dialog.getStringValue( Messages.getString("EnvNewJobWizardPage.new_env_dialog_value_field") ); //$NON-NLS-1$
+          String name = dialog.getStringValue( Messages.getString( "EnvNewJobWizardPage.new_env_dialog_name_field" ) ); //$NON-NLS-1$
+          value = dialog.getStringValue( Messages.getString( "EnvNewJobWizardPage.new_env_dialog_value_field" ) ); //$NON-NLS-1$
           if( !originalName.equals( name ) ) {
             if( addVariable( new EnvironmentVariable( name, value ) ) ) {
               this.table.remove( var );
@@ -206,8 +209,8 @@ public class EnvNewJobWizardPage extends WizardPage {
       this.removeButton.setText( Messages.getString( "EnvNewJobWizardPage.delete_var_button_label" ) ); //$NON-NLS-1$
     }
   }
-  
-  protected class VariableContentProvider implements IStructuredContentProvider {
+  protected class VariableContentProvider implements IStructuredContentProvider
+  {
 
     public Object[] getElements( final Object inputElement ) {
       EnvironmentVariable[] elements = new EnvironmentVariable[ 0 ];
@@ -292,7 +295,6 @@ public class EnvNewJobWizardPage extends WizardPage {
       return null;
     }
   }
-  
   /**
    * Internal class to store variable
    * 
@@ -305,6 +307,7 @@ public class EnvNewJobWizardPage extends WizardPage {
 
     /**
      * Creates new {@link EnvironmentVariable}'s instance
+     * 
      * @param name name of the variable
      * @param value value of the variable
      */
@@ -315,6 +318,7 @@ public class EnvNewJobWizardPage extends WizardPage {
 
     /**
      * Getter method to access variable's name
+     * 
      * @return name of the variable
      */
     public String getName() {
@@ -323,6 +327,7 @@ public class EnvNewJobWizardPage extends WizardPage {
 
     /**
      * Setter method to set variable's name
+     * 
      * @param name variable's name to be set
      */
     public void setName( final String name ) {
@@ -331,6 +336,7 @@ public class EnvNewJobWizardPage extends WizardPage {
 
     /**
      * Getter method to access variable's value
+     * 
      * @return value of the variable
      */
     public String getValue() {
@@ -339,6 +345,7 @@ public class EnvNewJobWizardPage extends WizardPage {
 
     /**
      * Setter method to set value of the variables
+     * 
      * @param value variable's value to be set
      */
     public void setValue( final String value ) {
@@ -349,16 +356,15 @@ public class EnvNewJobWizardPage extends WizardPage {
     public boolean equals( final Object obj )
     {
       boolean result = false;
-      if ( super.equals( obj )){
+      if( super.equals( obj ) ) {
         result = true;
       } else {
-        if (obj instanceof EnvironmentVariable){
-          result = this.getName().equals( (( EnvironmentVariable )obj).getName());
+        if( obj instanceof EnvironmentVariable ) {
+          result = this.getName()
+            .equals( ( ( EnvironmentVariable )obj ).getName() );
         }
       }
       return result;
     }
-    
-    
   }
 }

@@ -1,12 +1,18 @@
-/*******************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse consortium All rights reserved. This
- * program and the accompanying materials are made available under the terms of
- * the Eclipse Public License v1.0 which accompanies this distribution, and is
- * available at http://www.eclipse.org/legal/epl-v10.html Initial development of
- * the original code was made for project g-Eclipse founded by European Union
- * project number: FP6-IST-034327 http://www.geclipse.eu/ Contributor(s): PSNC -
- * Katarzyna Bylec
- ******************************************************************************/
+/******************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for
+ * project g-Eclipse founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributor(s):
+ *     PSNC - Katarzyna Bylec
+ *           
+ *****************************************************************************/
 package eu.geclipse.ui.wizards.jobs;
 
 import java.lang.reflect.InvocationTargetException;
@@ -26,12 +32,15 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
+import org.eclipse.ui.ide.IDE;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.impl.JSDLJobDescription;
+import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.internal.wizards.jobs.FileType;
 
 /**
@@ -80,7 +89,8 @@ public class NewJobWizard extends Wizard implements INewWizard {
     setWindowTitle( Messages.getString( "NewJobWizard.windowTitle" ) ); //$NON-NLS-1$
     this.selection = sel;
   }
-
+  
+  
   @Override
   public boolean performFinish()
   {
@@ -100,6 +110,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
     try {
       getContainer().run( false, true, op );
       result = true;
+      openFile();
     } catch( InterruptedException e ) {
       result = false;
     } catch( InvocationTargetException e ) {
@@ -108,7 +119,16 @@ public class NewJobWizard extends Wizard implements INewWizard {
                                Messages.getString( "NewJobWizard.error_title" ), realException.getMessage() ); //$NON-NLS-1$
       result = false;
     }
+    
     return result;
+  }
+  
+  private void openFile(){
+    try {
+      IDE.openEditor( Activator.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage(), this.file, true );
+    } catch( PartInitException partInitException ) {
+      Activator.logException( partInitException );
+    }
   }
 
   protected void createFile( final IProgressMonitor monitor ) {
@@ -163,12 +183,12 @@ public class NewJobWizard extends Wizard implements INewWizard {
       if( in.equals( Messages.getString( "FilesInputNewJobWizardPage.stdin_info" ) ) ) { //$NON-NLS-1$
         in = null;
       } else {
-        inName = "stdIn";
+        inName = "stdIn"; //$NON-NLS-1$
       }
       if( out.equals( Messages.getString( "FilesInputNewJobWizardPage.stdin_info" ) ) ) { //$NON-NLS-1$
         out = null;
       } else {
-        outName = "stdOut";
+        outName = "stdOut"; //$NON-NLS-1$
       }
       if( !this.executablePage.getExecutableFile().equals( "" ) ) { //$NON-NLS-1$
         jsdl.addPOSIXApplicationDetails( this.executablePage.getApplicationName(),

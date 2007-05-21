@@ -16,7 +16,6 @@
 package eu.geclipse.ui.internal.wizards.jobs;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import org.eclipse.jface.viewers.IStructuredContentProvider;

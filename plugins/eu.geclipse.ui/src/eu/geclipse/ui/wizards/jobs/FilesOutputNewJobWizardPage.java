@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import org.eclipse.jface.viewers.ComboBoxCellEditor;
 import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -38,6 +37,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
 import eu.geclipse.ui.dialogs.gexplorer.GridFileDialog;
 import eu.geclipse.ui.internal.dialogs.MultipleInputDialog;
@@ -122,7 +122,7 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
       }
       String name = dialog.getStringValue( Messages.getString( "OutputFilesTab.new_dialog_file_name_label" ) ); //$NON-NLS-1$
       String target = dialog.getStringValue( Messages.getString( "OutputFilesTab.new_dialog_file_target_label" ) ); //$NON-NLS-1$
-      String source = dialog.getStringValue( Messages.getString( "OutputFilesTab.new_dialog_file_source_label" ) );
+      String source = dialog.getStringValue( Messages.getString( "OutputFilesTab.new_dialog_file_source_label" ) ); //$NON-NLS-1$
       // FileType type = FileType.valueOf( ( dialog.getStringValue(
       // Messages.getString( "OutputFilesTab.new_dialog_file_source_label" ) )
       // ).toUpperCase() ); //$NON-NLS-1$
@@ -203,11 +203,11 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
       this.removeButton.setText( Messages.getString( "OutputFilesTab.remove_file_button" ) ); //$NON-NLS-1$
     }
 
-    public boolean canModify( Object element, String property ) {
+    public boolean canModify( final Object element, final String property ) {
       return true;
     }
 
-    public Object getValue( Object element, String property ) {
+    public Object getValue( final Object element, final String property ) {
       int columnIndex = -1;
       if( property.equals( Messages.getString( "FilesOutputNewJobWizardPage.table_source_header" ) ) ) { //$NON-NLS-1$
         columnIndex = 0;
@@ -221,22 +221,22 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
       Object result = null;
       DataStaging task = ( DataStaging )element;
       switch( columnIndex ) {
-        case 0: // COMPLETED_COLUMN
+        case 0: 
           result = task.getSourceLocation();
         break;
-        case 1: // DESCRIPTION_COLUMN
+        case 1: 
           result = task.getName();
         break;
-        case 2: // OWNER_COLUMN
+        case 2: 
           result = task.getTargetLocation();
         break;
         default:
-          result = "";
+          result = ""; //$NON-NLS-1$
       }
       return result;
     }
 
-    public void modify( Object element, String property, Object value ) {
+    public void modify( final Object element, final String property, final Object value ) {
       int columnIndex = -1;
       if( property.equals( Messages.getString( "FilesOutputNewJobWizardPage.table_source_header" ) ) ) { //$NON-NLS-1$
         columnIndex = 0;
@@ -253,7 +253,7 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
                                           taskOld.getTargetLocation(),
                                           taskOld.getSourceLocation() );
       switch( columnIndex ) {
-        case 0: // COMPLETED_COLUMN
+        case 0: 
           task.setSourceLocation( ( String )value );
           if( !task.getName().equals( taskOld.getName() ) ) {
             if( addVariable( task ) ) {
@@ -265,7 +265,7 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
             updateLaunchConfigurationDialog();
           }
         break;
-        case 1: // DESCRIPTION_COLUMN
+        case 1: 
           task.setName( ( String )value );
           if( !task.getName().equals( taskOld.getName() ) ) {
             if( addVariable( task ) ) {
@@ -276,7 +276,7 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
             updateLaunchConfigurationDialog();
           }
         break;
-        case 2: // OWNER_COLUMN
+        case 2: 
           task.setTargetLocation( ( String )value );
           if( !task.getName().equals( taskOld.getName() ) ) {
             if( addVariable( task ) ) {
@@ -290,6 +290,12 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
         break;
       }
     }
+    
+    Shell getShellInner() {
+        return super.getShell();
+    }
+    
+
 
     @Override
     protected void addEditors()
@@ -303,9 +309,9 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
       addEditor( new DialogCellEditor() {
 
         @Override
-        protected Object openDialogBox( Control cellEditorWindow )
+        protected Object openDialogBox( final Control cellEditorWindow )
         {
-          GridFileDialog dialog = new GridFileDialog( getShell() );
+          GridFileDialog dialog = new GridFileDialog( getShellInner() );
           String filename = dialog.open();
           return filename;
         }
@@ -314,9 +320,9 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
       addEditor( new DialogCellEditor() {
 
         @Override
-        protected Object openDialogBox( Control cellEditorWindow )
+        protected Object openDialogBox( final Control cellEditorWindow )
         {
-          GridFileDialog dialog = new GridFileDialog( getShell() );
+          GridFileDialog dialog = new GridFileDialog( getShellInner() );
           String filename = dialog.open();
           return filename;
         }
@@ -425,23 +431,21 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
       switch (type){
         case INPUT:
           for ( DataStaging file: this.tab.getInput() ){
-            if ( !file.getSourceLocation().equals( "" ) ){
+            if ( !file.getSourceLocation().equals( "" ) ){ //$NON-NLS-1$
               result.put( file.getName(), file.getSourceLocation() );
             }
           }
         break;
         case OUTPUT:
           for ( DataStaging file: this.tab.getInput() ){
-            if ( !file.getTargetLocation().equals( "" ) ){
+            if ( !file.getTargetLocation().equals( "" ) ){ //$NON-NLS-1$
               result.put( file.getName(), file.getTargetLocation() );
             }
           }
         break;
-      }
-      for( DataStaging file : this.tab.getInput() ) {
-//        if( file.getType().equals( type ) ) {
-//          result.put( file.getName(), file.getLocation() );
-//        }
+        case NULL:
+          //do nothing
+        break;
       }
     }
     return result;
@@ -456,8 +460,8 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
      * Creates new instance of IOFile
      * 
      * @param name name of the IOFile
-     * @param location location of the IOFile (String in form of URI)
-     * @param type type of the IOFile
+     * @param targetLocation target remote location of file (data stage out)
+     * @param sourceLocation source remote location of file (data stage in)
      */
     public DataStaging( final String name,
                         final String targetLocation,

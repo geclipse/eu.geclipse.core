@@ -1,11 +1,18 @@
-/*******************************************************************************
- * Copyright (c) 2007 g-Eclipse consortium All rights reserved. This program and
- * the accompanying materials are made available under the terms of the Eclipse
- * Public License v1.0 which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html Initial development of the original
- * code was made for project g-Eclipse founded by European Union project number:
- * FP6-IST-034327 http://www.geclipse.eu/ Contributor(s): PSNC - Katarzyna Bylec
- ******************************************************************************/
+/******************************************************************************
+ * Copyright (c) 2007 g-Eclipse consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for
+ * project g-Eclipse founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributor(s):
+ *     PSNC - Katarzyna Bylec
+ *           
+ *****************************************************************************/
 package eu.geclipse.ui.internal.wizards.jobs;
 
 import java.util.ArrayList;
@@ -38,10 +45,11 @@ public class ApplicationSpecificControlsFactory {
   ArrayList<Text> textFieldsFromParent;
   ArrayList<Text> textFieldsFromParentPositions;
   ArrayList<SelectionAdapter> adapters = new ArrayList<SelectionAdapter>();
+  ArrayList<DataStageControlsData> parentStagingInControls;
+  ArrayList<DataStageControlsData> parentStagingOutControls;
+  int intFile;
   private HashMap<Control, String> parentControlsParametersNames;
-  private ArrayList<DataStageControlsData> parentStagingInControls;
-  private ArrayList<DataStageControlsData> parentStagingOutControls;
-  private int intFile;
+  
 
   /**
    * Creates controls from xml file defined in extension of
@@ -342,7 +350,7 @@ public class ApplicationSpecificControlsFactory {
           .getShell() );
         String filename = dialog.open();
         if( filename != null ) {
-          if( intFile == 1 ) {
+          if( ApplicationSpecificControlsFactory.this.intFile == 1 ) {
             Text con = ( Text )ApplicationSpecificControlsFactory.this.parentStagingInControls.get( ApplicationSpecificControlsFactory.this.adapters.indexOf( this ) )
               .getURIControl();
             con.setText( filename );

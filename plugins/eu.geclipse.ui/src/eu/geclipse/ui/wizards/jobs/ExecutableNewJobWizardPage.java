@@ -14,7 +14,6 @@
  *      - Katarzyna Bylec (katis@man.poznan.pl)
  *           
  *****************************************************************************/
-
 package eu.geclipse.ui.wizards.jobs;
 
 import java.io.IOException;
@@ -55,28 +54,23 @@ import eu.geclipse.ui.wizards.jobs.wizardnodes.SpecificWizardPart;
 /**
  * Wizard page that allows user to choose an executable for the grid job, name
  * of the job and its description
- * 
  */
 public class ExecutableNewJobWizardPage extends WizardSelectionPage
   implements ModifyListener
 {
-  
-  Text stdin;
-  Text stdout;
-  Text stderr;
+
   /**
    * Key for the executable file preference.
    */
   private static String INPUT_EXE_ID = "executable_file"; //$NON-NLS-1$
-  
+  Text stdin;
+  Text stdout;
+  Text stderr;
   /**
    * Holds the name of the executable
    */
   StoredCombo executableFile;
-  
   Composite parentP;
-
-  
   /**
    * Button for oppening {@link GridFileDialog} - a dialog for chosing local or
    * remote files
@@ -85,11 +79,11 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
   /**
    * Holds name of the job to run
    */
-//  private Text jobName;
+  // private Text jobName;
   /**
    * Holds description of the job
    */
-//  private Text jobDescription;
+  // private Text jobDescription;
   /**
    * Holds name of the application
    */
@@ -98,8 +92,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
   private ArrayList<WizardPage> internalPages;
   private BasicWizardPart basicNode;
   private Button chooseButton;
-  
-  
+
   /**
    * Creates new wizard page
    * 
@@ -115,14 +108,12 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     this.appsWithExtraAttributes = Extensions.getApplicationParametersXMLMap();
     this.internalPages = internalPages;
   }
-  
 
   @Override
   public boolean isPageComplete()
   {
     return true;
   }
-  
 
   public void createControl( final Composite parent ) {
     this.parentP = parent;
@@ -136,21 +127,20 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     gLayout.verticalSpacing = 12;
     mainComp.setLayout( gLayout );
     GridData layout = new GridData();
-    
-    
-    
-//    Label nameLabel = new Label( mainComp, GridData.HORIZONTAL_ALIGN_BEGINNING
-//                                           | GridData.VERTICAL_ALIGN_CENTER );
-//    nameLabel.setText( Messages.getString( "ExecutableNewJobWizardPage.job_name_label" ) ); //$NON-NLS-1$
-//    layout.horizontalAlignment = GridData.FILL;
-//    nameLabel.setLayoutData( layout );
-//    this.jobName = new Text( mainComp, GridData.HORIZONTAL_ALIGN_BEGINNING
-//                                       | GridData.VERTICAL_ALIGN_CENTER
-//                                       | SWT.BORDER );
-//    layout = new GridData();
-//    layout.horizontalAlignment = GridData.FILL;
-//    layout.horizontalSpan = 2;
-//    this.jobName.setLayoutData( layout );
+    // Label nameLabel = new Label( mainComp,
+    // GridData.HORIZONTAL_ALIGN_BEGINNING
+    // | GridData.VERTICAL_ALIGN_CENTER );
+    // nameLabel.setText( Messages.getString(
+    // "ExecutableNewJobWizardPage.job_name_label" ) ); //$NON-NLS-1$
+    // layout.horizontalAlignment = GridData.FILL;
+    // nameLabel.setLayoutData( layout );
+    // this.jobName = new Text( mainComp, GridData.HORIZONTAL_ALIGN_BEGINNING
+    // | GridData.VERTICAL_ALIGN_CENTER
+    // | SWT.BORDER );
+    // layout = new GridData();
+    // layout.horizontalAlignment = GridData.FILL;
+    // layout.horizontalSpan = 2;
+    // this.jobName.setLayoutData( layout );
     Label applicationNameLabel = new Label( mainComp,
                                             GridData.HORIZONTAL_ALIGN_BEGINNING
                                                 | GridData.VERTICAL_ALIGN_CENTER );
@@ -186,108 +176,107 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
                            | GridData.VERTICAL_ALIGN_FILL
                            | GridData.VERTICAL_ALIGN_CENTER );
     this.gridFileDialogButton.setLayoutData( layout );
-//    Label descriptionLabel = new Label( mainComp,
-//                                        GridData.HORIZONTAL_ALIGN_BEGINNING
-//                                            | GridData.VERTICAL_ALIGN_CENTER );
-//    descriptionLabel.setText( Messages.getString( "ExecutableNewJobWizardPage.job_description_label" ) ); //$NON-NLS-1$
-//    layout = new GridData();
-//    layout.horizontalAlignment = GridData.FILL;
-//    layout.horizontalSpan = 3;
-//    descriptionLabel.setLayoutData( layout );
-//    this.jobDescription = new Text( mainComp, SWT.MULTI
-//                                              | SWT.BORDER
-//                                              | SWT.WRAP
-//                                              | SWT.V_SCROLL );
-//    layout = new GridData();
-//    layout.horizontalAlignment = GridData.FILL;
-//    layout.verticalAlignment = GridData.FILL;
-//    layout.horizontalSpan = 3;
-//    layout.verticalSpan = 10;
-//    layout.horizontalIndent = 25;
-//    this.jobDescription.setLayoutData( layout );
-    
+    // Label descriptionLabel = new Label( mainComp,
+    // GridData.HORIZONTAL_ALIGN_BEGINNING
+    // | GridData.VERTICAL_ALIGN_CENTER );
+    // descriptionLabel.setText( Messages.getString(
+    // "ExecutableNewJobWizardPage.job_description_label" ) ); //$NON-NLS-1$
+    // layout = new GridData();
+    // layout.horizontalAlignment = GridData.FILL;
+    // layout.horizontalSpan = 3;
+    // descriptionLabel.setLayoutData( layout );
+    // this.jobDescription = new Text( mainComp, SWT.MULTI
+    // | SWT.BORDER
+    // | SWT.WRAP
+    // | SWT.V_SCROLL );
+    // layout = new GridData();
+    // layout.horizontalAlignment = GridData.FILL;
+    // layout.verticalAlignment = GridData.FILL;
+    // layout.horizontalSpan = 3;
+    // layout.verticalSpan = 10;
+    // layout.horizontalIndent = 25;
+    // this.jobDescription.setLayoutData( layout );
     Group stdFilesGroup = new Group( mainComp, SWT.NONE );
-    stdFilesGroup.setText( "Standard files" );
-    stdFilesGroup.setLayout( new GridLayout(3, false) );
+    stdFilesGroup.setText( Messages.getString( "ExecutableNewJobWizardPage.composite_group_title" ) ); //$NON-NLS-1$
+    stdFilesGroup.setLayout( new GridLayout( 3, false ) );
     layout = new GridData( GridData.FILL_HORIZONTAL );
     layout.grabExcessHorizontalSpace = true;
     layout.horizontalSpan = 3;
     stdFilesGroup.setLayoutData( layout );
-    
     Label stdinLabel = new Label( stdFilesGroup, SWT.LEAD );
     layout = new GridData( GridData.VERTICAL_ALIGN_CENTER
-                          | GridData.HORIZONTAL_ALIGN_BEGINNING );
+                           | GridData.HORIZONTAL_ALIGN_BEGINNING );
     stdinLabel.setLayoutData( layout );
     stdinLabel.setText( Messages.getString( "FilesInputNewJobWizardPage.stdin_label" ) ); //$NON-NLS-1$
     this.stdin = new Text( stdFilesGroup, SWT.NONE | SWT.BORDER );
     layout = new GridData( GridData.FILL_HORIZONTAL
-                          | GridData.GRAB_HORIZONTAL
-                          | GridData.VERTICAL_ALIGN_CENTER
-                          | GridData.HORIZONTAL_ALIGN_CENTER );
+                           | GridData.GRAB_HORIZONTAL
+                           | GridData.VERTICAL_ALIGN_CENTER
+                           | GridData.HORIZONTAL_ALIGN_CENTER );
     this.stdin.setLayoutData( layout );
     this.stdin.setText( Messages.getString( "FilesInputNewJobWizardPage.stdin_info" ) ); //$NON-NLS-1$
     this.stdin.setEnabled( false );
     this.chooseButton = new Button( stdFilesGroup, SWT.PUSH );
-//    ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
-//    Image fileImage = sharedImages.getImage( ISharedImages.IMG_OBJ_FILE );
+    // ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
+    // Image fileImage = sharedImages.getImage( ISharedImages.IMG_OBJ_FILE );
     this.chooseButton.setImage( fileImage );
     layout = new GridData( GridData.HORIZONTAL_ALIGN_FILL
-                          | GridData.VERTICAL_ALIGN_FILL
-                          | GridData.VERTICAL_ALIGN_CENTER );
+                           | GridData.VERTICAL_ALIGN_FILL
+                           | GridData.VERTICAL_ALIGN_CENTER );
     this.chooseButton.setLayoutData( layout );
     Label stdoutLabel = new Label( stdFilesGroup, SWT.NONE );
     layout = new GridData( GridData.VERTICAL_ALIGN_CENTER
-                          | GridData.HORIZONTAL_ALIGN_BEGINNING );
+                           | GridData.HORIZONTAL_ALIGN_BEGINNING );
     stdoutLabel.setLayoutData( layout );
     stdoutLabel.setText( Messages.getString( "FilesInputNewJobWizardPage.stdout_label" ) ); //$NON-NLS-1$
-//    this.stdOutName = new Text (mainComp, SWT.NONE | SWT.BORDER);
-//    layout = new GridData( GridData.FILL_HORIZONTAL
-//                          | GridData.GRAB_HORIZONTAL
-//                          | GridData.VERTICAL_ALIGN_CENTER
-//                          | GridData.HORIZONTAL_ALIGN_CENTER );
-//    this.stdOutName.setText( "stdOut" ); //$NON-NLS-1$
-//    this.stdOutName.setLayoutData( layout );
+    // this.stdOutName = new Text (mainComp, SWT.NONE | SWT.BORDER);
+    // layout = new GridData( GridData.FILL_HORIZONTAL
+    // | GridData.GRAB_HORIZONTAL
+    // | GridData.VERTICAL_ALIGN_CENTER
+    // | GridData.HORIZONTAL_ALIGN_CENTER );
+    // this.stdOutName.setText( "stdOut" ); //$NON-NLS-1$
+    // this.stdOutName.setLayoutData( layout );
     this.stdout = new Text( stdFilesGroup, SWT.NONE | SWT.BORDER );
     layout = new GridData( GridData.FILL_HORIZONTAL
-                          | GridData.GRAB_HORIZONTAL
-                          | GridData.VERTICAL_ALIGN_CENTER
-                          | GridData.HORIZONTAL_ALIGN_CENTER );
-//     gData.horizontalSpan = 2;
+                           | GridData.GRAB_HORIZONTAL
+                           | GridData.VERTICAL_ALIGN_CENTER
+                           | GridData.HORIZONTAL_ALIGN_CENTER );
+    // gData.horizontalSpan = 2;
     this.stdout.setLayoutData( layout );
     this.stdout.setText( Messages.getString( "FilesInputNewJobWizardPage.stdin_info" ) ); //$NON-NLS-1$
     this.stdout.setEnabled( false );
     Button outButton = new Button( stdFilesGroup, SWT.PUSH );
     outButton.setImage( fileImage );
     layout = new GridData( GridData.HORIZONTAL_ALIGN_FILL
-                          | GridData.VERTICAL_ALIGN_FILL
-                          | GridData.VERTICAL_ALIGN_CENTER );
+                           | GridData.VERTICAL_ALIGN_FILL
+                           | GridData.VERTICAL_ALIGN_CENTER );
     outButton.setLayoutData( layout );
     Label stderrLabel = new Label( stdFilesGroup, SWT.NONE );
     layout = new GridData( GridData.VERTICAL_ALIGN_CENTER
-                          | GridData.HORIZONTAL_ALIGN_BEGINNING );
+                           | GridData.HORIZONTAL_ALIGN_BEGINNING );
     stderrLabel.setLayoutData( layout );
     stderrLabel.setText( Messages.getString( "FilesInputNewJobWizardPage.stderr_label" ) ); //$NON-NLS-1$
-//    this.stdErrName = new Text (mainComp, SWT.NONE | SWT.BORDER);
-//    layout = new GridData( GridData.FILL_HORIZONTAL
-//                          | GridData.GRAB_HORIZONTAL
-//                          | GridData.VERTICAL_ALIGN_CENTER
-//                          | GridData.HORIZONTAL_ALIGN_CENTER );
-//    this.stdErrName.setText( "stdErr" ); //$NON-NLS-1$
-//    this.stdErrName.setLayoutData( layout );
+    // this.stdErrName = new Text (mainComp, SWT.NONE | SWT.BORDER);
+    // layout = new GridData( GridData.FILL_HORIZONTAL
+    // | GridData.GRAB_HORIZONTAL
+    // | GridData.VERTICAL_ALIGN_CENTER
+    // | GridData.HORIZONTAL_ALIGN_CENTER );
+    // this.stdErrName.setText( "stdErr" ); //$NON-NLS-1$
+    // this.stdErrName.setLayoutData( layout );
     this.stderr = new Text( stdFilesGroup, SWT.NONE | SWT.BORDER );
     layout = new GridData( GridData.VERTICAL_ALIGN_CENTER
-                          | GridData.HORIZONTAL_ALIGN_CENTER
-                          | GridData.GRAB_HORIZONTAL
-                          | GridData.FILL_HORIZONTAL );
-//     gData.horizontalSpan = 2;
+                           | GridData.HORIZONTAL_ALIGN_CENTER
+                           | GridData.GRAB_HORIZONTAL
+                           | GridData.FILL_HORIZONTAL );
+    // gData.horizontalSpan = 2;
     this.stderr.setLayoutData( layout );
     this.stderr.setText( Messages.getString( "FilesInputNewJobWizardPage.stdin_info" ) ); //$NON-NLS-1$
     this.stderr.setEnabled( false );
     Button errButton = new Button( stdFilesGroup, SWT.PUSH );
     errButton.setImage( fileImage );
     layout = new GridData( GridData.HORIZONTAL_ALIGN_FILL
-                          | GridData.VERTICAL_ALIGN_FILL
-                          | GridData.VERTICAL_ALIGN_CENTER );
+                           | GridData.VERTICAL_ALIGN_FILL
+                           | GridData.VERTICAL_ALIGN_CENTER );
     errButton.setLayoutData( layout );
     this.chooseButton.addSelectionListener( new SelectionAdapter() {
 
@@ -325,11 +314,8 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
         }
       }
     } );
-
-    
-    
     this.gridFileDialogButton.addSelectionListener( new SelectionAdapter() {
-    
+
       @Override
       public void widgetSelected( final SelectionEvent e )
       {
@@ -340,8 +326,12 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
         }
       }
     } );
+    if( this.basicNode == null ) {
+      this.basicNode = new BasicWizardPart( this.internalPages,
+                                            this.getWizard() );
+    }
+    setSelectedNode( this.basicNode );
     setControl( mainComp );
-    
   }
 
   /**
@@ -372,19 +362,17 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
    * 
    * @return name of the job
    */
-//  public String getJobName() {
-//    return this.jobName.getText();
-//  }
-
+  // public String getJobName() {
+  // return this.jobName.getText();
+  // }
   /**
    * Returns description of the job to run on the grid
    * 
    * @return description of the job
    */
-//  public String getJobDescription() {
-//    return this.jobDescription.getText();
-//  }
-
+  // public String getJobDescription() {
+  // return this.jobDescription.getText();
+  // }
   /**
    * Returns application name to be run on the grid
    * 
@@ -397,13 +385,20 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
   public void modifyText( final ModifyEvent e ) {
     this.getContainer().updateButtons();
     if( this.basicNode == null ) {
-      this.basicNode = new BasicWizardPart( this.internalPages, this.getWizard() );
+      this.basicNode = new BasicWizardPart( this.internalPages,
+                                            this.getWizard() );
     }
-    if (this.appsWithExtraAttributes.values().contains( this.applicationName.getText())){
+    if( this.appsWithExtraAttributes.values()
+      .contains( this.applicationName.getText() ) )
+    {
       try {
-        for (String bundleId: this.appsWithExtraAttributes.keySet()){
-          if (this.appsWithExtraAttributes.get( bundleId ).equals( this.applicationName.getText() )){
-            setSelectedNode( new SpecificWizardPart(this.basicNode, this.getWizard(), bundleId ));
+        for( String bundleId : this.appsWithExtraAttributes.keySet() ) {
+          if( this.appsWithExtraAttributes.get( bundleId )
+            .equals( this.applicationName.getText() ) )
+          {
+            setSelectedNode( new SpecificWizardPart( this.basicNode,
+                                                     this.getWizard(),
+                                                     bundleId ) );
             this.executableFile.setText( Extensions.getJSDLExtensionExecutable( bundleId ) );
           }
         }
@@ -433,38 +428,46 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     return result;
   }
 
-  
-  
   @Override
   protected void setSelectedNode( final IWizardNode node )
   {
     super.setSelectedNode( node );
   }
 
-
   /**
-   * Returns list of pages created from parsing XML with description of additional pages specific to application
+   * Returns list of pages created from parsing XML with description of
+   * additional pages specific to application
+   * 
    * @return list of application specific pages
    */
   public List<IApplicationSpecificPage> getApplicationSpecificPages() {
     List<IApplicationSpecificPage> result = new ArrayList<IApplicationSpecificPage>();
-    if ( this.getSelectedNode() != null && this.getSelectedNode() != this.basicNode ){
-      SpecificWizardPart specificNode = (SpecificWizardPart) this.getSelectedNode();
-      for ( IWizardPage asp: specificNode.getPages() ){
-        result.add( ( IApplicationSpecificPage ) asp );
+    if( this.getSelectedNode() != null
+        && this.getSelectedNode() != this.basicNode )
+    {
+      SpecificWizardPart specificNode = ( SpecificWizardPart )this.getSelectedNode();
+      for( IWizardPage asp : specificNode.getPages() ) {
+        result.add( ( IApplicationSpecificPage )asp );
       }
     }
     return result;
   }
 
-
+  /**
+   * Method to access value of field holding path to stdin file
+   * 
+   * @return String representing remote path to stdin file
+   */
   public String getStdin() {
     return this.stdin.getText();
   }
 
-
+  /**
+   * Method to access value of a field holding path to stdout
+   * 
+   * @return String representing remote path to stdout file
+   */
   public String getStdout() {
     return this.stdout.getText();
   }
-  
 }
