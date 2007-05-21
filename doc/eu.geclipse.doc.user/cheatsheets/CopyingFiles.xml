@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cheatsheet title="Copying files between local machine and grid">
+   <intro>
+      <description>
+         Sometimes on your local machine you have prepared files containing data, which should be processed by job on grid.<br/>
+Additionally job can produce results to files, which you want to have on your local machine.<br/>
+In this cheat you will learn how to copy files between local machine and grid.
+      </description>
+   </intro>
+   <item title="Open the g-Eclipse user perspective" dialog="true" skip="true">
+      <description>
+         If you are not already in the g-Eclipse user perspective, in the main menu select <b>Window / Open Perspective / g-Eclipse (User)</b> or click on the &quot;Click to Perform&quot; link below.
+      </description>
+      <command serialization="org.eclipse.ui.perspectives.showPerspective(org.eclipse.ui.perspectives.showPerspective.perspectiveId=eu.geclipse.ui.userPerspective)" confirm="false">
+      </command>
+   </item>
+   <item title="Create connection to local machine" dialog="true" skip="true">
+      <description>
+      </description>
+      <subitem label="Go to view &quot;Grid Project&quot;, select &quot;Filesystems&quot;, and from context menu select &quot;New / Grid Connection&quot;." skip="false">
+         <command serialization="org.eclipse.ui.newWizard(newWizardId=eu.geclipse.ui.wizards.connectionWizard)" confirm="true">
+         </command>
+      </subitem>
+      <subitem label="Enter connection name (e.g. &quot;localhost&quot;) and press button &quot;Next&quot;." skip="false">
+      </subitem>
+      <subitem label="Select &quot;Local&quot; connection and press &quot;Next&quot;" skip="false">
+      </subitem>
+      <subitem label="Enter path to directory, in which your store data files on your local machine, and press button &quot;Finish&quot;" skip="false">
+      </subitem>
+   </item>
+   <item title="Create connection to Storage on Grid" dialog="true" skip="true">
+      <description>
+      </description>
+      <subitem label="Go to view &quot;Grid Project&quot;, expand Virtual Organization in your project (blue icon), and expand &quot;Storage&quot;." skip="false">
+      </subitem>
+      <subitem label="Select any storage. From context menu run &quot;Mount&quot;." skip="false">
+      </subitem>
+   </item>
+   <item title="Copying files" dialog="true" skip="false">
+      <description>
+         Since you have local and grid connections, you can explore these storages and copy files between its using Drag&amp;Drop technique.
+<br/>The best way to do it is to open local and grid connection in two views.
+      </description>
+      <subitem label="In view &quot;Grid Projects&quot;, under &quot;Filesystems&quot; find destination directory, to which you want to copy files." skip="false">
+      </subitem>
+      <subitem label="Open view &quot;Connections&quot;." skip="false">
+         <command serialization="org.eclipse.ui.views.showView(org.eclipse.ui.views.showView.viewId=eu.geclipse.ui.views.connectionView)" confirm="false">
+         </command>
+      </subitem>
+      <subitem label="Explore source connection, and select files, which you want to copy." skip="false">
+      </subitem>
+      <subitem label="Drag selected files, move mouse over view &quot;Grid Projects&quot; to directory, which you found previously, and drop its here." skip="false">
+      </subitem>
+   </item>
+</cheatsheet>

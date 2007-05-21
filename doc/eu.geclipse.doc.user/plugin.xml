@@ -87,6 +87,16 @@
             This cheat sheet will show you how submit a job.
          </description>
       </cheatsheet>
+      <cheatsheet
+            category="eu.geclipse.doc.user.gEclipseCheatSheets"
+            composite="false"
+            contentFile="cheatsheets/CopyingFiles.xml"
+            id="eu.geclipse.doc.user.copyingFiles"
+            name="Copying files between local machine and grid">
+         <description>
+         	This cheat sheet will show you how to copy files between local machine and storage on grid.
+         </description>
+      </cheatsheet>
    </extension>
    <extension point="org.eclipse.ui.intro.configExtension">
       <configExtension configId="org.eclipse.ui.intro.universalConfig"
