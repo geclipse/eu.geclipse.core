@@ -1,6 +1,5 @@
-#Tue May 08 14:50:33 CEST 2007
+#Mon May 21 09:36:42 CEST 2007
 eclipse.preferences.version=1
-encoding//schema/ui_definition.xsd=UnicodeLittle
 encoding//src/eu/geclipse/ui/dialogs/messages.properties=8859_1
 encoding//src/eu/geclipse/ui/editors/messages.properties=8859_1
 encoding//src/eu/geclipse/ui/internal/actions/messages.properties=8859_1
@@ -14,3 +13,4 @@ encoding//src/eu/geclipse/ui/views/jobdetails/jsdl/messages.properties=8859_1
 encoding//src/eu/geclipse/ui/views/messages.properties=8859_1
 encoding//src/eu/geclipse/ui/widgets/messages.properties=8859_1
 encoding//src/eu/geclipse/ui/wizards/messages.properties=8859_1
+encoding//xml/ui_definition.xsd=UnicodeLittle

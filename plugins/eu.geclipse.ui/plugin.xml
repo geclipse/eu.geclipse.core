@@ -213,6 +213,6 @@
          point="eu.geclipse.ui.jsdlApplicationParameters">
       <applicationName name="grep"/>
       <executablePath path="/usr/local/bin/grep"/>
-      <parametersSchema path="schema/page.xml"/>
+      <parametersSchema path="xml/page.xml"/>
    </extension>
 </plugin>

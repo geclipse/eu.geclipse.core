@@ -58,7 +58,7 @@ public class ApplicationSpecificPageFactory {
   /**
    * Path to location of the xml schema
    */
-  public static final String SCHEMA_LOCATION = "schema/ui_definition.xsd"; //$NON-NLS-1$
+  public static final String SCHEMA_LOCATION = "xml/ui_definition.xsd"; //$NON-NLS-1$
 
   /**
    * Method to validate XML file agains XML schema sefinition
