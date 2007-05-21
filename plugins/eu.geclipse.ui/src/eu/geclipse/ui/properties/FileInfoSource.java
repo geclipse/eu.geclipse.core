@@ -138,7 +138,7 @@ public class FileInfoSource extends AbstractPropertySource<IFileInfo> {
   }
   
   static private IProperty<IFileInfo> createAttributes() {
-    return new AbstractProperty<IFileInfo>( Messages.getString("FileInfoSource.propAttributes"), null ) //$NON-NLS-1$
+    return new AbstractProperty<IFileInfo>( Messages.getString("FileInfoSource.propAttributes"), null, false ) //$NON-NLS-1$
     {
       @Override
       public Object getValue( final IFileInfo fileInfo )
