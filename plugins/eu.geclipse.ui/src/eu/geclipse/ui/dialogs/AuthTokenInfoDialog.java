@@ -76,8 +76,8 @@ public class AuthTokenInfoDialog extends IconAndMessageDialog {
     gData = new GridData( GridData.FILL_BOTH );
     gData.grabExcessHorizontalSpace = true;
     gData.grabExcessVerticalSpace = true;
-    gData.widthHint = 300;
-    gData.heightHint = 300;
+    gData.widthHint = 600;
+    gData.heightHint = 400;
     mainComp.setLayoutData( gData );
     
     Label idLabel = new Label( mainComp, SWT.LEFT );
