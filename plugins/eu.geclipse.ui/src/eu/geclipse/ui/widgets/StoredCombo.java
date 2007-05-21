@@ -30,6 +30,8 @@ import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
@@ -94,6 +96,12 @@ public class StoredCombo extends Combo {
           }
           this.alreadyModifing = false;
         }
+      }
+    } );
+    addSelectionListener( new SelectionAdapter() {
+      @Override
+      public void widgetDefaultSelected( final SelectionEvent event ) {
+        StoredCombo.this.allowCompletion = false;
       }
     } );
     addKeyListener( new KeyAdapter() {
