@@ -12,7 +12,7 @@
   * Contributor(s):
   *     UCY (http://www.ucy.cs.ac.cy)
   *      - Nicholas Loulloudes (loulloudes.n@cs.ucy.ac.cy)
-  *      - Emilia Stamou (emstamou@cs.ucy.ac.cy)
+  *        
   *****************************************************************************/
 
 package eu.geclipse.ui.editors;

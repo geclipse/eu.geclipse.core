@@ -499,7 +499,7 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
       IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
       if (file != null)
       {
-        doSaveAs(URI.createPlatformResourceURI(file.getFullPath().toString()), new FileEditorInput(file));
+        doSaveAs(URI.createPlatformResourceURI(file.getFullPath().toString(), false), new FileEditorInput(file));
       }
     }
     
@@ -662,7 +662,7 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
     // Assumes that the input is a file object.
     //
     IFileEditorInput modelFile = (IFileEditorInput)getEditorInput();
-    URI resourceURI = URI.createPlatformResourceURI(modelFile.getFile().getFullPath().toString());
+    URI resourceURI = URI.createPlatformResourceURI(modelFile.getFile().getFullPath().toString(), false);
     Exception exception = null;
     Resource resource = null;
     try
@@ -722,8 +722,17 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
      
       }
          
-     }  
-      
+     } 
+  
+   
+
+     /**
+       * This looks up a string in plugin.properties, making a substitution.
+       * <!-- begin-user-doc -->
+         * <!-- end-user-doc -->
+       * @generated
+       */
+         
  
   // Returns a dignostic describing the errors and warnings listed in the resource
   // and the specified exception
@@ -736,7 +745,7 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
               (Diagnostic.ERROR,
                "eu.geclipse.ui", //$NON-NLS-1$
                0,
-               Messages.getString("JsdlMultiPageEditor.CreateModelErrorMessage"), //$NON-NLS-1$
+               Messages.getString("JsdlMultiPageEditor.CreateModelErrorMessage"), 
                new Object [] { exception == null ? (Object)resource : exception });
           basicDiagnostic.merge(EcoreUtil.computeDiagnostic(resource, true));
           return basicDiagnostic;
@@ -748,7 +757,7 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
               (Diagnostic.ERROR,
                "eu.geclipse.ui", //$NON-NLS-1$
                0,
-               Messages.getString("JsdlMultiPageEditor.CreateModelErrorMessage"), //$NON-NLS-1$
+               Messages.getString("JsdlMultiPageEditor.CreateModelErrorMessage"), 
                new Object[] { exception });
         }
         else

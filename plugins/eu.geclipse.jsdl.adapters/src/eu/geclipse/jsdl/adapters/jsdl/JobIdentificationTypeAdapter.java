@@ -18,11 +18,14 @@ package eu.geclipse.jsdl.adapters.jsdl;
 
 import java.util.Hashtable;
 import java.util.Iterator;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
 import eu.geclipse.jsdl.JobIdentificationType;
 import eu.geclipse.jsdl.JsdlFactory;
@@ -37,7 +40,8 @@ import eu.geclipse.jsdl.JsdlPackage;
 public class JobIdentificationTypeAdapter {
   
   Hashtable< Integer, Text > widgetFeaturesMap = new Hashtable< Integer, Text >();
-  
+  Hashtable< Integer, List > listFeaturesMap = new Hashtable< Integer, List >();   
+    
   private JobIdentificationType jobIdentificationType = 
                             JsdlFactory.eINSTANCE.createJobIdentificationType();
                                 
@@ -94,11 +98,39 @@ public class JobIdentificationTypeAdapter {
     } );
   }
   
+  public void attachToJobProject(final List widget){    
+    this.listFeaturesMap.put( JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_PROJECT
+                                , widget );
+        
+     widget.addFocusListener( new org.eclipse.swt.events.FocusListener() {
+      public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
+        // List Add Functionality    
+      }
+      public void focusGained(final FocusEvent e ) { }
+     
+    } );
+  }
+  
+  
+  public void attachToJobAnnotation(final List widget){    
+    this.listFeaturesMap.put( JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_ANNOTATION
+                                , widget );
+        
+     widget.addFocusListener( new org.eclipse.swt.events.FocusListener() {
+      public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
+        // List Add Functionality    
+      }
+      public void focusGained(final FocusEvent e ) { }
+     
+    } );
+  }
+  
+  
   public void load()
   {
     EObject object = this.jobIdentificationType;
     Text widgetName = null;
-    //EDataType dataType = null;
+    List listName = null;
     
     // Test if eObject is not empty.
     if(object != null) {
@@ -107,23 +139,45 @@ public class JobIdentificationTypeAdapter {
         
       for (Iterator iter = eClass.getEAllAttributes().iterator(); iter.hasNext();) {      
         EAttribute attribute = (EAttribute) iter.next();
-                                               
+      
+        //if (attribute.getUpperBound() == 1){ 
+        
         //Get Attribute Value.
         Object value = object.eGet( attribute );        
              
         Integer featureID = attribute.getFeatureID();
       
         //Check if Attribute has any value
-        if (object.eIsSet( attribute )){          
+        if (object.eIsSet( attribute )){   
+          
+        
+          if (attribute.getUpperBound() == 1){ 
+          
            widgetName = this.widgetFeaturesMap.get( featureID );
-         
-           if (attribute.getName().toString() != "any"){ //$NON-NLS-1$
-             widgetName.setText(value.toString());
-         } //end if
-                   
-        } //end if
-      } //end for
-    } //end if
+        
+           
+             if (attribute.getName().toString() != "any"){ //$NON-NLS-1$
+               widgetName.setText(value.toString());
+             } //end if "any"
+           }//end if UpperBound == 1                        
+              
+        // Add Multiplicity-Many Elements to attached Lists.
+        else if (attribute.getUpperBound() == EStructuralFeature.UNBOUNDED_MULTIPLICITY) {
+                        
+            listName = this.listFeaturesMap.get( featureID );
+                      
+            EList valueArray = (EList) value;
+
+            for (Iterator iterA = valueArray.iterator(); iterA.hasNext();){
+                 listName.add( iterA.next().toString() );
+                       
+            } // End for
+
+          }// End UNBOUNDED_MULTIPLICITY
+          
+        }
+      } //end for eIsSet()
+    } //end if null
   } // End void load()
   
   

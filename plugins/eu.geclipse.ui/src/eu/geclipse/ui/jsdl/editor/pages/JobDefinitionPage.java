@@ -48,13 +48,19 @@ public class JobDefinitionPage extends FormPage {
   Text txtId = null;
   Text txtDescription = null;
   Text txtJobName = null;
+  
+  List lstJobProject = null;
+  List lstJobAnnotation = null;
+  
   Label lblJobId = null;
   Label lblJobDescripiton = null;
   Label lblJobAnnotation = null;
   Label lblJobProject = null;
+  
   Button btnADD = null;
   Button btnDel = null;
   Button btnTest = null;
+  
   Composite jobDefComposite = null;
   Composite jobIdentComposite = null;
   
@@ -278,7 +284,8 @@ public class JobDefinitionPage extends FormPage {
     gridData.horizontalSpan = 1;
     gridData.widthHint = 300;
     gridData.heightHint = 150;
-    final List lstJobAnnotation = new List(client,SWT.MULTI| SWT.BORDER);      
+    this.lstJobAnnotation = new List(client,SWT.MULTI| SWT.BORDER); 
+    this.jobIdentificationTypeAdapter.attachToJobAnnotation( this.lstJobAnnotation);
     lstJobAnnotation.setLayoutData( gridData );
 
     //Create Button ADD
@@ -297,14 +304,11 @@ public class JobDefinitionPage extends FormPage {
     gd.widthHint = 40;
     this.btnDel = toolkit.createButton(client, Messages.JobDefinitionPage_ButtDEL, SWT.PUSH); 
     this.btnDel.setLayoutData( gd );
- 
-//    for (int i=0; i<this.jobIdentType.getJobAnnotation().size(); i++){
-//      lstJobAnnotation.add( this.jobIdentType.getJobAnnotation().get( i ).toString() );
-//    }
-//    
+    
     //Create the Label and List for Job Project Element
      this.lblJobProject = toolkit.createLabel(client,
                                        Messages.JobDefinitionPage_JobProject);
+     
      lblgd = new GridData();
      lblgd.verticalSpan = 3;
      lblJobProject.setLayoutData( lblgd );
@@ -314,8 +318,9 @@ public class JobDefinitionPage extends FormPage {
      gridData.horizontalSpan = 1;
      gridData.widthHint = 300;
      gridData.heightHint = 150;
-     List lstJobProject = new List(client,SWT.MULTI| SWT.BORDER);      
-     lstJobProject.setLayoutData( gridData );
+     this.lstJobProject = new List(client,SWT.MULTI| SWT.BORDER);
+     this.jobIdentificationTypeAdapter.attachToJobProject(this.lstJobProject );
+     this.lstJobProject.setLayoutData( gridData );
      
      //Create Button ADD
      gd = new GridData();
