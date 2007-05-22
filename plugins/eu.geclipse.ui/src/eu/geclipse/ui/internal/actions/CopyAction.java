@@ -15,15 +15,13 @@
 
 package eu.geclipse.ui.internal.actions;
 
-import java.util.List;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
+import org.eclipse.ui.views.navigator.LocalSelectionTransfer;
 import eu.geclipse.core.model.IGridElement;
 
 /**
@@ -50,10 +48,13 @@ public class CopyAction extends TransferAction {
    */
   @Override
   public void run() {
-    List< ? > data = getStructuredSelection().toList();
-    Object[] dataArray = getData( data.toArray( new Object[ data.size() ] ) );
-    Transfer[] dataTypes = getDataTypes( dataArray );
-    getClipboard().setContents( dataArray, dataTypes );
+    IStructuredSelection selection = getStructuredSelection();
+    LocalSelectionTransfer transfer = LocalSelectionTransfer.getInstance();
+    transfer.setSelection( selection );
+    Object[] data = new Object[] { selection };
+    Transfer[] dataTypes = new Transfer[] { transfer };
+    Clipboard clipboard = getClipboard();
+    clipboard.setContents( data, dataTypes );
   }
   
   /* (non-Javadoc)
@@ -65,33 +66,15 @@ public class CopyAction extends TransferAction {
     boolean enabled = super.updateSelection( selection );
     
     if ( enabled ) {
-      
-      IPath referenceLocation = null;
-      List< ? > selectedObjects = selection.toList();
-      
-      for ( Object selectedObject : selectedObjects ) {
-        
-        enabled = isDragSource( selectedObject );
-        if ( !enabled ) {
-          break;
-        }
-        
-        IPath location = getLocation( selectedObject );
-        if ( location == null ) {
+     
+      for ( Object o : selection.toList() ) {
+        if ( o instanceof IGridElement ) {
+          enabled = !( ( IGridElement ) o ).isVirtual();
+        } else {
           enabled = false;
         }
-        
-        if ( referenceLocation == null ) {
-          referenceLocation = location;
-        } else if ( referenceLocation.equals( location ) ) {
-          enabled = false;
-        }
-        
-        if ( !enabled ) {
-          break;
-        }
-        
       }
+      
     }
     
     return enabled;
@@ -106,7 +89,7 @@ public class CopyAction extends TransferAction {
    * @return The location in the workspace for the specified object or <code>null</code>
    * if the specified object is neither an {@link IResource} nor an {@link IGridElement}.
    */
-  private IPath getLocation( final Object obj ) {
+  /*private IPath getLocation( final Object obj ) {
     IPath location = null;
     if ( obj instanceof IResource ) {
       location = ( ( IResource ) obj ).getFullPath();
@@ -114,6 +97,6 @@ public class CopyAction extends TransferAction {
       location = ( ( IGridElement ) obj ).getPath(); 
     }
     return location;
-  }
+  }*/
   
 }

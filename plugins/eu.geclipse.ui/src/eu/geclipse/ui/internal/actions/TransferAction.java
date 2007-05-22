@@ -70,7 +70,7 @@ public class TransferAction extends SelectionListenerAction {
    * @param obj The object to be tested.
    * @return True if the specified object may be dragged.
    */
-  public boolean isDragSource( final Object obj ) {
+  /*public boolean isDragSource( final Object obj ) {
     boolean result = false;
     if ( obj instanceof IGridElement ) {
       IGridElement element = ( IGridElement ) obj;
@@ -79,7 +79,7 @@ public class TransferAction extends SelectionListenerAction {
       }
     }
     return result;
-  }
+  }*/
   
   /**
    * Determine if the specified object is a drop target.
@@ -87,7 +87,7 @@ public class TransferAction extends SelectionListenerAction {
    * @param obj The object to be tested.
    * @return True if the specified object is a target for drop operations.
    */
-  public boolean isDropTarget( final Object obj ) {
+  /*public boolean isDropTarget( final Object obj ) {
     boolean result = false;
     if ( obj instanceof IGridContainer ) {
       IGridContainer container = ( IGridContainer ) obj;
@@ -96,9 +96,9 @@ public class TransferAction extends SelectionListenerAction {
       }
     }
     return result;
-  }
+  }*/
   
-  private boolean checkDestination( final IResource resource,
+  /*private boolean checkDestination( final IResource resource,
                                     final IContainer destination ) {
     IPath resourcePath = resource.getFullPath().removeLastSegments( 1 );
     IPath destinationPath = destination.getFullPath();
@@ -204,6 +204,6 @@ public class TransferAction extends SelectionListenerAction {
       dataTypes[i] = getDataType( data[i] );
     }
     return dataTypes;
-  }
+  }*/
   
 }

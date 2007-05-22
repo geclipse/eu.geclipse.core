@@ -15,19 +15,17 @@
 
 package eu.geclipse.ui.internal.actions;
 
-import java.util.List;
-import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.dnd.Clipboard;
-import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.part.ResourceTransfer;
+import org.eclipse.ui.views.navigator.LocalSelectionTransfer;
 import eu.geclipse.core.model.IGridContainer;
-import eu.geclipse.ui.internal.Activator;
+import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.ui.internal.transfer.GridElementTransferOperation;
 import eu.geclipse.ui.views.GridModelViewPart;
 
 /**
@@ -62,33 +60,59 @@ public class PasteAction extends TransferAction {
    */
   @Override
   public void run() {
-    IStructuredSelection selection = getStructuredSelection();
-    if ( selection.size() == 1 ) {
-      final Object element = selection.getFirstElement();
-      if ( isDropTarget( element ) ) {
-        IContainer destination
-          = ( IContainer )( ( IGridContainer ) element ).getResource();
-        ResourceTransfer transfer = ResourceTransfer.getInstance();
-        Object contents = getClipboard().getContents( transfer );
-        if ( ( contents != null ) && ( contents instanceof IResource[] ) ) {
-          IResource[] resources = ( IResource[] ) contents;
-          try {
-            copyResources( resources, destination );
-          } catch( CoreException cExc ) {
-            // TODO mathias proper error handling
-            Activator.logException( cExc );
-          }
+    Clipboard clipboard = getClipboard();
+    LocalSelectionTransfer transfer = LocalSelectionTransfer.getInstance();
+    IStructuredSelection source = ( IStructuredSelection ) clipboard.getContents( transfer );
+    IStructuredSelection target = getStructuredSelection();
+    startTransfer( source, target );
+  }
+  
+  protected void startTransfer( final IStructuredSelection source,
+                                final IStructuredSelection target ) {
+    
+    if ( ! isEmpty( source ) && ! ( isEmpty( target ) ) ) {
+      
+      Object[] sourceArray
+        = source.toArray();
+      IGridElement[] sourceElements
+        = new IGridElement[ source.size() ];
+      
+      for ( int i = 0 ; i < sourceArray.length ; i++ ) {
+        
+        if ( sourceArray[ i ] instanceof IGridElement ) {
+          sourceElements[ i ] = ( IGridElement ) sourceArray[ i ];
+        } else {
+          // TODO mathias error handling
         }
-        Display display = PasteAction.this.view.getSite().getShell().getDisplay();
-        display.syncExec( new Runnable() {
-          public void run() {
-            IGridContainer container = ( IGridContainer ) element;
-            container.setDirty();
-            PasteAction.this.view.refreshViewer( container );
-          }
-        } );
+        
       }
+      
+      Object targetObject
+        = target.getFirstElement();
+      IGridContainer targetContainer = null;
+      
+      if ( targetObject instanceof IGridContainer ) {
+        targetContainer = ( IGridContainer ) targetObject;
+      } else {
+        // TODO mathias error handling
+      }
+      
+      if ( targetContainer != null ) {
+        startTransfer( sourceElements, targetContainer );
+      }
+      
     }
+    
+  }
+  
+  protected void startTransfer( final IGridElement[] sources,
+                                final IGridContainer target ) {
+    
+    GridElementTransferOperation op
+      = new GridElementTransferOperation( sources, target, false );
+    op.setUser( true );
+    op.schedule();
+    
   }
   
   /* (non-Javadoc)
@@ -97,18 +121,36 @@ public class PasteAction extends TransferAction {
   @Override
   protected boolean updateSelection( final IStructuredSelection selection ) {
     
-    boolean result = false;
+    boolean result = super.updateSelection( selection );
+    
+    if ( result
+        && ( selection.size() == 1 )
+        && ( selection.getFirstElement() instanceof IGridContainer ) ) {
       
-    List< ? > list = selection.toList();
-    if ( list.size() == 1 ) {
-      Object obj = list.get( 0 );
-      if ( isDropTarget( obj ) ) {
-        result = true;
+      Clipboard clipboard
+        = getClipboard();
+      TransferData[] data
+        = clipboard.getAvailableTypes();
+      LocalSelectionTransfer transfer
+        = LocalSelectionTransfer.getInstance();
+      
+      result = false;
+      
+      for ( TransferData d : data ) {
+        if ( transfer.isSupportedType( d ) ) {
+          result = true;
+          break;
+        }
       }
+      
     }
     
     return result;
     
+  }
+  
+  private boolean isEmpty( final ISelection selection ) {
+    return ( selection == null ) || ( selection.isEmpty() ); 
   }
   
 }
