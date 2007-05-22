@@ -50,6 +50,11 @@ public abstract class GlueIndex implements java.io.Serializable {
     return glueIndexInstance;
   }
 
+  public static void drop(){
+    glueIndexInstance=null;
+    serializeInstance();
+  }
+  
   private static IPath getGridInfoLocation() {
     Activator activator= eu.geclipse.info.Activator.getDefault();
     IPath location = null;

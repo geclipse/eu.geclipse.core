@@ -14,8 +14,12 @@ public interface IGlueInfoStore {
 
     public void removeListener(IGlueStoreChangeListerner listener, String resourceTypeName);
     
+    public void removeAllListeners();
+    
     public void addStateListener(IGlueStoreStateChangeListerner listener);
 
     public void removeStateListener(IGlueStoreStateChangeListerner listener);
+    
+    public void removeAllStateListeners();
     
 }
