@@ -257,9 +257,10 @@ public abstract class GlueIndex implements java.io.Serializable {
     String newKey = agt.getClass().getName() + key;
     AbstractGlueTable previous = fullIndex.put( newKey, agt );
     if( previous != null ) {
-      System.out.println( "Duplicate:\n   " + previous + "\n   " + agt ); //$NON-NLS-1$ //$NON-NLS-2$
+      //System.out.println( "Duplicate:\n   " + previous + "\n   " + agt ); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
+  
 
   /**
    * @param key
