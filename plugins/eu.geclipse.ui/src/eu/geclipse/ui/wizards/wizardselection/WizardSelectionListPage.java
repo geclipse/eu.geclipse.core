@@ -1,3 +1,18 @@
+/*****************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Thomas Koeckerbauer GUP, JKU - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.ui.wizards.wizardselection;
 
 import org.eclipse.jface.dialogs.IPageChangedListener;
@@ -22,7 +37,7 @@ import org.eclipse.ui.cheatsheets.ICheatSheetManager;
  * next steps in the wizard.
  */
 public class WizardSelectionListPage extends WizardSelectionPage implements IPageChangedListener {
-  protected static ICheatSheetManager cheatSheetManager = null;
+  protected ICheatSheetManager cheatSheetManager = null;
   protected IWizardSelectionNode[] wizardSelectionNodes;
   IWizardNode preselectedNode;
   private String title;
@@ -135,8 +150,8 @@ public class WizardSelectionListPage extends WizardSelectionPage implements IPag
           ( ( IInitalizableWizard ) wizard ).init( this.initData );
         }
         wizard.addPages();
-        if ( cheatSheetManager != null && cheatSheetManager.getData( "startingPageName" ) == "none" ) { //$NON-NLS-1$ //$NON-NLS-2$
-          cheatSheetManager.setData( "startingPageName", wizard.getStartingPage().getName() ); //$NON-NLS-1$
+        if ( this.cheatSheetManager != null && this.cheatSheetManager.getData( "startingPageName" ) == "none" ) { //$NON-NLS-1$ //$NON-NLS-2$
+          this.cheatSheetManager.setData( "startingPageName", wizard.getStartingPage().getName() ); //$NON-NLS-1$
         }
       }
     }
@@ -168,5 +183,15 @@ public class WizardSelectionListPage extends WizardSelectionPage implements IPag
         }
       }
     } );
+  }
+
+  /**
+   * Sets the cheat sheet manager. The "startingPageName" cheat sheet variable
+   * of the manager will be set to the name of the first page of the selected
+   * wizard when the user selects a wizard.
+   * @param cheatSheetManager the cheat sheet manager.
+   */
+  public void setCheatSheetManager( final ICheatSheetManager cheatSheetManager ) {
+    this.cheatSheetManager = cheatSheetManager;
   }
 } 

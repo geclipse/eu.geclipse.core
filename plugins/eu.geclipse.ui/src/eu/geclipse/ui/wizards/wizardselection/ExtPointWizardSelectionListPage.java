@@ -1,3 +1,18 @@
+/*****************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Thomas Koeckerbauer GUP, JKU - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.ui.wizards.wizardselection;
 
 import java.util.List;
@@ -9,7 +24,6 @@ import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.cheatsheets.ICheatSheetManager;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 
 /**
@@ -102,10 +116,13 @@ public class ExtPointWizardSelectionListPage extends WizardSelectionListPage {
               String name = element.getAttribute( EXT_NAME );
               String iconName = element.getAttribute( EXT_ICON );
               Image icon = null;
+              ImageDescriptor iconDesc = null;
               if ( iconName != null ) {
                 String pluginId = element.getContributor().getName();
-                ImageDescriptor iconDesc = AbstractUIPlugin.imageDescriptorFromPlugin( pluginId, iconName );
-                if ( iconDesc != null ) icon = iconDesc.createImage();
+                iconDesc = AbstractUIPlugin.imageDescriptorFromPlugin( pluginId, iconName );
+              }
+              if ( iconDesc != null ) {
+                icon = iconDesc.createImage();
               }
               IWizardSelectionNode wizardNode = new ExtPointWizardSelectionNode( element, id, name, icon );
               nodes.add( wizardNode );
@@ -115,9 +132,5 @@ public class ExtPointWizardSelectionListPage extends WizardSelectionListPage {
       }
     }
     return nodes.toArray( new IWizardSelectionNode[0] );
-  }
-
-  public void setCheatSheetManager( final ICheatSheetManager cheatSheetManager ) {
-    this.cheatSheetManager = cheatSheetManager;
   }
 }
