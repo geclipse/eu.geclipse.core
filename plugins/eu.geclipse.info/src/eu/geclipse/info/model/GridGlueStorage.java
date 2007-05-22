@@ -44,6 +44,10 @@ public class GridGlueStorage
   public URI[] getAccessTokens() {
     
     URI[] result = null;
+    //TODO: now we get the first Storage area only,
+    //      also we should check the GlueSAAccessControlBaseRule
+    
+    String path=getGlueSe().glueSAList.get(0).Path;
     
     try {
       String host = getName();
@@ -58,7 +62,12 @@ public class GridGlueStorage
             = ( String ) list.get( i ).getFieldByName( "Type" );
           Long port
             = ( Long ) list.get( i ).getFieldByName( "Port" );
-          result[ i ] = new URI( scheme, null, host, port.intValue(), null, null, null );
+          
+          //TODO: There seems to be a problem with  DPM/GridFTP
+          //I set the path to null otherwise it just doesn't work
+          path=null;
+          result[ i ] = new URI( scheme, null, host, port.intValue(), path, null, null );
+          
         }
       }
     } catch( RuntimeException e ) {
