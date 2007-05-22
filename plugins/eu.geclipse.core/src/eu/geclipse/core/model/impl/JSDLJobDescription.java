@@ -113,7 +113,7 @@ public class JSDLJobDescription extends ResourceGridContainer
    */
   public void loadModel( final IFile file ) {
     String filePath = file.getFullPath().toString();
-    URI uri = URI.createPlatformResourceURI( filePath );
+    URI uri = URI.createPlatformResourceURI( filePath, false );
     ResourceSet resourceSet = new ResourceSetImpl();
     Resource resourceA = resourceSet.createResource( uri );
     XMLMapImpl xmlmap = new XMLMapImpl();
@@ -169,7 +169,7 @@ public class JSDLJobDescription extends ResourceGridContainer
     // This is where i couldn't do it , but with the
     // wizard this is easy to do.
     String filePath = file.getFullPath().toString();
-    URI fileURI = URI.createPlatformResourceURI( filePath );
+    URI fileURI = URI.createPlatformResourceURI( filePath, false );
     // Create resource set.
     ResourceSet resourceSet = new ResourceSetImpl();
     Registry factoryRegistry = resourceSet.getResourceFactoryRegistry();
