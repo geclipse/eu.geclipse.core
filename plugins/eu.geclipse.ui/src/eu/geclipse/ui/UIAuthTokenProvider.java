@@ -313,10 +313,8 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
   @Override
   public void cheatSheetEvent( final ICheatSheetEvent event ) {
     cheatSheetManager = event.getCheatSheetManager();
-    if ( cheatSheetManager.getData( "var1" ) == null ) { //$NON-NLS-1$
-      cheatSheetManager.setData( "var1", "null" ); //$NON-NLS-1$ //$NON-NLS-2$
-      cheatSheetManager.setData( "var2", "null" ); //$NON-NLS-1$ //$NON-NLS-2$
+    if ( cheatSheetManager.getData( "startingPageName" ) == null ) { //$NON-NLS-1$
+      cheatSheetManager.setData( "startingPageName", "none" ); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
-
 }

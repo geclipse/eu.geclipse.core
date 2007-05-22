@@ -135,10 +135,10 @@ public class WizardSelectionListPage extends WizardSelectionPage implements IPag
           ( ( IInitalizableWizard ) wizard ).init( this.initData );
         }
         wizard.addPages();
+        if ( cheatSheetManager != null && cheatSheetManager.getData( "startingPageName" ) == "none" ) { //$NON-NLS-1$ //$NON-NLS-2$
+          cheatSheetManager.setData( "startingPageName", wizard.getStartingPage().getName() ); //$NON-NLS-1$
+        }
       }
-    }
-    if ( this.cheatSheetManager != null && this.cheatSheetManager.getData( "var1" ) == "null" ) {
-      this.cheatSheetManager.setData( "var1", wizard.getStartingPage().getName() );
     }
 
     return wizard;
@@ -165,12 +165,8 @@ public class WizardSelectionListPage extends WizardSelectionPage implements IPag
             getContainer().getCurrentPage().setPreviousPage( null );
           }
           getContainer().updateButtons();
-          if ( cheatSheetManager != null )
-            cheatSheetManager.setData("var2", WizardSelectionListPage.this.preselectedNode.getWizard().getWindowTitle() );
         }
       }
     } );
   }
-
-
 } 

@@ -51,33 +51,28 @@
       <description>
           Follow these simple steps to create your proxy.
       </description>
-                <conditional-subitem condition="${var1}">
+                <conditional-subitem condition="${startingPageName}">
                         <subitem when="gridProxyPage" label="Specify the location of your key and certificate."/>
                         <subitem when="voOPage" label="If there is no VO available in the list, click the 
                         'New VO' button and specify the required VO information and click 'Finish'."/>
-                        <subitem when="null" label="If you are seeing this, you must have gotten ahead of yourself 
+                        <subitem when="none" label="If you are seeing this, you must have gotten ahead of yourself 
                         by opening cheatsheet items without following the wizard."/>
                 </conditional-subitem>
-                <conditional-subitem condition="${var1}">
+                <conditional-subitem condition="${startingPageName}">
                         <subitem when="gridProxyPage" label="Enter your key passphrase."/>
                         <subitem when="voOPage" label="Select a VOMS Proxy from the list of available VO's."/>
-                        <subitem when="null" label="You will not be able to read the steps unless you restart this 
+                        <subitem when="none" label="You will not be able to read the steps unless you restart this 
                         cheatsheet and make the selection between Grid and VOMS proxy prior to opening this item."/>
                 </conditional-subitem>
-                <!--<conditional-subitem condition="${var2}">
-                        <subitem when="vomsVO" label="Specify a name, host, port, host DN, Information System endpoint, 
-                        and the VO server URL."/>
-                        <subitem when="null" label="no data"/>
-                </conditional-subitem>-->
-                <conditional-subitem condition="${var1}">
+                <conditional-subitem condition="${startingPageName}">
                         <subitem when="gridProxyPage" label="Adjust how long will the proxy be valid."/>
                         <subitem when="voOPage" label="Enter your key passphrase."/>
-                        <subitem when="null" label="no data"/>
+                        <subitem when="none" label="no data"/>
                 </conditional-subitem>
-                <conditional-subitem condition="${var1}">
+                <conditional-subitem condition="${startingPageName}">
                         <subitem when="gridProxyPage" label="Click 'Finish' to create and validate the proxy."/>
                         <subitem when="voOPage" label="Click 'Finish' to validate the proxy."/>
-                        <subitem when="null" label="no data"/>
+                        <subitem when="none" label="no data"/>
                 </conditional-subitem>
    </item>
 
