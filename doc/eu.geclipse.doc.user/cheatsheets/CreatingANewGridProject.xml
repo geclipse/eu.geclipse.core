@@ -11,10 +11,7 @@
           select <b>Window &gt; Open Perspective &gt; g-Eclipse (User)</b> or click
           on the &quot;Click to Perform&quot; link below.
       </description>
-	  <action 
-	          pluginId="org.eclipse.ui.cheatsheets"
-			  class="org.eclipse.ui.internal.cheatsheets.actions.OpenPerspective"
-			  param1="eu.geclipse.ui.userPerspective"/>
+      <command serialization="org.eclipse.ui.perspectives.showPerspective(org.eclipse.ui.perspectives.showPerspective.perspectiveId=eu.geclipse.ui.userPerspective)" confirm="false"/>
    </item>
    <item title="Select the Grid Project View" skip="true">
       <description>
@@ -26,7 +23,7 @@
       <description>
           Right-click into that view and select <b>New &gt; Grid Project</b> to launch the wizard.
       </description>
-      <command confirm="true" serialization="org.eclipse.ui.newWizard(newWizardId=eu.geclipse.ui.wizards.gridProjectWizard)"/>
+      <command confirm="false" serialization="org.eclipse.ui.newWizard(newWizardId=eu.geclipse.ui.wizards.gridProjectWizard)"/>
    </item>
    <item title="Basic Information">
    	  <description>Step through the pages in the Grid Project Wizard.</description>
