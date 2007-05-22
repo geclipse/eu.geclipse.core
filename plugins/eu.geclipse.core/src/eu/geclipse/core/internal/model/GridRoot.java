@@ -118,7 +118,7 @@ public final class GridRoot
    * @see eu.geclipse.core.model.IGridRoot#findElement(org.eclipse.core.runtime.IPath)
    */
   public final IGridElement findElement( final IPath path ) {
-    IGridElement element = null;
+    IGridElement element = path.isRoot() ? this : null;
     String[] segments = path.segments();
     IGridContainer container = this;
     for ( String segment : segments ) {
