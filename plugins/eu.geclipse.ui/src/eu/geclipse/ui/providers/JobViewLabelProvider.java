@@ -26,7 +26,9 @@ public class JobViewLabelProvider
           break;
         case 3:
           IGridJobStatus status = job.getJobStatus();
-          text = status.getName();
+          if ( status != null ) {
+            text = status.getName();
+          }
           break;
       }
     }
