@@ -48,6 +48,7 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridModelListener;
 import eu.geclipse.ui.internal.actions.ActionGroupManager;
+import eu.geclipse.ui.internal.actions.CommonActions;
 import eu.geclipse.ui.internal.actions.FileActions;
 import eu.geclipse.ui.internal.actions.OpenActions;
 import eu.geclipse.ui.internal.actions.TreeViewerActions;
@@ -201,11 +202,14 @@ public abstract class GridModelViewPart
   
   protected void contributeStandardActions( final ActionGroupManager groups ) {
     
-    this.openActions = new OpenActions( this.getSite() );
+    this.openActions = new OpenActions( getSite() );
     groups.addGroup( this.openActions );
     
     FileActions fileActions = new FileActions( this );
     groups.addGroup( fileActions );
+    
+    CommonActions commonActions = new CommonActions( getSite() );
+    groups.addGroup( commonActions );
     
     StructuredViewer sViewer = getViewer();
     if ( sViewer instanceof TreeViewer ) {
@@ -325,12 +329,12 @@ public abstract class GridModelViewPart
     createContextMenuGroups( menu );
     this.actions.setContext( context );
     this.actions.fillContextMenu( menu );
-    if ( ( ( IStructuredSelection )context.getSelection() ).size() == 1 ) {
+    /*if ( ( ( IStructuredSelection )context.getSelection() ).size() == 1 ) {
       PropertyDialogAction propertyDialogAction;
       propertyDialogAction = new PropertyDialogAction( new SameShellProvider( this.getSite().getShell() ),
                                                        this.getViewer() );
       menu.add( propertyDialogAction );
-    }
+    }*/
     this.actions.setContext( null );
   }
   
