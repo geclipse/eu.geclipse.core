@@ -165,7 +165,7 @@ public class SolutionRegistry {
     }
     
     else if ( solutionID == CHECK_VO_SETTINGS ) {
-      solution = new Solution( CHECK_VO_SETTINGS, "Check your VO settings" );
+      solution = new Solution( CHECK_VO_SETTINGS, Messages.getString("SolutionRegistry.check_vo_settings") ); //$NON-NLS-1$
     }
     
     else if ( solutionID == SERVER_DOWN ) {
