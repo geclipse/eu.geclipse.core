@@ -15,6 +15,8 @@
 
 package eu.geclipse.core.internal.model;
 
+import eu.geclipse.core.JobStatusUpdater;
+import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IJobManager;
@@ -44,6 +46,19 @@ public class JobManager
     // empty imlementation
   }
   
+  @Override
+  public boolean addElement( IGridElement element ) throws GridModelException
+  {
+    boolean flag;
+    flag=super.addElement( element );
+    if(element instanceof IGridJob){
+      JobStatusUpdater updater = new JobStatusUpdater ((IGridJob)element);
+      updater.setSystem( true );
+      updater.schedule(10000);
+    }
+    return flag;
+  }
+
   /**
    * Get the singleton instance of the <code>JobManager</code>.
    * 

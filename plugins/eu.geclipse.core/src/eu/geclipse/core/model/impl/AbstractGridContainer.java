@@ -85,11 +85,6 @@ public abstract class AbstractGridContainer
       throws GridModelException {
     IGridElement element = creator.create( this );
     element = addElement( element ); 
-    if(element instanceof IGridJob){
-      JobStatusUpdater updater = new JobStatusUpdater ((IGridJob)element);
-      updater.setSystem( true );
-      updater.schedule(10000);
-    }
     return element;
   }
   
