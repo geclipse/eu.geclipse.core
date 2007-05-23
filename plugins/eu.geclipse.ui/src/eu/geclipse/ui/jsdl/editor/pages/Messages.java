@@ -40,8 +40,7 @@ public class Messages extends NLS {
   public static String DataStagingPage_PageTitle;
   public static String DataStagingPage_Source;
   public static String DataStagingPage_Target;
-  public static String DataStagingPage_true;
-  public static String JobApplicationPage_Add;
+  public static String DataStagingPage_true;  
   public static String JobApplicationPage_additionalPosixApplDescr;
   public static String JobApplicationPage_additionalPosixApplElementTitle;
   public static String JobApplicationPage_ApplicationDescr;
@@ -76,9 +75,7 @@ public class Messages extends NLS {
   public static String JobApplicationPage_UserName;
   public static String JobApplicationPage_VirtualMemoryLimit;
   public static String JobApplicationPage_WallTimeLimit;
-  public static String JobApplicationPage_WorkingDirectory;
-  public static String JobDefinitionPage_ButtADD;
-  public static String JobDefinitionPage_ButtDEL;
+  public static String JobApplicationPage_WorkingDirectory;  
   public static String JobDefinitionPage_JobAnnotation;
   public static String JobDefinitionPage_JobDefinitionDescr;
   public static String JobDefinitionPage_jobDefinitionId;
@@ -111,9 +108,7 @@ public class Messages extends NLS {
   public static String ResourcesPage_DiskSpace;
   public static String ResourcesPage_FileSysType;
   public static String ResourcesPage_ExclExec;
-  public static String ResourcesPage_ExclExecDescr;
-  public static String ResourcesPage_ButtAdd;
-  public static String ResourcesPage_ButtDel;
+  public static String ResourcesPage_ExclExecDescr;  
   public static String ResourcesPage_CandHostDesc;
   public static String ResourcesPage_CanHost;
   public static String ResourcesPage_FileSystem;
@@ -136,6 +131,8 @@ public class Messages extends NLS {
   public static String ResourcesPage_true;
   public static String ResourcesPage_UpBoundRange;
   public static String ResourcesPage_VirtualMem;
+  public static String JsdlEditor_AddButton;
+  public static String JsdlEditor_RemoveButton;
   private static final String BUNDLE_NAME = "eu.geclipse.ui.jsdl.editor.pages.messages"; //$NON-NLS-1$
   static {
     // initialize resource bundle

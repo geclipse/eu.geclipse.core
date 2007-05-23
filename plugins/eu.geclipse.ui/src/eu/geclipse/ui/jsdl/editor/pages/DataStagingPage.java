@@ -35,6 +35,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 import eu.geclipse.jsdl.adapters.jsdl.DataStagingAdapter;
+import eu.geclipse.ui.internal.Activator;
 
 
 public class DataStagingPage extends FormPage{
@@ -52,6 +53,9 @@ public class DataStagingPage extends FormPage{
   Label lblDelOnTerm = null;
   Label lblSource = null;
   Label lblTarget = null;
+  
+  Combo comboCreationFlag = null;
+  Combo comboDelOnTerm = null;
 
   
   private DataStagingAdapter dataStagingAdapter;
@@ -82,8 +86,10 @@ public class DataStagingPage extends FormPage{
     form.setText(Messages.DataStagingPage_DataStagingPageTitle); 
   
     ColumnLayout layout = new ColumnLayout();
-    
-    // Set Max and Min Columns to be 1...
+   
+    layout.leftMargin = 10;
+    layout.rightMargin = 10;
+    /*  Set Max and Min Columns to be 1... */
     layout.maxNumColumns = 1;
     layout.minNumColumns = 1;    
     form.getBody().setLayout(layout);
@@ -93,9 +99,12 @@ public class DataStagingPage extends FormPage{
    this.jobDataStaging = createDataStagingSection(managedForm,
                                  Messages.DataStagingPage_PageTitle, 
                                  Messages.DataStagingPage_DataStagingDescr);  
-   
-   
+      
   // this.dataStagingAdapter.load();
+   
+   /* Set Form Background */
+   form.setBackgroundImage(Activator.getDefault().
+                           getImageRegistry().get( "formsbackground" ));
   }
   
 public void setActive(final boolean active) {
@@ -128,7 +137,8 @@ public void setActive(final boolean active) {
   } // End void getPageContent() 
 
 
-  // This method is used to create individual subsections
+  /* This method is used to create individual subsections */
+  
   private Composite createSection(final IManagedForm mform, final String title,
                                 final String desc, final int numColumns) {
     
@@ -145,18 +155,22 @@ public void setActive(final boolean active) {
    section.setText(title);
    section.setDescription(desc);
    toolkit.createCompositeSeparator(section);
+   
    Composite client = toolkit.createComposite(section);
           
    GridLayout layout = new GridLayout();
-   layout.verticalSpacing = 5;
+   layout.verticalSpacing = 8;
    layout.marginTop = 10;
+   layout.marginBottom = 10;
    layout.marginWidth = 0;
    layout.marginHeight = 0;
    layout.numColumns = numColumns;
    client.setLayout(layout);
    
    section.setClient(client);
-      
+   
+   toolkit.paintBordersFor( client );
+   
    return client;
    
    }
@@ -197,60 +211,56 @@ public void setActive(final boolean active) {
     gd.widthHint = 300;
     gd.heightHint = 50;
           
-    this.lstFileName = new List(clientsubSection, SWT.MULTI| SWT.BORDER);
+    this.lstFileName = new List(clientsubSection, SWT.NONE);
+    this.lstFileName.setData( FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER ); 
     this.lstFileName.setLayoutData( gd );
     
- 
-   
-    //this.txtFileName.setLayoutData(gd);
     
     gd = new GridData();
     //File System Name Label and Text box
     this.lblFileSystemName = toolkit.createLabel(clientsubSection,Messages.DataStagingPage_FileSystemName);
-    this.txtFileSystemName = toolkit.createText(clientsubSection, "", SWT.BORDER); //$NON-NLS-1$
+    this.txtFileSystemName = toolkit.createText(clientsubSection, "", SWT.NONE); //$NON-NLS-1$
     gd.widthHint = 300;
     this.txtFileSystemName.setLayoutData(gd);
     
     
     //Creation Flag Label and Combo box
     this.lblCreationFlag = toolkit.createLabel(clientsubSection,Messages.DataStagingPage_CreationFlag);
-    Combo comboCreationFlag = new Combo(clientsubSection,SWT.DROP_DOWN);
-    comboCreationFlag.add(""); //$NON-NLS-1$
-    comboCreationFlag.add(Messages.DataStagingPage_overwrite);
-    comboCreationFlag.add(Messages.DataStagingPage_append);
-    comboCreationFlag.add(Messages.DataStagingPage_dontOverwrite);
+    this.comboCreationFlag = new Combo(clientsubSection, SWT.NONE);
+    this.comboCreationFlag.setData( FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER );
+    this.comboCreationFlag.add(""); //$NON-NLS-1$
+    this.comboCreationFlag.add(Messages.DataStagingPage_overwrite);
+    this.comboCreationFlag.add(Messages.DataStagingPage_append);
+    this.comboCreationFlag.add(Messages.DataStagingPage_dontOverwrite);
     gd.widthHint = 300;
-    comboCreationFlag.setLayoutData(gd);
+    this.comboCreationFlag.setLayoutData(gd);
 
     //Delete On Termination Label and Combo box
     this.lblDelOnTerm = toolkit.createLabel(clientsubSection,Messages.DataStagingPage_DeleteOnTermination);
-    Combo comboDelOnTerm = new Combo(clientsubSection,SWT.DROP_DOWN);
-    comboDelOnTerm.add(""); //$NON-NLS-1$
-    comboDelOnTerm.add(Messages.DataStagingPage_true);
-    comboDelOnTerm.add(Messages.DataStagingPage_false);
+    this.comboDelOnTerm = new Combo(clientsubSection, SWT.NONE);
+    this.comboDelOnTerm.setData( FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER );
+    this.comboDelOnTerm.add(""); //$NON-NLS-1$
+    this.comboDelOnTerm.add(Messages.DataStagingPage_true);
+    this.comboDelOnTerm.add(Messages.DataStagingPage_false);
     gd.widthHint = 300;
-    comboDelOnTerm.setLayoutData(gd);
+    this.comboDelOnTerm.setLayoutData(gd);
     
     //Source Label and Text box
     this.lblSource = toolkit.createLabel(clientsubSection,Messages.DataStagingPage_Source);
-    this.txtSource = toolkit.createText(clientsubSection, "", SWT.BORDER); //$NON-NLS-1$
+    this.txtSource = toolkit.createText(clientsubSection, "", SWT.NONE); //$NON-NLS-1$
     gd.widthHint = 300;
     this.txtSource.setLayoutData(gd);
     
     //Target Label and Text box
     this.lblTarget = toolkit.createLabel(clientsubSection,Messages.DataStagingPage_Target);
-    this.txtTarget = toolkit.createText(clientsubSection, "", SWT.BORDER); //$NON-NLS-1$
+    this.txtTarget = toolkit.createText(clientsubSection, "", SWT.NONE); //$NON-NLS-1$
     gd.widthHint = 300;
     this.txtTarget.setLayoutData(gd);
     
-
+    toolkit.paintBordersFor( clientsubSection );
+    
     return clientsubSection;
   }
-  
-  
-
-  
-  
   
   
 
@@ -267,8 +277,7 @@ public void setActive(final boolean active) {
         
     this.jobDataStaging = createSubSection (client,mform,
                                Messages.DataStagingPage_Section
-                              ,Messages.DataStagingPage_SectionDesc,2,480,300);
-    
+                              ,Messages.DataStagingPage_SectionDesc,2,480,300);    
   
     
     return client;

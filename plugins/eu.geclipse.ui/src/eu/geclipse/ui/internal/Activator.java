@@ -213,7 +213,8 @@ public class Activator extends AbstractUIPlugin {
 //      { "view_hierarchical", "icons/view_hierarchical.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
       { "virtualfile", "icons/obj16/virtual_file_obj.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
       { "virtualfolder", "icons/obj16/virtual_folder_obj.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
-      { "vo", "icons/obj16/vo_obj.gif" } //$NON-NLS-1$ //$NON-NLS-2$
+      { "vo", "icons/obj16/vo_obj.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
+      {"formsbackground", "icons/form_banner.gif"} //$NON-NLS-1$ //$NON-NLS-2$
     };
     
     ImageDescriptor imgDsc = null;
