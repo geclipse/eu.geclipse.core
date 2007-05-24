@@ -81,7 +81,9 @@ public class GridConnection
    * Get the connection file containing the contact string of
    * this connection.
    * 
-   * @return This connection's connection file.
+   * @return This connection's connection file. This may be <code>null</code>
+   * if the connection is not part of the workspace, i.e. if this is a
+   * global connection.
    */
   public IFile getFsFile() {
     IFile result = null;
@@ -92,6 +94,12 @@ public class GridConnection
     return result;
   }
   
+  /**
+   * Get the file store pointing to the file file containing the contact string of
+   * this connection.
+   * 
+   * @return The connection's connection file store.
+   */
   public IFileStore getFsFileStore() {
     IFileStore result = getParent().getFileStore();
     result = result.getChild( this.fsFileName );

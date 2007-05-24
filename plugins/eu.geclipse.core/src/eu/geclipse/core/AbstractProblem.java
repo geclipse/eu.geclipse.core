@@ -142,6 +142,12 @@ public abstract class AbstractProblem implements IProblem {
     return resultList;
   }
   
+  /**
+   * Get the IDs of all solutions that are currently defined for this
+   * problem.
+   * 
+   * @return The ID's of all associated solutions.
+   */
   public List< Integer > getSolutionIDs() {
     
     List< Integer > ids = new ArrayList< Integer >();

@@ -55,12 +55,19 @@ public class GridConnectionRootAdapter
   /**
    * Get the associated filesytem file.
    * 
-   * @return The associated FS-file.
+   * @return The associated FS-file. May be <code>null</code> if the
+   * connection is not part of the workspace, i.e. if the connection is
+   * a global one.
    */
   public IFile getFsFile() {
     return ( ( GridConnection ) getGridConnection() ).getFsFile();
   }
   
+  /**
+   * Get the associated filesytem file store.
+   * 
+   * @return The associated FS-file's file store.
+   */
   public IFileStore getFsFileStore() {
     return ( ( GridConnection ) getGridConnection() ).getFsFileStore();
   }
