@@ -66,14 +66,13 @@ public class ConfigurableContentProvider
   }
   
   protected boolean isVisible( final IGridElement element ) {
-    boolean result = true;
+    boolean result = false;
     Object[] rootChildren = super.getChildren( this.rootElement );
-    result = false;
     IPath elementPath = element.getPath();
     for ( Object obj : rootChildren ) {
       if ( obj instanceof IGridElement ) {
         IPath rootPath = ( ( IGridElement ) obj ).getPath();
-        if ( elementPath.isPrefixOf( rootPath ) ) {
+        if ( elementPath.isPrefixOf( rootPath ) || rootPath.isPrefixOf( elementPath ) ) {
           result = true;
           break;
         }
