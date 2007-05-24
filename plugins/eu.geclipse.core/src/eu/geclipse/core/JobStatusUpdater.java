@@ -8,6 +8,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobID;
+import eu.geclipse.core.model.IGridJobStatus;
 
 public class JobStatusUpdater extends Job {
 
@@ -22,11 +23,19 @@ public class JobStatusUpdater extends Job {
   }
 
   protected IStatus run( final IProgressMonitor monitor ) {
-    int oldType = job.getJobStatus().getType();
+    int oldType = IGridJobStatus.UNKNOWN; 
+    int newType = IGridJobStatus.UNKNOWN; 
+    IGridJobStatus status=job.getJobStatus();
+    if(status!=null){
+      oldType=status.getType();
+    }
     // IGridJobStatus jobStatus = updateService.getJobStatus( job.getID() );
     try{
       job.updateJobStatus();
-      int newType = job.getJobStatus().getType();
+      status=job.getJobStatus();
+      if(status!=null){
+        newType=status.getType();
+      }
       if( oldType != newType ) {
       // TODO pawelw - status changed, notify all listeners;
     }
