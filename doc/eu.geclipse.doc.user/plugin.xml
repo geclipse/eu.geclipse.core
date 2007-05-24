@@ -94,7 +94,7 @@
             id="eu.geclipse.doc.user.copyingFiles"
             name="Copying files between local machine and grid">
          <description>
-         	This cheat sheet will show you how to copy files between local machine and storage on grid.
+         	This cheat sheet will show you how to copy files between your local machine and storage on the grid.
          </description>
       </cheatsheet>
    </extension>
