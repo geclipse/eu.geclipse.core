@@ -19,6 +19,8 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.graphics.FontMetrics;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -54,6 +56,11 @@ class SSHConnectionComposite extends Composite {
     this.passwordText.addListener( SWT.Modify, page );
     this.portText.addListener( SWT.Modify, page );
     this.portText.addListener( SWT.Verify, new NumberVerifier() );
+    GridData portTextGridData = (GridData) this.portText.getLayoutData();
+    GC gc = new GC( this.portText );
+    FontMetrics fm = gc.getFontMetrics();
+    portTextGridData.widthHint = 7 * fm.getAverageCharWidth();
+    gc.dispose();
   }
 
   private void initialize() {
