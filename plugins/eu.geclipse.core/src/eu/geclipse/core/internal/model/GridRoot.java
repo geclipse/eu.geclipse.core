@@ -86,6 +86,14 @@ public final class GridRoot
     return singleton;
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.impl.ResourceGridContainer#getParent()
+   */
+  @Override
+  public IGridContainer getParent() {
+    return null;
+  }
+  
   /**
    * Get the singleton instance of this Grid root. If the singleton is
    * not yet instantiated this method will return <code>null</code>.

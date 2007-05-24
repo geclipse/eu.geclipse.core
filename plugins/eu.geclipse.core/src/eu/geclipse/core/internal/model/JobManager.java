@@ -47,8 +47,8 @@ public class JobManager
   }
   
   @Override
-  public boolean addElement( IGridElement element ) throws GridModelException
-  {
+  public boolean addElement( final IGridElement element )
+      throws GridModelException {
     boolean flag;
     flag=super.addElement( element );
     if(element instanceof IGridJob){

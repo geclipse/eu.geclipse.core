@@ -92,6 +92,12 @@ public class GridConnection
     return result;
   }
   
+  public IFileStore getFsFileStore() {
+    IFileStore result = getParent().getFileStore();
+    result = result.getChild( this.fsFileName );
+    return result;
+  }
+  
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IManageable#getManager()
    */
@@ -130,8 +136,7 @@ public class GridConnection
    * for the new file store.
    */
   protected static IFileStore loadFromFsFile( final IFileStore fsFileStore )
-    throws GridModelException
-  {
+      throws GridModelException {
     IFileStore result = null;
     try {
       InputStream iStream = fsFileStore.openInputStream( EFS.NONE, null );

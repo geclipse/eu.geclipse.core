@@ -44,7 +44,20 @@ public class GridConnectionCreator extends AbstractGridElementCreator {
    */
   public IGridElement create( final IGridContainer parent )
       throws GridModelException {
-    return createGridConnection( parent, ( IFile ) getObject() );
+    
+    IGridElement result = null;
+    Object o = getObject();
+    
+    if ( isFsFile( o ) ) {
+      if ( o instanceof IFile ) {
+        result = createGridConnection( parent, ( IFile ) o );
+      } else if ( o instanceof IFileStore ) {
+        result = createGridConnection( parent, ( IFileStore ) o );
+      }
+    }
+    
+    return result;
+    
   }
     
   /**
@@ -61,12 +74,17 @@ public class GridConnectionCreator extends AbstractGridElementCreator {
    */
   protected IGridConnection createGridConnection( final IGridContainer parent,
                                                   final IFile fsFile )
-    throws GridModelException
-  {
+      throws GridModelException {
     URI uri = fsFile.getLocationURI();
     IFileSystem localFileSystem = EFS.getLocalFileSystem();
     IFileStore fsFileStore = localFileSystem.getStore( uri );
-    IFileStore fileStore = GridConnection.loadFromFsFile( fsFileStore );
+    return createGridConnection( parent, fsFileStore );
+  }
+  
+  protected IGridConnection createGridConnection( final IGridContainer parent,
+                                                  final IFileStore fsFile )
+      throws GridModelException {
+    IFileStore fileStore = GridConnection.loadFromFsFile( fsFile );
     IGridConnection connection = null;
     if( fileStore != null ) {
       connection = new GridConnection( parent, fileStore, fsFile.getName() );
@@ -94,9 +112,15 @@ public class GridConnectionCreator extends AbstractGridElementCreator {
    * fits the connection file's naming scheme.
    */
   private boolean isFsFile( final Object object ) {
-    return ( object instanceof IFile )
-      && ( ( IFile ) object ).getName().startsWith( "." ) //$NON-NLS-1$
-      && ( ( IFile ) object ).getName().endsWith( GridConnection.FILE_EXTENSION );
+    return ( ( object instanceof IFile )
+      && isFsFile( ( ( IFile ) object ).getName() ) )
+      || ( ( object instanceof IFileStore )
+          && isFsFile( ( ( IFileStore ) object ).getName() ) );
+  }
+  
+  private boolean isFsFile( final String filename ) {
+    return filename.startsWith( "." ) //$NON-NLS-1$
+      && filename.endsWith( GridConnection.FILE_EXTENSION );
   }
   
 }

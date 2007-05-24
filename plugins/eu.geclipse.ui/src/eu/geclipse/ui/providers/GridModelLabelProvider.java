@@ -53,8 +53,7 @@ public class GridModelLabelProvider extends LabelProvider
   }
 
   @Override
-  public Image getImage( final Object element )
-  {
+  public Image getImage( final Object element ) {
     Image resultImage = null;
     if( element instanceof IGridElement ) {
       // check if there is adapter to provide image
@@ -72,7 +71,7 @@ public class GridModelLabelProvider extends LabelProvider
       // get image from resource
       if( resultImage == null ) {
         IResource resource = ( ( IGridElement )element ).getResource();
-        if( resource != null ) {
+        if( ( resource != null ) && ( resource.getProject() != null ) ) {
           resultImage = this.workbenchLabelProvider.getImage( resource );
         } else if( element instanceof IGridContainer ) {
           resultImage = getFolderImage( ( ( IGridElement )element ).isVirtual() );

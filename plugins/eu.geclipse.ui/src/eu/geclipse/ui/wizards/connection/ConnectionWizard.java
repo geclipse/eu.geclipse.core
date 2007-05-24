@@ -16,10 +16,16 @@
 
 package eu.geclipse.ui.wizards.connection;
 
+import java.io.IOException;
+import java.io.OutputStream;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URL;
+import java.util.List;
+import org.eclipse.core.filesystem.EFS;
+import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -30,8 +36,10 @@ import org.eclipse.jface.viewers.TreeSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
-import eu.geclipse.core.connection.ConnectionManager;
-import eu.geclipse.core.connection.impl.ConnectionDescription;
+import eu.geclipse.core.model.GridModel;
+import eu.geclipse.core.model.GridModelException;
+import eu.geclipse.core.model.IConnectionManager;
+import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.ui.Extensions;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.dialogs.Solution;
@@ -147,11 +155,52 @@ public class ConnectionWizard extends Wizard implements INewWizard {
             // ConnectionWizard.this.propertiesFile,
             // ConnectionWizard.this.localizationPage.getFileName() );
           } else {
-            ConnectionDescription desc = new ConnectionDescription( fileSystemUri, null );
+            /*ConnectionDescription desc = new ConnectionDescription( fileSystemUri, null );
             ConnectionManager manager = ConnectionManager.getManager();
             manager.createAndSaveConnection( desc,
                                              ConnectionWizard.this.propertiesFile,
                                              ConnectionWizard.this.firstPage.getConnectionName() );
+                                             */
+            
+            String filename
+              = "." + ConnectionWizard.this.firstPage.getConnectionName() + ".fs";
+            
+            IConnectionManager connectionManager = GridModel.getConnectionManager();
+            IFileStore fileStore = connectionManager.getFileStore();
+            IFileStore child = fileStore.getChild( filename );
+            
+            try {
+              OutputStream oStream = child.openOutputStream( EFS.NONE, null );
+              oStream.write( fileSystemUri.toString().getBytes() );
+              oStream.close();
+            } catch ( CoreException cExc ) {
+              throw new InvocationTargetException( cExc );
+            } catch( IOException ioExc ) {
+              throw new InvocationTargetException( ioExc );
+            }
+            
+            List< IGridElementCreator > standardCreators = GridModel.getStandardCreators();
+            IGridElementCreator connectionCreator = null;
+            
+            for ( IGridElementCreator creator : standardCreators ) {
+              if ( creator.canCreate( child ) ) {
+                connectionCreator = creator;
+                break;
+              }
+            }
+            
+            if ( connectionCreator != null ) {
+              try {
+                connectionManager.create( connectionCreator );
+              } catch( GridModelException gmExc ) {
+                throw new InvocationTargetException( gmExc );
+              }
+            }
+            
+            else {
+              // TODO mathias proper error handling
+            }
+            
           }
         }
       } );

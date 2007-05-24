@@ -18,6 +18,7 @@ package eu.geclipse.core.internal.model;
 import java.io.InputStream;
 import java.io.Reader;
 import java.net.URI;
+import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFileState;
@@ -37,6 +38,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.content.IContentDescription;
 import org.eclipse.core.runtime.jobs.ISchedulingRule;
+import eu.geclipse.core.model.IGridProject;
 
 /**
  * {@link IFile} and {@link IFolder} implementation in order to wrap
@@ -57,6 +59,10 @@ public class GridConnectionRootAdapter
    */
   public IFile getFsFile() {
     return ( ( GridConnection ) getGridConnection() ).getFsFile();
+  }
+  
+  public IFileStore getFsFileStore() {
+    return ( ( GridConnection ) getGridConnection() ).getFsFileStore();
   }
   
   @Override
@@ -136,7 +142,12 @@ public class GridConnectionRootAdapter
   @Override
   public void clearHistory( final IProgressMonitor monitor )
       throws CoreException {
-    getFsFile().clearHistory( monitor );
+    IFile fsFile = getFsFile();
+    if ( fsFile != null ) {
+      getFsFile().clearHistory( monitor );
+    } else {
+      notYetImplemented();
+    }
   }
   
   @Override
@@ -343,7 +354,7 @@ public class GridConnectionRootAdapter
   
   @Override
   public String getName() {
-    return getFsFile().getName();
+    return getFsFileStore().getName();
   }
 
   @Override
@@ -359,7 +370,9 @@ public class GridConnectionRootAdapter
 
   @Override
   public IProject getProject() {
-    return getFsFile().getProject();
+    GridConnectionElement connection = getGridConnection();
+    IGridProject project = connection.getProject();
+    return project == null ? null : ( IProject ) project.getResource();
   }
 
   @Override
@@ -409,17 +422,32 @@ public class GridConnectionRootAdapter
   
   @Override
   public boolean isAccessible() {
-    return getFsFile().isAccessible();
+    boolean result = true;
+    IFile fsFile = getFsFile();
+    if ( fsFile != null ) {
+      result = fsFile.isAccessible();
+    }
+    return result;
   }
   
   @Override
   public boolean isConflicting( final ISchedulingRule rule ) {
-    return getFsFile().isConflicting( rule );
+    boolean result = false;
+    IFile fsFile = getFsFile();
+    if ( fsFile != null ) {
+      result = fsFile.isConflicting( rule );
+    }
+    return result;
   }
 
   @Override
   public boolean isDerived() {
-    return getFsFile().isDerived();
+    boolean result = false;
+    IFile fsFile = getFsFile();
+    if ( fsFile != null ) {
+      result = fsFile.isDerived();
+    }
+    return result;
   }
 
   @Override
@@ -434,23 +462,43 @@ public class GridConnectionRootAdapter
 
   @Override
   public boolean isLinked( final int options ) {
-    return getFsFile().isLinked( options );
+    boolean result = false;
+    IFile fsFile = getFsFile();
+    if ( fsFile != null ) {
+      result = fsFile.isLinked( options );
+    }
+    return result;
   }
 
   @SuppressWarnings("deprecation")
   @Override
   public boolean isLocal( final int depth ) {
-    return getFsFile().isLocal( depth );
+    boolean result = true;
+    IFile fsFile = getFsFile();
+    if ( fsFile != null ) {
+      result = fsFile.isLocal( depth );
+    }
+    return result;
   }
 
   @Override
   public boolean isPhantom() {
-    return getFsFile().isPhantom();
+    boolean result = false;
+    IFile fsFile = getFsFile();
+    if ( fsFile != null ) {
+      result = fsFile.isPhantom();
+    }
+    return result;
   }
   
   @Override
   public boolean isReadOnly() {
-    return getFsFile().isReadOnly();
+    boolean result = false;
+    IFile fsFile = getFsFile();
+    if ( fsFile != null ) {
+      result = fsFile.isReadOnly();
+    }
+    return result;
   }
 
   @Override
@@ -465,7 +513,12 @@ public class GridConnectionRootAdapter
 
   @Override
   public boolean isTeamPrivateMember() {
-    return getFsFile().isTeamPrivateMember();
+    boolean result = false;
+    IFile fsFile = getFsFile();
+    if ( fsFile != null ) {
+      result = fsFile.isTeamPrivateMember();
+    }
+    return result;
   }
   
   @Override

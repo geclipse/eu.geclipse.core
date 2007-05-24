@@ -119,25 +119,25 @@ public class Extensions {
     = "class"; //$NON-NLS-1$
   
   
-    /**
-     * List that holds all known element creators.
-     */
-    private static List< IGridElementCreator > elementCreators = null;
+  /**
+   * List that holds all known element creators.
+   */
+  private static List< IGridElementCreator > elementCreators = null;
 
-    /**
-     * List that holds all known authentication token descriptions.
-     */
-    private static List<IAuthenticationTokenDescription> authTokenDescriptions;
+  /**
+   * List that holds all known authentication token descriptions.
+   */
+  private static List<IAuthenticationTokenDescription> authTokenDescriptions;
 
-    /**
-     * List that holds all known problem providers.
-     */
-    private static List<IProblemProvider> problemProviders;
+  /**
+   * List that holds all known problem providers.
+   */
+  private static List<IProblemProvider> problemProviders;
 
-    /**
-     * List containing the names of all known authentication token.
-     */
-    private static List<String> authTokenNames;
+  /**
+   * List containing the names of all known authentication token.
+   */
+  private static List<String> authTokenNames;
     
   
   
