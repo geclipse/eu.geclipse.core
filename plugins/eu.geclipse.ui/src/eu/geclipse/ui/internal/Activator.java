@@ -103,6 +103,12 @@ public class Activator extends AbstractUIPlugin {
     = "eu.geclipse.ui.wizards.connectionWizard"; //$NON-NLS-1$
   
   /**
+   * The id of the workflow wizard.
+   */
+  public static final String ID_WORKFLOW_WIZARD
+    = "eu.geclipse.workflow.ui.wizards.workflowWizard"; //$NON-NLS-1$
+
+  /**
    * The shared instance.
    */
   private static Activator plugin;
