@@ -4,6 +4,7 @@ import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
 import eu.geclipse.core.model.IGridContainer;
@@ -15,14 +16,17 @@ public abstract class TreeControlViewPart extends GridModelViewPart {
     if ( ( element != null ) && ( element instanceof IGridContainer ) ) {
       IGridContainer container = ( IGridContainer ) element;
       if ( container.isLazy() && container.isDirty() ) {
-        Display display = this.viewer.getControl().getDisplay();
-        display.syncExec( new Runnable() {
-          public void run() {
-            TreeViewer tViewer = ( TreeViewer ) getViewer();
-            tViewer.setChildCount( element, 0 );
-            tViewer.setChildCount( element, 1 );
-          }
-        } );
+        Control control = this.viewer.getControl();
+        if ( ! control.isDisposed() ) {
+          Display display = control.getDisplay();
+          display.syncExec( new Runnable() {
+            public void run() {
+              TreeViewer tViewer = ( TreeViewer ) getViewer();
+              tViewer.setChildCount( element, 0 );
+              tViewer.setChildCount( element, 1 );
+            }
+          } );
+        }
       }
     }
     super.refreshViewer( element );

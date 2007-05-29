@@ -15,6 +15,7 @@
 
 package eu.geclipse.ui.internal.actions;
 
+import java.net.URL;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
@@ -32,9 +33,9 @@ public class ViewModeAction
     extends Action
     implements IConfigurationListener {
   
-  private static final String VIEW_FLAT_IMAGE = "view_flat"; //$NON-NLS-1$
+  static final String VIEW_FLAT_IMAGE = "icons/obj16/view_flat.gif"; //$NON-NLS-1$
 
-  private static final String VIEW_HIERARCHICAL_IMAGE = "view_hierarchical"; //$NON-NLS-1$
+  static final String VIEW_HIERARCHICAL_IMAGE = "icons/obj16/view_hierarchical.gif"; //$NON-NLS-1$
   
   /**
    * The view for which to set the mode.
@@ -59,18 +60,23 @@ public class ViewModeAction
                             final int viewMode,
                             final ElementManagerViewPart view ) {
     super( name );
+    
     this.view = view;
     this.viewMode = viewMode;
     updateActionState();
-    ImageRegistry imageRegistry
-      = Activator.getDefault().getImageRegistry();
-    ImageDescriptor desc = null;
+    
+    URL imgURL = null;
     if ( viewMode == ConfigurableContentProvider.MODE_FLAT ) {
-      desc = imageRegistry.getDescriptor( VIEW_FLAT_IMAGE );
+      imgURL = Activator.getDefault().getBundle().getEntry( ViewModeAction.VIEW_FLAT_IMAGE );
     } else if ( viewMode == ConfigurableContentProvider.MODE_HIERARCHICAL ) {
-      desc = imageRegistry.getDescriptor( VIEW_HIERARCHICAL_IMAGE );
+      imgURL = Activator.getDefault().getBundle().getEntry( ViewModeAction.VIEW_HIERARCHICAL_IMAGE );
     }
-    setImageDescriptor( desc );
+    
+    if ( imgURL != null ) {
+      ImageDescriptor descriptor = ImageDescriptor.createFromURL( imgURL );
+      setImageDescriptor( descriptor );
+    }
+    
   }
   
   /* (non-Javadoc)

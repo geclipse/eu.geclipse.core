@@ -329,12 +329,6 @@ public abstract class GridModelViewPart
     createContextMenuGroups( menu );
     this.actions.setContext( context );
     this.actions.fillContextMenu( menu );
-    /*if ( ( ( IStructuredSelection )context.getSelection() ).size() == 1 ) {
-      PropertyDialogAction propertyDialogAction;
-      propertyDialogAction = new PropertyDialogAction( new SameShellProvider( this.getSite().getShell() ),
-                                                       this.getViewer() );
-      menu.add( propertyDialogAction );
-    }*/
     this.actions.setContext( null );
   }
   

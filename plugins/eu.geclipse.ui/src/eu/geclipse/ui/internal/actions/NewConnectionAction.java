@@ -43,7 +43,7 @@ public class NewConnectionAction
    * @param workbenchWindow The {@link IWorkbenchWindow} for which to
    * create this action.
    */
-  protected NewConnectionAction( final IWorkbenchWindow workbenchWindow ) {
+  public NewConnectionAction( final IWorkbenchWindow workbenchWindow ) {
     super( Messages.getString("NewConnectionAction.new_connection_action_text") ); //$NON-NLS-1$
     this.workbenchWindow = workbenchWindow;
     URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/etool16/newconn_wiz.gif" ); //$NON-NLS-1$
