@@ -92,7 +92,7 @@ public class Activator extends Plugin {
    * 
    * @param exc The exception to be logged.
    */
-  public static void logException( final Exception exc ) {
+  public static void logException( final Throwable exc ) {
     String message = exc.getLocalizedMessage();
     if( message == null )
       message = exc.getClass().getName();

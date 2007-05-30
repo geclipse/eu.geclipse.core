@@ -147,8 +147,8 @@ public class ResourceGridContainer
             if ( localMonitor.isCanceled() ) {
               break;
             }
-          } catch ( Exception exception ) {
-            Activator.logException( exception );
+          } catch ( Throwable throwable ) {
+            Activator.logException( throwable );
           }
         }
         result = true;
