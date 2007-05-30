@@ -22,17 +22,18 @@ public class JobStatusUpdater extends Job {
     updaters.put( job.getID().getJobID(), this );
   }
 
+  @Override
   protected IStatus run( final IProgressMonitor monitor ) {
     int oldType = IGridJobStatus.UNKNOWN; 
     int newType = IGridJobStatus.UNKNOWN; 
-    IGridJobStatus status=job.getJobStatus();
+    IGridJobStatus status = this.job.getJobStatus();
     if(status!=null){
       oldType=status.getType();
     }
     // IGridJobStatus jobStatus = updateService.getJobStatus( job.getID() );
     try{
-      job.updateJobStatus();
-      status=job.getJobStatus();
+      this.job.updateJobStatus();
+      status = this.job.getJobStatus();
       if(status!=null){
         newType=status.getType();
       }
@@ -43,11 +44,11 @@ public class JobStatusUpdater extends Job {
     catch(RuntimeException e){
       Activator.logException( e );
     }
-    if( job.getJobStatus().canChange() ) {
+    if( this.job.getJobStatus().canChange() ) {
       schedule( 10000 );
     }
     else{
-      updaters.remove( job.getID().getJobID() );
+      updaters.remove( this.job.getID().getJobID() );
     }
     return Status.OK_STATUS;
   }
@@ -57,10 +58,7 @@ public class JobStatusUpdater extends Job {
     if(jsu==null){
       throw new IllegalAccessException("No updater for job id: "+id);
     }
-    else{
-      jsu.join();
-    }
-    
+    jsu.join();
   }
 
   static void waitForJob(final IGridJobID id) throws InterruptedException, IllegalAccessException{
