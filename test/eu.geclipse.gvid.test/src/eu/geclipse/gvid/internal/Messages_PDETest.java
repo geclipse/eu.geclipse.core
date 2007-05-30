@@ -58,7 +58,7 @@ public class Messages_PDETest {
   @Test
   public void testformatMessage() throws Exception {  
     Assert.assertEquals( Messages.formatMessage( this.string3,this.testarg1 ),
-      "Can't instanciate decoder for codec \"5\"\nPlease set a codec in the preferences dialog." ); //$NON-NLS-1$
+      "Cannot instantiate decoder for codec \"5\"\nPlease set a codec in the preferences dialog." ); //$NON-NLS-1$
     Assert.assertEquals( Messages.formatMessage( this.string4,this.testarg2[0],this.testarg2[1] ),
       "amount of bytes to drop (5) is greater than number of bytes in buffer (buffer1)" ); //$NON-NLS-1$
   }
