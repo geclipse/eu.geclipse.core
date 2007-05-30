@@ -1,7 +1,21 @@
+/*****************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.ui.dialogs;
 
 import java.util.Iterator;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.dialogs.Dialog;
@@ -27,6 +41,7 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+import eu.geclipse.core.connection.ConnectionManager;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IConnectionManager;
 import eu.geclipse.core.model.IGridConnectionElement;
@@ -41,28 +56,64 @@ import eu.geclipse.ui.providers.ConfigurableContentProvider;
 import eu.geclipse.ui.providers.ConnectionViewContentProvider;
 import eu.geclipse.ui.providers.ConnectionViewLabelProvider;
 import eu.geclipse.ui.providers.IConfigurationListener;
-import eu.geclipse.ui.views.ElementManagerViewPart;
 
+/**
+ * This is an implementation of a file dialog for browsing remote connections
+ * via EFS that are defined in the {@link ConnectionManager}. The dialog
+ * allows to select a remote file and also provides functionality to filter
+ * files by there file extensions.
+ */
 public class GridFileDialog
     extends Dialog
     implements IGridModelListener {
   
+  /**
+   * The {@link TreeViewer} used to display the remote file structure.
+   */
   protected TreeViewer treeViewer;
   
+  /**
+   * A filter used to filter the displayed files by there file extensions.
+   */
   private GridConnectionFilter filter;
   
+  /**
+   * The dialog's title.
+   */
   private String title;
   
+  /**
+   * The {@link TreeColumn} used to display the associated project of a connection.
+   */
   private TreeColumn projectColumn;
   
+  /**
+   * Field used to temporarily store the project column's width.
+   */
   private int lastProjectColumnWidth = 100;
   
+  /**
+   * The text field containing the selected file's name.
+   */
   private Text filenameText;
   
+  /**
+   * The combo box used to specify the currently applied file extension filter. 
+   */
   private Combo filetypeCombo;
   
+  /**
+   * The currently selected connection element.
+   */
   private IGridConnectionElement selectedElement;
   
+  /**
+   * Create a new <code>GridFileDialog</code> with the specified parent
+   * {@link Shell} and the specified dialog title.
+   * 
+   * @param parent The parent {@link Shell} of this dialog.
+   * @param title The dialog's title.
+   */
   public GridFileDialog( final Shell parent,
                          final String title ) {
     super( parent );
@@ -71,6 +122,22 @@ public class GridFileDialog
     this.filter = new GridConnectionFilter();
   }
   
+  /**
+   * Create and open a new <code>GridFileDialog</code>. This static method
+   * returns either the selected {@link IGridConnectionElement} if the
+   * dialog's return status is <code>OK</code> or <code>null</code> if the
+   * dialog was closed with cancel or with no element selected.
+   * 
+   * @param parent The parent {@link Shell} of this dialog.
+   * @param title The dialog's title.
+   * @param filteredFileExtensions A string array containing the applied
+   * filters. This array has to contain the filtered file extensions without
+   * the leading period character. It may also be <code>null</code>. In that
+   * case the wildcard filter is used and therefore all files are shown.
+   * @return The selected {@link IGridConnectionElement} if the dialog's
+   * return status was <code>OK</code> and a valid remote file was selected
+   * or <code>null</code>.
+   */
   public static IGridConnectionElement openFileDialog( final Shell parent,
                                                        final String title,
                                                        final String[] filteredFileExtensions ) {
@@ -80,6 +147,9 @@ public class GridFileDialog
     return dialog.getSelectedElement();
   }
   
+  /* (non-Javadoc)
+   * @see org.eclipse.jface.dialogs.Dialog#close()
+   */
   @Override
   public boolean close() {
     IConnectionManager cManager = GridModel.getConnectionManager();
@@ -87,6 +157,14 @@ public class GridFileDialog
     return super.close();
   }
   
+  /**
+   * Set the filters that are used to filter the displayed connections.
+   * 
+   * @param extensions A string array containing the applied
+   * filters. This array has to contain the filtered file extensions without
+   * the leading period character. It may also be <code>null</code>. In that
+   * case the wildcard filter is used and therefore all files are shown.
+   */
   public void setFilteredFileExtensions( final String[] extensions ) {
     this.filter.clearFileExtensionFilters();
     if ( extensions != null ) {
@@ -96,12 +174,19 @@ public class GridFileDialog
     }
   }
   
+  /* (non-Javadoc)
+   * @see org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets.Shell)
+   */
   @Override
   protected void configureShell( final Shell shell ) {
     super.configureShell(shell);
     shell.setText( this.title );
   }
   
+  /* (non-Javadoc)
+   * @see org.eclipse.jface.dialogs.Dialog#createDialogArea(org.eclipse.swt.widgets.Composite)
+   */
+  @Override
   protected Control createDialogArea( final Composite parent ) {
     
     GridData gData;
@@ -134,7 +219,7 @@ public class GridFileDialog
     gData.verticalAlignment = GridData.BEGINNING;
     toolBar.setLayoutData( gData );
     
-    int treeStyle = SWT.VIRTUAL | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL;
+    int treeStyle = SWT.VIRTUAL | SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL;
     this.treeViewer = new TreeViewer( treeComp, treeStyle );
     ConnectionViewContentProvider cProvider
       = new ConnectionViewContentProvider();
@@ -153,12 +238,12 @@ public class GridFileDialog
     tree.setLayoutData( gData );
     
     TreeColumn nameColumn = new TreeColumn( tree, SWT.NONE );
-    nameColumn.setText( "Name" );
+    nameColumn.setText( Messages.getString("GridFileDialog.name_column") ); //$NON-NLS-1$
     nameColumn.setAlignment( SWT.LEFT );
     nameColumn.setWidth( 300 );
     
     this.projectColumn = new TreeColumn( tree, SWT.NONE );
-    this.projectColumn.setText( "Project" );
+    this.projectColumn.setText( Messages.getString("GridFileDialog.project_column") ); //$NON-NLS-1$
     this.projectColumn.setAlignment( SWT.LEFT );
     this.projectColumn.setWidth( this.lastProjectColumnWidth );
     
@@ -176,7 +261,7 @@ public class GridFileDialog
     fileComp.setLayoutData( gData );
     
     Label filenameLabel = new Label( fileComp, SWT.NONE );
-    filenameLabel.setText( "Filename:" );
+    filenameLabel.setText( Messages.getString("GridFileDialog.filename_label") ); //$NON-NLS-1$
     gData = new GridData();
     gData.horizontalAlignment = GridData.BEGINNING;
     filenameLabel.setLayoutData( gData );
@@ -187,7 +272,7 @@ public class GridFileDialog
     this.filenameText.setLayoutData( gData );
     
     Label filetypeLabel = new Label( fileComp, SWT.NONE );
-    filetypeLabel.setText( "Filetype:" );
+    filetypeLabel.setText( Messages.getString("GridFileDialog.filetype_label") ); //$NON-NLS-1$
     gData = new GridData();
     gData.horizontalAlignment = GridData.BEGINNING;
     filetypeLabel.setLayoutData( gData );
@@ -218,21 +303,40 @@ public class GridFileDialog
       }
     } );
     
-    filter.link( this.treeViewer, this.filetypeCombo );
+    this.filter.link( this.treeViewer, this.filetypeCombo );
     
     return mainComp;
     
   }
   
+  /**
+   * Get the currently selected {@link IGridConnectionElement} or
+   * <code>null</code> if either no valid connection is selected or
+   * the dialog's return code is not <code>OK</code>.
+   * 
+   * @return The selected {@link IGridConnectionElement} if the dialog's
+   * return status was <code>OK</code> and a valid remote file was selected
+   * or <code>null</code>.
+   */
   public IGridConnectionElement getSelectedElement() {
     return getReturnCode() == OK ? this.selectedElement : null;
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridModelListener#gridModelChanged(eu.geclipse.core.model.IGridModelEvent)
+   */
   public void gridModelChanged( final IGridModelEvent event ) {
     IGridElement source = event.getSource();
     refreshViewer( source );
   }
   
+  /**
+   * Handler method for handling configuration changes of the
+   * {@link ConfigurableContentProvider} that is used to display the connections.
+   * 
+   * @param provider The {@link ConfigurableContentProvider} that changed its
+   * configuration.
+   */
   protected void handleConfigurationChanged( final ConfigurableContentProvider provider ) {
     int mode = provider.getMode();
     if ( mode == ConfigurableContentProvider.MODE_FLAT ) {
@@ -244,14 +348,20 @@ public class GridFileDialog
     refreshViewer();
   }
   
+  /**
+   * Handler method for handling double clicks in the {@link TreeViewer}.
+   * This handler expands or collapses tree nodes if the associated
+   * {@link IGridConnectionElement} is a folder or selects a connection
+   * and closes the dialog if the associated connection is a file.
+   */
   protected void handleDoubleClick() {
     IStructuredSelection selection
       = ( IStructuredSelection ) this.treeViewer.getSelection();
     Object object
       = selection.getFirstElement();
     if ( this.treeViewer.isExpandable( object ) ) {
-      boolean state = treeViewer.getExpandedState( object );
-      treeViewer.setExpandedState( object, !state );
+      boolean state = this.treeViewer.getExpandedState( object );
+      this.treeViewer.setExpandedState( object, !state );
     } else if ( object instanceof IGridConnectionElement ) {
       IGridConnectionElement element
         = ( IGridConnectionElement ) object;
@@ -263,6 +373,14 @@ public class GridFileDialog
     }
   }
   
+  /**
+   * Handler method that handles selection changes in the {@link TreeViewer}.
+   * The handler searches for the first valid remote file in the selection.
+   * If such a file is found the current selection of the dialog is changed
+   * and the file text field is updated with the name of this file.
+   * 
+   * @param selection The new selection of the {@link TreeViewer}.
+   */
   protected void handleSelectionChanged( final ISelection selection ) {
     this.filenameText.setText( "" ); //$NON-NLS-1$
     this.selectedElement = null;
@@ -287,10 +405,22 @@ public class GridFileDialog
     }
   }
   
+  /**
+   * Refreshed the whole {@link TreeViewer}. This is fully equivalent
+   * to <code>refreshViewer(null)</code>.
+   */
   private void refreshViewer() {
     refreshViewer( null );
   }
   
+  /**
+   * Refreshes the {@link TreeViewer} starting with the specified element.
+   * If the element is <code>null</code> the whole {@link TreeViewer} will
+   * be refreshed.
+   *  
+   * @param element The {@link IGridElement} that will be refreshed. This
+   * also includes the element's children.
+   */
   private void refreshViewer( final IGridElement element ) {
     Display display = this.treeViewer.getControl().getDisplay();
     display.syncExec( new Runnable() {
