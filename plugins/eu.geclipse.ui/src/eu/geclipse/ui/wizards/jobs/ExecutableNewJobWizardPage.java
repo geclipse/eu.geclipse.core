@@ -48,8 +48,8 @@ import org.eclipse.ui.PlatformUI;
 import org.xml.sax.SAXException;
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.ui.Extensions;
+import eu.geclipse.ui.dialogs.GridFileDialog;
 import eu.geclipse.ui.dialogs.NewProblemDialog;
-import eu.geclipse.ui.dialogs.gexplorer.GridFileDialog;
 import eu.geclipse.ui.widgets.StoredCombo;
 import eu.geclipse.ui.wizards.jobs.wizardnodes.BasicWizardPart;
 import eu.geclipse.ui.wizards.jobs.wizardnodes.SpecificWizardPart;
@@ -286,20 +286,19 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       @Override
       public void widgetSelected( final SelectionEvent e )
       {
-        IGridConnectionElement connection
-          = eu.geclipse.ui.dialogs.GridFileDialog.openFileDialog( getShell(), "Choose a file", null );
-        if ( connection != null ) {
+        IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
+                                                                           "Choose a file",
+                                                                           null );
+        if( connection != null ) {
           try {
-            String fs = connection.getConnectionFileStore().toString();
-            ExecutableNewJobWizardPage.this.stdin.setText( fs );
-          } catch ( CoreException cExc ) {
+            String filename = connection.getConnectionFileStore().toString();
+            if( filename != null ) {
+              ExecutableNewJobWizardPage.this.stdin.setText( filename );
+            }
+          } catch( CoreException cExc ) {
             NewProblemDialog.openProblem( getShell(), "error", "error", cExc );
           }
         }
-        /*String filename = dialog.open();
-        if( filename != null ) {
-          ExecutableNewJobWizardPage.this.stdin.setText( filename );
-        }*/
       }
     } );
     outButton.addSelectionListener( new SelectionAdapter() {
@@ -307,24 +306,19 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       @Override
       public void widgetSelected( final SelectionEvent e )
       {
-        String[] filters = new String[] {
-          "txt", "exe", "gif"
-        };
-        IGridConnectionElement connection
-          = eu.geclipse.ui.dialogs.GridFileDialog.openFileDialog( getShell(), "Choose a file", filters );
-        if ( connection != null ) {
+        IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
+                                                                           "Choose a file",
+                                                                           null );
+        if( connection != null ) {
           try {
-            String fs = connection.getConnectionFileStore().toString();
-            ExecutableNewJobWizardPage.this.stdout.setText( fs );
-          } catch ( CoreException cExc ) {
+            String filename = connection.getConnectionFileStore().toString();
+            if( filename != null ) {
+              ExecutableNewJobWizardPage.this.stdout.setText( filename );
+            }
+          } catch( CoreException cExc ) {
             NewProblemDialog.openProblem( getShell(), "error", "error", cExc );
           }
         }
-        /*GridFileDialog dialog = new GridFileDialog( getShell() );
-        String filename = dialog.open();
-        if( filename != null ) {
-          ExecutableNewJobWizardPage.this.stdout.setText( filename );
-        }*/
       }
     } );
     errButton.addSelectionListener( new SelectionAdapter() {
@@ -332,24 +326,19 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       @Override
       public void widgetSelected( final SelectionEvent e )
       {
-        String[] filters = new String[] {
-          "*", "txt", "exe", "gif"
-        };
-        IGridConnectionElement connection
-          = eu.geclipse.ui.dialogs.GridFileDialog.openFileDialog( getShell(), "Choose a file", filters );
-        if ( connection != null ) {
+        IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
+                                                                           "Choose a file",
+                                                                           null );
+        if( connection != null ) {
           try {
-            String fs = connection.getConnectionFileStore().toString();
-            ExecutableNewJobWizardPage.this.stderr.setText( fs );
-          } catch ( CoreException cExc ) {
+            String filename = connection.getConnectionFileStore().toString();
+            if( filename != null ) {
+              ExecutableNewJobWizardPage.this.stderr.setText( filename );
+            }
+          } catch( CoreException cExc ) {
             NewProblemDialog.openProblem( getShell(), "error", "error", cExc );
           }
         }
-        /*GridFileDialog dialog = new GridFileDialog( getShell() );
-        String filename = dialog.open();
-        if( filename != null ) {
-          ExecutableNewJobWizardPage.this.stderr.setText( filename );
-        }*/
       }
     } );
     this.gridFileDialogButton.addSelectionListener( new SelectionAdapter() {
@@ -357,10 +346,18 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       @Override
       public void widgetSelected( final SelectionEvent e )
       {
-        GridFileDialog dialog = new GridFileDialog( getShell() );
-        String filename = dialog.open();
-        if( filename != null ) {
-          ExecutableNewJobWizardPage.this.executableFile.setText( filename );
+        IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
+                                                                           "Choose a file",
+                                                                           null );
+        if( connection != null ) {
+          try {
+            String filename = connection.getConnectionFileStore().toString();
+            if( filename != null ) {
+              ExecutableNewJobWizardPage.this.executableFile.setText( filename );
+            }
+          } catch( CoreException cExc ) {
+            NewProblemDialog.openProblem( getShell(), "error", "error", cExc );
+          }
         }
       }
     } );

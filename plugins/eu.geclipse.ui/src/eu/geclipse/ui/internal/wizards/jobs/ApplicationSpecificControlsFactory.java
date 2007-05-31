@@ -17,6 +17,7 @@ package eu.geclipse.ui.internal.wizards.jobs;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -33,7 +34,9 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import eu.geclipse.ui.dialogs.gexplorer.GridFileDialog;
+import eu.geclipse.core.model.IGridConnectionElement;
+import eu.geclipse.ui.dialogs.GridFileDialog;
+import eu.geclipse.ui.dialogs.NewProblemDialog;
 import eu.geclipse.ui.wizards.jobs.IApplicationSpecificPage;
 
 /**
@@ -49,7 +52,6 @@ public class ApplicationSpecificControlsFactory {
   ArrayList<DataStageControlsData> parentStagingOutControls;
   int intFile;
   private HashMap<Control, String> parentControlsParametersNames;
-  
 
   /**
    * Creates controls from xml file defined in extension of
@@ -345,10 +347,21 @@ public class ApplicationSpecificControlsFactory {
       @Override
       public void widgetSelected( final SelectionEvent e )
       {
-        GridFileDialog dialog = new GridFileDialog( PlatformUI.getWorkbench()
-          .getActiveWorkbenchWindow()
-          .getShell() );
-        String filename = dialog.open();
+        String filename = null;
+        IGridConnectionElement connection = GridFileDialog.openFileDialog( PlatformUI.getWorkbench()
+                                                                             .getActiveWorkbenchWindow()
+                                                                             .getShell(),
+                                                                           "Choose a file",
+                                                                           null );
+        if( connection != null ) {
+          try {
+            filename = connection.getConnectionFileStore().toString();
+          } catch( CoreException cExc ) {
+            NewProblemDialog.openProblem( PlatformUI.getWorkbench()
+              .getActiveWorkbenchWindow()
+              .getShell(), "error", "error", cExc );
+          }
+        }
         if( filename != null ) {
           if( ApplicationSpecificControlsFactory.this.intFile == 1 ) {
             Text con = ( Text )ApplicationSpecificControlsFactory.this.parentStagingInControls.get( ApplicationSpecificControlsFactory.this.adapters.indexOf( this ) )
@@ -528,14 +541,23 @@ public class ApplicationSpecificControlsFactory {
       @Override
       public void widgetSelected( final SelectionEvent e )
       {
-        GridFileDialog dialog = new GridFileDialog( PlatformUI.getWorkbench()
-          .getActiveWorkbenchWindow()
-          .getShell() );
-        String filename = dialog.open();
-        if( filename != null ) {
-          ApplicationSpecificControlsFactory.this.textFieldsFromParent.get( ApplicationSpecificControlsFactory.this.adapters.indexOf( this ) )
-            .setText( filename );
-          // fileButton.setText( filename );
+        IGridConnectionElement connection = GridFileDialog.openFileDialog( PlatformUI.getWorkbench()
+                                                                             .getActiveWorkbenchWindow()
+                                                                             .getShell(),
+                                                                           "Choose a file",
+                                                                           null );
+        if( connection != null ) {
+          try {
+            String filename = connection.getConnectionFileStore().toString();
+            if( filename != null ) {
+              ApplicationSpecificControlsFactory.this.textFieldsFromParent.get( ApplicationSpecificControlsFactory.this.adapters.indexOf( this ) )
+                .setText( filename );
+            }
+          } catch( CoreException cExc ) {
+            NewProblemDialog.openProblem( PlatformUI.getWorkbench()
+              .getActiveWorkbenchWindow()
+              .getShell(), "error", "error", cExc );
+          }
         }
       }
     } );
@@ -559,7 +581,7 @@ public class ApplicationSpecificControlsFactory {
     layout.horizontalAlignment = GridData.FILL;
     layout.horizontalSpan = 2;
     layout.grabExcessHorizontalSpace = true;
-    ArrayList<String> temp = new ArrayList <String>();
+    ArrayList<String> temp = new ArrayList<String>();
     if( parametersMap.containsKey( ChildrenElements.LABEL ) ) {
       temp.add( parametersMap.get( ChildrenElements.LABEL ) );
     } else {

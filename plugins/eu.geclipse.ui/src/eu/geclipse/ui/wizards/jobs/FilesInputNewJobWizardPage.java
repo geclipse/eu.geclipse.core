@@ -13,9 +13,9 @@
  *     PSNC - Katarzyna Bylec
  *           
  *****************************************************************************/
-
 package eu.geclipse.ui.wizards.jobs;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -29,12 +29,13 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
-import eu.geclipse.ui.dialogs.gexplorer.GridFileDialog;
+import eu.geclipse.core.model.IGridConnectionElement;
+import eu.geclipse.ui.dialogs.GridFileDialog;
+import eu.geclipse.ui.dialogs.NewProblemDialog;
 
 /**
  * Wizard page that allows user to specify stdIn, stdOut and stdErr files for
  * job to be run on the Grid
- * 
  */
 public class FilesInputNewJobWizardPage extends WizardPage {
 
@@ -76,7 +77,7 @@ public class FilesInputNewJobWizardPage extends WizardPage {
                           | GridData.HORIZONTAL_ALIGN_BEGINNING );
     stdinLabel.setLayoutData( gData );
     stdinLabel.setText( Messages.getString( "FilesInputNewJobWizardPage.stdin_label" ) ); //$NON-NLS-1$
-    this.stdInName = new Text (mainComp, SWT.NONE | SWT.BORDER);
+    this.stdInName = new Text( mainComp, SWT.NONE | SWT.BORDER );
     gData = new GridData( GridData.FILL_HORIZONTAL
                           | GridData.GRAB_HORIZONTAL
                           | GridData.VERTICAL_ALIGN_CENTER
@@ -104,7 +105,7 @@ public class FilesInputNewJobWizardPage extends WizardPage {
                           | GridData.HORIZONTAL_ALIGN_BEGINNING );
     stdoutLabel.setLayoutData( gData );
     stdoutLabel.setText( Messages.getString( "FilesInputNewJobWizardPage.stdout_label" ) ); //$NON-NLS-1$
-    this.stdOutName = new Text (mainComp, SWT.NONE | SWT.BORDER);
+    this.stdOutName = new Text( mainComp, SWT.NONE | SWT.BORDER );
     gData = new GridData( GridData.FILL_HORIZONTAL
                           | GridData.GRAB_HORIZONTAL
                           | GridData.VERTICAL_ALIGN_CENTER
@@ -116,7 +117,7 @@ public class FilesInputNewJobWizardPage extends WizardPage {
                           | GridData.GRAB_HORIZONTAL
                           | GridData.VERTICAL_ALIGN_CENTER
                           | GridData.HORIZONTAL_ALIGN_CENTER );
-//     gData.horizontalSpan = 2;
+    // gData.horizontalSpan = 2;
     this.stdout.setLayoutData( gData );
     this.stdout.setText( Messages.getString( "FilesInputNewJobWizardPage.stdin_info" ) ); //$NON-NLS-1$
     this.stdout.setEnabled( false );
@@ -131,7 +132,7 @@ public class FilesInputNewJobWizardPage extends WizardPage {
                           | GridData.HORIZONTAL_ALIGN_BEGINNING );
     stderrLabel.setLayoutData( gData );
     stderrLabel.setText( Messages.getString( "FilesInputNewJobWizardPage.stderr_label" ) ); //$NON-NLS-1$
-    this.stdErrName = new Text (mainComp, SWT.NONE | SWT.BORDER);
+    this.stdErrName = new Text( mainComp, SWT.NONE | SWT.BORDER );
     gData = new GridData( GridData.FILL_HORIZONTAL
                           | GridData.GRAB_HORIZONTAL
                           | GridData.VERTICAL_ALIGN_CENTER
@@ -143,7 +144,7 @@ public class FilesInputNewJobWizardPage extends WizardPage {
                           | GridData.HORIZONTAL_ALIGN_CENTER
                           | GridData.GRAB_HORIZONTAL
                           | GridData.FILL_HORIZONTAL );
-//     gData.horizontalSpan = 2;
+    // gData.horizontalSpan = 2;
     this.stderr.setLayoutData( gData );
     this.stderr.setText( Messages.getString( "FilesInputNewJobWizardPage.stdin_info" ) ); //$NON-NLS-1$
     this.stderr.setEnabled( false );
@@ -158,10 +159,18 @@ public class FilesInputNewJobWizardPage extends WizardPage {
       @Override
       public void widgetSelected( final SelectionEvent e )
       {
-        GridFileDialog dialog = new GridFileDialog( getShell() );
-        String filename = dialog.open();
-        if( filename != null ) {
-          FilesInputNewJobWizardPage.this.stdin.setText( filename );
+        IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
+                                                                           "Choose a file",
+                                                                           null );
+        if( connection != null ) {
+          try {
+            String filename = connection.getConnectionFileStore().toString();
+            if( filename != null ) {
+              FilesInputNewJobWizardPage.this.stdin.setText( filename );
+            }
+          } catch( CoreException cExc ) {
+            NewProblemDialog.openProblem( getShell(), "error", "error", cExc );
+          }
         }
       }
     } );
@@ -170,10 +179,18 @@ public class FilesInputNewJobWizardPage extends WizardPage {
       @Override
       public void widgetSelected( final SelectionEvent e )
       {
-        GridFileDialog dialog = new GridFileDialog( getShell() );
-        String filename = dialog.open();
-        if( filename != null ) {
-          FilesInputNewJobWizardPage.this.stdout.setText( filename );
+        IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
+                                                                           "Choose a file",
+                                                                           null );
+        if( connection != null ) {
+          try {
+            String filename = connection.getConnectionFileStore().toString();
+            if( filename != null ) {
+              FilesInputNewJobWizardPage.this.stdout.setText( filename );
+            }
+          } catch( CoreException cExc ) {
+            NewProblemDialog.openProblem( getShell(), "error", "error", cExc );
+          }
         }
       }
     } );
@@ -182,10 +199,18 @@ public class FilesInputNewJobWizardPage extends WizardPage {
       @Override
       public void widgetSelected( final SelectionEvent e )
       {
-        GridFileDialog dialog = new GridFileDialog( getShell() );
-        String filename = dialog.open();
-        if( filename != null ) {
-          FilesInputNewJobWizardPage.this.stderr.setText( filename );
+        IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
+                                                                           "Choose a file",
+                                                                           null );
+        if( connection != null ) {
+          try {
+            String filename = connection.getConnectionFileStore().toString();
+            if( filename != null ) {
+              FilesInputNewJobWizardPage.this.stderr.setText( filename );
+            }
+          } catch( CoreException cExc ) {
+            NewProblemDialog.openProblem( getShell(), "error", "error", cExc );
+          }
         }
       }
     } );
@@ -195,13 +220,12 @@ public class FilesInputNewJobWizardPage extends WizardPage {
   }
 
   /**
-   * 
    * @return true if controls on this wizard page were created
    */
-  public boolean isCreated(){
+  public boolean isCreated() {
     return this.isCreated;
   }
-  
+
   /**
    * Method to access text form {@link FilesInputNewJobWizardPage#stderr}
    * 
@@ -231,22 +255,25 @@ public class FilesInputNewJobWizardPage extends WizardPage {
 
   /**
    * Returns name of stdin file (name local on execution host)
+   * 
    * @return name of stdin file
    */
   public String getStdinName() {
     return this.stdInName.getText();
   }
-  
+
   /**
    * Returns name of stdout file (name local on execution host)
+   * 
    * @return name of stdout file
    */
   public String getStdOutName() {
     return this.stdOutName.getText();
   }
-  
+
   /**
    * Returns name of stderr file (name local on execution host)
+   * 
    * @return name of stderr file
    */
   public String getStdErrName() {

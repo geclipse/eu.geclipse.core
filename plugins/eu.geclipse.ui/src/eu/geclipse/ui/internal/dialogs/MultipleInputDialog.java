@@ -13,7 +13,6 @@
  *     PSNC - Katarzyna Bylec
  *           
  *****************************************************************************/
-
 package eu.geclipse.ui.internal.dialogs;
 
 import java.util.ArrayList;
@@ -21,6 +20,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.debug.ui.IDebugUIConstants;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -39,7 +39,9 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import eu.geclipse.ui.dialogs.gexplorer.GridFileDialog;
+import eu.geclipse.core.model.IGridConnectionElement;
+import eu.geclipse.ui.dialogs.GridFileDialog;
+import eu.geclipse.ui.dialogs.NewProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.widgets.StoredCombo;
 
@@ -48,8 +50,6 @@ import eu.geclipse.ui.widgets.StoredCombo;
  * org.eclipse.debug.internal.ui.MultipleInputDialog for gEclipse.
  * Reimplementation was needed to avoid internal dependencies warnings. Some
  * methods were changed and some other added to suit gEclipse needs.
- * 
- * @author katis
  */
 public class MultipleInputDialog extends Dialog {
 
@@ -277,10 +277,18 @@ public class MultipleInputDialog extends Dialog {
       public void widgetSelected( final SelectionEvent e )
       {
         {
-          GridFileDialog dialog = new GridFileDialog( getShell() );
-          String filename = dialog.open();
-          if( filename != null ) {
-            text.setText( filename );
+          IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
+                                                                             "Choose a file",
+                                                                             null );
+          if( connection != null ) {
+            try {
+              String filename = connection.getConnectionFileStore().toString();
+              if( filename != null ) {
+                text.setText( filename );
+              }
+            } catch( CoreException cExc ) {
+              NewProblemDialog.openProblem( getShell(), "error", "error", cExc );
+            }
           }
         }
       }

@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.DialogCellEditor;
 import org.eclipse.jface.viewers.ICellModifier;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
@@ -39,7 +40,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TableItem;
-import eu.geclipse.ui.dialogs.gexplorer.GridFileDialog;
+import eu.geclipse.core.model.IGridConnectionElement;
+import eu.geclipse.ui.dialogs.GridFileDialog;
+import eu.geclipse.ui.dialogs.NewProblemDialog;
 import eu.geclipse.ui.internal.dialogs.MultipleInputDialog;
 import eu.geclipse.ui.internal.wizards.jobs.FileType;
 import eu.geclipse.ui.widgets.TabComponent;
@@ -221,13 +224,13 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
       Object result = null;
       DataStaging task = ( DataStaging )element;
       switch( columnIndex ) {
-        case 0: 
+        case 0:
           result = task.getSourceLocation();
         break;
-        case 1: 
+        case 1:
           result = task.getName();
         break;
-        case 2: 
+        case 2:
           result = task.getTargetLocation();
         break;
         default:
@@ -236,7 +239,10 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
       return result;
     }
 
-    public void modify( final Object element, final String property, final Object value ) {
+    public void modify( final Object element,
+                        final String property,
+                        final Object value )
+    {
       int columnIndex = -1;
       if( property.equals( Messages.getString( "FilesOutputNewJobWizardPage.table_source_header" ) ) ) { //$NON-NLS-1$
         columnIndex = 0;
@@ -253,7 +259,7 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
                                           taskOld.getTargetLocation(),
                                           taskOld.getSourceLocation() );
       switch( columnIndex ) {
-        case 0: 
+        case 0:
           task.setSourceLocation( ( String )value );
           if( !task.getName().equals( taskOld.getName() ) ) {
             if( addVariable( task ) ) {
@@ -265,7 +271,7 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
             updateLaunchConfigurationDialog();
           }
         break;
-        case 1: 
+        case 1:
           task.setName( ( String )value );
           if( !task.getName().equals( taskOld.getName() ) ) {
             if( addVariable( task ) ) {
@@ -276,7 +282,7 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
             updateLaunchConfigurationDialog();
           }
         break;
-        case 2: 
+        case 2:
           task.setTargetLocation( ( String )value );
           if( !task.getName().equals( taskOld.getName() ) ) {
             if( addVariable( task ) ) {
@@ -290,12 +296,10 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
         break;
       }
     }
-    
-    Shell getShellInner() {
-        return super.getShell();
-    }
-    
 
+    Shell getShellInner() {
+      return super.getShell();
+    }
 
     @Override
     protected void addEditors()
@@ -311,8 +315,17 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
         @Override
         protected Object openDialogBox( final Control cellEditorWindow )
         {
-          GridFileDialog dialog = new GridFileDialog( getShellInner() );
-          String filename = dialog.open();
+          String filename = "";
+          IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
+                                                                             "Choose a file",
+                                                                             null );
+          if( connection != null ) {
+            try {
+              filename = connection.getConnectionFileStore().toString();
+            } catch( CoreException cExc ) {
+              NewProblemDialog.openProblem( getShell(), "error", "error", cExc );
+            }
+          }
           return filename;
         }
       } );
@@ -322,8 +335,17 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
         @Override
         protected Object openDialogBox( final Control cellEditorWindow )
         {
-          GridFileDialog dialog = new GridFileDialog( getShellInner() );
-          String filename = dialog.open();
+          String filename = "";
+          IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
+                                                                             "Choose a file",
+                                                                             null );
+          if( connection != null ) {
+            try {
+              filename = connection.getConnectionFileStore().toString();
+            } catch( CoreException cExc ) {
+              NewProblemDialog.openProblem( getShell(), "error", "error", cExc );
+            }
+          }
           return filename;
         }
       } );
@@ -428,23 +450,23 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
   public HashMap<String, String> getFiles( final FileType type ) {
     HashMap<String, String> result = new HashMap<String, String>();
     if( this.tab != null ) {
-      switch (type){
+      switch( type ) {
         case INPUT:
-          for ( DataStaging file: this.tab.getInput() ){
-            if ( !file.getSourceLocation().equals( "" ) ){ //$NON-NLS-1$
+          for( DataStaging file : this.tab.getInput() ) {
+            if( !file.getSourceLocation().equals( "" ) ) { //$NON-NLS-1$
               result.put( file.getName(), file.getSourceLocation() );
             }
           }
         break;
         case OUTPUT:
-          for ( DataStaging file: this.tab.getInput() ){
-            if ( !file.getTargetLocation().equals( "" ) ){ //$NON-NLS-1$
+          for( DataStaging file : this.tab.getInput() ) {
+            if( !file.getTargetLocation().equals( "" ) ) { //$NON-NLS-1$
               result.put( file.getName(), file.getTargetLocation() );
             }
           }
         break;
         case NULL:
-          //do nothing
+          // do nothing
         break;
       }
     }
