@@ -40,7 +40,7 @@ public abstract class AbstractAuthTokenProvider implements IAuthTokenProvider {
    * registered and a token could be found.
    * @see eu.geclipse.core.auth.IAuthTokenProvider#requestToken()
    */
-  public static IAuthenticationToken staticRequestToken() {
+  public static synchronized IAuthenticationToken staticRequestToken() {
     IAuthTokenProvider provider = getHighestPriorityProvider();
     return provider == null ? null : provider.requestToken();
   }
@@ -55,7 +55,7 @@ public abstract class AbstractAuthTokenProvider implements IAuthTokenProvider {
    * registered and a token could be found.
    * @see eu.geclipse.core.auth.IAuthTokenProvider#requestToken(IAuthenticationTokenDescription)
    */
-  public static IAuthenticationToken staticRequestToken( final IAuthenticationTokenDescription description ) {
+  public static synchronized IAuthenticationToken staticRequestToken( final IAuthenticationTokenDescription description ) {
     IAuthTokenProvider provider = getHighestPriorityProvider();
     return provider == null ? null : provider.requestToken( description );
   }
