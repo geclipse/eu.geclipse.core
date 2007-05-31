@@ -47,7 +47,7 @@ public class PropertiesAdapterFactory implements IAdapterFactory {
     if( singleton == null ) {
       singleton = new PropertiesAdapterFactory();
       Platform.getAdapterManager().registerAdapters( singleton,
-                                                     IGridElement.class );
+                                                     Object.class );
     }
   }
 
