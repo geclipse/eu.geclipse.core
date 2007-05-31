@@ -59,7 +59,7 @@ public class DataStagingPage extends FormPage{
 
   
   private DataStagingAdapter dataStagingAdapter;
-  private Boolean contentRefreshed = false;
+  private Boolean contentRefreshed = Boolean.FALSE;
   
   
   // Constructor
@@ -107,7 +107,8 @@ public class DataStagingPage extends FormPage{
                            getImageRegistry().get( "formsbackground" ));
   }
   
-public void setActive(final boolean active) {
+  @Override
+  public void setActive(final boolean active) {
     
     if (active){
       if (isContentRefreshed()){    
@@ -119,7 +120,7 @@ public void setActive(final boolean active) {
 
 
   private boolean isContentRefreshed(){          
-    return this.contentRefreshed;
+    return this.contentRefreshed.booleanValue();
   }
   
   
@@ -127,7 +128,7 @@ public void setActive(final boolean active) {
                              final boolean refreshStatus){
 
    if (refreshStatus) {
-      this.contentRefreshed = true;
+      this.contentRefreshed = Boolean.TRUE;
       this.dataStagingAdapter.setContent( rootJsdlElement );
     }
    else{

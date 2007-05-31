@@ -19,11 +19,15 @@ package eu.geclipse.ui.jsdl.editor.pages;
 
 import org.eclipse.osgi.util.NLS;
 
+// Not the best hack but at least a hack that suppresses a lot of warnings
+// TODO Nicholas: Find another approach for fixing the bunch aof warnings
+// comming from this class
+@SuppressWarnings({"all"})
+
 /**
  * Returns the localised messages for this package.
  */
 public class Messages extends NLS {
-
   public static String DataStagingPage_Section;
   public static String DataStagingPage_SectionDesc;
   public static String DataStagingPage_append;

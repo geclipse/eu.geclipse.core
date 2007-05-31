@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import javax.xml.parsers.ParserConfigurationException;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.wizard.IWizardNode;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -45,7 +46,9 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.xml.sax.SAXException;
+import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.ui.Extensions;
+import eu.geclipse.ui.dialogs.NewProblemDialog;
 import eu.geclipse.ui.dialogs.gexplorer.GridFileDialog;
 import eu.geclipse.ui.widgets.StoredCombo;
 import eu.geclipse.ui.wizards.jobs.wizardnodes.BasicWizardPart;
@@ -283,11 +286,20 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       @Override
       public void widgetSelected( final SelectionEvent e )
       {
-        GridFileDialog dialog = new GridFileDialog( getShell() );
-        String filename = dialog.open();
+        IGridConnectionElement connection
+          = eu.geclipse.ui.dialogs.GridFileDialog.openFileDialog( getShell(), "Choose a file", null );
+        if ( connection != null ) {
+          try {
+            String fs = connection.getConnectionFileStore().toString();
+            ExecutableNewJobWizardPage.this.stdin.setText( fs );
+          } catch ( CoreException cExc ) {
+            NewProblemDialog.openProblem( getShell(), "error", "error", cExc );
+          }
+        }
+        /*String filename = dialog.open();
         if( filename != null ) {
           ExecutableNewJobWizardPage.this.stdin.setText( filename );
-        }
+        }*/
       }
     } );
     outButton.addSelectionListener( new SelectionAdapter() {
@@ -295,11 +307,24 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       @Override
       public void widgetSelected( final SelectionEvent e )
       {
-        GridFileDialog dialog = new GridFileDialog( getShell() );
+        String[] filters = new String[] {
+          "txt", "exe", "gif"
+        };
+        IGridConnectionElement connection
+          = eu.geclipse.ui.dialogs.GridFileDialog.openFileDialog( getShell(), "Choose a file", filters );
+        if ( connection != null ) {
+          try {
+            String fs = connection.getConnectionFileStore().toString();
+            ExecutableNewJobWizardPage.this.stdout.setText( fs );
+          } catch ( CoreException cExc ) {
+            NewProblemDialog.openProblem( getShell(), "error", "error", cExc );
+          }
+        }
+        /*GridFileDialog dialog = new GridFileDialog( getShell() );
         String filename = dialog.open();
         if( filename != null ) {
           ExecutableNewJobWizardPage.this.stdout.setText( filename );
-        }
+        }*/
       }
     } );
     errButton.addSelectionListener( new SelectionAdapter() {
@@ -307,11 +332,24 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       @Override
       public void widgetSelected( final SelectionEvent e )
       {
-        GridFileDialog dialog = new GridFileDialog( getShell() );
+        String[] filters = new String[] {
+          "*", "txt", "exe", "gif"
+        };
+        IGridConnectionElement connection
+          = eu.geclipse.ui.dialogs.GridFileDialog.openFileDialog( getShell(), "Choose a file", filters );
+        if ( connection != null ) {
+          try {
+            String fs = connection.getConnectionFileStore().toString();
+            ExecutableNewJobWizardPage.this.stderr.setText( fs );
+          } catch ( CoreException cExc ) {
+            NewProblemDialog.openProblem( getShell(), "error", "error", cExc );
+          }
+        }
+        /*GridFileDialog dialog = new GridFileDialog( getShell() );
         String filename = dialog.open();
         if( filename != null ) {
           ExecutableNewJobWizardPage.this.stderr.setText( filename );
-        }
+        }*/
       }
     } );
     this.gridFileDialogButton.addSelectionListener( new SelectionAdapter() {

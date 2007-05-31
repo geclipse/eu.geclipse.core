@@ -18,7 +18,6 @@ package eu.geclipse.ui.internal.actions;
 import java.net.URL;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.IContentProvider;
 import org.eclipse.jface.viewers.StructuredViewer;
 import eu.geclipse.ui.internal.Activator;

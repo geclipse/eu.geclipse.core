@@ -1,3 +1,18 @@
+/*****************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.ui.providers;
 
 import org.eclipse.jface.viewers.TreeViewer;
@@ -10,13 +25,33 @@ import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.ui.dialogs.NewProblemDialog;
 
-
+/**
+ * Runnable implementation that loads the children of a lazy
+ * {@link IGridContainer} in background and offers the possibility to
+ * display a {@link ProgressTreeNode} in {@link TreeViewer}s.
+ */
 public class ProgressRunner implements Runnable {
   
+  /**
+   * The progress tree node used to monitor the progress.
+   */
   protected ProgressTreeNode monitor;
   
+  /**
+   * The container from which to load the children.
+   */
   protected IGridContainer container;
   
+  /**
+   * Construct a new <code>ProgressRunner</code> for the specified
+   * {@link TreeViewer}.
+   * 
+   * @param treeViewer The {@link TreeViewer} where the progress of
+   * this operation will be shown. The progress is displayed as a
+   * child node of the provided {@link IGridContainer}.
+   * @param container The {@link IGridContainer} whose children
+   * should be loaded.
+   */
   public ProgressRunner( final TreeViewer treeViewer,
                          final IGridContainer container ) {
     this.container = container;
@@ -36,10 +71,19 @@ public class ProgressRunner implements Runnable {
     }
   }
   
+  /**
+   * Get the {@link ProgressTreeNode} used to show the progress
+   * of this operation.
+   * 
+   * @return The associated {@link ProgressTreeNode}.
+   */
   public ProgressTreeNode getMonitor() {
     return this.monitor;
   }
 
+  /* (non-Javadoc)
+   * @see java.lang.Runnable#run()
+   */
   public void run() {
     synchronized ( this.container ) {
       
@@ -54,8 +98,8 @@ public class ProgressRunner implements Runnable {
             public void run() {
               Shell shell = ProgressRunner.this.monitor.getTreeViewer().getControl().getShell();
               NewProblemDialog.openProblem( shell,
-                                            "Problem while fetching children",
-                                            "Unable to fetch children of "
+                                            Messages.getString("ProgressRunner.problem_title"), //$NON-NLS-1$
+                                            Messages.getString("ProgressRunner.problem_text") //$NON-NLS-1$
                                             + ProgressRunner.this.container.getName(),
                                             gmExc );
             }
@@ -77,11 +121,11 @@ public class ProgressRunner implements Runnable {
             } );
           }
         } else {
-          this.monitor.setTaskName( "Folder is currently empty" );
+          this.monitor.setTaskName( Messages.getString("ProgressRunner.folder_empty") ); //$NON-NLS-1$
           this.monitor.done();
         }
       } else {
-        this.monitor.setError( "Unable to fetch children" );
+        this.monitor.setError( Messages.getString("ProgressRunner.fetch_error") ); //$NON-NLS-1$
         this.monitor.done();
       }
     }

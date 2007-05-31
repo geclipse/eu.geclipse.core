@@ -15,22 +15,8 @@
 
 package eu.geclipse.ui.internal.actions;
 
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.List;
-import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.swt.dnd.Clipboard;
-import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.ui.actions.SelectionListenerAction;
-import org.eclipse.ui.part.ResourceTransfer;
-import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.IGridContainer;
-import eu.geclipse.core.model.IGridElement;
 
 /**
  * Base class for the copy/paste mechanism. Will be reimplemented soon.

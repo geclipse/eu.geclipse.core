@@ -396,7 +396,7 @@ public class ResourcesPage extends FormPage {
     
     Section subSection = toolkit.createSection(composite, ExpandableComposite.TITLE_BAR 
                                                | Section.DESCRIPTION
-                                              | Section.TWISTIE );  
+                                              | ExpandableComposite.TWISTIE );  
     
     subSection.setText(title);
     subSection.setDescription(desc);

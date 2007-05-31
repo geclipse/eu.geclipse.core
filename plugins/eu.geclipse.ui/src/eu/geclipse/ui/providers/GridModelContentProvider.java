@@ -136,8 +136,8 @@ public class GridModelContentProvider
         if ( this.treeViewer != null ) {
           Shell shell = this.treeViewer.getControl().getShell();
           NewProblemDialog.openProblem( shell,
-                                        "Content provider problem",
-                                        "Unable to query children of " + container.getName(),
+                                        Messages.getString("GridModelContentProvider.problem_title"), //$NON-NLS-1$
+                                        Messages.getString("GridModelContentProvider.problem_text") + container.getName(), //$NON-NLS-1$
                                         gmExc );
         } else {
           Activator.logException( gmExc );

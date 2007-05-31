@@ -116,7 +116,9 @@ public class JobApplicationPage extends FormPage {
   List lstEnvironment = null;
   
   Hashtable< String, Text > widgetMap = new Hashtable< String, Text >();
-  Boolean contentRefreshed = false;
+  Boolean contentRefreshed = Boolean.FALSE;
+  
+  POSIXApplicationType posixApplType = PosixFactory.eINSTANCE.createPOSIXApplicationType();
   
   private ApplicationTypeAdapter applicationTypeAdapter;
   private PosixApplicationTypeAdapter posixApplicationTypeAdapter;
@@ -124,8 +126,6 @@ public class JobApplicationPage extends FormPage {
 //  private ApplicationType applType = JsdlFactory.eINSTANCE
 //                                                      .createApplicationType();
   
-  private POSIXApplicationType posixApplType = PosixFactory.eINSTANCE
-                                                 .createPOSIXApplicationType();
  
   // Class Constructor
   public JobApplicationPage( final FormEditor editor ) {
@@ -138,6 +138,7 @@ public class JobApplicationPage extends FormPage {
   
   
   
+  @Override
   public void setActive(final boolean active) {
     
     if (active){
@@ -151,7 +152,7 @@ public class JobApplicationPage extends FormPage {
   
   
   private boolean isContentRefreshed(){          
-    return this.contentRefreshed;
+    return this.contentRefreshed.booleanValue();
   }
   
   
@@ -160,7 +161,7 @@ public class JobApplicationPage extends FormPage {
                              final boolean refreshStatus){
 
    if (refreshStatus) {
-      this.contentRefreshed = true;
+      this.contentRefreshed = Boolean.TRUE;
       this.applicationTypeAdapter.setContent( rootJsdlElement );
       this.posixApplicationTypeAdapter.setContent( rootJsdlElement );
 
@@ -397,7 +398,7 @@ public class JobApplicationPage extends FormPage {
     gd.heightHint = 100;
     this.lstArgument = new List(client, SWT.NONE);
     this.lstArgument.setData( FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER );  
-    lstArgument.setLayoutData( gd );
+    this.lstArgument.setLayoutData( gd );
      
       
     /*for (int i=0; i<this.posixApplType.getArgument().size(); i++){
@@ -438,7 +439,7 @@ public class JobApplicationPage extends FormPage {
     gd.widthHint = 300;
     this.txtInput = toolkit.createText(client, "", SWT.NONE); //$NON-NLS-1$
     this.posixApplicationTypeAdapter.attachPosixApplicationInput( this.txtInput );
-    txtInput.setLayoutData(gd);
+    this.txtInput.setLayoutData(gd);
    
     /* ============================= Output Widget =========================== */
     
@@ -487,7 +488,7 @@ public class JobApplicationPage extends FormPage {
     gd.heightHint = 100;
     this.lstEnvironment = new List(client, SWT.NONE);
     this.lstEnvironment.setData( FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER );  
-    lstEnvironment.setLayoutData(gd);
+    this.lstEnvironment.setLayoutData(gd);
      
     /* Create "Add" Button */
     gd = new GridData();
@@ -547,16 +548,19 @@ public class JobApplicationPage extends FormPage {
    
    this.lblWorkingDirectory = toolkit.createButton(client, Messages.JobApplicationPage_WorkingDirectory,SWT.CHECK);   
    this.lblWorkingDirectory.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
-     public void widgetSelected(final org.eclipse.swt.events.SelectionEvent e) {
+     @Override
+    public void widgetSelected(final org.eclipse.swt.events.SelectionEvent e) {
 //     Determines if the checkBox is checked or not
-     boolean selected = lblWorkingDirectory.getSelection();
+     boolean selected = JobApplicationPage.this.lblWorkingDirectory.getSelection();
 //      If checked then execute this code
      if (selected == true) {
-     
+       // currently empty
      }
 //      If not checked, then execute this one
      else
-     { System.out.println ("Check Box is not checked");}
+     { // Wow, commenting out bad style (comment from Mathias)
+       //System.out.println ("Check Box is not checked");
+       }
      }
      });
 
@@ -594,7 +598,9 @@ public class JobApplicationPage extends FormPage {
      posAppType.setWallTimeLimit( limType);
      }
 
-     public void focusGained( final org.eclipse.swt.events.FocusEvent e ) { }
+     public void focusGained( final org.eclipse.swt.events.FocusEvent e ) { 
+       // currently empty
+     }
 });
    
    /* ============================ File Size Limit ========================== */

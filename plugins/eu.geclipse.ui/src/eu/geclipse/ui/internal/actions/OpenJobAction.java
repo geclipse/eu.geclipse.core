@@ -53,11 +53,10 @@ public class OpenJobAction
       = getStructuredSelection().getFirstElement();
     if ( ( element != null ) && ( element instanceof IGridJob ) ) {
       IGridJob job = ( IGridJob ) element;
-      JobDetailsView view;
       try {
-        view = ( JobDetailsView ) this.workbenchPage.showView( JobDetailsView.ID,
-                                                              job.getPath().toString(),
-                                                              IWorkbenchPage.VIEW_ACTIVATE );
+        this.workbenchPage.showView( JobDetailsView.ID,
+                                     job.getPath().toString(),
+                                     IWorkbenchPage.VIEW_ACTIVATE );
       } catch( PartInitException e ) {
         // Just ignore this exception and do not open the job
       }

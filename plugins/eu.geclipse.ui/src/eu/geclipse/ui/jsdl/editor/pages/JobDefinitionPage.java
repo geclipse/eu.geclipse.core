@@ -82,6 +82,7 @@ public class JobDefinitionPage extends FormPage {
     
   }
   
+  @Override
   public void setActive(final boolean active) {
     
     if (active){
@@ -144,7 +145,7 @@ public class JobDefinitionPage extends FormPage {
                                  Messages.JobDefinitionPage_JobDefinitionDescr);  
          
      
-     jobDefinitionTypeAdapter.load();
+     this.jobDefinitionTypeAdapter.load();
  
      
 
@@ -152,7 +153,7 @@ public class JobDefinitionPage extends FormPage {
                              Messages.JobDefinitionPage_JobIdentificationTitle, 
                              Messages.JobDefinitionPage_JobIdentificationDescr);
     
-    jobIdentificationTypeAdapter.load();
+    this.jobIdentificationTypeAdapter.load();
     
     form.setBackgroundImage(Activator.getDefault().
                             getImageRegistry().get( "formsbackground" ));
@@ -254,7 +255,7 @@ public class JobDefinitionPage extends FormPage {
     this.txtJobName = toolkit.createText(client,"", SWT.NONE); 
     this.jobIdentificationTypeAdapter.attachToJobName( this.txtJobName );
 
-    txtJobName.setLayoutData(gd);
+    this.txtJobName.setLayoutData(gd);
     
     
     /* ========================= Job Description ============================ */
@@ -263,7 +264,7 @@ public class JobDefinitionPage extends FormPage {
                                            Messages.JobDefinitionPage_JobDescr);
     lblgd = new GridData();
     lblgd.verticalSpan = 1;
-    lblJobDescripiton.setLayoutData (lblgd);
+    this.lblJobDescripiton.setLayoutData (lblgd);
     
     this.txtDescription = toolkit.createText(client,"", SWT.MULTI 
                                                    | SWT.V_SCROLL | SWT.WRAP);
@@ -287,7 +288,7 @@ public class JobDefinitionPage extends FormPage {
     lblgd = new GridData();
     lblgd.horizontalSpan = 1;
     lblgd.verticalSpan = 2;    
-    lblJobAnnotation.setLayoutData( lblgd );
+    this.lblJobAnnotation.setLayoutData( lblgd );
    
     gd = new GridData();
     gd.verticalAlignment = GridData.FILL;
@@ -299,7 +300,7 @@ public class JobDefinitionPage extends FormPage {
     this.lstJobAnnotation = new List(client, SWT.None);
     this.lstJobAnnotation.setData( FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER );    
     this.jobIdentificationTypeAdapter.attachToJobAnnotation( this.lstJobAnnotation);
-    lstJobAnnotation.setLayoutData( gd );
+    this.lstJobAnnotation.setLayoutData( gd );
 
     //Create Button ADD
     gd = new GridData();
@@ -327,7 +328,7 @@ public class JobDefinitionPage extends FormPage {
      lblgd = new GridData();
      lblgd.verticalSpan = 2;
      lblgd.horizontalSpan = 1;
-     lblJobProject.setLayoutData( lblgd );
+     this.lblJobProject.setLayoutData( lblgd );
      
      gd = new GridData();
      gd.verticalSpan = 2;

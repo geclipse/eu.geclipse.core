@@ -1,3 +1,18 @@
+/*****************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.ui.providers;
 
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -13,19 +28,39 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 
+/**
+ * A progress monitor implementation to be used within {@link TreeViewer}s.
+ */
 public class ProgressTreeNode
     implements IProgressMonitor, Listener {
   
+  /**
+   * Internal class that handles UI updates.
+   */
   private class ProgressNodeUpdater implements Runnable {
     
+    /**
+     * The progress tree node used to show the progress.
+     */
     private ProgressTreeNode node;
     
+    /**
+     * The last progress string.
+     */
     private String lastProgress;
     
+    /**
+     * Construct a new updater for the specified {@link ProgressTreeNode}.
+     * 
+     * @param node The progress tree node showing the progress.
+     */
     public ProgressNodeUpdater( final ProgressTreeNode node ) {
       this.node = node;
     }
     
+    /* (non-Javadoc)
+     * @see java.lang.Runnable#run()
+     */
     public void run() {
       String progress = this.node.toString();
       if ( ( progress != null ) && !progress.equals( this.lastProgress ) ) {
@@ -34,6 +69,9 @@ public class ProgressTreeNode
       }
     }
     
+    /**
+     * Reset the progress.
+     */
     public void reset() {
       this.lastProgress = null;
     }
@@ -88,10 +126,18 @@ public class ProgressTreeNode
     this.updater = new ProgressNodeUpdater( this );
   }
   
+  /**
+   * Get the {@link TreeViewer} associated with this {@link ProgressTreeNode}.
+   * 
+   * @return The associated {@link TreeViewer}.
+   */
   public TreeViewer getTreeViewer() {
     return this.treeViewer;
   }
 
+  /* (non-Javadoc)
+   * @see org.eclipse.core.runtime.IProgressMonitor#beginTask(java.lang.String, int)
+   */
   public void beginTask( final String name,
                          final int totalWork ) {
     synchronized ( this ) {
@@ -104,17 +150,26 @@ public class ProgressTreeNode
     update();
   }
 
+  /* (non-Javadoc)
+   * @see org.eclipse.core.runtime.IProgressMonitor#done()
+   */
   public void done() {
     this.worked = this.tWork;
     this.done = true;
     update();
   }
 
+  /* (non-Javadoc)
+   * @see org.eclipse.core.runtime.IProgressMonitor#internalWorked(double)
+   */
   public void internalWorked( final double work ) {
     this.worked += work;
     update();
   }
 
+  /* (non-Javadoc)
+   * @see org.eclipse.core.runtime.IProgressMonitor#isCanceled()
+   */
   public boolean isCanceled() {
     return this.canceled;
   }
