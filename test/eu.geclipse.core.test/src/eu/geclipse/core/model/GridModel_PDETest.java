@@ -53,7 +53,7 @@ public class GridModel_PDETest {
    */
   @Test
   public void testGetJobManager() {
-    IJobManager jobManager = GridModel.getJobManager();
+    IGridJobManager jobManager = GridModel.getJobManager();
     Assert.assertNotNull( jobManager );
   }
 

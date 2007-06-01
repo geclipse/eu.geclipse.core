@@ -21,12 +21,12 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridElementManager;
-import eu.geclipse.core.model.IJobManager;
+import eu.geclipse.core.model.IGridJobManager;
 import eu.geclipse.ui.providers.JobViewLabelProvider;
 
 /**
  * Job view that shows all jobs that are currently managed by
- * the default implementation of the {@link IJobManager}
+ * the default implementation of the {@link IGridJobManager}
  * interface
  */
 public class GridJobView extends ElementManagerViewPart {

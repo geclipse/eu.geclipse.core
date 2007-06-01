@@ -26,7 +26,7 @@ import org.eclipse.ui.part.MultiPageEditorPart;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobStatus;
-import eu.geclipse.core.model.IJobManager;
+import eu.geclipse.core.model.IGridJobManager;
 
 /**
  * @author Mariusz Wojtysiak Viewer for submitted jobs developed as multitab
@@ -210,7 +210,7 @@ public class JobEditor extends MultiPageEditorPart {
   }
 
   private IGridJob getGridJob( final IFileEditorInput fileEditorInput ) {
-    IJobManager jobManager = GridModel.getJobManager();
+    IGridJobManager jobManager = GridModel.getJobManager();
     IGridJob gridJob = ( IGridJob )jobManager.findChild( fileEditorInput.getFile()
       .getName() );
     if( gridJob == null ) { //TODO add job-loading
