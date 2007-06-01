@@ -15,7 +15,7 @@
  *****************************************************************************/
 package eu.geclipse.ui.internal.wizards.jobs;
 
-import eu.geclipse.ui.wizards.jobs.IApplicationSpecificPage;
+import eu.geclipse.ui.wizards.jobs.applicationspecific.IApplicationSpecificPage;
 
 /**
  * Enumeration type holding names of the xml elements describing

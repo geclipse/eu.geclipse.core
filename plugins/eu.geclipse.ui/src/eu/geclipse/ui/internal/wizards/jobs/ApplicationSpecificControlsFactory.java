@@ -37,7 +37,8 @@ import org.w3c.dom.NodeList;
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.ui.dialogs.GridFileDialog;
 import eu.geclipse.ui.dialogs.NewProblemDialog;
-import eu.geclipse.ui.wizards.jobs.IApplicationSpecificPage;
+import eu.geclipse.ui.internal.Activator;
+import eu.geclipse.ui.wizards.jobs.applicationspecific.IApplicationSpecificPage;
 
 /**
  * Class to handle ui definition in XML from
@@ -220,8 +221,8 @@ public class ApplicationSpecificControlsFactory {
                        listValues );
       }
     } catch( IllegalArgumentException iaExc ) {
-      // TODO katis log
-      iaExc.printStackTrace();
+      //TODO katis error handling
+      Activator.logException( iaExc );
     }
   }
 

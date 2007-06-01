@@ -42,6 +42,7 @@ import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.impl.JSDLJobDescription;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.internal.wizards.jobs.FileType;
+import eu.geclipse.ui.wizards.jobs.applicationspecific.IApplicationSpecificPage;
 
 /**
  * Wizard for creating new jsdl file

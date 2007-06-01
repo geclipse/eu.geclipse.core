@@ -9,7 +9,6 @@
 package eu.geclipse.ui.widgets;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
@@ -41,7 +40,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import eu.geclipse.ui.internal.wizards.jobs.FileType;
 
 /**
  * @author katis
@@ -62,6 +60,7 @@ public abstract class TabComponent<T> extends AbstractLaunchConfigurationTab{
   private int tabWidth;
   private ArrayList<CellEditor> cellEditors = new ArrayList<CellEditor>();
   private ICellModifier cellModifier;
+  private int buttonsPosition;
 
   /**
    * @param contentProvider
@@ -74,6 +73,15 @@ public abstract class TabComponent<T> extends AbstractLaunchConfigurationTab{
                        final int hight,
                        final int width )
   {
+    this( contentProvider, labelProvider, propertiesVsHearders, hight, width, SWT.LEFT );
+  }
+  
+  public TabComponent (final IStructuredContentProvider contentProvider,
+                       final ITableLabelProvider labelProvider,
+                       final List<String> propertiesVsHearders,
+                       final int hight,
+                       final int width,
+                       final int buttonsPosition){
     this.contentProvider = contentProvider;
     this.tabHeight = hight;
     this.tabWidth = width;
@@ -89,14 +97,19 @@ public abstract class TabComponent<T> extends AbstractLaunchConfigurationTab{
       this.tabColumnsLayouts[ i ] = new ColumnWeightData( 50,
                                                           this.tabWidth,
                                                           false );
-    }
+    } 
+    this.buttonsPosition =  buttonsPosition;
   }
 
   public void createControl( final Composite parent ) {
     Composite mainComposite1 = new Composite( parent, SWT.NONE );
     setControl( mainComposite1 );
     GridLayout layout = new GridLayout();
-    layout.numColumns = 2;
+    if (this.buttonsPosition == SWT.BOTTOM || this.buttonsPosition == SWT.TOP){
+      layout.numColumns = 1;
+    } else {
+      layout.numColumns = 2;
+    }
     GridData gridData = new GridData( GridData.FILL_HORIZONTAL );
     mainComposite1.setLayout( layout );
     mainComposite1.setLayoutData( gridData );
@@ -149,7 +162,7 @@ public abstract class TabComponent<T> extends AbstractLaunchConfigurationTab{
     layout.marginHeight = 0;
     layout.marginWidth = 0;
     layout.numColumns = 1;
-    GridData gridData = new GridData( GridData.FILL_VERTICAL );
+    GridData gridData = new GridData( GridData.FILL_BOTH );
     gridData.heightHint = this.tabHeight;
     gridData.widthHint = ( this.tabColumnsHeaders.length * this.tabWidth ) + 30;
     tableComposite.setLayout( layout );
@@ -241,13 +254,20 @@ public abstract class TabComponent<T> extends AbstractLaunchConfigurationTab{
     GridLayout glayout = new GridLayout();
     glayout.marginHeight = 0;
     glayout.marginWidth = 0;
-    glayout.numColumns = 1;
+    if (this.buttonsPosition == SWT.BOTTOM || this.buttonsPosition == SWT.TOP){
+      glayout.numColumns = 3;
+    } else {
+      glayout.numColumns = 1;
+    }
     GridData gdata = new GridData( GridData.VERTICAL_ALIGN_BEGINNING
                                    | GridData.HORIZONTAL_ALIGN_END );
     buttonComposite.setLayout( glayout );
     buttonComposite.setLayoutData( gdata );
     buttonComposite.setFont( parent.getFont() );
-    createVerticalSpacer( buttonComposite, 1 );
+    if (this.buttonsPosition == SWT.LEFT){
+      createVerticalSpacer( buttonComposite, 1 );
+    }
+    
     // Create buttons
     gdata = new GridData( GridData.FILL_BOTH );
     this.addButton = new Button( buttonComposite, SWT.PUSH );

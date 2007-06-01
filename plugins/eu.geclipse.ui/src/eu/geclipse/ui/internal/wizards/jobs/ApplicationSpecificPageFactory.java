@@ -41,9 +41,9 @@ import org.xml.sax.SAXException;
 import eu.geclipse.ui.Extensions;
 import eu.geclipse.ui.dialogs.NewProblemDialog;
 import eu.geclipse.ui.internal.Activator;
-import eu.geclipse.ui.wizards.jobs.ApplicationSpecificLastPage;
-import eu.geclipse.ui.wizards.jobs.ApplicationSpecificPage;
-import eu.geclipse.ui.wizards.jobs.IApplicationSpecificPage;
+import eu.geclipse.ui.wizards.jobs.applicationspecific.ApplicationSpecificLastPage;
+import eu.geclipse.ui.wizards.jobs.applicationspecific.ApplicationSpecificPage;
+import eu.geclipse.ui.wizards.jobs.applicationspecific.IApplicationSpecificPage;
 import eu.geclipse.ui.wizards.jobs.wizardnodes.SpecificWizardPart;
 
 /**

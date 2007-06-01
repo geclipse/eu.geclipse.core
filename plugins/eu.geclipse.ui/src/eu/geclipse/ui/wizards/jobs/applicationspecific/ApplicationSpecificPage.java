@@ -14,7 +14,7 @@
  *           
  *****************************************************************************/
 
-package eu.geclipse.ui.wizards.jobs;
+package eu.geclipse.ui.wizards.jobs.applicationspecific;
 
 import java.util.ArrayList;
 import java.util.HashMap;

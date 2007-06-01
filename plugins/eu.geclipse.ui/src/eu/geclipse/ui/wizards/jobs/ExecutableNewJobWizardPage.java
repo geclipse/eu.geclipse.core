@@ -51,6 +51,8 @@ import eu.geclipse.ui.Extensions;
 import eu.geclipse.ui.dialogs.GridFileDialog;
 import eu.geclipse.ui.dialogs.NewProblemDialog;
 import eu.geclipse.ui.widgets.StoredCombo;
+import eu.geclipse.ui.wizards.jobs.applicationspecific.ApplicationSpecificPage;
+import eu.geclipse.ui.wizards.jobs.applicationspecific.IApplicationSpecificPage;
 import eu.geclipse.ui.wizards.jobs.wizardnodes.BasicWizardPart;
 import eu.geclipse.ui.wizards.jobs.wizardnodes.SpecificWizardPart;
 
@@ -179,26 +181,6 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
                            | GridData.VERTICAL_ALIGN_FILL
                            | GridData.VERTICAL_ALIGN_CENTER );
     this.gridFileDialogButton.setLayoutData( layout );
-    // Label descriptionLabel = new Label( mainComp,
-    // GridData.HORIZONTAL_ALIGN_BEGINNING
-    // | GridData.VERTICAL_ALIGN_CENTER );
-    // descriptionLabel.setText( Messages.getString(
-    // "ExecutableNewJobWizardPage.job_description_label" ) ); //$NON-NLS-1$
-    // layout = new GridData();
-    // layout.horizontalAlignment = GridData.FILL;
-    // layout.horizontalSpan = 3;
-    // descriptionLabel.setLayoutData( layout );
-    // this.jobDescription = new Text( mainComp, SWT.MULTI
-    // | SWT.BORDER
-    // | SWT.WRAP
-    // | SWT.V_SCROLL );
-    // layout = new GridData();
-    // layout.horizontalAlignment = GridData.FILL;
-    // layout.verticalAlignment = GridData.FILL;
-    // layout.horizontalSpan = 3;
-    // layout.verticalSpan = 10;
-    // layout.horizontalIndent = 25;
-    // this.jobDescription.setLayoutData( layout );
     Group stdFilesGroup = new Group( mainComp, SWT.NONE );
     stdFilesGroup.setText( Messages.getString( "ExecutableNewJobWizardPage.composite_group_title" ) ); //$NON-NLS-1$
     stdFilesGroup.setLayout( new GridLayout( 3, false ) );
