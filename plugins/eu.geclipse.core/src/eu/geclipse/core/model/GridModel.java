@@ -58,10 +58,10 @@ public class GridModel {
    * Get the manager that is dedicated to the management of
    * {@link IGridJob}s.
    * 
-   * @return The core implementation of the {@link IJobManager}
+   * @return The core implementation of the {@link IGridJobManager}
    * interface. 
    */
-  public static IJobManager getJobManager() {
+  public static IGridJobManager getJobManager() {
     return JobManager.getManager();
   }
 

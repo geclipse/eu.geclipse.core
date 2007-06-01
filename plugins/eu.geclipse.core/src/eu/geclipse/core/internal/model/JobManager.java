@@ -15,18 +15,21 @@
 
 package eu.geclipse.core.internal.model;
 
+import java.util.List;
+
 import eu.geclipse.core.JobStatusUpdater;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridJob;
-import eu.geclipse.core.model.IJobManager;
+import eu.geclipse.core.model.IGridJobManager;
+import eu.geclipse.core.model.IGridJobStatusListener;
 
 /**
- * Core implementation of an {@link IJobManager}.
+ * Core implementation of an {@link IGridJobManager}.
  */
 public class JobManager
     extends AbstractGridElementManager
-    implements IJobManager {
+    implements IGridJobManager {
   
   /**
    * The name of this manager.
@@ -83,6 +86,22 @@ public class JobManager
    */
   public boolean canManage( final IGridElement element ) {
     return element instanceof IGridJob;
+  }
+
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridJobManager#addJobStatusListener(java.util.List, int, eu.geclipse.core.model.IGridJobStatusListener)
+   */
+  public void addJobStatusListener(List<IGridJob> jobs, int status, IGridJobStatusListener listener) {
+    // TODO pawelw
+    
+  }
+
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridJobManager#removeJobStatusListener(eu.geclipse.core.model.IGridJobStatusListener)
+   */
+  public void removeJobStatusListener(IGridJobStatusListener listener) {
+    // TODO pawelw
+    
   }
   
 }

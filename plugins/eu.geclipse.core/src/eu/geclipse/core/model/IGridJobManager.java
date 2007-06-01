@@ -15,12 +15,17 @@
 
 package eu.geclipse.core.model;
 
+import java.util.List;
+
 /**
  * A job manager is able to manage {@link IGridJob}.
  */
-public interface IJobManager
+public interface IGridJobManager
     extends IGridElementManager {
   
-  // empty implementation
+
+  public void addJobStatusListener(List<IGridJob> jobs, int status, IGridJobStatusListener listener);
+
+  public void removeJobStatusListener(IGridJobStatusListener listener);
   
 }

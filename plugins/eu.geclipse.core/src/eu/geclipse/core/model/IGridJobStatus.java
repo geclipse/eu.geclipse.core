@@ -28,34 +28,34 @@ public interface IGridJobStatus {
   /**
    * Status for job which real status cannot be retrieved now
    */
-  public final static int UNKNOWN=0; 
+  public final static int UNKNOWN=0x0; 
 
   /**
    * Status of the job which was submitted and is not scheduled
    * by RB yet. 
    */
-  public final static int SUBMITTED=1; 
+  public final static int SUBMITTED=0x1; 
 
   /**
    * Status of the job which was scheduled by RB and is sent to
    * its destination, but computation was not started yet. 
    */
-  public final static int WAITING=2; 
+  public final static int WAITING=0x2; 
   
   /**
    * Status of the job which is actually running 
    */
-  public final static int RUNNING=3; 
+  public final static int RUNNING=0x4; 
 
   /**
    * Status of the job which was finished successfully 
    */
-  public final static int DONE=4; 
+  public final static int DONE=0x8; 
 
   /**
    * Status of the job which was finished unsuccessfully 
    */
-  public final static int ABORTED=5; 
+  public final static int ABORTED=0x10; 
 
   /**
    * Status of the job for which status informatio is no longer available.
@@ -63,7 +63,7 @@ public interface IGridJobStatus {
    * UNKNOWN and ABANDONED is that UNKNOWN can be changed in the future
    * to the real status and ABANDONED is a final status.   
    */
-  public final static int ABANDONED=-1; 
+  public final static int ABANDONED=0x20; 
   
   /**
    * Return true if the status of the job can be changed
