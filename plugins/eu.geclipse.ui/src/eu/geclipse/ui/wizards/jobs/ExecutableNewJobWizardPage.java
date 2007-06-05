@@ -132,20 +132,6 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     gLayout.verticalSpacing = 12;
     mainComp.setLayout( gLayout );
     GridData layout = new GridData();
-    // Label nameLabel = new Label( mainComp,
-    // GridData.HORIZONTAL_ALIGN_BEGINNING
-    // | GridData.VERTICAL_ALIGN_CENTER );
-    // nameLabel.setText( Messages.getString(
-    // "ExecutableNewJobWizardPage.job_name_label" ) ); //$NON-NLS-1$
-    // layout.horizontalAlignment = GridData.FILL;
-    // nameLabel.setLayoutData( layout );
-    // this.jobName = new Text( mainComp, GridData.HORIZONTAL_ALIGN_BEGINNING
-    // | GridData.VERTICAL_ALIGN_CENTER
-    // | SWT.BORDER );
-    // layout = new GridData();
-    // layout.horizontalAlignment = GridData.FILL;
-    // layout.horizontalSpan = 2;
-    // this.jobName.setLayoutData( layout );
     Label applicationNameLabel = new Label( mainComp,
                                             GridData.HORIZONTAL_ALIGN_BEGINNING
                                                 | GridData.VERTICAL_ALIGN_CENTER );
@@ -270,7 +256,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       {
         IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
                                                                            "Choose a file",
-                                                                           null );
+                                                                           null, true );
         if( connection != null ) {
           try {
             String filename = connection.getConnectionFileStore().toString();
@@ -289,8 +275,8 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       public void widgetSelected( final SelectionEvent e )
       {
         IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
-                                                                           "Choose a file",
-                                                                           null );
+                                                                           "Choose remote file",
+                                                                           null, false );
         if( connection != null ) {
           try {
             String filename = connection.getConnectionFileStore().toString();
@@ -309,8 +295,8 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       public void widgetSelected( final SelectionEvent e )
       {
         IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
-                                                                           "Choose a file",
-                                                                           null );
+                                                                           "Choose remote file",
+                                                                           null, false );
         if( connection != null ) {
           try {
             String filename = connection.getConnectionFileStore().toString();
@@ -329,8 +315,8 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       public void widgetSelected( final SelectionEvent e )
       {
         IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
-                                                                           "Choose a file",
-                                                                           null );
+                                                                           "Choose remote or local file",
+                                                                           null, true );
         if( connection != null ) {
           try {
             String filename = connection.getConnectionFileStore().toString();

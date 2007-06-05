@@ -28,7 +28,6 @@ Eclipse-LazyStart: true
 Export-Package: eu.geclipse.ui,
  eu.geclipse.ui.cheatsheets,
  eu.geclipse.ui.dialogs,
- eu.geclipse.ui.dialogs.gexplorer,
  eu.geclipse.ui.editors,
  eu.geclipse.ui.properties,
  eu.geclipse.ui.providers,

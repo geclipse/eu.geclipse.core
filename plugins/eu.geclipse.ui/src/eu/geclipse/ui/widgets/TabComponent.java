@@ -57,7 +57,7 @@ public abstract class TabComponent<T> extends AbstractLaunchConfigurationTab{
   private String[] tabColumnsHeaders;
   private String[] tabColumnsProperties;
   private int tabHeight;
-  private int tabWidth;
+  private List<Integer> columnsWidth = new ArrayList<Integer>();
   private ArrayList<CellEditor> cellEditors = new ArrayList<CellEditor>();
   private ICellModifier cellModifier;
   private int buttonsPosition;
@@ -84,7 +84,6 @@ public abstract class TabComponent<T> extends AbstractLaunchConfigurationTab{
                        final int buttonsPosition){
     this.contentProvider = contentProvider;
     this.tabHeight = hight;
-    this.tabWidth = width;
     this.labelProvider = labelProvider;
     this.tabColumnsHeaders = new String[ propertiesVsHearders.size() ];
     this.tabColumnsProperties = new String[ propertiesVsHearders.size() ];
@@ -94,8 +93,34 @@ public abstract class TabComponent<T> extends AbstractLaunchConfigurationTab{
       .toArray( this.tabColumnsProperties );
     this.tabColumnsLayouts = new ColumnLayoutData[ this.tabColumnsHeaders.length ];
     for( int i = 0; i < this.tabColumnsHeaders.length; i++ ) {
-      this.tabColumnsLayouts[ i ] = new ColumnWeightData( 50,
-                                                          this.tabWidth,
+      this.columnsWidth.add( Integer.valueOf( width ));
+      this.tabColumnsLayouts[ i ] = new ColumnWeightData( this.columnsWidth.get( i ),
+                                                          this.columnsWidth.get( i ),
+                                                          false );
+    } 
+    this.buttonsPosition =  buttonsPosition;
+  }
+  
+  public TabComponent (final IStructuredContentProvider contentProvider,
+                       final ITableLabelProvider labelProvider,
+                       final List<String> propertiesVsHearders,
+                       final int hight,
+                       final List<Integer> columnsWidth,
+                       final int buttonsPosition){
+    this.contentProvider = contentProvider;
+    this.tabHeight = hight;
+    this.columnsWidth = columnsWidth;
+    this.labelProvider = labelProvider;
+    this.tabColumnsHeaders = new String[ propertiesVsHearders.size() ];
+    this.tabColumnsProperties = new String[ propertiesVsHearders.size() ];
+    this.tabColumnsHeaders = propertiesVsHearders
+      .toArray( this.tabColumnsHeaders );
+    this.tabColumnsProperties = propertiesVsHearders
+      .toArray( this.tabColumnsProperties );
+    this.tabColumnsLayouts = new ColumnLayoutData[ this.tabColumnsHeaders.length ];
+    for( int i = 0; i < this.tabColumnsHeaders.length; i++ ) {
+      this.tabColumnsLayouts[ i ] = new ColumnWeightData( this.columnsWidth.get( i ),
+                                                          this.columnsWidth.get( i ),
                                                           false );
     } 
     this.buttonsPosition =  buttonsPosition;
@@ -164,7 +189,11 @@ public abstract class TabComponent<T> extends AbstractLaunchConfigurationTab{
     layout.numColumns = 1;
     GridData gridData = new GridData( GridData.FILL_BOTH );
     gridData.heightHint = this.tabHeight;
-    gridData.widthHint = ( this.tabColumnsHeaders.length * this.tabWidth ) + 30;
+    int width = 0;
+    for (Integer value: this.columnsWidth){
+      width = width + value.intValue();
+    }
+//    gridData.widthHint = ( this.tabColumnsHeaders.length * width ) + 30;
     tableComposite.setLayout( layout );
     tableComposite.setLayoutData( gridData );
     tableComposite.setFont( font );

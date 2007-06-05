@@ -97,6 +97,7 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
    * The currently selected connection element.
    */
   private IGridConnectionElement selectedElement;
+  private boolean allowLocal;
 
   /**
    * Create a new <code>GridFileDialog</code> with the specified parent
@@ -105,10 +106,11 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
    * @param parent The parent {@link Shell} of this dialog.
    * @param title The dialog's title.
    */
-  public GridFileDialog( final Shell parent, final String title ) {
+  public GridFileDialog( final Shell parent, final String title, final boolean allowLocal ) {
     super( parent );
     setShellStyle( SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL | SWT.RESIZE );
     this.title = title;
+    this.allowLocal = allowLocal;
     this.filter = new GridConnectionFilter();
   }
 
@@ -131,9 +133,10 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
    */
   public static IGridConnectionElement openFileDialog( final Shell parent,
                                                        final String title,
-                                                       final String[] filteredFileExtensions )
+                                                       final String[] filteredFileExtensions,
+                                                       final boolean allowLocal )
   {
-    GridFileDialog dialog = new GridFileDialog( parent, title );
+    GridFileDialog dialog = new GridFileDialog( parent, title, allowLocal );
     dialog.setFilteredFileExtensions( filteredFileExtensions );
     dialog.open();
     return dialog.getSelectedElement();
@@ -382,9 +385,14 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
           if( this.selectedElement.isFolder() ) {
             this.selectedElement = null;
           } else {
-            String name = this.selectedElement.getName();
-            this.filenameText.setText( name );
-            break;
+            if ( (! this.allowLocal)  && this.selectedElement.isLocal()){
+              this.selectedElement = null;
+            } else {
+              String name = this.selectedElement.getName();
+              int a =2;
+              this.filenameText.setText( name );
+              break;
+            }
           }
         }
       }

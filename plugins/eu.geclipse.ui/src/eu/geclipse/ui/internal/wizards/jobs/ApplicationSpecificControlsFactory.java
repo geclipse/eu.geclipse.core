@@ -353,7 +353,7 @@ public class ApplicationSpecificControlsFactory {
                                                                              .getActiveWorkbenchWindow()
                                                                              .getShell(),
                                                                            "Choose a file",
-                                                                           null );
+                                                                           null, true );
         if( connection != null ) {
           try {
             filename = connection.getConnectionFileStore().toString();
@@ -546,7 +546,7 @@ public class ApplicationSpecificControlsFactory {
                                                                              .getActiveWorkbenchWindow()
                                                                              .getShell(),
                                                                            "Choose a file",
-                                                                           null );
+                                                                           null, true );
         if( connection != null ) {
           try {
             String filename = connection.getConnectionFileStore().toString();
