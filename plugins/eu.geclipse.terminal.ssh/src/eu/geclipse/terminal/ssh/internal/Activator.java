@@ -17,8 +17,10 @@ package eu.geclipse.terminal.ssh.internal;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jsch.core.IJSchService;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+import org.osgi.util.tracker.ServiceTracker;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -30,6 +32,8 @@ public class Activator extends AbstractUIPlugin {
 
   // The shared instance
   private static Activator plugin;
+
+  private ServiceTracker tracker;
 
   /**
    * The constructor
@@ -45,6 +49,10 @@ public class Activator extends AbstractUIPlugin {
   @Override
   public void start( final BundleContext context ) throws Exception {
     super.start(context);
+    this.tracker = new ServiceTracker( getBundle().getBundleContext(),
+                                       IJSchService.class.getName(),
+                                       null );
+    this.tracker.open();
   }
 
   /*
@@ -54,9 +62,13 @@ public class Activator extends AbstractUIPlugin {
   @Override
   public void stop( final BundleContext context ) throws Exception {
     plugin = null;
+    this.tracker.close();
     super.stop(context);
   }
 
+  IJSchService getJSchService() {
+    return (IJSchService)this.tracker.getService();
+  }
   /**
    * Returns the shared instance
    *

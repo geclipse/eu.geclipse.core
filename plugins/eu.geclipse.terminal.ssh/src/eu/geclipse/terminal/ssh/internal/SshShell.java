@@ -15,25 +15,18 @@
 
 package eu.geclipse.terminal.ssh.internal;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
-
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Preferences;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.wizard.WizardDialog;
-import org.eclipse.jsch.internal.core.IConstants;
-import org.eclipse.jsch.internal.core.JSchCorePlugin;
+import org.eclipse.jsch.core.IJSchService;
 import org.eclipse.swt.widgets.Display;
-
 import com.jcraft.jsch.ChannelShell;
-import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
-
 import eu.geclipse.core.IBidirectionalConnection;
 import eu.geclipse.core.portforward.ForwardType;
 import eu.geclipse.core.portforward.IForward;
@@ -48,7 +41,6 @@ import eu.geclipse.ui.widgets.IDropDownEntry;
  * A terminal factory which allows to open SSH connected terminals.
  */
 public class SshShell implements IDropDownEntry<ITerminalView>, ITerminalListener {
-  private static final String SSH_HOME_DEFAULT = null;
   ChannelShell channel;
   private ITerminalPage terminal;
   private SSHConnectionInfo userInfo;
@@ -65,43 +57,6 @@ public class SshShell implements IDropDownEntry<ITerminalView>, ITerminalListene
       this.preConnectLines = lines;
       this.preConnectXPix = xPixels;
       this.preConnectYPix = yPixels;
-    }
-  }
-
-  private void loadPrivateKeys( final JSch jsch ) {
-    Preferences preferences = JSchCorePlugin.getPlugin().getPluginPreferences();
-    String privateKeys = preferences.getString( IConstants.KEY_PRIVATEKEY );
-    String sshHome = preferences.getString( IConstants.KEY_SSH2HOME );
-    String[] keyFilenames = privateKeys.split( "," ); //$NON-NLS-1$
-    for( String keyFilename : keyFilenames ) {
-      File file = new File( keyFilename );
-      if ( !file.isAbsolute() ) {
-        file = new File( sshHome, keyFilename );
-      }
-      if ( file.exists() ) {
-        try {
-          jsch.addIdentity( file.getPath() );
-        } catch( JSchException exception ) {
-          Activator.logException( exception );
-        }
-      }
-    }
-  }
-
-  private void loadKnownHosts( final JSch jsch ) {                                                                                                                                                                                                             
-    Preferences preferences = JSchCorePlugin.getPlugin().getPluginPreferences();
-    String sshHome = preferences.getString( IConstants.KEY_SSH2HOME );
-
-    if ( sshHome.length() == 0 ) {
-      sshHome = SSH_HOME_DEFAULT;
-    }
-
-    try {
-      File file;
-      file=new File( sshHome, "known_hosts" ); //$NON-NLS-1$
-      jsch.setKnownHosts( file.getPath() );
-    } catch ( Exception exception ) {
-      Activator.logException( exception );
     }
   }
 
@@ -125,51 +80,62 @@ public class SshShell implements IDropDownEntry<ITerminalView>, ITerminalListene
                               final SSHConnectionInfo sshConnectionInfo,
                               final List<IForward> forwards ) {
     try {
-      this.userInfo = sshConnectionInfo;
-      JSch jsch = new JSch();
-      loadKnownHosts( jsch );
-      loadPrivateKeys( jsch );
-      final Session session = jsch.getSession( this.userInfo.getUsername(),
-                                               this.userInfo.getHostname(),
-                                               this.userInfo.getPort() );
-      session.setUserInfo( this.userInfo );
-      if ( forwards != null ) {
-        for ( IForward forward : forwards ) {
-          if (forward.getType() == ForwardType.LOCAL ) {
-            session.setPortForwardingL( forward.getBindPort(),
-                                        forward.getHostname(),
-                                        forward.getPort() );
-          } else {
-            session.setPortForwardingR( forward.getBindPort(),
-                                        forward.getHostname(),
-                                        forward.getPort() );
+      IJSchService service = Activator.getDefault().getJSchService();
+      if (service == null) {
+        IStatus status = new Status( IStatus.ERROR, Activator.PLUGIN_ID,
+                                     Messages.getString("SshShell.couldNotGetService") ); //$NON-NLS-1$
+        Solution[] solutions = {
+          new Solution( Messages.getString("SshShell.checkYourInstall") ), //$NON-NLS-1$
+        };
+        ProblemDialog.openProblem( null,
+                                   Messages.getString( "SshShell.sshTerminal" ), //$NON-NLS-1$
+                                   Messages.getString("SshShell.couldNotGetService"), //$NON-NLS-1$
+                                   status,
+                                   solutions );
+      } else {
+        this.userInfo = sshConnectionInfo;
+        final Session session = service.createSession( this.userInfo.getHostname(),
+                                                       this.userInfo.getPort(),
+                                                       this.userInfo.getUsername() );
+        session.setUserInfo( this.userInfo );
+        if ( forwards != null ) {
+          for ( IForward forward : forwards ) {
+            if (forward.getType() == ForwardType.LOCAL ) {
+              session.setPortForwardingL( forward.getBindPort(),
+                                          forward.getHostname(),
+                                          forward.getPort() );
+            } else {
+              session.setPortForwardingR( forward.getBindPort(),
+                                          forward.getHostname(),
+                                          forward.getPort() );
+            }
           }
         }
-      }
-      session.connect();
-      IBidirectionalConnection connection = new IBidirectionalConnection() {
-        public void close() {
-          SshShell.this.channel.disconnect();
-          session.disconnect();
+        session.connect();
+        IBidirectionalConnection connection = new IBidirectionalConnection() {
+          public void close() {
+            SshShell.this.channel.disconnect();
+            session.disconnect();
+          }
+          public InputStream getInputStream() throws IOException {
+            return SshShell.this.channel.getInputStream();
+          }
+          public OutputStream getOutputStream() throws IOException {
+            return SshShell.this.channel.getOutputStream();
+          }
+        };
+  
+        this.channel = (ChannelShell) session.openChannel( "shell" ); //$NON-NLS-1$
+        this.terminal = terminalView.addTerminal( connection, this );
+        this.terminal.setTabName( this.userInfo.getHostname() );
+        this.terminal.setDescription( Messages.formatMessage( "SshShell.descriptionWithoutWinTitle", //$NON-NLS-1$
+                                                              this.userInfo.getUsername(),
+                                                              this.userInfo.getHostname() ) );
+        this.channel.connect();
+        if ( this.preConnectCols != -1 ) {
+          windowSizeChanged( this.preConnectCols, this.preConnectLines,
+                             this.preConnectXPix, this.preConnectYPix );
         }
-        public InputStream getInputStream() throws IOException {
-          return SshShell.this.channel.getInputStream();
-        }
-        public OutputStream getOutputStream() throws IOException {
-          return SshShell.this.channel.getOutputStream();
-        }
-      };
-
-      this.channel = (ChannelShell) session.openChannel( "shell" ); //$NON-NLS-1$
-      this.terminal = terminalView.addTerminal( connection, this );
-      this.terminal.setTabName( this.userInfo.getHostname() );
-      this.terminal.setDescription( Messages.formatMessage( "SshShell.descriptionWithoutWinTitle", //$NON-NLS-1$
-                                                            this.userInfo.getUsername(),
-                                                            this.userInfo.getHostname() ) );
-      this.channel.connect();
-      if ( this.preConnectCols != -1 ) {
-        windowSizeChanged( this.preConnectCols, this.preConnectLines,
-                           this.preConnectXPix, this.preConnectYPix );
       }
     } catch ( JSchException exception ) {
       String message = exception.getLocalizedMessage();
