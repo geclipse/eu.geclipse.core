@@ -65,7 +65,7 @@ public class GridGlueStorage
           
           //TODO: There seems to be a problem with  DPM/GridFTP
           //I set the path to null otherwise it just doesn't work
-          path=null;
+          //path=null;
           result[ i ] = new URI( scheme, null, host, port.intValue(), path, null, null );
           
         }
