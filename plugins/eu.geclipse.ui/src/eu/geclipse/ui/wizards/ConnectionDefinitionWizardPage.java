@@ -216,7 +216,7 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
   }
   
   protected URI getURI() {
-    /*
+    
     String scheme = this.schemeCombo.getText();
     if ( isEmpty(scheme) ) {
       scheme = null;
@@ -241,14 +241,9 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
     } catch( URISyntaxException uriExc ) {
       setErrorMessage( "Unable to create a valid URI from the specified information: " + uriExc.getMessage() );
     }
-    */
-    URI uri = null;
-    try {
-      uri = new URI( this.pathCombo.getText() );
-    } catch( URISyntaxException e ) {
-      setErrorMessage( e.getMessage() );
-      NewProblemDialog.openProblem( getShell(), "title", "error", e );
-    }
+    
+    System.out.println( "URI: " + uri );
+    
     return uri;
     
   }
