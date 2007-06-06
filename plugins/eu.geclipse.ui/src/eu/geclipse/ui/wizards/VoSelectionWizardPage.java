@@ -45,7 +45,7 @@ public class VoSelectionWizardPage extends WizardPage {
   
   public VoSelectionWizardPage( final boolean allowMultiSelection,
                                 final Class voType ) {
-    super( "voOPage", //$NON-NLS-1$
+    super( "voPage", //$NON-NLS-1$
            "VO Selection Page",
            null );
     setDescription( "Specify the VO that should be used" );
