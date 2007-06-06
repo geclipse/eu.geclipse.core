@@ -117,4 +117,11 @@ public interface IGridJobStatus {
   public Date getLastUpdateTime();
   
   
+  /**
+   * Return the explanation why the job is in the specific state. Can give more
+   * detailed information than just status name.
+   * 
+   * @return Sting with explanation
+   */
+  public String getReason();
 }
