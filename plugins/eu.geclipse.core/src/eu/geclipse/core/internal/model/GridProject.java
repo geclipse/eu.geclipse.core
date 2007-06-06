@@ -32,6 +32,7 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
+import eu.geclipse.core.project.GridProjectNature;
 
 /**
  * This is the grid model class that represents any project in the
@@ -129,8 +130,14 @@ public class GridProject
    * @see eu.geclipse.core.model.IGridProject#isGridProject()
    */
   public boolean isGridProject() {
-    // TODO mathias
-    return false;
+    boolean result = false;
+    IProject project = ( IProject ) getResource();
+    try {
+      result = project.hasNature( GridProjectNature.getID() );
+    } catch( CoreException e ) {
+      // Don't do anything here, just return false
+    }
+    return result;
   }
   
   /* (non-Javadoc)
