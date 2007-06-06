@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
 import eu.geclipse.core.auth.IAuthenticationTokenDescription;
 import eu.geclipse.core.model.IGridElementCreator;
 
@@ -30,6 +31,26 @@ import eu.geclipse.core.model.IGridElementCreator;
  * @author stuempert-m
  */
 public class Extensions {
+  
+  /**
+   * The ID of the filesystems extension point.
+   */
+  public static final String FILESYSTEMS_POINT
+    = "org.eclipse.core.filesystem.filesystems"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the scheme configuration element contained
+   * in the filesystems extension point.
+   */
+  public static final String FILESYSTEMS_ELEMENT
+    = "filesystem"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the scheme attribute for the filesystems
+   * extension point.
+   */
+  public static final String FILESYSTEMS_SCHEME_ATTRIBUTE
+    = "scheme"; //$NON-NLS-1$
 
   /**
    * The ID of the authentication token management extension point.
@@ -240,6 +261,18 @@ public class Extensions {
       problemProviders = resultList;
     }
     return problemProviders;
+  }
+  
+  public static List< String > getRegisteredFilesystemSchemes() {
+    List< String > resultList = new ArrayList< String >();
+    ExtensionManager manager = new ExtensionManager();
+    List< IConfigurationElement > configurationElements
+      = manager.getConfigurationElements( FILESYSTEMS_POINT, FILESYSTEMS_ELEMENT );
+    for ( IConfigurationElement element : configurationElements ) {
+      String scheme = element.getAttribute( FILESYSTEMS_SCHEME_ATTRIBUTE );
+      resultList.add( scheme );
+    }
+    return resultList;
   }
   
 }
