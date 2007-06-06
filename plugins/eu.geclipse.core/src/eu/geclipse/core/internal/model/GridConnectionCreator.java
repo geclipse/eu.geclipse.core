@@ -20,7 +20,9 @@ import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.filesystem.IFileSystem;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
 import eu.geclipse.core.model.GridModelException;
+import eu.geclipse.core.model.GridModelProblems;
 import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
@@ -54,6 +56,10 @@ public class GridConnectionCreator extends AbstractGridElementCreator {
       } else if ( o instanceof IFileStore ) {
         result = createGridConnection( parent, ( IFileStore ) o );
       }
+    }
+    
+    else if ( o instanceof URI ) {
+      result = createGridConnection( parent, ( URI ) o );
     }
     
     return result;
@@ -92,6 +98,24 @@ public class GridConnectionCreator extends AbstractGridElementCreator {
     return connection;
   }
   
+  protected IGridConnection createGridConnection( final IGridContainer parent,
+                                                  final URI uri )
+      throws GridModelException {
+    
+    IGridConnection connection = null;
+    
+    try {
+      String scheme = uri.getScheme();
+      IFileSystem fileSystem = EFS.getFileSystem( scheme );
+      IFileStore fileStore = fileSystem.getStore( uri );
+      connection = new TemporaryGridConnection( fileStore );
+    } catch ( CoreException cExc ) {
+      throw new GridModelException( GridModelProblems.ELEMENT_CREATE_FAILED, cExc );
+    }
+    
+    return connection;
+  }
+  
   /*
    * (non-Javadoc)
    * 
@@ -99,7 +123,7 @@ public class GridConnectionCreator extends AbstractGridElementCreator {
    */
   @Override
   protected boolean internalCanCreate( final Object fromObject ) {
-    return isFsFile( fromObject );
+    return isFsFile( fromObject ) || ( fromObject instanceof URI );
   }
   
   /**
