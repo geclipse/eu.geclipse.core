@@ -351,13 +351,6 @@ public class Terminal extends Canvas {
     int colsToUpdate = 0;
 
     while ( ch >= ' ' ) {
-/*try {
-  Thread.sleep( 10 );
-} catch( InterruptedException e ) {
-}
-triggerRedraw();*/
-//System.out.println( cursor.line + " " + cursor.col + " " + numLines + " " + numCols );
-
       Char scrCh = this.screenBuffer[ this.cursor.line ][ this.cursor.col ];
       scrCh.ch = (char)ch;
       scrCh.setToCursorFormat( this.cursor );
@@ -494,40 +487,40 @@ triggerRedraw();*/
       // ------------------ VT52 commands ------------------
       // TODO implement a VT52 mode
 /*      case 'A': // Cursor Up
-        System.out.println( "Cursor Up not implemented" );
+        Activator.logMessage( IStatus.WARNING, "Cursor Up not implemented" );
         break;
       case 'B': // Cursor Down
-        System.out.println( "Cursor Down not implemented" );
+        Activator.logMessage( IStatus.WARNING, "Cursor Down not implemented" );
         break;
       case 'C': // Cursor Right
-        System.out.println( "Cursor Right not implemented" );
+        Activator.logMessage( IStatus.WARNING, "Cursor Right not implemented" );
         break;
       //case 'D': // Cursor Left
-        //System.out.println( "Cursor Left not implemented" );
+        //Activator.logMessage( IStatus.WARNING, "Cursor Left not implemented" );
         //break;
       case 'F': // Enter Graphics Mode
-        System.out.println( "Enter Graphics Mode not implemented" );
+        Activator.logMessage( IStatus.WARNING, "Enter Graphics Mode not implemented" );
         break;
       case 'G': // Exit Graphics Mode
-        System.out.println( "Exit Graphics Mode not implemented" );
+        Activator.logMessage( IStatus.WARNING, "Exit Graphics Mode not implemented" );
         break;
       //case 'H': // Cursor to Home
-        //System.out.println( "Cursor to Home not implemented" );
+        //Activator.logMessage( IStatus.WARNING, "Cursor to Home not implemented" );
         //break;
       case 'I': // Reverse Line Feed
-        System.out.println( "Reverse Line Feed not implemented" );
+        Activator.logMessage( IStatus.WARNING, "Reverse Line Feed not implemented" );
         break;
       case 'J': // Erase to End of Screen
-        System.out.println( "Erase to End of Screen not implemented" );
+        Activator.logMessage( IStatus.WARNING, "Erase to End of Screen not implemented" );
         break;
       case 'K': // Erase to End of Line
-        System.out.println( "Erase to End of Line not implemented" );
+        Activator.logMessage( IStatus.WARNING, "Erase to End of Line not implemented" );
         break;
       case 'Y': // Direct Cursor Address
-        System.out.println( "Direct Cursor Address not implemented" );
+        Activator.logMessage( IStatus.WARNING, "Direct Cursor Address not implemented" );
         break;
       case '<': // Enter ANSI Mode
-        System.out.println( "Enter ANSI Mode not implemented" );
+        Activator.logMessage( IStatus.WARNING, "Enter ANSI Mode not implemented" );
         break;*/
         // ---------------- end VT52 commands ----------------
       default:
