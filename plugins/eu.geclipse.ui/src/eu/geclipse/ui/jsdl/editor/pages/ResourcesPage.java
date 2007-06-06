@@ -212,6 +212,7 @@ public class ResourcesPage extends FormPage {
     Label lblHostName = toolkit.createLabel(clientsubSection,Messages.ResourcesPage_HostName);
     GridData lblgd = new GridData();
     lblgd.verticalSpan = 3;
+    lblgd.verticalAlignment = GridData.BEGINNING;
     lblHostName.setLayoutData( lblgd );
          
     this.lstHostName = new List(clientsubSection, SWT.NONE);

@@ -190,7 +190,7 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
   private void pushContentToPages(){    
     this.jobDefPage.setPageContent( this.jobDefType, isModelRefreshed());
     this.jobApplicationPage.setPageContent( this.jobDefType, isModelRefreshed());
-    //this.dataStagingPage.setPageContent( this.jobDefType, isModelRefreshed());
+    this.dataStagingPage.setPageContent( this.jobDefType, isModelRefreshed());
   }
   
   /*

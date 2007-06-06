@@ -400,11 +400,7 @@ public class JobApplicationPage extends FormPage {
     this.lstArgument.setData( FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER );  
     this.lstArgument.setLayoutData( gd );
      
-      
-    /*for (int i=0; i<this.posixApplType.getArgument().size(); i++){
-       lstArgument.add( this.posixApplType.getArgument().get( i ).toString() );
-     }*/
-             
+                
     //Create "Add" Button
     gd = new GridData();
     gd.horizontalSpan = 2;

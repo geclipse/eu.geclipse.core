@@ -12,7 +12,7 @@
   * Contributor(s):
   *     UCY (http://www.ucy.cs.ac.cy)
   *      - Nicholas Loulloudes (loulloudes.n@cs.ucy.ac.cy)
-  *      - Emilia Stamou (emstamou@cs.ucy.ac.cy)
+  *            
   *****************************************************************************/
 
 package eu.geclipse.ui.jsdl.editor.pages;
@@ -21,6 +21,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -46,6 +47,7 @@ public class DataStagingPage extends FormPage{
   Text txtFileSystemName = null;
   Text txtSource = null;
   Text txtTarget = null;
+  Text txtName = null;
    
   Label lblFileName = null;
   Label lblFileSystemName = null;
@@ -53,6 +55,10 @@ public class DataStagingPage extends FormPage{
   Label lblDelOnTerm = null;
   Label lblSource = null;
   Label lblTarget = null;
+  Label lblName = null;
+  
+  Button btnAdd = null;
+  Button btnDel = null;
   
   Combo comboCreationFlag = null;
   Combo comboDelOnTerm = null;
@@ -62,23 +68,25 @@ public class DataStagingPage extends FormPage{
   private Boolean contentRefreshed = Boolean.FALSE;
   
   
-  // Constructor
+  /* Class Constructor */
   public DataStagingPage( final FormEditor editor )
                             
    {
     
     super(editor,Messages.DataStagingPage_pageId , 
           Messages.DataStagingPage_PageTitle);
-    
-   // breakTypes(list);
    
     }
   
-  @Override
   
-  // This method is used to create the Forms content by
-  // creating the form layout and then creating the form
-  // sub sections.
+  
+  
+  
+  /* This method is used to create the Forms content by
+   * creating the form layout and then creating the form
+   * sub sections.
+   */
+  @Override
   protected void createFormContent(final IManagedForm managedForm) {
     
         
@@ -100,18 +108,19 @@ public class DataStagingPage extends FormPage{
                                  Messages.DataStagingPage_PageTitle, 
                                  Messages.DataStagingPage_DataStagingDescr);  
       
-  // this.dataStagingAdapter.load();
+   this.dataStagingAdapter.load();
    
    /* Set Form Background */
    form.setBackgroundImage(Activator.getDefault().
                            getImageRegistry().get( "formsbackground" ));
   }
   
+
   @Override
   public void setActive(final boolean active) {
     
     if (active){
-      if (isContentRefreshed()){    
+      if (isContentRefreshed()){
         this.dataStagingAdapter.load();
       }//endif isContentRefreshed
     } // endif active
@@ -124,14 +133,16 @@ public class DataStagingPage extends FormPage{
   }
   
   
-  public void setPageContent(final EObject rootJsdlElement, 
+  
+  /* Must be called from the MPE Editor */ 
+    public void setPageContent(final EObject rootJsdlElement, 
                              final boolean refreshStatus){
 
    if (refreshStatus) {
       this.contentRefreshed = Boolean.TRUE;
       this.dataStagingAdapter.setContent( rootJsdlElement );
     }
-   else{
+   else{     
       this.dataStagingAdapter = new DataStagingAdapter(rootJsdlElement);     
    }
           
@@ -176,6 +187,8 @@ public class DataStagingPage extends FormPage{
    
    }
   
+  
+  
   private Composite createSubSection(final Composite composite, 
                                      final IManagedForm mform,
                                      final String title, 
@@ -205,58 +218,107 @@ public class DataStagingPage extends FormPage{
     
     
     subSection.setClient( clientsubSection );
-    
-    gd = new GridData();    
-    this.lblFileName = toolkit.createLabel(clientsubSection, Messages.DataStagingPage_FileName);
-
-    gd.widthHint = 300;
-    gd.heightHint = 50;
+       
           
-    this.lstFileName = new List(clientsubSection, SWT.NONE);
-    this.lstFileName.setData( FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER ); 
-    this.lstFileName.setLayoutData( gd );
-    
+    /* ========================== File Name Widgets ========================= */
     
     gd = new GridData();
-    //File System Name Label and Text box
+    gd.verticalSpan = 2;
+    gd.horizontalSpan = 1;
+    this.lblFileName = toolkit.createLabel(clientsubSection, Messages.DataStagingPage_FileName);
+    
+    this.lstFileName = new List(clientsubSection, SWT.NONE | SWT.V_SCROLL);
+    this.lstFileName.setData( FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER );    
+    this.dataStagingAdapter.attachToFileName( this.lstFileName );
+    gd.horizontalAlignment = GridData.FILL;
+    gd.verticalAlignment = GridData.FILL;
+    gd.verticalSpan = 2;
+    gd.horizontalSpan = 1;
+    gd.widthHint = 220;
+    gd.heightHint = 100;
+    this.lstFileName.setLayoutData( gd );
+    
+    /*  Create "Add" Button */
+    gd = new GridData();
+    gd.horizontalSpan = 2;
+    gd.verticalSpan = 1;
+    gd.widthHint = 60;
+    this.btnAdd = toolkit.createButton(clientsubSection, Messages.JsdlEditor_AddButton, SWT.PUSH);
+    this.dataStagingAdapter.attachToAdd( this.btnAdd );
+    this.btnAdd.setLayoutData( gd );
+    
+    
+    /* Create "Remove" Button */
+    gd = new GridData();
+    gd.horizontalSpan = 2;
+    gd.verticalSpan = 1;
+    gd.widthHint = 60;
+    gd.verticalAlignment = GridData.BEGINNING;
+    this.btnDel = toolkit.createButton(clientsubSection, Messages.JsdlEditor_RemoveButton, SWT.PUSH);
+    this.dataStagingAdapter.attachToDelete( this.btnDel );
+    this.btnDel.setLayoutData( gd );
+    
+    
+    /* =================== File-System Name Widgets ========================= */
+
+    gd = new GridData();
     this.lblFileSystemName = toolkit.createLabel(clientsubSection,Messages.DataStagingPage_FileSystemName);
     this.txtFileSystemName = toolkit.createText(clientsubSection, "", SWT.NONE); //$NON-NLS-1$
+    this.dataStagingAdapter.attachToFileSystemName(this.txtFileSystemName );
+    gd.horizontalSpan=3;
     gd.widthHint = 300;
     this.txtFileSystemName.setLayoutData(gd);
     
     
-    //Creation Flag Label and Combo box
+    /* ====================== Creation Flag Widgets ========================= */
+    
     this.lblCreationFlag = toolkit.createLabel(clientsubSection,Messages.DataStagingPage_CreationFlag);
     this.comboCreationFlag = new Combo(clientsubSection, SWT.NONE);
-    this.comboCreationFlag.setData( FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER );
-    this.comboCreationFlag.add(""); //$NON-NLS-1$
-    this.comboCreationFlag.add(Messages.DataStagingPage_overwrite);
-    this.comboCreationFlag.add(Messages.DataStagingPage_append);
-    this.comboCreationFlag.add(Messages.DataStagingPage_dontOverwrite);
+    this.comboCreationFlag.setData( FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER );    
+//    this.comboCreationFlag.add(Messages.DataStagingPage_overwrite);
+//    this.comboCreationFlag.add(Messages.DataStagingPage_append);
+//    this.comboCreationFlag.add(Messages.DataStagingPage_dontOverwrite);
+    this.dataStagingAdapter.attachToCreationFlag( this.comboCreationFlag );
+    gd.horizontalSpan=3;
     gd.widthHint = 300;
     this.comboCreationFlag.setLayoutData(gd);
 
-    //Delete On Termination Label and Combo box
+    /* =================== Delete On Termination Widgets ==================== */
+    
     this.lblDelOnTerm = toolkit.createLabel(clientsubSection,Messages.DataStagingPage_DeleteOnTermination);
     this.comboDelOnTerm = new Combo(clientsubSection, SWT.NONE);
-    this.comboDelOnTerm.setData( FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER );
-    this.comboDelOnTerm.add(""); //$NON-NLS-1$
+    this.comboDelOnTerm.setData( FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER );    
     this.comboDelOnTerm.add(Messages.DataStagingPage_true);
     this.comboDelOnTerm.add(Messages.DataStagingPage_false);
+    this.dataStagingAdapter.attachToDelOnTermination( this.comboDelOnTerm );
+    gd.horizontalSpan=3;
     gd.widthHint = 300;
     this.comboDelOnTerm.setLayoutData(gd);
     
-    //Source Label and Text box
+    /* ===================== Source Location Widgets ======================== */
     this.lblSource = toolkit.createLabel(clientsubSection,Messages.DataStagingPage_Source);
     this.txtSource = toolkit.createText(clientsubSection, "", SWT.NONE); //$NON-NLS-1$
+    this.dataStagingAdapter.attachToSource( this.txtSource );
+    gd.horizontalSpan=3;
     gd.widthHint = 300;
     this.txtSource.setLayoutData(gd);
     
-    //Target Label and Text box
+    /* ====================== Target Location Widgets ======================= */
+    
     this.lblTarget = toolkit.createLabel(clientsubSection,Messages.DataStagingPage_Target);
     this.txtTarget = toolkit.createText(clientsubSection, "", SWT.NONE); //$NON-NLS-1$
+    this.dataStagingAdapter.attachToTarget( this.txtTarget );
+    gd.horizontalSpan=3;
     gd.widthHint = 300;
     this.txtTarget.setLayoutData(gd);
+    
+    /* ========================== Name Widgets ============================ */
+    this.lblName = toolkit.createLabel(clientsubSection,Messages.DataStagingPage_Name);
+    this.txtName= toolkit.createText(clientsubSection, "", SWT.NONE); //$NON-NLS-1$
+    this.dataStagingAdapter.attachToName( this.txtName );
+    gd.horizontalSpan=3;
+    gd.widthHint = 300;
+    this.txtName.setLayoutData(gd);
     
     toolkit.paintBordersFor( clientsubSection );
     
@@ -274,15 +336,15 @@ public class DataStagingPage extends FormPage{
   {
    
     Composite client = createSection(mform, title, desc, 2);
-    //FormToolkit toolkit = mform.getToolkit();
-        
+    
+    /* Create the Staged Files Sub-Section */
     this.jobDataStaging = createSubSection (client,mform,
                                Messages.DataStagingPage_Section
-                              ,Messages.DataStagingPage_SectionDesc,2,480,300);    
+                              ,Messages.DataStagingPage_SectionDesc,4,490,320);    
   
     
     return client;
-}
+  }
 
 
-}
+} //End Class

@@ -137,7 +137,9 @@ public class Messages extends NLS {
   public static String ResourcesPage_VirtualMem;
   public static String JsdlEditor_AddButton;
   public static String JsdlEditor_RemoveButton;
+  public static String DataStagingPage_Name;
   private static final String BUNDLE_NAME = "eu.geclipse.ui.jsdl.editor.pages.messages"; //$NON-NLS-1$
+    
   static {
     // initialize resource bundle
     NLS.initializeMessages( BUNDLE_NAME, Messages.class );

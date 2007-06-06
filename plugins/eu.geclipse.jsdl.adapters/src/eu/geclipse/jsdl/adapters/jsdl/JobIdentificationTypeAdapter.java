@@ -25,6 +25,9 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
 import eu.geclipse.jsdl.JobIdentificationType;
@@ -125,6 +128,24 @@ public class JobIdentificationTypeAdapter {
     } );
   }
   
+  
+  
+  public void attachToDelete(final Button button, final List list){
+    button.addSelectionListener(new SelectionListener() {
+
+      public void widgetSelected(final SelectionEvent event) {        
+        
+      }
+
+      public void widgetDefaultSelected(final SelectionEvent event) {
+          // Do Nothing - Required method
+      }
+    });
+    
+    
+  }
+  
+ 
   
   public void load()
   {

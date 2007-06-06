@@ -25,12 +25,15 @@ package eu.geclipse.ui.jsdl.editor.pages;
 import java.util.Hashtable;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
@@ -64,6 +67,8 @@ public class JobDefinitionPage extends FormPage {
   
   Composite jobDefComposite = null;
   Composite jobIdentComposite = null;
+  
+  Table testTable = null;
   
    
   Hashtable< String, Text > widgetFeaturesMap = new Hashtable< String, Text >();
@@ -266,6 +271,8 @@ public class JobDefinitionPage extends FormPage {
     lblgd.verticalSpan = 1;
     this.lblJobDescripiton.setLayoutData (lblgd);
     
+    
+    
     this.txtDescription = toolkit.createText(client,"", SWT.MULTI 
                                                    | SWT.V_SCROLL | SWT.WRAP);
     
@@ -297,8 +304,27 @@ public class JobDefinitionPage extends FormPage {
     gd.verticalSpan = 2;    
     gd.widthHint = 235;
     gd.heightHint = 150;
+    
+//    testTable = new Table(client,SWT.SINGLE);
+    
+//  
+//    TableColumn col1 = new TableColumn(testTable, SWT.NONE); 
+//    col1.setText( "COL1" );
+//    col1.setWidth( 50 );
+//    
+//    
+//    TableItem item1 = new TableItem(testTable,0);    
+//    item1.setImage( Activator.getDefault().
+//                            getImageRegistry().get( "gridproject" ) );
+//    item1.setText( "HELLO1" );
+//
+//        
+//    testTable.setData(  FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER );
+//    testTable.setLayoutData( gd);
+                            
+    
     this.lstJobAnnotation = new List(client, SWT.None);
-    this.lstJobAnnotation.setData( FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER );    
+    this.lstJobAnnotation.setData( FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER );
     this.jobIdentificationTypeAdapter.attachToJobAnnotation( this.lstJobAnnotation);
     this.lstJobAnnotation.setLayoutData( gd );
 
@@ -308,6 +334,16 @@ public class JobDefinitionPage extends FormPage {
     gd.verticalSpan = 1;
     gd.widthHint = 60;
     this.btnADD = toolkit.createButton(client, Messages.JsdlEditor_AddButton, SWT.PUSH);
+    this.btnADD.addSelectionListener(new SelectionListener() {
+
+      public void widgetSelected(final SelectionEvent event) {
+      System.out.println(testTable.getItemCount());
+      }
+
+      public void widgetDefaultSelected(final SelectionEvent event) {
+       
+      }
+    });
     this.btnADD.setLayoutData( gd );
 
     //Create Button DEL
