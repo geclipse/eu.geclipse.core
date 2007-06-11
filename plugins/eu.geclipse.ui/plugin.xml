@@ -131,7 +131,7 @@
       <wizard
             canFinishEarly="true"
             category="eu.geclipse.ui.newResourceCategory"
-            class="eu.geclipse.ui.wizards.connection.ConnectionWizard"
+            class="eu.geclipse.ui.wizards.ConnectionWizard"
             finalPerspective="eu.geclipse.ui.gEclipsePerspective"
             hasPages="true"
             icon="icons/etool16/newconn_wiz.gif"
@@ -151,23 +151,6 @@
             class="eu.geclipse.ui.UIAuthTokenProvider"
             priority="999"/>
    </extension>
-   <extension
-         point="org.eclipse.ui.editors">     
- 	  <editor
-          class="eu.geclipse.ui.editors.JsdlMultiPageEditor"
-          default="true"
-          extensions="jsdl"
-          icon="icons/jsdlfile.gif"
-          id="eu.geclips.jsdl.multiedit.editors.JsdlMultiPageEditor"
-          name="JSDL Multi-Page Editor"/>      
-      <editor
-            class="eu.geclipse.ui.editors.JobEditor"
-            default="true"
-            extensions="glitejob,globusjob"
-            icon="icons/obj16/job_file_obj.gif"
-            id="eu.geclipse.ui.JobEditor"
-            name="%editor.JobEditor"/>
-   </extension>  
    <extension
          point="org.eclipse.ui.ide.projectNatureImages">
       <image

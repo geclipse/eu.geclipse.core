@@ -39,7 +39,7 @@ import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridProject;
-import eu.geclipse.core.model.impl.JSDLJobDescription;
+import eu.geclipse.jsdl.JSDLJobDescription;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.internal.wizards.jobs.FileType;
 import eu.geclipse.ui.wizards.jobs.applicationspecific.IApplicationSpecificPage;

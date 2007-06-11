@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobDescription;
-import eu.geclipse.core.model.impl.JSDLJobDescription;
+import eu.geclipse.jsdl.JSDLJobDescription;
 import eu.geclipse.ui.views.jobdetails.AbstractSection;
 import eu.geclipse.ui.views.jobdetails.ISectionItem;
 import eu.geclipse.ui.views.jobdetails.IViewConfiguration;
