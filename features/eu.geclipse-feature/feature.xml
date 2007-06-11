@@ -47,19 +47,22 @@ project number: FP5-IST-034327  http://www.geclipse.eu/
       <import plugin="org.eclipse.ui.forms"/>
       <import plugin="org.eclipse.emf.edit.ui"/>
       <import plugin="org.apache.axis"/>
+      <import plugin="javax.xml.rpc"/>
       <import plugin="org.eclipse.debug.core"/>
       <import plugin="org.eclipse.ui.cheatsheets"/>
       <import plugin="org.eclipse.ui.editors"/>
       <import plugin="org.eclipse.jsch.core"/>
       <import plugin="com.jcraft.jsch"/>
-      <import plugin="org.eclipse.emf.ecore.xmi"/>
-      <import plugin="org.eclipse.emf.edit"/>
       <import plugin="org.eclipse.ui.workbench.texteditor"/>
       <import plugin="com.ice.tar"/>
-      <import plugin="org.eclipse.swt"/>
-      <import plugin="javax.xml.rpc"/>
       <import plugin="org.eclipse.core.net"/>
       <import plugin="org.apache.log4j"/>
+      <import plugin="org.eclipse.emf.edit"/>
+      <import plugin="org.eclipse.swt"/>
+      <import plugin="org.eclipse.emf.ecore.xmi"/>
+      <import plugin="org.eclipse.emf"/>
+      <import plugin="org.eclipse.emf.common"/>
+      <import plugin="org.eclipse.emf.common.ui"/>
    </requires>
 
    <plugin
@@ -85,20 +88,6 @@ project number: FP5-IST-034327  http://www.geclipse.eu/
 
    <plugin
          id="eu.geclipse.terminal"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="eu.geclipse.jsdl"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="eu.geclipse.jsdl.edit"
          download-size="0"
          install-size="0"
          version="0.0.0"
@@ -152,7 +141,28 @@ project number: FP5-IST-034327  http://www.geclipse.eu/
          version="0.0.0"/>
 
    <plugin
-         id="eu.geclipse.jsdl.adapters"
+         id="eu.geclipse.jsdl"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="eu.geclipse.jsdl.edit"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="eu.geclipse.jsdl.model"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="eu.geclipse.jsdl.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"
