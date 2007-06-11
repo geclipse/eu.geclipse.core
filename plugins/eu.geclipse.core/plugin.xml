@@ -56,14 +56,6 @@
       </builder>
    </extension>
    <extension
-         id="eu.geclipse.core.gridProjectCreator"
-         name="Grid Project Creator"
-         point="eu.geclipse.core.gridElementCreator">
-      <creator
-            class="eu.geclipse.core.model.impl.JSDLJobDescriptionCreator"
-            name="JSDL Job"/>
-   </extension>
-   <extension
          point="org.eclipse.core.runtime.preferences">
       <scope
             class="eu.geclipse.core.project.GridProjectScope"

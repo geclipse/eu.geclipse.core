@@ -101,7 +101,7 @@ public class Activator extends Plugin {
                                  IStatus.OK,
                                  message,
                                  exc );
-    getDefault().getLog().log( status );
+    logStatus( status );
   }
 
   /**
