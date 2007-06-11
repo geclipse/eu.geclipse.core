@@ -7,30 +7,16 @@
 package eu.geclipse.jsdl.provider;
 
 
-import eu.geclipse.jsdl.CreationFlagEnumeration;
-import eu.geclipse.jsdl.DocumentRoot;
-import eu.geclipse.jsdl.FileSystemTypeEnumeration;
-import eu.geclipse.jsdl.JsdlFactory;
-import eu.geclipse.jsdl.JsdlPackage;
-import eu.geclipse.jsdl.OperatingSystemTypeEnumeration;
-import eu.geclipse.jsdl.ProcessorArchitectureEnumeration;
-
 import java.util.Collection;
 import java.util.List;
-
 import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
-
 import org.eclipse.emf.common.util.ResourceLocator;
-
 import org.eclipse.emf.ecore.EStructuralFeature;
-
 import org.eclipse.emf.ecore.util.FeatureMap;
 import org.eclipse.emf.ecore.util.FeatureMapUtil;
-
 import org.eclipse.emf.ecore.xml.type.XMLTypeFactory;
 import org.eclipse.emf.ecore.xml.type.XMLTypePackage;
-
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.IEditingDomainItemProvider;
 import org.eclipse.emf.edit.provider.IItemLabelProvider;
@@ -40,6 +26,13 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 import org.eclipse.emf.edit.provider.ItemPropertyDescriptor;
 import org.eclipse.emf.edit.provider.ItemProviderAdapter;
 import org.eclipse.emf.edit.provider.ViewerNotification;
+import eu.geclipse.jsdl.model.CreationFlagEnumeration;
+import eu.geclipse.jsdl.model.DocumentRoot;
+import eu.geclipse.jsdl.model.FileSystemTypeEnumeration;
+import eu.geclipse.jsdl.model.JsdlFactory;
+import eu.geclipse.jsdl.model.JsdlPackage;
+import eu.geclipse.jsdl.model.OperatingSystemTypeEnumeration;
+import eu.geclipse.jsdl.model.ProcessorArchitectureEnumeration;
 
 /**
  * This is the item provider adapter for a {@link eu.geclipse.jsdl.DocumentRoot} object.
