@@ -16,13 +16,11 @@
 package eu.geclipse.core.model;
 
 import java.util.List;
-
 import org.eclipse.core.resources.IFile;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-
-import eu.geclipse.core.model.impl.JSDLJobDescription;
+import eu.geclipse.jsdl.JSDLJobDescription;
 
 /**
  * Test for the {@link GridModel} class.
