@@ -242,8 +242,6 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
       setErrorMessage( "Unable to create a valid URI from the specified information: " + uriExc.getMessage() );
     }
     
-    System.out.println( "URI: " + uri );
-    
     return uri;
     
   }
