@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.editors">     
+ 	  <editor
+          class="eu.geclipse.jsdl.ui.editors.JsdlMultiPageEditor"
+          default="true"
+          extensions="jsdl"
+          icon="icons/jsdlfile.gif"
+          id="eu.geclipse.jsdl.ui.JsdlMultiPageEditor"
+          name="JSDL Multi-Page Editor"/>      
+   </extension>  
+
+</plugin>
