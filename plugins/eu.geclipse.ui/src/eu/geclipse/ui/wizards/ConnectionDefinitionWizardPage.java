@@ -4,8 +4,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
+
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -32,36 +34,65 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Tree;
-import eu.geclipse.core.Extensions;
+
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridElementCreator;
+import eu.geclipse.ui.Extensions;
 import eu.geclipse.ui.dialogs.NewProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.providers.ConnectionViewContentProvider;
 import eu.geclipse.ui.providers.ConnectionViewLabelProvider;
-import eu.geclipse.ui.util.FieldValidator;
 import eu.geclipse.ui.widgets.StoredCombo;
 
 public class ConnectionDefinitionWizardPage extends WizardPage {
   
-  private static final String HOST_PREF_ID
-    = "connectionWizardHost"; //$NON-NLS-1$
+  private static final String SEPARATOR = ":"; //$NON-NLS-1$
   
-  private static final String PORT_PREF_ID
-    = "connectionWizardPort"; //$NON-NLS-1$
+  private String currentURIType;
   
-  private static final String PATH_PREF_ID
-    = "connectionWizardPath"; //$NON-NLS-1$
+  private Composite mainComp;
+  
+  private Label schemeLabel;
+  
+  private Label uriLabel;
+  
+  private Label schemeSpecificPartLabel;
+  
+  private Label authorityLabel;
+  
+  private Label userInfoLabel;
+  
+  private Label hostLabel;
+  
+  private Label portLabel;
+  
+  private Label pathLabel;
+  
+  private Label queryLabel;
+  
+  private Label fragmentLabel;
 
   private Combo schemeCombo;
+  
+  private StoredCombo uriCombo;
+  
+  private StoredCombo schemeSpecificPartCombo;
+  
+  private StoredCombo authorityCombo;
+  
+  private StoredCombo userInfoCombo;
   
   private StoredCombo hostCombo;
   
   private StoredCombo portCombo;
   
   private StoredCombo pathCombo;
+  
+  private StoredCombo queryCombo;
+  
+  private StoredCombo fragmentCombo;
   
   private Link pathLink;
   
@@ -76,61 +107,36 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
 
   public void createControl( final Composite parent ) {
     
-    IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
     GridData gData;
     
-    Composite mainComp = new Composite( parent, SWT.NONE );
-    mainComp.setLayout( new GridLayout( 4, false ) );
+    this.mainComp = new Composite( parent, SWT.NONE );
+    this.mainComp.setLayout( new GridLayout( 2, false ) );
     gData = new GridData( GridData.FILL_HORIZONTAL );
     gData.grabExcessHorizontalSpace = true;
-    mainComp.setLayoutData( gData );
+    this.mainComp.setLayoutData( gData );
     
-    Label schemaLabel = new Label( mainComp, SWT.NONE );
-    schemaLabel.setText( "Scheme:" );
-    gData = new GridData();
-    schemaLabel.setLayoutData( gData );
+    this.schemeLabel = new Label( this.mainComp, SWT.NONE );
+    this.schemeCombo = createEditorField( this.mainComp, this.schemeLabel, "Scheme:" );
+    this.uriLabel = new Label( this.mainComp, SWT.NONE );
+    this.uriCombo = createEditorField( this.mainComp, this.uriLabel, "URI:" );
+    this.schemeSpecificPartLabel = new Label( this.mainComp, SWT.NONE );
+    this.schemeSpecificPartCombo = createEditorField( this.mainComp, this.schemeSpecificPartLabel, "Scheme specific part:" );
+    this.authorityLabel = new Label( this.mainComp, SWT.NONE );
+    this.authorityCombo = createEditorField( this.mainComp, this.authorityLabel, "Authority" );
+    this.userInfoLabel = new Label( this.mainComp, SWT.NONE );
+    this.userInfoCombo = createEditorField( this.mainComp, this.userInfoLabel, "User Info:" );
+    this.hostLabel = new Label( this.mainComp, SWT.NONE );
+    this.hostCombo = createEditorField( this.mainComp, this.hostLabel, "Host:" );
+    this.portLabel = new Label( this.mainComp, SWT.NONE );
+    this.portCombo = createEditorField( this.mainComp, this.portLabel, "Port:" );
+    this.pathLabel = new Label( this.mainComp, SWT.NONE );
+    this.pathCombo = createEditorField( this.mainComp, this.pathLabel, "Path:" );
+    this.queryLabel = new Label( this.mainComp, SWT.NONE );
+    this.queryCombo = createEditorField( this.mainComp, this.queryLabel, "Query:" );
+    this.fragmentLabel = new Label( this.mainComp, SWT.NONE );
+    this.fragmentCombo = createEditorField( this.mainComp, this.fragmentLabel, "Fragment:" );
     
-    this.schemeCombo = new Combo( mainComp, SWT.READ_ONLY );
-    gData = new GridData( GridData.FILL_HORIZONTAL );
-    gData.grabExcessHorizontalSpace = true;
-    gData.horizontalSpan = 3;
-    this.schemeCombo.setLayoutData( gData );
-    
-    Label hostPortLabel = new Label( mainComp, SWT.NONE );
-    hostPortLabel.setText( "Host and Port:" );
-    gData = new GridData();
-    hostPortLabel.setLayoutData( gData );
-    
-    this.hostCombo = new StoredCombo( mainComp, SWT.NONE );
-    this.hostCombo.setPreferences( preferenceStore, HOST_PREF_ID );
-    gData = new GridData( GridData.FILL_HORIZONTAL );
-    gData.grabExcessHorizontalSpace = true;
-    this.hostCombo.setLayoutData( gData );
-    
-    Label sepLabel = new Label( mainComp, SWT.NONE );
-    sepLabel.setText( ":" );
-    gData = new GridData();
-    sepLabel.setLayoutData( gData );
-    
-    this.portCombo = new StoredCombo( mainComp, SWT.NONE );
-    this.portCombo.setPreferences( preferenceStore, PORT_PREF_ID );
-    gData = new GridData();
-    gData.widthHint = 50;
-    this.portCombo.setLayoutData( gData );
-    
-    Label pathLabel = new Label( mainComp, SWT.NONE );
-    pathLabel.setText( "Directory:" );
-    gData = new GridData();
-    pathLabel.setLayoutData( gData );
-    
-    this.pathCombo = new StoredCombo( mainComp, SWT.NONE );
-    this.pathCombo.setPreferences( preferenceStore, PATH_PREF_ID );
-    gData = new GridData( GridData.FILL_HORIZONTAL );
-    gData.grabExcessHorizontalSpace = true;
-    gData.horizontalSpan = 3;
-    this.pathCombo.setLayoutData( gData );
-    
-    Group browseGroup = new Group( mainComp, SWT.NONE );
+    Group browseGroup = new Group( this.mainComp, SWT.NONE );
     browseGroup.setLayout( new GridLayout( 1, false ) );
     browseGroup.setText( "Remote Directory Browser" );
     gData = new GridData( GridData.FILL_BOTH );
@@ -174,19 +180,7 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
     
     this.schemeCombo.addModifyListener( new ModifyListener() {
       public void modifyText( final ModifyEvent e ) {
-        updateUI();
-      }
-    } );
-    
-    this.hostCombo.addModifyListener( new ModifyListener() {
-      public void modifyText( final ModifyEvent e ) {
-        updateUI();
-      }
-    } );
-    
-    this.portCombo.addModifyListener( new ModifyListener() {
-      public void modifyText( final ModifyEvent e ) {
-        updateUI();
+        setupFields();
       }
     } );
     
@@ -209,37 +203,80 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
       }
     } );
     
-    updateUI();
+    setupFields();
     
-    setControl( mainComp );
+    setControl( this.mainComp );
     
+  }
+  
+  protected StoredCombo createEditorField( final Composite parent,
+                                           final Label label,
+                                           final String text ) {
+
+    label.setText( text );
+    GridData lData = new GridData();
+    lData.minimumHeight = 0;
+    label.setLayoutData( lData );
+
+    StoredCombo editor = new StoredCombo( parent, SWT.NONE );
+    //this.pathCombo.setPreferences( preferenceStore, PATH_PREF_ID );
+    GridData eData = new GridData( GridData.FILL_HORIZONTAL );
+    eData.grabExcessHorizontalSpace = true;
+    eData.minimumHeight = 0;
+    editor.setLayoutData( eData );
+    
+    editor.addModifyListener( new ModifyListener() {
+      public void modifyText( final ModifyEvent e ) {
+        updateUI();
+      }
+    } );
+    
+    return editor;
+
   }
   
   protected URI getURI() {
     
-    String scheme = this.schemeCombo.getText();
-    if ( isEmpty(scheme) ) {
-      scheme = null;
-    }
-    
-    String host = this.hostCombo.getText();
-    if ( isEmpty( host ) ) {
-      host = null;
-    }
-    
-    String portS = this.portCombo.getText(); 
-    int port = isEmpty( portS ) ? -1 : Integer.parseInt( portS );
-    
-    String path = this.pathCombo.getText();
-    if ( isEmpty( path ) ) {
-      path = "/";
-    }
+    setErrorMessage( null );
     
     URI uri = null;
+    
+    String scheme = this.schemeCombo.getText();
+    
     try {
-      uri = new URI( scheme, null, host, port, path, null, null );
-    } catch( URISyntaxException uriExc ) {
+      
+      if ( this.uriCombo.isVisible() ) {
+        uri = new URI( this.uriCombo.getText() );
+      }
+    
+      else if ( this.schemeSpecificPartCombo.isVisible() ) {
+        String schemeSpecificPart = this.schemeSpecificPartCombo.getText();
+        String fragment = this.fragmentCombo.isVisible() ? this.fragmentCombo.getText() : null;
+        uri = new URI( scheme, schemeSpecificPart, fragment );
+      }
+      
+      else if ( ! this.hostCombo.isVisible() ) {
+        String authority = this.authorityCombo.getText();
+        String path = this.pathCombo.isVisible() ? this.pathCombo.getText() : null;
+        String query = this.queryCombo.isVisible() ? this.queryCombo.getText() : null;
+        String fragment = this.fragmentCombo.isVisible() ? this.fragmentCombo.getText() : null;
+        uri = new URI( scheme, authority, path, query, fragment );
+      }
+      
+      else {
+        String userInfo = this.userInfoCombo.isVisible() ? this.userInfoCombo.getText() : null;
+        String host = this.hostCombo.getText();
+        int port = this.portCombo.isVisible() ? Integer.parseInt( this.portCombo.getText() ) : -1;
+        String path = this.pathCombo.isVisible() ? this.pathCombo.getText() : null;
+        String query = this.queryCombo.isVisible() ? this.queryCombo.getText() : null;
+        String fragment = this.fragmentCombo.isVisible() ? this.fragmentCombo.getText() : null;
+        uri = new URI( scheme, userInfo, host, port, path, query, fragment );
+      }
+      
+    } catch ( URISyntaxException uriExc ) {
       setErrorMessage( "Unable to create a valid URI from the specified information: " + uriExc.getMessage() );
+    } catch ( NumberFormatException nfExc ) {
+      setErrorMessage( "Unable to create a valid URI from the specified information: " + nfExc.getMessage() );
     }
     
     return uri;
@@ -257,26 +294,42 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
   }
   
   protected void handleSelectionChanged( final ISelection selection ) {
+    
     if ( selection instanceof IStructuredSelection ) {
+      
       IStructuredSelection sSelection
         = ( IStructuredSelection ) selection;
       Object object = sSelection.getFirstElement();
+      
       if ( ( object != null ) && ( object instanceof IGridConnectionElement ) ) {
+        
         IGridConnectionElement element
           = ( ( IGridConnectionElement ) object );
+        
         try {
+    
           IFileStore fileStore
             = element.getConnectionFileStore();
           URI uri
             = fileStore.toURI();
-          String path
-            = uri.getPath();
-          this.pathCombo.setText( path );
+          
+          if ( this.currentURIType.equals( Extensions.EFS_URI_RAW ) ) {
+            this.uriCombo.setText( uri.toString() );
+          } else if ( this.currentURIType.equals( Extensions.EFS_URI_OPAQUE ) ) {
+            this.schemeSpecificPartCombo.setText( uri.getSchemeSpecificPart() );
+          } else if ( this.currentURIType.equals( Extensions.EFS_URI_HIERARCHICAL )
+              || this.currentURIType.equals( Extensions.EFS_URI_SERVER ) ) {
+            this.pathCombo.setText( uri.getPath() );
+          }
+          
         } catch ( CoreException cExc ) {
           setErrorMessage( "Error while selecting path: " + cExc.getMessage() );
         }
+        
       }
+      
     }
+    
   }
   
   protected void initializeBrowser() {
@@ -329,21 +382,174 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
   
   protected void initializeSchemeCombo( final Combo combo ) {
     List< String > schemes
-      = Extensions.getRegisteredFilesystemSchemes();
+      = eu.geclipse.core.Extensions.getRegisteredFilesystemSchemes();
     String[] schemeArray
       = schemes.toArray( new String[ schemes.size() ] );
     combo.setItems( schemeArray );
   }
   
-  protected void updateUI() {
+  protected void resetFields() {
     
-    boolean contactValid = validateContact();
+    setActive( this.uriCombo, this.uriLabel, "URI" );
+    setActive( this.schemeSpecificPartCombo, this.schemeSpecificPartLabel, null );
+    setActive( this.authorityCombo, this.authorityLabel, null );
+    setActive( this.userInfoCombo, this.userInfoLabel, null );
+    setActive( this.hostCombo, this.hostLabel, null );
+    setActive( this.portCombo, this.portLabel, null );
+    setActive( this.pathCombo, this.pathLabel, null );
+    setActive( this.queryCombo, this.queryLabel, null );
+    setActive( this.fragmentCombo, this.fragmentLabel, null );
     
-    this.pathLink.setEnabled( contactValid );
-    this.viewer.getTree().setEnabled( contactValid );
+    String scheme = this.schemeCombo.getText();
+    if ( ! isEmpty( scheme ) ) {
+      this.uriCombo.setText( scheme + SEPARATOR );
+    }
+    
+    this.currentURIType = Extensions.EFS_URI_RAW;
     
   }
   
+  protected void setupFields() {
+    
+    resetFields();
+    
+    String scheme = this.schemeCombo.getText();
+    IConfigurationElement extension
+      = Extensions.getRegisteredEFSExtension( scheme );
+    
+    if ( extension != null ) {
+      setActive( this.uriCombo, this.uriLabel, null );
+      processURIScheme( extension );
+    }
+    
+    this.mainComp.layout();
+    updateUI();
+    
+  }
+  
+  protected void updateUI() {
+    URI uri = getURI();
+    this.viewer.getTree().setEnabled( uri != null );
+    this.pathLink.setEnabled( uri != null );
+  }
+  
+  private void processURIScheme( final IConfigurationElement element ) {
+    this.currentURIType = element.getName();
+    if ( this.currentURIType.equals( Extensions.EFS_URI_RAW ) ) {
+      processRawURIScheme( element );
+    } else if ( this.currentURIType.equals( Extensions.EFS_URI_OPAQUE ) ) {
+      processOpaqueURIScheme( element );
+    } else if ( this.currentURIType.equals( Extensions.EFS_URI_HIERARCHICAL ) ) {
+      processHierarchicalURIScheme( element );
+    } else if ( this.currentURIType.equals( Extensions.EFS_URI_SERVER ) ) {
+      processServerURIScheme( element );
+    }
+  }
+
+  private void processServerURIScheme( final IConfigurationElement element ) {
+    
+    String userInfo = element.getAttribute( Extensions.EFS_USER_INFO_ATT );
+    String host = element.getAttribute( Extensions.EFS_HOST_ATT );
+    String port = element.getAttribute( Extensions.EFS_PORT_ATT );
+    String path = element.getAttribute( Extensions.EFS_PATH_ATT );
+    String query = element.getAttribute( Extensions.EFS_QUERY_ATT );
+    String fragment = element.getAttribute( Extensions.EFS_FRAGMENT_ATT );
+    
+    setActive( this.userInfoCombo, this.userInfoLabel, userInfo );
+    setActive( this.hostCombo, this.hostLabel, host );
+    setActive( this.portCombo, this.portLabel, port );
+    setActive( this.pathCombo, this.pathLabel, path );
+    setActive( this.queryCombo, this.queryLabel, query );
+    setActive( this.fragmentCombo, this.fragmentLabel, fragment );
+    
+    String scheme = this.schemeCombo.getText();
+    IPreferenceStore preferenceStore
+      = Activator.getDefault().getPreferenceStore();
+    this.userInfoCombo.setPreferences( preferenceStore,
+        scheme + SEPARATOR + Extensions.EFS_USER_INFO_ATT );
+    this.hostCombo.setPreferences( preferenceStore,
+        scheme + SEPARATOR + Extensions.EFS_HOST_ATT );
+    this.portCombo.setPreferences( preferenceStore,
+        scheme + SEPARATOR + Extensions.EFS_PORT_ATT );
+    this.pathCombo.setPreferences( preferenceStore,
+        scheme + SEPARATOR + Extensions.EFS_PATH_ATT );
+    this.queryCombo.setPreferences( preferenceStore,
+        scheme + SEPARATOR + Extensions.EFS_QUERY_ATT );
+    this.fragmentCombo.setPreferences( preferenceStore,
+        scheme + SEPARATOR + Extensions.EFS_FRAGMENT_ATT );
+    
+  }
+
+  private void processHierarchicalURIScheme( final IConfigurationElement element ) {
+    
+    String authority = element.getAttribute( Extensions.EFS_AUTHORITY_ATT );
+    String path = element.getAttribute( Extensions.EFS_PATH_ATT );
+    String query = element.getAttribute( Extensions.EFS_QUERY_ATT );
+    String fragment = element.getAttribute( Extensions.EFS_FRAGMENT_ATT );
+    
+    setActive( this.authorityCombo, this.authorityLabel, authority );
+    setActive( this.pathCombo, this.pathLabel, path );
+    setActive( this.queryCombo, this.queryLabel, query );
+    setActive( this.fragmentCombo, this.fragmentLabel, fragment );
+    
+    String scheme = this.schemeCombo.getText();
+    IPreferenceStore preferenceStore
+      = Activator.getDefault().getPreferenceStore();
+    this.authorityCombo.setPreferences( preferenceStore,
+        scheme + SEPARATOR + Extensions.EFS_AUTHORITY_ATT );
+    this.pathCombo.setPreferences( preferenceStore,
+        scheme + SEPARATOR + Extensions.EFS_PATH_ATT );
+    this.queryCombo.setPreferences( preferenceStore,
+        scheme + SEPARATOR + Extensions.EFS_QUERY_ATT );
+    this.fragmentCombo.setPreferences( preferenceStore,
+        scheme + SEPARATOR + Extensions.EFS_FRAGMENT_ATT );
+    
+  }
+
+  private void processOpaqueURIScheme( final IConfigurationElement element ) {
+    
+    String schemeSpecificPart = element.getAttribute( Extensions.EFS_SCHEME_SPEC_PART_ATT );
+    String fragment = element.getAttribute( Extensions.EFS_FRAGMENT_ATT );
+    
+    setActive( this.schemeSpecificPartCombo, this.schemeSpecificPartLabel, schemeSpecificPart );
+    setActive( this.fragmentCombo, this.fragmentLabel, fragment );
+    
+    String scheme = this.schemeCombo.getText();
+    IPreferenceStore preferenceStore
+      = Activator.getDefault().getPreferenceStore();
+    this.schemeSpecificPartCombo.setPreferences( preferenceStore,
+        scheme + SEPARATOR + Extensions.EFS_SCHEME_SPEC_PART_ATT );
+    this.fragmentCombo.setPreferences( preferenceStore,
+        scheme + SEPARATOR + Extensions.EFS_FRAGMENT_ATT );
+    
+  }
+
+  private void processRawURIScheme( final IConfigurationElement element ) {
+    
+    String uri = element.getAttribute( Extensions.EFS_URI_ATT );
+    
+    setActive( this.uriCombo, this.uriLabel, uri );
+    
+    String scheme = this.schemeCombo.getText();
+    IPreferenceStore preferenceStore
+      = Activator.getDefault().getPreferenceStore();
+    this.uriCombo.setPreferences( preferenceStore,
+        scheme + SEPARATOR + Extensions.EFS_URI_ATT );
+    
+  }
+
+  private void setActive( final StoredCombo editor,
+                          final Label label,
+                          final String text ) {
+    if ( ! isEmpty( text ) ) {
+      label.setText( text + SEPARATOR );
+    }
+    label.setVisible( ! isEmpty( text ) );
+    editor.setVisible( ! isEmpty( text ) );
+    ( ( GridData ) label.getLayoutData() ).exclude = isEmpty( text );
+    ( ( GridData ) editor.getLayoutData() ).exclude = isEmpty( text );
+  }
+  /*
   protected boolean validateContact() {
     
     String errorMessage = null;
@@ -372,7 +578,7 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
     return errorMessage == null;
     
   }
-  
+  */
   private boolean isEmpty( final String s ) {
     return ( s == null ) || ( s.length() == 0 );
   }

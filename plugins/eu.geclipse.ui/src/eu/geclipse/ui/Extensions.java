@@ -43,6 +43,54 @@ import eu.geclipse.ui.wizards.jobs.NewJobWizard;
  * @author stuempert-m
  */
 public class Extensions {
+  
+  public static final String EFS_POINT
+    = "eu.geclipse.ui.efs"; //$NON-NLS-1$
+
+  public static final String EFS_FILESYSTEM_ELEMENT
+    = "filesystem"; //$NON-NLS-1$
+  
+  public static final String EFS_SCHEME_ATT
+    = "scheme"; //$NON-NLS-1$
+  
+  public static final String EFS_URI_ATT
+    = "uri"; //$NON-NLS-1$
+  
+  public static final String EFS_SCHEME_SPEC_PART_ATT
+    = "scheme-specific-part"; //$NON-NLS-1$
+  
+  public static final String EFS_AUTHORITY_ATT
+    = "authority"; //$NON-NLS-1$
+  
+  public static final String EFS_USER_INFO_ATT
+    = "user-info"; //$NON-NLS-1$
+  
+  public static final String EFS_HOST_ATT
+    = "host"; //$NON-NLS-1$
+  
+  public static final String EFS_PORT_ATT
+    = "port"; //$NON-NLS-1$
+  
+  public static final String EFS_PATH_ATT
+    = "path"; //$NON-NLS-1$
+  
+  public static final String EFS_QUERY_ATT
+    = "query"; //$NON-NLS-1$
+  
+  public static final String EFS_FRAGMENT_ATT
+    = "fragment"; //$NON-NLS-1$
+  
+  public static final String EFS_URI_RAW
+    = "raw"; //$NON-NLS-1$
+  
+  public static final String EFS_URI_OPAQUE
+    = "opaque"; //$NON-NLS-1$
+  
+  public static final String EFS_URI_HIERARCHICAL
+    = "hierarchical"; //$NON-NLS-1$
+  
+  public static final String EFS_URI_SERVER
+    = "server"; //$NON-NLS-1$
 
   /**
    * The ID of the authentication token ui extension point.
@@ -126,6 +174,29 @@ public class Extensions {
       }
     }
     return resultList;
+  }
+  
+  static public IConfigurationElement getRegisteredEFSExtension( final String scheme ) {
+    IConfigurationElement result = null;
+    List< IConfigurationElement > registeredEFSExtensions
+      = getRegisteredEFSExtensions();
+    for ( IConfigurationElement element : registeredEFSExtensions ) {
+      if ( element.getAttribute( EFS_SCHEME_ATT ).equals( scheme ) ) {
+        IConfigurationElement[] children = element.getChildren();
+        if ( ( children != null ) && ( children.length > 0 ) ) {
+          result = children[0];
+          break;
+        }
+      }
+    }
+    return result;
+  }
+  
+  static public List< IConfigurationElement > getRegisteredEFSExtensions() {
+    ExtensionManager manager = new ExtensionManager();
+    List< IConfigurationElement > filesystems
+      = manager.getConfigurationElements( EFS_POINT, EFS_FILESYSTEM_ELEMENT );
+    return filesystems;
   }
 
   /**

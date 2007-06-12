@@ -144,6 +144,7 @@ public class StoredCombo extends Combo {
    */
   public void setPreferences( final IPreferenceStore preferenceStore,
                               final String preferenceID ) {
+    removeAll();
     this.prefStore = preferenceStore;
     this.prefID = preferenceID;
     if ( this.prefStore != null ) {

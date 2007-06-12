@@ -11,6 +11,7 @@
    <extension-point id="jobSubmissionWizard" name="jobSubmissionWizard" schema="schema/jobSubmissionWizard.exsd"/>
    <extension-point id="eu.geclipse.ui.jsdlApplicationParameters" name="jsdlApplicationParameters" schema="schema/jsdlApplicationParameters.exsd"/>
    <extension-point id="propertiesFactory" name="propertiesFactory" schema="schema/PropertiesFactory.exsd"/>
+   <extension-point id="eu.geclipse.ui.efs" name="EFS UI Contributions" schema="schema/eu.geclipse.ui.efs.exsd"/>
 
    <extension
          point="org.eclipse.ui.preferencePages">
@@ -197,5 +198,14 @@
       <applicationName name="grep"/>
       <executablePath path="/usr/local/bin/grep"/>
       <parametersSchema path="xml/page.xml"/>
+   </extension>
+   <extension
+         point="eu.geclipse.ui.efs">
+      <filesystem
+            scheme="file">
+         <opaque
+               scheme-specific-part="Local Directory">
+         </opaque>
+      </filesystem>
    </extension>
 </plugin>

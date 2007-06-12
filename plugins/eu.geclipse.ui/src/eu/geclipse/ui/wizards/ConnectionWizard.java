@@ -1,17 +1,19 @@
 package eu.geclipse.ui.wizards;
 
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
+
+import eu.geclipse.ui.internal.EmptySelection;
 
 
 public class ConnectionWizard
     extends Wizard
     implements INewWizard {
   
-  private IStructuredSelection initialSelection;
+  private ISelection initialSelection;
   
   private ConnectionLocationWizardPage fileCreationPage;
   
@@ -24,12 +26,14 @@ public class ConnectionWizard
   @Override
   public void addPages() {
     
-    this.fileCreationPage
-      = new ConnectionLocationWizardPage( "newGridConnectionLocationPage",
-                                          this.initialSelection );
-    this.fileCreationPage.setTitle( "Connection location" );
-    this.fileCreationPage.setDescription( "Choose the location in the workspace where the new connection will be created" );
-    addPage( this.fileCreationPage );
+    if ( this.initialSelection instanceof IStructuredSelection ) {
+      this.fileCreationPage
+        = new ConnectionLocationWizardPage( "newGridConnectionLocationPage",
+                                            ( IStructuredSelection ) this.initialSelection );
+      this.fileCreationPage.setTitle( "Connection location" );
+      this.fileCreationPage.setDescription( "Choose the location in the workspace where the new connection will be created" );
+      addPage( this.fileCreationPage );
+    }
     
     this.definitionPage = new ConnectionDefinitionWizardPage();
     addPage( this.definitionPage );
@@ -45,6 +49,9 @@ public class ConnectionWizard
   public void init( final IWorkbench workbench,
                     final IStructuredSelection selection ) {
     this.initialSelection = selection;
+    if ( this.initialSelection == null ) {
+      this.initialSelection = new EmptySelection();
+    }
   }
   
 }
