@@ -91,12 +91,6 @@ public class Activator extends AbstractUIPlugin {
     = "eu.geclipse.ui.wizards.gridProjectWizard"; //$NON-NLS-1$
   
   /**
-   * The id of the grid job wizard.
-   */
-  public static final String ID_JOB_WIZARD
-    = "eu.geclipse.ui.wizards.gridJobWizard"; //$NON-NLS-1$
-  
-  /**
    * The id of the connection wizard.
    */
   public static final String ID_CONNECTION_WIZARD

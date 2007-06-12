@@ -51,7 +51,6 @@ public class DeveloperPerspectiveFactory
     layout.addShowViewShortcut( IProgressConstants.PROGRESS_VIEW_ID );
 
     layout.addNewWizardShortcut( eu.geclipse.ui.internal.Activator.ID_PROJECT_WIZARD );
-    layout.addNewWizardShortcut( eu.geclipse.ui.internal.Activator.ID_JOB_WIZARD );
     layout.addNewWizardShortcut( eu.geclipse.ui.internal.Activator.ID_CONNECTION_WIZARD );
     layout.addNewWizardShortcut( eu.geclipse.ui.internal.Activator.ID_WORKFLOW_WIZARD );
     layout.addNewWizardShortcut( "org.eclipse.ui.wizards.new.folder" );//$NON-NLS-1$

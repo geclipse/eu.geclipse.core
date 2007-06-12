@@ -17,6 +17,7 @@ package eu.geclipse.ui.views.jobdetails;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.action.Action;
@@ -32,10 +33,10 @@ import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.part.ViewPart;
+
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridJob;
-import eu.geclipse.ui.views.jobdetails.jsdl.SectionRequirements;
 
 /**
  * View showing details about submitted job
@@ -66,7 +67,7 @@ public class JobDetailsView extends ViewPart implements IViewConfiguration {
       this.sectionsList = new ArrayList<ISection>();
       this.sectionsList.add( new SectionGeneral( this ) );
       this.sectionsList.add( new SectionDescription( this ) );
-      this.sectionsList.add( new SectionRequirements( this ) );
+      //this.sectionsList.add( new SectionRequirements( this ) );
     }
     return this.sectionsList;
   }
