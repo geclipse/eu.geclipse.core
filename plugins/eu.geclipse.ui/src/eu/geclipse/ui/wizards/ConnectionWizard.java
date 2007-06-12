@@ -41,6 +41,11 @@ public class ConnectionWizard
   }
 
   @Override
+  public String getWindowTitle() {
+    return "New Filesystem Connection";
+  }
+  
+  @Override
   public boolean performFinish() {
     // TODO Auto-generated method stub
     return false;
