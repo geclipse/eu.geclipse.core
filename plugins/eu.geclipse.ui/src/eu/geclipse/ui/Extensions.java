@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -31,10 +32,10 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
+
 import eu.geclipse.core.ExtensionManager;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.properties.IPropertiesFactory;
-import eu.geclipse.ui.wizards.jobs.NewJobWizard;
 
 /**
  * This is a helper class that holds static fields and methods to easily access
@@ -110,46 +111,6 @@ public class Extensions {
    * The ID of the connection wizard extension point.
    */
   public static final String CONNECTION_WIZARD_POINT = "eu.geclipse.ui.connectionWizard"; //$NON-NLS-1$
-  /**
-   * The ID of the jsdl application's additional parameters extension point.
-   */
-  public static final String JSDL_APPLICATION_PARAMETERS_POINT = "eu.geclipse.ui.jsdlApplicationParameters"; //$NON-NLS-1$
-  /**
-   * The name element contained in the eu.geclipse.ui.jsdlApplicationParameters
-   * ui extension point.
-   */
-  public static final String JSDL_PARAMETERS_APPLICATION_NAME_ELEMENT = "applicationName"; //$NON-NLS-1$
-  /**
-   * Name of attribute that holds path to xml document within
-   * {@link Extensions#JSDL_PARAMETERS_SCHEMA_ELEMENT} element in{@link Extensions#JSDL_APPLICATION_PARAMETERS_POINT}
-   * plug-in
-   */
-  public static final String JSDL_PARAMETERS_SCHEMA_ELEMENT_XML_PATH_ATTRIBUTE = "path"; //$NON-NLS-1$
-  /**
-   * Name of the attribute of
-   * {@link Extensions#JSDL_PARAMETERS_APPLICATION_NAME_ELEMENT} that holds the
-   * name (in {@link Extensions#JSDL_APPLICATION_PARAMETERS_POINT} extension
-   * point)
-   */
-  public static final String JSDL_PARAMETERS_APPLICATION_NAME_ELEMENT_NAME_ATTRIBUTE = "name"; //$NON-NLS-1$
-  /**
-   * Name of the element in extension of
-   * {@link Extensions#JSDL_APPLICATION_PARAMETERS_POINT} extension point that
-   * keeps information of xml
-   */
-  public static final String JSDL_PARAMETERS_SCHEMA_ELEMENT = "parametersSchema"; //$NON-NLS-1$
-  /**
-   * The executable element contained in the eu.geclipse.ui.jsdlApplicationParameters
-   * ui extension point.
-   */
-  public static final String JSDL_PARAMETERS_EXECUTABLE_ELEMENT = "executablePath"; //$NON-NLS-1$
-  /**
-   * Name of the attribute of
-   * {@link Extensions#JSDL_PARAMETERS_EXECUTABLE_ELEMENT} that holds the
-   * path (in {@link Extensions#JSDL_APPLICATION_PARAMETERS_POINT} extension
-   * point)
-   */
-  public static final String JSDL_PARAMETERS_EXECUTABLE_ELEMENT_PATH_ATTRIBUTE = "path"; //$NON-NLS-1$
   
   private static final String PROPERTIES_FACTORY_POINT = "eu.geclipse.ui.propertiesFactory";  //$NON-NLS-1$
   private static final String PROPERTIES_FACTORY_ELEMENT = "PropertiesFactory"; //$NON-NLS-1$
@@ -199,110 +160,6 @@ public class Extensions {
     return filesystems;
   }
 
-  /**
-   * Method to access list of paths to xml files that describe additional
-   * application's parameters for NewJobWizard
-   * 
-   * @return List of paths to xml files containing description of additional
-   *         parameters for applications used in JSDL
-   */
-  static public List<String> getApplicationParametersXML() {
-    List<String> result = new ArrayList<String>();
-    ExtensionManager eManager = new ExtensionManager();
-    for( IConfigurationElement element : eManager.getConfigurationElements( JSDL_APPLICATION_PARAMETERS_POINT,
-                                                                            JSDL_PARAMETERS_SCHEMA_ELEMENT ) )
-    {
-      result.add( element.getAttribute( JSDL_PARAMETERS_SCHEMA_ELEMENT_XML_PATH_ATTRIBUTE ) );
-    }
-    return result;
-  }
-
-  /**
-   * Method to access list of names of application for which additional
-   * parameters are required. Each element of this list is connected with bundle
-   * (by this bundle's id)
-   * 
-   * @return Map with bundles' ids as key and names of applications that require
-   *         additional parameters as values
-   */
-  static public Map<String, String> getApplicationParametersXMLMap() {
-    Map<String, String> result = new HashMap<String, String>();
-    ExtensionManager eManager = new ExtensionManager();
-    for( IConfigurationElement element : eManager.getConfigurationElements( JSDL_APPLICATION_PARAMETERS_POINT,
-                                                                            JSDL_PARAMETERS_APPLICATION_NAME_ELEMENT ) )
-    {
-      String bundleId = element.getDeclaringExtension()
-        .getContributor()
-        .getName();
-      String name = element.getAttribute( JSDL_PARAMETERS_APPLICATION_NAME_ELEMENT_NAME_ATTRIBUTE );
-      result.put( bundleId, name );
-    }
-    return result;
-  }
-
-  /**
-   * Returns path (in file system, not in Eclipse resources way) to xml file
-   * describing contents of additional {@link NewJobWizard} pages, for given
-   * bundle id
-   * 
-   * @param bundleId id of bundle within which xml file is defined
-   * @return path to xml file with description of additional pages for
-   *         {@link NewJobWizard}
-   */
-  static public Path getXMLPath( final String bundleId ) {
-    Path result = null;
-    ExtensionManager eManager = new ExtensionManager();
-    for( IConfigurationElement element : eManager.getConfigurationElements( JSDL_APPLICATION_PARAMETERS_POINT,
-                                                                            JSDL_PARAMETERS_SCHEMA_ELEMENT ) )
-    {
-      if( element.getDeclaringExtension()
-        .getContributor()
-        .getName()
-        .equals( bundleId ) )
-      {
-        try {
-          result = new Path( element.getAttribute( JSDL_PARAMETERS_SCHEMA_ELEMENT_XML_PATH_ATTRIBUTE ) );
-          URL fileURL = FileLocator.find( Platform.getBundle( bundleId ),
-                                          result,
-                                          null );
-          fileURL = FileLocator.toFileURL( fileURL );
-          String temp = fileURL.toString();
-          temp = temp.substring( temp.indexOf( fileURL.getProtocol() )
-                                 + fileURL.getProtocol().length()
-                                 + 1, temp.length() );
-          result = new Path( temp );
-        } catch( IOException ioe ) {
-          // TODO katis log
-        }
-      }
-    }
-    return result;
-  }
-  
-  /**
-   * Get all currently registered extension executable for the JSDL
-   * application parameter extension point.
-   *   
-   * @param bundleId The ID of the bundle for which to get the executables.
-   * @return The JSDL extension executables.
-   */
-  static public String getJSDLExtensionExecutable( final String bundleId ){
-    String result = null;
-    ExtensionManager eManager = new ExtensionManager();
-    for( IConfigurationElement element : eManager.getConfigurationElements( JSDL_APPLICATION_PARAMETERS_POINT,
-                                                                            JSDL_PARAMETERS_EXECUTABLE_ELEMENT ) )
-    {
-      if( element.getDeclaringExtension()
-          .getContributor()
-          .getName()
-          .equals( bundleId ) ){
-        result = element.getAttribute( JSDL_PARAMETERS_EXECUTABLE_ELEMENT_PATH_ATTRIBUTE );
-      }
-      
-    }
-    return result;
-  }
-  
   /**
    * Scan registered plugins and return all {@link IPropertiesFactory}, which support properties for 
    * class <code>sourceObjectClass</code>, or for <code>sourceObjectClass</code> base classes, or for

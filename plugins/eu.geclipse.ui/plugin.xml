@@ -9,7 +9,6 @@
    	schema="schema/eu.geclipse.ui.connection.connectionWizard.exsd"/>
    <extension-point id="newVoWizards" name="eu.geclipse.ui.newVoWizards" schema="schema/newVoWizards.exsd"/>
    <extension-point id="jobSubmissionWizard" name="jobSubmissionWizard" schema="schema/jobSubmissionWizard.exsd"/>
-   <extension-point id="eu.geclipse.ui.jsdlApplicationParameters" name="jsdlApplicationParameters" schema="schema/jsdlApplicationParameters.exsd"/>
    <extension-point id="propertiesFactory" name="propertiesFactory" schema="schema/PropertiesFactory.exsd"/>
    <extension-point id="eu.geclipse.ui.efs" name="EFS UI Contributions" schema="schema/eu.geclipse.ui.efs.exsd"/>
 
@@ -101,20 +100,6 @@
             id="eu.geclipse.ui.newResourceCategory"
             name="%category.name.0"/>
       <wizard
-            canFinishEarly="false"
-            category="eu.geclipse.ui.newResourceCategory"
-            class="eu.geclipse.ui.wizards.jobs.NewJobWizard"
-            finalPerspective="eu.geclipse.ui.gEclipsePerspective"
-            hasPages="true"
-            icon="icons/etool16/newjob_wiz.gif"
-            id="eu.geclipse.ui.wizards.gridJobWizard"
-            name="%wizard.gridJob"
-            preferredPerspectives="eu.geclipse.ui.gEclipsePerspective">
-         <description>
-            %wizard.gridJob.createJobDescription
-         </description>
-      </wizard>
-      <wizard
             canFinishEarly="true"
             category="eu.geclipse.ui.newResourceCategory"
             class="eu.geclipse.ui.wizards.NewGridProjectWizard"
@@ -192,12 +177,6 @@
             class="eu.geclipse.ui.properties.PropertiesFactory"
             id="eu.geclipse.ui.properties.PropertiesFactory"
             sourceObjectClass="java.lang.Object"/>
-   </extension>
-   <extension
-         point="eu.geclipse.ui.jsdlApplicationParameters">
-      <applicationName name="grep"/>
-      <executablePath path="/usr/local/bin/grep"/>
-      <parametersSchema path="xml/page.xml"/>
    </extension>
    <extension
          point="eu.geclipse.ui.efs">

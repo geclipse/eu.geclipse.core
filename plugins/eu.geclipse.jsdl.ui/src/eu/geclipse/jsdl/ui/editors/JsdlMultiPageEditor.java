@@ -530,7 +530,7 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
       BasicDiagnostic diagnostic =
         new BasicDiagnostic
           (Diagnostic.OK,
-           "eu.geclipse.ui", //$NON-NLS-1$
+           Activator.PLUGIN_ID, //$NON-NLS-1$
            0,
            null,
            new Object [] { this.editingDomain.getResourceSet() });
@@ -741,7 +741,7 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
           BasicDiagnostic basicDiagnostic =
             new BasicDiagnostic
               (Diagnostic.ERROR,
-               "eu.geclipse.ui", //$NON-NLS-1$
+               Activator.PLUGIN_ID,
                0,
                Messages.getString("JsdlMultiPageEditor.CreateModelErrorMessage"), 
                new Object [] { exception == null ? (Object)resource : exception });
@@ -753,7 +753,7 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
           return
             new BasicDiagnostic
               (Diagnostic.ERROR,
-               "eu.geclipse.ui", //$NON-NLS-1$
+                  Activator.PLUGIN_ID,
                0,
                Messages.getString("JsdlMultiPageEditor.CreateModelErrorMessage"), 
                new Object[] { exception });

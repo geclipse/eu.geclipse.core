@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
+   <extension-point id="eu.geclipse.jsdl.ui.applicationParameters" name="JSDL Application Parameters" schema="schema/eu.geclipse.jsdl.ui.applicationParameters.exsd"/>
    <extension
          point="org.eclipse.ui.editors">     
  	  <editor
@@ -10,6 +11,50 @@
           icon="icons/jsdlfile.gif"
           id="eu.geclipse.jsdl.ui.JsdlMultiPageEditor"
           name="JSDL Multi-Page Editor"/>      
-   </extension>  
+   </extension>
+   <extension
+         point="eu.geclipse.jsdl.ui.applicationParameters">
+      <applicationName name="grep"/>
+      <executablePath path="/usr/local/bin/grep"/>
+      <parametersSchema path="xml/page.xml"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            canFinishEarly="true"
+            category="eu.geclipse.ui.newResourceCategory"
+            class="eu.geclipse.jsdl.ui.wizards.NewJobWizard"
+            finalPerspective="eu.geclipse.ui.gEclipsePerspective"
+            hasPages="true"
+            icon="icons/etool16/newjob_wiz.gif"
+            id="eu.geclipse.jsdl.ui.newFileWizard"
+            name="%wizard.jsdl"
+            preferredPerspectives="eu.geclipse.ui.gEclipsePerspective">
+         <description>
+            %wizard.jsdl.createJobDescription
+         </description>
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="eu.geclipse.ui.userPerspective">
+         <newWizardShortcut
+               id="eu.geclipse.jsdl.ui.newFileWizard">
+         </newWizardShortcut>
+      </perspectiveExtension>
+      <perspectiveExtension
+            targetID="eu.geclipse.ui.operatorPerspective">
+         <newWizardShortcut
+               id="eu.geclipse.jsdl.ui.newFileWizard">
+         </newWizardShortcut>
+      </perspectiveExtension>
+      <perspectiveExtension
+            targetID="eu.geclipse.ui.developerPerspective">
+         <newWizardShortcut
+               id="eu.geclipse.jsdl.ui.newFileWizard">
+         </newWizardShortcut>
+      </perspectiveExtension>
+   </extension>
 
 </plugin>

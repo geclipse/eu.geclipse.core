@@ -1,3 +1,5 @@
-#Mon Jun 11 15:17:24 CEST 2007
+#Tue Jun 12 15:40:08 CEST 2007
 eclipse.preferences.version=1
+encoding//src/eu/geclipse/jsdl/ui/details/messages.properties=8859_1
 encoding//src/eu/geclipse/jsdl/ui/editors/messages.properties=8859_1
+encoding//src/eu/geclipse/jsdl/ui/internal/dialogs/messages.properties=8859_1
