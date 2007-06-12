@@ -63,6 +63,7 @@ public class GridJobView extends ElementManagerViewPart {
     return new JobViewLabelProvider();
   }
   
+  
   protected boolean createTreeColumns( final Tree tree ) {
     
     super.createTreeColumns( tree );
@@ -77,9 +78,19 @@ public class GridJobView extends ElementManagerViewPart {
     statusColumn.setAlignment( SWT.CENTER );
     statusColumn.setWidth( 100 );
     
+    TreeColumn reasonColumn = new TreeColumn( tree, SWT.NONE );
+    reasonColumn.setText( "Reason" );
+    reasonColumn.setAlignment( SWT.CENTER );
+    reasonColumn.setWidth( 100 );
+    
+    TreeColumn lastUpdateColumn = new TreeColumn( tree, SWT.NONE );
+    lastUpdateColumn.setText( "Last update time" );
+    lastUpdateColumn.setAlignment( SWT.CENTER );
+    lastUpdateColumn.setWidth( 100 );
+    
     return true;
     
-  }
+  }  
 
   /* (non-Javadoc)
    * @see eu.geclipse.ui.views.ElementManagerViewPart#contributeAdditionalActions(eu.geclipse.ui.internal.actions.ActionGroupManager)

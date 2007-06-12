@@ -15,6 +15,7 @@
 
 package eu.geclipse.ui.providers;
 
+import java.text.DateFormat;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridJob;
@@ -30,10 +31,12 @@ import eu.geclipse.ui.views.GridJobView;
 public class JobViewLabelProvider
     extends ElementManagerLabelProvider {
 
+  
   @Override
   protected String getColumnText( final IGridElement element,
                                   final int columnIndex ) {
     String text = ""; //$NON-NLS-1$
+    
     if ( element instanceof IGridJob ) {
       IGridJob job = ( IGridJob ) element;
       switch ( columnIndex ) {
@@ -41,14 +44,31 @@ public class JobViewLabelProvider
           text = job.getID().getJobID();
           break;
         case 3:
+        {
           IGridJobStatus status = job.getJobStatus();
           if ( status != null ) {
             text = status.getName();
           }
           break;
+        }
+        case 4:
+        {
+          IGridJobStatus status = job.getJobStatus();
+          if ( status != null ) {
+            text = status.getReason();
+          }          
+          break;
+        }
+        case 5:        
+          if ( job.getJobStatus() != null
+              && job.getJobStatus().getLastUpdateTime() != null ) {
+            text = DateFormat.getDateTimeInstance().format( job.getJobStatus().getLastUpdateTime() );
+          }          
+          break;        
       }
     }
     return text;
   }
   
+    
 }
