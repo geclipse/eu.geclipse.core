@@ -19,6 +19,8 @@ import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
+
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.impl.AbstractGridContainer;
 
@@ -78,7 +80,15 @@ public abstract class VirtualGridContainer
    * @see eu.geclipse.core.model.IGridElement#getPath()
    */
   public IPath getPath() {
-    return getParent().getPath().append( getName() );
+    IPath path = null;
+    IGridContainer par = getParent();
+    if ( par != null ) {
+      IPath parentPath = par.getPath();
+      if ( parentPath != null ) {
+        path = parentPath.append( getName() );
+      }
+    }
+    return path;
   }
 
   /* (non-Javadoc)
