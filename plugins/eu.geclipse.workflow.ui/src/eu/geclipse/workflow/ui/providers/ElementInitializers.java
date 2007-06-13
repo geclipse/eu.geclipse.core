@@ -15,4 +15,5 @@ import eu.geclipse.workflow.ui.part.WorkflowDiagramEditorPlugin;
  * @generated
  */
 public class ElementInitializers {
+  //
 }

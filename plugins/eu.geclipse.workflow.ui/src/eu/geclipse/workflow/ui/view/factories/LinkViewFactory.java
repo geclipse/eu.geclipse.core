@@ -26,6 +26,7 @@ public class LinkViewFactory extends ConnectionViewFactory {
   /**
    * @generated
    */
+  @Override
   protected List createStyles( View view ) {
     List styles = new ArrayList();
     styles.add( NotationFactory.eINSTANCE.createConnectorStyle() );
@@ -36,6 +37,7 @@ public class LinkViewFactory extends ConnectionViewFactory {
   /**
    * @generated
    */
+  @Override
   protected void decorateView( View containerView,
                                View view,
                                IAdaptable semanticAdapter,

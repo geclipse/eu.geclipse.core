@@ -11,7 +11,6 @@ package eu.geclipse.workflow.ui.part;
 
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
-import org.eclipse.osgi.util.NLS;
 
 /**
  * Returns the localised messages for this plugin

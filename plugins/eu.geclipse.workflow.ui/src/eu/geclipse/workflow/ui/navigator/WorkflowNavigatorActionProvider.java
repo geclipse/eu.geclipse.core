@@ -51,6 +51,7 @@ public class WorkflowNavigatorActionProvider extends CommonActionProvider {
   /**
    * @generated
    */
+  @Override
   public void init( ICommonActionExtensionSite aSite ) {
     super.init( aSite );
     if( aSite.getViewSite() instanceof ICommonViewerWorkbenchSite ) {
@@ -71,6 +72,7 @@ public class WorkflowNavigatorActionProvider extends CommonActionProvider {
   /**
    * @generated
    */
+  @Override
   public void fillActionBars( IActionBars actionBars ) {
     if( !myContribute ) {
       return;
@@ -86,6 +88,7 @@ public class WorkflowNavigatorActionProvider extends CommonActionProvider {
   /**
    * @generated
    */
+  @Override
   public void fillContextMenu( IMenuManager menu ) {
   }
   /**
@@ -136,6 +139,7 @@ public class WorkflowNavigatorActionProvider extends CommonActionProvider {
     /**
      * @generated
      */
+    @Override
     public void run() {
       if( myDiagram == null || myDiagram.eResource() == null ) {
         return;

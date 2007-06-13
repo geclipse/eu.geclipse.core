@@ -73,6 +73,7 @@ public class WorkflowBaseItemSemanticEditPolicy extends SemanticEditPolicy {
    * 
    * @generated
    */
+  @Override
   public Command getCommand( Request request ) {
     if( request instanceof ReconnectRequest ) {
       Object view = ( ( ReconnectRequest )request ).getConnectionEditPart()
@@ -100,6 +101,7 @@ public class WorkflowBaseItemSemanticEditPolicy extends SemanticEditPolicy {
   /**
    * @generated
    */
+  @Override
   protected Command getSemanticCommand( IEditCommandRequest request ) {
     IEditCommandRequest completedRequest = completeRequest( request );
     Object editHelperContext = completedRequest.getEditHelperContext();

@@ -108,6 +108,7 @@ public class WorkflowEditPartProvider extends AbstractEditPartProvider {
   /**
    * @generated
    */
+  @Override
   public synchronized IGraphicalEditPart createGraphicEditPart( View view ) {
     if( isAllowCaching() ) {
       IGraphicalEditPart part = getCachedPart( view );
@@ -123,6 +124,7 @@ public class WorkflowEditPartProvider extends AbstractEditPartProvider {
   /**
    * @generated
    */
+  @Override
   public synchronized boolean provides( IOperation operation ) {
     if( operation instanceof CreateGraphicEditPartOperation ) {
       View view = ( ( IEditPartOperation )operation ).getView();

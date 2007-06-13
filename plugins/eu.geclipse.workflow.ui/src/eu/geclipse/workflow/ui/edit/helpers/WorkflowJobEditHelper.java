@@ -13,4 +13,5 @@ package eu.geclipse.workflow.ui.edit.helpers;
  * @generated
  */
 public class WorkflowJobEditHelper extends WorkflowBaseEditHelper {
+  //
 }

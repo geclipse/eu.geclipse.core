@@ -36,6 +36,7 @@ public class WorkflowTextSelectionEditPolicy extends SelectionEditPolicy {
   /**
    * @generated
    */
+  @Override
   protected void showPrimarySelection() {
     if( getHostFigure() instanceof WrapLabel ) {
       ( ( WrapLabel )getHostFigure() ).setSelected( true );
@@ -49,6 +50,7 @@ public class WorkflowTextSelectionEditPolicy extends SelectionEditPolicy {
   /**
    * @generated
    */
+  @Override
   protected void showSelection() {
     if( getHostFigure() instanceof WrapLabel ) {
       ( ( WrapLabel )getHostFigure() ).setSelected( true );
@@ -64,6 +66,7 @@ public class WorkflowTextSelectionEditPolicy extends SelectionEditPolicy {
   /**
    * @generated
    */
+  @Override
   protected void hideSelection() {
     if( getHostFigure() instanceof WrapLabel ) {
       ( ( WrapLabel )getHostFigure() ).setSelected( false );
@@ -80,6 +83,7 @@ public class WorkflowTextSelectionEditPolicy extends SelectionEditPolicy {
   /**
    * @generated
    */
+  @Override
   protected void showFocus() {
     if( getHostFigure() instanceof WrapLabel ) {
       ( ( WrapLabel )getHostFigure() ).setFocus( true );
@@ -93,6 +97,7 @@ public class WorkflowTextSelectionEditPolicy extends SelectionEditPolicy {
   /**
    * @generated
    */
+  @Override
   protected void hideFocus() {
     if( getHostFigure() instanceof WrapLabel ) {
       ( ( WrapLabel )getHostFigure() ).setFocus( false );
@@ -143,6 +148,7 @@ public class WorkflowTextSelectionEditPolicy extends SelectionEditPolicy {
   protected IFigure createFocusFeedbackFigure() {
     return new Figure() {
 
+      @Override
       protected void paintFigure( Graphics graphics ) {
         graphics.drawFocus( getBounds().getResized( -1, -1 ) );
       }

@@ -56,6 +56,7 @@ public class WorkflowCanonicalEditPolicy extends CanonicalConnectionEditPolicy {
   /**
    * @generated
    */
+  @Override
   protected List getSemanticChildrenList() {
     View viewObject = ( View )getHost().getModel();
     List result = new LinkedList();
@@ -70,6 +71,7 @@ public class WorkflowCanonicalEditPolicy extends CanonicalConnectionEditPolicy {
   /**
    * @generated
    */
+  @Override
   protected boolean shouldDeleteView( View view ) {
     return true;
   }
@@ -77,6 +79,7 @@ public class WorkflowCanonicalEditPolicy extends CanonicalConnectionEditPolicy {
   /**
    * @generated
    */
+  @Override
   protected boolean isOrphaned( Collection semanticChildren, final View view ) {
     int visualID = WorkflowVisualIDRegistry.getVisualID( view );
     switch( visualID ) {
@@ -91,6 +94,7 @@ public class WorkflowCanonicalEditPolicy extends CanonicalConnectionEditPolicy {
   /**
    * @generated
    */
+  @Override
   protected String getDefaultFactoryHint() {
     return null;
   }
@@ -98,6 +102,7 @@ public class WorkflowCanonicalEditPolicy extends CanonicalConnectionEditPolicy {
   /**
    * @generated
    */
+  @Override
   protected Set getFeaturesToSynchronize() {
     if( myFeaturesToSynchronize == null ) {
       myFeaturesToSynchronize = new HashSet();
@@ -109,6 +114,7 @@ public class WorkflowCanonicalEditPolicy extends CanonicalConnectionEditPolicy {
   /**
    * @generated
    */
+  @Override
   protected List getSemanticConnectionsList() {
     return Collections.EMPTY_LIST;
   }
@@ -116,6 +122,7 @@ public class WorkflowCanonicalEditPolicy extends CanonicalConnectionEditPolicy {
   /**
    * @generated
    */
+  @Override
   protected EObject getSourceElement( EObject relationship ) {
     return null;
   }
@@ -123,6 +130,7 @@ public class WorkflowCanonicalEditPolicy extends CanonicalConnectionEditPolicy {
   /**
    * @generated
    */
+  @Override
   protected EObject getTargetElement( EObject relationship ) {
     return null;
   }
@@ -130,6 +138,7 @@ public class WorkflowCanonicalEditPolicy extends CanonicalConnectionEditPolicy {
   /**
    * @generated
    */
+  @Override
   protected boolean shouldIncludeConnection( Edge connector, Collection children )
   {
     return false;
@@ -138,6 +147,7 @@ public class WorkflowCanonicalEditPolicy extends CanonicalConnectionEditPolicy {
   /**
    * @generated
    */
+  @Override
   protected void refreshSemantic() {
     List createdViews = new LinkedList();
     createdViews.addAll( refreshSemanticChildren() );

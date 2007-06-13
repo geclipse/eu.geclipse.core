@@ -72,6 +72,7 @@ public class WorkflowCreationWizardPage extends WizardNewFileCreationPage {
   /**
    * @generated
    */
+  @Override
   public void createControl( Composite parent ) {
     super.createControl( parent );
     setFileName( WorkflowDiagramEditorUtil.getUniqueFileName( getContainerFullPath(),
@@ -83,15 +84,16 @@ public class WorkflowCreationWizardPage extends WizardNewFileCreationPage {
   /**
    * @generated
    */
+  @Override
   protected boolean validatePage() {
     if( !super.validatePage() ) {
       return false;
     }
     String extension = getExtension();
     if( extension != null
-        && !getFilePath().toString().endsWith( "." + extension ) )
+        && !getFilePath().toString().endsWith( "." + extension ) ) //$NON-NLS-1$
     {
-      setErrorMessage( NLS.bind( "File name should have ''{0}'' extension.",
+      setErrorMessage( NLS.bind( "File name should have ''{0}'' extension.", //$NON-NLS-1$
                                  extension ) );
       return false;
     }

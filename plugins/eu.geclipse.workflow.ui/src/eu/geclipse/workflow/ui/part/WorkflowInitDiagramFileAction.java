@@ -75,7 +75,7 @@ public class WorkflowInitDiagramFileAction implements IObjectActionDelegate {
   }
 
   /**
-   * @generated
+   * @generated NOT
    */
   public void run( IAction action ) {
     TransactionalEditingDomain editingDomain = GMFEditingDomainFactory.INSTANCE.createEditingDomain();
@@ -90,14 +90,14 @@ public class WorkflowInitDiagramFileAction implements IObjectActionDelegate {
     }
     if( diagramRoot == null ) {
       MessageDialog.openError( getShell(),
-                               Messages.getString("WorkflowInitDiagramFileAction_InitDiagramFileResourceErrorDialogTitle"),
-                               Messages.getString("WorkflowInitDiagramFileAction_InitDiagramFileResourceErrorDialogMessage") );
+                               Messages.getString("WorkflowInitDiagramFileAction_InitDiagramFileResourceErrorDialogTitle"), //$NON-NLS-1$
+                               Messages.getString("WorkflowInitDiagramFileAction_InitDiagramFileResourceErrorDialogMessage") ); //$NON-NLS-1$
       return;
     }
     Wizard wizard = new WorkflowNewDiagramFileWizard( domainModelURI,
                                                       diagramRoot,
                                                       editingDomain );
-    wizard.setWindowTitle( NLS.bind( Messages.getString("WorkflowInitDiagramFileAction_InitDiagramFileWizardTitle"),
+    wizard.setWindowTitle( NLS.bind( Messages.getString("WorkflowInitDiagramFileAction_InitDiagramFileWizardTitle"), //$NON-NLS-1$
                                      WorkflowEditPart.MODEL_ID ) );
     WorkflowDiagramEditorUtil.runWizard( getShell(), wizard, "InitDiagramFile" ); //$NON-NLS-1$
   }

@@ -22,6 +22,7 @@ public class DiagramPreferenceInitializer extends AbstractPreferenceInitializer
   /**
    * @generated
    */
+  @Override
   public void initializeDefaultPreferences() {
     IPreferenceStore store = getPreferenceStore();
     DiagramPrintingPreferencePage.initDefaults( store );

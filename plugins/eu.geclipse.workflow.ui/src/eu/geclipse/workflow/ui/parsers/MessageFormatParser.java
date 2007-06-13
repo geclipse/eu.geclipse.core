@@ -71,6 +71,7 @@ public class MessageFormatParser extends AbstractParser {
   /**
    * @generated
    */
+  @Override
   public String getViewPattern() {
     String pattern = super.getViewPattern();
     return pattern != null
@@ -81,6 +82,7 @@ public class MessageFormatParser extends AbstractParser {
   /**
    * @generated
    */
+  @Override
   public void setViewPattern( String viewPattern ) {
     super.setViewPattern( viewPattern );
     viewProcessor = null;
@@ -106,6 +108,7 @@ public class MessageFormatParser extends AbstractParser {
   /**
    * @generated
    */
+  @Override
   public String getEditorPattern() {
     String pattern = super.getEditorPattern();
     return pattern != null
@@ -116,6 +119,7 @@ public class MessageFormatParser extends AbstractParser {
   /**
    * @generated
    */
+  @Override
   public void setEditorPattern( String editorPattern ) {
     super.setEditorPattern( editorPattern );
     editorProcessor = null;
@@ -141,6 +145,7 @@ public class MessageFormatParser extends AbstractParser {
   /**
    * @generated
    */
+  @Override
   public String getEditPattern() {
     String pattern = super.getEditPattern();
     return pattern != null
@@ -151,6 +156,7 @@ public class MessageFormatParser extends AbstractParser {
   /**
    * @generated
    */
+  @Override
   public void setEditPattern( String editPattern ) {
     super.setEditPattern( editPattern );
     editProcessor = null;

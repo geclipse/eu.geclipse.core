@@ -29,6 +29,7 @@ public class WorkflowItemSemanticEditPolicy
   /**
    * @generated
    */
+  @Override
   protected Command getCreateCommand( CreateElementRequest req ) {
     if( WorkflowElementTypes.IWorkflowJob_1001 == req.getElementType() ) {
       if( req.getContainmentFeature() == null ) {
@@ -42,6 +43,7 @@ public class WorkflowItemSemanticEditPolicy
   /**
    * @generated
    */
+  @Override
   protected Command getDuplicateCommand( DuplicateElementsRequest req ) {
     TransactionalEditingDomain editingDomain = ( ( IGraphicalEditPart )getHost() ).getEditingDomain();
     return getGEFWrapper( new DuplicateAnythingCommand( editingDomain, req ) );

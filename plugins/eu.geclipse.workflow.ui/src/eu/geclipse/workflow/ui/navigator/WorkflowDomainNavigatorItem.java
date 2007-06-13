@@ -102,6 +102,7 @@ public class WorkflowDomainNavigatorItem extends PlatformObject {
   /**
    * @generated
    */
+  @Override
   public boolean equals( Object obj ) {
     if( obj instanceof eu.geclipse.workflow.ui.navigator.WorkflowDomainNavigatorItem )
     {
@@ -114,6 +115,7 @@ public class WorkflowDomainNavigatorItem extends PlatformObject {
   /**
    * @generated
    */
+  @Override
   public int hashCode() {
     return EcoreUtil.getURI( getEObject() ).hashCode();
   }

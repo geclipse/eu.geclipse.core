@@ -90,7 +90,7 @@ public class WorkflowCreationWizard extends Wizard implements INewWizard {
   public void init( IWorkbench workbench, IStructuredSelection selection ) {
     this.workbench = workbench;
     this.selection = selection;
-    setWindowTitle( "New Workflow Diagram" );
+    setWindowTitle( "New Workflow Diagram" ); //$NON-NLS-1$
     setDefaultPageImageDescriptor( WorkflowDiagramEditorPlugin.getBundledImageDescriptor( "icons/wizban/NewWorkflowWizard.gif" ) ); //$NON-NLS-1$
     setNeedsProgressMonitor( true );
   }
@@ -100,8 +100,8 @@ public class WorkflowCreationWizard extends Wizard implements INewWizard {
    */
   public void addPages() {
     diagramModelFilePage = new WorkflowCreationWizardPage( "DiagramModelFile", getSelection(), "workflow" ); //$NON-NLS-1$ //$NON-NLS-2$
-    diagramModelFilePage.setTitle( "Create Workflow Diagram" );
-    diagramModelFilePage.setDescription( "Select file that will contain diagram and domain models." );
+    diagramModelFilePage.setTitle( "Create Workflow Diagram" ); //$NON-NLS-1$
+    diagramModelFilePage.setDescription( "Select file that will contain diagram and domain models." ); //$NON-NLS-1$
     addPage( diagramModelFilePage );
   }
 
@@ -121,7 +121,7 @@ public class WorkflowCreationWizard extends Wizard implements INewWizard {
             WorkflowDiagramEditorUtil.openDiagram( diagram );
           } catch( PartInitException e ) {
             ErrorDialog.openError( getContainer().getShell(),
-                                   "Error opening diagram editor",
+                                   "Error opening diagram editor", //$NON-NLS-1$
                                    null,
                                    e.getStatus() );
           }
@@ -135,7 +135,7 @@ public class WorkflowCreationWizard extends Wizard implements INewWizard {
     } catch( InvocationTargetException e ) {
       if( e.getTargetException() instanceof CoreException ) {
         ErrorDialog.openError( getContainer().getShell(),
-                               "Creation Problems",
+                               "Creation Problems", //$NON-NLS-1$
                                null,
                                ( ( CoreException )e.getTargetException() ).getStatus() );
       } else {

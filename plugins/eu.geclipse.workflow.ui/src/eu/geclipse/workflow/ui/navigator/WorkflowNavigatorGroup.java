@@ -84,6 +84,7 @@ public class WorkflowNavigatorGroup extends WorkflowAbstractNavigatorItem {
   /**
    * @generated
    */
+  @Override
   public boolean equals( Object obj ) {
     if( obj instanceof eu.geclipse.workflow.ui.navigator.WorkflowNavigatorGroup )
     {
@@ -98,6 +99,7 @@ public class WorkflowNavigatorGroup extends WorkflowAbstractNavigatorItem {
   /**
    * @generated
    */
+  @Override
   public int hashCode() {
     return getGroupName().hashCode();
   }

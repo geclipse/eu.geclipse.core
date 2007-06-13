@@ -39,6 +39,7 @@ public class LinkEditPart extends ConnectionNodeEditPart {
   /**
    * @generated
    */
+  @Override
   protected void createDefaultEditPolicies() {
     super.createDefaultEditPolicies();
     installEditPolicy( EditPolicyRoles.SEMANTIC_ROLE,
@@ -53,6 +54,7 @@ public class LinkEditPart extends ConnectionNodeEditPart {
    * 
    * @generated
    */
+  @Override
   protected Connection createConnectionFigure() {
     return new LinkFigure();
   }

@@ -47,8 +47,7 @@ public abstract class WorkflowAbstractNavigatorItem extends PlatformObject {
       public Class[] getAdapterList() {
         return supportedTypes;
       }
-    },
-                                                   eu.geclipse.workflow.ui.navigator.WorkflowAbstractNavigatorItem.class );
+    }, eu.geclipse.workflow.ui.navigator.WorkflowAbstractNavigatorItem.class );
   }
   /**
    * @generated

@@ -58,6 +58,7 @@ public class WorkflowPropertySection extends AdvancedPropertySection
   /**
    * @generated
    */
+  @Override
   protected IPropertySourceProvider getPropertySourceProvider() {
     return this;
   }
@@ -88,6 +89,7 @@ public class WorkflowPropertySection extends AdvancedPropertySection
   /**
    * @generated
    */
+  @Override
   public void setInput( IWorkbenchPart part, ISelection selection ) {
     if( selection.isEmpty()
         || false == selection instanceof StructuredSelection )

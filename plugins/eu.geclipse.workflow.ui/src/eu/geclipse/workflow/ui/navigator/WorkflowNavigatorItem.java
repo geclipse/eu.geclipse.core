@@ -79,6 +79,7 @@ public class WorkflowNavigatorItem extends WorkflowAbstractNavigatorItem {
   /**
    * @generated
    */
+  @Override
   public boolean equals( Object obj ) {
     if( obj instanceof eu.geclipse.workflow.ui.navigator.WorkflowNavigatorItem )
     {
@@ -91,6 +92,7 @@ public class WorkflowNavigatorItem extends WorkflowAbstractNavigatorItem {
   /**
    * @generated
    */
+  @Override
   public int hashCode() {
     return EcoreUtil.getURI( getView() ).hashCode();
   }

@@ -57,7 +57,7 @@ public class WorkflowNewDiagramFileWizard extends Wizard {
   private TransactionalEditingDomain myEditingDomain;
 
   /**
-   * @generated
+   * @generated NOT
    */
   public WorkflowNewDiagramFileWizard( URI domainModelURI,
                                        EObject diagramRoot,
@@ -66,10 +66,10 @@ public class WorkflowNewDiagramFileWizard extends Wizard {
     assert domainModelURI != null : "Domain model uri must be specified"; //$NON-NLS-1$
     assert diagramRoot != null : "Doagram root element must be specified"; //$NON-NLS-1$
     assert editingDomain != null : "Editing domain must be specified"; //$NON-NLS-1$
-    myFileCreationPage = new WizardNewFileCreationPage( Messages.getString("WorkflowNewDiagramFileWizard_CreationPageName"),
+    myFileCreationPage = new WizardNewFileCreationPage( Messages.getString("WorkflowNewDiagramFileWizard_CreationPageName"), //$NON-NLS-1$
                                                         StructuredSelection.EMPTY );
-    myFileCreationPage.setTitle( Messages.getString("WorkflowNewDiagramFileWizard_CreationPageTitle") );
-    myFileCreationPage.setDescription( NLS.bind( Messages.getString("WorkflowNewDiagramFileWizard_CreationPageDescription"),
+    myFileCreationPage.setTitle( Messages.getString("WorkflowNewDiagramFileWizard_CreationPageTitle") ); //$NON-NLS-1$
+    myFileCreationPage.setDescription( NLS.bind( Messages.getString("WorkflowNewDiagramFileWizard_CreationPageDescription"), //$NON-NLS-1$
                                                  WorkflowEditPart.MODEL_ID ) );
     IPath filePath;
     String fileName = domainModelURI.trimFileExtension().lastSegment();
@@ -86,9 +86,9 @@ public class WorkflowNewDiagramFileWizard extends Wizard {
     myFileCreationPage.setFileName( WorkflowDiagramEditorUtil.getUniqueFileName( filePath,
                                                                                  fileName,
                                                                                  "workflow" ) ); //$NON-NLS-1$
-    diagramRootElementSelectionPage = new DiagramRootElementSelectionPage( Messages.getString("WorkflowNewDiagramFileWizard_RootSelectionPageName") );
-    diagramRootElementSelectionPage.setTitle( Messages.getString("WorkflowNewDiagramFileWizard_RootSelectionPageTitle") );
-    diagramRootElementSelectionPage.setDescription( Messages.getString("WorkflowNewDiagramFileWizard_RootSelectionPageDescription") );
+    diagramRootElementSelectionPage = new DiagramRootElementSelectionPage( Messages.getString("WorkflowNewDiagramFileWizard_RootSelectionPageName") ); //$NON-NLS-1$
+    diagramRootElementSelectionPage.setTitle( Messages.getString("WorkflowNewDiagramFileWizard_RootSelectionPageTitle") ); //$NON-NLS-1$
+    diagramRootElementSelectionPage.setDescription( Messages.getString("WorkflowNewDiagramFileWizard_RootSelectionPageDescription") ); //$NON-NLS-1$
     diagramRootElementSelectionPage.setModelElement( diagramRoot );
     myEditingDomain = editingDomain;
   }
@@ -102,7 +102,7 @@ public class WorkflowNewDiagramFileWizard extends Wizard {
   }
 
   /**
-   * @generated
+   * @generated NOT
    */
   public boolean performFinish() {
     List affectedFiles = new LinkedList();
@@ -115,7 +115,7 @@ public class WorkflowNewDiagramFileWizard extends Wizard {
     ResourceSet resourceSet = myEditingDomain.getResourceSet();
     final Resource diagramResource = resourceSet.createResource( diagramModelURI );
     AbstractTransactionalCommand command = new AbstractTransactionalCommand( myEditingDomain,
-                                                                             Messages.getString("WorkflowNewDiagramFileWizard_InitDiagramCommand"),
+                                                                             Messages.getString("WorkflowNewDiagramFileWizard_InitDiagramCommand"), //$NON-NLS-1$
                                                                              affectedFiles )
     {
 
@@ -125,7 +125,7 @@ public class WorkflowNewDiagramFileWizard extends Wizard {
       {
         int diagramVID = WorkflowVisualIDRegistry.getDiagramVisualID( diagramRootElementSelectionPage.getModelElement() );
         if( diagramVID != WorkflowEditPart.VISUAL_ID ) {
-          return CommandResult.newErrorCommandResult( Messages.getString("WorkflowNewDiagramFileWizard_IncorrectRootError") );
+          return CommandResult.newErrorCommandResult( Messages.getString("WorkflowNewDiagramFileWizard_IncorrectRootError") ); //$NON-NLS-1$
         }
         Diagram diagram = ViewService.createDiagram( diagramRootElementSelectionPage.getModelElement(),
                                                      WorkflowEditPart.MODEL_ID,
@@ -167,18 +167,18 @@ public class WorkflowNewDiagramFileWizard extends Wizard {
     }
 
     /**
-     * @generated
+     * @generated NOT
      */
     protected String getSelectionTitle() {
-      return Messages.getString("WorkflowNewDiagramFileWizard_RootSelectionPageSelectionTitle");
+      return Messages.getString("WorkflowNewDiagramFileWizard_RootSelectionPageSelectionTitle"); //$NON-NLS-1$
     }
 
     /**
-     * @generated
+     * @generated NOT
      */
     protected boolean validatePage() {
       if( selectedModelElement == null ) {
-        setErrorMessage( Messages.getString("WorkflowNewDiagramFileWizard_RootSelectionPageNoSelectionMessage") );
+        setErrorMessage( Messages.getString("WorkflowNewDiagramFileWizard_RootSelectionPageNoSelectionMessage") ); //$NON-NLS-1$
         return false;
       }
       boolean result = ViewService.getInstance()
@@ -187,7 +187,7 @@ public class WorkflowNewDiagramFileWizard extends Wizard {
                                                    WorkflowDiagramEditorPlugin.DIAGRAM_PREFERENCES_HINT ) );
       setErrorMessage( result
                              ? null
-                             : Messages.getString("WorkflowNewDiagramFileWizard_RootSelectionPageInvalidSelectionMessage") );
+                             : Messages.getString("WorkflowNewDiagramFileWizard_RootSelectionPageInvalidSelectionMessage") ); //$NON-NLS-1$
       return result;
     }
   }

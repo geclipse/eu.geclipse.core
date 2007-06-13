@@ -30,6 +30,7 @@ public class OutputPortItemSemanticEditPolicy
   /**
    * @generated
    */
+  @Override
   protected Command getDestroyElementCommand( DestroyElementRequest req ) {
     CompoundCommand cc = getDestroyEdgesCommand();
     addDestroyShortcutsCommand( cc );
@@ -40,6 +41,7 @@ public class OutputPortItemSemanticEditPolicy
   /**
    * @generated
    */
+  @Override
   protected Command getCreateRelationshipCommand( CreateRelationshipRequest req )
   {
     Command command = req.getTarget() == null
@@ -80,6 +82,7 @@ public class OutputPortItemSemanticEditPolicy
    * 
    * @generated
    */
+  @Override
   protected Command getReorientRelationshipCommand( ReorientRelationshipRequest req )
   {
     switch( getVisualID( req ) ) {

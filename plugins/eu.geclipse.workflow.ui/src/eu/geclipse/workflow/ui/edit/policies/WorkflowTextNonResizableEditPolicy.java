@@ -43,6 +43,7 @@ public class WorkflowTextNonResizableEditPolicy
   /**
    * @generated
    */
+  @Override
   protected void showPrimarySelection() {
     if( getHostFigure() instanceof WrapLabel ) {
       ( ( WrapLabel )getHostFigure() ).setSelected( true );
@@ -56,6 +57,7 @@ public class WorkflowTextNonResizableEditPolicy
   /**
    * @generated
    */
+  @Override
   protected void showSelection() {
     if( getHostFigure() instanceof WrapLabel ) {
       ( ( WrapLabel )getHostFigure() ).setSelected( true );
@@ -71,6 +73,7 @@ public class WorkflowTextNonResizableEditPolicy
   /**
    * @generated
    */
+  @Override
   protected void hideSelection() {
     if( getHostFigure() instanceof WrapLabel ) {
       ( ( WrapLabel )getHostFigure() ).setSelected( false );
@@ -87,6 +90,7 @@ public class WorkflowTextNonResizableEditPolicy
   /**
    * @generated
    */
+  @Override
   protected void showFocus() {
     if( getHostFigure() instanceof WrapLabel ) {
       ( ( WrapLabel )getHostFigure() ).setFocus( true );
@@ -100,6 +104,7 @@ public class WorkflowTextNonResizableEditPolicy
   /**
    * @generated
    */
+  @Override
   protected void hideFocus() {
     if( getHostFigure() instanceof WrapLabel ) {
       ( ( WrapLabel )getHostFigure() ).setFocus( false );
@@ -150,6 +155,7 @@ public class WorkflowTextNonResizableEditPolicy
   protected IFigure createFocusFeedbackFigure() {
     return new Figure() {
 
+      @Override
       protected void paintFigure( Graphics graphics ) {
         graphics.drawFocus( getBounds().getResized( -1, -1 ) );
       }
@@ -200,6 +206,7 @@ public class WorkflowTextNonResizableEditPolicy
   /**
    * @generated
    */
+  @Override
   protected List createSelectionHandles() {
     MoveHandle moveHandle = new MoveHandle( ( GraphicalEditPart )getHost() );
     moveHandle.setBorder( null );

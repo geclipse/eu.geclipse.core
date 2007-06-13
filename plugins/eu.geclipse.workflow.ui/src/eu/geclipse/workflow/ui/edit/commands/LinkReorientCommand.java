@@ -53,6 +53,7 @@ public class LinkReorientCommand extends EditElementCommand {
   /**
    * @generated
    */
+  @Override
   public boolean canExecute() {
     if( !( getElementToEdit() instanceof ILink ) ) {
       return false;
@@ -103,6 +104,7 @@ public class LinkReorientCommand extends EditElementCommand {
   /**
    * @generated
    */
+  @Override
   protected CommandResult doExecuteWithResult( IProgressMonitor monitor,
                                                IAdaptable info )
     throws ExecutionException

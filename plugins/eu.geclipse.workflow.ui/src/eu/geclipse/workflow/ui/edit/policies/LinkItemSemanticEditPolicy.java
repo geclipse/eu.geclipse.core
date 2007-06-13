@@ -23,6 +23,7 @@ public class LinkItemSemanticEditPolicy
   /**
    * @generated
    */
+  @Override
   protected Command getDestroyElementCommand( DestroyElementRequest req ) {
     return getGEFWrapper( new DestroyElementCommand( req ) );
   }

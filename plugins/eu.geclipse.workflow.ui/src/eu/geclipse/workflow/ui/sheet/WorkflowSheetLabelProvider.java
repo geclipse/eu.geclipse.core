@@ -36,6 +36,7 @@ public class WorkflowSheetLabelProvider extends DecoratingLabelProvider {
   /**
    * @generated
    */
+  @Override
   public String getText( Object element ) {
     Object selected = unwrap( element );
     if( selected instanceof WorkflowNavigatorGroup ) {
@@ -47,6 +48,7 @@ public class WorkflowSheetLabelProvider extends DecoratingLabelProvider {
   /**
    * @generated
    */
+  @Override
   public Image getImage( Object element ) {
     return super.getImage( unwrap( element ) );
   }

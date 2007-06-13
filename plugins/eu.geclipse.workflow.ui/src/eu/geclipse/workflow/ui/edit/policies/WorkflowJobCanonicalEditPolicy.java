@@ -37,6 +37,7 @@ public class WorkflowJobCanonicalEditPolicy extends CanonicalEditPolicy {
   /**
    * @generated
    */
+  @Override
   protected List getSemanticChildrenList() {
     View viewObject = ( View )getHost().getModel();
     List result = new LinkedList();
@@ -51,6 +52,7 @@ public class WorkflowJobCanonicalEditPolicy extends CanonicalEditPolicy {
   /**
    * @generated
    */
+  @Override
   protected boolean isOrphaned( Collection semanticChildren, final View view ) {
     int visualID = WorkflowVisualIDRegistry.getVisualID( view );
     switch( visualID ) {
@@ -66,6 +68,7 @@ public class WorkflowJobCanonicalEditPolicy extends CanonicalEditPolicy {
   /**
    * @generated
    */
+  @Override
   protected String getDefaultFactoryHint() {
     return null;
   }
@@ -73,6 +76,7 @@ public class WorkflowJobCanonicalEditPolicy extends CanonicalEditPolicy {
   /**
    * @generated
    */
+  @Override
   protected Set getFeaturesToSynchronize() {
     if( myFeaturesToSynchronize == null ) {
       myFeaturesToSynchronize = new HashSet();

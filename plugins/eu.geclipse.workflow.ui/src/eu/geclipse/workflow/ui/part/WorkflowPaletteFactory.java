@@ -34,11 +34,11 @@ public class WorkflowPaletteFactory {
 
   /**
    * Creates "Workflow" palette tool group
-   * @generated
+   * @generated NOT
    */
   private PaletteContainer createWorkflowGroup() {
-    PaletteGroup paletteContainer = new PaletteGroup( Messages.getString("WorkflowGroup_title") );
-    paletteContainer.setDescription( Messages.getString("WorkflowGroup_desc") );
+    PaletteGroup paletteContainer = new PaletteGroup( Messages.getString("WorkflowGroup_title") ); //$NON-NLS-1$
+    paletteContainer.setDescription( Messages.getString("WorkflowGroup_desc") ); //$NON-NLS-1$
     paletteContainer.add( createLinkCreationTool() );
     paletteContainer.add( createInputPortCreationTool() );
     paletteContainer.add( createOutputPortCreationTool() );
@@ -47,13 +47,13 @@ public class WorkflowPaletteFactory {
   }
 
   /**
-   * @generated
+   * @generated NOT
    */
   private ToolEntry createLinkCreationTool() {
     List/*<IElementType>*/types = new ArrayList/*<IElementType>*/( 1 );
     types.add( WorkflowElementTypes.ILink_3001 );
-    LinkToolEntry entry = new LinkToolEntry( Messages.getString("LinkCreationTool_title"),
-                                             Messages.getString("LinkCreationTool_desc"),
+    LinkToolEntry entry = new LinkToolEntry( Messages.getString("LinkCreationTool_title"), //$NON-NLS-1$
+                                             Messages.getString("LinkCreationTool_desc"), //$NON-NLS-1$
                                              types );
     entry.setSmallIcon( WorkflowDiagramEditorPlugin.findImageDescriptor( "/eu.geclipse.workflow.edit/icons/full/obj16/Link.gif" ) ); //$NON-NLS-1$
     entry.setLargeIcon( entry.getSmallIcon() );
@@ -61,13 +61,13 @@ public class WorkflowPaletteFactory {
   }
 
   /**
-   * @generated
+   * @generated NOT
    */
   private ToolEntry createInputPortCreationTool() {
     List/*<IElementType>*/types = new ArrayList/*<IElementType>*/( 1 );
     types.add( WorkflowElementTypes.IInputPort_2002 );
     NodeToolEntry entry = new NodeToolEntry( Messages.getString("InputPortCreationTool_title"), //$NON-NLS-1$
-                                             Messages.getString("InputPortCreationTool_desc"),
+                                             Messages.getString("InputPortCreationTool_desc"), //$NON-NLS-1$
                                              types );
     entry.setSmallIcon( WorkflowDiagramEditorPlugin.findImageDescriptor( "/eu.geclipse.workflow.edit/icons/full/obj16/InputPort.gif" ) ); //$NON-NLS-1$
     entry.setLargeIcon( entry.getSmallIcon() );
@@ -75,13 +75,13 @@ public class WorkflowPaletteFactory {
   }
 
   /**
-   * @generated
+   * @generated NOT
    */
   private ToolEntry createOutputPortCreationTool() {
     List/*<IElementType>*/types = new ArrayList/*<IElementType>*/( 1 );
     types.add( WorkflowElementTypes.IOutputPort_2001 );
-    NodeToolEntry entry = new NodeToolEntry( Messages.getString("OutputPortCreationTool_title"),
-                                             Messages.getString("OutputPortCreationTool_desc"),
+    NodeToolEntry entry = new NodeToolEntry( Messages.getString("OutputPortCreationTool_title"), //$NON-NLS-1$
+                                             Messages.getString("OutputPortCreationTool_desc"), //$NON-NLS-1$
                                              types );
     entry.setSmallIcon( WorkflowDiagramEditorPlugin.findImageDescriptor( "/eu.geclipse.workflow.edit/icons/full/obj16/OutputPort.gif" ) ); //$NON-NLS-1$
     entry.setLargeIcon( entry.getSmallIcon() );
@@ -89,13 +89,13 @@ public class WorkflowPaletteFactory {
   }
 
   /**
-   * @generated
+   * @generated NOT
    */
   private ToolEntry createWorkflowJobCreationTool() {
     List/*<IElementType>*/types = new ArrayList/*<IElementType>*/( 1 );
     types.add( WorkflowElementTypes.IWorkflowJob_1001 );
-    NodeToolEntry entry = new NodeToolEntry( Messages.getString("WorkflowJobCreationTool_title"),
-                                             Messages.getString("WorkflowJobCreationTool_desc"),
+    NodeToolEntry entry = new NodeToolEntry( Messages.getString("WorkflowJobCreationTool_title"), //$NON-NLS-1$
+                                             Messages.getString("WorkflowJobCreationTool_desc"), //$NON-NLS-1$
                                              types );
     entry.setSmallIcon( WorkflowDiagramEditorPlugin.findImageDescriptor( "/eu.geclipse.workflow.edit/icons/full/obj16/WorkflowJob.gif" ) ); //$NON-NLS-1$
     entry.setLargeIcon( entry.getSmallIcon() );

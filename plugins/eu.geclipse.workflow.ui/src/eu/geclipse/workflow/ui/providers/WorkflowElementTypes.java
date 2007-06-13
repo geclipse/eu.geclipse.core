@@ -35,6 +35,7 @@ public class WorkflowElementTypes extends ElementInitializers {
    * @generated
    */
   private WorkflowElementTypes() {
+    //
   }
   /**
    * @generated

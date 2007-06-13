@@ -51,15 +51,15 @@ public class WorkflowNavigatorLabelProvider extends LabelProvider
   static {
     WorkflowDiagramEditorPlugin.getInstance()
       .getImageRegistry()
-      .put( "Navigator?InvalidElement",
+      .put( "Navigator?InvalidElement", //$NON-NLS-1$
             ImageDescriptor.getMissingImageDescriptor() );
     WorkflowDiagramEditorPlugin.getInstance()
       .getImageRegistry()
-      .put( "Navigator?UnknownElement",
+      .put( "Navigator?UnknownElement", //$NON-NLS-1$
             ImageDescriptor.getMissingImageDescriptor() );
     WorkflowDiagramEditorPlugin.getInstance()
       .getImageRegistry()
-      .put( "Navigator?ImageNotFound",
+      .put( "Navigator?ImageNotFound", //$NON-NLS-1$
             ImageDescriptor.getMissingImageDescriptor() );
   }
 
@@ -80,6 +80,7 @@ public class WorkflowNavigatorLabelProvider extends LabelProvider
   /**
    * @generated
    */
+  @Override
   public Image getImage( Object element ) {
     if( element instanceof WorkflowNavigatorGroup ) {
       WorkflowNavigatorGroup group = ( WorkflowNavigatorGroup )element;
@@ -102,22 +103,22 @@ public class WorkflowNavigatorLabelProvider extends LabelProvider
   public Image getImage( View view ) {
     switch( WorkflowVisualIDRegistry.getVisualID( view ) ) {
       case WorkflowJobEditPart.VISUAL_ID:
-        return getImage( "Navigator?TopLevelNode?http:///eu/geclipse/workflow.ecore?IWorkflowJob",
+        return getImage( "Navigator?TopLevelNode?http:///eu/geclipse/workflow.ecore?IWorkflowJob", //$NON-NLS-1$
                          WorkflowElementTypes.IWorkflowJob_1001 );
       case OutputPortEditPart.VISUAL_ID:
-        return getImage( "Navigator?Node?http:///eu/geclipse/workflow.ecore?IOutputPort",
+        return getImage( "Navigator?Node?http:///eu/geclipse/workflow.ecore?IOutputPort", //$NON-NLS-1$
                          WorkflowElementTypes.IOutputPort_2001 );
       case InputPortEditPart.VISUAL_ID:
-        return getImage( "Navigator?Node?http:///eu/geclipse/workflow.ecore?IInputPort",
+        return getImage( "Navigator?Node?http:///eu/geclipse/workflow.ecore?IInputPort", //$NON-NLS-1$
                          WorkflowElementTypes.IInputPort_2002 );
       case WorkflowEditPart.VISUAL_ID:
-        return getImage( "Navigator?Diagram?http:///eu/geclipse/workflow.ecore?IWorkflow",
+        return getImage( "Navigator?Diagram?http:///eu/geclipse/workflow.ecore?IWorkflow", //$NON-NLS-1$
                          WorkflowElementTypes.IWorkflow_79 );
       case LinkEditPart.VISUAL_ID:
-        return getImage( "Navigator?Link?http:///eu/geclipse/workflow.ecore?ILink",
+        return getImage( "Navigator?Link?http:///eu/geclipse/workflow.ecore?ILink", //$NON-NLS-1$
                          WorkflowElementTypes.ILink_3001 );
       default:
-        return getImage( "Navigator?UnknownElement", null );
+        return getImage( "Navigator?UnknownElement", null ); //$NON-NLS-1$
     }
   }
 
@@ -136,7 +137,7 @@ public class WorkflowNavigatorLabelProvider extends LabelProvider
       imageRegistry.put( key, image );
     }
     if( image == null ) {
-      image = imageRegistry.get( "Navigator?ImageNotFound" );
+      image = imageRegistry.get( "Navigator?ImageNotFound" ); //$NON-NLS-1$
       imageRegistry.put( key, image );
     }
     return image;
@@ -145,6 +146,7 @@ public class WorkflowNavigatorLabelProvider extends LabelProvider
   /**
    * @generated
    */
+  @Override
   public String getText( Object element ) {
     if( element instanceof WorkflowNavigatorGroup ) {
       WorkflowNavigatorGroup group = ( WorkflowNavigatorGroup )element;
@@ -197,8 +199,8 @@ public class WorkflowNavigatorLabelProvider extends LabelProvider
       return parser.getPrintString( hintAdapter, ParserOptions.NONE.intValue() );
     } else {
       WorkflowDiagramEditorPlugin.getInstance()
-        .logError( "Parser was not found for label " + 4001 );
-      return "";
+        .logError( "Parser was not found for label " + 4001 ); //$NON-NLS-1$
+      return ""; //$NON-NLS-1$
     }
   }
 
@@ -211,8 +213,8 @@ public class WorkflowNavigatorLabelProvider extends LabelProvider
       return ( ( IWorkflowElement )domainModelElement ).getName();
     } else {
       WorkflowDiagramEditorPlugin.getInstance()
-        .logError( "No domain element for view with visualID = " + 2001 );
-      return "";
+        .logError( "No domain element for view with visualID = " + 2001 ); //$NON-NLS-1$
+      return ""; //$NON-NLS-1$
     }
   }
 
@@ -225,8 +227,8 @@ public class WorkflowNavigatorLabelProvider extends LabelProvider
       return ( ( IWorkflowElement )domainModelElement ).getName();
     } else {
       WorkflowDiagramEditorPlugin.getInstance()
-        .logError( "No domain element for view with visualID = " + 2002 );
-      return "";
+        .logError( "No domain element for view with visualID = " + 2002 ); //$NON-NLS-1$
+      return ""; //$NON-NLS-1$
     }
   }
 
@@ -239,8 +241,8 @@ public class WorkflowNavigatorLabelProvider extends LabelProvider
       return ( ( IWorkflowElement )domainModelElement ).getName();
     } else {
       WorkflowDiagramEditorPlugin.getInstance()
-        .logError( "No domain element for view with visualID = " + 79 );
-      return "";
+        .logError( "No domain element for view with visualID = " + 79 ); //$NON-NLS-1$
+      return ""; //$NON-NLS-1$
     }
   }
 
@@ -253,8 +255,8 @@ public class WorkflowNavigatorLabelProvider extends LabelProvider
       return ( ( IWorkflowElement )domainModelElement ).getName();
     } else {
       WorkflowDiagramEditorPlugin.getInstance()
-        .logError( "No domain element for view with visualID = " + 3001 );
-      return "";
+        .logError( "No domain element for view with visualID = " + 3001 ); //$NON-NLS-1$
+      return ""; //$NON-NLS-1$
     }
   }
 
@@ -262,14 +264,14 @@ public class WorkflowNavigatorLabelProvider extends LabelProvider
    * @generated
    */
   private String getUnknownElementText( View view ) {
-    return "<UnknownElement Visual_ID = " + view.getType() + ">";
+    return "<UnknownElement Visual_ID = " + view.getType() + ">"; //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   /**
    * @generated
    */
   private String getUnresolvedDomainElementProxyText( View view ) {
-    return "<Unresolved domain element Visual_ID = " + view.getType() + ">";
+    return "<Unresolved domain element Visual_ID = " + view.getType() + ">"; //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   /**

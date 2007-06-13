@@ -69,8 +69,9 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
 {
 
   /**
-   * @generated
+   * @generated NOT
    */
+  @Override
   protected ElementInfo createElementInfo( Object element )
     throws CoreException
   {
@@ -80,7 +81,7 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
       throw new CoreException( new Status( IStatus.ERROR,
                                            WorkflowDiagramEditorPlugin.ID,
                                            0,
-                                           NLS.bind( Messages.getString("WorkflowDocumentProvider_IncorrectInputError"),
+                                           NLS.bind( Messages.getString("WorkflowDocumentProvider_IncorrectInputError"), //$NON-NLS-1$
                                                      new Object[]{
                                                        element,
                                                        "org.eclipse.ui.part.FileEditorInput", "org.eclipse.emf.common.ui.URIEditorInput"} ), //$NON-NLS-1$ //$NON-NLS-2$ 
@@ -95,8 +96,9 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
   }
 
   /**
-   * @generated
+   * @generated NOT
    */
+  @Override
   protected IDocument createDocument( Object element ) throws CoreException {
     if( false == element instanceof FileEditorInput
         && false == element instanceof URIEditorInput )
@@ -104,7 +106,7 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
       throw new CoreException( new Status( IStatus.ERROR,
                                            WorkflowDiagramEditorPlugin.ID,
                                            0,
-                                           NLS.bind( Messages.getString("WorkflowDocumentProvider_IncorrectInputError"),
+                                           NLS.bind( Messages.getString("WorkflowDocumentProvider_IncorrectInputError"), //$NON-NLS-1$
                                                      new Object[]{
                                                        element,
                                                        "org.eclipse.ui.part.FileEditorInput", "org.eclipse.emf.common.ui.URIEditorInput"} ), //$NON-NLS-1$ //$NON-NLS-2$ 
@@ -152,6 +154,7 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
   /**
    * @generated
    */
+  @Override
   protected IDocument createEmptyDocument() {
     DiagramDocument document = new DiagramDocument();
     document.setEditingDomain( createEditingDomain() );
@@ -198,7 +201,7 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
   }
 
   /**
-   * @generated
+   * @generated NOT
    */
   protected void setDocumentContent( IDocument document, IEditorInput element )
     throws CoreException
@@ -249,7 +252,7 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
             }
           }
         }
-        throw new RuntimeException( Messages.getString("WorkflowDocumentProvider_NoDiagramInResourceError") );
+        throw new RuntimeException( Messages.getString("WorkflowDocumentProvider_NoDiagramInResourceError") ); //$NON-NLS-1$
       } catch( Exception e ) {
         CoreException thrownExcp = null;
         if( e instanceof CoreException ) {
@@ -261,7 +264,7 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
                                                       0,
                                                       msg != null
                                                                  ? msg
-                                                                 : Messages.getString("WorkflowDocumentProvider_DiagramLoadingError"),
+                                                                 : Messages.getString("WorkflowDocumentProvider_DiagramLoadingError"), //$NON-NLS-1$
                                                       e ) );
         }
         throw thrownExcp;
@@ -270,7 +273,7 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
       throw new CoreException( new Status( IStatus.ERROR,
                                            WorkflowDiagramEditorPlugin.ID,
                                            0,
-                                           NLS.bind( Messages.getString("WorkflowDocumentProvider_IncorrectInputError"),
+                                           NLS.bind( Messages.getString("WorkflowDocumentProvider_IncorrectInputError"), //$NON-NLS-1$
                                                      new Object[]{
                                                        element,
                                                        "org.eclipse.ui.part.FileEditorInput", "org.eclipse.emf.common.ui.URIEditorInput"} ), //$NON-NLS-1$ //$NON-NLS-2$ 
@@ -281,6 +284,7 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
   /**
    * @generated
    */
+  @Override
   public long getModificationStamp( Object element ) {
     ResourceSetInfo info = getResourceSetInfo( element );
     if( info != null ) {
@@ -292,6 +296,7 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
   /**
    * @generated
    */
+  @Override
   public boolean isDeleted( Object element ) {
     IDiagramDocument document = getDiagramDocument( element );
     if( document != null ) {
@@ -316,6 +321,7 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
   /**
    * @generated
    */
+  @Override
   protected void disposeElementInfo( Object element, ElementInfo info ) {
     if( info instanceof ResourceSetInfo ) {
       ResourceSetInfo resourceSetInfo = ( ResourceSetInfo )info;
@@ -327,6 +333,7 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
   /**
    * @generated
    */
+  @Override
   protected void doValidateState( Object element, Object computationContext )
     throws CoreException
   {
@@ -349,8 +356,9 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
   }
 
   /**
-   * @generated
+   * @generated NOT
    */
+  @Override
   public boolean isReadOnly( Object element ) {
     ResourceSetInfo info = getResourceSetInfo( element );
     if( info != null ) {
@@ -359,7 +367,7 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
           updateCache( element );
         } catch( CoreException ex ) {
           WorkflowDiagramEditorPlugin.getInstance()
-            .logError( Messages.getString("WorkflowDocumentProvider_isModifiable"), ex );
+            .logError( Messages.getString("WorkflowDocumentProvider_isModifiable"), ex ); //$NON-NLS-1$
           // Error message to log was initially taken from org.eclipse.gmf.runtime.diagram.ui.resources.editor.ide.internal.l10n.EditorMessages.StorageDocumentProvider_isModifiable
         }
       }
@@ -369,8 +377,9 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
   }
 
   /**
-   * @generated
+   * @generated NOT
    */
+  @Override
   public boolean isModifiable( Object element ) {
     if( !isStateValidated( element ) ) {
       if( element instanceof FileEditorInput
@@ -386,7 +395,7 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
           updateCache( element );
         } catch( CoreException ex ) {
           WorkflowDiagramEditorPlugin.getInstance()
-            .logError( Messages.getString("WorkflowDocumentProvider_isModifiable"), ex );
+            .logError( Messages.getString("WorkflowDocumentProvider_isModifiable"), ex ); //$NON-NLS-1$
           // Error message to log was initially taken from org.eclipse.gmf.runtime.diagram.ui.resources.editor.ide.internal.l10n.EditorMessages.StorageDocumentProvider_isModifiable
         }
       }
@@ -420,6 +429,7 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
   /**
    * @generated
    */
+  @Override
   protected void doUpdateStateCache( Object element ) throws CoreException {
     ResourceSetInfo info = getResourceSetInfo( element );
     if( info != null ) {
@@ -431,6 +441,7 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
   /**
    * @generated
    */
+  @Override
   public boolean isSynchronized( Object element ) {
     ResourceSetInfo info = getResourceSetInfo( element );
     if( info != null ) {
@@ -442,6 +453,7 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
   /**
    * @generated
    */
+  @Override
   protected ISchedulingRule getResetRule( Object element ) {
     ResourceSetInfo info = getResourceSetInfo( element );
     if( info != null ) {
@@ -464,6 +476,7 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
   /**
    * @generated
    */
+  @Override
   protected ISchedulingRule getSaveRule( Object element ) {
     ResourceSetInfo info = getResourceSetInfo( element );
     if( info != null ) {
@@ -484,6 +497,7 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
   /**
    * @generated
    */
+  @Override
   protected ISchedulingRule getSynchronizeRule( Object element ) {
     ResourceSetInfo info = getResourceSetInfo( element );
     if( info != null ) {
@@ -506,6 +520,7 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
   /**
    * @generated
    */
+  @Override
   protected ISchedulingRule getValidateStateRule( Object element ) {
     ResourceSetInfo info = getResourceSetInfo( element );
     if( info != null ) {
@@ -552,6 +567,7 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
   /**
    * @generated
    */
+  @Override
   protected void doSynchronize( Object element, IProgressMonitor monitor )
     throws CoreException
   {
@@ -568,8 +584,9 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
   }
 
   /**
-   * @generated
+   * @generated NOT
    */
+  @Override
   protected void doSaveDocument( IProgressMonitor monitor,
                                  Object element,
                                  IDocument document,
@@ -581,18 +598,18 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
         throw new CoreException( new Status( IStatus.ERROR,
                                              WorkflowDiagramEditorPlugin.ID,
                                              IStatus.OK,
-                                             Messages.getString("WorkflowDocumentProvider_UnsynchronizedFileSaveError"),
+                                             Messages.getString("WorkflowDocumentProvider_UnsynchronizedFileSaveError"), //$NON-NLS-1$
                                              null ) );
       }
       info.stopResourceListening();
       fireElementStateChanging( element );
       List resources = info.getResourceSet().getResources();
       try {
-        monitor.beginTask( Messages.getString("WorkflowDocumentProvider_SaveDiagramTask"),
+        monitor.beginTask( Messages.getString("WorkflowDocumentProvider_SaveDiagramTask"), //$NON-NLS-1$
                            resources.size() + 1 ); //"Saving diagram"
         for( Iterator it = resources.iterator(); it.hasNext(); ) {
           Resource nextResource = ( Resource )it.next();
-          monitor.setTaskName( NLS.bind( Messages.getString("WorkflowDocumentProvider_SaveNextResourceTask"),
+          monitor.setTaskName( NLS.bind( Messages.getString("WorkflowDocumentProvider_SaveNextResourceTask"), //$NON-NLS-1$
                                          nextResource.getURI() ) );
           if( nextResource.isLoaded()
               && !info.getEditingDomain().isReadOnly( nextResource ) )
@@ -632,7 +649,7 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
         throw new CoreException( new Status( IStatus.ERROR,
                                              WorkflowDiagramEditorPlugin.ID,
                                              0,
-                                             NLS.bind( Messages.getString("WorkflowDocumentProvider_IncorrectInputError"),
+                                             NLS.bind( Messages.getString("WorkflowDocumentProvider_IncorrectInputError"), //$NON-NLS-1$
                                                        new Object[]{
                                                          element,
                                                          "org.eclipse.ui.part.FileEditorInput", "org.eclipse.emf.common.ui.URIEditorInput"} ), //$NON-NLS-1$ //$NON-NLS-2$ 
@@ -652,11 +669,12 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
       final Diagram diagramCopy = ( Diagram )EcoreUtil.copy( diagramDocument.getDiagram() );
       try {
         new AbstractTransactionalCommand( diagramDocument.getEditingDomain(),
-                                          NLS.bind( Messages.getString("WorkflowDocumentProvider_SaveAsOperation"),
+                                          NLS.bind( Messages.getString("WorkflowDocumentProvider_SaveAsOperation"), //$NON-NLS-1$
                                                     diagramCopy.getName() ),
                                           affectedFiles )
         {
 
+          @Override
           protected CommandResult doExecuteWithResult( IProgressMonitor monitor,
                                                        IAdaptable info )
             throws ExecutionException
@@ -686,7 +704,7 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
   }
 
   /**
-   * @generated
+   * @generated NOT
    */
   protected void handleElementChanged( ResourceSetInfo info,
                                        Resource changedResource,
@@ -698,7 +716,7 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
         file.refreshLocal( IResource.DEPTH_INFINITE, monitor );
       } catch( CoreException ex ) {
         WorkflowDiagramEditorPlugin.getInstance()
-          .logError( Messages.getString("WorkflowDocumentProvider_handleElementContentChanged"),
+          .logError( Messages.getString("WorkflowDocumentProvider_handleElementContentChanged"), //$NON-NLS-1$
                      ex );
         // Error message to log was initially taken from org.eclipse.gmf.runtime.diagram.ui.resources.editor.ide.internal.l10n.EditorMessages.FileDocumentProvider_handleElementContentChanged
       }
@@ -759,6 +777,7 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
   /**
    * @generated
    */
+  @Override
   protected IRunnableContext getOperationRunner( IProgressMonitor monitor ) {
     return null;
   }
@@ -1047,6 +1066,7 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
     /**
      * @generated
      */
+    @Override
     public void notifyChanged( Notification notification ) {
       if( notification.getNotifier() instanceof ResourceSet ) {
         super.notifyChanged( notification );

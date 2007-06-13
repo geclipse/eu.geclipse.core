@@ -119,6 +119,7 @@ public class WorkflowParserProvider extends AbstractProvider
     /**
      * @generated
      */
+    @Override
     public Object getAdapter( Class adapter ) {
       if( IElementType.class.equals( adapter ) ) {
         return elementType;

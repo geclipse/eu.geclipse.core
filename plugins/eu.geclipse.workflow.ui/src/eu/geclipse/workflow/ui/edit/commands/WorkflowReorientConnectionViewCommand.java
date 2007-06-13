@@ -42,6 +42,7 @@ public class WorkflowReorientConnectionViewCommand
   /**
    * @generated
    */
+  @Override
   public List getAffectedFiles() {
     View view = ( View )edgeAdaptor.getAdapter( View.class );
     if( view != null ) {
@@ -67,6 +68,7 @@ public class WorkflowReorientConnectionViewCommand
   /**
    * @generated
    */
+  @Override
   protected CommandResult doExecuteWithResult( IProgressMonitor progressMonitor,
                                                IAdaptable info )
   {

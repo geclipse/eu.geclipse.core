@@ -68,6 +68,7 @@ public class WorkflowDiagramEditor extends DiagramDocumentEditor
   /**
    * @generated
    */
+  @Override
   protected String getContextID() {
     return CONTEXT_ID;
   }
@@ -75,6 +76,7 @@ public class WorkflowDiagramEditor extends DiagramDocumentEditor
   /**
    * @generated
    */
+  @Override
   protected PaletteRoot createPaletteRoot( PaletteRoot existingPaletteRoot ) {
     PaletteRoot root = super.createPaletteRoot( existingPaletteRoot );
     new WorkflowPaletteFactory().fillPalette( root );
@@ -84,6 +86,7 @@ public class WorkflowDiagramEditor extends DiagramDocumentEditor
   /**
    * @generated
    */
+  @Override
   protected PreferencesHint getPreferencesHint() {
     return WorkflowDiagramEditorPlugin.DIAGRAM_PREFERENCES_HINT;
   }
@@ -91,6 +94,7 @@ public class WorkflowDiagramEditor extends DiagramDocumentEditor
   /**
    * @generated
    */
+  @Override
   public String getContributorId() {
     return WorkflowDiagramEditorPlugin.ID;
   }
@@ -98,6 +102,7 @@ public class WorkflowDiagramEditor extends DiagramDocumentEditor
   /**
    * @generated
    */
+  @Override
   protected IDocumentProvider getDocumentProvider( IEditorInput input ) {
     if( input instanceof IFileEditorInput || input instanceof URIEditorInput ) {
       return WorkflowDiagramEditorPlugin.getInstance().getDocumentProvider();
@@ -108,6 +113,7 @@ public class WorkflowDiagramEditor extends DiagramDocumentEditor
   /**
    * @generated
    */
+  @Override
   public TransactionalEditingDomain getEditingDomain() {
     IDocument document = getEditorInput() != null
                                                  ? getDocumentProvider().getDocument( getEditorInput() )
@@ -121,6 +127,7 @@ public class WorkflowDiagramEditor extends DiagramDocumentEditor
   /**
    * @generated
    */
+  @Override
   protected void setDocumentProvider( IEditorInput input ) {
     if( input instanceof IFileEditorInput || input instanceof URIEditorInput ) {
       setDocumentProvider( WorkflowDiagramEditorPlugin.getInstance()
@@ -140,6 +147,7 @@ public class WorkflowDiagramEditor extends DiagramDocumentEditor
   /**
    * @generated
    */
+  @Override
   public boolean isSaveAsAllowed() {
     return true;
   }
@@ -147,6 +155,7 @@ public class WorkflowDiagramEditor extends DiagramDocumentEditor
   /**
    * @generated
    */
+  @Override
   public void doSaveAs() {
     performSaveAs( new NullProgressMonitor() );
   }
@@ -154,6 +163,7 @@ public class WorkflowDiagramEditor extends DiagramDocumentEditor
   /**
    * @generated
    */
+  @Override
   protected void performSaveAs( IProgressMonitor progressMonitor ) {
     Shell shell = getSite().getShell();
     IEditorInput input = getEditorInput();
@@ -171,7 +181,7 @@ public class WorkflowDiagramEditor extends DiagramDocumentEditor
       return;
     }
     if( provider.isDeleted( input ) && original != null ) {
-      String message = NLS.bind( "The original file ''{0}'' has been deleted.",
+      String message = NLS.bind( "The original file ''{0}'' has been deleted.", //$NON-NLS-1$
                                  original.getName() );
       dialog.setErrorMessage( null );
       dialog.setMessage( message, IMessageProvider.WARNING );
@@ -201,8 +211,8 @@ public class WorkflowDiagramEditor extends DiagramDocumentEditor
     for( int i = 0; i < editorRefs.length; i++ ) {
       if( matchingStrategy.matches( editorRefs[ i ], newInput ) ) {
         MessageDialog.openWarning( shell,
-                                   "Problem During Save As...",
-                                   "Save could not be completed. Target file is already open in another editor." );
+                                   "Problem During Save As...", //$NON-NLS-1$
+                                   "Save could not be completed. Target file is already open in another editor." ); //$NON-NLS-1$
         return;
       }
     }
@@ -218,8 +228,8 @@ public class WorkflowDiagramEditor extends DiagramDocumentEditor
       IStatus status = x.getStatus();
       if( status == null || status.getSeverity() != IStatus.CANCEL ) {
         ErrorDialog.openError( shell,
-                               "Save Problems",
-                               "Could not save file.",
+                               "Save Problems", //$NON-NLS-1$
+                               "Could not save file.", //$NON-NLS-1$
                                x.getStatus() );
       }
     } finally {

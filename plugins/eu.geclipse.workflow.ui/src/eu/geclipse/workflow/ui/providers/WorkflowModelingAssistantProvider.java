@@ -44,6 +44,7 @@ public class WorkflowModelingAssistantProvider
   /**
    * @generated
    */
+  @Override
   public List getTypesForPopupBar( IAdaptable host ) {
     IGraphicalEditPart editPart = ( IGraphicalEditPart )host.getAdapter( IGraphicalEditPart.class );
     if( editPart instanceof WorkflowJobEditPart ) {
@@ -63,6 +64,7 @@ public class WorkflowModelingAssistantProvider
   /**
    * @generated
    */
+  @Override
   public List getRelTypesOnSource( IAdaptable source ) {
     IGraphicalEditPart sourceEditPart = ( IGraphicalEditPart )source.getAdapter( IGraphicalEditPart.class );
     if( sourceEditPart instanceof OutputPortEditPart ) {
@@ -76,6 +78,7 @@ public class WorkflowModelingAssistantProvider
   /**
    * @generated
    */
+  @Override
   public List getRelTypesOnTarget( IAdaptable target ) {
     IGraphicalEditPart targetEditPart = ( IGraphicalEditPart )target.getAdapter( IGraphicalEditPart.class );
     if( targetEditPart instanceof InputPortEditPart ) {
@@ -89,6 +92,7 @@ public class WorkflowModelingAssistantProvider
   /**
    * @generated
    */
+  @Override
   public List getRelTypesOnSourceAndTarget( IAdaptable source, IAdaptable target )
   {
     IGraphicalEditPart sourceEditPart = ( IGraphicalEditPart )source.getAdapter( IGraphicalEditPart.class );
@@ -106,6 +110,7 @@ public class WorkflowModelingAssistantProvider
   /**
    * @generated
    */
+  @Override
   public List getTypesForSource( IAdaptable target,
                                  IElementType relationshipType )
   {
@@ -123,6 +128,7 @@ public class WorkflowModelingAssistantProvider
   /**
    * @generated
    */
+  @Override
   public List getTypesForTarget( IAdaptable source,
                                  IElementType relationshipType )
   {
@@ -140,6 +146,7 @@ public class WorkflowModelingAssistantProvider
   /**
    * @generated
    */
+  @Override
   public EObject selectExistingElementForSource( IAdaptable target,
                                                  IElementType relationshipType )
   {
@@ -150,6 +157,7 @@ public class WorkflowModelingAssistantProvider
   /**
    * @generated
    */
+  @Override
   public EObject selectExistingElementForTarget( IAdaptable source,
                                                  IElementType relationshipType )
   {

@@ -39,6 +39,7 @@ public class WorkflowEditPart extends DiagramEditPart {
   /**
    * @generated
    */
+  @Override
   protected void createDefaultEditPolicies() {
     super.createDefaultEditPolicies();
     installEditPolicy( EditPolicyRoles.SEMANTIC_ROLE,

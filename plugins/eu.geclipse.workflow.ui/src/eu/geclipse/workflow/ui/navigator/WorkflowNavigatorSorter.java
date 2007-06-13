@@ -25,6 +25,7 @@ public class WorkflowNavigatorSorter extends ViewerSorter {
   /**
    * @generated
    */
+  @Override
   public int category( Object element ) {
     if( element instanceof WorkflowNavigatorItem ) {
       WorkflowNavigatorItem item = ( WorkflowNavigatorItem )element;

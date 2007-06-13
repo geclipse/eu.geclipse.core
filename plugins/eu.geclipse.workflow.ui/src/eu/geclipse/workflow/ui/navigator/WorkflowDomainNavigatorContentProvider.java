@@ -91,6 +91,7 @@ public class WorkflowDomainNavigatorContentProvider
 
                                                            public void dispose()
                                                            {
+                                                             //
                                                            }
 
                                                            public boolean handleResourceChanged( final Resource resource )

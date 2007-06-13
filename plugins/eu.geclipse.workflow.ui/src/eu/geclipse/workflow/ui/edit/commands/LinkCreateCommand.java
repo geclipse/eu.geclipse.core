@@ -73,6 +73,7 @@ public class LinkCreateCommand extends CreateElementCommand {
   /**
    * @generated
    */
+  @Override
   public boolean canExecute() {
     if( source == null && target == null ) {
       return false;
@@ -98,6 +99,7 @@ public class LinkCreateCommand extends CreateElementCommand {
   /**
    * @generated
    */
+  @Override
   protected EObject doDefaultElementCreation() {
     // eu.geclipse.workflow.ILink newElement = (eu.geclipse.workflow.ILink) super.doDefaultElementCreation();
     ILink newElement = IWorkflowFactory.eINSTANCE.createILink();
@@ -110,6 +112,7 @@ public class LinkCreateCommand extends CreateElementCommand {
   /**
    * @generated
    */
+  @Override
   protected EClass getEClassToEdit() {
     return IWorkflowPackage.eINSTANCE.getIWorkflow();
   }
@@ -117,6 +120,7 @@ public class LinkCreateCommand extends CreateElementCommand {
   /**
    * @generated
    */
+  @Override
   protected CommandResult doExecuteWithResult( IProgressMonitor monitor,
                                                IAdaptable info )
     throws ExecutionException
@@ -130,6 +134,7 @@ public class LinkCreateCommand extends CreateElementCommand {
   /**
    * @generated
    */
+  @Override
   protected ConfigureRequest createConfigureRequest() {
     ConfigureRequest request = super.createConfigureRequest();
     request.setParameter( CreateRelationshipRequest.SOURCE, getSource() );
@@ -140,6 +145,7 @@ public class LinkCreateCommand extends CreateElementCommand {
   /**
    * @generated
    */
+  @Override
   protected void setElementToEdit( EObject element ) {
     throw new UnsupportedOperationException();
   }

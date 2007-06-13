@@ -187,18 +187,21 @@ public class WorkflowNavigatorContentProvider implements ICommonContentProvider
    * @generated
    */
   public void restoreState( IMemento aMemento ) {
+    //
   }
 
   /**
    * @generated
    */
   public void saveState( IMemento aMemento ) {
+    //
   }
 
   /**
    * @generated
    */
   public void init( ICommonContentExtensionSite aConfig ) {
+    //
   }
 
   /**

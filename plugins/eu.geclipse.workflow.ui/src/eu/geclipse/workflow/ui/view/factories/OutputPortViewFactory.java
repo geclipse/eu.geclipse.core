@@ -26,6 +26,7 @@ public class OutputPortViewFactory extends AbstractShapeViewFactory {
   /**
    * @generated
    */
+  @Override
   protected List createStyles( View view ) {
     List styles = new ArrayList();
     styles.add( NotationFactory.eINSTANCE.createShapeStyle() );
@@ -35,6 +36,7 @@ public class OutputPortViewFactory extends AbstractShapeViewFactory {
   /**
    * @generated
    */
+  @Override
   protected void decorateView( View containerView,
                                View view,
                                IAdaptable semanticAdapter,

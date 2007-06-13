@@ -31,6 +31,7 @@ public class InputPortCreateCommand extends CreateElementCommand {
   /**
    * @generated
    */
+  @Override
   protected EClass getEClassToEdit() {
     return IWorkflowPackage.eINSTANCE.getIWorkflowNode();
   }
@@ -38,6 +39,7 @@ public class InputPortCreateCommand extends CreateElementCommand {
   /**
    * @generated
    */
+  @Override
   protected EObject getElementToEdit() {
     EObject container = ( ( CreateElementRequest )getRequest() ).getContainer();
     if( container instanceof View ) {

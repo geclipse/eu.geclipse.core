@@ -64,6 +64,7 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
   /**
    * @generated
    */
+  @Override
   protected void createDefaultEditPolicies() {
     installEditPolicy( EditPolicyRoles.CREATION_ROLE, new CreationEditPolicy() );
     super.createDefaultEditPolicies();
@@ -83,15 +84,18 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
   protected LayoutEditPolicy createLayoutEditPolicy() {
     FlowLayoutEditPolicy lep = new FlowLayoutEditPolicy() {
 
+      @Override
       protected Command createAddCommand( EditPart child, EditPart after ) {
         return null;
       }
 
+      @Override
       protected Command createMoveChildCommand( EditPart child, EditPart after )
       {
         return null;
       }
 
+      @Override
       protected Command getCreateCommand( CreateRequest request ) {
         return null;
       }
@@ -135,6 +139,7 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
   /**
    * @generated
    */
+  @Override
   protected void addChildVisual( EditPart childEditPart, int index ) {
     if( addFixedChild( childEditPart ) ) {
       return;
@@ -145,6 +150,7 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
   /**
    * @generated
    */
+  @Override
   protected void removeChildVisual( EditPart childEditPart ) {
     if( removeFixedChild( childEditPart ) ) {
       return;
@@ -155,6 +161,7 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
   /**
    * @generated
    */
+  @Override
   protected IFigure getContentPaneFor( IGraphicalEditPart editPart ) {
     return super.getContentPaneFor( editPart );
   }
@@ -176,6 +183,7 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
    * 
    * @generated
    */
+  @Override
   protected NodeFigure createNodeFigure() {
     NodeFigure figure = createNodePlate();
     figure.setLayoutManager( new StackLayout() );
@@ -203,6 +211,7 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
   /**
    * @generated
    */
+  @Override
   public IFigure getContentPane() {
     if( contentPane != null ) {
       return contentPane;
@@ -213,6 +222,7 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
   /**
    * @generated
    */
+  @Override
   public EditPart getPrimaryChildEditPart() {
     return getChildBySemanticHint( WorkflowVisualIDRegistry.getType( WorkflowJobNameEditPart.VISUAL_ID ) );
   }
@@ -270,6 +280,7 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
     /**
      * @generated
      */
+    @Override
     protected boolean useLocalCoordinates() {
       return myUseLocalCoordinates;
     }

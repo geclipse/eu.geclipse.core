@@ -36,6 +36,7 @@ public class WorkflowJobItemSemanticEditPolicy
   /**
    * @generated
    */
+  @Override
   protected Command getCreateCommand( CreateElementRequest req ) {
     if( WorkflowElementTypes.IOutputPort_2001 == req.getElementType() ) {
       if( req.getContainmentFeature() == null ) {
@@ -55,6 +56,7 @@ public class WorkflowJobItemSemanticEditPolicy
   /**
    * @generated
    */
+  @Override
   protected Command getDestroyElementCommand( DestroyElementRequest req ) {
     CompoundCommand cc = getDestroyEdgesCommand();
     addDestroyChildNodesCommand( cc );

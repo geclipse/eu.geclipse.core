@@ -55,6 +55,7 @@ public class OutputPortEditPart extends ShapeNodeEditPart {
   /**
    * @generated
    */
+  @Override
   protected void createDefaultEditPolicies() {
     super.createDefaultEditPolicies();
     installEditPolicy( EditPolicyRoles.SEMANTIC_ROLE,
@@ -70,6 +71,7 @@ public class OutputPortEditPart extends ShapeNodeEditPart {
   protected LayoutEditPolicy createLayoutEditPolicy() {
     LayoutEditPolicy lep = new LayoutEditPolicy() {
 
+      @Override
       protected EditPolicy createChildEditPolicy( EditPart child ) {
         EditPolicy result = child.getEditPolicy( EditPolicy.PRIMARY_DRAG_ROLE );
         if( result == null ) {
@@ -78,10 +80,12 @@ public class OutputPortEditPart extends ShapeNodeEditPart {
         return result;
       }
 
+      @Override
       protected Command getMoveChildrenCommand( Request request ) {
         return null;
       }
 
+      @Override
       protected Command getCreateCommand( CreateRequest request ) {
         return null;
       }
@@ -121,6 +125,7 @@ public class OutputPortEditPart extends ShapeNodeEditPart {
    * 
    * @generated
    */
+  @Override
   protected NodeFigure createNodeFigure() {
     NodeFigure figure = createNodePlate();
     figure.setLayoutManager( new StackLayout() );
@@ -143,6 +148,7 @@ public class OutputPortEditPart extends ShapeNodeEditPart {
   /**
    * @generated
    */
+  @Override
   public IFigure getContentPane() {
     if( contentPane != null ) {
       return contentPane;
@@ -169,6 +175,7 @@ public class OutputPortEditPart extends ShapeNodeEditPart {
     /**
      * @generated
      */
+    @Override
     protected boolean useLocalCoordinates() {
       return myUseLocalCoordinates;
     }

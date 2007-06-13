@@ -117,7 +117,7 @@ public class ModelElementSelectionPage extends WizardPage {
    * @generated
    */
   protected String getSelectionTitle() {
-    return "Select model element:";
+    return "Select model element:"; //$NON-NLS-1$
   }
 
   /**
