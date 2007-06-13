@@ -89,6 +89,8 @@ import eu.geclipse.jsdl.ui.internal.pages.JobApplicationPage;
 import eu.geclipse.jsdl.ui.internal.pages.JobDefinitionPage;
 import eu.geclipse.jsdl.ui.internal.pages.ResourcesPage;
 
+
+
 public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainProvider{
   
   public static final JsdlMultiPageEditor INSTANCE = new JsdlMultiPageEditor();
@@ -109,8 +111,12 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
   private JobDefinitionPage jobDefPage = new JobDefinitionPage(this);
   private JobApplicationPage jobApplicationPage = new JobApplicationPage(this);
   private DataStagingPage dataStagingPage = new DataStagingPage(this);
-  private ResourcesPage resourcesPage = new ResourcesPage(this);
+  private ResourcesPage resourcesPage = new ResourcesPage(this);  
   private boolean refreshedModel = false;
+  //FIXME Uncomment below for doSave and setDiry
+  //private boolean isDirty = false;
+  
+  
   
   public JsdlMultiPageEditor(){
     // Create an adapter factory that yields item providers.
@@ -139,10 +145,11 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
               {
                 public void run()
                 {
+                  //FIXME Comment below for doSave and setDiry
                   firePropertyChange(IEditorPart.PROP_DIRTY);
 
                   // Try to select the affected objects.
-                  //
+                  //widget.getParent().get
                   //Command mostRecentCommand = ((CommandStack)event.getSource()).getMostRecentCommand();
 
                 }
@@ -158,8 +165,24 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
       commandStack, new HashMap<Resource, Boolean>()); 
         
       }
+ 
+//FIXME Uncomment below for doSave and setDiry
+//  @Override
+//  public boolean isDirty()
+//  {     
+//    return isDirty;
+//  } // End isDirty()
+//  
+//
+//  
+//  public final void setDirty(final boolean flag) {
+//   if (this.isDirty != flag) {
+//     this.isDirty = flag;
+//     firePropertyChange(IWorkbenchPartConstants.PROP_DIRTY);
+//   }
+//  } // End public final void setDirty()
   
-
+  
   @Override
   protected void addPages()
   {
@@ -185,11 +208,13 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
    * pages. The content pushed is actually the JobDefinition
    * element, which is the root element.
    */
+  
   private void pushContentToPages(){    
     this.jobDefPage.setPageContent( this.jobDefType, isModelRefreshed());
     this.jobApplicationPage.setPageContent( this.jobDefType, isModelRefreshed());
-    this.dataStagingPage.setPageContent( this.jobDefType, isModelRefreshed());
-  }
+    this.resourcesPage.setPageContent( this.jobDefType, isModelRefreshed() );
+    this.dataStagingPage.setPageContent( this.jobDefType, isModelRefreshed());   
+    }
   
   /*
    * Returns true if the Model was refreshed/changed.
@@ -454,6 +479,8 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
               catch (Exception exception)
               {
                 JsdlMultiPageEditor.this.resourceToDiagnosticMap.put(resource, analyzeResourceProblems(resource, exception));
+                //FIXME Uncomment below for doSave and setDiry
+                //setDirty( false );
               }
               first = false;
             }
@@ -471,6 +498,8 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
       // Refresh the necessary state.
       //
       ((BasicCommandStack)this.editingDomain.getCommandStack()).saveIsDone();
+      //FIXME Uncomment below for doSave and setDiry
+      //setDirty( false );
       firePropertyChange(IEditorPart.PROP_DIRTY);
     }
     catch (Exception exception)
@@ -479,6 +508,7 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
       //
       Activator.logException( exception );
     }
+    
     this.updateProblemIndication = true;
     updateProblemIndication();
     
@@ -512,13 +542,12 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
     setPartName(editorInput.getName());
     IProgressMonitor progressMonitor = new NullProgressMonitor();
     doSave(progressMonitor);
-  }
+  };
   
 
   @Override
   public boolean isSaveAsAllowed()
   {
-    // TODO Auto-generated method stub
     return true;
   }
  
@@ -713,11 +742,8 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
       
        if (testType instanceof JobDefinitionType){         
          this.jobDefType = (JobDefinitionType) testType;
-       }       
-       else {
-         //do nothing
-       }
-     
+       }      
+      
       }
          
      } 
@@ -795,7 +821,8 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
     @Override
     protected void pageChange(final int pageIndex)
      {      
-        super.pageChange(pageIndex);        
+        super.pageChange(pageIndex);
+        //FIXME Comment below for doSave and setDiry
         IProgressMonitor progressMonitor = new NullProgressMonitor();
         doSave(progressMonitor);     
      }

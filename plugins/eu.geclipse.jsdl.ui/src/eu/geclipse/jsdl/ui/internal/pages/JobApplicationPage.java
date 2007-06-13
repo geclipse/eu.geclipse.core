@@ -22,8 +22,6 @@ package eu.geclipse.jsdl.ui.internal.pages;
  *
  */
 
-import java.math.BigInteger;
-import java.util.Hashtable;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -42,12 +40,6 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 import eu.geclipse.jsdl.jsdl.ApplicationTypeAdapter;
-import eu.geclipse.jsdl.model.posix.DirectoryNameType;
-import eu.geclipse.jsdl.model.posix.GroupNameType;
-import eu.geclipse.jsdl.model.posix.LimitsType;
-import eu.geclipse.jsdl.model.posix.POSIXApplicationType;
-import eu.geclipse.jsdl.model.posix.PosixFactory;
-import eu.geclipse.jsdl.model.posix.UserNameType;
 import eu.geclipse.jsdl.posix.PosixApplicationTypeAdapter;
 import eu.geclipse.jsdl.ui.internal.Activator;
 
@@ -115,23 +107,20 @@ public class JobApplicationPage extends FormPage {
   List lstArgument = null;
   List lstEnvironment = null;
   
-  Hashtable< String, Text > widgetMap = new Hashtable< String, Text >();
-  Boolean contentRefreshed = Boolean.FALSE;
   
-  POSIXApplicationType posixApplType = PosixFactory.eINSTANCE.createPOSIXApplicationType();
+  Boolean contentRefreshed = Boolean.FALSE;
   
   private ApplicationTypeAdapter applicationTypeAdapter;
   private PosixApplicationTypeAdapter posixApplicationTypeAdapter;
   
-//  private ApplicationType applType = JsdlFactory.eINSTANCE
-//                                                      .createApplicationType();
-  
+
  
-  // Class Constructor
+ 
+  /* Class Constructor */
   public JobApplicationPage( final FormEditor editor ) {
     
-    super(editor,Messages.JobApplicationPage_pageId , 
-          Messages.JobApplicationPage_PageTitle);
+    super(editor,Messages.getString("JobApplicationPage_pageId") , 
+          Messages.getString("JobApplicationPage_PageTitle"));
    
    
   } // End Constructor
@@ -147,7 +136,7 @@ public class JobApplicationPage extends FormPage {
         this.posixApplicationTypeAdapter.load();
       }//endif isContentRefreshed
     } // endif active
-  }
+  } // End void setActive()
   
   
   
@@ -185,7 +174,7 @@ public class JobApplicationPage extends FormPage {
     
     
     ScrolledForm form = managedForm.getForm();
-    form.setText(Messages.JobApplicationPage_ApplicationTitle); 
+    form.setText(Messages.getString("JobApplicationPage_ApplicationTitle")); 
   
     ColumnLayout layout = new ColumnLayout();
     layout.leftMargin = 10;
@@ -197,22 +186,22 @@ public class JobApplicationPage extends FormPage {
 
     
     this.aS = createApplicationSection(managedForm, 
-                                       Messages.JobApplicationPage_Applicationtitle,
-                                       Messages.JobApplicationPage_ApplicationDescription );  
+                      Messages.getString("JobApplicationPage_Applicationtitle"),
+              Messages.getString("JobApplicationPage_ApplicationDescription") );  
     
     this.applicationTypeAdapter.load();
 
     
     this.apS = createAdditionalPosixSection(managedForm, 
-                                     Messages.JobApplicationPage_additionalPosixApplElementTitle,
-                                     Messages.JobApplicationPage_additionalPosixApplDescr);  
+       Messages.getString("JobApplicationPage_additionalPosixApplElementTitle"),
+       Messages.getString("JobApplicationPage_additionalPosixApplDescr"));  
     
     
 
     
     this.pS = createPosixSection(managedForm, 
-                                 Messages.JobApplicationPage_PosixApplicationtitle, 
-                                  Messages.JobApplicationPage_PosixApplicationDescription);
+                 Messages.getString("JobApplicationPage_PosixApplicationtitle"), 
+          Messages.getString("JobApplicationPage_PosixApplicationDescription"));
            
     this.posixApplicationTypeAdapter.load();
        
@@ -272,7 +261,10 @@ public class JobApplicationPage extends FormPage {
     
      
     return client;
-  }
+    
+  } //End Composite createSection
+  
+  
   
   /* 
    * Create the Application Section which includes the following:
@@ -290,7 +282,9 @@ public class JobApplicationPage extends FormPage {
     FormToolkit toolkit = mform.getToolkit();
 
     //Create Label and Text for Application Name Element
-    toolkit.createLabel(client, Messages.JobApplicationPage_ApplicationName); 
+    toolkit.createLabel(client,
+                      Messages.getString("JobApplicationPage_ApplicationName"));
+    
     this.txtApplicationName = toolkit.createText(client, "", SWT.NONE);  //$NON-NLS-1$
     gd = new GridData();
     gd.widthHint = 300;
@@ -300,15 +294,19 @@ public class JobApplicationPage extends FormPage {
     
 
     //Create Label and Text for Application Version     
-    toolkit.createLabel(client, Messages.JobApplicationPage_ApplicationVersion); 
+    toolkit.createLabel(client,
+                   Messages.getString("JobApplicationPage_ApplicationVersion")); 
     this.txtApplicationVersion = toolkit.createText(client, "", SWT.NONE);  //$NON-NLS-1$
     gd = new GridData();
     gd.widthHint = 300;
     this.txtApplicationVersion.setLayoutData(gd);
-    this.applicationTypeAdapter.attachToApplicationVersion( this.txtApplicationVersion );
+    
+    this.applicationTypeAdapter.
+                       attachToApplicationVersion( this.txtApplicationVersion );
 
     //Create Label and Text for Application Description Element    
-    toolkit.createLabel(client, Messages.JobApplicationPage_ApplicationDescr); 
+    toolkit.createLabel(client,
+                     Messages.getString("JobApplicationPage_ApplicationDescr")); 
     this.txtDescription = toolkit.createText(client, "",  //$NON-NLS-1$
                                                              SWT.NONE 
                                                              | SWT.V_SCROLL
@@ -324,7 +322,10 @@ public class JobApplicationPage extends FormPage {
     toolkit.paintBordersFor( client );
     
     return client;
-  }
+    
+  } // End Composite createApplicationSection()
+  
+  
   
    /* 
     * Create the Posix Application Section which includes the following:
@@ -336,8 +337,8 @@ public class JobApplicationPage extends FormPage {
     *  -Environment (String)
     */
   private Composite createPosixSection(final IManagedForm mform, 
-                                          final String title, 
-                                          final String desc)
+                                       final String title, 
+                                       final String desc)
    {
     GridData lblgd;
     GridData gd;
@@ -356,7 +357,8 @@ public class JobApplicationPage extends FormPage {
     
     
     /* Posix Name Widget */
-    this.lblPosixName = toolkit.createLabel(client, Messages.JobApplicationPage_PosixName); 
+    this.lblPosixName = toolkit.createLabel(client,
+                            Messages.getString("JobApplicationPage_PosixName")); 
     
     this.txtPosixName = toolkit.createText(client, "", SWT.NONE); //$NON-NLS-1$
     this.posixApplicationTypeAdapter.attachPosixApplicationName(this.txtPosixName);
@@ -365,11 +367,15 @@ public class JobApplicationPage extends FormPage {
     /* =========================== Executable Widget ======================== */
     
     lblgd = new GridData();
-    lblgd.horizontalSpan = 1;    
-    this.lblExecutable = toolkit.createLabel(client, Messages.JobApplicationPage_Executable); 
+    lblgd.horizontalSpan = 1;
+    
+    this.lblExecutable = toolkit.createLabel(client,
+                           Messages.getString("JobApplicationPage_Executable"));
+    
     this.lblExecutable.setLayoutData( lblgd ); 
     
     this.txtExecutable = toolkit.createText(client, "", SWT.NONE); //$NON-NLS-1$
+    
     this.posixApplicationTypeAdapter
                         .attachPosixApplicationExecutable(this.txtExecutable);
     
@@ -386,7 +392,10 @@ public class JobApplicationPage extends FormPage {
     lblgd = new GridData();
     lblgd.verticalSpan = 2;
     lblgd.horizontalSpan = 1;
-    this.lblArgument = toolkit.createLabel(client, Messages.JobApplicationPage_Argument);
+    
+    this.lblArgument = toolkit.createLabel(client,
+                             Messages.getString("JobApplicationPage_Argument"));
+    
     this.lblArgument.setLayoutData( lblgd );
     
     gd = new GridData();
@@ -397,7 +406,10 @@ public class JobApplicationPage extends FormPage {
     gd.widthHint = 235;
     gd.heightHint = 100;
     this.lstArgument = new List(client, SWT.NONE);
-    this.lstArgument.setData( FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER );  
+    
+    this.lstArgument.setData( FormToolkit.KEY_DRAW_BORDER,
+                              FormToolkit.TEXT_BORDER );
+    
     this.lstArgument.setLayoutData( gd );
      
                 
@@ -406,7 +418,9 @@ public class JobApplicationPage extends FormPage {
     gd.horizontalSpan = 2;
     gd.verticalSpan = 1;
     gd.widthHint = 60;
-    this.btnAdd = toolkit.createButton(client, Messages.JsdlEditor_AddButton, SWT.PUSH);
+    this.btnAdd = toolkit.createButton(client,
+                                       Messages.getString("JsdlEditor_AddButton")
+                                       , SWT.PUSH);
     this.btnAdd.setLayoutData( gd );
     
     
@@ -416,7 +430,11 @@ public class JobApplicationPage extends FormPage {
     gd.verticalSpan = 1;
     gd.widthHint = 60;
     gd.verticalAlignment = GridData.BEGINNING;
-    this.btnDel = toolkit.createButton(client, Messages.JsdlEditor_RemoveButton, SWT.PUSH);
+    
+    this.btnDel = toolkit.createButton(client,
+                                    Messages.getString("JsdlEditor_RemoveButton")
+                                    , SWT.PUSH);
+    
     this.btnDel.setLayoutData( gd );
       
     /* ============================= Input Widget =========================== */
@@ -424,7 +442,8 @@ public class JobApplicationPage extends FormPage {
     lblgd = new GridData();   
     lblgd.horizontalSpan = 1;
     
-    this.lblInput = toolkit.createLabel(client, Messages.JobApplicationPage_Input);
+    this.lblInput = toolkit.createLabel(client,
+                                Messages.getString("JobApplicationPage_Input"));
     this.lblInput.setLayoutData(lblgd);
     
     
@@ -440,7 +459,9 @@ public class JobApplicationPage extends FormPage {
     /* ============================= Output Widget =========================== */
     
     lblgd = new GridData();    
-    this.lblOutput = toolkit.createLabel(client, Messages.JobApplicationPage_Output);
+    this.lblOutput = toolkit.createLabel(client,
+                               Messages.getString("JobApplicationPage_Output"));
+    
     this.lblOutput.setLayoutData( lblgd );
     
     this.txtOutput = toolkit.createText(client, "", SWT.NONE); //$NON-NLS-1$
@@ -456,7 +477,9 @@ public class JobApplicationPage extends FormPage {
     /* ============================= Error Widget =========================== */ 
     
     lblgd = new GridData();    
-    this.lblError = toolkit.createLabel(client, Messages.JobApplicationPage_Error); 
+    this.lblError = toolkit.createLabel(client,
+                                Messages.getString("JobApplicationPage_Error"));
+    
     this.lblError.setLayoutData( lblgd );
     
     gd = new GridData();
@@ -472,9 +495,12 @@ public class JobApplicationPage extends FormPage {
     lblgd = new GridData();
     lblgd.verticalSpan = 2;
     lblgd.horizontalSpan = 1;
-    this.lblEnvironment = toolkit.createLabel(client, Messages.JobApplicationPage_Environment); 
-    this.lblEnvironment.setLayoutData( lblgd );
     
+    this.lblEnvironment = toolkit.createLabel(client,
+                          Messages.getString("JobApplicationPage_Environment"));
+    
+    this.lblEnvironment.setLayoutData( lblgd );
+        
     gd = new GridData();
     gd.horizontalAlignment = GridData.FILL;
     gd.verticalAlignment = GridData.FILL;
@@ -483,7 +509,10 @@ public class JobApplicationPage extends FormPage {
     gd.widthHint = 235;
     gd.heightHint = 100;
     this.lstEnvironment = new List(client, SWT.NONE);
-    this.lstEnvironment.setData( FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER );  
+    
+    this.lstEnvironment.setData( FormToolkit.KEY_DRAW_BORDER,
+                                 FormToolkit.TEXT_BORDER );
+    
     this.lstEnvironment.setLayoutData(gd);
      
     /* Create "Add" Button */
@@ -491,7 +520,9 @@ public class JobApplicationPage extends FormPage {
     gd.horizontalSpan = 2;
     gd.verticalSpan = 1;
     gd.widthHint = 60;
-    this.btnAdd = toolkit.createButton(client, Messages.JsdlEditor_AddButton, SWT.BUTTON1); 
+    this.btnAdd = toolkit.createButton(client,
+                                     Messages.getString("JsdlEditor_AddButton"),
+                                       SWT.BUTTON1); 
     this.btnAdd.setLayoutData( gd);
     
     /* Create "Remove" Button */
@@ -500,7 +531,10 @@ public class JobApplicationPage extends FormPage {
     gd.verticalSpan = 1;
     gd.widthHint = 60;
     gd.verticalAlignment = GridData.BEGINNING;
-    this.btnDel = toolkit.createButton(client, Messages.JsdlEditor_RemoveButton, SWT.PUSH); 
+    
+    this.btnDel = toolkit.createButton(client,
+                                  Messages.getString("JsdlEditor_RemoveButton"),
+                                  SWT.PUSH); 
     this.btnDel.setLayoutData( gd );
        
     toolkit.paintBordersFor( client );
@@ -542,7 +576,9 @@ public class JobApplicationPage extends FormPage {
    
    /* ========================= Working Directory =========================== */
    
-   this.lblWorkingDirectory = toolkit.createButton(client, Messages.JobApplicationPage_WorkingDirectory,SWT.CHECK);   
+   this.lblWorkingDirectory = toolkit.createButton(client, Messages.
+                               getString("JobApplicationPage_WorkingDirectory"),
+                               SWT.CHECK);   
    this.lblWorkingDirectory.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
      @Override
     public void widgetSelected(final org.eclipse.swt.events.SelectionEvent e) {
@@ -555,194 +591,194 @@ public class JobApplicationPage extends FormPage {
 //      If not checked, then execute this one
      else
      { // Wow, commenting out bad style (comment from Mathias)
-       //System.out.println ("Check Box is not checked");
+
        }
      }
      });
 
    
    this.txtWorkingDirectory = toolkit.createText(client, "", SWT.NONE); //$NON-NLS-1$
-   //this.widgetMap.put( prefix +"_workingdirectory", this.txtWorkingDirectory ); //$NON-NLS-1$
    gd.widthHint = 200;
    this.txtWorkingDirectory.setLayoutData(gd);
-   this.txtWorkingDirectory.addFocusListener( new org.eclipse.swt.events.FocusListener(){
-     public void focusLost( final org.eclipse.swt.events.FocusEvent e  ) {
-      DirectoryNameType directoryName = PosixFactory.eINSTANCE.createDirectoryNameType();
-      directoryName.setValue( JobApplicationPage.this.txtWorkingDirectory.getText() );
-      JobApplicationPage.this.posixApplType.setWorkingDirectory( directoryName );
-     }
-     public void focusGained( final org.eclipse.swt.events.FocusEvent e  ) {
-     // 
-     } 
-   });
+//   this.txtWorkingDirectory.addFocusListener( new org.eclipse.swt.events.FocusListener(){
+//     public void focusLost( final org.eclipse.swt.events.FocusEvent e  ) {
+//      DirectoryNameType directoryName = PosixFactory.eINSTANCE.createDirectoryNameType();
+//      directoryName.setValue( JobApplicationPage.this.txtWorkingDirectory.getText() );
+//      JobApplicationPage.this.posixApplType.setWorkingDirectory( directoryName );
+//     }
+//     public void focusGained( final org.eclipse.swt.events.FocusEvent e  ) {
+//     // 
+//     } 
+//   });
    
    /* ============================ Wall Time Limit  ========================= */
    
-   this.lblWallTimeLimit = toolkit.createButton(client, Messages.JobApplicationPage_WallTimeLimit,SWT.CHECK); 
+   this.lblWallTimeLimit = toolkit.createButton(client, 
+                          Messages.getString("JobApplicationPage_WallTimeLimit")
+                          ,SWT.CHECK); 
    
-   this.txtWallTimeLimit = toolkit.createText(client, "", SWT.NONE); //$NON-NLS-1$
-   //this.widgetMap.put( prefix +"_walltimelimit", this.txtWallTimeLimit ); //$NON-NLS-1$
+   this.txtWallTimeLimit = toolkit.createText(client, "", SWT.NONE); //$NON-NLS-1$-NLS-1$
    gd.widthHint = 200;
    this.txtWallTimeLimit.setLayoutData(gd);
-   
-   this.txtWallTimeLimit.addFocusListener( new org.eclipse.swt.events.FocusListener(){
-     public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
-     POSIXApplicationType posAppType = PosixFactory.eINSTANCE.createPOSIXApplicationType(); 
-     LimitsType limType = PosixFactory.eINSTANCE.createLimitsType();
-     BigInteger intVal = new BigInteger(JobApplicationPage.this.txtWallTimeLimit.getText());
-     limType.setValue(intVal);
-     posAppType.setWallTimeLimit( limType);
-     }
-
-     public void focusGained( final org.eclipse.swt.events.FocusEvent e ) { 
-       // currently empty
-     }
-});
-   
+      
    /* ============================ File Size Limit ========================== */
 
-   this.lblFileSizeLimit = toolkit.createButton(client, Messages.JobApplicationPage_FileSizeLimit,SWT.CHECK); 
+   this.lblFileSizeLimit = toolkit.createButton(client,
+                          Messages.getString("JobApplicationPage_FileSizeLimit")
+                          ,SWT.CHECK); 
    
    this.txtFileSizeLimit = toolkit.createText(client, "", SWT.NONE); //$NON-NLS-1$
-   //this.widgetMap.put( prefix +"_filesizelimit", this.txtFileSizeLimit ); //$NON-NLS-1$
    gd.widthHint = 200;
    this.txtFileSizeLimit.setLayoutData(gd);
    
    /* ============================ Core Dump Limit ========================== */
    
-   this.lblCoreDumpLimit = toolkit.createButton(client, Messages.JobApplicationPage_CoreDumpLimit,SWT.CHECK); 
+   this.lblCoreDumpLimit = toolkit.createButton(client, 
+                          Messages.getString("JobApplicationPage_CoreDumpLimit")
+                           ,SWT.CHECK); 
    
    this.txtCoreDumpLimit = toolkit.createText(client, "", SWT.NONE); //$NON-NLS-1$
-   //this.widgetMap.put( prefix +"_coredumplimit", this.txtCoreDumpLimit ); //$NON-NLS-1$
    gd.widthHint = 200;
    this.txtCoreDumpLimit.setLayoutData(gd);
 
    /* ==========================Data Segment Limit ========================== */
    
-   this.lblDataSegmentLimit = toolkit.createButton(client, Messages.JobApplicationPage_DataSegmentLimit,SWT.CHECK); 
+   this.lblDataSegmentLimit = toolkit.createButton(client,
+                       Messages.getString("JobApplicationPage_DataSegmentLimit")
+                      ,SWT.CHECK); 
    
    this.txtDataSegmentLimit = toolkit.createText(client, "", SWT.NONE); //$NON-NLS-1$
-   //this.widgetMap.put( prefix +"_datasegmentlimit", this.txtDataSegmentLimit ); //$NON-NLS-1$
    gd.widthHint = 200;
    this.txtDataSegmentLimit.setLayoutData(gd);
 
    /* ======================== Locked Memory Limit ========================== */
    
-   this.lblLockedMemoryLimit = toolkit.createButton(client, Messages.JobApplicationPage_LockedMemoryLimit,SWT.CHECK); 
+   this.lblLockedMemoryLimit = toolkit.createButton(client,
+                    Messages.getString("JobApplicationPage_LockedMemoryLimit"), 
+                    SWT.CHECK); 
    
    this.txtLockedMemoryLimit = toolkit.createText(client, "", SWT.NONE); //$NON-NLS-1$
-   //this.widgetMap.put( prefix +"_lockedmemorylimit", this.txtLockedMemoryLimit ); //$NON-NLS-1$
    gd.widthHint = 200;
    this.txtLockedMemoryLimit.setLayoutData(gd);
    
    /* =============================== Memory Limit ========================== */
    
-   this.lblMemoryLimit = toolkit.createButton(client, Messages.JobApplicationPage_MemoryLimit,SWT.CHECK); 
+   this.lblMemoryLimit = toolkit.createButton(client,
+                           Messages.getString("JobApplicationPage_MemoryLimit"),
+                           SWT.CHECK); 
    
-   this.txtMemoryLimit = toolkit.createText(client, "", SWT.NONE); //$NON-NLS-1$
-   //this.widgetMap.put( prefix +"_memorylimit", this.txtMemoryLimit ); //$NON-NLS-1$
+   this.txtMemoryLimit = toolkit.createText(client, "", SWT.NONE); //$NON-NLS-1$  
    gd.widthHint = 200;
    this.txtMemoryLimit.setLayoutData(gd);
    
    /* ====================== Open Descriptors Limit ========================= */
    
-   this.lblOpenDescriptorsLimit = toolkit.createButton(client, Messages.JobApplicationPage_OpenDescriptorsLimit,SWT.CHECK); 
+   this.lblOpenDescriptorsLimit = toolkit.createButton(client,
+                  Messages.getString("JobApplicationPage_OpenDescriptorsLimit"), 
+                    SWT.CHECK); 
    
    this.txtOpenDescriptorsLimit = toolkit.createText(client, "", SWT.NONE); //$NON-NLS-1$
-  // this.widgetMap.put( prefix +"_opendescriptorslimit", this.txtOpenDescriptorsLimit ); //$NON-NLS-1$
    gd.widthHint = 200;
    this.txtOpenDescriptorsLimit.setLayoutData(gd);
    
    /* ============================ Pipe Size Limit ========================== */
    
-   this.lblPipeSizeLimit = toolkit.createButton(client, Messages.JobApplicationPage_PipeSizeLimit,SWT.CHECK); 
+   this.lblPipeSizeLimit = toolkit.createButton(client,
+                         Messages.getString("JobApplicationPage_PipeSizeLimit"),
+                                                SWT.CHECK); 
    
    this.txtPipeSizeLimit = toolkit.createText(client, "", SWT.NONE); //$NON-NLS-1$
-   //this.widgetMap.put( prefix +"_pipesizelimit", this.txtPipeSizeLimit ); //$NON-NLS-1$
    gd.widthHint = 200;
    this.txtPipeSizeLimit.setLayoutData(gd);
    
    /* =========================== Stack Size Limit ========================== */
    
-   this.lblStackSizeLimit = toolkit.createButton(client, Messages.JobApplicationPage_StackSizeLimit,SWT.CHECK); 
+   this.lblStackSizeLimit = toolkit.createButton(client,
+                        Messages.getString("JobApplicationPage_StackSizeLimit"),
+                        SWT.CHECK); 
    
    this.txtStackSizeLimit = toolkit.createText(client, "", SWT.NONE); //$NON-NLS-1$
-   //this.widgetMap.put( prefix +"_stacksizelimit", this.txtStackSizeLimit ); //$NON-NLS-1$
    gd.widthHint = 200;
    this.txtStackSizeLimit.setLayoutData(gd);
    
    /* ============================= CPU Time Limit ========================== */
    
-   this.lblCPUTimeLimit = toolkit.createButton(client, Messages.JobApplicationPage_CPUTimeLimit, SWT.CHECK); 
+   this.lblCPUTimeLimit = toolkit.createButton(client,
+                          Messages.getString("JobApplicationPage_CPUTimeLimit"),
+                          SWT.CHECK); 
    
-   this.txtCPUTimeLimit = toolkit.createText(client, "", SWT.NONE); //$NON-NLS-1$
-   //this.widgetMap.put( prefix +"_cputimelimit", this.txtCPUTimeLimit ); //$NON-NLS-1$
+   this.txtCPUTimeLimit = toolkit.createText(client, "", SWT.NONE); //$NON-NLS-1$   
    gd.widthHint = 200;
    this.txtCPUTimeLimit.setLayoutData(gd);
    
    /* ====================== Process Count Limit ============================ */
    
-   this.lblProcessCountLimit = toolkit.createButton(client, Messages.JobApplicationPage_ProcessCountLimit, SWT.CHECK); 
+   this.lblProcessCountLimit = toolkit.createButton(client,
+                     Messages.getString("JobApplicationPage_ProcessCountLimit"),
+                     SWT.CHECK); 
    
    this.txtProcessCountLimit = toolkit.createText(client, "", SWT.NONE); //$NON-NLS-1$
-   //this.widgetMap.put( prefix +"_processcountlimit", this.txtProcessCountLimit ); //$NON-NLS-1$
    gd.widthHint = 200;
    this.txtProcessCountLimit.setLayoutData(gd);
    
    /* ============================= Virtual Memory Limit ==================== */
    
-   this.lblVirtualMemoryLimit = toolkit.createButton(client, Messages.JobApplicationPage_VirtualMemoryLimit, SWT.CHECK); 
+   this.lblVirtualMemoryLimit = toolkit.createButton(client,
+                    Messages.getString("JobApplicationPage_VirtualMemoryLimit"), 
+                    SWT.CHECK); 
    
    this.txtVirtualMemoryLimit = toolkit.createText(client, "", SWT.NONE); //$NON-NLS-1$
-   //this.widgetMap.put( prefix +"_virtualmemorylimit", this.txtVirtualMemoryLimit ); //$NON-NLS-1$
    gd.widthHint = 200;
    this.txtVirtualMemoryLimit.setLayoutData(gd);
    
    /* ========================= Thread Count Limit ========================== */
    
-   this.lblThreadCountLimit = toolkit.createButton(client, Messages.JobApplicationPage_ThreadCountLimit, SWT.CHECK); 
+   this.lblThreadCountLimit = toolkit.createButton(client,
+                      Messages.getString("JobApplicationPage_ThreadCountLimit"),
+                      SWT.CHECK); 
    
-   this.txtThreadCountLimit = toolkit.createText(client, "", SWT.NONE); //$NON-NLS-1$
-   //this.widgetMap.put( prefix +"_threadcountlimit", this.txtThreadCountLimit ); //$NON-NLS-1$
+   this.txtThreadCountLimit = toolkit.createText(client, "", SWT.NONE); //$NON-NLS-1$  
    gd.widthHint = 200;
    this.txtThreadCountLimit.setLayoutData(gd);
 
    /* ============================= User Name Limit ======================== */
    
-   this.lblUserName = toolkit.createButton(client, Messages.JobApplicationPage_UserName, SWT.CHECK); 
+   this.lblUserName = toolkit.createButton(client,
+                              Messages.getString("JobApplicationPage_UserName"),
+                              SWT.CHECK); 
    
    this.txtUserName = toolkit.createText(client, "", SWT.NONE); //$NON-NLS-1$
-   //this.widgetMap.put( prefix +"_username", this.txtUserName ); //$NON-NLS-1$
    gd.widthHint = 200;
    this.txtUserName.setLayoutData(gd);
-   this.txtUserName.addFocusListener( new org.eclipse.swt.events.FocusListener(){
-     public void focusLost( final org.eclipse.swt.events.FocusEvent e  ) {
-      UserNameType userName = PosixFactory.eINSTANCE.createUserNameType();
-      userName.setValue( JobApplicationPage.this.txtUserName.getText() );
-      JobApplicationPage.this.posixApplType.setUserName( userName );
-     }
-     public void focusGained( final org.eclipse.swt.events.FocusEvent e  ) {
-     // 
-     } 
-   });
+//   this.txtUserName.addFocusListener( new org.eclipse.swt.events.FocusListener(){
+//     public void focusLost( final org.eclipse.swt.events.FocusEvent e  ) {
+//      UserNameType userName = PosixFactory.eINSTANCE.createUserNameType();
+//      userName.setValue( JobApplicationPage.this.txtUserName.getText() );
+//      JobApplicationPage.this.posixApplType.setUserName( userName );
+//     }
+//     public void focusGained( final org.eclipse.swt.events.FocusEvent e  ) {
+//     // 
+//     } 
+//   });
 
    /* ============================= Group Name Limit ======================== */  
-   this.lblGroupName = toolkit.createButton(client, Messages.JobApplicationPage_GroupName, SWT.CHECK); 
+   this.lblGroupName = toolkit.createButton(client,
+                             Messages.getString("JobApplicationPage_GroupName"),
+                             SWT.CHECK); 
    
    this.txtGroupName = toolkit.createText(client, "", SWT.NONE); //$NON-NLS-1$
-   //this.widgetMap.put( prefix +"_groupname", this.txtGroupName ); //$NON-NLS-1$
    gd.widthHint = 200;
    this.txtGroupName.setLayoutData(gd);
-   this.txtGroupName.addFocusListener( new org.eclipse.swt.events.FocusListener(){
-     public void focusLost( final org.eclipse.swt.events.FocusEvent e  ) {
-      GroupNameType groupName = PosixFactory.eINSTANCE.createGroupNameType();
-      groupName.setValue( JobApplicationPage.this.txtGroupName.getText() );
-      JobApplicationPage.this.posixApplType.setGroupName( groupName );
-     }
-     public void focusGained( final org.eclipse.swt.events.FocusEvent e  ) {
-     // 
-     } 
-   });
+//   this.txtGroupName.addFocusListener( new org.eclipse.swt.events.FocusListener(){
+//     public void focusLost( final org.eclipse.swt.events.FocusEvent e  ) {
+//      GroupNameType groupName = PosixFactory.eINSTANCE.createGroupNameType();
+//      groupName.setValue( JobApplicationPage.this.txtGroupName.getText() );
+//      JobApplicationPage.this.posixApplType.setGroupName( groupName );
+//     }
+//     public void focusGained( final org.eclipse.swt.events.FocusEvent e  ) {
+//     // 
+//     } 
+//   });
 
    toolkit.paintBordersFor( client );
    

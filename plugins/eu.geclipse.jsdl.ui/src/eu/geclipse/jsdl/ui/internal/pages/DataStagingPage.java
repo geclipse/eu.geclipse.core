@@ -73,8 +73,8 @@ public class DataStagingPage extends FormPage{
                             
    {
     
-    super(editor,Messages.DataStagingPage_pageId , 
-          Messages.DataStagingPage_PageTitle);
+    super(editor,Messages.getString("DataStagingPage_pageId"), 
+          Messages.getString("DataStagingPage_PageTitle"));
    
     }
   
@@ -91,7 +91,7 @@ public class DataStagingPage extends FormPage{
     
         
     ScrolledForm form = managedForm.getForm();
-    form.setText(Messages.DataStagingPage_DataStagingPageTitle); 
+    form.setText(Messages.getString("DataStagingPage_DataStagingPageTitle")); 
   
     ColumnLayout layout = new ColumnLayout();
    
@@ -105,8 +105,8 @@ public class DataStagingPage extends FormPage{
 
         
    this.jobDataStaging = createDataStagingSection(managedForm,
-                                 Messages.DataStagingPage_PageTitle, 
-                                 Messages.DataStagingPage_DataStagingDescr);  
+                                Messages.getString("DataStagingPage_PageTitle"), 
+                        Messages.getString("DataStagingPage_DataStagingDescr"));  
       
    this.dataStagingAdapter.load();
    
@@ -225,7 +225,8 @@ public class DataStagingPage extends FormPage{
     gd = new GridData();
     gd.verticalSpan = 2;
     gd.horizontalSpan = 1;
-    this.lblFileName = toolkit.createLabel(clientsubSection, Messages.DataStagingPage_FileName);
+    this.lblFileName = toolkit.createLabel(clientsubSection,
+                                 Messages.getString("DataStagingPage_FileName"));
     
     this.lstFileName = new List(clientsubSection, SWT.NONE | SWT.V_SCROLL);
     this.lstFileName.setData( FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER );    
@@ -243,7 +244,9 @@ public class DataStagingPage extends FormPage{
     gd.horizontalSpan = 2;
     gd.verticalSpan = 1;
     gd.widthHint = 60;
-    this.btnAdd = toolkit.createButton(clientsubSection, Messages.JsdlEditor_AddButton, SWT.PUSH);
+    this.btnAdd = toolkit.createButton(clientsubSection,
+                                     Messages.getString("JsdlEditor_AddButton"),
+                                     SWT.PUSH);
     this.dataStagingAdapter.attachToAdd( this.btnAdd );
     this.btnAdd.setLayoutData( gd );
     
@@ -254,7 +257,9 @@ public class DataStagingPage extends FormPage{
     gd.verticalSpan = 1;
     gd.widthHint = 60;
     gd.verticalAlignment = GridData.BEGINNING;
-    this.btnDel = toolkit.createButton(clientsubSection, Messages.JsdlEditor_RemoveButton, SWT.PUSH);
+    this.btnDel = toolkit.createButton(clientsubSection,
+                                  Messages.getString("JsdlEditor_RemoveButton"),
+                                   SWT.PUSH);
     this.dataStagingAdapter.attachToDelete( this.btnDel );
     this.btnDel.setLayoutData( gd );
     
@@ -262,7 +267,8 @@ public class DataStagingPage extends FormPage{
     /* =================== File-System Name Widgets ========================= */
 
     gd = new GridData();
-    this.lblFileSystemName = toolkit.createLabel(clientsubSection,Messages.DataStagingPage_FileSystemName);
+    this.lblFileSystemName = toolkit.createLabel(clientsubSection,
+                          Messages.getString("DataStagingPage_FileSystemName"));
     this.txtFileSystemName = toolkit.createText(clientsubSection, "", SWT.NONE); //$NON-NLS-1$
     this.dataStagingAdapter.attachToFileSystemName(this.txtFileSystemName );
     gd.horizontalSpan=3;
@@ -272,12 +278,11 @@ public class DataStagingPage extends FormPage{
     
     /* ====================== Creation Flag Widgets ========================= */
     
-    this.lblCreationFlag = toolkit.createLabel(clientsubSection,Messages.DataStagingPage_CreationFlag);
+    this.lblCreationFlag = toolkit.createLabel(clientsubSection,
+                            Messages.getString("DataStagingPage_CreationFlag"));
+    
     this.comboCreationFlag = new Combo(clientsubSection, SWT.NONE);
-    this.comboCreationFlag.setData( FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER );    
-//    this.comboCreationFlag.add(Messages.DataStagingPage_overwrite);
-//    this.comboCreationFlag.add(Messages.DataStagingPage_append);
-//    this.comboCreationFlag.add(Messages.DataStagingPage_dontOverwrite);
+    this.comboCreationFlag.setData( FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER );
     this.dataStagingAdapter.attachToCreationFlag( this.comboCreationFlag );
     gd.horizontalSpan=3;
     gd.widthHint = 300;
@@ -285,18 +290,22 @@ public class DataStagingPage extends FormPage{
 
     /* =================== Delete On Termination Widgets ==================== */
     
-    this.lblDelOnTerm = toolkit.createLabel(clientsubSection,Messages.DataStagingPage_DeleteOnTermination);
+    this.lblDelOnTerm = toolkit.createLabel(clientsubSection,
+                     Messages.getString("DataStagingPage_DeleteOnTermination"));
+    
     this.comboDelOnTerm = new Combo(clientsubSection, SWT.NONE);
     this.comboDelOnTerm.setData( FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER );    
-    this.comboDelOnTerm.add(Messages.DataStagingPage_true);
-    this.comboDelOnTerm.add(Messages.DataStagingPage_false);
+    this.comboDelOnTerm.add(Messages.getString("DataStagingPage_true"));
+    this.comboDelOnTerm.add(Messages.getString("DataStagingPage_false"));
     this.dataStagingAdapter.attachToDelOnTermination( this.comboDelOnTerm );
     gd.horizontalSpan=3;
     gd.widthHint = 300;
     this.comboDelOnTerm.setLayoutData(gd);
     
     /* ===================== Source Location Widgets ======================== */
-    this.lblSource = toolkit.createLabel(clientsubSection,Messages.DataStagingPage_Source);
+    this.lblSource = toolkit.createLabel(clientsubSection,
+                                  Messages.getString("DataStagingPage_Source"));
+    
     this.txtSource = toolkit.createText(clientsubSection, "", SWT.NONE); //$NON-NLS-1$
     this.dataStagingAdapter.attachToSource( this.txtSource );
     gd.horizontalSpan=3;
@@ -305,7 +314,8 @@ public class DataStagingPage extends FormPage{
     
     /* ====================== Target Location Widgets ======================= */
     
-    this.lblTarget = toolkit.createLabel(clientsubSection,Messages.DataStagingPage_Target);
+    this.lblTarget = toolkit.createLabel(clientsubSection,
+                                  Messages.getString("DataStagingPage_Target"));
     this.txtTarget = toolkit.createText(clientsubSection, "", SWT.NONE); //$NON-NLS-1$
     this.dataStagingAdapter.attachToTarget( this.txtTarget );
     gd.horizontalSpan=3;
@@ -313,7 +323,8 @@ public class DataStagingPage extends FormPage{
     this.txtTarget.setLayoutData(gd);
     
     /* ========================== Name Widgets ============================ */
-    this.lblName = toolkit.createLabel(clientsubSection,Messages.DataStagingPage_Name);
+    this.lblName = toolkit.createLabel(clientsubSection,
+                                    Messages.getString("DataStagingPage_Name"));
     this.txtName= toolkit.createText(clientsubSection, "", SWT.NONE); //$NON-NLS-1$
     this.dataStagingAdapter.attachToName( this.txtName );
     gd.horizontalSpan=3;
@@ -339,8 +350,9 @@ public class DataStagingPage extends FormPage{
     
     /* Create the Staged Files Sub-Section */
     this.jobDataStaging = createSubSection (client,mform,
-                               Messages.DataStagingPage_Section
-                              ,Messages.DataStagingPage_SectionDesc,4,490,320);    
+                                 Messages.getString("DataStagingPage_Section"),
+                              Messages.getString("DataStagingPage_SectionDesc"),
+                              4,490,320);    
   
     
     return client;

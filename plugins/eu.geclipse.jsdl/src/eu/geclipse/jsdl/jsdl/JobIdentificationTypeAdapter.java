@@ -20,10 +20,10 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
-import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.util.FeatureMapUtil;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -35,6 +35,7 @@ import eu.geclipse.jsdl.model.JsdlFactory;
 import eu.geclipse.jsdl.model.JsdlPackage;
 
 
+
 /**
  * @author nickl
  *
@@ -43,7 +44,9 @@ import eu.geclipse.jsdl.model.JsdlPackage;
 public class JobIdentificationTypeAdapter {
   
   Hashtable< Integer, Text > widgetFeaturesMap = new Hashtable< Integer, Text >();
-  Hashtable< Integer, List > listFeaturesMap = new Hashtable< Integer, List >();   
+  Hashtable< Integer, List > listFeaturesMap = new Hashtable< Integer, List >();
+  Hashtable<String, EStructuralFeature> eStructuralFeaturesMap 
+                                 = new Hashtable<String, EStructuralFeature>();
     
   private JobIdentificationType jobIdentificationType = 
                             JsdlFactory.eINSTANCE.createJobIdentificationType();
@@ -71,9 +74,13 @@ public class JobIdentificationTypeAdapter {
 
    } // End getTypeforAdapter
   
+  
+  
   public void setContent(final EObject rootJsdlElement){
     getTypeForAdapter( rootJsdlElement );
   }
+  
+  
   
   public void attachToJobName(final Text widget){    
     this.widgetFeaturesMap.put( JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_NAME
@@ -134,7 +141,7 @@ public class JobIdentificationTypeAdapter {
     button.addSelectionListener(new SelectionListener() {
 
       public void widgetSelected(final SelectionEvent event) {        
-        
+        performDelete( list.getItem( list.getSelectionIndex() ) );
       }
 
       public void widgetDefaultSelected(final SelectionEvent event) {
@@ -142,6 +149,27 @@ public class JobIdentificationTypeAdapter {
       }
     });
     
+    
+  }
+  
+  
+  private void performDelete(final String key){
+    
+    List listWidget;
+    
+    /* Get EStructuralFeature */
+    EStructuralFeature eStructuralFeature = this.eStructuralFeaturesMap.get( key );
+    
+    /* Delete only Multi-Valued Elements */
+    if (FeatureMapUtil.isMany(this.jobIdentificationType, eStructuralFeature)){
+      ((java.util.List<?>)this.jobIdentificationType.eGet(eStructuralFeature))
+                                                                   .remove(key);
+    }
+    
+    /* Get Structural Feature ID to remove it from the associated SWT List */
+    int featureID = eStructuralFeature.getFeatureID();
+    listWidget = this.listFeaturesMap.get( featureID );
+    listWidget.remove( key );
     
   }
   
@@ -158,39 +186,47 @@ public class JobIdentificationTypeAdapter {
       EClass eClass = object.eClass();
              
         
-      for (Iterator iter = eClass.getEAllAttributes().iterator(); iter.hasNext();) {      
-        EAttribute attribute = (EAttribute) iter.next();
+      for (Iterator iter = eClass.getEAllStructuralFeatures().iterator(); iter.hasNext();) {      
+        EStructuralFeature eStructuralFeature = (EStructuralFeature) iter.next();
       
-        //if (attribute.getUpperBound() == 1){ 
         
         //Get Attribute Value.
-        Object value = object.eGet( attribute );        
+        Object value = object.eGet( eStructuralFeature );        
              
-        Integer featureID = attribute.getFeatureID();
+        int featureID = eStructuralFeature.getFeatureID();
       
         //Check if Attribute has any value
-        if (object.eIsSet( attribute )){   
+        if (object.eIsSet( eStructuralFeature )){   
           
         
-          if (attribute.getUpperBound() == 1){ 
+          if (eStructuralFeature.getUpperBound() == 1){ 
           
            widgetName = this.widgetFeaturesMap.get( featureID );
         
            
-             if (attribute.getName().toString() != "any"){ //$NON-NLS-1$
+             if (eStructuralFeature.getFeatureID() 
+                     != JsdlPackage.JOB_IDENTIFICATION_TYPE__ANY){ //$NON-NLS-1$
                widgetName.setText(value.toString());
              } //end if "any"
            }//end if UpperBound == 1                        
               
         // Add Multiplicity-Many Elements to attached Lists.
-        else if (attribute.getUpperBound() == EStructuralFeature.UNBOUNDED_MULTIPLICITY) {
+        else if (eStructuralFeature.getUpperBound()  
+                                 == EStructuralFeature.UNBOUNDED_MULTIPLICITY) {
                         
             listName = this.listFeaturesMap.get( featureID );
-                      
+                     
             EList valueArray = (EList) value;
-
-            for (Iterator iterA = valueArray.iterator(); iterA.hasNext();){
-                 listName.add( iterA.next().toString() );
+                       
+            Object eFeatureInst = null;
+            
+            for (Iterator it = valueArray.iterator(); it.hasNext();){
+                            
+              eFeatureInst = it.next();              
+              eStructuralFeaturesMap.put( eFeatureInst.toString(),
+                                              eStructuralFeature );
+              
+              listName.add( eFeatureInst.toString());
                        
             } // End for
 

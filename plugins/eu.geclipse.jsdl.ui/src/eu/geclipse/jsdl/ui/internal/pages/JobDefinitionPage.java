@@ -22,7 +22,6 @@ package eu.geclipse.jsdl.ui.internal.pages;
  *
  */
 
-import java.util.Hashtable;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -36,7 +35,6 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
-import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.ColumnLayout;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
@@ -45,6 +43,7 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 import eu.geclipse.jsdl.jsdl.JobDefinitionTypeAdapter;
 import eu.geclipse.jsdl.jsdl.JobIdentificationTypeAdapter;
+import eu.geclipse.jsdl.ui.editors.JsdlMultiPageEditor;
 import eu.geclipse.jsdl.ui.internal.Activator;
 
 public class JobDefinitionPage extends FormPage {
@@ -61,7 +60,7 @@ public class JobDefinitionPage extends FormPage {
   Label lblJobAnnotation = null;
   Label lblJobProject = null;
   
-  Button btnADD = null;
+  Button btnAdd = null;
   Button btnDel = null;
   Button btnTest = null;
   
@@ -70,21 +69,24 @@ public class JobDefinitionPage extends FormPage {
   
   Table testTable = null;
   
+  JsdlMultiPageEditor editor;
    
-  Hashtable< String, Text > widgetFeaturesMap = new Hashtable< String, Text >();
+  //Hashtable< String, Text > widgetFeaturesMap = new Hashtable< String, Text >();
   
   
   private JobDefinitionTypeAdapter jobDefinitionTypeAdapter ;
   private JobIdentificationTypeAdapter jobIdentificationTypeAdapter;
     
   private boolean contentRefreshed = false;
+  private boolean isDirtyVar = false;
   
-  public JobDefinitionPage( final FormEditor editor) {
+  public JobDefinitionPage( final JsdlMultiPageEditor editor) {
    
     
-    super(editor, Messages.JobDefinitionPage_jobDefinitionId, 
-                                Messages.JobDefinitionPage_JobDefinitionTitle);
+    super(editor, Messages.getString("JobDefinitionPage_jobDefinitionId"), 
+                  Messages.getString("JobDefinitionPage_JobDefinitionTitle"));
     
+    this.editor = editor;
   }
   
   @Override
@@ -112,12 +114,25 @@ public class JobDefinitionPage extends FormPage {
       this.jobDefinitionTypeAdapter.setContent( rootJsdlElement );
       this.jobIdentificationTypeAdapter.setContent( rootJsdlElement );
     }
-   else{
+   else{     
       this.jobDefinitionTypeAdapter = new JobDefinitionTypeAdapter(rootJsdlElement);
       this.jobIdentificationTypeAdapter = new JobIdentificationTypeAdapter(rootJsdlElement);
    }
           
   } // End void getPageContent()   
+  
+
+  @Override
+  public boolean isDirty() {
+    return isDirtyVar;
+    
+  }
+  
+  //FIXME Uncomment below for doSave and setDiry
+//  private void setDirty(final boolean dirtyFlag) {
+//    isDirtyVar = dirtyFlag;
+//    editor.setDirty( true );
+//  }
 
  
 
@@ -130,7 +145,7 @@ public class JobDefinitionPage extends FormPage {
     
         
     ScrolledForm form = managedForm.getForm();
-    form.setText(Messages.JobDefinitionPage_JobDefinitionPageTitle); 
+    form.setText(Messages.getString("JobDefinitionPage_JobDefinitionPageTitle")); 
     
   
     ColumnLayout layout = new ColumnLayout();
@@ -146,8 +161,8 @@ public class JobDefinitionPage extends FormPage {
 
         
    this.jobDefComposite = createJobDefinitionSection(managedForm,
-                                 Messages.JobDefinitionPage_JobDefinitionTitle, 
-                                 Messages.JobDefinitionPage_JobDefinitionDescr);  
+                    Messages.getString("JobDefinitionPage_JobDefinitionTitle"), 
+                    Messages.getString("JobDefinitionPage_JobDefinitionDescr"));  
          
      
      this.jobDefinitionTypeAdapter.load();
@@ -155,8 +170,8 @@ public class JobDefinitionPage extends FormPage {
      
 
     this.jobIdentComposite = createJobIdentificationSection(managedForm, 
-                             Messages.JobDefinitionPage_JobIdentificationTitle, 
-                             Messages.JobDefinitionPage_JobIdentificationDescr);
+                 Messages.getString("JobDefinitionPage_JobIdentificationTitle"), 
+                 Messages.getString("JobDefinitionPage_JobIdentificationDescr"));
     
     this.jobIdentificationTypeAdapter.load();
     
@@ -204,6 +219,7 @@ public class JobDefinitionPage extends FormPage {
    * Create the Job Definition Section which includes the following:
    *  -Job ID (String)
    */
+    
   private Composite createJobDefinitionSection(final IManagedForm mform, 
                                           final String title, final String desc)
   {
@@ -213,10 +229,11 @@ public class JobDefinitionPage extends FormPage {
     GridData gd;
   
     this.lblJobId = toolkit.createLabel(client,
-                                    Messages.JobDefinitionPage_JobDefinitionId);
+                       Messages.getString("JobDefinitionPage_JobDefinitionId"));
     
     this.txtId = toolkit.createText(client,"", SWT.NONE);    
     this.jobDefinitionTypeAdapter.attachID( this.txtId );
+    
   
     gd = new GridData();
     gd.widthHint = 300;
@@ -251,7 +268,7 @@ public class JobDefinitionPage extends FormPage {
     
     /* ================================ Job Name ============================ */
     
-    toolkit.createLabel(client, Messages.JobDefinitionPage_JobName);
+    toolkit.createLabel(client, Messages.getString("JobDefinitionPage_JobName"));
     gd = new GridData();
     gd.grabExcessHorizontalSpace = true;
     gd.verticalAlignment = GridData.CENTER;
@@ -266,7 +283,7 @@ public class JobDefinitionPage extends FormPage {
     /* ========================= Job Description ============================ */
     
     this.lblJobDescripiton = toolkit.createLabel (client,
-                                           Messages.JobDefinitionPage_JobDescr);
+                              Messages.getString("JobDefinitionPage_JobDescr"));
     lblgd = new GridData();
     lblgd.verticalSpan = 1;
     this.lblJobDescripiton.setLayoutData (lblgd);
@@ -291,7 +308,7 @@ public class JobDefinitionPage extends FormPage {
     /* ========================= Job Annotation ============================= */
     
     this.lblJobAnnotation = toolkit.createLabel(client,
-                                      Messages.JobDefinitionPage_JobAnnotation); 
+                         Messages.getString("JobDefinitionPage_JobAnnotation")); 
     lblgd = new GridData();
     lblgd.horizontalSpan = 1;
     lblgd.verticalSpan = 2;    
@@ -328,38 +345,43 @@ public class JobDefinitionPage extends FormPage {
     this.jobIdentificationTypeAdapter.attachToJobAnnotation( this.lstJobAnnotation);
     this.lstJobAnnotation.setLayoutData( gd );
 
-    //Create Button ADD
+    /* Create Button ADD */
     gd = new GridData();
     gd.horizontalSpan = 2;
     gd.verticalSpan = 1;
     gd.widthHint = 60;
-    this.btnADD = toolkit.createButton(client, Messages.JsdlEditor_AddButton, SWT.PUSH);
-    this.btnADD.addSelectionListener(new SelectionListener() {
-
+    this.btnAdd = toolkit.createButton(client, 
+                                       Messages.getString("JsdlEditor_AddButton"),
+                                       SWT.PUSH);
+    
+    btnAdd.addSelectionListener(new SelectionListener() {
       public void widgetSelected(final SelectionEvent event) {
-      System.out.println(testTable.getItemCount());
+        //FIXME Uncomment below for doSave and setDiry
+        //setDirty( true );
       }
 
       public void widgetDefaultSelected(final SelectionEvent event) {
-       
+          // Do Nothing - Required method
       }
     });
-    this.btnADD.setLayoutData( gd );
+    
+    this.btnAdd.setLayoutData( gd );
 
-    //Create Button DEL
-
+    /* Create Button DEL */
     gd = new GridData();    
     gd.horizontalSpan = 2;
     gd.verticalSpan = 1;
     gd.widthHint = 60;
     gd.verticalAlignment = GridData.BEGINNING;         
-    this.btnDel = toolkit.createButton(client, Messages.JsdlEditor_RemoveButton, SWT.PUSH); 
+    this.btnDel = toolkit.createButton(client,
+                       Messages.getString("JsdlEditor_RemoveButton"), SWT.PUSH); 
+    this.jobIdentificationTypeAdapter.attachToDelete( this.btnDel, this.lstJobAnnotation);
     this.btnDel.setLayoutData( gd );
     
     /* ============================= Job Project =============================*/
     
      this.lblJobProject = toolkit.createLabel(client,
-                                       Messages.JobDefinitionPage_JobProject);
+                            Messages.getString("JobDefinitionPage_JobProject"));
      
      lblgd = new GridData();
      lblgd.verticalSpan = 2;
@@ -381,7 +403,9 @@ public class JobDefinitionPage extends FormPage {
      gd.horizontalSpan = 2;
      gd.verticalSpan = 1;
      gd.widthHint = 60;     
-     this.btnDel = toolkit.createButton(client, Messages.JsdlEditor_AddButton, SWT.PUSH); 
+     this.btnDel = toolkit.createButton(client,
+                                     Messages.getString("JsdlEditor_AddButton"),
+                                     SWT.PUSH); 
      this.btnDel.setLayoutData( gd );
      
      //Create Button DEL
@@ -390,7 +414,11 @@ public class JobDefinitionPage extends FormPage {
      gd.widthHint = 60;
      gd.verticalSpan = 1;
      gd.verticalAlignment = GridData.BEGINNING;
-     this.btnDel = toolkit.createButton(client, Messages.JsdlEditor_RemoveButton, SWT.PUSH); 
+     this.btnDel = toolkit.createButton(client,
+                                  Messages.getString("JsdlEditor_RemoveButton"),
+                                  SWT.PUSH);
+     
+     this.jobIdentificationTypeAdapter.attachToDelete( this.btnDel, this.lstJobProject);
      this.btnDel.setLayoutData( gd );
  
      toolkit.paintBordersFor( client );
