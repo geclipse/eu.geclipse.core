@@ -66,10 +66,10 @@ public class WorkflowNewDiagramFileWizard extends Wizard {
     assert domainModelURI != null : "Domain model uri must be specified"; //$NON-NLS-1$
     assert diagramRoot != null : "Doagram root element must be specified"; //$NON-NLS-1$
     assert editingDomain != null : "Editing domain must be specified"; //$NON-NLS-1$
-    myFileCreationPage = new WizardNewFileCreationPage( Messages.WorkflowNewDiagramFileWizard_CreationPageName,
+    myFileCreationPage = new WizardNewFileCreationPage( Messages.getString("WorkflowNewDiagramFileWizard_CreationPageName"),
                                                         StructuredSelection.EMPTY );
-    myFileCreationPage.setTitle( Messages.WorkflowNewDiagramFileWizard_CreationPageTitle );
-    myFileCreationPage.setDescription( NLS.bind( Messages.WorkflowNewDiagramFileWizard_CreationPageDescription,
+    myFileCreationPage.setTitle( Messages.getString("WorkflowNewDiagramFileWizard_CreationPageTitle") );
+    myFileCreationPage.setDescription( NLS.bind( Messages.getString("WorkflowNewDiagramFileWizard_CreationPageDescription"),
                                                  WorkflowEditPart.MODEL_ID ) );
     IPath filePath;
     String fileName = domainModelURI.trimFileExtension().lastSegment();
@@ -86,9 +86,9 @@ public class WorkflowNewDiagramFileWizard extends Wizard {
     myFileCreationPage.setFileName( WorkflowDiagramEditorUtil.getUniqueFileName( filePath,
                                                                                  fileName,
                                                                                  "workflow" ) ); //$NON-NLS-1$
-    diagramRootElementSelectionPage = new DiagramRootElementSelectionPage( Messages.WorkflowNewDiagramFileWizard_RootSelectionPageName );
-    diagramRootElementSelectionPage.setTitle( Messages.WorkflowNewDiagramFileWizard_RootSelectionPageTitle );
-    diagramRootElementSelectionPage.setDescription( Messages.WorkflowNewDiagramFileWizard_RootSelectionPageDescription );
+    diagramRootElementSelectionPage = new DiagramRootElementSelectionPage( Messages.getString("WorkflowNewDiagramFileWizard_RootSelectionPageName") );
+    diagramRootElementSelectionPage.setTitle( Messages.getString("WorkflowNewDiagramFileWizard_RootSelectionPageTitle") );
+    diagramRootElementSelectionPage.setDescription( Messages.getString("WorkflowNewDiagramFileWizard_RootSelectionPageDescription") );
     diagramRootElementSelectionPage.setModelElement( diagramRoot );
     myEditingDomain = editingDomain;
   }
@@ -115,7 +115,7 @@ public class WorkflowNewDiagramFileWizard extends Wizard {
     ResourceSet resourceSet = myEditingDomain.getResourceSet();
     final Resource diagramResource = resourceSet.createResource( diagramModelURI );
     AbstractTransactionalCommand command = new AbstractTransactionalCommand( myEditingDomain,
-                                                                             Messages.WorkflowNewDiagramFileWizard_InitDiagramCommand,
+                                                                             Messages.getString("WorkflowNewDiagramFileWizard_InitDiagramCommand"),
                                                                              affectedFiles )
     {
 
@@ -125,7 +125,7 @@ public class WorkflowNewDiagramFileWizard extends Wizard {
       {
         int diagramVID = WorkflowVisualIDRegistry.getDiagramVisualID( diagramRootElementSelectionPage.getModelElement() );
         if( diagramVID != WorkflowEditPart.VISUAL_ID ) {
-          return CommandResult.newErrorCommandResult( Messages.WorkflowNewDiagramFileWizard_IncorrectRootError );
+          return CommandResult.newErrorCommandResult( Messages.getString("WorkflowNewDiagramFileWizard_IncorrectRootError") );
         }
         Diagram diagram = ViewService.createDiagram( diagramRootElementSelectionPage.getModelElement(),
                                                      WorkflowEditPart.MODEL_ID,
@@ -170,7 +170,7 @@ public class WorkflowNewDiagramFileWizard extends Wizard {
      * @generated
      */
     protected String getSelectionTitle() {
-      return Messages.WorkflowNewDiagramFileWizard_RootSelectionPageSelectionTitle;
+      return Messages.getString("WorkflowNewDiagramFileWizard_RootSelectionPageSelectionTitle");
     }
 
     /**
@@ -178,7 +178,7 @@ public class WorkflowNewDiagramFileWizard extends Wizard {
      */
     protected boolean validatePage() {
       if( selectedModelElement == null ) {
-        setErrorMessage( Messages.WorkflowNewDiagramFileWizard_RootSelectionPageNoSelectionMessage );
+        setErrorMessage( Messages.getString("WorkflowNewDiagramFileWizard_RootSelectionPageNoSelectionMessage") );
         return false;
       }
       boolean result = ViewService.getInstance()
@@ -187,7 +187,7 @@ public class WorkflowNewDiagramFileWizard extends Wizard {
                                                    WorkflowDiagramEditorPlugin.DIAGRAM_PREFERENCES_HINT ) );
       setErrorMessage( result
                              ? null
-                             : Messages.WorkflowNewDiagramFileWizard_RootSelectionPageInvalidSelectionMessage );
+                             : Messages.getString("WorkflowNewDiagramFileWizard_RootSelectionPageInvalidSelectionMessage") );
       return result;
     }
   }

@@ -171,13 +171,13 @@ public class WorkflowDiagramEditorUtil {
                                         IProgressMonitor progressMonitor )
   {
     TransactionalEditingDomain editingDomain = GMFEditingDomainFactory.INSTANCE.createEditingDomain();
-    progressMonitor.beginTask( Messages.WorkflowDiagramEditorUtil_CreateDiagramProgressTask,
+    progressMonitor.beginTask( Messages.getString("WorkflowDiagramEditorUtil_CreateDiagramProgressTask"),
                                3 );
     final Resource diagramResource = editingDomain.getResourceSet()
       .createResource( diagramURI );
     final String diagramName = diagramURI.lastSegment();
     AbstractTransactionalCommand command = new AbstractTransactionalCommand( editingDomain,
-                                                                             Messages.WorkflowDiagramEditorUtil_CreateDiagramCommandLabel,
+                                                                             Messages.getString("WorkflowDiagramEditorUtil_CreateDiagramCommandLabel"),
                                                                              Collections.EMPTY_LIST )
     {
 

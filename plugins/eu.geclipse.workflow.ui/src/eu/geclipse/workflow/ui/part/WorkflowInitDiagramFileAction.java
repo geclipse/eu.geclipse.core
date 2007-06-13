@@ -90,14 +90,14 @@ public class WorkflowInitDiagramFileAction implements IObjectActionDelegate {
     }
     if( diagramRoot == null ) {
       MessageDialog.openError( getShell(),
-                               Messages.WorkflowInitDiagramFileAction_InitDiagramFileResourceErrorDialogTitle,
-                               Messages.WorkflowInitDiagramFileAction_InitDiagramFileResourceErrorDialogMessage );
+                               Messages.getString("WorkflowInitDiagramFileAction_InitDiagramFileResourceErrorDialogTitle"),
+                               Messages.getString("WorkflowInitDiagramFileAction_InitDiagramFileResourceErrorDialogMessage") );
       return;
     }
     Wizard wizard = new WorkflowNewDiagramFileWizard( domainModelURI,
                                                       diagramRoot,
                                                       editingDomain );
-    wizard.setWindowTitle( NLS.bind( Messages.WorkflowInitDiagramFileAction_InitDiagramFileWizardTitle,
+    wizard.setWindowTitle( NLS.bind( Messages.getString("WorkflowInitDiagramFileAction_InitDiagramFileWizardTitle"),
                                      WorkflowEditPart.MODEL_ID ) );
     WorkflowDiagramEditorUtil.runWizard( getShell(), wizard, "InitDiagramFile" ); //$NON-NLS-1$
   }

@@ -9,200 +9,35 @@
  ******************************************************************************/
 package eu.geclipse.workflow.ui.part;
 
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 import org.eclipse.osgi.util.NLS;
 
 /**
- * @generated
+ * Returns the localised messages for this plugin
  */
-public class Messages extends NLS {
+public class Messages {
 
-  /**
-   * @generated
-   */
-  static {
-    NLS.initializeMessages( "messages", Messages.class ); //$NON-NLS-1$
-  }
+  private static final String BUNDLE_NAME = "eu.geclipse.workflow.ui.part.messages"; //$NON-NLS-1$
+  private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( BUNDLE_NAME );
 
-  /**
-   * @generated
-   */
   private Messages() {
+    // Empty constructor
   }
+
   /**
-   * @generated
+   * Returns a localised version of a message.
+   * 
+   * @param key key for the message.
+   * @return the localised string.
    */
-  public static String WorkflowDiagramEditorUtil_OpenModelResourceErrorDialogTitle;
-  /**
-   * @generated
-   */
-  public static String WorkflowDiagramEditorUtil_OpenModelResourceErrorDialogMessage;
-  /**
-   * @generated
-   */
-  public static String WorkflowDiagramEditorUtil_CreateDiagramProgressTask;
-  /**
-   * @generated
-   */
-  public static String WorkflowDiagramEditorUtil_CreateDiagramCommandLabel;
-  /**
-   * @generated
-   */
-  public static String WorkflowDocumentProvider_isModifiable;
-  /**
-   * @generated
-   */
-  public static String WorkflowDocumentProvider_handleElementContentChanged;
-  /**
-   * @generated
-   */
-  public static String WorkflowDocumentProvider_IncorrectInputError;
-  /**
-   * @generated
-   */
-  public static String WorkflowDocumentProvider_NoDiagramInResourceError;
-  /**
-   * @generated
-   */
-  public static String WorkflowDocumentProvider_DiagramLoadingError;
-  /**
-   * @generated
-   */
-  public static String WorkflowDocumentProvider_UnsynchronizedFileSaveError;
-  /**
-   * @generated
-   */
-  public static String WorkflowDocumentProvider_SaveDiagramTask;
-  /**
-   * @generated
-   */
-  public static String WorkflowDocumentProvider_SaveNextResourceTask;
-  /**
-   * @generated
-   */
-  public static String WorkflowDocumentProvider_SaveAsOperation;
-  /**
-   * @generated
-   */
-  public static String WorkflowInitDiagramFileAction_InitDiagramFileResourceErrorDialogTitle;
-  /**
-   * @generated
-   */
-  public static String WorkflowInitDiagramFileAction_InitDiagramFileResourceErrorDialogMessage;
-  /**
-   * @generated
-   */
-  public static String WorkflowInitDiagramFileAction_InitDiagramFileWizardTitle;
-  /**
-   * @generated
-   */
-  public static String WorkflowInitDiagramFileAction_OpenModelFileDialogTitle;
-  /**
-   * @generated
-   */
-  public static String WorkflowNewDiagramFileWizard_CreationPageName;
-  /**
-   * @generated
-   */
-  public static String WorkflowNewDiagramFileWizard_CreationPageTitle;
-  /**
-   * @generated
-   */
-  public static String WorkflowNewDiagramFileWizard_CreationPageDescription;
-  /**
-   * @generated
-   */
-  public static String WorkflowNewDiagramFileWizard_RootSelectionPageName;
-  /**
-   * @generated
-   */
-  public static String WorkflowNewDiagramFileWizard_RootSelectionPageTitle;
-  /**
-   * @generated
-   */
-  public static String WorkflowNewDiagramFileWizard_RootSelectionPageDescription;
-  /**
-   * @generated
-   */
-  public static String WorkflowNewDiagramFileWizard_RootSelectionPageSelectionTitle;
-  /**
-   * @generated
-   */
-  public static String WorkflowNewDiagramFileWizard_RootSelectionPageNoSelectionMessage;
-  /**
-   * @generated
-   */
-  public static String WorkflowNewDiagramFileWizard_RootSelectionPageInvalidSelectionMessage;
-  /**
-   * @generated
-   */
-  public static String WorkflowNewDiagramFileWizard_InitDiagramCommand;
-  /**
-   * @generated
-   */
-  public static String WorkflowNewDiagramFileWizard_IncorrectRootError;
-  /**
-   * @generated
-   */
-  public static String WorkflowGroup_title;
-  /**
-   * @generated
-   */
-  public static String WorkflowGroup_desc;
-  /**
-   * @generated
-   */
-  public static String LinkCreationTool_title;
-  /**
-   * @generated
-   */
-  public static String LinkCreationTool_desc;
-  /**
-   * @generated
-   */
-  public static String InputPortCreationTool_title;
-  /**
-   * @generated
-   */
-  public static String InputPortCreationTool_desc;
-  /**
-   * @generated
-   */
-  public static String OutputPortCreationTool_title;
-  /**
-   * @generated
-   */
-  public static String OutputPortCreationTool_desc;
-  /**
-   * @generated
-   */
-  public static String WorkflowJobCreationTool_title;
-  /**
-   * @generated
-   */
-  public static String WorkflowJobCreationTool_desc;
-  /**
-   * @generated
-   */
-  public static String CommandName_OpenDiagram;
-  /**
-   * @generated
-   */
-  public static String NavigatorGroupName_IWorkflow_79_links;
-  /**
-   * @generated
-   */
-  public static String NavigatorGroupName_IOutputPort_2001_outgoinglinks;
-  /**
-   * @generated
-   */
-  public static String NavigatorGroupName_IInputPort_2002_incominglinks;
-  /**
-   * @generated
-   */
-  public static String NavigatorGroupName_ILink_3001_target;
-  /**
-   * @generated
-   */
-  public static String NavigatorGroupName_ILink_3001_source;
-  // TODO: put accessor fields manually
+  public static String getString( final String key ) {
+    String resultString = '!' + key + '!';
+    try {
+      resultString = RESOURCE_BUNDLE.getString( key );
+    } catch( MissingResourceException mrEx ) {
+      // Nothing to do here
+    }
+    return resultString;
+  }
 }
