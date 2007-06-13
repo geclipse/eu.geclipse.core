@@ -513,4 +513,14 @@
          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
          sequence="F5"/>
    </extension>
+   <extension point="org.eclipse.gmf.runtime.diagram.ui.paletteProviders">
+         <paletteProvider class="org.eclipse.gmf.runtime.diagram.ui.providers.DefaultPaletteProvider">
+           <Priority name="High"/>
+           <contribution>
+             <predefinedEntry id="standardGroup/noteStack/textTool" remove="true"/>
+           </contribution>
+           <editor id="eu.geclipse.workflow.ui.part.WorkflowDiagramEditorID">
+           </editor>
+         </paletteProvider>
+   </extension>
 </plugin>
