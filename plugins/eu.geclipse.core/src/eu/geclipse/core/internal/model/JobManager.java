@@ -57,7 +57,7 @@ public class JobManager
     if(element instanceof IGridJob){
       JobStatusUpdater updater = new JobStatusUpdater ((IGridJob)element);
       updater.setSystem( true );
-      updater.schedule(10000);
+      updater.schedule(20000);
     }
     return flag;
   }
