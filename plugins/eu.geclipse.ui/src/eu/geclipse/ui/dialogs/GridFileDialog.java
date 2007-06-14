@@ -49,6 +49,7 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridModelListener;
 import eu.geclipse.ui.internal.GridConnectionFilter;
+import eu.geclipse.ui.internal.GridConnectionProtocolFilter;
 import eu.geclipse.ui.internal.actions.NewConnectionAction;
 import eu.geclipse.ui.internal.actions.ViewModeToggleAction;
 import eu.geclipse.ui.providers.ConfigurableContentProvider;
@@ -97,7 +98,7 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
    * The currently selected connection element.
    */
   private IGridConnectionElement selectedElement;
-  private boolean allowLocal;
+  private GridConnectionProtocolFilter protocolFilter;
 
   /**
    * Create a new <code>GridFileDialog</code> with the specified parent
@@ -106,12 +107,18 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
    * @param parent The parent {@link Shell} of this dialog.
    * @param title The dialog's title.
    */
-  public GridFileDialog( final Shell parent, final String title, final boolean allowLocal ) {
+  public GridFileDialog( final Shell parent,
+                         final String title,
+                         final boolean allowLocal )
+  {
     super( parent );
     setShellStyle( SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL | SWT.RESIZE );
     this.title = title;
-    this.allowLocal = allowLocal;
     this.filter = new GridConnectionFilter();
+    if( !allowLocal ) {
+      this.protocolFilter = new GridConnectionProtocolFilter();
+      this.protocolFilter.addFilterProtocol( "file" );
+    }
   }
 
   /**
@@ -294,6 +301,9 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
       }
     } );
     this.filter.link( this.treeViewer, this.filetypeCombo );
+    if (this.protocolFilter != null){
+      this.treeViewer.addFilter( this.protocolFilter );
+    }
     return mainComp;
   }
 
@@ -385,14 +395,8 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
           if( this.selectedElement.isFolder() ) {
             this.selectedElement = null;
           } else {
-            if ( (! this.allowLocal)  && this.selectedElement.isLocal()){
-              this.selectedElement = null;
-            } else {
-              String name = this.selectedElement.getName();
-              int a =2;
-              this.filenameText.setText( name );
-              break;
-            }
+            String name = this.selectedElement.getName();
+            this.filenameText.setText( name );
           }
         }
       }
