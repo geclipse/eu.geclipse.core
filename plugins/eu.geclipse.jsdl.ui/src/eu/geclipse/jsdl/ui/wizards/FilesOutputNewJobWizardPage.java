@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.DialogCellEditor;
@@ -51,7 +50,6 @@ import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ImageHyperlink;
-
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.dialogs.MultipleInputDialog;
@@ -138,11 +136,12 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
     // gridData.horizontalIndent = 15;
     // tabComp.setLayoutData( gridData );
     ArrayList<Integer> width = new ArrayList<Integer>();
-    width.add( Integer.valueOf( 240 ));
-    width.add( Integer.valueOf( 100 ));
+    width.add( Integer.valueOf( 240 ) );
+    width.add( Integer.valueOf( 100 ) );
     this.CopyFromTab = new StageInTab( new StageOutContentProvider(),
                                        new StageInLabelProvider(),
-                                       map, width );
+                                       map,
+                                       width );
     this.CopyFromTab.createControl( stdFilesGroup );
     // stdFilesGroup.getChildren()[stdFilesGroup.getChildren().length -
     // 1].setLayoutData( gridData );
@@ -180,11 +179,12 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
     message = Messages.getString( "FilesOutputNewJobWizardPage.table_target_header" ); //$NON-NLS-1$
     map.add( message );
     width = new ArrayList<Integer>();
-    width.add( Integer.valueOf( 100 ));
-    width.add( Integer.valueOf( 240 ));
+    width.add( Integer.valueOf( 100 ) );
+    width.add( Integer.valueOf( 240 ) );
     this.CopyToTab = new StageOutTab( new StageOutContentProvider(),
                                       new StageOutLabelProvider(),
-                                      map, width );
+                                      map,
+                                      width );
     this.CopyToTab.createControl( stdFilesGroup1 );
     // setPageComplete( true );
     this.isCreated = true;
@@ -203,7 +203,7 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
     public StageInTab( final IStructuredContentProvider contentProvider,
                        final ITableLabelProvider labelProvider,
                        final List<String> propertiesVsHearders,
-                       final List<Integer> columnsWidth)
+                       final List<Integer> columnsWidth )
     {
       super( contentProvider,
              labelProvider,
@@ -229,7 +229,7 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
         for( FileType fileType : FileType.values() ) {
           comboData.add( fileType.toString() );
         }
-        dialog.addBrowseField( Messages.getString( "OutputFilesTab.new_dialog_file_source_label" ), initSource, false ); //$NON-NLS-1$
+        dialog.addBrowseField( Messages.getString( "OutputFilesTab.new_dialog_file_source_label" ), initSource, false, true ); //$NON-NLS-1$
         dialog.addTextField( Messages.getString( "OutputFilesTab.new_dialog_file_name_label" ), initName, false ); //$NON-NLS-1$
         dialog.setConnectedFields( Messages.getString( "OutputFilesTab.new_dialog_file_source_label" ), Messages.getString( "OutputFilesTab.new_dialog_file_name_label" ) ); //$NON-NLS-1$ //$NON-NLS-2$
         if( dialog.open() != Window.OK ) {
@@ -277,7 +277,7 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
         for( FileType fileType : FileType.values() ) {
           comboData.add( fileType.toString() );
         }
-        dialog.addBrowseField( Messages.getString( "OutputFilesTab.new_dialog_file_source_label" ), orginalSource, false ); //$NON-NLS-1$
+        dialog.addBrowseField( Messages.getString( "OutputFilesTab.new_dialog_file_source_label" ), orginalSource, false, true ); //$NON-NLS-1$
         dialog.addTextField( Messages.getString( "OutputFilesTab.new_dialog_file_name_label" ), originalName, false ); //$NON-NLS-1$
         if( dialog.open() != Window.OK ) {
           // do nothing;
@@ -344,10 +344,6 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
       if( property.equals( Messages.getString( "FilesOutputNewJobWizardPage.table_name_header" ) ) ) { //$NON-NLS-1$
         columnIndex = 1;
       }
-      // if( property.equals( Messages.getString(
-      // "FilesOutputNewJobWizardPage.table_target_header" ) ) ) { //$NON-NLS-1$
-      // columnIndex = 2;
-      // }
       Object result = null;
       DataStaging task = ( DataStaging )element;
       switch( columnIndex ) {
@@ -357,9 +353,6 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
         case 1:
           result = task.getName();
         break;
-        // case 2:
-        // result = task.getTargetLocation();
-        // break;
         default:
           result = ""; //$NON-NLS-1$
       }
@@ -377,10 +370,6 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
       if( property.equals( Messages.getString( "FilesOutputNewJobWizardPage.table_name_header" ) ) ) { //$NON-NLS-1$
         columnIndex = 1;
       }
-      // if( property.equals( Messages.getString(
-      // "FilesOutputNewJobWizardPage.table_target_header" ) ) ) { //$NON-NLS-1$
-      // columnIndex = 2;
-      // }
       TableItem item = ( TableItem )element;
       DataStaging taskOld = ( DataStaging )item.getData();
       DataStaging task = null;
@@ -418,18 +407,6 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
               updateLaunchConfigurationDialog();
             }
           break;
-          // case 2:
-          // task.setTargetLocation( ( String )value );
-          // if( !task.getName().equals( taskOld.getName() ) ) {
-          // if( addVariable( task ) ) {
-          // this.table.remove( taskOld );
-          // }
-          // } else {
-          // taskOld.setTargetLocation( task.getTargetLocation() );
-          // this.table.update( taskOld, null );
-          // updateLaunchConfigurationDialog();
-          // }
-          // break;
         }
       }
     }
@@ -455,7 +432,8 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
           String filename = "";
           IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
                                                                              "Choose a file",
-                                                                             null, true );
+                                                                             null,
+                                                                             true );
           if( connection != null ) {
             try {
               filename = connection.getConnectionFileStore().toString();
@@ -467,26 +445,6 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
         }
       } );
       addEditor( new TextCellEditor() );
-      // addEditor( new DialogCellEditor() {
-      //
-      // @Override
-      // protected Object openDialogBox( final Control cellEditorWindow )
-      // {
-      // String filename = "";
-      // IGridConnectionElement connection = GridFileDialog.openFileDialog(
-      // getShell(),
-      // "Choose a file",
-      // null );
-      // if( connection != null ) {
-      // try {
-      // filename = connection.getConnectionFileStore().toString();
-      // } catch( CoreException cExc ) {
-      // NewProblemDialog.openProblem( getShell(), "error", "error", cExc );
-      // }
-      // }
-      // return filename;
-      // }
-      // } );
       setCellModifier( this );
     }
   }
@@ -503,7 +461,7 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
     public StageOutTab( final IStructuredContentProvider contentProvider,
                         final ITableLabelProvider labelProvider,
                         final List<String> propertiesVsHearders,
-                        final List<Integer> width)
+                        final List<Integer> width )
     {
       super( contentProvider,
              labelProvider,
@@ -516,7 +474,7 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
     @Override
     protected void handleAddButtonSelected()
     {
-      handleAddButtonSelected( "", "" );
+      handleAddButtonSelected( "", "" ); //$NON-NLS-1$ //$NON-NLS-2$
     }
 
     protected void handleAddButtonSelected( final String initName,
@@ -530,16 +488,14 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
           comboData.add( fileType.toString() );
         }
         dialog.addTextField( Messages.getString( "OutputFilesTab.new_dialog_file_name_label" ), initName, false ); //$NON-NLS-1$
-        dialog.addBrowseField( Messages.getString( "OutputFilesTab.new_dialog_file_target_label" ), initLocation, false ); //$NON-NLS-1$
-        dialog.setConnectedFields( Messages.getString( "OutputFilesTab.new_dialog_file_target_label" ), Messages.getString( "OutputFilesTab.new_dialog_file_name_label" ) );
+        dialog.addBrowseField( Messages.getString( "OutputFilesTab.new_dialog_file_target_label" ), initLocation, false, false ); //$NON-NLS-1$
+        dialog.setConnectedFields( Messages.getString( "OutputFilesTab.new_dialog_file_target_label" ), //$NON-NLS-1$
+                                   Messages.getString( "OutputFilesTab.new_dialog_file_name_label" ) ); //$NON-NLS-1$
         if( dialog.open() != Window.OK ) {
           return;
         }
         String name = dialog.getStringValue( Messages.getString( "OutputFilesTab.new_dialog_file_name_label" ) ); //$NON-NLS-1$
         String target = dialog.getStringValue( Messages.getString( "OutputFilesTab.new_dialog_file_target_label" ) ); //$NON-NLS-1$
-        // FileType type = FileType.valueOf( ( dialog.getStringValue(
-        // Messages.getString( "OutputFilesTab.new_dialog_file_source_label" ) )
-        // ).toUpperCase() ); //$NON-NLS-1$
         if( name != null
             && target != null
             && name.length() > 0
@@ -577,8 +533,7 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
           comboData.add( fileType.toString() );
         }
         dialog.addTextField( Messages.getString( "OutputFilesTab.new_dialog_file_name_label" ), originalName, false ); //$NON-NLS-1$
-        dialog.addBrowseField( Messages.getString( "OutputFilesTab.new_dialog_file_target_label" ), orginalTarget, false ); //$NON-NLS-1$
-        
+        dialog.addBrowseField( Messages.getString( "OutputFilesTab.new_dialog_file_target_label" ), orginalTarget, false, false ); //$NON-NLS-1$
         if( dialog.open() != Window.OK ) {
           // do nothing;
         } else {
@@ -636,10 +591,6 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
 
     public Object getValue( final Object element, final String property ) {
       int columnIndex = -1;
-      // if( property.equals( Messages.getString(
-      // "FilesOutputNewJobWizardPage.table_source_header" ) ) ) { //$NON-NLS-1$
-      // columnIndex = 0;
-      // }
       if( property.equals( Messages.getString( "FilesOutputNewJobWizardPage.table_name_header" ) ) ) { //$NON-NLS-1$
         columnIndex = 0;
       }
@@ -649,9 +600,6 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
       Object result = null;
       DataStaging task = ( DataStaging )element;
       switch( columnIndex ) {
-        // case 0:
-        // result = task.getSourceLocation();
-        // break;
         case 0:
           result = task.getName();
         break;
@@ -669,10 +617,6 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
                         final Object value )
     {
       int columnIndex = -1;
-      // if( property.equals( Messages.getString(
-      // "FilesOutputNewJobWizardPage.table_source_header" ) ) ) { //$NON-NLS-1$
-      // columnIndex = 0;
-      // }
       if( property.equals( Messages.getString( "FilesOutputNewJobWizardPage.table_name_header" ) ) ) { //$NON-NLS-1$
         columnIndex = 0;
       }
@@ -687,18 +631,6 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
                                 taskOld.getTargetLocation(),
                                 taskOld.getSourceLocation() );
         switch( columnIndex ) {
-          // case 0:
-          // task.setSourceLocation( ( String )value );
-          // if( !task.getName().equals( taskOld.getName() ) ) {
-          // if( addVariable( task ) ) {
-          // this.table.remove( taskOld );
-          // }
-          // } else {
-          // taskOld.setSourceLocation( task.getSourceLocation() );
-          // this.table.update( taskOld, null );
-          // updateLaunchConfigurationDialog();
-          // }
-          // break;
           case 0:
             task.setName( ( String )value );
             if( !task.getName().equals( taskOld.getName() ) ) {
@@ -743,26 +675,6 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
         filesTypesString[ i ] = type.getAlias();
         i++;
       }
-      // addEditor( new DialogCellEditor() {
-      //
-      // @Override
-      // protected Object openDialogBox( final Control cellEditorWindow )
-      // {
-      // String filename = "";
-      // IGridConnectionElement connection = GridFileDialog.openFileDialog(
-      // getShell(),
-      // "Choose a file",
-      // null );
-      // if( connection != null ) {
-      // try {
-      // filename = connection.getConnectionFileStore().toString();
-      // } catch( CoreException cExc ) {
-      // NewProblemDialog.openProblem( getShell(), "error", "error", cExc );
-      // }
-      // }
-      // return filename;
-      // }
-      // } );
       addEditor( new TextCellEditor() );
       addEditor( new DialogCellEditor() {
 
@@ -772,7 +684,8 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
           String filename = "";
           IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
                                                                              "Choose a file",
-                                                                             null, true );
+                                                                             null,
+                                                                             true );
           if( connection != null ) {
             try {
               filename = connection.getConnectionFileStore().toString();
@@ -859,19 +772,12 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
           case 1: // target loaction
             result = var.getTargetLocation();
           break;
-          // case 2: // value
-          // result = var.getTargetLocation();
-          // break;
         }
       }
       return result;
     }
 
     public Image getColumnImage( final Object element, final int columnIndex ) {
-      if( columnIndex == 0 ) {
-        // return
-        // DebugPluginImages.getImage(IDebugUIConstants.IMG_OBJS_ENV_VAR);
-      }
       return null;
     }
   }
@@ -1044,19 +950,12 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
           case 1: // name
             result = var.getName();
           break;
-          // case 2: // value
-          // result = var.getTargetLocation();
-          // break;
         }
       }
       return result;
     }
 
     public Image getColumnImage( final Object element, final int columnIndex ) {
-      if( columnIndex == 0 ) {
-        // return
-        // DebugPluginImages.getImage(IDebugUIConstants.IMG_OBJS_ENV_VAR);
-      }
       return null;
     }
   }

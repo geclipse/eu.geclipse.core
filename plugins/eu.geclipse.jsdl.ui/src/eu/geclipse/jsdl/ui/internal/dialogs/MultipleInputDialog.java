@@ -20,7 +20,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.ui.IDebugUIConstants;
@@ -43,7 +42,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.ui.dialogs.GridFileDialog;
@@ -72,7 +70,7 @@ public class MultipleInputDialog extends Dialog {
   protected Map<String, ArrayList<String>> combosData = new HashMap<String, ArrayList<String>>();
   private String title;
   private Map<String, String> connectedFields = new HashMap<String, String>();
-  
+
   /**
    * Method to create new MultipleInputDialog
    * 
@@ -122,45 +120,46 @@ public class MultipleInputDialog extends Dialog {
    */
   public void addBrowseField( final String labelText,
                               final String initialValue,
-                              final boolean allowsEmpty )
+                              final boolean allowsEmpty,
+                              final boolean allowLocal )
   {
     this.fieldList.add( new FieldSummary( BROWSE,
                                           labelText,
                                           initialValue,
-                                          allowsEmpty ) );
+                                          allowsEmpty,
+                                          allowLocal ) );
   }
-  
-  
-//  public void setConnectionFromBrowserToText( final String sourceFieldName, final String targetFieldName ){
-//    source = null;
-//    target = null;
-//    for (Control control: this.controlList){
-//      if (control.getData(FIELD_NAME).equals( sourceFieldName )){
-//        source = ( Text )control;
-//      } else {
-//        if (control.getData(FIELD_NAME).equals( sourceFieldName )){
-//          target = ( Text )control;
-//        }
-//      }
-//    }
-//    if (target != null && source != null){
-//      
-//      source.addFocusListener( new FocusListener(){
-//
-//        public void focusGained( FocusEvent e ) {
-//          // do nothing 
-//        }
-//
-//        public void focusLost( FocusEvent e ) {
-//          if (source.getText() != null && source.getText().length() > 0){
-//            target.setText( source.getText() );
-//          }
-//        }
-//        
-//      });
-//    }
-//  }
 
+  // public void setConnectionFromBrowserToText( final String sourceFieldName,
+  // final String targetFieldName ){
+  // source = null;
+  // target = null;
+  // for (Control control: this.controlList){
+  // if (control.getData(FIELD_NAME).equals( sourceFieldName )){
+  // source = ( Text )control;
+  // } else {
+  // if (control.getData(FIELD_NAME).equals( sourceFieldName )){
+  // target = ( Text )control;
+  // }
+  // }
+  // }
+  // if (target != null && source != null){
+  //      
+  // source.addFocusListener( new FocusListener(){
+  //
+  // public void focusGained( FocusEvent e ) {
+  // // do nothing
+  // }
+  //
+  // public void focusLost( FocusEvent e ) {
+  // if (source.getText() != null && source.getText().length() > 0){
+  // target.setText( source.getText() );
+  // }
+  // }
+  //        
+  // });
+  // }
+  // }
   /**
    * Method for adding new combo field to this dialog
    * 
@@ -178,43 +177,44 @@ public class MultipleInputDialog extends Dialog {
     this.fieldList.add( new FieldSummary( COMBO, labelText, initialValue, false ) );
   }
 
-  private boolean checkReadyToConnect(final String name, int positionInDialog){
+  private boolean checkReadyToConnect( final String name, int positionInDialog )
+  {
     boolean result = false;
-    if (this.connectedFields.containsKey( name )){
+    if( this.connectedFields.containsKey( name ) ) {
       String connectionName = this.connectedFields.get( name );
-      int connectionPosition = fieldList.size();
-      for (int i = 0; i < positionInDialog; i++){
-        if (fieldList.get( i ).name.equals( connectionName )){
+      int connectionPosition = this.fieldList.size();
+      for( int i = 0; i < positionInDialog; i++ ) {
+        if( this.fieldList.get( i ).name.equals( connectionName ) ) {
           connectionPosition = i;
         }
       }
-      if (connectionPosition < positionInDialog){
+      if( connectionPosition < positionInDialog ) {
         result = true;
       }
     } else {
-      if (this.connectedFields.containsValue( name )){
+      if( this.connectedFields.containsValue( name ) ) {
         String connectionName = "";
-        for (String connName: this.connectedFields.keySet()){
-          if (connectedFields.get( connName ).equals( name )){
-             connectionName = connName;
+        for( String connName : this.connectedFields.keySet() ) {
+          if( this.connectedFields.get( connName ).equals( name ) ) {
+            connectionName = connName;
           }
         }
-        int connectionPosition = fieldList.size();
-        for (int i = 0; i < positionInDialog; i++){
-          if (fieldList.get( i ).name.equals( connectionName )){
+        int connectionPosition = this.fieldList.size();
+        for( int i = 0; i < positionInDialog; i++ ) {
+          if( this.fieldList.get( i ).name.equals( connectionName ) ) {
             connectionPosition = i;
           }
         }
-        if (connectionPosition < positionInDialog){
+        if( connectionPosition < positionInDialog ) {
           result = true;
-        } 
+        }
       } else {
-        //do nothing
+        // do nothing
       }
     }
     return result;
   }
-  
+
   /*
    * (non-Javadoc)
    * 
@@ -232,13 +232,21 @@ public class MultipleInputDialog extends Dialog {
     this.panel.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
     for( Iterator<FieldSummary> i = this.fieldList.iterator(); i.hasNext(); ) {
       FieldSummary field = i.next();
-      boolean connected = checkReadyToConnect( field.name, this.fieldList.indexOf( field ) );
+      boolean connected = checkReadyToConnect( field.name,
+                                               this.fieldList.indexOf( field ) );
       switch( field.type ) {
         case TEXT:
-          createTextField( field.name, field.initialValue, field.allowsEmpty, connected );
+          createTextField( field.name,
+                           field.initialValue,
+                           field.allowsEmpty,
+                           connected );
         break;
         case BROWSE:
-          createBrowseField( field.name, field.initialValue, field.allowsEmpty, connected );
+          createBrowseField( field.name,
+                             field.initialValue,
+                             field.allowsEmpty,
+                             connected,
+                             field.allowLocal );
         break;
         case VARIABLE:
           createVariablesField( field.name,
@@ -272,7 +280,7 @@ public class MultipleInputDialog extends Dialog {
   protected void createTextField( final String labelText,
                                   final String initialValue,
                                   final boolean allowEmpty,
-                                  final boolean connected)
+                                  final boolean connected )
   {
     Label label = new Label( this.panel, SWT.NONE );
     label.setText( labelText );
@@ -302,124 +310,117 @@ public class MultipleInputDialog extends Dialog {
       } );
     }
     this.controlList.add( text );
-    if (connected){
-      //mamy target, trzeba dodac listenera do source
-      if (this.connectedFields.containsKey( labelText )){
+    if( connected ) {
+      // mamy target, trzeba dodac listenera do source
+      if( this.connectedFields.containsKey( labelText ) ) {
         String sourceName = this.connectedFields.get( labelText );
         Text sourceControl = null;
         int sourceIndex = -1;
         int targetIndex = -1;
-        for (Control control: this.controlList){
-          if (control.getData(FIELD_NAME).equals( sourceName )){
+        for( Control control : this.controlList ) {
+          if( control.getData( FIELD_NAME ).equals( sourceName ) ) {
             sourceControl = ( Text )control;
             sourceIndex = this.controlList.indexOf( control );
           } else {
-            if (control.getData(FIELD_NAME).equals( labelText )){
+            if( control.getData( FIELD_NAME ).equals( labelText ) ) {
               targetIndex = this.controlList.indexOf( control );
             }
           }
         }
-        
         final int targetPosition = targetIndex;
         final int sourcePosition = sourceIndex;
-        sourceControl.addModifyListener( new ModifyListener(){
+        sourceControl.addModifyListener( new ModifyListener() {
 
           public void modifyText( ModifyEvent e ) {
-//            String value = "";
-//            Path p = new Path(controlList.get( sourcePosition ).getText());
-//            value = p.lastSegment();
-//            if (controlList.get( targetPosition ).getText() != null && controlList.get( targetPosition ).getText().length() == 0 ){
-//              controlList.get( targetPosition ).setText( value );
-//            }
+            // String value = "";
+            // Path p = new Path(controlList.get( sourcePosition ).getText());
+            // value = p.lastSegment();
+            // if (controlList.get( targetPosition ).getText() != null &&
+            // controlList.get( targetPosition ).getText().length() == 0 ){
+            // controlList.get( targetPosition ).setText( value );
+            // }
           }
-          
-        });
-        sourceControl.addFocusListener( new FocusListener(){
+        } );
+        sourceControl.addFocusListener( new FocusListener() {
 
           public void focusGained( FocusEvent e ) {
-            // do  nothing
-            
+            // do nothing
           }
 
           public void focusLost( FocusEvent e ) {
             String value = "";
-            Path p = new Path(controlList.get( sourcePosition ).getText());
+            Path p = new Path( controlList.get( sourcePosition ).getText() );
             value = p.lastSegment();
-            if (controlList.get( targetPosition ).getText() != null && controlList.get( targetPosition ).getText().length() == 0 ){
+            if( controlList.get( targetPosition ).getText() != null
+                && controlList.get( targetPosition ).getText().length() == 0 )
+            {
               controlList.get( targetPosition ).setText( value );
             }
-            
           }
-          
-        });
+        } );
       } else {
-        //mamy source, do niego dodac listenera, znalezc target
-        //szukanie targetu
+        // mamy source, do niego dodac listenera, znalezc target
+        // szukanie targetu
         String targetName = null;
-        for (String name: connectedFields.keySet() ){
-          if (connectedFields.get( name ).equals( labelText )){
+        for( String name : connectedFields.keySet() ) {
+          if( connectedFields.get( name ).equals( labelText ) ) {
             targetName = name;
           }
         }
         Text targetControl = null;
         int sourceIndex = -1;
         int targetIndex = -1;
-        for (Control control: this.controlList){
-          if (control.getData(FIELD_NAME).equals( targetName )){
-            targetControl = (Text) control;
+        for( Control control : this.controlList ) {
+          if( control.getData( FIELD_NAME ).equals( targetName ) ) {
+            targetControl = ( Text )control;
             targetIndex = this.controlList.indexOf( control );
           } else {
-            if (control.getData(FIELD_NAME).equals( labelText )){
+            if( control.getData( FIELD_NAME ).equals( labelText ) ) {
               sourceIndex = this.controlList.indexOf( control );
             }
           }
         }
         final int sourcePosition = sourceIndex;
         final int targetPosition = targetIndex;
-        text.addModifyListener( new ModifyListener(){
+        text.addModifyListener( new ModifyListener() {
 
           public void modifyText( ModifyEvent e ) {
-//            controlList.get( targetPosition ).setText( controlList.get( sourcePosition ).getText() );
+            // controlList.get( targetPosition ).setText( controlList.get(
+            // sourcePosition ).getText() );
           }
-          
-        });
-
-        text.addFocusListener( new FocusListener(){
+        } );
+        text.addFocusListener( new FocusListener() {
 
           public void focusGained( FocusEvent e ) {
             // do nothing
-            
           }
 
           public void focusLost( FocusEvent e ) {
             String value = "";
-            Path p = new Path(controlList.get( sourcePosition ).getText());
+            Path p = new Path( controlList.get( sourcePosition ).getText() );
             value = p.lastSegment();
-            if (controlList.get( targetPosition ).getText() != null && controlList.get( targetPosition ).getText().length() == 0 ){
+            if( controlList.get( targetPosition ).getText() != null
+                && controlList.get( targetPosition ).getText().length() == 0 )
+            {
               controlList.get( targetPosition ).setText( value );
             }
-            
           }
-          
-        });
-
-        
+        } );
       }
     }
-
   }
-  
-  
-  public void setConnectedFields( final String sourceFieldName, final String targetFieldName ){
-    
-      this.connectedFields .put(targetFieldName, sourceFieldName);
-    
+
+  public void setConnectedFields( final String sourceFieldName,
+                                  final String targetFieldName )
+  {
+    this.connectedFields.put( targetFieldName, sourceFieldName );
   }
 
   protected void createBrowseField( final String labelText,
                                     final String initialValue,
                                     final boolean allowEmpty,
-                                    final boolean connected)
+                                    final boolean connected,
+                                    final boolean allowLocal )
   {
     Label label = new Label( this.panel, SWT.NONE );
     label.setText( labelText );
@@ -456,7 +457,7 @@ public class MultipleInputDialog extends Dialog {
         }
       } );
     }
-        Button button = createButton( comp,
+    Button button = createButton( comp,
                                   IDialogConstants.IGNORE_ID,
                                   Messages.getString( "MultilpeInputDialog.browse_button" ), //$NON-NLS-1$
                                   false );
@@ -468,7 +469,8 @@ public class MultipleInputDialog extends Dialog {
         {
           IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
                                                                              "Choose a file",
-                                                                             null, true );
+                                                                             null,
+                                                                             allowLocal );
           if( connection != null ) {
             try {
               String filename = connection.getConnectionFileStore().toString();
@@ -483,107 +485,111 @@ public class MultipleInputDialog extends Dialog {
       }
     } );
     this.controlList.add( text );
-    if (connected){
-      //mamy target, trzeba dodac listenera do source
-      if (this.connectedFields.containsKey( labelText )){
+    if( connected ) {
+      // mamy target, trzeba dodac listenera do source
+      if( this.connectedFields.containsKey( labelText ) ) {
         String sourceName = this.connectedFields.get( labelText );
         Text sourceControl = null;
         int sourceIndex = -1;
         int targetIndex = -1;
-        for (Control control: this.controlList){
-          if (control.getData(FIELD_NAME).equals( sourceName )){
+        for( Control control : this.controlList ) {
+          if( control.getData( FIELD_NAME ).equals( sourceName ) ) {
             sourceControl = ( Text )control;
             sourceIndex = this.controlList.indexOf( control );
           } else {
-            if (control.getData(FIELD_NAME).equals( labelText )){
+            if( control.getData( FIELD_NAME ).equals( labelText ) ) {
               targetIndex = this.controlList.indexOf( control );
             }
           }
         }
-        
         final int targetPosition = targetIndex;
         final int sourcePosition = sourceIndex;
-        sourceControl.addModifyListener( new ModifyListener(){
+        if( sourceControl != null ) {
+          sourceControl.addModifyListener( new ModifyListener() {
 
-          public void modifyText( ModifyEvent e ) {
-//            controlList.get( targetPosition ).setText( controlList.get( sourcePosition ).getText() );
-          }
-          
-        });
-        sourceControl.addFocusListener( new FocusListener(){
-
-          public void focusGained( FocusEvent e ) {
-            // do nothing
-            
-          }
-
-          public void focusLost( FocusEvent e ) {
-            String value = "";
-            Path p = new Path(controlList.get( sourcePosition ).getText());
-            value = p.lastSegment();
-            if (controlList.get( targetPosition ).getText() != null && controlList.get( targetPosition ).getText().length() == 0 ){
-              controlList.get( targetPosition ).setText( value );
+            public void modifyText( ModifyEvent e ) {
+              // controlList.get( targetPosition ).setText( controlList.get(
+              // sourcePosition ).getText() );
             }
-            
-          }
-          
-        });
+          } );
+          sourceControl.addFocusListener( new FocusListener() {
 
+            public void focusGained( FocusEvent e ) {
+              // do nothing
+            }
+
+            public void focusLost( FocusEvent e ) {
+              String value = "";
+              Path p = new Path( MultipleInputDialog.this.controlList.get( sourcePosition )
+                .getText() );
+              value = p.lastSegment();
+              if( MultipleInputDialog.this.controlList.get( targetPosition )
+                .getText() != null
+                  && MultipleInputDialog.this.controlList.get( targetPosition )
+                    .getText()
+                    .length() == 0 )
+              {
+                MultipleInputDialog.this.controlList.get( targetPosition )
+                  .setText( value );
+              }
+            }
+          } );
+        }
       } else {
-        //mamy source, do niego dodac listenera, znalezc target
-        //szukanie targetu
+        // mamy source, do niego dodac listenera, znalezc target
+        // szukanie targetu
         String targetName = null;
-        for (String name: connectedFields.keySet() ){
-          if (connectedFields.get( name ).equals( labelText )){
+        for( String name : this.connectedFields.keySet() ) {
+          if( this.connectedFields.get( name ).equals( labelText ) ) {
             targetName = name;
           }
         }
-        Text targetControl = null;
+        // Text targetControl = null;
         int sourceIndex = -1;
         int targetIndex = -1;
-        for (Control control: this.controlList){
-          if (control.getData(FIELD_NAME).equals( targetName )){
-            targetControl = (Text) control;
+        for( Control control : this.controlList ) {
+          if( control.getData( FIELD_NAME ).equals( targetName ) ) {
+            // targetControl = ( Text )control;
             targetIndex = this.controlList.indexOf( control );
           } else {
-            if (control.getData(FIELD_NAME).equals( labelText )){
+            if( control.getData( FIELD_NAME ).equals( labelText ) ) {
               sourceIndex = this.controlList.indexOf( control );
             }
           }
         }
         final int sourcePosition = sourceIndex;
         final int targetPosition = targetIndex;
-        text.addModifyListener( new ModifyListener(){
+        text.addModifyListener( new ModifyListener() {
 
           public void modifyText( ModifyEvent e ) {
-//            controlList.get( targetPosition ).setText( controlList.get( sourcePosition ).getText() );
+            // controlList.get( targetPosition ).setText( controlList.get(
+            // sourcePosition ).getText() );
           }
-          
-        });
-        text.addFocusListener( new FocusListener(){
+        } );
+        text.addFocusListener( new FocusListener() {
 
           public void focusGained( FocusEvent e ) {
             // do nothing
-            
           }
 
           public void focusLost( FocusEvent e ) {
             String value = "";
-            Path p = new Path(controlList.get( sourcePosition ).getText());
+            Path p = new Path( MultipleInputDialog.this.controlList.get( sourcePosition )
+              .getText() );
             value = p.lastSegment();
-            if (controlList.get( targetPosition ).getText() != null && controlList.get( targetPosition ).getText().length() == 0 ){
-              controlList.get( targetPosition ).setText( value );
+            if( MultipleInputDialog.this.controlList.get( targetPosition )
+              .getText() != null
+                && MultipleInputDialog.this.controlList.get( targetPosition )
+                  .getText()
+                  .length() == 0 )
+            {
+              MultipleInputDialog.this.controlList.get( targetPosition )
+                .setText( value );
             }
-            
           }
-          
-        });
-
-
-        
+        } );
       }
     }
-
   }
 
   // TODO katis - is this method used??
@@ -807,9 +813,12 @@ public class MultipleInputDialog extends Dialog {
     String name;
     String initialValue;
     boolean allowsEmpty;
+    boolean allowLocal;
 
     /**
-     * Creates new instance of {@link FieldSummary}
+     * Creates new instance of {@link FieldSummary}. By default this field will
+     * allow local filesystem values. This constructor should be used by all
+     * field types except form {@link MultipleInputDialog#BROWSE}.
      * 
      * @param type type of the field (see {@link MultipleInputDialog#BROWSE},
      *          {@link MultipleInputDialog#COMBO},
@@ -829,10 +838,39 @@ public class MultipleInputDialog extends Dialog {
                          final String initialValue,
                          final boolean allowsEmpty )
     {
+      this( type, name, initialValue, allowsEmpty, true );
+    }
+
+    /**
+     * Creates new instance of {@link FieldSummary}
+     * 
+     * @param type type of the field (see {@link MultipleInputDialog#BROWSE},
+     *          {@link MultipleInputDialog#COMBO},
+     *          {@link MultipleInputDialog#FIELD_NAME},
+     *          {@link MultipleInputDialog#TEXT} and
+     *          {@link MultipleInputDialog#VARIABLE})
+     * @param name name of the field (used to access this field's value by
+     *          method {@link MultipleInputDialog#getValue(String)} or
+     *          {@link MultipleInputDialog#getStringValue(String)}
+     * @param initialValue initial value to set this field to
+     * @param allowsEmpty indicates whether this field can be empty (if
+     *          <code>false</code> dialog cannot be closed until this field
+     *          holds some value)
+     * @param allowLocal if <code>false</code> this field will accept only
+     *          remote filesystems values, all values otherwise. For now this
+     *          setting works only for {@link MultipleInputDialog#BROWSE} field.
+     */
+    public FieldSummary( final int type,
+                         final String name,
+                         final String initialValue,
+                         final boolean allowsEmpty,
+                         boolean allowLocal )
+    {
       this.type = type;
       this.name = name;
       this.initialValue = initialValue;
       this.allowsEmpty = allowsEmpty;
+      this.allowLocal = allowLocal;
     }
   }
   protected class Validator {
