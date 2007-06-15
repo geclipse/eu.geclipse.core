@@ -70,6 +70,16 @@ public class SolutionRegistry {
    * Unique ID of the server may be down solution.
    */
   public static final int SERVER_DOWN = uniqueID();
+
+  /**
+   * Unique ID of the check if the IP address is a public address solution.
+   */
+  public static final int CHECK_PUBLIC_IP_ADDR = uniqueID();
+
+  /**
+   * Unique ID of the check if the hostname resolves to the ip address solution.
+   */
+  public static final int CHECK_HOSTNAME_MATCHES_IP_ADDR = uniqueID();
   
   /**
    * The singleton instance. 
@@ -170,6 +180,14 @@ public class SolutionRegistry {
     
     else if ( solutionID == SERVER_DOWN ) {
       solution = new Solution( SERVER_DOWN, Messages.getString("SolutionRegistry.server_down")); //$NON-NLS-1$
+    }
+    
+    else if ( solutionID == CHECK_PUBLIC_IP_ADDR ) {
+      solution = new Solution( CHECK_PUBLIC_IP_ADDR, Messages.getString("SolutionRegistry.check_public_ip_addr") ); //$NON-NLS-1$
+    }
+    
+    else if ( solutionID == CHECK_HOSTNAME_MATCHES_IP_ADDR ) {
+      solution = new Solution( CHECK_HOSTNAME_MATCHES_IP_ADDR, Messages.getString("SolutionRegistry.check_hostname_matches_ip_addr") ); //$NON-NLS-1$
     }
     
     return solution;
