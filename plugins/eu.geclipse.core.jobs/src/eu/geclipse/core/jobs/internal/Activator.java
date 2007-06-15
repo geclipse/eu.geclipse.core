@@ -10,49 +10,51 @@ import org.osgi.framework.BundleContext;
  */
 public class Activator extends Plugin {
 
-	// The plug-in ID
-	public static final String PLUGIN_ID = "eu.geclipse.core.jobs"; //$NON-NLS-1$
+  /** The plug-in ID */
+  public static final String PLUGIN_ID = "eu.geclipse.core.jobs"; //$NON-NLS-1$
 
-	// The shared instance
-	private static Activator plugin;
-	
-	/**
-	 * The constructor
-	 */
-	public Activator() {
-	  // empty implementation
-	}
+  // The shared instance
+  private static Activator plugin;
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.core.runtime.Plugins#start(org.osgi.framework.BundleContext)
-	 */
-	@Override
-  public void start(BundleContext context) throws Exception {
-		super.start(context);
-		plugin = this;
-	}
+  /**
+   * The constructor
+   */
+  public Activator() {
+    // empty implementation
+  }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.core.runtime.Plugin#stop(org.osgi.framework.BundleContext)
-	 */
-	@Override
-  public void stop(BundleContext context) throws Exception {
-		plugin = null;
-		super.stop(context);
-	}
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.eclipse.core.runtime.Plugins#start(org.osgi.framework.BundleContext)
+   */
+  @Override
+  public void start( final BundleContext context ) throws Exception {
+    super.start( context );
+    plugin = this;
+  }
 
-	/**
-	 * Returns the shared instance
-	 *
-	 * @return the shared instance
-	 */
-	public static Activator getDefault() {
-		return plugin;
-	}
-	
-	/**
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.eclipse.core.runtime.Plugin#stop(org.osgi.framework.BundleContext)
+   */
+  @Override
+  public void stop( final BundleContext context ) throws Exception {
+    plugin = null;
+    super.stop( context );
+  }
+
+  /**
+   * Returns the shared instance
+   * 
+   * @return the shared instance
+   */
+  public static Activator getDefault() {
+    return plugin;
+  }
+
+  /**
    * Helper method that enables debug logging to the console window
    * 
    * @param message String that will be written to the console
@@ -62,8 +64,8 @@ public class Activator extends Plugin {
       System.out.println( message );
     }
   }
-	
-	/**
+
+  /**
    * Logs an exception to the eclipse logger.
    * 
    * @param exc The exception to be logged.
@@ -88,5 +90,4 @@ public class Activator extends Plugin {
   public static void logStatus( final IStatus status ) {
     getDefault().getLog().log( status );
   }
-
 }
