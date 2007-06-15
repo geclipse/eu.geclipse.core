@@ -205,6 +205,34 @@ public class NewProblemDialog extends ErrorDialog {
     }
     
     if ( ( this.problem != null ) || ( this.throwable != null )) {
+      
+      List< String > reasons
+        = this.problem != null
+        ? this.problem.getReasons()
+        : null;
+        
+      if ( reasons != null ) {
+        
+        Composite reasonComposite = new Composite( composite, SWT.NONE );
+        reasonComposite.setLayout( new GridLayout( 1, false ) );
+        
+        Label reasonLabel = new Label( reasonComposite, SWT.NONE );
+        reasonLabel.setText( "Reasons:" );
+        gData = new GridData();
+        gData.horizontalAlignment = GridData.BEGINNING;
+        reasonLabel.setLayoutData( gData );
+        
+        for ( String reason : reasons ) {
+          
+          Label label = new Label( reasonComposite, SWT.NONE );
+          label.setText( "- " + reason );
+          gData = new GridData();
+          gData.horizontalAlignment = GridData.BEGINNING;
+          label.setLayoutData( gData );
+          
+        }
+        
+      }
     
       List< ISolution > solutions
         = this.problem != null
