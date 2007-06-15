@@ -56,18 +56,18 @@ public class ProblemRegistryCombine_Test {
     IStatus status;
     id = ProblemRegistry.uniqueID();
     problem1 = ProblemRegistry.createProblem( id, "test problem1", exec, null, Activator.PLUGIN_ID ); //$NON-NLS-1$
-    problem1.setReason( "unknown" ); //$NON-NLS-1$
+    problem1.addReason( "unknown" ); //$NON-NLS-1$
     id = ProblemRegistry.uniqueID();
     problem2 = ProblemRegistry.createProblem( id, "test problem2", exec, null, Activator.PLUGIN_ID ); //$NON-NLS-1$
     Assert.assertNotNull( problem1 );
     Assert.assertNotNull( problem2 );
     Assert.assertEquals( new Integer( 1 ),new Integer( problem1.getID() ));
     Assert.assertEquals( new Integer( 2 ),new Integer( problem2.getID() ));
-    Assert.assertEquals( problem1.getText(),"test problem1: unknown" ); //$NON-NLS-1$
+    Assert.assertEquals( problem1.getText(),"test problem1" ); //$NON-NLS-1$
     Assert.assertEquals( problem2.getText(),"test problem2" ); //$NON-NLS-1$
     status = problem1.getStatus();
     Assert.assertEquals( new Integer( 4 ),new Integer( status.getSeverity() ));
-    Assert.assertEquals( "test problem1: unknown",status.getMessage() ); //$NON-NLS-1$
+    Assert.assertEquals( "test problem1",status.getMessage() ); //$NON-NLS-1$
     status = problem2.getStatus();
     Assert.assertEquals( "test problem2",status.getMessage() ); //$NON-NLS-1$
   }

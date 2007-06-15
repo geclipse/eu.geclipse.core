@@ -86,19 +86,23 @@ public class AbstractProblem_PDETest {
 
 
   /** this test validates the functionality of 
-   * {@link AbstractProblem#setReason(String)}
-   * and {@link AbstractProblem#getText()}
+   * {@link AbstractProblem#addReason(String)}
+   * and {@link AbstractProblem#getReasons()}
    */
   
   @Test
-  public void testSetReason()
+  public void testAddReason()
   {
     IProblem problem;
     int id;
     Throwable exec = new Throwable ();
     id = ProblemRegistry.uniqueID();
     problem = ProblemRegistry.createProblem( id, "test problem", exec, null, Activator.PLUGIN_ID ); //$NON-NLS-1$
-    problem.setReason( "unknown" ); //$NON-NLS-1$
+    problem.addReason( "unknown" ); //$NON-NLS-1$
+    List< String > reasons = problem.getReasons();
+    Assert.assertNotNull( reasons );
+    Assert.assertEquals( new Double( 1 ), new Double( reasons.size() ) );
+    Assert.assertEquals( "unknown", reasons.get( 0 ) ); //$NON-NLS-1$
     Assert.assertEquals( "test problem: unknown", problem.getText()); //$NON-NLS-1$
   }
 

@@ -64,8 +64,8 @@ public class ProblemRegistry_Test {
     problem = ProblemRegistry.createProblem( id,message,exec,null,plugin_id );
     Assert.assertNotNull( problem );
     Assert.assertEquals( message,problem.getText() );
-    problem.setReason( reason );
-    Assert.assertEquals( problem.getText(),"test problem: CA not available" ); //$NON-NLS-1$
+    problem.addReason( reason );
+    Assert.assertEquals( problem.getText(),"test problem" ); //$NON-NLS-1$
   }
 
   /**
