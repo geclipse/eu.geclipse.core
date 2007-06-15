@@ -114,7 +114,9 @@ public class ProblemRegistry {
                               final Throwable exc, 
                               final String description ) {
     IProblem problem = getProblem(problemID, exc);
-    problem.setReason( description );
+    if ( description != null ) {
+      problem.addReason( description );
+    }
     return problem;
     
   }

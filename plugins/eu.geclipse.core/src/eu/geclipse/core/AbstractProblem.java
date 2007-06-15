@@ -58,7 +58,7 @@ public abstract class AbstractProblem implements IProblem {
   /**
    * Additional descriptive text for this problem.
    */
-  private String reason;
+  private List< String > reasons;
   
   /**
    * Construct a new problem with the specified ID and text.
@@ -84,6 +84,16 @@ public abstract class AbstractProblem implements IProblem {
     this.id = id;
     this.text = text;
     this.exception = exception;
+  }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.IProblem#setReason(java.lang.String)
+   */
+  public void addReason( final String reason ){
+    if ( this.reasons == null ) {
+      this.reasons = new ArrayList< String >();
+    }
+    this.reasons.add( reason );
   }
   
   /* (non-Javadoc)
@@ -121,6 +131,13 @@ public abstract class AbstractProblem implements IProblem {
    */
   public int getID() {
     return this.id;
+  }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.IProblem#getReasons()
+   */
+  public List< String > getReasons() {
+    return this.reasons;
   }
 
   /* (non-Javadoc)
@@ -173,13 +190,6 @@ public abstract class AbstractProblem implements IProblem {
   }
   
   /* (non-Javadoc)
-   * @see eu.geclipse.core.IProblem#setReason(java.lang.String)
-   */
-  public void setReason(final String reason){
-    this.reason=reason;
-  }
-  
-  /* (non-Javadoc)
    * @see eu.geclipse.core.IProblem#getStatus()
    */
   public IStatus getStatus() {
@@ -199,11 +209,7 @@ public abstract class AbstractProblem implements IProblem {
    * @see eu.geclipse.core.IProblem#getText()
    */
   public String getText() {
-    String message = this.text;
-    if( this.reason != null ){
-      message += ": " + this.reason; //$NON-NLS-1$
-    }
-    return message;
+    return this.text;
   }
   
   /**

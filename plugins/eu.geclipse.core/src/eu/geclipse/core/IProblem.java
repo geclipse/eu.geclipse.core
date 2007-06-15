@@ -28,6 +28,16 @@ import org.eclipse.core.runtime.IStatus;
 public interface IProblem {
   
   /**
+   * This method allow to add a specific text for already a created problem.
+   * The typical usage is to get a predefined problem from the ProblemRegistry
+   * and afterwards add text explaining the specific reason(s) of the problem.
+   * 
+   * @param reason A text specific for a problem that is not associated
+   * with a unique problem ID.
+   */
+  public void addReason( final String reason );
+  
+  /**
    * Add a solution with the specified ID to this problem.
    * 
    * @param solutionID The ID of the solution that should be added. This ID has
@@ -58,6 +68,14 @@ public interface IProblem {
   public int getID();
   
   /**
+   * Get a list of all reasons associated with this problem.
+   * 
+   * @return A list of the problem's reasons or <code>null</code>
+   * if no reasons were defined for this problem.
+   */
+  public List< String > getReasons();
+  
+  /**
    * Get the solutions contained in this problem using the specified
    * {@link SolutionRegistry}.
    * 
@@ -82,15 +100,5 @@ public interface IProblem {
    * @return A description of this problem.
    */
   public String getText();
-  
-  /**
-   * This method allow to set specific text for already created problem.
-   * Typical usage is to get predefined problem from ProblemRegistry and 
-   * than set text explaining specific reason of the problem.
-   * 
-   * @param reason A text specific for a problem that is not associated
-   * with a unique problem ID.
-   */
-  public void setReason( final String reason );
   
 }
