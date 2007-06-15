@@ -79,8 +79,7 @@ public abstract class JobSubmissionWizardBase extends Wizard
                     NewProblemDialog.openProblem( getShell(),
                                                   "Job submission failed",
                                                   "Cannot find a Job Submission Service to submit job to.",
-                                                  null,
-                                                  UISolutionRegistry.getRegistry() );
+                                                  null );
                   }
                   // create job
                   JobSubmissionWizardBase.this.creator.create( parent, jobId );
@@ -88,8 +87,7 @@ public abstract class JobSubmissionWizardBase extends Wizard
                   NewProblemDialog.openProblem( getShell(),
                                                 "Job submission failed",
                                                 "Job submission failed",
-                                                gmExc,
-                                                UISolutionRegistry.getRegistry() );
+                                                gmExc );
                 } catch( CoreException cExc ) {
                   NewProblemDialog.openProblem( getShell(),
                                                 "Job submission failed",
