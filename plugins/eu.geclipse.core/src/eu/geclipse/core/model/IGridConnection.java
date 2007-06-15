@@ -30,4 +30,13 @@ public interface IGridConnection
    */
   public URI getURI();
   
+  /**
+   * Specifies if this connection is global. Global connections are
+   * not part of a project and are therefore not located in the workspace.
+   * The parent of a global connection is the connection manager itself.
+   * 
+   * @return True if this is a global connection.
+   */
+  public boolean isGlobal();
+  
 }

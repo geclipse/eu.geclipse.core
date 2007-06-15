@@ -15,9 +15,13 @@
 
 package eu.geclipse.core.internal.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.runtime.CoreException;
+
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.GridModelProblems;
@@ -73,6 +77,33 @@ public class ConnectionManager
    */
   public boolean canManage( final IGridElement element ) {
     return element instanceof IGridConnection;
+  }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IConnectionManager#getGlobalConnections()
+   */
+  public IGridConnection[] getGlobalConnections() {
+    
+    List< IGridConnection > result = new ArrayList< IGridConnection >();
+    IGridElement[] children = getChildren( null );
+    
+    for ( IGridElement child : children ) {
+      if ( child instanceof IGridConnection ) {
+        IGridConnection connection
+          = ( IGridConnection ) child;
+        if ( connection.isGlobal() ) {
+          result.add( connection );
+        }
+      }
+    }
+    
+    IGridConnection[] gConnections
+      = result.isEmpty()
+      ? null
+      : result.toArray( new IGridConnection[ result.size() ] );
+    
+    return gConnections;
+    
   }
   
   /* (non-Javadoc)

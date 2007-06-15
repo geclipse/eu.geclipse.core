@@ -22,6 +22,13 @@ package eu.geclipse.core.model;
 public interface IConnectionManager
     extends IGridElementManager, IStorableElementManager {
   
-  // empty implementation
+  /**
+   * Get all global connections that are currently defined.
+   * 
+   * @return An array containing all currently defined global
+   * connections.
+   * @see IGridConnection#isGlobal();
+   */
+  public IGridConnection[] getGlobalConnections();
   
 }

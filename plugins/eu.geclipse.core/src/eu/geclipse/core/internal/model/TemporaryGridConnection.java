@@ -71,6 +71,13 @@ public class TemporaryGridConnection
   public boolean isFolder() {
     return true;
   }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridConnection#isGlobal()
+   */
+  public boolean isGlobal() {
+    return false;
+  }
 
   public boolean isValid() {
     return this.fetchError == null;

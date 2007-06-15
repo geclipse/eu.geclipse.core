@@ -120,6 +120,15 @@ public class GridConnection
   public String getName() {
     return this.fsFileName.substring( 1, this.fsFileName.length() - FILE_EXTENSION.length() );
   }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridConnection#isGlobal()
+   */
+  public boolean isGlobal() {
+    IGridContainer parent = getParent();
+    ConnectionManager manager = ConnectionManager.getManager();
+    return parent == manager;
+  }
 
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IStorableElement#load()
