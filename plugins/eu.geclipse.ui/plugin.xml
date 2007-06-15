@@ -187,4 +187,23 @@
          </opaque>
       </filesystem>
    </extension>
+   <extension
+         point="org.eclipse.ui.decorators">
+      <decorator
+            adaptable="false"
+            class="eu.geclipse.ui.decorators.GridJobDecorator"
+            id="eu.geclipse.ui.gridJobDecorator"
+            label="Grid Job Decorator"
+            lightweight="true"
+            state="true">
+         <description>
+            RSL Decorator
+         </description>
+         <enablement>
+            <objectClass
+                  name="eu.geclipse.core.jobs.GridJob">
+            </objectClass>
+         </enablement>
+      </decorator>
+   </extension>
 </plugin>
