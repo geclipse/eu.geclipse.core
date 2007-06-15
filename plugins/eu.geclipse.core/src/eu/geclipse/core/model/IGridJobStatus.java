@@ -58,12 +58,21 @@ public interface IGridJobStatus {
   public final static int ABORTED=0x10; 
 
   /**
-   * Status of the job for which status informatio is no longer available.
+   * Status of the job for which status information is no longer available.
    * e.g. job information was removed from RB. The difference between 
    * UNKNOWN and ABANDONED is that UNKNOWN can be changed in the future
    * to the real status and ABANDONED is a final status.   
    */
   public final static int ABANDONED=0x20; 
+
+  /**
+   * Status of the job cannot be determined
+   * The difference between UNDEF and UNKNOWN is that UNKNOWN is temporary state
+   * (e.g. because some network problem) and UNDEF is more permament state 
+   * (e.g. status cannot be retrieved because there is no access to status 
+   * service like no apropriate plugin is available)
+   */
+  public final static int UNDEF=0x40; 
   
   /**
    * Return true if the status of the job can be changed
