@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension-point id="eu.geclipse.grid.jobID" name="GridJobID" schema="schema/eu.geclipse.grid.jobId.exsd"/>
+   <extension
+         id="eu.geclipse.grid.GridJobCreator"
+         name="Grid Job"
+         point="eu.geclipse.core.gridElementCreator">
+      <creator
+            class="eu.geclipse.core.jobs.GridJobCreator"
+            name="Grid Job Creator">
+      </creator>
+   </extension>
+
+</plugin>
