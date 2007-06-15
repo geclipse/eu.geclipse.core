@@ -5,41 +5,67 @@ import java.net.URI;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.wizard.IWizardContainer;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
-import eu.geclipse.ui.internal.EmptySelection;
+import eu.geclipse.core.model.IGridConnection;
 
 
 public class ConnectionWizard
     extends Wizard
     implements INewWizard {
   
-  ConnectionLocationWizardPage fileCreationPage;
+  protected static final String CONNECTION_PREFIX = "."; //$NON-NLS-1$
+  
+  protected static final String CONNECTION_SUFFIX = ".fs"; //$NON-NLS-1$
+  
+  IWizardPage firstPage;
+  
+  private boolean createGlobalConnection;
   
   private ISelection initialSelection;
     
   private ConnectionDefinitionWizardPage definitionPage;
   
   public ConnectionWizard() {
+    this( false );
+  }
+  
+  public ConnectionWizard( final boolean createGlobalConnection ) {
     setNeedsProgressMonitor( true );
+    this.createGlobalConnection = createGlobalConnection;
   }
   
   @Override
   public void addPages() {
     
-    if ( this.initialSelection instanceof IStructuredSelection ) {
-      this.fileCreationPage
+    if ( this.createGlobalConnection ) {
+      this.firstPage = new ConnectionNameWizardPage();
+    } else {
+      this.firstPage
         = new ConnectionLocationWizardPage( "newGridConnectionLocationPage",
                                             ( IStructuredSelection ) this.initialSelection );
-      this.fileCreationPage.setTitle( "Connection location" );
-      this.fileCreationPage.setDescription( "Choose the location in the workspace where the new connection will be created" );
-      addPage( this.fileCreationPage );
+      this.firstPage.setTitle( "Connection location" );
+      this.firstPage.setDescription( "Choose the location in the workspace where the new connection will be created" );
     }
+    addPage( this.firstPage );
     
     this.definitionPage = new ConnectionDefinitionWizardPage();
     addPage( this.definitionPage );
+    
+  }
+  
+  @Override
+  public boolean canFinish() {
+    
+    IWizardContainer container = getContainer();
+    IWizardPage currentPage = container.getCurrentPage();
+    
+    return ( currentPage != this.firstPage ) && super.canFinish();
     
   }
 
@@ -56,10 +82,10 @@ public class ConnectionWizard
     
     if ( uri != null ) {
     
-      if ( this.fileCreationPage != null ) {
-        result = createLocalConnection();
-      } else {
+      if ( this.createGlobalConnection ) {
         result = createGlobalConnection();
+      } else {
+        result = createLocalConnection();
       }
     
     }
@@ -71,30 +97,58 @@ public class ConnectionWizard
   public void init( final IWorkbench workbench,
                     final IStructuredSelection selection ) {
     this.initialSelection = selection;
-    if ( this.initialSelection == null ) {
-      this.initialSelection = new EmptySelection();
-    }
   }
   
   private boolean createGlobalConnection() {
+    
     boolean result = false;
+    
+    ConnectionNameWizardPage page
+      = ( ConnectionNameWizardPage ) this.firstPage;
+    
+    URI uri = this.definitionPage.getURI();
+
+    if ( uri != null ) {
+      page.setInitialContent( uri );
+      IGridConnection connection = page.createNewConnection();
+      result = connection != null;
+    }
+    
+    if ( ! result ) {
+      setCurrentErrorMessage( page );
+    }
+    
     return result;
+    
   }
   
   private boolean createLocalConnection() {
     
     boolean result = false;
+
+    ConnectionLocationWizardPage page
+      = ( ConnectionLocationWizardPage ) this.firstPage;
     
     URI uri = this.definitionPage.getURI();
-    this.fileCreationPage.setInitialContent( uri );
     
     if ( uri != null ) {
-      IFile file = this.fileCreationPage.createNewFile();
-      result = ( file != null ) && ( file.exists() );
+      page.setInitialContent( uri );
+      IFile file = page.createNewFile();
+      result = ( file != null ) && file.exists();
+    }
+    
+    if ( ! result ) {
+      setCurrentErrorMessage( page );
     }
     
     return result;
     
+  }
+  
+  private void setCurrentErrorMessage( final IWizardPage fromPage ) {
+    String errorMessage = fromPage.getErrorMessage();
+    WizardPage toPage = ( WizardPage ) getContainer().getCurrentPage();
+    toPage.setErrorMessage( errorMessage );
   }
   
 }

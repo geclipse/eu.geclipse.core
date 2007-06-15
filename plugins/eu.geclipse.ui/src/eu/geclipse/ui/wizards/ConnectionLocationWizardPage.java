@@ -18,10 +18,6 @@ import eu.geclipse.core.model.IGridProject;
 public class ConnectionLocationWizardPage
     extends WizardNewFileCreationPage {
   
-  private static final String PREFIX = "."; //$NON-NLS-1$
-  
-  private static final String SUFFIX = ".fs"; //$NON-NLS-1$
-  
   private URI initialContent;
   
   private IStructuredSelection initialSelection;
@@ -41,7 +37,7 @@ public class ConnectionLocationWizardPage
   
   public String getConnectionFilename() {
     String filename = getFileName();
-    return PREFIX + filename + SUFFIX;
+    return ConnectionWizard.CONNECTION_PREFIX + filename + ConnectionWizard.CONNECTION_SUFFIX;
   }
   
   @Override

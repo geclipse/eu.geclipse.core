@@ -431,6 +431,7 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
     URI uri = getURI();
     this.viewer.getTree().setEnabled( uri != null );
     this.pathLink.setEnabled( uri != null );
+    setPageComplete( uri != null );
   }
   
   private void processURIScheme( final IConfigurationElement element ) {

@@ -24,7 +24,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.actions.BaseSelectionListenerAction;
 import eu.geclipse.ui.internal.Activator;
-import eu.geclipse.ui.wizards.connection.ConnectionWizard;
+import eu.geclipse.ui.wizards.ConnectionWizard;
 
 /**
  * Action for creating new connections using the {@link ConnectionWizard}.
@@ -60,7 +60,7 @@ public class NewConnectionAction
     IStructuredSelection selection = getStructuredSelection();
     Shell shell = this.workbenchWindow.getShell();
     
-    ConnectionWizard wizard = new ConnectionWizard();
+    ConnectionWizard wizard = new ConnectionWizard( selection.isEmpty() );
     wizard.init( workbench, selection );
     WizardDialog dialog = new WizardDialog( shell, wizard );
     
