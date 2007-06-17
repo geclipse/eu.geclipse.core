@@ -36,11 +36,12 @@ public class GridJobStatus implements IGridJobStatus {
   public static final String XML_ATTRIBUTE_CLASS = "class";
   final static public GridJobStatus UNKNOWN_STATUS = new GridJobStatus();
   
-  private String data = null;
   protected int type;
   protected String name = null;
   protected String reason = null;
   protected Date updateDate = null;
+
+  private String data = null;
 
   public GridJobStatus() {
     name = "Unknown";
@@ -57,17 +58,23 @@ public class GridJobStatus implements IGridJobStatus {
     data = null;
   }
 
-  public GridJobStatus(String name, int type) {
+  public GridJobStatus(final String name, final int type) {
     this.name = name;
     this.type = type;
     data = null;
   }
 
   
-  public GridJobStatus( IGridJobID id ) {
+  public GridJobStatus( final IGridJobID id ) {
   }
 
-  public GridJobStatus( Node statusNode ) {
+  public GridJobStatus( final Node statusNode ) {
+    this();
+    setXMLNode(statusNode);
+  }
+  
+  public void setXMLNode(final Node statusNode )
+  {
     int i;
     Node node;
     NodeList childNodes = statusNode.getChildNodes();
