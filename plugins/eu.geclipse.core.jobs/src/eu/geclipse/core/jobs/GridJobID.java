@@ -30,12 +30,12 @@ public class GridJobID implements IGridJobID {
   public GridJobID() {
   }
 
-  public GridJobID( Node jobIDNode ) {
+  public GridJobID( final Node jobIDNode ) {
     this();
     setXMLNode(jobIDNode);
   }
     
-  public final void setXMLNode( Node statusNode ) {
+  public final void setXMLNode( final Node statusNode ) {
       int i;
     Node node;
     NodeList childNodes = statusNode.getChildNodes();
@@ -56,7 +56,7 @@ public class GridJobID implements IGridJobID {
     return jobID;
   }
 
-  protected void setData( String data ) {
+  protected void setData( final String data ) {
     System.out.println( data );
   }
 

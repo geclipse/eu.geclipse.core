@@ -85,7 +85,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     }
   }
 
-  public void create( IGridContainer parent, IFolder jobFolder, GridJobID id, IGridJobDescription description ) throws GridModelException {
+  public void create( final IGridContainer parent, final IFolder jobFolder, final GridJobID id, final IGridJobDescription description ) throws GridModelException {
 //    super(jobFolder);
     jobStatusFile = jobFolder.getFile( JOBSTATUS_FILENAME );
     jobIdFile = jobFolder.getFile( JOBID_FILENAME );
@@ -111,7 +111,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
 
   }
 
-  private void readJobInfo( IFolder jobFolder ) {
+  private void readJobInfo( final IFolder jobFolder ) {
     Document document = createXmlDocument( jobInfoFile );
     if( document != null ) {
       Element rootElement = document.getDocumentElement();
@@ -122,7 +122,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
       Node node = rootElement.getFirstChild();
       if( !GridJob.JOBINFO_JOBDESCRIPTION_XMLNODENAME.equals( node.getNodeName() ) )
       {
-        // TODO pawelw change it to something more reliable
+        // TODO pawelw throw exception here
       }
       String filename = node.getTextContent();
       jobDescriptionFile = jobFolder.getFile( filename );
@@ -185,17 +185,35 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
   }
 
   private void readJobStatus() {
-    Document document = createXmlDocument( jobStatusFile );
+    
+    Document document = createXmlDocument( jobIdFile );
     if( document == null ) {
-      // TODO pawelw - log it?
+      jobStatus= new GridJobStatus();
     } else {
       Element rootElement = document.getDocumentElement();
       if( !GridJobStatus.XML_ROOT.equals( rootElement.getNodeName() ) ) {
-        // TODO pawelw
+        // TODO pawelw  - file is not correct
       }
       String className = rootElement.getAttribute( GridJobStatus.XML_ATTRIBUTE_CLASS );
-      // TODO pawelw - find apropriate class
-      jobStatus = new GridJobStatus( rootElement );
+      if(className!=null && !className.equals("")){
+        ExtensionManager manager = new ExtensionManager();
+        List< IConfigurationElement > list = manager.getConfigurationElements( "eu.geclipse.grid.jobStatu", "JobStatus" );
+        for( IConfigurationElement  element : list){
+          String attr = element.getAttribute( "class" );
+          if (className.equals( attr )){
+            try {
+              jobStatus = (GridJobStatus) element.createExecutableExtension( "class" );
+              jobStatus.setXMLNode( rootElement );
+            } catch( CoreException e ) {
+              // TODO Auto-generated catch block
+              e.printStackTrace();
+            }
+          }
+        }
+      }
+      
+      if(jobStatus==null)
+        jobStatus = new GridJobStatus( rootElement );
     }
   }
 
