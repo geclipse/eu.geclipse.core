@@ -47,6 +47,7 @@ project number: FP5-IST-034327  http://www.geclipse.eu/
       <import plugin="org.eclipse.ui.forms"/>
       <import plugin="org.eclipse.emf.edit.ui"/>
       <import plugin="org.apache.axis"/>
+      <import plugin="eu.geclipse.core.jobs"/>
       <import plugin="javax.xml.rpc"/>
       <import plugin="org.eclipse.debug.core"/>
       <import plugin="org.eclipse.ui.cheatsheets"/>
@@ -54,7 +55,6 @@ project number: FP5-IST-034327  http://www.geclipse.eu/
       <import plugin="org.eclipse.jsch.core"/>
       <import plugin="com.jcraft.jsch"/>
       <import plugin="org.eclipse.ui.workbench.texteditor"/>
-      <import plugin="com.ice.tar"/>
       <import plugin="org.eclipse.core.net"/>
       <import plugin="org.apache.log4j"/>
       <import plugin="org.eclipse.emf.edit"/>
