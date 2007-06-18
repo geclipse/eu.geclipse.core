@@ -263,8 +263,8 @@ abstract public class GridConnectionResourceAdapter
                                 final int depth )
   throws CoreException {
     // TODO mathias
-    notYetImplemented();
-    return null;
+    // notYetImplemented();
+    return new IMarker[ 0 ];
   }
 
   /* (non-Javadoc)
