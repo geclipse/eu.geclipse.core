@@ -83,7 +83,7 @@ public class WorkflowJobDescriptionEditPart extends CompartmentEditPart
   /**
    * @generated
    */
-  private String defaultText;
+  private String defaultText = "Job Description goes here";
 
   /**
    * @generated

@@ -30,7 +30,7 @@ import eu.geclipse.workflow.ui.part.WorkflowVisualIDRegistry;
 public class WorkflowEditPartFactory implements EditPartFactory {
 
   /**
-   * @generated
+   * @generated NOT
    */
   public EditPart createEditPart( EditPart context, Object model ) {
     if( model instanceof View ) {
@@ -84,6 +84,8 @@ public class WorkflowEditPartFactory implements EditPartFactory {
      * @generated
      */
     private WrapLabel wrapLabel;
+    
+    private Label label;
 
     /**
      * @generated
@@ -97,6 +99,13 @@ public class WorkflowEditPartFactory implements EditPartFactory {
      */
     public WrapLabel getWrapLabel() {
       return wrapLabel;
+    }
+    
+    /**
+     * 
+     */
+    public Label getLabel() {
+      return label;
     }
 
     /**

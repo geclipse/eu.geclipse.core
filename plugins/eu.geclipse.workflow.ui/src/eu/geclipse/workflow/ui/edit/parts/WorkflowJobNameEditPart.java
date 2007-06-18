@@ -105,8 +105,7 @@ public class WorkflowJobNameEditPart extends CompartmentEditPart
                          @Override
                         protected List createSelectionHandles() {
                            List handles = new ArrayList();
-                           NonResizableHandleKit.addMoveHandle( ( GraphicalEditPart )getHost(),
-                                                                handles );
+                           NonResizableHandleKit.addMoveHandle( ( GraphicalEditPart )getHost(), handles );
                            return handles;
                          }
 

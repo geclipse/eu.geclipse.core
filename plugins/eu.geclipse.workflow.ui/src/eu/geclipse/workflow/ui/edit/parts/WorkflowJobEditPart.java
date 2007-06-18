@@ -9,6 +9,8 @@
  ******************************************************************************/
 package eu.geclipse.workflow.ui.edit.parts;
 
+import org.eclipse.draw2d.Border;
+import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.LabeledContainer;
@@ -16,6 +18,7 @@ import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.StackLayout;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
+import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.commands.Command;
@@ -251,8 +254,8 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
       ToolbarLayout layoutThis = new ToolbarLayout();
       layoutThis.setStretchMinorAxis( false );
       layoutThis.setMinorAlignment( ToolbarLayout.ALIGN_TOPLEFT );
-      layoutThis.setSpacing( 5 );
-      layoutThis.setVertical( true );
+      layoutThis.setSpacing( 10 );
+      layoutThis.setVertical( false );
       this.setLayoutManager( layoutThis );
       this.setPreferredSize( 150, 100 );
       this.setCornerDimensions( new Dimension( 15, 15 ) );
@@ -271,7 +274,9 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
       LabeledContainer jobDescriptionContainer0 = new LabeledContainer();
       this.add( jobDescriptionContainer0 );
       WrapLabel workflowJobDescriptionFigure1 = new WrapLabel();
-      workflowJobDescriptionFigure1.setText( "<...>" );
+//      workflowJobDescriptionFigure1.setText( "Job Description Here" );
+//      workflowJobDescriptionFigure1.setBackgroundColor( JOB_DESC_BACK );
+//      workflowJobDescriptionFigure1.setOpaque( true );
       jobDescriptionContainer0.add( workflowJobDescriptionFigure1 );
       this.fFigureWorkflowJobDescriptionFigure = workflowJobDescriptionFigure1;
     }
@@ -313,4 +318,6 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
    * @generated
    */
   static final Color THIS_FORE = new Color( null, 220, 220, 240 );
+  
+  static final Color JOB_DESC_BACK = new Color( null, 250, 250, 190 );
 }
