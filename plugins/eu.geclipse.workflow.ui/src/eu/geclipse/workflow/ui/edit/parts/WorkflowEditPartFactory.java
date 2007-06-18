@@ -42,6 +42,8 @@ public class WorkflowEditPartFactory implements EditPartFactory {
           return new WorkflowJobEditPart( view );
         case WorkflowJobNameEditPart.VISUAL_ID:
           return new WorkflowJobNameEditPart( view );
+        case WorkflowJobDescriptionEditPart.VISUAL_ID:
+          return new WorkflowJobDescriptionEditPart( view );
         case OutputPortEditPart.VISUAL_ID:
           return new OutputPortEditPart( view );
         case InputPortEditPart.VISUAL_ID:
