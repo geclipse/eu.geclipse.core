@@ -29,7 +29,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
@@ -104,8 +105,11 @@ public class JobApplicationPage extends FormPage {
   Button lblUserName = null;
   Button lblGroupName  = null;
   
-  List lstArgument = null;
-  List lstEnvironment = null;
+  
+  
+  Table tblEnvironment = null;
+  Table tblArgument = null;
+  TableColumn column; 
   
   
   Boolean contentRefreshed = Boolean.FALSE;
@@ -339,7 +343,7 @@ public class JobApplicationPage extends FormPage {
   private Composite createPosixSection(final IManagedForm mform, 
                                        final String title, 
                                        final String desc)
-   {
+   {    
     GridData lblgd;
     GridData gd;
   
@@ -353,7 +357,7 @@ public class JobApplicationPage extends FormPage {
     gd.verticalAlignment = GridData.CENTER;
     gd.verticalSpan = 1;
     gd.horizontalSpan = 3;
-    gd.widthHint = 300;
+    gd.widthHint = 330;
     
     
     /* Posix Name Widget */
@@ -380,7 +384,7 @@ public class JobApplicationPage extends FormPage {
                         .attachPosixApplicationExecutable(this.txtExecutable);
     
     gd = new GridData();
-    gd.widthHint = 300;
+    gd.widthHint = 330;
     gd.horizontalSpan=3;
     gd.grabExcessHorizontalSpace = true;
     gd.verticalAlignment = GridData.CENTER;
@@ -403,14 +407,23 @@ public class JobApplicationPage extends FormPage {
     gd.verticalAlignment = GridData.FILL;
     gd.verticalSpan = 2;
     gd.horizontalSpan = 1;
-    gd.widthHint = 235;
+    gd.widthHint = 250;
     gd.heightHint = 100;
-    this.lstArgument = new List(client, SWT.NONE);
     
-    this.lstArgument.setData( FormToolkit.KEY_DRAW_BORDER,
-                              FormToolkit.TEXT_BORDER );
+    this.tblArgument = new Table(client,SWT.SINGLE);
+    this.tblArgument.setHeaderVisible( true);
     
-    this.lstArgument.setLayoutData( gd );
+    this.column = new TableColumn(this.tblArgument, SWT.NONE);    
+    this.column.setText( "File System Name" );
+    this.column.setWidth( 150 );
+    this.column = new TableColumn(this.tblArgument, SWT.NONE);    
+    this.column.setText( "Value" );
+    this.column.setWidth( 100 );
+    
+    this.posixApplicationTypeAdapter.attachToPosixApplicationArgument( this.tblArgument );
+        
+    tblArgument.setData(  FormToolkit.KEY_DRAW_BORDER );
+    tblArgument.setLayoutData( gd);
      
                 
     //Create "Add" Button
@@ -434,6 +447,8 @@ public class JobApplicationPage extends FormPage {
     this.btnDel = toolkit.createButton(client,
                                     Messages.getString("JsdlEditor_RemoveButton")
                                     , SWT.PUSH);
+    this.posixApplicationTypeAdapter.attachToDelete( this.btnDel, 
+                                                             this.tblArgument );
     
     this.btnDel.setLayoutData( gd );
       
@@ -451,7 +466,7 @@ public class JobApplicationPage extends FormPage {
     gd.verticalAlignment = GridData.FILL;   
     gd.horizontalSpan = 3;
     
-    gd.widthHint = 300;
+    gd.widthHint = 330;
     this.txtInput = toolkit.createText(client, "", SWT.NONE); //$NON-NLS-1$
     this.posixApplicationTypeAdapter.attachPosixApplicationInput( this.txtInput );
     this.txtInput.setLayoutData(gd);
@@ -470,7 +485,7 @@ public class JobApplicationPage extends FormPage {
     gd = new GridData();    
     gd.verticalAlignment = GridData.FILL;    
     gd.horizontalSpan = 3;
-    gd.widthHint = 300;
+    gd.widthHint = 330;
     this.txtOutput.setLayoutData( gd );
         
     
@@ -485,7 +500,7 @@ public class JobApplicationPage extends FormPage {
     gd = new GridData();
     gd.verticalAlignment = GridData.FILL;
     gd.horizontalSpan = 3;
-    gd.widthHint = 300;
+    gd.widthHint = 330;
     this.txtError = toolkit.createText(client, "", SWT.NONE); //$NON-NLS-1$
     this.posixApplicationTypeAdapter.attachPosixApplicationError( this.txtError );
     this.txtError.setLayoutData(gd);
@@ -506,14 +521,29 @@ public class JobApplicationPage extends FormPage {
     gd.verticalAlignment = GridData.FILL;
     gd.verticalSpan = 2;
     gd.horizontalSpan = 1;
-    gd.widthHint = 235;
+    gd.widthHint = 250;
     gd.heightHint = 100;
-    this.lstEnvironment = new List(client, SWT.NONE);
-    
-    this.lstEnvironment.setData( FormToolkit.KEY_DRAW_BORDER,
-                                 FormToolkit.TEXT_BORDER );
-    
-    this.lstEnvironment.setLayoutData(gd);
+
+    tblEnvironment = new Table(client,SWT.SINGLE);
+    tblEnvironment.setHeaderVisible( true);
+   
+   
+    column = new TableColumn(this.tblEnvironment, SWT.NONE);       
+    column.setText( "Name" );        
+    column.setWidth( 60 );
+    column = new TableColumn(this.tblEnvironment, SWT.NONE);    
+    column.setText( "File System Name" );
+    column.setWidth( 130 );
+    column = new TableColumn(this.tblEnvironment, SWT.NONE);    
+    column.setText( "Value" );
+    column.setWidth( 60 );
+
+    this.posixApplicationTypeAdapter.
+                     attachToPosixApplicationEnvironment( this.tblEnvironment );
+
+        
+    tblEnvironment.setData(  FormToolkit.KEY_DRAW_BORDER );
+    tblEnvironment.setLayoutData( gd);
      
     /* Create "Add" Button */
     gd = new GridData();

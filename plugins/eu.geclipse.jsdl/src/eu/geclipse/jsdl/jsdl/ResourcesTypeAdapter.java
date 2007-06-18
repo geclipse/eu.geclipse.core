@@ -21,6 +21,8 @@ package eu.geclipse.jsdl.jsdl;
  * @author nickl
  *
  */
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
 import org.eclipse.emf.common.util.EList;
@@ -31,9 +33,9 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
@@ -61,6 +63,8 @@ public class ResourcesTypeAdapter {
   Hashtable< Integer, Text > widgetFeaturesMap = new Hashtable< Integer, Text >();
   Hashtable< Integer, List > listFeaturesMap = new Hashtable< Integer, List >();
   Hashtable< Integer, Combo > comboFeaturesMap = new Hashtable< Integer, Combo >();
+  Hashtable<String, EStructuralFeature> eStructuralFeaturesMap 
+                                  = new Hashtable<String, EStructuralFeature>();
   
   private ResourcesType resourcesType 
                                   = JsdlFactory.eINSTANCE.createResourcesType();
@@ -82,6 +86,8 @@ public class ResourcesTypeAdapter {
   
   
   private Boolean adapterRefreshed = false;
+  
+  
   
   /* Class Constructor */
   public ResourcesTypeAdapter(final EObject rootJsdlElement) {
@@ -111,6 +117,7 @@ public class ResourcesTypeAdapter {
    } // End getTypeforAdapter()
   
   
+  
   /* Sets the Adapter's Content */
   public void setContent(final EObject rootJsdlElement){
     this.adapterRefreshed = true;
@@ -118,26 +125,81 @@ public class ResourcesTypeAdapter {
   }
   
   
+  
   public void attachToHostName(final List widget){    
     this.listFeaturesMap.put( JsdlPackage.RESOURCES_TYPE__CANDIDATE_HOSTS
                                 , widget );
-        
-    widget.addSelectionListener(new SelectionAdapter() {
-      public void widgetSelected(final SelectionEvent event) {
-//       List list = (List) event.getSource();
-//       String [] str = list.getSelection();       
-//       for (int i=0; i<str.length; i++){        
-//         
-//         
-//       }
-        
-     }
-
-     public void widgetDefaultSelected(final SelectionEvent event) { }
-    });
-     
+       
   } // End attachToHostName()
   
+  
+  public void attachToDelete(final Button button, final List list){
+    button.addSelectionListener(new SelectionListener() {
+
+      public void widgetSelected(final SelectionEvent event) {        
+        performDelete(list, list.getItem( list.getSelectionIndex() ) );
+      }
+
+      public void widgetDefaultSelected(final SelectionEvent event) {
+          // Do Nothing - Required method
+      }
+    });
+    
+    
+  }
+  
+  
+
+  public void performAdd(final List list, final String name, final Object value) {
+    
+    EStructuralFeature eFeature = null;
+    Collection<String> collection = new ArrayList<String>();
+    int featureID = JsdlPackage.RESOURCES_TYPE__CANDIDATE_HOSTS;
+     
+    
+    list.add( value.toString() );
+    for ( int i=0; i<list.getItemCount(); i++ ) {
+      collection.add( list.getItem( i ) );
+    }
+   
+    eFeature = this.candidateHosts.eClass().getEStructuralFeature( featureID );
+    this.candidateHosts.eSet(eFeature, collection);
+   
+    eFeature = null;
+    collection = null;
+    
+  }
+  
+  
+  private void performDelete(final List list, final String key){
+    
+    EStructuralFeature eStructuralFeature;
+    
+    /* Get EStructuralFeature */
+     if (this.eStructuralFeaturesMap.containsKey( key ) ){
+      eStructuralFeature = this.eStructuralFeaturesMap.get( key );
+    
+      System.out.println("IN0");
+    /* Delete only Multi-Valued Elements */
+        ((java.util.List<?>)this.candidateHosts.eGet(eStructuralFeature))
+                                                                   .remove(key);
+        list.remove( key );    
+        
+        System.out.println("CP: " +eStructuralFeature.getName().toString());
+        if (list.getItemCount() == 0)
+        {
+          System.out.println("IN getItem");
+          //FIXME Does not remove the <CandidateHosts> element.
+          ((java.util.List<?>)this.resourcesType.eGet(eStructuralFeature))
+                                                                   .remove(key);
+         
+        }
+    
+    }
+    
+    eStructuralFeature = null;
+  }
+    
   
   public void attachToOSType(final Combo widget){    
     this.comboFeaturesMap.put( JsdlPackage.RESOURCES_TYPE__OPERATING_SYSTEM
@@ -222,6 +284,7 @@ public class ResourcesTypeAdapter {
     } );
      
   } // End attachToOSDescription()
+  
   
   
   public void attachToFileSystemName(final Text widget){    
@@ -353,10 +416,17 @@ public class ResourcesTypeAdapter {
               this.candidateHosts = (CandidateHostsType) this.resourcesType
                                                     .eGet( eStructuralFeature );
               EList valueEList = this.candidateHosts.getHostName();
+              
+              Object eFeatureInstance = null;
+              
               if(!this.adapterRefreshed) {
+                
               for (Iterator it = valueEList.iterator(); it.hasNext();){
+                eFeatureInstance = it.next();              
+                eStructuralFeaturesMap.put( eFeatureInstance.toString(),
+                                                eStructuralFeature );
                
-                  listName.add( it.next().toString());
+                  listName.add(eFeatureInstance.toString());
                 } // End Iterator
                          
               } // Endif
@@ -365,6 +435,7 @@ public class ResourcesTypeAdapter {
             case JsdlPackage.RESOURCES_TYPE__OPERATING_SYSTEM :{
              this.operatingSystemType = (OperatingSystemType) this.resourcesType
                                                     .eGet( eStructuralFeature );
+             
              comboName = this.comboFeaturesMap.get( featureID );
              comboName.setText(this.operatingSystemType.getOperatingSystemType()
                                .getOperatingSystemName().getLiteral());
@@ -410,8 +481,8 @@ public class ResourcesTypeAdapter {
                              .get (JsdlPackage.DOCUMENT_ROOT__FILE_SYSTEM_TYPE);
                 comboName.setText(this.fileSystemType.getFileSystemType()
                                   .getLiteral());
+               
                 
-//                
               } // End Iterator
            
               

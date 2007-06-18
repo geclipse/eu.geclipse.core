@@ -80,9 +80,10 @@ import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.part.FileEditorInput;
+import eu.geclipse.jsdl.jsdl.JsdlAdaptersFactory;
+import eu.geclipse.jsdl.model.DocumentRoot;
 import eu.geclipse.jsdl.model.JobDefinitionType;
-import eu.geclipse.jsdl.posix.provider.PosixItemProviderAdapterFactory;
-import eu.geclipse.jsdl.provider.JsdlItemProviderAdapterFactory;
+import eu.geclipse.jsdl.posix.PosixAdaptersFactory;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.pages.DataStagingPage;
 import eu.geclipse.jsdl.ui.internal.pages.JobApplicationPage;
@@ -106,6 +107,7 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
   protected MarkerHelper markerHelper = new EditUIMarkerHelper();
   protected ComposedAdapterFactory adapterFactory;
   protected JobDefinitionType jobDefType = null;  
+  protected DocumentRoot documentRoot = null;
   private TextEditor editor = null;
   private int sourcePageIndex;
   private JobDefinitionPage jobDefPage = new JobDefinitionPage(this);
@@ -114,7 +116,7 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
   private ResourcesPage resourcesPage = new ResourcesPage(this);  
   private boolean refreshedModel = false;
   //FIXME Uncomment below for doSave and setDiry
-  //private boolean isDirty = false;
+//  private boolean isDirty = false;
   
   
   
@@ -122,10 +124,10 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
     // Create an adapter factory that yields item providers.
     //
     List<AdapterFactoryImpl> factories = new ArrayList<AdapterFactoryImpl>();
-    factories.add(new ResourceItemProviderAdapterFactory());
-    factories.add(new JsdlItemProviderAdapterFactory());
-    factories.add(new PosixItemProviderAdapterFactory());
-    factories.add(new ReflectiveItemProviderAdapterFactory());
+    factories.add(new ResourceItemProviderAdapterFactory() );
+    factories.add( new JsdlAdaptersFactory() );
+    factories.add( new PosixAdaptersFactory() );
+    factories.add(new ReflectiveItemProviderAdapterFactory() );
 
     this.adapterFactory = new ComposedAdapterFactory(factories);
 
@@ -149,7 +151,6 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
                   firePropertyChange(IEditorPart.PROP_DIRTY);
 
                   // Try to select the affected objects.
-                  //widget.getParent().get
                   //Command mostRecentCommand = ((CommandStack)event.getSource()).getMostRecentCommand();
 
                 }
@@ -166,7 +167,7 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
         
       }
  
-//FIXME Uncomment below for doSave and setDiry
+  //FIXME Uncomment below for Save
 //  @Override
 //  public boolean isDirty()
 //  {     
@@ -178,7 +179,8 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
 //  public final void setDirty(final boolean flag) {
 //   if (this.isDirty != flag) {
 //     this.isDirty = flag;
-//     firePropertyChange(IWorkbenchPartConstants.PROP_DIRTY);
+//     editorDirtyStateChanged();
+//     firePropertyChange(PROP_DIRTY);
 //   }
 //  } // End public final void setDirty()
   
@@ -459,7 +461,8 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
       new WorkspaceModifyOperation()
       {
         // This is the method that gets invoked when the operation runs.
-        
+
+      
         @Override
         public void execute(final IProgressMonitor monitor)
         {
@@ -741,11 +744,10 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
        // Instaceof checks for each EObject that appears in the resource.
       
        if (testType instanceof JobDefinitionType){         
-         this.jobDefType = (JobDefinitionType) testType;
+         this.jobDefType = (JobDefinitionType) testType;         
        }      
       
-      }
-         
+      }  
      } 
   
    

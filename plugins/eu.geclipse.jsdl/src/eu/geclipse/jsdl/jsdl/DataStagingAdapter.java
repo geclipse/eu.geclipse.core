@@ -229,11 +229,11 @@ public class DataStagingAdapter {
   } //End attachToDelOnTermination()
   
 
-  public void attachToDelete(final Button button){
+  public void attachToDelete(final List list , final Button button){
     button.addSelectionListener(new SelectionListener() {
 
       public void widgetSelected(final SelectionEvent event) {        
-        performDelete(dataStageEntryKey);
+        performDelete(list, dataStageEntryKey);
       }
 
       public void widgetDefaultSelected(final SelectionEvent event) {
@@ -434,19 +434,16 @@ public class DataStagingAdapter {
   /* Method deletes the selected DataStaged Item from the list and 
    * the JSDL Model.
    */
-  private void performDelete(final String key){
+  private void performDelete(final List list ,final String key){
     
-    List listWidget;
-    
+   
     /* Get EStructuralFeature */
     EObject selected = this.stageMap.get( key );
     
-    int featureID = JsdlPackage.DATA_STAGING_TYPE__FILE_NAME;
-    listWidget = this.listFeaturesMap.get( featureID );
-        
+          
     /* Remove EStructuralFeature from Parent. */
     EcoreUtil.remove( selected );  
-    listWidget.remove( key );
+    list.remove( key );
     
 //    if (listWidget.getItemCount()>0)
 //    {
@@ -458,8 +455,7 @@ public class DataStagingAdapter {
 //    {
 //      
 //    }
-    
-    
+        
     this.stageMap.remove( selected );
     
     

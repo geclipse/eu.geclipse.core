@@ -18,7 +18,10 @@
 package eu.geclipse.jsdl.ui.internal.pages;
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -37,6 +40,7 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 import eu.geclipse.jsdl.jsdl.ResourcesTypeAdapter;
 import eu.geclipse.jsdl.ui.internal.Activator;
+import eu.geclipse.jsdl.ui.internal.dialogs.MultipleInputDialog;
 
 
 public class ResourcesPage extends FormPage {
@@ -101,6 +105,8 @@ public class ResourcesPage extends FormPage {
   
   private ResourcesTypeAdapter resourcesTypeAdapter;
   private boolean contentRefreshed = false;
+  
+  private Object value = null;
   
   
   /*
@@ -290,6 +296,20 @@ public class ResourcesPage extends FormPage {
     this.btnAdd = toolkit.createButton(clientsubSection,
                                     Messages.getString("JsdlEditor_AddButton"),
                                     SWT.BUTTON1);  
+    
+    btnAdd.addSelectionListener(new SelectionListener() {
+      public void widgetSelected(final SelectionEvent event) {
+        //FIXME Uncomment below for doSave and setDiry
+        //setDirty( true ); 
+        handleAddDialog(Messages.getString( "ResourcesPage_HostNameDialog" ));
+        resourcesTypeAdapter.performAdd(lstHostName, "lstJobProject", value);
+      }
+
+       public void widgetDefaultSelected(final SelectionEvent event) {
+           // Do Nothing - Required method
+       }
+     });
+    
     this.btnAdd.setLayoutData( gdBut);
     
     //Create the Remove button
@@ -299,7 +319,8 @@ public class ResourcesPage extends FormPage {
     gdBut.horizontalAlignment = GridData.FILL;
     this.btnDel = toolkit.createButton(clientsubSection, 
                                  Messages.getString("JsdlEditor_RemoveButton"),
-                                 SWT.BUTTON1);  
+                                 SWT.BUTTON1);
+    this.resourcesTypeAdapter.attachToDelete( this.btnDel, this.lstHostName );
     this.btnDel.setLayoutData( gdBut);
     
     toolkit.paintBordersFor( clientsubSection);
@@ -722,6 +743,20 @@ public class ResourcesPage extends FormPage {
     comboRang.setLayoutData(gd);
     
     return comboRang;
+    
+  }
+  
+  
+  protected void handleAddDialog(final String dialogTitle){
+    MultipleInputDialog dialog = new MultipleInputDialog( this.getSite().getShell(),
+                                                         dialogTitle ); //$NON-NLS-1$ 
+        
+    dialog.addTextField( Messages.getString( "ResourcesPage_Value" ), "", false ); //$NON-NLS-1$    
+    if( dialog.open() != Window.OK ) {
+      return;
+    }
+    this.value = (Object) dialog.getStringValue( Messages.getString( "ResourcesPage_Value" ) ) ;
+    
     
   }
 

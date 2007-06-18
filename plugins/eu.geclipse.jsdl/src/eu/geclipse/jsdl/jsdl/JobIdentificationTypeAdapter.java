@@ -16,6 +16,8 @@
   *****************************************************************************/
 package eu.geclipse.jsdl.jsdl;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
 import org.eclipse.emf.common.util.EList;
@@ -44,13 +46,12 @@ import eu.geclipse.jsdl.model.JsdlPackage;
 public class JobIdentificationTypeAdapter {
   
   Hashtable< Integer, Text > widgetFeaturesMap = new Hashtable< Integer, Text >();
-  Hashtable< Integer, List > listFeaturesMap = new Hashtable< Integer, List >();
+  Hashtable< Integer, List > listFeaturesMap = new Hashtable< Integer, List >();  
   Hashtable<String, EStructuralFeature> eStructuralFeaturesMap 
                                  = new Hashtable<String, EStructuralFeature>();
     
   private JobIdentificationType jobIdentificationType = 
                             JsdlFactory.eINSTANCE.createJobIdentificationType();
-                                
   
   public JobIdentificationTypeAdapter(final EObject rootJsdlElement) {
     getTypeForAdapter(rootJsdlElement);
@@ -59,7 +60,7 @@ public class JobIdentificationTypeAdapter {
   
   
   private void  getTypeForAdapter(final EObject rootJsdlElement){
-    
+        
     TreeIterator iterator = rootJsdlElement.eAllContents();
     
     while ( iterator.hasNext (  )  )  {  
@@ -141,7 +142,7 @@ public class JobIdentificationTypeAdapter {
     button.addSelectionListener(new SelectionListener() {
 
       public void widgetSelected(final SelectionEvent event) {        
-        performDelete( list.getItem( list.getSelectionIndex() ) );
+        performDelete(list, list.getItem( list.getSelectionIndex() ) );
       }
 
       public void widgetDefaultSelected(final SelectionEvent event) {
@@ -153,27 +154,56 @@ public class JobIdentificationTypeAdapter {
   }
   
   
-  private void performDelete(final String key){
+  private void performDelete(final List list, final String key){
     
-    List listWidget;
+    EStructuralFeature eStructuralFeature;
     
     /* Get EStructuralFeature */
-    EStructuralFeature eStructuralFeature = this.eStructuralFeaturesMap.get( key );
+     if (this.eStructuralFeaturesMap.containsKey( key ) ){
+      eStructuralFeature = this.eStructuralFeaturesMap.get( key );
     
     /* Delete only Multi-Valued Elements */
-    if (FeatureMapUtil.isMany(this.jobIdentificationType, eStructuralFeature)){
-      ((java.util.List<?>)this.jobIdentificationType.eGet(eStructuralFeature))
+      if (FeatureMapUtil.isMany(this.jobIdentificationType, eStructuralFeature)){
+        
+        ((java.util.List<?>)this.jobIdentificationType.eGet(eStructuralFeature))
                                                                    .remove(key);
-    }
+      }
     
-    /* Get Structural Feature ID to remove it from the associated SWT List */
-    int featureID = eStructuralFeature.getFeatureID();
-    listWidget = this.listFeaturesMap.get( featureID );
-    listWidget.remove( key );
+    }
+    list.remove( key );    
+    eStructuralFeature = null;
+  }
+  
+  
+  
+  public void performAdd(final List list, final String name, final Object value) {
+    
+    EStructuralFeature eFeature = null;
+    Collection<String> collection = new ArrayList<String>();
+    int featureID;
+    
+    if (name == "lstJobAnnotation"){
+      featureID = JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_ANNOTATION;
+    }
+    else{
+      featureID = JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_PROJECT;
+    }
+     
+     
+    
+    list.add( value.toString() );
+    for ( int i=0; i<list.getItemCount(); i++ ) {
+      collection.add( list.getItem( i ) );
+    }
+   
+    eFeature = this.jobIdentificationType.eClass().getEStructuralFeature( featureID );
+    this.jobIdentificationType.eSet(eFeature, collection);
+   
+    eFeature = null;
+    collection = null;
     
   }
   
- 
   
   public void load()
   {
@@ -237,7 +267,7 @@ public class JobIdentificationTypeAdapter {
     } //end if null
   } // End void load()
   
-  
+    
   
   public boolean isEmpty(){
     boolean status = false;

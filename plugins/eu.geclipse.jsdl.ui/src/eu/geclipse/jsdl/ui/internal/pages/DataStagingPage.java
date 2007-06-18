@@ -60,8 +60,8 @@ public class DataStagingPage extends FormPage{
   Button btnAdd = null;
   Button btnDel = null;
   
-  Combo comboCreationFlag = null;
-  Combo comboDelOnTerm = null;
+  Combo cmbCreationFlag = null;
+  Combo cmbDelOnTerm = null;
 
   
   private DataStagingAdapter dataStagingAdapter;
@@ -200,7 +200,8 @@ public class DataStagingPage extends FormPage{
     
     FormToolkit toolkit = mform.getToolkit();
     
-    Section subSection = toolkit.createSection(composite, ExpandableComposite.TITLE_BAR 
+    Section subSection = toolkit.createSection(composite, 
+                                               ExpandableComposite.TITLE_BAR 
                                                | Section.DESCRIPTION 
                                                | SWT.WRAP);    
     subSection.setText(title);
@@ -229,7 +230,9 @@ public class DataStagingPage extends FormPage{
                                  Messages.getString("DataStagingPage_FileName"));
     
     this.lstFileName = new List(clientsubSection, SWT.NONE | SWT.V_SCROLL);
-    this.lstFileName.setData( FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER );    
+    this.lstFileName.setData( FormToolkit.KEY_DRAW_BORDER,
+                                                      FormToolkit.TEXT_BORDER );
+    
     this.dataStagingAdapter.attachToFileName( this.lstFileName );
     gd.horizontalAlignment = GridData.FILL;
     gd.verticalAlignment = GridData.FILL;
@@ -260,7 +263,7 @@ public class DataStagingPage extends FormPage{
     this.btnDel = toolkit.createButton(clientsubSection,
                                   Messages.getString("JsdlEditor_RemoveButton"),
                                    SWT.PUSH);
-    this.dataStagingAdapter.attachToDelete( this.btnDel );
+    this.dataStagingAdapter.attachToDelete(this.lstFileName, this.btnDel );
     this.btnDel.setLayoutData( gd );
     
     
@@ -281,26 +284,32 @@ public class DataStagingPage extends FormPage{
     this.lblCreationFlag = toolkit.createLabel(clientsubSection,
                             Messages.getString("DataStagingPage_CreationFlag"));
     
-    this.comboCreationFlag = new Combo(clientsubSection, SWT.NONE);
-    this.comboCreationFlag.setData( FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER );
-    this.dataStagingAdapter.attachToCreationFlag( this.comboCreationFlag );
+    this.cmbCreationFlag = new Combo(clientsubSection,  SWT.SIMPLE |
+                                                     SWT.DROP_DOWN | 
+                                                     SWT.READ_ONLY);
+    
+    this.cmbCreationFlag.setData( FormToolkit.KEY_DRAW_BORDER );
+    this.dataStagingAdapter.attachToCreationFlag( this.cmbCreationFlag );
     gd.horizontalSpan=3;
     gd.widthHint = 300;
-    this.comboCreationFlag.setLayoutData(gd);
+    this.cmbCreationFlag.setLayoutData(gd);
 
     /* =================== Delete On Termination Widgets ==================== */
     
     this.lblDelOnTerm = toolkit.createLabel(clientsubSection,
                      Messages.getString("DataStagingPage_DeleteOnTermination"));
     
-    this.comboDelOnTerm = new Combo(clientsubSection, SWT.NONE);
-    this.comboDelOnTerm.setData( FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER );    
-    this.comboDelOnTerm.add(Messages.getString("DataStagingPage_true"));
-    this.comboDelOnTerm.add(Messages.getString("DataStagingPage_false"));
-    this.dataStagingAdapter.attachToDelOnTermination( this.comboDelOnTerm );
+    this.cmbDelOnTerm = new Combo(clientsubSection,  SWT.SIMPLE |
+                                                  SWT.DROP_DOWN |
+                                                  SWT.READ_ONLY);
+    
+    this.cmbDelOnTerm.setData( FormToolkit.KEY_DRAW_BORDER);    
+    this.cmbDelOnTerm.add(Messages.getString("DataStagingPage_true"));
+    this.cmbDelOnTerm.add(Messages.getString("DataStagingPage_false"));
+    this.dataStagingAdapter.attachToDelOnTermination( this.cmbDelOnTerm );
     gd.horizontalSpan=3;
     gd.widthHint = 300;
-    this.comboDelOnTerm.setLayoutData(gd);
+    this.cmbDelOnTerm.setLayoutData(gd);
     
     /* ===================== Source Location Widgets ======================== */
     this.lblSource = toolkit.createLabel(clientsubSection,
