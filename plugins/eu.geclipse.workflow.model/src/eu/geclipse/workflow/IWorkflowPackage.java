@@ -20,7 +20,6 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.EReference;
 
 /**
- * <!-- begin-user-doc -->
  * The <b>Package</b> for the model.
  * It contains accessors for the meta objects to represent
  * <ul>
@@ -29,7 +28,6 @@ import org.eclipse.emf.ecore.EReference;
  *   <li>each enum,</li>
  *   <li>and each data type</li>
  * </ul>
- * <!-- end-user-doc -->
  * @see eu.geclipse.workflow.IWorkflowFactory
  * @model kind="package"
  * @generated
@@ -38,11 +36,9 @@ public interface IWorkflowPackage extends EPackage
 {
   /**
    * The package name.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
    * @generated
    */
-  String eNAME = "workflow";
+  String eNAME = "workflow"; //$NON-NLS-1$
 
   /**
    * The package namespace URI.
@@ -50,7 +46,7 @@ public interface IWorkflowPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNS_URI = "http:///eu/geclipse/workflow.ecore";
+  String eNS_URI = "http:///eu/geclipse/workflow.ecore"; //$NON-NLS-1$
 
   /**
    * The package namespace name.
@@ -58,7 +54,7 @@ public interface IWorkflowPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNS_PREFIX = "eu.geclipse.workflow";
+  String eNS_PREFIX = "eu.geclipse.workflow"; //$NON-NLS-1$
 
   /**
    * The singleton instance of the package.

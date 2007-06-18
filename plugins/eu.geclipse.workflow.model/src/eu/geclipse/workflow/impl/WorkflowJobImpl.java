@@ -24,9 +24,7 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.impl.ENotificationImpl;
 
 /**
- * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>IWorkflow Job</b></em>'.
- * <!-- end-user-doc -->
+ * An implementation of the model object '<em><b>IWorkflowJob</b></em>'.
  * <p>
  * The following features are implemented:
  * <ul>
@@ -40,8 +38,6 @@ public class WorkflowJobImpl extends WorkflowNodeImpl implements IWorkflowJob
 {
   /**
    * The default value of the '{@link #getJobDescription() <em>Job Description</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
    * @see #getJobDescription()
    * @generated
    * @ordered
@@ -50,8 +46,6 @@ public class WorkflowJobImpl extends WorkflowNodeImpl implements IWorkflowJob
 
   /**
    * The cached value of the '{@link #getJobDescription() <em>Job Description</em>}' attribute.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
    * @see #getJobDescription()
    * @generated
    * @ordered
@@ -59,8 +53,6 @@ public class WorkflowJobImpl extends WorkflowNodeImpl implements IWorkflowJob
   protected String jobDescription = JOB_DESCRIPTION_EDEFAULT;
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
    * @generated
    */
   protected WorkflowJobImpl()
@@ -69,8 +61,6 @@ public class WorkflowJobImpl extends WorkflowNodeImpl implements IWorkflowJob
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
    * @generated
    */
   @Override
@@ -80,8 +70,6 @@ public class WorkflowJobImpl extends WorkflowNodeImpl implements IWorkflowJob
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
    * @generated
    */
   public String getJobDescription()
@@ -90,8 +78,6 @@ public class WorkflowJobImpl extends WorkflowNodeImpl implements IWorkflowJob
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
    * @generated
    */
   public void setJobDescription(String newJobDescription)
@@ -103,8 +89,6 @@ public class WorkflowJobImpl extends WorkflowNodeImpl implements IWorkflowJob
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
    * @generated
    */
   @Override
@@ -119,8 +103,6 @@ public class WorkflowJobImpl extends WorkflowNodeImpl implements IWorkflowJob
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
    * @generated
    */
   @Override
@@ -136,8 +118,6 @@ public class WorkflowJobImpl extends WorkflowNodeImpl implements IWorkflowJob
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
    * @generated
    */
   @Override
@@ -153,8 +133,6 @@ public class WorkflowJobImpl extends WorkflowNodeImpl implements IWorkflowJob
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
    * @generated
    */
   @Override
@@ -169,8 +147,6 @@ public class WorkflowJobImpl extends WorkflowNodeImpl implements IWorkflowJob
   }
 
   /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
    * @generated
    */
   @Override
@@ -185,4 +161,4 @@ public class WorkflowJobImpl extends WorkflowNodeImpl implements IWorkflowJob
     return result.toString();
   }
 
-} //IWorkflowJobImpl
+}

@@ -60,14 +60,14 @@ import eu.geclipse.workflow.ui.providers.WorkflowParserProvider;
 /**
  * @generated
  */
-public class WorkflowJobNameEditPart extends CompartmentEditPart
+public class WorkflowJobDescriptionEditPart extends CompartmentEditPart
   implements ITextAwareEditPart
 {
 
   /**
    * @generated
    */
-  public static final int VISUAL_ID = 4001;
+  public static final int VISUAL_ID = 4002;
   /**
    * @generated
    */
@@ -88,7 +88,7 @@ public class WorkflowJobNameEditPart extends CompartmentEditPart
   /**
    * @generated
    */
-  public WorkflowJobNameEditPart( View view ) {
+  public WorkflowJobDescriptionEditPart( View view ) {
     super( view );
   }
 
@@ -96,27 +96,30 @@ public class WorkflowJobNameEditPart extends CompartmentEditPart
    * @generated
    */
   @Override
-  protected void createDefaultEditPolicies() {
+  protected void createDefaultEditPolicies()
+  {
     super.createDefaultEditPolicies();
     installEditPolicy( EditPolicy.DIRECT_EDIT_ROLE, new LabelDirectEditPolicy() );
     installEditPolicy( EditPolicy.PRIMARY_DRAG_ROLE,
                        new NonResizableEditPolicy() {
 
                          @Override
-                        protected List createSelectionHandles() {
+                         protected List createSelectionHandles()
+                         {
                            List handles = new ArrayList();
-                           NonResizableHandleKit.addMoveHandle( ( GraphicalEditPart )getHost(),
-                                                                handles );
+                           NonResizableHandleKit.addMoveHandle( ( GraphicalEditPart )getHost(), handles );
                            return handles;
                          }
 
                          @Override
-                        public Command getCommand( Request request ) {
+                         public Command getCommand( Request request )
+                         {
                            return null;
                          }
 
                          @Override
-                        public boolean understandsRequest( Request request ) {
+                         public boolean understandsRequest( Request request )
+                         {
                            return false;
                          }
                        } );
@@ -169,7 +172,7 @@ public class WorkflowJobNameEditPart extends CompartmentEditPart
   /**
    * @generated
    */
-  public void setLabel( Label figure ) {
+  public void setLabel( WrapLabel figure ) {
     unregisterVisuals();
     setFigure( figure );
     defaultText = getLabelTextHelper( figure );
@@ -181,7 +184,8 @@ public class WorkflowJobNameEditPart extends CompartmentEditPart
    * @generated
    */
   @Override
-  protected List getModelChildren() {
+  protected List getModelChildren()
+  {
     return Collections.EMPTY_LIST;
   }
 
@@ -189,7 +193,8 @@ public class WorkflowJobNameEditPart extends CompartmentEditPart
    * @generated
    */
   @Override
-  public IGraphicalEditPart getChildBySemanticHint( String semanticHint ) {
+  public IGraphicalEditPart getChildBySemanticHint( String semanticHint )
+  {
     return null;
   }
 
@@ -371,7 +376,8 @@ public class WorkflowJobNameEditPart extends CompartmentEditPart
    * @generated
    */
   @Override
-  protected void performDirectEditRequest( Request request ) {
+  protected void performDirectEditRequest( Request request )
+  {
     final Request theRequest = request;
     try {
       getEditingDomain().runExclusive( new Runnable() {
@@ -404,7 +410,8 @@ public class WorkflowJobNameEditPart extends CompartmentEditPart
    * @generated
    */
   @Override
-  protected void refreshVisuals() {
+  protected void refreshVisuals()
+  {
     super.refreshVisuals();
     refreshLabel();
     refreshFont();
@@ -449,7 +456,8 @@ public class WorkflowJobNameEditPart extends CompartmentEditPart
    * @generated
    */
   @Override
-  protected void refreshFont() {
+  protected void refreshFont()
+  {
     FontStyle style = ( FontStyle )getFontStyleOwnerView().getStyle( NotationPackage.eINSTANCE.getFontStyle() );
     if( style != null ) {
       FontData fontData = new FontData( style.getFontName(),
@@ -468,7 +476,8 @@ public class WorkflowJobNameEditPart extends CompartmentEditPart
    * @generated
    */
   @Override
-  protected void setFontColor( Color color ) {
+  protected void setFontColor( Color color )
+  {
     getFigure().setForegroundColor( color );
   }
 
@@ -476,7 +485,8 @@ public class WorkflowJobNameEditPart extends CompartmentEditPart
    * @generated
    */
   @Override
-  protected void addSemanticListeners() {
+  protected void addSemanticListeners()
+  {
     if( getParser() instanceof ISemanticParser ) {
       EObject element = resolveSemanticElement();
       parserElements = ( ( ISemanticParser )getParser() ).getSemanticElementsBeingParsed( element );
@@ -492,7 +502,8 @@ public class WorkflowJobNameEditPart extends CompartmentEditPart
    * @generated
    */
   @Override
-  protected void removeSemanticListeners() {
+  protected void removeSemanticListeners()
+  {
     if( parserElements != null ) {
       for( int i = 0; i < parserElements.size(); i++ ) {
         removeListenerFilter( "SemanticModel" + i ); //$NON-NLS-1$
@@ -506,12 +517,14 @@ public class WorkflowJobNameEditPart extends CompartmentEditPart
    * @generated
    */
   @Override
-  protected AccessibleEditPart getAccessibleEditPart() {
+  protected AccessibleEditPart getAccessibleEditPart()
+  {
     if( accessibleEP == null ) {
       accessibleEP = new AccessibleGraphicalEditPart() {
 
         @Override
-        public void getName( AccessibleEvent e ) {
+        public void getName( AccessibleEvent e )
+        {
           e.result = getLabelTextHelper( getFigure() );
         }
       };
@@ -530,7 +543,8 @@ public class WorkflowJobNameEditPart extends CompartmentEditPart
    * @generated
    */
   @Override
-  protected void addNotationalListeners() {
+  protected void addNotationalListeners()
+  {
     super.addNotationalListeners();
     addListenerFilter( "PrimaryView", this, getPrimaryView() ); //$NON-NLS-1$
   }
@@ -539,7 +553,8 @@ public class WorkflowJobNameEditPart extends CompartmentEditPart
    * @generated
    */
   @Override
-  protected void removeNotationalListeners() {
+  protected void removeNotationalListeners()
+  {
     super.removeNotationalListeners();
     removeListenerFilter( "PrimaryView" ); //$NON-NLS-1$
   }
@@ -548,7 +563,8 @@ public class WorkflowJobNameEditPart extends CompartmentEditPart
    * @generated
    */
   @Override
-  protected void handleNotificationEvent( Notification event ) {
+  protected void handleNotificationEvent( Notification event )
+  {
     Object feature = event.getFeature();
     if( NotationPackage.eINSTANCE.getFontStyle_FontColor().equals( feature ) ) {
       Integer c = ( Integer )event.getNewValue();
@@ -595,7 +611,8 @@ public class WorkflowJobNameEditPart extends CompartmentEditPart
    * @generated
    */
   @Override
-  protected IFigure createFigure() {
+  protected IFigure createFigure()
+  {
     // Parent should assign one using setLabel() method
     return null;
   }

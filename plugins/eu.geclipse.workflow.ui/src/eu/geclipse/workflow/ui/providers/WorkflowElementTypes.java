@@ -112,7 +112,7 @@ public class WorkflowElementTypes extends ElementInitializers {
             .create( eClass ) );
       }
     }
-    // TODO : support structural features
+    // TODO athandavan: support structural features
     return null;
   }
 
@@ -181,8 +181,7 @@ public class WorkflowElementTypes extends ElementInitializers {
     if( elements == null ) {
       elements = new IdentityHashMap();
       elements.put( IWorkflow_79, IWorkflowPackage.eINSTANCE.getIWorkflow() );
-      elements.put( IWorkflowJob_1001,
-                    IWorkflowPackage.eINSTANCE.getIWorkflowJob() );
+      elements.put( IWorkflowJob_1001, IWorkflowPackage.eINSTANCE.getIWorkflowJob() );
       elements.put( IOutputPort_2001,
                     IWorkflowPackage.eINSTANCE.getIOutputPort() );
       elements.put( IInputPort_2002, IWorkflowPackage.eINSTANCE.getIInputPort() );

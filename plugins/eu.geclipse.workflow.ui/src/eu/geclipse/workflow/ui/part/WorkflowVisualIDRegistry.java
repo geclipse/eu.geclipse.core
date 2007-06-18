@@ -20,6 +20,7 @@ import eu.geclipse.workflow.ui.edit.parts.InputPortEditPart;
 import eu.geclipse.workflow.ui.edit.parts.LinkEditPart;
 import eu.geclipse.workflow.ui.edit.parts.OutputPortEditPart;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowEditPart;
+import eu.geclipse.workflow.ui.edit.parts.WorkflowJobDescriptionEditPart;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowJobEditPart;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowJobNameEditPart;
 
@@ -166,6 +167,9 @@ public class WorkflowVisualIDRegistry {
     switch( containerVisualID ) {
       case WorkflowJobEditPart.VISUAL_ID:
         if( WorkflowJobNameEditPart.VISUAL_ID == nodeVisualID ) {
+          return true;
+        }
+        if( WorkflowJobDescriptionEditPart.VISUAL_ID == nodeVisualID ) {
           return true;
         }
         if( OutputPortEditPart.VISUAL_ID == nodeVisualID ) {

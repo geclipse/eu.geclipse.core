@@ -9,11 +9,12 @@
  ******************************************************************************/
 package eu.geclipse.workflow.ui.edit.parts;
 
-import org.eclipse.draw2d.FlowLayout;
 import org.eclipse.draw2d.IFigure;
+import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.LabeledContainer;
 import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.StackLayout;
+import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
@@ -108,22 +109,26 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
    */
   protected IFigure createNodeShape() {
     WorkflowJobFigure figure = new WorkflowJobFigure();
-    return primaryShape = figure;
+    return this.primaryShape = figure;
   }
 
   /**
    * @generated
    */
   public WorkflowJobFigure getPrimaryShape() {
-    return ( WorkflowJobFigure )primaryShape;
+    return ( WorkflowJobFigure )this.primaryShape;
   }
 
   /**
-   * @generated
+   * @generated NOT
    */
   protected boolean addFixedChild( EditPart childEditPart ) {
     if( childEditPart instanceof WorkflowJobNameEditPart ) {
       ( ( WorkflowJobNameEditPart )childEditPart ).setLabel( getPrimaryShape().getFigureWorkflowJobNameFigure() );
+      return true;
+    }
+    if( childEditPart instanceof WorkflowJobDescriptionEditPart ) {
+      ( ( WorkflowJobDescriptionEditPart )childEditPart ).setLabel( getPrimaryShape().getFigureWorkflowJobDescriptionFigure() );
       return true;
     }
     return false;
@@ -180,8 +185,7 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
    * 
    * Body of this method does not depend on settings in generation model
    * so you may safely remove <i>generated</i> tag and modify it.
-   * 
-   * @generated
+   *
    */
   @Override
   protected NodeFigure createNodeFigure() {
@@ -189,7 +193,7 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
     figure.setLayoutManager( new StackLayout() );
     IFigure shape = createNodeShape();
     figure.add( shape );
-    contentPane = setupContentPane( shape );
+    this.contentPane = setupContentPane( shape );
     return figure;
   }
 
@@ -213,8 +217,8 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
    */
   @Override
   public IFigure getContentPane() {
-    if( contentPane != null ) {
-      return contentPane;
+    if( this.contentPane != null ) {
+      return this.contentPane;
     }
     return super.getContentPane();
   }
@@ -234,25 +238,24 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
     /**
      * @generated
      */
-    private WrapLabel fFigureWorkflowJobNameFigure;
+    private Label fFigureWorkflowJobNameFigure;
     /**
      * @generated
      */
     private WrapLabel fFigureWorkflowJobDescriptionFigure;
 
     /**
-     * @generated
+     * Creates the WorkflowJobFigure
      */
     public WorkflowJobFigure() {
-      FlowLayout layoutThis = new FlowLayout();
+      ToolbarLayout layoutThis = new ToolbarLayout();
       layoutThis.setStretchMinorAxis( false );
-      layoutThis.setMinorAlignment( FlowLayout.ALIGN_LEFTTOP );
-      layoutThis.setMajorAlignment( FlowLayout.ALIGN_LEFTTOP );
-      layoutThis.setMajorSpacing( 5 );
-      layoutThis.setMinorSpacing( 5 );
-      layoutThis.setHorizontal( false );
+      layoutThis.setMinorAlignment( ToolbarLayout.ALIGN_TOPLEFT );
+      layoutThis.setSpacing( 5 );
+      layoutThis.setVertical( true );
       this.setLayoutManager( layoutThis );
-      this.setCornerDimensions( new Dimension( 20, 20 ) );
+      this.setPreferredSize( 150, 100 );
+      this.setCornerDimensions( new Dimension( 15, 15 ) );
       this.setForegroundColor( THIS_FORE );
       createContents();
     }
@@ -261,16 +264,16 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
      * @generated
      */
     private void createContents() {
-      WrapLabel workflowJobNameFigure0 = new WrapLabel();
+      Label workflowJobNameFigure0 = new Label();
       workflowJobNameFigure0.setText( "<...>" );
       this.add( workflowJobNameFigure0 );
-      fFigureWorkflowJobNameFigure = workflowJobNameFigure0;
+      this.fFigureWorkflowJobNameFigure = workflowJobNameFigure0;
       LabeledContainer jobDescriptionContainer0 = new LabeledContainer();
       this.add( jobDescriptionContainer0 );
       WrapLabel workflowJobDescriptionFigure1 = new WrapLabel();
       workflowJobDescriptionFigure1.setText( "<...>" );
       jobDescriptionContainer0.add( workflowJobDescriptionFigure1 );
-      fFigureWorkflowJobDescriptionFigure = workflowJobDescriptionFigure1;
+      this.fFigureWorkflowJobDescriptionFigure = workflowJobDescriptionFigure1;
     }
     /**
      * @generated
@@ -282,28 +285,28 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
      */
     @Override
     protected boolean useLocalCoordinates() {
-      return myUseLocalCoordinates;
+      return this.myUseLocalCoordinates;
     }
 
     /**
      * @generated
      */
     protected void setUseLocalCoordinates( boolean useLocalCoordinates ) {
-      myUseLocalCoordinates = useLocalCoordinates;
+      this.myUseLocalCoordinates = useLocalCoordinates;
     }
 
     /**
      * @generated
      */
-    public WrapLabel getFigureWorkflowJobNameFigure() {
-      return fFigureWorkflowJobNameFigure;
+    public Label getFigureWorkflowJobNameFigure() {
+      return this.fFigureWorkflowJobNameFigure;
     }
 
     /**
      * @generated
      */
     public WrapLabel getFigureWorkflowJobDescriptionFigure() {
-      return fFigureWorkflowJobDescriptionFigure;
+      return this.fFigureWorkflowJobDescriptionFigure;
     }
   }
   /**

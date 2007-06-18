@@ -21,6 +21,7 @@ import org.eclipse.gmf.runtime.emf.core.util.EObjectAdapter;
 import org.eclipse.gmf.runtime.notation.NotationFactory;
 import org.eclipse.gmf.runtime.notation.View;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowEditPart;
+import eu.geclipse.workflow.ui.edit.parts.WorkflowJobDescriptionEditPart;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowJobEditPart;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowJobNameEditPart;
 import eu.geclipse.workflow.ui.part.WorkflowVisualIDRegistry;
@@ -77,6 +78,12 @@ public class WorkflowJobViewFactory extends AbstractShapeViewFactory {
     getViewService().createNode( eObjectAdapter,
                                  view,
                                  WorkflowVisualIDRegistry.getType( WorkflowJobNameEditPart.VISUAL_ID ),
+                                 ViewUtil.APPEND,
+                                 true,
+                                 getPreferencesHint() );
+    getViewService().createNode( eObjectAdapter,
+                                 view,
+                                 WorkflowVisualIDRegistry.getType( WorkflowJobDescriptionEditPart.VISUAL_ID ),
                                  ViewUtil.APPEND,
                                  true,
                                  getPreferencesHint() );
