@@ -153,7 +153,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
   }
 
   @SuppressWarnings("unchecked")
-  private void setInitialModel( final JSDLJobDescription jsdl )
+  void setInitialModel( final JSDLJobDescription jsdl )
   {
     this.executablePage.getApplicationSpecificPage();
     jsdl.createRoot();
@@ -193,9 +193,16 @@ public class NewJobWizard extends Wizard implements INewWizard {
       } else {
         outName = "stdOut"; //$NON-NLS-1$
       }
-      if( !this.executablePage.getExecutableFile().equals( "" ) ) { //$NON-NLS-1$
+      String execName = this.executablePage.getExecutableFile();
+      if( !execName.equals( "" ) ) { //$NON-NLS-1$
+        //checking if exec is local
+        if (execName.startsWith( "/" ) || (execName.indexOf( ":" ) == 1)){ //$NON-NLS-1$ //$NON-NLS-2$
+          //exec is local
+          jsdl.setInDataStaging( "run_command", execName );
+          execName = "run_command";
+        }
         jsdl.addPOSIXApplicationDetails( this.executablePage.getApplicationName(),
-                                         this.executablePage.getExecutableFile(),
+                                         execName,
                                          in,
                                          inName,
                                          out,
