@@ -20,18 +20,22 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.FeatureMapUtil;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
+
 import eu.geclipse.jsdl.model.JobIdentificationType;
 import eu.geclipse.jsdl.model.JsdlFactory;
 import eu.geclipse.jsdl.model.JsdlPackage;
@@ -46,7 +50,7 @@ import eu.geclipse.jsdl.model.JsdlPackage;
 public class JobIdentificationTypeAdapter {
   
   Hashtable< Integer, Text > widgetFeaturesMap = new Hashtable< Integer, Text >();
-  Hashtable< Integer, List > listFeaturesMap = new Hashtable< Integer, List >();  
+  Hashtable< Integer, TableViewer > listFeaturesMap = new Hashtable< Integer, TableViewer >();  
   Hashtable<String, EStructuralFeature> eStructuralFeaturesMap 
                                  = new Hashtable<String, EStructuralFeature>();
     
@@ -109,11 +113,11 @@ public class JobIdentificationTypeAdapter {
     } );
   }
   
-  public void attachToJobProject(final List widget){    
+  public void attachToJobProject(final TableViewer widget){    
     this.listFeaturesMap.put( JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_PROJECT
                                 , widget );
         
-     widget.addFocusListener( new org.eclipse.swt.events.FocusListener() {
+     widget.getTable().addFocusListener( new org.eclipse.swt.events.FocusListener() {
       public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
         // List Add Functionality    
       }
@@ -123,11 +127,11 @@ public class JobIdentificationTypeAdapter {
   }
   
   
-  public void attachToJobAnnotation(final List widget){    
+  public void attachToJobAnnotation(final TableViewer widget){    
     this.listFeaturesMap.put( JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_ANNOTATION
                                 , widget );
         
-     widget.addFocusListener( new org.eclipse.swt.events.FocusListener() {
+     widget.getTable().addFocusListener( new org.eclipse.swt.events.FocusListener() {
       public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
         // List Add Functionality    
       }
@@ -209,7 +213,7 @@ public class JobIdentificationTypeAdapter {
   {
     EObject object = this.jobIdentificationType;
     Text widgetName = null;
-    List listName = null;
+    TableViewer listName = null;
     
     // Test if eObject is not empty.
     if(object != null) {
@@ -247,8 +251,11 @@ public class JobIdentificationTypeAdapter {
             listName = this.listFeaturesMap.get( featureID );
                      
             EList valueArray = (EList) value;
+            
+            listName.setInput( valueArray );
+            
                        
-            Object eFeatureInst = null;
+            /*Object eFeatureInst = null;
             
             for (Iterator it = valueArray.iterator(); it.hasNext();){
                             
@@ -258,7 +265,7 @@ public class JobIdentificationTypeAdapter {
               
               listName.add( eFeatureInst.toString());
                        
-            } // End for
+            }*/ // End for
 
           }// End UNBOUNDED_MULTIPLICITY
           

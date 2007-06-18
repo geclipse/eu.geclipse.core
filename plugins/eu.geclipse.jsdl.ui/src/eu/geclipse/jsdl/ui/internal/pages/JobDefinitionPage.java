@@ -24,6 +24,7 @@ package eu.geclipse.jsdl.ui.internal.pages;
 
 
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -43,6 +44,7 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
+
 import eu.geclipse.jsdl.jsdl.JobDefinitionTypeAdapter;
 import eu.geclipse.jsdl.jsdl.JobIdentificationTypeAdapter;
 import eu.geclipse.jsdl.ui.editors.JsdlMultiPageEditor;
@@ -55,8 +57,8 @@ public class JobDefinitionPage extends FormPage {
   Text txtDescription = null;
   Text txtJobName = null;
   
-  List lstJobProject = null;
-  List lstJobAnnotation = null;
+  Table lstJobProject = null;
+  Table lstJobAnnotation = null;
   
   Label lblJobId = null;
   Label lblJobDescripiton = null;
@@ -346,11 +348,15 @@ public class JobDefinitionPage extends FormPage {
 //    testTable.setLayoutData( gd);
                             
     
-    this.lstJobAnnotation = new List(client, SWT.None);
+    TableViewer annotationViewer = new TableViewer( client, SWT.BORDER );
+    this.lstJobAnnotation = annotationViewer.getTable();
+    annotationViewer.setContentProvider( new FeatureContentProvider() );
+    annotationViewer.setLabelProvider( new FeatureLabelProvider() );
+    
     this.lstJobAnnotation.setData( FormToolkit.KEY_DRAW_BORDER,
                                                       FormToolkit.TEXT_BORDER );
     
-    this.jobIdentificationTypeAdapter.attachToJobAnnotation( this.lstJobAnnotation);
+    this.jobIdentificationTypeAdapter.attachToJobAnnotation( annotationViewer );
     this.lstJobAnnotation.setLayoutData( gd );
 
     /* Create Button ADD */
@@ -367,7 +373,7 @@ public class JobDefinitionPage extends FormPage {
        //FIXME Uncomment below for doSave and setDiry
        //setDirty( true ); 
        handleAddDialog(Messages.getString( "JobDefinitionPage_JobAnnotationDialog" ));
-       jobIdentificationTypeAdapter.performAdd(lstJobAnnotation, "lstJobAnnotation", value);
+       //jobIdentificationTypeAdapter.performAdd(lstJobAnnotation, "lstJobAnnotation", value);
      }
 
       public void widgetDefaultSelected(final SelectionEvent event) {
@@ -385,7 +391,7 @@ public class JobDefinitionPage extends FormPage {
     gd.verticalAlignment = GridData.BEGINNING;         
     this.btnDel = toolkit.createButton(client,
                        Messages.getString("JsdlEditor_RemoveButton"), SWT.PUSH); 
-    this.jobIdentificationTypeAdapter.attachToDelete( this.btnDel, this.lstJobAnnotation);
+    //this.jobIdentificationTypeAdapter.attachToDelete( this.btnDel, this.lstJobAnnotation);
     this.btnDel.setLayoutData( gd );
     
     /* ============================= Job Project =============================*/
@@ -403,11 +409,16 @@ public class JobDefinitionPage extends FormPage {
      gd.horizontalSpan = 1;
      gd.widthHint = 235;
      gd.heightHint = 150;
-     this.lstJobProject = new List(client,  SWT.NONE);
+     
+     TableViewer projectViewer = new TableViewer( client, SWT.None );
+     this.lstJobProject = projectViewer.getTable();
+     projectViewer.setContentProvider( new FeatureContentProvider() );
+     projectViewer.setLabelProvider( new FeatureLabelProvider() );
+     
      this.lstJobProject.setData( FormToolkit.KEY_DRAW_BORDER,
                                                       FormToolkit.TEXT_BORDER );
      
-     this.jobIdentificationTypeAdapter.attachToJobProject(this.lstJobProject );
+     this.jobIdentificationTypeAdapter.attachToJobProject(projectViewer );
      this.lstJobProject.setLayoutData( gd );
      
      // Create Button ADD     
@@ -424,7 +435,7 @@ public class JobDefinitionPage extends FormPage {
          //FIXME Uncomment below for doSave and setDiry
          //setDirty( true ); 
          handleAddDialog(Messages.getString( "JobDefinitionPage_JobProjectDialog" ));
-         jobIdentificationTypeAdapter.performAdd(lstJobProject, "lstJobProject", value);
+         //jobIdentificationTypeAdapter.performAdd(lstJobProject, "lstJobProject", value);
        }
 
         public void widgetDefaultSelected(final SelectionEvent event) {
@@ -444,7 +455,7 @@ public class JobDefinitionPage extends FormPage {
                                   Messages.getString("JsdlEditor_RemoveButton"),
                                   SWT.PUSH);
      
-     this.jobIdentificationTypeAdapter.attachToDelete( this.btnDel, this.lstJobProject);
+     //this.jobIdentificationTypeAdapter.attachToDelete( this.btnDel, this.lstJobProject);
      this.btnDel.setLayoutData( gd );
  
      toolkit.paintBordersFor( client );
