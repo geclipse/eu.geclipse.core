@@ -262,13 +262,9 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
                                                                            "Choose a file",
                                                                            null, true );
         if( connection != null ) {
-          try {
-            String filename = connection.getConnectionFileStore().toString();
-            if( filename != null ) {
-              ExecutableNewJobWizardPage.this.stdin.setText( filename );
-            }
-          } catch( CoreException cExc ) {
-            NewProblemDialog.openProblem( getShell(), "error", "error", cExc );
+          String filename = getSelectedElementDisplayName( connection );
+          if( filename != null ) {
+            ExecutableNewJobWizardPage.this.stdin.setText( filename );
           }
         }
       }
@@ -282,13 +278,9 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
                                                                            "Choose remote file",
                                                                            null, false );
         if( connection != null ) {
-          try {
-            String filename = connection.getConnectionFileStore().toString();
-            if( filename != null ) {
-              ExecutableNewJobWizardPage.this.stdout.setText( filename );
-            }
-          } catch( CoreException cExc ) {
-            NewProblemDialog.openProblem( getShell(), "error", "error", cExc );
+          String filename = getSelectedElementDisplayName( connection );
+          if( filename != null ) {
+            ExecutableNewJobWizardPage.this.stdout.setText( filename );
           }
         }
       }
@@ -322,13 +314,9 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
                                                                            "Choose remote or local file",
                                                                            null, true );
         if( connection != null ) {
-          try {
-            String filename = connection.getConnectionFileStore().toString();
-            if( filename != null ) {
-              ExecutableNewJobWizardPage.this.executableFile.setText( filename );
-            }
-          } catch( CoreException cExc ) {
-            NewProblemDialog.openProblem( getShell(), "error", "error", cExc );
+          String filename = getSelectedElementDisplayName( connection );
+          if( filename != null ) {
+            ExecutableNewJobWizardPage.this.executableFile.setText( filename );
           }
         }
       }
@@ -341,6 +329,19 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     setControl( mainComp );
   }
 
+  
+  private String getSelectedElementDisplayName(IGridConnectionElement element){
+    String result = element.getName();
+    try {
+      if (element.getConnectionFileStore().getFileSystem().getScheme().equalsIgnoreCase( "file" )){
+        result = "file://" + result;
+      }
+    } catch( CoreException coreExc ) {
+      Activator.logException( coreExc );
+    }
+    return result;
+  }
+  
   /**
    * Returns name of executable to run on grid
    * 
