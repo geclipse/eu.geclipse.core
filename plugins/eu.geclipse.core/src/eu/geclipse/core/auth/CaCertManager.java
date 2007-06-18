@@ -42,8 +42,8 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.Path;
-import com.ice.tar.TarEntry;
-import com.ice.tar.TarInputStream;
+import eu.geclipse.core.util.tar.TarInputStream;
+import eu.geclipse.core.util.tar.TarEntry;
 import eu.geclipse.core.CoreProblems;
 import eu.geclipse.core.GridException;
 import eu.geclipse.core.Preferences;
@@ -188,11 +188,9 @@ public class CaCertManager implements IContentChangeNotifier {
    * Import CA certificates from an online repository.
    * 
    * @param repo The URL of the repository.
-   * 
    * @param monitor A progress monitor used to monitor the import operation.
-   * 
-   * @throws GridException If a problem occures when connecting to 
-   * the specified repository.
+   * @throws GridException If a problem occurs when connecting to the specified
+   *             repository.
    */
   public void importFromRepository( final URL repo,
                                     final IProgressMonitor monitor )
@@ -340,7 +338,7 @@ public class CaCertManager implements IContentChangeNotifier {
    * 
    * @return The path of the new file.
    * 
-   * @throws IOException If an exception occures during this operation.
+   * @throws IOException If an exception occurs during this operation.
    */
   private IPath copyFile( final IPath from,
                           final IPath to,
@@ -475,7 +473,7 @@ public class CaCertManager implements IContentChangeNotifier {
    * 
    * @param url The URL of the repository.
    * 
-   * @throws CoreException Thrown if an exception occures while
+   * @throws CoreException Thrown if an exception occurs while
    * contacting the specified repository.
    */
   private void loadFileFromRepository( final URL url )
@@ -495,7 +493,7 @@ public class CaCertManager implements IContentChangeNotifier {
       TarEntry tEntry;
       while ( ( tEntry = tIStream.getNextEntry() ) != null ) {
         if ( !tEntry.isDirectory() ) {
-          IPath oPath = new Path( tEntry.getName() );
+          IPath oPath = tEntry.getPath();
           oPath = location.append( oPath.lastSegment() );
           FileOutputStream fOStream = new FileOutputStream( oPath.toFile() );
           tIStream.copyEntryContents(fOStream);

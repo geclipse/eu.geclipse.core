@@ -72,6 +72,26 @@ public class SolutionRegistry {
   public static final int SERVER_DOWN = uniqueID();
 
   /**
+   * Unique ID of the re-download file solution.
+   */
+  public static final int DOWNLOAD_FILE_AGAIN = uniqueID();
+
+  /**
+   * Unique ID of the download from another source solution.
+   */
+  public static final int DOWNLOAD_FROM_ANOTHER_SOURCE = uniqueID();
+
+  /**
+   * Unique ID of the don't use this implementation solution.
+   */
+  public static final int DONT_USE_THIS_IMPLEMENTATION = uniqueID();
+
+  /**
+   * Unique ID of the report as bug solution.
+   */
+  public static final int REPORT_AS_BUG = uniqueID();
+
+  /**
    * Unique ID of the check if the IP address is a public address solution.
    */
   public static final int CHECK_PUBLIC_IP_ADDR = uniqueID();
@@ -147,7 +167,7 @@ public class SolutionRegistry {
     ISolution solution = null;
     
     if ( solutionID == CHECK_AUTH_DATA ) {
-      solution = new Solution( CHECK_AUTH_DATA, "Check your authentication data" ); //$NON-NLS-1$
+      solution = new Solution( CHECK_AUTH_DATA, Messages.getString("SolutionRegistry.check_auth_data") ); //$NON-NLS-1$
     }
     
     else if ( solutionID == CHECK_AUTH_TOKENS ) {
@@ -182,6 +202,26 @@ public class SolutionRegistry {
       solution = new Solution( SERVER_DOWN, Messages.getString("SolutionRegistry.server_down")); //$NON-NLS-1$
     }
     
+    else if( solutionID == DOWNLOAD_FILE_AGAIN ) {
+      solution = new Solution( DOWNLOAD_FILE_AGAIN,
+                               Messages.getString( "SolutionRegistry.download_file_again" ) ); //$NON-NLS-1$
+    } 
+
+    else if( solutionID == DOWNLOAD_FROM_ANOTHER_SOURCE ) {
+      solution = new Solution( DOWNLOAD_FROM_ANOTHER_SOURCE,
+                               Messages.getString( "SolutionRegistry.download_from_another_source" ) ); //$NON-NLS-1$
+    } 
+    
+    else if( solutionID == DONT_USE_THIS_IMPLEMENTATION ) {
+      solution = new Solution( DONT_USE_THIS_IMPLEMENTATION,
+                               Messages.getString( "SolutionRegistry.dont_use_this_implementation" ) ); //$NON-NLS-1$
+    } 
+    
+    else if( solutionID == REPORT_AS_BUG ) {
+      solution = new Solution( REPORT_AS_BUG,
+                               Messages.getString( "SolutionRegistry.report_as_bug" ) ); //$NON-NLS-1$
+    }
+
     else if ( solutionID == CHECK_PUBLIC_IP_ADDR ) {
       solution = new Solution( CHECK_PUBLIC_IP_ADDR, Messages.getString("SolutionRegistry.check_public_ip_addr") ); //$NON-NLS-1$
     }
