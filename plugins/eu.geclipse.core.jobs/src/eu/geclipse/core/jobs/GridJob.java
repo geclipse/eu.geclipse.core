@@ -186,7 +186,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
 
   private void readJobStatus() {
     
-    Document document = createXmlDocument( jobIdFile );
+    Document document = createXmlDocument( jobStatusFile );
     if( document == null ) {
       jobStatus= new GridJobStatus();
     } else {
@@ -226,11 +226,12 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
       if(newJobStatus!=null && newJobStatus instanceof GridJobStatus){
         jobStatus=(GridJobStatus)newJobStatus;
         writeJobStatus( jobStatusFile );
+        
       }
     } catch( GridException e ) {
       Activator.logException( e );
     }
-    jobStatus = new GridJobStatus( jobID );
+//    jobStatus = new GridJobStatus( jobID );
     return this.jobStatus;
   }
 
@@ -277,7 +278,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     try {
       DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance()
         .newDocumentBuilder();
-      InputStream inputStream = xmlFile.getContents();
+      InputStream inputStream = xmlFile.getContents(true);
       xmlDocument = documentBuilder.parse( inputStream );
       inputStream.close();
     } catch( CoreException e ) {
@@ -348,7 +349,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
    * @param jobFolder - Folder to which file should be written
    * @throws GridModelException
    */
-  private void writeJobDescription(IGridJobDescription description, IFolder jobFolder) throws GridModelException{
+  private void writeJobDescription(final IGridJobDescription description, final IFolder jobFolder) throws GridModelException{
     //create job description file
     IFile sourceDescriptionFile = ( IFile )description.getResource();
     jobDescriptionFile=jobFolder.getFile( sourceDescriptionFile.getName() );
@@ -406,7 +407,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
      * @param jobFolder - Folder to which file should be written
      * @throws GridModelException 
      */
-    private void writeJobStatus( IFile jobStatusFile ) throws GridModelException {
+    private void writeJobStatus( final IFile jobStatusFile ) throws GridModelException {
       String xml;
       byte[] byteArray;
       ByteArrayInputStream baos;
@@ -418,7 +419,12 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
       try{
       byteArray = xml.getBytes( "ISO-8859-1" ); // choose a charset
       baos = new ByteArrayInputStream( byteArray );
-      jobStatusFile.setContents( baos, true, true, null );
+      if(jobStatusFile.exists()){
+        jobStatusFile.setContents( baos, true, true, null );
+      }
+      else {
+        jobStatusFile.create( baos, true, null );
+      }
     } catch( CoreException cExc ) {
       throw new GridModelException( GridModelProblems.ELEMENT_CREATE_FAILED,
                                   cExc,

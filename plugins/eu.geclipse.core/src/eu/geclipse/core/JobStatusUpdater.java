@@ -82,7 +82,7 @@ public class JobStatusUpdater extends Job {
       Activator.logException( e );
     }
     if( this.job.getJobStatus().canChange() ) {
-      schedule( 10000 );
+      schedule( 30000 );
     }
     else{
       JobManager.getManager().removeUpdater( this );

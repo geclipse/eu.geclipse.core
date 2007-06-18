@@ -57,7 +57,7 @@ public class GridJobID implements IGridJobID {
   }
 
   protected void setData( final String data ) {
-    System.out.println( data );
+//    System.out.println( data );
   }
 
   public final String getXML() {
