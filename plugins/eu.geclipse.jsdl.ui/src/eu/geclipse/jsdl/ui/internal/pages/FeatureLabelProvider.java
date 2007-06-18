@@ -8,13 +8,11 @@ import org.eclipse.swt.graphics.Image;
 public class FeatureLabelProvider extends LabelProvider implements
     ITableLabelProvider {
 
-  @Override
   public Image getColumnImage(Object element, int columnIndex) {
     // TODO Auto-generated method stub
     return null;
   }
 
-  @Override
   public String getColumnText(Object element, int columnIndex) {
     String text = null;
     if ( element instanceof EStructuralFeature ) {

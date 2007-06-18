@@ -6,7 +6,6 @@ import org.eclipse.jface.viewers.Viewer;
 
 public class FeatureContentProvider implements IStructuredContentProvider {
 
-  @Override
   public Object[] getElements(Object inputElement) {
     Object[] result = null;
     if ( inputElement instanceof EList ) {
@@ -16,13 +15,11 @@ public class FeatureContentProvider implements IStructuredContentProvider {
     return result;
   }
 
-  @Override
   public void dispose() {
     // TODO Auto-generated method stub
 
   }
 
-  @Override
   public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
     // TODO Auto-generated method stub
 
