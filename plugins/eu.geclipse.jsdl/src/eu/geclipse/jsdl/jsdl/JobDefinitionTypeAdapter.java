@@ -53,7 +53,7 @@ public class JobDefinitionTypeAdapter extends JsdlAdaptersFactory {
     this.widgetFeaturesMap.put( JsdlPackage.JOB_DEFINITION_TYPE__ID, widget );
         
     widget.addModifyListener( new ModifyListener() {
-      @Override
+      
       public void modifyText( final ModifyEvent e ) {
         fireNotifyChanged( null );
       }
