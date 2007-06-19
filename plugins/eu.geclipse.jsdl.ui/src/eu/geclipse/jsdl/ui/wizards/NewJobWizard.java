@@ -159,28 +159,17 @@ public class NewJobWizard extends Wizard implements INewWizard {
     jsdl.createRoot();
     jsdl.addJobDescription();
     jsdl.addJobIdentification( this.executablePage.getApplicationName(), null );
-    if( !this.executablePage.getApplicationName().equals( "" ) ) { //$NON-NLS-1$
+    String appName = "";
+    if( this.executablePage.getApplicationName().equals( "" ) ) { //$NON-NLS-1$
+      appName = "example_name";
+    } else {
+      appName = this.executablePage.getApplicationName();
+    }
       jsdl.addApplication();
       String in = null;
       String out = null;
       String inName = null;
       String outName = null;
-      // if( this.inputFilesPage.isCreated() ) {
-      // in = this.inputFilesPage.getStdin();
-      // out = this.inputFilesPage.getStdout();
-      // if( in.equals( Messages.getString(
-      // "FilesInputNewJobWizardPage.stdin_info" ) ) ) { //$NON-NLS-1$
-      // in = null;
-      // } else {
-      // inName = this.inputFilesPage.getStdinName();
-      // }
-      // if( out.equals( Messages.getString(
-      // "FilesInputNewJobWizardPage.stdin_info" ) ) ) { //$NON-NLS-1$
-      // out = null;
-      // } else {
-      // outName = this.inputFilesPage.getStdOutName();
-      // }
-      // }
       in = this.executablePage.getStdin();
       out = this.executablePage.getStdout();
       if( in.equals( Messages.getString( "FilesInputNewJobWizardPage.stdin_info" ) ) ) { //$NON-NLS-1$
@@ -201,14 +190,14 @@ public class NewJobWizard extends Wizard implements INewWizard {
           jsdl.setInDataStaging( "run_command", execName );
           execName = "run_command";
         }
-        jsdl.addPOSIXApplicationDetails( this.executablePage.getApplicationName(),
+        jsdl.addPOSIXApplicationDetails( appName,
                                          execName,
                                          in,
                                          inName,
                                          out,
                                          outName );
       }
-    }
+    
     if( this.outputFilesPage.isCreated() ) {
       HashMap<String, String> outFiles = this.outputFilesPage.getFiles( FileType.OUTPUT );
       if( !outFiles.isEmpty() ) {

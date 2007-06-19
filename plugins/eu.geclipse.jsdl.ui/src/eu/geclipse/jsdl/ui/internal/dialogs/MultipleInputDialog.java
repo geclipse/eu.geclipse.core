@@ -471,9 +471,14 @@ public class MultipleInputDialog extends Dialog {
                                                                              "Choose a file",
                                                                              null,
                                                                              allowLocal );
+          
+          
           if( connection != null ) {
             try {
               String filename = connection.getConnectionFileStore().toString();
+              if (connection.getConnectionFileStore().getFileSystem().getScheme().equalsIgnoreCase( "file" )){
+                filename = "file://" + filename;
+              }
               if( filename != null ) {
                 text.setText( filename );
               }

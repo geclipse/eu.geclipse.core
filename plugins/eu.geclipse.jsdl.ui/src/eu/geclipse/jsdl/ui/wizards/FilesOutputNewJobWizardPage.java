@@ -190,6 +190,19 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
     this.isCreated = true;
     setControl( mainComp );
   }
+  
+  private String getSelectedElementDisplayName(IGridConnectionElement element){
+    String result = element.getName();
+    try {
+      if (element.getConnectionFileStore().getFileSystem().getScheme().equalsIgnoreCase( "file" )){
+        result = "file://" + result;
+      }
+    } catch( CoreException coreExc ) {
+      Activator.logException( coreExc );
+    }
+    return result;
+  }
+  
   class StageInTab extends TabComponent<DataStaging> implements ICellModifier {
 
     /**
