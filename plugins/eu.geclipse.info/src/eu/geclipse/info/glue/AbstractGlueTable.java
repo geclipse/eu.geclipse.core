@@ -55,13 +55,16 @@ public abstract class AbstractGlueTable implements Serializable{
 		  }
 		  f.set( this, valueToset );
 		  ret = this.getClass().getField( fieldName ).get( this );
-	  }catch(NoSuchFieldException nsfe){
+	  }catch(NoSuchFieldException nsfe){//check for a list
 		  String listFieldName=fieldName.substring(0,1).toLowerCase()+fieldName.substring(1);
-		  f=this.getClass().getField( listFieldName+"List" ); //$NON-NLS-1$
-		  ArrayList<AbstractGlueTable> list=(ArrayList<AbstractGlueTable>) f.get(this);
-		  String sValue=value.toString();
-		  AbstractGlueTable agt=GlueIndex.getInstance().get(fieldName,sValue);
-		  list.add(agt);
+		  try{
+		    f=this.getClass().getField( listFieldName+"List" ); //$NON-NLS-1$
+		    ArrayList<AbstractGlueTable> list=(ArrayList<AbstractGlueTable>) f.get(this);
+		    String sValue=value.toString();
+		    AbstractGlueTable agt=GlueIndex.getInstance().get(fieldName,sValue);
+		    list.add(agt);
+		  }catch(NoSuchFieldException nsfe2){//Ignore this field
+		  }
 	  }
 	  return ret;
   }
