@@ -31,6 +31,7 @@ import eu.geclipse.core.model.GridModelProblems;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridInfoService;
+import eu.geclipse.core.model.IGridJobSubmissionService;
 import eu.geclipse.core.model.IGridService;
 import eu.geclipse.core.model.IStorableElement;
 import eu.geclipse.core.model.IVirtualOrganization;
@@ -135,6 +136,18 @@ public abstract class AbstractVirtualOrganization
       }
     }
     return services.toArray( new IGridService[ services.size() ] );
+  }
+  
+  public IGridJobSubmissionService[] getJobSubmissionServices() throws GridModelException {
+    IGridService[] services = getServices();
+    List< IGridJobSubmissionService > jsServices
+      = new ArrayList< IGridJobSubmissionService >();
+    for ( IGridService service : services ) {
+      if ( service instanceof IGridJobSubmissionService ) {
+        jsServices.add( ( IGridJobSubmissionService ) service );
+      }
+    }
+    return jsServices.toArray( new IGridJobSubmissionService[ jsServices.size() ] );
   }
   
   /* (non-Javadoc)

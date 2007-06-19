@@ -8,6 +8,7 @@ import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridInfoService;
+import eu.geclipse.core.model.IGridJobSubmissionService;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IGridService;
 import eu.geclipse.core.model.IVirtualOrganization;
@@ -87,6 +88,11 @@ public class VoWrapper
   public IGridService[] getServices()
       throws GridModelException {
     return this.vo.getServices();
+  }
+  
+  public IGridJobSubmissionService[] getJobSubmissionServices()
+      throws GridModelException {
+    return this.vo.getJobSubmissionServices();
   }
   
   public IGridElement getWrappedElement() {

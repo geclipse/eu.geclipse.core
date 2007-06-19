@@ -103,6 +103,27 @@ public class GridModel {
     return standardCreators;
   }
   
+  public static IGridElementCreator getElementCreator(
+      final Object fromObject,
+      final Class< ? extends IGridElement > elementType ) {
+    
+    IGridElementCreator result = null;
+    
+    List< IGridElementCreator > creators
+      = elementType == null
+      ? getElementCreators()
+      : getElementCreators( elementType );
+    for ( IGridElementCreator creator : creators ) {
+      if ( creator.canCreate( fromObject ) ) {
+        result = creator;
+        break;
+      }
+    }
+    
+    return result;
+    
+  }
+  
   /**
    * Get a list of all element creators that are defined as extensions
    * of the <code>eu.geclipse.core.gridElementCreator</code> extension

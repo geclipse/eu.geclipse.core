@@ -46,6 +46,8 @@ public interface IVirtualOrganization
    */
   public IGridService[] getServices() throws GridModelException;
   
+  public IGridJobSubmissionService[] getJobSubmissionServices() throws GridModelException;
+  
   /**
    * Get a string that denotes the type of this VO. This string
    * has to be a singleton for each implementation. So each object
