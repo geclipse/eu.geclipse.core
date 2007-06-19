@@ -101,6 +101,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
   private ArrayList<WizardPage> internalPages;
   private BasicWizardPart basicNode;
   private Button chooseButton;
+  private Text argumentsLine;
 
   /**
    * Creates new wizard page
@@ -171,6 +172,16 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
                            | GridData.VERTICAL_ALIGN_FILL
                            | GridData.VERTICAL_ALIGN_CENTER );
     this.gridFileDialogButton.setLayoutData( layout );
+    
+    Label argumentsLabel = new Label(mainComp, SWT.LEAD);
+    argumentsLabel.setText( "Arguments line" );
+    layout = new GridData();
+    argumentsLabel.setLayoutData( layout );
+    this.argumentsLine = new Text(mainComp, SWT.BORDER);
+    layout = new GridData(GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL);
+    layout.horizontalSpan = 2;
+    this.argumentsLine.setLayoutData( layout );
+    
     Group stdFilesGroup = new Group( mainComp, SWT.NONE );
     stdFilesGroup.setText( Messages.getString( "ExecutableNewJobWizardPage.composite_group_title" ) ); //$NON-NLS-1$
     stdFilesGroup.setLayout( new GridLayout( 3, false ) );
@@ -331,7 +342,13 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
 
   
   private String getSelectedElementDisplayName(IGridConnectionElement element){
-    String result = element.getName();
+    String result = "";
+    try {
+      result = element.getConnectionFileStore().toString();
+    } catch( CoreException e ) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
     try {
       if (element.getConnectionFileStore().getFileSystem().getScheme().equalsIgnoreCase( "file" )){
         result = "file://" + result;
@@ -349,19 +366,19 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
    */
   public String getExecutableFile() {
     String result = this.executableFile.getText();
-    try {
-      URI newURI = new URI( this.executableFile.getText() );
-      String scheme = newURI.getScheme();
-      if( scheme != null ) {
-        result = result.substring( scheme.length() + 2, result.length() );
-      } else {
-        // this means user has specified executable name from hand (not choosing
-        // a file)
-        result = this.executableFile.getText();
-      }
-    } catch( URISyntaxException URISyntaxExc ) {
-      Activator.logException( URISyntaxExc );
-    }
+//    try {
+//      URI newURI = new URI( this.executableFile.getText() );
+//      String scheme = newURI.getScheme();
+//      if( scheme != null ) {
+//        result = result.substring( scheme.length() + 2, result.length() );
+//      } else {
+//        // this means user has specified executable name from hand (not choosing
+//        // a file)
+//        result = this.executableFile.getText();
+//      }
+//    } catch( URISyntaxException URISyntaxExc ) {
+//      Activator.logException( URISyntaxExc );
+//    }
     return result;
   }
 
@@ -460,6 +477,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     }
     return result;
   }
+  
 
   /**
    * Method to access value of field holding path to stdin file
@@ -477,5 +495,14 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
    */
   public String getStdout() {
     return this.stdout.getText();
+  }
+  
+  public ArrayList<String> getArgumentsList(){
+    ArrayList<String> result = new ArrayList<String>();
+    String[] table = this.argumentsLine.getText().split( " " );
+    for (String tableElement: table){
+      result.add( tableElement );
+    }
+    return result;
   }
 }

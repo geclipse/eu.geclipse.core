@@ -579,6 +579,19 @@ public class JSDLJobDescription extends ResourceGridContainer
       }
     }
   }
+  
+  public void addArgument(String argName){
+    POSIXApplicationType posixApp = getPosixApplication();
+    ArgumentType arg;
+    if( posixApp != null ) {
+      EList argumentList = posixApp.getArgument();
+      if( argName != null && !argName.equals( "" ) ) { //$NON-NLS-1$
+        arg = this.posixFactory.createArgumentType();
+        arg.setValue( argName );
+        argumentList.add( arg );
+      }
+    }
+  }
 
   public String getInput() {
     String inputString = null;

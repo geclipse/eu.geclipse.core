@@ -185,7 +185,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
       String execName = this.executablePage.getExecutableFile();
       if( !execName.equals( "" ) ) { //$NON-NLS-1$
         //checking if exec is local
-        if (execName.startsWith( "/" ) || (execName.indexOf( ":" ) == 1)){ //$NON-NLS-1$ //$NON-NLS-2$
+        if (execName.startsWith( "file" )){ //$NON-NLS-1$ //$NON-NLS-2$
           //exec is local
           jsdl.setInDataStaging( "run_command", execName );
           execName = "run_command";
@@ -212,6 +212,11 @@ public class NewJobWizard extends Wizard implements INewWizard {
         }
       }
     }
+    ArrayList<String> argList = this.executablePage.getArgumentsList();
+    for (String argumentFormLine: argList){
+      jsdl.addArgument( argumentFormLine );
+    }
+    
     List<IApplicationSpecificPage> aspList = this.executablePage.getApplicationSpecificPages();
     Map<String, ArrayList<String>> arguments;
     if( aspList != null ) {
