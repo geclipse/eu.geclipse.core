@@ -127,6 +127,11 @@ public class SolutionRegistry {
   public static final int CHECK_SSH_SERVER_CONFIG = uniqueID();
 
   /**
+   * Unique ID of the check check for valid proxy solution.
+   */
+  public static final int CHECK_FOR_VALID_PROXY = uniqueID();
+
+  /**
    * The singleton instance. 
    */
   private static SolutionRegistry singleton;
@@ -275,8 +280,11 @@ public class SolutionRegistry {
       solution = new Solution( CHECK_SSH_SERVER_CONFIG, Messages.getString("SolutionRegistry.check_ssh_server_config") ); //$NON-NLS-1$
     }
 
+    else if ( solutionID == CHECK_FOR_VALID_PROXY ) {
+      solution = new Solution( CHECK_FOR_VALID_PROXY, Messages.getString("SolutionRegistry.checkForValidProxy") ); //$NON-NLS-1$
+    }
+
     return solution;
-    
   }
   
   /**

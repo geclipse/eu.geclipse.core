@@ -71,6 +71,12 @@ public class CoreProblems implements IProblemProvider {
   public static final int LOGIN_FAILED
     = ProblemRegistry.uniqueID();
 
+  /**
+   * Problem ID for credential creation errors.
+   */
+  public static final int ERROR_CREATING_CREDENTIAL
+    = ProblemRegistry.uniqueID();
+
   /* (non-Javadoc)
    * @see eu.geclipse.core.IProblemProvider#getProblem(int, java.lang.Throwable)
    */
@@ -145,6 +151,13 @@ public class CoreProblems implements IProblemProvider {
     else if ( problemID == LOGIN_FAILED ) {
       problem = createProblem( problemID,
                                Messages.getString("CoreProblems.login_failed"), //$NON-NLS-1$
+                               exc,
+                               null );
+    }
+
+    else if ( problemID == ERROR_CREATING_CREDENTIAL ) {
+      problem = createProblem( problemID,
+                               Messages.getString("CoreProblems.errorCreatingCredential"), //$NON-NLS-1$
                                exc,
                                null );
     }
