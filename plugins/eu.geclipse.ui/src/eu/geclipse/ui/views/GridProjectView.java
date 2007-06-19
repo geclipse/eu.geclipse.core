@@ -29,6 +29,7 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridStorage;
 import eu.geclipse.ui.internal.actions.ActionGroupManager;
 import eu.geclipse.ui.internal.actions.BuildActions;
+import eu.geclipse.ui.internal.actions.DeployActions;
 import eu.geclipse.ui.internal.actions.EditorActions;
 import eu.geclipse.ui.internal.actions.MountActions;
 import eu.geclipse.ui.internal.actions.NewWizardActions;
@@ -106,6 +107,9 @@ public class GridProjectView
     
     MountActions mountActions = new MountActions( site );
     groups.addGroup( mountActions );
+    
+    DeployActions deployActions = new DeployActions( site );
+    groups.addGroup(  deployActions );
     
     ProjectActions projectActions = new ProjectActions( site );
     groups.addGroup( projectActions );
