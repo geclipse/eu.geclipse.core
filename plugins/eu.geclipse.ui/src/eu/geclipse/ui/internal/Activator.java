@@ -100,7 +100,7 @@ public class Activator extends AbstractUIPlugin {
    * The id of the workflow wizard.
    */
   public static final String ID_WORKFLOW_WIZARD
-    = "eu.geclipse.workflow.ui.wizards.workflowWizard"; //$NON-NLS-1$
+    = "eu.geclipse.workflow.ui.part.WorkflowCreationWizardID"; //$NON-NLS-1$
 
   /**
    * The shared instance.
