@@ -23,7 +23,9 @@ package eu.geclipse.jsdl.ui.internal.pages;
  */
 
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -51,7 +53,8 @@ import eu.geclipse.jsdl.ui.editors.JsdlMultiPageEditor;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.dialogs.MultipleInputDialog;
 
-public class JobDefinitionPage extends FormPage {
+public class JobDefinitionPage extends FormPage
+    implements INotifyChangedListener {
 
   Text txtId = null;
   Text txtDescription = null;
@@ -124,6 +127,7 @@ public class JobDefinitionPage extends FormPage {
     }
    else{     
       this.jobDefinitionTypeAdapter = new JobDefinitionTypeAdapter(rootJsdlElement);
+      this.jobDefinitionTypeAdapter.addListener( this );
       this.jobIdentificationTypeAdapter = new JobIdentificationTypeAdapter(rootJsdlElement);
    }
           
@@ -137,10 +141,9 @@ public class JobDefinitionPage extends FormPage {
   }
   
   //FIXME Uncomment below for doSave and setDiry
-//  private void setDirty(final boolean dirtyFlag) {
-//    isDirtyVar = dirtyFlag;
-//    editor.setDirty( true );
-//  }
+  private void setDirty(final boolean dirtyFlag) {
+    isDirtyVar = dirtyFlag;
+  }
 
  
 
@@ -475,6 +478,11 @@ public class JobDefinitionPage extends FormPage {
     this.value = (Object) dialog.getStringValue( Messages.getString( "JobDefinitionPage_Value" ) ) ;
     
     
+  }
+
+  @Override
+  public void notifyChanged(Notification notification) {
+    setDirty( true );
   }
   
   

@@ -24,9 +24,14 @@ package eu.geclipse.jsdl.jsdl;
 
 import java.util.Hashtable;
 import java.util.Iterator;
+
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.impl.NotificationImpl;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Text;
 import eu.geclipse.jsdl.model.JobDefinitionType;
 import eu.geclipse.jsdl.model.JsdlFactory;
@@ -47,6 +52,13 @@ public class JobDefinitionTypeAdapter extends JsdlAdaptersFactory {
   public void attachID(final Text widget){    
     this.widgetFeaturesMap.put( JsdlPackage.JOB_DEFINITION_TYPE__ID, widget );
         
+    widget.addModifyListener( new ModifyListener() {
+      @Override
+      public void modifyText( final ModifyEvent e ) {
+        fireNotifyChanged( null );
+      }
+    } );
+    
      widget.addFocusListener( new org.eclipse.swt.events.FocusListener() {
       public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
         jobDefinitionType.setId(widget.getText());    
