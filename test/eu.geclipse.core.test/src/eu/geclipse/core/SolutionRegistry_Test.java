@@ -31,7 +31,7 @@ public class SolutionRegistry_Test {
   @Before
   public void setUp() throws Exception
   {
-    this.solutionregistry = new SolutionRegistry();
+    this.solutionregistry = SolutionRegistry.getRegistry();
   }
 
   /**
@@ -63,7 +63,7 @@ public class SolutionRegistry_Test {
     solution = this.solutionregistry.getSolution( solutionID );
     Assert.assertEquals( new Integer( SolutionRegistry.SERVER_DOWN ),
                          new Integer( solution.getID() ));
-    Assert.assertEquals( "The server may be down. Contact the administrator",solution.getText() ); //$NON-NLS-1$
+    Assert.assertEquals( "The server may be down. Contact the administrator.",solution.getText() ); //$NON-NLS-1$
   }
 
   @Test

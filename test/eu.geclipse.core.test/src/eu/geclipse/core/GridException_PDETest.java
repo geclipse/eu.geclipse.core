@@ -70,7 +70,7 @@ public class GridException_PDETest {
     StackTraceElement[] stacktraceelements;
     this.gridexception = new GridException( problem_id,"TEST" ); //$NON-NLS-1$
     Assert.assertNotNull( this.gridexception );
-    Assert.assertEquals( "Job Submission failed: TEST",this.gridexception.getMessage() ); //$NON-NLS-1$
+    Assert.assertEquals( "Job Submission failed",this.gridexception.getMessage() ); //$NON-NLS-1$
     Throwable exc = new Throwable ();
     stacktraceelements = exc.getStackTrace();
     Assert.assertEquals( "eu.geclipse.core.GridException_PDETest",stacktraceelements[0].getClassName() ); //$NON-NLS-1$
@@ -112,7 +112,7 @@ public class GridException_PDETest {
     Throwable exc = new Throwable ();
     this.gridexception = new GridException( problem_id,exc,"test" ); //$NON-NLS-1$
     Assert.assertNotNull( this.gridexception );
-    Assert.assertEquals("Unable to establish connection: test",this.gridexception.getMessage() ); //$NON-NLS-1$
+    Assert.assertEquals("Unable to establish connection",this.gridexception.getMessage() ); //$NON-NLS-1$
     stacktraceelements = exc.getStackTrace();
     Assert.assertEquals( "eu.geclipse.core.GridException_PDETest",stacktraceelements[0].getClassName() ); //$NON-NLS-1$
     Assert.assertEquals( "testGridExceptionIntThrowableString",stacktraceelements[0].getMethodName() ); //$NON-NLS-1$ 

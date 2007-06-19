@@ -103,7 +103,7 @@ public class AbstractProblem_PDETest {
     Assert.assertNotNull( reasons );
     Assert.assertEquals( new Double( 1 ), new Double( reasons.size() ) );
     Assert.assertEquals( "unknown", reasons.get( 0 ) ); //$NON-NLS-1$
-    Assert.assertEquals( "test problem: unknown", problem.getText()); //$NON-NLS-1$
+    Assert.assertEquals( "test problem", problem.getText()); //$NON-NLS-1$
   }
 
   /** this test validates the functionality of 

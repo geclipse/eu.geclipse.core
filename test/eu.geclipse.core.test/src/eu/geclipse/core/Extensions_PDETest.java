@@ -46,7 +46,7 @@ public class Extensions_PDETest {
     List< String > tokens;
     tokens = Extensions.getRegisteredAuthTokenNames();
     Assert.assertEquals( new Integer( 2 ),new Integer( tokens.size() ));
-    Assert.assertEquals( "Grid Proxy",tokens.get( 0 ) ); //$NON-NLS-1$
+    Assert.assertEquals( "Globus Proxy",tokens.get( 0 ) ); //$NON-NLS-1$
     Assert.assertEquals( "VOMS Proxy",tokens.get( 1 ) ); //$NON-NLS-1$
   }
   
@@ -60,7 +60,7 @@ public class Extensions_PDETest {
     List< IAuthenticationTokenDescription > autokendescriptions;
     autokendescriptions = Extensions.getRegisteredAuthTokenDescriptions();
     Assert.assertEquals( new Integer( 2 ),new Integer( autokendescriptions.size() ));
-    Assert.assertEquals( "Grid Proxy",autokendescriptions.get( 0 ).getTokenTypeName() ); //$NON-NLS-1$
+    Assert.assertEquals( "Globus Proxy",autokendescriptions.get( 0 ).getTokenTypeName() ); //$NON-NLS-1$
     Assert.assertEquals( "VOMS Proxy",autokendescriptions.get( 1 ).getTokenTypeName() ); //$NON-NLS-1$
     // GridProxyDescription description;
     // File certFile = new File( "C:\\Dokumente und Einstellungen\\Tao-j\\Eigene Dateien\\usercert.pem" ); //$NON-NLS-1$
@@ -79,7 +79,7 @@ public class Extensions_PDETest {
   {
     List<IGridElementCreator> elementcreators;
     elementcreators = Extensions.getRegisteredElementCreators();
-    Assert.assertEquals( new Integer( 6 ),new Integer( elementcreators.size() ));
+    Assert.assertEquals( new Integer( 5 ),new Integer( elementcreators.size() ));
    }
 
   /** test method {@link Extensions#getRegisteredProblemProviders()}
@@ -92,6 +92,6 @@ public class Extensions_PDETest {
   {
     List< IProblemProvider > problemproviders;
     problemproviders = Extensions.getRegisteredProblemProviders();
-    Assert.assertEquals( new Integer( 8 ),new Integer( problemproviders.size() ));
+    Assert.assertEquals( new Integer( 9 ),new Integer( problemproviders.size() ));
   }
 }

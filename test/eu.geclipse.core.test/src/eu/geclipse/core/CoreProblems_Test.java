@@ -59,7 +59,7 @@ public class CoreProblems_Test {
     List< ISolution > solutions = new ArrayList< ISolution >();
     SolutionRegistry solutionregister = SolutionRegistry.getRegistry();
     solutions = problem.getSolutions( solutionregister );
-    Assert.assertEquals( "Check your internet connection",solutions.get( 0 ).getText() ); //$NON-NLS-1$
+    Assert.assertEquals( "Check your Internet connection",solutions.get( 0 ).getText() ); //$NON-NLS-1$
     Assert.assertEquals( new Integer( SolutionRegistry.CHECK_SERVER_URL ),
                          new Integer( solutions.get( 1 ).getID() ));
     Assert.assertEquals( "Check your server URL",solutions.get( 1 ).getText() ); //$NON-NLS-1$

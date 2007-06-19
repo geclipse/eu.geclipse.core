@@ -79,7 +79,7 @@ public class ProblemSolutionProviderRegistry_Test {
     solutions = problem.getSolutions( this.solutionregister );
     Assert.assertEquals( new Integer( SolutionRegistry.CHECK_INTERNET_CONNECTION ),
                          new Integer( solutions.get( 0 ).getID() ));
-    Assert.assertEquals( "Check your internet connection",solutions.get( 0 ).getText() ); //$NON-NLS-1$
+    Assert.assertEquals( "Check your Internet connection",solutions.get( 0 ).getText() ); //$NON-NLS-1$
     Assert.assertEquals( new Integer( SolutionRegistry.CHECK_SERVER_URL ),
                          new Integer( solutions.get( 1 ).getID() ));
     Assert.assertEquals( "Check your server URL",solutions.get( 1 ).getText() ); //$NON-NLS-1$

@@ -98,7 +98,7 @@ public class ExtensionManager_PDETest {
     List< IExtension > extentions;
     String point_ID = "eu.geclipse.core.gridElementCreator"; //$NON-NLS-1$
     extentions = this.extensionmanager.getExtensions( point_ID );
-    Assert.assertEquals( new Integer( 6 ),new Integer( extentions.size() ));
+    Assert.assertEquals( new Integer( 5 ),new Integer( extentions.size() ));
     Assert.assertEquals( "eu.geclipse.core.gridElementCreator",extentions.get( 0 ).getExtensionPointUniqueIdentifier() ); //$NON-NLS-1$
   }
   
@@ -116,7 +116,7 @@ public class ExtensionManager_PDETest {
     String point_ID = "eu.geclipse.core.authenticationTokenManagement"; //$NON-NLS-1$
     String element = "token"; //$NON-NLS-1$
     elements = this.extensionmanager.getConfigurationElements( point_ID,element );
-    Assert.assertEquals("eu.geclipse.grid.auth.gridProxy",elements.get( 0 ).getAttribute( "id" )); //$NON-NLS-1$ //$NON-NLS-2$
+    Assert.assertEquals("eu.geclipse.globus.auth.proxy",elements.get( 0 ).getAttribute( "id" )); //$NON-NLS-1$ //$NON-NLS-2$
     Assert.assertEquals("eu.geclipse.voms.auth.vomsProxy",elements.get( 1 ).getAttribute( "id" )); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
