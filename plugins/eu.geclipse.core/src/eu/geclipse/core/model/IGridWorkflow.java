@@ -20,7 +20,7 @@ package eu.geclipse.core.model;
  * integrating workflows into the Grid model.
  */
 public interface IGridWorkflow
-    extends IGridElement {
+    extends IGridContainer {
   
   // currently empty implememtation
   
