@@ -17,15 +17,12 @@
 package eu.geclipse.jsdl.ui.wizards;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
 import javax.xml.parsers.ParserConfigurationException;
-
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.wizard.IWizardNode;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -48,10 +45,10 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.xml.sax.SAXException;
-
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.jsdl.ui.Extensions;
 import eu.geclipse.jsdl.ui.internal.Activator;
+import eu.geclipse.jsdl.ui.internal.preference.ApplicationSpecificRegistry;
 import eu.geclipse.jsdl.ui.wizards.nodes.BasicWizardPart;
 import eu.geclipse.jsdl.ui.wizards.nodes.SpecificWizardPart;
 import eu.geclipse.jsdl.ui.wizards.specific.ApplicationSpecificPage;
@@ -102,6 +99,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
   private BasicWizardPart basicNode;
   private Button chooseButton;
   private Text argumentsLine;
+  private Map<Integer, String> appsWithParametersFromPrefs;
 
   /**
    * Creates new wizard page
@@ -116,6 +114,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     setTitle( Messages.getString( "ExecutableNewJobWizardPage.title" ) ); //$NON-NLS-1$
     setDescription( Messages.getString( "ExecutableNewJobWizardPage.description" ) ); //$NON-NLS-1$
     this.appsWithExtraAttributes = Extensions.getApplicationParametersXMLMap();
+    this.appsWithParametersFromPrefs = ApplicationSpecificRegistry.getInstance().getApplicationDataMapping();
     this.internalPages = internalPages;
   }
 
@@ -147,6 +146,9 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     this.applicationName = new Combo( mainComp, SWT.SINGLE );
     for( String value : this.appsWithExtraAttributes.values() ) {
       this.applicationName.add( value.toString() );
+    }
+    for (String value: this.appsWithParametersFromPrefs.values()){
+      this.applicationName.add( value );
     }
     layout = new GridData();
     layout.horizontalAlignment = GridData.FILL;
@@ -421,9 +423,10 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
           if( this.appsWithExtraAttributes.get( bundleId )
             .equals( this.applicationName.getText() ) )
           {
+            Path path = Extensions.getXMLPath( bundleId );
             setSelectedNode( new SpecificWizardPart( this.basicNode,
                                                      this.getWizard(),
-                                                     bundleId ) );
+                                                     path ) );
             this.executableFile.setText( Extensions.getJSDLExtensionExecutable( bundleId ) );
           }
         }

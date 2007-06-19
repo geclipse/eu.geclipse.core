@@ -120,13 +120,12 @@ public class ApplicationSpecificPageFactory {
    * @throws ParserConfigurationException when XML parser is not configured well
    * @throws IOException when thre are problems with reading the file
    */
-  public static List<WizardPage> getPagesFromXML( final String extensionId,
+  public static List<WizardPage> getPagesFromXML( final Path path,
                                                   final IWizardNode node )
     throws SAXException, ParserConfigurationException, IOException
   {
     List<WizardPage> result = new ArrayList<WizardPage>();
-    String path = Extensions.getXMLPath( extensionId ).toString();
-    File file = new File( path );
+    File file = new File( path.toString() );
     validateFile( file );
     DocumentBuilderFactory factoryDOM = DocumentBuilderFactory.newInstance();
     DocumentBuilder builder;

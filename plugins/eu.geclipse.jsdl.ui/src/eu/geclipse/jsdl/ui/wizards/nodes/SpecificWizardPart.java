@@ -21,6 +21,7 @@ import java.util.List;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.IWizardNode;
 import org.eclipse.jface.wizard.Wizard;
@@ -58,14 +59,13 @@ public class SpecificWizardPart extends Wizard implements IWizardNode {
    */
   public SpecificWizardPart( final IWizardNode nextWizard,
                              final IWizard parentWizard,
-                             final String extensionPointIdName )
+                             final Path xmlPath )
     throws SAXException, ParserConfigurationException, IOException
   {
     super();
     this.nextWizardIner = nextWizard;
     this.parentWizard = parentWizard;
-    this.extensionPointId = extensionPointIdName;
-    this.pages = ApplicationSpecificPageFactory.getPagesFromXML( this.extensionPointId,
+    this.pages = ApplicationSpecificPageFactory.getPagesFromXML( xmlPath,
                                                                  this.nextWizardIner );
     this.addPages();
     this.isCreated = true;

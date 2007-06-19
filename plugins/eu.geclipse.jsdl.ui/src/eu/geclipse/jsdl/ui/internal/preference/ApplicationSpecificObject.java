@@ -1,4 +1,4 @@
-package eu.geclipse.jsdl.ui.internal.wizards.appSpecificRegistry;
+package eu.geclipse.jsdl.ui.internal.preference;
 
 import org.eclipse.core.runtime.IPath;
 
@@ -11,11 +11,15 @@ public class ApplicationSpecificObject {
   
   private IPath xmlPath;
   
+  private int id;
   
-  public ApplicationSpecificObject( String appName, String path, IPath xmlPath ) {
+  
+  public ApplicationSpecificObject( int id, String appName, String path, IPath xmlPath ) {
+    this.id = id;
     this.appName = appName;
     this.appPath = path;
     this.xmlPath = xmlPath;
+    
   }
 
 
@@ -52,5 +56,11 @@ public class ApplicationSpecificObject {
   
   public void setXmlPath( IPath xmlPath ) {
     this.xmlPath = xmlPath;
+  }
+
+
+
+  public int getId() {
+    return this.id;
   }
 }

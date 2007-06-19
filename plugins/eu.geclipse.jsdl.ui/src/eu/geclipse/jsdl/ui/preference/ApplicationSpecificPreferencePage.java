@@ -1,4 +1,4 @@
-package eu.geclipse.jsdl.ui.internal.preference;
+package eu.geclipse.jsdl.ui.preference;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.dialogs.Dialog;
@@ -36,8 +36,8 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.jsdl.ui.internal.Activator;
-import eu.geclipse.jsdl.ui.internal.wizards.appSpecificRegistry.ApplicationSpecificObject;
-import eu.geclipse.jsdl.ui.internal.wizards.appSpecificRegistry.ApplicationSpecificRegistry;
+import eu.geclipse.jsdl.ui.internal.preference.ApplicationSpecificObject;
+import eu.geclipse.jsdl.ui.internal.preference.ApplicationSpecificRegistry;
 import eu.geclipse.ui.dialogs.GridFileDialog;
 import eu.geclipse.ui.dialogs.NewProblemDialog;
 
