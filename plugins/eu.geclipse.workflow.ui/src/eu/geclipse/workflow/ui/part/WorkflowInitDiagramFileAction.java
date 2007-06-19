@@ -19,7 +19,6 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.gmf.runtime.emf.core.GMFEditingDomainFactory;
 import org.eclipse.jface.action.IAction;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
@@ -27,6 +26,8 @@ import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
+
+import eu.geclipse.ui.dialogs.NewProblemDialog;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowEditPart;
 
 /**
@@ -89,9 +90,10 @@ public class WorkflowInitDiagramFileAction implements IObjectActionDelegate {
         .logError( "Unable to load resource: " + domainModelURI, ex ); //$NON-NLS-1$
     }
     if( diagramRoot == null ) {
-      MessageDialog.openError( getShell(),
-                               Messages.getString("WorkflowInitDiagramFileAction_InitDiagramFileResourceErrorDialogTitle"), //$NON-NLS-1$
-                               Messages.getString("WorkflowInitDiagramFileAction_InitDiagramFileResourceErrorDialogMessage") ); //$NON-NLS-1$
+      NewProblemDialog.openProblem( getShell(),
+          Messages.getString("WorkflowInitDiagramFileAction_InitDiagramFileResourceErrorDialogTitle"), //$NON-NLS-1$
+          Messages.getString("WorkflowInitDiagramFileAction_InitDiagramFileResourceErrorDialogMessage"), //$NON-NLS-1$
+          null );
       return;
     }
     Wizard wizard = new WorkflowNewDiagramFileWizard( domainModelURI,

@@ -59,11 +59,13 @@
    <extension point="org.eclipse.ui.newWizards">
       <?gmfgen generated="true"?>
   	  <wizard
-  	     name="%newWizardName"
-  	     icon="icons/obj16/Workflow.gif"
-  	     category="org.eclipse.ui.Examples"
-  	     class="eu.geclipse.workflow.ui.part.WorkflowCreationWizard"
-  	     id="eu.geclipse.workflow.ui.part.WorkflowCreationWizardID">
+           category="eu.geclipse.ui.newResourceCategory"
+           class="eu.geclipse.workflow.ui.part.WorkflowCreationWizard"
+           finalPerspective="eu.geclipse.ui.gEclipsePerspective"
+           icon="icons/obj16/Workflow.gif"
+           id="eu.geclipse.workflow.ui.part.WorkflowCreationWizardID"
+           name="%newWizardName"
+           preferredPerspectives="eu.geclipse.ui.gEclipsePerspective">
   	  	 <description>%newWizardDesc</description>  
       </wizard>
    </extension>
@@ -156,9 +158,10 @@
    <extension point="org.eclipse.ui.preferencePages">
       <?gmfgen generated="true"?>
       <page
+            category="eu.geclipse.ui.internal.preference.GEclipsePreferencePage"
+            class="eu.geclipse.workflow.ui.preferences.DiagramGeneralPreferencePage"
             id="eu.geclipse.workflow.ui.general"
-            name="%preference.page.title.eu.geclipse.workflow.ui.general"
-            class="eu.geclipse.workflow.ui.preferences.DiagramGeneralPreferencePage">
+            name="%preference.page.title.eu.geclipse.workflow.ui.general">
       </page>
       <page
             id="eu.geclipse.workflow.ui.appearance"

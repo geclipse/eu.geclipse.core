@@ -24,5 +24,14 @@
        class = "eu.geclipse.workflow.IWorkflowPackage"
        genModel = "model/workflow.genmodel" /> 
   </extension>
+  <extension
+         id="eu.geclipse.workflow.workflowCreator"
+         name="Workflow Creator"
+         point="eu.geclipse.core.gridElementCreator">
+      <creator
+            class="eu.geclipse.workflow.internal.model.GridWorkflowCreator"
+            name="Grid Workflow">
+      </creator>
+   </extension>
 
 </plugin>
