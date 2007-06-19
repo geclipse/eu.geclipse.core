@@ -15,6 +15,7 @@ import java.util.List;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
+import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
@@ -37,6 +38,7 @@ import org.eclipse.gmf.runtime.diagram.ui.editparts.CompartmentEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.ITextAwareEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.LabelDirectEditPolicy;
+import org.eclipse.gmf.runtime.diagram.ui.figures.NoteFigure;
 import org.eclipse.gmf.runtime.diagram.ui.l10n.DiagramColorRegistry;
 import org.eclipse.gmf.runtime.diagram.ui.requests.RequestConstants;
 import org.eclipse.gmf.runtime.diagram.ui.tools.TextDirectEditManager;
@@ -53,6 +55,7 @@ import org.eclipse.swt.accessibility.AccessibleEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
+import eu.geclipse.workflow.ui.edit.parts.InputPortEditPart.InputPortFigure;
 import eu.geclipse.workflow.ui.edit.policies.WorkflowTextSelectionEditPolicy;
 import eu.geclipse.workflow.ui.providers.WorkflowElementTypes;
 import eu.geclipse.workflow.ui.providers.WorkflowParserProvider;
@@ -83,7 +86,7 @@ public class WorkflowJobDescriptionEditPart extends CompartmentEditPart
   /**
    * @generated
    */
-  private String defaultText = "Job Description goes here";
+  private String defaultText;
 
   /**
    * @generated
@@ -245,6 +248,14 @@ public class WorkflowJobDescriptionEditPart extends CompartmentEditPart
     }
   }
 
+//  protected IFigure createNodeShape() {
+//    Insets insets = new Insets(getMapMode().DPtoLP(30), 
+//                               getMapMode().DPtoLP(30), getMapMode().DPtoLP(30), getMapMode().DPtoLP(45));
+//    WorkflowJobDescriptionNoteFigure figure = new WorkflowJobDescriptionNoteFigure( getMapMode().DPtoLP(300), 
+//                                                                                    getMapMode().DPtoLP(400), insets);
+//    return primaryShape = figure;
+//  }
+  
   /**
    * @generated
    */
@@ -611,9 +622,9 @@ public class WorkflowJobDescriptionEditPart extends CompartmentEditPart
    * @generated
    */
   @Override
-  protected IFigure createFigure()
-  {
+  protected IFigure createFigure() {
     // Parent should assign one using setLabel() method
     return null;
   }
+
 }

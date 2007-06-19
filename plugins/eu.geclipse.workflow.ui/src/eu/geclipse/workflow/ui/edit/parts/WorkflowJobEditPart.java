@@ -9,16 +9,12 @@
  ******************************************************************************/
 package eu.geclipse.workflow.ui.edit.parts;
 
-import org.eclipse.draw2d.Border;
-import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.LabeledContainer;
 import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.StackLayout;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.commands.Command;
@@ -79,7 +75,7 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
                        new WorkflowJobCanonicalEditPolicy() );
     installEditPolicy( EditPolicy.LAYOUT_ROLE, createLayoutEditPolicy() );
     // XXX need an SCR to runtime to have another abstract superclass that would let children add reasonable editpolicies
-    // removeEditPolicy(org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.CONNECTION_HANDLES_ROLE);
+    removeEditPolicy(org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.CONNECTION_HANDLES_ROLE);
   }
 
   /**
@@ -130,13 +126,22 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
       ( ( WorkflowJobNameEditPart )childEditPart ).setLabel( getPrimaryShape().getFigureWorkflowJobNameFigure() );
       return true;
     }
+//    if( childEditPart instanceof WorkflowJobDescriptionEditPart ) {
+//      ( ( WorkflowJobDescriptionEditPart )childEditPart ).setLabel( getPrimaryShape().getFigureWorkflowJobDescriptionFigure() );
+//      return true;
+//    }
+    return false;
+  }
+
+  protected boolean addChild( EditPart childEditPart ) {
     if( childEditPart instanceof WorkflowJobDescriptionEditPart ) {
       ( ( WorkflowJobDescriptionEditPart )childEditPart ).setLabel( getPrimaryShape().getFigureWorkflowJobDescriptionFigure() );
       return true;
     }
     return false;
   }
-
+  
+  
   /**
    * @generated
    */
@@ -178,16 +183,13 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
    * @generated
    */
   protected NodeFigure createNodePlate() {
-    DefaultSizeNodeFigure result = new DefaultSizeNodeFigure( getMapMode().DPtoLP( 40 ),
-                                                              getMapMode().DPtoLP( 40 ) );
+    DefaultSizeNodeFigure result = new DefaultSizeNodeFigure( getMapMode().DPtoLP( 100 ),
+                                                              getMapMode().DPtoLP( 50 ) );
     return result;
   }
 
   /**
    * Creates figure for this edit part.
-   * 
-   * Body of this method does not depend on settings in generation model
-   * so you may safely remove <i>generated</i> tag and modify it.
    *
    */
   @Override
@@ -233,6 +235,9 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
   public EditPart getPrimaryChildEditPart() {
     return getChildBySemanticHint( WorkflowVisualIDRegistry.getType( WorkflowJobNameEditPart.VISUAL_ID ) );
   }
+
+  
+  
   /**
    * @generated
    */
@@ -255,9 +260,9 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
       layoutThis.setStretchMinorAxis( false );
       layoutThis.setMinorAlignment( ToolbarLayout.ALIGN_TOPLEFT );
       layoutThis.setSpacing( 10 );
-      layoutThis.setVertical( false );
+      layoutThis.setVertical( true );
       this.setLayoutManager( layoutThis );
-      this.setPreferredSize( 150, 100 );
+      this.setPreferredSize( 100, 50 );
       this.setCornerDimensions( new Dimension( 15, 15 ) );
       this.setForegroundColor( THIS_FORE );
       createContents();
@@ -271,13 +276,15 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
       workflowJobNameFigure0.setText( "<...>" );
       this.add( workflowJobNameFigure0 );
       this.fFigureWorkflowJobNameFigure = workflowJobNameFigure0;
-      LabeledContainer jobDescriptionContainer0 = new LabeledContainer();
-      this.add( jobDescriptionContainer0 );
       WrapLabel workflowJobDescriptionFigure1 = new WrapLabel();
 //      workflowJobDescriptionFigure1.setText( "Job Description Here" );
+//      workflowJobDescriptionFigure1.setTextWrap( true );
+//      workflowJobDescriptionFigure1.setSize( 30, 30 );
 //      workflowJobDescriptionFigure1.setBackgroundColor( JOB_DESC_BACK );
 //      workflowJobDescriptionFigure1.setOpaque( true );
-      jobDescriptionContainer0.add( workflowJobDescriptionFigure1 );
+//      workflowJobDescriptionFigure1.setLocation( new Point ( 20, 20 ) );
+//      workflowJobDescriptionFigure1.setTextWrapWidth( 20 );
+      this.add( workflowJobDescriptionFigure1 );
       this.fFigureWorkflowJobDescriptionFigure = workflowJobDescriptionFigure1;
     }
     /**
@@ -314,6 +321,7 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
       return this.fFigureWorkflowJobDescriptionFigure;
     }
   }
+  
   /**
    * @generated
    */

@@ -61,8 +61,8 @@ public class InputPortEditPart extends ShapeNodeEditPart {
     installEditPolicy( EditPolicyRoles.SEMANTIC_ROLE,
                        new InputPortItemSemanticEditPolicy() );
     installEditPolicy( EditPolicy.LAYOUT_ROLE, createLayoutEditPolicy() );
-    // XXX need an SCR to runtime to have another abstract superclass that would let children add reasonable editpolicies
-    // removeEditPolicy(org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.CONNECTION_HANDLES_ROLE);
+
+    removeEditPolicy(org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.CONNECTION_HANDLES_ROLE);
   }
 
   /**
@@ -112,8 +112,9 @@ public class InputPortEditPart extends ShapeNodeEditPart {
    * @generated
    */
   protected NodeFigure createNodePlate() {
-    DefaultSizeNodeFigure result = new DefaultSizeNodeFigure( getMapMode().DPtoLP( 40 ),
-                                                              getMapMode().DPtoLP( 40 ) );
+    DefaultSizeNodeFigure result = new DefaultSizeNodeFigure( getMapMode().DPtoLP( 10 ),
+                                                              getMapMode().DPtoLP( 10 ) );
+    result.setDefaultSize( 10, 10 );
     return result;
   }
 

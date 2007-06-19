@@ -4,7 +4,8 @@
  * the Eclipse Public License v1.0 which accompanies this distribution, and is
  * available at http://www.eclipse.org/legal/epl-v10.html Initial development of
  * the original code was made for the g-Eclipse project founded by European
- * Union project number: FP6-IST-034327 http://www.geclipse.eu/ Contributors:
+ * Union project number: FP6-IST-034327 http://www.geclipse.eu/ 
+ * Contributors:
  * Ashish Thandavan - initial API and implementation
  ******************************************************************************/
 package eu.geclipse.workflow.ui.edit.parts;
