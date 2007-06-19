@@ -13,7 +13,7 @@ public abstract class AbstractGlueTable implements Serializable{
   protected String key;
   protected String keyName;
   public String tableName;
-  public boolean fresh;
+  public boolean byRefOnly=true;
   
   /**
    * @return The unique identified for this Glue entry
@@ -38,7 +38,7 @@ public abstract class AbstractGlueTable implements Serializable{
    * @throws IllegalAccessException
    * @throws NoSuchFieldException
    */
-  public Object setFieldByName( String fieldName, Object value )
+  public Object setFieldByName( String fieldName, Object value  )
   throws RuntimeException, IllegalAccessException, NoSuchFieldException
   {
 	  Object ret = null;
@@ -61,7 +61,7 @@ public abstract class AbstractGlueTable implements Serializable{
 		    f=this.getClass().getField( listFieldName+"List" ); //$NON-NLS-1$
 		    ArrayList<AbstractGlueTable> list=(ArrayList<AbstractGlueTable>) f.get(this);
 		    String sValue=value.toString();
-		    AbstractGlueTable agt=GlueIndex.getInstance().get(fieldName,sValue);
+		    AbstractGlueTable agt=GlueIndex.getInstance().get(fieldName,sValue,false);
 		    list.add(agt);
 		  }catch(NoSuchFieldException nsfe2){//Ignore this field
 		  }

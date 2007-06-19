@@ -51,6 +51,7 @@ public abstract class GlueIndex implements java.io.Serializable {
   }
 
   public static void drop(){
+    
     glueIndexInstance=null;
     serializeInstance();
   }
@@ -85,6 +86,11 @@ public abstract class GlueIndex implements java.io.Serializable {
     }
   }
 
+  public static void dropCachePersistenceFile(){
+    IPath serPath = getGridInfoLocation();
+    serPath.toFile().delete();
+  }
+  
   private static GlueIndex loadInstance() throws IOException {
     IPath serPath = getGridInfoLocation();
     GlueIndex gi=null;
@@ -109,24 +115,37 @@ public abstract class GlueIndex implements java.io.Serializable {
    * @param key the unique identifier for the Object to be retrieved
    * @return The Glue object with the specified key, null otherwise
    */
-  public AbstractGlueTable get( String objectName, String key ) {
+  public AbstractGlueTable get( String objectName, String key,boolean onlyIfExists ) {
     Class[] c = new Class[ 1 ];
     c[ 0 ] = String.class;
     Method m;
+    
     try {
-      m = GlueIndex.class.getMethod( "get" + objectName, c ); //$NON-NLS-1$
-      Object[] o = new Object[ 1 ];
-      o[ 0 ] = key;
-      return ( AbstractGlueTable )m.invoke( getInstance(), o );
+      boolean returnIt=true;
+      if(onlyIfExists){
+        String fieldName = objectName.substring( 0, 1 ).toLowerCase()
+        + objectName.substring( 1 );
+        Hashtable ht=(Hashtable)this.getClass().getField( fieldName ).get( this );
+        returnIt=ht.containsKey( key );
+      }
+      if(returnIt){
+        m = GlueIndex.class.getMethod( "get" + objectName, c ); //$NON-NLS-1$
+        Object[] o = new Object[ 1 ];
+        o[ 0 ] = key;
+        return ( AbstractGlueTable )m.invoke( getInstance(), o );
+      }
     } catch( SecurityException e ) {
-      e.printStackTrace();
+      //
     } catch( NoSuchMethodException e ) {
-      e.printStackTrace();
+      //
     } catch( IllegalArgumentException e ) {
-      e.printStackTrace();
+      //;
     } catch( IllegalAccessException e ) {
-      e.printStackTrace();
+      //
     } catch( InvocationTargetException e ) {
+      //
+    } catch( NoSuchFieldException e ) {
+
       e.printStackTrace();
     }
     return null;
@@ -273,7 +292,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueHost out = glueHost.get( key );
     if( out == null ) {
       out = new GlueHost();
-      out.fresh = true;
+
       out.setID( key );
       glueHost.put( key, out );
       putInFullIndex( key, out );
@@ -294,7 +313,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueSite out = glueSite.get( key );
     if( out == null ) {
       out = new GlueSite();
-      out.fresh = true;
+
       out.setID( key );
       glueSite.put( key, out );
       putInFullIndex( key, out );
@@ -315,7 +334,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueSE out = glueSE.get( key );
     if( out == null ) {
       out = new GlueSE();
-      out.fresh = true;
+
       out.setID( key );
       glueSE.put( key, out );
       putInFullIndex( key, out );
@@ -336,7 +355,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueSL out = glueSL.get( key );
     if( out == null ) {
       out = new GlueSL();
-      out.fresh = true;
+
       out.setID( key );
       glueSL.put( key, out );
       putInFullIndex( key, out );
@@ -357,7 +376,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueCluster out = glueCluster.get( key );
     if( out == null ) {
       out = new GlueCluster();
-      out.fresh = true;
+
       out.setID( key );
       glueCluster.put( key, out );
       putInFullIndex( key, out );
@@ -378,7 +397,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueSubCluster out = glueSubCluster.get( key );
     if( out == null ) {
       out = new GlueSubCluster();
-      out.fresh = true;
+
       out.setID( key );
       glueSubCluster.put( key, out );
       putInFullIndex( key, out );
@@ -399,7 +418,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueCE out = glueCE.get( key );
     if( out == null ) {
       out = new GlueCE();
-      out.fresh = true;
+
       out.setID( key );
       glueCE.put( key, out );
       putInFullIndex( key, out );
@@ -420,7 +439,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueBatchJob out = glueBatchJob.get( key );
     if( out == null ) {
       out = new GlueBatchJob();
-      out.fresh = true;
+
       out.setID( key );
       glueBatchJob.put( key, out );
       putInFullIndex( key, out );
@@ -441,7 +460,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueBatchQueue out = glueBatchQueue.get( key );
     if( out == null ) {
       out = new GlueBatchQueue();
-      out.fresh = true;
+
       out.setID( key );
       glueBatchQueue.put( key, out );
       putInFullIndex( key, out );
@@ -462,7 +481,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueBatchSystem out = glueBatchSystem.get( key );
     if( out == null ) {
       out = new GlueBatchSystem();
-      out.fresh = true;
+
       out.setID( key );
       glueBatchSystem.put( key, out );
       putInFullIndex( key, out );
@@ -484,7 +503,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueCEAccessControlBaseRule out = glueCEAccessControlBaseRule.get( key );
     if( out == null ) {
       out = new GlueCEAccessControlBaseRule();
-      out.fresh = true;
+
       out.setID( key );
       glueCEAccessControlBaseRule.put( key, out );
       putInFullIndex( key, out );
@@ -505,7 +524,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueCEContactString out = glueCEContactString.get( key );
     if( out == null ) {
       out = new GlueCEContactString();
-      out.fresh = true;
+
       out.setID( key );
       glueCEContactString.put( key, out );
       putInFullIndex( key, out );
@@ -526,7 +545,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueCESEBind out = glueCESEBind.get( key );
     if( out == null ) {
       out = new GlueCESEBind();
-      out.fresh = true;
+
       out.setID( key );
       glueCESEBind.put( key, out );
     } else {
@@ -546,7 +565,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueCEVOView out = glueCEVOView.get( key );
     if( out == null ) {
       out = new GlueCEVOView();
-      out.fresh = true;
+
       out.setID( key );
       glueCEVOView.put( key, out );
       putInFullIndex( key, out );
@@ -568,7 +587,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueCEVOViewAccessControlBaseRule out = glueCEVOViewAccessControlBaseRule.get( key );
     if( out == null ) {
       out = new GlueCEVOViewAccessControlBaseRule();
-      out.fresh = true;
+
       out.setID( key );
       glueCEVOViewAccessControlBaseRule.put( key, out );
       putInFullIndex( key, out );
@@ -589,7 +608,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueHostLocalFileSystem out = glueHostLocalFileSystem.get( key );
     if( out == null ) {
       out = new GlueHostLocalFileSystem();
-      out.fresh = true;
+
       out.setID( key );
       glueHostLocalFileSystem.put( key, out );
       putInFullIndex( key, out );
@@ -610,7 +629,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueHostNetworkAdapter out = glueHostNetworkAdapter.get( key );
     if( out == null ) {
       out = new GlueHostNetworkAdapter();
-      out.fresh = true;
+
       out.setID( key );
       glueHostNetworkAdapter.put( key, out );
       putInFullIndex( key, out );
@@ -631,7 +650,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueHostPoolAccount out = glueHostPoolAccount.get( key );
     if( out == null ) {
       out = new GlueHostPoolAccount();
-      out.fresh = true;
+
       out.setID( key );
       glueHostPoolAccount.put( key, out );
       putInFullIndex( key, out );
@@ -652,7 +671,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueHostProcess out = glueHostProcess.get( key );
     if( out == null ) {
       out = new GlueHostProcess();
-      out.fresh = true;
+
       out.setID( key );
       glueHostProcess.put( key, out );
       putInFullIndex( key, out );
@@ -673,7 +692,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueHostRemoteFileSystem out = glueHostRemoteFileSystem.get( key );
     if( out == null ) {
       out = new GlueHostRemoteFileSystem();
-      out.fresh = true;
+
       out.setID( key );
       glueHostRemoteFileSystem.put( key, out );
       putInFullIndex( key, out );
@@ -694,7 +713,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueHostRole out = glueHostRole.get( key );
     if( out == null ) {
       out = new GlueHostRole();
-      out.fresh = true;
+
       out.setID( key );
       glueHostRole.put( key, out );
       putInFullIndex( key, out );
@@ -715,7 +734,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueSA out = glueSA.get( key );
     if( out == null ) {
       out = new GlueSA();
-      out.fresh = true;
+
       out.setID( key );
       glueSA.put( key, out );
       putInFullIndex( key, out );
@@ -737,7 +756,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueSAAccessControlBaseRule out = glueSAAccessControlBaseRule.get( key );
     if( out == null ) {
       out = new GlueSAAccessControlBaseRule();
-      out.fresh = true;
+
       out.setID( key );
       glueSAAccessControlBaseRule.put( key, out );
       putInFullIndex( key, out );
@@ -758,7 +777,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueSEAccessProtocol out = glueSEAccessProtocol.get( key );
     if( out == null ) {
       out = new GlueSEAccessProtocol();
-      out.fresh = true;
+
       out.setID( key );
       glueSEAccessProtocol.put( key, out );
       putInFullIndex( key, out );
@@ -780,7 +799,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueSEAccessProtocolCapability out = glueSEAccessProtocolCapability.get( key );
     if( out == null ) {
       out = new GlueSEAccessProtocolCapability();
-      out.fresh = true;
+
       out.setID( key );
       glueSEAccessProtocolCapability.put( key, out );
       putInFullIndex( key, out );
@@ -802,7 +821,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueSEAccessProtocolSupportedSecurity out = glueSEAccessProtocolSupportedSecurity.get( key );
     if( out == null ) {
       out = new GlueSEAccessProtocolSupportedSecurity();
-      out.fresh = true;
+
       out.setID( key );
       glueSEAccessProtocolSupportedSecurity.put( key, out );
       putInFullIndex( key, out );
@@ -823,7 +842,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueSEControlProtocol out = glueSEControlProtocol.get( key );
     if( out == null ) {
       out = new GlueSEControlProtocol();
-      out.fresh = true;
+
       out.setID( key );
       glueSEControlProtocol.put( key, out );
       putInFullIndex( key, out );
@@ -845,7 +864,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueSEControlProtocolCapability out = glueSEControlProtocolCapability.get( key );
     if( out == null ) {
       out = new GlueSEControlProtocolCapability();
-      out.fresh = true;
+
       out.setID( key );
       glueSEControlProtocolCapability.put( key, out );
       putInFullIndex( key, out );
@@ -866,7 +885,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueService out = glueService.get( key );
     if( out == null ) {
       out = new GlueService();
-      out.fresh = true;
+
       out.setID( key );
       glueService.put( key, out );
       putInFullIndex( key, out );
@@ -888,7 +907,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueServiceAccessControlRule out = glueServiceAccessControlRule.get( key );
     if( out == null ) {
       out = new GlueServiceAccessControlRule();
-      out.fresh = true;
+
       out.setID( key );
       glueServiceAccessControlRule.put( key, out );
       putInFullIndex( key, out );
@@ -909,7 +928,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueServiceAssociation out = glueServiceAssociation.get( key );
     if( out == null ) {
       out = new GlueServiceAssociation();
-      out.fresh = true;
+
       out.setID( key );
       glueServiceAssociation.put( key, out );
       putInFullIndex( key, out );
@@ -930,7 +949,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueServiceData out = glueServiceData.get( key );
     if( out == null ) {
       out = new GlueServiceData();
-      out.fresh = true;
+
       out.setID( key );
       glueServiceData.put( key, out );
       putInFullIndex( key, out );
@@ -951,7 +970,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueServiceOwner out = glueServiceOwner.get( key );
     if( out == null ) {
       out = new GlueServiceOwner();
-      out.fresh = true;
+
       out.setID( key );
       glueServiceOwner.put( key, out );
       putInFullIndex( key, out );
@@ -972,7 +991,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueServiceStatus out = glueServiceStatus.get( key );
     if( out == null ) {
       out = new GlueServiceStatus();
-      out.fresh = true;
+
       out.setID( key );
       glueServiceStatus.put( key, out );
       putInFullIndex( key, out );
@@ -993,7 +1012,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueSiteInfo out = glueSiteInfo.get( key );
     if( out == null ) {
       out = new GlueSiteInfo();
-      out.fresh = true;
+
       out.setID( key );
       glueSiteInfo.put( key, out );
       putInFullIndex( key, out );
@@ -1014,7 +1033,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueSiteSponsor out = glueSiteSponsor.get( key );
     if( out == null ) {
       out = new GlueSiteSponsor();
-      out.fresh = true;
+
       out.setID( key );
       glueSiteSponsor.put( key, out );
       putInFullIndex( key, out );
@@ -1035,7 +1054,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueSubClusterLocation out = glueSubClusterLocation.get( key );
     if( out == null ) {
       out = new GlueSubClusterLocation();
-      out.fresh = true;
+
       out.setID( key );
       glueSubClusterLocation.put( key, out );
       putInFullIndex( key, out );
@@ -1057,7 +1076,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueSubClusterSoftwareRunTimeEnvironment out = glueSubClusterSoftwareRunTimeEnvironment.get( key );
     if( out == null ) {
       out = new GlueSubClusterSoftwareRunTimeEnvironment();
-      out.fresh = true;
+
       out.setID( key );
       glueSubClusterSoftwareRunTimeEnvironment.put( key, out );
       putInFullIndex( key, out );
@@ -1078,7 +1097,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     GlueVO out = glueVO.get( key );
     if( out == null ) {
       out = new GlueVO();
-      out.fresh = true;
+
       out.setID( key );
       glueVO.put( key, out );
       putInFullIndex( key, out );
