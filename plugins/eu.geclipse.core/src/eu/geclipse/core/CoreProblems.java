@@ -65,6 +65,12 @@ public class CoreProblems implements IProblemProvider {
   public static final int GET_SSH_SERVICE_FAILED
     = ProblemRegistry.uniqueID();
 
+  /**
+   * Problem ID for login failed.
+   */
+  public static final int LOGIN_FAILED
+    = ProblemRegistry.uniqueID();
+
   /* (non-Javadoc)
    * @see eu.geclipse.core.IProblemProvider#getProblem(int, java.lang.Throwable)
    */
@@ -134,6 +140,13 @@ public class CoreProblems implements IProblemProvider {
                                new int[] {
                                  SolutionRegistry.CHECK_INSTALLATION
                                } );
+    }
+
+    else if ( problemID == LOGIN_FAILED ) {
+      problem = createProblem( problemID,
+                               Messages.getString("CoreProblems.login_failed"), //$NON-NLS-1$
+                               exc,
+                               null );
     }
 
     return problem;

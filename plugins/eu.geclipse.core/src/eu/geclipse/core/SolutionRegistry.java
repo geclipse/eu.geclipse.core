@@ -117,6 +117,16 @@ public class SolutionRegistry {
   public static final int CHECK_INSTALLATION = uniqueID();
 
   /**
+   * Unique ID of the check username and password solution.
+   */
+  public static final int CHECK_USERNAME_AND_PASSWORD = uniqueID();
+
+  /**
+   * Unique ID of the check SSH server configuration solution.
+   */
+  public static final int CHECK_SSH_SERVER_CONFIG = uniqueID();
+
+  /**
    * The singleton instance. 
    */
   private static SolutionRegistry singleton;
@@ -255,6 +265,14 @@ public class SolutionRegistry {
 
     else if ( solutionID == CHECK_INSTALLATION ) {
       solution = new Solution( CHECK_INSTALLATION, Messages.getString("SolutionRegistry.check_installation") ); //$NON-NLS-1$
+    }
+
+    else if ( solutionID == CHECK_USERNAME_AND_PASSWORD ) {
+      solution = new Solution( CHECK_USERNAME_AND_PASSWORD, Messages.getString("SolutionRegistry.check_username_and_password") ); //$NON-NLS-1$
+    }
+
+    else if ( solutionID == CHECK_SSH_SERVER_CONFIG ) {
+      solution = new Solution( CHECK_SSH_SERVER_CONFIG, Messages.getString("SolutionRegistry.check_ssh_server_config") ); //$NON-NLS-1$
     }
 
     return solution;

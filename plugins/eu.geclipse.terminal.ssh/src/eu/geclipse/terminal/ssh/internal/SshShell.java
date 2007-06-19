@@ -30,6 +30,7 @@ import com.jcraft.jsch.Session;
 import eu.geclipse.core.CoreProblems;
 import eu.geclipse.core.GridException;
 import eu.geclipse.core.IBidirectionalConnection;
+import eu.geclipse.core.IProblem;
 import eu.geclipse.core.SolutionRegistry;
 import eu.geclipse.core.portforward.ForwardType;
 import eu.geclipse.core.portforward.IForward;
@@ -137,19 +138,14 @@ public class SshShell implements IDropDownEntry<ITerminalView>, ITerminalListene
         }
       }
     } catch ( JSchException exception ) {
-      String message = exception.getLocalizedMessage();
-      if ( message == null ) message = exception.getClass().getName();
-      IStatus status = new Status( IStatus.ERROR, Activator.PLUGIN_ID,
-                                   IStatus.OK, message, exception );
-      Solution[] solutions = { // TODO implement solve methods
-        new Solution( Messages.getString("SshShell.checkSSHConfig") ), //$NON-NLS-1$
-        new Solution( Messages.getString("SshShell.checkUsernameAndPasswd") ) //$NON-NLS-1$
-      };
-      ProblemDialog.openProblem( null,
-                                 Messages.getString( "SshShell.sshTerminal" ), //$NON-NLS-1$
-                                 Messages.getString( "SshShell.authFailed" ), //$NON-NLS-1$
-                                 status,
-                                 solutions );
+      GridException gridException = new GridException( CoreProblems.LOGIN_FAILED, exception );
+      IProblem problem = gridException.getProblem();
+      problem.addSolution( SolutionRegistry.CHECK_USERNAME_AND_PASSWORD );
+      problem.addSolution( SolutionRegistry.CHECK_SSH_SERVER_CONFIG );
+      NewProblemDialog.openProblem( null,
+                                    Messages.getString( "SshShell.sshTerminal" ), //$NON-NLS-1$
+                                    Messages.getString( "SshShell.authFailed" ), //$NON-NLS-1$
+                                    gridException );
     } catch( Exception exception ){
       Activator.logException( exception );
     }
