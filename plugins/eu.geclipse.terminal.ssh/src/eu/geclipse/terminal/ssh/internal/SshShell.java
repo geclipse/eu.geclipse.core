@@ -27,12 +27,16 @@ import org.eclipse.swt.widgets.Display;
 import com.jcraft.jsch.ChannelShell;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
+import eu.geclipse.core.CoreProblems;
+import eu.geclipse.core.GridException;
 import eu.geclipse.core.IBidirectionalConnection;
+import eu.geclipse.core.SolutionRegistry;
 import eu.geclipse.core.portforward.ForwardType;
 import eu.geclipse.core.portforward.IForward;
 import eu.geclipse.terminal.ITerminalListener;
 import eu.geclipse.terminal.ITerminalPage;
 import eu.geclipse.terminal.ITerminalView;
+import eu.geclipse.ui.dialogs.NewProblemDialog;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.dialogs.Solution;
 import eu.geclipse.ui.widgets.IDropDownEntry;
@@ -82,16 +86,11 @@ public class SshShell implements IDropDownEntry<ITerminalView>, ITerminalListene
     try {
       IJSchService service = Activator.getDefault().getJSchService();
       if (service == null) {
-        IStatus status = new Status( IStatus.ERROR, Activator.PLUGIN_ID,
-                                     Messages.getString("SshShell.couldNotGetService") ); //$NON-NLS-1$
-        Solution[] solutions = {
-          new Solution( Messages.getString("SshShell.checkYourInstall") ), //$NON-NLS-1$
-        };
-        ProblemDialog.openProblem( null,
-                                   Messages.getString( "SshShell.sshTerminal" ), //$NON-NLS-1$
-                                   Messages.getString("SshShell.couldNotGetService"), //$NON-NLS-1$
-                                   status,
-                                   solutions );
+        GridException gridException = new GridException( CoreProblems.GET_SSH_SERVICE_FAILED );
+        NewProblemDialog.openProblem( null,
+                                      Messages.getString( "SshShell.sshTerminal" ), //$NON-NLS-1$
+                                      Messages.getString( "SshShell.couldNotGetService" ), //$NON-NLS-1$
+                                      gridException );
       } else {
         this.userInfo = sshConnectionInfo;
         final Session session = service.createSession( this.userInfo.getHostname(),

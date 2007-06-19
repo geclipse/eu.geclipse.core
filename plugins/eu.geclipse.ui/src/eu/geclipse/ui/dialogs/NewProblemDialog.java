@@ -31,6 +31,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Shell;
@@ -131,7 +132,9 @@ public class NewProblemDialog extends ErrorDialog {
                                  final Throwable throwable ) {
     final NewProblemDialog dialog
       = new NewProblemDialog( parent, dialogTitle, message, throwable, null );
-    parent.getDisplay().syncExec( new Runnable() {
+    
+    Shell execShell = ( parent == null ) ? Display.getDefault().getShells()[0] : parent;
+    execShell.getDisplay().syncExec( new Runnable() {
       public void run() {
         result = dialog.open();
       }
@@ -162,7 +165,8 @@ public class NewProblemDialog extends ErrorDialog {
                                  final SolutionRegistry solutionRegistry ) {
     final NewProblemDialog dialog
       = new NewProblemDialog( parent, dialogTitle, message, gExc, solutionRegistry );
-    parent.getDisplay().syncExec( new Runnable() {
+    Shell execShell = ( parent == null ) ? Display.getDefault().getShells()[0] : parent;
+    execShell.getDisplay().syncExec( new Runnable() {
       public void run() {
         result = dialog.open();
       }

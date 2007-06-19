@@ -42,6 +42,12 @@ public class CoreProblems implements IProblemProvider {
     = ProblemRegistry.uniqueID();
 
   /**
+   * Problem ID for failed binding of ports.
+   */
+  public static final int BIND_FAILED
+    = ProblemRegistry.uniqueID();
+
+  /**
    * Problem ID for job submission failures.
    */
   public static final int JOB_SUBMISSION_FAILED
@@ -51,6 +57,12 @@ public class CoreProblems implements IProblemProvider {
    * Problem ID for unspecified IO problems.
    */
   public static final int UNSPECIFIED_IO_PROBLEM
+    = ProblemRegistry.uniqueID();
+
+  /**
+   * Problem ID for problem getting the SSH service from OSGI.
+   */
+  public static final int GET_SSH_SERVICE_FAILED
     = ProblemRegistry.uniqueID();
 
   /* (non-Javadoc)
@@ -89,6 +101,16 @@ public class CoreProblems implements IProblemProvider {
                                null );
     }
 
+    else if ( problemID == BIND_FAILED ) {
+      problem = createProblem( problemID,
+                               Messages.getString("CoreProblems.bindFailed"), //$NON-NLS-1$
+                               exc,
+                               new int[] {
+                                 SolutionRegistry.CHECK_PORT_ALREADY_IN_USE,
+                                 SolutionRegistry.USE_ANOTHER_PORT
+                               } );
+    }
+
     else if ( problemID == JOB_SUBMISSION_FAILED ) {
       problem = createProblem( problemID,
                                Messages.getString("CoreProblems.job_submission_failed"), //$NON-NLS-1$
@@ -101,10 +123,19 @@ public class CoreProblems implements IProblemProvider {
                                Messages.getString("CoreProblems.malformed_url"), //$NON-NLS-1$
                                exc,
                                new int[] {
-                               SolutionRegistry.CHECK_SERVER_URL,
-      } );
+                                 SolutionRegistry.CHECK_SERVER_URL
+                               } );
     }
-    
+
+    else if ( problemID == GET_SSH_SERVICE_FAILED ) {
+      problem = createProblem( problemID,
+                               Messages.getString("CoreProblems.get_ssh_service_failed"), //$NON-NLS-1$
+                               exc,
+                               new int[] {
+                                 SolutionRegistry.CHECK_INSTALLATION
+                               } );
+    }
+
     return problem;
     
   }

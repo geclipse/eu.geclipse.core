@@ -100,7 +100,22 @@ public class SolutionRegistry {
    * Unique ID of the check if the hostname resolves to the ip address solution.
    */
   public static final int CHECK_HOSTNAME_MATCHES_IP_ADDR = uniqueID();
-  
+
+  /**
+   * Unique ID of the check if the port is already in use solution.
+   */
+  public static final int CHECK_PORT_ALREADY_IN_USE = uniqueID();
+
+  /**
+   * Unique ID of the use another port solution.
+   */
+  public static final int USE_ANOTHER_PORT = uniqueID();
+
+  /**
+   * Unique ID of the use another port solution.
+   */
+  public static final int CHECK_INSTALLATION = uniqueID();
+
   /**
    * The singleton instance. 
    */
@@ -229,7 +244,19 @@ public class SolutionRegistry {
     else if ( solutionID == CHECK_HOSTNAME_MATCHES_IP_ADDR ) {
       solution = new Solution( CHECK_HOSTNAME_MATCHES_IP_ADDR, Messages.getString("SolutionRegistry.check_hostname_matches_ip_addr") ); //$NON-NLS-1$
     }
-    
+
+    else if ( solutionID == CHECK_PORT_ALREADY_IN_USE ) {
+      solution = new Solution( CHECK_PORT_ALREADY_IN_USE, Messages.getString("SolutionRegistry.check_port_already_in_use") ); //$NON-NLS-1$
+    }
+
+    else if ( solutionID == USE_ANOTHER_PORT ) {
+      solution = new Solution( USE_ANOTHER_PORT, Messages.getString("SolutionRegistry.use_another_port") ); //$NON-NLS-1$
+    }
+
+    else if ( solutionID == CHECK_INSTALLATION ) {
+      solution = new Solution( CHECK_INSTALLATION, Messages.getString("SolutionRegistry.check_installation") ); //$NON-NLS-1$
+    }
+
     return solution;
     
   }
