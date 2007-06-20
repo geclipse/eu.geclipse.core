@@ -45,11 +45,6 @@ public class BuildActions extends ActionGroup {
   private BuildAction buildAction;
   
   /**
-   * The refresh action.
-   */
-  private RefreshAction refreshAction;
-  
-  /**
    * Construct a new build actions group for the specified
    * workbench site.
    * 
@@ -63,16 +58,8 @@ public class BuildActions extends ActionGroup {
     ISelectionProvider provider = site.getSelectionProvider();
     
     this.buildAction = new BuildAction( shell, IncrementalProjectBuilder.INCREMENTAL_BUILD );
-    this.refreshAction = new RefreshAction( shell );
-    //this.refreshAction.setText( "Re&fresh@F5" );
-
-    ImageRegistry imgReg = Activator.getDefault().getImageRegistry();
-    Image image = imgReg.get( "refresh" ); //$NON-NLS-1$
-    ImageDescriptor refreshImage = ImageDescriptor.createFromImage( image );
-    this.refreshAction.setImageDescriptor( refreshImage );
 
     provider.addSelectionChangedListener( this.buildAction );
-    provider.addSelectionChangedListener( this.refreshAction );
     
   }
   
@@ -83,7 +70,6 @@ public class BuildActions extends ActionGroup {
   public void dispose() {
     ISelectionProvider provider = this.site.getSelectionProvider();
     provider.removeSelectionChangedListener( this.buildAction );
-    provider.removeSelectionChangedListener( this.refreshAction );
   }
   
   /* (non-Javadoc)
@@ -94,10 +80,6 @@ public class BuildActions extends ActionGroup {
     if ( this.buildAction.isEnabled() ) {
       menu.appendToGroup( ICommonMenuConstants.GROUP_BUILD, 
                           this.buildAction );
-    }
-    if ( this.refreshAction.isEnabled() ) {
-      menu.appendToGroup( ICommonMenuConstants.GROUP_BUILD,
-                          this.refreshAction );
     }
     super.fillContextMenu(menu);
   }

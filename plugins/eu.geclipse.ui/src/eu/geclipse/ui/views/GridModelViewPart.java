@@ -208,7 +208,7 @@ public abstract class GridModelViewPart
     FileActions fileActions = new FileActions( this );
     groups.addGroup( fileActions );
     
-    CommonActions commonActions = new CommonActions( getSite() );
+    CommonActions commonActions = new CommonActions( this );
     groups.addGroup( commonActions );
     
     StructuredViewer sViewer = getViewer();

@@ -16,15 +16,24 @@
 package eu.geclipse.ui.internal.actions;
 
 import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.window.IShellProvider;
 import org.eclipse.jface.window.SameShellProvider;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.actions.ActionGroup;
 import org.eclipse.ui.dialogs.PropertyDialogAction;
 import org.eclipse.ui.navigator.ICommonMenuConstants;
+
+import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.internal.GridElementSelectionAdapter;
+import eu.geclipse.ui.views.GridModelViewPart;
 
 /**
  * Action group that holds actions that are common to all Grid
@@ -48,14 +57,19 @@ public class CommonActions extends ActionGroup {
   private PropertyDialogAction propertyAction;
   
   /**
+   * The refresh action.
+   */
+  RefreshAction refreshAction;
+  
+  /**
    * Construct a new <code>CommonActions</code> action group for the
    * specified {@link IWorkbenchSite}.
    * 
    * @param site The {@link IWorkbenchSite} this action is associated with.
    */
-  public CommonActions( final IWorkbenchSite site ) {
+  public CommonActions( final GridModelViewPart part ) {
   
-    this.site = site;
+    this.site = part.getSite();
     Shell shell = site.getShell();
     IShellProvider shellProvider = new SameShellProvider( shell );
     ISelectionProvider selectionProvider = site.getSelectionProvider();
@@ -66,6 +80,24 @@ public class CommonActions extends ActionGroup {
     this.propertyAction
       = new PropertyDialogAction( shellProvider, this.selectionAdapter );
     
+    this.refreshAction = new RefreshAction( shell );
+    this.refreshAction.setText( "Re&fresh@F5" );
+    selectionProvider.addSelectionChangedListener( this.refreshAction );
+    
+    ImageRegistry imgReg = Activator.getDefault().getImageRegistry();
+    Image image = imgReg.get( "refresh" ); //$NON-NLS-1$
+    ImageDescriptor refreshImage = ImageDescriptor.createFromImage( image );
+    this.refreshAction.setImageDescriptor( refreshImage );
+    
+    part.getViewer().getControl().addKeyListener( new KeyAdapter() {
+      @Override
+      public void keyPressed( final KeyEvent e ) {
+        if ( e.keyCode == SWT.F5 ) {
+          CommonActions.this.refreshAction.run();
+        }
+      }
+    } );
+    
   }
   
   /* (non-Javadoc)
@@ -75,6 +107,7 @@ public class CommonActions extends ActionGroup {
   public void dispose() {
     ISelectionProvider selectionProvider = this.site.getSelectionProvider();
     selectionProvider.removeSelectionChangedListener( this.selectionAdapter );
+    selectionProvider.removeSelectionChangedListener( this.refreshAction );
   }
   
   /* (non-Javadoc)
@@ -85,6 +118,10 @@ public class CommonActions extends ActionGroup {
     if ( this.propertyAction.isEnabled() ) {
       menu.appendToGroup( ICommonMenuConstants.GROUP_PROPERTIES, 
                           this.propertyAction );
+    }
+    if ( this.refreshAction.isEnabled() ) {
+      menu.appendToGroup( ICommonMenuConstants.GROUP_BUILD,
+                          this.refreshAction );
     }
     super.fillContextMenu(menu);
   }
