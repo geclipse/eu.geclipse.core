@@ -54,6 +54,9 @@ public class Extensions {
   public static final String EFS_SCHEME_ATT
     = "scheme"; //$NON-NLS-1$
   
+  public static final String EFS_VALIDATOR_ATT
+    = "validator"; //$NON-NLS-1$
+  
   public static final String EFS_URI_ATT
     = "uri"; //$NON-NLS-1$
   
@@ -143,11 +146,13 @@ public class Extensions {
       = getRegisteredEFSExtensions();
     for ( IConfigurationElement element : registeredEFSExtensions ) {
       if ( element.getAttribute( EFS_SCHEME_ATT ).equals( scheme ) ) {
-        IConfigurationElement[] children = element.getChildren();
+        /*IConfigurationElement[] children = element.getChildren();
         if ( ( children != null ) && ( children.length > 0 ) ) {
           result = children[0];
           break;
-        }
+        }*/
+        result = element;
+        break;
       }
     }
     return result;

@@ -97,6 +97,8 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
   private Link pathLink;
   
   private TreeViewer viewer;
+  
+  private IConnectionTokenValidator validator;
     
   public ConnectionDefinitionWizardPage() {
     super( "connectionDefinitionPage",
@@ -406,6 +408,7 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
     }
     
     this.currentURIType = Extensions.EFS_URI_RAW;
+    this.validator = null;
     
   }
   
@@ -418,8 +421,24 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
       = Extensions.getRegisteredEFSExtension( scheme );
     
     if ( extension != null ) {
-      setActive( this.uriCombo, this.uriLabel, null );
-      processURIScheme( extension );
+      
+      IConfigurationElement[] children
+        = extension.getChildren();
+    
+      if ( ( children != null ) && ( children.length == 1 ) ) {
+        setActive( this.uriCombo, this.uriLabel, null );
+        processURIScheme( children[ 0 ] );
+      }
+    
+      try {
+        this.validator
+          = ( IConnectionTokenValidator ) extension.createExecutableExtension( Extensions.EFS_VALIDATOR_ATT );
+      } catch ( CoreException cExc ) {
+        // Since the validator is optional this may fail and
+        // may throw an exception that we would not like
+        // to handle here
+      }
+      
     }
     
     this.mainComp.layout();
@@ -431,7 +450,75 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
     URI uri = getURI();
     this.viewer.getTree().setEnabled( uri != null );
     this.pathLink.setEnabled( uri != null );
-    setPageComplete( uri != null );
+    setPageComplete( validatePage() && ( uri != null ) );
+  }
+  
+  protected boolean validatePage() {
+    
+    String error = null;
+    
+    if ( this.validator != null ) {
+      
+      if ( this.uriCombo.isVisible() ) {
+        error
+          = this.validator.validateToken( IConnectionTokenValidator.URI_TOKEN,
+                                          this.uriCombo.getText() );
+      }
+      
+      if ( ( error == null ) && this.schemeSpecificPartCombo.isVisible() ) {
+        error
+          = this.validator.validateToken( IConnectionTokenValidator.SCHEME_SPEC_TOKEN,
+                                          this.schemeSpecificPartCombo.getText() );
+      }
+      
+      if ( ( error == null ) && this.authorityCombo.isVisible() ) {
+        error
+          = this.validator.validateToken( IConnectionTokenValidator.AUTHORITY_TOKEN,
+                                          this.authorityCombo.getText() );
+      }
+      
+      if ( ( error == null ) && this.userInfoCombo.isVisible() ) {
+        error
+          = this.validator.validateToken( IConnectionTokenValidator.USER_INFO_TOKEN,
+                                          this.userInfoCombo.getText() );
+      }
+      
+      if ( ( error == null ) && this.hostCombo.isVisible() ) {
+        error
+          = this.validator.validateToken( IConnectionTokenValidator.HOST_TOKEN,
+                                          this.hostCombo.getText() );
+      }
+      
+      if ( ( error == null ) && this.portCombo.isVisible() ) {
+        error
+          = this.validator.validateToken( IConnectionTokenValidator.PORT_TOKEN,
+                                          this.portCombo.getText() );
+      }
+      
+      if ( ( error == null ) && this.pathCombo.isVisible() ) {
+        error
+          = this.validator.validateToken( IConnectionTokenValidator.PATH_TOKEN,
+                                          this.pathCombo.getText() );
+      }
+      
+      if ( ( error == null ) && this.queryCombo.isVisible() ) {
+        error
+          = this.validator.validateToken( IConnectionTokenValidator.QUERY_TOKEN,
+                                          this.queryCombo.getText() );
+      }
+      
+      if ( ( error == null ) && this.fragmentCombo.isVisible() ) {
+        error
+          = this.validator.validateToken( IConnectionTokenValidator.FRAGMENT_TOKEN,
+                                          this.fragmentCombo.getText() );
+      }
+      
+      setErrorMessage( error );
+      
+    }
+    
+    return error == null;
+    
   }
   
   private void processURIScheme( final IConfigurationElement element ) {
@@ -550,36 +637,7 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
     ( ( GridData ) label.getLayoutData() ).exclude = isEmpty( text );
     ( ( GridData ) editor.getLayoutData() ).exclude = isEmpty( text );
   }
-  /*
-  protected boolean validateContact() {
-    
-    String errorMessage = null;
-    
-    String scheme = this.schemeCombo.getText();
-    if ( ! FieldValidator.validateScheme( scheme ) ) {
-      errorMessage = "You have to choose a valid scheme";
-    }
-    
-    if ( errorMessage == null ) {
-      String host = this.hostCombo.getText();
-      if ( ! isEmpty( host ) && ! FieldValidator.validateHost( host ) ) {
-        errorMessage = "The specified hostname is invalid";
-      }
-    }
-    
-    if ( errorMessage == null ) {
-      String port = this.portCombo.getText();
-      if ( ! isEmpty( port ) && ! FieldValidator.validatePort( port ) ) {
-        errorMessage = "The specified port is invalid";
-      }
-    }
-    
-    setErrorMessage( errorMessage );
-    
-    return errorMessage == null;
-    
-  }
-  */
+  
   private boolean isEmpty( final String s ) {
     return ( s == null ) || ( s.length() == 0 );
   }
