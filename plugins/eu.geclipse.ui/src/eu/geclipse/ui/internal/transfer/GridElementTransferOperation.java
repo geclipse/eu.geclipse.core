@@ -360,9 +360,13 @@ public class GridElementTransferOperation
           
         }
         
+        subMonitor.done();
+        
       }
       
     } finally {
+      
+      monitor.subTask( Messages.getString("GridElementTransferOperation.closing_streams") ); //$NON-NLS-1$
       
       // Close output stream
       if ( outStream != null ) {
