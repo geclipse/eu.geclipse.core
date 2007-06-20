@@ -71,7 +71,7 @@ public class JobManager extends AbstractGridElementManager
     }
     return flag;
   }
-
+  
   public void startUpdater( final IGridJobID id)
     throws GridModelException
   {
