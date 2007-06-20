@@ -122,7 +122,7 @@ public class JobFiltersDialog extends TrayDialog {
       optionsList.add( new StatusOption( jobStatusGroup, "Running", IGridJobStatus.RUNNING ) );
       optionsList.add( new StatusOption( jobStatusGroup, "Done", IGridJobStatus.DONE ) );
       optionsList.add( new StatusOption( jobStatusGroup, "Aborted", IGridJobStatus.ABORTED ) );
-      optionsList.add( new StatusOption( jobStatusGroup, "Abandoned", IGridJobStatus.ABANDONED ) );
+      optionsList.add( new StatusOption( jobStatusGroup, "Abandoned", IGridJobStatus.PURGED ) );
       optionsList.add( new StatusOption( jobStatusGroup, "Others", IGridJobStatus.UNKNOWN ) );
             
       refresh( jobStatusFilter );

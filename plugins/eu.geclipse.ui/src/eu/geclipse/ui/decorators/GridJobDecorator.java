@@ -47,7 +47,7 @@ public class GridJobDecorator implements ILightweightLabelDecorator {
   imageNames.put( IGridJobStatus.RUNNING, "status_running.gif" ); 
   imageNames.put( IGridJobStatus.DONE, "status_done.gif" ); 
   imageNames.put( IGridJobStatus.ABORTED, "status_aborted.gif" ); 
-  imageNames.put( IGridJobStatus.ABANDONED, "status_abandoned.gif" ); 
+  imageNames.put( IGridJobStatus.PURGED, "status_abandoned.gif" ); 
   }
   
   public void decorate( final Object element, final IDecoration decoration ) {

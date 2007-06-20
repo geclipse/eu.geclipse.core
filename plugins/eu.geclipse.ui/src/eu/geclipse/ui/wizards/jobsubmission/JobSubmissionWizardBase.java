@@ -86,7 +86,7 @@ public abstract class JobSubmissionWizardBase extends Wizard
               {
                 
                 SubProgressMonitor subMonitor = new SubProgressMonitor( monitor, 1 );
-                subMonitor.beginTask( "Submitting job " + description.getName(), 2 );
+                subMonitor.beginTask( "Submitting job " + description.getName(), 10 );
                 
                 try {
                   
@@ -99,8 +99,8 @@ public abstract class JobSubmissionWizardBase extends Wizard
                   if( service != null ) {
                     
                     subMonitor.subTask( "Submission in progress" );
-                    jobId = service.submitJob( description, null );
-                    subMonitor.worked( 1 );
+                    jobId = service.submitJob( description, subMonitor );
+                    subMonitor.worked( 9 );
                     testCanceled( subMonitor );
                     
                   } else {
