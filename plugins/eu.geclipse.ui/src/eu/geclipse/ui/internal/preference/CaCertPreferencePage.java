@@ -22,6 +22,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.Comparator;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -32,6 +33,8 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -43,6 +46,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+
 import eu.geclipse.core.GridException;
 import eu.geclipse.core.ISolution;
 import eu.geclipse.core.SolutionRegistry;
@@ -158,6 +162,14 @@ public class CaCertPreferencePage
       public void widgetSelected( final SelectionEvent e ) {
         int sCnt = CaCertPreferencePage.this.caList.getSelectionCount();
         CaCertPreferencePage.this.deleteButton.setEnabled( sCnt > 0 );
+      }
+    } );
+    this.caList.addKeyListener( new KeyAdapter() {
+      @Override
+      public void keyReleased( final KeyEvent e ) {
+        if ( e.keyCode == SWT.DEL ) {
+          deleteSelected();
+        }
       }
     } );
     this.addFromDirButton.addSelectionListener( new SelectionAdapter() {
