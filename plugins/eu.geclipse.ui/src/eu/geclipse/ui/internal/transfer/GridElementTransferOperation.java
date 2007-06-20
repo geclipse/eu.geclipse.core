@@ -260,14 +260,15 @@ public class GridElementTransferOperation
                             final IProgressMonitor monitor ) {
     
     // Prepare copy operation
-    monitor.beginTask( Messages.getString("GridElementTransferOperation.copying_progress") + from.getName(), 10 ); //$NON-NLS-1$
+    monitor.beginTask( Messages.getString("GridElementTransferOperation.copying_progress") + from.getName(), 100 ); //$NON-NLS-1$
+    monitor.setTaskName( Messages.getString("GridElementTransferOperation.copying_progress") + from.getName() );
     InputStream inStream = null;
     OutputStream outStream = null;
     IStatus status = Status.OK_STATUS;
     
     // Put in try-catch-clause to ensure that monitor.done() is called and streams are closed
     try {
-    
+      
       // Fetch file infos
       IFileInfo fromInfo = from.fetchInfo();
       long length = fromInfo.getLength();
@@ -287,7 +288,7 @@ public class GridElementTransferOperation
       // Open input stream
       if ( status.isOK() ) {
         try {
-          inStream = from.openInputStream( EFS.NONE, new SubProgressMonitor( monitor, 1 ) );
+          inStream = from.openInputStream( EFS.NONE, new SubProgressMonitor( monitor, 8 ) );
         } catch( CoreException cExc ) {
           status = new Status( IStatus.ERROR,
                                Activator.PLUGIN_ID,
@@ -300,7 +301,7 @@ public class GridElementTransferOperation
       // Open output stream
       if ( status.isOK() ) {
         try {
-          outStream = toStore.openOutputStream( EFS.NONE, new SubProgressMonitor( monitor, 1 ) );
+          outStream = toStore.openOutputStream( EFS.NONE, new SubProgressMonitor( monitor, 8 ) );
         } catch( CoreException cExc ) {
           status = new Status( IStatus.ERROR,
                                Activator.PLUGIN_ID,
@@ -314,8 +315,11 @@ public class GridElementTransferOperation
       if ( status.isOK() && ( inStream != null ) && ( outStream != null ) ) {
         
         byte[] buffer = new byte[ 1024 ];
-        SubProgressMonitor subMonitor = new SubProgressMonitor( monitor, 8 );
-        subMonitor.beginTask( Messages.getString("GridElementTransferOperation.copying_progress") + from.getName(), (int)(length/buffer.length) ); //$NON-NLS-1$
+        Integer totalKb = new Integer( (int) Math.ceil((double)length/(double)buffer.length) ) ;
+        
+        SubProgressMonitor subMonitor = new SubProgressMonitor( monitor, 85 );
+        subMonitor.beginTask( Messages.getString("GridElementTransferOperation.copying_progress") + from.getName(), totalKb.intValue() ); //$NON-NLS-1$
+        subMonitor.subTask( Messages.getString("GridElementTransferOperation.copying_progress") + from.getName() );
         
         // Copy the data
         int kb_counter = 0;
@@ -354,9 +358,10 @@ public class GridElementTransferOperation
           subMonitor.worked( 1 );
           subMonitor.subTask( String.format( Messages.getString("GridElementTransferOperation.transfer_progress_format"),  //$NON-NLS-1$
                                              fromInfo.getName(),
-                                             new Integer( (int)(100./length*buffer.length*kb_counter) ),
+//                                             new Integer( (int)(100./length*buffer.length*kb_counter) ),
+                                             new Integer( (int)(100*( (kb_counter-1) * buffer.length + bytesRead ) / length ) ),
                                              new Integer( kb_counter ),
-                                             new Integer( (int)(length/buffer.length) ) ) );
+                                             totalKb ) );
           
         }
         
