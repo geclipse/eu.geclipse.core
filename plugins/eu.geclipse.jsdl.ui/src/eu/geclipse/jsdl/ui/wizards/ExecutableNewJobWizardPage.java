@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.Map;
 import javax.xml.parsers.ParserConfigurationException;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.wizard.IWizardNode;
@@ -415,31 +416,54 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       this.basicNode = new BasicWizardPart( this.internalPages,
                                             this.getWizard() );
     }
-    if( this.appsWithExtraAttributes.values()
-      .contains( this.applicationName.getText() ) )
-    {
-      try {
-        for( String bundleId : this.appsWithExtraAttributes.keySet() ) {
-          if( this.appsWithExtraAttributes.get( bundleId )
-            .equals( this.applicationName.getText() ) )
-          {
-            Path path = Extensions.getXMLPath( bundleId );
-            setSelectedNode( new SpecificWizardPart( this.basicNode,
-                                                     this.getWizard(),
-                                                     path ) );
-            this.executableFile.setText( Extensions.getJSDLExtensionExecutable( bundleId ) );
-          }
+    if (this.appsWithParametersFromPrefs.values().contains( this.applicationName.getText() )){
+      for (Integer appId: this.appsWithParametersFromPrefs.keySet()){
+        if (this.appsWithParametersFromPrefs.get( appId ).equals( this.applicationName.getText() )){
+          IPath pathA = ApplicationSpecificRegistry.getInstance().getApplicationData( appId.intValue() ).getXmlPath();
+          Path path = new Path(pathA.toFile().getPath());
+        try {
+          setSelectedNode( new SpecificWizardPart( this.basicNode,
+                                                   this.getWizard(),
+                                                   path ) );
+          this.executableFile.setText( ApplicationSpecificRegistry.getInstance().getApplicationData( appId.intValue() ).getAppPath());
+        } catch( SAXException e1 ) {
+          // TODO Auto-generated catch block
+          e1.printStackTrace();
+        } catch( ParserConfigurationException e1 ) {
+          // TODO Auto-generated catch block
+          e1.printStackTrace();
+        } catch( IOException e1 ) {
+          // TODO Auto-generated catch block
+          e1.printStackTrace();
         }
-      } catch( SAXException e1 ) {
-        // TODO Auto-generated catch block
-        e1.printStackTrace();
-      } catch( ParserConfigurationException e1 ) {
-        // TODO Auto-generated catch block
-        e1.printStackTrace();
-      } catch( IOException e1 ) {
-        // TODO Auto-generated catch block
-        e1.printStackTrace();
+        
+        }
       }
+//    if( this.appsWithExtraAttributes.values()
+//      .contains( this.applicationName.getText() ) )
+//    {
+//      try {
+//        for( String bundleId : this.appsWithExtraAttributes.keySet() ) {
+//          if( this.appsWithExtraAttributes.get( bundleId )
+//            .equals( this.applicationName.getText() ) )
+//          {
+//            Path path = Extensions.getXMLPath( bundleId );
+//            setSelectedNode( new SpecificWizardPart( this.basicNode,
+//                                                     this.getWizard(),
+//                                                     path ) );
+//            this.executableFile.setText( Extensions.getJSDLExtensionExecutable( bundleId ) );
+//          }
+//        }
+//      } catch( SAXException e1 ) {
+//        // TODO Auto-generated catch block
+//        e1.printStackTrace();
+//      } catch( ParserConfigurationException e1 ) {
+//        // TODO Auto-generated catch block
+//        e1.printStackTrace();
+//      } catch( IOException e1 ) {
+//        // TODO Auto-generated catch block
+//        e1.printStackTrace();
+//      }
     } else {
       setSelectedNode( this.basicNode );
     }

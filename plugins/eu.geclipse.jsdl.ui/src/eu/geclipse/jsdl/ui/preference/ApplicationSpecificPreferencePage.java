@@ -1,7 +1,10 @@
 package eu.geclipse.jsdl.ui.preference;
 
-import org.eclipse.core.runtime.CoreException;
+import org.eclipse.compare.IContentChangeListener;
+import org.eclipse.compare.IContentChangeNotifier;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.viewers.ColumnLayoutData;
@@ -16,7 +19,10 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableLayout;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -25,6 +31,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
@@ -34,26 +41,36 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
-import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.preference.ApplicationSpecificObject;
 import eu.geclipse.jsdl.ui.internal.preference.ApplicationSpecificRegistry;
-import eu.geclipse.ui.dialogs.GridFileDialog;
-import eu.geclipse.ui.dialogs.NewProblemDialog;
 
 public class ApplicationSpecificPreferencePage extends PreferencePage
-  implements IWorkbenchPreferencePage
+  implements IWorkbenchPreferencePage, IContentChangeListener
 {
 
   private Button addButton;
   private Button editButton;
   private Button removeButton;
   private TableViewer appsViewer;
+  private Table appsTable;
+  
+  
 
   public ApplicationSpecificPreferencePage() {
     super();
     setDescription( "Application specific parameters" );
+    ApplicationSpecificRegistry.getInstance().addContentChangeListener( this );
   }
+  
+
+  @Override
+  public void dispose()
+  {
+    ApplicationSpecificRegistry.getInstance().removeContentChangeListener( this );
+    super.dispose();
+  }
+
 
   @Override
   protected Control createContents( Composite parent )
@@ -67,7 +84,7 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
     mainComp.setLayout( gLayout );
     initializeDialogUnits( mainComp );
     GridData gData;
-    Table appsTable = new Table( mainComp, SWT.BORDER
+    appsTable = new Table( mainComp, SWT.BORDER | SWT.VIRTUAL
                                            | SWT.MULTI
                                            | SWT.FULL_SELECTION );
     appsTable.setHeaderVisible( true );
@@ -124,26 +141,56 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
       public void widgetSelected( SelectionEvent e )
       {
         editAppliactionSpecificData( null );
+//        ApplicationSpecificRegistry.getInstance().addApplicationSpecificData( name, path, xmlPath )
       }
     } );
     this.editButton = new Button( buttonsComp, SWT.PUSH );
     gData = new GridData( GridData.FILL_BOTH );
     this.editButton.setLayoutData( gData );
     this.editButton.setText( "Edit..." );
+    this.editButton.addSelectionListener( new SelectionAdapter() {
+
+      @Override
+      public void widgetSelected( SelectionEvent e )
+      {
+        editAppliactionSpecificData( getSelectedAppSpecificObject() );
+      }
+    } );
     this.removeButton = new Button( buttonsComp, SWT.PUSH );
     gData = new GridData( GridData.FILL_BOTH );
     this.removeButton.setLayoutData( gData );
     this.removeButton.setText( "Delete" );
+    this.removeButton.addSelectionListener( new SelectionAdapter(){
+      @Override
+      public void widgetSelected( SelectionEvent e ){
+        ApplicationSpecificRegistry.getInstance().removeApplicationSpecificData(getSelectedAppSpecificObject());
+      }
+    });
     updateButtons();
     return mainComp;
   }
 
-  void editAppliactionSpecificData( ApplicationSpecificObject asO ) {
-    EditDialog dialog = new EditDialog( getShell() );
-    dialog.open();
+  void editAppliactionSpecificData( ApplicationSpecificObject aSO ) {
+    EditDialog dialog;
+    if (aSO == null){
+      dialog = new EditDialog( getShell() );
+      if (dialog.open() == Window.OK){
+        ApplicationSpecificRegistry.getInstance().addApplicationSpecificData( dialog.getAppName(), dialog.getAppPath(), new Path(dialog.getXMLPath()) );
+      }
+    } else {
+      dialog = new EditDialog( getShell(), aSO.getAppName(), aSO.getAppPath(), aSO.getXmlPath().toOSString() );
+      if (dialog.open() == Window.OK){
+        ApplicationSpecificRegistry.getInstance().editApplicationSpecificData( aSO, dialog.getAppName(), dialog.getAppPath(), dialog.getXMLPath() );
+//        aSO.setAppName( dialog.getAppName() );
+//        aSO.setAppPath( dialog.getAppPath() );
+//        aSO.setXmlPath( new Path(dialog.getXMLPath()) );
+//        this.appsViewer.refresh();
+      }
+    }
+    
   }
 
-  public ApplicationSpecificObject getSelectedVo() {
+  public ApplicationSpecificObject getSelectedAppSpecificObject() {
     ApplicationSpecificObject selectedASO = null;
     IStructuredSelection selection = ( IStructuredSelection )this.appsViewer.getSelection();
     Object obj = selection.getFirstElement();
@@ -231,16 +278,46 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
     private Text appName;
     private Text appPath;
     private Text xmlPath;
+    
+    private String appNameInit;
+    private String appPathInit;
+    private String xmlPathInit;
+    private String returnAppName;
+    private String returnXMLPath;
+    private String returnAppPath;
 
     protected EditDialog( Shell parentShell ) {
       super( parentShell );
     }
+    
+    protected EditDialog( Shell parentShell, String appName, String appPath, String xmlPath ) {
+      super( parentShell );
+      this.appNameInit = appName;
+      this.appPathInit = appPath;
+      this.xmlPathInit = xmlPath;
+    }
+    
+    
+    @Override
+    protected void createButtonsForButtonBar( Composite parent )
+    {
+      super.createButtonsForButtonBar( parent );
+      updateButtons();
+    }
+
+
+
+    void updateButtons(){
+      if (!this.appName.getText().equals( "" ) && !this.appPath.getText().equals( "" ) && ! this.xmlPath.getText().equals( "" )){
+        super.getButton( IDialogConstants.OK_ID ).setEnabled( true );
+      } else {
+        super.getButton( IDialogConstants.OK_ID ).setEnabled( false );
+      }
+    } 
 
     @Override
     protected Control createDialogArea( Composite parent) 
     {
-      
-      
       
       Composite composite = (Composite) super.createDialogArea( parent );
       composite.setLayout( new GridLayout( 1, false ) );
@@ -266,7 +343,9 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
       gd = new GridData( GridData.FILL_BOTH );
       gd.horizontalSpan = 2;
       this.appName.setLayoutData( gd );
-      
+      if (this.appNameInit != null){
+        this.appName.setText( this.appNameInit );
+      }
       
       Label pathNameLabel = new Label(panel, SWT.LEAD);
       pathNameLabel.setText( "Application path" );
@@ -278,6 +357,9 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
       gd.widthHint = 250;
       gd.horizontalSpan = 2;
       this.appPath.setLayoutData( gd );
+      if (this.appPathInit != null){
+        this.appPath.setText( this.appPathInit );
+      }
       
       Label xmlPathLabel = new Label(panel, SWT.LEAD);
       xmlPathLabel.setText( "XML path" );
@@ -289,6 +371,10 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
       gd.grabExcessHorizontalSpace = true;
 //      gd.horizontalSpan = 2;
       this.xmlPath.setLayoutData( gd );
+      this.xmlPath.setLayoutData( gd );
+      if (this.xmlPathInit != null){
+        this.xmlPath.setText( this.xmlPathInit );
+      }
       
       Button browseButton = new Button(panel, SWT.PUSH);
 //      browseButton.setText( "aaa" );
@@ -302,27 +388,59 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
         @Override
         public void widgetSelected( SelectionEvent e )
         {
-          IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
-                                                                             "Choose a file",
-                                                                             null, true );
+          FileDialog file = new FileDialog(getShell());
+          
+          String connection = file.open(); 
           if( connection != null ) {
-            try {
-              String filename = connection.getConnectionFileStore().toString();
-              if( filename != null ) {
-                xmlPath.setText( filename );
-              }
-            } catch( CoreException cExc ) {
-              NewProblemDialog.openProblem( getShell(), "error", "error", cExc );
-            }
+                EditDialog.this.xmlPath.setText( connection );
           }
-        }
-        
-        
-        
+          updateButtons();
+        }   
       });
+      
+      ModifyListener selectionAdapter = new updateAdapter();
+      this.appName.addModifyListener( selectionAdapter );
+      this.appPath.addModifyListener( selectionAdapter );
+      this.xmlPath.addModifyListener( selectionAdapter );
       
       return composite;
       
     }
+    
+    
+    
+    @Override
+    protected void okPressed()
+    {
+      this.returnAppName = this.appName.getText();
+      this.returnAppPath = this.appPath.getText();
+      this.returnXMLPath = this.xmlPath.getText();
+      super.okPressed();
+    }
+
+    public String getAppName(){
+      return this.returnAppName;
+    }
+    
+    public String getAppPath(){
+      return this.returnAppPath;
+    }
+    
+    public String getXMLPath(){
+      return this.returnXMLPath;
+    }
+    
+    class updateAdapter implements ModifyListener{
+      
+
+      public void modifyText( ModifyEvent e ) {
+        updateButtons(); 
+      }
+    }
   }
+  public void contentChanged( IContentChangeNotifier source ) {
+    this.appsViewer.refresh();
+  }
+  
+  
 }

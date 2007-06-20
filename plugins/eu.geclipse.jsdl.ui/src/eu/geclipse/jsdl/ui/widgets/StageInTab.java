@@ -145,6 +145,8 @@ public class StageInTab extends TabComponent<DataStaging> implements ICellModifi
       }
     }
   }
+  
+  
 
   @Override
   protected void handleRemoveButtonSelected()
