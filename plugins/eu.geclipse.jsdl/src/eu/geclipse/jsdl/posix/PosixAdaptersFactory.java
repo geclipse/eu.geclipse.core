@@ -18,6 +18,7 @@ package eu.geclipse.jsdl.posix;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
@@ -40,15 +41,18 @@ public class PosixAdaptersFactory extends PosixAdapterFactory implements Compose
                                                                 IChangeNotifier,
                                                                    IDisposable {
 
-  
+    
   protected Collection <Object> supportedTypes = new ArrayList<Object>();
   
+  private List< INotifyChangedListener > listeners
+                                    = new ArrayList< INotifyChangedListener >();
+  
   public PosixAdaptersFactory() {
-    supportedTypes.add(IEditingDomainItemProvider.class);
-    supportedTypes.add(IStructuredItemContentProvider.class);
-    supportedTypes.add(ITreeItemContentProvider.class);
-    supportedTypes.add(IItemLabelProvider.class);
-    supportedTypes.add(IItemPropertySource.class);  
+    this.supportedTypes.add(IEditingDomainItemProvider.class);
+    this.supportedTypes.add(IStructuredItemContentProvider.class);
+    this.supportedTypes.add(ITreeItemContentProvider.class);
+    this.supportedTypes.add(IItemLabelProvider.class);
+    this.supportedTypes.add(IItemPropertySource.class);  
   }
   
   
@@ -62,19 +66,20 @@ public class PosixAdaptersFactory extends PosixAdapterFactory implements Compose
     
   }
 
-  public void addListener( final INotifyChangedListener arg0 ) {
-    // TODO Auto-generated method stub
-    
+  public void addListener( final INotifyChangedListener l ) {
+    if ( ! this.listeners.contains( l ) ) {
+      this.listeners.add( l );
+    }
   }
 
-  public void fireNotifyChanged( final Notification arg0 ) {
-    // TODO Auto-generated method stub
-    
+  public void fireNotifyChanged( final Notification n ) {
+    for ( INotifyChangedListener l : this.listeners ) {
+      l.notifyChanged( n );
+    }
   }
 
-  public void removeListener( final INotifyChangedListener arg0 ) {
-    // TODO Auto-generated method stub
-    
+  public void removeListener(final INotifyChangedListener l ) {
+    this.listeners.remove( l );
   }
 
   public void dispose() {

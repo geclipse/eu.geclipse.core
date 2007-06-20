@@ -32,7 +32,8 @@ import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
@@ -58,34 +59,35 @@ import eu.geclipse.jsdl.model.ResourcesType;
  */
 
 
-public class ResourcesTypeAdapter {
+public class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   
-  Hashtable< Integer, Text > widgetFeaturesMap = new Hashtable< Integer, Text >();
-  Hashtable< Integer, List > listFeaturesMap = new Hashtable< Integer, List >();
-  Hashtable< Integer, Combo > comboFeaturesMap = new Hashtable< Integer, Combo >();
-  Hashtable<String, EStructuralFeature> eStructuralFeaturesMap 
+  protected Hashtable< Integer, Text > widgetFeaturesMap = new Hashtable< Integer, Text >();
+  protected Hashtable< Integer, List > listFeaturesMap = new Hashtable< Integer, List >();
+  protected Hashtable< Integer, Combo > comboFeaturesMap = new Hashtable< Integer, Combo >();
+  protected Hashtable<String, EStructuralFeature> eStructuralFeaturesMap 
                                   = new Hashtable<String, EStructuralFeature>();
   
-  private ResourcesType resourcesType 
+  protected ResourcesType resourcesType 
                                   = JsdlFactory.eINSTANCE.createResourcesType();
   
-  private CandidateHostsType candidateHosts 
+  protected CandidateHostsType candidateHosts 
                              = JsdlFactory.eINSTANCE.createCandidateHostsType();
   
-  private OperatingSystemType operatingSystemType 
+  protected OperatingSystemType operatingSystemType 
                             = JsdlFactory.eINSTANCE.createOperatingSystemType();
   
-  private OperatingSystemTypeType operatingSystemTypeType
+  protected OperatingSystemTypeType operatingSystemTypeType
                         = JsdlFactory.eINSTANCE.createOperatingSystemTypeType();
   
-  private FileSystemType fileSystemType 
+  protected FileSystemType fileSystemType 
                                  = JsdlFactory.eINSTANCE.createFileSystemType();
   
-  private CPUArchitectureType cpuArchitectureType = 
+  protected CPUArchitectureType cpuArchitectureType = 
                               JsdlFactory.eINSTANCE.createCPUArchitectureType();
   
   
-  private Boolean adapterRefreshed = false;
+  private boolean adapterRefreshed = false;
+  private boolean isNotifyAllowed = true;
   
   
   
@@ -100,11 +102,11 @@ public class ResourcesTypeAdapter {
   
   private void  getTypeForAdapter(final EObject rootJsdlElement){
     
-    TreeIterator iterator = rootJsdlElement.eAllContents();
+    TreeIterator <EObject> iterator = rootJsdlElement.eAllContents();
     
     while ( iterator.hasNext (  )  )  {  
    
-      EObject eObject = (EObject) iterator.next();
+      EObject eObject = iterator.next();
           
       if ( eObject instanceof ResourcesType ) {
         
@@ -125,15 +127,22 @@ public class ResourcesTypeAdapter {
   }
   
   
+  protected void contentChanged(){
+    if (this.isNotifyAllowed){
+      fireNotifyChanged( null);
+    }
+  }
   
-  public void attachToHostName(final List widget){    
-    this.listFeaturesMap.put( JsdlPackage.RESOURCES_TYPE__CANDIDATE_HOSTS
-                                , widget );
+  
+  
+  public void attachToHostName(final List widget){ 
+    Integer featureID = new Integer(JsdlPackage.RESOURCES_TYPE__CANDIDATE_HOSTS);
+    this.listFeaturesMap.put( featureID , widget );
        
   } // End attachToHostName()
   
   
-  public void attachToDelete(final Button button, final List list){
+  public void attachToDelete(final Button button, final List list){    
     button.addSelectionListener(new SelectionListener() {
 
       public void widgetSelected(final SelectionEvent event) {        
@@ -152,7 +161,7 @@ public class ResourcesTypeAdapter {
 
   public void performAdd(final List list, final String name, final Object value) {
     
-    EStructuralFeature eFeature = null;
+    EStructuralFeature eStructuralFeature = null;
     Collection<String> collection = new ArrayList<String>();
     int featureID = JsdlPackage.RESOURCES_TYPE__CANDIDATE_HOSTS;
      
@@ -162,16 +171,20 @@ public class ResourcesTypeAdapter {
       collection.add( list.getItem( i ) );
     }
    
-    eFeature = this.candidateHosts.eClass().getEStructuralFeature( featureID );
-    this.candidateHosts.eSet(eFeature, collection);
+    eStructuralFeature = this.candidateHosts.eClass().getEStructuralFeature( featureID );
+    // Create association of Estrctural Feature in the FeatureMap.
+    this.eStructuralFeaturesMap.put( value.toString(), eStructuralFeature );
+    this.candidateHosts.eSet(eStructuralFeature, collection);
    
-    eFeature = null;
+    this.contentChanged();
+    
+    eStructuralFeature = null;
     collection = null;
     
   }
   
   
-  private void performDelete(final List list, final String key){
+  protected void performDelete(final List list, final String key){
     
     EStructuralFeature eStructuralFeature;
     
@@ -179,31 +192,37 @@ public class ResourcesTypeAdapter {
      if (this.eStructuralFeaturesMap.containsKey( key ) ){
       eStructuralFeature = this.eStructuralFeaturesMap.get( key );
     
-      System.out.println("IN0");
-    /* Delete only Multi-Valued Elements */
+      /* Delete only Multi-Valued Elements */
         ((java.util.List<?>)this.candidateHosts.eGet(eStructuralFeature))
                                                                    .remove(key);
         list.remove( key );    
         
-        System.out.println("CP: " +eStructuralFeature.getName().toString());
+       
         if (list.getItemCount() == 0)
         {
-          System.out.println("IN getItem");
+       
           //FIXME Does not remove the <CandidateHosts> element.
           ((java.util.List<?>)this.resourcesType.eGet(eStructuralFeature))
                                                                    .remove(key);
          
         }
+        this.removeFromMap( key );
+        this.contentChanged();
     
     }
     
     eStructuralFeature = null;
   }
-    
   
+  
+  private void removeFromMap (final Object key){
+    this.eStructuralFeaturesMap.remove( key );
+  }
+    
+   
   public void attachToOSType(final Combo widget){    
-    this.comboFeaturesMap.put( JsdlPackage.RESOURCES_TYPE__OPERATING_SYSTEM
-                                , widget );
+    Integer featureID = new Integer(JsdlPackage.RESOURCES_TYPE__OPERATING_SYSTEM);
+    this.comboFeaturesMap.put( featureID , widget );
         
     /* Populate the Combo Box with the CPU Architecture Literals */    
     EEnum cFEnum = JsdlPackage.Literals.OPERATING_SYSTEM_TYPE_ENUMERATION;
@@ -215,13 +234,18 @@ public class ResourcesTypeAdapter {
         
     widget.addSelectionListener(new SelectionListener() {
       public void widgetSelected(final SelectionEvent e) {
-        operatingSystemTypeType.setOperatingSystemName(
-             OperatingSystemTypeEnumeration.get( widget.getSelectionIndex() ) );
-        operatingSystemType.setOperatingSystemType(operatingSystemTypeType);
+        ResourcesTypeAdapter.this.operatingSystemTypeType
+         .setOperatingSystemName(OperatingSystemTypeEnumeration
+                                 .get( widget.getSelectionIndex() ) );
+        
+        ResourcesTypeAdapter.this.operatingSystemType
+                             .setOperatingSystemType(
+                             ResourcesTypeAdapter.this.operatingSystemTypeType);
+        ResourcesTypeAdapter.this.contentChanged();
       }
 
       public void widgetDefaultSelected(final SelectionEvent e) {
-        
+          //Do Nothing
       }
     });
      
@@ -229,9 +253,9 @@ public class ResourcesTypeAdapter {
   
   
   
-  public void attachToCPUArchitecture(final Combo widget){    
-    this.comboFeaturesMap.put( JsdlPackage.RESOURCES_TYPE__CPU_ARCHITECTURE
-                                , widget );
+  public void attachToCPUArchitecture(final Combo widget){
+    Integer featureID = new Integer (JsdlPackage.RESOURCES_TYPE__CPU_ARCHITECTURE);
+    this.comboFeaturesMap.put( featureID, widget );
         
     /* Populate the Combo Box with the CPU Architecture Literals */    
     EEnum cFEnum = JsdlPackage.Literals.PROCESSOR_ARCHITECTURE_ENUMERATION;
@@ -243,12 +267,15 @@ public class ResourcesTypeAdapter {
         
     widget.addSelectionListener(new SelectionListener() {
       public void widgetSelected(final SelectionEvent e) {
-        cpuArchitectureType.setCPUArchitectureName(ProcessorArchitectureEnumeration
+        ResourcesTypeAdapter.this.cpuArchitectureType.setCPUArchitectureName(
+                                              ProcessorArchitectureEnumeration
                                              .get( widget.getSelectionIndex()));
+        
+        ResourcesTypeAdapter.this.contentChanged();
       }
 
       public void widgetDefaultSelected(final SelectionEvent e) {
-        
+       // Do Nothing 
       }
     });
      
@@ -256,86 +283,97 @@ public class ResourcesTypeAdapter {
   
   
   
-  public void attachToOSVersion(final Text widget){    
-    this.widgetFeaturesMap.put( JsdlPackage.DOCUMENT_ROOT__OPERATING_SYSTEM_VERSION
-                                , widget );    
-     widget.addFocusListener( new org.eclipse.swt.events.FocusListener() {
-      public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
-        operatingSystemType.setOperatingSystemVersion( widget.getText() );
-       
-      }
-      public void focusGained(final FocusEvent e ) { }
-     
-    } );
-     
+  public void attachToOSVersion(final Text widget){
+    Integer featureID = new Integer (JsdlPackage.DOCUMENT_ROOT__OPERATING_SYSTEM_VERSION);
+    this.widgetFeaturesMap.put( featureID , widget );
+    
+    widget.addModifyListener( new ModifyListener() {
+      
+      public void modifyText( final ModifyEvent e ) {
+        ResourcesTypeAdapter.this.operatingSystemType
+                                 .setOperatingSystemVersion( widget.getText() );
+        contentChanged();
+          
+        }
+      } );
+    
+         
   } // End attachToOSVersion()
   
   
   
-  public void attachToOSDescription(final Text widget){    
-    this.widgetFeaturesMap.put( JsdlPackage.DOCUMENT_ROOT__DESCRIPTION
-                                , widget );    
-     widget.addFocusListener( new org.eclipse.swt.events.FocusListener() {
-      public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
-       operatingSystemType.setDescription( widget.getText() );
-      }
-      public void focusGained(final FocusEvent e ) { }
-     
-    } );
-     
+  public void attachToOSDescription(final Text widget){
+    Integer featureID = new Integer(JsdlPackage.DOCUMENT_ROOT__DESCRIPTION);
+    this.widgetFeaturesMap.put( featureID , widget );
+    
+    widget.addModifyListener( new ModifyListener() {
+      
+      public void modifyText( final ModifyEvent e ) {
+        ResourcesTypeAdapter.this.operatingSystemType
+                                            .setDescription( widget.getText() );  
+        contentChanged();
+          
+        }
+      } );   
+        
   } // End attachToOSDescription()
   
   
   
-  public void attachToFileSystemName(final Text widget){    
-    this.widgetFeaturesMap.put( JsdlPackage.FILE_SYSTEM_TYPE__NAME
-                                , widget );    
-     widget.addFocusListener( new org.eclipse.swt.events.FocusListener() {
-      public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
-      fileSystemType.setName( widget.getText() );
-      }
-      public void focusGained(final FocusEvent e ) { }
-     
-    } );
-     
+  public void attachToFileSystemName(final Text widget){
+    Integer featureID = new Integer(JsdlPackage.FILE_SYSTEM_TYPE__NAME);
+    this.widgetFeaturesMap.put( featureID , widget );
+    
+    widget.addModifyListener( new ModifyListener() {
+      
+      public void modifyText( final ModifyEvent e ) {
+        ResourcesTypeAdapter.this.fileSystemType.setName( widget.getText() );
+        contentChanged();
+          
+        }
+      } );
+    
   } // End attachToFileSystemName()
   
   
   
-  public void attachToFileSystemDescription(final Text widget){    
-    this.widgetFeaturesMap.put( JsdlPackage.FILE_SYSTEM_TYPE__DESCRIPTION
-                                , widget );    
-     widget.addFocusListener( new org.eclipse.swt.events.FocusListener() {
-      public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
-      fileSystemType.setDescription( widget.getText() );
-      }
-      public void focusGained(final FocusEvent e ) { }
-     
-    } );
-     
+  public void attachToFileSystemDescription(final Text widget){
+    Integer featureID = new Integer(JsdlPackage.FILE_SYSTEM_TYPE__DESCRIPTION);
+    this.widgetFeaturesMap.put( featureID , widget );
+    
+    widget.addModifyListener( new ModifyListener() {
+      
+      public void modifyText( final ModifyEvent e ) {
+        ResourcesTypeAdapter.this.fileSystemType.setDescription( widget.getText() );
+        contentChanged();          
+        }
+      } );
+         
   } // End attachToFileSystemDescription()
   
   
   
-  public void attachToFileSystemMountPoint(final Text widget){    
-    this.widgetFeaturesMap.put( JsdlPackage.FILE_SYSTEM_TYPE__MOUNT_POINT
-                                , widget );    
-     widget.addFocusListener( new org.eclipse.swt.events.FocusListener() {
-      public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
-      fileSystemType.setMountPoint( widget.getText() );
-      }
-      public void focusGained(final FocusEvent e ) { }
-     
-    } );
-     
+  public void attachToFileSystemMountPoint(final Text widget){
+    Integer featureID = new Integer(JsdlPackage.FILE_SYSTEM_TYPE__MOUNT_POINT);
+    this.widgetFeaturesMap.put( featureID , widget );
+    
+    widget.addModifyListener( new ModifyListener() {
+      
+      public void modifyText( final ModifyEvent e ) {
+        ResourcesTypeAdapter.this.fileSystemType.setMountPoint( widget.getText() );
+        contentChanged();          
+        }
+      } );    
+          
   } // End attachToFileSystemMountPoint()
   
   
   
   public void attachToFileSystemDiskSpace(final Text text, final Combo combo){
-    this.widgetFeaturesMap.put (JsdlPackage.FILE_SYSTEM_TYPE__DISK_SPACE
+    
+    this.widgetFeaturesMap.put (new Integer(JsdlPackage.FILE_SYSTEM_TYPE__DISK_SPACE)
                                 , text );
-    this.comboFeaturesMap.put( JsdlPackage.FILE_SYSTEM_TYPE__DISK_SPACE
+    this.comboFeaturesMap.put( new Integer(JsdlPackage.FILE_SYSTEM_TYPE__DISK_SPACE)
                                 , combo );
     
     /* Populate the Combo Box with the CPU Architecture Literals */    
@@ -348,19 +386,20 @@ public class ResourcesTypeAdapter {
         
     combo.addSelectionListener(new SelectionListener() {
       public void widgetSelected(final SelectionEvent e) {
+        //
       }
 
       public void widgetDefaultSelected(final SelectionEvent e) {
-        
+        //
       }
     });
   }
   
   
   
-  public void attachToFileSystemType(final Combo widget){    
-    this.comboFeaturesMap.put( JsdlPackage.DOCUMENT_ROOT__FILE_SYSTEM_TYPE
-                                , widget );
+  public void attachToFileSystemType(final Combo widget){
+    Integer featureID = new Integer(JsdlPackage.DOCUMENT_ROOT__FILE_SYSTEM_TYPE);
+    this.comboFeaturesMap.put( featureID , widget );
         
     /* Populate the Combo Box with the File System Type Literals */    
     EEnum cFEnum = JsdlPackage.Literals.FILE_SYSTEM_TYPE_ENUMERATION;
@@ -372,13 +411,16 @@ public class ResourcesTypeAdapter {
         
     widget.addSelectionListener(new SelectionListener() {
       public void widgetSelected(final SelectionEvent e) {
-        fileSystemType.setFileSystemType(FileSystemTypeEnumeration
-                                         .get( widget.getSelectionIndex() ) );
+        ResourcesTypeAdapter.this.fileSystemType
+                 .setFileSystemType(FileSystemTypeEnumeration.get( 
+                                                 widget.getSelectionIndex() ) );
+        
+        ResourcesTypeAdapter.this.contentChanged();
         
       }
 
       public void widgetDefaultSelected(final SelectionEvent e) {
-        
+        // Do Nothing
       }
     });
      
@@ -388,6 +430,7 @@ public class ResourcesTypeAdapter {
   
   public void load() {
     
+    this.isNotifyAllowed = false;
     Text widgetName = null;    
     List listName = null;
     Combo comboName = null;
@@ -396,9 +439,11 @@ public class ResourcesTypeAdapter {
     if(this.resourcesType != null) {
       EClass eClass = this.resourcesType.eClass();
              
-        
-      for (Iterator iter = eClass.getEAllStructuralFeatures().iterator(); iter.hasNext();) {      
-        EStructuralFeature eStructuralFeature = (EStructuralFeature) iter.next();
+      EList<EStructuralFeature> eAllStructuralFeaures = eClass.getEAllStructuralFeatures();
+      
+      for( EStructuralFeature eStructuralFeature : eAllStructuralFeaures ) {
+            
+       // EStructuralFeature eStructuralFeature = iter.next();
         
         int featureID = eStructuralFeature.getFeatureID();
 
@@ -412,7 +457,7 @@ public class ResourcesTypeAdapter {
             case JsdlPackage.RESOURCES_TYPE__ANY :
             break;            
             case JsdlPackage.RESOURCES_TYPE__CANDIDATE_HOSTS :{
-              listName = this.listFeaturesMap.get( featureID );
+              listName = this.listFeaturesMap.get( new Integer(featureID) );
               this.candidateHosts = (CandidateHostsType) this.resourcesType
                                                     .eGet( eStructuralFeature );
               EList valueEList = this.candidateHosts.getHostName();
@@ -423,7 +468,7 @@ public class ResourcesTypeAdapter {
                 
               for (Iterator it = valueEList.iterator(); it.hasNext();){
                 eFeatureInstance = it.next();              
-                eStructuralFeaturesMap.put( eFeatureInstance.toString(),
+                this.eStructuralFeaturesMap.put( eFeatureInstance.toString(),
                                                 eStructuralFeature );
                
                   listName.add(eFeatureInstance.toString());
@@ -436,19 +481,20 @@ public class ResourcesTypeAdapter {
              this.operatingSystemType = (OperatingSystemType) this.resourcesType
                                                     .eGet( eStructuralFeature );
              
-             comboName = this.comboFeaturesMap.get( featureID );
+             comboName = this.comboFeaturesMap.get( new Integer(featureID) );
              comboName.setText(this.operatingSystemType.getOperatingSystemType()
                                .getOperatingSystemName().getLiteral());
              
-            widgetName = widgetFeaturesMap.get( JsdlPackage.
-                                      DOCUMENT_ROOT__OPERATING_SYSTEM_VERSION );
+            widgetName = this.widgetFeaturesMap.get( new Integer
+                        (JsdlPackage.DOCUMENT_ROOT__OPERATING_SYSTEM_VERSION) );
             widgetName.setText( this.operatingSystemType
                                                   .getOperatingSystemVersion());
              
-            widgetName = widgetFeaturesMap.get( JsdlPackage.
-                                                DOCUMENT_ROOT__DESCRIPTION );
-                      widgetName.setText( this.operatingSystemType
-                                                             .getDescription());           
+            widgetName = this.widgetFeaturesMap
+                    .get( new Integer(JsdlPackage.DOCUMENT_ROOT__DESCRIPTION) );
+            
+            widgetName.setText( this.operatingSystemType.getDescription());
+            
             }
             break;            
             case JsdlPackage.RESOURCES_TYPE__FILE_SYSTEM: {
@@ -461,24 +507,28 @@ public class ResourcesTypeAdapter {
                 this.fileSystemType = (FileSystemType) it.next();
                 
                 widgetName = this.widgetFeaturesMap
-                              .get( JsdlPackage.FILE_SYSTEM_TYPE__NAME );
+                        .get( new Integer(JsdlPackage.FILE_SYSTEM_TYPE__NAME) );
+                
                 widgetName.setText( this.fileSystemType.getName() );
                 
                 widgetName = this.widgetFeaturesMap
-                              .get( JsdlPackage.FILE_SYSTEM_TYPE__DESCRIPTION );
+                  .get(new Integer(JsdlPackage.FILE_SYSTEM_TYPE__DESCRIPTION) );
+                
                 widgetName.setText( this.fileSystemType.getDescription() );
                 
                 
                 widgetName = this.widgetFeaturesMap
-                               .get( JsdlPackage.FILE_SYSTEM_TYPE__MOUNT_POINT );
+                 .get( new Integer(JsdlPackage.FILE_SYSTEM_TYPE__MOUNT_POINT) );
+                
                 widgetName.setText( this.fileSystemType.getMountPoint() );
                 
                 widgetName = this.widgetFeaturesMap
-                               .get( JsdlPackage.FILE_SYSTEM_TYPE__DISK_SPACE );
+                  .get( new Integer(JsdlPackage.FILE_SYSTEM_TYPE__DISK_SPACE) );
                 
 
                 comboName = this.comboFeaturesMap
-                             .get (JsdlPackage.DOCUMENT_ROOT__FILE_SYSTEM_TYPE);
+                .get (new Integer(JsdlPackage.DOCUMENT_ROOT__FILE_SYSTEM_TYPE));
+                
                 comboName.setText(this.fileSystemType.getFileSystemType()
                                   .getLiteral());
                
@@ -492,7 +542,7 @@ public class ResourcesTypeAdapter {
               this.cpuArchitectureType = (CPUArchitectureType) this.resourcesType
                                                     .eGet( eStructuralFeature );
                             
-             comboName = this.comboFeaturesMap.get( featureID );
+             comboName = this.comboFeaturesMap.get( new Integer(featureID) );
              comboName.setText( this.cpuArchitectureType.getCPUArchitectureName()
                                                                  .getLiteral());
             }
@@ -506,7 +556,7 @@ public class ResourcesTypeAdapter {
         
         else {
 
-                 
+             // Do Nothing    
         
         } // End Else
         
@@ -515,6 +565,8 @@ public class ResourcesTypeAdapter {
       } // End Iterator
        
     } //end if null    
+    
+    this.isNotifyAllowed = true;
     
   }// end load()
   

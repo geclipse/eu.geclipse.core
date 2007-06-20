@@ -22,7 +22,8 @@ import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
-import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.events.ExpansionAdapter;
 import org.eclipse.ui.forms.events.ExpansionEvent;
@@ -36,33 +37,47 @@ import eu.geclipse.jsdl.model.JsdlPackage;
  * @author nickl
  *
  */
-public class ApplicationTypeAdapter {
+public class ApplicationTypeAdapter extends JsdlAdaptersFactory {
   
-  Hashtable< Integer, Text > widgetFeaturesMap = new Hashtable< Integer, Text >();
-  private ApplicationType applicationType; 
+  
+  protected ApplicationType applicationType = JsdlFactory.eINSTANCE
+                                                       .createApplicationType();
+  private boolean isNotifyAllowed = true;
+  private boolean adapterRefreshed = false;
+  
+  private Hashtable< Integer, Text > widgetFeaturesMap = 
+                                               new Hashtable< Integer, Text >();
+  
     
   /*
    * Class Constructor
    */
   public ApplicationTypeAdapter (final EObject rootJsdlElement){
     
-    this.applicationType = JsdlFactory.eINSTANCE.createApplicationType();    
+    //this.applicationType = JsdlFactory.eINSTANCE.createApplicationType();    
     getTypeForAdapter(rootJsdlElement);
     
   } // End Constructor
   
   
   
+  protected void contentChanged(){
+    if (this.isNotifyAllowed){
+      fireNotifyChanged( null);
+    }
+  }
+    
+  
   /*
    * Get the Application Type Element from the root Jsdl Element.
    */  
   private void  getTypeForAdapter(final EObject rootJsdlElement){
     
-    TreeIterator iterator = rootJsdlElement.eAllContents();
+    TreeIterator<EObject> iterator = rootJsdlElement.eAllContents();
     
     while ( iterator.hasNext (  )  )  {  
    
-      EObject testType = (EObject) iterator.next();
+      EObject testType = iterator.next();
           
       if ( testType instanceof ApplicationType ) {
         this.applicationType = (ApplicationType) testType;  
@@ -75,10 +90,12 @@ public class ApplicationTypeAdapter {
   
   
   
+  
   /*
    * Allows to set the adapter content on demand and not through the constructor.
    */
   public void setContent(final EObject rootJsdlElement){
+    this.adapterRefreshed = true;
     getTypeForAdapter( rootJsdlElement );    
   }
   
@@ -87,16 +104,17 @@ public class ApplicationTypeAdapter {
   /*
    * Adapter interface to attach to the ApplicationName widget.
    */
-  public void attachToApplicationName(final Text widget){    
-    this.widgetFeaturesMap.put( JsdlPackage.APPLICATION_TYPE__APPLICATION_NAME
-                                , widget );
+  public void attachToApplicationName(final Text widget){
+    Integer featureID = new Integer(JsdlPackage.APPLICATION_TYPE__APPLICATION_NAME);
+    this.widgetFeaturesMap.put( featureID, widget );
+    
+    widget.addModifyListener( new ModifyListener() {
+      
+      public void modifyText( final ModifyEvent e ) {
+        ApplicationTypeAdapter.this.applicationType.setApplicationName(widget.getText());
+        contentChanged();
         
-     widget.addFocusListener( new org.eclipse.swt.events.FocusListener() {
-      public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
-        applicationType.setApplicationName(widget.getText());    
       }
-      public void focusGained( final FocusEvent e ) { }
-     
     } );
   }
   
@@ -105,35 +123,37 @@ public class ApplicationTypeAdapter {
   /*
    * Adapter interface to attach to the ApplicationVersion widget.
    */
-  public void attachToApplicationVersion(final Text widget){    
-    this.widgetFeaturesMap.put( JsdlPackage.APPLICATION_TYPE__APPLICATION_VERSION
-                                , widget );
+  public void attachToApplicationVersion(final Text widget){
+    Integer featureID = new Integer(JsdlPackage.APPLICATION_TYPE__APPLICATION_VERSION);
+    this.widgetFeaturesMap.put( featureID , widget );
         
-     widget.addFocusListener( new org.eclipse.swt.events.FocusListener() {
-      public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
-        applicationType.setApplicationVersion(widget.getText());    
+    widget.addModifyListener( new ModifyListener() {
+      
+      public void modifyText( final ModifyEvent e ) {
+        ApplicationTypeAdapter.this.applicationType.setApplicationVersion(widget.getText());
+        contentChanged();
+        
       }
-      public void focusGained(final FocusEvent e ) { }
-     
-    } );
-  }
+    } ); 
+   }
   
   
   
   /*
    * Adapter interface to attach to the ApplicationDescription widget.
    */
-  public void attachToApplicationDescription(final Text widget){    
-    this.widgetFeaturesMap.put( JsdlPackage.APPLICATION_TYPE__DESCRIPTION
-                                , widget );
+  public void attachToApplicationDescription(final Text widget){
+    Integer featureID = new Integer(JsdlPackage.APPLICATION_TYPE__DESCRIPTION);
+    this.widgetFeaturesMap.put( featureID , widget );
+    
+    widget.addModifyListener( new ModifyListener() {
+      
+      public void modifyText( final ModifyEvent e ) {
+        ApplicationTypeAdapter.this.applicationType.setDescription(widget.getText());
+        contentChanged();
         
-     widget.addFocusListener( new org.eclipse.swt.events.FocusListener() {
-      public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
-        applicationType.setDescription(widget.getText());    
       }
-      public void focusGained( final FocusEvent e ) { }
-     
-    } );
+    } );    
   }
   
   
@@ -142,11 +162,9 @@ public class ApplicationTypeAdapter {
      section.addExpansionListener( new ExpansionAdapter() {
        public void expansionStateChanged(final ExpansionEvent e) {
             if (e.data.equals(true)) {
-              System.out.println("Expanded");
-              createApplicationType();
+          //    createApplicationType();
             }
-            else{
-              System.out.println("NOT Expanded");
+            else{              
              // removeApplicationType();
             }
         }
@@ -159,6 +177,7 @@ public class ApplicationTypeAdapter {
    */
   public void load()
   {
+    this.isNotifyAllowed = false;
     EObject object = this.applicationType;
     Text widgetName = null;
     //EDataType dataType = null;
@@ -174,43 +193,27 @@ public class ApplicationTypeAdapter {
         //Get Attribute Value.
         Object value = object.eGet( attribute );        
              
-        Integer featureID = attribute.getFeatureID();
+        Integer featureID = new Integer(attribute.getFeatureID());
               
         //Check if Attribute has any value
         if (object.eIsSet( attribute )){          
            widgetName = this.widgetFeaturesMap.get( featureID );
                  
          //FIXME - any check should be removed..check cause of it.
-           if (attribute.getName().toString() != "any"){ //$NON-NLS-1$
+           if (attribute.getFeatureID() != JsdlPackage.APPLICATION_TYPE__ANY){
              widgetName.setText(value.toString());
          } //end if
                    
         } //end if
       } //end for
-    } //end if    
+    } //end if
+    this.isNotifyAllowed = true;
   } // End void load()
   
   
   /*
    * Creates the Application Type Elements in the JSDL document.
    */
-  
-  private void createApplicationType(){
-   // System.out.println("create");
-    getParent( this.applicationType );
-    
-        
-  }
-  
-  private EObject getParent(final EObject child){
-    
-    EObject parent = null;
-    parent = child.eContainer();    
-    
-    System.out.println("Parent:" + parent.toString());
-    
-    return parent;
-  }
   
   
   /*

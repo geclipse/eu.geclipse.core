@@ -48,11 +48,11 @@ public class JsdlAdaptersFactory extends JsdlAdapterFactory implements Composeab
     = new ArrayList< INotifyChangedListener >();
     
   public JsdlAdaptersFactory(){
-    supportedTypes.add(IEditingDomainItemProvider.class);
-    supportedTypes.add(IStructuredItemContentProvider.class);
-    supportedTypes.add(ITreeItemContentProvider.class);
-    supportedTypes.add(IItemLabelProvider.class);
-    supportedTypes.add(IItemPropertySource.class);  
+    this.supportedTypes.add(IEditingDomainItemProvider.class);
+    this.supportedTypes.add(IStructuredItemContentProvider.class);
+    this.supportedTypes.add(ITreeItemContentProvider.class);
+    this.supportedTypes.add(IItemLabelProvider.class);
+    this.supportedTypes.add(IItemPropertySource.class);  
     
   }
   

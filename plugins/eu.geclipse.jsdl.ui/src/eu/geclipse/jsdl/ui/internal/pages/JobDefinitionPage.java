@@ -26,7 +26,6 @@ package eu.geclipse.jsdl.ui.internal.pages;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
-import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -46,22 +45,26 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
-
 import eu.geclipse.jsdl.jsdl.JobDefinitionTypeAdapter;
 import eu.geclipse.jsdl.jsdl.JobIdentificationTypeAdapter;
-import eu.geclipse.jsdl.ui.editors.JsdlMultiPageEditor;
+import eu.geclipse.jsdl.ui.editors.JsdlEditor;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.dialogs.MultipleInputDialog;
 
 public class JobDefinitionPage extends FormPage
     implements INotifyChangedListener {
+  
+  protected Object value = null;
 
   Text txtId = null;
   Text txtDescription = null;
   Text txtJobName = null;
   
-  Table lstJobProject = null;
-  Table lstJobAnnotation = null;
+//  Table lstJobProject = null;
+//  Table lstJobAnnotation = null;
+  
+  List lstJobProject = null;
+  List lstJobAnnotation = null;
   
   Label lblJobId = null;
   Label lblJobDescripiton = null;
@@ -78,24 +81,24 @@ public class JobDefinitionPage extends FormPage
   Table testTable = null;
   
   
-  Object value = null;
   
-  JsdlMultiPageEditor editor;
+  
+  JsdlEditor editor;
    
   //Hashtable< String, Text > widgetFeaturesMap = new Hashtable< String, Text >();
   
   
-  private JobDefinitionTypeAdapter jobDefinitionTypeAdapter ;
-  private JobIdentificationTypeAdapter jobIdentificationTypeAdapter;
+  protected JobDefinitionTypeAdapter jobDefinitionTypeAdapter ;
+  protected JobIdentificationTypeAdapter jobIdentificationTypeAdapter;
     
   private boolean contentRefreshed = false;
-  private boolean isDirtyVar = false;
+  private boolean dirtyFlag = false;
   
-  public JobDefinitionPage( final JsdlMultiPageEditor editor) {
+  public JobDefinitionPage( final JsdlEditor editor) {
    
     
-    super(editor, Messages.getString("JobDefinitionPage_jobDefinitionId"), 
-                  Messages.getString("JobDefinitionPage_JobDefinitionTitle"));
+    super(editor, "",  //$NON-NLS-1$
+                  Messages.getString("JobDefinitionPage_JobDefinitionTitle")); //$NON-NLS-1$
     
     this.editor = editor;
   }
@@ -129,6 +132,7 @@ public class JobDefinitionPage extends FormPage
       this.jobDefinitionTypeAdapter = new JobDefinitionTypeAdapter(rootJsdlElement);
       this.jobDefinitionTypeAdapter.addListener( this );
       this.jobIdentificationTypeAdapter = new JobIdentificationTypeAdapter(rootJsdlElement);
+      this.jobIdentificationTypeAdapter.addListener( this );
    }
           
   } // End void getPageContent()   
@@ -136,13 +140,18 @@ public class JobDefinitionPage extends FormPage
 
   @Override
   public boolean isDirty() {
-    return isDirtyVar;
+    
+    return this.dirtyFlag;
     
   }
   
   //FIXME Uncomment below for doSave and setDiry
-  private void setDirty(final boolean dirtyFlag) {
-    isDirtyVar = dirtyFlag;
+  public void setDirty(final boolean dirtyFlag) {
+    if (this.dirtyFlag != dirtyFlag) {
+      this.dirtyFlag = dirtyFlag;     
+      this.getEditor().editorDirtyStateChanged();  
+    }
+    
   }
 
  
@@ -156,7 +165,7 @@ public class JobDefinitionPage extends FormPage
     
         
     ScrolledForm form = managedForm.getForm();
-    form.setText(Messages.getString("JobDefinitionPage_JobDefinitionPageTitle")); 
+    form.setText(Messages.getString("JobDefinitionPage_JobDefinitionPageTitle"));  //$NON-NLS-1$
     
   
     ColumnLayout layout = new ColumnLayout();
@@ -172,8 +181,8 @@ public class JobDefinitionPage extends FormPage
 
         
    this.jobDefComposite = createJobDefinitionSection(managedForm,
-                    Messages.getString("JobDefinitionPage_JobDefinitionTitle"), 
-                    Messages.getString("JobDefinitionPage_JobDefinitionDescr"));  
+                    Messages.getString("JobDefinitionPage_JobDefinitionTitle"),  //$NON-NLS-1$
+                    Messages.getString("JobDefinitionPage_JobDefinitionDescr"));   //$NON-NLS-1$
          
      
      this.jobDefinitionTypeAdapter.load();
@@ -181,13 +190,13 @@ public class JobDefinitionPage extends FormPage
      
 
     this.jobIdentComposite = createJobIdentificationSection(managedForm, 
-                 Messages.getString("JobDefinitionPage_JobIdentificationTitle"), 
-                 Messages.getString("JobDefinitionPage_JobIdentificationDescr"));
+                 Messages.getString("JobDefinitionPage_JobIdentificationTitle"),  //$NON-NLS-1$
+                 Messages.getString("JobDefinitionPage_JobIdentificationDescr")); //$NON-NLS-1$
     
     this.jobIdentificationTypeAdapter.load();
     
     form.setBackgroundImage(Activator.getDefault().
-                            getImageRegistry().get( "formsbackground" ));
+                            getImageRegistry().get( "formsbackground" )); //$NON-NLS-1$
 
   }
   
@@ -240,9 +249,9 @@ public class JobDefinitionPage extends FormPage
     GridData gd;
   
     this.lblJobId = toolkit.createLabel(client,
-                       Messages.getString("JobDefinitionPage_JobDefinitionId"));
+                       Messages.getString("JobDefinitionPage_JobDefinitionId")); //$NON-NLS-1$
     
-    this.txtId = toolkit.createText(client,"", SWT.NONE);    
+    this.txtId = toolkit.createText(client,"", SWT.NONE);     //$NON-NLS-1$
     this.jobDefinitionTypeAdapter.attachID( this.txtId );
     
   
@@ -279,13 +288,13 @@ public class JobDefinitionPage extends FormPage
     
     /* ================================ Job Name ============================ */
     
-    toolkit.createLabel(client, Messages.getString("JobDefinitionPage_JobName"));
+    toolkit.createLabel(client, Messages.getString("JobDefinitionPage_JobName")); //$NON-NLS-1$
     gd = new GridData();
     gd.grabExcessHorizontalSpace = true;
     gd.verticalAlignment = GridData.CENTER;
     gd.horizontalSpan = 3;
     gd.widthHint = 300;
-    this.txtJobName = toolkit.createText(client,"", SWT.NONE); 
+    this.txtJobName = toolkit.createText(client,"", SWT.NONE);  //$NON-NLS-1$
     this.jobIdentificationTypeAdapter.attachToJobName( this.txtJobName );
 
     this.txtJobName.setLayoutData(gd);
@@ -294,14 +303,14 @@ public class JobDefinitionPage extends FormPage
     /* ========================= Job Description ============================ */
     
     this.lblJobDescripiton = toolkit.createLabel (client,
-                              Messages.getString("JobDefinitionPage_JobDescr"));
+                              Messages.getString("JobDefinitionPage_JobDescr")); //$NON-NLS-1$
     lblgd = new GridData();
     lblgd.verticalSpan = 1;
     this.lblJobDescripiton.setLayoutData (lblgd);
     
     
     
-    this.txtDescription = toolkit.createText(client,"", SWT.MULTI 
+    this.txtDescription = toolkit.createText(client, "", SWT.MULTI  //$NON-NLS-1$
                                                    | SWT.V_SCROLL | SWT.WRAP);
     
     this.jobIdentificationTypeAdapter.attachToJobDescription( this.txtDescription );
@@ -319,7 +328,7 @@ public class JobDefinitionPage extends FormPage
     /* ========================= Job Annotation ============================= */
     
     this.lblJobAnnotation = toolkit.createLabel(client,
-                         Messages.getString("JobDefinitionPage_JobAnnotation")); 
+                         Messages.getString("JobDefinitionPage_JobAnnotation"));  //$NON-NLS-1$
     lblgd = new GridData();
     lblgd.horizontalSpan = 1;
     lblgd.verticalSpan = 2;    
@@ -333,34 +342,26 @@ public class JobDefinitionPage extends FormPage
     gd.widthHint = 235;
     gd.heightHint = 150;
     
-//    testTable = new Table(client,SWT.SINGLE);
+
     
-//  
-//    TableColumn col1 = new TableColumn(testTable, SWT.NONE); 
-//    col1.setText( "COL1" );
-//    col1.setWidth( 50 );
+//    TableViewer annotationViewer = new TableViewer( client, SWT.BORDER );
+//    this.lstJobAnnotation = annotationViewer.getTable();
+//    annotationViewer.setContentProvider( new FeatureContentProvider() );
+//    annotationViewer.setLabelProvider( new FeatureLabelProvider() );
 //    
+//    this.lstJobAnnotation.setData( FormToolkit.KEY_DRAW_BORDER,
+//                                                      FormToolkit.TEXT_BORDER );
 //    
-//    TableItem item1 = new TableItem(testTable,0);    
-//    item1.setImage( Activator.getDefault().
-//                            getImageRegistry().get( "gridproject" ) );
-//    item1.setText( "HELLO1" );
-//
-//        
-//    testTable.setData(  FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER );
-//    testTable.setLayoutData( gd);
-                            
+//    this.jobIdentificationTypeAdapter.attachToJobAnnotation( annotationViewer );
+//    this.lstJobAnnotation.setLayoutData( gd );
     
-    TableViewer annotationViewer = new TableViewer( client, SWT.BORDER );
-    this.lstJobAnnotation = annotationViewer.getTable();
-    annotationViewer.setContentProvider( new FeatureContentProvider() );
-    annotationViewer.setLabelProvider( new FeatureLabelProvider() );
-    
+    this.lstJobAnnotation = new List(client, SWT.None);
     this.lstJobAnnotation.setData( FormToolkit.KEY_DRAW_BORDER,
                                                       FormToolkit.TEXT_BORDER );
     
-    this.jobIdentificationTypeAdapter.attachToJobAnnotation( annotationViewer );
+    this.jobIdentificationTypeAdapter.attachToJobAnnotation( this.lstJobAnnotation);
     this.lstJobAnnotation.setLayoutData( gd );
+    
 
     /* Create Button ADD */
     gd = new GridData();
@@ -368,15 +369,19 @@ public class JobDefinitionPage extends FormPage
     gd.verticalSpan = 1;
     gd.widthHint = 60;
     this.btnAdd = toolkit.createButton(client, 
-                                     Messages.getString("JsdlEditor_AddButton"),
+                                     Messages.getString("JsdlEditor_AddButton"), //$NON-NLS-1$
                                      SWT.PUSH);
     
-    btnAdd.addSelectionListener(new SelectionListener() {
+    this.btnAdd.addSelectionListener(new SelectionListener() {
      public void widgetSelected(final SelectionEvent event) {
        //FIXME Uncomment below for doSave and setDiry
-       //setDirty( true ); 
-       handleAddDialog(Messages.getString( "JobDefinitionPage_JobAnnotationDialog" ));
-       //jobIdentificationTypeAdapter.performAdd(lstJobAnnotation, "lstJobAnnotation", value);
+       handleAddDialog(Messages.getString( "JobDefinitionPage_JobAnnotationDialog" )); //$NON-NLS-1$
+       
+       JobDefinitionPage.this.jobIdentificationTypeAdapter
+                       .performAdd(JobDefinitionPage.this.lstJobAnnotation,
+                                  "lstJobAnnotation", //$NON-NLS-1$
+                                   JobDefinitionPage.this.value);
+       setDirty( true );
      }
 
       public void widgetDefaultSelected(final SelectionEvent event) {
@@ -393,14 +398,15 @@ public class JobDefinitionPage extends FormPage
     gd.widthHint = 60;
     gd.verticalAlignment = GridData.BEGINNING;         
     this.btnDel = toolkit.createButton(client,
-                       Messages.getString("JsdlEditor_RemoveButton"), SWT.PUSH); 
-    //this.jobIdentificationTypeAdapter.attachToDelete( this.btnDel, this.lstJobAnnotation);
+                       Messages.getString("JsdlEditor_RemoveButton"), SWT.PUSH);  //$NON-NLS-1$
+    
+    this.jobIdentificationTypeAdapter.attachToDelete( this.btnDel, this.lstJobAnnotation);
     this.btnDel.setLayoutData( gd );
     
     /* ============================= Job Project =============================*/
     
      this.lblJobProject = toolkit.createLabel(client,
-                            Messages.getString("JobDefinitionPage_JobProject"));
+                            Messages.getString("JobDefinitionPage_JobProject")); //$NON-NLS-1$
      
      lblgd = new GridData();
      lblgd.verticalSpan = 2;
@@ -413,15 +419,22 @@ public class JobDefinitionPage extends FormPage
      gd.widthHint = 235;
      gd.heightHint = 150;
      
-     TableViewer projectViewer = new TableViewer( client, SWT.None );
-     this.lstJobProject = projectViewer.getTable();
-     projectViewer.setContentProvider( new FeatureContentProvider() );
-     projectViewer.setLabelProvider( new FeatureLabelProvider() );
-     
+//     TableViewer projectViewer = new TableViewer( client, SWT.None );
+//     this.lstJobProject = projectViewer.getTable();
+//     projectViewer.setContentProvider( new FeatureContentProvider() );
+//     projectViewer.setLabelProvider( new FeatureLabelProvider() );
+//     
+//     this.lstJobProject.setData( FormToolkit.KEY_DRAW_BORDER,
+//                                                      FormToolkit.TEXT_BORDER );
+//     
+//     this.jobIdentificationTypeAdapter.attachToJobProject(projectViewer );
+     this.lstJobProject = new List(client,  SWT.NONE);
      this.lstJobProject.setData( FormToolkit.KEY_DRAW_BORDER,
                                                       FormToolkit.TEXT_BORDER );
      
-     this.jobIdentificationTypeAdapter.attachToJobProject(projectViewer );
+     this.jobIdentificationTypeAdapter.attachToJobProject(this.lstJobProject );
+     this.lstJobProject.setLayoutData( gd );
+     
      this.lstJobProject.setLayoutData( gd );
      
      // Create Button ADD     
@@ -430,15 +443,19 @@ public class JobDefinitionPage extends FormPage
      gd.verticalSpan = 1;
      gd.widthHint = 60;     
      this.btnAdd = toolkit.createButton(client,
-                                     Messages.getString("JsdlEditor_AddButton"),
+                                     Messages.getString("JsdlEditor_AddButton"), //$NON-NLS-1$
                                      SWT.PUSH);
      
-     btnAdd.addSelectionListener(new SelectionListener() {
+     this.btnAdd.addSelectionListener(new SelectionListener() {
        public void widgetSelected(final SelectionEvent event) {
          //FIXME Uncomment below for doSave and setDiry
-         //setDirty( true ); 
-         handleAddDialog(Messages.getString( "JobDefinitionPage_JobProjectDialog" ));
-         //jobIdentificationTypeAdapter.performAdd(lstJobProject, "lstJobProject", value);
+         handleAddDialog(Messages.getString( "JobDefinitionPage_JobProjectDialog" )); //$NON-NLS-1$
+         
+         JobDefinitionPage.this.jobIdentificationTypeAdapter
+                           .performAdd(
+                                           JobDefinitionPage.this.lstJobProject,
+                                           "lstJobProject", //$NON-NLS-1$                                                       
+                                           JobDefinitionPage.this.value);
        }
 
         public void widgetDefaultSelected(final SelectionEvent event) {
@@ -455,10 +472,10 @@ public class JobDefinitionPage extends FormPage
      gd.verticalSpan = 1;
      gd.verticalAlignment = GridData.BEGINNING;
      this.btnDel = toolkit.createButton(client,
-                                  Messages.getString("JsdlEditor_RemoveButton"),
+                                  Messages.getString("JsdlEditor_RemoveButton"), //$NON-NLS-1$
                                   SWT.PUSH);
      
-     //this.jobIdentificationTypeAdapter.attachToDelete( this.btnDel, this.lstJobProject);
+     this.jobIdentificationTypeAdapter.attachToDelete( this.btnDel, this.lstJobProject);
      this.btnDel.setLayoutData( gd );
  
      toolkit.paintBordersFor( client );
@@ -469,13 +486,13 @@ public class JobDefinitionPage extends FormPage
   
   protected void handleAddDialog(final String dialogTitle){
     MultipleInputDialog dialog = new MultipleInputDialog( this.getSite().getShell(),
-                                                         dialogTitle ); //$NON-NLS-1$ 
+                                                         dialogTitle );
         
-    dialog.addTextField( Messages.getString( "JobDefinitionPage_Value" ), "", false ); //$NON-NLS-1$    
+    dialog.addTextField( Messages.getString( "JobDefinitionPage_Value" ), "", false ); //$NON-NLS-1$ //$NON-NLS-2$    
     if( dialog.open() != Window.OK ) {
       return;
     }
-    this.value = (Object) dialog.getStringValue( Messages.getString( "JobDefinitionPage_Value" ) ) ;
+    this.value = dialog.getStringValue( Messages.getString( "JobDefinitionPage_Value" ) ) ; //$NON-NLS-1$
     
     
   }

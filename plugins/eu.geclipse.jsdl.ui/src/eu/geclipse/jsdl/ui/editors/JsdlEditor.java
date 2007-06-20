@@ -43,7 +43,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.command.BasicCommandStack;
 import org.eclipse.emf.common.command.CommandStackListener;
-import org.eclipse.emf.common.notify.AdapterFactory;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.common.ui.MarkerHelper;
@@ -63,13 +62,11 @@ import org.eclipse.emf.edit.domain.IEditingDomainProvider;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.ReflectiveItemProviderAdapterFactory;
 import org.eclipse.emf.edit.provider.resource.ResourceItemProviderAdapterFactory;
-import org.eclipse.emf.edit.ui.provider.AdapterFactoryContentProvider;
 import org.eclipse.emf.edit.ui.util.EditUIMarkerHelper;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IEditorSite;
@@ -81,7 +78,6 @@ import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.part.FileEditorInput;
 import eu.geclipse.jsdl.jsdl.JsdlAdaptersFactory;
-import eu.geclipse.jsdl.model.DocumentRoot;
 import eu.geclipse.jsdl.model.JobDefinitionType;
 import eu.geclipse.jsdl.posix.PosixAdaptersFactory;
 import eu.geclipse.jsdl.ui.internal.Activator;
@@ -92,13 +88,13 @@ import eu.geclipse.jsdl.ui.internal.pages.ResourcesPage;
 
 
 
-public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainProvider{
+public class JsdlEditor extends FormEditor implements IEditingDomainProvider{
   
-  public static final JsdlMultiPageEditor INSTANCE = new JsdlMultiPageEditor();
+  //spublic static final JsdlMultiPageEditor INSTANCE = new JsdlMultiPageEditor();
   
   protected AdapterFactoryEditingDomain editingDomain;
   protected Collection<Resource> savedResources = new ArrayList<Resource>();
-  protected Viewer currentViewer;
+//  protected Viewer currentViewer;
   protected Collection<Resource> removedResources = new ArrayList<Resource>();
   protected Collection<Resource> changedResources = new ArrayList<Resource>();
   protected ISelection editorSelection = StructuredSelection.EMPTY;
@@ -107,20 +103,18 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
   protected MarkerHelper markerHelper = new EditUIMarkerHelper();
   protected ComposedAdapterFactory adapterFactory;
   protected JobDefinitionType jobDefType = null;  
-  protected DocumentRoot documentRoot = null;
   private TextEditor editor = null;
   private int sourcePageIndex;
   private JobDefinitionPage jobDefPage = new JobDefinitionPage(this);
   private JobApplicationPage jobApplicationPage = new JobApplicationPage(this);
   private DataStagingPage dataStagingPage = new DataStagingPage(this);
-  private ResourcesPage resourcesPage = new ResourcesPage(this);  
+  private ResourcesPage resourcesPage = new ResourcesPage(this);
   private boolean refreshedModel = false;
-  //FIXME Uncomment below for doSave and setDiry
-//  private boolean isDirty = false;
+  private boolean isDirtyFlag = false;
   
   
   
-  public JsdlMultiPageEditor(){
+  public JsdlEditor(){
     // Create an adapter factory that yields item providers.
     //
     List<AdapterFactoryImpl> factories = new ArrayList<AdapterFactoryImpl>();
@@ -167,22 +161,20 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
         
       }
  
-  //FIXME Uncomment below for Save
-//  @Override
-//  public boolean isDirty()
-//  {     
-//    return isDirty;
-//  } // End isDirty()
-//  
-//
-//  
-//  public final void setDirty(final boolean flag) {
-//   if (this.isDirty != flag) {
-//     this.isDirty = flag;
-//     editorDirtyStateChanged();
-//     firePropertyChange(PROP_DIRTY);
-//   }
-//  } // End public final void setDirty()
+  
+  protected void cleanPages(){
+    this.jobDefPage.setDirty( false );
+    this.jobApplicationPage.setDirty( false );
+    this.resourcesPage.setDirty( false );
+    this.dataStagingPage.setDirty( false ) ;
+  }
+
+  public void setDirty(final boolean flag) {
+   if (this.isDirtyFlag != flag) {
+     this.isDirtyFlag = flag;     
+     this.editorDirtyStateChanged();
+   }
+  } // End public final void setDirty()
   
   
   @Override
@@ -195,7 +187,7 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
       addPage(this.jobDefPage);      
       addPage(this.jobApplicationPage);
       addPage(this.resourcesPage);
-      addPage(this.dataStagingPage);
+      addPage(this.dataStagingPage);      
       addResourceEditorPage();
       pushContentToPages();
          }
@@ -215,16 +207,18 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
     this.jobDefPage.setPageContent( this.jobDefType, isModelRefreshed());
     this.jobApplicationPage.setPageContent( this.jobDefType, isModelRefreshed());
     this.resourcesPage.setPageContent( this.jobDefType, isModelRefreshed() );
-    this.dataStagingPage.setPageContent( this.jobDefType, isModelRefreshed());   
+    this.dataStagingPage.setPageContent( this.jobDefType, isModelRefreshed());    
     }
   
-  /*
-   * Returns true if the Model was refreshed/changed.
-   * This could be caused by an external editor
-  */ 
+  
+  
+  /**
+   * @return true if the the JSDL Model was refreshed / changed.
+   * This could be caused by an external editor.
+   */
   public boolean isModelRefreshed(){
      
-    return refreshedModel;
+    return this.refreshedModel;
   }
   
  
@@ -277,7 +271,7 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
           {
             class ResourceDeltaVisitor implements IResourceDeltaVisitor
             {
-              protected ResourceSet resourceSet = JsdlMultiPageEditor.this.editingDomain.getResourceSet();
+              protected ResourceSet resourceSet = JsdlEditor.this.editingDomain.getResourceSet();
               protected Collection< Resource > changedResources = new ArrayList< Resource >();
               protected Collection< Resource > removedResources = new ArrayList< Resource >();
 
@@ -296,7 +290,7 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
                       {
                         this.removedResources.add(resource);
                       }
-                      else if (!JsdlMultiPageEditor.this.savedResources.remove(resource))
+                      else if (!JsdlEditor.this.savedResources.remove(resource))
                       {
                         this.changedResources.add(resource);
                       }
@@ -323,7 +317,7 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
 
             if (!visitor.getRemovedResources().isEmpty())
             {
-              JsdlMultiPageEditor.this.removedResources.addAll(visitor.getRemovedResources());
+              JsdlEditor.this.removedResources.addAll(visitor.getRemovedResources());
               if (!isDirty())
               {
                 getSite().getShell().getDisplay().asyncExec
@@ -331,8 +325,8 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
                    {
                      public void run()
                      {
-                       getSite().getPage().closeEditor(JsdlMultiPageEditor.this, false);
-                       JsdlMultiPageEditor.this.dispose();
+                       getSite().getPage().closeEditor(JsdlEditor.this, false);
+                       JsdlEditor.this.dispose();
                      }
                    });
               }
@@ -340,8 +334,8 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
 
             if (!visitor.getChangedResources().isEmpty())
             {
-              JsdlMultiPageEditor.this.changedResources.addAll(visitor.getChangedResources());
-              if (getSite().getPage().getActiveEditor() == JsdlMultiPageEditor.this)
+              JsdlEditor.this.changedResources.addAll(visitor.getChangedResources());
+              if (getSite().getPage().getActiveEditor() == JsdlEditor.this)
               {
                 getSite().getShell().getDisplay().asyncExec
                   (new Runnable()
@@ -379,8 +373,8 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
         {
           if (handleDirtyConflict())
           {
-            getSite().getPage().closeEditor(JsdlMultiPageEditor.this, false);
-            JsdlMultiPageEditor.this.dispose();
+            getSite().getPage().closeEditor(JsdlEditor.this, false);
+            JsdlEditor.this.dispose();
           }
           else
           {
@@ -435,8 +429,8 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
         return
           MessageDialog.openQuestion
             (getSite().getShell(),
-             "_UI_FileConflict_label",
-             "_WARN_FileConflict");
+             "JsdlEditor_FileConflict_label", //$NON-NLS-1$
+             "JsdlEditor_WARN_FileConflict"); //$NON-NLS-1$
       }
   
     public ISelection getSelection()
@@ -469,21 +463,23 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
           // Save the resources to the file system.
           //
           boolean first = true;
-          for (Iterator<?> i = JsdlMultiPageEditor.this.editingDomain.getResourceSet().getResources().iterator(); i.hasNext(); )
+          for (Iterator<?> i = JsdlEditor.this.editingDomain.getResourceSet().getResources().iterator(); i.hasNext(); )
           {
             Resource resource = (Resource)i.next();
-            if ((first || !resource.getContents().isEmpty() || isPersisted(resource)) && !JsdlMultiPageEditor.this.editingDomain.isReadOnly(resource))
+            if ((first || !resource.getContents().isEmpty() || isPersisted(resource)) && !JsdlEditor.this.editingDomain.isReadOnly(resource))
             {
               try
               {
-                JsdlMultiPageEditor.this.savedResources.add(resource);
+                JsdlEditor.this.savedResources.add(resource);
                 resource.save(Collections.EMPTY_MAP);
               }
               catch (Exception exception)
               {
-                JsdlMultiPageEditor.this.resourceToDiagnosticMap.put(resource, analyzeResourceProblems(resource, exception));
+                JsdlEditor.this.resourceToDiagnosticMap.put(resource, analyzeResourceProblems(resource, exception));
                 //FIXME Uncomment below for doSave and setDiry
-                //setDirty( false );
+                setDirty( false );
+                cleanPages();
+                //firePropertyChange(IEditorPart.PROP_DIRTY);
               }
               first = false;
             }
@@ -502,8 +498,9 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
       //
       ((BasicCommandStack)this.editingDomain.getCommandStack()).saveIsDone();
       //FIXME Uncomment below for doSave and setDiry
-      //setDirty( false );
-      firePropertyChange(IEditorPart.PROP_DIRTY);
+      setDirty( false );
+      cleanPages();
+      //firePropertyChange(IEditorPart.PROP_DIRTY);
     }
     catch (Exception exception)
     {
@@ -540,12 +537,12 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
   
   protected void doSaveAs(final URI uri, final IEditorInput editorInput)
   {
-    ((Resource)this.editingDomain.getResourceSet().getResources().get(0)).setURI(uri);
+    this.editingDomain.getResourceSet().getResources().get(0).setURI(uri);
     setInputWithNotify(editorInput);
     setPartName(editorInput.getName());
     IProgressMonitor progressMonitor = new NullProgressMonitor();
     doSave(progressMonitor);
-  };
+  }
   
 
   @Override
@@ -640,14 +637,14 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
               Diagnostic diagnostic = analyzeResourceProblems((Resource)notification.getNotifier(), null);
               if (diagnostic.getSeverity() != Diagnostic.OK)
               {
-                JsdlMultiPageEditor.this.resourceToDiagnosticMap.put(resource, diagnostic);
+                JsdlEditor.this.resourceToDiagnosticMap.put(resource, diagnostic);
               }
               else
               {
-                JsdlMultiPageEditor.this.resourceToDiagnosticMap.remove(resource);
+                JsdlEditor.this.resourceToDiagnosticMap.remove(resource);
               }
 
-              if (JsdlMultiPageEditor.this.updateProblemIndication)
+              if (JsdlEditor.this.updateProblemIndication)
               {
                 getSite().getShell().getDisplay().asyncExec
                   (new Runnable()
@@ -682,11 +679,11 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
   
   
     
-    /*
-     * Responsible for de-serializing the model from the resource file.
-     * The resource is passed to the getResourceRoot method.     * 
-     * 
-     */
+  /**
+  * Responsible for de-serializing the model from the resource file.
+  * The resource is passed to the getResourceRoot method.
+  */
+ 
   public void getJsdlModel(){
     
     // Assumes that the input is a file object.
@@ -771,7 +768,7 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
               (Diagnostic.ERROR,
                Activator.PLUGIN_ID,
                0,
-               Messages.getString("JsdlMultiPageEditor.CreateModelErrorMessage"), 
+               Messages.getString("JsdlMultiPageEditor.CreateModelErrorMessage"),  //$NON-NLS-1$
                new Object [] { exception == null ? (Object)resource : exception });
           basicDiagnostic.merge(EcoreUtil.computeDiagnostic(resource, true));
           return basicDiagnostic;
@@ -783,7 +780,7 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
               (Diagnostic.ERROR,
                   Activator.PLUGIN_ID,
                0,
-               Messages.getString("JsdlMultiPageEditor.CreateModelErrorMessage"), 
+               Messages.getString("JsdlMultiPageEditor.CreateModelErrorMessage"),  //$NON-NLS-1$
                new Object[] { exception });
         }
         else
@@ -825,36 +822,40 @@ public class JsdlMultiPageEditor extends FormEditor implements IEditingDomainPro
      {      
         super.pageChange(pageIndex);
         //FIXME Comment below for doSave and setDiry
-        IProgressMonitor progressMonitor = new NullProgressMonitor();
-        doSave(progressMonitor);     
+//        IProgressMonitor progressMonitor = new NullProgressMonitor();
+//        doSave(progressMonitor);     
      }
     
     
-    public class ReverseAdapterFactoryContentProvider extends AdapterFactoryContentProvider 
-    {
-        public ReverseAdapterFactoryContentProvider(final AdapterFactory adapterFactory) {
-            super(adapterFactory);
-        }
-
-        public Object [] getElements(final Object object) {
-            Object parent = super.getParent(object);
-            return (parent == null ? Collections.EMPTY_SET : Collections.singleton(parent)).toArray();
-        }
-
-        public Object [] getChildren(final Object object) {
-            Object parent = super.getParent(object);
-            return (parent == null ? Collections.EMPTY_SET : Collections.singleton(parent)).toArray();
-        }
-
-        public boolean hasChildren(final Object object) {
-            Object parent = super.getParent(object);
-            return parent != null;
-        }
-
-        public Object getParent(final Object object) {
-            return null;
-        }
-    }
+//    public class ReverseAdapterFactoryContentProvider extends AdapterFactoryContentProvider 
+//    {
+//        public ReverseAdapterFactoryContentProvider(final AdapterFactory adapterFactory) {
+//            super(adapterFactory);
+//        }
+//
+//        @Override
+//        public Object [] getElements(final Object object) {
+//            Object parent = super.getParent(object);
+//            return (parent == null ? Collections.EMPTY_SET : Collections.singleton(parent)).toArray();
+//        }
+//
+//        @Override
+//        public Object [] getChildren(final Object object) {
+//            Object parent = super.getParent(object);
+//            return (parent == null ? Collections.EMPTY_SET : Collections.singleton(parent)).toArray();
+//        }
+//
+//        @Override
+//        public boolean hasChildren(final Object object) {
+//            Object parent = super.getParent(object);
+//            return parent != null;
+//        }
+//
+//        @Override
+//        public Object getParent(final Object object) {
+//            return null;
+//        }
+//    }
     
   
 } // End Class

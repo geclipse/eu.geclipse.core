@@ -28,6 +28,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -46,12 +48,20 @@ import eu.geclipse.jsdl.model.SourceTargetType;
  * @author nickl
  *
  */
-public class DataStagingAdapter {
+public class DataStagingAdapter extends JsdlAdaptersFactory {
   
-  Hashtable< Integer, Text > widgetFeaturesMap = new Hashtable< Integer, Text >();
-  Hashtable< Integer, List > listFeaturesMap = new Hashtable< Integer, List >();
-  Hashtable< Integer, Combo > comboFeaturesMap = new Hashtable< Integer, Combo >();
-  Hashtable< String, EObject > stageMap = new Hashtable<String, EObject>();
+  protected String dataStageEntryKey = ""; //$NON-NLS-1$
+  
+  protected Hashtable< String, EObject > stageMap =
+                                               new Hashtable<String, EObject>();
+  
+  protected Hashtable< Integer, Text > widgetFeaturesMap =
+                                               new Hashtable< Integer, Text >();
+  private Hashtable< Integer, List > listFeaturesMap =
+                                               new Hashtable< Integer, List >();
+  private Hashtable< Integer, Combo > comboFeaturesMap =
+                                              new Hashtable< Integer, Combo >();
+  
   
 
   private DataStagingType dataStagingType =
@@ -61,8 +71,8 @@ public class DataStagingAdapter {
 
   private Collection<EObject> dataStageList = new ArrayList<EObject>();
   
-  private String dataStageEntryKey = "";
-  private Boolean adapterRefreshed = false;
+  private boolean isNotifyAllowed = true;
+  private boolean adapterRefreshed = false;
   
   
   /*
@@ -76,6 +86,13 @@ public class DataStagingAdapter {
   }
   
   
+  protected void contentChanged(){
+    if (this.isNotifyAllowed){
+      fireNotifyChanged( null);
+    }
+  }
+  
+  
   
   public void attachToFileName(final List widget){    
     this.listFeaturesMap.put( JsdlPackage.DATA_STAGING_TYPE__FILE_NAME
@@ -86,8 +103,8 @@ public class DataStagingAdapter {
        List list = (List) event.getSource();
        String [] str = list.getSelection();       
        for (int i=0; i<str.length; i++){
-         dataStageEntryKey  = str[i];
-         navigateDataStaging(dataStageEntryKey );
+         DataStagingAdapter.this.dataStageEntryKey  = str[i];
+         navigateDataStaging(DataStagingAdapter.this.dataStageEntryKey );
          
        }
         
@@ -100,89 +117,103 @@ public class DataStagingAdapter {
   
   
   
-  public void attachToFileSystemName(final Text widget){    
-    this.widgetFeaturesMap.put( JsdlPackage.DATA_STAGING_TYPE__FILESYSTEM_NAME
-                                , widget );
-        
-     widget.addFocusListener( new org.eclipse.swt.events.FocusListener() {
+  public void attachToFileSystemName(final Text widget){
+    Integer featureID = new Integer(JsdlPackage.DATA_STAGING_TYPE__FILESYSTEM_NAME);
+    this.widgetFeaturesMap.put( featureID , widget );
+       
+    
+    widget.addFocusListener( new org.eclipse.swt.events.FocusListener() {
       public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
-        EObject eObject = stageMap.get( dataStageEntryKey );
+        EObject eObject = DataStagingAdapter.this.stageMap
+                            .get( DataStagingAdapter.this.dataStageEntryKey );
         eObject.eSet( JsdlPackage.Literals.DATA_STAGING_TYPE__FILESYSTEM_NAME,
-                      widget.getText() );
+                                        widget.getText() );
         eObject = null;
+        //contentChanged();
+      }
+      public void focusGained(final FocusEvent e ) {//
         
       }
-      public void focusGained(final FocusEvent e ) { }
      
     } );
-     
+          
   } // End attachToFileSystem()
   
   
   
   
-  public void attachToName(final Text widget){    
-    this.widgetFeaturesMap.put( JsdlPackage.DATA_STAGING_TYPE__NAME
-                                , widget );
-        
-     widget.addFocusListener( new org.eclipse.swt.events.FocusListener() {
+  public void attachToName(final Text widget){
+    Integer featureID = new Integer(JsdlPackage.DATA_STAGING_TYPE__NAME);
+    this.widgetFeaturesMap.put( featureID , widget );
+    
+    widget.addFocusListener( new org.eclipse.swt.events.FocusListener() {
       public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
-        EObject eObject = stageMap.get( dataStageEntryKey );
+        EObject eObject = DataStagingAdapter.this.stageMap
+                              .get( DataStagingAdapter.this.dataStageEntryKey );
+
         eObject.eSet( JsdlPackage.Literals.DATA_STAGING_TYPE__NAME,
-                      widget.getText() );
-        eObject = null;          
+                                    widget.getText() );
+        eObject = null;
+        contentChanged();
       }
-      public void focusGained(final FocusEvent e ) { }
+      public void focusGained(final FocusEvent e ) {//
+        
+      }
      
     } );
-     
+   
   } // End attactToName()
   
   
   
-  public void attachToSource(final Text widget){    
-    this.widgetFeaturesMap.put( JsdlPackage.DATA_STAGING_TYPE__SOURCE
-                                , widget );
-        
-     widget.addFocusListener( new org.eclipse.swt.events.FocusListener() {
+  public void attachToSource(final Text widget){  
+    Integer featureID = new Integer(JsdlPackage.DATA_STAGING_TYPE__SOURCE);
+    this.widgetFeaturesMap.put( featureID , widget );
+    
+    widget.addFocusListener( new org.eclipse.swt.events.FocusListener() {
       public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
-        EObject eObject = stageMap.get( dataStageEntryKey );
+        EObject eObject = DataStagingAdapter.this.stageMap
+                            .get( DataStagingAdapter.this.dataStageEntryKey );
         eObject.eSet( JsdlPackage.Literals.DATA_STAGING_TYPE__SOURCE,
-                      widget.getText() );
+        widget.getText() );
         eObject = null;
+        contentChanged();
       }
-      public void focusGained(final FocusEvent e ) { }
+      public void focusGained(final FocusEvent e ) {//
+        
+      }
      
     } );
-     
   } // End attachToSource()
   
   
   
   public void attachToTarget(final Text widget){    
-    this.widgetFeaturesMap.put( JsdlPackage.DATA_STAGING_TYPE__TARGET
-                                , widget );
-        
-     widget.addFocusListener( new org.eclipse.swt.events.FocusListener() {
-      public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
-        EObject eObject = stageMap.get( dataStageEntryKey );
-        SourceTargetType st = (SourceTargetType)eObject
-                .eGet( JsdlPackage.Literals.DATA_STAGING_TYPE__TARGET);
-        st.setURI( widget.getText() );
-        st = null;
-        eObject = null;          
-      }
-      public void focusGained(final FocusEvent e ) { }
-     
-    } );
-     
+    Integer featureID = new Integer(JsdlPackage.DATA_STAGING_TYPE__TARGET);
+    this.widgetFeaturesMap.put( featureID , widget );
+    
+    
+      
+      widget.addFocusListener( new org.eclipse.swt.events.FocusListener() {
+        public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
+          EObject eObject = stageMap.get( dataStageEntryKey );
+          eObject.eSet( JsdlPackage.Literals.DATA_STAGING_TYPE__SOURCE,
+                        widget.getText() );
+          eObject = null;
+        }
+        public void focusGained(final FocusEvent e ) {
+          //
+        }
+       
+      } );
+
   } // End attachToTarget()
   
   
   
-  public void attachToCreationFlag(final Combo widget){    
-    this.comboFeaturesMap.put( JsdlPackage.DATA_STAGING_TYPE__CREATION_FLAG
-                                , widget );
+  public void attachToCreationFlag(final Combo widget){
+    Integer featureID = new Integer(JsdlPackage.DATA_STAGING_TYPE__CREATION_FLAG);
+    this.comboFeaturesMap.put( featureID , widget );
     
     /* Populate the Combo Box with the Creation Flag Literals */    
     EEnum cFEnum = JsdlPackage.Literals.CREATION_FLAG_ENUMERATION;
@@ -194,14 +225,16 @@ public class DataStagingAdapter {
         
     widget.addSelectionListener(new SelectionListener() {
       public void widgetSelected(final SelectionEvent e) {
-        EObject eObject = (EObject) stageMap.get( dataStageEntryKey );
+       EObject eObject = DataStagingAdapter.this.stageMap
+                             .get( DataStagingAdapter.this.dataStageEntryKey );
         eObject.eSet( JsdlPackage.Literals.DATA_STAGING_TYPE__CREATION_FLAG,
                       CreationFlagEnumeration.get( widget.getSelectionIndex()));
         eObject = null;
+        contentChanged();
       }
 
       public void widgetDefaultSelected(final SelectionEvent e) {
-        
+        //
       }
     });
     
@@ -209,20 +242,22 @@ public class DataStagingAdapter {
   
   
   
-  public void attachToDelOnTermination(final Combo widget){    
-    this.comboFeaturesMap.put( JsdlPackage.DATA_STAGING_TYPE__DELETE_ON_TERMINATION
-                                , widget );
+  public void attachToDelOnTermination(final Combo widget){
+    Integer featureID = new Integer(JsdlPackage.DATA_STAGING_TYPE__DELETE_ON_TERMINATION);
+    this.comboFeaturesMap.put( featureID , widget );
         
     widget.addSelectionListener(new SelectionListener() {
       public void widgetSelected(final SelectionEvent e) {
-       EObject eObject = (EObject) stageMap.get( dataStageEntryKey );
+       EObject eObject = DataStagingAdapter.this.stageMap
+                             .get( DataStagingAdapter.this.dataStageEntryKey );
         eObject.eSet( JsdlPackage.Literals.DATA_STAGING_TYPE__DELETE_ON_TERMINATION,
                      Boolean.parseBoolean( widget.getItem( widget.getSelectionIndex() ) ) );
-        eObject = null;       
+        eObject = null;    
+        contentChanged();
       }
 
       public void widgetDefaultSelected(final SelectionEvent e) {
-        
+        // Do Nothing
       }
     });
     
@@ -233,7 +268,7 @@ public class DataStagingAdapter {
     button.addSelectionListener(new SelectionListener() {
 
       public void widgetSelected(final SelectionEvent event) {        
-        performDelete(list, dataStageEntryKey);
+        performDelete(list, DataStagingAdapter.this.dataStageEntryKey);
       }
 
       public void widgetDefaultSelected(final SelectionEvent event) {
@@ -265,11 +300,11 @@ public class DataStagingAdapter {
   
   private void  getTypeForAdapter(final EObject rootJsdlElement){
     
-    TreeIterator iterator = rootJsdlElement.eAllContents();
+    TreeIterator <EObject> iterator = rootJsdlElement.eAllContents();
     
     while ( iterator.hasNext (  )  )  {  
    
-      EObject testType = (EObject) iterator.next();
+      EObject testType = iterator.next();
           
       if ( testType instanceof DataStagingType ) {
         this.dataStageList.add( testType );
@@ -291,7 +326,8 @@ public class DataStagingAdapter {
   
   public void load()
   {
-    for (Iterator itList = dataStageList.iterator(); itList.hasNext();)
+    this.isNotifyAllowed = false;
+    for (Iterator itList = this.dataStageList.iterator(); itList.hasNext();)
     {
      
       EObject eObject = (EObject) itList.next();
@@ -315,7 +351,7 @@ public class DataStagingAdapter {
             if (eObject.eIsSet( eStructuralFeature )){
             switch (featureID) {
               case JsdlPackage.DATA_STAGING_TYPE__FILE_NAME:{
-                listName = this.listFeaturesMap.get( featureID );
+                listName = this.listFeaturesMap.get( new Integer(featureID) );
                 if(!this.adapterRefreshed)
                   {listName.add( value.toString() );}
                 this.stageMap.put( value.toString(), eObject );
@@ -334,11 +370,14 @@ public class DataStagingAdapter {
       } // endif eObject Null
     }// End list loop
 
+    this.isNotifyAllowed = true;
   } // End void load()
   
  
   
-  private void navigateDataStaging(final String key){
+  protected void navigateDataStaging(final String key){
+    
+    this.isNotifyAllowed = false;
         
     Text textWidget = null;
     Combo comboWidget = null;
@@ -354,7 +393,7 @@ public class DataStagingAdapter {
         int featureID = eStructuralFeature.getFeatureID();
         //Check for the features Multiplicity.
         
-        textWidget = this.widgetFeaturesMap.get( featureID );
+        textWidget = this.widgetFeaturesMap.get( new Integer(featureID) );
         
         if (eObject.eIsSet( eStructuralFeature))
           {
@@ -368,10 +407,10 @@ public class DataStagingAdapter {
                                                     .eGet( eStructuralFeature );
                  
                  if (this.sourceTargetType.getURI() != null ){
-                   textWidget.setText( sourceTargetType.getURI().toString() );  
+                   textWidget.setText( this.sourceTargetType.getURI().toString() );  
                  }
                  else
-                   { textWidget.setText(""); }
+                   { textWidget.setText(""); } //$NON-NLS-1$
                }                 
                break;
                case JsdlPackage.DATA_STAGING_TYPE__TARGET:{
@@ -380,10 +419,10 @@ public class DataStagingAdapter {
                                                     .eGet( eStructuralFeature );
                  
                  if (this.sourceTargetType.getURI() != null ){
-                   textWidget.setText( sourceTargetType.getURI().toString() );
+                   textWidget.setText( this.sourceTargetType.getURI().toString() );
                  }
                  else
-                 { textWidget.setText(""); }
+                 { textWidget.setText(""); } //$NON-NLS-1$
                }
                break;   
                case JsdlPackage.DATA_STAGING_TYPE__FILESYSTEM_NAME:{
@@ -395,12 +434,12 @@ public class DataStagingAdapter {
                }
                break;
                case JsdlPackage.DATA_STAGING_TYPE__CREATION_FLAG: {
-                 comboWidget = this.comboFeaturesMap.get( featureID );
+                 comboWidget = this.comboFeaturesMap.get( new Integer(featureID) );
                  comboWidget.setText( value.toString() );        
                }
                break;
                case JsdlPackage.DATA_STAGING_TYPE__DELETE_ON_TERMINATION:{
-                 comboWidget = this.comboFeaturesMap.get( featureID );
+                 comboWidget = this.comboFeaturesMap.get( new Integer(featureID) );
                  comboWidget.setText( value.toString() );
                }
                break;
@@ -416,25 +455,26 @@ public class DataStagingAdapter {
             break;
             case JsdlPackage.DATA_STAGING_TYPE__ANY_ATTRIBUTE:
             break;
-            default:textWidget.setText( "" );              
+            default:textWidget.setText( "" );               //$NON-NLS-1$
             break;
           }// End Switch
           
         } // End Else
         
       } //end Iterator            
-    } // endif      
+    } // endif    
+    this.isNotifyAllowed = true;
   } // End navigateDataStage()
   
   
-  private void performAdd(){
-    
+  protected void performAdd(){
+   // 
   }
   
   /* Method deletes the selected DataStaged Item from the list and 
    * the JSDL Model.
    */
-  private void performDelete(final List list ,final String key){
+  protected void performDelete(final List list ,final String key){
     
    
     /* Get EStructuralFeature */

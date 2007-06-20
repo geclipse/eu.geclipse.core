@@ -8,6 +8,8 @@ public class FeatureContentProvider implements IStructuredContentProvider {
 
   public Object[] getElements(Object inputElement) {
     Object[] result = null;
+    
+    
     if ( inputElement instanceof EList ) {
       EList list = ( EList ) inputElement;
       result = list.toArray( new Object[ list.size() ] );

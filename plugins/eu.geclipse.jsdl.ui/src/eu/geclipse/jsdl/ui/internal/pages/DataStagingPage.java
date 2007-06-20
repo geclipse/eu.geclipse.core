@@ -1,5 +1,4 @@
 /******************************************************************************
-  * Copyright (c) 2007 g-Eclipse consortium
   * All rights reserved. This program and the accompanying materials
   * are made available under the terms of the Eclipse Public License v1.0
   * which accompanies this distribution, and is available at
@@ -17,7 +16,9 @@
 
 package eu.geclipse.jsdl.ui.internal.pages;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -39,33 +40,34 @@ import eu.geclipse.jsdl.jsdl.DataStagingAdapter;
 import eu.geclipse.jsdl.ui.internal.Activator;
 
 
-public class DataStagingPage extends FormPage{
+public class DataStagingPage extends FormPage implements INotifyChangedListener{
   
-  Composite jobDataStaging = null;
+  protected Composite jobDataStaging = null;
   
-  List lstFileName = null;
-  Text txtFileSystemName = null;
-  Text txtSource = null;
-  Text txtTarget = null;
-  Text txtName = null;
+  protected List lstFileName = null;
+  protected Text txtFileSystemName = null;
+  protected Text txtSource = null;
+  protected Text txtTarget = null;
+  protected Text txtName = null;
    
-  Label lblFileName = null;
-  Label lblFileSystemName = null;
-  Label lblCreationFlag = null;
-  Label lblDelOnTerm = null;
-  Label lblSource = null;
-  Label lblTarget = null;
-  Label lblName = null;
+  protected Label lblFileName = null;
+  protected Label lblFileSystemName = null;
+  protected Label lblCreationFlag = null;
+  protected Label lblDelOnTerm = null;
+  protected Label lblSource = null;
+  protected Label lblTarget = null;
+  protected Label lblName = null;
   
-  Button btnAdd = null;
-  Button btnDel = null;
+  protected Button btnAdd = null;
+  protected Button btnDel = null;
   
-  Combo cmbCreationFlag = null;
-  Combo cmbDelOnTerm = null;
+  protected Combo cmbCreationFlag = null;
+  protected Combo cmbDelOnTerm = null;
 
   
   private DataStagingAdapter dataStagingAdapter;
-  private Boolean contentRefreshed = Boolean.FALSE;
+  private boolean contentRefreshed = false;
+  private boolean dirtyFlag = false;
   
   
   /* Class Constructor */
@@ -73,12 +75,27 @@ public class DataStagingPage extends FormPage{
                             
    {
     
-    super(editor,Messages.getString("DataStagingPage_pageId"), 
-          Messages.getString("DataStagingPage_PageTitle"));
+    super(editor,Messages.getString("DataStagingPage_pageId"),  //$NON-NLS-1$
+          Messages.getString("DataStagingPage_PageTitle")); //$NON-NLS-1$
    
     }
   
   
+  @Override
+  public boolean isDirty() {
+    
+    return this.dirtyFlag;
+    
+  }
+  
+  
+  
+  public void setDirty(final boolean dirtyFlag) {
+    if (this.dirtyFlag != dirtyFlag) {
+      this.dirtyFlag = dirtyFlag;     
+      this.getEditor().editorDirtyStateChanged();  
+    }
+  }
   
   
   
@@ -91,7 +108,7 @@ public class DataStagingPage extends FormPage{
     
         
     ScrolledForm form = managedForm.getForm();
-    form.setText(Messages.getString("DataStagingPage_DataStagingPageTitle")); 
+    form.setText(Messages.getString("DataStagingPage_DataStagingPageTitle"));  //$NON-NLS-1$
   
     ColumnLayout layout = new ColumnLayout();
    
@@ -105,14 +122,14 @@ public class DataStagingPage extends FormPage{
 
         
    this.jobDataStaging = createDataStagingSection(managedForm,
-                                Messages.getString("DataStagingPage_PageTitle"), 
-                        Messages.getString("DataStagingPage_DataStagingDescr"));  
+                                Messages.getString("DataStagingPage_PageTitle"),  //$NON-NLS-1$
+                        Messages.getString("DataStagingPage_DataStagingDescr"));   //$NON-NLS-1$
       
    this.dataStagingAdapter.load();
    
    /* Set Form Background */
    form.setBackgroundImage(Activator.getDefault().
-                           getImageRegistry().get( "formsbackground" ));
+                           getImageRegistry().get( "formsbackground" )); //$NON-NLS-1$
   }
   
 
@@ -129,7 +146,7 @@ public class DataStagingPage extends FormPage{
 
 
   private boolean isContentRefreshed(){          
-    return this.contentRefreshed.booleanValue();
+    return this.contentRefreshed;
   }
   
   
@@ -139,11 +156,12 @@ public class DataStagingPage extends FormPage{
                              final boolean refreshStatus){
 
    if (refreshStatus) {
-      this.contentRefreshed = Boolean.TRUE;
+      this.contentRefreshed = true;
       this.dataStagingAdapter.setContent( rootJsdlElement );
     }
    else{     
-      this.dataStagingAdapter = new DataStagingAdapter(rootJsdlElement);     
+      this.dataStagingAdapter = new DataStagingAdapter(rootJsdlElement);
+      this.dataStagingAdapter.addListener( this );
    }
           
   } // End void getPageContent() 
@@ -219,6 +237,8 @@ public class DataStagingPage extends FormPage{
     
     
     subSection.setClient( clientsubSection );
+    
+    
        
           
     /* ========================== File Name Widgets ========================= */
@@ -227,7 +247,7 @@ public class DataStagingPage extends FormPage{
     gd.verticalSpan = 2;
     gd.horizontalSpan = 1;
     this.lblFileName = toolkit.createLabel(clientsubSection,
-                                 Messages.getString("DataStagingPage_FileName"));
+                                 Messages.getString("DataStagingPage_FileName")); //$NON-NLS-1$
     
     this.lstFileName = new List(clientsubSection, SWT.NONE | SWT.V_SCROLL);
     this.lstFileName.setData( FormToolkit.KEY_DRAW_BORDER,
@@ -248,7 +268,7 @@ public class DataStagingPage extends FormPage{
     gd.verticalSpan = 1;
     gd.widthHint = 60;
     this.btnAdd = toolkit.createButton(clientsubSection,
-                                     Messages.getString("JsdlEditor_AddButton"),
+                                     Messages.getString("JsdlEditor_AddButton"), //$NON-NLS-1$
                                      SWT.PUSH);
     this.dataStagingAdapter.attachToAdd( this.btnAdd );
     this.btnAdd.setLayoutData( gd );
@@ -261,7 +281,7 @@ public class DataStagingPage extends FormPage{
     gd.widthHint = 60;
     gd.verticalAlignment = GridData.BEGINNING;
     this.btnDel = toolkit.createButton(clientsubSection,
-                                  Messages.getString("JsdlEditor_RemoveButton"),
+                                  Messages.getString("JsdlEditor_RemoveButton"), //$NON-NLS-1$
                                    SWT.PUSH);
     this.dataStagingAdapter.attachToDelete(this.lstFileName, this.btnDel );
     this.btnDel.setLayoutData( gd );
@@ -271,7 +291,7 @@ public class DataStagingPage extends FormPage{
 
     gd = new GridData();
     this.lblFileSystemName = toolkit.createLabel(clientsubSection,
-                          Messages.getString("DataStagingPage_FileSystemName"));
+                          Messages.getString("DataStagingPage_FileSystemName")); //$NON-NLS-1$
     this.txtFileSystemName = toolkit.createText(clientsubSection, "", SWT.NONE); //$NON-NLS-1$
     this.dataStagingAdapter.attachToFileSystemName(this.txtFileSystemName );
     gd.horizontalSpan=3;
@@ -282,7 +302,7 @@ public class DataStagingPage extends FormPage{
     /* ====================== Creation Flag Widgets ========================= */
     
     this.lblCreationFlag = toolkit.createLabel(clientsubSection,
-                            Messages.getString("DataStagingPage_CreationFlag"));
+                            Messages.getString("DataStagingPage_CreationFlag")); //$NON-NLS-1$
     
     this.cmbCreationFlag = new Combo(clientsubSection,  SWT.SIMPLE |
                                                      SWT.DROP_DOWN | 
@@ -297,23 +317,24 @@ public class DataStagingPage extends FormPage{
     /* =================== Delete On Termination Widgets ==================== */
     
     this.lblDelOnTerm = toolkit.createLabel(clientsubSection,
-                     Messages.getString("DataStagingPage_DeleteOnTermination"));
+                     Messages.getString("DataStagingPage_DeleteOnTermination")); //$NON-NLS-1$
     
     this.cmbDelOnTerm = new Combo(clientsubSection,  SWT.SIMPLE |
                                                   SWT.DROP_DOWN |
                                                   SWT.READ_ONLY);
     
     this.cmbDelOnTerm.setData( FormToolkit.KEY_DRAW_BORDER);    
-    this.cmbDelOnTerm.add(Messages.getString("DataStagingPage_true"));
-    this.cmbDelOnTerm.add(Messages.getString("DataStagingPage_false"));
+    this.cmbDelOnTerm.add(Messages.getString("DataStagingPage_true")); //$NON-NLS-1$
+    this.cmbDelOnTerm.add(Messages.getString("DataStagingPage_false")); //$NON-NLS-1$
     this.dataStagingAdapter.attachToDelOnTermination( this.cmbDelOnTerm );
     gd.horizontalSpan=3;
     gd.widthHint = 300;
     this.cmbDelOnTerm.setLayoutData(gd);
     
     /* ===================== Source Location Widgets ======================== */
+    
     this.lblSource = toolkit.createLabel(clientsubSection,
-                                  Messages.getString("DataStagingPage_Source"));
+                                  Messages.getString("DataStagingPage_Source")); //$NON-NLS-1$
     
     this.txtSource = toolkit.createText(clientsubSection, "", SWT.NONE); //$NON-NLS-1$
     this.dataStagingAdapter.attachToSource( this.txtSource );
@@ -324,7 +345,7 @@ public class DataStagingPage extends FormPage{
     /* ====================== Target Location Widgets ======================= */
     
     this.lblTarget = toolkit.createLabel(clientsubSection,
-                                  Messages.getString("DataStagingPage_Target"));
+                                  Messages.getString("DataStagingPage_Target")); //$NON-NLS-1$
     this.txtTarget = toolkit.createText(clientsubSection, "", SWT.NONE); //$NON-NLS-1$
     this.dataStagingAdapter.attachToTarget( this.txtTarget );
     gd.horizontalSpan=3;
@@ -333,7 +354,7 @@ public class DataStagingPage extends FormPage{
     
     /* ========================== Name Widgets ============================ */
     this.lblName = toolkit.createLabel(clientsubSection,
-                                    Messages.getString("DataStagingPage_Name"));
+                                    Messages.getString("DataStagingPage_Name")); //$NON-NLS-1$
     this.txtName= toolkit.createText(clientsubSection, "", SWT.NONE); //$NON-NLS-1$
     this.dataStagingAdapter.attachToName( this.txtName );
     gd.horizontalSpan=3;
@@ -359,12 +380,20 @@ public class DataStagingPage extends FormPage{
     
     /* Create the Staged Files Sub-Section */
     this.jobDataStaging = createSubSection (client,mform,
-                                 Messages.getString("DataStagingPage_Section"),
-                              Messages.getString("DataStagingPage_SectionDesc"),
-                              4,490,320);    
+                                 Messages.getString("DataStagingPage_Section"), //$NON-NLS-1$
+                              Messages.getString("DataStagingPage_SectionDesc"), //$NON-NLS-1$
+                              4,490,330);    
   
     
     return client;
+  }
+
+
+
+
+
+  public void notifyChanged( Notification notification ) {    
+    setDirty( true );    
   }
 
 

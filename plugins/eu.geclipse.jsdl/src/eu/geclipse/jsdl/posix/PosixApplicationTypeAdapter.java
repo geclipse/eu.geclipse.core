@@ -28,7 +28,8 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.util.FeatureMapUtil;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
@@ -47,30 +48,37 @@ import eu.geclipse.jsdl.model.posix.PosixPackage;
  * @author nickl
  *
  */
-public class PosixApplicationTypeAdapter {
+public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
-  Hashtable< Integer, Text > widgetFeaturesMap = new Hashtable< Integer, Text >();
-  Hashtable< Integer, Table > tableFeaturesMap = new Hashtable< Integer, Table >();
-  Hashtable<String, EStructuralFeature> eStructuralFeaturesMap 
+  protected POSIXApplicationType posixApplicationType = 
+                            PosixFactory.eINSTANCE.createPOSIXApplicationType();
+  
+  protected EnvironmentType environmentType = PosixFactory.eINSTANCE.
+                                                        createEnvironmentType();
+
+  protected ArgumentType argumentType = PosixFactory.eINSTANCE.createArgumentType();
+  
+  protected FileNameType fileName = null;
+  
+  private Hashtable< Integer, Text > widgetFeaturesMap = new Hashtable< Integer, Text >();
+  private Hashtable< Integer, Table > tableFeaturesMap = new Hashtable< Integer, Table >();
+  private Hashtable<String, EStructuralFeature> eStructuralFeaturesMap 
                                   = new Hashtable<String, EStructuralFeature>();
   
-  private POSIXApplicationType posixApplicationType;
   
-  private EnvironmentType environmentType = PosixFactory.eINSTANCE.
-                                                        createEnvironmentType();
   
-  private ArgumentType argumentType = PosixFactory.eINSTANCE.createArgumentType();
   
-  private FileNameType fileName = null;
-  private Boolean adapterRefreshed = false;
+  private boolean adapterRefreshed = false;
+  private boolean isNotifyAllowed = true;
   
-  /*
-   * Class Constructor
+  
+  /**
+   * PosixApplicationTypeAdapter Class Constructor
+   * @param rootJsdlElement
    */
   public PosixApplicationTypeAdapter(final EObject rootJsdlElement){
     
-    this.posixApplicationType = PosixFactory.eINSTANCE.createPOSIXApplicationType();
-    getTypeForAdapter(rootJsdlElement);
+     getTypeForAdapter(rootJsdlElement);
     
   }
   
@@ -81,17 +89,16 @@ public class PosixApplicationTypeAdapter {
   */  
   private void  getTypeForAdapter(final EObject rootJsdlElement){
    
-   TreeIterator iterator = rootJsdlElement.eAllContents();
+   TreeIterator<EObject> iterator = rootJsdlElement.eAllContents();
    
    while ( iterator.hasNext (  )  )  {  
   
-     EObject testType = (EObject) iterator.next();
+     EObject testType = iterator.next();
          
      if ( testType instanceof POSIXApplicationType ) {
        this.posixApplicationType = (POSIXApplicationType) testType;  
       
-//       LimitsTypeAdapter lt = new LimitsTypeAdapter(posixApplicationType);
-     } 
+    } 
      
    }    
 
@@ -102,108 +109,119 @@ public class PosixApplicationTypeAdapter {
  /*
   * Method of setting the content of the Adapter.
   */
- public void setContent(final EObject rootJsdlElement){
+  public void setContent(final EObject rootJsdlElement){
    this.adapterRefreshed = true; 
    getTypeForAdapter( rootJsdlElement );   
    
   } // End setContent()
   
+  
+  
+  protected void contentChanged(){
+    if (this.isNotifyAllowed){
+      fireNotifyChanged( null);
+    }
+  }
+  
  
- 
-  public void attachPosixApplicationName(final Text widget){    
-    this.widgetFeaturesMap.put( PosixPackage.POSIX_APPLICATION_TYPE__NAME, widget );    
+  public void attachPosixApplicationName(final Text widget){
+    Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__NAME);
+    this.widgetFeaturesMap.put( featureID, widget );
+    
+     widget.addModifyListener( new ModifyListener() {
+      
+      public void modifyText( final ModifyEvent e ) {
+        PosixApplicationTypeAdapter.this.posixApplicationType.setName(widget.getText());
+        contentChanged();
         
-     widget.addFocusListener( new org.eclipse.swt.events.FocusListener() {
-      public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
-        posixApplicationType.setName(widget.getText());    
       }
-      public void focusGained(final org.eclipse.swt.events.FocusEvent e ) { }
-    } );
+    } );    
   }
   
   
   
-  public void attachPosixApplicationExecutable(final Text widget){    
-    this.widgetFeaturesMap.put( PosixPackage.POSIX_APPLICATION_TYPE__EXECUTABLE, widget );    
-    fileName = PosixFactory.eINSTANCE.createFileNameType();    
-     widget.addFocusListener( new org.eclipse.swt.events.FocusListener() {
-      public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
-        fileName.setValue( widget.getText() );
-        posixApplicationType.setExecutable(fileName);    
-      }      
-      public void focusGained(final org.eclipse.swt.events.FocusEvent e ) { }
-    } );
+  public void attachPosixApplicationExecutable(final Text widget){
+    Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__EXECUTABLE);
+    this.widgetFeaturesMap.put( featureID , widget );    
+    this.fileName = PosixFactory.eINSTANCE.createFileNameType();
+   
+    widget.addModifyListener( new ModifyListener() {
+    public void modifyText( final ModifyEvent e ) {
+      PosixApplicationTypeAdapter.this.fileName.setValue( widget.getText() );
+      PosixApplicationTypeAdapter.this.posixApplicationType
+                      .setExecutable(PosixApplicationTypeAdapter.this.fileName);
+      contentChanged();
+      
+    }
+  } );     
   }
   
   
   
-  public void attachPosixApplicationInput(final Text widget){    
-    this.widgetFeaturesMap.put( PosixPackage.POSIX_APPLICATION_TYPE__INPUT, widget );
-    fileName = PosixFactory.eINSTANCE.createFileNameType();    
-     widget.addFocusListener( new org.eclipse.swt.events.FocusListener() {
-      public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
-        fileName.setValue( widget.getText() );
-        posixApplicationType.setInput(fileName);    
-      }      
-      public void focusGained(final org.eclipse.swt.events.FocusEvent e ) { }
-    } );
+  public void attachPosixApplicationInput(final Text widget){   
+    Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__INPUT);
+    this.widgetFeaturesMap.put( featureID , widget );
+    this.fileName = PosixFactory.eINSTANCE.createFileNameType();
+    
+    widget.addModifyListener( new ModifyListener() {
+      public void modifyText( final ModifyEvent e ) {
+        PosixApplicationTypeAdapter.this.fileName.setValue( widget.getText() );
+        PosixApplicationTypeAdapter.this.posixApplicationType
+                          .setInput(PosixApplicationTypeAdapter.this.fileName);
+        contentChanged();
+        
+      }
+    } ); 
+     
   }
 
   
   
   public void attachPosixApplicationOutput(final Text widget){    
-    this.widgetFeaturesMap.put( PosixPackage.POSIX_APPLICATION_TYPE__OUTPUT, widget );
-    fileName = PosixFactory.eINSTANCE.createFileNameType();    
-     widget.addFocusListener( new org.eclipse.swt.events.FocusListener() {
-      public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
-        fileName.setValue( widget.getText() );
-        posixApplicationType.setOutput(fileName);    
-      }      
-      public void focusGained(final org.eclipse.swt.events.FocusEvent e ) { }
-    } );   
-  }
-  
-  
-  
-  public void attachPosixApplicationError(final Text widget){    
-    this.widgetFeaturesMap.put( PosixPackage.POSIX_APPLICATION_TYPE__ERROR, widget );
-    fileName = PosixFactory.eINSTANCE.createFileNameType();    
-     widget.addFocusListener( new org.eclipse.swt.events.FocusListener() {
-      public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
-        fileName.setValue( widget.getText() );
-        posixApplicationType.setError(fileName);    
-      }      
-      public void focusGained(final org.eclipse.swt.events.FocusEvent e ) { }
-    } );
-  }
-  
-  
-  public void attachToPosixApplicationArgument(final Table widget){    
-    this.tableFeaturesMap.put( PosixPackage.POSIX_APPLICATION_TYPE__ARGUMENT
-                                , widget );
+    Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__OUTPUT);
+    this.widgetFeaturesMap.put( featureID, widget );
+    this.fileName = PosixFactory.eINSTANCE.createFileNameType();
+    
+    widget.addModifyListener( new ModifyListener() {
+      public void modifyText( final ModifyEvent e ) {
+        PosixApplicationTypeAdapter.this.fileName.setValue( widget.getText() );
+        PosixApplicationTypeAdapter.this.posixApplicationType
+                          .setOutput(PosixApplicationTypeAdapter.this.fileName);
+        contentChanged();
         
-     widget.addFocusListener( new org.eclipse.swt.events.FocusListener() {
-      public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
-        // List Add Functionality    
       }
-      public void focusGained(final FocusEvent e ) { }
-     
-    } );
+    } );    
   }
   
   
   
-  public void attachToPosixApplicationEnvironment(final Table widget){    
-    this.tableFeaturesMap.put( PosixPackage.POSIX_APPLICATION_TYPE__ENVIRONMENT
-                                , widget );
+  public void attachPosixApplicationError(final Text widget){
+    Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__ERROR);
+    this.widgetFeaturesMap.put( featureID , widget );
+    this.fileName = PosixFactory.eINSTANCE.createFileNameType();   
+    
+    widget.addModifyListener( new ModifyListener() {
+      public void modifyText( final ModifyEvent e ) {
+        PosixApplicationTypeAdapter.this.fileName.setValue( widget.getText() );
+        PosixApplicationTypeAdapter.this.posixApplicationType
+                          .setError(PosixApplicationTypeAdapter.this.fileName);
+        contentChanged();
         
-     widget.addFocusListener( new org.eclipse.swt.events.FocusListener() {
-      public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
-        // List Add Functionality    
       }
-      public void focusGained(final FocusEvent e ) { }
-     
     } );
+  }
+  
+  
+  public void attachToPosixApplicationArgument(final Table widget){
+    Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__ARGUMENT);
+    this.tableFeaturesMap.put( featureID , widget );      
+  }
+  
+  
+  
+  public void attachToPosixApplicationEnvironment(final Table widget){
+    Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__ENVIRONMENT);
+    this.tableFeaturesMap.put( featureID , widget );       
   }
   
   
@@ -238,33 +256,55 @@ public class PosixApplicationTypeAdapter {
   } //End isEmpty()
   
   
-private void performDelete(final TableItem item){
+  protected void performDelete(final TableItem item){
     
-    Table tableWidget;
+    Table tableWidget = null;
+    EStructuralFeature eStructuralFeature = null;
         
     String key = item.getText( 0 );    
     
+    if (this.eStructuralFeaturesMap.containsKey( key ) ){
+    
     /* Get EStructuralFeature */
-    EStructuralFeature eStructuralFeature = this.eStructuralFeaturesMap.get( key );
+      eStructuralFeature = this.eStructuralFeaturesMap.get( key );
     
     /* Delete only Multi-Valued Elements */
-    if (FeatureMapUtil.isMany(this.posixApplicationType, eStructuralFeature)){
+      if (FeatureMapUtil.isMany(this.posixApplicationType, eStructuralFeature)){
       
-      ((java.util.List<?>)this.posixApplicationType.eGet(eStructuralFeature))
+        ((java.util.List<?>)this.posixApplicationType.eGet(eStructuralFeature))
                                                                    .remove( key );
+      
+        
+        this.removeFromMap( key );
+        this.contentChanged();
+        
+        Integer featureID = new Integer(eStructuralFeature.getFeatureID());
+        tableWidget = this.tableFeaturesMap.get( featureID );
+      }
     }    
 
           
-    /* Get Structural Feature ID to remove it from the associated SWT List */
-    int featureID = eStructuralFeature.getFeatureID();
+    /* Get Structural Feature ID to remove it from the associated SWT Table 
+     * and also delete any reference to the Structural Features Map*/
+    
+    Integer featureID = new Integer(eStructuralFeature.getFeatureID());
     tableWidget = this.tableFeaturesMap.get( featureID );
     tableWidget.remove( tableWidget.getSelectionIndex() );
+    
     
   }
   
   
+  
+  private void removeFromMap (final Object key){
+    this.eStructuralFeaturesMap.remove( key );
+  }
+  
+  
+  
   public void load()
   {
+    this.isNotifyAllowed = false;
     EObject object = this.posixApplicationType;
     Text widgetName = null;
     Table tableName = null;
@@ -273,11 +313,11 @@ private void performDelete(final TableItem item){
     if(object != null) {
       EClass eClass = object.eClass();
       
-      for (Iterator iterRef = eClass.getEAllStructuralFeatures().iterator(); iterRef.hasNext();){
+      for (Iterator<EStructuralFeature> iterRef = eClass.getEAllStructuralFeatures().iterator(); iterRef.hasNext();){
         
-        EStructuralFeature eStructuralFeature = (EStructuralFeature) iterRef.next();
+        EStructuralFeature eStructuralFeature = iterRef.next();
            
-        Integer featureID = eStructuralFeature.getFeatureID();
+        int featureID =  eStructuralFeature.getFeatureID();
         
         if (eStructuralFeature instanceof EReference) {
 
@@ -295,13 +335,11 @@ private void performDelete(final TableItem item){
              eStrFeatValue = eObject.eGet(ExtendedMetaData.INSTANCE.getSimpleFeature(eObject.eClass())); 
             
            }
-                
-           
            
            // Check if Reference has been set.
            if (object.eIsSet( eStructuralFeature ) 
-               && eStructuralFeature.getName().toString() != "anyAttribute" ){          
-             widgetName = this.widgetFeaturesMap.get( featureID );
+               && eStructuralFeature.getFeatureID() != PosixPackage.POSIX_APPLICATION_TYPE__ANY_ATTRIBUTE ){          
+             widgetName = this.widgetFeaturesMap.get( new Integer(featureID) );
              widgetName.setText(eStrFeatValue.toString());            
              
            }
@@ -313,11 +351,12 @@ private void performDelete(final TableItem item){
               case PosixPackage.POSIX_APPLICATION_TYPE__ENVIRONMENT:                
               {
                 
-                tableName = this.tableFeaturesMap.get( featureID );
+                tableName = this.tableFeaturesMap.get( new Integer(featureID) );
                 EList valueList = (EList) object.eGet( eStructuralFeature );                
                 if(!this.adapterRefreshed) {
-                  for (Iterator it = valueList.iterator(); it.hasNext();){
+                  for (Iterator  it = valueList.iterator(); it.hasNext();){
                    this.environmentType = (EnvironmentType) it.next(); 
+                  
                    
                    this.eStructuralFeaturesMap.put( this.environmentType.getFilesystemName(),
                                                   eStructuralFeature );
@@ -333,17 +372,23 @@ private void performDelete(final TableItem item){
               case PosixPackage.POSIX_APPLICATION_TYPE__ARGUMENT:                
               {                
                 tableName = this.tableFeaturesMap.get( featureID );
-                EList valueList = (EList) object.eGet( eStructuralFeature );                
+                EList valueList = (EList) object.eGet( eStructuralFeature );  
+                String fileSystemName = ""; //$NON-NLS-1$
+                String fileSystemValue = ""; //$NON-NLS-1$
+                
                 if(!this.adapterRefreshed) {
                   for (Iterator it = valueList.iterator(); it.hasNext();){
                     
                    this.argumentType = (ArgumentType) it.next();          
                    this.eStructuralFeaturesMap.put( this.argumentType.getFilesystemName(),
                                                     eStructuralFeature );
+                   fileSystemName = this.argumentType.getFilesystemName();
+                   fileSystemValue = this.argumentType.getValue();
+                 
                    
                      TableItem tableItem  = new TableItem(tableName, SWT.NONE);                     
-                     tableItem.setText( 0 , this.argumentType.getFilesystemName());
-                     tableItem.setText( 1 , this.argumentType.getValue());                     
+                     tableItem.setText( 0 , fileSystemName);
+                     tableItem.setText( 1 , fileSystemValue);                     
                     } // End Iterator
                              
                   } // Endif
@@ -368,7 +413,7 @@ private void performDelete(final TableItem item){
                 
           // Check if Attribute has any value
           if (object.eIsSet( eStructuralFeature )){          
-             widgetName = this.widgetFeaturesMap.get( featureID );
+             widgetName = this.widgetFeaturesMap.get( new Integer(featureID) );
              
              if (eStructuralFeature.getName().toString() != "any"){ //$NON-NLS-1$
                widgetName.setText(value.toString());
@@ -386,6 +431,7 @@ private void performDelete(final TableItem item){
       
       
     } // End if    
+    this.isNotifyAllowed = true;
   } // End void load()
     
   
