@@ -13,12 +13,6 @@
           name="JSDL Editor"/>      
    </extension>
    <extension
-         point="eu.geclipse.jsdl.ui.applicationParameters">
-      <applicationName name="grep"/>
-      <executablePath path="/usr/local/bin/grep"/>
-      <parametersSchema path="xml/page.xml"/>
-   </extension>
-   <extension
          point="org.eclipse.ui.newWizards">
       <wizard
             canFinishEarly="true"
