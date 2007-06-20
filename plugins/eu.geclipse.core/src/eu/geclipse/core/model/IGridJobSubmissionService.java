@@ -16,6 +16,8 @@
 
 package eu.geclipse.core.model;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+
 import eu.geclipse.core.GridException;
 
 /**
@@ -30,7 +32,7 @@ public interface IGridJobSubmissionService extends IGridService{
    * @return TODO pawel
    * @throws GridException TODO pawel
    */
-  public IGridJobID submitJob( final IGridJobDescription parent ) throws GridException;
+  public IGridJobID submitJob( final IGridJobDescription parent, final IProgressMonitor monitor ) throws GridException;
 
 //  /**
 //   * TODO pawel
