@@ -113,7 +113,7 @@ public class GridJobStatus implements IGridJobStatus {
     boolean canChange = true;
     switch( type ) {
       case DONE:
-      case ABANDONED:
+      case PURGED:
       case ABORTED:
         canChange = false;
     }
