@@ -13,7 +13,6 @@
  *    Mathias Stuempert - initial API and implementation
  *    Pawel Wolniewicz - Some improvements
  *****************************************************************************/
-
 package eu.geclipse.core.model;
 
 import java.util.Date;
@@ -24,46 +23,34 @@ import java.util.Date;
  */
 public interface IGridJobStatus {
 
-  
-  /**
-   * Status for job which real status cannot be retrieved now
-   */
-  public final static int UNKNOWN=0x0; 
-
   /**
    * Status of the job which was submitted and is not scheduled by RB yet.
    */
-  public final static int SUBMITTED=0x1; 
-
+  public final static int SUBMITTED = 0x1;
   /**
    * Status of the job which was scheduled by RB and is sent to its destination,
    * but computation was not started yet.
    */
-  public final static int WAITING=0x2; 
-  
+  public final static int WAITING = 0x2;
   /**
    * Status of the job which is actually running
    */
-  public final static int RUNNING=0x4; 
-
+  public final static int RUNNING = 0x4;
   /**
    * Status of the job which was finished successfully
    */
-  public final static int DONE=0x8; 
-
+  public final static int DONE = 0x8;
   /**
    * Status of the job which was finished unsuccessfully
    */
-  public final static int ABORTED=0x10; 
-
+  public final static int ABORTED = 0x10;
   /**
    * Status of the job for which status information is no longer available. e.g.
    * job information was removed from RB. The difference between UNKNOWN and
-   * ABANDONED is that UNKNOWN can be changed in the future to the real status
-   * and ABANDONED is a final status.
+   * PURGED is that UNKNOWN can be changed in the future to the real status and
+   * PURGED is a final status.
    */
-  public final static int ABANDONED=0x20; 
-
+  public final static int PURGED = 0x20;
   /**
    * <p>
    * Status of the job cannot be determined.
@@ -72,11 +59,26 @@ public interface IGridJobStatus {
    * The difference between UNDEF and UNKNOWN is that UNKNOWN is a temporary
    * state (e.g. because some network problem) and UNDEF is more permanent state
    * (e.g. status cannot be retrieved because there is no access to status
-   * service like no appropriate plugin is available)
+   * service like no appropriate plugin is available) Job with status UNKNOWN
+   * will be queried again during the session, job wit status UNDEF will not.
+   * UNDEF job existing in the workspace will be queried for update when
+   * gEclipse starts
    * </p>
    */
-  public final static int UNDEF=0x40; 
-  
+  public final static int UNDEF = 0x40;
+  /**
+   * Status for job which real status cannot be retrieved now
+   */
+  public final static int UNKNOWN = 0x80;
+  public final static int _ALL = ABORTED
+                                 + DONE
+                                 + PURGED
+                                 + RUNNING
+                                 + SUBMITTED
+                                 + UNKNOWN
+                                 + WAITING
+                                 + UNDEF;
+
   /**
    * <p>
    * Return true if the status of the job can be changed in the future yet.
@@ -116,7 +118,7 @@ public interface IGridJobStatus {
    * @return Name of the status
    */
   public String getName();
-  
+
   /**
    * Returns the type of the status. This is integer value and defines the
    * meaning of the status. This value will be used for filtering job list to
@@ -135,8 +137,7 @@ public interface IGridJobStatus {
    * @return time of last update
    */
   public Date getLastUpdateTime();
-  
-  
+
   /**
    * Return the explanation why the job is in the specific state. Can give more
    * detailed information than just status name.
