@@ -58,7 +58,13 @@ public class CoreProblems implements IProblemProvider {
    */
   public static final int UNSPECIFIED_IO_PROBLEM
     = ProblemRegistry.uniqueID();
-
+  
+  /**
+   * Problem ID for file access problems.
+   */
+  public static final int FILE_ACCESS_PROBLEM
+    = ProblemRegistry.uniqueID();
+ 
   /**
    * Problem ID for problem getting the SSH service from OSGI.
    */
@@ -112,7 +118,12 @@ public class CoreProblems implements IProblemProvider {
                                exc,
                                null );
     }
-
+    else if ( problemID == FILE_ACCESS_PROBLEM ) {
+      problem = createProblem( problemID,
+                               "There was a problem when performing an operation on a file/directory",
+                               exc,
+                               null );
+    }
     else if ( problemID == BIND_FAILED ) {
       problem = createProblem( problemID,
                                Messages.getString("CoreProblems.bindFailed"), //$NON-NLS-1$
