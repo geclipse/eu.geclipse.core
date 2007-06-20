@@ -24,7 +24,9 @@ public interface IGridJobManager
     extends IGridElementManager {
   
 
-  public void addJobStatusListener(List<IGridJob> jobs, int status, IGridJobStatusListener listener);
+  public void addJobStatusListener(IGridJob[] jobs, int status, IGridJobStatusListener listener);
+
+  public void addJobStatusListener(IGridJobID[] jobIds, int status, IGridJobStatusListener listener);
 
   public void removeJobStatusListener(IGridJobStatusListener listener);
   

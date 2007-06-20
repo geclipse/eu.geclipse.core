@@ -24,6 +24,7 @@ import eu.geclipse.core.JobStatusUpdater;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridJob;
+import eu.geclipse.core.model.IGridJobID;
 import eu.geclipse.core.model.IGridJobManager;
 import eu.geclipse.core.model.IGridJobStatusListener;
 
@@ -45,7 +46,7 @@ public class JobManager extends AbstractGridElementManager
   /**
    * Hashtable for holding information about updaters assigned to jobs.
    */
-  private Hashtable<IGridJob, JobStatusUpdater> updaters = new Hashtable<IGridJob, JobStatusUpdater>();
+  private Hashtable<IGridJobID, JobStatusUpdater> updaters = new Hashtable<IGridJobID, JobStatusUpdater>();
 
   /**
    * Private constructor to ensure to have only one instance of this class. This
@@ -62,10 +63,10 @@ public class JobManager extends AbstractGridElementManager
     boolean flag;
     flag = super.addElement( element );
     if( element instanceof IGridJob ) {
-      JobStatusUpdater updater = new JobStatusUpdater( ( IGridJob )element );
-      updaters.put( ( IGridJob )element, updater );
+      JobStatusUpdater updater = new JobStatusUpdater( (( IGridJob )element).getID() );
+      updaters.put( (( IGridJob )element).getID(), updater );
       updater.setSystem( true );
-      updater.schedule( 20000 );
+      updater.schedule( 120000 );
     }
     return flag;
   }
@@ -106,13 +107,30 @@ public class JobManager extends AbstractGridElementManager
    * @see eu.geclipse.core.model.IGridJobManager#addJobStatusListener(java.util.List,
    *      int, eu.geclipse.core.model.IGridJobStatusListener)
    */
-  public void addJobStatusListener( final List<IGridJob> jobs,
+  public void addJobStatusListener( final IGridJob[] jobs,
                                     final int status,
                                     final IGridJobStatusListener listener )
   {
     JobStatusUpdater updater;
     for( IGridJob job : jobs ) {
-      updater = ( JobStatusUpdater )updaters.get( job );
+      updater = ( JobStatusUpdater )updaters.get( job.getID() );
+      updater.addJobStatusListener( status, listener );
+    }
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see eu.geclipse.core.model.IGridJobManager#addJobStatusListener(java.util.List,
+   *      int, eu.geclipse.core.model.IGridJobStatusListener)
+   */
+  public void addJobStatusListener( final IGridJobID[] ids,
+                                    final int status,
+                                    final IGridJobStatusListener listener )
+  {
+    JobStatusUpdater updater;
+    for( IGridJobID id : ids ) {
+      updater = ( JobStatusUpdater )updaters.get( id );
       updater.addJobStatusListener( status, listener );
     }
   }
