@@ -46,7 +46,7 @@ public class JobManager extends AbstractGridElementManager
   /**
    * Hashtable for holding information about updaters assigned to jobs.
    */
-  private Hashtable<IGridJobID, JobStatusUpdater> updaters = new Hashtable<IGridJobID, JobStatusUpdater>();
+  private Hashtable<IGridJob, JobStatusUpdater> updaters = new Hashtable<IGridJob, JobStatusUpdater>();
 
   /**
    * Private constructor to ensure to have only one instance of this class. This
@@ -63,8 +63,8 @@ public class JobManager extends AbstractGridElementManager
     boolean flag;
     flag = super.addElement( element );
     if( element instanceof IGridJob ) {
-      JobStatusUpdater updater = new JobStatusUpdater( (( IGridJob )element).getID() );
-      updaters.put( (( IGridJob )element).getID(), updater );
+      JobStatusUpdater updater = new JobStatusUpdater( (( IGridJob )element) );
+      updaters.put( (( IGridJob )element), updater );
       updater.setSystem( true );
       updater.schedule( 120000 );
     }
