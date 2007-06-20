@@ -142,13 +142,13 @@ public class WorkflowNewDiagramFileWizard extends Wizard {
       WorkflowDiagramEditorUtil.openDiagram( diagramResource );
     } catch( ExecutionException e ) {
       WorkflowDiagramEditorPlugin.getInstance()
-        .logError( "Unable to create model and diagram", e ); //$NON-NLS-1$
+        .logError( Messages.getString("WorkflowInitDiagramFileAction_UnableToCreateModelAndDiagram"), e ); //$NON-NLS-1$
     } catch( IOException ex ) {
       WorkflowDiagramEditorPlugin.getInstance()
-        .logError( "Save operation failed for: " + diagramModelURI, ex ); //$NON-NLS-1$
+        .logError( Messages.getString("WorkflowInitDiagramFileAction_SaveOperationFailedFor") + diagramModelURI, ex ); //$NON-NLS-1$
     } catch( PartInitException ex ) {
       WorkflowDiagramEditorPlugin.getInstance()
-        .logError( "Unable to open editor", ex ); //$NON-NLS-1$
+        .logError( Messages.getString("WorkflowInitDiagramFileAction_UnableToOpenEditor"), ex ); //$NON-NLS-1$
     }
     return true;
   }
