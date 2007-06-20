@@ -38,8 +38,7 @@ public class WorkflowJobItemProvider extends WorkflowNodeItemProvider
 {
 
   /**
-   * This constructs an instance from a factory and a notifier. <!--
-   * begin-user-doc --> <!-- end-user-doc -->
+   * This constructs an instance from a factory and a notifier. 
    * 
    * @generated
    */
@@ -48,8 +47,7 @@ public class WorkflowJobItemProvider extends WorkflowNodeItemProvider
   }
 
   /**
-   * This returns the property descriptors for the adapted class. <!--
-   * begin-user-doc --> <!-- end-user-doc -->
+   * This returns the property descriptors for the adapted class. 
    * 
    * @generated
    */
@@ -64,10 +62,9 @@ public class WorkflowJobItemProvider extends WorkflowNodeItemProvider
   }
 
   /**
-   * This adds a property descriptor for the Job Description feature. <!--
-   * begin-user-doc --> <!-- end-user-doc -->
+   * This adds a property descriptor for the Job Description feature. 
    * 
-   * @generated
+   * @generated NOT
    */
   protected void addJobDescriptionPropertyDescriptor( Object object ) {
     itemPropertyDescriptors.add( createItemPropertyDescriptor( ( ( ComposeableAdapterFactory )adapterFactory ).getRootAdapterFactory(),
@@ -78,7 +75,7 @@ public class WorkflowJobItemProvider extends WorkflowNodeItemProvider
                                                                           "_UI_IWorkflowJob_type" ),
                                                                IWorkflowPackage.Literals.IWORKFLOW_JOB__JOB_DESCRIPTION,
                                                                true,
-                                                               false,
+                                                               true,
                                                                false,
                                                                ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
                                                                null,
@@ -86,21 +83,18 @@ public class WorkflowJobItemProvider extends WorkflowNodeItemProvider
   }
 
   /**
-   * This returns IWorkflowJob.gif. <!-- begin-user-doc --> <!-- end-user-doc
-   * -->
+   * This returns IWorkflowJob.gif. 
    * 
    * @generated
    */
   @Override
   public Object getImage( Object object )
   {
-    return overlayImage( object,
-                         getResourceLocator().getImage( "full/obj16/WorkflowJob" ) );
+    return overlayImage( object, getResourceLocator().getImage( "full/obj16/WorkflowJob" ) );
   }
 
   /**
-   * This returns the label text for the adapted class. <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * This returns the label text for the adapted class. 
    * 
    * @generated
    */
@@ -131,7 +125,7 @@ public class WorkflowJobItemProvider extends WorkflowNodeItemProvider
       case IWorkflowPackage.IWORKFLOW_JOB__JOB_DESCRIPTION:
         fireNotifyChanged( new ViewerNotification( notification,
                                                    notification.getNotifier(),
-                                                   false,
+                                                   true,
                                                    true ) );
         return;
     }
@@ -141,8 +135,7 @@ public class WorkflowJobItemProvider extends WorkflowNodeItemProvider
   /**
    * This adds {@link org.eclipse.emf.edit.command.CommandParameter}s describing the children
    * that can be created under this object.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
+   * 
    * @generated
    */
   @Override
@@ -154,8 +147,6 @@ public class WorkflowJobItemProvider extends WorkflowNodeItemProvider
 
   /**
    * Return the resource locator for this item provider's resources.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
    * @generated
    */
   @Override

@@ -359,7 +359,7 @@ public class WorkflowJobNameEditPart extends CompartmentEditPart
   /**
    * @generated
    */
-  private void performDirectEdit( char initialCharacter ) {
+  void performDirectEdit( char initialCharacter ) {
     if( getManager() instanceof TextDirectEditManager ) {
       ( ( TextDirectEditManager )getManager() ).show( initialCharacter );
     } else {

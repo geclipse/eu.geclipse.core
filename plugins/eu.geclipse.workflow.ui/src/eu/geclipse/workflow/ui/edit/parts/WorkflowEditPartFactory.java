@@ -71,9 +71,8 @@ public class WorkflowEditPartFactory implements EditPartFactory {
   {
     if( source.getFigure() instanceof WrapLabel )
       return new TextCellEditorLocator( ( WrapLabel )source.getFigure() );
-    else {
+    else 
       return new LabelCellEditorLocator( ( Label )source.getFigure() );
-    }
   }
   /**
    * @generated
@@ -130,6 +129,8 @@ public class WorkflowEditPartFactory implements EditPartFactory {
       }
     }
   }
+  
+  
   /**
    * @generated
    */

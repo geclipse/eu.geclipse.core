@@ -182,8 +182,7 @@ public class WorkflowElementTypes extends ElementInitializers {
       elements = new IdentityHashMap();
       elements.put( IWorkflow_79, IWorkflowPackage.eINSTANCE.getIWorkflow() );
       elements.put( IWorkflowJob_1001, IWorkflowPackage.eINSTANCE.getIWorkflowJob() );
-      elements.put( IOutputPort_2001,
-                    IWorkflowPackage.eINSTANCE.getIOutputPort() );
+      elements.put( IOutputPort_2001, IWorkflowPackage.eINSTANCE.getIOutputPort() );
       elements.put( IInputPort_2002, IWorkflowPackage.eINSTANCE.getIInputPort() );
       elements.put( ILink_3001, IWorkflowPackage.eINSTANCE.getILink() );
     }

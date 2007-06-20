@@ -30,8 +30,7 @@ import org.eclipse.emf.edit.provider.ViewerNotification;
 
 /**
  * This is the item provider adapter for a
- * {@link eu.geclipse.workflow.IWorkflowNode} object. <!-- begin-user-doc -->
- * <!-- end-user-doc -->
+ * {@link eu.geclipse.workflow.IWorkflowNode} object. 
  * 
  * @generated
  */

@@ -11,6 +11,7 @@ package eu.geclipse.workflow.ui.edit.parts;
 
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
+import org.eclipse.draw2d.PositionConstants;
 import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.StackLayout;
 import org.eclipse.draw2d.ToolbarLayout;
@@ -34,7 +35,6 @@ import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.swt.graphics.Color;
 import eu.geclipse.workflow.ui.edit.policies.WorkflowJobCanonicalEditPolicy;
 import eu.geclipse.workflow.ui.edit.policies.WorkflowJobItemSemanticEditPolicy;
-import eu.geclipse.workflow.ui.part.WorkflowVisualIDRegistry;
 
 /**
  * @generated
@@ -157,7 +157,13 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
     if( addFixedChild( childEditPart ) ) {
       return;
     }
+    super.addChildVisual( childEditPart, 1 );
+
+    if ( addChild( childEditPart )) {
+      return;
+    }
     super.addChildVisual( childEditPart, -1 );
+
   }
 
   /**
@@ -228,13 +234,11 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
     return super.getContentPane();
   }
 
-  /**
-   * @generated
-   */
-  @Override
-  public EditPart getPrimaryChildEditPart() {
-    return getChildBySemanticHint( WorkflowVisualIDRegistry.getType( WorkflowJobNameEditPart.VISUAL_ID ) );
-  }
+
+//  @Override
+//  public EditPart getPrimaryChildEditPart() {
+//    return getChildBySemanticHint( WorkflowVisualIDRegistry.getType( WorkflowJobDescriptionEditPart.VISUAL_ID ) );
+//  }
 
   
   
@@ -253,7 +257,9 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
     private WrapLabel fFigureWorkflowJobDescriptionFigure;
 
     /**
-     * Creates the WorkflowJobFigure
+     * Constructor; creates the WorkflowJobFigure
+     * 
+     * Note to developer: FlowLayout does not allow the WrapLabel to wrap its text. 
      */
     public WorkflowJobFigure() {
       ToolbarLayout layoutThis = new ToolbarLayout();
@@ -269,23 +275,23 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
     }
 
     /**
-     * @generated
+     * Creates the contents of the WorkflowJob figure
      */
     private void createContents() {
-      Label workflowJobNameFigure0 = new Label();
-      workflowJobNameFigure0.setText( "<...>" );
-      this.add( workflowJobNameFigure0 );
-      this.fFigureWorkflowJobNameFigure = workflowJobNameFigure0;
-      WrapLabel workflowJobDescriptionFigure1 = new WrapLabel();
-//      workflowJobDescriptionFigure1.setText( "Job Description Here" );
-//      workflowJobDescriptionFigure1.setTextWrap( true );
-//      workflowJobDescriptionFigure1.setSize( 30, 30 );
-//      workflowJobDescriptionFigure1.setBackgroundColor( JOB_DESC_BACK );
-//      workflowJobDescriptionFigure1.setOpaque( true );
-//      workflowJobDescriptionFigure1.setLocation( new Point ( 20, 20 ) );
-//      workflowJobDescriptionFigure1.setTextWrapWidth( 20 );
-      this.add( workflowJobDescriptionFigure1 );
-      this.fFigureWorkflowJobDescriptionFigure = workflowJobDescriptionFigure1;
+      Label workflowJobNameFigure = new Label();
+      workflowJobNameFigure.setText( "<...>" );
+      this.add( workflowJobNameFigure );
+      this.fFigureWorkflowJobNameFigure = workflowJobNameFigure;
+      WrapLabel workflowJobDescriptionFigure = new WrapLabel();
+      workflowJobDescriptionFigure.setText( "<..>" );
+      workflowJobDescriptionFigure.setTextWrap( true );
+      workflowJobDescriptionFigure.setTextAlignment( PositionConstants.LEFT );
+      workflowJobDescriptionFigure.setBackgroundColor( JOB_DESC_BACK );
+      workflowJobDescriptionFigure.setOpaque( true );
+      workflowJobDescriptionFigure.setTextWrapWidth( 100 );
+//      workflowJobDescriptionFigure.setFocus( true );
+      this.add( workflowJobDescriptionFigure );
+      this.fFigureWorkflowJobDescriptionFigure = workflowJobDescriptionFigure;
     }
     /**
      * @generated
@@ -327,5 +333,5 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
    */
   static final Color THIS_FORE = new Color( null, 220, 220, 240 );
   
-  static final Color JOB_DESC_BACK = new Color( null, 250, 250, 190 );
+  static final Color JOB_DESC_BACK = new Color( null, 250, 250, 220 );
 }

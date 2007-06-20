@@ -4,7 +4,8 @@
  * the Eclipse Public License v1.0 which accompanies this distribution, and is
  * available at http://www.eclipse.org/legal/epl-v10.html Initial development of
  * the original code was made for the g-Eclipse project founded by European
- * Union project number: FP6-IST-034327 http://www.geclipse.eu/ Contributors:
+ * Union project number: FP6-IST-034327 http://www.geclipse.eu/ 
+ * Contributors:
  * Ashish Thandavan - initial API and implementation
  ******************************************************************************/
 package eu.geclipse.workflow.ui.edit.parts;
@@ -15,7 +16,6 @@ import java.util.List;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.draw2d.IFigure;
 import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.geometry.Insets;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
@@ -38,7 +38,6 @@ import org.eclipse.gmf.runtime.diagram.ui.editparts.CompartmentEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.ITextAwareEditPart;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.LabelDirectEditPolicy;
-import org.eclipse.gmf.runtime.diagram.ui.figures.NoteFigure;
 import org.eclipse.gmf.runtime.diagram.ui.l10n.DiagramColorRegistry;
 import org.eclipse.gmf.runtime.diagram.ui.requests.RequestConstants;
 import org.eclipse.gmf.runtime.diagram.ui.tools.TextDirectEditManager;
@@ -55,7 +54,6 @@ import org.eclipse.swt.accessibility.AccessibleEvent;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
-import eu.geclipse.workflow.ui.edit.parts.InputPortEditPart.InputPortFigure;
 import eu.geclipse.workflow.ui.edit.policies.WorkflowTextSelectionEditPolicy;
 import eu.geclipse.workflow.ui.providers.WorkflowElementTypes;
 import eu.geclipse.workflow.ui.providers.WorkflowParserProvider;
@@ -99,8 +97,7 @@ public class WorkflowJobDescriptionEditPart extends CompartmentEditPart
    * @generated
    */
   @Override
-  protected void createDefaultEditPolicies()
-  {
+  protected void createDefaultEditPolicies() {
     super.createDefaultEditPolicies();
     installEditPolicy( EditPolicy.DIRECT_EDIT_ROLE, new LabelDirectEditPolicy() );
     installEditPolicy( EditPolicy.PRIMARY_DRAG_ROLE,
@@ -134,9 +131,8 @@ public class WorkflowJobDescriptionEditPart extends CompartmentEditPart
   protected String getLabelTextHelper( IFigure figure ) {
     if( figure instanceof WrapLabel ) {
       return ( ( WrapLabel )figure ).getText();
-    } else {
+    } else 
       return ( ( Label )figure ).getText();
-    }
   }
 
   /**
@@ -187,8 +183,7 @@ public class WorkflowJobDescriptionEditPart extends CompartmentEditPart
    * @generated
    */
   @Override
-  protected List getModelChildren()
-  {
+  protected List getModelChildren()  {
     return Collections.EMPTY_LIST;
   }
 
@@ -196,8 +191,7 @@ public class WorkflowJobDescriptionEditPart extends CompartmentEditPart
    * @generated
    */
   @Override
-  public IGraphicalEditPart getChildBySemanticHint( String semanticHint )
-  {
+  public IGraphicalEditPart getChildBySemanticHint( String semanticHint ) {
     return null;
   }
 
@@ -375,7 +369,7 @@ public class WorkflowJobDescriptionEditPart extends CompartmentEditPart
   /**
    * @generated
    */
-  private void performDirectEdit( char initialCharacter ) {
+  void performDirectEdit( char initialCharacter ) {
     if( getManager() instanceof TextDirectEditManager ) {
       ( ( TextDirectEditManager )getManager() ).show( initialCharacter );
     } else {
@@ -387,8 +381,7 @@ public class WorkflowJobDescriptionEditPart extends CompartmentEditPart
    * @generated
    */
   @Override
-  protected void performDirectEditRequest( Request request )
-  {
+  protected void performDirectEditRequest( Request request ) {
     final Request theRequest = request;
     try {
       getEditingDomain().runExclusive( new Runnable() {
@@ -421,8 +414,7 @@ public class WorkflowJobDescriptionEditPart extends CompartmentEditPart
    * @generated
    */
   @Override
-  protected void refreshVisuals()
-  {
+  protected void refreshVisuals()  {
     super.refreshVisuals();
     refreshLabel();
     refreshFont();
@@ -467,8 +459,7 @@ public class WorkflowJobDescriptionEditPart extends CompartmentEditPart
    * @generated
    */
   @Override
-  protected void refreshFont()
-  {
+  protected void refreshFont() {
     FontStyle style = ( FontStyle )getFontStyleOwnerView().getStyle( NotationPackage.eINSTANCE.getFontStyle() );
     if( style != null ) {
       FontData fontData = new FontData( style.getFontName(),
@@ -487,8 +478,7 @@ public class WorkflowJobDescriptionEditPart extends CompartmentEditPart
    * @generated
    */
   @Override
-  protected void setFontColor( Color color )
-  {
+  protected void setFontColor( Color color ) {
     getFigure().setForegroundColor( color );
   }
 
@@ -496,8 +486,7 @@ public class WorkflowJobDescriptionEditPart extends CompartmentEditPart
    * @generated
    */
   @Override
-  protected void addSemanticListeners()
-  {
+  protected void addSemanticListeners() {
     if( getParser() instanceof ISemanticParser ) {
       EObject element = resolveSemanticElement();
       parserElements = ( ( ISemanticParser )getParser() ).getSemanticElementsBeingParsed( element );
@@ -513,8 +502,7 @@ public class WorkflowJobDescriptionEditPart extends CompartmentEditPart
    * @generated
    */
   @Override
-  protected void removeSemanticListeners()
-  {
+  protected void removeSemanticListeners() {
     if( parserElements != null ) {
       for( int i = 0; i < parserElements.size(); i++ ) {
         removeListenerFilter( "SemanticModel" + i ); //$NON-NLS-1$
@@ -528,14 +516,12 @@ public class WorkflowJobDescriptionEditPart extends CompartmentEditPart
    * @generated
    */
   @Override
-  protected AccessibleEditPart getAccessibleEditPart()
-  {
+  protected AccessibleEditPart getAccessibleEditPart() {
     if( accessibleEP == null ) {
       accessibleEP = new AccessibleGraphicalEditPart() {
 
         @Override
-        public void getName( AccessibleEvent e )
-        {
+        public void getName( AccessibleEvent e ) {
           e.result = getLabelTextHelper( getFigure() );
         }
       };
@@ -554,8 +540,7 @@ public class WorkflowJobDescriptionEditPart extends CompartmentEditPart
    * @generated
    */
   @Override
-  protected void addNotationalListeners()
-  {
+  protected void addNotationalListeners() {
     super.addNotationalListeners();
     addListenerFilter( "PrimaryView", this, getPrimaryView() ); //$NON-NLS-1$
   }
@@ -564,8 +549,7 @@ public class WorkflowJobDescriptionEditPart extends CompartmentEditPart
    * @generated
    */
   @Override
-  protected void removeNotationalListeners()
-  {
+  protected void removeNotationalListeners() {
     super.removeNotationalListeners();
     removeListenerFilter( "PrimaryView" ); //$NON-NLS-1$
   }
@@ -574,8 +558,7 @@ public class WorkflowJobDescriptionEditPart extends CompartmentEditPart
    * @generated
    */
   @Override
-  protected void handleNotificationEvent( Notification event )
-  {
+  protected void handleNotificationEvent( Notification event ) {
     Object feature = event.getFeature();
     if( NotationPackage.eINSTANCE.getFontStyle_FontColor().equals( feature ) ) {
       Integer c = ( Integer )event.getNewValue();

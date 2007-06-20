@@ -22,6 +22,7 @@ import org.eclipse.gmf.runtime.emf.ui.services.parser.ParserHintAdapter;
 import org.eclipse.gmf.runtime.notation.View;
 import eu.geclipse.workflow.IWorkflowPackage;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowJobNameEditPart;
+import eu.geclipse.workflow.ui.edit.parts.WorkflowJobDescriptionEditPart;
 import eu.geclipse.workflow.ui.parsers.MessageFormatParser;
 import eu.geclipse.workflow.ui.part.WorkflowVisualIDRegistry;
 
@@ -36,6 +37,8 @@ public class WorkflowParserProvider extends AbstractProvider
    * @generated
    */
   private IParser iWorkflowJobName_4001Parser;
+  
+  private IParser iWorkflowJobDescription_4002Parser;
 
   /**
    * @generated
@@ -45,6 +48,13 @@ public class WorkflowParserProvider extends AbstractProvider
       iWorkflowJobName_4001Parser = createIWorkflowJobName_4001Parser();
     }
     return iWorkflowJobName_4001Parser;
+  }
+
+  private IParser getIWorkflowJobDescription_4002Parser() {
+    if( iWorkflowJobDescription_4002Parser == null ) {
+      iWorkflowJobDescription_4002Parser = createIWorkflowJobDescription_4002Parser();
+    }
+    return iWorkflowJobDescription_4002Parser;
   }
 
   /**
@@ -58,6 +68,14 @@ public class WorkflowParserProvider extends AbstractProvider
     return parser;
   }
 
+  protected IParser createIWorkflowJobDescription_4002Parser() {
+    EAttribute[] features = new EAttribute[]{
+      IWorkflowPackage.eINSTANCE.getIWorkflowJob_JobDescription(),
+    };
+    MessageFormatParser parser = new MessageFormatParser( features );
+    return parser;
+  }
+
   /**
    * @generated
    */
@@ -65,6 +83,8 @@ public class WorkflowParserProvider extends AbstractProvider
     switch( visualID ) {
       case WorkflowJobNameEditPart.VISUAL_ID:
         return getIWorkflowJobName_4001Parser();
+      case WorkflowJobDescriptionEditPart.VISUAL_ID:
+        return getIWorkflowJobDescription_4002Parser();
     }
     return null;
   }

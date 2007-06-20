@@ -24,10 +24,8 @@ import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.ecore.EObject;
 
 /**
- * <!-- begin-user-doc -->
  * The <b>Adapter Factory</b> for the model.
  * It provides an adapter <code>createXXX</code> method for each class of the model.
- * <!-- end-user-doc -->
  * @see eu.geclipse.workflow.IWorkflowPackage
  * @generated
  */
@@ -35,16 +33,12 @@ public class WorkflowAdapterFactory extends AdapterFactoryImpl
 {
   /**
    * The cached model package.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
    * @generated
    */
   protected static IWorkflowPackage modelPackage;
 
   /**
    * Creates an instance of the adapter factory.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
    * @generated
    */
   public WorkflowAdapterFactory()
@@ -79,8 +73,6 @@ public class WorkflowAdapterFactory extends AdapterFactoryImpl
 
   /**
    * The switch the delegates to the <code>createXXX</code> methods.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
    * @generated
    */
   protected WorkflowSwitch<Adapter> modelSwitch =
@@ -135,8 +127,6 @@ public class WorkflowAdapterFactory extends AdapterFactoryImpl
 
   /**
    * Creates an adapter for the <code>target</code>.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
    * @param target the object to adapt.
    * @return the adapter for the <code>target</code>.
    * @generated

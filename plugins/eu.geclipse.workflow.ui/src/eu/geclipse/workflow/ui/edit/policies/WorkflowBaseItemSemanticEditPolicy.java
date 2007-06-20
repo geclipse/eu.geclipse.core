@@ -274,15 +274,6 @@ public class WorkflowBaseItemSemanticEditPolicy extends SemanticEditPolicy {
   }
 
   /**
-   * @deprecated use getGEFWrapper() instead
-   * @generated
-   */
-  protected final Command getMSLWrapper( ICommand cmd ) {
-    // XXX deprecated: use getGEFWrapper() instead
-    return getGEFWrapper( cmd );
-  }
-
-  /**
    * @generated
    */
   protected EObject getSemanticElement() {
