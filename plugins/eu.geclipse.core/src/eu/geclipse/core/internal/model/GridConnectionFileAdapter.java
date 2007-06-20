@@ -232,9 +232,7 @@ public class GridConnectionFileAdapter
   
   public IFileState[] getHistory( final IProgressMonitor monitor )
       throws CoreException {
-    // TODO mathias
-    notYetImplemented();
-    return null;
+    return new IFileState[ 0 ];
   }
 
   public void move( final IPath destination,
