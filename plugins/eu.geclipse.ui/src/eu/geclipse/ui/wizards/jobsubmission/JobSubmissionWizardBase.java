@@ -24,7 +24,9 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.IWizardContainer;
 import org.eclipse.jface.wizard.Wizard;
@@ -49,32 +51,58 @@ public abstract class JobSubmissionWizardBase extends Wizard
 
   protected IGridJobCreator creator;
   protected List<IGridJobDescription> jobDescriptions;
+  
+  protected JobSubmissionWizardBase() {
+    setNeedsProgressMonitor( true );
+  }
 
   @Override
   public boolean performFinish()
   {
     boolean result = true;
     if( this.creator != null ) {
+      final IGridJobSubmissionService service = getSubmissionService();
       final IWizardContainer container = getContainer();
       try {
-        container.run( false, false, new IRunnableWithProgress() {
+        container.run( true, true, new IRunnableWithProgress() {
+          
+          protected void testCanceled( final IProgressMonitor monitor ) {
+            if ( monitor.isCanceled() ) {
+              throw new OperationCanceledException();
+            }
+          }
 
           public void run( final IProgressMonitor monitor )
             throws InvocationTargetException, InterruptedException
           {
             monitor.beginTask( "Submitting jobs...",
                                JobSubmissionWizardBase.this.jobDescriptions.size() );
+            
             for( IGridJobDescription description : JobSubmissionWizardBase.this.jobDescriptions )
             {
+              testCanceled( monitor );
               monitor.subTask( description.getName() );
               if( JobSubmissionWizardBase.this.creator.canCreate( description ) )
               {
+                
+                SubProgressMonitor subMonitor = new SubProgressMonitor( monitor, 1 );
+                subMonitor.beginTask( "Submitting job " + description.getName(), 2 );
+                
                 try {
+                  
+                  subMonitor.subTask( "Creating job file" );
                   IGridContainer parent = buildPath( description );
-                  IGridJobSubmissionService service = getSubmissionService();
+                  subMonitor.worked( 1 );
+                  testCanceled( subMonitor );
+                  
                   IGridJobID jobId = null;
                   if( service != null ) {
-                    jobId = service.submitJob( description );
+                    
+                    subMonitor.subTask( "Submission in progress" );
+                    jobId = service.submitJob( description, null );
+                    subMonitor.worked( 1 );
+                    testCanceled( subMonitor );
+                    
                   } else {
                     NewProblemDialog.openProblem( getShell(),
                                                   "Job submission failed",
@@ -93,9 +121,10 @@ public abstract class JobSubmissionWizardBase extends Wizard
                                                 "Job submission failed",
                                                 "Job submission failed",
                                                 cExc );
+                } finally {
+                  subMonitor.done();
                 }
               }
-              monitor.worked( 1 );
             }
             monitor.done();
           }
@@ -189,4 +218,5 @@ public abstract class JobSubmissionWizardBase extends Wizard
       }
     }
   }
+  
 }
