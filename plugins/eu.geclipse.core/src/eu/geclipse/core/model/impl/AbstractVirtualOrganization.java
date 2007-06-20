@@ -128,20 +128,15 @@ public abstract class AbstractVirtualOrganization
    */
   public IGridService[] getServices()
       throws GridModelException {
-    List< IGridService > services = new ArrayList< IGridService >();
-    IGridElement[] children = getChildren( null );
-    for ( IGridElement child : children ) {
-      if ( child instanceof IGridService ) {
-        services.add( ( IGridService ) child );
-      }
-    }
-    return services.toArray( new IGridService[ services.size() ] );
+    IGridInfoService infoService = getInfoService();
+    IGridService[] services = infoService.fetchServices( this, this, null );
+    return services;
   }
   
   public IGridJobSubmissionService[] getJobSubmissionServices() throws GridModelException {
-    IGridService[] services = getServices();
     List< IGridJobSubmissionService > jsServices
       = new ArrayList< IGridJobSubmissionService >();
+    IGridService[] services = getServices();
     for ( IGridService service : services ) {
       if ( service instanceof IGridJobSubmissionService ) {
         jsServices.add( ( IGridJobSubmissionService ) service );
