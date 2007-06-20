@@ -66,6 +66,8 @@ public interface IGridJobStatus {
    * </p>
    */
   public final static int UNDEF = 0x40;
+  
+  
   /**
    * Status for job which real status cannot be retrieved now
    */
@@ -79,6 +81,8 @@ public interface IGridJobStatus {
                                  + WAITING
                                  + UNDEF;
 
+  
+  
   /**
    * <p>
    * Return true if the status of the job can be changed in the future yet.
