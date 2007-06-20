@@ -29,52 +29,48 @@ public class GridJobStatus implements IGridJobStatus {
 
   final static public String XML_ROOT = "JobStatus";
   final static public String XML_STATUSNAME = "Name";
-  final static public String XML_STATUSTYPE = "Type";  
-  final static public String XML_STATUSREASON = "Reason";  
-  final static public String XML_STATUSDATA = "Data";  
-  final static public String XML_STATUSUPDATEDATE = "UpdateDate";  
+  final static public String XML_STATUSTYPE = "Type";
+  final static public String XML_STATUSREASON = "Reason";
+  final static public String XML_STATUSDATA = "Data";
+  final static public String XML_STATUSUPDATEDATE = "UpdateDate";
   public static final String XML_ATTRIBUTE_CLASS = "class";
   final static public GridJobStatus UNKNOWN_STATUS = new GridJobStatus();
-  
   protected int type;
   protected String name = null;
   protected String reason = null;
   protected Date updateDate = null;
-
   private String data = null;
 
   public GridJobStatus() {
     name = "Unknown";
     type = UNKNOWN;
-    reason="";
+    reason = "";
     data = null;
-    updateDate=Calendar.getInstance().getTime();
+    updateDate = Calendar.getInstance().getTime();
   }
 
-  public GridJobStatus(final String aReason) {
+  public GridJobStatus( final String aReason ) {
     name = "Unknown";
     type = UNKNOWN;
-    reason=aReason;
+    reason = aReason;
     data = null;
   }
 
-  public GridJobStatus(final String name, final int type) {
+  public GridJobStatus( final String name, final int type ) {
     this.name = name;
     this.type = type;
     data = null;
   }
 
-  
   public GridJobStatus( final IGridJobID id ) {
   }
 
   public GridJobStatus( final Node statusNode ) {
     this();
-    setXMLNode(statusNode);
+    setXMLNode( statusNode );
   }
-  
-  public void setXMLNode(final Node statusNode )
-  {
+
+  public void setXMLNode( final Node statusNode ) {
     int i;
     Node node;
     NodeList childNodes = statusNode.getChildNodes();
@@ -91,14 +87,13 @@ public class GridJobStatus implements IGridJobStatus {
           reason = reason.trim();
       }
       if( XML_STATUSUPDATEDATE.equals( node.getNodeName() ) ) {
-        DateFormat df =SimpleDateFormat.getDateTimeInstance();
-        
+        DateFormat df = SimpleDateFormat.getDateTimeInstance();
         try {
           updateDate = df.parse( node.getTextContent() );
         } catch( DOMException e ) {
-          //empty implementation
+          // empty implementation
         } catch( ParseException e ) {
-          //empty implementation
+          // empty implementation
         };
       }
       if( XML_STATUSTYPE.equals( node.getNodeName() ) ) {
@@ -154,29 +149,29 @@ public class GridJobStatus implements IGridJobStatus {
            + GridJobStatus.XML_STATUSTYPE
            + ">\n";
     xml += "  <"
-      + GridJobStatus.XML_STATUSUPDATEDATE
-      + ">"
-      + updateDate
-      + "</"
-      + GridJobStatus.XML_STATUSUPDATEDATE
-      + ">\n";
-    xml += "  <"
-      + GridJobStatus.XML_STATUSREASON
-      + ">"
-      + reason.replaceAll( "&", "" )
-      + "</"
-      + GridJobStatus.XML_STATUSREASON
-      + ">\n";
-    xml+="<" 
-    + GridJobStatus.XML_STATUSDATA
-    +"><![CDATA["
-    + getData()
-    + "]]></" 
-    + GridJobStatus.XML_STATUSDATA
-    +">";
+           + GridJobStatus.XML_STATUSUPDATEDATE
+           + ">"
+           + updateDate
+           + "</"
+           + GridJobStatus.XML_STATUSUPDATEDATE
+           + ">\n";
+    if( reason != null ) {
+      xml += "  <"
+             + GridJobStatus.XML_STATUSREASON
+             + ">"
+             + reason.replaceAll( "&", "" )
+             + "</"
+             + GridJobStatus.XML_STATUSREASON
+             + ">\n";
+    }
+    xml += "<"
+           + GridJobStatus.XML_STATUSDATA
+           + "><![CDATA["
+           + getData()
+           + "]]></"
+           + GridJobStatus.XML_STATUSDATA
+           + ">";
     xml += "</" + GridJobStatus.XML_ROOT + ">\n";
-
-
     return xml;
   }
 
@@ -195,16 +190,12 @@ public class GridJobStatus implements IGridJobStatus {
   public Date getLastUpdateTime() {
     return updateDate;
   }
-  
-  
+
   // Below method should be overriten by child classes
-  
   protected String getData() {
     return null;
   }
+
   protected void setData( String data ) {
   }
-
-
-
 }

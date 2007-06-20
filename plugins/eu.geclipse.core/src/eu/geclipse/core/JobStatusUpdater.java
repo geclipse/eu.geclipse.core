@@ -114,7 +114,7 @@ public class JobStatusUpdater extends Job {
     catch(RuntimeException e){
       Activator.logException( e );
     }
-    if( this.job.getJobStatus().canChange() ) {
+    if( newStatus!=null && newStatus.canChange() ) {
       schedule( 30000 );
     }
     else{
