@@ -46,7 +46,8 @@ public class JobManager extends AbstractGridElementManager
   /**
    * Hashtable for holding information about updaters assigned to jobs.
    */
-  private Hashtable<IGridJob, JobStatusUpdater> updaters = new Hashtable<IGridJob, JobStatusUpdater>();
+//  private Hashtable<IGridJob, JobStatusUpdater> updatersByJob = new Hashtable<IGridJob, JobStatusUpdater>();
+  private Hashtable<IGridJobID, JobStatusUpdater> updaters = new Hashtable<IGridJobID, JobStatusUpdater>();
 
   /**
    * Private constructor to ensure to have only one instance of this class. This
@@ -64,11 +65,20 @@ public class JobManager extends AbstractGridElementManager
     flag = super.addElement( element );
     if( element instanceof IGridJob ) {
       JobStatusUpdater updater = new JobStatusUpdater( (( IGridJob )element) );
-      updaters.put( (( IGridJob )element), updater );
+      updaters.put( (( IGridJob )element).getID(), updater );
       updater.setSystem( true );
-      updater.schedule( 120000 );
+      updater.schedule( 60000 );
     }
     return flag;
+  }
+
+  public void startUpdater( final IGridJobID id)
+    throws GridModelException
+  {
+    JobStatusUpdater updater = new JobStatusUpdater( id );
+    updaters.put( id, updater );
+    updater.setSystem( true );
+    updater.schedule( 30000 );
   }
 
   /**
@@ -188,7 +198,24 @@ public class JobManager extends AbstractGridElementManager
   void waitForJob( final IGridJob job )
     throws InterruptedException, NoSuchElementException
   {
-    JobStatusUpdater updater = updaters.get( job );
+    JobStatusUpdater updater = updaters.get( job.getID() );
+    if( updater == null ) {
+      throw new NoSuchElementException();
+    }
+    updater.join();
+  }
+
+  /**
+   * Wait until updater for the given job finishes, which means that the job status 
+   * is final and cannot be changed any more.
+   * @param job
+   * @throws InterruptedException
+   * @throws NoSuchElementException
+   */
+  void waitForJob( final IGridJobID id )
+    throws InterruptedException, NoSuchElementException
+  {
+    JobStatusUpdater updater = updaters.get( id );
     if( updater == null ) {
       throw new NoSuchElementException();
     }
