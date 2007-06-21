@@ -16,15 +16,16 @@
 package eu.geclipse.jsdl.ui.wizards;
 
 import java.lang.reflect.InvocationTargetException;
+import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -38,7 +39,6 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.eclipse.ui.ide.IDE;
-
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
@@ -61,7 +61,6 @@ public class NewJobWizard extends Wizard implements INewWizard {
   private ExecutableNewJobWizardPage executablePage;
   private FilesOutputNewJobWizardPage outputFilesPage;
 
-
   @Override
   public void addPages()
   {
@@ -83,8 +82,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
     setWindowTitle( Messages.getString( "NewJobWizard.windowTitle" ) ); //$NON-NLS-1$
     this.selection = sel;
   }
-  
-  
+
   @Override
   public boolean performFinish()
   {
@@ -113,13 +111,15 @@ public class NewJobWizard extends Wizard implements INewWizard {
                                Messages.getString( "NewJobWizard.error_title" ), realException.getMessage() ); //$NON-NLS-1$
       result = false;
     }
-    
     return result;
   }
-  
-  private void openFile(){
+
+  private void openFile() {
     try {
-      IDE.openEditor( Activator.getDefault().getWorkbench().getActiveWorkbenchWindow().getActivePage(), this.file, true );
+      IDE.openEditor( Activator.getDefault()
+        .getWorkbench()
+        .getActiveWorkbenchWindow()
+        .getActivePage(), this.file, true );
     } catch( PartInitException partInitException ) {
       Activator.logException( partInitException );
     }
@@ -156,48 +156,49 @@ public class NewJobWizard extends Wizard implements INewWizard {
     } else {
       appName = this.executablePage.getApplicationName();
     }
-      jsdl.addApplication();
-      String in = null;
-      String out = null;
-      String inName = null;
-      String outName = null;
-      in = this.executablePage.getStdin();
-      out = this.executablePage.getStdout();
-      if( in.equals( "" )) { //$NON-NLS-1$
-        in = null;
+    jsdl.addApplication();
+    String in = null;
+    String out = null;
+    String inName = null;
+    String outName = null;
+    in = this.executablePage.getStdin();
+    out = this.executablePage.getStdout();
+    if( in.equals( "" ) ) { //$NON-NLS-1$
+      in = null;
+    } else {
+      inName = "stdIn"; //$NON-NLS-1$
+    }
+    if( out.equals( "" ) ) { //$NON-NLS-1$
+      out = null;
+    } else {
+      outName = "stdOut"; //$NON-NLS-1$
+    }
+    String execName = this.executablePage.getExecutableFile();
+    if( !execName.equals( "" ) ) { //$NON-NLS-1$
+      // checking if exec is local
+      if( execName.startsWith( "file" ) ) { //$NON-NLS-1$ //$NON-NLS-2$
+        // exec is local
+        jsdl.setInDataStaging( "run_command", execName );
+        execName = "run_command";
       } else {
-        inName = "stdIn"; //$NON-NLS-1$
-      }
-      if( out.equals( "" )) { //$NON-NLS-1$
-        out = null;
-      } else {
-        outName = "stdOut"; //$NON-NLS-1$
-      }
-      String execName = this.executablePage.getExecutableFile();
-      if( !execName.equals( "" ) ) { //$NON-NLS-1$
-        //checking if exec is local
-        if (execName.startsWith( "file" )){ //$NON-NLS-1$ //$NON-NLS-2$
-          //exec is local
-          
-          jsdl.setInDataStaging( "run_command", execName );
-          execName = "run_command";
-        } else {
-          try {
-            URI test = new URI (execName);
+        try {
+          URI test = new URI( execName );
+          if( test.getScheme() != null ) {
             jsdl.setInDataStaging( "run_command", execName );
             execName = "run_command";
-          } catch( URISyntaxException e ) {
-            
           }
+        } catch( URISyntaxException e ) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
         }
-        jsdl.addPOSIXApplicationDetails( appName,
-                                         execName,
-                                         in,
-                                         inName,
-                                         out,
-                                         outName );
       }
-    
+      jsdl.addPOSIXApplicationDetails( appName,
+                                       execName,
+                                       in,
+                                       inName,
+                                       out,
+                                       outName );
+    }
     if( this.outputFilesPage.isCreated() ) {
       HashMap<String, String> outFiles = this.outputFilesPage.getFiles( FileType.OUTPUT );
       if( !outFiles.isEmpty() ) {
@@ -213,10 +214,9 @@ public class NewJobWizard extends Wizard implements INewWizard {
       }
     }
     ArrayList<String> argList = this.executablePage.getArgumentsList();
-    for (String argumentFormLine: argList){
+    for( String argumentFormLine : argList ) {
       jsdl.addArgument( argumentFormLine );
     }
-    
     List<IApplicationSpecificPage> aspList = this.executablePage.getApplicationSpecificPages();
     Map<String, ArrayList<String>> arguments;
     if( aspList != null ) {
