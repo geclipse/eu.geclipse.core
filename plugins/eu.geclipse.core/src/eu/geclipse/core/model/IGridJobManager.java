@@ -15,7 +15,6 @@
 
 package eu.geclipse.core.model;
 
-import java.util.List;
 
 /**
  * A job manager is able to manage {@link IGridJob}.

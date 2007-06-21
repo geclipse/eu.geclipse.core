@@ -72,6 +72,9 @@ public class JobManager extends AbstractGridElementManager
     return flag;
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridJobManager#startUpdater(eu.geclipse.core.model.IGridJobID)
+   */
   public void startUpdater( final IGridJobID id)
     throws GridModelException
   {
