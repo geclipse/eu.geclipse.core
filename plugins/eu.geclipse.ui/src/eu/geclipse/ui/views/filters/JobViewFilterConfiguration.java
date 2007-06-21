@@ -15,27 +15,31 @@
  *****************************************************************************/
 package eu.geclipse.ui.views.filters;
 
-import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.ui.IMemento;
-import eu.geclipse.ui.dialogs.ConfigureFiltersDialog;
+
 
 /**
- * Class implementing base functionality for viewer filters
- * Inherited class should implement {@link Cloneable} in order to be shown in {@link ConfigureFiltersDialog}
+ *
  */
-public abstract class AbstractGridViewerFilter extends ViewerFilter 
-implements IGridFilter, Cloneable {
-  
-  protected boolean readBoolean( final IMemento memento, final String key ) {
-    boolean value = false;
-    
-    Integer integer = memento.getInteger( key );
-    
-    if( integer != null ) {
-      value = integer.intValue() != 0;
+public class JobViewFilterConfiguration extends AbstractGridFilterConfiguration
+{
+  public JobViewFilterConfiguration( final String name ) {
+    super( name );
+    addFilter( new JobStatusFilter() );
+  }
+
+  /* (non-Javadoc)
+   * @see eu.geclipse.ui.views.filters.AbstractGridFilterConfiguration#readFilter(org.eclipse.ui.IMemento, java.lang.String)
+   */
+  @Override
+  protected void readFilter( final IMemento filterMemento, final String filterId )
+  {
+    if( filterId.equals( JobStatusFilter.getId() ) ) {
+      getJobStatusFilter().readState( filterMemento );
     }
-    
-    return value;
   }
   
+  public JobStatusFilter getJobStatusFilter() {
+    return findFilter( JobStatusFilter.class );
+  }
 }

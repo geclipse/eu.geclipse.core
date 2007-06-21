@@ -17,25 +17,16 @@ package eu.geclipse.ui.views.filters;
 
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.ui.IMemento;
-import eu.geclipse.ui.dialogs.ConfigureFiltersDialog;
+
 
 /**
- * Class implementing base functionality for viewer filters
- * Inherited class should implement {@link Cloneable} in order to be shown in {@link ConfigureFiltersDialog}
+ *
  */
-public abstract class AbstractGridViewerFilter extends ViewerFilter 
-implements IGridFilter, Cloneable {
-  
-  protected boolean readBoolean( final IMemento memento, final String key ) {
-    boolean value = false;
-    
-    Integer integer = memento.getInteger( key );
-    
-    if( integer != null ) {
-      value = integer.intValue() != 0;
-    }
-    
-    return value;
-  }
-  
+public interface IGridFilter {
+  boolean isEnabled();
+  void saveState( final IMemento filterMemento );
+  void readState( final IMemento filterMemento );
+  ViewerFilter getFilter();
+  IGridFilter makeClone() throws CloneNotSupportedException;
+  String getFilterId();
 }

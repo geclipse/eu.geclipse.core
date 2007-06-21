@@ -15,47 +15,32 @@
  *****************************************************************************/
 package eu.geclipse.ui.views.filters;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.ui.IMemento;
 import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobStatus;
 
-
 public class JobStatusFilter extends AbstractGridViewerFilter {
-  
-  private Map<Integer, Boolean> statusMap = new HashMap<Integer, Boolean>();
-  
-  private boolean enabled = false;
-  
-  private static final String MEMENTO_TYPE_FILTER = "JobStatusFilter";
   private static final String MEMENTO_KEY_ENABLED = "Enabled";
-  
   private static final String MEMENTO_TYPE_STATUS = "Status";  
   private static final String MEMENTO_KEY_STATUS_SHOW = "Show";
   
-  public JobStatusFilter( final IMemento memento ) {
-    if( memento != null ) {
-      IMemento filterMemento = memento.getChild( MEMENTO_TYPE_FILTER );
-      if( filterMemento != null ) {
-        this.enabled = readBoolean( filterMemento, MEMENTO_KEY_ENABLED );
-        IMemento[] statusMementos = filterMemento.getChildren( MEMENTO_TYPE_STATUS );
-        for( IMemento statusMemento : statusMementos ) {
-          Integer statusValue = Integer.valueOf( statusMemento.getID() );
-          Integer showOnView = statusMemento.getInteger( MEMENTO_KEY_STATUS_SHOW );
-          if( statusValue != null
-              && showOnView != null ) {
-            this.statusMap.put( statusValue, new Boolean( showOnView.intValue() != 0 ) );
-          }
-        }
-      }
-    }
+  private boolean enabled = true;
+  private HashMap<Integer, Boolean> statusMap = new HashMap<Integer, Boolean>();
+  
+  public JobStatusFilter() {
   }
   
+  public IGridFilter makeClone() throws CloneNotSupportedException {
+    JobStatusFilter newFilter = (JobStatusFilter)super.clone();
+    
+    newFilter.statusMap = (HashMap<Integer, Boolean>)statusMap.clone();
+    
+    return newFilter;
+  }
+    
   public void setEnabled( boolean enabled ) {
     this.enabled = enabled;
   }
@@ -94,9 +79,7 @@ public class JobStatusFilter extends AbstractGridViewerFilter {
     return showOnView == null || showOnView.booleanValue();
   }
   
-  @Override
-  public void saveState( final IMemento memento ) {
-    IMemento filterMemento = memento.createChild( MEMENTO_TYPE_FILTER );
+  public void saveState( final IMemento filterMemento ) {    
     filterMemento.putInteger( MEMENTO_KEY_ENABLED, this.enabled ? 1 : 0 );
 
     for( Integer status : this.statusMap.keySet() ) {
@@ -105,24 +88,38 @@ public class JobStatusFilter extends AbstractGridViewerFilter {
       statusMemento.putInteger( MEMENTO_KEY_STATUS_SHOW, getStatusState( status.intValue() ) ? 1 : 0 ); 
     }
   }
-  
-  static private boolean readBoolean( final IMemento memento, final String key ) {
-    boolean value = false;
-    
-    Integer integer = memento.getInteger( key );
-    
-    if( integer != null ) {
-      value = integer.intValue() != 0;
-    }
-    
-    return value;
+
+  public boolean isEnabled() {
+    return this.enabled;
+  }
+
+  public void readState( final IMemento filterMemento ) {
+    this.enabled = readBoolean( filterMemento, MEMENTO_KEY_ENABLED );
+    IMemento[] statusMementos = filterMemento.getChildren( MEMENTO_TYPE_STATUS );
+    for( IMemento statusMemento : statusMementos ) {
+      Integer statusValue = Integer.valueOf( statusMemento.getID() );
+      Integer showOnView = statusMemento.getInteger( MEMENTO_KEY_STATUS_SHOW );
+      if( statusValue != null
+          && showOnView != null ) {
+        setStatusState( statusValue.intValue(), showOnView.intValue() != 0 );
+      }
+    }    
+  }
+
+  static String getId()
+  {
+    return "JobStatusFilter";
   }
 
   public ViewerFilter getFilter() {
     return this;
   }
-  
-  public boolean isEnabled() {
-    return this.enabled;
+
+  /* (non-Javadoc)
+   * @see eu.geclipse.ui.views.filters.IGridFilter#getFilterId()
+   */
+  public String getFilterId() {
+    return getId();
   }
+
 }

@@ -13,29 +13,25 @@
  *     Mariusz Wojtysiak - initial API and implementation
  *     
  *****************************************************************************/
-package eu.geclipse.ui.views.filters;
+package eu.geclipse.ui.internal.dialogs.ConfigureFilters;
 
-import org.eclipse.jface.viewers.ViewerFilter;
-import org.eclipse.ui.IMemento;
-import eu.geclipse.ui.dialogs.ConfigureFiltersDialog;
+import org.eclipse.swt.widgets.Composite;
+import eu.geclipse.ui.views.filters.IGridFilter;
+import eu.geclipse.ui.views.filters.JobStatusFilter;
+
 
 /**
- * Class implementing base functionality for viewer filters
- * Inherited class should implement {@link Cloneable} in order to be shown in {@link ConfigureFiltersDialog}
+ * Factory creting composites for specific {@link IFilterComposite}.
+ * Produced composite is used in {@link ConfigureFiltersDialog}
  */
-public abstract class AbstractGridViewerFilter extends ViewerFilter 
-implements IGridFilter, Cloneable {
-  
-  protected boolean readBoolean( final IMemento memento, final String key ) {
-    boolean value = false;
+public class FilterCompositeFactory {
+  static public IFilterComposite create( final IGridFilter filter, final Composite parent, final int style ) {
+    IFilterComposite composite = null;
     
-    Integer integer = memento.getInteger( key );
-    
-    if( integer != null ) {
-      value = integer.intValue() != 0;
+    if( filter instanceof JobStatusFilter ) {
+      composite = new JobStatusComposite( (JobStatusFilter)filter, parent );
     }
     
-    return value;
+    return composite;
   }
-  
 }
