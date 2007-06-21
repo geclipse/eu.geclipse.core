@@ -16,6 +16,8 @@
 package eu.geclipse.jsdl.ui.wizards;
 
 import java.lang.reflect.InvocationTargetException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -176,8 +178,17 @@ public class NewJobWizard extends Wizard implements INewWizard {
         //checking if exec is local
         if (execName.startsWith( "file" )){ //$NON-NLS-1$ //$NON-NLS-2$
           //exec is local
+          
           jsdl.setInDataStaging( "run_command", execName );
           execName = "run_command";
+        } else {
+          try {
+            URI test = new URI (execName);
+            jsdl.setInDataStaging( "run_command", execName );
+            execName = "run_command";
+          } catch( URISyntaxException e ) {
+            
+          }
         }
         jsdl.addPOSIXApplicationDetails( appName,
                                          execName,
