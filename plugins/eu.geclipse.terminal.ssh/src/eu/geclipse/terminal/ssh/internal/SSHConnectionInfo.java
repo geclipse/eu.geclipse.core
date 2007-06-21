@@ -27,6 +27,7 @@ class SSHConnectionInfo implements UserInfo {
   private String passwd;
   private String passphrase;
   private int port;
+  private boolean canceledPWValue;
 
   SSHConnectionInfo( final String username, final String hostname,
                      final String password, final String passphrase,
@@ -36,6 +37,7 @@ class SSHConnectionInfo implements UserInfo {
     this.passwd = password;
     this.passphrase = passphrase;
     this.port = portNumber;
+    this.canceledPWValue = false;
   }
   
   public String getPassword() {
@@ -69,9 +71,10 @@ class SSHConnectionInfo implements UserInfo {
                                              Messages.getString( "SshShell.sshTerminal" ), //$NON-NLS-1$
                                              message, null, null);
     int result = dlg.open();
-    if ( result == Window.OK ) {
+    if ( result == Window.OK )
       this.passphrase = dlg.getValue();
-    }
+    else
+      this.canceledPWValue = true;
     return result == Window.OK;
   }
 
@@ -80,9 +83,10 @@ class SSHConnectionInfo implements UserInfo {
                                              Messages.getString( "SshShell.sshTerminal" ), //$NON-NLS-1$
                                              message, null, null);
     int result = dlg.open();
-    if ( result == Window.OK ) {
+    if ( result == Window.OK )
       this.passwd = dlg.getValue();
-    }
+    else
+      this.canceledPWValue = true;
     return result == Window.OK;
   }
 
@@ -90,5 +94,14 @@ class SSHConnectionInfo implements UserInfo {
     MessageDialog.openInformation( null,
                                    Messages.getString( "SshShell.sshTerminal" ), //$NON-NLS-1$
                                    message );
+  }
+
+  /**
+   * Returns if the user pushed cancel when queried for password for the ssh session.
+   * @return Returns <code>true</code> if the user pushed cancel when asked for the pw,
+   * <code>true</code> otherwise.
+   */
+  public boolean getCanceledPWValue() {
+    return this.canceledPWValue;
   }
 }

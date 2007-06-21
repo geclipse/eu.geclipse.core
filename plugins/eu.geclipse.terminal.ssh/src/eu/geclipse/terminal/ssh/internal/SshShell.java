@@ -19,8 +19,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.List;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jsch.core.IJSchService;
 import org.eclipse.swt.widgets.Display;
@@ -38,8 +36,6 @@ import eu.geclipse.terminal.ITerminalListener;
 import eu.geclipse.terminal.ITerminalPage;
 import eu.geclipse.terminal.ITerminalView;
 import eu.geclipse.ui.dialogs.NewProblemDialog;
-import eu.geclipse.ui.dialogs.ProblemDialog;
-import eu.geclipse.ui.dialogs.Solution;
 import eu.geclipse.ui.widgets.IDropDownEntry;
 
 /**
@@ -138,14 +134,16 @@ public class SshShell implements IDropDownEntry<ITerminalView>, ITerminalListene
         }
       }
     } catch ( JSchException exception ) {
-      GridException gridException = new GridException( CoreProblems.LOGIN_FAILED, exception );
-      IProblem problem = gridException.getProblem();
-      problem.addSolution( SolutionRegistry.CHECK_USERNAME_AND_PASSWORD );
-      problem.addSolution( SolutionRegistry.CHECK_SSH_SERVER_CONFIG );
-      NewProblemDialog.openProblem( null,
-                                    Messages.getString( "SshShell.sshTerminal" ), //$NON-NLS-1$
-                                    Messages.getString( "SshShell.authFailed" ), //$NON-NLS-1$
-                                    gridException );
+      if ( !this.userInfo.getCanceledPWValue() ) {
+        GridException gridException = new GridException( CoreProblems.LOGIN_FAILED, exception );
+        IProblem problem = gridException.getProblem();
+        problem.addSolution( SolutionRegistry.CHECK_USERNAME_AND_PASSWORD );
+        problem.addSolution( SolutionRegistry.CHECK_SSH_SERVER_CONFIG );
+        NewProblemDialog.openProblem( null,
+                                      Messages.getString( "SshShell.sshTerminal" ), //$NON-NLS-1$
+                                      Messages.getString( "SshShell.authFailed" ), //$NON-NLS-1$
+                                      gridException );
+      }
     } catch( Exception exception ){
       Activator.logException( exception );
     }
