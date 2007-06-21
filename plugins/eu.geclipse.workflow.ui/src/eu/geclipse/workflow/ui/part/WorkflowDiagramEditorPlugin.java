@@ -37,7 +37,7 @@ public class WorkflowDiagramEditorPlugin extends AbstractUIPlugin {
   /**
    * @generated
    */
-  public static final String ID = "eu.geclipse.workflow.diagram"; //$NON-NLS-1$
+  public static final String ID = "eu.geclipse.workflow.ui"; //$NON-NLS-1$
   /**
    * @generated
    */

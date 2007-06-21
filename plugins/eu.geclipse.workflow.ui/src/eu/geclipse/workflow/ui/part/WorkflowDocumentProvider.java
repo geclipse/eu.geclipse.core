@@ -167,7 +167,7 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
   private TransactionalEditingDomain createEditingDomain() {
     TransactionalEditingDomain editingDomain = DiagramEditingDomainFactory.getInstance()
       .createEditingDomain();
-    editingDomain.setID( "eu.geclipse.workflow.diagram.EditingDomain" ); //$NON-NLS-1$
+    editingDomain.setID( "eu.geclipse.workflow.ui.EditingDomain" ); //$NON-NLS-1$
     final NotificationFilter diagramResourceModifiedFilter = NotificationFilter.createNotifierFilter( editingDomain.getResourceSet() )
       .and( NotificationFilter.createEventTypeFilter( Notification.ADD ) )
       .and( NotificationFilter.createFeatureFilter( ResourceSet.class,

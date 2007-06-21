@@ -74,12 +74,12 @@
       <?gmfgen generated="true"?>
       <objectContribution
             adaptable="false"
-            id="eu.geclipse.workflow.diagram.LoadResource"
+            id="eu.geclipse.workflow.ui.LoadResource"
             objectClass="eu.geclipse.workflow.ui.edit.parts.WorkflowEditPart">
          <action
                class="eu.geclipse.workflow.ui.part.WorkflowLoadResourceAction"
                enablesFor="1"
-               id="eu.geclipse.workflow.diagram.LoadResourceAction"
+               id="eu.geclipse.workflow.ui.LoadResourceAction"
                label="%loadResourceActionLabel"
                menubarPath="additions">
          </action>
@@ -89,7 +89,7 @@
    <extension point="org.eclipse.ui.popupMenus">
       <?gmfgen generated="true"?>
       <objectContribution
-            id="eu.geclipse.workflow.diagram.InitDiagram"
+            id="eu.geclipse.workflow.ui.InitDiagram"
             nameFilter="*.workflow"
             objectClass="org.eclipse.core.resources.IFile">
          <action
@@ -97,7 +97,7 @@
                class="eu.geclipse.workflow.ui.part.WorkflowInitDiagramFileAction"
                menubarPath="additions"
                enablesFor="1"
-               id="eu.geclipse.workflow.diagram.InitDiagramAction">
+               id="eu.geclipse.workflow.ui.InitDiagramAction">
          </action>
       </objectContribution>
    </extension>
@@ -198,7 +198,7 @@
    <extension point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
       <?gmfgen generated="true"?>
       <propertyContributor
-            contributorId="eu.geclipse.workflow.diagram"
+            contributorId="eu.geclipse.workflow.ui"
             labelProvider="eu.geclipse.workflow.ui.sheet.WorkflowSheetLabelProvider">
          <propertyCategory category="domain"/>
          <propertyCategory category="visual"/>
@@ -208,7 +208,7 @@
 
    <extension point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
       <?gmfgen generated="true"?>   
-      <propertyTabs contributorId="eu.geclipse.workflow.diagram">
+      <propertyTabs contributorId="eu.geclipse.workflow.ui">
          <propertyTab
              category="visual"
              id="property.tab.AppearancePropertySection"
@@ -226,7 +226,7 @@
 
    <extension point="org.eclipse.ui.views.properties.tabbed.propertySections">
       <?gmfgen generated="true"?>   
-      <propertySections contributorId="eu.geclipse.workflow.diagram">
+      <propertySections contributorId="eu.geclipse.workflow.ui">
          <propertySection id="property.section.ConnectorAppearancePropertySection" 
             filter="org.eclipse.gmf.runtime.diagram.ui.properties.filters.ConnectionEditPartPropertySectionFilter" 
             class="org.eclipse.gmf.runtime.diagram.ui.properties.sections.appearance.ConnectionAppearancePropertySection" 
@@ -356,7 +356,7 @@
          <enablement>
             <test
                property="org.eclipse.gmf.runtime.emf.core.editingDomain"
-               value="eu.geclipse.workflow.diagram.EditingDomain"/>
+               value="eu.geclipse.workflow.ui.EditingDomain"/>
          </enablement>
       </clientContext> 
       <binding context="WorkflowClientContext">
@@ -371,9 +371,9 @@
 	   <extension point="org.eclipse.core.expressions.propertyTesters">
       <?gmfgen generated="true"?>
        <propertyTester
-           id="eu.geclipse.workflow.diagram.URIEditorInputPropertyTester"
+           id="eu.geclipse.workflow.ui.URIEditorInputPropertyTester"
            type="org.eclipse.emf.common.ui.URIEditorInput"
-           namespace="eu.geclipse.workflow.diagram"
+           namespace="eu.geclipse.workflow.ui"
            properties="isURIEditorInput"
            class="eu.geclipse.workflow.ui.part.WorkflowUriEditorInputTester">
        </propertyTester>
@@ -382,9 +382,9 @@
 	   <extension point="org.eclipse.core.expressions.propertyTesters">
       <?gmfgen generated="true"?>
        <propertyTester
-           id="eu.geclipse.workflow.diagram.DomainModelElementPropertyTester"
+           id="eu.geclipse.workflow.ui.DomainModelElementPropertyTester"
            type="org.eclipse.emf.ecore.EObject"
-           namespace="eu.geclipse.workflow.diagram"
+           namespace="eu.geclipse.workflow.ui"
            properties="isDomainModelElement"
            class="eu.geclipse.workflow.ui.part.WorkflowDomainModelElementTester">
        </propertyTester>
@@ -460,14 +460,14 @@
                </and>
                <and>
                   <instanceof value="org.eclipse.emf.ecore.EObject"/>
-                  <test property="eu.geclipse.workflow.diagram.isDomainModelElement"/>
+                  <test property="eu.geclipse.workflow.ui.isDomainModelElement"/>
                </and>
             </or>
          </triggerPoints>
          <possibleChildren>
             <and>
        	       <instanceof value="org.eclipse.emf.ecore.EObject"/>
-       	       <test property="eu.geclipse.workflow.diagram.isDomainModelElement"/>
+       	       <test property="eu.geclipse.workflow.ui.isDomainModelElement"/>
        	    </and>
          </possibleChildren>
       </navigatorContent>
@@ -490,7 +490,7 @@
          <editorInputEnablement>
             <and>
                <instanceof value="org.eclipse.emf.common.ui.URIEditorInput"/>
-               <test property="eu.geclipse.workflow.diagram.isURIEditorInput"/>
+               <test property="eu.geclipse.workflow.ui.isURIEditorInput"/>
             </and>
          </editorInputEnablement>
          <selectionEnablement>

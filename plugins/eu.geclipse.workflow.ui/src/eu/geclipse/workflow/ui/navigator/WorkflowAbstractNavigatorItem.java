@@ -30,7 +30,7 @@ public abstract class WorkflowAbstractNavigatorItem extends PlatformObject {
     {
 
       public String getContributorId() {
-        return "eu.geclipse.workflow.diagram"; //$NON-NLS-1$
+        return "eu.geclipse.workflow.ui"; //$NON-NLS-1$
       }
     };
     Platform.getAdapterManager().registerAdapters( new IAdapterFactory() {
