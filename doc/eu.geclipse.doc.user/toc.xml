@@ -8,11 +8,5 @@
    <topic label="Getting Started">
       <anchor id="gettingstarted"/>
    </topic>
-   <topic label="Reference">
-      <anchor id="reference"/>
-   </topic>
-   <topic label="Samples">
-      <anchor id="samples"/>
-   </topic>
    <topic label="What's new" href="html/whats_new.html"/>
 </toc>

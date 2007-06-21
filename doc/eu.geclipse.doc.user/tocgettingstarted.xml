@@ -2,9 +2,10 @@
 <?NLS TYPE="org.eclipse.help.toc"?>
 
 <toc label="Getting Started" link_to="toc.xml#gettingstarted"> 
-		<topic label="CA Certificates" href="html/gettingstarted/downloadCAcerts.html" /> 
-		<topic label="Authentication Tokens" href="html/gettingstarted/AuthenticationTokens.html" /> 
+		<topic label="Import CA Certificates" href="html/gettingstarted/downloadCAcerts.html" /> 
+		<topic label="Create Authentication Tokens" href="html/gettingstarted/AuthenticationTokens.html" /> 
 		<topic label="VO Declaration" href="html/gettingstarted/VO-Declaration.html" />
 		<topic label="New Grid Project Wizard" href="html/gettingstarted/NewProjectWizard.html" />
-		<topic label="Creating a Job" href="html/gettingstarted/CreatingaJob.html" /> 
+		<topic label="Create a Job" href="html/gettingstarted/CreatingaJob.html" /> 
+		<topic label="Submit a Job" href="html/gettingstarted/SubmitaJob.html" /> 
 </toc>
