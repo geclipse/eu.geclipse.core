@@ -124,11 +124,15 @@ public class ConnectionNameWizardPage extends WizardPage {
       IGridConnection[] gConnections
         = connectionManager.getGlobalConnections();
       
-      for ( IGridConnection connection : gConnections ) {
-        if ( connection.getName().equals( name ) ) {
-          setErrorMessage( "A connection with the specified name already exists" );
-          valid = false;
+      if ( gConnections != null ) {
+      
+        for ( IGridConnection connection : gConnections ) {
+          if ( connection.getName().equals( name ) ) {
+            setErrorMessage( "A connection with the specified name already exists" );
+            valid = false;
+          }
         }
+        
       }
       
     } else {
