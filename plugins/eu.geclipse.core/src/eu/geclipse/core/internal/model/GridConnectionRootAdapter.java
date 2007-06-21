@@ -326,7 +326,18 @@ public class GridConnectionRootAdapter
   
   @Override
   public IPath getFullPath() {
-    return getFsFile().getFullPath();
+    
+    IPath result = null;
+    IFile fsFile = getFsFile();
+    
+    if ( fsFile != null ) {
+      result = fsFile.getFullPath();
+    } else {
+      result = getGridConnection().getPath();
+    }
+    
+    return result;
+    
   }
   
   public IFileState[] getHistory( final IProgressMonitor monitor )
