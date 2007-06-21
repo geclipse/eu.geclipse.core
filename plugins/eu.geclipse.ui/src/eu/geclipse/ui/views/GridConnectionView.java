@@ -4,7 +4,8 @@ import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
-import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.IWorkbenchSite;
+
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridElement;
@@ -20,9 +21,8 @@ public class GridConnectionView extends ElementManagerViewPart {
   @Override
   protected void contributeAdditionalActions( final ActionGroupManager groups ) {
     
-    
-    IWorkbenchWindow workbenchWindow = this.getSite().getWorkbenchWindow();
-    ConnectionViewActions cActions = new ConnectionViewActions( workbenchWindow );
+    IWorkbenchSite site = getSite();
+    ConnectionViewActions cActions = new ConnectionViewActions( site );
     groups.addGroup( cActions );
      
     super.contributeAdditionalActions( groups );
