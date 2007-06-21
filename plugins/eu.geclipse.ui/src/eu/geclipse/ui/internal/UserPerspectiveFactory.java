@@ -50,24 +50,30 @@ public class UserPerspectiveFactory
     IFolderLayout bottomFolder
       = layout.createFolder( "bottom", IPageLayout.BOTTOM, 0.75f, editorArea ); //$NON-NLS-1$
     bottomFolder.addView( eu.geclipse.ui.internal.Activator.ID_CONNECTION_VIEW );
-    bottomFolder.addView( eu.geclipse.ui.internal.Activator.ID_AUTH_VIEW );
-    bottomFolder.addView( eu.geclipse.ui.internal.Activator.ID_WEB_VIEW );
+    bottomFolder.addView( eu.geclipse.ui.internal.Activator.ID_JOBS_VIEW );
+    bottomFolder.addPlaceholder( eu.geclipse.ui.internal.Activator.ID_JOBDETAILS_VIEW );
+    bottomFolder.addPlaceholder( eu.geclipse.ui.internal.Activator.ID_AUTH_VIEW );
+    bottomFolder.addPlaceholder( eu.geclipse.ui.internal.Activator.ID_WEB_VIEW );
     bottomFolder.addPlaceholder( IPageLayout.ID_PROBLEM_VIEW );
+    bottomFolder.addPlaceholder( IPageLayout.ID_PROP_SHEET);
     bottomFolder.addPlaceholder( NewSearchUI.SEARCH_VIEW_ID );
     bottomFolder.addPlaceholder( IPageLayout.ID_BOOKMARKS );
     bottomFolder.addPlaceholder( IProgressConstants.PROGRESS_VIEW_ID );
     
+    layout.addShowViewShortcut( eu.geclipse.ui.internal.Activator.ID_AUTH_VIEW );
+    layout.addShowViewShortcut( eu.geclipse.ui.internal.Activator.ID_JOBDETAILS_VIEW );
     layout.addShowViewShortcut( IPageLayout.ID_PROBLEM_VIEW );
+    layout.addShowViewShortcut( IPageLayout.ID_PROP_SHEET );
     layout.addShowViewShortcut( IPageLayout.ID_RES_NAV );
     layout.addShowViewShortcut( IPageLayout.ID_TASK_LIST );
     layout.addShowViewShortcut( IProgressConstants.PROGRESS_VIEW_ID );
 
+    layout.addNewWizardShortcut( "org.eclipse.ui.wizards.new.folder" );//$NON-NLS-1$
     layout.addNewWizardShortcut( eu.geclipse.ui.internal.Activator.ID_PROJECT_WIZARD );
     layout.addNewWizardShortcut( eu.geclipse.ui.internal.Activator.ID_CONNECTION_WIZARD );
     layout.addNewWizardShortcut( eu.geclipse.ui.internal.Activator.ID_WORKFLOW_WIZARD );
-    layout.addNewWizardShortcut( "org.eclipse.ui.wizards.new.folder" );//$NON-NLS-1$
-    layout.addNewWizardShortcut( "org.eclipse.ui.wizards.new.file" );//$NON-NLS-1$
-    layout.addNewWizardShortcut( "org.eclipse.ui.editors.wizards.UntitledTextFileWizard" );//$NON-NLS-1$
+//    layout.addNewWizardShortcut( "org.eclipse.ui.wizards.new.file" );//$NON-NLS-1$
+//    layout.addNewWizardShortcut( "org.eclipse.ui.editors.wizards.UntitledTextFileWizard" );//$NON-NLS-1$
     
   }
 

@@ -91,6 +91,18 @@ public class Activator extends AbstractUIPlugin {
     = "eu.geclipse.webview.views.WebView"; //$NON-NLS-1$
   
   /**
+   * The id of the jobs view.
+   */
+  public static final String ID_JOBS_VIEW
+    = "eu.geclipse.ui.views.jobView"; //$NON-NLS-1$
+
+  /**
+   * The id of the job details view.
+   */
+  public static final String ID_JOBDETAILS_VIEW
+    =  "eu.geclipse.ui.views.jobdetails.JobDetailsView"; //$NON-NLS-1$
+  
+  /**
    * The id of the grid project wizard.
    */
   public static final String ID_PROJECT_WIZARD
