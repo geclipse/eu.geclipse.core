@@ -235,12 +235,10 @@ public class VoSelectionWizardPage extends WizardPage {
   }
   
   protected void updateVoList() {
-    System.out.println( "Updating vo list" );
     this.voList.removeAll();
     IVoManager manager = GridModel.getVoManager();
     try {
       IGridElement[] vos = manager.getChildren( null );
-      System.out.println( "Vos: " + vos.length );
       java.util.List< String > nameList = new ArrayList< String >();
       for ( IGridElement vo : vos ) {
         if ( ( this.voType == null ) || this.voType.isAssignableFrom( vo.getClass() ) ) {
