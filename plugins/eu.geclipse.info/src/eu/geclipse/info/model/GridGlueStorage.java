@@ -51,30 +51,26 @@ public class GridGlueStorage
     
     try {
       String host = getName();
-      Object field
-        = getGlueSe().getFieldByName( "glueSEAccessProtocolList" );
-      List< GlueSEAccessProtocol > list
-        = ( List< GlueSEAccessProtocol > ) field;
+      List list=getGlueSe().glueSEAccessProtocolList;
       if ( ( list != null ) && !list.isEmpty() ) {
         result = new URI[ list.size() ];
-        for ( int i = 0 ; i < list.size() ; i++ ) {
-          String scheme
-            = ( String ) list.get( i ).getFieldByName( "Type" );
-          Long port
-            = ( Long ) list.get( i ).getFieldByName( "Port" );
-          
-          //TODO: There seems to be a problem with  DPM/GridFTP
-          //I set the path to null otherwise it just doesn't work
-          //path=null;
-          result[ i ] = new URI( scheme, null, host, port.intValue(), path, null, null );
-          
+        for( int i = 0; i < result.length; i++ ) {
+          GlueSEAccessProtocol ap=getGlueSe().glueSEAccessProtocolList.get( i );
+          String scheme=null;
+          if(ap.Type.startsWith( "srm" ) ){
+            String[] vNumbers=ap.Version.split( "\\." );
+            StringBuilder sBuilder=new StringBuilder("srm-v");
+            for( String n : vNumbers ) {
+              sBuilder.append( n );
+            }
+            scheme=sBuilder.toString();
+          }else{
+            scheme=ap.Type;
+          }
+          result[i]= new URI( scheme, null, host, ap.Port.intValue(), path,null, null );
         }
-      }
+      }        
     } catch( RuntimeException e ) {
-      // Just catch and do nothing here
-    } catch( IllegalAccessException e ) {
-      // Just catch and do nothing here
-    } catch( NoSuchFieldException e ) {
       // Just catch and do nothing here
     } catch( URISyntaxException e ) {
       // Just catch and do nothing here
