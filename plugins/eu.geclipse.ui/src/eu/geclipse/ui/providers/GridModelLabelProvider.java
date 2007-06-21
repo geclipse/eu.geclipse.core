@@ -79,32 +79,9 @@ public class GridModelLabelProvider
    */
   @Override
   public Image getImage( final Object element ) {
+    
     Image resultImage = null;
-    if( element instanceof IGridElement ) {
-      // check if there is adapter to provide image
-      if( element instanceof IAdaptable ) {
-        IAdaptable adaptable = ( IAdaptable )element;
-        IWorkbenchAdapter adapter = ( IWorkbenchAdapter )( adaptable.getAdapter( IWorkbenchAdapter.class ) );
-        if( adapter != null ) {
-          ImageDescriptor imageDescriptor = adapter.getImageDescriptor( element );
-          if( imageDescriptor != null ) {
-            resultImage = imageDescriptor.createImage();
-            PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator().decorateImage( resultImage, element );
-          }
-        }
-      }
-      // get image from resource
-      if( resultImage == null ) {
-        IResource resource = ( ( IGridElement )element ).getResource();
-        if( ( resource != null ) && ( resource.getProject() != null ) ) {
-          resultImage = this.workbenchLabelProvider.getImage( resource );
-        } else if( element instanceof IGridContainer ) {
-          resultImage = getFolderImage( ( ( IGridElement )element ).isVirtual() );
-        } else {
-          resultImage = getFileImage( ( ( IGridElement )element ).isVirtual() );
-        }
-      }
-    }
+    
     if( element instanceof IGridConnectionElement ) {
       IGridConnectionElement gridMount = ( IGridConnectionElement )element;
       if( !gridMount.isValid() ) {
@@ -122,36 +99,65 @@ public class GridModelLabelProvider
       resultImage = getStorageImage();
     } else if( element instanceof IGridService ) {
       resultImage = getServiceImage();
-      // } else if ( element instanceof IGridJob ) {
-      // resultImage = getJobImage();
+    } else if ( element instanceof IGridElement ) {
+      
+      IGridElement gElement = ( IGridElement ) element;
+      
+      // check if there is adapter to provide image
+      IWorkbenchAdapter adapter = ( IWorkbenchAdapter )( gElement.getAdapter( IWorkbenchAdapter.class ) );
+      if( adapter != null ) {
+        ImageDescriptor imageDescriptor = adapter.getImageDescriptor( element );
+        if( imageDescriptor != null ) {
+          resultImage = imageDescriptor.createImage();
+          PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator().decorateImage( resultImage, element );
+        }
+      }
+
+      // get image from resource
+      if( resultImage == null ) {
+        IResource resource = ( ( IGridElement )element ).getResource();
+        if( ( resource != null ) && ( resource.getProject() != null ) ) {
+          resultImage = this.workbenchLabelProvider.getImage( resource );
+        } else if( element instanceof IGridContainer ) {
+          resultImage = getFolderImage( ( ( IGridElement )element ).isVirtual() );
+        } else {
+          resultImage = getFileImage( ( ( IGridElement )element ).isVirtual() );
+        }
+      }
+      
     }
+    
     return resultImage;
+    
   }
 
   /* (non-Javadoc)
    * @see org.eclipse.jface.viewers.LabelProvider#getText(java.lang.Object)
    */
   @Override
-  public String getText( final Object element )
-  {
+  public String getText( final Object element ) {
+    
     String resultText = null;
+    
     if( element instanceof IGridElement ) {
       resultText = ( ( IGridElement )element ).getName();
       IResource resource = ( ( IGridElement )element ).getResource();
-      if( resource != null ) {
+      if( ( resource != null ) && ( resource.getProject() != null ) ) {
         resultText = this.labelDecorator.decorateText( resultText, element );
-//        resultText = this.labelDecorator.decorateText( resultText, resource );
       }
     } else if( element instanceof ProgressTreeNode ) {
       resultText = element.toString();
     }
+    
     if( element instanceof IGridConnectionElement ) {
       IGridConnectionElement connection = ( IGridConnectionElement )element;
       if( !connection.isValid() ) {
         resultText += "(Error: " + connection.getError() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
       }
     }
+    
     return resultText;
+    
   }
 
   /**
