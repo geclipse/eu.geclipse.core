@@ -3,14 +3,17 @@
    <description url="http://www.geclipse.eu/update/">
       This is the Eclipse update site for the g-Eclipse project.
    </description>
-   <feature url="features/eu.geclipse_0.5.0.jar" id="eu.geclipse" version="0.5.0">
+   <feature url="features/eu.geclipse_0.5.0.qualifier.jar" id="eu.geclipse" version="0.5.0">
       <category name="g-Eclipse"/>
    </feature>
-   <feature url="features/eu.geclipse.add_on_0.5.0.jar" id="eu.geclipse.add_on" version="0.5.0">
+   <feature url="features/eu.geclipse.add_on_0.5.0.qualifier.jar" id="eu.geclipse.add_on" version="0.5.0">
       <category name="g-Eclipse Add-ons"/>
    </feature>
-   <feature url="features/at.jku.gup.gvid.codec.xvid_1.0.0.jar" id="at.jku.gup.gvid.codec.xvid" version="1.0.0">
-      <category name="g-Eclipse Add-ons"/>
+   <feature url="features/eu.geclipse.glite_0.5.0.qualifier.jar" id="eu.geclipse.glite" version="0.5.0.qualifier">
+      <category name="Middlewares"/>
+   </feature>
+   <feature url="features/eu.geclipse.globus_0.5.0.qualifier.jar" id="eu.geclipse.globus" version="0.5.0.qualifier">
+      <category name="Middlewares"/>
    </feature>
    <category-def name="g-Eclipse" label="g-Eclipse"/>
    <category-def name="g-Eclipse Add-ons" label="g-Eclipse Add-ons">
@@ -18,4 +21,5 @@
          This features contains additional tools and features.
       </description>
    </category-def>
+   <category-def name="Middlewares" label="Middlewares"/>
 </site>
