@@ -53,7 +53,13 @@ public class Activator extends AbstractUIPlugin {
    */
   public static final String ID_CONNECTION_VIEW
     = "eu.geclipse.ui.views.connectionView"; //$NON-NLS-1$
-  
+
+  /**
+   * The id of the job view.
+   */
+  public static final String ID_JOB_VIEW
+    = "eu.geclipse.ui.views.jobView"; //$NON-NLS-1$
+
   /**
    * The id of the GlueInfoViewer.
    */
@@ -214,8 +220,8 @@ public class Activator extends AbstractUIPlugin {
       { "virtualfile", "icons/obj16/virtual_file_obj.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
       { "virtualfolder", "icons/obj16/virtual_folder_obj.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
       { "vo", "icons/obj16/vo_obj.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
-      {"formsbackground", "icons/form_banner.gif"}, //$NON-NLS-1$ //$NON-NLS-2$
-      { "configure_filters", "icons/obj16/filter_ps.gif" }, //$NON-NLS-2$      
+      { "formsbackground", "icons/form_banner.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
+      { "configure_filters", "icons/obj16/filter_ps.gif" },  //$NON-NLS-1$ //$NON-NLS-2$      
       { "helplink", "icons/elcl16/linkto_help.gif" } //$NON-NLS-1$ //$NON-NLS-2$
     };
     

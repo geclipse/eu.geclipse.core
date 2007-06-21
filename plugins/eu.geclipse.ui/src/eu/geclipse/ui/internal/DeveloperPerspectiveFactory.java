@@ -30,16 +30,24 @@ public class DeveloperPerspectiveFactory
   public void createInitialLayout( final IPageLayout layout ) {
     
     String editorArea = layout.getEditorArea();
+    
+    layout.addActionSet( "org.eclipse.debug.ui.launchActionSet" ); //$NON-NLS-1$
 
-    IFolderLayout leftFolder
-      = layout.createFolder( "left", IPageLayout.LEFT, 0.25f, editorArea ); //$NON-NLS-1$
-    leftFolder.addView( eu.geclipse.ui.internal.Activator.ID_GPROJECT_VIEW );
-    leftFolder.addPlaceholder( IPageLayout.ID_RES_NAV );
+    IFolderLayout topLeftFolder
+      = layout.createFolder( "topleft", IPageLayout.LEFT, 0.25f, editorArea ); //$NON-NLS-1$
+    topLeftFolder.addView( eu.geclipse.ui.internal.Activator.ID_GPROJECT_VIEW );
+    topLeftFolder.addPlaceholder( IPageLayout.ID_RES_NAV );
+  
+    IFolderLayout bottomLeftFolder
+      = layout.createFolder( "bottomleft", IPageLayout.BOTTOM, 0.5f, eu.geclipse.ui.internal.Activator.ID_GPROJECT_VIEW ); //$NON-NLS-1$
+    bottomLeftFolder.addView( eu.geclipse.ui.internal.Activator.ID_GLUE_INFO_VIEW );
+
     
     IFolderLayout bottomFolder
       = layout.createFolder( "bottom", IPageLayout.BOTTOM, 0.75f, editorArea ); //$NON-NLS-1$
     bottomFolder.addView( eu.geclipse.ui.internal.Activator.ID_CONNECTION_VIEW );
     bottomFolder.addView( eu.geclipse.ui.internal.Activator.ID_AUTH_VIEW );
+    bottomFolder.addView( eu.geclipse.ui.internal.Activator.ID_JOB_VIEW );
     bottomFolder.addPlaceholder( IPageLayout.ID_PROBLEM_VIEW );
     bottomFolder.addPlaceholder( NewSearchUI.SEARCH_VIEW_ID );
     bottomFolder.addPlaceholder( IPageLayout.ID_BOOKMARKS );
