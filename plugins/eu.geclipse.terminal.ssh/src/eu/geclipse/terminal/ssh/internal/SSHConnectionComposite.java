@@ -15,6 +15,7 @@
 
 package eu.geclipse.terminal.ssh.internal;
 
+import java.util.ArrayList;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -28,6 +29,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
+import eu.geclipse.info.glue.AbstractGlueTable;
+import eu.geclipse.info.glue.GlueQuery;
 import eu.geclipse.ui.widgets.NumberVerifier;
 import eu.geclipse.ui.widgets.StoredCombo;
 
@@ -61,6 +64,25 @@ class SSHConnectionComposite extends Composite {
     FontMetrics fm = gc.getFontMetrics();
     portTextGridData.widthHint = 7 * fm.getAverageCharWidth();
     gc.dispose();
+    addComputingElements();
+  }
+
+  private void addComputingElements() {
+    ArrayList<AbstractGlueTable> ceTable = GlueQuery.getGlueTable( "GlueCE", null ); //$NON-NLS-1$
+    for ( AbstractGlueTable table : ceTable ) {
+      try {
+        String hostname = ( String ) table.getFieldByName( "HostName" ); //$NON-NLS-1$
+        if ( hostname != null && this.hostnameCombo.indexOf( hostname ) == -1 ) {
+          this.hostnameCombo.add( hostname );
+        }
+      } catch( RuntimeException exception ) {
+        Activator.logException( exception );
+      } catch( IllegalAccessException exception ) {
+        Activator.logException( exception );
+      } catch( NoSuchFieldException exception ) {
+        Activator.logException( exception );
+      }
+    }
   }
 
   private void initialize() {
