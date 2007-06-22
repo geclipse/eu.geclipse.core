@@ -69,6 +69,8 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener{
   private boolean contentRefreshed = false;
   private boolean dirtyFlag = false;
   
+  private final int WIDGET_HEIGHT = 100;
+  
   
   /* Class Constructor */
   public DataStagingPage( final FormEditor editor )
@@ -259,7 +261,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener{
     gd.verticalSpan = 2;
     gd.horizontalSpan = 1;
     gd.widthHint = 220;
-    gd.heightHint = 100;
+    gd.heightHint = this.WIDGET_HEIGHT;
     this.lstFileName.setLayoutData( gd );
     
     /*  Create "Add" Button */

@@ -47,10 +47,10 @@ import eu.geclipse.jsdl.ui.internal.dialogs.MultipleInputDialog;
 
 public class ResourcesPage extends FormPage implements INotifyChangedListener {
   
-  static final int TXT_LENGTH = 300;
+   
   
   protected ResourcesTypeAdapter resourcesTypeAdapter;
-  
+  protected Object value = null;  
   protected Composite jobRescComposite = null;
   protected Label lblDescr = null;
   protected Label lblMountPoint = null;
@@ -111,7 +111,10 @@ public class ResourcesPage extends FormPage implements INotifyChangedListener {
   private boolean contentRefreshed = false;
   private boolean dirtyFlag = false;
   
-  private Object value = null;
+  
+  
+  private final int TXT_LENGTH = 300;
+  private final int WIDGET_HEIGHT = 100;
   
   
   /*
@@ -173,8 +176,9 @@ public class ResourcesPage extends FormPage implements INotifyChangedListener {
     return this.dirtyFlag;
     
   }
+
   
-  //FIXME Uncomment below for doSave and setDiry
+  
   public void setDirty(final boolean dirtyFlag) {
     if (this.dirtyFlag != dirtyFlag) {
       this.dirtyFlag = dirtyFlag;     
@@ -182,6 +186,9 @@ public class ResourcesPage extends FormPage implements INotifyChangedListener {
     }
     
   }
+  
+  
+  
   @Override
   /*
    *  This method is used to create the Forms content by
@@ -306,8 +313,8 @@ public class ResourcesPage extends FormPage implements INotifyChangedListener {
     gdlst = new GridData();
     gdlst.verticalSpan = 3;
     gdlst.horizontalSpan = 1;
-    gdlst.heightHint = 150;
-    gdlst.widthHint = ResourcesPage.TXT_LENGTH;
+    gdlst.heightHint = this.WIDGET_HEIGHT;
+    gdlst.widthHint = this.TXT_LENGTH;
     this.lstHostName.setLayoutData(gdlst);
  
     //Create the Add button
@@ -322,7 +329,9 @@ public class ResourcesPage extends FormPage implements INotifyChangedListener {
     this.btnAdd.addSelectionListener(new SelectionListener() {
       public void widgetSelected(final SelectionEvent event) {
         handleAddDialog(Messages.getString( "ResourcesPage_HostNameDialog" )); //$NON-NLS-1$
-        ResourcesPage.this.resourcesTypeAdapter.performAdd(lstHostName, "lstJobProject", value); //$NON-NLS-1$
+        ResourcesPage.this.resourcesTypeAdapter.performAdd(ResourcesPage.this.lstHostName,
+                                                           "lstJobProject", //$NON-NLS-1$
+                                                           ResourcesPage.this.value);
       }
 
        public void widgetDefaultSelected(final SelectionEvent event) {
@@ -392,7 +401,7 @@ public class ResourcesPage extends FormPage implements INotifyChangedListener {
     
     gd = new GridData();
     gd.horizontalSpan = 2;
-    gd.widthHint = ResourcesPage.TXT_LENGTH;
+    gd.widthHint = this.TXT_LENGTH;
     
     this.txtFileSystemName = toolkit.createText(clientsubSection, "", SWT.NONE); //$NON-NLS-1$
     this.resourcesTypeAdapter.attachToFileSystemName( this.txtFileSystemName );
@@ -413,7 +422,7 @@ public class ResourcesPage extends FormPage implements INotifyChangedListener {
     gd = new GridData();
     gd.horizontalSpan = 2;
     gd.widthHint = 285;
-    gd.heightHint = 100;
+    gd.heightHint = this.WIDGET_HEIGHT;
     this.txtFileSystemDescr.setLayoutData(gd);
     
     /* ========================= Mount Point Widgets =========================*/
@@ -423,7 +432,7 @@ public class ResourcesPage extends FormPage implements INotifyChangedListener {
     
     gd = new GridData();
     gd.horizontalSpan = 2;
-    gd.widthHint = ResourcesPage.TXT_LENGTH;
+    gd.widthHint = this.TXT_LENGTH;
     this.txtMountPoint = toolkit.createText(clientsubSection, "", SWT.NONE); //$NON-NLS-1$
     this.resourcesTypeAdapter.attachToFileSystemMountPoint( this.txtMountPoint );
     this.txtMountPoint.setLayoutData(gd);        
@@ -449,7 +458,7 @@ public class ResourcesPage extends FormPage implements INotifyChangedListener {
     /* ========================= File System Widgets =========================*/
     gd = new GridData();
     gd.horizontalSpan = 2;
-    gd.widthHint = ResourcesPage.TXT_LENGTH + 5 ;
+    gd.widthHint = this.TXT_LENGTH + 5 ;
     this.lblFileSystemType = toolkit.createLabel(clientsubSection,
                                Messages.getString("ResourcesPage_FileSysType")); //$NON-NLS-1$
     
@@ -530,7 +539,7 @@ public class ResourcesPage extends FormPage implements INotifyChangedListener {
     this.resourcesTypeAdapter.attachToOSDescription( this.txtOSDescr );
 
     gd.widthHint = 265;
-    gd.heightHint=100;
+    gd.heightHint=this.WIDGET_HEIGHT;
     this.txtOSDescr.setLayoutData(gd);
     
     toolkit.paintBordersFor( clientsubSection);
@@ -571,7 +580,7 @@ public class ResourcesPage extends FormPage implements INotifyChangedListener {
     subSection.setClient( clientsubSection );
     
     gd = new GridData();
-    gd.widthHint = ResourcesPage.TXT_LENGTH-20;
+    gd.widthHint = this.TXT_LENGTH-20;
     
     /*========================== CPU Architecture Widgets ====================*/
     

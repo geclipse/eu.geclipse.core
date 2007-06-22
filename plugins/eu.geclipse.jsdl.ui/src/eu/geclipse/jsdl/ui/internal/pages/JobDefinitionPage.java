@@ -56,34 +56,25 @@ public class JobDefinitionPage extends FormPage
   
   protected Object value = null;
 
-  Text txtId = null;
-  Text txtDescription = null;
-  Text txtJobName = null;
+  protected Text txtId = null;
+  protected Text txtDescription = null;
+  protected Text txtJobName = null;
   
-//  Table lstJobProject = null;
-//  Table lstJobAnnotation = null;
+  protected List lstJobProject = null;
+  protected List lstJobAnnotation = null;
   
-  List lstJobProject = null;
-  List lstJobAnnotation = null;
+  protected Label lblJobId = null;
+  protected Label lblJobDescripiton = null;
+  protected Label lblJobAnnotation = null;
+  protected Label lblJobProject = null;
   
-  Label lblJobId = null;
-  Label lblJobDescripiton = null;
-  Label lblJobAnnotation = null;
-  Label lblJobProject = null;
+  protected Button btnAdd = null;
+  protected Button btnDel = null;
+  protected Button btnTest = null;
   
-  Button btnAdd = null;
-  Button btnDel = null;
-  Button btnTest = null;
+  protected Composite jobDefComposite = null;
+  protected Composite jobIdentComposite = null;
   
-  Composite jobDefComposite = null;
-  Composite jobIdentComposite = null;
-  
-  Table testTable = null;
-  
-  
-  
-  
-  JsdlEditor editor;
    
   //Hashtable< String, Text > widgetFeaturesMap = new Hashtable< String, Text >();
   
@@ -94,13 +85,14 @@ public class JobDefinitionPage extends FormPage
   private boolean contentRefreshed = false;
   private boolean dirtyFlag = false;
   
+  private final int widgetHeight = 100; 
+  
   public JobDefinitionPage( final JsdlEditor editor) {
    
     
     super(editor, "",  //$NON-NLS-1$
-                  Messages.getString("JobDefinitionPage_JobDefinitionTitle")); //$NON-NLS-1$
+                  Messages.getString("JobDefinitionPage_JobDefinitionTitle")); //$NON-NLS-1$   
     
-    this.editor = editor;
   }
   
   @Override
@@ -113,6 +105,8 @@ public class JobDefinitionPage extends FormPage
       }//endif isContentRefreshed
     } // endif active
   }
+  
+  
   
   // Checks if the content of the model for this page is refreshed.
   private boolean isContentRefreshed(){          
@@ -145,7 +139,6 @@ public class JobDefinitionPage extends FormPage
     
   }
   
-  //FIXME Uncomment below for doSave and setDiry
   public void setDirty(final boolean dirtyFlag) {
     if (this.dirtyFlag != dirtyFlag) {
       this.dirtyFlag = dirtyFlag;     
@@ -321,7 +314,7 @@ public class JobDefinitionPage extends FormPage
     gd.verticalSpan = 1;
     gd.horizontalSpan = 3;
     gd.widthHint = 285;
-    gd.heightHint = 150;
+    gd.heightHint = this.widgetHeight;
     this.txtDescription.setLayoutData(gd);
  
     
@@ -336,24 +329,12 @@ public class JobDefinitionPage extends FormPage
    
     gd = new GridData();
     gd.verticalAlignment = GridData.FILL;
-    //gd.horizontalAlignment = GridData.FILL;
     gd.horizontalSpan = 1;
     gd.verticalSpan = 2;    
-    gd.widthHint = 235;
-    gd.heightHint = 150;
+    gd.widthHint = 250;
+    gd.heightHint = this.widgetHeight;
     
 
-    
-//    TableViewer annotationViewer = new TableViewer( client, SWT.BORDER );
-//    this.lstJobAnnotation = annotationViewer.getTable();
-//    annotationViewer.setContentProvider( new FeatureContentProvider() );
-//    annotationViewer.setLabelProvider( new FeatureLabelProvider() );
-//    
-//    this.lstJobAnnotation.setData( FormToolkit.KEY_DRAW_BORDER,
-//                                                      FormToolkit.TEXT_BORDER );
-//    
-//    this.jobIdentificationTypeAdapter.attachToJobAnnotation( annotationViewer );
-//    this.lstJobAnnotation.setLayoutData( gd );
     
     this.lstJobAnnotation = new List(client, SWT.None);
     this.lstJobAnnotation.setData( FormToolkit.KEY_DRAW_BORDER,
@@ -374,7 +355,6 @@ public class JobDefinitionPage extends FormPage
     
     this.btnAdd.addSelectionListener(new SelectionListener() {
      public void widgetSelected(final SelectionEvent event) {
-       //FIXME Uncomment below for doSave and setDiry
        handleAddDialog(Messages.getString( "JobDefinitionPage_JobAnnotationDialog" )); //$NON-NLS-1$
        
        JobDefinitionPage.this.jobIdentificationTypeAdapter
@@ -416,18 +396,9 @@ public class JobDefinitionPage extends FormPage
      gd = new GridData();
      gd.verticalSpan = 2;
      gd.horizontalSpan = 1;
-     gd.widthHint = 235;
-     gd.heightHint = 150;
-     
-//     TableViewer projectViewer = new TableViewer( client, SWT.None );
-//     this.lstJobProject = projectViewer.getTable();
-//     projectViewer.setContentProvider( new FeatureContentProvider() );
-//     projectViewer.setLabelProvider( new FeatureLabelProvider() );
-//     
-//     this.lstJobProject.setData( FormToolkit.KEY_DRAW_BORDER,
-//                                                      FormToolkit.TEXT_BORDER );
-//     
-//     this.jobIdentificationTypeAdapter.attachToJobProject(projectViewer );
+     gd.widthHint = 250;
+     gd.heightHint = this.widgetHeight;
+
      this.lstJobProject = new List(client,  SWT.NONE);
      this.lstJobProject.setData( FormToolkit.KEY_DRAW_BORDER,
                                                       FormToolkit.TEXT_BORDER );
@@ -448,7 +419,7 @@ public class JobDefinitionPage extends FormPage
      
      this.btnAdd.addSelectionListener(new SelectionListener() {
        public void widgetSelected(final SelectionEvent event) {
-         //FIXME Uncomment below for doSave and setDiry
+
          handleAddDialog(Messages.getString( "JobDefinitionPage_JobProjectDialog" )); //$NON-NLS-1$
          
          JobDefinitionPage.this.jobIdentificationTypeAdapter

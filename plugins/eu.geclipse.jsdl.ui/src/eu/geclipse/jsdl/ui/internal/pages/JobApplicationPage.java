@@ -25,7 +25,11 @@ package eu.geclipse.jsdl.ui.internal.pages;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
+import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -45,6 +49,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import eu.geclipse.jsdl.jsdl.ApplicationTypeAdapter;
 import eu.geclipse.jsdl.posix.PosixApplicationTypeAdapter;
 import eu.geclipse.jsdl.ui.internal.Activator;
+import eu.geclipse.jsdl.ui.internal.dialogs.MultipleInputDialog;
 
 public class JobApplicationPage extends FormPage 
                                              implements INotifyChangedListener{
@@ -111,18 +116,23 @@ public class JobApplicationPage extends FormPage
   
   
   protected Table tblEnvironment = null;
+  protected TableViewer environmentViewer = null;   
   protected Table tblArgument = null;
-  private TableColumn column; 
+  protected TableViewer argumentViewer = null;
+
+  protected ApplicationTypeAdapter applicationTypeAdapter;
+  protected PosixApplicationTypeAdapter posixApplicationTypeAdapter;
+  protected Object[] value = null;
   
   
-  private boolean contentRefreshed = false;
-  
-  private ApplicationTypeAdapter applicationTypeAdapter;
-  private PosixApplicationTypeAdapter posixApplicationTypeAdapter;
+  private TableColumn column;    
+  private boolean contentRefreshed = false;  
   private boolean dirtyFlag = false;
   
 
- 
+  private final int widgetHeight = 100; 
+  
+   
  
   /* Class Constructor */
   public JobApplicationPage( final FormEditor editor ) {
@@ -154,8 +164,9 @@ public class JobApplicationPage extends FormPage
     return this.dirtyFlag;
     
   }
+
   
-  //FIXME Uncomment below for doSave and setDiry
+  
   public void setDirty (final boolean dirtyFlag) {
     if (this.dirtyFlag != dirtyFlag) {
       this.dirtyFlag = dirtyFlag;     
@@ -163,6 +174,7 @@ public class JobApplicationPage extends FormPage
     }
     
   }
+  
   
   
   private boolean isContentRefreshed(){          
@@ -341,7 +353,7 @@ public class JobApplicationPage extends FormPage
     gd = new GridData();
     gd.verticalSpan = 3;
     gd.widthHint = 285;
-    gd.heightHint = 100;
+    gd.heightHint = this.widgetHeight;
     this.txtDescription.setLayoutData(gd);
     this.applicationTypeAdapter
                          .attachToApplicationDescription( this.txtDescription );
@@ -431,10 +443,14 @@ public class JobApplicationPage extends FormPage
     gd.verticalSpan = 2;
     gd.horizontalSpan = 1;
     gd.widthHint = 250;
-    gd.heightHint = 100;
+    gd.heightHint = this.widgetHeight;
     
-    this.tblArgument = new Table(client,SWT.SINGLE);
+    
+    this.argumentViewer = new TableViewer(client, SWT.BORDER);
+    this.tblArgument = this.argumentViewer.getTable();
     this.tblArgument.setHeaderVisible( true);
+    this.argumentViewer.setContentProvider( new FeatureContentProvider() );
+    this.argumentViewer.setLabelProvider( new FeatureLabelProvider() );
     
     this.column = new TableColumn(this.tblArgument, SWT.NONE);    
     this.column.setText( "File System Name" ); //$NON-NLS-1$
@@ -443,7 +459,8 @@ public class JobApplicationPage extends FormPage
     this.column.setText( "Value" ); //$NON-NLS-1$
     this.column.setWidth( 100 );
     
-    this.posixApplicationTypeAdapter.attachToPosixApplicationArgument( this.tblArgument );
+    this.posixApplicationTypeAdapter
+                       .attachToPosixApplicationArgument( this.argumentViewer );
         
     this.tblArgument.setData(  FormToolkit.KEY_DRAW_BORDER );
     this.tblArgument.setLayoutData( gd);
@@ -457,6 +474,22 @@ public class JobApplicationPage extends FormPage
     this.btnAdd = toolkit.createButton(client,
                                        Messages.getString("JsdlEditor_AddButton") //$NON-NLS-1$
                                        , SWT.PUSH);
+    
+    this.btnAdd.addSelectionListener(new SelectionListener() {
+      public void widgetSelected(final SelectionEvent event) {
+        handleAddDialog(Messages.getString( "JobApplicationPage_ArgumentDialog" )); //$NON-NLS-1$
+        JobApplicationPage.this.posixApplicationTypeAdapter.performAdd(
+                                         JobApplicationPage.this.argumentViewer,
+                                                "argumentViewer", //$NON-NLS-1$
+                                                JobApplicationPage.this.value );
+      
+      }
+
+       public void widgetDefaultSelected(final SelectionEvent event) {
+           // Do Nothing - Required method
+       }
+     });
+    
     this.btnAdd.setLayoutData( gd );
     
     
@@ -471,8 +504,8 @@ public class JobApplicationPage extends FormPage
                                     Messages.getString("JsdlEditor_RemoveButton") //$NON-NLS-1$
                                     , SWT.PUSH);
     this.posixApplicationTypeAdapter.attachToDelete( this.btnDel, 
-                                                             this.tblArgument );
-    
+                                                             this.argumentViewer );
+
     this.btnDel.setLayoutData( gd );
       
     /* ============================= Input Widget =========================== */
@@ -545,12 +578,16 @@ public class JobApplicationPage extends FormPage
     gd.verticalSpan = 2;
     gd.horizontalSpan = 1;
     gd.widthHint = 250;
-    gd.heightHint = 100;
-
-    this.tblEnvironment = new Table(client,SWT.SINGLE);
+    gd.heightHint = this.widgetHeight;
+    
+    
+    this.environmentViewer = new TableViewer(client, SWT.BORDER);
+    this.tblEnvironment = this.environmentViewer.getTable();
     this.tblEnvironment.setHeaderVisible( true);
-   
-   
+    this.environmentViewer.setContentProvider( new FeatureContentProvider() );
+    this.environmentViewer.setLabelProvider( new FeatureLabelProvider() );
+    
+    
     this.column = new TableColumn(this.tblEnvironment, SWT.NONE);       
     this.column.setText( "Name" );         //$NON-NLS-1$
     this.column.setWidth( 60 );
@@ -561,9 +598,10 @@ public class JobApplicationPage extends FormPage
     this.column.setText( "Value" ); //$NON-NLS-1$
     this.column.setWidth( 60 );
 
+    
     this.posixApplicationTypeAdapter.
-                     attachToPosixApplicationEnvironment( this.tblEnvironment );
-
+                   attachToPosixApplicationEnvironment( this.environmentViewer );
+    
         
     this.tblEnvironment.setData(  FormToolkit.KEY_DRAW_BORDER );
     this.tblEnvironment.setLayoutData( gd);
@@ -575,7 +613,22 @@ public class JobApplicationPage extends FormPage
     gd.widthHint = 60;
     this.btnAdd = toolkit.createButton(client,
                                      Messages.getString("JsdlEditor_AddButton"), //$NON-NLS-1$
-                                       SWT.BUTTON1); 
+                                       SWT.BUTTON1);
+    
+    this.btnAdd.addSelectionListener(new SelectionListener() {
+      public void widgetSelected(final SelectionEvent event) {
+        handleAddDialog(Messages.getString( "JobApplicationPage_EnvironmentDialog" )); //$NON-NLS-1$
+        
+      
+      }
+
+       public void widgetDefaultSelected(final SelectionEvent event) {
+           // Do Nothing - Required method
+       }
+     });
+    
+   
+    
     this.btnAdd.setLayoutData( gd);
     
     /* Create "Remove" Button */
@@ -588,6 +641,9 @@ public class JobApplicationPage extends FormPage
     this.btnDel = toolkit.createButton(client,
                                   Messages.getString("JsdlEditor_RemoveButton"), //$NON-NLS-1$
                                   SWT.PUSH); 
+    
+    this.posixApplicationTypeAdapter.attachToDelete( this.btnDel, 
+                                                       this.environmentViewer );
     this.btnDel.setLayoutData( gd );
        
     toolkit.paintBordersFor( client );
@@ -837,6 +893,46 @@ public class JobApplicationPage extends FormPage
    
    return client;
    }
+  
+  
+  protected void handleAddDialog(final String dialogTitle){
+    
+    
+    MultipleInputDialog dialog = new MultipleInputDialog( this.getSite().getShell(),
+                                                         dialogTitle );
+    if (dialogTitle == Messages.getString("JobApplicationPage_ArgumentDialog" )){ //$NON-NLS-1$
+      
+      this.value = new Object[2];
+      dialog.addTextField( Messages.getString( "JobApplicationPage_FileSystemName" ), "", false ); //$NON-NLS-1$ //$NON-NLS-2$
+      dialog.addTextField( Messages.getString( "JobApplicationPage_Value" ), "", false ); //$NON-NLS-1$ //$NON-NLS-2$
+                       
+    }
+    else
+    {
+      
+      this.value = new Object[3];
+      dialog.addTextField( Messages.getString( "JobApplicationPage_Name" ), "", false ); //$NON-NLS-1$ //$NON-NLS-2$
+      dialog.addTextField( Messages.getString( "JobApplicationPage_FileSystemName" ), "", false ); //$NON-NLS-1$ //$NON-NLS-2$
+      dialog.addTextField( Messages.getString( "JobApplicationPage_Value" ), "", false ); //$NON-NLS-1$ //$NON-NLS-2$
+           
+    }
+        
+    if( dialog.open() != Window.OK ) {
+      return;
+    }
+    
+    if (this.value.length == 2){
+      this.value[0] = dialog.getStringValue( Messages.getString( "JobApplicationPage_FileSystemName" ) ) ; //$NON-NLS-1$
+      this.value[1] = dialog.getStringValue( Messages.getString( "JobApplicationPage_Value" ) ) ;     //$NON-NLS-1$
+    }
+    else {
+      
+    this.value[0] = dialog.getStringValue( Messages.getString( "JobApplicationPage_Name" ) ) ; //$NON-NLS-1$
+    this.value[1] = dialog.getStringValue( Messages.getString( "JobApplicationPage_FileSystemName" ) ) ; //$NON-NLS-1$  
+    this.value[2] = dialog.getStringValue( Messages.getString( "JobApplicationPage_Value" ) ) ;     //$NON-NLS-1$
+    }
+    
+  }
 
 
 

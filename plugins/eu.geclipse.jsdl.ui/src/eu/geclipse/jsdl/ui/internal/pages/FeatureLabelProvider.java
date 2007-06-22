@@ -1,9 +1,10 @@
 package eu.geclipse.jsdl.ui.internal.pages;
 
-import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
+import eu.geclipse.jsdl.model.posix.ArgumentType;
+import eu.geclipse.jsdl.model.posix.EnvironmentType;
 
 public class FeatureLabelProvider extends LabelProvider implements
     ITableLabelProvider {
@@ -15,14 +16,36 @@ public class FeatureLabelProvider extends LabelProvider implements
 
   public String getColumnText(Object element, int columnIndex) {
     String text = null;
-    if ( element instanceof EStructuralFeature ) {
-      EStructuralFeature feature = ( EStructuralFeature ) element;
+      
+    if ( element instanceof ArgumentType ) {
+      
+      ArgumentType argumentType = ( ArgumentType ) element;      
       switch ( columnIndex ) {
         case 0:
-          feature.toString();
+          text = argumentType.getFilesystemName();
+          break;
+        case 1:
+          text = argumentType.getValue();
+          break;
+          default:
+          break;
       }
-    } else {
-      text = element.toString();
+    } 
+    else if (element instanceof EnvironmentType) {
+      EnvironmentType environmentType = ( EnvironmentType ) element;      
+      switch ( columnIndex ) {
+        case 0:
+          text = environmentType.getName();
+          break;
+        case 1:
+          text = environmentType.getFilesystemName();
+          break;
+        case 2:
+          text = environmentType.getValue();
+          break;
+          default:
+          break;
+      }
     }
     return text;
   }

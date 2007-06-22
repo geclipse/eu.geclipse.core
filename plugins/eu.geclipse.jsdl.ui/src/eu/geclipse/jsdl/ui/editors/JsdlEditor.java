@@ -226,8 +226,9 @@ public class JsdlEditor extends FormEditor implements IEditingDomainProvider{
    * This method adds the Resource Editor Page to the Multi-page editior
    */
   private void addResourceEditorPage()throws PartInitException{
-    
+        
     this.sourcePageIndex = addPage(getSourceEditor(), getEditorInput());
+    
     
     setPageText(this.sourcePageIndex, getEditorInput().getName());
 
@@ -244,6 +245,9 @@ public class JsdlEditor extends FormEditor implements IEditingDomainProvider{
      if (this.editor == null)
       {
           this.editor = new TextEditor();
+          
+          
+          
       }
       return this.editor;
   }
@@ -478,6 +482,7 @@ public class JsdlEditor extends FormEditor implements IEditingDomainProvider{
                 JsdlEditor.this.resourceToDiagnosticMap.put(resource, analyzeResourceProblems(resource, exception));
                 //FIXME Uncomment below for doSave and setDiry
                 setDirty( false );
+                doTextEditorSave();
                 cleanPages();
                 //firePropertyChange(IEditorPart.PROP_DIRTY);
               }
@@ -499,6 +504,7 @@ public class JsdlEditor extends FormEditor implements IEditingDomainProvider{
       ((BasicCommandStack)this.editingDomain.getCommandStack()).saveIsDone();
       //FIXME Uncomment below for doSave and setDiry
       setDirty( false );
+      doTextEditorSave();
       cleanPages();
       //firePropertyChange(IEditorPart.PROP_DIRTY);
     }
@@ -543,7 +549,10 @@ public class JsdlEditor extends FormEditor implements IEditingDomainProvider{
     IProgressMonitor progressMonitor = new NullProgressMonitor();
     doSave(progressMonitor);
   }
-  
+ 
+  protected void doTextEditorSave(){
+    this.editor.doSave( null );
+  }
 
   @Override
   public boolean isSaveAsAllowed()
