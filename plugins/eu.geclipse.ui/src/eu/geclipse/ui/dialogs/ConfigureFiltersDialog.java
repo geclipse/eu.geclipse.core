@@ -215,6 +215,7 @@ public class ConfigureFiltersDialog extends TrayDialog {
           tableViewer.add( newConfiguration );
           tableViewer.setChecked( newConfiguration, newConfiguration.isEnabled() );
           tableViewer.setSelection( new StructuredSelection( newConfiguration ) );
+          enableConfiguration( newConfiguration );
         }
       }
       
@@ -252,11 +253,20 @@ public class ConfigureFiltersDialog extends TrayDialog {
         else {
           IGridFilterConfiguration configuration = (IGridFilterConfiguration)selection.getFirstElement();
           tableViewer.remove( configuration );
-          configurations.remove( configuration );          
+          configurations.remove( configuration );
+          selectDefaultConfiguration();
         }
       }
       
     });
+  }
+  
+  private void selectDefaultConfiguration() {
+    if( !this.configurations.isEmpty() ) {
+      IGridFilterConfiguration configuration = this.configurations.get( 0 );
+      tableViewer.setSelection( new StructuredSelection( configuration ) );
+      enableConfiguration( configuration );
+    }
   }
   
   private Button createButton( final Composite parent, final String textString ) {

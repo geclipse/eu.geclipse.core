@@ -119,7 +119,9 @@ public class ConfigureFiltersAction extends Action {
     public void widgetSelected( SelectionEvent event )
     {
       // check selection before enabling, because widgetSelected is called twice: for old-selected item and for new
-      if( ((MenuItem)event.item).getSelection() ) {
+      MenuItem menuItem = (MenuItem)event.getSource();
+      if( menuItem != null
+          && menuItem.getSelection() ) {
         filterConfigurationsManager.enableConfiguration( configuration );
       }
     }

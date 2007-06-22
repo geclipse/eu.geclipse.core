@@ -57,7 +57,7 @@ public class JobStatusComposite implements IFilterComposite {
   
   private void createEnabledCheckBox( final Composite parent ) {
     this.enabledCheckbox = new Button( parent, SWT.CHECK );
-    this.enabledCheckbox.setText( "Filter jobs with following status:" );
+    this.enabledCheckbox.setText( "Show jobs with following status:" );
     
     this.enabledCheckbox.addSelectionListener( new SelectionAdapter() {
 
