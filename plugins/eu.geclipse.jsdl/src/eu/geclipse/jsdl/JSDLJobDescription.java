@@ -579,8 +579,15 @@ public class JSDLJobDescription extends ResourceGridContainer
       }
     }
   }
-  
-  public void addArgument(String argName){
+
+  /**
+   * Adds a jsdl-posix:Argument element as a child of jsdl-posix:Application
+   * 
+   * @param argName name of the argument to add
+   */
+  @SuppressWarnings("unchecked")
+  public void addArgument( final String argName )
+  {
     POSIXApplicationType posixApp = getPosixApplication();
     ArgumentType arg;
     if( posixApp != null ) {
@@ -945,7 +952,14 @@ public class JSDLJobDescription extends ResourceGridContainer
     return result;
   }
 
-  public List<DataStagingType> getDataStagingIn() {
+  /**
+   * Method to acces data staging in for this JSDL document
+   * 
+   * @return List od {@link DataStagingType}
+   */
+  @SuppressWarnings("unchecked")
+  public List<DataStagingType> getDataStagingIn()
+  {
     List<DataStagingType> result = new ArrayList<DataStagingType>();
     DocumentRoot dRoot = getDocumentRoot();
     if( getJobDescription( dRoot ) != null ) {
@@ -959,7 +973,14 @@ public class JSDLJobDescription extends ResourceGridContainer
     return result;
   }
 
-  public List<DataStagingType> getDataStagingOut() {
+  /**
+   * Method to acces data staging out for this JSDL document
+   * 
+   * @return List od {@link DataStagingType}
+   */
+  @SuppressWarnings("unchecked")
+  public List<DataStagingType> getDataStagingOut()
+  {
     List<DataStagingType> result = new ArrayList<DataStagingType>();
     DocumentRoot dRoot = getDocumentRoot();
     if( getJobDescription( dRoot ) != null ) {
@@ -973,22 +994,34 @@ public class JSDLJobDescription extends ResourceGridContainer
     return result;
   }
 
+  /**
+   * The same as {@link JSDLJobDescription#getDataStagingIn()}, but returns
+   * only those files which are local to user's computer
+   * 
+   * @return List of {@link DataStagingType}
+   */
   public List<DataStagingType> getLocalDataStagingIn() {
     List<DataStagingType> result = new ArrayList<DataStagingType>();
     for( DataStagingType dataType : getDataStagingIn() ) {
-      if( dataType.getSource().getURI().startsWith( "file:" ) ) {
+      if( dataType.getSource().getURI().startsWith( "file:" ) ) { //$NON-NLS-1$
         result.add( dataType );
       }
     }
     return result;
   }
 
+  /**
+   * If there is an executable file that's supposed to be stage in - this method
+   * will return it
+   * 
+   * @return {@link DataStagingType} representing file to execute. If command to
+   *         execute is local to execution machine - it will return null
+   */
   public DataStagingType getStdInputDataType() {
-    
     DataStagingType result = null;
     if( getInput() != null ) {
-      for (DataStagingType dataType: getDataStagingIn()){
-        if (dataType.getFileName().equals( getInput() )){
+      for( DataStagingType dataType : getDataStagingIn() ) {
+        if( dataType.getFileName().equals( getInput() ) ) {
           result = dataType;
         }
       }

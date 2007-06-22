@@ -25,16 +25,16 @@ import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
-import org.eclipse.emf.ecore.util.FeatureMapUtil;
-import org.eclipse.swt.SWT;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import eu.geclipse.jsdl.model.posix.ArgumentType;
 import eu.geclipse.jsdl.model.posix.EnvironmentType;
@@ -61,9 +61,8 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   protected FileNameType fileName = null;
   
   private Hashtable< Integer, Text > widgetFeaturesMap = new Hashtable< Integer, Text >();
-  private Hashtable< Integer, Table > tableFeaturesMap = new Hashtable< Integer, Table >();
-  private Hashtable<String, EStructuralFeature> eStructuralFeaturesMap 
-                                  = new Hashtable<String, EStructuralFeature>();
+  private Hashtable< Integer, TableViewer > tableFeaturesMap = new Hashtable< Integer, TableViewer >();
+
   
   
   
@@ -212,25 +211,26 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   }
   
   
-  public void attachToPosixApplicationArgument(final Table widget){
+  public void attachToPosixApplicationArgument(final TableViewer widget){
     Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__ARGUMENT);
     this.tableFeaturesMap.put( featureID , widget );      
   }
   
   
   
-  public void attachToPosixApplicationEnvironment(final Table widget){
+  public void attachToPosixApplicationEnvironment(final TableViewer widget){
     Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__ENVIRONMENT);
     this.tableFeaturesMap.put( featureID , widget );       
   }
   
   
   
-  public void attachToDelete(final Button button, final Table table){
+  public void attachToDelete(final Button button, final TableViewer viewer){
+
     button.addSelectionListener(new SelectionListener() {
 
-      public void widgetSelected(final SelectionEvent event) {
-        performDelete( table.getItem( table.getSelectionIndex() ) );
+      public void widgetSelected(final SelectionEvent event) {        
+        performDelete(viewer);
       }
 
       public void widgetDefaultSelected(final SelectionEvent event) {
@@ -242,8 +242,8 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   }
   
   
-  /*
-   * Method of checking if the adapter is Empty..
+  /**
+   * @return true if the PosixApplicationTypeAdapter is Empty. 
    */
   public boolean isEmpty(){
     boolean status = false;
@@ -256,62 +256,86 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   } //End isEmpty()
   
   
-  protected void performDelete(final TableItem item){
+  
+  public void performAdd (final TableViewer tableViewer,
+                        final String name, final Object[] value) {
     
-    Table tableWidget = null;
+//    EStructuralFeature eStructuralFeature = null;
+//    Collection<Object> collection = new ArrayList<Object>();
+//    int featureID;
+//    
+//    if (name == "argumentViewer"){ //$NON-NLS-1$
+//      featureID = PosixPackage.POSIX_APPLICATION_TYPE__ARGUMENT;
+//    }
+//    else{
+//      featureID = PosixPackage.POSIX_APPLICATION_TYPE__ENVIRONMENT;
+//    }
+//    
+//    // Get EStructural Feature.
+//    eStructuralFeature = this.posixApplicationType.eClass().getEStructuralFeature( featureID );
+//       
+//    
+//    tableViewer.add(value);
+//    
+//     for ( int i=0; i<tableViewer.getTable().getItemCount(); i++ ) {
+//        collection.add( tableViewer.getElementAt( i ) );
+//      
+//     }
+//     
+//
+//    this.posixApplicationType.eSet(eStructuralFeature, collection);
+//    
+//    tableViewer.refresh();
+//   
+//    this.contentChanged();
+//    
+//    eStructuralFeature = null;
+//    collection = null;
+    
+  }
+  
+  
+  
+  protected void performDelete(final TableViewer viewer ){
+    
     EStructuralFeature eStructuralFeature = null;
+    IStructuredSelection structSelection 
+                               = ( IStructuredSelection ) viewer.getSelection();
+    
+    Object feature = structSelection.getFirstElement();
+    
+    
+    if (feature instanceof ArgumentType){
+        ArgumentType argument = (ArgumentType) feature;
+       
         
-    String key = item.getText( 0 );    
-    
-    if (this.eStructuralFeaturesMap.containsKey( key ) ){
-    
-    /* Get EStructuralFeature */
-      eStructuralFeature = this.eStructuralFeaturesMap.get( key );
-    
-    /* Delete only Multi-Valued Elements */
-      if (FeatureMapUtil.isMany(this.posixApplicationType, eStructuralFeature)){
-      
-        ((java.util.List<?>)this.posixApplicationType.eGet(eStructuralFeature))
-                                                                   .remove( key );
-      
+        eStructuralFeature = argument.eContainmentFeature();
+        EcoreUtil.remove( argument);
         
-        this.removeFromMap( key );
-        this.contentChanged();
-        
-        Integer featureID = new Integer(eStructuralFeature.getFeatureID());
-        tableWidget = this.tableFeaturesMap.get( featureID );
-      }
-    }    
-
-          
-    /* Get Structural Feature ID to remove it from the associated SWT Table 
-     * and also delete any reference to the Structural Features Map*/
+    }
+    else if (feature instanceof EnvironmentType) {
+      EnvironmentType environment = (EnvironmentType) feature;
+      eStructuralFeature = environment.eContainingFeature();
+      EcoreUtil.remove( environment );
+    }
     
-    Integer featureID = new Integer(eStructuralFeature.getFeatureID());
-    tableWidget = this.tableFeaturesMap.get( featureID );
-    tableWidget.remove( tableWidget.getSelectionIndex() );
-    
-    
+    viewer.refresh();
+    contentChanged();
   }
   
   
-  
-  private void removeFromMap (final Object key){
-    this.eStructuralFeaturesMap.remove( key );
-  }
-  
-  
+ 
   
   public void load()
   {
     this.isNotifyAllowed = false;
-    EObject object = this.posixApplicationType;
+    EObject posixEObject = this.posixApplicationType;
     Text widgetName = null;
-    Table tableName = null;
+    TableViewer tableName = null;
      
     // Test if eObject is not empty.
-    if(object != null) {
-      EClass eClass = object.eClass();
+    if(posixEObject != null) {
+      EClass eClass = posixEObject.eClass();
       
       for (Iterator<EStructuralFeature> iterRef = eClass.getEAllStructuralFeatures().iterator(); iterRef.hasNext();){
         
@@ -323,11 +347,11 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
 
           //Check for the features Multiplicity.
           
-          if (object.eIsSet( eStructuralFeature ) 
+          if (posixEObject.eIsSet( eStructuralFeature ) 
             && eStructuralFeature.getUpperBound() 
-            != EStructuralFeature.UNBOUNDED_MULTIPLICITY ){
+            != ETypedElement.UNBOUNDED_MULTIPLICITY ){
         
-           EObject eObject = (EObject) object.eGet( eStructuralFeature );
+           EObject eObject = (EObject) posixEObject.eGet( eStructuralFeature );
                 
            Object eStrFeatValue = null;
           
@@ -337,7 +361,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
            }
            
            // Check if Reference has been set.
-           if (object.eIsSet( eStructuralFeature ) 
+           if (posixEObject.eIsSet( eStructuralFeature ) 
                && eStructuralFeature.getFeatureID() != PosixPackage.POSIX_APPLICATION_TYPE__ANY_ATTRIBUTE ){          
              widgetName = this.widgetFeaturesMap.get( new Integer(featureID) );
              widgetName.setText(eStrFeatValue.toString());            
@@ -352,18 +376,12 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
               {
                 
                 tableName = this.tableFeaturesMap.get( new Integer(featureID) );
-                EList valueList = (EList) object.eGet( eStructuralFeature );                
+                               
+                EList valueList = (EList) posixEObject.eGet( eStructuralFeature );                
                 if(!this.adapterRefreshed) {
-                  for (Iterator  it = valueList.iterator(); it.hasNext();){
-                   this.environmentType = (EnvironmentType) it.next(); 
-                  
-                   
-                   this.eStructuralFeaturesMap.put( this.environmentType.getFilesystemName(),
-                                                  eStructuralFeature );
-                     TableItem tableItem  = new TableItem(tableName, SWT.NONE);
-                     tableItem.setText( 0 , this.environmentType.getName());
-                     tableItem.setText( 1 , this.environmentType.getFilesystemName());
-                     tableItem.setText( 2 , this.environmentType.getValue());
+                  for (Iterator  it = valueList.iterator(); it.hasNext();){                    
+                    this.environmentType = (EnvironmentType) it.next();                   
+                    tableName.setInput( valueList );
                     } // End Iterator
                              
                   } // Endif
@@ -371,25 +389,17 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__ARGUMENT:                
               {                
-                tableName = this.tableFeaturesMap.get( featureID );
-                EList valueList = (EList) object.eGet( eStructuralFeature );  
-                String fileSystemName = ""; //$NON-NLS-1$
-                String fileSystemValue = ""; //$NON-NLS-1$
+                tableName = this.tableFeaturesMap.get( new Integer(featureID) );
+                
+                EList<ArgumentType> valueList = (EList) posixEObject.eGet( eStructuralFeature );
+                
                 
                 if(!this.adapterRefreshed) {
-                  for (Iterator it = valueList.iterator(); it.hasNext();){
-                    
-                   this.argumentType = (ArgumentType) it.next();          
-                   this.eStructuralFeaturesMap.put( this.argumentType.getFilesystemName(),
-                                                    eStructuralFeature );
-                   fileSystemName = this.argumentType.getFilesystemName();
-                   fileSystemValue = this.argumentType.getValue();
-                 
-                   
-                     TableItem tableItem  = new TableItem(tableName, SWT.NONE);                     
-                     tableItem.setText( 0 , fileSystemName);
-                     tableItem.setText( 1 , fileSystemValue);                     
-                    } // End Iterator
+                  
+                  for (Iterator <ArgumentType> it = valueList.iterator(); it.hasNext();) {                   
+                    this.argumentType =  it.next();        
+                     tableName.setInput( valueList );
+                   } // End Iterator
                              
                   } // Endif
               }                
@@ -407,12 +417,10 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
         else if (eStructuralFeature instanceof EAttribute) {
           
           // Get Attribute Value.
-          Object value = object.eGet( eStructuralFeature );        
-               
+          Object value = posixEObject.eGet( eStructuralFeature );
           
-                
           // Check if Attribute has any value
-          if (object.eIsSet( eStructuralFeature )){          
+          if (posixEObject.eIsSet( eStructuralFeature )){          
              widgetName = this.widgetFeaturesMap.get( new Integer(featureID) );
              
              if (eStructuralFeature.getName().toString() != "any"){ //$NON-NLS-1$
