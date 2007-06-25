@@ -62,6 +62,11 @@ public class SolutionRegistry {
   public static final int CHECK_SERVER_URL = uniqueID();
   
   /**
+   * Unique ID of the check system clock solution.
+   */
+  public static final int CHECK_SYSTEM_CLOCK = uniqueID();
+  
+  /**
    * Unique ID of the check VO settings solution.
    */
   public static final int CHECK_VO_SETTINGS = uniqueID();
@@ -218,6 +223,10 @@ public class SolutionRegistry {
 
     else if ( solutionID == CHECK_SERVER_URL ) {
       solution = new Solution( CHECK_SERVER_URL, Messages.getString("SolutionRegistry.check_server_url")); //$NON-NLS-1$
+    }
+    
+    else if ( solutionID == CHECK_SYSTEM_CLOCK ) {
+      solution = new Solution( CHECK_SYSTEM_CLOCK, Messages.getString("SolutionRegistry.check_system_clock")); //$NON-NLS-1$
     }
     
     else if ( solutionID == CHECK_TIMEOUT_SETTINGS ) {

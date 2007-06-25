@@ -276,12 +276,20 @@ public abstract class AbstractGridContainer
   }
     
   /**
-   * Set the dirty flag of this container.
+   * Set the dirty flag of this container. If setting to dirty, the
+   * flags of all child containers are also set recursively to dirty.
    * 
    * @param d The new value of the container's dirty flag.
    */
   protected void setDirty( final boolean d ) {
     this.dirty = d;
+    if ( d ) {
+      for ( IGridElement child : this.children ) {
+        if ( child instanceof IGridContainer ) {
+          ( ( IGridContainer ) child ).setDirty();
+        }
+      }
+    }
   }
   
   protected void setProcessEvents( final boolean enabled ) {

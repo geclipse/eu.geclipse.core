@@ -137,7 +137,23 @@ public abstract class AbstractProblem implements IProblem {
    * @see eu.geclipse.core.IProblem#getReasons()
    */
   public List< String > getReasons() {
-    return this.reasons;
+    
+    List< String > resultList = new ArrayList< String >();
+    
+    if ( this.reasons != null ) {
+      resultList.addAll( this.reasons );
+    }
+    
+    Throwable exc = getException();
+    if ( ( exc != null ) && ( exc instanceof GridException ) ) {
+      List< String > secReasons = ( ( GridException ) exc ).getProblem().getReasons();
+      if ( secReasons != null ) {
+        resultList.addAll( secReasons );
+      }
+    }
+    
+    return resultList;
+    
   }
 
   /* (non-Javadoc)
@@ -175,7 +191,7 @@ public abstract class AbstractProblem implements IProblem {
     }
     
     Throwable exc = getException();
-    if ( exc instanceof GridException ) {
+    if ( ( exc != null ) && ( exc instanceof GridException ) ) {
       IProblem problem = ( ( GridException ) exc ).getProblem();
       List< Integer > sids = ( ( AbstractProblem ) problem ).getSolutionIDs();
       for ( Integer sid : sids ) {
