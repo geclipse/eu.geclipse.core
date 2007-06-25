@@ -7,7 +7,6 @@ import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.actions.BaseSelectionListenerAction;
@@ -20,7 +19,8 @@ public class DeleteConnectionAction
     extends BaseSelectionListenerAction {
   
   protected DeleteConnectionAction() {
-    super( "D&elete@DEL" );
+    super( Messages.getString("DeleteConnectionAction.delete_text") ); //$NON-NLS-1$
+    setToolTipText( Messages.getString("DeleteConnectionAction.delete_tooltip") ); //$NON-NLS-1$
     URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/obj16/invalid_element_obj.gif" ); //$NON-NLS-1$
     setImageDescriptor( ImageDescriptor.createFromURL( imgUrl ) );
   }
