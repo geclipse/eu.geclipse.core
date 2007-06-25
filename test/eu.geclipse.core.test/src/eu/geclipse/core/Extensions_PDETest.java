@@ -79,7 +79,7 @@ public class Extensions_PDETest {
   {
     List<IGridElementCreator> elementcreators;
     elementcreators = Extensions.getRegisteredElementCreators();
-    Assert.assertEquals( new Integer( 5 ),new Integer( elementcreators.size() ));
+    Assert.assertEquals( new Integer( 8 ),new Integer( elementcreators.size() ));
    }
 
   /** test method {@link Extensions#getRegisteredProblemProviders()}
