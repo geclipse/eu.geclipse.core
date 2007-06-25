@@ -241,6 +241,10 @@ public class JobIdentificationTypeAdapter extends JsdlAdaptersFactory {
   
   
   public void performAdd(final List list, final String name, final Object value) {
+
+    if (value == null) {
+      return;
+    }
     
     EStructuralFeature eStructuralFeature = null;
     Collection<String> collection = new ArrayList<String>();

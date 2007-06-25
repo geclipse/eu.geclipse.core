@@ -17,6 +17,11 @@
 
 package eu.geclipse.jsdl.ui.internal.pages;
 
+/**
+ * @author nicholas
+ *
+ */
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
@@ -40,11 +45,20 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
+import eu.geclipse.jsdl.jsdl.JobDefinitionTypeAdapter;
+import eu.geclipse.jsdl.jsdl.JobIdentificationTypeAdapter;
 import eu.geclipse.jsdl.jsdl.ResourcesTypeAdapter;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.dialogs.MultipleInputDialog;
 
 
+/**
+ * This class provides the Resources Page page that appears in the JSDL editor.
+ * It provides a graphical user interface to the following elements of a JSDL 
+ * document:
+ * 
+ * 
+ */
 public class ResourcesPage extends FormPage implements INotifyChangedListener {
   
    
@@ -117,8 +131,13 @@ public class ResourcesPage extends FormPage implements INotifyChangedListener {
   private final int WIDGET_HEIGHT = 100;
   
   
-  /*
-   * Class Constructor.
+  
+  /**
+   * 
+   * ResourcesPage class constructor. Initialiazes the Resources Page by 
+   * passing as an argument the container JSDL editor.
+   * @param editor
+   * 
    */
   public ResourcesPage( final FormEditor editor )
                             
@@ -151,9 +170,23 @@ public class ResourcesPage extends FormPage implements INotifyChangedListener {
     return this.contentRefreshed;
      }
   
-  /*
-   * Public Method called from the MPE Editor to set the 
-   * page content.
+  /**
+   * Method that set's the Resources Page content. The content is the root 
+   * JSDL element. Also this method is responsible to initialize the associated 
+   * type adapters for the elements of this page. This method must be called only
+   * from the JSDL Editor.
+   * 
+   * Associated Type Adapters for this page are: 
+   * @see JobDefinitionTypeAdapter
+   * @see JobIdentificationTypeAdapter
+   *  
+   * @param rootJsdlElement
+   * 
+   * @param refreshStatus
+   * Set to TRUE if the original page content is already set, but there is a need
+   * to refresh the page because there was a change to this content
+   *  from an outside editor.
+   * 
    */
   public void setPageContent(final EObject rootJsdlElement, 
                              final boolean refreshStatus){
@@ -178,7 +211,13 @@ public class ResourcesPage extends FormPage implements INotifyChangedListener {
   }
 
   
-  
+  /**
+   * This method set's the dirty status of the page.
+   * 
+   * @param dirtyFlag
+   * If TRUE then the page is Dirty and a Save operation is needed.
+   * 
+   */
   public void setDirty(final boolean dirtyFlag) {
     if (this.dirtyFlag != dirtyFlag) {
       this.dirtyFlag = dirtyFlag;     

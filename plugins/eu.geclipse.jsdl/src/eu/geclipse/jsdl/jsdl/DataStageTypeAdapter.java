@@ -28,8 +28,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -48,7 +46,7 @@ import eu.geclipse.jsdl.model.SourceTargetType;
  * @author nickl
  *
  */
-public class DataStagingAdapter extends JsdlAdaptersFactory {
+public class DataStageTypeAdapter extends JsdlAdaptersFactory {
   
   protected String dataStageEntryKey = ""; //$NON-NLS-1$
   
@@ -78,7 +76,7 @@ public class DataStagingAdapter extends JsdlAdaptersFactory {
   /*
    * Class Constructor 
    */
-  public DataStagingAdapter (final EObject rootJsdlElement){
+  public DataStageTypeAdapter (final EObject rootJsdlElement){
 
 
     getTypeForAdapter(rootJsdlElement);
@@ -103,8 +101,8 @@ public class DataStagingAdapter extends JsdlAdaptersFactory {
        List list = (List) event.getSource();
        String [] str = list.getSelection();       
        for (int i=0; i<str.length; i++){
-         DataStagingAdapter.this.dataStageEntryKey  = str[i];
-         navigateDataStaging(DataStagingAdapter.this.dataStageEntryKey );
+         DataStageTypeAdapter.this.dataStageEntryKey  = str[i];
+         navigateDataStaging(DataStageTypeAdapter.this.dataStageEntryKey );
          
        }
         
@@ -124,8 +122,8 @@ public class DataStagingAdapter extends JsdlAdaptersFactory {
     
     widget.addFocusListener( new org.eclipse.swt.events.FocusListener() {
       public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
-        EObject eObject = DataStagingAdapter.this.stageMap
-                            .get( DataStagingAdapter.this.dataStageEntryKey );
+        EObject eObject = DataStageTypeAdapter.this.stageMap
+                            .get( DataStageTypeAdapter.this.dataStageEntryKey );
         eObject.eSet( JsdlPackage.Literals.DATA_STAGING_TYPE__FILESYSTEM_NAME,
                                         widget.getText() );
         eObject = null;
@@ -148,8 +146,8 @@ public class DataStagingAdapter extends JsdlAdaptersFactory {
     
     widget.addFocusListener( new org.eclipse.swt.events.FocusListener() {
       public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
-        EObject eObject = DataStagingAdapter.this.stageMap
-                              .get( DataStagingAdapter.this.dataStageEntryKey );
+        EObject eObject = DataStageTypeAdapter.this.stageMap
+                              .get( DataStageTypeAdapter.this.dataStageEntryKey );
 
         eObject.eSet( JsdlPackage.Literals.DATA_STAGING_TYPE__NAME,
                                     widget.getText() );
@@ -172,8 +170,8 @@ public class DataStagingAdapter extends JsdlAdaptersFactory {
     
     widget.addFocusListener( new org.eclipse.swt.events.FocusListener() {
       public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
-        EObject eObject = DataStagingAdapter.this.stageMap
-                            .get( DataStagingAdapter.this.dataStageEntryKey );
+        EObject eObject = DataStageTypeAdapter.this.stageMap
+                            .get( DataStageTypeAdapter.this.dataStageEntryKey );
         eObject.eSet( JsdlPackage.Literals.DATA_STAGING_TYPE__SOURCE,
         widget.getText() );
         eObject = null;
@@ -225,8 +223,8 @@ public class DataStagingAdapter extends JsdlAdaptersFactory {
         
     widget.addSelectionListener(new SelectionListener() {
       public void widgetSelected(final SelectionEvent e) {
-       EObject eObject = DataStagingAdapter.this.stageMap
-                             .get( DataStagingAdapter.this.dataStageEntryKey );
+       EObject eObject = DataStageTypeAdapter.this.stageMap
+                             .get( DataStageTypeAdapter.this.dataStageEntryKey );
         eObject.eSet( JsdlPackage.Literals.DATA_STAGING_TYPE__CREATION_FLAG,
                       CreationFlagEnumeration.get( widget.getSelectionIndex()));
         eObject = null;
@@ -248,8 +246,8 @@ public class DataStagingAdapter extends JsdlAdaptersFactory {
         
     widget.addSelectionListener(new SelectionListener() {
       public void widgetSelected(final SelectionEvent e) {
-       EObject eObject = DataStagingAdapter.this.stageMap
-                             .get( DataStagingAdapter.this.dataStageEntryKey );
+       EObject eObject = DataStageTypeAdapter.this.stageMap
+                             .get( DataStageTypeAdapter.this.dataStageEntryKey );
         eObject.eSet( JsdlPackage.Literals.DATA_STAGING_TYPE__DELETE_ON_TERMINATION,
                      Boolean.parseBoolean( widget.getItem( widget.getSelectionIndex() ) ) );
         eObject = null;    
@@ -268,7 +266,7 @@ public class DataStagingAdapter extends JsdlAdaptersFactory {
     button.addSelectionListener(new SelectionListener() {
 
       public void widgetSelected(final SelectionEvent event) {        
-        performDelete(list, DataStagingAdapter.this.dataStageEntryKey);
+        performDelete(list, DataStageTypeAdapter.this.dataStageEntryKey);
       }
 
       public void widgetDefaultSelected(final SelectionEvent event) {

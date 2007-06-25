@@ -51,6 +51,16 @@ import eu.geclipse.jsdl.posix.PosixApplicationTypeAdapter;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.dialogs.MultipleInputDialog;
 
+/**
+ * This class provides the Job Application page that appears in the JSDL editor.
+ * It provides a graphical user interface to the following elements of a JSDL 
+ * document:
+ * 
+ * Application Name
+ * Application Version
+ * Application Description 
+ *
+ */
 public class JobApplicationPage extends FormPage 
                                              implements INotifyChangedListener{
   
@@ -133,15 +143,19 @@ public class JobApplicationPage extends FormPage
   private final int widgetHeight = 100; 
   
    
- 
-  /* Class Constructor */
+
+  /**
+   * JobApplicationPage class constructor. Initialiazes the JobApplica Page 
+   * by passing as an argument the container JSDL editor.
+   * @param editor
+   */
   public JobApplicationPage( final FormEditor editor ) {
     
     super(editor,Messages.getString("JobApplicationPage_pageId") ,  //$NON-NLS-1$
           Messages.getString("JobApplicationPage_PageTitle")); //$NON-NLS-1$
    
    
-  } // End Constructor
+  } // End Class Constructor
   
   
   
@@ -163,26 +177,51 @@ public class JobApplicationPage extends FormPage
     
     return this.dirtyFlag;
     
-  }
+  } //End boolean isDirty()
 
   
-  
+  /**
+   * This method set's the dirty status of the page.
+   * 
+   * @param dirtyFlag
+   * If TRUE then the page is Dirty and a Save operation is needed.
+   * 
+   */
   public void setDirty (final boolean dirtyFlag) {
     if (this.dirtyFlag != dirtyFlag) {
       this.dirtyFlag = dirtyFlag;     
       this.getEditor().editorDirtyStateChanged();  
     }
     
-  }
+  } //End void setDirty()
   
   
   
-  private boolean isContentRefreshed(){          
+  private boolean isContentRefreshed(){
+    
     return this.contentRefreshed;
-  }
+    
+  } 
   
   
-  
+  /**
+   * Method that set's the JobApplication Page content. The content is the root 
+   * JSDL element. Also this method is responsible to initialize the associated 
+   * type adapters for the elements of this page.  This method must be called only
+   * from the JSDL Editor.
+   * 
+   * Associated Type Adapters for this page are: 
+   * @see ApplicationTypeAdapter
+   * @see PosixApplicationTypeAdapter
+   *  
+   * @param rootJsdlElement
+   * 
+   * @param refreshStatus
+   * Set to TRUE if the original page content is already set, but there is a need
+   * to refresh the page because there was a change to this content
+   *  from an outside editor.
+   * 
+   */
   public void setPageContent(final EObject rootJsdlElement, 
                              final boolean refreshStatus){
 
@@ -192,21 +231,30 @@ public class JobApplicationPage extends FormPage
       this.posixApplicationTypeAdapter.setContent( rootJsdlElement );
 
     }
+   
    else{
+     
+      /* Initialize the ApplicationTypeAdapter for this page */
       this.applicationTypeAdapter = new ApplicationTypeAdapter(rootJsdlElement);
+      /*Add Save State change notification listener. */
       this.applicationTypeAdapter.addListener( this );
+      /* Initialize the PosixApplicationTypeAdapter for this page */
       this.posixApplicationTypeAdapter = new PosixApplicationTypeAdapter(rootJsdlElement);
+      /*Add Save State change notification listener. */
       this.posixApplicationTypeAdapter.addListener( this );
 
-   }
+   } // End else
           
   } // End void getPageContent() 
   
  
     
-  //This method is used to create the Forms content by
-  // creating the form layout and then creating the form
-  // sub sections.
+  /*
+   * This method is used to create the Forms content by
+  * creating the form layout and then creating the form
+  * sub sections.
+  * 
+  */
   
   @Override
   protected void createFormContent(final IManagedForm managedForm) {
@@ -268,7 +316,8 @@ public class JobApplicationPage extends FormPage
       section = toolkit.createSection(form.getBody(), 
                                             ExpandableComposite.TITLE_BAR
                                             |Section.DESCRIPTION
-                                            |Section.TWISTIE | SWT.WRAP);
+                                            |ExpandableComposite.TWISTIE
+                                            | SWT.WRAP);
     } else {
      
       section = toolkit.createSection(form.getBody(), 

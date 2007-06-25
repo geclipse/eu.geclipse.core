@@ -11,8 +11,7 @@
   *
   * Contributor(s):
   *     UCY (http://www.ucy.cs.ac.cy)
-  *      - Nicholas Loulloudes (loulloudes.n@cs.ucy.ac.cy)
-  *      - Emilia Stamou (emstamou@cs.ucy.ac.cy)
+  *      - Nicholas Loulloudes (loulloudes.n@cs.ucy.ac.cy) 
   *****************************************************************************/
 
 package eu.geclipse.jsdl.ui.internal.pages;
@@ -20,21 +19,15 @@ package eu.geclipse.jsdl.ui.internal.pages;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-// Not the best hack but at least a hack that suppresses a lot of warnings
-// TODO Nicholas: Find another approach for fixing the bunch aof warnings
-// comming from this class
-@SuppressWarnings({"all"})
-
-/**
- * Returns the localised messages for this package.
- */
 /**
  * Returns the localised messages for this package.
  */
 public class Messages {
 
-  private static final String BUNDLE_NAME = "eu.geclipse.jsdl.ui.internal.pages.messages"; //$NON-NLS-1$
-  private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( BUNDLE_NAME );
+  private static final String BUNDLE_NAME =
+                    "eu.geclipse.jsdl.ui.internal.pages.messages"; //$NON-NLS-1$
+  private static final ResourceBundle RESOURCE_BUNDLE = 
+                                      ResourceBundle.getBundle( BUNDLE_NAME );
 
   private Messages() {
     // Empty constructor
@@ -47,6 +40,7 @@ public class Messages {
    * @return the localised string.
    */
   public static String getString( final String key ) {
+    
     String resultString = '!' + key + '!'; 
     try {
       resultString = RESOURCE_BUNDLE.getString( key );
@@ -56,7 +50,5 @@ public class Messages {
     return resultString;
   }
   
-
-
  
 }

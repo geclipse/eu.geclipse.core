@@ -16,6 +16,11 @@
 
 package eu.geclipse.jsdl.ui.internal.pages;
 
+/**
+ * @author nicholas
+ *
+ */
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
@@ -36,10 +41,16 @@ import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
-import eu.geclipse.jsdl.jsdl.DataStagingAdapter;
+import eu.geclipse.jsdl.jsdl.DataStageTypeAdapter;
 import eu.geclipse.jsdl.ui.internal.Activator;
 
-
+/**
+ * This class provides the DataStaging Page page that appears in the JSDL editor.
+ * It provides a graphical user interface to the following elements of a JSDL 
+ * document:
+ * 
+ * 
+ */
 public class DataStagingPage extends FormPage implements INotifyChangedListener{
   
   protected Composite jobDataStaging = null;
@@ -65,14 +76,20 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener{
   protected Combo cmbDelOnTerm = null;
 
   
-  private DataStagingAdapter dataStagingAdapter;
+  private DataStageTypeAdapter dataStageTypeAdapter;
   private boolean contentRefreshed = false;
   private boolean dirtyFlag = false;
   
   private final int WIDGET_HEIGHT = 100;
   
   
-  /* Class Constructor */
+  
+  /**
+   * 
+   * DataStagingPage class constructor. Initialiazes the DataStaging Page by 
+   * passing as an argument the container JSDL editor.
+   * @param editor
+   */
   public DataStagingPage( final FormEditor editor )
                             
    {
@@ -92,6 +109,13 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener{
   
   
   
+  /**
+   * This method set's the dirty status of the page.
+   * 
+   * @param dirtyFlag
+   * If TRUE then the page is Dirty and a Save operation is needed.
+   * 
+   */
   public void setDirty(final boolean dirtyFlag) {
     if (this.dirtyFlag != dirtyFlag) {
       this.dirtyFlag = dirtyFlag;     
@@ -127,12 +151,13 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener{
                                 Messages.getString("DataStagingPage_PageTitle"),  //$NON-NLS-1$
                         Messages.getString("DataStagingPage_DataStagingDescr"));   //$NON-NLS-1$
       
-   this.dataStagingAdapter.load();
+   this.dataStageTypeAdapter.load();
    
    /* Set Form Background */
    form.setBackgroundImage(Activator.getDefault().
                            getImageRegistry().get( "formsbackground" )); //$NON-NLS-1$
-  }
+   
+  } //End void createFormContent()
   
 
   @Override
@@ -140,34 +165,54 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener{
     
     if (active){
       if (isContentRefreshed()){
-        this.dataStagingAdapter.load();
+        this.dataStageTypeAdapter.load();
       }//endif isContentRefreshed
     } // endif active
-  }
+    
+  } //End void setActive()
 
 
 
-  private boolean isContentRefreshed(){          
+  private boolean isContentRefreshed(){
+    
     return this.contentRefreshed;
-  }
+    
+  } //End boolean isContentRefreshed()
   
   
-  
-  /* Must be called from the MPE Editor */ 
+     
+  /**
+   * Method that set's the DataStagingPage content. The content is the root 
+   * JSDL element. Also this method is responsible to initialize the associated 
+   * type adapters for the elements of this page. This method must be called only
+   * from the JSDL Editor.
+   * 
+   * Associated Type Adapters for this page are: 
+   * @see DataStageTypeAdapter 
+   *  
+   * @param rootJsdlElement
+   * 
+   * @param refreshStatus
+   * Set to TRUE if the original page content is already set, but there is a need
+   * to refresh the page because there was a change to this content
+   *  from an outside editor.
+   * 
+   */
     public void setPageContent(final EObject rootJsdlElement, 
                              final boolean refreshStatus){
 
    if (refreshStatus) {
       this.contentRefreshed = true;
-      this.dataStagingAdapter.setContent( rootJsdlElement );
+      this.dataStageTypeAdapter.setContent( rootJsdlElement );
     }
    else{     
-      this.dataStagingAdapter = new DataStagingAdapter(rootJsdlElement);
-      this.dataStagingAdapter.addListener( this );
+      this.dataStageTypeAdapter = new DataStageTypeAdapter(rootJsdlElement);
+      this.dataStageTypeAdapter.addListener( this );
    }
           
-  } // End void getPageContent() 
-
+  } // End void getPageContent()
+    
+    
 
   /* This method is used to create individual subsections */
   
@@ -205,7 +250,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener{
    
    return client;
    
-   }
+   }// End void createSection()
   
   
   
@@ -255,7 +300,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener{
     this.lstFileName.setData( FormToolkit.KEY_DRAW_BORDER,
                                                       FormToolkit.TEXT_BORDER );
     
-    this.dataStagingAdapter.attachToFileName( this.lstFileName );
+    this.dataStageTypeAdapter.attachToFileName( this.lstFileName );
     gd.horizontalAlignment = GridData.FILL;
     gd.verticalAlignment = GridData.FILL;
     gd.verticalSpan = 2;
@@ -272,7 +317,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener{
     this.btnAdd = toolkit.createButton(clientsubSection,
                                      Messages.getString("JsdlEditor_AddButton"), //$NON-NLS-1$
                                      SWT.PUSH);
-    this.dataStagingAdapter.attachToAdd( this.btnAdd );
+    this.dataStageTypeAdapter.attachToAdd( this.btnAdd );
     this.btnAdd.setLayoutData( gd );
     
     
@@ -285,7 +330,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener{
     this.btnDel = toolkit.createButton(clientsubSection,
                                   Messages.getString("JsdlEditor_RemoveButton"), //$NON-NLS-1$
                                    SWT.PUSH);
-    this.dataStagingAdapter.attachToDelete(this.lstFileName, this.btnDel );
+    this.dataStageTypeAdapter.attachToDelete(this.lstFileName, this.btnDel );
     this.btnDel.setLayoutData( gd );
     
     
@@ -295,7 +340,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener{
     this.lblFileSystemName = toolkit.createLabel(clientsubSection,
                           Messages.getString("DataStagingPage_FileSystemName")); //$NON-NLS-1$
     this.txtFileSystemName = toolkit.createText(clientsubSection, "", SWT.NONE); //$NON-NLS-1$
-    this.dataStagingAdapter.attachToFileSystemName(this.txtFileSystemName );
+    this.dataStageTypeAdapter.attachToFileSystemName(this.txtFileSystemName );
     gd.horizontalSpan=3;
     gd.widthHint = 300;
     this.txtFileSystemName.setLayoutData(gd);
@@ -311,7 +356,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener{
                                                      SWT.READ_ONLY);
     
     this.cmbCreationFlag.setData( FormToolkit.KEY_DRAW_BORDER );
-    this.dataStagingAdapter.attachToCreationFlag( this.cmbCreationFlag );
+    this.dataStageTypeAdapter.attachToCreationFlag( this.cmbCreationFlag );
     gd.horizontalSpan=3;
     gd.widthHint = 300;
     this.cmbCreationFlag.setLayoutData(gd);
@@ -328,7 +373,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener{
     this.cmbDelOnTerm.setData( FormToolkit.KEY_DRAW_BORDER);    
     this.cmbDelOnTerm.add(Messages.getString("DataStagingPage_true")); //$NON-NLS-1$
     this.cmbDelOnTerm.add(Messages.getString("DataStagingPage_false")); //$NON-NLS-1$
-    this.dataStagingAdapter.attachToDelOnTermination( this.cmbDelOnTerm );
+    this.dataStageTypeAdapter.attachToDelOnTermination( this.cmbDelOnTerm );
     gd.horizontalSpan=3;
     gd.widthHint = 300;
     this.cmbDelOnTerm.setLayoutData(gd);
@@ -339,7 +384,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener{
                                   Messages.getString("DataStagingPage_Source")); //$NON-NLS-1$
     
     this.txtSource = toolkit.createText(clientsubSection, "", SWT.NONE); //$NON-NLS-1$
-    this.dataStagingAdapter.attachToSource( this.txtSource );
+    this.dataStageTypeAdapter.attachToSource( this.txtSource );
     gd.horizontalSpan=3;
     gd.widthHint = 300;
     this.txtSource.setLayoutData(gd);
@@ -349,16 +394,17 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener{
     this.lblTarget = toolkit.createLabel(clientsubSection,
                                   Messages.getString("DataStagingPage_Target")); //$NON-NLS-1$
     this.txtTarget = toolkit.createText(clientsubSection, "", SWT.NONE); //$NON-NLS-1$
-    this.dataStagingAdapter.attachToTarget( this.txtTarget );
+    this.dataStageTypeAdapter.attachToTarget( this.txtTarget );
     gd.horizontalSpan=3;
     gd.widthHint = 300;
     this.txtTarget.setLayoutData(gd);
     
     /* ========================== Name Widgets ============================ */
+    
     this.lblName = toolkit.createLabel(clientsubSection,
                                     Messages.getString("DataStagingPage_Name")); //$NON-NLS-1$
     this.txtName= toolkit.createText(clientsubSection, "", SWT.NONE); //$NON-NLS-1$
-    this.dataStagingAdapter.attachToName( this.txtName );
+    this.dataStageTypeAdapter.attachToName( this.txtName );
     gd.horizontalSpan=3;
     gd.widthHint = 300;
     this.txtName.setLayoutData(gd);
@@ -392,11 +438,11 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener{
 
 
 
-
-
-  public void notifyChanged( Notification notification ) {    
-    setDirty( true );    
-  }
+  public void notifyChanged( Notification notification ) {
+    
+    setDirty( true );
+    
+  }// End notifyChanged()
 
 
 } //End Class

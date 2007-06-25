@@ -36,7 +36,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
-import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
@@ -51,6 +50,18 @@ import eu.geclipse.jsdl.ui.editors.JsdlEditor;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.dialogs.MultipleInputDialog;
 
+/**
+ * This class provides the Job Definition page that appears in the JSDL editor.
+ * It provides a graphical user interface to the following elements of a JSDL 
+ * document:
+ * 
+ * - Job Definition ID
+ * - Job Name
+ * - Job Description
+ * - Job Annotation
+ * - Job Project
+ * 
+ */
 public class JobDefinitionPage extends FormPage
     implements INotifyChangedListener {
   
@@ -74,11 +85,7 @@ public class JobDefinitionPage extends FormPage
   
   protected Composite jobDefComposite = null;
   protected Composite jobIdentComposite = null;
-  
-   
-  //Hashtable< String, Text > widgetFeaturesMap = new Hashtable< String, Text >();
-  
-  
+    
   protected JobDefinitionTypeAdapter jobDefinitionTypeAdapter ;
   protected JobIdentificationTypeAdapter jobIdentificationTypeAdapter;
     
@@ -87,6 +94,11 @@ public class JobDefinitionPage extends FormPage
   
   private final int widgetHeight = 100; 
   
+  
+  /**
+   * JobDefinitionPage Class constructor.
+   * @param editor
+   */
   public JobDefinitionPage( final JsdlEditor editor) {
    
     
@@ -108,12 +120,32 @@ public class JobDefinitionPage extends FormPage
   
   
   
-  // Checks if the content of the model for this page is refreshed.
+  /*
+   *  Checks if the content of the model for this page is refreshed.
+   */
   private boolean isContentRefreshed(){          
     return this.contentRefreshed;
      }
   
   
+  /**
+   * Method that set's the JobDefinition Page content. The content is the root 
+   * JSDL element. Also this method is responsible to initialize the associated 
+   * type adapters for the elements of this page.  This method must be called only
+   * from the JSDL Editor.
+   * 
+   * Associated Type Adapters for this page are: 
+   * @see JobDefinitionTypeAdapter
+   * @see JobIdentificationTypeAdapter
+   *  
+   * @param rootJsdlElement
+   * 
+   * @param refreshStatus
+   * Set to TRUE if the original page content is already set, but there is a need
+   * to refresh the page because there was a change to this content
+   *  from an outside editor.
+   * 
+   */
   public void setPageContent(final EObject rootJsdlElement, 
                              final boolean refreshStatus){
 
@@ -139,6 +171,13 @@ public class JobDefinitionPage extends FormPage
     
   }
   
+  /**
+   * This method set's the dirty status of the page.
+   * 
+   * @param dirtyFlag
+   * If TRUE then the page is Dirty and a Save operation is needed.
+   * 
+   */
   public void setDirty(final boolean dirtyFlag) {
     if (this.dirtyFlag != dirtyFlag) {
       this.dirtyFlag = dirtyFlag;     
@@ -421,12 +460,12 @@ public class JobDefinitionPage extends FormPage
        public void widgetSelected(final SelectionEvent event) {
 
          handleAddDialog(Messages.getString( "JobDefinitionPage_JobProjectDialog" )); //$NON-NLS-1$
-         
          JobDefinitionPage.this.jobIdentificationTypeAdapter
                            .performAdd(
                                            JobDefinitionPage.this.lstJobProject,
                                            "lstJobProject", //$NON-NLS-1$                                                       
                                            JobDefinitionPage.this.value);
+
        }
 
         public void widgetDefaultSelected(final SelectionEvent event) {
@@ -459,10 +498,13 @@ public class JobDefinitionPage extends FormPage
     MultipleInputDialog dialog = new MultipleInputDialog( this.getSite().getShell(),
                                                          dialogTitle );
         
-    dialog.addTextField( Messages.getString( "JobDefinitionPage_Value" ), "", false ); //$NON-NLS-1$ //$NON-NLS-2$    
-    if( dialog.open() != Window.OK ) {
+    dialog.addTextField( Messages.getString( "JobDefinitionPage_Value" ), "", false ); //$NON-NLS-1$ //$NON-NLS-2$
+    
+    if( dialog.open() != Window.OK ) { 
+      this.value = null;
       return;
     }
+    
     this.value = dialog.getStringValue( Messages.getString( "JobDefinitionPage_Value" ) ) ; //$NON-NLS-1$
     
     
