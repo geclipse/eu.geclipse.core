@@ -48,6 +48,8 @@ import eu.geclipse.ui.widgets.StoredCombo;
 
 public class ConnectionDefinitionWizardPage extends WizardPage {
   
+  protected TreeViewer viewer;
+  
   private static final String SEPARATOR = ":"; //$NON-NLS-1$
   
   private String currentURIType;
@@ -96,15 +98,13 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
   
   private Link pathLink;
   
-  private TreeViewer viewer;
-  
   private IConnectionTokenValidator validator;
     
   public ConnectionDefinitionWizardPage() {
-    super( "connectionDefinitionPage",
-           "Connection Definition",
+    super( Messages.getString("ConnectionDefinitionWizardPage.name"), //$NON-NLS-1$
+           Messages.getString("ConnectionDefinitionWizardPage.title"), //$NON-NLS-1$
            null );
-    setDescription( "Define your new connection to the Grid" );
+    setDescription( Messages.getString("ConnectionDefinitionWizardPage.description") ); //$NON-NLS-1$
   }
 
   public void createControl( final Composite parent ) {
@@ -118,29 +118,29 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
     this.mainComp.setLayoutData( gData );
     
     this.schemeLabel = new Label( this.mainComp, SWT.NONE );
-    this.schemeCombo = createEditorField( this.mainComp, this.schemeLabel, "Scheme:" );
+    this.schemeCombo = createEditorField( this.mainComp, this.schemeLabel, Messages.getString("ConnectionDefinitionWizardPage.scheme_label"), SWT.READ_ONLY ); //$NON-NLS-1$
     this.uriLabel = new Label( this.mainComp, SWT.NONE );
-    this.uriCombo = createEditorField( this.mainComp, this.uriLabel, "URI:" );
+    this.uriCombo = createEditorField( this.mainComp, this.uriLabel, Messages.getString("ConnectionDefinitionWizardPage.uri_label"), SWT.NONE ); //$NON-NLS-1$
     this.schemeSpecificPartLabel = new Label( this.mainComp, SWT.NONE );
-    this.schemeSpecificPartCombo = createEditorField( this.mainComp, this.schemeSpecificPartLabel, "Scheme specific part:" );
+    this.schemeSpecificPartCombo = createEditorField( this.mainComp, this.schemeSpecificPartLabel, Messages.getString("ConnectionDefinitionWizardPage.scheme_spec_label"), SWT.NONE ); //$NON-NLS-1$
     this.authorityLabel = new Label( this.mainComp, SWT.NONE );
-    this.authorityCombo = createEditorField( this.mainComp, this.authorityLabel, "Authority" );
+    this.authorityCombo = createEditorField( this.mainComp, this.authorityLabel, Messages.getString("ConnectionDefinitionWizardPage.authority_label"), SWT.NONE ); //$NON-NLS-1$
     this.userInfoLabel = new Label( this.mainComp, SWT.NONE );
-    this.userInfoCombo = createEditorField( this.mainComp, this.userInfoLabel, "User Info:" );
+    this.userInfoCombo = createEditorField( this.mainComp, this.userInfoLabel, Messages.getString("ConnectionDefinitionWizardPage.user_info_label"), SWT.NONE ); //$NON-NLS-1$
     this.hostLabel = new Label( this.mainComp, SWT.NONE );
-    this.hostCombo = createEditorField( this.mainComp, this.hostLabel, "Host:" );
+    this.hostCombo = createEditorField( this.mainComp, this.hostLabel, Messages.getString("ConnectionDefinitionWizardPage.host_label"), SWT.NONE ); //$NON-NLS-1$
     this.portLabel = new Label( this.mainComp, SWT.NONE );
-    this.portCombo = createEditorField( this.mainComp, this.portLabel, "Port:" );
+    this.portCombo = createEditorField( this.mainComp, this.portLabel, Messages.getString("ConnectionDefinitionWizardPage.port_label"), SWT.NONE ); //$NON-NLS-1$
     this.pathLabel = new Label( this.mainComp, SWT.NONE );
-    this.pathCombo = createEditorField( this.mainComp, this.pathLabel, "Path:" );
+    this.pathCombo = createEditorField( this.mainComp, this.pathLabel, Messages.getString("ConnectionDefinitionWizardPage.path_label"), SWT.NONE ); //$NON-NLS-1$
     this.queryLabel = new Label( this.mainComp, SWT.NONE );
-    this.queryCombo = createEditorField( this.mainComp, this.queryLabel, "Query:" );
+    this.queryCombo = createEditorField( this.mainComp, this.queryLabel, Messages.getString("ConnectionDefinitionWizardPage.query_label"), SWT.NONE ); //$NON-NLS-1$
     this.fragmentLabel = new Label( this.mainComp, SWT.NONE );
-    this.fragmentCombo = createEditorField( this.mainComp, this.fragmentLabel, "Fragment:" );
+    this.fragmentCombo = createEditorField( this.mainComp, this.fragmentLabel, Messages.getString("ConnectionDefinitionWizardPage.fragment_label"), SWT.NONE ); //$NON-NLS-1$
     
     Group browseGroup = new Group( this.mainComp, SWT.NONE );
     browseGroup.setLayout( new GridLayout( 1, false ) );
-    browseGroup.setText( "Remote Directory Browser" );
+    browseGroup.setText( Messages.getString("ConnectionDefinitionWizardPage.browse_title") ); //$NON-NLS-1$
     gData = new GridData( GridData.FILL_BOTH );
     gData.horizontalSpan = 4;
     gData.grabExcessHorizontalSpace = true;
@@ -148,7 +148,7 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
     browseGroup.setLayoutData( gData );
     
     this.pathLink = new Link( browseGroup, SWT.NONE );
-    this.pathLink.setText( "You may want to <A>create a temporary connection</A> in order to browse the specified host." );
+    this.pathLink.setText( Messages.getString("ConnectionDefinitionWizardPage.browse_link") ); //$NON-NLS-1$
     gData = new GridData();
     this.pathLink.setLayoutData( gData );
     
@@ -161,7 +161,7 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
     this.viewer.setLabelProvider( lProvider );
     this.viewer.addFilter( new ViewerFilter() {
       @Override
-      public boolean select( final Viewer viewer,
+      public boolean select( final Viewer view,
                              final Object parentElement,
                              final Object element ) {
         boolean result = true;
@@ -213,14 +213,15 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
   
   protected StoredCombo createEditorField( final Composite parent,
                                            final Label label,
-                                           final String text ) {
+                                           final String text,
+                                           final int editorStyle ) {
 
     label.setText( text );
     GridData lData = new GridData();
     lData.minimumHeight = 0;
     label.setLayoutData( lData );
 
-    StoredCombo editor = new StoredCombo( parent, SWT.NONE );
+    StoredCombo editor = new StoredCombo( parent, editorStyle );
     //this.pathCombo.setPreferences( preferenceStore, PATH_PREF_ID );
     GridData eData = new GridData( GridData.FILL_HORIZONTAL );
     eData.grabExcessHorizontalSpace = true;
@@ -243,7 +244,7 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
     
     URI uri = null;
     
-    String scheme = this.schemeCombo.getText();
+    String scheme = this.schemeCombo.getText() + SEPARATOR;
     
     try {
       
@@ -276,9 +277,9 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
       }
       
     } catch ( URISyntaxException uriExc ) {
-      setErrorMessage( "Unable to create a valid URI from the specified information: " + uriExc.getMessage() );
+      setErrorMessage( Messages.getString("ConnectionDefinitionWizardPage.invalid_uri_error") + uriExc.getMessage() ); //$NON-NLS-1$
     } catch ( NumberFormatException nfExc ) {
-      setErrorMessage( "Unable to create a valid URI from the specified information: " + nfExc.getMessage() );
+      setErrorMessage( Messages.getString("ConnectionDefinitionWizardPage.invalid_uri_error") + nfExc.getMessage() ); //$NON-NLS-1$
     }
     
     return uri;
@@ -325,7 +326,7 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
           }
           
         } catch ( CoreException cExc ) {
-          setErrorMessage( "Error while selecting path: " + cExc.getMessage() );
+          setErrorMessage( Messages.getString("ConnectionDefinitionWizardPage.path_error") + cExc.getMessage() ); //$NON-NLS-1$
         }
         
       }
@@ -366,10 +367,10 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
             } );
           } catch( InvocationTargetException itExc ) {
             Throwable cause = itExc.getCause();
-            setErrorMessage( "Unable to create a temporary connection: " + cause.getMessage() );
+            setErrorMessage( Messages.getString("ConnectionDefinitionWizardPage.temp_connection_error") + cause.getMessage() ); //$NON-NLS-1$
             NewProblemDialog.openProblem( getShell(),
-                                          "Connection error",
-                                          "Unable to create a temporary connection",
+                                          Messages.getString("ConnectionDefinitionWizardPage.connection_error_title"), //$NON-NLS-1$
+                                          Messages.getString("ConnectionDefinitionWizardPage.connection_error_text"), //$NON-NLS-1$
                                           cause );
           } catch( InterruptedException e ) {
             // Don't handle this here
@@ -392,7 +393,7 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
   
   protected void resetFields() {
     
-    setActive( this.uriCombo, this.uriLabel, "URI" );
+    setActive( this.uriCombo, this.uriLabel, Messages.getString("ConnectionDefinitionWizardPage.uri_raw_label") ); //$NON-NLS-1$
     setActive( this.schemeSpecificPartCombo, this.schemeSpecificPartLabel, null );
     setActive( this.authorityCombo, this.authorityLabel, null );
     setActive( this.userInfoCombo, this.userInfoLabel, null );
