@@ -215,7 +215,7 @@ public class NewProblemDialog extends ErrorDialog {
         ? this.problem.getReasons()
         : null;
         
-      if ( reasons != null ) {
+      if ( ( reasons != null ) && ! reasons.isEmpty() ) {
         
         Composite reasonComposite = new Composite( composite, SWT.NONE );
         reasonComposite.setLayout( new GridLayout( 1, false ) );
