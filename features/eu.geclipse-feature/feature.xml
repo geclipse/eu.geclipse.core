@@ -62,6 +62,14 @@ project number: FP5-IST-034327  http://www.geclipse.eu/
       <import plugin="org.eclipse.emf"/>
       <import plugin="org.eclipse.emf.common"/>
       <import plugin="org.eclipse.emf.common.ui"/>
+      <import plugin="org.eclipse.jface"/>
+      <import plugin="org.eclipse.gmf.runtime.notation"/>
+      <import plugin="org.eclipse.gmf.runtime.diagram.ui"/>
+      <import plugin="org.eclipse.gmf.runtime.diagram.ui.properties"/>
+      <import plugin="org.eclipse.gmf.runtime.diagram.ui.resources.editor"/>
+      <import plugin="org.eclipse.core.expressions"/>
+      <import plugin="org.eclipse.gef"/>
+      <import plugin="org.eclipse.ui.views"/>
    </requires>
 
    <plugin
@@ -190,6 +198,20 @@ project number: FP5-IST-034327  http://www.geclipse.eu/
 
    <plugin
          id="eu.geclipse.workflow.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="eu.geclipse.batch"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="eu.geclipse.batch.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"
