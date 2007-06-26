@@ -14,12 +14,6 @@
       <toc
             file="tocgettingstarted.xml">
       </toc>
-      <toc
-            file="tocreference.xml">
-      </toc>
-      <toc
-            file="tocsamples.xml">
-      </toc>
    </extension>
    <extension
          point="org.eclipse.ui.cheatsheets.cheatSheetContent">
@@ -36,6 +30,16 @@
                This cheat sheet will show you how to create a new g-Eclipse Grid Project.
             </description>
        </cheatsheet>
+      <cheatsheet
+            category="eu.geclipse.doc.user.gEclipseCheatSheets"
+            composite="false"
+            contentFile="cheatsheets/DeclaringAVO.xml"
+            id="eu.geclipse.doc.user.declaringAVO"
+            name="Declaring a Virtual Organisation">
+         <description>
+            This cheat sheet will show you how to declare a Virtual Organisation in g-Eclipse.
+         </description>
+      </cheatsheet>
       <cheatsheet
             category="eu.geclipse.doc.user.gEclipseCheatSheets"
             composite="false"
@@ -72,9 +76,9 @@
             composite="true"
             contentFile="cheatsheets/GettingStartedWithgEclipse.xml"
             id="eu.geclipse.doc.user.gettingStarted"
-            name="Getting Started With gEclipse">
+            name="Getting Started With g-Eclipse">
          <description>
-            This cheat sheet will guide you through the set up process for using gEclipse.
+            This cheat sheet will guide you through the set up process for using g-Eclipse.
          </description>
       </cheatsheet>
       <cheatsheet

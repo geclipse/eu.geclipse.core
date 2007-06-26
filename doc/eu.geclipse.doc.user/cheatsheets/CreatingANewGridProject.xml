@@ -36,11 +36,11 @@
       	  Select your VO from the list and click the <b>Next</b> button.
       	  Or, if you have no VO available in the list, you can create a new one by clicking on 
       	  the <b>New VO</b> button, selecting the type of VO and clicking the <b>Next</b> button.
-      	<subitem label="New VO">
-      	  Enter the name for your VO, host, port, host DN, Information System Endpoint, 
-      	  and the VO server URL and click the <b>Finish</b> Button. Then select your VO from the list
+ <!--     	<subitem label="New VO">
+      	  Enter the name for your VO, host, port, host DN and Information System Endpoint 
+      	  and click the <b>Finish</b> Button. Then select your VO from the list
       	  and click <b>Next</b> to get to the last page of this wizard.
-      	</subitem>
+      	</subitem> -->
       </subitem>
       <subitem label="Referenced Project">
       	  Select the referenced project and click the <b>Finish</b> button to complete the 

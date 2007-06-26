@@ -11,23 +11,38 @@
 <body BGCOLOR="#ffffff">
 <h1>Virtual Organisation Declaration</h1>
 
-<p> Go to Window &gt; Preferences &gt; g-Eclipse &gt; VO-Declaration. </p>
+<h3>If you already belong to one or more VO's :</h3>
+<p>If you already belong to a Virtual Organisation supported by the EGEE infrastructure, you will
+   need your VO's settings such as <i>Name</i>, <i>Host</i>, <i>Port</i>, <i>Host DN</i> and 
+   <i>Information System Endpoint</i> in order to continue. This information can be requested 
+   from the manager of your VO.
+</p>
 
+<h3>If you do not currently belong to any VO :</h3>
+<p>If you would like to use g-Eclipse but do not belong to any Virtual Organisation supported by the 
+ EGEE infrastructure, you can request membership to the 'geclipsetutor' VO. <br/>In a browser, go to 
+ <b>GILDA Testbed page</b> and follow the instructions on the page to request membership and a 
+ user certificate. <br/>When you have received e-mail confirmation that your membership has been 
+ approved, return to g-Eclipse and continue with the declaration of the 'geclipsetutor' VO.</p>
+
+<p> Open the <a class="command-link" href='javascript:executeCommand("org.eclipse.ui.window.preferences(preferencePageId=eu.geclipse.ui.internal.preference.VOPreferencePage)")'>
+<img src="PLUGINS_ROOT/org.eclipse.help/command_link.png">
+<b>g-Eclipse &gt; VO-Declarations</b></a> preference page. </p>
 
 <p> Click on the <b>Add</b> button and, in the dialog that opens, put in the VO specific settings 
-such as Name, Host, Port, Host DN, and Information System Endpoint. The path to the server's certificate
-should also be specified; the URL could point to a remote or a local file. Click <b>Finish</b>.</p>
+such as Name, Host, Port, Host DN, and Information System Endpoint. Click <b>Finish</b> when done. 
+<br/>(Note: Ensure you enter the name of the VO exactly as you see it : 'geclipsetutor' is not the
+same as 'g-EclipseTutor'.)</p>
 
 <img src="images/wizard_NewGridProject_specifyAttribsForNewVO.jpg" alt="Attributes for VO" width="650">
-<br><br><br>
+</br>Figure 1: Settings for the 'geclipsetutor' VO</br><br>
 
-In the dialog that opens up, select the VO that you just created and click <b>OK</b> to complete the 
-VO declaration process.
-
+<p>Back in the VO-Declarations preference page, select the VO that you just created and click <b>OK</b> 
+to complete the process.</p>
 
 
 <p><a href="../gettingstarted/maintopic.html">Back to Getting Started</a></p>
-<p><a href="../gettingstarted/NewProjectWizard.html">Continue to Create a new Grid Project</a></p>
+<p><a href="../gettingstarted/AuthenticationTokens.html">Continue to Generate Grid Authentication Tokens</a></p>
 
 </body>
 </html>

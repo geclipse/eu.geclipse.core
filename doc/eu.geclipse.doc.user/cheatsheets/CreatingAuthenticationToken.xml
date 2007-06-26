@@ -28,7 +28,7 @@
 
    <item title="Open the Authentication Token Wizard" dialog="true">
         <description>
-          Open the <b>New Authentication Token</b> wizard by clicking the
+          Open the <b>New Authentication Token</b> wizard by clicking
           <b>Click to Perform</b>.<br/>
           This action bypasses the need to click the <b>New</b> button located in
           the top right corner of the <b>Authentication Tokens</b> panel view and 
@@ -62,7 +62,7 @@
                         <subitem when="gridProxyPage" label="Enter your key passphrase."/>
                         <subitem when="voOPage" label="Select a VOMS Proxy from the list of available VO's."/>
                         <subitem when="none" label="You will not be able to read the steps unless you restart this 
-                        cheatsheet and make the selection between Grid and VOMS proxy prior to opening this item."/>
+                        cheatsheet and make the selection between the types of proxies on offer prior to opening this item."/>
                 </conditional-subitem>
                 <conditional-subitem condition="${startingPageName}">
                         <subitem when="gridProxyPage" label="Adjust how long will the proxy be valid."/>
@@ -77,10 +77,9 @@
    </item>
 
    <item title="Activate Your Token">
-      <description>Highlight your newly created token listed in the <b>Authentication Tokens</b>
-                panel view and click the <b>Activation</b> button.<br/>
+      <description>Highlight your newly created token listed in the <b>Authentication Tokens</b> panel view and click the <b>Activation</b> button.<br/>
       </description>
-      <subitem label="Click on the token entry to make the activation button (padlock) in the top right part of this panel view visible."/>
+      <subitem label="Click on the token entry to make the activation button (a padlock) in the top right part of this panel view visible."/>
       <subitem label="Click this padlock to initiate the activation of your token."/>
    </item>
    
