@@ -193,11 +193,14 @@ public class AuthTokenView extends ViewPart implements IContentChangeListener {
             columnText = token.getID();
             break;
           case 1:
+            columnText = token.getDescription().getTokenTypeName();
+            break;
+          case 2:
             columnText = token.isActive()
             ? Messages.getString("AuthTokenView.token_active") :  //$NON-NLS-1$
               Messages.getString("AuthTokenView.token_inactive"); //$NON-NLS-1$
             break;
-          case 2:
+          case 3:
             if ( !token.isActive() ) {
               columnText = ""; //$NON-NLS-1$
             } else {
@@ -358,11 +361,15 @@ public class AuthTokenView extends ViewPart implements IContentChangeListener {
     
     TableColumn idColumn = new TableColumn( this.tokenTable, SWT.LEFT );
     idColumn.setText( Messages.getString("AuthTokenView.id_column_label") ); //$NON-NLS-1$
-    idColumn.setWidth( 350 );
+    idColumn.setWidth( 300 );
     idColumn.setAlignment( SWT.LEFT );
+    TableColumn typeColumn = new TableColumn( this.tokenTable, SWT.CENTER );
+    typeColumn.setText( Messages.getString("AuthTokenView.type_column_label") ); //$NON-NLS-1$
+    typeColumn.setWidth( 150 );
+    typeColumn.setAlignment( SWT.CENTER );
     TableColumn stateColumn = new TableColumn( this.tokenTable, SWT.CENTER );
     stateColumn.setText( Messages.getString("AuthTokenView.state_column_label") ); //$NON-NLS-1$
-    stateColumn.setWidth( 150 );
+    stateColumn.setWidth( 100 );
     stateColumn.setAlignment( SWT.CENTER );
     TableColumn lifetimeColumn = new TableColumn( this.tokenTable, SWT.CENTER );
     lifetimeColumn.setText( Messages.getString("AuthTokenView.lifetime_column_label") ); //$NON-NLS-1$
