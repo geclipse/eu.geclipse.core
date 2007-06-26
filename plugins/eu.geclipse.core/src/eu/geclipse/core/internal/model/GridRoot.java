@@ -17,13 +17,16 @@ package eu.geclipse.core.internal.model;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
+
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
@@ -201,6 +204,9 @@ public final class GridRoot
       case IResourceDelta.REMOVED:
         resourceRemoved( delta.getResource() );
         break;
+      case IResourceDelta.CHANGED:
+        resourceChanged( delta.getResource(), delta.getFlags() );
+        break;
     }
     IResourceDelta[] children = delta.getAffectedChildren();
     for ( IResourceDelta child : children ) {
@@ -232,6 +238,25 @@ public final class GridRoot
    */
   public void removeGridModelListener( final IGridModelListener listener ) {
     this.listeners.remove( listener );
+  }
+  
+  /**
+   * Handle a project state changed, i.e. project opened or project closed.
+   * 
+   * @param project The project whose state has changed.
+   */
+  protected void projectStateChanged( final IGridProject project ) {
+    
+    int type
+      = project.isOpen()
+      ? IGridModelEvent.PROJECT_OPENED
+      : IGridModelEvent.PROJECT_CLOSED;
+    IGridContainer source = project.getParent();
+    IGridElement[] elements = new IGridElement[] { project };
+    
+    IGridModelEvent event = new GridModelEvent( type, source, elements );
+    fireGridModelEvent( event );
+    
   }
   
   /**
@@ -274,6 +299,18 @@ public final class GridRoot
           } catch( GridModelException gmExc ) {
             Activator.logException( gmExc );
           }
+        }
+      }
+    }
+  }
+  
+  protected void resourceChanged( final IResource resource,
+                                  final int flags ) {
+    if ( resource != null ) {
+      IGridElement element = findElement( resource );
+      if ( element != null ) {
+        if ( ( element instanceof IGridProject ) && ( ( flags & IResourceDelta.OPEN ) != 0 ) ) {
+          projectStateChanged( ( IGridProject ) element );
         }
       }
     }
