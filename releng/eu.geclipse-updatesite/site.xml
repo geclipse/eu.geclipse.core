@@ -3,23 +3,31 @@
    <description url="http://www.geclipse.eu/update/">
       This is the Eclipse update site for the g-Eclipse project.
    </description>
-   <feature url="features/eu.geclipse_0.5.0.qualifier.jar" id="eu.geclipse" version="0.5.0">
+   <feature url="features/eu.geclipse_0.5.0.qualifier.jar" id="eu.geclipse" version="0.5.0.200706221014">
       <category name="g-Eclipse"/>
    </feature>
-   <feature url="features/eu.geclipse.add_on_0.5.0.qualifier.jar" id="eu.geclipse.add_on" version="0.5.0">
+   <feature url="features/eu.geclipse.add_on_0.5.0.qualifier.jar" id="eu.geclipse.add_on" version="0.5.0.200706221014">
       <category name="g-Eclipse Add-ons"/>
    </feature>
-   <feature url="features/eu.geclipse.glite_0.5.0.qualifier.jar" id="eu.geclipse.glite" version="0.5.0.qualifier">
+   <feature url="features/eu.geclipse.glite_0.5.0.qualifier.jar" id="eu.geclipse.glite" version="0.5.0.200706221014">
       <category name="Middlewares"/>
    </feature>
-   <feature url="features/eu.geclipse.globus_0.5.0.qualifier.jar" id="eu.geclipse.globus" version="0.5.0.qualifier">
+   <feature url="features/eu.geclipse.globus_0.5.0.qualifier.jar" id="eu.geclipse.globus" version="0.5.0.200706221014">
       <category name="Middlewares"/>
    </feature>
-   <category-def name="g-Eclipse" label="g-Eclipse"/>
-   <category-def name="g-Eclipse Add-ons" label="g-Eclipse Add-ons">
+   <category-def name="g-Eclipse" label="g-Eclipse">
       <description>
-         This features contains additional tools and features.
+         This is the basic g-Eclipse feature that comes with middleware independent functionalities, i.e. the g-Eclipse core.
       </description>
    </category-def>
-   <category-def name="Middlewares" label="Middlewares"/>
+   <category-def name="g-Eclipse Add-ons" label="g-Eclipse Add-ons">
+      <description>
+         These features contain additional tools and features.
+      </description>
+   </category-def>
+   <category-def name="Middlewares" label="Middlewares">
+      <description>
+         These are the middleware add-ons for g-Eclipse. If you would like to work on a specifiy middleware this is the place where you may find support for it.
+      </description>
+   </category-def>
 </site>
