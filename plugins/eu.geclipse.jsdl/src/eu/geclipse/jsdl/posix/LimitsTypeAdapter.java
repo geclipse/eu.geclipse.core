@@ -32,8 +32,9 @@ public class LimitsTypeAdapter {
   Hashtable< Integer, Text > widgetFeaturesMap = new Hashtable< Integer, Text >();
   private POSIXApplicationType parent = null;  
 
-  /*
-   * Class Constructor.
+  /**
+   * LimitsTypeAdapter Class Constructor
+   * @param lParent 
    */
   public LimitsTypeAdapter (final POSIXApplicationType lParent ){
     this.parent = lParent;
@@ -43,11 +44,11 @@ public class LimitsTypeAdapter {
   
   private void getLimitsType (final POSIXApplicationType posixParent){
   
-    TreeIterator iterator = posixParent.eAllContents();
+    TreeIterator<EObject> iterator = posixParent.eAllContents();
     
     while (iterator.hasNext()){
       
-      EObject testType = (EObject) iterator.next();
+      EObject testType = iterator.next();
       
       System.out.println(testType.eContainingFeature().toString());
       

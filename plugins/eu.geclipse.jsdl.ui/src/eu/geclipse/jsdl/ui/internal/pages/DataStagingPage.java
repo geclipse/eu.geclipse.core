@@ -51,7 +51,8 @@ import eu.geclipse.jsdl.ui.internal.Activator;
  * 
  * 
  */
-public class DataStagingPage extends FormPage implements INotifyChangedListener{
+public final class DataStagingPage extends FormPage 
+                                              implements INotifyChangedListener{
   
   protected Composite jobDataStaging = null;
   

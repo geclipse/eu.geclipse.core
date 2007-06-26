@@ -32,6 +32,7 @@ import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
@@ -59,7 +60,7 @@ import eu.geclipse.jsdl.model.ResourcesType;
  */
 
 
-public class ResourcesTypeAdapter extends JsdlAdaptersFactory {
+public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   
   protected Hashtable< Integer, Text > widgetFeaturesMap = new Hashtable< Integer, Text >();
   protected Hashtable< Integer, List > listFeaturesMap = new Hashtable< Integer, List >();
@@ -86,12 +87,17 @@ public class ResourcesTypeAdapter extends JsdlAdaptersFactory {
                               JsdlFactory.eINSTANCE.createCPUArchitectureType();
   
   
+  protected EStructuralFeature parentFeature = null;
+  
   private boolean adapterRefreshed = false;
-  private boolean isNotifyAllowed = true;
+  private boolean isNotifyAllowed = true;  
   
   
-  
-  /* Class Constructor */
+  /**
+   * ResourcesTypeAdatper Class Constructor
+   * 
+   * @param rootJsdlElement The root element of a JSDL document.
+   */
   public ResourcesTypeAdapter(final EObject rootJsdlElement) {
     
     getTypeForAdapter(rootJsdlElement);
@@ -102,6 +108,7 @@ public class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   
   private void  getTypeForAdapter(final EObject rootJsdlElement){
     
+   
     TreeIterator <EObject> iterator = rootJsdlElement.eAllContents();
     
     while ( iterator.hasNext (  )  )  {  
@@ -110,7 +117,8 @@ public class ResourcesTypeAdapter extends JsdlAdaptersFactory {
           
       if ( eObject instanceof ResourcesType ) {
         
-        this.resourcesType = (ResourcesType) eObject;
+        this.resourcesType = (ResourcesType) eObject;        
+        
         
       } // endif ResourcesType
       
@@ -120,28 +128,54 @@ public class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   
   
   
-  /* Sets the Adapter's Content */
+  /**
+   * JobIdentificationTypeAdapter Class Constructor
+   * 
+   * @param rootJsdlElement The root element of a JSDL document.
+   */
   public void setContent(final EObject rootJsdlElement){
+    
     this.adapterRefreshed = true;
     getTypeForAdapter( rootJsdlElement );
+    
   }
+  
   
   
   protected void contentChanged(){
+    
     if (this.isNotifyAllowed){
       fireNotifyChanged( null);
     }
+    
   }
   
+ 
   
-  
-  public void attachToHostName(final List widget){ 
+  /**
+   * Adapter interface to attach to the CandidateHosts list widget.
+   * 
+   * @param widget The SWT list widget which is associated with the 
+   * CandidateHosts element of the JSDL document.
+   */
+  public void attachToHostName(final List widget){
+    
     Integer featureID = new Integer(JsdlPackage.RESOURCES_TYPE__CANDIDATE_HOSTS);
     this.listFeaturesMap.put( featureID , widget );
        
   } // End attachToHostName()
   
   
+  
+  /**
+   * Adapter interface to attach to the Delete button.
+   * 
+   * @param button The SWT button which is associated with an SWT list on the page
+   * and is responsible to delete elements from this list.
+   * 
+   * @param list The SWT list containing the elements to be deleted.
+   * 
+   */
   public void attachToDelete(final Button button, final List list){    
     button.addSelectionListener(new SelectionListener() {
 
@@ -158,8 +192,11 @@ public class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   }
   
   
-
-  public void performAdd(final List list, final String name, final Object value) {
+  /**
+   * @param list The SWT list that contains the Structural Features
+   * @param value 
+   */
+  public void performAdd(final List list, final Object value) {
     
     EStructuralFeature eStructuralFeature = null;
     Collection<String> collection = new ArrayList<String>();
@@ -175,6 +212,13 @@ public class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     // Create association of Estrctural Feature in the FeatureMap.
     this.eStructuralFeaturesMap.put( value.toString(), eStructuralFeature );
     this.candidateHosts.eSet(eStructuralFeature, collection);
+    
+    if (!this.resourcesType.eIsSet( eStructuralFeature ) ){
+     this.resourcesType.setCandidateHosts( this.candidateHosts ); 
+    }
+     
+        
+
    
     this.contentChanged();
     
@@ -199,12 +243,8 @@ public class ResourcesTypeAdapter extends JsdlAdaptersFactory {
         
        
         if (list.getItemCount() == 0)
-        {
-       
-          //FIXME Does not remove the <CandidateHosts> element.
-          ((java.util.List<?>)this.resourcesType.eGet(eStructuralFeature))
-                                                                   .remove(key);
-         
+        {  
+          EcoreUtil.remove( (EObject) this.resourcesType.eGet(eStructuralFeature) );         
         }
         this.removeFromMap( key );
         this.contentChanged();
@@ -215,12 +255,22 @@ public class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   }
   
   
+  
   private void removeFromMap (final Object key){
+    
     this.eStructuralFeaturesMap.remove( key );
+    
   }
     
    
+  /**
+   * Adapter interface to attach to the Operating System Type combo widget.
+   * 
+   * @param widget The SWT combo widget which is associated with the 
+   * OperatingSystemType element of the JSDL document.
+   */
   public void attachToOSType(final Combo widget){    
+    
     Integer featureID = new Integer(JsdlPackage.RESOURCES_TYPE__OPERATING_SYSTEM);
     this.comboFeaturesMap.put( featureID , widget );
         
@@ -253,8 +303,16 @@ public class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   
   
   
+  /**
+   * Adapter interface to attach to the CPU Architecture combo widget.
+   * 
+   * @param widget The SWT combo widget which is associated with the 
+   * CPUArchitecture element of the JSDL document.
+   */
   public void attachToCPUArchitecture(final Combo widget){
+    
     Integer featureID = new Integer (JsdlPackage.RESOURCES_TYPE__CPU_ARCHITECTURE);
+
     this.comboFeaturesMap.put( featureID, widget );
         
     /* Populate the Combo Box with the CPU Architecture Literals */    
@@ -267,9 +325,16 @@ public class ResourcesTypeAdapter extends JsdlAdaptersFactory {
         
     widget.addSelectionListener(new SelectionListener() {
       public void widgetSelected(final SelectionEvent e) {
+                
         ResourcesTypeAdapter.this.cpuArchitectureType.setCPUArchitectureName(
                                               ProcessorArchitectureEnumeration
                                              .get( widget.getSelectionIndex()));
+        
+        if (!ResourcesTypeAdapter.this.resourcesType
+                          .eIsSet( ResourcesTypeAdapter.this.parentFeature )){
+          ResourcesTypeAdapter.this.resourcesType
+            .setCPUArchitecture( ResourcesTypeAdapter.this.cpuArchitectureType );
+        }
         
         ResourcesTypeAdapter.this.contentChanged();
       }
@@ -282,8 +347,14 @@ public class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   } // End attachToCPUArchitecture
   
   
-  
+  /**
+   * Adapter interface to attach to the Operating System Version text widget.
+   * 
+   * @param widget The SWT combo widget which is associated with the 
+   * OperatingSystemVersion element of the JSDL document.
+   */
   public void attachToOSVersion(final Text widget){
+    
     Integer featureID = new Integer (JsdlPackage.DOCUMENT_ROOT__OPERATING_SYSTEM_VERSION);
     this.widgetFeaturesMap.put( featureID , widget );
     
@@ -301,8 +372,14 @@ public class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   } // End attachToOSVersion()
   
   
-  
+  /**
+   * Adapter interface to attach to the Operating System Description text widget.
+   * 
+   * @param widget The SWT text widget which is associated with the 
+   * OperatingSystem Description element of the JSDL document.
+   */
   public void attachToOSDescription(final Text widget){
+    
     Integer featureID = new Integer(JsdlPackage.DOCUMENT_ROOT__DESCRIPTION);
     this.widgetFeaturesMap.put( featureID , widget );
     
@@ -319,7 +396,12 @@ public class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   } // End attachToOSDescription()
   
   
-  
+  /**
+   * Adapter interface to attach to the FileSystemType Name text widget.
+   * 
+   * @param widget The SWT text widget which is associated with the 
+   * Name attribute of the FileSystemType element in a JSDL document.
+   */
   public void attachToFileSystemName(final Text widget){
     Integer featureID = new Integer(JsdlPackage.FILE_SYSTEM_TYPE__NAME);
     this.widgetFeaturesMap.put( featureID , widget );
@@ -337,7 +419,14 @@ public class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   
   
   
+  /**
+   * Adapter interface to attach to the FileSystemType Description text widget.
+   * 
+   * @param widget The SWT text widget which is associated with the 
+   * FileSystemType Description element of the JSDL document.
+   */
   public void attachToFileSystemDescription(final Text widget){
+    
     Integer featureID = new Integer(JsdlPackage.FILE_SYSTEM_TYPE__DESCRIPTION);
     this.widgetFeaturesMap.put( featureID , widget );
     
@@ -352,8 +441,14 @@ public class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   } // End attachToFileSystemDescription()
   
   
-  
+  /**
+   * Adapter interface to attach to the Mount Point text widget.
+   * 
+   * @param widget The SWT text widget which is associated with the 
+   * MountPoint element of the JSDL document.
+   */
   public void attachToFileSystemMountPoint(final Text widget){
+    
     Integer featureID = new Integer(JsdlPackage.FILE_SYSTEM_TYPE__MOUNT_POINT);
     this.widgetFeaturesMap.put( featureID , widget );
     
@@ -369,6 +464,15 @@ public class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   
   
   
+  /**
+   * Adapter interface to attach to the Disk Space text widget and to Range Value
+   * combo widget.
+   * 
+   * @param text The SWT text widget which is associated with the 
+   * DiskSpace element of the JSDL document.
+   * @param combo The SWT combo widget which is associated with the Disk Space
+   * Range Value element.
+   */
   public void attachToFileSystemDiskSpace(final Text text, final Combo combo){
     
     this.widgetFeaturesMap.put (new Integer(JsdlPackage.FILE_SYSTEM_TYPE__DISK_SPACE)
@@ -396,8 +500,14 @@ public class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   }
   
   
-  
+  /**
+   * Adapter interface to attach to the FileSystemType combo widget.
+   * 
+   * @param widget The SWT combo widget which is associated with the 
+   * FileSystemType element of a JSDL document.
+   */
   public void attachToFileSystemType(final Combo widget){
+    
     Integer featureID = new Integer(JsdlPackage.DOCUMENT_ROOT__FILE_SYSTEM_TYPE);
     this.comboFeaturesMap.put( featureID , widget );
         
@@ -428,6 +538,10 @@ public class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   
   
   
+  /**
+   * This method populates the model content to the widgets registered with the
+   * ResourcesType adapter.
+   */
   public void load() {
     
     this.isNotifyAllowed = false;
@@ -458,15 +572,18 @@ public class ResourcesTypeAdapter extends JsdlAdaptersFactory {
             break;            
             case JsdlPackage.RESOURCES_TYPE__CANDIDATE_HOSTS :{
               listName = this.listFeaturesMap.get( new Integer(featureID) );
+              
               this.candidateHosts = (CandidateHostsType) this.resourcesType
                                                     .eGet( eStructuralFeature );
-              EList valueEList = this.candidateHosts.getHostName();
+              
+              EList<String> valueEList = this.candidateHosts.getHostName();
+          
               
               Object eFeatureInstance = null;
               
               if(!this.adapterRefreshed) {
                 
-              for (Iterator it = valueEList.iterator(); it.hasNext();){
+              for (Iterator<String> it = valueEList.iterator(); it.hasNext();){
                 eFeatureInstance = it.next();              
                 this.eStructuralFeaturesMap.put( eFeatureInstance.toString(),
                                                 eStructuralFeature );

@@ -59,7 +59,8 @@ import eu.geclipse.jsdl.ui.internal.dialogs.MultipleInputDialog;
  * 
  * 
  */
-public class ResourcesPage extends FormPage implements INotifyChangedListener {
+public final class ResourcesPage extends FormPage 
+                                            implements INotifyChangedListener {
   
    
   
@@ -368,8 +369,7 @@ public class ResourcesPage extends FormPage implements INotifyChangedListener {
     this.btnAdd.addSelectionListener(new SelectionListener() {
       public void widgetSelected(final SelectionEvent event) {
         handleAddDialog(Messages.getString( "ResourcesPage_HostNameDialog" )); //$NON-NLS-1$
-        ResourcesPage.this.resourcesTypeAdapter.performAdd(ResourcesPage.this.lstHostName,
-                                                           "lstJobProject", //$NON-NLS-1$
+        ResourcesPage.this.resourcesTypeAdapter.performAdd(ResourcesPage.this.lstHostName,                                                          
                                                            ResourcesPage.this.value);
       }
 

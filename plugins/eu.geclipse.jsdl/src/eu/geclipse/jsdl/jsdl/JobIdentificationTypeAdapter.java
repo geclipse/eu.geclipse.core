@@ -16,6 +16,11 @@
   *****************************************************************************/
 package eu.geclipse.jsdl.jsdl;
 
+/**
+ * @author nickl
+ *
+ */
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -26,6 +31,7 @@ import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.util.FeatureMapUtil;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -40,19 +46,19 @@ import eu.geclipse.jsdl.model.JsdlPackage;
 
 
 
+
+
 /**
- * @author nickl
+ * JobIdentificationTypeAdapter Class
  *
  */
-
-public class JobIdentificationTypeAdapter extends JsdlAdaptersFactory {
+public final class JobIdentificationTypeAdapter extends JsdlAdaptersFactory {
   
   protected JobIdentificationType jobIdentificationType = 
                             JsdlFactory.eINSTANCE.createJobIdentificationType();
   
   
-  Hashtable< Integer, Text > widgetFeaturesMap = new Hashtable< Integer, Text >();
-  //Hashtable< Integer, TableViewer > listFeaturesMap = new Hashtable< Integer, TableViewer >();
+  Hashtable< Integer, Text > widgetFeaturesMap = new Hashtable< Integer, Text >(); 
   HashMap< Integer, List > listFeaturesMap = new HashMap< Integer, List >();
   Hashtable<String, EStructuralFeature> eStructuralFeaturesMap 
                                  = new Hashtable<String, EStructuralFeature>();
@@ -62,6 +68,11 @@ public class JobIdentificationTypeAdapter extends JsdlAdaptersFactory {
   private boolean adapterRefreshed = false;
   
   
+  /**
+   * JobIdentificationTypeAdapter Class Constructor
+   * 
+   * @param rootJsdlElement The root element of a JSDL document.
+   */
   public JobIdentificationTypeAdapter(final EObject rootJsdlElement) {
     
     getTypeForAdapter(rootJsdlElement);
@@ -86,22 +97,38 @@ public class JobIdentificationTypeAdapter extends JsdlAdaptersFactory {
    } // End getTypeforAdapter
   
   
-  
+  /**
+   * JobIdentificationTypeAdapter Class Constructor
+   * 
+   * @param rootJsdlElement The root element of a JSDL document.
+   */
   public void setContent(final EObject rootJsdlElement){
+    
     this.adapterRefreshed = true;
     getTypeForAdapter( rootJsdlElement );
+    
   }
+  
   
   
   protected void contentChanged(){
+    
     if (this.isNotifyAllowed){
       fireNotifyChanged( null);
     }
+    
   }
   
   
   
+  /**
+   * Adapter interface to attach to the JobName text widget.
+   * 
+   * @param widget The SWT text widget which is associated with the 
+   * JobName element of the JSDL document.
+   */
   public void attachToJobName(final Text widget){ 
+    
     Integer featureID = new Integer (JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_NAME);
     this.widgetFeaturesMap.put( featureID, widget );
         
@@ -118,7 +145,14 @@ public class JobIdentificationTypeAdapter extends JsdlAdaptersFactory {
   
   
   
+  /**
+   * Adapter interface to attach to the JobDescription text widget.
+   * 
+   * @param widget The SWT text widget which is associated with the 
+   * JobDescription element of the JSDL document.
+   */
   public void attachToJobDescription(final Text widget){    
+    
     Integer featureID = new Integer (JsdlPackage.JOB_IDENTIFICATION_TYPE__DESCRIPTION);
     this.widgetFeaturesMap.put( featureID , widget );
     
@@ -129,47 +163,52 @@ public class JobIdentificationTypeAdapter extends JsdlAdaptersFactory {
         contentChanged();
           
         }
-      } );
-        
-//     widget.addFocusListener( new org.eclipse.swt.events.FocusListener() {
-//      public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
-//        jobIdentificationType.setDescription(widget.getText());    
-//      }
-//      public void focusGained(final FocusEvent e ) { }
-//     
-//    } );
+      } );       
+
   }
   
+  
+  
+  /**
+   * Adapter interface to attach to the JobProject list widget.
+   * 
+   * @param widget The SWT list widget which is associated with the 
+   * JobProject element of the JSDL document.
+   */
   public void attachToJobProject(final List widget){  
+    
     Integer featureID = new Integer (JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_PROJECT);
-    this.listFeaturesMap.put( featureID, widget );        
+    this.listFeaturesMap.put( featureID, widget );
+    
   }
   
-  
-//  public void attachToJobAnnotation(final TableViewer widget){    
-//    this.listFeaturesMap.put( JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_ANNOTATION
-//                                , widget );
-//        
-//     widget.getTable().addFocusListener( new org.eclipse.swt.events.FocusListener() {
-//      public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
-//        // List Add Functionality    
-//      }
-//      public void focusGained(final FocusEvent e ) { }
-//     
-//    } );
-//  }
-  
-  
-  
+
+  /**
+   * Adapter interface to attach to the JobAnnotation list widget.
+   * 
+   * @param widget The SWT list widget which is associated with the 
+   * JobAnnotation element of the JSDL document.
+   */
   public void attachToJobAnnotation(final List widget){
     
     Integer featureID = new Integer(JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_ANNOTATION);
     this.listFeaturesMap.put( featureID, widget );
+    
   }
   
+ 
   
-  
+  /**
+   * Adapter interface to attach to the Delete button.
+   * 
+   * @param button The SWT button which is associated with an SWT list on the page
+   * and is responsible to delete elements from this list.
+   * 
+   * @param list The SWT list containing the elements to be deleted.
+   * 
+   */
   public void attachToDelete(final Button button, final List list){
+    
     button.addSelectionListener(new SelectionListener() {
 
       public void widgetSelected(final SelectionEvent event) { 
@@ -178,44 +217,16 @@ public class JobIdentificationTypeAdapter extends JsdlAdaptersFactory {
 
       public void widgetDefaultSelected(final SelectionEvent event) {
 
-        
+      // Do Nothing
       }
-    });
+    });    
     
-    
-  }
-  
-  
-//  private void performDelete(final TableViewer list, final ISelection key){
-//    
-//
-//    
-//    EStructuralFeature eStructuralFeature = (EStructuralFeature) list.getInput();
-//   
-//    /* Get EStructuralFeature */
-////     if (this.eStructuralFeaturesMap.containsKey( key ) ){
-////      eStructuralFeature = this.eStructuralFeaturesMap.get( key );
-////    
-//    /* Delete only Multi-Valued Elements */
-//      if (FeatureMapUtil.isMany(this.jobIdentificationType, eStructuralFeature)){
-//        
-//        ((java.util.List<?>)this.jobIdentificationType.eGet(eStructuralFeature))
-//                                                                   .remove(key);
-//      }
-//    
-//    //}
-//  
-//    list.remove( key );   
-//    
-//    eStructuralFeature = null;
-//  }
+  }  
   
   
   
   protected void performDelete(final List list, final String key){
-    
-
-    
+      
     EStructuralFeature eStructuralFeature;
    
     /* Get EStructuralFeature */
@@ -236,10 +247,16 @@ public class JobIdentificationTypeAdapter extends JsdlAdaptersFactory {
     list.remove( key );   
     
     eStructuralFeature = null;
+    
   }
   
   
   
+  /**
+   * @param list The SWT list that contains the Structural Features
+   * @param name The name of the SWT list.
+   * @param value 
+   */
   public void performAdd(final List list, final String name, final Object value) {
 
     if (value == null) {
@@ -279,12 +296,17 @@ public class JobIdentificationTypeAdapter extends JsdlAdaptersFactory {
   }
   
   
+  
+  /**
+   * This method populates the model content to the widgets registered with the
+   * JobIdentificationType adapter.
+   */
   public void load()
   {
+    
     this.isNotifyAllowed = false;
     EObject object = this.jobIdentificationType;
     Text widgetName = null;
-//    TableViewer listName = null;
     List listName = null;
     
     // Test if eObject is not empty.
@@ -292,8 +314,12 @@ public class JobIdentificationTypeAdapter extends JsdlAdaptersFactory {
       EClass eClass = object.eClass();
              
         
-      for (Iterator iter = eClass.getEAllStructuralFeatures().iterator(); iter.hasNext();) {      
-        EStructuralFeature eStructuralFeature = (EStructuralFeature) iter.next();
+//      for (Iterator iter = eClass.getEAllStructuralFeatures().iterator(); iter.hasNext();) {      
+//        EStructuralFeature eStructuralFeature = (EStructuralFeature) iter.next();
+//        
+        EList<EStructuralFeature> allEStructuralFeatures =
+                                             eClass.getEAllStructuralFeatures();
+        for( EStructuralFeature eStructuralFeature : allEStructuralFeatures) {
       
         
         //Get Attribute Value.
@@ -311,34 +337,31 @@ public class JobIdentificationTypeAdapter extends JsdlAdaptersFactory {
         
            
              if (eStructuralFeature.getFeatureID() 
-                     != JsdlPackage.JOB_IDENTIFICATION_TYPE__ANY){
+                                   != JsdlPackage.JOB_IDENTIFICATION_TYPE__ANY){
                widgetName.setText(value.toString());
-             } //end if "any"
+             } //end if "ANY"
            }//end if UpperBound == 1                        
               
         // Add Multiplicity-Many Elements to attached Lists.
         else if (eStructuralFeature.getUpperBound()  
-                                 == EStructuralFeature.UNBOUNDED_MULTIPLICITY) {
+                                 == ETypedElement.UNBOUNDED_MULTIPLICITY) {
                         
             listName = this.listFeaturesMap.get( featureID );
                      
             EList valueArray = (EList) value;       
             
-//            listName.setInput( valueArray);
-            
              
             Object eFeatureInst = null;
           
             if(!this.adapterRefreshed) {
-            for (Iterator it = valueArray.iterator(); it.hasNext();){
+              for (Iterator it = valueArray.iterator(); it.hasNext();){
                             
-              eFeatureInst = it.next();             
-              this.eStructuralFeaturesMap.put( eFeatureInst.toString(),
+                eFeatureInst = it.next();             
+                this.eStructuralFeaturesMap.put( eFeatureInst.toString(),
                                               eStructuralFeature );
               
-              listName.add( eFeatureInst.toString());
-                       
-            } // End for
+                listName.add( eFeatureInst.toString());
+              } // End for
             } // End if
           }// End UNBOUNDED_MULTIPLICITY
           
@@ -349,17 +372,25 @@ public class JobIdentificationTypeAdapter extends JsdlAdaptersFactory {
         }
       } //end for eIsSet()
     } //end if null
+    
     this.isNotifyAllowed = true;
+    
   } // End void load()
   
   
   
   private void removeFromMap (final Object key){
+    
     this.eStructuralFeaturesMap.remove( key );
+    
   }
   
     
   
+  /**
+   * @return TRUE if the adapter is empty. If it is empty, it means that there 
+   * is no JobDefinition element in the JSDL document. 
+   */ 
   public boolean isEmpty(){
     boolean status = false;
 

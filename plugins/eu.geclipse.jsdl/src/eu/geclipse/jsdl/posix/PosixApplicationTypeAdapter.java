@@ -58,7 +58,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
 
   protected ArgumentType argumentType = PosixFactory.eINSTANCE.createArgumentType();
   
-  protected FileNameType fileName = null;
+  //protected FileNameType fileName = null;
   
   private Hashtable< Integer, Text > widgetFeaturesMap = new Hashtable< Integer, Text >();
   private Hashtable< Integer, TableViewer > tableFeaturesMap = new Hashtable< Integer, TableViewer >();
@@ -105,10 +105,13 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
  
   
   
- /*
-  * Method of setting the content of the Adapter.
-  */
+  /**
+   * Allows to set the adapter's content on demand and not through the constructor.
+   * 
+   * @param rootJsdlElement The root element of a JSDL document.
+   */
   public void setContent(final EObject rootJsdlElement){
+    
    this.adapterRefreshed = true; 
    getTypeForAdapter( rootJsdlElement );   
    
@@ -122,8 +125,16 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
     }
   }
   
- 
+  
+  
+  /**
+   * Adapter interface to attach to the PosixApplication Name text widget.
+   * 
+   * @param widget The SWT text widget which is associated with the 
+   * Name attribute of a PosixApplication element in a JSDL document.
+   */
   public void attachPosixApplicationName(final Text widget){
+    
     Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__NAME);
     this.widgetFeaturesMap.put( featureID, widget );
     
@@ -134,76 +145,138 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
         contentChanged();
         
       }
-    } );    
-  }
+    } );
+     
+  } // End void attachPosixApplicationName()
   
   
   
+  /**
+   * Adapter interface to attach to the PosixApplication Executable text widget.
+   * 
+   * @param widget The SWT text widget which is associated with the 
+   * PosixApplication Executable element of the JSDL document.
+   */
   public void attachPosixApplicationExecutable(final Text widget){
+    
     Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__EXECUTABLE);
     this.widgetFeaturesMap.put( featureID , widget );    
-    this.fileName = PosixFactory.eINSTANCE.createFileNameType();
+    
    
     widget.addModifyListener( new ModifyListener() {
+      FileNameType fileName = PosixFactory.eINSTANCE.createFileNameType();
     public void modifyText( final ModifyEvent e ) {
-      PosixApplicationTypeAdapter.this.fileName.setValue( widget.getText() );
-      PosixApplicationTypeAdapter.this.posixApplicationType
-                      .setExecutable(PosixApplicationTypeAdapter.this.fileName);
+     
+      if (!widget.getText().equals( "" )){ //$NON-NLS-1$
+        this.fileName.setValue( widget.getText() );
+        PosixApplicationTypeAdapter.this.posixApplicationType
+                                                  .setExecutable(this.fileName);
+      }
+      else{
+        PosixApplicationTypeAdapter.this.posixApplicationType
+                                                          .setExecutable(null);
+      }
       contentChanged();
       
     }
-  } );     
-  }
+  } );   
+    
+  } // End void attachPosixApplicationExecutable()
   
   
   
+  /**
+   * Adapter interface to attach to the PosixApplication Input text widget.
+   * 
+   * @param widget The SWT text widget which is associated with the 
+   * PosixApplication Input element of the JSDL document.
+   */
   public void attachPosixApplicationInput(final Text widget){   
+    
     Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__INPUT);
     this.widgetFeaturesMap.put( featureID , widget );
-    this.fileName = PosixFactory.eINSTANCE.createFileNameType();
+
     
     widget.addModifyListener( new ModifyListener() {
+      FileNameType fileName = PosixFactory.eINSTANCE.createFileNameType();
       public void modifyText( final ModifyEvent e ) {
-        PosixApplicationTypeAdapter.this.fileName.setValue( widget.getText() );
-        PosixApplicationTypeAdapter.this.posixApplicationType
-                          .setInput(PosixApplicationTypeAdapter.this.fileName);
+      
+        if (!widget.getText().equals( "" )){ //$NON-NLS-1$
+          this.fileName.setValue( widget.getText() );
+          PosixApplicationTypeAdapter.this.posixApplicationType
+                                                    .setInput(this.fileName);
+        }
+        else{
+          PosixApplicationTypeAdapter.this.posixApplicationType
+                                                            .setInput(null);
+        }
         contentChanged();
         
       }
     } ); 
      
-  }
+  }// End void attachPosixApplicationInput()
 
   
   
-  public void attachPosixApplicationOutput(final Text widget){    
+  /**
+   * Adapter interface to attach to the PosixApplication Output text widget.
+   * 
+   * @param widget The SWT text widget which is associated with the 
+   * PosixApplication Output element of the JSDL document.
+   */
+  public void attachPosixApplicationOutput(final Text widget){
+    
     Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__OUTPUT);
     this.widgetFeaturesMap.put( featureID, widget );
-    this.fileName = PosixFactory.eINSTANCE.createFileNameType();
+   
     
     widget.addModifyListener( new ModifyListener() {
+      FileNameType fileName = PosixFactory.eINSTANCE.createFileNameType();
       public void modifyText( final ModifyEvent e ) {
-        PosixApplicationTypeAdapter.this.fileName.setValue( widget.getText() );
-        PosixApplicationTypeAdapter.this.posixApplicationType
-                          .setOutput(PosixApplicationTypeAdapter.this.fileName);
+        
+        if (!widget.getText().equals( "" )){ //$NON-NLS-1$
+          this.fileName.setValue( widget.getText() );
+          PosixApplicationTypeAdapter.this.posixApplicationType
+                                                    .setOutput(this.fileName);
+        }
+        else{
+          PosixApplicationTypeAdapter.this.posixApplicationType
+                                                            .setOutput(null);
+        }
         contentChanged();
         
       }
-    } );    
-  }
+    } ); 
+    
+  } // End void attachPosixApplicationOutput()
   
   
   
+  /**
+   * Adapter interface to attach to the PosixApplication Error text widget.
+   * 
+   * @param widget The SWT text widget which is associated with the 
+   * PosixApplication Error element of the JSDL document.
+   */
   public void attachPosixApplicationError(final Text widget){
     Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__ERROR);
     this.widgetFeaturesMap.put( featureID , widget );
-    this.fileName = PosixFactory.eINSTANCE.createFileNameType();   
+  
     
-    widget.addModifyListener( new ModifyListener() {
+    widget.addModifyListener( new ModifyListener() {   
+      FileNameType fileName = PosixFactory.eINSTANCE.createFileNameType();
       public void modifyText( final ModifyEvent e ) {
-        PosixApplicationTypeAdapter.this.fileName.setValue( widget.getText() );
-        PosixApplicationTypeAdapter.this.posixApplicationType
-                          .setError(PosixApplicationTypeAdapter.this.fileName);
+        
+        if (!widget.getText().equals( "" )){ //$NON-NLS-1$
+          this.fileName.setValue( widget.getText() );
+          PosixApplicationTypeAdapter.this.posixApplicationType
+                                                    .setError(this.fileName);
+        }
+        else{
+          PosixApplicationTypeAdapter.this.posixApplicationType
+                                                            .setError(null);
+        }
         contentChanged();
         
       }
@@ -211,20 +284,39 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   }
   
   
+  /**
+   * Adapter interface to attach to the PosixApplication Argument text widget.
+   * 
+   * @param widget The {@link org.eclipse.jface.viewers.TableViewer} which is associated with the 
+   * PosixApplication Argument element of the JSDL document.
+   */
   public void attachToPosixApplicationArgument(final TableViewer widget){
     Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__ARGUMENT);
     this.tableFeaturesMap.put( featureID , widget );      
   }
   
   
-  
+  /**
+   * Adapter interface to attach to the PosixApplication Enivronment text widget.
+   * 
+   * @param widget The {@link org.eclipse.jface.viewers.TableViewer} which is associated with the 
+   * PosixApplication Environment element of the JSDL document.
+   */
   public void attachToPosixApplicationEnvironment(final TableViewer widget){
     Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__ENVIRONMENT);
     this.tableFeaturesMap.put( featureID , widget );       
   }
   
   
-  
+  /**
+   * 
+   * Adapter interface to attach to the PosixApplication Delete button
+   * widget.
+   *  
+   * @param button The SWT Button that triggered the Delete event.
+   * @param viewer The {@link org.eclipse.jface.viewers.TableViewer}
+   * containing the element to be deleted.
+   */
   public void attachToDelete(final Button button, final TableViewer viewer){
 
     button.addSelectionListener(new SelectionListener() {
@@ -257,9 +349,14 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
   
   
-  public void performAdd (final TableViewer tableViewer,
-                        final String name, final Object[] value) {
-    
+//  /**
+//   * @param tableViewer
+//   * @param name
+//   * @param value
+//   */
+//  public void performAdd (final TableViewer tableViewer,
+//                        final String name, final Object[] value) {
+//    
 //    EStructuralFeature eStructuralFeature = null;
 //    Collection<Object> collection = new ArrayList<Object>();
 //    int featureID;
@@ -291,8 +388,8 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
 //    
 //    eStructuralFeature = null;
 //    collection = null;
-    
-  }
+//    
+//  }
   
   
   
@@ -325,7 +422,11 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
   
  
-  
+  /**
+   * 
+   * This method populates the model content to the widgets registered with the
+   * PosixApplication adapter.
+   */ 
   public void load()
   {
     this.isNotifyAllowed = false;

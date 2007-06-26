@@ -47,6 +47,9 @@ public class JsdlAdaptersFactory extends JsdlAdapterFactory implements Composeab
   private List< INotifyChangedListener > listeners
     = new ArrayList< INotifyChangedListener >();
     
+  /**
+   * JsdlAdaptersFactory Class Constructor.
+   */
   public JsdlAdaptersFactory(){
     this.supportedTypes.add(IEditingDomainItemProvider.class);
     this.supportedTypes.add(IStructuredItemContentProvider.class);
@@ -58,12 +61,12 @@ public class JsdlAdaptersFactory extends JsdlAdapterFactory implements Composeab
   
   
   public ComposeableAdapterFactory getRootAdapterFactory() {
-    // TODO Auto-generated method stub
+    //  Auto-generated method stub
     return null;
   }
 
   public void setParentAdapterFactory( final ComposedAdapterFactory arg0 ) {
-    // TODO Auto-generated method stub
+    //  Auto-generated method stub
     
   }
 
@@ -84,7 +87,7 @@ public class JsdlAdaptersFactory extends JsdlAdapterFactory implements Composeab
   }
 
   public void dispose() {
-    // TODO Auto-generated method stub
+    //  Auto-generated method stub
     
   }
   

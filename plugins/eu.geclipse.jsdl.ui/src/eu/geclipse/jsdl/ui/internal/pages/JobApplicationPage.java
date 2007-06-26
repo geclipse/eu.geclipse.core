@@ -61,7 +61,7 @@ import eu.geclipse.jsdl.ui.internal.dialogs.MultipleInputDialog;
  * Application Description 
  *
  */
-public class JobApplicationPage extends FormPage 
+public final class JobApplicationPage extends FormPage 
                                              implements INotifyChangedListener{
   
   
@@ -527,10 +527,10 @@ public class JobApplicationPage extends FormPage
     this.btnAdd.addSelectionListener(new SelectionListener() {
       public void widgetSelected(final SelectionEvent event) {
         handleAddDialog(Messages.getString( "JobApplicationPage_ArgumentDialog" )); //$NON-NLS-1$
-        JobApplicationPage.this.posixApplicationTypeAdapter.performAdd(
-                                         JobApplicationPage.this.argumentViewer,
-                                                "argumentViewer", //$NON-NLS-1$
-                                                JobApplicationPage.this.value );
+//        JobApplicationPage.this.posixApplicationTypeAdapter.performAdd(
+//                                         JobApplicationPage.this.argumentViewer,
+//                                                "argumentViewer", //$NON-NLS-1$
+//                                                JobApplicationPage.this.value );
       
       }
 

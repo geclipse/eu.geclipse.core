@@ -16,8 +16,13 @@
   *****************************************************************************/
 package eu.geclipse.jsdl.jsdl;
 
+/**
+ * @author nickl
+ *
+ */
+
 import java.util.Hashtable;
-import java.util.Iterator;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -33,28 +38,30 @@ import eu.geclipse.jsdl.model.JsdlFactory;
 import eu.geclipse.jsdl.model.JsdlPackage;
 
 
+
 /**
- * @author nickl
+ * ApplicationTypeAdapter Class.
  *
  */
-public class ApplicationTypeAdapter extends JsdlAdaptersFactory {
+public final class ApplicationTypeAdapter extends JsdlAdaptersFactory {
   
   
   protected ApplicationType applicationType = JsdlFactory.eINSTANCE
                                                        .createApplicationType();
   private boolean isNotifyAllowed = true;
-  private boolean adapterRefreshed = false;
+//  private boolean adapterRefreshed = false;
   
   private Hashtable< Integer, Text > widgetFeaturesMap = 
                                                new Hashtable< Integer, Text >();
   
     
-  /*
-   * Class Constructor
+  /**
+   * ApplicationTypeAdapter Class Constructor
+   * 
+   * @param rootJsdlElement The root element of a JSDL document.
    */
   public ApplicationTypeAdapter (final EObject rootJsdlElement){
-    
-    //this.applicationType = JsdlFactory.eINSTANCE.createApplicationType();    
+
     getTypeForAdapter(rootJsdlElement);
     
   } // End Constructor
@@ -62,9 +69,11 @@ public class ApplicationTypeAdapter extends JsdlAdaptersFactory {
   
   
   protected void contentChanged(){
+    
     if (this.isNotifyAllowed){
       fireNotifyChanged( null);
     }
+    
   }
     
   
@@ -91,18 +100,24 @@ public class ApplicationTypeAdapter extends JsdlAdaptersFactory {
   
   
   
-  /*
-   * Allows to set the adapter content on demand and not through the constructor.
+  /**
+   * Allows to set the adapter's content on demand and not through the constructor.
+   * 
+   * @param rootJsdlElement The root element of a JSDL document.
    */
   public void setContent(final EObject rootJsdlElement){
-    this.adapterRefreshed = true;
+    //FIXME Uncheck below for adapterRefresh Status.
+    //this.adapterRefreshed = true;
     getTypeForAdapter( rootJsdlElement );    
   }
   
   
   
-  /*
-   * Adapter interface to attach to the ApplicationName widget.
+  /**
+   * Adapter interface to attach to the ApplicationName text widget.
+   * 
+   * @param widget The SWT text widget which is associated with the 
+   * ApplicationName element of the JSDL document.
    */
   public void attachToApplicationName(final Text widget){
     Integer featureID = new Integer(JsdlPackage.APPLICATION_TYPE__APPLICATION_NAME);
@@ -119,10 +134,12 @@ public class ApplicationTypeAdapter extends JsdlAdaptersFactory {
   }
   
   
-  
-  /*
-   * Adapter interface to attach to the ApplicationVersion widget.
-   */
+  /**
+   * Adapter interface to attach to the ApplicationName text widget.
+   * 
+   * @param widget The SWT text widget which is associated with the 
+   * ApplicationVersion element of the JSDL document.
+   */  
   public void attachToApplicationVersion(final Text widget){
     Integer featureID = new Integer(JsdlPackage.APPLICATION_TYPE__APPLICATION_VERSION);
     this.widgetFeaturesMap.put( featureID , widget );
@@ -138,10 +155,12 @@ public class ApplicationTypeAdapter extends JsdlAdaptersFactory {
    }
   
   
-  
-  /*
-   * Adapter interface to attach to the ApplicationDescription widget.
-   */
+  /**
+   * Adapter interface to attach to the ApplicationDescription text widget.
+   * 
+   * @param widget The SWT text widget which is associated with the 
+   * ApplicationDescription element of the JSDL document.
+   */ 
   public void attachToApplicationDescription(final Text widget){
     Integer featureID = new Integer(JsdlPackage.APPLICATION_TYPE__DESCRIPTION);
     this.widgetFeaturesMap.put( featureID , widget );
@@ -157,11 +176,16 @@ public class ApplicationTypeAdapter extends JsdlAdaptersFactory {
   }
   
   
+  /**
+   * @param section The SWT ExpandableComposite that hosts the widgets related
+   * to Application elements.
+   */
   public void attachToApplicationSection(final ExpandableComposite section){    
            
      section.addExpansionListener( new ExpansionAdapter() {
-       public void expansionStateChanged(final ExpansionEvent e) {
-            if (e.data.equals(true)) {
+       @Override
+      public void expansionStateChanged(final ExpansionEvent e) {
+            if (e.data.equals(Boolean.TRUE)) {
           //    createApplicationType();
             }
             else{              
@@ -172,8 +196,9 @@ public class ApplicationTypeAdapter extends JsdlAdaptersFactory {
   }
   
  
-  /*
-   * This loads the model content to the widgets registered with the adapter
+  /**
+   * This method populates the model content to the widgets registered with the
+   * ApplicationType adapter.
    */
   public void load()
   {
@@ -185,10 +210,9 @@ public class ApplicationTypeAdapter extends JsdlAdaptersFactory {
     // Test if eObject is not empty.
     if(object != null) {
       EClass eClass = object.eClass();
-             
-        
-      for (Iterator iter = eClass.getEAllAttributes().iterator(); iter.hasNext();) {      
-        EAttribute attribute = (EAttribute) iter.next();
+      
+      EList<EAttribute> allAttributes = eClass.getEAllAttributes();
+      for( EAttribute attribute : allAttributes ) {
                                                
         //Get Attribute Value.
         Object value = object.eGet( attribute );        
@@ -198,8 +222,7 @@ public class ApplicationTypeAdapter extends JsdlAdaptersFactory {
         //Check if Attribute has any value
         if (object.eIsSet( attribute )){          
            widgetName = this.widgetFeaturesMap.get( featureID );
-                 
-         //FIXME - any check should be removed..check cause of it.
+
            if (attribute.getFeatureID() != JsdlPackage.APPLICATION_TYPE__ANY){
              widgetName.setText(value.toString());
          } //end if
@@ -208,16 +231,14 @@ public class ApplicationTypeAdapter extends JsdlAdaptersFactory {
       } //end for
     } //end if
     this.isNotifyAllowed = true;
+    
   } // End void load()
   
   
-  /*
-   * Creates the Application Type Elements in the JSDL document.
-   */
   
-  
-  /*
-   * Check if adapter is Empty.
+  /**
+   * @return TRUE if the adapter is empty. If it is empty, it means that there 
+   * is no JobDefinition element in the JSDL document. 
    */
   public boolean isEmpty(){
     boolean status = false;
@@ -227,7 +248,7 @@ public class ApplicationTypeAdapter extends JsdlAdaptersFactory {
     }
     
     return status;
-  }
+  } // End boolean isEmpty()
   
   
   

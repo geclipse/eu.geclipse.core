@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
@@ -46,7 +47,7 @@ import eu.geclipse.jsdl.model.SourceTargetType;
  * @author nickl
  *
  */
-public class DataStageTypeAdapter extends JsdlAdaptersFactory {
+public final class DataStageTypeAdapter extends JsdlAdaptersFactory {
   
   protected String dataStageEntryKey = ""; //$NON-NLS-1$
   
@@ -73,8 +74,10 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
   private boolean adapterRefreshed = false;
   
   
-  /*
-   * Class Constructor 
+  /**
+   * DataStageTypeAdapter Class Constructor
+   * 
+   * @param rootJsdlElement The root element of a JSDL document.
    */
   public DataStageTypeAdapter (final EObject rootJsdlElement){
 
@@ -85,18 +88,26 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
   
   
   protected void contentChanged(){
+    
     if (this.isNotifyAllowed){
       fireNotifyChanged( null);
     }
-  }
+  } //end void contenctChanged()
   
   
   
-  public void attachToFileName(final List widget){    
-    this.listFeaturesMap.put( JsdlPackage.DATA_STAGING_TYPE__FILE_NAME
-                                , widget );
+  /**
+   * Adapter interface to attach to the DataStaging FileName list widget.
+   * 
+   * @param widget The SWT list widget which is associated with the 
+   * DataStaging FileName elements of the JSDL document.
+   */
+  public void attachToFileName(final List widget){ 
+    Integer featureID = new Integer(JsdlPackage.DATA_STAGING_TYPE__FILE_NAME);
+    this.listFeaturesMap.put( featureID , widget );
         
     widget.addSelectionListener(new SelectionAdapter() {
+      @Override
       public void widgetSelected(final SelectionEvent event) {
        List list = (List) event.getSource();
        String [] str = list.getSelection();       
@@ -108,13 +119,22 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
         
      }
 
-     public void widgetDefaultSelected(final SelectionEvent event) { }
+     @Override
+    public void widgetDefaultSelected(final SelectionEvent event) {
+       // Do Nothing
+     }
     });
      
   } // End attachToFileName()
   
   
   
+  /**
+   * Adapter interface to attach to the DataStaging FileSystemName text widget.
+   * 
+   * @param widget The SWT text widget which is associated with the 
+   * DataStaging FileSystemName element of the JSDL document.
+   */
   public void attachToFileSystemName(final Text widget){
     Integer featureID = new Integer(JsdlPackage.DATA_STAGING_TYPE__FILESYSTEM_NAME);
     this.widgetFeaturesMap.put( featureID , widget );
@@ -140,6 +160,12 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
   
   
   
+  /**
+   * Adapter interface to attach to the DataStaging Name text widget.
+   * 
+   * @param widget The SWT text widget which is associated with the 
+   * DataStaging Name element of the JSDL document.
+   */
   public void attachToName(final Text widget){
     Integer featureID = new Integer(JsdlPackage.DATA_STAGING_TYPE__NAME);
     this.widgetFeaturesMap.put( featureID , widget );
@@ -164,6 +190,12 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
   
   
   
+  /**
+   * Adapter interface to attach to the DataStaging Source text widget.
+   * 
+   * @param widget The SWT text widget which is associated with the 
+   * DataStaging Source element of the JSDL document.
+   */
   public void attachToSource(final Text widget){  
     Integer featureID = new Integer(JsdlPackage.DATA_STAGING_TYPE__SOURCE);
     this.widgetFeaturesMap.put( featureID , widget );
@@ -185,22 +217,28 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
   } // End attachToSource()
   
   
-  
+  /**
+   * Adapter interface to attach to the DataStaging Target text widget.
+   * 
+   * @param widget The SWT text widget which is associated with the 
+   * DataStaging Target element of the JSDL document.
+   */
   public void attachToTarget(final Text widget){    
     Integer featureID = new Integer(JsdlPackage.DATA_STAGING_TYPE__TARGET);
     this.widgetFeaturesMap.put( featureID , widget );
-    
-    
       
       widget.addFocusListener( new org.eclipse.swt.events.FocusListener() {
         public void focusLost( final org.eclipse.swt.events.FocusEvent e ) {
-          EObject eObject = stageMap.get( dataStageEntryKey );
+          
+          EObject eObject = DataStageTypeAdapter.this.stageMap
+                            .get( DataStageTypeAdapter.this.dataStageEntryKey );
+          
           eObject.eSet( JsdlPackage.Literals.DATA_STAGING_TYPE__SOURCE,
                         widget.getText() );
           eObject = null;
         }
         public void focusGained(final FocusEvent e ) {
-          //
+          // Do Nothing
         }
        
       } );
@@ -209,6 +247,12 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
   
   
   
+  /**
+   * Adapter interface to attach to the DataStaging CreationFlag combo widget.
+   * 
+   * @param widget The SWT combo widget which is associated with the 
+   * DataStaging CreationFlag element of the JSDL document.
+   */
   public void attachToCreationFlag(final Combo widget){
     Integer featureID = new Integer(JsdlPackage.DATA_STAGING_TYPE__CREATION_FLAG);
     this.comboFeaturesMap.put( featureID , widget );
@@ -232,7 +276,7 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
       }
 
       public void widgetDefaultSelected(final SelectionEvent e) {
-        //
+        // Do Nothing
       }
     });
     
@@ -240,6 +284,13 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
   
   
   
+  /**
+   * Adapter interface to attach to the DataStaging DeleteOnTermination combo
+   *  widget.
+   * 
+   * @param widget The SWT combo widget which is associated with the 
+   * DataStaging DeleteOnTermination element of the JSDL document.
+   */
   public void attachToDelOnTermination(final Combo widget){
     Integer featureID = new Integer(JsdlPackage.DATA_STAGING_TYPE__DELETE_ON_TERMINATION);
     this.comboFeaturesMap.put( featureID , widget );
@@ -262,6 +313,14 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
   } //End attachToDelOnTermination()
   
 
+  /**
+   * 
+   * Adapter interface to attach to the DataStaging Delete button
+   * widget.
+   *  
+   * @param list The SWT list containing the DataStage element to be deleted.
+   * @param button The SWT Button that triggered the Delete event.
+   */
   public void attachToDelete(final List list , final Button button){
     button.addSelectionListener(new SelectionListener() {
 
@@ -279,6 +338,13 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
   
   
   
+  /**
+   * 
+   * Adapter interface to attach to the DataStaging Add button
+   * widget.
+   *
+   * @param button The SWT Button that triggered the Add. event.
+   */
   public void attachToAdd(final Button button){
     button.addSelectionListener(new SelectionListener() {
 
@@ -295,7 +361,6 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
   }
   
   
-  
   private void  getTypeForAdapter(final EObject rootJsdlElement){
     
     TreeIterator <EObject> iterator = rootJsdlElement.eAllContents();
@@ -309,10 +374,16 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
         } //endif dataStageType
       
     } // End while    
+    
    } // End getTypeforAdapter()
   
   
   
+  /**
+   * Allows to set the adapter's content on demand and not through the constructor.
+   * 
+   * @param rootJsdlElement The root element of a JSDL document.
+   */
   public void setContent(final EObject rootJsdlElement) {
     
     this.adapterRefreshed = true;
@@ -322,22 +393,31 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
   
   
   
+  /**
+   * 
+   * This method populates the model content to the widgets registered with the
+   * DataStageType adapter.
+   */
   public void load()
   {
     this.isNotifyAllowed = false;
-    for (Iterator itList = this.dataStageList.iterator(); itList.hasNext();)
+    for (Iterator <EObject> itList = this.dataStageList.iterator(); itList.hasNext();)
     {
      
-      EObject eObject = (EObject) itList.next();
+      EObject eObject = itList.next();
       List listName = null;
        
       // Test if eObject is not empty.
       if(eObject != null) {
         EClass eClass = eObject.eClass();
         
-        for (Iterator iterRef = eClass.getEAllStructuralFeatures().iterator(); iterRef.hasNext();){
-          
-          EStructuralFeature eStructuralFeature = (EStructuralFeature) iterRef.next();        
+//        for (Iterator iterRef = eClass.getEAllStructuralFeatures().iterator(); iterRef.hasNext();){
+//          
+//          EStructuralFeature eStructuralFeature = (EStructuralFeature) iterRef.next();
+        
+        EList<EStructuralFeature> allEStructuralFeatures = eClass.getEAllStructuralFeatures();
+        for( EStructuralFeature eStructuralFeature : allEStructuralFeatures) {
+
 
             if (eStructuralFeature instanceof EAttribute) {         
             // Get Attribute Value.
@@ -348,11 +428,13 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
             
             if (eObject.eIsSet( eStructuralFeature )){
             switch (featureID) {
+              
               case JsdlPackage.DATA_STAGING_TYPE__FILE_NAME:{
                 listName = this.listFeaturesMap.get( new Integer(featureID) );
                 if(!this.adapterRefreshed)
                   {listName.add( value.toString() );}
                 this.stageMap.put( value.toString(), eObject );
+                
                 }              
               break;
               default: // Do Nothing;
@@ -383,10 +465,9 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
     
     if(eObject != null) {
       EClass eClass = eObject.eClass();
-      
-      for (Iterator iterRef = eClass.getEAllStructuralFeatures().iterator(); iterRef.hasNext();){
-        
-        EStructuralFeature eStructuralFeature = (EStructuralFeature) iterRef.next();
+
+      EList<EStructuralFeature> allEStructuralFeatures = eClass.getEAllStructuralFeatures();
+      for( EStructuralFeature eStructuralFeature : allEStructuralFeatures) {
         
         int featureID = eStructuralFeature.getFeatureID();
         //Check for the features Multiplicity.
@@ -461,13 +542,17 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
         
       } //end Iterator            
     } // endif    
+    
     this.isNotifyAllowed = true;
+    
   } // End navigateDataStage()
   
   
   protected void performAdd(){
    // 
   }
+  
+  
   
   /* Method deletes the selected DataStaged Item from the list and 
    * the JSDL Model.
@@ -500,7 +585,10 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
   }
   
   
-    
+  /**
+   * @return TRUE if the adapter is empty. If it is empty, it means that there 
+   * is no JobDefinition element in the JSDL document. 
+   */  
   public boolean isEmpty(){
     boolean status = false;
 

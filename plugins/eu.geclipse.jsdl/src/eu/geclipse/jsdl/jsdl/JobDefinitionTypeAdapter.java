@@ -39,13 +39,14 @@ import eu.geclipse.jsdl.model.JsdlPackage;
  * JobDefinitionTypeAdapter Class.
  *
  */
-public class JobDefinitionTypeAdapter extends JsdlAdaptersFactory {
+public final class JobDefinitionTypeAdapter extends JsdlAdaptersFactory {
   
   protected JobDefinitionType jobDefinitionType =
                                JsdlFactory.eINSTANCE.createJobDefinitionType();
   protected HashMap< Integer, Text > widgetFeaturesMap = new HashMap< Integer, Text >();
    
   private boolean isNotifyAllowed = true;
+  
   
   /**
    * Constructs a new <code> JobDefinitionTypeAdapter </code>
@@ -57,11 +58,15 @@ public class JobDefinitionTypeAdapter extends JsdlAdaptersFactory {
       
   }
   
+  
+  
   protected void contentChanged(){
     if (this.isNotifyAllowed){
       fireNotifyChanged( null);
     }
   }
+  
+  
   
   /**
    * @param widget
@@ -81,8 +86,7 @@ public class JobDefinitionTypeAdapter extends JsdlAdaptersFactory {
   }
   
   
-  
-  
+    
   /**
    * @param rootJsdlElement
    */
@@ -90,10 +94,13 @@ public class JobDefinitionTypeAdapter extends JsdlAdaptersFactory {
     getTypeForAdapter( rootJsdlElement );
   }
   
-        
+   
+  
    private void  getTypeForAdapter(final EObject rootJsdlElement){      
         this.jobDefinitionType = (JobDefinitionType) rootJsdlElement;         
    }
+   
+   
  
    /**
    * 
@@ -134,7 +141,7 @@ public class JobDefinitionTypeAdapter extends JsdlAdaptersFactory {
    
    
    /**
-   * @return true if the adapter is empty. If it is empty, it means that there 
+   * @return TRUE if the adapter is empty. If it is empty, it means that there 
    * is no JobDefinition element in the JSDL document. 
    */
   public boolean isEmpty(){

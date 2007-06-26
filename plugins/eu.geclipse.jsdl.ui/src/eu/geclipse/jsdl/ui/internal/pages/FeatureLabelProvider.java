@@ -43,6 +43,7 @@ public class FeatureLabelProvider extends LabelProvider implements
 
   public String getColumnText(Object element, int columnIndex) {
     String text = null;
+    
       
     if ( element instanceof ArgumentType ) {
       
@@ -74,10 +75,16 @@ public class FeatureLabelProvider extends LabelProvider implements
           break;
       } // end switch
       
-    }// end elseif
+    }// end elseif EnvironmentType
     
     else{
-      // Do Nothing
+      switch ( columnIndex ) {
+        case 0:
+          text = element.toString();
+          break;        
+          default:
+          break;
+      } // end switch
     }
     return text;
     

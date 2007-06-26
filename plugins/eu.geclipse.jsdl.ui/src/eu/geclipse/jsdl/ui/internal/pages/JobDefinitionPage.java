@@ -62,8 +62,8 @@ import eu.geclipse.jsdl.ui.internal.dialogs.MultipleInputDialog;
  * - Job Project
  * 
  */
-public class JobDefinitionPage extends FormPage
-    implements INotifyChangedListener {
+public final class JobDefinitionPage extends FormPage
+                                            implements INotifyChangedListener {
   
   protected Object value = null;
 

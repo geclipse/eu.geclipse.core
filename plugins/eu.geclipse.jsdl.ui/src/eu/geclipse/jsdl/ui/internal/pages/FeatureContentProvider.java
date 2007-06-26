@@ -23,6 +23,7 @@ package eu.geclipse.jsdl.ui.internal.pages;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
+import eu.geclipse.jsdl.model.CandidateHostsType;
 
 
 /**
@@ -36,8 +37,21 @@ public class FeatureContentProvider implements IStructuredContentProvider {
   public Object[] getElements(Object inputElement) {
     Object[] result = null;
 
+    
+    if (inputElement instanceof CandidateHostsType){
+      CandidateHostsType candidateHostsType = (CandidateHostsType) inputElement;
+      
+      EList<String>list = candidateHostsType.getHostName();
+      result = list.toArray( new Object[ list.size() ] );
+  
+    }
+    else{
+      
       EList<Object>list = (EList) inputElement;
       result = list.toArray( new Object[ list.size() ] );
+      
+      }
+      
     
     return result;
   }
