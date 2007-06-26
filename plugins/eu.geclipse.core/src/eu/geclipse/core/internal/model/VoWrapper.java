@@ -100,7 +100,7 @@ public class VoWrapper
   }
   
   public boolean isLazy() {
-    return true;
+    return false;
   }
 
   public boolean isLocal() {
@@ -123,7 +123,16 @@ public class VoWrapper
   
   @Override
   public void setDirty() {
-    // empty implementation 
+    try {
+      for ( IGridElement child : getChildren( null ) ) {
+        if ( child instanceof IGridContainer ) {
+          ( ( IGridContainer ) child ).setDirty();
+        }
+      }
+    } catch ( GridModelException gmExc ) {
+      // Should never happen, if it does we will at least log it
+      Activator.logException( gmExc );
+    }
   }
 
 }
