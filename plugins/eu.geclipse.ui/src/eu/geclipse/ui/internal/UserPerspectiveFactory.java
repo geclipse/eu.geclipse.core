@@ -82,6 +82,10 @@ public class UserPerspectiveFactory
 //    layout.addNewWizardShortcut( "org.eclipse.ui.wizards.new.file" );//$NON-NLS-1$
 //    layout.addNewWizardShortcut( "org.eclipse.ui.editors.wizards.UntitledTextFileWizard" );//$NON-NLS-1$
     
+    layout.addPerspectiveShortcut( Activator.ID_OPERATOR_PERSPECTIVE );
+    layout.addPerspectiveShortcut( Activator.ID_DEVELOPER_PERSPECTIVE );
+    layout.addPerspectiveShortcut( Activator.ID_EXPLORER_PERSPECTIVE );
+    
   }
 
 }

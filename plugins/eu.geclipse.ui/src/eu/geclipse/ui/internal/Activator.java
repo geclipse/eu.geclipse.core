@@ -119,6 +119,30 @@ public class Activator extends AbstractUIPlugin {
    */
   public static final String ID_WORKFLOW_WIZARD
     = "eu.geclipse.workflow.ui.part.WorkflowCreationWizardID"; //$NON-NLS-1$
+  
+  /**
+   * The id of the Grid user perspective.
+   */
+  public static final String ID_USER_PERSPECTIVE
+    = "eu.geclipse.ui.userPerspective"; //$NON-NLS-1$
+  
+  /**
+   * The id of the Grid operator perspective.
+   */
+  public static final String ID_OPERATOR_PERSPECTIVE
+    = "eu.geclipse.ui.operatorPerspective"; //$NON-NLS-1$
+  
+  /**
+   * The id of the Grid developer perspective.
+   */
+  public static final String ID_DEVELOPER_PERSPECTIVE
+    = "eu.geclipse.ui.developerPerspective"; //$NON-NLS-1$
+  
+  /**
+   * The id of the Grid explorer perspective.
+   */
+  public static final String ID_EXPLORER_PERSPECTIVE
+    = "eu.geclipse.ui.explorerPerspective"; //$NON-NLS-1$
 
   /**
    * The shared instance.

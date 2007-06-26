@@ -64,6 +64,10 @@ public class GridExplorerPerspective
     layout.addShowViewShortcut( IProgressConstants.PROGRESS_VIEW_ID );
     layout.addShowViewShortcut( LogExceptionSolution.LOG_VIEW_ID );
     
+    layout.addPerspectiveShortcut( Activator.ID_USER_PERSPECTIVE );
+    layout.addPerspectiveShortcut( Activator.ID_OPERATOR_PERSPECTIVE );
+    layout.addPerspectiveShortcut( Activator.ID_DEVELOPER_PERSPECTIVE );
+    
   }
   
 }

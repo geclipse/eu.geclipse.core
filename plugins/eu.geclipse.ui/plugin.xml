@@ -91,7 +91,7 @@
             class="eu.geclipse.ui.internal.GridExplorerPerspective"
             fixed="false"
             icon="icons/eview16/gexplorer_pers.gif"
-            id="eu.geclipse.ui.gridExplorerPerspective"
+            id="eu.geclipse.ui.explorerPerspective"
             name="%perspective.explorer.name"/>
    </extension>
    <extension
