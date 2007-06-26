@@ -43,7 +43,7 @@ import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.wizards.wizardselection.ExtPointWizardSelectionListPage;
 
 /**
- * The <code>UIAuthTokenProvider</auth> is the main point were Plugins should request their
+ * The <code>UIAuthTokenProvider</auth> is the main point where Plugins should request their
  * authentication tokens. It should be used instead of the <code>AuthenticationTokenManager</code>
  * whenever possible. It provides methods to request any token or tokens of a special type. It also
  * takes responsibility for the user interactions with respect to new token wizards, question
