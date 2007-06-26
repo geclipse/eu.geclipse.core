@@ -18,6 +18,11 @@ package eu.geclipse.ui.internal;
 import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
+import org.eclipse.ui.IPlaceholderFolderLayout;
+import org.eclipse.ui.progress.IProgressConstants;
+
+import eu.geclipse.ui.LogExceptionSolution;
+import eu.geclipse.ui.ShowViewSolution;
 
 /**
  * Perspective factory for the g-Eclipse grid exploring perspective. 
@@ -33,14 +38,31 @@ public class GridExplorerPerspective
   public void createInitialLayout( final IPageLayout layout ) {
     
     String editorArea = layout.getEditorArea();
+    
+    IPlaceholderFolderLayout leftFolder
+      = layout.createPlaceholderFolder( "left", IPageLayout.LEFT, 0.2f, editorArea );
+    leftFolder.addPlaceholder( eu.geclipse.ui.internal.Activator.ID_GPROJECT_VIEW );
+    leftFolder.addPlaceholder( IPageLayout.ID_RES_NAV );
 
     IFolderLayout bottomLeftFolder
       = layout.createFolder( "bottomleft", IPageLayout.BOTTOM, 0.5f, editorArea ); //$NON-NLS-1$
     bottomLeftFolder.addView( eu.geclipse.ui.internal.Activator.ID_CONNECTION_VIEW + ":left*" ); //$NON-NLS-1$
     
+    IFolderLayout bottomFolder
+      = layout.createFolder( "bottom", IPageLayout.BOTTOM, 0.7f, "bottomleft" );
+    bottomFolder.addView( IProgressConstants.PROGRESS_VIEW_ID );
+    bottomFolder.addView( LogExceptionSolution.LOG_VIEW_ID );
+    bottomFolder.addPlaceholder( eu.geclipse.ui.internal.Activator.ID_AUTH_VIEW );
+    
     IFolderLayout bottomRightFolder
-      = layout.createFolder( "bottomright", IPageLayout.RIGHT, 0.5f, eu.geclipse.ui.internal.Activator.ID_CONNECTION_VIEW ); //$NON-NLS-1$
+      = layout.createFolder( "bottomright", IPageLayout.RIGHT, 0.5f, "bottomleft" ); //$NON-NLS-1$
     bottomRightFolder.addView( eu.geclipse.ui.internal.Activator.ID_CONNECTION_VIEW + ":right*" ); //$NON-NLS-1$
+    
+    layout.addShowViewShortcut( eu.geclipse.ui.internal.Activator.ID_GPROJECT_VIEW );
+    layout.addShowViewShortcut( eu.geclipse.ui.internal.Activator.ID_AUTH_VIEW );
+    layout.addShowViewShortcut( IPageLayout.ID_RES_NAV );
+    layout.addShowViewShortcut( IProgressConstants.PROGRESS_VIEW_ID );
+    layout.addShowViewShortcut( LogExceptionSolution.LOG_VIEW_ID );
     
   }
   
