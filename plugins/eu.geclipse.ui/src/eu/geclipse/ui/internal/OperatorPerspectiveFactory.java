@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -22,12 +22,12 @@ import org.eclipse.ui.IPerspectiveFactory;
 import org.eclipse.ui.progress.IProgressConstants;
 
 /**
- * Perspective factory for the g-Eclipse operator perspective. 
+ * Perspective factory for the g-Eclipse operator perspective.
  */
 public class OperatorPerspectiveFactory implements IPerspectiveFactory {
-  
+
   public void createInitialLayout( final IPageLayout layout ) {
-    
+
     String editorArea = layout.getEditorArea();
 
     IFolderLayout topLeftFolder
@@ -38,27 +38,28 @@ public class OperatorPerspectiveFactory implements IPerspectiveFactory {
     IFolderLayout bottomLeftFolder
      = layout.createFolder( "bottomleft", IPageLayout.BOTTOM, 0.5f, eu.geclipse.ui.internal.Activator.ID_GPROJECT_VIEW ); //$NON-NLS-1$
     bottomLeftFolder.addView( eu.geclipse.ui.internal.Activator.ID_GLUE_INFO_VIEW );
-   
+
     IFolderLayout rightFolder
       = layout.createFolder( "right", IPageLayout.RIGHT, 0.5f, eu.geclipse.ui.internal.Activator.ID_TERMINAL_VIEW ); //$NON-NLS-1$
     rightFolder.addView( eu.geclipse.ui.internal.Activator.ID_TERMINAL_VIEW );
-      
+    rightFolder.addView( IPageLayout.ID_OUTLINE );
+
     IFolderLayout bottomFolder
       = layout.createFolder( "bottom", IPageLayout.BOTTOM, 0.6f, editorArea ); //$NON-NLS-1$
     bottomFolder.addView( IPageLayout.ID_PROP_SHEET );
-    // TODO This should have been the following identifier. 
+    // TODO This should have been the following identifier.
     // eu.geclipse.batch.ui.internal.Activator.ID_BATCH_JOB_VIEW
     // Due to batch.ui plugin location have to do this hack
     // Leve as Warning to remember
     bottomFolder.addView( "eu.geclipse.batch.ui.views.BatchJobView" );
     bottomFolder.addView( eu.geclipse.ui.internal.Activator.ID_AUTH_VIEW );
-    
+
     bottomFolder.addPlaceholder( IPageLayout.ID_PROP_SHEET );
     bottomFolder.addPlaceholder( IPageLayout.ID_PROBLEM_VIEW );
     bottomFolder.addPlaceholder( NewSearchUI.SEARCH_VIEW_ID );
     bottomFolder.addPlaceholder( IPageLayout.ID_BOOKMARKS );
     bottomFolder.addPlaceholder( IProgressConstants.PROGRESS_VIEW_ID );
-    
+
     layout.addShowViewShortcut( "eu.geclipse.batch.ui.views.BatchJobView" );
     layout.addShowViewShortcut( IPageLayout.ID_PROP_SHEET );
     layout.addShowViewShortcut( IPageLayout.ID_PROBLEM_VIEW );
@@ -66,7 +67,7 @@ public class OperatorPerspectiveFactory implements IPerspectiveFactory {
     layout.addShowViewShortcut( IPageLayout.ID_TASK_LIST );
     layout.addShowViewShortcut( IProgressConstants.PROGRESS_VIEW_ID );
 
-    // TODO This should have been the following identifier. 
+    // TODO This should have been the following identifier.
     // eu.geclipse.batch.ui.internal.Activator.ID_BATCH_WIZARD
     // Due to batch.ui plugin location have to do this hack
     // Leve as Warning to remember
