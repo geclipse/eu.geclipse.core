@@ -94,7 +94,7 @@ public class GridJobStatus implements IGridJobStatus {
           // empty implementation
         } catch( ParseException e ) {
           // empty implementation
-        };
+        }
       }
       if( XML_STATUSTYPE.equals( node.getNodeName() ) ) {
         try {
@@ -196,6 +196,6 @@ public class GridJobStatus implements IGridJobStatus {
     return null;
   }
 
-  protected void setData( String data ) {
+  protected void setData( final String data ) {
   }
 }
