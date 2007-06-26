@@ -27,7 +27,7 @@ public class LogExceptionSolution
   /**
    * The ID of the PDE log view.
    */
-  private static final String LOG_VIEW_ID
+  public static final String LOG_VIEW_ID
     = "org.eclipse.pde.runtime.LogView"; //$NON-NLS-1$
   
   /**
