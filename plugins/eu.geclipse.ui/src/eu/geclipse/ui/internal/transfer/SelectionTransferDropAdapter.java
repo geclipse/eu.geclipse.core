@@ -95,8 +95,8 @@ public class SelectionTransferDropAdapter
     if ( newTarget != this.lastTarget ) {
       this.lastTarget = newTarget;
       validateDrop( event );
-      computeFeedback( event );
     }
+    computeFeedback( event );
   }
 
   /* (non-Javadoc)
