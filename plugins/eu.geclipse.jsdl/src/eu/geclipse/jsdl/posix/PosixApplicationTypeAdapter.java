@@ -28,7 +28,9 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -319,10 +321,23 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    */
   public void attachToDelete(final Button button, final TableViewer viewer){
 
+    viewer.addSelectionChangedListener( new ISelectionChangedListener() {
+
+      public void selectionChanged( final SelectionChangedEvent event ) {
+        button.setEnabled( true );
+       
+        
+      }
+      
+    });
+
     button.addSelectionListener(new SelectionListener() {
 
       public void widgetSelected(final SelectionEvent event) {        
         performDelete(viewer);
+        if (viewer.getTable().getItemCount() == 0){
+          button.setEnabled( false );
+        }
       }
 
       public void widgetDefaultSelected(final SelectionEvent event) {

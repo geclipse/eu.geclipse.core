@@ -331,6 +331,7 @@ public final class DataStagingPage extends FormPage
     this.btnDel = toolkit.createButton(clientsubSection,
                                   Messages.getString("JsdlEditor_RemoveButton"), //$NON-NLS-1$
                                    SWT.PUSH);
+    this.btnDel.setEnabled( false );
     this.dataStageTypeAdapter.attachToDelete(this.lstFileName, this.btnDel );
     this.btnDel.setLayoutData( gd );
     

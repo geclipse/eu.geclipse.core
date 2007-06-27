@@ -322,10 +322,30 @@ public final class DataStageTypeAdapter extends JsdlAdaptersFactory {
    * @param button The SWT Button that triggered the Delete event.
    */
   public void attachToDelete(final List list , final Button button){
+    
+    list.addSelectionListener(new SelectionListener() {
+      
+
+      public void widgetSelected(final SelectionEvent e ) {
+        if (list.getItemCount()>0){
+          
+          button.setEnabled( true );
+        }     
+      }
+
+      public void widgetDefaultSelected( final SelectionEvent e ) {
+        //  Auto-generated method stub   
+      }
+    });
+    
+    
     button.addSelectionListener(new SelectionListener() {
 
       public void widgetSelected(final SelectionEvent event) {        
         performDelete(list, DataStageTypeAdapter.this.dataStageEntryKey);
+        if (list.getItemCount() == 0) {
+          button.setEnabled( false ); 
+        }
       }
 
       public void widgetDefaultSelected(final SelectionEvent event) {
@@ -580,6 +600,7 @@ public final class DataStageTypeAdapter extends JsdlAdaptersFactory {
 //    }
         
     this.stageMap.remove( selected );
+    contentChanged();
     
     
   }

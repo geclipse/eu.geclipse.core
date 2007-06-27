@@ -209,15 +209,34 @@ public final class JobIdentificationTypeAdapter extends JsdlAdaptersFactory {
    */
   public void attachToDelete(final Button button, final List list){
     
+    
+    list.addSelectionListener(new SelectionListener() {
+      
+
+      public void widgetSelected(final SelectionEvent e ) {
+        if (list.getItemCount()>0){
+          
+          button.setEnabled( true );
+        }     
+      }
+
+      public void widgetDefaultSelected( final SelectionEvent e ) {
+        //  Auto-generated method stub   
+      }
+    });
+    
     button.addSelectionListener(new SelectionListener() {
 
       public void widgetSelected(final SelectionEvent event) { 
         performDelete(list, list.getItem( list.getSelectionIndex() ) );
+        if (list.getItemCount() == 0) {
+         button.setEnabled( false ); 
+        }
       }
 
       public void widgetDefaultSelected(final SelectionEvent event) {
-
-      // Do Nothing
+        //Do Nothing
+    
       }
     });    
     

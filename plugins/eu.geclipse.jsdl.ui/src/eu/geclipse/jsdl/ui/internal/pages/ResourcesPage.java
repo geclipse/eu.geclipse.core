@@ -388,6 +388,9 @@ public final class ResourcesPage extends FormPage
     this.btnDel = toolkit.createButton(clientsubSection, 
                                  Messages.getString("JsdlEditor_RemoveButton"), //$NON-NLS-1$
                                  SWT.BUTTON1);
+    
+    this.btnDel.setEnabled( false );
+    
     this.resourcesTypeAdapter.attachToDelete( this.btnDel, this.lstHostName );
     this.btnDel.setLayoutData( gdBut);
     

@@ -418,6 +418,7 @@ public final class JobDefinitionPage extends FormPage
     gd.verticalAlignment = GridData.BEGINNING;         
     this.btnDel = toolkit.createButton(client,
                        Messages.getString("JsdlEditor_RemoveButton"), SWT.PUSH);  //$NON-NLS-1$
+    this.btnDel.setEnabled( false );
     
     this.jobIdentificationTypeAdapter.attachToDelete( this.btnDel, this.lstJobAnnotation);
     this.btnDel.setLayoutData( gd );
@@ -484,6 +485,7 @@ public final class JobDefinitionPage extends FormPage
      this.btnDel = toolkit.createButton(client,
                                   Messages.getString("JsdlEditor_RemoveButton"), //$NON-NLS-1$
                                   SWT.PUSH);
+     this.btnDel.setEnabled( false );
      
      this.jobIdentificationTypeAdapter.attachToDelete( this.btnDel, this.lstJobProject);
      this.btnDel.setLayoutData( gd );

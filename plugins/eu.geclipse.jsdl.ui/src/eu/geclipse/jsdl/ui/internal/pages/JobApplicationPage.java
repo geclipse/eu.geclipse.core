@@ -515,7 +515,7 @@ public final class JobApplicationPage extends FormPage
     this.tblArgument.setLayoutData( gd);
      
                 
-    //Create "Add" Button
+    /* Create "Add" Button */
     gd = new GridData();
     gd.horizontalSpan = 2;
     gd.verticalSpan = 1;
@@ -552,6 +552,7 @@ public final class JobApplicationPage extends FormPage
     this.btnDel = toolkit.createButton(client,
                                     Messages.getString("JsdlEditor_RemoveButton") //$NON-NLS-1$
                                     , SWT.PUSH);
+    this.btnDel.setEnabled( false );
     this.posixApplicationTypeAdapter.attachToDelete( this.btnDel, 
                                                              this.argumentViewer );
 
@@ -690,6 +691,7 @@ public final class JobApplicationPage extends FormPage
     this.btnDel = toolkit.createButton(client,
                                   Messages.getString("JsdlEditor_RemoveButton"), //$NON-NLS-1$
                                   SWT.PUSH); 
+    this.btnDel.setEnabled( false );
     
     this.posixApplicationTypeAdapter.attachToDelete( this.btnDel, 
                                                        this.environmentViewer );
@@ -952,7 +954,7 @@ public final class JobApplicationPage extends FormPage
     if (dialogTitle == Messages.getString("JobApplicationPage_ArgumentDialog" )){ //$NON-NLS-1$
       
       this.value = new Object[2];
-      dialog.addTextField( Messages.getString( "JobApplicationPage_FileSystemName" ), "", false ); //$NON-NLS-1$ //$NON-NLS-2$
+      dialog.addTextField( Messages.getString( "JobApplicationPage_FileSystemName" ), "", false ); //$NON-NLS-1$ //$NON-NLS-2$      
       dialog.addTextField( Messages.getString( "JobApplicationPage_Value" ), "", false ); //$NON-NLS-1$ //$NON-NLS-2$
                        
     }
