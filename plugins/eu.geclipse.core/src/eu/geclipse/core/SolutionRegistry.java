@@ -42,6 +42,11 @@ public class SolutionRegistry {
   public static final int CHECK_CA_CERTIFICATES = uniqueID();
   
   /**
+   * Unique ID of the check your hostname settings solution.
+   */
+  public static final int CHECK_HOSTNAME_SETTINGS = uniqueID(); 
+  
+  /**
    * Unique ID of the check internet connection solution.
    */
   public static final int CHECK_INTERNET_CONNECTION = uniqueID();
@@ -211,6 +216,10 @@ public class SolutionRegistry {
     
     else if ( solutionID == CHECK_CA_CERTIFICATES ) {
       solution = new Solution( CHECK_CA_CERTIFICATES, Messages.getString("SolutionRegistry.check_ca_certificates") ); //$NON-NLS-1$
+    }
+    
+    else if ( solutionID == CHECK_HOSTNAME_SETTINGS ) {
+      solution = new Solution( CHECK_HOSTNAME_SETTINGS, Messages.getString("SolutionRegistry.check_hostname_settings") ); //$NON-NLS-1$
     }
     
     else if ( solutionID == CHECK_INTERNET_CONNECTION ) {
