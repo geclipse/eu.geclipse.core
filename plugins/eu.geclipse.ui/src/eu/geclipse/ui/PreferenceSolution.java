@@ -37,7 +37,7 @@ public class PreferenceSolution extends UISolution {
    * ID of the network preference page.
    */
   public static final String NETWORK_PREFERENCE_PAGE
-    = "org.eclipse.net.ui.NetPreferences"; //$NON-NLS-1$
+    = "org.eclipse.ui.net.NetPreferences"; //$NON-NLS-1$
   
   /**
    * ID of the VO preference page.
