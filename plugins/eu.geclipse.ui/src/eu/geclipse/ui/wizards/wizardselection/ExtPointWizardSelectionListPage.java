@@ -46,15 +46,19 @@ public class ExtPointWizardSelectionListPage extends WizardSelectionListPage {
    *                         from.
    * @param title Title of the page.
    * @param desc Description text of the page.
+   * @param emptyListErrMsg error message that should be displayed if the list
+   *                        is empty
    */
   public ExtPointWizardSelectionListPage( final String pageName,
                                           final String extensionPointId,
                                           final String title,
-                                          final String desc ) {
+                                          final String desc,
+                                          final String emptyListErrMsg ) {
     super( pageName,
            getWizardList( extensionPointId, null ),
            title,
-           desc );
+           desc,
+           emptyListErrMsg );
   }
 
   /**
@@ -68,16 +72,21 @@ public class ExtPointWizardSelectionListPage extends WizardSelectionListPage {
    *                   not in the list it won't be displayed in the list.
    * @param title Title of the page.
    * @param desc Description text of the page.
+   * @param emptyListErrMsg error message that should be displayed if the
+   *                        filtered list is empty
+
    */
   public ExtPointWizardSelectionListPage( final String pageName,
                                           final String extensionPointId,
                                           final List<String> filterList,
                                           final String title,
-                                          final String desc ) {
+                                          final String desc,
+                                          final String emptyListErrMsg ) {
     super( pageName,
            getWizardList( extensionPointId , filterList ),
            title,
-           desc );
+           desc,
+           emptyListErrMsg );
   }
 
   /**

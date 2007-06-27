@@ -12,6 +12,7 @@
  * Contributor(s):
  *     Pawel Wolniewicz - PSNC
  *****************************************************************************/
+
 package eu.geclipse.ui.wizards.jobsubmission;
 
 import java.util.Hashtable;
@@ -41,11 +42,12 @@ public class JobCreatorSelectionWizardPage
            "eu.geclipse.ui.jobSubmissionWizard",
            getFilterList( parent ),
            "Job Creation",
-           "Select the type of job to create" );
+           "Select the type of job to create",
+           "No job creators for this type of job description available." );
   }
 
   /**
-   * Find job submission wizzards that are able to create jobs using given
+   * Find job submission wizards that are able to create jobs using given
    * creators
    * 
    * @param parent

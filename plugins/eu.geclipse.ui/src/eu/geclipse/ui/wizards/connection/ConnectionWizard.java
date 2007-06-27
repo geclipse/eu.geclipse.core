@@ -27,8 +27,6 @@ import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -41,8 +39,6 @@ import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IConnectionManager;
 import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.ui.Extensions;
-import eu.geclipse.ui.dialogs.ProblemDialog;
-import eu.geclipse.ui.dialogs.Solution;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.wizards.wizardselection.ExtPointWizardSelectionListPage;
 
@@ -121,7 +117,8 @@ public class ConnectionWizard extends Wizard implements INewWizard {
         Messages.getString( "ConnectionWizard.start_page_name" ), //$NON-NLS-1$
         Extensions.CONNECTION_WIZARD_POINT, 
         Messages.getString( "ConnectionWizard.start_page_title" ), //$NON-NLS-1$
-        Messages.getString( "ConnectionWizard.start_page_description" ) ); //$NON-NLS-1$
+        Messages.getString( "ConnectionWizard.start_page_description" ), //$NON-NLS-1$
+        Messages.getString( "ConnectionWizard.no_connection_type" ) ); //$NON-NLS-1$
     this.startPage.setInitData( this );
     addPage( this.startPage );
   }
@@ -163,7 +160,7 @@ public class ConnectionWizard extends Wizard implements INewWizard {
                                              */
             
             String filename
-              = "." + ConnectionWizard.this.firstPage.getConnectionName() + ".fs";
+              = "." + ConnectionWizard.this.firstPage.getConnectionName() + ".fs"; //$NON-NLS-1$ //$NON-NLS-2$
             
             IConnectionManager connectionManager = GridModel.getConnectionManager();
             IFileStore fileStore = connectionManager.getFileStore();

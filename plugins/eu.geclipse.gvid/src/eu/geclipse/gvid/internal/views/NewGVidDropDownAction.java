@@ -69,7 +69,8 @@ class NewGVidDropDownAction extends DropDownExtensionAction<IGVidView> {
             Messages.getString( "NewGVidDropDownAction.selectConnectionType" ), //$NON-NLS-1$
             EXT_ID_NEW_GVID_WIZARD,
             Messages.getString( "NewGVidDropDownAction.title" ), //$NON-NLS-1$
-            Messages.getString( "NewGVidDropDownAction.description" ) ); //$NON-NLS-1$
+            Messages.getString( "NewGVidDropDownAction.description" ), //$NON-NLS-1$
+            Messages.getString( "NewGVidDropDownAction.noConnectionTypes" ) ); //$NON-NLS-1$
         page.setInitData( NewGVidDropDownAction.this.gvidView );
         addPage( page );
       }

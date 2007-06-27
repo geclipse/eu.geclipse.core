@@ -53,17 +53,22 @@ public class WizardSelectionListPage extends WizardSelectionPage implements IPag
    *                             displayed in the WizardSelectionListPage.
    * @param title Title of the page.
    * @param desc Description text of the page.
+   * @param emptyListErrMsg error message that should be displayed if the list
+   *                        is empty
    */
   public WizardSelectionListPage( final String pageName,
                                   final IWizardSelectionNode[] wizardSelectionNodes,
                                   final String title,
-                                  final String desc ) {
+                                  final String desc,
+                                  final String emptyListErrMsg ) {
     super( pageName );
     this.wizardSelectionNodes = wizardSelectionNodes;
     this.title = title;
     this.desc = desc;
     if ( wizardSelectionNodes.length == 1 ) {
       this.preselectedNode = wizardSelectionNodes[0];
+    } else if ( wizardSelectionNodes.length == 0 ) {
+      setErrorMessage( emptyListErrMsg );
     }
   }
 

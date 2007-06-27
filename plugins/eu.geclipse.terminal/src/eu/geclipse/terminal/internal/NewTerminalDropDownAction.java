@@ -62,7 +62,8 @@ class NewTerminalDropDownAction extends DropDownExtensionAction<ITerminalView> {
             Messages.getString( "NewTerminalDropDownAction.selectConnectionType" ), //$NON-NLS-1$
             EXT_ID_NEW_TERMINAL_WIZARD,
             Messages.getString( "NewTerminalDropDownAction.title" ), //$NON-NLS-1$
-            Messages.getString( "NewTerminalDropDownAction.description" ) ); //$NON-NLS-1$
+            Messages.getString( "NewTerminalDropDownAction.description" ), //$NON-NLS-1$
+            Messages.getString( "NewTerminalDropDownAction.noConnectionTypes" ) ); //$NON-NLS-1$
         page.setInitData( NewTerminalDropDownAction.this.terminalView );
         addPage( page );
       }
