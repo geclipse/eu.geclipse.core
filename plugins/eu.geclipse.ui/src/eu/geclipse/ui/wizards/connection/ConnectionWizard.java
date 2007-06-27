@@ -205,20 +205,6 @@ public class ConnectionWizard extends Wizard implements INewWizard {
         }
       } );
     } catch( InvocationTargetException itExc ) {
-      IStatus status = new Status( IStatus.ERROR,
-                                   eu.geclipse.ui.internal.Activator.PLUGIN_ID,
-                                   IStatus.OK,
-                                   Messages.getString( "ConnectionWizard.error_reason" ), //$NON-NLS-1$
-                                   itExc.getCause() );
-      ProblemDialog dialog = new ProblemDialog( getShell(),
-                                                Messages.getString( "ConnectionWizard.problem_dialog_title" ), //$NON-NLS-1$
-                                                Messages.getString( "ConnectionWizard.error_message" ), status ); //$NON-NLS-1$
-      dialog.addSolution( new Solution("Check if parameters are not malformed (e.g. containing special characters)") ); //$NON-NLS-1$
-      dialog.addSolution( new Solution("Make sure plug-in for connection type you have chosen is running in current workspace") ); //$NON-NLS-1$
-      dialog.open();
-      // ErrorDialog.openError( getShell(), "A problem occured", //$NON-NLS-1$
-      // "Connection cannot be created", //$NON-NLS-1$
-      // status );
       eu.geclipse.ui.internal.Activator.logException( itExc );
     } catch( InterruptedException intExc ) {
       // do nothing just log
