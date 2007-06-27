@@ -244,7 +244,7 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
     
     URI uri = null;
     
-    String scheme = this.schemeCombo.getText() + SEPARATOR;
+    String scheme = this.schemeCombo.getText();
     
     try {
       
