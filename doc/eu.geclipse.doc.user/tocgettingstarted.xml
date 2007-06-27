@@ -8,4 +8,7 @@
 		<topic label="New Grid Project Wizard" href="html/gettingstarted/NewProjectWizard.html" />
 		<topic label="Create a Job" href="html/gettingstarted/CreatingaJob.html" /> 
 		<topic label="Submit a Job" href="html/gettingstarted/SubmitaJob.html" /> 
+		<topic label="Launching and Debugging" href="html/gettingstarted/launchanddebug/launch.html">
+			<anchor id="launchanddebug"/>
+		</topic>
 </toc>

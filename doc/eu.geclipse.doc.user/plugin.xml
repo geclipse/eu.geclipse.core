@@ -14,6 +14,9 @@
       <toc
             file="tocgettingstarted.xml">
       </toc>
+      <toc
+            file="toclaunchanddebug.xml">
+      </toc>
    </extension>
    <extension
          point="org.eclipse.ui.cheatsheets.cheatSheetContent">
