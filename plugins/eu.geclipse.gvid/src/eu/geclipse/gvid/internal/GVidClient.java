@@ -22,7 +22,9 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+
 import javax.swing.event.EventListenerList;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -32,10 +34,12 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Display;
+
 import eu.geclipse.gvid.Activator;
 import eu.geclipse.gvid.IDecoder;
 import eu.geclipse.gvid.IGVidStatsListener;
 import eu.geclipse.gvid.internal.preferences.PreferenceConstants;
+import eu.geclipse.ui.dialogs.NewProblemDialog;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 
 /**
@@ -95,19 +99,13 @@ public class GVidClient extends Component implements Runnable {
       }
     } catch( CoreException coreException ) {
       exception = coreException;
-      Activator.logException( coreException );
+      // Activator.logException( coreException );
     }
     if ( decoderImpl == null || exception != null) {
-      Status status = new Status( IStatus.ERROR,
-                                  Messages.getString( "GVidClient.gvid" ), //$NON-NLS-1$
-                                  IStatus.OK,
-                                  Messages.formatMessage( "GVidClient.cantInstanciateCodec", codecName ), //$NON-NLS-1$
-                                  exception );
-      ProblemDialog.openProblem( Display.getCurrent().getActiveShell(),
-                                 null,
-                                 Messages.formatMessage( "GVidClient.cantInstanciateDecoder", codecName ), //$NON-NLS-1$
-                                 status,
-                                 null );
+      NewProblemDialog.openProblem( Display.getCurrent().getActiveShell(),
+                                    Messages.getString( "GVidClient.gvid" ), //$NON-NLS-1$
+                                    Messages.formatMessage( "GVidClient.cantInstanciateCodec", codecName ), //$NON-NLS-1$
+                                    exception );
     }
     return decoderImpl;
   }

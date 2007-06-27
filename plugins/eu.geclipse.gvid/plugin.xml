@@ -43,4 +43,10 @@
                visible="true"/>
       </perspectiveExtension>
    </extension>
+   <extension
+         point="eu.geclipse.core.problemProvider">
+      <provider
+            class="eu.geclipse.gvid.GVidProblems">
+      </provider>
+   </extension>
 </plugin>
