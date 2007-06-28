@@ -51,6 +51,7 @@ public abstract class ElementManagerViewPart
   /* (non-Javadoc)
    * @see org.eclipse.compare.IContentChangeListener#contentChanged(org.eclipse.compare.IContentChangeNotifier)
    */
+  @Override
   public void gridModelChanged( final IGridModelEvent event ) {
     refreshViewer( event.getSource() );
   }
@@ -138,12 +139,12 @@ public abstract class ElementManagerViewPart
     super.createTreeColumns( tree );
     
     TreeColumn nameColumn = new TreeColumn( tree, SWT.NONE );
-    nameColumn.setText( "Name" );
+    nameColumn.setText( Messages.getString("ElementManagerViewPart.name_column") ); //$NON-NLS-1$
     nameColumn.setAlignment( SWT.LEFT );
     nameColumn.setWidth( 300 );
     
     this.projectColumn = new TreeColumn( tree, SWT.NONE );
-    this.projectColumn.setText( "Project" );
+    this.projectColumn.setText( Messages.getString("ElementManagerViewPart.project_column") ); //$NON-NLS-1$
     this.projectColumn.setAlignment( SWT.LEFT );
     this.projectColumn.setWidth( 100 );
     

@@ -58,12 +58,12 @@ public class GridConnectionView extends ElementManagerViewPart {
     super.createTreeColumns( tree );
     
     TreeColumn sizeColumn = new TreeColumn( tree, SWT.NONE );
-    sizeColumn.setText( "Size" );
+    sizeColumn.setText( Messages.getString("GridConnectionView.size_column") ); //$NON-NLS-1$
     sizeColumn.setAlignment( SWT.RIGHT );
     sizeColumn.setWidth( 100 );
     
     TreeColumn modColumn = new TreeColumn( tree, SWT.NONE );
-    modColumn.setText( "Last Modification" );
+    modColumn.setText( Messages.getString("GridConnectionView.modification_column") ); //$NON-NLS-1$
     modColumn.setAlignment( SWT.CENTER );
     modColumn.setWidth( 200 );
     
