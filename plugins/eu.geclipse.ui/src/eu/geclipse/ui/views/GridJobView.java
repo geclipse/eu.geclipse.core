@@ -15,23 +15,18 @@
 
 package eu.geclipse.ui.views;
 
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.StructuredViewer;
-import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
-import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.actions.ActionGroup;
+
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridElementManager;
 import eu.geclipse.core.model.IGridJobManager;
-import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.internal.actions.ActionGroupManager;
 import eu.geclipse.ui.internal.actions.FilterActions;
 import eu.geclipse.ui.providers.JobViewLabelProvider;
@@ -64,27 +59,31 @@ public class GridJobView extends ElementManagerViewPart {
     return new JobViewLabelProvider();
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.ui.views.ElementManagerViewPart#createTreeColumns(org.eclipse.swt.widgets.Tree)
+   */
+  @Override
   protected boolean createTreeColumns( final Tree tree ) {
     
     super.createTreeColumns( tree );
     
     TreeColumn idColumn = new TreeColumn( tree, SWT.NONE );
-    idColumn.setText( "ID" );
+    idColumn.setText( Messages.getString("GridJobView.id_column") ); //$NON-NLS-1$
     idColumn.setAlignment( SWT.CENTER );
     idColumn.setWidth( 200 );
     
     TreeColumn statusColumn = new TreeColumn( tree, SWT.NONE );
-    statusColumn.setText( "Status" );
+    statusColumn.setText( Messages.getString("GridJobView.status_column") ); //$NON-NLS-1$
     statusColumn.setAlignment( SWT.CENTER );
     statusColumn.setWidth( 100 );
     
     TreeColumn reasonColumn = new TreeColumn( tree, SWT.NONE );
-    reasonColumn.setText( "Reason" );
+    reasonColumn.setText( Messages.getString("GridJobView.reason_column") ); //$NON-NLS-1$
     reasonColumn.setAlignment( SWT.CENTER );
     reasonColumn.setWidth( 100 );
     
     TreeColumn lastUpdateColumn = new TreeColumn( tree, SWT.NONE );
-    lastUpdateColumn.setText( "Last update time" );
+    lastUpdateColumn.setText( Messages.getString("GridJobView.last_update_column") ); //$NON-NLS-1$
     lastUpdateColumn.setAlignment( SWT.CENTER );
     lastUpdateColumn.setWidth( 100 );
     
@@ -96,7 +95,7 @@ public class GridJobView extends ElementManagerViewPart {
    * @see eu.geclipse.ui.views.ElementManagerViewPart#contributeAdditionalActions(eu.geclipse.ui.internal.actions.ActionGroupManager)
    */
   @Override
-  protected void contributeAdditionalActions( ActionGroupManager groups )
+  protected void contributeAdditionalActions( final ActionGroupManager groups )
   {
     groups.addGroup( new FilterActions( getSite(), this.filterConfigurationsManager ) );
     super.contributeAdditionalActions( groups );
@@ -106,22 +105,22 @@ public class GridJobView extends ElementManagerViewPart {
    * @see org.eclipse.ui.part.ViewPart#saveState(org.eclipse.ui.IMemento)
    */
   @Override
-  public void saveState( final IMemento memento )
+  public void saveState( final IMemento mem )
   {
     if( this.filterConfigurationsManager != null ) {
-      this.filterConfigurationsManager.saveState( memento );
+      this.filterConfigurationsManager.saveState( mem );
     }
-    super.saveState( memento );
+    super.saveState( mem );
   }
 
   /* (non-Javadoc)
    * @see org.eclipse.ui.part.ViewPart#init(org.eclipse.ui.IViewSite, org.eclipse.ui.IMemento)
    */
   @Override
-  public void init( final IViewSite site, final IMemento memento ) throws PartInitException
+  public void init( final IViewSite site, final IMemento mem ) throws PartInitException
   {
-    this.memento = memento;
-    super.init( site, memento );
+    this.memento = mem;
+    super.init( site, mem );
   }
 
   /* (non-Javadoc)
@@ -139,10 +138,10 @@ public class GridJobView extends ElementManagerViewPart {
     this.filterConfigurationsManager.readState( this.memento );
   }
   
-  private void createFilterConfigurationsManager( final StructuredViewer viewer )
+  private void createFilterConfigurationsManager( final StructuredViewer sViewer )
   {
     this.filterConfigurationsManager = new GridFilterConfigurationsManager( GridFilterConfigurationsManager.ID_JOBVIEW,
-                                                                            viewer )
+                                                                            sViewer )
     {
 
       @Override
