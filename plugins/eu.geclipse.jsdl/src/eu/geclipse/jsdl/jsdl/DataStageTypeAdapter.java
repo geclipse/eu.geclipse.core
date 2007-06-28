@@ -420,33 +420,41 @@ public final class DataStageTypeAdapter extends JsdlAdaptersFactory {
    */
   public void load()
   {
+    List listName = null;
+    EObject eObject = null;
+    EClass eClass = null;
+   
     this.isNotifyAllowed = false;
+    
     for (Iterator <EObject> itList = this.dataStageList.iterator(); itList.hasNext();)
     {
      
-      EObject eObject = itList.next();
-      List listName = null;
+      eObject = itList.next();
+      
        
       // Test if eObject is not empty.
       if(eObject != null) {
-        EClass eClass = eObject.eClass();
-        
-//        for (Iterator iterRef = eClass.getEAllStructuralFeatures().iterator(); iterRef.hasNext();){
-//          
-//          EStructuralFeature eStructuralFeature = (EStructuralFeature) iterRef.next();
-        
+        eClass = eObject.eClass();
+
+        /* Get a list of all Structural Features */
         EList<EStructuralFeature> allEStructuralFeatures = eClass.getEAllStructuralFeatures();
+        /* Loop through the list */ 
         for( EStructuralFeature eStructuralFeature : allEStructuralFeatures) {
 
-
-            if (eStructuralFeature instanceof EAttribute) {         
+            /* Only care about EAtrributes since FILE_NAME is an attribute
+             * of DataStaging Type.
+             */
+          
+            if (eStructuralFeature instanceof EAttribute) {
+              
             // Get Attribute Value.
             Object value = eObject.eGet( eStructuralFeature );        
-                 
+            // Get FeatureID    
             int featureID = eStructuralFeature.getFeatureID();
            
-            
+
             if (eObject.eIsSet( eStructuralFeature )){
+              
             switch (featureID) {
               
               case JsdlPackage.DATA_STAGING_TYPE__FILE_NAME:{
@@ -461,15 +469,15 @@ public final class DataStageTypeAdapter extends JsdlAdaptersFactory {
               break;
             }
             }
-            listName.setSelection( 0 );
-            navigateDataStaging( listName.getItem( 0 ) );
+
           } // endif EAttribute
 
        } // End Iterator.
   
       } // endif eObject Null
     }// End list loop
-
+    listName.setSelection( 0 );
+    navigateDataStaging( listName.getItem( 0 ) );
     this.isNotifyAllowed = true;
   } // End void load()
   
