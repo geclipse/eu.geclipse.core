@@ -28,6 +28,8 @@ class SSHConnectionInfo implements UserInfo {
   private String passphrase;
   private int port;
   private boolean canceledPWValue;
+  private boolean promptPasswd;
+  private boolean promptPassphrase;
 
   SSHConnectionInfo( final String username, final String hostname,
                      final String password, final String passphrase,
@@ -35,12 +37,15 @@ class SSHConnectionInfo implements UserInfo {
     this.user = username;
     this.host = hostname;
     this.passwd = password;
+    this.promptPasswd = !( this.passwd != null && this.passwd.length() != 0 );
     this.passphrase = passphrase;
+    this.promptPassphrase = !( this.passphrase != null && this.passphrase.length() != 0 );
     this.port = portNumber;
     this.canceledPWValue = false;
   }
   
   public String getPassword() {
+    this.promptPasswd = true;
     return this.passwd;
   }
   
@@ -63,30 +68,39 @@ class SSHConnectionInfo implements UserInfo {
   }
 
   public String getPassphrase() {
+    this.promptPassphrase = true;
     return this.passphrase;
   }
 
-  public boolean promptPassphrase( final String message ){
-    PasswordDialog dlg = new PasswordDialog( Display.getCurrent().getActiveShell(),
-                                             Messages.getString( "SshShell.sshTerminal" ), //$NON-NLS-1$
-                                             message, null, null);
-    int result = dlg.open();
-    if ( result == Window.OK )
-      this.passphrase = dlg.getValue();
-    else
-      this.canceledPWValue = true;
+  public boolean promptPassphrase( final String message ) {
+    int result = Window.OK;
+
+    if ( this.promptPassphrase ) {
+      PasswordDialog dlg = new PasswordDialog( Display.getCurrent().getActiveShell(),
+                                               Messages.getString( "SshShell.sshTerminal" ), //$NON-NLS-1$
+                                               message, null, null);
+      result = dlg.open();
+      if ( result == Window.OK )
+        this.passphrase = dlg.getValue();
+      else
+        this.canceledPWValue = true;
+    }
     return result == Window.OK;
   }
 
   public boolean promptPassword( final String message ) {
-    PasswordDialog dlg = new PasswordDialog( Display.getCurrent().getActiveShell(),
-                                             Messages.getString( "SshShell.sshTerminal" ), //$NON-NLS-1$
-                                             message, null, null);
-    int result = dlg.open();
-    if ( result == Window.OK )
-      this.passwd = dlg.getValue();
-    else
-      this.canceledPWValue = true;
+    int result = Window.OK;
+    
+    if ( this.promptPasswd ) {
+      PasswordDialog dlg = new PasswordDialog( Display.getCurrent().getActiveShell(),
+                                               Messages.getString( "SshShell.sshTerminal" ), //$NON-NLS-1$
+                                               message, null, null);
+      result = dlg.open();
+      if ( result == Window.OK )
+        this.passwd = dlg.getValue();
+      else
+        this.canceledPWValue = true;
+    }
     return result == Window.OK;
   }
 
