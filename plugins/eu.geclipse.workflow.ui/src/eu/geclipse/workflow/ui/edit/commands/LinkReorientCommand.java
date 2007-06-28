@@ -21,6 +21,7 @@ import eu.geclipse.workflow.ILink;
 import eu.geclipse.workflow.IOutputPort;
 import eu.geclipse.workflow.IWorkflow;
 import eu.geclipse.workflow.ui.edit.policies.WorkflowBaseItemSemanticEditPolicy;
+import eu.geclipse.workflow.ui.part.Messages;
 
 /**
  * @generated
@@ -102,7 +103,7 @@ public class LinkReorientCommand extends EditElementCommand {
   }
 
   /**
-   * @generated
+   * @generated NOT
    */
   @Override
   protected CommandResult doExecuteWithResult( IProgressMonitor monitor,
@@ -110,7 +111,7 @@ public class LinkReorientCommand extends EditElementCommand {
     throws ExecutionException
   {
     if( !canExecute() ) {
-      throw new ExecutionException( "Invalid arguments in reorient link command" ); //$NON-NLS-1$
+      throw new ExecutionException( Messages.getString("LinkCreateCommand_InvalidArgumentsInReorientLink") ); //$NON-NLS-1$
     }
     if( reorientDirection == ReorientRelationshipRequest.REORIENT_SOURCE ) {
       return reorientSource();

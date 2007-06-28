@@ -69,7 +69,6 @@ public class WorkflowDomainNavigatorContentProvider
     TransactionalEditingDomain editingDomain = GMFEditingDomainFactory.INSTANCE.createEditingDomain();
     myEditingDomain = ( AdapterFactoryEditingDomain )editingDomain;
     myEditingDomain.setResourceToReadOnlyMap( new HashMap() {
-
       public Object get( Object key ) {
         if( !containsKey( key ) ) {
           put( key, Boolean.TRUE );

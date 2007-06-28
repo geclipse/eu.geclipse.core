@@ -25,6 +25,7 @@ import eu.geclipse.workflow.IWorkflow;
 import eu.geclipse.workflow.IWorkflowFactory;
 import eu.geclipse.workflow.IWorkflowPackage;
 import eu.geclipse.workflow.ui.edit.policies.WorkflowBaseItemSemanticEditPolicy;
+import eu.geclipse.workflow.ui.part.Messages;
 
 /**
  * @generated
@@ -101,8 +102,7 @@ public class LinkCreateCommand extends CreateElementCommand {
    */
   @Override
   protected EObject doDefaultElementCreation() {
-    // eu.geclipse.workflow.ILink newElement = (eu.geclipse.workflow.ILink) super.doDefaultElementCreation();
-    ILink newElement = IWorkflowFactory.eINSTANCE.createILink();
+   ILink newElement = IWorkflowFactory.eINSTANCE.createILink();
     getContainer().getLinks().add( newElement );
     newElement.setSource( getSource() );
     newElement.setTarget( getTarget() );
@@ -118,7 +118,7 @@ public class LinkCreateCommand extends CreateElementCommand {
   }
 
   /**
-   * @generated
+   * @generated NOT
    */
   @Override
   protected CommandResult doExecuteWithResult( IProgressMonitor monitor,
@@ -126,7 +126,7 @@ public class LinkCreateCommand extends CreateElementCommand {
     throws ExecutionException
   {
     if( !canExecute() ) {
-      throw new ExecutionException( "Invalid arguments in create link command" ); //$NON-NLS-1$
+      throw new ExecutionException( Messages.getString("LinkCreateCommand_InvalidArgumentsInCreateLink" ) ); //$NON-NLS-1$
     }
     return super.doExecuteWithResult( monitor, info );
   }

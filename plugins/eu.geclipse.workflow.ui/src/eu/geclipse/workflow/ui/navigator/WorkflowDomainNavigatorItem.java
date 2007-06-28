@@ -32,9 +32,9 @@ public class WorkflowDomainNavigatorItem extends PlatformObject {
     Platform.getAdapterManager().registerAdapters( new IAdapterFactory() {
 
       public Object getAdapter( Object adaptableObject, Class adapterType ) {
-        if( adaptableObject instanceof eu.geclipse.workflow.ui.navigator.WorkflowDomainNavigatorItem )
+        if( adaptableObject instanceof WorkflowDomainNavigatorItem )
         {
-          eu.geclipse.workflow.ui.navigator.WorkflowDomainNavigatorItem domainNavigatorItem = ( eu.geclipse.workflow.ui.navigator.WorkflowDomainNavigatorItem )adaptableObject;
+          WorkflowDomainNavigatorItem domainNavigatorItem = ( WorkflowDomainNavigatorItem )adaptableObject;
           EObject eObject = domainNavigatorItem.getEObject();
           if( adapterType == EObject.class ) {
             return eObject;
@@ -51,7 +51,7 @@ public class WorkflowDomainNavigatorItem extends PlatformObject {
         return supportedTypes;
       }
     },
-                                                   eu.geclipse.workflow.ui.navigator.WorkflowDomainNavigatorItem.class );
+    WorkflowDomainNavigatorItem.class );
   }
   /**
    * @generated
@@ -104,10 +104,10 @@ public class WorkflowDomainNavigatorItem extends PlatformObject {
    */
   @Override
   public boolean equals( Object obj ) {
-    if( obj instanceof eu.geclipse.workflow.ui.navigator.WorkflowDomainNavigatorItem )
+    if( obj instanceof WorkflowDomainNavigatorItem )
     {
       return EcoreUtil.getURI( getEObject() )
-        .equals( EcoreUtil.getURI( ( ( eu.geclipse.workflow.ui.navigator.WorkflowDomainNavigatorItem )obj ).getEObject() ) );
+        .equals( EcoreUtil.getURI( ( ( WorkflowDomainNavigatorItem )obj ).getEObject() ) );
     }
     return super.equals( obj );
   }

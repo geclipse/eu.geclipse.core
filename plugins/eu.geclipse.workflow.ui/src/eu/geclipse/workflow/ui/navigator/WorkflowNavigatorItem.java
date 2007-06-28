@@ -30,10 +30,10 @@ public class WorkflowNavigatorItem extends WorkflowAbstractNavigatorItem {
     Platform.getAdapterManager().registerAdapters( new IAdapterFactory() {
 
       public Object getAdapter( Object adaptableObject, Class adapterType ) {
-        if( adaptableObject instanceof eu.geclipse.workflow.ui.navigator.WorkflowNavigatorItem
+        if( adaptableObject instanceof WorkflowNavigatorItem
             && ( adapterType == View.class || adapterType == EObject.class ) )
         {
-          return ( ( eu.geclipse.workflow.ui.navigator.WorkflowNavigatorItem )adaptableObject ).getView();
+          return ( ( WorkflowNavigatorItem )adaptableObject ).getView();
         }
         return null;
       }
@@ -41,8 +41,7 @@ public class WorkflowNavigatorItem extends WorkflowAbstractNavigatorItem {
       public Class[] getAdapterList() {
         return supportedTypes;
       }
-    },
-                                                   eu.geclipse.workflow.ui.navigator.WorkflowNavigatorItem.class );
+    }, WorkflowNavigatorItem.class );
   }
   /**
    * @generated
@@ -81,10 +80,10 @@ public class WorkflowNavigatorItem extends WorkflowAbstractNavigatorItem {
    */
   @Override
   public boolean equals( Object obj ) {
-    if( obj instanceof eu.geclipse.workflow.ui.navigator.WorkflowNavigatorItem )
+    if( obj instanceof WorkflowNavigatorItem )
     {
       return EcoreUtil.getURI( getView() )
-        .equals( EcoreUtil.getURI( ( ( eu.geclipse.workflow.ui.navigator.WorkflowNavigatorItem )obj ).getView() ) );
+        .equals( EcoreUtil.getURI( ( ( WorkflowNavigatorItem )obj ).getView() ) );
     }
     return super.equals( obj );
   }

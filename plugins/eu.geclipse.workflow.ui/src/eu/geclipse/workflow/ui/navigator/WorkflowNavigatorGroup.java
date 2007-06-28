@@ -86,9 +86,9 @@ public class WorkflowNavigatorGroup extends WorkflowAbstractNavigatorItem {
    */
   @Override
   public boolean equals( Object obj ) {
-    if( obj instanceof eu.geclipse.workflow.ui.navigator.WorkflowNavigatorGroup )
+    if( obj instanceof WorkflowNavigatorGroup )
     {
-      eu.geclipse.workflow.ui.navigator.WorkflowNavigatorGroup anotherGroup = ( eu.geclipse.workflow.ui.navigator.WorkflowNavigatorGroup )obj;
+      WorkflowNavigatorGroup anotherGroup = ( WorkflowNavigatorGroup )obj;
       if( getGroupName().equals( anotherGroup.getGroupName() ) ) {
         return getParent().equals( anotherGroup.getParent() );
       }
