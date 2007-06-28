@@ -82,18 +82,7 @@ public class StoredCombo extends Combo {
       public void modifyText( final ModifyEvent event ) {
         if ( !this.alreadyModifing && StoredCombo.this.allowCompletion ) {
           this.alreadyModifing = true;
-          Combo combo = (Combo) event.widget;
-          String text = combo.getText();
-          if ( text.length() > 0 ) {
-            String[] items = getItems();
-            for( String item : items ) {
-              if ( item.startsWith( text ) && text.length() < item.length() ) {
-                setText( item );
-                setSelection( new Point( text.length(), item.length() ) );
-                break;
-              }
-            }
-          }
+          doAutoCompletion();
           this.alreadyModifing = false;
         }
       }
@@ -181,6 +170,30 @@ public class StoredCombo extends Combo {
       this.allowCompletion = save;
     }
     return valid;
+  }
+  
+  protected void doAutoCompletion() {
+    
+    String text = getText();
+    
+    if ( text.length() > 0 ) {
+      
+      String newText = null;
+      String[] items = getItems();
+
+      for( String item : items ) {
+        if ( item.startsWith( text ) && ( ( newText == null ) || ( item.length() < newText.length() ) ) ) {
+          newText = item;
+        }
+      }
+      
+      if ( newText != null ) {
+        setText( newText );
+        setSelection( new Point( text.length(), newText.length() ) );
+      }
+      
+    }
+    
   }
 
   /**
