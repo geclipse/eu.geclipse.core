@@ -27,6 +27,8 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+import eu.geclipse.ui.dialogs.NewProblemDialog;
+import eu.geclipse.ui.wizards.Messages;
 import eu.geclipse.workflow.provider.WorkflowItemProviderAdapterFactory;
 
 /**
@@ -206,7 +208,7 @@ public class WorkflowDiagramEditorPlugin extends AbstractUIPlugin {
 
   /**
    * @param throwable actual error or null could be passed
-   * @generated
+   * @generated NOT
    */
   public void logError( String error, Throwable throwable ) {
     if( error == null && throwable != null ) {
@@ -217,7 +219,7 @@ public class WorkflowDiagramEditorPlugin extends AbstractUIPlugin {
                               IStatus.OK,
                               error,
                               throwable ) );
-    debug( error, throwable );
+//    debug( error, throwable );
   }
 
   /**
@@ -229,7 +231,7 @@ public class WorkflowDiagramEditorPlugin extends AbstractUIPlugin {
 
   /**
    * @param throwable actual error or null could be passed
-   * @generated
+   * @generated NOT
    */
   public void logInfo( String message, Throwable throwable ) {
     if( message == null && throwable != null ) {
@@ -240,21 +242,22 @@ public class WorkflowDiagramEditorPlugin extends AbstractUIPlugin {
                               IStatus.OK,
                               message,
                               throwable ) );
-    debug( message, throwable );
+//    debug( message, throwable );
   }
 
-  /**
-   * @generated
-   */
-  private void debug( String message, Throwable throwable ) {
-    if( !isDebugging() ) {
-      return;
-    }
-    if( message != null ) {
-      System.err.println( message );
-    }
-    if( throwable != null ) {
-      throwable.printStackTrace();
-    }
-  }
+//  private void debug( String message, Throwable throwable ) {
+//    if( !isDebugging() ) {
+//      return;
+//    }
+//    if( message != null ) {
+//      System.err.println( message );
+//    }
+//    if( throwable != null ) {
+//      throwable.printStackTrace();
+//      NewProblemDialog.openProblem( getSite().getShell(),
+//                                    Messages.getString("Title goes here"), //$NON-NLS-1$
+//                                    Messages.getString("Actual text of error goes here"), //$NON-NLS-1$
+//                                    throwable );
+//    }
+//  }
 }

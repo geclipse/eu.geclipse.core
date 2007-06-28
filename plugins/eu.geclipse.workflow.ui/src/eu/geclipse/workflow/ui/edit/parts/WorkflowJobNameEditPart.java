@@ -55,6 +55,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import eu.geclipse.workflow.ui.edit.policies.WorkflowTextSelectionEditPolicy;
+import eu.geclipse.workflow.ui.part.WorkflowDiagramEditorPlugin;
 import eu.geclipse.workflow.ui.providers.WorkflowElementTypes;
 import eu.geclipse.workflow.ui.providers.WorkflowParserProvider;
 
@@ -281,7 +282,7 @@ public class WorkflowJobNameEditPart extends CompartmentEditPart
                                                                ? null
                                                                : valid.getMessage();
           } catch( InterruptedException ie ) {
-            ie.printStackTrace();
+            WorkflowDiagramEditorPlugin.getInstance().logError( "Error:", ie ); //$NON-NLS-1$
           }
         }
         // shouldn't get here
@@ -395,8 +396,8 @@ public class WorkflowJobNameEditPart extends CompartmentEditPart
           }
         }
       } );
-    } catch( InterruptedException e ) {
-      e.printStackTrace();
+    } catch( InterruptedException ex ) {
+      WorkflowDiagramEditorPlugin.getInstance().logError( "Error:", ex ); //$NON-NLS-1$
     }
   }
 
