@@ -19,12 +19,47 @@
 </p>
 
 <h3>If you do not currently belong to any VO :</h3>
-<p>If you would like to use g-Eclipse but do not belong to any Virtual Organisation supported by the 
- EGEE infrastructure, you can request membership to the 'geclipsetutor' VO. <br/>In a browser, go to 
- <b>GILDA Testbed page</b> and follow the instructions on the page to request membership and a 
- user certificate. <br/>When you have received e-mail confirmation that your membership has been 
- approved, return to g-Eclipse and continue with the declaration of the 'geclipsetutor' VO.</p>
+<p>If you would like to test and use  g-Eclipse, but do not have access to an
+existing Grid infrastructure, you can request membership to the Training VO
+'geclipsetutor'. This Training-VO is supported by the 
+<a href="https://gilda.ct.infn.it/testbed.html">GILDA Testbed</a>. The following
+action needs to be performed. 
+<ol>
+<li> Get your personal GILDA certificate. <br>
+The security on Grid is currently based on X.509 certificates. To get access to the 
+geclipsetutor VO, you need to get a temporary certifcate from the GILDA Certification 
+Authority (GILDA CA). Detailed instructions can be found 
+<a href="https://gilda.ct.infn.it/step1.html">here</a>. Is is important to know, that
+the whole procedure can take 12-24 hours and includes more than just one step.
+But at the end of the procedure, your personnel GILDA certificate is installed in your 
+webbrowser and the files "usercert.pem" and userkey.pem" are stored in a dedicated 
+directory on your hard disk. 
 
+<li> Accept the Use Policy of the GILDA testbed <br>
+Due to legal reasons, every user has to agree on the "Acceptable user Policy" of the 
+GILDA testbed. This can be done <a href="https://gilda.ct.infn.it/aup.php">here</a>. 
+
+<li>  Register to the Virtual Organization "geclipsetutor" <br>
+With the first two steps finished, your are ready to ask for membership in the Virtual
+Organisation "geclipsetutor". Therefore goto the 
+<a href="https://dgrid-voms.fzk.de:8443/voms/geclipsetutor/">VOMS webpage</a> 
+(https://dgrid-voms.fzk.de:8443/voms/geclipsetutor/) of this VO. Be aware that you must 
+perform this with the same browser you used to request your personel GILDA certificate.  
+Your request will be evaluated by the "geclipsetutor" VO managers and you will receive 
+three emails: the first one to confirm your email address, the second one to let you 
+know that your request is going to be processed, and the third one to let you know 
+that your request has been accepted.  
+
+<li> Then you should be ready to use the g-Eclipse framework to access the GILDA 
+training Grid infrastructure. As there are manual interactions neccessary. the whole 
+procedure might take some time, but this will allow you to evaluate the power of the
+g-Eclipse framework and of the underlying Grid infrastructure. 
+</ol>
+
+<p>Now, you can return to the g-Eclipse framework, and continue with the setup of your
+VO (geclipsetutor or another). </p>
+
+<h3>Enter the VO configuration data:</h3>
 <p> Open the <a class="command-link" href='javascript:executeCommand("org.eclipse.ui.window.preferences(preferencePageId=eu.geclipse.ui.internal.preference.VOPreferencePage)")'>
 <img src="PLUGINS_ROOT/org.eclipse.help/command_link.png">
 <b>g-Eclipse &gt; VO-Declarations</b></a> preference page. </p>
