@@ -113,7 +113,7 @@ public class GridJobView
   @Override
   protected void contributeAdditionalActions( final ActionGroupManager groups )
   {
-    groups.addGroup( new FilterActions( getSite(), this.filterConfigurationsManager ) );
+//    groups.addGroup( new FilterActions( getSite(), this.filterConfigurationsManager ) );  //TODO mariusz 
     super.contributeAdditionalActions( groups );
   }
       
@@ -147,7 +147,7 @@ public class GridJobView
   protected void initViewer( final StructuredViewer sViewer )
   {
     super.initViewer( sViewer );
-    initFilters( sViewer );
+    //initFilters( sViewer );
   }
   
   private void initFilters( final StructuredViewer sViewer ) {
