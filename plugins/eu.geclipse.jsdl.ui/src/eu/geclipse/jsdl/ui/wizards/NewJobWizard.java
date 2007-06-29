@@ -29,6 +29,7 @@ import java.util.Properties;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -281,6 +282,32 @@ public class NewJobWizard extends Wizard implements INewWizard {
     {
       super( pageName, selection );
       this.iniSelection = selection;
+    }
+
+    @Override
+    protected boolean validatePage()
+    {
+      boolean result = true;
+      if( !super.validatePage() ) {
+        result = false;
+      }
+      if( !getFilePath().toString().endsWith( ".jsdl" ) ) { //$NON-NLS-1$
+        setErrorMessage( "File must have \"jsdl\" extension" );
+        result = false;
+      }
+      return result;
+    }
+
+    protected IPath getFilePath() {
+      IPath path = getContainerFullPath();
+      if( path == null ) {
+        path = new Path( "" ); //$NON-NLS-1$
+      }
+      String fileName = getFileName();
+      if( fileName != null ) {
+        path = path.append( fileName );
+      }
+      return path;
     }
 
     @Override
