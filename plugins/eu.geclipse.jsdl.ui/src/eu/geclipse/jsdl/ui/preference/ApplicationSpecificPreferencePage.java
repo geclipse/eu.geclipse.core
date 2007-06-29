@@ -59,7 +59,7 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
 
   public ApplicationSpecificPreferencePage() {
     super();
-    setDescription( "Application specific parameters" );
+    setDescription( Messages.getString("ApplicationSpecificPreferencePage.description") ); //$NON-NLS-1$
     ApplicationSpecificRegistry.getInstance().addContentChangeListener( this );
   }
   
@@ -134,7 +134,7 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
     this.addButton = new Button( buttonsComp, SWT.PUSH );
     gData = new GridData( GridData.FILL_BOTH );
     this.addButton.setLayoutData( gData );
-    this.addButton.setText( "Add..." );
+    this.addButton.setText( Messages.getString("ApplicationSpecificPreferencePage.add_button") ); //$NON-NLS-1$
     this.addButton.addSelectionListener( new SelectionAdapter() {
 
       @Override
@@ -147,7 +147,7 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
     this.editButton = new Button( buttonsComp, SWT.PUSH );
     gData = new GridData( GridData.FILL_BOTH );
     this.editButton.setLayoutData( gData );
-    this.editButton.setText( "Edit..." );
+    this.editButton.setText( Messages.getString("ApplicationSpecificPreferencePage.edit_button") ); //$NON-NLS-1$
     this.editButton.addSelectionListener( new SelectionAdapter() {
 
       @Override
@@ -159,7 +159,7 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
     this.removeButton = new Button( buttonsComp, SWT.PUSH );
     gData = new GridData( GridData.FILL_BOTH );
     this.removeButton.setLayoutData( gData );
-    this.removeButton.setText( "Delete" );
+    this.removeButton.setText( Messages.getString("ApplicationSpecificPreferencePage.delete_button") ); //$NON-NLS-1$
     this.removeButton.addSelectionListener( new SelectionAdapter(){
       @Override
       public void widgetSelected( SelectionEvent e ){
@@ -218,12 +218,7 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
     setPreferenceStore( Activator.getDefault().getPreferenceStore() );
   }
 
-  @Override
-  public void performApply()
-  {
-    MessageDialog.openConfirm( getShell(), "title", "message" );
-    // return super.performOk();
-  }
+  
   class ApplicationSpecificPageContentProvider
     implements IStructuredContentProvider
   {
@@ -308,7 +303,7 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
 
 
     void updateButtons(){
-      if (!this.appName.getText().equals( "" ) && !this.appPath.getText().equals( "" ) && ! this.xmlPath.getText().equals( "" )){
+      if (!this.appName.getText().equals( "" ) && !this.appPath.getText().equals( "" ) && ! this.xmlPath.getText().equals( "" )){ //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         super.getButton( IDialogConstants.OK_ID ).setEnabled( true );
       } else {
         super.getButton( IDialogConstants.OK_ID ).setEnabled( false );
@@ -335,7 +330,7 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
       
       
       Label appNameLabel = new Label(panel, SWT.LEAD);
-      appNameLabel.setText( "Application name" );
+      appNameLabel.setText( Messages.getString("ApplicationSpecificPreferencePage.dialog_application_name_label") ); //$NON-NLS-1$
       gd = new GridData( );
       appNameLabel.setLayoutData( gd );
       
@@ -348,7 +343,7 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
       }
       
       Label pathNameLabel = new Label(panel, SWT.LEAD);
-      pathNameLabel.setText( "Application path" );
+      pathNameLabel.setText( Messages.getString("ApplicationSpecificPreferencePage.dialog_application_path_label") ); //$NON-NLS-1$
       gd = new GridData();
       pathNameLabel.setLayoutData( new GridData() );
       
@@ -362,7 +357,7 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
       }
       
       Label xmlPathLabel = new Label(panel, SWT.LEAD);
-      xmlPathLabel.setText( "XML path" );
+      xmlPathLabel.setText( Messages.getString("ApplicationSpecificPreferencePage.dialog_xml_label") ); //$NON-NLS-1$
       gd = new GridData();
       xmlPathLabel.setLayoutData( new GridData() );
       
