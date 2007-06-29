@@ -82,23 +82,28 @@ public class TarInputStream {
        */
       if ( nextEntry.isNull() )  {
         nextEntry = new TarEntry( readBlock( BLOCK_SZ ) );
-        if ( nextEntry.isNull() ) {
+        /*if ( nextEntry.isNull() ) {
           return null;
-        }
+        }*/
       }
     } catch ( IOException ioExc ) {
       throw new TarArchiveException( TarProblems.UNSPECIFIED_IO_PROBLEM,
                                      ioExc );
     }
     
-    // Data will follow only if entry's size is not zero
-    if ( nextEntry.getSize() > 0 ) {
-      this.dataPending = true;
+    if ( ! nextEntry.isNull() ) {
+    
+      // Data will follow only if entry's size is not zero
+      if ( nextEntry.getSize() > 0 ) {
+        this.dataPending = true;
+      }
+  
+      this.currentEntry = nextEntry;
+      
     }
 
-    this.currentEntry = nextEntry;
-
-    return this.currentEntry;
+    return nextEntry.isNull() ? null : this.currentEntry;
+    
   }
 
   /**
