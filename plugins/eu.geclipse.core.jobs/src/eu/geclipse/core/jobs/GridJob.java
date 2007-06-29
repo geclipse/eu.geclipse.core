@@ -50,6 +50,7 @@ import eu.geclipse.core.model.IGridJobID;
 import eu.geclipse.core.model.IGridJobStatus;
 import eu.geclipse.core.model.IGridJobStatusService;
 import eu.geclipse.core.model.IGridJobStatusServiceFactory;
+import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
 import eu.geclipse.jsdl.JSDLJobDescription;
 
@@ -226,7 +227,6 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
       if(newJobStatus!=null && newJobStatus instanceof GridJobStatus){
         jobStatus=(GridJobStatus)newJobStatus;
         writeJobStatus( jobStatusFile );
-        
       }
     } catch( GridException e ) {
       Activator.logException( e );
@@ -376,7 +376,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
      * @param jobFolder - Folder to which file should be written
      * @throws GridModelException
      */
-    private void writeJobID( final IGridJobID id, IFolder jobFolder ) throws GridModelException {
+    private void writeJobID( final IGridJobID id, final IFolder jobFolder ) throws GridModelException {
       IFile file;
       //create jobID file
       file = jobFolder.getFile( GridJob.JOBID_FILENAME );
