@@ -151,8 +151,8 @@ public class GridProjectCreationOperation implements IRunnableWithProgress {
     String voName = projectVo.getName();
     
     IScopeContext projectScope = new ProjectScope( project );
-    Preferences projectNode = projectScope.getNode( "eu.geclipse.core" );
-    projectNode.put( "vo", voName );
+    Preferences projectNode = projectScope.getNode( "eu.geclipse.core" ); //$NON-NLS-1$
+    projectNode.put( "vo", voName ); //$NON-NLS-1$
     
     try {
       projectNode.flush();
@@ -160,7 +160,7 @@ public class GridProjectCreationOperation implements IRunnableWithProgress {
       IStatus status = new Status( IStatus.ERROR,
                                  Activator.PLUGIN_ID,
                                  IStatus.CANCEL,
-                                 "Unable to set project preferences",
+                                 Messages.getString("GridProjectCreationOperation.set_preferences_failed"), //$NON-NLS-1$
                                  bsExc );
       throw new CoreException( status );
     }

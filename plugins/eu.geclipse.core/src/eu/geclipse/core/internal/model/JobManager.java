@@ -70,7 +70,7 @@ public class JobManager extends AbstractGridElementManager
     flag = super.addElement( element );
     if( element instanceof IGridJob ) {
       JobStatusUpdater updater = new JobStatusUpdater( (( IGridJob )element) );
-      updaters.put( (( IGridJob )element).getID(), updater );
+      this.updaters.put( (( IGridJob )element).getID(), updater );
       updater.setSystem( true );
       updater.schedule( 60000 );
       updater.addJobStatusListener( IGridJobStatus._ALL, this );
@@ -85,7 +85,7 @@ public class JobManager extends AbstractGridElementManager
     throws GridModelException
   {
     JobStatusUpdater updater = new JobStatusUpdater( id );
-    updaters.put( id, updater );
+    this.updaters.put( id, updater );
     updater.setSystem( true );
     updater.schedule( 30000 );
   }
@@ -138,7 +138,7 @@ public class JobManager extends AbstractGridElementManager
   {
     JobStatusUpdater updater;
     for( IGridJob job : jobs ) {
-      updater = ( JobStatusUpdater )updaters.get( job.getID() );
+      updater = this.updaters.get( job.getID() );
       updater.addJobStatusListener( status, listener );
     }
   }
@@ -155,7 +155,7 @@ public class JobManager extends AbstractGridElementManager
   {
     JobStatusUpdater updater;
     for( IGridJobID id : ids ) {
-      updater = ( JobStatusUpdater )updaters.get( id );
+      updater = this.updaters.get( id );
       updater.addJobStatusListener( status, listener );
     }
   }
@@ -167,7 +167,7 @@ public class JobManager extends AbstractGridElementManager
    */
   public void removeJobStatusListener( final IGridJobStatusListener listener ) {
     JobStatusUpdater updater;
-    for( Enumeration<JobStatusUpdater> e = updaters.elements(); e.hasMoreElements(); )
+    for( Enumeration<JobStatusUpdater> e = this.updaters.elements(); e.hasMoreElements(); )
     {
       updater = e.nextElement();
       updater.removeJobStatusListener( listener );
@@ -182,7 +182,7 @@ public class JobManager extends AbstractGridElementManager
    * @param updater
    */
   public void removeUpdater( final JobStatusUpdater updater ) {
-    Collection<JobStatusUpdater> values = updaters.values();
+    Collection<JobStatusUpdater> values = this.updaters.values();
     while( values.remove( updater ) ) {
       // empty block};
     }
@@ -220,7 +220,7 @@ public class JobManager extends AbstractGridElementManager
   void waitForJob( final IGridJob job )
     throws InterruptedException, NoSuchElementException
   {
-    JobStatusUpdater updater = updaters.get( job.getID() );
+    JobStatusUpdater updater = this.updaters.get( job.getID() );
     if( updater == null ) {
       throw new NoSuchElementException();
     }
@@ -237,7 +237,7 @@ public class JobManager extends AbstractGridElementManager
   void waitForJob( final IGridJobID id )
     throws InterruptedException, NoSuchElementException
   {
-    JobStatusUpdater updater = updaters.get( id );
+    JobStatusUpdater updater = this.updaters.get( id );
     if( updater == null ) {
       throw new NoSuchElementException();
     }

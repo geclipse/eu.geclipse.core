@@ -37,14 +37,14 @@ public class VoSelectionWizardPage extends WizardPage {
   
   private boolean allowMultiSelection;
   
-  private Class voType;
+  private Class< ? > voType;
   
   public VoSelectionWizardPage( final boolean allowMultiSelection ) {
     this( allowMultiSelection, null );
   }
   
   public VoSelectionWizardPage( final boolean allowMultiSelection,
-                                final Class voType ) {
+                                final Class< ? > voType ) {
     super( "voPage", //$NON-NLS-1$
            "VO Selection Page",
            null );

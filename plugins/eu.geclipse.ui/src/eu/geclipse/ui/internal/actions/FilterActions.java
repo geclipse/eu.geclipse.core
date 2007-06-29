@@ -15,11 +15,10 @@
  *****************************************************************************/
 package eu.geclipse.ui.internal.actions;
 
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.actions.ActionGroup;
+
 import eu.geclipse.ui.views.filters.GridFilterConfigurationsManager;
 
 
@@ -40,16 +39,17 @@ public class FilterActions extends ActionGroup {
    * @see org.eclipse.ui.actions.ActionGroup#fillActionBars(org.eclipse.ui.IActionBars)
    */
   @Override
-  public void fillActionBars( IActionBars actionBars )
+  public void fillActionBars( final IActionBars actionBars )
   {
     actionBars.getToolBarManager().add( new ConfigureFiltersAction( this.site, this.filterConfigurationsManager ) );
 //    actionBars.getToolBarManager().add( createChangeFilter() );
     super.fillActionBars( actionBars );
   }
-  
+  /*
   private IAction createChangeFilter() {
     return new Action( "Filter", Action.AS_DROP_DOWN_MENU ) {
       
     };
   }
+  */
 }

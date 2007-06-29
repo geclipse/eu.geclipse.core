@@ -53,7 +53,7 @@ public class ConnectionLocationWizardPage
   
   @Override
   protected String getNewFileLabel() {
-    return "Connection name:";
+    return Messages.getString("ConnectionLocationWizardPage.connection_name"); //$NON-NLS-1$
   }
   
   @Override
@@ -102,7 +102,7 @@ public class ConnectionLocationWizardPage
       IWorkspaceRoot root = workspace.getRoot();
       if ( root.exists( filepath ) ) {
         result = false;
-        setErrorMessage( "A connection with the specified name already exists" );
+        setErrorMessage( Messages.getString("ConnectionLocationWizardPage.connection_already_exists") ); //$NON-NLS-1$
       }
       
     }

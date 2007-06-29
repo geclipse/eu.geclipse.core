@@ -23,29 +23,30 @@ import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobStatus;
 
 public class JobStatusFilter extends AbstractGridViewerFilter {
-  private static final String MEMENTO_KEY_ENABLED = "Enabled";
-  private static final String MEMENTO_TYPE_STATUS = "Status";  
-  private static final String MEMENTO_KEY_STATUS_SHOW = "Show";
+  private static final String MEMENTO_KEY_ENABLED = "Enabled"; //$NON-NLS-1$
+  private static final String MEMENTO_TYPE_STATUS = "Status";   //$NON-NLS-1$
+  private static final String MEMENTO_KEY_STATUS_SHOW = "Show"; //$NON-NLS-1$
   
   private boolean enabled = true;
   private HashMap<Integer, Boolean> statusMap = new HashMap<Integer, Boolean>();
   
   public JobStatusFilter() {
+    // empty implementation
   }
   
   public IGridFilter makeClone() throws CloneNotSupportedException {
     JobStatusFilter newFilter = (JobStatusFilter)super.clone();
     
-    newFilter.statusMap = (HashMap<Integer, Boolean>)statusMap.clone();
+    newFilter.statusMap = (HashMap<Integer, Boolean>)this.statusMap.clone();
     
     return newFilter;
   }
     
-  public void setEnabled( boolean enabled ) {
+  public void setEnabled( final boolean enabled ) {
     this.enabled = enabled;
   }
   
-  public void setStatusState( int jobStatus, boolean showOnView ) {
+  public void setStatusState( final int jobStatus, final boolean showOnView ) {
     this.statusMap.put( Integer.valueOf( jobStatus ), Boolean.valueOf( showOnView ) );
   }
 
@@ -73,7 +74,7 @@ public class JobStatusFilter extends AbstractGridViewerFilter {
     return showOnView;
   }
   
-  public boolean getStatusState( int jobStatus ) {
+  public boolean getStatusState( final int jobStatus ) {
     Boolean showOnView = this.statusMap.get( Integer.valueOf( jobStatus ) );
     
     return showOnView == null || showOnView.booleanValue();

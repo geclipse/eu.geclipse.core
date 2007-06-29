@@ -42,6 +42,11 @@ import eu.geclipse.ui.views.GridModelViewPart;
 public class CommonActions extends ActionGroup {
   
   /**
+   * The refresh action.
+   */
+  RefreshAction refreshAction;
+  
+  /**
    * The {@link IWorkbenchSite} this action is associated with.
    */
   private IWorkbenchSite site;
@@ -57,11 +62,6 @@ public class CommonActions extends ActionGroup {
   private PropertyDialogAction propertyAction;
   
   /**
-   * The refresh action.
-   */
-  RefreshAction refreshAction;
-  
-  /**
    * Construct a new <code>CommonActions</code> action group for the
    * specified {@link IWorkbenchSite}.
    * 
@@ -70,9 +70,9 @@ public class CommonActions extends ActionGroup {
   public CommonActions( final GridModelViewPart part ) {
   
     this.site = part.getSite();
-    Shell shell = site.getShell();
+    Shell shell = this.site.getShell();
     IShellProvider shellProvider = new SameShellProvider( shell );
-    ISelectionProvider selectionProvider = site.getSelectionProvider();
+    ISelectionProvider selectionProvider = this.site.getSelectionProvider();
     
     this.selectionAdapter = new GridElementSelectionAdapter();
     selectionProvider.addSelectionChangedListener( this.selectionAdapter );
@@ -81,7 +81,7 @@ public class CommonActions extends ActionGroup {
       = new PropertyDialogAction( shellProvider, this.selectionAdapter );
     
     this.refreshAction = new RefreshAction( shell );
-    this.refreshAction.setText( "Re&fresh@F5" );
+    this.refreshAction.setText( Messages.getString("CommonActions.refresh") ); //$NON-NLS-1$
     selectionProvider.addSelectionChangedListener( this.refreshAction );
     
     ImageRegistry imgReg = Activator.getDefault().getImageRegistry();

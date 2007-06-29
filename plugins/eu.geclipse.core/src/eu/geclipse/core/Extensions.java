@@ -19,8 +19,9 @@ package eu.geclipse.core;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
+
 import eu.geclipse.core.auth.IAuthenticationTokenDescription;
 import eu.geclipse.core.model.IGridElementCreator;
 
@@ -31,6 +32,12 @@ import eu.geclipse.core.model.IGridElementCreator;
  * @author stuempert-m
  */
 public class Extensions {
+  
+  /**
+   * The ID of the job status service manager point.
+   */
+  public static final String JOB_STATUS_SERVICE_MANAGER_POINT
+    = "eu.geclipse.core.gridJobStatusServiceManager"; //$NON-NLS-1$
   
   /**
    * The ID of the filesystems extension point.

@@ -6,15 +6,16 @@ import org.eclipse.ui.model.IWorkbenchAdapter;
 
 public class GridUIAdapterFactory implements IAdapterFactory {
 
+  @SuppressWarnings("unchecked")
   public Object getAdapter( final Object adaptableObject, final Class adapterType ) {
-
+    Object result = null;
     if(adapterType.isAssignableFrom( IWorkbenchAdapter.class)){
-      return new GridJobAdapter();
+      result = new GridJobAdapter();
     }
-    // TODO Auto-generated method stub
-    return null;
+    return result;
   }
 
+  @SuppressWarnings("unchecked")
   public Class[] getAdapterList() {
     Class[] table = new Class[1];
     table[0]= IWorkbenchAdapter.class;

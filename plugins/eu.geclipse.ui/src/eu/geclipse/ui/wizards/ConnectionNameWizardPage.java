@@ -21,7 +21,6 @@ import org.eclipse.swt.widgets.Text;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IConnectionManager;
 import eu.geclipse.core.model.IGridConnection;
-import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
 
 public class ConnectionNameWizardPage extends WizardPage {
@@ -31,11 +30,11 @@ public class ConnectionNameWizardPage extends WizardPage {
   private URI initialContent;
   
   public ConnectionNameWizardPage() {
-    super( "connectionNamePage",
-           "Connection Name",
+    super( Messages.getString("ConnectionNameWizardPage.name"), //$NON-NLS-1$
+           Messages.getString("ConnectionNameWizardPage.title"), //$NON-NLS-1$
            null
     );
-    setDescription( "Enter the name of the new connection" );
+    setDescription( Messages.getString("ConnectionNameWizardPage.description") ); //$NON-NLS-1$
   }
 
   public void createControl( final Composite parent ) {
@@ -48,7 +47,7 @@ public class ConnectionNameWizardPage extends WizardPage {
     mainComp.setLayoutData( gData );
     
     Label nameLabel = new Label( mainComp, SWT.NULL );
-    nameLabel.setText( "Connection name:" );
+    nameLabel.setText( Messages.getString("ConnectionNameWizardPage.name_label") ); //$NON-NLS-1$
     gData = new GridData();
     nameLabel.setLayoutData( gData );
     
@@ -128,7 +127,7 @@ public class ConnectionNameWizardPage extends WizardPage {
       
         for ( IGridConnection connection : gConnections ) {
           if ( connection.getName().equals( name ) ) {
-            setErrorMessage( "A connection with the specified name already exists" );
+            setErrorMessage( Messages.getString("ConnectionNameWizardPage.connection_already_exists") ); //$NON-NLS-1$
             valid = false;
           }
         }
@@ -137,7 +136,6 @@ public class ConnectionNameWizardPage extends WizardPage {
       
     } else {
       
-      setErrorMessage( "You have to define a valid connection name" );
       valid = false;
       
     }

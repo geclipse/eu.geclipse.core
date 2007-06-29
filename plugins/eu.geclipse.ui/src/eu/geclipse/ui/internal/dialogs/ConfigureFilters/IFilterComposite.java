@@ -15,8 +15,6 @@
  *****************************************************************************/
 package eu.geclipse.ui.internal.dialogs.ConfigureFilters;
 
-import org.eclipse.swt.widgets.Composite;
-import eu.geclipse.ui.views.filters.IGridFilter;
 import eu.geclipse.ui.views.filters.IGridFilterConfiguration;
 
 public interface IFilterComposite {

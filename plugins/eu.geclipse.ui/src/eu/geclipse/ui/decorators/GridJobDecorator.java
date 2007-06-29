@@ -34,6 +34,27 @@ import eu.geclipse.ui.internal.Activator;
  * Addes an error decorator to RSL icon in case the file can not be parsed.
  */
 public class GridJobDecorator implements ILightweightLabelDecorator {
+  
+  private static final String STATUS_UNKNOWN_IMG
+    = "status_unknown.gif"; //$NON-NLS-1$
+  
+  private static final String STATUS_SUBMITTED_IMG
+    = "status_submitted.gif"; //$NON-NLS-1$
+  
+  private static final String STATUS_WAITING_IMG
+    = "status_waiting.gif"; //$NON-NLS-1$
+  
+  private static final String STATUS_RUNNING_IMG
+    = "status_running.gif"; //$NON-NLS-1$
+  
+  private static final String STATUS_DONE_IMG
+    = "status_done.gif"; //$NON-NLS-1$
+  
+  private static final String STATUS_ABORTED_IMG
+    = "status_aborted.gif"; //$NON-NLS-1$
+  
+  private static final String STATUS_ABANDONED_IMG
+    = "status_abandoned.gif"; //$NON-NLS-1$
 
   private static Hashtable<Integer, String> imageNames;
   
@@ -41,13 +62,13 @@ public class GridJobDecorator implements ILightweightLabelDecorator {
 
   static {
   imageNames=new Hashtable<Integer, String>();
-  imageNames.put( IGridJobStatus.UNKNOWN, "status_unknown.gif" ); 
-  imageNames.put( IGridJobStatus.SUBMITTED, "status_submitted.gif" ); 
-  imageNames.put( IGridJobStatus.WAITING, "status_waiting.gif" ); 
-  imageNames.put( IGridJobStatus.RUNNING, "status_running.gif" ); 
-  imageNames.put( IGridJobStatus.DONE, "status_done.gif" ); 
-  imageNames.put( IGridJobStatus.ABORTED, "status_aborted.gif" ); 
-  imageNames.put( IGridJobStatus.PURGED, "status_abandoned.gif" ); 
+  imageNames.put( new Integer( IGridJobStatus.UNKNOWN ), STATUS_UNKNOWN_IMG ); 
+  imageNames.put( new Integer( IGridJobStatus.SUBMITTED ), STATUS_SUBMITTED_IMG ); 
+  imageNames.put( new Integer( IGridJobStatus.WAITING ), STATUS_WAITING_IMG ); 
+  imageNames.put( new Integer( IGridJobStatus.RUNNING ), STATUS_RUNNING_IMG ); 
+  imageNames.put( new Integer( IGridJobStatus.DONE ), STATUS_DONE_IMG ); 
+  imageNames.put( new Integer( IGridJobStatus.ABORTED ), STATUS_ABORTED_IMG ); 
+  imageNames.put( new Integer( IGridJobStatus.PURGED ), STATUS_ABANDONED_IMG ); 
   }
   
   public void decorate( final Object element, final IDecoration decoration ) {
@@ -61,7 +82,7 @@ public class GridJobDecorator implements ILightweightLabelDecorator {
 
   private ImageDescriptor getIcon( final int type ) {
     ImageDescriptor decorator=null;
-    String fileName=imageNames.get( type );
+    String fileName=imageNames.get( new Integer( type ) );
     URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/ovr16/"+fileName ); //$NON-NLS-1$
     decorator= ImageDescriptor.createFromURL( imgUrl );
     return decorator;

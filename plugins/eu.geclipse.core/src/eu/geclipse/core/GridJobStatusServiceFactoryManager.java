@@ -36,7 +36,7 @@ public class GridJobStatusServiceFactoryManager {
    * @return GridJobStatusServiceFactory capable to get informatino for given GridjobID class
    *  or null if factory cannot be found.
    */
-  static public IGridJobStatusServiceFactory getFactory( final Class cl )
+  static public IGridJobStatusServiceFactory getFactory( final Class< ? > cl )
   {
     IGridJobStatusServiceFactory factory = null;
     if( factories.containsKey( cl.getName() ) ) {
@@ -47,22 +47,22 @@ public class GridJobStatusServiceFactoryManager {
 
 static{  
   ExtensionManager manager = new ExtensionManager();
-  List< IExtension > l = manager.getExtensions( "eu.geclipse.core.gridJobStatusServiceManager");
+  List< IExtension > l = manager.getExtensions( Extensions.JOB_STATUS_SERVICE_MANAGER_POINT );
   for( IExtension extension : l ) {
     IConfigurationElement[] configurationElements = extension.getConfigurationElements();
     IGridJobStatusServiceFactory factory=null;
     for ( int cel = 0 ; cel < configurationElements.length ; cel++ ) {
       String name = configurationElements[ cel ].getName();
-      if ( name.equals( "factory" ) ) {
+      if ( name.equals( "factory" ) ) { //$NON-NLS-1$
         try {
-          factory = ( IGridJobStatusServiceFactory )configurationElements[ cel ].createExecutableExtension( "class" );
+          factory = ( IGridJobStatusServiceFactory )configurationElements[ cel ].createExecutableExtension( "class" ); //$NON-NLS-1$
           factories.put( factory.getClass().getName(), factory );
         } catch( CoreException e ) {
           Activator.logException( e );
         }
       }
-      if ( name.equals( "jobID" ) ) {
-        String jobIdClass=configurationElements[ cel ].getAttribute( "class" );
+      if ( name.equals( "jobID" ) ) { //$NON-NLS-1$
+        String jobIdClass=configurationElements[ cel ].getAttribute( "class" ); //$NON-NLS-1$
         if(jobIdClass!=null && factory!=null){
           factories.put( jobIdClass, factory );
         }

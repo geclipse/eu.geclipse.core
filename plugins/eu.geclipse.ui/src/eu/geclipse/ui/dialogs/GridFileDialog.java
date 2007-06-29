@@ -65,6 +65,8 @@ import eu.geclipse.ui.providers.IConfigurationListener;
  */
 public class GridFileDialog extends Dialog implements IGridModelListener {
 
+  private static final String LOCAL_FILTER = "file"; //$NON-NLS-1$
+  
   /**
    * The {@link TreeViewer} used to display the remote file structure.
    */
@@ -117,7 +119,7 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
     this.filter = new GridConnectionFilter();
     if( !allowLocal ) {
       this.protocolFilter = new GridConnectionProtocolFilter();
-      this.protocolFilter.addFilterProtocol( "file" );
+      this.protocolFilter.addFilterProtocol( LOCAL_FILTER );
     }
   }
 

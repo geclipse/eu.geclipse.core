@@ -25,7 +25,9 @@ import eu.geclipse.ui.views.filters.JobStatusFilter;
  * Produced composite is used in {@link ConfigureFiltersDialog}
  */
 public class FilterCompositeFactory {
-  static public IFilterComposite create( final IGridFilter filter, final Composite parent, final int style ) {
+  static public IFilterComposite create( final IGridFilter filter,
+                                         final Composite parent,
+                                         @SuppressWarnings("unused") final int style ) {
     IFilterComposite composite = null;
     
     if( filter instanceof JobStatusFilter ) {

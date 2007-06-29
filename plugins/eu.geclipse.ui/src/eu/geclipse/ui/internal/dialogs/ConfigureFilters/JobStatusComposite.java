@@ -37,31 +37,32 @@ public class JobStatusComposite implements IFilterComposite {
   private Group topGroup;
   private boolean readOnly = false;
 
-  public JobStatusComposite( JobStatusFilter filter, Composite parent ) {
+  public JobStatusComposite( final JobStatusFilter filter, final Composite parent ) {
     this.filter = filter;
     
-    topGroup = new Group( parent, SWT.NONE );
-    topGroup.setLayout( new GridLayout( 1, false ) );
-    createEnabledCheckBox( topGroup );
+    this.topGroup = new Group( parent, SWT.NONE );
+    this.topGroup.setLayout( new GridLayout( 1, false ) );
+    createEnabledCheckBox( this.topGroup );
     
-    optionsList.add( new StatusOption( topGroup, "Submitted", IGridJobStatus.SUBMITTED ) );
-    optionsList.add( new StatusOption( topGroup, "Waiting", IGridJobStatus.WAITING ) );
-    optionsList.add( new StatusOption( topGroup, "Running", IGridJobStatus.RUNNING ) );
-    optionsList.add( new StatusOption( topGroup, "Done", IGridJobStatus.DONE ) );
-    optionsList.add( new StatusOption( topGroup, "Aborted", IGridJobStatus.ABORTED ) );
-    optionsList.add( new StatusOption( topGroup, "Purged", IGridJobStatus.PURGED ) );
-    optionsList.add( new StatusOption( topGroup, "Others", IGridJobStatus.UNKNOWN ) );    
+    this.optionsList.add( new StatusOption( this.topGroup, Messages.getString("JobStatusComposite.submitted"), IGridJobStatus.SUBMITTED ) ); //$NON-NLS-1$
+    this.optionsList.add( new StatusOption( this.topGroup, Messages.getString("JobStatusComposite.waiting"), IGridJobStatus.WAITING ) ); //$NON-NLS-1$
+    this.optionsList.add( new StatusOption( this.topGroup, Messages.getString("JobStatusComposite.running"), IGridJobStatus.RUNNING ) ); //$NON-NLS-1$
+    this.optionsList.add( new StatusOption( this.topGroup, Messages.getString("JobStatusComposite.done"), IGridJobStatus.DONE ) ); //$NON-NLS-1$
+    this.optionsList.add( new StatusOption( this.topGroup, Messages.getString("JobStatusComposite.aborted"), IGridJobStatus.ABORTED ) ); //$NON-NLS-1$
+    this.optionsList.add( new StatusOption( this.topGroup, Messages.getString("JobStatusComposite.purged"), IGridJobStatus.PURGED ) ); //$NON-NLS-1$
+    this.optionsList.add( new StatusOption( this.topGroup, Messages.getString("JobStatusComposite.others"), IGridJobStatus.UNKNOWN ) );     //$NON-NLS-1$
     
     refresh();
   }
   
   private void createEnabledCheckBox( final Composite parent ) {
     this.enabledCheckbox = new Button( parent, SWT.CHECK );
-    this.enabledCheckbox.setText( "Show jobs with following status:" );
+    this.enabledCheckbox.setText( Messages.getString("JobStatusComposite.enabled_box_text") ); //$NON-NLS-1$
     
     this.enabledCheckbox.addSelectionListener( new SelectionAdapter() {
 
-      public void widgetSelected( SelectionEvent event ) {
+      @Override
+      public void widgetSelected( final SelectionEvent event ) {
         onChangeEnabledState();
       }
       
@@ -72,7 +73,7 @@ public class JobStatusComposite implements IFilterComposite {
     private int statusValue;
     private Button checkbox;
 
-    public StatusOption( final Composite parent, final String descriptionString, int statusValue ) {
+    public StatusOption( final Composite parent, final String descriptionString, final int statusValue ) {
       this.statusValue = statusValue;
       this.checkbox = new Button( parent, SWT.CHECK );
       this.checkbox.setText( descriptionString );
@@ -81,7 +82,7 @@ public class JobStatusComposite implements IFilterComposite {
       this.checkbox.setLayoutData( gridData );
     }
     
-    void setSelected( boolean selected ) {
+    void setSelected( final boolean selected ) {
       this.checkbox.setSelection( selected );
     }
     
@@ -89,15 +90,15 @@ public class JobStatusComposite implements IFilterComposite {
       return this.checkbox.getSelection();
     }
     
-    void enable( boolean enable ) {
+    void enable( final boolean enable ) {
       this.checkbox.setEnabled( enable );
     }
     
     int getStatusValue() {
-      return statusValue;
+      return this.statusValue;
     }
     
-    void setReadOnly( boolean readOnly ) {
+    void setReadOnly( final boolean readOnly ) {
       this.checkbox.setEnabled( !readOnly );
     }
   }
@@ -111,7 +112,7 @@ public class JobStatusComposite implements IFilterComposite {
     }
   }
 
-  public void setFilter( IGridFilterConfiguration filterConfiguration ) {
+  public void setFilter( final IGridFilterConfiguration filterConfiguration ) {
     this.filter = filterConfiguration == null ? null : ((JobViewFilterConfiguration)filterConfiguration).getJobStatusFilter();
     refresh();
   }
@@ -128,15 +129,15 @@ public class JobStatusComposite implements IFilterComposite {
     }
   }
 
-  public void setReadOnly( boolean readOnly ) {
+  public void setReadOnly( final boolean readOnly ) {
     this.readOnly = readOnly;
     onChangeEnabledState();
   }
   
-  private void onChangeEnabledState() {
+  void onChangeEnabledState() {
     this.enabledCheckbox.setEnabled( !this.readOnly );
     for( StatusOption option : this.optionsList ) {
-      option.setReadOnly( readOnly || !this.enabledCheckbox.getSelection() );
+      option.setReadOnly( this.readOnly || !this.enabledCheckbox.getSelection() );
     }    
   }
 }

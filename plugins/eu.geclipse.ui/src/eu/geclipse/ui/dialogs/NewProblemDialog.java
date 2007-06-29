@@ -221,7 +221,7 @@ public class NewProblemDialog extends ErrorDialog {
         reasonComposite.setLayout( new GridLayout( 1, false ) );
         
         Label reasonLabel = new Label( reasonComposite, SWT.NONE );
-        reasonLabel.setText( "Reasons:" );
+        reasonLabel.setText( Messages.getString("NewProblemDialog.further_reasons") ); //$NON-NLS-1$
         gData = new GridData();
         gData.horizontalAlignment = GridData.BEGINNING;
         reasonLabel.setLayoutData( gData );
@@ -229,7 +229,7 @@ public class NewProblemDialog extends ErrorDialog {
         for ( String reason : reasons ) {
           
           Label label = new Label( reasonComposite, SWT.NONE );
-          label.setText( "- " + reason );
+          label.setText( "- " + reason ); //$NON-NLS-1$
           gData = new GridData();
           gData.horizontalAlignment = GridData.BEGINNING;
           label.setLayoutData( gData );

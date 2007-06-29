@@ -48,23 +48,28 @@ public class GenericConnectionTokenValidator implements
     
   }
   
-  protected String validateURI( final String uri ) {
+  protected String validateURI( @SuppressWarnings("unused")
+                                final String uri ) {
     return null;
   }
   
-  protected String validateSchemeSpecificPart( final String schemeSpecificPart ) {
+  protected String validateSchemeSpecificPart( @SuppressWarnings("unused")
+                                               final String schemeSpecificPart ) {
     return null;
   }
   
-  protected String validateAuthority( final String authority ) {
+  protected String validateAuthority( @SuppressWarnings("unused")
+                                      final String authority ) {
     return null;
   }
   
-  protected String validateUserInfo( final String userInfo ) {
+  protected String validateUserInfo( @SuppressWarnings("unused")
+                                     final String userInfo ) {
     return null;
   }
   
-  protected String validateHost( final String host ) {
+  protected String validateHost( @SuppressWarnings("unused")
+                                 final String host ) {
     return null;
   }
   
@@ -76,7 +81,7 @@ public class GenericConnectionTokenValidator implements
       int portnr = Integer.parseInt( port );
       error = validatePort( portnr );
     } catch ( NumberFormatException nfExc ) {
-      error = "The port is not a number"; 
+      error = Messages.getString("GenericConnectionTokenValidator.port_nan");  //$NON-NLS-1$
     }
     
     return error;
@@ -88,22 +93,25 @@ public class GenericConnectionTokenValidator implements
     String error = null;
     
     if ( ( port < 1 ) || ( port > 65535 ) ) {
-      error = "The port has to be in the range 1-65535";
+      error = Messages.getString("GenericConnectionTokenValidator.port_invalid_range"); //$NON-NLS-1$
     }
     
     return error;
     
   }
   
-  protected String validatePath( final String path ) {
+  protected String validatePath( @SuppressWarnings("unused")
+                                 final String path ) {
     return null;
   }
   
-  protected String validateQuery( final String query ) {
+  protected String validateQuery( @SuppressWarnings("unused")
+                                  final String query ) {
     return null;
   }
   
-  protected String validateFragment( final String fragment ) {
+  protected String validateFragment( @SuppressWarnings("unused")
+                                     final String fragment ) {
     return null;
   }
 

@@ -17,17 +17,12 @@ package eu.geclipse.ui.internal.actions;
 
 import org.eclipse.core.resources.IncrementalProjectBuilder;
 import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.jface.viewers.ISelectionProvider;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.actions.ActionGroup;
 import org.eclipse.ui.actions.BuildAction;
-import org.eclipse.ui.actions.RefreshAction;
 import org.eclipse.ui.navigator.ICommonMenuConstants;
-import eu.geclipse.ui.internal.Activator;
 
 /**
  * An {@link ActionGroup} that holds all build related actions.

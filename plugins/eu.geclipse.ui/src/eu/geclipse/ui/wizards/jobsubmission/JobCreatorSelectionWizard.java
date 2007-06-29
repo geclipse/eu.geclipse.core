@@ -36,7 +36,7 @@ public class JobCreatorSelectionWizard extends Wizard {
     this.jobCreators = jobCreators;
     setNeedsProgressMonitor( true );
     setForcePreviousAndNextButtons( true );
-    setWindowTitle( "Submit Job" );
+    setWindowTitle( Messages.getString("JobCreatorSelectionWizard.title") ); //$NON-NLS-1$
     URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/wizban/jobsubmit_wiz.gif" ); //$NON-NLS-1$
     setDefaultPageImageDescriptor( ImageDescriptor.createFromURL( imgUrl ) );
   }

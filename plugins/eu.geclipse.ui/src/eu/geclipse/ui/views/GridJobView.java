@@ -30,11 +30,8 @@ import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobManager;
 import eu.geclipse.core.model.IGridJobStatusListener;
 import eu.geclipse.ui.internal.actions.ActionGroupManager;
-import eu.geclipse.ui.internal.actions.FilterActions;
 import eu.geclipse.ui.providers.JobViewLabelProvider;
 import eu.geclipse.ui.views.filters.GridFilterConfigurationsManager;
-import eu.geclipse.ui.views.filters.IGridFilterConfiguration;
-import eu.geclipse.ui.views.filters.JobViewFilterConfiguration;
 
 /**
  * Job view that shows all jobs that are currently managed by
@@ -149,12 +146,13 @@ public class GridJobView
     super.initViewer( sViewer );
     //initFilters( sViewer );
   }
-  
+  /*
   private void initFilters( final StructuredViewer sViewer ) {
     createFilterConfigurationsManager( sViewer );
     this.filterConfigurationsManager.readState( this.memento );
   }
-  
+  */
+  /*
   private void createFilterConfigurationsManager( final StructuredViewer sViewer )
   {
     this.filterConfigurationsManager = new GridFilterConfigurationsManager( GridFilterConfigurationsManager.ID_JOBVIEW,
@@ -168,6 +166,6 @@ public class GridJobView
       }
     };
   }
-  
+  */
 
 }

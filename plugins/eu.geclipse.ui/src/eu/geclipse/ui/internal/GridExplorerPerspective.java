@@ -22,7 +22,6 @@ import org.eclipse.ui.IPlaceholderFolderLayout;
 import org.eclipse.ui.progress.IProgressConstants;
 
 import eu.geclipse.ui.LogExceptionSolution;
-import eu.geclipse.ui.ShowViewSolution;
 
 /**
  * Perspective factory for the g-Eclipse grid exploring perspective. 
@@ -40,7 +39,7 @@ public class GridExplorerPerspective
     String editorArea = layout.getEditorArea();
     
     IPlaceholderFolderLayout leftFolder
-      = layout.createPlaceholderFolder( "left", IPageLayout.LEFT, 0.2f, editorArea );
+      = layout.createPlaceholderFolder( "left", IPageLayout.LEFT, 0.2f, editorArea ); //$NON-NLS-1$
     leftFolder.addPlaceholder( eu.geclipse.ui.internal.Activator.ID_GPROJECT_VIEW );
     leftFolder.addPlaceholder( IPageLayout.ID_RES_NAV );
 
@@ -49,13 +48,13 @@ public class GridExplorerPerspective
     bottomLeftFolder.addView( eu.geclipse.ui.internal.Activator.ID_CONNECTION_VIEW + ":left*" ); //$NON-NLS-1$
     
     IFolderLayout bottomFolder
-      = layout.createFolder( "bottom", IPageLayout.BOTTOM, 0.7f, "bottomleft" );
+      = layout.createFolder( "bottom", IPageLayout.BOTTOM, 0.7f, "bottomleft" ); //$NON-NLS-1$ //$NON-NLS-2$
     bottomFolder.addView( IProgressConstants.PROGRESS_VIEW_ID );
     bottomFolder.addView( LogExceptionSolution.LOG_VIEW_ID );
     bottomFolder.addPlaceholder( eu.geclipse.ui.internal.Activator.ID_AUTH_VIEW );
     
     IFolderLayout bottomRightFolder
-      = layout.createFolder( "bottomright", IPageLayout.RIGHT, 0.5f, "bottomleft" ); //$NON-NLS-1$
+      = layout.createFolder( "bottomright", IPageLayout.RIGHT, 0.5f, "bottomleft" ); //$NON-NLS-1$ //$NON-NLS-2$
     bottomRightFolder.addView( eu.geclipse.ui.internal.Activator.ID_CONNECTION_VIEW + ":right*" ); //$NON-NLS-1$
     
     layout.addShowViewShortcut( eu.geclipse.ui.internal.Activator.ID_GPROJECT_VIEW );

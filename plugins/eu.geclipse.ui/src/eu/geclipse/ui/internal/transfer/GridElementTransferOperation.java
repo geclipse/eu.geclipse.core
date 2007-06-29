@@ -261,7 +261,7 @@ public class GridElementTransferOperation
     
     // Prepare copy operation
     monitor.beginTask( Messages.getString("GridElementTransferOperation.copying_progress") + from.getName(), 100 ); //$NON-NLS-1$
-    monitor.setTaskName( Messages.getString("GridElementTransferOperation.copying_progress") + from.getName() );
+    monitor.setTaskName( Messages.getString("GridElementTransferOperation.copying_progress") + from.getName() ); //$NON-NLS-1$
     InputStream inStream = null;
     OutputStream outStream = null;
     IStatus status = Status.OK_STATUS;
@@ -319,7 +319,7 @@ public class GridElementTransferOperation
         
         SubProgressMonitor subMonitor = new SubProgressMonitor( monitor, 85 );
         subMonitor.beginTask( Messages.getString("GridElementTransferOperation.copying_progress") + from.getName(), totalKb.intValue() ); //$NON-NLS-1$
-        subMonitor.subTask( Messages.getString("GridElementTransferOperation.copying_progress") + from.getName() );
+        subMonitor.subTask( Messages.getString("GridElementTransferOperation.copying_progress") + from.getName() ); //$NON-NLS-1$
         
         // Copy the data
         int kb_counter = 0;

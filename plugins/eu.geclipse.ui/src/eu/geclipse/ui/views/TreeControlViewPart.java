@@ -12,6 +12,7 @@ import eu.geclipse.core.model.IGridElement;
 
 public abstract class TreeControlViewPart extends GridModelViewPart {
   
+  @Override
   public void refreshViewer( final IGridElement element ) {
     if ( ( element != null ) && ( element instanceof IGridContainer ) ) {
       IGridContainer container = ( IGridContainer ) element;

@@ -107,7 +107,7 @@ public class TarInputStream {
    * @return The newly read block
    * @throws IOException if reading the stream failed
    */
-  private byte[] readBlock( int size ) throws IOException {
+  private byte[] readBlock( final int size ) throws IOException {
     byte[] block = new byte[ size ];
 
     /*

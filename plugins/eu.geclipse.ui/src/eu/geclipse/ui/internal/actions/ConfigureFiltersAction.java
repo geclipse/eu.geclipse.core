@@ -16,6 +16,7 @@
 package eu.geclipse.ui.internal.actions;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuCreator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -24,6 +25,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.IWorkbenchSite;
+
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.views.filters.GridFilterConfigurationsManager;
 import eu.geclipse.ui.views.filters.IFilterConfigurationListener;
@@ -34,18 +36,19 @@ import eu.geclipse.ui.views.filters.IGridFilterConfiguration;
  *
  */
 public class ConfigureFiltersAction extends Action {
+  
+  private static final String CONFIGURE_IMG = "configure_filters"; //$NON-NLS-1$
 
-  private GridFilterConfigurationsManager filterConfigurationsManager;
+  GridFilterConfigurationsManager filterConfigurationsManager;
   private IWorkbenchSite site;
-  private IMenuCreator menuCreator;
   
   public ConfigureFiltersAction( final IWorkbenchSite site, final GridFilterConfigurationsManager filterConfigurationsManager ) {
-    super( "&Configure Filters...", Action.AS_DROP_DOWN_MENU );
+    super( Messages.getString("ConfigureFiltersAction.name"), IAction.AS_DROP_DOWN_MENU ); //$NON-NLS-1$
     this.filterConfigurationsManager = filterConfigurationsManager;
     this.site = site;
     
-    setImageDescriptor( Activator.getDefault().getImageRegistry().getDescriptor( "configure_filters" ) );    
-    setToolTipText( "Configure the filters to be applied to this view" );
+    setImageDescriptor( Activator.getDefault().getImageRegistry().getDescriptor( CONFIGURE_IMG ) );    
+    setToolTipText( Messages.getString("ConfigureFiltersAction.description") ); //$NON-NLS-1$
     
     setMenuCreator( new MenuCreator() );
   }
@@ -55,41 +58,41 @@ public class ConfigureFiltersAction extends Action {
     
     public MenuCreator() {
       super();
-      filterConfigurationsManager.addConfigurationListener( this );
+      ConfigureFiltersAction.this.filterConfigurationsManager.addConfigurationListener( this );
     }
 
     public void dispose() {
-      if( menu != null ) {
+      if( this.menu != null ) {
         disposeMenu();
       }
       
-      filterConfigurationsManager.removeConfigurationListener( this );
+      ConfigureFiltersAction.this.filterConfigurationsManager.removeConfigurationListener( this );
     }
 
-    public Menu getMenu( Control parent ) {
+    public Menu getMenu( final Control parent ) {
       if( this.menu == null ) {
         this.menu = createMenu( parent );
       }
       return this.menu;
     }
 
-    public Menu getMenu( Menu parent ) {
+    public Menu getMenu( final Menu parent ) {
       return null;
     }
     
     protected void disposeMenu() {
-      menu.dispose();
+      this.menu.dispose();
       this.menu = null;
     }
     
     private Menu createMenu( final Control parent ) {
-      Menu menu =  new Menu( parent );
+      Menu mnu =  new Menu( parent );
       
-      for( IGridFilterConfiguration configuration : filterConfigurationsManager.getConfigurations() ) {
-        createMenuItem( menu, configuration );
+      for( IGridFilterConfiguration configuration : ConfigureFiltersAction.this.filterConfigurationsManager.getConfigurations() ) {
+        createMenuItem( mnu, configuration );
       }
       
-      return menu;
+      return mnu;
     }
     
     private void createMenuItem( final Menu parent, final IGridFilterConfiguration configuration ) {
@@ -102,7 +105,7 @@ public class ConfigureFiltersAction extends Action {
     public void configurationChanged() {
       disposeMenu();
     }
-  };
+  }
   
   private class MenuItemSelectionListener extends SelectionAdapter {
     private IGridFilterConfiguration configuration;
@@ -116,13 +119,13 @@ public class ConfigureFiltersAction extends Action {
      * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
      */
     @Override
-    public void widgetSelected( SelectionEvent event )
+    public void widgetSelected( final SelectionEvent event )
     {
       // check selection before enabling, because widgetSelected is called twice: for old-selected item and for new
       MenuItem menuItem = (MenuItem)event.getSource();
       if( menuItem != null
           && menuItem.getSelection() ) {
-        filterConfigurationsManager.enableConfiguration( configuration );
+        ConfigureFiltersAction.this.filterConfigurationsManager.enableConfiguration( this.configuration );
       }
     }
   }
@@ -133,6 +136,6 @@ public class ConfigureFiltersAction extends Action {
   @Override
   public void run()
   {
-    filterConfigurationsManager.configure( this.site.getShell() );        
+    this.filterConfigurationsManager.configure( this.site.getShell() );        
   }
 }

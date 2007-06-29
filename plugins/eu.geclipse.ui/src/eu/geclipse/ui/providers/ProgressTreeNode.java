@@ -304,7 +304,7 @@ public class ProgressTreeNode
       event.gc.setClipping( ( Rectangle ) null );
     }
     
-    String progressString = isDone() ? "done" : String.valueOf( progress )+"%"; //$NON-NLS-1$
+    String progressString = isDone() ? "done" : String.valueOf( progress )+"%"; //$NON-NLS-1$ //$NON-NLS-2$
     Point progressExtend = event.gc.textExtent( progressString );
     int progressX = event.x + 2 + ( progBarWidth - progressExtend.x ) / 2;
     event.gc.setForeground( white );

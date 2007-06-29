@@ -19,7 +19,6 @@ import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.impl.AbstractGridContainer;

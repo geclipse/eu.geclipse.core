@@ -47,10 +47,10 @@ public class ConnectionWizard
       this.firstPage = new ConnectionNameWizardPage();
     } else {
       this.firstPage
-        = new ConnectionLocationWizardPage( "newGridConnectionLocationPage",
+        = new ConnectionLocationWizardPage( Messages.getString("ConnectionWizard.location_page_name"), //$NON-NLS-1$
                                             ( IStructuredSelection ) this.initialSelection );
-      this.firstPage.setTitle( "Connection location" );
-      this.firstPage.setDescription( "Choose the location in the workspace where the new connection will be created" );
+      this.firstPage.setTitle( Messages.getString("ConnectionWizard.location_page_title") ); //$NON-NLS-1$
+      this.firstPage.setDescription( Messages.getString("ConnectionWizard.location_page_description") ); //$NON-NLS-1$
     }
     addPage( this.firstPage );
     
@@ -71,7 +71,7 @@ public class ConnectionWizard
 
   @Override
   public String getWindowTitle() {
-    return "New Filesystem Connection";
+    return Messages.getString("ConnectionWizard.window_title"); //$NON-NLS-1$
   }
   
   @Override

@@ -48,9 +48,9 @@ import eu.geclipse.ui.widgets.StoredCombo;
 
 public class ConnectionDefinitionWizardPage extends WizardPage {
   
-  protected TreeViewer viewer;
-  
   private static final String SEPARATOR = ":"; //$NON-NLS-1$
+
+  protected TreeViewer viewer;
   
   private String currentURIType;
   

@@ -29,10 +29,10 @@ import eu.geclipse.ui.dialogs.ConfigureFiltersDialog;
  *
  */
 abstract public class GridFilterConfigurationsManager {
-  static final public String ID_JOBVIEW = "JobView";
+  static final public String ID_JOBVIEW = "JobView"; //$NON-NLS-1$
   
-  static final private String MEMENTO_TYPE_CONFIGURATIONS_LIST = "FilterConfigurationsList";
-  static final private String MEMENTO_TYPE_CONFIGURATION = "FilterConfiguration";
+  static final private String MEMENTO_TYPE_CONFIGURATIONS_LIST = "FilterConfigurationsList"; //$NON-NLS-1$
+  static final private String MEMENTO_TYPE_CONFIGURATION = "FilterConfiguration"; //$NON-NLS-1$
   
   private String id;
   private List<IGridFilterConfiguration> configurations = new ArrayList<IGridFilterConfiguration>();
@@ -63,7 +63,7 @@ abstract public class GridFilterConfigurationsManager {
   }
 
   public void readState( final IMemento memento ) {
-    configurations.clear();
+    this.configurations.clear();
     if( memento != null ) {
       IMemento configurationsListMemento = memento.getChild( getMementoTypeName() );
       if( configurationsListMemento != null ) {        
@@ -74,12 +74,12 @@ abstract public class GridFilterConfigurationsManager {
           if( nameString != null ) {
             IGridFilterConfiguration configuration = createConfiguration( nameString );
             configuration.read( configurationMemento );
-            configurations.add( configuration );
+            this.configurations.add( configuration );
           }
         }
       }
     }
-    if( viewer != null ) {
+    if( this.viewer != null ) {
       this.viewer.setFilters( getEnabledFilters() );
     }    
   }
@@ -102,7 +102,7 @@ abstract public class GridFilterConfigurationsManager {
   }
   
   private String getMementoTypeName() {
-    return MEMENTO_TYPE_CONFIGURATIONS_LIST + "." + id;
+    return MEMENTO_TYPE_CONFIGURATIONS_LIST + "." + this.id; //$NON-NLS-1$
   }
   
   public final List<IGridFilterConfiguration> getConfigurations() {

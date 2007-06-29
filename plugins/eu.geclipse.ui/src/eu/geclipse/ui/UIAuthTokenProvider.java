@@ -117,9 +117,9 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
           thr = intExc;
         }
         if ( thr != null ) {
-          NewProblemDialog.openProblem( shell,
-                                        "Token activation error",
-                                        "Error while activating the current token",
+          NewProblemDialog.openProblem( UIAuthTokenProvider.this.shell,
+                                        Messages.getString("UIAuthTokenProvider.token_activation_error_title"), //$NON-NLS-1$
+                                        Messages.getString("UIAuthTokenProvider.token_activation_error_message"), //$NON-NLS-1$
                                         thr );
         }
       }

@@ -17,11 +17,8 @@ package eu.geclipse.ui.views.filters;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.eclipse.jface.dialogs.TrayDialog;
-import org.eclipse.jface.viewers.CheckboxTableViewer;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -33,7 +30,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Table;
+
 import eu.geclipse.core.model.IGridJobStatus;
 
 
@@ -68,16 +65,16 @@ public class JobFiltersDialog extends TrayDialog {
     dialogAreaComposite.setLayoutData( new GridData( GridData.FILL_BOTH ) );
     
     
-    filterCompositesList.add( new JobStatusComposite( dialogAreaComposite, (JobStatusFilter) findFilter( this.filters, JobStatusFilter.class ) ) );    
+    this.filterCompositesList.add( new JobStatusComposite( dialogAreaComposite, (JobStatusFilter) findFilter( this.filters, JobStatusFilter.class ) ) );    
         
     return super.createDialogArea( parent );
   }
   
-  private ViewerFilter findFilter( final ViewerFilter[] filters, Class<? extends ViewerFilter> filterClass ) {
+  private ViewerFilter findFilter( final ViewerFilter[] filterList, final Class<? extends ViewerFilter> filterClass ) {
     ViewerFilter filter = null;
     
-    for( int index = 0; index < filters.length && filter == null; index++ ) {
-      ViewerFilter currentFilter = filters[index];
+    for( int index = 0; index < filterList.length && filter == null; index++ ) {
+      ViewerFilter currentFilter = filterList[index];
       if( currentFilter.getClass().equals( filterClass ) ) {
         filter = currentFilter;
       }
@@ -100,13 +97,13 @@ public class JobFiltersDialog extends TrayDialog {
   
   private abstract class AbstractFilterComposite {
     abstract protected void saveFilter();    
-  };
+  }
   
   private class JobStatusComposite extends AbstractFilterComposite
   {
+    final JobStatusFilter filter;
     private List<StatusOption> optionsList = new ArrayList<StatusOption>();
     private Button enabledCheckbox;
-    final JobStatusFilter filter;
     
     public JobStatusComposite( final Composite parent, final JobStatusFilter jobStatusFilter ) {
       this.filter = jobStatusFilter;
@@ -134,7 +131,7 @@ public class JobFiltersDialog extends TrayDialog {
       
       this.enabledCheckbox.addSelectionListener( new SelectionAdapter() {
 
-        public void widgetSelected( SelectionEvent event ) {
+        public void widgetSelected( final SelectionEvent event ) {
           enableFilter( enabledCheckbox.getSelection() );
         }
         
@@ -150,7 +147,7 @@ public class JobFiltersDialog extends TrayDialog {
       enableFilter( filter.isEnabled() );
     }
     
-    private void enableFilter( boolean enable ) {
+    private void enableFilter( final boolean enable ) {
       this.enabledCheckbox.setSelection( enable );
       
       for( StatusOption option : this.optionsList ) {
@@ -158,6 +155,7 @@ public class JobFiltersDialog extends TrayDialog {
       }
     }
     
+    @Override
     protected void saveFilter() {
       this.filter.setEnabled( this.enabledCheckbox.getSelection() );
       
@@ -170,7 +168,7 @@ public class JobFiltersDialog extends TrayDialog {
       private int statusValue;
       private Button checkbox;
 
-      public StatusOption( final Composite parent, final String descriptionString, int statusValue ) {
+      public StatusOption( final Composite parent, final String descriptionString, final int statusValue ) {
         this.statusValue = statusValue;
         this.checkbox = new Button( parent, SWT.CHECK );
         this.checkbox.setText( descriptionString );
@@ -179,7 +177,7 @@ public class JobFiltersDialog extends TrayDialog {
         this.checkbox.setLayoutData( gridData );
       }
       
-      void setSelected( boolean selected ) {
+      void setSelected( final boolean selected ) {
         this.checkbox.setSelection( selected );
       }
       
@@ -187,12 +185,12 @@ public class JobFiltersDialog extends TrayDialog {
         return this.checkbox.getSelection();
       }
       
-      void enable( boolean enable ) {
+      void enable( final boolean enable ) {
         this.checkbox.setEnabled( enable );
       }
       
       int getStatusValue() {
-        return statusValue;
+        return this.statusValue;
       }
     }
     
@@ -202,7 +200,7 @@ public class JobFiltersDialog extends TrayDialog {
    * @see org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets.Shell)
    */
   @Override
-  protected void configureShell( Shell newShell )
+  protected void configureShell( final Shell newShell )
   {
     newShell.setText( "Configure filters" );
     super.configureShell( newShell );

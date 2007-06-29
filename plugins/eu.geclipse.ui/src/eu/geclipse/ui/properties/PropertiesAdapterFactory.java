@@ -1,10 +1,11 @@
 package eu.geclipse.ui.properties;
 
 import java.util.List;
+
 import org.eclipse.core.runtime.IAdapterFactory;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.ui.views.properties.IPropertySource;
-import eu.geclipse.core.model.IGridElement;
+
 import eu.geclipse.ui.Extensions;
 
 

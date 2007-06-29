@@ -17,15 +17,16 @@ package eu.geclipse.core;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.internal.model.JobManager;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
-import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobID;
@@ -56,12 +57,12 @@ public class JobStatusUpdater extends Job {
   IGridJobStatus lastStatus=null;
 
   public JobStatusUpdater( final IGridJob job ) {
-    super( "Grid Job Status Updater" );
+    super( Messages.getString("JobStatusUpdater.name") ); //$NON-NLS-1$
     this.job = job;
 //    updaters.put( job.getID().getJobID(), this );
   }
   public JobStatusUpdater( final IGridJobID jobID ) {
-    super( "Grid Job Status Updater" );
+    super( Messages.getString("JobStatusUpdater.name") ); //$NON-NLS-1$
     this.jobID = jobID;
 //    updaters.put( job.getID().getJobID(), this );
   }
@@ -69,14 +70,14 @@ public class JobStatusUpdater extends Job {
   @Override
   protected IStatus run( final IProgressMonitor monitor ) {
     int oldType = -1;
-    if(lastStatus!=null){
-      oldType=lastStatus.getType();
+    if(this.lastStatus!=null){
+      oldType=this.lastStatus.getType();
     }
     int newType = IGridJobStatus.UNKNOWN; 
     IGridJobStatus newStatus = null;
     // IGridJobStatus jobStatus = updateService.getJobStatus( job.getID() );
     try{
-      if(job!=null)
+      if(this.job!=null)
       {
         this.job.updateJobStatus();
         newStatus = this.job.getJobStatus();
@@ -84,10 +85,10 @@ public class JobStatusUpdater extends Job {
       else{
         List<IGridElementCreator> elementCreators = GridModel.getElementCreators( IGridJobStatusService.class );
         for(IGridElementCreator creator:elementCreators){
-          if(creator.canCreate( jobID )){
+          if(creator.canCreate( this.jobID )){
             try {
               IGridJobStatusService service = (IGridJobStatusService)creator.create( null );
-              newStatus = service.getJobStatus( jobID );
+              newStatus = service.getJobStatus( this.jobID );
             } catch( GridModelException e ) {
                //   empty implementation
             } catch( GridException e ) {
@@ -98,15 +99,15 @@ public class JobStatusUpdater extends Job {
       }
       if(newStatus!=null){
         newType=newStatus.getType();
-        lastStatus=newStatus;
+        this.lastStatus=newStatus;
       }
       if( oldType != newType ) {
       // status changed, notify all listeners;
-      for(Enumeration<IGridJobStatusListener> e=listeners.keys();e.hasMoreElements();){
+      for(Enumeration<IGridJobStatusListener> e=this.listeners.keys();e.hasMoreElements();){
         IGridJobStatusListener listener =e.nextElement();
-        int trigger=listeners.get( listener );
+        int trigger=this.listeners.get( listener ).intValue();
         if( (newType & trigger)>0){
-          listener.statusChanged( job );
+          listener.statusChanged( this.job );
         }
       }
     }
@@ -132,7 +133,7 @@ public class JobStatusUpdater extends Job {
    * @param listener - listener to be notifies about the change.
    */
   public void addJobStatusListener( final int status, final IGridJobStatusListener listener ) {
-    listeners.put( listener, status );
+    this.listeners.put( listener, new Integer( status ) );
   }
 
   /**
@@ -140,7 +141,7 @@ public class JobStatusUpdater extends Job {
    * @param listener
    */
   public void removeJobStatusListener( final IGridJobStatusListener listener ) {
-    listeners.remove( listener );
+    this.listeners.remove( listener );
   }
 
 }

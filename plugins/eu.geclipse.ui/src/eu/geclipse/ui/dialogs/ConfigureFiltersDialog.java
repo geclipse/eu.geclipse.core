@@ -31,6 +31,7 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -50,10 +51,10 @@ import eu.geclipse.ui.views.filters.IGridFilterConfiguration;
 
 public class ConfigureFiltersDialog extends TrayDialog {  
 
-  private List<IFilterComposite> composites = new ArrayList<IFilterComposite>();
-  private CheckboxTableViewer tableViewer;
-  private List<IGridFilterConfiguration> configurations;
-  private GridFilterConfigurationsManager configurationsManager;
+  CheckboxTableViewer tableViewer;
+  List<IGridFilterConfiguration> configurations;
+  GridFilterConfigurationsManager configurationsManager;
+  List<IFilterComposite> composites = new ArrayList<IFilterComposite>();
 
   public ConfigureFiltersDialog( final Shell shell, final GridFilterConfigurationsManager filterConfigurationsManager ) {
     super( shell );
@@ -68,7 +69,7 @@ public class ConfigureFiltersDialog extends TrayDialog {
   @Override
   protected void configureShell( final Shell newShell )
   {
-    newShell.setText( "Configure filters" );
+    newShell.setText( Messages.getString("ConfigureFiltersDialog.shell_text") ); //$NON-NLS-1$
     super.configureShell( newShell );
   } 
 
@@ -102,39 +103,39 @@ public class ConfigureFiltersDialog extends TrayDialog {
     GridData gridData = new GridData();
     gridData.horizontalSpan = 2;
     label.setLayoutData( gridData );
-    label.setText( "Defined filters:" );
+    label.setText( Messages.getString("ConfigureFiltersDialog.table_label") ); //$NON-NLS-1$
   }
   
   private void createConfigsTable( final Composite parent ) {
-    tableViewer = CheckboxTableViewer.newCheckList( parent, SWT.CHECK | SWT.BORDER );
-    tableViewer.setContentProvider( new ArrayContentProvider() );
-    tableViewer.setLabelProvider( createTableLabelProvider() );
-    tableViewer.addSelectionChangedListener( createTableSelectionListener() );
-    tableViewer.addCheckStateListener( createCheckStateListener() );
+    this.tableViewer = CheckboxTableViewer.newCheckList( parent, SWT.CHECK | SWT.BORDER );
+    this.tableViewer.setContentProvider( new ArrayContentProvider() );
+    this.tableViewer.setLabelProvider( createTableLabelProvider() );
+    this.tableViewer.addSelectionChangedListener( createTableSelectionListener() );
+    this.tableViewer.addCheckStateListener( createCheckStateListener() );
     
     GridData gridData = new GridData();
     gridData.heightHint = 150;
     gridData.widthHint = 75;
-    tableViewer.getTable().setLayoutData( gridData );
-    tableViewer.setInput( this.configurations );
+    this.tableViewer.getTable().setLayoutData( gridData );
+    this.tableViewer.setInput( this.configurations );
     setCheckedConfigs();
-    tableViewer.setSelection( new StructuredSelection( this.configurations.get( 0 ) ) );
+    this.tableViewer.setSelection( new StructuredSelection( this.configurations.get( 0 ) ) );
   }
   
   private ICheckStateListener createCheckStateListener() {
     return new ICheckStateListener() {
 
-      public void checkStateChanged( CheckStateChangedEvent event ) {
+      public void checkStateChanged( final CheckStateChangedEvent event ) {
         IGridFilterConfiguration configuration = ( IGridFilterConfiguration )event.getElement();
         enableConfiguration( configuration );
       }
     };
   }
   
-  private void enableConfiguration( IGridFilterConfiguration configuration ) {
+  void enableConfiguration( final IGridFilterConfiguration configuration ) {
     for( IGridFilterConfiguration curConfiguration : this.configurations ) {
       boolean enable = curConfiguration == configuration;
-      tableViewer.setChecked( curConfiguration, enable );
+      this.tableViewer.setChecked( curConfiguration, enable );
       curConfiguration.setEnabled( enable );
     }
     
@@ -181,7 +182,7 @@ public class ConfigureFiltersDialog extends TrayDialog {
     };
   }
   
-  private void setReadOnly( boolean readOnly ) {
+  void setReadOnly( final boolean readOnly ) {
     for( IFilterComposite filterComposite : ConfigureFiltersDialog.this.composites ) {
       filterComposite.setReadOnly( readOnly );
     }    
@@ -198,23 +199,24 @@ public class ConfigureFiltersDialog extends TrayDialog {
   }
   
   private void createNewButton( final Composite parent ) {
-    Button button = createButton( parent, "&New");
+    Button button = createButton( parent, Messages.getString("ConfigureFiltersDialog.new_button")); //$NON-NLS-1$
     button.addSelectionListener( new SelectionAdapter() {
 
       /* (non-Javadoc)
        * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
        */
       @Override
-      public void widgetSelected( SelectionEvent e )
+      public void widgetSelected( final SelectionEvent e )
       {
-        InputDialog dialog = new InputDialog( getShell(), "Create New Filter", "Enter Filter Name", "", createNameValidator() );
+        InputDialog dialog = new InputDialog( getShell(), Messages.getString("ConfigureFiltersDialog.create_new_filter"), Messages.getString("ConfigureFiltersDialog.enter_filter_name"), "", createNameValidator() ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         
-        if( dialog.open() == InputDialog.OK ) {          
-          IGridFilterConfiguration newConfiguration = configurationsManager.createConfiguration( dialog.getValue() );
-          configurations.add( newConfiguration );
-          tableViewer.add( newConfiguration );
-          tableViewer.setChecked( newConfiguration, newConfiguration.isEnabled() );
-          tableViewer.setSelection( new StructuredSelection( newConfiguration ) );
+        if( dialog.open() == Window.OK ) {          
+          IGridFilterConfiguration newConfiguration
+            = ConfigureFiltersDialog.this.configurationsManager.createConfiguration( dialog.getValue() );
+          ConfigureFiltersDialog.this.configurations.add( newConfiguration );
+          ConfigureFiltersDialog.this.tableViewer.add( newConfiguration );
+          ConfigureFiltersDialog.this.tableViewer.setChecked( newConfiguration, newConfiguration.isEnabled() );
+          ConfigureFiltersDialog.this.tableViewer.setSelection( new StructuredSelection( newConfiguration ) );
           enableConfiguration( newConfiguration );
         }
       }
@@ -222,10 +224,10 @@ public class ConfigureFiltersDialog extends TrayDialog {
       private IInputValidator createNameValidator() {
         return new IInputValidator() {
 
-          public String isValid( String newText ) {
+          public String isValid( final String newText ) {
             String invalidMsg = null;
             if( findConfiguration( newText ) != null ) {
-              invalidMsg = "Filter \"" + newText + "\" already exists. Please enter unique Filter Name.";
+              invalidMsg = String.format( Messages.getString("ConfigureFiltersDialog.filter_already_exists"), newText ); //$NON-NLS-1$
             }
             return invalidMsg;
           }
@@ -236,7 +238,7 @@ public class ConfigureFiltersDialog extends TrayDialog {
   }
   
   private void createDeleteButton( final Composite parent ) {
-    Button button = createButton( parent, "&Delete" );
+    Button button = createButton( parent, Messages.getString("ConfigureFiltersDialog.delete_button") ); //$NON-NLS-1$
     
     button.addSelectionListener( new SelectionAdapter() {
 
@@ -244,16 +246,17 @@ public class ConfigureFiltersDialog extends TrayDialog {
        * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
        */
       @Override
-      public void widgetSelected( SelectionEvent e )
+      public void widgetSelected( final SelectionEvent e )
       {
-        StructuredSelection selection = (StructuredSelection)tableViewer.getSelection();
+        StructuredSelection selection
+          = (StructuredSelection)ConfigureFiltersDialog.this.tableViewer.getSelection();
         if( selection == null || selection.isEmpty() ) {
-          MessageDialog.openWarning( getShell(), "Delete filter", "Select Filter, which you want to delete" );
+          MessageDialog.openWarning( getShell(), Messages.getString("ConfigureFiltersDialog.delete_filter"), Messages.getString("ConfigureFiltersDialog.select_filter") ); //$NON-NLS-1$ //$NON-NLS-2$
         }
         else {
           IGridFilterConfiguration configuration = (IGridFilterConfiguration)selection.getFirstElement();
-          tableViewer.remove( configuration );
-          configurations.remove( configuration );
+          ConfigureFiltersDialog.this.tableViewer.remove( configuration );
+          ConfigureFiltersDialog.this.configurations.remove( configuration );
           selectDefaultConfiguration();
         }
       }
@@ -261,10 +264,10 @@ public class ConfigureFiltersDialog extends TrayDialog {
     });
   }
   
-  private void selectDefaultConfiguration() {
+  void selectDefaultConfiguration() {
     if( !this.configurations.isEmpty() ) {
       IGridFilterConfiguration configuration = this.configurations.get( 0 );
-      tableViewer.setSelection( new StructuredSelection( configuration ) );
+      this.tableViewer.setSelection( new StructuredSelection( configuration ) );
       enableConfiguration( configuration );
     }
   }
@@ -293,23 +296,27 @@ public class ConfigureFiltersDialog extends TrayDialog {
   private List<IGridFilterConfiguration> copyConfigurations( final List<IGridFilterConfiguration> sourceConfigurations ) {
     List<IGridFilterConfiguration> newConfigurations = new ArrayList<IGridFilterConfiguration>( 3 + ( sourceConfigurations != null ? sourceConfigurations.size() : 0 ) );
 
-    try {
-      for( IGridFilterConfiguration configuration : sourceConfigurations ) {
-        newConfigurations.add( configuration.clone() );
+    if ( sourceConfigurations != null ) {
+    
+      try {
+        for( IGridFilterConfiguration configuration : sourceConfigurations ) {
+          newConfigurations.add( configuration.clone() );
+        }
+      } catch( CloneNotSupportedException exception ) {
+        Activator.logException( exception );
       }
-    } catch( CloneNotSupportedException exception ) {
-      Activator.getDefault().logException( exception );
+      
     }
     
     if( newConfigurations.isEmpty() ) {
-      IGridFilterConfiguration defaultConfiguration = this.configurationsManager.createConfiguration( "Default" );      
+      IGridFilterConfiguration defaultConfiguration = this.configurationsManager.createConfiguration( Messages.getString("ConfigureFiltersDialog.default_config") );       //$NON-NLS-1$
       newConfigurations.add( defaultConfiguration );
     }
     
     return newConfigurations;
   }
   
-  private IGridFilterConfiguration findConfiguration( final String name ) {
+  IGridFilterConfiguration findConfiguration( final String name ) {
     IGridFilterConfiguration foundConfiguration = null;
     
     for( Iterator<IGridFilterConfiguration> iterator = this.configurations.iterator(); iterator.hasNext() && foundConfiguration == null;  )
@@ -321,7 +328,7 @@ public class ConfigureFiltersDialog extends TrayDialog {
     }
     return foundConfiguration;
   }
-  
+  /*
   private void deleteConfiguration( final String name ) {
     IGridFilterConfiguration configuration = findConfiguration( name );
     
@@ -329,7 +336,7 @@ public class ConfigureFiltersDialog extends TrayDialog {
       this.configurations.remove( configuration );
     }
   }
-  
+  */
   /* (non-Javadoc)
    * @see org.eclipse.jface.dialogs.Dialog#okPressed()
    */

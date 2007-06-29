@@ -51,7 +51,7 @@ public class OperatorPerspectiveFactory implements IPerspectiveFactory {
     // eu.geclipse.batch.ui.internal.Activator.ID_BATCH_JOB_VIEW
     // Due to batch.ui plugin location have to do this hack
     // Leve as Warning to remember
-    bottomFolder.addView( "eu.geclipse.batch.ui.views.BatchJobView" );
+    bottomFolder.addView( "eu.geclipse.batch.ui.views.BatchJobView" ); //$NON-NLS-1$
     bottomFolder.addView( eu.geclipse.ui.internal.Activator.ID_AUTH_VIEW );
 
     bottomFolder.addPlaceholder( IPageLayout.ID_PROP_SHEET );
@@ -60,7 +60,7 @@ public class OperatorPerspectiveFactory implements IPerspectiveFactory {
     bottomFolder.addPlaceholder( IPageLayout.ID_BOOKMARKS );
     bottomFolder.addPlaceholder( IProgressConstants.PROGRESS_VIEW_ID );
 
-    layout.addShowViewShortcut( "eu.geclipse.batch.ui.views.BatchJobView" );
+    layout.addShowViewShortcut( "eu.geclipse.batch.ui.views.BatchJobView" ); //$NON-NLS-1$
     layout.addShowViewShortcut( IPageLayout.ID_PROP_SHEET );
     layout.addShowViewShortcut( IPageLayout.ID_PROBLEM_VIEW );
     layout.addShowViewShortcut( IPageLayout.ID_RES_NAV );
@@ -71,7 +71,7 @@ public class OperatorPerspectiveFactory implements IPerspectiveFactory {
     // eu.geclipse.batch.ui.internal.Activator.ID_BATCH_WIZARD
     // Due to batch.ui plugin location have to do this hack
     // Leve as Warning to remember
-    layout.addNewWizardShortcut( "eu.geclipse.batch.ui.wizards.BatchCreationWizard" );
+    layout.addNewWizardShortcut( "eu.geclipse.batch.ui.wizards.BatchCreationWizard" ); //$NON-NLS-1$
     layout.addNewWizardShortcut( eu.geclipse.ui.internal.Activator.ID_PROJECT_WIZARD );
     layout.addNewWizardShortcut( eu.geclipse.ui.internal.Activator.ID_CONNECTION_WIZARD );
     layout.addNewWizardShortcut( eu.geclipse.ui.internal.Activator.ID_WORKFLOW_WIZARD );

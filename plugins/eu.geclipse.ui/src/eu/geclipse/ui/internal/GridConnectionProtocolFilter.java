@@ -12,14 +12,14 @@ public class GridConnectionProtocolFilter extends ViewerFilter {
 
   private List<String> protocolsToFilter = new ArrayList<String>();
   
-  public void addFilterProtocol(String protocol){
+  public void addFilterProtocol( final String protocol ){
     if (! this.protocolsToFilter.contains( protocol )){
       this.protocolsToFilter.add( protocol );
     }
   }
   
   @Override
-  public boolean select( Viewer viewer, Object parentElement, Object element )
+  public boolean select( final Viewer viewer, final Object parentElement, final Object element )
   {
     boolean result = false;
     if ( element instanceof IGridConnectionElement ) {
@@ -28,7 +28,7 @@ public class GridConnectionProtocolFilter extends ViewerFilter {
     return result;
   }
 
-  private boolean select( IGridConnectionElement element ) {
+  private boolean select( final IGridConnectionElement element ) {
     boolean result = true;
     try {
       String protocol = element.getConnectionFileStore().getFileSystem().getScheme();

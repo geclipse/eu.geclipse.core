@@ -120,7 +120,7 @@ public class CoreProblems implements IProblemProvider {
     }
     else if ( problemID == FILE_ACCESS_PROBLEM ) {
       problem = createProblem( problemID,
-                               "There was a problem when performing an operation on a file/directory",
+                               Messages.getString("CoreProblems.file_access"), //$NON-NLS-1$
                                exc,
                                null );
     }

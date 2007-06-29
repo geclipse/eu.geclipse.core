@@ -98,7 +98,8 @@ public class GridConnectionCreator extends AbstractGridElementCreator {
     return connection;
   }
   
-  protected IGridConnection createGridConnection( final IGridContainer parent,
+  protected IGridConnection createGridConnection( @SuppressWarnings("unused")
+                                                  final IGridContainer parent,
                                                   final URI uri )
       throws GridModelException {
     

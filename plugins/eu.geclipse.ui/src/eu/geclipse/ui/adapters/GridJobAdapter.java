@@ -12,7 +12,8 @@ import eu.geclipse.ui.internal.Activator;
  */
 public class GridJobAdapter extends WorkbenchAdapter {
 
-  public ImageDescriptor getImageDescriptor(Object resource) {
+  @Override
+  public ImageDescriptor getImageDescriptor( final Object resource ) {
     URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/obj16/job_folder.gif" ); //$NON-NLS-1$
    return ImageDescriptor.createFromURL( imgUrl );
 //        return PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(

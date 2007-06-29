@@ -24,12 +24,12 @@ import org.eclipse.ui.IMemento;
 abstract public class AbstractGridFilterConfiguration
   implements IGridFilterConfiguration
 {
-  private static final String MEMENTO_KEY_ENABLED = "Enabled";
-  private static final String MEMENTO_KEY_TYPE = "Filter";
+  private static final String MEMENTO_KEY_ENABLED = "Enabled"; //$NON-NLS-1$
+  private static final String MEMENTO_KEY_TYPE = "Filter"; //$NON-NLS-1$
   
+  protected ArrayList<IGridFilter> filtersList = new ArrayList<IGridFilter>();
   private String name;
   private boolean enabled = false;
-  protected ArrayList<IGridFilter> filtersList = new ArrayList<IGridFilter>();
   
   public AbstractGridFilterConfiguration( final String name ) {
     super();
@@ -78,7 +78,7 @@ abstract public class AbstractGridFilterConfiguration
    * @see eu.geclipse.ui.views.filters.IGridFilterConfiguration#getFilters()
    */
   public List<IGridFilter> getFilters() {
-    return filtersList;
+    return this.filtersList;
   }
 
   /* (non-Javadoc)
@@ -93,7 +93,7 @@ abstract public class AbstractGridFilterConfiguration
     }
   }
   
-  protected void addFilter( IGridFilter filter ) {
+  protected void addFilter( final IGridFilter filter ) {
     this.filtersList.add( filter );
   }
   
@@ -107,11 +107,11 @@ abstract public class AbstractGridFilterConfiguration
   /* (non-Javadoc)
    * @see eu.geclipse.ui.views.filters.IGridFilterConfiguration#setEnabled(boolean)
    */
-  public void setEnabled( boolean enabled ) {
+  public void setEnabled( final boolean enabled ) {
     this.enabled = enabled;
   }
   
-  protected <FilterType extends IGridFilter> FilterType findFilter( Class<? extends IGridFilter> filterClass ) {
+  protected <FilterType extends IGridFilter> FilterType findFilter( final Class<? extends IGridFilter> filterClass ) {
     FilterType filter = null;
     Iterator<IGridFilter> iterator = this.filtersList.iterator();
     

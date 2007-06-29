@@ -20,7 +20,7 @@ public class RefreshAction extends BaseSelectionListenerAction {
   private IStructuredSelection lastElementSelection;
 
   protected RefreshAction( final Shell shell ) {
-    super( "Re&fresh@F5" );
+    super( Messages.getString("RefreshAction.refresh") ); //$NON-NLS-1$
     this.resourcesRefresh = new org.eclipse.ui.actions.RefreshAction( shell );
   }
   

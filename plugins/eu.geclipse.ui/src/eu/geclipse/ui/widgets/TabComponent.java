@@ -94,8 +94,8 @@ public abstract class TabComponent<T> extends AbstractLaunchConfigurationTab{
     this.tabColumnsLayouts = new ColumnLayoutData[ this.tabColumnsHeaders.length ];
     for( int i = 0; i < this.tabColumnsHeaders.length; i++ ) {
       this.columnsWidth.add( Integer.valueOf( width ));
-      this.tabColumnsLayouts[ i ] = new ColumnWeightData( this.columnsWidth.get( i ),
-                                                          this.columnsWidth.get( i ),
+      this.tabColumnsLayouts[ i ] = new ColumnWeightData( this.columnsWidth.get( i ).intValue(),
+                                                          this.columnsWidth.get( i ).intValue(),
                                                           false );
     } 
     this.buttonsPosition =  buttonsPosition;
@@ -119,8 +119,8 @@ public abstract class TabComponent<T> extends AbstractLaunchConfigurationTab{
       .toArray( this.tabColumnsProperties );
     this.tabColumnsLayouts = new ColumnLayoutData[ this.tabColumnsHeaders.length ];
     for( int i = 0; i < this.tabColumnsHeaders.length; i++ ) {
-      this.tabColumnsLayouts[ i ] = new ColumnWeightData( this.columnsWidth.get( i ),
-                                                          this.columnsWidth.get( i ),
+      this.tabColumnsLayouts[ i ] = new ColumnWeightData( this.columnsWidth.get( i ).intValue(),
+                                                          this.columnsWidth.get( i ).intValue(),
                                                           false );
     } 
     this.buttonsPosition =  buttonsPosition;
@@ -160,12 +160,12 @@ public abstract class TabComponent<T> extends AbstractLaunchConfigurationTab{
     // do nothing - subclasses defines its behavior
   }
   
-  protected void setCellModifier(ICellModifier cellModifier){
+  protected void setCellModifier( final ICellModifier cellModifier ){
     this.cellModifier = cellModifier;
   }
 
-  protected void addComboEditor( ComboBoxCellEditor editor, String[] types, boolean readOnly ) { 
-   editor.create( table.getTable() );
+  protected void addComboEditor( final ComboBoxCellEditor editor, final String[] types, final boolean readOnly ) { 
+   editor.create( this.table.getTable() );
    editor.setItems( types );
    if (readOnly){
      editor.setStyle( SWT.READ_ONLY );
@@ -174,8 +174,8 @@ public abstract class TabComponent<T> extends AbstractLaunchConfigurationTab{
    
  }
 
-  public void addEditor( CellEditor editor ) {
-    editor.create( table.getTable() );
+  public void addEditor( final CellEditor editor ) {
+    editor.create( this.table.getTable() );
     this.cellEditors.add( editor );
   }
 
