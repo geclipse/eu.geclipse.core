@@ -287,7 +287,7 @@ public class GridConnectionElement
     } catch ( GridModelException gmExc ) {
       throw gmExc;
     } catch ( CoreException cExc ) {
-      throw new GridModelException( GridModelProblems.FETCH_CHILDREN_FAILED, cExc, getName() );
+      throw new GridModelException( GridModelProblems.FETCH_CHILDREN_FAILED, cExc );
     } finally {
       setProcessEvents( true );
     }
