@@ -21,8 +21,10 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.NoSuchElementException;
+import org.eclipse.core.runtime.jobs.Job;
 
 import eu.geclipse.core.JobStatusUpdater;
+import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridJob;
@@ -30,12 +32,14 @@ import eu.geclipse.core.model.IGridJobID;
 import eu.geclipse.core.model.IGridJobManager;
 import eu.geclipse.core.model.IGridJobStatus;
 import eu.geclipse.core.model.IGridJobStatusListener;
+import eu.geclipse.core.model.IGridModelEvent;
+import eu.geclipse.core.model.IGridModelListener;
 
 /**
  * Core implementation of an {@link IGridJobManager}.
  */
 public class JobManager extends AbstractGridElementManager
-  implements IGridJobManager, IGridJobStatusListener
+  implements IGridJobManager, IGridJobStatusListener, IGridModelListener
 {
 
   /**
@@ -54,6 +58,8 @@ public class JobManager extends AbstractGridElementManager
   
   private List< IGridJobStatusListener > globalListeners = new ArrayList< IGridJobStatusListener >();
 
+  private boolean listenerRegistered=false;
+  
   /**
    * Private constructor to ensure to have only one instance of this class. This
    * can be obtained by {@link #getManager()}.
@@ -66,6 +72,14 @@ public class JobManager extends AbstractGridElementManager
   public boolean addElement( final IGridElement element )
     throws GridModelException
   {
+//fast workaroud. 
+//TODO pawelw -correct it    
+    if(listenerRegistered==false){
+      listenerRegistered=true;
+      GridModel.getRoot().addGridModelListener( this );
+    }
+
+    
     boolean flag;
     flag = super.addElement( element );
     if( element instanceof IGridJob ) {
@@ -76,7 +90,7 @@ public class JobManager extends AbstractGridElementManager
       updater.addJobStatusListener( IGridJobStatus._ALL, this );
     }
     return flag;
-  }
+   }
   
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridJobManager#startUpdater(eu.geclipse.core.model.IGridJobID)
@@ -120,6 +134,9 @@ public class JobManager extends AbstractGridElementManager
     return element instanceof IGridJob;
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridJobManager#addJobStatusListener(eu.geclipse.core.model.IGridJobStatusListener)
+   */
   public void addJobStatusListener( final IGridJobStatusListener listener ) {
     if ( ! this.globalListeners.contains( listener ) ) {
       this.globalListeners.add( listener );
@@ -242,6 +259,49 @@ public class JobManager extends AbstractGridElementManager
       throw new NoSuchElementException();
     }
     updater.join();
+  }
+
+  public void removeJobStatusListener( final IGridJob[] jobs, final IGridJobStatusListener listener ) {
+
+    JobStatusUpdater updater;
+    for(int i=0;i<jobs.length;i++){
+      updater=updaters.get( jobs[i].getID() );
+      updater.removeJobStatusListener( listener );
+    }
+    this.globalListeners.remove( listener );
+  }
+
+  public void removeJobStatusListener( final IGridJobID[] ids, final IGridJobStatusListener listener ) {
+    JobStatusUpdater updater;
+    for(int i=0;i<ids.length;i++){
+      updater=updaters.get( ids[i] );
+      updater.removeJobStatusListener( listener );
+    }
+    this.globalListeners.remove( listener );
+  }
+
+  public void gridModelChanged( final IGridModelEvent event ) {
+    if( event.getType() == IGridModelEvent.ELEMENTS_REMOVED ) {
+      IGridElement[] removedElements = event.getElements();
+      for( IGridElement elem : removedElements ) {
+        if( elem instanceof IGridJob ) {
+          IGridJob job = ( IGridJob )elem;
+          JobStatusUpdater updater = updaters.get( job.getID() );
+          // check if updater is currently running and wait until it finishes
+          while( updater.getState() == Job.RUNNING ) {
+            try {
+              Thread.sleep( 1000 );
+            } catch( InterruptedException e ) {
+              // empty block
+            }
+          }
+          // cancel updater
+          updater.cancel();
+          // remove updater from updaters list
+          this.removeUpdater( updater );
+        }
+      }
+    }
   }
 
 }
