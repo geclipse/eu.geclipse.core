@@ -467,7 +467,8 @@ public final class DataStageTypeAdapter extends JsdlAdaptersFactory {
               break;
               default: // Do Nothing;
               break;
-            }
+              
+            }//endif switch
             }
 
           } // endif EAttribute
@@ -476,8 +477,15 @@ public final class DataStageTypeAdapter extends JsdlAdaptersFactory {
   
       } // endif eObject Null
     }// End list loop
-    listName.setSelection( 0 );
-    navigateDataStaging( listName.getItem( 0 ) );
+    
+    // If the wasn't any DataStage Element then there is no reference to the 
+    // datastage List, so check if we have that list reference before setting
+    // the selection.
+    
+    if (listName != null ) {
+      listName.setSelection( 0 );
+      navigateDataStaging( listName.getItem( 0 ) );
+    }
     this.isNotifyAllowed = true;
   } // End void load()
   
