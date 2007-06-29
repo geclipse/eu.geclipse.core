@@ -15,24 +15,27 @@
  *****************************************************************************/
 package eu.geclipse.core.internal.model;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.NoSuchElementException;
+
 import eu.geclipse.core.JobStatusUpdater;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobID;
 import eu.geclipse.core.model.IGridJobManager;
+import eu.geclipse.core.model.IGridJobStatus;
 import eu.geclipse.core.model.IGridJobStatusListener;
 
 /**
  * Core implementation of an {@link IGridJobManager}.
  */
 public class JobManager extends AbstractGridElementManager
-  implements IGridJobManager
+  implements IGridJobManager, IGridJobStatusListener
 {
 
   /**
@@ -48,6 +51,8 @@ public class JobManager extends AbstractGridElementManager
    */
 //  private Hashtable<IGridJob, JobStatusUpdater> updatersByJob = new Hashtable<IGridJob, JobStatusUpdater>();
   private Hashtable<IGridJobID, JobStatusUpdater> updaters = new Hashtable<IGridJobID, JobStatusUpdater>();
+  
+  private List< IGridJobStatusListener > globalListeners = new ArrayList< IGridJobStatusListener >();
 
   /**
    * Private constructor to ensure to have only one instance of this class. This
@@ -68,6 +73,7 @@ public class JobManager extends AbstractGridElementManager
       updaters.put( (( IGridJob )element).getID(), updater );
       updater.setSystem( true );
       updater.schedule( 60000 );
+      updater.addJobStatusListener( IGridJobStatus._ALL, this );
     }
     return flag;
   }
@@ -112,6 +118,12 @@ public class JobManager extends AbstractGridElementManager
    */
   public boolean canManage( final IGridElement element ) {
     return element instanceof IGridJob;
+  }
+  
+  public void addJobStatusListener( final IGridJobStatusListener listener ) {
+    if ( ! this.globalListeners.contains( listener ) ) {
+      this.globalListeners.add( listener );
+    }
   }
 
   /*
@@ -160,6 +172,7 @@ public class JobManager extends AbstractGridElementManager
       updater = e.nextElement();
       updater.removeJobStatusListener( listener );
     }
+    this.globalListeners.remove( listener );
   }
 
   /**
@@ -172,6 +185,12 @@ public class JobManager extends AbstractGridElementManager
     Collection<JobStatusUpdater> values = updaters.values();
     while( values.remove( updater ) ) {
       // empty block};
+    }
+  }
+  
+  public void statusChanged( final IGridJob job ) {
+    for ( IGridJobStatusListener listener : this.globalListeners ) {
+      listener.statusChanged( job );
     }
   }
 
@@ -224,4 +243,5 @@ public class JobManager extends AbstractGridElementManager
     }
     updater.join();
   }
+
 }

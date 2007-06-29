@@ -26,7 +26,9 @@ import org.eclipse.ui.PartInitException;
 
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridElementManager;
+import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobManager;
+import eu.geclipse.core.model.IGridJobStatusListener;
 import eu.geclipse.ui.internal.actions.ActionGroupManager;
 import eu.geclipse.ui.internal.actions.FilterActions;
 import eu.geclipse.ui.providers.JobViewLabelProvider;
@@ -39,9 +41,23 @@ import eu.geclipse.ui.views.filters.JobViewFilterConfiguration;
  * the default implementation of the {@link IGridJobManager}
  * interface
  */
-public class GridJobView extends ElementManagerViewPart {
+public class GridJobView
+    extends ElementManagerViewPart
+    implements IGridJobStatusListener {
+  
   private IMemento memento;
+  
   private GridFilterConfigurationsManager filterConfigurationsManager;
+  
+  @Override
+  public void dispose() {
+    GridModel.getJobManager().removeJobStatusListener( this );
+    super.dispose();
+  }
+  
+  public void statusChanged( final IGridJob job ) {
+    refreshViewer( job );
+  }
 
   /* (non-Javadoc)
    * @see eu.geclipse.ui.views.GridElementManagerViewPart#getManager()
@@ -121,6 +137,7 @@ public class GridJobView extends ElementManagerViewPart {
   {
     this.memento = mem;
     super.init( site, mem );
+    GridModel.getJobManager().addJobStatusListener( this );
   }
 
   /* (non-Javadoc)

@@ -68,7 +68,7 @@ public class JobStatusUpdater extends Job {
 
   @Override
   protected IStatus run( final IProgressMonitor monitor ) {
-    int oldType = IGridJobStatus.UNKNOWN;
+    int oldType = -1;
     if(lastStatus!=null){
       oldType=lastStatus.getType();
     }

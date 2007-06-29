@@ -22,6 +22,7 @@ package eu.geclipse.core.model;
 public interface IGridJobManager
     extends IGridElementManager {
   
+  public void addJobStatusListener( IGridJobStatusListener listener );
 
   public void addJobStatusListener(IGridJob[] jobs, int status, IGridJobStatusListener listener);
 
