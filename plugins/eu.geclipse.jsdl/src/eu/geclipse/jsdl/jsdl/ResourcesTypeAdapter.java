@@ -54,8 +54,20 @@ import eu.geclipse.jsdl.model.ProcessorArchitectureEnumeration;
 import eu.geclipse.jsdl.model.ResourcesType;
 
 
+
 /**
- * @author nickl
+ * ResourcesTypeAdapter Class
+ * 
+ * This class provides adapters for manipulating <b>Resources</b> elements through the
+ * Resources Page of the JSDL editor. Supported Resources elements are:
+ * <p>
+ * - Candidate Hosts
+ * <p>
+ * - FileSystem
+ * <p>
+ * - OperatingSystem
+ * <p>
+ * - CPUArchitecture
  *
  */
 

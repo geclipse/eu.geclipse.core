@@ -18,7 +18,7 @@
 package eu.geclipse.jsdl.ui.internal.pages;
 
 /**
- * @author nicholas
+ * @author nickl
  *
  */
 

@@ -15,7 +15,10 @@
   *
   *****************************************************************************/
 package eu.geclipse.jsdl.posix;
-
+/**
+ * @author nickl
+ *
+ */
 import java.util.Hashtable;
 import java.util.Iterator;
 import org.eclipse.emf.common.util.EList;
@@ -47,8 +50,23 @@ import eu.geclipse.jsdl.model.posix.PosixPackage;
 
 
 /**
- * @author nickl
+ * PosixApplicationTypeAdapter Class
  *
+ * This class provides adapters for manipulating <b>POSIXApplication</b> elements 
+ * through the Application Page of the JSDL editor. Supported POSIXApplication 
+ * elements are:
+ * <p>
+ * - Executable
+ * <p>
+ * - Argument
+ * <p>
+ * - Input
+ * <p>
+ * - Output
+ * <p>
+ * - Error
+ * <p>
+ * - Environment
  */
 public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
@@ -81,7 +99,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
     
      getTypeForAdapter(rootJsdlElement);
     
-  }
+  } // End Class Constructor
   
   
   
@@ -99,7 +117,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
      if ( testType instanceof POSIXApplicationType ) {
        this.posixApplicationType = (POSIXApplicationType) testType;  
       
-    } 
+     } 
      
    }    
 
@@ -122,10 +140,12 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
   
   protected void contentChanged(){
+    
     if (this.isNotifyAllowed){
       fireNotifyChanged( null);
     }
-  }
+    
+  } // End void contentChanged()
   
   
   
@@ -283,7 +303,9 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
         
       }
     } );
-  }
+    
+  } // End void attachPosixApplicationError()
+  
   
   
   /**
@@ -293,9 +315,11 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    * PosixApplication Argument element of the JSDL document.
    */
   public void attachToPosixApplicationArgument(final TableViewer widget){
+    
     Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__ARGUMENT);
-    this.tableFeaturesMap.put( featureID , widget );      
-  }
+    this.tableFeaturesMap.put( featureID , widget );
+    
+  } // End void attachToPosixApplicationArgument()
   
   
   /**
@@ -305,9 +329,11 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    * PosixApplication Environment element of the JSDL document.
    */
   public void attachToPosixApplicationEnvironment(final TableViewer widget){
+    
     Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__ENVIRONMENT);
-    this.tableFeaturesMap.put( featureID , widget );       
-  }
+    this.tableFeaturesMap.put( featureID , widget );
+    
+  } // End void attachToPosixApplicationEnvironment()s
   
   
   /**
@@ -346,7 +372,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
     });
     
     
-  }
+  } // End void attachToDelete()
   
   
   /**
@@ -360,7 +386,8 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
     }
     
     return status;
-  } //End isEmpty()
+    
+  } // End boolean isEmpty()
   
   
   
@@ -433,7 +460,8 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
     
     viewer.refresh();
     contentChanged();
-  }
+    
+  } // End void performDelete()
   
   
  
@@ -444,6 +472,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    */ 
   public void load()
   {
+    
     this.isNotifyAllowed = false;
     EObject posixEObject = this.posixApplicationType;
     Text widgetName = null;
@@ -556,6 +585,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
       
     } // End if    
     this.isNotifyAllowed = true;
+    
   } // End void load()
     
   

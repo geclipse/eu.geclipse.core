@@ -47,6 +47,28 @@ import eu.geclipse.jsdl.model.SourceTargetType;
  * @author nickl
  *
  */
+
+
+/**
+ * DataStageTypeAdapter Class
+ * <p>
+ * This class provides adapters for manipulating <b>Data Staging </b> 
+ * elements  through the Data Staging Page of the JSDL editor. 
+ * Supported DataStaging elements are:
+ * <p>
+ * - FileName
+ * <p>
+ * - FileSystemName
+ * <p>
+ * - CreationFlag
+ * <p>
+ * - DeleteOnTermination
+ * <p>
+ * - Source
+ * <p>
+ * - Target
+ *
+ */
 public final class DataStageTypeAdapter extends JsdlAdaptersFactory {
   
   protected String dataStageEntryKey = ""; //$NON-NLS-1$
@@ -84,7 +106,7 @@ public final class DataStageTypeAdapter extends JsdlAdaptersFactory {
 
     getTypeForAdapter(rootJsdlElement);
     
-  }
+  } // End Constructor
   
   
   protected void contentChanged(){
@@ -92,7 +114,7 @@ public final class DataStageTypeAdapter extends JsdlAdaptersFactory {
     if (this.isNotifyAllowed){
       fireNotifyChanged( null);
     }
-  } //end void contenctChanged()
+  } // End void contenctChanged()
   
   
   
@@ -125,7 +147,7 @@ public final class DataStageTypeAdapter extends JsdlAdaptersFactory {
      }
     });
      
-  } // End attachToFileName()
+  } // End void attachToFileName()
   
   
   
@@ -155,7 +177,7 @@ public final class DataStageTypeAdapter extends JsdlAdaptersFactory {
      
     } );
           
-  } // End attachToFileSystem()
+  } // End void attachToFileSystem()
   
   
   
@@ -186,7 +208,7 @@ public final class DataStageTypeAdapter extends JsdlAdaptersFactory {
      
     } );
    
-  } // End attactToName()
+  } // End void attactToName()
   
   
   
@@ -214,7 +236,8 @@ public final class DataStageTypeAdapter extends JsdlAdaptersFactory {
       }
      
     } );
-  } // End attachToSource()
+  } // End void attachToSource()
+  
   
   
   /**
@@ -243,7 +266,7 @@ public final class DataStageTypeAdapter extends JsdlAdaptersFactory {
        
       } );
 
-  } // End attachToTarget()
+  } // End void attachToTarget()
   
   
   
@@ -280,7 +303,7 @@ public final class DataStageTypeAdapter extends JsdlAdaptersFactory {
       }
     });
     
-  } // End attachToCreationFlag()
+  } // End void attachToCreationFlag()
   
   
   
@@ -310,7 +333,8 @@ public final class DataStageTypeAdapter extends JsdlAdaptersFactory {
       }
     });
     
-  } //End attachToDelOnTermination()
+  } //End void attachToDelOnTermination()
+  
   
 
   /**
@@ -354,7 +378,7 @@ public final class DataStageTypeAdapter extends JsdlAdaptersFactory {
     });
     
     
-  }
+  } // End void attachToDelete()
   
   
   
@@ -378,9 +402,12 @@ public final class DataStageTypeAdapter extends JsdlAdaptersFactory {
     });
     
     
-  }
+  } //End void attachToAdd()
   
   
+  /*
+   * Get the DataStage Elements from the Root JSDL Element.
+   */
   private void  getTypeForAdapter(final EObject rootJsdlElement){
     
     TreeIterator <EObject> iterator = rootJsdlElement.eAllContents();
@@ -395,7 +422,7 @@ public final class DataStageTypeAdapter extends JsdlAdaptersFactory {
       
     } // End while    
     
-   } // End getTypeforAdapter()
+   } // End void getTypeforAdapter()
   
   
   
@@ -409,7 +436,7 @@ public final class DataStageTypeAdapter extends JsdlAdaptersFactory {
     this.adapterRefreshed = true;
     getTypeForAdapter( rootJsdlElement );
     
-  } // End setContent()
+  } // End void setContent()
   
   
   
@@ -487,10 +514,17 @@ public final class DataStageTypeAdapter extends JsdlAdaptersFactory {
       navigateDataStaging( listName.getItem( 0 ) );
     }
     this.isNotifyAllowed = true;
+    
   } // End void load()
   
  
   
+  /*
+   * Method to Navigate through the DataStaging Elements in the list.
+   * When a DataStage element is selected in a list, it's attributes will be 
+   * populated in the respective text fields below the list.
+   * 
+   */
   protected void navigateDataStaging(final String key){
     
     this.isNotifyAllowed = false;
@@ -584,6 +618,7 @@ public final class DataStageTypeAdapter extends JsdlAdaptersFactory {
   } // End navigateDataStage()
   
   
+  
   protected void performAdd(){
    // 
   }
@@ -618,8 +653,8 @@ public final class DataStageTypeAdapter extends JsdlAdaptersFactory {
     this.stageMap.remove( selected );
     contentChanged();
     
-    
-  }
+  } // End void performDelete()
+  
   
   
   /**

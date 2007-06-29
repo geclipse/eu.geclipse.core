@@ -50,6 +50,18 @@ import eu.geclipse.jsdl.model.JsdlPackage;
 
 /**
  * JobIdentificationTypeAdapter Class
+ * <p>
+ * This class provides adapters for manipulating <b>Job Identification </b> 
+ * elements  through the Job Definition Page of the JSDL editor. 
+ * Supported JobIdentification elements are:
+ * <p>
+ * - JobName
+ * <p>
+ * - JobDescription
+ * <p>
+ * - JobAnnotation
+ * <p>
+ * - JobProject
  *
  */
 public final class JobIdentificationTypeAdapter extends JsdlAdaptersFactory {
@@ -80,6 +92,7 @@ public final class JobIdentificationTypeAdapter extends JsdlAdaptersFactory {
   }  // End Constructor
   
   
+  
   private void  getTypeForAdapter(final EObject rootJsdlElement){
         
     TreeIterator<EObject> iterator = rootJsdlElement.eAllContents();
@@ -97,8 +110,9 @@ public final class JobIdentificationTypeAdapter extends JsdlAdaptersFactory {
    } // End getTypeforAdapter
   
   
+  
   /**
-   * JobIdentificationTypeAdapter Class Constructor
+   * Allows to set the adapter's content on demand and not through the constructor.
    * 
    * @param rootJsdlElement The root element of a JSDL document.
    */

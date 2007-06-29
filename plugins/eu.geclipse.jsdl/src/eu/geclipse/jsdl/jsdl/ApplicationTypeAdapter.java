@@ -41,7 +41,17 @@ import eu.geclipse.jsdl.model.JsdlPackage;
 
 /**
  * ApplicationTypeAdapter Class.
- *
+ * <p>
+ * This class provides adapters for manipulating <b>Application </b> 
+ * elements  through the Application Page of the JSDL editor. 
+ * Supported Application elements are:
+ * <p>
+ * - ApplicationName
+ * <p>
+ * - ApplicationVersion
+ * <p>
+ * - Description
+ * 
  */
 public final class ApplicationTypeAdapter extends JsdlAdaptersFactory {
   
@@ -106,9 +116,9 @@ public final class ApplicationTypeAdapter extends JsdlAdaptersFactory {
    * @param rootJsdlElement The root element of a JSDL document.
    */
   public void setContent(final EObject rootJsdlElement){
-    //FIXME Uncheck below for adapterRefresh Status.
-    //this.adapterRefreshed = true;
-    getTypeForAdapter( rootJsdlElement );    
+
+    getTypeForAdapter( rootJsdlElement );  
+    
   }
   
   

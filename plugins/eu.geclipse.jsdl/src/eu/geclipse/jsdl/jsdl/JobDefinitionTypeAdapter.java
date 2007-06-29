@@ -37,6 +37,12 @@ import eu.geclipse.jsdl.model.JsdlPackage;
 
 /**
  * JobDefinitionTypeAdapter Class.
+ * <p>
+ * This class provides adapters for manipulating <b>Job Definition </b> 
+ * elements  through the Job Definition Page of the JSDL editor. 
+ * Supported JobDefinition attributes are:
+ * <p>
+ * - ID
  *
  */
 public final class JobDefinitionTypeAdapter extends JsdlAdaptersFactory {
@@ -54,17 +60,20 @@ public final class JobDefinitionTypeAdapter extends JsdlAdaptersFactory {
    * @param rootJsdlElement . The root element of a JSDL document.
    */
   public JobDefinitionTypeAdapter(final EObject rootJsdlElement) {
+    
     getTypeForAdapter(rootJsdlElement);
       
-  }
+  } // End class Constructor
   
   
   
   protected void contentChanged(){
     if (this.isNotifyAllowed){
+      
       fireNotifyChanged( null);
     }
-  }
+    
+  } // End void contentChanged()
   
   
   
@@ -72,6 +81,7 @@ public final class JobDefinitionTypeAdapter extends JsdlAdaptersFactory {
    * @param widget
    */
   public void attachID(final Text widget){
+    
     Integer featureID = new Integer (JsdlPackage.JOB_DEFINITION_TYPE__ID);
     this.widgetFeaturesMap.put( featureID, widget );
     
@@ -82,23 +92,32 @@ public final class JobDefinitionTypeAdapter extends JsdlAdaptersFactory {
         contentChanged();
         
       }
-    } );        
-  }
+    } );   
+      
+  } // End void attachID()
   
   
     
   /**
+   * Allows to set the adapter's content on demand and not through the constructor.
+   * 
    * @param rootJsdlElement
    */
   public void setContent(final EObject rootJsdlElement){
+    
     getTypeForAdapter( rootJsdlElement );
-  }
+    
+  } // End void setContent()
   
    
-  
-   private void  getTypeForAdapter(final EObject rootJsdlElement){      
-        this.jobDefinitionType = (JobDefinitionType) rootJsdlElement;         
-   }
+  /*
+   * Get the JobDefinition Elements from the Root JSDL Element.
+   */
+   private void  getTypeForAdapter(final EObject rootJsdlElement){
+     
+        this.jobDefinitionType = (JobDefinitionType) rootJsdlElement;
+        
+   } // End void getTypeForAdapter()
    
    
  
@@ -107,6 +126,7 @@ public final class JobDefinitionTypeAdapter extends JsdlAdaptersFactory {
    */
   public void load()
    {
+    
      this.isNotifyAllowed = false;
      EObject eObject = this.jobDefinitionType;
      Text widgetName = null;
@@ -136,6 +156,7 @@ public final class JobDefinitionTypeAdapter extends JsdlAdaptersFactory {
        } //end for
      } //end if
      this.isNotifyAllowed = true;
+     
    } // End void populateAttributes()
    
    
@@ -152,6 +173,7 @@ public final class JobDefinitionTypeAdapter extends JsdlAdaptersFactory {
      }
      
      return status;
-   }
+     
+   }// End boolean isEmpty()
     
-}
+}// End Class
