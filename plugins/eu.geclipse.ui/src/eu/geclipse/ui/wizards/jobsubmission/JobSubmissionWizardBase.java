@@ -114,12 +114,12 @@ public abstract class JobSubmissionWizardBase extends Wizard
                 } catch( GridModelException gmExc ) {
                   NewProblemDialog.openProblem( getShell(),
                                                 "Job submission failed",
-                                                "Job submission failed",
+                                                null,
                                                 gmExc );
                 } catch( CoreException cExc ) {
                   NewProblemDialog.openProblem( getShell(),
                                                 "Job submission failed",
-                                                "Job submission failed",
+                                                null,
                                                 cExc );
                 } finally {
                   subMonitor.done();
