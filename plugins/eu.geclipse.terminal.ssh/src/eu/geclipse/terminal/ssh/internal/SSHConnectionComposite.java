@@ -29,6 +29,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
+import eu.geclipse.core.util.HostnameChecker;
 import eu.geclipse.info.glue.AbstractGlueTable;
 import eu.geclipse.info.glue.GlueQuery;
 import eu.geclipse.ui.widgets.NumberVerifier;
@@ -131,6 +132,7 @@ class SSHConnectionComposite extends Composite {
   IStatus getStatus() {
     Integer port = null;
     boolean validPort = true;
+
     try {
       port = new Integer( this.portText.getText() );
     } catch (NumberFormatException exception) {
@@ -151,6 +153,9 @@ class SSHConnectionComposite extends Composite {
     } else if ( !validPort ) {
       status = new Status( IStatus.ERROR, Activator.PLUGIN_ID, IStatus.OK,
                            Messages.getString("SSHConnectionComposite.AValidPortNumberMustBeEntered"), null ); //$NON-NLS-1$
+    } else if ( !HostnameChecker.checkHostname( this.hostnameCombo.getText() ) ) {
+      status = new Status( IStatus.WARNING, Activator.PLUGIN_ID, IStatus.OK,
+                           Messages.getString("SSHConnectionComposite.invalidHostname"), null ); //$NON-NLS-1$
     } else if ( this.passwordText.getText().length() == 0 ) {
       status = new Status( IStatus.INFO, Activator.PLUGIN_ID, IStatus.OK,
                            Messages.getString("SSHConnectionComposite.passwordIsRequiredIfYouAreNotUsingPubKeyAuth"), //$NON-NLS-1$
