@@ -22,25 +22,19 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-
 import javax.swing.event.EventListenerList;
-
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Display;
-
 import eu.geclipse.gvid.Activator;
 import eu.geclipse.gvid.IDecoder;
 import eu.geclipse.gvid.IGVidStatsListener;
 import eu.geclipse.gvid.internal.preferences.PreferenceConstants;
 import eu.geclipse.ui.dialogs.NewProblemDialog;
-import eu.geclipse.ui.dialogs.ProblemDialog;
 
 /**
  * Output client for GVid. Allows to interact with remote rendered interactive
