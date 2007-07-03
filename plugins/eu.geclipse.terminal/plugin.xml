@@ -4,6 +4,21 @@
    <extension-point id="dropDownEntry" name="%extension-point.dropDownEntry" schema="schema/dropDownEntry.exsd"/>
    <extension-point id="newTerminalWizards" name="%extension-point.newTerminalWizards" schema="schema/newTerminalWizards.exsd"/>
    <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            name="Terminal"
+            category="eu.geclipse.ui.internal.preference.GEclipsePreferencePage"
+            class="eu.geclipse.terminal.internal.preferences.TerminalPreferencePage"
+            id="eu.geclipse.terminal.internal.preferences.TerminalPreferencePage">
+      </page>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="eu.geclipse.terminal.internal.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
          point="org.eclipse.ui.views">
       <view
             name="%view.name.0"

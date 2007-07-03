@@ -149,31 +149,35 @@ class TerminalPainter implements PaintListener {
     this.startCharLine = line;
     this.startCharCol = col;
     this.numChars = 1;
-    this.lineHeight = this.lineHeightMode[ line ];
-    this.lineWidth = this.lineWidthMode[ line ];
+    this.lineHeight = this.lineHeightMode[ line + this.terminal.getScrollbarPosLine() ];
+    this.lineWidth = this.lineWidthMode[ line + this.terminal.getScrollbarPosLine() ];
   }
   
+  /* (non-Javadoc)
+   * @see org.eclipse.swt.events.PaintListener#paintControl(org.eclipse.swt.events.PaintEvent)
+   */
   public void paintControl( final PaintEvent paintEvent ) {
     Char[][] screenBuffer = this.terminal.getScreenBuffer();
     this.lineHeightMode = this.terminal.getLineHeightMode();
     this.lineWidthMode = this.terminal.getLineWidthMode();
-    int numLines = screenBuffer.length;
+    int numLines = this.terminal.getNumLines();
     int numCols = screenBuffer[0].length;
     int fontHeight = this.terminal.getFontHeigth();
     int fontWidth = this.terminal.getFontWidth();
     int startLine = paintEvent.y / fontHeight;
     int endLine = ( paintEvent.y + paintEvent.height + fontHeight ) / fontHeight;
-    if ( endLine > numLines ) endLine = numLines;
+    boolean fillBottomGap = screenBuffer.length < endLine + this.terminal.getScrollbarPosLine();
+    if ( endLine > numLines && fillBottomGap) endLine = numLines;
     for ( int line = startLine; line < endLine; line++ ) {
       int startCol = paintEvent.x / fontWidth;
       int endCol = ( paintEvent.x + paintEvent.width + fontWidth ) / fontWidth;
       if ( endCol > numCols ) endCol = numCols;
-      if ( this.lineWidthMode[ line ] == LineWidthMode.DOUBLE ) {
+      if ( this.lineWidthMode[ line + this.terminal.getScrollbarPosLine() ] == LineWidthMode.DOUBLE ) {
         startCol /= 2;
         endCol = ( endCol + 1 ) / 2;
       }
       for ( int col = startCol; col < endCol; col ++) {
-        Char ch = screenBuffer[line][col];
+        Char ch = screenBuffer[ line + this.terminal.getScrollbarPosLine() ][ col ];
         if ( this.startChar == null ) {
           resetStartChar( ch, line, col );
         } else if ( this.startChar.ch == 0 && ch.ch == 0
@@ -190,22 +194,24 @@ class TerminalPainter implements PaintListener {
       }
       paintBufferedArea( paintEvent.gc );
       this.startChar = null;
-      if ( line == this.terminal.getCursorLine() ) {
+      if ( line + this.terminal.getScrollbarPosLine() == this.terminal.getCursorLine() + this.terminal.getHistorySize() ) {
         int widthMult = 1;
-        if ( this.lineWidthMode[ line ] == LineWidthMode.DOUBLE ) widthMult = 2; 
+        if ( this.lineWidthMode[ line + this.terminal.getScrollbarPosLine() ] == LineWidthMode.DOUBLE ) widthMult = 2; 
         // draw cursor
         paintEvent.gc.drawText( "_", //$NON-NLS-1$
                                 fontWidth * this.terminal.getCursorCol() * widthMult,
-                                fontHeight * this.terminal.getCursorLine(), true );
+                                fontHeight * line , true );
       }
     }
     // fill the gap at the widget border
     paintEvent.gc.setBackground( this.terminal.getBackground() );
-    if ( ( paintEvent.y + paintEvent.height ) >= ( fontHeight * numLines ) ) {
-      int height = ( paintEvent.y + paintEvent.height )
-                   - ( fontHeight * numLines );
-      paintEvent.gc.fillRectangle( paintEvent.x, fontHeight * numLines,
-                                   paintEvent.width, height );
+    if ( fillBottomGap ) {
+      if ( ( paintEvent.y + paintEvent.height ) >= ( fontHeight * numLines ) ) {
+        int height = ( paintEvent.y + paintEvent.height )
+                     - ( fontHeight * numLines );
+        paintEvent.gc.fillRectangle( paintEvent.x, fontHeight * numLines,
+                                     paintEvent.width, height );
+      }
     }
     if ( ( paintEvent.x + paintEvent.width ) >= ( fontWidth * numCols ) ) {
       int width = ( paintEvent.x + paintEvent.width )
@@ -235,12 +241,13 @@ class TerminalPainter implements PaintListener {
     int fontWidth = this.terminal.getFontWidth();
     GC gc = new GC( this.terminal );
     gc.copyArea( 0,
-                 fontHeight * ( topMargin + 1 ),
+                 fontHeight * ( topMargin + this.terminal.getHistorySize() - this.terminal.getScrollbarPosLine() + 1 ),
                  fontWidth * numCols,
                  fontHeight * ( bottomMargin - topMargin ),
                  0,
-                 fontHeight * topMargin,
+                 fontHeight * ( topMargin + this.terminal.getHistorySize() - this.terminal.getScrollbarPosLine() ),
                  true );
+    gc.dispose();
   }
 
   void scrollDown( final int topMargin, final int bottomMargin ) {
@@ -250,11 +257,12 @@ class TerminalPainter implements PaintListener {
     int fontWidth = this.terminal.getFontWidth();
     GC gc = new GC( this.terminal );
     gc.copyArea( 0,
-                 fontHeight * topMargin,
+                 fontHeight * ( topMargin + this.terminal.getHistorySize() - this.terminal.getScrollbarPosLine() ),
                  fontWidth * numCols,
                  fontHeight * ( bottomMargin - topMargin ),
                  0,
-                 fontHeight * ( topMargin + 1 ),
+                 fontHeight * ( topMargin + this.terminal.getHistorySize() - this.terminal.getScrollbarPosLine() + 1 ),
                  true );
+    gc.dispose();
   }
 }

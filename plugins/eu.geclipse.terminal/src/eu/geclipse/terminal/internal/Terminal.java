@@ -48,7 +48,6 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import eu.geclipse.terminal.ITerminalListener;
 
-
 /**
  * VT100 terminal emulator widget.
  */
@@ -66,6 +65,7 @@ public class Terminal extends Canvas {
   TerminalPainter terminalPainter;
   int topMargin;
   int bottomMargin;
+  int historySize;
   private PushbackInputStream input;
   private Char[][] screenBuffer;
   private LineHeightMode[] lineHeightMode;
@@ -98,12 +98,14 @@ public class Terminal extends Canvas {
    * @param style widget style.
    * @param initFgColor default foreground color.
    * @param initBgColor default background color.
+   * @param historySize size of history in lines.
    */
-  public Terminal(final Composite parent, final int style, final Color initFgColor, final Color initBgColor) {
-    super(parent, style | SWT.NO_BACKGROUND );
+  public Terminal(final Composite parent, final int style, final Color initFgColor, final Color initBgColor, final int historySize ) {
+    super(parent, style | SWT.NO_BACKGROUND | SWT.V_SCROLL );
     this.clipboard = new Clipboard( getDisplay() );
+    this.historySize = historySize;
     initMenu();
-    initSystemColorTable();    
+    initSystemColorTable();
     if ( initBgColor != null ) this.defaultBgColor = initBgColor;
     if ( initFgColor != null ) this.defaultFgColor = initFgColor;
     this.cursor = new Cursor( this.defaultFgColor, this.defaultBgColor );
@@ -117,6 +119,13 @@ public class Terminal extends Canvas {
         changeScreenSize();
       }
     });
+    
+    getVerticalBar().addSelectionListener( new SelectionAdapter() {
+      @Override
+      public void widgetSelected( final SelectionEvent event ) {
+        triggerRedraw();
+      }
+    } );
 
     addListener(SWT.KeyDown, new Listener() { 
       public void handleEvent( final Event event ) {
@@ -171,9 +180,13 @@ public class Terminal extends Canvas {
             else if ( event.keyCode == SWT.INSERT ) out.write( insert );
             else if ( event.character == SWT.DEL ) out.write( delete );
             else if ( event.character == SWT.BS ) out.write( backspace );
-            else if ( event.keyCode == SWT.PAGE_UP ) out.write( pageUp );
-            else if ( event.keyCode == SWT.PAGE_DOWN ) out.write( pageDown );
-            else if ( event.keyCode == SWT.F1 ) out.write( F1 );
+            else if ( event.keyCode == SWT.PAGE_UP ) {
+              if ( (event.stateMask | SWT.SHIFT) != 0 ) scrollHistoryPageUp();
+              else out.write( pageUp );
+            } else if ( event.keyCode == SWT.PAGE_DOWN ) {
+              if ( (event.stateMask | SWT.SHIFT) != 0 ) scrollHistoryPageDown();
+              else out.write( pageDown );
+            } else if ( event.keyCode == SWT.F1 ) out.write( F1 );
             else if ( event.keyCode == SWT.F2 ) out.write( F2 );
             else if ( event.keyCode == SWT.F3 ) out.write( F3 );
             else if ( event.keyCode == SWT.F4 ) out.write( F4 );
@@ -207,6 +220,26 @@ public class Terminal extends Canvas {
       }
     } );
     reset();
+  }
+
+  void scrollHistoryPageUp() {
+    int oldPos = getScrollbarPosLine();
+    int newPos = oldPos - this.numLines;
+    if ( newPos < 0 ) newPos = 0;
+    if ( newPos != oldPos ) {
+      getVerticalBar().setSelection( newPos );
+      triggerRedraw();
+    }
+  }
+
+  void scrollHistoryPageDown() {
+    int oldPos = getScrollbarPosLine();
+    int newPos = oldPos + this.numLines;
+    if ( newPos > this.historySize ) newPos = this.historySize;
+    if ( newPos != oldPos ) {
+      getVerticalBar().setSelection( newPos );
+      triggerRedraw();
+    }
   }
 
   private void initMenu() {
@@ -351,7 +384,7 @@ public class Terminal extends Canvas {
     int colsToUpdate = 0;
 
     while ( ch >= ' ' ) {
-      Char scrCh = this.screenBuffer[ this.cursor.line ][ this.cursor.col ];
+      Char scrCh = this.screenBuffer[ this.cursor.line + this.historySize ][ this.cursor.col ];
       scrCh.ch = (char)ch;
       scrCh.setToCursorFormat( this.cursor );
       this.cursor.col++;
@@ -408,7 +441,7 @@ public class Terminal extends Canvas {
       public void run () {
         if ( !isDisposed() ) {
           redraw( col * getFontWidth() * finalFontWidthMult,
-                  line * getFontHeigth(),
+                  ( line + Terminal.this.historySize - getScrollbarPosLine() ) * getFontHeigth(),
                   cols * getFontWidth() * finalFontWidthMult,
                   lines * getFontHeigth(),
                   false );
@@ -417,7 +450,7 @@ public class Terminal extends Canvas {
     } );
   }
 
-  private void triggerRedraw() {
+  void triggerRedraw() {
     Display.getDefault().syncExec( new Runnable() {
       public void run () {
         redraw();
@@ -641,8 +674,8 @@ public class Terminal extends Canvas {
   }
 
   private void doubleWidthLine( final LineWidthMode mode ) {
-    this.lineHeightMode[ this.cursor.line ] = LineHeightMode.NORMAL;
-    this.lineWidthMode[ this.cursor.line ] = mode;
+    this.lineHeightMode[ this.cursor.line + this.historySize ] = LineHeightMode.NORMAL;
+    this.lineWidthMode[ this.cursor.line + this.historySize ] = mode;
     if (mode == LineWidthMode.DOUBLE && this.cursor.col > this.numCols / 2) {
       this.cursor.col = this.numCols / 2;
     }
@@ -651,19 +684,19 @@ public class Terminal extends Canvas {
 
   private void doubleHeightLine( final LineHeightMode mode ) {
     if ( mode == LineHeightMode.DOUBLE_TOP || mode == LineHeightMode.DOUBLE_BOTTOM ) {
-      this.lineWidthMode[ this.cursor.line ] = LineWidthMode.DOUBLE;
+      this.lineWidthMode[ this.cursor.line + this.historySize ] = LineWidthMode.DOUBLE;
     }
-    this.lineHeightMode[ this.cursor.line ] = mode;
+    this.lineHeightMode[ this.cursor.line + this.historySize ] = mode;
     triggerRedraw( 0, this.cursor.line, this.numCols, 1 );
   }
 
   private void screenAlignmentDisplay() {
-    for( int i = 0; i < this.lineHeightMode.length; i++ ) {
+    for( int i = this.historySize; i < this.numLines + this.historySize; i++ ) {
       this.lineHeightMode[ i ] = LineHeightMode.NORMAL;
       this.lineWidthMode[ i ] = LineWidthMode.NORMAL;
     }
-    for( Char[] line : this.screenBuffer ) {
-      for( Char character : line ) {
+    for( int i = this.historySize; i < this.numLines + this.historySize; i++ ) {
+      for( Char character : this.screenBuffer[ i ] ) {
         character.ch = 'E';
       }
     }
@@ -869,8 +902,8 @@ public class Terminal extends Canvas {
     if (params.length != 0) val = params[0];
     if (val == 0) val = 1;
     for ( int i = this.cursor.col; ( i < ( this.cursor.col + val ) ) && ( i < colsInLine ); i++ ) {
-      this.screenBuffer[ this.cursor.line ][ i ].erase( this.defaultFgColor, this.defaultBgColor );
-      this.screenBuffer[ this.cursor.line ][ i ].bgColor = this.cursor.bgColor;
+      this.screenBuffer[ this.cursor.line + this.historySize ][ i ].erase( this.defaultFgColor, this.defaultBgColor );
+      this.screenBuffer[ this.cursor.line + this.historySize ][ i ].bgColor = this.cursor.bgColor;
     }
     triggerRedraw( this.cursor.col, this.cursor.line, val, 1 );
   }
@@ -883,10 +916,10 @@ public class Terminal extends Canvas {
     if ( val > ( colsInLine - this.cursor.col ) ) val = colsInLine - this.cursor.col;
     int colsToMove = colsInLine - this.cursor.col - val;
     for ( int i = this.cursor.col; i < ( this.cursor.col + colsToMove ); i++ ) {
-      this.screenBuffer[ this.cursor.line ][ i ] = this.screenBuffer[ this.cursor.line ][ i + val ];
+      this.screenBuffer[ this.cursor.line + this.historySize ][ i ] = this.screenBuffer[ this.cursor.line + this.historySize ][ i + val ];
     }
     for ( int i = ( this.cursor.col + colsToMove ); i < colsInLine; i++ ) {
-      this.screenBuffer[ this.cursor.line ][ i ] = new Char( this.defaultFgColor, this.defaultBgColor );
+      this.screenBuffer[ this.cursor.line + this.historySize ][ i ] = new Char( this.defaultFgColor, this.defaultBgColor );
     }
     triggerRedraw( this.cursor.col, this.cursor.line, colsInLine - this.cursor.col, 1 );
   }
@@ -903,7 +936,7 @@ public class Terminal extends Canvas {
           eraseScreen(); 
           Display.getDefault().syncExec(new Runnable() {
             public void run () {
-              setSize( 132 * getFontWidth(), 24 * getFontHeigth() );
+              setSize( 132 * getFontWidth() + getVerticalBar().getSize().x , 24 * getFontHeigth() );
             }
           });
           break;
@@ -959,7 +992,7 @@ public class Terminal extends Canvas {
         case 3: // 80 Column Mode
           Display.getDefault().syncExec(new Runnable() {
             public void run () {
-              setSize( 80 * getFontWidth(), 24 * getFontHeigth() );
+              setSize( 80 * getFontWidth() + getVerticalBar().getSize().x, 24 * getFontHeigth() );
             }
           });
           this.cursor.reset( this.defaultFgColor, this.defaultBgColor );
@@ -1054,16 +1087,21 @@ public class Terminal extends Canvas {
   }
 
   private void scrollUp() {
-    Char[] tmp = this.screenBuffer[ this.topMargin ];
-    for( int i = this.topMargin; i < this.bottomMargin; i++ ) {
-      this.lineHeightMode[ i ] = this.lineHeightMode[ i + 1 ];
-      this.lineWidthMode[ i ] = this.lineWidthMode[ i + 1 ];
-      this.screenBuffer[ i ] = this.screenBuffer[ i + 1 ];
+    Char[] tmp;
+    if ( this.topMargin == 0 ) {
+      tmp = scrollHistory();
+    } else {
+      tmp = this.screenBuffer[ this.topMargin + this.historySize ];
     }
-    this.screenBuffer[ this.bottomMargin ] = tmp;
+    for( int i = this.topMargin; i < this.bottomMargin; i++ ) {
+      this.lineHeightMode[ i + this.historySize ] = this.lineHeightMode[ i + this.historySize + 1 ];
+      this.lineWidthMode[ i + this.historySize ] = this.lineWidthMode[ i + this.historySize + 1 ];
+      this.screenBuffer[ i + this.historySize ] = this.screenBuffer[ i + this.historySize + 1 ];
+    }
+    this.screenBuffer[ this.bottomMargin + this.historySize ] = tmp;
     eraseLine( this.bottomMargin );
-    this.lineWidthMode[ this.bottomMargin ] = LineWidthMode.NORMAL;
-    this.lineHeightMode[ this.bottomMargin ] = LineHeightMode.NORMAL;
+    this.lineWidthMode[ this.bottomMargin + this.historySize ] = LineWidthMode.NORMAL;
+    this.lineHeightMode[ this.bottomMargin + this.historySize ] = LineHeightMode.NORMAL;
     Display.getDefault().syncExec(new Runnable() {
       public void run () {
         Terminal.this.terminalPainter.scrollUp( Terminal.this.topMargin,
@@ -1076,17 +1114,27 @@ public class Terminal extends Canvas {
     triggerRedraw( this.cursor.col, this.cursor.line - 1, 1, 1 );
   }
 
-  private void scrollDown() {
-    Char[] tmp = this.screenBuffer[ this.bottomMargin ];
-    for( int i = this.bottomMargin; i > this.topMargin; i-- ) {
-      this.lineHeightMode[ i ] = this.lineHeightMode[ i - 1 ];
-      this.lineWidthMode[ i ] = this.lineWidthMode[ i - 1 ];
-      this.screenBuffer[ i ] = this.screenBuffer[ i - 1 ];
+  private Char[] scrollHistory() {
+    Char[] tmp = this.screenBuffer[0];
+    for( int i = 0; i < this.historySize; i++ ) {
+      this.lineHeightMode[ i ] = this.lineHeightMode[ i + 1 ];
+      this.lineWidthMode[ i ] = this.lineWidthMode[ i + 1 ];
+      this.screenBuffer[ i ] = this.screenBuffer[ i + 1 ];
     }
-    this.screenBuffer[ this.topMargin ] = tmp;
+    return tmp;
+  }
+  
+  private void scrollDown() {
+    Char[] tmp = this.screenBuffer[ this.bottomMargin + this.historySize ];
+    for( int i = this.bottomMargin; i > this.topMargin; i-- ) {
+      this.lineHeightMode[ i + this.historySize ] = this.lineHeightMode[ i + this.historySize - 1 ];
+      this.lineWidthMode[ i + this.historySize ] = this.lineWidthMode[ i + this.historySize - 1 ];
+      this.screenBuffer[ i + this.historySize ] = this.screenBuffer[ i + this.historySize - 1 ];
+    }
+    this.screenBuffer[ this.topMargin + this.historySize ] = tmp;
     eraseLine( this.topMargin );
-    this.lineWidthMode[ this.topMargin ] = LineWidthMode.NORMAL;
-    this.lineHeightMode[ this.topMargin ] = LineHeightMode.NORMAL;
+    this.lineWidthMode[ this.topMargin + this.historySize ] = LineWidthMode.NORMAL;
+    this.lineHeightMode[ this.topMargin + this.historySize ] = LineHeightMode.NORMAL;
     Display.getDefault().syncExec(new Runnable() {
       public void run () {
         Terminal.this.terminalPainter.scrollDown( Terminal.this.topMargin,
@@ -1231,7 +1279,7 @@ public class Terminal extends Canvas {
     switch ( val ) {
       case 0: // From cursor to end of screen
         eraseInLine( params );
-        for( int i = this.cursor.line+1; i < this.screenBuffer.length; i++ ) {
+        for( int i = this.cursor.line+1; i < this.numLines; i++ ) {
           eraseLine( i );
         }    
         triggerRedraw( 0, this.cursor.line+1, this.numCols,
@@ -1245,7 +1293,7 @@ public class Terminal extends Canvas {
         triggerRedraw( 0, 0, this.numCols, this.cursor.line );
         break;
       case 2: // Entire screen
-        for( int i = 0; i < this.screenBuffer.length; i++ ) {
+        for( int i = 0; i < this.numLines; i++ ) {
           eraseLine( i );
         }
         triggerRedraw();
@@ -1263,14 +1311,14 @@ public class Terminal extends Canvas {
     if (params.length > 0) val = params[0];
     switch (val) {
       case 0: // From cursor to end of line
-        for( int i = this.cursor.col; i < this.screenBuffer[ this.cursor.line ].length; i++ ) {
-         this.screenBuffer[ this.cursor.line ][ i ].erase( this.defaultFgColor, this.defaultBgColor );
+        for( int i = this.cursor.col; i < this.screenBuffer[ this.cursor.line + this.historySize ].length; i++ ) {
+         this.screenBuffer[ this.cursor.line + this.historySize ][ i ].erase( this.defaultFgColor, this.defaultBgColor );
         }
         triggerRedraw( this.cursor.col, this.cursor.line, this.numCols-this.cursor.col, 1 );
         break;
       case 1: // From beginning of line to cursor
         for( int i = 0; i <= this.cursor.col; i++ ) {
-          this.screenBuffer[ this.cursor.line ][ i ].erase( this.defaultFgColor, this.defaultBgColor );
+          this.screenBuffer[ this.cursor.line + this.historySize ][ i ].erase( this.defaultFgColor, this.defaultBgColor );
         }
         triggerRedraw( 0, this.cursor.line, this.cursor.col+1, 1 );
         break;
@@ -1287,7 +1335,7 @@ public class Terminal extends Canvas {
   }
 
   private void eraseLine( final int lineNr ) {
-    for( Char character : this.screenBuffer[ lineNr ] ) {
+    for( Char character : this.screenBuffer[ lineNr + this.historySize ] ) {
       character.erase( this.defaultFgColor, this.defaultBgColor );
     }
   }
@@ -1485,11 +1533,11 @@ public class Terminal extends Canvas {
     this.fontWidth = gc.getFontMetrics().getAverageCharWidth();
     this.fontHeight = gc.getFontMetrics().getHeight();
     gc.dispose();
-    this.numCols = widgetSize.x / this.fontWidth;
+    this.numCols = ( widgetSize.x - getVerticalBar().getSize().x ) / this.fontWidth;
     this.numLines = widgetSize.y / this.fontHeight;
     if ( this.numCols < 2 ) this.numCols = 80;
     if ( this.numLines < 2 ) this.numLines = 24;
-    newScreenBuffer = new Char[ this.numLines ][];
+    newScreenBuffer = new Char[ this.numLines + this.historySize ][];
     for( int i = 0; i < newScreenBuffer.length; i++ ) {
       newScreenBuffer[ i ] = new Char[ this.numCols ];
       // TODO copy old linemodes;
@@ -1507,8 +1555,8 @@ public class Terminal extends Canvas {
       }
     }
     this.screenBuffer = newScreenBuffer;
-    this.lineHeightMode = new LineHeightMode[ this.numLines ];
-    this.lineWidthMode = new LineWidthMode[ this.numLines ];
+    this.lineHeightMode = new LineHeightMode[ this.numLines  + this.historySize ];
+    this.lineWidthMode = new LineWidthMode[ this.numLines + this.historySize ];
     resetLineModes();
     setTopAndBottomMargins( new int[0] );
     if ( this.cursor.line >= this.numLines ) this.cursor.line = this.numLines - 1;
@@ -1518,6 +1566,7 @@ public class Terminal extends Canvas {
                                        this.numCols * this.fontWidth,
                                        this.numLines * this.fontHeight );
     }
+    this.getVerticalBar().setValues( this.historySize, 0, this.screenBuffer.length, this.numLines, 1, this.numLines );
   }
 
   /**
@@ -1572,17 +1621,28 @@ public class Terminal extends Canvas {
   LineHeightMode[] getLineHeightMode() {
     return this.lineHeightMode;
   }
-  
-  
+
   LineWidthMode[] getLineWidthMode() {
     return this.lineWidthMode;
   }
-  
+
   int getCursorLine() {
     return this.cursor.line;
   }
-  
+
   int getCursorCol() {
     return this.cursor.col;
+  }
+  
+  int getScrollbarPosLine() {
+    return getVerticalBar().getSelection();
+  }
+
+  int getNumLines() {
+    return this.numLines;
+  }
+  
+  int getHistorySize() {
+    return this.historySize;
   }
 }

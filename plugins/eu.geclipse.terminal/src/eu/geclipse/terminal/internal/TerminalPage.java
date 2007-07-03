@@ -16,6 +16,7 @@
 package eu.geclipse.terminal.internal;
 
 import java.io.IOException;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.graphics.Color;
@@ -29,6 +30,7 @@ import org.eclipse.ui.themes.IThemeManager;
 import eu.geclipse.core.IBidirectionalConnection;
 import eu.geclipse.terminal.ITerminalListener;
 import eu.geclipse.terminal.ITerminalPage;
+import eu.geclipse.terminal.internal.preferences.PreferenceConstants;
 
 class TerminalPage extends Composite implements ITerminalPage {
   private static final String fgColorThemeEntry = "eu.geclipse.terminal.ForgroundColor"; //$NON-NLS-1$
@@ -137,7 +139,9 @@ class TerminalPage extends Composite implements ITerminalPage {
     Color fgColor = themeManager.getCurrentTheme().getColorRegistry().get( fgColorThemeEntry );
     Color bgColor = themeManager.getCurrentTheme().getColorRegistry().get( bgColorThemeEntry );
     Font font = themeManager.getCurrentTheme().getFontRegistry().get( fontTextEntry );
-    this.terminal = new Terminal( this, SWT.NONE, fgColor, bgColor );
+    IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+    int historySize = store.getInt( PreferenceConstants.P_HISTORY_SIZE );
+    this.terminal = new Terminal( this, SWT.NONE, fgColor, bgColor, historySize );
     this.terminal.setFont( font );
     this.terminal.setLayoutData( terminalGridData );
     this.tabItem.setText( Messages.getString( "TerminalPage.terminal" ) ); //$NON-NLS-1$
