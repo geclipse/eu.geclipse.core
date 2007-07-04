@@ -23,15 +23,17 @@ import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.PartInitException;
-
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridElementManager;
 import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobManager;
 import eu.geclipse.core.model.IGridJobStatusListener;
 import eu.geclipse.ui.internal.actions.ActionGroupManager;
+import eu.geclipse.ui.internal.actions.FilterActions;
 import eu.geclipse.ui.providers.JobViewLabelProvider;
 import eu.geclipse.ui.views.filters.GridFilterConfigurationsManager;
+import eu.geclipse.ui.views.filters.IGridFilterConfiguration;
+import eu.geclipse.ui.views.filters.JobViewFilterConfiguration;
 
 /**
  * Job view that shows all jobs that are currently managed by
@@ -110,7 +112,7 @@ public class GridJobView
   @Override
   protected void contributeAdditionalActions( final ActionGroupManager groups )
   {
-//    groups.addGroup( new FilterActions( getSite(), this.filterConfigurationsManager ) );  //TODO mariusz 
+    groups.addGroup( new FilterActions( getSite(), this.filterConfigurationsManager ) );  //TODO mariusz 
     super.contributeAdditionalActions( groups );
   }
       
@@ -144,15 +146,14 @@ public class GridJobView
   protected void initViewer( final StructuredViewer sViewer )
   {
     super.initViewer( sViewer );
-    //initFilters( sViewer );
+    initFilters( sViewer );
   }
-  /*
+  
   private void initFilters( final StructuredViewer sViewer ) {
     createFilterConfigurationsManager( sViewer );
     this.filterConfigurationsManager.readState( this.memento );
   }
-  */
-  /*
+  
   private void createFilterConfigurationsManager( final StructuredViewer sViewer )
   {
     this.filterConfigurationsManager = new GridFilterConfigurationsManager( GridFilterConfigurationsManager.ID_JOBVIEW,
@@ -166,6 +167,6 @@ public class GridJobView
       }
     };
   }
-  */
+
 
 }

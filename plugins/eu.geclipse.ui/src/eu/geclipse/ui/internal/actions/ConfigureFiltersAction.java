@@ -33,7 +33,7 @@ import eu.geclipse.ui.views.filters.IGridFilterConfiguration;
 
 
 /**
- *
+ * Action for Filter viewers
  */
 public class ConfigureFiltersAction extends Action {
   
@@ -42,6 +42,10 @@ public class ConfigureFiltersAction extends Action {
   GridFilterConfigurationsManager filterConfigurationsManager;
   private IWorkbenchSite site;
   
+  /**
+   * @param site - workbench site, on which action will be placed 
+   * @param filterConfigurationsManager - filters manager for workbench site 
+   */
   public ConfigureFiltersAction( final IWorkbenchSite site, final GridFilterConfigurationsManager filterConfigurationsManager ) {
     super( Messages.getString("ConfigureFiltersAction.name"), IAction.AS_DROP_DOWN_MENU ); //$NON-NLS-1$
     this.filterConfigurationsManager = filterConfigurationsManager;
@@ -56,7 +60,7 @@ public class ConfigureFiltersAction extends Action {
   private class MenuCreator implements IMenuCreator, IFilterConfigurationListener {
     private Menu menu;
     
-    public MenuCreator() {
+    protected MenuCreator() {
       super();
       ConfigureFiltersAction.this.filterConfigurationsManager.addConfigurationListener( this );
     }
@@ -81,20 +85,47 @@ public class ConfigureFiltersAction extends Action {
     }
     
     protected void disposeMenu() {
-      this.menu.dispose();
+      if( this.menu != null ) {
+        this.menu.dispose();
+      }
       this.menu = null;
     }
     
     private Menu createMenu( final Control parent ) {
-      Menu mnu =  new Menu( parent );
+      Menu rootMenu =  new Menu( parent );
       
       for( IGridFilterConfiguration configuration : ConfigureFiltersAction.this.filterConfigurationsManager.getConfigurations() ) {
-        createMenuItem( mnu, configuration );
+        createMenuItem( rootMenu, configuration );
       }
       
-      return mnu;
+      if( !ConfigureFiltersAction.this.filterConfigurationsManager.getConfigurations().isEmpty() ) {
+        new MenuItem( rootMenu, SWT.SEPARATOR );
+      }
+      
+      createConfigureMenu( rootMenu );
+      
+      return rootMenu;
     }
     
+    private void createConfigureMenu( final Menu parent ) {
+      MenuItem item = new MenuItem( parent, SWT.CASCADE );
+      
+      item.setText( Messages.getString("ConfigureFiltersAction.ConfigureFilters") ); //$NON-NLS-1$
+      
+      item.addSelectionListener( new SelectionAdapter() {
+
+        /* (non-Javadoc)
+         * @see org.eclipse.swt.events.SelectionAdapter#widgetSelected(org.eclipse.swt.events.SelectionEvent)
+         */
+        @Override
+        public void widgetSelected( final SelectionEvent e )
+        {
+          run();
+        }
+        
+      });
+    }
+
     private void createMenuItem( final Menu parent, final IGridFilterConfiguration configuration ) {
       MenuItem item = new MenuItem( parent, SWT.RADIO );
       item.setText( configuration.getName() );
@@ -110,7 +141,7 @@ public class ConfigureFiltersAction extends Action {
   private class MenuItemSelectionListener extends SelectionAdapter {
     private IGridFilterConfiguration configuration;
 
-    public MenuItemSelectionListener( final IGridFilterConfiguration configuration ) {
+    protected MenuItemSelectionListener( final IGridFilterConfiguration configuration ) {
       super();
       this.configuration = configuration;
     }
