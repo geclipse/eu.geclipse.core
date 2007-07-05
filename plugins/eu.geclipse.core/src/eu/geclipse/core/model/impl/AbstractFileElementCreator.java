@@ -16,6 +16,7 @@
 package eu.geclipse.core.model.impl;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.IPath;
 
 /**
  * Element creator for creating elements from files. Therefore
@@ -34,8 +35,8 @@ public abstract class AbstractFileElementCreator
   protected boolean internalCanCreate( final Object fromObject ) {
     boolean result = false;
     if ( fromObject instanceof IFile ) {
-      String fileExtension
-        = ( ( IFile ) fromObject ).getLocation().getFileExtension();
+      IPath location = ( ( IFile ) fromObject ).getLocation();
+      String fileExtension = location == null ? "" : location.getFileExtension();
       result = internalCanCreate( fileExtension );
     }
     return result;
