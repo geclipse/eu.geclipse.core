@@ -19,11 +19,15 @@ import java.text.DateFormat;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileInfo;
+import org.eclipse.core.runtime.CoreException;
+
 import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.views.GridConnectionView;
 
 /**
@@ -87,9 +91,13 @@ public class ConnectionViewLabelProvider
     if ( ( element instanceof IGridConnectionElement )
         && !( element instanceof IGridConnection ) ) {
       IGridConnectionElement connection
-      = ( IGridConnectionElement ) element;
-      IFileInfo fileInfo
-      = connection.getConnectionFileInfo();
+        = ( IGridConnectionElement ) element;
+      IFileInfo fileInfo = null;
+      try {
+        fileInfo = connection.getConnectionFileInfo();
+      } catch ( CoreException cExc ) {
+        Activator.logException( cExc );
+      }
       if ( fileInfo != null ) {
         switch ( columnIndex ) {
           case 2:
@@ -114,10 +122,12 @@ public class ConnectionViewLabelProvider
    */
   private String getModificationString( final IFileInfo fileInfo ) {
     String result = "N/A"; //$NON-NLS-1$
-    long time = fileInfo.getLastModified();
-    if ( time != EFS.NONE ) {
-      Date date = new Date( time );
-      result = this.dateFormat.format( date );
+    if ( fileInfo != null ) {
+      long time = fileInfo.getLastModified();
+      if ( time != EFS.NONE ) {
+        Date date = new Date( time );
+        result = this.dateFormat.format( date );
+      }
     }
     return result;
   }
@@ -132,15 +142,17 @@ public class ConnectionViewLabelProvider
    */
   private String getSizeString( final IFileInfo fileInfo ) {
     String result = "N/A"; //$NON-NLS-1$
-    long length = fileInfo.getLength();
-    if ( length != EFS.NONE ) {
-      double mag = Math.floor( Math.log( length ) / Math.log( 1024 ) );
-      if ( mag >= prefixes.length ) mag = prefixes.length - 1;
-      double ref = Math.pow( 1024., mag );
-      double value = length / ref;
-      result
-        = this.sizeFormat.format( value )
-        + " " + prefixes[ ( int ) mag ] + FILE_SIZE_UNIT; //$NON-NLS-1$
+    if ( fileInfo != null ) {
+      long length = fileInfo.getLength();
+      if ( length != EFS.NONE ) {
+        double mag = Math.floor( Math.log( length ) / Math.log( 1024 ) );
+        if ( mag >= prefixes.length ) mag = prefixes.length - 1;
+        double ref = Math.pow( 1024., mag );
+        double value = length / ref;
+        result
+          = this.sizeFormat.format( value )
+          + " " + prefixes[ ( int ) mag ] + FILE_SIZE_UNIT; //$NON-NLS-1$
+      }
     }
     return result;
   }

@@ -17,7 +17,11 @@ package eu.geclipse.ui.properties;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.eclipse.core.runtime.CoreException;
+
 import eu.geclipse.core.model.IGridConnectionElement;
+import eu.geclipse.ui.internal.Activator;
 
 
 /**
@@ -32,8 +36,13 @@ public class GridConnectionElementSource extends AbstractPropertySource<IGridCon
   public GridConnectionElementSource( final IGridConnectionElement sourceObject ) {
     super( sourceObject );
     
-    if( sourceObject.getConnectionFileInfo() != null ) {
-      addChildSource( new FileInfoSource( sourceObject.getConnectionFileInfo() ) );
+    try {
+      if( sourceObject.getConnectionFileInfo() != null ) {
+        addChildSource( new FileInfoSource( sourceObject.getConnectionFileInfo() ) );
+      }
+    } catch ( CoreException cExc ) {
+      // TODO Mariusz: Have a look if the error handling is ok
+      Activator.logException( cExc );
     }
   }
 
