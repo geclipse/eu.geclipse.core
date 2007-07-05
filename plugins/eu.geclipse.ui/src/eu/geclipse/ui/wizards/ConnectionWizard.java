@@ -2,7 +2,11 @@ package eu.geclipse.ui.wizards;
 
 import java.net.URI;
 
-import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardContainer;
@@ -12,6 +16,7 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
+import eu.geclipse.core.filesystem.FileSystem;
 import eu.geclipse.core.model.IGridConnection;
 
 
@@ -132,9 +137,19 @@ public class ConnectionWizard
     URI uri = this.definitionPage.getURI();
     
     if ( uri != null ) {
-      page.setInitialContent( uri );
-      IFile file = page.createNewFile();
-      result = ( file != null ) && file.exists();
+      //page.setInitialContent( uri );
+      IPath path = page.getContainerFullPath();
+      path = path.append( page.getFileName() );
+      IFolder folder = ResourcesPlugin.getWorkspace().getRoot().getFolder( path );
+      
+      try {
+        URI masterURI = FileSystem.createMasterURI( uri );
+        folder.createLink( masterURI, IResource.ALLOW_MISSING_LOCAL, null );
+      } catch (CoreException e) {
+        e.printStackTrace();
+      }
+      
+      result = ( folder != null ) && folder.exists();
     }
     
     if ( ! result ) {

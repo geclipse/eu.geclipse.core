@@ -82,7 +82,7 @@ public class GridModelLabelProvider
     
     Image resultImage = null;
     
-    if( element instanceof IGridConnectionElement ) {
+    /*if( element instanceof IGridConnectionElement ) {
       IGridConnectionElement gridMount = ( IGridConnectionElement )element;
       if( !gridMount.isValid() ) {
         resultImage = getInvalidElementImage();
@@ -91,7 +91,7 @@ public class GridModelLabelProvider
       } else {
         resultImage = getFileImage( true );
       }
-    } else if( element instanceof IVirtualOrganization ) {
+    } else */if( element instanceof IVirtualOrganization ) {
       resultImage = getVoImage();
     } else if( element instanceof IGridComputing ) {
       resultImage = getComputingImage();

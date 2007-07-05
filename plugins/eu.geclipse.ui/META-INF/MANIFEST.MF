@@ -22,7 +22,8 @@ Require-Bundle: org.eclipse.core.filesystem,
  org.eclipse.ui.forms,
  org.eclipse.emf.edit.ui,
  org.apache.axis,
- eu.geclipse.core.jobs
+ eu.geclipse.core.jobs,
+ eu.geclipse.core.filesystem
 Eclipse-LazyStart: true
 Export-Package: eu.geclipse.ui,
  eu.geclipse.ui.adapters,

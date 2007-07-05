@@ -28,12 +28,12 @@ public class ConnectionLocationWizardPage
     this.initialSelection = selection;
   }
   
-  @Override
+  /*@Override
   public IFile createNewFile() {
     String filename = getConnectionFilename();
     setFileName( filename );
     return super.createNewFile();
-  }
+  }*/
   
   public String getConnectionFilename() {
     String filename = getFileName();
