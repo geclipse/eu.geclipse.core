@@ -7,7 +7,6 @@ import java.net.URI;
 import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.filesystem.IFileSystem;
-import org.eclipse.core.filesystem.provider.FileInfo;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -65,9 +64,9 @@ public class FileStore
       throws CoreException {
     //System.out.println( getName() + ".fetchInfo" );
     IFileInfo fileInfo = getSlave().fetchInfo( options, monitor );
-    if ( fileInfo instanceof FileInfo ) {
+    /*if ( fileInfo instanceof FileInfo ) {
       ( ( FileInfo ) fileInfo ).setExists( true );
-    }
+    }*/
     return fileInfo; 
   }
 
@@ -102,9 +101,12 @@ public class FileStore
   public IFileStore mkdir( final int options,
                            final IProgressMonitor monitor)
       throws CoreException {
-    IFileStore dir = getSlave().mkdir( options, monitor );
-    FileStore store = new FileStore( this, dir );
-    return store;
+    FileStore result = this;
+    if ( ! fetchInfo().exists() ) {
+      IFileStore dir = getSlave().mkdir( options, monitor );
+      result = new FileStore( this, dir );
+    }
+    return result;
   }
 
   @Override

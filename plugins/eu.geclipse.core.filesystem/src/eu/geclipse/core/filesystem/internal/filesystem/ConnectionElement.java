@@ -57,9 +57,9 @@ public class ConnectionElement
     return null;
   }
   
-  public IFileInfo getConnectionFileInfo() {
+  public IFileInfo getConnectionFileInfo() throws CoreException {
     if ( this.fileInfo == null ) {
-      IFileStore store = getFileStore();
+      IFileStore store = getConnectionFileStore();
       this.fileInfo = store.fetchInfo();
     }
     return this.fileInfo;
