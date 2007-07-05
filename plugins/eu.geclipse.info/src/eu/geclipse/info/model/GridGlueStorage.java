@@ -15,9 +15,16 @@
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.ArrayList;
 import java.util.List;
 import eu.geclipse.core.model.IGridContainer;
+import eu.geclipse.core.model.IGridResource;
 import eu.geclipse.core.model.IGridStorage;
+import eu.geclipse.core.model.IVirtualOrganization;
+import eu.geclipse.core.model.IVoManager;
+import eu.geclipse.core.model.impl.AbstractGridContainer;
+import eu.geclipse.info.glue.GlueQuery;
+import eu.geclipse.info.glue.GlueSA;
 import eu.geclipse.info.glue.GlueSE;
 import eu.geclipse.info.glue.GlueSEAccessProtocol;
 
@@ -43,39 +50,46 @@ public class GridGlueStorage
   
   public URI[] getAccessTokens() {
     
-    URI[] result = null;
-    //TODO: now we get the first Storage area only,
-    //      also we should check the GlueSAAccessControlBaseRule
-    
-    String path=getGlueSe().glueSAList.get(0).Path;
-    
-    try {
-      String host = getName();
-      List list=getGlueSe().glueSEAccessProtocolList;
-      if ( ( list != null ) && !list.isEmpty() ) {
-        result = new URI[ list.size() ];
-        for( int i = 0; i < result.length; i++ ) {
-          GlueSEAccessProtocol ap=getGlueSe().glueSEAccessProtocolList.get( i );
-          String scheme=null;
-          if(ap.Type.startsWith( "srm" ) ){
-            String[] vNumbers=ap.Version.split( "\\." );
-            StringBuilder sBuilder=new StringBuilder("srm-v");
-            for( String n : vNumbers ) {
-              sBuilder.append( n );
+    ArrayList<URI> uriList=new ArrayList<URI>();
+
+    for( GlueSA sa : getGlueSe().glueSAList ) {
+      if(GlueQuery.saSupportsVO( sa, this.getProject().getVO().getName() )){
+        try {
+          String host = getName();
+          List list=getGlueSe().glueSEAccessProtocolList;
+          if ( ( list != null ) && !list.isEmpty() ) {
+            int protocolCount=list.size();
+            for( int i = 0; i < protocolCount; i++ ) {
+              GlueSEAccessProtocol ap=getGlueSe().glueSEAccessProtocolList.get( i );
+              String scheme=null;
+              if(ap.Type.startsWith( "srm" ) ){
+                String[] vNumbers=ap.Version.split( "\\." );
+                StringBuilder sBuilder=new StringBuilder("srm-v");
+                for( String n : vNumbers ) {
+                  sBuilder.append( n );
+                }
+                scheme=sBuilder.toString();
+              }else{
+                scheme=ap.Type;
+              }
+              uriList.add(new URI( scheme, null, host, 
+                                   ap.Port.intValue(), sa.Path,
+                                   null, null ));
             }
-            scheme=sBuilder.toString();
-          }else{
-            scheme=ap.Type;
-          }
-          result[i]= new URI( scheme, null, host, ap.Port.intValue(), path,null, null );
+          }        
+        } catch( RuntimeException e ) {
+          // Just catch and do nothing here
+        } catch( URISyntaxException e ) {
+          // Just catch and do nothing here
         }
-      }        
-    } catch( RuntimeException e ) {
-      // Just catch and do nothing here
-    } catch( URISyntaxException e ) {
-      // Just catch and do nothing here
+      }
     }
-    
+    URI[] result = new URI[uriList.size()];
+    int i=0;
+    for( URI uri : uriList ) {
+      result[i]=uri;
+      ++i;
+    }
     return result;
     
   }
