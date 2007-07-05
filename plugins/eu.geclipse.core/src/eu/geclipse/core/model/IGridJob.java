@@ -16,6 +16,8 @@
 
 package eu.geclipse.core.model;
 
+import java.util.Date;
+
 
 /**
  * Base interface for all middleware specific implementations of
@@ -60,5 +62,11 @@ public interface IGridJob
    */
   public IGridJobDescription getJobDescription();
 
+  /**
+   * Returns the date of submission. 
+   * 
+   * @return time of last update
+   */
+  public Date getSubmissionTime();
   
 }
