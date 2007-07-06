@@ -181,10 +181,10 @@ public class Terminal extends Canvas {
             else if ( event.character == SWT.DEL ) out.write( delete );
             else if ( event.character == SWT.BS ) out.write( backspace );
             else if ( event.keyCode == SWT.PAGE_UP ) {
-              if ( (event.stateMask | SWT.SHIFT) != 0 ) scrollHistoryPageUp();
+              if ( ( event.stateMask & SWT.SHIFT ) != 0 ) scrollHistoryPageUp();
               else out.write( pageUp );
             } else if ( event.keyCode == SWT.PAGE_DOWN ) {
-              if ( (event.stateMask | SWT.SHIFT) != 0 ) scrollHistoryPageDown();
+              if ( ( event.stateMask & SWT.SHIFT ) != 0 ) scrollHistoryPageDown();
               else out.write( pageDown );
             } else if ( event.keyCode == SWT.F1 ) out.write( F1 );
             else if ( event.keyCode == SWT.F2 ) out.write( F2 );
