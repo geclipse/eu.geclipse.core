@@ -55,7 +55,9 @@ public abstract class AbstractGridElement
    * @see eu.geclipse.core.model.IGridElement#getProject()
    */
   public IGridProject getProject() {
-    IGridProject project = null;
+    IGridContainer parent = getParent();
+    return parent == null ? null : parent.getProject();
+    /*IGridProject project = null;
     IGridContainer parent = getParent();
     while ( ( parent != null ) && !( parent instanceof IGridProject ) ) {
       parent = parent.getParent();
@@ -63,7 +65,7 @@ public abstract class AbstractGridElement
     if ( parent instanceof IGridProject ) {
       project = ( IGridProject ) parent; 
     }
-    return project;
+    return project;*/
   }
 
   /* (non-Javadoc)
