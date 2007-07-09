@@ -7,14 +7,18 @@ import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.filesystem.IFileSystem;
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Path;
 
-import eu.geclipse.core.model.GridModelException;
-import eu.geclipse.core.model.GridModelProblems;
+import eu.geclipse.core.filesystem.FileSystem;
+import eu.geclipse.core.filesystem.internal.Activator;
+import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridContainer;
@@ -25,6 +29,168 @@ public class ConnectionElement
     extends AbstractGridContainer
     implements IGridConnectionElement {
   
+  private IResource resource;
+  
+  private CoreException fetchError;
+  
+  protected ConnectionElement( final IResource resource ) {
+    Assert.isNotNull( resource );
+    this.resource = resource;
+  }
+  
+  @Override
+  public boolean canContain( final IGridElement element ) {
+    return
+      isFolder()
+      && !element.isVirtual()
+      && !( element instanceof IGridConnection );
+  }
+
+  public IResource createLocalCopy( final IProgressMonitor monitor )
+      throws CoreException {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+  public IFileInfo getConnectionFileInfo() throws CoreException {
+    return getConnectionFileStore().fetchInfo();
+  }
+
+  public IFileStore getConnectionFileStore() throws CoreException {
+    IResource res= getResource();
+    URI uri = res.getLocationURI();
+    FileSystem fileSystem = new FileSystem();
+    return fileSystem.getStore( uri );
+  }
+  
+  public String getError() {
+    String error = null;
+    if ( this.fetchError != null ) {
+      error = this.fetchError.getLocalizedMessage();
+    }
+    return error;
+  }
+  
+  @Override
+  public boolean hasChildren() {
+    return isFolder() ? super.hasChildren() : false;
+  }
+
+  public boolean isFolder() {
+    return getResource().getType() == IResource.FOLDER;
+  }
+  
+  public boolean isLazy() {
+    return true;
+  }
+  
+  public boolean isLocal() {
+    return false;
+  }
+
+  public boolean isValid() {
+    return getError() == null;
+  }
+  
+  @Override
+  protected boolean fetchChildren( final IProgressMonitor monitor ) {
+    
+    IResource res = getResource();
+    
+    if ( res instanceof IContainer ) {
+
+      IContainer container = ( IContainer ) res;
+      setProcessEvents( false );
+    
+      try {
+        
+        FileStore fileStore = ( FileStore ) getConnectionFileStore();
+        fileStore.activate();
+        
+        res.refreshLocal( IResource.DEPTH_ONE, monitor );
+        
+        IResource[] members = container.members();
+        if ( members != null ) {
+          for ( IResource member : members ) {
+            ConnectionElement child = new ConnectionElement( member );
+            addElement( child );
+          }
+        }
+        
+        /*
+        String[] childNames = fileStore.childNames( EFS.NONE, monitor );
+        
+        for ( String childName : childNames ) {
+          IFileStore childStore = fileStore.getChild( childName );
+          IFileInfo childInfo = childStore.fetchInfo();
+          if ( childInfo.isDirectory() ) {
+            IFolder childFolder = container.getFolder( new Path( childName ) );
+            //childFolder.createLink( childStore.toURI(), IResource.REPLACE, null );
+            childFolder.create( false, false, null );
+            addElement( new ConnectionElement( childFolder ) );
+          } else {
+            IFile childFile = container.getFile( new Path( childName ) );
+            //childFile.createLink( childStore.toURI(), IResource.REPLACE, null );
+            childFile.create( null, false, null );
+            addElement( new ConnectionElement( childFile ) );
+          }
+        }
+        */
+        /*
+        res.refreshLocal( IResource.DEPTH_ONE, monitor );
+        
+        IContainer container = ( IContainer ) res;
+        IResource[] members = container.members();
+        if ( members != null ) {
+          for ( IResource member : members ) {
+            ConnectionElement child = new ConnectionElement( member );
+            addElement( child );
+          }
+        }
+        */
+        
+      } catch ( CoreException cExc ) {
+        Activator.logException( cExc );
+      } finally {
+        setProcessEvents( true );
+      }
+      
+    }
+    
+    return this.fetchError == null;
+    
+  }
+
+  public IFileStore getFileStore() {
+    URI uri = getResource().getLocationURI();
+    IFileSystem fileSystem = EFS.getLocalFileSystem();
+    IFileStore fileStore = fileSystem.getStore( uri );
+    return fileStore;
+  }
+
+  public String getName() {
+    return getResource().getName();
+  }
+
+  public IGridContainer getParent() {
+    IGridContainer parent = null;
+    IPath parentPath = getPath().removeLastSegments( 1 );
+    IGridElement parentElement = GridModel.getRoot().findElement( parentPath );
+    if ( parentElement instanceof IGridContainer ) {
+      parent = ( IGridContainer ) parentElement;
+    }
+    return parent;
+  }
+
+  public IPath getPath() {
+    return getResource().getFullPath();
+  }
+
+  public IResource getResource() {
+    return this.resource;
+  }
+
+  /*
   private IGridContainer parent;
   
   private IResource resource;
@@ -107,7 +273,7 @@ public class ConnectionElement
   /* (non-Javadoc)
    * @see eu.geclipse.core.internal.model.VirtualGridContainer#hasChildren()
    */
-  @Override
+/*  @Override
   public boolean hasChildren() {
     return isFolder() ? super.hasChildren() : false;
   }
@@ -141,22 +307,22 @@ public class ConnectionElement
     try {
       
       store = getConnectionFileStore();
-      manager = FileSystemManager.getInstance( ( FileStore ) store );
+      manager = FileSystemManager.getInstance();
       manager.setActive( store, true );
     
       IResource res = getResource();
       
       if ( res instanceof IContainer ) {
         res.refreshLocal( IResource.DEPTH_ONE, monitor );
-        IContainer container = ( IContainer ) res;
+        /*IContainer container = ( IContainer ) res;
         IResource[] members = container.members();
         if ( members != null ) {
           for ( IResource member : members ) {
             ConnectionElement child = new ConnectionElement( this, member );
             addElement( child );
           }
-        }
-      }
+        }*/
+/*      }
       
     } catch ( GridModelException gmExc ) {
       throw gmExc;
@@ -172,5 +338,5 @@ public class ConnectionElement
     return this.fetchError == null;
 
   }
-
+*/
 }

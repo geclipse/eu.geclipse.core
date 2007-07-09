@@ -23,32 +23,53 @@ public class FileStore
  
   private IFileStore slave;
   
-  FileStore( final FileSystem fileSystem,
-             final IFileStore slave ) {
+  private boolean isActive;
+  
+  private String[] childNames;
+  
+  protected FileStore( final FileSystem fileSystem,
+                       final IFileStore slave ) {
     Assert.isNotNull( fileSystem );
     Assert.isNotNull( slave );
     this.fileSystem = fileSystem;
     this.parent = null;
     this.slave = slave;
-    FileSystemManager.registerStore( this );
+    this.isActive = false;
   }
 
-  FileStore( final FileStore parent,
-             final IFileStore slave ) {
+  private FileStore( final FileStore parent,
+                     final IFileStore slave ) {
     Assert.isNotNull( parent );
     Assert.isNotNull( slave );
     this.fileSystem = ( FileSystem ) parent.getFileSystem();
     this.parent = parent;
     this.slave = slave;
-    FileSystemManager.registerStore( this );
+    this.isActive = false;
+  }
+  
+  public void activate() {
+    setActive( true );
   }
 
   @Override
   public String[] childNames( final int options,
                               final IProgressMonitor monitor )
       throws CoreException {
-    FileSystemManager manager = FileSystemManager.getInstance( this );
-    return manager.isActive( this ) ? getSlave().childNames( options, monitor ) : new String[ 0 ];
+    
+    String[] result = this.childNames;
+    
+    if ( isActive() ) {
+      result = getSlave().childNames( options, monitor );
+      this.childNames = result;
+      setActive( false );
+    }
+    
+    if ( result == null ) {
+      result = new String[ 0 ];
+    }
+    
+    return result;
+    
   }
   
   @Override
@@ -62,19 +83,27 @@ public class FileStore
   public IFileInfo fetchInfo( final int options,
                               final IProgressMonitor monitor )
       throws CoreException {
-    //System.out.println( getName() + ".fetchInfo" );
     IFileInfo fileInfo = getSlave().fetchInfo( options, monitor );
-    /*if ( fileInfo instanceof FileInfo ) {
-      ( ( FileInfo ) fileInfo ).setExists( true );
-    }*/
     return fileInfo; 
   }
 
   @Override
   public IFileStore getChild( final String name ) {
-    //System.out.println( getName() + ".getChild(" + name + ")" );
+    
+    FileStore result = null;
     IFileStore child = getSlave().getChild( name );
-    return child == null ? null : new FileStore( this, child );
+    
+    if ( child != null ) {
+      FileStoreRegistry registry = FileStoreRegistry.getInstance();
+      result = registry.getStore( child );
+      if ( result == null ) {
+        result = new FileStore( this, child );
+        registry.putStore( result );
+      }
+    }
+    
+    return result;
+    
   }
   
   @Override
@@ -89,7 +118,6 @@ public class FileStore
 
   @Override
   public IFileStore getParent() {
-    //System.out.println( getName() + ".getParent" );
     return this.parent;
   }
   
@@ -104,7 +132,12 @@ public class FileStore
     FileStore result = this;
     if ( ! fetchInfo().exists() ) {
       IFileStore dir = getSlave().mkdir( options, monitor );
-      result = new FileStore( this, dir );
+      FileStoreRegistry registry = FileStoreRegistry.getInstance();
+      result = registry.getStore( dir );
+      if ( result == null ) {
+        result = new FileStore( this, dir );
+        registry.putStore( result );
+      }
     }
     return result;
   }
@@ -130,10 +163,18 @@ public class FileStore
       throws CoreException {
     getSlave().putInfo( info, options, monitor );
   }
-
+  
   @Override
   public URI toURI() {
     return FileSystemManager.createMasterURI( getSlave().toURI() );
+  }
+  
+  private boolean isActive() {
+    return this.isActive;
+  }
+  
+  private void setActive( final boolean active ) {
+    this.isActive = active;
   }
 
 }

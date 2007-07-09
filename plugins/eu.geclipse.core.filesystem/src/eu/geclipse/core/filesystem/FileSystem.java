@@ -63,7 +63,7 @@ public class FileSystem
   @Override
   public IFileStore getStore( final URI uri ) {
     FileStore result = null;
-    FileSystemManager manager = FileSystemManager.getInstance( uri );
+    FileSystemManager manager = FileSystemManager.getInstance();
     result = manager.getStore( this, uri );
     this.slave = result.getSlave().getFileSystem();
     return result;

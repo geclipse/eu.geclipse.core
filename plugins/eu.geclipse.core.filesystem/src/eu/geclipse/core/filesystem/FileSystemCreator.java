@@ -26,7 +26,7 @@ public class FileSystemCreator
   public IGridElement create( final IGridContainer parent )
       throws GridModelException {
     IFolder folder = ( IFolder ) getObject();
-    ConnectionRoot connection = new ConnectionRoot( parent, folder );
+    ConnectionRoot connection = new ConnectionRoot( folder );
     try {
       IFileInfo info = connection.getConnectionFileInfo();
       if ( info instanceof FileInfo ) {
