@@ -15,13 +15,17 @@
 
 package eu.geclipse.ui.providers;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.ITreeViewerListener;
 import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Shell;
+
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
@@ -131,7 +135,14 @@ public class GridModelContentProvider
       children = new Object[] { monitor };
     } else {
       try {
-        children = container.getChildren( null );
+        IGridElement[] childElements = container.getChildren( null );
+        List< IGridElement > visibleChildren = new ArrayList< IGridElement >();
+        for ( IGridElement child : childElements ) {
+          if ( ! child.isHidden() ) {
+            visibleChildren.add( child );
+          }
+        }
+        children = visibleChildren.toArray( new IGridElement[ visibleChildren.size() ] );
       } catch( GridModelException gmExc ) {
         if ( this.treeViewer != null ) {
           Shell shell = this.treeViewer.getControl().getShell();

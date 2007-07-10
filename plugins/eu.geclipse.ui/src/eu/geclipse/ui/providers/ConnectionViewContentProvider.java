@@ -15,7 +15,9 @@
 
 package eu.geclipse.ui.providers;
 
+import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridConnectionElement;
+import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.ui.views.GridConnectionView;
 
@@ -36,6 +38,26 @@ public class ConnectionViewContentProvider extends ConfigurableContentProvider {
       visible = super.isVisible( element );
     }
     return visible;
+  }
+  
+  protected Object remapElement( final IGridContainer container,
+                                 final IGridElement element ) {
+    
+    Object result = null;
+    
+    if ( element instanceof IGridConnection ) {
+      IGridConnection connection = ( IGridConnection ) element;
+      if ( connection.isGlobal() ) {
+        result = connection;
+      }
+    }
+    
+    if ( result == null ) {
+      result = super.remapElement( container, element );
+    }
+    
+    return result;
+    
   }
   
 }

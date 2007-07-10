@@ -66,31 +66,6 @@ public class ConnectionNameWizardPage extends WizardPage {
     validatePage();
 
   }
-  
-  public IGridConnection createNewConnection() {
-    
-    IGridConnection result = null;
-    
-    try {
-      
-      IFileStore fileStore = getConnectionFilestore();
-      IGridElementCreator creator = findConnectionCreator( fileStore );
-      
-      if ( creator != null ) {
-        IConnectionManager connectionManager
-          = GridModel.getConnectionManager();
-        result = ( IGridConnection ) connectionManager.create( creator );
-      }
-      
-    } catch ( CoreException cExc ) {
-      setErrorMessage( cExc.getMessage() );
-    } catch ( IOException ioExc ) {
-      setErrorMessage( ioExc.getMessage() );
-    }
-    
-    return result;
-    
-  }
 
   public String getConnectionName() {
     return this.nameText.getText();
@@ -98,15 +73,6 @@ public class ConnectionNameWizardPage extends WizardPage {
   
   public void setConnectionName( final String name ) {
     this.nameText.setText( name );
-  }
-  
-  public String getConnectionFileName() {
-    String filename = getConnectionName();
-    return ConnectionWizard.CONNECTION_PREFIX + filename + ConnectionWizard.CONNECTION_SUFFIX;
-  }
-  
-  protected void setInitialContent( final URI uri ) {
-    this.initialContent = uri;
   }
   
   protected boolean validatePage() {
@@ -143,48 +109,6 @@ public class ConnectionNameWizardPage extends WizardPage {
     setPageComplete( valid );
     
     return valid;
-    
-  }
-  
-  private void createInitialContent( final IFileStore fileStore )
-      throws CoreException, IOException {
-    
-    if ( this.initialContent != null ) {
-      OutputStream oStream = fileStore.openOutputStream( EFS.NONE, null );
-      oStream.write( this.initialContent.toString().getBytes() );
-      oStream.close();
-    }
-    
-  }
-  
-  private IGridElementCreator findConnectionCreator( final IFileStore fileStore ) {
-    
-    IGridElementCreator result = null;
-    List< IGridElementCreator > standardCreators = GridModel.getStandardCreators();
-    
-    for ( IGridElementCreator creator : standardCreators ) {
-      if ( creator.canCreate( fileStore ) ) {
-        result = creator;
-        break;
-      }
-    }
-    
-    return result;
-    
-  }
-  
-  private IFileStore getConnectionFilestore()
-      throws CoreException, IOException {
-    
-    String filename = getConnectionFileName();
-    
-    IConnectionManager connectionManager = GridModel.getConnectionManager();
-    IFileStore connectionStore = connectionManager.getFileStore();
-    IFileStore childStore = connectionStore.getChild( filename );
-    
-    createInitialContent( childStore );
-    
-    return childStore;
     
   }
 

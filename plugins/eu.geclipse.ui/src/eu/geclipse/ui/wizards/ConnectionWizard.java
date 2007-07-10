@@ -17,7 +17,10 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
 import eu.geclipse.core.filesystem.FileSystem;
-import eu.geclipse.core.model.IGridConnection;
+import eu.geclipse.core.model.GridModel;
+import eu.geclipse.core.model.GridModelException;
+import eu.geclipse.core.model.IGridPreferences;
+import eu.geclipse.ui.internal.Activator;
 
 
 public class ConnectionWizard
@@ -110,13 +113,19 @@ public class ConnectionWizard
     
     ConnectionNameWizardPage page
       = ( ConnectionNameWizardPage ) this.firstPage;
+    String name = page.getConnectionName();
     
-    URI uri = this.definitionPage.getURI();
+    URI slaveURI = this.definitionPage.getURI();
 
-    if ( uri != null ) {
-      page.setInitialContent( uri );
-      IGridConnection connection = page.createNewConnection();
-      result = connection != null;
+    if ( slaveURI != null ) {
+      try {
+        URI masterURI = FileSystem.createMasterURI( slaveURI );
+        IGridPreferences preferences = GridModel.getPreferences();
+        preferences.createGlobalConnection( name, masterURI );
+        result = true;
+      } catch ( GridModelException gmExc ) {
+        page.setErrorMessage( gmExc.getMessage() );
+      }
     }
     
     if ( ! result ) {
@@ -134,22 +143,23 @@ public class ConnectionWizard
     ConnectionLocationWizardPage page
       = ( ConnectionLocationWizardPage ) this.firstPage;
     
-    URI uri = this.definitionPage.getURI();
+    URI slaveURI = this.definitionPage.getURI();
     
-    if ( uri != null ) {
-      //page.setInitialContent( uri );
+    if ( slaveURI != null ) {
+
       IPath path = page.getContainerFullPath();
       path = path.append( page.getFileName() );
       IFolder folder = ResourcesPlugin.getWorkspace().getRoot().getFolder( path );
       
       try {
-        URI masterURI = FileSystem.createMasterURI( uri );
+        URI masterURI = FileSystem.createMasterURI( slaveURI );
         folder.createLink( masterURI, IResource.ALLOW_MISSING_LOCAL, null );
-      } catch (CoreException e) {
-        e.printStackTrace();
+      } catch ( CoreException cExc ) {
+        Activator.logException( cExc );
       }
       
       result = ( folder != null ) && folder.exists();
+      
     }
     
     if ( ! result ) {

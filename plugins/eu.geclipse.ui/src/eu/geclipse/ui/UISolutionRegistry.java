@@ -46,7 +46,7 @@ public class UISolutionRegistry extends SolutionRegistry {
    *  
    * @param shell The {@link Shell} used to create the UI solutions.
    */
-  private UISolutionRegistry( final Shell shell ) {
+  protected UISolutionRegistry( final Shell shell ) {
     this.shell = shell;
   }
   

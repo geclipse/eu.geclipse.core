@@ -215,8 +215,8 @@ public class ConfigurableContentProvider
    * @return The element that is a direct or indirect parent of the
    * specified element and is a direct child of the specified container.
    */
-  private Object remapElement( final IGridContainer container,
-                               final IGridElement element ) {
+  protected Object remapElement( final IGridContainer container,
+                                 final IGridElement element ) {
     IGridElement result = element;
     IPath parentPath = container.getPath();
     IPath childPath = element.getPath();
