@@ -44,8 +44,6 @@ public class GridProject
     extends ResourceGridContainer
     implements IGridProject {
   
-  private static final String TEMP_FOLDER = ".temp"; //$NON-NLS-1$
-  
   private static final String PROJECT_NODE = "eu.geclipse.core"; //$NON-NLS-1$
   
   private static final String VO_ATTRIBUTE = "vo"; //$NON-NLS-1$
@@ -70,16 +68,6 @@ public class GridProject
   @Override
   public boolean canContain( final IGridElement element ) {
     return true;
-  }
-    
-  public IFile createTempFile( final String name, final InputStream contents ) throws CoreException {
-    IFolder folder = getTempFolder();
-    IFile file = folder.getFile( name );
-    if ( file.exists() ) {
-      file.delete( IResource.NONE, null );
-    }
-    file.create( contents, true, null );
-    return file;
   }
   
   /* (non-Javadoc)
@@ -157,15 +145,6 @@ public class GridProject
       result = super.fetchChildren( monitor );
     }
     return result;
-  }
-  
-  private IFolder getTempFolder() throws CoreException {
-    IProject project = ( IProject ) getResource();
-    IFolder folder = project.getFolder( TEMP_FOLDER );
-    if ( !folder.exists() ) {
-      folder.create( IResource.NONE, true, null );
-    }
-    return folder;
   }
   
   private boolean hasVo( final IGridElement[] children ) {

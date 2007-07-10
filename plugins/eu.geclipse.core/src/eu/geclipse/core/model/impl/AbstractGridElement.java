@@ -67,6 +67,10 @@ public abstract class AbstractGridElement
     }
     return project;*/
   }
+  
+  public boolean isHidden() {
+    return getName().startsWith( "." );
+  }
 
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridElement#isVirtual()

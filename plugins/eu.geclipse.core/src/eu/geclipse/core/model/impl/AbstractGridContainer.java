@@ -127,12 +127,22 @@ public abstract class AbstractGridContainer
    */
   public IGridElement[] getChildren( final IProgressMonitor monitor )
       throws GridModelException {
+    
     if ( isLazy() && isDirty() ) {
       deleteAll();
       boolean result = fetchChildren( monitor );
       setDirty( !result );
     }
-    return this.children.toArray( new IGridElement[this.children.size()] );
+    /*
+    List< IGridElement > childList = new ArrayList< IGridElement >();
+    for ( IGridElement child : this.children ) {
+      if ( ! child.isHidden() ) {
+        childList.add( child );
+      }
+    }
+    */
+    return this.children.toArray( new IGridElement[ this.children.size() ] );
+    
   }
 
   /* (non-Javadoc)

@@ -50,18 +50,6 @@ public interface IGridProject extends IGridContainer {
   public static final String DIR_WORKFLOWS = Messages.getString( "IGridProject.dir_workflows" ); //$NON-NLS-1$
   
   /**
-   * Create a temporary file that is hidden withing the grid project.
-   * This is a first implementation that will change in the future so
-   * do not rely on this method.
-   * 
-   * @param name The name of the file.
-   * @param contents The content if the file.
-   * @return The newly created file itself.
-   * @throws CoreException
-   */
-  public IFile createTempFile( final String name, final InputStream contents ) throws CoreException;
-  
-  /**
    * Get the virtual organisation that is associated with this project.
    * 
    * @return The associated {@link IVirtualOrganization}.

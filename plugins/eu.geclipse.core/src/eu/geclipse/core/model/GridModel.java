@@ -17,12 +17,16 @@ package eu.geclipse.core.model;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.eclipse.core.filesystem.IFileStore;
+import org.eclipse.core.runtime.CoreException;
+
 import eu.geclipse.core.Extensions;
 import eu.geclipse.core.internal.model.ConnectionManager;
 import eu.geclipse.core.internal.model.GridConnectionCreator;
 import eu.geclipse.core.internal.model.GridProjectCreator;
 import eu.geclipse.core.internal.model.GridRoot;
+import eu.geclipse.core.internal.model.HiddenProject;
 import eu.geclipse.core.internal.model.JobManager;
 import eu.geclipse.core.internal.model.LocalResourceCreator;
 import eu.geclipse.core.internal.model.TransferManager;
@@ -76,9 +80,7 @@ public class GridModel {
    * @see GridRoot#getInstance()
    */
   public static IGridRoot getRoot() {
-    IGridRoot root=null;
-    root=GridRoot.getInstance();
-    return root;
+    return GridRoot.getInstance();
   }
   
   /**
@@ -249,6 +251,10 @@ public class GridModel {
       }
     }
     return resultList;
+  }
+  
+  public static IGridPreferences getPreferences() throws GridModelException {
+    return HiddenProject.getInstance();
   }
   
   /**

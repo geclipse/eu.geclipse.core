@@ -41,8 +41,7 @@ public class LocalResourceCreator
    */
   @Override
   protected boolean internalCanCreate( final Object fromObject ) {
-    return ( isFile( fromObject ) || isFolder( fromObject ) )
-    && isVisible( ( IResource ) fromObject );
+    return isFile( fromObject ) || isFolder( fromObject );
   }
   
   /**
@@ -65,19 +64,6 @@ public class LocalResourceCreator
    */
   private boolean isFolder( final Object object ) {
     return ( object instanceof IFolder );
-  }
-  
-  /**
-   * Determines if the specified resource should be represented
-   * by an element in the model. By default resources whose name
-   * start with a period are not represented by the model or at
-   * least are not handled by this special creator.
-   * 
-   * @param resource The resource to be tested.
-   * @return True of the resource is visible within the model.
-   */
-  private boolean isVisible( final IResource resource ) {
-    return !resource.getName().startsWith( "." ); //$NON-NLS-1$
   }
   
 }

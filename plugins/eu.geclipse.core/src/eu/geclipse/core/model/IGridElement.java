@@ -95,6 +95,8 @@ public interface IGridElement
    */
   public IResource getResource();
   
+  public boolean isHidden();
+  
   /**
    * Determines if this element is local. A local element has to be
    * any related item (not necessarily an <code>IResource</code>) that

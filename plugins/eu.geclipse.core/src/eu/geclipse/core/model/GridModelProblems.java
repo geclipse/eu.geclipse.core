@@ -75,6 +75,12 @@ public class GridModelProblems implements IProblemProvider {
     = ProblemRegistry.uniqueID();
   
   /**
+   * Unique ID for the preference creation failed problem.
+   */
+  public static final int PREFERENCE_CREATION_FAILED
+    = ProblemRegistry.uniqueID();
+  
+  /**
    * Unique ID for the refresh failed problem.
    */
   public static final int REFRESH_FAILED
@@ -137,6 +143,13 @@ public class GridModelProblems implements IProblemProvider {
     else if ( problemID == JOB_SUBMIT_FAILED ) {
       problem = createProblem( problemID,
                                Messages.getString("GridModelProblems.submit_job_failed"), //$NON-NLS-1$
+                               exc,
+                               null );
+    }
+    
+    else if ( problemID == PREFERENCE_CREATION_FAILED ) {
+      problem = createProblem( problemID,
+                               Messages.getString("GridModelProblems.preference_creation_failed"), //$NON-NLS-1$
                                exc,
                                null );
     }
