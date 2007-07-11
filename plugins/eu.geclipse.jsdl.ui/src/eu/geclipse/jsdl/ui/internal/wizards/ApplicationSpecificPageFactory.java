@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -29,7 +28,6 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
-
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
@@ -40,8 +38,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
-
-import eu.geclipse.jsdl.ui.Extensions;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.wizards.nodes.SpecificWizardPart;
 import eu.geclipse.jsdl.ui.wizards.specific.ApplicationSpecificLastPage;
@@ -65,7 +61,6 @@ public class ApplicationSpecificPageFactory {
 
   /**
    * Method to validate XML file against XML schema definition
-   * 
    * @param xmlFile File to validate.
    * @throws SAXException if validation was not successful
    */

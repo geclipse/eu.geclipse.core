@@ -17,8 +17,6 @@
 package eu.geclipse.jsdl.ui.wizards;
 
 import java.io.IOException;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -49,6 +47,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.xml.sax.SAXException;
 import eu.geclipse.core.model.IGridConnectionElement;
+import eu.geclipse.jsdl.JSDLJobDescription;
 import eu.geclipse.jsdl.ui.Extensions;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.preference.ApplicationSpecificRegistry;
@@ -102,7 +101,21 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
   private BasicWizardPart basicNode;
   private Button chooseButton;
   private Text argumentsLine;
-  private Map<Integer, String> appsWithParametersFromPrefs;
+  private Map<String, Integer> appsWithParametersFromPrefs;
+  /**
+   * Object representing basic JSDL content for an application specific
+   * settings. It is parsed (created) when the "Finish" button is pressed - not
+   * every time the application chosen by user changes. This is kind of lazy
+   * loading. This object is passed to {@link FilesOutputNewJobWizardPage} so it
+   * can present data staging information form basic JSDL file to the user.
+   */
+  private JSDLJobDescription basicJSDL;
+
+  @Override
+  public IWizardPage getNextPage()
+  {
+    return super.getNextPage();
+  }
 
   /**
    * Creates new wizard page
@@ -153,7 +166,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     for( String value : this.appsWithExtraAttributes.values() ) {
       this.applicationName.add( value.toString() );
     }
-    for( String value : this.appsWithParametersFromPrefs.values() ) {
+    for( String value : this.appsWithParametersFromPrefs.keySet() ) {
       this.applicationName.add( value );
     }
     layout = new GridData();
@@ -374,14 +387,19 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     return result;
   }
 
-  
   /**
    * Returns application name to be run on the grid
    * 
    * @return name of the application
    */
   String getApplicationName() {
-    return this.applicationName.getText();
+    String result = this.applicationName.getText();
+    if( this.appsWithParametersFromPrefs.keySet().contains( result ) ) {
+      result = ApplicationSpecificRegistry.getInstance()
+        .getApplicationData( ( this.appsWithParametersFromPrefs.get( result ) ).intValue() )
+        .getAppName();
+    }
+    return result;
   }
 
   public void modifyText( final ModifyEvent e ) {
@@ -390,63 +408,60 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       this.basicNode = new BasicWizardPart( this.internalPages,
                                             this.getWizard() );
     }
-    if( this.appsWithParametersFromPrefs.values()
+    if( this.appsWithParametersFromPrefs.keySet()
       .contains( this.applicationName.getText() ) )
     {
-      for( Integer appId : this.appsWithParametersFromPrefs.keySet() ) {
-        if( this.appsWithParametersFromPrefs.get( appId )
-          .equals( this.applicationName.getText() ) )
-        {
-          IPath pathA = ApplicationSpecificRegistry.getInstance()
-            .getApplicationData( appId.intValue() )
-            .getXmlPath();
-          Path path = new Path( pathA.toFile().getPath() );
-          try {
-            setSelectedNode( new SpecificWizardPart( this.basicNode,
-                                                     this.getWizard(),
-                                                     path ) );
-            this.executableFile.setText( ApplicationSpecificRegistry.getInstance()
-              .getApplicationData( appId.intValue() )
-              .getAppPath() );
-          } catch( SAXException e1 ) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-          } catch( ParserConfigurationException e1 ) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-          } catch( IOException e1 ) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-          }
-        }
+      int appId = this.appsWithParametersFromPrefs.get( this.applicationName.getText() )
+        .intValue();
+      IPath pathA = ApplicationSpecificRegistry.getInstance()
+        .getApplicationData( appId )
+        .getXmlPath();
+      Path path = new Path( pathA.toFile().getPath() );
+      try {
+        setSelectedNode( new SpecificWizardPart( this.basicNode,
+                                                 this.getWizard(),
+                                                 path ) );
+        this.executableFile.setText( ApplicationSpecificRegistry.getInstance()
+          .getApplicationData( appId )
+          .getAppPath() );
+      } catch( SAXException e1 ) {
+        // TODO Auto-generated catch block
+        e1.printStackTrace();
+      } catch( ParserConfigurationException e1 ) {
+        // TODO Auto-generated catch block
+        e1.printStackTrace();
+      } catch( IOException e1 ) {
+        // TODO Auto-generated catch block
+        e1.printStackTrace();
       }
-      // if( this.appsWithExtraAttributes.values()
-      // .contains( this.applicationName.getText() ) )
-      // {
-      // try {
-      // for( String bundleId : this.appsWithExtraAttributes.keySet() ) {
-      // if( this.appsWithExtraAttributes.get( bundleId )
-      // .equals( this.applicationName.getText() ) )
-      // {
-      // Path path = Extensions.getXMLPath( bundleId );
-      // setSelectedNode( new SpecificWizardPart( this.basicNode,
-      // this.getWizard(),
-      // path ) );
-      // this.executableFile.setText( Extensions.getJSDLExtensionExecutable(
-      // bundleId ) );
-      // }
-      // }
-      // } catch( SAXException e1 ) {
-      // // TODO Auto-generated catch block
-      // e1.printStackTrace();
-      // } catch( ParserConfigurationException e1 ) {
-      // // TODO Auto-generated catch block
-      // e1.printStackTrace();
-      // } catch( IOException e1 ) {
-      // // TODO Auto-generated catch block
-      // e1.printStackTrace();
-      // }
-    } else {
+    }
+    // if( this.appsWithExtraAttributes.values()
+    // .contains( this.applicationName.getText() ) )
+    // {
+    // try {
+    // for( String bundleId : this.appsWithExtraAttributes.keySet() ) {
+    // if( this.appsWithExtraAttributes.get( bundleId )
+    // .equals( this.applicationName.getText() ) )
+    // {
+    // Path path = Extensions.getXMLPath( bundleId );
+    // setSelectedNode( new SpecificWizardPart( this.basicNode,
+    // this.getWizard(),
+    // path ) );
+    // this.executableFile.setText( Extensions.getJSDLExtensionExecutable(
+    // bundleId ) );
+    // }
+    // }
+    // } catch( SAXException e1 ) {
+    // // TODO Auto-generated catch block
+    // e1.printStackTrace();
+    // } catch( ParserConfigurationException e1 ) {
+    // // TODO Auto-generated catch block
+    // e1.printStackTrace();
+    // } catch( IOException e1 ) {
+    // // TODO Auto-generated catch block
+    // e1.printStackTrace();
+    // }
+    else {
       setSelectedNode( this.basicNode );
     }
   }
@@ -513,17 +528,24 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     }
     return result;
   }
-  
-  public void updateButtons(){
-    this.getContainer().updateButtons();
+
+  /**
+   * Method to access basic JSDL file used by application specific settings.
+   * 
+   * @return object representing information kept in basic JSDL file or
+   *         <code>null</code> if no such file is present.
+   */
+  public JSDLJobDescription getBasicJSDL() {
+    return this.basicJSDL;
   }
 
-
-  class ModifyTextListener implements ModifyListener{
+  public void updateButtons() {
+    this.getContainer().updateButtons();
+  }
+  class ModifyTextListener implements ModifyListener {
 
     public void modifyText( ModifyEvent e ) {
       ExecutableNewJobWizardPage.this.updateButtons();
     }
-    
   }
 }

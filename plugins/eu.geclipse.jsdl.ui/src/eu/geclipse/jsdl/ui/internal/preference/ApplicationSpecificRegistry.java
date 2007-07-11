@@ -1,3 +1,18 @@
+/******************************************************************************
+ * Copyright (c) 2007 g-Eclipse consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for
+ * project g-Eclipse founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributor(s):
+ *     PSNC - Katarzyna Bylec
+ *           
+ *****************************************************************************/
 package eu.geclipse.jsdl.ui.internal.preference;
 
 import java.io.BufferedReader;
@@ -10,23 +25,27 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.eclipse.compare.IContentChangeListener;
 import org.eclipse.compare.IContentChangeNotifier;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.Path;
-
 import eu.geclipse.jsdl.ui.internal.Activator;
 
 /**
- * singleton
+ * Registry that manages {@link ApplicationSpecificObject}, which are created,
+ * removed and edited while gEclipse is run. Those objects are serialized, so
+ * there are accessible after Eclipse is restarted. This class is singleton.
  */
 public class ApplicationSpecificRegistry implements IContentChangeNotifier {
 
   private int currentIdPointer;
   private List<ApplicationSpecificObject> apps;
-  private static final String DIRECTORY_NAME = ".appsData";
+  private static final String DIRECTORY_NAME = ".appsData"; //$NON-NLS-1$
+  private static final String APP_NAME_PREFIX = "appName="; //$NON-NLS-1$
+  private static final String APP_PATH_PREFIX = "appPath="; //$NON-NLS-1$
+  private static final String XML_PATH_PREFIX = "XMLPath="; //$NON-NLS-1$
+  private static final String JSDL_PATH_PEFIX = "JSDLPath="; //$NON-NLS-1$
   static private ApplicationSpecificRegistry instance;
   /**
    * Content change event listeners
@@ -39,10 +58,10 @@ public class ApplicationSpecificRegistry implements IContentChangeNotifier {
   private Map<ApplicationSpecificObject, String> appSpecObjectsToFiles = new HashMap<ApplicationSpecificObject, String>();
 
   private ApplicationSpecificRegistry() {
-    apps = new ArrayList<ApplicationSpecificObject>();
+    this.apps = new ArrayList<ApplicationSpecificObject>();
     this.currentIdPointer = 0;
     IPath location = Activator.getDefault().getStateLocation();
-    location = location.append( ApplicationSpecificRegistry.DIRECTORY_NAME ); //$NON-NLS-1$
+    location = location.append( ApplicationSpecificRegistry.DIRECTORY_NAME );
     File file = location.toFile();
     if( file.exists() ) {
       String[] names = file.list();
@@ -75,22 +94,31 @@ public class ApplicationSpecificRegistry implements IContentChangeNotifier {
         String appName = null;
         String path = null;
         IPath xmlPath = null;
+        IPath jsdlPath = null;
         while( ( line = in.readLine() ) != null ) {
-          if( line.startsWith( "appName=" ) ) { //$NON-NLS-1$
-            appName = line.substring( "appName=".length() ).trim(); //$NON-NLS-1$
+          if( line.startsWith( ApplicationSpecificRegistry.APP_NAME_PREFIX ) ) {
+            appName = line.substring( ApplicationSpecificRegistry.APP_NAME_PREFIX.length() )
+              .trim();
           }
-          if( line.startsWith( "appPath=" ) ) { //$NON-NLS-1$
-            path = line.substring( "appPath=".length() ).trim(); //$NON-NLS-1$
+          if( line.startsWith( ApplicationSpecificRegistry.APP_PATH_PREFIX ) ) {
+            path = line.substring( ApplicationSpecificRegistry.APP_PATH_PREFIX.length() )
+              .trim();
           }
-          if( line.startsWith( "XMLPath=" ) ) { //$NON-NLS-1$
-            xmlPath = new Path( line.substring( "XMLPath=".length() ).trim() ); //$NON-NLS-1$
+          if( line.startsWith( ApplicationSpecificRegistry.XML_PATH_PREFIX ) ) {
+            xmlPath = new Path( line.substring( ApplicationSpecificRegistry.XML_PATH_PREFIX.length() )
+              .trim() );
+          }
+          if( line.startsWith( ApplicationSpecificRegistry.JSDL_PATH_PEFIX ) ) {
+            jsdlPath = new Path( line.substring( ApplicationSpecificRegistry.JSDL_PATH_PEFIX.length() )
+              .trim() );
           }
         }
         if( appName != null && path != null && xmlPath != null ) {
           result = new ApplicationSpecificObject( this.currentIdPointer,
                                                   appName,
                                                   path,
-                                                  xmlPath );
+                                                  xmlPath,
+                                                  jsdlPath );
           this.appSpecObjectsToFiles.put( result, filePath.lastSegment() );
           this.currentIdPointer++;
         }
@@ -103,6 +131,11 @@ public class ApplicationSpecificRegistry implements IContentChangeNotifier {
     return result;
   }
 
+  /**
+   * Method to access instance of ApplicationSpecificRegistry
+   * 
+   * @return instance of ApplicationSpecificRegistry
+   */
   public static ApplicationSpecificRegistry getInstance() {
     if( instance == null ) {
       instance = new ApplicationSpecificRegistry();
@@ -110,6 +143,12 @@ public class ApplicationSpecificRegistry implements IContentChangeNotifier {
     return instance;
   }
 
+  /**
+   * Returns {@link ApplicationSpecificObject} object with given id
+   * 
+   * @param id id of {@link ApplicationSpecificObject} object
+   * @return {@link ApplicationSpecificObject} object with given id
+   */
   public ApplicationSpecificObject getApplicationData( int id ) {
     ApplicationSpecificObject result = null;
     for( ApplicationSpecificObject aSO : this.apps ) {
@@ -120,18 +159,38 @@ public class ApplicationSpecificRegistry implements IContentChangeNotifier {
     return result;
   }
 
+  /**
+   * Method to access list of {@link ApplicationSpecificObject} managed by this
+   * registry
+   * 
+   * @return list of {@link ApplicationSpecificObject} available in this
+   *         registry
+   */
   public List<ApplicationSpecificObject> getApplicationDataList() {
     return this.apps;
   }
 
+  /**
+   * Adds new application specific data to this registry. Data is written down
+   * on disk and will be accessible after Eclipse is restarted.
+   * 
+   * @param name name of application
+   * @param path path to executable file of this application
+   * @param xmlPath path to XML file with information how exta wizard's pages
+   *          should look like
+   * @param jsdlPath path to JSDL file used as a base for JSDL file generated by
+   *          New Job Wizard for this application settings
+   */
   public void addApplicationSpecificData( final String name,
                                           final String path,
-                                          final IPath xmlPath )
+                                          final IPath xmlPath,
+                                          final Path jsdlPath )
   {
     ApplicationSpecificObject newObject = new ApplicationSpecificObject( this.currentIdPointer,
                                                                          name,
                                                                          path,
-                                                                         xmlPath );
+                                                                         xmlPath,
+                                                                         jsdlPath );
     this.currentIdPointer++;
     if( !this.apps.contains( newObject ) ) {
       try {
@@ -152,7 +211,7 @@ public class ApplicationSpecificRegistry implements IContentChangeNotifier {
     path = path.append( ApplicationSpecificRegistry.DIRECTORY_NAME );
     File directory = path.toFile();
     if( !directory.exists() ) {
-      directory.createNewFile();
+      directory.mkdir();
     }
     int name = aSO.getId();
     boolean canCreate = false;
@@ -168,9 +227,15 @@ public class ApplicationSpecificRegistry implements IContentChangeNotifier {
     File newFile = path.toFile();
     newFile.createNewFile();
     FileWriter writer = new FileWriter( newFile, true );
-    writer.write( "appName=" + aSO.getAppName() + "\n" );
-    writer.write( "appPath=" + aSO.getAppPath() + "\n" );
-    writer.write( "XMLPath=" + aSO.getXmlPath() );
+    writer.write( ApplicationSpecificRegistry.APP_NAME_PREFIX
+                  + aSO.getAppName()
+                  + "\n" ); //$NON-NLS-1$
+    writer.write( ApplicationSpecificRegistry.APP_PATH_PREFIX
+                  + aSO.getAppPath()
+                  + "\n" ); //$NON-NLS-1$
+    writer.write( ApplicationSpecificRegistry.XML_PATH_PREFIX
+                  + aSO.getXmlPath() + "\n"); //$NON-NLS-1$
+    writer.write( ApplicationSpecificRegistry.JSDL_PATH_PEFIX + aSO.getJsdlPath() );
     writer.close();
     this.appSpecObjectsToFiles.put( aSO, Integer.valueOf( name ).toString() );
   }
@@ -183,8 +248,8 @@ public class ApplicationSpecificRegistry implements IContentChangeNotifier {
    *         parameters' settings for the same application. Then its name is
    *         appended with ints (e.g. grep (1), grep (2), etc...).
    */
-  public Map<Integer, String> getApplicationDataMapping() {
-    Map<Integer, String> result = new HashMap<Integer, String>();
+  public Map<String, Integer> getApplicationDataMapping() {
+    Map<String, Integer> result = new HashMap<String, Integer>();
     Map<String, Integer> numberOfOccurences = new HashMap<String, Integer>();
     for( ApplicationSpecificObject appSO : this.apps ) {
       if( numberOfOccurences.containsKey( appSO.getAppName() ) ) {
@@ -200,10 +265,11 @@ public class ApplicationSpecificRegistry implements IContentChangeNotifier {
       int numOfOcc = numberOfOccurences.get( appSpecObject.getAppName() )
         .intValue();
       if( numOfOcc != 1 ) {
-        numberOfOccurences.put( appSpecObject.getAppName(), numOfOcc - 1 );
-        nameToDisplay = nameToDisplay + "(" + ( numOfOcc - 1 ) + ")";
+        numberOfOccurences.put( appSpecObject.getAppName(),
+                                Integer.valueOf( numOfOcc - 1 ) );
+        nameToDisplay = nameToDisplay + "(" + ( numOfOcc - 1 ) + ")"; //$NON-NLS-1$ //$NON-NLS-2$
       }
-      result.put( new Integer( appSpecObject.getId() ), nameToDisplay );
+      result.put( nameToDisplay, new Integer( appSpecObject.getId() ) );
     }
     return result;
   }
@@ -232,6 +298,12 @@ public class ApplicationSpecificRegistry implements IContentChangeNotifier {
     }
   }
 
+  /**
+   * Removes application specific data held in this registry. This data won't be
+   * accessible even after Eclipse is restarted.
+   * 
+   * @param selectedAppSpecificObject object to remove
+   */
   public void removeApplicationSpecificData( ApplicationSpecificObject selectedAppSpecificObject )
   {
     String fileName = this.appSpecObjectsToFiles.get( selectedAppSpecificObject );
@@ -247,10 +319,25 @@ public class ApplicationSpecificRegistry implements IContentChangeNotifier {
     }
   }
 
+  /**
+   * Changes given {@link ApplicationSpecificObject}. In this object given
+   * values will be set.
+   * 
+   * @param oldASO object to change
+   * @param newAppName application name to change in given
+   *          ApplicationSpecificObject
+   * @param newAppPath path to executable file to change in given
+   *          ApplicationSpecificObject
+   * @param newXMLPath path to XML file to change in given
+   *          ApplicationSpecificObject
+   * @param newJSDLPath path to JSDL file to change in given
+   *          ApplicationSpecificObject
+   */
   public void editApplicationSpecificData( ApplicationSpecificObject oldASO,
                                            String newAppName,
                                            String newAppPath,
-                                           String newXMLPath )
+                                           String newXMLPath,
+                                           String newJSDLPath )
   {
     IPath path = Activator.getDefault().getStateLocation();
     path = path.append( ApplicationSpecificRegistry.DIRECTORY_NAME );
@@ -258,13 +345,21 @@ public class ApplicationSpecificRegistry implements IContentChangeNotifier {
     FileWriter writer;
     try {
       writer = new FileWriter( path.toFile(), false );
-      writer.write( "appName=" + newAppName + "\n" );
-      writer.write( "appPath=" + newAppPath + "\n" );
-      writer.write( "XMLPath=" + newXMLPath );
+      writer.write( ApplicationSpecificRegistry.APP_NAME_PREFIX
+                    + newAppName
+                    + "\n" ); //$NON-NLS-1$
+      writer.write( ApplicationSpecificRegistry.APP_PATH_PREFIX
+                    + newAppPath
+                    + "\n" ); //$NON-NLS-1$
+      writer.write( ApplicationSpecificRegistry.XML_PATH_PREFIX
+                    + newXMLPath
+                    + "\n" ); //$NON-NLS-1$
+      writer.write( ApplicationSpecificRegistry.JSDL_PATH_PEFIX + newJSDLPath );
       writer.close();
       oldASO.setAppName( newAppName );
       oldASO.setAppPath( newAppPath );
       oldASO.setXmlPath( new Path( newXMLPath ) );
+      oldASO.setJSDLPath( new Path( newJSDLPath ) );
       notifyListeners();
     } catch( IOException exc ) {
       // TODO katis: problem dialog

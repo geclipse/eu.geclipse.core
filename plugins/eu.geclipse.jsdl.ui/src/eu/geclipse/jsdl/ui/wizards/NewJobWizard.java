@@ -16,10 +16,8 @@
 package eu.geclipse.jsdl.ui.wizards;
 
 import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.HashMap;
@@ -267,6 +265,13 @@ public class NewJobWizard extends Wizard implements INewWizard {
     jsdl.getLocalDataStagingIn();
     jsdl.getStdInputDataType();
   }
+
+  @Override
+  public boolean canFinish()
+  {
+    // TODO Auto-generated method stub
+    return super.canFinish();
+  }
   class FirstPage extends WizardNewFileCreationPage {
 
     private IStructuredSelection iniSelection;
@@ -310,6 +315,17 @@ public class NewJobWizard extends Wizard implements INewWizard {
       return path;
     }
 
+    // @Override
+    // public boolean canFlipToNextPage()
+    // {
+    // boolean result = true;
+    // if (super.canFlipToNextPage()){
+    // if (super.validateLinkedResource().isOK()){
+    // result = false;
+    // }
+    // }
+    // return result;
+    // }
     @Override
     protected void initialPopulateContainerNameField()
     {
