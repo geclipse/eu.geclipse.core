@@ -18,13 +18,12 @@ package eu.geclipse.ui.internal.dialogs.ConfigureFilters;
 import java.util.ArrayList;
 import java.util.List;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
 import eu.geclipse.core.model.IGridJobStatus;
 import eu.geclipse.ui.views.filters.IGridFilterConfiguration;
 import eu.geclipse.ui.views.filters.JobStatusFilter;
@@ -32,8 +31,7 @@ import eu.geclipse.ui.views.filters.JobViewFilterConfiguration;
 
 public class JobStatusComposite implements IFilterComposite {
   private JobStatusFilter filter;
-  private List<StatusOption> optionsList = new ArrayList<StatusOption>();
-  private Button enabledCheckbox;
+  private List<StatusOption> optionsList = new ArrayList<StatusOption>();  
   private Group topGroup;
   private boolean readOnly = false;
 
@@ -41,8 +39,12 @@ public class JobStatusComposite implements IFilterComposite {
     this.filter = filter;
     
     this.topGroup = new Group( parent, SWT.NONE );
-    this.topGroup.setLayout( new GridLayout( 1, false ) );
-    createEnabledCheckBox( this.topGroup );
+    GridLayout layout = new GridLayout( 1, false );
+    this.topGroup.setLayout( layout );
+    this.topGroup.setLayoutData( new GridData( SWT.FILL, SWT.TOP, false, false ) );
+    
+    Label label = new Label( this.topGroup, SWT.NONE );
+    label.setText( "Show jobs with following status:" );
     
     this.optionsList.add( new StatusOption( this.topGroup, Messages.getString("JobStatusComposite.submitted"), IGridJobStatus.SUBMITTED ) ); //$NON-NLS-1$
     this.optionsList.add( new StatusOption( this.topGroup, Messages.getString("JobStatusComposite.waiting"), IGridJobStatus.WAITING ) ); //$NON-NLS-1$
@@ -54,21 +56,7 @@ public class JobStatusComposite implements IFilterComposite {
     
     refresh();
   }
-  
-  private void createEnabledCheckBox( final Composite parent ) {
-    this.enabledCheckbox = new Button( parent, SWT.CHECK );
-    this.enabledCheckbox.setText( Messages.getString("JobStatusComposite.enabled_box_text") ); //$NON-NLS-1$
-    
-    this.enabledCheckbox.addSelectionListener( new SelectionAdapter() {
-
-      @Override
-      public void widgetSelected( final SelectionEvent event ) {
-        onChangeEnabledState();
-      }
-      
-    } );
-  }
-    
+     
   private class StatusOption {
     private int statusValue;
     private Button checkbox;
@@ -77,9 +65,6 @@ public class JobStatusComposite implements IFilterComposite {
       this.statusValue = statusValue;
       this.checkbox = new Button( parent, SWT.CHECK );
       this.checkbox.setText( descriptionString );
-      GridData gridData = new GridData();
-      gridData.horizontalIndent = 10;
-      this.checkbox.setLayoutData( gridData );
     }
     
     void setSelected( final boolean selected ) {
@@ -105,7 +90,6 @@ public class JobStatusComposite implements IFilterComposite {
 
   public void saveToFilter() {
     if( this.filter != null ) {
-      this.filter.setEnabled( this.enabledCheckbox.getSelection() );
       for( StatusOption option : this.optionsList ) {
         this.filter.setStatusState( option.getStatusValue(), option.isSelected() );
       }      
@@ -119,9 +103,7 @@ public class JobStatusComposite implements IFilterComposite {
   
   private void refresh() {
     if( this.filter != null )
-    {
-      this.enabledCheckbox.setSelection( this.filter.isEnabled() );
-      
+    {      
       for( StatusOption option : this.optionsList ) {
         option.setSelected( this.filter.getStatusState( option.getStatusValue() ) );
       }      
@@ -134,10 +116,13 @@ public class JobStatusComposite implements IFilterComposite {
     onChangeEnabledState();
   }
   
-  void onChangeEnabledState() {
-    this.enabledCheckbox.setEnabled( !this.readOnly );
+  void onChangeEnabledState() {    
     for( StatusOption option : this.optionsList ) {
-      option.setReadOnly( this.readOnly || !this.enabledCheckbox.getSelection() );
+      option.setReadOnly( this.readOnly );
     }    
+  }
+
+  public boolean validate() {
+    return true;
   }
 }

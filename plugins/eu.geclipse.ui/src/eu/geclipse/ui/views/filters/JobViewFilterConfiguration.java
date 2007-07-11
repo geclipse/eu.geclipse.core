@@ -26,20 +26,14 @@ public class JobViewFilterConfiguration extends AbstractGridFilterConfiguration
   public JobViewFilterConfiguration( final String name ) {
     super( name );
     addFilter( new JobStatusFilter() );
-  }
-
-  /* (non-Javadoc)
-   * @see eu.geclipse.ui.views.filters.AbstractGridFilterConfiguration#readFilter(org.eclipse.ui.IMemento, java.lang.String)
-   */
-  @Override
-  protected void readFilter( final IMemento filterMemento, final String filterId )
-  {
-    if( filterId.equals( JobStatusFilter.getId() ) ) {
-      getJobStatusFilter().readState( filterMemento );
-    }
+    addFilter( new JobSubmissionTimeFilter() );
   }
   
   public JobStatusFilter getJobStatusFilter() {
-    return findFilter( JobStatusFilter.class );
+    return (JobStatusFilter)findFilter( JobStatusFilter.getId() );
+  }
+  
+  public JobSubmissionTimeFilter getSubmissionTimeFilter() {
+    return (JobSubmissionTimeFilter)findFilter( JobSubmissionTimeFilter.getId() );
   }
 }

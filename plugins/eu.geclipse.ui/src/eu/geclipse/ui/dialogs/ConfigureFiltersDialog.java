@@ -18,6 +18,8 @@ package eu.geclipse.ui.dialogs;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import org.eclipse.core.runtime.Assert;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -49,12 +51,12 @@ import eu.geclipse.ui.views.filters.GridFilterConfigurationsManager;
 import eu.geclipse.ui.views.filters.IGridFilter;
 import eu.geclipse.ui.views.filters.IGridFilterConfiguration;
 
-public class ConfigureFiltersDialog extends TrayDialog {  
+public class ConfigureFiltersDialog extends TrayDialog {
 
-  CheckboxTableViewer tableViewer;
-  List<IGridFilterConfiguration> configurations;
-  GridFilterConfigurationsManager configurationsManager;
-  List<IFilterComposite> composites = new ArrayList<IFilterComposite>();
+  private CheckboxTableViewer tableViewer;
+  private List<IGridFilterConfiguration> configurations;
+  private GridFilterConfigurationsManager configurationsManager;
+  private List<IFilterComposite> composites = new ArrayList<IFilterComposite>();
 
   public ConfigureFiltersDialog( final Shell shell, final GridFilterConfigurationsManager filterConfigurationsManager ) {
     super( shell );
@@ -84,7 +86,7 @@ public class ConfigureFiltersDialog extends TrayDialog {
     ((GridLayout)dialogAreaComposite.getLayout()).numColumns = 2;
     createConfigurationsComposite( dialogAreaComposite );
     createFiltersComposite( dialogAreaComposite );
-        
+
     return dialogAreaComposite;
   }
   
@@ -93,6 +95,7 @@ public class ConfigureFiltersDialog extends TrayDialog {
     
     GridLayout layout = new GridLayout( 2, false );
     configComposite.setLayout( layout );
+    configComposite.setLayoutData( new GridData( SWT.FILL, SWT.TOP, false, false ) );
     createTableLabel( configComposite );
     createConfigsTable( configComposite );
     createTableButtons( configComposite );
@@ -132,7 +135,7 @@ public class ConfigureFiltersDialog extends TrayDialog {
     };
   }
   
-  void enableConfiguration( final IGridFilterConfiguration configuration ) {
+  private void enableConfiguration( final IGridFilterConfiguration configuration ) {
     for( IGridFilterConfiguration curConfiguration : this.configurations ) {
       boolean enable = curConfiguration == configuration;
       this.tableViewer.setChecked( curConfiguration, enable );
@@ -166,19 +169,18 @@ public class ConfigureFiltersDialog extends TrayDialog {
     return new ISelectionChangedListener() {
 
       public void selectionChanged( final SelectionChangedEvent event ) {
-        StructuredSelection selection = (StructuredSelection)event.getSelection();        
-        
+        StructuredSelection selection = ( StructuredSelection )event.getSelection();
         if( selection != null ) {
-          IGridFilterConfiguration configuration = (IGridFilterConfiguration)selection.getFirstElement();   
-          
-          for( IFilterComposite filterComposite : ConfigureFiltersDialog.this.composites ) {
-            filterComposite.saveToFilter();
-            filterComposite.setFilter( configuration );
+          IGridFilterConfiguration configuration = ( IGridFilterConfiguration )selection.getFirstElement();
+          if( saveFilter() ) {
+            for( IFilterComposite filterComposite : ConfigureFiltersDialog.this.composites )
+            {
+              filterComposite.setFilter( configuration );
+            }
           }
         }
-        
         setReadOnly( selection == null || selection.isEmpty() );
-      }      
+      }
     };
   }
   
@@ -283,10 +285,13 @@ public class ConfigureFiltersDialog extends TrayDialog {
   
   private void createFiltersComposite( final Composite parent ) {
     Composite filtersComposite = new Composite( parent, SWT.NONE );
-    filtersComposite.setLayout( new GridLayout( 1, false ) );
+    filtersComposite.setLayout( new GridLayout( 2, false ) );
     IGridFilterConfiguration configuration = this.configurations.get( 0 );
     for( IGridFilter filter : configuration.getFilters() ) {
-      IFilterComposite composite = FilterCompositeFactory.create( filter, filtersComposite, SWT.NONE );
+      IFilterComposite composite = FilterCompositeFactory.create( filter, filtersComposite );
+      
+      Assert.isTrue( composite != null, "Probably IGridFilter.makeClone() returned null" );
+      
       if( composite != null ) {
         this.composites.add( composite );
       }
@@ -328,26 +333,19 @@ public class ConfigureFiltersDialog extends TrayDialog {
     }
     return foundConfiguration;
   }
+  
   /*
-  private void deleteConfiguration( final String name ) {
-    IGridFilterConfiguration configuration = findConfiguration( name );
-    
-    if( configuration != null ) {
-      this.configurations.remove( configuration );
-    }
-  }
-  */
-  /* (non-Javadoc)
+   * (non-Javadoc)
+   * 
    * @see org.eclipse.jface.dialogs.Dialog#okPressed()
    */
   @Override
   protected void okPressed()
   {
-    saveConfigurationsState();
-    for( IFilterComposite composite : this.composites ) {
-      composite.saveToFilter();
+    if( saveFilter() ) {
+      saveConfigurationsState();
+      super.okPressed();
     }
-    super.okPressed();
   }
 
   public List<IGridFilterConfiguration> getConfigurations() {
@@ -360,4 +358,34 @@ public class ConfigureFiltersDialog extends TrayDialog {
     }
   }
 
+  /* (non-Javadoc)
+   * @see org.eclipse.jface.dialogs.TrayDialog#isHelpAvailable()
+   */
+  @Override
+  public boolean isHelpAvailable()
+  {
+    return false;
+  }
+
+  private boolean saveFilter() {
+    boolean success = true;
+    
+    for( Iterator<IFilterComposite> iterator = this.composites.iterator(); iterator.hasNext() && success; ) {
+      success &= iterator.next().validate();
+    }
+    
+    if( success ) {
+      for( IFilterComposite composite : this.composites ) {
+        composite.saveToFilter();
+      }
+    }
+    
+    return success;
+  }
+  
+  private void showErrorMessage( final String reasonMessage ) {
+    Status status = new Status( Status.INFO, Activator.getDefault().PLUGIN_ID, "Cannot save filter." );
+    
+    ProblemDialog.openProblem( this.getShell(), "Save filter", reasonMessage, status, null );    
+  }
 }

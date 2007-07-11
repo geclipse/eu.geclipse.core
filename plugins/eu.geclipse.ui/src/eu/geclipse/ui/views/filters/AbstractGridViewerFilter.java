@@ -15,6 +15,10 @@
  *****************************************************************************/
 package eu.geclipse.ui.views.filters;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.util.Date;
+import java.util.Locale;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.ui.IMemento;
 import eu.geclipse.ui.dialogs.ConfigureFiltersDialog;
@@ -37,5 +41,44 @@ implements IGridFilter, Cloneable {
     
     return value;
   }
+  
+  protected void saveDate( final IMemento memento, final String key, final Date date ) {
+    String dateString = getDateTimeFormatter().format( date );
+    memento.putString( key, dateString );
+  }
+  
+  protected Date readDate( final IMemento memento, final String key ) {
+    Date date = null;
+    String dateString = memento.getString( key );
+    
+    if( dateString != null ) {
+      try {
+        date = getDateTimeFormatter().parse( dateString );
+      } catch( ParseException exception ) {
+        // ignore errors
+      }
+    }
+    
+    return date;
+  }
+
+  /* (non-Javadoc)
+   * @see eu.geclipse.ui.views.filters.IGridFilter#getFilter()
+   */
+  public ViewerFilter getFilter() {
+    return this;
+  }
+  
+  private DateFormat getDateTimeFormatter() {
+    DateFormat formatter = DateFormat.getDateTimeInstance( DateFormat.SHORT, DateFormat.SHORT, 
+                                                           new Locale( "Locale.US" ) );
+    
+    if( formatter == null ) {
+      formatter = DateFormat.getDateTimeInstance( DateFormat.SHORT, DateFormat.SHORT );
+    }
+    
+    return formatter;
+  }
+  
   
 }

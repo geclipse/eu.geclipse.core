@@ -157,7 +157,6 @@ public class JobFiltersDialog extends TrayDialog {
     
     @Override
     protected void saveFilter() {
-      this.filter.setEnabled( this.enabledCheckbox.getSelection() );
       
       for( StatusOption option : this.optionsList ) {
         this.filter.setStatusState( option.getStatusValue(), option.isSelected() );

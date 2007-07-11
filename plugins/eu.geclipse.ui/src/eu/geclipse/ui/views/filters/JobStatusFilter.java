@@ -16,6 +16,7 @@
 package eu.geclipse.ui.views.filters;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.ui.IMemento;
@@ -23,11 +24,9 @@ import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobStatus;
 
 public class JobStatusFilter extends AbstractGridViewerFilter {
-  private static final String MEMENTO_KEY_ENABLED = "Enabled"; //$NON-NLS-1$
   private static final String MEMENTO_TYPE_STATUS = "Status";   //$NON-NLS-1$
   private static final String MEMENTO_KEY_STATUS_SHOW = "Show"; //$NON-NLS-1$
   
-  private boolean enabled = true;
   private HashMap<Integer, Boolean> statusMap = new HashMap<Integer, Boolean>();
   
   public JobStatusFilter() {
@@ -41,36 +40,27 @@ public class JobStatusFilter extends AbstractGridViewerFilter {
     
     return newFilter;
   }
-    
-  public void setEnabled( final boolean enabled ) {
-    this.enabled = enabled;
-  }
   
   public void setStatusState( final int jobStatus, final boolean showOnView ) {
     this.statusMap.put( Integer.valueOf( jobStatus ), Boolean.valueOf( showOnView ) );
   }
 
   @Override
-  public boolean select( final Viewer viewer, final Object parentElement, final Object element )
+  public boolean select( final Viewer viewer,
+                         final Object parentElement,
+                         final Object element )
   {
     boolean showOnView = true;
-    
     if( element instanceof IGridJob ) {
-      IGridJob job = (IGridJob) element; 
-      
-      if( this.enabled ) {
-        int jobStatus = job.getJobStatus().getType();
-        Boolean showOnViewBool = this.statusMap.get( Integer.valueOf( jobStatus ) );
-        
-        if( showOnViewBool == null ) {
-          showOnView = getStatusState( IGridJobStatus.UNKNOWN );
-        }
-        else {
-          showOnView = showOnViewBool.booleanValue();
-        }
+      IGridJob job = ( IGridJob )element;
+      int jobStatus = job.getJobStatus().getType();
+      Boolean showOnViewBool = this.statusMap.get( Integer.valueOf( jobStatus ) );
+      if( showOnViewBool == null ) {
+        showOnView = getStatusState( IGridJobStatus.UNKNOWN );
+      } else {
+        showOnView = showOnViewBool.booleanValue();
       }
     }
-    
     return showOnView;
   }
   
@@ -81,7 +71,6 @@ public class JobStatusFilter extends AbstractGridViewerFilter {
   }
   
   public void saveState( final IMemento filterMemento ) {    
-    filterMemento.putInteger( MEMENTO_KEY_ENABLED, this.enabled ? 1 : 0 );
 
     for( Integer status : this.statusMap.keySet() ) {
       IMemento statusMemento = filterMemento.createChild( MEMENTO_TYPE_STATUS, status.toString() );
@@ -90,12 +79,23 @@ public class JobStatusFilter extends AbstractGridViewerFilter {
     }
   }
 
+  /*
+   * (non-Javadoc)
+   * 
+   * @see eu.geclipse.ui.views.filters.IGridFilter#isEnabled()
+   */
   public boolean isEnabled() {
-    return this.enabled;
+    // return true if any status is not checked, what means this filter should
+    // be used to filter jobs by status
+    boolean enabled = false;
+    Iterator<Integer> keysIterator = this.statusMap.keySet().iterator();
+    while( keysIterator.hasNext() && !enabled ) {
+      enabled |= !this.statusMap.get( keysIterator.next() ).booleanValue();
+    }
+    return enabled;
   }
 
   public void readState( final IMemento filterMemento ) {
-    this.enabled = readBoolean( filterMemento, MEMENTO_KEY_ENABLED );
     IMemento[] statusMementos = filterMemento.getChildren( MEMENTO_TYPE_STATUS );
     for( IMemento statusMemento : statusMementos ) {
       Integer statusValue = Integer.valueOf( statusMemento.getID() );

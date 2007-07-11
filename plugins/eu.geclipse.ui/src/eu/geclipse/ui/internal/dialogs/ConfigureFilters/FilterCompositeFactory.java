@@ -18,20 +18,22 @@ package eu.geclipse.ui.internal.dialogs.ConfigureFilters;
 import org.eclipse.swt.widgets.Composite;
 import eu.geclipse.ui.views.filters.IGridFilter;
 import eu.geclipse.ui.views.filters.JobStatusFilter;
+import eu.geclipse.ui.views.filters.JobSubmissionTimeFilter;
 
 
 /**
- * Factory creting composites for specific {@link IFilterComposite}.
+ * Factory creating composites for specific {@link IFilterComposite}.
  * Produced composite is used in {@link ConfigureFiltersDialog}
  */
 public class FilterCompositeFactory {
   static public IFilterComposite create( final IGridFilter filter,
-                                         final Composite parent,
-                                         @SuppressWarnings("unused") final int style ) {
+                                         final Composite parent ) {
     IFilterComposite composite = null;
     
     if( filter instanceof JobStatusFilter ) {
       composite = new JobStatusComposite( (JobStatusFilter)filter, parent );
+    } else if( filter instanceof JobSubmissionTimeFilter ) {
+      composite = new JobSubmissionTimeComposite( (JobSubmissionTimeFilter)filter, parent );
     }
     
     return composite;

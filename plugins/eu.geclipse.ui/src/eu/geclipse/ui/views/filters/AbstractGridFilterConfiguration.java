@@ -61,11 +61,13 @@ abstract public class AbstractGridFilterConfiguration
     }
 
     for( IMemento filterMemento : configurationMemento.getChildren( MEMENTO_KEY_TYPE ) ) {
-      readFilter( filterMemento, filterMemento.getID() );
+      IGridFilter filter = findFilter( filterMemento.getID() );
+      
+      if( filter != null ) {
+        filter.readState( filterMemento );        
+      } // if filter wasn't found, then maybe exists in IMemento, but current implementation doesn't support this filter longer 
     }
-  }
-  
-  abstract protected void readFilter( final IMemento filterMemento, final String filterId );
+  }  
 
   /* (non-Javadoc)
    * @see eu.geclipse.ui.views.filters.IGridFilterConfiguration#isEnabled()
@@ -111,14 +113,14 @@ abstract public class AbstractGridFilterConfiguration
     this.enabled = enabled;
   }
   
-  protected <FilterType extends IGridFilter> FilterType findFilter( final Class<? extends IGridFilter> filterClass ) {
-    FilterType filter = null;
+  protected IGridFilter findFilter( final String id ) {
+    IGridFilter filter = null;
     Iterator<IGridFilter> iterator = this.filtersList.iterator();
     
     while( iterator.hasNext() && filter == null ) {
       IGridFilter currentFilter = iterator.next();
-      if( currentFilter.getClass().equals( filterClass ) ) {
-        filter = (FilterType)currentFilter;
+      if( currentFilter.getFilterId().equals( id ) ) {
+        filter = currentFilter;
       }
     }
     
