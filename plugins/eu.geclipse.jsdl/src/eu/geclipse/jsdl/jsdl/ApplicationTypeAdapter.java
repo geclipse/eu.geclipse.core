@@ -230,10 +230,12 @@ public final class ApplicationTypeAdapter extends JsdlAdaptersFactory {
         Integer featureID = new Integer(attribute.getFeatureID());
               
         //Check if Attribute has any value
-        if (object.eIsSet( attribute )){          
+        if (object.eIsSet( attribute ) 
+            && this.widgetFeaturesMap.containsKey( featureID )) {
+          
            widgetName = this.widgetFeaturesMap.get( featureID );
 
-           if (attribute.getFeatureID() != JsdlPackage.APPLICATION_TYPE__ANY){
+           if (attribute.getFeatureID() != JsdlPackage.APPLICATION_TYPE__ANY){             
              widgetName.setText(value.toString());
          } //end if
                    

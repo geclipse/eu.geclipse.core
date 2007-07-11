@@ -519,18 +519,22 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
             switch( featureID ) {
               case PosixPackage.POSIX_APPLICATION_TYPE__ENVIRONMENT:                
               {
-                
+               
                 tableName = this.tableFeaturesMap.get( new Integer(featureID) );
                                
                 EList valueList = (EList) posixEObject.eGet( eStructuralFeature );                
-                if(!this.adapterRefreshed) {
+                if(!this.adapterRefreshed
+                    && this.tableFeaturesMap.containsKey( new Integer(featureID))) {
+                  
                   for (Iterator  it = valueList.iterator(); it.hasNext();){                    
                     this.environmentType = (EnvironmentType) it.next();                   
                     tableName.setInput( valueList );
+                    
                     } // End Iterator
                              
                   } // Endif
-              }                
+               }//
+                              
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__ARGUMENT:                
               {                
@@ -539,7 +543,8 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
                 EList<ArgumentType> valueList = (EList) posixEObject.eGet( eStructuralFeature );
                 
                 
-                if(!this.adapterRefreshed) {
+                if(!this.adapterRefreshed 
+                    && this.tableFeaturesMap.containsKey( new Integer(featureID))) {
                   
                   for (Iterator <ArgumentType> it = valueList.iterator(); it.hasNext();) {                   
                     this.argumentType =  it.next();        
@@ -565,7 +570,9 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
           Object value = posixEObject.eGet( eStructuralFeature );
           
           // Check if Attribute has any value
-          if (posixEObject.eIsSet( eStructuralFeature )){          
+          if (posixEObject.eIsSet( eStructuralFeature ) 
+              && this.widgetFeaturesMap.containsKey( new Integer(featureID) )){ 
+            
              widgetName = this.widgetFeaturesMap.get( new Integer(featureID) );
              
              if (eStructuralFeature.getName().toString() != "any"){ //$NON-NLS-1$

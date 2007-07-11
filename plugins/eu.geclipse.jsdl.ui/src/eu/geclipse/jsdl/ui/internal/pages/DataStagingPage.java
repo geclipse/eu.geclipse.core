@@ -54,6 +54,7 @@ import eu.geclipse.jsdl.ui.internal.Activator;
 public final class DataStagingPage extends FormPage 
                                               implements INotifyChangedListener{
   
+  protected static final String PAGE_ID = "DATA_STAGING";  //$NON-NLS-1$
   protected Composite jobDataStaging = null;
   
   protected List lstFileName = null;
@@ -95,7 +96,7 @@ public final class DataStagingPage extends FormPage
                             
    {
     
-    super(editor,Messages.getString("DataStagingPage_pageId"),  //$NON-NLS-1$
+    super(editor,PAGE_ID,
           Messages.getString("DataStagingPage_PageTitle")); //$NON-NLS-1$
    
     }

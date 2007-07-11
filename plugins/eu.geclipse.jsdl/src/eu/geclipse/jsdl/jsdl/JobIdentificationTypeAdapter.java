@@ -361,7 +361,8 @@ public final class JobIdentificationTypeAdapter extends JsdlAdaptersFactory {
         Integer featureID =  new Integer(eStructuralFeature.getFeatureID());
       
         //Check if Attribute has any value
-        if (object.eIsSet( eStructuralFeature )){   
+        if (object.eIsSet( eStructuralFeature )
+            && this.widgetFeaturesMap.containsKey( featureID )){   
           
         
           if (eStructuralFeature.getUpperBound() == 1){ 

@@ -95,5 +95,5 @@ public class Activator extends AbstractUIPlugin {
   public static void logStatus( final IStatus status ) {
     getDefault().getLog().log( status );
   }
-  
+   
 }

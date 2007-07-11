@@ -89,6 +89,7 @@ import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.pages.DataStagingPage;
 import eu.geclipse.jsdl.ui.internal.pages.JobApplicationPage;
 import eu.geclipse.jsdl.ui.internal.pages.JobDefinitionPage;
+import eu.geclipse.jsdl.ui.internal.pages.OverviewPage;
 import eu.geclipse.jsdl.ui.internal.pages.ResourcesPage;
 
 
@@ -126,6 +127,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
   private int sourcePageIndex;
   private boolean refreshedModel = false;
   private boolean isDirtyFlag = false;
+  private OverviewPage overviewPage = new OverviewPage(this);
   private JobDefinitionPage jobDefPage = new JobDefinitionPage(this);
   private JobApplicationPage jobApplicationPage = new JobApplicationPage(this);
   private DataStagingPage dataStagingPage = new DataStagingPage(this);
@@ -150,6 +152,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
     factories.add(new ReflectiveItemProviderAdapterFactory() );
 
     this.adapterFactory = new ComposedAdapterFactory(factories);
+    
 
     /*
     * Create the command stack that will notify this editor as commands 
@@ -192,16 +195,19 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
       commandStack, new HashMap<Resource, Boolean>()); 
         
       }
+  
+
  
   
   protected void cleanPages(){
+    this.overviewPage.setDirty( false );
     this.jobDefPage.setDirty( false );
     this.jobApplicationPage.setDirty( false );
     this.resourcesPage.setDirty( false );
     this.dataStagingPage.setDirty( false ) ;
   }
 
-  
+
   /**
    * This method set's the dirty status of the editor.
    * 
@@ -225,6 +231,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
    
       
      try {
+      addPage( this.overviewPage );
       addPage(this.jobDefPage);      
       addPage(this.jobApplicationPage);
       addPage(this.resourcesPage);
@@ -245,12 +252,15 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
    * element, which is the root element.
    */
   
-  private void pushContentToPages(){    
+  private void pushContentToPages(){
+    
+    this.overviewPage.setPageContent( this.jobDefType, isModelRefreshed() );
     this.jobDefPage.setPageContent( this.jobDefType, isModelRefreshed());
     this.jobApplicationPage.setPageContent( this.jobDefType, isModelRefreshed());
     this.resourcesPage.setPageContent( this.jobDefType, isModelRefreshed() );
-    this.dataStagingPage.setPageContent( this.jobDefType, isModelRefreshed());    
-    }
+    this.dataStagingPage.setPageContent( this.jobDefType, isModelRefreshed());
+    
+  }
   
   
   

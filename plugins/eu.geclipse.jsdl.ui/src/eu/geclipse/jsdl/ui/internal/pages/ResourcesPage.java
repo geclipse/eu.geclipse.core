@@ -63,7 +63,7 @@ public final class ResourcesPage extends FormPage
                                             implements INotifyChangedListener {
   
    
-  
+  protected static final String PAGE_ID = "RESOURCES";  //$NON-NLS-1$
   protected ResourcesTypeAdapter resourcesTypeAdapter;
   protected Object value = null;  
   protected Composite jobRescComposite = null;
@@ -144,7 +144,7 @@ public final class ResourcesPage extends FormPage
                             
    {
    
-    super(editor,Messages.getString("ResourcesPage_pageId") , //$NON-NLS-1$
+    super(editor, PAGE_ID ,
           Messages.getString("ResourcesPage_PageTitle")); //$NON-NLS-1$
         
     } // End Class Constructor.
@@ -636,7 +636,7 @@ public final class ResourcesPage extends FormPage
     this.resourcesTypeAdapter.attachToCPUArchitecture( this.cmbCPUArchName );
     this.cmbCPUArchName.setLayoutData(gd);
     
-    toolkit.paintBordersFor( clientsubSection);
+    toolkit.paintBordersFor( clientsubSection);    
     
   } //End void cPUArch()
   

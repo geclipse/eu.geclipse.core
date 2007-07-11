@@ -64,7 +64,7 @@ import eu.geclipse.jsdl.ui.internal.dialogs.MultipleInputDialog;
 public final class JobApplicationPage extends FormPage 
                                              implements INotifyChangedListener{
   
-  
+  protected static final String PAGE_ID = "APPLICATION";  //$NON-NLS-1$
   protected Composite aS = null;
   protected Composite pS = null;
   protected Composite apS = null ;
@@ -151,7 +151,7 @@ public final class JobApplicationPage extends FormPage
    */
   public JobApplicationPage( final FormEditor editor ) {
     
-    super(editor,Messages.getString("JobApplicationPage_pageId") ,  //$NON-NLS-1$
+    super(editor, PAGE_ID ,
           Messages.getString("JobApplicationPage_PageTitle")); //$NON-NLS-1$
    
    
