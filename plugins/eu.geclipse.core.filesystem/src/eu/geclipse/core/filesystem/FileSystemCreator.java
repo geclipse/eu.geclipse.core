@@ -5,9 +5,11 @@ import java.net.URI;
 import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.provider.FileInfo;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 
 import eu.geclipse.core.filesystem.internal.Activator;
+import eu.geclipse.core.filesystem.internal.filesystem.ConnectionElement;
 import eu.geclipse.core.filesystem.internal.filesystem.ConnectionRoot;
 import eu.geclipse.core.filesystem.internal.filesystem.IFileSystemProperties;
 import eu.geclipse.core.model.GridModelException;
@@ -25,7 +27,26 @@ public class FileSystemCreator
 
   public IGridElement create( final IGridContainer parent )
       throws GridModelException {
-    IFolder folder = ( IFolder ) getObject();
+    
+    IGridElement result = null;
+    IResource resource = ( IResource ) getObject();
+    
+    if ( isFileSystemLink( resource ) ) {
+      result = createConnectionRoot( ( IFolder ) resource );
+    } else {
+      result = createConnectionElement( resource );
+    }
+    
+    return result;
+    
+  }
+  
+  private ConnectionElement createConnectionElement( final IResource resource ) {
+    ConnectionElement element = new ConnectionElement( resource );
+    return element;
+  }
+  
+  private ConnectionRoot createConnectionRoot( final IFolder folder ) {
     ConnectionRoot connection = new ConnectionRoot( folder );
     try {
       IFileInfo info = connection.getConnectionFileInfo();
@@ -41,9 +62,35 @@ public class FileSystemCreator
   
   @Override
   protected boolean internalCanCreate( final Object fromObject ) {
+    
     boolean result = false;
-    if ( fromObject instanceof IFolder ) {
-      IFolder folder = ( IFolder ) fromObject;
+    
+    if ( fromObject instanceof IResource ) {
+      result = isFileSystemElement( ( IResource ) fromObject );
+    }
+    
+    return result;
+    
+  }
+  
+  private boolean isFileSystemElement( final IResource resource ) {
+    
+    boolean result = isFileSystemLink( resource );
+    
+    if ( ! result && ( resource != null ) ) {
+      result = isFileSystemElement( resource.getParent() );
+    }
+    
+    return result;
+    
+  }
+  
+  private boolean isFileSystemLink( final IResource resource ) {
+    
+    boolean result = false;
+    
+    if ( ( resource != null ) && ( resource instanceof IFolder ) ) {
+      IFolder folder = ( IFolder ) resource;
       if ( folder.isLinked() ) {
         URI uri = folder.getRawLocationURI();
         String scheme = uri.getScheme();
@@ -52,7 +99,9 @@ public class FileSystemCreator
         }
       }
     }
+
     return result;
+    
   }
 
 }
