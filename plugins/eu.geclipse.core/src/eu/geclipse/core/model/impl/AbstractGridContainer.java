@@ -383,7 +383,11 @@ public abstract class AbstractGridContainer
   private void testCanContain( final IGridElement element )
       throws GridModelException {
     if ( !canContain( element ) ) {
-      throw new GridModelException( GridModelProblems.CONTAINER_CAN_NOT_CONTAIN );
+      throw new GridModelException( GridModelProblems.CONTAINER_CAN_NOT_CONTAIN,
+                                    "A Grid container of the type "
+                                    + getClass().getName()
+                                    + " can not contain elements of the type "
+                                    + element.getClass().getName() );
     }
   }
   

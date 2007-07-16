@@ -17,7 +17,9 @@ package eu.geclipse.core;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.Status;
 
 /**
@@ -44,11 +46,6 @@ public abstract class AbstractProblem implements IProblem {
    * List of solution IDs.
    */
   private List< Integer > solutionIDs = new ArrayList< Integer >();
-  
-  /**
-   * A status object representing this problem to Eclipse.
-   */
-  private IStatus status;
   
   /**
    * The problem text.
@@ -209,6 +206,44 @@ public abstract class AbstractProblem implements IProblem {
    * @see eu.geclipse.core.IProblem#getStatus()
    */
   public IStatus getStatus() {
+    
+    IStatus result = null;
+    
+    if ( hasReasons() ) {
+      
+      List< String > reasonList = getReasons();
+      
+      result = new MultiStatus(
+        getPluginID(),
+        getID(),
+        getText(),
+        getException()
+      );
+      
+      for ( String reason : reasonList ) {
+        IStatus status = new Status(
+            IStatus.ERROR,
+            getPluginID(),
+            getID(),
+            reason,
+            null
+        );
+        ( ( MultiStatus ) result ).add( status );
+      }
+      
+    } else {
+      result = new Status(
+        IStatus.ERROR,
+        getPluginID(),
+        getID(),
+        getText(),
+        getException()
+      );
+    }
+    
+    return result;
+    
+    /*
     if ( this.status == null ) {
       this.status = new Status(
         IStatus.ERROR,
@@ -219,6 +254,7 @@ public abstract class AbstractProblem implements IProblem {
       );
     }
     return this.status;
+    */
   }
 
   /* (non-Javadoc)
@@ -226,6 +262,11 @@ public abstract class AbstractProblem implements IProblem {
    */
   public String getText() {
     return this.text;
+  }
+  
+  public boolean hasReasons() {
+    List< String > reasonList = getReasons();
+    return ( reasonList != null ) && ! reasonList.isEmpty();
   }
   
   /**

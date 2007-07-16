@@ -17,6 +17,7 @@
 package eu.geclipse.core;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IStatus;
 
 /**
  * Base class of all Grid exceptions. This exception is also the base
@@ -83,7 +84,7 @@ public class GridException extends CoreException {
   public GridException( final int problemID,
                         final Throwable exc,
                         final String description ) {
-    this(ProblemRegistry.getRegistry().getProblem( problemID, exc, description ));
+    this( ProblemRegistry.getRegistry().getProblem( problemID, exc, description ) );
   }
 
   /**
