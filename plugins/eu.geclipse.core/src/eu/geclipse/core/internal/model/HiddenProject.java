@@ -16,6 +16,7 @@ import org.eclipse.core.runtime.Path;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.GridModelProblems;
+import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridPreferences;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IGridRoot;
@@ -90,6 +91,11 @@ public class HiddenProject
     
     return new HiddenProject( project );
     
+  }
+  
+  @Override
+  public boolean canContain( final IGridElement element ) {
+    return true;
   }
   
   public void createGlobalConnection( final String name, final URI masterURI )

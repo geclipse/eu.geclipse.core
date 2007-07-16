@@ -128,19 +128,20 @@ public abstract class AbstractGridContainer
   public IGridElement[] getChildren( final IProgressMonitor monitor )
       throws GridModelException {
     
-    if ( isLazy() && isDirty() ) {
-      deleteAll();
-      boolean result = fetchChildren( monitor );
-      setDirty( !result );
-    }
-    /*
-    List< IGridElement > childList = new ArrayList< IGridElement >();
-    for ( IGridElement child : this.children ) {
-      if ( ! child.isHidden() ) {
-        childList.add( child );
+    setProcessEvents( false );
+    
+    try {
+    
+      if ( isLazy() && isDirty() ) {
+        deleteAll();
+        boolean result = fetchChildren( monitor );
+        setDirty( !result );
       }
+      
+    } finally {
+      setProcessEvents( true );
     }
-    */
+    
     return this.children.toArray( new IGridElement[ this.children.size() ] );
     
   }
@@ -231,6 +232,9 @@ public abstract class AbstractGridContainer
    */
   protected IGridElement addElement( final IGridElement element )
       throws GridModelException {
+    
+    //System.out.println( "AbstractGridContainer#addElement@" + getName() + ": " + element.getName() );
+    
     if ( element != null ) {
       testCanContain( element );
       IGridElement oldChild = findChild( element.getName() );
@@ -280,6 +284,7 @@ public abstract class AbstractGridContainer
   
   protected void removeElement( final IGridElement element ) {
     boolean result = this.children.remove( element );
+    //System.out.println( "AbstractGridContainer#removeElement@" + getName() + ": " + element.getName() + ", " + result );
     if ( result ) {
       fireGridModelEvent( IGridModelEvent.ELEMENTS_REMOVED, element );
     }
@@ -306,13 +311,18 @@ public abstract class AbstractGridContainer
     
     if ( enabled && ( this.processEventsPolicy > 0) ) {
       this.processEventsPolicy--;
-    } else if ( !enabled ) {
+    } else if ( ! enabled ) {
       this.processEventsPolicy++;
     }
     
-    if ( this.processEventsPolicy == 0 ) {
+    if ( getProcessEvents() ) {
       processEvents();
     }
+    
+  }
+  
+  protected boolean getProcessEvents() {
+    return this.processEventsPolicy == 0;
   }
   
   private void fireGridModelEvent( final int type,
@@ -359,7 +369,7 @@ public abstract class AbstractGridContainer
       }
     }
     
-    if ( this.processEventsPolicy == 0 ) {
+    if ( getProcessEvents() ) {
       processEvents();
     }
     

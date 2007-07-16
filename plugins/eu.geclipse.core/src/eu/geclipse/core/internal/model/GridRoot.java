@@ -60,6 +60,9 @@ public final class GridRoot
   private List< IGridModelListener > listeners
     = new ArrayList< IGridModelListener >();
   
+  private List< IGridModelEvent > globalEventQueue
+    = new ArrayList< IGridModelEvent >();
+  
   /**
    * Private constructor to ensure to have only one instance of
    * this class. This can be obtained by {@link #getInstance()}.
@@ -69,7 +72,9 @@ public final class GridRoot
     ResourcesPlugin.getWorkspace().addResourceChangeListener(
       new IResourceChangeListener() {
         public void resourceChanged( final IResourceChangeEvent event ) {
+          setProcessEvents( false );
           handleResourceChange( event );
+          setProcessEvents( true );
         }
       }
     );
@@ -172,8 +177,82 @@ public final class GridRoot
    * @param event The event to be distributed.
    */
   public void fireGridModelEvent( final IGridModelEvent event ) {
-    for ( IGridModelListener listener : this.listeners ) {
-      listener.gridModelChanged( event );
+    queueEvent( event );
+  }
+  
+  @Override
+  protected void setProcessEvents( final boolean enabled ) {
+
+    super.setProcessEvents( enabled );
+    
+    if ( getProcessEvents() ) {
+      processGlobalEvents();
+    }
+    
+  }
+
+  private void queueEvent( final IGridModelEvent event ) {
+    
+    IGridModelEvent newEvent = event;
+    
+    for ( IGridModelEvent ev : this.globalEventQueue ) {
+      IGridModelEvent mergedEvent = mergeEvents( ev, event );
+      if ( mergedEvent != null ) {
+        this.globalEventQueue.remove( ev );
+        newEvent = mergedEvent;
+        break;
+      }
+    }
+    
+    this.globalEventQueue.add( newEvent );
+    
+    if ( getProcessEvents() ) {
+      processGlobalEvents();
+    }
+    
+  }
+  
+  private IGridModelEvent mergeEvents( final IGridModelEvent event1,
+                                       final IGridModelEvent event2 ) {
+    IGridModelEvent result = null;
+    if ( ( event1.getType() == event2.getType() ) && ( event1.getSource() == event2.getSource() ) ) {
+      IGridElement[] mergedElements
+        = mergeElements( event1.getElements(), event2.getElements() );
+      result = new GridModelEvent( event1.getType(), event1.getSource(), mergedElements );
+    }
+    return result;
+  }
+  
+  private IGridElement[] mergeElements( final IGridElement[] elements1,
+                                        final IGridElement[] elements2 ) {
+    
+    List< IGridElement > mergedElements
+      = new ArrayList< IGridElement >();
+    
+    for ( IGridElement element : elements1 ) {
+      if ( ! mergedElements.contains( element ) ) {
+        mergedElements.add( element );
+      }
+    }
+    
+    for ( IGridElement element : elements2 ) {
+      if ( ! mergedElements.contains( element ) ) {
+        mergedElements.add( element );
+      }
+    }
+    
+    return mergedElements.toArray( new IGridElement[ mergedElements.size() ] );
+    
+  }
+  
+  private synchronized void processGlobalEvents() {
+    if ( ( this.globalEventQueue != null ) && ( this.listeners != null ) ) {
+      for ( IGridModelEvent event : this.globalEventQueue ) {
+        for ( IGridModelListener listener : this.listeners ) {
+          listener.gridModelChanged( event );
+        }
+      }
+      this.globalEventQueue.clear();
     }
   }
   
@@ -183,6 +262,7 @@ public final class GridRoot
    * @param event The event to be handled.
    */
   protected void handleResourceChange( final IResourceChangeEvent event ) {
+    //System.out.println( "GridRoot#handleResourceChange" );
     switch ( event.getType() ) {
       case IResourceChangeEvent.POST_CHANGE:
         handlePostChange( event.getDelta() );
@@ -264,6 +344,7 @@ public final class GridRoot
    * @param resource The added resource.
    */
   protected void resourceAdded( final IResource resource ) {
+    System.out.println( "GridRoot#resourceAdded: " + resource.getFullPath() );
     if ( resource != null ) {
       IGridElementCreator creator = findCreator( resource );
       if ( creator != null ) {
@@ -288,6 +369,7 @@ public final class GridRoot
    * @param resource The removed resource.
    */
   protected void resourceRemoved( final IResource resource ) {
+    System.out.println( "GridRoot#resourceRemoved: " + resource.getFullPath() );
     if ( resource != null ) {
       IGridElement element = findElement( resource );
       if ( element != null ) {
