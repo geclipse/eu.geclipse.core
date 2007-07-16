@@ -36,6 +36,12 @@ public class CoreProblems implements IProblemProvider {
     = ProblemRegistry.uniqueID();
   
   /**
+   * Problem ID for an unknown host.
+   */
+  public static final int UNKNOWN_HOST
+    = ProblemRegistry.uniqueID();
+  
+  /**
    * Problem ID for malformed URLs.
    */
   public static final int MALFORMED_URL
@@ -83,6 +89,12 @@ public class CoreProblems implements IProblemProvider {
   public static final int ERROR_CREATING_CREDENTIAL
     = ProblemRegistry.uniqueID();
 
+  /**
+   * Problem ID for system time check failures.
+   */
+  public static final int SYSTEM_TIME_CHECK_FAILED
+    = ProblemRegistry.uniqueID();
+
   /* (non-Javadoc)
    * @see eu.geclipse.core.IProblemProvider#getProblem(int, java.lang.Throwable)
    */
@@ -109,6 +121,16 @@ public class CoreProblems implements IProblemProvider {
                                  SolutionRegistry.CHECK_INTERNET_CONNECTION,
                                  SolutionRegistry.CHECK_SERVER_URL,
                                  SolutionRegistry.CHECK_PROXY_SETTINGS
+                               } );
+    }
+    
+    else if ( problemID == UNKNOWN_HOST ) {
+      problem = createProblem( problemID,
+                               Messages.getString("CoreProblems.unknown_host"), //$NON-NLS-1$
+                               exc,
+                               new int[] {
+                                 SolutionRegistry.CHECK_INTERNET_CONNECTION,
+                                 SolutionRegistry.CHECK_SERVER_URL
                                } );
     }
     
@@ -169,6 +191,13 @@ public class CoreProblems implements IProblemProvider {
     else if ( problemID == ERROR_CREATING_CREDENTIAL ) {
       problem = createProblem( problemID,
                                Messages.getString("CoreProblems.errorCreatingCredential"), //$NON-NLS-1$
+                               exc,
+                               null );
+    }
+
+    else if ( problemID == SYSTEM_TIME_CHECK_FAILED ) {
+      problem = createProblem( problemID,
+                               Messages.getString("CoreProblems.system_time_check_failed"), //$NON-NLS-1$
                                exc,
                                null );
     }

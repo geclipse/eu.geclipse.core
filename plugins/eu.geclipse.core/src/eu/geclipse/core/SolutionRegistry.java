@@ -52,6 +52,11 @@ public class SolutionRegistry {
   public static final int CHECK_INTERNET_CONNECTION = uniqueID();
   
   /**
+   * Unique ID of the check if a firewall blocks your connection solution.
+   */
+  public static final int CHECK_FIREWALL = uniqueID();
+  
+  /**
    * Unique ID of the check proxy settings solution.
    */
   public static final int CHECK_PROXY_SETTINGS = uniqueID();
@@ -67,9 +72,9 @@ public class SolutionRegistry {
   public static final int CHECK_SERVER_URL = uniqueID();
   
   /**
-   * Unique ID of the check system clock solution.
+   * Unique ID of the check system time solution.
    */
-  public static final int CHECK_SYSTEM_CLOCK = uniqueID();
+  public static final int CHECK_SYSTEM_TIME = uniqueID();
   
   /**
    * Unique ID of the check VO settings solution.
@@ -80,6 +85,11 @@ public class SolutionRegistry {
    * Unique ID of the server may be down solution.
    */
   public static final int SERVER_DOWN = uniqueID();
+  
+  /**
+   * Unique ID of the contact the admins solution.
+   */
+  public static final int CONTACT_SERVER_ADMINS = uniqueID();
 
   /**
    * Unique ID of the re-download file solution.
@@ -226,6 +236,10 @@ public class SolutionRegistry {
       solution = new Solution( CHECK_INTERNET_CONNECTION, Messages.getString("SolutionRegistry.check_internet_connection") ); //$NON-NLS-1$
     }
     
+    else if ( solutionID == CHECK_FIREWALL ) {
+      solution = new Solution( CHECK_FIREWALL, Messages.getString("SolutionRegistry.check_firewall") ); //$NON-NLS-1$
+    }
+    
     else if ( solutionID == CHECK_PROXY_SETTINGS ) {
       solution = new Solution( CHECK_PROXY_SETTINGS, Messages.getString("SolutionRegistry.check_proxy_settings") ); //$NON-NLS-1$
     }
@@ -234,8 +248,8 @@ public class SolutionRegistry {
       solution = new Solution( CHECK_SERVER_URL, Messages.getString("SolutionRegistry.check_server_url")); //$NON-NLS-1$
     }
     
-    else if ( solutionID == CHECK_SYSTEM_CLOCK ) {
-      solution = new Solution( CHECK_SYSTEM_CLOCK, Messages.getString("SolutionRegistry.check_system_clock")); //$NON-NLS-1$
+    else if ( solutionID == CHECK_SYSTEM_TIME ) {
+      solution = new Solution( CHECK_SYSTEM_TIME, Messages.getString("SolutionRegistry.check_system_time")); //$NON-NLS-1$
     }
     
     else if ( solutionID == CHECK_TIMEOUT_SETTINGS ) {
@@ -248,6 +262,10 @@ public class SolutionRegistry {
     
     else if ( solutionID == SERVER_DOWN ) {
       solution = new Solution( SERVER_DOWN, Messages.getString("SolutionRegistry.server_down")); //$NON-NLS-1$
+    }
+    
+    else if ( solutionID == CONTACT_SERVER_ADMINS ) {
+      solution = new Solution( CONTACT_SERVER_ADMINS, Messages.getString("SolutionRegistry.contact_server_admins")); //$NON-NLS-1$
     }
     
     else if( solutionID == DOWNLOAD_FILE_AGAIN ) {

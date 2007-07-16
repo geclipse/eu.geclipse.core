@@ -223,7 +223,7 @@ public class CaCertPreferencePage
   }
   
   /**
-   * Triggered by the corresponding button in the UI. Adds certificated from
+   * Triggered by the corresponding button in the UI. Adds certificates from
    * a local directory.
    */
   protected void addFromDirectory() {
@@ -271,7 +271,7 @@ public class CaCertPreferencePage
   }
   
   /**
-   * Triggered by the corresponding button in the UI. Adds certificated from
+   * Triggered by the corresponding button in the UI. Adds certificates from
    * a remote repository.
    */
   protected void addFromRepository() {

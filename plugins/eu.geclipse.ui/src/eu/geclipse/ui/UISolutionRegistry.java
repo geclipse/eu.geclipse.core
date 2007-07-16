@@ -99,6 +99,10 @@ public class UISolutionRegistry extends SolutionRegistry {
                                          this.shell,
                                          PreferenceSolution.VO_PREFERENCE_PAGE );
     }
+    
+    else if ( solutionID == SolutionRegistry.CHECK_SYSTEM_TIME ) {
+      solution = new CheckSystemTimeSolution( solution, this.shell );
+    }
 
     return solution;
 
