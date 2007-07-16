@@ -17,6 +17,8 @@ public class FileStore
     extends org.eclipse.core.filesystem.provider.FileStore
     implements IFileStore {
   
+  private static int counter = 0;
+  
   private FileSystem fileSystem;
   
   private FileStore parent;
@@ -27,6 +29,8 @@ public class FileStore
   
   private String[] childNames;
   
+  private int count;
+  
   protected FileStore( final FileSystem fileSystem,
                        final IFileStore slave ) {
     Assert.isNotNull( fileSystem );
@@ -35,6 +39,7 @@ public class FileStore
     this.parent = null;
     this.slave = slave;
     this.isActive = false;
+    count = counter++;
   }
 
   private FileStore( final FileStore parent,
@@ -45,6 +50,11 @@ public class FileStore
     this.parent = parent;
     this.slave = slave;
     this.isActive = false;
+    count = counter++;
+  }
+  
+  public int getID() {
+    return count;
   }
   
   public void activate() {
@@ -162,6 +172,10 @@ public class FileStore
                        final IProgressMonitor monitor)
       throws CoreException {
     getSlave().putInfo( info, options, monitor );
+  }
+  
+  public void reset() {
+    this.childNames = null;
   }
   
   @Override

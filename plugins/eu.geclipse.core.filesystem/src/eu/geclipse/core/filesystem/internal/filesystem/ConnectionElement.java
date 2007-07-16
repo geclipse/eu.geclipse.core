@@ -6,20 +6,16 @@ import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.filesystem.IFileSystem;
-import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.IStatus;
 
 import eu.geclipse.core.filesystem.FileSystem;
 import eu.geclipse.core.filesystem.internal.Activator;
 import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
@@ -31,19 +27,16 @@ public class ConnectionElement
   
   private IResource resource;
   
-  private CoreException fetchError;
+  private Throwable fetchError;
   
-  protected ConnectionElement( final IResource resource ) {
+  public ConnectionElement( final IResource resource ) {
     Assert.isNotNull( resource );
     this.resource = resource;
   }
   
   @Override
   public boolean canContain( final IGridElement element ) {
-    return
-      isFolder()
-      && !element.isVirtual()
-      && !( element instanceof IGridConnection );
+    return isFolder() && ( element instanceof IGridConnectionElement );
   }
 
   public IResource createLocalCopy( final IProgressMonitor monitor )
@@ -51,7 +44,7 @@ public class ConnectionElement
     // TODO Auto-generated method stub
     return null;
   }
-
+  
   public IFileInfo getConnectionFileInfo() throws CoreException {
     return getConnectionFileStore().fetchInfo();
   }
@@ -80,6 +73,11 @@ public class ConnectionElement
     return getResource().getType() == IResource.FOLDER;
   }
   
+  @Override
+  public boolean isHidden() {
+    return false;
+  }
+  
   public boolean isLazy() {
     return true;
   }
@@ -93,71 +91,24 @@ public class ConnectionElement
   }
   
   @Override
-  protected boolean fetchChildren( final IProgressMonitor monitor ) {
+  protected synchronized boolean fetchChildren( final IProgressMonitor monitor ) {
     
-    IResource res = getResource();
-    
-    if ( res instanceof IContainer ) {
-
-      IContainer container = ( IContainer ) res;
-      setProcessEvents( false );
-    
-      try {
-        
-        FileStore fileStore = ( FileStore ) getConnectionFileStore();
-        fileStore.activate();
-        
-        res.refreshLocal( IResource.DEPTH_ONE, monitor );
-        
-        IResource[] members = container.members();
-        if ( members != null ) {
-          for ( IResource member : members ) {
-            ConnectionElement child = new ConnectionElement( member );
-            addElement( child );
-          }
-        }
-        
-        /*
-        String[] childNames = fileStore.childNames( EFS.NONE, monitor );
-        
-        for ( String childName : childNames ) {
-          IFileStore childStore = fileStore.getChild( childName );
-          IFileInfo childInfo = childStore.fetchInfo();
-          if ( childInfo.isDirectory() ) {
-            IFolder childFolder = container.getFolder( new Path( childName ) );
-            //childFolder.createLink( childStore.toURI(), IResource.REPLACE, null );
-            childFolder.create( false, false, null );
-            addElement( new ConnectionElement( childFolder ) );
-          } else {
-            IFile childFile = container.getFile( new Path( childName ) );
-            //childFile.createLink( childStore.toURI(), IResource.REPLACE, null );
-            childFile.create( null, false, null );
-            addElement( new ConnectionElement( childFile ) );
-          }
-        }
-        */
-        /*
-        res.refreshLocal( IResource.DEPTH_ONE, monitor );
-        
-        IContainer container = ( IContainer ) res;
-        IResource[] members = container.members();
-        if ( members != null ) {
-          for ( IResource member : members ) {
-            ConnectionElement child = new ConnectionElement( member );
-            addElement( child );
-          }
-        }
-        */
-        
-      } catch ( CoreException cExc ) {
-        Activator.logException( cExc );
-      } finally {
-        setProcessEvents( true );
-      }
+    ConnectionElementFetcher job = new ConnectionElementFetcher( this );
       
+    job.schedule();
+    
+    try {
+      job.join();
+    } catch ( InterruptedException intExc ) {
+      Activator.logException( intExc );
+    }
+  
+    IStatus result = job.getResult();
+    if ( ! result.isOK() ) {
+      Activator.logStatus( result );
     }
     
-    return this.fetchError == null;
+    return result.isOK();
     
   }
 

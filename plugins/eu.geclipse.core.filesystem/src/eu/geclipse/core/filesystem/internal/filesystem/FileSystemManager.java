@@ -35,32 +35,42 @@ public class FileSystemManager
     URI masterURI = slaveURI;
     
     if ( ! masterURI.getScheme().equals( SCHEME ) ) {
-    
-      String slaveScheme = slaveURI.getScheme();
-      String query = slaveURI.getQuery();
-      
-      if ( query == null ) {
-        query = ""; //$NON-NLS-1$
-      }
-      
-      if ( query.length() > 0 ) {
-        query += QUERY_SEPARATOR;
-      }
-      
-      query += QUERY_ID + QUERY_ASSIGN + slaveScheme;
       
       try {
-        masterURI = new URI(
-            SCHEME,
-            slaveURI.getUserInfo(),
-            slaveURI.getHost(),
-            slaveURI.getPort(),
-            slaveURI.getPath(),
-            query,
-            slaveURI.getFragment()
-        );
-      } catch ( URISyntaxException uriExc ) {
-        throw new IllegalArgumentException( uriExc );
+    
+        String slaveScheme = slaveURI.getScheme();
+        IFileSystem slaveSystem = EFS.getFileSystem( slaveScheme );
+        IFileStore slaveStore = slaveSystem.getStore( slaveURI );
+        URI remappedURI = slaveStore.toURI();
+        
+        String query = remappedURI.getQuery();
+        
+        if ( query == null ) {
+          query = ""; //$NON-NLS-1$
+        }
+        
+        if ( query.length() > 0 ) {
+          query += QUERY_SEPARATOR;
+        }
+        
+        query += QUERY_ID + QUERY_ASSIGN + slaveScheme;
+        
+        try {
+          masterURI = new URI(
+              SCHEME,
+              remappedURI.getUserInfo(),
+              remappedURI.getHost(),
+              remappedURI.getPort(),
+              remappedURI.getPath(),
+              query,
+              remappedURI.getFragment()
+          );
+        } catch ( URISyntaxException uriExc ) {
+          throw new IllegalArgumentException( uriExc );
+        }
+        
+      } catch ( CoreException cExc ) {
+        throw new IllegalArgumentException( cExc );
       }
       
     }
@@ -126,38 +136,8 @@ public class FileSystemManager
     
     return result;
     
-    /*
-    FileStore result = null;
-    
-    try {
-      
-      IFileStore slaveStore = getSlaveStore( uri );
-      URI key = createMasterURI( slaveStore.toURI() );
-      result = this.registeredStores.get( key );
-    
-      if ( result == null ) {
-        result = new FileStore( fileSystem, slaveStore );
-      }
-      
-    } catch ( CoreException cExc ) {
-      Activator.logException( cExc );
-    } catch ( URISyntaxException uriExc ) {
-      Activator.logException( uriExc );
-    }
-        
-    return result;
-    */
   }
-/*
-  public boolean isActive( final IFileStore fileStore ) {
-    return isActive( fileStore.toURI() );
-  }
-  
-  public void setActive( final IFileStore fileStore,
-                         final boolean active ) {
-    setActive( fileStore.toURI(), active );
-  }
-*/
+
   private static IFileStore getSlaveStore( final URI uri )
       throws CoreException, URISyntaxException {
     IFileSystem slaveSystem = getSlaveSystem( uri );
