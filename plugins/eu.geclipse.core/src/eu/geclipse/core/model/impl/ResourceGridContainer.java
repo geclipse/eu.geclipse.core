@@ -80,7 +80,7 @@ public class ResourceGridContainer
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridElement#getName()
    */
-  public String getName() {
+  final public String getName() {
     return this.resource.getName();
   }
 
