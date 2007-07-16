@@ -85,6 +85,7 @@ public class ProgressRunner implements Runnable {
    * @see java.lang.Runnable#run()
    */
   public void run() {
+    
     synchronized ( this.container ) {
       
       try {
@@ -106,7 +107,7 @@ public class ProgressRunner implements Runnable {
           } );
         }
       }
-      
+      /*
       if ( !this.container.isDirty() ) {
         if ( this.container.hasChildren() ) {
           final TreeViewer viewer = this.monitor.getTreeViewer();
@@ -124,11 +125,13 @@ public class ProgressRunner implements Runnable {
           this.monitor.setTaskName( Messages.getString("ProgressRunner.folder_empty") ); //$NON-NLS-1$
           this.monitor.done();
         }
-      } else {
+      } else */
+      if ( this.container.isDirty() ){
         this.monitor.setError( Messages.getString("ProgressRunner.fetch_error") ); //$NON-NLS-1$
         this.monitor.done();
       }
     }
+    
   }
   
 }

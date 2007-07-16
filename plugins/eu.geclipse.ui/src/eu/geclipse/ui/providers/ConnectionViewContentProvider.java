@@ -40,6 +40,7 @@ public class ConnectionViewContentProvider extends ConfigurableContentProvider {
     return visible;
   }
   
+  @Override
   protected Object remapElement( final IGridContainer container,
                                  final IGridElement element ) {
     
