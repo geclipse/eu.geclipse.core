@@ -262,7 +262,6 @@ public final class GridRoot
    * @param event The event to be handled.
    */
   protected void handleResourceChange( final IResourceChangeEvent event ) {
-    //System.out.println( "GridRoot#handleResourceChange" );
     switch ( event.getType() ) {
       case IResourceChangeEvent.POST_CHANGE:
         handlePostChange( event.getDelta() );
@@ -344,7 +343,6 @@ public final class GridRoot
    * @param resource The added resource.
    */
   protected void resourceAdded( final IResource resource ) {
-    System.out.println( "GridRoot#resourceAdded: " + resource.getFullPath() );
     if ( resource != null ) {
       IGridElementCreator creator = findCreator( resource );
       if ( creator != null ) {
@@ -369,7 +367,6 @@ public final class GridRoot
    * @param resource The removed resource.
    */
   protected void resourceRemoved( final IResource resource ) {
-    System.out.println( "GridRoot#resourceRemoved: " + resource.getFullPath() );
     if ( resource != null ) {
       IGridElement element = findElement( resource );
       if ( element != null ) {

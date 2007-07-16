@@ -232,9 +232,6 @@ public abstract class AbstractGridContainer
    */
   protected IGridElement addElement( final IGridElement element )
       throws GridModelException {
-    
-    //System.out.println( "AbstractGridContainer#addElement@" + getName() + ": " + element.getName() );
-    
     if ( element != null ) {
       testCanContain( element );
       IGridElement oldChild = findChild( element.getName() );
@@ -284,7 +281,6 @@ public abstract class AbstractGridContainer
   
   protected void removeElement( final IGridElement element ) {
     boolean result = this.children.remove( element );
-    //System.out.println( "AbstractGridContainer#removeElement@" + getName() + ": " + element.getName() + ", " + result );
     if ( result ) {
       fireGridModelEvent( IGridModelEvent.ELEMENTS_REMOVED, element );
     }
