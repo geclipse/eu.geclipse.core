@@ -58,5 +58,12 @@
             id="eu.geclipse.jsdl.ui.applicationParameters"
             name="Application Parameters"/>
    </extension>
+   <extension
+         point="eu.geclipse.ui.propertiesFactory">
+      <PropertiesFactory
+            class="eu.geclipse.jsdl.ui.properties.PropertiesFactory"
+            id="eu.geclipse.jsdl.ui.PropertiesFactory"
+            sourceObjectClass="eu.geclipse.jsdl.JSDLJobDescription"/>
+   </extension>
 
 </plugin>
