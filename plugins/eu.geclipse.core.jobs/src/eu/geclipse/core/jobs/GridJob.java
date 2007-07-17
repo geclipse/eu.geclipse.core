@@ -59,6 +59,7 @@ import eu.geclipse.core.model.IGridJobStatusService;
 import eu.geclipse.core.model.IGridJobStatusServiceFactory;
 import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
+import eu.geclipse.core.model.impl.ResourceGridElement;
 import eu.geclipse.jsdl.JSDLJobDescription;
 
 public class GridJob extends ResourceGridContainer implements IGridJob {
@@ -360,7 +361,13 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
    * if(desc!=null){ name = name + "("+desc.getName()+")"; } return name; }
    */
   public boolean canContain( final IGridElement element ) {
-    return ( element instanceof IGridJobDescription );
+    return ( element instanceof IGridJobDescription )
+    || ( element instanceof ResourceGridElement );
+  }
+  
+  @Override
+  public boolean isHidden() {
+    return false;
   }
 
   /**
