@@ -35,8 +35,6 @@ public class ConnectionViewActions extends ActionGroup {
    */
   private NewConnectionAction newConnectionAction;
   
-  private DeleteConnectionAction deleteConnectionAction;
-  
   private IWorkbenchSite site; 
   
   /**
@@ -51,11 +49,9 @@ public class ConnectionViewActions extends ActionGroup {
     this.site = site;
     
     this.newConnectionAction = new NewConnectionAction( site.getWorkbenchWindow() );
-    this.deleteConnectionAction = new DeleteConnectionAction();
     
     ISelectionProvider provider = this.site.getSelectionProvider();
     provider.addSelectionChangedListener( this.newConnectionAction );
-    provider.addSelectionChangedListener( this.deleteConnectionAction );
     
   }
   
@@ -63,7 +59,6 @@ public class ConnectionViewActions extends ActionGroup {
   public void dispose() {
     ISelectionProvider provider = this.site.getSelectionProvider();
     provider.removeSelectionChangedListener( this.newConnectionAction );
-    provider.removeSelectionChangedListener( this.deleteConnectionAction );
   }
   
   /* (non-Javadoc)
@@ -73,7 +68,6 @@ public class ConnectionViewActions extends ActionGroup {
   public void fillActionBars( final IActionBars actionBars ) {
     IToolBarManager manager = actionBars.getToolBarManager();
     manager.add( this.newConnectionAction );
-    manager.add( this.deleteConnectionAction );
   }
   
   @Override
@@ -82,11 +76,6 @@ public class ConnectionViewActions extends ActionGroup {
     if ( this.newConnectionAction.isEnabled() ) {
       menu.appendToGroup( ICommonMenuConstants.GROUP_NEW,
                           this.newConnectionAction );
-    }
-    
-    if ( this.deleteConnectionAction.isEnabled() ) {
-      menu.appendToGroup( ICommonMenuConstants.GROUP_NEW,
-                          this.deleteConnectionAction );
     }
     
   }
