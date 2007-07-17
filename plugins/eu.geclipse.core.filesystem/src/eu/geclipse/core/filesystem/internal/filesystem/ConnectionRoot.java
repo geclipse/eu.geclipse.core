@@ -8,6 +8,7 @@ import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridElementManager;
+import eu.geclipse.core.model.IGridProject;
 
 public class ConnectionRoot
     extends ConnectionElement
@@ -18,13 +19,12 @@ public class ConnectionRoot
   }
   
   public URI getURI() {
-    // TODO Auto-generated method stub
     return null;
   }
 
   public boolean isGlobal() {
-    // TODO Auto-generated method stub
-    return false;
+    IGridProject project = getProject();
+    return project.isHidden();
   }
 
   public IGridElementManager getManager() {
