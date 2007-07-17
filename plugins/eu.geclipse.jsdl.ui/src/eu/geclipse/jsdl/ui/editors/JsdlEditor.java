@@ -1,18 +1,18 @@
 /******************************************************************************
-  * Copyright (c) 2007 g-Eclipse consortium
-  * All rights reserved. This program and the accompanying materials
-  * are made available under the terms of the Eclipse Public License v1.0
-  * which accompanies this distribution, and is available at
-  * http://www.eclipse.org/legal/epl-v10.html
-  *
-  * Initialial development of the original code was made for
-  * project g-Eclipse founded by European Union
-  * project number: FP6-IST-034327  http://www.geclipse.eu/
-  *
-  * Contributor(s):
-  *     UCY (http://www.ucy.cs.ac.cy)
-  *      - Nicholas Loulloudes (loulloudes.n@cs.ucy.ac.cy)
-  *      
+ * Copyright (c) 2007 g-Eclipse consortium
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for
+ * project g-Eclipse founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributor(s):
+ *     UCY (http://www.ucy.cs.ac.cy)
+ *      - Nicholas Loulloudes (loulloudes.n@cs.ucy.ac.cy)
+ *
   *****************************************************************************/
 
 
@@ -131,7 +131,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
   private JobDefinitionPage jobDefPage = new JobDefinitionPage(this);
   private JobApplicationPage jobApplicationPage = new JobApplicationPage(this);
   private DataStagingPage dataStagingPage = new DataStagingPage(this);
-  private ResourcesPage resourcesPage = new ResourcesPage(this);
+  private ResourcesPage resourcesPage = new ResourcesPage(this);  
   
   
   
@@ -199,12 +199,14 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
 
  
   
-  protected void cleanPages(){
+  protected void cleanDirtyState() {
+    
     this.overviewPage.setDirty( false );
     this.jobDefPage.setDirty( false );
     this.jobApplicationPage.setDirty( false );
     this.resourcesPage.setDirty( false );
     this.dataStagingPage.setDirty( false ) ;
+    
   }
 
 
@@ -216,10 +218,12 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
    * 
    */
   public void setDirty(final boolean dirtyFlag) {
+    
    if (this.isDirtyFlag != dirtyFlag) {
      this.isDirtyFlag = dirtyFlag;     
      this.editorDirtyStateChanged();
    }
+   
   } // End void setDirty()
   
   
@@ -227,20 +231,20 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
   @Override
   protected void addPages()
   {
-    getJsdlModel();
-   
+    getJsdlModel();   
       
      try {
       addPage( this.overviewPage );
-      addPage(this.jobDefPage);      
+      addPage(this.jobDefPage);
       addPage(this.jobApplicationPage);
       addPage(this.resourcesPage);
       addPage(this.dataStagingPage);      
       addResourceEditorPage();
       pushContentToPages();
+      
          }
-   catch (PartInitException e) {
-      Activator.logException( e );
+   catch (PartInitException e) {     
+      Activator.logException( e );      
    }
     
   }
@@ -252,13 +256,13 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
    * element, which is the root element.
    */
   
-  private void pushContentToPages(){
+  private void pushContentToPages() {
     
     this.overviewPage.setPageContent( this.jobDefType, isModelRefreshed() );
-    this.jobDefPage.setPageContent( this.jobDefType, isModelRefreshed());
-    this.jobApplicationPage.setPageContent( this.jobDefType, isModelRefreshed());
+    this.jobDefPage.setPageContent( this.jobDefType, isModelRefreshed() );
+    this.jobApplicationPage.setPageContent( this.jobDefType, isModelRefreshed() );
     this.resourcesPage.setPageContent( this.jobDefType, isModelRefreshed() );
-    this.dataStagingPage.setPageContent( this.jobDefType, isModelRefreshed());
+    this.dataStagingPage.setPageContent( this.jobDefType, isModelRefreshed() );
     
   }
   
@@ -545,9 +549,10 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
               {
                 JsdlEditor.this.resourceToDiagnosticMap.put(resource, analyzeResourceProblems(resource, exception));
 
-                setDirty( false );
+                //setDirty( false );
                 doTextEditorSave();
-                cleanPages();
+                cleanDirtyState();
+                refreshEditor();
 
               }
               first = false;
@@ -567,9 +572,10 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
 
       ((BasicCommandStack)this.editingDomain.getCommandStack()).saveIsDone();
 
-      setDirty( false );
+      //setDirty( false );
       doTextEditorSave();
-      cleanPages();
+      cleanDirtyState();
+      refreshEditor();
 
     }
     catch (Exception exception)
@@ -795,12 +801,16 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
     
     // This means the file was edited from an external editor so
     // push the new JSDL model to the pages.
-    if (!this.changedResources.isEmpty()){      
-      this.refreshedModel = true;
-      pushContentToPages();
-      this.refreshedModel = false;
+    if (!this.changedResources.isEmpty()){
+        refreshEditor();
     }
     
+  }
+  
+  protected void refreshEditor(){
+    this.refreshedModel = true;
+    pushContentToPages();
+    this.refreshedModel = false;
   }
     
   

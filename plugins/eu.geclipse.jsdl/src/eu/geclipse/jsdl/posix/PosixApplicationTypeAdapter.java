@@ -1,20 +1,21 @@
 /******************************************************************************
-  * Copyright (c) 2007 g-Eclipse consortium
-  * All rights reserved. This program and the accompanying materials
-  * are made available under the terms of the Eclipse Public License v1.0
-  * which accompanies this distribution, and is available at
-  * http://www.eclipse.org/legal/epl-v10.html
-  *
-  * Initialial development of the original code was made for
-  * project g-Eclipse founded by European Union
-  * project number: FP6-IST-034327  http://www.geclipse.eu/
-  *
-  * Contributor(s):
-  *     UCY (http://www.ucy.cs.ac.cy)
-  *      - Nicholas Loulloudes (loulloudes.n@cs.ucy.ac.cy)
-  *
+ * Copyright (c) 2007 g-Eclipse consortium
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for
+ * project g-Eclipse founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributor(s):
+ *     UCY (http://www.ucy.cs.ac.cy)
+ *      - Nicholas Loulloudes (loulloudes.n@cs.ucy.ac.cy)
+ *
   *****************************************************************************/
 package eu.geclipse.jsdl.posix;
+
 /**
  * @author nickl
  *
@@ -42,11 +43,14 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Text;
 import eu.geclipse.jsdl.model.posix.ArgumentType;
+import eu.geclipse.jsdl.model.posix.DirectoryNameType;
 import eu.geclipse.jsdl.model.posix.EnvironmentType;
 import eu.geclipse.jsdl.model.posix.FileNameType;
+import eu.geclipse.jsdl.model.posix.GroupNameType;
 import eu.geclipse.jsdl.model.posix.POSIXApplicationType;
 import eu.geclipse.jsdl.model.posix.PosixFactory;
 import eu.geclipse.jsdl.model.posix.PosixPackage;
+import eu.geclipse.jsdl.model.posix.UserNameType;
 
 
 /**
@@ -78,7 +82,14 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
 
   protected ArgumentType argumentType = PosixFactory.eINSTANCE.createArgumentType();
   
-  //protected FileNameType fileName = null;
+  protected DirectoryNameType directoryNameType = PosixFactory.eINSTANCE
+                                                     .createDirectoryNameType();
+  
+//  protected LimitsType limits = PosixFactory.eINSTANCE.createLimitsType();
+  
+  protected UserNameType userNameType = PosixFactory.eINSTANCE.createUserNameType();
+  
+  protected GroupNameType groupNameType = PosixFactory.eINSTANCE.createGroupNameType();
   
   private Hashtable< Integer, Text > widgetFeaturesMap = new Hashtable< Integer, Text >();
   private Hashtable< Integer, TableViewer > tableFeaturesMap = new Hashtable< Integer, TableViewer >();
@@ -333,7 +344,217 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
     Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__ENVIRONMENT);
     this.tableFeaturesMap.put( featureID , widget );
     
-  } // End void attachToPosixApplicationEnvironment()s
+  } // End void attachToPosixApplicationEnvironment()
+  
+  
+  
+  
+//  /**
+//   * Adapter interface to attach to the PosixApplication WorkingDirectory text 
+//   * widget.
+//   * 
+//   * @param button The SWT button which enalbes or disables the associated text 
+//   * widget 
+//   * @param text The SWT text widget which is associated with the 
+//   * PosixApplication Working Directory element of the JSDL document.
+//   */
+//  public void attachToWorkingDirectory(final Button button, final Text text){
+//    
+//    button.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
+//      @Override
+//     public void widgetSelected(final org.eclipse.swt.events.SelectionEvent e) {
+////      Determines if the checkBox is checked or not
+//      boolean selected = button.getSelection();
+//      if (selected == true) {
+//        text.setEnabled( true );
+//      }
+//      else
+//      {
+//        text.setText( "" ); //$NON-NLS-1$
+//        text.setEnabled( false );
+//        
+//        
+//      }
+//     }
+//     });
+//  }
+//  
+//  
+//  
+//  
+//  /**
+//   * @param text
+//   */
+//  public void attachToWallTimeLimit(final Text text){
+//    
+//    Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__WALL_TIME_LIMIT);
+//    this.widgetFeaturesMap.put( featureID , text );    
+//      
+//      text.addModifyListener( new ModifyListener() {   
+////        LimitsType limits = PosixFactory.eINSTANCE.createLimitsType();
+//        BigInteger bigInteger ;
+//        public void modifyText( final ModifyEvent e ) {
+//         
+//          if (!text.getText().equals( "" )){ //$NON-NLS-1$ 
+//            this.bigInteger = new BigInteger(text.getText());
+//            PosixApplicationTypeAdapter.this.limits.setValue( this.bigInteger );
+//            PosixApplicationTypeAdapter.this.posixApplicationType.setWallTimeLimit( PosixApplicationTypeAdapter.this.limits );
+//          }
+//          else{
+//           PosixApplicationTypeAdapter.this
+//           .deleteElement( PosixPackage.POSIX_APPLICATION_TYPE__WALL_TIME_LIMIT ) ;
+//          }
+//          contentChanged();
+//          
+//        }
+//      } );
+//    }
+//  
+//  
+//  
+//  /**
+//   * Adapter interface to attach to the PosixApplication FileSizeLimit text 
+//   * widget.
+//   * 
+//   * @param text The SWT text widget which is associated with the 
+//   * PosixApplication Working Directory element of the JSDL document.
+//   */
+//  public void attachToFileSizeLimit(final Text text){
+//    
+//    Integer featureID = 
+//              new Integer(PosixPackage.POSIX_APPLICATION_TYPE__FILE_SIZE_LIMIT);
+//    
+//    this.widgetFeaturesMap.put( featureID , text );    
+//      
+//    text.addModifyListener( new ModifyListener() {   
+////      LimitsType limits = PosixFactory.eINSTANCE.createLimitsType();
+//      BigInteger bigInteger ;
+//      public void modifyText( final ModifyEvent e ) {
+//      
+//        if (!text.getText().equals( "" )) { //$NON-NLS-1$ 
+//          this.bigInteger = new BigInteger(text.getText());
+//          PosixApplicationTypeAdapter.this.limits.setValue( this.bigInteger );
+//          PosixApplicationTypeAdapter.this.posixApplicationType.setFileSizeLimit( PosixApplicationTypeAdapter.this.limits );
+//          }
+//        
+//        else {
+//          PosixApplicationTypeAdapter.this
+//           .deleteElement(PosixPackage.POSIX_APPLICATION_TYPE__FILE_SIZE_LIMIT);
+//          }
+//        
+//          contentChanged();
+//          
+//        }
+//      } );
+//    
+//    } // End void attachToFileSizeLimit()
+//  
+//  
+//  
+//  /**
+//   * Adapter interface to attach to the PosixApplication CoreDumpLimit text 
+//   * widget.
+//   * 
+//   * @param text The SWT text widget which is associated with the 
+//   * PosixApplication CoreDumpLimit element of the JSDL document.
+//   */
+//  public void attachToCoreDumpLimit(final Text text){
+//    
+//    Integer featureID = 
+//              new Integer(PosixPackage.POSIX_APPLICATION_TYPE__CORE_DUMP_LIMIT);
+//    
+//    this.widgetFeaturesMap.put( featureID , text );    
+//      
+//    text.addModifyListener( new ModifyListener() {   
+//      
+//      BigInteger bigInteger ;
+//      public void modifyText( final ModifyEvent e ) {      
+//        if (!text.getText().equals( "" )) { //$NON-NLS-1$
+//          this.bigInteger = new BigInteger(text.getText());
+//         PosixApplicationTypeAdapter.this.limits.setValue( this.bigInteger );      
+//          PosixApplicationTypeAdapter.this.posixApplicationType
+//                                                .setCoreDumpLimit( PosixApplicationTypeAdapter.this.limits );
+//          }
+//        
+//        else {        
+//            PosixApplicationTypeAdapter.this
+//          .deleteElement(PosixPackage.POSIX_APPLICATION_TYPE__CORE_DUMP_LIMIT);
+//          }
+//        
+//          contentChanged();
+//          
+//        }
+//      } );
+//    
+//    } // End void attachToFileSizeLimit()
+  
+  
+  
+  /**
+   * Adapter interface to attach to the PosixApplication UserName text 
+   * widget.
+   * 
+   * @param text The SWT text widget which is associated with the 
+   * PosixApplication UserName element of the JSDL document.
+   */  
+  public void attachToUserName(final Text text){
+    
+    Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__USER_NAME);
+    this.widgetFeaturesMap.put( featureID , text );    
+      
+      text.addModifyListener( new ModifyListener() {
+        public void modifyText( final ModifyEvent e ) {
+         
+          if (!text.getText().equals( "" )){ //$NON-NLS-1$            
+            PosixApplicationTypeAdapter.this.userNameType.setValue( text.getText() );
+            PosixApplicationTypeAdapter.this.posixApplicationType
+                                      .setUserName( PosixApplicationTypeAdapter
+                                                    .this.userNameType );
+          }
+          else{
+           PosixApplicationTypeAdapter.this
+           .posixApplicationType.setUserName( null );
+          }
+          contentChanged();
+          
+        }
+      } );
+    }
+  
+  
+  
+  /**
+   * Adapter interface to attach to the PosixApplication GroupName text 
+   * widget.
+   * 
+   * @param text The SWT text widget which is associated with the 
+   * PosixApplication GroupName element of the JSDL document.
+   */  
+  public void attachToGroupName(final Text text){
+    
+    Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__GROUP_NAME);
+    this.widgetFeaturesMap.put( featureID , text );    
+      
+      text.addModifyListener( new ModifyListener() {
+        public void modifyText( final ModifyEvent e ) {
+         
+          if (!text.getText().equals( "" )){ //$NON-NLS-1$            
+            PosixApplicationTypeAdapter.this.groupNameType.setValue( text.getText() );
+            PosixApplicationTypeAdapter.this.posixApplicationType
+                                     .setGroupName( PosixApplicationTypeAdapter.
+                                                    this.groupNameType);
+          }
+          else{
+           PosixApplicationTypeAdapter.this
+           .posixApplicationType.setGroupName( null );
+          }
+          contentChanged();
+          
+        }
+      } );
+    }
+  
+  
   
   
   /**
@@ -433,11 +654,19 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
 //    
 //  }
   
+ 
+  protected void deleteElement(final int featureID){
+        
+    EStructuralFeature eStructuralFeature = this.posixApplicationType.eClass().getEStructuralFeature( featureID );
+    
+    EcoreUtil.remove( eStructuralFeature );
+    
+  }
+  
   
   
   protected void performDelete(final TableViewer viewer ){
     
-    EStructuralFeature eStructuralFeature = null;
     IStructuredSelection structSelection 
                                = ( IStructuredSelection ) viewer.getSelection();
     
@@ -445,17 +674,17 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
     
     
     if (feature instanceof ArgumentType){
-        ArgumentType argument = (ArgumentType) feature;
-       
-        
-        eStructuralFeature = argument.eContainmentFeature();
-        EcoreUtil.remove( argument);
+      
+      ArgumentType argument = (ArgumentType) feature;    
+
+      EcoreUtil.remove( argument);
         
     }
     else if (feature instanceof EnvironmentType) {
+      
       EnvironmentType environment = (EnvironmentType) feature;
-      eStructuralFeature = environment.eContainingFeature();
       EcoreUtil.remove( environment );
+      
     }
     
     viewer.refresh();
@@ -477,45 +706,108 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
     EObject posixEObject = this.posixApplicationType;
     Text widgetName = null;
     TableViewer tableName = null;
+    Object eStrFeatValue = null;
      
-    // Test if eObject is not empty.
-    if(posixEObject != null) {
+    /* Test if eObject is not empty. */
+    
+    if (posixEObject != null) {
       EClass eClass = posixEObject.eClass();
       
-      for (Iterator<EStructuralFeature> iterRef = eClass.getEAllStructuralFeatures().iterator(); iterRef.hasNext();){
+      for (Iterator<EStructuralFeature> iterRef = 
+            eClass.getEAllStructuralFeatures().iterator(); iterRef.hasNext();) {
         
         EStructuralFeature eStructuralFeature = iterRef.next();
            
-        int featureID =  eStructuralFeature.getFeatureID();
+        int featureID =  eStructuralFeature.getFeatureID();        
+        
+       
         
         if (eStructuralFeature instanceof EReference) {
-
-          //Check for the features Multiplicity.
           
-          if (posixEObject.eIsSet( eStructuralFeature ) 
-            && eStructuralFeature.getUpperBound() 
-            != ETypedElement.UNBOUNDED_MULTIPLICITY ){
-        
-           EObject eObject = (EObject) posixEObject.eGet( eStructuralFeature );
-                
-           Object eStrFeatValue = null;
-          
-           if (ExtendedMetaData.INSTANCE.getContentKind(eObject.eClass()) == ExtendedMetaData.SIMPLE_CONTENT){
-             eStrFeatValue = eObject.eGet(ExtendedMetaData.INSTANCE.getSimpleFeature(eObject.eClass())); 
+          /* Check if Feature is Set ? */
+          if (posixEObject.eIsSet( eStructuralFeature )) {
             
-           }
+          /* Check for the features Multiplicity.
+           * and if the associated widget key is contained in the FeatureMap.
+           */
+          
+          if (eStructuralFeature.getUpperBound() 
+            != ETypedElement.UNBOUNDED_MULTIPLICITY
+            && this.widgetFeaturesMap.containsKey( new Integer(featureID)) ) {
            
-           // Check if Reference has been set.
-           if (posixEObject.eIsSet( eStructuralFeature ) 
-               && eStructuralFeature.getFeatureID() != PosixPackage.POSIX_APPLICATION_TYPE__ANY_ATTRIBUTE ){          
-             widgetName = this.widgetFeaturesMap.get( new Integer(featureID) );
-             widgetName.setText(eStrFeatValue.toString());            
+           EObject eObject = (EObject) posixEObject.eGet( eStructuralFeature );           
+                
+           eStrFeatValue = new Object();
+          
+//           if (ExtendedMetaData.INSTANCE.getContentKind(eObject.eClass()) 
+//               == ExtendedMetaData.SIMPLE_CONTENT) {
              
-           }
-          } // End UNBOUNDED_MULTIPLICITY
-          else {            
-
+             eStrFeatValue = eObject.eGet(ExtendedMetaData.INSTANCE.
+                                            getSimpleFeature(eObject.eClass())); 
             
+//           } // End if SIMPLE.CONTENT
+
+           widgetName = this.widgetFeaturesMap.get( new Integer(featureID) );
+           
+                        
+             switch( featureID ) {
+              case PosixPackage.POSIX_APPLICATION_TYPE__EXECUTABLE:{
+                           
+                widgetName.setText(eStrFeatValue.toString());  
+              } 
+              break;
+              case PosixPackage.POSIX_APPLICATION_TYPE__INPUT:{
+                             
+                widgetName.setText(eStrFeatValue.toString());  
+              } 
+              break;
+              case PosixPackage.POSIX_APPLICATION_TYPE__OUTPUT:{
+                
+                widgetName.setText(eStrFeatValue.toString());  
+              } 
+              break;
+              case PosixPackage.POSIX_APPLICATION_TYPE__ERROR:{
+                
+                widgetName.setText(eStrFeatValue.toString());  
+              } 
+              break;
+              case PosixPackage.POSIX_APPLICATION_TYPE__WALL_TIME_LIMIT:{
+                
+                widgetName.setText(eStrFeatValue.toString());
+              } 
+              break;
+              case PosixPackage.POSIX_APPLICATION_TYPE__FILE_SIZE_LIMIT:{
+                
+                widgetName.setText(eStrFeatValue.toString());
+              } 
+              break;
+              case PosixPackage.POSIX_APPLICATION_TYPE__CORE_DUMP_LIMIT: {     
+
+                    widgetName.setText(eStrFeatValue.toString());
+              } 
+              break;
+              case PosixPackage.POSIX_APPLICATION_TYPE__GROUP_NAME: {     
+
+                widgetName.setText(eStrFeatValue.toString());
+              } 
+              break;
+              case PosixPackage.POSIX_APPLICATION_TYPE__USER_NAME: {     
+
+                widgetName.setText(eStrFeatValue.toString());
+              } 
+              break;
+
+              case PosixPackage.POSIX_APPLICATION_TYPE__ANY_ATTRIBUTE:               
+              break;
+              
+              default:
+              break;
+            }
+
+         } // End UNBOUNDED_MULTIPLICITY
+          
+          else {
+           
             switch( featureID ) {
               case PosixPackage.POSIX_APPLICATION_TYPE__ENVIRONMENT:                
               {
@@ -523,7 +815,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
                 tableName = this.tableFeaturesMap.get( new Integer(featureID) );
                                
                 EList valueList = (EList) posixEObject.eGet( eStructuralFeature );                
-                if(!this.adapterRefreshed
+                if( !this.adapterRefreshed
                     && this.tableFeaturesMap.containsKey( new Integer(featureID))) {
                   
                   for (Iterator  it = valueList.iterator(); it.hasNext();){                    
@@ -543,7 +835,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
                 EList<ArgumentType> valueList = (EList) posixEObject.eGet( eStructuralFeature );
                 
                 
-                if(!this.adapterRefreshed 
+                if( !this.adapterRefreshed 
                     && this.tableFeaturesMap.containsKey( new Integer(featureID))) {
                   
                   for (Iterator <ArgumentType> it = valueList.iterator(); it.hasNext();) {                   
@@ -561,8 +853,8 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
 
             
           } // End Else
-        } // End else EReference
-        
+         } // End if eIsSet()
+        } // End else EReference        
         // Then this is an attribute.
         else if (eStructuralFeature instanceof EAttribute) {
           

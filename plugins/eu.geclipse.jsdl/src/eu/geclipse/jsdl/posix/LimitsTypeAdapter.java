@@ -16,47 +16,21 @@
   *****************************************************************************/
 package eu.geclipse.jsdl.posix;
 
-import java.util.Hashtable;
-import org.eclipse.emf.common.util.TreeIterator;
-import org.eclipse.emf.ecore.EObject;
-import org.eclipse.swt.widgets.Text;
-import eu.geclipse.jsdl.model.posix.POSIXApplicationType;
 
 
 /**
  * @author nickl
  *
  */
-public class LimitsTypeAdapter {
+public class LimitsTypeAdapter extends PosixAdaptersFactory  {
   
-  Hashtable< Integer, Text > widgetFeaturesMap = new Hashtable< Integer, Text >();
-  private POSIXApplicationType parent = null;  
+ 
 
   /**
    * LimitsTypeAdapter Class Constructor
-   * @param lParent 
+   * @param rootJsdlElement 
    */
-  public LimitsTypeAdapter (final POSIXApplicationType lParent ){
-    this.parent = lParent;
-    getLimitsType(this.parent);
-  }
-  
-  
-  private void getLimitsType (final POSIXApplicationType posixParent){
-  
-    TreeIterator<EObject> iterator = posixParent.eAllContents();
-    
-    while (iterator.hasNext()){
-      
-      EObject testType = iterator.next();
-      
-      System.out.println(testType.eContainingFeature().toString());
-      
-      
-      
-    }
-      
-    
-  }
+
+
   
 }

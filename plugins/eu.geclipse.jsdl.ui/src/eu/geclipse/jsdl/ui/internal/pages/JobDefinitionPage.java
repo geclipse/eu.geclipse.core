@@ -1,18 +1,18 @@
 /******************************************************************************
-  * Copyright (c) 2007 g-Eclipse consortium
-  * All rights reserved. This program and the accompanying materials
-  * are made available under the terms of the Eclipse Public License v1.0
-  * which accompanies this distribution, and is available at
-  * http://www.eclipse.org/legal/epl-v10.html
-  *
-  * Initialial development of the original code was made for
-  * project g-Eclipse founded by European Union
-  * project number: FP6-IST-034327  http://www.geclipse.eu/
-  *
-  * Contributor(s):
-  *     UCY (http://www.ucy.cs.ac.cy)
-  *      - Nicholas Loulloudes (loulloudes.n@cs.ucy.ac.cy)
-  *            
+ * Copyright (c) 2007 g-Eclipse consortium
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for
+ * project g-Eclipse founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributor(s):
+ *     UCY (http://www.ucy.cs.ac.cy)
+ *      - Nicholas Loulloudes (loulloudes.n@cs.ucy.ac.cy)
+ *
   *****************************************************************************/
 
 package eu.geclipse.jsdl.ui.internal.pages;
@@ -31,7 +31,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
@@ -39,11 +38,9 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
-import org.eclipse.ui.forms.widgets.ExpandableComposite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
-import org.eclipse.ui.forms.widgets.Section;
-import org.eclipse.ui.forms.widgets.TableWrapLayout;
+import org.eclipse.ui.forms.widgets.TableWrapData;
 import eu.geclipse.jsdl.jsdl.JobDefinitionTypeAdapter;
 import eu.geclipse.jsdl.jsdl.JobIdentificationTypeAdapter;
 import eu.geclipse.jsdl.ui.editors.JsdlEditor;
@@ -83,6 +80,7 @@ public final class JobDefinitionPage extends FormPage
   protected Button btnDel = null;
   protected Button btnTest = null;
   
+  protected Composite body = null;
   protected Composite jobDefComposite = null;
   protected Composite jobIdentComposite = null;
     
@@ -197,88 +195,54 @@ public final class JobDefinitionPage extends FormPage
     
         
     ScrolledForm form = managedForm.getForm();
-    form.setText(Messages.getString("JobDefinitionPage_JobDefinitionPageTitle"));  //$NON-NLS-1$
+    FormToolkit toolkit = managedForm.getToolkit();
     
-    TableWrapLayout layout = new TableWrapLayout();
-    layout.verticalSpacing = 8;
-    layout.horizontalSpacing = 8;
-    layout.leftMargin = 10;
-    layout.rightMargin = 10;
-    layout.topMargin = 10;
-    layout.bottomMargin = 10;
-    layout.numColumns = 2;
-    layout.makeColumnsEqualWidth = false;
-      
-    form.getBody().setLayout(layout);
-        
-   this.jobDefComposite = createJobDefinitionSection(managedForm,
-                    Messages.getString("JobDefinitionPage_JobDefinitionTitle"),  //$NON-NLS-1$
-                    Messages.getString("JobDefinitionPage_JobDefinitionDescr"));   //$NON-NLS-1$
-         
-     
-     this.jobDefinitionTypeAdapter.load();
- 
-     
-
-    this.jobIdentComposite = createJobIdentificationSection(managedForm, 
-                 Messages.getString("JobDefinitionPage_JobIdentificationTitle"),  //$NON-NLS-1$
-                 Messages.getString("JobDefinitionPage_JobIdentificationDescr")); //$NON-NLS-1$
+    form.setText(Messages.getString("JobDefinitionPage_JobDefinitionPageTitle"));  //$NON-NLS-1$
+    this.body = form.getBody();
+    this.body.setLayout(FormLayoutFactory.createFormTableWrapLayout(true, 2));
+    
+    
+    this.jobDefComposite = toolkit.createComposite( this.body );
+    this.jobDefComposite.setLayout(FormLayoutFactory.createFormPaneTableWrapLayout(false, 1));
+    this.jobDefComposite.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
+    createJobDefinitionSection(this.jobDefComposite , toolkit);
+    
+    this.jobDefinitionTypeAdapter.load();
+    
+    this.jobIdentComposite = toolkit.createComposite( this.body );
+    this.jobIdentComposite.setLayout(FormLayoutFactory.createFormPaneTableWrapLayout(false, 1));
+    this.jobIdentComposite.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
+    
+    createJobIdentificationSection (this.jobIdentComposite, toolkit);
     
     this.jobIdentificationTypeAdapter.load();
-    
-//    form.setBackgroundImage(Activator.getDefault().
-//                            getImageRegistry().get( "formsbackground" )); //$NON-NLS-1$
 
   }
   
-  
-  // This method is used to create individual subsections
-  private Composite createSection(final IManagedForm mform, final String title,
-                                final String desc, final int numColumns) {
-    
-   final ScrolledForm form = mform.getForm();
-   FormToolkit toolkit = mform.getToolkit();
-       
-                   
-   Section section = toolkit.createSection(form.getBody(), 
-                                                  ExpandableComposite.TITLE_BAR 
-                                                  | Section.DESCRIPTION 
-                                                  | SWT.WRAP);
-
-   section.clientVerticalSpacing = 5;   
-   section.setText(title);
-   section.setDescription(desc);
-   toolkit.createCompositeSeparator(section);
-   Composite client = toolkit.createComposite(section);
-          
-   GridLayout layout = new GridLayout();
-   layout.verticalSpacing = 8;
-   layout.marginTop = 10;
-   layout.marginBottom = 10;
-   layout.marginWidth = 0;
-   layout.marginHeight = 0;
-   layout.numColumns = numColumns;
-   client.setLayout(layout);
-   
-   section.setClient(client);
-  
-     
-   return client;
-   
-   }
   
   /* 
    * Create the Job Definition Section which includes the following:
    *  -Job ID (String)
    */
     
-  private Composite createJobDefinitionSection(final IManagedForm mform, 
-                                          final String title, final String desc)
+  private void createJobDefinitionSection(final Composite parent,
+                                          final FormToolkit toolkit)
   {
     
-    Composite client = createSection(mform, title, desc, 2);
-    FormToolkit toolkit = mform.getToolkit();
+    String sectionTitle =  Messages.getString("JobDefinitionPage_JobDefinitionTitle");  //$NON-NLS-1$
+    String sectionDescription = Messages.getString("JobDefinitionPage_JobDefinitionDescr");   //$NON-NLS-1$
+        
+    
     GridData gd;
+    
+    
+    Composite client = FormSectionFactory.createGridStaticSection(toolkit,
+                                                                  parent,
+                                                                  sectionTitle,
+                                                                  sectionDescription,
+                                                                  2,
+                                                                  false
+                                                                  );
   
     this.lblJobId = toolkit.createLabel(client,
                        Messages.getString("JobDefinitionPage_JobDefinitionId")); //$NON-NLS-1$
@@ -287,18 +251,18 @@ public final class JobDefinitionPage extends FormPage
     this.jobDefinitionTypeAdapter.attachID( this.txtId );
     
   
-    gd = new GridData(GridData.FILL);
-
-    
+    gd = new GridData();
+    gd.grabExcessHorizontalSpace = true;
+    gd.verticalAlignment = GridData.CENTER;
     gd.widthHint = 300;
     this.txtId.setLayoutData(gd);
-     
+    
+    
     //Paint Flat Borders
     
     toolkit.paintBordersFor( client );
     
-    return client;
-}
+  }
   
   
   /* 
@@ -308,16 +272,25 @@ public final class JobDefinitionPage extends FormPage
    *  -Job Annotation (EList)
    *  -Job Project (EList)
    */
-  private Composite createJobIdentificationSection(final IManagedForm mform, 
-                                                   final String title, 
-                                                   final String desc)
-  {
-    Composite client = createSection(mform, title, desc, 4);
-    FormToolkit toolkit = mform.getToolkit();
-       
+  private void createJobIdentificationSection(final Composite parent,
+                                                   final FormToolkit toolkit)
+  { 
     
-    GridData gd ;
-    GridData lblgd;
+    String sectionTitle = Messages.getString("JobDefinitionPage_JobIdentificationTitle");  //$NON-NLS-1$
+    String sectionDescription = Messages.getString("JobDefinitionPage_JobIdentificationDesr"); //$NON-NLS-1$
+    
+    GridData gd;
+       
+    Composite client = FormSectionFactory.createGridStaticSection(toolkit,
+                                           parent,
+                                           sectionTitle,
+                                           sectionDescription,
+                                           4,
+                                           false
+                                           );
+       
+      
+    
     
     /* ================================ Job Name ============================ */
     
@@ -338,9 +311,9 @@ public final class JobDefinitionPage extends FormPage
     
     this.lblJobDescripiton = toolkit.createLabel (client,
                               Messages.getString("JobDefinitionPage_JobDescr")); //$NON-NLS-1$
-    lblgd = new GridData();
-    lblgd.verticalSpan = 1;
-    this.lblJobDescripiton.setLayoutData (lblgd);
+    gd = new GridData();
+    gd.verticalSpan = 1;
+    this.lblJobDescripiton.setLayoutData (gd);
     
     
     
@@ -363,10 +336,10 @@ public final class JobDefinitionPage extends FormPage
     
     this.lblJobAnnotation = toolkit.createLabel(client,
                          Messages.getString("JobDefinitionPage_JobAnnotation"));  //$NON-NLS-1$
-    lblgd = new GridData();
-    lblgd.horizontalSpan = 1;
-    lblgd.verticalSpan = 2;  
-    this.lblJobAnnotation.setLayoutData( lblgd );
+    gd = new GridData();
+    gd.horizontalSpan = 1;
+    gd.verticalSpan = 2;  
+    this.lblJobAnnotation.setLayoutData( gd );
    
     gd = new GridData();
     gd.verticalAlignment = GridData.FILL;
@@ -433,10 +406,10 @@ public final class JobDefinitionPage extends FormPage
      this.lblJobProject = toolkit.createLabel(client,
                             Messages.getString("JobDefinitionPage_JobProject")); //$NON-NLS-1$
      
-     lblgd = new GridData();
-     lblgd.verticalSpan = 2;
-     lblgd.horizontalSpan = 1;
-     this.lblJobProject.setLayoutData( lblgd );
+     gd = new GridData();
+     gd.verticalSpan = 2;
+     gd.horizontalSpan = 1;
+     this.lblJobProject.setLayoutData( gd );
      
      gd = new GridData();
      gd.verticalSpan = 2;
@@ -499,8 +472,7 @@ public final class JobDefinitionPage extends FormPage
      this.btnDel.setLayoutData( gd );
  
      toolkit.paintBordersFor( client );
-     
-    return client;
+
      
   }
   
