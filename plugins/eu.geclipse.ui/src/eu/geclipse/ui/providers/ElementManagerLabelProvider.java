@@ -56,7 +56,7 @@ public abstract class ElementManagerLabelProvider
           break;
         case 1:
           IGridProject project = gridElement.getProject();
-          if ( project != null ) {
+          if ( ( project != null ) && ! project.isHidden() ) {
             text = project.getName();
           }
           break;
