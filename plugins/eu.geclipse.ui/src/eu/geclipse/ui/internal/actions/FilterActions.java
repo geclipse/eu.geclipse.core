@@ -20,15 +20,20 @@ import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.actions.ActionGroup;
 
 import eu.geclipse.ui.views.filters.GridFilterConfigurationsManager;
+import eu.geclipse.ui.views.filters.IGridFilterConfiguration;
 
 
 /**
- *
+ * Actions for IGridFilter and {@link IGridFilterConfiguration}
  */
 public class FilterActions extends ActionGroup {
   private IWorkbenchSite site;
   private GridFilterConfigurationsManager filterConfigurationsManager;
   
+  /**
+   * @param site
+   * @param filterConfigurationsManager
+   */
   public FilterActions( final IWorkbenchSite site, final GridFilterConfigurationsManager filterConfigurationsManager ) {
     super();
     this.site = site;
@@ -42,14 +47,6 @@ public class FilterActions extends ActionGroup {
   public void fillActionBars( final IActionBars actionBars )
   {
     actionBars.getToolBarManager().add( new ConfigureFiltersAction( this.site, this.filterConfigurationsManager ) );
-//    actionBars.getToolBarManager().add( createChangeFilter() );
     super.fillActionBars( actionBars );
   }
-  /*
-  private IAction createChangeFilter() {
-    return new Action( "Filter", Action.AS_DROP_DOWN_MENU ) {
-      
-    };
-  }
-  */
 }

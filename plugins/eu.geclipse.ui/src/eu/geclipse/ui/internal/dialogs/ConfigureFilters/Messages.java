@@ -3,6 +3,9 @@ package eu.geclipse.ui.internal.dialogs.ConfigureFilters;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
+/**
+ *
+ */
 public class Messages {
   private static final String BUNDLE_NAME = "eu.geclipse.ui.internal.dialogs.ConfigureFilters.messages"; //$NON-NLS-1$
 

@@ -20,70 +20,79 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.IMemento;
 import eu.geclipse.core.model.IGridJob;
 
-
 /**
  * Filter for jobs using time when job was submitted
  */
 public class JobSubmissionTimeFilter extends AbstractGridViewerFilter {
-  static private String MEMENTO_KEY_AFTERDATE = "AfterDate";
-  static private String MEMENTO_KEY_BEFOREDATE = "BeforeDate";
+
+  static private String MEMENTO_KEY_AFTERDATE = "AfterDate"; //$NON-NLS-1$
+  static private String MEMENTO_KEY_BEFOREDATE = "BeforeDate"; //$NON-NLS-1$
   private Date afterDate;
   private Date beforeDate;
 
-  /* (non-Javadoc)
-   * @see org.eclipse.jface.viewers.ViewerFilter#select(org.eclipse.jface.viewers.Viewer, java.lang.Object, java.lang.Object)
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.eclipse.jface.viewers.ViewerFilter#select(org.eclipse.jface.viewers.Viewer,
+   *      java.lang.Object, java.lang.Object)
    */
   @Override
-  public boolean select( final Viewer viewer, final Object parentElement, final Object element )
+  public boolean select( final Viewer viewer,
+                         final Object parentElement,
+                         final Object element )
   {
     boolean showOnView = true;
-    
     if( element instanceof IGridJob ) {
-      IGridJob job = (IGridJob) element;
-      
+      IGridJob job = ( IGridJob )element;
       if( job.getSubmissionTime() != null ) {
-        if( afterDate != null ) {
-          showOnView &= job.getSubmissionTime().after( afterDate ); 
+        if( this.afterDate != null ) {
+          showOnView &= job.getSubmissionTime().after( this.afterDate );
         }
-        if( beforeDate != null ) {
-          showOnView &= job.getSubmissionTime().before( beforeDate );
+        if( this.beforeDate != null ) {
+          showOnView &= job.getSubmissionTime().before( this.beforeDate );
         }
       }
     }
-
     return showOnView;
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see eu.geclipse.ui.views.filters.IGridFilter#getFilterId()
    */
   public String getFilterId() {
     return getId();
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see eu.geclipse.ui.views.filters.IGridFilter#isEnabled()
    */
   public boolean isEnabled() {
     return this.afterDate != null || this.beforeDate != null;
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see eu.geclipse.ui.views.filters.IGridFilter#makeClone()
    */
   public IGridFilter makeClone() throws CloneNotSupportedException {
-    JobSubmissionTimeFilter newFilter = (JobSubmissionTimeFilter)super.clone();
-    
+    JobSubmissionTimeFilter newFilter = ( JobSubmissionTimeFilter )super.clone();
     if( this.afterDate != null ) {
-      newFilter.afterDate = (Date)this.afterDate.clone();
+      newFilter.afterDate = ( Date )this.afterDate.clone();
     }
     if( this.beforeDate != null ) {
-      newFilter.beforeDate = (Date)this.beforeDate.clone();
+      newFilter.beforeDate = ( Date )this.beforeDate.clone();
     }
     return newFilter;
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see eu.geclipse.ui.views.filters.IGridFilter#readState(org.eclipse.ui.IMemento)
    */
   public void readState( final IMemento filterMemento ) {
@@ -91,34 +100,48 @@ public class JobSubmissionTimeFilter extends AbstractGridViewerFilter {
     this.beforeDate = readDate( filterMemento, MEMENTO_KEY_BEFOREDATE );
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see eu.geclipse.ui.views.filters.IGridFilter#saveState(org.eclipse.ui.IMemento)
    */
   public void saveState( final IMemento filterMemento ) {
     if( this.afterDate != null ) {
       saveDate( filterMemento, MEMENTO_KEY_AFTERDATE, this.afterDate );
     }
-    
     if( this.beforeDate != null ) {
       saveDate( filterMemento, MEMENTO_KEY_BEFOREDATE, this.beforeDate );
     }
   }
 
   static String getId() {
-    return "JobSubmissionTimeFilter";
+    return "JobSubmissionTimeFilter"; //$NON-NLS-1$
   }
-  
-  public void setDates( final Date afterDate, final Date beforeDate ) {
-    this.afterDate = afterDate;
-    this.beforeDate = beforeDate;
+
+  /**
+   * @param newAfterDate jobs submitted after this date will be shown on view
+   *            (may be null)
+   * @param newBeforeDate jobs submitted before this date will be shown on view
+   *            (may be null)
+   */
+  public void setDates( final Date newAfterDate, final Date newBeforeDate ) {
+    this.afterDate = newAfterDate;
+    this.beforeDate = newBeforeDate;
   }
-  
+
+  /**
+   * @return date after, which jobs will be visibled on view, or null if this
+   *         date shouldn't be used to filter
+   */
   public Date getAfterDate() {
     return this.afterDate;
   }
-  
+
+  /**
+   * @return date before, which jobs will be visibled on view, or null if this
+   *         date shouldn't be used to filter
+   */
   public Date getBeforeDate() {
     return this.beforeDate;
   }
-  
 }

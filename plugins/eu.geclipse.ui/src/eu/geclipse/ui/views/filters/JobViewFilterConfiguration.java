@@ -15,24 +15,34 @@
  *****************************************************************************/
 package eu.geclipse.ui.views.filters;
 
-import org.eclipse.ui.IMemento;
+import eu.geclipse.ui.views.GridJobView;
+
 
 
 /**
- *
+ * Filters configuration for {@link GridJobView}
  */
 public class JobViewFilterConfiguration extends AbstractGridFilterConfiguration
 {
+  /**
+   * @param name configuration name
+   */
   public JobViewFilterConfiguration( final String name ) {
     super( name );
     addFilter( new JobStatusFilter() );
     addFilter( new JobSubmissionTimeFilter() );
   }
   
+  /**
+   * @return filter using job-status to filter
+   */
   public JobStatusFilter getJobStatusFilter() {
     return (JobStatusFilter)findFilter( JobStatusFilter.getId() );
   }
   
+  /**
+   * @return filter using job submission time to filter
+   */
   public JobSubmissionTimeFilter getSubmissionTimeFilter() {
     return (JobSubmissionTimeFilter)findFilter( JobSubmissionTimeFilter.getId() );
   }

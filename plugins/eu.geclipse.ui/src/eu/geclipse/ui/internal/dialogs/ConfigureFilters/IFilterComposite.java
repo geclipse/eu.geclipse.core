@@ -32,18 +32,14 @@ public interface IFilterComposite {
   
   /**
    * Save values changed by user into stored {@link IGridFilter}
+   * @return true if everything was successfully saved, false if saving should be interupted
    * 
    */
-  void saveToFilter();
-  
-  /**
-   * @return true if all settings are correct. False causes that filter will not be saved
-   */
-  boolean validate();
-  
+  boolean saveToFilter();
+
   /**
    * Changes controls state. Called when none filter is selected in dialog, and user shouldn't change data
-   * @param readOnly
+   * @param enabled true if composite should be readolny, false if should be writeable
    */
-  void setReadOnly( boolean readOnly );
+  void setEnabled( boolean enabled );
 }

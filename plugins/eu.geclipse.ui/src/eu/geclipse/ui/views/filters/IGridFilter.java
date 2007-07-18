@@ -22,25 +22,27 @@ import eu.geclipse.ui.dialogs.ConfigureFiltersDialog;
 
 
 /**
- * Filters used in g-eclipse views
+ * Filter used in g-eclipse views
  */
 public interface IGridFilter {
   
   /**
-   * Usefull when in given filter configuration user don't want to use all filters
+   * Useful when in given filter configuration user doesn't want to use all filters
    * (e.g. user want to filter jobs using status, but he haven't specified submission date)
-   * @return true if this filter should be used to filter views
+   * @return true if this filter should be applied to the view
    */
   boolean isEnabled();
   
   
   /**
+   * Saves filter state into {@link IMemento}
    * @param filterMemento memento, in which filter state should be stored
    */
   void saveState( final IMemento filterMemento );
   
   
   /**
+   * Read filter state from {@link IMemento}
    * @param filterMemento memento, from which filter state will be restored
    */
   void readState( final IMemento filterMemento );

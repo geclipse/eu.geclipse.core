@@ -17,32 +17,44 @@ package eu.geclipse.ui.views.filters;
 
 import java.util.HashMap;
 import java.util.Iterator;
+
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.ui.IMemento;
+
 import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobStatus;
 
+/**
+ * Filter using job-status to filter jobs
+ */
 public class JobStatusFilter extends AbstractGridViewerFilter {
-  private static final String MEMENTO_TYPE_STATUS = "Status";   //$NON-NLS-1$
-  private static final String MEMENTO_KEY_STATUS_SHOW = "Show"; //$NON-NLS-1$
-  
+
+  private static final String MEMENTO_TYPE_STATUS = "Status"; //$NON-NLS-1$
+  private static final String MEMENTO_KEY_STATUS_SHOW = "Show"; //$NON-NLS-1$  
   private HashMap<Integer, Boolean> statusMap = new HashMap<Integer, Boolean>();
-  
+
+  /**
+   * 
+   */
   public JobStatusFilter() {
     // empty implementation
   }
-  
+
+  @SuppressWarnings("unchecked")
   public IGridFilter makeClone() throws CloneNotSupportedException {
-    JobStatusFilter newFilter = (JobStatusFilter)super.clone();
-    
-    newFilter.statusMap = (HashMap<Integer, Boolean>)this.statusMap.clone();
-    
+    JobStatusFilter newFilter = ( JobStatusFilter )super.clone();
+    newFilter.statusMap = ( HashMap<Integer, Boolean> )this.statusMap.clone();
     return newFilter;
   }
-  
+
+  /**
+   * @param jobStatus
+   * @param showOnView true if jobs with given jobStatus should be visibled on
+   *            view
+   */
   public void setStatusState( final int jobStatus, final boolean showOnView ) {
-    this.statusMap.put( Integer.valueOf( jobStatus ), Boolean.valueOf( showOnView ) );
+    this.statusMap.put( Integer.valueOf( jobStatus ),
+                        Boolean.valueOf( showOnView ) );
   }
 
   @Override
@@ -63,19 +75,22 @@ public class JobStatusFilter extends AbstractGridViewerFilter {
     }
     return showOnView;
   }
-  
+
+  /**
+   * @param jobStatus
+   * @return true if job with given jobStatus is visibled on view according to
+   *         this filter
+   */
   public boolean getStatusState( final int jobStatus ) {
     Boolean showOnView = this.statusMap.get( Integer.valueOf( jobStatus ) );
-    
     return showOnView == null || showOnView.booleanValue();
   }
-  
-  public void saveState( final IMemento filterMemento ) {    
 
+  public void saveState( final IMemento filterMemento ) {
     for( Integer status : this.statusMap.keySet() ) {
       IMemento statusMemento = filterMemento.createChild( MEMENTO_TYPE_STATUS, status.toString() );
-      
-      statusMemento.putInteger( MEMENTO_KEY_STATUS_SHOW, getStatusState( status.intValue() ) ? 1 : 0 ); 
+      statusMemento.putInteger( MEMENTO_KEY_STATUS_SHOW,
+                                getStatusState( status.intValue() ) ? 1 : 0 );
     }
   }
 
@@ -100,20 +115,14 @@ public class JobStatusFilter extends AbstractGridViewerFilter {
     for( IMemento statusMemento : statusMementos ) {
       Integer statusValue = Integer.valueOf( statusMemento.getID() );
       Integer showOnView = statusMemento.getInteger( MEMENTO_KEY_STATUS_SHOW );
-      if( statusValue != null
-          && showOnView != null ) {
+      if( statusValue != null && showOnView != null ) {
         setStatusState( statusValue.intValue(), showOnView.intValue() != 0 );
       }
-    }    
+    }
   }
 
-  static String getId()
-  {
-    return "JobStatusFilter";
-  }
-
-  public ViewerFilter getFilter() {
-    return this;
+  static String getId() {
+    return "JobStatusFilter"; //$NON-NLS-1$
   }
 
   /* (non-Javadoc)
@@ -122,5 +131,4 @@ public class JobStatusFilter extends AbstractGridViewerFilter {
   public String getFilterId() {
     return getId();
   }
-
 }

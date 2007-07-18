@@ -20,17 +20,42 @@ import org.eclipse.ui.IMemento;
 
 
 /**
- * Interface, which gather many different filters, which can be applied on the
- * view. Implementations should collect all filter for one specific view. User
- * can has many different configurations for the same job. In this way, filters
- * are obtained from all enabled configurations.
+ * Interface, which gather all possible filters, which can be applied on the
+ * view. 
+ * Implementations should collect all filters for one specific view. 
  */
 public interface IGridFilterConfiguration extends Cloneable {
+  /**
+   * @return configuration name
+   */
   String getName();
+  
+  /**
+   * @return true if filters in this configuration should be applied into view
+   */
   boolean isEnabled();
+  
+  /**
+   * Saves configuration and all filters into memento
+   * @param memento
+   */
   void saveState( final IMemento memento );
-  List<IGridFilter> getFilters();
+
+  /**
+   * Reads configuration and all filters from memento
+   * @param configurationMemento
+   */
   void read( final IMemento configurationMemento );
+  
+  /**
+   * @return all enabled IGridFilter objects from this configuration, which should be applied to the view
+   */
+  List<IGridFilter> getFilters();
+  
   IGridFilterConfiguration clone() throws CloneNotSupportedException;
+  
+  /**
+   * @param enabled true if filters in this configuration should be applied to the view
+   */
   void setEnabled( boolean enabled );
 }

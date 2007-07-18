@@ -18,21 +18,19 @@ package eu.geclipse.ui.dialogs;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.IInputValidator;
 import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.TrayDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
-import org.eclipse.jface.viewers.CheckStateChangedEvent;
-import org.eclipse.jface.viewers.CheckboxTableViewer;
-import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -44,6 +42,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.internal.dialogs.ConfigureFilters.FilterCompositeFactory;
 import eu.geclipse.ui.internal.dialogs.ConfigureFilters.IFilterComposite;
@@ -51,13 +50,20 @@ import eu.geclipse.ui.views.filters.GridFilterConfigurationsManager;
 import eu.geclipse.ui.views.filters.IGridFilter;
 import eu.geclipse.ui.views.filters.IGridFilterConfiguration;
 
+/**
+ * Dialog, which allow user to make filter configurations
+ */
 public class ConfigureFiltersDialog extends TrayDialog {
 
-  private CheckboxTableViewer tableViewer;
-  private List<IGridFilterConfiguration> configurations;
-  private GridFilterConfigurationsManager configurationsManager;
-  private List<IFilterComposite> composites = new ArrayList<IFilterComposite>();
+  protected TableViewer tableViewer;
+  protected List<IFilterComposite> composites = new ArrayList<IFilterComposite>();
+  protected List<IGridFilterConfiguration> configurations;
+  protected GridFilterConfigurationsManager configurationsManager;  
 
+  /**
+   * @param shell parent shell, or <code>null</code> to create a top-level shell
+   * @param filterConfigurationsManager manager, from which filters will be obtained
+   */
   public ConfigureFiltersDialog( final Shell shell, final GridFilterConfigurationsManager filterConfigurationsManager ) {
     super( shell );
     this.configurationsManager = filterConfigurationsManager;
@@ -86,6 +92,7 @@ public class ConfigureFiltersDialog extends TrayDialog {
     ((GridLayout)dialogAreaComposite.getLayout()).numColumns = 2;
     createConfigurationsComposite( dialogAreaComposite );
     createFiltersComposite( dialogAreaComposite );
+    selectEnabledConfiguration();
 
     return dialogAreaComposite;
   }
@@ -109,45 +116,22 @@ public class ConfigureFiltersDialog extends TrayDialog {
     label.setText( Messages.getString("ConfigureFiltersDialog.table_label") ); //$NON-NLS-1$
   }
   
-  private void createConfigsTable( final Composite parent ) {
-    this.tableViewer = CheckboxTableViewer.newCheckList( parent, SWT.CHECK | SWT.BORDER );
+  private void createConfigsTable( final Composite parent ) {    
+    this.tableViewer = new TableViewer( parent, SWT.BORDER );
     this.tableViewer.setContentProvider( new ArrayContentProvider() );
-    this.tableViewer.setLabelProvider( createTableLabelProvider() );
+    this.tableViewer.setLabelProvider( createTableLabelProvider() );    
     this.tableViewer.addSelectionChangedListener( createTableSelectionListener() );
-    this.tableViewer.addCheckStateListener( createCheckStateListener() );
-    
+
     GridData gridData = new GridData();
     gridData.heightHint = 150;
     gridData.widthHint = 75;
     this.tableViewer.getTable().setLayoutData( gridData );
     this.tableViewer.setInput( this.configurations );
-    setCheckedConfigs();
-    this.tableViewer.setSelection( new StructuredSelection( this.configurations.get( 0 ) ) );
   }
   
-  private ICheckStateListener createCheckStateListener() {
-    return new ICheckStateListener() {
-
-      public void checkStateChanged( final CheckStateChangedEvent event ) {
-        IGridFilterConfiguration configuration = ( IGridFilterConfiguration )event.getElement();
-        enableConfiguration( configuration );
-      }
-    };
-  }
-  
-  private void enableConfiguration( final IGridFilterConfiguration configuration ) {
+  protected void enableConfiguration( final IGridFilterConfiguration configuration ) {
     for( IGridFilterConfiguration curConfiguration : this.configurations ) {
-      boolean enable = curConfiguration == configuration;
-      this.tableViewer.setChecked( curConfiguration, enable );
-      curConfiguration.setEnabled( enable );
-    }
-    
-  }      
-
-
-  private void setCheckedConfigs() {
-    for( IGridFilterConfiguration configuration : this.configurations ) {
-      this.tableViewer.setChecked( configuration, configuration.isEnabled() );
+      curConfiguration.setEnabled( curConfiguration == configuration );
     }
   }
 
@@ -168,25 +152,32 @@ public class ConfigureFiltersDialog extends TrayDialog {
   ISelectionChangedListener createTableSelectionListener() {
     return new ISelectionChangedListener() {
 
+      private IGridFilterConfiguration selectedConfiguration;
+
       public void selectionChanged( final SelectionChangedEvent event ) {
         StructuredSelection selection = ( StructuredSelection )event.getSelection();
         if( selection != null ) {
-          IGridFilterConfiguration configuration = ( IGridFilterConfiguration )selection.getFirstElement();
           if( saveFilter() ) {
+            this.selectedConfiguration = ( IGridFilterConfiguration )selection.getFirstElement();
+            enableConfiguration( this.selectedConfiguration );
             for( IFilterComposite filterComposite : ConfigureFiltersDialog.this.composites )
             {
-              filterComposite.setFilter( configuration );
+              filterComposite.setFilter( this.selectedConfiguration );
             }
+          } else {
+            ConfigureFiltersDialog.this.tableViewer.removeSelectionChangedListener( this );
+            ConfigureFiltersDialog.this.tableViewer.setSelection( this.selectedConfiguration != null ? new StructuredSelection( this.selectedConfiguration ) : null );
+            ConfigureFiltersDialog.this.tableViewer.addSelectionChangedListener( this );
           }
         }
-        setReadOnly( selection == null || selection.isEmpty() );
+        setEnabledComposites( selection != null && !selection.isEmpty() );
       }
     };
   }
   
-  void setReadOnly( final boolean readOnly ) {
+  void setEnabledComposites( final boolean enabled ) {
     for( IFilterComposite filterComposite : ConfigureFiltersDialog.this.composites ) {
-      filterComposite.setReadOnly( readOnly );
+      filterComposite.setEnabled( enabled );
     }    
   }
 
@@ -210,16 +201,16 @@ public class ConfigureFiltersDialog extends TrayDialog {
       @Override
       public void widgetSelected( final SelectionEvent e )
       {
-        InputDialog dialog = new InputDialog( getShell(), Messages.getString("ConfigureFiltersDialog.create_new_filter"), Messages.getString("ConfigureFiltersDialog.enter_filter_name"), "", createNameValidator() ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        
-        if( dialog.open() == Window.OK ) {          
-          IGridFilterConfiguration newConfiguration
-            = ConfigureFiltersDialog.this.configurationsManager.createConfiguration( dialog.getValue() );
-          ConfigureFiltersDialog.this.configurations.add( newConfiguration );
-          ConfigureFiltersDialog.this.tableViewer.add( newConfiguration );
-          ConfigureFiltersDialog.this.tableViewer.setChecked( newConfiguration, newConfiguration.isEnabled() );
-          ConfigureFiltersDialog.this.tableViewer.setSelection( new StructuredSelection( newConfiguration ) );
-          enableConfiguration( newConfiguration );
+        if( saveFilter() ) {
+          InputDialog dialog = new InputDialog( getShell(), Messages.getString("ConfigureFiltersDialog.create_new_filter"), Messages.getString("ConfigureFiltersDialog.enter_filter_name"), "", createNameValidator() ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+          
+          if( dialog.open() == Window.OK ) {
+            IGridFilterConfiguration newConfiguration
+              = ConfigureFiltersDialog.this.configurationsManager.createConfiguration( dialog.getValue() );
+            ConfigureFiltersDialog.this.configurations.add( newConfiguration );
+            ConfigureFiltersDialog.this.tableViewer.add( newConfiguration );
+            ConfigureFiltersDialog.this.tableViewer.setSelection( new StructuredSelection( newConfiguration ) );            
+          }
         }
       }
       
@@ -250,16 +241,18 @@ public class ConfigureFiltersDialog extends TrayDialog {
       @Override
       public void widgetSelected( final SelectionEvent e )
       {
-        StructuredSelection selection
-          = (StructuredSelection)ConfigureFiltersDialog.this.tableViewer.getSelection();
-        if( selection == null || selection.isEmpty() ) {
-          MessageDialog.openWarning( getShell(), Messages.getString("ConfigureFiltersDialog.delete_filter"), Messages.getString("ConfigureFiltersDialog.select_filter") ); //$NON-NLS-1$ //$NON-NLS-2$
-        }
-        else {
-          IGridFilterConfiguration configuration = (IGridFilterConfiguration)selection.getFirstElement();
-          ConfigureFiltersDialog.this.tableViewer.remove( configuration );
-          ConfigureFiltersDialog.this.configurations.remove( configuration );
-          selectDefaultConfiguration();
+        if( saveFilter() ) {
+          StructuredSelection selection
+            = (StructuredSelection)ConfigureFiltersDialog.this.tableViewer.getSelection();
+          if( selection == null || selection.isEmpty() ) {
+            MessageDialog.openWarning( getShell(), Messages.getString("ConfigureFiltersDialog.delete_filter"), Messages.getString("ConfigureFiltersDialog.select_filter") ); //$NON-NLS-1$ //$NON-NLS-2$
+          }
+          else {
+            IGridFilterConfiguration configuration = (IGridFilterConfiguration)selection.getFirstElement();
+            ConfigureFiltersDialog.this.tableViewer.remove( configuration );
+            ConfigureFiltersDialog.this.configurations.remove( configuration );
+            selectDefaultConfiguration();
+          }
         }
       }
       
@@ -270,7 +263,6 @@ public class ConfigureFiltersDialog extends TrayDialog {
     if( !this.configurations.isEmpty() ) {
       IGridFilterConfiguration configuration = this.configurations.get( 0 );
       this.tableViewer.setSelection( new StructuredSelection( configuration ) );
-      enableConfiguration( configuration );
     }
   }
   
@@ -280,7 +272,7 @@ public class ConfigureFiltersDialog extends TrayDialog {
     gridData.widthHint = 80;
     button.setLayoutData( gridData );
     button.setText( textString );    
-    return button;   
+    return button;
   }
   
   private void createFiltersComposite( final Composite parent ) {
@@ -290,7 +282,7 @@ public class ConfigureFiltersDialog extends TrayDialog {
     for( IGridFilter filter : configuration.getFilters() ) {
       IFilterComposite composite = FilterCompositeFactory.create( filter, filtersComposite );
       
-      Assert.isTrue( composite != null, "Probably IGridFilter.makeClone() returned null" );
+      Assert.isTrue( composite != null, "Probably IGridFilter.makeClone() returned null" ); //$NON-NLS-1$
       
       if( composite != null ) {
         this.composites.add( composite );
@@ -316,7 +308,7 @@ public class ConfigureFiltersDialog extends TrayDialog {
     if( newConfigurations.isEmpty() ) {
       IGridFilterConfiguration defaultConfiguration = this.configurationsManager.createConfiguration( Messages.getString("ConfigureFiltersDialog.default_config") );       //$NON-NLS-1$
       newConfigurations.add( defaultConfiguration );
-    }
+    }  
     
     return newConfigurations;
   }
@@ -343,19 +335,15 @@ public class ConfigureFiltersDialog extends TrayDialog {
   protected void okPressed()
   {
     if( saveFilter() ) {
-      saveConfigurationsState();
       super.okPressed();
     }
   }
 
+  /**
+   * @return configurations changed in dialog
+   */
   public List<IGridFilterConfiguration> getConfigurations() {
     return this.configurations;
-  }
-  
-  private void saveConfigurationsState() {
-    for( IGridFilterConfiguration configuration : this.configurations ) {
-      configuration.setEnabled( this.tableViewer.getChecked( configuration ) );
-    }
   }
 
   /* (non-Javadoc)
@@ -367,25 +355,42 @@ public class ConfigureFiltersDialog extends TrayDialog {
     return false;
   }
 
-  private boolean saveFilter() {
+  protected boolean saveFilter() {
     boolean success = true;
+    Iterator<IFilterComposite> iterator = this.composites.iterator();    
     
-    for( Iterator<IFilterComposite> iterator = this.composites.iterator(); iterator.hasNext() && success; ) {
-      success &= iterator.next().validate();
-    }
-    
-    if( success ) {
-      for( IFilterComposite composite : this.composites ) {
-        composite.saveToFilter();
-      }
+    while( success && iterator.hasNext() ) {
+      IFilterComposite composite = iterator.next();
+      success &= composite.saveToFilter();
     }
     
     return success;
   }
   
-  private void showErrorMessage( final String reasonMessage ) {
-    Status status = new Status( Status.INFO, Activator.getDefault().PLUGIN_ID, "Cannot save filter." );
-    
-    ProblemDialog.openProblem( this.getShell(), "Save filter", reasonMessage, status, null );    
+  private void selectEnabledConfiguration() {
+    if( !this.configurations.isEmpty() ) {
+      IGridFilterConfiguration enabledConfiguration = findEnabledConfiguration();
+      
+      if( enabledConfiguration != null ) {
+        this.tableViewer.setSelection( new StructuredSelection( enabledConfiguration ) );
+      }
+    }    
   }
+
+  private IGridFilterConfiguration findEnabledConfiguration() {
+    IGridFilterConfiguration enabledConfiguration = null;
+    
+    for( Iterator<IGridFilterConfiguration> iterator = this.configurations.iterator(); 
+        iterator.hasNext() && enabledConfiguration == null; ) 
+    {
+      IGridFilterConfiguration configuration = iterator.next();
+      
+      if( configuration.isEnabled() ) {
+        enabledConfiguration = configuration;
+      }       
+    }
+    
+    return enabledConfiguration;
+  }
+  
 }

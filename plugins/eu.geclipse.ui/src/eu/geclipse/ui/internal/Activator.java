@@ -257,7 +257,8 @@ public class Activator extends AbstractUIPlugin {
       { "virtualfolder", "icons/obj16/virtual_folder_obj.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
       { "vo", "icons/obj16/vo_obj.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
       { "formsbackground", "icons/form_banner.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
-      { "configure_filters", "icons/obj16/filter_ps.gif" },  //$NON-NLS-1$ //$NON-NLS-2$      
+      { "configure_filters", "icons/obj16/filter_ps.gif" },  //$NON-NLS-1$ //$NON-NLS-2$
+      { "configure_filters_on", "icons/obj16/filter_on.gif" },  //$NON-NLS-1$ //$NON-NLS-2$
       { "helplink", "icons/elcl16/linkto_help.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
       { "calendar", "icons/calendar.gif" }  //$NON-NLS-1$//$NON-NLS-2$
     };

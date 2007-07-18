@@ -20,6 +20,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.PopupDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -38,6 +39,12 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+
+import eu.geclipse.core.GridException;
+import eu.geclipse.core.IProblem;
+import eu.geclipse.ui.DateTimeSolutionRegistry;
+import eu.geclipse.ui.UIProblems;
+import eu.geclipse.ui.dialogs.NewProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 
 /**
@@ -61,17 +68,21 @@ public class DateTimeText {
 
   private static Image image;
   protected Style style;
+  protected Button calendarButton;  
   private Text text;  
-  private Button calendarButton;
+  private Composite topComposite;
+  private boolean allowEmpty;
   
   /**
    * @param parent
    * @param style
+   * @param allowEmpty if false, then {@link DateTimeText#getDate()} throw an exception for empty date 
    */
-  public DateTimeText( final Composite parent, final Style style ) {
+  public DateTimeText( final Composite parent, final Style style, final boolean allowEmpty ) {
     super();
     this.style = style;
-    Composite composite = new Composite( parent, SWT.NULL );
+    this.allowEmpty = allowEmpty;
+    this.topComposite = new Composite( parent, SWT.NULL );
     GridLayout layout = new GridLayout( 2, false );
     layout.horizontalSpacing = 0;
     layout.marginWidth = 0;
@@ -80,16 +91,16 @@ public class DateTimeText {
     layout.verticalSpacing = 0;
     layout.marginHeight = 0;
     layout.marginWidth = 0;
-    composite.setLayout( layout );
-    createText( composite );
-    createButton( composite );
+    this.topComposite.setLayout( layout );
+    createText( this.topComposite );
+    createButton( this.topComposite );
   }
 
   /**
    * @param date date, which will be visibled in widget
    */
   public void setDate( final Date date ) {
-    String valueString = "";
+    String valueString = ""; //$NON-NLS-1$
     if( date != null ) {
       valueString = getFormatter( this.style ).format( date );
     }
@@ -97,38 +108,29 @@ public class DateTimeText {
   }
   
   /**
-   * @return Date entered in control, or null if date is empty or is invalid. To
-   *         distinguish between empty and valid use {@link DateTimeText#isValid()}
+   * @return Date entered in control, or null if allowEmpty is true and entered date is empty
+   * @throws GridException thrown when user entered date in wrong format
+   * @see NewProblemDialog#openProblem(Shell, String, String, Throwable)
    */
-  public Date getDate() {
+  public Date getDate() throws GridException {
     Date date = null;
     try {
       date = internalGetDate();
     } catch( ParseException exception ) {
-      // Just return null when exception occurs
+      GridException gridException = new GridException( UIProblems.DATETIME_PARSE_PROBLEM );
+      IProblem problem = gridException.getProblem();
+      problem.addSolution( DateTimeSolutionRegistry.getRegistry().findSolution( DateTimeSolutionRegistry.USE_CALENDAR_BUTTON, this ) );
+      problem.addSolution( DateTimeSolutionRegistry.getRegistry().findSolution( DateTimeSolutionRegistry.APPLY_VALID_DATEFORMAT, this ) );
+      if( this.allowEmpty ) {
+        problem.addSolution( DateTimeSolutionRegistry.getRegistry().findSolution( DateTimeSolutionRegistry.DELETE_ENTERED_DATE, this ) );
+      }
+      throw gridException;
     }
     return date;
   }
-  
+
   /**
-   * @return true if entered date is valid or if is empty. To show to the user
-   *         proper date format, use {@link DateTimeText#getValidDateFormat()}
-   */
-  public boolean isValid() {
-    boolean valid = false;
-    try {
-      internalGetDate();
-      valid = true;
-    } catch( ParseException exception ) {
-      // ignore exception
-    }
-    return valid;
-  }
-  
-  /**
-   * @return String containing format in which date should be entered. Use it in
-   *         error-messages shown for user, when {@link DateTimeText#isValid()}
-   *         return false
+   * @return String containing format in which date should be entered.
    */
   public String getValidDateFormat() {
     
@@ -187,12 +189,13 @@ public class DateTimeText {
     Date date = null;
     DateFormat formatter = getFormatter( this.style );
     String dateString = this.text.getText();
-    if( dateString.length() > 0 ) {
+    if( !this.allowEmpty
+        || dateString.length() > 0 ) {
       try {
         date = formatter.parse( dateString );
       } catch( ParseException exception ) {
         // if declared parser doesn't work for entered data, try to use other
-        // parsers (maybe user ommited some data parts)?
+        // parsers (maybe user ommited some date parts)?
         date = parseOtherFormats( dateString );
         
         if( date == null ) {
@@ -237,9 +240,7 @@ public class DateTimeText {
       @Override
       public void widgetSelected( final SelectionEvent e )
       {
-        DateTimeDialog dialog = new DateTimeDialog( parent.getShell() );        
-        
-        dialog.open();
+        openCalendarDialog();
       }
     } );
   }
@@ -253,6 +254,21 @@ public class DateTimeText {
       DateTimeText.image = imageDescriptor.createImage();
     }
     return DateTimeText.image;
+  }
+
+  /**
+   * @return shell, on which control is placed 
+   */
+  public Shell getShell() {
+    return this.topComposite.getShell();
+  }
+  
+  /**
+   * Opens popup dialog with calendar to easy selecting date and time
+   */
+  public void openCalendarDialog() {
+    DateTimeDialog dialog = new DateTimeDialog( getShell() );
+    dialog.open();
   }
   
   private class DateTimeDialog extends PopupDialog {
@@ -315,7 +331,12 @@ public class DateTimeText {
       }
 
       createButtons( composite );
-      setDate( DateTimeText.this.getDate() );
+
+      try {
+        setDate( DateTimeText.this.getDate() );
+      } catch( GridException exception ) {
+        // ignore exception
+      }
       
       return composite;
     }
@@ -364,9 +385,9 @@ public class DateTimeText {
     @Override
     protected Point getInitialLocation( final Point initialSize )
     {
-      return Display.getCurrent().map( calendarButton.getParent(),
+      return Display.getCurrent().map( DateTimeText.this.calendarButton.getParent(),
                                        null,
-                                       calendarButton.getLocation() );
+                                       DateTimeText.this.calendarButton.getLocation() );
     }
 
     private void createOkButton( final Composite parent ) {
@@ -412,14 +433,25 @@ public class DateTimeText {
         }} );
     }    
     
-    private void closeWithSave() {
+    protected void closeWithSave() {
       DateTimeText.this.setDate( getDate() );
       close();
     }
   }
 
-  public void setReadOnly( boolean readOnly ) {
-    // TODO mariusz Auto-generated method stub
-    
+  /**
+   * @param enabled true if widget should allow editing, false if should work in readonly mode  
+   */
+  public void setEnabled( final boolean enabled ) {
+    this.text.setEnabled( enabled );
+    this.calendarButton.setEnabled( enabled );    
   }
+
+  /**
+   * @return @see org.eclipse.swt.widgets.Text#setFocus()
+   */
+  public boolean setFocus() {
+    return this.text.setFocus();
+  }
+
 }

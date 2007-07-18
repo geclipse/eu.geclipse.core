@@ -96,7 +96,6 @@ public abstract class GridModelViewPart
     createContextMenu( this.viewer );
     
     GridModel.getRoot().addGridModelListener( this );
-        
   }
   
   @Override

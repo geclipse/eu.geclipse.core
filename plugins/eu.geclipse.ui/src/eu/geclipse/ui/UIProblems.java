@@ -17,12 +17,20 @@ package eu.geclipse.ui;
 
 import eu.geclipse.core.IProblem;
 import eu.geclipse.core.IProblemProvider;
+import eu.geclipse.core.ProblemRegistry;
+import eu.geclipse.ui.internal.Activator;
+import eu.geclipse.ui.widgets.DateTimeText;
 
 /**
  * Problem provider of the UI plugin. Defines all general UI related
  * problems.
  */
 public class UIProblems implements IProblemProvider {
+  
+  /**
+   * Problem with widget {@link DateTimeText}
+   */
+  public static final int DATETIME_PARSE_PROBLEM = ProblemRegistry.uniqueID();
   
   /* (non-Javadoc)
    * @see eu.geclipse.core.IProblemProvider#getProblem(int, java.lang.Throwable)
@@ -32,10 +40,11 @@ public class UIProblems implements IProblemProvider {
 
     IProblem problem = null;
     
-    // currently empty
+    if( problemID == DATETIME_PARSE_PROBLEM ) {
+      problem = ProblemRegistry.createProblem( problemID, Messages.getString("UIProblems.InvalidDateFormat"), exc, null, Activator.PLUGIN_ID ); //$NON-NLS-1$
+    }
     
     return problem;
-    
   }
   
   /**
@@ -53,5 +62,5 @@ public class UIProblems implements IProblemProvider {
                                   final int[] solutionIDs ) {
     return ProblemRegistry.createProblem( id, text, exc, solutionIDs, Activator.PLUGIN_ID );
   }*/
-  
+
 }

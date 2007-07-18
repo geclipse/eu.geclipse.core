@@ -17,6 +17,7 @@ package eu.geclipse.ui.views;
 
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.StructuredViewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
@@ -32,6 +33,7 @@ import eu.geclipse.ui.internal.actions.ActionGroupManager;
 import eu.geclipse.ui.internal.actions.FilterActions;
 import eu.geclipse.ui.providers.JobViewLabelProvider;
 import eu.geclipse.ui.views.filters.GridFilterConfigurationsManager;
+import eu.geclipse.ui.views.filters.IFilterConfigurationListener;
 import eu.geclipse.ui.views.filters.IGridFilterConfiguration;
 import eu.geclipse.ui.views.filters.JobViewFilterConfiguration;
 
@@ -42,15 +44,20 @@ import eu.geclipse.ui.views.filters.JobViewFilterConfiguration;
  */
 public class GridJobView
     extends ElementManagerViewPart
-    implements IGridJobStatusListener {
+    implements IGridJobStatusListener,
+    IFilterConfigurationListener {
   
-  private IMemento memento;
-  
+  private IMemento memento;  
   private GridFilterConfigurationsManager filterConfigurationsManager;
   
   @Override
   public void dispose() {
     GridModel.getJobManager().removeJobStatusListener( this );
+    
+    if( this.filterConfigurationsManager != null ) {
+      this.filterConfigurationsManager.removeConfigurationListener( this );
+    }
+    
     super.dispose();
   }
   
@@ -112,7 +119,7 @@ public class GridJobView
   @Override
   protected void contributeAdditionalActions( final ActionGroupManager groups )
   {
-    groups.addGroup( new FilterActions( getSite(), this.filterConfigurationsManager ) );  //TODO mariusz 
+    groups.addGroup( new FilterActions( getSite(), this.filterConfigurationsManager ) ); 
     super.contributeAdditionalActions( groups );
   }
       
@@ -156,16 +163,26 @@ public class GridJobView
   
   private void createFilterConfigurationsManager( final StructuredViewer sViewer )
   {
-    this.filterConfigurationsManager = new GridFilterConfigurationsManager( GridFilterConfigurationsManager.ID_JOBVIEW,
-                                                                            sViewer )
+    this.filterConfigurationsManager = new GridFilterConfigurationsManager( GridFilterConfigurationsManager.ID_JOBVIEW )
     {
-
       @Override
       public IGridFilterConfiguration createConfiguration( final String name )
       {
         return new JobViewFilterConfiguration( name );
       }
     };
+    
+    this.filterConfigurationsManager.addConfigurationListener( this );
+  }
+
+  public void configurationChanged() {
+    // ignore changes in configurations
+  }
+
+  public void filterConfigurationSelected( final ViewerFilter[] filters ) {
+    if( this.getViewer() != null ) {
+      this.getViewer().setFilters( filters );
+    }
   }
 
 
