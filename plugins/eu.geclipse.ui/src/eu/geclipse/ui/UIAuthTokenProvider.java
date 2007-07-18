@@ -234,7 +234,7 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
       public void addPages() {
         ExtPointWizardSelectionListPage page = new ExtPointWizardSelectionListPage(
             WIZARD_PAGE_NAME,
-            eu.geclipse.core.Extensions.AUTH_TOKEN_MANAGEMENT_POINT,
+            Extensions.AUTH_TOKEN_UI_POINT,
             Messages.getString( "UIAuthTokenProvider.wizard_first_page_title" ), //$NON-NLS-1$
             Messages.getString( "UIAuthTokenProvider.wizard_first_page_description" ), //$NON-NLS-1$
             Messages.getString( "UIAuthTokenProvider.noTokenCreator" ) ); //$NON-NLS-1$

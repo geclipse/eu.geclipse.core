@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
-   <extension-point id="eu.geclipse.ui.authTokenUI" 
-   	name="%extension-point.name.authenticationToken" 
-   	schema="schema/eu.geclipse.ui.AuthTokenUIFactory.exsd"/>
    <extension-point id="eu.geclipse.ui.connectionWizard" 
    	name="%extension-point.name.connectionWizard" 
    	schema="schema/eu.geclipse.ui.connection.connectionWizard.exsd"/>
@@ -11,6 +8,7 @@
    <extension-point id="jobSubmissionWizard" name="jobSubmissionWizard" schema="schema/jobSubmissionWizard.exsd"/>
    <extension-point id="propertiesFactory" name="propertiesFactory" schema="schema/PropertiesFactory.exsd"/>
    <extension-point id="eu.geclipse.ui.efs" name="EFS UI Contributions" schema="schema/eu.geclipse.ui.efs.exsd"/>
+   <extension-point id="authTokenUI" name="Authentication Token UI Contributions" schema="schema/authTokenUI.exsd"/>
 
    <extension
          point="org.eclipse.ui.preferencePages">
@@ -130,14 +128,6 @@
       </wizard>
    </extension>
    <extension
-         id="eu.geclipse.ui.tokenProvider"
-         name="%extension.name.0"
-         point="eu.geclipse.core.authenticationTokenManagement">
-      <provider
-            class="eu.geclipse.ui.UIAuthTokenProvider"
-            priority="999"/>
-   </extension>
-   <extension
          point="org.eclipse.ui.ide.projectNatureImages">
       <image
             natureId="eu.geclipse.core.project.GridProjectNature"
@@ -205,5 +195,12 @@
             </objectClass>
          </enablement>
       </decorator>
+   </extension>
+   <extension
+         point="eu.geclipse.core.authTokenProvider">
+      <provider
+            class="eu.geclipse.ui.UIAuthTokenProvider"
+            priority="999">
+      </provider>
    </extension>
 </plugin>

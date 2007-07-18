@@ -708,11 +708,11 @@ public class AuthTokenView extends ViewPart implements IContentChangeListener {
         List<IContributionItem> itemList = new LinkedList<IContributionItem>();
         ExtensionManager manager = new ExtensionManager();
         List< IConfigurationElement > cElements
-          = manager.getConfigurationElements( Extensions.AUTH_TOKEN_MANAGEMENT_POINT,
+          = manager.getConfigurationElements( Extensions.AUTH_TOKEN_POINT,
                                               Extensions.AUTH_TOKEN_ELEMENT );
         for ( IConfigurationElement element : cElements ) {
-          final String name = element.getAttribute( "name" ); //$NON-NLS-1$
-          final String wizardId = element.getAttribute( "wizard" ); //$NON-NLS-1$
+          final String name = element.getAttribute( Extensions.AUTH_TOKEN_NAME_ATTRIBUTE );
+          final String wizardId = element.getAttribute( Extensions.AUTH_TOKEN_WIZARD_ATTRIBUTE );
           if ( name != null && wizardId != null ) {
             Action action = new Action() {
               @Override

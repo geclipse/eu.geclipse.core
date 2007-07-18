@@ -34,6 +34,67 @@ import eu.geclipse.core.model.IGridElementCreator;
 public class Extensions {
   
   /**
+   * The ID of the authentication token extension point.
+   */
+  public static final String AUTH_TOKEN_POINT
+    = "eu.geclipse.core.authTokens"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the authentication token configuration element contained
+   * in the authentication token management extension point. 
+   */
+  public static final String AUTH_TOKEN_ELEMENT
+    = "token"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the name attribute of the token element of the
+   * authentication token extension point.
+   */
+  public static final String AUTH_TOKEN_NAME_ATTRIBUTE
+    = "name"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the wizard attribute of the token element of the
+   * authentication token extension point.
+   */
+  public static final String AUTH_TOKEN_WIZARD_ATTRIBUTE
+    = "wizard"; //$NON-NLS-1$
+
+  /**
+   * The ID of the executable extension of the authentication token description
+   * configuration element.
+   */
+  public static final String AUTH_TOKEN_DESCRIPTION_EXECUTABLE
+    = "description"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the authentication token provider extension point.
+   */
+  public static final String AUTH_TOKEN_PROVIDER_POINT
+    = "eu.geclipse.core.authTokenProvider"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the authentication token provider configuration element
+   * contained in the authentication token management extension point. 
+   */
+  public static final String AUTH_TOKEN_PROVIDER_ELEMENT
+    = "provider"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the executable extension of the authentication token
+   * provider element.
+   */
+  public static final String AUTH_TOKEN_PROVIDER_EXECUTABLE
+    = "class"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the priority attribute of the provider element of the
+   * authentication token provider extension point.
+   */
+  public static final String AUTH_TOKEN_PROVIDER_PRIORITY_ATTRIBUTE
+    = "priority"; //$NON-NLS-1$
+  
+  /**
    * The ID of the job status service manager point.
    */
   public static final String JOB_STATUS_SERVICE_MANAGER_POINT
@@ -60,12 +121,6 @@ public class Extensions {
     = "scheme"; //$NON-NLS-1$
 
   /**
-   * The ID of the authentication token management extension point.
-   */
-  public static final String AUTH_TOKEN_MANAGEMENT_POINT
-    = "eu.geclipse.core.authenticationTokenManagement"; //$NON-NLS-1$
-  
-  /**
    * The ID of the connection management extension point.
    */
   public static final String CONNECTION_MANAGEMENT_POINT
@@ -82,27 +137,6 @@ public class Extensions {
    */
   public static final String PROBLEM_PROVIDER_POINT
     = "eu.geclipse.core.problemProvider"; //$NON-NLS-1$
-  
-  /**
-   * The ID of the authentication token configuration element contained
-   * in the authentication token management extension point. 
-   */
-  public static final String AUTH_TOKEN_ELEMENT
-    = "token"; //$NON-NLS-1$
-
-  /**
-   * The ID of the executable extension of the authentication token description
-   * configuration element.
-   */
-  public static final String AUTH_TOKEN_DESCRIPTION_EXECUTABLE
-    = "description"; //$NON-NLS-1$
-
-  /**
-   * The ID of the authentication token provider configuration element
-   * contained in the authentication token management extension point. 
-   */
-  public static final String AUTH_TOKEN_PROVIDER_ELEMENT
-    = "provider"; //$NON-NLS-1$
   
   /**
    * The ID of the connection protocol configuration element
@@ -181,10 +215,10 @@ public class Extensions {
       List< String > resultList = new ArrayList< String >();
       ExtensionManager manager = new ExtensionManager();
       List< IConfigurationElement > cElements
-        = manager.getConfigurationElements( AUTH_TOKEN_MANAGEMENT_POINT,
+        = manager.getConfigurationElements( AUTH_TOKEN_POINT,
                                             AUTH_TOKEN_ELEMENT );
       for ( IConfigurationElement element : cElements ) {
-        String name = element.getAttribute( "name" ); //$NON-NLS-1$
+        String name = element.getAttribute( AUTH_TOKEN_NAME_ATTRIBUTE );
         if ( name != null ) {
           resultList.add( name );
         }
@@ -209,9 +243,9 @@ public class Extensions {
       = new ArrayList< IAuthenticationTokenDescription >();
       ExtensionManager manager = new ExtensionManager();
       List< Object > objectList
-      = manager.getExecutableExtensions( AUTH_TOKEN_MANAGEMENT_POINT,
-                                         AUTH_TOKEN_ELEMENT,
-                                         AUTH_TOKEN_DESCRIPTION_EXECUTABLE );
+        = manager.getExecutableExtensions( AUTH_TOKEN_POINT,
+                                           AUTH_TOKEN_ELEMENT,
+                                           AUTH_TOKEN_DESCRIPTION_EXECUTABLE );
       for ( Object o : objectList ) {
         if ( o instanceof IAuthenticationTokenDescription ) {
           resultList.add( ( IAuthenticationTokenDescription ) o );

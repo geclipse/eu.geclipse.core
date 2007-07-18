@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
-   <extension-point id="authenticationTokenManagement" name="%extension-point.authenticationTokenManagement" schema="schema/authenticationTokenManagement.exsd"/>
    <extension-point id="connectionManagement" name="%extension-point.connectionManagement" schema="schema/connectionManagement.exsd"/>
    <extension-point id="gridElementCreator" name="%extension-point.gridElementCreator" schema="schema/gridElementCreator.exsd"/>
    <extension-point id="problemProvider" name="%extension-point.problemProvider" schema="schema/problemProvider.exsd"/>
    <extension-point id="eu.geclipse.core.gridJobStatusServiceManager" name="GridJobStatusServiceManager" schema="schema/eu.geclipse.core.gridJobStatusServiceManager.exsd"/>
+   <extension-point id="authTokens" name="Authentication Tokens" schema="schema/authTokens.exsd"/>
+   <extension-point id="authTokenProvider" name="Authentication Token Provider" schema="schema/authTokenProvider.exsd"/>
    <extension
          point="eu.geclipse.core.connectionManagement"
          id="eu.geclipse.core.connectionProtocol.gridftp">
@@ -29,14 +30,6 @@
             id="eu.geclipse.core.connectionProtocol.local"
             name="local"
             wizardID="eu.geclipse.core.connectionProtocol.local"/>
-   </extension>
-   <extension
-         id="eu.geclipse.core.authTokenProvider"
-         name="%extension.coreAuthTokenProvider"
-         point="eu.geclipse.core.authenticationTokenManagement">
-      <provider
-            class="eu.geclipse.core.auth.CoreAuthTokenProvider"
-            priority="0"/>
    </extension>
    <extension
          id="eu.geclipse.core.project.GridProjectNature"
@@ -68,5 +61,12 @@
       <provider class="eu.geclipse.core.security.GridGSSProblems"/>
       <provider class="eu.geclipse.core.model.GridModelProblems"/>
       <provider class="eu.geclipse.core.util.tar.TarProblems"/>
+   </extension>
+   <extension
+         point="eu.geclipse.core.authTokenProvider">
+      <provider
+            class="eu.geclipse.core.auth.CoreAuthTokenProvider"
+            priority="0">
+      </provider>
    </extension>
 </plugin>

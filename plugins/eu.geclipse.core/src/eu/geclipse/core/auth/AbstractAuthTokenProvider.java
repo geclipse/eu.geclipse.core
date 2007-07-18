@@ -72,11 +72,11 @@ public abstract class AbstractAuthTokenProvider implements IAuthTokenProvider {
     int priority = Integer.MIN_VALUE;
     ExtensionManager extensionBrowser = new ExtensionManager();
     List< IConfigurationElement > providers
-      = extensionBrowser.getConfigurationElements( Extensions.AUTH_TOKEN_MANAGEMENT_POINT,
+      = extensionBrowser.getConfigurationElements( Extensions.AUTH_TOKEN_PROVIDER_POINT,
                                                    Extensions.AUTH_TOKEN_PROVIDER_ELEMENT );
     
     for ( IConfigurationElement e : providers ) {
-      String prioString = e.getAttribute( "priority" ); //$NON-NLS-1$
+      String prioString = e.getAttribute( Extensions.AUTH_TOKEN_PROVIDER_PRIORITY_ATTRIBUTE );
       try {
         int p = Integer.parseInt( prioString );
         if ( p > priority ) {
@@ -91,7 +91,7 @@ public abstract class AbstractAuthTokenProvider implements IAuthTokenProvider {
     IAuthTokenProvider provider = null;
     if ( element != null ) {
       try {
-        provider = ( IAuthTokenProvider ) element.createExecutableExtension( "class" ); //$NON-NLS-1$
+        provider = ( IAuthTokenProvider ) element.createExecutableExtension( Extensions.AUTH_TOKEN_PROVIDER_EXECUTABLE );
       } catch( CoreException cExc ) {
         eu.geclipse.core.internal.Activator.logException( cExc );
       }
