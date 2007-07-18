@@ -21,6 +21,10 @@ public class FileSystem
   public static URI createMasterURI( final URI slaveURI ) {
     return FileSystemManager.createMasterURI( slaveURI );
   }
+  
+  public static URI createSlaveURI( final URI masterURI ) {
+    return FileSystemManager.createSlaveURI( masterURI );
+  }
     
   @Override
   public int attributes() {

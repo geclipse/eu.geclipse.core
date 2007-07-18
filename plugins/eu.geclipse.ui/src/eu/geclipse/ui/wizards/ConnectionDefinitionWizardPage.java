@@ -30,15 +30,23 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.ui.PlatformUI;
 
+import eu.geclipse.core.filesystem.FileSystem;
 import eu.geclipse.core.model.GridModel;
+import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridConnectionElement;
-import eu.geclipse.core.model.IGridElementCreator;
+import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridModelEvent;
+import eu.geclipse.core.model.IGridModelListener;
+import eu.geclipse.core.model.IGridPreferences;
 import eu.geclipse.ui.Extensions;
 import eu.geclipse.ui.dialogs.NewProblemDialog;
 import eu.geclipse.ui.internal.Activator;
@@ -221,6 +229,12 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
       }
     } );
     
+    GridModel.getRoot().addGridModelListener( new IGridModelListener() {
+      public void gridModelChanged( final IGridModelEvent event ) {
+        handleGridModelChanged( event );
+      }
+    } );
+    
     setupFields();
     
     setControl( this.mainComp );
@@ -311,6 +325,19 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
     }
   }
   
+  protected void handleGridModelChanged( final IGridModelEvent event ) {
+    Control control = this.viewer.getControl();
+    if ( ! control.isDisposed() ) {
+      Display display = control.getDisplay();
+      display.asyncExec( new Runnable() {
+        public void run() {
+          IGridElement element = event.getSource();
+          ConnectionDefinitionWizardPage.this.viewer.refresh( element );
+        }
+      } );
+    }
+  }
+  
   protected void handleSelectionChanged( final ISelection selection ) {
     
     if ( selection instanceof IStructuredSelection ) {
@@ -326,10 +353,9 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
         
         try {
     
-          IFileStore fileStore
-            = element.getConnectionFileStore();
-          URI uri
-            = fileStore.toURI();
+          IFileStore fileStore = element.getConnectionFileStore();
+          URI uri = fileStore.toURI();
+          uri = FileSystem.createSlaveURI( uri );
           
           if ( this.currentURIType.equals( Extensions.EFS_URI_RAW ) ) {
             this.uriCombo.setText( uri.toString() );
@@ -354,10 +380,27 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
     
     this.viewer.setInput( null );
     
-    URI uri = getURI();
+    URI slaveURI = getURI();
     
-    if ( uri != null ) {
+    if ( slaveURI != null ) {
       
+      try {
+      
+        URI masterURI = FileSystem.createMasterURI( slaveURI );
+        IGridPreferences preferences = GridModel.getPreferences();
+        IGridConnection connection
+          = preferences.createTemporaryConnection( masterURI );
+        this.viewer.setInput( connection );
+        
+      } catch ( GridModelException gmExc ) {
+        setErrorMessage( Messages.getString("ConnectionDefinitionWizardPage.temp_connection_error") + gmExc.getMessage() ); //$NON-NLS-1$
+        NewProblemDialog.openProblem( getShell(),
+                                      Messages.getString("ConnectionDefinitionWizardPage.connection_error_title"), //$NON-NLS-1$
+                                      Messages.getString("ConnectionDefinitionWizardPage.connection_error_text"), //$NON-NLS-1$
+                                      gmExc );
+      }
+      
+      /*
       List< IGridElementCreator > standardCreators = GridModel.getStandardCreators();
       
       for ( final IGridElementCreator creator : standardCreators ) {
@@ -392,7 +435,7 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
           }
           break;
         }
-      }
+      }*/
             
     }
     

@@ -43,11 +43,7 @@ public class FileStoreRegistry {
   
   private URI getKey( final URI uri ) {
     URI key = uri;
-    try {
-      key = FileSystemManager.createSlaveURI( uri );
-    } catch ( URISyntaxException uriExc ) {
-      Activator.logException( uriExc );
-    }
+    key = FileSystemManager.createSlaveURI( uri );
     return key;
   }
   

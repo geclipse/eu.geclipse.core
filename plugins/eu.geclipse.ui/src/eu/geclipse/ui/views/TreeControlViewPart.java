@@ -15,7 +15,7 @@ public abstract class TreeControlViewPart extends GridModelViewPart {
   @Override
   public void refreshViewer( final IGridElement element ) {
     if ( ( element != null ) && ( element instanceof IGridContainer ) ) {
-      IGridContainer container = ( IGridContainer ) element;
+      final IGridContainer container = ( IGridContainer ) element;
       if ( container.isLazy() && container.isDirty() ) {
         Control control = this.viewer.getControl();
         if ( ! control.isDisposed() ) {
@@ -23,8 +23,7 @@ public abstract class TreeControlViewPart extends GridModelViewPart {
           display.syncExec( new Runnable() {
             public void run() {
               TreeViewer tViewer = ( TreeViewer ) getViewer();
-              tViewer.setChildCount( element, 0 );
-              tViewer.setChildCount( element, 1 );
+              tViewer.setChildCount( container, container.getChildCount() );
             }
           } );
         }

@@ -15,6 +15,7 @@
 
 package eu.geclipse.ui.providers;
 
+import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Control;
@@ -107,29 +108,24 @@ public class ProgressRunner implements Runnable {
           } );
         }
       }
-      /*
-      if ( !this.container.isDirty() ) {
-        if ( this.container.hasChildren() ) {
-          final TreeViewer viewer = this.monitor.getTreeViewer();
-          Control control = viewer.getControl();
-          if ( !control.isDisposed() ) {
-            Display display = control.getDisplay();
-            display.asyncExec( new Runnable() {
-              public void run() {
-                viewer.refresh( ProgressRunner.this.container );
-                viewer.expandToLevel( ProgressRunner.this.container, 1 );
-              }
-            } );
-          }
-        } else {
-          this.monitor.setTaskName( Messages.getString("ProgressRunner.folder_empty") ); //$NON-NLS-1$
-          this.monitor.done();
-        }
-      } else */
+      
       if ( this.container.isDirty() ){
         this.monitor.setError( Messages.getString("ProgressRunner.fetch_error") ); //$NON-NLS-1$
         this.monitor.done();
+      } else if ( this.container.getChildCount() == 0 ) {
+        final TreeViewer viewer = this.monitor.getTreeViewer();
+        Control control = viewer.getControl();
+        if ( !control.isDisposed() ) {
+          Display display = control.getDisplay();
+          display.asyncExec( new Runnable() {
+            public void run() {
+              viewer.refresh( ProgressRunner.this.container );
+              viewer.collapseToLevel( ProgressRunner.this.container, AbstractTreeViewer.ALL_LEVELS );
+            }
+          } );
+        }
       }
+      
     }
     
   }

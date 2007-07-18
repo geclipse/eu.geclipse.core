@@ -26,6 +26,11 @@ public class ConnectionRoot
     IGridProject project = getProject();
     return project.isHidden();
   }
+  
+  @Override
+  public boolean isHidden() {
+    return getName().startsWith( "." ); //$NON-NLS-1$
+  }
 
   public IGridElementManager getManager() {
     return GridModel.getConnectionManager();

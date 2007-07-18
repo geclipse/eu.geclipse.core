@@ -79,8 +79,7 @@ public class FileSystemManager
     
   }
   
-  public static URI createSlaveURI( final URI masterURI )
-      throws URISyntaxException {
+  public static URI createSlaveURI( final URI masterURI ) {
 
     URI slaveURI = masterURI;
     if ( masterURI.getScheme().equals( SCHEME ) ) {
@@ -102,7 +101,8 @@ public class FileSystemManager
         }
       }
 
-      slaveURI = new URI(
+      try {
+        slaveURI = new URI(
           slaveScheme,
           masterURI.getUserInfo(),
           masterURI.getHost(),
@@ -110,7 +110,10 @@ public class FileSystemManager
           masterURI.getPath(),
           slaveQuery.length() == 0 ? null : slaveQuery,
               masterURI.getFragment() );
-
+      } catch ( URISyntaxException uriExc ) {
+        throw new IllegalArgumentException( uriExc );
+      }
+      
     }
 
     return slaveURI;

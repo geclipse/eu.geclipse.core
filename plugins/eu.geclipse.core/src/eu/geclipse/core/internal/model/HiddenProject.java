@@ -16,6 +16,7 @@ import org.eclipse.core.runtime.Path;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.GridModelProblems;
+import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridPreferences;
 import eu.geclipse.core.model.IGridProject;
@@ -30,6 +31,10 @@ public class HiddenProject
   public static final String NAME = ".geclipse"; //$NON-NLS-1$
   
   private static final String DIR_GLOBAL_CONNECTIONS = ".connections"; //$NON-NLS-1$
+  
+  private static final String DIR_TEMP = ".temp"; //$NON-NLS-1$
+  
+  private static final String TEMP_CONNECTION_NAME = ".tmp_connection"; //$NON-NLS-1$
   
   private HiddenProject( final IResource resource ) {
     super(resource);
@@ -56,7 +61,7 @@ public class HiddenProject
     
   }
   
-  public static HiddenProject getInstance( final IProject project )
+  static HiddenProject getInstance( final IProject project )
       throws GridModelException {
     
     if ( ! project.exists() ) {
@@ -76,18 +81,29 @@ public class HiddenProject
       desc.setLocation(projectPath);
       
       try {
-        
         project.create( desc, null );
-        project.open( null );
-        
-        createProjectStructure( project );
-        
       } catch ( CoreException cExc ) {
         throw new GridModelException( GridModelProblems.PREFERENCE_CREATION_FAILED,
                                       cExc );
       }
       
     }
+    
+    if ( ! project.isOpen() ) {
+      try {
+        project.open( null );
+      } catch ( CoreException cExc ) {
+        throw new GridModelException( GridModelProblems.PREFERENCE_CREATION_FAILED,
+                                      cExc );
+      }
+    }
+    
+    try {
+      createProjectStructure( project );
+    } catch ( CoreException cExc ) {
+      throw new GridModelException( GridModelProblems.PREFERENCE_CREATION_FAILED,
+                                    cExc );
+    } 
     
     return new HiddenProject( project );
     
@@ -109,6 +125,29 @@ public class HiddenProject
       throw new GridModelException( GridModelProblems.ELEMENT_CREATE_FAILED,
                                     cExc ); 
     }
+  }
+  
+  public IGridConnection createTemporaryConnection( final URI masterURI )
+      throws GridModelException {
+    
+    IGridConnection result = null;
+    
+    try {
+      IProject project = ( IProject ) getResource();
+      IFolder folder = project.getFolder( DIR_TEMP );
+      IFolder connection = folder.getFolder( TEMP_CONNECTION_NAME );
+      if ( connection.exists() ) {
+        connection.delete( true, null );
+      }
+      connection.createLink( masterURI, IResource.ALLOW_MISSING_LOCAL | IResource.REPLACE, null );
+      result = ( IGridConnection ) GridModel.getConnectionManager().findChild( TEMP_CONNECTION_NAME );
+    } catch ( CoreException cExc ) {
+      throw new GridModelException( GridModelProblems.ELEMENT_CREATE_FAILED,
+                                    cExc ); 
+    }
+    
+    return result;
+    
   }
   
   /* (non-Javadoc)
@@ -134,6 +173,7 @@ public class HiddenProject
   private static void createProjectStructure( final IProject project )
       throws CoreException {
     createProjectDirectory( project, DIR_GLOBAL_CONNECTIONS );
+    createProjectDirectory( project, DIR_TEMP );
   }
   
   private static void createProjectDirectory( final IProject project,
@@ -142,7 +182,7 @@ public class HiddenProject
     
     IFolder folder = project.getFolder( new Path( name ) );
     
-    if ( !folder.exists() ) {
+    if ( ! folder.exists() ) {
       folder.create( IResource.FORCE, true, null );
     }
     

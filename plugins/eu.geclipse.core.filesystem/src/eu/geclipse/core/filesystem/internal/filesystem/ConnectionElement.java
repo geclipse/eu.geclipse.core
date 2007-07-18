@@ -12,6 +12,8 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.SubProgressMonitor;
 
 import eu.geclipse.core.filesystem.FileSystem;
 import eu.geclipse.core.filesystem.internal.Activator;
@@ -93,6 +95,33 @@ public class ConnectionElement
   @Override
   protected synchronized boolean fetchChildren( final IProgressMonitor monitor ) {
     
+    IProgressMonitor lMonitor
+      = monitor == null
+      ? new NullProgressMonitor()
+      : monitor;
+    
+    this.fetchError = null;
+    
+    lMonitor.beginTask( "Fetching children of " + getName(), 100 );
+    
+    try {
+    
+      IResource res = getResource();
+      FileStore fileStore = ( FileStore ) getConnectionFileStore();
+      fileStore.reset();
+      res.refreshLocal( IResource.DEPTH_INFINITE, new SubProgressMonitor( lMonitor, 10 ) );
+      fileStore.activate();
+      res.refreshLocal( IResource.DEPTH_ONE, new SubProgressMonitor( lMonitor, 90 ) );
+      
+    } catch ( CoreException cExc ) {
+      this.fetchError = cExc;
+    } finally {
+      lMonitor.done();
+    }
+    
+    return this.fetchError == null;
+    
+    /*
     ConnectionElementFetcher job = new ConnectionElementFetcher( this );
       
     job.schedule();
@@ -109,7 +138,7 @@ public class ConnectionElement
     }
     
     return result.isOK();
-    
+    */
   }
 
   public IFileStore getFileStore() {
