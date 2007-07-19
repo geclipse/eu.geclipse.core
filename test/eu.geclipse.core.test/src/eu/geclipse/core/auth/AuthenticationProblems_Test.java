@@ -29,6 +29,10 @@ import eu.geclipse.core.IProblem;
 public class AuthenticationProblems_Test {
 
   AuthenticationProblems authproblem;
+  
+  /**setup
+   * @throws Exception
+   */
   @Before
   public void setUp() throws Exception
   {

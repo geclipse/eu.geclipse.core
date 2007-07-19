@@ -28,6 +28,9 @@ import org.junit.Test;
 public class SolutionRegistry_Test {
   SolutionRegistry solutionregistry;
 
+  /**setup
+   * @throws Exception
+   */
   @Before
   public void setUp() throws Exception
   {
@@ -64,12 +67,6 @@ public class SolutionRegistry_Test {
     Assert.assertEquals( new Integer( SolutionRegistry.SERVER_DOWN ),
                          new Integer( solution.getID() ));
     Assert.assertEquals( "The server may be down. Contact the administrator.",solution.getText() ); //$NON-NLS-1$
-  }
-
-  @Test
-  public void testFindSolution()
-  {
-  // protected method can not be tested   
   }
 
   /**

@@ -29,6 +29,9 @@ public class AuthenticationException_PDETest {
 
   int problemid;
   
+  /**setup
+   * @throws Exception
+   */
   @Before
   public void setUp() throws Exception
   {
@@ -45,7 +48,7 @@ public class AuthenticationException_PDETest {
     Assert.assertEquals( new Integer( this.problemid ), new Integer( auex.getProblem().getID()) );
   }
 
-  /** Tests the method {@link AuthenticationException#AuthenticationException(intstring)}
+  /** Tests the method {@link AuthenticationException#AuthenticationException(int, String)}
    * 
    */
   @Test
@@ -57,7 +60,7 @@ public class AuthenticationException_PDETest {
    Assert.assertEquals("Job Submission failed",auex.getProblem().getText() ); //$NON-NLS-1$
   }
 
-  /** Tests the method {@link AuthenticationException#AuthenticationException(intthrowable)}
+  /** Tests the method {@link AuthenticationException#AuthenticationException(int, Throwable)}
    * 
    */
   @Test

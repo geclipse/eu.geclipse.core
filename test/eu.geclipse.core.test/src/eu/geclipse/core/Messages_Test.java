@@ -42,7 +42,7 @@ public class Messages_Test {
 
   /**
    * @brief Test method for
-   * {@link eu.geclipse.core.Messages#getString()}.
+   * {@link eu.geclipse.core.Messages#getString(String)}.
    * @throws Exception IOException
    */
   

@@ -33,6 +33,9 @@ import org.eclipse.core.runtime.IStatus;
 
 public class ProblemRegistryCombine_Test {
 
+  /**setup
+   * @throws Exception
+   */
   @Before
   public void setUp() throws Exception
   {

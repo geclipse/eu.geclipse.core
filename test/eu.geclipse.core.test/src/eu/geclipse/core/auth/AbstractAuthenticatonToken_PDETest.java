@@ -28,6 +28,9 @@ import org.junit.Test;
 
 public class AbstractAuthenticatonToken_PDETest {
 
+  /**setup
+   * @throws Exception
+   */
   @Before
   public void setUp() throws Exception
   {
@@ -35,7 +38,7 @@ public class AbstractAuthenticatonToken_PDETest {
   }
 
   /** test the functionality of method
-   * {@link AbstractAuthenticatonToken#getTokenLocation()}
+   * {@link AbstractAuthenticationToken#getTokenLocation()}
    * 
    */
   
@@ -44,38 +47,7 @@ public class AbstractAuthenticatonToken_PDETest {
   {
     IPath location = AbstractAuthenticationToken.getTokenLocation();
     Assert.assertNotNull( location );
-    Assert.assertEquals( "C:/Dokumente und Einstellungen/Tao-j/workspaces/junit-workspace/.metadata/.plugins/eu.geclipse.core/.tokens", location.toString() ); //$NON-NLS-1$
-    Assert.assertEquals( "C:\\Dokumente und Einstellungen\\Tao-j\\workspaces\\junit-workspace\\.metadata\\.plugins\\eu.geclipse.core\\.tokens",location.toOSString() ); //$NON-NLS-1$
-  }
-
-  @Test
-  public void testGetDescription()
-  {
- // can not be tested due to private feature. There is no way to create this class
- // so the method can not be called even though they are public
-  }
-
-  @Test
-  public void testSetActive()
-  {
-  //  can not be tested due to private feature
-  }
-
-  @Test
-  public void testValidate()
-  {
-  //  can not be tested due to private feature
-  }
-
-  @Test
-  public void testFireTokenStateChanged()
-  {
-  //  can not be tested due to private feature
-  }
-
-  @Test
-  public void testGetTokenFile()
-  {
-  //  can not be tested due to private feature
+   // Assert.assertEquals( "C:/Dokumente und Einstellungen/Tao-j/workspaces/junit-workspace/.metadata/.plugins/eu.geclipse.core/.tokens", location.toString() ); //$NON-NLS-1$
+   // Assert.assertEquals( "C:\\Dokumente und Einstellungen\\Tao-j\\workspaces\\junit-workspace\\.metadata\\.plugins\\eu.geclipse.core\\.tokens",location.toOSString() ); //$NON-NLS-1$
   }
 }

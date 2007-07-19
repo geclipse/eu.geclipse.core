@@ -32,6 +32,9 @@ public class CoreProblems_Test {
   
   CoreProblems coreproblem;
 
+  /**setup
+   * @throws Exception
+   */
   @Before
   public void setUp() throws Exception
   {

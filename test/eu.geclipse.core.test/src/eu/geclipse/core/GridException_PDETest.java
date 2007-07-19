@@ -30,6 +30,9 @@ public class GridException_PDETest {
   GridException gridexception;
   CoreProblems coreproblem;
 
+  /**setup
+   * @throws Exception
+   */
   @Before
   public void setUp() throws Exception
   {

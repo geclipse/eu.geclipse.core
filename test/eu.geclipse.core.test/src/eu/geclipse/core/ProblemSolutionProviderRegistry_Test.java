@@ -39,6 +39,9 @@ public class ProblemSolutionProviderRegistry_Test {
   GridModelProblems gridmodelproblem;
   AuthenticationProblems authproblem;
   
+  /**setup
+   * @throws Exception
+   */
   @Before
   public void setUp() throws Exception
   {

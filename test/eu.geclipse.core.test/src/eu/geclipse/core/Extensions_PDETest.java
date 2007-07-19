@@ -30,6 +30,9 @@ import eu.geclipse.core.model.IGridElementCreator;
 
 public class Extensions_PDETest {
   
+  /**setup
+   * @throws Exception
+   */
   @Before
   public void setUp() throws Exception
   {

@@ -27,6 +27,9 @@ import org.junit.Test;
 
 public class ProblemRegistry_Test {
  
+  /**setup
+   * @throws Exception
+   */
   @Before
   public void setUp() throws Exception
   {
@@ -104,6 +107,9 @@ public class ProblemRegistry_Test {
     //  can not reference to this method in the private class 
   }
 
+  /**tests the method {@link ProblemRegistry#uniqueID()}
+   * 
+   */
   @Test
   public void testUniqueID()
   {

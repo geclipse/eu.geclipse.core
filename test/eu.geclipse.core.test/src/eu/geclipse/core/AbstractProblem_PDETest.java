@@ -31,6 +31,9 @@ import eu.geclipse.core.internal.Activator;
 
 public class AbstractProblem_PDETest {
 
+  /**setup
+   * @throws Exception
+   */
   @Before
   public void setUp() throws Exception
   {

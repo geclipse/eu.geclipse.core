@@ -15,8 +15,6 @@
 
 package eu.geclipse.core.auth;
 
-import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.junit.Assert;
@@ -35,6 +33,9 @@ public class CaCertManager_PDETest {
   URL url;
   String caid;
   
+  /**setup
+   * @throws Exception
+   */
   @Before
   public void setUp() throws Exception
   {
@@ -52,8 +53,9 @@ public class CaCertManager_PDETest {
   }
 
 
-  /** Tests the method {@link CaCertManager#importFromRepository()}
+  /** Tests the method {@link CaCertManager#importFromRepository(URL, org.eclipse.core.runtime.IProgressMonitor)}
    * this test must be first performed, because other methods tests need CA
+   * @throws GridException 
    */
   @Test
   public void testImportFromRepository() throws GridException
@@ -73,7 +75,7 @@ public class CaCertManager_PDETest {
     Assert.assertNotNull( this.caid );
   }
 
-  /** Tests the method {@link CaCertManager#getCertificate()}
+  /** Tests the method {@link CaCertManager#getCertificate(String)}
    * with a true case (the avilable CA) and  afalse case (the wrong CA id)
    */
   @Test
@@ -87,17 +89,18 @@ public class CaCertManager_PDETest {
     Assert.assertNotNull( this.cacertmanager.getCertificate( this.caid ) );
   }
 
-  /** Tests the method {@link CaCertManager#getCertLocation()}
+  /** Tests the method getCertLocation
    * it must not be at the junit-workspace
    */
   @Test
   public void testGetCaCertLocation()
   {
-  Assert.assertEquals( "C:\\Dokumente und Einstellungen\\Tao-j\\workspaces\\junit-workspace\\.metadata\\.plugins\\eu.geclipse.core\\.certs", //$NON-NLS-1$
-                             this.cacertmanager.getCaCertLocation().toOSString() );
+    //removed for nightly build
+  //Assert.assertEquals( "C:\\Dokumente und Einstellungen\\Tao-j\\workspaces\\junit-workspace\\.metadata\\.plugins\\eu.geclipse.core\\.certs", //$NON-NLS-1$
+                         //    this.cacertmanager.getCaCertLocation().toOSString() );
   }
   
-  /** Tests the method {@link CaCertManager#DeleteCertificate()}
+  /** Tests the method {@link CaCertManager#deleteCertificate(String)}
    * it must not be deleted
    */
   @Test
@@ -110,7 +113,8 @@ public class CaCertManager_PDETest {
     Assert.assertNull( this.cacertmanager.getCertificate(this.caid) );
   }
 
-  @Test
+  /* removed for nightly build due to the path
+   @Test
   public void testImportFromDirectory() throws IOException
   {
    File calocate = new File ("C:\\Dokumente und Einstellungen\\Tao-j\\workspaces\\runtime-EclipseApplication\\.metadata\\.plugins\\eu.geclipse.core\\.certs"); //$NON-NLS-1$
@@ -119,5 +123,5 @@ public class CaCertManager_PDETest {
    ICaCertificate[]calist = this.cacertmanager.getCertificates();
    this.caid = calist[0].getID();
    this.cacertmanager.deleteCertificate( this.caid );
-  }
+  }*/
 }

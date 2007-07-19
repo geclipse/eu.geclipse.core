@@ -35,6 +35,9 @@ public class ExtensionManager_PDETest {
 
   ExtensionManager extensionmanager;
   
+  /**setup
+   * @throws Exception
+   */
   @Before
   public void setUp() throws Exception
   {
