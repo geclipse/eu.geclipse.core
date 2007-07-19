@@ -20,8 +20,11 @@ package eu.geclipse.jsdl.posix;
  * @author nickl
  *
  */
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EAttribute;
@@ -42,8 +45,12 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Text;
+
+import eu.geclipse.jsdl.model.ApplicationType;
+import eu.geclipse.jsdl.model.JsdlFactory;
 import eu.geclipse.jsdl.model.posix.ArgumentType;
 import eu.geclipse.jsdl.model.posix.DirectoryNameType;
+import eu.geclipse.jsdl.model.posix.DocumentRoot;
 import eu.geclipse.jsdl.model.posix.EnvironmentType;
 import eu.geclipse.jsdl.model.posix.FileNameType;
 import eu.geclipse.jsdl.model.posix.GroupNameType;
@@ -73,6 +80,10 @@ import eu.geclipse.jsdl.model.posix.UserNameType;
  * - Environment
  */
 public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
+  
+  protected ApplicationType applicationType = 
+                                  JsdlFactory.eINSTANCE.createApplicationType();
+  protected DocumentRoot documentRoot = PosixFactory.eINSTANCE.createDocumentRoot();
   
   protected POSIXApplicationType posixApplicationType = 
                             PosixFactory.eINSTANCE.createPOSIXApplicationType();
@@ -125,7 +136,10 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
      EObject testType = iterator.next();
          
-     if ( testType instanceof POSIXApplicationType ) {
+     if (testType instanceof ApplicationType) {
+       this.applicationType = (ApplicationType) testType;
+     }
+     else if ( testType instanceof POSIXApplicationType ) {
        this.posixApplicationType = (POSIXApplicationType) testType;  
       
      } 
@@ -159,6 +173,23 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   } // End void contentChanged()
   
   
+  protected void checkPosixApplicationElement(){
+    
+    EStructuralFeature eStructuralFeature = this.documentRoot.eClass()
+    .getEStructuralFeature( PosixPackage.DOCUMENT_ROOT__POSIX_APPLICATION );
+    
+    Collection<POSIXApplicationType> collection = 
+                                          new ArrayList<POSIXApplicationType>();
+    collection.add( this.posixApplicationType);
+        
+    if (!this.applicationType.eIsSet( eStructuralFeature )){      
+      this.applicationType.eSet( eStructuralFeature, collection );
+
+
+    }
+  }
+  
+  
   
   /**
    * Adapter interface to attach to the PosixApplication Name text widget.
@@ -174,6 +205,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
      widget.addModifyListener( new ModifyListener() {
       
       public void modifyText( final ModifyEvent e ) {
+        checkPosixApplicationElement();
         PosixApplicationTypeAdapter.this.posixApplicationType.setName(widget.getText());
         contentChanged();
         
@@ -196,16 +228,19 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
     this.widgetFeaturesMap.put( featureID , widget );    
     
    
-    widget.addModifyListener( new ModifyListener() {
+    widget.addModifyListener( new ModifyListener() {      
       FileNameType fileName = PosixFactory.eINSTANCE.createFileNameType();
     public void modifyText( final ModifyEvent e ) {
+      checkPosixApplicationElement();
      
       if (!widget.getText().equals( "" )){ //$NON-NLS-1$
+        
         this.fileName.setValue( widget.getText() );
         PosixApplicationTypeAdapter.this.posixApplicationType
                                                   .setExecutable(this.fileName);
       }
       else{
+        
         PosixApplicationTypeAdapter.this.posixApplicationType
                                                           .setExecutable(null);
       }
@@ -234,6 +269,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
       FileNameType fileName = PosixFactory.eINSTANCE.createFileNameType();
       public void modifyText( final ModifyEvent e ) {
       
+        checkPosixApplicationElement();
         if (!widget.getText().equals( "" )){ //$NON-NLS-1$
           this.fileName.setValue( widget.getText() );
           PosixApplicationTypeAdapter.this.posixApplicationType
@@ -269,6 +305,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
       public void modifyText( final ModifyEvent e ) {
         
         if (!widget.getText().equals( "" )){ //$NON-NLS-1$
+          checkPosixApplicationElement();
           this.fileName.setValue( widget.getText() );
           PosixApplicationTypeAdapter.this.posixApplicationType
                                                     .setOutput(this.fileName);
@@ -302,6 +339,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
       public void modifyText( final ModifyEvent e ) {
         
         if (!widget.getText().equals( "" )){ //$NON-NLS-1$
+          checkPosixApplicationElement();
           this.fileName.setValue( widget.getText() );
           PosixApplicationTypeAdapter.this.posixApplicationType
                                                     .setError(this.fileName);
@@ -345,7 +383,6 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
     this.tableFeaturesMap.put( featureID , widget );
     
   } // End void attachToPosixApplicationEnvironment()
-  
   
   
   
@@ -504,6 +541,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
       
       text.addModifyListener( new ModifyListener() {
         public void modifyText( final ModifyEvent e ) {
+          checkPosixApplicationElement();
          
           if (!text.getText().equals( "" )){ //$NON-NLS-1$            
             PosixApplicationTypeAdapter.this.userNameType.setValue( text.getText() );
@@ -537,6 +575,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
       
       text.addModifyListener( new ModifyListener() {
         public void modifyText( final ModifyEvent e ) {
+          checkPosixApplicationElement();
          
           if (!text.getText().equals( "" )){ //$NON-NLS-1$            
             PosixApplicationTypeAdapter.this.groupNameType.setValue( text.getText() );

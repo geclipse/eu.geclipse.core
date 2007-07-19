@@ -237,8 +237,8 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
       addPage( this.overviewPage );
       addPage(this.jobDefPage);
       addPage(this.jobApplicationPage);
-      addPage(this.resourcesPage);
-      addPage(this.dataStagingPage);      
+      addPage(this.dataStagingPage);  
+      addPage(this.resourcesPage);          
       addResourceEditorPage();
       pushContentToPages();
       

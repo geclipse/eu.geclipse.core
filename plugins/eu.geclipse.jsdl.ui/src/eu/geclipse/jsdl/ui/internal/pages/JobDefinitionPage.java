@@ -240,9 +240,7 @@ public final class JobDefinitionPage extends FormPage
                                                                   parent,
                                                                   sectionTitle,
                                                                   sectionDescription,
-                                                                  2,
-                                                                  false
-                                                                  );
+                                                                  2);
   
     this.lblJobId = toolkit.createLabel(client,
                        Messages.getString("JobDefinitionPage_JobDefinitionId")); //$NON-NLS-1$
@@ -276,8 +274,11 @@ public final class JobDefinitionPage extends FormPage
                                                    final FormToolkit toolkit)
   { 
     
-    String sectionTitle = Messages.getString("JobDefinitionPage_JobIdentificationTitle");  //$NON-NLS-1$
-    String sectionDescription = Messages.getString("JobDefinitionPage_JobIdentificationDesr"); //$NON-NLS-1$
+    String sectionTitle = Messages
+                         .getString("JobDefinitionPage_JobIdentificationTitle");  //$NON-NLS-1$
+    
+    String sectionDescription = Messages
+                         .getString("JobDefinitionPage_JobIdentificationDescr"); //$NON-NLS-1$
     
     GridData gd;
        
@@ -285,9 +286,7 @@ public final class JobDefinitionPage extends FormPage
                                            parent,
                                            sectionTitle,
                                            sectionDescription,
-                                           4,
-                                           false
-                                           );
+                                           4);
        
       
     
@@ -313,6 +312,7 @@ public final class JobDefinitionPage extends FormPage
                               Messages.getString("JobDefinitionPage_JobDescr")); //$NON-NLS-1$
     gd = new GridData();
     gd.verticalSpan = 1;
+    gd.verticalAlignment = GridData.BEGINNING;
     this.lblJobDescripiton.setLayoutData (gd);
     
     
@@ -339,6 +339,7 @@ public final class JobDefinitionPage extends FormPage
     gd = new GridData();
     gd.horizontalSpan = 1;
     gd.verticalSpan = 2;  
+    gd.verticalAlignment = GridData.BEGINNING;
     this.lblJobAnnotation.setLayoutData( gd );
    
     gd = new GridData();
@@ -409,6 +410,7 @@ public final class JobDefinitionPage extends FormPage
      gd = new GridData();
      gd.verticalSpan = 2;
      gd.horizontalSpan = 1;
+     gd.verticalAlignment = GridData.BEGINNING;
      this.lblJobProject.setLayoutData( gd );
      
      gd = new GridData();

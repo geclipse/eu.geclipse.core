@@ -43,8 +43,11 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
 import eu.geclipse.jsdl.model.CPUArchitectureType;
 import eu.geclipse.jsdl.model.CandidateHostsType;
+import eu.geclipse.jsdl.model.DocumentRoot;
 import eu.geclipse.jsdl.model.FileSystemType;
 import eu.geclipse.jsdl.model.FileSystemTypeEnumeration;
+import eu.geclipse.jsdl.model.JobDefinitionType;
+import eu.geclipse.jsdl.model.JobDescriptionType;
 import eu.geclipse.jsdl.model.JsdlFactory;
 import eu.geclipse.jsdl.model.JsdlPackage;
 import eu.geclipse.jsdl.model.OperatingSystemType;
@@ -79,6 +82,12 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   protected Hashtable< Integer, Combo > comboFeaturesMap = new Hashtable< Integer, Combo >();
   protected Hashtable<String, EStructuralFeature> eStructuralFeaturesMap 
                                   = new Hashtable<String, EStructuralFeature>();
+  
+  protected DocumentRoot documentRoot = 
+                                     JsdlFactory.eINSTANCE.createDocumentRoot();
+  
+  protected JobDescriptionType jobDescriptionType = 
+                               JsdlFactory.eINSTANCE.createJobDescriptionType();
   
   protected ResourcesType resourcesType 
                                   = JsdlFactory.eINSTANCE.createResourcesType();
@@ -127,7 +136,10 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
    
       EObject eObject = iterator.next();
           
-      if ( eObject instanceof ResourcesType ) {
+      if (eObject instanceof JobDescriptionType) {
+        this.jobDescriptionType = (JobDescriptionType) eObject;
+      }
+      else if ( eObject instanceof ResourcesType ) {
         
         this.resourcesType = (ResourcesType) eObject;        
         
@@ -240,8 +252,10 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
       collection.add( list.getItem( i ) );
     }
    
+//    checkParentElement( featureID );
+    checkResourcesElement();
     eStructuralFeature = this.candidateHosts.eClass().getEStructuralFeature( featureID );
-    // Create association of Estrctural Feature in the FeatureMap.
+    // Create association of EStructural Feature in the FeatureMap.
     this.eStructuralFeaturesMap.put( value.toString(), eStructuralFeature );
     this.candidateHosts.eSet(eStructuralFeature, collection);
     
@@ -258,6 +272,68 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     collection = null;
     
   }
+    
+   
+  
+  protected void checkResourcesElement(){
+    EStructuralFeature eStructuralFeature = this.jobDescriptionType.eClass()
+    .getEStructuralFeature( JsdlPackage.JOB_DESCRIPTION_TYPE__RESOURCES );
+    
+    if (!this.jobDescriptionType.eIsSet( eStructuralFeature )){      
+      this.jobDescriptionType.eSet( eStructuralFeature, this.resourcesType );
+
+
+    }
+  }
+  
+  
+  
+  protected void checkOSElement (){
+    checkResourcesElement();    
+    EStructuralFeature eStructuralFeature = this.resourcesType.eClass()
+    .getEStructuralFeature( JsdlPackage.RESOURCES_TYPE__OPERATING_SYSTEM );
+    
+    if (!this.resourcesType.eIsSet( eStructuralFeature )){      
+      this.resourcesType.eSet( eStructuralFeature, this.operatingSystemType );
+    }
+  }
+  
+  
+  
+  protected void checkFileSystemElement(){
+    checkResourcesElement();
+    
+    EStructuralFeature eStructuralFeature = this.resourcesType.eClass()
+    .getEStructuralFeature( JsdlPackage.RESOURCES_TYPE__FILE_SYSTEM);
+    
+    Collection<FileSystemType> collection = new ArrayList<FileSystemType>();
+    collection.add( this.fileSystemType );
+    
+    if (!this.resourcesType.eIsSet( eStructuralFeature )){      
+      this.resourcesType.eSet( eStructuralFeature, collection );
+
+
+    }
+  }
+  
+
+  
+  protected void checkCPUArch(){
+    checkResourcesElement();
+    
+    EStructuralFeature eStructuralFeature = this.resourcesType.eClass()
+    .getEStructuralFeature( JsdlPackage.RESOURCES_TYPE__CPU_ARCHITECTURE);
+    
+     
+    if (!this.resourcesType.eIsSet( eStructuralFeature )){      
+      this.resourcesType.eSet( eStructuralFeature, this.cpuArchitectureType );
+
+
+    }
+  }
+
+
+  
   
   
   protected void performDelete(final List list, final String key){
@@ -316,6 +392,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
         
     widget.addSelectionListener(new SelectionListener() {
       public void widgetSelected(final SelectionEvent e) {
+        checkOSElement();        
         ResourcesTypeAdapter.this.operatingSystemTypeType
          .setOperatingSystemName(OperatingSystemTypeEnumeration
                                  .get( widget.getSelectionIndex() ) );
@@ -357,16 +434,14 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
         
     widget.addSelectionListener(new SelectionListener() {
       public void widgetSelected(final SelectionEvent e) {
-                
+        checkCPUArch();
         ResourcesTypeAdapter.this.cpuArchitectureType.setCPUArchitectureName(
                                               ProcessorArchitectureEnumeration
                                              .get( widget.getSelectionIndex()));
         
-        if (!ResourcesTypeAdapter.this.resourcesType
-                          .eIsSet( ResourcesTypeAdapter.this.parentFeature )){
           ResourcesTypeAdapter.this.resourcesType
             .setCPUArchitecture( ResourcesTypeAdapter.this.cpuArchitectureType );
-        }
+
         
         ResourcesTypeAdapter.this.contentChanged();
       }
@@ -393,6 +468,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     widget.addModifyListener( new ModifyListener() {
       
       public void modifyText( final ModifyEvent e ) {
+        checkOSElement();
         ResourcesTypeAdapter.this.operatingSystemType
                                  .setOperatingSystemVersion( widget.getText() );
         contentChanged();
@@ -418,6 +494,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     widget.addModifyListener( new ModifyListener() {
       
       public void modifyText( final ModifyEvent e ) {
+        checkOSElement();
         ResourcesTypeAdapter.this.operatingSystemType
                                             .setDescription( widget.getText() );  
         contentChanged();
@@ -441,6 +518,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     widget.addModifyListener( new ModifyListener() {
       
       public void modifyText( final ModifyEvent e ) {
+//        checkFileSystemElement();
         ResourcesTypeAdapter.this.fileSystemType.setName( widget.getText() );
         contentChanged();
           
@@ -465,6 +543,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     widget.addModifyListener( new ModifyListener() {
       
       public void modifyText( final ModifyEvent e ) {
+//        checkFileSystemElement();
         ResourcesTypeAdapter.this.fileSystemType.setDescription( widget.getText() );
         contentChanged();          
         }
@@ -487,6 +566,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     widget.addModifyListener( new ModifyListener() {
       
       public void modifyText( final ModifyEvent e ) {
+//        checkFileSystemElement();
         ResourcesTypeAdapter.this.fileSystemType.setMountPoint( widget.getText() );
         contentChanged();          
         }
@@ -553,6 +633,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
         
     widget.addSelectionListener(new SelectionListener() {
       public void widgetSelected(final SelectionEvent e) {
+//        checkFileSystemElement();
         ResourcesTypeAdapter.this.fileSystemType
                  .setFileSystemType(FileSystemTypeEnumeration.get( 
                                                  widget.getSelectionIndex() ) );

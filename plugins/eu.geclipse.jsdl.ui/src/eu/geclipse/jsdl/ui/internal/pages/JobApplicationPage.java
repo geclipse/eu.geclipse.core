@@ -43,6 +43,7 @@ import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.TableWrapData;
+
 import eu.geclipse.jsdl.jsdl.ApplicationTypeAdapter;
 import eu.geclipse.jsdl.posix.PosixApplicationTypeAdapter;
 import eu.geclipse.jsdl.ui.internal.dialogs.MultipleInputDialog;
@@ -272,6 +273,7 @@ public final class JobApplicationPage extends FormPage
     FormToolkit toolkit = managedForm.getToolkit();
     
     form.setText(Messages.getString("JobApplicationPage_ApplicationTitle"));  //$NON-NLS-1$
+    
     this.body = form.getBody();
     this.body.setLayout(FormLayoutFactory.createFormTableWrapLayout(false, 2));
     
@@ -320,9 +322,7 @@ public final class JobApplicationPage extends FormPage
                                            parent,
                                            sectionTitle,
                                            sectionDescription,
-                                           2,
-                                           false
-                                           );
+                                           2);
    
     //Create Label and Text for Application Name Element
     this.lblApplicationName = toolkit.createLabel(client,
@@ -395,9 +395,7 @@ public final class JobApplicationPage extends FormPage
                                                parent,
                                                sectionTitle,
                                                sectionDescripiton,
-                                               4 ,
-                                               false
-                                               );
+                                               4 );
 
        
     gd = new GridData();
@@ -448,6 +446,7 @@ public final class JobApplicationPage extends FormPage
     gd = new GridData();
     gd.verticalSpan = 2;
     gd.horizontalSpan = 1;
+    gd.verticalAlignment = GridData.BEGINNING;
     
     this.lblArgument = toolkit.createLabel(client,
                              Messages.getString("JobApplicationPage_Argument")); //$NON-NLS-1$
@@ -579,11 +578,12 @@ public final class JobApplicationPage extends FormPage
     this.posixApplicationTypeAdapter.attachPosixApplicationError( this.txtError );
     this.txtError.setLayoutData(gd);
        
-    /* ======================= Envorinment Widget =========================== */   
+    /* ======================= Environment Widget =========================== */   
     
     gd = new GridData();
     gd.verticalSpan = 2;
     gd.horizontalSpan = 1;
+    gd.verticalAlignment = GridData.BEGINNING;
     
     this.lblEnvironment = toolkit.createLabel(client,
                           Messages.getString("JobApplicationPage_Environment")); //$NON-NLS-1$
@@ -635,9 +635,7 @@ public final class JobApplicationPage extends FormPage
     
     this.btnAdd.addSelectionListener(new SelectionListener() {
       public void widgetSelected(final SelectionEvent event) {
-        handleAddDialog(Messages.getString( "JobApplicationPage_EnvironmentDialog" )); //$NON-NLS-1$
-        
-      
+        handleAddDialog(Messages.getString( "JobApplicationPage_EnvironmentDialog" )); //$NON-NLS-1$      
       }
 
        public void widgetDefaultSelected(final SelectionEvent event) {
@@ -698,7 +696,7 @@ public final class JobApplicationPage extends FormPage
     
     TableWrapData td;
      
-    Composite client = FormSectionFactory.createStaticSection( toolkit,
+    Composite client = FormSectionFactory.createExpandableSection( toolkit,
                                              parent,
                                              sectionTitle,
                                              sectionDescripiton,
