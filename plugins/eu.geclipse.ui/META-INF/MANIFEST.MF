@@ -8,20 +8,15 @@ Bundle-Vendor: %Bundle-Vendor
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.core.filesystem,
  org.eclipse.core.runtime,
- org.eclipse.core.resources,
  org.eclipse.compare,
  org.eclipse.debug.ui,
- org.eclipse.jface.text,
  org.eclipse.search,
- org.eclipse.ui,
  org.eclipse.ui.ide,
  org.eclipse.ui.navigator,
  eu.geclipse.core,
  org.eclipse.help,
- org.eclipse.emf.ecore,
  org.eclipse.ui.forms,
  org.eclipse.emf.edit.ui,
- org.apache.axis,
  eu.geclipse.core.jobs,
  eu.geclipse.core.filesystem
 Eclipse-LazyStart: true
@@ -44,11 +39,8 @@ Export-Package: eu.geclipse.ui,
  eu.geclipse.ui.wizards.jobsubmission,
  eu.geclipse.ui.wizards.portforward,
  eu.geclipse.ui.wizards.wizardselection
-Import-Package: javax.xml.rpc,
- org.eclipse.debug.core,
+Import-Package: org.eclipse.debug.core,
  org.eclipse.debug.ui,
- org.eclipse.jface.text,
  org.eclipse.ui.cheatsheets,
- org.eclipse.ui.editors.text,
- org.eclipse.ui.texteditor
+ org.eclipse.ui.editors.text
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
