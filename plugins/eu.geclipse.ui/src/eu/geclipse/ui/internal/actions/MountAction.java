@@ -18,12 +18,17 @@ package eu.geclipse.ui.internal.actions;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.URI;
+
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.action.Action;
+
+import eu.geclipse.core.filesystem.FileSystem;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridProject;
@@ -97,9 +102,22 @@ public class MountAction extends Action {
    */
   protected void createMount( final IGridStorage source )
       throws CoreException {
-    IFile mountFile = getMountFile( source );
+    IGridProject project = source.getProject();
+    String mountPointName = IGridProject.DIR_MOUNTS;
+    IGridElement mountPoint = project.findChild( mountPointName );
+    if ( mountPoint instanceof IGridContainer ) {
+      IContainer container = ( IContainer ) mountPoint.getResource();
+      if ( container != null ) {
+        IPath path = new Path( getMountName( source ) );
+        IFolder folder = container.getFolder( path );
+        URI accessToken = findAccessToken( this.accessProtocol, source );
+        URI masterURI = FileSystem.createMasterURI( accessToken );
+        folder.createLink( masterURI, IResource.ALLOW_MISSING_LOCAL, null );
+      }
+    }
+    /*IFile mountFile = getMountFile( source );
     InputStream contents = createContents( source );
-    mountFile.create( contents, true, null );
+    mountFile.create( contents, true, null );*/
   }
   
   /**
@@ -159,8 +177,7 @@ public class MountAction extends Action {
    */
   protected String getMountName( final IGridStorage source ) {
     String[] parts = this.accessProtocol.split( ":" ); //$NON-NLS-1$
-    String name = '.' + parts[0] + '.' + source.getName()
-      + '.' + parts[1] + ".fs"; //$NON-NLS-1$
+    String name = parts[0] + '.' + source.getName() + '.' + parts[1];
     return name;
   }
   

@@ -26,6 +26,8 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.ui.actions.CompoundContributionItem;
+
+import eu.geclipse.core.Extensions;
 import eu.geclipse.core.model.IGridStorage;
 
 /**
@@ -116,13 +118,38 @@ public class MountMenu
    */
   protected List< String > getProtocols( final IGridStorage storage ) {
     List< String > result = new ArrayList< String >();
-    URI[] accessTokens = storage.getAccessTokens();
+    URI[] accessTokens = filterProtocols( storage.getAccessTokens() );
     if ( accessTokens != null ) {
       for ( int i = 0 ; i < accessTokens.length ; i++ ) {
         result.add( getProtocol( accessTokens[i] ) );
       }
     }
     return result;
+  }
+  
+  /**
+   * Filter the specified protocols, i.e. return a sub array of the specified
+   * array that only contains protocols that are supported by a currently
+   * installed EFS extension.
+   * 
+   * @param list The protocol list to be filtered. 
+   * @return A subset of the original list containing only protocols that are
+   * supported by a currently installed EFS implementation.
+   */
+  private URI[] filterProtocols( final URI[] list ) {
+    
+    List< URI > result = new ArrayList< URI >();
+    List< String > schemes = Extensions.getRegisteredFilesystemSchemes();
+    
+    for ( URI protocol : list ) {
+      String scheme = protocol.getScheme();
+      if ( schemes.contains( scheme ) ) {
+        result.add( protocol );
+      }
+    }
+    
+    return result.toArray( new URI[ result.size() ] );
+    
   }
   
   /**
