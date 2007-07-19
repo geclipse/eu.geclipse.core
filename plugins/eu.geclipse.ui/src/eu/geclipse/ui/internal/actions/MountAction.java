@@ -15,12 +15,9 @@
 
 package eu.geclipse.ui.internal.actions;
 
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
 import java.net.URI;
 
 import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -79,21 +76,6 @@ public class MountAction extends Action {
   }
   
   /**
-   * Create the content of the mount file.
-   * 
-   * @param source The storage element for which a mount file
-   * content should be generated.
-   * @return The content of the mount file.
-   */
-  protected InputStream createContents( final IGridStorage source ) {
-    URI accessToken = findAccessToken( this.accessProtocol, source );
-    String accessString = accessToken.toString() + '/';
-    byte[] bytes = accessString.getBytes();
-    ByteArrayInputStream biStream = new ByteArrayInputStream( bytes );
-    return biStream;
-  }
-  
-  /**
    * Create a mount file for the specified storage element. The mount
    * file is created in the filesystems folder of the selected project.
    * 
@@ -115,9 +97,6 @@ public class MountAction extends Action {
         folder.createLink( masterURI, IResource.ALLOW_MISSING_LOCAL, null );
       }
     }
-    /*IFile mountFile = getMountFile( source );
-    InputStream contents = createContents( source );
-    mountFile.create( contents, true, null );*/
   }
   
   /**
@@ -137,32 +116,6 @@ public class MountAction extends Action {
       if ( MountMenu.getProtocol( token ).equalsIgnoreCase( protocol ) ) {
         result = token;
         break;
-      }
-    }
-    return result;
-  }
-  
-  /**
-   * Get the handle of the mount file for the specified storage element.
-   * This is only a handle operation, the content of the file is created
-   * elsewhere.
-   * 
-   * @param source The storage element for which to create a mount file.
-   * @return The handle to the mount file. The returned file has not
-   * necesarily to exist.
-   */
-  protected IFile getMountFile( final IGridStorage source ) {
-    IFile result = null;
-    IGridProject project = source.getProject();
-    if ( project != null ) {
-      String mountPointName = IGridProject.DIR_MOUNTS;
-      IGridElement mountPoint = project.findChild( mountPointName );
-      if ( mountPoint instanceof IGridContainer ) {
-        IContainer container = ( IContainer ) mountPoint.getResource();
-        if ( container != null ) {
-          IPath filePath = new Path( getMountName( source ) );
-          result = container.getFile( filePath );
-        }
       }
     }
     return result;
