@@ -93,9 +93,11 @@ public class FileSystemCreator
       IFolder folder = ( IFolder ) resource;
       if ( folder.isLinked() ) {
         URI uri = folder.getRawLocationURI();
-        String scheme = uri.getScheme();
-        if ( IFileSystemProperties.SCHEME.equals( scheme ) ) {
-          result = true;
+        if ( uri != null ) { // uri is null if the link target does not exist anymore
+          String scheme = uri.getScheme();
+          if ( IFileSystemProperties.SCHEME.equals( scheme ) ) {
+            result = true;
+          }
         }
       }
     }
