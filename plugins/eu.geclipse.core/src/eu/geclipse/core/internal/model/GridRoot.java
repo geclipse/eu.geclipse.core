@@ -27,6 +27,8 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 
 import eu.geclipse.core.internal.Activator;
+import eu.geclipse.core.internal.model.notify.GridModelEvent;
+import eu.geclipse.core.internal.model.notify.NotificationService;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
@@ -54,14 +56,13 @@ public final class GridRoot
    */
   private static GridRoot singleton;
   
-  /**
-   * The list of {@link IGridModelListener}s.
-   */
+  /*
   private List< IGridModelListener > listeners
     = new ArrayList< IGridModelListener >();
   
   private List< IGridModelEvent > globalEventQueue
     = new ArrayList< IGridModelEvent >();
+  */
   
   /**
    * Private constructor to ensure to have only one instance of
@@ -71,10 +72,11 @@ public final class GridRoot
     super( ResourcesPlugin.getWorkspace().getRoot() );
     ResourcesPlugin.getWorkspace().addResourceChangeListener(
       new IResourceChangeListener() {
+        @SuppressWarnings("synthetic-access")
         public void resourceChanged( final IResourceChangeEvent event ) {
-          setProcessEvents( false );
+          lock();
           handleResourceChange( event );
-          setProcessEvents( true );
+          unlock();
         }
       }
     );
@@ -116,9 +118,7 @@ public final class GridRoot
    * @see eu.geclipse.core.model.IGridModelNotifier#addGridModelListener(eu.geclipse.core.model.IGridModelListener)
    */
   public void addGridModelListener( final IGridModelListener listener ) {
-    if ( !this.listeners.contains( listener ) ) {
-      this.listeners.add( listener );
-    }
+    NotificationService.getInstance().addListener( listener );
   }
   
   /* (non-Javadoc)
@@ -177,20 +177,10 @@ public final class GridRoot
    * @param event The event to be distributed.
    */
   public void fireGridModelEvent( final IGridModelEvent event ) {
-    queueEvent( event );
+    NotificationService.getInstance().queueEvent( event );
   }
   
-  @Override
-  protected void setProcessEvents( final boolean enabled ) {
-
-    super.setProcessEvents( enabled );
-    
-    if ( getProcessEvents() ) {
-      processGlobalEvents();
-    }
-    
-  }
-
+  /*
   private void queueEvent( final IGridModelEvent event ) {
     
     IGridModelEvent newEvent = event;
@@ -255,7 +245,7 @@ public final class GridRoot
       this.globalEventQueue.clear();
     }
   }
-  
+  */
   /**
    * Handle a resource change event.
    * 
@@ -315,7 +305,7 @@ public final class GridRoot
    * @see eu.geclipse.core.model.IGridModelNotifier#removeGridModelListener(eu.geclipse.core.model.IGridModelListener)
    */
   public void removeGridModelListener( final IGridModelListener listener ) {
-    this.listeners.remove( listener );
+    NotificationService.getInstance().removeListener( listener );
   }
   
   /**

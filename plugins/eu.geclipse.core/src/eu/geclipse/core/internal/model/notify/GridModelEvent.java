@@ -13,7 +13,7 @@
  *    Mathias Stuempert - initial API and implementation
  *****************************************************************************/
 
-package eu.geclipse.core.internal.model;
+package eu.geclipse.core.internal.model.notify;
 
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridModelEvent;

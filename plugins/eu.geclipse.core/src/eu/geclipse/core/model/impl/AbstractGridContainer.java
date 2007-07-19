@@ -19,12 +19,16 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
+import java.util.Map.Entry;
+
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
-import eu.geclipse.core.internal.model.GridModelEvent;
 import eu.geclipse.core.internal.model.GridRoot;
+import eu.geclipse.core.internal.model.notify.GridModelEvent;
+import eu.geclipse.core.internal.model.notify.NotificationService;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.GridModelProblems;
 import eu.geclipse.core.model.IGridContainer;
@@ -41,12 +45,12 @@ import eu.geclipse.core.model.IManageable;
 public abstract class AbstractGridContainer
     extends AbstractGridElement
     implements IGridContainer {
-  
+  /*
   private int processEventsPolicy = 0;
   
   private Hashtable< Integer, List< IGridElement > > eventQueue
     = new Hashtable< Integer, List< IGridElement > >();
-  
+  */
   /**
    * List of currently know children.
    */
@@ -128,7 +132,7 @@ public abstract class AbstractGridContainer
   public IGridElement[] getChildren( final IProgressMonitor monitor )
       throws GridModelException {
     
-    setProcessEvents( false );
+    lock();
     
     try {
     
@@ -139,7 +143,7 @@ public abstract class AbstractGridContainer
       }
       
     } finally {
-      setProcessEvents( true );
+      unlock();
     }
     
     return this.children.toArray( new IGridElement[ this.children.size() ] );
@@ -192,7 +196,9 @@ public abstract class AbstractGridContainer
   
   public void refresh( final IProgressMonitor monitor )
       throws GridModelException {
-    setProcessEvents( false );
+    
+    lock();
+    
     try {
       if ( isLocal() ) {
         IContainer container = ( IContainer ) getResource();
@@ -210,8 +216,9 @@ public abstract class AbstractGridContainer
         }
       }
     } finally {
-      setProcessEvents( true );
+      unlock();
     }
+    
   }
   
   /* (non-Javadoc)
@@ -303,6 +310,15 @@ public abstract class AbstractGridContainer
     }
   }
   
+  protected void lock() {
+    NotificationService.getInstance().lock();
+  }
+  
+  protected void unlock() {
+    NotificationService.getInstance().unlock();
+  }
+  
+  /*
   protected void setProcessEvents( final boolean enabled ) {
     
     if ( enabled && ( this.processEventsPolicy > 0) ) {
@@ -318,8 +334,8 @@ public abstract class AbstractGridContainer
   }
   
   protected boolean getProcessEvents() {
-    return this.processEventsPolicy == 0;
-  }
+    return this.processEventsPolicy == 0 && ! this.eventQueue.isEmpty();
+  }*/
   
   private void fireGridModelEvent( final int type,
                                    final IGridElement element ) {
@@ -328,13 +344,20 @@ public abstract class AbstractGridContainer
   
   private void fireGridModelEvent( final int type,
                                    final IGridElement[] elements ) {
-    queueEvent( type, elements );
+    if ( ( elements != null ) && ( elements.length > 0 ) ) {
+      IGridModelEvent event = new GridModelEvent( type, this, elements );
+      NotificationService.getInstance().queueEvent( event );
+    }
   }
-  
+  /*
   private void processEvents() {
+    setProcessEvents( false );
     GridRoot gridRoot = GridRoot.getRoot();
     if ( gridRoot != null ) {
-      for ( Map.Entry< Integer, List< IGridElement > > entry : this.eventQueue.entrySet() ) {
+      Set< Entry < Integer, List< IGridElement > > > eventSet
+        = this.eventQueue.entrySet();
+      this.eventQueue.clear();
+      for ( Map.Entry< Integer, List< IGridElement > > entry : eventSet ) {
         int type = entry.getKey().intValue();
         List< IGridElement > elementList = entry.getValue();
         IGridElement[] elements = elementList.toArray( new IGridElement[ elementList.size() ] );
@@ -345,7 +368,7 @@ public abstract class AbstractGridContainer
         gridRoot.fireGridModelEvent( event );
       }
     }
-    this.eventQueue.clear();
+    setProcessEvents( true );
   }
   
   private void queueEvent( final int type,
@@ -370,7 +393,7 @@ public abstract class AbstractGridContainer
     }
     
   }
-  
+  */
   /**
    * Test if this container can contain the specified element
    * and throw a {@link GridModelException} if this is not the

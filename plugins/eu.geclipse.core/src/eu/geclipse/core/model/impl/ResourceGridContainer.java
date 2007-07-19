@@ -132,7 +132,7 @@ public class ResourceGridContainer
     boolean result = false;
     deleteAll();
     if ( ( this.resource != null ) && ( this.resource instanceof IContainer ) ) {
-      setProcessEvents( false );
+      lock();
       try {
         IResource[] members = ( ( IContainer ) this.resource ).members();
         localMonitor.beginTask( Messages.getString( "AbstractGridContainer.load_progress" ), members.length ); //$NON-NLS-1$
@@ -155,7 +155,7 @@ public class ResourceGridContainer
       } catch ( CoreException cExc ) {
         Activator.logException( cExc );
       } finally {
-        setProcessEvents( true );
+        unlock();
       }
     }
 

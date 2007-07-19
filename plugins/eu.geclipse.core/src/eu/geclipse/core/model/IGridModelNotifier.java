@@ -15,7 +15,7 @@
 
 package eu.geclipse.core.model;
 
-import eu.geclipse.core.internal.model.GridModelEvent;
+import eu.geclipse.core.internal.model.notify.GridModelEvent;
 
 /**
  * Definition of a notification service for {@link GridModelEvent}s.

@@ -270,7 +270,7 @@ public class GridConnectionElement
     this.fetchError = null;
     
     try {
-      setProcessEvents( false );
+      lock();
       IFileStore fs = getConnectionFileStore();
       if ( fs != null ) {
         IFileStore[] childStores
@@ -289,7 +289,7 @@ public class GridConnectionElement
     } catch ( CoreException cExc ) {
       throw new GridModelException( GridModelProblems.FETCH_CHILDREN_FAILED, cExc );
     } finally {
-      setProcessEvents( true );
+      unlock();
     }
     
     return this.fetchError == null;

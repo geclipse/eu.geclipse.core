@@ -104,7 +104,7 @@ public class GridConnectionCreator extends AbstractGridElementCreator {
       throws GridModelException {
     
     IGridConnection connection = null;
-    
+    /*
     try {
       String scheme = uri.getScheme();
       IFileSystem fileSystem = EFS.getFileSystem( scheme );
@@ -113,7 +113,7 @@ public class GridConnectionCreator extends AbstractGridElementCreator {
     } catch ( CoreException cExc ) {
       throw new GridModelException( GridModelProblems.ELEMENT_CREATE_FAILED, cExc );
     }
-    
+    */
     return connection;
   }
   
