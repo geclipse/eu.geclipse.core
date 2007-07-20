@@ -30,6 +30,9 @@ import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Display;
+
+import eu.geclipse.core.GridException;
+import eu.geclipse.core.ProblemRegistry;
 import eu.geclipse.gvid.Activator;
 import eu.geclipse.gvid.IDecoder;
 import eu.geclipse.gvid.IGVidStatsListener;
@@ -192,6 +195,17 @@ public class GVidClient extends Component implements Runnable {
         this.running = false;
       } catch( IOException ioException ) {
         this.running = false;
+      } catch( Exception exception ) {
+        this.running = false;
+        final GridException gridException = new GridException( ProblemRegistry.UNKNOWN_PROBLEM, exception );
+        Display.getDefault().asyncExec( new Runnable() {
+          public void run() {
+            NewProblemDialog.openProblem( null,
+                                          "Error during video decoding",
+                                          "An error occured during video decoding (is the right codec selected?)",
+                                          gridException, null );
+          }
+        } );
       }
     }
     unregisterEvents();
