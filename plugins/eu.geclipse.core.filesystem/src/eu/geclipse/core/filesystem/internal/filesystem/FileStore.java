@@ -4,6 +4,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 
+import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.filesystem.IFileSystem;
@@ -17,8 +18,6 @@ public class FileStore
     extends org.eclipse.core.filesystem.provider.FileStore
     implements IFileStore {
   
-  private static int counter = 0;
-  
   private FileSystem fileSystem;
   
   private FileStore parent;
@@ -29,8 +28,6 @@ public class FileStore
   
   private String[] childNames;
   
-  private int count;
-  
   protected FileStore( final FileSystem fileSystem,
                        final IFileStore slave ) {
     Assert.isNotNull( fileSystem );
@@ -39,7 +36,6 @@ public class FileStore
     this.parent = null;
     this.slave = slave;
     this.isActive = false;
-    count = counter++;
   }
 
   private FileStore( final FileStore parent,
@@ -50,11 +46,6 @@ public class FileStore
     this.parent = parent;
     this.slave = slave;
     this.isActive = false;
-    count = counter++;
-  }
-  
-  public int getID() {
-    return count;
   }
   
   public void activate() {
@@ -133,6 +124,14 @@ public class FileStore
   
   public IFileStore getSlave() {
     return this.slave;
+  }
+  
+  public boolean isLocal() {
+    URI uri = toURI();
+    String scheme = FileSystemManager.getSlaveScheme( uri );
+    IFileSystem localFileSystem = EFS.getLocalFileSystem();
+    String localScheme = localFileSystem.getScheme();
+    return scheme.equals( localScheme );
   }
   
   @Override

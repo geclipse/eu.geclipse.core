@@ -119,6 +119,29 @@ public class FileSystemManager
     return slaveURI;
 
   }
+  
+  public static String getSlaveScheme( final URI uri ) {
+
+    String scheme = ""; //$NON-NLS-1$
+
+    String query = uri.getQuery();
+
+    if ( query != null ) {
+
+      String[] parts = query.split( QUERY_SEPARATOR );
+
+      for ( String part : parts ) {
+        if ( part.startsWith( QUERY_ID + QUERY_ASSIGN ) ) {
+          scheme = part.substring( QUERY_ID.length() + QUERY_ASSIGN.length() );
+          break;
+        }
+      }
+
+    }
+
+    return scheme;
+
+  }
 
   public FileStore getStore( final FileSystem fileSystem, final URI uri ) {
 
@@ -154,28 +177,6 @@ public class FileSystemManager
     return EFS.getFileSystem( slaveScheme );
   }
 
-  private static String getSlaveScheme( final URI uri ) {
-
-    String scheme = ""; //$NON-NLS-1$
-
-    String query = uri.getQuery();
-
-    if ( query != null ) {
-
-      String[] parts = query.split( QUERY_SEPARATOR );
-
-      for ( String part : parts ) {
-        if ( part.startsWith( QUERY_ID + QUERY_ASSIGN ) ) {
-          scheme = part.substring( QUERY_ID.length() + QUERY_ASSIGN.length() );
-          break;
-        }
-      }
-
-    }
-
-    return scheme;
-
-  }
 /*
   private boolean isActive( final URI key ) {
     return this.activeStores.contains( key );

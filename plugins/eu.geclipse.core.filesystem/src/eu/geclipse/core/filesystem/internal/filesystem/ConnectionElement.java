@@ -85,7 +85,18 @@ public class ConnectionElement
   }
   
   public boolean isLocal() {
-    return false;
+    
+    boolean result = false;
+    
+    try {
+      FileStore fileStore = ( FileStore ) getConnectionFileStore();
+      result = fileStore.isLocal();
+    } catch ( CoreException cExc ) {
+      Activator.logException( cExc );
+    }
+    
+    return result;
+    
   }
 
   public boolean isValid() {
