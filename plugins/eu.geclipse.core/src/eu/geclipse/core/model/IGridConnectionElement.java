@@ -30,7 +30,7 @@ public interface IGridConnectionElement extends IGridResource, IGridContainer {
    * Get the {@link IFileStore} object corresponding to this connection.
    * 
    * @return The file store of this connection.
-   * @throws CoreException If a problem occures when creating the file store.
+   * @throws CoreException If a problem occurs when creating the file store.
    */
   public IFileStore getConnectionFileStore() throws CoreException;
   
