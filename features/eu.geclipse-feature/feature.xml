@@ -35,34 +35,32 @@ project number: FP5-IST-034327  http://www.geclipse.eu/
       <import plugin="org.eclipse.ui"/>
       <import plugin="org.eclipse.core.runtime"/>
       <import plugin="org.eclipse.core.filesystem"/>
-      <import plugin="org.eclipse.core.resources"/>
       <import plugin="org.eclipse.compare"/>
       <import plugin="org.eclipse.debug.ui"/>
-      <import plugin="org.eclipse.jface.text"/>
       <import plugin="org.eclipse.search"/>
       <import plugin="org.eclipse.ui.ide"/>
       <import plugin="org.eclipse.ui.navigator"/>
       <import plugin="org.eclipse.help"/>
-      <import plugin="org.eclipse.emf.ecore"/>
       <import plugin="org.eclipse.ui.forms"/>
       <import plugin="org.eclipse.emf.edit.ui"/>
-      <import plugin="org.apache.axis"/>
-      <import plugin="javax.xml.rpc"/>
       <import plugin="org.eclipse.debug.core"/>
       <import plugin="org.eclipse.ui.cheatsheets"/>
       <import plugin="org.eclipse.ui.editors"/>
       <import plugin="org.eclipse.jsch.core"/>
       <import plugin="com.jcraft.jsch"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.jface.text"/>
       <import plugin="org.eclipse.ui.workbench.texteditor"/>
       <import plugin="org.eclipse.core.net"/>
       <import plugin="org.apache.log4j"/>
       <import plugin="org.eclipse.emf.edit"/>
       <import plugin="org.eclipse.swt"/>
+      <import plugin="org.eclipse.jface"/>
+      <import plugin="org.eclipse.emf.ecore"/>
       <import plugin="org.eclipse.emf.ecore.xmi"/>
       <import plugin="org.eclipse.emf"/>
       <import plugin="org.eclipse.emf.common"/>
       <import plugin="org.eclipse.emf.common.ui"/>
-      <import plugin="org.eclipse.jface"/>
       <import plugin="org.eclipse.gmf.runtime.notation"/>
       <import plugin="org.eclipse.gmf.runtime.diagram.ui"/>
       <import plugin="org.eclipse.gmf.runtime.diagram.ui.properties"/>
@@ -212,6 +210,13 @@ project number: FP5-IST-034327  http://www.geclipse.eu/
 
    <plugin
          id="eu.geclipse.batch.ui"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="eu.geclipse.core.filesystem"
          download-size="0"
          install-size="0"
          version="0.0.0"
