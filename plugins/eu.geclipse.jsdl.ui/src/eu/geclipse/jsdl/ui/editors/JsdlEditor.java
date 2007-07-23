@@ -34,6 +34,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
@@ -82,6 +83,7 @@ import org.eclipse.ui.dialogs.SaveAsDialog;
 import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.part.FileEditorInput;
+
 import eu.geclipse.jsdl.jsdl.JsdlAdaptersFactory;
 import eu.geclipse.jsdl.model.JobDefinitionType;
 import eu.geclipse.jsdl.posix.PosixAdaptersFactory;
@@ -131,7 +133,8 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
   private JobDefinitionPage jobDefPage = new JobDefinitionPage(this);
   private JobApplicationPage jobApplicationPage = new JobApplicationPage(this);
   private DataStagingPage dataStagingPage = new DataStagingPage(this);
-  private ResourcesPage resourcesPage = new ResourcesPage(this);  
+  private ResourcesPage resourcesPage = new ResourcesPage(this); 
+  
   
   
   
@@ -205,7 +208,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
     this.jobDefPage.setDirty( false );
     this.jobApplicationPage.setDirty( false );
     this.resourcesPage.setDirty( false );
-    this.dataStagingPage.setDirty( false ) ;
+    this.dataStagingPage.setDirty( false ) ;    
     
   }
 
@@ -238,7 +241,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
       addPage(this.jobDefPage);
       addPage(this.jobApplicationPage);
       addPage(this.dataStagingPage);  
-      addPage(this.resourcesPage);          
+      addPage(this.resourcesPage);      
       addResourceEditorPage();
       pushContentToPages();
       

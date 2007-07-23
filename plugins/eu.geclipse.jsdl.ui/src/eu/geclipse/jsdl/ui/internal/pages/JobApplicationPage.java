@@ -134,7 +134,7 @@ public final class JobApplicationPage extends FormPage
   protected ApplicationTypeAdapter applicationTypeAdapter;
   protected PosixApplicationTypeAdapter posixApplicationTypeAdapter;
 
-  protected Object[] value = null;
+  protected Object[][] value = null;
   
   
   private TableColumn column;    
@@ -491,20 +491,20 @@ public final class JobApplicationPage extends FormPage
                                        Messages.getString("JsdlEditor_AddButton") //$NON-NLS-1$
                                        , SWT.PUSH);
     
-//    this.btnAdd.addSelectionListener(new SelectionListener() {
-//      public void widgetSelected(final SelectionEvent event) {
-//        handleAddDialog(Messages.getString( "JobApplicationPage_ArgumentDialog" )); //$NON-NLS-1$
-//        JobApplicationPage.this.posixApplicationTypeAdapter.performAdd(
-//                                         JobApplicationPage.this.argumentViewer,
-//                                                "argumentViewer", //$NON-NLS-1$
-//                                                JobApplicationPage.this.value );
-//      
-//      }
-//
-//       public void widgetDefaultSelected(final SelectionEvent event) {
-//           // Do Nothing - Required method
-//       }
-//     });
+    this.btnAdd.addSelectionListener(new SelectionListener() {
+      public void widgetSelected(final SelectionEvent event) {
+        handleAddDialog(Messages.getString( "JobApplicationPage_ArgumentDialog" )); //$NON-NLS-1$
+        JobApplicationPage.this.posixApplicationTypeAdapter.performAdd(
+                                         JobApplicationPage.this.argumentViewer,
+                                                "argumentViewer", //$NON-NLS-1$
+                                                JobApplicationPage.this.value );
+      
+      }
+
+       public void widgetDefaultSelected(final SelectionEvent event) {
+           // Do Nothing - Required method
+       }
+     });
     
     this.btnAdd.setLayoutData( gd );
     
@@ -635,7 +635,11 @@ public final class JobApplicationPage extends FormPage
     
     this.btnAdd.addSelectionListener(new SelectionListener() {
       public void widgetSelected(final SelectionEvent event) {
-        handleAddDialog(Messages.getString( "JobApplicationPage_EnvironmentDialog" )); //$NON-NLS-1$      
+        handleAddDialog(Messages.getString( "JobApplicationPage_EnvironmentDialog" )); //$NON-NLS-1$
+        JobApplicationPage.this.posixApplicationTypeAdapter.performAdd(
+                                      JobApplicationPage.this.environmentViewer,
+                                                             "environmentiewer", //$NON-NLS-1$
+                                                JobApplicationPage.this.value );
       }
 
        public void widgetDefaultSelected(final SelectionEvent event) {
@@ -869,7 +873,8 @@ public final class JobApplicationPage extends FormPage
                                                          dialogTitle );
     if (dialogTitle == Messages.getString("JobApplicationPage_ArgumentDialog" )){ //$NON-NLS-1$
       
-      this.value = new Object[2];
+      this.value = new Object[1][2];
+      
       dialog.addTextField( Messages.getString( "JobApplicationPage_FileSystemName" ), "", false ); //$NON-NLS-1$ //$NON-NLS-2$      
       dialog.addTextField( Messages.getString( "JobApplicationPage_Value" ), "", false ); //$NON-NLS-1$ //$NON-NLS-2$
                        
@@ -877,7 +882,7 @@ public final class JobApplicationPage extends FormPage
     else
     {
       
-      this.value = new Object[3];
+      this.value = new Object[1][3];
       dialog.addTextField( Messages.getString( "JobApplicationPage_Name" ), "", false ); //$NON-NLS-1$ //$NON-NLS-2$
       dialog.addTextField( Messages.getString( "JobApplicationPage_FileSystemName" ), "", false ); //$NON-NLS-1$ //$NON-NLS-2$
       dialog.addTextField( Messages.getString( "JobApplicationPage_Value" ), "", false ); //$NON-NLS-1$ //$NON-NLS-2$
@@ -888,15 +893,17 @@ public final class JobApplicationPage extends FormPage
       return;
     }
     
-    if (this.value.length == 2){
-      this.value[0] = dialog.getStringValue( Messages.getString( "JobApplicationPage_FileSystemName" ) ) ; //$NON-NLS-1$
-      this.value[1] = dialog.getStringValue( Messages.getString( "JobApplicationPage_Value" ) ) ;     //$NON-NLS-1$
+   
+    
+    if (this.value[0].length == 2){
+      this.value[0][0] =  dialog.getStringValue( Messages.getString( "JobApplicationPage_FileSystemName" ) ) ; //$NON-NLS-1$
+      this.value[0][1] = dialog.getStringValue( Messages.getString( "JobApplicationPage_Value" ) ) ;     //$NON-NLS-1$
     }
     else {
       
-    this.value[0] = dialog.getStringValue( Messages.getString( "JobApplicationPage_Name" ) ) ; //$NON-NLS-1$
-    this.value[1] = dialog.getStringValue( Messages.getString( "JobApplicationPage_FileSystemName" ) ) ; //$NON-NLS-1$  
-    this.value[2] = dialog.getStringValue( Messages.getString( "JobApplicationPage_Value" ) ) ;     //$NON-NLS-1$
+    this.value[0][0] = dialog.getStringValue( Messages.getString( "JobApplicationPage_Name" ) ) ; //$NON-NLS-1$
+    this.value[0][1] = dialog.getStringValue( Messages.getString( "JobApplicationPage_FileSystemName" ) ) ; //$NON-NLS-1$  
+    this.value[0][2] = dialog.getStringValue( Messages.getString( "JobApplicationPage_Value" ) ) ;     //$NON-NLS-1$
     }
     
   }

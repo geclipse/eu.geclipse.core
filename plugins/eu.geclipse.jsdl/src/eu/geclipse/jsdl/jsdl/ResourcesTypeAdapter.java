@@ -242,6 +242,10 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
    */
   public void performAdd(final List list, final Object value) {
     
+    if (value == null) {
+      return;
+    }
+    
     EStructuralFeature eStructuralFeature = null;
     Collection<String> collection = new ArrayList<String>();
     int featureID = JsdlPackage.RESOURCES_TYPE__CANDIDATE_HOSTS;
@@ -251,11 +255,12 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     for ( int i=0; i<list.getItemCount(); i++ ) {
       collection.add( list.getItem( i ) );
     }
-   
-//    checkParentElement( featureID );
+
     checkResourcesElement();
     eStructuralFeature = this.candidateHosts.eClass().getEStructuralFeature( featureID );
+    
     // Create association of EStructural Feature in the FeatureMap.
+    
     this.eStructuralFeaturesMap.put( value.toString(), eStructuralFeature );
     this.candidateHosts.eSet(eStructuralFeature, collection);
     

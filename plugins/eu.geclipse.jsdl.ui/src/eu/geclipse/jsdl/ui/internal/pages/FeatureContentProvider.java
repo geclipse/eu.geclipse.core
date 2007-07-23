@@ -21,6 +21,8 @@ package eu.geclipse.jsdl.ui.internal.pages;
  * @author nickl
  */
 
+import java.util.Collection;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -46,10 +48,16 @@ public class FeatureContentProvider implements IStructuredContentProvider {
       result = list.toArray( new Object[ list.size() ] );
   
     }
+    else if (inputElement instanceof Object[]) {      
+      return (Object[]) inputElement;
+    }
+    else if (inputElement instanceof Collection) {      
+      return ((Collection) inputElement).toArray();
+  }
     else{
       
-      EList<Object>list = (EList) inputElement;
-      result = list.toArray( new Object[ list.size() ] );
+//      EList<Object>list = (EList) inputElement;
+//      result = list.toArray( new Object[ list.size() ] );
       
       }
       

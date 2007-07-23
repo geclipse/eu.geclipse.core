@@ -199,7 +199,7 @@ public final class JobDefinitionPage extends FormPage
     
     form.setText(Messages.getString("JobDefinitionPage_JobDefinitionPageTitle"));  //$NON-NLS-1$
     this.body = form.getBody();
-    this.body.setLayout(FormLayoutFactory.createFormTableWrapLayout(true, 2));
+    this.body.setLayout(FormLayoutFactory.createFormTableWrapLayout(true, 1));
     
     
     this.jobDefComposite = toolkit.createComposite( this.body );

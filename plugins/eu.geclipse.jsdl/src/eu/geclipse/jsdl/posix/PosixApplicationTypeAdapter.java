@@ -25,6 +25,7 @@ import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
 
+import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EAttribute;
@@ -651,47 +652,77 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
   
   
-//  /**
-//   * @param tableViewer
-//   * @param name
-//   * @param value
-//   */
-//  public void performAdd (final TableViewer tableViewer,
-//                        final String name, final Object[] value) {
-//    
-//    EStructuralFeature eStructuralFeature = null;
-//    Collection<Object> collection = new ArrayList<Object>();
-//    int featureID;
-//    
-//    if (name == "argumentViewer"){ //$NON-NLS-1$
-//      featureID = PosixPackage.POSIX_APPLICATION_TYPE__ARGUMENT;
-//    }
-//    else{
-//      featureID = PosixPackage.POSIX_APPLICATION_TYPE__ENVIRONMENT;
-//    }
-//    
-//    // Get EStructural Feature.
-//    eStructuralFeature = this.posixApplicationType.eClass().getEStructuralFeature( featureID );
-//       
-//    
-//    tableViewer.add(value);
-//    
-//     for ( int i=0; i<tableViewer.getTable().getItemCount(); i++ ) {
-//        collection.add( tableViewer.getElementAt( i ) );
-//      
-//     }
-//     
-//
-//    this.posixApplicationType.eSet(eStructuralFeature, collection);
-//    
-//    tableViewer.refresh();
-//   
-//    this.contentChanged();
-//    
-//    eStructuralFeature = null;
-//    collection = null;
-//    
-//  }
+  /**
+   * @param tableViewer
+   * @param name
+   * @param value
+   */
+  public void performAdd (final TableViewer tableViewer,
+                        final String name, final Object[][] value) {
+        
+    if (value[0][0] == null) {
+      return;
+    }
+    
+    EStructuralFeature eStructuralFeature = null;   
+    Collection<Object> collection = new ArrayList<Object>();    
+    Object[] valuesArray = value[0];  
+    
+    EList <EObject> newInputList = (EList<EObject>)tableViewer.getInput(); 
+    
+    
+  
+    if (newInputList == null) {
+      newInputList = new BasicEList<EObject>();
+    }
+        
+    int featureID;
+    
+    if (name == "argumentViewer"){ //$NON-NLS-1$
+      
+      featureID = PosixPackage.POSIX_APPLICATION_TYPE__ARGUMENT;
+      this.argumentType = PosixFactory.eINSTANCE.createArgumentType();
+      this.argumentType.setFilesystemName( valuesArray[0].toString() );
+      this.argumentType.setValue( valuesArray[1].toString() );
+      newInputList.add( this.argumentType );
+      
+    
+      
+    }
+    
+    else{
+      
+      featureID = PosixPackage.POSIX_APPLICATION_TYPE__ENVIRONMENT;
+      this.environmentType = PosixFactory.eINSTANCE.createEnvironmentType();
+      this.environmentType.setName( valuesArray[0].toString() );
+      this.environmentType.setFilesystemName( valuesArray[1].toString() );
+      this.environmentType.setValue( valuesArray[2].toString() );
+      newInputList.add( this.environmentType );
+      
+    }
+    
+    // Get EStructural Feature.
+    eStructuralFeature = this.posixApplicationType.eClass().getEStructuralFeature( featureID );
+    
+    tableViewer.setInput(newInputList);
+    
+    
+    for ( int i=0; i<tableViewer.getTable().getItemCount(); i++ ) {
+      collection.add( tableViewer.getElementAt( i ) );
+    }
+
+    checkPosixApplicationElement();
+    this.posixApplicationType.eSet(eStructuralFeature, collection);
+    
+    tableViewer.refresh();
+   
+    this.contentChanged();
+    
+    eStructuralFeature = null;
+    newInputList = null;
+    collection = null;
+    
+  }
   
  
   protected void deleteElement(final int featureID){

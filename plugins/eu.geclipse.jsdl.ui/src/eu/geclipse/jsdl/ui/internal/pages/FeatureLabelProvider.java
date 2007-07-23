@@ -23,6 +23,8 @@ package eu.geclipse.jsdl.ui.internal.pages;
  * @author nickl
  */
 
+import java.util.ArrayList;
+
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
@@ -44,6 +46,7 @@ public class FeatureLabelProvider extends LabelProvider implements
 
   public String getColumnText(Object element, int columnIndex) {
     String text = null;
+    Object[] array = null;
     
       
     if ( element instanceof ArgumentType ) {
@@ -78,6 +81,10 @@ public class FeatureLabelProvider extends LabelProvider implements
       
     }// end elseif EnvironmentType
     
+    else if (element instanceof Object[]) {     
+      array = ( Object[] ) element;            
+    } 
+    
     else{
       switch ( columnIndex ) {
         case 0:
@@ -86,6 +93,10 @@ public class FeatureLabelProvider extends LabelProvider implements
           default:
           break;
       } // end switch
+    }
+    
+    if ( ( array != null ) && ( columnIndex < array.length ) ) {
+      text = getText( array[ columnIndex ] );
     }
     return text;
     
