@@ -200,7 +200,7 @@ public abstract class GridModelViewPart
   
   protected void contributeStandardActions( final ActionGroupManager groups ) {
     
-    this.openActions = new OpenActions( getSite() );
+    this.openActions = new OpenActions( this );
     groups.addGroup( this.openActions );
     
     FileActions fileActions = new FileActions( this );

@@ -23,10 +23,15 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.OpenEvent;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyAdapter;
+import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.actions.ActionGroup;
 import org.eclipse.ui.navigator.ICommonMenuConstants;
+
+import eu.geclipse.ui.views.GridModelViewPart;
 
 /**
  * Action group holding all available open actions.
@@ -34,14 +39,14 @@ import org.eclipse.ui.navigator.ICommonMenuConstants;
 public class OpenActions extends ActionGroup {
   
   /**
+   * Action for opening Grid model elements.
+   */
+  protected OpenElementAction openElementAction;
+  
+  /**
    * The workbench site this action belongs to.
    */
   private IWorkbenchSite site;
-  
-  /**
-   * Action for opening Grid model elements.
-   */
-  private OpenElementAction openElementAction;
   
   /**
    * Construct a new open action group for the specified workbench site.
@@ -49,15 +54,24 @@ public class OpenActions extends ActionGroup {
    * @param site The {@link IWorkbenchSite} for which to create this
    * open action group.
    */
-  public OpenActions( final IWorkbenchSite site ) {
+  public OpenActions( final GridModelViewPart part ) {
     
-    this.site = site;
-    IWorkbenchPage page = site.getPage();
-    ISelectionProvider provider = site.getSelectionProvider();
+    this.site = part.getSite();
+    IWorkbenchPage page = this.site.getPage();
+    ISelectionProvider provider = this.site.getSelectionProvider();
     
     this.openElementAction = new OpenElementAction( page );
     
     provider.addSelectionChangedListener( this.openElementAction );
+    
+    part.getViewer().getControl().addKeyListener( new KeyAdapter() {
+      @Override
+      public void keyPressed( final KeyEvent e ) {
+        if ( e.keyCode == SWT.F3 ) {
+          OpenActions.this.openElementAction.run();
+        }
+      }
+    } );
     
   }
   
