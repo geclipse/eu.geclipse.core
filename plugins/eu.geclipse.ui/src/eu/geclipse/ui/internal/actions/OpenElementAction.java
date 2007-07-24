@@ -21,12 +21,10 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
-import org.eclipse.ui.IEditorDescriptor;
-import org.eclipse.ui.IEditorRegistry;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.actions.BaseSelectionListenerAction;
 import org.eclipse.ui.actions.OpenFileAction;
-import org.eclipse.ui.editors.text.EditorsUI;
+
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridJob;
 
@@ -41,12 +39,7 @@ public class OpenElementAction
    * Ordinary open file action.
    */
   private OpenFileAction openFileAction;
-  
-  /**
-   * Specialised action to open connection files.
-   */
-  private OpenFileAction openConnectionAction;
-  
+    
   /**
    * Specialised action to open Grid jobs.
    */
@@ -67,13 +60,7 @@ public class OpenElementAction
     
     super( Messages.getString("OpenElementAction.open_element_action_text") ); //$NON-NLS-1$
     
-    IEditorRegistry editorRegistry
-      = page.getWorkbenchWindow().getWorkbench().getEditorRegistry();
-    IEditorDescriptor defaultTextEditor
-      = editorRegistry.findEditor( EditorsUI.DEFAULT_TEXT_EDITOR_ID );
-    
     this.openFileAction = new OpenFileAction( page );
-    this.openConnectionAction = new OpenFileAction( page, defaultTextEditor );
     this.openJobAction = new OpenJobAction( page );
     
   }
@@ -109,9 +96,7 @@ public class OpenElementAction
     
     this.activeAction = null;
     
-    if ( isGridConnection( selection ) ) {
-      this.activeAction = this.openConnectionAction;
-    } else if ( isGridJob( selection ) ) {
+    if ( isGridJob( selection ) ) {
       this.activeAction = this.openJobAction;
     } else {
       this.activeAction = this.openFileAction;
