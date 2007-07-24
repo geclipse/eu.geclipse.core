@@ -150,7 +150,7 @@ public class GridProjectView
    */
   @Override
   protected StructuredViewer createViewer( final Composite parent ) {
-    StructuredViewer sViewer = new TreeViewer( parent, SWT.VIRTUAL | SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL );
+    StructuredViewer sViewer = new TreeViewer( parent, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL );
     return sViewer;
   }
   
