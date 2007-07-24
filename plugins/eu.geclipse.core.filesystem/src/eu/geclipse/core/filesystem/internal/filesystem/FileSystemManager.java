@@ -8,7 +8,7 @@ import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.filesystem.IFileSystem;
 import org.eclipse.core.runtime.CoreException;
 
-import eu.geclipse.core.filesystem.FileSystem;
+import eu.geclipse.core.filesystem.GEclipseFileSystem;
 import eu.geclipse.core.filesystem.internal.Activator;
 
 public class FileSystemManager
@@ -143,15 +143,15 @@ public class FileSystemManager
 
   }
 
-  public FileStore getStore( final FileSystem fileSystem, final URI uri ) {
+  public GEclipseFileStore getStore( final GEclipseFileSystem fileSystem, final URI uri ) {
 
     FileStoreRegistry registry = FileStoreRegistry.getInstance();
-    FileStore result = registry.getStore( uri );
+    GEclipseFileStore result = registry.getStore( uri );
     
     if ( result == null ) {
       try {
         IFileStore slaveStore = getSlaveStore( uri );
-        result = new FileStore( fileSystem, slaveStore );
+        result = new GEclipseFileStore( fileSystem, slaveStore );
         registry.putStore( result );
       } catch ( CoreException cExc ) {
         Activator.logException( cExc );

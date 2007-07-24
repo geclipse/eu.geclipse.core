@@ -12,8 +12,8 @@ public class FileStoreRegistry {
   
   private static FileStoreRegistry instance;
   
-  private Hashtable< URI, FileStore > registeredStores
-    = new Hashtable< URI, FileStore >();
+  private Hashtable< URI, GEclipseFileStore > registeredStores
+    = new Hashtable< URI, GEclipseFileStore >();
   
   private FileStoreRegistry() {
     // empty implementation
@@ -26,18 +26,18 @@ public class FileStoreRegistry {
     return instance;
   }
   
-  void putStore( final FileStore store ) {
+  void putStore( final GEclipseFileStore store ) {
     URI uri = store.toURI();
     URI key = getKey( uri );
     this.registeredStores.put( key, store );
   }
   
-  FileStore getStore( final URI uri ) {
+  GEclipseFileStore getStore( final URI uri ) {
     URI key = getKey( uri );
     return this.registeredStores.get( key );
   }
   
-  FileStore getStore( final IFileStore fileStore ) {
+  GEclipseFileStore getStore( final IFileStore fileStore ) {
     return getStore( fileStore.toURI() );
   }
   

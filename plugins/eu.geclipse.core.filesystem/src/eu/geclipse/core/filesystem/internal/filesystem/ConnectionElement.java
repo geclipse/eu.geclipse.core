@@ -15,7 +15,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 
-import eu.geclipse.core.filesystem.FileSystem;
+import eu.geclipse.core.filesystem.GEclipseFileSystem;
 import eu.geclipse.core.filesystem.internal.Activator;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridConnectionElement;
@@ -54,7 +54,7 @@ public class ConnectionElement
   public IFileStore getConnectionFileStore() throws CoreException {
     IResource res= getResource();
     URI uri = res.getLocationURI();
-    FileSystem fileSystem = new FileSystem();
+    GEclipseFileSystem fileSystem = new GEclipseFileSystem();
     return fileSystem.getStore( uri );
   }
   
@@ -89,7 +89,7 @@ public class ConnectionElement
     boolean result = false;
     
     try {
-      FileStore fileStore = ( FileStore ) getConnectionFileStore();
+      GEclipseFileStore fileStore = ( GEclipseFileStore ) getConnectionFileStore();
       result = fileStore.isLocal();
     } catch ( CoreException cExc ) {
       Activator.logException( cExc );
@@ -118,7 +118,7 @@ public class ConnectionElement
     try {
     
       IResource res = getResource();
-      FileStore fileStore = ( FileStore ) getConnectionFileStore();
+      GEclipseFileStore fileStore = ( GEclipseFileStore ) getConnectionFileStore();
       fileStore.reset();
       res.refreshLocal( IResource.DEPTH_INFINITE, new SubProgressMonitor( lMonitor, 10 ) );
       fileStore.activate();
