@@ -15,7 +15,7 @@
    <extension
          point="org.eclipse.ui.newWizards">
       <wizard
-            canFinishEarly="true"
+            canFinishEarly="false"
             category="eu.geclipse.ui.newResourceCategory"
             class="eu.geclipse.jsdl.ui.wizards.NewJobWizard"
             finalPerspective="eu.geclipse.ui.gEclipsePerspective"
