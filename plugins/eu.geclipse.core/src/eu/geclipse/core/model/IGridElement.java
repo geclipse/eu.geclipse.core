@@ -95,6 +95,12 @@ public interface IGridElement
    */
   public IResource getResource();
   
+  /**
+   * Determines if this element is hidden. Hidden elements are not
+   * shown in the Grid model views.
+   * 
+   * @return True if this is a hidden element, false otherwise.
+   */
   public boolean isHidden();
   
   /**

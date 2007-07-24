@@ -17,7 +17,6 @@
 package eu.geclipse.core;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IStatus;
 
 /**
  * Base class of all Grid exceptions. This exception is also the base

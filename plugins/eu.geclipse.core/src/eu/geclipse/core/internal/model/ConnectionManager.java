@@ -18,13 +18,6 @@ package eu.geclipse.core.internal.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.filesystem.EFS;
-import org.eclipse.core.filesystem.IFileStore;
-import org.eclipse.core.runtime.CoreException;
-
-import eu.geclipse.core.internal.Activator;
-import eu.geclipse.core.model.GridModelException;
-import eu.geclipse.core.model.GridModelProblems;
 import eu.geclipse.core.model.IConnectionManager;
 import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridElement;

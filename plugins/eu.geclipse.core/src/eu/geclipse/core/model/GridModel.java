@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.filesystem.IFileStore;
-import org.eclipse.core.runtime.CoreException;
 
 import eu.geclipse.core.Extensions;
 import eu.geclipse.core.internal.model.ConnectionManager;

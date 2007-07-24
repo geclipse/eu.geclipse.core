@@ -304,6 +304,12 @@ public class Extensions {
     return problemProviders;
   }
   
+  /**
+   * Get a list of all currently registered filesystem schemes.
+   * 
+   * @return A list of Strings containing all schemes that are
+   * currently known by the EFS.
+   */
   public static List< String > getRegisteredFilesystemSchemes() {
     List< String > resultList = new ArrayList< String >();
     ExtensionManager manager = new ExtensionManager();

@@ -1,3 +1,18 @@
+/*****************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.core.internal.model;
 
 import java.net.URI;
@@ -24,22 +39,51 @@ import eu.geclipse.core.model.IGridRoot;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
 
+/**
+ * The hidden project is a project that is not visible in the Grid
+ * model views. It implements {@link IGridPreferences} and therefore stores
+ * all global preferences in a well defined structure within a project.
+ */
 public class HiddenProject
     extends ResourceGridContainer
     implements IGridProject, IGridPreferences {
   
+  /**
+   * The name of the project.
+   */
   public static final String NAME = ".geclipse"; //$NON-NLS-1$
   
+  /**
+   * Folder name of the global connections folder.
+   */
   private static final String DIR_GLOBAL_CONNECTIONS = ".connections"; //$NON-NLS-1$
   
+  /**
+   * Folder name of the temporary folder.
+   */
   private static final String DIR_TEMP = ".temp"; //$NON-NLS-1$
   
+  /**
+   * Name of the temporary connection.
+   */
   private static final String TEMP_CONNECTION_NAME = ".tmp_connection"; //$NON-NLS-1$
   
+  /**
+   * Private constructor.
+   * 
+   * @param resource The resource from which to create the project.
+   */
   private HiddenProject( final IResource resource ) {
     super(resource);
   }
   
+  /**
+   * Get the singleton instance of the hidden project.
+   * 
+   * @return The singleton. If not yet happened the singleton will be
+   * created.
+   * @throws GridModelException If the creation of the singleton fails.
+   */
   public static HiddenProject getInstance() throws GridModelException {
     
     IGridRoot gridRoot = GridModel.getRoot();
@@ -61,6 +105,13 @@ public class HiddenProject
     
   }
   
+  /**
+   * Get the singleton instance of the hidden project.
+   * 
+   * @param project The {@link IProject} from which to create the singleton.
+   * @return The hidden project.
+   * @throws GridModelException If the creation of the project fails.
+   */
   static HiddenProject getInstance( final IProject project )
       throws GridModelException {
     
@@ -109,11 +160,17 @@ public class HiddenProject
     
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.impl.AbstractGridContainer#canContain(eu.geclipse.core.model.IGridElement)
+   */
   @Override
   public boolean canContain( final IGridElement element ) {
     return true;
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridPreferences#createGlobalConnection(java.lang.String, java.net.URI)
+   */
   public void createGlobalConnection( final String name, final URI masterURI )
       throws GridModelException {
     try {
@@ -127,6 +184,9 @@ public class HiddenProject
     }
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridPreferences#createTemporaryConnection(java.net.URI)
+   */
   public IGridConnection createTemporaryConnection( final URI masterURI )
       throws GridModelException {
     
@@ -158,26 +218,49 @@ public class HiddenProject
     return this;
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridProject#getVO()
+   */
   public IVirtualOrganization getVO() {
     return null;
   }
 
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridProject#isGridProject()
+   */
   public boolean isGridProject() {
     return false;
   }
 
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridProject#isOpen()
+   */
   public boolean isOpen() {
     return false;
   }
   
+  /**
+   * Create the structure of the hidden project.
+   * 
+   * @param project The corresponding {@link IProject} used to create
+   * the project folders.
+   * @throws CoreException If an error occures during the structure creation.
+   */
   private static void createProjectStructure( final IProject project )
       throws CoreException {
     createProjectDirectory( project, DIR_GLOBAL_CONNECTIONS );
     createProjectDirectory( project, DIR_TEMP );
   }
   
+  /**
+   * Create a directory within the project.
+   * 
+   * @param project The project used to create the directory.
+   * @param name The name of the new directory.
+   * @throws CoreException If the creation of the directory failed.
+   */
   private static void createProjectDirectory( final IProject project,
-                                       final String name )
+                                              final String name )
       throws CoreException {
     
     IFolder folder = project.getFolder( new Path( name ) );

@@ -264,6 +264,11 @@ public abstract class AbstractProblem implements IProblem {
     return this.text;
   }
   
+  /**
+   * Determine if this problem currently contains reasons.
+   * 
+   * @return True if there are reasons for that problem.
+   */
   public boolean hasReasons() {
     List< String > reasonList = getReasons();
     return ( reasonList != null ) && ! reasonList.isEmpty();

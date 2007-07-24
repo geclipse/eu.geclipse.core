@@ -74,8 +74,8 @@ public class JobManager extends AbstractGridElementManager
   {
 //fast workaroud. 
 //TODO pawelw -correct it    
-    if(listenerRegistered==false){
-      listenerRegistered=true;
+    if( this.listenerRegistered == false ){
+      this.listenerRegistered = true;
       GridModel.getRoot().addGridModelListener( this );
     }
 
