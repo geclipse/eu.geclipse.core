@@ -16,7 +16,7 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
-import eu.geclipse.core.filesystem.FileSystem;
+import eu.geclipse.core.filesystem.GEclipseFileSystem;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridPreferences;
@@ -119,7 +119,7 @@ public class ConnectionWizard
 
     if ( slaveURI != null ) {
       try {
-        URI masterURI = FileSystem.createMasterURI( slaveURI );
+        URI masterURI = GEclipseFileSystem.createMasterURI( slaveURI );
         IGridPreferences preferences = GridModel.getPreferences();
         preferences.createGlobalConnection( name, masterURI );
         result = true;
@@ -152,7 +152,7 @@ public class ConnectionWizard
       IFolder folder = ResourcesPlugin.getWorkspace().getRoot().getFolder( path );
       
       try {
-        URI masterURI = FileSystem.createMasterURI( slaveURI );
+        URI masterURI = GEclipseFileSystem.createMasterURI( slaveURI );
         folder.createLink( masterURI, IResource.ALLOW_MISSING_LOCAL, null );
       } catch ( CoreException cExc ) {
         Activator.logException( cExc );

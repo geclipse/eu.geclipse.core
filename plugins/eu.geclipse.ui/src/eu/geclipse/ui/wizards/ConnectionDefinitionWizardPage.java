@@ -38,7 +38,7 @@ import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.PlatformUI;
 
-import eu.geclipse.core.filesystem.FileSystem;
+import eu.geclipse.core.filesystem.GEclipseFileSystem;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridConnection;
@@ -355,7 +355,7 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
     
           IFileStore fileStore = element.getConnectionFileStore();
           URI uri = fileStore.toURI();
-          uri = FileSystem.createSlaveURI( uri );
+          uri = GEclipseFileSystem.createSlaveURI( uri );
           
           if ( this.currentURIType.equals( Extensions.EFS_URI_RAW ) ) {
             this.uriCombo.setText( uri.toString() );
@@ -386,7 +386,7 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
       
       try {
       
-        URI masterURI = FileSystem.createMasterURI( slaveURI );
+        URI masterURI = GEclipseFileSystem.createMasterURI( slaveURI );
         IGridPreferences preferences = GridModel.getPreferences();
         IGridConnection connection
           = preferences.createTemporaryConnection( masterURI );
