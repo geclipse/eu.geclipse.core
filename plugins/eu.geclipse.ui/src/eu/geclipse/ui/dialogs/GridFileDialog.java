@@ -25,6 +25,8 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -66,7 +68,6 @@ import eu.geclipse.ui.providers.IConfigurationListener;
 public class GridFileDialog extends Dialog implements IGridModelListener {
 
   private static final String LOCAL_FILTER = "file"; //$NON-NLS-1$
-  
   /**
    * The {@link TreeViewer} used to display the remote file structure.
    */
@@ -100,7 +101,7 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
    * The currently selected connection element.
    */
   private IGridConnectionElement selectedElement;
-  private GridConnectionProtocolFilter protocolFilter;
+  private ViewerFilter protocolFilter;
 
   /**
    * Create a new <code>GridFileDialog</code> with the specified parent
@@ -118,8 +119,25 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
     this.title = title;
     this.filter = new GridConnectionFilter();
     if( !allowLocal ) {
-      this.protocolFilter = new GridConnectionProtocolFilter();
-      this.protocolFilter.addFilterProtocol( LOCAL_FILTER );
+      this.protocolFilter = new ViewerFilter() {
+
+        @Override
+        public boolean select( final Viewer viewer,
+                               final Object parentElement,
+                               final Object element )
+        {
+          boolean result = true;
+          if( element instanceof IGridConnectionElement ) {
+            if( ( ( IGridConnectionElement )element ).isLocal() ) {
+              result = false;
+            }
+          }
+          return result;
+          //      
+        }
+      };
+      // this.protocolFilter = new GridConnectionProtocolFilter();
+      // this.protocolFilter.addFilterProtocol( LOCAL_FILTER );
     }
   }
 
@@ -132,10 +150,10 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
    * @param parent The parent {@link Shell} of this dialog.
    * @param title The dialog's title.
    * @param filteredFileExtensions A string array containing the applied
-   *          filters. This array has to contain the filtered file extensions
-   *          without the leading period character. It may also be
-   *          <code>null</code>. In that case the wildcard filter is used and
-   *          therefore all files are shown.
+   *            filters. This array has to contain the filtered file extensions
+   *            without the leading period character. It may also be
+   *            <code>null</code>. In that case the wildcard filter is used
+   *            and therefore all files are shown.
    * @return The selected {@link IGridConnectionElement} if the dialog's return
    *         status was <code>OK</code> and a valid remote file was selected
    *         or <code>null</code>.
@@ -157,8 +175,7 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
    * @see org.eclipse.jface.dialogs.Dialog#close()
    */
   @Override
-  public boolean close()
-  {
+  public boolean close() {
     IConnectionManager cManager = GridModel.getConnectionManager();
     cManager.removeGridModelListener( this );
     return super.close();
@@ -168,10 +185,10 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
    * Set the filters that are used to filter the displayed connections.
    * 
    * @param extensions A string array containing the applied filters. This array
-   *          has to contain the filtered file extensions without the leading
-   *          period character. It may also be <code>null</code>. In that
-   *          case the wildcard filter is used and therefore all files are
-   *          shown.
+   *            has to contain the filtered file extensions without the leading
+   *            period character. It may also be <code>null</code>. In that
+   *            case the wildcard filter is used and therefore all files are
+   *            shown.
    */
   public void setFilteredFileExtensions( final String[] extensions ) {
     this.filter.clearFileExtensionFilters();
@@ -188,8 +205,7 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
    * @see org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets.Shell)
    */
   @Override
-  protected void configureShell( final Shell shell )
-  {
+  protected void configureShell( final Shell shell ) {
     super.configureShell( shell );
     shell.setText( this.title );
   }
@@ -200,8 +216,7 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
    * @see org.eclipse.jface.dialogs.Dialog#createDialogArea(org.eclipse.swt.widgets.Composite)
    */
   @Override
-  protected Control createDialogArea( final Composite parent )
-  {
+  protected Control createDialogArea( final Composite parent ) {
     GridData gData;
     Composite mainComp = new Composite( parent, SWT.NONE );
     mainComp.setLayout( new GridLayout( 1, false ) );
@@ -303,7 +318,7 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
       }
     } );
     this.filter.link( this.treeViewer, this.filetypeCombo );
-    if (this.protocolFilter != null){
+    if( this.protocolFilter != null ) {
       this.treeViewer.addFilter( this.protocolFilter );
     }
     return mainComp;
@@ -340,7 +355,7 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
    * connections.
    * 
    * @param provider The {@link ConfigurableContentProvider} that changed its
-   *          configuration.
+   *            configuration.
    */
   protected void handleConfigurationChanged( final ConfigurableContentProvider provider )
   {
@@ -419,7 +434,7 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
    * refreshed.
    * 
    * @param element The {@link IGridElement} that will be refreshed. This also
-   *          includes the element's children.
+   *            includes the element's children.
    */
   private void refreshViewer( final IGridElement element ) {
     Display display = this.treeViewer.getControl().getDisplay();
