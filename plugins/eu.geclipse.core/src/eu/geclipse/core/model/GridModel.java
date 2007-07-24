@@ -23,7 +23,6 @@ import org.eclipse.core.runtime.CoreException;
 
 import eu.geclipse.core.Extensions;
 import eu.geclipse.core.internal.model.ConnectionManager;
-import eu.geclipse.core.internal.model.GridConnectionCreator;
 import eu.geclipse.core.internal.model.GridProjectCreator;
 import eu.geclipse.core.internal.model.GridRoot;
 import eu.geclipse.core.internal.model.HiddenProject;
@@ -99,8 +98,6 @@ public class GridModel {
       standardCreators = new ArrayList< IGridElementCreator >();
       standardCreators.add( new GridProjectCreator() );
       standardCreators.add( new LocalResourceCreator() );
-      //standardCreators.add( new GridMountCreator() );
-      standardCreators.add( new GridConnectionCreator() );
     }
     return standardCreators;
   }

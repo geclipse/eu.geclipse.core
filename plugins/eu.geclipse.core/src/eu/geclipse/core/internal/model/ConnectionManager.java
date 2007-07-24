@@ -53,11 +53,7 @@ public class ConnectionManager
   private static ConnectionManager singleton;
   
   private ConnectionManager() {
-    try {
-      loadElements();
-    } catch ( GridModelException gmExc ) {
-      Activator.logException( gmExc );
-    }
+    // empty implementation
   }
   
   /**
@@ -113,35 +109,4 @@ public class ConnectionManager
     return NAME;
   }
 
-  /* (non-Javadoc)
-   * @see eu.geclipse.core.model.IStorableElementManager#loadElements()
-   */
-  public void loadElements() throws GridModelException {
-
-    IFileStore fileStore = getFileStore();
-    
-    IFileStore[] childStores;
-    try {
-      childStores = fileStore.childStores( EFS.NONE, null );
-    } catch( CoreException cExc ) {
-      throw new GridModelException( GridModelProblems.ELEMENT_LOAD_FAILED, cExc );
-    }
-    
-    for ( IFileStore childStore : childStores ) {
-      IFileStore remoteStore
-        = GridConnection.loadFromFsFile( childStore );
-      IGridConnection connection
-        = new GridConnection( this, remoteStore, childStore.getName() );
-      addElement( connection );
-    }
-        
-  }
-  
-  /* (non-Javadoc)
-   * @see eu.geclipse.core.model.IStorableElementManager#saveElements()
-   */
-  public void saveElements() throws GridModelException {
-    // TODO mathias
-  }
-  
 }

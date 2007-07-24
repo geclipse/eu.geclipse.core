@@ -20,7 +20,7 @@ package eu.geclipse.core.model;
  * that will for sure change in the future.
  */
 public interface IConnectionManager
-    extends IGridElementManager, IStorableElementManager {
+    extends IGridElementManager {
   
   /**
    * Get all global connections that are currently defined.
