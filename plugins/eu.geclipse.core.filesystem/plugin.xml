@@ -6,7 +6,7 @@
       <filesystem
             scheme="gecl">
          <run
-               class="eu.geclipse.core.filesystem.FileSystem">
+               class="eu.geclipse.core.filesystem.GEclipseFileSystem">
          </run>
       </filesystem>
    </extension>
