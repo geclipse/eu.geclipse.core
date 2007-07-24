@@ -25,7 +25,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.action.Action;
 
-import eu.geclipse.core.filesystem.FileSystem;
+import eu.geclipse.core.filesystem.GEclipseFileSystem;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridProject;
@@ -93,7 +93,7 @@ public class MountAction extends Action {
         IPath path = new Path( getMountName( source ) );
         IFolder folder = container.getFolder( path );
         URI accessToken = findAccessToken( this.accessProtocol, source );
-        URI masterURI = FileSystem.createMasterURI( accessToken );
+        URI masterURI = GEclipseFileSystem.createMasterURI( accessToken );
         folder.createLink( masterURI, IResource.ALLOW_MISSING_LOCAL, null );
       }
     }
