@@ -245,7 +245,7 @@ public class ProgressTreeNode
    * @param event The event triggering this measurement.
    */
   protected void measureItem( final Event event ) {
-    event.height = this.treeViewer.getTree().getItemHeight();//event.gc.getFontMetrics().getHeight();
+    event.height = event.gc.getFontMetrics().getHeight();
     event.width = getProgressBarWidth( event.gc ) + 3;
     if ( this.taskName != null ) {
       event.width += DEFAULT_TEXT_GAP
