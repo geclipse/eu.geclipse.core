@@ -20,7 +20,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
@@ -35,6 +37,7 @@ import org.eclipse.emf.ecore.util.FeatureMapUtil;
 import org.eclipse.emf.ecore.util.FeatureMap.Entry;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMLMapImpl;
+
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
 import eu.geclipse.jsdl.internal.JsdlAdaptersPlugin;
@@ -107,6 +110,16 @@ public class JSDLJobDescription extends ResourceGridContainer
    */
   public JSDLJobDescription( final IFile file ) {
     super( file );
+    try {
+      if( file.getContents().read() != -1 ) {
+        loadModel( file );
+      }
+    } catch( CoreException e ) {
+      // TODO katis - error handling
+    } catch( IOException e ) {
+      // TODO katis - error handling
+      e.printStackTrace();
+    }
   }
 
   /**
@@ -125,9 +138,25 @@ public class JSDLJobDescription extends ResourceGridContainer
     try {
       resourceA.load( options );
       this.documentRoot = ( DocumentRoot )resourceA.getContents().get( 0 );
-      this.documentRoot.getJobDefinition();
+      this.jobDefinition = this.documentRoot.getJobDefinition();
+      this.jobDescription = this.jobDefinition.getJobDescription();
+      this.jobIdentification = this.documentRoot.getJobIdentification();
     } catch( IOException ioEx ) {
       JsdlAdaptersPlugin.logException( ioEx );
+    }
+  }
+
+  public DocumentRoot getRoot() {
+    return this.documentRoot;
+  }
+
+  public void setRoot( final DocumentRoot root ) {
+    this.documentRoot = root;
+    if( root.getJobDefinition() != null ) {
+      this.jobDefinition = root.getJobDefinition();
+      if( this.jobDefinition.getJobDescription() != null ) {
+        this.jobDescription = this.jobDefinition.getJobDescription();
+      }
     }
   }
 
@@ -144,7 +173,7 @@ public class JSDLJobDescription extends ResourceGridContainer
    * Get the content of the corresponding JSDL file.
    * 
    * @return The content of the file as a String.
-   * @throws IOException If an error occures when loading the content.
+   * @throws IOException If an error occurs when loading the content.
    */
   public String getJSDLString() throws IOException {
     String jsdl = null;
@@ -164,8 +193,7 @@ public class JSDLJobDescription extends ResourceGridContainer
   // It get's as parameters the JobDefinition and the file name.
   // You can get the file name from the wizard.
   @SuppressWarnings("unchecked")
-  private void writeModelToFile( final EObject jsdlRoot, final IFile file )
-  {
+  private void writeModelToFile( final EObject jsdlRoot, final IFile file ) {
     // Here you have to get the File's path...
     // This is where i couldn't do it , but with the
     // wizard this is easy to do.
@@ -223,7 +251,7 @@ public class JSDLJobDescription extends ResourceGridContainer
   }
 
   /**
-   * Method to add job identyfication element to JSDL. This method must not be
+   * Method to add job identification element to JSDL. This method must not be
    * called before calling {@link JSDLJobDescription#jobIdentification}
    * 
    * @param jobName
@@ -325,8 +353,7 @@ public class JSDLJobDescription extends ResourceGridContainer
    * @param path
    */
   @SuppressWarnings("unchecked")
-  public void setOutDataStaging( final String name, final String path )
-  {
+  public void setOutDataStaging( final String name, final String path ) {
     DataStagingType dataIn = this.jsdlFactory.createDataStagingType();
     dataIn.setCreationFlag( CreationFlagEnumeration.OVERWRITE_LITERAL );
     dataIn.setDeleteOnTermination( true );
@@ -345,8 +372,7 @@ public class JSDLJobDescription extends ResourceGridContainer
    * @param path
    */
   @SuppressWarnings("unchecked")
-  public void setInDataStaging( final String name, final String path )
-  {
+  public void setInDataStaging( final String name, final String path ) {
     DataStagingType dataOut = this.jsdlFactory.createDataStagingType();
     dataOut.setCreationFlag( CreationFlagEnumeration.OVERWRITE_LITERAL );
     dataOut.setDeleteOnTermination( true );
@@ -586,8 +612,7 @@ public class JSDLJobDescription extends ResourceGridContainer
    * @param argName name of the argument to add
    */
   @SuppressWarnings("unchecked")
-  public void addArgument( final String argName )
-  {
+  public void addArgument( final String argName ) {
     POSIXApplicationType posixApp = getPosixApplication();
     ArgumentType arg;
     if( posixApp != null ) {
@@ -666,7 +691,7 @@ public class JSDLJobDescription extends ResourceGridContainer
    * @param start - minimum number of cpu
    * @param end - maximum number of cpu
    * @param exclusive - treat above range as closed (valid value can be also
-   *          start or end)
+   *            start or end)
    */
   @SuppressWarnings("unchecked")
   public void setTotalCPUCount( final double start,
@@ -707,8 +732,7 @@ public class JSDLJobDescription extends ResourceGridContainer
    * @param hostsList - list of hosts, which are candidate to run jub
    */
   @SuppressWarnings("unchecked")
-  public void addCandidateHosts( final List<String> hostsList )
-  {
+  public void addCandidateHosts( final List<String> hostsList ) {
     DocumentRoot dRoot = getDocumentRoot();
     if( dRoot != null
         && dRoot.getJobDefinition() != null
@@ -763,7 +787,7 @@ public class JSDLJobDescription extends ResourceGridContainer
    * @param start - minimum CPU speed
    * @param end - maximum CPU speed
    * @param exclusive - should above range be trated as closed (start / end
-   *          value is valid value)
+   *            value is valid value)
    */
   @SuppressWarnings("unchecked")
   public void setInidividialCPUSpeedRange( final double start,
@@ -804,7 +828,7 @@ public class JSDLJobDescription extends ResourceGridContainer
    * @param start - minimum amount of memory
    * @param end - maximum amount of memory
    * @param exclusive - should above range be closed (then start and end value
-   *          is valid value)
+   *            is valid value)
    */
   @SuppressWarnings("unchecked")
   public void setTotalPhysicalMemory( final double start,
@@ -953,20 +977,53 @@ public class JSDLJobDescription extends ResourceGridContainer
   }
 
   /**
-   * Method to acces data staging in for this JSDL document
+   * Method to access data staging in for this JSDL document
    * 
-   * @return List od {@link DataStagingType}
+   * @return List of {@link DataStagingType}
    */
   @SuppressWarnings("unchecked")
-  public List<DataStagingType> getDataStagingIn()
-  {
+  public List<DataStagingType> getDataStagingIn() {
     List<DataStagingType> result = new ArrayList<DataStagingType>();
     DocumentRoot dRoot = getDocumentRoot();
     if( getJobDescription( dRoot ) != null ) {
       List<DataStagingType> temp = this.jobDescription.getDataStaging();
-      for( DataStagingType dataType : temp ) {
-        if( dataType.getSource() != null ) {
-          result.add( dataType );
+      if( temp != null ) {
+        for( DataStagingType dataType : temp ) {
+          if( dataType.getSource() != null ) {
+            result.add( dataType );
+          }
+        }
+      }
+    }
+    return result;
+  }
+
+  public Map<String, String> getDataStagingInStrings() {
+    Map<String, String> result = new HashMap<String, String>();
+    DocumentRoot dRoot = getDocumentRoot();
+    if( getJobDescription( dRoot ) != null ) {
+      List<DataStagingType> temp = this.jobDescription.getDataStaging();
+      if( temp != null ) {
+        for( DataStagingType dataType : temp ) {
+          if( dataType.getSource() != null ) {
+            result.put( dataType.getFileName(), dataType.getSource().getURI() );
+          }
+        }
+      }
+    }
+    return result;
+  }
+
+  public Map<String, String> getDataStagingOutStrings() {
+    Map<String, String> result = new HashMap<String, String>();
+    DocumentRoot dRoot = getDocumentRoot();
+    if( getJobDescription( dRoot ) != null ) {
+      List<DataStagingType> temp = this.jobDescription.getDataStaging();
+      if( temp != null ) {
+        for( DataStagingType dataType : temp ) {
+          if( dataType.getTarget() != null ) {
+            result.put( dataType.getFileName(), dataType.getTarget().getURI() );
+          }
         }
       }
     }
@@ -974,20 +1031,21 @@ public class JSDLJobDescription extends ResourceGridContainer
   }
 
   /**
-   * Method to acces data staging out for this JSDL document
+   * Method to access data staging out for this JSDL document
    * 
-   * @return List od {@link DataStagingType}
+   * @return List of {@link DataStagingType}
    */
   @SuppressWarnings("unchecked")
-  public List<DataStagingType> getDataStagingOut()
-  {
+  public List<DataStagingType> getDataStagingOut() {
     List<DataStagingType> result = new ArrayList<DataStagingType>();
     DocumentRoot dRoot = getDocumentRoot();
     if( getJobDescription( dRoot ) != null ) {
       List<DataStagingType> temp = this.jobDescription.getDataStaging();
-      for( DataStagingType dataType : temp ) {
-        if( dataType.getTarget() != null ) {
-          result.add( dataType );
+      if( temp != null ) {
+        for( DataStagingType dataType : temp ) {
+          if( dataType.getTarget() != null ) {
+            result.add( dataType );
+          }
         }
       }
     }
@@ -1027,5 +1085,13 @@ public class JSDLJobDescription extends ResourceGridContainer
       }
     }
     return result;
+  }
+
+  public void removeDataStaging() {
+    this.jobDescription.getDataStaging().removeAll( this.jobDescription.getDataStaging() );
+  }
+
+  public void addDataStagingType( DataStagingType data ) {
+    this.jobDescription.getDataStaging().add( data );
   }
 }
