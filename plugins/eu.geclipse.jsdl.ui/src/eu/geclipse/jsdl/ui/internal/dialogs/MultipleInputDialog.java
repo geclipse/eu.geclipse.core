@@ -51,7 +51,7 @@ import eu.geclipse.ui.widgets.StoredCombo;
 /**
  * This class is in fact adaptation of Eclipse's class
  * org.eclipse.debug.internal.ui.MultipleInputDialog for gEclipse.
- * Reimplementation was needed to avoid internal dependencies warnings. Some
+ * Re-implementation was needed to avoid internal dependencies warnings. Some
  * methods were changed and some other added to suit gEclipse needs.
  */
 public class MultipleInputDialog extends Dialog {
@@ -89,8 +89,7 @@ public class MultipleInputDialog extends Dialog {
    * @see org.eclipse.jface.window.Window#configureShell(org.eclipse.swt.widgets.Shell)
    */
   @Override
-  protected void configureShell( final Shell shell )
-  {
+  protected void configureShell( final Shell shell ) {
     super.configureShell( shell );
     if( this.title != null ) {
       shell.setText( this.title );
@@ -103,8 +102,7 @@ public class MultipleInputDialog extends Dialog {
    * @see org.eclipse.jface.dialogs.Dialog#createButtonBar(org.eclipse.swt.widgets.Composite)
    */
   @Override
-  protected Control createButtonBar( final Composite parent )
-  {
+  protected Control createButtonBar( final Composite parent ) {
     Control bar = super.createButtonBar( parent );
     validateFields();
     return bar;
@@ -117,6 +115,8 @@ public class MultipleInputDialog extends Dialog {
    * @param labelText label for the filed
    * @param initialValue initial value to set field to
    * @param allowsEmpty parameter allowing this field to be empty or not
+   * @param allowLocal true for field which will accept both - local and remote
+   *            location, false - only for remote
    */
   public void addBrowseField( final String labelText,
                               final String initialValue,
@@ -166,8 +166,8 @@ public class MultipleInputDialog extends Dialog {
    * @param labelText label to describe combo field
    * @param values values to put on the list of the combo field
    * @param initialValue one of the values from values list. Combo field will be
-   *          set to this value. If <code>null</code> - combo field is set to
-   *          point on the first value from the values set
+   *            set to this value. If <code>null</code> - combo field is set
+   *            to point on the first value from the values set
    */
   public void addComboField( final String labelText,
                              final ArrayList<String> values,
@@ -221,8 +221,7 @@ public class MultipleInputDialog extends Dialog {
    * @see org.eclipse.jface.dialogs.Dialog#createDialogArea(org.eclipse.swt.widgets.Composite)
    */
   @Override
-  protected Control createDialogArea( final Composite parent )
-  {
+  protected Control createDialogArea( final Composite parent ) {
     Composite container = ( Composite )super.createDialogArea( parent );
     container.setLayout( new GridLayout( 2, false ) );
     container.setLayoutData( new GridData( GridData.FILL_BOTH ) );
@@ -297,8 +296,7 @@ public class MultipleInputDialog extends Dialog {
       this.validators.add( new Validator() {
 
         @Override
-        public boolean validate()
-        {
+        public boolean validate() {
           return !text.getText().equals( "" ); //$NON-NLS-1$
         }
       } );
@@ -445,8 +443,7 @@ public class MultipleInputDialog extends Dialog {
       this.validators.add( new Validator() {
 
         @Override
-        public boolean validate()
-        {
+        public boolean validate() {
           return !text.getText().equals( "" ); //$NON-NLS-1$
         }
       } );
@@ -464,19 +461,20 @@ public class MultipleInputDialog extends Dialog {
     button.addSelectionListener( new SelectionAdapter() {
 
       @Override
-      public void widgetSelected( final SelectionEvent e )
-      {
+      public void widgetSelected( final SelectionEvent e ) {
         {
           IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
                                                                              "Choose a file",
                                                                              null,
                                                                              allowLocal );
-          
-          
           if( connection != null ) {
             try {
               String filename = connection.getConnectionFileStore().toString();
-              if (connection.getConnectionFileStore().getFileSystem().getScheme().equalsIgnoreCase( "file" )){
+              if( connection.getConnectionFileStore()
+                .getFileSystem()
+                .getScheme()
+                .equalsIgnoreCase( "file" ) )
+              {
                 filename = "file://" + filename;
               }
               if( filename != null ) {
@@ -630,8 +628,7 @@ public class MultipleInputDialog extends Dialog {
       this.validators.add( new Validator() {
 
         @Override
-        public boolean validate()
-        {
+        public boolean validate() {
           return !text.getText().equals( "" ); //$NON-NLS-1$
         }
       } );
@@ -684,8 +681,7 @@ public class MultipleInputDialog extends Dialog {
       this.validators.add( new Validator() {
 
         @Override
-        public boolean validate()
-        {
+        public boolean validate() {
           return !combo.getText().equals( "" ); //$NON-NLS-1$
         }
       } );
@@ -705,8 +701,7 @@ public class MultipleInputDialog extends Dialog {
    * @see org.eclipse.jface.dialogs.Dialog#okPressed()
    */
   @Override
-  protected void okPressed()
-  {
+  protected void okPressed() {
     for( Iterator<Text> i = this.controlList.iterator(); i.hasNext(); ) {
       Control control = i.next();
       if( control instanceof Text ) {
@@ -732,8 +727,7 @@ public class MultipleInputDialog extends Dialog {
    * @see org.eclipse.jface.window.Window#open()
    */
   @Override
-  public int open()
-  {
+  public int open() {
     applyDialogFont( this.panel );
     return super.open();
   }
@@ -768,8 +762,7 @@ public class MultipleInputDialog extends Dialog {
    * @see org.eclipse.jface.dialogs.Dialog#getDialogBoundsSettings()
    */
   @Override
-  protected IDialogSettings getDialogBoundsSettings()
-  {
+  protected IDialogSettings getDialogBoundsSettings() {
     IDialogSettings settings = Activator.getDefault().getDialogSettings();
     IDialogSettings section = settings.getSection( getDialogSettingsSectionName() );
     if( section == null ) {
@@ -784,8 +777,8 @@ public class MultipleInputDialog extends Dialog {
    * @param labelText label to describe this field
    * @param initialValue initial value of this field
    * @param allowsEmpty indicates whether this field can be empty (if
-   *          <code>false</code> dialog cannot be closed until this field
-   *          holds some value)
+   *            <code>false</code> dialog cannot be closed until this field
+   *            holds some value)
    */
   public void addTextField( final String labelText,
                             final String initialValue,
@@ -826,17 +819,17 @@ public class MultipleInputDialog extends Dialog {
      * field types except form {@link MultipleInputDialog#BROWSE}.
      * 
      * @param type type of the field (see {@link MultipleInputDialog#BROWSE},
-     *          {@link MultipleInputDialog#COMBO},
-     *          {@link MultipleInputDialog#FIELD_NAME},
-     *          {@link MultipleInputDialog#TEXT} and
-     *          {@link MultipleInputDialog#VARIABLE})
+     *            {@link MultipleInputDialog#COMBO},
+     *            {@link MultipleInputDialog#FIELD_NAME},
+     *            {@link MultipleInputDialog#TEXT} and
+     *            {@link MultipleInputDialog#VARIABLE})
      * @param name name of the field (used to access this field's value by
-     *          method {@link MultipleInputDialog#getValue(String)} or
-     *          {@link MultipleInputDialog#getStringValue(String)}
+     *            method {@link MultipleInputDialog#getValue(String)} or
+     *            {@link MultipleInputDialog#getStringValue(String)}
      * @param initialValue initial value to set this field to
      * @param allowsEmpty indicates whether this field can be empty (if
-     *          <code>false</code> dialog cannot be closed until this field
-     *          holds some value)
+     *            <code>false</code> dialog cannot be closed until this field
+     *            holds some value)
      */
     public FieldSummary( final int type,
                          final String name,
@@ -850,20 +843,21 @@ public class MultipleInputDialog extends Dialog {
      * Creates new instance of {@link FieldSummary}
      * 
      * @param type type of the field (see {@link MultipleInputDialog#BROWSE},
-     *          {@link MultipleInputDialog#COMBO},
-     *          {@link MultipleInputDialog#FIELD_NAME},
-     *          {@link MultipleInputDialog#TEXT} and
-     *          {@link MultipleInputDialog#VARIABLE})
+     *            {@link MultipleInputDialog#COMBO},
+     *            {@link MultipleInputDialog#FIELD_NAME},
+     *            {@link MultipleInputDialog#TEXT} and
+     *            {@link MultipleInputDialog#VARIABLE})
      * @param name name of the field (used to access this field's value by
-     *          method {@link MultipleInputDialog#getValue(String)} or
-     *          {@link MultipleInputDialog#getStringValue(String)}
+     *            method {@link MultipleInputDialog#getValue(String)} or
+     *            {@link MultipleInputDialog#getStringValue(String)}
      * @param initialValue initial value to set this field to
      * @param allowsEmpty indicates whether this field can be empty (if
-     *          <code>false</code> dialog cannot be closed until this field
-     *          holds some value)
+     *            <code>false</code> dialog cannot be closed until this field
+     *            holds some value)
      * @param allowLocal if <code>false</code> this field will accept only
-     *          remote filesystems values, all values otherwise. For now this
-     *          setting works only for {@link MultipleInputDialog#BROWSE} field.
+     *            remote filesystems values, all values otherwise. For now this
+     *            setting works only for {@link MultipleInputDialog#BROWSE}
+     *            field.
      */
     public FieldSummary( final int type,
                          final String name,
