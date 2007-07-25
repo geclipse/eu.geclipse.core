@@ -1,6 +1,5 @@
 package eu.geclipse.ui.wizards;
 
-import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -8,8 +7,6 @@ import java.util.List;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
@@ -36,7 +33,6 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Tree;
-import org.eclipse.ui.PlatformUI;
 
 import eu.geclipse.core.filesystem.GEclipseFileSystem;
 import eu.geclipse.core.model.GridModel;
@@ -331,8 +327,10 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
       Display display = control.getDisplay();
       display.asyncExec( new Runnable() {
         public void run() {
-          IGridElement element = event.getSource();
-          ConnectionDefinitionWizardPage.this.viewer.refresh( element );
+          if ( ! ConnectionDefinitionWizardPage.this.viewer.getControl().isDisposed() ) {
+            IGridElement element = event.getSource();
+            ConnectionDefinitionWizardPage.this.viewer.refresh( element );
+          }
         }
       } );
     }
