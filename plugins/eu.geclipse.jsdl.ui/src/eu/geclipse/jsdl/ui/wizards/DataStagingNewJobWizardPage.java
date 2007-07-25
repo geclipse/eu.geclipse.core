@@ -368,7 +368,6 @@ public class DataStagingNewJobWizardPage extends WizardPage {
         DataStaging newData = new DataStaging(name, initialOut.get( name ), null);
         this.initialStagingOut.add( newData );
         if (this.copyFromTab != null){
-          
         }
       } catch( Exception e ) {
         // TODO Auto-generated catch block

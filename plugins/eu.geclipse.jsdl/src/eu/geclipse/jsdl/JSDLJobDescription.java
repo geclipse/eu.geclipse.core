@@ -16,6 +16,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.rmi.activation.Activator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -118,7 +119,7 @@ public class JSDLJobDescription extends ResourceGridContainer
       // TODO katis - error handling
     } catch( IOException e ) {
       // TODO katis - error handling
-      e.printStackTrace();
+      
     }
   }
 
