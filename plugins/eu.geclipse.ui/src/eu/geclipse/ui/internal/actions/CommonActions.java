@@ -65,7 +65,7 @@ public class CommonActions extends ActionGroup {
    * Construct a new <code>CommonActions</code> action group for the
    * specified {@link IWorkbenchSite}.
    * 
-   * @param site The {@link IWorkbenchSite} this action is associated with.
+   * @param part The {@link GridModelViewPart} this action is associated with.
    */
   public CommonActions( final GridModelViewPart part ) {
   

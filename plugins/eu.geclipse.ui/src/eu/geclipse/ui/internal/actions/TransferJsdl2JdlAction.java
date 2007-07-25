@@ -1,10 +1,10 @@
 
 package eu.geclipse.ui.internal.actions;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.StringBufferInputStream;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
@@ -130,7 +130,10 @@ public class TransferJsdl2JdlAction extends SelectionListenerAction {
       /*
        * put the result of the transformation in the new file 
        */
-      InputStream inputStream = new StringBufferInputStream( jdlWriter.toString() );
+      // mathias: Changed to ByteArrayInputStream since StringBufferInputStream is deprecated.
+      //InputStream inputStream = new StringBufferInputStream( jdlWriter.toString() );
+      byte[] bytes = jdlWriter.toString().getBytes();
+      ByteArrayInputStream inputStream = new ByteArrayInputStream( bytes );
 
       outfile.create( inputStream, false, null );
     

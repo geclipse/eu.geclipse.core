@@ -28,6 +28,8 @@ public abstract class AbstractGridElement
     extends PlatformObject
     implements IGridElement {
   
+  private static final String HIDDEN_PREFIX = "."; //$NON-NLS-1$
+  
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridElement#dispose()
    */
@@ -57,19 +59,10 @@ public abstract class AbstractGridElement
   public IGridProject getProject() {
     IGridContainer parent = getParent();
     return parent == null ? null : parent.getProject();
-    /*IGridProject project = null;
-    IGridContainer parent = getParent();
-    while ( ( parent != null ) && !( parent instanceof IGridProject ) ) {
-      parent = parent.getParent();
-    }
-    if ( parent instanceof IGridProject ) {
-      project = ( IGridProject ) parent; 
-    }
-    return project;*/
   }
   
   public boolean isHidden() {
-    return getName().startsWith( "." );
+    return getName().startsWith( HIDDEN_PREFIX );
   }
 
   /* (non-Javadoc)

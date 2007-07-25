@@ -1,3 +1,18 @@
+/*****************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.core.filesystem;
 
 import java.net.URI;
@@ -17,14 +32,24 @@ import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.impl.AbstractGridElementCreator;
 
+/**
+ * Grid element creator for file system mounts. This class both creates
+ * root mounts for file systems and element mounts for child nodes.
+ */
 public class FileSystemCreator
     extends AbstractGridElementCreator {
 
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridElementCreator#canCreate(java.lang.Class)
+   */
   public boolean canCreate( final Class<? extends IGridElement> elementType ) {
     // TODO Auto-generated method stub
     return false;
   }
 
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridElementCreator#create(eu.geclipse.core.model.IGridContainer)
+   */
   public IGridElement create( final IGridContainer parent )
       throws GridModelException {
     
@@ -41,11 +66,25 @@ public class FileSystemCreator
     
   }
   
+  /**
+   * Creates a connection element from the specified resource.
+   * 
+   * @param resource The resource for creating the element.
+   * @return A {@link ConnectionElement} that corresponds to the specified
+   * resource.
+   */
   private ConnectionElement createConnectionElement( final IResource resource ) {
     ConnectionElement element = new ConnectionElement( resource );
     return element;
   }
   
+  /**
+   * Creates a connection root from the specified linked folder.
+   * 
+   * @param folder The linked folder from which to create the root.
+   * @return A {@link ConnectionRoot} that corresponds to the specified
+   * folder.
+   */
   private ConnectionRoot createConnectionRoot( final IFolder folder ) {
     ConnectionRoot connection = new ConnectionRoot( folder );
     try {
@@ -60,6 +99,9 @@ public class FileSystemCreator
     return connection;
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.impl.AbstractGridElementCreator#internalCanCreate(java.lang.Object)
+   */
   @Override
   protected boolean internalCanCreate( final Object fromObject ) {
     
@@ -73,6 +115,13 @@ public class FileSystemCreator
     
   }
   
+  /**
+   * Determines if the specified resource is part of a linked connection.
+   * 
+   * @param resource The resource to be tested.
+   * @return True if the specified resource either is a linked folder
+   * or is a direct or indirect child of a linked folder.  
+   */
   private boolean isFileSystemElement( final IResource resource ) {
     
     boolean result = isFileSystemLink( resource );
@@ -85,6 +134,13 @@ public class FileSystemCreator
     
   }
   
+  /**
+   * Determines if the specified resource is a linked folder.
+   * 
+   * @param resource The resource to be tested.
+   * @return True if the specified resource is a linked folder and
+   * the link is a g-Eclipse URI.
+   */
   private boolean isFileSystemLink( final IResource resource ) {
     
     boolean result = false;

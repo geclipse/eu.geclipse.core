@@ -1,3 +1,18 @@
+/*****************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.core.filesystem.internal;
 
 import org.eclipse.core.runtime.IStatus;
@@ -10,10 +25,14 @@ import org.osgi.framework.BundleContext;
  */
 public class Activator extends Plugin {
 
-  // The plug-in ID
+  /**
+   * The plug-in ID 
+   */
   public static final String PLUGIN_ID = "eu.geclipse.core.filesystem"; //$NON-NLS-1$
 
-  // The shared instance
+  /**
+   *  The shared instance
+   */
   private static Activator plugin;
 
   /**

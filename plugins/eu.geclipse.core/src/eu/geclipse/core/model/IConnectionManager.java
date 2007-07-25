@@ -27,7 +27,7 @@ public interface IConnectionManager
    * 
    * @return An array containing all currently defined global
    * connections.
-   * @see IGridConnection#isGlobal();
+   * @see IGridConnection#isGlobal()
    */
   public IGridConnection[] getGlobalConnections();
   

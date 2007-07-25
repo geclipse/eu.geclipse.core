@@ -15,9 +15,6 @@
 
 package eu.geclipse.core.model;
 
-import java.io.InputStream;
-import org.eclipse.core.resources.IFile;
-import org.eclipse.core.runtime.CoreException;
 import eu.geclipse.core.Messages;
 
 /**

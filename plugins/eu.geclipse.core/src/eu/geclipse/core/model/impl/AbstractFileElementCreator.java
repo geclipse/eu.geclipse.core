@@ -20,13 +20,15 @@ import org.eclipse.core.runtime.IPath;
 
 /**
  * Element creator for creating elements from files. Therefore
- * the {@link #internalCanCreate(Object)} method delegates the decision
- * to the {@link #internalCanCreate(String)} method who decides with the
+ * the internalCanCreate(Object) method delegates the decision
+ * to the internalCanCreate(String) method who decides with the
  * help of the file extension of the file's name if this creator is
  * able to create an element from the specified {@link IFile}.
  */
 public abstract class AbstractFileElementCreator
     extends AbstractGridElementCreator {
+  
+  private static final String EMPTY_STRING = ""; //$NON-NLS-1$
 
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.impl.AbstractGridElementCreator#internalCanCreate(java.lang.Object)
@@ -36,7 +38,7 @@ public abstract class AbstractFileElementCreator
     boolean result = false;
     if ( fromObject instanceof IFile ) {
       IPath location = ( ( IFile ) fromObject ).getLocation();
-      String fileExtension = location == null ? "" : location.getFileExtension();
+      String fileExtension = location == null ? EMPTY_STRING : location.getFileExtension();
       result = internalCanCreate( fileExtension );
     }
     return result;

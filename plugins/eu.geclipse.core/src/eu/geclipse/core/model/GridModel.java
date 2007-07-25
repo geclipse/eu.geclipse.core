@@ -101,6 +101,15 @@ public class GridModel {
     return standardCreators;
   }
   
+  /**
+   * Get an {@link IGridElementCreator} that is able to create
+   * an element of the specified type from the specified object.
+   * 
+   * @param fromObject The object from which to create the element. 
+   * @param elementType The type of the element to be created.
+   * @return An appropriate element creator or <code>null</code> if no
+   * such creator is currently registered.
+   */
   public static IGridElementCreator getElementCreator(
       final Object fromObject,
       final Class< ? extends IGridElement > elementType ) {
@@ -249,6 +258,13 @@ public class GridModel {
     return resultList;
   }
   
+  /**
+   * Get the grid preferences.
+   * 
+   * @return An instance of {@link IGridPreferences}.
+   * @throws GridModelException If the preferences could not be found
+   * or the creation of the preferences failed.
+   */
   public static IGridPreferences getPreferences() throws GridModelException {
     return HiddenProject.getInstance();
   }

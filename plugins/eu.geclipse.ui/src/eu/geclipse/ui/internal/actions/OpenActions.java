@@ -51,7 +51,7 @@ public class OpenActions extends ActionGroup {
   /**
    * Construct a new open action group for the specified workbench site.
    * 
-   * @param site The {@link IWorkbenchSite} for which to create this
+   * @param part The {@link GridModelViewPart} for which to create this
    * open action group.
    */
   public OpenActions( final GridModelViewPart part ) {

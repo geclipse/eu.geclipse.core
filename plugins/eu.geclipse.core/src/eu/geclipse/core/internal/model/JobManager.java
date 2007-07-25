@@ -261,20 +261,32 @@ public class JobManager extends AbstractGridElementManager
     updater.join();
   }
 
+  /**
+   * Removes the specified {@link IGridJobStatusListener} from the list of listeners.
+   * 
+   * @param jobs The jobs from which the listener should be removed.
+   * @param listener The listener to be removed.
+   */
   public void removeJobStatusListener( final IGridJob[] jobs, final IGridJobStatusListener listener ) {
 
     JobStatusUpdater updater;
     for(int i=0;i<jobs.length;i++){
-      updater=updaters.get( jobs[i].getID() );
+      updater=this.updaters.get( jobs[i].getID() );
       updater.removeJobStatusListener( listener );
     }
     this.globalListeners.remove( listener );
   }
 
+  /**
+   * Removes the specified {@link IGridJobStatusListener} from the list of listeners.
+   * 
+   * @param ids The ids of the jobs from which the listener should be removed.
+   * @param listener The listener to be removed.
+   */
   public void removeJobStatusListener( final IGridJobID[] ids, final IGridJobStatusListener listener ) {
     JobStatusUpdater updater;
     for(int i=0;i<ids.length;i++){
-      updater=updaters.get( ids[i] );
+      updater=this.updaters.get( ids[i] );
       updater.removeJobStatusListener( listener );
     }
     this.globalListeners.remove( listener );
@@ -286,7 +298,7 @@ public class JobManager extends AbstractGridElementManager
       for( IGridElement elem : removedElements ) {
         if( elem instanceof IGridJob ) {
           IGridJob job = ( IGridJob )elem;
-          JobStatusUpdater updater = updaters.get( job.getID() );
+          JobStatusUpdater updater = this.updaters.get( job.getID() );
           // check if updater is currently running and wait until it finishes
           while( updater.getState() == Job.RUNNING ) {
             try {

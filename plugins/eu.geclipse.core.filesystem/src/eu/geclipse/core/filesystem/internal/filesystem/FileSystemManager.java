@@ -1,3 +1,18 @@
+/*****************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.core.filesystem.internal.filesystem;
 
 import java.net.URI;
@@ -11,18 +26,31 @@ import org.eclipse.core.runtime.CoreException;
 import eu.geclipse.core.filesystem.GEclipseFileSystem;
 import eu.geclipse.core.filesystem.internal.Activator;
 
+/**
+ * Internal class that manages file stores within the g-Eclipse
+ * file system.
+ */
 public class FileSystemManager
     implements IFileSystemProperties {
   
+  /**
+   * The singleton instance.
+   */
   private static FileSystemManager instance;
   
-  /*private List< URI > activeStores
-    = new ArrayList< URI >();*/
-  
+  /**
+   * Private constructor.
+   */
   private FileSystemManager() {
     // Empty implementation
   }
   
+  /**
+   * Get the singleton instance of the file system manager.
+   * If not yet happened this instance is created.
+   * 
+   * @return The singleton instance.
+   */
   public static FileSystemManager getInstance() {
     if ( instance == null ) {
       instance = new FileSystemManager();
@@ -30,6 +58,14 @@ public class FileSystemManager
     return instance;
   }
   
+  /**
+   * Create a g-Eclipse URI from the specified URI. If the specified URI
+   * is already a g-Eclipse URI it is just returned.
+   * 
+   * @param slaveURI The slave URI from which to create a master URI. 
+   * @return The g-Eclipse URI that corresponds to the specified
+   * slave URI. 
+   */
   public static URI createMasterURI( final URI slaveURI ) {
     
     URI masterURI = slaveURI;
@@ -79,6 +115,13 @@ public class FileSystemManager
     
   }
   
+  /**
+   * Create a slave URI from the specified g-Eclipse URI. If the specified
+   * URI is not a g-Eclipse URI it is just returned.
+   * 
+   * @param masterURI The g-Eclipse URI from which to create the slave URI.
+   * @return The slave URI that corresponds to the specified g-Eclipse URI.
+   */
   public static URI createSlaveURI( final URI masterURI ) {
 
     URI slaveURI = masterURI;
@@ -120,6 +163,13 @@ public class FileSystemManager
 
   }
   
+  /**
+   * Get the scheme of the slave file system from the specified URI.
+   * 
+   * @param uri The URI from which to retrieve the scheme. This may be
+   * either a slave or a master URI. 
+   * @return The scheme of the slave file system.
+   */
   public static String getSlaveScheme( final URI uri ) {
 
     String scheme = ""; //$NON-NLS-1$
@@ -143,6 +193,15 @@ public class FileSystemManager
 
   }
 
+  /**
+   * Get a file store for the specified URI. The file store is created
+   * for the specified file system.
+   * 
+   * @param fileSystem The {@link GEclipseFileSystem} for which to create
+   * the file store.
+   * @param uri The URI from which to create a file store.
+   * @return The {@link GEclipseFileStore} for the specified URI.
+   */
   public GEclipseFileStore getStore( final GEclipseFileSystem fileSystem, final URI uri ) {
 
     FileStoreRegistry registry = FileStoreRegistry.getInstance();
@@ -155,8 +214,6 @@ public class FileSystemManager
         registry.putStore( result );
       } catch ( CoreException cExc ) {
         Activator.logException( cExc );
-      } catch ( URISyntaxException uriExc ) {
-        Activator.logException( uriExc );
       }
     }
     
@@ -164,31 +221,31 @@ public class FileSystemManager
     
   }
 
+  /**
+   * Get a slave store for the specified URI.
+   * 
+   * @param uri The URI from which to create a slave store.
+   * @return The created slave store.
+   * @throws CoreException If the store could not be created.
+   */
   private static IFileStore getSlaveStore( final URI uri )
-      throws CoreException, URISyntaxException {
+      throws CoreException {
     IFileSystem slaveSystem = getSlaveSystem( uri );
     URI slaveURI = createSlaveURI( uri );
     return slaveSystem.getStore( slaveURI );
   }
 
+  /**
+   * Get a slave system for the specified URI.
+   * 
+   * @param uri The URI from which to create a slave system.
+   * @return The created slave system.
+   * @throws CoreException If the system could not be created.
+   */
   private static IFileSystem getSlaveSystem( final URI uri )
       throws CoreException {
     String slaveScheme = getSlaveScheme( uri );
     return EFS.getFileSystem( slaveScheme );
   }
 
-/*
-  private boolean isActive( final URI key ) {
-    return this.activeStores.contains( key );
-  }
-
-  private void setActive( final URI key, final boolean active ) {
-    boolean isActive = isActive( key );
-    if ( active && ! isActive ) {
-      this.activeStores.add( key );
-    } else if ( ! active && isActive ) {
-      this.activeStores.remove( key );
-    }
-  }
-*/
 }

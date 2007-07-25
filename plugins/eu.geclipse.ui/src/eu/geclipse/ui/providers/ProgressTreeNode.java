@@ -174,15 +174,29 @@ public class ProgressTreeNode
     return this.canceled;
   }
   
+  /**
+   * Determine if the job is done.
+   * 
+   * @return True if the job is done.
+   */
   public boolean isDone() {
     return this.done;
   }
 
+  /* (non-Javadoc)
+   * @see org.eclipse.core.runtime.IProgressMonitor#setCanceled(boolean)
+   */
   public void setCanceled( final boolean value ) {
     this.canceled = value;
     update();
   }
   
+  /**
+   * Set the error string for this tree node. The error string
+   * is shown as part of the nodes text.
+   * 
+   * @param error The error string to be set.
+   */
   public void setError( final String error ) {
     this.errorString = error;
   }

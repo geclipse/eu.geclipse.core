@@ -1,3 +1,18 @@
+/*****************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.core.filesystem.internal.filesystem;
 
 import java.io.InputStream;
@@ -15,22 +30,47 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import eu.geclipse.core.filesystem.GEclipseFileSystem;
 import eu.geclipse.core.filesystem.internal.Activator;
 
+/**
+ * Implementation of {@link IFileStore} for the g-Eclipse file system.
+ */
 public class GEclipseFileStore
     extends org.eclipse.core.filesystem.provider.FileStore
     implements IFileStore {
   
+  /**
+   * The file system.
+   */
   private GEclipseFileSystem fileSystem;
   
+  /**
+   * The parent store. May be <code>null</code>.
+   */
   private GEclipseFileStore parent;
  
+  /**
+   * The slave store.
+   */
   private IFileStore slave;
   
+  /**
+   * Determines if this store is active.
+   */
   private boolean isActive;
   
+  /**
+   * The names of the children if yet fetched.
+   */
   private String[] childNames;
   
+  /**
+   * Create a new master store from the specified slave store. The
+   * file store will be a root store.
+   * 
+   * @param fileSystem The file system for which to create the store.
+   * @param slave The slave store for which to create the master store.
+   */
   protected GEclipseFileStore( final GEclipseFileSystem fileSystem,
-                       final IFileStore slave ) {
+                               final IFileStore slave ) {
     Assert.isNotNull( fileSystem );
     Assert.isNotNull( slave );
     this.fileSystem = fileSystem;
@@ -39,8 +79,15 @@ public class GEclipseFileStore
     this.isActive = false;
   }
 
+  /**
+   * Create a new master store from the specified slave store. The
+   * file store will be a child store.
+   * 
+   * @param parent The parent store of this file store.
+   * @param slave The slave store for which to create the master store.
+   */
   private GEclipseFileStore( final GEclipseFileStore parent,
-                     final IFileStore slave ) {
+                             final IFileStore slave ) {
     Assert.isNotNull( parent );
     Assert.isNotNull( slave );
     this.fileSystem = ( GEclipseFileSystem ) parent.getFileSystem();
@@ -49,10 +96,19 @@ public class GEclipseFileStore
     this.isActive = false;
   }
   
+  /**
+   * Activate this store. After a store is activated the
+   * {@link #childNames(int, IProgressMonitor)} method will delegate its
+   * work to the slave store. If {@link #childNames(int, IProgressMonitor)}
+   * is called without activating the store the cached names are returned.
+   */
   public void activate() {
     setActive( true );
   }
 
+  /* (non-Javadoc)
+   * @see org.eclipse.core.filesystem.provider.FileStore#childNames(int, org.eclipse.core.runtime.IProgressMonitor)
+   */
   @Override
   public String[] childNames( final int options,
                               final IProgressMonitor monitor )
@@ -80,6 +136,9 @@ public class GEclipseFileStore
     
   }
   
+  /* (non-Javadoc)
+   * @see org.eclipse.core.filesystem.provider.FileStore#delete(int, org.eclipse.core.runtime.IProgressMonitor)
+   */
   @Override
   public void delete( final int options,
                       final IProgressMonitor monitor )
@@ -87,6 +146,9 @@ public class GEclipseFileStore
     getSlave().delete( options, monitor );
   }
 
+  /* (non-Javadoc)
+   * @see org.eclipse.core.filesystem.provider.FileStore#fetchInfo(int, org.eclipse.core.runtime.IProgressMonitor)
+   */
   @Override
   public IFileInfo fetchInfo( final int options,
                               final IProgressMonitor monitor )
@@ -95,6 +157,9 @@ public class GEclipseFileStore
     return fileInfo; 
   }
 
+  /* (non-Javadoc)
+   * @see org.eclipse.core.filesystem.provider.FileStore#getChild(java.lang.String)
+   */
   @Override
   public IFileStore getChild( final String name ) {
     
@@ -114,25 +179,46 @@ public class GEclipseFileStore
     
   }
   
+  /* (non-Javadoc)
+   * @see org.eclipse.core.filesystem.provider.FileStore#getFileSystem()
+   */
   @Override
   public IFileSystem getFileSystem() {
     return this.fileSystem;
   }
 
+  /* (non-Javadoc)
+   * @see org.eclipse.core.filesystem.provider.FileStore#getName()
+   */
   @Override
   public String getName() {
     return getSlave().getName();
   }
 
+  /* (non-Javadoc)
+   * @see org.eclipse.core.filesystem.provider.FileStore#getParent()
+   */
   @Override
   public IFileStore getParent() {
     return this.parent;
   }
   
+  /**
+   * Get this file stores slave store.
+   * 
+   * @return The slave store of this file store.
+   */
   public IFileStore getSlave() {
     return this.slave;
   }
   
+  /**
+   * Determines if this file store is a local store. Local stores
+   * are stores that have a slave store comming from the
+   * {@link EFS#getLocalFileSystem()}.
+   * 
+   * @return True if this store is a local mount.
+   */
   public boolean isLocal() {
     URI uri = toURI();
     String scheme = FileSystemManager.getSlaveScheme( uri );
@@ -141,6 +227,9 @@ public class GEclipseFileStore
     return scheme.equals( localScheme );
   }
   
+  /* (non-Javadoc)
+   * @see org.eclipse.core.filesystem.provider.FileStore#mkdir(int, org.eclipse.core.runtime.IProgressMonitor)
+   */
   @Override
   public IFileStore mkdir( final int options,
                            final IProgressMonitor monitor)
@@ -158,6 +247,9 @@ public class GEclipseFileStore
     return result;
   }
 
+  /* (non-Javadoc)
+   * @see org.eclipse.core.filesystem.provider.FileStore#openInputStream(int, org.eclipse.core.runtime.IProgressMonitor)
+   */
   @Override
   public InputStream openInputStream( final int options,
                                       final IProgressMonitor monitor )
@@ -165,6 +257,9 @@ public class GEclipseFileStore
     return getSlave().openInputStream( options, monitor );
   }
   
+  /* (non-Javadoc)
+   * @see org.eclipse.core.filesystem.provider.FileStore#openOutputStream(int, org.eclipse.core.runtime.IProgressMonitor)
+   */
   @Override
   public OutputStream openOutputStream( final int options,
                                         final IProgressMonitor monitor )
@@ -172,6 +267,9 @@ public class GEclipseFileStore
     return getSlave().openOutputStream( options, monitor );
   }
   
+  /* (non-Javadoc)
+   * @see org.eclipse.core.filesystem.provider.FileStore#putInfo(org.eclipse.core.filesystem.IFileInfo, int, org.eclipse.core.runtime.IProgressMonitor)
+   */
   @Override
   public void putInfo( final IFileInfo info,
                        final int options,
@@ -180,19 +278,38 @@ public class GEclipseFileStore
     getSlave().putInfo( info, options, monitor );
   }
   
+  /**
+   * Reset this file store. Resetting a file store means deleting the cached
+   * child names.
+   */
   public void reset() {
     this.childNames = null;
   }
   
+  /* (non-Javadoc)
+   * @see org.eclipse.core.filesystem.provider.FileStore#toURI()
+   */
   @Override
   public URI toURI() {
     return FileSystemManager.createMasterURI( getSlave().toURI() );
   }
   
+  /**
+   * Determines if this file store is currently active.
+   * 
+   * @return True if this store is active, i.e. if the next time when
+   * {@link #childNames(int, IProgressMonitor)} is called this call will
+   * be delegated to the slave store.
+   */
   private boolean isActive() {
     return this.isActive;
   }
   
+  /**
+   * Set this stores activation state.
+   * 
+   * @param active True if the store should be active.
+   */
   private void setActive( final boolean active ) {
     this.isActive = active;
   }

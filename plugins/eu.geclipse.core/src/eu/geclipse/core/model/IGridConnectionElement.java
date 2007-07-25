@@ -17,9 +17,7 @@ package eu.geclipse.core.model;
 
 import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
  * Base interface for elements of a filesystem mount.
@@ -51,16 +49,6 @@ public interface IGridConnectionElement extends IGridResource, IGridContainer {
    * @return An error string.
    */
   public String getError();
-  
-  /**
-   * This method is not intended for public use. It may disappear in the near
-   * future.
-   * 
-   * @param monitor Progress monitor.
-   * @return A local {@link IResource}.
-   * @throws CoreException
-   */
-  public IResource createLocalCopy( final IProgressMonitor monitor ) throws CoreException;
   
   /**
    * Determine if this grid mount object specifies a folder. If it

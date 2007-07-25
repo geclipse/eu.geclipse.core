@@ -122,8 +122,7 @@ public class AuthenticationTokenManager implements IContentChangeNotifier {
    * token is not longer accessible from this manager and should not longer be used.
    *  
    * @param token The {@link IAuthenticationToken} to be destroyed.
-   * @throws AuthenticationException 
-   * @see #removeToken(IAuthenticationToken)
+   * @throws AuthenticationException
    */
   public void destroyToken( final IAuthenticationToken token ) throws AuthenticationException {
     removeToken( token );

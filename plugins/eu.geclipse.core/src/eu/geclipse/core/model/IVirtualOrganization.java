@@ -46,6 +46,14 @@ public interface IVirtualOrganization
    */
   public IGridService[] getServices() throws GridModelException;
   
+  /**
+   * Get a list of all job submission services that are available for
+   * this virtual organization.
+   * 
+   * @return A list of all currently available job submission services.
+   * @throws GridModelException If an error occures while retrieving
+   * the services.
+   */
   public IGridJobSubmissionService[] getJobSubmissionServices() throws GridModelException;
   
   /**

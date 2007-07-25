@@ -1,3 +1,18 @@
+/*****************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.core.filesystem.internal.filesystem;
 
 import java.net.URI;
@@ -11,7 +26,6 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 
@@ -23,41 +37,67 @@ import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.impl.AbstractGridContainer;
 
+/**
+ * Internal implementation of the {@link IGridConnectionElement}.
+ */
 public class ConnectionElement
     extends AbstractGridContainer
     implements IGridConnectionElement {
   
+  /**
+   * The corresponding resource.
+   */
   private IResource resource;
   
+  /**
+   * An error that may have occured during the last fetch operation.
+   */
   private Throwable fetchError;
   
+  /**
+   * Create a new connection element from the specified resource.
+   * 
+   * @param resource The resource from which to create a new element.
+   * This resource has either to be a folder linked to a g-Eclipse URI
+   * or has to be a child of such a folder.
+   */
   public ConnectionElement( final IResource resource ) {
     Assert.isNotNull( resource );
     this.resource = resource;
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.impl.AbstractGridContainer#canContain(eu.geclipse.core.model.IGridElement)
+   */
   @Override
   public boolean canContain( final IGridElement element ) {
     return isFolder() && ( element instanceof IGridConnectionElement );
   }
 
-  public IResource createLocalCopy( final IProgressMonitor monitor )
-      throws CoreException {
-    // TODO Auto-generated method stub
-    return null;
-  }
-  
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridConnectionElement#getConnectionFileInfo()
+   */
   public IFileInfo getConnectionFileInfo() throws CoreException {
     return getConnectionFileStore().fetchInfo();
   }
 
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridConnectionElement#getConnectionFileStore()
+   */
   public IFileStore getConnectionFileStore() throws CoreException {
-    IResource res= getResource();
-    URI uri = res.getLocationURI();
-    GEclipseFileSystem fileSystem = new GEclipseFileSystem();
-    return fileSystem.getStore( uri );
+    IFileStore result = null;
+    IResource res = getResource();
+    if ( res != null ) {
+      URI uri = res.getLocationURI();
+      GEclipseFileSystem fileSystem = new GEclipseFileSystem();
+      result = fileSystem.getStore( uri ); 
+    }
+    return result;
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridConnectionElement#getError()
+   */
   public String getError() {
     String error = null;
     if ( this.fetchError != null ) {
@@ -66,24 +106,39 @@ public class ConnectionElement
     return error;
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.impl.AbstractGridContainer#hasChildren()
+   */
   @Override
   public boolean hasChildren() {
     return isFolder() ? super.hasChildren() : false;
   }
 
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridConnectionElement#isFolder()
+   */
   public boolean isFolder() {
     return getResource().getType() == IResource.FOLDER;
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.impl.AbstractGridElement#isHidden()
+   */
   @Override
   public boolean isHidden() {
     return false;
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridContainer#isLazy()
+   */
   public boolean isLazy() {
     return true;
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridElement#isLocal()
+   */
   public boolean isLocal() {
     
     boolean result = false;
@@ -99,10 +154,33 @@ public class ConnectionElement
     
   }
 
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridConnectionElement#isValid()
+   */
   public boolean isValid() {
     return getError() == null;
   }
   
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.impl.AbstractGridContainer#setDirty()
+   */
+  @Override
+  public void setDirty() {
+    super.setDirty();
+    try {
+      GEclipseFileStore fileStore
+        = ( GEclipseFileStore ) getConnectionFileStore();
+      if ( fileStore != null ) {
+        fileStore.activate();
+      }
+    } catch ( CoreException cExc ) {
+      Activator.logException( cExc );
+    }
+  }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.impl.AbstractGridContainer#fetchChildren(org.eclipse.core.runtime.IProgressMonitor)
+   */
   @Override
   protected synchronized boolean fetchChildren( final IProgressMonitor monitor ) {
     
@@ -113,7 +191,7 @@ public class ConnectionElement
     
     this.fetchError = null;
     
-    lMonitor.beginTask( "Fetching children of " + getName(), 100 );
+    lMonitor.beginTask( String.format( Messages.getString("ConnectionElement.fetching_children_progress"), getName() ), 100 ); //$NON-NLS-1$
     
     try {
     
@@ -132,26 +210,11 @@ public class ConnectionElement
     
     return this.fetchError == null;
     
-    /*
-    ConnectionElementFetcher job = new ConnectionElementFetcher( this );
-      
-    job.schedule();
-    
-    try {
-      job.join();
-    } catch ( InterruptedException intExc ) {
-      Activator.logException( intExc );
-    }
-  
-    IStatus result = job.getResult();
-    if ( ! result.isOK() ) {
-      Activator.logStatus( result );
-    }
-    
-    return result.isOK();
-    */
   }
 
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridElement#getFileStore()
+   */
   public IFileStore getFileStore() {
     URI uri = getResource().getLocationURI();
     IFileSystem fileSystem = EFS.getLocalFileSystem();
@@ -159,10 +222,16 @@ public class ConnectionElement
     return fileStore;
   }
 
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridElement#getName()
+   */
   public String getName() {
     return getResource().getName();
   }
 
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridElement#getParent()
+   */
   public IGridContainer getParent() {
     IGridContainer parent = null;
     IPath parentPath = getPath().removeLastSegments( 1 );
@@ -173,161 +242,18 @@ public class ConnectionElement
     return parent;
   }
 
-  public IPath getPath() {
-    return getResource().getFullPath();
-  }
-
-  public IResource getResource() {
-    return this.resource;
-  }
-
-  /*
-  private IGridContainer parent;
-  
-  private IResource resource;
-  
-  private CoreException fetchError;
-  
-  private IFileStore fileStore;
-  
-  private IFileInfo fileInfo;
-  
-  public ConnectionElement( final IGridContainer parent,
-                            final IResource resource ) {
-    Assert.isNotNull( parent );
-    Assert.isNotNull( resource );
-    this.parent = parent;
-    this.resource = resource;
-  }
-  
-  @Override
-  public boolean canContain( final IGridElement element ) {
-    return
-      isFolder()
-      && !element.isVirtual()
-      && !( element instanceof IGridConnection );
-  }
-  
-  public IResource createLocalCopy( final IProgressMonitor monitor )
-      throws CoreException {
-    // TODO Auto-generated method stub
-    return null;
-  }
-  
-  public IFileInfo getConnectionFileInfo() throws CoreException {
-    if ( this.fileInfo == null ) {
-      IFileStore store = getConnectionFileStore();
-      this.fileInfo = store.fetchInfo();
-    }
-    return this.fileInfo;
-  }
-
-  public IFileStore getConnectionFileStore() throws CoreException {
-    if ( this.fileStore == null ) {
-      IResource res = getResource();
-      URI uri = res.getLocationURI();
-      String scheme = uri.getScheme();
-      IFileSystem fileSystem = EFS.getFileSystem( scheme );
-      this.fileStore = fileSystem.getStore( uri );
-    }
-    return this.fileStore;
-  }
-  
-  public String getError() {
-    String error = null;
-    if ( this.fetchError != null ) {
-      error = this.fetchError.getLocalizedMessage();
-    }
-    return error;
-  }
-
-  public IFileStore getFileStore() {
-    return getParent().getFileStore().getChild( getName() );
-  }
-
-  public String getName() {
-    return getResource().getName();
-  }
-
-  public IGridContainer getParent() {
-    return this.parent;
-  }
-
-  public IPath getPath() {
-    return getResource().getFullPath();
-  }
-
-  public IResource getResource() {
-    return this.resource;
-  }
-  
   /* (non-Javadoc)
-   * @see eu.geclipse.core.internal.model.VirtualGridContainer#hasChildren()
+   * @see eu.geclipse.core.model.IGridElement#getPath()
    */
-/*  @Override
-  public boolean hasChildren() {
-    return isFolder() ? super.hasChildren() : false;
-  }
-  
-  public boolean isFolder() {
-    return getResource().getType() == IResource.FOLDER;
-  }
-  
-  public boolean isLazy() {
-    return true;
+  public IPath getPath() {
+    return getResource().getFullPath();
   }
 
-  public boolean isLocal() {
-    return false;
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridElement#getResource()
+   */
+  public IResource getResource() {
+    return this.resource;
   }
 
-  public boolean isValid() {
-    return getError() == null;
-  }
-  
-  @Override
-  protected boolean fetchChildren( final IProgressMonitor monitor )
-      throws GridModelException {
-
-    this.fetchError = null;
-    IFileStore store = null;
-    FileSystemManager manager = null;
-
-    setProcessEvents( false );
-    
-    try {
-      
-      store = getConnectionFileStore();
-      manager = FileSystemManager.getInstance();
-      manager.setActive( store, true );
-    
-      IResource res = getResource();
-      
-      if ( res instanceof IContainer ) {
-        res.refreshLocal( IResource.DEPTH_ONE, monitor );
-        /*IContainer container = ( IContainer ) res;
-        IResource[] members = container.members();
-        if ( members != null ) {
-          for ( IResource member : members ) {
-            ConnectionElement child = new ConnectionElement( this, member );
-            addElement( child );
-          }
-        }*/
-/*      }
-      
-    } catch ( GridModelException gmExc ) {
-      throw gmExc;
-    } catch ( CoreException cExc ) {
-      throw new GridModelException( GridModelProblems.FETCH_CHILDREN_FAILED, cExc );
-    } finally {
-      setProcessEvents( true );
-      if ( ( store != null ) && ( manager != null ) ) {
-        manager.setActive( store, false );
-      }
-    }
-
-    return this.fetchError == null;
-
-  }
-*/
 }

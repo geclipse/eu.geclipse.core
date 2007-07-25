@@ -20,7 +20,6 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchSite;
-import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.actions.ActionGroup;
 import org.eclipse.ui.navigator.ICommonMenuConstants;
 
@@ -41,7 +40,7 @@ public class ConnectionViewActions extends ActionGroup {
    * Create a new connection view action for the specified workbench
    * window.
    * 
-   * @param workbenchWindow The {@link IWorkbenchWindow} to generate
+   * @param site The {@link IWorkbenchSite} to generate
    * this action for.
    */
   public ConnectionViewActions( final IWorkbenchSite site ) {

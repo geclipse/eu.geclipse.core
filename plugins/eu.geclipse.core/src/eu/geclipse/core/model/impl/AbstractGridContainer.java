@@ -16,16 +16,13 @@
 package eu.geclipse.core.model.impl;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.Map.Entry;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+
 import eu.geclipse.core.internal.model.GridRoot;
 import eu.geclipse.core.internal.model.notify.GridModelEvent;
 import eu.geclipse.core.internal.model.notify.NotificationService;
@@ -407,10 +404,10 @@ public abstract class AbstractGridContainer
       throws GridModelException {
     if ( !canContain( element ) ) {
       throw new GridModelException( GridModelProblems.CONTAINER_CAN_NOT_CONTAIN,
-                                    "A Grid container of the type "
-                                    + getClass().getName()
-                                    + " can not contain elements of the type "
-                                    + element.getClass().getName() );
+          String.format(
+              Messages.getString("AbstractGridContainer.can_not_contain_error"), //$NON-NLS-1$
+              getClass().getName(), element.getClass().getName()
+          ) );
     }
   }
   

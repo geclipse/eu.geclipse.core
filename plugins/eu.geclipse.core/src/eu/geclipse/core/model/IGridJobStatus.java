@@ -72,6 +72,10 @@ public interface IGridJobStatus {
    * Status for job which real status cannot be retrieved now
    */
   public final static int UNKNOWN = 0x80;
+  
+  /**
+   * Shortcut for all known statuses. 
+   */
   public final static int _ALL = ABORTED
                                  + DONE
                                  + PURGED
