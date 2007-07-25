@@ -15,6 +15,7 @@
 package eu.geclipse.ui.dialogs;
 
 import java.util.Iterator;
+
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.ToolBarManager;
 import org.eclipse.jface.dialogs.Dialog;
@@ -42,6 +43,7 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
+
 import eu.geclipse.core.connection.ConnectionManager;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IConnectionManager;
@@ -51,7 +53,6 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridModelListener;
 import eu.geclipse.ui.internal.GridConnectionFilter;
-import eu.geclipse.ui.internal.GridConnectionProtocolFilter;
 import eu.geclipse.ui.internal.actions.NewConnectionAction;
 import eu.geclipse.ui.internal.actions.ViewModeToggleAction;
 import eu.geclipse.ui.providers.ConfigurableContentProvider;
@@ -67,7 +68,6 @@ import eu.geclipse.ui.providers.IConfigurationListener;
  */
 public class GridFileDialog extends Dialog implements IGridModelListener {
 
-  private static final String LOCAL_FILTER = "file"; //$NON-NLS-1$
   /**
    * The {@link TreeViewer} used to display the remote file structure.
    */
@@ -109,6 +109,9 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
    * 
    * @param parent The parent {@link Shell} of this dialog.
    * @param title The dialog's title.
+   * @param allowLocal when <code>true</code> - both local and remote
+   *            connections will be shown in dialog, if <code>false</code> -
+   *            only remote connections
    */
   public GridFileDialog( final Shell parent,
                          final String title,
@@ -154,6 +157,9 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
    *            without the leading period character. It may also be
    *            <code>null</code>. In that case the wildcard filter is used
    *            and therefore all files are shown.
+   * @param allowLocal when <code>true</code> - both local and remote
+   *            connections will be shown in dialog, if <code>false</code> -
+   *            only remote connections
    * @return The selected {@link IGridConnectionElement} if the dialog's return
    *         status was <code>OK</code> and a valid remote file was selected
    *         or <code>null</code>.
