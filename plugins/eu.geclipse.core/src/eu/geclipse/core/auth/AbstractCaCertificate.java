@@ -20,6 +20,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Hashtable;
+
 import org.eclipse.core.runtime.IPath;
 
 /**
@@ -74,7 +75,15 @@ public abstract class AbstractCaCertificate implements ICaCertificate {
     if ( this.caID == null ) {
       this.caID = getAlias();
       if ( this.caID == null ) {
-        this.caID = Long.toHexString( getCaHash() );
+        long hash = getCaHash();
+        if ( hash < 0 ) {
+          IPath path = getCertificateFile();
+          if ( path != null ) {
+            this.caID = path.removeFileExtension().lastSegment();
+          }
+        } else {
+          this.caID = Long.toHexString( hash );
+        }
       }
     }
     return this.caID;
@@ -88,7 +97,11 @@ public abstract class AbstractCaCertificate implements ICaCertificate {
       IPath path = getCertificateFile();
       if ( path != null ) {
         String hashString = path.removeFileExtension().lastSegment();
-        this.caHash = Long.parseLong( hashString, 16 );
+        try {
+          this.caHash = Long.parseLong( hashString, 16 );
+        } catch ( NumberFormatException nfExc ) {
+          // Just catch
+        }
       }
     }
     return this.caHash;
