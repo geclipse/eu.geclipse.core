@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse consortium 
+ * Copyright (c) 2007 g-Eclipse consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,7 +10,7 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributor(s):
- *     PSNC - Katarzyna Bylec
+ *     PSNC - Katarzyna Bylec (katis@man.poznan.pl)
  *           
  *****************************************************************************/
 package eu.geclipse.jsdl.ui.preference;
@@ -404,7 +404,6 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
         this.xmlPath.setText( this.xmlPathInit );
       }
       Button browseButton = new Button( panel, SWT.PUSH );
-      // browseButton.setText( "aaa" );
       gd = new GridData();
       browseButton.setLayoutData( gd );
       ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
@@ -437,7 +436,6 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
         this.jsdlPath.setText( this.jsdlPathInit );
       }
       Button browseButton1 = new Button( panel, SWT.PUSH );
-      // browseButton.setText( "aaa" );
       gd = new GridData();
       browseButton1.setLayoutData( gd );
       browseButton1.setImage( fileImage );

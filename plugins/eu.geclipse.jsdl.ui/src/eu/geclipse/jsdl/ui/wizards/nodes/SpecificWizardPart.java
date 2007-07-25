@@ -13,7 +13,6 @@
  *     PSNC - Katarzyna Bylec
  *           
  *****************************************************************************/
-
 package eu.geclipse.jsdl.ui.wizards.nodes;
 
 import java.io.IOException;
@@ -74,7 +73,8 @@ public class SpecificWizardPart extends Wizard implements IWizardNode {
   @Override
   public boolean performFinish()
   {
-    return this.parentWizard.performFinish();
+//    return this.parentWizard.performFinish();
+    return true;
   }
 
   public Point getExtent() {
