@@ -1,8 +1,29 @@
+/******************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for
+ * project g-Eclipse founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributor(s):
+ *     PSNC: 
+ *      - Katarzyna Bylec (katis@man.poznan.pl)
+ *           
+ *****************************************************************************/
 package eu.geclipse.jsdl.ui.internal.dataStaging;
 
 import java.net.URI;
 
+import eu.geclipse.jsdl.ui.wizards.NewJobWizard;
 
+/**
+ * Class covering information about data staging in and out used in
+ * {@link NewJobWizard}
+ */
 public class DataStaging {
 
   private String sourceLocation;
@@ -15,8 +36,8 @@ public class DataStaging {
    * @param name name of the IOFile
    * @param targetLocation target remote location of file (data stage out)
    * @param sourceLocation source remote location of file (data stage in)
-   * @throws Exception exception is thrown when target location is local or
-   *           not absolute
+   * @throws Exception exception is thrown when target location is local or not
+   *             absolute
    */
   public DataStaging( final String name,
                       final String targetLocation,
@@ -52,7 +73,7 @@ public class DataStaging {
   /**
    * Getter method to access the source location of data staging in
    * 
-   * @return source loaction
+   * @return source location
    */
   public String getSourceLocation() {
     return this.sourceLocation;
@@ -67,7 +88,6 @@ public class DataStaging {
     this.sourceLocation = location;
   }
 
-  
   /**
    * Getter method to access the target location of data staging out
    * 
@@ -83,6 +103,7 @@ public class DataStaging {
    * @param target location
    */
   public void setTargetLocation( final String target ) throws Exception {
+    //TODO kasia - change this method. Add new exception 
     URI uri = new URI( target );
     if( uri.isAbsolute() ) {
       this.targetLocation = target;
@@ -92,8 +113,7 @@ public class DataStaging {
   }
 
   @Override
-  public boolean equals( final Object argument )
-  {
+  public boolean equals( final Object argument ) {
     boolean result = false;
     if( super.equals( argument ) ) {
       result = true;
