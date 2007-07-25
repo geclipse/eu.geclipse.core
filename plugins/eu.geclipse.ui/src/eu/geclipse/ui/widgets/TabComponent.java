@@ -61,7 +61,19 @@ public abstract class TabComponent<T> extends AbstractLaunchConfigurationTab{
   private ArrayList<CellEditor> cellEditors = new ArrayList<CellEditor>();
   private ICellModifier cellModifier;
   private int buttonsPosition;
+  private Object input;
 
+  public TabComponent( final IStructuredContentProvider contentProvider,
+                       final ITableLabelProvider labelProvider,
+                       final List<String> propertiesVsHearders,
+                       final Object input,
+                       final int hight,
+                       final int width )
+  {
+    this( contentProvider, labelProvider, propertiesVsHearders, hight, width, SWT.LEFT );
+    this.input = input;
+  }
+  
   /**
    * @param contentProvider
    * @param labelProvider
@@ -76,9 +88,12 @@ public abstract class TabComponent<T> extends AbstractLaunchConfigurationTab{
     this( contentProvider, labelProvider, propertiesVsHearders, hight, width, SWT.LEFT );
   }
   
+  
+  
   public TabComponent (final IStructuredContentProvider contentProvider,
                        final ITableLabelProvider labelProvider,
                        final List<String> propertiesVsHearders,
+                       
                        final int hight,
                        final int width,
                        final int buttonsPosition){
@@ -99,11 +114,13 @@ public abstract class TabComponent<T> extends AbstractLaunchConfigurationTab{
                                                           false );
     } 
     this.buttonsPosition =  buttonsPosition;
+   
   }
   
   public TabComponent (final IStructuredContentProvider contentProvider,
                        final ITableLabelProvider labelProvider,
                        final List<String> propertiesVsHearders,
+                       final Object input,
                        final int hight,
                        final List<Integer> columnsWidth,
                        final int buttonsPosition){
@@ -124,6 +141,33 @@ public abstract class TabComponent<T> extends AbstractLaunchConfigurationTab{
                                                           false );
     } 
     this.buttonsPosition =  buttonsPosition;
+    this.input = input;
+  }
+  public TabComponent (final IStructuredContentProvider contentProvider,
+                       final ITableLabelProvider labelProvider,
+                       final List<String> propertiesVsHearders,
+   
+                       final int hight,
+                       final List<Integer> columnsWidth,
+                       final int buttonsPosition){
+    this.contentProvider = contentProvider;
+    this.tabHeight = hight;
+    this.columnsWidth = columnsWidth;
+    this.labelProvider = labelProvider;
+    this.tabColumnsHeaders = new String[ propertiesVsHearders.size() ];
+    this.tabColumnsProperties = new String[ propertiesVsHearders.size() ];
+    this.tabColumnsHeaders = propertiesVsHearders
+      .toArray( this.tabColumnsHeaders );
+    this.tabColumnsProperties = propertiesVsHearders
+      .toArray( this.tabColumnsProperties );
+    this.tabColumnsLayouts = new ColumnLayoutData[ this.tabColumnsHeaders.length ];
+    for( int i = 0; i < this.tabColumnsHeaders.length; i++ ) {
+      this.tabColumnsLayouts[ i ] = new ColumnWeightData( this.columnsWidth.get( i ).intValue(),
+                                                          this.columnsWidth.get( i ).intValue(),
+                                                          false );
+    } 
+    this.buttonsPosition =  buttonsPosition;
+   
   }
 
   public void createControl( final Composite parent ) {
@@ -216,6 +260,7 @@ public abstract class TabComponent<T> extends AbstractLaunchConfigurationTab{
     gridData = new GridData( GridData.FILL_BOTH );
     this.table.getControl().setLayoutData( gridData );
     this.table.setContentProvider( this.contentProvider );
+    this.table.setInput( this.input );
     this.table.setLabelProvider( this.labelProvider );
     this.table.setColumnProperties( this.tabColumnsProperties );
     this.table.addSelectionChangedListener( new ISelectionChangedListener() {
@@ -239,6 +284,7 @@ public abstract class TabComponent<T> extends AbstractLaunchConfigurationTab{
       tc.setResizable( this.tabColumnsLayouts[ i ].resizable );
       tc.setText( this.tabColumnsHeaders[ i ] );
     }
+    this.table.refresh();
   }
 
   public String getName() {

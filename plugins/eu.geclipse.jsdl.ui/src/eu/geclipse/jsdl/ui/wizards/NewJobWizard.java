@@ -58,11 +58,11 @@ public class NewJobWizard extends Wizard implements INewWizard {
   private WizardNewFileCreationPage firstPage;
   private IFile file;
   private ExecutableNewJobWizardPage executablePage;
-  private FilesOutputNewJobWizardPage outputFilesPage;
+  private DataStagingNewJobWizardPage outputFilesPage;
+  private JSDLJobDescription basicJSDL;
 
   @Override
-  public void addPages()
-  {
+  public void addPages() {
     this.firstPage = new FirstPage( Messages.getString( "NewJobWizard.first_page_name" ), //$NON-NLS-1$
                                     this.selection );
     this.firstPage.setTitle( Messages.getString( "NewJobWizard.first_page_title" ) ); //$NON-NLS-1$
@@ -70,7 +70,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
     this.firstPage.setFileName( Messages.getString( "NewJobWizard.first_page_default_new_file_name" ) ); //$NON-NLS-1$
     addPage( this.firstPage );
     ArrayList<WizardPage> internal = new ArrayList<WizardPage>();
-    this.outputFilesPage = new FilesOutputNewJobWizardPage( Messages.getString( "NewJobWizard.files_output_new_job_page_name" ) ); //$NON-NLS-1$;
+    this.outputFilesPage = new DataStagingNewJobWizardPage( Messages.getString( "NewJobWizard.files_output_new_job_page_name" ) ); //$NON-NLS-1$;
     internal.add( this.outputFilesPage );
     this.executablePage = new ExecutableNewJobWizardPage( Messages.getString( "NewJobWizard.executablePageName" ), internal ); //$NON-NLS-1$
     addPage( this.executablePage );
@@ -83,8 +83,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
   }
 
   @Override
-  public boolean performFinish()
-  {
+  public boolean performFinish() {
     boolean result = false;
     IRunnableWithProgress op = new IRunnableWithProgress() {
 
@@ -124,6 +123,10 @@ public class NewJobWizard extends Wizard implements INewWizard {
     }
   }
 
+  IPath getProject() {
+    return this.firstPage.getContainerFullPath();
+  }
+
   protected void createFile( final IProgressMonitor monitor ) {
     monitor.beginTask( Messages.getString( "NewJobWizard.creating_task" ) + this.firstPage.getFileName(), 2 ); //$NON-NLS-1$
     this.file = this.firstPage.createNewFile();
@@ -143,11 +146,16 @@ public class NewJobWizard extends Wizard implements INewWizard {
   }
 
   @SuppressWarnings("unchecked")
-  void setInitialModel( final JSDLJobDescription jsdl )
-  {
+  void setInitialModel( final JSDLJobDescription jsdl ) {
     this.executablePage.getApplicationSpecificPage();
-    jsdl.createRoot();
-    jsdl.addJobDescription();
+    if( this.basicJSDL != null ) {
+      this.basicJSDL.removeDataStaging();
+      jsdl.setRoot( this.basicJSDL.getRoot() );
+      
+    } else {
+      jsdl.createRoot();
+      jsdl.addJobDescription();
+    }
     jsdl.addJobIdentification( this.executablePage.getApplicationName(), null );
     String appName = "";
     if( this.executablePage.getApplicationName().equals( "" ) ) { //$NON-NLS-1$
@@ -266,9 +274,19 @@ public class NewJobWizard extends Wizard implements INewWizard {
     jsdl.getStdInputDataType();
   }
 
+  void updateBasicJSDL( JSDLJobDescription basicJSDL ) {
+    this.basicJSDL = basicJSDL;
+    if( this.basicJSDL != null ) {
+      this.outputFilesPage.setInitialStagingOut( this.basicJSDL.getDataStagingOutStrings() );
+      this.outputFilesPage.setInitialStagingIn( this.basicJSDL.getDataStagingInStrings() );
+    } else {
+      this.outputFilesPage.setInitialStagingOut( null );
+      this.outputFilesPage.setInitialStagingIn( null );
+    }
+  }
+
   @Override
-  public boolean canFinish()
-  {
+  public boolean canFinish() {
     // TODO Auto-generated method stub
     return super.canFinish();
   }
@@ -290,8 +308,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
     }
 
     @Override
-    protected boolean validatePage()
-    {
+    protected boolean validatePage() {
       boolean result = true;
       if( !super.validatePage() ) {
         result = false;
@@ -327,8 +344,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
     // return result;
     // }
     @Override
-    protected void initialPopulateContainerNameField()
-    {
+    protected void initialPopulateContainerNameField() {
       {
         Object obj = this.iniSelection.getFirstElement();
         if( obj instanceof IGridContainer ) {

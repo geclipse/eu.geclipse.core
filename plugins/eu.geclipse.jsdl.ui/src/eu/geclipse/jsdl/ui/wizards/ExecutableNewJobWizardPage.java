@@ -20,7 +20,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
 import javax.xml.parsers.ParserConfigurationException;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -46,7 +51,10 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.xml.sax.SAXException;
+
+import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridConnectionElement;
+import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.jsdl.JSDLJobDescription;
 import eu.geclipse.jsdl.ui.Extensions;
 import eu.geclipse.jsdl.ui.internal.Activator;
@@ -80,18 +88,10 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
   StoredCombo executableFile;
   Composite parentP;
   /**
-   * Button for oppening {@link GridFileDialog} - a dialog for chosing local or
+   * Button for opening {@link GridFileDialog} - a dialog for choosing local or
    * remote files
    */
   private Button gridFileDialogButton;
-  /**
-   * Holds name of the job to run
-   */
-  // private Text jobName;
-  /**
-   * Holds description of the job
-   */
-  // private Text jobDescription;
   /**
    * Holds name of the application
    */
@@ -106,14 +106,60 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
    * Object representing basic JSDL content for an application specific
    * settings. It is parsed (created) when the "Finish" button is pressed - not
    * every time the application chosen by user changes. This is kind of lazy
-   * loading. This object is passed to {@link FilesOutputNewJobWizardPage} so it
+   * loading. This object is passed to {@link DataStagingNewJobWizardPage} so it
    * can present data staging information form basic JSDL file to the user.
    */
   private JSDLJobDescription basicJSDL;
 
+  
+  
+  
   @Override
-  public IWizardPage getNextPage()
-  {
+  public IWizardPage getNextPage() {
+    // If in application specific settings basic JSDL file is given its copy - a
+    // temporary jsdl file - is created in workspace. This file is used to
+    // generate JSDLJobDescription object which will be passed to next wizard's
+    // page.
+    Integer aspID = this.appsWithParametersFromPrefs.get( this.applicationName.getText() );
+    if( aspID != null ) {
+      IPath path = ApplicationSpecificRegistry.getInstance()
+        .getApplicationData( aspID.intValue() )
+        .getJsdlPath();
+      if( path != null && !path.equals( "" ) ) { //$NON-NLS-1$
+        //getting jsdl source
+        //creating temp Eclipse's resource
+//        IPath workspacePath = ResourcesPlugin.getWorkspace()
+//          .getRoot()
+//          .getLocation();
+//        workspacePath = workspacePath.append( ".tempJSDL.jsdl" );
+        IPath workspacePath = ((NewJobWizard)this.getWizard()).getProject();
+        workspacePath = workspacePath.append( ".tempJSDL.jsdl" );
+        IFile newFileHandle = ResourcesPlugin.getWorkspace().getRoot()
+          .getFile( workspacePath );
+        try {
+          newFileHandle.createLink( path, IResource.REPLACE , null );
+          IGridElement element = GridModel.getRoot().findElement( newFileHandle );
+          if( element instanceof JSDLJobDescription ) {
+            this.basicJSDL = ( JSDLJobDescription )element;
+            ((NewJobWizard)this.getWizard()).updateBasicJSDL(this.basicJSDL);
+          }
+        } catch( CoreException e ) {
+          //TODO katis - error handling
+          e.printStackTrace();
+        } finally {
+          try {
+            newFileHandle.delete( true, null );
+          } catch( CoreException e ) {
+            //TODO katis - error handling
+            e.printStackTrace();
+          }
+        }
+      } else {
+        ((NewJobWizard)this.getWizard()).updateBasicJSDL(null);
+      }
+    } else {
+      ((NewJobWizard)this.getWizard()).updateBasicJSDL(null);
+    }
     return super.getNextPage();
   }
 
@@ -124,7 +170,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
    * @param internalPages
    */
   protected ExecutableNewJobWizardPage( final String pageName,
-                                        final ArrayList<WizardPage> internalPages )
+                                        ArrayList<WizardPage> internalPages )
   {
     super( pageName );
     setTitle( Messages.getString( "ExecutableNewJobWizardPage.title" ) ); //$NON-NLS-1$
@@ -136,8 +182,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
   }
 
   @Override
-  public boolean isPageComplete()
-  {
+  public boolean isPageComplete() {
     return true;
   }
 
@@ -199,8 +244,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     this.gridFileDialogButton.addSelectionListener( new SelectionAdapter() {
 
       @Override
-      public void widgetSelected( final SelectionEvent e )
-      {
+      public void widgetSelected( final SelectionEvent e ) {
         IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
                                                                            "Choose remote or local file",
                                                                            null,
@@ -254,8 +298,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     this.chooseButton.addSelectionListener( new SelectionAdapter() {
 
       @Override
-      public void widgetSelected( final SelectionEvent e )
-      {
+      public void widgetSelected( final SelectionEvent e ) {
         IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
                                                                            "Choose a file",
                                                                            null,
@@ -291,8 +334,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     outButton.addSelectionListener( new SelectionAdapter() {
 
       @Override
-      public void widgetSelected( final SelectionEvent e )
-      {
+      public void widgetSelected( final SelectionEvent e ) {
         IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
                                                                            "Choose remote file",
                                                                            null,
@@ -328,8 +370,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     errButton.addSelectionListener( new SelectionAdapter() {
 
       @Override
-      public void widgetSelected( final SelectionEvent e )
-      {
+      public void widgetSelected( final SelectionEvent e ) {
         IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
                                                                            "Choose remote file",
                                                                            null,
@@ -478,8 +519,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
   }
 
   @Override
-  protected void setSelectedNode( final IWizardNode node )
-  {
+  protected void setSelectedNode( final IWizardNode node ) {
     super.setSelectedNode( node );
   }
 

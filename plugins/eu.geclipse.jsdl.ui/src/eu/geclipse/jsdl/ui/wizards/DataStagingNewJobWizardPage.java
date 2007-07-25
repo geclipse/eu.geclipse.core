@@ -67,21 +67,23 @@ import eu.geclipse.ui.widgets.TabComponent;
  * 
  * @author katis
  */
-public class FilesOutputNewJobWizardPage extends WizardPage {
+public class DataStagingNewJobWizardPage extends WizardPage {
 
   /**
    * Special component to keep record of variables user provided
    */
-  StageInTab CopyFromTab;
-  StageOutTab CopyToTab;
+  StageInTab copyFromTab;
+  StageOutTab copyToTab;
   private boolean isCreated = false;
+  private List<DataStaging> initialStagingOut;
+  private List<DataStaging> initialStagingIn;
 
   /**
    * Method to create new instance of EnvNewJobWizardPage
    * 
    * @param pageName name that will describe this page
    */
-  protected FilesOutputNewJobWizardPage( final String pageName ) {
+  protected DataStagingNewJobWizardPage( final String pageName ) {
     super( pageName );
     setDescription( Messages.getString( "FilesOutputNewJobWizardPage.page_description" ) ); //$NON-NLS-1$
     setTitle( Messages.getString( "FilesOutputNewJobWizardPage.page_title" ) ); //$NON-NLS-1$
@@ -110,7 +112,7 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
     link.addHyperlinkListener( new HyperlinkAdapter() {
 
       public void linkActivated( HyperlinkEvent e ) {
-        FilesOutputNewJobWizardPage.this.performHelp();
+        DataStagingNewJobWizardPage.this.performHelp();
       }
     } );
     // form.setText( "Stage in" );
@@ -140,11 +142,14 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
     ArrayList<Integer> width = new ArrayList<Integer>();
     width.add( Integer.valueOf( 240 ) );
     width.add( Integer.valueOf( 100 ) );
-    this.CopyFromTab = new StageInTab( new StageOutContentProvider(),
+    StageOutContentProvider contentProvider = new StageOutContentProvider();
+    this.copyFromTab = new StageInTab( new StageOutContentProvider(),
                                        new StageInLabelProvider(),
+                                       
                                        map,
+                                       this.initialStagingIn,
                                        width );
-    this.CopyFromTab.createControl( stdFilesGroup );
+    this.copyFromTab.createControl( stdFilesGroup );
     // stdFilesGroup.getChildren()[stdFilesGroup.getChildren().length -
     // 1].setLayoutData( gridData );
     // setPageComplete( true );
@@ -183,11 +188,12 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
     width = new ArrayList<Integer>();
     width.add( Integer.valueOf( 100 ) );
     width.add( Integer.valueOf( 240 ) );
-    this.CopyToTab = new StageOutTab( new StageOutContentProvider(),
+    this.copyToTab = new StageOutTab( new StageOutContentProvider(),
                                       new StageOutLabelProvider(),
                                       map,
+                                      this.initialStagingOut,
                                       width );
-    this.CopyToTab.createControl( stdFilesGroup1 );
+    this.copyToTab.createControl( stdFilesGroup1 );
     // setPageComplete( true );
     this.isCreated = true;
     setControl( mainComp );
@@ -209,17 +215,8 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
   {
 
     public Object[] getElements( final Object inputElement ) {
-      DataStaging[] elements = new DataStaging[ 0 ];
-      Map<String, String> m = new HashMap<String, String>();
-      if( !m.isEmpty() ) {
-        elements = new DataStaging[ m.size() ];
-        String[] varNames = new String[ m.size() ];
-        m.keySet().toArray( varNames );
-        for( int i = 0; i < m.size(); i++ ) {
-          // elements[ i ] = new OutputFile( varNames[ i ],
-          // m.get( varNames[ i ] ) );
-        }
-      }
+      DataStaging[] elements = new DataStaging[0];
+      elements = ( DataStaging[] )((List)inputElement).toArray( elements );
       return elements;
     }
 
@@ -291,22 +288,22 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
   /**
    * Method to access String values kept by table
    * 
-   * @param type Type of a files wchich values should be extracted from table
+   * @param type Type of a files which values should be extracted from table
    * @return Map with file names as a keys and their location as a value
    */
   public HashMap<String, String> getFiles( final FileType type ) {
     HashMap<String, String> result = new HashMap<String, String>();
-    if( this.CopyFromTab != null ) {
+    if( this.copyFromTab != null ) {
       switch( type ) {
         case INPUT:
-          for( DataStaging file : this.CopyFromTab.getInput() ) {
+          for( DataStaging file : this.copyFromTab.getInput() ) {
             if( !file.getSourceLocation().equals( "" ) ) { //$NON-NLS-1$
               result.put( file.getName(), file.getSourceLocation() );
             }
           }
         break;
         case OUTPUT:
-          for( DataStaging file : this.CopyToTab.getInput() ) {
+          for( DataStaging file : this.copyToTab.getInput() ) {
             if( !file.getTargetLocation().equals( "" ) ) { //$NON-NLS-1$
               result.put( file.getName(), file.getTargetLocation() );
             }
@@ -329,10 +326,10 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
   }
 
   /**
-   * Method to fnd out if this page was created
+   * Method to find out if this page was created
    * 
    * @return true if method
-   *         {@link FilesOutputNewJobWizardPage#createControl(Composite)} was
+   *         {@link DataStagingNewJobWizardPage#createControl(Composite)} was
    *         invoked
    */
   public boolean isCreated() {
@@ -361,5 +358,37 @@ public class FilesOutputNewJobWizardPage extends WizardPage {
     public Image getColumnImage( final Object element, final int columnIndex ) {
       return null;
     }
+  }
+
+  public void setInitialStagingOut( Map<String, String> initialOut ) {
+    this.initialStagingOut = new ArrayList<DataStaging>();
+    if ( initialOut != null){
+    for (String name: initialOut.keySet()){
+      try {
+        DataStaging newData = new DataStaging(name, initialOut.get( name ), null);
+        this.initialStagingOut.add( newData );
+        if (this.copyFromTab != null){
+          
+        }
+      } catch( Exception e ) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    }}
+  }
+  
+  public void setInitialStagingIn( Map<String, String> initialOut ) {
+    this.initialStagingIn = new ArrayList<DataStaging>();
+    if ( initialOut != null){
+    for (String name: initialOut.keySet()){
+      try {
+        DataStaging newData = new DataStaging(name, null, initialOut.get( name ));
+        this.initialStagingIn.add( newData );
+      } catch( Exception e ) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    }
+  }
   }
 }
