@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fileset-config file-format-version="1.2.0" simple-config="true">
+    <fileset name="all" enabled="true" check-config-name="geclipse" local="false">
+        <file-match-pattern match-pattern="." include-pattern="true"/>
+    </fileset>
+    <filter name="FilesFromPackage" enabled="true">
+        <filter-data value="src"/>
+        <filter-data value="src/eu"/>
+        <filter-data value="src/eu/geclipse"/>
+        <filter-data value="src/eu/geclipse/jsdl"/>
+        <filter-data value="src/eu/geclipse/jsdl/impl"/>
+        <filter-data value="src/eu/geclipse/jsdl/posix"/>
+        <filter-data value="src/eu/geclipse/jsdl/posix/impl"/>
+        <filter-data value="src/eu/geclipse/jsdl/posix/util"/>
+        <filter-data value="src/eu/geclipse/jsdl/util"/>
+    </filter>
+</fileset-config>
