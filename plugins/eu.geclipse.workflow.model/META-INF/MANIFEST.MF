@@ -11,7 +11,7 @@ Export-Package: eu.geclipse.workflow,
  eu.geclipse.workflow.impl,
  eu.geclipse.workflow.util
 Require-Bundle: org.eclipse.core.runtime,
- org.eclipse.emf.ecore;visibility:=reexport,
+ org.eclipse.emf.ecore,
  org.eclipse.core.resources,
  eu.geclipse.core,
  org.eclipse.core.filesystem
