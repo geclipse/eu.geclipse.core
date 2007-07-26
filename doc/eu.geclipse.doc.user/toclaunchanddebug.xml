@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc label="Launch and Debug" link_to="tocgettingstarted.xml#launchanddebug"> 
+		<topic label="Java Application Launch Configuration Dialog" href="html/gettingstarted/launchanddebug/java.html" />
+		<topic label="C/C++ Application Launch Configuration Dialog" href="html/gettingstarted/launchanddebug/ccpp.html" />
+		<topic label="C/C++ MPI Application Launch Configuration Dialog" href="html/gettingstarted/launchanddebug/mpiccpp.html" />
+		<topic label="Running an Application on the Grid" href="html/gettingstarted/launchanddebug/running.html" />
+		<topic label="Debugging an Application on the Grid" href="html/gettingstarted/launchanddebug/debugging.html" />
+</toc>
