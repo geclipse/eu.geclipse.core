@@ -1,3 +1,19 @@
+/******************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for
+ * project g-Eclipse founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributor(s):
+ *     PSNC: 
+ *      - Katarzyna Bylec (katis@man.poznan.pl)
+ *           
+ *****************************************************************************/
 package eu.geclipse.ui.wizards.connection;
 
 import org.eclipse.core.resources.IFile;
@@ -14,7 +30,7 @@ import eu.geclipse.core.connection.ConnectionManager;
 
 /**
  * First page of a {@link ConnectionWizard} created from gExplorerView. This
- * page is used to get connection's name and check if conection with this name
+ * page is used to get connection's name and check if connection with this name
  * already exists
  * 
  * @author katis

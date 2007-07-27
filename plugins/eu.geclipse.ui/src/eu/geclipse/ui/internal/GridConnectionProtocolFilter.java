@@ -1,3 +1,18 @@
+/******************************************************************************
+ * Copyright (c) 2007 g-Eclipse consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for
+ * project g-Eclipse founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributor(s):
+ *     PSNC - Katarzyna Bylec (katis@man.poznan.pl)
+ *           
+ *****************************************************************************/
 package eu.geclipse.ui.internal;
 
 import java.util.ArrayList;
@@ -7,23 +22,35 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import eu.geclipse.core.model.IGridConnectionElement;
 
-
+/**
+ * Implementation of a {@link ViewerFilter} that may be used in conjunction with
+ * viewers used to display Grid model elements. It filters out connection
+ * elements which slave protocol was given by user.
+ */
 public class GridConnectionProtocolFilter extends ViewerFilter {
 
   private List<String> protocolsToFilter = new ArrayList<String>();
-  
-  public void addFilterProtocol( final String protocol ){
-    if (! this.protocolsToFilter.contains( protocol )){
+
+  /**
+   * Adds name of a protocol. Connections with this protocol will be filtered
+   * out.
+   * 
+   * @param protocol
+   */
+  public void addFilterProtocol( final String protocol ) {
+    if( !this.protocolsToFilter.contains( protocol ) ) {
       this.protocolsToFilter.add( protocol );
     }
   }
-  
+
   @Override
-  public boolean select( final Viewer viewer, final Object parentElement, final Object element )
+  public boolean select( final Viewer viewer,
+                         final Object parentElement,
+                         final Object element )
   {
     boolean result = false;
-    if ( element instanceof IGridConnectionElement ) {
-      result = select( ( IGridConnectionElement  ) element );
+    if( element instanceof IGridConnectionElement ) {
+      result = select( ( IGridConnectionElement )element );
     }
     return result;
   }
@@ -31,8 +58,10 @@ public class GridConnectionProtocolFilter extends ViewerFilter {
   private boolean select( final IGridConnectionElement element ) {
     boolean result = true;
     try {
-      String protocol = element.getConnectionFileStore().getFileSystem().getScheme();
-      if (this.protocolsToFilter.contains( protocol )){
+      String protocol = element.getConnectionFileStore()
+        .getFileSystem()
+        .getScheme();
+      if( this.protocolsToFilter.contains( protocol ) ) {
         result = false;
       }
     } catch( CoreException e ) {

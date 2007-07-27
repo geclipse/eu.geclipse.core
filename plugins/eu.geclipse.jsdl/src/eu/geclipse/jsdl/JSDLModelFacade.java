@@ -27,13 +27,23 @@ import eu.geclipse.jsdl.model.SourceTargetType;
  * @author Kasia
  */
 public class JSDLModelFacade {
-  
-  public static DataStagingType getDataStagingType(){
+
+  /**
+   * Creates new instance of {@link DataStagingType}
+   * 
+   * @return new instance of {@link DataStagingType}
+   */
+  public static DataStagingType getDataStagingType() {
     return JsdlPackage.eINSTANCE.getJsdlFactory().createDataStagingType();
   }
-  
-  public static SourceTargetType getSourceTargetType(){
+
+  /**
+   * Creates new instance of {@link SourceTargetType}. This object is needed to
+   * set details of {@link DataStagingType} objects.
+   * 
+   * @return new instance of {@link SourceTargetType}
+   */
+  public static SourceTargetType getSourceTargetType() {
     return JsdlPackage.eINSTANCE.getJsdlFactory().createSourceTargetType();
   }
-  
 }

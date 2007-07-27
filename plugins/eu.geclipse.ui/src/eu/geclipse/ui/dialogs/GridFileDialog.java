@@ -53,6 +53,7 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridModelListener;
 import eu.geclipse.ui.internal.GridConnectionFilter;
+import eu.geclipse.ui.internal.GridConnectionProtocolFilter;
 import eu.geclipse.ui.internal.actions.NewConnectionAction;
 import eu.geclipse.ui.internal.actions.ViewModeToggleAction;
 import eu.geclipse.ui.providers.ConfigurableContentProvider;
@@ -102,6 +103,7 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
    */
   private IGridConnectionElement selectedElement;
   private ViewerFilter protocolFilter;
+  private GridConnectionProtocolFilter protocolFilter1;
 
   /**
    * Create a new <code>GridFileDialog</code> with the specified parent
@@ -139,8 +141,9 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
           //      
         }
       };
-      // this.protocolFilter = new GridConnectionProtocolFilter();
-      // this.protocolFilter.addFilterProtocol( LOCAL_FILTER );
+       this.protocolFilter1 = new GridConnectionProtocolFilter();
+//       this.protocolFilter.addFilterProtocol( LOCAL_FILTER );
+       this.protocolFilter1.addFilterProtocol( "file" );
     }
   }
 
@@ -326,6 +329,9 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
     this.filter.link( this.treeViewer, this.filetypeCombo );
     if( this.protocolFilter != null ) {
       this.treeViewer.addFilter( this.protocolFilter );
+    }
+    if ( this.protocolFilter1 != null ){
+      this.treeViewer.addFilter( this.protocolFilter1 );
     }
     return mainComp;
   }
