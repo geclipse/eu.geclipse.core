@@ -143,7 +143,12 @@ public class Activator extends AbstractUIPlugin {
    */
   public static final String ID_EXPLORER_PERSPECTIVE
     = "eu.geclipse.ui.explorerPerspective"; //$NON-NLS-1$
-
+  
+  /**
+   * The id of the ProcessMonitoring View.
+   */
+  public static final String ID_PROCESS_STATUS
+    = "eu.geclipse.ui.views.ProcessStatView"; //$NON-NLS-1$
   /**
    * The shared instance.
    */
