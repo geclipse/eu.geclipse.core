@@ -64,6 +64,13 @@
             icon="icons/job.gif"
             id="eu.geclipse.ui.views.jobdetails.JobDetailsView"
             name="%view.jobDetails"/>
+      <view
+            allowMultiple="true"
+            category="eu.geclipse.ui.viewcategory"
+            class="eu.geclipse.ui.views.ProcessStatView"
+            icon="icons/job.gif"
+            id="eu.geclipse.ui.views.ProcessStatView"
+            name="Process Status Viewer"/>
    </extension>
    <extension
          point="org.eclipse.ui.perspectives">
