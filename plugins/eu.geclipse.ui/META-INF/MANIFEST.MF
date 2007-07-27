@@ -36,6 +36,7 @@ Export-Package: eu.geclipse.ui,
  eu.geclipse.ui.wizards.connection.managers.gridftp,
  eu.geclipse.ui.wizards.connection.managers.local,
  eu.geclipse.ui.wizards.connection.managers.srm,
+ eu.geclipse.ui.wizards.deployment,
  eu.geclipse.ui.wizards.jobsubmission,
  eu.geclipse.ui.wizards.portforward,
  eu.geclipse.ui.wizards.wizardselection
