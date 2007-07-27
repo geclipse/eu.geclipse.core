@@ -22,7 +22,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ColumnLayoutData;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ISelection;
@@ -59,20 +58,31 @@ import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.jsdl.JSDLModelFacade;
 import eu.geclipse.jsdl.model.DataStagingType;
 import eu.geclipse.jsdl.model.SourceTargetType;
-import eu.geclipse.jsdl.ui.internal.Activator;
-import eu.geclipse.jsdl.ui.wizards.ExecutableNewJobWizardPage;
 import eu.geclipse.ui.dialogs.GridFileDialog;
 
+/**
+ * Set of controls used to handle presentation of Data Staging In (see
+ * {@link DataStagingType} details to user. Information is presented in a table
+ * with two columns (name of a file and a source URI). User can add new entry to
+ * this table and edit or remove existing ones.
+ */
 public class DataStageInTable {
 
-  private Table table;
   TableViewer tableViewer;
+  List<DataStagingType> input;
+  private Table table;
   private Button addButton;
   private Button editButton;
   private Button removeButton;
-  List<DataStagingType> input;
   private Composite mainComp;
 
+  /**
+   * Creates new instance of table, table viewer and 3 buttons (add, edit and
+   * remove)
+   * 
+   * @param parent control's parent
+   * @param input input for table
+   */
   public DataStageInTable( final Composite parent,
                            final List<DataStagingType> input )
   {
@@ -99,9 +109,9 @@ public class DataStageInTable {
     tableLayout.addColumnData( data );
     data = new ColumnWeightData( 150 );
     tableLayout.addColumnData( data );
-    nameColumn.setText( "Location" ); //$NON-NLS-1$
+    nameColumn.setText( Messages.getString( "DataStageInTable.location_field_label" ) ); //$NON-NLS-1$
     TableColumn typeColumn = new TableColumn( this.table, SWT.LEFT );
-    typeColumn.setText( "Name" ); //$NON-NLS-1$
+    typeColumn.setText( Messages.getString( "DataStageInTable.name_field_label" ) ); //$NON-NLS-1$
     this.tableViewer = new TableViewer( this.table );
     IStructuredContentProvider contentProvider = new DataStageInContentProvider();
     this.tableViewer.setContentProvider( contentProvider );
@@ -122,33 +132,33 @@ public class DataStageInTable {
     buttonsComp.setLayoutData( gData );
     gData = new GridData( GridData.FILL_BOTH );
     this.addButton.setLayoutData( gData );
-    this.addButton.setText( "Add..." );
+    this.addButton.setText( Messages.getString( "DataStageInTable.add_button_label" ) ); //$NON-NLS-1$
     this.addButton.addSelectionListener( new SelectionAdapter() {
 
       @Override
-      public void widgetSelected( SelectionEvent e ) {
+      public void widgetSelected( final SelectionEvent event ) {
         editDataStagingEntry( null );
       }
     } );
     this.editButton = new Button( buttonsComp, SWT.PUSH );
     gData = new GridData( GridData.FILL_BOTH );
     this.editButton.setLayoutData( gData );
-    this.editButton.setText( "Edit..." );
+    this.editButton.setText( Messages.getString( "DataStageInTable.edit_button_label" ) ); //$NON-NLS-1$
     this.editButton.addSelectionListener( new SelectionAdapter() {
 
       @Override
-      public void widgetSelected( SelectionEvent e ) {
+      public void widgetSelected( final SelectionEvent event ) {
         editDataStagingEntry( getSelectedObject() );
       }
     } );
     this.removeButton = new Button( buttonsComp, SWT.PUSH );
     gData = new GridData( GridData.FILL_BOTH );
     this.removeButton.setLayoutData( gData );
-    this.removeButton.setText( "Remove" );
+    this.removeButton.setText( Messages.getString( "DataStageInTable.remove_button_label" ) ); //$NON-NLS-1$
     this.removeButton.addSelectionListener( new SelectionAdapter() {
 
       @Override
-      public void widgetSelected( SelectionEvent e ) {
+      public void widgetSelected( final SelectionEvent event ) {
         DataStageInTable.this.input.remove( getSelectedObject() );
         DataStageInTable.this.tableViewer.refresh();
       }
@@ -166,11 +176,16 @@ public class DataStageInTable {
     return result;
   }
 
+  /**
+   * Returns data kept in table
+   * 
+   * @return list of {@link DataStagingType} objects
+   */
   public List<DataStagingType> getDataStagingType() {
     return this.input;
   }
 
-  private void editDataStagingEntry( DataStagingType selectedObject ) {
+  void editDataStagingEntry( final DataStagingType selectedObject ) {
     EditDialog dialog;
     if( selectedObject == null ) {
       dialog = new EditDialog( this.mainComp.getShell() );
@@ -182,8 +197,8 @@ public class DataStageInTable {
           this.tableViewer.refresh();
         } else {
           MessageDialog.openError( this.mainComp.getShell(),
-                                   "New data staging in...",
-                                   "Data staging already exists." );
+                                   Messages.getString( "DataStageInTable.value_exists_dialog_title" ), //$NON-NLS-1$
+                                   Messages.getString( "DataStageInTable.value_exists_dialog_message" ) ); //$NON-NLS-1$
         }
       }
     } else {
@@ -204,18 +219,20 @@ public class DataStageInTable {
             this.tableViewer.refresh();
           } else {
             MessageDialog.openError( this.mainComp.getShell(),
-                                     "Edit data staging in...",
-                                     "Data staging already exists." );
+                                     Messages.getString( "DataStageInTable.edit_dialog_title" ), //$NON-NLS-1$
+                                     Messages.getString( "DataStageInTable.value_exists_dialog_message" ) ); //$NON-NLS-1$
           }
         }
       }
     }
   }
 
-  private boolean isDataInInput( DataStagingType newData ) {
+  private boolean isDataInInput( final DataStagingType newData ) {
     boolean result = false;
     for( DataStagingType data : this.input ) {
-      if( data.getFileName().equals( newData.getFileName() ) && data.getSource().getURI().equals( newData.getSource().getURI() ) ) {
+      if( data.getFileName().equals( newData.getFileName() )
+          && data.getSource().getURI().equals( newData.getSource().getURI() ) )
+      {
         result = true;
       }
     }
@@ -242,23 +259,31 @@ public class DataStageInTable {
   }
   class DataStageInContentProvider implements IStructuredContentProvider {
 
-    public Object[] getElements( Object inputElement ) {
+    @SuppressWarnings("unchecked")
+    public Object[] getElements( final Object inputElement ) {
       DataStagingType[] elements = new DataStagingType[ 0 ];
       elements = ( DataStagingType[] )( ( List )inputElement ).toArray( new DataStagingType[ 0 ] );
       return elements;
     }
 
     public void dispose() {
-      // TODO Auto-generated method stub
+      // do nothing
     }
 
-    public void inputChanged( Viewer viewer, Object oldInput, Object newInput )
+    public void inputChanged( final Viewer viewer,
+                              final Object oldInput,
+                              final Object newInput )
     {
-      // TODO Auto-generated method stub
+      // do nothing
     }
   }
 
-  public void updateInput( List<DataStagingType> newInput ) {
+  /**
+   * Updates the table input (in case when the object representing
+   * 
+   * @param newInput new object that will be used as an input
+   */
+  public void updateInput( final List<DataStagingType> newInput ) {
     this.input = newInput;
     this.tableViewer.setInput( this.input );
   }
@@ -266,11 +291,11 @@ public class DataStageInTable {
     implements ITableLabelProvider
   {
 
-    public Image getColumnImage( Object element, int columnIndex ) {
+    public Image getColumnImage( final Object element, final int columnIndex ) {
       return null;
     }
 
-    public String getColumnText( Object element, int columnIndex ) {
+    public String getColumnText( final Object element, final int columnIndex ) {
       String result = null;
       if( element != null ) {
         DataStagingType var = ( DataStagingType )element;
@@ -288,31 +313,34 @@ public class DataStageInTable {
   }
   class EditDialog extends Dialog {
 
-    private String initName;
-    private String initPath;
-
-    protected EditDialog( Shell parentShell ) {
-      super( parentShell );
-    }
-
-    protected EditDialog( Shell parentShell, String name, String path ) {
-      this( parentShell );
-      this.initName = name;
-      this.initPath = path;
-    }
-    
-    protected void configureShell(Shell shell) {
-      super.configureShell(shell);
-      shell.setText("Data staging in");
-   }
-    
     Text pathText;
     private Text nameText;
     private String returnName;
     private String returnPath;
+    private String initName;
+    private String initPath;
+
+    protected EditDialog( final Shell parentShell ) {
+      super( parentShell );
+    }
+
+    protected EditDialog( final Shell parentShell,
+                          final String name,
+                          final String path )
+    {
+      this( parentShell );
+      this.initName = name;
+      this.initPath = path;
+    }
 
     @Override
-    protected Control createDialogArea( Composite parent ) {
+    protected void configureShell( final Shell shell ) {
+      super.configureShell( shell );
+      shell.setText( Messages.getString( "DataStageInTable.add_dialog_title" ) ); //$NON-NLS-1$
+    }
+
+    @Override
+    protected Control createDialogArea( final Composite parent ) {
       Composite composite = ( Composite )super.createDialogArea( parent );
       composite.setLayout( new GridLayout( 1, false ) );
       composite.setLayoutData( new GridData( GridData.FILL_BOTH ) );
@@ -324,7 +352,7 @@ public class DataStageInTable {
       gd = new GridData( GridData.FILL_HORIZONTAL );
       panel.setLayoutData( gd );
       Label pathLabel = new Label( panel, SWT.LEAD );
-      pathLabel.setText( "Location" );
+      pathLabel.setText( Messages.getString( "DataStageInTable.location_field_label" ) ); //$NON-NLS-1$
       gd = new GridData();
       pathLabel.setLayoutData( gd );
       this.pathText = new Text( panel, SWT.BORDER );
@@ -334,19 +362,19 @@ public class DataStageInTable {
         this.pathText.setText( this.initPath );
       }
       Button browseButton = new Button( panel, SWT.PUSH );
-      IPreferenceStore prefs = Activator.getDefault().getPreferenceStore();
+      // IPreferenceStore prefs = Activator.getDefault().getPreferenceStore();
       ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
       Image fileImage = sharedImages.getImage( ISharedImages.IMG_OBJ_FILE );
       browseButton.setImage( fileImage );
       browseButton.addSelectionListener( new SelectionAdapter() {
 
         @Override
-        public void widgetSelected( SelectionEvent e ) {
+        public void widgetSelected( final SelectionEvent event ) {
           String filename = null;
           IGridConnectionElement connection = GridFileDialog.openFileDialog( PlatformUI.getWorkbench()
                                                                                .getActiveWorkbenchWindow()
                                                                                .getShell(),
-                                                                             "Choose a file",
+                                                                             Messages.getString( "DataStageInTable.grid_file_dialog_title" ), //$NON-NLS-1$
                                                                              null,
                                                                              true );
           if( connection != null ) {
@@ -364,7 +392,7 @@ public class DataStageInTable {
         }
       } );
       Label nameLabel = new Label( panel, SWT.LEAD );
-      nameLabel.setText( "Name" );
+      nameLabel.setText( Messages.getString( "DataStageInTable.name_field_label" ) ); //$NON-NLS-1$
       nameLabel.setLayoutData( new GridData() );
       this.nameText = new Text( panel, SWT.BORDER );
       gd = new GridData();
@@ -381,14 +409,25 @@ public class DataStageInTable {
       return composite;
     }
 
+    /**
+     * Access to path value provided by the user.
+     * 
+     * @return string representing URI
+     */
     public String getPath() {
       return this.returnPath;
     }
 
+    /**
+     * Access to name value provided by the user.
+     * 
+     * @return name of the data staging in
+     */
     public String getName() {
       return this.returnName;
     }
 
+    @Override
     protected void okPressed() {
       this.returnName = this.nameText.getText();
       this.returnPath = this.pathText.getText();
@@ -396,8 +435,8 @@ public class DataStageInTable {
     }
 
     void updateButtons() {
-      if( !this.nameText.getText().equals( "" )
-          && !this.pathText.getText().equals( "" ) )
+      if( !this.nameText.getText().equals( "" ) //$NON-NLS-1$
+          && !this.pathText.getText().equals( "" ) ) //$NON-NLS-1$
       {
         super.getButton( IDialogConstants.OK_ID ).setEnabled( true );
       } else {
@@ -406,13 +445,13 @@ public class DataStageInTable {
     }
 
     @Override
-    protected void createButtonsForButtonBar( Composite parent ) {
+    protected void createButtonsForButtonBar( final Composite parent ) {
       super.createButtonsForButtonBar( parent );
       updateButtons();
     }
     class UpdateAdapter implements ModifyListener {
 
-      public void modifyText( ModifyEvent e ) {
+      public void modifyText( final ModifyEvent event ) {
         updateButtons();
       }
     }
