@@ -33,13 +33,13 @@ import eu.geclipse.jsdl.ui.wizards.NewJobWizard;
 
 /**
  * Class that is a {@link IWizardNode} holding itself as a Wizard. This Wizard
- * is a specific (not allways present) part of {@link NewJobWizard}
+ * is a specific (not always present) part of {@link NewJobWizard}
  */
 public class SpecificWizardPart extends Wizard implements IWizardNode {
 
   private IWizardNode nextWizardIner;
   private IWizard parentWizard;
-  private String extensionPointId;
+//  private String extensionPointId;
   private boolean isCreated;
   private List<WizardPage> pages;
 
@@ -47,11 +47,10 @@ public class SpecificWizardPart extends Wizard implements IWizardNode {
    * Creates an instance of {@link SpecificWizardPart}
    * 
    * @param nextWizard wizard that will be shown after this wizard (as a
-   *          subwizard of {@link NewJobWizard})
+   *            subwizard of {@link NewJobWizard})
    * @param parentWizard wizard containing this wizard (usually
-   *          {@link NewJobWizard})
-   * @param extensionPointIdName id of extension point that defines pages of
-   *          this wizard
+   *            {@link NewJobWizard})
+   * @param xmlPath path to file containing information of page's
    * @throws SAXException in case of SAX problems
    * @throws ParserConfigurationException in case of bad parser configuration
    * @throws IOException in case of problems with files
@@ -63,7 +62,7 @@ public class SpecificWizardPart extends Wizard implements IWizardNode {
   {
     super();
     this.nextWizardIner = nextWizard;
-    this.parentWizard = parentWizard;
+//    this.parentWizard = parentWizard;
     this.pages = ApplicationSpecificPageFactory.getPagesFromXML( xmlPath,
                                                                  this.nextWizardIner );
     this.addPages();
@@ -71,8 +70,7 @@ public class SpecificWizardPart extends Wizard implements IWizardNode {
   }
 
   @Override
-  public boolean performFinish()
-  {
+  public boolean performFinish() {
 //    return this.parentWizard.performFinish();
     return true;
   }
@@ -90,11 +88,9 @@ public class SpecificWizardPart extends Wizard implements IWizardNode {
   }
 
   @Override
-  public void addPages()
-  {
+  public void addPages() {
     for( WizardPage asp : this.pages ) {
       addPage( asp );
     }
   }
- 
 }
