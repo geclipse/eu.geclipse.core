@@ -82,16 +82,14 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
   }
 
   @Override
-  public void dispose()
-  {
+  public void dispose() {
     ApplicationSpecificRegistry.getInstance()
       .removeContentChangeListener( this );
     super.dispose();
   }
 
   @Override
-  protected Control createContents( Composite parent )
-  {
+  protected Control createContents( final Composite parent ) {
     initializeDialogUnits( parent );
     noDefaultAndApplyButton();
     Composite mainComp = new Composite( parent, SWT.NONE );
@@ -160,8 +158,7 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
     this.addButton.addSelectionListener( new SelectionAdapter() {
 
       @Override
-      public void widgetSelected( SelectionEvent e )
-      {
+      public void widgetSelected( final SelectionEvent event ) {
         editAppliactionSpecificData( null );
       }
     } );
@@ -172,8 +169,7 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
     this.editButton.addSelectionListener( new SelectionAdapter() {
 
       @Override
-      public void widgetSelected( SelectionEvent e )
-      {
+      public void widgetSelected( final SelectionEvent event ) {
         editAppliactionSpecificData( getSelectedAppSpecificObject() );
       }
     } );
@@ -184,8 +180,7 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
     this.removeButton.addSelectionListener( new SelectionAdapter() {
 
       @Override
-      public void widgetSelected( SelectionEvent e )
-      {
+      public void widgetSelected( final SelectionEvent event ) {
         ApplicationSpecificRegistry.getInstance()
           .removeApplicationSpecificData( getSelectedAppSpecificObject() );
       }
@@ -194,7 +189,7 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
     return mainComp;
   }
 
-  void editAppliactionSpecificData( ApplicationSpecificObject aSO ) {
+  void editAppliactionSpecificData( final ApplicationSpecificObject aSO ) {
     EditDialog dialog;
     if( aSO == null ) {
       dialog = new EditDialog( getShell() );
@@ -207,7 +202,7 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
       }
     } else {
       String jsdlPath = null;
-      if (aSO.getJsdlPath() != null){
+      if( aSO.getJsdlPath() != null ) {
         jsdlPath = aSO.getJsdlPath().toOSString();
       }
       dialog = new EditDialog( getShell(),
@@ -250,14 +245,14 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
     this.editButton.setEnabled( selectionAvailable );
   }
 
-  public void init( IWorkbench workbench ) {
+  public void init( final IWorkbench workbench ) {
     setPreferenceStore( Activator.getDefault().getPreferenceStore() );
   }
   class ApplicationSpecificPageContentProvider
     implements IStructuredContentProvider
   {
 
-    public Object[] getElements( Object inputElement ) {
+    public Object[] getElements( final Object inputElement ) {
       ApplicationSpecificObject[] result = new ApplicationSpecificObject[ 0 ];
       result = ApplicationSpecificRegistry.getInstance()
         .getApplicationDataList()
@@ -269,7 +264,9 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
       // TODO Auto-generated method stub
     }
 
-    public void inputChanged( Viewer viewer, Object oldInput, Object newInput )
+    public void inputChanged( final Viewer viewer,
+                              final Object oldInput,
+                              final Object newInput )
     {
       // TODO Auto-generated method stub
     }
@@ -278,11 +275,11 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
     implements ITableLabelProvider
   {
 
-    public Image getColumnImage( Object element, int columnIndex ) {
+    public Image getColumnImage( final Object element, final int columnIndex ) {
       return null;
     }
 
-    public String getColumnText( Object element, int columnIndex ) {
+    public String getColumnText( final Object element, final int columnIndex ) {
       String result = null;
       ApplicationSpecificObject asO = ( ApplicationSpecificObject )element;
       switch( columnIndex ) {
@@ -298,7 +295,7 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
         case 3: // JSDL path
           if( asO.getJsdlPath() != null ) {
             result = asO.getJsdlPath().toOSString();
-          } 
+          }
         break;
         default:
           result = ""; //$NON-NLS-1$
@@ -309,9 +306,10 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
   }
   class EditDialog extends Dialog {
 
+    Text xmlPath;
+    Text jsdlPath;
     private Text appName;
     private Text appPath;
-    Text xmlPath;
     private String appNameInit;
     private String appPathInit;
     private String xmlPathInit;
@@ -320,17 +318,16 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
     private String returnXMLPath;
     private String returnAppPath;
     private String returnJSDLPath;
-    Text jsdlPath;
 
-    protected EditDialog( Shell parentShell ) {
+    protected EditDialog( final Shell parentShell ) {
       super( parentShell );
     }
 
-    protected EditDialog( Shell parentShell,
-                          String appName,
-                          String appPath,
-                          String xmlPath,
-                          String jsdlPath )
+    protected EditDialog( final Shell parentShell,
+                          final String appName,
+                          final String appPath,
+                          final String xmlPath,
+                          final String jsdlPath )
     {
       super( parentShell );
       this.appNameInit = appName;
@@ -340,8 +337,7 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
     }
 
     @Override
-    protected void createButtonsForButtonBar( Composite parent )
-    {
+    protected void createButtonsForButtonBar( final Composite parent ) {
       super.createButtonsForButtonBar( parent );
       updateButtons();
     }
@@ -355,8 +351,7 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
     }
 
     @Override
-    protected Control createDialogArea( Composite parent )
-    {
+    protected Control createDialogArea( final Composite parent ) {
       Composite composite = ( Composite )super.createDialogArea( parent );
       composite.setLayout( new GridLayout( 1, false ) );
       composite.setLayoutData( new GridData( GridData.FILL_BOTH ) );
@@ -412,8 +407,7 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
       browseButton.addSelectionListener( new SelectionAdapter() {
 
         @Override
-        public void widgetSelected( SelectionEvent e )
-        {
+        public void widgetSelected( final SelectionEvent event ) {
           FileDialog file = new FileDialog( getShell() );
           String connection = file.open();
           if( connection != null ) {
@@ -442,8 +436,7 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
       browseButton1.addSelectionListener( new SelectionAdapter() {
 
         @Override
-        public void widgetSelected( SelectionEvent e )
-        {
+        public void widgetSelected( final SelectionEvent event ) {
           FileDialog file = new FileDialog( getShell() );
           String connection = file.open();
           if( connection != null ) {
@@ -460,8 +453,7 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
     }
 
     @Override
-    protected void okPressed()
-    {
+    protected void okPressed() {
       this.returnAppName = this.appName.getText();
       this.returnAppPath = this.appPath.getText();
       this.returnXMLPath = this.xmlPath.getText();
@@ -508,13 +500,13 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
     }
     class updateAdapter implements ModifyListener {
 
-      public void modifyText( ModifyEvent e ) {
+      public void modifyText( final ModifyEvent event ) {
         updateButtons();
       }
     }
   }
 
-  public void contentChanged( IContentChangeNotifier source ) {
+  public void contentChanged( final IContentChangeNotifier source ) {
     this.appsViewer.refresh();
   }
 }
