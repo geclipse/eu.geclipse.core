@@ -1,3 +1,19 @@
+/******************************************************************************
+ * Copyright (c) 2007 g-Eclipse consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for
+ * project g-Eclipse founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributor(s):
+ *     PSNC: 
+ *      - Katarzyna Bylec (katis@man.poznan.pl)
+ *           
+ *****************************************************************************/
 package eu.geclipse.jsdl.ui.widgets;
 
 import java.util.List;
@@ -5,6 +21,7 @@ import java.util.List;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.viewers.ColumnLayoutData;
 import org.eclipse.jface.viewers.ColumnWeightData;
@@ -117,27 +134,25 @@ public class DataStageInTable {
     gData = new GridData( GridData.FILL_BOTH );
     this.editButton.setLayoutData( gData );
     this.editButton.setText( "Edit..." );
-    this.editButton.addSelectionListener( new SelectionAdapter(){
+    this.editButton.addSelectionListener( new SelectionAdapter() {
 
       @Override
       public void widgetSelected( SelectionEvent e ) {
         editDataStagingEntry( getSelectedObject() );
       }
-      
-    });
+    } );
     this.removeButton = new Button( buttonsComp, SWT.PUSH );
     gData = new GridData( GridData.FILL_BOTH );
     this.removeButton.setLayoutData( gData );
     this.removeButton.setText( "Remove" );
-    this.removeButton.addSelectionListener( new SelectionAdapter(){
+    this.removeButton.addSelectionListener( new SelectionAdapter() {
 
       @Override
       public void widgetSelected( SelectionEvent e ) {
         DataStageInTable.this.input.remove( getSelectedObject() );
         DataStageInTable.this.tableViewer.refresh();
       }
-      
-    });
+    } );
     updateButtons();
   }
 
@@ -145,13 +160,13 @@ public class DataStageInTable {
     DataStagingType result = null;
     IStructuredSelection selection = ( IStructuredSelection )this.tableViewer.getSelection();
     Object obj = selection.getFirstElement();
-    if ( obj instanceof DataStagingType ){
+    if( obj instanceof DataStagingType ) {
       result = ( DataStagingType )obj;
     }
     return result;
   }
-  
-  public List<DataStagingType> getDataStagingInType(){
+
+  public List<DataStagingType> getDataStagingType() {
     return this.input;
   }
 
@@ -160,24 +175,58 @@ public class DataStageInTable {
     if( selectedObject == null ) {
       dialog = new EditDialog( this.mainComp.getShell() );
       if( dialog.open() == Window.OK ) {
-        this.input.add( getNewDataStagingType( dialog.getName(), dialog.getPath() ) );
-        this.tableViewer.refresh();
+        DataStagingType newData = getNewDataStagingType( dialog.getName(),
+                                                         dialog.getPath() );
+        if( !isDataInInput( newData ) ) {
+          this.input.add( newData );
+          this.tableViewer.refresh();
+        } else {
+          MessageDialog.openError( this.mainComp.getShell(),
+                                   "New data staging in...",
+                                   "Data staging already exists." );
+        }
       }
     } else {
-      dialog = new EditDialog(this.mainComp.getShell(), selectedObject.getName(), selectedObject.getSource().getURI());
-      if (dialog.open() == Window.OK){
-        this.input.add( getNewDataStagingType( dialog.getName(), dialog.getPath() ) );
-        this.input.remove( selectedObject );
-        this.tableViewer.refresh();
+      dialog = new EditDialog( this.mainComp.getShell(),
+                               selectedObject.getFileName(),
+                               selectedObject.getSource().getURI() );
+      if( dialog.open() == Window.OK ) {
+        DataStagingType newData = getNewDataStagingType( dialog.getName(),
+                                                         dialog.getPath() );
+        if( !newData.getFileName().equals( selectedObject.getFileName() )
+            || !newData.getSource().getURI().equals( selectedObject.getSource()
+              .getURI() ) )
+        {
+          if( !isDataInInput( newData ) ) {
+            this.input.add( getNewDataStagingType( dialog.getName(),
+                                                   dialog.getPath() ) );
+            this.input.remove( selectedObject );
+            this.tableViewer.refresh();
+          } else {
+            MessageDialog.openError( this.mainComp.getShell(),
+                                     "Edit data staging in...",
+                                     "Data staging already exists." );
+          }
+        }
       }
     }
+  }
+
+  private boolean isDataInInput( DataStagingType newData ) {
+    boolean result = false;
+    for( DataStagingType data : this.input ) {
+      if( data.getFileName().equals( newData.getFileName() ) && data.getSource().getURI().equals( newData.getSource().getURI() ) ) {
+        result = true;
+      }
+    }
+    return result;
   }
 
   private DataStagingType getNewDataStagingType( final String name,
                                                  final String path )
   {
     DataStagingType result = JSDLModelFacade.getDataStagingType();
-    result.setName( name );
+    result.setFileName( name );
     SourceTargetType source = JSDLModelFacade.getSourceTargetType();
     source.setURI( path );
     result.setSource( source );
@@ -230,7 +279,7 @@ public class DataStageInTable {
             result = var.getSource().getURI();
           break;
           case 1: // name
-            result = var.getName();
+            result = var.getFileName();
           break;
         }
       }
@@ -245,12 +294,18 @@ public class DataStageInTable {
     protected EditDialog( Shell parentShell ) {
       super( parentShell );
     }
-    
-    protected EditDialog( Shell parentShell, String name, String path  ) {
-      super( parentShell );
+
+    protected EditDialog( Shell parentShell, String name, String path ) {
+      this( parentShell );
       this.initName = name;
       this.initPath = path;
     }
+    
+    protected void configureShell(Shell shell) {
+      super.configureShell(shell);
+      shell.setText("Data staging in");
+   }
+    
     Text pathText;
     private Text nameText;
     private String returnName;
@@ -272,8 +327,10 @@ public class DataStageInTable {
       pathLabel.setText( "Location" );
       gd = new GridData();
       pathLabel.setLayoutData( gd );
-      pathText = new Text( panel, SWT.BORDER );
-      if (this.initPath != null){
+      this.pathText = new Text( panel, SWT.BORDER );
+      gd = new GridData( GridData.FILL_HORIZONTAL );
+      this.pathText.setLayoutData( gd );
+      if( this.initPath != null ) {
         this.pathText.setText( this.initPath );
       }
       Button browseButton = new Button( panel, SWT.PUSH );
@@ -311,10 +368,11 @@ public class DataStageInTable {
       nameLabel.setLayoutData( new GridData() );
       this.nameText = new Text( panel, SWT.BORDER );
       gd = new GridData();
+      gd.widthHint = 260;
       gd.horizontalSpan = 2;
       gd.horizontalAlignment = SWT.FILL;
       this.nameText.setLayoutData( gd );
-      if (this.initName != null){
+      if( this.initName != null ) {
         this.nameText.setText( this.initName );
       }
       ModifyListener listener = new UpdateAdapter();
