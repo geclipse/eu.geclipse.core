@@ -141,9 +141,8 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
           //      
         }
       };
-       this.protocolFilter1 = new GridConnectionProtocolFilter();
+//       this.protocolFilter1 = new GridConnectionProtocolFilter();
 //       this.protocolFilter.addFilterProtocol( LOCAL_FILTER );
-       this.protocolFilter1.addFilterProtocol( "file" );
     }
   }
 
@@ -329,9 +328,6 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
     this.filter.link( this.treeViewer, this.filetypeCombo );
     if( this.protocolFilter != null ) {
       this.treeViewer.addFilter( this.protocolFilter );
-    }
-    if ( this.protocolFilter1 != null ){
-      this.treeViewer.addFilter( this.protocolFilter1 );
     }
     return mainComp;
   }
