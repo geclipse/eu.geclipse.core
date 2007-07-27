@@ -1,11 +1,19 @@
-/*******************************************************************************
- * Copyright (c) 2006 g-Eclipse consortium All rights reserved. This program and
- * the accompanying materials are made available under the terms of the Eclipse
- * Public License v1.0 which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html Initial development of the original
- * code was made for project g-Eclipse founded by European Union project number:
- * FP6-IST-034327 http://www.geclipse.eu/ Contributor(s): PSNC - Katarzyna Bylec
- ******************************************************************************/
+/******************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for
+ * project g-Eclipse founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributor(s):
+ *     PSNC: 
+ *      - Katarzyna Bylec (katis@man.poznan.pl)
+ *           
+ *****************************************************************************/
 package eu.geclipse.ui.widgets;
 
 import java.util.ArrayList;
@@ -45,7 +53,7 @@ import org.eclipse.swt.widgets.TableItem;
  * @author katis
  * @param <T> Type of items stored in the table
  */
-public abstract class TabComponent<T> extends AbstractLaunchConfigurationTab{
+public abstract class TabComponent<T> extends AbstractLaunchConfigurationTab {
 
   protected Button editButton;
   protected Button removeButton;
@@ -70,10 +78,15 @@ public abstract class TabComponent<T> extends AbstractLaunchConfigurationTab{
                        final int hight,
                        final int width )
   {
-    this( contentProvider, labelProvider, propertiesVsHearders, hight, width, SWT.LEFT );
+    this( contentProvider,
+          labelProvider,
+          propertiesVsHearders,
+          hight,
+          width,
+          SWT.LEFT );
     this.input = input;
   }
-  
+
   /**
    * @param contentProvider
    * @param labelProvider
@@ -85,96 +98,100 @@ public abstract class TabComponent<T> extends AbstractLaunchConfigurationTab{
                        final int hight,
                        final int width )
   {
-    this( contentProvider, labelProvider, propertiesVsHearders, hight, width, SWT.LEFT );
+    this( contentProvider,
+          labelProvider,
+          propertiesVsHearders,
+          hight,
+          width,
+          SWT.LEFT );
   }
-  
-  
-  
-  public TabComponent (final IStructuredContentProvider contentProvider,
+
+  public TabComponent( final IStructuredContentProvider contentProvider,
                        final ITableLabelProvider labelProvider,
                        final List<String> propertiesVsHearders,
-                       
                        final int hight,
                        final int width,
-                       final int buttonsPosition){
+                       final int buttonsPosition )
+  {
     this.contentProvider = contentProvider;
     this.tabHeight = hight;
     this.labelProvider = labelProvider;
     this.tabColumnsHeaders = new String[ propertiesVsHearders.size() ];
     this.tabColumnsProperties = new String[ propertiesVsHearders.size() ];
-    this.tabColumnsHeaders = propertiesVsHearders
-      .toArray( this.tabColumnsHeaders );
-    this.tabColumnsProperties = propertiesVsHearders
-      .toArray( this.tabColumnsProperties );
+    this.tabColumnsHeaders = propertiesVsHearders.toArray( this.tabColumnsHeaders );
+    this.tabColumnsProperties = propertiesVsHearders.toArray( this.tabColumnsProperties );
     this.tabColumnsLayouts = new ColumnLayoutData[ this.tabColumnsHeaders.length ];
     for( int i = 0; i < this.tabColumnsHeaders.length; i++ ) {
-      this.columnsWidth.add( Integer.valueOf( width ));
-      this.tabColumnsLayouts[ i ] = new ColumnWeightData( this.columnsWidth.get( i ).intValue(),
-                                                          this.columnsWidth.get( i ).intValue(),
+      this.columnsWidth.add( Integer.valueOf( width ) );
+      this.tabColumnsLayouts[ i ] = new ColumnWeightData( this.columnsWidth.get( i )
+                                                            .intValue(),
+                                                          this.columnsWidth.get( i )
+                                                            .intValue(),
                                                           false );
-    } 
-    this.buttonsPosition =  buttonsPosition;
-   
+    }
+    this.buttonsPosition = buttonsPosition;
   }
-  
-  public TabComponent (final IStructuredContentProvider contentProvider,
+
+  public TabComponent( final IStructuredContentProvider contentProvider,
                        final ITableLabelProvider labelProvider,
                        final List<String> propertiesVsHearders,
                        final Object input,
                        final int hight,
                        final List<Integer> columnsWidth,
-                       final int buttonsPosition){
+                       final int buttonsPosition )
+  {
     this.contentProvider = contentProvider;
     this.tabHeight = hight;
     this.columnsWidth = columnsWidth;
     this.labelProvider = labelProvider;
     this.tabColumnsHeaders = new String[ propertiesVsHearders.size() ];
     this.tabColumnsProperties = new String[ propertiesVsHearders.size() ];
-    this.tabColumnsHeaders = propertiesVsHearders
-      .toArray( this.tabColumnsHeaders );
-    this.tabColumnsProperties = propertiesVsHearders
-      .toArray( this.tabColumnsProperties );
+    this.tabColumnsHeaders = propertiesVsHearders.toArray( this.tabColumnsHeaders );
+    this.tabColumnsProperties = propertiesVsHearders.toArray( this.tabColumnsProperties );
     this.tabColumnsLayouts = new ColumnLayoutData[ this.tabColumnsHeaders.length ];
     for( int i = 0; i < this.tabColumnsHeaders.length; i++ ) {
-      this.tabColumnsLayouts[ i ] = new ColumnWeightData( this.columnsWidth.get( i ).intValue(),
-                                                          this.columnsWidth.get( i ).intValue(),
+      this.tabColumnsLayouts[ i ] = new ColumnWeightData( this.columnsWidth.get( i )
+                                                            .intValue(),
+                                                          this.columnsWidth.get( i )
+                                                            .intValue(),
                                                           false );
-    } 
-    this.buttonsPosition =  buttonsPosition;
+    }
+    this.buttonsPosition = buttonsPosition;
     this.input = input;
   }
-  public TabComponent (final IStructuredContentProvider contentProvider,
+
+  public TabComponent( final IStructuredContentProvider contentProvider,
                        final ITableLabelProvider labelProvider,
                        final List<String> propertiesVsHearders,
-   
                        final int hight,
                        final List<Integer> columnsWidth,
-                       final int buttonsPosition){
+                       final int buttonsPosition )
+  {
     this.contentProvider = contentProvider;
     this.tabHeight = hight;
     this.columnsWidth = columnsWidth;
     this.labelProvider = labelProvider;
     this.tabColumnsHeaders = new String[ propertiesVsHearders.size() ];
     this.tabColumnsProperties = new String[ propertiesVsHearders.size() ];
-    this.tabColumnsHeaders = propertiesVsHearders
-      .toArray( this.tabColumnsHeaders );
-    this.tabColumnsProperties = propertiesVsHearders
-      .toArray( this.tabColumnsProperties );
+    this.tabColumnsHeaders = propertiesVsHearders.toArray( this.tabColumnsHeaders );
+    this.tabColumnsProperties = propertiesVsHearders.toArray( this.tabColumnsProperties );
     this.tabColumnsLayouts = new ColumnLayoutData[ this.tabColumnsHeaders.length ];
     for( int i = 0; i < this.tabColumnsHeaders.length; i++ ) {
-      this.tabColumnsLayouts[ i ] = new ColumnWeightData( this.columnsWidth.get( i ).intValue(),
-                                                          this.columnsWidth.get( i ).intValue(),
+      this.tabColumnsLayouts[ i ] = new ColumnWeightData( this.columnsWidth.get( i )
+                                                            .intValue(),
+                                                          this.columnsWidth.get( i )
+                                                            .intValue(),
                                                           false );
-    } 
-    this.buttonsPosition =  buttonsPosition;
-   
+    }
+    this.buttonsPosition = buttonsPosition;
   }
 
   public void createControl( final Composite parent ) {
     Composite mainComposite1 = new Composite( parent, SWT.NONE );
     setControl( mainComposite1 );
     GridLayout layout = new GridLayout();
-    if (this.buttonsPosition == SWT.BOTTOM || this.buttonsPosition == SWT.TOP){
+    if( this.buttonsPosition == SWT.BOTTOM || this.buttonsPosition == SWT.TOP )
+    {
       layout.numColumns = 1;
     } else {
       layout.numColumns = 2;
@@ -188,11 +205,11 @@ public abstract class TabComponent<T> extends AbstractLaunchConfigurationTab{
     setLabels();
     Dialog.applyDialogFont( mainComposite1 );
     addEditors();
-    if (! this.cellEditors.isEmpty()){
-      CellEditor[] editorsTable = new CellEditor[this.cellEditors.size()];
+    if( !this.cellEditors.isEmpty() ) {
+      CellEditor[] editorsTable = new CellEditor[ this.cellEditors.size() ];
       int i = 0;
-      for (CellEditor editor: this.cellEditors){
-        editorsTable[i] = editor;
+      for( CellEditor editor : this.cellEditors ) {
+        editorsTable[ i ] = editor;
         i++;
       }
       this.table.setCellEditors( editorsTable );
@@ -203,20 +220,22 @@ public abstract class TabComponent<T> extends AbstractLaunchConfigurationTab{
   protected void addEditors() {
     // do nothing - subclasses defines its behavior
   }
-  
-  protected void setCellModifier( final ICellModifier cellModifier ){
+
+  protected void setCellModifier( final ICellModifier cellModifier ) {
     this.cellModifier = cellModifier;
   }
 
-  protected void addComboEditor( final ComboBoxCellEditor editor, final String[] types, final boolean readOnly ) { 
-   editor.create( this.table.getTable() );
-   editor.setItems( types );
-   if (readOnly){
-     editor.setStyle( SWT.READ_ONLY );
-   }
-   this.cellEditors.add( editor );
-   
- }
+  protected void addComboEditor( final ComboBoxCellEditor editor,
+                                 final String[] types,
+                                 final boolean readOnly )
+  {
+    editor.create( this.table.getTable() );
+    editor.setItems( types );
+    if( readOnly ) {
+      editor.setStyle( SWT.READ_ONLY );
+    }
+    this.cellEditors.add( editor );
+  }
 
   public void addEditor( final CellEditor editor ) {
     editor.create( this.table.getTable() );
@@ -234,10 +253,10 @@ public abstract class TabComponent<T> extends AbstractLaunchConfigurationTab{
     GridData gridData = new GridData( GridData.FILL_BOTH );
     gridData.heightHint = this.tabHeight;
     int width = 0;
-    for (Integer value: this.columnsWidth){
+    for( Integer value : this.columnsWidth ) {
       width = width + value.intValue();
     }
-//    gridData.widthHint = ( this.tabColumnsHeaders.length * width ) + 30;
+    // gridData.widthHint = ( this.tabColumnsHeaders.length * width ) + 30;
     tableComposite.setLayout( layout );
     tableComposite.setLayoutData( gridData );
     tableComposite.setFont( font );
@@ -329,7 +348,8 @@ public abstract class TabComponent<T> extends AbstractLaunchConfigurationTab{
     GridLayout glayout = new GridLayout();
     glayout.marginHeight = 0;
     glayout.marginWidth = 0;
-    if (this.buttonsPosition == SWT.BOTTOM || this.buttonsPosition == SWT.TOP){
+    if( this.buttonsPosition == SWT.BOTTOM || this.buttonsPosition == SWT.TOP )
+    {
       glayout.numColumns = 3;
     } else {
       glayout.numColumns = 1;
@@ -339,10 +359,9 @@ public abstract class TabComponent<T> extends AbstractLaunchConfigurationTab{
     buttonComposite.setLayout( glayout );
     buttonComposite.setLayoutData( gdata );
     buttonComposite.setFont( parent.getFont() );
-    if (this.buttonsPosition == SWT.LEFT){
+    if( this.buttonsPosition == SWT.LEFT ) {
       createVerticalSpacer( buttonComposite, 1 );
     }
-    
     // Create buttons
     gdata = new GridData( GridData.FILL_BOTH );
     this.addButton = new Button( buttonComposite, SWT.PUSH );
@@ -350,8 +369,7 @@ public abstract class TabComponent<T> extends AbstractLaunchConfigurationTab{
     this.addButton.addSelectionListener( new SelectionAdapter() {
 
       @Override
-      public void widgetSelected( final SelectionEvent event )
-      {
+      public void widgetSelected( final SelectionEvent event ) {
         handleAddButtonSelected();
       }
     } );
@@ -361,8 +379,7 @@ public abstract class TabComponent<T> extends AbstractLaunchConfigurationTab{
     this.editButton.addSelectionListener( new SelectionAdapter() {
 
       @Override
-      public void widgetSelected( final SelectionEvent event )
-      {
+      public void widgetSelected( final SelectionEvent event ) {
         handleEditButtonSelected();
       }
     } );
@@ -373,8 +390,7 @@ public abstract class TabComponent<T> extends AbstractLaunchConfigurationTab{
     this.removeButton.addSelectionListener( new SelectionAdapter() {
 
       @Override
-      public void widgetSelected( final SelectionEvent event )
-      {
+      public void widgetSelected( final SelectionEvent event ) {
         handleRemoveButtonSelected();
       }
     } );
@@ -382,15 +398,15 @@ public abstract class TabComponent<T> extends AbstractLaunchConfigurationTab{
   }
 
   @SuppressWarnings("unchecked")
-  protected boolean addVariable( final T variable )
-  {
+  protected boolean addVariable( final T variable ) {
     boolean result = true;
     TableItem[] items = this.table.getTable().getItems();
     for( int i = 0; i < items.length; i++ ) {
       T existingVariable = ( T )items[ i ].getData();
       if( existingVariable.equals( variable ) ) {
         boolean overWrite = MessageDialog.openQuestion( getShell(),
-                                                        Messages.getString( "TabComponent.replace_table_item_question_title" ), Messages.getString( "TabComponent.replace_table_item_question" ) ); //$NON-NLS-1$ //$NON-NLS-2$
+                                                        Messages.getString( "TabComponent.replace_table_item_question_title" ), //$NON-NLS-1$
+                                                        Messages.getString( "TabComponent.replace_table_item_question" ) ); //$NON-NLS-1$
         if( !overWrite ) {
           result = false;
         } else {
@@ -413,8 +429,7 @@ public abstract class TabComponent<T> extends AbstractLaunchConfigurationTab{
    * @return ArrayList of items kept in table
    */
   @SuppressWarnings("unchecked")
-  public ArrayList<T> getInput()
-  {
+  public ArrayList<T> getInput() {
     ArrayList<T> result = new ArrayList<T>();
     for( TableItem item : this.table.getTable().getItems() ) {
       result.add( ( T )item.getData() );
