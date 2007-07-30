@@ -70,30 +70,28 @@ import eu.geclipse.ui.dialogs.GridFileDialog;
 import eu.geclipse.ui.dialogs.NewProblemDialog;
 
 /**
- * Set of controls used to handle presentation of Data Staging In (see
+ * Set of controls used to handle presentation of Data Staging Out (see
  * {@link DataStagingType} details to user. Information is presented in a table
- * with two columns (name of a file and a source URI). User can add new entry to
+ * with two columns (name of a file and a target URI). User can add new entry to
  * this table and edit or remove existing ones.
  */
-public class DataStageInTable {
+public class DataStageOutTable {
 
+  Composite mainComp;
   TableViewer tableViewer;
   List<DataStagingType> input;
-  Composite mainComp;
   private Table table;
   private Button addButton;
   private Button editButton;
   private Button removeButton;
 
   /**
-   * Creates new instance of table, table viewer and 3 buttons (add, edit and
-   * remove)
-   * 
-   * @param parent control's parent
-   * @param input input for table
+   * Creates new instance of table, table viewer, buttons (add, edit and remove).
+   * @param parent controls' parent
+   * @param input input for a table
    */
-  public DataStageInTable( final Composite parent,
-                           final List<DataStagingType> input )
+  public DataStageOutTable( final Composite parent,
+                            final List<DataStagingType> input )
   {
     this.input = input;
     this.mainComp = new Composite( parent, SWT.NONE );
@@ -118,15 +116,15 @@ public class DataStageInTable {
     tableLayout.addColumnData( data );
     data = new ColumnWeightData( 150 );
     tableLayout.addColumnData( data );
-    nameColumn.setText( Messages.getString( "DataStageInTable.location_field_label" ) ); //$NON-NLS-1$
-    TableColumn typeColumn = new TableColumn( this.table, SWT.LEFT );
-    typeColumn.setText( Messages.getString( "DataStageInTable.name_field_label" ) ); //$NON-NLS-1$
+    nameColumn.setText( "Name" ); //$NON-NLS-1$
+    TableColumn locationColumn = new TableColumn( this.table, SWT.LEFT );
+    locationColumn.setText( "Location" ); //$NON-NLS-1$
     this.tableViewer = new TableViewer( this.table );
     IStructuredContentProvider contentProvider = new DataStageInContentProvider();
     this.tableViewer.setContentProvider( contentProvider );
     this.tableViewer.setColumnProperties( new String[]{
-      Messages.getString( "DataStageInTable.location_field_label" ), //$NON-NLS-1$
-      Messages.getString( "DataStageInTable.name_field_label" ) //$NON-NLS-1$
+      Messages.getString( "DataStageInTable.name_field_label" ), //$NON-NLS-1$
+      Messages.getString( "DataStageInTable.location_field_label" ) //$NON-NLS-1$
     } );
     this.tableViewer.setLabelProvider( new DataStageInContentLabelProvider() );
     this.tableViewer.setInput( this.input );
@@ -149,7 +147,7 @@ public class DataStageInTable {
     this.addButton.addSelectionListener( new SelectionAdapter() {
 
       @Override
-      public void widgetSelected( final SelectionEvent event ) {
+      public void widgetSelected( final SelectionEvent e ) {
         editDataStagingEntry( null );
       }
     } );
@@ -160,7 +158,7 @@ public class DataStageInTable {
     this.editButton.addSelectionListener( new SelectionAdapter() {
 
       @Override
-      public void widgetSelected( final SelectionEvent event ) {
+      public void widgetSelected( final SelectionEvent e ) {
         editDataStagingEntry( getSelectedObject() );
       }
     } );
@@ -171,9 +169,9 @@ public class DataStageInTable {
     this.removeButton.addSelectionListener( new SelectionAdapter() {
 
       @Override
-      public void widgetSelected( final SelectionEvent event ) {
-        DataStageInTable.this.input.remove( getSelectedObject() );
-        DataStageInTable.this.tableViewer.refresh();
+      public void widgetSelected( final SelectionEvent e ) {
+        DataStageOutTable.this.input.remove( getSelectedObject() );
+        DataStageOutTable.this.tableViewer.refresh();
       }
     } );
     DialogCellEditor editor = new DialogCellEditor() {
@@ -181,17 +179,18 @@ public class DataStageInTable {
       @Override
       protected Object openDialogBox( final Control cellEditorWindow ) {
         String filename = ( String )doGetValue();
-        IGridConnectionElement connection = GridFileDialog.openFileDialog( DataStageInTable.this.mainComp.getShell(),
-                                                                           Messages.getString("DataStageInTable.grid_file_dialog_title"), //$NON-NLS-1$
+        cellEditorWindow.getData();
+        IGridConnectionElement connection = GridFileDialog.openFileDialog( DataStageOutTable.this.mainComp.getShell(),
+                                                                           Messages.getString("DataStageOutTable.grid_file_dialog_title"), //$NON-NLS-1$
                                                                            null,
                                                                            true );
         if( connection != null ) {
           try {
             filename = connection.getConnectionFileStore().toString();
           } catch( CoreException cExc ) {
-            NewProblemDialog.openProblem( DataStageInTable.this.mainComp.getShell(),
-                                          Messages.getString("DataStageInTable.error"), //$NON-NLS-1$
-                                          Messages.getString("DataStageInTable.error"), //$NON-NLS-1$
+            NewProblemDialog.openProblem( DataStageOutTable.this.mainComp.getShell(),
+                                          Messages.getString("DataStageOutTable.error"), //$NON-NLS-1$
+                                          Messages.getString("DataStageOutTable.error"), //$NON-NLS-1$
                                           cExc );
           }
         }
@@ -201,7 +200,6 @@ public class DataStageInTable {
     CellEditor[] table1 = new CellEditor[ 1 ];
     table1[ 0 ] = editor;
     editor.create( this.table );
-    
     this.tableViewer.setCellModifier( new ICellModifier() {
 
       public boolean canModify( final Object element, final String property ) {
@@ -210,20 +208,20 @@ public class DataStageInTable {
 
       public Object getValue( final Object element, final String property ) {
         int columnIndex = -1;
-        if( property.equals( Messages.getString( "DataStageInTable.location_field_label" ) ) ) { //$NON-NLS-1$
+        if( property.equals( Messages.getString( "DataStageInTable.name_field_label" ) ) ) { //$NON-NLS-1$
           columnIndex = 0;
         }
-        if( property.equals( Messages.getString( "DataStageInTable.name_field_label" ) ) ) { //$NON-NLS-1$
+        if( property.equals( Messages.getString( "DataStageInTable.location_field_label" ) ) ) { //$NON-NLS-1$
           columnIndex = 1;
         }
         Object result = null;
         DataStagingType data1 = ( DataStagingType )element;
         switch( columnIndex ) {
           case 0:
-            result = data1.getSource().getURI();
+            result = data1.getFileName();
           break;
           case 1:
-            result = data1.getFileName();
+            result = data1.getTarget().getURI();
           break;
           default:
             result = ""; //$NON-NLS-1$
@@ -236,10 +234,10 @@ public class DataStageInTable {
                           final Object value )
       {
         int columnIndex = -1;
-        if( property.equals( Messages.getString( "DataStageInTable.location_field_label" ) ) ) { //$NON-NLS-1$
+        if( property.equals( Messages.getString( "DataStageInTable.name_field_label" ) ) ) { //$NON-NLS-1$
           columnIndex = 0;
         }
-        if( property.equals( Messages.getString( "DataStageInTable.name_field_label" ) ) ) { //$NON-NLS-1$
+        if( property.equals( Messages.getString( "DataStageInTable.location_field_label" ) ) ) { //$NON-NLS-1$
           columnIndex = 1;
         }
         TableItem item = ( TableItem )element;
@@ -247,36 +245,36 @@ public class DataStageInTable {
         DataStagingType dataNew = null;
         switch( columnIndex ) {
           case 0:
-            dataNew = getNewDataStagingType( dataOld.getFileName(),
-                                             ( String )value );
+            dataNew = getNewDataStagingType( ( String )value,
+                                             dataOld.getTarget().getURI() );
             if( !dataNew.getFileName().equals( dataOld.getFileName() )
-                || !dataNew.getSource().getURI().equals( dataOld.getSource()
+                || !dataNew.getTarget().getURI().equals( dataOld.getTarget()
                   .getURI() ) )
             {
               if( !isDataInInput( dataNew ) ) {
-                DataStageInTable.this.input.add( dataNew );
-                DataStageInTable.this.input.remove( dataOld );
-                DataStageInTable.this.tableViewer.refresh();
+                DataStageOutTable.this.input.add( dataNew );
+                DataStageOutTable.this.input.remove( dataOld );
+                DataStageOutTable.this.tableViewer.refresh();
               } else {
-                MessageDialog.openError( DataStageInTable.this.mainComp.getShell(),
+                MessageDialog.openError( DataStageOutTable.this.mainComp.getShell(),
                                          Messages.getString( "DataStageInTable.edit_dialog_title" ), //$NON-NLS-1$
                                          Messages.getString( "DataStageInTable.value_exists_dialog_message" ) ); //$NON-NLS-1$
               }
             }
           break;
           case 1:
-            dataNew = getNewDataStagingType( ( String )value,
-                                             dataOld.getSource().getURI() );
+            dataNew = getNewDataStagingType( dataOld.getFileName(),
+                                             ( String )value );
             if( !dataNew.getFileName().equals( dataOld.getFileName() )
-                || !dataNew.getSource().getURI().equals( dataOld.getSource()
+                || !dataNew.getTarget().getURI().equals( dataOld.getTarget()
                   .getURI() ) )
             {
               if( !isDataInInput( dataNew ) ) {
-                DataStageInTable.this.input.add( dataNew );
-                DataStageInTable.this.input.remove( dataOld );
-                DataStageInTable.this.tableViewer.refresh();
+                DataStageOutTable.this.input.add( dataNew );
+                DataStageOutTable.this.input.remove( dataOld );
+                DataStageOutTable.this.tableViewer.refresh();
               } else {
-                MessageDialog.openError( DataStageInTable.this.mainComp.getShell(),
+                MessageDialog.openError( DataStageOutTable.this.mainComp.getShell(),
                                          Messages.getString( "DataStageInTable.edit_dialog_title" ), //$NON-NLS-1$
                                          Messages.getString( "DataStageInTable.value_exists_dialog_message" ) ); //$NON-NLS-1$
               }
@@ -285,14 +283,10 @@ public class DataStageInTable {
         }
       }
     } );
-
     CellEditor[] edTable = new CellEditor[]{
-      editor,
-      new TextCellEditor( this.tableViewer.getTable() )
+      new TextCellEditor( this.tableViewer.getTable() ), editor
     };
-
     this.tableViewer.setCellEditors( edTable );
-    
     TableViewerEditor.create( this.tableViewer,
                               new ColumnViewerEditorActivationStrategy( this.tableViewer ),
                               ColumnViewerEditor.TABBING_HORIZONTAL
@@ -329,33 +323,32 @@ public class DataStageInTable {
                                                          dialog.getPath() );
         if( !isDataInInput( newData ) ) {
           this.input.add( newData );
-          this.tableViewer.refresh();
         } else {
           MessageDialog.openError( this.mainComp.getShell(),
-                                   Messages.getString( "DataStageInTable.value_exists_dialog_title" ), //$NON-NLS-1$
-                                   Messages.getString( "DataStageInTable.value_exists_dialog_message" ) ); //$NON-NLS-1$
+                                   Messages.getString("DataStageOutTable.new_dialog_title"), //$NON-NLS-1$
+                                   Messages.getString("DataStageOutTable.data_exists_error") ); //$NON-NLS-1$
         }
+        this.tableViewer.refresh();
       }
     } else {
       dialog = new EditDialog( this.mainComp.getShell(),
                                selectedObject.getFileName(),
-                               selectedObject.getSource().getURI() );
+                               selectedObject.getTarget().getURI() );
       if( dialog.open() == Window.OK ) {
         DataStagingType newData = getNewDataStagingType( dialog.getName(),
                                                          dialog.getPath() );
         if( !newData.getFileName().equals( selectedObject.getFileName() )
-            || !newData.getSource().getURI().equals( selectedObject.getSource()
+            || !newData.getTarget().getURI().equals( selectedObject.getTarget()
               .getURI() ) )
         {
           if( !isDataInInput( newData ) ) {
-            this.input.add( getNewDataStagingType( dialog.getName(),
-                                                   dialog.getPath() ) );
+            this.input.add( newData );
             this.input.remove( selectedObject );
             this.tableViewer.refresh();
           } else {
             MessageDialog.openError( this.mainComp.getShell(),
-                                     Messages.getString( "DataStageInTable.edit_dialog_title" ), //$NON-NLS-1$
-                                     Messages.getString( "DataStageInTable.value_exists_dialog_message" ) ); //$NON-NLS-1$
+                                     Messages.getString("DataStageOutTable.2"), //$NON-NLS-1$
+                                     Messages.getString("DataStageOutTable.edit_dialog_title") ); //$NON-NLS-1$
           }
         }
       }
@@ -366,7 +359,7 @@ public class DataStageInTable {
     boolean result = false;
     for( DataStagingType data : this.input ) {
       if( data.getFileName().equals( newData.getFileName() )
-          && data.getSource().getURI().equals( newData.getSource().getURI() ) )
+          && data.getTarget().getURI().equals( newData.getTarget().getURI() ) )
       {
         result = true;
       }
@@ -374,13 +367,14 @@ public class DataStageInTable {
     return result;
   }
 
-  DataStagingType getNewDataStagingType( final String name, final String path )
+  DataStagingType getNewDataStagingType( final String name,
+                                                 final String path )
   {
     DataStagingType result = JSDLModelFacade.getDataStagingType();
     result.setFileName( name );
     SourceTargetType source = JSDLModelFacade.getSourceTargetType();
     source.setURI( path );
-    result.setSource( source );
+    result.setTarget( source );
     return result;
   }
 
@@ -435,10 +429,10 @@ public class DataStageInTable {
         DataStagingType var = ( DataStagingType )element;
         switch( columnIndex ) {
           case 0: // source location
-            result = var.getSource().getURI();
+            result = var.getFileName();
           break;
           case 1: // name
-            result = var.getFileName();
+            result = var.getTarget().getURI();
           break;
         }
       }
@@ -462,7 +456,7 @@ public class DataStageInTable {
                           final String name,
                           final String path )
     {
-      this( parentShell );
+      super( parentShell );
       this.initName = name;
       this.initPath = path;
     }
@@ -470,7 +464,7 @@ public class DataStageInTable {
     @Override
     protected void configureShell( final Shell shell ) {
       super.configureShell( shell );
-      shell.setText( Messages.getString( "DataStageInTable.add_dialog_title" ) ); //$NON-NLS-1$
+      shell.setText( Messages.getString("DataStageOutTable.dialog_title") ); //$NON-NLS-1$
     }
 
     @Override
@@ -485,30 +479,42 @@ public class DataStageInTable {
       panel.setLayout( gLayout );
       gd = new GridData( GridData.FILL_HORIZONTAL );
       panel.setLayoutData( gd );
+      Label nameLabel = new Label( panel, SWT.LEAD );
+      nameLabel.setText( Messages.getString( "DataStageInTable.name_field_label" ) ); //$NON-NLS-1$
+      nameLabel.setLayoutData( new GridData() );
+      this.nameText = new Text( panel, SWT.BORDER );
+      gd = new GridData();
+      gd.widthHint = 260;
+      gd.horizontalSpan = 2;
+      gd.horizontalAlignment = SWT.FILL;
+      this.nameText.setLayoutData( gd );
+      if( this.initName != null ) {
+        this.nameText.setText( this.initName );
+      }
       Label pathLabel = new Label( panel, SWT.LEAD );
       pathLabel.setText( Messages.getString( "DataStageInTable.location_field_label" ) ); //$NON-NLS-1$
       gd = new GridData();
       pathLabel.setLayoutData( gd );
       this.pathText = new Text( panel, SWT.BORDER );
-      gd = new GridData( GridData.FILL_HORIZONTAL );
-      this.pathText.setLayoutData( gd );
       if( this.initPath != null ) {
         this.pathText.setText( this.initPath );
       }
+      gd = new GridData( GridData.FILL_HORIZONTAL );
+      this.pathText.setLayoutData( gd );
       Button browseButton = new Button( panel, SWT.PUSH );
-      // IPreferenceStore prefs = Activator.getDefault().getPreferenceStore();
+//      IPreferenceStore prefs = Activator.getDefault().getPreferenceStore();
       ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
       Image fileImage = sharedImages.getImage( ISharedImages.IMG_OBJ_FILE );
       browseButton.setImage( fileImage );
       browseButton.addSelectionListener( new SelectionAdapter() {
 
         @Override
-        public void widgetSelected( final SelectionEvent event ) {
+        public void widgetSelected( final SelectionEvent e ) {
           String filename = null;
           IGridConnectionElement connection = GridFileDialog.openFileDialog( PlatformUI.getWorkbench()
                                                                                .getActiveWorkbenchWindow()
                                                                                .getShell(),
-                                                                             Messages.getString( "DataStageInTable.grid_file_dialog_title" ), //$NON-NLS-1$
+                                                                             Messages.getString("DataStageOutTable.grid_file_dialog_title"), //$NON-NLS-1$
                                                                              null,
                                                                              true );
           if( connection != null ) {
@@ -525,18 +531,6 @@ public class DataStageInTable {
           updateButtons();
         }
       } );
-      Label nameLabel = new Label( panel, SWT.LEAD );
-      nameLabel.setText( Messages.getString( "DataStageInTable.name_field_label" ) ); //$NON-NLS-1$
-      nameLabel.setLayoutData( new GridData() );
-      this.nameText = new Text( panel, SWT.BORDER );
-      gd = new GridData();
-      gd.widthHint = 260;
-      gd.horizontalSpan = 2;
-      gd.horizontalAlignment = SWT.FILL;
-      this.nameText.setLayoutData( gd );
-      if( this.initName != null ) {
-        this.nameText.setText( this.initName );
-      }
       ModifyListener listener = new UpdateAdapter();
       this.nameText.addModifyListener( listener );
       this.pathText.addModifyListener( listener );
@@ -585,7 +579,7 @@ public class DataStageInTable {
     }
     class UpdateAdapter implements ModifyListener {
 
-      public void modifyText( final ModifyEvent event ) {
+      public void modifyText( final ModifyEvent e ) {
         updateButtons();
       }
     }

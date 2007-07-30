@@ -43,6 +43,7 @@ import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.jsdl.JSDLJobDescription;
+import eu.geclipse.jsdl.model.DataStagingType;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.wizards.FileType;
 import eu.geclipse.jsdl.ui.wizards.specific.IApplicationSpecificPage;
@@ -151,7 +152,6 @@ public class NewJobWizard extends Wizard implements INewWizard {
     if( this.basicJSDL != null ) {
       this.basicJSDL.removeDataStaging();
       jsdl.setRoot( this.basicJSDL.getRoot() );
-      
     } else {
       jsdl.createRoot();
       jsdl.addJobDescription();
@@ -207,17 +207,28 @@ public class NewJobWizard extends Wizard implements INewWizard {
                                        outName );
     }
     if( this.outputFilesPage.isCreated() ) {
-      HashMap<String, String> outFiles = this.outputFilesPage.getFiles( FileType.OUTPUT );
+      List<DataStagingType> outFiles;
+      outFiles = this.outputFilesPage.getFiles( FileType.OUTPUT );
       if( !outFiles.isEmpty() ) {
-        for( String name : outFiles.keySet() ) {
-          jsdl.setOutDataStaging( name, outFiles.get( name ) );
+        for( DataStagingType data : outFiles ) {
+          jsdl.addDataStagingType( data );
         }
       }
+      // HashMap<String, String> outFiles = this.outputFilesPage.getFiles(
+      // FileType.OUTPUT );
+      // if( !outFiles.isEmpty() ) {
+      // for( String name : outFiles.keySet() ) {
+      // jsdl.setOutDataStaging( name, outFiles.get( name ) );
+      // }
+      // }
       outFiles = this.outputFilesPage.getFiles( FileType.INPUT );
       if( !outFiles.isEmpty() ) {
-        for( String name : outFiles.keySet() ) {
-          jsdl.setInDataStaging( name, outFiles.get( name ) );
+        for( DataStagingType data : outFiles ) {
+          jsdl.addDataStagingType( data );
         }
+        // for( String name : outFiles.keySet() ) {
+        // jsdl.setInDataStaging( name, outFiles.get( name ) );
+        // }
       }
     }
     ArrayList<String> argList = this.executablePage.getArgumentsList();
@@ -275,13 +286,22 @@ public class NewJobWizard extends Wizard implements INewWizard {
   }
 
   void updateBasicJSDL( JSDLJobDescription basicJSDL ) {
+    boolean fromPreSet = false;
+    if( this.basicJSDL != null ) {
+      fromPreSet = true;
+    }
     this.basicJSDL = basicJSDL;
     if( this.basicJSDL != null ) {
       this.outputFilesPage.setInitialStagingOut( this.basicJSDL.getDataStagingOutStrings() );
       this.outputFilesPage.setInitialStagingIn( this.basicJSDL.getDataStagingInStrings() );
     } else {
-      this.outputFilesPage.setInitialStagingOut( null );
-      this.outputFilesPage.setInitialStagingIn( null );
+      if( !fromPreSet ) {
+        this.outputFilesPage.setInitialStagingInModel( this.outputFilesPage.getFiles( FileType.INPUT ) );
+        this.outputFilesPage.setInitialStagingOutModel( this.outputFilesPage.getFiles( FileType.OUTPUT ) );
+      } else {
+        this.outputFilesPage.setInitialStagingOut( null );
+        this.outputFilesPage.setInitialStagingIn( null );
+      }
     }
   }
 

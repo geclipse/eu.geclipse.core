@@ -114,6 +114,26 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
   
   
   
+ 
+
+  /**
+   * Creates new wizard page
+   * 
+   * @param pageName name of the page
+   * @param internalPages
+   */
+  protected ExecutableNewJobWizardPage( final String pageName,
+                                        final ArrayList<WizardPage> internalPages )
+  {
+    super( pageName );
+    setTitle( Messages.getString( "ExecutableNewJobWizardPage.title" ) ); //$NON-NLS-1$
+    setDescription( Messages.getString( "ExecutableNewJobWizardPage.description" ) ); //$NON-NLS-1$
+    this.appsWithExtraAttributes = Extensions.getApplicationParametersXMLMap();
+    this.appsWithParametersFromPrefs = ApplicationSpecificRegistry.getInstance()
+      .getApplicationDataMapping();
+    this.internalPages = internalPages;
+  }
+
   @Override
   public IWizardPage getNextPage() {
     // If in application specific settings basic JSDL file is given its copy - a
@@ -162,25 +182,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     }
     return super.getNextPage();
   }
-
-  /**
-   * Creates new wizard page
-   * 
-   * @param pageName name of the page
-   * @param internalPages
-   */
-  protected ExecutableNewJobWizardPage( final String pageName,
-                                        ArrayList<WizardPage> internalPages )
-  {
-    super( pageName );
-    setTitle( Messages.getString( "ExecutableNewJobWizardPage.title" ) ); //$NON-NLS-1$
-    setDescription( Messages.getString( "ExecutableNewJobWizardPage.description" ) ); //$NON-NLS-1$
-    this.appsWithExtraAttributes = Extensions.getApplicationParametersXMLMap();
-    this.appsWithParametersFromPrefs = ApplicationSpecificRegistry.getInstance()
-      .getApplicationDataMapping();
-    this.internalPages = internalPages;
-  }
-
+  
   @Override
   public boolean isPageComplete() {
     return true;
@@ -395,7 +397,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     setControl( mainComp );
   }
 
-  private String getSelectedElementDisplayName( IGridConnectionElement element )
+  private String getSelectedElementDisplayName( final IGridConnectionElement element )
   {
     String result = "";
     try {
@@ -584,7 +586,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
   }
   class ModifyTextListener implements ModifyListener {
 
-    public void modifyText( ModifyEvent e ) {
+    public void modifyText( final ModifyEvent event ) {
       ExecutableNewJobWizardPage.this.updateButtons();
     }
   }
