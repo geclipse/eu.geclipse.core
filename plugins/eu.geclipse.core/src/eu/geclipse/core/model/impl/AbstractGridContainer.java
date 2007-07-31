@@ -25,7 +25,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 import eu.geclipse.core.internal.model.GridRoot;
 import eu.geclipse.core.internal.model.notify.GridModelEvent;
-import eu.geclipse.core.internal.model.notify.NotificationService;
+import eu.geclipse.core.internal.model.notify.GridNotificationService;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.GridModelProblems;
 import eu.geclipse.core.model.IGridContainer;
@@ -42,12 +42,7 @@ import eu.geclipse.core.model.IManageable;
 public abstract class AbstractGridContainer
     extends AbstractGridElement
     implements IGridContainer {
-  /*
-  private int processEventsPolicy = 0;
   
-  private Hashtable< Integer, List< IGridElement > > eventQueue
-    = new Hashtable< Integer, List< IGridElement > >();
-  */
   /**
    * List of currently know children.
    */
@@ -308,31 +303,12 @@ public abstract class AbstractGridContainer
   }
   
   protected void lock() {
-    NotificationService.getInstance().lock();
+    getGridNotificationService().lock();
   }
   
   protected void unlock() {
-    NotificationService.getInstance().unlock();
+    getGridNotificationService().unlock();
   }
-  
-  /*
-  protected void setProcessEvents( final boolean enabled ) {
-    
-    if ( enabled && ( this.processEventsPolicy > 0) ) {
-      this.processEventsPolicy--;
-    } else if ( ! enabled ) {
-      this.processEventsPolicy++;
-    }
-    
-    if ( getProcessEvents() ) {
-      processEvents();
-    }
-    
-  }
-  
-  protected boolean getProcessEvents() {
-    return this.processEventsPolicy == 0 && ! this.eventQueue.isEmpty();
-  }*/
   
   private void fireGridModelEvent( final int type,
                                    final IGridElement element ) {
@@ -343,54 +319,14 @@ public abstract class AbstractGridContainer
                                    final IGridElement[] elements ) {
     if ( ( elements != null ) && ( elements.length > 0 ) ) {
       IGridModelEvent event = new GridModelEvent( type, this, elements );
-      NotificationService.getInstance().queueEvent( event );
+      getGridNotificationService().queueEvent( event );
     }
-  }
-  /*
-  private void processEvents() {
-    setProcessEvents( false );
-    GridRoot gridRoot = GridRoot.getRoot();
-    if ( gridRoot != null ) {
-      Set< Entry < Integer, List< IGridElement > > > eventSet
-        = this.eventQueue.entrySet();
-      this.eventQueue.clear();
-      for ( Map.Entry< Integer, List< IGridElement > > entry : eventSet ) {
-        int type = entry.getKey().intValue();
-        List< IGridElement > elementList = entry.getValue();
-        IGridElement[] elements = elementList.toArray( new IGridElement[ elementList.size() ] );
-        IGridModelEvent event
-          = new GridModelEvent( type,
-                                this,
-                                elements );
-        gridRoot.fireGridModelEvent( event );
-      }
-    }
-    setProcessEvents( true );
   }
   
-  private void queueEvent( final int type,
-                           final IGridElement[] elements ) {
-    
-    Integer iType = new Integer( type );
-    List< IGridElement > elementList = this.eventQueue.get( iType );
-    
-    if ( elementList == null ) {
-      elementList = new ArrayList< IGridElement >();
-      this.eventQueue.put( iType, elementList );
-    }
-    
-    for ( IGridElement element : elements ) {
-      if ( !elementList.contains( element ) ) {
-        elementList.add( element );
-      }
-    }
-    
-    if ( getProcessEvents() ) {
-      processEvents();
-    }
-    
+  private GridNotificationService getGridNotificationService() {
+    return GridRoot.getGridNotificationService();
   }
-  */
+  
   /**
    * Test if this container can contain the specified element
    * and throw a {@link GridModelException} if this is not the

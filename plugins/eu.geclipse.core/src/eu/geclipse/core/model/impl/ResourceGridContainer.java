@@ -30,6 +30,7 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import eu.geclipse.core.Extensions;
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.internal.Messages;
+import eu.geclipse.core.internal.model.notify.GridElementLifecycleManager;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
@@ -178,41 +179,7 @@ public class ResourceGridContainer
    * @see GridModel#getStandardCreators()
    */
   protected IGridElementCreator findCreator( final IResource res ) {
-    IGridElementCreator result = null;
-    List< IGridElementCreator > creators
-      = Extensions.getRegisteredElementCreators();
-    for ( IGridElementCreator creator : creators ) {
-      if ( creator.canCreate( res ) ) {
-        result = creator;
-        break;
-      }
-    }
-    if ( result == null ) {
-      result = findStandardCreator( res );
-    }
-    return result;
+    return GridElementLifecycleManager.findCreator( res );
   }
   
-  /**
-   * Find an element creator for the specified {@link IResource}.
-   * Searches only the standard creators.
-   * 
-   * @param resource The resource for which to find a creator.
-   * @return The creator or <code>null</code> if no such
-   * creator could be found.
-   * @see GridModel#getStandardCreators()
-   */
-  protected IGridElementCreator findStandardCreator( final IResource res ) {
-    IGridElementCreator result = null;
-    List< IGridElementCreator > standardCreators
-      = GridModel.getStandardCreators();
-    for ( IGridElementCreator creator : standardCreators ) {
-      if ( creator.canCreate( res ) ) {
-        result = creator;
-        break;
-      }
-    }
-    return result;
-  }
-
 }

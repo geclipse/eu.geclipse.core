@@ -27,12 +27,9 @@ import eu.geclipse.core.model.IGridModelListener;
  * manages all event notifications from the Grid model to the
  * outside world.
  */
-public class NotificationService {
+public class GridNotificationService {
   
-  /**
-   * The singleton instance.
-   */
-  private static NotificationService instance;
+  private static GridNotificationService instance;
   
   /**
    * List containing all registered listeners.
@@ -54,20 +51,14 @@ public class NotificationService {
   /**
    * Private constructor.
    */
-  private NotificationService() {
+  private GridNotificationService() {
     this.lockCounter = 0;
   }
   
-  /**
-   * Get the singleton instance of the <code>NotificationService</code>.
-   * 
-   * @return The singleton. If not yet happened the singleton will be
-   * created.
-   */
-  public static final NotificationService getInstance() {
+  public static GridNotificationService getInstance() {
     
     if ( instance == null ) {
-      instance = new NotificationService();
+      instance = new GridNotificationService();
     }
     
     return instance;
