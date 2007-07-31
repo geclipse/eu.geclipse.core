@@ -162,23 +162,6 @@ public class ConnectionElement
   }
   
   /* (non-Javadoc)
-   * @see eu.geclipse.core.model.impl.AbstractGridContainer#setDirty()
-   */
-  @Override
-  public void setDirty() {
-    super.setDirty();
-    try {
-      GEclipseFileStore fileStore
-        = ( GEclipseFileStore ) getConnectionFileStore();
-      if ( fileStore != null ) {
-        fileStore.activate();
-      }
-    } catch ( CoreException cExc ) {
-      Activator.logException( cExc );
-    }
-  }
-  
-  /* (non-Javadoc)
    * @see eu.geclipse.core.model.impl.AbstractGridContainer#fetchChildren(org.eclipse.core.runtime.IProgressMonitor)
    */
   @Override

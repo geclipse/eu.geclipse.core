@@ -23,18 +23,20 @@ import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.filesystem.IFileSystem;
+import org.eclipse.core.filesystem.provider.FileStore;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import eu.geclipse.core.filesystem.GEclipseFileSystem;
+import eu.geclipse.core.filesystem.GEclipseURI;
 import eu.geclipse.core.filesystem.internal.Activator;
 
 /**
  * Implementation of {@link IFileStore} for the g-Eclipse file system.
  */
 public class GEclipseFileStore
-    extends org.eclipse.core.filesystem.provider.FileStore
+    extends FileStore
     implements IFileStore {
   
   /**
@@ -76,7 +78,7 @@ public class GEclipseFileStore
     this.fileSystem = fileSystem;
     this.parent = null;
     this.slave = slave;
-    this.isActive = false;
+    setActive( false );
   }
 
   /**
@@ -93,7 +95,7 @@ public class GEclipseFileStore
     this.fileSystem = ( GEclipseFileSystem ) parent.getFileSystem();
     this.parent = parent;
     this.slave = slave;
-    this.isActive = false;
+    setActive( false );
   }
   
   /**
@@ -114,9 +116,12 @@ public class GEclipseFileStore
                               final IProgressMonitor monitor )
       throws CoreException {
     
+    System.out.println( "GEclipseFileStore#childNames@" + getName() + ": active = " + isActive() );
+    
     String[] result = this.childNames;
     
     if ( isActive() ) {
+      setActive( false );
       try {
         result = getSlave().childNames( options, monitor );
       } catch ( CoreException cExc ) {
@@ -124,7 +129,6 @@ public class GEclipseFileStore
         throw cExc;
       }
       this.childNames = result;
-      setActive( false );
     }
     
     if ( result == null ) {
@@ -162,6 +166,8 @@ public class GEclipseFileStore
    */
   @Override
   public IFileStore getChild( final String name ) {
+    
+    //System.out.println( "GEclipseFileStore#getChild@" + getName() + ": " + name );
     
     GEclipseFileStore result = null;
     IFileStore child = getSlave().getChild( name );
@@ -220,8 +226,7 @@ public class GEclipseFileStore
    * @return True if this store is a local mount.
    */
   public boolean isLocal() {
-    URI uri = toURI();
-    String scheme = FileSystemManager.getSlaveScheme( uri );
+    String scheme = toGEclipseURI().getSlaveScheme();
     IFileSystem localFileSystem = EFS.getLocalFileSystem();
     String localScheme = localFileSystem.getScheme();
     return scheme.equals( localScheme );
@@ -286,12 +291,16 @@ public class GEclipseFileStore
     this.childNames = null;
   }
   
+  public GEclipseURI toGEclipseURI() {
+    return new GEclipseURI( getSlave().toURI() );
+  }
+  
   /* (non-Javadoc)
    * @see org.eclipse.core.filesystem.provider.FileStore#toURI()
    */
   @Override
   public URI toURI() {
-    return FileSystemManager.createMasterURI( getSlave().toURI() );
+    return toGEclipseURI().toMasterURI();
   }
   
   /**

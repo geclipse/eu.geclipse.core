@@ -26,7 +26,6 @@ import org.eclipse.core.runtime.CoreException;
 import eu.geclipse.core.filesystem.internal.Activator;
 import eu.geclipse.core.filesystem.internal.filesystem.ConnectionElement;
 import eu.geclipse.core.filesystem.internal.filesystem.ConnectionRoot;
-import eu.geclipse.core.filesystem.internal.filesystem.IFileSystemProperties;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
@@ -151,7 +150,7 @@ public class FileSystemCreator
         URI uri = folder.getRawLocationURI();
         if ( uri != null ) { // uri is null if the link target does not exist anymore
           String scheme = uri.getScheme();
-          if ( IFileSystemProperties.SCHEME.equals( scheme ) ) {
+          if ( GEclipseURI.getScheme().equals( scheme ) ) {
             result = true;
           }
         }

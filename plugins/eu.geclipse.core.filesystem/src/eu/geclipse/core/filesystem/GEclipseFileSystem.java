@@ -48,29 +48,6 @@ public class GEclipseFileSystem
    */
   private IFileSystem slave;
   
-  /**
-   * Create a g-Eclipse URI from the specified URI. If the specified URI
-   * is already a g-Eclipse URI it is just returned.
-   * 
-   * @param slaveURI The slave URI from which to create a master URI. 
-   * @return The g-Eclipse URI that corresponds to the specified
-   * slave URI. 
-   */
-  public static URI createMasterURI( final URI slaveURI ) {
-    return FileSystemManager.createMasterURI( slaveURI );
-  }
-  
-  /**
-   * Create a slave URI from the specified g-Eclipse URI. If the specified
-   * URI is not a g-Eclipse URI it is just returned.
-   * 
-   * @param masterURI The g-Eclipse URI from which to create the slave URI.
-   * @return The slave URI that corresponds to the specified g-Eclipse URI.
-   */
-  public static URI createSlaveURI( final URI masterURI ) {
-    return FileSystemManager.createSlaveURI( masterURI );
-  }
-    
   /* (non-Javadoc)
    * @see org.eclipse.core.filesystem.provider.FileSystem#attributes()
    */
@@ -126,6 +103,7 @@ public class GEclipseFileSystem
    */
   @Override
   public IFileStore getStore( final URI uri ) {
+    //System.out.println( "GEclipseFileSystem#getStore@" + uri );
     GEclipseFileStore result = null;
     FileSystemManager manager = FileSystemManager.getInstance();
     result = manager.getStore( this, uri );

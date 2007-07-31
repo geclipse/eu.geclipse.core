@@ -20,6 +20,8 @@ import java.util.Hashtable;
 
 import org.eclipse.core.filesystem.IFileStore;
 
+import eu.geclipse.core.filesystem.GEclipseURI;
+
 /**
  * Central repository for all {@link GEclipseFileStore}s. The file stores
  * are cached in order to workaround some issues that occure when new
@@ -65,9 +67,8 @@ public class FileStoreRegistry {
    * @param store The store to be cached.
    */
   void putStore( final GEclipseFileStore store ) {
-    URI uri = store.toURI();
-    URI key = getKey( uri );
-    this.registeredStores.put( key, store );
+    GEclipseURI uri = new GEclipseURI( store.toURI() );
+    this.registeredStores.put( uri.toSlaveURI(), store );
   }
   
   /**
@@ -78,9 +79,9 @@ public class FileStoreRegistry {
    * @return The corresponding store or <code>null</code> if no such
    * store is yet registered.
    */
-  GEclipseFileStore getStore( final URI uri ) {
-    URI key = getKey( uri );
-    return this.registeredStores.get( key );
+  GEclipseFileStore getStore( final GEclipseURI uri ) {
+    GEclipseFileStore fileStore = this.registeredStores.get( uri.toSlaveURI() );
+    return fileStore;
   }
   
   /**
@@ -91,19 +92,8 @@ public class FileStoreRegistry {
    * such store was yet registered.
    */
   GEclipseFileStore getStore( final IFileStore fileStore ) {
-    return getStore( fileStore.toURI() );
-  }
-  
-  /**
-   * Get a unique URI as key for internal usage.
-   * 
-   * @param uri The URI for which to create a key.
-   * @return The URI that is used to reference file stores.
-   */
-  private URI getKey( final URI uri ) {
-    URI key = uri;
-    key = FileSystemManager.createSlaveURI( uri );
-    return key;
+    GEclipseURI uri = new GEclipseURI( fileStore.toURI() );
+    return getStore( uri );
   }
   
 }
