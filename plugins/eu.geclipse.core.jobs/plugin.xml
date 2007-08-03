@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
-   <extension-point id="eu.geclipse.grid.jobID" name="GridJobID" schema="schema/eu.geclipse.grid.jobId.exsd"/>
+   <extension-point id="eu.geclipse.grid.jobStatus" name="GridJobID" schema="schema/eu.geclipse.core.jobs.jobStatus.exsd"/>
+   <extension-point id="eu.geclipse.core.jobs.jobID" name="GridJobStatus" schema="schema/eu.geclipse.core.jobs.jobID.exsd"/>
    <extension
          id="eu.geclipse.grid.GridJobCreator"
          name="Grid Job"

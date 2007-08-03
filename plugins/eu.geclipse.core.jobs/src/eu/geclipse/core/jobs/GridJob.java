@@ -1,17 +1,12 @@
-/******************************************************************************
- * Copyright (c) 2006 g-Eclipse consortium
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
- *
- * Initial development of the original code was made for
- * project g-Eclipse founded by European Union
- * project number: FP6-IST-034327  http://www.geclipse.eu/
- *
- * Contributor(s):
- *     Pawel Wolniewicz - PSNC
- *****************************************************************************/
+/*******************************************************************************
+ * Copyright (c) 2006 g-Eclipse consortium All rights reserved. This program and
+ * the accompanying materials are made available under the terms of the Eclipse
+ * Public License v1.0 which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html Initial development of the original
+ * code was made for project g-Eclipse founded by European Union project number:
+ * FP6-IST-034327 http://www.geclipse.eu/ Contributor(s): Pawel Wolniewicz -
+ * PSNC
+ ******************************************************************************/
 package eu.geclipse.core.jobs;
 
 import java.io.ByteArrayInputStream;
@@ -57,7 +52,6 @@ import eu.geclipse.core.model.IGridJobID;
 import eu.geclipse.core.model.IGridJobStatus;
 import eu.geclipse.core.model.IGridJobStatusService;
 import eu.geclipse.core.model.IGridJobStatusServiceFactory;
-import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
 import eu.geclipse.core.model.impl.ResourceGridElement;
 import eu.geclipse.jsdl.JSDLJobDescription;
@@ -81,6 +75,9 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
   private IGridJobStatusService statusService;
   private Date submissionTime;
 
+  /**
+   * @param jobFolder
+   */
   public GridJob( final IFolder jobFolder ) {
     super( jobFolder );
     jobStatusFile = jobFolder.getFile( JOBSTATUS_FILENAME );
@@ -193,7 +190,6 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
               jobID.setXMLNode( rootElement );
             } catch( CoreException e ) {
               // TODO Auto-generated catch block
-              e.printStackTrace();
             }
           }
         }
@@ -236,7 +232,6 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
               jobStatus.setXMLNode( rootElement );
             } catch( CoreException e ) {
               // TODO Auto-generated catch block
-              e.printStackTrace();
             }
           }
         }
@@ -303,28 +298,30 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
 
   private Document createXmlDocument( final IFile xmlFile ) {
     Document xmlDocument = null;
-    try {
-      DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance()
-        .newDocumentBuilder();
-      InputStream inputStream = xmlFile.getContents( true );
-      xmlDocument = documentBuilder.parse( inputStream );
-      inputStream.close();
-    } catch( CoreException e ) {
-      logXmlError( Status.WARNING,
-                   Messages.getString( "GliteJob.jobfile_contents" ),
-                   e );
-    } catch( SAXException e ) {
-      logXmlError( Status.WARNING,
-                   Messages.getString( "GliteJob.jobfile_parse_xml" ),
-                   e );
-    } catch( IOException e ) {
-      logXmlError( Status.WARNING,
-                   Messages.getString( "GliteJob.jobfile_contents" ),
-                   e );
-    } catch( ParserConfigurationException e ) {
-      logXmlError( Status.WARNING,
-                   Messages.getString( "GliteJob.jobfile_parse_xml" ),
-                   e );
+    if( xmlFile.exists() ) {
+      try {
+        DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance()
+          .newDocumentBuilder();
+        InputStream inputStream = xmlFile.getContents( true );
+        xmlDocument = documentBuilder.parse( inputStream );
+        inputStream.close();
+      } catch( CoreException e ) {
+        logXmlError( Status.WARNING,
+                     Messages.getString( "GliteJob.jobfile_contents" ),
+                     e );
+      } catch( SAXException e ) {
+        logXmlError( Status.WARNING,
+                     Messages.getString( "GliteJob.jobfile_parse_xml" ),
+                     e );
+      } catch( IOException e ) {
+        logXmlError( Status.WARNING,
+                     Messages.getString( "GliteJob.jobfile_contents" ),
+                     e );
+      } catch( ParserConfigurationException e ) {
+        logXmlError( Status.WARNING,
+                     Messages.getString( "GliteJob.jobfile_parse_xml" ),
+                     e );
+      }
     }
     return xmlDocument;
   }
@@ -362,9 +359,9 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
    */
   public boolean canContain( final IGridElement element ) {
     return ( element instanceof IGridJobDescription )
-    || ( element instanceof ResourceGridElement );
+           || ( element instanceof ResourceGridElement );
   }
-  
+
   @Override
   public boolean isHidden() {
     return false;
@@ -441,7 +438,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
    * @param jobFolder - Folder to which file should be written
    * @throws GridModelException
    */
-  private void writeJobStatus( final IFile jobStatusFile )
+  private void writeJobStatus( final IFile _jobStatusFile )
     throws GridModelException
   {
     String xml;
@@ -454,16 +451,16 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     try {
       byteArray = xml.getBytes( "ISO-8859-1" ); // choose a charset
       baos = new ByteArrayInputStream( byteArray );
-      if( jobStatusFile.exists() ) {
-        jobStatusFile.setContents( baos, true, true, null );
+      if( _jobStatusFile.exists() ) {
+        _jobStatusFile.setContents( baos, true, true, null );
       } else {
-        jobStatusFile.create( baos, true, null );
+        _jobStatusFile.create( baos, true, null );
       }
     } catch( CoreException cExc ) {
       throw new GridModelException( GridModelProblems.ELEMENT_CREATE_FAILED,
                                     cExc,
                                     "Problem while writing job status file "
-                                        + jobStatusFile.getName() );
+                                        + _jobStatusFile.getName() );
     } catch( UnsupportedEncodingException e ) {
       throw new GridModelException( GridModelProblems.ELEMENT_CREATE_FAILED,
                                     e,
