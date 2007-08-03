@@ -54,6 +54,7 @@ public final class GridRoot
    */
   private GridRoot() {
     super( ResourcesPlugin.getWorkspace().getRoot() );
+    addGridModelListener( JobManager.getManager() );
     getGridNotificationService();
     getResourceNotificationService();
   }

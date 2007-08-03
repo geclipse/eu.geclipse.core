@@ -65,19 +65,19 @@ public class JobManager extends AbstractGridElementManager
    * can be obtained by {@link #getManager()}.
    */
   private JobManager() {
-    // empty imlementation
+    // empty implementation
   }
 
   @Override
   public boolean addElement( final IGridElement element )
     throws GridModelException
   {
-//fast workaroud. 
+//fast workaround. 
 //TODO pawelw -correct it    
-    if( this.listenerRegistered == false ){
-      this.listenerRegistered = true;
-      GridModel.getRoot().addGridModelListener( this );
-    }
+//    if( this.listenerRegistered == false ){
+//      this.listenerRegistered = true;
+//      GridModel.getRoot().addGridModelListener( this );
+//    }
 
     
     boolean flag;
