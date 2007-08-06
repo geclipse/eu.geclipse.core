@@ -1064,8 +1064,10 @@ public class JSDLJobDescription extends ResourceGridContainer
     for( DataStagingType dataType : getDataStagingIn() ) {
       try {
         java.net.URI testURI = new java.net.URI( dataType.getSource().getURI() );
-        if (testURI.getQuery().indexOf( "geclslave=file" ) != -1){
-          result.add( dataType );
+        if( testURI != null && testURI.getQuery() != null ) {
+          if( testURI.getQuery().indexOf( "geclslave=file" ) != -1 ) {
+            result.add( dataType );
+          }
         }
       } catch( URISyntaxException e ) {
         // TODO katis

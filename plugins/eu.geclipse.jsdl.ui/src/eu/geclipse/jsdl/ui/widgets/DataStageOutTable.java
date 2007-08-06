@@ -16,6 +16,7 @@
  *****************************************************************************/
 package eu.geclipse.jsdl.ui.widgets;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
@@ -79,14 +80,20 @@ public class DataStageOutTable {
 
   Composite mainComp;
   TableViewer tableViewer;
-  List<DataStagingType> input;
+  List<DataStagingType> input = new ArrayList<DataStagingType>();
   private Table table;
   private Button addButton;
   private Button editButton;
   private Button removeButton;
 
+  public DataStageOutTable( final Composite parent ) {
+    this( parent, new ArrayList<DataStagingType>() );
+  }
+
   /**
-   * Creates new instance of table, table viewer, buttons (add, edit and remove).
+   * Creates new instance of table, table viewer, buttons (add, edit and
+   * remove).
+   * 
    * @param parent controls' parent
    * @param input input for a table
    */
@@ -127,6 +134,9 @@ public class DataStageOutTable {
       Messages.getString( "DataStageInTable.location_field_label" ) //$NON-NLS-1$
     } );
     this.tableViewer.setLabelProvider( new DataStageInContentLabelProvider() );
+    if( this.input == null ) {
+      this.input = new ArrayList<DataStagingType>();
+    }
     this.tableViewer.setInput( this.input );
     this.tableViewer.addSelectionChangedListener( new ISelectionChangedListener()
     {
@@ -181,7 +191,7 @@ public class DataStageOutTable {
         String filename = ( String )doGetValue();
         cellEditorWindow.getData();
         IGridConnectionElement connection = GridFileDialog.openFileDialog( DataStageOutTable.this.mainComp.getShell(),
-                                                                           Messages.getString("DataStageOutTable.grid_file_dialog_title"), //$NON-NLS-1$
+                                                                           Messages.getString( "DataStageOutTable.grid_file_dialog_title" ), //$NON-NLS-1$
                                                                            null,
                                                                            true );
         if( connection != null ) {
@@ -189,8 +199,8 @@ public class DataStageOutTable {
             filename = connection.getConnectionFileStore().toString();
           } catch( CoreException cExc ) {
             NewProblemDialog.openProblem( DataStageOutTable.this.mainComp.getShell(),
-                                          Messages.getString("DataStageOutTable.error"), //$NON-NLS-1$
-                                          Messages.getString("DataStageOutTable.error"), //$NON-NLS-1$
+                                          Messages.getString( "DataStageOutTable.error" ), //$NON-NLS-1$
+                                          Messages.getString( "DataStageOutTable.error" ), //$NON-NLS-1$
                                           cExc );
           }
         }
@@ -325,8 +335,8 @@ public class DataStageOutTable {
           this.input.add( newData );
         } else {
           MessageDialog.openError( this.mainComp.getShell(),
-                                   Messages.getString("DataStageOutTable.new_dialog_title"), //$NON-NLS-1$
-                                   Messages.getString("DataStageOutTable.data_exists_error") ); //$NON-NLS-1$
+                                   Messages.getString( "DataStageOutTable.new_dialog_title" ), //$NON-NLS-1$
+                                   Messages.getString( "DataStageOutTable.data_exists_error" ) ); //$NON-NLS-1$
         }
         this.tableViewer.refresh();
       }
@@ -347,8 +357,8 @@ public class DataStageOutTable {
             this.tableViewer.refresh();
           } else {
             MessageDialog.openError( this.mainComp.getShell(),
-                                     Messages.getString("DataStageOutTable.edit_dialog_title"), //$NON-NLS-1$
-                                     Messages.getString("DataStageOutTable.data_exists_error") ); //$NON-NLS-1$
+                                     Messages.getString( "DataStageOutTable.edit_dialog_title" ), //$NON-NLS-1$
+                                     Messages.getString( "DataStageOutTable.data_exists_error" ) ); //$NON-NLS-1$
           }
         }
       }
@@ -367,8 +377,7 @@ public class DataStageOutTable {
     return result;
   }
 
-  DataStagingType getNewDataStagingType( final String name,
-                                                 final String path )
+  DataStagingType getNewDataStagingType( final String name, final String path )
   {
     DataStagingType result = JSDLModelFacade.getDataStagingType();
     result.setFileName( name );
@@ -464,7 +473,7 @@ public class DataStageOutTable {
     @Override
     protected void configureShell( final Shell shell ) {
       super.configureShell( shell );
-      shell.setText( Messages.getString("DataStageOutTable.dialog_title") ); //$NON-NLS-1$
+      shell.setText( Messages.getString( "DataStageOutTable.dialog_title" ) ); //$NON-NLS-1$
     }
 
     @Override
@@ -502,7 +511,7 @@ public class DataStageOutTable {
       gd = new GridData( GridData.FILL_HORIZONTAL );
       this.pathText.setLayoutData( gd );
       Button browseButton = new Button( panel, SWT.PUSH );
-//      IPreferenceStore prefs = Activator.getDefault().getPreferenceStore();
+      // IPreferenceStore prefs = Activator.getDefault().getPreferenceStore();
       ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
       Image fileImage = sharedImages.getImage( ISharedImages.IMG_OBJ_FILE );
       browseButton.setImage( fileImage );
@@ -514,7 +523,7 @@ public class DataStageOutTable {
           IGridConnectionElement connection = GridFileDialog.openFileDialog( PlatformUI.getWorkbench()
                                                                                .getActiveWorkbenchWindow()
                                                                                .getShell(),
-                                                                             Messages.getString("DataStageOutTable.grid_file_dialog_title"), //$NON-NLS-1$
+                                                                             Messages.getString( "DataStageOutTable.grid_file_dialog_title" ), //$NON-NLS-1$
                                                                              null,
                                                                              true );
           if( connection != null ) {

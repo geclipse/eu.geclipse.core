@@ -16,6 +16,7 @@
  *****************************************************************************/
 package eu.geclipse.jsdl.ui.widgets;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
@@ -78,7 +79,7 @@ import eu.geclipse.ui.dialogs.NewProblemDialog;
 public class DataStageInTable {
 
   TableViewer tableViewer;
-  List<DataStagingType> input;
+  List<DataStagingType> input = new ArrayList<DataStagingType>();
   Composite mainComp;
   private Table table;
   private Button addButton;
@@ -92,6 +93,11 @@ public class DataStageInTable {
    * @param parent control's parent
    * @param input input for table
    */
+  
+  public DataStageInTable( final Composite parent ){
+    this( parent, new ArrayList<DataStagingType>() );
+  }
+  
   public DataStageInTable( final Composite parent,
                            final List<DataStagingType> input )
   {
@@ -129,6 +135,9 @@ public class DataStageInTable {
       Messages.getString( "DataStageInTable.name_field_label" ) //$NON-NLS-1$
     } );
     this.tableViewer.setLabelProvider( new DataStageInContentLabelProvider() );
+    if (this.input == null){
+      this.input = new ArrayList<DataStagingType>();
+    }
     this.tableViewer.setInput( this.input );
     this.tableViewer.addSelectionChangedListener( new ISelectionChangedListener()
     {
@@ -320,6 +329,11 @@ public class DataStageInTable {
    */
   public List<DataStagingType> getDataStagingType() {
     return this.input;
+  }
+  
+  public void setInput(List<DataStagingType> input){
+    this.input = input;
+    this.tableViewer.setInput( this.input );
   }
 
   void editDataStagingEntry( final DataStagingType selectedObject ) {
