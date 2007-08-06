@@ -78,6 +78,16 @@ import eu.geclipse.ui.dialogs.NewProblemDialog;
  */
 public class DataStageInTable {
 
+  /**
+   * This constant is used to inform the class' constructor that buttons (Add,
+   * Edit and Remove button) should be placed on the right side of the table.
+   */
+  public static final int BUTTONS_RIGHT = 0;
+  /**
+   * This constant is used to inform the class' constructor that buttons (Add,
+   * Edit and Remove button) should be placed below the table.
+   */
+  public static final int BUTTONS_BOTTOM = 1;
   TableViewer tableViewer;
   List<DataStagingType> input = new ArrayList<DataStagingType>();
   Composite mainComp;
@@ -93,17 +103,23 @@ public class DataStageInTable {
    * @param parent control's parent
    * @param input input for table
    */
-  
-  public DataStageInTable( final Composite parent ){
-    this( parent, new ArrayList<DataStagingType>() );
+  public DataStageInTable( final Composite parent, final int buttonsPosition ) {
+    this( parent, new ArrayList<DataStagingType>(), buttonsPosition );
   }
-  
+
   public DataStageInTable( final Composite parent,
-                           final List<DataStagingType> input )
+                           final List<DataStagingType> input,
+                           final int buttonsPosition )
   {
     this.input = input;
     this.mainComp = new Composite( parent, SWT.NONE );
-    this.mainComp.setLayout( new GridLayout( 1, false ) );
+    GridLayout gLayout;
+    if( buttonsPosition == DataStageInTable.BUTTONS_RIGHT ) {
+      gLayout = new GridLayout( 2, false );
+    } else {
+      gLayout = new GridLayout( 1, false );
+    }
+    this.mainComp.setLayout( gLayout );
     this.table = new Table( this.mainComp, SWT.BORDER
                                            | SWT.VIRTUAL
                                            | SWT.MULTI
@@ -135,7 +151,7 @@ public class DataStageInTable {
       Messages.getString( "DataStageInTable.name_field_label" ) //$NON-NLS-1$
     } );
     this.tableViewer.setLabelProvider( new DataStageInContentLabelProvider() );
-    if (this.input == null){
+    if( this.input == null ) {
       this.input = new ArrayList<DataStagingType>();
     }
     this.tableViewer.setInput( this.input );
@@ -147,7 +163,12 @@ public class DataStageInTable {
       }
     } );
     Composite buttonsComp = new Composite( this.mainComp, SWT.NONE );
-    buttonsComp.setLayout( new GridLayout( 3, true ) );
+    if( buttonsPosition == DataStageInTable.BUTTONS_BOTTOM ) {
+      gLayout = new GridLayout( 3, true );
+    } else {
+      gLayout = new GridLayout( 1, false );
+    }
+    buttonsComp.setLayout( gLayout );
     this.addButton = new Button( buttonsComp, SWT.PUSH );
     gData = new GridData( GridData.VERTICAL_ALIGN_BEGINNING
                           | GridData.HORIZONTAL_ALIGN_END );
@@ -191,7 +212,7 @@ public class DataStageInTable {
       protected Object openDialogBox( final Control cellEditorWindow ) {
         String filename = ( String )doGetValue();
         IGridConnectionElement connection = GridFileDialog.openFileDialog( DataStageInTable.this.mainComp.getShell(),
-                                                                           Messages.getString("DataStageInTable.grid_file_dialog_title"), //$NON-NLS-1$
+                                                                           Messages.getString( "DataStageInTable.grid_file_dialog_title" ), //$NON-NLS-1$
                                                                            null,
                                                                            true );
         if( connection != null ) {
@@ -199,8 +220,8 @@ public class DataStageInTable {
             filename = connection.getConnectionFileStore().toString();
           } catch( CoreException cExc ) {
             NewProblemDialog.openProblem( DataStageInTable.this.mainComp.getShell(),
-                                          Messages.getString("DataStageInTable.error"), //$NON-NLS-1$
-                                          Messages.getString("DataStageInTable.error"), //$NON-NLS-1$
+                                          Messages.getString( "DataStageInTable.error" ), //$NON-NLS-1$
+                                          Messages.getString( "DataStageInTable.error" ), //$NON-NLS-1$
                                           cExc );
           }
         }
@@ -210,7 +231,6 @@ public class DataStageInTable {
     CellEditor[] table1 = new CellEditor[ 1 ];
     table1[ 0 ] = editor;
     editor.create( this.table );
-    
     this.tableViewer.setCellModifier( new ICellModifier() {
 
       public boolean canModify( final Object element, final String property ) {
@@ -263,9 +283,11 @@ public class DataStageInTable {
                   .getURI() ) )
             {
               if( !isDataInInput( dataNew ) ) {
-//                DataStageInTable.this.input.add( dataNew );
-//                DataStageInTable.this.input.remove( dataOld );
-                updateDataStaging( dataOld, dataNew.getFileName(), dataNew.getSource() );
+                // DataStageInTable.this.input.add( dataNew );
+                // DataStageInTable.this.input.remove( dataOld );
+                updateDataStaging( dataOld,
+                                   dataNew.getFileName(),
+                                   dataNew.getSource() );
                 DataStageInTable.this.tableViewer.refresh();
               } else {
                 MessageDialog.openError( DataStageInTable.this.mainComp.getShell(),
@@ -282,9 +304,11 @@ public class DataStageInTable {
                   .getURI() ) )
             {
               if( !isDataInInput( dataNew ) ) {
-//                DataStageInTable.this.input.add( dataNew );
-//                DataStageInTable.this.input.remove( dataOld );
-                updateDataStaging( dataOld, dataNew.getFileName(), dataNew.getSource() );
+                // DataStageInTable.this.input.add( dataNew );
+                // DataStageInTable.this.input.remove( dataOld );
+                updateDataStaging( dataOld,
+                                   dataNew.getFileName(),
+                                   dataNew.getSource() );
                 DataStageInTable.this.tableViewer.refresh();
               } else {
                 MessageDialog.openError( DataStageInTable.this.mainComp.getShell(),
@@ -296,14 +320,10 @@ public class DataStageInTable {
         }
       }
     } );
-
     CellEditor[] edTable = new CellEditor[]{
-      editor,
-      new TextCellEditor( this.tableViewer.getTable() )
+      editor, new TextCellEditor( this.tableViewer.getTable() )
     };
-
     this.tableViewer.setCellEditors( edTable );
-    
     TableViewerEditor.create( this.tableViewer,
                               new ColumnViewerEditorActivationStrategy( this.tableViewer ),
                               ColumnViewerEditor.TABBING_HORIZONTAL
@@ -330,10 +350,10 @@ public class DataStageInTable {
   public List<DataStagingType> getDataStagingType() {
     return this.input;
   }
-  
-  public void setInput(List<DataStagingType> input){
+
+  public void setInput( List<DataStagingType> input ) {
     this.input = input;
-    if (this.input == null){
+    if( this.input == null ) {
       this.input = new ArrayList<DataStagingType>();
     }
     this.tableViewer.setInput( this.input );
@@ -362,22 +382,25 @@ public class DataStageInTable {
       if( dialog.open() == Window.OK ) {
         DataStagingType newData = getNewDataStagingType( dialog.getName(),
                                                          dialog.getPath() );
-//        DataStagingType newData = selectedObject;
-//        newData.setFileName( dialog.getName() );
-//        SourceTargetType source = JSDLModelFacade.getSourceTargetType();
-//        source.setURI( dialog.getPath() );
-//        newData.setSource( source );
+        // DataStagingType newData = selectedObject;
+        // newData.setFileName( dialog.getName() );
+        // SourceTargetType source = JSDLModelFacade.getSourceTargetType();
+        // source.setURI( dialog.getPath() );
+        // newData.setSource( source );
         if( !newData.getFileName().equals( selectedObject.getFileName() )
             || !newData.getSource().getURI().equals( selectedObject.getSource()
               .getURI() ) )
         {
           if( !isDataInInput( newData ) ) {
-//            this.input.add( getNewDataStagingType( dialog.getName(),
-//                                                   dialog.getPath() ) );
-//            this.input.remove( selectedObject );
-//            this.input.add( getNewDataStagingType( dialog.getName(), dialog.getPath() ) );
-//            this.input.remove( selectedObject );
-            updateDataStaging(selectedObject, newData.getFileName(), newData.getSource());
+            // this.input.add( getNewDataStagingType( dialog.getName(),
+            // dialog.getPath() ) );
+            // this.input.remove( selectedObject );
+            // this.input.add( getNewDataStagingType( dialog.getName(),
+            // dialog.getPath() ) );
+            // this.input.remove( selectedObject );
+            updateDataStaging( selectedObject,
+                               newData.getFileName(),
+                               newData.getSource() );
             this.tableViewer.refresh();
           } else {
             MessageDialog.openError( this.mainComp.getShell(),
@@ -390,8 +413,8 @@ public class DataStageInTable {
   }
 
   void updateDataStaging( final DataStagingType selectedObject,
-                                  final String name,
-                                  final SourceTargetType source )
+                          final String name,
+                          final SourceTargetType source )
   {
     selectedObject.setFileName( name );
     selectedObject.getSource().setURI( source.getURI() );

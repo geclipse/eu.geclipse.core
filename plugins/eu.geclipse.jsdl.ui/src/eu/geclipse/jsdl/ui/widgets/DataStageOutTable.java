@@ -78,6 +78,16 @@ import eu.geclipse.ui.dialogs.NewProblemDialog;
  */
 public class DataStageOutTable {
 
+  /**
+   * This constant is used to inform the class' constructor that buttons (Add,
+   * Edit and Remove button) should be placed on the right side of the table.
+   */
+  public static final int BUTTONS_RIGHT = 0;
+  /**
+   * This constant is used to inform the class' constructor that buttons (Add,
+   * Edit and Remove button) should be placed below the table.
+   */
+  public static final int BUTTONS_BOTTOM = 1;
   Composite mainComp;
   TableViewer tableViewer;
   List<DataStagingType> input = new ArrayList<DataStagingType>();
@@ -86,8 +96,9 @@ public class DataStageOutTable {
   private Button editButton;
   private Button removeButton;
 
-  public DataStageOutTable( final Composite parent ) {
-    this( parent, new ArrayList<DataStagingType>() );
+  public DataStageOutTable( final Composite parent, final int buttonsPosition )
+  {
+    this( parent, new ArrayList<DataStagingType>(), buttonsPosition );
   }
 
   /**
@@ -98,11 +109,18 @@ public class DataStageOutTable {
    * @param input input for a table
    */
   public DataStageOutTable( final Composite parent,
-                            final List<DataStagingType> input )
+                            final List<DataStagingType> input,
+                            final int buttonsPosition )
   {
     this.input = input;
     this.mainComp = new Composite( parent, SWT.NONE );
-    this.mainComp.setLayout( new GridLayout( 1, false ) );
+    GridLayout gLayout;
+    if (buttonsPosition == DataStageOutTable.BUTTONS_BOTTOM){
+      gLayout = new GridLayout(1, false);
+    } else {
+      gLayout = new GridLayout(2, false);
+    }
+    this.mainComp.setLayout( gLayout );
     this.table = new Table( this.mainComp, SWT.BORDER
                                            | SWT.VIRTUAL
                                            | SWT.MULTI
@@ -146,7 +164,12 @@ public class DataStageOutTable {
       }
     } );
     Composite buttonsComp = new Composite( this.mainComp, SWT.NONE );
-    buttonsComp.setLayout( new GridLayout( 3, true ) );
+    if (buttonsPosition == DataStageOutTable.BUTTONS_BOTTOM){
+      gLayout = new GridLayout(3, true);
+    } else {
+      gLayout = new GridLayout(1, false);
+    }
+    buttonsComp.setLayout( gLayout );
     this.addButton = new Button( buttonsComp, SWT.PUSH );
     gData = new GridData( GridData.VERTICAL_ALIGN_BEGINNING
                           | GridData.HORIZONTAL_ALIGN_END );
@@ -324,14 +347,14 @@ public class DataStageOutTable {
     return this.input;
   }
 
-  public void setInput(List<DataStagingType> input){
+  public void setInput( List<DataStagingType> input ) {
     this.input = input;
-    if (this.input == null){
+    if( this.input == null ) {
       this.input = new ArrayList<DataStagingType>();
     }
     this.tableViewer.setInput( this.input );
   }
-  
+
   void editDataStagingEntry( final DataStagingType selectedObject ) {
     EditDialog dialog;
     if( selectedObject == null ) {

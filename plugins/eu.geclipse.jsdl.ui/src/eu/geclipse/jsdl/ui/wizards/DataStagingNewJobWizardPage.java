@@ -106,7 +106,8 @@ public class DataStagingNewJobWizardPage extends WizardPage {
       }
     } );
     this.copyFromTab = new DataStageInTable( inFilesGroup,
-                                             this.initialStagingIn );
+                                             this.initialStagingIn,
+                                             DataStageInTable.BUTTONS_BOTTOM );
     // Data stage out group
     Group outFilesGroup = new Group( mainComp, SWT.NONE );
     outFilesGroup.setText( "Stage out" );
@@ -123,7 +124,8 @@ public class DataStagingNewJobWizardPage extends WizardPage {
                                                          SWT.WRAP );
     link1.setImage( Activator.getDefault().getImageRegistry().get( "helplink" ) );
     this.copyToTab = new DataStageOutTable( outFilesGroup,
-                                            this.initialStagingOut );
+                                            this.initialStagingOut,
+                                            DataStageOutTable.BUTTONS_BOTTOM );
     this.isCreated = true;
     setControl( mainComp );
   }
@@ -459,7 +461,6 @@ public class DataStagingNewJobWizardPage extends WizardPage {
   @Override
   public IWizardPage getPreviousPage() {
     return super.getPreviousPage();
-    
   }
 
   public void setInitialStagingInModel( List<DataStagingType> files ) {
@@ -468,7 +469,7 @@ public class DataStagingNewJobWizardPage extends WizardPage {
       this.copyFromTab.updateInput( this.initialStagingIn );
     }
   }
-  
+
   public void setInitialStagingOutModel( List<DataStagingType> files ) {
     this.initialStagingOut = files;
     if( this.copyToTab != null ) {
