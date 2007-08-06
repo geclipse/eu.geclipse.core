@@ -26,7 +26,6 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -69,6 +68,7 @@ import eu.geclipse.ui.providers.IConfigurationListener;
  */
 public class GridFileDialog extends Dialog implements IGridModelListener {
 
+  private static final String LOCAL_FILTER = "file"; //$NON-NLS-1$
   /**
    * The {@link TreeViewer} used to display the remote file structure.
    */
@@ -102,8 +102,7 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
    * The currently selected connection element.
    */
   private IGridConnectionElement selectedElement;
-  private ViewerFilter protocolFilter;
-  private GridConnectionProtocolFilter protocolFilter1;
+  private GridConnectionProtocolFilter protocolFilter;
 
   /**
    * Create a new <code>GridFileDialog</code> with the specified parent
@@ -124,25 +123,24 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
     this.title = title;
     this.filter = new GridConnectionFilter();
     if( !allowLocal ) {
-      this.protocolFilter = new ViewerFilter() {
-
-        @Override
-        public boolean select( final Viewer viewer,
-                               final Object parentElement,
-                               final Object element )
-        {
-          boolean result = true;
-          if( element instanceof IGridConnectionElement ) {
-            if( ( ( IGridConnectionElement )element ).isLocal() ) {
-              result = false;
-            }
-          }
-          return result;
-          //      
-        }
-      };
-//       this.protocolFilter1 = new GridConnectionProtocolFilter();
-//       this.protocolFilter.addFilterProtocol( LOCAL_FILTER );
+//      this.protocolFilter = new ViewerFilter() {
+//
+//        @Override
+//        public boolean select( final Viewer viewer,
+//                               final Object parentElement,
+//                               final Object element )
+//        {
+//          boolean result = true;
+//          if( element instanceof IGridConnectionElement ) {
+//            if( ( ( IGridConnectionElement )element ).isLocal() ) {
+//              result = false;
+//            }
+//          }
+//          return result;
+//        }
+//      };
+       this.protocolFilter = new GridConnectionProtocolFilter();
+       this.protocolFilter.addFilterProtocol( LOCAL_FILTER );
     }
   }
 

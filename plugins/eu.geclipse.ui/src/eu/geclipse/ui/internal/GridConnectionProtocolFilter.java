@@ -17,9 +17,11 @@ package eu.geclipse.ui.internal;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
+
 import eu.geclipse.core.model.IGridConnectionElement;
 
 /**
@@ -58,11 +60,16 @@ public class GridConnectionProtocolFilter extends ViewerFilter {
   private boolean select( final IGridConnectionElement element ) {
     boolean result = true;
     try {
-      String protocol = element.getConnectionFileStore()
-        .getFileSystem()
-        .getScheme();
-      if( this.protocolsToFilter.contains( protocol ) ) {
-        result = false;
+      String query = element.getConnectionFileStore().toURI().getQuery();
+      if( query != null ) {
+        int start = query.indexOf( "geclslave=" ); //$NON-NLS-1$
+        if( start != -1 ) {
+          String protocol = query.substring( start + "geclslave=".length(), //$NON-NLS-1$
+                                             query.indexOf( "&", start ) ); //$NON-NLS-1$
+          if( this.protocolsToFilter.contains( protocol ) ) {
+            result = false;
+          }
+        }
       }
     } catch( CoreException e ) {
       Activator.logException( e );
