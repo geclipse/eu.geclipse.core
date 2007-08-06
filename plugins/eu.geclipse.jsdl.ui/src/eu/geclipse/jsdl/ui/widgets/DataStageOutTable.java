@@ -324,6 +324,14 @@ public class DataStageOutTable {
     return this.input;
   }
 
+  public void setInput(List<DataStagingType> input){
+    this.input = input;
+    if (this.input == null){
+      this.input = new ArrayList<DataStagingType>();
+    }
+    this.tableViewer.setInput( this.input );
+  }
+  
   void editDataStagingEntry( final DataStagingType selectedObject ) {
     EditDialog dialog;
     if( selectedObject == null ) {

@@ -333,6 +333,9 @@ public class DataStageInTable {
   
   public void setInput(List<DataStagingType> input){
     this.input = input;
+    if (this.input == null){
+      this.input = new ArrayList<DataStagingType>();
+    }
     this.tableViewer.setInput( this.input );
   }
 
