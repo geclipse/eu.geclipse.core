@@ -83,6 +83,8 @@ public class ApplicationSpecificPage extends WizardPage
     return this.parent;
   }
 
+  
+  
   public Map<String, ArrayList<String>> getParametersValues() {
     Map<String, ArrayList<String>> result = null;
     if( this.controlsParametersNames != null

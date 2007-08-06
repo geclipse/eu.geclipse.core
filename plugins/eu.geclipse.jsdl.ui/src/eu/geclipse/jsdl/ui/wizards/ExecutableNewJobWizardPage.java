@@ -111,11 +111,6 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
    */
   private JSDLJobDescription basicJSDL;
 
-  
-  
-  
- 
-
   /**
    * Creates new wizard page
    * 
@@ -145,44 +140,46 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       IPath path = ApplicationSpecificRegistry.getInstance()
         .getApplicationData( aspID.intValue() )
         .getJsdlPath();
-      if( path != null && !path.equals( "" ) ) { //$NON-NLS-1$
-        //getting jsdl source
-        //creating temp Eclipse's resource
-//        IPath workspacePath = ResourcesPlugin.getWorkspace()
-//          .getRoot()
-//          .getLocation();
-//        workspacePath = workspacePath.append( ".tempJSDL.jsdl" );
-        IPath workspacePath = ((NewJobWizard)this.getWizard()).getProject();
+      if( path != null && !path.toOSString().equals( "" ) ) { //$NON-NLS-1$
+        // getting jsdl source
+        // creating temp Eclipse's resource
+        // IPath workspacePath = ResourcesPlugin.getWorkspace()
+        // .getRoot()
+        // .getLocation();
+        // workspacePath = workspacePath.append( ".tempJSDL.jsdl" );
+        IPath workspacePath = ( ( NewJobWizard )this.getWizard() ).getProject();
         workspacePath = workspacePath.append( ".tempJSDL.jsdl" );
-        IFile newFileHandle = ResourcesPlugin.getWorkspace().getRoot()
+        IFile newFileHandle = ResourcesPlugin.getWorkspace()
+          .getRoot()
           .getFile( workspacePath );
         try {
-          newFileHandle.createLink( path, IResource.REPLACE , null );
-          IGridElement element = GridModel.getRoot().findElement( newFileHandle );
+          newFileHandle.createLink( path, IResource.REPLACE, null );
+          IGridElement element = GridModel.getRoot()
+            .findElement( newFileHandle );
           if( element instanceof JSDLJobDescription ) {
             this.basicJSDL = ( JSDLJobDescription )element;
-            ((NewJobWizard)this.getWizard()).updateBasicJSDL(this.basicJSDL);
+            ( ( NewJobWizard )this.getWizard() ).updateBasicJSDL( this.basicJSDL, this.applicationName.getText() );
           }
         } catch( CoreException e ) {
-          //TODO katis - error handling
+          // TODO katis - error handling
           e.printStackTrace();
         } finally {
           try {
             newFileHandle.delete( true, null );
           } catch( CoreException e ) {
-            //TODO katis - error handling
+            // TODO katis - error handling
             e.printStackTrace();
           }
         }
       } else {
-        ((NewJobWizard)this.getWizard()).updateBasicJSDL(null);
+        ( ( NewJobWizard )this.getWizard() ).updateBasicJSDL( null, this.applicationName.getText() );
       }
     } else {
-      ((NewJobWizard)this.getWizard()).updateBasicJSDL(null);
+      ( ( NewJobWizard )this.getWizard() ).updateBasicJSDL( null, this.applicationName.getText() );
     }
     return super.getNextPage();
   }
-  
+
   @Override
   public boolean isPageComplete() {
     return true;
@@ -578,6 +575,44 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
    *         <code>null</code> if no such file is present.
    */
   public JSDLJobDescription getBasicJSDL() {
+ // If in application specific settings basic JSDL file is given its copy - a
+    // temporary jsdl file - is created in workspace. This file is used to
+    // generate JSDLJobDescription object which will be passed to next wizard's
+    // page.
+    Integer aspID = this.appsWithParametersFromPrefs.get( this.applicationName.getText() );
+    if( aspID != null ) {
+      IPath path = ApplicationSpecificRegistry.getInstance()
+        .getApplicationData( aspID.intValue() )
+        .getJsdlPath();
+      if( path != null && !path.toOSString().equals( "" ) ) { //$NON-NLS-1$
+        IPath workspacePath = ((NewJobWizard)this.getWizard()).getProject();
+        workspacePath = workspacePath.append( ".tempJSDL.jsdl" );
+        IFile newFileHandle = ResourcesPlugin.getWorkspace().getRoot()
+          .getFile( workspacePath );
+        try {
+          newFileHandle.createLink( path, IResource.REPLACE , null );
+          IGridElement element = GridModel.getRoot().findElement( newFileHandle );
+          if( element instanceof JSDLJobDescription ) {
+            this.basicJSDL = ( JSDLJobDescription )element;
+//            ((NewJobWizard)this.getWizard()).updateBasicJSDL(this.basicJSDL);
+          }
+        } catch( CoreException e ) {
+          // TODO katis - error handling
+          e.printStackTrace();
+        } finally {
+          try {
+            newFileHandle.delete( true, null );
+          } catch( CoreException e ) {
+            // TODO katis - error handling
+            e.printStackTrace();
+          }
+        }
+      } else {
+        this.basicJSDL = null;
+      }
+    } else {
+      this.basicJSDL = null;
+    }
     return this.basicJSDL;
   }
 

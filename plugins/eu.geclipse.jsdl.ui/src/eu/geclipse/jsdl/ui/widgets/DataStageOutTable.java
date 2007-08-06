@@ -257,8 +257,8 @@ public class DataStageOutTable {
                 DataStageOutTable.this.tableViewer.refresh();
               } else {
                 MessageDialog.openError( DataStageOutTable.this.mainComp.getShell(),
-                                         Messages.getString( "DataStageInTable.edit_dialog_title" ), //$NON-NLS-1$
-                                         Messages.getString( "DataStageInTable.value_exists_dialog_message" ) ); //$NON-NLS-1$
+                                         Messages.getString( "DataStageOutTable.edit_dialog_title" ), //$NON-NLS-1$
+                                         Messages.getString( "DataStageOutTable.data_exists_error" ) ); //$NON-NLS-1$
               }
             }
           break;
@@ -275,8 +275,8 @@ public class DataStageOutTable {
                 DataStageOutTable.this.tableViewer.refresh();
               } else {
                 MessageDialog.openError( DataStageOutTable.this.mainComp.getShell(),
-                                         Messages.getString( "DataStageInTable.edit_dialog_title" ), //$NON-NLS-1$
-                                         Messages.getString( "DataStageInTable.value_exists_dialog_message" ) ); //$NON-NLS-1$
+                                         Messages.getString( "DataStageOutTable.edit_dialog_title" ), //$NON-NLS-1$
+                                         Messages.getString( "DataStageOutTable.data_exists_error" ) ); //$NON-NLS-1$
               }
             }
           break;
@@ -347,8 +347,8 @@ public class DataStageOutTable {
             this.tableViewer.refresh();
           } else {
             MessageDialog.openError( this.mainComp.getShell(),
-                                     Messages.getString("DataStageOutTable.2"), //$NON-NLS-1$
-                                     Messages.getString("DataStageOutTable.edit_dialog_title") ); //$NON-NLS-1$
+                                     Messages.getString("DataStageOutTable.edit_dialog_title"), //$NON-NLS-1$
+                                     Messages.getString("DataStageOutTable.data_exists_error") ); //$NON-NLS-1$
           }
         }
       }

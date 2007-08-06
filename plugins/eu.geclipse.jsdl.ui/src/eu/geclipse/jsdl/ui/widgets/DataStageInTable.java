@@ -254,8 +254,9 @@ public class DataStageInTable {
                   .getURI() ) )
             {
               if( !isDataInInput( dataNew ) ) {
-                DataStageInTable.this.input.add( dataNew );
-                DataStageInTable.this.input.remove( dataOld );
+//                DataStageInTable.this.input.add( dataNew );
+//                DataStageInTable.this.input.remove( dataOld );
+                updateDataStaging( dataOld, dataNew.getFileName(), dataNew.getSource() );
                 DataStageInTable.this.tableViewer.refresh();
               } else {
                 MessageDialog.openError( DataStageInTable.this.mainComp.getShell(),
@@ -272,8 +273,9 @@ public class DataStageInTable {
                   .getURI() ) )
             {
               if( !isDataInInput( dataNew ) ) {
-                DataStageInTable.this.input.add( dataNew );
-                DataStageInTable.this.input.remove( dataOld );
+//                DataStageInTable.this.input.add( dataNew );
+//                DataStageInTable.this.input.remove( dataOld );
+                updateDataStaging( dataOld, dataNew.getFileName(), dataNew.getSource() );
                 DataStageInTable.this.tableViewer.refresh();
               } else {
                 MessageDialog.openError( DataStageInTable.this.mainComp.getShell(),
@@ -343,14 +345,22 @@ public class DataStageInTable {
       if( dialog.open() == Window.OK ) {
         DataStagingType newData = getNewDataStagingType( dialog.getName(),
                                                          dialog.getPath() );
+//        DataStagingType newData = selectedObject;
+//        newData.setFileName( dialog.getName() );
+//        SourceTargetType source = JSDLModelFacade.getSourceTargetType();
+//        source.setURI( dialog.getPath() );
+//        newData.setSource( source );
         if( !newData.getFileName().equals( selectedObject.getFileName() )
             || !newData.getSource().getURI().equals( selectedObject.getSource()
               .getURI() ) )
         {
           if( !isDataInInput( newData ) ) {
-            this.input.add( getNewDataStagingType( dialog.getName(),
-                                                   dialog.getPath() ) );
-            this.input.remove( selectedObject );
+//            this.input.add( getNewDataStagingType( dialog.getName(),
+//                                                   dialog.getPath() ) );
+//            this.input.remove( selectedObject );
+//            this.input.add( getNewDataStagingType( dialog.getName(), dialog.getPath() ) );
+//            this.input.remove( selectedObject );
+            updateDataStaging(selectedObject, newData.getFileName(), newData.getSource());
             this.tableViewer.refresh();
           } else {
             MessageDialog.openError( this.mainComp.getShell(),
@@ -360,6 +370,14 @@ public class DataStageInTable {
         }
       }
     }
+  }
+
+  void updateDataStaging( final DataStagingType selectedObject,
+                                  final String name,
+                                  final SourceTargetType source )
+  {
+    selectedObject.setFileName( name );
+    selectedObject.getSource().setURI( source.getURI() );
   }
 
   boolean isDataInInput( final DataStagingType newData ) {

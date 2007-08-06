@@ -101,7 +101,7 @@ public class DataStagingNewJobWizardPage extends WizardPage {
     link.setImage( Activator.getDefault().getImageRegistry().get( "helplink" ) );
     link.addHyperlinkListener( new HyperlinkAdapter() {
 
-      public void linkActivated( HyperlinkEvent e ) {
+      public void linkActivated( final HyperlinkEvent e ) {
         DataStagingNewJobWizardPage.this.performHelp();
       }
     } );
@@ -464,11 +464,15 @@ public class DataStagingNewJobWizardPage extends WizardPage {
 
   public void setInitialStagingInModel( List<DataStagingType> files ) {
     this.initialStagingIn = files;
-    
+    if( this.copyFromTab != null ) {
+      this.copyFromTab.updateInput( this.initialStagingIn );
+    }
   }
   
   public void setInitialStagingOutModel( List<DataStagingType> files ) {
     this.initialStagingOut = files;
-    
+    if( this.copyToTab != null ) {
+      this.copyToTab.updateInput( this.initialStagingOut );
+    }
   }
 }

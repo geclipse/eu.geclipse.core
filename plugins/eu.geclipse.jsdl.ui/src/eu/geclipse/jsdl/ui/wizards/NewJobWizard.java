@@ -20,10 +20,10 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -38,6 +38,7 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.eclipse.ui.ide.IDE;
+
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
@@ -45,6 +46,7 @@ import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.jsdl.JSDLJobDescription;
 import eu.geclipse.jsdl.model.DataStagingType;
 import eu.geclipse.jsdl.ui.internal.Activator;
+import eu.geclipse.jsdl.ui.internal.preference.ApplicationSpecificRegistry;
 import eu.geclipse.jsdl.ui.internal.wizards.FileType;
 import eu.geclipse.jsdl.ui.wizards.specific.IApplicationSpecificPage;
 
@@ -61,6 +63,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
   private ExecutableNewJobWizardPage executablePage;
   private DataStagingNewJobWizardPage outputFilesPage;
   private JSDLJobDescription basicJSDL;
+  private String appName = ""; //$NON-NLS-1$
 
   @Override
   public void addPages() {
@@ -149,12 +152,36 @@ public class NewJobWizard extends Wizard implements INewWizard {
   @SuppressWarnings("unchecked")
   void setInitialModel( final JSDLJobDescription jsdl ) {
     this.executablePage.getApplicationSpecificPage();
-    if( this.basicJSDL != null ) {
-      this.basicJSDL.removeDataStaging();
-      jsdl.setRoot( this.basicJSDL.getRoot() );
+    if( getContainer().getCurrentPage() != this.outputFilesPage ) {
+      JSDLJobDescription tempJSDL = this.executablePage.getBasicJSDL();
+      String tempAppName = this.executablePage.getApplicationName();
+      if( ! tempAppName.equals( this.appName ) ) {
+//        this.basicJSDL = this.executablePage.getBasicJSDL();
+        updateBasicJSDL( tempJSDL, tempAppName );
+        if( this.basicJSDL != null ) {
+          
+          jsdl.setRoot( this.basicJSDL.getRoot() );
+        } else {
+          jsdl.createRoot();
+          jsdl.addJobDescription();
+        }
+      } else {
+        if( this.basicJSDL != null ) {
+          this.basicJSDL.removeDataStaging();
+          jsdl.setRoot( this.basicJSDL.getRoot() );
+        } else {
+          jsdl.createRoot();
+          jsdl.addJobDescription();
+        }
+      }
     } else {
-      jsdl.createRoot();
-      jsdl.addJobDescription();
+      if( this.basicJSDL != null ) {
+        this.basicJSDL.removeDataStaging();
+        jsdl.setRoot( this.basicJSDL.getRoot() );
+      } else {
+        jsdl.createRoot();
+        jsdl.addJobDescription();
+      }
     }
     jsdl.addJobIdentification( this.executablePage.getApplicationName(), null );
     String appName = "";
@@ -183,11 +210,11 @@ public class NewJobWizard extends Wizard implements INewWizard {
     String execName = this.executablePage.getExecutableFile();
     if( !execName.equals( "" ) ) { //$NON-NLS-1$
       // checking if exec is local
-      if( execName.startsWith( "file" ) ) { //$NON-NLS-1$ //$NON-NLS-2$
-        // exec is local
-        jsdl.setInDataStaging( "run_command", execName );
-        execName = "run_command";
-      } else {
+//      if( execName.startsWith( "file" ) ) { //$NON-NLS-1$ //$NON-NLS-2$
+//        // exec is local
+//        jsdl.setInDataStaging( "run_command", execName );
+//        execName = "run_command";
+//      } else {
         try {
           URI test = new URI( execName );
           if( test.getScheme() != null ) {
@@ -198,7 +225,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
           // TODO Auto-generated catch block
           e.printStackTrace();
         }
-      }
+//      }
       jsdl.addPOSIXApplicationDetails( appName,
                                        execName,
                                        in,
@@ -285,15 +312,21 @@ public class NewJobWizard extends Wizard implements INewWizard {
     jsdl.getStdInputDataType();
   }
 
-  void updateBasicJSDL( JSDLJobDescription basicJSDL ) {
+  /**
+   * 
+   * @param newBasicJSDL
+   * @param aspName name of application (its 'display name', shown on Name list in Job Wizard, see also {@link ApplicationSpecificRegistry#getApplicationDataMapping()})
+   */
+  void updateBasicJSDL( final JSDLJobDescription newBasicJSDL, final String aspName ) {
     boolean fromPreSet = false;
     if( this.basicJSDL != null ) {
       fromPreSet = true;
     }
-    this.basicJSDL = basicJSDL;
+    this.basicJSDL = newBasicJSDL;
+    this.appName = aspName;
     if( this.basicJSDL != null ) {
-      this.outputFilesPage.setInitialStagingOut( this.basicJSDL.getDataStagingOutStrings() );
-      this.outputFilesPage.setInitialStagingIn( this.basicJSDL.getDataStagingInStrings() );
+      this.outputFilesPage.setInitialStagingOutModel( this.basicJSDL.getDataStagingOut() );
+      this.outputFilesPage.setInitialStagingInModel( this.basicJSDL.getDataStagingIn() );
     } else {
       if( !fromPreSet ) {
         this.outputFilesPage.setInitialStagingInModel( this.outputFilesPage.getFiles( FileType.INPUT ) );

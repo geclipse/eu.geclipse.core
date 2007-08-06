@@ -16,6 +16,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.net.URISyntaxException;
 import java.rmi.activation.Activator;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -119,7 +120,6 @@ public class JSDLJobDescription extends ResourceGridContainer
       // TODO katis - error handling
     } catch( IOException e ) {
       // TODO katis - error handling
-      
     }
   }
 
@@ -1062,8 +1062,14 @@ public class JSDLJobDescription extends ResourceGridContainer
   public List<DataStagingType> getLocalDataStagingIn() {
     List<DataStagingType> result = new ArrayList<DataStagingType>();
     for( DataStagingType dataType : getDataStagingIn() ) {
-      if( dataType.getSource().getURI().startsWith( "file:" ) ) { //$NON-NLS-1$
-        result.add( dataType );
+      try {
+        java.net.URI testURI = new java.net.URI( dataType.getSource().getURI() );
+        if (testURI.getQuery().indexOf( "geclslave=file" ) != -1){
+          result.add( dataType );
+        }
+      } catch( URISyntaxException e ) {
+        // TODO katis
+        e.printStackTrace();
       }
     }
     return result;
@@ -1089,7 +1095,8 @@ public class JSDLJobDescription extends ResourceGridContainer
   }
 
   public void removeDataStaging() {
-    this.jobDescription.getDataStaging().removeAll( this.jobDescription.getDataStaging() );
+    this.jobDescription.getDataStaging()
+      .removeAll( this.jobDescription.getDataStaging() );
   }
 
   public void addDataStagingType( DataStagingType data ) {
