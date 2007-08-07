@@ -7,6 +7,7 @@
    <extension-point id="eu.geclipse.core.gridJobStatusServiceManager" name="GridJobStatusServiceManager" schema="schema/eu.geclipse.core.gridJobStatusServiceManager.exsd"/>
    <extension-point id="authTokens" name="Authentication Tokens" schema="schema/authTokens.exsd"/>
    <extension-point id="authTokenProvider" name="Authentication Token Provider" schema="schema/authTokenProvider.exsd"/>
+   <extension-point id="applicationDeployment" name="Application Deployment" schema="schema/applicationDeployment.exsd"/>
    <extension
          point="eu.geclipse.core.connectionManagement"
          id="eu.geclipse.core.connectionProtocol.gridftp">

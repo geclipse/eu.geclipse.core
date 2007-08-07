@@ -34,6 +34,27 @@ import eu.geclipse.core.model.IGridElementCreator;
 public class Extensions {
   
   /**
+   * The ID of the application deployment extension point.
+   */
+  public static final String APPLICATION_DEPLOYMENT_POINT
+  = "eu.geclipse.core.applicationDeployment"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the application deployment element contained
+   * in the application deployment extension point. 
+   */
+  public static final String APPLICATION_DEPLOYMENT_ELEMENT
+    = "deployment"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the executable extension of the application deployment description
+   * configuration element.
+   */
+  public static final String APPLICATION_DEPLOYMENT_EXECUTABLE
+    = "class"; //$NON-NLS-1$
+  
+  
+  /**
    * The ID of the authentication token extension point.
    */
   public static final String AUTH_TOKEN_POINT
@@ -180,7 +201,6 @@ public class Extensions {
   public static final String PROBLEM_PROVIDER_EXECUTABLE
     = "class"; //$NON-NLS-1$
   
-  
   /**
    * List that holds all known element creators.
    */
@@ -200,8 +220,11 @@ public class Extensions {
    * List containing the names of all known authentication token.
    */
   private static List<String> authTokenNames;
-    
   
+  /**
+   * List that holds all known deployment service descriptions.
+   */
+  private static List< IApplicationDeployment > applicationDeployment;
   
   /**
    * Get a list with the names of all registered authentication tokens.
@@ -320,6 +343,31 @@ public class Extensions {
       resultList.add( scheme );
     }
     return resultList;
+  }
+  
+  /**
+   * Get a list of all currently registered application deployment.
+   * 
+   * @return A list containing instances of all currently registered
+   * extensions of the application deployment configuration elements.
+   */
+  public static List< IApplicationDeployment > getRegisteredParametersDescription() {
+    if ( applicationDeployment == null ) {
+      List< IApplicationDeployment > resultList
+      = new ArrayList< IApplicationDeployment >();
+      ExtensionManager manager = new ExtensionManager();
+      List< Object > objectList
+      = manager.getExecutableExtensions( APPLICATION_DEPLOYMENT_POINT,
+                                         APPLICATION_DEPLOYMENT_ELEMENT,
+                                         APPLICATION_DEPLOYMENT_EXECUTABLE );
+      for ( Object o : objectList ) {
+        if ( o instanceof IApplicationDeployment ) {
+          resultList.add( ( IApplicationDeployment ) o );
+        }
+      }
+      applicationDeployment = resultList;
+    }
+    return applicationDeployment;
   }
   
 }
