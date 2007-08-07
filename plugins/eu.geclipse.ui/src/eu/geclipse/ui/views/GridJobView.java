@@ -15,6 +15,10 @@
 
 package eu.geclipse.ui.views;
 
+import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.util.IPropertyChangeListener;
+import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.ViewerFilter;
@@ -23,7 +27,9 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridElementManager;
 import eu.geclipse.core.model.IGridJob;
@@ -31,6 +37,7 @@ import eu.geclipse.core.model.IGridJobManager;
 import eu.geclipse.core.model.IGridJobStatusListener;
 import eu.geclipse.ui.internal.actions.ActionGroupManager;
 import eu.geclipse.ui.internal.actions.FilterActions;
+import eu.geclipse.ui.internal.actions.JobViewActions;
 import eu.geclipse.ui.providers.JobViewLabelProvider;
 import eu.geclipse.ui.views.filters.GridFilterConfigurationsManager;
 import eu.geclipse.ui.views.filters.IFilterConfigurationListener;
@@ -48,6 +55,7 @@ public class GridJobView
     IFilterConfigurationListener {
   
   private IMemento memento;  
+  private JobViewActions jobActions;
   private GridFilterConfigurationsManager filterConfigurationsManager;
   
   @Override
@@ -119,6 +127,9 @@ public class GridJobView
   @Override
   protected void contributeAdditionalActions( final ActionGroupManager groups )
   {
+    IWorkbenchSite site = getSite();
+    this.jobActions = new JobViewActions( site );
+    groups.addGroup( this.jobActions );
     groups.addGroup( new FilterActions( getSite(), this.filterConfigurationsManager ) ); 
     super.contributeAdditionalActions( groups );
   }
@@ -144,6 +155,16 @@ public class GridJobView
     this.memento = mem;
     super.init( site, mem );
     GridModel.getJobManager().addJobStatusListener( this );
+    IPreferenceStore preferenceStore = new ScopedPreferenceStore( new InstanceScope(),
+                                                                  "eu.geclipse.core" ); //$NON-NLS-1$
+    preferenceStore.addPropertyChangeListener( new IPropertyChangeListener() {
+
+      public void propertyChange( final PropertyChangeEvent event ) {
+        if( GridJobView.this.jobActions != null ) {
+          GridJobView.this.jobActions.setJobsUpdateStatus( eu.geclipse.core.Preferences.getUpdateJobsStatus() );
+        }
+      }
+    } );
   }
 
   /* (non-Javadoc)

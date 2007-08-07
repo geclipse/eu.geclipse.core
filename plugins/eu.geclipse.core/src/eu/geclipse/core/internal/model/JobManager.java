@@ -11,7 +11,8 @@
  *
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
- *    Pawel Wolniewicz 
+ *    Pawel Wolniewicz
+ *    Szymon Mueller
  *****************************************************************************/
 package eu.geclipse.core.internal.model;
 
@@ -19,11 +20,17 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
 import eu.geclipse.core.JobStatusUpdater;
+import eu.geclipse.core.Preferences;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
@@ -34,6 +41,133 @@ import eu.geclipse.core.model.IGridJobStatus;
 import eu.geclipse.core.model.IGridJobStatusListener;
 import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridModelListener;
+
+/**
+ * Helper class to schedule {@link JobStatusUpdater} updates
+ */
+class JobScheduler extends Job {
+
+  /**
+   * Normal priority to start updating {@link JobStatusUpdater}
+   */
+  public static final int UPDATER_NORMAL_PRIORITY = 1;
+  
+  /**
+   * High priority to start updating {@link JobStatusUpdater}, used for jobs which were
+   * manually set to update
+   */
+  public static final int UPDATER_HIGH_PRIORITY = 2;
+  
+  /**
+   * Singleton of this class 
+   */
+  private static JobScheduler singleton;
+  
+  /**
+   * Hashtable holding updaters and their priorities to start/resume updating
+   */
+  private Hashtable< JobStatusUpdater, Integer > sleepingUpdaters = new Hashtable<JobStatusUpdater, Integer >();
+
+  /**
+   * Constructor for JobScheduler
+   * @param name 
+   */
+  public JobScheduler( final String name ) {
+    super( Messages.getString( "JobManager.scheduler_name" ) ); //$NON-NLS-1$
+    schedule( 30000 );
+  }
+
+  /**
+   * Gets the shared singleton of this class
+   * 
+   * @return Gets singleton of this class.
+   */
+  public static JobScheduler getJobScheduler() {
+    if( singleton == null ) {
+      singleton = new JobScheduler( "" ); //$NON-NLS-1$
+    }
+    return singleton;
+  }
+
+  @Override
+  public IStatus run( final IProgressMonitor monitor ) {
+    if( Preferences.getUpdateJobsStatus() && this.sleepingUpdaters.size() > 0 )
+    {
+      JobStatusUpdater updaterToWakeUp = null;
+      if( this.sleepingUpdaters.contains( new Integer( UPDATER_HIGH_PRIORITY ) ) )
+      {
+        JobStatusUpdater tempUpdater = null;
+        for( Enumeration<JobStatusUpdater> enumeration = this.sleepingUpdaters.keys(); enumeration.hasMoreElements(); )
+        {
+          tempUpdater = enumeration.nextElement();
+          if( this.sleepingUpdaters.get( tempUpdater ).intValue() == UPDATER_HIGH_PRIORITY )
+          {
+            updaterToWakeUp = tempUpdater;
+          }
+        }
+        updaterToWakeUp.wakeUp();
+        updaterToWakeUp.schedule( Preferences.getUpdateJobsPeriod() );
+      } else {
+        updaterToWakeUp = this.sleepingUpdaters.keys().nextElement();
+        updaterToWakeUp.wakeUp();
+        updaterToWakeUp.schedule( Preferences.getUpdateJobsPeriod() );
+      }
+      this.sleepingUpdaters.remove( updaterToWakeUp );
+    }
+    schedule( 30000 );
+    return Status.OK_STATUS;
+  }
+
+  /**
+   * Method for adding gridJob with chosen priority to queue of updaters waiting
+   * for start
+   * 
+   * @param updater
+   * @param priority
+   */
+  public void addUpdaterToQueue( final JobStatusUpdater updater, final int priority ) {
+    this.sleepingUpdaters.put( updater, new Integer( priority ) );
+  }
+
+  /**
+   * 
+   * @param numberOfRunningUpdaters 
+   * @return number of running jobs after wake up
+   */
+  public int wakeUpdaters( final int numberOfRunningUpdaters ) {
+    int actualRunningUpdaters = numberOfRunningUpdaters;
+    for( Enumeration<JobStatusUpdater> e = this.sleepingUpdaters.keys(); e.hasMoreElements(); )
+    {
+      JobStatusUpdater updater = e.nextElement();
+      updater.wakeUp();
+      updater.schedule( Preferences.getUpdateJobsPeriod() );
+      actualRunningUpdaters++;
+    }
+    return actualRunningUpdaters;
+  }
+
+ 
+  /**
+   * Searches hashtable of sleeping updaters for updater and wakes him up 
+   * @param updater to be awaken
+   * @return True if updater was found and woken up 
+   */
+  public boolean wakeUpdater( final JobStatusUpdater updater ) {
+    boolean result = false;
+    for( Enumeration<JobStatusUpdater> e= this.sleepingUpdaters.keys(); e.hasMoreElements(); ) {
+      JobStatusUpdater sleepingUpdater = e.nextElement();
+      if (updater == sleepingUpdater) {
+        sleepingUpdater.setManualUpdate( true );
+        sleepingUpdater.wakeUp();
+        sleepingUpdater.schedule( 1000 );
+        result = true;
+        this.sleepingUpdaters.put( sleepingUpdater, new Integer( UPDATER_HIGH_PRIORITY ) );
+      }
+    }
+    return result;
+  }
+ 
+}
 
 /**
  * Core implementation of an {@link IGridJobManager}.
@@ -60,6 +194,8 @@ public class JobManager extends AbstractGridElementManager
 
   private boolean listenerRegistered=false;
   
+  private int numberOfRunningUpdaters = 0;
+  
   /**
    * Private constructor to ensure to have only one instance of this class. This
    * can be obtained by {@link #getManager()}.
@@ -83,16 +219,25 @@ public class JobManager extends AbstractGridElementManager
     boolean flag;
     flag = super.addElement( element );
     if( element instanceof IGridJob ) {
-      JobStatusUpdater updater = new JobStatusUpdater( (( IGridJob )element) );
-      this.updaters.put( (( IGridJob )element).getID(), updater );
+      JobScheduler scheduler = JobScheduler.getJobScheduler();
+      JobStatusUpdater updater = new JobStatusUpdater( ( ( IGridJob )element ) );
+      this.updaters.put( ( ( IGridJob )element ).getID(), updater );
       updater.setSystem( true );
-      updater.schedule( 60000 );
+      if( Preferences.getUpdateJobsStatus() ) {
+        int updatePeriod = Preferences.getUpdateJobsPeriod();
+        updater.schedule( updatePeriod ); 
+        this.numberOfRunningUpdaters++;
+      } else {
+        scheduler.addUpdaterToQueue( updater, JobScheduler.UPDATER_NORMAL_PRIORITY );
+      }
       updater.addJobStatusListener( IGridJobStatus._ALL, this );
     }
     return flag;
-   }
+  }
   
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see eu.geclipse.core.model.IGridJobManager#startUpdater(eu.geclipse.core.model.IGridJobID)
    */
   public void startUpdater( final IGridJobID id)
@@ -101,7 +246,66 @@ public class JobManager extends AbstractGridElementManager
     JobStatusUpdater updater = new JobStatusUpdater( id );
     this.updaters.put( id, updater );
     updater.setSystem( true );
-    updater.schedule( 30000 );
+    int updatePeriod = Preferences.getUpdateJobsPeriod();
+    updater.schedule( updatePeriod );
+  }
+
+  public void pauseAllUpdaters(){
+    JobScheduler scheduler = JobScheduler.getJobScheduler();
+    for (Enumeration<IGridJobID> e = this.updaters.keys();e.hasMoreElements(); ){
+      IGridJobID jobId = e.nextElement();
+      JobStatusUpdater updater = this.updaters.get( jobId );
+      updater.sleep();
+      this.numberOfRunningUpdaters--;
+      scheduler.addUpdaterToQueue( updater, JobScheduler.UPDATER_NORMAL_PRIORITY );
+    }
+  }
+  
+  public void wakeUpAllUpdaters() {
+    int newNumberOfRunningUpdaters = JobScheduler.getJobScheduler().wakeUpdaters( this.numberOfRunningUpdaters );
+    setNumberOfRunningUpdaters( newNumberOfRunningUpdaters );
+  }
+  
+  public void updateJobsStatus( final ArrayList<IGridJob> selectedJobs ) {
+    for( Enumeration<IGridJobID> enumJobIds = this.updaters.keys(); enumJobIds.hasMoreElements(); )
+    {
+      IGridJobID jobId = enumJobIds.nextElement();
+      // if ( jobId == jobs.getID() ) {
+      // JobStatusUpdater updater = this.updaters.get( jobId );
+      // if ( !JobScheduler.getJobScheduler().wakeUpdater( updater ) ) {
+      // updater.sleep();
+      // updater.wakeUp();
+      // updater.schedule( 1000 );
+      // }
+      // }
+      for( Iterator<IGridJob> iterSelectedJobs = selectedJobs.iterator(); iterSelectedJobs.hasNext(); )
+      {
+        IGridJob selectedJob = iterSelectedJobs.next();
+        if( jobId == selectedJob.getID() ) {
+          JobStatusUpdater updater = this.updaters.get( jobId );
+          if( !JobScheduler.getJobScheduler().wakeUpdater( updater ) ) {
+            updater.sleep();
+            updater.wakeUp();
+            updater.schedule( 1000 );
+          }
+        }
+      }
+    }
+  }
+  
+  /**
+   * 
+   * @return Number of running updaters
+   */
+  public int getNumberOfRunningUpdaters() {
+    return this.numberOfRunningUpdaters;
+  }
+  
+  /**
+   * @param number of running updaters to set.
+   */
+  public void setNumberOfRunningUpdaters( final int number ) {
+    this.numberOfRunningUpdaters = number;
   }
 
   /**
@@ -133,12 +337,12 @@ public class JobManager extends AbstractGridElementManager
   public boolean canManage( final IGridElement element ) {
     return element instanceof IGridJob;
   }
-  
+
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridJobManager#addJobStatusListener(eu.geclipse.core.model.IGridJobStatusListener)
    */
   public void addJobStatusListener( final IGridJobStatusListener listener ) {
-    if ( ! this.globalListeners.contains( listener ) ) {
+    if( ! this.globalListeners.contains( listener ) ) {
       this.globalListeners.add( listener );
     }
   }
@@ -204,7 +408,7 @@ public class JobManager extends AbstractGridElementManager
       // empty block};
     }
   }
-  
+
   public void statusChanged( final IGridJob job ) {
     for ( IGridJobStatusListener listener : this.globalListeners ) {
       listener.statusChanged( job );
@@ -225,11 +429,9 @@ public class JobManager extends AbstractGridElementManager
   // IllegalAccessException{
   // waitForJob(id.getJobID());
   // }
-
-  
   /**
-   * Wait until updater for the given job finishes, which means that the job status 
-   * is final and cannot be changed any more.
+   * Wait until updater for the given job finishes, which means that the job
+   * status is final and cannot be changed any more.
    * @param job
    * @throws InterruptedException
    * @throws NoSuchElementException
@@ -245,8 +447,8 @@ public class JobManager extends AbstractGridElementManager
   }
 
   /**
-   * Wait until updater for the given job finishes, which means that the job status 
-   * is final and cannot be changed any more.
+   * Wait until updater for the given job finishes, which means that the job
+   * status is final and cannot be changed any more.
    * @param job
    * @throws InterruptedException
    * @throws NoSuchElementException

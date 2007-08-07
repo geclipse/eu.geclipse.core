@@ -11,6 +11,7 @@
  *
  * Contributors:
  *    Pawel Wolniewicz 
+ *    Szymon Mueller
  *****************************************************************************/
 package eu.geclipse.core;
 
@@ -36,7 +37,7 @@ import eu.geclipse.core.model.IGridJobStatusService;
 
 /**
  * The class for updating job status in the background. There is one JobStatusUpdater 
- * for each job and tt is started when a job is added to project.  
+ * for each job and it is started when a job is added to project.  
  * @see JobManager
  * @see IGridJobStatus
  * @see IGridJob
@@ -45,7 +46,7 @@ import eu.geclipse.core.model.IGridJobStatusService;
 public class JobStatusUpdater extends Job {
 
   /**
-   * Hashtable that hold infomation about registered listeners and the statuses for
+   * Hashtable that hold information about registered listeners and the statuses for
    * which listener should be notified
    * @seeIGridJobStatusListener
    */
@@ -55,12 +56,22 @@ public class JobStatusUpdater extends Job {
   IGridJobID jobID;
   IGridJob job;
   IGridJobStatus lastStatus=null;
-
+  boolean manualUpdate = false;
+  
+  /**
+   * Constructor
+   * @param job for which this updater is created
+   */
   public JobStatusUpdater( final IGridJob job ) {
     super( Messages.getString("JobStatusUpdater.name") ); //$NON-NLS-1$
     this.job = job;
 //    updaters.put( job.getID().getJobID(), this );
   }
+  
+  /**
+   * Constructor
+   * @param jobID of job for which this updater is created
+   */
   public JobStatusUpdater( final IGridJobID jobID ) {
     super( Messages.getString("JobStatusUpdater.name") ); //$NON-NLS-1$
     this.jobID = jobID;
@@ -69,67 +80,78 @@ public class JobStatusUpdater extends Job {
 
   @Override
   protected IStatus run( final IProgressMonitor monitor ) {
-    int oldType = -1;
-    if(this.lastStatus!=null){
-      oldType=this.lastStatus.getType();
-    }
-    int newType = IGridJobStatus.UNKNOWN; 
-    IGridJobStatus newStatus = null;
-    // IGridJobStatus jobStatus = updateService.getJobStatus( job.getID() );
-    try{
-      if(this.job!=null)
-      {
-        this.job.updateJobStatus();
-        newStatus = this.job.getJobStatus();
-      }
-      else{
-        List<IGridElementCreator> elementCreators = GridModel.getElementCreators( IGridJobStatusService.class );
-        for(IGridElementCreator creator:elementCreators){
-          if(creator.canCreate( this.jobID )){
-            try {
-              IGridJobStatusService service = (IGridJobStatusService)creator.create( null );
-              newStatus = service.getJobStatus( this.jobID );
-            } catch( GridModelException e ) {
-               //   empty implementation
-            } catch( GridException e ) {
-              //   empty implementation
+    if( this.job != null ) {
+      if( Preferences.getUpdateJobsStatus() || this.manualUpdate ) {
+        int oldType = -1;
+        if( this.lastStatus != null ) {
+          oldType = this.lastStatus.getType();
+        }
+        int newType = IGridJobStatus.UNKNOWN;
+        IGridJobStatus newStatus = null;
+        try {
+          if( this.job != null ) {
+            this.job.updateJobStatus();
+            newStatus = this.job.getJobStatus();
+          } else {
+            List<IGridElementCreator> elementCreators = GridModel.getElementCreators( IGridJobStatusService.class );
+            for( IGridElementCreator creator : elementCreators ) {
+              if( creator.canCreate( this.jobID ) ) {
+                try {
+                  IGridJobStatusService service = ( IGridJobStatusService )creator.create( null );
+                  newStatus = service.getJobStatus( this.jobID );
+                } catch( GridModelException e ) {
+                  // empty implementation
+                } catch( GridException e ) {
+                  // empty implementation
+                }
+              }
             }
           }
+          if( newStatus != null ) {
+            newType = newStatus.getType();
+            this.lastStatus = newStatus;
+          }
+          if( oldType != newType )
+            for( Enumeration<IGridJobStatusListener> e = this.listeners.keys(); e.hasMoreElements(); )
+            {
+              IGridJobStatusListener listener = e.nextElement();
+              int trigger = this.listeners.get( listener ).intValue();
+              if( ( newType & trigger ) > 0 ) {
+                listener.statusChanged( this.job );
+              }
+            }
+        } catch( RuntimeException e ) {
+          Activator.logException( e );
+        }
+        if( newStatus != null && newStatus.canChange() ) {
+          if( this.manualUpdate ) {
+            this.manualUpdate = false;
+          } else {
+            int updatePeriod = Preferences.getUpdateJobsPeriod();
+            schedule( updatePeriod );
+          }
+        } else {
+          JobManager.getManager().removeUpdater( this );
         }
       }
-      if(newStatus!=null){
-        newType=newStatus.getType();
-        this.lastStatus=newStatus;
-      }
-      if( oldType != newType ) {
-      // status changed, notify all listeners;
-      for(Enumeration<IGridJobStatusListener> e=this.listeners.keys();e.hasMoreElements();){
-        IGridJobStatusListener listener =e.nextElement();
-        int trigger=this.listeners.get( listener ).intValue();
-        if( (newType & trigger)>0){
-          listener.statusChanged( this.job );
-        }
-      }
-    }
-    }
-    catch(RuntimeException e){
-      Activator.logException( e );
-    }
-    if( newStatus!=null && newStatus.canChange() ) {
-      schedule( 30000 );
-    }
-    else{
-      JobManager.getManager().removeUpdater( this );
     }
     return Status.OK_STATUS;
   }
   
+  /**
+   * Sets manul update for this updater, allows to update job without updates running in the background
+   * @param status of manual update for this updater
+   */
+  public void setManualUpdate( final boolean status ) {
+    this.manualUpdate = status;
+  }
 
   /**
-   * Add status listener for the updater. The listener will be notify, when the status
-   * of the job will change. 
-   * @param status - aggregate value of IGridJobStatus types, for which listener 
-   * should be notified.
+   * Add status listener for the updater. The listener will be notify, when the
+   * status of the job will change.
+   * 
+   * @param status - aggregate value of IGridJobStatus types, for which listener
+   *            should be notified.
    * @param listener - listener to be notifies about the change.
    */
   public void addJobStatusListener( final int status, final IGridJobStatusListener listener ) {

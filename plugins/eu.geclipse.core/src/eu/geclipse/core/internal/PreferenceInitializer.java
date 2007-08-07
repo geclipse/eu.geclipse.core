@@ -11,10 +11,12 @@
  *
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
+ *    Szymon Mueller
  *****************************************************************************/
 
 package eu.geclipse.core.internal;
 
+import org.eclipse.core.runtime.Preferences;
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 
 /**
@@ -30,8 +32,9 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
    */
   @Override
   public void initializeDefaultPreferences() {
-    // Currently empty implementation
-    //Preferences node = new DefaultScope().getNode( Activator.PLUGIN_ID );
+    Preferences prefs = Activator.getDefault().getPluginPreferences();
+    prefs.setDefault( PreferenceConstants.JOBS_UPDATE_JOBS_STATUS, false );
+    prefs.setDefault( PreferenceConstants.JOBS_UPDATE_JOBS_PERIOD, 30 );
   }
   
 }

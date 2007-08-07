@@ -11,10 +11,12 @@
  *
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
+ *    Szymon Mueller - additional methods for updaters
  *****************************************************************************/
 
 package eu.geclipse.core.model;
 
+import java.util.ArrayList;
 
 /**
  * A job manager is able to manage {@link IGridJob}.
@@ -38,5 +40,20 @@ public interface IGridJobManager
    */
   public void startUpdater( final IGridJobID id) throws GridModelException;
   
-
+  /**
+   * Stops refreshing all job status updaters
+   */
+  public void pauseAllUpdaters();
+  
+  /**
+   * Starts refreshing all job status udapters
+   */
+  public void wakeUpAllUpdaters();
+  
+  /**
+   * Update job status for the given job
+   * @param selectedJobs to have its status updated
+   */
+  public void updateJobsStatus( final ArrayList< IGridJob > selectedJobs );
+  
 }

@@ -34,4 +34,14 @@ public class PreferenceConstants {
   public static final String DEFAULT_VO_ID
     = "def_vo"; //$NON-NLS-1$
   
+  /**
+   * States if background updaters for job status should be running
+   */
+  public static final String JOBS_UPDATE_JOBS_STATUS = "jobs.update.jobs.status"; //$NON-NLS-1$
+  
+  /**
+   * Time between background updates for each job
+   */
+  public static final String JOBS_UPDATE_JOBS_PERIOD = "jobs.update.jobs.period"; //$NON-NLS-1$
+ 
 }

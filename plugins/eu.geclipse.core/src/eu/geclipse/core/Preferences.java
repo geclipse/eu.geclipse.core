@@ -11,6 +11,7 @@
  *
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
+ *    Szymon Mueller
  *****************************************************************************/
 
 package eu.geclipse.core;
@@ -116,6 +117,44 @@ public class Preferences {
     org.eclipse.core.runtime.Preferences preferenceStore = getPreferenceStore();
     String defaultVoName = preferenceStore.getString( PreferenceConstants.DEFAULT_VO_ID );
     return defaultVoName;
+  }
+  
+  /**
+   * Sets the status of the job updates
+   * @param status Status of updates to be set 
+   */
+  static public void setUpdateJobsStatus( final boolean status ) {
+    org.eclipse.core.runtime.Preferences preferenceStore = getPreferenceStore();
+    preferenceStore.setValue( PreferenceConstants.JOBS_UPDATE_JOBS_STATUS, status );
+  }
+  
+  /**
+   * Gets the status of the job updates
+   * @return Status of job updates
+   */
+  static public boolean getUpdateJobsStatus() {
+    org.eclipse.core.runtime.Preferences preferenceStore = getPreferenceStore();
+    boolean valueUpdateJobsStatus = preferenceStore.getBoolean( PreferenceConstants.JOBS_UPDATE_JOBS_STATUS );
+    return valueUpdateJobsStatus;
+  }
+  
+  /**
+   * Sets the time period (in miliseconds) between job updates 
+   * @param period Period between job status' updates
+   */
+  static public void setUpdateJobsPeriod( final int period ) {
+    org.eclipse.core.runtime.Preferences preferenceStore = getPreferenceStore();
+    preferenceStore.setValue( PreferenceConstants.JOBS_UPDATE_JOBS_PERIOD, period );
+  }
+  
+  /**
+   * Gets the time period (in seconds) 
+   * @return Time in seconds between job status' udpates
+   */
+  static public int getUpdateJobsPeriod() {
+    org.eclipse.core.runtime.Preferences preferenceStore = getPreferenceStore();
+    int valueUpdateJobsPeriod = preferenceStore.getInt( PreferenceConstants.JOBS_UPDATE_JOBS_PERIOD );
+    return valueUpdateJobsPeriod * 1000;  
   }
   
   /**
