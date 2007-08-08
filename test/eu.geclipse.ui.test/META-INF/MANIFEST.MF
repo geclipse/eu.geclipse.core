@@ -10,7 +10,6 @@ Require-Bundle: org.eclipse.ui,
  org.eclipse.core.filesystem,
  org.eclipse.core.runtime,
  org.junit4,
- eu.geclipse.efs.gridftp,
  eu.geclipse.ui,
  org.eclipse.ui.views
 Eclipse-LazyStart: true
