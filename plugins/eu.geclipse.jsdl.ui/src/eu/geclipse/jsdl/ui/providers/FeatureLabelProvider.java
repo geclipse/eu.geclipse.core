@@ -13,21 +13,20 @@
  *     UCY (http://www.ucy.cs.ac.cy)
  *      - Nicholas Loulloudes (loulloudes.n@cs.ucy.ac.cy)
  *
-  *****************************************************************************/
+ *****************************************************************************/
 
 
-package eu.geclipse.jsdl.ui.internal.pages;
+package eu.geclipse.jsdl.ui.providers;
 
 
 /**
  * @author nickl
  */
 
-import java.util.ArrayList;
-
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
+
 import eu.geclipse.jsdl.model.posix.ArgumentType;
 import eu.geclipse.jsdl.model.posix.EnvironmentType;
 
@@ -39,12 +38,13 @@ import eu.geclipse.jsdl.model.posix.EnvironmentType;
 public class FeatureLabelProvider extends LabelProvider implements
     ITableLabelProvider {
 
-  public Image getColumnImage(Object element, int columnIndex) {
+  public Image getColumnImage(final Object element,final int columnIndex) {
     // Auto-generated method stub
     return null;
   }
 
-  public String getColumnText(Object element, int columnIndex) {
+  public String getColumnText(final Object element, final int columnIndex) {
+    
     String text = null;
     Object[] array = null;
     
@@ -62,8 +62,10 @@ public class FeatureLabelProvider extends LabelProvider implements
           default:
           break;
       }
+      
     } 
     else if (element instanceof EnvironmentType) {
+      
       EnvironmentType environmentType = ( EnvironmentType ) element;      
       switch ( columnIndex ) {
         case 0:
@@ -77,15 +79,19 @@ public class FeatureLabelProvider extends LabelProvider implements
           break;
           default:
           break;
+          
       } // end switch
       
-    }// end elseif EnvironmentType
+    } // end else_if EnvironmentType
     
-    else if (element instanceof Object[]) {     
-      array = ( Object[] ) element;            
-    } 
+    else if (element instanceof Object[]) {
+      
+      array = ( Object[] ) element;
+      
+    }
     
-    else{
+    else {
+       
       switch ( columnIndex ) {
         case 0:
           text = element.toString();
@@ -93,6 +99,7 @@ public class FeatureLabelProvider extends LabelProvider implements
           default:
           break;
       } // end switch
+      
     }
     
     if ( ( array != null ) && ( columnIndex < array.length ) ) {

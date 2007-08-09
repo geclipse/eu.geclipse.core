@@ -15,7 +15,7 @@
  *
   *****************************************************************************/
 
-package eu.geclipse.jsdl.jsdl;
+package eu.geclipse.jsdl.ui.adapters.jsdl;
 
 /**
  * @author nickl

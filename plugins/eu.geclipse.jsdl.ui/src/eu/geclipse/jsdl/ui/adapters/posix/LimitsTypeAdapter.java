@@ -14,7 +14,7 @@
   *      - Nicholas Loulloudes (loulloudes.n@cs.ucy.ac.cy)
   *
   *****************************************************************************/
-package eu.geclipse.jsdl.posix;
+package eu.geclipse.jsdl.ui.adapters.posix;
 
 
 

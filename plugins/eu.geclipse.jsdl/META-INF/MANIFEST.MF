@@ -16,7 +16,5 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.filesystem,
  org.eclipse.jface
 Eclipse-LazyStart: true
-Export-Package: eu.geclipse.jsdl,
- eu.geclipse.jsdl.jsdl,
- eu.geclipse.jsdl.posix
+Export-Package: eu.geclipse.jsdl
 Bundle-RequiredExecutionEnvironment: J2SE-1.5

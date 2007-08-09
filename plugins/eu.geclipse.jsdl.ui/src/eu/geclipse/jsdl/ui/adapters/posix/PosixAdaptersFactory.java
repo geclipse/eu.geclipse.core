@@ -14,12 +14,11 @@
  *      - Nicholas Loulloudes (loulloudes.n@cs.ucy.ac.cy)
  *
   *****************************************************************************/
-package eu.geclipse.jsdl.jsdl;
+package eu.geclipse.jsdl.ui.adapters.posix;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
@@ -31,42 +30,42 @@ import org.eclipse.emf.edit.provider.IItemPropertySource;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
+import eu.geclipse.jsdl.model.posix.util.PosixAdapterFactory;
 
-import eu.geclipse.jsdl.model.util.JsdlAdapterFactory;
 
 /**
  * @author nickl
  *
  */
-public class JsdlAdaptersFactory extends JsdlAdapterFactory implements ComposeableAdapterFactory,
+public class PosixAdaptersFactory extends PosixAdapterFactory implements ComposeableAdapterFactory,
                                                                 IChangeNotifier,
-                                                                IDisposable  {
-  
+                                                                   IDisposable {
+
+    
   protected Collection <Object> supportedTypes = new ArrayList<Object>();
   
   private List< INotifyChangedListener > listeners
-    = new ArrayList< INotifyChangedListener >();
-    
+                                    = new ArrayList< INotifyChangedListener >();
+  
   /**
-   * JsdlAdaptersFactory Class Constructor.
+   * PosixAdaptersFactory Class Constructor
    */
-  public JsdlAdaptersFactory(){
+  public PosixAdaptersFactory() {
     this.supportedTypes.add(IEditingDomainItemProvider.class);
     this.supportedTypes.add(IStructuredItemContentProvider.class);
     this.supportedTypes.add(ITreeItemContentProvider.class);
     this.supportedTypes.add(IItemLabelProvider.class);
     this.supportedTypes.add(IItemPropertySource.class);  
-    
   }
   
   
   public ComposeableAdapterFactory getRootAdapterFactory() {
-    //  Auto-generated method stub
+    // TODO Auto-generated method stub
     return null;
   }
 
   public void setParentAdapterFactory( final ComposedAdapterFactory arg0 ) {
-    //  Auto-generated method stub
+    // TODO Auto-generated method stub
     
   }
 
@@ -87,8 +86,7 @@ public class JsdlAdaptersFactory extends JsdlAdapterFactory implements Composeab
   }
 
   public void dispose() {
-    //  Auto-generated method stub
+    // TODO Auto-generated method stub
     
   }
-  
 }

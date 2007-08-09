@@ -41,8 +41,8 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
-import eu.geclipse.jsdl.jsdl.ApplicationTypeAdapter;
-import eu.geclipse.jsdl.posix.PosixApplicationTypeAdapter;
+import eu.geclipse.jsdl.ui.adapters.jsdl.ApplicationTypeAdapter;
+import eu.geclipse.jsdl.ui.adapters.posix.PosixApplicationTypeAdapter;
 import eu.geclipse.jsdl.ui.editors.JsdlEditor;
 
 /**

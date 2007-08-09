@@ -41,8 +41,9 @@ import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.TableWrapData;
-import eu.geclipse.jsdl.jsdl.JobDefinitionTypeAdapter;
-import eu.geclipse.jsdl.jsdl.JobIdentificationTypeAdapter;
+
+import eu.geclipse.jsdl.ui.adapters.jsdl.JobDefinitionTypeAdapter;
+import eu.geclipse.jsdl.ui.adapters.jsdl.JobIdentificationTypeAdapter;
 import eu.geclipse.jsdl.ui.editors.JsdlEditor;
 import eu.geclipse.jsdl.ui.internal.dialogs.MultipleInputDialog;
 

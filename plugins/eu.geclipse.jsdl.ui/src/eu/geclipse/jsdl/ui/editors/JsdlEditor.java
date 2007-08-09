@@ -84,9 +84,9 @@ import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.part.FileEditorInput;
 
-import eu.geclipse.jsdl.jsdl.JsdlAdaptersFactory;
 import eu.geclipse.jsdl.model.JobDefinitionType;
-import eu.geclipse.jsdl.posix.PosixAdaptersFactory;
+import eu.geclipse.jsdl.ui.adapters.jsdl.JsdlAdaptersFactory;
+import eu.geclipse.jsdl.ui.adapters.posix.PosixAdaptersFactory;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.pages.DataStagingPage;
 import eu.geclipse.jsdl.ui.internal.pages.JobApplicationPage;
@@ -133,7 +133,8 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
   private JobDefinitionPage jobDefPage = new JobDefinitionPage(this);
   private JobApplicationPage jobApplicationPage = new JobApplicationPage(this);
   private DataStagingPage dataStagingPage = new DataStagingPage(this);
-  private ResourcesPage resourcesPage = new ResourcesPage(this); 
+  private ResourcesPage resourcesPage = new ResourcesPage(this);
+  
   
   
   
@@ -265,7 +266,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
     this.jobDefPage.setPageContent( this.jobDefType, isModelRefreshed() );
     this.jobApplicationPage.setPageContent( this.jobDefType, isModelRefreshed() );
     this.resourcesPage.setPageContent( this.jobDefType, isModelRefreshed() );
-    this.dataStagingPage.setPageContent( this.jobDefType, isModelRefreshed() );
+    this.dataStagingPage.setPageContent( this.jobDefType, isModelRefreshed() );    
     
   }
   

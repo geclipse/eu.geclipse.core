@@ -13,9 +13,9 @@
  *     UCY (http://www.ucy.cs.ac.cy)
  *      - Nicholas Loulloudes (loulloudes.n@cs.ucy.ac.cy)
  *
-  *****************************************************************************/
+ *****************************************************************************/
 
-package eu.geclipse.jsdl.ui.internal.pages;
+package eu.geclipse.jsdl.ui.providers;
 
 /**
  * @author nickl
@@ -36,8 +36,8 @@ import eu.geclipse.jsdl.model.CandidateHostsType;
  */
 public class FeatureContentProvider implements IStructuredContentProvider {
 
-  @SuppressWarnings("unchecked")
-  public Object[] getElements(Object inputElement) {
+  
+  public Object[] getElements(final Object inputElement) {
     Object[] result = null;
 
     
@@ -48,18 +48,15 @@ public class FeatureContentProvider implements IStructuredContentProvider {
       result = list.toArray( new Object[ list.size() ] );
   
     }
-    else if (inputElement instanceof Object[]) {      
-      return (Object[]) inputElement;
+    else if (inputElement instanceof Object[]) {     
+      result = (Object[]) inputElement;
     }
-    else if (inputElement instanceof Collection) {      
-      return ((Collection) inputElement).toArray();
-  }
-    else{
-      
-//      EList<Object>list = (EList) inputElement;
-//      result = list.toArray( new Object[ list.size() ] );
-      
-      }
+    else if (inputElement instanceof Collection) {    
+      result = ((Collection) inputElement).toArray();
+    }
+    else {      
+     result = null;
+    }
       
     
     return result;
@@ -70,7 +67,8 @@ public class FeatureContentProvider implements IStructuredContentProvider {
 
   }
 
-  public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+  public void inputChanged(final Viewer viewer, final Object oldInput, 
+                           final Object newInput) {
     // Auto-generated method stub
 
   }

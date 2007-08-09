@@ -44,9 +44,11 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 
-import eu.geclipse.jsdl.jsdl.ApplicationTypeAdapter;
-import eu.geclipse.jsdl.posix.PosixApplicationTypeAdapter;
+import eu.geclipse.jsdl.ui.adapters.jsdl.ApplicationTypeAdapter;
+import eu.geclipse.jsdl.ui.adapters.posix.PosixApplicationTypeAdapter;
 import eu.geclipse.jsdl.ui.internal.dialogs.MultipleInputDialog;
+import eu.geclipse.jsdl.ui.providers.FeatureContentProvider;
+import eu.geclipse.jsdl.ui.providers.FeatureLabelProvider;
 
 /**
  * This class provides the Job Application page that appears in the JSDL editor.
