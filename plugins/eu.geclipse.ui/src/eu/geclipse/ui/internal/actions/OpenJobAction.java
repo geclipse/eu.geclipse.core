@@ -21,7 +21,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.BaseSelectionListenerAction;
 
 import eu.geclipse.core.model.IGridJob;
-import eu.geclipse.ui.views.jobdetailsNEW.JobDetailsView;
+import eu.geclipse.ui.views.jobdetails.JobDetailsView;
 
 /**
  * Dedicated action for opening {@link IGridJob}s.

@@ -111,7 +111,6 @@ abstract public class JobTextDetail extends JobDetail {
       this.detailText.dispose();
       this.detailText = null;
     }
-    this.getSection().removeDetail( this );
   }
 
   private void setVisible( final boolean visible ) {

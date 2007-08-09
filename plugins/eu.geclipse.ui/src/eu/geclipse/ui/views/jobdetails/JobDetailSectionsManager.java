@@ -186,6 +186,7 @@ public class JobDetailSectionsManager {
                               jobDetail.getSection() ) == null )
         {
           jobDetail.dispose();
+          jobDetail.getSection().removeDetail( jobDetail );
         }
       }
     }

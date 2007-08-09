@@ -66,9 +66,9 @@
       <view
             allowMultiple="false"
             category="eu.geclipse.ui.viewcategory"
-            class="eu.geclipse.ui.views.jobdetailsNEW.JobDetailsView"
+            class="eu.geclipse.ui.views.jobdetails.JobDetailsView"
             icon="icons/job.gif"
-            id="eu.geclipse.ui.views.jobdetailsNEW.JobDetailsView"
+            id="eu.geclipse.ui.views.jobdetails.JobDetailsView"
             name="%view.jobDetails"/>
       <view
             allowMultiple="true"
@@ -219,8 +219,8 @@
    <extension
          point="eu.geclipse.ui.jobDetailsFactory">
             <JobDetailsFactory
-            class="eu.geclipse.ui.views.jobdetailsNEW.GridJobDetailsFactory"
-            id="eu.geclipse.ui.views.jobdetailsNEW.GridJobDetailsFactory"
+            class="eu.geclipse.ui.views.jobdetails.GridJobDetailsFactory"
+            id="eu.geclipse.ui.views.jobdetails.GridJobDetailsFactory"
             sourceJobClass="eu.geclipse.core.model.IGridJob"/>
    </extension>
 </plugin>

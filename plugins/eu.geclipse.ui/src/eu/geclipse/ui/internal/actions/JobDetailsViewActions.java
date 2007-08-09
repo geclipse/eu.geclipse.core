@@ -22,7 +22,7 @@ import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IMemento;
 import org.eclipse.ui.actions.ActionGroup;
 
-import eu.geclipse.ui.views.jobdetailsNEW.JobDetailsView;
+import eu.geclipse.ui.views.jobdetails.JobDetailsView;
 
 
 /**

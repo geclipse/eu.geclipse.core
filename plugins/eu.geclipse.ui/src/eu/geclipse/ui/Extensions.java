@@ -29,7 +29,7 @@ import org.eclipse.core.runtime.Status;
 import eu.geclipse.core.ExtensionManager;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.properties.IPropertiesFactory;
-import eu.geclipse.ui.views.jobdetailsNEW.IJobDetailsFactory;
+import eu.geclipse.ui.views.jobdetails.IJobDetailsFactory;
 
 /**
  * This is a helper class that holds static fields and methods to easily access
