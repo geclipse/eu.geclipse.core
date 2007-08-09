@@ -61,10 +61,14 @@ public class ConfigureFiltersDialog extends TrayDialog {
   protected GridFilterConfigurationsManager configurationsManager;  
 
   /**
-   * @param shell parent shell, or <code>null</code> to create a top-level shell
-   * @param filterConfigurationsManager manager, from which filters will be obtained
+   * @param shell parent shell, or <code>null</code> to create a top-level
+   *            shell
+   * @param filterConfigurationsManager manager, from which filters will be
+   *            obtained
    */
-  public ConfigureFiltersDialog( final Shell shell, final GridFilterConfigurationsManager filterConfigurationsManager ) {
+  public ConfigureFiltersDialog( final Shell shell,
+                                 final GridFilterConfigurationsManager filterConfigurationsManager )
+  {
     super( shell );
     this.configurationsManager = filterConfigurationsManager;
     this.configurations = copyConfigurations( filterConfigurationsManager.getConfigurations() );
@@ -166,7 +170,11 @@ public class ConfigureFiltersDialog extends TrayDialog {
             }
           } else {
             ConfigureFiltersDialog.this.tableViewer.removeSelectionChangedListener( this );
-            ConfigureFiltersDialog.this.tableViewer.setSelection( this.selectedConfiguration != null ? new StructuredSelection( this.selectedConfiguration ) : null );
+            
+            ConfigureFiltersDialog.this.tableViewer.setSelection( this.selectedConfiguration != null
+                                            ? new StructuredSelection( this.selectedConfiguration )
+                                            : null );
+            
             ConfigureFiltersDialog.this.tableViewer.addSelectionChangedListener( this );
           }
         }
@@ -202,7 +210,10 @@ public class ConfigureFiltersDialog extends TrayDialog {
       public void widgetSelected( final SelectionEvent e )
       {
         if( saveFilter() ) {
-          InputDialog dialog = new InputDialog( getShell(), Messages.getString("ConfigureFiltersDialog.create_new_filter"), Messages.getString("ConfigureFiltersDialog.enter_filter_name"), "", createNameValidator() ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+          InputDialog dialog = new InputDialog( getShell(),
+                  Messages.getString( "ConfigureFiltersDialog.create_new_filter" ),  //$NON-NLS-1$
+                  Messages.getString( "ConfigureFiltersDialog.enter_filter_name" ),  //$NON-NLS-1$
+                  "", createNameValidator() ); //$NON-NLS-1$ 
           
           if( dialog.open() == Window.OK ) {
             IGridFilterConfiguration newConfiguration
@@ -220,7 +231,8 @@ public class ConfigureFiltersDialog extends TrayDialog {
           public String isValid( final String newText ) {
             String invalidMsg = null;
             if( findConfiguration( newText ) != null ) {
-              invalidMsg = String.format( Messages.getString("ConfigureFiltersDialog.filter_already_exists"), newText ); //$NON-NLS-1$
+              invalidMsg = String.format( Messages.getString("ConfigureFiltersDialog.filter_already_exists"),//$NON-NLS-1$ 
+                                          newText ); 
             }
             return invalidMsg;
           }
@@ -245,7 +257,8 @@ public class ConfigureFiltersDialog extends TrayDialog {
           StructuredSelection selection
             = (StructuredSelection)ConfigureFiltersDialog.this.tableViewer.getSelection();
           if( selection == null || selection.isEmpty() ) {
-            MessageDialog.openWarning( getShell(), Messages.getString("ConfigureFiltersDialog.delete_filter"), Messages.getString("ConfigureFiltersDialog.select_filter") ); //$NON-NLS-1$ //$NON-NLS-2$
+            MessageDialog.openWarning( getShell(), Messages.getString("ConfigureFiltersDialog.delete_filter"),  //$NON-NLS-1$
+                                       Messages.getString("ConfigureFiltersDialog.select_filter") ); //$NON-NLS-1$
           }
           else {
             IGridFilterConfiguration configuration = (IGridFilterConfiguration)selection.getFirstElement();
@@ -290,11 +303,13 @@ public class ConfigureFiltersDialog extends TrayDialog {
     }
   }
   
-  private List<IGridFilterConfiguration> copyConfigurations( final List<IGridFilterConfiguration> sourceConfigurations ) {
-    List<IGridFilterConfiguration> newConfigurations = new ArrayList<IGridFilterConfiguration>( 3 + ( sourceConfigurations != null ? sourceConfigurations.size() : 0 ) );
-
-    if ( sourceConfigurations != null ) {
+  private List<IGridFilterConfiguration> copyConfigurations( final List<IGridFilterConfiguration> sourceConfigurations )
+  {
+    List<IGridFilterConfiguration> newConfigurations = 
+        new ArrayList<IGridFilterConfiguration>( 3 
+            + ( sourceConfigurations != null ? sourceConfigurations.size() : 0 ) );
     
+    if( sourceConfigurations != null ) {
       try {
         for( IGridFilterConfiguration configuration : sourceConfigurations ) {
           newConfigurations.add( configuration.clone() );
@@ -302,21 +317,21 @@ public class ConfigureFiltersDialog extends TrayDialog {
       } catch( CloneNotSupportedException exception ) {
         Activator.logException( exception );
       }
-      
     }
-    
     if( newConfigurations.isEmpty() ) {
-      IGridFilterConfiguration defaultConfiguration = this.configurationsManager.createConfiguration( Messages.getString("ConfigureFiltersDialog.default_config") );       //$NON-NLS-1$
+      IGridFilterConfiguration defaultConfiguration = 
+        this.configurationsManager.createConfiguration( Messages.getString( "ConfigureFiltersDialog.default_config" ) ); //$NON-NLS-1$
+      
       newConfigurations.add( defaultConfiguration );
-    }  
-    
+    }
     return newConfigurations;
   }
   
   IGridFilterConfiguration findConfiguration( final String name ) {
     IGridFilterConfiguration foundConfiguration = null;
     
-    for( Iterator<IGridFilterConfiguration> iterator = this.configurations.iterator(); iterator.hasNext() && foundConfiguration == null;  )
+    for( Iterator<IGridFilterConfiguration> iterator = this.configurations.iterator(); 
+        iterator.hasNext() && foundConfiguration == null;  )
     {
       IGridFilterConfiguration configuration = iterator.next();
       if( configuration.getName().equals( name ) ) {

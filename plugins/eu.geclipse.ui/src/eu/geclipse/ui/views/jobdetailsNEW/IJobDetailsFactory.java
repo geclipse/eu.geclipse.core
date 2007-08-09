@@ -13,15 +13,26 @@
  *     Mariusz Wojtysiak - initial API and implementation
  *     
  *****************************************************************************/
-package eu.geclipse.ui.views.jobdetails;
+package eu.geclipse.ui.views.jobdetailsNEW;
+
+import java.util.List;
+
+import eu.geclipse.core.model.IGridJob;
 
 /**
- * Interface, which returns information about current configuration of view 
+ *
  */
-public interface IViewConfiguration {
+public interface IJobDetailsFactory {
 
   /**
-   * @return true if items with empty value should be hidden
+   * Returns details, which potentially can be obtained from passed gridJob.
+   * Potentially means, it's possible to get this value from passed gridJob, but
+   * returned value can be null.
+   * 
+   * @param gridJob job, for which details should be returned
+   * @param sectionManager manages sections, on which details are grouped
+   * @return All details which can be shown for passed gridJob
    */
-  boolean isShowEmptyEnabled();
+  List<IJobDetail> getDetails( final IGridJob gridJob,
+                               final JobDetailSectionsManager sectionManager );
 }

@@ -9,6 +9,7 @@
    <extension-point id="propertiesFactory" name="propertiesFactory" schema="schema/PropertiesFactory.exsd"/>
    <extension-point id="eu.geclipse.ui.efs" name="EFS UI Contributions" schema="schema/eu.geclipse.ui.efs.exsd"/>
    <extension-point id="authTokenUI" name="Authentication Token UI Contributions" schema="schema/authTokenUI.exsd"/>
+   <extension-point id="eu.geclipse.ui.jobDetailsFactory" name="eu.geclipse.ui.jobDetailsFactory" schema="schema/eu.geclipse.ui.jobDetailsFactory.exsd"/>
 
    <extension
          point="org.eclipse.ui.preferencePages">
@@ -63,11 +64,11 @@
             id="eu.geclipse.ui.views.connectionView"
             name="Connections"/>
       <view
-            allowMultiple="true"
+            allowMultiple="false"
             category="eu.geclipse.ui.viewcategory"
-            class="eu.geclipse.ui.views.jobdetails.JobDetailsView"
+            class="eu.geclipse.ui.views.jobdetailsNEW.JobDetailsView"
             icon="icons/job.gif"
-            id="eu.geclipse.ui.views.jobdetails.JobDetailsView"
+            id="eu.geclipse.ui.views.jobdetailsNEW.JobDetailsView"
             name="%view.jobDetails"/>
       <view
             allowMultiple="true"
@@ -214,5 +215,12 @@
             class="eu.geclipse.ui.UIAuthTokenProvider"
             priority="999">
       </provider>
+   </extension>
+   <extension
+         point="eu.geclipse.ui.jobDetailsFactory">
+            <JobDetailsFactory
+            class="eu.geclipse.ui.views.jobdetailsNEW.GridJobDetailsFactory"
+            id="eu.geclipse.ui.views.jobdetailsNEW.GridJobDetailsFactory"
+            sourceJobClass="eu.geclipse.core.model.IGridJob"/>
    </extension>
 </plugin>

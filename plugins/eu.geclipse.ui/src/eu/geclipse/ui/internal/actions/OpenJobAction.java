@@ -19,8 +19,9 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.BaseSelectionListenerAction;
+
 import eu.geclipse.core.model.IGridJob;
-import eu.geclipse.ui.views.jobdetails.JobDetailsView;
+import eu.geclipse.ui.views.jobdetailsNEW.JobDetailsView;
 
 /**
  * Dedicated action for opening {@link IGridJob}s.
@@ -52,10 +53,9 @@ public class OpenJobAction
     Object element
       = getStructuredSelection().getFirstElement();
     if ( ( element != null ) && ( element instanceof IGridJob ) ) {
-      IGridJob job = ( IGridJob ) element;
       try {
         this.workbenchPage.showView( JobDetailsView.ID,
-                                     job.getPath().toString(),
+                                     null,
                                      IWorkbenchPage.VIEW_ACTIVATE );
       } catch( PartInitException e ) {
         // Just ignore this exception and do not open the job

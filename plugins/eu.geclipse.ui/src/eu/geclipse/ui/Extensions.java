@@ -29,6 +29,7 @@ import org.eclipse.core.runtime.Status;
 import eu.geclipse.core.ExtensionManager;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.properties.IPropertiesFactory;
+import eu.geclipse.ui.views.jobdetailsNEW.IJobDetailsFactory;
 
 /**
  * This is a helper class that holds static fields and methods to easily access
@@ -112,6 +113,11 @@ public class Extensions {
   private static final String PROPERTIES_FACTORY_ELEMENT = "PropertiesFactory"; //$NON-NLS-1$
   private static final String PROPERTIES_FACTORY_SOURCECLASS_ATTR = "sourceObjectClass"; //$NON-NLS-1$
   private static final String PROPERTIES_FACTORY_CLASS_ATTR = "class"; //$NON-NLS-1$
+  private static final String JOBDETAILS_FACTORY_POINT = "eu.geclipse.ui.jobDetailsFactory";
+  private static final String JOBDETAILS_FACTORY_ELEMENT = "JobDetailsFactory";
+  private static final String JOBDETAILS_FACTORY_SOURCEJOB_CLASS = "sourceJobClass";
+  private static final String JOBDETAILS_FACTORY_SOURCEJOBSTATUS_CLASS = "sourceJobStatusClass";
+  private static final String JOBDETAILS_FACTORY_IMPLEMENTATION_CLASS = "class";
   
   /**
    * Get a list of all currently registered authentication token ui factories.
@@ -200,7 +206,7 @@ public class Extensions {
    * <p>
    * Why we cannot use {@link Class#isAssignableFrom(Class)}?<br>
    * {@link Class#isAssignableFrom(Class)} needs instance of Class as parameter.
-   * Unfortunatelly we have only full class name, and we don't want to load this
+   * Unfortunately we have only full class name, and we don't want to load this
    * class if wasn't loaded yet. So, instead to compare {@link Class} objects,
    * we just compare class name. Similar solution was used in Eclipse. See:
    * <code>TabbedPropertyRegistryClassSectionFilter.appliesToEffectiveType()</code>
@@ -218,16 +224,11 @@ public class Extensions {
     boolean isInstance = false;
     if( checkedObjectClass.getName().equals( fullyClassNameString ) ) {
       isInstance = true;
-    } else {
-      // check interfaces
-      Class<?>[] interfaces = checkedObjectClass.getInterfaces();
-      for( int index = 0; index < interfaces.length && isInstance == false; index++ )
-      {
-        if( interfaces[ index ].getName().equals( fullyClassNameString ) ) {
-          isInstance = true;
-        }
-      }
+    } else {      
+      // check interfaces of this class
+      isInstance = ( findInterface( checkedObjectClass, fullyClassNameString ) != null );
     }
+    
     // check base class
     if( isInstance == false && checkedObjectClass.getSuperclass() != null ) {
       isInstance = isInstanceOf( checkedObjectClass.getSuperclass(),
@@ -235,4 +236,70 @@ public class Extensions {
     }
     return isInstance;
   }
+  
+  static private Class<?> findInterface( final Class<?> checkedObjectClass, 
+                                               final String fullyInterfaceNameString ) {
+    Class<?> foundInterface = null;
+    Class<?>[] interfaces = checkedObjectClass.getInterfaces();
+    
+    for( int index = 0; index < interfaces.length && foundInterface == null; index++ ) {
+      if( interfaces[index].getName().equals( fullyInterfaceNameString ) ) {
+        foundInterface = interfaces[index];
+      }
+      else {
+        foundInterface = findInterface( interfaces[index], fullyInterfaceNameString );
+      }
+    }
+    
+    return foundInterface;
+  }
+
+  /**
+   * @param gridJobClass
+   * @param gridJobStatusClass
+   * @return factories supports details for passed job and jobstatus
+   */
+  static public List<IJobDetailsFactory> getJobDetailsFactories( final Class<?> gridJobClass, final Class<?> gridJobStatusClass )
+  {
+    List<IJobDetailsFactory> propertiesFactoryList = new ArrayList<IJobDetailsFactory>();
+    ExtensionManager extManager = new ExtensionManager();
+    List<IConfigurationElement> confElementsList = extManager.getConfigurationElements( JOBDETAILS_FACTORY_POINT,
+                                                                                        JOBDETAILS_FACTORY_ELEMENT );
+    for( IConfigurationElement element : confElementsList ) {
+      String currentSourceObjectString = element.getAttribute( JOBDETAILS_FACTORY_SOURCEJOB_CLASS );
+      if( currentSourceObjectString != null ) {
+        try {
+          if( isInstanceOf( gridJobClass, currentSourceObjectString )
+              && isSupportJobStatus( element, gridJobStatusClass ) ) {
+            IJobDetailsFactory factory = ( IJobDetailsFactory )element.createExecutableExtension( JOBDETAILS_FACTORY_IMPLEMENTATION_CLASS );
+            propertiesFactoryList.add( factory );
+          }
+        } catch( CoreException exception ) {
+          Activator.logException( exception );
+        }
+      } else {
+        Activator.logStatus( new Status( IStatus.ERROR,
+                                         Activator.PLUGIN_ID,
+                                         IStatus.ERROR,
+                                         "Attribute " //$NON-NLS-1$
+                                             + JOBDETAILS_FACTORY_SOURCEJOB_CLASS
+                                             + " not found", //$NON-NLS-1$
+                                         null ) );
+      }
+    }
+    return propertiesFactoryList;
+  }
+  
+  static private boolean isSupportJobStatus( final IConfigurationElement configElement, final Class<?> jobStatusClass ) {
+    boolean support = true;
+    String factoryStatusClass = configElement.getAttribute( JOBDETAILS_FACTORY_SOURCEJOBSTATUS_CLASS );
+    
+    if( factoryStatusClass != null ) {
+      support = jobStatusClass != null
+        && isInstanceOf( jobStatusClass, factoryStatusClass );
+    }
+    
+    return support;
+  }
+  
 }

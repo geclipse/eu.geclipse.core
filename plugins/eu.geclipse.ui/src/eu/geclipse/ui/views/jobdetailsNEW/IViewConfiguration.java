@@ -13,30 +13,27 @@
  *     Mariusz Wojtysiak - initial API and implementation
  *     
  *****************************************************************************/
-package eu.geclipse.ui.views.jobdetails;
+package eu.geclipse.ui.views.jobdetailsNEW;
 
-import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.forms.widgets.FormToolkit;
-import eu.geclipse.core.model.IGridJob;
 
 /**
- * Interface for section in job details view
+ * JobDetailsView configuration
  */
-interface ISection {
+public interface IViewConfiguration {
 
   /**
-   * Creates all widgets for visualisation of section
-   * 
-   * @param parentComposite
-   * @param formToolkit
+   * @return true if details with empty value also should be shown on view
    */
-  void createWidgets( final Composite parentComposite,
-                      final FormToolkit formToolkit );
+  boolean isShowEmptyEnabled();
 
   /**
-   * Refresh values showed in this section
-   * 
-   * @param gridJob - object containg job data
+   * @return manager of {@link IJobDetailsSection}s
    */
-  void refresh( final IGridJob gridJob );
+  JobDetailSectionsManager getSectionsManager();
+
+  /**
+   * @return form toolkit used to create widgets
+   */
+  FormToolkit getFormToolkit();
 }

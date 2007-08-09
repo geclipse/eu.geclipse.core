@@ -85,12 +85,16 @@ public class JobSubmissionTimeComposite implements IFilterComposite {
         } catch( GridException exception ) {
           this.beforeDateTimeText.setFocus();
           NewProblemDialog.openProblem( this.parent.getShell(),
-                                        Messages.getString( "JobSubmissionTimeComposite.ErrTitle" ), Messages.getString( "JobSubmissionTimeComposite.ErrSavingBeforeDate" ), exception ); //$NON-NLS-1$//$NON-NLS-2$
+                                        Messages.getString( "JobSubmissionTimeComposite.ErrTitle" ),  //$NON-NLS-1$
+                                        Messages.getString( "JobSubmissionTimeComposite.ErrSavingBeforeDate" ),  //$NON-NLS-1$
+                                        exception );
         }
       } catch( GridException exception ) {
         this.afterDateTimeText.setFocus();
         NewProblemDialog.openProblem( this.parent.getShell(),
-                                      Messages.getString( "JobSubmissionTimeComposite.ErrTitle" ), Messages.getString( "JobSubmissionTimeComposite.ErrSavingAfterDate" ), exception ); //$NON-NLS-1$//$NON-NLS-2$
+                                      Messages.getString( "JobSubmissionTimeComposite.ErrTitle" ),  //$NON-NLS-1$
+                                      Messages.getString( "JobSubmissionTimeComposite.ErrSavingAfterDate" ),  //$NON-NLS-1$
+                                      exception );
       }
     }
     return success;
