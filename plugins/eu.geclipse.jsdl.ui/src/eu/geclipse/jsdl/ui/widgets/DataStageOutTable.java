@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLayoutData;
@@ -44,8 +42,6 @@ import org.eclipse.jface.viewers.TextCellEditor;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -54,14 +50,9 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.jsdl.JSDLModelFacade;
@@ -115,10 +106,10 @@ public class DataStageOutTable {
     this.input = input;
     this.mainComp = new Composite( parent, SWT.NONE );
     GridLayout gLayout;
-    if (buttonsPosition == DataStageOutTable.BUTTONS_BOTTOM){
-      gLayout = new GridLayout(1, false);
+    if( buttonsPosition == DataStageOutTable.BUTTONS_BOTTOM ) {
+      gLayout = new GridLayout( 1, false );
     } else {
-      gLayout = new GridLayout(2, false);
+      gLayout = new GridLayout( 2, false );
     }
     this.mainComp.setLayout( gLayout );
     this.table = new Table( this.mainComp, SWT.BORDER
@@ -164,10 +155,10 @@ public class DataStageOutTable {
       }
     } );
     Composite buttonsComp = new Composite( this.mainComp, SWT.NONE );
-    if (buttonsPosition == DataStageOutTable.BUTTONS_BOTTOM){
-      gLayout = new GridLayout(3, true);
+    if( buttonsPosition == DataStageOutTable.BUTTONS_BOTTOM ) {
+      gLayout = new GridLayout( 3, true );
     } else {
-      gLayout = new GridLayout(1, false);
+      gLayout = new GridLayout( 1, false );
     }
     buttonsComp.setLayout( gLayout );
     this.addButton = new Button( buttonsComp, SWT.PUSH );
@@ -356,9 +347,9 @@ public class DataStageOutTable {
   }
 
   void editDataStagingEntry( final DataStagingType selectedObject ) {
-    EditDialog dialog;
+    DataStagingOutDialog dialog;
     if( selectedObject == null ) {
-      dialog = new EditDialog( this.mainComp.getShell() );
+      dialog = new DataStagingOutDialog( this.mainComp.getShell() );
       if( dialog.open() == Window.OK ) {
         DataStagingType newData = getNewDataStagingType( dialog.getName(),
                                                          dialog.getPath() );
@@ -372,7 +363,7 @@ public class DataStageOutTable {
         this.tableViewer.refresh();
       }
     } else {
-      dialog = new EditDialog( this.mainComp.getShell(),
+      dialog = new DataStagingOutDialog( this.mainComp.getShell(),
                                selectedObject.getFileName(),
                                selectedObject.getTarget().getURI() );
       if( dialog.open() == Window.OK ) {
@@ -479,149 +470,5 @@ public class DataStageOutTable {
       return result;
     }
   }
-  class EditDialog extends Dialog {
-
-    Text pathText;
-    private Text nameText;
-    private String returnName;
-    private String returnPath;
-    private String initName;
-    private String initPath;
-
-    protected EditDialog( final Shell parentShell ) {
-      super( parentShell );
-    }
-
-    protected EditDialog( final Shell parentShell,
-                          final String name,
-                          final String path )
-    {
-      super( parentShell );
-      this.initName = name;
-      this.initPath = path;
-    }
-
-    @Override
-    protected void configureShell( final Shell shell ) {
-      super.configureShell( shell );
-      shell.setText( Messages.getString( "DataStageOutTable.dialog_title" ) ); //$NON-NLS-1$
-    }
-
-    @Override
-    protected Control createDialogArea( final Composite parent ) {
-      Composite composite = ( Composite )super.createDialogArea( parent );
-      composite.setLayout( new GridLayout( 1, false ) );
-      composite.setLayoutData( new GridData( GridData.FILL_BOTH ) );
-      Composite panel = new Composite( composite, SWT.NONE );
-      this.initializeDialogUnits( composite );
-      GridData gd;
-      GridLayout gLayout = new GridLayout( 3, false );
-      panel.setLayout( gLayout );
-      gd = new GridData( GridData.FILL_HORIZONTAL );
-      panel.setLayoutData( gd );
-      Label nameLabel = new Label( panel, SWT.LEAD );
-      nameLabel.setText( Messages.getString( "DataStageInTable.name_field_label" ) ); //$NON-NLS-1$
-      nameLabel.setLayoutData( new GridData() );
-      this.nameText = new Text( panel, SWT.BORDER );
-      gd = new GridData();
-      gd.widthHint = 260;
-      gd.horizontalSpan = 2;
-      gd.horizontalAlignment = SWT.FILL;
-      this.nameText.setLayoutData( gd );
-      if( this.initName != null ) {
-        this.nameText.setText( this.initName );
-      }
-      Label pathLabel = new Label( panel, SWT.LEAD );
-      pathLabel.setText( Messages.getString( "DataStageInTable.location_field_label" ) ); //$NON-NLS-1$
-      gd = new GridData();
-      pathLabel.setLayoutData( gd );
-      this.pathText = new Text( panel, SWT.BORDER );
-      if( this.initPath != null ) {
-        this.pathText.setText( this.initPath );
-      }
-      gd = new GridData( GridData.FILL_HORIZONTAL );
-      this.pathText.setLayoutData( gd );
-      Button browseButton = new Button( panel, SWT.PUSH );
-      // IPreferenceStore prefs = Activator.getDefault().getPreferenceStore();
-      ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
-      Image fileImage = sharedImages.getImage( ISharedImages.IMG_OBJ_FILE );
-      browseButton.setImage( fileImage );
-      browseButton.addSelectionListener( new SelectionAdapter() {
-
-        @Override
-        public void widgetSelected( final SelectionEvent e ) {
-          String filename = null;
-          IGridConnectionElement connection = GridFileDialog.openFileDialog( PlatformUI.getWorkbench()
-                                                                               .getActiveWorkbenchWindow()
-                                                                               .getShell(),
-                                                                             Messages.getString( "DataStageOutTable.grid_file_dialog_title" ), //$NON-NLS-1$
-                                                                             null,
-                                                                             true );
-          if( connection != null ) {
-            try {
-              filename = connection.getConnectionFileStore().toString();
-            } catch( CoreException e1 ) {
-              // TODO Auto-generated catch block
-              e1.printStackTrace();
-            }
-            if( filename != null ) {
-              EditDialog.this.pathText.setText( filename );
-            }
-          }
-          updateButtons();
-        }
-      } );
-      ModifyListener listener = new UpdateAdapter();
-      this.nameText.addModifyListener( listener );
-      this.pathText.addModifyListener( listener );
-      return composite;
-    }
-
-    /**
-     * Access to path value provided by the user.
-     * 
-     * @return string representing URI
-     */
-    public String getPath() {
-      return this.returnPath;
-    }
-
-    /**
-     * Access to name value provided by the user.
-     * 
-     * @return name of the data staging in
-     */
-    public String getName() {
-      return this.returnName;
-    }
-
-    @Override
-    protected void okPressed() {
-      this.returnName = this.nameText.getText();
-      this.returnPath = this.pathText.getText();
-      super.okPressed();
-    }
-
-    void updateButtons() {
-      if( !this.nameText.getText().equals( "" ) //$NON-NLS-1$
-          && !this.pathText.getText().equals( "" ) ) //$NON-NLS-1$
-      {
-        super.getButton( IDialogConstants.OK_ID ).setEnabled( true );
-      } else {
-        super.getButton( IDialogConstants.OK_ID ).setEnabled( false );
-      }
-    }
-
-    @Override
-    protected void createButtonsForButtonBar( final Composite parent ) {
-      super.createButtonsForButtonBar( parent );
-      updateButtons();
-    }
-    class UpdateAdapter implements ModifyListener {
-
-      public void modifyText( final ModifyEvent e ) {
-        updateButtons();
-      }
-    }
-  }
+  
 }
