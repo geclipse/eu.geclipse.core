@@ -140,7 +140,12 @@ implements ISelectionListener, IViewConfiguration, IGridJobStatusListener
     this.inputJob = gridJob;
     
     if( this.inputJob != null ) {
-      jobManager.addJobStatusListener( new IGridJob[] { this.inputJob }, IGridJobStatus._ALL, this );
+      try {
+        jobManager.addJobStatusListener( new IGridJob[] { this.inputJob }, IGridJobStatus._ALL, this );
+      }
+      catch( NullPointerException exception ) {
+        // TODO mariusz Temporary solution for bug #
+      }
     }
     
     refresh();
