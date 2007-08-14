@@ -149,10 +149,16 @@ public class Activator extends AbstractUIPlugin {
    */
   public static final String ID_PROCESS_STATUS
     = "eu.geclipse.ui.views.ProcessStatView"; //$NON-NLS-1$
+  
+  /**
+   * Image for action Refresh
+   */
+  public static final String IMG_REFRESH = "refresh"; //$NON-NLS-1$
+  
   /**
    * The shared instance.
    */
-  private static Activator plugin;
+  private static Activator plugin;  
   
 
   /**
@@ -265,7 +271,8 @@ public class Activator extends AbstractUIPlugin {
       { "configure_filters", "icons/obj16/filter_ps.gif" },  //$NON-NLS-1$ //$NON-NLS-2$
       { "configure_filters_on", "icons/obj16/filter_on.gif" },  //$NON-NLS-1$ //$NON-NLS-2$
       { "helplink", "icons/elcl16/linkto_help.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
-      { "calendar", "icons/calendar.gif" }  //$NON-NLS-1$//$NON-NLS-2$
+      { "calendar", "icons/calendar.gif" },  //$NON-NLS-1$//$NON-NLS-2$
+      { IMG_REFRESH, "icons/eview16/refresh.gif" }  //$NON-NLS-1$//$NON-NLS-2$
     };
     
     ImageDescriptor imgDsc = null;

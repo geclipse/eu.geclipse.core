@@ -23,6 +23,7 @@ import org.eclipse.ui.actions.SelectionListenerAction;
 import eu.geclipse.core.jobs.GridJob;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridJob;
+import eu.geclipse.ui.internal.Activator;
 
 /**
  * Action for toggling refresh for selected job
@@ -33,6 +34,10 @@ public class UpdateJobStatusAction extends SelectionListenerAction {
 
   protected UpdateJobStatusAction() {
     super( Messages.getString( "UpdateJobStatusAction.title" ) ); //$NON-NLS-1$
+    
+    setImageDescriptor( Activator.getDefault()
+                        .getImageRegistry()
+                        .getDescriptor( Activator.IMG_REFRESH ) );
   }
 
   @Override
