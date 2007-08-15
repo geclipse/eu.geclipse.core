@@ -10,4 +10,5 @@ Require-Bundle: org.eclipse.core.runtime,
  eu.geclipse.core,
  org.eclipse.core.resources
 Eclipse-LazyStart: true
-Export-Package: eu.geclipse.core.filesystem
+Export-Package: eu.geclipse.core.filesystem,
+ eu.geclipse.core.filesystem.internal.filesystem;x-friends:="eu.geclipse.test"
