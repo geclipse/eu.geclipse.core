@@ -34,7 +34,8 @@ class SSHConnectionWizardPage extends WizardPage implements Listener {
     this.composite = new SSHConnectionComposite( parent, SWT.NONE, this );
     setPageComplete( false );
     setControl( this.composite );
-    validateInput();
+    IStatus status = this.composite.getStatus();
+    setPageComplete( status.getSeverity() != IStatus.ERROR );
   }
 
   @Override
