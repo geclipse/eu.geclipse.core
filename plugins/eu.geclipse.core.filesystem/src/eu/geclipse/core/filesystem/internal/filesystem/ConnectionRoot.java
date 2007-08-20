@@ -54,7 +54,7 @@ public class ConnectionRoot
    */
   public boolean isGlobal() {
     IGridProject project = getProject();
-    return project.isHidden();
+    return ( project == null ) || project.isHidden();
   }
   
   /* (non-Javadoc)
