@@ -15,14 +15,12 @@
 
 package eu.geclipse.ui.internal.preference;
 
-import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Arrays;
 import java.util.Comparator;
 
+import org.eclipse.compare.IContentChangeListener;
+import org.eclipse.compare.IContentChangeNotifier;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -31,7 +29,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.PreferencePage;
-import org.eclipse.jface.window.Window;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
@@ -47,22 +45,17 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
-import eu.geclipse.core.GridException;
-import eu.geclipse.core.ISolution;
-import eu.geclipse.core.SolutionRegistry;
 import eu.geclipse.core.auth.CaCertManager;
 import eu.geclipse.core.auth.ICaCertificate;
-import eu.geclipse.ui.UISolution;
-import eu.geclipse.ui.dialogs.NewCaCertDialog;
-import eu.geclipse.ui.dialogs.NewProblemDialog;
 import eu.geclipse.ui.internal.Activator;
+import eu.geclipse.ui.internal.wizards.CaCertificateImportWizard;
 
 /**
  * Preference page to import and manage CA certificates. 
  */
 public class CaCertPreferencePage
     extends PreferencePage
-    implements IWorkbenchPreferencePage {
+    implements IWorkbenchPreferencePage, IContentChangeListener {
   
   /**
    * The list containing all currently available CA certificates.
@@ -90,6 +83,21 @@ public class CaCertPreferencePage
   public CaCertPreferencePage() {
     super();
     setDescription( Messages.getString( "CaCertPreferencePage.description" ) ); //$NON-NLS-1$
+    CaCertManager.getManager().addContentChangeListener( this );
+  }
+  
+  public void contentChanged( final IContentChangeNotifier source ) {
+    getControl().getDisplay().asyncExec( new Runnable() {
+      public void run() {
+        updateCaList();
+      }
+    } );
+  }
+  
+  @Override
+  public void dispose() {
+    CaCertManager.getManager().removeContentChangeListener( this );
+    super.dispose();
   }
 
   /* (non-Javadoc)
@@ -227,7 +235,8 @@ public class CaCertPreferencePage
    * a local directory.
    */
   protected void addFromDirectory() {
-    NewCaCertDialog dialog = new NewCaCertDialog( NewCaCertDialog.FROM_DIRECTORY, getShell() );
+    addCertificates( CaCertificateImportWizard.ImportMethod.LOCAL );
+    /*NewCaCertDialog dialog = new NewCaCertDialog( NewCaCertDialog.FROM_DIRECTORY, getShell() );
     if ( dialog.open() == Window.OK ) {
       IStatus status = null;
       String dirname = dialog.getResult();
@@ -267,7 +276,7 @@ public class CaCertPreferencePage
                                status );
       }
       updateCaList();
-    }
+    }*/
   }
   
   /**
@@ -275,7 +284,8 @@ public class CaCertPreferencePage
    * a remote repository.
    */
   protected void addFromRepository() {
-    NewCaCertDialog dialog = new NewCaCertDialog( NewCaCertDialog.FROM_REPOSITORY, getShell() );
+    addCertificates( CaCertificateImportWizard.ImportMethod.REMOTE );
+    /*NewCaCertDialog dialog = new NewCaCertDialog( NewCaCertDialog.FROM_REPOSITORY, getShell() );
     if ( dialog.open() == Window.OK ) {
       boolean updateList = true;
       final String repoString = dialog.getResult();
@@ -322,7 +332,7 @@ public class CaCertPreferencePage
         updateCaList();
       }
 
-    }
+    }*/
   }
   
   /**
@@ -382,4 +392,11 @@ public class CaCertPreferencePage
     }
   }
   
+  private void addCertificates( final CaCertificateImportWizard.ImportMethod importMethod ) {
+    CaCertificateImportWizard wizard
+      = new CaCertificateImportWizard( importMethod );
+    WizardDialog dialog = new WizardDialog( getShell(), wizard );
+    dialog.open();
+  }
+
 }
