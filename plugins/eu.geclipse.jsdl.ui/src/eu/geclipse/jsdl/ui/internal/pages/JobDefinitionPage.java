@@ -94,6 +94,7 @@ public final class JobDefinitionPage extends FormPage
   private final int widgetHeight = 100; 
    
   
+  
   /**
    * JobDefinitionPage Class constructor.
    * @param editor
@@ -106,15 +107,17 @@ public final class JobDefinitionPage extends FormPage
     
   }
   
+  
+  
   @Override
   public void setActive(final boolean active) {
     
-    if (active){
-      if (isContentRefreshed()){    
+    if ( active ){
+      if ( isContentRefreshed() ) {    
         this.jobDefinitionTypeAdapter.load();
         this.jobIdentificationTypeAdapter.load();
-      }//endif isContentRefreshed
-    } // endif active
+      }// end_if isContentRefreshed
+    } // end_if active
   }
   
   
@@ -122,9 +125,10 @@ public final class JobDefinitionPage extends FormPage
   /*
    *  Checks if the content of the model for this page is refreshed.
    */
-  private boolean isContentRefreshed(){          
+  private boolean isContentRefreshed() {          
     return this.contentRefreshed;
-     }
+  }
+  
   
   
   /**
@@ -148,15 +152,15 @@ public final class JobDefinitionPage extends FormPage
   public void setPageContent(final EObject rootJsdlElement, 
                              final boolean refreshStatus){
 
-   if (refreshStatus) {
+   if ( refreshStatus ) {
       this.contentRefreshed = true;
       this.jobDefinitionTypeAdapter.setContent( rootJsdlElement );
       this.jobIdentificationTypeAdapter.setContent( rootJsdlElement );
     }
-   else{     
-      this.jobDefinitionTypeAdapter = new JobDefinitionTypeAdapter(rootJsdlElement);
+   else {     
+      this.jobDefinitionTypeAdapter = new JobDefinitionTypeAdapter( rootJsdlElement );
       this.jobDefinitionTypeAdapter.addListener( this );
-      this.jobIdentificationTypeAdapter = new JobIdentificationTypeAdapter(rootJsdlElement);
+      this.jobIdentificationTypeAdapter = new JobIdentificationTypeAdapter( rootJsdlElement );
       this.jobIdentificationTypeAdapter.addListener( this );
    }
           
@@ -173,13 +177,13 @@ public final class JobDefinitionPage extends FormPage
   /**
    * This method set's the dirty status of the page.
    * 
-   * @param dirtyFlag
+   * @param dirty
    * If TRUE then the page is Dirty and a Save operation is needed.
    * 
    */
-  public void setDirty(final boolean dirtyFlag) {
-    if (this.dirtyFlag != dirtyFlag) {
-      this.dirtyFlag = dirtyFlag;     
+  public void setDirty(final boolean dirty) {
+    if (this.dirtyFlag != dirty) {
+      this.dirtyFlag = dirty;     
       this.getEditor().editorDirtyStateChanged();  
     }
     
@@ -496,7 +500,7 @@ public final class JobDefinitionPage extends FormPage
   }
 
   
-  public void notifyChanged(Notification notification) {
+  public void notifyChanged(final Notification notification) {
     setDirty( true );
   }
   

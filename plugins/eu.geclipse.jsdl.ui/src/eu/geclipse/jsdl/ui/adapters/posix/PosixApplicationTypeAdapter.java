@@ -769,6 +769,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    * This method populates the model content to the widgets registered with the
    * PosixApplication adapter.
    */ 
+  @SuppressWarnings("unchecked")
   public void load()
   {
     
@@ -884,12 +885,12 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
                
                 tableName = this.tableFeaturesMap.get( new Integer(featureID) );
                                
-                EList valueList = (EList) posixEObject.eGet( eStructuralFeature );                
-                if( !this.adapterRefreshed
-                    && this.tableFeaturesMap.containsKey( new Integer(featureID))) {
+                EList<EnvironmentType> valueList = (EList<EnvironmentType>) posixEObject.eGet( eStructuralFeature );                
+                if(/* !this.adapterRefreshed
+                    && */this.tableFeaturesMap.containsKey( new Integer(featureID))) {
                   
-                  for (Iterator  it = valueList.iterator(); it.hasNext();){                    
-                    this.environmentType = (EnvironmentType) it.next();                   
+                  for (Iterator<EnvironmentType>  it = valueList.iterator(); it.hasNext();){                    
+                    this.environmentType = it.next();                   
                     tableName.setInput( valueList );
                     
                     } // End Iterator
@@ -902,11 +903,11 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
               {                
                 tableName = this.tableFeaturesMap.get( new Integer(featureID) );
                 
-                EList<ArgumentType> valueList = (EList) posixEObject.eGet( eStructuralFeature );
+                EList<ArgumentType> valueList = (EList<ArgumentType>) posixEObject.eGet( eStructuralFeature );
                 
                 
-                if( !this.adapterRefreshed 
-                    && this.tableFeaturesMap.containsKey( new Integer(featureID))) {
+                if(/* !this.adapterRefreshed 
+                    &&*/ this.tableFeaturesMap.containsKey( new Integer(featureID))) {
                   
                   for (Iterator <ArgumentType> it = valueList.iterator(); it.hasNext();) {                   
                     this.argumentType =  it.next();        

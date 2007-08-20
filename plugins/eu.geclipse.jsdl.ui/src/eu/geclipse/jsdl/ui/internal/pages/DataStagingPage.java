@@ -25,7 +25,6 @@ import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.TableWrapData;
-
 import eu.geclipse.jsdl.ui.adapters.jsdl.DataStageTypeAdapter;
 import eu.geclipse.jsdl.ui.providers.DataStageInLabelProvider;
 import eu.geclipse.jsdl.ui.providers.DataStageOutLabelProvider;
@@ -135,10 +134,10 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
   @Override
   public void setActive(final boolean active) {
     
-    if (active){
-      if (isContentRefreshed()){
+    if ( active ){
+      if ( isContentRefreshed() ) {
         this.dataStageTypeAdapter.load();
-      }//end_if isContentRefreshed
+      }//end_if isContentRefreshed()
     } // end_if active
     
   } //End void setActive()
@@ -186,33 +185,45 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
  
  
  
- /**
- * @param rootJsdlElement
- * @param refreshStatus
- */
-  public void setPageContent(final EObject rootJsdlElement, 
-                            final boolean refreshStatus){
+  /**
+   * Method that set's the DataStage Page content. The content is the root 
+   * JSDL element. Also this method is responsible to initialize the associated 
+   * type adapters for the elements of this page.  This method must be called only
+   * from the JSDL Editor.
+   * 
+   * Associated Type Adapters for this page are: 
+   * @see DataStageTypeAdapter
+   *  
+   * @param rootJsdlElement
+   * 
+   * @param refreshStatus
+   * Set to TRUE if the original page content is already set, but there is a need
+   * to refresh the page because there was a change to this content
+   * from an outside editor.
+   * 
+   */
+  public void setPageContent( final EObject rootJsdlElement, 
+                              final boolean refreshStatus ) {
 
-  if (refreshStatus) {
+  if ( refreshStatus ) {
      this.contentRefreshed = true;
      this.dataStageTypeAdapter.setContent( rootJsdlElement );
    }
-  else{     
-     this.dataStageTypeAdapter = new DataStageTypeAdapter(rootJsdlElement);
+  else {     
+     this.dataStageTypeAdapter = new DataStageTypeAdapter( rootJsdlElement );
      this.dataStageTypeAdapter.addListener( this );
-  }
+   }
          
- } // End void getPageContent()
+  } // End void getPageContent()
  
  
  
   /* This function creates the Stage-In Section of the DateStage Page */
   private void createStageInSection( final Composite parent,
-                                        final FormToolkit toolkit )                                             
-  {
+                                     final FormToolkit toolkit ) {
    
-   String sectionTitle = Messages.getString("DataStagingPage_StageInSection"); //$NON-NLS-1$
-   String sectionDescription = Messages.getString("Job  private final int WIDGET_HEIGHT = 100;ApplicationPage_ApplicationDescription");   //$NON-NLS-1$
+   String sectionTitle = Messages.getString( "DataStagingPage_StageInSection" ); //$NON-NLS-1$
+   String sectionDescription = Messages.getString( "DataStagingPage_StageInDescr" );   //$NON-NLS-1$
    
    GridData gd;
       
@@ -233,7 +244,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    gd.heightHint = this.WIDGET_HEIGHT;
    
    
-   this.viewerStageIn = new TableViewer(client, SWT.BORDER 
+   this.viewerStageIn = new TableViewer(client, SWT.NONE 
                                         | SWT.VIRTUAL                                        
                                         | SWT.FULL_SELECTION );
    
@@ -347,7 +358,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
   {
 
    String sectionTitle = Messages.getString("DataStagingPage_StageOutSection"); //$NON-NLS-1$
-   String sectionDescription = Messages.getString("StageOut");   //$NON-NLS-1$
+   String sectionDescription = Messages.getString("DataStagingPage_StageOutDescr");   //$NON-NLS-1$
    
    GridData gd;
       
@@ -368,7 +379,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    gd.heightHint = this.WIDGET_HEIGHT;
    
    
-   this.viewerStageOut = new TableViewer(client, SWT.BORDER 
+   this.viewerStageOut = new TableViewer(client, SWT.NONE 
                                         | SWT.VIRTUAL                                        
                                         | SWT.FULL_SELECTION );
    

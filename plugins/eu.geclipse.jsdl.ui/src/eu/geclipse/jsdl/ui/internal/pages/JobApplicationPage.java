@@ -187,13 +187,13 @@ public final class JobApplicationPage extends FormPage
   /**
    * This method set's the dirty status of the page.
    * 
-   * @param dirtyFlag
+   * @param dirty
    * If TRUE then the page is Dirty and a Save operation is needed.
    * 
    */
-  public void setDirty (final boolean dirtyFlag) {
-    if (this.dirtyFlag != dirtyFlag) {
-      this.dirtyFlag = dirtyFlag;     
+  public void setDirty (final boolean dirty) {
+    if (this.dirtyFlag != dirty) {
+      this.dirtyFlag = dirty;     
       this.getEditor().editorDirtyStateChanged();  
     }
     
@@ -911,7 +911,7 @@ public final class JobApplicationPage extends FormPage
   }
   
 
-  public void notifyChanged( Notification notification ) {
+  public void notifyChanged( final Notification notification ) {
       setDirty( true );
     
   }

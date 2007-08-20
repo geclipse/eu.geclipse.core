@@ -25,6 +25,11 @@ package eu.geclipse.jsdl.ui.internal.pages;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
@@ -34,7 +39,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.List;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
@@ -48,6 +54,8 @@ import eu.geclipse.jsdl.ui.adapters.jsdl.JobIdentificationTypeAdapter;
 import eu.geclipse.jsdl.ui.adapters.jsdl.ResourcesTypeAdapter;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.dialogs.MultipleInputDialog;
+import eu.geclipse.jsdl.ui.providers.FeatureContentProvider;
+import eu.geclipse.jsdl.ui.providers.FeatureLabelProvider;
 
 
 /**
@@ -94,8 +102,9 @@ public final class ResourcesPage extends FormPage
   
   protected Button btnAdd = null;
   protected Button btnDel = null;
+  protected Button btnEdit = null;
   
-  protected List lstHostName = null;
+  protected TableViewer hostsViewer = null;
  
   private Text txtFileSystemName = null;
   private Text txtFileSystemDescr = null;
@@ -122,6 +131,10 @@ public final class ResourcesPage extends FormPage
   private Combo cmbFileSystemType = null;
   private Combo cmbDiskSpaceRange = null;
   
+  private Table tblHosts = null;
+  
+  private TableColumn column = null;
+  
   
   
   private boolean contentRefreshed = false;
@@ -136,7 +149,7 @@ public final class ResourcesPage extends FormPage
   
   /**
    * 
-   * ResourcesPage class constructor. Initialiazes the Resources Page by 
+   * ResourcesPage class constructor. Initializes the Resources Page by 
    * passing as an argument the container JSDL editor.
    * @param editor
    * 
@@ -160,17 +173,18 @@ public final class ResourcesPage extends FormPage
     if (active){
       if (isContentRefreshed()){    
         this.resourcesTypeAdapter.load();        
-      }//endif (isContentRefreshed())
-    } // endif (active)
+      } // end_if (isContentRefreshed())
+    } //  end_if (active)
   } // End void setActive()
   
   
   /*
    * Checks if the Page Content has been refreshed. 
    */
-  private boolean isContentRefreshed(){          
+  private boolean isContentRefreshed() {
+    
     return this.contentRefreshed;
-     }
+  }
   
   /**
    * Method that set's the Resources Page content. The content is the root 
@@ -216,13 +230,13 @@ public final class ResourcesPage extends FormPage
   /**
    * This method set's the dirty status of the page.
    * 
-   * @param dirtyFlag
+   * @param dirty
    * If TRUE then the page is Dirty and a Save operation is needed.
    * 
    */
-  public void setDirty(final boolean dirtyFlag) {
-    if (this.dirtyFlag != dirtyFlag) {
-      this.dirtyFlag = dirtyFlag;     
+  public void setDirty(final boolean dirty) {
+    if (this.dirtyFlag != dirty) {
+      this.dirtyFlag = dirty;     
       this.getEditor().editorDirtyStateChanged();  
     }
     
@@ -306,23 +320,40 @@ public final class ResourcesPage extends FormPage
     Label lblHostName = toolkit.createLabel(client, 
                                   Messages.getString("ResourcesPage_HostName")); //$NON-NLS-1$
     
-    gd.verticalSpan = 3;
+    gd.verticalSpan = 5;
     gd.verticalAlignment = GridData.BEGINNING;
     lblHostName.setLayoutData( gd );
-         
-    this.lstHostName = new List(client, SWT.NONE);
-    this.lstHostName.setData( FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER );
-    this.resourcesTypeAdapter.attachToHostName( this.lstHostName );
+    
+    this.hostsViewer = new TableViewer(client, SWT.NONE);
+    this.tblHosts = this.hostsViewer.getTable();    
+    this.hostsViewer.setContentProvider( new FeatureContentProvider() );
+    this.hostsViewer.setLabelProvider( new FeatureLabelProvider() );
+    
+    this.column = new TableColumn(this.tblHosts, SWT.NONE);    
+    this.column.setWidth( 150 );
+        
+    this.hostsViewer.addSelectionChangedListener( new ISelectionChangedListener()
+    {
+
+      public void selectionChanged( final SelectionChangedEvent event ) {
+        updateButtons((TableViewer)event.getSource());
+      }
+    } );
+    
     
     gd = new GridData(GridData.FILL_BOTH);
     gd = new GridData();
-    gd.verticalSpan = 3;
+    gd.verticalSpan = 5;
     gd.horizontalSpan = 1;
     gd.heightHint = this.WIDGET_HEIGHT;
     gd.widthHint = this.TXT_LENGTH;
-    this.lstHostName.setLayoutData(gd);
- 
-    //Create the Add button
+    
+    this.tblHosts.setData(  FormToolkit.KEY_DRAW_BORDER );
+    this.tblHosts.setLayoutData( gd );
+
+    this.resourcesTypeAdapter.attachToHostName( this.hostsViewer );
+    
+    /* Create the Add button */
     gd = new GridData();
     gd.verticalSpan = 2;
     gd.verticalAlignment = GridData.END;
@@ -333,8 +364,9 @@ public final class ResourcesPage extends FormPage
     
     this.btnAdd.addSelectionListener(new SelectionListener() {
       public void widgetSelected(final SelectionEvent event) {
-        handleAddDialog(Messages.getString( "ResourcesPage_HostNameDialog" )); //$NON-NLS-1$
-        ResourcesPage.this.resourcesTypeAdapter.performAdd(ResourcesPage.this.lstHostName,                                                          
+        handleAddDialog(Messages.getString( "ResourcesPage_HostNameDialog" ), //$NON-NLS-1$
+                                                    (Button) event.getSource() ); 
+        ResourcesPage.this.resourcesTypeAdapter.performAdd(ResourcesPage.this.hostsViewer,                                                          
                                                            ResourcesPage.this.value);
       }
 
@@ -345,7 +377,33 @@ public final class ResourcesPage extends FormPage
     
     this.btnAdd.setLayoutData( gd);
     
-    //Create the Remove button
+    
+    /* Create the Edit button */
+    gd = new GridData();
+    gd.verticalSpan = 2;
+    gd.verticalAlignment = GridData.END;
+    gd.horizontalAlignment = GridData.FILL;
+    this.btnEdit = toolkit.createButton(client,
+                                    Messages.getString("JsdlEditor_EditButton"), //$NON-NLS-1$
+                                    SWT.BUTTON1);  
+    
+    this.btnEdit.addSelectionListener(new SelectionListener() {
+      public void widgetSelected(final SelectionEvent event) {
+        handleAddDialog(Messages.getString( "ResourcesPage_HostNameDialog" ), //$NON-NLS-1$
+                                                    (Button) event.getSource()); 
+        ResourcesPage.this.resourcesTypeAdapter.performEdit(ResourcesPage.this.hostsViewer,                                                          
+                                                           ResourcesPage.this.value);
+      }
+
+       public void widgetDefaultSelected(final SelectionEvent event) {
+           // Do Nothing - Required method
+       }
+     });
+    
+    this.btnEdit.setLayoutData( gd);
+    
+    
+    /* Create the Remove button */
     gd = new GridData();
     gd.verticalSpan = 1;
     gd.verticalAlignment = GridData.BEGINNING;
@@ -354,9 +412,9 @@ public final class ResourcesPage extends FormPage
                                  Messages.getString("JsdlEditor_RemoveButton"), //$NON-NLS-1$
                                  SWT.BUTTON1);
     
-    this.btnDel.setEnabled( false );
+    this.btnDel.setEnabled( true );
     
-    this.resourcesTypeAdapter.attachToDelete( this.btnDel, this.lstHostName );
+    this.resourcesTypeAdapter.attachToDelete( this.btnDel, this.hostsViewer );
     this.btnDel.setLayoutData( gd);
     
     toolkit.paintBordersFor( client);
@@ -729,48 +787,6 @@ public final class ResourcesPage extends FormPage
     
   }
   
-  /* 
-   * Create the Resources Section
-   * 
-   */
-  /*
-  private Composite createResourcesSection(final IManagedForm mform, 
-                                          final String title, 
-                                          final String desc)
-  {
-   
-    Composite client = createSection(mform, title, desc, 2);
-
-    CandidateHostsSubSection (client,mform,
-                            Messages.getString("ResourcesPage_CanHost"), //$NON-NLS-1$
-                            Messages.getString("ResourcesPage_CandHostDesc") //$NON-NLS-1$
-                            ,3,480,270);
-    
-    FileSystemSubSection( client,mform,
-                          Messages.getString("ResourcesPage_FileSystem"),  //$NON-NLS-1$
-                          Messages.getString("ResourcesPage_FileSystemDesc"), //$NON-NLS-1$
-                          3,480,270);
-    
-    osSubSection(client,mform,
-                 Messages.getString("ResourcesPage_OperSyst"), //$NON-NLS-1$
-                 Messages.getString("ResourcesPage_OperSystDescr"), //$NON-NLS-1$
-                 2,480,220);
-    
-    cPUArch( client,mform,
-             Messages.getString("ResourcesPage_CPUArch"), //$NON-NLS-1$
-             Messages.getString("ResourcesPage_CPUArchDescr"), //$NON-NLS-1$
-             2,480,210);
-    
-    addElementsSubSection( client,mform,
-                         Messages.getString("ResourcesPage_AddElementRangeVal"), //$NON-NLS-1$
-                 Messages.getString("ResourcesPage_AddElementsRangeValueDescr"), //$NON-NLS-1$
-                 3,515,450 );
-    
-  
-      
-     return client;
-}
-*/
 
   private Combo createCombo(final Composite composite){
     
@@ -787,22 +803,61 @@ public final class ResourcesPage extends FormPage
   }
   
   
-  protected void handleAddDialog(final String dialogTitle){
+  @SuppressWarnings("unchecked")
+  protected void handleAddDialog(final String dialogTitle, final Button button){
     MultipleInputDialog dialog = new MultipleInputDialog( this.getSite().getShell(),
                                                          dialogTitle );
-        
-    dialog.addTextField( Messages.getString( "ResourcesPage_Value" ), "", false ); //$NON-NLS-1$ //$NON-NLS-2$    
-    if( dialog.open() != Window.OK ) {
-      return;
+    if (button == this.btnAdd ) {
+      
+      dialog.addTextField( Messages.getString( "ResourcesPage_Value" ), "" , false ); //$NON-NLS-1$ //$NON-NLS-2$}
+      
     }
+    else {
+      IStructuredSelection structSelection 
+                     = ( IStructuredSelection ) this.hostsViewer.getSelection();
+      
+      java.util.List<String> list =  structSelection.toList();
+      
+      dialog.addTextField( Messages.getString( "ResourcesPage_Value" ), //$NON-NLS-1$
+              list.get( 0 ) , false ); 
+    }
+    
+    
+    if( dialog.open() != Window.OK ) {
+      
+      return;
+            
+    }
+    
     this.value = dialog.getStringValue( Messages.getString( "ResourcesPage_Value" ) ) ; //$NON-NLS-1$
     
     
   }
+  
 
-  public void notifyChanged( Notification notification ) {
+  public void notifyChanged( final Notification notification ) {
     setDirty( true );
     
   }
+  
+  
+  
+  /*
+   * This function updates the status of the buttons related to
+   * the respective Stage-In and Stage-Out Table Viewers. The Status of the 
+   * buttons is adjusted according to the selection and content of the respective
+   * table viewer.
+   * 
+   */ 
+    protected void updateButtons(final TableViewer tableViewer) {
+    
+    ISelection selection = tableViewer.getSelection();
+    boolean selectionAvailable = !selection.isEmpty();    
+    
+      this.btnAdd.setEnabled( true );
+      this.btnDel.setEnabled( selectionAvailable );
+      this.btnEdit.setEnabled( selectionAvailable );
+    
+  } // End updateButtons
 
 }

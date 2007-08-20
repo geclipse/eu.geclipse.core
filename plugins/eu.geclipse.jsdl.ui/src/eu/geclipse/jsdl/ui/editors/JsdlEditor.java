@@ -123,8 +123,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
   protected boolean updateProblemIndication = true;
   protected MarkerHelper markerHelper = new EditUIMarkerHelper();
   protected ComposedAdapterFactory adapterFactory;
-  protected JobDefinitionType jobDefType = null;  
-  
+  protected JobDefinitionType jobDefType = null;
   private TextEditor editor = null;
   private int sourcePageIndex;
   private boolean refreshedModel = false;
@@ -283,7 +282,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
   
  
   /*
-   * This method adds the Resource Editor Page to the JSDL editior
+   * This method adds the Resource Editor Page to the JSDL editor
    */
   private void addResourceEditorPage()throws PartInitException{
         
@@ -305,7 +304,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
     
      if (this.editor == null)
       {
-       this.editor = new TextEditor();          
+       this.editor = new TextEditor();   
       }
       return this.editor;
   }

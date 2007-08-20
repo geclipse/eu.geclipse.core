@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
+import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EClass;
@@ -32,21 +33,20 @@ import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
-import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
-import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
 import eu.geclipse.jsdl.model.CPUArchitectureType;
 import eu.geclipse.jsdl.model.CandidateHostsType;
 import eu.geclipse.jsdl.model.DocumentRoot;
 import eu.geclipse.jsdl.model.FileSystemType;
 import eu.geclipse.jsdl.model.FileSystemTypeEnumeration;
-import eu.geclipse.jsdl.model.JobDefinitionType;
 import eu.geclipse.jsdl.model.JobDescriptionType;
 import eu.geclipse.jsdl.model.JsdlFactory;
 import eu.geclipse.jsdl.model.JsdlPackage;
@@ -78,7 +78,7 @@ import eu.geclipse.jsdl.model.ResourcesType;
 public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   
   protected Hashtable< Integer, Text > widgetFeaturesMap = new Hashtable< Integer, Text >();
-  protected Hashtable< Integer, List > listFeaturesMap = new Hashtable< Integer, List >();
+  protected Hashtable< Integer, TableViewer > viewerFeaturesMap = new Hashtable< Integer, TableViewer >();
   protected Hashtable< Integer, Combo > comboFeaturesMap = new Hashtable< Integer, Combo >();
   protected Hashtable<String, EStructuralFeature> eStructuralFeaturesMap 
                                   = new Hashtable<String, EStructuralFeature>();
@@ -182,10 +182,10 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
    * @param widget The SWT list widget which is associated with the 
    * CandidateHosts element of the JSDL document.
    */
-  public void attachToHostName(final List widget){
+  public void attachToHostName(final TableViewer widget){
     
     Integer featureID = new Integer(JsdlPackage.RESOURCES_TYPE__CANDIDATE_HOSTS);
-    this.listFeaturesMap.put( featureID , widget );
+    this.viewerFeaturesMap.put( featureID , widget );
        
   } // End attachToHostName()
   
@@ -194,37 +194,19 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   /**
    * Adapter interface to attach to the Delete button.
    * 
-   * @param button The SWT button which is associated with an SWT list on the page
+   * @param button The SWT {@link Button} which is associated with an SWT list on the page
    * and is responsible to delete elements from this list.
    * 
-   * @param list The SWT list containing the elements to be deleted.
+   * @param tableViewer The SWT {@link TableViewer} containing the elements to be deleted.
    * 
    */
-  public void attachToDelete(final Button button, final List list){ 
-    
-    list.addSelectionListener(new SelectionListener() {
-      
+  public void attachToDelete(final Button button, final TableViewer tableViewer ){ 
 
-      public void widgetSelected(final SelectionEvent e ) {
-        if (list.getItemCount()>0){
-          
-          button.setEnabled( true );
-        }     
-      }
-
-      public void widgetDefaultSelected( final SelectionEvent e ) {
-        //  Auto-generated method stub   
-      }
-    });
-    
     
     button.addSelectionListener(new SelectionListener() {
 
-      public void widgetSelected(final SelectionEvent event) {        
-        performDelete(list, list.getItem( list.getSelectionIndex() ) );
-        if (list.getItemCount() == 0) {
-          button.setEnabled( false ); 
-        }
+      public void widgetSelected(final SelectionEvent event) {
+        performDelete( tableViewer  );
       }
 
       public void widgetDefaultSelected(final SelectionEvent event) {
@@ -237,10 +219,11 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   
   
   /**
-   * @param list The SWT list that contains the Structural Features
+   * @param tableViewer The SWT TableViewer that contains the Structural Features
    * @param value 
    */
-  public void performAdd(final List list, final Object value) {
+  @SuppressWarnings("unchecked")
+  public void performAdd(final TableViewer tableViewer, final Object value) {
     
     if (value == null) {
       return;
@@ -250,41 +233,93 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     Collection<String> collection = new ArrayList<String>();
     int featureID = JsdlPackage.RESOURCES_TYPE__CANDIDATE_HOSTS;
      
+    EList <String> newInputList = ( EList<String> )tableViewer.getInput(); 
+        
     
-    list.add( value.toString() );
-    for ( int i=0; i<list.getItemCount(); i++ ) {
-      collection.add( list.getItem( i ) );
+    if (newInputList == null) {
+      newInputList = new BasicEList<String>();
     }
+    
+    newInputList.add( (String)value );    
 
-    checkResourcesElement();
+    tableViewer.setInput( newInputList  );
+    
+    
     eStructuralFeature = this.candidateHosts.eClass().getEStructuralFeature( featureID );
     
-    // Create association of EStructural Feature in the FeatureMap.
-    
-    this.eStructuralFeaturesMap.put( value.toString(), eStructuralFeature );
-    this.candidateHosts.eSet(eStructuralFeature, collection);
-    
-    if (!this.resourcesType.eIsSet( eStructuralFeature ) ){
-     this.resourcesType.setCandidateHosts( this.candidateHosts ); 
+    for ( int i=0; i<tableViewer.getTable().getItemCount(); i++ ) {
+      collection.add( (String) tableViewer.getElementAt( i ) );
     }
-     
-        
+    
+    checkResourcesElement();
+    this.candidateHosts.eSet(eStructuralFeature, collection);
 
-   
     this.contentChanged();
     
     eStructuralFeature = null;
     collection = null;
     
   }
+  
+  
+  
+  /**
+   * @param tableViewer The SWT TableViewer that contains the Structural Features
+   * @param value 
+   */
+  @SuppressWarnings("unchecked")
+  public void performEdit(final TableViewer tableViewer, final Object value) {
+    
+    if (value == null) {
+      return;
+    }
+    
+    EStructuralFeature eStructuralFeature;
+    
+    int featureID = JsdlPackage.RESOURCES_TYPE__CANDIDATE_HOSTS;
+    
+    /*
+     * Get the TableViewer Selection
+     */
+    IStructuredSelection structSelection 
+                              = ( IStructuredSelection ) tableViewer.getSelection();
+  
+    /* If the selection is not null the Change the selected element */
+    if (structSelection != null) {
+      
+    eStructuralFeature = this.candidateHosts.eClass()
+                                            .getEStructuralFeature( featureID );
+
+    Object feature = structSelection.getFirstElement();
+    
+    /* Get the Index of the Element that needs to be changed */
+      int index = (( java.util.List<Object> )this.candidateHosts.eGet(eStructuralFeature))
+                                                           .indexOf( feature  );
+      
+    /* Change the element. The element is located through it's index position
+     * in the list.
+     */
+      (( java.util.List<Object> )this.candidateHosts.eGet( eStructuralFeature ))
+            .set( index, value );
+  
+    /* Refresh the table viewer and notify the editor that
+     *  the page content has changed. 
+     */
+    tableViewer.refresh();
+    contentChanged();
+    
+    }  
+    
+  }
     
    
   
-  protected void checkResourcesElement(){
-    EStructuralFeature eStructuralFeature = this.jobDescriptionType.eClass()
-    .getEStructuralFeature( JsdlPackage.JOB_DESCRIPTION_TYPE__RESOURCES );
+  protected void checkResourcesElement() {
     
-    if (!this.jobDescriptionType.eIsSet( eStructuralFeature )){      
+    EStructuralFeature eStructuralFeature = this.jobDescriptionType.eClass()
+          .getEStructuralFeature( JsdlPackage.JOB_DESCRIPTION_TYPE__RESOURCES );
+    
+    if (!this.jobDescriptionType.eIsSet( eStructuralFeature )) {      
       this.jobDescriptionType.eSet( eStructuralFeature, this.resourcesType );
 
 
@@ -293,19 +328,53 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   
   
   
-  protected void checkOSElement (){
+  protected void performDelete( final TableViewer viewer ){
+    
+    EStructuralFeature eStructuralFeature;
+        
+    int featureID = JsdlPackage.RESOURCES_TYPE__CANDIDATE_HOSTS;
+    
+    IStructuredSelection structSelection 
+                              = ( IStructuredSelection ) viewer.getSelection();
+    
+    if (structSelection != null) {
+  
+    
+    eStructuralFeature = this.candidateHosts.eClass()
+                                            .getEStructuralFeature( featureID );
+
+    Object feature = structSelection.getFirstElement();
+    
+    /* Delete only Multi-Valued Elements */
+    ((java.util.List<?>)this.candidateHosts.eGet(eStructuralFeature))
+                                                             .remove(feature);
+  /*
+   * Refresh the table viewer and notify the editor that the page content has
+   * changed.
+   */
+    viewer.refresh();
+    contentChanged();
+    
+    }  
+    
+  }
+  
+  
+  protected void checkOSElement() {
+    
     checkResourcesElement();    
     EStructuralFeature eStructuralFeature = this.resourcesType.eClass()
     .getEStructuralFeature( JsdlPackage.RESOURCES_TYPE__OPERATING_SYSTEM );
     
-    if (!this.resourcesType.eIsSet( eStructuralFeature )){      
+    if ( !this.resourcesType.eIsSet( eStructuralFeature ) ) {      
       this.resourcesType.eSet( eStructuralFeature, this.operatingSystemType );
     }
   }
   
   
   
-  protected void checkFileSystemElement(){
+  protected void checkFileSystemElement() {
+    
     checkResourcesElement();
     
     EStructuralFeature eStructuralFeature = this.resourcesType.eClass()
@@ -314,75 +383,36 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     Collection<FileSystemType> collection = new ArrayList<FileSystemType>();
     collection.add( this.fileSystemType );
     
-    if (!this.resourcesType.eIsSet( eStructuralFeature )){      
+    if ( !this.resourcesType.eIsSet( eStructuralFeature ) ) {      
       this.resourcesType.eSet( eStructuralFeature, collection );
-
-
     }
   }
   
 
   
-  protected void checkCPUArch(){
+  protected void checkCPUArch() {
+    
     checkResourcesElement();
     
     EStructuralFeature eStructuralFeature = this.resourcesType.eClass()
-    .getEStructuralFeature( JsdlPackage.RESOURCES_TYPE__CPU_ARCHITECTURE);
+    .getEStructuralFeature( JsdlPackage.RESOURCES_TYPE__CPU_ARCHITECTURE );
     
      
-    if (!this.resourcesType.eIsSet( eStructuralFeature )){      
+    if ( !this.resourcesType.eIsSet( eStructuralFeature ) ) {      
       this.resourcesType.eSet( eStructuralFeature, this.cpuArchitectureType );
-
-
-    }
-  }
-
-
-  
-  
-  
-  protected void performDelete(final List list, final String key){
-    
-    EStructuralFeature eStructuralFeature;
-    
-    /* Get EStructuralFeature */
-     if (this.eStructuralFeaturesMap.containsKey( key ) ){
-      eStructuralFeature = this.eStructuralFeaturesMap.get( key );
-    
-      /* Delete only Multi-Valued Elements */
-        ((java.util.List<?>)this.candidateHosts.eGet(eStructuralFeature))
-                                                                   .remove(key);
-        list.remove( key );    
-        
-       
-        if (list.getItemCount() == 0)
-        {  
-          EcoreUtil.remove( (EObject) this.resourcesType.eGet(eStructuralFeature) );         
-        }
-        this.removeFromMap( key );
-        this.contentChanged();
-    
     }
     
-    eStructuralFeature = null;
   }
-  
-  
-  
-  private void removeFromMap (final Object key){
-    
-    this.eStructuralFeaturesMap.remove( key );
-    
-  }
-    
+
+
    
   /**
-   * Adapter interface to attach to the Operating System Type combo widget.
+   * Adapter interface to attach to the Operating System Type Combo widget.
    * 
-   * @param widget The SWT combo widget which is associated with the 
+   * @param widget The SWT {@link Combo} widget which is associated with the 
    * OperatingSystemType element of the JSDL document.
    */
-  public void attachToOSType(final Combo widget){    
+  public void attachToOSType( final Combo widget ) {     
     
     Integer featureID = new Integer(JsdlPackage.RESOURCES_TYPE__OPERATING_SYSTEM);
     this.comboFeaturesMap.put( featureID , widget );
@@ -516,8 +546,8 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
    * @param widget The SWT text widget which is associated with the 
    * Name attribute of the FileSystemType element in a JSDL document.
    */
-  public void attachToFileSystemName(final Text widget){
-    Integer featureID = new Integer(JsdlPackage.FILE_SYSTEM_TYPE__NAME);
+  public void attachToFileSystemName( final Text widget ){
+    Integer featureID = new Integer( JsdlPackage.FILE_SYSTEM_TYPE__NAME );
     this.widgetFeaturesMap.put( featureID , widget );
     
     widget.addModifyListener( new ModifyListener() {
@@ -542,7 +572,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
    */
   public void attachToFileSystemDescription(final Text widget){
     
-    Integer featureID = new Integer(JsdlPackage.FILE_SYSTEM_TYPE__DESCRIPTION);
+    Integer featureID = new Integer( JsdlPackage.FILE_SYSTEM_TYPE__DESCRIPTION );
     this.widgetFeaturesMap.put( featureID , widget );
     
     widget.addModifyListener( new ModifyListener() {
@@ -565,7 +595,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
    */
   public void attachToFileSystemMountPoint(final Text widget){
     
-    Integer featureID = new Integer(JsdlPackage.FILE_SYSTEM_TYPE__MOUNT_POINT);
+    Integer featureID = new Integer( JsdlPackage.FILE_SYSTEM_TYPE__MOUNT_POINT );
     this.widgetFeaturesMap.put( featureID , widget );
     
     widget.addModifyListener( new ModifyListener() {
@@ -587,7 +617,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
    * 
    * @param text The SWT text widget which is associated with the 
    * DiskSpace element of the JSDL document.
-   * @param combo The SWT combo widget which is associated with the Disk Space
+   * @param combo The SWT {@link Combo} widget which is associated with the Disk Space
    * Range Value element.
    */
   public void attachToFileSystemDiskSpace(final Text text, final Combo combo){
@@ -660,11 +690,12 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
    * This method populates the model content to the widgets registered with the
    * ResourcesType adapter.
    */
+  @SuppressWarnings("unchecked")
   public void load() {
     
     this.isNotifyAllowed = false;
     Text widgetName = null;    
-    List listName = null;
+    TableViewer tableViewer = null;
     Combo comboName = null;
     
     // Test if eObject is not empty.
@@ -689,39 +720,36 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
             case JsdlPackage.RESOURCES_TYPE__ANY :
             break;            
             case JsdlPackage.RESOURCES_TYPE__CANDIDATE_HOSTS :{
-              listName = this.listFeaturesMap.get( new Integer(featureID) );
+              tableViewer = this.viewerFeaturesMap.get( new Integer( featureID ) );
               
               this.candidateHosts = (CandidateHostsType) this.resourcesType
                                                     .eGet( eStructuralFeature );
               
               EList<String> valueEList = this.candidateHosts.getHostName();
           
+              tableViewer.setInput( valueEList  );
+//              Object eFeatureInstance = null;
+//                                           
+//              for (Iterator<String> it = valueEList.iterator(); it.hasNext();) {
+//                eFeatureInstance = it.next();              
+//                this.eStructuralFeaturesMap.put( eFeatureInstance.toString(),
+//                                                eStructuralFeature );
+//               
+//                  listName.add(eFeatureInstance.toString());
+//                } // End Iterator                         
               
-              Object eFeatureInstance = null;
-              
-              if(!this.adapterRefreshed) {
-                
-              for (Iterator<String> it = valueEList.iterator(); it.hasNext();){
-                eFeatureInstance = it.next();              
-                this.eStructuralFeaturesMap.put( eFeatureInstance.toString(),
-                                                eStructuralFeature );
-               
-                  listName.add(eFeatureInstance.toString());
-                } // End Iterator
-                         
-              } // Endif
             }
             break;
             case JsdlPackage.RESOURCES_TYPE__OPERATING_SYSTEM :{
              this.operatingSystemType = (OperatingSystemType) this.resourcesType
                                                     .eGet( eStructuralFeature );
              
-             comboName = this.comboFeaturesMap.get( new Integer(featureID) );
+             comboName = this.comboFeaturesMap.get( new Integer( featureID  ) );
              comboName.setText(this.operatingSystemType.getOperatingSystemType()
                                .getOperatingSystemName().getLiteral());
              
             widgetName = this.widgetFeaturesMap.get( new Integer
-                        (JsdlPackage.DOCUMENT_ROOT__OPERATING_SYSTEM_VERSION) );
+                        ( JsdlPackage.DOCUMENT_ROOT__OPERATING_SYSTEM_VERSION ) );
             widgetName.setText( this.operatingSystemType
                                                   .getOperatingSystemVersion());
              
@@ -734,12 +762,12 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
             break;            
             case JsdlPackage.RESOURCES_TYPE__FILE_SYSTEM: {
                             
-              EList valueEList = (EList) this.resourcesType           
+              EList<FileSystemType> valueEList = (EList<FileSystemType>) this.resourcesType           
                                                     .eGet( eStructuralFeature );
               
-              for (Iterator it = valueEList.iterator(); it.hasNext();){
+              for (Iterator<FileSystemType> it = valueEList.iterator(); it.hasNext();){
                 
-                this.fileSystemType = (FileSystemType) it.next();
+                this.fileSystemType = it.next();
                 
                 widgetName = this.widgetFeaturesMap
                         .get( new Integer(JsdlPackage.FILE_SYSTEM_TYPE__NAME) );
@@ -787,7 +815,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
             default:
             break;
           }
-        }// endif EReference
+        }// end_if EReference
         
         else {
 
@@ -802,6 +830,10 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     } //end if null    
     
     this.isNotifyAllowed = true;
+    
+    if ( this.adapterRefreshed ) {
+      this.adapterRefreshed = false;
+    }
     
   }// end load()
   

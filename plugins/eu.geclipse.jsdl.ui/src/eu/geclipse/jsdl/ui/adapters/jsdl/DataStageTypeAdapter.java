@@ -135,6 +135,7 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
    * This method populates the model content to the widgets registered with the
    * DataStageType adapter.
    */
+  @SuppressWarnings("unchecked")
   public void load()
   {
     this.isNotifyAllowed = false;
@@ -167,14 +168,13 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
                 tableName2 = this.tableFeaturesMap
                      .get(new Integer( JsdlPackage.DATA_STAGING_TYPE__TARGET ));
                 
-                EList valueList = (EList) jobDescrEObject.eGet( eStructuralFeature );                
-                if( !this.adapterRefreshed ) {               
+                       
+          
+                EList<EStructuralFeature > valueList = (EList<EStructuralFeature>) jobDescrEObject.eGet( eStructuralFeature );                
 
                   tableName.setInput( valueList );
                   tableName2.setInput( valueList);
-                  
-                  
-                  } // End_if adapterRefreshed
+
                } // end case DATA_STAGING
                               
               break;
@@ -190,6 +190,31 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
       
     } // End_if null
     
+    /* 
+     * If the refresh flag is set the unset it since we finished the refresh of
+     * the widgets
+     */
+    if ( this.adapterRefreshed ) {
+      this.adapterRefreshed = false;
+    }
+    
   }// end load()
+  
+  
+  /**
+   * @return TRUE if the adapter is empty. If it is empty, it means that there 
+   * is no DataStage element in the JSDL document. 
+   */ 
+  public boolean isEmpty() {
+    boolean status = false;
+
+    if (!this.dataStagingType.equals( null )){       
+      status = true;
+    }
+    
+    return status;
+  }
+  
+  
   
 } // End Class
