@@ -116,6 +116,47 @@ public class Extensions {
     = "priority"; //$NON-NLS-1$
   
   /**
+   * The ID of the CA certificate loader extension point.
+   */
+  public static final String CA_CERT_LOADER_POINT
+    = "eu.geclipse.core.caCertificateLoader"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the CA certificate loader configuration element
+   * of the CA certificate loader extension point.
+   */
+  public static final String CA_CERT_LOADER_ELEMENT
+    = "loader"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the name attribute of the loader configuration element
+   * of the CA certificate loader extension point.
+   */
+  public static final String CA_CERT_LOADER_NAME_ATTRIBUTE
+    = "name"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the class attribute of the loader configuration element
+   * of the CA certificate loader extension point.
+   */
+  public static final String CA_CERT_LOADER_CLASS_ATTRIBUTE
+    = "class"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the fromLocal attribute of the loader configuration element
+   * of the CA certificate loader extension point.
+   */
+  public static final String CA_CERT_LOADER_FROM_LOCAL_ATTRIBUTE
+    = "fromLocal"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the fromRemote attribute of the loader configuration element
+   * of the CA certificate loader extension point.
+   */
+  public static final String CA_CERT_LOADER_FROM_REMOTE_ATTRIBUTE
+    = "fromRemote"; //$NON-NLS-1$
+  
+  /**
    * The ID of the job status service manager point.
    */
   public static final String JOB_STATUS_SERVICE_MANAGER_POINT
