@@ -116,8 +116,6 @@ public class GEclipseFileStore
                               final IProgressMonitor monitor )
       throws CoreException {
     
-    System.out.println( "GEclipseFileStore#childNames@" + getName() + ": active = " + isActive() );
-    
     String[] result = this.childNames;
     
     if ( isActive() ) {
@@ -132,8 +130,7 @@ public class GEclipseFileStore
     }
     
     if ( result == null ) {
-      // FIXME get rid of this garbage creation, use FileStore.EMPTY_STRING_ARRAY instead
-      result = new String[ 0 ];
+      result = FileStore.EMPTY_STRING_ARRAY;
     }
     
     return result;
