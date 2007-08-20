@@ -8,6 +8,7 @@
    <extension-point id="authTokens" name="Authentication Tokens" schema="schema/authTokens.exsd"/>
    <extension-point id="authTokenProvider" name="Authentication Token Provider" schema="schema/authTokenProvider.exsd"/>
    <extension-point id="applicationDeployment" name="Application Deployment" schema="schema/applicationDeployment.exsd"/>
+   <extension-point id="caCertificateLoader" name="CA Certificate Loader" schema="schema/caCertificateLoader.exsd"/>
    <extension
          point="eu.geclipse.core.connectionManagement"
          id="eu.geclipse.core.connectionProtocol.gridftp">
@@ -69,5 +70,14 @@
             class="eu.geclipse.core.auth.CoreAuthTokenProvider"
             priority="0">
       </provider>
+   </extension>
+   <extension
+         point="eu.geclipse.core.caCertificateLoader">
+      <loader
+            class="eu.geclipse.core.internal.auth.EUGridPMACertificateLoader"
+            fromLocal="true"
+            fromRemote="true"
+            name="European Policy Management Authority for Grid Authentication">
+      </loader>
    </extension>
 </plugin>
