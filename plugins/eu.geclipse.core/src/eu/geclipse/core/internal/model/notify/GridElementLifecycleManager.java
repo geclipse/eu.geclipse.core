@@ -33,18 +33,18 @@ public class GridElementLifecycleManager
    * @see GridModel#getElementCreators()
    * @see GridModel#getStandardCreators()
    */
-  public static IGridElementCreator findCreator( final IResource res ) {
+  public static IGridElementCreator findCreator( final IResource resource ) {
     IGridElementCreator result = null;
     List< IGridElementCreator > creators
       = Extensions.getRegisteredElementCreators();
     for ( IGridElementCreator creator : creators ) {
-      if ( creator.canCreate( res ) ) {
+      if ( creator.canCreate( resource ) ) {
         result = creator;
         break;
       }
     }
     if ( result == null ) {
-      result = findStandardCreator( res );
+      result = findStandardCreator( resource );
     }
     return result;
   }
@@ -58,12 +58,12 @@ public class GridElementLifecycleManager
    * creator could be found.
    * @see GridModel#getStandardCreators()
    */
-  public static IGridElementCreator findStandardCreator( final IResource res ) {
+  public static IGridElementCreator findStandardCreator( final IResource resource ) {
     IGridElementCreator result = null;
     List< IGridElementCreator > standardCreators
       = GridModel.getStandardCreators();
     for ( IGridElementCreator creator : standardCreators ) {
-      if ( creator.canCreate( res ) ) {
+      if ( creator.canCreate( resource ) ) {
         result = creator;
         break;
       }
@@ -79,10 +79,10 @@ public class GridElementLifecycleManager
         resourceAdded( delta.getResource() );
         break;
       case IResourceDelta.REMOVED:
-        //resourceRemoved( delta.getResource() );
+        resourceRemoved( delta.getResource() );
         break;
       case IResourceDelta.CHANGED:
-        //resourceChanged( delta.getResource(), delta.getFlags() );
+        resourceChanged( delta.getResource(), delta.getFlags() );
         break;
     }
     
