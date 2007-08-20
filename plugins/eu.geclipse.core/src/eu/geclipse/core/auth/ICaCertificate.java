@@ -15,6 +15,10 @@
 
 package eu.geclipse.core.auth;
 
+import java.io.IOException;
+
+import org.eclipse.core.runtime.IPath;
+
 /**
  * Definition of a CA certificate. A CA certificate has always an ID and
  * an associated certificate file. It may also have additional files like
@@ -32,11 +36,8 @@ public interface ICaCertificate {
    */
   public String getID();
   
-  /**
-   * Get the hash code of this CA.
-   * 
-   * @return The hash that identifies this CA.
-   */
-  public long getCaHash();
+  public void delete( final IPath fromDirectory );
+  
+  public void write( final IPath toDirectory ) throws IOException;
   
 }
