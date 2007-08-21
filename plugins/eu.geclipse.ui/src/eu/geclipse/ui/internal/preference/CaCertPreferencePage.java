@@ -15,19 +15,12 @@
 
 package eu.geclipse.ui.internal.preference;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.Comparator;
 
 import org.eclipse.compare.IContentChangeListener;
 import org.eclipse.compare.IContentChangeNotifier;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.dialogs.ProgressMonitorDialog;
-import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
@@ -236,47 +229,6 @@ public class CaCertPreferencePage
    */
   protected void addFromDirectory() {
     addCertificates( CaCertificateImportWizard.ImportMethod.LOCAL );
-    /*NewCaCertDialog dialog = new NewCaCertDialog( NewCaCertDialog.FROM_DIRECTORY, getShell() );
-    if ( dialog.open() == Window.OK ) {
-      IStatus status = null;
-      String dirname = dialog.getResult();
-      final File dirfile = new File( dirname );
-      final CaCertManager manager = CaCertManager.getManager();
-      IRunnableWithProgress runnable = new IRunnableWithProgress() {
-        public void run( final IProgressMonitor monitor )
-            throws InvocationTargetException, InterruptedException {
-          try {
-            manager.importFromDirectory( dirfile, monitor );
-          } catch( IOException ioExc ) {
-            throw new InvocationTargetException( ioExc );
-          }
-        }
-      };
-      try {
-        new ProgressMonitorDialog( getShell() ).run( true, true, runnable );
-      } catch( InvocationTargetException itExc ) {
-        eu.geclipse.ui.internal.Activator.logException( itExc.getCause() );
-        status = new Status( IStatus.ERROR,
-                             eu.geclipse.ui.internal.Activator.PLUGIN_ID,
-                             IStatus.OK,
-                             Messages.getString( "CaCertPreferencePage.load_cert_error" ), //$NON-NLS-1$
-                             itExc.getCause() );
-      } catch( InterruptedException intExc ) {
-        eu.geclipse.ui.internal.Activator.logException( intExc );
-        status = new Status( IStatus.ERROR,
-                             eu.geclipse.ui.internal.Activator.PLUGIN_ID,
-                             IStatus.OK,
-                             Messages.getString( "CaCertPreferencePage.load_cert_error" ), //$NON-NLS-1$
-                             intExc );
-      }
-      if ( status != null ) {
-        ErrorDialog.openError( getShell(),
-                               Messages.getString( "CaCertPreferencePage.cert_error" ), //$NON-NLS-1$
-                               Messages.getString( "CaCertPreferencePage.unable_load_cert_error" ), //$NON-NLS-1$
-                               status );
-      }
-      updateCaList();
-    }*/
   }
   
   /**
@@ -285,54 +237,6 @@ public class CaCertPreferencePage
    */
   protected void addFromRepository() {
     addCertificates( CaCertificateImportWizard.ImportMethod.REMOTE );
-    /*NewCaCertDialog dialog = new NewCaCertDialog( NewCaCertDialog.FROM_REPOSITORY, getShell() );
-    if ( dialog.open() == Window.OK ) {
-      boolean updateList = true;
-      final String repoString = dialog.getResult();
-      try {
-        final URL repoURL = new URL( repoString );
-        final CaCertManager manager = CaCertManager.getManager();
-        IRunnableWithProgress runnable = new IRunnableWithProgress() {
-          public void run( final IProgressMonitor monitor )
-              throws InvocationTargetException, InterruptedException {
-            try {
-              manager.importFromRepository( repoURL, monitor );
-            } catch( GridException gExc ) {
-              throw new InvocationTargetException( gExc );
-            }
-          }
-        };
-        new ProgressMonitorDialog( getShell() ).run( true, true, runnable );
-      } catch( MalformedURLException muExc ) {
-        // Will be catched implicit by CaCertManager
-      } catch( InvocationTargetException itExc ) {
-        Throwable cause = itExc.getCause();
-        if ( cause instanceof GridException ) {
-          GridException gExc = ( GridException ) cause;
-          ISolution slave = SolutionRegistry.getRegistry().getSolution( SolutionRegistry.CHECK_SERVER_URL );
-          ISolution solution = new UISolution( slave, getShell() ) {
-            @Override
-            public void solve() {
-              addFromRepository();
-            }
-          };
-          gExc.getProblem().addSolution( solution );
-          int result = 
-            NewProblemDialog.openProblem( getShell(),
-                                          Messages.getString( "CaCertPreferencePage.cert_error" ), //$NON-NLS-1$
-                                          Messages.getString( "CaCertPreferencePage.unable_load_cert_rep_error" ), //$NON-NLS-1$
-                                          gExc );
-          updateList = result != NewProblemDialog.SOLVE;
-        }
-      } catch( InterruptedException intExc ) {
-        // Nothing to do here
-      }
-      
-      if ( updateList ) {
-        updateCaList();
-      }
-
-    }*/
   }
   
   /**
@@ -348,46 +252,7 @@ public class CaCertPreferencePage
                                                    Messages.getString( "CaCertPreferencePage.confirm_delete_message" ) ); //$NON-NLS-1$
       if ( confirm ) {
         final CaCertManager manager = CaCertManager.getManager();
-        IRunnableWithProgress runnable = new IRunnableWithProgress() {
-          public void run( final IProgressMonitor monitor )
-              throws InvocationTargetException, InterruptedException {
-            monitor.beginTask( Messages.getString( "CaCertPreferencePage.delete_cert_prog" ), selected.length ); //$NON-NLS-1$
-            for ( int i = 0 ; i < selected.length ; i++ ) {
-              monitor.subTask( selected[i] );
-              manager.deleteCertificate( selected[i] );
-              monitor.worked( 1 );
-              if ( monitor.isCanceled() ) {
-                break;
-              }
-              monitor.done();
-            }
-          }
-        };
-        IStatus status = null;
-        try {
-          new ProgressMonitorDialog( getShell() ).run( true, true, runnable );
-        } catch( InvocationTargetException itExc ) {
-          eu.geclipse.ui.internal.Activator.logException( itExc );
-          status = new Status( IStatus.ERROR,
-                               eu.geclipse.ui.internal.Activator.PLUGIN_ID,
-                               IStatus.OK,
-                               Messages.getString( "CaCertPreferencePage.delete_cert_error" ), //$NON-NLS-1$
-                               itExc.getCause() );
-        } catch( InterruptedException intExc ) {
-          eu.geclipse.ui.internal.Activator.logException( intExc );
-          status = new Status( IStatus.ERROR,
-                               eu.geclipse.ui.internal.Activator.PLUGIN_ID,
-                               IStatus.OK,
-                               Messages.getString( "CaCertPreferencePage.delete_cert_error" ), //$NON-NLS-1$
-                               intExc );
-        }
-        if ( status != null ) {
-          ErrorDialog.openError( getShell(),
-                                 Messages.getString( "CaCertPreferencePage.cert_error" ), //$NON-NLS-1$
-                                 Messages.getString( "CaCertPreferencePage.unable_delete_cert_error" ), //$NON-NLS-1$
-                                 status );
-        }
-        updateCaList();
+        manager.deleteCertificates( selected );
       }
     }
   }
