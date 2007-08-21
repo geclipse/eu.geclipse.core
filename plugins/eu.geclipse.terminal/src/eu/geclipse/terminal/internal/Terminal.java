@@ -1058,7 +1058,7 @@ public class Terminal extends Canvas {
   private void reset() {
     this.cursor.reset( this.defaultFgColor, this.defaultBgColor );
     this.tabulatorPositons.clear();
-    this.wraparound = false;
+    this.wraparound = true; // <-- XXX is this really the right value for VT100?
     this.reverseWraparound = false;
     this.reverseScreenMode = false;
     this.newLineMode = false;
