@@ -49,7 +49,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Tree;
 
-import eu.geclipse.core.filesystem.GEclipseFileSystem;
 import eu.geclipse.core.filesystem.GEclipseURI;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
