@@ -3,6 +3,11 @@ package eu.geclipse.core.filesystem;
 import java.net.URI;
 import java.net.URISyntaxException;
 
+import org.eclipse.core.filesystem.EFS;
+import org.eclipse.core.filesystem.IFileStore;
+import org.eclipse.core.filesystem.IFileSystem;
+import org.eclipse.core.runtime.CoreException;
+
 public class GEclipseURI {
   
   private static final String SCHEME = "gecl"; //$NON-NLS-1$
@@ -18,7 +23,21 @@ public class GEclipseURI {
   private URI masterURI;
 
   public GEclipseURI( final URI uri ) {
-    this.masterURI = getMasterURI( uri );
+    
+    URI slaveURI = getSlaveURI( uri );
+    
+    // Get the unique slave URI by using the file stores toURI()-method
+    try {
+      IFileSystem fileSystem = EFS.getFileSystem( slaveURI.getScheme() );
+      IFileStore fileStore = fileSystem.getStore( slaveURI );
+      slaveURI = fileStore.toURI();
+    } catch ( CoreException cExc ) {
+      // Do nothing in order to make the constructor fail-safe.
+      // If an exception occurs just use the original slave URI.
+    }
+    
+    this.masterURI = getMasterURI( slaveURI );
+    
   }
   
   public static String getScheme() {
