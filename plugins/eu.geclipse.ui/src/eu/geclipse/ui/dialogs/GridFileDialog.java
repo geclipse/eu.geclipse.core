@@ -26,7 +26,6 @@ import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -183,7 +182,7 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
   @Override
   public boolean close() {
     IConnectionManager cManager = GridModel.getConnectionManager();
-    cManager.removeGridModelListener( this );
+    GridModel.getRoot().removeGridModelListener( this );
     return super.close();
   }
 
@@ -315,7 +314,7 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
         handleDoubleClick();
       }
     } );
-    cManager.addGridModelListener( this );
+    GridModel.getRoot().addGridModelListener( this );
     cProvider.addConfigurationListener( new IConfigurationListener() {
 
       public void configurationChanged( final ConfigurableContentProvider source )
