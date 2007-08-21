@@ -16,11 +16,9 @@
 package eu.geclipse.core.auth;
 
 import java.net.URL;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import eu.geclipse.core.GridException;
 
 /**This class tests the methods in the CaCertManager class 
  * 
@@ -53,15 +51,6 @@ public class CaCertManager_PDETest {
   }
 
 
-  /** Tests the method {@link CaCertManager#importFromRepository(URL, org.eclipse.core.runtime.IProgressMonitor)}
-   * this test must be first performed, because other methods tests need CA
-   * @throws GridException 
-   */
-  @Test
-  public void testImportFromRepository() throws GridException
-  {
-    this.cacertmanager.importFromRepository( this.url, new NullProgressMonitor() );
-  }
   /** Tests the method {@link CaCertManager#getCertificates()}
    * it must not be null
    */
