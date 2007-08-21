@@ -36,6 +36,8 @@ public interface ICaCertificate {
    */
   public String getID();
   
+  public byte[] getCertificateData();
+  
   public void delete( final IPath fromDirectory );
   
   public void write( final IPath toDirectory ) throws IOException;

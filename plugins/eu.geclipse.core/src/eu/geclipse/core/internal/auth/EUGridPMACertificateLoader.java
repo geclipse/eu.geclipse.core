@@ -2,7 +2,6 @@ package eu.geclipse.core.internal.auth;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -29,10 +28,20 @@ import eu.geclipse.core.util.tar.TarArchiveException;
 import eu.geclipse.core.util.tar.TarEntry;
 import eu.geclipse.core.util.tar.TarInputStream;
 
-public class EUGridPMACertificateLoader implements ICaCertificateLoader {
+public class EUGridPMACertificateLoader
+    implements ICaCertificateLoader {
   
   private static final String DEFAULT_LOCATION
     = "http://www.eugridpma.org/distribution/igtf/current/accredited/tgz"; //$NON-NLS-1$
+  
+  public ICaCertificate getCertificate( final IPath path )
+      throws GridException {
+    try {
+      return EUGridPMACertificate.readFromFile( path );
+    } catch ( IOException ioExc ) {
+      throw new GridException( CoreProblems.UNSPECIFIED_IO_PROBLEM, ioExc );
+    }
+  }
   
   public ICaCertificate getCertificate( final URI uri, final String certID, final IProgressMonitor monitor )
       throws GridException {
@@ -80,23 +89,6 @@ public class EUGridPMACertificateLoader implements ICaCertificateLoader {
           
           else if ( EUGridPMACertificate.INFO_FILE_EXTENSION.equalsIgnoreCase( extension ) ) {
             infoData = readFromStream( tiStream );
-            /*ByteArrayOutputStream baoStream = new ByteArrayOutputStream();
-            tiStream.copyEntryContents( baoStream );
-            byte[] byteArray = baoStream.toByteArray();
-            ByteArrayInputStream baiStream = new ByteArrayInputStream( byteArray );
-            InputStreamReader isReader = new InputStreamReader( baiStream );
-            BufferedReader bReader = new BufferedReader( isReader );
-            String line;
-            while ( ( line = bReader.readLine() ) != null ) {
-              String[] parts = line.split( "=" ); //$NON-NLS-1$
-              String  fieldID = parts[0].trim();
-              if ( fieldID.equalsIgnoreCase( "alias" ) && ( parts.length > 1 ) ) { //$NON-NLS-1$
-                certificateID = parts[1].trim();
-                break;
-              }
-            }
-            bReader.close();
-            isReader.close();*/
           }
           
         }

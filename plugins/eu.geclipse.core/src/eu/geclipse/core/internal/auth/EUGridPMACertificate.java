@@ -1,69 +1,122 @@
 package eu.geclipse.core.internal.auth;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.Reader;
+import java.io.Writer;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 
+import eu.geclipse.core.auth.AbstractCaCertificate;
 import eu.geclipse.core.auth.ICaCertificate;
 
-public class EUGridPMACertificate implements ICaCertificate {
+public class EUGridPMACertificate
+    extends PEMCertificate {
   
-  static final String CERT_FILE_EXTENSION
-    = "0"; //$NON-NLS-1$
-
   static final String INFO_FILE_EXTENSION
     = "info"; //$NON-NLS-1$
   
-  private static final String INVALID_ID = "N/A"; //$NON-NLS-1$
+  private static final String LIST_FILE_EXTENSION
+    = "eugridpma"; //$NON-NLS-1$
   
-  private byte[] certificateData;
+  private static final String INVALID_ID = "N/A"; //$NON-NLS-1$
   
   private byte[] infoData;
   
-  private String id;
-  
   EUGridPMACertificate( final byte[] certificateData,
                         final byte[] infoData ) {
-    Assert.isNotNull( certificateData );
+    super( getIDFromInfo( infoData ), certificateData );
     Assert.isNotNull( infoData );
-    this.certificateData = certificateData;
     this.infoData = infoData;
-    this.id = getIDFromInfo( infoData );
   }
   
-  public void delete( final IPath fromDirectory ) {
-    // TODO mathias
-  }
-
-  public String getID() {
-    return this.id;
+  static EUGridPMACertificate readFromFile( final IPath filePath )
+      throws IOException {
+    
+    EUGridPMACertificate result = null;
+    
+    if ( LIST_FILE_EXTENSION.equals( filePath.getFileExtension() ) ) {
+      
+      FileReader fReader = new FileReader( filePath.toFile() );
+      BufferedReader bReader = new BufferedReader( fReader );
+      
+      try {
+        
+        String line = bReader.readLine();
+        IPath certFilePath = new Path( line );
+        byte[] certData = read( certFilePath );
+        
+        line = bReader.readLine();
+        IPath infoFilePath = new Path( line );
+        byte[] infoData = read( infoFilePath );
+        
+        result = new EUGridPMACertificate( certData, infoData );
+        
+      } finally {
+        secureClose( bReader );
+        secureClose( fReader );
+      }
+      
+    }
+    
+    return result;
+    
   }
   
+  public byte[] getInfoData() {
+    return this.infoData;
+  }
+  
+  @Override
   public void write( final IPath toDirectory )
       throws IOException {
     
-    String filename = getID();
+    String fileName = getID();
+    IPath filePath = toDirectory.append( fileName );
     
-    IPath certFilePath
-      = toDirectory.append( filename ).addFileExtension( CERT_FILE_EXTENSION );
-    write( this.certificateData, certFilePath );
+    IPath listFilePath = filePath.addFileExtension( LIST_FILE_EXTENSION );
+    IPath certFilePath = filePath.addFileExtension( CERT_FILE_EXTENSION );
+    IPath infoFilePath = filePath.addFileExtension( INFO_FILE_EXTENSION );
     
-    IPath infoFilePath
-      = toDirectory.append( filename ).addFileExtension( INFO_FILE_EXTENSION );
-    write( this.infoData, infoFilePath );
+    FileWriter fWriter = new FileWriter( listFilePath.toFile() );
+    BufferedWriter bWriter = new BufferedWriter( fWriter );
+    try {
+      bWriter.write( certFilePath.toString() );
+      bWriter.newLine();
+      bWriter.write( infoFilePath.toString() );
+    } finally {
+      secureClose( bWriter );
+      secureClose( fWriter );
+    }
+    
+    write( getCertificateData(), certFilePath );
+    write( getInfoData(), infoFilePath );
     
   }
   
-  private String getIDFromInfo( final byte[] info ) {
+  @Override
+  protected String[] getFileNames() {
+    return new String[] {
+      new Path( getID() ).addFileExtension( LIST_FILE_EXTENSION ).toString(),
+      new Path( getID() ).addFileExtension( CERT_FILE_EXTENSION ).toString(),
+      new Path( getID() ).addFileExtension( INFO_FILE_EXTENSION ).toString()
+    };
+  }
+  
+  private static String getIDFromInfo( final byte[] info ) {
     
     String result = INVALID_ID;
     
@@ -99,46 +152,4 @@ public class EUGridPMACertificate implements ICaCertificate {
   
   }
   
-  private void secureClose( final InputStream iStream ) {
-    if ( iStream != null ) {
-      try {
-        iStream.close();
-      } catch (IOException e) {
-        // Do nothing here, just catch
-      }
-    }
-  }
-  
-  private void secureClose( final OutputStream oStream ) {
-    if ( oStream != null ) {
-      try {
-        oStream.close();
-      } catch (IOException e) {
-        // Do nothing here, just catch
-      }
-    }
-  }
-  
-  private void secureClose( final Reader reader ) {
-    if ( reader != null ) {
-      try {
-        reader.close();
-      } catch (IOException e) {
-        // Do nothing here, just catch
-      }
-    }
-  }
-  
-  private void write( final byte[] data, final IPath filePath )
-      throws IOException {
-    File file = filePath.toFile();
-    FileOutputStream foStream = null;
-    try {
-      foStream = new FileOutputStream( file );
-      foStream.write( data );
-    } finally {
-      secureClose( foStream );
-    }
-  }
-
 }

@@ -79,5 +79,11 @@
             fromRemote="true"
             name="European Policy Management Authority for Grid Authentication">
       </loader>
+      <loader
+            class="eu.geclipse.core.internal.auth.PEMCertificateLoader"
+            fromLocal="true"
+            fromRemote="false"
+            name="PEM Based Certificate Loader">
+      </loader>
    </extension>
 </plugin>

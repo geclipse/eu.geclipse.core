@@ -18,12 +18,17 @@ package eu.geclipse.core.auth;
 import java.io.File;
 import java.io.IOException;
 import java.util.Hashtable;
+import java.util.List;
 
 import org.eclipse.compare.IContentChangeListener;
 import org.eclipse.compare.IContentChangeNotifier;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.ListenerList;
+import org.eclipse.core.runtime.Path;
 
+import eu.geclipse.core.ExtensionManager;
+import eu.geclipse.core.Extensions;
+import eu.geclipse.core.GridException;
 import eu.geclipse.core.internal.Activator;
 
 /**
@@ -35,36 +40,6 @@ import eu.geclipse.core.internal.Activator;
  * @author stuempert-m
  */
 public class CaCertManager implements IContentChangeNotifier {
-  
-//  /**
-//   * Internally used implementation of the {@link ICaCertificate} interface.
-//   * 
-//   * @author stuempert-m
-//   */
-//  private class CaCertificate extends AbstractCaCertificate {
-//    
-//    /**
-//     * Protected standard constructor.
-//     */
-//    protected CaCertificate() {
-//      // empty implementation
-//    }
-//    
-//    /**
-//     * Delete all files from disk that are related to this CA certificate.
-//     */
-//    protected void delete() {
-//      IPath[] files = getFiles();
-//      for ( int i = 0 ; i < files.length ; i++ ) {
-//        File file = files[i].toFile();
-//        if ( file.exists() ) {
-//          file.delete();
-//        }
-//      }
-//    }
-//    
-//  }
-  
   
   /**
    * The singleton.
@@ -149,11 +124,22 @@ public class CaCertManager implements IContentChangeNotifier {
    * If no such certificate was found nothing will be done.
    */
   public void deleteCertificate( final String id ) {
-    ICaCertificate certificate = this.certs.get( id );
+    ICaCertificate certificate = getCertificate( id );
     if ( certificate != null ) {
       if ( internalDeleteCertificate( certificate ) ) {
         fireContentChanged();
       }
+    }
+  }
+  
+  public void deleteCertificates( final String[] ids ) {
+    boolean changed = false;
+    for ( String id : ids ) {
+      ICaCertificate certificate = getCertificate( id );
+      changed |= internalDeleteCertificate( certificate );
+    }
+    if ( changed ) {
+      fireContentChanged();
     }
   }
   
@@ -177,131 +163,7 @@ public class CaCertManager implements IContentChangeNotifier {
     }
     return location;
   }
-  
-//  /**
-//   * Import CA certificates from an online repository.
-//   * 
-//   * @param repo The URL of the repository.
-//   * @param monitor A progress monitor used to monitor the import operation.
-//   * @throws GridException If a problem occurs when connecting to the specified
-//   *             repository.
-//   */
-//  public void importFromRepository( final URL repo,
-//                                    final IProgressMonitor monitor )
-//      throws GridException {
-//    
-//    monitor.beginTask( Messages.getString( "CaCertManager.fetching_files_task" ), 103 ); //$NON-NLS-1$
-//    
-//    // Connecting to repository
-//    monitor.subTask( Messages.getString( "CaCertManager.connecting_task" ) ); //$NON-NLS-1$
-//    monitor.worked( 1 );
-//    
-//    // Getting list of files
-//    List< String > files = null;
-//    if ( !monitor.isCanceled() ) {
-//      monitor.subTask( Messages.getString( "CaCertManager.getting_files_task" ) ); //$NON-NLS-1$
-//      files = getFilesFromRepository( repo );
-//      monitor.worked( 1 );
-//    }
-//    
-//    // Loading files from repository
-//    if ( !monitor.isCanceled() && ( files != null ) ) {
-//      int lastProg = 0;
-//      for ( int i = 0 ; i < files.size() ; i++ ) {
-//        String message =   Messages.getString( "CaCertManager.download_unzip_task" ) //$NON-NLS-1$
-//                         + files.get( i );
-//        monitor.subTask( message );
-//        try {
-//          URL url = new URL( repo.toString() + "/" + files.get( i ) ); //$NON-NLS-1$
-//          loadFileFromRepository( url );
-//        } catch( MalformedURLException muExc ) {
-//          Activator.logException( muExc );
-//        }
-//        int prog = 100 * i / files.size();
-//        if ( prog > lastProg ) {
-//          monitor.worked( prog - lastProg );
-//          lastProg = prog;
-//        }
-//        if ( monitor.isCanceled() ) {
-//          break;
-//        }
-//      }
-//      monitor.worked( 1 );
-//    }
-//    
-//    // Update list of CAs if necessary
-//    if ( !monitor.isCanceled() && ( files != null ) && ( files.size() > 0 ) ) {
-//      monitor.setTaskName( Messages.getString( "CaCertManager.updating_list_task" ) ); //$NON-NLS-1$
-//      update();
-//      fireContentChanged();
-//      monitor.worked( 1 );
-//    }
-//    
-//    monitor.done();
-//    
-//  }
-  
-//  /**
-//   * Import CA certificates from a local directory.
-//   * 
-//   * @param dir The directory from which to import the certificates.
-//   * 
-//   * @param monitor A progress monitor used to indicate the progress of
-//   * this operation.
-//   * 
-//   * @throws IOException Thrown if an error occured when accessing the
-//   * specified directory.
-//   */
-//  public void importFromDirectory( final File dir,
-//                                   final IProgressMonitor monitor )
-//      throws IOException {
-//    
-//    if( !dir.exists() ) {
-//      throw new IOException( Messages.getString( "CaCertManager.dir_not_found_error" ) + dir.getPath() ); //$NON-NLS-1$
-//    }
-//    
-//    if( !dir.isDirectory() ) {
-//      throw new IOException( Messages.getString( "CaCertManager.not_a_dir_error" ) + dir.getPath() ); //$NON-NLS-1$
-//    }
-//    
-//    File[] certFiles = dir.listFiles( new FilenameFilter() {
-//      public boolean accept( final File ddir, final String name ) {
-//        return name.endsWith( ".0" ); //$NON-NLS-1$
-//      }
-//    } );
-//    
-//    IPath destPath = getCaCertLocation();
-//
-//    monitor.beginTask( Messages.getString( "CaCertManager.copy_files_prog_msg" ), certFiles.length+1 ); //$NON-NLS-1$
-//    for ( int i = 0 ; i < certFiles.length ; i++ ) {
-//    
-//      IPath srcPath = new Path( certFiles[i].getPath() );
-//      IPath file = new Path( srcPath.removeFileExtension().lastSegment() );
-//      srcPath = srcPath.removeLastSegments( 1 );
-//      
-//      copyFile( srcPath, destPath, file, "0", monitor ); //$NON-NLS-1$
-//      copyFile( srcPath, destPath, file, "r0", monitor ); //$NON-NLS-1$
-//      copyFile( srcPath, destPath, file, "crl_url", monitor ); //$NON-NLS-1$
-//      copyFile( srcPath, destPath, file, "info", monitor ); //$NON-NLS-1$
-//      
-//      monitor.worked( 1 );
-//      if ( monitor.isCanceled() ) {
-//        i = certFiles.length;
-//      }
-//      
-//    }
-//    
-//    if ( certFiles.length > 0 ) {
-//      monitor.setTaskName( Messages.getString( "CaCertManager.updating_list_task" ) ); //$NON-NLS-1$
-//      update();
-//      fireContentChanged();
-//    }
-//    monitor.worked( 1 );
-//    
-//    monitor.done();
-//    
-//  }
-  
+
   /* (non-Javadoc)
    * @see org.eclipse.compare.IContentChangeNotifier#addContentChangeListener(org.eclipse.compare.IContentChangeListener)
    */
@@ -316,189 +178,48 @@ public class CaCertManager implements IContentChangeNotifier {
     this.ccListeners.remove( listener );
   }
   
-//  /**
-//   * Copy a file from one local location to another.
-//   *  
-//   * @param from The source folder.
-//   * 
-//   * @param to The target folder.
-//   * 
-//   * @param file The file to be copied.
-//   * 
-//   * @param extension The extension of the copied file.
-//   * 
-//   * @param monitor A progress monitor to indicate the progress of
-//   * this operation.
-//   * 
-//   * @return The path of the new file.
-//   * 
-//   * @throws IOException If an exception occurs during this operation.
-//   */
-//  private IPath copyFile( final IPath from,
-//                          final IPath to,
-//                          final IPath file,
-//                          final String extension,
-//                          final IProgressMonitor monitor ) throws IOException {
-//    
-//    IPath fileName = file.addFileExtension( extension );
-//    IPath srcFile = from.append( fileName );
-//    IPath dstFile = to.append( fileName );
-//    monitor.subTask( fileName.toString() );
-//    FileReader fReader = null;
-//    FileWriter fWriter = null;
-//    BufferedReader bReader = null;
-//    BufferedWriter bWriter = null;
-//    try {
-//      fReader = new FileReader( srcFile.toFile() );
-//      bReader = new BufferedReader( fReader );
-//      fWriter = new FileWriter( dstFile.toFile() );
-//      bWriter = new BufferedWriter( fWriter );
-//      String line;
-//      while ( ( line = bReader.readLine() ) != null ) {
-//        bWriter.write( line );
-//        bWriter.newLine();
-//      }
-//    } catch ( final FileNotFoundException fnfExc ) {
-//      // We won't do anything here since not all files have to be present
-//      dstFile = null;
-//    } catch ( final IOException ioExc ) {
-//      throw ioExc;
-//    } finally {
-//      if ( bReader != null ) bReader.close();
-//      if ( bWriter != null ) bWriter.close();
-//      if ( fReader != null ) fReader.close();
-//      if ( fWriter != null ) fWriter.close();
-//    }
-//    
-//    return dstFile;
-//    
-//  }
-  
   /**
    * Update this manager.
    */
   private void update() {
     
-//    this.certs.clear();
-//    IPath certLocation = getCaCertLocation();
-//    File certDir = certLocation.toFile();
-//    
-//    if ( certDir.isDirectory() ) {
-//      
-//      String[] certFiles = certDir.list( new FilenameFilter() {
-//        public boolean accept( final File dir, final String name ) {
-//          return name.endsWith( ".0" ); //$NON-NLS-1$
-//        }
-//      } );
-//      
-//      for ( int i = 0 ; i < certFiles.length ; i++ ) {
-//        
-//        final IPath certPath   = new Path( certFiles[i] );
-//        
-//        final String filename = certPath.removeFileExtension().lastSegment();
-//        String[] caFiles = certDir.list( new FilenameFilter() {
-//          public boolean accept( final File dir, final String name ) {
-//            return name.startsWith( filename );
-//          }
-//        } );
-//        
-//        CaCertificate cert = new CaCertificate();
-//        for ( int j = 0 ; j < caFiles.length ; j++ ) {
-//          cert.addFile( certLocation.append( caFiles[j] ) );
-//        }
-//        this.certs.put( cert.getID(), cert );
-//        
-//      }
-//      
-//    }
+    this.certs.clear();
+    IPath certLocation = getCaCertLocation();
+    File certDir = certLocation.toFile();
+    
+    if ( certDir.isDirectory() ) {
+      
+      String[] certFiles = certDir.list();
+      
+      if ( ( certFiles != null ) && ( certFiles.length > 0 ) ) {
+        
+        ExtensionManager extManager = new ExtensionManager();
+        List< Object > loaders
+          = extManager.getExecutableExtensions(
+              Extensions.CA_CERT_LOADER_POINT,
+              Extensions.CA_CERT_LOADER_ELEMENT,
+              Extensions.CA_CERT_LOADER_CLASS_ATTRIBUTE );
+     
+        for ( int i = 0 ; i < certFiles.length ; i++ ) {
+          final IPath certPath = certLocation.append( certFiles[i] );
+          for ( Object o : loaders ) {
+            ICaCertificateLoader loader = ( ICaCertificateLoader ) o;
+            try {
+              ICaCertificate certificate = loader.getCertificate( certPath );
+              if ( certificate != null ) {
+                internalAddCertificate( certificate );
+                break;
+              }
+            } catch ( GridException gExc ) {
+              Activator.logException( gExc );
+            }
+          }
+        }
+      }
+    }
     
   }
-  
-//  /**
-//   * Get a list of files contained in the specified repository.
-//   * 
-//   * @param url The URL of the repository.
-//   * 
-//   * @return The list of files contained in the repository.
-//   * 
-//   * @throws CoreException If an exception occures while
-//   * contacting the repository.
-//   */
-//  private List<String> getFilesFromRepository( final URL url )
-//      throws GridException {
-//    
-//    List< String > files = new ArrayList< String >();
-//    try {
-//      URLConnection connection = Preferences.getURLConnection( url );
-//      try {
-//        connection.connect();
-//      } catch ( SocketTimeoutException toExc ) {
-//        throw new GridException( CoreProblems.CONNECTION_TIMEOUT, toExc );
-//      }
-//      InputStream iStream = connection.getInputStream();
-//      InputStreamReader iReader = new InputStreamReader( iStream );
-//      BufferedReader bReader = new BufferedReader( iReader );
-//      String line;
-//      StringBuffer buffer = new StringBuffer();
-//      while ( ( line = bReader.readLine() ) != null ) {
-//        buffer.append( line );
-//      }
-//      bReader.close();
-//      String content = buffer.toString().replaceAll( " ", "" ); //$NON-NLS-1$ //$NON-NLS-2$
-//      int index = -1;
-//      while ( ( index = content.indexOf( "ahref=\"", index+1 ) ) > 0 ) { //$NON-NLS-1$
-//        int endIndex = content.indexOf( "\">", index+7 ); //$NON-NLS-1$
-//        if ( endIndex > 0 ) {
-//          String file = content.substring( index+7, endIndex );
-//          if ( file.toLowerCase().endsWith( ".tar.gz" ) ) { //$NON-NLS-1$
-//            files.add( file );
-//          }
-//        }
-//        index = endIndex;
-//      }
-//    } catch ( IOException ioExc ) {
-//      throw new GridException( CoreProblems.CONNECTION_FAILED, ioExc );
-//    }
-//    return files;
-//  }
-  
-//  /**
-//   * Load a file from the specified online repository.
-//   * 
-//   * @param url The URL of the repository.
-//   * 
-//   * @throws CoreException Thrown if an exception occurs while
-//   * contacting the specified repository.
-//   */
-//  private void loadFileFromRepository( final URL url )
-//      throws GridException {
-//    IPath location = getCaCertLocation();
-//    try {
-//      URLConnection connection = Preferences.getURLConnection( url );
-//      try {
-//        connection.connect();
-//      } catch ( SocketTimeoutException toExc ) {
-//        throw new GridException( CoreProblems.CONNECTION_TIMEOUT, toExc );
-//      }
-//      InputStream iStream = connection.getInputStream();
-//      BufferedInputStream bStream = new BufferedInputStream( iStream );
-//      GZIPInputStream zStream = new GZIPInputStream( bStream );
-//      TarInputStream tIStream = new TarInputStream( zStream );
-//      TarEntry tEntry;
-//      while ( ( tEntry = tIStream.getNextEntry() ) != null ) {
-//        if ( !tEntry.isDirectory() ) {
-//          IPath oPath = tEntry.getPath();
-//          oPath = location.append( oPath.lastSegment() );
-//          FileOutputStream fOStream = new FileOutputStream( oPath.toFile() );
-//          tIStream.copyEntryContents(fOStream);
-//          fOStream.close();
-//        }
-//      }
-//    } catch ( IOException ioExc ) {
-//      throw new GridException( CoreProblems.CONNECTION_FAILED, ioExc );
-//    }
-//  }
-  
+
   /**
    * Notify all registered IContentChangeListeners about content changes.
    */
