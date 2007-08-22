@@ -16,23 +16,34 @@
  *****************************************************************************/
 package eu.geclipse.jsdl.ui.adapters.jsdl;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
 
+import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
+import org.eclipse.swt.widgets.Button;
 
+import eu.geclipse.jsdl.model.CreationFlagEnumeration;
 import eu.geclipse.jsdl.model.DataStagingType;
+import eu.geclipse.jsdl.model.DocumentRoot;
 import eu.geclipse.jsdl.model.JobDefinitionType;
 import eu.geclipse.jsdl.model.JobDescriptionType;
 import eu.geclipse.jsdl.model.JsdlFactory;
 import eu.geclipse.jsdl.model.JsdlPackage;
+import eu.geclipse.jsdl.model.SourceTargetType;
 
 
 
@@ -45,13 +56,20 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
   private boolean isNotifyAllowed = true;
   private boolean adapterRefreshed = false;
   
+  private DocumentRoot documentRoot = 
+                                    JsdlFactory.eINSTANCE.createDocumentRoot();
+  
   
   private DataStagingType dataStagingType =
                                   JsdlFactory.eINSTANCE.createDataStagingType();
   
+  private SourceTargetType sourceTargetType = 
+                                 JsdlFactory.eINSTANCE.createSourceTargetType();
+  
   
   private Hashtable< Integer, TableViewer > tableFeaturesMap = new Hashtable< Integer, TableViewer >();
   private JobDescriptionType jobDescriptionType = JsdlFactory.eINSTANCE.createJobDescriptionType();
+  
   
   
   /**
@@ -109,7 +127,8 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
         return ((DataStagingType) element).getSource()!= null;
       }
     });
-  }
+    
+  } // End void attactToStageIn()
   
   
   
@@ -126,8 +145,136 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
         return ((DataStagingType) element).getTarget()!= null;
       }
     });
-  }
+    
+  } //End void attactToStageOut()
   
+  
+  
+  /**
+   * 
+   * Adapter interface to attach to the DataStage Delete button
+   * widget.
+   *  
+   * @param button The SWT Button that triggered the Delete event.
+   * @param viewer The {@link org.eclipse.jface.viewers.TableViewer}
+   * containing the element to be deleted.
+   */
+  public void attachToDelete(final Button button, final TableViewer viewer){
+
+    button.addSelectionListener(new SelectionListener() {
+
+      public void widgetSelected(final SelectionEvent event) {        
+        performDelete(viewer);
+      }
+
+      public void widgetDefaultSelected(final SelectionEvent event) {
+          // Do Nothing - Required method
+      }
+    });
+    
+    
+  } // End void attachToDelete()
+  
+  
+  
+  
+  /**
+   * @param tableViewer
+   * @param value
+   */
+  
+  public void performAdd ( final TableViewer tableViewer, final Object[] value) {
+    
+    if (value[0] == null) {
+      return;
+    }
+    
+    EStructuralFeature eStructuralFeature = null;   
+    Collection<DataStagingType> collection = new ArrayList<DataStagingType>();
+    int featureID = JsdlPackage.JOB_DESCRIPTION_TYPE__DATA_STAGING;
+
+    
+    EList <DataStagingType> newInputList = (EList<DataStagingType>)tableViewer.getInput(); 
+    
+    if (newInputList == null) {
+      newInputList = new BasicEList<DataStagingType>();
+    }
+        
+   
+    
+//    this.dataStagingType = JsdlFactory.eINSTANCE.createDataStagingType();
+    
+    this.dataStagingType.setFileName( value[0].toString() );
+    this.dataStagingType.setFilesystemName( value[0].toString() );
+    this.dataStagingType.setName(value[0].toString() );    
+    this.sourceTargetType.setURI( value[1].toString() );
+    this.dataStagingType.setSource( this.sourceTargetType );
+    this.dataStagingType.setTarget( null );
+    this.dataStagingType.setCreationFlag( CreationFlagEnumeration.APPEND_LITERAL );
+    this.dataStagingType.setDeleteOnTermination( false );
+    newInputList.add( this.dataStagingType );
+    
+    eStructuralFeature = this.jobDescriptionType.eClass().getEStructuralFeature( featureID );
+    
+    tableViewer.setInput(newInputList);
+    
+    for ( int i=0; i<tableViewer.getTable().getItemCount(); i++ ) {
+      System.out.println(tableViewer.getElementAt( i ));
+      collection.add( (DataStagingType) tableViewer.getElementAt( i ) );
+    }
+               
+
+    this.jobDescriptionType.eSet(eStructuralFeature, collection);
+    
+    tableViewer.refresh();
+   
+    this.contentChanged();
+    
+    eStructuralFeature = null;
+    newInputList = null;
+    collection = null;
+  
+    
+  } // end void performAdd()
+  
+  
+  
+  protected void checkDataStageElement(){
+    
+    EStructuralFeature eStructuralFeature = this.documentRoot.eClass()
+    .getEStructuralFeature( JsdlPackage.JOB_DESCRIPTION_TYPE__DATA_STAGING );
+    
+    Collection<DataStagingType> collection = 
+                                          new ArrayList<DataStagingType>();
+    collection.add( this.dataStagingType);
+        
+    if (!this.jobDescriptionType.eIsSet( eStructuralFeature )){      
+      this.jobDescriptionType.eSet( eStructuralFeature, collection );
+
+
+    }
+  } // end void checkDataStageElement()
+  
+  
+  
+  protected void performDelete(final TableViewer viewer ){
+    
+    IStructuredSelection structSelection 
+                               = ( IStructuredSelection ) viewer.getSelection();
+    
+    Object feature = structSelection.getFirstElement();
+    
+         
+      DataStagingType selectedDataStage = (DataStagingType) feature;    
+
+      EcoreUtil.remove( selectedDataStage);
+        
+    
+    viewer.refresh();
+    contentChanged();
+    
+  } // End void performDelete()
+   
   
   
   /**
@@ -198,7 +345,10 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
       this.adapterRefreshed = false;
     }
     
+    this.isNotifyAllowed = true;
+    
   }// end load()
+  
   
   
   /**
@@ -213,7 +363,7 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
     }
     
     return status;
-  }
+  } // End isEmpty()
   
   
   

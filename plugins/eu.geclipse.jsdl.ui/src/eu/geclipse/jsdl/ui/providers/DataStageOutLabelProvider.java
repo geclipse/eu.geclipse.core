@@ -16,11 +16,15 @@
   *****************************************************************************/
 package eu.geclipse.jsdl.ui.providers;
 
+import java.net.URL;
+
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
 import eu.geclipse.jsdl.model.DataStagingType;
+import eu.geclipse.jsdl.ui.internal.Activator;
 
 
 /**
@@ -29,10 +33,45 @@ import eu.geclipse.jsdl.model.DataStagingType;
  */
 public class DataStageOutLabelProvider extends LabelProvider
                                                 implements ITableLabelProvider {
+  
+  private Image stageOutImage;
+  private Image stageInOutImage;
+  
+  
+ /**
+ * Class Constructor
+ */
+public DataStageOutLabelProvider() {
+    
+    loadImages();
+  }
 
   public Image getColumnImage( final Object element, final int columnIndex ) {
-    // TODO Auto-generated method stub
-    return null;
+    Image image = null;
+    if (element instanceof DataStagingType){
+      
+      DataStagingType dataStagingType  = (DataStagingType) element; 
+            
+        switch ( columnIndex ) {
+          case 0:
+           
+            if ( (dataStagingType.getSource() != null ) 
+                &&  (dataStagingType.getTarget() != null) ) {
+              image = this.stageInOutImage;
+            }
+            else if (dataStagingType.getTarget() != null ){
+              image = this.stageOutImage;  
+            }
+            
+            break;
+          default:
+            break;
+        } // end switch
+           
+       
+    }
+    return image;
+    
   }
 
   public String getColumnText( final Object element, final int columnIndex ) {
@@ -69,5 +108,20 @@ public class DataStageOutLabelProvider extends LabelProvider
     return text;
     
   } // End  getColumnText()
+  
+  
+  
+  void loadImages(){
+    
+    URL stageOutURL = Activator.getDefault().getBundle().getEntry( "icons/stage-out.gif" ); //$NON-NLS-1$
+    URL stageInOutURL = Activator.getDefault().getBundle().getEntry( "icons/stage-in-out.gif" ); //$NON-NLS-1$    
+    ImageDescriptor stageOutDesc = ImageDescriptor.createFromURL( stageOutURL );
+    ImageDescriptor stageInOutDesc = ImageDescriptor.createFromURL( stageInOutURL );    
+    this.stageOutImage = stageOutDesc.createImage();
+    this.stageInOutImage = stageInOutDesc.createImage();
+    
+  }
+  
+  
   
 } // End Class

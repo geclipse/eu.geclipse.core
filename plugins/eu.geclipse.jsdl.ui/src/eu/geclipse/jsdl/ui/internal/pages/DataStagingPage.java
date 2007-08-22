@@ -7,6 +7,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -25,11 +26,14 @@ import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.TableWrapData;
+
+import eu.geclipse.jsdl.model.DataStagingType;
 import eu.geclipse.jsdl.ui.adapters.jsdl.DataStageTypeAdapter;
 import eu.geclipse.jsdl.ui.providers.DataStageInLabelProvider;
 import eu.geclipse.jsdl.ui.providers.DataStageOutLabelProvider;
 import eu.geclipse.jsdl.ui.providers.FeatureContentProvider;
 import eu.geclipse.jsdl.ui.providers.FeatureLabelProvider;
+import eu.geclipse.jsdl.ui.widgets.DataStagingInDialog;
 
 
 /**
@@ -70,15 +74,18 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
   protected Table tblStageIn = null;
   protected Table tblStageOut = null; 
   
-  protected TableViewer viewerStageIn = null;  
-  protected TableViewer viewerStageOut = null;  
+  protected TableViewer stageInViewer = null;  
+  protected TableViewer stageOutViewer = null;  
+  
+  protected Object[] value = null;
+  
+  protected DataStageTypeAdapter dataStageTypeAdapter;
+  
     
   protected FeatureContentProvider featureContentProvider = new FeatureContentProvider();
   protected FeatureLabelProvider featureLabelProvider = new FeatureLabelProvider();
-  private TableColumn column;
   
-  private DataStageTypeAdapter dataStageTypeAdapter; 
-  
+  private TableColumn column;    
   private final int WIDGET_HEIGHT = 100;
   private boolean contentRefreshed = false;
   private boolean dirtyFlag = false;
@@ -244,18 +251,17 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    gd.heightHint = this.WIDGET_HEIGHT;
    
    
-   this.viewerStageIn = new TableViewer(client, SWT.NONE 
-                                        | SWT.VIRTUAL                                        
+   this.stageInViewer = new TableViewer(client, SWT.NONE                                                                              
                                         | SWT.FULL_SELECTION );
    
-   this.tblStageIn = this.viewerStageIn.getTable();
+   this.tblStageIn = this.stageInViewer.getTable();
    this.tblStageIn .setHeaderVisible( true);
    this.tblStageIn.setLinesVisible( true );
    
    /* Set the common Content Provider  */
-   this.viewerStageIn.setContentProvider(new FeatureContentProvider() );
+   this.stageInViewer.setContentProvider(new FeatureContentProvider() );
    /* Set the dedicated Label Provider for DataStage-In elements */
-   this.viewerStageIn.setLabelProvider(new DataStageInLabelProvider() );   
+   this.stageInViewer.setLabelProvider(new DataStageInLabelProvider() );   
    
    this.column = new TableColumn(this.tblStageIn, SWT.LEFT);    
    this.column.setText( Messages.getString("DataStagingPage_Source") ); //$NON-NLS-1$
@@ -270,18 +276,21 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    this.column.setText( Messages.getString("DataStagingPage_DeleteOnTermination") ); //$NON-NLS-1$
    this.column.setWidth( 100 );
    
+   
+   this.dataStageTypeAdapter.attachToStageIn( this.stageInViewer  );
+   
    /* Based on the Table Viewer selection, update the status of the respective
     * buttons.
     */
-   this.viewerStageIn .addSelectionChangedListener( new ISelectionChangedListener()
+   this.stageInViewer .addSelectionChangedListener( new ISelectionChangedListener()
    {
 
-     public void selectionChanged( final SelectionChangedEvent event ) {
+     public void selectionChanged( final SelectionChangedEvent event ) {       
        updateButtons((TableViewer)event.getSource());
      }
    } );
    
-   this.dataStageTypeAdapter.attachToStageIn( this.viewerStageIn  );
+   
    this.tblStageIn.setData(  FormToolkit.KEY_DRAW_BORDER );
    this.tblStageIn.setLayoutData( gd);
    
@@ -296,7 +305,10 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    
    this.btnStageInAdd.addSelectionListener(new SelectionListener() {
      public void widgetSelected(final SelectionEvent event) {
-       //         
+                handleEventDialog( null );
+                DataStagingPage.this.dataStageTypeAdapter
+                               .performAdd( DataStagingPage.this.stageInViewer ,
+                                                   DataStagingPage.this.value );
      }
 
       public void widgetDefaultSelected(final SelectionEvent event) {
@@ -339,13 +351,13 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
                                    Messages.getString("JsdlEditor_RemoveButton") //$NON-NLS-1$
                                    , SWT.PUSH);   
    
-//   this.posixApplicationTypeAdapter.attachToDelete( this.btnDel, 
-//                                                            this.argumentViewer );
+   this.dataStageTypeAdapter.attachToDelete( this.btnStageInDel, 
+                                                           this.stageInViewer );
 
    this.btnStageInDel.setLayoutData( gd );
    
    /* Update Buttons so as to reflect the initial status of the TableViewer */
-   updateButtons( this.viewerStageIn  );
+   updateButtons( this.stageInViewer  );
    
    toolkit.paintBordersFor( client );  
      
@@ -379,18 +391,17 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    gd.heightHint = this.WIDGET_HEIGHT;
    
    
-   this.viewerStageOut = new TableViewer(client, SWT.NONE 
-                                        | SWT.VIRTUAL                                        
+   this.stageOutViewer = new TableViewer(client, SWT.NONE                                                                                
                                         | SWT.FULL_SELECTION );
    
    
-   this.tblStageOut = this.viewerStageOut.getTable();
+   this.tblStageOut = this.stageOutViewer.getTable();
    this.tblStageOut .setHeaderVisible( true);
    this.tblStageOut.setLinesVisible( true );  
    /* Set the common Content Provider  */
-   this.viewerStageOut.setContentProvider( new FeatureContentProvider() );
+   this.stageOutViewer.setContentProvider( new FeatureContentProvider() );
    /* Set the dedicated Label Provider for DataStage-Out elements */
-   this.viewerStageOut.setLabelProvider( new DataStageOutLabelProvider() );
+   this.stageOutViewer.setLabelProvider( new DataStageOutLabelProvider() );
    
      
    this.column = new TableColumn(this.tblStageOut, SWT.CENTER);    
@@ -409,7 +420,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    /* Based on the Table Viewer selection, update the status of the respective
     * buttons.
     */
-   this.viewerStageOut .addSelectionChangedListener( new ISelectionChangedListener()
+   this.stageOutViewer .addSelectionChangedListener( new ISelectionChangedListener()
    {
 
      public void selectionChanged( final SelectionChangedEvent event ) {
@@ -417,7 +428,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
      }
    } );
    
-   this.dataStageTypeAdapter.attachToStageOut( this.viewerStageOut  );
+   this.dataStageTypeAdapter.attachToStageOut( this.stageOutViewer  );
    this.tblStageOut.setData(  FormToolkit.KEY_DRAW_BORDER );
    this.tblStageOut.setLayoutData( gd);
    
@@ -482,7 +493,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    this.btnStageOutDel.setLayoutData( gd );
    
    /* Update Buttons so as to reflect the initial status of the TableViewer */
-   updateButtons( this.viewerStageOut  );
+   updateButtons( this.stageOutViewer  );
    
    toolkit.paintBordersFor( client );
 
@@ -502,7 +513,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    ISelection selection = tableViewer.getSelection();
    boolean selectionAvailable = !selection.isEmpty();
    
-   if (tableViewer == this.viewerStageIn){
+   if (tableViewer == this.stageInViewer){
    
      this.btnStageInAdd.setEnabled( true );
      this.btnStageInDel.setEnabled( selectionAvailable );
@@ -516,7 +527,53 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    }
  } // End updateButtons
   
-  
+   protected void handleEventDialog( final DataStagingType selectedObject ) {
+     DataStagingInDialog dialog;
+     
+     if( selectedObject == null ) {
+       this.value = new Object[2];
+       dialog = new DataStagingInDialog( this.body.getShell() );
+       if( dialog.open() == Window.OK ) {
+         this.value[0] = dialog.getName();
+         this.value[1] = dialog.getPath();
+         
+}
+//     } else {
+//       dialog = new DataStagingInDialog( this.body.getShell(),
+//                                selectedObject.getFileName(),
+//                                selectedObject.getSource().getURI() );
+//       if( dialog.open() == Window.OK ) {
+//         DataStagingType newData = getNewDataStagingType( dialog.getName(),
+//                                                          dialog.getPath() );
+//         // DataStagingType newData = selectedObject;
+//         // newData.setFileName( dialog.getName() );
+//         // SourceTargetType source = JSDLModelFacade.getSourceTargetType();
+//         // source.setURI( dialog.getPath() );
+//         // newData.setSource( source );
+//         if( !newData.getFileName().equals( selectedObject.getFileName() )
+//             || !newData.getSource().getURI().equals( selectedObject.getSource()
+//               .getURI() ) )
+//         {
+//           if( !isDataInInput( newData ) ) {
+//             // this.input.add( getNewDataStagingType( dialog.getName(),
+//             // dialog.getPath() ) );
+//             // this.input.remove( selectedObject );
+//             // this.input.add( getNewDataStagingType( dialog.getName(),
+//             // dialog.getPath() ) );
+//             // this.input.remove( selectedObject );
+//             updateDataStaging( selectedObject,
+//                                newData.getFileName(),
+//                                newData.getSource() );
+//             this.tableViewer.refresh();
+//           } else {
+//             MessageDialog.openError( this.body.getShell(),
+//                                      Messages.getString( "DataStageInTable.edit_dialog_title" ), //$NON-NLS-1$
+//                                      Messages.getString( "DataStageInTable.value_exists_dialog_message" ) ); //$NON-NLS-1$
+//           }
+//         }
+//       }
+     }
+   }
   
 } // End Class
 

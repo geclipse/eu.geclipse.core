@@ -247,7 +247,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     
     eStructuralFeature = this.candidateHosts.eClass().getEStructuralFeature( featureID );
     
-    for ( int i=0; i<tableViewer.getTable().getItemCount(); i++ ) {
+    for ( int i=0; i<tableViewer.getTable().getItemCount(); i++ ) {      
       collection.add( (String) tableViewer.getElementAt( i ) );
     }
     

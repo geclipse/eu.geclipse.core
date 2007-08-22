@@ -40,7 +40,7 @@ public class FeatureContentProvider implements IStructuredContentProvider {
   public Object[] getElements(final Object inputElement) {
     Object[] result = null;
 
-    
+   
     if (inputElement instanceof CandidateHostsType){
       CandidateHostsType candidateHostsType = (CandidateHostsType) inputElement;
       

@@ -48,11 +48,11 @@ public class DataStagingInDialog extends Dialog {
   private String initName;
   private String initPath;
 
-  protected DataStagingInDialog( final Shell parentShell ) {
+  public DataStagingInDialog( final Shell parentShell ) {
     super( parentShell );
   }
 
-  protected DataStagingInDialog( final Shell parentShell,
+  public DataStagingInDialog( final Shell parentShell,
                         final String name,
                         final String path )
   {
