@@ -35,4 +35,9 @@ public interface ITerminalListener {
    * @param windowTitle new window title.
    */
   void windowTitleChanged( final String windowTitle );
+  
+  /**
+   * Session terminated.
+   */
+  void terminated();
 }

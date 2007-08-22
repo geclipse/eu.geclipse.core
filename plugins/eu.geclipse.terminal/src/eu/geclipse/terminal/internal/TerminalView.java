@@ -18,6 +18,7 @@ package eu.geclipse.terminal.internal;
 import java.io.IOException;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabFolder2Adapter;
@@ -27,6 +28,7 @@ import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
@@ -34,6 +36,7 @@ import eu.geclipse.core.IBidirectionalConnection;
 import eu.geclipse.terminal.ITerminalListener;
 import eu.geclipse.terminal.ITerminalPage;
 import eu.geclipse.terminal.ITerminalView;
+import eu.geclipse.terminal.internal.preferences.PreferenceConstants;
 
 /**
  * View containing VT100 terminal emulators. Terminals can be added by creating
@@ -107,18 +110,50 @@ public class TerminalView extends ViewPart implements ITerminalView {
     this.cTabFolder.setFocus();
   }
 
-  /*
-   * (non-Javadoc)
-   * 
+  /* (non-Javadoc)
    * @see eu.geclipse.terminal.views.ITerminalView#addTerminal(java.io.InputStream,
    *      java.io.OutputStream)
    */
   public ITerminalPage addTerminal( final IBidirectionalConnection connection,
                                     final ITerminalListener termListener ) throws IOException {
-    CTabItem cTabItem = new CTabItem( this.cTabFolder, SWT.CLOSE );
+    final CTabItem cTabItem = new CTabItem( this.cTabFolder, SWT.CLOSE );
     TerminalPage page = new TerminalPage( this.cTabFolder, SWT.NONE, cTabItem );
     page.setConnection( connection );
-    page.setTerminalListener( termListener );
+    page.addTerminalListener( termListener );
+    page.addTerminalListener( new ITerminalListener() {
+      /* (non-Javadoc)
+       * @see eu.geclipse.terminal.ITerminalListener#terminated()
+       */
+      public void terminated() {
+        IPreferenceStore store = Activator.getDefault().getPreferenceStore();
+        boolean closeTabs = store.getBoolean( PreferenceConstants.P_CLOSE_TABS );
+        if ( closeTabs ) { 
+          Display.getDefault().syncExec( new Runnable() {
+            /* (non-Javadoc)
+             * @see java.lang.Runnable#run()
+             */
+            public void run() {
+              cTabItem.dispose();
+            }
+          } );
+        }
+      }
+
+      /* (non-Javadoc)
+       * @see eu.geclipse.terminal.ITerminalListener#windowSizeChanged(int, int, int, int)
+       */
+      public void windowSizeChanged( final int cols, final int lines,
+                                     final int pixels, final int pixels2 ) {
+        // not needed
+      }
+
+      /* (non-Javadoc)
+       * @see eu.geclipse.terminal.ITerminalListener#windowTitleChanged(java.lang.String)
+       */
+      public void windowTitleChanged( final String windowTitle ) {
+        // not needed
+      }
+    } );
     cTabItem.setControl( page );
     this.cTabFolder.setSelection( cTabItem );
     return page;

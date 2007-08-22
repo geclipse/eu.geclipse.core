@@ -85,7 +85,7 @@ public class Terminal extends Canvas {
   private boolean reverseScreenMode;
   private String windowTitle;
   private final SortedSet<Integer> tabulatorPositons = new TreeSet<Integer>();
-  private ITerminalListener listener;
+  private List<ITerminalListener> listeners;
   private boolean wraparound;
   private boolean reverseWraparound;
   private boolean running;
@@ -111,6 +111,7 @@ public class Terminal extends Canvas {
     this.cursor = new Cursor( this.defaultFgColor, this.defaultBgColor );
     this.savedCursor = new Cursor( this.defaultFgColor, this.defaultBgColor );
     this.screenBuffer = new Char[0][];
+    this.listeners = new LinkedList<ITerminalListener>();
     changeScreenSize();
     this.terminalPainter = new TerminalPainter( this );
     addPaintListener( this.terminalPainter );
@@ -280,11 +281,19 @@ public class Terminal extends Canvas {
   }
 
   /**
-   * Registers a terminal listner for tracking terminal size and title changes.
+   * Registers a terminal listener for tracking terminal size and title changes.
    * @param termListener the listener.
    */
-  public void setTerminalListener( final ITerminalListener termListener ) {
-    this.listener = termListener;
+  public void addTerminalListener( final ITerminalListener termListener ) {
+    this.listeners.add( termListener );
+  }
+
+  /**
+   * Removes a terminal listener for tracking terminal size and title changes.
+   * @param termListener the listener.
+   */
+  public void removeTerminalListener( final ITerminalListener termListener ) {
+    this.listeners.remove( termListener );
   }
 
   private void bell() {
@@ -342,11 +351,14 @@ public class Terminal extends Canvas {
                                                         new Character( (char) ch ) ) );
         } else {
           this.input.unread( ch );
-          readText(); 
+          readText();
         }
       }
     } catch( IOException ioException ) {
       Activator.logException( ioException );
+    }
+    for ( ITerminalListener listener : this.listeners ) {
+      listener.terminated();
     }
   }
 
@@ -714,7 +726,9 @@ public class Terminal extends Canvas {
     } else switch (commandNr) {
       case 0: // Set Window Title
         this.windowTitle = readString();
-        if ( this.listener != null ) this.listener.windowTitleChanged( this.windowTitle ); 
+        for ( ITerminalListener listener : this.listeners ) {
+          listener.windowTitleChanged( this.windowTitle );
+        }
         break;
       case 4:
         colorNr = readNumber();
@@ -1561,10 +1575,12 @@ public class Terminal extends Canvas {
     setTopAndBottomMargins( new int[0] );
     if ( this.cursor.line >= this.numLines ) this.cursor.line = this.numLines - 1;
     if ( this.cursor.col >= this.numCols ) this.cursor.col = this.numCols - 1;
-    if ( this.numCols != 0 && this.numLines !=0 && this.listener != null) {
-      this.listener.windowSizeChanged( this.numCols, this.numLines,
-                                       this.numCols * this.fontWidth,
-                                       this.numLines * this.fontHeight );
+    if ( this.numCols != 0 && this.numLines !=0 ) {
+      for ( ITerminalListener listener : this.listeners ) {
+        listener.windowSizeChanged( this.numCols, this.numLines,
+                                    this.numCols * this.fontWidth,
+                                    this.numLines * this.fontHeight );
+      }
     }
     this.getVerticalBar().setValues( this.historySize, 0, this.screenBuffer.length, this.numLines, 1, this.numLines );
   }

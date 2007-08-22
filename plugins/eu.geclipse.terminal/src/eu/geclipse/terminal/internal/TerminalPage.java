@@ -109,8 +109,8 @@ class TerminalPage extends Composite implements ITerminalPage {
     this.terminal.setOutputStream( this.connection.getOutputStream() );
   }
 
-  void setTerminalListener( final ITerminalListener termListener ) {
-    this.terminal.setTerminalListener( termListener );
+  void addTerminalListener( final ITerminalListener termListener ) {
+    this.terminal.addTerminalListener( termListener );
   }
   
   void closeConnection() {

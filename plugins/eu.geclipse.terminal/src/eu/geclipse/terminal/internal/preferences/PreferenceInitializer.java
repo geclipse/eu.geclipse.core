@@ -31,5 +31,6 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
   public void initializeDefaultPreferences() {
     IPreferenceStore store = Activator.getDefault().getPreferenceStore();
     store.setDefault( PreferenceConstants.P_HISTORY_SIZE, 100 );
+    store.setDefault( PreferenceConstants.P_CLOSE_TABS, false );
   }
 }

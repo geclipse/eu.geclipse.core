@@ -155,4 +155,11 @@ public class SshShell implements IDropDownEntry<ITerminalView>, ITerminalListene
                                   this.userInfo.getHostname(),
                                   windowTitle ) );
   }
+
+  /* (non-Javadoc)
+   * @see eu.geclipse.terminal.ITerminalListener#terminated()
+   */
+  public void terminated() {
+    // not needed
+  }
 }

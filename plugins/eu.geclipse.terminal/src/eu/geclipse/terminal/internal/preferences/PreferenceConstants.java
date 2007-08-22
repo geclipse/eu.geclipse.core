@@ -20,7 +20,11 @@ package eu.geclipse.terminal.internal.preferences;
  */
 public class PreferenceConstants {
   /**
-   * Name of the preference field for storing the "history size" option".
+   * Name of the preference field for storing the "history size" option.
    */
   public static final String P_HISTORY_SIZE = "historySize"; //$NON-NLS-1$
+  /**
+   * Name of the preference field for storing the "close tabs" option.
+   */
+  public static final String P_CLOSE_TABS = "closeTabs"; //$NON-NLS-1$
 }

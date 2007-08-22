@@ -15,6 +15,7 @@
 
 package eu.geclipse.terminal.internal.preferences;
 
+import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IntegerFieldEditor;
 import org.eclipse.ui.IWorkbench;
@@ -44,6 +45,9 @@ public class TerminalPreferencePage extends FieldEditorPreferencePage
   public void createFieldEditors() {
     addField( new IntegerFieldEditor( PreferenceConstants.P_HISTORY_SIZE,
                                       Messages.getString("TerminalPreferencePage.sizeOfHistory"), //$NON-NLS-1$
+                                      getFieldEditorParent() ) );
+    addField( new BooleanFieldEditor( PreferenceConstants.P_CLOSE_TABS,
+                                      Messages.getString("TerminalPreferencePage.closeTabs"), //$NON-NLS-1$
                                       getFieldEditorParent() ) );
   }
 
