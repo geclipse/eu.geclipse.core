@@ -47,26 +47,12 @@ import eu.geclipse.ui.views.Messages;
 import eu.geclipse.ui.providers.ProcessViewContentprovider;
 import eu.geclipse.ui.providers.ProcessViewLabelProvider;
 
-
-
 /**
- * This sample class demonstrates how to plug-in a new
- * workbench view. The view shows data obtained from the
- * model. The sample creates a dummy model on the fly,
- * but a real implementation would connect to the model
- * available either in this or another plug-in (e.g. the workspace).
- * The view is connected to the model using a content provider.
- * <p>
- * The view uses a label provider to define how model
- * objects should be presented in the view. Each
- * view can present the same model objects using
- * different labels and icons, if needed. Alternatively,
- * a single label provider can be shared between views
- * in order to ensure that objects of the same type are
- * presented in the same way everywhere.
- * <p>
+ * A view for either displaying a list of processes running on a machine, represented
+ * by GridProcessMonitor-Objects or showing the details of one process specified.
+ * @author mpolak
+ *
  */
-
 public class ProcessStatView extends ViewPart implements IContentChangeListener {
  
   TreeViewer viewer;
@@ -83,9 +69,7 @@ public class ProcessStatView extends ViewPart implements IContentChangeListener 
    * The constructor.
    */
   public ProcessStatView() {
-    this.remoteMonitors = new HashSet<GridProcessMonitor>();
-    
-    
+    this.remoteMonitors = new HashSet<GridProcessMonitor>();  
   }
 
   /**
@@ -102,7 +86,7 @@ public class ProcessStatView extends ViewPart implements IContentChangeListener 
     this.viewer.setSorter(new ViewerSorter());  //TODO
     
     makeActions();
-    hookContextMenu();
+   // hookContextMenu();
     hookDoubleClickAction();
     contributeToActionBars();
   }
@@ -152,7 +136,7 @@ public class ProcessStatView extends ViewPart implements IContentChangeListener 
     this.updateaction = new Action() {
       @Override
       public void run() {
-        //showMessage("Fetching Processlist"); //$NON-NLS-1$
+        System.out.println("Fetching Processlist"); //$NON-NLS-1$
   
         ProcessStatView.this.viewer.refresh();
 
@@ -182,23 +166,35 @@ public class ProcessStatView extends ViewPart implements IContentChangeListener 
     };
   }
   
-public void addSite(URI newsite) {
+/**
+ * Add a new site to be monitored by this view.
+ * @param newsite an URI of a new site to be monitored in this view
+ */
+public void addSite(final URI newsite) {
   if (newsite != null){
-    this.remoteMonitors.add( new GridProcessMonitor(newsite));
+    GridProcessMonitor newmon = new GridProcessMonitor(newsite);
+    newmon.setUpdateInterval(5);
+    this.remoteMonitors.add( newmon );
     this.viewer.setInput(this.remoteMonitors.toArray());
+    ProcessStatView.this.viewer.refresh();
+    System.out.println("added: "+newsite); //$NON-NLS-1$
   }
   
 }
 
-public void removeSite (URI selected){
+/**
+ * Remove a monitored site from this view
+ * @param selected an URI of the site to be removed from this monitoring view
+ */
+public void removeSite (final URI selected){
   if (selected != null){
     this.remoteMonitors.remove( new GridProcessMonitor(selected) );
+    ProcessStatView.this.viewer.refresh();
   }
 }
 
-protected void initializeBrowser() {
-    
-  this.viewer.setInput( null );
+protected void initializeBrowser() {  
+  this.viewer.setInput( this.remoteMonitors.toArray() );
 }
   
 
@@ -220,5 +216,6 @@ protected void initializeBrowser() {
 
   public void contentChanged( final IContentChangeNotifier source ) {
     this.viewer.refresh();
+    System.out.println("content changed"); //$NON-NLS-1$
   }
 }
