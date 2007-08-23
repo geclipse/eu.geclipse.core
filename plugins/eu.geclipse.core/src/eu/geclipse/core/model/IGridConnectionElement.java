@@ -15,6 +15,8 @@
 
 package eu.geclipse.core.model;
 
+import java.net.URI;
+
 import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.runtime.CoreException;
@@ -49,6 +51,8 @@ public interface IGridConnectionElement extends IGridResource, IGridContainer {
    * @return An error string.
    */
   public String getError();
+  
+  public URI getURI();
   
   /**
    * Determine if this grid mount object specifies a folder. If it
