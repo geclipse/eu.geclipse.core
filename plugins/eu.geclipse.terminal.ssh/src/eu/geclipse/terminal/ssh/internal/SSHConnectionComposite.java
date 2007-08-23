@@ -29,6 +29,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
+
+import eu.geclipse.core.model.GridModel;
+import eu.geclipse.core.model.GridModelException;
+import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.util.HostnameChecker;
 import eu.geclipse.info.glue.AbstractGlueTable;
 import eu.geclipse.info.glue.GlueQuery;
@@ -69,20 +73,27 @@ class SSHConnectionComposite extends Composite {
   }
 
   private void addComputingElements() {
-    ArrayList<AbstractGlueTable> ceTable = GlueQuery.getGlueTable( "GlueCE", null ); //$NON-NLS-1$
-    for ( AbstractGlueTable table : ceTable ) {
-      try {
-        String hostname = ( String ) table.getFieldByName( "HostName" ); //$NON-NLS-1$
-        if ( hostname != null && this.hostnameCombo.indexOf( hostname ) == -1 ) {
-          this.hostnameCombo.add( hostname );
+    try {
+      IGridElement[] vos = GridModel.getVoManager().getChildren(null);
+      for ( IGridElement vo : vos ) {
+        ArrayList<AbstractGlueTable> ceTable = GlueQuery.getGlueTable( "GlueCE", vo.getName() ); //$NON-NLS-1$
+        for ( AbstractGlueTable table : ceTable ) {
+          try {
+            String hostname = ( String ) table.getFieldByName( "HostName" ); //$NON-NLS-1$
+            if ( hostname != null && this.hostnameCombo.indexOf( hostname ) == -1 ) {
+              this.hostnameCombo.add( hostname );
+            }
+          } catch( RuntimeException exception ) {
+            Activator.logException( exception );
+          } catch( IllegalAccessException exception ) {
+            Activator.logException( exception );
+          } catch( NoSuchFieldException exception ) {
+            Activator.logException( exception );
+          }
         }
-      } catch( RuntimeException exception ) {
-        Activator.logException( exception );
-      } catch( IllegalAccessException exception ) {
-        Activator.logException( exception );
-      } catch( NoSuchFieldException exception ) {
-        Activator.logException( exception );
       }
+    } catch( GridModelException exception ) {
+      Activator.logException( exception );
     }
   }
 
