@@ -90,6 +90,13 @@
                </appInfo>
             </annotation>
          </attribute>
+         <attribute name="pattern" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 
