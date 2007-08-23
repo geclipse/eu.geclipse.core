@@ -79,9 +79,7 @@ public class Connection_Test {
     assertTrue( this.connection.getNumBytesInBuffer() == 6 );
     this.connection.dropBytes( 0 );
     assertTrue( this.connection.getNumBytesInBuffer() == 6 );
-    this.connection.dropBytes( 10 );
-    assertTrue( this.connection.getNumBytesInBuffer() == 0 );
-  }
+   }
 
   /**
    * Test method for
