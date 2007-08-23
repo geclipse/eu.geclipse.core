@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Test Fragment
+Bundle-SymbolicName: eu.geclipse.glite.editor.test
+Bundle-Version: 0.5.0.qualifier
+Bundle-Vendor: Eclipse.org
+Fragment-Host: eu.geclipse.glite.editor;bundle-version="0.5.0"
+Require-Bundle: org.junit4
