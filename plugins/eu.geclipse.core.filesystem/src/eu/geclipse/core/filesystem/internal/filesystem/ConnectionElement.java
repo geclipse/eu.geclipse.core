@@ -106,6 +106,17 @@ public class ConnectionElement
     return error;
   }
   
+  public URI getURI() {
+    URI result = null;
+    try {
+      GEclipseFileStore fileStore = ( GEclipseFileStore ) getConnectionFileStore();
+      result = fileStore.getSlave().toURI();
+    } catch ( CoreException cExc ) {
+      Activator.logException( cExc );
+    }
+    return result;
+  }
+  
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.impl.AbstractGridContainer#hasChildren()
    */
