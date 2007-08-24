@@ -287,10 +287,10 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     /* If the selection is not null the Change the selected element */
     if (structSelection != null) {
       
-    eStructuralFeature = this.candidateHosts.eClass()
+      eStructuralFeature = this.candidateHosts.eClass()
                                             .getEStructuralFeature( featureID );
 
-    Object feature = structSelection.getFirstElement();
+      Object feature = structSelection.getFirstElement();
     
     /* Get the Index of the Element that needs to be changed */
       int index = (( java.util.List<Object> )this.candidateHosts.eGet(eStructuralFeature))
@@ -305,8 +305,8 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     /* Refresh the table viewer and notify the editor that
      *  the page content has changed. 
      */
-    tableViewer.refresh();
-    contentChanged();
+      tableViewer.refresh();
+      contentChanged();
     
     }  
     
@@ -578,7 +578,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     widget.addModifyListener( new ModifyListener() {
       
       public void modifyText( final ModifyEvent e ) {
-//        checkFileSystemElement();
+        checkFileSystemElement();
         ResourcesTypeAdapter.this.fileSystemType.setDescription( widget.getText() );
         contentChanged();          
         }
@@ -601,7 +601,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     widget.addModifyListener( new ModifyListener() {
       
       public void modifyText( final ModifyEvent e ) {
-//        checkFileSystemElement();
+        checkFileSystemElement();
         ResourcesTypeAdapter.this.fileSystemType.setMountPoint( widget.getText() );
         contentChanged();          
         }
@@ -705,9 +705,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
       EList<EStructuralFeature> eAllStructuralFeaures = eClass.getEAllStructuralFeatures();
       
       for( EStructuralFeature eStructuralFeature : eAllStructuralFeaures ) {
-            
-       // EStructuralFeature eStructuralFeature = iter.next();
-        
+       
         int featureID = eStructuralFeature.getFeatureID();
 
 
@@ -728,36 +726,40 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
               EList<String> valueEList = this.candidateHosts.getHostName();
           
               tableViewer.setInput( valueEList  );
-//              Object eFeatureInstance = null;
-//                                           
-//              for (Iterator<String> it = valueEList.iterator(); it.hasNext();) {
-//                eFeatureInstance = it.next();              
-//                this.eStructuralFeaturesMap.put( eFeatureInstance.toString(),
-//                                                eStructuralFeature );
-//               
-//                  listName.add(eFeatureInstance.toString());
-//                } // End Iterator                         
               
             }
             break;
             case JsdlPackage.RESOURCES_TYPE__OPERATING_SYSTEM :{
+              
              this.operatingSystemType = (OperatingSystemType) this.resourcesType
                                                     .eGet( eStructuralFeature );
              
-             comboName = this.comboFeaturesMap.get( new Integer( featureID  ) );
-             comboName.setText(this.operatingSystemType.getOperatingSystemType()
-                               .getOperatingSystemName().getLiteral());
+             if ( this.operatingSystemType.getOperatingSystemType() !=null ) {
+               
+               comboName = this.comboFeaturesMap.get( new Integer( featureID  ) );
+               comboName.setText(this.operatingSystemType.getOperatingSystemType()
+                                       .getOperatingSystemName().getLiteral());
              
-            widgetName = this.widgetFeaturesMap.get( new Integer
+             }
+             
+             if (this.operatingSystemType.getOperatingSystemVersion() != null ) {
+               
+               widgetName = this.widgetFeaturesMap.get( new Integer
                         ( JsdlPackage.DOCUMENT_ROOT__OPERATING_SYSTEM_VERSION ) );
-            widgetName.setText( this.operatingSystemType
+               widgetName.setText( this.operatingSystemType
                                                   .getOperatingSystemVersion());
+            
+             }
+            
+             if (this.operatingSystemType.getDescription() != null ) {
+               
              
-            widgetName = this.widgetFeaturesMap
+               widgetName = this.widgetFeaturesMap
                     .get( new Integer(JsdlPackage.DOCUMENT_ROOT__DESCRIPTION) );
             
-            widgetName.setText( this.operatingSystemType.getDescription());
-            
+               widgetName.setText( this.operatingSystemType.getDescription());
+             }
+             
             }
             break;            
             case JsdlPackage.RESOURCES_TYPE__FILE_SYSTEM: {
@@ -769,21 +771,35 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
                 
                 this.fileSystemType = it.next();
                 
+                if (this.fileSystemType.getName() != null ) {
+                
                 widgetName = this.widgetFeaturesMap
                         .get( new Integer(JsdlPackage.FILE_SYSTEM_TYPE__NAME) );
                 
                 widgetName.setText( this.fileSystemType.getName() );
                 
+                }
+                
+                if (this.fileSystemType.getDescription() != null ) {
+                  
                 widgetName = this.widgetFeaturesMap
                   .get(new Integer(JsdlPackage.FILE_SYSTEM_TYPE__DESCRIPTION) );
                 
                 widgetName.setText( this.fileSystemType.getDescription() );
                 
+                }
                 
+                if (this.fileSystemType.getMountPoint() != null ) {
+                  
                 widgetName = this.widgetFeaturesMap
                  .get( new Integer(JsdlPackage.FILE_SYSTEM_TYPE__MOUNT_POINT) );
                 
                 widgetName.setText( this.fileSystemType.getMountPoint() );
+                
+                }
+                
+                if (this.fileSystemType.getDiskSpace() != null ) {
+                  
                 
                 widgetName = this.widgetFeaturesMap
                   .get( new Integer(JsdlPackage.FILE_SYSTEM_TYPE__DISK_SPACE) );
@@ -793,8 +809,8 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
                 .get (new Integer(JsdlPackage.DOCUMENT_ROOT__FILE_SYSTEM_TYPE));
                 
                 comboName.setText(this.fileSystemType.getFileSystemType()
-                                  .getLiteral());
-               
+                                                                 .getLiteral());
+                }               
                 
               } // End Iterator
            

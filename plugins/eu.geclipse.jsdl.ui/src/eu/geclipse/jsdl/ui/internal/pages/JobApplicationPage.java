@@ -25,6 +25,10 @@ package eu.geclipse.jsdl.ui.internal.pages;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -44,6 +48,8 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 
+import eu.geclipse.jsdl.model.posix.ArgumentType;
+import eu.geclipse.jsdl.model.posix.EnvironmentType;
 import eu.geclipse.jsdl.ui.adapters.jsdl.ApplicationTypeAdapter;
 import eu.geclipse.jsdl.ui.adapters.posix.PosixApplicationTypeAdapter;
 import eu.geclipse.jsdl.ui.internal.dialogs.MultipleInputDialog;
@@ -95,8 +101,15 @@ public final class JobApplicationPage extends FormPage
   protected Text txtFileSystemName = null;
   protected Text txtWorkingDirectory = null;
   
-  protected Button btnDel = null;
-  protected Button btnAdd = null;
+  
+  protected Button btnArgAdd = null;
+  protected Button btnArgEdit = null;
+  protected Button btnArgDel = null;
+  
+  
+  protected Button btnEnVarAdd = null;
+  protected Button btnEnVarEdit = null;
+  protected Button btnEnVarDel = null;
   
   protected Label lblApplicationName = null;
   protected Label lblApplicationVersion = null;
@@ -149,7 +162,7 @@ public final class JobApplicationPage extends FormPage
    
 
   /**
-   * JobApplicationPage class constructor. Initialiazes the JobApplica Page 
+   * JobApplicationPage class constructor. Initializes the JobApplica Page 
    * by passing as an argument the container JSDL editor.
    * @param editor
    */
@@ -170,8 +183,8 @@ public final class JobApplicationPage extends FormPage
       if (isContentRefreshed()){    
         this.applicationTypeAdapter.load();  
         this.posixApplicationTypeAdapter.load();
-      }//endif isContentRefreshed
-    } // endif active
+      }//end_if isContentRefreshed
+    } // end_if active
   } // End void setActive()
   
   
@@ -458,7 +471,7 @@ public final class JobApplicationPage extends FormPage
     gd = new GridData();
     gd.horizontalAlignment = GridData.FILL;
     gd.verticalAlignment = GridData.FILL;
-    gd.verticalSpan = 2;
+    gd.verticalSpan = 3;
     gd.horizontalSpan = 1;
     gd.widthHint = 250;
     gd.heightHint = this.widgetHeight;
@@ -479,6 +492,15 @@ public final class JobApplicationPage extends FormPage
     
     this.posixApplicationTypeAdapter
                        .attachToPosixApplicationArgument( this.argumentViewer );
+    
+    this.argumentViewer.addSelectionChangedListener( new ISelectionChangedListener()
+    {
+
+      public void selectionChanged( final SelectionChangedEvent event ) {        
+        updateButtons((TableViewer)event.getSource());
+      }
+    } );
+    
         
     this.tblArgument.setData(  FormToolkit.KEY_DRAW_BORDER );
     this.tblArgument.setLayoutData( gd);
@@ -489,13 +511,14 @@ public final class JobApplicationPage extends FormPage
     gd.horizontalSpan = 2;
     gd.verticalSpan = 1;
     gd.widthHint = 60;
-    this.btnAdd = toolkit.createButton(client,
+    this.btnArgAdd = toolkit.createButton(client,
                                        Messages.getString("JsdlEditor_AddButton") //$NON-NLS-1$
                                        , SWT.PUSH);
     
-    this.btnAdd.addSelectionListener(new SelectionListener() {
+    this.btnArgAdd.addSelectionListener(new SelectionListener() {
       public void widgetSelected(final SelectionEvent event) {
-        handleAddDialog(Messages.getString( "JobApplicationPage_ArgumentDialog" )); //$NON-NLS-1$
+        handleAddDialog(Messages.getString( "JobApplicationPage_ArgumentDialog" ), //$NON-NLS-1$
+                                                   (Button) event.getSource() ); 
         JobApplicationPage.this.posixApplicationTypeAdapter.performAdd(
                                          JobApplicationPage.this.argumentViewer,
                                                 "argumentViewer", //$NON-NLS-1$
@@ -508,7 +531,36 @@ public final class JobApplicationPage extends FormPage
        }
      });
     
-    this.btnAdd.setLayoutData( gd );
+    this.btnArgAdd.setLayoutData( gd );
+    
+    
+    /* Create "Edit" Button */
+    gd = new GridData();
+    gd.horizontalSpan = 2;
+    gd.verticalSpan = 1;
+    gd.widthHint = 60;
+    this.btnArgEdit = toolkit.createButton(client,
+                                       Messages.getString("JsdlEditor_EditButton") //$NON-NLS-1$
+                                       , SWT.PUSH);
+    
+    this.btnArgEdit.addSelectionListener(new SelectionListener() {
+      public void widgetSelected(final SelectionEvent event) {
+        handleAddDialog(Messages.getString( "JobApplicationPage_ArgumentDialog" ), //$NON-NLS-1$
+                                                    (Button) event.getSource());
+        
+        JobApplicationPage.this.posixApplicationTypeAdapter.
+                            performEdit( JobApplicationPage.this.argumentViewer,
+                                                JobApplicationPage.this.value );
+    
+      
+      }
+
+       public void widgetDefaultSelected(final SelectionEvent event) {
+           // Do Nothing - Required method
+       }
+     });
+    
+    this.btnArgEdit.setLayoutData( gd );
     
     
     /* Create "Remove" Button */
@@ -518,14 +570,14 @@ public final class JobApplicationPage extends FormPage
     gd.widthHint = 60;
     gd.verticalAlignment = GridData.BEGINNING;
     
-    this.btnDel = toolkit.createButton(client,
+    this.btnArgDel = toolkit.createButton(client,
                                     Messages.getString("JsdlEditor_RemoveButton") //$NON-NLS-1$
                                     , SWT.PUSH);
-    this.btnDel.setEnabled( false );
-    this.posixApplicationTypeAdapter.attachToDelete( this.btnDel, 
+    this.btnArgDel.setEnabled( false );
+    this.posixApplicationTypeAdapter.attachToDelete( this.btnArgDel, 
                                                              this.argumentViewer );
 
-    this.btnDel.setLayoutData( gd );
+    this.btnArgDel.setLayoutData( gd );
       
     /* ============================= Input Widget =========================== */
     
@@ -595,7 +647,7 @@ public final class JobApplicationPage extends FormPage
     gd = new GridData();
     gd.horizontalAlignment = GridData.FILL;
     gd.verticalAlignment = GridData.FILL;
-    gd.verticalSpan = 2;
+    gd.verticalSpan = 3;
     gd.horizontalSpan = 1;
     gd.widthHint = 250;
     gd.heightHint = this.widgetHeight;
@@ -622,6 +674,14 @@ public final class JobApplicationPage extends FormPage
     this.posixApplicationTypeAdapter.
                    attachToPosixApplicationEnvironment( this.environmentViewer );
     
+    this.environmentViewer.addSelectionChangedListener( new ISelectionChangedListener()
+    {
+
+      public void selectionChanged( final SelectionChangedEvent event ) {        
+        updateButtons((TableViewer)event.getSource());
+      }
+    } );
+    
         
     this.tblEnvironment.setData(  FormToolkit.KEY_DRAW_BORDER );
     this.tblEnvironment.setLayoutData( gd);
@@ -631,13 +691,14 @@ public final class JobApplicationPage extends FormPage
     gd.horizontalSpan = 2;
     gd.verticalSpan = 1;
     gd.widthHint = 60;
-    this.btnAdd = toolkit.createButton(client,
+    this.btnEnVarAdd = toolkit.createButton(client,
                                      Messages.getString("JsdlEditor_AddButton"), //$NON-NLS-1$
                                        SWT.BUTTON1);
     
-    this.btnAdd.addSelectionListener(new SelectionListener() {
+    this.btnEnVarAdd.addSelectionListener(new SelectionListener() {
       public void widgetSelected(final SelectionEvent event) {
-        handleAddDialog(Messages.getString( "JobApplicationPage_EnvironmentDialog" )); //$NON-NLS-1$
+        handleAddDialog(Messages.getString( "JobApplicationPage_EnvironmentDialog" ), //$NON-NLS-1$
+                                                   (Button) event.getSource() );
         JobApplicationPage.this.posixApplicationTypeAdapter.performAdd(
                                       JobApplicationPage.this.environmentViewer,
                                                              "environmentiewer", //$NON-NLS-1$
@@ -649,9 +710,36 @@ public final class JobApplicationPage extends FormPage
        }
      });
     
-   
+    this.btnEnVarAdd.setLayoutData( gd);
     
-    this.btnAdd.setLayoutData( gd);
+    /* Create "Edit" Button */
+    gd = new GridData();
+    gd.horizontalSpan = 2;
+    gd.verticalSpan = 1;
+    gd.widthHint = 60;
+    this.btnEnVarEdit = toolkit.createButton(client,
+                                       Messages.getString("JsdlEditor_EditButton") //$NON-NLS-1$
+                                       , SWT.PUSH);
+    
+    this.btnEnVarEdit.addSelectionListener(new SelectionListener() {
+      public void widgetSelected(final SelectionEvent event) {        
+        handleAddDialog(Messages.getString( "JobApplicationPage_EnvironmentDialog" ), //$NON-NLS-1$
+                                                    (Button) event.getSource());
+        
+        JobApplicationPage.this.posixApplicationTypeAdapter.
+                         performEdit( JobApplicationPage.this.environmentViewer,
+                                                JobApplicationPage.this.value );
+    
+      
+      }
+
+       public void widgetDefaultSelected(final SelectionEvent event) {
+           // Do Nothing - Required method
+       }
+     });
+    
+    this.btnEnVarEdit.setLayoutData( gd );
+    
     
     /* Create "Remove" Button */
     gd = new GridData();
@@ -660,14 +748,14 @@ public final class JobApplicationPage extends FormPage
     gd.widthHint = 60;
     gd.verticalAlignment = GridData.BEGINNING;
     
-    this.btnDel = toolkit.createButton(client,
+    this.btnEnVarDel = toolkit.createButton(client,
                                   Messages.getString("JsdlEditor_RemoveButton"), //$NON-NLS-1$
                                   SWT.PUSH); 
-    this.btnDel.setEnabled( false );
+    this.btnEnVarDel.setEnabled( false );
     
-    this.posixApplicationTypeAdapter.attachToDelete( this.btnDel, 
+    this.posixApplicationTypeAdapter.attachToDelete( this.btnEnVarDel, 
                                                        this.environmentViewer );
-    this.btnDel.setLayoutData( gd );
+    this.btnEnVarDel.setLayoutData( gd );
        
     toolkit.paintBordersFor( client );
     
@@ -868,27 +956,64 @@ public final class JobApplicationPage extends FormPage
    }
   
   
-  protected void handleAddDialog(final String dialogTitle){
+  protected void handleAddDialog(final String dialogTitle , final Button button ){
     
     
     MultipleInputDialog dialog = new MultipleInputDialog( this.getSite().getShell(),
                                                          dialogTitle );
+    
+    
     if (dialogTitle == Messages.getString("JobApplicationPage_ArgumentDialog" )){ //$NON-NLS-1$
-      
+    
       this.value = new Object[1][2];
       
-      dialog.addTextField( Messages.getString( "JobApplicationPage_FileSystemName" ), "", false ); //$NON-NLS-1$ //$NON-NLS-2$      
-      dialog.addTextField( Messages.getString( "JobApplicationPage_Value" ), "", false ); //$NON-NLS-1$ //$NON-NLS-2$
-                       
-    }
+      if (button == this.btnArgAdd ) {            
+      
+        dialog.addTextField( Messages.getString( "JobApplicationPage_FileSystemName" ), "", false ); //$NON-NLS-1$ //$NON-NLS-2$      
+        dialog.addTextField( Messages.getString( "JobApplicationPage_Value" ), "", false ); //$NON-NLS-1$ //$NON-NLS-2$
+      }
+      else
+      {
+        IStructuredSelection structSelection 
+                    = ( IStructuredSelection ) this.argumentViewer.getSelection();
+
+        
+        ArgumentType argType = (ArgumentType) structSelection.getFirstElement();
+
+         dialog.addTextField( Messages.getString( "JobApplicationPage_FileSystemName" ), //$NON-NLS-1$
+                                           argType.getFilesystemName(), false );
+         
+         dialog.addTextField( Messages.getString( "JobApplicationPage_Value" ), //$NON-NLS-1$
+                                                    argType.getValue(), false ); 
+         
+      }
+    }    
     else
     {
-      
       this.value = new Object[1][3];
-      dialog.addTextField( Messages.getString( "JobApplicationPage_Name" ), "", false ); //$NON-NLS-1$ //$NON-NLS-2$
-      dialog.addTextField( Messages.getString( "JobApplicationPage_FileSystemName" ), "", false ); //$NON-NLS-1$ //$NON-NLS-2$
-      dialog.addTextField( Messages.getString( "JobApplicationPage_Value" ), "", false ); //$NON-NLS-1$ //$NON-NLS-2$
-           
+      
+      if (button == this.btnEnVarAdd ) {
+       
+        dialog.addTextField( Messages.getString( "JobApplicationPage_Name" ), "", false ); //$NON-NLS-1$ //$NON-NLS-2$
+        dialog.addTextField( Messages.getString( "JobApplicationPage_FileSystemName" ), "", false ); //$NON-NLS-1$ //$NON-NLS-2$
+        dialog.addTextField( Messages.getString( "JobApplicationPage_Value" ), "", false ); //$NON-NLS-1$ //$NON-NLS-2$
+      }      
+      else {
+        
+        IStructuredSelection structSelection 
+                  = ( IStructuredSelection ) this.environmentViewer.getSelection();
+
+        EnvironmentType envType = (EnvironmentType) structSelection.getFirstElement();
+        
+        dialog.addTextField( Messages.getString( "JobApplicationPage_Name" ),  //$NON-NLS-1$
+                                                     envType.getName(), false ); 
+        dialog.addTextField( Messages.getString( "JobApplicationPage_FileSystemName" ), //$NON-NLS-1$
+                                           envType.getFilesystemName(), false ); 
+          dialog.addTextField( Messages.getString( "JobApplicationPage_Value" ),  //$NON-NLS-1$
+                                                    envType.getValue(), false );
+        
+      }
+      
     }
         
     if( dialog.open() != Window.OK ) {
@@ -915,5 +1040,29 @@ public final class JobApplicationPage extends FormPage
       setDirty( true );
     
   }
+   
+  
+  
+  protected void updateButtons(final TableViewer tableViewer) {
+    
+    ISelection selection = tableViewer.getSelection();
+    boolean selectionAvailable = !selection.isEmpty();    
+    
+    if (tableViewer == this.argumentViewer) {
+      
+      this.btnArgAdd.setEnabled( true );
+      this.btnArgEdit.setEnabled( selectionAvailable );
+      this.btnArgDel.setEnabled( selectionAvailable );
+      
+    }
+    else {
+      
+      this.btnEnVarAdd.setEnabled( true );
+      this.btnEnVarEdit.setEnabled( selectionAvailable );
+      this.btnEnVarDel.setEnabled( selectionAvailable );
+      
+    }
+    
+  } // End updateButtons
   
 } // End Class

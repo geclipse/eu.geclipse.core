@@ -323,25 +323,6 @@ public final class ResourcesPage extends FormPage
     gd.verticalSpan = 5;
     gd.verticalAlignment = GridData.BEGINNING;
     lblHostName.setLayoutData( gd );
-
-    
-    this.hostsViewer = new TableViewer(client, SWT.NONE);
-    this.tblHosts = this.hostsViewer.getTable();    
-    this.hostsViewer.setContentProvider( new FeatureContentProvider() );
-    this.hostsViewer.setLabelProvider( new FeatureLabelProvider() );
-    
-    this.column = new TableColumn(this.tblHosts, SWT.NONE);    
-    this.column.setWidth( 150 );
-        
-    this.hostsViewer.addSelectionChangedListener( new ISelectionChangedListener()
-    {
-
-      public void selectionChanged( final SelectionChangedEvent event ) {        
-        updateButtons((TableViewer)event.getSource());
-      }
-    } );
-    
-
     
     this.hostsViewer = new TableViewer(client, SWT.NONE);
     this.tblHosts = this.hostsViewer.getTable();    

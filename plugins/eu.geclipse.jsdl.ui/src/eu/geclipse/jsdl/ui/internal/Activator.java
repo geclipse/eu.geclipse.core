@@ -97,25 +97,6 @@ public class Activator extends AbstractUIPlugin {
   public static void logStatus( final IStatus status ) {
     getDefault().getLog().log( status );
   }
-  
-  
-  
-  @Override
-  protected void initializeImageRegistry( final ImageRegistry reg )
-  {
-    String[][] images = {
-      { "stage-in", "icons/stage-in.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
-      { "stage-in-out", "icons/stage-in-out.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
-      { "stage-out", "icons/stage-out.gif" } //$NON-NLS-1$ //$NON-NLS-2$      
-    };
-    
-    
-    ImageDescriptor imgDsc = null;
-    for( String[] image : images ) {
-      imgDsc = imageDescriptorFromPlugin( PLUGIN_ID, image[ 1 ] );
-      reg.put( image[ 0 ], imgDsc );
-    }
-  }
-  
+ 
    
 }

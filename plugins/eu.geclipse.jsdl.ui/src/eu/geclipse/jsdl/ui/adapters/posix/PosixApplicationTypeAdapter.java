@@ -36,9 +36,7 @@ import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -608,23 +606,12 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    */
   public void attachToDelete(final Button button, final TableViewer viewer){
 
-    viewer.addSelectionChangedListener( new ISelectionChangedListener() {
-
-      public void selectionChanged( final SelectionChangedEvent event ) {
-        button.setEnabled( true );
-       
-        
-      }
-      
-    });
 
     button.addSelectionListener(new SelectionListener() {
 
       public void widgetSelected(final SelectionEvent event) {        
         performDelete(viewer);
-        if (viewer.getTable().getItemCount() == 0){
-          button.setEnabled( false );
-        }
+
       }
 
       public void widgetDefaultSelected(final SelectionEvent event) {
@@ -724,7 +711,117 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
     
   }
   
+  
+  
+  /**
+   * @param tableViewer The SWT TableViewer that contains the Structural Features
+   * @param value 
+   */
+  @SuppressWarnings("unchecked")
+  public void performEdit(final TableViewer tableViewer, final Object[][] value) {
+    
+    TableViewer table = null;
+    int featureID;
+    
+    if (value[0][0] == null) {
+      return;
+    }
+    
+    Object[] valuesArray = value[0];
+        
+    EStructuralFeature eStructuralFeature;
+    
+    /*
+     * Get the TableViewer Selection
+     */
+    IStructuredSelection structSelection 
+                              = ( IStructuredSelection ) tableViewer.getSelection();
+    
+    /* If the selection is not null then Change the selected element */
+    if (structSelection != null) {
+    
+      Object feature = structSelection.getFirstElement();
+      
+      table = this.tableFeaturesMap.get( new Integer (PosixPackage.POSIX_APPLICATION_TYPE__ARGUMENT) );
+    
+      if (tableViewer == table) {
+    
+        featureID = PosixPackage.POSIX_APPLICATION_TYPE__ARGUMENT;
+        
+        eStructuralFeature = this.posixApplicationType.eClass()
+                                            .getEStructuralFeature( featureID );
+
+        
+
+        /* Get the Index of the Element that needs to be changed */
+        int index = (( java.util.List<Object> )this.posixApplicationType
+                                 .eGet(eStructuralFeature)).indexOf( feature  );
+
+        /* 
+         * Create a new Argument Type EObject with the new values that will 
+         * substitute the old EObject.
+         */
+        this.argumentType = PosixFactory.eINSTANCE.createArgumentType();
+        this.argumentType.setFilesystemName( valuesArray[0].toString() );
+        this.argumentType.setValue( valuesArray[1].toString() );
+        
+        
+        /* Change the element. The element is located through it's index position
+         *   in the list.
+         */
+        
+        (( java.util.List<Object> )this.posixApplicationType
+                   .eGet( eStructuralFeature )).set( index, this.argumentType );
+        
+      } 
+      else {
+        
+        featureID = PosixPackage.POSIX_APPLICATION_TYPE__ENVIRONMENT;
+        
+        eStructuralFeature = this.posixApplicationType.eClass()
+                                            .getEStructuralFeature( featureID );
+
+        
+        /* Get the Index of the Element that needs to be changed */
+        int index = (( java.util.List<Object> )this.posixApplicationType
+                                 .eGet(eStructuralFeature)).indexOf( feature  );
+
+        /* 
+         * Create a new Environment Type EObject with the new values that will 
+         * substitute the old EObject.
+         */
+        this.environmentType = PosixFactory.eINSTANCE.createEnvironmentType();
+        this.environmentType.setName( valuesArray[0].toString() );
+        this.environmentType.setFilesystemName( valuesArray[1].toString() );
+        this.environmentType.setValue( valuesArray[2].toString() );
+        
+        
+        /* Change the element. The element is located through it's index position
+         *   in the list.
+         */
+        
+        (( java.util.List<Object> )this.posixApplicationType
+                .eGet( eStructuralFeature )).set( index, this.environmentType );
+
+            
+      }
+    
+
+  
+  
+   /* Refresh the table viewer and notify the editor that
+   *  the page content has changed. 
+   */
+
+    tableViewer.refresh();
+    contentChanged();
+    
+    }  // end_if (structSelection != null)
+    
+  } // end void performEdit()
+  
  
+  
   protected void deleteElement(final int featureID){
         
     EStructuralFeature eStructuralFeature = this.posixApplicationType.eClass().getEStructuralFeature( featureID );
