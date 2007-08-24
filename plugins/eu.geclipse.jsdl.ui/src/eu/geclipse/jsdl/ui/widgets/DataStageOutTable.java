@@ -86,6 +86,10 @@ public class DataStageOutTable {
   private Button editButton;
   private Button removeButton;
 
+  /**
+   * @param parent
+   * @param buttonsPosition
+   */
   public DataStageOutTable( final Composite parent, final int buttonsPosition )
   {
     this( parent, new ArrayList<DataStagingType>(), buttonsPosition );
@@ -97,6 +101,7 @@ public class DataStageOutTable {
    * 
    * @param parent controls' parent
    * @param input input for a table
+   * @param buttonsPosition 
    */
   public DataStageOutTable( final Composite parent,
                             final List<DataStagingType> input,
@@ -337,7 +342,10 @@ public class DataStageOutTable {
     return this.input;
   }
 
-  public void setInput( List<DataStagingType> input ) {
+  /**
+   * @param input
+   */
+  public void setInput(final List<DataStagingType> input ) {
     this.input = input;
     if( this.input == null ) {
       this.input = new ArrayList<DataStagingType>();

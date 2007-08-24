@@ -40,6 +40,10 @@ import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.ui.dialogs.GridFileDialog;
 
 
+/**
+ * @author nickl
+ *
+ */
 public class DataStagingOutDialog extends Dialog {
   Text pathText;
   private Text nameText;
@@ -48,11 +52,19 @@ public class DataStagingOutDialog extends Dialog {
   private String initName;
   private String initPath;
 
-  protected DataStagingOutDialog( final Shell parentShell ) {
+  /**
+   * @param parentShell
+   */
+  public DataStagingOutDialog( final Shell parentShell ) {
     super( parentShell );
   }
 
-  protected DataStagingOutDialog( final Shell parentShell,
+  /**
+   * @param parentShell
+   * @param name
+   * @param path
+   */
+  public DataStagingOutDialog( final Shell parentShell,
                         final String name,
                         final String path )
   {

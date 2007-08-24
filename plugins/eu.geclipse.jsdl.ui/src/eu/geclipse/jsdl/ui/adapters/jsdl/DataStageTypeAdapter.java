@@ -36,7 +36,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 
-import eu.geclipse.jsdl.model.CreationFlagEnumeration;
 import eu.geclipse.jsdl.model.DataStagingType;
 import eu.geclipse.jsdl.model.DocumentRoot;
 import eu.geclipse.jsdl.model.JobDefinitionType;
@@ -185,6 +184,11 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
   
   public void performAdd ( final TableViewer tableViewer, final Object[] value) {
     
+    TableViewer stageInViewer = null;
+    
+    stageInViewer = this.tableFeaturesMap
+                     .get( new Integer(JsdlPackage.DATA_STAGING_TYPE__SOURCE) );
+    
     if (value[0] == null) {
       return;
     }
@@ -199,27 +203,39 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
     if (newInputList == null) {
       newInputList = new BasicEList<DataStagingType>();
     }
+     
+    if (tableViewer == stageInViewer) {
         
-   
+      this.dataStagingType.setName(value[0].toString() );    
+      this.sourceTargetType.setURI( value[1].toString() );
+      this.dataStagingType.setSource( this.sourceTargetType );
+      this.dataStagingType.setTarget( null );
+      this.dataStagingType.setFileName( value[0].toString() );
+      this.dataStagingType.setFilesystemName( value[0].toString() );
+//    this.dataStagingType.setCreationFlag( CreationFlagEnumeration.APPEND_LITERAL );
+//    this.dataStagingType.setDeleteOnTermination( false );
+      
+    }
+    else {
+      
+      this.dataStagingType.setName(value[0].toString() );    
+      this.sourceTargetType.setURI( value[1].toString() );
+      this.dataStagingType.setSource( null );
+      this.dataStagingType.setTarget( this.sourceTargetType );
+      this.dataStagingType.setFileName( value[0].toString() );
+      this.dataStagingType.setFilesystemName( value[0].toString() );
+//    this.dataStagingType.setCreationFlag( CreationFlagEnumeration.APPEND_LITERAL );
+//    this.dataStagingType.setDeleteOnTermination( false );
+    }
+      
     
-//    this.dataStagingType = JsdlFactory.eINSTANCE.createDataStagingType();
-    
-    this.dataStagingType.setFileName( value[0].toString() );
-    this.dataStagingType.setFilesystemName( value[0].toString() );
-    this.dataStagingType.setName(value[0].toString() );    
-    this.sourceTargetType.setURI( value[1].toString() );
-    this.dataStagingType.setSource( this.sourceTargetType );
-    this.dataStagingType.setTarget( null );
-    this.dataStagingType.setCreationFlag( CreationFlagEnumeration.APPEND_LITERAL );
-    this.dataStagingType.setDeleteOnTermination( false );
     newInputList.add( this.dataStagingType );
     
     eStructuralFeature = this.jobDescriptionType.eClass().getEStructuralFeature( featureID );
     
     tableViewer.setInput(newInputList);
     
-    for ( int i=0; i<tableViewer.getTable().getItemCount(); i++ ) {
-      System.out.println(tableViewer.getElementAt( i ));
+    for ( int i=0; i<tableViewer.getTable().getItemCount(); i++ ) {      
       collection.add( (DataStagingType) tableViewer.getElementAt( i ) );
     }
                
@@ -274,6 +290,83 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
     contentChanged();
     
   } // End void performDelete()
+  
+  
+  
+  /**
+   * @param tableViewer The SWT TableViewer that contains the Structural Features
+   * @param value 
+   */
+  @SuppressWarnings("unchecked")
+  public void performEdit(final TableViewer tableViewer, final Object[] value) {
+    
+    TableViewer stageInViewer = null;
+    
+    stageInViewer = this.tableFeaturesMap
+                     .get( new Integer(JsdlPackage.DATA_STAGING_TYPE__SOURCE) );
+
+    
+    if (value[0] == null) {
+      return;
+    }
+    
+    EStructuralFeature eStructuralFeature;
+    
+    int featureID = JsdlPackage.JOB_DESCRIPTION_TYPE__DATA_STAGING;
+    
+    /*
+     * Get the TableViewer Selection
+     */
+    IStructuredSelection structSelection 
+                              = ( IStructuredSelection ) tableViewer.getSelection();
+  
+    /* If the selection is not null the Change the selected element */
+    if (structSelection != null) {
+      
+      eStructuralFeature = this.jobDescriptionType.eClass()
+                                            .getEStructuralFeature( featureID );
+
+      Object feature = structSelection.getFirstElement();
+    
+    /* Get the Index of the Element that needs to be changed */
+      int index = (( java.util.List<Object> )this.jobDescriptionType.eGet(eStructuralFeature))
+                                                           .indexOf( feature  );
+      
+      
+      
+      this.dataStagingType = JsdlFactory.eINSTANCE.createDataStagingType();      
+      this.sourceTargetType = JsdlFactory.eINSTANCE.createSourceTargetType();
+     
+      if (tableViewer == stageInViewer) {
+        this.sourceTargetType.setURI( value[0].toString() );
+        this.dataStagingType.setSource( this.sourceTargetType );  
+        this.dataStagingType.setFileName( value[1].toString() );
+
+      }
+      else {
+        this.dataStagingType.setFileName( value[0].toString() );
+        this.sourceTargetType.setURI( value[1].toString() );
+        this.dataStagingType.setTarget( this.sourceTargetType );  
+      }
+        
+      
+      
+    /* Change the element. The element is located through it's index position
+     * in the list.
+     */
+      (( java.util.List<Object> )this.jobDescriptionType.eGet( eStructuralFeature ))
+            .set( index, this.dataStagingType );
+  
+    /* Refresh the table viewer and notify the editor that
+     *  the page content has changed. 
+     */
+      tableViewer.refresh();
+      contentChanged();
+    
+    }  
+    
+  }
+  
    
   
   

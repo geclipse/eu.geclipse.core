@@ -1,3 +1,19 @@
+/******************************************************************************
+ * Copyright (c) 2007 g-Eclipse consortium
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initialia development of the original code was made for
+ * project g-Eclipse founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributor(s):
+ *     UCY (http://www.ucy.cs.ac.cy)
+ *      - Nicholas Loulloudes (loulloudes.n@cs.ucy.ac.cy)
+ *
+ *****************************************************************************/
 package eu.geclipse.jsdl.ui.internal.pages;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -5,6 +21,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
@@ -34,6 +51,7 @@ import eu.geclipse.jsdl.ui.providers.DataStageOutLabelProvider;
 import eu.geclipse.jsdl.ui.providers.FeatureContentProvider;
 import eu.geclipse.jsdl.ui.providers.FeatureLabelProvider;
 import eu.geclipse.jsdl.ui.widgets.DataStagingInDialog;
+import eu.geclipse.jsdl.ui.widgets.DataStagingOutDialog;
 
 
 /**
@@ -305,7 +323,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    
    this.btnStageInAdd.addSelectionListener(new SelectionListener() {
      public void widgetSelected(final SelectionEvent event) {
-                handleEventDialog( null );
+                handleEventDialog(DataStagingPage.this.stageInViewer, null );
                 DataStagingPage.this.dataStageTypeAdapter
                                .performAdd( DataStagingPage.this.stageInViewer ,
                                                    DataStagingPage.this.value );
@@ -329,7 +347,11 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    
    this.btnStageInEdit.addSelectionListener(new SelectionListener() {
      public void widgetSelected(final SelectionEvent event) {
-       //       
+       handleEventDialog(DataStagingPage.this.stageInViewer, 
+               getViewerSelectionObject( DataStagingPage.this.stageInViewer ) );
+       DataStagingPage.this.dataStageTypeAdapter
+                               .performEdit( DataStagingPage.this.stageInViewer,
+                                                   DataStagingPage.this.value );
      }
 
       public void widgetDefaultSelected(final SelectionEvent event) {
@@ -350,7 +372,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    this.btnStageInDel = toolkit.createButton(client,
                                    Messages.getString("JsdlEditor_RemoveButton") //$NON-NLS-1$
                                    , SWT.PUSH);   
-   
+  
    this.dataStageTypeAdapter.attachToDelete( this.btnStageInDel, 
                                                            this.stageInViewer );
 
@@ -424,7 +446,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    {
 
      public void selectionChanged( final SelectionChangedEvent event ) {
-       updateButtons((TableViewer)event.getSource());
+       updateButtons( (TableViewer) event.getSource() );
      }
    } );
    
@@ -444,7 +466,10 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    
    this.btnStageOutAdd.addSelectionListener(new SelectionListener() {
      public void widgetSelected(final SelectionEvent event) {
-       //       
+       handleEventDialog(DataStagingPage.this.stageOutViewer, null );
+       DataStagingPage.this.dataStageTypeAdapter
+                               .performAdd( DataStagingPage.this.stageOutViewer ,
+                                                   DataStagingPage.this.value );
      }
 
       public void widgetDefaultSelected(final SelectionEvent event) {
@@ -465,8 +490,12 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    
    this.btnStageOutEdit.addSelectionListener(new SelectionListener() {
      public void widgetSelected(final SelectionEvent event) {
-       // 
-     }
+       handleEventDialog(DataStagingPage.this.stageOutViewer, 
+                         getViewerSelectionObject( DataStagingPage.this.stageOutViewer ) );
+                 DataStagingPage.this.dataStageTypeAdapter
+                              .performEdit( DataStagingPage.this.stageOutViewer,
+                                                   DataStagingPage.this.value );
+                 }
 
       public void widgetDefaultSelected(final SelectionEvent event) {
           // Do Nothing - Required method
@@ -487,8 +516,8 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
                                    Messages.getString("JsdlEditor_RemoveButton") //$NON-NLS-1$
                                    , SWT.PUSH);
    
-//   this.posixApplicationTypeAdapter.attachToDelete( this.btnDel, 
-//                                                            this.argumentViewer );
+   this.dataStageTypeAdapter.attachToDelete( this.btnStageOutDel, 
+                                                            this.stageOutViewer );
 
    this.btnStageOutDel.setLayoutData( gd );
    
@@ -526,52 +555,77 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
      this.btnStageOutEdit.setEnabled( selectionAvailable );
    }
  } // End updateButtons
-  
-   protected void handleEventDialog( final DataStagingType selectedObject ) {
-     DataStagingInDialog dialog;
+   
+   
+   protected DataStagingType getViewerSelectionObject( final TableViewer tableViewer ) {
+     DataStagingType result = null;
      
-     if( selectedObject == null ) {
-       this.value = new Object[2];
-       dialog = new DataStagingInDialog( this.body.getShell() );
-       if( dialog.open() == Window.OK ) {
-         this.value[0] = dialog.getName();
-         this.value[1] = dialog.getPath();
+     IStructuredSelection selection = ( IStructuredSelection )tableViewer.getSelection();
+     Object obj = selection.getFirstElement();
+     if( obj instanceof DataStagingType ) {
+       result = ( DataStagingType )obj;
+     
+     }
+     return result;
+     
+   }
+  
+   
+   
+   protected void handleEventDialog(final TableViewer tableViewer, 
+                                        final DataStagingType selectedObject ) {
+     this.value = new Object[2];
+     
+     if (tableViewer == this.stageInViewer ) {
+       DataStagingInDialog dialog;
+     
+       if( selectedObject == null ) {
+       
+         dialog = new DataStagingInDialog( this.body.getShell(), 
+                                           DataStagingInDialog.ADVANCED_DIALOG);
+         if( dialog.open() == Window.OK ) {         
+           this.value[0] = dialog.getPath();
+           this.value[1] = dialog.getName();         
+         }
+
+       } else {
+       
+         dialog = new DataStagingInDialog( this.body.getShell(),
+                                           DataStagingInDialog.ADVANCED_DIALOG,
+                                           selectedObject.getFileName(),
+                                           selectedObject.getSource().getURI() );
+         if( dialog.open() == Window.OK ) {         
+           this.value[0] = dialog.getPath();
+           this.value[1] = dialog.getName();              
+         }
+
+       }
+     }
+     else{
+       
+       DataStagingOutDialog dialog;
+       
+       if( selectedObject == null ) {
          
-}
-//     } else {
-//       dialog = new DataStagingInDialog( this.body.getShell(),
-//                                selectedObject.getFileName(),
-//                                selectedObject.getSource().getURI() );
-//       if( dialog.open() == Window.OK ) {
-//         DataStagingType newData = getNewDataStagingType( dialog.getName(),
-//                                                          dialog.getPath() );
-//         // DataStagingType newData = selectedObject;
-//         // newData.setFileName( dialog.getName() );
-//         // SourceTargetType source = JSDLModelFacade.getSourceTargetType();
-//         // source.setURI( dialog.getPath() );
-//         // newData.setSource( source );
-//         if( !newData.getFileName().equals( selectedObject.getFileName() )
-//             || !newData.getSource().getURI().equals( selectedObject.getSource()
-//               .getURI() ) )
-//         {
-//           if( !isDataInInput( newData ) ) {
-//             // this.input.add( getNewDataStagingType( dialog.getName(),
-//             // dialog.getPath() ) );
-//             // this.input.remove( selectedObject );
-//             // this.input.add( getNewDataStagingType( dialog.getName(),
-//             // dialog.getPath() ) );
-//             // this.input.remove( selectedObject );
-//             updateDataStaging( selectedObject,
-//                                newData.getFileName(),
-//                                newData.getSource() );
-//             this.tableViewer.refresh();
-//           } else {
-//             MessageDialog.openError( this.body.getShell(),
-//                                      Messages.getString( "DataStageInTable.edit_dialog_title" ), //$NON-NLS-1$
-//                                      Messages.getString( "DataStageInTable.value_exists_dialog_message" ) ); //$NON-NLS-1$
-//           }
-//         }
-//       }
+         dialog = new DataStagingOutDialog( this.body.getShell() );
+         if( dialog.open() == Window.OK ) {         
+           this.value[0] = dialog.getName();
+           this.value[1] = dialog.getPath();         
+         }
+
+       } else {
+       
+         dialog = new DataStagingOutDialog( this.body.getShell(),
+                                selectedObject.getFileName(),
+                                selectedObject.getTarget().getURI() );
+         
+         if( dialog.open() == Window.OK ) {         
+           this.value[0] = dialog.getName();
+           this.value[1] = dialog.getPath();         
+         }
+
+       }
+       
      }
    }
   

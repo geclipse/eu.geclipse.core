@@ -92,12 +92,17 @@ public class DataStageInTable {
    * remove)
    * 
    * @param parent control's parent
-   * @param input input for table
+   * @param buttonsPosition 
    */
   public DataStageInTable( final Composite parent, final int buttonsPosition ) {
     this( parent, new ArrayList<DataStagingType>(), buttonsPosition );
   }
 
+  /**
+   * @param parent
+   * @param input
+   * @param buttonsPosition
+   */
   public DataStageInTable( final Composite parent,
                            final List<DataStagingType> input,
                            final int buttonsPosition )
@@ -342,7 +347,10 @@ public class DataStageInTable {
     return this.input;
   }
 
-  public void setInput( List<DataStagingType> input ) {
+  /**
+   * @param input
+   */
+  public void setInput( final List<DataStagingType> input ) {
     this.input = input;
     if( this.input == null ) {
       this.input = new ArrayList<DataStagingType>();
@@ -353,7 +361,8 @@ public class DataStageInTable {
   void editDataStagingEntry( final DataStagingType selectedObject ) {
     DataStagingInDialog dialog;
     if( selectedObject == null ) {
-      dialog = new DataStagingInDialog( this.mainComp.getShell() );
+      dialog = new DataStagingInDialog( this.mainComp.getShell(),
+                                            DataStagingInDialog.SIMPLE_DIALOG );
       if( dialog.open() == Window.OK ) {
         DataStagingType newData = getNewDataStagingType( dialog.getName(),
                                                          dialog.getPath() );
@@ -368,7 +377,8 @@ public class DataStageInTable {
       }
     } else {
       dialog = new DataStagingInDialog( this.mainComp.getShell(),
-                               selectedObject.getFileName(),
+                                        DataStagingInDialog.SIMPLE_DIALOG,
+                                        selectedObject.getFileName(),
                                selectedObject.getSource().getURI() );
       if( dialog.open() == Window.OK ) {
         DataStagingType newData = getNewDataStagingType( dialog.getName(),
