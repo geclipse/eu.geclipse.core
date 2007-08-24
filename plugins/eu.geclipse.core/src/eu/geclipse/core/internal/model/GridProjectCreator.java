@@ -59,13 +59,6 @@ public class GridProjectCreator
   
   @Override
   public boolean internalCanCreate( final Object object ) {
-    /*boolean result = false;
-    if ( object instanceof IProject ) {
-      IProject project = ( IProject ) object;
-      String name = project.getName();
-      result = ! name.startsWith( "." ); //$NON-NLS-1$
-    }
-    return result;*/
     return ( object instanceof IProject );
   }
 
