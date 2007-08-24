@@ -25,6 +25,7 @@ import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 
@@ -71,10 +72,10 @@ public class HiddenProject
   /**
    * Private constructor.
    * 
-   * @param resource The resource from which to create the project.
+   * @param project The {@link IProject} from which to create the project.
    */
-  private HiddenProject( final IResource resource ) {
-    super(resource);
+  private HiddenProject( final IProject project ) {
+    super( project );
   }
   
   /**
@@ -90,15 +91,10 @@ public class HiddenProject
     HiddenProject result = ( HiddenProject ) gridRoot.findChild( NAME );
     
     if ( result == null ) {
-      
       IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
-      
       String projectName = NAME;
-      
       IProject project = workspaceRoot.getProject( projectName );
-      
       result = getInstance( project );
-      
     }
     
     return result;
@@ -134,27 +130,10 @@ public class HiddenProject
       try {
         project.create( desc, null );
       } catch ( CoreException cExc ) {
-        throw new GridModelException( GridModelProblems.PREFERENCE_CREATION_FAILED,
-                                      cExc );
+        throw new GridModelException( GridModelProblems.PREFERENCE_CREATION_FAILED, cExc );
       }
       
     }
-    
-    if ( ! project.isOpen() ) {
-      try {
-        project.open( null );
-      } catch ( CoreException cExc ) {
-        throw new GridModelException( GridModelProblems.PREFERENCE_CREATION_FAILED,
-                                      cExc );
-      }
-    }
-    
-    try {
-      createProjectStructure( project );
-    } catch ( CoreException cExc ) {
-      throw new GridModelException( GridModelProblems.PREFERENCE_CREATION_FAILED,
-                                    cExc );
-    } 
     
     return new HiddenProject( project );
     
@@ -174,8 +153,7 @@ public class HiddenProject
   public void createGlobalConnection( final String name, final URI masterURI )
       throws GridModelException {
     try {
-      IProject project = ( IProject ) getResource();
-      IFolder folder = project.getFolder( DIR_GLOBAL_CONNECTIONS );
+      IFolder folder = getGlobalConnectionsFolder();
       IFolder connection = folder.getFolder( name );
       connection.createLink( masterURI, IResource.ALLOW_MISSING_LOCAL, null );
     } catch ( CoreException cExc ) {
@@ -193,8 +171,7 @@ public class HiddenProject
     IGridConnection result = null;
     
     try {
-      IProject project = ( IProject ) getResource();
-      IFolder folder = project.getFolder( DIR_TEMP );
+      IFolder folder = getTemporaryFolder();
       IFolder connection = folder.getFolder( TEMP_CONNECTION_NAME );
       if ( connection.exists() ) {
         connection.delete( true, null );
@@ -236,38 +213,49 @@ public class HiddenProject
    * @see eu.geclipse.core.model.IGridProject#isOpen()
    */
   public boolean isOpen() {
+    return ( ( IProject ) getResource() ).isOpen();
+  }
+  
+  @Override
+  protected boolean fetchChildren( final IProgressMonitor monitor ) {
     return false;
   }
   
-  /**
-   * Create the structure of the hidden project.
-   * 
-   * @param project The corresponding {@link IProject} used to create
-   * the project folders.
-   * @throws CoreException If an error occures during the structure creation.
-   */
-  private static void createProjectStructure( final IProject project )
-      throws CoreException {
-    createProjectDirectory( project, DIR_GLOBAL_CONNECTIONS );
-    createProjectDirectory( project, DIR_TEMP );
+  protected IProject getAccessibleProject() throws CoreException {
+    IProject project = ( IProject ) getResource();
+    if ( ! project.isOpen() ) {
+      project.open( null );
+    }
+    return project;
+  }
+  
+  protected IFolder getGlobalConnectionsFolder() throws CoreException {
+    IFolder folder = getProjectFolder( DIR_GLOBAL_CONNECTIONS );
+    return folder;
+  }
+  
+  protected IFolder getTemporaryFolder() throws CoreException {
+    IFolder folder = getProjectFolder( DIR_TEMP );
+    return folder;
   }
   
   /**
-   * Create a directory within the project.
+   * Create and/or retrieve a directory within the project.
    * 
-   * @param project The project used to create the directory.
    * @param name The name of the new directory.
    * @throws CoreException If the creation of the directory failed.
    */
-  private static void createProjectDirectory( final IProject project,
-                                              final String name )
+  private IFolder getProjectFolder( final String name )
       throws CoreException {
     
+    IProject project = getAccessibleProject();
     IFolder folder = project.getFolder( new Path( name ) );
     
     if ( ! folder.exists() ) {
       folder.create( IResource.FORCE, true, null );
     }
+    
+    return folder;
     
   }
 
