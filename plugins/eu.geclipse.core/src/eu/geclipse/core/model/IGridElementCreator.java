@@ -24,7 +24,7 @@ package eu.geclipse.core.model;
  * potentially able to create an element and if so it can be asked to
  * really try to create the element. It is not necessarily true that the
  * creator can create an element if it returns true when asked if it can.
- * It may also the case that there occures an error during the creation
+ * It may also the case that there occurs an error during the creation
  * of the element even if it should in principal be possible to create
  * an element.
  * 
@@ -57,7 +57,7 @@ public interface IGridElementCreator {
    * afterwards retrieved with the {@link #getObject()} method.
    * 
    * @param fromObject The object from which to create an element.
-   * @return True if this elementor is potentially able to
+   * @return True if this creator is potentially able to
    * create elements from the specified object. 
    */
   public boolean canCreate( final Object fromObject );
