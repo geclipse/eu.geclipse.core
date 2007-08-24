@@ -1,0 +1,9 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Test Fragment
+Bundle-SymbolicName: eu.geclipse.info.test
+Bundle-Version: 0.5.0.qualifier
+Bundle-Vendor: Eclipse.org
+Fragment-Host: eu.geclipse.info;bundle-version="0.5.0"
+Require-Bundle: org.junit4,
+ eu.geclipse.test
