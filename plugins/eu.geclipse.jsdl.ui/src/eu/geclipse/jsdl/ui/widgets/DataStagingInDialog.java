@@ -61,18 +61,22 @@ public class DataStagingInDialog extends Dialog {
    * Delete On Termination
    */
   public static final int ADVANCED_DIALOG = 1;
-  Text pathText;
   
+  protected Combo creationFlagCombo;
+  protected Combo deleteOnTerminationCombo;
+  
+  protected Text pathText; 
   private int dialogStyle;
   private Text nameText;
   private String returnName;
   private String returnPath;
+  private String initCreationFlag;
+  private String initDeleteFlag;
   private String initName;
   private String initPath;
-  private Combo creationFlagCombo;
-  private Combo deleteOnTerminationCombo;
   private int returnCreationFlag;
   private Boolean returnDeleteFlag;
+  
   
 
   /**
@@ -100,6 +104,33 @@ public class DataStagingInDialog extends Dialog {
     this.initPath = path;
     this.dialogStyle = style;
   }
+  
+  
+  /**
+   * @param parentShell
+   * @param style
+   * @param name
+   * @param path
+   * @param deleteFlag
+   * @param creationFlag
+   */
+  public DataStagingInDialog( final Shell parentShell,
+                              final int style,
+                              final String name,
+                              final String path,      
+                              final String creationFlag,
+                              final Boolean deleteFlag)
+  {
+    this( parentShell, style );
+    this.initName = name;
+    this.initPath = path;
+    this.dialogStyle = style;
+    this.initCreationFlag = creationFlag ;    
+    this.initDeleteFlag =   deleteFlag.toString() ;
+    
+  }
+  
+  
 
   @Override
   protected void configureShell( final Shell shell ) {
@@ -193,9 +224,21 @@ public class DataStagingInDialog extends Dialog {
           this.creationFlagCombo.add( cFEnum.getEEnumLiteral( i ).toString() );
         }
         cFEnum = null;
+        int indexOfOverwite;
+        
+        if( this.initCreationFlag != null ) {
+          indexOfOverwite = this.creationFlagCombo.indexOf( this.initCreationFlag );
+          this.creationFlagCombo.select( indexOfOverwite );          
+        }
+        
+        else{
+          
+          indexOfOverwite = this.creationFlagCombo.indexOf( "overwrite" ); //$NON-NLS-1$
+          this.creationFlagCombo.select( indexOfOverwite );
+          
+        }
      
-     int indexOfOverwite = this.creationFlagCombo.indexOf( "overwrite" ); //$NON-NLS-1$
-     this.creationFlagCombo.select( indexOfOverwite );
+     
      gd = new GridData();
      
      Label deleteOnTerminationLabel = new Label(panel,SWT.LEAD);
@@ -210,10 +253,20 @@ public class DataStagingInDialog extends Dialog {
      
      this.deleteOnTerminationCombo.add( "true"); //$NON-NLS-1$
      this.deleteOnTerminationCombo.add( "false"); //$NON-NLS-1$
-     this.deleteOnTerminationCombo.select( 0 );
+     
+     if( this.initDeleteFlag != null ) {       
+       int indexOfDelete = this.deleteOnTerminationCombo.indexOf( this.initDeleteFlag.toString() );
+       this.deleteOnTerminationCombo.select( indexOfDelete );          
+     }
+     
+     else{
+              
+       this.creationFlagCombo.select (0);
+       
+     }
+  
      
      gd = new GridData();
-//     gd.widthHint = 260;
      gd.horizontalSpan = 2;
      gd.horizontalAlignment = SWT.FILL;
      this.deleteOnTerminationCombo.setLayoutData( gd );
@@ -262,6 +315,8 @@ public class DataStagingInDialog extends Dialog {
   public int getCreationFlag() {
     return this.returnCreationFlag;
   }
+  
+  
 
   @SuppressWarnings("boxing")
   @Override

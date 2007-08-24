@@ -356,7 +356,8 @@ public class DataStageOutTable {
   void editDataStagingEntry( final DataStagingType selectedObject ) {
     DataStagingOutDialog dialog;
     if( selectedObject == null ) {
-      dialog = new DataStagingOutDialog( this.mainComp.getShell() );
+      dialog = new DataStagingOutDialog( this.mainComp.getShell(),
+                                         DataStagingInDialog.ADVANCED_DIALOG);
       if( dialog.open() == Window.OK ) {
         DataStagingType newData = getNewDataStagingType( dialog.getName(),
                                                          dialog.getPath() );
@@ -371,8 +372,10 @@ public class DataStageOutTable {
       }
     } else {
       dialog = new DataStagingOutDialog( this.mainComp.getShell(),
-                               selectedObject.getFileName(),
-                               selectedObject.getTarget().getURI() );
+                                         DataStagingInDialog.ADVANCED_DIALOG,
+                                         selectedObject.getFileName(),
+                                         selectedObject.getTarget().getURI() );
+      
       if( dialog.open() == Window.OK ) {
         DataStagingType newData = getNewDataStagingType( dialog.getName(),
                                                          dialog.getPath() );

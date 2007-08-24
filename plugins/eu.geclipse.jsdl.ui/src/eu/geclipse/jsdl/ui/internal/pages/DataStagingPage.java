@@ -593,7 +593,11 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
          dialog = new DataStagingInDialog( this.body.getShell(),
                                            DataStagingInDialog.ADVANCED_DIALOG,
                                            selectedObject.getFileName(),
-                                           selectedObject.getSource().getURI() );
+                                           selectedObject.getSource().getURI(),
+                                           selectedObject.getCreationFlag().toString(),
+                                           selectedObject.isDeleteOnTermination() );
+         
+         
          if( dialog.open() == Window.OK ) {         
            this.value[0] = dialog.getPath();
            this.value[1] = dialog.getName();              
@@ -607,7 +611,8 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
        
        if( selectedObject == null ) {
          
-         dialog = new DataStagingOutDialog( this.body.getShell() );
+         dialog = new DataStagingOutDialog( this.body.getShell(),
+                                            DataStagingInDialog.ADVANCED_DIALOG);
          if( dialog.open() == Window.OK ) {         
            this.value[0] = dialog.getName();
            this.value[1] = dialog.getPath();         
@@ -616,8 +621,11 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
        } else {
        
          dialog = new DataStagingOutDialog( this.body.getShell(),
-                                selectedObject.getFileName(),
-                                selectedObject.getTarget().getURI() );
+                                            DataStagingInDialog.ADVANCED_DIALOG,
+                                            selectedObject.getFileName(),
+                                            selectedObject.getTarget().getURI(),
+                                            selectedObject.getCreationFlag().toString(),
+                                            selectedObject.isDeleteOnTermination() );
          
          if( dialog.open() == Window.OK ) {         
            this.value[0] = dialog.getName();
