@@ -27,10 +27,16 @@ import java.util.StringTokenizer;
 import java.util.TreeSet;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.text.ITextSelection;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.TextTransfer;
+import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -51,7 +57,7 @@ import eu.geclipse.terminal.ITerminalListener;
 /**
  * VT100 terminal emulator widget.
  */
-public class Terminal extends Canvas {
+public class Terminal extends Canvas implements ISelectionProvider {
   private static final int BEL = 7;
   private static final int FF = 12;
   private static final int SO = 14;
@@ -85,11 +91,13 @@ public class Terminal extends Canvas {
   private boolean reverseScreenMode;
   private String windowTitle;
   private final SortedSet<Integer> tabulatorPositons = new TreeSet<Integer>();
-  private List<ITerminalListener> listeners;
+  private List<ITerminalListener> terminalListeners;
   private boolean wraparound;
   private boolean reverseWraparound;
   private boolean running;
   private Clipboard clipboard;
+  private List<ISelectionChangedListener> selectionListeners;
+  private TerminalSelection terminalSelection;
 
   /**
    * Creates a new terminal widget.
@@ -111,9 +119,13 @@ public class Terminal extends Canvas {
     this.cursor = new Cursor( this.defaultFgColor, this.defaultBgColor );
     this.savedCursor = new Cursor( this.defaultFgColor, this.defaultBgColor );
     this.screenBuffer = new Char[0][];
-    this.listeners = new LinkedList<ITerminalListener>();
+    this.terminalListeners = new LinkedList<ITerminalListener>();
+    this.selectionListeners = new LinkedList<ISelectionChangedListener>();
     changeScreenSize();
     this.terminalPainter = new TerminalPainter( this );
+    this.terminalSelection = new TerminalSelection( this );
+    addMouseListener( this.terminalSelection );
+    addMouseMoveListener( this.terminalSelection );
     addPaintListener( this.terminalPainter );
     addListener(SWT.Resize, new Listener() {
       public void handleEvent( final Event event ) {
@@ -127,7 +139,7 @@ public class Terminal extends Canvas {
         triggerRedraw();
       }
     } );
-
+    
     addListener(SWT.KeyDown, new Listener() { 
       public void handleEvent( final Event event ) {
         // index 0 = keypad numeric mode, index 1 = keypad application mode
@@ -244,10 +256,22 @@ public class Terminal extends Canvas {
   }
 
   private void initMenu() {
+    ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
     Menu popUpMenu = new Menu( getShell(), SWT.POP_UP );
+    MenuItem copyItem = new MenuItem( popUpMenu, SWT.PUSH );
+    copyItem.setText( Messages.getString("Terminal.copy") ); //$NON-NLS-1$
+    // TODO disable menu if selection is empty
+    ImageDescriptor copyImage 
+        = sharedImages.getImageDescriptor( ISharedImages.IMG_TOOL_COPY );
+    copyItem.setImage( copyImage.createImage() );
+    copyItem.addSelectionListener( new SelectionAdapter() {
+      @Override
+      public void widgetSelected( final SelectionEvent event ) {
+        copy();
+      }
+    } );
     MenuItem pasteItem = new MenuItem( popUpMenu, SWT.PUSH );
     pasteItem.setText( Messages.getString( "Terminal.paste" ) ); //$NON-NLS-1$
-    ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
     ImageDescriptor pasteImage 
         = sharedImages.getImageDescriptor( ISharedImages.IMG_TOOL_PASTE );
     pasteItem.setImage( pasteImage.createImage() );
@@ -260,6 +284,16 @@ public class Terminal extends Canvas {
     setMenu( popUpMenu );    
   }
 
+  /**
+   * Triggers copy from the terminal into the clipboard.
+   */
+  void copy() {
+    String text = ((ITextSelection) getSelection()).getText();
+    TextTransfer plainTextTransfer = TextTransfer.getInstance();
+    this.clipboard.setContents( new String[] { text },
+                                new Transfer[] { plainTextTransfer } );
+  }
+  
   private Object getClipboardContent( final  int clipboardType ) {
     TextTransfer plainTextTransfer = TextTransfer.getInstance();
     return this.clipboard.getContents(plainTextTransfer, clipboardType);
@@ -285,7 +319,7 @@ public class Terminal extends Canvas {
    * @param termListener the listener.
    */
   public void addTerminalListener( final ITerminalListener termListener ) {
-    this.listeners.add( termListener );
+    this.terminalListeners.add( termListener );
   }
 
   /**
@@ -293,7 +327,7 @@ public class Terminal extends Canvas {
    * @param termListener the listener.
    */
   public void removeTerminalListener( final ITerminalListener termListener ) {
-    this.listeners.remove( termListener );
+    this.terminalListeners.remove( termListener );
   }
 
   private void bell() {
@@ -357,7 +391,7 @@ public class Terminal extends Canvas {
     } catch( IOException ioException ) {
       Activator.logException( ioException );
     }
-    for ( ITerminalListener listener : this.listeners ) {
+    for ( ITerminalListener listener : this.terminalListeners ) {
       listener.terminated();
     }
   }
@@ -726,7 +760,7 @@ public class Terminal extends Canvas {
     } else switch (commandNr) {
       case 0: // Set Window Title
         this.windowTitle = readString();
-        for ( ITerminalListener listener : this.listeners ) {
+        for ( ITerminalListener listener : this.terminalListeners ) {
           listener.windowTitleChanged( this.windowTitle );
         }
         break;
@@ -1576,7 +1610,7 @@ public class Terminal extends Canvas {
     if ( this.cursor.line >= this.numLines ) this.cursor.line = this.numLines - 1;
     if ( this.cursor.col >= this.numCols ) this.cursor.col = this.numCols - 1;
     if ( this.numCols != 0 && this.numLines !=0 ) {
-      for ( ITerminalListener listener : this.listeners ) {
+      for ( ITerminalListener listener : this.terminalListeners ) {
         listener.windowSizeChanged( this.numCols, this.numLines,
                                     this.numCols * this.fontWidth,
                                     this.numLines * this.fontHeight );
@@ -1658,7 +1692,35 @@ public class Terminal extends Canvas {
     return this.numLines;
   }
   
+  int getNumCols() {
+    return this.numCols;
+  }
+  
   int getHistorySize() {
     return this.historySize;
+  }
+
+  public void addSelectionChangedListener( final ISelectionChangedListener listener ) {
+    this.selectionListeners.add( listener );
+  }
+
+  public ISelection getSelection() {
+    return this.terminalSelection;
+  }
+
+  public void removeSelectionChangedListener( final ISelectionChangedListener listener ) {
+    this.selectionListeners.remove( listener );
+  }
+
+  public void setSelection( final ISelection selection ) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  void fireSelectionChanged() {
+    SelectionChangedEvent event = new SelectionChangedEvent( this, this.terminalSelection );
+    for ( ISelectionChangedListener listener : this.selectionListeners ) {
+      listener.selectionChanged( event );
+    }
   }
 }

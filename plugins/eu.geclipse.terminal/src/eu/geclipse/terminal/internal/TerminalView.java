@@ -16,6 +16,7 @@
 package eu.geclipse.terminal.internal;
 
 import java.io.IOException;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -26,12 +27,15 @@ import org.eclipse.swt.custom.CTabFolderEvent;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.part.ViewPart;
+
 import eu.geclipse.core.IBidirectionalConnection;
 import eu.geclipse.terminal.ITerminalListener;
 import eu.geclipse.terminal.ITerminalPage;
@@ -44,8 +48,9 @@ import eu.geclipse.terminal.internal.preferences.PreferenceConstants;
  */
 public class TerminalView extends ViewPart implements ITerminalView {
   CTabFolder cTabFolder = null;
+  SelectionProviderIntermediate selectionProvider;
   private NewTerminalDropDownAction newTerminalAction;
-
+    
   /**
    * This is a callback that will allow us to create the viewer and initialize
    * it.
@@ -87,6 +92,18 @@ public class TerminalView extends ViewPart implements ITerminalView {
         }
       }
     } );
+    actionBars.setGlobalActionHandler( ActionFactory.COPY.getId(), new Action() {
+      @Override
+      public void run() {
+        // TODO disable menu if selection is empty
+        CTabItem item = TerminalView.this.cTabFolder.getSelection();
+        if( item != null && item.getControl() != null ) {
+          ((TerminalPage)item.getControl()).copy();
+        }
+      }
+    } );
+    this.selectionProvider = new SelectionProviderIntermediate();
+    getSite().setSelectionProvider( this.selectionProvider );
   }
 
   private void contributeToActionBars() {
@@ -155,7 +172,16 @@ public class TerminalView extends ViewPart implements ITerminalView {
       }
     } );
     cTabItem.setControl( page );
+    this.cTabFolder.addSelectionListener( new SelectionAdapter() {
+      @Override
+      public void widgetSelected( final SelectionEvent event ) {
+        TerminalView.this.selectionProvider.setSelectionProviderDelegate( 
+          ((TerminalPage)(((CTabFolder)event.getSource()).getSelection()).getControl()).getTerminal());
+          
+      }
+    } );
     this.cTabFolder.setSelection( cTabItem );
+    this.selectionProvider.setSelectionProviderDelegate( page.getTerminal() );
     return page;
   }
 }

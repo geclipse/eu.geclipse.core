@@ -16,6 +16,7 @@
 package eu.geclipse.terminal.internal;
 
 import java.io.IOException;
+
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabItem;
@@ -27,6 +28,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.themes.IThemeManager;
+
 import eu.geclipse.core.IBidirectionalConnection;
 import eu.geclipse.terminal.ITerminalListener;
 import eu.geclipse.terminal.ITerminalPage;
@@ -45,6 +47,10 @@ class TerminalPage extends Composite implements ITerminalPage {
     super( parent, style );
     this.tabItem = cTabItem;
     createPartControl();
+  }
+
+  void copy() {
+    this.terminal.copy();
   }
 
   void paste() {
@@ -146,5 +152,9 @@ class TerminalPage extends Composite implements ITerminalPage {
     this.terminal.setLayoutData( terminalGridData );
     this.tabItem.setText( Messages.getString( "TerminalPage.terminal" ) ); //$NON-NLS-1$
     setLayout( gridLayout );
+  }
+  
+  Terminal getTerminal() {
+    return this.terminal;
   }
 }
