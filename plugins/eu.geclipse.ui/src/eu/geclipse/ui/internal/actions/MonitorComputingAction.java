@@ -60,7 +60,7 @@ public class MonitorComputingAction extends SelectionListenerAction {
    * @param site The {@link IWorkbenchSite} to create this action for.
    */
   public MonitorComputingAction( final IWorkbenchSite site ) {
-    super( "Monitor Computing Ressource" ); //$NON-NLS-1$
+    super( "Monitor Computing Resource" ); //$NON-NLS-1$
     this.setEnabled( false );
     this.site = site;
   }
