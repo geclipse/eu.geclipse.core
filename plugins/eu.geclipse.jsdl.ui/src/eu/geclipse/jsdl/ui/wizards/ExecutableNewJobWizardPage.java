@@ -158,7 +158,8 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
             .findElement( newFileHandle );
           if( element instanceof JSDLJobDescription ) {
             this.basicJSDL = ( JSDLJobDescription )element;
-            ( ( NewJobWizard )this.getWizard() ).updateBasicJSDL( this.basicJSDL, this.applicationName.getText() );
+            ( ( NewJobWizard )this.getWizard() ).updateBasicJSDL( this.basicJSDL,
+                                                                  this.applicationName.getText() );
           }
         } catch( CoreException e ) {
           // TODO katis - error handling
@@ -172,10 +173,12 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
           }
         }
       } else {
-        ( ( NewJobWizard )this.getWizard() ).updateBasicJSDL( null, this.applicationName.getText() );
+        ( ( NewJobWizard )this.getWizard() ).updateBasicJSDL( null,
+                                                              this.applicationName.getText() );
       }
     } else {
-      ( ( NewJobWizard )this.getWizard() ).updateBasicJSDL( null, this.applicationName.getText() );
+      ( ( NewJobWizard )this.getWizard() ).updateBasicJSDL( null,
+                                                            this.applicationName.getText() );
     }
     return super.getNextPage();
   }
@@ -346,7 +349,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
         }
       }
     } );
-    // Lable - stderr file
+    // Label - stderr file
     Label stderrLabel = new Label( stdFilesGroup, SWT.NONE );
     layout = new GridData( GridData.VERTICAL_ALIGN_CENTER
                            | GridData.HORIZONTAL_ALIGN_BEGINNING );
@@ -375,13 +378,9 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
                                                                            null,
                                                                            false );
         if( connection != null ) {
-          try {
-            String filename = connection.getConnectionFileStore().toString();
-            if( filename != null ) {
-              ExecutableNewJobWizardPage.this.stderr.setText( filename );
-            }
-          } catch( CoreException cExc ) {
-            NewProblemDialog.openProblem( getShell(), "error", "error", cExc );
+          String filename = getSelectedElementDisplayName( connection );
+          if( filename != null ) {
+            ExecutableNewJobWizardPage.this.stderr.setText( filename );
           }
         }
       }
@@ -397,12 +396,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
   private String getSelectedElementDisplayName( final IGridConnectionElement element )
   {
     String result = "";
-    try {
-      result = element.getConnectionFileStore().toString();
-    } catch( CoreException e ) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
-    }
+    result = element.getURI().toString();
     try {
       if( element.getConnectionFileStore()
         .getFileSystem()
@@ -575,7 +569,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
    *         <code>null</code> if no such file is present.
    */
   public JSDLJobDescription getBasicJSDL() {
- // If in application specific settings basic JSDL file is given its copy - a
+    // If in application specific settings basic JSDL file is given its copy - a
     // temporary jsdl file - is created in workspace. This file is used to
     // generate JSDLJobDescription object which will be passed to next wizard's
     // page.
@@ -585,16 +579,18 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
         .getApplicationData( aspID.intValue() )
         .getJsdlPath();
       if( path != null && !path.toOSString().equals( "" ) ) { //$NON-NLS-1$
-        IPath workspacePath = ((NewJobWizard)this.getWizard()).getProject();
+        IPath workspacePath = ( ( NewJobWizard )this.getWizard() ).getProject();
         workspacePath = workspacePath.append( ".tempJSDL.jsdl" );
-        IFile newFileHandle = ResourcesPlugin.getWorkspace().getRoot()
+        IFile newFileHandle = ResourcesPlugin.getWorkspace()
+          .getRoot()
           .getFile( workspacePath );
         try {
-          newFileHandle.createLink( path, IResource.REPLACE , null );
-          IGridElement element = GridModel.getRoot().findElement( newFileHandle );
+          newFileHandle.createLink( path, IResource.REPLACE, null );
+          IGridElement element = GridModel.getRoot()
+            .findElement( newFileHandle );
           if( element instanceof JSDLJobDescription ) {
             this.basicJSDL = ( JSDLJobDescription )element;
-//            ((NewJobWizard)this.getWizard()).updateBasicJSDL(this.basicJSDL);
+            // ((NewJobWizard)this.getWizard()).updateBasicJSDL(this.basicJSDL);
           }
         } catch( CoreException e ) {
           // TODO katis - error handling

@@ -9,9 +9,9 @@
  * project g-Eclipse founded by European Union
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
- * Contributor(s):
- *     PSNC: 
+ * Contributor(s): 
  *      - Katarzyna Bylec (katis@man.poznan.pl)
+ *      - Nicholas Loulloudes (loulloudes.n@cs.ucy.ac.cy)
  *           
  *****************************************************************************/
 package eu.geclipse.jsdl.ui.widgets;
@@ -42,27 +42,23 @@ import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.jsdl.model.JsdlPackage;
 import eu.geclipse.ui.dialogs.GridFileDialog;
 
-
 /**
  * @author nickl
- *
  */
 public class DataStagingOutDialog extends Dialog {
+
   /**
    * Variable that specifies that a simple dialog should be created.
    */
   public static final int SIMPLE_DIALOG = 0;
   /**
    * Variable that specifies that an advanced dialog should be created,
-   * extending the fields of the SIMPLE_DIALOG the two following fields:
-   * <b>
-   * Creation Flag
-   * Delete On Termination
+   * extending the fields of the SIMPLE_DIALOG the two following fields: <b>
+   * Creation Flag Delete On Termination
    */
   public static final int ADVANCED_DIALOG = 1;
   protected Text pathText;
-  
-  private int dialogStyle;  
+  private int dialogStyle;
   private Text nameText;
   private String returnName;
   private String returnPath;
@@ -77,16 +73,16 @@ public class DataStagingOutDialog extends Dialog {
 
   /**
    * @param parentShell
-   * @param style 
+   * @param style
    */
-  public DataStagingOutDialog( final Shell parentShell , final int style ) {
+  public DataStagingOutDialog( final Shell parentShell, final int style ) {
     super( parentShell );
     this.dialogStyle = style;
   }
 
   /**
    * @param parentShell
-   * @param style 
+   * @param style
    * @param name
    * @param path
    */
@@ -101,7 +97,6 @@ public class DataStagingOutDialog extends Dialog {
     this.dialogStyle = style;
   }
 
-  
   /**
    * @param parentShell
    * @param style
@@ -111,21 +106,20 @@ public class DataStagingOutDialog extends Dialog {
    * @param creationFlag
    */
   public DataStagingOutDialog( final Shell parentShell,
-                              final int style,
-                              final String name,
-                              final String path,      
-                              final String creationFlag,
-                              final Boolean deleteFlag)
+                               final int style,
+                               final String name,
+                               final String path,
+                               final String creationFlag,
+                               final Boolean deleteFlag )
   {
     this( parentShell, style );
     this.initName = name;
     this.initPath = path;
     this.dialogStyle = style;
-    this.initCreationFlag = creationFlag ;    
-    this.initDeleteFlag =   deleteFlag.toString() ;
-    
+    this.initCreationFlag = creationFlag;
+    this.initDeleteFlag = deleteFlag.toString();
   }
-  
+
   @Override
   protected void configureShell( final Shell shell ) {
     super.configureShell( shell );
@@ -183,12 +177,7 @@ public class DataStagingOutDialog extends Dialog {
                                                                            null,
                                                                            true );
         if( connection != null ) {
-          try {
-            filename = connection.getConnectionFileStore().toString();
-          } catch( CoreException e1 ) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-          }
+          filename = connection.getURI().toString();
           if( filename != null ) {
             DataStagingOutDialog.this.pathText.setText( filename );
           }
@@ -196,76 +185,55 @@ public class DataStagingOutDialog extends Dialog {
         updateButtons();
       }
     } );
-    
-    if (this.dialogStyle == DataStagingInDialog.ADVANCED_DIALOG) {
+    if( this.dialogStyle == DataStagingInDialog.ADVANCED_DIALOG ) {
       gd = new GridData();
-      Label creationFlagLabel = new Label(panel,SWT.LEAD);
+      Label creationFlagLabel = new Label( panel, SWT.LEAD );
       creationFlagLabel.setText( Messages.getString( "DataStageInTable.CreationFlag_field_label" ) ); //$NON-NLS-1$
       creationFlagLabel.setLayoutData( gd );
-      this.creationFlagCombo = new Combo(panel, SWT.BORDER 
-                                               | SWT.SIMPLE 
-                                               | SWT.DROP_DOWN 
-                                               | SWT.READ_ONLY);
+      this.creationFlagCombo = new Combo( panel, SWT.BORDER
+                                                 | SWT.SIMPLE
+                                                 | SWT.DROP_DOWN
+                                                 | SWT.READ_ONLY );
       gd = new GridData();
       gd.widthHint = 260;
       gd.horizontalSpan = 2;
       gd.horizontalAlignment = SWT.FILL;
       this.creationFlagCombo.setLayoutData( gd );
-      
-      /* Populate the Combo Box with the Creation Flag Literals */    
+      /* Populate the Combo Box with the Creation Flag Literals */
       EEnum cFEnum = JsdlPackage.Literals.CREATION_FLAG_ENUMERATION;
-         for (int i=0; i<cFEnum.getELiterals().size(); i++){         
-           this.creationFlagCombo.add( cFEnum.getEEnumLiteral( i ).toString() );
-         }
-              
-     int indexOfOverwite;
-     
-         if( this.initCreationFlag != null ) {
-           indexOfOverwite = this.creationFlagCombo.indexOf( this.initCreationFlag );
-           this.creationFlagCombo.select( indexOfOverwite );          
-         }
-         
-         else{
-           
-           indexOfOverwite = this.creationFlagCombo.indexOf( "overwrite" ); //$NON-NLS-1$
-           this.creationFlagCombo.select( indexOfOverwite );
-           
-         }
-      
+      for( int i = 0; i < cFEnum.getELiterals().size(); i++ ) {
+        this.creationFlagCombo.add( cFEnum.getEEnumLiteral( i ).toString() );
+      }
+      int indexOfOverwite;
+      if( this.initCreationFlag != null ) {
+        indexOfOverwite = this.creationFlagCombo.indexOf( this.initCreationFlag );
+        this.creationFlagCombo.select( indexOfOverwite );
+      } else {
+        indexOfOverwite = this.creationFlagCombo.indexOf( "overwrite" ); //$NON-NLS-1$
+        this.creationFlagCombo.select( indexOfOverwite );
+      }
       gd = new GridData();
-      
-      Label deleteOnTerminationLabel = new Label(panel,SWT.LEAD);
+      Label deleteOnTerminationLabel = new Label( panel, SWT.LEAD );
       deleteOnTerminationLabel.setText( Messages.getString( "DataStageInTable.DeleteOnTermination_field_label" ) ); //$NON-NLS-1$
       deleteOnTerminationLabel.setLayoutData( gd );
-      this.deleteOnTerminationCombo = new Combo(panel, SWT.BORDER 
-                                                     | SWT.SIMPLE 
-                                                     | SWT.DROP_DOWN 
-                                                     | SWT.READ_ONLY);
-      
+      this.deleteOnTerminationCombo = new Combo( panel, SWT.BORDER
+                                                        | SWT.SIMPLE
+                                                        | SWT.DROP_DOWN
+                                                        | SWT.READ_ONLY );
       /* Populate the Combo Box with the Delete On Termination Literals */
-      
-      this.deleteOnTerminationCombo.add( "true"); //$NON-NLS-1$
-      this.deleteOnTerminationCombo.add( "false"); //$NON-NLS-1$
-      
-      if( this.initDeleteFlag != null ) {       
+      this.deleteOnTerminationCombo.add( "true" ); //$NON-NLS-1$
+      this.deleteOnTerminationCombo.add( "false" ); //$NON-NLS-1$
+      if( this.initDeleteFlag != null ) {
         int indexOfDelete = this.deleteOnTerminationCombo.indexOf( this.initDeleteFlag.toString() );
-        this.deleteOnTerminationCombo.select( indexOfDelete );          
+        this.deleteOnTerminationCombo.select( indexOfDelete );
+      } else {
+        this.creationFlagCombo.select( 0 );
       }
-      
-      else{
-               
-        this.creationFlagCombo.select (0);
-        
-      }
-      
       gd = new GridData();
       gd.horizontalSpan = 2;
       gd.horizontalAlignment = SWT.FILL;
       this.deleteOnTerminationCombo.setLayoutData( gd );
-      
-     }
-    
-    
+    }
     ModifyListener listener = new UpdateAdapter();
     this.nameText.addModifyListener( listener );
     this.pathText.addModifyListener( listener );
@@ -289,16 +257,16 @@ public class DataStagingOutDialog extends Dialog {
   public String getName() {
     return this.returnName;
   }
-  
+
   /**
    * Access to file Delete On Termination Flag provided by the user.
    * 
    * @return Delete On Termination flag set by the user.
    */
-  public Boolean getDeleteOnTermination(){
+  public Boolean getDeleteOnTermination() {
     return this.returnDeleteFlag;
   }
-  
+
   /**
    * Access to file Creation Flag provided by the user.
    * 
@@ -312,8 +280,12 @@ public class DataStagingOutDialog extends Dialog {
   protected void okPressed() {
     this.returnName = this.nameText.getText();
     this.returnPath = this.pathText.getText();
-    this.returnCreationFlag = this.creationFlagCombo.getSelectionIndex();
-    this.returnDeleteFlag = Boolean.parseBoolean( this.deleteOnTerminationCombo.getItem( this.deleteOnTerminationCombo.getSelectionIndex() ) );
+    if( this.dialogStyle == ADVANCED_DIALOG ) {
+      this.returnCreationFlag = this.creationFlagCombo.getSelectionIndex();
+      if( this.deleteOnTerminationCombo.getSelectionIndex() != -1 ) {
+        this.returnDeleteFlag = new Boolean( Boolean.parseBoolean( this.deleteOnTerminationCombo.getItem( this.deleteOnTerminationCombo.getSelectionIndex() ) ) );
+      }
+    }
     super.okPressed();
   }
 
