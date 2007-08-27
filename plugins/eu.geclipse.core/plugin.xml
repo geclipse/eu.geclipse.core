@@ -86,4 +86,18 @@
             name="PEM Based Certificate Loader">
       </loader>
    </extension>
+   <extension
+         point="eu.geclipse.core.gridElementCreator">
+      <creator
+            class="eu.geclipse.core.model.impl.GenericVoCreator"
+            name="Generic VO"
+            wizard="eu.geclipse.ui.wizards.GenericVoWizard">
+         <source
+               class="eu.geclipse.core.Object:1">
+         </source>
+         <target
+               class="eu.geclipse.core.GridElement1">
+         </target>
+      </creator>
+   </extension>
 </plugin>

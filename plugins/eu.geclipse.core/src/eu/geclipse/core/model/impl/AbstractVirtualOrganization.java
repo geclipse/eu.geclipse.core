@@ -128,8 +128,11 @@ public abstract class AbstractVirtualOrganization
    */
   public IGridService[] getServices()
       throws GridModelException {
+    IGridService[] services = null;
     IGridInfoService infoService = getInfoService();
-    IGridService[] services = infoService.fetchServices( this, this, null );
+    if ( infoService != null ) {
+      services = infoService.fetchServices( this, this, null );
+    }
     return services;
   }
   

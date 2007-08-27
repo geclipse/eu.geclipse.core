@@ -223,4 +223,13 @@
             id="eu.geclipse.ui.views.jobdetails.GridJobDetailsFactory"
             sourceJobClass="eu.geclipse.core.model.IGridJob"/>
    </extension>
+   <extension
+         point="eu.geclipse.ui.newVoWizards">
+      <wizard
+            class="eu.geclipse.ui.wizards.GenericVoWizard"
+            icon="icons/obj16/vo_obj.gif"
+            id="eu.geclipse.ui.wizards.GenericVoWizard"
+            name="Generic VO">
+      </wizard>
+   </extension>
 </plugin>
