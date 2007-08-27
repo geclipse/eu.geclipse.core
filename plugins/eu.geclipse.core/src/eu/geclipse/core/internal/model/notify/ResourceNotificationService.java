@@ -30,21 +30,26 @@ public class ResourceNotificationService
   
   public void resourceChanged( final IResourceChangeEvent event ) {
     
-    GridNotificationService gridNotificationService
-      = GridRoot.getGridNotificationService();
-    
-    gridNotificationService.lock();
-    
-    GridElementLifecycleManager visitor = new GridElementLifecycleManager();
     IResourceDelta delta = event.getDelta();
     
-    try {
-      delta.accept( visitor );
-    } catch ( CoreException cExc ) {
-      Activator.logException( cExc );
-    }
+    if ( delta != null ) {
     
-    gridNotificationService.unlock();
+      GridNotificationService gridNotificationService
+        = GridRoot.getGridNotificationService();
+      
+      gridNotificationService.lock();
+      
+      GridElementLifecycleManager visitor = new GridElementLifecycleManager();
+      
+      try {
+        delta.accept( visitor );
+      } catch ( CoreException cExc ) {
+        Activator.logException( cExc );
+      }
+      
+      gridNotificationService.unlock();
+      
+    }
     
   }
 

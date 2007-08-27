@@ -134,7 +134,7 @@ public class GridElementLifecycleManager
   }
   
   private void resourceChanged( final IResource resource,
-                                  final int flags ) {
+                                final int flags ) {
     if ( resource != null ) {
       IGridElement element = GridRoot.getInstance().findElement( resource );
       if ( element != null ) {

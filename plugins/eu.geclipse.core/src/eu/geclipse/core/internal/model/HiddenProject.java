@@ -127,7 +127,7 @@ public class HiddenProject
       IProjectDescription desc = project.getWorkspace().newProjectDescription( projectName );
       desc.setLocation(projectPath);
       
-      try {
+      try {        
         project.create( desc, null );
       } catch ( CoreException cExc ) {
         throw new GridModelException( GridModelProblems.PREFERENCE_CREATION_FAILED, cExc );
@@ -218,7 +218,11 @@ public class HiddenProject
   
   @Override
   protected boolean fetchChildren( final IProgressMonitor monitor ) {
-    return false;
+    boolean result = false;
+    if ( isOpen() ) {
+      result = super.fetchChildren( monitor );
+    }
+    return result;
   }
   
   protected IProject getAccessibleProject() throws CoreException {
