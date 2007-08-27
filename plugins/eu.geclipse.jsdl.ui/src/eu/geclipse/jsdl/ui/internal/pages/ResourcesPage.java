@@ -18,7 +18,7 @@
 package eu.geclipse.jsdl.ui.internal.pages;
 
 /**
- * @author nickl
+ * @author nloulloud
  *
  */
 
@@ -62,6 +62,8 @@ import eu.geclipse.jsdl.ui.providers.FeatureLabelProvider;
  * This class provides the Resources Page page that appears in the JSDL editor.
  * It provides a graphical user interface to the following elements of a JSDL 
  * document:
+ * 
+ * 
  * 
  * 
  */
@@ -364,7 +366,7 @@ public final class ResourcesPage extends FormPage
     
     this.btnAdd.addSelectionListener(new SelectionListener() {
       public void widgetSelected(final SelectionEvent event) {
-        handleAddDialog(Messages.getString( "ResourcesPage_HostNameDialog" ), //$NON-NLS-1$
+        handleAddDialog(Messages.getString( "ResourcesPage_NewHostNameDialog" ), //$NON-NLS-1$
                                                     (Button) event.getSource() ); 
         ResourcesPage.this.resourcesTypeAdapter.performAdd(ResourcesPage.this.hostsViewer,                                                          
                                                            ResourcesPage.this.value);
@@ -389,7 +391,7 @@ public final class ResourcesPage extends FormPage
     
     this.btnEdit.addSelectionListener(new SelectionListener() {
       public void widgetSelected(final SelectionEvent event) {
-        handleAddDialog(Messages.getString( "ResourcesPage_HostNameDialog" ), //$NON-NLS-1$
+        handleAddDialog(Messages.getString( "ResourcesPage_EditHostNameDialog" ), //$NON-NLS-1$
                                                     (Button) event.getSource()); 
         ResourcesPage.this.resourcesTypeAdapter.performEdit(ResourcesPage.this.hostsViewer,                                                          
                                                            ResourcesPage.this.value);
@@ -805,8 +807,11 @@ public final class ResourcesPage extends FormPage
   
   @SuppressWarnings("unchecked")
   protected void handleAddDialog(final String dialogTitle, final Button button){
+    
     MultipleInputDialog dialog = new MultipleInputDialog( this.getSite().getShell(),
                                                          dialogTitle );
+    
+    
     if (button == this.btnAdd ) {
       
       dialog.addTextField( Messages.getString( "ResourcesPage_Value" ), "" , false ); //$NON-NLS-1$ //$NON-NLS-2$}

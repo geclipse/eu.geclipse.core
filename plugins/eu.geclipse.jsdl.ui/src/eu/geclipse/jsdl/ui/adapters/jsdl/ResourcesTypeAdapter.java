@@ -18,7 +18,7 @@ package eu.geclipse.jsdl.ui.adapters.jsdl;
 
 
 /**
- * @author nickl
+ * @author nloulloud
  *
  */
 import java.util.ArrayList;
@@ -27,7 +27,6 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EObject;
@@ -44,9 +43,9 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Text;
 import eu.geclipse.jsdl.model.CPUArchitectureType;
 import eu.geclipse.jsdl.model.CandidateHostsType;
-import eu.geclipse.jsdl.model.DocumentRoot;
 import eu.geclipse.jsdl.model.FileSystemType;
 import eu.geclipse.jsdl.model.FileSystemTypeEnumeration;
+import eu.geclipse.jsdl.model.JobDefinitionType;
 import eu.geclipse.jsdl.model.JobDescriptionType;
 import eu.geclipse.jsdl.model.JsdlFactory;
 import eu.geclipse.jsdl.model.JsdlPackage;
@@ -80,11 +79,9 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   protected Hashtable< Integer, Text > widgetFeaturesMap = new Hashtable< Integer, Text >();
   protected Hashtable< Integer, TableViewer > viewerFeaturesMap = new Hashtable< Integer, TableViewer >();
   protected Hashtable< Integer, Combo > comboFeaturesMap = new Hashtable< Integer, Combo >();
+ 
   protected Hashtable<String, EStructuralFeature> eStructuralFeaturesMap 
                                   = new Hashtable<String, EStructuralFeature>();
-  
-  protected DocumentRoot documentRoot = 
-                                     JsdlFactory.eINSTANCE.createDocumentRoot();
   
   protected JobDescriptionType jobDescriptionType = 
                                JsdlFactory.eINSTANCE.createJobDescriptionType();
@@ -108,8 +105,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
                               JsdlFactory.eINSTANCE.createCPUArchitectureType();
   
   
-  protected EStructuralFeature parentFeature = null;
-  
+    
   private boolean adapterRefreshed = false;
   private boolean isNotifyAllowed = true;  
   
@@ -129,24 +125,8 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   
   private void  getTypeForAdapter(final EObject rootJsdlElement){
     
-   
-    TreeIterator <EObject> iterator = rootJsdlElement.eAllContents();
-    
-    while ( iterator.hasNext (  )  )  {  
-   
-      EObject eObject = iterator.next();
-          
-      if (eObject instanceof JobDescriptionType) {
-        this.jobDescriptionType = (JobDescriptionType) eObject;
-      }
-      else if ( eObject instanceof ResourcesType ) {
-        
-        this.resourcesType = (ResourcesType) eObject;        
-        
-        
-      } // endif ResourcesType
-      
-    } // End while   
+    this.jobDescriptionType = ((JobDefinitionType ) rootJsdlElement).getJobDescription();
+    this.resourcesType = this.jobDescriptionType.getResources();
 
    } // End getTypeforAdapter()
   

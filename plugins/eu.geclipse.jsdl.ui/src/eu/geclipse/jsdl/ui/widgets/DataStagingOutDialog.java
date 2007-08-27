@@ -16,7 +16,6 @@
  *****************************************************************************/
 package eu.geclipse.jsdl.ui.widgets;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -209,7 +208,9 @@ public class DataStagingOutDialog extends Dialog {
       for( int i = 0; i < cFEnum.getELiterals().size(); i++ ) {
         this.creationFlagCombo.add( cFEnum.getEEnumLiteral( i ).toString() );
       }
+      
       int indexOfOverwite;
+      
       if( this.initCreationFlag != null ) {
         indexOfOverwite = this.creationFlagCombo.indexOf( this.initCreationFlag );
         this.creationFlagCombo.select( indexOfOverwite );
@@ -217,6 +218,7 @@ public class DataStagingOutDialog extends Dialog {
         indexOfOverwite = this.creationFlagCombo.indexOf( "overwrite" ); //$NON-NLS-1$
         this.creationFlagCombo.select( indexOfOverwite );
       }
+      
       gd = new GridData();
       Label deleteOnTerminationLabel = new Label( panel, SWT.LEAD );
       deleteOnTerminationLabel.setText( Messages.getString( "DataStageInTable.DeleteOnTermination_field_label" ) ); //$NON-NLS-1$
@@ -228,12 +230,14 @@ public class DataStagingOutDialog extends Dialog {
       /* Populate the Combo Box with the Delete On Termination Literals */
       this.deleteOnTerminationCombo.add( "true" ); //$NON-NLS-1$
       this.deleteOnTerminationCombo.add( "false" ); //$NON-NLS-1$
+      
       if( this.initDeleteFlag != null ) {
         int indexOfDelete = this.deleteOnTerminationCombo.indexOf( this.initDeleteFlag.toString() );
         this.deleteOnTerminationCombo.select( indexOfDelete );
       } else {
-        this.creationFlagCombo.select( 0 );
+        this.deleteOnTerminationCombo.select( 0 );
       }
+      
       gd = new GridData();
       gd.horizontalSpan = 2;
       gd.horizontalAlignment = SWT.FILL;

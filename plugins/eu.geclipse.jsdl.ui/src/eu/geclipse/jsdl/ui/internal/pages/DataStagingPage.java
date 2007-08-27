@@ -46,6 +46,7 @@ import org.eclipse.ui.forms.widgets.TableWrapData;
 
 import eu.geclipse.jsdl.model.DataStagingType;
 import eu.geclipse.jsdl.ui.adapters.jsdl.DataStageTypeAdapter;
+import eu.geclipse.jsdl.ui.editors.JsdlEditor;
 import eu.geclipse.jsdl.ui.providers.DataStageInLabelProvider;
 import eu.geclipse.jsdl.ui.providers.DataStageOutLabelProvider;
 import eu.geclipse.jsdl.ui.providers.FeatureContentProvider;
@@ -55,51 +56,40 @@ import eu.geclipse.jsdl.ui.widgets.DataStagingOutDialog;
 
 
 /**
- * @author nickl
+ * @author nloulloud
  *
  */
 public class DataStagingPage extends FormPage implements INotifyChangedListener {
 
   protected Composite body = null;
   protected Composite stageInSection = null;
-  protected Composite stageOutSection = null;
-  
+  protected Composite stageOutSection = null;  
   protected List lstStageInFileName = null;
   protected Text txtStageInFileSystemName = null;
   protected Text txtSource = null;
   protected Text txtTarget = null;
-  protected Text txtStageInName = null;
-   
+  protected Text txtStageInName = null;   
   protected Label lblStageInFileName = null;
   protected Label lblStageInFileSystemName = null;
   protected Label lblCreationFlag = null;
   protected Label lblDelOnTerm = null;
   protected Label lblSource = null;
   protected Label lblTarget = null;
-  protected Label lblStageInName = null;
-  
+  protected Label lblStageInName = null;  
   protected Button btnStageInAdd = null;
   protected Button btnStageInEdit = null;
-  protected Button btnStageInDel = null;
-  
+  protected Button btnStageInDel = null; 
   protected Button btnStageOutAdd = null;
   protected Button btnStageOutEdit = null;
-  protected Button btnStageOutDel = null;
-  
+  protected Button btnStageOutDel = null;  
   protected Combo cmbCreationFlag = null;
-  protected Combo cmbDelOnTerm = null;
-  
+  protected Combo cmbDelOnTerm = null;  
   protected Table tblStageIn = null;
-  protected Table tblStageOut = null; 
-  
+  protected Table tblStageOut = null;   
   protected TableViewer stageInViewer = null;  
-  protected TableViewer stageOutViewer = null;  
-  
-  protected Object[] value = null;
-  
-  protected DataStageTypeAdapter dataStageTypeAdapter;
-  
-    
+  protected TableViewer stageOutViewer = null;   
+  protected Object[] value = null;  
+  protected DataStageTypeAdapter dataStageTypeAdapter;    
   protected FeatureContentProvider featureContentProvider = new FeatureContentProvider();
   protected FeatureLabelProvider featureLabelProvider = new FeatureLabelProvider();
   
@@ -110,7 +100,19 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
   
   
   /**
-   * @param editor
+   * This class provides the DataStaging Page page that appears in the JSDL editor.
+   * It provides a graphical user interface to the following DataStaging elements
+   * of a JSDL document:
+   * 
+   * - FileName
+   * - FileSystemName
+   * - Source/Target Location
+   * - CreationFlag
+   * - DeleteOnTermination
+   * 
+   * @param editor The parent {@link JsdlEditor}. 
+   * 
+   * 
    */
   public DataStagingPage( final FormEditor editor )
   
@@ -157,7 +159,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
   
   
   @Override
-  public void setActive(final boolean active) {
+  public void setActive( final boolean active ) {
     
     if ( active ){
       if ( isContentRefreshed() ) {
@@ -178,16 +180,16 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
   
   
   @Override
-  protected void createFormContent(final IManagedForm managedForm) {
+  protected void createFormContent( final IManagedForm managedForm ) {
     
     
     ScrolledForm form = managedForm.getForm();
     FormToolkit toolkit = managedForm.getToolkit();
     
-    form.setText(Messages.getString("DataStagingPage_DataStagingPageTitle"));  //$NON-NLS-1$
+    form.setText( Messages.getString( "DataStagingPage_DataStagingPageTitle" ) );  //$NON-NLS-1$
     
     this.body = form.getBody();
-    this.body.setLayout(FormLayoutFactory.createFormTableWrapLayout(false, 2));
+    this.body.setLayout( FormLayoutFactory.createFormTableWrapLayout( false, 2) );
     
     
     this.stageInSection = toolkit.createComposite( this.body );
@@ -252,11 +254,11 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    
    GridData gd;
       
-   Composite client = FormSectionFactory.createGridStaticSection(toolkit,
+   Composite client = FormSectionFactory.createGridStaticSection( toolkit,
                                           parent,
                                           sectionTitle,
                                           sectionDescription,
-                                          3);
+                                          3 );
      
    
    gd = new GridData();
@@ -277,21 +279,21 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    this.tblStageIn.setLinesVisible( true );
    
    /* Set the common Content Provider  */
-   this.stageInViewer.setContentProvider(new FeatureContentProvider() );
+   this.stageInViewer.setContentProvider( new FeatureContentProvider() );
    /* Set the dedicated Label Provider for DataStage-In elements */
-   this.stageInViewer.setLabelProvider(new DataStageInLabelProvider() );   
+   this.stageInViewer.setLabelProvider( new DataStageInLabelProvider() );   
    
-   this.column = new TableColumn(this.tblStageIn, SWT.LEFT);    
-   this.column.setText( Messages.getString("DataStagingPage_Source") ); //$NON-NLS-1$
+   this.column = new TableColumn( this.tblStageIn, SWT.LEFT );    
+   this.column.setText( Messages.getString( "DataStagingPage_Source" ) ); //$NON-NLS-1$
    this.column.setWidth( 200 );
-   this.column = new TableColumn(this.tblStageIn, SWT.CENTER);    
-   this.column.setText( Messages.getString("DataStagingPage_FileName") ); //$NON-NLS-1$
+   this.column = new TableColumn( this.tblStageIn, SWT.CENTER );    
+   this.column.setText( Messages.getString( "DataStagingPage_FileName") ); //$NON-NLS-1$
    this.column.setWidth( 150 );
-   this.column = new TableColumn(this.tblStageIn, SWT.CENTER);    
-   this.column.setText( Messages.getString("DataStagingPage_CreationFlag") ); //$NON-NLS-1$
+   this.column = new TableColumn( this.tblStageIn, SWT.CENTER );    
+   this.column.setText( Messages.getString( "DataStagingPage_CreationFlag" ) ); //$NON-NLS-1$
    this.column.setWidth( 100 );
-   this.column = new TableColumn(this.tblStageIn, SWT.CENTER);    
-   this.column.setText( Messages.getString("DataStagingPage_DeleteOnTermination") ); //$NON-NLS-1$
+   this.column = new TableColumn( this.tblStageIn, SWT.CENTER );    
+   this.column.setText( Messages.getString( "DataStagingPage_DeleteOnTermination" ) ); //$NON-NLS-1$
    this.column.setWidth( 100 );
    
    
@@ -304,32 +306,32 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    {
 
      public void selectionChanged( final SelectionChangedEvent event ) {       
-       updateButtons((TableViewer)event.getSource());
+       updateButtons( ( TableViewer )event.getSource() );
      }
    } );
    
    
    this.tblStageIn.setData(  FormToolkit.KEY_DRAW_BORDER );
-   this.tblStageIn.setLayoutData( gd);
+   this.tblStageIn.setLayoutData( gd );
    
    /* Create "Add" Button */
    gd = new GridData();
    gd.horizontalSpan = 2;
    gd.verticalSpan = 1;
    gd.widthHint = 60;
-   this.btnStageInAdd = toolkit.createButton(client,
-                                      Messages.getString("JsdlEditor_AddButton") //$NON-NLS-1$
+   this.btnStageInAdd = toolkit.createButton( client,
+                                      Messages.getString( "JsdlEditor_AddButton" ) //$NON-NLS-1$
                                       , SWT.PUSH);
    
-   this.btnStageInAdd.addSelectionListener(new SelectionListener() {
-     public void widgetSelected(final SelectionEvent event) {
-                handleEventDialog(DataStagingPage.this.stageInViewer, null );
+   this.btnStageInAdd.addSelectionListener( new SelectionListener() {
+     public void widgetSelected( final SelectionEvent event ) {
+                handleEventDialog( DataStagingPage.this.stageInViewer, null );
                 DataStagingPage.this.dataStageTypeAdapter
                                .performAdd( DataStagingPage.this.stageInViewer ,
                                                    DataStagingPage.this.value );
      }
 
-      public void widgetDefaultSelected(final SelectionEvent event) {
+      public void widgetDefaultSelected( final SelectionEvent event ) {
           // Do Nothing - Required method
       }
     });
@@ -341,20 +343,20 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    gd.horizontalSpan = 2;
    gd.verticalSpan = 1;
    gd.widthHint = 60;
-   this.btnStageInEdit = toolkit.createButton(client,
+   this.btnStageInEdit = toolkit.createButton( client,
                                       Messages.getString("JsdlEditor_EditButton") //$NON-NLS-1$
-                                      , SWT.PUSH);
+                                      , SWT.PUSH );
    
-   this.btnStageInEdit.addSelectionListener(new SelectionListener() {
-     public void widgetSelected(final SelectionEvent event) {
-       handleEventDialog(DataStagingPage.this.stageInViewer, 
+   this.btnStageInEdit.addSelectionListener( new SelectionListener() {
+     public void widgetSelected( final SelectionEvent event ) {
+       handleEventDialog( DataStagingPage.this.stageInViewer, 
                getViewerSelectionObject( DataStagingPage.this.stageInViewer ) );
        DataStagingPage.this.dataStageTypeAdapter
                                .performEdit( DataStagingPage.this.stageInViewer,
                                                    DataStagingPage.this.value );
      }
 
-      public void widgetDefaultSelected(final SelectionEvent event) {
+      public void widgetDefaultSelected( final SelectionEvent event ) {
           // Do Nothing - Required method
       }
     });
@@ -369,9 +371,9 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    gd.widthHint = 60;
    gd.verticalAlignment = GridData.BEGINNING;
    
-   this.btnStageInDel = toolkit.createButton(client,
-                                   Messages.getString("JsdlEditor_RemoveButton") //$NON-NLS-1$
-                                   , SWT.PUSH);   
+   this.btnStageInDel = toolkit.createButton( client,
+                                   Messages.getString( "JsdlEditor_RemoveButton" ) //$NON-NLS-1$
+                                   , SWT.PUSH );   
   
    this.dataStageTypeAdapter.attachToDelete( this.btnStageInDel, 
                                                            this.stageInViewer );
@@ -388,19 +390,19 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
  
  /* This function creates the Stage-Out Section of the DateStage Page */
   private void createStageOutSection( final Composite parent,
-                                    final FormToolkit toolkit )                                             
+                                      final FormToolkit toolkit )                                             
   {
 
-   String sectionTitle = Messages.getString("DataStagingPage_StageOutSection"); //$NON-NLS-1$
-   String sectionDescription = Messages.getString("DataStagingPage_StageOutDescr");   //$NON-NLS-1$
+   String sectionTitle = Messages.getString( "DataStagingPage_StageOutSection" ); //$NON-NLS-1$
+   String sectionDescription = Messages.getString( "DataStagingPage_StageOutDescr" );   //$NON-NLS-1$
    
    GridData gd;
       
-   Composite client = FormSectionFactory.createGridStaticSection(toolkit,
+   Composite client = FormSectionFactory.createGridStaticSection( toolkit,
                                           parent,
                                           sectionTitle,
                                           sectionDescription,
-                                          3);
+                                          3 );
      
    
    gd = new GridData();
@@ -413,12 +415,12 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    gd.heightHint = this.WIDGET_HEIGHT;
    
    
-   this.stageOutViewer = new TableViewer(client, SWT.NONE                                                                                
+   this.stageOutViewer = new TableViewer( client, SWT.NONE                                                                                
                                         | SWT.FULL_SELECTION );
    
    
    this.tblStageOut = this.stageOutViewer.getTable();
-   this.tblStageOut .setHeaderVisible( true);
+   this.tblStageOut .setHeaderVisible( true );
    this.tblStageOut.setLinesVisible( true );  
    /* Set the common Content Provider  */
    this.stageOutViewer.setContentProvider( new FeatureContentProvider() );
@@ -426,17 +428,17 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    this.stageOutViewer.setLabelProvider( new DataStageOutLabelProvider() );
    
      
-   this.column = new TableColumn(this.tblStageOut, SWT.CENTER);    
-   this.column.setText( Messages.getString("DataStagingPage_FileName")); //$NON-NLS-1$
+   this.column = new TableColumn( this.tblStageOut, SWT.CENTER );    
+   this.column.setText( Messages.getString( "DataStagingPage_FileName" ) ); //$NON-NLS-1$
    this.column.setWidth( 150 );
-   this.column = new TableColumn(this.tblStageOut, SWT.LEFT);
-   this.column.setText( Messages.getString("DataStagingPage_Target") ); //$NON-NLS-1$
+   this.column = new TableColumn( this.tblStageOut, SWT.LEFT  );
+   this.column.setText( Messages.getString( "DataStagingPage_Target" ) ); //$NON-NLS-1$
    this.column.setWidth( 200 );
-   this.column = new TableColumn(this.tblStageOut, SWT.CENTER);    
-   this.column.setText( Messages.getString("DataStagingPage_CreationFlag") ); //$NON-NLS-1$
+   this.column = new TableColumn( this.tblStageOut, SWT.CENTER );    
+   this.column.setText( Messages.getString( "DataStagingPage_CreationFlag" ) ); //$NON-NLS-1$
    this.column.setWidth( 100 );
-   this.column = new TableColumn(this.tblStageOut, SWT.CENTER);    
-   this.column.setText( Messages.getString("DataStagingPage_DeleteOnTermination") ); //$NON-NLS-1$
+   this.column = new TableColumn( this.tblStageOut, SWT.CENTER );    
+   this.column.setText( Messages.getString( "DataStagingPage_DeleteOnTermination" ) ); //$NON-NLS-1$
    this.column.setWidth( 100 );
    
    /* Based on the Table Viewer selection, update the status of the respective
@@ -460,19 +462,19 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    gd.horizontalSpan = 2;
    gd.verticalSpan = 1;
    gd.widthHint = 60;
-   this.btnStageOutAdd = toolkit.createButton(client,
-                                      Messages.getString("JsdlEditor_AddButton") //$NON-NLS-1$
-                                      , SWT.PUSH);
+   this.btnStageOutAdd = toolkit.createButton( client,
+                                    Messages.getString( "JsdlEditor_AddButton" ) //$NON-NLS-1$
+                                    , SWT.PUSH );
    
-   this.btnStageOutAdd.addSelectionListener(new SelectionListener() {
-     public void widgetSelected(final SelectionEvent event) {
-       handleEventDialog(DataStagingPage.this.stageOutViewer, null );
+   this.btnStageOutAdd.addSelectionListener( new SelectionListener() {
+     public void widgetSelected( final SelectionEvent event) {
+       handleEventDialog( DataStagingPage.this.stageOutViewer, null );
        DataStagingPage.this.dataStageTypeAdapter
                                .performAdd( DataStagingPage.this.stageOutViewer ,
                                                    DataStagingPage.this.value );
      }
 
-      public void widgetDefaultSelected(final SelectionEvent event) {
+      public void widgetDefaultSelected( final SelectionEvent event ) {
           // Do Nothing - Required method
       }
     });
@@ -484,20 +486,20 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    gd.horizontalSpan = 2;
    gd.verticalSpan = 1;
    gd.widthHint = 60;
-   this.btnStageOutEdit = toolkit.createButton(client,
-                                      Messages.getString("JsdlEditor_EditButton") //$NON-NLS-1$
-                                      , SWT.PUSH);
+   this.btnStageOutEdit = toolkit.createButton( client,
+                                      Messages.getString( "JsdlEditor_EditButton" ) //$NON-NLS-1$
+                                      , SWT.PUSH );
    
-   this.btnStageOutEdit.addSelectionListener(new SelectionListener() {
-     public void widgetSelected(final SelectionEvent event) {
-       handleEventDialog(DataStagingPage.this.stageOutViewer, 
+   this.btnStageOutEdit.addSelectionListener( new SelectionListener() {
+     public void widgetSelected( final SelectionEvent event) {
+       handleEventDialog( DataStagingPage.this.stageOutViewer, 
                          getViewerSelectionObject( DataStagingPage.this.stageOutViewer ) );
                  DataStagingPage.this.dataStageTypeAdapter
                               .performEdit( DataStagingPage.this.stageOutViewer,
                                                    DataStagingPage.this.value );
                  }
 
-      public void widgetDefaultSelected(final SelectionEvent event) {
+      public void widgetDefaultSelected( final SelectionEvent event ) {
           // Do Nothing - Required method
       }
     });
@@ -512,9 +514,9 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    gd.widthHint = 60;
    gd.verticalAlignment = GridData.BEGINNING;
    
-   this.btnStageOutDel = toolkit.createButton(client,
-                                   Messages.getString("JsdlEditor_RemoveButton") //$NON-NLS-1$
-                                   , SWT.PUSH);
+   this.btnStageOutDel = toolkit.createButton( client,
+                                   Messages.getString( "JsdlEditor_RemoveButton" ) //$NON-NLS-1$
+                                   , SWT.PUSH );
    
    this.dataStageTypeAdapter.attachToDelete( this.btnStageOutDel, 
                                                             this.stageOutViewer );
@@ -537,7 +539,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
   * table viewer.
   * 
   */ 
-   protected void updateButtons(final TableViewer tableViewer) {
+   protected void updateButtons( final TableViewer tableViewer ) {
    
    ISelection selection = tableViewer.getSelection();
    boolean selectionAvailable = !selection.isEmpty();
@@ -572,9 +574,10 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
   
    
    
-   protected void handleEventDialog(final TableViewer tableViewer, 
-                                        final DataStagingType selectedObject ) {
-     this.value = new Object[2];
+   @SuppressWarnings("boxing")
+  protected void handleEventDialog( final TableViewer tableViewer, 
+                                    final DataStagingType selectedObject ) {
+     this.value = new Object[4];
      
      if (tableViewer == this.stageInViewer ) {
        DataStagingInDialog dialog;
@@ -585,7 +588,10 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
                                            DataStagingInDialog.ADVANCED_DIALOG);
          if( dialog.open() == Window.OK ) {         
            this.value[0] = dialog.getPath();
-           this.value[1] = dialog.getName();         
+           this.value[1] = dialog.getName();
+           this.value[2] = dialog.getCreationFlag();
+           this.value[3] = dialog.getDeleteOnTermination();
+      
          }
 
        } else {
@@ -598,9 +604,13 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
                                            selectedObject.isDeleteOnTermination() );
          
          
-         if( dialog.open() == Window.OK ) {         
+         if( dialog.open() == Window.OK ) {        
+           
            this.value[0] = dialog.getPath();
-           this.value[1] = dialog.getName();              
+           this.value[1] = dialog.getName();
+           this.value[2] = dialog.getCreationFlag();
+           this.value[3] = dialog.getDeleteOnTermination();
+           
          }
 
        }
@@ -615,7 +625,9 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
                                             DataStagingInDialog.ADVANCED_DIALOG);
          if( dialog.open() == Window.OK ) {         
            this.value[0] = dialog.getName();
-           this.value[1] = dialog.getPath();         
+           this.value[1] = dialog.getPath();  
+           this.value[2] = dialog.getCreationFlag();
+           this.value[3] = dialog.getDeleteOnTermination();
          }
 
        } else {
@@ -630,6 +642,8 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
          if( dialog.open() == Window.OK ) {         
            this.value[0] = dialog.getName();
            this.value[1] = dialog.getPath();         
+           this.value[2] = dialog.getCreationFlag();
+           this.value[3] = dialog.getDeleteOnTermination();
          }
 
        }

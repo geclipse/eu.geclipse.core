@@ -374,7 +374,7 @@ public class DataStageInTable {
         } else {
           MessageDialog.openError( this.mainComp.getShell(),
                                    Messages.getString( "DataStageInTable.value_exists_dialog_title" ), //$NON-NLS-1$
-                                   Messages.getString( "DataStageInTable.value_exists_dialog_message" ) ); //$NON-NLS-1$
+                                   Messages.getString( "DataStagingPage_New_DuplicateEntryDialog_Message" ) ); //$NON-NLS-1$
         }
       }
     } else {

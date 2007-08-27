@@ -28,6 +28,7 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
@@ -36,6 +37,7 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 
+import eu.geclipse.jsdl.model.CreationFlagEnumeration;
 import eu.geclipse.jsdl.model.DataStagingType;
 import eu.geclipse.jsdl.model.DocumentRoot;
 import eu.geclipse.jsdl.model.JobDefinitionType;
@@ -43,11 +45,34 @@ import eu.geclipse.jsdl.model.JobDescriptionType;
 import eu.geclipse.jsdl.model.JsdlFactory;
 import eu.geclipse.jsdl.model.JsdlPackage;
 import eu.geclipse.jsdl.model.SourceTargetType;
+import eu.geclipse.jsdl.ui.internal.pages.Messages;
 
 
 
 /**
- * @author nickl
+ * @author nloulloud
+ *
+ */
+
+
+/**
+ * DataStageTypeAdapter Class
+ * <p>
+ * This class provides adapters for manipulating <b>Data Staging </b> 
+ * elements  through the Data Staging Page of the JSDL editor. 
+ * Supported DataStaging elements are:
+ * <p>
+ * - FileName
+ * <p>
+ * - FileSystemName
+ * <p>
+ * - CreationFlag
+ * <p>
+ * - DeleteOnTermination
+ * <p>
+ * - Source
+ * <p>
+ * - Target
  *
  */
 public class DataStageTypeAdapter extends JsdlAdaptersFactory {
@@ -65,14 +90,18 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
   private SourceTargetType sourceTargetType = 
                                  JsdlFactory.eINSTANCE.createSourceTargetType();
   
+    
+  private Hashtable< Integer, TableViewer > tableFeaturesMap = 
+                                        new Hashtable< Integer, TableViewer >();
   
-  private Hashtable< Integer, TableViewer > tableFeaturesMap = new Hashtable< Integer, TableViewer >();
-  private JobDescriptionType jobDescriptionType = JsdlFactory.eINSTANCE.createJobDescriptionType();
-  
+  private JobDescriptionType jobDescriptionType = 
+                               JsdlFactory.eINSTANCE.createJobDescriptionType();
   
   
   /**
-   * @param rootJsdlElement
+   * DataStageTypeAdapter Class Constructor
+   * 
+   * @param rootJsdlElement The root element of a JSDL document.
    */
   public DataStageTypeAdapter (final EObject rootJsdlElement){
 
@@ -94,14 +123,16 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
   private void  getTypeForAdapter(final EObject rootJsdlElement) {
 
     this.jobDescriptionType = ((JobDefinitionType ) rootJsdlElement).getJobDescription();
-    this.jobDescriptionType.getDataStaging();
+//    this.jobDescriptionType.getDataStaging();
     
    } // End void getTypeforAdapter()
   
   
   
   /**
-   * @param rootJsdlElement
+   * Allows to set the adapter's content on demand and not through the constructor.
+   * 
+   * @param rootJsdlElement The root element of a JSDL document.
    */
   public void setContent(final EObject rootJsdlElement) {
     
@@ -113,7 +144,15 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
   
   
   /**
-   * @param widget
+   * Adapter interface to attach to the DataStaging Stage-In Table Viewer widget
+   * 
+   * @param widget The {@link TableViewer} in which all the Stage-In elements are
+   * displayed. The Stage-In elements are those elements that contain only the 
+   * Source URI. The Target URI on these elements is null. Elements which
+   * contain Stage-In and Stage-Out are also shown in this table viewer.
+   * 
+   * This method add's a filter to the table viewer so as to show only DataStage 
+   * elements that contain a Source URI.
    */
   public void attachToStageIn(final TableViewer widget) {
     
@@ -130,9 +169,16 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
   } // End void attactToStageIn()
   
   
-  
   /**
-   * @param widget
+   * Adapter interface to attach to the DataStaging Stage-Out Table Viewer widget
+   * 
+   * @param widget The {@link TableViewer} in which all the Stage-In elements are
+   * displayed. The Stage-Out elements are those elements that contain only the 
+   * Target location. The Source location on these elements is null. Elements which
+   * contain Stage-In and Stage-Out are also shown in this table viewer.
+   * 
+   * This method add's a filter to the table viewer so as to show only DataStage 
+   * elements that contain a Target URI.
    */
   public void attachToStageOut(final TableViewer widget) {
     
@@ -178,17 +224,34 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
   
   
   /**
-   * @param tableViewer
-   * @param value
+   * Add's a new DataStaging element in the JSDL model. The new DataStaging element
+   * is added as a child of the JobDescription element. The new DataStaging element
+   * can be a Stage-In element (containing a Source URI) or a Stage-Out element 
+   * (containing a Target URI). 
+   * 
+   * @param tableViewer The {@link TableViewer} to add the new DataStaging element.
+   * If the new DataStaging element is a Stage-In element, then the table viewer 
+   * responsible for such elements should be passed here. The opposite is valid 
+   * for Stage-Out elements. 
+   * 
+   * 
+   * @param value The value array obtained from the Dialog.
    */
   
+  @SuppressWarnings({
+    "boxing", "unchecked"
+  })
   public void performAdd ( final TableViewer tableViewer, final Object[] value) {
     
     TableViewer stageInViewer = null;
-    
+
+    /* Assume that the table viewer is the one responsible for the Stage-In
+     * elements.
+     */ 
     stageInViewer = this.tableFeaturesMap
                      .get( new Integer(JsdlPackage.DATA_STAGING_TYPE__SOURCE) );
-    
+
+    /* Check if the values from the dialog are null. */
     if (value[0] == null) {
       return;
     }
@@ -203,17 +266,28 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
     if (newInputList == null) {
       newInputList = new BasicEList<DataStagingType>();
     }
-     
+    
+    /* Instantiate new DataStage and SourceTarge objects */
+    
+    this.dataStagingType = JsdlFactory.eINSTANCE.createDataStagingType();
+    this.sourceTargetType = JsdlFactory.eINSTANCE.createSourceTargetType();
+    
+    /*
+     * If the assumption was correct and the table viewer is the one responsible
+     * for the Stage-In elements, create a new data stage element and assign the 
+     * values retrieved from the dialog. 
+     * 
+     */     
     if (tableViewer == stageInViewer) {
-        
+       
       this.dataStagingType.setName(value[0].toString() );    
       this.sourceTargetType.setURI( value[1].toString() );
       this.dataStagingType.setSource( this.sourceTargetType );
       this.dataStagingType.setTarget( null );
       this.dataStagingType.setFileName( value[0].toString() );
       this.dataStagingType.setFilesystemName( value[0].toString() );
-//    this.dataStagingType.setCreationFlag( CreationFlagEnumeration.APPEND_LITERAL );
-//    this.dataStagingType.setDeleteOnTermination( false );
+      this.dataStagingType.setCreationFlag(CreationFlagEnumeration.get( (Integer) value[2]));
+      this.dataStagingType.setDeleteOnTermination( (Boolean) value[3] );
       
     }
     else {
@@ -224,27 +298,44 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
       this.dataStagingType.setTarget( this.sourceTargetType );
       this.dataStagingType.setFileName( value[0].toString() );
       this.dataStagingType.setFilesystemName( value[0].toString() );
-//    this.dataStagingType.setCreationFlag( CreationFlagEnumeration.APPEND_LITERAL );
-//    this.dataStagingType.setDeleteOnTermination( false );
+      this.dataStagingType.setCreationFlag(CreationFlagEnumeration.get( (Integer) value[2]));
+      this.dataStagingType.setDeleteOnTermination( (Boolean) value[3] );
     }
       
+    /* Check if the new Data Stage element is not already in the table viewer's
+     * input
+     */
+    if (!doesElementExists( this.dataStagingType, newInputList )) {
+      newInputList.add( this.dataStagingType );
     
-    newInputList.add( this.dataStagingType );
+      eStructuralFeature = this.jobDescriptionType.eClass().getEStructuralFeature( featureID );
     
-    eStructuralFeature = this.jobDescriptionType.eClass().getEStructuralFeature( featureID );
+      // Change the table viewers input.
+      tableViewer.setInput(newInputList);
     
-    tableViewer.setInput(newInputList);
+      for ( int i=0; i<tableViewer.getTable().getItemCount(); i++ ) {      
+        collection.add( (DataStagingType) tableViewer.getElementAt( i ) );
+      }
+      
+      this.jobDescriptionType.eSet(eStructuralFeature, collection);
     
-    for ( int i=0; i<tableViewer.getTable().getItemCount(); i++ ) {      
-      collection.add( (DataStagingType) tableViewer.getElementAt( i ) );
+      /* Refresh the table viewer and notify the editor that
+       *  the page content has changed. 
+       */
+      tableViewer.refresh();   
+      this.contentChanged();
+      
     }
-               
-
-    this.jobDescriptionType.eSet(eStructuralFeature, collection);
-    
-    tableViewer.refresh();
-   
-    this.contentChanged();
+    else {
+      
+      /*
+       * Show the Error Dialog, this means that the new values that are to be added 
+       * are already contained in the table viewer Input. 
+       */
+      MessageDialog.openError( tableViewer.getControl().getShell(),
+                               Messages.getString( "DataStagingPage_DuplicateEntryDialog_Title"), //$NON-NLS-1$
+                               Messages.getString( "DataStagingPage_New_DuplicateEntryDialog_Message" ) ); //$NON-NLS-1$
+    }
     
     eStructuralFeature = null;
     newInputList = null;
@@ -272,20 +363,28 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
   } // end void checkDataStageElement()
   
   
-  
-  protected void performDelete(final TableViewer viewer ){
+  /**
+   * Delete the selected Element in the TableViewer. The selected element must
+   * be of type: {@link DataStagingType}
+   * 
+   */
+  protected void performDelete(final TableViewer viewer ) {
     
+    /* Get the table viewer selection.  */
     IStructuredSelection structSelection 
                                = ( IStructuredSelection ) viewer.getSelection();
     
+    /* Get the First Element of the selection. */
     Object feature = structSelection.getFirstElement();
     
-         
-      DataStagingType selectedDataStage = (DataStagingType) feature;    
+    /* Cast the first element to DataStageingType */
+    DataStagingType selectedDataStage = (DataStagingType) feature;    
 
-      EcoreUtil.remove( selectedDataStage);
+    /* Remove the selected DataStage object from it's container (JobDescription) */
+    EcoreUtil.remove( selectedDataStage);
         
-    
+    /* Refresh the viewer and notify the editor that the page content has 
+     * changed. */
     viewer.refresh();
     contentChanged();
     
@@ -294,21 +393,31 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
   
   
   /**
+   * Edit the attributes of the selected object in the TableViewer. 
+   * 
    * @param tableViewer The SWT TableViewer that contains the Structural Features
    * @param value 
    */
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings({
+    "unchecked", "boxing"
+  })
   public void performEdit(final TableViewer tableViewer, final Object[] value) {
     
     TableViewer stageInViewer = null;
     
+    /* Assume that the table viewer is the one responsible for the Stage-In
+     * elements.
+     */ 
     stageInViewer = this.tableFeaturesMap
                      .get( new Integer(JsdlPackage.DATA_STAGING_TYPE__SOURCE) );
 
-    
+    /* Check if the values from the dialog are null. */
     if (value[0] == null) {
       return;
     }
+    
+    //Get the table viewer's input.
+    EList <DataStagingType> newInputList = (EList<DataStagingType>)tableViewer.getInput();
     
     EStructuralFeature eStructuralFeature;
     
@@ -333,43 +442,123 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
                                                            .indexOf( feature  );
       
       
-      
+      /* Instantiate new DataStage and SourceTarge objects */
       this.dataStagingType = JsdlFactory.eINSTANCE.createDataStagingType();      
       this.sourceTargetType = JsdlFactory.eINSTANCE.createSourceTargetType();
-     
+      
+     /*
+      * If the assumption was correct and the table viewer is the one responsible
+      * for the Stage-In elements, create a new data stage element and assign the 
+      * values retrieved from the dialog. 
+      * 
+      */
       if (tableViewer == stageInViewer) {
+        
         this.sourceTargetType.setURI( value[0].toString() );
         this.dataStagingType.setSource( this.sourceTargetType );  
-        this.dataStagingType.setFileName( value[1].toString() );
+        this.dataStagingType.setFileName( value[1].toString() );        
+        this.dataStagingType.setCreationFlag(CreationFlagEnumeration.get( (Integer) value[2]));
+        this.dataStagingType.setDeleteOnTermination( (Boolean) value[3] );
+        
+        
 
-      }
+      } // end_if (tableViewer == stageInViewer)
+      
+      /*
+       * Else the table viewer is the one responsible for the Stage-Out Data Stage
+       * elements. 
+       */
       else {
+        
         this.dataStagingType.setFileName( value[0].toString() );
         this.sourceTargetType.setURI( value[1].toString() );
-        this.dataStagingType.setTarget( this.sourceTargetType );  
-      }
+        this.dataStagingType.setTarget( this.sourceTargetType ); 
+        this.dataStagingType.setCreationFlag(CreationFlagEnumeration.get( (Integer) value[2]));
+        this.dataStagingType.setDeleteOnTermination( (Boolean) value[3] );
         
+      } // End else
       
+      /* Check if the new Data Stage element is not already in the table viewer's
+       * input
+       */        
+      if (!doesElementExists( this.dataStagingType, newInputList )) {  
       
-    /* Change the element. The element is located through it's index position
-     * in the list.
-     */
-      (( java.util.List<Object> )this.jobDescriptionType.eGet( eStructuralFeature ))
+        /* Change the element. The element is located through it's index position
+         * in the list.
+         */
+        (( java.util.List<Object> )this.jobDescriptionType.eGet( eStructuralFeature ))
             .set( index, this.dataStagingType );
   
-    /* Refresh the table viewer and notify the editor that
-     *  the page content has changed. 
+        /* Refresh the table viewer and notify the editor that
+         *  the page content has changed. 
+         */
+        tableViewer.refresh();       
+
+        contentChanged();
+    
+    } // end_if doesElementExits()
+      
+    else {
+      /*
+       * Show the Error Dialog, this means that the new values that are edited 
+       * are already contained in the table viewer Input. 
+       */
+      MessageDialog.openError( tableViewer.getControl().getShell(),
+              Messages.getString( "DataStagingPage_DuplicateEntryDialog_Title"), //$NON-NLS-1$
+              Messages.getString( "DataStagingPage_Edit_DuplicateEntryDialog_Message" ) ); //$NON-NLS-1$
+      
+    } // End else
+      
+   } // end_if structSelection
+    
+    
+  } // End void performEdit()
+  
+  
+  /*
+   * Private function that checks whether a specific Data Stage element already
+   * exists in the input of the table viewer. The criteria for an element match
+   * are the equality of Location(either Source or Target) and the FileName.
+   * 
+   * Returns TRUE if the new element already exists and FALSE if it doesn't. 
+   */
+  private boolean doesElementExists (final DataStagingType newDataStage,
+                                     final EList <DataStagingType> inputList) {
+    
+    boolean result = false; 
+    
+    /*
+     * Check if the new Element is Stage-In element or if is a Stage-Out Element
      */
-      tableViewer.refresh();
-      contentChanged();
+    if (newDataStage.getSource() != null) {
     
-    }  
+      // Iterate over all the table viewer input
+      for( DataStagingType data : inputList ) {
+        if( data.getFileName().equals( newDataStage.getFileName() )
+            && data.getSource().getURI().equals( newDataStage.getSource().getURI() ) )
+        {
+          result = true;
+        }
+      }
+    }
     
-  }
-  
+    else {
+      // Iterate over all the table viewer input
+      for( DataStagingType data : inputList ) {
+        if( data.getFileName().equals( newDataStage.getFileName() )
+            && data.getTarget().getURI().equals( newDataStage.getTarget().getURI() ) )
+        {
+          result = true;
+        }
+      }
+    }
+    
+    return result;
+    
+  } // End boolean doesElementExists()
    
-  
-  
+   
+    
   /**
    * 
    * This method populates the model content to the widgets registered with the
@@ -378,6 +567,7 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
   @SuppressWarnings("unchecked")
   public void load()
   {
+    
     this.isNotifyAllowed = false;
     EObject jobDescrEObject  = this.jobDescriptionType;    
     TableViewer tableName = null;
@@ -388,6 +578,10 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
     if (jobDescrEObject != null) {
       EClass eClass = jobDescrEObject.eClass();
       
+      /* Iterate over all EStructural Features of the Job Description element
+       * so as to fine the DataStage Element.
+       */
+      
       for (Iterator<EStructuralFeature> iterRef = 
             eClass.getEAllStructuralFeatures().iterator(); iterRef.hasNext();) {
         
@@ -395,14 +589,14 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
            
         int featureID =  eStructuralFeature.getFeatureID();        
               
-        
+        // Check if the eStructural Reference is an EReferece.
         if (eStructuralFeature instanceof EReference) {
           
           /* Check if Feature is Set ? */
           if (jobDescrEObject.eIsSet( eStructuralFeature )) {
             switch( featureID ) {
               case JsdlPackage.JOB_DESCRIPTION_TYPE__DATA_STAGING:               
-              {                     
+              { 
                 tableName = this.tableFeaturesMap
                     .get( new Integer(JsdlPackage.DATA_STAGING_TYPE__SOURCE) );
                 tableName2 = this.tableFeaturesMap
@@ -410,8 +604,12 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
                 
                        
           
-                EList<EStructuralFeature > valueList = (EList<EStructuralFeature>) jobDescrEObject.eGet( eStructuralFeature );                
-
+                EList<EStructuralFeature > valueList = (EList<EStructuralFeature>) jobDescrEObject.eGet( eStructuralFeature );
+                
+                
+                  // The two table viewers for Stage-In and Stage-Out
+                  // have the same input, the only difference between them is 
+                  // the different LabelProviders
                   tableName.setInput( valueList );
                   tableName2.setInput( valueList);
 
@@ -446,12 +644,12 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
   
   /**
    * @return TRUE if the adapter is empty. If it is empty, it means that there 
-   * is no DataStage element in the JSDL document. 
+   * is no DataStaging element in the JSDL document. 
    */ 
   public boolean isEmpty() {
     boolean status = false;
 
-    if (!this.dataStagingType.equals( null )){       
+    if ( !this.dataStagingType.equals( null ) ) {       
       status = true;
     }
     

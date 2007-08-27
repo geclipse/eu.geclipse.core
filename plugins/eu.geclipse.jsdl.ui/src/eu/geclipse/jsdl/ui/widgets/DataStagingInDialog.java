@@ -231,11 +231,12 @@ public class DataStagingInDialog extends Dialog {
       /* Populate the Combo Box with the Delete On Termination Literals */
       this.deleteOnTerminationCombo.add( "true" ); //$NON-NLS-1$
       this.deleteOnTerminationCombo.add( "false" ); //$NON-NLS-1$
+      
       if( this.initDeleteFlag != null ) {
         int indexOfDelete = this.deleteOnTerminationCombo.indexOf( this.initDeleteFlag.toString() );
         this.deleteOnTerminationCombo.select( indexOfDelete );
       } else {
-        this.creationFlagCombo.select( 0 );
+        this.deleteOnTerminationCombo.select( 0 );
       }
       gd = new GridData();
       gd.horizontalSpan = 2;

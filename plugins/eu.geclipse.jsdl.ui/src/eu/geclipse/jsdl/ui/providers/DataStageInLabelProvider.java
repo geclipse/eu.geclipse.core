@@ -82,7 +82,7 @@ public class DataStageInLabelProvider extends LabelProvider
       
       DataStagingType dataStagingType  = (DataStagingType) element;   
       
-//      if (dataStagingType.getSource() != null ){
+      if (dataStagingType.getSource() != null ){
         
       switch ( columnIndex ) {
         case 0:
@@ -101,7 +101,7 @@ public class DataStageInLabelProvider extends LabelProvider
           break;
         } // end switch
       
-//      } // end_if getSource()
+      } // end_if getSource()
 
     } // end_if dataStagingType
     
