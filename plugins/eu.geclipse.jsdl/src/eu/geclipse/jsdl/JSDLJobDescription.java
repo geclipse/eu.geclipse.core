@@ -315,7 +315,7 @@ public class JSDLJobDescription extends ResourceGridContainer
     }
     if( stdout != null ) {
       FileNameType outputFile = this.posixFactory.createFileNameType();
-      outputFile.setValue( stdout );
+      outputFile.setValue( outName );
       posixApp.setOutput( outputFile );
     }
     ApplicationType app = this.jobDescription.getApplication();
