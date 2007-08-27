@@ -86,7 +86,7 @@ public class DataStagingNewJobWizardPage extends WizardPage {
     // Data stage in group
     inFilesGroup.setText( "Stage in" ); //$NON-NLS-1$
     inFilesGroup.setLayout( new GridLayout( 1, false ) );
-    gridData = new GridData( GridData.FILL_HORIZONTAL );
+    gridData = new GridData( GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL);
     gridData.grabExcessHorizontalSpace = true;
     inFilesGroup.setLayoutData( gridData );
     FormToolkit toolkit = new FormToolkit( inFilesGroup.getDisplay() );
@@ -112,7 +112,7 @@ public class DataStagingNewJobWizardPage extends WizardPage {
     Group outFilesGroup = new Group( mainComp, SWT.NONE );
     outFilesGroup.setText( "Stage out" );
     outFilesGroup.setLayout( new GridLayout( 1, false ) );
-    gridData = new GridData( GridData.FILL_HORIZONTAL );
+    gridData = new GridData( GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL );
     gridData.grabExcessHorizontalSpace = true;
     outFilesGroup.setLayoutData( gridData );
     Form outForm = toolkit.createForm( outFilesGroup );

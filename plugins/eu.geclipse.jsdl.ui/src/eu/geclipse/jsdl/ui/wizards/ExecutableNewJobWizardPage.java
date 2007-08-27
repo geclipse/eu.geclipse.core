@@ -110,6 +110,9 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
    * can present data staging information form basic JSDL file to the user.
    */
   private JSDLJobDescription basicJSDL;
+  private Group stdFilesGroup;
+  private Button outButton;
+  private Button errButton;
 
   /**
    * Creates new wizard page
@@ -236,6 +239,18 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
                            | GridData.GRAB_HORIZONTAL
                            | GridData.VERTICAL_ALIGN_CENTER );
     this.executableFile.setLayoutData( layout );
+    
+    this.executableFile.addModifyListener( new ModifyListener(){
+
+      public void modifyText( ModifyEvent e ) {
+        if (executableFile.getText().equals( "" )){
+          setStdFilesGroupEnabled( false );
+        } else {
+          setStdFilesGroupEnabled( true );
+        }
+      }
+      
+    });
     // Button - browsing for executable file
     this.gridFileDialogButton = new Button( mainComp, SWT.PUSH );
     this.gridFileDialogButton.setImage( fileImage );
@@ -270,7 +285,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     layout.horizontalSpan = 2;
     this.argumentsLine.setLayoutData( layout );
     // Group - std files group
-    Group stdFilesGroup = new Group( mainComp, SWT.NONE );
+    stdFilesGroup = new Group( mainComp, SWT.NONE );
     stdFilesGroup.setText( Messages.getString( "ExecutableNewJobWizardPage.composite_group_title" ) ); //$NON-NLS-1$
     stdFilesGroup.setLayout( new GridLayout( 3, false ) );
     layout = new GridData( GridData.FILL_HORIZONTAL );
@@ -327,7 +342,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
                            | GridData.HORIZONTAL_ALIGN_CENTER );
     this.stdout.setLayoutData( layout );
     // Button - browsing for stdout files (only remote)
-    Button outButton = new Button( stdFilesGroup, SWT.PUSH );
+    outButton = new Button( stdFilesGroup, SWT.PUSH );
     outButton.setImage( fileImage );
     layout = new GridData( GridData.HORIZONTAL_ALIGN_FILL
                            | GridData.VERTICAL_ALIGN_FILL
@@ -363,7 +378,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
                            | GridData.FILL_HORIZONTAL );
     this.stderr.setLayoutData( layout );
     // Button - browsing for stderr file (only remote)
-    Button errButton = new Button( stdFilesGroup, SWT.PUSH );
+    errButton = new Button( stdFilesGroup, SWT.PUSH );
     errButton.setImage( fileImage );
     layout = new GridData( GridData.HORIZONTAL_ALIGN_FILL
                            | GridData.VERTICAL_ALIGN_FILL
@@ -390,7 +405,17 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
                                             this.getWizard() );
     }
     setSelectedNode( this.basicNode );
+    setStdFilesGroupEnabled( false );
     setControl( mainComp );
+  }
+  
+  private void setStdFilesGroupEnabled(boolean enabled){
+    this.stdin.setEnabled( enabled );
+    this.chooseButton.setEnabled( enabled );
+    this.stdout.setEnabled( enabled );
+    this.outButton.setEnabled( enabled );
+    this.stderr.setEnabled( enabled );
+    this.errButton.setEnabled( enabled );
   }
 
   private String getSelectedElementDisplayName( final IGridConnectionElement element )
