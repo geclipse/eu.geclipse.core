@@ -19,9 +19,12 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
@@ -35,6 +38,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
 import eu.geclipse.core.ExtensionManager;
 import eu.geclipse.core.GridException;
 import eu.geclipse.core.GridJobStatusServiceFactoryManager;
@@ -140,13 +144,11 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
             jobDescriptionFile = jobFolder.getFile( filename );
           }
           if( JOBINFO_SUBMISSIONTIME_XMLNODENAME.equals( node.getNodeName() ) )
-          {
+          {            
             DateFormat df = SimpleDateFormat.getDateTimeInstance();
             try {
-              submissionTime = df.parse( node.getTextContent() );
+              submissionTime = xml2Date( node.getTextContent() );
             } catch( DOMException e ) {
-              // empty implementation
-            } catch( ParseException e ) {
               // empty implementation
             }
           }
@@ -502,7 +504,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
           + "<"
           + JOBINFO_SUBMISSIONTIME_XMLNODENAME
           + ">"
-          + submissionTime
+          + date2Xml( submissionTime )
           + "</"
           + JOBINFO_SUBMISSIONTIME_XMLNODENAME
           + ">"
@@ -529,6 +531,44 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
   public Date getSubmissionTime() {
     return submissionTime;
   }
+  
+  private String date2Xml( final Date date ) {
+    String xml = "";
+    if( date != null ) {
+      xml = getXmlDateTimeFormatter().format( date );
+    }
+    
+    return xml;
+  }
+  
+  private Date xml2Date( final String xml ) {
+    Date date = null;
+    
+    if( xml.length() > 0 ) {
+      try {
+        date = getXmlDateTimeFormatter().parse( xml );
+      } catch( ParseException exception ) {
+        // empty implementation
+      }
+    }
+    
+    return date;
+  }
+
+  /**
+   * @return formatter used to store and read data into xml
+   */  
+  private DateFormat getXmlDateTimeFormatter() {
+    DateFormat formatter = DateFormat.getDateTimeInstance( DateFormat.SHORT,
+                                                           DateFormat.SHORT,
+                                                           new Locale( "Locale.US" ) ); //$NON-NLS-1$
+    if( formatter == null ) {
+      formatter = DateFormat.getDateTimeInstance( DateFormat.SHORT,
+                                                  DateFormat.SHORT );
+    }
+    return formatter;
+  }
+  
   // public Object getAdapter(Class cl){
   // Object adapter=null;
   // // adapter=Platform.getAdapterManager().getAdapter(this, cl);
