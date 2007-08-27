@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.SortedSet;
 import java.util.StringTokenizer;
 import java.util.TreeSet;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.text.ITextSelection;
@@ -37,6 +38,8 @@ import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.MenuAdapter;
+import org.eclipse.swt.events.MenuEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -52,6 +55,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.MenuItem;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
+
 import eu.geclipse.terminal.ITerminalListener;
 
 /**
@@ -258,7 +262,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
   private void initMenu() {
     ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
     Menu popUpMenu = new Menu( getShell(), SWT.POP_UP );
-    MenuItem copyItem = new MenuItem( popUpMenu, SWT.PUSH );
+    final MenuItem copyItem = new MenuItem( popUpMenu, SWT.PUSH );
     copyItem.setText( Messages.getString("Terminal.copy") ); //$NON-NLS-1$
     // TODO disable menu if selection is empty
     ImageDescriptor copyImage 
@@ -279,6 +283,12 @@ public class Terminal extends Canvas implements ISelectionProvider {
       @Override
       public void widgetSelected( final SelectionEvent event ) {
         paste();
+      }
+    } );
+    popUpMenu.addMenuListener( new MenuAdapter() {
+      @Override
+      public void menuShown( final MenuEvent event ) {
+        copyItem.setEnabled( !getSelection().isEmpty() );
       }
     } );
     setMenu( popUpMenu );    

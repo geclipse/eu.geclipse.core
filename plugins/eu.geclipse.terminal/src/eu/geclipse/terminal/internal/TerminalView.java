@@ -20,6 +20,8 @@ import java.io.IOException;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabFolder2Adapter;
@@ -92,18 +94,23 @@ public class TerminalView extends ViewPart implements ITerminalView {
         }
       }
     } );
-    actionBars.setGlobalActionHandler( ActionFactory.COPY.getId(), new Action() {
+    final Action copyAction = new Action() {
       @Override
       public void run() {
-        // TODO disable menu if selection is empty
         CTabItem item = TerminalView.this.cTabFolder.getSelection();
         if( item != null && item.getControl() != null ) {
           ((TerminalPage)item.getControl()).copy();
         }
       }
-    } );
+    };
+    actionBars.setGlobalActionHandler( ActionFactory.COPY.getId(), copyAction );
     this.selectionProvider = new SelectionProviderIntermediate();
     getSite().setSelectionProvider( this.selectionProvider );
+    this.selectionProvider.addSelectionChangedListener( new ISelectionChangedListener() {
+      public void selectionChanged( final SelectionChangedEvent event ) {
+        copyAction.setEnabled( !event.getSelection().isEmpty() );
+      }
+    } );
   }
 
   private void contributeToActionBars() {
