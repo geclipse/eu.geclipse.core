@@ -116,13 +116,15 @@ public class DataStageInTable {
       gLayout = new GridLayout( 1, false );
     }
     this.mainComp.setLayout( gLayout );
+    GridData gData = new GridData(GridData.FILL_BOTH | GridData.GRAB_HORIZONTAL);
+    this.mainComp.setLayoutData( gData );
     this.table = new Table( this.mainComp, SWT.BORDER
                                            | SWT.VIRTUAL
                                            | SWT.MULTI
                                            | SWT.FULL_SELECTION );
     this.table.setHeaderVisible( true );
     this.table.setLinesVisible( true );
-    GridData gData = new GridData( GridData.FILL_BOTH );
+    gData = new GridData( GridData.FILL_BOTH );
     gData.grabExcessVerticalSpace = true;
     gData.widthHint = 400;
     gData.heightHint = 100;

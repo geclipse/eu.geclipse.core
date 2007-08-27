@@ -16,6 +16,8 @@
  *****************************************************************************/
 package eu.geclipse.jsdl.ui.widgets;
 
+import java.net.MalformedURLException;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.jface.dialogs.Dialog;
@@ -168,6 +170,11 @@ public class DataStagingInDialog extends Dialog {
           filename = connection.getURI().toString();
           if( filename != null ) {
             DataStagingInDialog.this.pathText.setText( filename );
+            if (nameText.getText().equals( "" )){
+              String nameToSet = "";
+              nameToSet = filename.substring( filename.lastIndexOf( "/" ) + 1, filename.length() - 1);
+              nameText.setText( nameToSet );
+            }
           }
         }
         updateButtons();
@@ -277,7 +284,7 @@ public class DataStagingInDialog extends Dialog {
     return this.returnCreationFlag;
   }
 
-  @SuppressWarnings("boxing")
+  
   @Override
   protected void okPressed() {
     this.returnName = this.nameText.getText();
@@ -285,7 +292,7 @@ public class DataStagingInDialog extends Dialog {
     if( this.dialogStyle == ADVANCED_DIALOG ) {
       this.returnCreationFlag = this.creationFlagCombo.getSelectionIndex();
       if( this.deleteOnTerminationCombo.getSelectionIndex() != -1 ) {
-        this.returnDeleteFlag = Boolean.parseBoolean( this.deleteOnTerminationCombo.getItem( this.deleteOnTerminationCombo.getSelectionIndex() ) );
+        this.returnDeleteFlag = new Boolean( Boolean.parseBoolean( this.deleteOnTerminationCombo.getItem( this.deleteOnTerminationCombo.getSelectionIndex() ) ));
       }
     }
     super.okPressed();

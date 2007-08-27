@@ -180,6 +180,11 @@ public class DataStagingOutDialog extends Dialog {
           filename = connection.getURI().toString();
           if( filename != null ) {
             DataStagingOutDialog.this.pathText.setText( filename );
+            if (nameText.getText().equals( "" )){
+              String nameToSet = "";
+              nameToSet = filename.substring( filename.lastIndexOf( "/" ) + 1, filename.length() - 1);
+              nameText.setText( nameToSet );
+            }
           }
         }
         updateButtons();
