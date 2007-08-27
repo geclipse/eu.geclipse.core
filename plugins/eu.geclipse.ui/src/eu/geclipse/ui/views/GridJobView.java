@@ -12,9 +12,13 @@
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
  *****************************************************************************/
-
 package eu.geclipse.ui.views;
 
+import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
+
+import org.eclipse.core.runtime.Preferences;
 import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
@@ -29,12 +33,16 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.WorkbenchException;
+import org.eclipse.ui.XMLMemento;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
+
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridElementManager;
 import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobManager;
 import eu.geclipse.core.model.IGridJobStatusListener;
+import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.internal.actions.ActionGroupManager;
 import eu.geclipse.ui.internal.actions.FilterActions;
 import eu.geclipse.ui.internal.actions.JobViewActions;
@@ -45,83 +53,82 @@ import eu.geclipse.ui.views.filters.IGridFilterConfiguration;
 import eu.geclipse.ui.views.filters.JobViewFilterConfiguration;
 
 /**
- * Job view that shows all jobs that are currently managed by
- * the default implementation of the {@link IGridJobManager}
- * interface
+ * Job view that shows all jobs that are currently managed by the default
+ * implementation of the {@link IGridJobManager} interface
  */
-public class GridJobView
-    extends ElementManagerViewPart
-    implements IGridJobStatusListener,
-    IFilterConfigurationListener {
-  
-  private IMemento memento;  
+public class GridJobView extends ElementManagerViewPart
+  implements IGridJobStatusListener, IFilterConfigurationListener
+{
+  private static String XML_MEMENTO_FILTERS = "Filters"; //$NON-NLS-1$
+  private static String PREFERENCE_NAME_FILTERS = "GridJobViewFilters"; //$NON-NLS-1$
   private JobViewActions jobActions;
   private GridFilterConfigurationsManager filterConfigurationsManager;
-  
+
   @Override
   public void dispose() {
     GridModel.getJobManager().removeJobStatusListener( this );
-    
     if( this.filterConfigurationsManager != null ) {
       this.filterConfigurationsManager.removeConfigurationListener( this );
     }
     
+    saveFilters();    
     super.dispose();
   }
-  
+
   public void statusChanged( final IGridJob job ) {
     refreshViewer( job );
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see eu.geclipse.ui.views.GridElementManagerViewPart#getManager()
    */
   @Override
   protected IGridElementManager getManager() {
     return GridModel.getJobManager();
   }
-  
-  /* (non-Javadoc)
+
+  /*
+   * (non-Javadoc)
+   * 
    * @see eu.geclipse.ui.views.GridModelViewPart#createLabelProvider()
    */
   @Override
   protected IBaseLabelProvider createLabelProvider() {
     return new JobViewLabelProvider();
   }
-  
-  /* (non-Javadoc)
+
+  /*
+   * (non-Javadoc)
+   * 
    * @see eu.geclipse.ui.views.ElementManagerViewPart#createTreeColumns(org.eclipse.swt.widgets.Tree)
    */
   @Override
   protected boolean createTreeColumns( final Tree tree ) {
-    
     super.createTreeColumns( tree );
-    
     TreeColumn idColumn = new TreeColumn( tree, SWT.NONE );
-    idColumn.setText( Messages.getString("GridJobView.id_column") ); //$NON-NLS-1$
+    idColumn.setText( Messages.getString( "GridJobView.id_column" ) ); //$NON-NLS-1$
     idColumn.setAlignment( SWT.CENTER );
     idColumn.setWidth( 200 );
-    
     TreeColumn statusColumn = new TreeColumn( tree, SWT.NONE );
-    statusColumn.setText( Messages.getString("GridJobView.status_column") ); //$NON-NLS-1$
+    statusColumn.setText( Messages.getString( "GridJobView.status_column" ) ); //$NON-NLS-1$
     statusColumn.setAlignment( SWT.CENTER );
     statusColumn.setWidth( 100 );
-    
     TreeColumn reasonColumn = new TreeColumn( tree, SWT.NONE );
-    reasonColumn.setText( Messages.getString("GridJobView.reason_column") ); //$NON-NLS-1$
+    reasonColumn.setText( Messages.getString( "GridJobView.reason_column" ) ); //$NON-NLS-1$
     reasonColumn.setAlignment( SWT.CENTER );
     reasonColumn.setWidth( 100 );
-    
     TreeColumn lastUpdateColumn = new TreeColumn( tree, SWT.NONE );
-    lastUpdateColumn.setText( Messages.getString("GridJobView.last_update_column") ); //$NON-NLS-1$
+    lastUpdateColumn.setText( Messages.getString( "GridJobView.last_update_column" ) ); //$NON-NLS-1$
     lastUpdateColumn.setAlignment( SWT.CENTER );
     lastUpdateColumn.setWidth( 100 );
-    
     return true;
-    
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see eu.geclipse.ui.views.ElementManagerViewPart#contributeAdditionalActions(eu.geclipse.ui.internal.actions.ActionGroupManager)
    */
   @Override
@@ -130,29 +137,21 @@ public class GridJobView
     IWorkbenchSite site = getSite();
     this.jobActions = new JobViewActions( site );
     groups.addGroup( this.jobActions );
-    groups.addGroup( new FilterActions( getSite(), this.filterConfigurationsManager ) ); 
+    groups.addGroup( new FilterActions( getSite(),
+                                        this.filterConfigurationsManager ) );
     super.contributeAdditionalActions( groups );
   }
-      
-  /* (non-Javadoc)
-   * @see org.eclipse.ui.part.ViewPart#saveState(org.eclipse.ui.IMemento)
-   */
-  @Override
-  public void saveState( final IMemento mem )
-  {
-    if( this.filterConfigurationsManager != null ) {
-      this.filterConfigurationsManager.saveState( mem );
-    }
-    super.saveState( mem );
-  }
 
-  /* (non-Javadoc)
-   * @see org.eclipse.ui.part.ViewPart#init(org.eclipse.ui.IViewSite, org.eclipse.ui.IMemento)
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.eclipse.ui.part.ViewPart#init(org.eclipse.ui.IViewSite,
+   *      org.eclipse.ui.IMemento)
    */
   @Override
-  public void init( final IViewSite site, final IMemento mem ) throws PartInitException
+  public void init( final IViewSite site, final IMemento mem )
+    throws PartInitException
   {
-    this.memento = mem;
     super.init( site, mem );
     GridModel.getJobManager().addJobStatusListener( this );
     IPreferenceStore preferenceStore = new ScopedPreferenceStore( new InstanceScope(),
@@ -167,32 +166,32 @@ public class GridJobView
     } );
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see eu.geclipse.ui.views.GridModelViewPart#initViewer(org.eclipse.jface.viewers.StructuredViewer)
    */
   @Override
-  protected void initViewer( final StructuredViewer sViewer )
-  {
+  protected void initViewer( final StructuredViewer sViewer ) {
     super.initViewer( sViewer );
     initFilters( sViewer );
   }
-  
+
   private void initFilters( final StructuredViewer sViewer ) {
     createFilterConfigurationsManager( sViewer );
-    this.filterConfigurationsManager.readState( this.memento );
+    readFilters();
   }
-  
+
   private void createFilterConfigurationsManager( final StructuredViewer sViewer )
   {
     this.filterConfigurationsManager = new GridFilterConfigurationsManager( GridFilterConfigurationsManager.ID_JOBVIEW )
     {
+
       @Override
-      public IGridFilterConfiguration createConfiguration( final String name )
-      {
+      public IGridFilterConfiguration createConfiguration( final String name ) {
         return new JobViewFilterConfiguration( name );
       }
     };
-    
     this.filterConfigurationsManager.addConfigurationListener( this );
   }
 
@@ -206,5 +205,34 @@ public class GridJobView
     }
   }
 
+  private void saveFilters() {
+    XMLMemento memento = XMLMemento.createWriteRoot( XML_MEMENTO_FILTERS );
+    if( this.filterConfigurationsManager != null ) {
+      this.filterConfigurationsManager.saveState( memento );
+    }
+    StringWriter writer = new StringWriter();
+    try {
+      memento.save( writer );
+    } catch( IOException exc ) {
+      Activator.logException( exc );
+    }
+    
+    Preferences preferences = Activator.getDefault().getPluginPreferences();
+    preferences.setValue( PREFERENCE_NAME_FILTERS, writer.toString() );
+    Activator.getDefault().savePluginPreferences();
+  }
+  
+  private void readFilters() {    
+    String preference = Activator.getDefault().getPluginPreferences().getString( PREFERENCE_NAME_FILTERS );
 
+    if( preference != null
+        && preference.length() > 0 ) {
+      StringReader reader = new StringReader( preference );
+      try {
+        this.filterConfigurationsManager.readState( XMLMemento.createReadRoot( reader ) );
+      } catch (WorkbenchException exc) {
+        Activator.logException( exc );
+      }
+    }
+  }  
 }
