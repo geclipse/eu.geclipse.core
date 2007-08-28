@@ -113,11 +113,10 @@ public class ProblemRegistry_Test {
   @Test
   public void testUniqueID()
   {
-    int id;
+    int initialID, id;
+    initialID = ProblemRegistry.uniqueID ();
     id = ProblemRegistry.uniqueID ();
-    Assert.assertEquals( new Integer( id ),new Integer( 1 ));
     id = ProblemRegistry.uniqueID ();
-    id = ProblemRegistry.uniqueID ();
-    Assert.assertEquals( new Integer( id ),new Integer( 3 ));
+    Assert.assertEquals( new Integer( id ),new Integer( initialID + 2 ));
   }
 }
