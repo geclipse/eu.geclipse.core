@@ -28,7 +28,7 @@ project number: FP5-IST-034327  http://www.geclipse.eu/
    </license>
 
    <url>
-      <update label="g-Eclipse Updates" url="http://www.geclipse.eu/update/site.xml"/>
+      <update label="g-Eclipse Update Site" url="http://download.eclipse.org/technology/geclipse/updates/0.5/site.xml"/>
    </url>
 
    <requires>
@@ -48,8 +48,8 @@ project number: FP5-IST-034327  http://www.geclipse.eu/
       <import plugin="org.eclipse.ui.editors"/>
       <import plugin="org.eclipse.jsch.core"/>
       <import plugin="com.jcraft.jsch"/>
-      <import plugin="org.eclipse.core.resources"/>
       <import plugin="org.eclipse.jface.text"/>
+      <import plugin="org.eclipse.core.resources"/>
       <import plugin="org.eclipse.ui.workbench.texteditor"/>
       <import plugin="org.eclipse.core.net"/>
       <import plugin="org.apache.log4j"/>
@@ -66,8 +66,6 @@ project number: FP5-IST-034327  http://www.geclipse.eu/
       <import plugin="org.eclipse.gmf.runtime.diagram.ui.properties"/>
       <import plugin="org.eclipse.gmf.runtime.diagram.ui.resources.editor"/>
       <import plugin="org.eclipse.core.expressions"/>
-      <import plugin="org.eclipse.gef"/>
-      <import plugin="org.eclipse.ui.views"/>
    </requires>
 
    <plugin
