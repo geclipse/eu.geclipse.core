@@ -26,7 +26,6 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import eu.geclipse.test.GridTestStub;
 
 
 /**tests the class {@link GVidClient}
@@ -44,9 +43,9 @@ public class GVidClient_PDETest {
   public static void setUpBeforeClass() throws Exception {
     InputStream in;
     OutputStream out;
-    String path = GridTestStub.setUpLocalDir() + "testfile"; //$NON-NLS-1$
+    String path = "d:/geclipsetest/" + "testfile"; //$NON-NLS-1$ //$NON-NLS-2$
     in = new FileInputStream( path );
-    path = GridTestStub.setUpLocalDir() + "output"; //$NON-NLS-1$
+    path = "d:/geclipsetest/" + "output"; //$NON-NLS-1$ //$NON-NLS-2$
     out = new FileOutputStream( path );
     gvidclient = new GVidClient(in, out);
   }
