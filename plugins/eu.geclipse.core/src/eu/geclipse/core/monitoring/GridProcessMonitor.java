@@ -155,46 +155,51 @@ public class GridProcessMonitor {
     return success;
   }
   
- 
-  
-  
   /**
-   * Sets the interval of seconds between two updates of the remote list of processes
+   * Sets the interval of seconds between two updates of the remote list of
+   * processes
+   * 
    * @param seconds between two updates
    */
-  public void setUpdateInterval(final int seconds){
-    if (seconds >= 0){
+  public void setUpdateInterval( final int seconds ) {
+    if( seconds >= 0 ) {
       this.updateinterval = seconds;
-      this.updateJob.schedule(this.updateinterval);
+      this.updateJob.schedule( this.updateinterval );
     } else {
       this.updateinterval = 0;
     }
   }
   
   /**
-   * Fetches the status of one process identified via its pid represented by a GridProcess object
+   * Fetches the status of one process identified via its pid represented by a
+   * GridProcess object
+   * 
    * @param pid the remote machines process-id to fetch information about
-   * @return an Object of type GridProcess containing information about the remote process with PID pid
+   * @return an Object of type GridProcess containing information about the
+   *         remote process with PID pid
    */
-  public GridProcess getProcessInfo(int pid){
-    
+  public GridProcess getProcessInfo( final int pid ) {
     GridProcess newproc = null;
-    if (pid > 0 && this.proclist != null && this.proclist.contains( new Integer(pid) )){
-
-      if (this.currentcon != null ){
-        IGridElement procdirelem = this.currentcon.findChild( new Integer(pid).toString() );
-        if (procdirelem != null && procdirelem instanceof IGridConnectionElement){
-          IGridConnectionElement procdir = ( ( IGridConnectionElement ) procdirelem );
-          newproc = new GridProcess (procdir);
+    if( pid > 0
+        && this.proclist != null
+        && this.proclist.contains( new Integer( pid ) ) )
+    {
+      if( this.currentcon != null ) {
+        IGridElement procdirelem = this.currentcon.findChild( new Integer( pid ).toString() );
+        if( procdirelem != null
+            && procdirelem instanceof IGridConnectionElement )
+        {
+          IGridConnectionElement procdir = ( ( IGridConnectionElement )procdirelem );
+          newproc = new GridProcess( procdir );
         }
       }
     }
-   
     return newproc;
   }
   
   /**
    * Get a list of remotely running processes.
+   * 
    * @return a HashSet with PIDs of the remotely running processes
    */
   public HashSet<Integer> getProcessList(){
