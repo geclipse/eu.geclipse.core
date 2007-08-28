@@ -17,7 +17,7 @@
 package eu.geclipse.jsdl.ui.internal.pages;
 
 /**
- * @author nickl
+ * @author nloulloud
  *
  */
 
@@ -56,15 +56,13 @@ public final class OverviewPage extends FormPage
   
   protected static final String PAGE_ID = "OVERVIEW";  //$NON-NLS-1$
   protected ApplicationTypeAdapter applicationTypeAdapter;
-  protected PosixApplicationTypeAdapter posixApplicationTypeAdapter; 
-  
+  protected PosixApplicationTypeAdapter posixApplicationTypeAdapter;   
   protected Composite composite = null;
   protected Label lblApplicationName = null;
   protected Label lblExecutable = null;
   protected Label lblInput = null;
   protected Label lblOutput = null;
-  protected Label lblError = null;
-    
+  protected Label lblError = null;    
   protected FormText sectionContent = null;
   protected Text txtApplicationName = null;
   protected Text txtExecutable = null;
@@ -72,10 +70,10 @@ public final class OverviewPage extends FormPage
   protected Text txtOutput = null;
   protected Text txtError = null;
   
-  private FormToolkit toolkit;
-     
+  private FormToolkit toolkit;     
   private boolean contentRefreshed = false;
-  private boolean dirtyFlag = false;
+  private boolean dirtyFlag = false;  
+  private final int WIDGET_MAX_WIDTH = 100;
   
   /**
    * OverviewPage class constructor.
@@ -91,7 +89,7 @@ public final class OverviewPage extends FormPage
 
 
   
-  public void notifyChanged( Notification arg0 ) {
+  public void notifyChanged( final Notification arg0 ) {
     
     setDirty( true );
     
@@ -99,16 +97,16 @@ public final class OverviewPage extends FormPage
   
   
   @Override
-  public void setActive(final boolean active) {
+  public void setActive( final boolean active ) {
     
-    if (active){
-      if (isContentRefreshed()){    
+    if ( active ){
+      if ( isContentRefreshed() ) {    
         
         this.applicationTypeAdapter.load();
         this.posixApplicationTypeAdapter.load();
         
-      }//endif isContentRefreshed
-    } // endif active
+      }//end_if isContentRefreshed
+    } // end_if active
     
   } // End void setActive()
   
@@ -117,14 +115,14 @@ public final class OverviewPage extends FormPage
   /**
    * This method set's the dirty status of the page.
    * 
-   * @param dirtyFlag
+   * @param dirty
    * If TRUE then the page is Dirty and a Save operation is needed.
    * 
    */
-  public void setDirty(final boolean dirtyFlag) {
+  public void setDirty( final boolean dirty ) {
     
-    if (this.dirtyFlag != dirtyFlag) {
-      this.dirtyFlag = dirtyFlag;     
+    if ( this.dirtyFlag != dirty ) {
+      this.dirtyFlag = dirty;     
       this.getEditor().editorDirtyStateChanged();  
     }
     
@@ -150,8 +148,8 @@ public final class OverviewPage extends FormPage
    * from an outside editor.
    * 
    */
-  public void setPageContent(final EObject rootJsdlElement, 
-                             final boolean refreshStatus) {
+  public void setPageContent( final EObject rootJsdlElement, 
+                             final boolean refreshStatus ) {
 
    if (refreshStatus) {
       this.contentRefreshed = true;
@@ -251,10 +249,10 @@ public final class OverviewPage extends FormPage
                                                    | SWT.WRAP);
 
      section.clientVerticalSpacing = 5;   
-     section.setText(title);
-     section.setDescription(desc);
-     this.toolkit.createCompositeSeparator(section);
-     Composite client = this.toolkit.createComposite(section);
+     section.setText( title );
+     section.setDescription( desc );
+     this.toolkit.createCompositeSeparator( section );
+     Composite client = this.toolkit.createComposite( section );
             
      TableWrapLayout layout = new TableWrapLayout();
      layout.verticalSpacing = 8;
@@ -266,9 +264,9 @@ public final class OverviewPage extends FormPage
      layout.numColumns = numColumns;
      layout.makeColumnsEqualWidth = false;
      client.setLayout(layout);
-     TableWrapData data = new TableWrapData(TableWrapData.FILL_GRAB);
-     section.setLayoutData(data);               
-     section.setClient(client);
+     TableWrapData data = new TableWrapData( TableWrapData.FILL_GRAB );
+     section.setLayoutData( data );               
+     section.setClient( client );
     
         
      return client;
@@ -276,20 +274,22 @@ public final class OverviewPage extends FormPage
      }
   
   
-  private Composite createGeneralInfoSection(final IManagedForm mform, 
-                                             final String title, 
-                                             final String desc) {
+  private Composite createGeneralInfoSection( final IManagedForm mform, 
+                                              final String title, 
+                                              final String desc ) {
     
-    Composite client = createSection(mform, title, desc, 2);
+    Composite client = createSection( mform, title, desc, 2 );
     TableWrapData td ;
     
     /* ======================== Application Name ============================ */
     
-    this.lblApplicationName = this.toolkit.createLabel(client,
-                                   Messages.getString("OverviewPage_ApplName")); //$NON-NLS-1$
+    this.lblApplicationName = this.toolkit.createLabel( client,
+                                   Messages.getString( "OverviewPage_ApplName" ) ); //$NON-NLS-1$
     
-    td = new TableWrapData(TableWrapData.FILL_GRAB);
-    this.txtApplicationName = this.toolkit.createText(client,"", SWT.NONE);     //$NON-NLS-1$
+    td = new TableWrapData( TableWrapData.FILL_GRAB );
+    td.maxWidth = this.WIDGET_MAX_WIDTH;
+    
+    this.txtApplicationName = this.toolkit.createText( client,"", SWT.NONE );     //$NON-NLS-1$
     
     this.applicationTypeAdapter
                             .attachToApplicationName( this.txtApplicationName );
@@ -298,12 +298,13 @@ public final class OverviewPage extends FormPage
         
     /* ============================== Executable ============================ */
     
-    this.lblExecutable = this.toolkit.createLabel(client,
-                                 Messages.getString("OverviewPage_Executable")); //$NON-NLS-1$
+    this.lblExecutable = this.toolkit.createLabel( client,
+                                 Messages.getString( "OverviewPage_Executable" ) ); //$NON-NLS-1$
                         
-     td = new TableWrapData(TableWrapData.FILL_GRAB);
+     td = new TableWrapData( TableWrapData.FILL_GRAB );
+     td.maxWidth = this.WIDGET_MAX_WIDTH;
      
-     this.txtExecutable = this.toolkit.createText(client,"", SWT.NONE);     //$NON-NLS-1$
+     this.txtExecutable = this.toolkit.createText( client,"", SWT.NONE );     //$NON-NLS-1$
      
      this.posixApplicationTypeAdapter
                         .attachPosixApplicationExecutable( this.txtExecutable );
@@ -312,12 +313,13 @@ public final class OverviewPage extends FormPage
     
     /* ============================== Input File ============================ */
     
-     this.lblInput = this.toolkit.createLabel(client,
-                                  Messages.getString("OverviewPage_Input")); //$NON-NLS-1$
+     this.lblInput = this.toolkit.createLabel( client,
+                                  Messages.getString( "OverviewPage_Input" ) ); //$NON-NLS-1$
                                           
-     td = new TableWrapData(TableWrapData.FILL_GRAB);
+     td = new TableWrapData( TableWrapData.FILL_GRAB );
+     td.maxWidth = this.WIDGET_MAX_WIDTH;
                        
-     this.txtInput = this.toolkit.createText(client,"", SWT.NONE);     //$NON-NLS-1$
+     this.txtInput = this.toolkit.createText( client,"", SWT.NONE );     //$NON-NLS-1$
      
      this.posixApplicationTypeAdapter
                                  .attachPosixApplicationInput( this.txtInput );
@@ -325,12 +327,15 @@ public final class OverviewPage extends FormPage
      this.txtInput.setLayoutData( td );
     /* ==============================Output File ============================ */
      
-     this.lblOutput = this.toolkit.createLabel(client,
-                                      Messages.getString("OverviewPage_Output")); //$NON-NLS-1$
+     this.lblOutput = this.toolkit.createLabel( client,
+                                  Messages.getString( "OverviewPage_Output" ) ); //$NON-NLS-1$
                                                       
-     td = new TableWrapData(TableWrapData.FILL_GRAB);
+     td = new TableWrapData( TableWrapData.FILL_GRAB );
+     td.maxWidth = this.WIDGET_MAX_WIDTH;
+     
                                    
-     this.txtOutput = this.toolkit.createText(client,"", SWT.NONE);     //$NON-NLS-1$
+     this.txtOutput = this.toolkit.createText( client, "" , SWT.NONE );     //$NON-NLS-1$
+     
      
      this.posixApplicationTypeAdapter
                                 .attachPosixApplicationOutput( this.txtOutput );
@@ -340,12 +345,13 @@ public final class OverviewPage extends FormPage
     
     /* ============================== Error File ============================ */
      
-     this.lblError = this.toolkit.createLabel(client,
-                                      Messages.getString("OverviewPage_Error")); //$NON-NLS-1$
+     this.lblError = this.toolkit.createLabel( client,
+                                      Messages.getString( "OverviewPage_Error" ) ); //$NON-NLS-1$
                                                                
-     td = new TableWrapData(TableWrapData.FILL_GRAB);
+     td = new TableWrapData( TableWrapData.FILL_GRAB );
+     td.maxWidth = this.WIDGET_MAX_WIDTH;
                                             
-     this.txtError = this.toolkit.createText(client,"", SWT.NONE);     //$NON-NLS-1$
+     this.txtError = this.toolkit.createText( client,"", SWT.NONE );     //$NON-NLS-1$
      
      this.posixApplicationTypeAdapter
                                   .attachPosixApplicationError( this.txtError );
@@ -362,117 +368,116 @@ public final class OverviewPage extends FormPage
   
   
   
-  private Composite createJobDefSection(final IManagedForm mform, 
-                                        final String title, 
-                                        final String desc) {
+  private Composite createJobDefSection( final IManagedForm mform, 
+                                         final String title, 
+                                         final String desc ) {
 
-  Composite client = createSection(mform, title, desc, 2);
+  Composite client = createSection( mform, title, desc, 2 );
   
-   this.sectionContent = this.toolkit.createFormText(client, true);
+   this.sectionContent = this.toolkit.createFormText( client, true );
     try {
       this.sectionContent.setText(Messages.getString( "OverviewPage_JobDefContent" ), true, false); //$NON-NLS-1$
-    } catch (SWTException e) {
-      this.sectionContent.setText(e.getMessage(),false, false);
+    } catch ( SWTException e ) {
+      this.sectionContent.setText( e.getMessage(), false, false );
     }
     
-    this.sectionContent.addHyperlinkListener(this);
+    this.sectionContent.addHyperlinkListener( this );
 
   return client;
 
-  }//End Composite createJobDefSection()
+  } //End Composite createJobDefSection()
   
   
   
-  private Composite createApplicationSection(final IManagedForm mform, 
-                                             final String title, 
-                                             final String desc) {
+  private Composite createApplicationSection( final IManagedForm mform, 
+                                              final String title, 
+                                              final String desc ) {
     
-    Composite client = createSection(mform, title, desc, 2);
+    Composite client = createSection( mform, title, desc, 2 );
     
-    this.sectionContent = this.toolkit.createFormText(client, true);
+    this.sectionContent = this.toolkit.createFormText( client, true );
      try {
        this.sectionContent.setText(Messages.getString( "OverviewPage_ApplicationContent" ), true, false); //$NON-NLS-1$
-     } catch (SWTException e) {
-       this.sectionContent.setText(e.getMessage(),false, false);
+     } catch ( SWTException e ) {
+       this.sectionContent.setText( e.getMessage(),false, false );
      }
      
-     this.sectionContent.addHyperlinkListener(this);
+     this.sectionContent.addHyperlinkListener( this );
      
    return client;
     
-  }
+  }// End Composite createApplicationSection()
 
   
   
-  private Composite createResourcesSection(final IManagedForm mform, 
-                                             final String title, 
-                                             final String desc) {
+  private Composite createResourcesSection( final IManagedForm mform, 
+                                            final String title, 
+                                            final String desc ) {
   
-    Composite client = createSection(mform, title, desc, 2);
+    Composite client = createSection( mform, title, desc, 2 );
     
-    this.sectionContent = this.toolkit.createFormText(client, true);
+    this.sectionContent = this.toolkit.createFormText( client, true );
      try {
        this.sectionContent.setText(Messages.getString( "OverviewPage_ResourcesContent" ), true, false); //$NON-NLS-1$
-     } catch (SWTException e) {
-       this.sectionContent.setText(e.getMessage(),false, false);
+     } catch ( SWTException e ) {
+       this.sectionContent.setText( e.getMessage(),false, false );
      }
      
-     this.sectionContent.addHyperlinkListener(this);
+     this.sectionContent.addHyperlinkListener( this );
      
    return client;
     
-  }
+  } // End Composite createResourcesSection()
   
   
   
-  private Composite createDataStageSection(final IManagedForm mform, 
-                                           final String title, 
-                                           final String desc) {
+  private Composite createDataStageSection( final IManagedForm mform, 
+                                            final String title, 
+                                            final String desc ) {
   
-    Composite client = createSection(mform, title, desc, 2);
+    Composite client = createSection( mform, title, desc, 2 );
     
-    this.sectionContent = this.toolkit.createFormText(client, true);
+    this.sectionContent = this.toolkit.createFormText( client, true );
      try {
-       this.sectionContent.setText(Messages.getString( "OverviewPage_DataStagingContent" ), true, false); //$NON-NLS-1$
-     } catch (SWTException e) {
-       this.sectionContent.setText(e.getMessage(),false, false);
+       this.sectionContent.setText( Messages.getString( "OverviewPage_DataStagingContent" ), true, false ); //$NON-NLS-1$
+     } catch ( SWTException e ) {
+       this.sectionContent.setText( e.getMessage(),false, false );
      }
      
-     this.sectionContent.addHyperlinkListener(this);
+     this.sectionContent.addHyperlinkListener( this );
 
   
   return client;
   
-}
+} // End Composite createDataStageSection()
 
 
 
-  public void linkActivated( HyperlinkEvent e ) { 
-    String href = (String) e.getHref();    
-    this.getEditor().setActivePage( href );
-  }
-
-
-
-  public void linkEntered( HyperlinkEvent e ) {
-    IStatusLineManager mng = getEditor().getEditorSite().getActionBars()
-                                                        .getStatusLineManager();
-    mng.setMessage(e.getLabel());
+  public void linkActivated( final HyperlinkEvent e ) {
     
-  }
+    String href = ( String ) e.getHref();    
+    this.getEditor().setActivePage( href );
+    
+  } // End void linkActiveted()
 
 
 
-  public void linkExited( HyperlinkEvent e ) {
+  public void linkEntered( final HyperlinkEvent e ) {
     IStatusLineManager mng = getEditor().getEditorSite().getActionBars()
                                                         .getStatusLineManager();
-    mng.setMessage(null);
-  }
-  
-  
+    mng.setMessage( e.getLabel() );
+    
+  }// End void linkEntered()
 
+
+
+  public void linkExited( final HyperlinkEvent e ) {
+    IStatusLineManager mng = getEditor().getEditorSite().getActionBars()
+                                                        .getStatusLineManager();
+    mng.setMessage( null );
+    
+  } // End void linkExited()
   
   
   
-  
-} //End Class
+} // End OverviewPage Class

@@ -157,7 +157,7 @@ public final class JobApplicationPage extends FormPage
   private boolean dirtyFlag = false;
   
 
-  private final int widgetHeight = 100; 
+  private final int WIDGET_HEIGHT = 100; 
   
    
 
@@ -179,12 +179,17 @@ public final class JobApplicationPage extends FormPage
   @Override
   public void setActive(final boolean active) {
     
-    if (active){
-      if (isContentRefreshed()){    
+    if ( active ){
+      
+      if ( isContentRefreshed() ) {
+        
         this.applicationTypeAdapter.load();  
         this.posixApplicationTypeAdapter.load();
+        
       }//end_if isContentRefreshed
+      
     } // end_if active
+    
   } // End void setActive()
   
   
@@ -204,8 +209,8 @@ public final class JobApplicationPage extends FormPage
    * If TRUE then the page is Dirty and a Save operation is needed.
    * 
    */
-  public void setDirty (final boolean dirty) {
-    if (this.dirtyFlag != dirty) {
+  public void setDirty ( final boolean dirty ) {
+    if ( this.dirtyFlag != dirty ) {
       this.dirtyFlag = dirty;     
       this.getEditor().editorDirtyStateChanged();  
     }
@@ -214,7 +219,7 @@ public final class JobApplicationPage extends FormPage
   
   
   
-  private boolean isContentRefreshed(){
+  private boolean isContentRefreshed() {
     
     return this.contentRefreshed;
     
@@ -239,10 +244,10 @@ public final class JobApplicationPage extends FormPage
    *  from an outside editor.
    * 
    */
-  public void setPageContent(final EObject rootJsdlElement, 
-                             final boolean refreshStatus){
+  public void setPageContent( final EObject rootJsdlElement, 
+                              final boolean refreshStatus ){
 
-   if (refreshStatus) {
+   if ( refreshStatus ) {
      
       this.contentRefreshed = true;
       this.applicationTypeAdapter.setContent( rootJsdlElement );
@@ -253,19 +258,13 @@ public final class JobApplicationPage extends FormPage
    else{
      
       /* Initialize the ApplicationTypeAdapter for this page */
-      this.applicationTypeAdapter = new ApplicationTypeAdapter(rootJsdlElement);
+      this.applicationTypeAdapter = new ApplicationTypeAdapter( rootJsdlElement );
       /*Add Save State change notification listener. */
       this.applicationTypeAdapter.addListener( this );
       /* Initialize the PosixApplicationTypeAdapter for this page */
-      this.posixApplicationTypeAdapter = new PosixApplicationTypeAdapter(rootJsdlElement);
+      this.posixApplicationTypeAdapter = new PosixApplicationTypeAdapter( rootJsdlElement );
       /*Add Save State change notification listener. */
       this.posixApplicationTypeAdapter.addListener( this );
-//      /* Initialize the LimitsTypeAdapter for this page */
-//      this.limitsTypeAdapter = new LimitsTypeAdapter(rootJsdlElement);
-//      /*Add Save State change notification listener. */
-//      this.limitsTypeAdapter.addListener( this );
-      
-      
 
    } // End else
           
@@ -281,13 +280,13 @@ public final class JobApplicationPage extends FormPage
   */
   
   @Override
-  protected void createFormContent(final IManagedForm managedForm) {
+  protected void createFormContent( final IManagedForm managedForm ) {
     
     
     ScrolledForm form = managedForm.getForm();
     FormToolkit toolkit = managedForm.getToolkit();
     
-    form.setText(Messages.getString("JobApplicationPage_ApplicationTitle"));  //$NON-NLS-1$
+    form.setText( Messages.getString( "JobApplicationPage_ApplicationTitle" ) );  //$NON-NLS-1$
     
     this.body = form.getBody();
     this.body.setLayout(FormLayoutFactory.createFormTableWrapLayout(false, 2));
@@ -375,7 +374,7 @@ public final class JobApplicationPage extends FormPage
     gd = new GridData();
     gd.verticalSpan = 3;
     gd.widthHint = 285;
-    gd.heightHint = this.widgetHeight;
+    gd.heightHint = this.WIDGET_HEIGHT;
     this.txtDescription.setLayoutData(gd);    
     this.applicationTypeAdapter
                          .attachToApplicationDescription( this.txtDescription );
@@ -474,7 +473,7 @@ public final class JobApplicationPage extends FormPage
     gd.verticalSpan = 3;
     gd.horizontalSpan = 1;
     gd.widthHint = 250;
-    gd.heightHint = this.widgetHeight;
+    gd.heightHint = this.WIDGET_HEIGHT;
     
     
     this.argumentViewer = new TableViewer(client, SWT.BORDER);
@@ -650,7 +649,7 @@ public final class JobApplicationPage extends FormPage
     gd.verticalSpan = 3;
     gd.horizontalSpan = 1;
     gd.widthHint = 250;
-    gd.heightHint = this.widgetHeight;
+    gd.heightHint = this.WIDGET_HEIGHT;
     
     
     this.environmentViewer = new TableViewer(client, SWT.BORDER);
@@ -969,7 +968,7 @@ public final class JobApplicationPage extends FormPage
       
       if (button == this.btnArgAdd ) {            
       
-        dialog.addTextField( Messages.getString( "JobApplicationPage_FileSystemName" ), "", false ); //$NON-NLS-1$ //$NON-NLS-2$      
+        dialog.addTextField( Messages.getString( "JobApplicationPage_FileSystemName" ), "", true ); //$NON-NLS-1$ //$NON-NLS-2$      
         dialog.addTextField( Messages.getString( "JobApplicationPage_Value" ), "", false ); //$NON-NLS-1$ //$NON-NLS-2$
       }
       else
