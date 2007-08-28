@@ -15,8 +15,6 @@
 
 package eu.geclipse.core.filesystem.internal.filesystem;
 
-import java.net.URI;
-
 import org.eclipse.core.resources.IFolder;
 
 import eu.geclipse.core.model.GridModel;
@@ -40,13 +38,6 @@ public class ConnectionRoot
    */
   public ConnectionRoot( final IFolder folder ) {
     super( folder );
-  }
-  
-  /* (non-Javadoc)
-   * @see eu.geclipse.core.model.IGridConnection#getURI()
-   */
-  public URI getURI() {
-    return null;
   }
 
   /* (non-Javadoc)

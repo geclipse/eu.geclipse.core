@@ -164,8 +164,6 @@ public class GEclipseFileStore
   @Override
   public IFileStore getChild( final String name ) {
     
-    //System.out.println( "GEclipseFileStore#getChild@" + getName() + ": " + name );
-    
     GEclipseFileStore result = null;
     IFileStore child = getSlave().getChild( name );
     
