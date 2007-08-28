@@ -7,3 +7,4 @@ Bundle-Vendor: %Bundle-Vendor
 Bundle-Localization: plugin
 Eclipse-LazyStart: true
 Require-Bundle: eu.geclipse.ui
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
