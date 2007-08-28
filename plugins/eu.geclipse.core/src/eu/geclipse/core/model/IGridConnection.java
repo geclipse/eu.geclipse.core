@@ -24,13 +24,6 @@ public interface IGridConnection
     extends IGridConnectionElement, IManageable, IStorableElement {
   
   /**
-   * Get the {@link URI} of the filesystem.
-   * 
-   * @return The filesystem's {@link URI}.
-   */
-  public URI getURI();
-  
-  /**
    * Specifies if this connection is global. Global connections are
    * not part of a project and are therefore not located in the workspace.
    * The parent of a global connection is the connection manager itself.

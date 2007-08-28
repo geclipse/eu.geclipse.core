@@ -24,7 +24,6 @@ import org.eclipse.compare.IContentChangeListener;
 import org.eclipse.compare.IContentChangeNotifier;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.ListenerList;
-import org.eclipse.core.runtime.Path;
 
 import eu.geclipse.core.ExtensionManager;
 import eu.geclipse.core.Extensions;
@@ -78,12 +77,22 @@ public class CaCertManager implements IContentChangeNotifier {
     return singleton;
   }
   
+  /**
+   * Add a certificate to the list of managed certificates.
+   * 
+   * @param certificate The cterificate to be added.
+   */
   public void addCertificate( final ICaCertificate certificate ) {
     if ( internalAddCertificate( certificate ) ) {
       fireContentChanged();
     }
   }
   
+  /**
+   * Add a list of certificates to the managed certificates.
+   * 
+   * @param certificates The certifcates to be added.
+   */
   public void addCertificates( final ICaCertificate[] certificates ) {
     boolean changed = false;
     for ( ICaCertificate certificate : certificates ) {
@@ -132,6 +141,12 @@ public class CaCertManager implements IContentChangeNotifier {
     }
   }
   
+  /**
+   * Delete the certificates with the specified ids. The certificates
+   * are removed from the list of certificates and are deleted afterwards. 
+   * 
+   * @param ids The ids of the certificates to be deleted.
+   */
   public void deleteCertificates( final String[] ids ) {
     boolean changed = false;
     for ( String id : ids ) {
