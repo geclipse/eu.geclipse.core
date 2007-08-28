@@ -64,7 +64,7 @@ public class PropertiesFactory implements IPropertiesFactory {
     
     if( sourceObject instanceof IGridConnectionElement ) {
       sourcesList.add( new GridConnectionElementSource( ( IGridConnectionElement ) sourceObject ) );
-    }
+    }    
     
     return sourcesList;
   }

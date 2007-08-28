@@ -19,6 +19,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.geclipse.core.filesystem.GEclipseURI;
+
 
 /**
  * Properties for {@link URI}
@@ -31,7 +33,7 @@ public class URIPropertySource extends AbstractPropertySource<URI> {
    * @param uri - URI for which properties will be displayed
    */
   public URIPropertySource( final URI uri ) {
-    super( uri );
+    super( getRealUri( uri ) );
   }
 
   @Override
@@ -105,12 +107,17 @@ public class URIPropertySource extends AbstractPropertySource<URI> {
       @Override
       public Object getValue( final URI uri )
       {
-        String portString = null;
+        String portString = null;        
         if( uri.getPort() != -1 ) {
           portString = String.valueOf( uri.getScheme() );
         }
         return portString;
       }
     };
+  }
+  
+  static URI getRealUri( final URI uri ) {
+    URI slaveUri = new GEclipseURI( uri ).toSlaveURI();
+    return slaveUri != null ? slaveUri : uri;
   }
 }

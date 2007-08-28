@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.ui.internal.Activator;
@@ -41,9 +42,8 @@ public class GridConnectionElementSource extends AbstractPropertySource<IGridCon
         addChildSource( new FileInfoSource( sourceObject.getConnectionFileInfo() ) );
       }
     } catch ( CoreException cExc ) {
-      // TODO Mariusz: Have a look if the error handling is ok
       Activator.logException( cExc );
-    }
+    }    
   }
 
   @Override
@@ -64,8 +64,26 @@ public class GridConnectionElementSource extends AbstractPropertySource<IGridCon
   static private List<IProperty<IGridConnectionElement>> createProperties() {
     ArrayList<IProperty<IGridConnectionElement>> propertiesList = new ArrayList<IProperty<IGridConnectionElement>>();
     
-    // properties for IGridConnectionElement are developed in child properties
+    propertiesList.add( createPath() );    
 
     return propertiesList;
+  }
+
+  private static IProperty<IGridConnectionElement> createPath() {
+    return new AbstractProperty<IGridConnectionElement>( Messages.getString("GridConnectionElementSource.path"), null, false ) { //$NON-NLS-1$
+
+      @Override
+      public Object getValue( final IGridConnectionElement sourceObject ) {
+        String pathString = null;
+        IPath path = sourceObject.getPath();
+        
+        if( path != null ) {
+          pathString = path.toString();
+        }
+        
+        return pathString;
+      }
+      
+    };
   }  
 }

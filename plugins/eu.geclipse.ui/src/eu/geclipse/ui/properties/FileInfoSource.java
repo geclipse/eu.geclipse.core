@@ -104,12 +104,16 @@ public class FileInfoSource extends AbstractPropertySource<IFileInfo> {
   }
 
   static private IProperty<IFileInfo> createLength() {
-    return new AbstractProperty<IFileInfo>( Messages.getString("FileInfoSource.propLength"), null ) //$NON-NLS-1$
+    return new AbstractProperty<IFileInfo>( Messages.getString("FileInfoSource.propLength"), null, false ) //$NON-NLS-1$
     {
       @Override
       public Object getValue( final IFileInfo fileInfo )
       {
-        String valueString = fileInfo.isDirectory() ? Messages.getString("FileInfoSource.directory") : getBytesFormattedString( fileInfo.getLength() );          //$NON-NLS-1$
+        String valueString = null;
+        
+        if( !fileInfo.isDirectory() ) {
+          valueString = getBytesFormattedString( fileInfo.getLength() );
+        }
         
         return valueString;
       }
@@ -117,16 +121,14 @@ public class FileInfoSource extends AbstractPropertySource<IFileInfo> {
   }
   
   static private IProperty<IFileInfo> createLastModified() {
-    return new AbstractProperty<IFileInfo>( Messages.getString("FileInfoSource.propLastModified"), null ) //$NON-NLS-1$
+    return new AbstractProperty<IFileInfo>( Messages.getString("FileInfoSource.propLastModified"), null, false ) //$NON-NLS-1$
     {
       @Override
       public Object getValue( final IFileInfo fileInfo )
       {
         String valueString = null;
         
-        if( fileInfo.getLastModified() == EFS.NONE ) {
-          valueString = Messages.getString("FileInfoSource.unknown"); //$NON-NLS-1$
-        } else {
+        if( fileInfo.getLastModified() != EFS.NONE ) {          
           Calendar calendar = Calendar.getInstance();
           calendar.setTimeInMillis( fileInfo.getLastModified() );
           valueString = DateFormat.getDateTimeInstance().format( calendar.getTime() );
@@ -168,5 +170,6 @@ public class FileInfoSource extends AbstractPropertySource<IFileInfo> {
         return fileInfo.getStringAttribute( EFS.ATTRIBUTE_LINK_TARGET );
       }
     };
-  } 
+  }
+  
 }
