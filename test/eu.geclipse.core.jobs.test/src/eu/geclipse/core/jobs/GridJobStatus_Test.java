@@ -29,7 +29,7 @@ import org.w3c.dom.Element;
 
 import eu.geclipse.core.model.IGridJobID;
 import eu.geclipse.core.model.IGridJobStatus;
-import eu.geclipse.test.GridTestStub;
+
 
 /**tests the class {@link GridJobStatus}
  * @author tao-j
@@ -47,7 +47,7 @@ public class GridJobStatus_Test {
   public static void setUpBeforeClass() throws Exception {
     DocumentBuilder documentBuilder = DocumentBuilderFactory.newInstance()
     .newDocumentBuilder();
-    String path = GridTestStub.setUpLocalDir() + "jobfolder/.jobID"; //$NON-NLS-1$
+    String path = "d:/geclipsetest/" + "jobfolder/.jobID"; //$NON-NLS-1$ //$NON-NLS-2$
     FileInputStream input = new FileInputStream( path );
     Document document = documentBuilder.parse( input);
     input.close();
