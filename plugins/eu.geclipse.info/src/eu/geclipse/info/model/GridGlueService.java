@@ -13,53 +13,53 @@
  *    Mathias Stuempert - initial API and implementation
  *****************************************************************************/package eu.geclipse.info.model;
 
-import java.net.URI;
-import java.net.URISyntaxException;
+ import java.net.URI;
+ import java.net.URISyntaxException;
 
-import eu.geclipse.core.model.IGridContainer;
-import eu.geclipse.core.model.IGridService;
-import eu.geclipse.info.glue.GlueService;
+ import eu.geclipse.core.model.IGridContainer;
+ import eu.geclipse.core.model.IGridService;
+ import eu.geclipse.info.glue.GlueService;
 
-/**
- * Implementation of the {@link eu.geclipse.core.model.IGridElement}
- * interface for a {@link GlueService}.
- */
-public class GridGlueService
-    extends GridGlueElement
-    implements IGridService {
+ /**
+  * Implementation of the {@link eu.geclipse.core.model.IGridElement}
+  * interface for a {@link GlueService}.
+  */
+ public class GridGlueService
+ extends GridGlueElement
+ implements IGridService {
 
-  /**
-   * Construct a new <code>GridGlueService</code> for the specified
-   * {@link GlueService}.
-   * 
-   * @param parent The parent of this element.
-   * @param glueService The associated glue Service object.
-   */
-  public GridGlueService( final IGridContainer parent,
-                          final GlueService glueService ) {
-    super( parent, glueService );
-  }
-
-
-  @Override
-  public String getName() {
-	  GlueService gs=(GlueService) getGlueElement();
-	  return (gs.endpoint!=null)?gs.endpoint:gs.getID()+" (endpoint missing)";
-  }
+   /**
+    * Construct a new <code>GridGlueService</code> for the specified
+    * {@link GlueService}.
+    * 
+    * @param parent The parent of this element.
+    * @param glueService The associated glue Service object.
+    */
+   public GridGlueService( final IGridContainer parent,
+                           final GlueService glueService ) {
+     super( parent, glueService );
+   }
 
 
-  public URI getURI() {
-	  GlueService gs=(GlueService) getGlueElement();
-	  URI uri=null;
-	  try {
-		  uri=new URI(gs.endpoint);
-	  } catch (URISyntaxException e) {
-		  uri=null;
-	  }
-	  return uri;
-  }
+   @Override
+   public String getName() {
+     GlueService gs=(GlueService) getGlueElement();
+     return (gs.endpoint!=null)?gs.endpoint:gs.getID()+" (endpoint missing)";
+   }
 
-  public GlueService getGlueService(){
-	  return (GlueService)getGlueElement();
-  }
-}
+
+   public URI getURI() {
+     GlueService gs=(GlueService) getGlueElement();
+     URI uri=null;
+     try {
+       uri=new URI(gs.endpoint);
+     } catch (URISyntaxException e) {
+       uri=null;
+     }
+     return uri;
+   }
+
+   public GlueService getGlueService(){
+     return (GlueService)getGlueElement();
+   }
+ }

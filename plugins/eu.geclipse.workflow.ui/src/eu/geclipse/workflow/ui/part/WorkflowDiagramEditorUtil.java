@@ -422,5 +422,5 @@ public class WorkflowDiagramEditorUtil {
       }
       return element2ViewMap;
     }
-  } //LazyElement2ViewMap	
+  } //LazyElement2ViewMap
 }

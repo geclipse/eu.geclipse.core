@@ -2,15 +2,8 @@ package eu.geclipse.info.glue;
 
 import java.util.Date;
 public class GlueBatchQueue extends AbstractGlueTable implements java.io.Serializable{
-  /**
-   * 
-   */
+
   private static final long serialVersionUID = 1L;
-  public GlueIndex glueIndex;
-
-  public String getID(){return QueueName;}
-
-  public void setID(String id){ QueueName=id;}
 
   public GlueHost glueHost; //GlueHostUniqueID
   public String QueueName; //PK
@@ -22,4 +15,13 @@ public class GlueBatchQueue extends AbstractGlueTable implements java.io.Seriali
   public Date MeasurementDate;
   public Date MeasurementTime;
 
+  public GlueIndex glueIndex;
+
+  public String getID() {
+    return QueueName;
+  }
+
+  public void setID( final String id ) {
+    QueueName = id;
+  }
 }

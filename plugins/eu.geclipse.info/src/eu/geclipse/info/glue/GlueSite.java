@@ -2,18 +2,13 @@ package eu.geclipse.info.glue;
 
 import java.util.Date;
 import java.util.ArrayList;
-public class GlueSite extends AbstractGlueTable implements java.io.Serializable{
-  /**
-   * 
-   */
+
+public class GlueSite extends AbstractGlueTable implements java.io.Serializable
+{
+
   private static final long serialVersionUID = 1L;
   public GlueIndex glueIndex;
-
-  public String getID(){return UniqueId;}
-
-  public void setID(String id){ UniqueId=id;}
-
-  public String UniqueId; //PK
+  public String UniqueId; // PK
   public String keyName = "UniqueId";
   public String Name;
   public String Description;
@@ -32,4 +27,11 @@ public class GlueSite extends AbstractGlueTable implements java.io.Serializable{
   public ArrayList<GlueSiteInfo> glueSiteInfoList = new ArrayList<GlueSiteInfo>();
   public ArrayList<GlueSiteSponsor> glueSiteSponsorList = new ArrayList<GlueSiteSponsor>();
 
+  public String getID() {
+    return UniqueId;
+  }
+
+  public void setID( final String id ) {
+    UniqueId = id;
+  }
 }

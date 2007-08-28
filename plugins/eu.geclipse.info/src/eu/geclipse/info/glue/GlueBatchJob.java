@@ -4,17 +4,6 @@ import java.util.Date;
 
 
 public class GlueBatchJob extends AbstractGlueTable implements java.io.Serializable{
-  /**
-   * 
-   */
-  private static final long serialVersionUID = 1L;
-  /* (non-Javadoc)
-   * @see eu.geclipse.info.glue.AbstractGlueTable#getID()
-   */
-  @Override
-  public String getID(){return GlueBatchJobGlobalID;}
-
-  public void setID(String id){ GlueBatchJobGlobalID=id;}
 
   public String GlueBatchJobGlobalID; //PK
   public GlueHost glueHost; //GlueHostUniqueID
@@ -35,5 +24,19 @@ public class GlueBatchJob extends AbstractGlueTable implements java.io.Serializa
   public String VO;
   public Date MeasurementDate;
   public Date MeasurementTime;
+
+  private static final long serialVersionUID = 1L;
+
+  /* (non-Javadoc)
+   * @see eu.geclipse.info.glue.AbstractGlueTable#getID()
+   */
+  @Override
+  public String getID() {
+    return GlueBatchJobGlobalID;
+  }
+
+  public void setID( final String id ) {
+    GlueBatchJobGlobalID = id;
+  }
 
 }

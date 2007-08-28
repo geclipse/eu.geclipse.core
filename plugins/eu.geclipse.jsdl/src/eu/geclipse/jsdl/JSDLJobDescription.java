@@ -1101,7 +1101,7 @@ public class JSDLJobDescription extends ResourceGridContainer
       .removeAll( this.jobDescription.getDataStaging() );
   }
 
-  public void addDataStagingType( DataStagingType data ) {
+  public void addDataStagingType( final DataStagingType data ) {
     this.jobDescription.getDataStaging().add( data );
   }
 }

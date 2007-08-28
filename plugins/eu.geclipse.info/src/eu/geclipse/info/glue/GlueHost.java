@@ -1,20 +1,14 @@
 package eu.geclipse.info.glue;
 
-import java.util.Date;
 import java.util.ArrayList;
-public class GlueHost extends AbstractGlueTable implements java.io.Serializable{
-  /**
-   * 
-   */
+import java.util.Date;
+
+public class GlueHost extends AbstractGlueTable implements java.io.Serializable
+{
+
   private static final long serialVersionUID = 1L;
-  public GlueIndex glueIndex;
-
-  public String getID(){return UniqueID;}
-
-  public void setID(String id){ UniqueID=id;}
-
   public String Name;
-  public String UniqueID; //PK
+  public String UniqueID; // PK
   public String keyName = "UniqueID";
   public Long UpTime;
   public Long FileCounterRegularOpen;
@@ -80,5 +74,13 @@ public class GlueHost extends AbstractGlueTable implements java.io.Serializable{
   public ArrayList<GlueHostProcess> glueHostProcessList = new ArrayList<GlueHostProcess>();
   public ArrayList<GlueHostRole> glueHostRoleList = new ArrayList<GlueHostRole>();
   public ArrayList<GlueVO> glueVOList = new ArrayList<GlueVO>();
+  public GlueIndex glueIndex;
 
+  public String getID() {
+    return UniqueID;
+  }
+
+  public void setID( final String id ) {
+    UniqueID = id;
+  }
 }

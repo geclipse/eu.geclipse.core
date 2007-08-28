@@ -2,21 +2,14 @@ package eu.geclipse.info.glue;
 
 import java.util.Date;
 import java.util.ArrayList;
-public class GlueSA extends AbstractGlueTable implements java.io.Serializable{
-  /**
-   * 
-   */
+
+public class GlueSA extends AbstractGlueTable implements java.io.Serializable {
+
   private static final long serialVersionUID = 1L;
-  public GlueIndex glueIndex;
-
-  public String getID(){return UniqueID;}
-
-  public void setID(String id){ UniqueID=id;}
-
-  private String UniqueID;
+  
   public String keyName = "UniqueID";
   public String Root;
-  public GlueSE glueSE; //GlueSEUniqueID
+  public GlueSE glueSE; // GlueSEUniqueID
   public Long PolicyMaxFileSize;
   public Long PolicyMinFileSize;
   public Long PolicyMaxData;
@@ -32,5 +25,15 @@ public class GlueSA extends AbstractGlueTable implements java.io.Serializable{
   public Date MeasurementDate;
   public Date MeasurementTime;
   public ArrayList<GlueSAAccessControlBaseRule> glueSAAccessControlBaseRuleList = new ArrayList<GlueSAAccessControlBaseRule>();
+  public GlueIndex glueIndex;
 
+  private String UniqueID;
+
+  public String getID() {
+    return UniqueID;
+  }
+
+  public void setID( final String id ) {
+    UniqueID = id;
+  }
 }

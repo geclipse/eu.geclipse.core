@@ -1,19 +1,14 @@
 package eu.geclipse.info.glue;
 
 import java.util.Date;
-public class GlueHostProcess extends AbstractGlueTable implements java.io.Serializable{
-  /**
-   * 
-   */
+
+public class GlueHostProcess extends AbstractGlueTable
+  implements java.io.Serializable
+{
+
   private static final long serialVersionUID = 1L;
-  public GlueIndex glueIndex;
-
-  public String getID(){return Name;}
-
-  public void setID(String id){ Name=id;}
-
-  public GlueHost glueHost; //GlueHostUniqueID
-  public String Name; //PK
+  public GlueHost glueHost; // GlueHostUniqueID
+  public String Name; // PK
   public String Command;
   public Long FirstStarted;
   public Long LastStarted;
@@ -27,5 +22,13 @@ public class GlueHostProcess extends AbstractGlueTable implements java.io.Serial
   public String Status;
   public Date MeasurementDate;
   public Date MeasurementTime;
+  public GlueIndex glueIndex;
 
+  public String getID() {
+    return Name;
+  }
+
+  public void setID( final String id ) {
+    Name = id;
+  }
 }

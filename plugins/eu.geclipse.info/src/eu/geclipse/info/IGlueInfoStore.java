@@ -6,20 +6,17 @@ package eu.geclipse.info;
  * 
  */
 public interface IGlueInfoStore {
-	/**
-	 * @param listener
-	 * @param objectName
-	 */
-    public void addListener(IGlueStoreChangeListerner listener, String objectName);
 
-    public void removeListener(IGlueStoreChangeListerner listener, String resourceTypeName);
-    
-    public void removeAllListeners();
-    
-    public void addStateListener(IGlueStoreStateChangeListerner listener);
+  public void addListener(IGlueStoreChangeListerner listener, String objectName);
 
-    public void removeStateListener(IGlueStoreStateChangeListerner listener);
-    
-    public void removeAllStateListeners();
+  public void removeListener(IGlueStoreChangeListerner listener, String resourceTypeName);
+
+  public void removeAllListeners();
+
+  public void addStateListener(IGlueStoreStateChangeListerner listener);
+
+  public void removeStateListener(IGlueStoreStateChangeListerner listener);
+
+  public void removeAllStateListeners();
     
 }

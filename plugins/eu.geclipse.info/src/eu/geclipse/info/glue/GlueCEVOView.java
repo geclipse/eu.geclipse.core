@@ -2,20 +2,16 @@ package eu.geclipse.info.glue;
 
 import java.util.Date;
 import java.util.ArrayList;
-public class GlueCEVOView extends AbstractGlueTable implements java.io.Serializable{
-  /**
-   * 
-   */
+
+public class GlueCEVOView extends AbstractGlueTable
+  implements java.io.Serializable
+{
+
   private static final long serialVersionUID = 1L;
-  public GlueIndex glueIndex;
-
-  public String getID(){return UniqueID;}
-
-  public void setID(String id){ UniqueID=id;}
-
-  public String UniqueID; //PK
+  
+  public String UniqueID; // PK
   public String keyName = "UniqueID";
-  public GlueCE glueCE; //GlueCEUniqueID
+  public GlueCE glueCE; // GlueCEUniqueID
   public String LocalID;
   public Long RunningJobs;
   public Long WaitingJobs;
@@ -29,6 +25,15 @@ public class GlueCEVOView extends AbstractGlueTable implements java.io.Serializa
   public Long FreeCpus;
   public Date MeasurementDate;
   public Date MeasurementTime;
-  public ArrayList<GlueCEVOViewAccessControlBaseRule> glueCEVOViewAccessControlBaseRuleList = new ArrayList<GlueCEVOViewAccessControlBaseRule>();
+  public ArrayList<GlueCEVOViewAccessControlBaseRule> glueCEVOViewAccessControlBaseRuleList 
+    = new ArrayList<GlueCEVOViewAccessControlBaseRule>();
+  public GlueIndex glueIndex;
 
+  public String getID() {
+    return UniqueID;
+  }
+
+  public void setID( final String id ) {
+    UniqueID = id;
+  }
 }

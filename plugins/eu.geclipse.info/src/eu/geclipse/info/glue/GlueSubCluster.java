@@ -2,21 +2,17 @@ package eu.geclipse.info.glue;
 
 import java.util.Date;
 import java.util.ArrayList;
-public class GlueSubCluster extends AbstractGlueTable implements java.io.Serializable{
-  /**
-   * 
-   */
+
+public class GlueSubCluster extends AbstractGlueTable
+  implements java.io.Serializable
+{
+
   private static final long serialVersionUID = 1L;
   public GlueIndex glueIndex;
-
-  public String getID(){return UniqueID;}
-
-  public void setID(String id){ UniqueID=id;}
-
-  public String UniqueID; //PK
+  public String UniqueID; // PK
   public String keyName = "UniqueID";
   public String Name;
-  public GlueCluster glueCluster; //GlueClusterUniqueID
+  public GlueCluster glueCluster; // GlueClusterUniqueID
   public Long RAMSize;
   public Long RAMAvailable;
   public Long VirtualSize;
@@ -51,4 +47,11 @@ public class GlueSubCluster extends AbstractGlueTable implements java.io.Seriali
   public ArrayList<GlueSubClusterLocation> glueSubClusterLocationList = new ArrayList<GlueSubClusterLocation>();
   public ArrayList<GlueSubClusterSoftwareRunTimeEnvironment> glueSubClusterSoftwareRunTimeEnvironmentList = new ArrayList<GlueSubClusterSoftwareRunTimeEnvironment>();
 
+  public String getID() {
+    return UniqueID;
+  }
+
+  public void setID( final String id ) {
+    UniqueID = id;
+  }
 }

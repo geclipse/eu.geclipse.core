@@ -12,6 +12,7 @@ public abstract class AbstractGlueTable implements Serializable{
 
   protected String key;
   protected String keyName;
+
   public String tableName;
   public boolean byRefOnly=true;
   
@@ -41,32 +42,35 @@ public abstract class AbstractGlueTable implements Serializable{
   public Object setFieldByName( String fieldName, Object value  )
   throws RuntimeException, IllegalAccessException, NoSuchFieldException
   {
-	  Object ret = null;
-	  Object valueToset=value;
-	  Field f;
-	  try{
-		  f=this.getClass().getField( fieldName );
-		  if(f.getGenericType().equals(Integer.class)){
-			  valueToset=new Integer((String)value);
-		  }else if(f.getGenericType().equals(Long.class)){
-			  valueToset=new Long((String)value);
-		  }else if(f.getGenericType().equals(Double.class)){
-			  valueToset=new Double((String)value);
-		  }
-		  f.set( this, valueToset );
-		  ret = this.getClass().getField( fieldName ).get( this );
-	  }catch(NoSuchFieldException nsfe){//check for a list
-		  String listFieldName=fieldName.substring(0,1).toLowerCase()+fieldName.substring(1);
-		  try{
-		    f=this.getClass().getField( listFieldName+"List" ); //$NON-NLS-1$
-		    ArrayList<AbstractGlueTable> list=(ArrayList<AbstractGlueTable>) f.get(this);
-		    String sValue=value.toString();
-		    AbstractGlueTable agt=GlueIndex.getInstance().get(fieldName,sValue,false);
-		    list.add(agt);
-		  }catch(NoSuchFieldException nsfe2){//Ignore this field
-		  }
-	  }
-	  return ret;
+    Object ret = null;
+    Object valueToset = value;
+    Field f;
+    try {
+      f = this.getClass().getField( fieldName );
+      if( f.getGenericType().equals( Integer.class ) ) {
+        valueToset = new Integer( ( String )value );
+      } else if( f.getGenericType().equals( Long.class ) ) {
+        valueToset = new Long( ( String )value );
+      } else if( f.getGenericType().equals( Double.class ) ) {
+        valueToset = new Double( ( String )value );
+      }
+      f.set( this, valueToset );
+      ret = this.getClass().getField( fieldName ).get( this );
+    } catch( NoSuchFieldException nsfe ) {// check for a list
+      String listFieldName = fieldName.substring( 0, 1 ).toLowerCase()
+                             + fieldName.substring( 1 );
+      try {
+        f = this.getClass().getField( listFieldName + "List" ); //$NON-NLS-1$
+        ArrayList<AbstractGlueTable> list = ( ArrayList<AbstractGlueTable> )f.get( this );
+        String sValue = value.toString();
+        AbstractGlueTable agt = GlueIndex.getInstance().get( fieldName,
+                                                             sValue,
+                                                             false );
+        list.add( agt );
+      } catch( NoSuchFieldException nsfe2 ) {//Ignore this field
+      }
+    }
+    return ret;
   }
 
   /**
