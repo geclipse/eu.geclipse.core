@@ -81,12 +81,19 @@ public class GEclipseURI {
         query = new String();
       }
       
-      String uid = host + String.valueOf( port );
+      query += QUERY_SLAVE_SCHEME_TOKEN + QUERY_TOKEN_ASSIGN + uri.getScheme();
       
-      query
-        += QUERY_SLAVE_SCHEME_TOKEN + QUERY_TOKEN_ASSIGN + uri.getScheme()
-         + QUERY_TOKEN_SEPARATOR
-         + QUERY_UID_TOKEN + QUERY_TOKEN_ASSIGN + uid;
+      String uid = new String();
+      if ( ( host != null ) && ( host.length() > 0 ) ) {
+        uid += host;
+      }
+      if ( port != -1 ) {
+        uid += String.valueOf( port );
+      }
+      if ( uid.length() > 0 ) {
+        query += QUERY_TOKEN_SEPARATOR + QUERY_UID_TOKEN + QUERY_TOKEN_ASSIGN + uid;
+      }
+         
       
       try {
         result = new URI( scheme, userInfo, host, port, path, query, fragment );
