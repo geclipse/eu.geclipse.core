@@ -16,7 +16,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
@@ -60,19 +59,15 @@ public class DeploymentTargetTreeContentProvider implements ITreeContentProvider
   }
 
   public boolean hasChildren( final Object element ) {
-    return ( element instanceof IGridContainer ) ? this.getChildren( element ).length > 0 : false;
+    boolean result = false;
+    if ( element instanceof IGridContainer ) {
+      result = ( ( IGridContainer ) element ).hasChildren();
+    }
+    return result;
   }
 
   public Object[] getElements( final Object inputElement ) {
-    IGridElement[] elements = null;
-    if ( inputElement != null && inputElement instanceof IGridContainer ) {
-      try {
-        elements = ( ( IGridContainer ) inputElement ).getChildren( null );
-      } catch( GridModelException e ) {
-        Activator.logException( e );
-      }
-    }
-    return ( elements != null ) ? elements : new Object[0];
+    return ( Object[] )( ( inputElement == null ) ? new Object[0] :  inputElement );
   }
 
   public void dispose() {

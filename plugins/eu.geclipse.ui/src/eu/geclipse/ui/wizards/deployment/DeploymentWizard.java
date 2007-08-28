@@ -36,6 +36,14 @@ import eu.geclipse.ui.internal.Activator;
  * @author Yifan Zhou
  */
 public class DeploymentWizard extends Wizard {
+  
+  public static final String EXT_CLASS = "class"; //$NON-NLS-1$
+  
+  public static final String EXT_NAME = "name"; //$NON-NLS-1$
+  
+  public static final String EXT_ID = "id"; //$NON-NLS-1$
+  
+  public static final String EXT_CATEGORY = "category"; //$NON-NLS-1$
 
   /**
    * The chooser page ( first page ) in deployment wizard.
@@ -109,9 +117,7 @@ public class DeploymentWizard extends Wizard {
       targetList.add( seObject );
     }
     IGridElement[] target = targetList.toArray( new IGridElement[ targetList.size() ] );
-    String tag = this.descriptionPage.getTextOfTag().getText() 
-      + "_"  //$NON-NLS-1$
-      + this.descriptionPage.getTextOfVersion().getText();
+    String tag = this.descriptionPage.getTag();
     IApplicationDeployment appDeployment = this.chooserPage.getExecuteExt();
     DeploymentJob job 
       = new DeploymentJob( Messages.getString( "Deployment.deployment_wizard_job" ),  //$NON-NLS-1$
@@ -135,11 +141,11 @@ public class DeploymentWizard extends Wizard {
   }
 
   protected void initProjects() {
-    List<IGridElement> refProjects = new ArrayList<IGridElement>();
+    List< IGridElement > refProjects = new ArrayList< IGridElement >();
     IGridElement[] allProjects = null;
     IProject[] rProjects = null;
-    this.trueGridProject = ( IGridElement )this.selection.getFirstElement();
-    IProject gProject = ( IProject )this.trueGridProject.getResource();
+    this.trueGridProject = ( IGridElement ) this.selection.getFirstElement();
+    IProject gProject = ( IProject ) this.trueGridProject.getResource();
     try {
       rProjects = gProject.getReferencedProjects();
       allProjects = GridModel.getRoot().getChildren( null );

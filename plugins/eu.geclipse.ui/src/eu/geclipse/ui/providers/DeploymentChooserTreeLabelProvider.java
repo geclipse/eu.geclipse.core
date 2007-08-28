@@ -22,7 +22,8 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.swt.graphics.Image;
-import eu.geclipse.ui.wizards.deployment.Messages;
+
+import eu.geclipse.ui.wizards.deployment.DeploymentWizard;
 import eu.geclipse.ui.internal.Activator;
 
 /**
@@ -47,7 +48,7 @@ public class DeploymentChooserTreeLabelProvider implements ILabelProvider {
     URL urlTypeImage = Activator
       .getDefault().getBundle().getEntry( "icons/deploy16/flag_pink.png" ); //$NON-NLS-1$
     String category = ( ( IConfigurationElement ) element )
-      .getAttribute( Messages.getString( "ConfigurationELement.CATEGORY" ) ); //$NON-NLS-1$
+      .getAttribute( DeploymentWizard.EXT_CATEGORY ); 
     if ( category == null || category.equals( "" ) ) { //$NON-NLS-1$
       this.rootImage = ImageDescriptor.createFromURL( urlRootElementImage ).createImage();
       image = this.rootImage; 
@@ -60,7 +61,7 @@ public class DeploymentChooserTreeLabelProvider implements ILabelProvider {
 
   public String getText( final Object element ) {
     String text = ( ( IConfigurationElement ) element )
-      .getAttribute( Messages.getString( "ConfigurationELement.NAME" ) ); //$NON-NLS-1$
+      .getAttribute( DeploymentWizard.EXT_NAME ); 
     return text;
   }
 

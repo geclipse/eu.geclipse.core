@@ -92,11 +92,11 @@ public class DeploymentChooser extends WizardPage {
         if ( selection != null && !selection.isEmpty() ) {
           IConfigurationElement element = ( IConfigurationElement ) selection.getFirstElement();
           String attribute 
-            = element.getAttribute( Messages.getString( "ConfigurationELement.CATEGORY" ) ); //$NON-NLS-1$
+            = element.getAttribute( DeploymentWizard.EXT_CATEGORY );
           if ( attribute != null && !attribute.equals( "" ) ) { //$NON-NLS-1$
             try {
               Object object 
-                = element.createExecutableExtension( Messages.getString( "ConfigurationELement.CLASS" ) ); //$NON-NLS-1$
+                = element.createExecutableExtension( DeploymentWizard.EXT_CLASS );
               if ( object instanceof IApplicationDeployment ) {
                 setExecuteExt( ( IApplicationDeployment ) object );
               }

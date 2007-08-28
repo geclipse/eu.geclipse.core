@@ -17,12 +17,14 @@ package eu.geclipse.ui.providers;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
-import eu.geclipse.ui.wizards.deployment.Messages;
+
+import eu.geclipse.ui.wizards.deployment.DeploymentWizard;
 
 /**
  * 
@@ -39,9 +41,9 @@ public class DeploymentChooserTreeContentProvider implements ITreeContentProvide
       IConfigurationElement[] configElements = extension.getConfigurationElements();
       for ( IConfigurationElement configElement : configElements ) {
         String category = configElement
-          .getAttribute( Messages.getString( "ConfigurationELement.CATEGORY" ) ); //$NON-NLS-1$
+          .getAttribute( DeploymentWizard.EXT_CATEGORY );
         String id = ( ( IConfigurationElement ) parentElement )
-          .getAttribute( Messages.getString( "ConfigurationELement.ID" ) ); //$NON-NLS-1$
+          .getAttribute( DeploymentWizard.EXT_ID ); 
         if ( category != null && !category.equals( "" ) && category.equals( id ) ) { //$NON-NLS-1$
           elements.add( configElement );
         }
@@ -54,13 +56,13 @@ public class DeploymentChooserTreeContentProvider implements ITreeContentProvide
   public Object getParent( final Object element ) {
     Object parent = null;
     String category = ( ( IConfigurationElement ) element )
-      .getAttribute( Messages.getString( "ConfigurationELement.CATEGORY" ) ); //$NON-NLS-1$
+      .getAttribute( DeploymentWizard.EXT_CATEGORY ); 
     if ( category != null && category != "" ) { //$NON-NLS-1$
       IExtension extension = ( ( IConfigurationElement ) element ).getDeclaringExtension();
       IConfigurationElement[] configElements = extension.getConfigurationElements();
       for ( IConfigurationElement configElement : configElements ) {
         String id = configElement
-          .getAttribute( Messages.getString( "ConfigurationELement.ID" ) ); //$NON-NLS-1$
+          .getAttribute( DeploymentWizard.EXT_ID );
         if ( id.equals( category ) ) {
           parent = configElement;
         }
@@ -71,7 +73,7 @@ public class DeploymentChooserTreeContentProvider implements ITreeContentProvide
 
   public boolean hasChildren( final Object element ) {
     String category = ( ( IConfigurationElement ) element )
-      .getAttribute( Messages.getString( "ConfigurationELement.CATEGORY" ) ); //$NON-NLS-1$
+      .getAttribute( DeploymentWizard.EXT_CATEGORY );
     return ( category == null || category.equals( "" ) ) ? true : false; //$NON-NLS-1$
   }
 
@@ -82,7 +84,7 @@ public class DeploymentChooserTreeContentProvider implements ITreeContentProvide
         IConfigurationElement[] configElements = extension.getConfigurationElements();
         for ( IConfigurationElement configElement : configElements ) {
           String category = configElement
-            .getAttribute( Messages.getString( "ConfigurationELement.CATEGORY" ) ); //$NON-NLS-1$
+            .getAttribute( DeploymentWizard.EXT_CATEGORY ); 
           if ( category == null || category == "" ) { //$NON-NLS-1$
             elements.add( configElement );
           }

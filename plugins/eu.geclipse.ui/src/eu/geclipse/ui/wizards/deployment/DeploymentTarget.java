@@ -15,6 +15,9 @@
 
 package eu.geclipse.ui.wizards.deployment;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
@@ -32,10 +35,12 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 
+import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
-import eu.geclipse.core.model.IGridContainer;
+import eu.geclipse.core.model.IGridComputing;
 import eu.geclipse.core.model.IGridElement;
-import eu.geclipse.core.model.IGridProject;
+import eu.geclipse.core.model.IGridInfoService;
+import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.providers.DeploymentTargetTreeContentProvider;
 import eu.geclipse.ui.providers.GridModelLabelProvider;
@@ -65,8 +70,8 @@ public class DeploymentTarget extends WizardPage {
   public void createControl( final Composite parent ) {
     Composite composite = new Composite( parent, SWT.NONE );
     composite.setLayout( new GridLayout( 1, false ) );
-    Group ceGroup = new Group( composite, SWT.BORDER );
-    GridData gridData = new GridData( GridData.GRAB_HORIZONTAL | GridData.GRAB_VERTICAL | GridData.FILL_BOTH );
+    Group ceGroup = new Group( composite, SWT.NONE );
+    GridData gridData = new GridData( GridData.FILL_BOTH | GridData.GRAB_HORIZONTAL | GridData.GRAB_VERTICAL );
     ceGroup.setText( Messages.getString( "Deployment.deployment_target_ce_group_label" ) ); //$NON-NLS-1$
     ceGroup.setLayoutData( gridData );
     ceGroup.setLayout( new GridLayout( 2, false ) );
@@ -101,9 +106,9 @@ public class DeploymentTarget extends WizardPage {
         updatePageComplete();
       }
     });
-    Group seGroup = new Group( composite, SWT.BORDER );
+    Group seGroup = new Group( composite, SWT.NONE );
     seGroup.setText( Messages.getString( "Deployment.deployment_target_se_group_label" ) ); //$NON-NLS-1$
-    gridData = new GridData( GridData.GRAB_HORIZONTAL | GridData.GRAB_VERTICAL | GridData.FILL_BOTH );
+    gridData = new GridData(GridData.FILL_BOTH | GridData.GRAB_HORIZONTAL | GridData.GRAB_VERTICAL );
     seGroup.setLayoutData( gridData );
     seGroup.setLayout( new GridLayout( 2, false ) );
     this.seTree = new CheckboxTreeViewer( seGroup, SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER );
@@ -117,10 +122,10 @@ public class DeploymentTarget extends WizardPage {
     seSelectAll.addSelectionListener( new SelectionAdapter() {
       @Override
       public void widgetSelected( final SelectionEvent event ) {
-        for ( Object ceElement 
+        for ( Object seElement 
             : ( ( DeploymentTargetTreeContentProvider ) getSETree()
                 .getContentProvider() ).getElements( getSERootElement() ) ) {
-          getSETree().setSubtreeChecked( ceElement, true );
+          getSETree().setSubtreeChecked( seElement, true );
         }
         updatePageComplete();
       }
@@ -159,18 +164,23 @@ public class DeploymentTarget extends WizardPage {
     });
     this.ceTree.addCheckStateListener( new ICheckStateListener() {
       public void checkStateChanged( final CheckStateChangedEvent event ) {
-        if ( getCETree().getChecked( event.getElement() ) ) {
-          getCETree().setSubtreeChecked( event.getElement(), true );
-        } else {
-          getCETree().setSubtreeChecked( event.getElement(), false );
-          ( ( DeploymentSource ) getPreviousPage() ).recursionUnchecked( getCETree(), event.getElement() );
-        }
+//        if ( getCETree().getChecked( event.getElement() ) ) {
+//          getCETree().setSubtreeChecked( event.getElement(), true );
+//        } else {
+//          getCETree().setSubtreeChecked( event.getElement(), false );
+//          ( ( DeploymentSource ) getPreviousPage() ).recursionUnchecked( getCETree(), event.getElement() );
+//        }
         updatePageComplete();
       }
     });
     this.seTree.setContentProvider( new DeploymentTargetTreeContentProvider() );
     this.seTree.setLabelProvider( new GridModelLabelProvider() );
-    this.seTree.setInput( this.getSERootElement() );
+    if ( ( ( DeploymentChooser ) this.getWizard().getStartingPage() )
+        .getExecuteExt().getClass().getName().equals( "eu.geclipse.glite.deployment.JDLBasedApplicationDeployment" ) ) { //$NON-NLS-1$
+      this.seTree.setInput( null );
+    } else {
+      this.seTree.setInput( this.getSERootElement() );
+    }
     this.seTree.setSorter( new ViewerSorter() {
       @Override
       public int compare( final Viewer viewer, final Object e1, final Object e2 ) {
@@ -179,12 +189,12 @@ public class DeploymentTarget extends WizardPage {
     });
     this.seTree.addCheckStateListener( new ICheckStateListener() {
       public void checkStateChanged( final CheckStateChangedEvent event ) {
-        if ( getSETree().getChecked( event.getElement() ) ) {
-          getSETree().setSubtreeChecked( event.getElement(), true );
-        } else {
-          getSETree().setSubtreeChecked( event.getElement(), false );
-          ( ( DeploymentSource ) getPreviousPage() ).recursionUnchecked( getSETree(), event.getElement() );
-        }
+//        if ( getSETree().getChecked( event.getElement() ) ) {
+//          getSETree().setSubtreeChecked( event.getElement(), true );
+//        } else {
+//          getSETree().setSubtreeChecked( event.getElement(), false );
+//          ( ( DeploymentSource ) getPreviousPage() ).recursionUnchecked( getSETree(), event.getElement() );
+//        }
         updatePageComplete();
       }
     });
@@ -229,49 +239,32 @@ public class DeploymentTarget extends WizardPage {
     return this.ceTree;
   }
   
-  protected IGridElement getCERootElement() {
-    IGridElement rootElement = null;
-    IGridElement gridProject = ( ( DeploymentWizard ) this.getWizard() ).getGridProject();
+  protected IGridComputing[] getCERootElement() {
+    IGridComputing[] elements = null;
+    IVirtualOrganization vo = ( ( DeploymentWizard ) this.getWizard() ).getGridProject().getProject().getVO();
     try {
-      IGridElement[] containers = ( ( IGridProject ) gridProject ).getChildren( null );
-      if ( containers != null ) {
-        for ( IGridElement container : containers ) {
-          if ( container.isVirtual() ) {
-            IGridElement[] voContainers = ( ( IGridContainer ) container ).getChildren( null );
-            if ( voContainers != null ) {
-              for ( IGridElement voContainer : voContainers ) {
-                if ( voContainer.getName()
-                    .equals( Messages.getString( "Deployment.deployment_target_computing" ) ) ) { //$NON-NLS-1$
-                    rootElement = voContainer;
-                }
-              }
-            }
-          }
+      IGridInfoService infoService = vo.getInfoService();
+      elements = infoService.fetchComputing( null, vo, null );
+    } catch( GridModelException e ) {
+      Activator.logException( e );
+    }
+    return ( elements == null ) ? null : elements;
+  }
+  
+  protected IGridElement[] getSERootElement() {
+    IGridElement[] allConnections = null;
+    List< IGridElement > connections = new ArrayList< IGridElement >();
+    try {
+      allConnections = GridModel.getConnectionManager().getChildren( null );
+      for ( IGridElement connection : allConnections ) {
+        if ( connection.getProject().equals( ( ( DeploymentWizard ) this.getWizard() ).getGridProject() ) ) {
+          connections.add( connection );
         }
       }
     } catch( GridModelException e ) {
       Activator.logException( e );
     }
-    return rootElement;
-  }
-  
-  protected IGridElement getSERootElement() {
-    IGridElement rootElement = null;
-    IGridElement gridProject = ( ( DeploymentWizard ) this.getWizard() ).getGridProject();
-    try {
-      IGridElement[] containers = ( ( IGridProject ) gridProject ).getChildren( null );
-      if ( containers != null ) {
-        for ( IGridElement container : containers ) {
-          if ( container.getName()
-              .equals( Messages.getString( "Deployment.deployment_target_filesystems" ) ) ) { //$NON-NLS-1$
-            rootElement = container;
-            }
-          }
-        }
-    } catch( GridModelException e ) {
-      Activator.logException( e );
-    }
-    return rootElement;
+    return ( allConnections == null ) ? null : connections.toArray( new IGridElement[ connections.size() ]);  
   }
   
 }

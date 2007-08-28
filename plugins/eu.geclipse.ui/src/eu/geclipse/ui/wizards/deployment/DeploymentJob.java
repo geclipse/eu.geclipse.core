@@ -62,8 +62,12 @@ public class DeploymentJob extends Job {
 
   @Override
   protected IStatus run( final IProgressMonitor monitor ) {
+    IStatus status = Status.OK_STATUS;
     this.appDeployment.deploy( this.source, this.target, this.tag, monitor );
-    return Status.OK_STATUS;
+    if ( monitor.isCanceled() ) status =  Status.CANCEL_STATUS;
+    return status;
   }
+  
+  
   
 }

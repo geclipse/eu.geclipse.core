@@ -69,7 +69,7 @@ public class DeploymentSource extends WizardPage {
     gridData.horizontalAlignment = GridData.BEGINNING;
     descriptionLabel.setLayoutData( gridData );
     this.sourceTree = new CheckboxTreeViewer( composite, SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER );
-    gridData = new GridData( GridData.FILL_BOTH );
+    gridData = new GridData( GridData.FILL_BOTH | GridData.GRAB_HORIZONTAL  | GridData.GRAB_VERTICAL );
     this.sourceTree.getTree().setLayoutData( gridData );
     Composite bComposite = new Composite( composite, SWT.NONE );
     gridData = new GridData();
