@@ -42,7 +42,7 @@ import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
-import eu.geclipse.core.connection.ConnectionManager;
+//import eu.geclipse.core.connection.ConnectionManager;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IConnectionManager;
 import eu.geclipse.core.model.IGridConnectionElement;
