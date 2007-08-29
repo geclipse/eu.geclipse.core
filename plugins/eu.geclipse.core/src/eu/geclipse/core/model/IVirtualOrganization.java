@@ -29,7 +29,7 @@ public interface IVirtualOrganization
   /**
    * Get the info service of this VO.
    * 
-   * @return The info service tha can be queried for VO related
+   * @return The info service that can be queried for VO related
    * information. 
    * @throws GridModelException If an error occures while the service
    * is fetched.
@@ -65,4 +65,9 @@ public interface IVirtualOrganization
    */
   public String getTypeName();
   
+  /**
+   * Returns the id of the wizard which should be used to edit VOs of this type.
+   * @return if of the wizard to edit the VO
+   */
+  public String getWizardId();
 }

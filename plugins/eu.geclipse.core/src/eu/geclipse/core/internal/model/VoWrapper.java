@@ -150,4 +150,10 @@ public class VoWrapper
     }
   }
 
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IVirtualOrganization#getWizardId()
+   */
+  public String getWizardId() {
+    return this.vo.getWizardId();
+  }
 }

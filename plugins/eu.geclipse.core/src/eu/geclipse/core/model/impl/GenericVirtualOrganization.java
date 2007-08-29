@@ -92,4 +92,10 @@ public class GenericVirtualOrganization
     
   }
 
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IVirtualOrganization#getWizardId()
+   */
+  public String getWizardId() {
+    return "eu.geclipse.ui.wizards.GenericVoWizard"; //$NON-NLS-1$
+  }
 }

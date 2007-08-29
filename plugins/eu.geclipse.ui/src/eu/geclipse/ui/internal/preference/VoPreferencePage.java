@@ -421,7 +421,9 @@ public class VoPreferencePage
             Messages.getString("VoPreferencePage.create_new_vo_long"), //$NON-NLS-1$
             Messages.getString("VoPreferencePage.no_vo_providers") ); //$NON-NLS-1$
         page.setInitData( vo );
-        // TODO select vo wizard type by vo type when editing an existing vo
+        if ( vo != null ) {
+          page.setPreselectedId( vo.getWizardId(), true );
+        }
         addPage( page );
       }
       

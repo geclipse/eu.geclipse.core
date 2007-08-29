@@ -83,7 +83,7 @@ public class WizardSelectionListPage extends WizardSelectionPage implements IPag
     
   /**
    * Sets the node of the wizard which should be preselected. If set the
-   * WizardSelectionListPage will be skiped and the first page of the
+   * WizardSelectionListPage will be skipped and the first page of the
    * preselected wizard will be displayed.
    * @param node IWizardNode representing the wizard to be preselected.
    * @param hidePrevPage true if it should not be possible to go back to the
