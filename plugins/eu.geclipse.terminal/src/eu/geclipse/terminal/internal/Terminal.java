@@ -40,6 +40,8 @@ import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.events.MenuAdapter;
 import org.eclipse.swt.events.MenuEvent;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Color;
@@ -141,6 +143,15 @@ public class Terminal extends Canvas implements ISelectionProvider {
       @Override
       public void widgetSelected( final SelectionEvent event ) {
         triggerRedraw();
+      }
+    } );
+    
+    addMouseListener( new MouseAdapter() {
+      @Override
+      public void mouseDown( final MouseEvent event ) {
+        if ( event.button == 2 ) {
+          paste();
+        }
       }
     } );
     
@@ -483,11 +494,11 @@ public class Terminal extends Canvas implements ISelectionProvider {
     return numColsInLine;
   }
   
-  private void triggerRedraw( final int col, final int line, final int cols, final int lines ) {
+  void triggerRedraw( final int col, final int line, final int cols, final int lines ) {
     int fontWidthMult = 1;
     for ( int i = line; i < line + lines
                         && i < this.lineWidthMode.length ; i++ ) {
-      if ( this.lineWidthMode[i] == LineWidthMode.DOUBLE ) {
+      if ( this.lineWidthMode[ i + Terminal.this.historySize ] == LineWidthMode.DOUBLE ) {
         fontWidthMult = 2;
         break;
       }
@@ -1553,6 +1564,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
   private int read() throws IOException {
      int val = this.input.read();
      if ( val == -1 ) this.running = false;
+     this.terminalSelection.clearSelection();
      return val;
   }
 

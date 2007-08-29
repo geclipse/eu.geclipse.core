@@ -25,9 +25,11 @@ import org.eclipse.swt.graphics.Rectangle;
 
 class TerminalPainter implements PaintListener {
   private Terminal terminal;
+  private TerminalSelection selection;
   private Char startChar = null;
   private int startCharLine = 0;
   private int startCharCol = 0;
+  private boolean selected;
   private StringBuilder buffer = new StringBuilder();
   private int numChars = 0;
   private LineHeightMode lineHeight;
@@ -87,7 +89,7 @@ class TerminalPainter implements PaintListener {
     int fontWidth = this.terminal.getFontWidth();
     if ( this.lineWidth == LineWidthMode.DOUBLE ) fontWidth *= 2;
     
-    if ( this.startChar.negative ^ this.terminal.isInReverseScreenMode() ) {
+    if ( this.startChar.negative ^ this.terminal.isInReverseScreenMode() ^ this.selected ) {
       gc.setBackground( this.startChar.fgColor );
       gc.setForeground( this.startChar.bgColor );
     } else {
@@ -148,6 +150,7 @@ class TerminalPainter implements PaintListener {
     this.startChar = ch;
     this.startCharLine = line;
     this.startCharCol = col;
+    this.selected = this.selection.isSelected( line + this.terminal.getScrollbarPosLine(), col );
     this.numChars = 1;
     this.lineHeight = this.lineHeightMode[ line + this.terminal.getScrollbarPosLine() ];
     this.lineWidth = this.lineWidthMode[ line + this.terminal.getScrollbarPosLine() ];
@@ -160,6 +163,7 @@ class TerminalPainter implements PaintListener {
     Char[][] screenBuffer = this.terminal.getScreenBuffer();
     this.lineHeightMode = this.terminal.getLineHeightMode();
     this.lineWidthMode = this.terminal.getLineWidthMode();
+    this.selection = (TerminalSelection) this.terminal.getSelection();
     int numLines = this.terminal.getNumLines();
     int numCols = screenBuffer[0].length;
     int fontHeight = this.terminal.getFontHeigth();
@@ -181,10 +185,12 @@ class TerminalPainter implements PaintListener {
         if ( this.startChar == null ) {
           resetStartChar( ch, line, col );
         } else if ( this.startChar.ch == 0 && ch.ch == 0
-                    && ch.hasSameFormat( this.startChar ) ) {
+                    && ch.hasSameFormat( this.startChar )
+                    && this.selection.isSelected( line + this.terminal.getScrollbarPosLine(), col ) == this.selected ) {
           this.numChars++;
         } else if ( this.startChar.ch != 0 && ch.ch != 0
-                    && ch.hasSameFormat( this.startChar ) ) {
+                    && ch.hasSameFormat( this.startChar )
+                    && this.selection.isSelected( line + this.terminal.getScrollbarPosLine(), col ) == this.selected ) {
           addToStringBuffer( this.buffer, ch );
           this.numChars++;
         } else {

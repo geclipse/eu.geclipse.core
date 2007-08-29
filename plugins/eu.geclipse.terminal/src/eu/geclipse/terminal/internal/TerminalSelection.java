@@ -20,6 +20,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.MouseMoveListener;
+import org.eclipse.swt.widgets.Display;
 
 class TerminalSelection implements ITextSelection, MouseMoveListener, MouseListener {
   private int startRow;
@@ -36,7 +37,16 @@ class TerminalSelection implements ITextSelection, MouseMoveListener, MouseListe
     this.terminal = terminal;
   }
   
-  private void clearSelection( final int row, final int col ) {
+  void clearSelection() {
+    Display.getDefault().syncExec( new Runnable() {
+      public void run() {
+        clearSelection( 0, 0 );
+      }
+    } );
+  }
+
+  void clearSelection( final int row, final int col ) {
+    boolean redraw = !isEmpty();
     this.row1 = row;
     this.col1 = col;
     this.row2 = row;
@@ -45,6 +55,7 @@ class TerminalSelection implements ITextSelection, MouseMoveListener, MouseListe
     this.startCol = col;
     this.endRow = row;
     this.endCol = col;
+    if ( redraw ) this.terminal.redraw();
   }
   
   private void updateSelection( final int row, final int col ) {
@@ -64,11 +75,20 @@ class TerminalSelection implements ITextSelection, MouseMoveListener, MouseListe
   }
 
   private int getColForXPos( final int xPos ) {
-    return xPos / this.terminal.getFontWidth();
+    int col = xPos / this.terminal.getFontWidth();
+    if ( col > this.terminal.getNumCols() ) {
+      col = this.terminal.getNumCols();
+    }
+    return col;
   }
 
   private int getRowForYPos( final int yPos ) {
-    return yPos / this.terminal.getFontHeigth();
+    int scrollbarLine = this.terminal.getScrollbarPosLine();
+    int row = yPos / this.terminal.getFontHeigth() + scrollbarLine;
+    if ( row >= this.terminal.getNumLines() + this.terminal.getHistorySize() ) {
+      row = this.terminal.getNumLines() + this.terminal.getHistorySize() - 1;
+    }
+    return row;
   }
 
   public int getEndLine() {
@@ -90,13 +110,12 @@ class TerminalSelection implements ITextSelection, MouseMoveListener, MouseListe
 
   public String getText() {
     StringBuilder str = new StringBuilder();
-    int scrollbarLine = this.terminal.getScrollbarPosLine();
     Char[][] screenbuffer = this.terminal.getScreenBuffer();
     for( int row = this.startRow; row <= this.endRow; row++ ) {
       for( int col = ( ( row == this.startRow ) ? this.startCol : 0 );
            col < ( ( row == this.endRow ) ? this.endCol : this.terminal.getNumCols() );
            col++ ) {
-        char ch = screenbuffer[ row + scrollbarLine ][ col ].ch;
+        char ch = screenbuffer[ row ][ col ].ch;
         if ( ch != 0 ) str.append( ch );
       }
       if ( row != this.endRow ) str.append( '\n' );
@@ -109,7 +128,26 @@ class TerminalSelection implements ITextSelection, MouseMoveListener, MouseListe
   }
 
   public void mouseDoubleClick( final MouseEvent event ) {
-    // not used
+    int row = getRowForYPos( event.y );
+    int col = getColForXPos( event.x );
+    int selStartCol = col;
+    int selEndCol = col;
+    char ch;
+    do {
+      ch = this.terminal.getScreenBuffer()[ row ][ selStartCol ].ch;
+      selStartCol--;
+    } while( selStartCol >= 0 && ch !=' ' && ch != 0 );
+    selStartCol++;
+    if ( ch ==' ' || ch == 0 ) selStartCol++;
+    do {
+      ch = this.terminal.getScreenBuffer()[ row ][ selEndCol ].ch;
+      selEndCol++;
+    } while( selEndCol < this.terminal.getNumCols() && ch !=' ' && ch != 0 );
+    if ( ch ==' ' || ch == 0 ) selEndCol--;
+    clearSelection( row, selStartCol );
+    updateSelection( row, selEndCol );
+    triggerRedraw( row, selStartCol, row, selEndCol );
+    this.terminal.fireSelectionChanged();    
   }
 
   public void mouseDown( final MouseEvent event ) {
@@ -119,16 +157,48 @@ class TerminalSelection implements ITextSelection, MouseMoveListener, MouseListe
   }
 
   public void mouseUp( final MouseEvent event ) {
-    if ( event.button == 1 ) {
-      // TODO add bounds check for selection
-      updateSelection( getRowForYPos( event.y ), getColForXPos( event.x ) );
-      this.terminal.fireSelectionChanged();
-    }
+//    if ( event.button == 1 ) {
+//      updateSelection( getRowForYPos( event.y ), getColForXPos( event.x ) );
+//      this.terminal.fireSelectionChanged();
+//    }
   }
 
   public void mouseMove( final MouseEvent event ) {
     if ( ( event.stateMask & SWT.BUTTON1 ) != 0 ) {
-      updateSelection( getRowForYPos( event.x ), getRowForYPos( event.y ) );
+      int oldStartRow = this.startRow;
+      int oldStartCol = this.startCol;
+      int oldEndRow = this.endRow;
+      int oldEndCol = this.endCol;
+      updateSelection( getRowForYPos( event.y ), getColForXPos( event.x ) );
+      triggerRedraw( oldStartRow, oldStartCol, this.startRow, this.startCol );
+      triggerRedraw( oldEndRow, oldEndCol, this.endRow, this.endCol );
+      this.terminal.fireSelectionChanged();
     }
+  }
+  
+  private void triggerRedraw( final int oldRow, final int oldCol,
+                              final int newRow, final int newCol ) {
+    int topRow = Math.min( oldRow, newRow );
+    int bottomRow = Math.max( oldRow, newRow );
+    int leftCol = Math.min( oldCol, newCol );
+    int rightCol = Math.max( oldCol, newCol );
+    if ( topRow != bottomRow ) {
+      this.terminal.triggerRedraw( 0,
+                                   topRow - this.terminal.getHistorySize(),
+                                   this.terminal.getNumCols(),
+                                   bottomRow - topRow + 1 );
+    } else if ( leftCol != rightCol ) {
+      this.terminal.triggerRedraw( leftCol,
+                                   topRow - this.terminal.getHistorySize(),
+                                   rightCol - leftCol,
+                                   1 );
+    }
+  }
+  
+  boolean isSelected( final int row, final int col ) {
+    return ( row > this.startRow && row < this.endRow)
+           || ( row == this.startRow && row != this.endRow && col >= this.startCol )
+           || ( row != this.startRow && row == this.endRow && col < this.endCol )
+           || ( row == this.startRow && row == this.endRow && col >= this.startCol && col < this.endCol );
   }
 }
