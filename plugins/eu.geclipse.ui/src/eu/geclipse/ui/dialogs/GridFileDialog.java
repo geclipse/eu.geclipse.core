@@ -181,7 +181,6 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
    */
   @Override
   public boolean close() {
-    IConnectionManager cManager = GridModel.getConnectionManager();
     GridModel.getRoot().removeGridModelListener( this );
     return super.close();
   }
@@ -444,20 +443,8 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
   private void refreshViewer( final IGridElement element ) {
     Display display = this.treeViewer.getControl().getDisplay();
     display.syncExec( new Runnable() {
-
       public void run() {
-        if( element != null ) {
-          if( element instanceof IGridContainer ) {
-            IGridContainer container = ( IGridContainer )element;
-            if( container.isLazy() && container.isDirty() ) {
-              GridFileDialog.this.treeViewer.setChildCount( element, 0 );
-              GridFileDialog.this.treeViewer.setChildCount( element, 1 );
-            }
-          }
-          GridFileDialog.this.treeViewer.refresh( element );
-        } else {
-          GridFileDialog.this.treeViewer.refresh();
-        }
+        GridFileDialog.this.treeViewer.refresh();
       }
     } );
   }
