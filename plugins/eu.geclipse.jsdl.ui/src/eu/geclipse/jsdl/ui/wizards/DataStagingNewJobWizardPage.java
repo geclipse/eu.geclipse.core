@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -40,7 +39,6 @@ import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ImageHyperlink;
 
-import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.jsdl.JSDLModelFacade;
 import eu.geclipse.jsdl.model.DataStagingType;
 import eu.geclipse.jsdl.model.SourceTargetType;
@@ -86,7 +84,8 @@ public class DataStagingNewJobWizardPage extends WizardPage {
     // Data stage in group
     inFilesGroup.setText( "Stage in" ); //$NON-NLS-1$
     inFilesGroup.setLayout( new GridLayout( 1, false ) );
-    gridData = new GridData( GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL);
+    gridData = new GridData( GridData.FILL_HORIZONTAL
+                             | GridData.GRAB_HORIZONTAL );
     gridData.grabExcessHorizontalSpace = true;
     inFilesGroup.setLayoutData( gridData );
     FormToolkit toolkit = new FormToolkit( inFilesGroup.getDisplay() );
@@ -95,12 +94,13 @@ public class DataStagingNewJobWizardPage extends WizardPage {
     inForm.getBody().setLayout( new GridLayout( 2, false ) );
     Label inDescription = new Label( inForm.getBody(), SWT.NONE );
     inDescription.setLayoutData( gridData );
-    inDescription.setText( "Files copied to computing element before execution of the job" );
+    inDescription.setText( Messages.getString( "DataStagingNewJobWizardPage.data_staging_in_description" ) ); //$NON-NLS-1$
     ImageHyperlink link = toolkit.createImageHyperlink( inForm.getBody(),
                                                         SWT.WRAP );
-    link.setImage( Activator.getDefault().getImageRegistry().get( "helplink" ) );
+    link.setImage( Activator.getDefault().getImageRegistry().get( "helplink" ) ); //$NON-NLS-1$
     link.addHyperlinkListener( new HyperlinkAdapter() {
 
+      @Override
       public void linkActivated( final HyperlinkEvent e ) {
         DataStagingNewJobWizardPage.this.performHelp();
       }
@@ -110,26 +110,26 @@ public class DataStagingNewJobWizardPage extends WizardPage {
                                              DataStageInTable.BUTTONS_BOTTOM );
     // Data stage out group
     Group outFilesGroup = new Group( mainComp, SWT.NONE );
-    outFilesGroup.setText( "Stage out" );
+    outFilesGroup.setText( Messages.getString( "DataStagingNewJobWizardPage.stage_out_title" ) ); //$NON-NLS-1$
     outFilesGroup.setLayout( new GridLayout( 1, false ) );
-    gridData = new GridData( GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL );
+    gridData = new GridData( GridData.FILL_HORIZONTAL
+                             | GridData.GRAB_HORIZONTAL );
     gridData.grabExcessHorizontalSpace = true;
     outFilesGroup.setLayoutData( gridData );
     Form outForm = toolkit.createForm( outFilesGroup );
     outForm.getBody().setLayout( new GridLayout( 2, false ) );
     Label outDescription = new Label( outForm.getBody(), SWT.NONE );
     outDescription.setLayoutData( gridData );
-    outDescription.setText( "Files copied from computing element after execution of the job" );
+    outDescription.setText( Messages.getString( "DataStagingNewJobWizardPage.data_staging_out_description" ) ); //$NON-NLS-1$
     ImageHyperlink link1 = toolkit.createImageHyperlink( outForm.getBody(),
                                                          SWT.WRAP );
-    link1.setImage( Activator.getDefault().getImageRegistry().get( "helplink" ) );
+    link1.setImage( Activator.getDefault().getImageRegistry().get( "helplink" ) ); //$NON-NLS-1$
     this.copyToTab = new DataStageOutTable( outFilesGroup,
                                             this.initialStagingOut,
                                             DataStageOutTable.BUTTONS_BOTTOM );
     this.isCreated = true;
     setControl( mainComp );
   }
-
   // public void createControl( final Composite parent ) {
   // Composite mainComp = new Composite( parent, SWT.NONE );
   // mainComp.setLayout( new GridLayout( 1, false ) );
@@ -247,25 +247,27 @@ public class DataStagingNewJobWizardPage extends WizardPage {
   // this.isCreated = true;
   // setControl( mainComp );
   // }
-  private String getSelectedElementDisplayName( IGridConnectionElement element )
-  {
-    String result = element.getName();
-    try {
-      if( element.getConnectionFileStore()
-        .getFileSystem()
-        .getScheme()
-        .equalsIgnoreCase( "file" ) )
-      {
-        result = "file://" + result;
-      }
-    } catch( CoreException coreExc ) {
-      Activator.logException( coreExc );
-    }
-    return result;
-  }
+  // private String getSelectedElementDisplayName( IGridConnectionElement
+  // element )
+  // {
+  // String result = element.getName();
+  // try {
+  // if( element.getConnectionFileStore()
+  // .getFileSystem()
+  // .getScheme()
+  // .equalsIgnoreCase( "file" ) )
+  // {
+  // result = "file://" + result;
+  // }
+  // } catch( CoreException coreExc ) {
+  // Activator.logException( coreExc );
+  // }
+  // return result;
+  // }
   protected class StageOutContentProvider implements IStructuredContentProvider
   {
 
+    @SuppressWarnings("unchecked")
     public Object[] getElements( final Object inputElement ) {
       DataStaging[] elements = new DataStaging[ 0 ];
       elements = ( DataStaging[] )( ( List )inputElement ).toArray( elements );
@@ -414,7 +416,14 @@ public class DataStagingNewJobWizardPage extends WizardPage {
     }
   }
 
-  public void setInitialStagingOut( Map<String, String> initialOut ) {
+  /**
+   * Method to set initial contents of table holding DataStagingOut files, when
+   * only their name and location are given (as a Strings).
+   * 
+   * @param initialOut map of DataStagingOut files' data with their names as a
+   *            keys and locations as a values
+   */
+  public void setInitialStagingOut( final Map<String, String> initialOut ) {
     this.initialStagingOut = new ArrayList<DataStagingType>();
     if( initialOut != null ) {
       for( String name : initialOut.keySet() ) {
@@ -436,15 +445,22 @@ public class DataStagingNewJobWizardPage extends WizardPage {
     }
   }
 
-  public void setInitialStagingIn( Map<String, String> initialOut ) {
+  /**
+   * Method to set initial contents of table holding DataStagingIn files, when
+   * only their name and location are given (as a Strings).
+   * 
+   * @param initialIn map of DataStagingOut files' data with their names as a
+   *            keys and locations as a values
+   */
+  public void setInitialStagingIn( final Map<String, String> initialIn ) {
     this.initialStagingIn = new ArrayList<DataStagingType>();
-    if( initialOut != null ) {
-      for( String name : initialOut.keySet() ) {
+    if( initialIn != null ) {
+      for( String name : initialIn.keySet() ) {
         try {
           DataStagingType newData = JSDLModelFacade.getDataStagingType();
           newData.setFileName( name );
           SourceTargetType sourceDataOut = JSDLModelFacade.getSourceTargetType();
-          sourceDataOut.setURI( initialOut.get( name ) );
+          sourceDataOut.setURI( initialIn.get( name ) );
           newData.setSource( sourceDataOut );
           this.initialStagingIn.add( newData );
         } catch( Exception e ) {
@@ -463,14 +479,22 @@ public class DataStagingNewJobWizardPage extends WizardPage {
     return super.getPreviousPage();
   }
 
-  public void setInitialStagingInModel( List<DataStagingType> files ) {
+  /**
+   * Setter method for a field holding initial contents of table with DataStagingInFiles
+   * @param files list of {@link DataStagingType} objects
+   */
+  public void setInitialStagingInModel( final List<DataStagingType> files ) {
     this.initialStagingIn = files;
     if( this.copyFromTab != null ) {
       this.copyFromTab.updateInput( this.initialStagingIn );
     }
   }
 
-  public void setInitialStagingOutModel( List<DataStagingType> files ) {
+  /**
+   * Setter method for a field holding initial contents of table with DataStagingOutFiles
+   * @param files list of {@link DataStagingType} objects
+   */
+  public void setInitialStagingOutModel( final List<DataStagingType> files ) {
     this.initialStagingOut = files;
     if( this.copyToTab != null ) {
       this.copyToTab.updateInput( this.initialStagingOut );

@@ -184,11 +184,11 @@ public class NewJobWizard extends Wizard implements INewWizard {
       }
     }
     jsdl.addJobIdentification( this.executablePage.getApplicationName(), null );
-    String appName = "";
+    String appName1 = ""; //$NON-NLS-1$
     if( this.executablePage.getApplicationName().equals( "" ) ) { //$NON-NLS-1$
-      appName = "example_name";
+      appName1 = "example_name"; //$NON-NLS-1$
     } else {
-      appName = this.executablePage.getApplicationName();
+      appName1 = this.executablePage.getApplicationName();
     }
     jsdl.addApplication();
     String in = null;
@@ -218,15 +218,15 @@ public class NewJobWizard extends Wizard implements INewWizard {
         try {
           URI test = new URI( execName );
           if( test.getScheme() != null ) {
-            jsdl.setInDataStaging( "run_command", execName );
-            execName = "run_command";
+            jsdl.setInDataStaging( "run_command", execName ); //$NON-NLS-1$
+            execName = "run_command"; //$NON-NLS-1$
           }
         } catch( URISyntaxException e ) {
           // TODO Auto-generated catch block
           e.printStackTrace();
         }
 //      }
-      jsdl.addPOSIXApplicationDetails( appName,
+      jsdl.addPOSIXApplicationDetails( appName1,
                                        execName,
                                        in,
                                        inName,
@@ -367,7 +367,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
         result = false;
       }
       if( !getFilePath().toString().endsWith( ".jsdl" ) ) { //$NON-NLS-1$
-        setErrorMessage( "File must have \"jsdl\" extension" );
+        setErrorMessage( "File must have \"jsdl\" extension" ); 
         result = false;
       }
       return result;

@@ -64,7 +64,6 @@ import eu.geclipse.jsdl.ui.wizards.nodes.SpecificWizardPart;
 import eu.geclipse.jsdl.ui.wizards.specific.ApplicationSpecificPage;
 import eu.geclipse.jsdl.ui.wizards.specific.IApplicationSpecificPage;
 import eu.geclipse.ui.dialogs.GridFileDialog;
-import eu.geclipse.ui.dialogs.NewProblemDialog;
 import eu.geclipse.ui.widgets.StoredCombo;
 
 /**
@@ -151,7 +150,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
         // .getLocation();
         // workspacePath = workspacePath.append( ".tempJSDL.jsdl" );
         IPath workspacePath = ( ( NewJobWizard )this.getWizard() ).getProject();
-        workspacePath = workspacePath.append( ".tempJSDL.jsdl" );
+        workspacePath = workspacePath.append( ".tempJSDL.jsdl" ); //$NON-NLS-1$
         IFile newFileHandle = ResourcesPlugin.getWorkspace()
           .getRoot()
           .getFile( workspacePath );
@@ -239,18 +238,17 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
                            | GridData.GRAB_HORIZONTAL
                            | GridData.VERTICAL_ALIGN_CENTER );
     this.executableFile.setLayoutData( layout );
-    
-    this.executableFile.addModifyListener( new ModifyListener(){
+    this.executableFile.addModifyListener( new ModifyListener() {
 
-      public void modifyText( ModifyEvent e ) {
-        if (executableFile.getText().equals( "" )){
+      public void modifyText( final ModifyEvent event ) {
+        if( ExecutableNewJobWizardPage.this.executableFile.getText()
+          .equals( "" ) ) { //$NON-NLS-1$
           setStdFilesGroupEnabled( false );
         } else {
           setStdFilesGroupEnabled( true );
         }
       }
-      
-    });
+    } );
     // Button - browsing for executable file
     this.gridFileDialogButton = new Button( mainComp, SWT.PUSH );
     this.gridFileDialogButton.setImage( fileImage );
@@ -263,7 +261,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       @Override
       public void widgetSelected( final SelectionEvent e ) {
         IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
-                                                                           "Choose remote or local file",
+                                                                           Messages.getString("ExecutableNewJobWizardPage.grid_file_dialog_title"), //$NON-NLS-1$
                                                                            null,
                                                                            true );
         if( connection != null ) {
@@ -276,7 +274,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     } );
     // Label - arguments list
     Label argumentsLabel = new Label( mainComp, SWT.LEAD );
-    argumentsLabel.setText( "Arguments line" );
+    argumentsLabel.setText( Messages.getString("ExecutableNewJobWizardPage.arguments_line_label") ); //$NON-NLS-1$
     layout = new GridData();
     argumentsLabel.setLayoutData( layout );
     // Text - arguments list
@@ -285,28 +283,28 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     layout.horizontalSpan = 2;
     this.argumentsLine.setLayoutData( layout );
     // Group - std files group
-    stdFilesGroup = new Group( mainComp, SWT.NONE );
-    stdFilesGroup.setText( Messages.getString( "ExecutableNewJobWizardPage.composite_group_title" ) ); //$NON-NLS-1$
-    stdFilesGroup.setLayout( new GridLayout( 3, false ) );
+    this.stdFilesGroup = new Group( mainComp, SWT.NONE );
+    this.stdFilesGroup.setText( Messages.getString( "ExecutableNewJobWizardPage.composite_group_title" ) ); //$NON-NLS-1$
+    this.stdFilesGroup.setLayout( new GridLayout( 3, false ) );
     layout = new GridData( GridData.FILL_HORIZONTAL );
     layout.grabExcessHorizontalSpace = true;
     layout.horizontalSpan = 3;
-    stdFilesGroup.setLayoutData( layout );
+    this.stdFilesGroup.setLayoutData( layout );
     // Label - stdin file
-    Label stdinLabel = new Label( stdFilesGroup, SWT.LEAD );
+    Label stdinLabel = new Label( this.stdFilesGroup, SWT.LEAD );
     layout = new GridData( GridData.VERTICAL_ALIGN_CENTER
                            | GridData.HORIZONTAL_ALIGN_BEGINNING );
     stdinLabel.setLayoutData( layout );
     stdinLabel.setText( Messages.getString( "FilesInputNewJobWizardPage.stdin_label" ) ); //$NON-NLS-1$
     // Text - stdin file
-    this.stdin = new Text( stdFilesGroup, SWT.NONE | SWT.BORDER );
+    this.stdin = new Text( this.stdFilesGroup, SWT.NONE | SWT.BORDER );
     layout = new GridData( GridData.FILL_HORIZONTAL
                            | GridData.GRAB_HORIZONTAL
                            | GridData.VERTICAL_ALIGN_CENTER
                            | GridData.HORIZONTAL_ALIGN_CENTER );
     this.stdin.setLayoutData( layout );
     // Button - browsing for stdin file
-    this.chooseButton = new Button( stdFilesGroup, SWT.PUSH );
+    this.chooseButton = new Button( this.stdFilesGroup, SWT.PUSH );
     this.chooseButton.setImage( fileImage );
     layout = new GridData( GridData.HORIZONTAL_ALIGN_FILL
                            | GridData.VERTICAL_ALIGN_FILL
@@ -317,7 +315,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       @Override
       public void widgetSelected( final SelectionEvent e ) {
         IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
-                                                                           "Choose a file",
+                                                                           Messages.getString("ExecutableNewJobWizardPage.grid_file_dialog_title"), //$NON-NLS-1$
                                                                            null,
                                                                            true );
         if( connection != null ) {
@@ -329,33 +327,33 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       }
     } );
     // Label - stdout file
-    Label stdoutLabel = new Label( stdFilesGroup, SWT.NONE );
+    Label stdoutLabel = new Label( this.stdFilesGroup, SWT.NONE );
     layout = new GridData( GridData.VERTICAL_ALIGN_CENTER
                            | GridData.HORIZONTAL_ALIGN_BEGINNING );
     stdoutLabel.setLayoutData( layout );
     stdoutLabel.setText( Messages.getString( "FilesInputNewJobWizardPage.stdout_label" ) ); //$NON-NLS-1$
     // Text - stdout file
-    this.stdout = new Text( stdFilesGroup, SWT.NONE | SWT.BORDER );
+    this.stdout = new Text( this.stdFilesGroup, SWT.NONE | SWT.BORDER );
     layout = new GridData( GridData.FILL_HORIZONTAL
                            | GridData.GRAB_HORIZONTAL
                            | GridData.VERTICAL_ALIGN_CENTER
                            | GridData.HORIZONTAL_ALIGN_CENTER );
     this.stdout.setLayoutData( layout );
     // Button - browsing for stdout files (only remote)
-    outButton = new Button( stdFilesGroup, SWT.PUSH );
-    outButton.setImage( fileImage );
+    this.outButton = new Button( this.stdFilesGroup, SWT.PUSH );
+    this.outButton.setImage( fileImage );
     layout = new GridData( GridData.HORIZONTAL_ALIGN_FILL
                            | GridData.VERTICAL_ALIGN_FILL
                            | GridData.VERTICAL_ALIGN_CENTER );
-    outButton.setLayoutData( layout );
-    outButton.addSelectionListener( new SelectionAdapter() {
+    this.outButton.setLayoutData( layout );
+    this.outButton.addSelectionListener( new SelectionAdapter() {
 
       @Override
       public void widgetSelected( final SelectionEvent e ) {
         IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
-                                                                           "Choose remote file",
+                                                                           Messages.getString("ExecutableNewJobWizardPage.grid_file_dialog_title"), //$NON-NLS-1$
                                                                            null,
-                                                                           false );
+                                                                           true );
         if( connection != null ) {
           String filename = getSelectedElementDisplayName( connection );
           if( filename != null ) {
@@ -365,33 +363,33 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       }
     } );
     // Label - stderr file
-    Label stderrLabel = new Label( stdFilesGroup, SWT.NONE );
+    Label stderrLabel = new Label( this.stdFilesGroup, SWT.NONE );
     layout = new GridData( GridData.VERTICAL_ALIGN_CENTER
                            | GridData.HORIZONTAL_ALIGN_BEGINNING );
     stderrLabel.setLayoutData( layout );
     stderrLabel.setText( Messages.getString( "FilesInputNewJobWizardPage.stderr_label" ) ); //$NON-NLS-1$
     // Text - stderr file (only remote)
-    this.stderr = new Text( stdFilesGroup, SWT.NONE | SWT.BORDER );
+    this.stderr = new Text( this.stdFilesGroup, SWT.NONE | SWT.BORDER );
     layout = new GridData( GridData.VERTICAL_ALIGN_CENTER
                            | GridData.HORIZONTAL_ALIGN_CENTER
                            | GridData.GRAB_HORIZONTAL
                            | GridData.FILL_HORIZONTAL );
     this.stderr.setLayoutData( layout );
     // Button - browsing for stderr file (only remote)
-    errButton = new Button( stdFilesGroup, SWT.PUSH );
-    errButton.setImage( fileImage );
+    this.errButton = new Button( this.stdFilesGroup, SWT.PUSH );
+    this.errButton.setImage( fileImage );
     layout = new GridData( GridData.HORIZONTAL_ALIGN_FILL
                            | GridData.VERTICAL_ALIGN_FILL
                            | GridData.VERTICAL_ALIGN_CENTER );
-    errButton.setLayoutData( layout );
-    errButton.addSelectionListener( new SelectionAdapter() {
+    this.errButton.setLayoutData( layout );
+    this.errButton.addSelectionListener( new SelectionAdapter() {
 
       @Override
       public void widgetSelected( final SelectionEvent e ) {
         IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
-                                                                           "Choose remote file",
+                                                                           Messages.getString("ExecutableNewJobWizardPage.grid_file_dialog_title"), //$NON-NLS-1$
                                                                            null,
-                                                                           false );
+                                                                           true );
         if( connection != null ) {
           String filename = getSelectedElementDisplayName( connection );
           if( filename != null ) {
@@ -408,8 +406,8 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     setStdFilesGroupEnabled( false );
     setControl( mainComp );
   }
-  
-  private void setStdFilesGroupEnabled(boolean enabled){
+
+  void setStdFilesGroupEnabled( final boolean enabled ) {
     this.stdin.setEnabled( enabled );
     this.chooseButton.setEnabled( enabled );
     this.stdout.setEnabled( enabled );
@@ -418,17 +416,16 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     this.errButton.setEnabled( enabled );
   }
 
-  private String getSelectedElementDisplayName( final IGridConnectionElement element )
-  {
-    String result = "";
+  String getSelectedElementDisplayName( final IGridConnectionElement element ) {
+    String result = ""; //$NON-NLS-1$
     result = element.getURI().toString();
     try {
       if( element.getConnectionFileStore()
         .getFileSystem()
         .getScheme()
-        .equalsIgnoreCase( "file" ) )
+        .equalsIgnoreCase( "file" ) ) //$NON-NLS-1$
       {
-        result = "file://" + result;
+        result = "file://" + result; //$NON-NLS-1$
       }
     } catch( CoreException coreExc ) {
       Activator.logException( coreExc );
@@ -478,7 +475,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       Path path = new Path( pathA.toFile().getPath() );
       try {
         setSelectedNode( new SpecificWizardPart( this.basicNode,
-                                                 this.getWizard(),
+        // this.getWizard(),
                                                  path ) );
         this.executableFile.setText( ApplicationSpecificRegistry.getInstance()
           .getApplicationData( appId )
@@ -493,34 +490,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
         // TODO Auto-generated catch block
         e1.printStackTrace();
       }
-    }
-    // if( this.appsWithExtraAttributes.values()
-    // .contains( this.applicationName.getText() ) )
-    // {
-    // try {
-    // for( String bundleId : this.appsWithExtraAttributes.keySet() ) {
-    // if( this.appsWithExtraAttributes.get( bundleId )
-    // .equals( this.applicationName.getText() ) )
-    // {
-    // Path path = Extensions.getXMLPath( bundleId );
-    // setSelectedNode( new SpecificWizardPart( this.basicNode,
-    // this.getWizard(),
-    // path ) );
-    // this.executableFile.setText( Extensions.getJSDLExtensionExecutable(
-    // bundleId ) );
-    // }
-    // }
-    // } catch( SAXException e1 ) {
-    // // TODO Auto-generated catch block
-    // e1.printStackTrace();
-    // } catch( ParserConfigurationException e1 ) {
-    // // TODO Auto-generated catch block
-    // e1.printStackTrace();
-    // } catch( IOException e1 ) {
-    // // TODO Auto-generated catch block
-    // e1.printStackTrace();
-    // }
-    else {
+    } else {
       setSelectedNode( this.basicNode );
     }
   }
@@ -578,9 +548,14 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     return this.stdout.getText();
   }
 
+  /**
+   * Method to access job's arguments given by user.
+   * 
+   * @return list of arguments
+   */
   public ArrayList<String> getArgumentsList() {
     ArrayList<String> result = new ArrayList<String>();
-    String[] table = this.argumentsLine.getText().split( " " );
+    String[] table = this.argumentsLine.getText().split( " " ); //$NON-NLS-1$
     for( String tableElement : table ) {
       result.add( tableElement );
     }
@@ -605,7 +580,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
         .getJsdlPath();
       if( path != null && !path.toOSString().equals( "" ) ) { //$NON-NLS-1$
         IPath workspacePath = ( ( NewJobWizard )this.getWizard() ).getProject();
-        workspacePath = workspacePath.append( ".tempJSDL.jsdl" );
+        workspacePath = workspacePath.append( ".tempJSDL.jsdl" ); //$NON-NLS-1$
         IFile newFileHandle = ResourcesPlugin.getWorkspace()
           .getRoot()
           .getFile( workspacePath );
@@ -637,6 +612,9 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     return this.basicJSDL;
   }
 
+  /**
+   * Updates buttons as a reaction to changes in page's fields content.
+   */
   public void updateButtons() {
     this.getContainer().updateButtons();
   }

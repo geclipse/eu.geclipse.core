@@ -16,9 +16,6 @@
  *****************************************************************************/
 package eu.geclipse.jsdl.ui.widgets;
 
-import java.net.MalformedURLException;
-
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
