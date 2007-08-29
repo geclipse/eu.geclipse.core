@@ -56,9 +56,9 @@ public class DataStagingOutDialog extends Dialog {
    * Creation Flag Delete On Termination
    */
   public static final int ADVANCED_DIALOG = 1;
+  protected Text nameText;
   protected Text pathText;
-  private int dialogStyle;
-  private Text nameText;
+  private int dialogStyle; 
   private String returnName;
   private String returnPath;
   private String initName;
@@ -179,10 +179,10 @@ public class DataStagingOutDialog extends Dialog {
           filename = connection.getURI().toString();
           if( filename != null ) {
             DataStagingOutDialog.this.pathText.setText( filename );
-            if (nameText.getText().equals( "" )){
-              String nameToSet = "";
-              nameToSet = filename.substring( filename.lastIndexOf( "/" ) + 1, filename.length() - 1);
-              nameText.setText( nameToSet );
+            if (DataStagingOutDialog.this.nameText.getText().equals( "" )){ //$NON-NLS-1$
+              String nameToSet = ""; //$NON-NLS-1$
+              nameToSet = filename.substring( filename.lastIndexOf( "/" ) + 1, filename.length() ); //$NON-NLS-1$
+              DataStagingOutDialog.this.nameText.setText( nameToSet );
             }
           }
         }
