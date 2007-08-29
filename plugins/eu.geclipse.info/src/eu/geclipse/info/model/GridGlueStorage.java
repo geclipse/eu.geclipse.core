@@ -17,12 +17,9 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
+
 import eu.geclipse.core.model.IGridContainer;
-import eu.geclipse.core.model.IGridResource;
 import eu.geclipse.core.model.IGridStorage;
-import eu.geclipse.core.model.IVirtualOrganization;
-import eu.geclipse.core.model.IVoManager;
-import eu.geclipse.core.model.impl.AbstractGridContainer;
 import eu.geclipse.info.glue.GlueQuery;
 import eu.geclipse.info.glue.GlueSA;
 import eu.geclipse.info.glue.GlueSE;
@@ -72,8 +69,10 @@ public class GridGlueStorage
               }else{
                 scheme=ap.Type;
               }
+              
+              String newPath =  sa.Path.endsWith( "/" ) ? sa.Path : sa.Path + "/";
               uriList.add(new URI( scheme, null, host, 
-                                   ap.Port.intValue(), sa.Path,
+                                   ap.Port.intValue(), newPath,
                                    null, null ));
             }
           }        
