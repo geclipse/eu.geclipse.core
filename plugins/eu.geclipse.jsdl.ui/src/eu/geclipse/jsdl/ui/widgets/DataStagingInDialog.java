@@ -58,10 +58,9 @@ public class DataStagingInDialog extends Dialog {
   public static final int ADVANCED_DIALOG = 1;
   protected Combo creationFlagCombo;
   protected Combo deleteOnTerminationCombo;
-  protected Text nameText;
   protected Text pathText;
   private int dialogStyle;
-  
+  private Text nameText;
   private String returnName;
   private String returnPath;
   private String initCreationFlag;
@@ -168,10 +167,10 @@ public class DataStagingInDialog extends Dialog {
           filename = connection.getURI().toString();
           if( filename != null ) {
             DataStagingInDialog.this.pathText.setText( filename );
-            if (DataStagingInDialog.this.nameText.getText().equals( "" )){ //$NON-NLS-1$
-              String nameToSet = ""; //$NON-NLS-1$
-              nameToSet = filename.substring( filename.lastIndexOf( "/" ) + 1, filename.length()); //$NON-NLS-1$
-              DataStagingInDialog.this.nameText.setText( nameToSet );
+            if (nameText.getText().equals( "" )){
+              String nameToSet = "";
+              nameToSet = filename.substring( filename.lastIndexOf( "/" ) + 1, filename.length());
+              nameText.setText( nameToSet );
             }
           }
         }
