@@ -155,11 +155,10 @@ public class NewJobWizard extends Wizard implements INewWizard {
     if( getContainer().getCurrentPage() != this.outputFilesPage ) {
       JSDLJobDescription tempJSDL = this.executablePage.getBasicJSDL();
       String tempAppName = this.executablePage.getApplicationName();
-      if( ! tempAppName.equals( this.appName ) ) {
-//        this.basicJSDL = this.executablePage.getBasicJSDL();
+      if( !tempAppName.equals( this.appName ) ) {
+        // this.basicJSDL = this.executablePage.getBasicJSDL();
         updateBasicJSDL( tempJSDL, tempAppName );
         if( this.basicJSDL != null ) {
-          
           jsdl.setRoot( this.basicJSDL.getRoot() );
         } else {
           jsdl.createRoot();
@@ -209,23 +208,19 @@ public class NewJobWizard extends Wizard implements INewWizard {
     }
     String execName = this.executablePage.getExecutableFile();
     if( !execName.equals( "" ) ) { //$NON-NLS-1$
-      // checking if exec is local
-//      if( execName.startsWith( "file" ) ) { //$NON-NLS-1$ //$NON-NLS-2$
-//        // exec is local
-//        jsdl.setInDataStaging( "run_command", execName );
-//        execName = "run_command";
-//      } else {
-        try {
-          URI test = new URI( execName );
-          if( test.getScheme() != null ) {
-            jsdl.setInDataStaging( "run_command", execName ); //$NON-NLS-1$
-            execName = "run_command"; //$NON-NLS-1$
-          }
-        } catch( URISyntaxException e ) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
+      try {
+        URI test = new URI( execName );
+        if( test.getScheme() != null ) {
+          String execNameTemp = test.toString().substring( test.toString()
+                                                  .lastIndexOf( "/" ) + 1,
+                                                test.toString().length() );
+          jsdl.setInDataStaging( execNameTemp, execName ); //$NON-NLS-1$
+          execName = execNameTemp;
         }
-//      }
+      } catch( URISyntaxException e ) {
+        // TODO katis
+        e.printStackTrace();
+      }
       jsdl.addPOSIXApplicationDetails( appName1,
                                        execName,
                                        in,
@@ -313,11 +308,14 @@ public class NewJobWizard extends Wizard implements INewWizard {
   }
 
   /**
-   * 
    * @param newBasicJSDL
-   * @param aspName name of application (its 'display name', shown on Name list in Job Wizard, see also {@link ApplicationSpecificRegistry#getApplicationDataMapping()})
+   * @param aspName name of application (its 'display name', shown on Name list
+   *            in Job Wizard, see also
+   *            {@link ApplicationSpecificRegistry#getApplicationDataMapping()})
    */
-  void updateBasicJSDL( final JSDLJobDescription newBasicJSDL, final String aspName ) {
+  void updateBasicJSDL( final JSDLJobDescription newBasicJSDL,
+                        final String aspName )
+  {
     boolean fromPreSet = false;
     if( this.basicJSDL != null ) {
       fromPreSet = true;
@@ -367,7 +365,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
         result = false;
       }
       if( !getFilePath().toString().endsWith( ".jsdl" ) ) { //$NON-NLS-1$
-        setErrorMessage( "File must have \"jsdl\" extension" ); 
+        setErrorMessage( "File must have \"jsdl\" extension" );
         result = false;
       }
       return result;
