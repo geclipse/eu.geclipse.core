@@ -20,8 +20,8 @@ import java.io.IOException;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.preference.IPreferenceStore;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
+//import org.eclipse.jface.viewers.ISelectionChangedListener;
+//import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabFolder2Adapter;
@@ -61,6 +61,8 @@ public class TerminalView extends ViewPart implements ITerminalView {
   public void createPartControl( final Composite parent ) {
     makeActions();
     contributeToActionBars();
+    this.selectionProvider = new SelectionProviderIntermediate();
+    getSite().setSelectionProvider( this.selectionProvider );
     GridData gridData = new GridData();
     gridData.horizontalAlignment = GridData.FILL;
     gridData.grabExcessHorizontalSpace = true;
@@ -94,7 +96,8 @@ public class TerminalView extends ViewPart implements ITerminalView {
         }
       }
     } );
-    final Action copyAction = new Action() {
+    // removed since the global copy action binds ctrl-c in the terminal to copy
+/*    final Action copyAction = new Action() {
       @Override
       public void run() {
         CTabItem item = TerminalView.this.cTabFolder.getSelection();
@@ -104,13 +107,11 @@ public class TerminalView extends ViewPart implements ITerminalView {
       }
     };
     actionBars.setGlobalActionHandler( ActionFactory.COPY.getId(), copyAction );
-    this.selectionProvider = new SelectionProviderIntermediate();
-    getSite().setSelectionProvider( this.selectionProvider );
     this.selectionProvider.addSelectionChangedListener( new ISelectionChangedListener() {
       public void selectionChanged( final SelectionChangedEvent event ) {
         copyAction.setEnabled( !event.getSelection().isEmpty() );
       }
-    } );
+    } );*/
   }
 
   private void contributeToActionBars() {
