@@ -88,12 +88,19 @@ public class VoSelectionWizardPage extends WizardPage {
     gData.grabExcessVerticalSpace = true;
     this.voList.setLayoutData( gData );
     this.voList.addSelectionListener( new SelectionAdapter() {
+      
       @Override
       public void widgetSelected( final SelectionEvent e ) {
         showSelectedInfo();
         IVirtualOrganization[] selectedVo = getSelectedVos();
         setPageComplete( selectedVo != null );
       }
+      
+      @Override
+      public void widgetDefaultSelected( final SelectionEvent e ) {
+        getWizard().getContainer().showPage( getNextPage() );
+      }
+      
     } );
     
     Button newButton = new Button( voGroup, SWT.PUSH );
