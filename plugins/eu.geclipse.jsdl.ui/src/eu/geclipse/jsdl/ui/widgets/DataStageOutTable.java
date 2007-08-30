@@ -359,7 +359,7 @@ public class DataStageOutTable {
     DataStagingOutDialog dialog;
     if( selectedObject == null ) {
       dialog = new DataStagingOutDialog( this.mainComp.getShell(),
-                                         DataStagingInDialog.ADVANCED_DIALOG);
+                                         DataStagingInDialog.SIMPLE_DIALOG);
       if( dialog.open() == Window.OK ) {
         DataStagingType newData = getNewDataStagingType( dialog.getName(),
                                                          dialog.getPath() );
