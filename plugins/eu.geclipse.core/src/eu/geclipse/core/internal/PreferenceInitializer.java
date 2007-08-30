@@ -33,7 +33,7 @@ public class PreferenceInitializer extends AbstractPreferenceInitializer {
   @Override
   public void initializeDefaultPreferences() {
     Preferences prefs = Activator.getDefault().getPluginPreferences();
-    prefs.setDefault( PreferenceConstants.JOBS_UPDATE_JOBS_STATUS, false );
+    prefs.setDefault( PreferenceConstants.JOBS_UPDATE_JOBS_STATUS, true );
     prefs.setDefault( PreferenceConstants.JOBS_UPDATE_JOBS_PERIOD, 30 );
   }
   
