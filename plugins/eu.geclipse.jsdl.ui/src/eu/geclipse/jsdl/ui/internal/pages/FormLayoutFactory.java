@@ -30,50 +30,155 @@ import org.eclipse.ui.forms.widgets.TableWrapLayout;
 public class FormLayoutFactory {
 
 
+    /**
+     * 
+     */
     public static final int DEFAULT_CLEAR_MARGIN = 10;
     
+    /**
+     * 
+     */
     public static final int CONTROL_HORIZONTAL_INDENT = 3;
     
 
+    /**
+     * 
+     */
     public static final int FORM_BODY_MARGIN_TOP = 12;
+    /**
+     * 
+     */
     public static final int FORM_BODY_MARGIN_BOTTOM = 12;
+    /**
+     * 
+     */
     public static final int FORM_BODY_MARGIN_LEFT = 6;
+    /**
+     * 
+     */
     public static final int FORM_BODY_MARGIN_RIGHT = 6;
+    /**
+     * 
+     */
     public static final int FORM_BODY_HORIZONTAL_SPACING = 8; 
+    /**
+     * 
+     */
     public static final int FORM_BODY_VERTICAL_SPACING = 5;
+    /**
+     * 
+     */
     public static final int FORM_BODY_MARGIN_HEIGHT = 0;
+    /**
+     * 
+     */
     public static final int FORM_BODY_MARGIN_WIDTH = 0;
     
 
+    /**
+     * 
+     */
     public static final int SECTION_CLIENT_MARGIN_TOP = 10;
+    /**
+     * 
+     */
     public static final int SECTION_CLIENT_MARGIN_BOTTOM = 10;
+    /**
+     * 
+     */
     public static final int SECTION_CLIENT_MARGIN_LEFT = 6;
+    /**
+     * 
+     */
     public static final int SECTION_CLIENT_MARGIN_RIGHT = 6;    
+    /**
+     * 
+     */
     public static final int SECTION_CLIENT_HORIZONTAL_SPACING = 8;
+    /**
+     * 
+     */
     public static final int SECTION_CLIENT_VERTICAL_SPACING = 8;
+    /**
+     * 
+     */
     public static final int SECTION_CLIENT_MARGIN_HEIGHT = 0;
+    /**
+     * 
+     */
     public static final int SECTION_CLIENT_MARGIN_WIDTH = 0;
 
+    /**
+     * 
+     */
     public static final int SECTION_HEADER_VERTICAL_SPACING = 6;
 
 
+    /**
+     * 
+     */
     public static final int CLEAR_MARGIN_TOP = DEFAULT_CLEAR_MARGIN;
+    /**
+     * 
+     */
     public static final int CLEAR_MARGIN_BOTTOM = DEFAULT_CLEAR_MARGIN;
+    /**
+     * 
+     */
     public static final int CLEAR_MARGIN_LEFT = DEFAULT_CLEAR_MARGIN;
+    /**
+     * 
+     */
     public static final int CLEAR_MARGIN_RIGHT = DEFAULT_CLEAR_MARGIN;  
+    /**
+     * 
+     */
     public static final int CLEAR_HORIZONTAL_SPACING = 8;
+    /**
+     * 
+     */
     public static final int CLEAR_VERTICAL_SPACING = 8;
+    /**
+     * 
+     */
     public static final int CLEAR_MARGIN_HEIGHT = 0;
+    /**
+     * 
+     */
     public static final int CLEAR_MARGIN_WIDTH = 0; 
     
 
+    /**
+     * 
+     */
     public static final int FORM_PANE_MARGIN_TOP = 0;
+    /**
+     * 
+     */
     public static final int FORM_PANE_MARGIN_BOTTOM = 0;
+    /**
+     * 
+     */
     public static final int FORM_PANE_MARGIN_LEFT = 0;
+    /**
+     * 
+     */
     public static final int FORM_PANE_MARGIN_RIGHT = 0; 
+    /**
+     * 
+     */
     public static final int FORM_PANE_HORIZONTAL_SPACING = FORM_BODY_HORIZONTAL_SPACING;
+    /**
+     * 
+     */
     public static final int FORM_PANE_VERTICAL_SPACING = FORM_BODY_VERTICAL_SPACING;
+    /**
+     * 
+     */
     public static final int FORM_PANE_MARGIN_HEIGHT = 0;
+    /**
+     * 
+     */
     public static final int FORM_PANE_MARGIN_WIDTH = 0;     
     
     /**
@@ -89,8 +194,8 @@ public class FormLayoutFactory {
      * @param numColumns
      * @return layout
      */
-    public static GridLayout createFormGridLayout(boolean makeColumnsEqualWidth,
-            int numColumns) {
+    public static GridLayout createFormGridLayout(final boolean makeColumnsEqualWidth,
+            final int numColumns) {
         GridLayout layout = new GridLayout();
 
         layout.marginHeight = FORM_BODY_MARGIN_HEIGHT;
@@ -117,8 +222,8 @@ public class FormLayoutFactory {
      * @param numColumns
      * @return layout
      */
-    public static GridLayout createClearGridLayout(boolean makeColumnsEqualWidth,
-            int numColumns) {
+    public static GridLayout createClearGridLayout(final boolean makeColumnsEqualWidth,
+            final int numColumns) {
         GridLayout layout = new GridLayout();
 
         layout.marginHeight = CLEAR_MARGIN_HEIGHT;
@@ -145,8 +250,8 @@ public class FormLayoutFactory {
      * @return layout
      */
     public static TableWrapLayout createFormTableWrapLayout(
-            boolean makeColumnsEqualWidth,
-            int numColumns) {
+            final boolean makeColumnsEqualWidth,
+            final int numColumns) {
         TableWrapLayout layout = new TableWrapLayout();
         
         layout.topMargin = FORM_BODY_MARGIN_TOP;
@@ -170,8 +275,8 @@ public class FormLayoutFactory {
      * @return layout
      */
     public static TableWrapLayout createFormPaneTableWrapLayout(
-                                                  boolean makeColumnsEqualWidth,
-                                                  int numColumns) {
+                                                  final boolean makeColumnsEqualWidth,
+                                                  final int numColumns) {
       
         TableWrapLayout layout = new TableWrapLayout();
         
@@ -195,8 +300,8 @@ public class FormLayoutFactory {
      * @param numColumns
      * @return layout
      */
-    public static GridLayout createFormPaneGridLayout(boolean makeColumnsEqualWidth,
-            int numColumns) {
+    public static GridLayout createFormPaneGridLayout(final boolean makeColumnsEqualWidth,
+            final int numColumns) {
         GridLayout layout = new GridLayout();
 
         layout.marginHeight = FORM_PANE_MARGIN_HEIGHT;
@@ -224,8 +329,8 @@ public class FormLayoutFactory {
      * @return layout
      */
     public static TableWrapLayout createClearTableWrapLayout(
-            boolean makeColumnsEqualWidth,
-            int numColumns) {
+            final boolean makeColumnsEqualWidth,
+            final int numColumns) {
         TableWrapLayout layout = new TableWrapLayout();
         
         layout.topMargin = CLEAR_MARGIN_TOP;
@@ -251,8 +356,8 @@ public class FormLayoutFactory {
      * @param numColumns
      * @return layout
      */
-    public static GridLayout createSectionClientGridLayout(boolean makeColumnsEqualWidth,
-            int numColumns) {
+    public static GridLayout createSectionClientGridLayout(final boolean makeColumnsEqualWidth,
+            final int numColumns) {
         GridLayout layout = new GridLayout();
 
         layout.marginHeight = SECTION_CLIENT_MARGIN_HEIGHT;
@@ -279,8 +384,8 @@ public class FormLayoutFactory {
      * @param numColumns
      * @return layout
      */
-    public static TableWrapLayout createSectionClientTableWrapLayout(boolean makeColumnsEqualWidth,
-            int numColumns) {
+    public static TableWrapLayout createSectionClientTableWrapLayout(final boolean makeColumnsEqualWidth,
+            final int numColumns) {
         TableWrapLayout layout = new TableWrapLayout();
         
         layout.topMargin = SECTION_CLIENT_MARGIN_TOP;

@@ -275,7 +275,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
                                         | SWT.FULL_SELECTION );
    
    this.tblStageIn = this.stageInViewer.getTable();
-   this.tblStageIn .setHeaderVisible( true);
+   this.tblStageIn .setHeaderVisible( true);   
    this.tblStageIn.setLinesVisible( true );
    
    /* Set the common Content Provider  */

@@ -644,6 +644,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    * @param name
    * @param value
    */
+  @SuppressWarnings("unchecked")
   public void performAdd (final TableViewer tableViewer,
                         final String name, final Object[][] value) {
         
@@ -1011,12 +1012,13 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
                      tableName.setInput( valueList );
                    } // End Iterator
                              
-                  } // Endif
+                  } // End_if
               }                
               break;
               
               default:
               break;
+              
             }
 
             

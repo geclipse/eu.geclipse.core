@@ -305,7 +305,7 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
     /* Check if the new Data Stage element is not already in the table viewer's
      * input
      */
-    if (!doesElementExists( this.dataStagingType, newInputList )) {
+    if (!doesElementExists( null, this.dataStagingType, newInputList )) {
       newInputList.add( this.dataStagingType );
     
       eStructuralFeature = this.jobDescriptionType.eClass().getEStructuralFeature( featureID );
@@ -435,11 +435,11 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
       eStructuralFeature = this.jobDescriptionType.eClass()
                                             .getEStructuralFeature( featureID );
 
-      Object feature = structSelection.getFirstElement();
+      Object oldDataStageElement = structSelection.getFirstElement();
     
     /* Get the Index of the Element that needs to be changed */
       int index = (( java.util.List<Object> )this.jobDescriptionType.eGet(eStructuralFeature))
-                                                           .indexOf( feature  );
+                                                           .indexOf( oldDataStageElement  );
       
       
       /* Instantiate new DataStage and SourceTarge objects */
@@ -481,7 +481,8 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
       /* Check if the new Data Stage element is not already in the table viewer's
        * input
        */        
-      if (!doesElementExists( this.dataStagingType, newInputList )) {  
+      if (!doesElementExists( (DataStagingType) oldDataStageElement,
+                              this.dataStagingType, newInputList )) {  
       
         /* Change the element. The element is located through it's index position
          * in the list.
@@ -522,19 +523,30 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
    * 
    * Returns TRUE if the new element already exists and FALSE if it doesn't. 
    */
-  private boolean doesElementExists (final DataStagingType newDataStage,
+  private boolean doesElementExists (final DataStagingType oldDataStage,
+                                     final DataStagingType newDataStage,
                                      final EList <DataStagingType> inputList) {
     
-    boolean result = false; 
+    boolean result = false;
     
     /*
      * Check if the new Element is Stage-In element or if is a Stage-Out Element
      */
     if (newDataStage.getSource() != null) {
     
-      // Iterate over all the table viewer input
+      
+      /*
+       *  Iterate over all the table viewer input.
+       *  If the the new data-stage element is not the old one and
+       *  the FileName and Source are the same, return TRUE because
+       *  it means that there is a duplicate data-stage element,
+       *   so the new one must not be add.
+       *  
+       */
+      
       for( DataStagingType data : inputList ) {
-        if( data.getFileName().equals( newDataStage.getFileName() )
+        if( !data.equals( oldDataStage )            
+           && data.getFileName().equals( newDataStage.getFileName() )
             && data.getSource().getURI().equals( newDataStage.getSource().getURI() ) )
         {
           result = true;
@@ -543,9 +555,18 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
     }
     
     else {
-      // Iterate over all the table viewer input
+      
+      /*
+       *  Iterate over all the table viewer input.
+       *  If the the new data-stage element is not the old one and
+       *  the FileName and Target are the same, return TRUE because
+       *  it means that there is a duplicate data-stage element,
+       *   so the new one must not be add.
+       *  
+       */
       for( DataStagingType data : inputList ) {
-        if( data.getFileName().equals( newDataStage.getFileName() )
+        if( !data.equals( oldDataStage )  
+            && data.getFileName().equals( newDataStage.getFileName() )
             && data.getTarget().getURI().equals( newDataStage.getTarget().getURI() ) )
         {
           result = true;

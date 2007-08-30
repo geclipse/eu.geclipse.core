@@ -347,9 +347,6 @@ public final class JobIdentificationTypeAdapter extends JsdlAdaptersFactory {
       EClass eClass = object.eClass();
              
         
-//      for (Iterator iter = eClass.getEAllStructuralFeatures().iterator(); iter.hasNext();) {      
-//        EStructuralFeature eStructuralFeature = (EStructuralFeature) iter.next();
-//        
         EList<EStructuralFeature> allEStructuralFeatures =
                                              eClass.getEAllStructuralFeatures();
         for( EStructuralFeature eStructuralFeature : allEStructuralFeatures) {
