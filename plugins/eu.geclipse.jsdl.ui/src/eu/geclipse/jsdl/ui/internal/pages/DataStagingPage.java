@@ -270,9 +270,9 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    gd.widthHint = 600;
    gd.heightHint = this.WIDGET_HEIGHT;
    
-   
-   this.stageInViewer = new TableViewer(client, SWT.NONE                                                                              
-                                        | SWT.FULL_SELECTION );
+   //FIXME This is a work-around for the Bug#: 201705 for Windows.
+   this.stageInViewer = new TableViewer(client, SWT.BORDER                                                                            
+                                        | SWT.FULL_SELECTION);
    
    this.tblStageIn = this.stageInViewer.getTable();
    this.tblStageIn .setHeaderVisible( true);   
@@ -310,9 +310,8 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
      }
    } );
    
-   
-   this.stageInViewer.setData( FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER );   
-   this.tblStageIn.setData(  FormToolkit.KEY_DRAW_BORDER );
+         
+   this.tblStageIn.setData(  FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER );
    this.tblStageIn.setLayoutData( gd );
    
    /* Create "Add" Button */
@@ -383,7 +382,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    
    /* Update Buttons so as to reflect the initial status of the TableViewer */
    updateButtons( this.stageInViewer  );
-   
+      
    toolkit.paintBordersFor( client );  
      
  }
@@ -415,8 +414,8 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    gd.widthHint = 600;
    gd.heightHint = this.WIDGET_HEIGHT;
    
-   
-   this.stageOutViewer = new TableViewer( client, SWT.NONE                                                                                
+   //FIXME This is a work-around for the Bug#: 201705 for Windows.
+   this.stageOutViewer = new TableViewer( client, SWT.BORDER                                                                                
                                         | SWT.FULL_SELECTION );
    
    
@@ -453,9 +452,8 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
      }
    } );
    
-   this.dataStageTypeAdapter.attachToStageOut( this.stageOutViewer  );
-   this.stageOutViewer.setData( FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER );
-   this.tblStageOut.setData(  FormToolkit.KEY_DRAW_BORDER );
+   this.dataStageTypeAdapter.attachToStageOut( this.stageOutViewer  );   
+   this.tblStageOut.setData(  FormToolkit.KEY_DRAW_BORDER , FormToolkit.TEXT_BORDER);
    this.tblStageOut.setLayoutData( gd);
    
    

@@ -326,7 +326,9 @@ public final class ResourcesPage extends FormPage
     gd.verticalAlignment = GridData.BEGINNING;
     lblHostName.setLayoutData( gd );
     
-    this.hostsViewer = new TableViewer(client, SWT.NONE);
+    
+    //FIXME This is a work-around for the Bug#: 201705 for Windows.
+    this.hostsViewer = new TableViewer(client, SWT.BORDER);
     this.tblHosts = this.hostsViewer.getTable();    
     this.hostsViewer.setContentProvider( new FeatureContentProvider() );
     this.hostsViewer.setLabelProvider( new FeatureLabelProvider() );
@@ -418,7 +420,7 @@ public final class ResourcesPage extends FormPage
     
     this.resourcesTypeAdapter.attachToDelete( this.btnDel, this.hostsViewer );
     this.btnDel.setLayoutData( gd);
-    
+        
     toolkit.paintBordersFor( client);
     
   } //End void CandidateHostsSubSection()
