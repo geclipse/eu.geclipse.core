@@ -12,6 +12,7 @@
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
  *****************************************************************************/
+
 package eu.geclipse.ui.views;
 
 import java.io.IOException;

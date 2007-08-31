@@ -24,6 +24,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.IWorkbenchWindow;
+
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridStorage;
@@ -36,7 +37,6 @@ import eu.geclipse.ui.internal.actions.MountActions;
 import eu.geclipse.ui.internal.actions.NewWizardActions;
 import eu.geclipse.ui.internal.actions.ProjectActions;
 import eu.geclipse.ui.internal.actions.SubmitJobActions;
-import eu.geclipse.ui.internal.actions.TransferJsdl2JdlAction;
 import eu.geclipse.ui.internal.actions.TransferJsdl2JdlActions;
 import eu.geclipse.ui.providers.GridModelContentProvider;
 import eu.geclipse.ui.providers.GridModelLabelProvider;

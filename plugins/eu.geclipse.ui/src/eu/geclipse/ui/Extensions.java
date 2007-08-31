@@ -1,20 +1,18 @@
-/******************************************************************************
-  * Copyright (c) 2006 g-Eclipse consortium
-  * All rights reserved. This program and the accompanying materials
-  * are made available under the terms of the Eclipse Public License v1.0
-  * which accompanies this distribution, and is available at
-  * http://www.eclipse.org/legal/epl-v10.html
-  *
-  * Initialial development of the original code was made for
-  * project g-Eclipse founded by European Union
-  * project number: FP6-IST-034327  http://www.geclipse.eu/
-  *
-  * Contributor(s):
-  *     FZK (http://www.fzk.de)
-  *      - Mathias Stuempert (mathias.stuempert@iwr.fzk.de)
-  *     PSNC
-  *      - Katarzyna Bylec (katis@man.poznan.pl)
-  *****************************************************************************/
+/*****************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *    Katarzyna Bylec
+ *****************************************************************************/
 
 package eu.geclipse.ui;
 

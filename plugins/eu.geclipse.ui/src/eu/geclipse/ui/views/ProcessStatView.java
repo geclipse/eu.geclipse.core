@@ -12,6 +12,7 @@
  * Contributors:
  *    Martin Polak GUP, JKU - initial implementation
  *****************************************************************************/
+
 package eu.geclipse.ui.views;
 
 import java.net.URI;
