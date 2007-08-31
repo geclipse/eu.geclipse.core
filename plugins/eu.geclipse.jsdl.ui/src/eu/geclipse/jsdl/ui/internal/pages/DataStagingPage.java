@@ -311,6 +311,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    } );
    
    
+   this.stageInViewer.setData( FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER );   
    this.tblStageIn.setData(  FormToolkit.KEY_DRAW_BORDER );
    this.tblStageIn.setLayoutData( gd );
    
@@ -453,6 +454,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    } );
    
    this.dataStageTypeAdapter.attachToStageOut( this.stageOutViewer  );
+   this.stageOutViewer.setData( FormToolkit.KEY_DRAW_BORDER, FormToolkit.TEXT_BORDER );
    this.tblStageOut.setData(  FormToolkit.KEY_DRAW_BORDER );
    this.tblStageOut.setLayoutData( gd);
    
