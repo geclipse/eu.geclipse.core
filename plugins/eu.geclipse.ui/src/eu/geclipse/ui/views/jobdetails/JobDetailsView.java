@@ -48,8 +48,6 @@ import eu.geclipse.core.model.IGridJobStatus;
 import eu.geclipse.core.model.IGridJobStatusListener;
 import eu.geclipse.ui.internal.actions.JobDetailsViewActions;
 
-// TODO mariusz change package name
-// TODO mariusz package name in extension points (declared + used)
 
 /**
  *
@@ -144,7 +142,7 @@ implements ISelectionListener, IViewConfiguration, IGridJobStatusListener
         jobManager.addJobStatusListener( new IGridJob[] { this.inputJob }, IGridJobStatus._ALL, this );
       }
       catch( NullPointerException exception ) {
-        // TODO mariusz Temporary solution for bug #
+        // TODO mariusz Temporary solution for bug #199711
       }
     }
     

@@ -247,7 +247,6 @@ public class DateTimeText {
 
   private Image getImage() {
     if( DateTimeText.image == null ) {
-      // TODO mariusz change calendar icon, to this one for which we have license
       ImageDescriptor imageDescriptor = Activator.getDefault()
         .getImageRegistry()
         .getDescriptor( "calendar" ); //$NON-NLS-1$

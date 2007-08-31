@@ -58,7 +58,7 @@ abstract public class JobDetail implements IJobDetail {
    * Refresh detail data in widget using passed job
    * 
    * @param gridJob job, from which data should be obtained for detail
-   * @param viewConfiguration TODO mariusz
+   * @param viewConfiguration
    */
   abstract protected boolean refresh( final IGridJob gridJob,
                                       IViewConfiguration viewConfiguration );
