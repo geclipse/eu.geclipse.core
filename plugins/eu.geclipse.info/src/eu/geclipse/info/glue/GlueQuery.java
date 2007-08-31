@@ -1,14 +1,35 @@
+/******************************************************************************
+ * Copyright (c) 2007 g-Eclipse consortium
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for
+ * project g-Eclipse founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributor(s):
+ *     UCY (http://www.ucy.cs.ac.cy)
+ *      - George Tsouloupas (georget@cs.ucy.ac.cy)
+ *
+ *****************************************************************************/
+
 package eu.geclipse.info.glue;
 
 import java.util.ArrayList;
 import java.util.Enumeration;
 
+/**
+ * @author George Tsouloupas
+ * TODO Write Comments
+ */
 public class GlueQuery {
 
   public static ArrayList<AbstractGlueTable> getGlueTable(String tableName,String vo){
     ArrayList<AbstractGlueTable> inArray=GlueIndex.getInstance().getList(tableName);
     ArrayList<AbstractGlueTable> outArray=new ArrayList<AbstractGlueTable>();
-    if(vo==null || vo.equals("none")){
+    if(vo==null || vo.equals("none")){ //$NON-NLS-1$
       return inArray;
     }
 
@@ -53,7 +74,7 @@ public class GlueQuery {
     return outArray;
   }
 
-  public static boolean seSupportsVO(GlueSE se,String vo){
+  public static boolean seSupportsVO(final GlueSE se, final String vo){
     boolean found=false;
     for (GlueSA sa : se.glueSAList) {
       for (GlueSAAccessControlBaseRule rule : sa.glueSAAccessControlBaseRuleList) {
@@ -69,7 +90,7 @@ public class GlueQuery {
     return found;
   }
 
-  public static boolean ceSupportsVO(GlueCE ce, String vo){
+  public static boolean ceSupportsVO(final GlueCE ce, final String vo){
     boolean found=false;
     for (GlueCEAccessControlBaseRule rule : ce.glueCEAccessControlBaseRuleList) {
       if(rule.Value.equals("VO:"+vo)){ //$NON-NLS-1$
@@ -80,7 +101,7 @@ public class GlueQuery {
     return found;
   }
 
-  public static boolean serviceSupportsVO(GlueService service, String vo){
+  public static boolean serviceSupportsVO(final GlueService service, final String vo){
     boolean found=false;
     for (GlueServiceAccessControlRule rule : service.glueServiceAccessControlRuleList) {
       if(rule.value.equals(vo)){ 
@@ -91,10 +112,10 @@ public class GlueQuery {
     return found;
   }
 
-  public static boolean saSupportsVO(GlueSA sa, String vo){
+  public static boolean saSupportsVO(final GlueSA sa, final String vo){
     boolean found=false;
     for (GlueSAAccessControlBaseRule rule : sa.glueSAAccessControlBaseRuleList) {
-      if(rule.Value.equals(vo)){ //$NON-NLS-1$
+      if(rule.Value.equals(vo)){
         found=true;
         break;
       }
@@ -102,7 +123,7 @@ public class GlueQuery {
     return found;
   }
 
-  public static boolean siteSupportsVO(GlueSite site, String vo){
+  public static boolean siteSupportsVO(final GlueSite site, final String vo){
     boolean found=false;
     for (GlueSE se: site.glueSEList) {
       if(seSupportsVO(se, vo)){
@@ -126,7 +147,7 @@ public class GlueQuery {
     return found;
   }
 
-  public static ArrayList<AbstractGlueTable> getStorageElements(String vo){
+  public static ArrayList<AbstractGlueTable> getStorageElements(final String vo){
     ArrayList<AbstractGlueTable> agtList=new ArrayList<AbstractGlueTable>();
     Enumeration<GlueSE> enSE= GlueIndex.getInstance().glueSE.elements();
     while(enSE.hasMoreElements()){

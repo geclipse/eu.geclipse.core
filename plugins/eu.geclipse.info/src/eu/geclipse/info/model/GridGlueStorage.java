@@ -59,9 +59,9 @@ public class GridGlueStorage
             for( int i = 0; i < protocolCount; i++ ) {
               GlueSEAccessProtocol ap=getGlueSe().glueSEAccessProtocolList.get( i );
               String scheme=null;
-              if(ap.Type.startsWith( "srm" ) ){
-                String[] vNumbers=ap.Version.split( "\\." );
-                StringBuilder sBuilder=new StringBuilder("srm-v");
+              if(ap.Type.startsWith( "srm" ) ){ //$NON-NLS-1$
+                String[] vNumbers=ap.Version.split( "\\." ); //$NON-NLS-1$
+                StringBuilder sBuilder=new StringBuilder("srm-v"); //$NON-NLS-1$
                 for( String n : vNumbers ) {
                   sBuilder.append( n );
                 }
@@ -70,7 +70,7 @@ public class GridGlueStorage
                 scheme=ap.Type;
               }
               
-              String newPath =  sa.Path.endsWith( "/" ) ? sa.Path : sa.Path + "/";
+              String newPath =  sa.Path.endsWith( "/" ) ? sa.Path : sa.Path + "/"; //$NON-NLS-1$ //$NON-NLS-2$
               uriList.add(new URI( scheme, null, host, 
                                    ap.Port.intValue(), newPath,
                                    null, null ));

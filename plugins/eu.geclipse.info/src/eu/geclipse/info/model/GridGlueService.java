@@ -44,7 +44,7 @@
    @Override
    public String getName() {
      GlueService gs=(GlueService) getGlueElement();
-     return (gs.endpoint!=null)?gs.endpoint:gs.getID()+" (endpoint missing)";
+     return (gs.endpoint!=null)?gs.endpoint:gs.getID()+" (endpoint missing)"; //$NON-NLS-1$
    }
 
 
