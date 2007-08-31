@@ -19,6 +19,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
+
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -89,7 +91,7 @@ public class GridJobStatus implements IGridJobStatus {
       if( XML_STATUSUPDATEDATE.equals( node.getNodeName() ) ) {
         DateFormat df = SimpleDateFormat.getDateTimeInstance();
         try {
-          updateDate = df.parse( node.getTextContent() );
+          updateDate = getXmlDateFormatter().parse( node.getTextContent() );
         } catch( DOMException e ) {
           // empty implementation
         } catch( ParseException e ) {
@@ -151,7 +153,7 @@ public class GridJobStatus implements IGridJobStatus {
     xml += "  <"
            + GridJobStatus.XML_STATUSUPDATEDATE
            + ">"
-           + updateDate
+           + getXmlDateFormatter().format( updateDate )
            + "</"
            + GridJobStatus.XML_STATUSUPDATEDATE
            + ">\n";
@@ -173,6 +175,18 @@ public class GridJobStatus implements IGridJobStatus {
            + ">";
     xml += "</" + GridJobStatus.XML_ROOT + ">\n";
     return xml;
+  }
+
+  private DateFormat getXmlDateFormatter() {
+    DateFormat formatter = DateFormat.getDateTimeInstance( DateFormat.SHORT,
+                                                           DateFormat.SHORT,
+                                                           new Locale( "Locale.US" ) ); //$NON-NLS-1$
+    if( formatter == null ) {
+      formatter = DateFormat.getDateTimeInstance( DateFormat.SHORT,
+                                                  DateFormat.SHORT );
+    }
+    return formatter;
+
   }
 
   public String getName() {
