@@ -17,7 +17,9 @@
 
 package eu.geclipse.info;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
+import org.eclipse.core.runtime.Status;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -68,4 +70,19 @@ public class Activator extends Plugin {
     return plugin;
   }
 
+  /**
+   * Logs an exception.
+   * 
+   * @param exception the exception.
+   */
+  public static void logException( final Exception exception ) {
+    String message = exception.getLocalizedMessage();
+    if ( message == null ) message = exception.getClass().getName();
+    IStatus status = new Status( IStatus.ERROR,
+                                 PLUGIN_ID,
+                                 IStatus.OK,
+                                 message,
+                                 exception );
+    getDefault().getLog().log( status );
+  }
 }
