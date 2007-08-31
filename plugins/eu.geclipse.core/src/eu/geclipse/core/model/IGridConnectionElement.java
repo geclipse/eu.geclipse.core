@@ -52,6 +52,11 @@ public interface IGridConnectionElement extends IGridResource, IGridContainer {
    */
   public String getError();
   
+  /**
+   * Get the <code>URI</code> that corresponds to this connection element.
+   * 
+   * @return The elements remote location.
+   */
   public URI getURI();
   
   /**

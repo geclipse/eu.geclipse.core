@@ -286,6 +286,12 @@ public class GEclipseFileStore
     this.childNames = null;
   }
   
+  /**
+   * Get the {@link GEclipseURI} associated with this file store.
+   * 
+   * @return The {@link GEclipseURI} created from the
+   * slave's <code>URI</code>.
+   */
   public GEclipseURI toGEclipseURI() {
     return new GEclipseURI( getSlave().toURI() );
   }

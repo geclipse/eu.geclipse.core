@@ -15,8 +15,6 @@
 
 package eu.geclipse.core.model;
 
-import java.net.URI;
-
 /**
  * Base interface for filesystem mounts.
  */
