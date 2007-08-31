@@ -94,7 +94,7 @@ public class MonitorComputingAction extends SelectionListenerAction {
         // Just ignore this exception and do not open the job
       } catch( URISyntaxException e ) {
         // TODO Auto-generated catch block
-        e.printStackTrace();
+        Activator.logException( e );
       }
       
     }
