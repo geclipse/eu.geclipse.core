@@ -31,7 +31,6 @@ import org.eclipse.core.runtime.jobs.Job;
 
 import eu.geclipse.core.JobStatusUpdater;
 import eu.geclipse.core.Preferences;
-import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridJob;
@@ -105,8 +104,10 @@ class JobScheduler extends Job {
             updaterToWakeUp = tempUpdater;
           }
         }
-        updaterToWakeUp.wakeUp();
-        updaterToWakeUp.schedule( Preferences.getUpdateJobsPeriod() );
+        if ( updaterToWakeUp != null ) {
+          updaterToWakeUp.wakeUp();
+          updaterToWakeUp.schedule( Preferences.getUpdateJobsPeriod() );
+        }
       } else {
         updaterToWakeUp = this.sleepingUpdaters.keys().nextElement();
         updaterToWakeUp.wakeUp();
@@ -192,7 +193,7 @@ public class JobManager extends AbstractGridElementManager
   
   private List< IGridJobStatusListener > globalListeners = new ArrayList< IGridJobStatusListener >();
 
-  private boolean listenerRegistered=false;
+//  private boolean listenerRegistered=false;
   
   private int numberOfRunningUpdaters = 0;
   
