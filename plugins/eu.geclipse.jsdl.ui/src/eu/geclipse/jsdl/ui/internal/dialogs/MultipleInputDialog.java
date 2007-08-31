@@ -177,7 +177,7 @@ public class MultipleInputDialog extends Dialog {
     this.fieldList.add( new FieldSummary( COMBO, labelText, initialValue, false ) );
   }
 
-  private boolean checkReadyToConnect( final String name, int positionInDialog )
+  private boolean checkReadyToConnect( final String name, final int positionInDialog )
   {
     boolean result = false;
     if( this.connectedFields.containsKey( name ) ) {
@@ -193,7 +193,7 @@ public class MultipleInputDialog extends Dialog {
       }
     } else {
       if( this.connectedFields.containsValue( name ) ) {
-        String connectionName = "";
+        String connectionName = ""; //$NON-NLS-1$
         for( String connName : this.connectedFields.keySet() ) {
           if( this.connectedFields.get( connName ).equals( name ) ) {
             connectionName = connName;
@@ -329,7 +329,7 @@ public class MultipleInputDialog extends Dialog {
         final int sourcePosition = sourceIndex;
         sourceControl.addModifyListener( new ModifyListener() {
 
-          public void modifyText( ModifyEvent e ) {
+          public void modifyText( final ModifyEvent event ) {
             // String value = "";
             // Path p = new Path(controlList.get( sourcePosition ).getText());
             // value = p.lastSegment();
@@ -341,18 +341,18 @@ public class MultipleInputDialog extends Dialog {
         } );
         sourceControl.addFocusListener( new FocusListener() {
 
-          public void focusGained( FocusEvent e ) {
+          public void focusGained( final FocusEvent event ) {
             // do nothing
           }
 
-          public void focusLost( FocusEvent e ) {
-            String value = "";
-            Path p = new Path( controlList.get( sourcePosition ).getText() );
+          public void focusLost( final FocusEvent event ) {
+            String value = ""; //$NON-NLS-1$
+            Path p = new Path( MultipleInputDialog.this.controlList.get( sourcePosition ).getText() );
             value = p.lastSegment();
-            if( controlList.get( targetPosition ).getText() != null
-                && controlList.get( targetPosition ).getText().length() == 0 )
+            if( MultipleInputDialog.this.controlList.get( targetPosition ).getText() != null
+                && MultipleInputDialog.this.controlList.get( targetPosition ).getText().length() == 0 )
             {
-              controlList.get( targetPosition ).setText( value );
+              MultipleInputDialog.this.controlList.get( targetPosition ).setText( value );
             }
           }
         } );
@@ -360,8 +360,8 @@ public class MultipleInputDialog extends Dialog {
         // mamy source, do niego dodac listenera, znalezc target
         // szukanie targetu
         String targetName = null;
-        for( String name : connectedFields.keySet() ) {
-          if( connectedFields.get( name ).equals( labelText ) ) {
+        for( String name : this.connectedFields.keySet() ) {
+          if( this.connectedFields.get( name ).equals( labelText ) ) {
             targetName = name;
           }
         }
@@ -382,25 +382,25 @@ public class MultipleInputDialog extends Dialog {
         final int targetPosition = targetIndex;
         text.addModifyListener( new ModifyListener() {
 
-          public void modifyText( ModifyEvent e ) {
+          public void modifyText( final ModifyEvent event ) {
             // controlList.get( targetPosition ).setText( controlList.get(
             // sourcePosition ).getText() );
           }
         } );
         text.addFocusListener( new FocusListener() {
 
-          public void focusGained( FocusEvent e ) {
+          public void focusGained( final FocusEvent event ) {
             // do nothing
           }
 
-          public void focusLost( FocusEvent e ) {
-            String value = "";
-            Path p = new Path( controlList.get( sourcePosition ).getText() );
+          public void focusLost( final FocusEvent event ) {
+            String value = ""; //$NON-NLS-1$
+            Path p = new Path( MultipleInputDialog.this.controlList.get( sourcePosition ).getText() );
             value = p.lastSegment();
-            if( controlList.get( targetPosition ).getText() != null
-                && controlList.get( targetPosition ).getText().length() == 0 )
+            if( MultipleInputDialog.this.controlList.get( targetPosition ).getText() != null
+                && MultipleInputDialog.this.controlList.get( targetPosition ).getText().length() == 0 )
             {
-              controlList.get( targetPosition ).setText( value );
+              MultipleInputDialog.this.controlList.get( targetPosition ).setText( value );
             }
           }
         } );

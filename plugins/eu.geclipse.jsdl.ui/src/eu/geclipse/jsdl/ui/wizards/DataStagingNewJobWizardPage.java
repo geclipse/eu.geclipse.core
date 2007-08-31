@@ -18,16 +18,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -43,7 +36,6 @@ import eu.geclipse.jsdl.JSDLModelFacade;
 import eu.geclipse.jsdl.model.DataStagingType;
 import eu.geclipse.jsdl.model.SourceTargetType;
 import eu.geclipse.jsdl.ui.internal.Activator;
-import eu.geclipse.jsdl.ui.internal.dataStaging.DataStaging;
 import eu.geclipse.jsdl.ui.internal.wizards.FileType;
 import eu.geclipse.jsdl.ui.widgets.DataStageInTable;
 import eu.geclipse.jsdl.ui.widgets.DataStageOutTable;
@@ -264,80 +256,80 @@ public class DataStagingNewJobWizardPage extends WizardPage {
   // }
   // return result;
   // }
-  protected class StageOutContentProvider implements IStructuredContentProvider
-  {
-
-    @SuppressWarnings("unchecked")
-    public Object[] getElements( final Object inputElement ) {
-      DataStaging[] elements = new DataStaging[ 0 ];
-      elements = ( DataStaging[] )( ( List )inputElement ).toArray( elements );
-      return elements;
-    }
-
-    public void dispose() {
-      // nothing
-    }
-
-    public void inputChanged( final Viewer viewer,
-                              final Object oldInput,
-                              final Object newInput )
-    {
-      if( newInput == null ) {
-        // do nothing
-      } else {
-        if( viewer instanceof TableViewer ) {
-          TableViewer tableViewer = ( TableViewer )viewer;
-          if( tableViewer.getTable().isDisposed() ) {
-            // do nothing
-          } else {
-            tableViewer.setSorter( new ViewerSorter() {
-
-              @Override
-              public int compare( final Viewer iviewer,
-                                  final Object element1,
-                                  final Object element2 )
-              {
-                int result;
-                if( element1 == null ) {
-                  result = -1;
-                } else if( element2 == null ) {
-                  result = 1;
-                } else {
-                  result = ( ( DataStaging )element1 ).getName()
-                    .compareToIgnoreCase( ( ( DataStaging )element2 ).getName() );
-                }
-                return result;
-              }
-            } );
-          }
-        }
-      }
-    }
-  }
-  class StageOutLabelProvider extends LabelProvider
-    implements ITableLabelProvider
-  {
-
-    public String getColumnText( final Object element, final int columnIndex ) {
-      String result = null;
-      if( element != null ) {
-        DataStaging var = ( DataStaging )element;
-        switch( columnIndex ) {
-          case 0: // name
-            result = var.getName();
-          break;
-          case 1: // target loaction
-            result = var.getTargetLocation();
-          break;
-        }
-      }
-      return result;
-    }
-
-    public Image getColumnImage( final Object element, final int columnIndex ) {
-      return null;
-    }
-  }
+//  protected class StageOutContentProvider implements IStructuredContentProvider
+//  {
+//
+//    @SuppressWarnings("unchecked")
+//    public Object[] getElements( final Object inputElement ) {
+//      DataStaging[] elements = new DataStaging[ 0 ];
+//      elements = ( DataStaging[] )( ( List )inputElement ).toArray( elements );
+//      return elements;
+//    }
+//
+//    public void dispose() {
+//      // nothing
+//    }
+//
+//    public void inputChanged( final Viewer viewer,
+//                              final Object oldInput,
+//                              final Object newInput )
+//    {
+//      if( newInput == null ) {
+//        // do nothing
+//      } else {
+//        if( viewer instanceof TableViewer ) {
+//          TableViewer tableViewer = ( TableViewer )viewer;
+//          if( tableViewer.getTable().isDisposed() ) {
+//            // do nothing
+//          } else {
+//            tableViewer.setSorter( new ViewerSorter() {
+//
+//              @Override
+//              public int compare( final Viewer iviewer,
+//                                  final Object element1,
+//                                  final Object element2 )
+//              {
+//                int result;
+//                if( element1 == null ) {
+//                  result = -1;
+//                } else if( element2 == null ) {
+//                  result = 1;
+//                } else {
+//                  result = ( ( DataStaging )element1 ).getName()
+//                    .compareToIgnoreCase( ( ( DataStaging )element2 ).getName() );
+//                }
+//                return result;
+//              }
+//            } );
+//          }
+//        }
+//      }
+//    }
+//  }
+//  class StageOutLabelProvider extends LabelProvider
+//    implements ITableLabelProvider
+//  {
+//
+//    public String getColumnText( final Object element, final int columnIndex ) {
+//      String result = null;
+//      if( element != null ) {
+//        DataStaging var = ( DataStaging )element;
+//        switch( columnIndex ) {
+//          case 0: // name
+//            result = var.getName();
+//          break;
+//          case 1: // target loaction
+//            result = var.getTargetLocation();
+//          break;
+//        }
+//      }
+//      return result;
+//    }
+//
+//    public Image getColumnImage( final Object element, final int columnIndex ) {
+//      return null;
+//    }
+//  }
 
   /**
    * Method to access String values kept by table
@@ -391,30 +383,30 @@ public class DataStagingNewJobWizardPage extends WizardPage {
   public boolean isCreated() {
     return this.isCreated;
   }
-  class StageInLabelProvider extends LabelProvider
-    implements ITableLabelProvider
-  {
-
-    public String getColumnText( final Object element, final int columnIndex ) {
-      String result = null;
-      if( element != null ) {
-        DataStaging var = ( DataStaging )element;
-        switch( columnIndex ) {
-          case 0: // source location
-            result = var.getSourceLocation();
-          break;
-          case 1: // name
-            result = var.getName();
-          break;
-        }
-      }
-      return result;
-    }
-
-    public Image getColumnImage( final Object element, final int columnIndex ) {
-      return null;
-    }
-  }
+//  class StageInLabelProvider extends LabelProvider
+//    implements ITableLabelProvider
+//  {
+//
+//    public String getColumnText( final Object element, final int columnIndex ) {
+//      String result = null;
+//      if( element != null ) {
+//        DataStaging var = ( DataStaging )element;
+//        switch( columnIndex ) {
+//          case 0: // source location
+//            result = var.getSourceLocation();
+//          break;
+//          case 1: // name
+//            result = var.getName();
+//          break;
+//        }
+//      }
+//      return result;
+//    }
+//
+//    public Image getColumnImage( final Object element, final int columnIndex ) {
+//      return null;
+//    }
+//  }
 
   /**
    * Method to set initial contents of table holding DataStagingOut files, when

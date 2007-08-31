@@ -51,21 +51,21 @@ import eu.geclipse.ui.dialogs.NewProblemDialog;
 public class ApplicationSpecificPageFactory {
 
   /**
-   * Name of language used when creating xml schema
+   * Name of language used when creating XML schema
    */
   public static final String SCHEMA_LANGUAGE = "http://www.w3.org/2001/XMLSchema"; //$NON-NLS-1$
   /**
-   * Path to location of the xml schema
+   * Path to location of the XML schema
    */
   public static final String SCHEMA_LOCATION = "xml/ui_definition.xsd"; //$NON-NLS-1$
 
   /**
    * Method to validate XML file against XML schema definition
+   * 
    * @param xmlFile File to validate.
    * @throws SAXException if validation was not successful
    */
-  public static void validateFile( final File xmlFile ) throws SAXException
-  {
+  public static void validateFile( final File xmlFile ) throws SAXException {
     SchemaFactory factory = SchemaFactory.newInstance( SCHEMA_LANGUAGE );
     Path result = new Path( SCHEMA_LOCATION );
     URL fileURL = FileLocator.find( Platform.getBundle( Activator.PLUGIN_ID ),
@@ -74,14 +74,18 @@ public class ApplicationSpecificPageFactory {
     try {
       fileURL = FileLocator.toFileURL( fileURL );
     } catch( IOException ioException ) {
-      NewProblemDialog.openProblem( PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
-                                    Messages.getString("ApplicationSpecificPageFactory.XML_problems_title"), //$NON-NLS-1$
-                                    Messages.getString("ApplicationSpecificPageFactory.XML_problems_text"),  //$NON-NLS-1$
+      NewProblemDialog.openProblem( PlatformUI.getWorkbench()
+                                      .getActiveWorkbenchWindow()
+                                      .getShell(),
+                                    Messages.getString( "ApplicationSpecificPageFactory.XML_problems_title" ), //$NON-NLS-1$
+                                    Messages.getString( "ApplicationSpecificPageFactory.XML_problems_text" ), //$NON-NLS-1$
                                     ioException );
-    } catch(NullPointerException nullExc){
-      NewProblemDialog.openProblem( PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
-                                    Messages.getString("ApplicationSpecificPageFactory.XML_problems_title"), //$NON-NLS-1$
-                                    Messages.getString("ApplicationSpecificPageFactory.XML_problems_text"),  //$NON-NLS-1$
+    } catch( NullPointerException nullExc ) {
+      NewProblemDialog.openProblem( PlatformUI.getWorkbench()
+                                      .getActiveWorkbenchWindow()
+                                      .getShell(),
+                                    Messages.getString( "ApplicationSpecificPageFactory.XML_problems_title" ), //$NON-NLS-1$
+                                    Messages.getString( "ApplicationSpecificPageFactory.XML_problems_text" ), //$NON-NLS-1$
                                     nullExc );
     }
     String temp = fileURL.toString();
@@ -97,23 +101,25 @@ public class ApplicationSpecificPageFactory {
       Source source = new StreamSource( xmlFile );
       validator.validate( source );
     } catch( IOException ioException ) {
-      NewProblemDialog.openProblem( PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(),
-                                    Messages.getString("ApplicationSpecificPageFactory.XML_problems_title"), //$NON-NLS-1$
-                                    Messages.getString("ApplicationSpecificPageFactory.XML_problems_text"),  //$NON-NLS-1$
+      NewProblemDialog.openProblem( PlatformUI.getWorkbench()
+                                      .getActiveWorkbenchWindow()
+                                      .getShell(),
+                                    Messages.getString( "ApplicationSpecificPageFactory.XML_problems_title" ), //$NON-NLS-1$
+                                    Messages.getString( "ApplicationSpecificPageFactory.XML_problems_text" ), //$NON-NLS-1$
                                     ioException );
     }
   }
 
   /**
-   * Method used to extract information about pages from xml file and create
+   * Method used to extract information about pages from XML file and create
    * those wizard pages
    * 
-   * @param extensionId an id of extension in which xml file is defined
-   * @param node node of xml file to parse
-   * @return list of wzard pages contained in {@link SpecificWizardPart}
+   * @param path to XML file
+   * @param node node of XML file to parse
+   * @return list of wizard pages contained in {@link SpecificWizardPart}
    * @throws SAXException when there is problem with XML
    * @throws ParserConfigurationException when XML parser is not configured well
-   * @throws IOException when thre are problems with reading the file
+   * @throws IOException when there are problems with reading the file
    */
   public static List<WizardPage> getPagesFromXML( final Path path,
                                                   final IWizardNode node )

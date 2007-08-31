@@ -374,7 +374,7 @@ public class DataStageOutTable {
       }
     } else {
       dialog = new DataStagingOutDialog( this.mainComp.getShell(),
-                                         DataStagingInDialog.ADVANCED_DIALOG,
+                                         DataStagingInDialog.SIMPLE_DIALOG,
                                          selectedObject.getFileName(),
                                          selectedObject.getTarget().getURI() );
       

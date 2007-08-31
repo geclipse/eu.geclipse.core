@@ -57,8 +57,8 @@ public class DataStagingOutDialog extends Dialog {
    */
   public static final int ADVANCED_DIALOG = 1;
   protected Text pathText;
+  Text nameText;
   private int dialogStyle;
-  private Text nameText;
   private String returnName;
   private String returnPath;
   private String initName;
@@ -179,10 +179,11 @@ public class DataStagingOutDialog extends Dialog {
           filename = connection.getURI().toString();
           if( filename != null ) {
             DataStagingOutDialog.this.pathText.setText( filename );
-            if (nameText.getText().equals( "" )){
-              String nameToSet = "";
-              nameToSet = filename.substring( filename.lastIndexOf( "/" ) + 1, filename.length());
-              nameText.setText( nameToSet );
+            if( DataStagingOutDialog.this.nameText.getText().equals( "" ) ) { //$NON-NLS-1$
+              String nameToSet = ""; //$NON-NLS-1$
+              nameToSet = filename.substring( filename.lastIndexOf( "/" ) + 1, //$NON-NLS-1$
+                                              filename.length() );
+              DataStagingOutDialog.this.nameText.setText( nameToSet );
             }
           }
         }
@@ -208,9 +209,7 @@ public class DataStagingOutDialog extends Dialog {
       for( int i = 0; i < cFEnum.getELiterals().size(); i++ ) {
         this.creationFlagCombo.add( cFEnum.getEEnumLiteral( i ).toString() );
       }
-      
       int indexOfOverwite;
-      
       if( this.initCreationFlag != null ) {
         indexOfOverwite = this.creationFlagCombo.indexOf( this.initCreationFlag );
         this.creationFlagCombo.select( indexOfOverwite );
@@ -218,7 +217,6 @@ public class DataStagingOutDialog extends Dialog {
         indexOfOverwite = this.creationFlagCombo.indexOf( "overwrite" ); //$NON-NLS-1$
         this.creationFlagCombo.select( indexOfOverwite );
       }
-      
       gd = new GridData();
       Label deleteOnTerminationLabel = new Label( panel, SWT.LEAD );
       deleteOnTerminationLabel.setText( Messages.getString( "DataStageInTable.DeleteOnTermination_field_label" ) ); //$NON-NLS-1$
@@ -230,14 +228,12 @@ public class DataStagingOutDialog extends Dialog {
       /* Populate the Combo Box with the Delete On Termination Literals */
       this.deleteOnTerminationCombo.add( "true" ); //$NON-NLS-1$
       this.deleteOnTerminationCombo.add( "false" ); //$NON-NLS-1$
-      
       if( this.initDeleteFlag != null ) {
         int indexOfDelete = this.deleteOnTerminationCombo.indexOf( this.initDeleteFlag.toString() );
         this.deleteOnTerminationCombo.select( indexOfDelete );
       } else {
         this.deleteOnTerminationCombo.select( 0 );
       }
-      
       gd = new GridData();
       gd.horizontalSpan = 2;
       gd.horizontalAlignment = SWT.FILL;

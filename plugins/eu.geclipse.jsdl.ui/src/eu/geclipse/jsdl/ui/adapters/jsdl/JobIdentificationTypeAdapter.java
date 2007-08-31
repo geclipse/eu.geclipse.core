@@ -334,6 +334,7 @@ public final class JobIdentificationTypeAdapter extends JsdlAdaptersFactory {
    * This method populates the model content to the widgets registered with the
    * JobIdentificationType adapter.
    */
+  @SuppressWarnings("unchecked")
   public void load()
   {
     

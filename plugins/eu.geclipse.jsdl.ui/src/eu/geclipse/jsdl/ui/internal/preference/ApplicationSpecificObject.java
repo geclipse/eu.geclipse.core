@@ -16,7 +16,6 @@
 package eu.geclipse.jsdl.ui.internal.preference;
 
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 
 /**
  * Class representing data necesary to create extra pages for New Job Wizard.
@@ -40,11 +39,11 @@ public class ApplicationSpecificObject {
    * @param xmlPath
    * @param jsdlPath
    */
-  public ApplicationSpecificObject( int id,
-                                    String appName,
-                                    String path,
-                                    IPath xmlPath,
-                                    IPath jsdlPath )
+  public ApplicationSpecificObject( final int id,
+                                    final String appName,
+                                    final String path,
+                                    final IPath xmlPath,
+                                    final IPath jsdlPath )
   {
     this.id = id;
     this.appName = appName;
@@ -54,43 +53,89 @@ public class ApplicationSpecificObject {
   }
 
   /**
-   * Method to acc
-   * @return
+   * Method to access path to basic JSDL
+   * 
+   * @return JSDL path
    */
   public IPath getJsdlPath() {
     return this.jsdlPath;
   }
 
-  public void setJSDLPath( IPath jsdlPath ) {
-    this.jsdlPath = jsdlPath;
+  /**
+   * Method to set basic JSDL path
+   * 
+   * @param newJsdlPath path to set
+   */
+  public void setJSDLPath( final IPath newJsdlPath ) {
+    this.jsdlPath = newJsdlPath;
   }
 
+  /**
+   * Method to access application name
+   * 
+   * @return name of application for which specific data is kept
+   */
   public String getAppName() {
-    return appName;
+    return this.appName;
   }
 
-  public void setAppName( String appName ) {
+  /**
+   * Method to set application name, for which the specific data is kept
+   * 
+   * @param appName application name to set
+   */
+  public void setAppName( final String appName ) {
     this.appName = appName;
   }
 
+  /**
+   * Method to access path to executable file of application
+   * 
+   * @return path (local, usually absolute) in form of String to application's
+   *         executable file (e.g. /bin/echo)
+   */
   public String getAppPath() {
-    return appPath;
+    return this.appPath;
   }
 
-  public void setAppPath( String appPath ) {
+  /**
+   * Method to set path to application's executable file
+   * 
+   * @param appPath path to application's executable file in form of String
+   *            (e.g. /bin/echo)
+   */
+  public void setAppPath( final String appPath ) {
     this.appPath = appPath;
   }
 
+  /**
+   * Path to user's local XML file in which specific wizard pages for
+   * application are defined
+   * 
+   * @return path to XML file on user's machine. This file keep information of
+   *         how should wizard specific pages look like for application
+   */
   public IPath getXmlPath() {
-    return xmlPath;
+    return this.xmlPath;
   }
 
-  public void setXmlPath( IPath xmlPath ) {
+  /**
+   * Method to set path to XML file in which information of how should specific
+   * wizard pages look like is kept
+   * 
+   * @param xmlPath path to set
+   */
+  public void setXmlPath( final IPath xmlPath ) {
     this.xmlPath = xmlPath;
   }
 
+  /**
+   * Get unique id that distinguishes this object among other
+   * {@link ApplicationSpecificObject}s
+   * 
+   * @return unique {@link ApplicationSpecificObject}'s id
+   */
   public int getId() {
     return this.id;
   }
-
 }

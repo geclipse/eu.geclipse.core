@@ -354,7 +354,7 @@ public class ApplicationSpecificControlsFactory {
         IGridConnectionElement connection = GridFileDialog.openFileDialog( PlatformUI.getWorkbench()
                                                                              .getActiveWorkbenchWindow()
                                                                              .getShell(),
-                                                                           "Choose a file",
+                                                                           Messages.getString("ApplicationSpecificControlsFactory.choose_a_file_message"), //$NON-NLS-1$
                                                                            null, true );
         if( connection != null ) {
           try {
@@ -362,7 +362,7 @@ public class ApplicationSpecificControlsFactory {
           } catch( CoreException cExc ) {
             NewProblemDialog.openProblem( PlatformUI.getWorkbench()
               .getActiveWorkbenchWindow()
-              .getShell(), "error", "error", cExc );
+              .getShell(), Messages.getString("ApplicationSpecificControlsFactory.error_dialog_title"), Messages.getString("ApplicationSpecificControlsFactory.error_dialog_message"), cExc );  //$NON-NLS-1$ //$NON-NLS-2$
           }
         }
         if( filename != null ) {
@@ -547,7 +547,7 @@ public class ApplicationSpecificControlsFactory {
         IGridConnectionElement connection = GridFileDialog.openFileDialog( PlatformUI.getWorkbench()
                                                                              .getActiveWorkbenchWindow()
                                                                              .getShell(),
-                                                                           "Choose a file",
+                                                                           Messages.getString("ApplicationSpecificControlsFactory.choose_a_file_message"), //$NON-NLS-1$
                                                                            null, true );
         if( connection != null ) {
           try {
@@ -559,7 +559,7 @@ public class ApplicationSpecificControlsFactory {
           } catch( CoreException cExc ) {
             NewProblemDialog.openProblem( PlatformUI.getWorkbench()
               .getActiveWorkbenchWindow()
-              .getShell(), "error", "error", cExc );
+              .getShell(), Messages.getString("ApplicationSpecificControlsFactory.error_dialog_title"), Messages.getString("ApplicationSpecificControlsFactory.error_dialog_message"), cExc ); //$NON-NLS-1$ //$NON-NLS-2$
           }
         }
       }

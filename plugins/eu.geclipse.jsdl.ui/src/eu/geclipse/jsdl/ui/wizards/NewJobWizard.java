@@ -211,10 +211,10 @@ public class NewJobWizard extends Wizard implements INewWizard {
       try {
         URI test = new URI( execName );
         if( test.getScheme() != null ) {
-          String execNameTemp = test.toString().substring( test.toString()
-                                                  .lastIndexOf( "/" ) + 1,
-                                                test.toString().length() );
-          jsdl.setInDataStaging( execNameTemp, execName ); //$NON-NLS-1$
+          String execNameTemp = test.toString()
+            .substring( test.toString().lastIndexOf( "/" ) + 1, //$NON-NLS-1$
+                        test.toString().length() );
+          jsdl.setInDataStaging( execNameTemp, execName );
           execName = execNameTemp;
         }
       } catch( URISyntaxException e ) {
@@ -365,7 +365,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
         result = false;
       }
       if( !getFilePath().toString().endsWith( ".jsdl" ) ) { //$NON-NLS-1$
-        setErrorMessage( "File must have \"jsdl\" extension" );
+        setErrorMessage( Messages.getString("NewJobWizard.wrong_file_extension_error_message") ); //$NON-NLS-1$
         result = false;
       }
       return result;

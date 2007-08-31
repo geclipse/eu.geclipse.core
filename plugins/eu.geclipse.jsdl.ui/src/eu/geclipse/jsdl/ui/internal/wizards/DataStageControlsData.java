@@ -50,7 +50,7 @@ public class DataStageControlsData {
   }
 
   /**
-   * Method to access {@link DataStageControlsData#argName}
+   * Method to access DataStageControlsData.argName
    * 
    * @return name of the argument
    */
@@ -59,7 +59,7 @@ public class DataStageControlsData {
   }
 
   /**
-   * Method to access {@link DataStageControlsData#argName}
+   * Method to access DataStageControlsData.argName
    * 
    * @return control that holds name of the file
    */
@@ -68,7 +68,7 @@ public class DataStageControlsData {
   }
 
   /**
-   * Method to access {@link DataStageControlsData#URIControl}
+   * Method to access DataStageControlsData.URIControl
    * 
    * @return control that holds URI of the file
    */
