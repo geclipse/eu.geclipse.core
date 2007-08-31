@@ -90,9 +90,6 @@ public class WebView extends ViewPart {
    * set the Browser's URL to the value defined in the action!
    */
   void setUrl( final String url ) {
-    if( Activator.getDefault().isDebugging() ) {
-      System.out.println( url );
-    }
     this.browser.setUrl( url );
   }
 
