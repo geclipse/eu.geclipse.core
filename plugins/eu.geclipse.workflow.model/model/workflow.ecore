@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ecore:EPackage xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore" name="workflow"
+    nsURI="http:///eu/geclipse/workflow.ecore" nsPrefix="eu.geclipse.workflow">
+  <eClassifiers xsi:type="ecore:EClass" name="IPort" abstract="true" eSuperTypes="#//IWorkflowElement"/>
+  <eClassifiers xsi:type="ecore:EClass" name="ILink" eSuperTypes="#//IWorkflowElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="workflow" lowerBound="1"
+        eType="#//IWorkflow" eOpposite="#//IWorkflow/links"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="target" lowerBound="1"
+        eType="#//IInputPort" eOpposite="#//IInputPort/links"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="source" lowerBound="1"
+        eType="#//IOutputPort" eOpposite="#//IOutputPort/links"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IInputPort" eSuperTypes="#//IPort">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="node" lowerBound="1" eType="#//IWorkflowNode"
+        eOpposite="#//IWorkflowNode/inputs"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="links" upperBound="-1"
+        eType="#//ILink" eOpposite="#//ILink/target"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IOutputPort" eSuperTypes="#//IPort">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="node" lowerBound="1" eType="#//IWorkflowNode"
+        eOpposite="#//IWorkflowNode/outputs"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="links" upperBound="-1"
+        eType="#//ILink" eOpposite="#//ILink/source"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IWorkflow" eSuperTypes="#//IWorkflowElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="nodes" upperBound="-1"
+        eType="#//IWorkflowNode" containment="true" eOpposite="#//IWorkflowNode/workflow"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="links" upperBound="-1"
+        eType="#//ILink" containment="true" eOpposite="#//ILink/workflow"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IWorkflowJob" eSuperTypes="#//IWorkflowNode">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="jobDescription" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IWorkflowElement" abstract="true">
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="name" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="id" lowerBound="1" eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EString"
+        volatile="true" iD="true"/>
+  </eClassifiers>
+  <eClassifiers xsi:type="ecore:EClass" name="IWorkflowNode" abstract="true" eSuperTypes="#//IWorkflowElement">
+    <eStructuralFeatures xsi:type="ecore:EReference" name="workflow" lowerBound="1"
+        eType="#//IWorkflow" eOpposite="#//IWorkflow/nodes"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="outputs" lowerBound="1"
+        upperBound="-1" eType="#//IOutputPort" containment="true" eOpposite="#//IOutputPort/node"/>
+    <eStructuralFeatures xsi:type="ecore:EReference" name="inputs" lowerBound="1"
+        upperBound="-1" eType="#//IInputPort" containment="true" eOpposite="#//IInputPort/node"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isStart" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
+    <eStructuralFeatures xsi:type="ecore:EAttribute" name="isFinish" lowerBound="1"
+        eType="ecore:EDataType http://www.eclipse.org/emf/2002/Ecore#//EBoolean" defaultValueLiteral="false"/>
+  </eClassifiers>
+</ecore:EPackage>
