@@ -122,7 +122,7 @@ public class GridJobView extends ElementManagerViewPart
     TreeColumn lastUpdateColumn = new TreeColumn( tree, SWT.NONE );
     lastUpdateColumn.setText( Messages.getString( "GridJobView.last_update_column" ) ); //$NON-NLS-1$
     lastUpdateColumn.setAlignment( SWT.CENTER );
-    lastUpdateColumn.setWidth( 100 );
+    lastUpdateColumn.setWidth( 120 );
     return true;
   }
 

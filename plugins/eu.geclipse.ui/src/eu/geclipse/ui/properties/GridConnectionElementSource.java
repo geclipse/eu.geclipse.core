@@ -15,13 +15,16 @@
  *****************************************************************************/
 package eu.geclipse.ui.properties;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 
+import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridConnectionElement;
+import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.ui.internal.Activator;
 
 
@@ -64,26 +67,39 @@ public class GridConnectionElementSource extends AbstractPropertySource<IGridCon
   static private List<IProperty<IGridConnectionElement>> createProperties() {
     ArrayList<IProperty<IGridConnectionElement>> propertiesList = new ArrayList<IProperty<IGridConnectionElement>>();
     
-    propertiesList.add( createPath() );    
+    propertiesList.add( createUri() );    
 
     return propertiesList;
   }
 
-  private static IProperty<IGridConnectionElement> createPath() {
-    return new AbstractProperty<IGridConnectionElement>( Messages.getString("GridConnectionElementSource.path"), null, false ) { //$NON-NLS-1$
+  private static IProperty<IGridConnectionElement> createUri() {
+    return new AbstractProperty<IGridConnectionElement>( Messages.getString( "GridConnectionElementSource.uri" ), null, false ) { //$NON-NLS-1$
 
       @Override
       public Object getValue( final IGridConnectionElement sourceObject ) {
-        String pathString = null;
-        IPath path = sourceObject.getPath();
-        
-        if( path != null ) {
-          pathString = path.toString();
+        String uriString = null;
+        IGridContainer parent = sourceObject;
+        int lastRelativeSegments = 0;
+        while( parent != null && !( parent instanceof IGridConnection ) ) {
+          parent = parent.getParent();
+          lastRelativeSegments++;
         }
-        
-        return pathString;
+        if( parent != null && parent instanceof IGridConnection ) {
+          URI parentUri = ( ( IGridConnection )parent ).getURI();
+          IPath localPath = sourceObject.getPath();
+          if( lastRelativeSegments <= localPath.segmentCount() ) {
+            IPath relativePath = localPath.removeFirstSegments( localPath.segmentCount()
+                                                                - lastRelativeSegments );
+            try {
+              URI newUri = parentUri.resolve( relativePath.toString() );
+              uriString = newUri.toString();
+            } catch( IllegalArgumentException exception ) {
+              // do nothing
+            }
+          }
+        }
+        return uriString;
       }
-      
     };
   }  
 }
