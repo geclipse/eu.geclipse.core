@@ -55,6 +55,11 @@ public class GridNotificationService {
     this.lockCounter = 0;
   }
   
+  /**
+   * Get the singleton service instance.
+   * 
+   * @return The singleton instance.
+   */
   public static GridNotificationService getInstance() {
     
     if ( instance == null ) {

@@ -72,6 +72,12 @@ public final class GridRoot
     return singleton;
   }
   
+  /**
+   * Get the {@link GridNotificationService} that is used to
+   * notify model listeners about changes in the model.
+   * 
+   * @return The models notification service.
+   */
   public static GridNotificationService getGridNotificationService() {
     return GridNotificationService.getInstance();
   }
@@ -84,6 +90,12 @@ public final class GridRoot
     return null;
   }
   
+  /**
+   * Get the {@link ResourceNotificationService} that is used to
+   * notify the model about changes in the resource tree.
+   * 
+   * @return The resource notification service.
+   */
   public static ResourceNotificationService getResourceNotificationService() {
     return ResourceNotificationService.getInstance();
   }

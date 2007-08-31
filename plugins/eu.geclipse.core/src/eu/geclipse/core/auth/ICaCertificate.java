@@ -36,10 +36,32 @@ public interface ICaCertificate {
    */
   public String getID();
   
+  /**
+   * Get the raw certificate data of this certificate.
+   * 
+   * @return The certificate's raw data.
+   */
   public byte[] getCertificateData();
   
+  /**
+   * Delete this certificate from the specified directory. This
+   * deleted all files that belong to this certificate.
+   * 
+   * @param fromDirectory The directory from which to delete the
+   * certificate.
+   * @see #write(IPath) 
+   */
   public void delete( final IPath fromDirectory );
   
+  /**
+   * Write this certificate to the specified directory. Certificates may
+   * contain several files and only the concrete {@link ICaCertificate}
+   * implementation knows about these files. So in order to completely
+   * remove a certificate the {@link #delete(IPath)}-method should be
+   * used.
+   * @param toDirectory
+   * @throws IOException
+   */
   public void write( final IPath toDirectory ) throws IOException;
   
 }

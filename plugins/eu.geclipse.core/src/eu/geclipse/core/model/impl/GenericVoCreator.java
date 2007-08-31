@@ -1,3 +1,18 @@
+/*****************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.core.model.impl;
 
 import org.eclipse.core.filesystem.IFileInfo;
@@ -8,6 +23,9 @@ import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IStorableElementCreator;
 
+/**
+ * Grid element creator for the {@link GenericVirtualOrganization}.
+ */
 public class GenericVoCreator
     implements IStorableElementCreator {
   
@@ -28,10 +46,8 @@ public class GenericVoCreator
    * 
    * @param vo The {@link GenericVirtualOrganization} to which to
    * apply this creators settings.
-   * @throws GridModelException If an error occurs during the operation.
    */
-  public void apply( final GenericVirtualOrganization vo )
-      throws GridModelException {
+  public void apply( final GenericVirtualOrganization vo ) {
     // currently empty implementation
   }
 
@@ -40,7 +56,6 @@ public class GenericVoCreator
   }
 
   public boolean canCreate( final Object fromObject ) {
-    // TODO mathias
     return false;
   }
   

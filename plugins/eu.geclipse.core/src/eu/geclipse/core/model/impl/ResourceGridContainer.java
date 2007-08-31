@@ -16,7 +16,7 @@
 package eu.geclipse.core.model.impl;
 
 import java.net.URI;
-import java.util.List;
+
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.filesystem.IFileSystem;
@@ -27,7 +27,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import eu.geclipse.core.Extensions;
+
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.internal.Messages;
 import eu.geclipse.core.internal.model.notify.GridElementLifecycleManager;

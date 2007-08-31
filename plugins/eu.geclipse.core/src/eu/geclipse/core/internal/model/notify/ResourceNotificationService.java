@@ -1,3 +1,18 @@
+/*****************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.core.internal.model.notify;
 
 import org.eclipse.core.resources.IResourceChangeEvent;
@@ -9,6 +24,10 @@ import org.eclipse.core.runtime.CoreException;
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.internal.model.GridRoot;
 
+/**
+ * This class tracks changes in the Eclipse resource tree and
+ * processes them using the {@link GridElementLifecycleManager}.
+ */
 public class ResourceNotificationService
     implements IResourceChangeListener {
   
@@ -18,6 +37,11 @@ public class ResourceNotificationService
     ResourcesPlugin.getWorkspace().addResourceChangeListener( this );
   }
   
+  /**
+   * Get the singleton of this class.
+   * 
+   * @return The singleton instance.
+   */
   public static ResourceNotificationService getInstance() {
     
     if ( instance == null ) {

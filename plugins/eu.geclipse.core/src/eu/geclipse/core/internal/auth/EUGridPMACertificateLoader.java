@@ -1,3 +1,18 @@
+/*****************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.core.internal.auth;
 
 import java.io.BufferedInputStream;
@@ -28,6 +43,10 @@ import eu.geclipse.core.util.tar.TarArchiveException;
 import eu.geclipse.core.util.tar.TarEntry;
 import eu.geclipse.core.util.tar.TarInputStream;
 
+/**
+ * Certificate loader for certificates from the
+ * European Policy Management Authority for Grid Authentication.
+ */
 public class EUGridPMACertificateLoader
     implements ICaCertificateLoader {
   
@@ -51,7 +70,7 @@ public class EUGridPMACertificateLoader
       ? new NullProgressMonitor()
       : monitor;
       
-    lMonitor.beginTask( "Loading certificate " + certID + "...", 3 );
+    lMonitor.beginTask( String.format( Messages.getString("EUGridPMACertificateLoader.load_cert_task"), certID ), 3 ); //$NON-NLS-1$
     
     ICaCertificate result = null;
     
@@ -60,9 +79,9 @@ public class EUGridPMACertificateLoader
       byte[] certificateData = null;
       byte[] infoData = null;
       
-      lMonitor.subTask( "Contacting server" );
+      lMonitor.subTask( Messages.getString("EUGridPMACertificateLoader.contact_server_task") ); //$NON-NLS-1$
       URL url = uri.toURL();
-      url = new URL( url.toString() + "/" + certID );
+      url = new URL( url.toString() + "/" + certID ); //$NON-NLS-1$
       URLConnection connection = Preferences.getURLConnection( url );
       try {
         connection.connect();
@@ -71,7 +90,7 @@ public class EUGridPMACertificateLoader
       }
       lMonitor.worked( 1 );
       
-      lMonitor.subTask( "Decompressing file" );
+      lMonitor.subTask( Messages.getString("EUGridPMACertificateLoader.decomp_file_task") ); //$NON-NLS-1$
       InputStream iStream = connection.getInputStream();
       BufferedInputStream bStream = new BufferedInputStream( iStream );
       GZIPInputStream zStream = new GZIPInputStream( bStream );
@@ -83,7 +102,7 @@ public class EUGridPMACertificateLoader
           IPath oPath = tEntry.getPath();
           String extension = oPath.getFileExtension();
           
-          if ( EUGridPMACertificate.CERT_FILE_EXTENSION.equalsIgnoreCase( extension ) ) {
+          if ( PEMCertificate.CERT_FILE_EXTENSION.equalsIgnoreCase( extension ) ) {
             certificateData = readFromStream( tiStream );
           }
           
@@ -95,7 +114,7 @@ public class EUGridPMACertificateLoader
       }
       lMonitor.done();
       
-      lMonitor.subTask( "Generating certificate" );
+      lMonitor.subTask( Messages.getString("EUGridPMACertificateLoader.generate_cert_task") ); //$NON-NLS-1$
       if ( ( certificateData != null ) && ( infoData != null ) ) {
         result = new EUGridPMACertificate( certificateData, infoData );
       }
@@ -119,13 +138,13 @@ public class EUGridPMACertificateLoader
       ? new NullProgressMonitor()
       : monitor;
     
-    lMonitor.beginTask( "Fetching certificate list...", 3 );
+    lMonitor.beginTask( Messages.getString("EUGridPMACertificateLoader.fetch_list_task"), 3 ); //$NON-NLS-1$
     
     List< String > result = new ArrayList< String >();
     
     try {
       
-      lMonitor.subTask( "Contacting server" );
+      lMonitor.subTask( Messages.getString("EUGridPMACertificateLoader.contact_server_task") ); //$NON-NLS-1$
       URLConnection connection = Preferences.getURLConnection( uri.toURL() );
       try {
         connection.connect();
@@ -134,7 +153,7 @@ public class EUGridPMACertificateLoader
       }
       lMonitor.worked( 1 );
       
-      lMonitor.subTask( "Loading list" );
+      lMonitor.subTask( Messages.getString("EUGridPMACertificateLoader.load_list_task") ); //$NON-NLS-1$
       InputStream iStream = connection.getInputStream();
       InputStreamReader iReader = new InputStreamReader( iStream );
       BufferedReader bReader = new BufferedReader( iReader );
@@ -146,7 +165,7 @@ public class EUGridPMACertificateLoader
       bReader.close();
       lMonitor.done();
 
-      lMonitor.subTask( "Parsing list" );
+      lMonitor.subTask( Messages.getString("EUGridPMACertificateLoader.parse_list_task") ); //$NON-NLS-1$
       String content = buffer.toString().replaceAll( " ", "" ); //$NON-NLS-1$ //$NON-NLS-2$
       int index = -1;
       while ( ( index = content.indexOf( "ahref=\"", index+1 ) ) > 0 ) { //$NON-NLS-1$
