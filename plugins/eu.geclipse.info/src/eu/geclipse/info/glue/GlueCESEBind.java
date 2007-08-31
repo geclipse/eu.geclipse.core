@@ -70,9 +70,6 @@ public class GlueCESEBind extends AbstractGlueTable
    */
   public GlueIndex glueIndex;
 
-  /**
-   * @param id
-   */
   public void setID( final String id ) {
     this.key = id;
   }

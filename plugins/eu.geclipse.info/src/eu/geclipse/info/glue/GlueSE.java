@@ -128,9 +128,6 @@ public class GlueSE extends AbstractGlueTable implements java.io.Serializable {
     return this.UniqueID;
   }
 
-  /**
-   * @param id
-   */
   public void setID( final String id ) {
     this.UniqueID = id;
   }

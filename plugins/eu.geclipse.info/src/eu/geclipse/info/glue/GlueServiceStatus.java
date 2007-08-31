@@ -28,6 +28,10 @@ public class GlueServiceStatus extends AbstractGlueTable
 {
 
   private static final long serialVersionUID = 1L;
+  
+  /**
+   * 
+   */
   public GlueService glueService; // GlueService_UniqueId
 
   /**
@@ -51,9 +55,6 @@ public class GlueServiceStatus extends AbstractGlueTable
   public Date MeasurementTime;
 
 
-  /**
-   * @param id
-   */
   public void setID( final String id ) {
     this.key = id;
   }

@@ -62,9 +62,6 @@ public class GlueSiteInfo extends AbstractGlueTable
     return this.OtherInfo;
   }
 
-  /**
-   * @param id
-   */
   public void setID( final String id ) {
     this.OtherInfo = id;
   }

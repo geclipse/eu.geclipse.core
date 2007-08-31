@@ -61,9 +61,6 @@ public class GlueCEAccessControlBaseRule extends AbstractGlueTable implements ja
     return this.Value;
   }
 
-  /**
-   * @param id
-   */
   public void setID( final String id ) {
     this.Value = id;
   }

@@ -129,9 +129,6 @@ public class GlueService extends AbstractGlueTable
     return this.uniqueId;
   }
 
-  /**
-   * @param id
-   */
   public void setID( final String id ) {
     this.uniqueId = id;
   }

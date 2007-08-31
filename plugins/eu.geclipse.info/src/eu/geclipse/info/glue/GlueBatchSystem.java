@@ -100,9 +100,6 @@ public class GlueBatchSystem extends AbstractGlueTable implements java.io.Serial
     return this.Type;
   }
 
-  /**
-   * @param id
-   */
   public void setID( final String id ) {
     this.Type = id;
   }

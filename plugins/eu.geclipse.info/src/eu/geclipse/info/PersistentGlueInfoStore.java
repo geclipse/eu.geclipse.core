@@ -21,16 +21,10 @@ package eu.geclipse.info;
  */
 public abstract class PersistentGlueInfoStore implements IGlueInfoStore {
 
-  /**
-   * @param Filename
-   */
   public void write( final String Filename ) {
     //To be implemented by subclasses
   }
 
-  /**
-   * @param Filename
-   */
   public void read( final String Filename ) {
     //To be implemented by subclasses
   }

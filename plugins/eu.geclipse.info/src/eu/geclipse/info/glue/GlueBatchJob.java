@@ -112,9 +112,6 @@ public class GlueBatchJob extends AbstractGlueTable implements java.io.Serializa
     return this.GlueBatchJobGlobalID;
   }
 
-  /**
-   * @param id
-   */
   public void setID( final String id ) {
     this.GlueBatchJobGlobalID = id;
   }

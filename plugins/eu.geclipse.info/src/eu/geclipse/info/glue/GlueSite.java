@@ -132,9 +132,6 @@ public class GlueSite extends AbstractGlueTable implements java.io.Serializable
     return this.UniqueId;
   }
 
-  /**
-   * @param id
-   */
   public void setID( final String id ) {
     this.UniqueId = id;
   }

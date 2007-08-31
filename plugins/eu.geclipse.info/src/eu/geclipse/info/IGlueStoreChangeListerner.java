@@ -26,8 +26,5 @@ import eu.geclipse.info.glue.AbstractGlueTable;
  */
 public interface IGlueStoreChangeListerner {
 
-  /**
-   * @param modifiedGlueEntries
-   */
   public void infoChanged( final ArrayList<AbstractGlueTable> modifiedGlueEntries );
 }

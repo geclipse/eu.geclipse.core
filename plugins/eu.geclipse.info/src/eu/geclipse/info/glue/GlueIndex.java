@@ -299,9 +299,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return glueIndexInstance;
   }
 
-  /**
-   * 
-   */
   public static void drop(){
     
     glueIndexInstance=null;
@@ -338,9 +335,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     }
   }
 
-  /**
-   * 
-   */
   public static void dropCachePersistenceFile(){
     IPath serPath = getGridInfoLocation();
     serPath.toFile().delete();
@@ -455,10 +449,6 @@ public abstract class GlueIndex implements java.io.Serializable {
   }
   
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueHost getGlueHost( final String key ) {
     if( key == null ) {
       return null;
@@ -476,10 +466,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   }
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueSite getGlueSite( final String key ) {
     if( key == null ) {
       return null;
@@ -497,10 +483,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   }
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueSE getGlueSE( final String key ) {
     if( key == null ) {
       return null;
@@ -518,10 +500,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   }
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueSL getGlueSL( final String key ) {
     if( key == null ) {
       return null;
@@ -539,10 +517,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   }
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueCluster getGlueCluster( final String key ) {
     if( key == null ) {
       return null;
@@ -560,10 +534,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   }
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueSubCluster getGlueSubCluster( final String key ) {
     if( key == null ) {
       return null;
@@ -581,10 +551,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   }
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueCE getGlueCE( final String key ) {
     if( key == null ) {
       return null;
@@ -602,10 +568,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   }
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueBatchJob getGlueBatchJob( final String key ) {
     if( key == null ) {
       return null;
@@ -623,10 +585,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   }
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueBatchQueue getGlueBatchQueue( final String key ) {
     if( key == null ) {
       return null;
@@ -644,10 +602,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   }
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueBatchSystem getGlueBatchSystem( final String key ) {
     if( key == null ) {
       return null;
@@ -665,10 +619,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   }
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueCEAccessControlBaseRule getGlueCEAccessControlBaseRule( final String key )
   {
     if( key == null ) {
@@ -687,10 +637,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   }
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueCEContactString getGlueCEContactString( final String key ) {
     if( key == null ) {
       return null;
@@ -708,10 +654,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   }
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueCESEBind getGlueCESEBind( final String key ) {
     if( key == null ) {
       return null;
@@ -728,10 +670,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   } 
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueCEVOView getGlueCEVOView( final String key ) {
     if( key == null ) {
       return null;
@@ -749,10 +687,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   }
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueCEVOViewAccessControlBaseRule getGlueCEVOViewAccessControlBaseRule( final String key )
   {
     if( key == null ) {
@@ -771,10 +705,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   }
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueHostLocalFileSystem getGlueHostLocalFileSystem( final String key ) {
     if( key == null ) {
       return null;
@@ -792,10 +722,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   }
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueHostNetworkAdapter getGlueHostNetworkAdapter( final String key ) {
     if( key == null ) {
       return null;
@@ -813,10 +739,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   }
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueHostPoolAccount getGlueHostPoolAccount( final String key ) {
     if( key == null ) {
       return null;
@@ -834,10 +756,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   }
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueHostProcess getGlueHostProcess( final String key ) {
     if( key == null ) {
       return null;
@@ -855,10 +773,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   }
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueHostRemoteFileSystem getGlueHostRemoteFileSystem( final String key ) {
     if( key == null ) {
       return null;
@@ -876,10 +790,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   }
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueHostRole getGlueHostRole( final String key ) {
     if( key == null ) {
       return null;
@@ -897,10 +807,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   }
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueSA getGlueSA( final String key ) {
     if( key == null ) {
       return null;
@@ -918,10 +824,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   }
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueSAAccessControlBaseRule getGlueSAAccessControlBaseRule( final String key )
   {
     if( key == null ) {
@@ -940,10 +842,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   }
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueSEAccessProtocol getGlueSEAccessProtocol( final String key ) {
     if( key == null ) {
       return null;
@@ -961,10 +859,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   }
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueSEAccessProtocolCapability getGlueSEAccessProtocolCapability( final String key )
   {
     if( key == null ) {
@@ -983,10 +877,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   }
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueSEAccessProtocolSupportedSecurity getGlueSEAccessProtocolSupportedSecurity( final String key )
   {
     if( key == null ) {
@@ -1005,10 +895,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   }
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueSEControlProtocol getGlueSEControlProtocol( final String key ) {
     if( key == null ) {
       return null;
@@ -1026,10 +912,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   }
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueSEControlProtocolCapability getGlueSEControlProtocolCapability( final String key )
   {
     if( key == null ) {
@@ -1048,10 +930,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   }
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueService getGlueService( final String key ) {
     if( key == null ) {
       return null;
@@ -1069,10 +947,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   }
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueServiceAccessControlRule getGlueServiceAccessControlRule( final String key )
   {
     if( key == null ) {
@@ -1091,10 +965,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   }
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueServiceAssociation getGlueServiceAssociation( final String key ) {
     if( key == null ) {
       return null;
@@ -1112,10 +982,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   }
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueServiceData getGlueServiceData( final String key ) {
     if( key == null ) {
       return null;
@@ -1133,10 +999,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   }
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueServiceOwner getGlueServiceOwner( final String key ) {
     if( key == null ) {
       return null;
@@ -1154,10 +1016,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   }
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueServiceStatus getGlueServiceStatus( final String key ) {
     if( key == null ) {
       return null;
@@ -1175,10 +1033,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   }
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueSiteInfo getGlueSiteInfo( final String key ) {
     if( key == null ) {
       return null;
@@ -1196,10 +1050,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   }
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueSiteSponsor getGlueSiteSponsor( final String key ) {
     if( key == null ) {
       return null;
@@ -1217,10 +1067,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   }
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueSubClusterLocation getGlueSubClusterLocation( final String key ) {
     if( key == null ) {
       return null;
@@ -1238,10 +1084,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   }
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueSubClusterSoftwareRunTimeEnvironment getGlueSubClusterSoftwareRunTimeEnvironment( final String key )
   {
     if( key == null ) {
@@ -1260,10 +1102,6 @@ public abstract class GlueIndex implements java.io.Serializable {
     return out;
   }
 
-  /**
-   * @param key
-   * @return object
-   */
   public GlueVO getGlueVO( final String key ) {
     if( key == null ) {
       return null;
@@ -1280,6 +1118,4 @@ public abstract class GlueIndex implements java.io.Serializable {
     }
     return out;
   }
-
-
 }

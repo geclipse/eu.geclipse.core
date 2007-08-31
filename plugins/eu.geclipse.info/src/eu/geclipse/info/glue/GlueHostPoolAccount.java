@@ -78,9 +78,6 @@ public class GlueHostPoolAccount extends AbstractGlueTable
     return this.Prefix;
   }
 
-  /**
-   * @param id
-   */
   public void setID( final String id ) {
     this.Prefix = id;
   }

@@ -50,9 +50,6 @@ public class GlueServiceAccessControlRule extends AbstractGlueTable
    */
   public Date MeasurementTime;
 
-  /**
-   * @param id
-   */
   public void setID( final String id ) {
     this.key = id;
   }

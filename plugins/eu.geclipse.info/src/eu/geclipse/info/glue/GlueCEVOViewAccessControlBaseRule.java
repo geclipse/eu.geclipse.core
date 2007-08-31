@@ -61,9 +61,6 @@ public class GlueCEVOViewAccessControlBaseRule extends AbstractGlueTable impleme
     return this.Value;
   }
 
-  /**
-   * @param id
-   */
   public void setID( final String id ) {
     this.Value = id;
   }

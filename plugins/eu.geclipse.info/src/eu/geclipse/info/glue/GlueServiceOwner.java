@@ -62,9 +62,6 @@ public class GlueServiceOwner extends AbstractGlueTable
     return this.Owner;
   }
 
-  /**
-   * @param id
-   */
   public void setID( final String id ) {
     this.Owner = id;
   }

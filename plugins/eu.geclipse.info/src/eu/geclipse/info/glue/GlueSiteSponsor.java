@@ -62,9 +62,6 @@ public class GlueSiteSponsor extends AbstractGlueTable
     return this.Sponsor;
   }
 
-  /**
-   * @param id
-   */
   public void setID( final String id ) {
     this.Sponsor = id;
   }

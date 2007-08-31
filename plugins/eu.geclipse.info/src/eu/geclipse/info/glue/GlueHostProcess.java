@@ -118,9 +118,6 @@ public class GlueHostProcess extends AbstractGlueTable
     return this.Name;
   }
 
-  /**
-   * @param id
-   */
   public void setID( final String id ) {
     this.Name = id;
   }

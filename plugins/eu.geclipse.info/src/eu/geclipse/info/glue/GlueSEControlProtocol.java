@@ -94,9 +94,6 @@ public class GlueSEControlProtocol extends AbstractGlueTable
     return this.UniqueID;
   }
 
-  /**
-   * @param id
-   */
   public void setID( final String id ) {
     this.UniqueID = id;
   }

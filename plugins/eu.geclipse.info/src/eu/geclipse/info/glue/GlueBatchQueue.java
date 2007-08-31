@@ -85,9 +85,6 @@ public class GlueBatchQueue extends AbstractGlueTable implements java.io.Seriali
     return this.QueueName;
   }
 
-  /**
-   * @param id
-   */
   public void setID( final String id ) {
     this.QueueName = id;
   }

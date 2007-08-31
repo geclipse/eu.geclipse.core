@@ -30,6 +30,7 @@ public abstract class AbstractGlueTable implements Serializable{
    * 
    */
   public String tableName;
+  
   /**
    * 
    */
@@ -37,6 +38,7 @@ public abstract class AbstractGlueTable implements Serializable{
   
   protected String key;
   protected String keyName;
+  
   /**
    * @return The unique identified for this Glue entry
    */
