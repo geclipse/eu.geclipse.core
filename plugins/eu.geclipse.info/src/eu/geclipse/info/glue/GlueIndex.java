@@ -351,6 +351,8 @@ public abstract class GlueIndex implements java.io.Serializable {
         gi= ( GlueIndex )ois.readObject();
       } catch( ClassNotFoundException e ) {
         e.printStackTrace();
+      } catch( Exception exception ) {
+        throw new IOException("Could not load cache."); //$NON-NLS-1$
       }
     }else{
       throw new IOException("Could not load cache."); //$NON-NLS-1$
