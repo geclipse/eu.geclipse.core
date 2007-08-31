@@ -200,20 +200,6 @@ project number: FP5-IST-034327  http://www.geclipse.eu/
          unpack="false"/>
 
    <plugin
-         id="eu.geclipse.batch"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="eu.geclipse.batch.ui"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="eu.geclipse.core.filesystem"
          download-size="0"
          install-size="0"
