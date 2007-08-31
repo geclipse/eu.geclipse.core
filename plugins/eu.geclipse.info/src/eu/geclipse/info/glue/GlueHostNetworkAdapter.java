@@ -29,18 +29,70 @@ public class GlueHostNetworkAdapter extends AbstractGlueTable
 
   private static final long serialVersionUID = 1L;
 
+
+  /**
+   * 
+   */
   public GlueHost glueHost; // GlueHostUniqueID
+
+  /**
+   * 
+   */
   public String Name; // PK
+
+  /**
+   * 
+   */
   public String IPAddress;
+
+  /**
+   * 
+   */
   public Long MTU;
+
+  /**
+   * 
+   */
   public Long TXRate;
+
+  /**
+   * 
+   */
   public Long RXRate;
+
+  /**
+   * 
+   */
   public String LastOctetsTX;
+
+  /**
+   * 
+   */
   public String LastOctetsRX;
+
+  /**
+   * 
+   */
   public String OutboundIP;
+
+  /**
+   * 
+   */
   public String InboundIP;
+
+  /**
+   * 
+   */
   public Date MeasurementDate;
+
+  /**
+   * 
+   */
   public Date MeasurementTime;
+
+  /**
+   * 
+   */
   public GlueIndex glueIndex;
 
   /* (non-Javadoc)
@@ -51,6 +103,9 @@ public class GlueHostNetworkAdapter extends AbstractGlueTable
     return this.Name;
   }
 
+  /**
+   * @param id
+   */
   public void setID( final String id ) {
     this.Name = id;
   }

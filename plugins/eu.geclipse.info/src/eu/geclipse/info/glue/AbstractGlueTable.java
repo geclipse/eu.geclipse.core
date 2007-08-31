@@ -58,11 +58,10 @@ public abstract class AbstractGlueTable implements Serializable{
    * @return the value of the updated field, null in the case of a list
    * @throws RuntimeException
    * @throws IllegalAccessException
-   * @throws NoSuchFieldException
    */
 
   public Object setFieldByName( final String fieldName, final Object value  )
-  throws RuntimeException, IllegalAccessException, NoSuchFieldException
+  throws RuntimeException, IllegalAccessException//, NoSuchFieldException
   {
     Object ret = null;
     Object valueToset = value;

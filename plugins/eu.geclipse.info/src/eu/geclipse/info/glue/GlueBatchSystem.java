@@ -27,19 +27,69 @@ public class GlueBatchSystem extends AbstractGlueTable implements java.io.Serial
   
   private static final long serialVersionUID = 1L;
   
+  /**
+   * 
+   */
   public GlueHost glueHost; //GlueHostUniqueID
+  
+  /**
+   * 
+   */
   public String Type; //PK
+  
+  /**
+   * 
+   */
   public Long TotalJobSlots;
+  
+  /**
+   * 
+   */
   public Long FreeJobSlots;
+  
+  /**
+   * 
+   */
   public Long NodeCount;
+  
+  /**
+   * 
+   */
   public Double CPULoadAvg;
+  
+  /**
+   * 
+   */
   public Long RAMTotal;
+  
+  /**
+   * 
+   */
   public Long RAMUsed;
+  
+  /**
+   * 
+   */
   public Long NodeDownCount;
+  
+  /**
+   * 
+   */
   public String NodeDownList;
+  
+  /**
+   * 
+   */
   public Date MeasurementDate;
+  
+  /**
+   * 
+   */
   public Date MeasurementTime;
 
+  /**
+   * 
+   */
   public GlueIndex glueIndex;
 
   /* (non-Javadoc)
@@ -50,6 +100,9 @@ public class GlueBatchSystem extends AbstractGlueTable implements java.io.Serial
     return this.Type;
   }
 
+  /**
+   * @param id
+   */
   public void setID( final String id ) {
     this.Type = id;
   }

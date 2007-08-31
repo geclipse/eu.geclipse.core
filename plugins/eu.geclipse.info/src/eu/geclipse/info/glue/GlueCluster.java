@@ -29,15 +29,55 @@ public class GlueCluster extends AbstractGlueTable
 {
   private static final long serialVersionUID = 1L;
 
+
+  /**
+   * 
+   */
   public String UniqueID; //PK
+
+  /**
+   * 
+   */
   public String keyName = "UniqueID"; //$NON-NLS-1$
+
+  /**
+   * 
+   */
   public String Name;
+
+  /**
+   * 
+   */
   public String InformationServiceURL;
+
+  /**
+   * 
+   */
   public GlueSite glueSite; //GlueSite_UniqueId
+
+  /**
+   * 
+   */
   public Date MeasurementDate;
+
+  /**
+   * 
+   */
   public Date MeasurementTime;
+
+  /**
+   * 
+   */
   public ArrayList<GlueSubCluster> glueSubClusterList = new ArrayList<GlueSubCluster>();
+
+  /**
+   * 
+   */
   public ArrayList<GlueCE> glueCEList = new ArrayList<GlueCE>();
+
+  /**
+   * 
+   */
   public GlueIndex glueIndex;
 
   /* (non-Javadoc)
@@ -48,6 +88,9 @@ public class GlueCluster extends AbstractGlueTable
     return this.UniqueID;
   }
 
+  /**
+   * @param id
+   */
   public void setID( final String id ) {
     this.UniqueID = id;
   }

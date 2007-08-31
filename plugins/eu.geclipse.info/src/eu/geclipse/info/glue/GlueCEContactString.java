@@ -27,10 +27,30 @@ public class GlueCEContactString extends AbstractGlueTable implements java.io.Se
   
   private static final long serialVersionUID = 1L;
   
+
+  /**
+   * 
+   */
   public GlueCE glueCE; //GlueCEUniqueID
+
+  /**
+   * 
+   */
   public String Value; //PK
+
+  /**
+   * 
+   */
   public Date MeasurementDate;
+
+  /**
+   * 
+   */
   public Date MeasurementTime;
+
+  /**
+   * 
+   */
   public GlueIndex glueIndex;
 
   /* (non-Javadoc)

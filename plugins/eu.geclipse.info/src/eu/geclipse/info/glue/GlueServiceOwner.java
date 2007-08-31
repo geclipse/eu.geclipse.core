@@ -28,10 +28,30 @@ public class GlueServiceOwner extends AbstractGlueTable
 {
 
   private static final long serialVersionUID = 1L;
+
+  /**
+   * 
+   */
   public GlueService glueService; // GlueService_UniqueId
+
+  /**
+   * 
+   */
   public String Owner; // PK
+
+  /**
+   * 
+   */
   public Date MeasurementDate;
+
+  /**
+   * 
+   */
   public Date MeasurementTime;
+
+  /**
+   * 
+   */
   public GlueIndex glueIndex;
 
   /* (non-Javadoc)
@@ -42,6 +62,9 @@ public class GlueServiceOwner extends AbstractGlueTable
     return this.Owner;
   }
 
+  /**
+   * @param id
+   */
   public void setID( final String id ) {
     this.Owner = id;
   }

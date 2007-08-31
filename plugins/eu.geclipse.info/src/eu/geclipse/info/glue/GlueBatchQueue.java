@@ -26,16 +26,54 @@ public class GlueBatchQueue extends AbstractGlueTable implements java.io.Seriali
 
   private static final long serialVersionUID = 1L;
 
+  /**
+   * 
+   */
   public GlueHost glueHost; //GlueHostUniqueID
+  
+  /**
+   * 
+   */
   public String QueueName; //PK
+  
+  /**
+   * 
+   */
   public String JobFinishedTotal;
+  
+  /**
+   * 
+   */
   public String JobFinishedOK;
+  
+  /**
+   * 
+   */
   public String JobFinishedKO;
+  
+  /**
+   * 
+   */
   public String JobRunning;
+  
+  /**
+   * 
+   */
   public String JobWaiting;
+  
+  /**
+   * 
+   */
   public Date MeasurementDate;
+  
+  /**
+   * 
+   */
   public Date MeasurementTime;
 
+  /**
+   * 
+   */
   public GlueIndex glueIndex;
 
   
@@ -47,6 +85,9 @@ public class GlueBatchQueue extends AbstractGlueTable implements java.io.Seriali
     return this.QueueName;
   }
 
+  /**
+   * @param id
+   */
   public void setID( final String id ) {
     this.QueueName = id;
   }

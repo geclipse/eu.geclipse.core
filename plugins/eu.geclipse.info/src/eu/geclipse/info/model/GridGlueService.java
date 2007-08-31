@@ -59,7 +59,10 @@
      return uri;
    }
 
-   public GlueService getGlueService(){
+   /**
+   * @return GlueService
+   */
+  public GlueService getGlueService(){
      return (GlueService)getGlueElement();
    }
  }

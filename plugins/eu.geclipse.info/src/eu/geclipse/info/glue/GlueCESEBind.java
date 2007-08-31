@@ -29,15 +29,50 @@ public class GlueCESEBind extends AbstractGlueTable
   
   private static final long serialVersionUID = 1L;
 
+
+  /**
+   * 
+   */
   public GlueCE glueCE; // GlueCEUniqueID
+
+  /**
+   * 
+   */
   public GlueSE glueSE; // GlueSEUniqueID
+
+  /**
+   * 
+   */
   public String Accesspoint;
+
+  /**
+   * 
+   */
   public String MountInfo;
+
+  /**
+   * 
+   */
   public Long Weight;
+
+  /**
+   * 
+   */
   public Date MeasurementDate;
+
+  /**
+   * 
+   */
   public Date MeasurementTime;
+
+  /**
+   * 
+   */
   public GlueIndex glueIndex;
 
+  /**
+   * @param id
+   */
   public void setID( final String id ) {
     this.key = id;
   }

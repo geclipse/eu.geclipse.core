@@ -29,13 +29,45 @@ public class GlueHostPoolAccount extends AbstractGlueTable
 
   private static final long serialVersionUID = 1L;
 
+
+  /**
+   * 
+   */
   public GlueHost glueHost; // GlueHostUniqueID
+
+  /**
+   * 
+   */
   public String Prefix; // PK
+
+  /**
+   * 
+   */
   public String AssignedTo;
+
+  /**
+   * 
+   */
   public Long Total;
+
+  /**
+   * 
+   */
   public Long Free;
+
+  /**
+   * 
+   */
   public Date MeasurementDate;
+
+  /**
+   * 
+   */
   public Date MeasurementTime;
+
+  /**
+   * 
+   */
   public GlueIndex glueIndex;
 
   /* (non-Javadoc)
@@ -46,6 +78,9 @@ public class GlueHostPoolAccount extends AbstractGlueTable
     return this.Prefix;
   }
 
+  /**
+   * @param id
+   */
   public void setID( final String id ) {
     this.Prefix = id;
   }

@@ -28,11 +28,35 @@ public class GlueServiceData extends AbstractGlueTable
 {
 
   private static final long serialVersionUID = 1L;
+
+  /**
+   * 
+   */
   public GlueService glueService; // GlueService_UniqueId
+
+  /**
+   * 
+   */
   public String DataKey; // PK
+
+  /**
+   * 
+   */
   public String DataValue;
+
+  /**
+   * 
+   */
   public Date MeasurementDate;
+
+  /**
+   * 
+   */
   public Date MeasurementTime;
+
+  /**
+   * 
+   */
   public GlueIndex glueIndex;
 
   /* (non-Javadoc)
@@ -43,6 +67,9 @@ public class GlueServiceData extends AbstractGlueTable
     return this.DataKey;
   }
 
+  /**
+   * @param id
+   */
   public void setID( final String id ) {
     this.DataKey = id;
   }

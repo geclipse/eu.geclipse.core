@@ -28,10 +28,30 @@ public class GlueSiteInfo extends AbstractGlueTable
 {
 
   private static final long serialVersionUID = 1L;
+
+  /**
+   * 
+   */
   public GlueIndex glueIndex;
+
+  /**
+   * 
+   */
   public GlueSite glueSite; // GlueSite_UniqueId
+
+  /**
+   * 
+   */
   public String OtherInfo; // PK
+
+  /**
+   * 
+   */
   public Date MeasurementDate;
+
+  /**
+   * 
+   */
   public Date MeasurementTime;
 
   /* (non-Javadoc)
@@ -42,6 +62,9 @@ public class GlueSiteInfo extends AbstractGlueTable
     return this.OtherInfo;
   }
 
+  /**
+   * @param id
+   */
   public void setID( final String id ) {
     this.OtherInfo = id;
   }

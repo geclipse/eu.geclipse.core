@@ -28,10 +28,30 @@ public class GlueSubClusterSoftwareRunTimeEnvironment extends AbstractGlueTable
 {
 
   private static final long serialVersionUID = 1L;
+
+  /**
+   * 
+   */
   public GlueIndex glueIndex;
+
+  /**
+   * 
+   */
   public String Value; // PK
+
+  /**
+   * 
+   */
   public GlueSubCluster glueSubCluster; // GlueSubClusterUniqueID
+
+  /**
+   * 
+   */
   public Date MeasurementDate;
+
+  /**
+   * 
+   */
   public Date MeasurementTime;
 
   /* (non-Javadoc)
@@ -42,6 +62,9 @@ public class GlueSubClusterSoftwareRunTimeEnvironment extends AbstractGlueTable
     return this.Value;
   }
 
+  /**
+   * @param id
+   */
   public void setID( final String id ) {
     this.Value = id;
   }

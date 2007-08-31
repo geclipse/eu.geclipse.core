@@ -27,10 +27,30 @@ public class GlueCEAccessControlBaseRule extends AbstractGlueTable implements ja
 
   private static final long serialVersionUID = 1L;
 
+
+  /**
+   * 
+   */
   public GlueCE glueCE; //GlueCEUniqueID
+
+  /**
+   * 
+   */
   public String Value; //PK
+
+  /**
+   * 
+   */
   public Date MeasurementDate;
+
+  /**
+   * 
+   */
   public Date MeasurementTime;
+
+  /**
+   * 
+   */
   public GlueIndex glueIndex;
 
   /* (non-Javadoc)
@@ -41,6 +61,9 @@ public class GlueCEAccessControlBaseRule extends AbstractGlueTable implements ja
     return this.Value;
   }
 
+  /**
+   * @param id
+   */
   public void setID( final String id ) {
     this.Value = id;
   }

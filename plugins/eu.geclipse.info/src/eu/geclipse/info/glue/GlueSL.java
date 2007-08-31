@@ -27,15 +27,55 @@ import java.util.Date;
 public class GlueSL extends AbstractGlueTable implements java.io.Serializable {
 
   private static final long serialVersionUID = 1L;
+
+  /**
+   * 
+   */
   public GlueIndex glueIndex;
+
+  /**
+   * 
+   */
   public String UniqueID; // PK
+
+  /**
+   * 
+   */
   public String keyName = "UniqueID"; //$NON-NLS-1$
+
+  /**
+   * 
+   */
   public GlueSE glueSE; // GlueSEUniqueID
+
+  /**
+   * 
+   */
   public String Name;
+
+  /**
+   * 
+   */
   public String ArchitectureType;
+
+  /**
+   * 
+   */
   public Long MaxIOCapacity;
+
+  /**
+   * 
+   */
   public String InformationServiceURL;
+
+  /**
+   * 
+   */
   public Date MeasurementDate;
+
+  /**
+   * 
+   */
   public Date MeasurementTime;
 
   
@@ -47,6 +87,9 @@ public class GlueSL extends AbstractGlueTable implements java.io.Serializable {
     return this.UniqueID;
   }
 
+  /**
+   * @param id
+   */
   public void setID( final String id ) {
     this.UniqueID = id;
   }

@@ -29,10 +29,30 @@ public class GlueSEAccessProtocolCapability extends AbstractGlueTable
 
   private static final long serialVersionUID = 1L;
 
+
+  /**
+   * 
+   */
   public GlueSEAccessProtocol glueSEAccessProtocol; // GlueSEAccessProtocolUniqueID
+
+  /**
+   * 
+   */
   public String Value; // PK
+
+  /**
+   * 
+   */
   public Date MeasurementDate;
+
+  /**
+   * 
+   */
   public Date MeasurementTime;
+
+  /**
+   * 
+   */
   public GlueIndex glueIndex;
 
   /* (non-Javadoc)
@@ -43,6 +63,9 @@ public class GlueSEAccessProtocolCapability extends AbstractGlueTable
     return this.Value;
   }
 
+  /**
+   * @param id
+   */
   public void setID( final String id ) {
     this.Value = id;
   }

@@ -26,7 +26,12 @@ import java.util.Enumeration;
  */
 public class GlueQuery {
 
-  public static ArrayList<AbstractGlueTable> getGlueTable(String tableName,String vo){
+  /**
+   * @param tableName
+   * @param vo
+   * @return ArrayList<AbstractGlueTable>
+   */
+  public static ArrayList<AbstractGlueTable> getGlueTable(final String tableName, final String vo){
     ArrayList<AbstractGlueTable> inArray=GlueIndex.getInstance().getList(tableName);
     ArrayList<AbstractGlueTable> outArray=new ArrayList<AbstractGlueTable>();
     if(vo==null || vo.equals("none")){ //$NON-NLS-1$
@@ -74,6 +79,11 @@ public class GlueQuery {
     return outArray;
   }
 
+  /**
+   * @param se
+   * @param vo
+   * @return boolean
+   */
   public static boolean seSupportsVO(final GlueSE se, final String vo){
     boolean found=false;
     for (GlueSA sa : se.glueSAList) {
@@ -90,6 +100,11 @@ public class GlueQuery {
     return found;
   }
 
+  /**
+   * @param ce
+   * @param vo
+   * @return boolean
+   */
   public static boolean ceSupportsVO(final GlueCE ce, final String vo){
     boolean found=false;
     for (GlueCEAccessControlBaseRule rule : ce.glueCEAccessControlBaseRuleList) {
@@ -101,6 +116,11 @@ public class GlueQuery {
     return found;
   }
 
+  /**
+   * @param service
+   * @param vo
+   * @return boolean
+   */
   public static boolean serviceSupportsVO(final GlueService service, final String vo){
     boolean found=false;
     for (GlueServiceAccessControlRule rule : service.glueServiceAccessControlRuleList) {
@@ -112,6 +132,11 @@ public class GlueQuery {
     return found;
   }
 
+  /**
+   * @param sa
+   * @param vo
+   * @return booelan
+   */
   public static boolean saSupportsVO(final GlueSA sa, final String vo){
     boolean found=false;
     for (GlueSAAccessControlBaseRule rule : sa.glueSAAccessControlBaseRuleList) {
@@ -123,6 +148,11 @@ public class GlueQuery {
     return found;
   }
 
+  /**
+   * @param site
+   * @param vo
+   * @return booelan
+   */
   public static boolean siteSupportsVO(final GlueSite site, final String vo){
     boolean found=false;
     for (GlueSE se: site.glueSEList) {
@@ -147,6 +177,10 @@ public class GlueQuery {
     return found;
   }
 
+  /**
+   * @param vo
+   * @return ArrayList<AbstractGlueTable>
+   */
   public static ArrayList<AbstractGlueTable> getStorageElements(final String vo){
     ArrayList<AbstractGlueTable> agtList=new ArrayList<AbstractGlueTable>();
     Enumeration<GlueSE> enSE= GlueIndex.getInstance().glueSE.elements();

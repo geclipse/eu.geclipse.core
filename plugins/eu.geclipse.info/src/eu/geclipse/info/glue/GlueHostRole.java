@@ -28,10 +28,30 @@ public class GlueHostRole extends AbstractGlueTable
 {
 
   private static final long serialVersionUID = 1L;
+
+  /**
+   * 
+   */
   public GlueHost glueHost; // GlueHostUniqueID
+
+  /**
+   * 
+   */
   public String Name; // PK
+
+  /**
+   * 
+   */
   public Date MeasurementDate;
+
+  /**
+   * 
+   */
   public Date MeasurementTime;
+
+  /**
+   * 
+   */
   public GlueIndex glueIndex;
 
   /* (non-Javadoc)
@@ -42,6 +62,9 @@ public class GlueHostRole extends AbstractGlueTable
     return this.Name;
   }
 
+  /**
+   * @param id
+   */
   public void setID( final String id ) {
     this.Name = id;
   }

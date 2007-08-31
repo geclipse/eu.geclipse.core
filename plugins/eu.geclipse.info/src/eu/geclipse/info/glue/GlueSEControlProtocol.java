@@ -30,16 +30,60 @@ public class GlueSEControlProtocol extends AbstractGlueTable
 
   private static final long serialVersionUID = 1L;
 
+
+  /**
+   * 
+   */
   public String UniqueID; // PK
+
+  /**
+   * 
+   */
   public String keyName = "UniqueID"; //$NON-NLS-1$
+
+  /**
+   * 
+   */
   public GlueSE glueSE; // GlueSEUniqueID
+
+  /**
+   * 
+   */
   public String LocalID;
+
+  /**
+   * 
+   */
   public String Endpoint;
+
+  /**
+   * 
+   */
   public String Type;
+
+  /**
+   * 
+   */
   public String Version;
+
+  /**
+   * 
+   */
   public Date MeasurementDate;
+
+  /**
+   * 
+   */
   public Date MeasurementTime;
+
+  /**
+   * 
+   */
   public ArrayList<GlueSEControlProtocolCapability> glueSEControlProtocolCapabilityList = new ArrayList<GlueSEControlProtocolCapability>();
+
+  /**
+   * 
+   */
   public GlueIndex glueIndex;
 
   /* (non-Javadoc)
@@ -50,6 +94,9 @@ public class GlueSEControlProtocol extends AbstractGlueTable
     return this.UniqueID;
   }
 
+  /**
+   * @param id
+   */
   public void setID( final String id ) {
     this.UniqueID = id;
   }

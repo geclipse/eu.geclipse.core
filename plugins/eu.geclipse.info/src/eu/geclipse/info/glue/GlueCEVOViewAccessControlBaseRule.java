@@ -27,11 +27,30 @@ public class GlueCEVOViewAccessControlBaseRule extends AbstractGlueTable impleme
 
   private static final long serialVersionUID = 1L;
   
+
+  /**
+   * 
+   */
   public GlueCEVOView glueCEVOView; //GlueCEVOViewUniqueID
+
+  /**
+   * 
+   */
   public String Value; //PK
+
+  /**
+   * 
+   */
   public Date MeasurementDate;
+
+  /**
+   * 
+   */
   public Date MeasurementTime;
   
+  /**
+   * 
+   */
   public GlueIndex glueIndex;
 
   /* (non-Javadoc)
@@ -42,6 +61,9 @@ public class GlueCEVOViewAccessControlBaseRule extends AbstractGlueTable impleme
     return this.Value;
   }
 
+  /**
+   * @param id
+   */
   public void setID( final String id ) {
     this.Value = id;
   }

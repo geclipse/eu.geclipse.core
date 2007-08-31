@@ -30,24 +30,100 @@ public class GlueCEVOView extends AbstractGlueTable
 
   private static final long serialVersionUID = 1L;
   
+
+  /**
+   * 
+   */
   public String UniqueID; // PK
+
+  /**
+   * 
+   */
   public String keyName = "UniqueID"; //$NON-NLS-1$
+
+  /**
+   * 
+   */
   public GlueCE glueCE; // GlueCEUniqueID
+
+  /**
+   * 
+   */
   public String LocalID;
+
+  /**
+   * 
+   */
   public Long RunningJobs;
+
+  /**
+   * 
+   */
   public Long WaitingJobs;
+
+  /**
+   * 
+   */
   public Long TotalJobs;
+
+  /**
+   * 
+   */
   public Long FreeJobSlots;
+
+  /**
+   * 
+   */
   public Long EstimatedResponseTime;
+
+  /**
+   * 
+   */
   public Long WorstResponseTime;
+
+  /**
+   * 
+   */
   public String DefaultSE;
+
+  /**
+   * 
+   */
   public String ApplicationDir;
+
+  /**
+   * 
+   */
   public String DataDir;
+
+  /**
+   * 
+   */
   public Long FreeCpus;
+
+  /**
+   * 
+   */
   public Date MeasurementDate;
+
+  /**
+   * 
+   */
   public Date MeasurementTime;
+
+  /**
+   * 
+   */
+
+  /**
+   * 
+   */
   public ArrayList<GlueCEVOViewAccessControlBaseRule> glueCEVOViewAccessControlBaseRuleList 
     = new ArrayList<GlueCEVOViewAccessControlBaseRule>();
+
+  /**
+   * 
+   */
   public GlueIndex glueIndex;
 
   /* (non-Javadoc)
@@ -58,6 +134,9 @@ public class GlueCEVOView extends AbstractGlueTable
     return this.UniqueID;
   }
 
+  /**
+   * @param id
+   */
   public void setID( final String id ) {
     this.UniqueID = id;
   }

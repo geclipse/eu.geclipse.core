@@ -28,24 +28,100 @@ public class GlueSA extends AbstractGlueTable implements java.io.Serializable {
 
   private static final long serialVersionUID = 1L;
   
+
+  /**
+   * 
+   */
   public String keyName = "UniqueID"; //$NON-NLS-1$
+
+  /**
+   * 
+   */
   public String Root;
+
+  /**
+   * 
+   */
   public GlueSE glueSE; // GlueSEUniqueID
+
+  /**
+   * 
+   */
   public Long PolicyMaxFileSize;
+
+  /**
+   * 
+   */
   public Long PolicyMinFileSize;
+
+  /**
+   * 
+   */
   public Long PolicyMaxData;
+
+  /**
+   * 
+   */
   public Long PolicyMaxNumFiles;
+
+  /**
+   * 
+   */
   public Long PolicyMaxPinDuration;
+
+  /**
+   * 
+   */
   public Long PolicyQuota;
+
+  /**
+   * 
+   */
   public String PolicyFileLifeTime;
+
+  /**
+   * 
+   */
   public Long StateAvailableSpace;
+
+  /**
+   * 
+   */
   public Long StateUsedSpace;
+
+  /**
+   * 
+   */
   public String LocalID;
+
+  /**
+   * 
+   */
   public String Path;
+
+  /**
+   * 
+   */
   public String Type;
+
+  /**
+   * 
+   */
   public Date MeasurementDate;
+
+  /**
+   * 
+   */
   public Date MeasurementTime;
+
+  /**
+   * 
+   */
   public ArrayList<GlueSAAccessControlBaseRule> glueSAAccessControlBaseRuleList = new ArrayList<GlueSAAccessControlBaseRule>();
+
+  /**
+   * 
+   */
   public GlueIndex glueIndex;
 
   private String UniqueID;
@@ -58,6 +134,9 @@ public class GlueSA extends AbstractGlueTable implements java.io.Serializable {
     return this.UniqueID;
   }
 
+  /**
+   * @param id
+   */
   public void setID( final String id ) {
     this.UniqueID = id;
   }

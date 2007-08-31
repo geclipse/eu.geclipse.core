@@ -66,47 +66,210 @@ public abstract class GlueIndex implements java.io.Serializable {
   private static GlueIndex glueIndexInstance;
 
   //Used for invalidating the cache 
+  
+  /**
+   * 
+   */
   public String voListString;
 
+  /**
+   * 
+   */
   public Hashtable<String, GlueHost> glueHost = new Hashtable<String, GlueHost>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueSite> glueSite = new Hashtable<String, GlueSite>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueSE> glueSE = new Hashtable<String, GlueSE>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueSL> glueSL = new Hashtable<String, GlueSL>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueCluster> glueCluster = new Hashtable<String, GlueCluster>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueSubCluster> glueSubCluster = new Hashtable<String, GlueSubCluster>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueCE> glueCE = new Hashtable<String, GlueCE>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueBatchJob> glueBatchJob = new Hashtable<String, GlueBatchJob>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueBatchQueue> glueBatchQueue = new Hashtable<String, GlueBatchQueue>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueBatchSystem> glueBatchSystem = new Hashtable<String, GlueBatchSystem>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueCEAccessControlBaseRule> glueCEAccessControlBaseRule = new Hashtable<String, GlueCEAccessControlBaseRule>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueCEContactString> glueCEContactString = new Hashtable<String, GlueCEContactString>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueCESEBind> glueCESEBind = new Hashtable<String, GlueCESEBind>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueCEVOView> glueCEVOView = new Hashtable<String, GlueCEVOView>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueCEVOViewAccessControlBaseRule> glueCEVOViewAccessControlBaseRule = new Hashtable<String, GlueCEVOViewAccessControlBaseRule>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueHostLocalFileSystem> glueHostLocalFileSystem = new Hashtable<String, GlueHostLocalFileSystem>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueHostNetworkAdapter> glueHostNetworkAdapter = new Hashtable<String, GlueHostNetworkAdapter>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueHostPoolAccount> glueHostPoolAccount = new Hashtable<String, GlueHostPoolAccount>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueHostProcess> glueHostProcess = new Hashtable<String, GlueHostProcess>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueHostRemoteFileSystem> glueHostRemoteFileSystem = new Hashtable<String, GlueHostRemoteFileSystem>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueHostRole> glueHostRole = new Hashtable<String, GlueHostRole>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueSA> glueSA = new Hashtable<String, GlueSA>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueSAAccessControlBaseRule> glueSAAccessControlBaseRule = new Hashtable<String, GlueSAAccessControlBaseRule>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueSEAccessProtocol> glueSEAccessProtocol = new Hashtable<String, GlueSEAccessProtocol>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueSEAccessProtocolCapability> glueSEAccessProtocolCapability = new Hashtable<String, GlueSEAccessProtocolCapability>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueSEAccessProtocolSupportedSecurity> glueSEAccessProtocolSupportedSecurity = new Hashtable<String, GlueSEAccessProtocolSupportedSecurity>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueSEControlProtocol> glueSEControlProtocol = new Hashtable<String, GlueSEControlProtocol>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueSEControlProtocolCapability> glueSEControlProtocolCapability = new Hashtable<String, GlueSEControlProtocolCapability>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueService> glueService = new Hashtable<String, GlueService>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueServiceAccessControlRule> glueServiceAccessControlRule = new Hashtable<String, GlueServiceAccessControlRule>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueServiceAssociation> glueServiceAssociation = new Hashtable<String, GlueServiceAssociation>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueServiceData> glueServiceData = new Hashtable<String, GlueServiceData>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueServiceOwner> glueServiceOwner = new Hashtable<String, GlueServiceOwner>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueServiceStatus> glueServiceStatus = new Hashtable<String, GlueServiceStatus>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueSiteInfo> glueSiteInfo = new Hashtable<String, GlueSiteInfo>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueSiteSponsor> glueSiteSponsor = new Hashtable<String, GlueSiteSponsor>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueSubClusterLocation> glueSubClusterLocation = new Hashtable<String, GlueSubClusterLocation>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueSubClusterSoftwareRunTimeEnvironment> glueSubClusterSoftwareRunTimeEnvironment = new Hashtable<String, GlueSubClusterSoftwareRunTimeEnvironment>();
+
+  /**
+   * 
+   */
   public Hashtable<String, GlueVO> glueVO = new Hashtable<String, GlueVO>();
+
+  /**
+   * 
+   */
   public Hashtable<String, AbstractGlueTable> fullIndex = new Hashtable<String, AbstractGlueTable>();
 
   
@@ -136,6 +299,9 @@ public abstract class GlueIndex implements java.io.Serializable {
     return glueIndexInstance;
   }
 
+  /**
+   * 
+   */
   public static void drop(){
     
     glueIndexInstance=null;
@@ -172,6 +338,9 @@ public abstract class GlueIndex implements java.io.Serializable {
     }
   }
 
+  /**
+   * 
+   */
   public static void dropCachePersistenceFile(){
     IPath serPath = getGridInfoLocation();
     serPath.toFile().delete();
@@ -199,6 +368,7 @@ public abstract class GlueIndex implements java.io.Serializable {
    * @param objectName String representing the name of the Glue Object 
    * such as "GlueSite", "GlueCE", "GlueSE" ...
    * @param key the unique identifier for the Object to be retrieved
+   * @param onlyIfExists 
    * @return The Glue object with the specified key, null otherwise
    */
   public AbstractGlueTable get( final String objectName, final String key, final boolean onlyIfExists ) {

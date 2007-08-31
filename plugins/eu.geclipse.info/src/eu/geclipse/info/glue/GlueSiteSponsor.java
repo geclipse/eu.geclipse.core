@@ -28,10 +28,30 @@ public class GlueSiteSponsor extends AbstractGlueTable
 {
 
   private static final long serialVersionUID = 1L;
+
+  /**
+   * 
+   */
   public GlueIndex glueIndex;
+
+  /**
+   * 
+   */
   public GlueSite glueSite; // GlueSite_UniqueId
+
+  /**
+   * 
+   */
   public String Sponsor; // PK
+
+  /**
+   * 
+   */
   public Date MeasurementDate;
+
+  /**
+   * 
+   */
   public Date MeasurementTime;
 
   /* (non-Javadoc)
@@ -42,6 +62,9 @@ public class GlueSiteSponsor extends AbstractGlueTable
     return this.Sponsor;
   }
 
+  /**
+   * @param id
+   */
   public void setID( final String id ) {
     this.Sponsor = id;
   }

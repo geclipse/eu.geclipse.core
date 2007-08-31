@@ -29,11 +29,30 @@ public class GlueServiceAccessControlRule extends AbstractGlueTable
 
   private static final long serialVersionUID = 1L;
 
+
+  /**
+   * 
+   */
   public GlueService glueService; // GlueServiceUniqueID
+
+  /**
+   * 
+   */
   public String value;
+
+  /**
+   * 
+   */
   public Date MeasurementDate;
+
+  /**
+   * 
+   */
   public Date MeasurementTime;
 
+  /**
+   * @param id
+   */
   public void setID( final String id ) {
     this.key = id;
   }

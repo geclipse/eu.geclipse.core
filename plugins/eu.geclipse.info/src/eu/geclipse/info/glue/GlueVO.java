@@ -25,10 +25,30 @@ import java.util.Date;
 public class GlueVO extends AbstractGlueTable implements java.io.Serializable {
 
   private static final long serialVersionUID = 1L;
+
+  /**
+   * 
+   */
   public GlueIndex glueIndex;
+
+  /**
+   * 
+   */
   public GlueHost glueHost; // GlueHostUniqueID
+
+  /**
+   * 
+   */
   public String Name; // PK
+
+  /**
+   * 
+   */
   public Date MeasurementDate;
+
+  /**
+   * 
+   */
   public Date MeasurementTime;
 
   /* (non-Javadoc)
@@ -39,6 +59,9 @@ public class GlueVO extends AbstractGlueTable implements java.io.Serializable {
     return this.Name;
   }
 
+  /**
+   * @param id
+   */
   public void setID( final String id ) {
     this.Name = id;
   }

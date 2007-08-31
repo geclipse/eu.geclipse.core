@@ -29,15 +29,55 @@ public class GlueHostRemoteFileSystem extends AbstractGlueTable
 
   private static final long serialVersionUID = 1L;
 
+
+  /**
+   * 
+   */
   public GlueSubCluster glueSubCluster; // GlueSubClusterUniqueID
+
+  /**
+   * 
+   */
   public String Name; // PK
+
+  /**
+   * 
+   */
   public String Root;
+
+  /**
+   * 
+   */
   public Long Size;
+
+  /**
+   * 
+   */
   public Long AvailableSpace;
+
+  /**
+   * 
+   */
   public String ReadOnly;
+
+  /**
+   * 
+   */
   public String Type;
+
+  /**
+   * 
+   */
   public Date MeasurementDate;
+
+  /**
+   * 
+   */
   public Date MeasurementTime;
+
+  /**
+   * 
+   */
   public GlueIndex glueIndex;
 
   /* (non-Javadoc)
@@ -48,6 +88,9 @@ public class GlueHostRemoteFileSystem extends AbstractGlueTable
     return this.Name;
   }
 
+  /**
+   * @param id
+   */
   public void setID( final String id ) {
     this.Name = id;
   }

@@ -28,21 +28,86 @@ public class GlueHostProcess extends AbstractGlueTable
 {
 
   private static final long serialVersionUID = 1L;
+  
+
+  /**
+   * 
+   */
   public GlueHost glueHost; // GlueHostUniqueID
+
+  /**
+   * 
+   */
   public String Name; // PK
+
+  /**
+   * 
+   */
   public String Command;
+
+  /**
+   * 
+   */
   public Long FirstStarted;
+
+  /**
+   * 
+   */
   public Long LastStarted;
+
+  /**
+   * 
+   */
   public Long MemUsageOneMax;
+
+  /**
+   * 
+   */
   public Long MemUsageAverage;
+
+  /**
+   * 
+   */
   public Long CPUUsageOneMax;
+
+  /**
+   * 
+   */
   public Long CPUUsageAll;
+
+  /**
+   * 
+   */
   public Long TimeUsageOneMax;
+
+  /**
+   * 
+   */
   public Long TimeUsageAll;
+
+  /**
+   * 
+   */
   public Long NumberOfInstances;
+
+  /**
+   * 
+   */
   public String Status;
+
+  /**
+   * 
+   */
   public Date MeasurementDate;
+
+  /**
+   * 
+   */
   public Date MeasurementTime;
+
+  /**
+   * 
+   */
   public GlueIndex glueIndex;
 
   /* (non-Javadoc)
@@ -53,6 +118,9 @@ public class GlueHostProcess extends AbstractGlueTable
     return this.Name;
   }
 
+  /**
+   * @param id
+   */
   public void setID( final String id ) {
     this.Name = id;
   }
