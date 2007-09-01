@@ -41,7 +41,7 @@ import eu.geclipse.core.SolutionRegistry;
 public class TimeChecker {
 
   // Public rdate servers
-  protected static final String[] SERVERS = {
+  static final String[] SERVERS = {
     "time.fu-berlin.de", //$NON-NLS-1$
     "time.mtu.edu",      //$NON-NLS-1$
     "ntp0.csx.cam.ac.uk" //$NON-NLS-1$
@@ -85,12 +85,13 @@ public class TimeChecker {
    * @return <code>true</code> if the system time is OK, false otherwise
    */
   public boolean getTimeCheckStatus() {
-    if ( ( this.sysTime != 0 )
-      && ( Math.abs( this.sysTime - this.referenceTime ) <= MAX_SYSTIME_OFFSET ) )
+    boolean result = false;
+    if( ( this.sysTime != 0 )
+        && ( Math.abs( this.sysTime - this.referenceTime ) <= MAX_SYSTIME_OFFSET ) )
     {
-      return true;
+      result = true;
     }
-    return false;
+    return result;
   }
   
   /**
