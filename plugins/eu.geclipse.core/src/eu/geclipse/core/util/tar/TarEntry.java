@@ -173,14 +173,14 @@ public class TarEntry {
                              final int offset,
                              final int length )
   {
-    String s = new String();
+    StringBuffer result = new StringBuffer();
 
     int i = 0;
     while ( (buffer[ offset + i ] != 0) && i < length ) {
-      s = s + (char) buffer[ offset + i ];
+      result = result.append( (char) buffer[ offset + i ] );
       i++;
     }
-    return s;
+    return result.toString();
   }
   
   /*

@@ -196,7 +196,7 @@ public class SolutionRegistry {
         Activator.PLUGIN_ID,
         IStatus.OK,
         String.format( Messages.getString("SolutionRegistry.no_solution_found"), //$NON-NLS-1$
-                       new Integer( solutionID ) ),
+                       Integer.valueOf( solutionID ) ),
         null
       );
       Activator.logStatus( status );

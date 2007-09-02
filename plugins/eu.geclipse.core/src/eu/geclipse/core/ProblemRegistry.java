@@ -136,7 +136,7 @@ public class ProblemRegistry {
     if ( problem == null ) {
       problem = createProblem( UNKNOWN_PROBLEM,
                                String.format( Messages.getString("ProblemRegistry.unknown_problem"), //$NON-NLS-1$
-                                              new Integer( problemID ) ),
+                                              Integer.valueOf( problemID ) ),
                                exc,
                                null,
                                Activator.PLUGIN_ID );
