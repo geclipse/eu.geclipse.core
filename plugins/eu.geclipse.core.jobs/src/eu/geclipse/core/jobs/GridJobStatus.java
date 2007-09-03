@@ -16,7 +16,6 @@ package eu.geclipse.core.jobs;
 
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
@@ -24,6 +23,7 @@ import java.util.Locale;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
 import eu.geclipse.core.model.IGridJobID;
 import eu.geclipse.core.model.IGridJobStatus;
 
@@ -88,8 +88,7 @@ public class GridJobStatus implements IGridJobStatus {
         if( reason != null )
           reason = reason.trim();
       }
-      if( XML_STATUSUPDATEDATE.equals( node.getNodeName() ) ) {
-        DateFormat df = SimpleDateFormat.getDateTimeInstance();
+      if( XML_STATUSUPDATEDATE.equals( node.getNodeName() ) ) {        
         try {
           updateDate = getXmlDateFormatter().parse( node.getTextContent() );
         } catch( DOMException e ) {
@@ -150,13 +149,17 @@ public class GridJobStatus implements IGridJobStatus {
            + "</"
            + GridJobStatus.XML_STATUSTYPE
            + ">\n";
-    xml += "  <"
-           + GridJobStatus.XML_STATUSUPDATEDATE
-           + ">"
-           + getXmlDateFormatter().format( updateDate )
-           + "</"
-           + GridJobStatus.XML_STATUSUPDATEDATE
-           + ">\n";
+
+    if( this.updateDate != null ) {
+      xml += "  <"
+             + GridJobStatus.XML_STATUSUPDATEDATE
+             + ">"
+             + getXmlDateFormatter().format( this.updateDate )
+             + "</"
+             + GridJobStatus.XML_STATUSUPDATEDATE
+             + ">\n";
+    }
+    
     if( reason != null ) {
       xml += "  <"
              + GridJobStatus.XML_STATUSREASON
