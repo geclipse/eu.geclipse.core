@@ -11,6 +11,7 @@
  *
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
+ *    Szymon Mueller
  *****************************************************************************/
 
 package eu.geclipse.core.internal;
@@ -43,5 +44,10 @@ public class PreferenceConstants {
    * Time between background updates for each job
    */
   public static final String JOBS_UPDATE_JOBS_PERIOD = "jobs.update.jobs.period"; //$NON-NLS-1$
+  
+  /**
+   * Maximum number of simultaneous running job status updaters
+   */
+  public static final String JOBS_UPDATE_UPDATERS_LIMTI = "jobs.update.updaters.limit"; //$NON-NLS-1$
  
 }

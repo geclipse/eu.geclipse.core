@@ -63,6 +63,13 @@ public class JobUpdatersPreferencePage extends FieldEditorPreferencePage
                                                               6 );
     updatePeriod.setValidRange( 0, 100000 );
     addField( updatePeriod );
+    
+    IntegerFieldEditor updatersLimit = new IntegerFieldEditor( Messages.getString( "JobsPreferencePage.jobs_update_updaters_limit" ), //$NON-NLS-1$
+                                                              Messages.getString("JobUpdatersPreferencePage.jobs_update_updaters_limit"), //$NON-NLS-1$
+                                                              getFieldEditorParent(),
+                                                              6 );
+    updatersLimit.setValidRange( 1, 1000 );
+    addField( updatersLimit );
   }
 
   /*

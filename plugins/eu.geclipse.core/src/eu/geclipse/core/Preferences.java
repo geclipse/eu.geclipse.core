@@ -158,6 +158,25 @@ public class Preferences {
   }
   
   /**
+   * Sets the limit of the simultaneously running job status updaters
+   * @param limit Maximum number of the running updaters.
+   */
+  static public void setUpdatersLimit( final int limit ) {
+    org.eclipse.core.runtime.Preferences preferenceStore = getPreferenceStore();
+    preferenceStore.setValue( PreferenceConstants.JOBS_UPDATE_UPDATERS_LIMTI, limit );
+  }
+  
+  /**
+   * Gets the limit of the simultaneously running job status updaters
+   * @return Maximum number of the running updaters.
+   */
+  static public int getUpdatersLimit() {
+    org.eclipse.core.runtime.Preferences preferenceStore = getPreferenceStore();
+    int valueUpdatersLimit = preferenceStore.getInt( PreferenceConstants.JOBS_UPDATE_UPDATERS_LIMTI );
+    return valueUpdatersLimit;
+  }
+  
+  /**
    * Save these preferences to the preference store. This method just calls
    * <code>Activator.getDefault().savePluginPreferences();</code>.
    */

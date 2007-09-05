@@ -56,7 +56,6 @@ public class JobStatusUpdater extends Job {
   IGridJobID jobID;
   IGridJob job;
   IGridJobStatus lastStatus=null;
-  boolean manualUpdate = false;
   
   /**
    * Constructor
@@ -65,7 +64,6 @@ public class JobStatusUpdater extends Job {
   public JobStatusUpdater( final IGridJob job ) {
     super( Messages.getString("JobStatusUpdater.name") ); //$NON-NLS-1$
     this.job = job;
-//    updaters.put( job.getID().getJobID(), this );
   }
   
   /**
@@ -75,13 +73,23 @@ public class JobStatusUpdater extends Job {
   public JobStatusUpdater( final IGridJobID jobID ) {
     super( Messages.getString("JobStatusUpdater.name") ); //$NON-NLS-1$
     this.jobID = jobID;
-//    updaters.put( job.getID().getJobID(), this );
+  }
+  
+  
+  /**
+   * @return Job for which this updater is running.
+   */
+  public IGridJob getJob() {
+    return this.job;
   }
 
   @Override
   protected IStatus run( final IProgressMonitor monitor ) {
     if( this.job != null ) {
-      if( Preferences.getUpdateJobsStatus() || this.manualUpdate ) {
+      // if( JobManager.getManager().getNumberOfRunningUpdaters() <=
+      // Preferences.getUpdatersLimit() )
+      // {
+      if( Preferences.getUpdateJobsStatus() ) {
         int oldType = -1;
         if( this.lastStatus != null ) {
           oldType = this.lastStatus.getType();
@@ -124,26 +132,14 @@ public class JobStatusUpdater extends Job {
           Activator.logException( e );
         }
         if( newStatus != null && newStatus.canChange() ) {
-          if( this.manualUpdate ) {
-            this.manualUpdate = false;
-          } else {
-            int updatePeriod = Preferences.getUpdateJobsPeriod();
-            schedule( updatePeriod );
-          }
+          int updatePeriod = Preferences.getUpdateJobsPeriod();
+          schedule( updatePeriod );
         } else {
           JobManager.getManager().removeUpdater( this );
         }
       }
     }
     return Status.OK_STATUS;
-  }
-  
-  /**
-   * Sets manul update for this updater, allows to update job without updates running in the background
-   * @param status of manual update for this updater
-   */
-  public void setManualUpdate( final boolean status ) {
-    this.manualUpdate = status;
   }
 
   /**

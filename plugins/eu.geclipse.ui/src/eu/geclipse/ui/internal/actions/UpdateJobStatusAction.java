@@ -17,11 +17,16 @@ package eu.geclipse.ui.internal.actions;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.actions.SelectionListenerAction;
 
 import eu.geclipse.core.jobs.GridJob;
-import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.ui.internal.Activator;
 
@@ -29,21 +34,56 @@ import eu.geclipse.ui.internal.Activator;
  * Action for toggling refresh for selected job
  */
 public class UpdateJobStatusAction extends SelectionListenerAction {
+  
+  private IWorkbenchWindow workbenchWindow;
+  ArrayList<IGridJob> selectedJobs = new ArrayList<IGridJob>();
 
-  private ArrayList< IGridJob > selectedJobs = new ArrayList< IGridJob >();
+  /**
+   * Constructor.
+   * @param workbenchWindow Workbench window
+   */
+  public UpdateJobStatusAction( final IWorkbenchWindow workbenchWindow ) {
+    super( Messages.getString( "UpdateJobStatusAction.title" ) ); //$NON-NLS-1$
+    this.workbenchWindow = workbenchWindow;
+    setImageDescriptor( Activator.getDefault()
+      .getImageRegistry()
+      .getDescriptor( Activator.IMG_REFRESH ) );
+  }
 
   protected UpdateJobStatusAction() {
     super( Messages.getString( "UpdateJobStatusAction.title" ) ); //$NON-NLS-1$
-    
     setImageDescriptor( Activator.getDefault()
-                        .getImageRegistry()
-                        .getDescriptor( Activator.IMG_REFRESH ) );
+      .getImageRegistry()
+      .getDescriptor( Activator.IMG_REFRESH ) );
   }
 
   @Override
   public void run() {
     if( this.selectedJobs.size() > 0 ) {
-      GridModel.getJobManager().updateJobsStatus( this.selectedJobs );
+      if( this.workbenchWindow != null ) {
+        Job job = new Job( Messages.getString( "UpdateJobStatusAction.manual_update_job_name" ) ) { //$NON-NLS-1$
+
+          @Override
+          protected IStatus run( final IProgressMonitor monitor ) {
+            monitor.beginTask( Messages.getString( "UpdateJobStatusAction.manual_update_task_name" ), //$NON-NLS-1$
+                               UpdateJobStatusAction.this.selectedJobs.size() );
+            for( IGridJob jobToUpdate : UpdateJobStatusAction.this.selectedJobs )
+            {
+              if( !monitor.isCanceled() ) {
+                monitor.subTask( Messages.getString( "UpdateJobStatusAction.manual_update_subtask_name" ) //$NON-NLS-1$
+                                 + jobToUpdate.getID().getJobID() );
+                new SubProgressMonitor( monitor, 1 );
+                jobToUpdate.updateJobStatus();
+                monitor.worked( 1 );
+              }
+            }
+            monitor.done();
+            return Status.OK_STATUS;
+          }
+        };
+        job.setUser( true );
+        job.schedule();
+      }
     }
   }
 
@@ -56,9 +96,6 @@ public class UpdateJobStatusAction extends SelectionListenerAction {
         this.selectedJobs.add( ( GridJob )element );
       }
     }
-    
-    
-    
     if( this.selectedJobs.size() > 0 ) {
       if( !this.isEnabled() ) {
         this.setEnabled( true );
@@ -66,6 +103,7 @@ public class UpdateJobStatusAction extends SelectionListenerAction {
     } else {
       this.setEnabled( false );
     }
-    return super.updateSelection( selection ) && ( this.selectedJobs.size() > 0 );
+    return super.updateSelection( selection )
+           && ( this.selectedJobs.size() > 0 );
   }
 }

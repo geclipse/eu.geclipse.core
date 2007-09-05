@@ -63,10 +63,15 @@ class JobScheduler extends Job {
   private static JobScheduler singleton;
   
   /**
-   * Hashtable holding updaters and their priorities to start/resume updating
+   * Hashtable holding paused updaters and their priorities to start/resume updating
    */
-  private Hashtable< JobStatusUpdater, Integer > sleepingUpdaters = new Hashtable<JobStatusUpdater, Integer >();
-
+  private Hashtable< JobStatusUpdater, Integer > sleepingUpdaters = new Hashtable< JobStatusUpdater, Integer >();
+  
+  /**
+   * Hashtable holding working updaters and their priorities
+   */
+  private Hashtable< JobStatusUpdater, Integer > workingUpdaters = new Hashtable< JobStatusUpdater, Integer>();
+  
   /**
    * Constructor for JobScheduler
    * @param name 
@@ -76,9 +81,17 @@ class JobScheduler extends Job {
     schedule( 30000 );
   }
 
+  
+  /**
+   * Gets number of running job status updaters
+   * @return Number of the currently running updaters
+   */
+  public int getNumberOfRunningUpdaters() {
+    return this.workingUpdaters.size();
+  }
+  
   /**
    * Gets the shared singleton of this class
-   * 
    * @return Gets singleton of this class.
    */
   public static JobScheduler getJobScheduler() {
@@ -90,7 +103,8 @@ class JobScheduler extends Job {
 
   @Override
   public IStatus run( final IProgressMonitor monitor ) {
-    if( Preferences.getUpdateJobsStatus() && this.sleepingUpdaters.size() > 0 )
+    if( Preferences.getUpdateJobsStatus() && this.sleepingUpdaters.size() > 0 
+        && ( getNumberOfRunningUpdaters() < Preferences.getUpdatersLimit() ) )
     {
       JobStatusUpdater updaterToWakeUp = null;
       if( this.sleepingUpdaters.contains( new Integer( UPDATER_HIGH_PRIORITY ) ) )
@@ -113,59 +127,96 @@ class JobScheduler extends Job {
         updaterToWakeUp.wakeUp();
         updaterToWakeUp.schedule( Preferences.getUpdateJobsPeriod() );
       }
+      this.workingUpdaters.put(  updaterToWakeUp, new Integer( UPDATER_NORMAL_PRIORITY ));
       this.sleepingUpdaters.remove( updaterToWakeUp );
     }
+    
+    //checks if there should be updaters put to sleep due to limits
+    while ( getNumberOfRunningUpdaters() > Preferences.getUpdatersLimit() ) {
+      JobStatusUpdater updater = this.workingUpdaters.keys().nextElement();
+      pauseUpdater( updater );
+    }
+    
     schedule( 30000 );
     return Status.OK_STATUS;
   }
 
   /**
-   * Method for adding gridJob with chosen priority to queue of updaters waiting
-   * for start
-   * 
-   * @param updater
-   * @param priority
+   * Schedules updater, depending on the preference settings and actual number
+   * of running updaters. 
+   * If updater is eligible to start, this metod schedules it,
+   * if not, it's put into the list of the waiting updaters. 
+   * @param updater Updater to be scheduled.
    */
-  public void addUpdaterToQueue( final JobStatusUpdater updater, final int priority ) {
-    this.sleepingUpdaters.put( updater, new Integer( priority ) );
-  }
-
-  /**
-   * 
-   * @param numberOfRunningUpdaters 
-   * @return number of running jobs after wake up
-   */
-  public int wakeUpdaters( final int numberOfRunningUpdaters ) {
-    int actualRunningUpdaters = numberOfRunningUpdaters;
-    for( Enumeration<JobStatusUpdater> e = this.sleepingUpdaters.keys(); e.hasMoreElements(); )
-    {
-      JobStatusUpdater updater = e.nextElement();
-      updater.wakeUp();
-      updater.schedule( Preferences.getUpdateJobsPeriod() );
-      actualRunningUpdaters++;
+  public void scheduleNewUpdater( final JobStatusUpdater updater ) {
+    if( Preferences.getUpdateJobsStatus() && ( getNumberOfRunningUpdaters() < Preferences.getUpdatersLimit() ) ) {
+      int updatePeriod = Preferences.getUpdateJobsPeriod();
+      updater.schedule( updatePeriod ); 
+      this.workingUpdaters.put( updater, new Integer( UPDATER_NORMAL_PRIORITY ) );
+    } else {
+      this.sleepingUpdaters.put( updater, new Integer( UPDATER_NORMAL_PRIORITY ) );
     }
-    return actualRunningUpdaters;
   }
 
- 
   /**
-   * Searches hashtable of sleeping updaters for updater and wakes him up 
-   * @param updater to be awaken
-   * @return True if updater was found and woken up 
+   * Pauses all of the running updaters.
    */
-  public boolean wakeUpdater( final JobStatusUpdater updater ) {
+  public void pauseAllUpdaters() {
+    for( Enumeration<JobStatusUpdater> e = this.workingUpdaters.keys(); e.hasMoreElements(); ) {
+      JobStatusUpdater updater = e.nextElement();
+      pauseUpdater( updater );
+    }
+  }
+  
+  /**
+   * Pauses specified updater.
+   * @param updater Updater to be paused.
+   * @return True when updater was paused.
+   */
+  public boolean pauseUpdater( final JobStatusUpdater updater ) {
     boolean result = false;
-    for( Enumeration<JobStatusUpdater> e= this.sleepingUpdaters.keys(); e.hasMoreElements(); ) {
-      JobStatusUpdater sleepingUpdater = e.nextElement();
-      if (updater == sleepingUpdater) {
-        sleepingUpdater.setManualUpdate( true );
-        sleepingUpdater.wakeUp();
-        sleepingUpdater.schedule( 1000 );
-        result = true;
-        this.sleepingUpdaters.put( sleepingUpdater, new Integer( UPDATER_HIGH_PRIORITY ) );
-      }
+    if ( this.workingUpdaters.containsKey( updater ) ) {
+      result = true;
+      updater.sleep();
+      this.sleepingUpdaters.put( updater, new Integer( UPDATER_NORMAL_PRIORITY ) );
+      this.workingUpdaters.remove( updater );
     }
     return result;
+  }
+  
+  /**
+   * Resumes all updaters.
+   */
+  public void resumeAllUpdaters() {
+    for ( Enumeration< JobStatusUpdater > e = this.sleepingUpdaters.keys(); e.hasMoreElements(); ) {
+      JobStatusUpdater updater = e.nextElement();
+      resumeUpdater( updater );
+    }
+  }
+  
+  /**
+   * Resume specified updater.
+   * @param updater Updater to be resumed.
+   * @return True if updater was resumed.
+   */
+  public boolean resumeUpdater ( final JobStatusUpdater updater ) {
+    boolean result = false;
+    if ( this.sleepingUpdaters.containsKey( updater ) ) {
+      result = true;
+      updater.wakeUp();
+      this.workingUpdaters.put( updater, new Integer( UPDATER_NORMAL_PRIORITY ) );
+      this.sleepingUpdaters.remove( updater );
+    }
+    return result;
+  }
+
+  /**
+   * Removes specified updater from lists of running and sleeping updaters 
+   * @param updater
+   */
+  public void clearUpdater( final JobStatusUpdater updater ) {
+    this.sleepingUpdaters.remove( updater );
+    this.workingUpdaters.remove( updater );
   }
  
 }
@@ -188,15 +239,11 @@ public class JobManager extends AbstractGridElementManager
   /**
    * Hashtable for holding information about updaters assigned to jobs.
    */
-//  private Hashtable<IGridJob, JobStatusUpdater> updatersByJob = new Hashtable<IGridJob, JobStatusUpdater>();
-  private Hashtable<IGridJobID, JobStatusUpdater> updaters = new Hashtable<IGridJobID, JobStatusUpdater>();
+
+  Hashtable<IGridJobID, JobStatusUpdater> updaters = new Hashtable<IGridJobID, JobStatusUpdater>();
   
   private List< IGridJobStatusListener > globalListeners = new ArrayList< IGridJobStatusListener >();
 
-//  private boolean listenerRegistered=false;
-  
-  private int numberOfRunningUpdaters = 0;
-  
   /**
    * Private constructor to ensure to have only one instance of this class. This
    * can be obtained by {@link #getManager()}.
@@ -209,29 +256,53 @@ public class JobManager extends AbstractGridElementManager
   public boolean addElement( final IGridElement element )
     throws GridModelException
   {
-//fast workaround. 
-//TODO pawelw -correct it    
-//    if( this.listenerRegistered == false ){
-//      this.listenerRegistered = true;
-//      GridModel.getRoot().addGridModelListener( this );
-//    }
-
-    
+    // fast workaround.
+    // TODO pawelw -correct it
+    // if( this.listenerRegistered == false ){
+    // this.listenerRegistered = true;
+    // GridModel.getRoot().addGridModelListener( this );
+    // }
     boolean flag;
     flag = super.addElement( element );
     if( element instanceof IGridJob ) {
-      JobScheduler scheduler = JobScheduler.getJobScheduler();
       JobStatusUpdater updater = new JobStatusUpdater( ( ( IGridJob )element ) );
       this.updaters.put( ( ( IGridJob )element ).getID(), updater );
       updater.setSystem( true );
-      if( Preferences.getUpdateJobsStatus() ) {
-        int updatePeriod = Preferences.getUpdateJobsPeriod();
-        updater.schedule( updatePeriod ); 
-        this.numberOfRunningUpdaters++;
-      } else {
-        scheduler.addUpdaterToQueue( updater, JobScheduler.UPDATER_NORMAL_PRIORITY );
-      }
+      JobScheduler.getJobScheduler().scheduleNewUpdater( updater );
       updater.addJobStatusListener( IGridJobStatus._ALL, this );
+      // TODO - Temporary fix to bug id = 199711
+      if( ( ( IGridJob )element ).getID()
+        .getJobID()
+        .equals( Messages.getString( "JobManager.UNKNOWN_STRING" ) ) ) { //$NON-NLS-1$
+        Thread jobIDUpdate = new Thread() {
+
+          private boolean found = false;
+
+          @Override
+          public void run() {
+            try {
+              Thread.sleep( 1000 );
+            } catch( InterruptedException e ) {
+              // empty block
+            }
+            Enumeration<IGridJobID> col = JobManager.this.updaters.keys();
+            while( col.hasMoreElements() && !( this.found ) ) {
+              IGridJobID jobID = col.nextElement();
+              if( jobID.getJobID()
+                .equals( Messages.getString( "JobManager.UNKNOWN_STRING" ) ) ) { //$NON-NLS-1$
+                this.found = true;
+                JobStatusUpdater updaterToRefresh = JobManager.this.updaters.get( jobID );
+                if( updaterToRefresh != null ) {
+                  JobManager.this.updaters.remove( jobID );
+                  JobManager.this.updaters.put( updaterToRefresh.getJob().getID(),
+                                                updaterToRefresh );
+                }
+              }
+            }
+          }
+        };
+        jobIDUpdate.start();
+      }
     }
     return flag;
   }
@@ -247,68 +318,55 @@ public class JobManager extends AbstractGridElementManager
     JobStatusUpdater updater = new JobStatusUpdater( id );
     this.updaters.put( id, updater );
     updater.setSystem( true );
-    int updatePeriod = Preferences.getUpdateJobsPeriod();
-    updater.schedule( updatePeriod );
+    JobScheduler.getJobScheduler().scheduleNewUpdater( updater );
   }
 
   public void pauseAllUpdaters(){
-    JobScheduler scheduler = JobScheduler.getJobScheduler();
-    for (Enumeration<IGridJobID> e = this.updaters.keys();e.hasMoreElements(); ){
-      IGridJobID jobId = e.nextElement();
-      JobStatusUpdater updater = this.updaters.get( jobId );
-      updater.sleep();
-      this.numberOfRunningUpdaters--;
-      scheduler.addUpdaterToQueue( updater, JobScheduler.UPDATER_NORMAL_PRIORITY );
+    JobScheduler.getJobScheduler().pauseAllUpdaters();
+  }
+  
+  /**
+   * Pauses specified updater.
+   * @param updater Updater to be paused.
+   */
+  public void pauseUpdater( final JobStatusUpdater updater ) {
+    JobScheduler.getJobScheduler().pauseUpdater( updater );
+  }
+  
+  /**
+   * Pauses updater for the specified job.
+   * @param jobId Id of the job, for which updater should be paused.
+   */
+  public void pauseUpdater( final IGridJobID jobId ) {
+    JobStatusUpdater updater = this.updaters.get( jobId );
+    if ( updater != null ) {
+      JobScheduler.getJobScheduler().pauseUpdater( updater );
     }
   }
   
   public void wakeUpAllUpdaters() {
-    int newNumberOfRunningUpdaters = JobScheduler.getJobScheduler().wakeUpdaters( this.numberOfRunningUpdaters );
-    setNumberOfRunningUpdaters( newNumberOfRunningUpdaters );
+    JobScheduler.getJobScheduler().resumeAllUpdaters();
   }
   
   public void updateJobsStatus( final ArrayList<IGridJob> selectedJobs ) {
     for( Enumeration<IGridJobID> enumJobIds = this.updaters.keys(); enumJobIds.hasMoreElements(); )
     {
       IGridJobID jobId = enumJobIds.nextElement();
-      // if ( jobId == jobs.getID() ) {
-      // JobStatusUpdater updater = this.updaters.get( jobId );
-      // if ( !JobScheduler.getJobScheduler().wakeUpdater( updater ) ) {
-      // updater.sleep();
-      // updater.wakeUp();
-      // updater.schedule( 1000 );
-      // }
-      // }
       for( Iterator<IGridJob> iterSelectedJobs = selectedJobs.iterator(); iterSelectedJobs.hasNext(); )
       {
         IGridJob selectedJob = iterSelectedJobs.next();
         if( jobId == selectedJob.getID() ) {
           JobStatusUpdater updater = this.updaters.get( jobId );
-          if( !JobScheduler.getJobScheduler().wakeUpdater( updater ) ) {
-            updater.sleep();
-            updater.wakeUp();
-            updater.schedule( 1000 );
-          }
+          updater.sleep();
+          updater.wakeUp();
+          updater.schedule( 1000 );
         }
       }
     }
   }
   
-  /**
-   * 
-   * @return Number of running updaters
-   */
-  public int getNumberOfRunningUpdaters() {
-    return this.numberOfRunningUpdaters;
-  }
   
-  /**
-   * @param number of running updaters to set.
-   */
-  public void setNumberOfRunningUpdaters( final int number ) {
-    this.numberOfRunningUpdaters = number;
-  }
-
+  
   /**
    * Get the singleton instance of the <code>JobManager</code>.
    * 
@@ -358,10 +416,18 @@ public class JobManager extends AbstractGridElementManager
                                     final int status,
                                     final IGridJobStatusListener listener )
   {
-    JobStatusUpdater updater;
+    JobStatusUpdater updater = null;
     for( IGridJob job : jobs ) {
-      updater = this.updaters.get( job.getID() );
-      updater.addJobStatusListener( status, listener );
+      //updater = this.updaters.get( job.getID() );
+//      if ( updater != null){
+//        updater.addJobStatusListener( status, listener );
+//      } else {
+        for (JobStatusUpdater updaterTemp : this.updaters.values() ){
+          if (updaterTemp.getJob().equals(job)){
+            updaterTemp.addJobStatusListener( status, listener );
+          }
+        }
+//      }
     }
   }
 
@@ -406,7 +472,7 @@ public class JobManager extends AbstractGridElementManager
   public void removeUpdater( final JobStatusUpdater updater ) {
     Collection<JobStatusUpdater> values = this.updaters.values();
     while( values.remove( updater ) ) {
-      // empty block};
+      JobScheduler.getJobScheduler().clearUpdater ( updater );
     }
   }
 

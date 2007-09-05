@@ -54,7 +54,7 @@ public class JobViewActions extends ActionGroup {
   public JobViewActions( final IWorkbenchSite site ) {
     this.site = site;
     this.toggleJobsUpdateAction = new ToggleUpdateJobsAction();
-    this.updateSelectedJobStatusAction = new UpdateJobStatusAction();
+    this.updateSelectedJobStatusAction = new UpdateJobStatusAction( site.getWorkbenchWindow());
     ISelectionProvider provider = this.site.getSelectionProvider();
     provider.addSelectionChangedListener( this.toggleJobsUpdateAction );
     provider.addSelectionChangedListener( this.updateSelectedJobStatusAction );
