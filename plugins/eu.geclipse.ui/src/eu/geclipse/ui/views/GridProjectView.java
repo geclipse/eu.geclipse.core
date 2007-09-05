@@ -38,6 +38,7 @@ import eu.geclipse.ui.internal.actions.NewWizardActions;
 import eu.geclipse.ui.internal.actions.ProjectActions;
 import eu.geclipse.ui.internal.actions.SubmitJobActions;
 import eu.geclipse.ui.internal.actions.TransferJsdl2JdlActions;
+import eu.geclipse.ui.internal.actions.VisualizationActions;
 import eu.geclipse.ui.providers.GridModelContentProvider;
 import eu.geclipse.ui.providers.GridModelLabelProvider;
 
@@ -123,8 +124,11 @@ public class GridProjectView
     BuildActions  buildActions = new BuildActions( site );
     groups.addGroup( buildActions );
     
-    MonitorActions monitorActions = new MonitorActions (site);
+    MonitorActions monitorActions = new MonitorActions ( site );
     groups.addGroup ( monitorActions);
+    
+    VisualizationActions visualizationActions = new VisualizationActions ( site );
+    groups.addGroup ( visualizationActions );
     
     this.editorActions = new EditorActions( this );
     groups.addGroup( this.editorActions );
