@@ -679,7 +679,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     Combo comboName = null;
     
     // Test if eObject is not empty.
-    if(this.resourcesType != null) {
+    if( this.resourcesType != null ) {
       EClass eClass = this.resourcesType.eClass();
              
       EList<EStructuralFeature> eAllStructuralFeaures = eClass.getEAllStructuralFeatures();

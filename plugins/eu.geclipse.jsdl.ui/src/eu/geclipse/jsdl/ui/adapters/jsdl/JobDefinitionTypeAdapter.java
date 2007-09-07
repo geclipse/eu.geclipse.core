@@ -18,7 +18,7 @@
 package eu.geclipse.jsdl.ui.adapters.jsdl;
 
 /**
- * @author nickl
+ * @author nloulloud
  *
  */
 
@@ -68,7 +68,7 @@ public final class JobDefinitionTypeAdapter extends JsdlAdaptersFactory {
   
   
   protected void contentChanged(){
-    if (this.isNotifyAllowed){
+    if ( this.isNotifyAllowed ){
       
       fireNotifyChanged( null);
     }
@@ -78,7 +78,7 @@ public final class JobDefinitionTypeAdapter extends JsdlAdaptersFactory {
   
   
   /**
-   * @param widget
+   * @param widget The Text widget that handles the JobDefinition ID.
    */
   public void attachID(final Text widget){
     
@@ -128,31 +128,35 @@ public final class JobDefinitionTypeAdapter extends JsdlAdaptersFactory {
    {
     
      this.isNotifyAllowed = false;
-     EObject eObject = this.jobDefinitionType;
+//     EObject eObject = this.jobDefinitionType;
      Text widgetName = null;
        
      // Test if eObject is not empty.
-     if(eObject != null) {
-       EClass eClass = eObject.eClass();
+     if ( this.jobDefinitionType != null ) {
+       EClass eClass = this.jobDefinitionType.eClass();
               
-      EList<EAttribute> allAttributes = eClass.getEAllAttributes();
+      EList <EAttribute> allAttributes = eClass.getEAllAttributes();
       for( EAttribute attribute : allAttributes ) {
                                                
          //Get Attribute Value.
-         Object value = eObject.eGet( attribute );        
-              
-         Integer featureID = new Integer( attribute.getFeatureID() );
-       
-         //Check if Attribute has any value
-         if (eObject.eIsSet( attribute )){          
-            widgetName = this.widgetFeaturesMap.get( featureID );
-              
-            if (featureID != new Integer (JsdlPackage.JOB_DEFINITION_TYPE__ANY_ATTRIBUTE))
-            {
+         Object value = this.jobDefinitionType.eGet( attribute );
+         
+         int featureID =  attribute.getFeatureID();
+         
+         if (this.jobDefinitionType.eIsSet( attribute )){ 
+           widgetName = this.widgetFeaturesMap.get( new Integer ( featureID ) );
+      
+           switch( featureID ) {
+             
+            case JsdlPackage.JOB_DEFINITION_TYPE__ID:
               widgetName.setText(value.toString());
-            } //end if
-                    
-         } //end if
+            break;
+            default:
+            break;
+            
+           }// end switch
+         }   // end_if eIsSet()
+
        } //end for
      } //end if
      this.isNotifyAllowed = true;
@@ -165,10 +169,10 @@ public final class JobDefinitionTypeAdapter extends JsdlAdaptersFactory {
    * @return TRUE if the adapter is empty. If it is empty, it means that there 
    * is no JobDefinition element in the JSDL document. 
    */
-  public boolean isEmpty(){
+  public boolean isEmpty() {
      boolean status = false;
  
-     if (!this.jobDefinitionType.equals( null )){       
+     if ( !this.jobDefinitionType.equals( null ) ) {       
        status = true;
      }
      

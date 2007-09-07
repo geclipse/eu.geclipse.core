@@ -21,15 +21,22 @@ package eu.geclipse.jsdl.ui.internal.pages;
  *
  */
 
+import java.net.URL;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IStatusLineManager;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
+import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.events.HyperlinkEvent;
@@ -41,9 +48,11 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
+
 import eu.geclipse.jsdl.ui.adapters.jsdl.ApplicationTypeAdapter;
 import eu.geclipse.jsdl.ui.adapters.posix.PosixApplicationTypeAdapter;
 import eu.geclipse.jsdl.ui.editors.JsdlEditor;
+import eu.geclipse.jsdl.ui.internal.Activator;
 
 /**
  * 
@@ -73,7 +82,8 @@ public final class OverviewPage extends FormPage
   private FormToolkit toolkit;     
   private boolean contentRefreshed = false;
   private boolean dirtyFlag = false;  
-  private final int WIDGET_MAX_WIDTH = 100;
+  private final int WIDGET_MAX_WIDTH = 100;  
+  private ImageDescriptor helpDesc; 
   
   /**
    * OverviewPage class constructor.
@@ -192,7 +202,7 @@ public final class OverviewPage extends FormPage
   @Override
   protected void createFormContent(final IManagedForm managedForm){
   
-    ScrolledForm form = managedForm.getForm();
+    final ScrolledForm form = managedForm.getForm();
     form.setText(Messages.getString("OverviewPage_PageTitle"));  //$NON-NLS-1$
     
     TableWrapLayout layout = new TableWrapLayout();
@@ -232,9 +242,12 @@ public final class OverviewPage extends FormPage
                                  Messages.getString("OverviewPage_DataStagingTitle"),  //$NON-NLS-1$
                           Messages.getString("OverviewPage_DataStagingDescription")); //$NON-NLS-1$
                                     
-    
+    addFormPageHelp( form );
   }
   
+  protected String getHelpResource() {
+    return "guide/tools/editors/manifest_editor/overview.htm"; //$NON-NLS-1$
+}
   
   private Composite createSection( final IManagedForm mform, final String title,
                                    final String desc, final int numColumns ) {
@@ -477,6 +490,32 @@ public final class OverviewPage extends FormPage
     mng.setMessage( null );
     
   } // End void linkExited()
+  
+  
+  private void addFormPageHelp(final ScrolledForm form ) {
+    
+    final String href = getHelpResource();
+    if (href != null) {
+        IToolBarManager manager = form.getToolBarManager();
+        Action helpAction = new Action("help") { //$NON-NLS-1$
+            @Override
+            public void run() {
+                BusyIndicator.showWhile(form.getDisplay(), new Runnable() {
+                    public void run() {
+                        PlatformUI.getWorkbench().getHelpSystem().displayHelpResource(href);
+                    }
+                });
+            }
+        };
+        helpAction.setToolTipText("HELP"); 
+        URL stageInURL = Activator.getDefault().getBundle().getEntry( "icons/help.gif" ); //$NON-NLS-1$       
+        this.helpDesc = ImageDescriptor.createFromURL( stageInURL ) ;   
+        helpAction.setImageDescriptor(this.helpDesc);
+        manager.add(helpAction);
+        form.updateToolBar();
+    }
+    
+  }
   
   
   

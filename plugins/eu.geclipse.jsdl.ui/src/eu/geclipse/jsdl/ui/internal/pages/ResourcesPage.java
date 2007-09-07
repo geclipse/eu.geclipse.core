@@ -22,9 +22,12 @@ package eu.geclipse.jsdl.ui.internal.pages;
  *
  */
 
+import java.net.URL;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -131,19 +134,11 @@ public final class ResourcesPage extends FormPage
   private Combo cmbOperSystType = null;
   private Combo cmbCPUArchName = null;
   private Combo cmbFileSystemType = null;
-  private Combo cmbDiskSpaceRange = null;
-  
-  private Table tblHosts = null;
-  
-  private TableColumn column = null;
-  
-  
-  
+  private Combo cmbDiskSpaceRange = null;  
+  private Table tblHosts = null;  
+  private TableColumn column = null;   
   private boolean contentRefreshed = false;
   private boolean dirtyFlag = false;
-  
-  
-  
   private final int TXT_LENGTH = 300;
   private final int WIDGET_HEIGHT = 100;
   
@@ -866,5 +861,7 @@ public final class ResourcesPage extends FormPage
       this.btnEdit.setEnabled( selectionAvailable );
     
   } // End updateButtons
+    
+
 
 }

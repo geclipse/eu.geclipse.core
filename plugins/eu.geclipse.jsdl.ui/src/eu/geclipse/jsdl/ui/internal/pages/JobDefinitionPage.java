@@ -18,7 +18,7 @@
 package eu.geclipse.jsdl.ui.internal.pages;
 
 /**
- * @author nickl
+ * @author nloulloud
  *
  */
 
@@ -28,8 +28,8 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
@@ -64,40 +64,33 @@ public final class JobDefinitionPage extends FormPage
   
   protected static final String PAGE_ID = "JOB_DEFINITION";  //$NON-NLS-1$
   protected Object value = null;
-
   protected Text txtId = null;
   protected Text txtDescription = null;
-  protected Text txtJobName = null;
-  
+  protected Text txtJobName = null;  
   protected List lstJobProject = null;
-  protected List lstJobAnnotation = null;
-  
+  protected List lstJobAnnotation = null;  
   protected Label lblJobId = null;
   protected Label lblJobDescripiton = null;
   protected Label lblJobAnnotation = null;
-  protected Label lblJobProject = null;
-  
+  protected Label lblJobProject = null;  
   protected Button btnAdd = null;
   protected Button btnDel = null;
-  protected Button btnTest = null;
-  
+  protected Button btnTest = null;  
   protected Composite body = null;
   protected Composite jobDefComposite = null;
-  protected Composite jobIdentComposite = null;
-    
+  protected Composite jobIdentComposite = null;    
   protected JobDefinitionTypeAdapter jobDefinitionTypeAdapter ;
   protected JobIdentificationTypeAdapter jobIdentificationTypeAdapter;
     
   private boolean contentRefreshed = false;
-  private boolean dirtyFlag = false;
-  
+  private boolean dirtyFlag = false;  
   private final int widgetHeight = 100; 
    
   
   
   /**
    * JobDefinitionPage Class constructor.
-   * @param editor
+   * @param editor The JSDL Editor.
    */
   public JobDefinitionPage( final JsdlEditor editor) {
    
@@ -110,14 +103,16 @@ public final class JobDefinitionPage extends FormPage
   
   
   @Override
-  public void setActive(final boolean active) {
+  public void setActive( final boolean active ) {
     
-    if ( active ){
+    if ( active ) {
       if ( isContentRefreshed() ) {    
         this.jobDefinitionTypeAdapter.load();
         this.jobIdentificationTypeAdapter.load();
-      }// end_if isContentRefreshed
+      } // end_if isContentRefreshed
+      
     } // end_if active
+    
   }
   
   
@@ -149,8 +144,8 @@ public final class JobDefinitionPage extends FormPage
    *  from an outside editor.
    * 
    */
-  public void setPageContent(final EObject rootJsdlElement, 
-                             final boolean refreshStatus){
+  public void setPageContent( final EObject rootJsdlElement, 
+                              final boolean refreshStatus ){
 
    if ( refreshStatus ) {
       this.contentRefreshed = true;
@@ -166,13 +161,14 @@ public final class JobDefinitionPage extends FormPage
           
   } // End void setPageContent()   
   
+  
 
   @Override
-  public boolean isDirty() {
-    
-    return this.dirtyFlag;
-    
+  public boolean isDirty() {    
+    return this.dirtyFlag;    
   }
+  
+  
   
   /**
    * This method set's the dirty status of the page.
@@ -181,7 +177,8 @@ public final class JobDefinitionPage extends FormPage
    * If TRUE then the page is Dirty and a Save operation is needed.
    * 
    */
-  public void setDirty(final boolean dirty) {
+  public void setDirty( final boolean dirty ) {
+    
     if (this.dirtyFlag != dirty) {
       this.dirtyFlag = dirty;     
       this.getEditor().editorDirtyStateChanged();  
@@ -191,38 +188,39 @@ public final class JobDefinitionPage extends FormPage
 
  
 
+    
+  /* This method is used to create the Forms content by
+  * creating the form layout and then creating the form
+  * sub sections.
+  */
   @Override
-  
-  // This method is used to create the Forms content by
-  // creating the form layout and then creating the form
-  // sub sections.
-  protected void createFormContent(final IManagedForm managedForm) {
+  protected void createFormContent( final IManagedForm managedForm ) {
     
         
     ScrolledForm form = managedForm.getForm();
     FormToolkit toolkit = managedForm.getToolkit();
     
-    form.setText(Messages.getString("JobDefinitionPage_JobDefinitionPageTitle"));  //$NON-NLS-1$
+    form.setText( Messages.getString( "JobDefinitionPage_JobDefinitionPageTitle" ) );  //$NON-NLS-1$
     this.body = form.getBody();
-    this.body.setLayout(FormLayoutFactory.createFormTableWrapLayout(true, 1));
-    
-    
+    this.body.setLayout( FormLayoutFactory.createFormTableWrapLayout( true, 1 ));
+        
     this.jobDefComposite = toolkit.createComposite( this.body );
-    this.jobDefComposite.setLayout(FormLayoutFactory.createFormPaneTableWrapLayout(false, 1));
-    this.jobDefComposite.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
-    createJobDefinitionSection(this.jobDefComposite , toolkit);
+    this.jobDefComposite.setLayout( FormLayoutFactory.createFormPaneTableWrapLayout( false, 1 ) );
+    this.jobDefComposite.setLayoutData( new TableWrapData(TableWrapData.FILL_GRAB ) );
+    createJobDefinitionSection( this.jobDefComposite , toolkit );
     
     this.jobDefinitionTypeAdapter.load();
     
     this.jobIdentComposite = toolkit.createComposite( this.body );
-    this.jobIdentComposite.setLayout(FormLayoutFactory.createFormPaneTableWrapLayout(false, 1));
-    this.jobIdentComposite.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
+    this.jobIdentComposite.setLayout( FormLayoutFactory.createFormPaneTableWrapLayout( false, 1 ) );
+    this.jobIdentComposite.setLayoutData( new TableWrapData(TableWrapData.FILL_GRAB ) );
     
-    createJobIdentificationSection (this.jobIdentComposite, toolkit);
+    createJobIdentificationSection( this.jobIdentComposite, toolkit );
     
     this.jobIdentificationTypeAdapter.load();
 
   }
+  
   
   
   /* 
@@ -230,42 +228,41 @@ public final class JobDefinitionPage extends FormPage
    *  -Job ID (String)
    */
     
-  private void createJobDefinitionSection(final Composite parent,
-                                          final FormToolkit toolkit)
+  private void createJobDefinitionSection( final Composite parent,
+                                           final FormToolkit toolkit )
   {
     
-    String sectionTitle =  Messages.getString("JobDefinitionPage_JobDefinitionTitle");  //$NON-NLS-1$
-    String sectionDescription = Messages.getString("JobDefinitionPage_JobDefinitionDescr");   //$NON-NLS-1$
+    String sectionTitle =  Messages.getString( "JobDefinitionPage_JobDefinitionTitle" );  //$NON-NLS-1$
+    String sectionDescription = Messages.getString( "JobDefinitionPage_JobDefinitionDescr" );   //$NON-NLS-1$
         
     
     GridData gd;
     
     
-    Composite client = FormSectionFactory.createGridStaticSection(toolkit,
-                                                                  parent,
-                                                                  sectionTitle,
-                                                                  sectionDescription,
-                                                                  2);
+    Composite client = FormSectionFactory.createGridStaticSection( toolkit,
+                                                                   parent,
+                                                                   sectionTitle,
+                                                                   sectionDescription,
+                                                                   2 );
   
-    this.lblJobId = toolkit.createLabel(client,
-                       Messages.getString("JobDefinitionPage_JobDefinitionId")); //$NON-NLS-1$
+    this.lblJobId = toolkit.createLabel( client,
+                       Messages.getString( "JobDefinitionPage_JobDefinitionId" ) ); //$NON-NLS-1$
     
-    this.txtId = toolkit.createText(client,"", SWT.NONE);     //$NON-NLS-1$
+    this.txtId = toolkit.createText( client, "", SWT.NONE );     //$NON-NLS-1$
     this.jobDefinitionTypeAdapter.attachID( this.txtId );
-    
-  
+ 
     gd = new GridData();
     gd.grabExcessHorizontalSpace = true;
     gd.verticalAlignment = GridData.CENTER;
     gd.widthHint = 300;
-    this.txtId.setLayoutData(gd);
+    this.txtId.setLayoutData( gd );
     
     
-    //Paint Flat Borders
-    
+    /* Paint Flat Borders */    
     toolkit.paintBordersFor( client );
     
   }
+  
   
   
   /* 
@@ -275,55 +272,53 @@ public final class JobDefinitionPage extends FormPage
    *  -Job Annotation (EList)
    *  -Job Project (EList)
    */
-  private void createJobIdentificationSection(final Composite parent,
-                                                   final FormToolkit toolkit)
+  private void createJobIdentificationSection( final Composite parent,
+                                               final FormToolkit toolkit )
   { 
     
     String sectionTitle = Messages
-                         .getString("JobDefinitionPage_JobIdentificationTitle");  //$NON-NLS-1$
+                         .getString( "JobDefinitionPage_JobIdentificationTitle" );  //$NON-NLS-1$
     
     String sectionDescription = Messages
-                         .getString("JobDefinitionPage_JobIdentificationDescr"); //$NON-NLS-1$
+                         .getString( "JobDefinitionPage_JobIdentificationDescr" ); //$NON-NLS-1$
     
     GridData gd;
        
-    Composite client = FormSectionFactory.createGridStaticSection(toolkit,
-                                           parent,
-                                           sectionTitle,
-                                           sectionDescription,
-                                           4);
+    Composite client = FormSectionFactory.createGridStaticSection( toolkit,
+                                                                   parent,
+                                                                   sectionTitle,
+                                                                   sectionDescription,
+                                                                   4 );
        
       
-    
-    
     /* ================================ Job Name ============================ */
     
-    toolkit.createLabel(client, Messages.getString("JobDefinitionPage_JobName")); //$NON-NLS-1$
+    toolkit.createLabel( client, Messages.getString( "JobDefinitionPage_JobName" ) ); //$NON-NLS-1$
     gd = new GridData();
     gd.grabExcessHorizontalSpace = true;
     gd.verticalAlignment = GridData.CENTER;
     gd.horizontalSpan = 3;
     gd.widthHint = 300;
     
-    this.txtJobName = toolkit.createText(client,"", SWT.NONE);  //$NON-NLS-1$
+    this.txtJobName = toolkit.createText( client, "", SWT.NONE );  //$NON-NLS-1$
     this.jobIdentificationTypeAdapter.attachToJobName( this.txtJobName );
 
-    this.txtJobName.setLayoutData(gd);
-    
-    
+    this.txtJobName.setLayoutData( gd );
+        
     /* ========================= Job Description ============================ */
     
-    this.lblJobDescripiton = toolkit.createLabel (client,
-                              Messages.getString("JobDefinitionPage_JobDescr")); //$NON-NLS-1$
+    this.lblJobDescripiton = toolkit.createLabel ( client,
+                              Messages.getString("JobDefinitionPage_JobDescr" ) ); //$NON-NLS-1$
     gd = new GridData();
     gd.verticalSpan = 1;
     gd.verticalAlignment = GridData.BEGINNING;
-    this.lblJobDescripiton.setLayoutData (gd);
+    this.lblJobDescripiton.setLayoutData ( gd );
     
     
     
-    this.txtDescription = toolkit.createText(client, "", SWT.MULTI  //$NON-NLS-1$
-                                                   | SWT.V_SCROLL | SWT.WRAP);
+    this.txtDescription = toolkit.createText( client, "", SWT.MULTI  //$NON-NLS-1$
+                                                        | SWT.V_SCROLL 
+                                                        | SWT.WRAP );
     
     this.jobIdentificationTypeAdapter.attachToJobDescription( this.txtDescription );
     
@@ -334,13 +329,14 @@ public final class JobDefinitionPage extends FormPage
     gd.horizontalSpan = 3;
     gd.widthHint = 285;
     gd.heightHint = this.widgetHeight;
-    this.txtDescription.setLayoutData(gd);
+    this.txtDescription.setLayoutData( gd );
  
     
     /* ========================= Job Annotation ============================= */
     
-    this.lblJobAnnotation = toolkit.createLabel(client,
-                         Messages.getString("JobDefinitionPage_JobAnnotation"));  //$NON-NLS-1$
+    this.lblJobAnnotation = toolkit.createLabel( client,
+                         Messages.getString( "JobDefinitionPage_JobAnnotation" ) );  //$NON-NLS-1$
+    
     gd = new GridData();
     gd.horizontalSpan = 1;
     gd.verticalSpan = 2;  
@@ -353,9 +349,6 @@ public final class JobDefinitionPage extends FormPage
     gd.verticalSpan = 2;    
     gd.widthHint = 250;
     gd.heightHint = this.widgetHeight;
-
-    
-    
 
     
     this.lstJobAnnotation = new List(client, SWT.None);
@@ -371,24 +364,23 @@ public final class JobDefinitionPage extends FormPage
     gd.horizontalSpan = 2;
     gd.verticalSpan = 1;
     gd.widthHint = 60;
-    this.btnAdd = toolkit.createButton(client, 
-                                     Messages.getString("JsdlEditor_AddButton"), //$NON-NLS-1$
-                                     SWT.PUSH);
+    this.btnAdd = toolkit.createButton( client, 
+                                        Messages.getString( "JsdlEditor_AddButton" ), //$NON-NLS-1$
+                                        SWT.PUSH );
     
-    this.btnAdd.addSelectionListener(new SelectionListener() {
-     public void widgetSelected(final SelectionEvent event) {
+    this.btnAdd.addSelectionListener( new SelectionAdapter() {
+      
+     @Override
+     public void widgetSelected( final SelectionEvent event ) {
        handleAddDialog(Messages.getString( "JobDefinitionPage_JobAnnotationDialog" )); //$NON-NLS-1$
        
        JobDefinitionPage.this.jobIdentificationTypeAdapter
-                       .performAdd(JobDefinitionPage.this.lstJobAnnotation,
-                                  "lstJobAnnotation", //$NON-NLS-1$
-                                   JobDefinitionPage.this.value);
+                       .performAdd( JobDefinitionPage.this.lstJobAnnotation,
+                                    "lstJobAnnotation", //$NON-NLS-1$
+                                    JobDefinitionPage.this.value );
        setDirty( true );
      }
 
-      public void widgetDefaultSelected(final SelectionEvent event) {
-          // Do Nothing - Required method
-      }
     });
     
     this.btnAdd.setLayoutData( gd );
@@ -400,8 +392,9 @@ public final class JobDefinitionPage extends FormPage
     gd.widthHint = 60;
     gd.verticalAlignment = GridData.BEGINNING;
 
-    this.btnDel = toolkit.createButton(client,
-                       Messages.getString("JsdlEditor_RemoveButton"), SWT.PUSH);  //$NON-NLS-1$
+    this.btnDel = toolkit.createButton( client,
+                                        Messages.getString("JsdlEditor_RemoveButton"), //$NON-NLS-1$
+                                        SWT.PUSH);
     this.btnDel.setEnabled( false );
     
     this.jobIdentificationTypeAdapter.attachToDelete( this.btnDel, this.lstJobAnnotation);
@@ -409,8 +402,8 @@ public final class JobDefinitionPage extends FormPage
     
     /* ============================= Job Project =============================*/
     
-     this.lblJobProject = toolkit.createLabel(client,
-                            Messages.getString("JobDefinitionPage_JobProject")); //$NON-NLS-1$
+     this.lblJobProject = toolkit.createLabel( client,
+                            Messages.getString("JobDefinitionPage_JobProject") ); //$NON-NLS-1$
      
      gd = new GridData();
      gd.verticalSpan = 2;
@@ -425,13 +418,11 @@ public final class JobDefinitionPage extends FormPage
      gd.heightHint = this.widgetHeight;
      
 
-     this.lstJobProject = new List(client,  SWT.NONE);
+     this.lstJobProject = new List( client,  SWT.NONE );
      this.lstJobProject.setData( FormToolkit.KEY_DRAW_BORDER,
-                                                      FormToolkit.TEXT_BORDER );
+                                 FormToolkit.TEXT_BORDER );
      
-     this.jobIdentificationTypeAdapter.attachToJobProject(this.lstJobProject );
-     this.lstJobProject.setLayoutData( gd );
-     
+     this.jobIdentificationTypeAdapter.attachToJobProject( this.lstJobProject );
      this.lstJobProject.setLayoutData( gd );
      
      // Create Button ADD     
@@ -440,58 +431,60 @@ public final class JobDefinitionPage extends FormPage
      gd.verticalSpan = 1;
      gd.widthHint = 60;
 
-     this.btnAdd = toolkit.createButton(client,
-                                     Messages.getString("JsdlEditor_AddButton"), //$NON-NLS-1$
-                                     SWT.PUSH);
+     this.btnAdd = toolkit.createButton( client,
+                                         Messages.getString( "JsdlEditor_AddButton" ), //$NON-NLS-1$
+                                         SWT.PUSH);
      
-     this.btnAdd.addSelectionListener(new SelectionListener() {
-       public void widgetSelected(final SelectionEvent event) {
+     this.btnAdd.addSelectionListener( new SelectionAdapter() {
+       
+       @Override
+      public void widgetSelected( final SelectionEvent event) {
 
-         handleAddDialog(Messages.getString( "JobDefinitionPage_JobProjectDialog" )); //$NON-NLS-1$
+         handleAddDialog(Messages.getString( "JobDefinitionPage_JobProjectDialog" ) ); //$NON-NLS-1$
          JobDefinitionPage.this.jobIdentificationTypeAdapter
-                           .performAdd(
-                                           JobDefinitionPage.this.lstJobProject,
-                                           "lstJobProject", //$NON-NLS-1$                                                       
-                                           JobDefinitionPage.this.value);
+                          .performAdd( JobDefinitionPage.this.lstJobProject,
+                                       "lstJobProject", //$NON-NLS-1$                                                       
+                                       JobDefinitionPage.this.value );
 
        }
 
-        public void widgetDefaultSelected(final SelectionEvent event) {
-            // Do Nothing - Required method
-        }
       });
      
      this.btnAdd.setLayoutData( gd );
      
-     //Create Button DEL
+     /* Create Button DEL */
      gd = new GridData();
      gd.horizontalSpan = 2;
      gd.widthHint = 60;
      gd.verticalSpan = 1;
      gd.verticalAlignment = GridData.BEGINNING;
 
-     this.btnDel = toolkit.createButton(client,
-                                  Messages.getString("JsdlEditor_RemoveButton"), //$NON-NLS-1$
-                                  SWT.PUSH);
+     this.btnDel = toolkit.createButton( client,
+                                         Messages.getString("JsdlEditor_RemoveButton"), //$NON-NLS-1$
+                                         SWT.PUSH );
      this.btnDel.setEnabled( false );
      
      this.jobIdentificationTypeAdapter.attachToDelete( this.btnDel, this.lstJobProject);
      this.btnDel.setLayoutData( gd );
  
      toolkit.paintBordersFor( client );
-
      
   }
   
-  protected void handleAddDialog(final String dialogTitle){
+  
+  
+  protected void handleAddDialog( final String dialogTitle ) {
+    
     MultipleInputDialog dialog = new MultipleInputDialog( this.getSite().getShell(),
                                                          dialogTitle );
         
     dialog.addTextField( Messages.getString( "JobDefinitionPage_Value" ), "", false ); //$NON-NLS-1$ //$NON-NLS-2$
     
-    if( dialog.open() != Window.OK ) { 
+    if( dialog.open() != Window.OK ) {
+      
       this.value = null;
       return;
+      
     }
     
     this.value = dialog.getStringValue( Messages.getString( "JobDefinitionPage_Value" ) ) ; //$NON-NLS-1$
@@ -500,11 +493,14 @@ public final class JobDefinitionPage extends FormPage
   }
 
   
-  public void notifyChanged(final Notification notification) {
+  
+  public void notifyChanged( final Notification notification ) {
+    
     setDirty( true );
+    
   }
   
   
 
- }
+ } // End Class JobDefinitionPage
   
