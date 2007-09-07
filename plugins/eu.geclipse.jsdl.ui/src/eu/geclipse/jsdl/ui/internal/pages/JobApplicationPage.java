@@ -18,7 +18,7 @@
 package eu.geclipse.jsdl.ui.internal.pages;
 
 /**
- * @author nickl
+ * @author nloulloud
  *
  */
 
@@ -73,8 +73,7 @@ public final class JobApplicationPage extends FormPage
   protected Composite body = null;
   protected Composite aS = null;
   protected Composite pS = null;
-  protected Composite apS = null ;
-    
+  protected Composite apS = null;    
   protected Text txtExecutable = null;
   protected Text txtPosixName = null;
   protected Text txtInput = null;
@@ -99,18 +98,13 @@ public final class JobApplicationPage extends FormPage
   protected Text txtUserName = null;
   protected Text txtGroupName = null;
   protected Text txtFileSystemName = null;
-  protected Text txtWorkingDirectory = null;
-  
-  
+  protected Text txtWorkingDirectory = null;  
   protected Button btnArgAdd = null;
   protected Button btnArgEdit = null;
   protected Button btnArgDel = null;
-  
-  
   protected Button btnEnVarAdd = null;
   protected Button btnEnVarEdit = null;
-  protected Button btnEnVarDel = null;
-  
+  protected Button btnEnVarDel = null;  
   protected Label lblApplicationName = null;
   protected Label lblApplicationVersion = null;
   protected Label lblApplicationDescription = null;
@@ -121,8 +115,7 @@ public final class JobApplicationPage extends FormPage
   protected Label lblInput = null;
   protected Label lblOutput = null;
   protected Label lblError = null;
-  protected Label lblEnvironment = null;
-  
+  protected Label lblEnvironment = null;  
   protected Label lblWallTimeLimit = null;
   protected Label lblFileSizeLimit = null;
   protected Label lblCoreDumpLimit = null;
@@ -138,25 +131,17 @@ public final class JobApplicationPage extends FormPage
   protected Label lblThreadCountLimit = null;
   protected Label lblUserName = null;
   protected Label lblGroupName  = null;
-  
-  
-  
   protected Table tblEnvironment = null;
   protected TableViewer environmentViewer = null;   
   protected Table tblArgument = null;
   protected TableViewer argumentViewer = null;
-
   protected ApplicationTypeAdapter applicationTypeAdapter;
   protected PosixApplicationTypeAdapter posixApplicationTypeAdapter;
-
   protected Object[][] value = null;
-  
-  
+    
   private TableColumn column;    
   private boolean contentRefreshed = false;  
   private boolean dirtyFlag = false;
-  
-
   private final int WIDGET_HEIGHT = 100; 
   
    
@@ -283,25 +268,25 @@ public final class JobApplicationPage extends FormPage
   protected void createFormContent( final IManagedForm managedForm ) {
     
     
-    ScrolledForm form = managedForm.getForm();
+    ScrolledForm form = managedForm.getForm();    
     FormToolkit toolkit = managedForm.getToolkit();
     
     form.setText( Messages.getString( "JobApplicationPage_ApplicationTitle" ) );  //$NON-NLS-1$
     
     this.body = form.getBody();
-    this.body.setLayout(FormLayoutFactory.createFormTableWrapLayout(false, 2));
+    this.body.setLayout( FormLayoutFactory.createFormTableWrapLayout( false, 2) );
     
     
     this.aS = toolkit.createComposite( this.body );
-    this.aS.setLayout(FormLayoutFactory.createFormPaneTableWrapLayout(false, 1));
-    this.aS.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
+    this.aS.setLayout(FormLayoutFactory.createFormPaneTableWrapLayout( false, 1 ) );
+    this.aS.setLayoutData( new TableWrapData( TableWrapData.FILL_GRAB ) );
 
     createApplicationSection( this.aS , toolkit );
     
     
     this.apS = toolkit.createComposite( this.body );
-    this.apS.setLayout(FormLayoutFactory.createFormPaneTableWrapLayout(false, 1));
-    this.apS.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
+    this.apS.setLayout(FormLayoutFactory.createFormPaneTableWrapLayout( false, 1) );
+    this.apS.setLayoutData( new TableWrapData( TableWrapData.FILL_GRAB ) );
 
     createAdditionalPosixSection( this.apS, toolkit );
     createPosixSection( this.aS, toolkit );
@@ -327,55 +312,55 @@ public final class JobApplicationPage extends FormPage
                                          final FormToolkit toolkit )                                             
   {
     
-    String sectionTitle = Messages.getString("JobApplicationPage_Applicationtitle"); //$NON-NLS-1$
-    String sectionDescription = Messages.getString("JobApplicationPage_ApplicationDescription");   //$NON-NLS-1$
+    String sectionTitle = Messages.getString( "JobApplicationPage_Applicationtitle" ); //$NON-NLS-1$
+    String sectionDescription = Messages.getString( "JobApplicationPage_ApplicationDescription" );   //$NON-NLS-1$
     
     GridData gd;
        
-    Composite client = FormSectionFactory.createGridStaticSection(toolkit,
-                                           parent,
-                                           sectionTitle,
-                                           sectionDescription,
-                                           2);
+    Composite client = FormSectionFactory.createGridStaticSection( toolkit,
+                                                                   parent,
+                                                                   sectionTitle,
+                                                                   sectionDescription,
+                                                                   2);
    
     //Create Label and Text for Application Name Element
-    this.lblApplicationName = toolkit.createLabel(client,
-                      Messages.getString("JobApplicationPage_ApplicationName")); //$NON-NLS-1$
+    this.lblApplicationName = toolkit.createLabel( client,
+                      Messages.getString( "JobApplicationPage_ApplicationName" ) ); //$NON-NLS-1$
     
-    this.txtApplicationName = toolkit.createText(client, "", SWT.NONE);  //$NON-NLS-1$
+    this.txtApplicationName = toolkit.createText( client, "", SWT.NONE );  //$NON-NLS-1$
     
     gd = new GridData();
     gd.widthHint = 300;
-    this.txtApplicationName.setLayoutData(gd);    
+    this.txtApplicationName.setLayoutData( gd );    
     this.applicationTypeAdapter.attachToApplicationName( this.txtApplicationName );
     
     
 
     //Create Label and Text for Application Version     
-    this.lblApplicationVersion = toolkit.createLabel(client,
-                   Messages.getString("JobApplicationPage_ApplicationVersion"));  //$NON-NLS-1$
-    this.txtApplicationVersion = toolkit.createText(client, "", SWT.NONE);  //$NON-NLS-1$
+    this.lblApplicationVersion = toolkit.createLabel( client,
+                   Messages.getString( "JobApplicationPage_ApplicationVersion" ) );  //$NON-NLS-1$
+    this.txtApplicationVersion = toolkit.createText( client, "", SWT.NONE );  //$NON-NLS-1$
     
     gd = new GridData();
     gd.widthHint = 300;
-    this.txtApplicationVersion.setLayoutData(gd);
+    this.txtApplicationVersion.setLayoutData( gd );
         
     this.applicationTypeAdapter.
                        attachToApplicationVersion( this.txtApplicationVersion );
 
     //Create Label and Text for Application Description Element    
-    this.lblApplicationDescription = toolkit.createLabel(client,
+    this.lblApplicationDescription = toolkit.createLabel( client,
                      Messages.getString("JobApplicationPage_ApplicationDescr"));  //$NON-NLS-1$
-    this.txtDescription = toolkit.createText(client, "",  //$NON-NLS-1$
+    this.txtDescription = toolkit.createText( client, "",  //$NON-NLS-1$
                                                              SWT.NONE 
                                                              | SWT.V_SCROLL                                       
-                                                             | SWT.WRAP);
+                                                             | SWT.WRAP  );
     
     gd = new GridData();
     gd.verticalSpan = 3;
     gd.widthHint = 285;
     gd.heightHint = this.WIDGET_HEIGHT;
-    this.txtDescription.setLayoutData(gd);    
+    this.txtDescription.setLayoutData( gd );    
     this.applicationTypeAdapter
                          .attachToApplicationDescription( this.txtDescription );
        
@@ -398,18 +383,18 @@ public final class JobApplicationPage extends FormPage
                                    final FormToolkit toolkit )
    {    
     
-    String sectionTitle = Messages.getString("JobApplicationPage_PosixApplicationtitle");  //$NON-NLS-1$
-    String sectionDescripiton = Messages.getString("JobApplicationPage_PosixApplicationDescription"); //$NON-NLS-1$
+    String sectionTitle = Messages.getString( "JobApplicationPage_PosixApplicationtitle" );  //$NON-NLS-1$
+    String sectionDescripiton = Messages.getString( "JobApplicationPage_PosixApplicationDescription" ); //$NON-NLS-1$
     
     GridData gd;
   
     /* ===================== Posix Application Widget ======================= */
 
-    Composite client = FormSectionFactory.createGridStaticSection(toolkit,
-                                               parent,
-                                               sectionTitle,
-                                               sectionDescripiton,
-                                               4 );
+    Composite client = FormSectionFactory.createGridStaticSection( toolkit,
+                                                                   parent,
+                                                                   sectionTitle,
+                                                                   sectionDescripiton,
+                                                                   4 );
 
        
     gd = new GridData();
@@ -420,12 +405,12 @@ public final class JobApplicationPage extends FormPage
     gd.widthHint = 330;
     
     /* Posix Name Widget */
-    this.lblPosixName = toolkit.createLabel(client,
-                            Messages.getString("JobApplicationPage_PosixName"));  //$NON-NLS-1$
+    this.lblPosixName = toolkit.createLabel( client,
+                            Messages.getString( "JobApplicationPage_PosixName" ) );  //$NON-NLS-1$
     
-    this.txtPosixName = toolkit.createText(client, "", SWT.NONE); //$NON-NLS-1$
-    this.posixApplicationTypeAdapter.attachPosixApplicationName(this.txtPosixName);
-    this.txtPosixName.setLayoutData(gd);
+    this.txtPosixName = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    this.posixApplicationTypeAdapter.attachPosixApplicationName( this.txtPosixName );
+    this.txtPosixName.setLayoutData( gd );
     
     
     /* =========================== Executable Widget ======================== */
@@ -435,15 +420,15 @@ public final class JobApplicationPage extends FormPage
     
     
     
-    this.lblExecutable = toolkit.createLabel(client,
-                           Messages.getString("JobApplicationPage_Executable")); //$NON-NLS-1$
+    this.lblExecutable = toolkit.createLabel( client,
+                           Messages.getString( "JobApplicationPage_Executable" ) ); //$NON-NLS-1$
     
     this.lblExecutable.setLayoutData( gd ); 
     
-    this.txtExecutable = toolkit.createText(client, "", SWT.NONE); //$NON-NLS-1$
+    this.txtExecutable = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
     
     this.posixApplicationTypeAdapter
-                        .attachPosixApplicationExecutable(this.txtExecutable);
+                        .attachPosixApplicationExecutable( this.txtExecutable );
     
     gd = new GridData();
     gd.widthHint = 330;
@@ -451,7 +436,7 @@ public final class JobApplicationPage extends FormPage
     gd.grabExcessHorizontalSpace = true;
     gd.verticalAlignment = GridData.CENTER;
     gd.verticalSpan = 1;
-    this.txtExecutable.setLayoutData(gd);
+    this.txtExecutable.setLayoutData( gd );
  
 
     
@@ -462,8 +447,8 @@ public final class JobApplicationPage extends FormPage
     gd.horizontalSpan = 1;
     gd.verticalAlignment = GridData.BEGINNING;
     
-    this.lblArgument = toolkit.createLabel(client,
-                             Messages.getString("JobApplicationPage_Argument")); //$NON-NLS-1$
+    this.lblArgument = toolkit.createLabel( client,
+                             Messages.getString( "JobApplicationPage_Argument" ) ); //$NON-NLS-1$
     
     this.lblArgument.setLayoutData( gd );
     
@@ -476,16 +461,16 @@ public final class JobApplicationPage extends FormPage
     gd.heightHint = this.WIDGET_HEIGHT;
     
     
-    this.argumentViewer = new TableViewer(client, SWT.BORDER);
+    this.argumentViewer = new TableViewer( client, SWT.BORDER );
     this.tblArgument = this.argumentViewer.getTable();
     this.tblArgument.setHeaderVisible( true);
     this.argumentViewer.setContentProvider( new FeatureContentProvider() );
     this.argumentViewer.setLabelProvider( new FeatureLabelProvider() );
     
-    this.column = new TableColumn(this.tblArgument, SWT.NONE);    
+    this.column = new TableColumn( this.tblArgument, SWT.NONE );    
     this.column.setText( "File System Name" ); //$NON-NLS-1$
     this.column.setWidth( 150 );
-    this.column = new TableColumn(this.tblArgument, SWT.NONE);    
+    this.column = new TableColumn( this.tblArgument, SWT.NONE );    
     this.column.setText( "Value" ); //$NON-NLS-1$
     this.column.setWidth( 100 );
     
@@ -496,7 +481,7 @@ public final class JobApplicationPage extends FormPage
     {
 
       public void selectionChanged( final SelectionChangedEvent event ) {        
-        updateButtons((TableViewer)event.getSource());
+        updateButtons( ( TableViewer )event.getSource());
       }
     } );
     
@@ -510,14 +495,14 @@ public final class JobApplicationPage extends FormPage
     gd.horizontalSpan = 2;
     gd.verticalSpan = 1;
     gd.widthHint = 60;
-    this.btnArgAdd = toolkit.createButton(client,
-                                       Messages.getString("JsdlEditor_AddButton") //$NON-NLS-1$
-                                       , SWT.PUSH);
+    this.btnArgAdd = toolkit.createButton( client,
+                                           Messages.getString("JsdlEditor_AddButton"), //$NON-NLS-1$
+                                           SWT.PUSH );
     
-    this.btnArgAdd.addSelectionListener(new SelectionListener() {
-      public void widgetSelected(final SelectionEvent event) {
+    this.btnArgAdd.addSelectionListener( new SelectionListener() {
+      public void widgetSelected( final SelectionEvent event ) {
         handleAddDialog(Messages.getString( "JobApplicationPage_ArgumentDialog" ), //$NON-NLS-1$
-                                                   (Button) event.getSource() ); 
+                                                   ( Button ) event.getSource() ); 
         JobApplicationPage.this.posixApplicationTypeAdapter.performAdd(
                                          JobApplicationPage.this.argumentViewer,
                                                 "argumentViewer", //$NON-NLS-1$
@@ -525,7 +510,7 @@ public final class JobApplicationPage extends FormPage
       
       }
 
-       public void widgetDefaultSelected(final SelectionEvent event) {
+       public void widgetDefaultSelected( final SelectionEvent event ) {
            // Do Nothing - Required method
        }
      });
@@ -538,14 +523,14 @@ public final class JobApplicationPage extends FormPage
     gd.horizontalSpan = 2;
     gd.verticalSpan = 1;
     gd.widthHint = 60;
-    this.btnArgEdit = toolkit.createButton(client,
-                                       Messages.getString("JsdlEditor_EditButton") //$NON-NLS-1$
-                                       , SWT.PUSH);
+    this.btnArgEdit = toolkit.createButton( client,
+                                            Messages.getString("JsdlEditor_EditButton"), //$NON-NLS-1$
+                                            SWT.PUSH);
     
-    this.btnArgEdit.addSelectionListener(new SelectionListener() {
-      public void widgetSelected(final SelectionEvent event) {
+    this.btnArgEdit.addSelectionListener( new SelectionListener() {
+      public void widgetSelected( final SelectionEvent event ) {
         handleAddDialog(Messages.getString( "JobApplicationPage_ArgumentDialog" ), //$NON-NLS-1$
-                                                    (Button) event.getSource());
+                                                    ( Button ) event.getSource());
         
         JobApplicationPage.this.posixApplicationTypeAdapter.
                             performEdit( JobApplicationPage.this.argumentViewer,
@@ -554,7 +539,7 @@ public final class JobApplicationPage extends FormPage
       
       }
 
-       public void widgetDefaultSelected(final SelectionEvent event) {
+       public void widgetDefaultSelected( final SelectionEvent event ) {
            // Do Nothing - Required method
        }
      });
@@ -570,11 +555,11 @@ public final class JobApplicationPage extends FormPage
     gd.verticalAlignment = GridData.BEGINNING;
     
     this.btnArgDel = toolkit.createButton(client,
-                                    Messages.getString("JsdlEditor_RemoveButton") //$NON-NLS-1$
-                                    , SWT.PUSH);
+                                          Messages.getString( "JsdlEditor_RemoveButton" ), //$NON-NLS-1$
+                                          SWT.PUSH);
     this.btnArgDel.setEnabled( false );
     this.posixApplicationTypeAdapter.attachToDelete( this.btnArgDel, 
-                                                             this.argumentViewer );
+                                                     this.argumentViewer );
 
     this.btnArgDel.setLayoutData( gd );
       
@@ -584,8 +569,8 @@ public final class JobApplicationPage extends FormPage
     gd.horizontalSpan = 1;
     
     this.lblInput = toolkit.createLabel(client,
-                                Messages.getString("JobApplicationPage_Input")); //$NON-NLS-1$
-    this.lblInput.setLayoutData(gd);
+                                        Messages.getString( "JobApplicationPage_Input" ) ); //$NON-NLS-1$
+    this.lblInput.setLayoutData( gd );
     
     
     gd = new GridData();
@@ -593,19 +578,19 @@ public final class JobApplicationPage extends FormPage
     gd.horizontalSpan = 3;
     
     gd.widthHint = 330;
-    this.txtInput = toolkit.createText(client, "", SWT.NONE); //$NON-NLS-1$
+    this.txtInput = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
     this.posixApplicationTypeAdapter.attachPosixApplicationInput( this.txtInput );
-    this.txtInput.setLayoutData(gd);
+    this.txtInput.setLayoutData( gd );
    
     /* ============================= Output Widget =========================== */
     
     gd = new GridData();    
-    this.lblOutput = toolkit.createLabel(client,
-                               Messages.getString("JobApplicationPage_Output")); //$NON-NLS-1$
+    this.lblOutput = toolkit.createLabel( client,
+                                          Messages.getString( "JobApplicationPage_Output" ) ); //$NON-NLS-1$
     
     this.lblOutput.setLayoutData( gd );
     
-    this.txtOutput = toolkit.createText(client, "", SWT.NONE); //$NON-NLS-1$
+    this.txtOutput = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
     this.posixApplicationTypeAdapter.attachPosixApplicationOutput( this.txtOutput );
     
     gd = new GridData();    
@@ -619,7 +604,7 @@ public final class JobApplicationPage extends FormPage
     
     gd = new GridData();    
     this.lblError = toolkit.createLabel(client,
-                                Messages.getString("JobApplicationPage_Error")); //$NON-NLS-1$
+                                        Messages.getString( "JobApplicationPage_Error" ) ); //$NON-NLS-1$
     
     this.lblError.setLayoutData( gd );
     
@@ -627,7 +612,7 @@ public final class JobApplicationPage extends FormPage
     gd.verticalAlignment = GridData.FILL;
     gd.horizontalSpan = 3;
     gd.widthHint = 330;
-    this.txtError = toolkit.createText(client, "", SWT.NONE); //$NON-NLS-1$
+    this.txtError = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
     this.posixApplicationTypeAdapter.attachPosixApplicationError( this.txtError );
     this.txtError.setLayoutData(gd);
        
@@ -639,7 +624,7 @@ public final class JobApplicationPage extends FormPage
     gd.verticalAlignment = GridData.BEGINNING;
     
     this.lblEnvironment = toolkit.createLabel(client,
-                          Messages.getString("JobApplicationPage_Environment")); //$NON-NLS-1$
+                                              Messages.getString( "JobApplicationPage_Environment" ) ); //$NON-NLS-1$
     
     this.lblEnvironment.setLayoutData( gd );
         
@@ -652,20 +637,20 @@ public final class JobApplicationPage extends FormPage
     gd.heightHint = this.WIDGET_HEIGHT;
     
     
-    this.environmentViewer = new TableViewer(client, SWT.BORDER);
+    this.environmentViewer = new TableViewer( client, SWT.BORDER );
     this.tblEnvironment = this.environmentViewer.getTable();
     this.tblEnvironment.setHeaderVisible( true);
     this.environmentViewer.setContentProvider( new FeatureContentProvider() );
     this.environmentViewer.setLabelProvider( new FeatureLabelProvider() );
     
     
-    this.column = new TableColumn(this.tblEnvironment, SWT.NONE);       
+    this.column = new TableColumn( this.tblEnvironment, SWT.NONE );       
     this.column.setText( "Name" );         //$NON-NLS-1$
     this.column.setWidth( 60 );
-    this.column = new TableColumn(this.tblEnvironment, SWT.NONE);    
+    this.column = new TableColumn(this.tblEnvironment, SWT.NONE );    
     this.column.setText( "File System Name" ); //$NON-NLS-1$
     this.column.setWidth( 130 );
-    this.column = new TableColumn(this.tblEnvironment, SWT.NONE);    
+    this.column = new TableColumn( this.tblEnvironment, SWT.NONE );    
     this.column.setText( "Value" ); //$NON-NLS-1$
     this.column.setWidth( 60 );
 
@@ -691,13 +676,13 @@ public final class JobApplicationPage extends FormPage
     gd.verticalSpan = 1;
     gd.widthHint = 60;
     this.btnEnVarAdd = toolkit.createButton(client,
-                                     Messages.getString("JsdlEditor_AddButton"), //$NON-NLS-1$
-                                       SWT.BUTTON1);
+                                            Messages.getString( "JsdlEditor_AddButton" ), //$NON-NLS-1$
+                                            SWT.BUTTON1);
     
-    this.btnEnVarAdd.addSelectionListener(new SelectionListener() {
-      public void widgetSelected(final SelectionEvent event) {
-        handleAddDialog(Messages.getString( "JobApplicationPage_EnvironmentDialog" ), //$NON-NLS-1$
-                                                   (Button) event.getSource() );
+    this.btnEnVarAdd.addSelectionListener( new SelectionListener() {
+      public void widgetSelected( final SelectionEvent event ) {
+        handleAddDialog( Messages.getString( "JobApplicationPage_EnvironmentDialog" ), //$NON-NLS-1$
+                                                 ( Button ) event.getSource() );
         JobApplicationPage.this.posixApplicationTypeAdapter.performAdd(
                                       JobApplicationPage.this.environmentViewer,
                                                              "environmentiewer", //$NON-NLS-1$
@@ -709,7 +694,7 @@ public final class JobApplicationPage extends FormPage
        }
      });
     
-    this.btnEnVarAdd.setLayoutData( gd);
+    this.btnEnVarAdd.setLayoutData( gd );
     
     /* Create "Edit" Button */
     gd = new GridData();
@@ -717,13 +702,13 @@ public final class JobApplicationPage extends FormPage
     gd.verticalSpan = 1;
     gd.widthHint = 60;
     this.btnEnVarEdit = toolkit.createButton(client,
-                                       Messages.getString("JsdlEditor_EditButton") //$NON-NLS-1$
-                                       , SWT.PUSH);
+                                             Messages.getString( "JsdlEditor_EditButton" ), //$NON-NLS-1$
+                                             SWT.PUSH);
     
-    this.btnEnVarEdit.addSelectionListener(new SelectionListener() {
-      public void widgetSelected(final SelectionEvent event) {        
+    this.btnEnVarEdit.addSelectionListener( new SelectionListener() {
+      public void widgetSelected( final SelectionEvent event ) {        
         handleAddDialog(Messages.getString( "JobApplicationPage_EnvironmentDialog" ), //$NON-NLS-1$
-                                                    (Button) event.getSource());
+                                                    ( Button ) event.getSource());
         
         JobApplicationPage.this.posixApplicationTypeAdapter.
                          performEdit( JobApplicationPage.this.environmentViewer,
@@ -747,13 +732,13 @@ public final class JobApplicationPage extends FormPage
     gd.widthHint = 60;
     gd.verticalAlignment = GridData.BEGINNING;
     
-    this.btnEnVarDel = toolkit.createButton(client,
-                                  Messages.getString("JsdlEditor_RemoveButton"), //$NON-NLS-1$
-                                  SWT.PUSH); 
+    this.btnEnVarDel = toolkit.createButton( client,
+                                             Messages.getString( "JsdlEditor_RemoveButton" ), //$NON-NLS-1$
+                                             SWT.PUSH); 
     this.btnEnVarDel.setEnabled( false );
     
     this.posixApplicationTypeAdapter.attachToDelete( this.btnEnVarDel, 
-                                                       this.environmentViewer );
+                                                     this.environmentViewer );
     this.btnEnVarDel.setLayoutData( gd );
        
     toolkit.paintBordersFor( client );

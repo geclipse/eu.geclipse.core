@@ -115,7 +115,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
    * 
    * @param rootJsdlElement The root element of a JSDL document.
    */
-  public ResourcesTypeAdapter(final EObject rootJsdlElement) {
+  public ResourcesTypeAdapter( final EObject rootJsdlElement ) {
     
     getTypeForAdapter(rootJsdlElement);
       
@@ -681,15 +681,15 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     // Test if eObject is not empty.
     if( this.resourcesType != null ) {
       EClass eClass = this.resourcesType.eClass();
+      int featureID;
              
       EList<EStructuralFeature> eAllStructuralFeaures = eClass.getEAllStructuralFeatures();
       
       for( EStructuralFeature eStructuralFeature : eAllStructuralFeaures ) {
        
-        int featureID = eStructuralFeature.getFeatureID();
+        featureID = eStructuralFeature.getFeatureID();
 
-
-        if (this.resourcesType.eIsSet( eStructuralFeature )){
+        if ( this.resourcesType.eIsSet( eStructuralFeature ) ){
         
         if (eStructuralFeature instanceof EReference) {
           

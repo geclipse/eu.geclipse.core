@@ -113,19 +113,18 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
   
   protected void contentChanged(){
     
-    if (this.isNotifyAllowed){
+    if ( this.isNotifyAllowed )  {
       fireNotifyChanged( null);
     }
   } // End void contenctChanged()
   
   
   
-  private void  getTypeForAdapter(final EObject rootJsdlElement) {
+  private void  getTypeForAdapter( final EObject rootJsdlElement ) {
 
-    this.jobDescriptionType = ((JobDefinitionType ) rootJsdlElement).getJobDescription();
-//    this.jobDescriptionType.getDataStaging();
+    this.jobDescriptionType = ( ( JobDefinitionType ) rootJsdlElement ).getJobDescription();
     
-   } // End void getTypeforAdapter()
+  } // End void getTypeforAdapter()
   
   
   
@@ -134,7 +133,7 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
    * 
    * @param rootJsdlElement The root element of a JSDL document.
    */
-  public void setContent(final EObject rootJsdlElement) {
+  public void setContent( final EObject rootJsdlElement ) {
     
     this.adapterRefreshed = true;
     getTypeForAdapter( rootJsdlElement );
@@ -154,15 +153,15 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
    * This method add's a filter to the table viewer so as to show only DataStage 
    * elements that contain a Source URI.
    */
-  public void attachToStageIn(final TableViewer widget) {
-    
-    Integer featureID = new Integer(JsdlPackage.DATA_STAGING_TYPE__SOURCE);
+  public void attachToStageIn( final TableViewer widget ) {
+     
+    Integer featureID = new Integer( JsdlPackage.DATA_STAGING_TYPE__SOURCE );
     this.tableFeaturesMap.put( featureID , widget );
     
     widget.addFilter(new ViewerFilter() {
       @Override
-      public boolean select(final Viewer viewer, final Object parent, final Object element) {
-        return ((DataStagingType) element).getSource()!= null;
+      public boolean select( final Viewer viewer, final Object parent, final Object element ) {
+        return ( ( DataStagingType ) element).getSource()!= null;
       }
     });
     
@@ -180,14 +179,14 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
    * This method add's a filter to the table viewer so as to show only DataStage 
    * elements that contain a Target URI.
    */
-  public void attachToStageOut(final TableViewer widget) {
+  public void attachToStageOut( final TableViewer widget ) {
     
-    Integer featureID = new Integer(JsdlPackage.DATA_STAGING_TYPE__TARGET);
+    Integer featureID = new Integer( JsdlPackage.DATA_STAGING_TYPE__TARGET );
     this.tableFeaturesMap.put( featureID , widget );
-    widget.addFilter(new ViewerFilter() {
+    widget.addFilter( new ViewerFilter() {
       @Override
-      public boolean select(final Viewer viewer, final Object parent, final Object element) {
-        return ((DataStagingType) element).getTarget()!= null;
+      public boolean select( final Viewer viewer, final Object parent, final Object element ) {
+        return ( ( DataStagingType) element ).getTarget() != null;
       }
     });
     
@@ -204,15 +203,15 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
    * @param viewer The {@link org.eclipse.jface.viewers.TableViewer}
    * containing the element to be deleted.
    */
-  public void attachToDelete(final Button button, final TableViewer viewer){
+  public void attachToDelete( final Button button, final TableViewer viewer ) {
 
-    button.addSelectionListener(new SelectionListener() {
+    button.addSelectionListener( new SelectionListener() {
 
-      public void widgetSelected(final SelectionEvent event) {        
-        performDelete(viewer);
+      public void widgetSelected( final SelectionEvent event ) {        
+        performDelete( viewer );
       }
 
-      public void widgetDefaultSelected(final SelectionEvent event) {
+      public void widgetDefaultSelected( final SelectionEvent event ) {
           // Do Nothing - Required method
       }
     });
@@ -249,7 +248,7 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
      * elements.
      */ 
     stageInViewer = this.tableFeaturesMap
-                     .get( new Integer(JsdlPackage.DATA_STAGING_TYPE__SOURCE) );
+                     .get( new Integer( JsdlPackage.DATA_STAGING_TYPE__SOURCE ) );
 
     /* Check if the values from the dialog are null. */
     if (value[0] == null) {
@@ -261,9 +260,9 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
     int featureID = JsdlPackage.JOB_DESCRIPTION_TYPE__DATA_STAGING;
 
     
-    EList <DataStagingType> newInputList = (EList<DataStagingType>)tableViewer.getInput(); 
+    EList <DataStagingType> newInputList = ( EList<DataStagingType> )tableViewer.getInput(); 
     
-    if (newInputList == null) {
+    if ( newInputList == null ) {
       newInputList = new BasicEList<DataStagingType>();
     }
     
@@ -278,7 +277,7 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
      * values retrieved from the dialog. 
      * 
      */     
-    if (tableViewer == stageInViewer) {
+    if ( tableViewer == stageInViewer ) {
        
       this.dataStagingType.setName(value[0].toString() );    
       this.sourceTargetType.setURI( value[1].toString() );
@@ -378,10 +377,10 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
     Object feature = structSelection.getFirstElement();
     
     /* Cast the first element to DataStageingType */
-    DataStagingType selectedDataStage = (DataStagingType) feature;    
+    DataStagingType selectedDataStage = ( DataStagingType ) feature;    
 
     /* Remove the selected DataStage object from it's container (JobDescription) */
-    EcoreUtil.remove( selectedDataStage);
+    EcoreUtil.remove( selectedDataStage );
         
     /* Refresh the viewer and notify the editor that the page content has 
      * changed. */
@@ -401,7 +400,7 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
   @SuppressWarnings({
     "unchecked", "boxing"
   })
-  public void performEdit(final TableViewer tableViewer, final Object[] value) {
+  public void performEdit( final TableViewer tableViewer, final Object[] value) {
     
     TableViewer stageInViewer = null;
     
@@ -409,7 +408,7 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
      * elements.
      */ 
     stageInViewer = this.tableFeaturesMap
-                     .get( new Integer(JsdlPackage.DATA_STAGING_TYPE__SOURCE) );
+                     .get( new Integer( JsdlPackage.DATA_STAGING_TYPE__SOURCE ) );
 
     /* Check if the values from the dialog are null. */
     if (value[0] == null) {
@@ -417,7 +416,7 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
     }
     
     //Get the table viewer's input.
-    EList <DataStagingType> newInputList = (EList<DataStagingType>)tableViewer.getInput();
+    EList <DataStagingType> newInputList = ( EList<DataStagingType> )tableViewer.getInput();
     
     EStructuralFeature eStructuralFeature;
     
@@ -438,7 +437,7 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
       Object oldDataStageElement = structSelection.getFirstElement();
     
     /* Get the Index of the Element that needs to be changed */
-      int index = (( java.util.List<Object> )this.jobDescriptionType.eGet(eStructuralFeature))
+      int index = ( ( java.util.List<Object> ) this.jobDescriptionType.eGet(eStructuralFeature))
                                                            .indexOf( oldDataStageElement  );
       
       
@@ -457,8 +456,8 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
         this.sourceTargetType.setURI( value[0].toString() );
         this.dataStagingType.setSource( this.sourceTargetType );  
         this.dataStagingType.setFileName( value[1].toString() );        
-        this.dataStagingType.setCreationFlag(CreationFlagEnumeration.get( (Integer) value[2]));
-        this.dataStagingType.setDeleteOnTermination( (Boolean) value[3] );
+        this.dataStagingType.setCreationFlag( CreationFlagEnumeration.get( ( Integer ) value[2] ) );
+        this.dataStagingType.setDeleteOnTermination( ( Boolean ) value[3] );
         
         
 
@@ -473,21 +472,21 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
         this.dataStagingType.setFileName( value[0].toString() );
         this.sourceTargetType.setURI( value[1].toString() );
         this.dataStagingType.setTarget( this.sourceTargetType ); 
-        this.dataStagingType.setCreationFlag(CreationFlagEnumeration.get( (Integer) value[2]));
-        this.dataStagingType.setDeleteOnTermination( (Boolean) value[3] );
+        this.dataStagingType.setCreationFlag( CreationFlagEnumeration.get( (Integer) value[2] ) );
+        this.dataStagingType.setDeleteOnTermination( ( Boolean ) value[3] );
         
       } // End else
       
       /* Check if the new Data Stage element is not already in the table viewer's
        * input
        */        
-      if (!doesElementExists( (DataStagingType) oldDataStageElement,
+      if (!doesElementExists( ( DataStagingType ) oldDataStageElement,
                               this.dataStagingType, newInputList )) {  
       
         /* Change the element. The element is located through it's index position
          * in the list.
          */
-        (( java.util.List<Object> )this.jobDescriptionType.eGet( eStructuralFeature ))
+        ( ( java.util.List<Object> ) this.jobDescriptionType.eGet( eStructuralFeature ) )
             .set( index, this.dataStagingType );
   
         /* Refresh the table viewer and notify the editor that
@@ -596,8 +595,9 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
      
     /* Test if eObject is not empty. */
     
-    if (jobDescrEObject != null) {
+    if ( jobDescrEObject != null ) {
       EClass eClass = jobDescrEObject.eClass();
+      int featureID;
       
       /* Iterate over all EStructural Features of the Job Description element
        * so as to fine the DataStage Element.
@@ -608,13 +608,14 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
         
         EStructuralFeature eStructuralFeature = iterRef.next();
            
-        int featureID =  eStructuralFeature.getFeatureID();        
+        featureID =  eStructuralFeature.getFeatureID();        
               
         // Check if the eStructural Reference is an EReferece.
         if (eStructuralFeature instanceof EReference) {
           
           /* Check if Feature is Set ? */
-          if (jobDescrEObject.eIsSet( eStructuralFeature )) {
+          if ( jobDescrEObject.eIsSet( eStructuralFeature ) ) {
+            
             switch( featureID ) {
               case JsdlPackage.JOB_DESCRIPTION_TYPE__DATA_STAGING:               
               { 

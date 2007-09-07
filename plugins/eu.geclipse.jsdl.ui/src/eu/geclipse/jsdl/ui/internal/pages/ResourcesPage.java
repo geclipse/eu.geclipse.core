@@ -22,12 +22,9 @@ package eu.geclipse.jsdl.ui.internal.pages;
  *
  */
 
-import java.net.URL;
-
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -103,14 +100,12 @@ public final class ResourcesPage extends FormPage
   protected Label lblTotVirtMem = null;
   protected Label lblTotDiskSp = null;
   protected Label lblTotResCount = null;
-  protected Label lblFileSystemName = null;
-  
+  protected Label lblFileSystemName = null;  
   protected Button btnAdd = null;
   protected Button btnDel = null;
-  protected Button btnEdit = null;
+  protected Button btnEdit = null;  
+  protected TableViewer hostsViewer = null; 
   
-  protected TableViewer hostsViewer = null;
- 
   private Text txtFileSystemName = null;
   private Text txtFileSystemDescr = null;
   private Text txtMountPoint = null;  
@@ -129,8 +124,7 @@ public final class ResourcesPage extends FormPage
   private Text txtTotPhMem = null;
   private Text txtTotVirtMem = null;
   private Text txtTotDiskSp = null;
-  private Text txtTotResCount = null;
-  
+  private Text txtTotResCount = null;  
   private Combo cmbOperSystType = null;
   private Combo cmbCPUArchName = null;
   private Combo cmbFileSystemType = null;
