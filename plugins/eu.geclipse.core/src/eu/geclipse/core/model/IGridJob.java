@@ -18,6 +18,12 @@ package eu.geclipse.core.model;
 
 import java.util.Date;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.MultiStatus;
+
+import eu.geclipse.core.GridException;
+
 
 /**
  * Base interface for all middleware specific implementations of
@@ -68,5 +74,12 @@ public interface IGridJob
    * @return time of last update
    */
   public Date getSubmissionTime();
+  
+  /**
+   * @param monitor the progress monitor
+   * @return status. May be {@link MultiStatus} contains separate status for every output file
+   * @throws GridException thrown if output files cannot be downloaded at all
+   */
+  public IStatus downloadOutputs(IProgressMonitor monitor) throws GridException;
   
 }
