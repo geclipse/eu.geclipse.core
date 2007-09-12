@@ -1,36 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<site>
-   <description url="http://www.geclipse.eu/update/">
-      g-Eclipse Add-ons Update Site
+<site
+      mirrorsURL="http://www.eclipse.org/downloads/download.php?file=/technology/geclipse/updates/0.5milestones/site.xml&amp;format=xml">
+   <description url="http://download.eclipse.org/technology/geclipse/updates/0.5/">
+      This Update Site contains the basic g-Eclipse feature that comes with middleware independent functionalities, i.e. the g-Eclipse core.
    </description>
    <feature url="features/eu.geclipse_0.5.0.qualifier.jar" id="eu.geclipse" version="0.5.0.qualifier">
       <category name="g-Eclipse"/>
    </feature>
-   <feature url="features/eu.geclipse.add_on_0.5.0.qualifier.jar" id="eu.geclipse.add_on" version="0.5.0.qualifier">
-      <category name="g-Eclipse add-ons"/>
-   </feature>
-   <feature url="features/eu.geclipse.glite_0.5.0.qualifier.jar" id="eu.geclipse.glite" version="0.5.0.qualifier">
-      <category name="g-Eclipse middleware components"/>
-   </feature>
-   <feature url="features/eu.geclipse.globus_0.5.0.qualifier.jar" id="eu.geclipse.globus" version="0.5.0.qualifier">
-      <category name="g-Eclipse middleware components"/>
-   </feature>
-   <feature url="features/at.jku.gup.gvid.codec.xvid_1.0.0.qualifier.jar" id="at.jku.gup.gvid.codec.xvid" version="1.0.0.qualifier">
-      <category name="g-Eclipse add-ons"/>
-   </feature>
    <category-def name="g-Eclipse" label="g-Eclipse">
       <description>
-         This is the basic g-Eclipse feature that comes with middleware independent functionalities, i.e. the g-Eclipse core.
-      </description>
-   </category-def>
-   <category-def name="g-Eclipse add-ons" label="g-Eclipse add-ons">
-      <description>
-         These features contain additional tools and functionality which are middleware independent.
-      </description>
-   </category-def>
-   <category-def name="g-Eclipse middleware components" label="g-Eclipse middleware components">
-      <description>
-         These are g-Eclipse&apos;s middleware-specific features. If you would like to work on a specifiy middleware this is the place where you may find support for it.
+         This is the Eclipse Update Site for the g-Eclipse (incubation) project.
       </description>
    </category-def>
 </site>
