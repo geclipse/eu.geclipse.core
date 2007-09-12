@@ -27,6 +27,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.actions.SelectionListenerAction;
 
 import eu.geclipse.core.jobs.GridJob;
+import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.ui.internal.Activator;
 
@@ -60,20 +61,21 @@ public class UpdateJobStatusAction extends SelectionListenerAction {
   @Override
   public void run() {
     if( this.selectedJobs.size() > 0 ) {
-      if( this.workbenchWindow != null ) {
+      final ArrayList<IGridJob> jobsToUpdate = ( ArrayList<IGridJob> )this.selectedJobs.clone();
         Job job = new Job( Messages.getString( "UpdateJobStatusAction.manual_update_job_name" ) ) { //$NON-NLS-1$
 
           @Override
           protected IStatus run( final IProgressMonitor monitor ) {
             monitor.beginTask( Messages.getString( "UpdateJobStatusAction.manual_update_task_name" ), //$NON-NLS-1$
-                               UpdateJobStatusAction.this.selectedJobs.size() );
-            for( IGridJob jobToUpdate : UpdateJobStatusAction.this.selectedJobs )
+                               jobsToUpdate.size() );
+            for( IGridJob jobToUpdate : jobsToUpdate )
             {
               if( !monitor.isCanceled() ) {
                 monitor.subTask( Messages.getString( "UpdateJobStatusAction.manual_update_subtask_name" ) //$NON-NLS-1$
                                  + jobToUpdate.getID().getJobID() );
                 new SubProgressMonitor( monitor, 1 );
                 jobToUpdate.updateJobStatus();
+                GridModel.getJobManager().jobStatusChanged( jobToUpdate );
                 monitor.worked( 1 );
               }
             }
@@ -84,7 +86,6 @@ public class UpdateJobStatusAction extends SelectionListenerAction {
         job.setUser( true );
         job.schedule();
       }
-    }
   }
 
   @Override
