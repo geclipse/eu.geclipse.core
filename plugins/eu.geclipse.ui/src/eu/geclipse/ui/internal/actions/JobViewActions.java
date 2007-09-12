@@ -30,8 +30,24 @@ public class JobViewActions extends ActionGroup {
 
   private ToggleUpdateJobsAction toggleJobsUpdateAction;
   private UpdateJobStatusAction updateSelectedJobStatusAction;
+  private DownloadJobOutputsAction downloadOutputsAction;
   private IWorkbenchSite site;
 
+  /**
+   * Constructor for GridJobView actions
+   * @param site
+   */
+  public JobViewActions( final IWorkbenchSite site ) {
+    this.site = site;
+    this.toggleJobsUpdateAction = new ToggleUpdateJobsAction();
+    this.updateSelectedJobStatusAction = new UpdateJobStatusAction( site.getWorkbenchWindow());
+    this.downloadOutputsAction = new DownloadJobOutputsAction();
+    ISelectionProvider provider = this.site.getSelectionProvider();
+    provider.addSelectionChangedListener( this.toggleJobsUpdateAction );
+    provider.addSelectionChangedListener( this.updateSelectedJobStatusAction );
+    provider.addSelectionChangedListener( this.downloadOutputsAction );
+  }
+  
   /**
    * Sets if updates of job statuses should be running and updates tool tip for button 
    * @param status to be set
@@ -45,26 +61,14 @@ public class JobViewActions extends ActionGroup {
       this.toggleJobsUpdateAction.setToolTipText( Messages
                                                   .getString( "ToggleJobsUpdatesAction.toggle_jobs_updates_action_inactive_text" ) );//$NON-NLS-1$
     }
-  }
-
-  /**
-   * Constructor for GridJobView actions
-   * @param site
-   */
-  public JobViewActions( final IWorkbenchSite site ) {
-    this.site = site;
-    this.toggleJobsUpdateAction = new ToggleUpdateJobsAction();
-    this.updateSelectedJobStatusAction = new UpdateJobStatusAction( site.getWorkbenchWindow());
-    ISelectionProvider provider = this.site.getSelectionProvider();
-    provider.addSelectionChangedListener( this.toggleJobsUpdateAction );
-    provider.addSelectionChangedListener( this.updateSelectedJobStatusAction );
-  }
+  }  
 
   @Override
   public void dispose() {
     ISelectionProvider provider = this.site.getSelectionProvider();
     provider.removeSelectionChangedListener( this.toggleJobsUpdateAction );
     provider.removeSelectionChangedListener( this.updateSelectedJobStatusAction );
+    provider.removeSelectionChangedListener( this.downloadOutputsAction );
   }
 
   @Override
@@ -84,5 +88,7 @@ public class JobViewActions extends ActionGroup {
       }
       super.fillContextMenu( menu );
     }
+    
+    menu.appendToGroup( ICommonMenuConstants.GROUP_BUILD, this.downloadOutputsAction );
   }
 }

@@ -46,7 +46,6 @@ public class PropertiesAdapterFactory implements IAdapterFactory {
   {
     IPropertySource propertySource = null;
     if( adapterType == IPropertySource.class ) {
-      // TODO mariusz add factories caching
       List<IPropertiesFactory> factoriesList = Extensions.getPropertiesFactories( adaptableObject.getClass() );
       
       if( !factoriesList.isEmpty() ) {

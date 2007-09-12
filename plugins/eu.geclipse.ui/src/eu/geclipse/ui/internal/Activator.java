@@ -23,6 +23,9 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.forms.FormColors;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+
+import eu.geclipse.ui.internal.actions.DownloadJobOutputsAction;
+import eu.geclipse.ui.internal.actions.UpdateJobStatusAction;
 import eu.geclipse.ui.properties.PropertiesAdapterFactory;
 
 
@@ -156,6 +159,16 @@ public class Activator extends AbstractUIPlugin {
   public static final String IMG_REFRESH = "refresh"; //$NON-NLS-1$
   
   /**
+   * Image for action {@link DownloadJobOutputsAction}
+   */
+  public static final String IMG_DOWNLOAD_JOB_OUTPUT = "DownloadJobOutput"; //$NON-NLS-1$
+  
+  /**
+   * Image for action {@link UpdateJobStatusAction}
+   */
+  public static final String IMG_UPDATE_JOB_STATUS = "UpdateJobStatus";  //$NON-NLS-1$
+  
+  /**
    * The shared instance.
    */
   private static Activator plugin;  
@@ -272,7 +285,9 @@ public class Activator extends AbstractUIPlugin {
       { "configure_filters_on", "icons/obj16/filter_on.gif" },  //$NON-NLS-1$ //$NON-NLS-2$
       { "helplink", "icons/elcl16/linkto_help.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
       { "calendar", "icons/calendar.gif" },  //$NON-NLS-1$//$NON-NLS-2$
-      { IMG_REFRESH, "icons/eview16/refresh.gif" }  //$NON-NLS-1$//$NON-NLS-2$
+      { IMG_REFRESH, "icons/eview16/refresh.gif" },  //$NON-NLS-1$
+      { IMG_DOWNLOAD_JOB_OUTPUT, "icons/DownloadJobOutput.gif" }, //$NON-NLS-1$
+      { IMG_UPDATE_JOB_STATUS, "icons/UpdateJobStatus.gif" } //$NON-NLS-1$
     };
     
     ImageDescriptor imgDsc = null;

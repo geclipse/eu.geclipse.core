@@ -33,6 +33,7 @@ public class JobDetailsViewActions extends ActionGroup {
   private JobDetailsView view;
   private IAction showEmptyValuesAction;
   private UpdateJobStatusAction updateJobStatusAction;
+  private DownloadJobOutputsAction downloadJobOutputAction;
   
   /**
    * @param view on which actions are placed
@@ -49,6 +50,7 @@ public class JobDetailsViewActions extends ActionGroup {
   public void fillActionBars( final IActionBars actionBars ) {
     super.fillActionBars( actionBars );
     actionBars.getToolBarManager().add( getUpdateJobStatusAction() );
+    actionBars.getToolBarManager().add( getDownloadJobOutputAction() );
   }
 
   /* (non-Javadoc)
@@ -56,9 +58,10 @@ public class JobDetailsViewActions extends ActionGroup {
    */
   @Override
   public void fillContextMenu( final IMenuManager menu ) {
-    super.fillContextMenu( menu );
-    menu.add( getShowEmptyValuesAction() );
+    super.fillContextMenu( menu );    
     menu.add( getUpdateJobStatusAction() );
+    menu.add( getDownloadJobOutputAction() );
+    menu.add( getShowEmptyValuesAction() );
   }  
   
   /**
@@ -119,7 +122,16 @@ public class JobDetailsViewActions extends ActionGroup {
    */
   @Override
   public void dispose() {
-    this.view.getJobSelectionProvider().removeSelectionChangedListener( getUpdateJobStatusAction() );
+    if( this.updateJobStatusAction != null ) {
+      this.view.getJobSelectionProvider().removeSelectionChangedListener( this.updateJobStatusAction );
+      this.updateJobStatusAction = null;
+    }
+    
+    if( this.downloadJobOutputAction != null ) {
+      this.view.getJobSelectionProvider().removeSelectionChangedListener( this.downloadJobOutputAction );
+      this.downloadJobOutputAction = null;
+    }
+    
     super.dispose();
   }
 
@@ -129,6 +141,15 @@ public class JobDetailsViewActions extends ActionGroup {
    */
   JobDetailsView getView() {
     return this.view;
+  }
+
+  private DownloadJobOutputsAction getDownloadJobOutputAction() {    
+    if( this.downloadJobOutputAction == null ) {
+      this.downloadJobOutputAction = new DownloadJobOutputsAction();
+      this.view.getJobSelectionProvider().addSelectionChangedListener( this.downloadJobOutputAction );
+    }
+    
+    return this.downloadJobOutputAction;
   }
   
 }

@@ -35,8 +35,8 @@ import eu.geclipse.ui.internal.Activator;
  */
 public class UpdateJobStatusAction extends SelectionListenerAction {
   
-  private IWorkbenchWindow workbenchWindow;
   ArrayList<IGridJob> selectedJobs = new ArrayList<IGridJob>();
+  private IWorkbenchWindow workbenchWindow;
 
   /**
    * Constructor.
@@ -47,14 +47,14 @@ public class UpdateJobStatusAction extends SelectionListenerAction {
     this.workbenchWindow = workbenchWindow;
     setImageDescriptor( Activator.getDefault()
       .getImageRegistry()
-      .getDescriptor( Activator.IMG_REFRESH ) );
+      .getDescriptor( Activator.IMG_UPDATE_JOB_STATUS ) );
   }
 
   protected UpdateJobStatusAction() {
     super( Messages.getString( "UpdateJobStatusAction.title" ) ); //$NON-NLS-1$
     setImageDescriptor( Activator.getDefault()
       .getImageRegistry()
-      .getDescriptor( Activator.IMG_REFRESH ) );
+      .getDescriptor( Activator.IMG_UPDATE_JOB_STATUS ) );
   }
 
   @Override

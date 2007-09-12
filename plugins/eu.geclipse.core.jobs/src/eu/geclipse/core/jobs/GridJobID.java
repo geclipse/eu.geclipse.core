@@ -14,37 +14,53 @@
  *****************************************************************************/
 package eu.geclipse.core.jobs;
 
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+
+import eu.geclipse.core.GridException;
 import eu.geclipse.core.model.IGridJobID;
 
+/**
+ * Class representing handle returned from grid to submitted job 
+ */
 public class GridJobID implements IGridJobID {
 
-  final static public String XML_ROOT = "JobID";
-  final static public String XML_NAMENODE = "Name";
-  final static public String XML_DATANODE = "Data";
-  final static public String UNKNOWN="Unknown";
-  public static final String XML_ATTRIBUTE_CLASS = "class";
+  final static String UNKNOWN="Unknown"; //$NON-NLS-1$
+  final static String XML_ROOT = "JobID"; //$NON-NLS-1$
+  final static String XML_ATTRIBUTE_CLASS = "class"; //$NON-NLS-1$
+  final static private String XML_NAMENODE = "Name"; //$NON-NLS-1$
+  final static private String XML_DATANODE = "Data"; //$NON-NLS-1$
   protected String jobID = UNKNOWN;
 
+  /**
+   * 
+   */
   public GridJobID() {
+    // default constructor
   }
 
+  /**
+   * @param jobIDNode
+   */
   public GridJobID( final Node jobIDNode ) {
     this();
     setXMLNode(jobIDNode);
   }
     
-  public final void setXMLNode( final Node statusNode ) {
+  final void setXMLNode( final Node statusNode ) {
       int i;
     Node node;
     NodeList childNodes = statusNode.getChildNodes();
     for( i = 0; i < childNodes.getLength(); i++ ) {
       node = childNodes.item( i );
       if( XML_NAMENODE.equals( node.getNodeName() ) ) {
-        jobID = node.getTextContent();
-        if( jobID != null )
-          jobID = jobID.trim();
+        this.jobID = node.getTextContent();
+        if( this.jobID != null )
+          this.jobID = this.jobID.trim();
       }
       if( XML_DATANODE.equals( node.getNodeName() ) ) {
         setData( node.getTextContent() );
@@ -53,7 +69,7 @@ public class GridJobID implements IGridJobID {
   }
 
   public String getJobID() {
-    return jobID;
+    return this.jobID;
   }
 
   protected void setData( final String data ) {
@@ -68,7 +84,7 @@ public class GridJobID implements IGridJobID {
            + "=\""
            + this.getClass().getName()
            + "\"><Name>"
-           + jobID
+           + this.jobID
            + "</Name><Data><![CDATA["
            + getData()
            + "]]></Data></"
@@ -78,5 +94,9 @@ public class GridJobID implements IGridJobID {
 
   protected String getData() {
     return "<test>XML</test>";
+  }
+
+  public IStatus downloadOutputs(final IFolder jobFolder, final IProgressMonitor monitor) throws GridException {
+    return new Status( IStatus.WARNING, eu.geclipse.core.jobs.internal.Activator.PLUGIN_ID, Messages.getString("GridJobID.errNotImplemented") ); //$NON-NLS-1$
   }
 }
