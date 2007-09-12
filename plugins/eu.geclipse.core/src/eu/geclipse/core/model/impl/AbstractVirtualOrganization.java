@@ -17,6 +17,7 @@ package eu.geclipse.core.model.impl;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
@@ -24,15 +25,18 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.internal.model.VoManager;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.GridModelProblems;
+import eu.geclipse.core.model.IGridComputing;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridInfoService;
 import eu.geclipse.core.model.IGridJobSubmissionService;
 import eu.geclipse.core.model.IGridService;
+import eu.geclipse.core.model.IGridStorage;
 import eu.geclipse.core.model.IStorableElement;
 import eu.geclipse.core.model.IVirtualOrganization;
 
@@ -67,6 +71,15 @@ public abstract class AbstractVirtualOrganization
     } catch( CoreException cExc ) {
       Activator.logException( cExc );
     }
+  }
+  
+  public IGridComputing[] getComputing() throws GridModelException {
+    IGridComputing[] computing = null;
+    IGridInfoService infoService = getInfoService();
+    if ( infoService != null ) {
+      computing = infoService.fetchComputing( this, this, null );
+    }
+    return computing;
   }
   
   /* (non-Javadoc)
@@ -134,6 +147,15 @@ public abstract class AbstractVirtualOrganization
       services = infoService.fetchServices( this, this, null );
     }
     return services;
+  }
+  
+  public IGridStorage[] getStorage() throws GridModelException {
+    IGridStorage[] storage = null;
+    IGridInfoService infoService = getInfoService();
+    if ( infoService != null ) {
+      storage = infoService.fetchStorage( this, this, null );
+    }
+    return storage;
   }
   
   public IGridJobSubmissionService[] getJobSubmissionServices() throws GridModelException {

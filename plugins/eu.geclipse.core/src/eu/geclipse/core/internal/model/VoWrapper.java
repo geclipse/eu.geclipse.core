@@ -18,14 +18,17 @@ package eu.geclipse.core.internal.model;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
+
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.GridModelException;
+import eu.geclipse.core.model.IGridComputing;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridInfoService;
 import eu.geclipse.core.model.IGridJobSubmissionService;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IGridService;
+import eu.geclipse.core.model.IGridStorage;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.IWrappedElement;
 import eu.geclipse.core.model.impl.AbstractGridContainer;
@@ -69,6 +72,11 @@ public class VoWrapper
   public void dispose() {
     this.vo.dispose();
   }
+  
+  public IGridComputing[] getComputing()
+      throws GridModelException {
+    return this.vo.getComputing();
+  }
 
   public IFileStore getFileStore() {
     return getProject().getFileStore().getChild( getName() );
@@ -103,6 +111,11 @@ public class VoWrapper
   public IGridService[] getServices()
       throws GridModelException {
     return this.vo.getServices();
+  }
+  
+  public IGridStorage[] getStorage()
+      throws GridModelException {
+    return this.vo.getStorage();
   }
   
   public IGridJobSubmissionService[] getJobSubmissionServices()

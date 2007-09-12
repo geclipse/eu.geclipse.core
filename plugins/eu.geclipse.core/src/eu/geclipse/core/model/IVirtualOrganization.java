@@ -26,6 +26,8 @@ package eu.geclipse.core.model;
 public interface IVirtualOrganization
     extends IGridContainer, IStorableElement {
   
+  public IGridComputing[] getComputing() throws GridModelException;
+  
   /**
    * Get the info service of this VO.
    * 
@@ -45,6 +47,8 @@ public interface IVirtualOrganization
    * are fetched.
    */
   public IGridService[] getServices() throws GridModelException;
+  
+  public IGridStorage[] getStorage() throws GridModelException;
   
   /**
    * Get a list of all job submission services that are available for
