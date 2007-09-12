@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URISyntaxException;
-import java.rmi.activation.Activator;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -147,10 +146,21 @@ public class JSDLJobDescription extends ResourceGridContainer
     }
   }
 
+  /**
+   * Method to access root element of an EMF document represented by this
+   * object.
+   * 
+   * @return root element of a JSDL document
+   */
   public DocumentRoot getRoot() {
     return this.documentRoot;
   }
 
+  /**
+   * Method to set
+   * 
+   * @param root
+   */
   public void setRoot( final DocumentRoot root ) {
     this.documentRoot = root;
     if( root.getJobDefinition() != null ) {
@@ -294,6 +304,8 @@ public class JSDLJobDescription extends ResourceGridContainer
    * @param stdinName
    * @param stdout
    * @param outName
+   * @param err
+   * @param errName
    */
   @SuppressWarnings("unchecked")
   public void addPOSIXApplicationDetails( final String applicationName,
@@ -301,7 +313,9 @@ public class JSDLJobDescription extends ResourceGridContainer
                                           final String stdin,
                                           final String stdinName,
                                           final String stdout,
-                                          final String outName )
+                                          final String outName,
+                                          final String err,
+                                          final String errName )
   {
     this.jobDescription.getApplication().setApplicationName( applicationName );
     POSIXApplicationType posixApp = this.posixFactory.createPOSIXApplicationType();
@@ -318,6 +332,11 @@ public class JSDLJobDescription extends ResourceGridContainer
       outputFile.setValue( outName );
       posixApp.setOutput( outputFile );
     }
+    if (err != null){
+      FileNameType errorFile = this.posixFactory.createFileNameType();
+      errorFile.setValue( errName );
+      posixApp.setError( errorFile );
+    }
     ApplicationType app = this.jobDescription.getApplication();
     EClass eClass = ExtendedMetaData.INSTANCE.getDocumentRoot( this.posixPackage );
     Entry e = FeatureMapUtil.createEntry( eClass.getEStructuralFeature( "pOSIXApplication" ), //$NON-NLS-1$
@@ -327,7 +346,7 @@ public class JSDLJobDescription extends ResourceGridContainer
     if( stdin != null ) {
       DataStagingType dataIn = this.jsdlFactory.createDataStagingType();
       dataIn.setCreationFlag( CreationFlagEnumeration.OVERWRITE_LITERAL );
-      dataIn.setDeleteOnTermination( true );
+      dataIn.setDeleteOnTermination( false );
       dataIn.setFileName( stdinName );
       SourceTargetType sourceDataIn = this.jsdlFactory.createSourceTargetType();
       sourceDataIn.setURI( stdin );
@@ -337,12 +356,22 @@ public class JSDLJobDescription extends ResourceGridContainer
     if( stdout != null ) {
       DataStagingType dataOut = this.jsdlFactory.createDataStagingType();
       dataOut.setCreationFlag( CreationFlagEnumeration.OVERWRITE_LITERAL );
-      dataOut.setDeleteOnTermination( true );
+      dataOut.setDeleteOnTermination( false );
       dataOut.setFileName( outName );
       SourceTargetType sourceDataOut = this.jsdlFactory.createSourceTargetType();
       sourceDataOut.setURI( stdout );
       dataOut.setTarget( sourceDataOut );
       this.jobDescription.getDataStaging().add( dataOut );
+    }
+    if (err != null){
+      DataStagingType dataErr = this.jsdlFactory.createDataStagingType();
+      dataErr.setCreationFlag( CreationFlagEnumeration.OVERWRITE_LITERAL );
+      dataErr.setDeleteOnTermination( false );
+      dataErr.setFileName( errName );
+      SourceTargetType sourceDataErr = this.jsdlFactory.createSourceTargetType();
+      sourceDataErr.setURI( err );
+      dataErr.setTarget( sourceDataErr );
+      this.jobDescription.getDataStaging().add( dataErr );
     }
   }
 
@@ -1064,14 +1093,14 @@ public class JSDLJobDescription extends ResourceGridContainer
     for( DataStagingType dataType : getDataStagingIn() ) {
       try {
         java.net.URI testURI = new java.net.URI( dataType.getSource().getURI() );
-//        if( testURI != null && testURI.getQuery() != null ) {
-//          if( testURI.getQuery().indexOf( "geclslave=file" ) != -1 ) {
-//            result.add( dataType );
-//          }
-//        }
-        if (testURI != null){
-          if (testURI.getScheme().equals( "file" )){
-          result.add( dataType );
+        // if( testURI != null && testURI.getQuery() != null ) {
+        // if( testURI.getQuery().indexOf( "geclslave=file" ) != -1 ) {
+        // result.add( dataType );
+        // }
+        // }
+        if( testURI != null ) {
+          if( testURI.getScheme().equals( "file" ) ) {
+            result.add( dataType );
           }
         }
       } catch( URISyntaxException e ) {
