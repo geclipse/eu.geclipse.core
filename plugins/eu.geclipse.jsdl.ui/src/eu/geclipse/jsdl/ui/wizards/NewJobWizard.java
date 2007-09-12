@@ -192,10 +192,13 @@ public class NewJobWizard extends Wizard implements INewWizard {
     jsdl.addApplication();
     String in = null;
     String out = null;
+    String err = null;
     String inName = null;
     String outName = null;
+    String errName = null;
     in = this.executablePage.getStdin();
     out = this.executablePage.getStdout();
+    err = this.executablePage.getStderr();
     if( in.equals( "" ) ) { //$NON-NLS-1$
       in = null;
     } else {
@@ -205,6 +208,11 @@ public class NewJobWizard extends Wizard implements INewWizard {
       out = null;
     } else {
       outName = "stdOut"; //$NON-NLS-1$
+    }
+    if (err.equals( "" )){ //$NON-NLS-1$
+      err = null;
+    } else {
+      errName = "stdErr"; //$NON-NLS-1$
     }
     String execName = this.executablePage.getExecutableFile();
     if( !execName.equals( "" ) ) { //$NON-NLS-1$
@@ -226,7 +234,9 @@ public class NewJobWizard extends Wizard implements INewWizard {
                                        in,
                                        inName,
                                        out,
-                                       outName );
+                                       outName,
+                                       err, 
+                                       errName);
     }
     if( this.outputFilesPage.isCreated() ) {
       List<DataStagingType> outFiles;

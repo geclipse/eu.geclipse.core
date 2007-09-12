@@ -624,4 +624,11 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       ExecutableNewJobWizardPage.this.updateButtons();
     }
   }
+  /**
+   * Method to access value of path to standard error file 
+   * @return string value kept in standard error text field
+   */
+  public String getStderr() {
+    return this.stderr.getText();
+  }
 }
