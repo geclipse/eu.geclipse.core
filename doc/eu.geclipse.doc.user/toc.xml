@@ -2,11 +2,14 @@
 <?NLS TYPE="org.eclipse.help.toc"?>
 
 <toc label="g-Eclipse" topic="html/toc.html">
-   <topic label="Prerequisites">
+   <topic label="Prerequisites" href="html/prerequisites/maintopic.html">
       <anchor id="prerequisites"/>
    </topic>
-   <topic label="Getting Started">
+   <topic label="Getting Started" href="html/gettingstarted/maintopic.html">
       <anchor id="gettingstarted"/>
+   </topic>
+   <topic label="Concepts" href="html/concepts/maintopic.html">
+      <anchor id="concepts"/>
    </topic>
    <topic label="What's new" href="html/whats_new.html"/>
 </toc>
