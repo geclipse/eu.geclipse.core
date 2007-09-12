@@ -51,9 +51,15 @@ public interface IGridJobManager
   public void wakeUpAllUpdaters();
   
   /**
-   * Update job status for the given job
+   * Tells updaters of the given jobs to update statues of the jobs.
    * @param selectedJobs to have its status updated
    */
   public void updateJobsStatus( final ArrayList< IGridJob > selectedJobs );
   
+  /**
+   * Tells updater of the given job that status has been changed externally
+   * (i.e. job status wasn't updated in job status updater).
+   * @param job Job, which status has changed.
+   */
+  public void jobStatusChanged( final IGridJob job );
 }

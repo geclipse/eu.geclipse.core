@@ -143,6 +143,33 @@ public class JobStatusUpdater extends Job {
   }
 
   /**
+   * Used when job status was updated outside of the updater.
+   * Checks if status changed from previous update. If so informs
+   * all listeners that status has changed.
+   * @param newStatus Fetched status 
+   */
+  public void statusUpdated( final IGridJobStatus newStatus ) {
+    int oldType = -1;
+    if( this.lastStatus != null ) {
+      oldType = this.lastStatus.getType();
+    }
+    if ( newStatus != null && this.lastStatus !=null ) {
+        int newType = newStatus.getType();
+        if ( oldType != newType ) {
+          this.lastStatus = newStatus;
+          for( Enumeration<IGridJobStatusListener> e = this.listeners.keys(); e.hasMoreElements(); )
+          {
+            IGridJobStatusListener listener = e.nextElement();
+            int trigger = this.listeners.get( listener ).intValue();
+            if( ( newType & trigger ) > 0 ) {
+              listener.statusChanged( this.job );
+            }
+          }
+        }
+    }
+  }
+  
+  /**
    * Add status listener for the updater. The listener will be notify, when the
    * status of the job will change.
    * 

@@ -16,6 +16,7 @@
  *****************************************************************************/
 package eu.geclipse.core.internal.model;
 
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
@@ -365,8 +366,6 @@ public class JobManager extends AbstractGridElementManager
     }
   }
   
-  
-  
   /**
    * Get the singleton instance of the <code>JobManager</code>.
    * 
@@ -582,6 +581,13 @@ public class JobManager extends AbstractGridElementManager
           this.removeUpdater( updater );
         }
       }
+    }
+  }
+  
+  public void jobStatusChanged ( final IGridJob job ) {
+    JobStatusUpdater updater = this.updaters.get( job.getID() );
+    if ( updater != null ) {
+      updater.statusUpdated( job.getJobStatus() );
     }
   }
 
