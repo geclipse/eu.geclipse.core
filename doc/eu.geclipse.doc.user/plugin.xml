@@ -9,11 +9,8 @@
             primary="true">
       </toc>
       <toc
-            file="prerequisites.xml">
-      </toc>
-      <toc
             file="tocgettingstarted.xml">
-      </toc>
+      </toc>>
       <toc
             file="toclaunchanddebug.xml">
       </toc>

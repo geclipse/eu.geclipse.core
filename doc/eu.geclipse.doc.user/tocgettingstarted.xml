@@ -1,16 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc label="Getting Started" link_to="toc.xml#gettingstarted"> 
-		<topic label="Import CA Certificates" href="html/gettingstarted/downloadCAcerts.html" /> 
-		<topic label="VO Declaration" href="html/gettingstarted/VO-Declaration.html" />
-		<topic label="Create Authentication Tokens" href="html/gettingstarted/AuthenticationTokens.html" /> 
-		<topic label="New Grid Project Wizard" href="html/gettingstarted/NewProjectWizard.html" />
-		<topic label="Create a Job" href="html/gettingstarted/CreatingaJob.html" /> 
-		<topic label="Submit a Job" href="html/gettingstarted/SubmitaJob.html" /> 
-		<topic label="glogin" href="html/gettingstarted/glogin.html"/>
-		<topic label="Terminal" href="html/gettingstarted/terminal.html"/>
-		<topic label="Launching and Debugging" href="html/gettingstarted/launchanddebug/launch.html">
-			<anchor id="launchanddebug"/>
-		</topic>
+<toc
+  label="Getting Started"
+  link_to="toc.xml#geclipse_gettingstarted">
+  <topic
+    label="Prerequisites"
+    href="html/gettingstarted/prerequisites.html" />
+  <topic
+    label="Import CA Certificates"
+    href="html/gettingstarted/downloadCAcerts.html" />
+  <topic
+    label="VO Declaration"
+    href="html/gettingstarted/VO-Declaration.html" />
+  <topic
+    label="Create Authentication Tokens"
+    href="html/gettingstarted/AuthenticationTokens.html" />
+  <topic
+    label="New Grid Project Wizard"
+    href="html/gettingstarted/NewProjectWizard.html" />
+  <topic
+    label="Create a Job"
+    href="html/gettingstarted/CreatingaJob.html" />
+  <topic
+    label="Submit a Job"
+    href="html/gettingstarted/SubmitaJob.html" />
+  <topic
+    label="glogin"
+    href="html/gettingstarted/glogin.html" />
+  <topic
+    label="Terminal"
+    href="html/gettingstarted/terminal.html" />
+  <topic
+    label="Launching and Debugging"
+    href="html/gettingstarted/launchanddebug/launch.html">
+    <anchor id="geclipse_launchanddebug" />
+  </topic>
 </toc>
