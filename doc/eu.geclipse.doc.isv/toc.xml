@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?NLS TYPE="org.eclipse.help.toc"?>
+
+<toc
+  label="g-Eclispe ISV Documentation"
+  link_to="../eu.geclipse.doc.user/toc.xml#geclipse_additionalinformation">
+  <topic label="How To Contribute">
+    <anchor id="geclipse_howtocontribute" />
+  </topic>
+  <topic label="API Reference">
+    <anchor id="geclipse_apireference" />
+  </topic>
+</toc>

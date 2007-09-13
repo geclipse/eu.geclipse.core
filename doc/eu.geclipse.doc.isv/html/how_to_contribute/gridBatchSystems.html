@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+<head>
+<meta
+  http-equiv="Content-Type"
+  content="text/html; charset=UTF-8">
+<META
+  HTTP-EQUIV="Content-Style-Type"
+  CONTENT="text/css">
+<LINK
+  REL="STYLESHEET"
+  HREF="../../book.css"
+  CHARSET="UTF-8"
+  TYPE="text/css">
+<title>g-Eclipse - Concepts</title>
+</head>
+
+<body BGCOLOR="#ffffff">
+<h1>Grid Batch Systems</h1>
+<p>How to implement support for a new Batch Service?</p>
+
+<ul>
+  <li>Access to batch services are based on SSH, I.e. a tunnel into
+  the server where the batch service is running. Current implementations
+  for</li>
+  <ul>
+    <li>PBS</li>
+  </ul>
+</ul>
+
+<h2>UI Components</h2>
+<p>Create new queue wizard page</p>
+<img
+  width="580"
+  height="494"
+  src="images/newQueueWizardPage.png" />
+
+<p>Batch Service Editor</p>
+<img
+  width="916"
+  height="969"
+  src="images/batchServiceEditor.png" />
+
+<h2>Interfaces to implement</h2>
+<dl>
+  <dt><code>eu.geclipse.batch.IBatchWrapper</code></dt>
+  <dd>Implement this to represent a new batch service</dd>
+  <dt><code>eu.geclipse.batch.ui.editors.BatchEditor</code></dt>
+  <dd>In method setInput add the instantiation of your batch
+  service wrapper</dd>
+</dl>
+
+</body>
+
+</html>
