@@ -11,9 +11,17 @@
   <topic label="Concepts">
     <anchor id="geclipse_concepts" />
   </topic>
+
+  <anchor id="geclipse_additionalinformation"/>
+
   <topic
     label="What's new"
     href="html/whats_new.html">
     <anchor id="geclipse_whatsnew" />
   </topic>
+  <topic
+    label="Legal"
+    href="about.html">
+  </topic>
+
 </toc>
