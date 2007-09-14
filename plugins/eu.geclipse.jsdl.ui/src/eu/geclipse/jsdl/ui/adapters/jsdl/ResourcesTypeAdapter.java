@@ -203,7 +203,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
    * @param value 
    */
   @SuppressWarnings("unchecked")
-  public void performAdd(final TableViewer tableViewer, final Object value) {
+  public void performAdd(final TableViewer tableViewer, final Object[] value) {
     
     if (value == null) {
       return;
@@ -220,7 +220,10 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
       newInputList = new BasicEList<String>();
     }
     
-    newInputList.add( (String)value );    
+    for (int i=0; i < value.length; i++) {
+      
+      newInputList.add( (String)value[i] );  
+    }
 
     tableViewer.setInput( newInputList  );
     

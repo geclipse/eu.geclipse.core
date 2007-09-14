@@ -34,7 +34,6 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
@@ -786,6 +785,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
       // Load the resource through the editing domain.
       //
       resource = this.editingDomain.getResourceSet().getResource(resourceURI, true);
+      
     }
     catch (Exception e)
     {

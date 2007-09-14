@@ -47,7 +47,6 @@ import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.TableWrapData;
-
 import eu.geclipse.jsdl.model.posix.ArgumentType;
 import eu.geclipse.jsdl.model.posix.EnvironmentType;
 import eu.geclipse.jsdl.ui.adapters.jsdl.ApplicationTypeAdapter;
@@ -98,7 +97,7 @@ public final class JobApplicationPage extends FormPage
   protected Text txtUserName = null;
   protected Text txtGroupName = null;
   protected Text txtFileSystemName = null;
-  protected Text txtWorkingDirectory = null;  
+  protected Text txtWorkingDirectory = null;
   protected Button btnArgAdd = null;
   protected Button btnArgEdit = null;
   protected Button btnArgDel = null;
@@ -432,13 +431,12 @@ public final class JobApplicationPage extends FormPage
     
     gd = new GridData();
     gd.widthHint = 330;
-    gd.horizontalSpan=3;
+    gd.horizontalSpan = 3;
     gd.grabExcessHorizontalSpace = true;
     gd.verticalAlignment = GridData.CENTER;
     gd.verticalSpan = 1;
     this.txtExecutable.setLayoutData( gd );
- 
-
+    
     
     /* ============================= Argument Widget ======================== */
     

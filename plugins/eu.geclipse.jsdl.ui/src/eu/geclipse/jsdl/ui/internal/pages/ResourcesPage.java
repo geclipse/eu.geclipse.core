@@ -22,6 +22,7 @@ package eu.geclipse.jsdl.ui.internal.pages;
  *
  */
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
@@ -42,18 +43,21 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.TableWrapData;
-
+import eu.geclipse.core.model.GridModel;
+import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridRoot;
 import eu.geclipse.jsdl.ui.adapters.jsdl.JobDefinitionTypeAdapter;
 import eu.geclipse.jsdl.ui.adapters.jsdl.JobIdentificationTypeAdapter;
 import eu.geclipse.jsdl.ui.adapters.jsdl.ResourcesTypeAdapter;
 import eu.geclipse.jsdl.ui.internal.Activator;
-import eu.geclipse.jsdl.ui.internal.dialogs.MultipleInputDialog;
+import eu.geclipse.jsdl.ui.internal.dialogs.CandidateHostsDialog;
 import eu.geclipse.jsdl.ui.providers.FeatureContentProvider;
 import eu.geclipse.jsdl.ui.providers.FeatureLabelProvider;
 
@@ -73,7 +77,7 @@ public final class ResourcesPage extends FormPage
    
   protected static final String PAGE_ID = "RESOURCES";  //$NON-NLS-1$
   protected ResourcesTypeAdapter resourcesTypeAdapter;
-  protected Object value = null;  
+  protected Object[] value = null;  
   protected Composite body = null;
   protected Composite jobRescComposite = null;
   protected Composite left = null;
@@ -799,34 +803,31 @@ public final class ResourcesPage extends FormPage
   @SuppressWarnings("unchecked")
   protected void handleAddDialog(final String dialogTitle, final Button button){
     
-    MultipleInputDialog dialog = new MultipleInputDialog( this.getSite().getShell(),
-                                                         dialogTitle );
+    CandidateHostsDialog hostsDialog = new CandidateHostsDialog( this.getSite().getShell(), dialogTitle );
     
+    IFile file = ( (IFileEditorInput) this.getEditor().getEditorInput() ).getFile();
+    IGridRoot root = GridModel.getRoot();
+    IGridElement element = root.findElement( file );
+    hostsDialog.setDialogInput( element );
+
+    if (button != this.btnAdd ) {
     
-    if (button == this.btnAdd ) {
-      
-      dialog.addTextField( Messages.getString( "ResourcesPage_Value" ), "" , false ); //$NON-NLS-1$ //$NON-NLS-2$}
-      
+       IStructuredSelection structSelection 
+                   = ( IStructuredSelection ) this.hostsViewer.getSelection();
+    
+       java.util.List<String> list =  structSelection.toList();
+    
+       hostsDialog.setInitialValue( list.get(0) );
+
     }
-    else {
-      IStructuredSelection structSelection 
-                     = ( IStructuredSelection ) this.hostsViewer.getSelection();
-      
-      java.util.List<String> list =  structSelection.toList();
-      
-      dialog.addTextField( Messages.getString( "ResourcesPage_Value" ), //$NON-NLS-1$
-              list.get( 0 ) , false ); 
+  
+ 
+    if( hostsDialog.open() != Window.OK ) {
+    
+        return;
+        
     }
-    
-    
-    if( dialog.open() != Window.OK ) {
-      
-      return;
-            
-    }
-    
-    this.value = dialog.getStringValue( Messages.getString( "ResourcesPage_Value" ) ) ; //$NON-NLS-1$
-    
+      this.value = hostsDialog.getValue();
     
   }
   
