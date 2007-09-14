@@ -18,9 +18,14 @@ package eu.geclipse.ui.internal.actions;
 import java.util.Iterator;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.SelectionListenerAction;
 
-import eu.geclipse.core.JobOutputsDownloader;
+import eu.geclipse.core.jobs.JobOutputsDownloaderManager;
 import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.ui.internal.Activator;
 
@@ -41,17 +46,21 @@ public class DownloadJobOutputsAction extends SelectionListenerAction {
    */
   @Override
   public void run() {
+    boolean wasAlreadyScheduled = false;
     IStructuredSelection selection = getStructuredSelection();
     if( isAnyJobSelected( selection ) ) {
       for( Iterator<?> iterator = selection.iterator(); iterator.hasNext(); ) {
         Object object = iterator.next();
         if( object instanceof IGridJob ) {
           IGridJob job = ( IGridJob )object;
-          JobOutputsDownloader downloader = new JobOutputsDownloader( job );
-          downloader.setUser( true );
-          downloader.schedule();
+          wasAlreadyScheduled |= ( JobOutputsDownloaderManager.getManager()
+            .scheduleDownloading( job, true ) == JobOutputsDownloaderManager.ScheduleStatus.ALREADY_SCHEDULED );
         }
       }
+    }
+    
+    if( wasAlreadyScheduled ) {
+      showView( "org.eclipse.ui.views.ProgressView" );
     }
     super.run();
   }
@@ -66,5 +75,16 @@ public class DownloadJobOutputsAction extends SelectionListenerAction {
   @Override
   protected boolean updateSelection( final IStructuredSelection selection ) {
     return isAnyJobSelected( selection );
+  }
+  
+  private void showView( final String viewId ) {
+    IWorkbench workbench = PlatformUI.getWorkbench();
+    IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
+    IWorkbenchPage page = window.getActivePage();
+    try {
+      page.showView( viewId );
+    } catch( PartInitException piExc ) {
+      Activator.logException( piExc );
+    }
   }
 }
