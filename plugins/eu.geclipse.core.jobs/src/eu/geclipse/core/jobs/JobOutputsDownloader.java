@@ -21,7 +21,6 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
 import eu.geclipse.core.GridException;
-import eu.geclipse.core.Messages;
 import eu.geclipse.core.jobs.internal.Activator;
 import eu.geclipse.core.model.IGridJob;
 
