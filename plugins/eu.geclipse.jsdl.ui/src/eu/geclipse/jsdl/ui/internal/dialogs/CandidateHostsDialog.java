@@ -21,12 +21,8 @@ import java.util.Collection;
 import java.util.List;
 import org.eclipse.debug.ui.IDebugUIConstants;
 import org.eclipse.jface.dialogs.Dialog;
-import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IDialogSettings;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.jface.viewers.CheckboxTableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -35,7 +31,6 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import eu.geclipse.core.model.IGridComputing;
 import eu.geclipse.core.model.IGridElement;
@@ -102,12 +97,12 @@ public class CandidateHostsDialog extends Dialog {
    */
   public void validateFields() {
     
-      if ( this.text.getText() == "" ) { //$NON-NLS-1$
-        getButton( IDialogConstants.OK_ID ).setEnabled( false );        
-      } // end_if
-      else{
-        getButton( IDialogConstants.OK_ID ).setEnabled( true );
-      }
+//      if ( this.text.getText() == "" ) { //$NON-NLS-1$
+//        getButton( IDialogConstants.OK_ID ).setEnabled( false );        
+//      } // end_if
+//      else{
+//        getButton( IDialogConstants.OK_ID ).setEnabled( true );
+//      }
       
   } // end void validateFields()
   
@@ -130,33 +125,36 @@ public class CandidateHostsDialog extends Dialog {
     label.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_BEGINNING ) );
     GridData gd;
     
-    gd = new GridData();
-    gd.horizontalAlignment = GridData.FILL;
-    gd.verticalAlignment = GridData.FILL;
+    gd = new GridData( GridData.FILL_BOTH );
+    gd.grabExcessHorizontalSpace = true;
+    gd.grabExcessVerticalSpace = true;
     gd.verticalSpan = 3;
     gd.horizontalSpan = 2;
     gd.widthHint = 300;
     gd.heightHint = 100;
-    TableViewer hostsViewer = new TableViewer(this.panel , SWT.BORDER                                                          
-                                                          | SWT.MULTI
-                                                          | SWT.FULL_SELECTION );
-    Table tblHosts = hostsViewer.getTable();
+    
+    
+    Table table = new Table( this.panel, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CHECK );
+    table.setLayoutData( gd );
+    
+    CheckboxTableViewer hostsViewer = new CheckboxTableViewer( table );
+    
     hostsViewer.setContentProvider( new FeatureContentProvider() );
     hostsViewer.setLabelProvider( new FeatureLabelProvider() );
     
-    hostsViewer.addSelectionChangedListener( new ISelectionChangedListener()
-    {
-
-      public void selectionChanged( final SelectionChangedEvent event ) {        
-        IStructuredSelection selection = ( IStructuredSelection )event.getSelection();
-        
-        setValue( selection.toArray() );
-      }
-    } );
+//    hostsViewer.addSelectionChangedListener( new ISelectionChangedListener()
+//    {
+//
+//      public void selectionChanged( final SelectionChangedEvent event ) {        
+//        IStructuredSelection selection = ( IStructuredSelection )event.getSelection();
+//        
+//        setValue( selection.toArray() );
+//      }
+//    } );
     
-    TableColumn column = new TableColumn(tblHosts, SWT.FILL);
-    column.setWidth( 300 );
-    tblHosts.setLayoutData( gd );
+//    TableColumn column = new TableColumn(tblHosts, SWT.FILL);
+//    column.setWidth( 300 );
+//    tblHosts.setLayoutData( gd );
     
     try {
       
@@ -172,18 +170,18 @@ public class CandidateHostsDialog extends Dialog {
     }
     
     
-    this.text = new Text( this.panel, SWT.SINGLE | SWT.BORDER | SWT.WRAP );
-    this.text.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
-    // make sure rows are the same height on both panels.
-    label.setSize( label.getSize().x, this.text.getSize().y );
-    
-    if ( this.initialValue != null) {
-      this.text.setText( this.initialValue );
-    }
-    
-    if ( this.text.getText().equals( "" ) ) { //$NON-NLS-1$
-//      getButton( IDialogConstants.OK_ID ).setEnabled( false );
-    }
+//    this.text = new Text( this.panel, SWT.SINGLE | SWT.BORDER | SWT.WRAP );
+//    this.text.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
+//    // make sure rows are the same height on both panels.
+//    label.setSize( label.getSize().x, this.text.getSize().y );
+//    
+//    if ( this.initialValue != null) {
+//      this.text.setText( this.initialValue );
+//    }
+//    
+//    if ( this.text.getText().equals( "" ) ) { //$NON-NLS-1$
+////      getButton( IDialogConstants.OK_ID ).setEnabled( false );
+//    }
      
     Dialog.applyDialogFont( container );
     return parent;

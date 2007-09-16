@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
-
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -38,15 +37,20 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Text;
-
 import eu.geclipse.jsdl.model.ApplicationType;
+import eu.geclipse.jsdl.model.DataStagingType;
+import eu.geclipse.jsdl.model.JobDefinitionType;
+import eu.geclipse.jsdl.model.JobDescriptionType;
 import eu.geclipse.jsdl.model.JsdlFactory;
+import eu.geclipse.jsdl.model.JsdlPackage;
 import eu.geclipse.jsdl.model.posix.ArgumentType;
 import eu.geclipse.jsdl.model.posix.DirectoryNameType;
 import eu.geclipse.jsdl.model.posix.DocumentRoot;
@@ -83,6 +87,9 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   protected ApplicationType applicationType = 
                                   JsdlFactory.eINSTANCE.createApplicationType();
   protected DocumentRoot documentRoot = PosixFactory.eINSTANCE.createDocumentRoot();
+  
+  protected JobDescriptionType jobDescriptionType =
+                                JsdlFactory.eINSTANCE.createJobDescriptionType();
   
   protected POSIXApplicationType posixApplicationType = 
                             PosixFactory.eINSTANCE.createPOSIXApplicationType();
@@ -133,9 +140,12 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    
    while ( iterator.hasNext (  )  )  {  
   
-     EObject testType = iterator.next();
-         
-     if (testType instanceof ApplicationType) {
+     EObject testType = iterator.next();         
+     
+     if (testType instanceof JobDescriptionType) {
+       this.jobDescriptionType = (JobDescriptionType) testType;
+     }
+     else if (testType instanceof ApplicationType) {
        this.applicationType = (ApplicationType) testType;
      }
      else if ( testType instanceof POSIXApplicationType ) {
@@ -143,7 +153,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
       
      } 
      
-   }    
+   }
 
   } // End getTypeforAdapters()
  
@@ -226,6 +236,20 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
     Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__EXECUTABLE);
     this.widgetFeaturesMap.put( featureID , widget );    
     
+    
+    widget.addFocusListener( new FocusListener(){
+
+      public void focusLost( final FocusEvent e ) {
+        checkDataStageMissMatch(widget.getText());
+        
+      }
+
+      public void focusGained( final FocusEvent e ) {
+        // TODO Auto-generated method stub
+        
+      }
+      
+    });
    
     widget.addModifyListener( new ModifyListener() {      
       FileNameType fileName = PosixFactory.eINSTANCE.createFileNameType();
@@ -621,6 +645,16 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
     
     
   } // End void attachToDelete()
+  
+  
+  
+  protected void checkDataStageMissMatch(final String element) {
+    DataStagingType dataStagingType = JsdlFactory.eINSTANCE.createDataStagingType();
+    dataStagingType = ( DataStagingType )this.jobDescriptionType.getDataStaging();
+    
+
+    
+  }
   
   
   /**
