@@ -3,10 +3,10 @@
 
 <toc
   label="g-Eclispe API Reference"
-  link_to="toc.xml#geclipse_apireference">
+  link_to="toc.xml#geclipse_reference_api">
   <topic
     label="API Reference"
     href="html/api_reference/index.html">
-    <anchor id="geclipse_apireference"   />
   </topic>
+  <anchor id="geclipse_reference_api_ext" />
 </toc>
