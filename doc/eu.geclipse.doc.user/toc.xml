@@ -1,24 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?NLS TYPE="org.eclipse.help.toc"?>
 
-<toc
-  label="g-Eclipse"
-  topic="html/toc.html">
+<toc label="g-Eclipse">
 
-  <topic label="Getting Started">
+  <topic
+    label="Getting Started"
+    href="html/index.html">
     <anchor id="geclipse_gettingstarted" />
   </topic>
+
   <topic label="Concepts">
     <anchor id="geclipse_concepts" />
   </topic>
 
-  <anchor id="geclipse_additionalinformation"/>
+  <anchor id="geclipse_additionalinformation" />
 
   <topic
     label="What's new"
     href="html/whats_new.html">
     <anchor id="geclipse_whatsnew" />
   </topic>
+
   <topic
     label="Legal"
     href="about.html">
