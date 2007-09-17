@@ -28,7 +28,6 @@ import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
-import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
@@ -50,6 +49,7 @@ import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.TableWrapData;
+
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridRoot;
@@ -374,30 +374,31 @@ public final class ResourcesPage extends FormPage
     
     this.btnAdd.setLayoutData( gd);
     
+    //FIXME Uncomment for Edit Functionality
     
     /* Create the Edit button */
-    gd = new GridData();
-    gd.verticalSpan = 2;
-    gd.verticalAlignment = GridData.END;
-    gd.horizontalAlignment = GridData.FILL;
-    this.btnEdit = toolkit.createButton(client,
-                                    Messages.getString("JsdlEditor_EditButton"), //$NON-NLS-1$
-                                    SWT.BUTTON1);  
-    
-    this.btnEdit.addSelectionListener(new SelectionListener() {
-      public void widgetSelected(final SelectionEvent event) {
-        handleAddDialog(Messages.getString( "ResourcesPage_EditHostNameDialog" ), //$NON-NLS-1$
-                                                    (Button) event.getSource()); 
-        ResourcesPage.this.resourcesTypeAdapter.performEdit(ResourcesPage.this.hostsViewer,                                                          
-                                                           ResourcesPage.this.value);
-      }
-
-       public void widgetDefaultSelected(final SelectionEvent event) {
-           // Do Nothing - Required method
-       }
-     });
-    
-    this.btnEdit.setLayoutData( gd);
+//    gd = new GridData();
+//    gd.verticalSpan = 2;
+//    gd.verticalAlignment = GridData.END;
+//    gd.horizontalAlignment = GridData.FILL;
+//    this.btnEdit = toolkit.createButton(client,
+//                                    Messages.getString("JsdlEditor_EditButton"), //$NON-NLS-1$
+//                                    SWT.BUTTON1);  
+//    
+//    this.btnEdit.addSelectionListener(new SelectionListener() {
+//      public void widgetSelected(final SelectionEvent event) {
+//        handleAddDialog(Messages.getString( "ResourcesPage_EditHostNameDialog" ), //$NON-NLS-1$
+//                                                    (Button) event.getSource()); 
+//        ResourcesPage.this.resourcesTypeAdapter.performEdit(ResourcesPage.this.hostsViewer,                                                          
+//                                                           ResourcesPage.this.value);
+//      }
+//
+//       public void widgetDefaultSelected(final SelectionEvent event) {
+//           // Do Nothing - Required method
+//       }
+//     });
+//    
+//    this.btnEdit.setLayoutData( gd);
     
     
     /* Create the Remove button */
@@ -803,21 +804,24 @@ public final class ResourcesPage extends FormPage
   @SuppressWarnings("unchecked")
   protected void handleAddDialog(final String dialogTitle, final Button button){
     
+    this.value = null;
+    
     CandidateHostsDialog hostsDialog = new CandidateHostsDialog( this.getSite().getShell(), dialogTitle );
     
     IFile file = ( (IFileEditorInput) this.getEditor().getEditorInput() ).getFile();
     IGridRoot root = GridModel.getRoot();
     IGridElement element = root.findElement( file );
     hostsDialog.setDialogInput( element );
+    hostsDialog.setExistingCandidateHosts(this.hostsViewer.getInput());
 
     if (button != this.btnAdd ) {
-    
-       IStructuredSelection structSelection 
-                   = ( IStructuredSelection ) this.hostsViewer.getSelection();
-    
-       java.util.List<String> list =  structSelection.toList();
-    
-       hostsDialog.setInitialValue( list.get(0) );
+    //FIXME Un-comment for Edit Functionality
+//       IStructuredSelection structSelection 
+//                   = ( IStructuredSelection ) this.hostsViewer.getSelection();
+//    
+       
+//       java.util.List<String> list =  structSelection.toList();
+       
 
     }
   
@@ -827,6 +831,7 @@ public final class ResourcesPage extends FormPage
         return;
         
     }
+    
       this.value = hostsDialog.getValue();
     
   }
@@ -853,7 +858,8 @@ public final class ResourcesPage extends FormPage
     
       this.btnAdd.setEnabled( true );
       this.btnDel.setEnabled( selectionAvailable );
-      this.btnEdit.setEnabled( selectionAvailable );
+//      FIXME Un-comment for Edit Functionality
+//      this.btnEdit.setEnabled( selectionAvailable );
     
   } // End updateButtons
     

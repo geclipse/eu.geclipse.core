@@ -19,10 +19,15 @@ package eu.geclipse.jsdl.ui.internal.dialogs;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
 import org.eclipse.debug.ui.IDebugUIConstants;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IDialogSettings;
+import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
+import org.eclipse.jface.viewers.ICheckStateListener;
+import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -31,7 +36,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.Text;
+
 import eu.geclipse.core.model.IGridComputing;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.jsdl.JSDLJobDescription;
@@ -47,14 +52,15 @@ import eu.geclipse.jsdl.ui.providers.FeatureLabelProvider;
  */
 public class CandidateHostsDialog extends Dialog {
   
+  protected CheckboxTableViewer hostsViewer = null;
   protected Composite panel = null;
   protected String title = null;
   protected List<Validator> validators = new ArrayList<Validator>();  
   private IGridElement gridElement = null;
   private JSDLJobDescription jobDescription = null;
-  private String initialValue = null;
-  private Text text = null; 
-  private Object[] selectedHosts = null;
+  private List<String> existingHosts = new ArrayList<String>();  
+  private String[] selectedHosts = null;
+  
 
   /**
    * @param parentShell
@@ -86,24 +92,17 @@ public class CandidateHostsDialog extends Dialog {
   protected Control createButtonBar( final Composite parent ) {
     
     Control btnBar = super.createButtonBar( parent );
-    validateFields();
+    getButton( IDialogConstants.OK_ID ).setEnabled( false );
     return btnBar;
     
   }
   
   
-  /**
-   * Validates all dialog fields and makes OK button disabled or enabled
-   */
-  public void validateFields() {
+  
+  private void enableOKButton( final boolean value) {
     
-//      if ( this.text.getText() == "" ) { //$NON-NLS-1$
-//        getButton( IDialogConstants.OK_ID ).setEnabled( false );        
-//      } // end_if
-//      else{
-//        getButton( IDialogConstants.OK_ID ).setEnabled( true );
-//      }
-      
+      getButton( IDialogConstants.OK_ID ).setEnabled( value );
+          
   } // end void validateFields()
   
   
@@ -137,51 +136,38 @@ public class CandidateHostsDialog extends Dialog {
     Table table = new Table( this.panel, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CHECK );
     table.setLayoutData( gd );
     
-    CheckboxTableViewer hostsViewer = new CheckboxTableViewer( table );
+    this.hostsViewer = new CheckboxTableViewer( table );
     
-    hostsViewer.setContentProvider( new FeatureContentProvider() );
-    hostsViewer.setLabelProvider( new FeatureLabelProvider() );
+    this.hostsViewer.setContentProvider( new FeatureContentProvider() );
+    this.hostsViewer.setLabelProvider( new FeatureLabelProvider() );
     
-//    hostsViewer.addSelectionChangedListener( new ISelectionChangedListener()
-//    {
-//
-//      public void selectionChanged( final SelectionChangedEvent event ) {        
-//        IStructuredSelection selection = ( IStructuredSelection )event.getSelection();
-//        
-//        setValue( selection.toArray() );
-//      }
-//    } );
-    
-//    TableColumn column = new TableColumn(tblHosts, SWT.FILL);
-//    column.setWidth( 300 );
-//    tblHosts.setLayoutData( gd );
+    this.hostsViewer.addCheckStateListener( new ICheckStateListener () {
+
+      public void checkStateChanged( final CheckStateChangedEvent event ) {        
+        setValue( CandidateHostsDialog.this.hostsViewer.getCheckedElements() );
+        
+      }
+      
+    });
     
     try {
       
       Collection <String> computingElements =  new ArrayList<String>();
       IGridComputing[] gridComputings = this.jobDescription.getProject().getVO().getComputing() ;
-      for (int i=0; i<gridComputings.length; i++){
-        computingElements.add( gridComputings[i].getName() );
-      }
       
-      hostsViewer.setInput( computingElements );
+          
+      for (int i=0; i < gridComputings.length; i++){        
+        
+        
+      if ( ! this.existingHosts.contains( gridComputings[i].getName() )  )
+        computingElements.add( gridComputings[i].getName() );
+
+      }
+      this.hostsViewer.setInput( computingElements );
     } catch( Exception e ) {
       Activator.logException( e );
     }
     
-    
-//    this.text = new Text( this.panel, SWT.SINGLE | SWT.BORDER | SWT.WRAP );
-//    this.text.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
-//    // make sure rows are the same height on both panels.
-//    label.setSize( label.getSize().x, this.text.getSize().y );
-//    
-//    if ( this.initialValue != null) {
-//      this.text.setText( this.initialValue );
-//    }
-//    
-//    if ( this.text.getText().equals( "" ) ) { //$NON-NLS-1$
-////      getButton( IDialogConstants.OK_ID ).setEnabled( false );
-//    }
      
     Dialog.applyDialogFont( container );
     return parent;
@@ -217,7 +203,8 @@ public class CandidateHostsDialog extends Dialog {
     
     IDialogSettings settings = Activator.getDefault().getDialogSettings();
     IDialogSettings section = settings.getSection( getDialogSettingsSectionName() );
-    if( section == null ) {
+    if( section == null ) {   
+
       section = settings.addNewSection( getDialogSettingsSectionName() );
     }
     return section;
@@ -227,7 +214,11 @@ public class CandidateHostsDialog extends Dialog {
   
   
   /**
-   * @param input
+   * This method specifies the input the for {@link CheckboxTableViewer} in the 
+   * dialog. The input is of type {@link IGridElement} and is obtained by getting
+   * the input file of the JSDL editor.
+   *  
+   * @param input The IGridElement obtained from the JSDL editor.
    */
   public void setDialogInput(final IGridElement input ) {
     this.gridElement = input ;
@@ -236,33 +227,38 @@ public class CandidateHostsDialog extends Dialog {
 
   
   
+  
   /**
-   * @param value
+   * This is a optional method that allows to filter the Computing Elements shown
+   * in the {@link CheckboxTableViewer} of the dialog. Computing Elements that
+   * already are included in the Candidate Hosts {@link TableViewer} of the JSDL 
+   * Resources page are not shown. 
+   * 
+   * @param input The Input of the Candidates Hosts {@link TableViewer} 
    */
-  public void setInitialValue( final String value ) {
-    this.initialValue  = value;
+  @SuppressWarnings("unchecked")
+  public void setExistingCandidateHosts( final Object input ) {
+    
+    this.existingHosts = (List<String>) input;   
+    
+    
   }
   
   
   
-  protected void setValue (final Object value) {
-            
-    if ( value instanceof Object[]) {      
-      
-      this.selectedHosts = ( Object[] ) value;      
-      String tempValue = "";  //$NON-NLS-1$
-      for ( int i=0; i < this.selectedHosts.length; i++ ) {        
-        tempValue = tempValue + " [ " + this.selectedHosts[i].toString() + " ] "; //$NON-NLS-1$ //$NON-NLS-2$
-      } // end for
-      this.text.setText( tempValue );
-      
-    }
+  protected void setValue (final Object[] value) {
     
+        
+    Object[] checkedElements = value;
+    if ( checkedElements != null && checkedElements.length > 0 ) {
+      enableOKButton( true );
+      this.selectedHosts = new String[ checkedElements.length ];
+      for ( int i = 0 ; i < checkedElements.length ; i++ ) {
+        this.selectedHosts[ i ] = ( String ) checkedElements[ i ];
+      }
+    }
     else {
-      
-      this.selectedHosts[0] = value.toString();
-      this.text.setText( this.selectedHosts[0].toString() );
-      
+      enableOKButton( false );
     }
     
   }  // end void setValue()
@@ -273,7 +269,7 @@ public class CandidateHostsDialog extends Dialog {
    * @return The selected Candidate Host(s).
    */
   public Object[] getValue() {
-        
+              
     return this.selectedHosts;
   }
 
@@ -282,6 +278,7 @@ public class CandidateHostsDialog extends Dialog {
     
        
     if ( input instanceof JSDLJobDescription ) {      
+      
       this.jobDescription = ( JSDLJobDescription ) input;           
     }
     else {      

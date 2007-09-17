@@ -126,7 +126,10 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   private void  getTypeForAdapter(final EObject rootJsdlElement){
     
     this.jobDescriptionType = ((JobDefinitionType ) rootJsdlElement).getJobDescription();
-    this.resourcesType = this.jobDescriptionType.getResources();
+    
+    if (this.jobDescriptionType.getResources() != null ) {
+      this.resourcesType = this.jobDescriptionType.getResources();
+    }
 
    } // End getTypeforAdapter()
   
@@ -234,7 +237,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
       collection.add( (String) tableViewer.getElementAt( i ) );
     }
     
-    checkResourcesElement();
+    checkCandidateHostsElement();
     this.candidateHosts.eSet(eStructuralFeature, collection);
 
     this.contentChanged();
@@ -294,8 +297,8 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     }  
     
   }
+  
     
-   
   
   protected void checkResourcesElement() {
     
@@ -308,7 +311,19 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
 
     }
   }
+
   
+  
+  
+  protected void checkCandidateHostsElement() {
+    checkResourcesElement();    
+    EStructuralFeature eStructuralFeature = this.resourcesType.eClass()
+    .getEStructuralFeature( JsdlPackage.RESOURCES_TYPE__CANDIDATE_HOSTS );
+    
+    if ( !this.resourcesType.eIsSet( eStructuralFeature ) ) {      
+      this.resourcesType.eSet( eStructuralFeature, this.candidateHosts );
+    }
+  }
   
   
   protected void performDelete( final TableViewer viewer ){
