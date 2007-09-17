@@ -199,4 +199,10 @@ project number: FP5-IST-034327  http://www.geclipse.eu/
          version="0.0.0"
          unpack="false"/>
 
+   <plugin
+         id="eu.geclipse.doc.isv"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
 </feature>
