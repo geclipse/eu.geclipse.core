@@ -77,6 +77,14 @@
             icon="icons/job.gif"
             id="eu.geclipse.ui.views.ProcessStatView"
             name="Process Status Viewer"/>
+      <view
+            allowMultiple="false"
+            category="eu.geclipse.ui.viewcategory"
+            class="eu.geclipse.ui.views.VisualizationView"
+            icon="icons/vtk_logo.png"
+            id="eu.geclipse.ui.views.visualizationview"
+            name="Visualization View">
+      </view>
    </extension>
    <extension
          point="org.eclipse.ui.perspectives">

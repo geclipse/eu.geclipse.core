@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.PartInitException;
@@ -27,6 +28,7 @@ import eu.geclipse.core.CoreProblems;
 import eu.geclipse.core.GridException;
 import eu.geclipse.core.model.IGridVisualization;
 import eu.geclipse.ui.dialogs.NewProblemDialog;
+import eu.geclipse.ui.views.VisualizationView;
 
 
 /**
@@ -62,8 +64,10 @@ public class RenderLocalVTKPipelineAction extends SelectionListenerAction {
       = getStructuredSelection().getFirstElement();
     if ( element != null && checkForPipelineCompletion( element ) ) {
       try {
-        this.site.getPage().showView( "eu.geclipse.vtk.ui.internal.views.VTKView" ); //$NON-NLS-1$
-        //TODO - create a vtkWindow with actors build up from the element !!!!
+        IViewPart view = this.site.getPage().showView( "eu.geclipse.ui.views.visualizationview" ); //$NON-NLS-1$
+        view.setFocus();
+        ( ( VisualizationView )view ).setPipeline( (IGridVisualization) element, "local" ); //$NON-NLS-1$
+        ( ( VisualizationView )view ).render();
       } catch( PartInitException e ) {
         NewProblemDialog.openProblem( null,
                                       Messages.getString( "RenderLocalVTKPipelineAction.errorDialogTitle" ), //$NON-NLS-1$
@@ -74,7 +78,6 @@ public class RenderLocalVTKPipelineAction extends SelectionListenerAction {
     else {
       final GridException fileException = new GridException( CoreProblems.FILE_ACCESS_PROBLEM,
                                                              Messages.getString( "RenderLocalVTKPipelineAction.elementNotVisualizable" ) ); //$NON-NLS-1$
-
           NewProblemDialog.openProblem( null,
                                         Messages.getString( "RenderLocalVTKPipelineAction.errorDialogTitle" ), //$NON-NLS-1$
                                         Messages.getString( "RenderLocalVTKPipelineAction.errorInfo" ), //$NON-NLS-1$
@@ -83,7 +86,7 @@ public class RenderLocalVTKPipelineAction extends SelectionListenerAction {
   }
 
 
-  private boolean checkForPipelineCompletion( Object element ) {
+  private boolean checkForPipelineCompletion( final Object element ) {
     //TODO - validate that the .vtkpipeline file specifies at least the data location,
     //        appropriate reader for the data type and instruction about how to render 
     //        the data (i.e. most likely one or more filters' specifications)

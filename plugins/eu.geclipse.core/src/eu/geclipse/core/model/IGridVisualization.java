@@ -15,13 +15,32 @@
 package eu.geclipse.core.model;
 
 
+
 /**
  * An interfaces for integrating visualisation into the Grid model.
  */
 public interface IGridVisualization extends IGridContainer {
 
   /**
-   * @return user's description for the specific vtk pipeline 
+   * @return user's description for the specific VTK pipeline 
    */
   String getDescription();
+
+  /**
+   * Locally runs the rendering of the VTK pipeline based on 
+   * what is described in the vtkpipeline model.
+   */
+  void renderLocal();
+
+  /**
+   * Remotely runs the rendering of the VTK pipeline based on 
+   * what is described in the vtkpipeline model.
+   */
+  void renderRemote();
+
+  /**
+   * @return true if the vtkpipeline specification is complete and correct.
+   */
+  boolean isValid();
+  
 }
