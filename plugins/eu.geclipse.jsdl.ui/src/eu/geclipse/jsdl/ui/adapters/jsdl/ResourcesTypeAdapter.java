@@ -351,7 +351,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
       
     ((java.util.List<?>)this.candidateHosts.eGet(eStructuralFeature))
                                                              .remove(feature);
-//    contentChanged();
+    contentChanged();
       }
       else {
         viewer.remove( feature );
