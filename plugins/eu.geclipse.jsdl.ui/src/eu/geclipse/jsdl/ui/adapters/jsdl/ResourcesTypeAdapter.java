@@ -54,6 +54,7 @@ import eu.geclipse.jsdl.model.OperatingSystemTypeEnumeration;
 import eu.geclipse.jsdl.model.OperatingSystemTypeType;
 import eu.geclipse.jsdl.model.ProcessorArchitectureEnumeration;
 import eu.geclipse.jsdl.model.ResourcesType;
+import eu.geclipse.jsdl.ui.internal.Activator;
 
 
 
@@ -329,7 +330,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   protected void performDelete( final TableViewer viewer ){
     
     EStructuralFeature eStructuralFeature;
-        
+    
     int featureID = JsdlPackage.RESOURCES_TYPE__CANDIDATE_HOSTS;
     
     IStructuredSelection structSelection 
@@ -343,17 +344,32 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
 
     Object feature = structSelection.getFirstElement();
     
+    try {
     /* Delete only Multi-Valued Elements */
+      
+      if (!this.adapterRefreshed) {
+      
     ((java.util.List<?>)this.candidateHosts.eGet(eStructuralFeature))
                                                              .remove(feature);
-  /*
-   * Refresh the table viewer and notify the editor that the page content has
-   * changed.
-   */
-    viewer.refresh();
-    contentChanged();
+//    contentChanged();
+      }
+      else {
+        viewer.remove( feature );
+      }
+}
+    catch ( Exception e ) {
+      Activator.logException( e );
+    }
     
-    }  
+    /*
+     * Refresh the table viewer and notify the editor that the page content has
+     * changed.
+     */  
+    viewer.refresh();
+//    contentChanged();
+    
+    }
+    
     
   }
   
