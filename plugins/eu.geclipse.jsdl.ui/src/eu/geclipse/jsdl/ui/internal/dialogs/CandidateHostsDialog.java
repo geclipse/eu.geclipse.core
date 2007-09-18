@@ -63,14 +63,19 @@ public class CandidateHostsDialog extends Dialog {
   
 
   /**
-   * @param parentShell
-   * @param title
+   * This class creates a Dialog for adding Candidate Hosts to a JSDL file. The 
+   * dialog consists of a {@link CheckboxTableViewer} that displays all Computing
+   * Elements that support a specific Virtual Organization (VO). This VO is the
+   * same as the VO of the Grid Project the JSDL file belongs. 
+   * 
+   * @param shell The parent shell
+   * @param title The dialog title.
    */
-  public CandidateHostsDialog( final Shell parentShell, final String title ) {
+  public CandidateHostsDialog( final Shell shell, final String title ) {
     
-    super( parentShell );    
+    super( shell );    
     this.title = title;    
-    setShellStyle( getShellStyle() | SWT.RESIZE );
+    setShellStyle( getShellStyle() | SWT.RESIZE |SWT.APPLICATION_MODAL  );
     
   } // end Class Constructor
 
@@ -79,7 +84,8 @@ public class CandidateHostsDialog extends Dialog {
   @Override
   protected void configureShell( final Shell shell ) {
     
-    shell.setSize( 600, 300 );
+//    shell.setSize( 600, 300 );
+    
     super.configureShell( shell );
     if( this.title != null ) {
       shell.setText( this.title );
@@ -110,7 +116,7 @@ public class CandidateHostsDialog extends Dialog {
   @Override
   protected Control createDialogArea( final Composite parent ) {
            
-    Composite container = ( Composite )super.createDialogArea( parent );
+    Composite container = ( Composite ) super.createDialogArea( parent );
     container.setLayout( new GridLayout( 2, false ) );
     container.setLayoutData( new GridData( GridData.FILL_BOTH ) );
     this.panel = new Composite( container, SWT.NONE );
@@ -193,7 +199,7 @@ public class CandidateHostsDialog extends Dialog {
   
   
   private String getDialogSettingsSectionName() {
-    return IDebugUIConstants.PLUGIN_ID + ".MULTIPLE_INPUT_DIALOG_2"; //$NON-NLS-1$
+    return IDebugUIConstants.PLUGIN_ID + ".CANDIDATE_HOSTS_DIALOG_2"; //$NON-NLS-1$
   }
   
   
@@ -266,6 +272,8 @@ public class CandidateHostsDialog extends Dialog {
   
   
   /**
+   * Get's the selected Candidate Hosts in the Dialog.
+   * 
    * @return The selected Candidate Host(s).
    */
   public Object[] getValue() {

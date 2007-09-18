@@ -20,10 +20,12 @@ package eu.geclipse.jsdl.ui.adapters.posix;
  * @author nickl
  *
  */
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
+
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -45,18 +47,18 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Text;
+
 import eu.geclipse.jsdl.model.ApplicationType;
 import eu.geclipse.jsdl.model.DataStagingType;
-import eu.geclipse.jsdl.model.JobDefinitionType;
 import eu.geclipse.jsdl.model.JobDescriptionType;
 import eu.geclipse.jsdl.model.JsdlFactory;
-import eu.geclipse.jsdl.model.JsdlPackage;
 import eu.geclipse.jsdl.model.posix.ArgumentType;
 import eu.geclipse.jsdl.model.posix.DirectoryNameType;
 import eu.geclipse.jsdl.model.posix.DocumentRoot;
 import eu.geclipse.jsdl.model.posix.EnvironmentType;
 import eu.geclipse.jsdl.model.posix.FileNameType;
 import eu.geclipse.jsdl.model.posix.GroupNameType;
+import eu.geclipse.jsdl.model.posix.LimitsType;
 import eu.geclipse.jsdl.model.posix.POSIXApplicationType;
 import eu.geclipse.jsdl.model.posix.PosixFactory;
 import eu.geclipse.jsdl.model.posix.PosixPackage;
@@ -99,17 +101,14 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
 
   protected ArgumentType argumentType = PosixFactory.eINSTANCE.createArgumentType();
   
-  protected DirectoryNameType directoryNameType = PosixFactory.eINSTANCE
-                                                     .createDirectoryNameType();
-  
-//  protected LimitsType limits = PosixFactory.eINSTANCE.createLimitsType();
-  
   protected UserNameType userNameType = PosixFactory.eINSTANCE.createUserNameType();
   
   protected GroupNameType groupNameType = PosixFactory.eINSTANCE.createGroupNameType();
   
-  private Hashtable< Integer, Text > widgetFeaturesMap = new Hashtable< Integer, Text >();
-  private Hashtable< Integer, TableViewer > tableFeaturesMap = new Hashtable< Integer, TableViewer >();
+  private Hashtable< Integer, Text > widgetFeaturesMap = 
+                                               new Hashtable< Integer, Text >();
+  private Hashtable< Integer, TableViewer > tableFeaturesMap = 
+                                        new Hashtable< Integer, TableViewer >();
 
   
   
@@ -409,144 +408,570 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
   
   
-//  /**
-//   * Adapter interface to attach to the PosixApplication WorkingDirectory text 
-//   * widget.
-//   * 
-//   * @param button The SWT button which enalbes or disables the associated text 
-//   * widget 
-//   * @param text The SWT text widget which is associated with the 
-//   * PosixApplication Working Directory element of the JSDL document.
-//   */
-//  public void attachToWorkingDirectory(final Button button, final Text text){
-//    
-//    button.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
-//      @Override
-//     public void widgetSelected(final org.eclipse.swt.events.SelectionEvent e) {
-////      Determines if the checkBox is checked or not
-//      boolean selected = button.getSelection();
-//      if (selected == true) {
-//        text.setEnabled( true );
-//      }
-//      else
-//      {
-//        text.setText( "" ); //$NON-NLS-1$
-//        text.setEnabled( false );
-//        
-//        
-//      }
-//     }
-//     });
-//  }
-//  
-//  
-//  
-//  
-//  /**
-//   * @param text
-//   */
-//  public void attachToWallTimeLimit(final Text text){
-//    
-//    Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__WALL_TIME_LIMIT);
-//    this.widgetFeaturesMap.put( featureID , text );    
-//      
-//      text.addModifyListener( new ModifyListener() {   
-////        LimitsType limits = PosixFactory.eINSTANCE.createLimitsType();
-//        BigInteger bigInteger ;
-//        public void modifyText( final ModifyEvent e ) {
-//         
-//          if (!text.getText().equals( "" )){ //$NON-NLS-1$ 
-//            this.bigInteger = new BigInteger(text.getText());
-//            PosixApplicationTypeAdapter.this.limits.setValue( this.bigInteger );
-//            PosixApplicationTypeAdapter.this.posixApplicationType.setWallTimeLimit( PosixApplicationTypeAdapter.this.limits );
-//          }
-//          else{
-//           PosixApplicationTypeAdapter.this
-//           .deleteElement( PosixPackage.POSIX_APPLICATION_TYPE__WALL_TIME_LIMIT ) ;
-//          }
-//          contentChanged();
-//          
-//        }
-//      } );
-//    }
-//  
-//  
-//  
-//  /**
-//   * Adapter interface to attach to the PosixApplication FileSizeLimit text 
-//   * widget.
-//   * 
-//   * @param text The SWT text widget which is associated with the 
-//   * PosixApplication Working Directory element of the JSDL document.
-//   */
-//  public void attachToFileSizeLimit(final Text text){
-//    
-//    Integer featureID = 
-//              new Integer(PosixPackage.POSIX_APPLICATION_TYPE__FILE_SIZE_LIMIT);
-//    
-//    this.widgetFeaturesMap.put( featureID , text );    
-//      
-//    text.addModifyListener( new ModifyListener() {   
-////      LimitsType limits = PosixFactory.eINSTANCE.createLimitsType();
-//      BigInteger bigInteger ;
-//      public void modifyText( final ModifyEvent e ) {
-//      
-//        if (!text.getText().equals( "" )) { //$NON-NLS-1$ 
-//          this.bigInteger = new BigInteger(text.getText());
-//          PosixApplicationTypeAdapter.this.limits.setValue( this.bigInteger );
-//          PosixApplicationTypeAdapter.this.posixApplicationType.setFileSizeLimit( PosixApplicationTypeAdapter.this.limits );
-//          }
-//        
-//        else {
-//          PosixApplicationTypeAdapter.this
-//           .deleteElement(PosixPackage.POSIX_APPLICATION_TYPE__FILE_SIZE_LIMIT);
-//          }
-//        
-//          contentChanged();
-//          
-//        }
-//      } );
-//    
-//    } // End void attachToFileSizeLimit()
-//  
-//  
-//  
-//  /**
-//   * Adapter interface to attach to the PosixApplication CoreDumpLimit text 
-//   * widget.
-//   * 
-//   * @param text The SWT text widget which is associated with the 
-//   * PosixApplication CoreDumpLimit element of the JSDL document.
-//   */
-//  public void attachToCoreDumpLimit(final Text text){
-//    
-//    Integer featureID = 
-//              new Integer(PosixPackage.POSIX_APPLICATION_TYPE__CORE_DUMP_LIMIT);
-//    
-//    this.widgetFeaturesMap.put( featureID , text );    
-//      
-//    text.addModifyListener( new ModifyListener() {   
-//      
-//      BigInteger bigInteger ;
-//      public void modifyText( final ModifyEvent e ) {      
-//        if (!text.getText().equals( "" )) { //$NON-NLS-1$
-//          this.bigInteger = new BigInteger(text.getText());
-//         PosixApplicationTypeAdapter.this.limits.setValue( this.bigInteger );      
-//          PosixApplicationTypeAdapter.this.posixApplicationType
-//                                                .setCoreDumpLimit( PosixApplicationTypeAdapter.this.limits );
-//          }
-//        
-//        else {        
-//            PosixApplicationTypeAdapter.this
-//          .deleteElement(PosixPackage.POSIX_APPLICATION_TYPE__CORE_DUMP_LIMIT);
-//          }
-//        
-//          contentChanged();
-//          
-//        }
-//      } );
-//    
-//    } // End void attachToFileSizeLimit()
+  /**
+   * Adapter interface to attach to the PosixApplication WorkingDirectory text 
+   * widget.
+   *     
+   * @param widget The SWT text widget which is associated with the 
+   * PosixApplication Working Directory element of the JSDL document.
+   */
+  public void attachToWorkingDirectory(final Text widget){    
+    Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__WORKING_DIRECTORY);
+    this.widgetFeaturesMap.put( featureID , widget );
+    
+    widget.addModifyListener( new ModifyListener(){
+
+      public void modifyText( final ModifyEvent e ) {
+        DirectoryNameType directoryNameType =
+                              PosixFactory.eINSTANCE.createDirectoryNameType();
+        
+        if (!widget.getText().equals( "" )){ //$NON-NLS-1$
+          checkPosixApplicationElement();          
+          directoryNameType.setValue( widget.getText() );
+          PosixApplicationTypeAdapter.this.posixApplicationType
+                                                    .setWorkingDirectory( directoryNameType );
+        }
+        else{
+          PosixApplicationTypeAdapter.this.posixApplicationType
+                                                            .setError(null);
+        }
+        contentChanged();
+        
+     }
+      
+      
+    });
+
+  }
+  
+  
+ 
+  /**
+   * @param text
+   */
+  public void attachToWallTimeLimit(final Text text){
+    
+    Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__WALL_TIME_LIMIT);
+    this.widgetFeaturesMap.put( featureID , text );    
+      
+      text.addModifyListener( new ModifyListener() {  
+      LimitsType limits = PosixFactory.eINSTANCE.createLimitsType();
+      BigInteger bigInteger ;
+        
+        public void modifyText( final ModifyEvent e ) {
+        
+          if (!text.getText().equals( "" )){ //$NON-NLS-1$ 
+           this.bigInteger = new BigInteger(text.getText());
+           this.limits.setValue( this.bigInteger ); 
+            PosixApplicationTypeAdapter.this.posixApplicationType.setWallTimeLimit( this.limits );
+          }
+          
+          else{
+           PosixApplicationTypeAdapter.this
+           .deleteElement( PosixPackage.POSIX_APPLICATION_TYPE__WALL_TIME_LIMIT ) ;
+          }
+          
+        contentChanged();
+        
+        }
+      } );
+    }
+  
+  
+  
+  /**
+   * Adapter interface to attach to the PosixApplication FileSizeLimit text 
+   * widget.
+   * 
+   * @param text The SWT text widget which is associated with the 
+   * PosixApplication Working Directory element of the JSDL document.
+   */
+  public void attachToFileSizeLimit(final Text text){
+    
+    Integer featureID = 
+              new Integer(PosixPackage.POSIX_APPLICATION_TYPE__FILE_SIZE_LIMIT);
+    
+    this.widgetFeaturesMap.put( featureID , text );    
+      
+    text.addModifyListener( new ModifyListener() {
+    LimitsType limits = PosixFactory.eINSTANCE.createLimitsType();
+    BigInteger bigInteger ;
+
+      public void modifyText( final ModifyEvent e ) {
+
+      if (!text.getText().equals( "" )) { //$NON-NLS-1$ 
+        this.bigInteger = new BigInteger(text.getText());
+        this.limits.setValue( this.bigInteger );
+        PosixApplicationTypeAdapter.this.posixApplicationType.setFileSizeLimit( this.limits );
+      }
+      
+     else {
+       PosixApplicationTypeAdapter.this
+           .deleteElement(PosixPackage.POSIX_APPLICATION_TYPE__FILE_SIZE_LIMIT);
+          }
+        
+     contentChanged();
+     
+
+        }
+      } );
+    
+  } // End void attachToFileSizeLimit()
+  
+  
+  
+  /**
+   * Adapter interface to attach to the PosixApplication CoreDumpLimit text 
+   * widget.
+   * 
+   * @param text The SWT text widget which is associated with the 
+   * PosixApplication CoreDumpLimit element of the JSDL document.
+   */
+  public void attachToCoreDumpLimit( final Text text ) {
+    
+    Integer featureID = 
+              new Integer( PosixPackage.POSIX_APPLICATION_TYPE__CORE_DUMP_LIMIT );
+    
+    this.widgetFeaturesMap.put( featureID , text );    
+      
+    text.addModifyListener( new ModifyListener() {   
+    BigInteger bigInteger ;
+    LimitsType limits = PosixFactory.eINSTANCE.createLimitsType();      
+      
+      public void modifyText( final ModifyEvent e ) {
+        
+        if ( !text.getText().equals( "" ) ) { //$NON-NLS-1$
+          this.bigInteger = new BigInteger(text.getText());
+          this.limits.setValue( this.bigInteger );      
+          PosixApplicationTypeAdapter.this.posixApplicationType
+                                                .setCoreDumpLimit( this.limits );
+          }
+        
+        else {        
+            PosixApplicationTypeAdapter.this
+          .deleteElement( PosixPackage.POSIX_APPLICATION_TYPE__CORE_DUMP_LIMIT );
+          }
+        
+       contentChanged();
+
+      }
+      } );
+    
+  } // End void attachToCoreDumpLimit()
+  
+  
+  
+  /**
+   * Adapter interface to attach to the PosixApplication DataSegmentLimit text 
+   * widget.
+   * 
+   * @param text The SWT text widget which is associated with the 
+   * PosixApplication DataSegmentLimit element of the JSDL document.
+   */
+  public void attachToDataSegmentLimit( final Text text ) {
+    
+    Integer featureID = 
+              new Integer( PosixPackage.POSIX_APPLICATION_TYPE__DATA_SEGMENT_LIMIT );
+    
+    this.widgetFeaturesMap.put( featureID , text );    
+      
+    text.addModifyListener( new ModifyListener() {   
+    BigInteger bigInteger ;
+    LimitsType limits = PosixFactory.eINSTANCE.createLimitsType();    
+      
+      public void modifyText( final ModifyEvent e ) {
+
+        if ( !text.getText().equals( "" ) ) { //$NON-NLS-1$
+          this.bigInteger = new BigInteger(text.getText());
+          this.limits.setValue( this.bigInteger );      
+          PosixApplicationTypeAdapter.this.posixApplicationType
+                                                .setDataSegmentLimit( this.limits );
+          }
+        
+        else {        
+            PosixApplicationTypeAdapter.this
+          .deleteElement( PosixPackage.POSIX_APPLICATION_TYPE__DATA_SEGMENT_LIMIT );
+          }
+        
+       contentChanged();
+       
+        }
+      } );
+    
+  } // End void attachToDataSegmentLimit()
+  
+  
+  
+  /**
+   * Adapter interface to attach to the PosixApplication LockedMemoryLimit text 
+   * widget.
+   * 
+   * @param text The SWT text widget which is associated with the 
+   * PosixApplication LockedMemoryLimit element of the JSDL document.
+   */
+  public void attachToLockedMemoryLimit( final Text text ) {
+    
+    Integer featureID = 
+              new Integer( PosixPackage.POSIX_APPLICATION_TYPE__LOCKED_MEMORY_LIMIT );
+    
+    this.widgetFeaturesMap.put( featureID , text );    
+      
+    text.addModifyListener( new ModifyListener() {   
+      BigInteger bigInteger ;
+      LimitsType limits = PosixFactory.eINSTANCE.createLimitsType();
+      
+      public void modifyText( final ModifyEvent e ) {
+
+        if ( !text.getText().equals( "" ) ) { //$NON-NLS-1$
+          this.bigInteger = new BigInteger(text.getText());
+          this.limits.setValue( this.bigInteger );      
+          PosixApplicationTypeAdapter.this.posixApplicationType
+                                                .setLockedMemoryLimit( this.limits );
+          }
+        
+        else {        
+            PosixApplicationTypeAdapter.this
+          .deleteElement( PosixPackage.POSIX_APPLICATION_TYPE__LOCKED_MEMORY_LIMIT );
+          }
+        
+          contentChanged();
+        
+        }      
+      } );
+    
+  } // End void attachToLockedMemoryLimit()
+  
+  
+  
+  /**
+   * Adapter interface to attach to the PosixApplication MemoryLimit text 
+   * widget.
+   * 
+   * @param text The SWT text widget which is associated with the 
+   * PosixApplication MemoryLimit element of the JSDL document.
+   */
+  public void attachToMemoryLimit( final Text text ) {
+    
+    Integer featureID = 
+              new Integer( PosixPackage.POSIX_APPLICATION_TYPE__MEMORY_LIMIT );
+    
+    this.widgetFeaturesMap.put( featureID , text );    
+      
+    text.addModifyListener( new ModifyListener() {   
+      BigInteger bigInteger ;
+      LimitsType limits = PosixFactory.eINSTANCE.createLimitsType();
+      
+      public void modifyText( final ModifyEvent e ) {
+
+        if ( !text.getText().equals( "" ) ) { //$NON-NLS-1$
+          this.bigInteger = new BigInteger(text.getText());
+          this.limits.setValue( this.bigInteger );      
+          PosixApplicationTypeAdapter.this.posixApplicationType
+                                                .setMemoryLimit( this.limits );
+          }
+        
+        else {        
+            PosixApplicationTypeAdapter.this
+          .deleteElement( PosixPackage.POSIX_APPLICATION_TYPE__MEMORY_LIMIT );
+          }
+        
+          contentChanged();
+        
+        }      
+      } );
+    
+  } // End void attachToMemoryLimit()
+  
+  
+  
+  /**
+   * Adapter interface to attach to the PosixApplication OpenDescriptorLimit text 
+   * widget.
+   * 
+   * @param text The SWT text widget which is associated with the 
+   * PosixApplication OpenDescriptorLimit element of the JSDL document.
+   */
+  public void attachToOpenDesciptorsLimit( final Text text ) {
+    
+    Integer featureID = 
+              new Integer( PosixPackage.POSIX_APPLICATION_TYPE__OPEN_DESCRIPTORS_LIMIT );
+    
+    this.widgetFeaturesMap.put( featureID , text );    
+      
+    text.addModifyListener( new ModifyListener() {   
+      BigInteger bigInteger ;
+      LimitsType limits = PosixFactory.eINSTANCE.createLimitsType();
+      
+      public void modifyText( final ModifyEvent e ) {
+
+        if ( !text.getText().equals( "" ) ) { //$NON-NLS-1$
+          this.bigInteger = new BigInteger(text.getText());
+          this.limits.setValue( this.bigInteger );      
+          PosixApplicationTypeAdapter.this.posixApplicationType
+                                                .setOpenDescriptorsLimit( this.limits );
+          }
+        
+        else {        
+            PosixApplicationTypeAdapter.this
+          .deleteElement( PosixPackage.POSIX_APPLICATION_TYPE__OPEN_DESCRIPTORS_LIMIT );
+          }
+        
+          contentChanged();
+        
+        }      
+      } );
+    
+  } // End void attachToOpenDescriptorLimit()
+  
+  
+  
+  /**
+   * Adapter interface to attach to the PosixApplication OpenDescriptorLimit text 
+   * widget.
+   * 
+   * @param text The SWT text widget which is associated with the 
+   * PosixApplication OpenDescriptorLimit element of the JSDL document.
+   */
+  public void attachToPipeSizeLimit( final Text text ) {
+    
+    Integer featureID = 
+              new Integer( PosixPackage.POSIX_APPLICATION_TYPE__PIPE_SIZE_LIMIT );
+    
+    this.widgetFeaturesMap.put( featureID , text );    
+      
+    text.addModifyListener( new ModifyListener() {   
+      BigInteger bigInteger ;
+      LimitsType limits = PosixFactory.eINSTANCE.createLimitsType();
+      
+      public void modifyText( final ModifyEvent e ) {
+
+        if ( !text.getText().equals( "" ) ) { //$NON-NLS-1$
+          this.bigInteger = new BigInteger(text.getText());
+          this.limits.setValue( this.bigInteger );      
+          PosixApplicationTypeAdapter.this.posixApplicationType
+                                                .setPipeSizeLimit( this.limits );
+          }
+        
+        else {        
+            PosixApplicationTypeAdapter.this
+          .deleteElement( PosixPackage.POSIX_APPLICATION_TYPE__PIPE_SIZE_LIMIT );
+          }
+        
+          contentChanged();
+        
+        }      
+      } );
+    
+  } // End void attachToPipeSizeLimit()
+  
+  
+  
+  /**
+   * Adapter interface to attach to the PosixApplication StackSizeLimit text 
+   * widget.
+   * 
+   * @param text The SWT text widget which is associated with the 
+   * PosixApplication StackSizeLimit element of the JSDL document.
+   */
+  public void attachToStackSizeLimit( final Text text ) {
+    
+    Integer featureID = 
+              new Integer( PosixPackage.POSIX_APPLICATION_TYPE__STACK_SIZE_LIMIT );
+    
+    this.widgetFeaturesMap.put( featureID , text );    
+      
+    text.addModifyListener( new ModifyListener() {   
+      BigInteger bigInteger ;
+      LimitsType limits = PosixFactory.eINSTANCE.createLimitsType();
+      
+      public void modifyText( final ModifyEvent e ) {
+
+        if ( !text.getText().equals( "" ) ) { //$NON-NLS-1$
+          this.bigInteger = new BigInteger(text.getText());
+          this.limits.setValue( this.bigInteger );      
+          PosixApplicationTypeAdapter.this.posixApplicationType
+                                                .setStackSizeLimit( this.limits );
+          }
+        
+        else {        
+            PosixApplicationTypeAdapter.this
+          .deleteElement( PosixPackage.POSIX_APPLICATION_TYPE__STACK_SIZE_LIMIT );
+          }
+        
+          contentChanged();
+        
+        }      
+      } );
+    
+  } // End void attachToStackSizeLimit()
+  
+  
+  
+  /**
+   * Adapter interface to attach to the PosixApplication CPUTimeLimit text 
+   * widget.
+   * 
+   * @param text The SWT text widget which is associated with the 
+   * PosixApplication CPUTimeLimit element of the JSDL document.
+   */
+  public void attachToCPUTimeLimit( final Text text ) {
+    
+    Integer featureID = 
+              new Integer( PosixPackage.POSIX_APPLICATION_TYPE__CPU_TIME_LIMIT );
+    
+    this.widgetFeaturesMap.put( featureID , text );    
+      
+    text.addModifyListener( new ModifyListener() {   
+      BigInteger bigInteger ;
+      LimitsType limits = PosixFactory.eINSTANCE.createLimitsType();
+      
+      public void modifyText( final ModifyEvent e ) {
+
+        if ( !text.getText().equals( "" ) ) { //$NON-NLS-1$
+          this.bigInteger = new BigInteger(text.getText());
+          this.limits.setValue( this.bigInteger );      
+          PosixApplicationTypeAdapter.this.posixApplicationType
+                                                .setCPUTimeLimit( this.limits );
+          }
+        
+        else {        
+            PosixApplicationTypeAdapter.this
+          .deleteElement( PosixPackage.POSIX_APPLICATION_TYPE__CPU_TIME_LIMIT );
+          }
+        
+          contentChanged();
+        
+        }      
+      } );
+    
+  } // End void attachToCPUTimeLimit()
+  
+  
+  
+  /**
+   * Adapter interface to attach to the PosixApplication ProcessCountLimit( text 
+   * widget.
+   * 
+   * @param text The SWT text widget which is associated with the 
+   * PosixApplication ProcessCountLimit( element of the JSDL document.
+   */
+  public void attachToProcessCountLimit( final Text text ) {
+    
+    Integer featureID = 
+              new Integer( PosixPackage.POSIX_APPLICATION_TYPE__PROCESS_COUNT_LIMIT );
+    
+    this.widgetFeaturesMap.put( featureID , text );    
+      
+    text.addModifyListener( new ModifyListener() {   
+      BigInteger bigInteger ;
+      LimitsType limits = PosixFactory.eINSTANCE.createLimitsType();
+      
+      public void modifyText( final ModifyEvent e ) {
+
+        if ( !text.getText().equals( "" ) ) { //$NON-NLS-1$
+          this.bigInteger = new BigInteger(text.getText());
+          this.limits.setValue( this.bigInteger );      
+          PosixApplicationTypeAdapter.this.posixApplicationType
+                                                .setProcessCountLimit( this.limits );
+          }
+        
+        else {        
+            PosixApplicationTypeAdapter.this
+          .deleteElement( PosixPackage.POSIX_APPLICATION_TYPE__PROCESS_COUNT_LIMIT );
+          }
+        
+          contentChanged();
+        
+        }      
+      } );
+    
+  } // End void attachToProcessCountLimit()
+  
+  
+  
+  /**
+   * Adapter interface to attach to the PosixApplication ProcessCountLimit( text 
+   * widget.
+   * 
+   * @param text The SWT text widget which is associated with the 
+   * PosixApplication ProcessCountLimit( element of the JSDL document.
+   */
+  public void attachToVirtualMemoryLimit( final Text text ) {
+    
+    Integer featureID = 
+              new Integer( PosixPackage.POSIX_APPLICATION_TYPE__VIRTUAL_MEMORY_LIMIT );
+    
+    this.widgetFeaturesMap.put( featureID , text );    
+      
+    text.addModifyListener( new ModifyListener() {   
+      BigInteger bigInteger ;
+      LimitsType limits = PosixFactory.eINSTANCE.createLimitsType();
+      
+      public void modifyText( final ModifyEvent e ) {
+
+        if ( !text.getText().equals( "" ) ) { //$NON-NLS-1$
+          this.bigInteger = new BigInteger(text.getText());
+          this.limits.setValue( this.bigInteger );      
+          PosixApplicationTypeAdapter.this.posixApplicationType
+                                                .setVirtualMemoryLimit( this.limits );
+          }
+        
+        else {        
+            PosixApplicationTypeAdapter.this
+          .deleteElement( PosixPackage.POSIX_APPLICATION_TYPE__VIRTUAL_MEMORY_LIMIT );
+          }
+        
+          contentChanged();
+        
+        }      
+      } );
+    
+  } // End void attachToVirtualMemoryLimit()
+  
+  
+  
+  
+  /**
+   * Adapter interface to attach to the PosixApplication ProcessCountLimit( text 
+   * widget.
+   * 
+   * @param text The SWT text widget which is associated with the 
+   * PosixApplication ProcessCountLimit( element of the JSDL document.
+   */
+  public void attachToThreadCountLimit( final Text text ) {
+    
+    Integer featureID = 
+              new Integer( PosixPackage.POSIX_APPLICATION_TYPE__THREAD_COUNT_LIMIT );
+    
+    this.widgetFeaturesMap.put( featureID , text );    
+      
+    text.addModifyListener( new ModifyListener() {   
+      BigInteger bigInteger ;
+      LimitsType limits = PosixFactory.eINSTANCE.createLimitsType();
+      
+      public void modifyText( final ModifyEvent e ) {
+
+        if ( !text.getText().equals( "" ) ) { //$NON-NLS-1$
+          this.bigInteger = new BigInteger(text.getText());
+          this.limits.setValue( this.bigInteger );      
+          PosixApplicationTypeAdapter.this.posixApplicationType
+                                                .setThreadCountLimit ( this.limits );
+          }
+        
+        else {        
+            PosixApplicationTypeAdapter.this
+          .deleteElement( PosixPackage.POSIX_APPLICATION_TYPE__THREAD_COUNT_LIMIT );
+          }
+        
+          contentChanged();
+        
+        }      
+      } );
+    
+  } // End void attachToThreadCountLimit()
+  
+  
+  
   
   
   
@@ -591,34 +1016,33 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    * @param text The SWT text widget which is associated with the 
    * PosixApplication GroupName element of the JSDL document.
    */  
-  public void attachToGroupName(final Text text){
+  public void attachToGroupName( final Text text ) {
     
-    Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__GROUP_NAME);
+    Integer featureID = new Integer( PosixPackage.POSIX_APPLICATION_TYPE__GROUP_NAME );
     this.widgetFeaturesMap.put( featureID , text );    
       
-      text.addModifyListener( new ModifyListener() {
-        public void modifyText( final ModifyEvent e ) {
-          checkPosixApplicationElement();
+    text.addModifyListener( new ModifyListener() {
+      public void modifyText( final ModifyEvent e ) {
+        checkPosixApplicationElement();
          
-          if (!text.getText().equals( "" )){ //$NON-NLS-1$            
-            PosixApplicationTypeAdapter.this.groupNameType.setValue( text.getText() );
-            PosixApplicationTypeAdapter.this.posixApplicationType
+        if ( !text.getText().equals( "" ) ) { //$NON-NLS-1$            
+          PosixApplicationTypeAdapter.this.groupNameType.setValue( text.getText() );
+          PosixApplicationTypeAdapter.this.posixApplicationType
                                      .setGroupName( PosixApplicationTypeAdapter.
-                                                    this.groupNameType);
-          }
-          else{
-           PosixApplicationTypeAdapter.this
-           .posixApplicationType.setGroupName( null );
-          }
-          contentChanged();
-          
+                                                    this.groupNameType );
         }
-      } );
-    }
+       else{
+         PosixApplicationTypeAdapter.this.posixApplicationType.setGroupName( null );
+       }
+        
+       contentChanged();
+          
+       }
+     } );
+  }
   
   
-  
-  
+      
   /**
    * 
    * Adapter interface to attach to the PosixApplication Delete button
@@ -974,6 +1398,10 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
                 widgetName.setText(eStrFeatValue.toString());  
               } 
               break;
+              case PosixPackage.POSIX_APPLICATION_TYPE__WORKING_DIRECTORY: {
+                widgetName.setText( eStrFeatValue.toString() );
+              }
+              break;
               case PosixPackage.POSIX_APPLICATION_TYPE__WALL_TIME_LIMIT:{
                 
                 widgetName.setText(eStrFeatValue.toString());
@@ -988,6 +1416,56 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
 
                     widgetName.setText(eStrFeatValue.toString());
               } 
+              break;
+              case PosixPackage.POSIX_APPLICATION_TYPE__DATA_SEGMENT_LIMIT: {     
+
+                widgetName.setText(eStrFeatValue.toString());
+              } 
+              break;
+              case PosixPackage.POSIX_APPLICATION_TYPE__LOCKED_MEMORY_LIMIT: {     
+
+                widgetName.setText(eStrFeatValue.toString());
+              } 
+              break;
+              case PosixPackage.POSIX_APPLICATION_TYPE__MEMORY_LIMIT: {     
+
+                widgetName.setText(eStrFeatValue.toString());
+              }              
+              break;
+              case PosixPackage.POSIX_APPLICATION_TYPE__OPEN_DESCRIPTORS_LIMIT: {     
+
+                widgetName.setText(eStrFeatValue.toString());
+              }              
+              break;
+              case PosixPackage.POSIX_APPLICATION_TYPE__PIPE_SIZE_LIMIT: {     
+
+                widgetName.setText(eStrFeatValue.toString());
+              }              
+              break;
+              case PosixPackage.POSIX_APPLICATION_TYPE__STACK_SIZE_LIMIT: {     
+
+                widgetName.setText(eStrFeatValue.toString());
+              }              
+              break;
+              case PosixPackage.POSIX_APPLICATION_TYPE__CPU_TIME_LIMIT: {     
+
+                widgetName.setText(eStrFeatValue.toString());
+              }              
+              break;
+              case PosixPackage.POSIX_APPLICATION_TYPE__PROCESS_COUNT_LIMIT: {     
+
+                widgetName.setText(eStrFeatValue.toString());
+              }              
+              break;
+              case PosixPackage.POSIX_APPLICATION_TYPE__VIRTUAL_MEMORY_LIMIT: {     
+
+                widgetName.setText(eStrFeatValue.toString());
+              }              
+              break;
+              case PosixPackage.POSIX_APPLICATION_TYPE__THREAD_COUNT_LIMIT: {     
+
+                widgetName.setText(eStrFeatValue.toString());
+              }              
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__GROUP_NAME: {     
 

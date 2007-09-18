@@ -806,7 +806,7 @@ public final class ResourcesPage extends FormPage
     
     this.value = null;
     
-    CandidateHostsDialog hostsDialog = new CandidateHostsDialog( this.getSite().getShell(), dialogTitle );
+    CandidateHostsDialog hostsDialog = new CandidateHostsDialog( this.body.getShell(), dialogTitle );
     
     IFile file = ( (IFileEditorInput) this.getEditor().getEditorInput() ).getFile();
     IGridRoot root = GridModel.getRoot();
