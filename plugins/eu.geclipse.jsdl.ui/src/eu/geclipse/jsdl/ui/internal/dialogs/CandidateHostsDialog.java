@@ -164,11 +164,17 @@ public class CandidateHostsDialog extends Dialog {
           
       for (int i=0; i < gridComputings.length; i++){        
         
-        
-      if ( ! this.existingHosts.contains( gridComputings[i].getName() )  )
-        computingElements.add( gridComputings[i].getName() );
+      if (this.existingHosts != null ) {       
+        if ( !this.existingHosts.contains( gridComputings[i].getName() )  ) 
+        {
+          computingElements.add( gridComputings[i].getName() );
 
+        }
       }
+      else {
+        computingElements.add( gridComputings[i].getName() );
+      }
+      } // end 
       this.hostsViewer.setInput( computingElements );
     } catch( Exception e ) {
       Activator.logException( e );
@@ -199,7 +205,7 @@ public class CandidateHostsDialog extends Dialog {
   
   
   private String getDialogSettingsSectionName() {
-    return IDebugUIConstants.PLUGIN_ID + ".CANDIDATE_HOSTS_DIALOG_2"; //$NON-NLS-1$
+    return IDebugUIConstants.PLUGIN_ID + ".CANDIDATE_HOSTS_DIALOG"; //$NON-NLS-1$
   }
   
   
