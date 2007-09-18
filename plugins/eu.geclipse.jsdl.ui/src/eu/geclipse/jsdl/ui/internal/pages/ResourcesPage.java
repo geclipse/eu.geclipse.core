@@ -40,7 +40,6 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.forms.IManagedForm;
@@ -133,8 +132,8 @@ public final class ResourcesPage extends FormPage
   private Combo cmbCPUArchName = null;
   private Combo cmbFileSystemType = null;
   private Combo cmbDiskSpaceRange = null;  
-  private Table tblHosts = null;  
-  private TableColumn column = null;   
+//  private Table tblHosts = null;  
+//  private TableColumn column = null;   
   private boolean contentRefreshed = false;
   private boolean dirtyFlag = false;
   private final int TXT_LENGTH = 300;
@@ -320,14 +319,22 @@ public final class ResourcesPage extends FormPage
     lblHostName.setLayoutData( gd );
     
     
+    Table tblHosts = new Table( client, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+    gd = new GridData( GridData.FILL_BOTH );
+    gd.grabExcessHorizontalSpace = true;
+    gd.grabExcessVerticalSpace = true;
+    gd.verticalSpan = 5;
+    gd.horizontalSpan = 1;
+    gd.heightHint = this.WIDGET_HEIGHT;
+    gd.widthHint = this.TXT_LENGTH;
+
+    tblHosts.setLayoutData( gd );
+    
     //FIXME This is a work-around for the Bug#: 201705 for Windows.
-    this.hostsViewer = new TableViewer(client, SWT.BORDER);
-    this.tblHosts = this.hostsViewer.getTable();    
+    this.hostsViewer = new TableViewer(tblHosts);
+    tblHosts = this.hostsViewer.getTable();    
     this.hostsViewer.setContentProvider( new FeatureContentProvider() );
     this.hostsViewer.setLabelProvider( new FeatureLabelProvider() );
-    
-    this.column = new TableColumn(this.tblHosts, SWT.NONE);    
-    this.column.setWidth( 150 );
         
     this.hostsViewer.addSelectionChangedListener( new ISelectionChangedListener()
     {
@@ -338,15 +345,9 @@ public final class ResourcesPage extends FormPage
     } );
     
     
-    gd = new GridData(GridData.FILL_BOTH);
-    gd = new GridData();
-    gd.verticalSpan = 5;
-    gd.horizontalSpan = 1;
-    gd.heightHint = this.WIDGET_HEIGHT;
-    gd.widthHint = this.TXT_LENGTH;
-    
-    this.tblHosts.setData(  FormToolkit.KEY_DRAW_BORDER );
-    this.tblHosts.setLayoutData( gd );
+
+    tblHosts.setData(  FormToolkit.KEY_DRAW_BORDER );
+
 
     this.resourcesTypeAdapter.attachToHostName( this.hostsViewer );
     

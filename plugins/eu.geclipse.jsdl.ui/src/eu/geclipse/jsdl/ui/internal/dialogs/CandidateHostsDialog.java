@@ -51,7 +51,7 @@ import eu.geclipse.jsdl.ui.providers.FeatureLabelProvider;
  *
  */
 public class CandidateHostsDialog extends Dialog {
-  
+ 
   protected CheckboxTableViewer hostsViewer = null;
   protected Composite panel = null;
   protected String title = null;
@@ -60,6 +60,7 @@ public class CandidateHostsDialog extends Dialog {
   private JSDLJobDescription jobDescription = null;
   private List<String> existingHosts = new ArrayList<String>();  
   private String[] selectedHosts = null;
+
   
 
   /**
@@ -84,7 +85,7 @@ public class CandidateHostsDialog extends Dialog {
   @Override
   protected void configureShell( final Shell shell ) {
     
-//    shell.setSize( 600, 300 );
+    shell.setSize( 600, 300 );
     
     super.configureShell( shell );
     if( this.title != null ) {
