@@ -1,3 +1,17 @@
+/*****************************************************************************
+ * Copyright (c) 2006 Marc R. Hoffmann
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * From the article "Eclipse Workbench: Using the Selection Service" at
+ * http://www.eclipse.org/articles/Article-WorkbenchSelections/article.html
+ * 
+ * Contributors:
+ *    Marc R. Hoffmann
+ *****************************************************************************/
+
 package eu.geclipse.terminal.internal;
 
 import org.eclipse.core.runtime.ListenerList;
