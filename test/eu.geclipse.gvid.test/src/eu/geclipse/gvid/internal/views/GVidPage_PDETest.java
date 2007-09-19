@@ -41,12 +41,12 @@ public class GVidPage_PDETest {
    */
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
-    final InputStream in;
-    final OutputStream out;
-    String path = "d:/geclipsetest/" + "testfile"; //$NON-NLS-1$ //$NON-NLS-2$
-    in = new FileInputStream( path );
-    path = "d:/geclipsetest/" + "output"; //$NON-NLS-1$ //$NON-NLS-2$
-    out = new FileOutputStream( path );
+    //final InputStream in;
+    //final OutputStream out;
+    //String path = "d:/geclipsetest/" + "testfile"; //$NON-NLS-1$ //$NON-NLS-2$
+    //in = new FileInputStream( path );
+    //path = "d:/geclipsetest/" + "output"; //$NON-NLS-1$ //$NON-NLS-2$
+    //out = new FileOutputStream( path );
   }
 
   /**tests the method GvidPage
