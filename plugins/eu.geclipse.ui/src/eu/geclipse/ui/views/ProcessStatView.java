@@ -16,7 +16,6 @@
 package eu.geclipse.ui.views;
 
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.HashSet;
 import org.eclipse.compare.IContentChangeListener;
 import org.eclipse.compare.IContentChangeNotifier;
@@ -43,7 +42,6 @@ import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.ViewPart;
 
 import eu.geclipse.core.monitoring.GridProcessMonitor;
-import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.views.Messages;
 import eu.geclipse.ui.providers.ProcessViewContentprovider;
 import eu.geclipse.ui.providers.ProcessViewLabelProvider;
