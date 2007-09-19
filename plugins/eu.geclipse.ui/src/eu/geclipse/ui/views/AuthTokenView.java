@@ -761,7 +761,7 @@ public class AuthTokenView extends ViewPart implements IContentChangeListener {
     } );
     Menu menu = manager.createContextMenu( this.tokenTable );
     this.tokenTable.setMenu(menu);
-    getSite().registerContextMenu( manager, this.tokenList );
+    getSite().registerContextMenu( manager, getSite().getSelectionProvider() );
   }
 
 }
