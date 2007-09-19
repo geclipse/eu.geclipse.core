@@ -60,6 +60,7 @@ import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridModelListener;
+import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.IVoManager;
 import eu.geclipse.ui.dialogs.NewProblemDialog;
@@ -450,16 +451,45 @@ public class VoPreferencePage
                                                     Messages.getString("VoPreferencePage.delete_vos"), //$NON-NLS-1$
                                                     Messages.getString("VoPreferencePage.really_delete_vos") ); //$NON-NLS-1$
       if ( !confirm ) {
+        IGridElement[] projectElements = {};
+        
+        // Collect a list of children of the GridRoot
+        try {
+          projectElements = GridModel.getRoot().getChildren( null );
+        } catch ( GridModelException gme ) {
+          // GridRoot is not a lazy container
+        }
+        
         IVoManager manager = GridModel.getVoManager();
+        IGridProject igp = null;
+        
         for ( IVirtualOrganization vo : vos ) {
-          try {
-            manager.delete( vo );
-          } catch( GridModelException gmExc ) {
-            NewProblemDialog.openProblem( this.getShell(),
-                                          Messages.getString("VoPreferencePage.error"), //$NON-NLS-1$
-                                          Messages.getString("VoPreferencePage.delete_vo_failed") + " " + vo.getName(), //$NON-NLS-1$ //$NON-NLS-2$
-                                          gmExc,
-                                          null );
+          // Check if the given VO is used by some GridProject on the WS
+          boolean used = false;
+          for( IGridElement element : projectElements ) {
+            igp = (IGridProject) element;
+            if ( igp.isGridProject() && ( vo == igp.getVO() ) ) {
+              used = true;
+              break;
+            }
+          }
+          
+          if ( used ) {
+            MessageDialog.openError( this.getShell(),
+                                     Messages.getString("VoPreferencePage.error"), //$NON-NLS-1$
+                                     String.format( Messages.getString("VoPreferencePage.vo_in_use"), //$NON-NLS-1$
+                                                    vo.getName(),
+                                                    igp.getName() ) );
+          } else {
+            try {
+              manager.delete( vo );
+            } catch( GridModelException gmExc ) {
+              NewProblemDialog.openProblem( this.getShell(),
+                                            Messages.getString("VoPreferencePage.error"), //$NON-NLS-1$
+                                            Messages.getString("VoPreferencePage.delete_vo_failed") + " " + vo.getName(), //$NON-NLS-1$ //$NON-NLS-2$
+                                            gmExc,
+                                            null );
+            }
           }
         }
         updateButtons();
