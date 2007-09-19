@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>ConnectionWizard</title>
+<style>@import url("../../book.css");</style>
+<style>@import url("../../schema.css");</style>
+</HEAD>
+<BODY>
+<H1><CENTER>ConnectionWizard</CENTER></H1>
+<p></p>
+<h6 class=CaptionFigColumn id=header>Identifier: </h6>eu.geclipse.ui.eu.geclipse.ui.connection.connectionWizard<p></p>
+<h6 class=CaptionFigColumn id=header>Since: </h6>[Enter the first release in which this extension point appears.]
+<p></p>
+
+<p>
+<h6 class=CaptionFigColumn id=header>Description: </h6>Each contributor extending <code>eu.geclipse.core.connectionManagement</code> extension point that wants to provide wizard pages used in New Grid Connection Wizard should use this extension point.</p>
+<p><h6 class=CaptionFigColumn id=header>Configuration Markup:</h6></p>
+<p class=code id=dtd>&lt;!ELEMENT <a name="e.extension">extension</a> (<a href="#e.wizard">wizard</a>+)&gt;</p>
+<p class=code id=dtd>&lt;!ATTLIST extension</p>
+<p class=code id=dtdAttlist>point&nbsp;CDATA #REQUIRED<p class=code id=dtdAttlist>id&nbsp;&nbsp;&nbsp;&nbsp;CDATA #IMPLIED<p class=code id=dtdAttlist>name&nbsp;&nbsp;CDATA #IMPLIED&gt;</p>
+<p></p>
+<p class=ConfigMarkup id=elementDesc>
+This is standard Eclipse's element used for extension point management within Eclipse's Registry</p>
+<br>
+<ul class=ConfigMarkup id=attlistDesc>
+</ul>
+<br><p class=code id=dtd>&lt;!ELEMENT <a name="e.wizard">wizard</a> EMPTY&gt;</p>
+<p class=code id=dtd>&lt;!ATTLIST wizard</p>
+<p class=code id=dtdAttlist>name&nbsp;&nbsp;CDATA #REQUIRED<p class=code id=dtdAttlist>class&nbsp;CDATA #REQUIRED<p class=code id=dtdAttlist>icon&nbsp;&nbsp;CDATA #IMPLIED<p class=code id=dtdAttlist>id&nbsp;&nbsp;&nbsp;&nbsp;CDATA #REQUIRED&gt;</p>
+<p></p>
+<ul class=ConfigMarkup id=attlistDesc>
+<li><b>name</b> - Name of the Wizard.</li>
+<li><b>class</b> - Class implementing the eu.geclipse.ui.wizards.INewWizard interface with UserDataType eu.geclipse.terminal.ITerminalView.</li>
+<li><b>icon</b> - Icon for this wizard, displayed in the first page of the "new terminal wizard" where the wizard can be selected. (optional)</li>
+<li><b>id</b> - </li>
+</ul>
+<br><h6 class=CaptionFigColumn id=header>Examples: </h6>[Enter extension point usage example here.]
+<p></p>
+
+<h6 class=CaptionFigColumn id=header>API Information: </h6>[Enter API information here.]
+<p></p>
+
+<h6 class=CaptionFigColumn id=header>Supplied Implementation: </h6>[Enter information about supplied implementation of this extension point.]
+<p></p>
+
+<br>
+<p class=note id=copyright>
+</p>
+</BODY>
+</HTML>

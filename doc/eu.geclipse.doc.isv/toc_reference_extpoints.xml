@@ -5,8 +5,80 @@
   label="Extension Point Reference"
   link_to="toc.xml#geclipse_reference_extpoint">
   <topic
-    label="Extension Point Reference"
-    href="html/api_reference/index.html">
+    label="eu.geclipse.core.applicationDeployment"
+    href="html/extension-points/eu_geclipse_core_applicationDeployment.html">
+  </topic>
+  <topic
+    label="eu.geclipse.core.authTokenProvider"
+    href="html/extension-points/eu_geclipse_core_authTokenProvider.html">
+  </topic>
+  <topic
+    label="eu.geclipse.core.authTokens"
+    href="html/extension-points/eu_geclipse_core_authTokens.html">
+  </topic>
+  <topic
+    label="eu.geclipse.core.caCertificateLoader"
+    href="html/extension-points/eu_geclipse_core_caCertificateLoader.html">
+  </topic>
+  <topic
+    label="eu.geclipse.core.connectionManagement"
+    href="html/extension-points/eu_geclipse_core_connectionManagement.html">
+  </topic>
+  <topic
+    label="eu.geclipse.core.gridElementCreator"
+    href="html/extension-points/eu_geclipse_core_gridElementCreator.html">
+  </topic>
+  <topic
+    label="eu.geclipse.core.gridJobStatusServiceManager"
+    href="html/extension-points/eu_geclipse_core_gridJobStatusServiceManager.html">
+  </topic>
+  <topic
+    label="eu.geclipse.core.problemProvider"
+    href="html/extension-points/eu_geclipse_core_problemProvider.html">
+  </topic>
+  <topic
+    label="eu.geclipse.grid.jobStatus"
+    href="html/extension-points/eu_geclipse_grid_jobStatus.html">
+  </topic>
+  <topic
+    label="eu.geclipse.gvid.codec"
+    href="html/extension-points/eu_geclipse_gvid_codec.html">
+  </topic>
+  <topic
+    label="eu.geclipse.gvid.dropDownEntry"
+    href="html/extension-points/eu_geclipse_gvid_dropDownEntry.html">
+  </topic>
+  <topic
+    label="eu.geclipse.gvid.newGVidWizards"
+    href="html/extension-points/eu_geclipse_gvid_newGVidWizards.html">
+  </topic>
+  <topic
+    label="eu.geclipse.ui.authTokenUI"
+    href="html/extension-points/eu_geclipse_ui_authTokenUI.html">
+  </topic>
+  <topic
+    label="eu.geclipse.ui.connectionWizard"
+    href="html/extension-points/eu_geclipse_ui_connectionWizard.html">
+  </topic>
+  <topic
+    label="eu.geclipse.ui.efs"
+    href="html/extension-points/eu_geclipse_ui_efs.html">
+  </topic>
+  <topic
+    label="eu.geclipse.ui.jobDetailsFactory"
+    href="html/extension-points/eu_geclipse_ui_jobDetailsFactory.html">
+  </topic>
+  <topic
+    label="eu.geclipse.ui.jobSubmissionWizard"
+    href="html/extension-points/eu_geclipse_ui_jobSubmissionWizard.html">
+  </topic>
+  <topic
+    label="eu.geclipse.ui.newVoWizards"
+    href="html/extension-points/eu_geclipse_ui_newVoWizards.html">
+  </topic>
+  <topic
+    label="eu.geclipse.ui.propertiesFactory"
+    href="html/extension-points/eu_geclipse_ui_propertiesFactory.html">
   </topic>
   <anchor id="geclipse_reference_extpoint_ext" />
 </toc>

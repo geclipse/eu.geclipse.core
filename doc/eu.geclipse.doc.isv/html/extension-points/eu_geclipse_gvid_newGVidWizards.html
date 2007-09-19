@@ -1,0 +1,43 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>New GVid Wizards</title>
+<style>@import url("../../book.css");</style>
+<style>@import url("../../schema.css");</style>
+</HEAD>
+<BODY>
+<H1><CENTER>New GVid Wizards</CENTER></H1>
+<p></p>
+<h6 class=CaptionFigColumn id=header>Identifier: </h6>eu.geclipse.gvid.newGVidWizards<p></p>
+<p>
+<h6 class=CaptionFigColumn id=header>Description: </h6>This extension point is used to plug in new GVid wizards which allow to create GVid sessions using different communication layers or data sources.</p>
+<p><h6 class=CaptionFigColumn id=header>Configuration Markup:</h6></p>
+<p class=code id=dtd>&lt;!ELEMENT <a name="e.extension">extension</a> (<a href="#e.wizard">wizard</a>+)&gt;</p>
+<p class=code id=dtd>&lt;!ATTLIST extension</p>
+<p class=code id=dtdAttlist>point&nbsp;CDATA #REQUIRED<p class=code id=dtdAttlist>id&nbsp;&nbsp;&nbsp;&nbsp;CDATA #IMPLIED<p class=code id=dtdAttlist>name&nbsp;&nbsp;CDATA #IMPLIED&gt;</p>
+<p></p>
+<ul class=ConfigMarkup id=attlistDesc>
+<li><b>id</b> - A unique id that will be used to reference this wizard extension.</li>
+<li><b>name</b> - Name of the wizard extension.</li>
+</ul>
+<br><p class=code id=dtd>&lt;!ELEMENT <a name="e.wizard">wizard</a> EMPTY&gt;</p>
+<p class=code id=dtd>&lt;!ATTLIST wizard</p>
+<p class=code id=dtdAttlist>name&nbsp;&nbsp;CDATA #REQUIRED<p class=code id=dtdAttlist>class&nbsp;CDATA #REQUIRED<p class=code id=dtdAttlist>icon&nbsp;&nbsp;CDATA #IMPLIED<p class=code id=dtdAttlist>id&nbsp;&nbsp;&nbsp;&nbsp;CDATA #REQUIRED&gt;</p>
+<p></p>
+<ul class=ConfigMarkup id=attlistDesc>
+<li><b>name</b> - Name of the Wizard.</li>
+<li><b>class</b> - Class implementing the eu.geclipse.ui.wizards.INewWizard interface using eu.geclipse.gvid.IGVidView as UserDataType.</li>
+<li><b>icon</b> - Icon for this wizard, displayed in the first page of the "new GVid wizard" where the wizard can be selected. (optional)</li>
+<li><b>id</b> - </li>
+</ul>
+<br><h6 class=CaptionFigColumn id=header>Examples: </h6>See eu.geclipse.terminal.glogin for an example.
+<p></p>
+
+<h6 class=CaptionFigColumn id=header>API Information: </h6>Plug-ins that want to extend this extension point have to implement eu.geclipse.ui.wizards.INewWizard using eu.geclipse.gvid.GVidView as UserDataType.
+<p></p>
+
+<br>
+<p class=note id=copyright>
+</p>
+</BODY>
+</HTML>

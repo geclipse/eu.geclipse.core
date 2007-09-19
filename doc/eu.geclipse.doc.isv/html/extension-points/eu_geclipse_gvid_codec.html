@@ -1,0 +1,41 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>GVid Video Codec</title>
+<style>@import url("../../book.css");</style>
+<style>@import url("../../schema.css");</style>
+</HEAD>
+<BODY>
+<H1><CENTER>GVid Video Codec</CENTER></H1>
+<p></p>
+<h6 class=CaptionFigColumn id=header>Identifier: </h6>eu.geclipse.gvid.codec<p></p>
+<p>
+<h6 class=CaptionFigColumn id=header>Description: </h6>This extension point is used to plug in new video codecs for the video compression in GVid.</p>
+<p><h6 class=CaptionFigColumn id=header>Configuration Markup:</h6></p>
+<p class=code id=dtd>&lt;!ELEMENT <a name="e.extension">extension</a> (<a href="#e.codec">codec</a>+)&gt;</p>
+<p class=code id=dtd>&lt;!ATTLIST extension</p>
+<p class=code id=dtdAttlist>point&nbsp;CDATA #REQUIRED<p class=code id=dtdAttlist>id&nbsp;&nbsp;&nbsp;&nbsp;CDATA #IMPLIED<p class=code id=dtdAttlist>name&nbsp;&nbsp;CDATA #IMPLIED&gt;</p>
+<p></p>
+<ul class=ConfigMarkup id=attlistDesc>
+<li><b>id</b> - A unique id that will be used to reference this video codec extension.</li>
+<li><b>name</b> - Name of the video codec extension.</li>
+</ul>
+<br><p class=code id=dtd>&lt;!ELEMENT <a name="e.codec">codec</a> EMPTY&gt;</p>
+<p class=code id=dtd>&lt;!ATTLIST codec</p>
+<p class=code id=dtdAttlist>decoderClass&nbsp;CDATA #REQUIRED<p class=code id=dtdAttlist>name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CDATA #REQUIRED&gt;</p>
+<p></p>
+<ul class=ConfigMarkup id=attlistDesc>
+<li><b>decoderClass</b> - Class implementing the eu.geclipse.gvid.IDecoder interface.</li>
+<li><b>name</b> - Name of the video codec (used to for the codec selection in the preferences page).</li>
+</ul>
+<br><h6 class=CaptionFigColumn id=header>Examples: </h6>See eu.geclipse.gvid.codec.uncompressed for an example.
+<p></p>
+
+<h6 class=CaptionFigColumn id=header>API Information: </h6>Plug-ins that want to extend this extension point have to implement eu.geclipse.gvid.IDecoder. For adding a new codec to GVid the video encoder implementation has to be added to the server side part of GVid.
+<p></p>
+
+<br>
+<p class=note id=copyright>
+</p>
+</BODY>
+</HTML>

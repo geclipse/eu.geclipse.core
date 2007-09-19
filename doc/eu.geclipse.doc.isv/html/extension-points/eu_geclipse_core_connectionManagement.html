@@ -1,0 +1,50 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>connectionManagement</title>
+<style>@import url("../../book.css");</style>
+<style>@import url("../../schema.css");</style>
+</HEAD>
+<BODY>
+<H1><CENTER>connectionManagement</CENTER></H1>
+<p></p>
+<h6 class=CaptionFigColumn id=header>Identifier: </h6>eu.geclipse.core.connectionManagement<p></p>
+<h6 class=CaptionFigColumn id=header>Since: </h6><b>This extension point is part of an interim API that is still under development and expected to change significantly before reaching stability. It is being made available at this early stage to solicit feedback from pioneering adopters on the understanding that any code that uses this API will almost certainly be broken (repeatedly) as the API evolves.</b>
+<p></p>
+
+<p>
+<h6 class=CaptionFigColumn id=header>Description: </h6>This extension point is for providing File Systems (extension of <code>org.eclipse.core.filesystem.filesystems</code>) that could be used by gExplorer. Each contributor can also provide Connection Wizard Pages (extension of <code>eu.geclipse.ui.connection.connectionWizard</code> if some special initiation of File System is required). In other words: each connection implementation must extend this extension point (e.g gridFTP connection). This is representation of transport layer.</p>
+<p><h6 class=CaptionFigColumn id=header>Configuration Markup:</h6></p>
+<p class=code id=dtd>&lt;!ELEMENT <a name="e.extension">extension</a> (<a href="#e.connectionProtocol">connectionProtocol</a>)&gt;</p>
+<p class=code id=dtd>&lt;!ATTLIST extension</p>
+<p class=code id=dtdAttlist>point&nbsp;CDATA #REQUIRED<p class=code id=dtdAttlist>id&nbsp;&nbsp;&nbsp;&nbsp;CDATA #REQUIRED<p class=code id=dtdAttlist>name&nbsp;&nbsp;CDATA #IMPLIED&gt;</p>
+<p></p>
+<p class=ConfigMarkup id=elementDesc>
+This is standard Eclipse's element used for extension point management within Eclipse's Registry</p>
+<br>
+<ul class=ConfigMarkup id=attlistDesc>
+</ul>
+<br><p class=code id=dtd>&lt;!ELEMENT <a name="e.connectionProtocol">connectionProtocol</a> EMPTY&gt;</p>
+<p class=code id=dtd>&lt;!ATTLIST connectionProtocol</p>
+<p class=code id=dtdAttlist>id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CDATA #REQUIRED<p class=code id=dtdAttlist>name&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CDATA #REQUIRED<p class=code id=dtdAttlist>class&nbsp;&nbsp;&nbsp;&nbsp;CDATA #REQUIRED<p class=code id=dtdAttlist>wizardID&nbsp;CDATA #REQUIRED&gt;</p>
+<p></p>
+<ul class=ConfigMarkup id=attlistDesc>
+<li><b>id</b> - Value of this attribute is used to associate File System provided by <code>eu.geclipse.core.connectionManagement</code> extension point with Connection Wizard Pages provided by <code>eu.geclipse.ui.connection.connectionWizard</code> extension point (it must be used in <code>eu.geclipse.ui.connection.connectionWizard</code>)</li>
+<li><b>name</b> - Value of name attribute will be used to present connection parameters to user, therefore it should be user readable name.</li>
+<li><b>class</b> - Value of this attribute binds connectionManagement with FileSystem. It should be the same as value of attribute <code>class</code> in element <code>run</code> (in element <code>filesystem</code>) in <code>org.eclipse.core.filesystem.filesystems</code> extension point.</li>
+<li><b>wizardID</b> - Set to true if this extension point requires data from user to connect. This data is taken from Connection Wizard Pages. Developer should provide Connection Wizard Pages by extending <code>eu.geclipse.ui.connection.connectionWizard</code> extension point.</li>
+</ul>
+<br><h6 class=CaptionFigColumn id=header>Examples: </h6>[Enter extension point usage example here.]
+<p></p>
+
+<h6 class=CaptionFigColumn id=header>API Information: </h6>[Enter API information here.]
+<p></p>
+
+<h6 class=CaptionFigColumn id=header>Supplied Implementation: </h6>[Enter information about supplied implementation of this extension point.]
+<p></p>
+
+<br>
+<p class=note id=copyright>
+</p>
+</BODY>
+</HTML>

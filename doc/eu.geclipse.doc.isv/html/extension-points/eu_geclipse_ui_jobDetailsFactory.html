@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<HTML>
+<HEAD><meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<title>eu.geclipse.ui.jobDetailsFactory</title>
+<style>@import url("../../book.css");</style>
+<style>@import url("../../schema.css");</style>
+</HEAD>
+<BODY>
+<H1><CENTER>eu.geclipse.ui.jobDetailsFactory</CENTER></H1>
+<p></p>
+<h6 class=CaptionFigColumn id=header>Identifier: </h6>eu.geclipse.ui.eu.geclipse.ui.jobDetailsFactory<p></p>
+<h6 class=CaptionFigColumn id=header>Since: </h6>[Enter the first release in which this extension point appears.]
+<p></p>
+
+<p>
+<h6 class=CaptionFigColumn id=header>Description: </h6>[Enter description of this extension point.]</p>
+<p><h6 class=CaptionFigColumn id=header>Configuration Markup:</h6></p>
+<p class=code id=dtd>&lt;!ELEMENT <a name="e.extension">extension</a> (<a href="#e.JobDetailsFactory">JobDetailsFactory</a>+)+&gt;</p>
+<p class=code id=dtd>&lt;!ATTLIST extension</p>
+<p class=code id=dtdAttlist>point&nbsp;CDATA #REQUIRED<p class=code id=dtdAttlist>id&nbsp;&nbsp;&nbsp;&nbsp;CDATA #IMPLIED<p class=code id=dtdAttlist>name&nbsp;&nbsp;CDATA #IMPLIED&gt;</p>
+<p></p>
+<ul class=ConfigMarkup id=attlistDesc>
+</ul>
+<br><p class=code id=dtd>&lt;!ELEMENT <a name="e.JobDetailsFactory">JobDetailsFactory</a> EMPTY&gt;</p>
+<p class=code id=dtd>&lt;!ATTLIST JobDetailsFactory</p>
+<p class=code id=dtdAttlist>id&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CDATA #REQUIRED<p class=code id=dtdAttlist>class&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CDATA #REQUIRED<p class=code id=dtdAttlist>sourceJobClass&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;CDATA #REQUIRED<p class=code id=dtdAttlist>sourceJobStatusClass&nbsp;CDATA #IMPLIED&gt;</p>
+<p></p>
+<p class=ConfigMarkup id=elementDesc>
+Factory, which produces detailed items of submitted job for "Job Details" view</p>
+<br>
+<ul class=ConfigMarkup id=attlistDesc>
+<li><b>id</b> - </li>
+<li><b>class</b> - Class, which implements this factory</li>
+<li><b>sourceJobClass</b> - Class extending IGridJob, for which this factory can produce detailed items.
+This factory will be used only for IGridJob-s, which are instance of specified sourceJobClass</li>
+<li><b>sourceJobStatusClass</b> - Optionally class extending IGridJobStatus, for which this factory can produce detailed items.
+If you specify it, then this factory will be used only for IGridJob-s, for which getStatus() return object which is instance of sourceJobStatusClass.</li>
+</ul>
+<br><h6 class=CaptionFigColumn id=header>Examples: </h6>[Enter extension point usage example here.]
+<p></p>
+
+<h6 class=CaptionFigColumn id=header>API Information: </h6>[Enter API information here.]
+<p></p>
+
+<h6 class=CaptionFigColumn id=header>Supplied Implementation: </h6>[Enter information about supplied implementation of this extension point.]
+<p></p>
+
+<br>
+<p class=note id=copyright>
+</p>
+</BODY>
+</HTML>
