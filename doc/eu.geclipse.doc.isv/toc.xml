@@ -2,16 +2,23 @@
 <?NLS TYPE="org.eclipse.help.toc"?>
 
 <toc
-  label="g-Eclipse Developer Guide"
+  label="g-Eclipse Developer Guide">
+<!-- 
   link_to="../eu.geclipse.doc.user/toc.xml#geclipse_additionalinformation">
+ -->
+
   <topic label="Programmer's Guide">
     <anchor id="geclipse_reference_howtocontribute" />
   </topic>
+
   <topic label="API Reference">
     <anchor id="geclipse_reference_api" />
   </topic>
+
   <topic label="Extension Point Reference">
     <anchor id="geclipse_reference_extpoint" />
   </topic>
+
   <anchor id="geclipse_reference" />
+
 </toc>
