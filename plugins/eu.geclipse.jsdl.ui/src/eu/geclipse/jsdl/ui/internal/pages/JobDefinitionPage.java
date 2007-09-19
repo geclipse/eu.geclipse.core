@@ -23,11 +23,17 @@ package eu.geclipse.jsdl.ui.internal.pages;
  */
 
 
+import java.net.URL;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -36,6 +42,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
@@ -45,6 +52,7 @@ import org.eclipse.ui.forms.widgets.TableWrapData;
 import eu.geclipse.jsdl.ui.adapters.jsdl.JobDefinitionTypeAdapter;
 import eu.geclipse.jsdl.ui.adapters.jsdl.JobIdentificationTypeAdapter;
 import eu.geclipse.jsdl.ui.editors.JsdlEditor;
+import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.dialogs.MultipleInputDialog;
 
 /**
@@ -82,6 +90,7 @@ public final class JobDefinitionPage extends FormPage
   protected JobDefinitionTypeAdapter jobDefinitionTypeAdapter ;
   protected JobIdentificationTypeAdapter jobIdentificationTypeAdapter;
     
+  private ImageDescriptor helpDesc = null; 
   private boolean contentRefreshed = false;
   private boolean dirtyFlag = false;  
   private final int widgetHeight = 100; 
@@ -204,20 +213,28 @@ public final class JobDefinitionPage extends FormPage
     this.body = form.getBody();
     this.body.setLayout( FormLayoutFactory.createFormTableWrapLayout( true, 1 ));
         
+
     this.jobDefComposite = toolkit.createComposite( this.body );
     this.jobDefComposite.setLayout( FormLayoutFactory.createFormPaneTableWrapLayout( false, 1 ) );
     this.jobDefComposite.setLayoutData( new TableWrapData(TableWrapData.FILL_GRAB ) );
+    /* Create Job Definition Section */
     createJobDefinitionSection( this.jobDefComposite , toolkit );
     
+    /* Load the JobDefinition Adapter for this page */
     this.jobDefinitionTypeAdapter.load();
     
     this.jobIdentComposite = toolkit.createComposite( this.body );
     this.jobIdentComposite.setLayout( FormLayoutFactory.createFormPaneTableWrapLayout( false, 1 ) );
     this.jobIdentComposite.setLayoutData( new TableWrapData(TableWrapData.FILL_GRAB ) );
     
+    /* Create Job Identification Section */
     createJobIdentificationSection( this.jobIdentComposite, toolkit );
     
+    /* Load the JobIdentification Adapter for this page */
     this.jobIdentificationTypeAdapter.load();
+    
+    /* Also add the help system */
+    addFormPageHelp( form );
 
   }
   
@@ -490,6 +507,38 @@ public final class JobDefinitionPage extends FormPage
     this.value = dialog.getStringValue( Messages.getString( "JobDefinitionPage_Value" ) ) ; //$NON-NLS-1$
     
     
+  }
+ 
+
+  
+  private void addFormPageHelp(final ScrolledForm form ) {
+    
+    final String href = getHelpResource();
+    if (href != null) {
+        IToolBarManager manager = form.getToolBarManager();
+        Action helpAction = new Action("help") { //$NON-NLS-1$
+            @Override
+            public void run() {
+                BusyIndicator.showWhile(form.getDisplay(), new Runnable() {
+                    public void run() {
+                        PlatformUI.getWorkbench().getHelpSystem().displayHelpResource(href);
+                    }
+                });
+            }
+        };
+        helpAction.setToolTipText(Messages.getString( "OverviewPage_Help" ));  //$NON-NLS-1$
+        URL stageInURL = Activator.getDefault().getBundle().getEntry( "icons/help.gif" ); //$NON-NLS-1$       
+        this.helpDesc = ImageDescriptor.createFromURL( stageInURL ) ;   
+        helpAction.setImageDescriptor(this.helpDesc);
+        manager.add(helpAction);
+        form.updateToolBar();
+    }
+    
+  }
+  
+  
+  protected String getHelpResource() {
+    return "guide/tools/editors/manifest_editor/DataStaging.htm"; //$NON-NLS-1$
   }
 
   

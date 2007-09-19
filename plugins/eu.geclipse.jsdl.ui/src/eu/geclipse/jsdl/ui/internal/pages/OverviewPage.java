@@ -247,7 +247,7 @@ public final class OverviewPage extends FormPage
   
   protected String getHelpResource() {
     return "guide/tools/editors/manifest_editor/overview.htm"; //$NON-NLS-1$
-}
+  }
   
   private Composite createSection( final IManagedForm mform, final String title,
                                    final String desc, final int numColumns ) {

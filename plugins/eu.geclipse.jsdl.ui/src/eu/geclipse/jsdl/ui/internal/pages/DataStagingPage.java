@@ -16,9 +16,14 @@
  *****************************************************************************/
 package eu.geclipse.jsdl.ui.internal.pages;
 
+import java.net.URL;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -26,6 +31,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -37,6 +43,7 @@ import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.FormPage;
@@ -47,6 +54,7 @@ import org.eclipse.ui.forms.widgets.TableWrapData;
 import eu.geclipse.jsdl.model.DataStagingType;
 import eu.geclipse.jsdl.ui.adapters.jsdl.DataStageTypeAdapter;
 import eu.geclipse.jsdl.ui.editors.JsdlEditor;
+import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.providers.DataStageInLabelProvider;
 import eu.geclipse.jsdl.ui.providers.DataStageOutLabelProvider;
 import eu.geclipse.jsdl.ui.providers.FeatureContentProvider;
@@ -93,6 +101,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
   protected FeatureContentProvider featureContentProvider = new FeatureContentProvider();
   protected FeatureLabelProvider featureLabelProvider = new FeatureLabelProvider();
   
+  private ImageDescriptor helpDesc = null;
   private TableColumn column;    
   private final int WIDGET_HEIGHT = 100;
   private boolean contentRefreshed = false;
@@ -196,17 +205,22 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
     this.stageInSection.setLayout(FormLayoutFactory.createFormPaneTableWrapLayout(false, 1));
     this.stageInSection.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
 
+    /* Create the Stage-In Section */
     createStageInSection( this.stageInSection , toolkit );
    
     this.stageOutSection = toolkit.createComposite( this.body );
     this.stageOutSection.setLayout(FormLayoutFactory.createFormPaneTableWrapLayout(false, 1));
     this.stageOutSection.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
 
+    /* Create the Stage-Out Section */
     createStageOutSection( this.stageInSection, toolkit );    
 
     /*Load the Adapters for this page */
     
     this.dataStageTypeAdapter.load();
+    
+    /* Also add the help system */
+    addFormPageHelp( form );
     
   }
  
@@ -528,7 +542,39 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    
    toolkit.paintBordersFor( client );
 
-}
+  } // end createStageOutSection()
+  
+  
+  
+  private void addFormPageHelp(final ScrolledForm form ) {
+    
+    final String href = getHelpResource();
+    if (href != null) {
+        IToolBarManager manager = form.getToolBarManager();
+        Action helpAction = new Action("help") { //$NON-NLS-1$
+            @Override
+            public void run() {
+                BusyIndicator.showWhile(form.getDisplay(), new Runnable() {
+                    public void run() {
+                        PlatformUI.getWorkbench().getHelpSystem().displayHelpResource(href);
+                    }
+                });
+            }
+        };
+        helpAction.setToolTipText(Messages.getString( "OverviewPage_Help" ));  //$NON-NLS-1$
+        URL stageInURL = Activator.getDefault().getBundle().getEntry( "icons/help.gif" ); //$NON-NLS-1$       
+        this.helpDesc = ImageDescriptor.createFromURL( stageInURL ) ;   
+        helpAction.setImageDescriptor(this.helpDesc);
+        manager.add(helpAction);
+        form.updateToolBar();
+    }
+    
+  }
+  
+  
+  protected String getHelpResource() {
+    return "guide/tools/editors/manifest_editor/DataStaging.htm"; //$NON-NLS-1$
+  }
  
  
  

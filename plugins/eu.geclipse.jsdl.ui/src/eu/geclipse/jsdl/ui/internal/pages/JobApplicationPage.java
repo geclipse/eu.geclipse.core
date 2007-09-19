@@ -12,9 +12,14 @@ package eu.geclipse.jsdl.ui.internal.pages;
 /**
  * @author nloulloud
  */
+import java.net.URL;
+
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -22,6 +27,7 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -31,6 +37,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.FormPage;
@@ -41,6 +48,7 @@ import eu.geclipse.jsdl.model.posix.ArgumentType;
 import eu.geclipse.jsdl.model.posix.EnvironmentType;
 import eu.geclipse.jsdl.ui.adapters.jsdl.ApplicationTypeAdapter;
 import eu.geclipse.jsdl.ui.adapters.posix.PosixApplicationTypeAdapter;
+import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.dialogs.MultipleInputDialog;
 import eu.geclipse.jsdl.ui.providers.FeatureContentProvider;
 import eu.geclipse.jsdl.ui.providers.FeatureLabelProvider;
@@ -123,11 +131,15 @@ public final class JobApplicationPage extends FormPage
   protected ApplicationTypeAdapter applicationTypeAdapter;
   protected PosixApplicationTypeAdapter posixApplicationTypeAdapter;
   protected Object[][] value = null;
+  
+  private ImageDescriptor helpDesc = null;
   private TableColumn column;
   private boolean contentRefreshed = false;
   private boolean dirtyFlag = false;
   private final int WIDGET_HEIGHT = 100;
 
+  
+  
   /**
    * JobApplicationPage class constructor. Initializes the JobApplica Page by
    * passing as an argument the container JSDL editor.
@@ -138,6 +150,8 @@ public final class JobApplicationPage extends FormPage
     super( editor, PAGE_ID, Messages.getString( "JobApplicationPage_PageTitle" ) ); //$NON-NLS-1$
   } // End Class Constructor
 
+  
+  
   @Override
   public void setActive( final boolean active ) {
     if( active ) {
@@ -148,11 +162,15 @@ public final class JobApplicationPage extends FormPage
     } // end_if active
   } // End void setActive()
 
+  
+  
   @Override
   public boolean isDirty() {
     return this.dirtyFlag;
   } // End boolean isDirty()
 
+  
+  
   /**
    * This method set's the dirty status of the page.
    * 
@@ -169,6 +187,8 @@ public final class JobApplicationPage extends FormPage
     return this.contentRefreshed;
   }
 
+    
+  
   /**
    * Method that set's the JobApplication Page content. The content is the root
    * JSDL element. Also this method is responsible to initialize the associated
@@ -201,33 +221,44 @@ public final class JobApplicationPage extends FormPage
     } // End else
   } // End void getPageContent()
 
+  
+  
   /*
    * This method is used to create the Forms content by creating the form layout
    * and then creating the form sub sections.
    */
   @Override
   protected void createFormContent( final IManagedForm managedForm ) {
+    
     ScrolledForm form = managedForm.getForm();
     FormToolkit toolkit = managedForm.getToolkit();
+    
     form.setText( Messages.getString( "JobApplicationPage_ApplicationTitle" ) ); //$NON-NLS-1$
     this.body = form.getBody();
     this.body.setLayout( FormLayoutFactory.createFormTableWrapLayout( false, 2 ) );
+    
     this.aS = toolkit.createComposite( this.body );
-    this.aS.setLayout( FormLayoutFactory.createFormPaneTableWrapLayout( false,
-                                                                        1 ) );
+    this.aS.setLayout( FormLayoutFactory.createFormPaneTableWrapLayout( false, 1 ) );
     this.aS.setLayoutData( new TableWrapData( TableWrapData.FILL_GRAB ) );
+    
     createApplicationSection( this.aS, toolkit );
     this.apS = toolkit.createComposite( this.body );
-    this.apS.setLayout( FormLayoutFactory.createFormPaneTableWrapLayout( false,
-                                                                         1 ) );
+    this.apS.setLayout( FormLayoutFactory.createFormPaneTableWrapLayout( false, 1 ) );
     this.apS.setLayoutData( new TableWrapData( TableWrapData.FILL_GRAB ) );
     createAdditionalPosixSection( this.apS, toolkit );
     createPosixSection( this.aS, toolkit );
+    
     /* Load the Adapters for this page */
     this.applicationTypeAdapter.load();
     this.posixApplicationTypeAdapter.load();
+    
+    /* Also add the help system */
+    addFormPageHelp( form );
+    
   }
 
+  
+  
   /*
    * Create the Application Section which includes the following: -Application
    * Name (String) -Application Version (String) -Application Description
@@ -275,6 +306,9 @@ public final class JobApplicationPage extends FormPage
     this.applicationTypeAdapter.attachToApplicationDescription( this.txtDescription );
     toolkit.paintBordersFor( client );
   } // End void createApplicationSection()
+  
+  
+  
 
   /*
    * Create the Posix Application Section which includes the following:
@@ -551,6 +585,8 @@ public final class JobApplicationPage extends FormPage
     toolkit.paintBordersFor( client );
   }
 
+  
+  
   /*
    * Create Additional Posix Application Section which includes the following:
    * -Working Directory (String) -Wall Time Limit (nonNegativeInteger) -File
@@ -768,11 +804,46 @@ public final class JobApplicationPage extends FormPage
       this.value[ 0 ][ 2 ] = dialog.getStringValue( Messages.getString( "JobApplicationPage_Value" ) ); //$NON-NLS-1$
     }
   }
-
+  
+  
+  
   public void notifyChanged( final Notification notification ) {
     setDirty( true );
   }
+  
+  
+  private void addFormPageHelp(final ScrolledForm form ) {
+    
+    final String href = getHelpResource();
+    if (href != null) {
+        IToolBarManager manager = form.getToolBarManager();
+        Action helpAction = new Action("help") { //$NON-NLS-1$
+            @Override
+            public void run() {
+                BusyIndicator.showWhile(form.getDisplay(), new Runnable() {
+                    public void run() {
+                        PlatformUI.getWorkbench().getHelpSystem().displayHelpResource(href);
+                    }
+                });
+            }
+        };
+        helpAction.setToolTipText(Messages.getString( "OverviewPage_Help" ));  //$NON-NLS-1$
+        URL stageInURL = Activator.getDefault().getBundle().getEntry( "icons/help.gif" ); //$NON-NLS-1$       
+        this.helpDesc = ImageDescriptor.createFromURL( stageInURL ) ;   
+        helpAction.setImageDescriptor(this.helpDesc);
+        manager.add(helpAction);
+        form.updateToolBar();
+    }
+    
+  }
+  
+  
+  protected String getHelpResource() {
+    return "guide/tools/editors/manifest_editor/DataStaging.htm"; //$NON-NLS-1$
+  }
+  
 
+  
   protected void updateButtons( final TableViewer tableViewer ) {
     ISelection selection = tableViewer.getSelection();
     boolean selectionAvailable = !selection.isEmpty();
@@ -786,4 +857,7 @@ public final class JobApplicationPage extends FormPage
       this.btnEnVarDel.setEnabled( selectionAvailable );
     }
   } // End updateButtons
+  
+  
+  
 } // End Class

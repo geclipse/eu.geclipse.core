@@ -22,16 +22,22 @@ package eu.geclipse.jsdl.ui.internal.pages;
  *
  */
 
+import java.net.URL;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
+import org.eclipse.jface.action.Action;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
@@ -42,6 +48,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.editor.FormPage;
@@ -131,9 +138,8 @@ public final class ResourcesPage extends FormPage
   private Combo cmbOperSystType = null;
   private Combo cmbCPUArchName = null;
   private Combo cmbFileSystemType = null;
-  private Combo cmbDiskSpaceRange = null;  
-//  private Table tblHosts = null;  
-//  private TableColumn column = null;   
+  private Combo cmbDiskSpaceRange = null;
+  private ImageDescriptor helpDesc = null; 
   private boolean contentRefreshed = false;
   private boolean dirtyFlag = false;
   private final int TXT_LENGTH = 300;
@@ -265,16 +271,19 @@ public final class ResourcesPage extends FormPage
     this.right.setLayout(FormLayoutFactory.createFormPaneTableWrapLayout(false, 1));
     this.right.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
     
-    
+    /* Create the Candidate Hosts Section */
     createCandidateHostsSection ( this.left , toolkit );
    
-    
+    /* Create the File System Section */
     createFileSystemSection( this.right, toolkit );
     
+    /* Create the Operating System Section */
     createOSSection( this.left , toolkit  );
     
+    /* Create the CPU Architecture Section */
     createCPUArch( this.right, toolkit );
     
+    /* Create the Additional Elements Section */
     createAddElementsSection( this.left, toolkit );
 
    this.resourcesTypeAdapter.load();
@@ -283,6 +292,9 @@ public final class ResourcesPage extends FormPage
    form.setBackgroundImage(Activator.getDefault().
                            getImageRegistry().get( "formsbackground" )); //$NON-NLS-1$
 
+   /* Also add the help system */
+   addFormPageHelp( form );
+   
   }
   
 
@@ -802,6 +814,34 @@ public final class ResourcesPage extends FormPage
   }
   
   
+  
+  private void addFormPageHelp(final ScrolledForm form ) {
+    
+    final String href = getHelpResource();
+    if (href != null) {
+        IToolBarManager manager = form.getToolBarManager();
+        Action helpAction = new Action("help") { //$NON-NLS-1$
+            @Override
+            public void run() {
+                BusyIndicator.showWhile(form.getDisplay(), new Runnable() {
+                    public void run() {
+                        PlatformUI.getWorkbench().getHelpSystem().displayHelpResource(href);
+                    }
+                });
+            }
+        };
+        helpAction.setToolTipText(Messages.getString( "OverviewPage_Help" ));  //$NON-NLS-1$
+        URL stageInURL = Activator.getDefault().getBundle().getEntry( "icons/help.gif" ); //$NON-NLS-1$       
+        this.helpDesc = ImageDescriptor.createFromURL( stageInURL ) ;   
+        helpAction.setImageDescriptor(this.helpDesc);
+        manager.add(helpAction);
+        form.updateToolBar();
+    }
+    
+  }
+  
+  
+  
   @SuppressWarnings("unchecked")
   protected void handleAddDialog(final String dialogTitle, final Button button){
     
@@ -844,6 +884,9 @@ public final class ResourcesPage extends FormPage
   }
   
   
+  protected String getHelpResource() {
+    return "guide/tools/editors/manifest_editor/Resources.htm"; //$NON-NLS-1$
+  }
   
   /*
    * This function updates the status of the buttons related to
