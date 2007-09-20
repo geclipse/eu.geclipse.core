@@ -13,36 +13,41 @@
  *     RUR (http://acet.rdg.ac.uk/)
  *     - Ashish Thandavan - initial API and implementation
  ******************************************************************************/
-package eu.geclipse.workflow.ui.providers;
+package eu.geclipse.workflow.ui.internal;
 
-import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.gmf.runtime.common.core.service.AbstractProvider;
-import org.eclipse.gmf.runtime.common.core.service.IOperation;
-import org.eclipse.gmf.runtime.common.ui.services.icon.GetIconOperation;
-import org.eclipse.gmf.runtime.common.ui.services.icon.IIconProvider;
-import org.eclipse.swt.graphics.Image;
+import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.draw2d.RectangleFigure;
+
 
 /**
  * @generated
  */
-public class WorkflowIconProvider extends AbstractProvider
-  implements IIconProvider
-{
+public class InputPortFigure extends RectangleFigure {
 
   /**
    * @generated
    */
-  public Image getIcon( IAdaptable hint, int flags ) {
-    return WorkflowElementTypes.getImage( hint );
+  public InputPortFigure() {
+    this.setBackgroundColor( ColorConstants.lightBlue );
+    this.setSize( 1, 1 );
+  }
+  /**
+   * @generated
+   */
+  private boolean myUseLocalCoordinates = false;
+
+  /**
+   * @generated
+   */
+  @Override
+  protected boolean useLocalCoordinates() {
+    return myUseLocalCoordinates;
   }
 
   /**
    * @generated
    */
-  public boolean provides( IOperation operation ) {
-    if( operation instanceof GetIconOperation ) {
-      return ( ( GetIconOperation )operation ).execute( this ) != null;
-    }
-    return false;
+  protected void setUseLocalCoordinates( boolean useLocalCoordinates ) {
+    myUseLocalCoordinates = useLocalCoordinates;
   }
 }

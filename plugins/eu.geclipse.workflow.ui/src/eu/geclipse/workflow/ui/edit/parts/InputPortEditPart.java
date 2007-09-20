@@ -1,20 +1,22 @@
 /*******************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium All rights reserved. This
- * program and the accompanying materials are made available under the terms of
- * the Eclipse Public License v1.0 which accompanies this distribution, and is
- * available at http://www.eclipse.org/legal/epl-v10.html Initial development of
- * the original code was made for the g-Eclipse project founded by European
- * Union project number: FP6-IST-034327 http://www.geclipse.eu/ Contributors:
- * Ashish Thandavan - initial API and implementation
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials 
+ * are made available under the terms of the Eclipse Public License v1.0 
+ * which accompanies this distribution, and is available at 
+ * http://www.eclipse.org/legal/epl-v10.html 
+ * 
+ * Initial development of the original code was made for the g-Eclipse project 
+ * funded by European Union project number: FP6-IST-034327 
+ * http://www.geclipse.eu/
+ *  
+ * Contributors:
+ *     RUR (http://acet.rdg.ac.uk/)
+ *     - Ashish Thandavan - initial API and implementation
  ******************************************************************************/
 package eu.geclipse.workflow.ui.edit.parts;
 
-import org.eclipse.draw2d.Graphics;
 import org.eclipse.draw2d.IFigure;
-// import org.eclipse.draw2d.RectangleFigure;
-import org.eclipse.draw2d.Shape;
 import org.eclipse.draw2d.StackLayout;
-import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.Request;
@@ -27,10 +29,12 @@ import org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles;
 import org.eclipse.gmf.runtime.gef.ui.figures.DefaultSizeNodeFigure;
 import org.eclipse.gmf.runtime.gef.ui.figures.NodeFigure;
 import org.eclipse.gmf.runtime.notation.View;
+
+import eu.geclipse.workflow.ui.internal.InputPortFigure;
 import eu.geclipse.workflow.ui.edit.policies.InputPortItemSemanticEditPolicy;
 
 /**
- * @generated
+ * The class that connects the Figure and Model of the InputPort.
  */
 public class InputPortEditPart extends ShapeNodeEditPart {
 
@@ -160,96 +164,63 @@ public class InputPortEditPart extends ShapeNodeEditPart {
   }
   
   
-  /*
-   * Copyright (c) 2006 Borland Software Corporation
-   * 
-   * All rights reserved. This program and the accompanying materials
-   * are made available under the terms of the Eclipse Public License v1.0
-   * which accompanies this distribution, and is available at
-   * http://www.eclipse.org/legal/epl-v10.html
-   *
-   * Contributors:
-   *    Michael Golubev (Borland) - initial API and implementation
-   */
-  public class InputPortFigure extends Shape {
-    private int[] myCachedPath = new int[8];
-    
-    public InputPortFigure() {
- //    this.setBackgroundColor( ColorConstants.lightBlue );
- //     this.setSize( 1, 1 );
-    }
-
-    /**
-     * @see Shape#fillShape(Graphics)
-     */
-    protected void fillShape(Graphics graphics) {
-      Rectangle r = getBounds();
-
-      int centerX = r.x + r.width / 2;
-      int centerY = r.y + r.height / 2;
-
-      setPathPoint(0, centerX, r.y);
-      setPathPoint(1, r.x + r.width, centerY);
-      setPathPoint(2, centerX, r.y + r.height);
-      setPathPoint(2, r.x, centerY);
-
-      graphics.fillRectangle(getBounds());
-    }
-
-    /**
-     * @see Shape#outlineShape(Graphics)
-     */
-    protected void outlineShape(Graphics graphics) {
-      Rectangle r = getBounds();
-
-      int centerX = r.x + r.width / 2;
-      int centerY = r.y + r.height / 2;
-
-      graphics.drawLine(centerX, r.y, r.x + r.width, centerY);
-      graphics.drawLine(centerX, r.y, r.x, centerY);
-      graphics.drawLine(centerX, r.y + r.height, r.x + r.width, centerY);
-      graphics.drawLine(centerX, r.y + r.height, r.x, centerY);
-    }
-
-    private void setPathPoint(int index, int x, int y){
-      myCachedPath[index * 2] = x;
-      myCachedPath[index * 2 + 1] = x;
-    }
-
-  }
-  
-  
-  
-//  /**
-//   * @generated
+//  /*
+//   * Copyright (c) 2006 Borland Software Corporation
+//   * 
+//   * All rights reserved. This program and the accompanying materials
+//   * are made available under the terms of the Eclipse Public License v1.0
+//   * which accompanies this distribution, and is available at
+//   * http://www.eclipse.org/legal/epl-v10.html
+//   *
+//   * Contributors:
+//   *    Michael Golubev (Borland) - initial API and implementation
 //   */
-//  public class InputPortFigure extends RectangleFigure {
-//
-//    /**
-//     * @generated
-//     */
+//  public class InputPortFigure extends Shape {
+//    private int[] myCachedPath = new int[8];
+//    
 //    public InputPortFigure() {
-//      this.setBackgroundColor( ColorConstants.lightBlue );
-//      this.setSize( 1, 1 );
-//    }
-//    /**
-//     * @generated
-//     */
-//    private boolean myUseLocalCoordinates = false;
-//
-//    /**
-//     * @generated
-//     */
-//    @Override
-//    protected boolean useLocalCoordinates() {
-//      return myUseLocalCoordinates;
+// //    this.setBackgroundColor( ColorConstants.lightBlue );
+// //     this.setSize( 1, 1 );
 //    }
 //
 //    /**
-//     * @generated
+//     * @see Shape#fillShape(Graphics)
 //     */
-//    protected void setUseLocalCoordinates( boolean useLocalCoordinates ) {
-//      myUseLocalCoordinates = useLocalCoordinates;
+//    protected void fillShape(Graphics graphics) {
+//      Rectangle r = getBounds();
+//
+//      int centerX = r.x + r.width / 2;
+//      int centerY = r.y + r.height / 2;
+//
+//      setPathPoint(0, centerX, r.y);
+//      setPathPoint(1, r.x + r.width, centerY);
+//      setPathPoint(2, centerX, r.y + r.height);
+//      setPathPoint(2, r.x, centerY);
+//
+//      graphics.fillRectangle(getBounds());
 //    }
+//
+//    /**
+//     * @see Shape#outlineShape(Graphics)
+//     */
+//    protected void outlineShape(Graphics graphics) {
+//      Rectangle r = getBounds();
+//
+//      int centerX = r.x + r.width / 2;
+//      int centerY = r.y + r.height / 2;
+//
+//      graphics.drawLine(centerX, r.y, r.x + r.width, centerY);
+//      graphics.drawLine(centerX, r.y, r.x, centerY);
+//      graphics.drawLine(centerX, r.y + r.height, r.x + r.width, centerY);
+//      graphics.drawLine(centerX, r.y + r.height, r.x, centerY);
+//    }
+//
+//    private void setPathPoint(int index, int x, int y){
+//      myCachedPath[index * 2] = x;
+//      myCachedPath[index * 2 + 1] = x;
+//    }
+//
 //  }
+//  
+
 }

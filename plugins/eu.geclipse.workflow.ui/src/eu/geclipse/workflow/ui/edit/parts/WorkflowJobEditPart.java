@@ -1,22 +1,22 @@
 /*******************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium All rights reserved. This
- * program and the accompanying materials are made available under the terms of
- * the Eclipse Public License v1.0 which accompanies this distribution, and is
- * available at http://www.eclipse.org/legal/epl-v10.html Initial development of
- * the original code was made for the g-Eclipse project founded by European
- * Union project number: FP6-IST-034327 http://www.geclipse.eu/ 
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials 
+ * are made available under the terms of the Eclipse Public License v1.0 
+ * which accompanies this distribution, and is available at 
+ * http://www.eclipse.org/legal/epl-v10.html 
+ * 
+ * Initial development of the original code was made for the g-Eclipse project 
+ * funded by European Union project number: FP6-IST-034327 
+ * http://www.geclipse.eu/
+ *  
  * Contributors:
- * Ashish Thandavan - initial API and implementation
+ *     RUR (http://acet.rdg.ac.uk/)
+ *     - Ashish Thandavan - initial API and implementation
  ******************************************************************************/
 package eu.geclipse.workflow.ui.edit.parts;
 
 import org.eclipse.draw2d.IFigure;
-import org.eclipse.draw2d.Label;
-import org.eclipse.draw2d.PositionConstants;
-import org.eclipse.draw2d.RoundedRectangle;
 import org.eclipse.draw2d.StackLayout;
-import org.eclipse.draw2d.ToolbarLayout;
-import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.commands.Command;
@@ -29,16 +29,16 @@ import org.eclipse.gmf.runtime.diagram.ui.editpolicies.CreationEditPolicy;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.DragDropEditPolicy;
 import org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles;
 import org.eclipse.gmf.runtime.draw2d.ui.figures.ConstrainedToolbarLayout;
-import org.eclipse.gmf.runtime.draw2d.ui.figures.WrapLabel;
 import org.eclipse.gmf.runtime.gef.ui.figures.DefaultSizeNodeFigure;
 import org.eclipse.gmf.runtime.gef.ui.figures.NodeFigure;
 import org.eclipse.gmf.runtime.notation.View;
-import org.eclipse.swt.graphics.Color;
+
+import eu.geclipse.workflow.ui.internal.WorkflowJobFigure;
 import eu.geclipse.workflow.ui.edit.policies.WorkflowJobCanonicalEditPolicy;
 import eu.geclipse.workflow.ui.edit.policies.WorkflowJobItemSemanticEditPolicy;
 
 /**
- * @generated
+ * The class that connects the Figure and Model of the WorkflowJob
  */
 public class WorkflowJobEditPart extends ShapeNodeEditPart {
 
@@ -242,97 +242,5 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
 //  }
 
   
-  
-  /**
-   * @generated
-   */
-  public class WorkflowJobFigure extends RoundedRectangle {
 
-    /**
-     * @generated
-     */
-    private Label fFigureWorkflowJobNameFigure;
-    /**
-     * @generated
-     */
-    private WrapLabel fFigureWorkflowJobDescriptionFigure;
-
-    /**
-     * Constructor; creates the WorkflowJobFigure
-     * 
-     * Note to developer: FlowLayout does not allow the WrapLabel to wrap its text. 
-     */
-    public WorkflowJobFigure() {
-      ToolbarLayout layoutThis = new ToolbarLayout();
-      layoutThis.setStretchMinorAxis( false );
-      layoutThis.setMinorAlignment( ToolbarLayout.ALIGN_TOPLEFT );
-      layoutThis.setSpacing( 10 );
-      layoutThis.setVertical( true );
-      this.setLayoutManager( layoutThis );
-      this.setPreferredSize( 100, 50 );
-      this.setCornerDimensions( new Dimension( 15, 15 ) );
-      this.setForegroundColor( THIS_FORE );
-      createContents();
-    }
-
-    /**
-     * Creates the contents of the WorkflowJob figure
-     */
-    private void createContents() {
-      Label workflowJobNameFigure = new Label();
-      workflowJobNameFigure.setText( "<...>" );
-      this.add( workflowJobNameFigure );
-      this.fFigureWorkflowJobNameFigure = workflowJobNameFigure;
-      WrapLabel workflowJobDescriptionFigure = new WrapLabel();
-      workflowJobDescriptionFigure.setText( "<..>" );
-      workflowJobDescriptionFigure.setTextWrap( true );
-      workflowJobDescriptionFigure.setTextAlignment( PositionConstants.LEFT );
-      workflowJobDescriptionFigure.setBackgroundColor( JOB_DESC_BACK );
-      workflowJobDescriptionFigure.setOpaque( true );
-      workflowJobDescriptionFigure.setTextWrapWidth( 100 );
-//      workflowJobDescriptionFigure.setFocus( true );
-      this.add( workflowJobDescriptionFigure );
-      this.fFigureWorkflowJobDescriptionFigure = workflowJobDescriptionFigure;
-    }
-    /**
-     * @generated
-     */
-    private boolean myUseLocalCoordinates = false;
-
-    /**
-     * @generated
-     */
-    @Override
-    protected boolean useLocalCoordinates() {
-      return this.myUseLocalCoordinates;
-    }
-
-    /**
-     * @generated
-     */
-    protected void setUseLocalCoordinates( boolean useLocalCoordinates ) {
-      this.myUseLocalCoordinates = useLocalCoordinates;
-    }
-
-    /**
-     * @generated
-     */
-    public Label getFigureWorkflowJobNameFigure() {
-      return this.fFigureWorkflowJobNameFigure;
-    }
-
-    /**
-     * @generated
-     */
-    public WrapLabel getFigureWorkflowJobDescriptionFigure() {
-      return this.fFigureWorkflowJobDescriptionFigure;
-    }
-  }
-  
-  /**
-   * @generated
-   */
-  static final Color THIS_FORE = new Color( null, 220, 220, 240 );
-  
-  static final Color JOB_DESC_BACK = new Color( null, 250, 250, 220 );
 }

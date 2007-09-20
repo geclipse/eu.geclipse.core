@@ -1,12 +1,17 @@
 /*******************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium All rights reserved. This
- * program and the accompanying materials are made available under the terms of
- * the Eclipse Public License v1.0 which accompanies this distribution, and is
- * available at http://www.eclipse.org/legal/epl-v10.html Initial development of
- * the original code was made for the g-Eclipse project founded by European
- * Union project number: FP6-IST-034327 http://www.geclipse.eu/ 
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials 
+ * are made available under the terms of the Eclipse Public License v1.0 
+ * which accompanies this distribution, and is available at 
+ * http://www.eclipse.org/legal/epl-v10.html 
+ * 
+ * Initial development of the original code was made for the g-Eclipse project 
+ * funded by European Union project number: FP6-IST-034327 
+ * http://www.geclipse.eu/
+ *  
  * Contributors:
- * Ashish Thandavan - initial API and implementation
+ *     RUR (http://acet.rdg.ac.uk/)
+ *     - Ashish Thandavan - initial API and implementation
  ******************************************************************************/
 package eu.geclipse.workflow.ui.edit.parts;
 
@@ -60,7 +65,7 @@ import eu.geclipse.workflow.ui.providers.WorkflowElementTypes;
 import eu.geclipse.workflow.ui.providers.WorkflowParserProvider;
 
 /**
- * @generated
+ * The class that connects the Figure and Model of the WorkflowJobDescription.
  */
 public class WorkflowJobDescriptionEditPart extends CompartmentEditPart
   implements ITextAwareEditPart
@@ -132,10 +137,12 @@ public class WorkflowJobDescriptionEditPart extends CompartmentEditPart
   protected String getLabelTextHelper( IFigure figure ) {
     if( figure instanceof WrapLabel ) {
       return ( ( WrapLabel )figure ).getText();
-    } else 
+    } else {
       return ( ( Label )figure ).getText();
+    }
   }
 
+  
   /**
    * @generated
    */
@@ -172,7 +179,14 @@ public class WorkflowJobDescriptionEditPart extends CompartmentEditPart
   /**
    * @generated
    */
-  public void setLabel( WrapLabel figure ) {
+//  public void setLabel( WrapLabel figure ) {
+//    unregisterVisuals();
+//    setFigure( figure );
+//    defaultText = getLabelTextHelper( figure );
+//    registerVisuals();
+//    refreshVisuals();
+//  }
+  public void setLabel( Label figure ) {
     unregisterVisuals();
     setFigure( figure );
     defaultText = getLabelTextHelper( figure );

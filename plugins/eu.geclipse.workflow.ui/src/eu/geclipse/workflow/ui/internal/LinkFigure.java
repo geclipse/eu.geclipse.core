@@ -13,36 +13,37 @@
  *     RUR (http://acet.rdg.ac.uk/)
  *     - Ashish Thandavan - initial API and implementation
  ******************************************************************************/
-package eu.geclipse.workflow.ui.providers;
 
-import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.gmf.runtime.common.core.service.AbstractProvider;
-import org.eclipse.gmf.runtime.common.core.service.IOperation;
-import org.eclipse.gmf.runtime.common.ui.services.icon.GetIconOperation;
-import org.eclipse.gmf.runtime.common.ui.services.icon.IIconProvider;
-import org.eclipse.swt.graphics.Image;
+package eu.geclipse.workflow.ui.internal;
 
-/**
+import org.eclipse.draw2d.PolylineDecoration;
+import org.eclipse.draw2d.RotatableDecoration;
+import org.eclipse.draw2d.geometry.PointList;
+import org.eclipse.gmf.runtime.draw2d.ui.figures.PolylineConnectionEx;
+
+  /**
  * @generated
  */
-public class WorkflowIconProvider extends AbstractProvider
-  implements IIconProvider
-{
+public class LinkFigure extends PolylineConnectionEx {
 
   /**
    * @generated
    */
-  public Image getIcon( IAdaptable hint, int flags ) {
-    return WorkflowElementTypes.getImage( hint );
+  public LinkFigure() {
+    setTargetDecoration( createTargetDecoration() );
   }
 
   /**
    * @generated
    */
-  public boolean provides( IOperation operation ) {
-    if( operation instanceof GetIconOperation ) {
-      return ( ( GetIconOperation )operation ).execute( this ) != null;
-    }
-    return false;
+  private RotatableDecoration createTargetDecoration() {
+    PolylineDecoration df = new PolylineDecoration();
+    PointList pl = new PointList();
+    pl.addPoint( -1, 1 );
+    pl.addPoint( 0, 0 );
+    pl.addPoint( -1, -1 );
+    df.setTemplate( pl );
+    df.setScale( 7, 3 );
+    return df;
   }
 }

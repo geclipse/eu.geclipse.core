@@ -12,8 +12,9 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributors:
- *    Ashish Thandavan - initial API and implementation
--->
+ *    RUR (http://acet.rdg.ac.uk/)
+ *     - Ashish Thandavan - initial API and implementation
+ -->
 <plugin>
 
    <extension point="org.eclipse.team.core.fileTypes">
