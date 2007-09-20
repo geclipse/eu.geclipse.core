@@ -11,9 +11,6 @@
             file="toc_reference_howtocontribute.xml">
       </toc>
       <toc
-            file="toc_reference_api.xml">
-      </toc>
-      <toc
             file="toc_reference_extpoints.xml">
       </toc>
    </extension>

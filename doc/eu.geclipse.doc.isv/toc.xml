@@ -11,7 +11,9 @@
     <anchor id="geclipse_reference_howtocontribute" />
   </topic>
 
-  <topic label="API Reference">
+  <topic
+    label="API Reference"
+    href="html/api_reference/index.html">
     <anchor id="geclipse_reference_api" />
   </topic>
 
