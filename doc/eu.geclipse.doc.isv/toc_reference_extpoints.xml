@@ -37,6 +37,10 @@
     href="html/extension-points/eu_geclipse_core_problemProvider.html">
   </topic>
   <topic
+    label="eu.geclipse.core.jobs.jobID"
+    href="html/extension-points/eu_geclipse_core_jobs_jobID.html">
+  </topic>
+  <topic
     label="eu.geclipse.grid.jobStatus"
     href="html/extension-points/eu_geclipse_grid_jobStatus.html">
   </topic>
