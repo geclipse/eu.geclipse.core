@@ -1,0 +1,59 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css"> 
+	<LINK REL="STYLESHEET" HREF="../../book.css" CHARSET="ISO-8859-1" TYPE="text/css"> 
+	<title>Scientific Data Visualisation using g-Eclipse - Local Rendering</title>
+    <script language="JavaScript" src="PLUGINS_ROOT/org.eclipse.help/livehelp.js"> </script>
+</head>
+
+<body BGCOLOR="#ffffff">
+
+<h1>Scientific Data Visualisation using g-Eclipse</h1>
+<h2>Visualising Scientific Data on Local Machine</h2>
+
+<p>
+<b>Prerequisite:</b> Have created a VTK Pipeline file (*.vtkpipeline), with fully defined 
+algorithm set and an absolute path to the location of an existing data set. Refer to 
+ <a href="CreatingVtkPipelineFile.html">Creating VTK Pipeline File</a> and 
+ <a href="SpecifyingVtkPipelineContent.html">Specifying VTK Pipeline Content</a>
+</p>
+
+<p>
+<b>Step 1:</b> Right-click on the VTK Pipeline file and select "Render Locally". 
+The figure below shows this action, which will bring up the Visualisation view and 
+after a short while (note that due to the loading of the VTK module, the first time 
+will take longer) your processed data will be displayed.
+</br></br>
+<img src="images/VtkPipelineFile_renderAction.jpg" alt="Screen-shot Showing 
+How to Invoke an Action to Perform Local Data Rendering" width="800">
+</br>Figure 1: Invoking an action to perform local data rendering.</br></br>
+</p>
+
+<p>
+<b>Step 2:</b> Explore the data using your mouse. The basic interaction commands are 
+zoom (right-click), rotate (left-click) and move (middle button). In the final 
+implementation, more interaction options will be integrated, such as sliders to 
+move the algorithm parameter values, etc.
+</p>
+
+<p>
+You will see a locally rendered image as shown on the figure below. 
+</br></br>
+<img src="images/VtkPipelineFile_renderedLocally.jpg" alt="Screen-shot of the 
+Locally Rendered Iso surface Image" width="800">
+</br>Figure 2: Iso surface of a head extracted from volume data.</br></br>
+</p>
+
+<p><ul>
+   <li> <a href="CreatingVtkPipelineFile.html">Creating VTK Pipeline File</a></li>
+   <li> <a href="SpecifyingVtkPipelineContent.html">Specifying VTK Pipeline Content</a></li>
+   <li> <a href="RenderingRemotely.html">Visualising Scientific Data Rendered on Remote Machine</a></li>
+</ul></p>
+<p><a href="Visualization.html">Back to Introduction To Visualisation in g-Eclipse</a></p>
+<p><a href="../maintopic.html">Back to Getting Started</a></p>
+
+</body>
+</html>

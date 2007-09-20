@@ -1,0 +1,94 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css"> 
+	<LINK REL="STYLESHEET" HREF="../../book.css" CHARSET="ISO-8859-1" TYPE="text/css"> 
+	<title>Scientific Data Visualisation using g-Eclipse - Specifying VTK Pipeline Content</title>
+    <script language="JavaScript" src="PLUGINS_ROOT/org.eclipse.help/livehelp.js"> </script>
+</head>
+
+<body BGCOLOR="#ffffff">
+
+<h1>Scientific Data Visualisation using g-Eclipse</h1>
+<h2>Specifying VTK Pipeline Content</h2>
+
+<p>
+<b>This page explains the VTK Pipeline editor. Note that this work is in progress and 
+more information is being added periodically.</b>
+</p> 
+
+<p>
+<b>Prerequisite:</b> Have created a VTK Pipeline file (*.vtkpipeline). Refer to 
+ <a href="CreatingVtkPipelineFile.html">Creating VTK Pipeline File</a>
+</p>
+
+<p>
+<b>Step 1:</b> If the VTK Pipeline editor is not already opened, double-click on the 
+VTK Pipeline file that was created using the VTK Pipeline wizard.
+</br>
+The editor opens up at the overview page that links to the additional editor pages.
+You can see the VTK Pipeline in its raw form in the last page of the editor. You will 
+notice that it is an XML file. You may chose to edit this file directly in its raw 
+form, however, it is recommended that you use the additional editor pages in order to
+guarantee that the file its structure is valid at all time.
+</p>
+
+<p>
+<b>Step 2:</b> Click on the DataSource link from the Overview page or select the tab labelled 
+Data Source Page.</br>
+Under the Data Source Section, you will be able to change the data file location, and 
+the type of the data. </br>
+Under the Data Reader Section, you will be able to change the VTK reader class and 
+add and specify parameters for it. </br> Based on your selection of the data type input
+a list of a number of less often changed parameters, which you will be able to predefine 
+on the Visualisation preference page, will be shown. However, you will still be able to 
+adjust every one of the parameters for the current VTK Pipeline from within this place 
+of the editor.</br>
+This page is in development and therefore for now, any changes you make will not take 
+effect. 
+</p>
+
+<p>
+<b>Step 3:</b> Click on the DataProcessing link from the Overview page or select the tab labelled 
+Data Processing Page. </br>
+On this page you will be able to change the output format. Again based on your selection 
+of the output format, a list of a number of less often changed parameters will be shown. 
+And again, you will be able to adjust every one of the parameters for the current 
+VTK Pipeline from within this place of the editor.</br>
+This page is in development and therefore for now, any changes you make will not take 
+effect. 
+</p>
+
+<p>
+<b>Step 4:</b> Click on the VTKFilter link from the Overview page or select the tab labelled 
+VTK Filter Algorithm Page. </br>
+On this page you will be able to add filter algorithms and set their respective 
+attributes.</br>
+This page is in development and therefore for now, any changes you make will not take 
+effect. 
+</p>
+
+<p>
+As the specification of a data processing pipeline may get quite complex, with many 
+filters connecting to one another, the definition of the algorithms may become cumbersome 
+with if only the text editor is available. Therefore, in the final state of the g-Eclipse 
+Visualisation module, the need is to include a graphical editor as part of this text 
+editor.  
+</p>
+
+<p>
+You can learn more about VTK at <a href="http://www.vtk.org/">VTK Homepage</a><br>
+</p>
+
+<p><ul>
+   <li> <a href="CreatingVtkPipelineFile.html">Creating VTK Pipeline File</a></li>
+   <li> <a href="RenderingLocally.html">Visualising Scientific Data on Local Machine</a></li>
+   <li> <a href="RenderingRemotely.html">Visualising Scientific Data Rendered on Remote Machine</a></li>
+</ul></p>
+<p><a href="Visualization.html">Back to Introduction To Visualisation in g-Eclipse</a></p>
+<p><a href="../maintopic.html">Back to Getting Started</a></p>
+
+</body>
+</html>
