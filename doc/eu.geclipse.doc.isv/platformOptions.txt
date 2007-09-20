@@ -1,0 +1,26 @@
+-public
+-sourcepath "
+;../@repDirectory@eu.geclipse.core/src
+;../@repDirectory@eu.geclipse.core.filesystem/src
+;../@repDirectory@eu.geclipse.core.jobs/src
+;../@repDirectory@eu.geclipse.gvid/src
+;../@repDirectory@eu.geclipse.info/src
+;../@repDirectory@eu.geclipse.ui/src
+"
+-verbose
+-encoding "iso-8859-1"
+-charset "iso-8859-1"
+-d html/api_reference
+-breakiterator
+-use
+-splitIndex
+-windowtitle "g-Eclipse API Specification"
+-doctitle "g-Eclipse API Specification"
+-header "<b>g-Eclipse</b><br>Release 0.5.0"
+-keywords
+eu.geclipse.core
+eu.geclipse.core.filesystem
+eu.geclipse.core.jobs
+eu.geclipse.gvid
+eu.geclipse.info
+eu.geclipse.ui

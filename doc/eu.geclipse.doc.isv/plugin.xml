@@ -17,5 +17,29 @@
             file="toc_reference_extpoints.xml">
       </toc>
    </extension>
+   <extension
+         point="org.eclipse.pde.core.javadoc">
+      <javadoc
+            path="html/api_reference">
+         <plugin
+               id="eu.geclipse.core">
+         </plugin>
+         <plugin
+               id="eu.geclipse.core.filesystem">
+         </plugin>
+         <plugin
+               id="eu.geclipse.core.jobs">
+         </plugin>
+         <plugin
+               id="eu.geclipse.gvid">
+         </plugin>
+         <plugin
+               id="eu.geclipse.info">
+         </plugin>
+         <plugin
+               id="eu.geclipse.ui">
+         </plugin>
+      </javadoc>
+   </extension>
 
 </plugin>
