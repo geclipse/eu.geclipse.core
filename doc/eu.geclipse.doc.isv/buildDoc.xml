@@ -3,7 +3,8 @@
 
   <target name="init">
     <available file="${basedir}/index" property="index.present"/>
-  	<property name="repositoryStructure" value="../plugins/"/>
+  	<!-- <property name="repositoryStructure" value="../plugins/"/ -->
+  	<property name="repositoryStructure" value=""/>
   </target>
 
   <target name="all" depends="init" unless="index.present">
