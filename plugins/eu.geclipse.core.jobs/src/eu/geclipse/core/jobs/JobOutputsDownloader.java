@@ -45,17 +45,24 @@ public class JobOutputsDownloader extends Job {
   @Override
   protected IStatus run( final IProgressMonitor monitor ) {
     IStatus status = null;
-    
     try {
       status = this.gridJob.downloadOutputs( monitor );
     } catch( GridException exception ) {
       status = exception.getStatus();
-      
       if( status == null ) {
-        status = new Status( IStatus.ERROR, Activator.PLUGIN_ID, 0, Messages.getString("JobOutputsDownloader.errCannotDownloadJobOutput"), exception ); //$NON-NLS-1$
+        status = new Status( IStatus.ERROR,
+                             Activator.PLUGIN_ID,
+                             0,
+                             Messages.getString( "JobOutputsDownloader.errCannotDownloadJobOutput" ), exception ); //$NON-NLS-1$
       }
     }
-
+    // default status if wasn't returned anywhere
+    if( status == null ) {
+      status = new Status( IStatus.ERROR,
+                           Activator.PLUGIN_ID,
+                           0,
+                           Messages.getString( "JobOutputsDownloader.errCannotDownloadJobOutput" ), null ); //$NON-NLS-1$      
+    }
     return status;
   }
   
