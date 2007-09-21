@@ -3,8 +3,15 @@
 
   <target name="init">
     <available file="${basedir}/index" property="index.present"/>
-  	<!-- <property name="repositoryStructure" value="../plugins/"/ -->
-  	<property name="repositoryStructure" value=""/>
+    <available 
+       file="${basedir}/../eu.geclipse.core/plugin.xml" 
+       property="repositoryStructure" 
+       value="" />
+  	<available 
+  		file="${basedir}/../../plugins/eu.geclipse.core/plugin.xml" 
+  		property="repositoryStructure" 
+  	  value="../plugins/" />
+  	
   </target>
 
   <target name="all" depends="init" unless="index.present">
@@ -12,7 +19,7 @@
   	<!--<antcall target="examplesDocCopy" /-->
   	<antcall target="generateJavadoc" />
     <!--<antcall target="build.index" /-->
-    <!--antcall target="createDocZip" /-->
+    <!--<antcall target="createDocZip" /-->
   </target>
 
 
