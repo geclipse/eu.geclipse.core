@@ -103,8 +103,7 @@ public class InputPortEditPart extends ShapeNodeEditPart {
    * @generated
    */
   protected IFigure createNodeShape() {
-    InputPortFigure figure = new InputPortFigure();
-    return primaryShape = figure;
+    return primaryShape = new InputPortFigure();
   }
 
   /**
@@ -127,10 +126,6 @@ public class InputPortEditPart extends ShapeNodeEditPart {
   /**
    * Creates figure for this edit part.
    * 
-   * Body of this method does not depend on settings in generation model
-   * so you may safely remove <i>generated</i> tag and modify it.
-   * 
-   * @generated
    */
   @Override
   protected NodeFigure createNodeFigure() {
@@ -162,65 +157,5 @@ public class InputPortEditPart extends ShapeNodeEditPart {
     }
     return super.getContentPane();
   }
-  
-  
-//  /*
-//   * Copyright (c) 2006 Borland Software Corporation
-//   * 
-//   * All rights reserved. This program and the accompanying materials
-//   * are made available under the terms of the Eclipse Public License v1.0
-//   * which accompanies this distribution, and is available at
-//   * http://www.eclipse.org/legal/epl-v10.html
-//   *
-//   * Contributors:
-//   *    Michael Golubev (Borland) - initial API and implementation
-//   */
-//  public class InputPortFigure extends Shape {
-//    private int[] myCachedPath = new int[8];
-//    
-//    public InputPortFigure() {
-// //    this.setBackgroundColor( ColorConstants.lightBlue );
-// //     this.setSize( 1, 1 );
-//    }
-//
-//    /**
-//     * @see Shape#fillShape(Graphics)
-//     */
-//    protected void fillShape(Graphics graphics) {
-//      Rectangle r = getBounds();
-//
-//      int centerX = r.x + r.width / 2;
-//      int centerY = r.y + r.height / 2;
-//
-//      setPathPoint(0, centerX, r.y);
-//      setPathPoint(1, r.x + r.width, centerY);
-//      setPathPoint(2, centerX, r.y + r.height);
-//      setPathPoint(2, r.x, centerY);
-//
-//      graphics.fillRectangle(getBounds());
-//    }
-//
-//    /**
-//     * @see Shape#outlineShape(Graphics)
-//     */
-//    protected void outlineShape(Graphics graphics) {
-//      Rectangle r = getBounds();
-//
-//      int centerX = r.x + r.width / 2;
-//      int centerY = r.y + r.height / 2;
-//
-//      graphics.drawLine(centerX, r.y, r.x + r.width, centerY);
-//      graphics.drawLine(centerX, r.y, r.x, centerY);
-//      graphics.drawLine(centerX, r.y + r.height, r.x + r.width, centerY);
-//      graphics.drawLine(centerX, r.y + r.height, r.x, centerY);
-//    }
-//
-//    private void setPathPoint(int index, int x, int y){
-//      myCachedPath[index * 2] = x;
-//      myCachedPath[index * 2 + 1] = x;
-//    }
-//
-//  }
-//  
 
 }

@@ -42,10 +42,8 @@ public class WorkflowVisualIDRegistry {
   /**
    * @generated
    */
-  private static final String DEBUG_KEY = WorkflowDiagramEditorPlugin.getInstance()
-    .getBundle()
-    .getSymbolicName()
-                                          + "/debug/visualID"; //$NON-NLS-1$
+  private static final String DEBUG_KEY = WorkflowDiagramEditorPlugin.getInstance().getBundle().getSymbolicName()
+          + "/debug/visualID"; //$NON-NLS-1$
 
   /**
    * @generated
@@ -89,7 +87,7 @@ public class WorkflowVisualIDRegistry {
         .equalsIgnoreCase( Platform.getDebugOption( DEBUG_KEY ) ) )
       {
         WorkflowDiagramEditorPlugin.getInstance()
-          .logError( "Unable to parse view type as a visualID number: " + type );
+          .logError( "Unable to parse view type as a visualID number: " + type ); //$NON-NLS-1$
       }
     }
     return -1;

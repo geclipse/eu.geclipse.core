@@ -64,7 +64,7 @@ public class WorkflowDiagramEditorPlugin extends AbstractUIPlugin {
   private WorkflowDocumentProvider myDocumentProvider;
 
   /**
-   * @generated
+   * Constructor
    */
   public WorkflowDiagramEditorPlugin() {
   }

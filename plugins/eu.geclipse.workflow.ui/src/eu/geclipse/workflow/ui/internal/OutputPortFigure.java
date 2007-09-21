@@ -19,34 +19,26 @@ import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.RectangleFigure;
 
 /**
- * Holder for the GEF OutputPortFigure
+ * A GEF figure for an OutputPort.
  */
 public class OutputPortFigure extends RectangleFigure {
 
-  /**
-   * @generated
-   */
-  public OutputPortFigure() {
-    this.setBackgroundColor( ColorConstants.darkBlue );
-    this.setSize( 1, 1 );
-  }
-  /**
-   * @generated
-   */
   private boolean myUseLocalCoordinates = false;
 
   /**
-   * @generated
+   * Default Constructor
    */
-  @Override
-  protected boolean useLocalCoordinates() {
-    return myUseLocalCoordinates;
+  public OutputPortFigure() {
+    this.setBackgroundColor( ColorConstants.darkBlue );
+    this.setSize( 10, 10 );
   }
 
-  /**
-   * @generated
-   */
   protected void setUseLocalCoordinates( boolean useLocalCoordinates ) {
-    myUseLocalCoordinates = useLocalCoordinates;
+    this.myUseLocalCoordinates = useLocalCoordinates;
+  }
+
+  @Override
+  protected boolean useLocalCoordinates() {
+    return this.myUseLocalCoordinates;
   }
 }

@@ -30,7 +30,7 @@ import eu.geclipse.workflow.ui.edit.policies.WorkflowBaseItemSemanticEditPolicy;
 import eu.geclipse.workflow.ui.part.Messages;
 
 /**
- * @generated
+ * The class that deals with re-orienting links.
  */
 public class LinkReorientCommand extends EditElementCommand {
 

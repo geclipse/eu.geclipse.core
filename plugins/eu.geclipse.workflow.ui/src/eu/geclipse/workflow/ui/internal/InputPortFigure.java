@@ -20,34 +20,27 @@ import org.eclipse.draw2d.RectangleFigure;
 
 
 /**
- * @generated
+ * A GEF figure for an InputPort.
  */
 public class InputPortFigure extends RectangleFigure {
 
-  /**
-   * @generated
-   */
-  public InputPortFigure() {
-    this.setBackgroundColor( ColorConstants.lightBlue );
-    this.setSize( 1, 1 );
-  }
-  /**
-   * @generated
-   */
   private boolean myUseLocalCoordinates = false;
 
   /**
-   * @generated
+   * Default Constructor
    */
-  @Override
-  protected boolean useLocalCoordinates() {
-    return myUseLocalCoordinates;
+  public InputPortFigure() {
+    this.setBackgroundColor( ColorConstants.lightBlue );
+    this.setSize( 10, 10 );
+  }
+  
+  protected void setUseLocalCoordinates( boolean useLocalCoordinates ) {
+    this.myUseLocalCoordinates = useLocalCoordinates;
   }
 
-  /**
-   * @generated
-   */
-  protected void setUseLocalCoordinates( boolean useLocalCoordinates ) {
-    myUseLocalCoordinates = useLocalCoordinates;
+  @Override
+  protected boolean useLocalCoordinates() {
+    return this.myUseLocalCoordinates;
   }
+
 }

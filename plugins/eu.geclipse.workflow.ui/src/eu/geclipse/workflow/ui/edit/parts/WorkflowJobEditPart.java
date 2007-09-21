@@ -46,24 +46,20 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
    * @generated
    */
   public static final int VISUAL_ID = 1001;
-  /**
-   * @generated
-   */
+
   protected IFigure contentPane;
-  /**
-   * @generated
-   */
+
   protected IFigure primaryShape;
 
   /**
-   * @generated
+   * Constructor
    */
   public WorkflowJobEditPart( View view ) {
     super( view );
   }
 
   /**
-   * @generated
+   * Creates the edit policies for this edit part
    */
   @Override
   protected void createDefaultEditPolicies() {
@@ -91,8 +87,7 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
       }
 
       @Override
-      protected Command createMoveChildCommand( EditPart child, EditPart after )
-      {
+      protected Command createMoveChildCommand( EditPart child, EditPart after ) {
         return null;
       }
 
@@ -105,7 +100,7 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
   }
 
   /**
-   * @generated
+   * Creates the shape of the node
    */
   protected IFigure createNodeShape() {
     WorkflowJobFigure figure = new WorkflowJobFigure();
@@ -113,45 +108,32 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
   }
 
   /**
-   * @generated
+   * Returns the shape of this figure
    */
   public WorkflowJobFigure getPrimaryShape() {
     return ( WorkflowJobFigure )this.primaryShape;
   }
 
   /**
-   * @generated NOT
+   * Add children to this edit part 
    */
   protected boolean addFixedChild( EditPart childEditPart ) {
     if( childEditPart instanceof WorkflowJobNameEditPart ) {
       ( ( WorkflowJobNameEditPart )childEditPart ).setLabel( getPrimaryShape().getFigureWorkflowJobNameFigure() );
       return true;
     }
-//    if( childEditPart instanceof WorkflowJobDescriptionEditPart ) {
-//      ( ( WorkflowJobDescriptionEditPart )childEditPart ).setLabel( getPrimaryShape().getFigureWorkflowJobDescriptionFigure() );
-//      return true;
-//    }
     return false;
   }
 
-  protected boolean addChild( EditPart childEditPart ) {
-    if( childEditPart instanceof WorkflowJobDescriptionEditPart ) {
-      ( ( WorkflowJobDescriptionEditPart )childEditPart ).setLabel( getPrimaryShape().getFigureWorkflowJobDescriptionFigure() );
-      return true;
-    }
-    return false;
-  }
-  
-  
   /**
-   * @generated
+   * Remove a fixed child
    */
   protected boolean removeFixedChild( EditPart childEditPart ) {
     return false;
   }
 
   /**
-   * @generated
+   * Adds the child's visual
    */
   @Override
   protected void addChildVisual( EditPart childEditPart, int index ) {
@@ -160,15 +142,15 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
     }
     super.addChildVisual( childEditPart, 1 );
 
-    if ( addChild( childEditPart )) {
-      return;
-    }
-    super.addChildVisual( childEditPart, -1 );
+//    if ( addChild( childEditPart )) {
+//      return;
+//    }
+//    super.addChildVisual( childEditPart, -1 );
 
   }
 
   /**
-   * @generated
+   * Removes the child's visual
    */
   @Override
   protected void removeChildVisual( EditPart childEditPart ) {
@@ -225,7 +207,7 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
   }
 
   /**
-   * @generated
+   * Returns the content pane
    */
   @Override
   public IFigure getContentPane() {

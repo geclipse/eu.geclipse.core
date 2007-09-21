@@ -21,20 +21,20 @@ import org.eclipse.draw2d.RotatableDecoration;
 import org.eclipse.draw2d.geometry.PointList;
 import org.eclipse.gmf.runtime.draw2d.ui.figures.PolylineConnectionEx;
 
-  /**
- * @generated
+/**
+ * The GEF figure for a Link
  */
 public class LinkFigure extends PolylineConnectionEx {
 
   /**
-   * @generated
+   * Default Constructor
    */
   public LinkFigure() {
     setTargetDecoration( createTargetDecoration() );
   }
 
   /**
-   * @generated
+   * Creates the arrow decoration at the end of a link 
    */
   private RotatableDecoration createTargetDecoration() {
     PolylineDecoration df = new PolylineDecoration();

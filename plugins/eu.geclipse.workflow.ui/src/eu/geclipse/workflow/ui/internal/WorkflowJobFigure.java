@@ -24,7 +24,7 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.swt.graphics.Color;
 
 /**
- * Holder of a GEF Figure for a WorkflowJob
+ * The GEF Figure for a WorkflowJob
  * 
  * @author athandavan
  *
@@ -35,82 +35,56 @@ public class WorkflowJobFigure extends RoundedRectangle {
     /**
      * The preferred size for this figure
      */
-    private static final Dimension SIZE = new Dimension( 100, 100 );
+    private static final Dimension SIZE = new Dimension( 100, 50 );
 
+    private boolean myUseLocalCoordinates = false;
 
     private Label figWorkflowJobName;
-    private Label figWorkflowJobDescription;
-//    private WrapLabel figWorkflowJobDescription;
 
     final static Color THIS_FORE = new Color( null, 220, 220, 240 );
-    static final Color JOB_DESC_BACK = new Color( null, 250, 250, 220 );
+    final static Color JOB_NAME_BACK = new Color( null, 250, 250, 220 );
 
     /**
-     * Constructor; creates the WorkflowJobFigure
-     * 
-     * Note to developer: FlowLayout does not allow the WrapLabel to wrap its text. 
+     * Default Constructor. This creates the WorkflowJobFigure.
      */
     public WorkflowJobFigure() {
       ToolbarLayout layoutThis = new ToolbarLayout();
       
       layoutThis.setStretchMinorAxis( false );
       layoutThis.setMinorAlignment( ToolbarLayout.ALIGN_TOPLEFT );
-      layoutThis.setSpacing( 10 );
+      layoutThis.setSpacing( 5 );
       layoutThis.setVertical( true );
       
       this.setLayoutManager( layoutThis );
       this.setPreferredSize( SIZE );
       this.setCornerDimensions( new Dimension( 15, 15 ) );
-//      this.setForegroundColor( THIS_FORE );
+      this.setForegroundColor( THIS_FORE );
       this.setOpaque( true );
 
       createContents();
     }
 
+    
     /**
      * Creates the contents of the WorkflowJob figure
      */
     private void createContents() {
       Label workflowJobNameFigure = new Label();
       workflowJobNameFigure.setText( "<...>" );
+      workflowJobNameFigure.setBackgroundColor( JOB_NAME_BACK );
       this.add( workflowJobNameFigure );
       this.figWorkflowJobName = workflowJobNameFigure;
-
-      Label workflowJobDescFigure = new Label();
-      workflowJobDescFigure.setBackgroundColor( JOB_DESC_BACK );
-      workflowJobDescFigure.setText( "<..>" );
-      workflowJobDescFigure.setEnabled( true );
-      workflowJobDescFigure.setFocusTraversable( true );
-      workflowJobDescFigure.setVisible( false );
-      this.add( workflowJobDescFigure );
-      this.figWorkflowJobDescription = workflowJobDescFigure;
-      
-//      WrapLabel workflowJobDescriptionFigure = new WrapLabel();
-//      workflowJobDescriptionFigure.setText( "<..>" );
-//      workflowJobDescriptionFigure.setTextWrap( true );
-//      workflowJobDescriptionFigure.setTextAlignment( PositionConstants.LEFT );
-//      workflowJobDescriptionFigure.setBackgroundColor( JOB_DESC_BACK );
-//      workflowJobDescriptionFigure.setOpaque( true );
-//      workflowJobDescriptionFigure.setTextWrapWidth( 80 );
-//      workflowJobDescriptionFigure.setFocus( true );
-//      this.add( workflowJobDescriptionFigure );
-//      this.figWorkflowJobDescription = workflowJobDescriptionFigure;
     }
 
 
-//    private boolean myUseLocalCoordinates = false;
+    @Override
+    protected boolean useLocalCoordinates() {
+      return this.myUseLocalCoordinates;
+    }
 
-
-//    protected boolean useLocalCoordinates() {
-//      return this.myUseLocalCoordinates;
-//    }
-
-    /**
-     * @generated
-     */
-//    protected void setUseLocalCoordinates( boolean useLocalCoordinates ) {
-//      this.myUseLocalCoordinates = useLocalCoordinates;
-//    }
+    protected void setUseLocalCoordinates( boolean useLocalCoordinates ) {
+      this.myUseLocalCoordinates = useLocalCoordinates;
+    }
 
     /**
      * @generated
@@ -119,12 +93,12 @@ public class WorkflowJobFigure extends RoundedRectangle {
       return this.figWorkflowJobName;
     }
 
-    /**
-     * @generated
-     */
-    public Label getFigureWorkflowJobDescriptionFigure() {
-      return this.figWorkflowJobDescription;
-    }
+//    /**
+//     * @generated
+//     */
+//    public Label getFigureWorkflowJobDescriptionFigure() {
+//      return this.figWorkflowJobDescription;
+//    }
     
     /**
      * @see org.eclipse.draw2d.Figure#getPreferredSize(int, int)

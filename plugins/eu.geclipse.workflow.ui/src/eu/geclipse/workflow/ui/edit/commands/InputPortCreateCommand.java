@@ -16,6 +16,7 @@
 package eu.geclipse.workflow.ui.edit.commands;
 
 import eu.geclipse.workflow.IWorkflowPackage;
+
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gmf.runtime.emf.type.core.commands.CreateElementCommand;
@@ -23,19 +24,19 @@ import org.eclipse.gmf.runtime.emf.type.core.requests.CreateElementRequest;
 import org.eclipse.gmf.runtime.notation.View;
 
 /**
- * @generated
+ * The command to create an InputPort in the model.
  */
 public class InputPortCreateCommand extends CreateElementCommand {
 
   /**
-   * @generated
+   * Constructor
    */
   public InputPortCreateCommand( CreateElementRequest req ) {
     super( req );
   }
 
   /**
-   * @generated
+   * Returns the WorkflowNode EClass in which the InputPort is created
    */
   @Override
   protected EClass getEClassToEdit() {

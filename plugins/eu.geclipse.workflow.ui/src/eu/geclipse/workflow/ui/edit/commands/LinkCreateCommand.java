@@ -34,25 +34,25 @@ import eu.geclipse.workflow.ui.edit.policies.WorkflowBaseItemSemanticEditPolicy;
 import eu.geclipse.workflow.ui.part.Messages;
 
 /**
- * @generated
+ * The command to create a Link in the model.
  */
 public class LinkCreateCommand extends CreateElementCommand {
 
   /**
-   * @generated
+   * The source of the link
    */
   private final EObject source;
   /**
-   * @generated
+   * The target of the link
    */
   private final EObject target;
   /**
-   * @generated
+   * The workflow in which the link is being created
    */
   private IWorkflow container;
 
   /**
-   * @generated
+   * Constructor
    */
   public LinkCreateCommand( CreateRelationshipRequest request,
                             EObject source,
