@@ -241,12 +241,16 @@ public final class OverviewPage extends FormPage
     this.composite = createDataStageSection(managedForm,
                                  Messages.getString("OverviewPage_DataStagingTitle"),  //$NON-NLS-1$
                           Messages.getString("OverviewPage_DataStagingDescription")); //$NON-NLS-1$
-                                    
+/*
+ * Un-comment for Context-Sensitive Help system
+ */
+//    PlatformUI.getWorkbench().getHelpSystem().setHelp(form.getBody(), "/eu.geclipse.doc.user/html/concepts/jobmanagement/creatingJSDL.html");
     addFormPageHelp( form );
+   
   }
   
   protected String getHelpResource() {
-    return "guide/tools/editors/manifest_editor/overview.htm"; //$NON-NLS-1$
+    return "/eu.geclipse.doc.user/html/concepts/jobmanagement/editingJSDL.html"; //$NON-NLS-1$
   }
   
   private Composite createSection( final IManagedForm mform, final String title,
