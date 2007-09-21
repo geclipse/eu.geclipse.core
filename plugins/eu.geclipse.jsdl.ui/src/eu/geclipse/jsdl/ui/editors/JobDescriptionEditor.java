@@ -30,8 +30,7 @@ import org.eclipse.ui.part.MultiPageEditorPart;
 import org.eclipse.ui.texteditor.ITextEditor;
 
 /**
- * Multi page editor for jsdl files
- * 
+ * Multi page editor for jsdl files  
  * @author katis
  */
 public class JobDescriptionEditor extends MultiPageEditorPart {
@@ -60,6 +59,8 @@ public class JobDescriptionEditor extends MultiPageEditorPart {
     }
   }
 
+  
+  
   @Override
   protected void createPages()
   {

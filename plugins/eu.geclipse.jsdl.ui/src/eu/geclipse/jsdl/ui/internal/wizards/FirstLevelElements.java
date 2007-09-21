@@ -18,7 +18,7 @@ package eu.geclipse.jsdl.ui.internal.wizards;
 import eu.geclipse.jsdl.ui.wizards.specific.IApplicationSpecificPage;
 
 /**
- * Enumeration type holding names of the xml elements describing
+ * Enumeration type holding names of the XML elements describing
  * {@link IApplicationSpecificPage}
  */
 public enum FirstLevelElements {
@@ -60,7 +60,7 @@ public enum FirstLevelElements {
   }
 
   /**
-   * Get alias ov enum value
+   * Get alias of enumeration value
    * 
    * @return "text" for {@link FirstLevelElements#TEXT}<br>
    *         "list" for {@link FirstLevelElements#LIST}<br>
@@ -72,11 +72,11 @@ public enum FirstLevelElements {
   }
 
   /**
-   * Returns enum value for given alias (see
+   * Returns enumeration value for given alias (see
    * {@link FirstLevelElements#getAlias()}
    * 
-   * @param alias alias of enum value
-   * @return enum value for given alias or {@link FirstLevelElements#NULL} if
+   * @param alias alias of enumeration value
+   * @return enumeration value for given alias or {@link FirstLevelElements#NULL} if
    *         there is no value with this alias
    */
   public static FirstLevelElements valueOfAlias( final String alias ) {

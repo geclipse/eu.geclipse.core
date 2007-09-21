@@ -51,7 +51,7 @@ import eu.geclipse.jsdl.ui.internal.wizards.FileType;
 import eu.geclipse.jsdl.ui.wizards.specific.IApplicationSpecificPage;
 
 /**
- * Wizard for creating new jsdl file
+ * Wizard for creating new JSDL file
  * 
  * @author katis
  */
