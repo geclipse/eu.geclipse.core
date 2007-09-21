@@ -21,6 +21,14 @@
     <anchor id="geclipse_whatsnew" />
   </topic>
 
+  <topic 
+    label="Known Issues">
+    <topic
+      label="g-Eclipse Known Issues"
+      href="html/known_issues.html" />
+    <anchor id="geclipse_knownissues" />
+  </topic>
+
   <topic
     label="Legal"
     href="about.html">
