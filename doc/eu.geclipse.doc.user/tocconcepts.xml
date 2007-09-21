@@ -73,6 +73,8 @@
       label="Creating a JSDL Job Description"
       href="html/concepts/jobmanagement/creatingJSDL.html">
     </topic>
+    <topic label="Editing a JSDL Job Description" href="html/concepts/jobmanagement/editingJSDL.html">
+    	<topic label="Job Definition Page" href="html/concepts/jobmanagement/editorpages/jobdefinition.html"></topic></topic>
     <topic 
       label="Submitting a Job"
       href="html/concepts/jobmanagement/jobsubmit.html">
