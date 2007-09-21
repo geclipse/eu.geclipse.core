@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+<head>
+<meta
+  http-equiv="Content-Type"
+  content="text/html; charset=UTF-8">
+<META
+  HTTP-EQUIV="Content-Style-Type"
+  CONTENT="text/css">
+<LINK
+  REL="STYLESHEET"
+  HREF="../../book.css"
+  CHARSET="UTF-8"
+  TYPE="text/css">
+<title>g-Eclipse - Job Details View</title>
+</head>
+
+<body BGCOLOR="#ffffff">
+<h1>Job Details View</h1>
+<p>How to implement MY details shown in view Job Details?</p>
+Every submitted job can has information describing job state on grid like current status, used resources, credentials etc.<br>
+This data are grouped into:<br>
+<ul>
+<li>General (common) details</li>
+<li>Middleware specific details</li>
+</ul>
+
+<h2>UI Components</h2>
+<p>General (common) details:<br>
+<img src="images/jobDetailsGeneral.png"/>
+<p>Middleware specific details:<br>
+<img src="images/jobDetailsMiddleware.png"/>
+
+<h2>Important Extension points</h2>
+<h3>UI extension point</h3>
+<p>For new implementing middleware, Job Details view show only General details.
+To show details specific to new middleware, implement following extension point:
+<h3>eu.geclipse.ui.jobDetailsFactory( jobClass, jobStatusClass )</h3>
+<ul>
+<li>jobClass - name of class, which implements IGridJob for new middleware</li>
+<li>jobStatusClass - optional name of class, which implements IGridJobStatus for new middleware</li>
+</ul>
+<p>If job with specified jobClass and specified jobStatusClass is selected in views 'Grid Projects' or 'Jobs', then this extendsion point will be used to show job details.
+
+
+<h2>Interfaces to implement</h2>
+<dl>
+  <dt><code>eu.geclipse.ui.views.jobdetails.IJobDetailsFactory</code></dt>
+  <dd>Implement this interface to generate details for job selected in view</dd>
+  <dt><code>eu.geclipse.ui.views.jobdetails.IJobDetailsSection</code></dt>
+  <dd>Objects implementing this interace return one detail for selected job. For simple pairs: (detail-name,detail-value) you can just use class <code>JobTextDetail</code>.</dd>
+</dl>
+
+</body>
+
+</html>

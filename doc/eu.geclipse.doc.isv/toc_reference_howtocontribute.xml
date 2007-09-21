@@ -22,5 +22,8 @@
   <topic
     label="Batch Systems"
     href="html/how_to_contribute/gridBatchSystems.html" />
+  <topic
+    label="Job Details View"
+    href="html/how_to_contribute/gridJobDetails.html" />    
   <anchor id="geclipse_reference_howtocontribute_ext" />
 </toc>
