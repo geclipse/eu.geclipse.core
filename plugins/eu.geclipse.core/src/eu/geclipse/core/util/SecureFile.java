@@ -32,13 +32,13 @@ import eu.geclipse.core.internal.Activator;
  * in Java <= 5 or in Eclipse itself. This class should go away with
  * the use of Java 6...
  * 
- * @author ariel
+ * @author agarcia
  * @see    java.io.File
  */
 public class SecureFile extends File {
 
   private static final String SECURE_PERMISSIONS_FAILED 
-    = "Failed to set secure permissions: ";
+    = "Failed to set secure permissions: "; //$NON-NLS-1$
   
   /** Declare some serialVersionUID */
   private static final long serialVersionUID = 101010123456789010L;
@@ -123,16 +123,20 @@ public class SecureFile extends File {
     if ( f.isDirectory() ) {
       mode = "700"; //$NON-NLS-1$
     }
-    String[] cmd = { "chmod", mode, path };
-    String[] env = { "PATH=/bin;/usr/bin;/usr/local/bin" };
+    String[] cmd = { "chmod", mode, path }; //$NON-NLS-1$
+    String[] env = { "PATH=/bin;/usr/bin;/usr/local/bin" }; //$NON-NLS-1$
     Runtime rt = Runtime.getRuntime();
     Process proc = null;
     try {
       proc = rt.exec( cmd, env );
     } catch (Exception ex) {
-      // TODO: replace console logging with appropriate (g)eclipse tools
-      System.out.println( "Failed to set secure permissions:"
-                          + "Exception running chmod:" + ex.toString() );
+      String msg =   SECURE_PERMISSIONS_FAILED
+                   + "Exception running chmod"; //$NON-NLS-1$
+      IStatus status = new Status( IStatus.WARNING, 
+                                   Activator.PLUGIN_ID, IStatus.OK, 
+                                   msg, 
+                                   ex );
+      Activator.logStatus( status );
       return false;
     }
 
@@ -149,7 +153,7 @@ public class SecureFile extends File {
       // Something went wrong
       retVal = 1;
       String msg =   SECURE_PERMISSIONS_FAILED
-                   + "Exception running chmod";
+                   + "Exception waiting for chmod to finish"; //$NON-NLS-1$
       IStatus status = new Status( IStatus.WARNING, 
                                    Activator.PLUGIN_ID, IStatus.OK, 
                                    msg, 
@@ -157,15 +161,19 @@ public class SecureFile extends File {
       Activator.logStatus( status );
     }
     if ( retVal != 0 ) {
-      System.out.println( SECURE_PERMISSIONS_FAILED );
       String line = null;
+      String msg = "chmod command returned non-zero value: "; //$NON-NLS-1$
       try {
         while ( (line = eB.readLine()) != null ) {
-          System.out.println( line );
+          msg.concat( line + " -- " ); //$NON-NLS-1$
         }
       } catch ( IOException ioe ) {
         //
       }
+      IStatus status = new Status( IStatus.WARNING, 
+                                   Activator.PLUGIN_ID, 
+                                   SECURE_PERMISSIONS_FAILED + msg );
+      Activator.logStatus( status );
       return false;
     }
 
@@ -221,7 +229,7 @@ public class SecureFile extends File {
     String filePath = getPath();
     boolean ret = protect( filePath );
     if ( ret != true ) {
-      // CreateNewFile succeded, but setting the secure permissions didn't...
+      // CreateNewFile succeeded, but setting the secure permissions didn't...
       File dfile = new File( filePath );
       dfile.delete();
       // TODO: check this method's policy regarding return value and
