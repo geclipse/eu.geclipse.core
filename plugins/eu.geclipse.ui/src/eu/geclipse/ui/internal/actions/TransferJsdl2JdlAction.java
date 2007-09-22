@@ -114,7 +114,7 @@ public class TransferJsdl2JdlAction extends SelectionListenerAction {
 
       /*
        * get the XSLT file from this plugin! 
-       * Be carefull. the XSLT is distributed to different plugings
+       * Be careful, the XSLT is distributed in different plugins
        */
       Bundle bundle = Activator.getDefault().getBundle();
       IPath path = new Path( "jsdl2jdl.xslt" ); //$NON-NLS-1$
