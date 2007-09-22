@@ -31,25 +31,26 @@ public class ProcessViewLabelProvider extends LabelProvider
   public ProcessViewLabelProvider(){
     loadImages();
   }
+  
   @Override
-  public String getText( final Object o )  {
-    String label = o .toString();
-    if (o instanceof GridProcessMonitor){
+  public String getText( final Object o ) {
+    String label = o.toString();
+    
+    if (o instanceof GridProcessMonitor) {
        label = ((GridProcessMonitor)o).getTarget().getHost();
-      
-    } else if (o instanceof Integer){
+    } else if (o instanceof Integer) {
       // TODO do something fancier here?
     }
     return label;
   }
+  
   @Override
   public Image getImage(final Object o){
     
     if (o instanceof GridProcessMonitor){
       return this.computingImage;
-    } else
-      return this.processImage;
-
+    }
+    return this.processImage;
   }
   
   void loadImages(){
@@ -60,5 +61,5 @@ public class ProcessViewLabelProvider extends LabelProvider
     this.computingImage = compdesc.createImage();
     this.processImage = procdesc.createImage();
   }
-    
+
 }
