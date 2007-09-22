@@ -76,7 +76,7 @@ public class GridProjectNature implements IProjectNature {
    * 
    * @param builderName The name of the builder to be added.
    * 
-   * @throws CoreException If an exception occures when trying to
+   * @throws CoreException If an exception occurs when trying to
    * add the specified builder.
    */
   private void addBuilder( final String builderName ) throws CoreException {
@@ -109,7 +109,7 @@ public class GridProjectNature implements IProjectNature {
    * 
    * @param builderName The name of the builder to be removed.
    * 
-   * @throws CoreException If an exception occures while removing the
+   * @throws CoreException If an exception occurs while removing the
    * specified builder.
    */
   private void removeBuilder( final String builderName ) throws CoreException {

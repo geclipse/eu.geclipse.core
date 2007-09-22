@@ -20,7 +20,7 @@ import org.eclipse.core.runtime.preferences.IScope;
 
 /**
  * Project scope for the Grid project that manages project related
- * settings and preferenes.
+ * settings and preferences.
  */
 public class GridProjectScope implements IScope {
 
