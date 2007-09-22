@@ -110,19 +110,19 @@ public class GridJobView extends ElementManagerViewPart
     super.createTreeColumns( tree );
     TreeColumn idColumn = new TreeColumn( tree, SWT.NONE );
     idColumn.setText( Messages.getString( "GridJobView.id_column" ) ); //$NON-NLS-1$
-    idColumn.setAlignment( SWT.CENTER );
+    idColumn.setAlignment( SWT.LEFT );
     idColumn.setWidth( 200 );
     TreeColumn statusColumn = new TreeColumn( tree, SWT.NONE );
     statusColumn.setText( Messages.getString( "GridJobView.status_column" ) ); //$NON-NLS-1$
-    statusColumn.setAlignment( SWT.CENTER );
+    statusColumn.setAlignment( SWT.LEFT );
     statusColumn.setWidth( 100 );
     TreeColumn reasonColumn = new TreeColumn( tree, SWT.NONE );
     reasonColumn.setText( Messages.getString( "GridJobView.reason_column" ) ); //$NON-NLS-1$
-    reasonColumn.setAlignment( SWT.CENTER );
+    reasonColumn.setAlignment( SWT.LEFT );
     reasonColumn.setWidth( 100 );
     TreeColumn lastUpdateColumn = new TreeColumn( tree, SWT.NONE );
     lastUpdateColumn.setText( Messages.getString( "GridJobView.last_update_column" ) ); //$NON-NLS-1$
-    lastUpdateColumn.setAlignment( SWT.CENTER );
+    lastUpdateColumn.setAlignment( SWT.LEFT );
     lastUpdateColumn.setWidth( 120 );
     return true;
   }
