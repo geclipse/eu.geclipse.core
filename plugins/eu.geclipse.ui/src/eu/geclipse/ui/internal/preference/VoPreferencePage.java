@@ -177,9 +177,11 @@ public class VoPreferencePage
   }
 
   /**
-   * The tabl viewer used to display the VOs.
+   * The table viewer used to display the VOs.
+   *   Package visibility to avoid warning about synthetic accessor
+   *   performance issue.
    */
-  private CheckboxTableViewer voViewer;
+  CheckboxTableViewer voViewer;
   
   /**
    * The button that triggers the creation of a new VO.
@@ -302,8 +304,12 @@ public class VoPreferencePage
           try {
             if ( !event.getChecked() ) {
               manager.setDefault( null );
+            } else {
+              // We want a radio-button behavior, as there is only one default VO
+              VoPreferencePage.this.voViewer.setCheckedElements( new Object[] { vo } );
+              VoPreferencePage.this.voViewer.refresh();
+              manager.setDefault( vo );
             }
-            manager.setDefault( vo );
           } catch ( GridModelException gmExc ) {
             // TODO mathias
             Activator.logException( gmExc );
