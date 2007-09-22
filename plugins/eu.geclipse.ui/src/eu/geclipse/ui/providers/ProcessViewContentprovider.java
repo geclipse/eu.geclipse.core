@@ -32,15 +32,15 @@ public class ProcessViewContentprovider  implements ITreeContentProvider {
    */
   public Object[] getChildren( final Object parentElement ) {
     Object[] result = new Object[0];
-    if (parentElement instanceof GridProcessMonitor[]){
+
+    if (parentElement instanceof GridProcessMonitor[]) {
       result = (GridProcessMonitor[])parentElement;
-    } else if (parentElement instanceof GridProcessMonitor){
+    } else if (parentElement instanceof GridProcessMonitor) {
       GridProcessMonitor mon = (GridProcessMonitor)parentElement;
       result = mon.getProcessList().toArray();
-    } else if (parentElement instanceof GridProcess){
+    } else if (parentElement instanceof GridProcess) {
       GridProcess proc = (GridProcess)parentElement;
       result = proc.getStat().keySet().toArray();
-      
     }
     return result;
   }
@@ -49,7 +49,6 @@ public class ProcessViewContentprovider  implements ITreeContentProvider {
    * @see org.eclipse.jface.viewers.ITreeContentProvider#getParent(java.lang.Object)
    */
   public Object getParent( Object element ) {
-   
     return null;
   }
 
@@ -58,8 +57,9 @@ public class ProcessViewContentprovider  implements ITreeContentProvider {
    */
   public boolean hasChildren( Object element ) {
     boolean result = false;
-    if (element instanceof GridProcessMonitor){
-      result = true;                        // TODO really check if we could read processes
+    if (element instanceof GridProcessMonitor) {
+      // TODO really check if we could read processes
+      result = true;
     }
     return result;
   }
@@ -74,13 +74,12 @@ public class ProcessViewContentprovider  implements ITreeContentProvider {
   /* (non-Javadoc)
    * @see org.eclipse.jface.viewers.IContentProvider#inputChanged(org.eclipse.jface.viewers.Viewer, java.lang.Object, java.lang.Object)
    */
-
   public void inputChanged( Viewer viewer, Object oldInput, Object newInput ) {
     // nothing to do here
   }
 
   public void dispose() {
     // Nothing to do here
- 
   }
+
 }
