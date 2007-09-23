@@ -143,8 +143,7 @@ public class GridProcessMonitor {
               throw new InvocationTargetException( gmExc );
             }
           } catch( InvocationTargetException itExc ) {
-              Activator.logException( itExc );
-              itExc.printStackTrace();
+            Activator.logException( itExc );
             //Throwable cause = itExc.getCause();
             //throw new GridException(eu.geclipse.core.CoreProblems.CONNECTION_FAILED,cause, "Temporary Connection failed"); //$NON-NLS-1$
             success = false;
