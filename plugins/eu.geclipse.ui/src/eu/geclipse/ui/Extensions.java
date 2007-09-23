@@ -111,11 +111,11 @@ public class Extensions {
   private static final String PROPERTIES_FACTORY_ELEMENT = "PropertiesFactory"; //$NON-NLS-1$
   private static final String PROPERTIES_FACTORY_SOURCECLASS_ATTR = "sourceObjectClass"; //$NON-NLS-1$
   private static final String PROPERTIES_FACTORY_CLASS_ATTR = "class"; //$NON-NLS-1$
-  private static final String JOBDETAILS_FACTORY_POINT = "eu.geclipse.ui.jobDetailsFactory";
-  private static final String JOBDETAILS_FACTORY_ELEMENT = "JobDetailsFactory";
-  private static final String JOBDETAILS_FACTORY_SOURCEJOB_CLASS = "sourceJobClass";
-  private static final String JOBDETAILS_FACTORY_SOURCEJOBSTATUS_CLASS = "sourceJobStatusClass";
-  private static final String JOBDETAILS_FACTORY_IMPLEMENTATION_CLASS = "class";
+  private static final String JOBDETAILS_FACTORY_POINT = "eu.geclipse.ui.jobDetailsFactory"; //$NON-NLS-1$
+  private static final String JOBDETAILS_FACTORY_ELEMENT = "JobDetailsFactory"; //$NON-NLS-1$
+  private static final String JOBDETAILS_FACTORY_SOURCEJOB_CLASS = "sourceJobClass"; //$NON-NLS-1$
+  private static final String JOBDETAILS_FACTORY_SOURCEJOBSTATUS_CLASS = "sourceJobStatusClass"; //$NON-NLS-1$
+  private static final String JOBDETAILS_FACTORY_IMPLEMENTATION_CLASS = "class"; //$NON-NLS-1$
   
   /**
    * Get a list of all currently registered authentication token ui factories.
