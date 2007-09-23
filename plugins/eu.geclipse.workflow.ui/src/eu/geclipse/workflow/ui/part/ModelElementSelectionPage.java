@@ -32,6 +32,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
+import eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin;
+
 /**
  * Wizard page that allows to select element from model.
  * 

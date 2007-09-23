@@ -35,6 +35,9 @@ import org.eclipse.ui.IWorkbenchPart;
 
 import eu.geclipse.ui.dialogs.NewProblemDialog;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowEditPart;
+import eu.geclipse.workflow.ui.editor.WorkflowDiagramEditorUtil;
+import eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin;
+import eu.geclipse.workflow.ui.wizards.WorkflowNewDiagramFileWizard;
 
 /**
  * @generated

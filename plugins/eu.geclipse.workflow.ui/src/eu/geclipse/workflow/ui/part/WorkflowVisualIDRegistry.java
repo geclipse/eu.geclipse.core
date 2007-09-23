@@ -29,6 +29,7 @@ import eu.geclipse.workflow.ui.edit.parts.WorkflowEditPart;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowJobDescriptionEditPart;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowJobEditPart;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowJobNameEditPart;
+import eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin;
 
 /**
  * This registry is used to determine which type of visual object should be

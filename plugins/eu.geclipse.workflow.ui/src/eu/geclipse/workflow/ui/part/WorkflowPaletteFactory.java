@@ -24,6 +24,8 @@ import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gef.palette.ToolEntry;
 import org.eclipse.gmf.runtime.diagram.ui.tools.UnspecifiedTypeConnectionTool;
 import org.eclipse.gmf.runtime.diagram.ui.tools.UnspecifiedTypeCreationTool;
+
+import eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin;
 import eu.geclipse.workflow.ui.providers.WorkflowElementTypes;
 
 /**
