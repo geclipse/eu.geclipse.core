@@ -100,7 +100,7 @@ public class WorkflowJobDescriptionEditPart extends CompartmentEditPart
   }
 
   /**
-   * @generated
+   * Creates the edit policies for this editpart
    */
   @Override
   protected void createDefaultEditPolicies() {

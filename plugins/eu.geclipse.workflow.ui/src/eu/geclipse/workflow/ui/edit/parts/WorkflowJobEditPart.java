@@ -59,7 +59,7 @@ public class WorkflowJobEditPart extends ShapeNodeEditPart {
   }
 
   /**
-   * Creates the edit policies for this edit part
+   * Creates the edit policies for this editpart
    */
   @Override
   protected void createDefaultEditPolicies() {

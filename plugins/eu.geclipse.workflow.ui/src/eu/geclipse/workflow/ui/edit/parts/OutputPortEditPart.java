@@ -59,7 +59,7 @@ public class OutputPortEditPart extends ShapeNodeEditPart {
   }
 
   /**
-   * @generated
+   * Creates the edit policies for this editpart
    */
   @Override
   protected void createDefaultEditPolicies() {

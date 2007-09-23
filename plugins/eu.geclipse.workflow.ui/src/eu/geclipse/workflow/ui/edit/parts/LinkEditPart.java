@@ -41,7 +41,7 @@ public class LinkEditPart extends ConnectionNodeEditPart {
   }
 
   /**
-   * @generated
+   * Creates the edit policies for this editpart
    */
   @Override
   protected void createDefaultEditPolicies() {

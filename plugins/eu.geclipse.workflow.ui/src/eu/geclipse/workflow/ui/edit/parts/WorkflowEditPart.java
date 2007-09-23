@@ -38,7 +38,7 @@ public class WorkflowEditPart extends DiagramEditPart {
   }
 
   /**
-   * @generated
+   * Creates the edit policies for this editpart
    */
   @Override
   protected void createDefaultEditPolicies() {
