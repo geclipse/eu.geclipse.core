@@ -16,7 +16,8 @@
 package eu.geclipse.workflow.ui.preferences;
 
 import org.eclipse.gmf.runtime.diagram.ui.preferences.ConnectionsPreferencePage;
-import eu.geclipse.workflow.ui.part.WorkflowDiagramEditorPlugin;
+
+import eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin;
 
 /**
  * @generated

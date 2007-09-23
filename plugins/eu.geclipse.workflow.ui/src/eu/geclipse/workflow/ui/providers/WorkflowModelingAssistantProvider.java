@@ -38,7 +38,7 @@ import eu.geclipse.workflow.ui.edit.parts.InputPortEditPart;
 import eu.geclipse.workflow.ui.edit.parts.OutputPortEditPart;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowEditPart;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowJobEditPart;
-import eu.geclipse.workflow.ui.part.WorkflowDiagramEditorPlugin;
+import eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin;
 
 /**
  * @generated

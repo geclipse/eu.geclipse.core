@@ -22,8 +22,9 @@ import org.eclipse.gmf.runtime.notation.View;
 import org.eclipse.jface.viewers.DecoratingLabelProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.graphics.Image;
+
+import eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin;
 import eu.geclipse.workflow.ui.navigator.WorkflowNavigatorGroup;
-import eu.geclipse.workflow.ui.part.WorkflowDiagramEditorPlugin;
 
 /**
  * @generated

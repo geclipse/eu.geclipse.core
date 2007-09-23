@@ -26,17 +26,12 @@ import eu.geclipse.workflow.ui.edit.policies.WorkflowItemSemanticEditPolicy;
  */
 public class WorkflowEditPart extends DiagramEditPart {
 
-  /**
-   * @generated
-   */
   public final static String MODEL_ID = "Workflow"; //$NON-NLS-1$
-  /**
-   * @generated
-   */
+
   public static final int VISUAL_ID = 79;
 
   /**
-   * @generated
+   * Default constructor.
    */
   public WorkflowEditPart( View view ) {
     super( view );

@@ -36,7 +36,8 @@ import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.navigator.ILinkHelper;
 import org.eclipse.ui.part.FileEditorInput;
-import eu.geclipse.workflow.ui.part.WorkflowDiagramEditorPlugin;
+
+import eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin;
 
 /**
  * @generated

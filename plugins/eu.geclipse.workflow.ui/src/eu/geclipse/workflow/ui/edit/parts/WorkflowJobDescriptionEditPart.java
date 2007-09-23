@@ -60,7 +60,7 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.FontData;
 import org.eclipse.swt.graphics.Image;
 import eu.geclipse.workflow.ui.edit.policies.WorkflowTextSelectionEditPolicy;
-import eu.geclipse.workflow.ui.part.WorkflowDiagramEditorPlugin;
+import eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin;
 import eu.geclipse.workflow.ui.providers.WorkflowElementTypes;
 import eu.geclipse.workflow.ui.providers.WorkflowParserProvider;
 

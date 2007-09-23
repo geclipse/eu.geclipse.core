@@ -35,7 +35,8 @@ import org.eclipse.gmf.runtime.emf.commands.core.command.CompositeTransactionalC
 import org.eclipse.gmf.runtime.emf.type.core.commands.SetValueCommand;
 import org.eclipse.gmf.runtime.emf.type.core.requests.SetRequest;
 import org.eclipse.jface.text.contentassist.IContentAssistProcessor;
-import eu.geclipse.workflow.ui.part.WorkflowDiagramEditorPlugin;
+
+import eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin;
 
 /**
  * @generated

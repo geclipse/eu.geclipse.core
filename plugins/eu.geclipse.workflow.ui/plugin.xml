@@ -41,9 +41,9 @@
          icon="icons/obj16/Workflow.gif"
          extensions="workflow"
          default="true"
-         class="eu.geclipse.workflow.ui.part.WorkflowDiagramEditor"
-         matchingStrategy="eu.geclipse.workflow.ui.part.WorkflowMatchingStrategy"
-         contributorClass="eu.geclipse.workflow.ui.part.WorkflowDiagramActionBarContributor">
+         class="eu.geclipse.workflow.ui.editor.WorkflowDiagramEditor"
+         matchingStrategy="eu.geclipse.workflow.ui.editor.WorkflowMatchingStrategy"
+         contributorClass="eu.geclipse.workflow.ui.editor.WorkflowDiagramActionBarContributor">
       </editor>
    </extension>
    
@@ -61,7 +61,7 @@
       <?gmfgen generated="true"?>
   	  <wizard
            category="eu.geclipse.ui.newResourceCategory"
-           class="eu.geclipse.workflow.ui.part.WorkflowCreationWizard"
+           class="eu.geclipse.workflow.ui.wizards.WorkflowCreationWizard"
            finalPerspective="eu.geclipse.ui.gEclipsePerspective"
            icon="icons/obj16/Workflow.gif"
            id="eu.geclipse.workflow.ui.part.WorkflowCreationWizardID"
@@ -376,7 +376,7 @@
            type="org.eclipse.emf.common.ui.URIEditorInput"
            namespace="eu.geclipse.workflow.ui"
            properties="isURIEditorInput"
-           class="eu.geclipse.workflow.ui.part.WorkflowUriEditorInputTester">
+           class="eu.geclipse.workflow.ui.editor.WorkflowUriEditorInputTester">
        </propertyTester>
    </extension>
 

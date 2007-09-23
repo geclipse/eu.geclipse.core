@@ -22,7 +22,7 @@ import eu.geclipse.workflow.ui.edit.parts.OutputPortEditPart;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowEditPart;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowJobEditPart;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowJobNameEditPart;
-import eu.geclipse.workflow.ui.part.WorkflowDiagramEditorPlugin;
+import eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin;
 import eu.geclipse.workflow.ui.part.WorkflowVisualIDRegistry;
 import eu.geclipse.workflow.ui.providers.WorkflowElementTypes;
 import eu.geclipse.workflow.ui.providers.WorkflowParserProvider;

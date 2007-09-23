@@ -16,8 +16,8 @@
 package eu.geclipse.workflow.ui.navigator;
 
 import eu.geclipse.workflow.ui.edit.parts.WorkflowEditPart;
-import eu.geclipse.workflow.ui.part.WorkflowDiagramEditor;
-import eu.geclipse.workflow.ui.part.WorkflowDiagramEditorPlugin;
+import eu.geclipse.workflow.ui.editor.WorkflowDiagramEditor;
+import eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin;
 import eu.geclipse.workflow.ui.part.WorkflowVisualIDRegistry;
 import java.util.Iterator;
 import org.eclipse.core.runtime.IAdaptable;

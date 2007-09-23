@@ -4,7 +4,7 @@ Bundle-Name: %pluginName
 Bundle-SymbolicName: eu.geclipse.workflow.ui;singleton:=true
 Bundle-Version: 0.5.0.qualifier
 Bundle-ClassPath: .
-Bundle-Activator: eu.geclipse.workflow.ui.part.WorkflowDiagramEditorPlugin
+Bundle-Activator: eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin
 Bundle-Vendor: %providerName
 Bundle-Localization: plugin
 Export-Package: eu.geclipse.workflow.ui.edit.parts, 

@@ -17,7 +17,8 @@ package eu.geclipse.workflow.ui.preferences;
 
 import org.eclipse.core.runtime.preferences.AbstractPreferenceInitializer;
 import org.eclipse.jface.preference.IPreferenceStore;
-import eu.geclipse.workflow.ui.part.WorkflowDiagramEditorPlugin;
+
+import eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin;
 
 /**
  * @generated

@@ -15,7 +15,7 @@
  ******************************************************************************/
 package eu.geclipse.workflow.ui.providers;
 
-import eu.geclipse.workflow.ui.part.WorkflowDiagramEditorPlugin;
+import eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin;
 
 /**
  * @generated
