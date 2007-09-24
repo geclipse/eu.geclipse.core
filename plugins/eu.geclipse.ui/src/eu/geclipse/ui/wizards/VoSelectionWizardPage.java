@@ -64,7 +64,7 @@ public class VoSelectionWizardPage extends WizardPage {
            "VO Selection Page",
            null );
     setDescription( "Specify the VO that should be used" );
-    URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/wizban/newtoken_wiz.gif" ); //$NON-NLS-1$
+    URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/wizban/vo_wiz.gif" ); //$NON-NLS-1$
     setImageDescriptor( ImageDescriptor.createFromURL( imgUrl ) );
     this.allowMultiSelection = allowMultiSelection;
     this.voType = voType;

@@ -15,6 +15,9 @@
 
 package eu.geclipse.ui.wizards;
 
+import java.net.URL;
+
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -28,6 +31,7 @@ import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IVoManager;
 import eu.geclipse.core.model.impl.GenericVirtualOrganization;
 import eu.geclipse.core.model.impl.GenericVoCreator;
+import eu.geclipse.ui.internal.Activator;
 
 /**
  * Wizard page for the {@link GenericVirtualOrganization}.
@@ -47,6 +51,8 @@ public class GenericVoWizardPage
            "Generic VO",
            null );
     setDescription( "Specify the attributes of your VO" );
+    URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/wizban/vo_wiz.gif" ); //$NON-NLS-1$
+    setImageDescriptor( ImageDescriptor.createFromURL( imgUrl ) );
   }
 
   public void createControl( final Composite parent ) {

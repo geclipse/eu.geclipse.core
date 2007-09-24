@@ -417,7 +417,7 @@ public class VoPreferencePage
    * @param vo To {@link IVirtualOrganization} to be edited. 
    */
   public void editVO( final IVirtualOrganization vo ) {
-    URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/authtokenwizard.gif" ); //$NON-NLS-1$
+    URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/wizban/vo_wiz.gif" ); //$NON-NLS-1$
     Wizard wizard = new Wizard() {
       @Override
       public void addPages() {
