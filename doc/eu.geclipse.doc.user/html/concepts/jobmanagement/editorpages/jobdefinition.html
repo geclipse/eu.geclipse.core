@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css"> 
+	<LINK REL="STYLESHEET" HREF="../../../../book.css" CHARSET="ISO-8859-1" 
+	TYPE="text/css"> 
+	<title>g-Eclipse - JSDL Editor - Job Definition Page </title>
+    <script language="JavaScript" 
+    src="PLUGINS_ROOT/org.eclipse.help/livehelp.js"> </script>
+</head>
+
+<body BGCOLOR="#ffffff">
+
+<h1>g-Eclipse - JSDL Editor - Job Definition Page</h1>
+
+<p>The Job Definition page provides an interface for manipulating general
+requirements of the job. It consists of two sections: the <b>Job Definition</b> and <b>Job 
+Identification</b>.</p>
+
+<h2> Job Definition </h2>
+<p>
+This section allows to manipulate the <b>JobDefinition</b> element of a JSDL document.
+The <b>JobDefinition</b> element is the root element of a JSDL document and contains the
+<b>JobDescription</b> element.
+</p>
+
+<img src="../images/jobdefinition_section.png" alt="Job Definition Section" width="474">
+<p>An <b>ID</b> is optional and defines the ID of the Job Definition document.  
+
+<h2> Job Identification</h2>
+
+<p> This section allows to manipulate the <b>JobIdenification</b> element of a 
+JSDL document. This element contains other elements that identify a job.
+</p>
+
+<img src="../images/jobidentification_section.png" alt="Job Identification Section" width="474">
+
+<p> A <b>Job Name</b> is optional and specifies the name of the job in a JSDL
+document. The Job name is of type "String" and may not be unique to a particular
+JSDL document. </p>
+
+<p> A <b> Job Description </b> is optional and provides, human readable, 
+description about the job. The Job Description is of type "String".</p>
+
+<p> A <b> Job Annotation </b> is optional and annotates the job. The Job Annotation
+is of type "String" and may include information that can be used by the consuming
+system. Press <b>Add..</b> for opening an input dialog to insert a Job Annotation. 
+Press <b>Remove</b> to remove the selected Job Annotation. </p>
+
+<p> A <b> Job Project </b> is optional and specifies the project to which the job
+belongs. The Job Project is of type "String" and may include information that can be used by the consuming
+system. Press <b>Add..</b> for opening an input dialog to insert a Job Project. 
+Press <b>Remove</b> to remove the selected Job Project. </p>
+
+</body>
+</html>
