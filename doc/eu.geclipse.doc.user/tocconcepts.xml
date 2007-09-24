@@ -80,6 +80,10 @@
         label="Job Definition Page"
         href="html/concepts/jobmanagement/editorpages/jobdefinition.html">
       </topic>
+      <topic
+      	href="html/concepts/jobmanagement/editorpages/application.html"
+      	label="Application Page">
+      </topic>
     </topic>
     <topic 
       label="Submitting a Job"
