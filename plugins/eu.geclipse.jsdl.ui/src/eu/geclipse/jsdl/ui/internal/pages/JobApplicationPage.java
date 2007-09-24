@@ -839,7 +839,7 @@ public final class JobApplicationPage extends FormPage
   
   
   protected String getHelpResource() {
-    return "guide/tools/editors/manifest_editor/DataStaging.htm"; //$NON-NLS-1$
+    return "/eu.geclipse.doc.user/html/concepts/jobmanagement/editorpages/application.html"; //$NON-NLS-1$
   }
   
 
