@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gmftool:ToolRegistry xmi:version="2.0"
+    xmlns:xmi="http://www.omg.org/XMI"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:gmftool="http://www.eclipse.org/gmf/2005/ToolDefinition">
+  <palette
+      title="workflowPalette">
+    <tools
+        xsi:type="gmftool:ToolGroup"
+        title="Workflow"
+        description=""
+        active="//@palette/@tools.0/@tools.3">
+      <smallIcon
+          xsi:type="gmftool:BundleImage"
+          path="/icons/full/obj16/Workflow.gif"
+          bundle="eu.geclipse.workflow.edit"/>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="Link"
+          description="Create new Link">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="/icons/full/obj16/Link.gif"
+            bundle="eu.geclipse.workflow.edit"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="InputPort"
+          description="Create new InputPort">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="/icons/full/obj16/InputPort.gif"
+            bundle="eu.geclipse.workflow.edit"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="OutputPort"
+          description="Create new OutputPort">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="/icons/full/obj16/OutputPort.gif"
+            bundle="eu.geclipse.workflow.edit"/>
+      </tools>
+      <tools
+          xsi:type="gmftool:CreationTool"
+          title="WorkflowJob"
+          description="Create new WorkflowJob">
+        <smallIcon
+            xsi:type="gmftool:BundleImage"
+            path="/icons/full/obj16/WorkflowJob.gif"
+            bundle="eu.geclipse.workflow.edit"/>
+      </tools>
+    </tools>
+  </palette>
+</gmftool:ToolRegistry>

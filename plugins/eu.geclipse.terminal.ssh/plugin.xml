@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         id="eu.geclipse.terminal.ssh"
+         name="%extension.name.0"
+         point="eu.geclipse.terminal.dropDownEntry">
+      <dropDownEntry
+            class="eu.geclipse.terminal.ssh.internal.SshShell"
+            label="SSH"
+            icon="icons/obj16/ssh.png"/>
+   </extension>
+   <extension
+         point="eu.geclipse.terminal.newTerminalWizards">
+      <wizard
+            class="eu.geclipse.terminal.ssh.internal.SSHWizard"
+            id="eu.geclipse.terminal.ssh.internal.SSHWizard"
+            name="SSH"
+            icon="icons/obj16/ssh.png"/>
+   </extension>
+</plugin>
