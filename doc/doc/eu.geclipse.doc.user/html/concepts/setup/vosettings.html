@@ -1,0 +1,110 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+<meta
+  http-equiv="Content-Type"
+  content="text/html; charset=iso-8859-1">
+<META
+  HTTP-EQUIV="Content-Style-Type"
+  CONTENT="text/css">
+<LINK
+  REL="STYLESHEET"
+  HREF="../../../book.css"
+  CHARSET="ISO-8859-1"
+  TYPE="text/css">
+<title>VO Settings</title>
+<script
+  language="JavaScript"
+  src="PLUGINS_ROOT/org.eclipse.help/livehelp.js"> </script>
+</head>
+
+<body BGCOLOR="#ffffff">
+
+<h1>VO Settings</h1>
+
+<ul>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#createVO">Creating a new VO</a></li>
+<li><a href="#editVO">Editing a VO</a></li>
+<li><a href="#deleteVO">Deleting VOs</a></li>
+</ul>
+
+<h2><a name="overview">Overview</a></h2>
+<p>The most important g-Eclipse preference is the declaration of at
+least one valid Virtual Organization (in short VO). In terms of the
+Grid a VO is
+<blockquote cite="http://en.wikipedia.org/wiki/Virtual_organization">
+[...] a group of individuals or institutions who
+share the computing resources of a "grid" for a common goal;
+</blockquote>
+Within g-Eclipse VOs are used as the central access point to the user's
+personalized Grid. VOs are therefore specific for a certain middleware.
+In general a VO implementation requires at least a contact string for
+contacting a specific information service. This service is afterwards
+used by g-Eclipse to query the Grid - or to be more precise the
+underlying middleware - for available resources like computing elements,
+storage elements and other services.
+
+<p>Since not all currently available middlewares support the concept
+of Virtual Organizations g-Eclipse comes with a generic VO implementation
+that is simply a named but empty resource container. This generic VO
+may also be used as base class for developers to define their own VO.
+
+<p>
+<img border="0" src="images/VOPreferencePage.png" alt="The g-Eclipse VO preference page">
+
+<h2><a name="createVO">Creating a new VO</a></h2>
+<p>You can use the
+<a class="command-link" href='javascript:executeCommand("org.eclipse.ui.window.preferences(preferencePageId=eu.geclipse.ui.internal.preference.VOPreferencePage)")'>
+<img src="PLUGINS_ROOT/org.eclipse.help/command_link.png">
+<b>g-Eclipse &gt; VO-Declarations</b></a> preference page to setup a new
+Virtual Organization. There you can click <b>Add...</b> to start the
+<b>VO Wizard</b>. If you installed g-Eclipse with a middleware extension
+the <b>VO Wizard</b> may show up a first page that let you choose the
+type of the VO you want to create:
+
+<p>
+<img border="0" src="images/VOTypeWizardPage.png" alt="Wizard page for selection a VO type">
+
+<p>
+For the setup of a middleware specific VO please see the corresponding
+help pages of the middleware specific help. If no middleware extension is
+available the <b>VO Wizard</b> will directly switch to the wizard page
+for setting up a generic VO:
+
+<p>
+<img border="0" src="images/GenericVOWizardPage.png" alt="Wizard page for specifying a generic VO">
+
+<p>
+All you have to do here is to enter a name for your generic VO and to press
+<b>Finish</b>. Afterwards the newly create VO will be shown in the VO
+preference page.
+
+<h2><a name="editVO">Editing a VO</a></h2>
+
+<p>
+To edit the settings of a VO open the
+<a class="command-link" href='javascript:executeCommand("org.eclipse.ui.window.preferences(preferencePageId=eu.geclipse.ui.internal.preference.VOPreferencePage)")'>
+<img src="PLUGINS_ROOT/org.eclipse.help/command_link.png">
+<b>g-Eclipse &gt; VO-Declarations</b></a> preference page. Select the VO
+you would like to edit and click <b>Edit...</b>. Now the
+<b>VO Wizard</b> shows up with the and automatically switches to the wizard
+page where you may edit the settings of the selected VO. Note that you can
+change any setting except the VOs name. After you did your changes click
+<b>Finish</b> and your new VO settings will be saved.
+
+<p>
+To start editing a VO you can also simply double-click this VO in the
+list of all currently available VOs.
+
+<h2><a name="deleteVO">Deleting a VO</a></h2>
+To delete one or multiple VOs open the <a class="command-link" href='javascript:executeCommand("org.eclipse.ui.window.preferences(preferencePageId=eu.geclipse.ui.internal.preference.VOPreferencePage)")'>
+<img src="PLUGINS_ROOT/org.eclipse.help/command_link.png">
+<b>g-Eclipse &gt; VO-Declarations</b></a> preference page. Select the
+VOs you want to delete. You may also select multiple VOs that will
+afterwards be deleted in a single operation. Click <b>Remove</b> and the
+selected VOs will be deleted from the list of declared VOs.
+
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css"> 
+	<LINK REL="STYLESHEET" HREF="PLUGINS_ROOT/eu.geclipse.doc.user/book.css" CHARSET="ISO-8859-1" TYPE="text/css"> 
+	<title>Scientific Data Visualisation using g-Eclipse - Creating VTK Pipeline File</title>
+    <script language="JavaScript" src="PLUGINS_ROOT/org.eclipse.help/livehelp.js"> </script>
+</head>
+
+<body BGCOLOR="#ffffff">
+
+<h1>Scientific Data Visualisation using g-Eclipse</h1>
+<h2>Creating VTK Pipeline File</h2>
+
+<p>
+<b>This page describes the VTK Pipeline wizard. Note that this work is in progress and 
+more information is being added periodically.</b>
+</p> 
+
+<p>
+<b>Prerequisites:</b> Have a g-Eclipse Grid Project created. Refer to 
+<a href="../NewProjectWizard.html">Create a new Grid Project</a>
+</p>
+
+<p>
+<b>Step 1:</b> Righ-click on the g-Eclipse Project in the project explorer view and navigate 
+to the VTK Pipeline creation wizard by selecting <b>New &gt; Other &gt; g-Eclipse &gt; 
+VTK Pipeline</b>.</br> The wizard is shown in the picture below.</br></br>
+<img src="images/VtkPipelineWizard_select.jpg" alt="Screen-shot of the VTK Pipeline 
+Wizard Selection" width="800">
+</br>Figure 1: Selecting the VTK Pipeline wizard.</br></br>
+Clicking <b>Next</b> and you will be taken to a wizard that will help you create a VTK 
+Pipeline file and let you define some initial settings for the pipeline. 
+</p>
+
+<p>
+<b>Step 2:</b> On the first page of the wizard, select the location where your file will be 
+saved and type in the name of the file with .vtkpipeline extension. Then click <b>Next</b>.
+</p>
+
+<p>
+<b>Step 3:</b> On the second and last page of this wizard, you are asked to enter some more 
+information. 
+<ul>
+<li>First, you should enter the type of your data. This info will be used to suggest 
+a default VTK reader class that is most suited for your data set. You will have an 
+opportunity to change this reader class later in the VTK Pipeline editor as described 
+<a href="SpecifyingVtkPipelineContent.html">here</a>.</li>
+<li>Next, you have to enter the full path of the data file location. You may want to use 
+the browse button for an easy navigation to the data file.</li>
+<li>Finally, select the type of output you expect after processing the data set. Once 
+again, this info will be user to preset some default parameter values, which you 
+will be able to adjust if you need to.</li>
+</ul>
+Then click the <b>Finish</b> button.
+</p>
+
+<p>
+This completes the creation of the VTK Pipeline file. This file will appear 
+in the project explorer under the location you specified within your g-Eclipse project.
+Also the VTK Pipeline editor will open up, as show on the image below, 
+In this editor you will be able to specify the pipeline further. </br></br>
+<img src="images/VtkPipelineEditor_overviewPage.jpg" alt="Screen-shot of the VTK Pipeline 
+Editor Overview Page" width="800">
+</br>Figure 2: Overview Page of the VTK Pipeline editor.</br></br>
+The use of this editor is explained <a href="SpecifyingVtkPipelineContent.html">here</a>. 
+</p>
+
+<p><ul>
+   <li> <a href="SpecifyingVtkPipelineContent.html">Specifying VTK Pipeline Content</a></li>
+   <li> <a href="RenderingLocally.html">Visualising Scientific Data on Local Machine</a></li>
+   <li> <a href="RenderingRemotely.html">Visualising Scientific Data Rendered on Remote Machine</a></li>
+</ul></p>
+<p><a href="Visualization.html">Back to Introduction To Visualisation in g-Eclipse</a></p>
+<p><a href="../maintopic.html">Back to Getting Started</a></p>
+
+</body>
+</html>

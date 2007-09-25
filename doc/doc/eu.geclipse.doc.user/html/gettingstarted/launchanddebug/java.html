@@ -1,0 +1,77 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css"> 
+	<LINK REL="STYLESHEET" HREF="../../../book.css" CHARSET="ISO-8859-1" TYPE="text/css"> 
+	<title>g-Eclipse - Java Grid Application Launch Configuration Dialog</title>
+    <script language="JavaScript" src="PLUGINS_ROOT/org.eclipse.help/livehelp.js"> </script>
+</head>
+
+<body BGCOLOR="#ffffff">
+
+<h1>Java Grid Application Launch Configuration Dialog</h1>
+
+<p>
+Always consider that the application will run on a remote machine and therefore the following requirements have to be met.
+<UL>
+<LI>The dependencies of the application have to be available remotely or packed into the jar file.
+<LI>The remote environment has to be set up correctly.
+<LI><a href="../glogin.html">GLogin</a> has to be available on the remote host.
+<LI>The project has to be built for the remote java version.
+<LI>The main class has to be selected in the jar file.
+</UL>
+</p>
+
+<h2><A NAME="main">The Main Tab</h2>
+<p>
+Allows to select the project and a jar containing the project which will be used to 
+run the application. Moreover the program's input and output can be connected to a 
+console.
+</p>
+<img src="images/java_main.jpg" alt="main tab"> <br><br><br>
+
+<h2>The Arguments Tab</h2>
+<p>
+Provides fields to specify program arguments, virtual machine arguments and the 
+program's working directory.
+</p>
+<img src="images/java_args.jpg" alt="arguments tab"><br><br><br>
+
+<h2><A NAME="grid">The Grid Tab</h2>
+<p>
+The application will be started on a remote machine defined by a contact string. 
+Optionally, it is possible to specify the remote <a href="../glogin.html">GLogin</a> 
+executable instead of using the default one. Furthermore, encryption of the communication 
+to the remote host can be deactivated.
+</p>
+<img src="images/java_grid.jpg" alt="grid tab"><br><br><br>
+
+<h2>The Debug Tab</h2>
+<p>
+The remote debugging uses a port forwarded through <a href="../glogin.html">GLogin</a> 
+which can be defined using the fields of this tab.
+</p>
+<img src="images/java_debug.jpg" alt="staging tab"><br><br><br>
+
+<h2>The Staging Tab</h2>
+<p>
+Currently GridFTP is used to transfer the jar file, selected in the 
+<A HREF="#main ">Main Dialog</A>, to the computing element from the contact string 
+specified in the <A HREF="#grid ">Grid Tab</A>. In addition to enabling or disabling 
+ executable staging, it is possible to set the port used for GridFTP.
+</p>
+<img src="images/java_stage.jpg" alt="staging tab"><br><br><br>
+
+<h2>The Source Tab</h2>
+<p>
+The source search path for the debugger can be specified in this tab.
+</p>
+<img src="images/java_source.jpg" alt="soruce tab"><br><br><br>
+
+<p><a href="launch.html">Back to Launching and Debugging</a></p>
+<p><a href="../maintopic.html">Back to Getting Started</a></p>
+
+</body>
+</html>

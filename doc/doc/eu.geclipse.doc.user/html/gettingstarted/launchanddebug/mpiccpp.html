@@ -1,0 +1,91 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css"> 
+	<LINK REL="STYLESHEET" HREF="../../../book.css" CHARSET="ISO-8859-1" TYPE="text/css"> 
+	<title>g-Eclipse - C/C++ MPI Grid Application Launch Configuration Dialog</title>
+    <script language="JavaScript" src="PLUGINS_ROOT/org.eclipse.help/livehelp.js"> </script>
+</head>
+
+<body BGCOLOR="#ffffff">
+
+<h1>C/C++ MPI Grid Application Launch Configuration Dialog</h1>
+
+<p>
+Always consider that the application will run on a remote machine and therefore the 
+following requirements have to be met.
+<ul>
+<li>The dependencies of the application have to be available remotely.
+<li>The remote environment has to be set up correctly.
+<li><a href="../glogin.html">GLogin</a> has to be available on the remote host.
+<li>The project has to be built for the remote architecture and libraries.
+</ul>
+</p>
+
+<h2><A NAME="main">The Main Tab</h2>
+<p>
+Allows one to select the project and an executable which will be used to run the 
+application. Moreover, the the program's input and output can be connected to a 
+console.
+</p>
+<img src="images/mpi_main.jpg" alt="main tab"> <br><br><br>
+
+<h2>The Arguments Tab</h2>
+<p>
+Provides fields to specify program arguments and the program's working directory.
+</p>
+<img src="images/mpi_args.jpg" alt="arguments tab"><br><br><br>
+
+<h2><A NAME="grid">The Grid Tab</h2>
+<p>
+The application will be started on a remote machine defined by a contact string. 
+Optionally, it is possible to specify the remote <a href="../glogin.html">GLogin</a> 
+executable instead of using the default one. Furthermore, encryption of the 
+communication to the remote host can be deactivated.
+</p>
+<img src="images/mpi_grid.jpg" alt="grid tab"><br><br><br>
+
+<h2>The MPI Tab</h2>
+<p>
+This tab offers a field to set the number of processes which will be used to run the 
+application. To use an MPI implementation on the remote machine other than the default,
+the path to the mpirun/mpiexec executable can be specified.
+</p>
+<img src="images/mpi_mpi.jpg" alt="staging tab"><br><br><br>
+
+<h2>The Debug Tab</h2>
+<p>
+Two ways of remote debugging are available:
+<UL>
+<LI> <b>gdb + nc</b> - uses netcat and gdb on the remote machine.
+<LI> <b>gdbserver</b> - uses gdbserver on the remote machine.
+</UL>
+The remote debugging uses ports forwarded through <a href="../glogin.html">GLogin</a> 
+which can be defined using the fields of this tab. A script is used to distribute 
+gdb/gdbserver among the processes which currently only works on some mpi implementations. 
+It is possible to automatically stop at the <i> main method </i> of the application.
+</p>
+<img src="images/mpi_debug.jpg" alt="staging tab"><br><br><br>
+
+<h2>The Staging Tab</h2>
+<p>
+Currently GridFTP is used to transfer the executable file, selected in the 
+<A HREF="#main ">Main Dialog</A>, to the computing element from the contact string 
+specified in the <A HREF="#grid ">Grid Tab</A>. In addition to enabling or disabling 
+executable staging, it is possible to set the port used for GridFTP.
+</p>
+<img src="images/mpi_stage.jpg" alt="staging tab"><br><br><br>
+
+<h2>The Source Tab</h2>
+<p>
+The source search path for the debugger can be specified in this tab.
+</p>
+<img src="images/mpi_source.jpg" alt="soruce tab"><br><br><br>
+
+<p><a href="launch.html">Back to Launching and Debugging</a></p>
+<p><a href="../maintopic.html">Back to Getting Started</a></p>
+
+</body>
+</html>
