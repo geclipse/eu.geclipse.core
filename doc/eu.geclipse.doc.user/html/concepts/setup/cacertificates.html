@@ -22,8 +22,74 @@
 <body BGCOLOR="#ffffff">
 
 <h1>CA Certificates</h1>
-<p>Please add text here...</p>
 
+<p>
+CA Certificates (CA: Certificate Authority) are used to verify the identity
+of a CA on the client side. The g-Eclipse framework itself comes currently
+with support for PEM-encoded certificates. In order to access the Grid it is
+often needed to import these certificates in g-Eclipse. This help section
+describes how such certificates can be imported.
+
+<ul>
+<li><a href="#fromRepository">Import from a Repository</a></li>
+<li><a href="#fromDirectory">Import from a Directory</a></li>
+<li><a href="#deleteCert">Delete Certificates</a></li>
+</ul>
+
+<h2><a name="fromRepository">Import from a Repository</a></h2>
+
+<p>
+The easiest way to import CA certificates is from a remote repository.
+Currently g-Eclipse supports the EUGridPMA repository that can be found
+at <a href="http://www.eugridpma.org">http://www.eugridpma.org</a>. To import
+certificates from such a repository you have to open the
+<a class="command-link" href='javascript:executeCommand("org.eclipse.ui.window.preferences(preferencePageId=eu.geclipse.ui.internal.preference.CaCertPreferencePage)")'>
+<img src="PLUGINS_ROOT/org.eclipse.help/command_link.png">
+<b>g-Eclipse &gt; CA Certificates</b></a> preference page.
+This page contains a list of all currently available CA certificates.
+
+<p>
+<img border="0" src="images/CACertPreferencePage.png" alt="The g-Eclipse CA Certificate Preference Page">
+
+<p>
+To import further certificates click <b>Add from Repository...</b>.
+This will open the <b>CA Certificate Import Wizard</b>.
+
+<p>
+<img border="0" src="images/CACertWizard.png" alt="The g-Eclipse CA Certificate Import Wizard">
+
+<p>
+On the first page of this wizard you can select a certificate loader that
+is used to import certificates. By default g-Eclipse comes with a certificate
+loader for certificates hosted by the European Policy Management Authority
+for Grid Authentication (EUGridPMA). After selecting a loader and clicking
+<b>Next</b> a wizard page for specifying a repository URL will open.
+
+<p>
+<img border="0" src="images/CACertURLWizardPage.png" alt="The g-Eclipse CA Certificate URL Wizard Page">
+
+<p>
+In the <b>Repository URL Wizard Page</b> you have to specify a valid URL
+pointing to a location where CA certificates can be found. Depending on the
+certificate loader you have chosen on the wizard page before this field
+may already be initialized with a reasonable URL. By clicking <b>Next</b>
+the certificate loader is triggered to query the given URL for available
+certificates. If no error occurs while contacting the specified URL the
+next wizard page will appear with a list of all certificates that are
+ready to be imported.
+
+<p>
+<img border="0" src="images/CACertListWizardPage.png" alt="The g-Eclipse CA Certificate List Wizard Page">
+
+<p>
+Now you can simply select the check box for each certificate you would like
+to import and click <b>Finish</b>. After that the selected certificates are
+downloaded, decompressed and imported into g-Eclipse. The preference page
+will afterwards display the newly imported certificates.
+
+<h2><a name="fromDirectory">Import from a Directory</a></h2>
+
+<h2><a name="deleteCert">Delete Certificates</a></h2>
 
 </body>
 </html>
