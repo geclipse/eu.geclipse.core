@@ -15,6 +15,8 @@
 
 package eu.geclipse.ui.providers;
 
+import java.util.HashSet;
+
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import eu.geclipse.core.monitoring.GridProcess;
@@ -22,7 +24,7 @@ import eu.geclipse.core.monitoring.GridProcessMonitor;
 
 
 /**
- * @author picard
+ * @author Martin Polak
  *
  */
 public class ProcessViewContentprovider  implements ITreeContentProvider {
@@ -30,11 +32,11 @@ public class ProcessViewContentprovider  implements ITreeContentProvider {
   /* (non-Javadoc)
    * @see org.eclipse.jface.viewers.ITreeContentProvider#getChildren(java.lang.Object)
    */
+  @SuppressWarnings("unchecked")
   public Object[] getChildren( final Object parentElement ) {
     Object[] result = new Object[0];
-
-    if (parentElement instanceof GridProcessMonitor[]) {
-      result = (GridProcessMonitor[])parentElement;
+    if (parentElement instanceof HashSet){
+      result = ((HashSet<GridProcessMonitor>)parentElement).toArray();
     } else if (parentElement instanceof GridProcessMonitor) {
       GridProcessMonitor mon = (GridProcessMonitor)parentElement;
       result = mon.getProcessList().toArray();
