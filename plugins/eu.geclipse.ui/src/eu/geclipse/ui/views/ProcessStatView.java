@@ -17,6 +17,7 @@ package eu.geclipse.ui.views;
 
 import java.net.URI;
 import java.util.HashSet;
+
 import org.eclipse.compare.IContentChangeListener;
 import org.eclipse.compare.IContentChangeNotifier;
 import org.eclipse.jface.action.Action;
@@ -42,7 +43,6 @@ import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.ViewPart;
 
 import eu.geclipse.core.monitoring.GridProcessMonitor;
-import eu.geclipse.ui.views.Messages;
 import eu.geclipse.ui.providers.ProcessViewContentprovider;
 import eu.geclipse.ui.providers.ProcessViewLabelProvider;
 
@@ -53,22 +53,23 @@ import eu.geclipse.ui.providers.ProcessViewLabelProvider;
  *
  */
 public class ProcessStatView extends ViewPart implements IContentChangeListener {
-  
+ 
   TreeViewer viewer;
   
-  Action updateaction;
+  Action updateAction;
   Action doubleClickAction;
+  Action removeAction;
   Action dropJobAction;
-  
-  HashSet<GridProcessMonitor> remoteMonitors;
+
+  HashSet<GridProcessMonitor> remoteMonitors; 
   
   private DrillDownAdapter drillDownAdapter;
-  
+ 
   /**
    * The constructor.
    */
   public ProcessStatView() {
-    this.remoteMonitors = new HashSet<GridProcessMonitor>();
+    this.remoteMonitors = new HashSet<GridProcessMonitor>();  
   }
 
   /**
@@ -85,7 +86,7 @@ public class ProcessStatView extends ViewPart implements IContentChangeListener 
     this.viewer.setSorter(new ViewerSorter());  //TODO
     
     makeActions();
-    // hookContextMenu();
+    hookContextMenu();
     hookDoubleClickAction();
     contributeToActionBars();
   }
@@ -102,44 +103,49 @@ public class ProcessStatView extends ViewPart implements IContentChangeListener 
     this.viewer.getControl().setMenu(menu);
     getSite().registerContextMenu(menuMgr, this.viewer);
   }
-  
+
   private void contributeToActionBars() {
     IActionBars bars = getViewSite().getActionBars();
     fillLocalPullDown(bars.getMenuManager());
     fillLocalToolBar(bars.getToolBarManager());
   }
-  
+
   private void fillLocalPullDown(final IMenuManager manager) {
-    manager.add(this.updateaction);
+    manager.add(this.updateAction);
     manager.add(new Separator());
+    
   }
-  
+
   void fillContextMenu(final IMenuManager manager) {
-    manager.add(this.updateaction);
+    manager.add(this.updateAction);
+    manager.add(this.removeAction);
     manager.add(new Separator());
-    this.drillDownAdapter.addNavigationActions(manager);
     // Other plug-ins can contribute there actions here
     manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
   }
+
+ 
   
   private void fillLocalToolBar(final IToolBarManager manager) {
-    manager.add(this.updateaction);
+    manager.add(this.updateAction);
     manager.add(new Separator());
     this.drillDownAdapter.addNavigationActions(manager);
   }
-  
+
   private void makeActions() {
-    this.updateaction = new Action() {
+    this.updateAction = new Action() {
       @Override
       public void run() {
-        ProcessStatView.this.viewer.refresh();
+         ProcessStatView.this.viewer.refresh();
       }
     };
-    this.updateaction.setText(Messages.getString("ProcessStatView.update"));  //$NON-NLS-1$
-    this.updateaction.setToolTipText(Messages.getString("ProcessStatView.updatestat"));  //$NON-NLS-1$
-    this.updateaction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().
+    this.updateAction.setText(Messages.getString("ProcessStatView.update"));  //$NON-NLS-1$
+    this.updateAction.setToolTipText(Messages.getString("ProcessStatView.updatestat"));  //$NON-NLS-1$
+    this.updateAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().
                                          getImageDescriptor(ISharedImages.IMG_TOOL_REDO));
-        
+
+       
+    
     this.doubleClickAction = new Action() {
       @Override
       public void run() {
@@ -155,37 +161,67 @@ public class ProcessStatView extends ViewPart implements IContentChangeListener 
         ProcessStatView.this.viewer.refresh();
       }
     };
+    
+    this.removeAction = new Action() {
+      @Override
+      public void run() {
+        ISelection selection = ProcessStatView.this.viewer.getSelection();
+        Object obj = ((IStructuredSelection)selection).getFirstElement();
+        if (obj != null && obj instanceof GridProcessMonitor){
+          GridProcessMonitor selected = (GridProcessMonitor)obj;
+          ProcessStatView.this.removeMonitor( selected);
+          ProcessStatView.this.viewer.refresh();
+          
+        }
+        
+      }
+    };
+    this.removeAction.setText(Messages.getString("ProcessStatView.remove"));  //$NON-NLS-1$
+    this.removeAction.setToolTipText(Messages.getString("ProcessStatView.removemon"));  //$NON-NLS-1$
+    this.removeAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().
+                                         getImageDescriptor(ISharedImages.IMG_TOOL_DELETE));
+    
   }
+  
+/**
+ * Add a new site to be monitored by this view.
+ * @param newsite an URI of a new site to be monitored in this view
+ */
+public void addSite(final URI newsite) {
+  if (newsite != null){
+    GridProcessMonitor newmon = new GridProcessMonitor(newsite);
+    newmon.setUpdateInterval(5);
+    this.remoteMonitors.add( newmon );
+    this.viewer.setInput(this.remoteMonitors);
+    ProcessStatView.this.viewer.refresh();
+  } 
+}
 
-  /**
-   * Add a new site to be monitored by this view.
-   * @param newsite an URI of a new site to be monitored in this view
-   */
-  public void addSite(final URI newsite) {
-    if (newsite != null) {
-      GridProcessMonitor newmon = new GridProcessMonitor(newsite);
-      newmon.setUpdateInterval(5);
-      this.remoteMonitors.add( newmon );
-      this.viewer.setInput(this.remoteMonitors.toArray());
-      ProcessStatView.this.viewer.refresh();
-    }
+/**
+ * Remove a monitored site from this view
+ * @param selected an URI of the site to be removed from this monitoring view
+ */
+public void removeSite (final URI selected){
+  if (selected != null){
+    this.remoteMonitors.remove( new GridProcessMonitor(selected) );
+    ProcessStatView.this.viewer.refresh();
   }
-
-  /**
-   * Remove a monitored site from this view
-   * @param selected an URI of the site to be removed from this monitoring view
-   */
-  public void removeSite (final URI selected) {
-    if (selected != null) {
-      this.remoteMonitors.remove( new GridProcessMonitor(selected) );
-      ProcessStatView.this.viewer.refresh();
-    }
+}
+/**
+ * Remove a monitored site from this view
+ * @param selected the GridProcessMonitor of the site to be removed from this monitoring view
+ */
+public void removeMonitor(final GridProcessMonitor selected){
+  if (selected != null){
+    this.remoteMonitors.remove( selected );
+    ProcessStatView.this.viewer.refresh();
   }
+}
 
-  protected void initializeBrowser() {
-    this.viewer.setInput( this.remoteMonitors.toArray() );
-  }
-
+protected void initializeBrowser() {  
+  this.viewer.setInput( this.remoteMonitors );
+}
+  
 
   private void hookDoubleClickAction() {
     this.viewer.addDoubleClickListener(new IDoubleClickListener() {
@@ -205,6 +241,6 @@ public class ProcessStatView extends ViewPart implements IContentChangeListener 
 
   public void contentChanged( final IContentChangeNotifier source ) {
     this.viewer.refresh();
+    System.out.println("content changed"); //$NON-NLS-1$
   }
-
 }
