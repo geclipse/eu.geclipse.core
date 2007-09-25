@@ -17,12 +17,14 @@ package eu.geclipse.ui.internal.wizards;
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
 
@@ -31,6 +33,7 @@ import eu.geclipse.core.auth.CaCertManager;
 import eu.geclipse.core.auth.ICaCertificate;
 import eu.geclipse.core.auth.ICaCertificateLoader;
 import eu.geclipse.ui.dialogs.NewProblemDialog;
+import eu.geclipse.ui.internal.Activator;
 
 public class CaCertificateImportWizard extends Wizard {
   
@@ -51,6 +54,8 @@ public class CaCertificateImportWizard extends Wizard {
     super();
     this.importMethod = importType;
     setNeedsProgressMonitor( true );
+    URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/wizban/cacert_wiz.gif" ); //$NON-NLS-1$
+    setDefaultPageImageDescriptor( ImageDescriptor.createFromURL( imgUrl ) );
   }
   
   @Override
