@@ -34,6 +34,11 @@ public class MonitorActions extends ActionGroup {
   private MonitorComputingAction monCEAction;
   private MonitorJobAction monJobAction;
   
+  /**
+   * Contributes Actions to monitor specific computing resources and jobs to the 
+   * project views context menu
+   * @param site
+   */
   public MonitorActions(final IWorkbenchPartSite site){
     this.site = site;
     ISelectionProvider selectionProvider = site.getSelectionProvider();
@@ -64,13 +69,14 @@ public class MonitorActions extends ActionGroup {
   @Override
   public void fillContextMenu( final IMenuManager mgr )
   {
+    super.fillContextMenu( mgr );
     if ( this.monCEAction.isEnabled() ) {
-      mgr.appendToGroup( ICommonMenuConstants.GROUP_BUILD, this.monCEAction );
+      mgr.appendToGroup( ICommonMenuConstants.GROUP_ADDITIONS, this.monCEAction );
     }
    // if ( this.monJobAction.isEnabled() ) {
    //   mgr.appendToGroup( ICommonMenuConstants.GROUP_BUILD, this.monJobAction );
    // }
-    super.fillContextMenu( mgr );
+    
   }
   
   
