@@ -26,7 +26,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import eu.geclipse.core.GridException;
-import eu.geclipse.core.internal.auth.ProxyData;
 
 
 /**this class tests the methods in {@link EUGridPMACertificateLoader}
@@ -50,9 +49,9 @@ public class EUGridPMACertificateLoader_PDETest {
     String sslproxyhost = "proxy.fzk.de"; //$NON-NLS-1$
     int sslport = 443;
     proxyservice.setProxiesEnabled( true );
-    ProxyData[] proxies = {
-      new ProxyData(IProxyData.HTTP_PROXY_TYPE,httpproxyhost,httpport,false),
-      new ProxyData(IProxyData.HTTPS_PROXY_TYPE,sslproxyhost,sslport,false)
+    eu.geclipse.core.test.internal.ProxyData[] proxies = {
+      new eu.geclipse.core.test.internal.ProxyData(IProxyData.HTTP_PROXY_TYPE,httpproxyhost,httpport,false),
+      new eu.geclipse.core.test.internal.ProxyData(IProxyData.HTTPS_PROXY_TYPE,sslproxyhost,sslport,false)
     };
     proxyservice.setProxyData( proxies );
   }
