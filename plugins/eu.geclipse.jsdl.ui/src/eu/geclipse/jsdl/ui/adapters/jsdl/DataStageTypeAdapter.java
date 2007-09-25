@@ -268,8 +268,11 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
     
     /* Instantiate new DataStage and SourceTarge objects */
     
-    this.dataStagingType = JsdlFactory.eINSTANCE.createDataStagingType();
-    this.sourceTargetType = JsdlFactory.eINSTANCE.createSourceTargetType();
+
+    DataStagingType newDataStagingType = JsdlFactory.eINSTANCE.createDataStagingType();
+    SourceTargetType newSourceTargetType = JsdlFactory.eINSTANCE.createSourceTargetType(); 
+
+
     
     /*
      * If the assumption was correct and the table viewer is the one responsible
@@ -278,42 +281,49 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
      * 
      */     
     if ( tableViewer == stageInViewer ) {
-       
-      this.dataStagingType.setName(value[0].toString() );    
-      this.sourceTargetType.setURI( value[1].toString() );
-      this.dataStagingType.setSource( this.sourceTargetType );
-      this.dataStagingType.setTarget( null );
-      this.dataStagingType.setFileName( value[0].toString() );
-      this.dataStagingType.setFilesystemName( value[0].toString() );
-      this.dataStagingType.setCreationFlag(CreationFlagEnumeration.get( (Integer) value[2]));
-      this.dataStagingType.setDeleteOnTermination( (Boolean) value[3] );
+      
+      newSourceTargetType.setURI( value[0].toString() );      
+      newDataStagingType.setName(value[1].toString() );     
+      newDataStagingType.setSource( newSourceTargetType );
+      newDataStagingType.setTarget(null);      
+      newDataStagingType.setFileName( value[1].toString() );          
+      newDataStagingType.setFilesystemName( value[0].toString() );
+      newDataStagingType.setCreationFlag(CreationFlagEnumeration.get( (Integer) value[2]));
+      newDataStagingType.setDeleteOnTermination( (Boolean) value[3] );
+      
+      
       
     }
     else {
+
+      newDataStagingType.setName(value[0].toString() );
+      newSourceTargetType.setURI( value[1].toString() );
+      newDataStagingType.setSource( null );
+      newDataStagingType.setTarget( newSourceTargetType );
+      newDataStagingType.setFileName( value[0].toString() );
+      newDataStagingType.setFilesystemName( value[0].toString() );
+      newDataStagingType.setCreationFlag(CreationFlagEnumeration.get( (Integer) value[2]));
+      newDataStagingType.setDeleteOnTermination( (Boolean) value[3] );
       
-      this.dataStagingType.setName(value[0].toString() );    
-      this.sourceTargetType.setURI( value[1].toString() );
-      this.dataStagingType.setSource( null );
-      this.dataStagingType.setTarget( this.sourceTargetType );
-      this.dataStagingType.setFileName( value[0].toString() );
-      this.dataStagingType.setFilesystemName( value[0].toString() );
-      this.dataStagingType.setCreationFlag(CreationFlagEnumeration.get( (Integer) value[2]));
-      this.dataStagingType.setDeleteOnTermination( (Boolean) value[3] );
     }
       
     /* Check if the new Data Stage element is not already in the table viewer's
      * input
      */
-    if (!doesElementExists( null, this.dataStagingType, newInputList )) {
-      newInputList.add( this.dataStagingType );
+    boolean exists = doesElementExists( this.dataStagingType, newDataStagingType, newInputList ); 
+    
+    if ( !exists ) {
+      newInputList.add( newDataStagingType );
     
       eStructuralFeature = this.jobDescriptionType.eClass().getEStructuralFeature( featureID );
     
-      // Change the table viewers input.
+      /* Change the table viewers input. */
       tableViewer.setInput(newInputList);
-    
-      for ( int i=0; i<tableViewer.getTable().getItemCount(); i++ ) {      
-        collection.add( (DataStagingType) tableViewer.getElementAt( i ) );
+      
+      
+          
+      for ( int i=0; i<newInputList.size(); i++ ) {      
+        collection.add( newInputList.get( i ) );
       }
       
       this.jobDescriptionType.eSet(eStructuralFeature, collection);
@@ -325,8 +335,25 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
       this.contentChanged();
       
     }
+    
+    else if ( exists ) {
+      int index = getExisting( newDataStagingType, newInputList);
+      if (newInputList.get( index ).getTarget() == null && newDataStagingType.getTarget() != null ){
+        newInputList.get( index ).setTarget(  newDataStagingType.getTarget() );
+        tableViewer.setInput( newInputList );
+        tableViewer.refresh();
+      }
+      else if (newInputList.get( index ).getSource() == null && newDataStagingType.getSource() != null ){
+        newInputList.get( index ).setSource(  newDataStagingType.getSource() );
+        tableViewer.setInput( newInputList );
+        tableViewer.refresh();
+      }
+      
+    }
+        
     else {
       
+            
       /*
        * Show the Error Dialog, this means that the new values that are to be added 
        * are already contained in the table viewer Input. 
@@ -522,15 +549,73 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
    * 
    * Returns TRUE if the new element already exists and FALSE if it doesn't. 
    */
-  private boolean doesElementExists (final DataStagingType oldDataStage,
-                                     final DataStagingType newDataStage,
-                                     final EList <DataStagingType> inputList) {
+  private boolean doesElementExists ( final DataStagingType oldDataStage,
+                                      final DataStagingType newDataStage,
+                                      final EList <DataStagingType> inputList ) {
     
     boolean result = false;
     
     /*
+     * Check if the oldDataStage is not null first.
+     */
+
+    /*
      * Check if the new Element is Stage-In element or if is a Stage-Out Element
      */
+      if (newDataStage.getSource() != null) {
+    
+      
+      /*
+       *  Iterate over all the table viewer input.
+       *  If the the new data-stage element is not the old one and
+       *  the FileName and Source are the same, return TRUE because
+       *  it means that there is a duplicate data-stage element,
+       *   so the new one must not be add.
+       *  
+       */
+      
+        for( DataStagingType data : inputList ) {
+          if( !data.equals( oldDataStage )
+              && data.getSource() != null 
+              && data.getFileName().equals( newDataStage.getFileName() )
+              && data.getSource().getURI().equals( newDataStage.getSource().getURI() ) )
+          {
+            result = true;
+          }
+        }
+      }
+    
+      else {
+      
+      /*
+       *  Iterate over all the table viewer input.
+       *  If the the new data-stage element is not the old one and
+       *  the FileName and Target are the same, return TRUE because
+       *  it means that there is a duplicate data-stage element,
+       *   so the new one must not be add.
+       *  
+       */
+        for( DataStagingType data : inputList ) {
+          if( !data.equals( oldDataStage ) 
+              && data.getTarget() != null 
+              && data.getFileName().equals( newDataStage.getFileName() )
+              && data.getTarget().getURI().equals( newDataStage.getTarget().getURI() ) )
+          {
+            result = true;
+          }
+        }
+      }
+    
+    return result;
+    
+  } // End boolean doesElementExists()
+  
+  
+  private int getExisting( final DataStagingType newDataStage,
+                                       final EList <DataStagingType> inputList) {
+    
+    int position = 0;
+    
     if (newDataStage.getSource() != null) {
     
       
@@ -543,17 +628,17 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
        *  
        */
       
-      for( DataStagingType data : inputList ) {
-        if( !data.equals( oldDataStage )            
-           && data.getFileName().equals( newDataStage.getFileName() )
-            && data.getSource().getURI().equals( newDataStage.getSource().getURI() ) )
-        {
-          result = true;
+        for( DataStagingType data : inputList ) {
+          if( data.getSource() != null 
+              && data.getFileName().equals( newDataStage.getFileName() )
+              && data.getSource().getURI().equals( newDataStage.getSource().getURI() ) )
+          {
+           position = inputList.indexOf( data );
+          }
         }
       }
-    }
     
-    else {
+      else {
       
       /*
        *  Iterate over all the table viewer input.
@@ -563,19 +648,19 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
        *   so the new one must not be add.
        *  
        */
-      for( DataStagingType data : inputList ) {
-        if( !data.equals( oldDataStage )  
-            && data.getFileName().equals( newDataStage.getFileName() )
-            && data.getTarget().getURI().equals( newDataStage.getTarget().getURI() ) )
-        {
-          result = true;
+        for( DataStagingType data : inputList ) {
+          if( data.getTarget() != null 
+              && data.getFileName().equals( newDataStage.getFileName() )
+              && data.getTarget().getURI().equals( newDataStage.getTarget().getURI() ) )
+          {
+            position = inputList.indexOf( data );
+          }
         }
       }
-    }
     
-    return result;
+    return position;
     
-  } // End boolean doesElementExists()
+  }
    
    
     
