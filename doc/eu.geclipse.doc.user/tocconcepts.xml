@@ -84,6 +84,11 @@
       	href="html/concepts/jobmanagement/editorpages/application.html"
       	label="Application Page">
       </topic>
+      <topic
+      	href="html/concepts/jobmanagement/editorpages/datastaging.html"
+      	label="Data Staging Page">
+      </topic>
+      <topic href="html/concepts/jobmanagement/editorpages/resources.html" label="Resources Page"></topic>
     </topic>
     <topic 
       label="Submitting a Job"
