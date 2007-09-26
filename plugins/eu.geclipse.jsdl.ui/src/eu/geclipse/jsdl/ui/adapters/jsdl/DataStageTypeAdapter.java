@@ -335,22 +335,7 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
       this.contentChanged();
       
     }
-    
-    else if ( exists ) {
-      int index = getExisting( newDataStagingType, newInputList);
-      if (newInputList.get( index ).getTarget() == null && newDataStagingType.getTarget() != null ){
-        newInputList.get( index ).setTarget(  newDataStagingType.getTarget() );
-        tableViewer.setInput( newInputList );
-        tableViewer.refresh();
-      }
-      else if (newInputList.get( index ).getSource() == null && newDataStagingType.getSource() != null ){
-        newInputList.get( index ).setSource(  newDataStagingType.getSource() );
-        tableViewer.setInput( newInputList );
-        tableViewer.refresh();
-      }
       
-    }
-        
     else {
       
             
@@ -610,58 +595,6 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
     
   } // End boolean doesElementExists()
   
-  
-  private int getExisting( final DataStagingType newDataStage,
-                                       final EList <DataStagingType> inputList) {
-    
-    int position = 0;
-    
-    if (newDataStage.getSource() != null) {
-    
-      
-      /*
-       *  Iterate over all the table viewer input.
-       *  If the the new data-stage element is not the old one and
-       *  the FileName and Source are the same, return TRUE because
-       *  it means that there is a duplicate data-stage element,
-       *   so the new one must not be add.
-       *  
-       */
-      
-        for( DataStagingType data : inputList ) {
-          if( data.getSource() != null 
-              && data.getFileName().equals( newDataStage.getFileName() )
-              && data.getSource().getURI().equals( newDataStage.getSource().getURI() ) )
-          {
-           position = inputList.indexOf( data );
-          }
-        }
-      }
-    
-      else {
-      
-      /*
-       *  Iterate over all the table viewer input.
-       *  If the the new data-stage element is not the old one and
-       *  the FileName and Target are the same, return TRUE because
-       *  it means that there is a duplicate data-stage element,
-       *   so the new one must not be add.
-       *  
-       */
-        for( DataStagingType data : inputList ) {
-          if( data.getTarget() != null 
-              && data.getFileName().equals( newDataStage.getFileName() )
-              && data.getTarget().getURI().equals( newDataStage.getTarget().getURI() ) )
-          {
-            position = inputList.indexOf( data );
-          }
-        }
-      }
-    
-    return position;
-    
-  }
-   
    
     
   /**

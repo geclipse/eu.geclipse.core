@@ -150,7 +150,7 @@ public class DataStagingOutDialog extends Dialog {
       this.nameText.setText( this.initName );
     }
     Label pathLabel = new Label( panel, SWT.LEAD );
-    pathLabel.setText( Messages.getString( "DataStageInTable.location_field_label" ) ); //$NON-NLS-1$
+    pathLabel.setText( Messages.getString( "DataStageInTable.target_location_field_label" ) ); //$NON-NLS-1$
     gd = new GridData();
     pathLabel.setLayoutData( gd );
     this.pathText = new Text( panel, SWT.BORDER );
