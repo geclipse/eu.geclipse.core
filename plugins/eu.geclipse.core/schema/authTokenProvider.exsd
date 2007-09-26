@@ -6,7 +6,7 @@
          <meta.schema plugin="eu.geclipse.core" id="authTokenProvider" name="Authentication Token Provider"/>
       </appInfo>
       <documentation>
-         [Enter description of this extension point.]
+         This extension point is only for internal use. It is not intended to be used outside the g-Eclipse core plugins.
       </documentation>
    </annotation>
 
@@ -47,7 +47,7 @@
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  Implementation of the &lt;code&gt;eu.geclipse.core.auth.IAuthTokenProvider&lt;/code&gt; interface that is intended to provide authentication tokens.
                </documentation>
                <appInfo>
                   <meta.attribute kind="java" basedOn=":eu.geclipse.core.auth.IAuthTokenProvider"/>
@@ -57,7 +57,7 @@
          <attribute name="priority" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  All available auth token providers are ordered by their priority. The provider with the highest priority is then asked first if it can provide an auth token. If he cannot the provider with the second highest priority is asked and so forth.
                </documentation>
             </annotation>
          </attribute>
@@ -69,7 +69,7 @@
          <meta.section type="since"/>
       </appInfo>
       <documentation>
-         [Enter the first release in which this extension point appears.]
+         0.5
       </documentation>
    </annotation>
 
@@ -78,7 +78,14 @@
          <meta.section type="examples"/>
       </appInfo>
       <documentation>
-         [Enter extension point usage example here.]
+         &lt;pre&gt;
+&lt;extension point=&quot;eu.geclipse.core.authTokenProvider&quot;&gt;
+  &lt;provider
+    class=&quot;eu.geclipse.core.auth.CoreAuthTokenProvider&quot;
+    priority=&quot;0&quot;&gt;
+  &lt;/provider&gt;
+&lt;/extension&gt;
+&lt;/pre&gt;
       </documentation>
    </annotation>
 
@@ -87,7 +94,7 @@
          <meta.section type="apiInfo"/>
       </appInfo>
       <documentation>
-         [Enter API information here.]
+         See the &lt;code&gt;eu.geclipse.core.auth.IAuthTokenProvider&lt;/code&gt; interface.
       </documentation>
    </annotation>
 
@@ -96,7 +103,7 @@
          <meta.section type="implementation"/>
       </appInfo>
       <documentation>
-         [Enter information about supplied implementation of this extension point.]
+         The g-Eclipse core comes with a core provider implementation. The only other implementation is provided by the UI. The UI implementation has a higher priority than the core implementation. That means that whenever the UI is available auth token requests are directed to the UI.
       </documentation>
    </annotation>
 
@@ -105,7 +112,13 @@
          <meta.section type="copyright"/>
       </appInfo>
       <documentation>
-         
+         &lt;p&gt;Copyright (c) 2006, 2007 g-Eclipse Consortium
+
+&lt;p&gt;All rights reserved.
+
+&lt;p&gt;This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0which accompanies this distribution, and is available at &lt;a href=&quot;http://www.eclipse.org/legal/epl-v10.html&quot;&gt;http://www.eclipse.org/legal/epl-v10.html&lt;/a&gt;.
+
+&lt;p&gt;Initial development of the original code was made for the g-Eclipse project founded by European Union project number: FP6-IST-034327 &lt;a href=&quot;http://www.geclipse.eu&quot;&gt;http://www.geclipse.eu&lt;/a&gt;.
       </documentation>
    </annotation>
 

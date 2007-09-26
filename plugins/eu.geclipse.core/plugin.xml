@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
-   <extension-point id="connectionManagement" name="%extension-point.connectionManagement" schema="schema/connectionManagement.exsd"/>
    <extension-point id="gridElementCreator" name="%extension-point.gridElementCreator" schema="schema/gridElementCreator.exsd"/>
    <extension-point id="problemProvider" name="%extension-point.problemProvider" schema="schema/problemProvider.exsd"/>
    <extension-point id="eu.geclipse.core.gridJobStatusServiceManager" name="GridJobStatusServiceManager" schema="schema/eu.geclipse.core.gridJobStatusServiceManager.exsd"/>
@@ -10,28 +9,10 @@
    <extension-point id="applicationDeployment" name="Application Deployment" schema="schema/applicationDeployment.exsd"/>
    <extension-point id="caCertificateLoader" name="CA Certificate Loader" schema="schema/caCertificateLoader.exsd"/>
    <extension
-         point="eu.geclipse.core.connectionManagement"
-         id="eu.geclipse.core.connectionProtocol.gridftp">
-      <connectionProtocol
-            class="org.eclipse.core.filesystem.provider.FileSystem"
-            id="eu.geclipse.core.connectionProtocol.gridftp"
-            name="Grid FTP"
-            wizardID="eu.geclipse.core.connectionProtocol.gridftp"/>
-   </extension>
-   <extension
          id="eu.geclipse.core.internal.PreferenceInitializer"
          name="%extension.preferenceInitializer"
          point="org.eclipse.core.runtime.preferences">
       <initializer class="eu.geclipse.core.internal.PreferenceInitializer"/>
-   </extension>
-   <extension
-         id="eu.geclipse.core.connectionProtocol.local"
-         point="eu.geclipse.core.connectionManagement">
-      <connectionProtocol
-            class="org.eclipse.core.filesystem.provider.FileSystem"
-            id="eu.geclipse.core.connectionProtocol.local"
-            name="local"
-            wizardID="eu.geclipse.core.connectionProtocol.local"/>
    </extension>
    <extension
          id="eu.geclipse.core.project.GridProjectNature"

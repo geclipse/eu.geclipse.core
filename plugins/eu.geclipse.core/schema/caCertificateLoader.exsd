@@ -6,7 +6,7 @@
          <meta.schema plugin="eu.geclipse.core" id="caCertificateLoader" name="CA Certificate Loader"/>
       </appInfo>
       <documentation>
-         [Enter description of this extension point.]
+         This interface is used to query either remote or local repositories for CA certificates in a format that is specific for a certain certificate loader.
       </documentation>
    </annotation>
 
@@ -83,7 +83,7 @@
          <meta.section type="since"/>
       </appInfo>
       <documentation>
-         [Enter the first release in which this extension point appears.]
+         0.5
       </documentation>
    </annotation>
 

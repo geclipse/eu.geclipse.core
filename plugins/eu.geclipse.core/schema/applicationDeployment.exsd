@@ -6,7 +6,7 @@
          <meta.schema plugin="eu.geclipse.core" id="applicationDeployment" name="Application Deployment"/>
       </appInfo>
       <documentation>
-         [Enter description of this extension point.]
+         This extension point provides mechanisms for deploying applications to a Grid. A middleware extension implementation that would like to support application deployment has to implement this extension point.
       </documentation>
    </annotation>
 
@@ -47,14 +47,14 @@
          <attribute name="id" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  A unique ID used to identify the application deployment mechanism.
                </documentation>
             </annotation>
          </attribute>
          <attribute name="name" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  A user readable string that is used to represent a specific application deployment mechanism to the user.
                </documentation>
                <appInfo>
                   <meta.attribute translatable="true"/>
@@ -64,7 +64,7 @@
          <attribute name="class" type="string">
             <annotation>
                <documentation>
-                  
+                  Implementation of the &lt;code&gt;eu.geclipse.core.IApplicationDeployment&lt;/code&gt; interface that is used for the application deployment process.
                </documentation>
                <appInfo>
                   <meta.attribute kind="java" basedOn=":eu.geclipse.core.IApplicationDeployment"/>
@@ -74,7 +74,7 @@
          <attribute name="category" type="string">
             <annotation>
                <documentation>
-                  
+                  A user readable string that is used to categorize deployment mechanisms within the deployment wizard.
                </documentation>
             </annotation>
          </attribute>
@@ -86,7 +86,7 @@
          <meta.section type="since"/>
       </appInfo>
       <documentation>
-         [Enter the first release in which this extension point appears.]
+         0.5
       </documentation>
    </annotation>
 
@@ -95,7 +95,26 @@
          <meta.section type="examples"/>
       </appInfo>
       <documentation>
-         [Enter extension point usage example here.]
+         &lt;pre&gt;
+&lt;extension point=&quot;eu.geclipse.core.applicationDeployment&quot;&gt;
+  &lt;deployment
+    id=&quot;eu.geclipse.glite.deployment.middleware&quot;
+    name=&quot;Glite Middleware&quot;&gt;
+  &lt;/deployment&gt;
+  &lt;deployment
+    category=&quot;eu.geclipse.glite.deployment.middleware&quot;
+    class=&quot;eu.geclipse.glite.deployment.JDLBasedApplicationDeployment&quot;
+    id=&quot;eu.geclipse.glite.deployment.JDLBasedApplicationDeployment&quot;
+    name=&quot;JDL-based Application Deployment&quot;&gt;
+  &lt;/deployment&gt;
+  &lt;deployment
+    category=&quot;eu.geclipse.glite.deployment.middleware&quot;
+    class=&quot;eu.geclipse.glite.deployment.TransferBasedApplicationDeployment&quot;
+    id=&quot;eu.geclipse.glite.deployment.TransferBasedApplicationDeployment&quot;
+    name=&quot;Transfer-based Application Deployment&quot;&gt;
+  &lt;/deployment&gt;
+&lt;/extension&gt;
+&lt;/pre&gt;
       </documentation>
    </annotation>
 
@@ -104,7 +123,7 @@
          <meta.section type="apiInfo"/>
       </appInfo>
       <documentation>
-         [Enter API information here.]
+         See the &lt;code&gt;eu.geclipse.core.IApplicationDeployment&lt;/code&gt; interface.
       </documentation>
    </annotation>
 
@@ -113,7 +132,7 @@
          <meta.section type="implementation"/>
       </appInfo>
       <documentation>
-         [Enter information about supplied implementation of this extension point.]
+         There are no g-Eclipse core implementations of this extension point. See the middleware extensions for reference.
       </documentation>
    </annotation>
 
@@ -122,7 +141,13 @@
          <meta.section type="copyright"/>
       </appInfo>
       <documentation>
-         
+         &lt;p&gt;Copyright (c) 2006, 2007 g-Eclipse Consortium
+
+&lt;p&gt;All rights reserved.
+
+&lt;p&gt;This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0which accompanies this distribution, and is available at &lt;a href=&quot;http://www.eclipse.org/legal/epl-v10.html&quot;&gt;http://www.eclipse.org/legal/epl-v10.html&lt;/a&gt;.
+
+&lt;p&gt;Initial development of the original code was made for the g-Eclipse project founded by European Union project number: FP6-IST-034327 &lt;a href=&quot;http://www.geclipse.eu&quot;&gt;http://www.geclipse.eu&lt;/a&gt;.
       </documentation>
    </annotation>
 

@@ -6,7 +6,7 @@
          <meta.schema plugin="eu.geclipse.core" id="authTokens" name="Authentication Tokens"/>
       </appInfo>
       <documentation>
-         [Enter description of this extension point.]
+         This extension point is used to define new types of authentication tokens.
       </documentation>
    </annotation>
 
@@ -47,14 +47,14 @@
          <attribute name="id" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  A unique ID that is used to internally refer to a authentication token implementation.
                </documentation>
             </annotation>
          </attribute>
          <attribute name="name" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  A user readable name that denotes the token type name. This name is used by the UI whenever refering to a specific token implementation.
                </documentation>
                <appInfo>
                   <meta.attribute translatable="true"/>
@@ -64,7 +64,7 @@
          <attribute name="description" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  Implementation of the &lt;code&gt;eu.geclipse.core.auth.IAuthenticationTokenDescription&lt;/code&gt; interface that is used as an entry point to an authentication token implementation.
                </documentation>
                <appInfo>
                   <meta.attribute kind="java" basedOn=":eu.geclipse.core.auth.IAuthenticationTokenDescription"/>
@@ -74,7 +74,7 @@
          <attribute name="wizard" type="string">
             <annotation>
                <documentation>
-                  
+                  The ID of a wizard that contains specific wizard pages needed to initialize an authentication token.
                </documentation>
             </annotation>
          </attribute>
@@ -86,7 +86,7 @@
          <meta.section type="since"/>
       </appInfo>
       <documentation>
-         [Enter the first release in which this extension point appears.]
+         0.5
       </documentation>
    </annotation>
 
@@ -95,7 +95,16 @@
          <meta.section type="examples"/>
       </appInfo>
       <documentation>
-         [Enter extension point usage example here.]
+         &lt;pre&gt;
+&lt;extension point=&quot;eu.geclipse.core.authTokens&quot;&gt;
+  &lt;token
+    description=&quot;eu.geclipse.globus.auth.GlobusProxyDescription&quot;
+    id=&quot;eu.geclipse.globus.auth.proxy&quot;
+    name=&quot;Globus Proxy&quot;
+    wizard=&quot;eu.geclipse.globus.ui.wizards.GlobusProxyWizard&quot;&gt;
+  &lt;/token&gt;
+&lt;/extension&gt;
+&lt;/pre&gt;
       </documentation>
    </annotation>
 
@@ -104,7 +113,7 @@
          <meta.section type="apiInfo"/>
       </appInfo>
       <documentation>
-         [Enter API information here.]
+         See the &lt;code&gt;eu.geclipse.core.auth.IAuthenticationTokenDescription&lt;/code&gt; interface.
       </documentation>
    </annotation>
 
@@ -113,7 +122,7 @@
          <meta.section type="implementation"/>
       </appInfo>
       <documentation>
-         [Enter information about supplied implementation of this extension point.]
+         The g-Eclipse core does currently not provide any authentication tokens. It is up to the middleware implementation to provide a specific AAI.
       </documentation>
    </annotation>
 
@@ -122,7 +131,13 @@
          <meta.section type="copyright"/>
       </appInfo>
       <documentation>
-         
+         &lt;p&gt;Copyright (c) 2006, 2007 g-Eclipse Consortium
+
+&lt;p&gt;All rights reserved.
+
+&lt;p&gt;This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0which accompanies this distribution, and is available at &lt;a href=&quot;http://www.eclipse.org/legal/epl-v10.html&quot;&gt;http://www.eclipse.org/legal/epl-v10.html&lt;/a&gt;.
+
+&lt;p&gt;Initial development of the original code was made for the g-Eclipse project founded by European Union project number: FP6-IST-034327 &lt;a href=&quot;http://www.geclipse.eu&quot;&gt;http://www.geclipse.eu&lt;/a&gt;.
       </documentation>
    </annotation>
 
