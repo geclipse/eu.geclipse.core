@@ -90,5 +90,14 @@
   <target name="createDocZip">
     <zip zipfile="${basedir}/doc.zip" basedir="${basedir}" includes="about.html, book.css, html/**" />
   </target>
+	
+  <target name="clean">
+    <delete defaultexcludes="true">
+      <fileset dir="html/extension-points" />
+    </delete>
+    <delete defaultexcludes="true">
+      <fileset dir="html/api_reference" />
+    </delete>
+  </target>
 </project>
 
