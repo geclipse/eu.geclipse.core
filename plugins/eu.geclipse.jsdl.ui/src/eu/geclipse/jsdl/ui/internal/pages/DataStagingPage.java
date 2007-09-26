@@ -127,15 +127,14 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
   
   {
    
-   super(editor,"", //$NON-NLS-1$
-         Messages.getString("DataStagingPage_PageTitle")); //$NON-NLS-1$
+   super( editor,"", //$NON-NLS-1$
+         Messages.getString("DataStagingPage_PageTitle") ); //$NON-NLS-1$
   
    }
   
   
   public void notifyChanged( final Notification arg0 ) {
     setDirty( true );
-    
   }
   
   
@@ -147,9 +146,9 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    * If TRUE then the page is Dirty and a Save operation is needed.
    * 
    */
-  public void setDirty(final boolean dirty) {
+  public void setDirty( final boolean dirty ) {
     
-    if (this.dirtyFlag != dirty) {
+    if ( this.dirtyFlag != dirty ) {
       this.dirtyFlag = dirty;     
       this.getEditor().editorDirtyStateChanged();  
     }
@@ -180,7 +179,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
   
   
   
-  private boolean isContentRefreshed(){
+  private boolean isContentRefreshed() {
     
     return this.contentRefreshed;
     
@@ -285,8 +284,8 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    gd.heightHint = this.WIDGET_HEIGHT;
    
    //FIXME This is a work-around for the Bug#: 201705 for Windows.
-   this.stageInViewer = new TableViewer(client, SWT.BORDER                                                                            
-                                        | SWT.FULL_SELECTION);
+   this.stageInViewer = new TableViewer( client, SWT.BORDER                                                                            
+                                        | SWT.FULL_SELECTION );
    
    this.tblStageIn = this.stageInViewer.getTable();
    this.tblStageIn .setHeaderVisible( true);   
@@ -546,26 +545,26 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
   
   
   
-  private void addFormPageHelp(final ScrolledForm form ) {
+  private void addFormPageHelp( final ScrolledForm form ) {
     
     final String href = getHelpResource();
-    if (href != null) {
+    if ( href != null ) {
         IToolBarManager manager = form.getToolBarManager();
-        Action helpAction = new Action("help") { //$NON-NLS-1$
+        Action helpAction = new Action( "help" ) { //$NON-NLS-1$
             @Override
             public void run() {
                 BusyIndicator.showWhile(form.getDisplay(), new Runnable() {
                     public void run() {
-                        PlatformUI.getWorkbench().getHelpSystem().displayHelpResource(href);
+                        PlatformUI.getWorkbench().getHelpSystem().displayHelpResource( href );
                     }
                 });
             }
         };
-        helpAction.setToolTipText(Messages.getString( "OverviewPage_Help" ));  //$NON-NLS-1$
+        helpAction.setToolTipText( Messages.getString( "DataStagingPage_Help" ) );  //$NON-NLS-1$
         URL stageInURL = Activator.getDefault().getBundle().getEntry( "icons/help.gif" ); //$NON-NLS-1$       
         this.helpDesc = ImageDescriptor.createFromURL( stageInURL ) ;   
-        helpAction.setImageDescriptor(this.helpDesc);
-        manager.add(helpAction);
+        helpAction.setImageDescriptor( this.helpDesc );
+        manager.add( helpAction );
         form.updateToolBar();
     }
     
@@ -573,7 +572,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
   
   
   protected String getHelpResource() {
-    return "guide/tools/editors/manifest_editor/DataStaging.htm"; //$NON-NLS-1$
+    return "/eu.geclipse.doc.user/html/concepts/jobmanagement/editorpages/datastaging.html"; //$NON-NLS-1$
   }
  
  
@@ -620,7 +619,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
   
    
    
-   @SuppressWarnings("boxing")
+  @SuppressWarnings("boxing")
   protected void handleEventDialog( final TableViewer tableViewer, 
                                     final DataStagingType selectedObject ) {
      this.value = new Object[4];

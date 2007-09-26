@@ -526,10 +526,10 @@ public final class JobDefinitionPage extends FormPage
                 });
             }
         };
-        helpAction.setToolTipText(Messages.getString( "OverviewPage_Help" ));  //$NON-NLS-1$
+        helpAction.setToolTipText( Messages.getString( "JobDefinitionPage_Help" ) );  //$NON-NLS-1$
         URL stageInURL = Activator.getDefault().getBundle().getEntry( "icons/help.gif" ); //$NON-NLS-1$       
         this.helpDesc = ImageDescriptor.createFromURL( stageInURL ) ;   
-        helpAction.setImageDescriptor(this.helpDesc);
+        helpAction.setImageDescriptor( this.helpDesc );
         manager.add(helpAction);
         form.updateToolBar();
     }

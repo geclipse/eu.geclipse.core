@@ -792,9 +792,11 @@ public final class JobApplicationPage extends FormPage
                              false );
       }
     }
+    
     if( dialog.open() != Window.OK ) {
       return;
     }
+    
     if( this.value[ 0 ].length == 2 ) {
       this.value[ 0 ][ 0 ] = dialog.getStringValue( Messages.getString( "JobApplicationPage_FileSystemName" ) ); //$NON-NLS-1$
       this.value[ 0 ][ 1 ] = dialog.getStringValue( Messages.getString( "JobApplicationPage_Value" ) ); //$NON-NLS-1$
@@ -815,23 +817,23 @@ public final class JobApplicationPage extends FormPage
   private void addFormPageHelp(final ScrolledForm form ) {
     
     final String href = getHelpResource();
-    if (href != null) {
+    if ( href != null ) {
         IToolBarManager manager = form.getToolBarManager();
-        Action helpAction = new Action("help") { //$NON-NLS-1$
+        Action helpAction = new Action( "help" ) { //$NON-NLS-1$
             @Override
             public void run() {
-                BusyIndicator.showWhile(form.getDisplay(), new Runnable() {
+                BusyIndicator.showWhile( form.getDisplay(), new Runnable() {
                     public void run() {
                         PlatformUI.getWorkbench().getHelpSystem().displayHelpResource(href);
                     }
-                });
+                } );
             }
         };
-        helpAction.setToolTipText(Messages.getString( "OverviewPage_Help" ));  //$NON-NLS-1$
+        helpAction.setToolTipText( Messages.getString( "JobApplicationPage_Help" ) );  //$NON-NLS-1$
         URL stageInURL = Activator.getDefault().getBundle().getEntry( "icons/help.gif" ); //$NON-NLS-1$       
         this.helpDesc = ImageDescriptor.createFromURL( stageInURL ) ;   
-        helpAction.setImageDescriptor(this.helpDesc);
-        manager.add(helpAction);
+        helpAction.setImageDescriptor( this.helpDesc );
+        manager.add( helpAction );
         form.updateToolBar();
     }
     
@@ -845,8 +847,10 @@ public final class JobApplicationPage extends FormPage
 
   
   protected void updateButtons( final TableViewer tableViewer ) {
+    
     ISelection selection = tableViewer.getSelection();
     boolean selectionAvailable = !selection.isEmpty();
+    
     if( tableViewer == this.argumentViewer ) {
       this.btnArgAdd.setEnabled( true );
       this.btnArgEdit.setEnabled( selectionAvailable );
@@ -856,6 +860,7 @@ public final class JobApplicationPage extends FormPage
       this.btnEnVarEdit.setEnabled( selectionAvailable );
       this.btnEnVarDel.setEnabled( selectionAvailable );
     }
+    
   } // End updateButtons
   
   
