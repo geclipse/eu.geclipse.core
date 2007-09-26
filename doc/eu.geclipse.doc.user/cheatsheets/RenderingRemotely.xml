@@ -2,12 +2,44 @@
 <cheatsheet title="Visualising Scientific Data Rendered on Remote Machine">
    <intro href="/eu.geclipse.doc.user/html/gettingstarted/visualization/RenderingRemotely.html">
       <description>
-         <b>Body</b>
+         <b>This cheat sheet will show you how to invoke a remotely rendered visualisation.</b>
       </description>
    </intro>
-   <item title="Item" dialog="true" skip="false">
+   <item title="Open the g-Eclipse User perspective" dialog="true" skip="true">
       <description>
-         <b>Body</b>
+         If you are not already in the g-Eclipse User perspective, in the main menu
+          select <b>Window &gt; Open Perspective &gt; Other...</b> and select
+          <b>g-Eclipse (User)</b>. Alternatively, click on the &quot;Click to Perform&quot; 
+          link below.
       </description>
+      <action class="org.eclipse.ui.internal.cheatsheets.actions.OpenPerspective" pluginId="org.eclipse.ui.cheatsheets" confirm="false" param1="eu.geclipse.ui.userPerspective">
+      </action>
+   </item>
+   <item title="Locate a VTK Pipeline File" dialog="true" skip="false">
+      <description>
+         If you have followed the previous cheatsheets, you will have a .vtkpipeline file
+         somewhere in your project view. Locate this file.
+      </description>
+   </item>
+   <item title="Open Remote Rendering Viewer" dialog="true" skip="false">
+      <description>
+         Note that as of now, full functionality is not implemented and only a demo is 
+         available. 
+         Right-click on your .vtkpipeline file and select <b>Render Remotely</b>.
+         This will bring up a GVid viewer.
+      </description>
+   </item>
+   <item title="Invoke Remote Rendering Demo" dialog="true" skip="false">
+      <description>
+         Click on the <b>New Connection</b> button in the upper right corner of the GVid view.
+         In the wizard that pops up, select GLogin connection and click <b>Next</b>.
+         On the next page of the wizard, enter the following settings:
+      </description>
+      <subitem label="Contact string: hydra.gup.uni-linz.ac.at" skip="false">
+      </subitem>
+      <subitem label="Command: /bin/sh startdemo.sh" skip="false">
+      </subitem>
+      <subitem label="Leave everything else blank and unselected and click Finish." skip="false">
+      </subitem>
    </item>
 </cheatsheet>
