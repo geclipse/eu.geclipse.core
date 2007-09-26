@@ -5,11 +5,60 @@
          <b>This cheat sheet will show you how to create a VTK pipeline file.</b>
       </description>
    </intro>
-   <item title="Open the g-Eclipse user perspective" dialog="true" skip="false">
+   <item title="Open the g-Eclipse User perspective" skip="true">
       <description>
-         If you are not already in the g-Eclipse user perspective, in the main menu select <b>Window &gt; Open Perspective &gt; g-Eclipse (User)</b> or click on the &quot;Click to Perform&quot; link below.
+          If you are not already in the g-Eclipse User perspective, in the main menu
+          select <b>Window &gt; Open Perspective &gt; Other...</b> and select
+          <b>g-Eclipse (User)</b>. Alternatively, click on the &quot;Click to Perform&quot; 
+          link below.
       </description>
-      <command serialization="org.eclipse.ui.perspectives.showPerspective(org.eclipse.ui.perspectives.showPerspective.perspectiveId=org.eclipse.pde.ui.PDEPerspective)" confirm="false">
-      </command>
+          <action
+                  pluginId="org.eclipse.ui.cheatsheets"
+                          class="org.eclipse.ui.internal.cheatsheets.actions.OpenPerspective"
+                          param1="eu.geclipse.ui.userPerspective"/>
    </item>
+
+   <item title="Select the Grid Project View" skip="true">
+      <description>
+          Select the Grid Project View on your g-Eclipse Workbench.
+      </description>
+      <command serialization="org.eclipse.ui.views.showView(org.eclipse.ui.views.showView.viewId=eu.geclipse.ui.views.gridProjectView)"/>
+   </item>
+   
+   <item title="Launch the VTK Pipeline Wizard" dialog="true" skip="true">
+      <description>
+          Right-click into that view and select <b>New &gt; Other.. &gt; VTK Pipeline</b> to launch the wizard.
+      </description>
+      <command confirm="false" serialization="org.eclipse.ui.newWizard(newWizardId=eu.geclipse.vtk.ui.wizards.VTKPipelineWizardID)"/>
+   </item>
+   
+   <item title="Name your VTK Pipeline File" dialog="true" skip="true">
+      <description>
+          Make sure you have selected the directory where the VTK Pipeline will be stored, 
+          name your file or accept the default and click <b>Next</b>.
+      </description>
+   </item>
+   
+   <item title="Define the VTK Pipeline" dialog="true" skip="true">
+      <description>
+          Enter the main content of the file.
+          Note that the current implementation is not dependent on the type of data 
+          and type of output. Choose any.
+      </description>
+      <subitem label="Type of Data: Select one of the available types of data.">
+      </subitem>
+      <subitem label="Data Source Location: Use the browse button to select the location of your data source.
+Note that current implementation can only visualise data that is locally present on your machine.
+If your data is located remotely, please copy it over to your machine first.">
+      </subitem>
+      <subitem label="Output Type: Select one of the available output types.">
+      </subitem>
+   </item>
+   
+   <item title="Complete the VTK Pipeline File Creation" dialog="true" skip="true">
+      <description>
+          Click <b>Finish</b> to complete the VTK Pipeline creation.
+      </description>
+   </item>
+
 </cheatsheet>
