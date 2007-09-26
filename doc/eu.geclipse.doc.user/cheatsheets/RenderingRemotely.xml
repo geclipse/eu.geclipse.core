@@ -2,7 +2,7 @@
 <cheatsheet title="Visualising Scientific Data Rendered on Remote Machine">
    <intro href="/eu.geclipse.doc.user/html/gettingstarted/visualization/RenderingRemotely.html">
       <description>
-         <b>This cheat sheet will show you how to invoke a remotely rendered visualisation.</b>
+         This cheat sheet will show you how to invoke a remotely rendered visualisation.
       </description>
    </intro>
    <item title="Open the g-Eclipse User perspective" dialog="true" skip="true">
@@ -17,7 +17,7 @@
    </item>
    <item title="Locate a VTK Pipeline File" dialog="true" skip="false">
       <description>
-         If you have followed the previous cheatsheets, you will have a .vtkpipeline file
+         If you have followed the previous cheatsheets, you will have a <b>.vtkpipeline</b> file
          somewhere in your project view. Locate this file.
       </description>
    </item>
@@ -26,12 +26,12 @@
          Note that as of now, full functionality is not implemented and only a demo is 
          available. 
          Right-click on your .vtkpipeline file and select <b>Render Remotely</b>.
-         This will bring up a GVid viewer.
+         This will bring up a <b>GVid viewer</b>.
       </description>
    </item>
    <item title="Invoke Remote Rendering Demo" dialog="true" skip="false">
       <description>
-         Click on the <b>New Connection</b> button in the upper right corner of the GVid view.
+         Click on the <b>New Connection</b> button in the upper right corner of the <b>GVid view</b>.
          In the wizard that pops up, select GLogin connection and click <b>Next</b>.
          On the next page of the wizard, enter the following settings:
       </description>
