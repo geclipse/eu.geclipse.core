@@ -2,12 +2,36 @@
 <cheatsheet title="Visualising Scientific Data on Local Machine">
    <intro href="/eu.geclipse.doc.user/html/gettingstarted/visualization/RenderingLocally.html">
       <description>
-         <b>Body</b>
+         This cheat sheet will show you how to invoke a locally rendered visualisation.
       </description>
    </intro>
-   <item title="Item" dialog="true" skip="false">
+   <item title="Open the g-Eclipse User perspective" dialog="true" skip="true">
       <description>
-         <b>Body</b>
+         If you are not already in the g-Eclipse User perspective, in the main menu
+          select <b>Window &gt; Open Perspective &gt; Other...</b> and select
+          <b>g-Eclipse (User)</b>. Alternatively, click on the &quot;Click to Perform&quot; 
+          link below.
+      </description>
+      <action class="org.eclipse.ui.internal.cheatsheets.actions.OpenPerspective" pluginId="org.eclipse.ui.cheatsheets" confirm="false" param1="eu.geclipse.ui.userPerspective">
+      </action>
+   </item>
+   <item title="Locate a VTK Pipeline File" dialog="true" skip="false">
+      <description>
+         If you have followed the previous cheatsheets, you will have a .vtkpipeline file
+         somewhere in your project view. Locate this file.
+      </description>
+   </item>
+   <item title="Open Local Rendering Viewer" dialog="true" skip="false">
+      <description>
+         Right-click on your .vtkpipeline file and select <b>Render Locally</b>.
+         This will bring up a <b>Visualisation viewer</b>. After a few seconds, you will
+         see your data rendered in the view.
+      </description>
+   </item>
+   <item title="Interact with Rendered Image" dialog="true" skip="false">
+      <description>
+         You can explore your data by dragging the mouse. Right-click to <b>zoom</b>, 
+         left-click to <b>rotate</b> and middle button to <b>move</b> the image.
       </description>
    </item>
 </cheatsheet>
