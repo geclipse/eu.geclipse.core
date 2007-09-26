@@ -2,12 +2,73 @@
 <cheatsheet title="Title">
    <intro href="/eu.geclipse.doc.user/html/gettingstarted/visualization/SpecifyingVtkPipelineContent.html">
       <description>
-         <b>Body</b>
+         <b>This cheat sheet will show you how to further define and edit a VTK pipeline file.</b>
       </description>
    </intro>
-   <item title="Item" dialog="true" skip="false">
+   
+   <item title="Open the g-Eclipse User perspective" skip="true">
       <description>
-         <b>Body</b>
+          If you are not already in the g-Eclipse User perspective, in the main menu
+          select <b>Window &gt; Open Perspective &gt; Other...</b> and select
+          <b>g-Eclipse (User)</b>. Alternatively, click on the &quot;Click to Perform&quot; 
+          link below.
+      </description>
+          <action
+                  pluginId="org.eclipse.ui.cheatsheets"
+                          class="org.eclipse.ui.internal.cheatsheets.actions.OpenPerspective"
+                          param1="eu.geclipse.ui.userPerspective"/>
+   </item>
+
+   <item title="Open the VTK Pipeline Editor" skip="true">
+      <description>
+         If you have closed the VTK Pipeline Editor, created in the previous cheatsheet, 
+         double-click on your <b>.vtkpipeline</b> file to open it up again. 
+      	You will see a five page editor, with the <b>Overview page</b> selected.
+      	This editor will allow you to further describe your VTK pipeline.
+      	Note that only the file location is currently used when reading the VTK Pipeline
+      	file during rendering. All other settings will be used in later development.
       </description>
    </item>
+   
+   <item title="Overview Page" dialog="true" skip="true">
+      <description>
+         The overview page that also links to the additional editor pages allows you to edit the 
+         main entries, which you have originally filled in with the wizard.
+         If you are satisfied with the content of this page, select the next tab or click
+         on the <b>DataSource</b> link.
+      </description>
+   </item>
+   
+   <item title="Data Source Page" dialog="true" skip="true">
+      <description>
+         On this page, under the Data Source Section, you can change the data 
+         file location, and the type of the data. Under the Data Reader Section, you will 
+         be able to add the VTK reader class and set its respective parameters. 
+         Now select the next tab called <b>Data Processing Page</b>.
+      </description>
+   </item>
+   
+   <item title="Data Processing Page" dialog="true" skip="true">
+      <description>
+         On this page you will be able to change the output format.
+         Now select the next tab called <b>VTK Filter Algorithm Page</b>.
+      </description>
+   </item>
+   
+   <item title="VTK Filter Algorithm Page" dialog="true" skip="true">
+      <description>
+         On this page you will be able to add the filter algorithm classes and 
+         their attributes.
+         Now select the last tab called <b>*.vtkpipeline</b>.
+      </description>
+   </item>
+   
+   <item title="Raw .vtkpipeline Page" dialog="true" skip="true">
+      <description>
+         On this page you can see how your pipeline structure looks.
+         You could edit this file by hand but it is recommended you use the editor
+         to make changes in order to keep your file valid at all times.
+      </description>
+   </item>
+   
 </cheatsheet>
