@@ -23,10 +23,19 @@ job is executed.</p>
 <p>This section allows to specify which files should be moved to the execution host
 before the job starts executing.</p>
 
+<img src="../images/stage-in_section.jpg" alt="Stage-In Files Section">
+
 
 <p> The table in this section provides an overview of the stage-in files along with
 their attributes. All stage-in files are denoted with the
 <img src="../../../../../eu.geclipse.jsdl.ui/icons/stage-in.gif" alt="Stage-In icon"> icon. </p>
+
+<p> Press <b>Add...</b> for opening an input dialog to insert a new stage-in file.</p>
+
+<img src="../images/stage-in_dialog.jpg" alt="Stage-In Dialog">
+
+<p> The input dialog allows you to specify the source location of the stage-in file
+by browsing remote file systems.</p> 
 
 <p>A <b>Source Location</b> specifies the location (directory) of the stage-in 
 file on a remote host. The Source location is optional, but if specified, it should
@@ -44,15 +53,38 @@ the Creation Flag is the JSDL Editor is set to "overwrite".</p>
 <p>A <b>Delete On Termination</b> specifies whether the stage-in file should be
 deleted after the job executes.</p>
 
+<p> You can browse remote <a href="../../../concepts/connections/creating.html"> file systems</a> which are available to your Grid Project
+by clicking the <img src="../images/file.gif" alt="File"> button next to the location 
+text field.
+You can create also new connections to remote file systems which are not available
+to your Grid Project by clicking 
+<img src="../../../../../eu.geclipse.ui/icons/etool16/newconn_wiz.gif" alt="New Connection">.
+</p>
+
+<img src="../images/stage-in_grid-dialog.jpg" alt="Stage-In Grid File Dialog">
+
+
+
+
 <h1>Staged-Out Files</h1>
 
 <p>This section allows to specify which files should be moved from the execution host
 after the job terminates.</p>
 
+<img src="../images/stage-out_section.jpg" alt="Stage-Out Files">
+
 
 <p> The table in this section provides an overview of the stage-out files along with
 their attributes. All stage-out files are denoted with the
 <img src="../../../../../eu.geclipse.jsdl.ui/icons/stage-out.gif" alt="Stage-Out icon"> icon. </p>
+
+
+<p> Press <b>Add...</b> for opening an input dialog to insert a new stage-out file.</p>
+
+<img src="../images/stage-out_dialog.jpg" alt="Stage-Out Dialog">
+
+<p> The input dialog allows you to specify the target location of the stage-out file
+by browsing remote file systems.</p> 
 
 <p>A <b>Target Location</b> specifies the location (directory) of the stage-out 
 file on a remote host. The Target location is optional, but if specified, it should
@@ -69,6 +101,17 @@ the Creation Flag is the JSDL Editor is set to "overwrite".</p>
 
 <p>A <b>Delete On Termination</b> specifies whether the file to be stage-out should be
 deleted after it has been send to the target location.</p>
+
+
+<p> You can browse remote <a href="../../../concepts/connections/creating.html">
+file systems</a> which are available to your Grid Project by clicking the <img src="../images/file.gif" alt="File">
+button next to the location text field.
+You can create also new connections to remote file systems which are not available
+to your Grid Project by clicking 
+<img src="../../../../../eu.geclipse.ui/icons/etool16/newconn_wiz.gif" alt="New Connection">.
+</p>
+
+<img src="../images/stage-out_grid-dialog.jpg" alt="Stage-Out Grid File Dialog">
 
 
 </body>
