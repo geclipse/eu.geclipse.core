@@ -80,6 +80,20 @@ public class Activator extends Plugin {
   }
 
   /**
+   * Logs an exception with custom messago to the eclipse logger.
+   * 
+   * @param exc The exception to be logged.
+   */
+  public static void logException( final Throwable exc, String message ) {
+    IStatus status = new Status( IStatus.ERROR,
+                                 PLUGIN_ID,
+                                 IStatus.OK,
+                                 message,
+                                 exc );
+    logStatus( status );
+  }
+
+  /**
    * Logs an exception to the eclipse logger.
    * 
    * @param exc The exception to be logged.

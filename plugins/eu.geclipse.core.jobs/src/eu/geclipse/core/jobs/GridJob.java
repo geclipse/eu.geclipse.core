@@ -1,12 +1,18 @@
-/*******************************************************************************
- * Copyright (c) 2006 g-Eclipse consortium All rights reserved. This program and
- * the accompanying materials are made available under the terms of the Eclipse
- * Public License v1.0 which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html Initial development of the original
- * code was made for project g-Eclipse founded by European Union project number:
- * FP6-IST-034327 http://www.geclipse.eu/ Contributor(s): Pawel Wolniewicz -
- * PSNC
- ******************************************************************************/
+/*****************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Pawel Wolniewicz 
+ *    Mariusz Wojtysiak
+ *****************************************************************************/
 package eu.geclipse.core.jobs;
 
 import java.io.ByteArrayInputStream;
@@ -28,6 +34,7 @@ import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -62,9 +69,10 @@ import eu.geclipse.core.model.impl.ResourceGridElement;
 import eu.geclipse.jsdl.JSDLJobDescription;
 
 /**
- * Class representing submitted job. 
+ * Class representing submitted job.
  */
 public class GridJob extends ResourceGridContainer implements IGridJob {
+
   final static private String JOBID_FILENAME = ".jobID"; //$NON-NLS-1$
   final static private String JOBINFO_FILENAME = ".jobInfo"; //$NON-NLS-1$
   final static private String JOBSTATUS_FILENAME = ".jobStatus"; //$NON-NLS-1$
@@ -98,15 +106,22 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     }
   }
 
+  public static void createJobStructure( final IFolder jobFolder,
+                                         final GridJobID id,
+                                         final IGridJobDescription description )
+    throws GridModelException
+  {
+    GridJob job = new GridJob( jobFolder );
+    job.create( jobFolder, id, description );
+  }
+
   /**
-   * @param parent
    * @param jobFolder
    * @param id
    * @param description
    * @throws GridModelException
    */
-  public void create( final IGridContainer parent,
-                      final IFolder jobFolder,
+  public void create( final IFolder jobFolder,
                       final GridJobID id,
                       final IGridJobDescription description )
     throws GridModelException
@@ -117,20 +132,30 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     this.jobInfoFile = jobFolder.getFile( JOBINFO_FILENAME );
     this.jobID = id;
     this.jobDescription = description;
-    this.jobStatus = new GridJobStatus( Messages.getString("GridJob.jobStatusSubmitted"), //$NON-NLS-1$
-                                   IGridJobStatus.SUBMITTED );
+    this.jobStatus = new GridJobStatus( Messages.getString( "GridJob.jobStatusSubmitted" ), //$NON-NLS-1$
+                                        IGridJobStatus.SUBMITTED );
     writeJobDescription( description, jobFolder );
     writeJobID( id, jobFolder );
     writeJobStatus( this.jobStatusFile );
     writeJobInfo( description, jobFolder );
-    IGridElementCreator creator = findCreator( this.jobDescriptionFile );
-    if( creator != null ) {
-      create( creator );
-    }
-    IGridJobStatusServiceFactory factory = GridJobStatusServiceFactoryManager.getFactory( id.getClass() );
-    if( factory != null ) {
-      this.statusService = factory.getGridJobStatusService( id );
-    }
+    // IPath path = jobFolder.getFullPath().append( jobDescriptionFile.getName()
+    // );
+    // try {
+    // jobDescriptionFile.copy( path, true, null );
+    // } catch( CoreException e ) {
+    // throw new GridModelException( GridModelProblems.ELEMENT_CREATE_FAILED,
+    // e,
+    // "Problem while creating job description file" );
+    // }
+    // IGridElementCreator creator = findCreator( jobDescriptionFile );
+    // if( creator != null ) {
+    // create( creator );
+    // }
+    // IGridJobStatusServiceFactory factory =
+    // GridJobStatusServiceFactoryManager.getFactory( id.getClass() );
+    // if( factory != null ) {
+    // statusService = factory.getGridJobStatusService( id );
+    // }
   }
 
   private void readJobInfo( final IFolder jobFolder ) {
@@ -256,7 +281,9 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
   public IGridJobStatus updateJobStatus() {
     IGridJobStatus newJobStatus = null;
     try {
-      if( this.statusService != null && this.jobID.getJobID() != GridJobID.UNKNOWN ) {
+      if( this.statusService != null
+          && this.jobID.getJobID() != GridJobID.UNKNOWN )
+      {
         newJobStatus = this.statusService.getJobStatus( this.jobID );
       }
       if( newJobStatus != null && newJobStatus instanceof GridJobStatus ) {
@@ -267,7 +294,6 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
       Activator.logException( e );
     }
     // jobStatus = new GridJobStatus( jobID );
-    
     return this.jobStatus;
   }
 
@@ -373,12 +399,11 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
    * name=super.getName(); IGridJobDescription desc = getJobDescription();
    * if(desc!=null){ name = name + "("+desc.getName()+")"; } return name; }
    */
-  
   @Override
   public boolean canContain( final IGridElement element ) {
     return ( element instanceof IGridJobDescription )
            || ( element instanceof ResourceGridElement )
-           || ( element instanceof ResourceGridContainer ); 
+           || ( element instanceof ResourceGridContainer );
   }
 
   @Override
@@ -436,7 +461,8 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     String xml = ( ( GridJobID )id ).getXML();
     Activator.consoleLog( xml );
     try {
-      byte[] byteArray = xml.getBytes( "ISO-8859-1" ); // choose a charset //$NON-NLS-1$
+      byte[] byteArray = xml.getBytes( "ISO-8859-1" ); // choose a charset
+                                                        // //$NON-NLS-1$
       ByteArrayInputStream baos = new ByteArrayInputStream( byteArray );
       file.create( baos, true, null );
     } catch( CoreException cExc ) {
@@ -468,7 +494,8 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     // TODO - pawelw - remove it
     Activator.consoleLog( xml );
     try {
-      byteArray = xml.getBytes( "ISO-8859-1" ); // choose a charset //$NON-NLS-1$
+      byteArray = xml.getBytes( "ISO-8859-1" ); // choose a charset
+                                                // //$NON-NLS-1$
       baos = new ByteArrayInputStream( byteArray );
       if( _jobStatusFile.exists() ) {
         _jobStatusFile.setContents( baos, true, true, null );
@@ -530,7 +557,8 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
           + ">"; //$NON-NLS-1$
     Activator.consoleLog( xml );
     try {
-      byteArray = xml.getBytes( "ISO-8859-1" ); // choose a charset //$NON-NLS-1$
+      byteArray = xml.getBytes( "ISO-8859-1" ); // choose a charset
+                                                // //$NON-NLS-1$
       baos = new ByteArrayInputStream( byteArray );
       file.create( baos, true, null );
     } catch( CoreException cExc ) {
@@ -548,6 +576,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
   public Date getSubmissionTime() {
     return this.submissionTime;
   }
+
   // public Object getAdapter(Class cl){
   // Object adapter=null;
   // // adapter=Platform.getAdapterManager().getAdapter(this, cl);
@@ -559,7 +588,6 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
   // public IResource getResource() {
   // return gridJobFolder;
   // }
-
   public IStatus downloadOutputs( final IProgressMonitor monitor )
     throws GridException
   {
@@ -579,5 +607,30 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
       } );
     }
     return status;
+  }
+
+  /**
+   * Check if a job can be created from this folder. Currently it checks only if
+   * directory contains job info file.
+   * 
+   * @param folder
+   * @return
+   */
+  public static boolean canCreate( final IFolder folder ) {
+    IFile infoFile = folder.getFile( GridJob.JOBINFO_FILENAME );
+    return "job".equalsIgnoreCase( folder.getFileExtension() )
+                                                              ? infoFile.exists()
+                                                              : false;
+  }
+
+  /*
+   * GridJobs adds children in constructor. Children should not be handled by
+   * model.
+   * 
+   * @see eu.geclipse.core.model.impl.ResourceGridContainer#fetchChildren(org.eclipse.core.runtime.IProgressMonitor)
+   */
+  @Override
+  protected boolean fetchChildren( final IProgressMonitor monitor ) {
+    return true;
   }
 }
