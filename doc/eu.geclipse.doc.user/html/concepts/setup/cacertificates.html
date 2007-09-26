@@ -52,8 +52,8 @@ This page contains a list of all currently available CA certificates.
 <img border="0" src="images/CACertPreferencePage.png" alt="The g-Eclipse CA Certificate Preference Page">
 
 <p>
-To import further certificates click <b>Add from Repository...</b>.
-This will open the <b>CA Certificate Import Wizard</b>.
+To import further certificates from a remote repository click
+<b>Add from Repository...</b>. This will open the <b>CA Certificate Import Wizard</b>.
 
 <p>
 <img border="0" src="images/CACertWizard.png" alt="The g-Eclipse CA Certificate Import Wizard">
@@ -89,7 +89,51 @@ will afterwards display the newly imported certificates.
 
 <h2><a name="fromDirectory">Import from a Directory</a></h2>
 
+To import further certificates from a local directory click
+<b>Add from Directory...</b>. This will open the <b>CA Certificate Import Wizard</b>.
+
+<p>
+<img border="0" src="images/CACertDirWizard.png" alt="The g-Eclipse CA Certificate Import Wizard">
+
+<p>
+On the first page of this wizard you can select a certificate loader that
+is used to import certificates. By default g-Eclipse comes with a certificate
+loader for certificates hosted by the European Policy Management Authority
+for Grid Authentication (EUGridPMA) and a certificate loader for simple PEM-based
+certificates. After selecting a loader and clicking
+<b>Next</b> a wizard page for specifying a local directory will open.
+
+<p>
+<img border="0" src="images/CACertDirWizardPage.png" alt="The g-Eclipse CA Certificate Directory Wizard Page">
+
+<p>
+In the <b>Local Direcory Wizard Page</b> you have to specify a valid directory
+pointing to a location where CA certificates can be found. By clicking <b>Next</b>
+the certificate loader is triggered to query the given directory for available
+certificates. If no error occurs while listing the certificates contained in the
+directory the next wizard page will appear with a list of all certificates that are
+ready to be imported.
+
+<p>
+<img border="0" src="images/CACertDirListWizardPage.png" alt="The g-Eclipse CA Certificate List Wizard Page">
+
+<p>
+Now you can simply select the check box for each certificate you would like
+to import and click <b>Finish</b>. After that the selected certificates are
+imported into g-Eclipse. The preference page will afterwards display the newly
+imported certificates.
+
 <h2><a name="deleteCert">Delete Certificates</a></h2>
+
+<p>
+To delete one or multiple certificates simple open the
+<a class="command-link" href='javascript:executeCommand("org.eclipse.ui.window.preferences(preferencePageId=eu.geclipse.ui.internal.preference.CaCertPreferencePage)")'>
+<img src="PLUGINS_ROOT/org.eclipse.help/command_link.png">
+<b>g-Eclipse &gt; CA Certificates</b></a> preference page,
+select the certificates you would like to delete and click
+<b>Delete</b>. A dialog will then appear where you have to confirm that
+you really would like to delete the selected certificates. After that
+the selected certificates are permanently removed from the certificate list.
 
 </body>
 </html>
