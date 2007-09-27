@@ -5,12 +5,6 @@
   label="Concepts"
   link_to="toc.xml#geclipse_concepts">
 
-  <topic
-    label="Overview"
-    href="html/concepts/overview/overview.html">
-    <anchor id="geclipse_concepts_overview" />
-  </topic>
-
   <topic 
     label="g-Eclipse Setup">
     <anchor id="geclipse_concepts_setup" />
