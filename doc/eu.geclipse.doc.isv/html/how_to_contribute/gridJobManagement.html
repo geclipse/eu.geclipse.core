@@ -30,17 +30,68 @@
 
 <h2>UI Components</h2>
 
+<p>The Grid Job submission Wizard allows to submit jobs to the specific middleware.</p>
+<img
+  src="images/jobSubmission.png" />
+
+
 <h2>Important Extension points</h2>
 <h3>Core extension point</h3>
+
+<dl>
+  <dt><code>eu.geclipse.core.gridJobStatusServiceManager</code></dt>
+  <dd>This extention point defines factory for JobStatus services. The factory must be able to create service for given URI. </dd>
+</dl>
+
+<dl>
+  <dt><code>eu.geclipse.core.gridElementCreator</code></dt>
+  <dd>This extension point can be used to define middleware
+  specific Job Status Service and Job Submission Service creators.<br>
+</dl>
+
+<dl>
+  <dt><code>eu.geclipse.core.jobs.jobID</code></dt>
+  <dd>The specific jobID implementation can be provided with this extention point</dd>
+</dl>
+
+<dl>
+  <dt><code>eu.geclipse.core.jobs.jobStatus</code></dt>
+  <dd>The specific jobStatus implementation can be provided with this extention point</dd>
+</dl>
+
+
 <h3>UI extension point</h3>
+<dl>
+  <dt><code>eu.geclipse.ui.jobSubmissionWizard</code></dt>
+  <dd>Defines custom wizard and job creator which should be used for middleware specific job submission.
+</dd>
+</dl>
+
 
 <h2>Interfaces to implement</h2>
 <dl>
-  <dt><code>eu.geclipse.XXXXXXXXXXXXX</code></dt>
-  <dd>Implement this XXXXXXXXXXXXX</dd>
-  <dt><code>eu.geclipse.XXXXXXXXXXXXX</code></dt>
-  <dd>Implement this XXXXXXXXXXXXX</dd>
+  <dt><code>eu.geclipse.core.model.implAbstractGridJobCreator</code></dt>
+  <dd>Implement this to represent middleware specific Grid Job Creator. This is not required as the general eu.geclipse.core.jobs.GridJobCreator can be used</dd>
+  <dt><code>eu.geclipse.core.model.IGridJobStatusService</code></dt>
+  <dd>Implement this to provide middleware specific job status service</dd>
+  <dt><code>eu.geclipse.core.model.IGridJobSubmissionService</code></dt>
+  <dd>Implement this to provide middleware specific job submission service</dd>
+  <dt><code>eu.geclipse.core.model.IGridElementCreator</code></dt>
+  <dd>Implement this to provide middleware specific JobStatusServiceCreator and JobSubmissionServiceCreator(in fact it is
+  recommended to extend <code>eu.geclipse.core.model.impl.AbstractGridElementCreator</code>)</dd>
 </dl>
+
+<h2>Classes to extend</h2>
+<dl>
+  <dt><code>eu.geclipse.core.jobs.GridJobID</code></dt>
+  <dd>Extend this class to implement middleware specific implementation of job id which can be handled by eu.geclipse.core.jobs.GridJob </dd>
+  <dt><code>eu.geclipse.core.jobs.GridJobStatus</code></dt>
+  <dd>Extend this class to implement middleware specific implementation of job status which can be handled by eu.geclipse.core.jobs.GridJob </dd>
+  <dt><code>eu.geclipse.ui.wizards.jobsubmission.JobSubmissionWizardBase</code></dt>
+  <dd>Implement this to provide job wizard which will be used for middleware specific job submission</dd>
+</dl>
+
+
 
 </body>
 

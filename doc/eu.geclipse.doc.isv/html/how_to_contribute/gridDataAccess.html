@@ -32,16 +32,33 @@
 
 <h2>UI Components</h2>
 
+<p>The Connection Wizard allows to define new remote connection.
+tokens.</p>
+<img
+  src="images/newConnectionWizard.png" />
+
+
 <h2>Important Extension points</h2>
-<h3>Core extension point</h3>
+
 <h3>UI extension point</h3>
+
+<dl>
+  <dt><code>org.eclipse.core.filesystem.filesystems</code></dt>
+  <dd>Provides a scheme for defining new  type of filesystem</dd>
+</dl>
+
+<h3>Core extension point</h3>
+
+<dl>
+  <dt><code>eu.geclipse.ui.efs</code></dt>
+  <dd>Allows to define efs ui extension for implemented filesystem</dd>
+</dl>
+
 
 <h2>Interfaces to implement</h2>
 <dl>
-  <dt><code>eu.geclipse.XXXXXXXXXXXXX</code></dt>
-  <dd>Implement this XXXXXXXXXXXXX</dd>
-  <dt><code>eu.geclipse.XXXXXXXXXXXXX</code></dt>
-  <dd>Implement this XXXXXXXXXXXXX</dd>
+  <dt><code>eu.geclipse.org.eclipse.core.filesystem.provider.FileSystem</code></dt>
+  <dd>Implement this to define new type of filesystem</dd>
 </dl>
 
 </body>
