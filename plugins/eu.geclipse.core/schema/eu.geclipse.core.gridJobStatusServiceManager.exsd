@@ -6,17 +6,12 @@
          <meta.schema plugin="eu.geclipse.core" id="eu.geclipse.core.gridJobStatusServiceManager" name="GridJobStatusServiceManager"/>
       </appInfo>
       <documentation>
-         [Enter description of this extension point.]
+         This extention point defines factory for JobStatus services. The factory must be able to create service for given URI. 
+ServedJobID elements informs JobStatus service manager that the services created by the factory can retrieve job status for the specificed GridJobIDs classes.
       </documentation>
    </annotation>
 
    <element name="extension">
-      <annotation>
-         <documentation>
-            This extention point defines factory for JobStatus services. The factory must be able to create service for given URI. 
-ServedJobID elements informs JobStatus service manager that the services created by the factory can retrieve job status for the specificed GridJobIDs classes.
-         </documentation>
-      </annotation>
       <complexType>
          <sequence>
             <element ref="factory"/>
@@ -50,11 +45,16 @@ ServedJobID elements informs JobStatus service manager that the services created
    </element>
 
    <element name="factory">
+      <annotation>
+         <documentation>
+            Factory that can create GridJobStatusService from the given GridJobId
+         </documentation>
+      </annotation>
       <complexType>
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  Name of the class implementing eu.geclipse.core.model.IGridJobStatusServiceFactory.
                </documentation>
                <appInfo>
                   <meta.attribute kind="java" basedOn="eu.geclipse.core.model.IGridJobStatusServiceFactory"/>
@@ -65,11 +65,16 @@ ServedJobID elements informs JobStatus service manager that the services created
    </element>
 
    <element name="jobID">
+      <annotation>
+         <documentation>
+            Definition of GridJobID for which the factory can create GridJobStatusService
+         </documentation>
+      </annotation>
       <complexType>
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  Name of the class implementing eu.geclipse.core.model.IGridJobID for which the factory can create GridJobStatusService
                </documentation>
                <appInfo>
                   <meta.attribute kind="java" basedOn="eu.geclipse.core.model.IGridJobID"/>
@@ -84,7 +89,7 @@ ServedJobID elements informs JobStatus service manager that the services created
          <meta.section type="since"/>
       </appInfo>
       <documentation>
-         [Enter the first release in which this extension point appears.]
+         0.5
       </documentation>
    </annotation>
 
@@ -93,7 +98,12 @@ ServedJobID elements informs JobStatus service manager that the services created
          <meta.section type="examples"/>
       </appInfo>
       <documentation>
-         [Enter extension point usage example here.]
+         &lt;extension
+         point=&quot;eu.geclipse.core.gridJobStatusServiceManager&quot;&gt;
+      &lt;factory
+            class=&quot;eu.geclipse.glite.resources.GliteJobStatusServiceFactory&quot;/&gt;
+      &lt;jobID class=&quot;eu.geclipse.glite.resources.GliteJobID&quot;/&gt;
+   &lt;/extension&gt;
       </documentation>
    </annotation>
 
@@ -102,7 +112,7 @@ ServedJobID elements informs JobStatus service manager that the services created
          <meta.section type="apiInfo"/>
       </appInfo>
       <documentation>
-         [Enter API information here.]
+         see  the eu.geclipse.core.model.IGridJobStatusServiceFactory interface.
       </documentation>
    </annotation>
 
@@ -111,7 +121,7 @@ ServedJobID elements informs JobStatus service manager that the services created
          <meta.section type="implementation"/>
       </appInfo>
       <documentation>
-         [Enter information about supplied implementation of this extension point.]
+         There are no g-Eclipse core implementations of this extension point. See the middleware extensions for reference.
       </documentation>
    </annotation>
 
@@ -120,7 +130,13 @@ ServedJobID elements informs JobStatus service manager that the services created
          <meta.section type="copyright"/>
       </appInfo>
       <documentation>
-         
+         &lt;p&gt;Copyright (c) 2006, 2007 g-Eclipse Consortium
+
+&lt;p&gt;All rights reserved.
+
+&lt;p&gt;This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at &lt;a href=&quot;http://www.eclipse.org/legal/epl-v10.html&quot;&gt;http://www.eclipse.org/legal/epl-v10.html&lt;/a&gt;.
+
+&lt;p&gt;Initial development of the original code was made for the g-Eclipse project founded by European Union project number: FP6-IST-034327 &lt;a href=&quot;http://www.geclipse.eu&quot;&gt;http://www.geclipse.eu&lt;/a&gt;.
       </documentation>
    </annotation>
 

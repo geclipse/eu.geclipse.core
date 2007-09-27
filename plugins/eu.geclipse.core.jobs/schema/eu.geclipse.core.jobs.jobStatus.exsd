@@ -3,15 +3,18 @@
 <schema targetNamespace="eu.geclipse.core.jobs">
 <annotation>
       <appInfo>
-         <meta.schema plugin="eu.geclipse.core.jobs" id="eu.geclipse.core.jobs.jobID" name="GridJobStatus"/>
+         <meta.schema plugin="eu.geclipse.core.jobs" id="eu.geclipse.core.jobs.jobStatus" name="GridJobStatus"/>
       </appInfo>
       <documentation>
-         [Enter description of this extension point.]
+         This extension points allows to define custom extension of  eu.geclipse.core.jobs.GridJobStatus which is used by GridJob. GridJob represents a submitted job and needs middleware specific implementations of IGridJobStatus and IGridJobID.
       </documentation>
    </annotation>
 
    <element name="extension">
       <complexType>
+         <sequence>
+            <element ref="JobStatus"/>
+         </sequence>
          <attribute name="point" type="string" use="required">
             <annotation>
                <documentation>
@@ -44,10 +47,10 @@
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  Name of the class implementing eu.geclipse.core.jobs.GridJobStatus
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn="eu.geclipse.grid.resources.GridJobStatus:"/>
+                  <meta.attribute kind="java" basedOn="eu.geclipse.core.jobs.GridJobStatus:"/>
                </appInfo>
             </annotation>
          </attribute>
@@ -59,7 +62,7 @@
          <meta.section type="since"/>
       </appInfo>
       <documentation>
-         [Enter the first release in which this extension point appears.]
+         0.5
       </documentation>
    </annotation>
 
@@ -68,7 +71,11 @@
          <meta.section type="examples"/>
       </appInfo>
       <documentation>
-         [Enter extension point usage example here.]
+            &lt;extension
+         point=&quot;eu.geclipse.core.jobs.jobStatus&quot;&gt;
+      &lt;JobID class=&quot;eu.geclipse.core.jobs.GliteJobStatus&quot;/&gt;
+   &lt;/extension&gt;
+
       </documentation>
    </annotation>
 
@@ -77,7 +84,7 @@
          <meta.section type="apiInfo"/>
       </appInfo>
       <documentation>
-         [Enter API information here.]
+         See definition of eu.geclipse.core.jobs.GridJobStatus class
       </documentation>
    </annotation>
 
@@ -86,7 +93,7 @@
          <meta.section type="implementation"/>
       </appInfo>
       <documentation>
-         [Enter information about supplied implementation of this extension point.]
+         There are no g-Eclipse core implementations of this extension point. See the middleware extensions for reference.
       </documentation>
    </annotation>
 
@@ -95,7 +102,13 @@
          <meta.section type="copyright"/>
       </appInfo>
       <documentation>
-         
+         &lt;p&gt;Copyright (c) 2006, 2007 g-Eclipse Consortium
+
+&lt;p&gt;All rights reserved.
+
+&lt;p&gt;This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at &lt;a href=&quot;http://www.eclipse.org/legal/epl-v10.html&quot;&gt;http://www.eclipse.org/legal/epl-v10.html&lt;/a&gt;.
+
+&lt;p&gt;Initial development of the original code was made for the g-Eclipse project founded by European Union project number: FP6-IST-034327 &lt;a href=&quot;http://www.geclipse.eu&quot;&gt;http://www.geclipse.eu&lt;/a&gt;.
       </documentation>
    </annotation>
 

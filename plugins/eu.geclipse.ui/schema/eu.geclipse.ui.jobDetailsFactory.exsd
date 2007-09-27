@@ -6,7 +6,11 @@
          <meta.schema plugin="eu.geclipse.ui" id="eu.geclipse.ui.jobDetailsFactory" name="eu.geclipse.ui.jobDetailsFactory"/>
       </appInfo>
       <documentation>
-         [Enter description of this extension point.]
+         This extension point defines factory, which produces detailed items of submitted job for &quot;Job Details&quot; view. 
+
+A Factory can produce detailed items from IGridJob and optionally IGridJobStatus objects.
+
+
       </documentation>
    </annotation>
 
@@ -52,7 +56,7 @@
          <attribute name="id" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  Unique ID of the factory
                </documentation>
             </annotation>
          </attribute>
@@ -96,7 +100,7 @@ If you specify it, then this factory will be used only for IGridJob-s, for which
          <meta.section type="since"/>
       </appInfo>
       <documentation>
-         [Enter the first release in which this extension point appears.]
+         0.5
       </documentation>
    </annotation>
 
@@ -105,7 +109,16 @@ If you specify it, then this factory will be used only for IGridJob-s, for which
          <meta.section type="examples"/>
       </appInfo>
       <documentation>
-         [Enter extension point usage example here.]
+            &lt;extension
+         point=&quot;eu.geclipse.ui.jobDetailsFactory&quot;&gt;
+      &lt;JobDetailsFactory
+            class=&quot;eu.geclipse.glite.jobdetails.GliteJobDetailsFactory&quot;
+            id=&quot;eu.geclipse.glite.JobDetailsFactory&quot;
+            sourceJobClass=&quot;eu.geclipse.core.jobs.GridJob&quot;
+            sourceJobStatusClass=&quot;eu.geclipse.glite.resources.GliteJobStatus&quot;&gt;
+      &lt;/JobDetailsFactory&gt;
+   &lt;/extension&gt;
+
       </documentation>
    </annotation>
 
@@ -114,7 +127,7 @@ If you specify it, then this factory will be used only for IGridJob-s, for which
          <meta.section type="apiInfo"/>
       </appInfo>
       <documentation>
-         [Enter API information here.]
+         See eu.geclipse.ui.views.IJobDetailsFactory, eu.geclipse.core.model.IGridJob and eu.geclipse.core.model.IGridJobStatus interfaces.
       </documentation>
    </annotation>
 
@@ -123,7 +136,7 @@ If you specify it, then this factory will be used only for IGridJob-s, for which
          <meta.section type="implementation"/>
       </appInfo>
       <documentation>
-         [Enter information about supplied implementation of this extension point.]
+         There are no g-Eclipse core implementations of this extension point. See the middleware extensions for reference.
       </documentation>
    </annotation>
 
@@ -132,7 +145,13 @@ If you specify it, then this factory will be used only for IGridJob-s, for which
          <meta.section type="copyright"/>
       </appInfo>
       <documentation>
-         
+         &lt;p&gt;Copyright (c) 2006, 2007 g-Eclipse Consortium
+
+&lt;p&gt;All rights reserved.
+
+&lt;p&gt;This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at &lt;a href=&quot;http://www.eclipse.org/legal/epl-v10.html&quot;&gt;http://www.eclipse.org/legal/epl-v10.html&lt;/a&gt;.
+
+&lt;p&gt;Initial development of the original code was made for the g-Eclipse project founded by European Union project number: FP6-IST-034327 &lt;a href=&quot;http://www.geclipse.eu&quot;&gt;http://www.geclipse.eu&lt;/a&gt;.
       </documentation>
    </annotation>
 

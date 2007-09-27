@@ -53,7 +53,7 @@ If many sources support properties for the same class, then properties from all 
          <attribute name="id" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  Unique id of the factory
                </documentation>
             </annotation>
          </attribute>
@@ -86,7 +86,7 @@ Used for plugin lazy-loading. If you put here Object, then your plugin will be l
          <meta.section type="since"/>
       </appInfo>
       <documentation>
-         [Enter the first release in which this extension point appears.]
+         0.5
       </documentation>
    </annotation>
 
@@ -95,7 +95,14 @@ Used for plugin lazy-loading. If you put here Object, then your plugin will be l
          <meta.section type="examples"/>
       </appInfo>
       <documentation>
-         [Enter extension point usage example here.]
+            &lt;extension
+         point=&quot;eu.geclipse.ui.propertiesFactory&quot;&gt;
+      &lt;PropertiesFactory
+            class=&quot;eu.geclipse.jsdl.ui.properties.PropertiesFactory&quot;
+            id=&quot;eu.geclipse.jsdl.ui.PropertiesFactory&quot;
+            sourceObjectClass=&quot;eu.geclipse.jsdl.JSDLJobDescription&quot;/&gt;
+   &lt;/extension&gt;
+
       </documentation>
    </annotation>
 
@@ -104,7 +111,7 @@ Used for plugin lazy-loading. If you put here Object, then your plugin will be l
          <meta.section type="apiInfo"/>
       </appInfo>
       <documentation>
-         [Enter API information here.]
+         See eu.geclipse.ui.properties.IPropertiesFactory interface.
       </documentation>
    </annotation>
 
@@ -113,7 +120,8 @@ Used for plugin lazy-loading. If you put here Object, then your plugin will be l
          <meta.section type="implementation"/>
       </appInfo>
       <documentation>
-         [Enter information about supplied implementation of this extension point.]
+         eu.geclipse.jsdl.ui.properties.PropertiesFactory
+eu.geclipse.ui.properties.PropertiesFactory
       </documentation>
    </annotation>
 
@@ -122,7 +130,13 @@ Used for plugin lazy-loading. If you put here Object, then your plugin will be l
          <meta.section type="copyright"/>
       </appInfo>
       <documentation>
-         
+         &lt;p&gt;Copyright (c) 2006, 2007 g-Eclipse Consortium
+
+&lt;p&gt;All rights reserved.
+
+&lt;p&gt;This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at &lt;a href=&quot;http://www.eclipse.org/legal/epl-v10.html&quot;&gt;http://www.eclipse.org/legal/epl-v10.html&lt;/a&gt;.
+
+&lt;p&gt;Initial development of the original code was made for the g-Eclipse project founded by European Union project number: FP6-IST-034327 &lt;a href=&quot;http://www.geclipse.eu&quot;&gt;http://www.geclipse.eu&lt;/a&gt;.
       </documentation>
    </annotation>
 
