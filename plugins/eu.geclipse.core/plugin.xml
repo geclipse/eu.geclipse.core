@@ -74,10 +74,10 @@
             name="Generic VO"
             wizard="eu.geclipse.ui.wizards.GenericVoWizard">
          <source
-               class="eu.geclipse.core.Object:1">
+               class="org.eclipse.core.filesystem.IFileStore">
          </source>
          <target
-               class="eu.geclipse.core.GridElement1">
+               class="eu.geclipse.core.model.impl.GenericVirtualOrganization">
          </target>
       </creator>
    </extension>

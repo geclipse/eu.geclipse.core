@@ -6,7 +6,7 @@
          <meta.schema plugin="eu.geclipse.core" id="gridElementCreator" name="Grid Element Creator"/>
       </appInfo>
       <documentation>
-         [Enter description of this extension point.]
+         This extension point is the entry point into the g-Eclipse model. It defines element creators that are able to create Grid model elements from arbitrary &lt;code&gt;Object&lt;/code&gt;s like &lt;code&gt;IResource&lt;/code&gt;s or &lt;code&gt;URI&lt;/code&gt;s. These element creators are used to both create elements and to insert them into the model hierarchy.
       </documentation>
    </annotation>
 
@@ -51,7 +51,7 @@
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  Implementation of the &lt;code&gt;eu.geclipse.core.model.IGridElementCreator&lt;/code&gt; interface that is used to create Grid elements and to insert them into the Grid model hierarchy.
                </documentation>
                <appInfo>
                   <meta.attribute kind="java" basedOn="eu.geclipse.core.model.IGridElementCreator"/>
@@ -61,14 +61,14 @@
          <attribute name="wizard" type="string">
             <annotation>
                <documentation>
-                  
+                  An optional wizard ID that may be used by the UI to specify initial arguments for a new Grid element.
                </documentation>
             </annotation>
          </attribute>
          <attribute name="name" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  A name of the creator that may be used to represent the creator in the UI, e.g. in wizard pages.
                </documentation>
                <appInfo>
                   <meta.attribute translatable="true"/>
@@ -79,11 +79,16 @@
    </element>
 
    <element name="source">
+      <annotation>
+         <documentation>
+            Specifies the source of the creator. The source of a creator is an arbitrary class (inheriting from &lt;code&gt;java.lang.Object&lt;/code&gt; from which a Grid element can be created.
+         </documentation>
+      </annotation>
       <complexType>
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  An arbitrary &lt;code&gt;java.lang.Object&lt;/code&gt; from which this creator can create a Grid element.
                </documentation>
                <appInfo>
                   <meta.attribute kind="java" basedOn="java.lang.Object:"/>
@@ -93,7 +98,7 @@
          <attribute name="pattern" type="string">
             <annotation>
                <documentation>
-                  
+                  An optional regular expression that may be used to further restrict the sources. If the source itself is for instance a &lt;code&gt;java.io.File&lt;/code&gt; the pattern may be used to match the filename of the file.
                </documentation>
             </annotation>
          </attribute>
@@ -101,11 +106,16 @@
    </element>
 
    <element name="target">
+      <annotation>
+         <documentation>
+            Specifies the target of the creator. The target of a creator is a class that implements &lt;code&gt;eu.geclipse.core.model.IGridElement&lt;/code&gt; and that is created by a specific creator.
+         </documentation>
+      </annotation>
       <complexType>
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  A &lt;code&gt;eu.geclipse.core.model.IGridElement&lt;/code&gt; that denotes the types of elements that are created by an element creator.
                </documentation>
                <appInfo>
                   <meta.attribute kind="java" basedOn=":eu.geclipse.core.model.IGridElement"/>
@@ -120,7 +130,7 @@
          <meta.section type="since"/>
       </appInfo>
       <documentation>
-         &lt;b&gt;This extension point is part of an interim API that is still under development and expected to change significantly before reaching stability. It is being made available at this early stage to solicit feedback from pioneering adopters on the understanding that any code that uses this API will almost certainly be broken (repeatedly) as the API evolves.&lt;/b&gt;
+         0.5
       </documentation>
    </annotation>
 
@@ -129,7 +139,21 @@
          <meta.section type="examples"/>
       </appInfo>
       <documentation>
-         [Enter extension point usage example here.]
+         &lt;pre&gt;
+&lt;extension point=&quot;eu.geclipse.core.gridElementCreator&quot;&gt;
+  &lt;creator
+    class=&quot;eu.geclipse.core.model.impl.GenericVoCreator&quot;
+    name=&quot;Generic VO&quot;
+    wizard=&quot;eu.geclipse.ui.wizards.GenericVoWizard&quot;&gt;
+    &lt;source
+      class=&quot;org.eclipse.core.filesystem.IFileStore&quot;&gt;
+    &lt;/source&gt;
+    &lt;target
+      class=&quot;eu.geclipse.core.model.impl.GenericVirtualOrganization&quot;&gt;
+    &lt;/target&gt;
+  &lt;/creator&gt;
+&lt;/extension&gt;
+&lt;/pre&gt;
       </documentation>
    </annotation>
 
@@ -138,7 +162,7 @@
          <meta.section type="apiInfo"/>
       </appInfo>
       <documentation>
-         [Enter API information here.]
+         See the &lt;code&gt;eu.geclipse.core.model.IGridElementCreator&lt;/code&gt; interface.
       </documentation>
    </annotation>
 
@@ -147,7 +171,7 @@
          <meta.section type="implementation"/>
       </appInfo>
       <documentation>
-         [Enter information about supplied implementation of this extension point.]
+         A core implementation of this extension point is for instance used for the Generic Virtual Organization.
       </documentation>
    </annotation>
 
@@ -156,7 +180,13 @@
          <meta.section type="copyright"/>
       </appInfo>
       <documentation>
-         
+         &lt;p&gt;Copyright (c) 2006, 2007 g-Eclipse Consortium
+
+&lt;p&gt;All rights reserved.
+
+&lt;p&gt;This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at &lt;a href=&quot;http://www.eclipse.org/legal/epl-v10.html&quot;&gt;http://www.eclipse.org/legal/epl-v10.html&lt;/a&gt;.
+
+&lt;p&gt;Initial development of the original code was made for the g-Eclipse project founded by European Union project number: FP6-IST-034327 &lt;a href=&quot;http://www.geclipse.eu&quot;&gt;http://www.geclipse.eu&lt;/a&gt;.
       </documentation>
    </annotation>
 

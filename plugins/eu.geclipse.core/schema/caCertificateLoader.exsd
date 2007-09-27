@@ -47,14 +47,14 @@
          <attribute name="name" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  A user readable string that is used to represent this certificate loader in the UI.
                </documentation>
             </annotation>
          </attribute>
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  An implementation of the &lt;code&gt;eu.geclipse.core.auth.ICaCertificateLoader&lt;/code&gt; interface that defines the functionalities of a certificate loader.
                </documentation>
                <appInfo>
                   <meta.attribute kind="java" basedOn=":eu.geclipse.core.auth.ICaCertificateLoader"/>
@@ -64,14 +64,14 @@
          <attribute name="fromLocal" type="boolean" use="required">
             <annotation>
                <documentation>
-                  
+                  A boolean value that specifies if a specific certificate loader can import certificates from a local directory.
                </documentation>
             </annotation>
          </attribute>
          <attribute name="fromRemote" type="boolean" use="required">
             <annotation>
                <documentation>
-                  
+                  A boolean value that specifies if a specific certificate loader can import certificates from a remote repository.
                </documentation>
             </annotation>
          </attribute>
@@ -92,7 +92,16 @@
          <meta.section type="examples"/>
       </appInfo>
       <documentation>
-         [Enter extension point usage example here.]
+         &lt;pre&gt;
+&lt;extension point=&quot;eu.geclipse.core.caCertificateLoader&quot;&gt;
+  &lt;loader
+    class=&quot;eu.geclipse.core.internal.auth.EUGridPMACertificateLoader&quot;
+    fromLocal=&quot;true&quot;
+    fromRemote=&quot;true&quot;
+    name=&quot;European Policy Management Authority for Grid Authentication&quot;&gt;
+  &lt;/loader&gt;
+&lt;/extension&gt;
+&lt;/pre&gt;
       </documentation>
    </annotation>
 
@@ -101,7 +110,7 @@
          <meta.section type="apiInfo"/>
       </appInfo>
       <documentation>
-         [Enter API information here.]
+         See the &lt;code&gt;eu.geclipse.core.auth.ICaCertificateLoader&lt;/code&gt; interface.
       </documentation>
    </annotation>
 
@@ -110,7 +119,7 @@
          <meta.section type="implementation"/>
       </appInfo>
       <documentation>
-         [Enter information about supplied implementation of this extension point.]
+         The g-Eclipse core itself comes with two implementations of this extension point. One is the EUGridPMA based implementation that both supports remote and local repositories. The other implementation is a PEM-based certificate loader that queries local repositories for PEM-files containing CA certificates.
       </documentation>
    </annotation>
 
@@ -119,7 +128,13 @@
          <meta.section type="copyright"/>
       </appInfo>
       <documentation>
-         
+         &lt;p&gt;Copyright (c) 2006, 2007 g-Eclipse Consortium
+
+&lt;p&gt;All rights reserved.
+
+&lt;p&gt;This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at &lt;a href=&quot;http://www.eclipse.org/legal/epl-v10.html&quot;&gt;http://www.eclipse.org/legal/epl-v10.html&lt;/a&gt;.
+
+&lt;p&gt;Initial development of the original code was made for the g-Eclipse project founded by European Union project number: FP6-IST-034327 &lt;a href=&quot;http://www.geclipse.eu&quot;&gt;http://www.geclipse.eu&lt;/a&gt;.
       </documentation>
    </annotation>
 
