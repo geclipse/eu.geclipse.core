@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cheatsheet title="Creating a grid job description">
-   <intro href="/eu.geclipse.doc.user/html/gettingstarted/CreatingaJob.html">
+   <intro href="/eu.geclipse.doc.user/html/concepts/jobmanagement/creatingJSDL.html">
       <description>
           This cheat sheet will show you how to create a grid job description.
       </description>

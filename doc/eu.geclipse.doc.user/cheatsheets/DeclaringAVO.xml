@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cheatsheet title="Declaring a Virtual Organisation">
-   <intro href="/eu.geclipse.doc.user/html/gettingstarted/VO-Declaration.html">
+   <intro href="/eu.geclipse.doc.user/html/concepts/setup/vosettings.html">
       <description>
           This cheat sheet will walk you through the steps involved in declaring a 
           Virtual Organisation (VO).

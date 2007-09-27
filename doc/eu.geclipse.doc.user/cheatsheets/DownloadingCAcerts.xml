@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cheatsheet title="Downloading CA Certificates">
-   <intro href="/eu.geclipse.doc.user/html/gettingstarted/downloadCAcerts.html">
+   <intro href="/eu.geclipse.doc.user/html/concepts/setup/cacertificates.html">
       <description>
          This cheat sheet will show you how to download and install 
           CA certificates into g-Eclipse.<br/>

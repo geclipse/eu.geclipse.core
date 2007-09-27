@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <cheatsheet title="Creating a new g-Eclipse Grid Project">
-   <intro href="/eu.geclipse.doc.user/html/gettingstarted/NewProjectWizard.html">
+   <intro href="/eu.geclipse.doc.user/html/concepts/gridproject/creating.html">
       <description>
           This cheat sheet will show you how to create a new g-Eclipse Grid Project.
       </description>
