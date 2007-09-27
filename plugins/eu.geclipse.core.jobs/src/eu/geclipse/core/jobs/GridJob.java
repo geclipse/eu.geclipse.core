@@ -32,9 +32,9 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourceAttributes;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
@@ -54,9 +54,7 @@ import eu.geclipse.core.jobs.internal.Activator;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.GridModelProblems;
-import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
-import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.core.model.IGridElementManager;
 import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobDescription;
@@ -82,10 +80,10 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
   private GridJobID jobID = null;
   private IGridJobDescription jobDescription = null;
   private GridJobStatus jobStatus = null;
-  private IFile jobDescriptionFile;
-  private IFile jobIdFile;
-  private IFile jobStatusFile;
-  private IFile jobInfoFile;
+  private IFile jobDescriptionFile=null;
+  private IFile jobIdFile=null;
+  private IFile jobStatusFile=null;
+  private IFile jobInfoFile=null;
   private IGridJobStatusService statusService;
   private Date submissionTime;
 
@@ -100,6 +98,22 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     readJobInfo( jobFolder );
     // gridJobFolder = new GridJobFolder( jobFolder, this );
     readJobID();
+    if( this.jobDescriptionFile != null ) {
+      readJobDescription();
+      try {
+        ResourceAttributes attributes = this.jobDescription.getResource().getResourceAttributes();
+        attributes.setReadOnly( true );
+        try {
+          this.jobDescription.getResource().setResourceAttributes(attributes);
+        } catch( CoreException e ) {
+          Activator.logException( e );
+        }
+        addElement( this.jobDescription );
+      } catch( GridModelException e ) {
+        Activator.logException( e, "Cannot load Job Description of job"
+                                   + jobFolder.getName() );
+      }
+    }
     IGridJobStatusServiceFactory factory = GridJobStatusServiceFactoryManager.getFactory( this.jobID.getClass() );
     if( factory != null ) {
       this.statusService = factory.getGridJobStatusService( this.jobID );
@@ -462,7 +476,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     Activator.consoleLog( xml );
     try {
       byte[] byteArray = xml.getBytes( "ISO-8859-1" ); // choose a charset
-                                                        // //$NON-NLS-1$
+      // //$NON-NLS-1$
       ByteArrayInputStream baos = new ByteArrayInputStream( byteArray );
       file.create( baos, true, null );
     } catch( CoreException cExc ) {
@@ -495,7 +509,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     Activator.consoleLog( xml );
     try {
       byteArray = xml.getBytes( "ISO-8859-1" ); // choose a charset
-                                                // //$NON-NLS-1$
+      // //$NON-NLS-1$
       baos = new ByteArrayInputStream( byteArray );
       if( _jobStatusFile.exists() ) {
         _jobStatusFile.setContents( baos, true, true, null );
@@ -558,7 +572,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     Activator.consoleLog( xml );
     try {
       byteArray = xml.getBytes( "ISO-8859-1" ); // choose a charset
-                                                // //$NON-NLS-1$
+      // //$NON-NLS-1$
       baos = new ByteArrayInputStream( byteArray );
       file.create( baos, true, null );
     } catch( CoreException cExc ) {
