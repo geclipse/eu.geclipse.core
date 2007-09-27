@@ -22,8 +22,59 @@
 <body BGCOLOR="#ffffff">
 
 <h1>Creating a Grid Project</h1>
-<p>Please add text here...</p>
 
+<ul>
+<li><a href="#overview">Overview</a>
+<li><a href="#creating">Creating a Grid Project</a>
+</ul>
 
+<h2><a name="overview">Overview</a></h2>
+<p>A Grid Project can be seen as a an entity that manages different aspects for Grid users 
+(i.e. computing resources, storage resources, services, applications, Virtual Organizations, 
+etc.). A Grid Project has therefore its own structure as other project types. The different 
+aspects of a Grid projects can be seen by the 
+<a href="PLUGINS_ROOT/eu.geclipse.doc.user/html/concepts/gridproject/projectview.html">Grid project view</a>
+which is a part of the different perspectives of g-Eclipse.</p>
+
+<p> Before a user can create a Grid project, the settings for Virtual Organization needs to be
+declared with the help of the g-Eclipse preferences pages (see chapter on 
+<a href="PLUGINS_ROOT/eu.geclipse.doc.user/html/concepts/setup/vosettings.html">VO settings</a>).
+</p>
+
+<h2><a name="creating">Creating a Grid project</a></h2>
+
+<p>
+First you have to start the "Grid Project Wizards" by one of the two following options. 
+You start the Grid Project Creating Wizards with the New Project Wizard by 
+selecting "File --> New... --> Project..." and choose the Grid project under g-Eclipse. 
+</p>
+<img border="0" src="images/NewProject.png" alt="New Project Wizard">
+
+<p>
+In case you use the Grid Project View already, you can create a Grid Project with the context 
+menu by right-clicking and selecting "New --> Grid Project". 
+</p>
+<img border="0" src="images/NewProjectContext.png" alt="New Grid Project Context Menu">
+
+<p> Then the "New Grid Project Wizard" starts and asks for the name of the new Grid Project. 
+</p>
+<img border="0" src="images/GridProjectWizard1.png" alt="New Grid Project Wizard Page 1">
+
+<p> On the next Wizard page, select the Virtual Organization you want to use for the New Grid
+Project. You can use the "New" Button to create a Virtual Organization as described here </p>
+<img border="0" src="images/GridProjectWizard2.png" alt="New Grid Project Wizard Page 2">
+
+<p> In case you have already other project in your work space, you can assign on of the existing
+project as an assigned project to the Grid Project. I.e. if you have developed your application 
+as a project within Eclipse and you want to port that application to the Grid, you can assign 
+your application project as a related project to the new Grid project. </p> 
+<img border="0" src="images/GridProjectWizard3.png" alt="New Grid Project Wizard Page 3">
+
+<p>
+Click "Finish" to create the Grid project in your work space. The best way to deal with the
+Grid Project is with the help of the 
+<a href="PLUGINS_ROOT/eu.geclipse.doc.user/html/concepts/gridproject/projectview.html">Grid 
+Project View.</a> </p>
+<br><br><br><br>
 </body>
 </html>
