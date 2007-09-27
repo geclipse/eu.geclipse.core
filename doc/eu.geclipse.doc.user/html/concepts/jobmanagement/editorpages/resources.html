@@ -1,10 +1,77 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+	<META HTTP-EQUIV="Content-Style-Type" CONTENT="text/css"> 
+	<LINK REL="STYLESHEET" HREF="../../../../book.css" CHARSET="ISO-8859-1" 
+	TYPE="text/css"> 
+	<title>g-Eclipse - JSDL Editor - Resources Page </title>
+    <script language="JavaScript" 
+    src="PLUGINS_ROOT/org.eclipse.help/livehelp.js"> </script>
 </head>
-<body>
+
+<body BGCOLOR="#ffffff">
+
+<h1>g-Eclipse - JSDL Editor - Resources Page</h1>
+
+<p> The Resources page provides an interface for specifying the resource requirements
+of the job. It consists of five sections: the <b>Candidate Hosts</b>, the 
+<b>Operating System</b>, the <b>File System</b> , the <b>CPU Architecture</b> and
+the <b>Additional Resources Elements </b>.</p>
+
+<h2>Candidate Hosts</h2>
+
+<p>The section allows to manipulate the <b>CandidateHosts</b> element of a JSDL 
+document. This element specifies a lists of hosts that can be selected for running
+the job.</p>
+
+<img src="../images/resources_hosts.jpg" alt="Candidate Hosts Section">
+
+<p> Click <b>Add...</b> to open the <b>New Candidate Hosts</b> dialog for adding a new
+Candidate Host.
+</p>
+
+<img src="../images/resources_new-hosts.jpg" alt="New Candidate Hosts Dialog">
+
+<p> The list provides all the hosts that are available for job submission.
+This hosts are obtained from the Information Service, based on the Virtual 
+Organization (VO) specified in the Grid Project. Hosts that are already
+included in the Candidate Hosts list on the Resources page, are not included in 
+the New Candidate Hosts dialog.</p>
+
+<p> Select one or more available Candidate Hosts from the list by checking the
+respective checkbox and press <b>Add..</b> to include in the Candidate Hosts list.</p>
+
+<h2>Operating System Section</h2>
+<p>This section allows to manipulate the <b>OperatingSystemType</b> element of a
+JSDL document. This elements defines the name of the Operating System.</p>
+
+<img src="../images/resources_os.jpg" alt="Operating System Section">
+
+
+<h2>File System Section</h2>
+<p>This section allows to manipulate the <b>FileSystem</b> element of a
+JSDL document. This elements defines the file system that is required by the
+job. Also it defines necessary disk space and file system type which are required
+by the job.</p>
+
+<img src="../images/resources_filesystem.jpg" alt="File System Section">
+
+<h2>CPU Architecture Section</h2>
+<p>This section allows to manipulate the <b>CPUArchitecture</b> element of a
+JSDL document. This elements defines the CPU Architecture that is required by the
+job. Also it defines necessary disk space and file system type which are required
+by the job.</p>
+
+<img src="../images/resources_cpu.jpg" alt="CPU Architecture Section">
+
+<h2>Additional Resources Section</h2>
+<p>This section allows to define additional resource requirements of the job.
+A Range can be specified by selecting either <b>LowerBoundedRange</b>,<b>
+UpperBoundedRange</b> or <b>exact</b> from the combo-box and the entering the 
+respective value.</p>
+
+<img src="../images/resources_additional.jpg" alt="Additional Resources Elements Section">
 
 </body>
 </html>
