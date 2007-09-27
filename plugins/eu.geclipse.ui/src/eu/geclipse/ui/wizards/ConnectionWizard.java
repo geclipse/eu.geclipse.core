@@ -16,12 +16,14 @@
 package eu.geclipse.ui.wizards;
 
 import java.net.URI;
+import java.net.URL;
 
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardContainer;
@@ -31,7 +33,6 @@ import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
-import eu.geclipse.core.filesystem.GEclipseFileSystem;
 import eu.geclipse.core.filesystem.GEclipseURI;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
@@ -60,6 +61,8 @@ public class ConnectionWizard
   }
   
   public ConnectionWizard( final boolean createGlobalConnection ) {
+    URL imgURL = Activator.getDefault().getBundle().getResource( "icons/wizban/newconn_wiz.gif" );
+    setDefaultPageImageDescriptor( ImageDescriptor.createFromURL( imgURL ) );
     setNeedsProgressMonitor( true );
     this.createGlobalConnection = createGlobalConnection;
   }
