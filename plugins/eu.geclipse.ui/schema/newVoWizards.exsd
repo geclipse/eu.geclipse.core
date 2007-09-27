@@ -6,7 +6,7 @@
          <meta.schema plugin="eu.geclipse.ui" id="newVoWizards" name="eu.geclipse.ui.newVoWizards"/>
       </appInfo>
       <documentation>
-         [Enter description of this extension point.]
+         This extension point is used to defined wizards for creating new middleware specific virtual organizations.
       </documentation>
    </annotation>
 
@@ -47,7 +47,7 @@
          <attribute name="name" type="string" use="required">
             <annotation>
                <documentation>
-                  Name of the Wizard.
+                  A user readable string that is used to present this VO to the user.
                </documentation>
                <appInfo>
                   <meta.attribute translatable="true"/>
@@ -57,7 +57,7 @@
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  Class implementing the eu.geclipse.ui.wizards.INewWizard interface with UserDataType eu.geclipse.terminal.ITerminalView.
+                  Class implementing the &lt;code&gt;eu.geclipse.ui.wizards.INewWizard&lt;/code&gt; interface.
                </documentation>
                <appInfo>
                   <meta.attribute kind="java" basedOn="eu.geclipse.ui.wizards.INewWizard"/>
@@ -67,14 +67,14 @@
          <attribute name="icon" type="string">
             <annotation>
                <documentation>
-                  Icon for this wizard, displayed in the first page of the &quot;new terminal wizard&quot; where the wizard can be selected. (optional)
+                  Icon for this wizard.
                </documentation>
             </annotation>
          </attribute>
          <attribute name="id" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  A unique ID that is used to internally refer to this implementation.
                </documentation>
             </annotation>
          </attribute>
@@ -86,7 +86,7 @@
          <meta.section type="since"/>
       </appInfo>
       <documentation>
-         [Enter the first release in which this extension point appears.]
+         0.5
       </documentation>
    </annotation>
 
@@ -95,7 +95,16 @@
          <meta.section type="examples"/>
       </appInfo>
       <documentation>
-         [Enter extension point usage example here.]
+         &lt;pre&gt;
+&lt;extension point=&quot;eu.geclipse.ui.newVoWizards&quot;&gt;
+  &lt;wizard
+    class=&quot;eu.geclipse.ui.wizards.GenericVoWizard&quot;
+    icon=&quot;icons/obj16/vo_obj.gif&quot;
+    id=&quot;eu.geclipse.ui.wizards.GenericVoWizard&quot;
+    name=&quot;Generic VO&quot;&gt;
+  &lt;/wizard&gt;
+&lt;/extension&gt;
+&lt;/pre&gt;
       </documentation>
    </annotation>
 
@@ -104,7 +113,7 @@
          <meta.section type="apiInfo"/>
       </appInfo>
       <documentation>
-         [Enter API information here.]
+         See the &lt;code&gt;eu.geclipse.ui.wizards.INewWizard&lt;/code&gt; interface.
       </documentation>
    </annotation>
 
@@ -113,7 +122,7 @@
          <meta.section type="implementation"/>
       </appInfo>
       <documentation>
-         [Enter information about supplied implementation of this extension point.]
+         The UI itself comes with an implementation for the Generic VO.
       </documentation>
    </annotation>
 
@@ -122,7 +131,13 @@
          <meta.section type="copyright"/>
       </appInfo>
       <documentation>
-         
+         &lt;p&gt;Copyright (c) 2006, 2007 g-Eclipse Consortium
+
+&lt;p&gt;All rights reserved.
+
+&lt;p&gt;This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at &lt;a href=&quot;http://www.eclipse.org/legal/epl-v10.html&quot;&gt;http://www.eclipse.org/legal/epl-v10.html&lt;/a&gt;.
+
+&lt;p&gt;Initial development of the original code was made for the g-Eclipse project founded by European Union project number: FP6-IST-034327 &lt;a href=&quot;http://www.geclipse.eu&quot;&gt;http://www.geclipse.eu&lt;/a&gt;.
       </documentation>
    </annotation>
 

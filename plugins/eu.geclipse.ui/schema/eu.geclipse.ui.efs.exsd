@@ -6,7 +6,7 @@
          <meta.schema plugin="eu.geclipse.ui" id="eu.geclipse.ui.efs" name="EFS UI Contributions"/>
       </appInfo>
       <documentation>
-         [Enter description of this extension point.]
+         This extension point is used to split the information contained in an URI into several tokens (host, port, path, query ...) and to provide an user interface for these tokens in order to create a Grid connections from the resulting URI.
       </documentation>
    </annotation>
 
@@ -53,14 +53,14 @@
          <attribute name="scheme" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  The filesystem scheme this extension refers to. This has to be the same scheme as provided by the &lt;code&gt;org.eclipse.core.filesystem.filesystems&lt;/code&gt; extension point.
                </documentation>
             </annotation>
          </attribute>
          <attribute name="validator" type="string">
             <annotation>
                <documentation>
-                  
+                  An implementation of the &lt;code&gt;eu.geclipse.ui.wizards.IConnectionTokenValidator&lt;/code&gt; interface that is used to verify URI tokens.
                </documentation>
                <appInfo>
                   <meta.attribute kind="java" basedOn=":eu.geclipse.ui.wizards.IConnectionTokenValidator"/>
@@ -71,11 +71,16 @@
    </element>
 
    <element name="raw">
+      <annotation>
+         <documentation>
+            The raw URI type. Raw URIs consist of a single string.
+         </documentation>
+      </annotation>
       <complexType>
          <attribute name="uri" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  The string from which the URI is created.
                </documentation>
                <appInfo>
                   <meta.attribute translatable="true"/>
@@ -86,11 +91,16 @@
    </element>
 
    <element name="opaque">
+      <annotation>
+         <documentation>
+            The opaque URI type. Opaque URIs consist of a scheme specific part and a fragment.
+         </documentation>
+      </annotation>
       <complexType>
          <attribute name="scheme-specific-part" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  The scheme specific part of the URI.
                </documentation>
                <appInfo>
                   <meta.attribute translatable="true"/>
@@ -100,7 +110,7 @@
          <attribute name="fragment" type="string">
             <annotation>
                <documentation>
-                  
+                  The fragment of the URI.
                </documentation>
                <appInfo>
                   <meta.attribute translatable="true"/>
@@ -111,11 +121,16 @@
    </element>
 
    <element name="hierarchical">
+      <annotation>
+         <documentation>
+            The hierarchical URI type. Hierarchical URIs consist of an authority, a path, a query and a fragment.
+         </documentation>
+      </annotation>
       <complexType>
          <attribute name="authority" type="string">
             <annotation>
                <documentation>
-                  
+                  The authority of the URI.
                </documentation>
                <appInfo>
                   <meta.attribute translatable="true"/>
@@ -125,7 +140,7 @@
          <attribute name="path" type="string">
             <annotation>
                <documentation>
-                  
+                  The path of the URI.
                </documentation>
                <appInfo>
                   <meta.attribute translatable="true"/>
@@ -135,7 +150,7 @@
          <attribute name="query" type="string">
             <annotation>
                <documentation>
-                  
+                  The query of the URI.
                </documentation>
                <appInfo>
                   <meta.attribute translatable="true"/>
@@ -145,7 +160,7 @@
          <attribute name="fragment" type="string">
             <annotation>
                <documentation>
-                  
+                  The fragment of the URI.
                </documentation>
                <appInfo>
                   <meta.attribute translatable="true"/>
@@ -156,11 +171,16 @@
    </element>
 
    <element name="server">
+      <annotation>
+         <documentation>
+            The server URI type. Server URIs consist of an user info, a host name, a port, a path, a query and a fragment.
+         </documentation>
+      </annotation>
       <complexType>
          <attribute name="user-info" type="string">
             <annotation>
                <documentation>
-                  
+                  The user info of the URI.
                </documentation>
                <appInfo>
                   <meta.attribute translatable="true"/>
@@ -170,7 +190,7 @@
          <attribute name="host" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  The host name of the URI.
                </documentation>
                <appInfo>
                   <meta.attribute translatable="true"/>
@@ -180,7 +200,7 @@
          <attribute name="port" type="string">
             <annotation>
                <documentation>
-                  
+                  The port of the URI.
                </documentation>
                <appInfo>
                   <meta.attribute translatable="true"/>
@@ -190,7 +210,7 @@
          <attribute name="path" type="string">
             <annotation>
                <documentation>
-                  
+                  The path of the URI.
                </documentation>
                <appInfo>
                   <meta.attribute translatable="true"/>
@@ -200,7 +220,7 @@
          <attribute name="query" type="string">
             <annotation>
                <documentation>
-                  
+                  The query of the URI.
                </documentation>
                <appInfo>
                   <meta.attribute translatable="true"/>
@@ -210,7 +230,7 @@
          <attribute name="fragment" type="string">
             <annotation>
                <documentation>
-                  
+                  The fragment of the URI.
                </documentation>
                <appInfo>
                   <meta.attribute translatable="true"/>
@@ -225,7 +245,7 @@
          <meta.section type="since"/>
       </appInfo>
       <documentation>
-         [Enter the first release in which this extension point appears.]
+         0.5
       </documentation>
    </annotation>
 
@@ -234,7 +254,19 @@
          <meta.section type="examples"/>
       </appInfo>
       <documentation>
-         [Enter extension point usage example here.]
+         &lt;pre&gt;
+&lt;extension point=&quot;eu.geclipse.ui.efs&quot;&gt;
+  &lt;filesystem
+    scheme=&quot;gridftp&quot;
+    validator=&quot;eu.geclipse.efs.gridftp.ui.GridFTPTokenValidator&quot;&gt;
+    &lt;server
+      host=&quot;GFTP Server&quot;
+      path=&quot;Remote Directory&quot;
+      port=&quot;GFTP Port&quot;&gt;
+    &lt;/server&gt;
+  &lt;/filesystem&gt;
+&lt;/extension&gt;
+&lt;/pre&gt;
       </documentation>
    </annotation>
 
@@ -243,7 +275,7 @@
          <meta.section type="apiInfo"/>
       </appInfo>
       <documentation>
-         [Enter API information here.]
+         See the &lt;code&gt;eu.geclipse.ui.wizards.IConnectionTokenValidator&lt;/code&gt; interface.
       </documentation>
    </annotation>
 
@@ -252,7 +284,7 @@
          <meta.section type="implementation"/>
       </appInfo>
       <documentation>
-         [Enter information about supplied implementation of this extension point.]
+         There are no internal implementation of this extension point. See the middleware specific implementations for reference.
       </documentation>
    </annotation>
 
@@ -261,7 +293,13 @@
          <meta.section type="copyright"/>
       </appInfo>
       <documentation>
-         
+         &lt;p&gt;Copyright (c) 2006, 2007 g-Eclipse Consortium
+
+&lt;p&gt;All rights reserved.
+
+&lt;p&gt;This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at &lt;a href=&quot;http://www.eclipse.org/legal/epl-v10.html&quot;&gt;http://www.eclipse.org/legal/epl-v10.html&lt;/a&gt;.
+
+&lt;p&gt;Initial development of the original code was made for the g-Eclipse project founded by European Union project number: FP6-IST-034327 &lt;a href=&quot;http://www.geclipse.eu&quot;&gt;http://www.geclipse.eu&lt;/a&gt;.
       </documentation>
    </annotation>
 

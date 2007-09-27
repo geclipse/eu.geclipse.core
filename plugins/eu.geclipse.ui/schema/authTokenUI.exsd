@@ -6,7 +6,7 @@
          <meta.schema plugin="eu.geclipse.ui" id="authTokenUI" name="Authentication Token UI Components"/>
       </appInfo>
       <documentation>
-         [Enter description of this extension point.]
+         This extension point is used to provide UI components for managing authentication tokens. These UI components are used to create tokens and to show token information.
       </documentation>
    </annotation>
 
@@ -48,14 +48,14 @@
          <attribute name="id" type="string">
             <annotation>
                <documentation>
-                  
+                  A unique ID that is used internally to refer to this factory.
                </documentation>
             </annotation>
          </attribute>
          <attribute name="name" type="string">
             <annotation>
                <documentation>
-                  
+                  A user readable string that is used by the UI to represent this factory to the user.
                </documentation>
                <appInfo>
                   <meta.attribute translatable="true"/>
@@ -65,7 +65,7 @@
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  An implementation of the &lt;code&gt;eu.geclipse.ui.IAuthTokenUIFactory&lt;/code&gt; interface that is used to create a dialog showing token related information.
                </documentation>
                <appInfo>
                   <meta.attribute kind="java" basedOn=":eu.geclipse.ui.IAuthTokenUIFactory"/>
@@ -80,14 +80,14 @@
          <attribute name="id" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  A unique ID that is used internally to refer to this wizard.
                </documentation>
             </annotation>
          </attribute>
          <attribute name="name" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  A user readable string that is used by the UI to represent this wizard to the user.
                </documentation>
                <appInfo>
                   <meta.attribute translatable="true"/>
@@ -97,7 +97,7 @@
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  An implementation of the &lt;code&gt;org.eclipse.ui.INewWizard&lt;/code&gt; interface that is used to specify token specific parameters for initializing an authentication token.
                </documentation>
                <appInfo>
                   <meta.attribute kind="java" basedOn=":org.eclipse.ui.INewWizard"/>
@@ -107,7 +107,7 @@
          <attribute name="icon" type="string">
             <annotation>
                <documentation>
-                  
+                  An icon that is used to graphically represent this wizard in the UI.
                </documentation>
             </annotation>
          </attribute>
@@ -119,7 +119,7 @@
          <meta.section type="since"/>
       </appInfo>
       <documentation>
-         [Enter the first release in which this extension point appears.]
+         0.5
       </documentation>
    </annotation>
 
@@ -128,7 +128,21 @@
          <meta.section type="examples"/>
       </appInfo>
       <documentation>
-         [Enter extension point usage example here.]
+         &lt;pre&gt;
+&lt;extension point=&quot;eu.geclipse.ui.authTokenUI&quot;&gt;
+  &lt;wizard
+    class=&quot;eu.geclipse.globus.ui.wizards.GlobusProxyWizard&quot;
+    icon=&quot;icons/obj16/proxy.gif&quot;
+    id=&quot;eu.geclipse.globus.ui.wizards.GlobusProxyWizard&quot;
+    name=&quot;Globus Proxy&quot;&gt;
+  &lt;/wizard&gt;
+  &lt;factory
+    class=&quot;eu.geclipse.globus.ui.GlobusProxyUIFactory&quot;
+    id=&quot;eu.geclipse.globus.ui.gridProxyUIFactory&quot;
+    name=&quot;Grid Proxy UI Factory&quot;&gt;
+  &lt;/factory&gt;
+&lt;/extension&gt;
+&lt;/pre&gt;
       </documentation>
    </annotation>
 
@@ -137,7 +151,7 @@
          <meta.section type="apiInfo"/>
       </appInfo>
       <documentation>
-         [Enter API information here.]
+         See the &lt;code&gt;eu.geclipse.ui.IAuthTokenUIFactory&lt;/code&gt; and &lt;code&gt;org.eclipse.ui.INewWizard&lt;/code&gt; interfaces.
       </documentation>
    </annotation>
 
@@ -146,7 +160,7 @@
          <meta.section type="implementation"/>
       </appInfo>
       <documentation>
-         [Enter information about supplied implementation of this extension point.]
+         The UI itself does not contain an implementation of this extension point. Implementations are normally contained in middleware extensions.
       </documentation>
    </annotation>
 
@@ -155,7 +169,13 @@
          <meta.section type="copyright"/>
       </appInfo>
       <documentation>
-         
+         &lt;p&gt;Copyright (c) 2006, 2007 g-Eclipse Consortium
+
+&lt;p&gt;All rights reserved.
+
+&lt;p&gt;This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at &lt;a href=&quot;http://www.eclipse.org/legal/epl-v10.html&quot;&gt;http://www.eclipse.org/legal/epl-v10.html&lt;/a&gt;.
+
+&lt;p&gt;Initial development of the original code was made for the g-Eclipse project founded by European Union project number: FP6-IST-034327 &lt;a href=&quot;http://www.geclipse.eu&quot;&gt;http://www.geclipse.eu&lt;/a&gt;.
       </documentation>
    </annotation>
 
