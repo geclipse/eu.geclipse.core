@@ -14,9 +14,6 @@
       <toc
             file="tocconcepts.xml">
       </toc>
-      <toc
-            file="tocvisualization.xml">
-      </toc>
    </extension>
    <extension
          point="org.eclipse.ui.cheatsheets.cheatSheetContent">
