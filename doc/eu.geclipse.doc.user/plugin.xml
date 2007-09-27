@@ -101,16 +101,6 @@
          	This cheat sheet will show you how to copy files between your local machine and storage on the grid.
          </description>
       </cheatsheet>
-      <cheatsheet
-            category="eu.geclipse.doc.user.gEclipseCheatSheets"
-            composite="true"
-            contentFile="cheatsheets/VisualizationWithgEclipse.xml"
-            id="eu.geclipse.doc.user.visualization"
-            name="Visualisation in g-Eclipse">
-         <description>
-            This cheat sheet will teach you how to use the Visualisation modul of g-Eclipse.
-         </description>
-      </cheatsheet>
    </extension>
    <extension point="org.eclipse.ui.intro.configExtension">
       <configExtension configId="org.eclipse.ui.intro.universalConfig"
