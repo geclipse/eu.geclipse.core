@@ -160,17 +160,4 @@
     <anchor id="geclipse_concepts_siteadministration" />
   </topic>
 
-  <topic 
-    label="Visualitzation">
-    <topic 
-      label="Local Visualization"
-      href="html/concepts/visualization/local.html">
-    </topic>
-    <topic 
-      label="Remote Visualization"
-      href="html/concepts/visualization/remote.html">
-    </topic>
-    <anchor id="geclipse_concepts_visualization" />
-  </topic>
-
 </toc>
