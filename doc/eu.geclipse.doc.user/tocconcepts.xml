@@ -160,4 +160,9 @@
     <anchor id="geclipse_concepts_siteadministration" />
   </topic>
 
+  <topic 
+    label="Visualisation">
+    <anchor id="geclipse_concepts_visualization" />
+  </topic>
+
 </toc>
