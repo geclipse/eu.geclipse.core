@@ -23,27 +23,27 @@
 <ul>
 <li><h4>Firewalls:</h4>
 g-Eclipse has the same connectivity requirements as any other client
-software for that grid middleware. Therefore you will need to be able
+software for a specific grid middleware. Therefore you will need to be able
 to establish outgoing TCP connections to a series of ports, and in a
 few cases also allow some incoming open ports. Check the middleware
 specific documentation for more details.
 </li>
 <li><h4>Changes in Job Description are not reflected immediately in Properties view:</h4>
-If you modify jsdl file, then Properties view will show still old values for job description. 
-You have to restart g-Eclipse to see new values. 
-Despite of it, modify (correct) job description will be used for job submission even without g-Eclipse restarting.   
+If you modify a JSDL file, then the Properties view will still show old values for the job description. 
+You have to restart g-Eclipse to see the updated values. 
+Despite this, the modified (correct) job description will be used for job submission even without 
+having to restart g-Eclipse.   
 </li>
 <li><h4>ProcessStatusView only shows anonymous pid-lists:</h4>
 The current implementation of the Process Status View started with the Action: "Monitor Computing Resource"
 will only display anonymous pid-lists of the remote resources as long as the GridFTP connection to the
-remote host is successful. Full functionality is going to be available for the 1.0.0 Release
-</li>
-<li><h4>VO Management:</h4>
-Web View using HTTPS doesn't work on Mac OS X.
+remote host is successful. Full functionality is going to be available for the 1.0.0 Release.
 </li>
 <li><h4>Known Issues with Mac OS X:</h4>
 Sometimes, collapsing the tree in the Grid Project View or the Glue Information
-Viewer will either cause the application to crash or make it not redraw the tree.
+Viewer will either not redraw the tree, or, in some cases, cause the application to crash.
+<h5>VO Management:</h5>
+Web View using HTTPS does not work on Mac OS X.
 </li>
 <li><h4>JSDL Editor Issues:</h4>
 <h5>Input field validations:</h5>
@@ -55,8 +55,10 @@ Input guidelines are given on the <a href="concepts/jobmanagement/editingJSDL.ht
 The current implementation of the JSDL editor provides limited functionality for
 manipulating the elements under the File System and Additional Resources
 Elements sections of the Resources Page. 
- 
-
+</li>
+<li><h4>Workflow Builder</h4>
+The workflow builder is sometimes unstable and it does not yet have the full functionality to 
+allow submission to a grid middleware.
 </li>
 </ul>
 
