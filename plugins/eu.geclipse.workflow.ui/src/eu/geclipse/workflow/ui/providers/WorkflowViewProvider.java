@@ -45,8 +45,8 @@ public class WorkflowViewProvider extends AbstractViewProvider {
   /**
    * @generated
    */
-  protected Class getDiagramViewClass( IAdaptable semanticAdapter,
-                                       String diagramKind )
+  @Override
+  protected Class getDiagramViewClass( IAdaptable semanticAdapter, String diagramKind )
   {
     EObject semanticElement = getSemanticElement( semanticAdapter );
     if( WorkflowEditPart.MODEL_ID.equals( diagramKind )
@@ -60,9 +60,8 @@ public class WorkflowViewProvider extends AbstractViewProvider {
   /**
    * @generated
    */
-  protected Class getNodeViewClass( IAdaptable semanticAdapter,
-                                    View containerView,
-                                    String semanticHint )
+  @Override
+  protected Class getNodeViewClass( IAdaptable semanticAdapter, View containerView, String semanticHint )
   {
     if( containerView == null ) {
       return null;

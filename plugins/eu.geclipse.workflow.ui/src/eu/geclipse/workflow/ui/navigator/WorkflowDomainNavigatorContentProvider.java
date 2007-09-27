@@ -38,8 +38,7 @@ import eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin;
 /**
  * @generated
  */
-public class WorkflowDomainNavigatorContentProvider
-  implements ICommonContentProvider
+public class WorkflowDomainNavigatorContentProvider implements ICommonContentProvider
 {
 
   /**
@@ -76,6 +75,7 @@ public class WorkflowDomainNavigatorContentProvider
     TransactionalEditingDomain editingDomain = GMFEditingDomainFactory.INSTANCE.createEditingDomain();
     myEditingDomain = ( AdapterFactoryEditingDomain )editingDomain;
     myEditingDomain.setResourceToReadOnlyMap( new HashMap() {
+      @Override
       public Object get( Object key ) {
         if( !containsKey( key ) ) {
           put( key, Boolean.TRUE );

@@ -95,11 +95,8 @@ public class WorkflowDiagramEditorUtil {
       .getRoot()
       .findMember( new Path( path ) );
     if( workspaceResource instanceof IFile ) {
-      IWorkbenchPage page = PlatformUI.getWorkbench()
-        .getActiveWorkbenchWindow()
-        .getActivePage();
-      return null != page.openEditor( new FileEditorInput( ( IFile )workspaceResource ),
-                                      WorkflowDiagramEditor.ID );
+      IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+      return (null != page.openEditor( new FileEditorInput( ( IFile )workspaceResource ), WorkflowDiagramEditor.ID ));
     }
     return false;
   }
@@ -122,9 +119,7 @@ public class WorkflowDiagramEditorUtil {
   /**
    * @generated
    */
-  public static String getUniqueFileName( IPath containerFullPath,
-                                          String fileName,
-                                          String extension )
+  public static String getUniqueFileName( IPath containerFullPath, String fileName, String extension )
   {
     if( containerFullPath == null ) {
       containerFullPath = new Path( "" ); //$NON-NLS-1$
@@ -175,8 +170,7 @@ public class WorkflowDiagramEditorUtil {
    * This method should be called within a workspace modify operation since it creates resources.
    * @generated
    */
-  public static Resource createDiagram( URI diagramURI,
-                                        IProgressMonitor progressMonitor )
+  public static Resource createDiagram( URI diagramURI, IProgressMonitor progressMonitor )
   {
     TransactionalEditingDomain editingDomain = GMFEditingDomainFactory.INSTANCE.createEditingDomain();
     progressMonitor.beginTask( Messages.getString("WorkflowDiagramEditorUtil_CreateDiagramProgressTask"), //$NON-NLS-1$
@@ -189,8 +183,7 @@ public class WorkflowDiagramEditorUtil {
                                                                              Collections.EMPTY_LIST )
     {
 
-      protected CommandResult doExecuteWithResult( IProgressMonitor monitor,
-                                                   IAdaptable info )
+      protected CommandResult doExecuteWithResult( IProgressMonitor monitor, IAdaptable info )
         throws ExecutionException
       {
         IWorkflow model = createInitialModel();
@@ -247,8 +240,7 @@ public class WorkflowDiagramEditorUtil {
   /**
    * @generated
    */
-  public static void selectElementsInDiagram( IDiagramWorkbenchPart diagramPart,
-                                              List/*EditPart*/editParts )
+  public static void selectElementsInDiagram( IDiagramWorkbenchPart diagramPart, List/*EditPart*/editParts )
   {
     diagramPart.getDiagramGraphicalViewer().deselectAll();
     EditPart firstPrimary = null;
@@ -270,9 +262,7 @@ public class WorkflowDiagramEditorUtil {
   /**
    * @generated
    */
-  private static int findElementsInDiagramByID( DiagramEditPart diagramPart,
-                                                EObject element,
-                                                List editPartCollector )
+  private static int findElementsInDiagramByID( DiagramEditPart diagramPart, EObject element, List editPartCollector )
   {
     IDiagramGraphicalViewer viewer = ( IDiagramGraphicalViewer )diagramPart.getViewer();
     final int intialNumOfEditParts = editPartCollector.size();
@@ -285,8 +275,7 @@ public class WorkflowDiagramEditorUtil {
       }
     }
     String elementID = EMFCoreUtil.getProxyID( element );
-    List associatedParts = viewer.findEditPartsForElement( elementID,
-                                                           IGraphicalEditPart.class );
+    List associatedParts = viewer.findEditPartsForElement( elementID, IGraphicalEditPart.class );
     // perform the possible hierarchy disjoint -> take the top-most parts only
     for( Iterator editPartIt = associatedParts.iterator(); editPartIt.hasNext(); )
     {
@@ -316,9 +305,7 @@ public class WorkflowDiagramEditorUtil {
   /**
    * @generated
    */
-  public static View findView( DiagramEditPart diagramEditPart,
-                               EObject targetElement,
-                               LazyElement2ViewMap lazyElement2ViewMap )
+  public static View findView( DiagramEditPart diagramEditPart, EObject targetElement, LazyElement2ViewMap lazyElement2ViewMap )
   {
     boolean hasStructuralURI = false;
     if( targetElement.eResource() instanceof XMLResource ) {
@@ -397,9 +384,7 @@ public class WorkflowDiagramEditorUtil {
     /**
      * @generated
      */
-    static Map buildElement2ViewMap( View parentView,
-                                     Map element2ViewMap,
-                                     Set elements )
+    static Map buildElement2ViewMap( View parentView, Map element2ViewMap, Set elements )
     {
       if( elements.size() == element2ViewMap.size() )
         return element2ViewMap;
