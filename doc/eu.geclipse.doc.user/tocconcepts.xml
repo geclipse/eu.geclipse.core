@@ -128,14 +128,6 @@
 
   <topic 
     label="Application Development">
-    <topic 
-      label="Debugging"
-      href="html/concepts/applicationdevelopment/debugging.html">
-    </topic>
-    <topic 
-      label="Application Deployment"
-      href="html/concepts/applicationdevelopment/deployment.html">
-    </topic>
     <anchor id="geclipse_concepts_applicationdevelopment" />
   </topic>
 

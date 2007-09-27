@@ -29,14 +29,6 @@
     label="glogin"
     href="html/gettingstarted/glogin.html" />
   <topic
-    label="Terminal"
-    href="html/gettingstarted/terminal.html" />
-  <topic
-    label="Launching and Debugging"
-    href="html/gettingstarted/launchanddebug/launch.html">
-    <anchor id="geclipse_launchanddebug" />
-  </topic>
-  <topic
     label="Visualisation"
     href="html/gettingstarted/visualization/Visualization.html">
     <anchor id="geclipse_visualisation" />
