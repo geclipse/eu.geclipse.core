@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.help.toc">
+      <toc
+            file="toc.xml"
+            primary="true">
+      </toc>
+      <toc
+            file="toc_reference_howtocontribute.xml">
+      </toc>
+      <toc
+            file="toc_reference_extpoints.xml">
+      </toc>
+   </extension>
+   <extension
+         point="org.eclipse.pde.core.javadoc">
+      <javadoc
+            path="html/api_reference">
+        <plugin id="eu.geclipse.core"></plugin>
+        <plugin id="eu.geclipse.core.filesystem"></plugin>
+        <plugin id="eu.geclipse.core.jobs"></plugin>
+        <plugin id="eu.geclipse.glite.editor"></plugin>
+        <plugin id="eu.geclipse.gvid"></plugin>
+        <plugin id="eu.geclipse.gvid.uncompressed"></plugin>
+        <plugin id="eu.geclipse.info"></plugin>
+        <plugin id="eu.geclipse.jsdl"></plugin>
+        <plugin id="eu.geclipse.jsdl.edit"></plugin>
+        <plugin id="eu.geclipse.jsdl.model"></plugin>
+        <plugin id="eu.geclipse.jsdl.ui"></plugin>
+        <plugin id="eu.geclipse.terminal"></plugin>
+        <plugin id="eu.geclipse.terminal.ssh"></plugin>
+        <plugin id="eu.geclipse.ui"></plugin>
+        <plugin id="eu.geclipse.webview"></plugin>
+        <plugin id="eu.geclipse.workflow.edit"></plugin>
+        <plugin id="eu.geclipse.workflow.model"></plugin>
+        <plugin id="eu.geclipse.workflow.ui"></plugin>
+      </javadoc>
+   </extension>
+
+</plugin>
