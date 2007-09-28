@@ -1,0 +1,17 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: g-Eclipse Grid Workflow Model Test Plug-in
+Bundle-SymbolicName: eu.geclipse.workflow.model.test
+Bundle-Version: 0.5.0.qualifier
+Bundle-Activator: eu.geclipse.workflow.model.test.internal.Activator
+Bundle-Vendor: Eclipse.org
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.core.resources,
+ org.junit4,
+ org.eclipse.emf,
+ org.eclipse.emf.common,
+ eu.geclipse.workflow.model,
+ org.eclipse.emf.ecore.xmi
+Eclipse-LazyStart: true
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
