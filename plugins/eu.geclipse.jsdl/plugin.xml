@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         id="eu.geclipse.jsdl.jsdlCreator"
+         name="JSDL Creator"
+         point="eu.geclipse.core.gridElementCreator">
+      <creator
+            class="eu.geclipse.jsdl.JSDLJobDescriptionCreator"
+            name="JSDL Job"/>
+   </extension>
+
+</plugin>

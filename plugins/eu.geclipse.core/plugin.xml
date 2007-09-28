@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension-point id="gridElementCreator" name="%extension-point.gridElementCreator" schema="schema/gridElementCreator.exsd"/>
+   <extension-point id="problemProvider" name="%extension-point.problemProvider" schema="schema/problemProvider.exsd"/>
+   <extension-point id="eu.geclipse.core.gridJobStatusServiceManager" name="GridJobStatusServiceManager" schema="schema/eu.geclipse.core.gridJobStatusServiceManager.exsd"/>
+   <extension-point id="authTokens" name="Authentication Tokens" schema="schema/authTokens.exsd"/>
+   <extension-point id="authTokenProvider" name="Authentication Token Provider" schema="schema/authTokenProvider.exsd"/>
+   <extension-point id="applicationDeployment" name="Application Deployment" schema="schema/applicationDeployment.exsd"/>
+   <extension-point id="caCertificateLoader" name="CA Certificate Loader" schema="schema/caCertificateLoader.exsd"/>
+   <extension
+         id="eu.geclipse.core.internal.PreferenceInitializer"
+         name="%extension.preferenceInitializer"
+         point="org.eclipse.core.runtime.preferences">
+      <initializer class="eu.geclipse.core.internal.PreferenceInitializer"/>
+   </extension>
+   <extension
+         id="eu.geclipse.core.project.GridProjectNature"
+         name="%extension.gridProjectNature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run class="eu.geclipse.core.project.GridProjectNature"/>
+      </runtime>
+   </extension>
+   <extension
+         id="eu.geclipse.core.project.GridProjectBuilder"
+         name="%extension.gridProjectBuilder"
+         point="org.eclipse.core.resources.builders">
+      <builder
+            >
+         <run class="eu.geclipse.core.project.GridProjectBuilder"/>
+      </builder>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <scope
+            class="eu.geclipse.core.project.GridProjectScope"
+            name="eu.geclipse.core.projectScope"/>
+   </extension>
+   <extension
+         point="eu.geclipse.core.problemProvider">
+      <provider class="eu.geclipse.core.CoreProblems"/>
+      <provider class="eu.geclipse.core.auth.AuthenticationProblems"/>
+      <provider class="eu.geclipse.core.security.GridGSSProblems"/>
+      <provider class="eu.geclipse.core.model.GridModelProblems"/>
+      <provider class="eu.geclipse.core.util.tar.TarProblems"/>
+   </extension>
+   <extension
+         point="eu.geclipse.core.authTokenProvider">
+      <provider
+            class="eu.geclipse.core.auth.CoreAuthTokenProvider"
+            priority="0">
+      </provider>
+   </extension>
+   <extension
+         point="eu.geclipse.core.caCertificateLoader">
+      <loader
+            class="eu.geclipse.core.internal.auth.EUGridPMACertificateLoader"
+            fromLocal="true"
+            fromRemote="true"
+            name="European Policy Management Authority for Grid Authentication">
+      </loader>
+      <loader
+            class="eu.geclipse.core.internal.auth.PEMCertificateLoader"
+            fromLocal="true"
+            fromRemote="false"
+            name="PEM Based Certificate Loader">
+      </loader>
+   </extension>
+   <extension
+         point="eu.geclipse.core.gridElementCreator">
+      <creator
+            class="eu.geclipse.core.model.impl.GenericVoCreator"
+            name="Generic VO"
+            wizard="eu.geclipse.ui.wizards.GenericVoWizard">
+         <source
+               class="org.eclipse.core.filesystem.IFileStore">
+         </source>
+         <target
+               class="eu.geclipse.core.model.impl.GenericVirtualOrganization">
+         </target>
+      </creator>
+   </extension>
+</plugin>
