@@ -1,7 +1,0 @@
-# Debugging options for the eu.geclipse.workflow.ui plug-in
-
-# Turn on general debugging for the eu.geclipse.workflow.ui plug-in
-eu.geclipse.workflow.ui/debug=false
-
-# Turn on debugging of visualID processing
-eu.geclipse.workflow.ui/debug/visualID=true
