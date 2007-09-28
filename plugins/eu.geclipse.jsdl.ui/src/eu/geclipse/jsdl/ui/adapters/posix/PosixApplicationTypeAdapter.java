@@ -39,8 +39,6 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.swt.events.FocusEvent;
-import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionEvent;
@@ -235,20 +233,6 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
     Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__EXECUTABLE);
     this.widgetFeaturesMap.put( featureID , widget );    
     
-    
-    widget.addFocusListener( new FocusListener(){
-
-      public void focusLost( final FocusEvent e ) {
-        checkDataStageMissMatch(widget.getText());
-        
-      }
-
-      public void focusGained( final FocusEvent e ) {
-        // TODO Auto-generated method stub
-        
-      }
-      
-    });
    
     widget.addModifyListener( new ModifyListener() {      
       FileNameType fileName = PosixFactory.eINSTANCE.createFileNameType();
