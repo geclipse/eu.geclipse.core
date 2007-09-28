@@ -37,8 +37,8 @@
     href="html/extension-points/eu_geclipse_core_jobs_jobID.html">
   </topic>
   <topic
-    label="eu.geclipse.grid.jobStatus"
-    href="html/extension-points/eu_geclipse_grid_jobStatus.html">
+    label="eu.geclipse.core.jobs.jobStatus"
+    href="html/extension-points/eu_geclipse_core_jobs_jobStatus.html">
   </topic>
   <topic
     label="eu.geclipse.gvid.codec"

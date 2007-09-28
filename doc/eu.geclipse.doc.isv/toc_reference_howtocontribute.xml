@@ -10,9 +10,11 @@
   <topic
     label="Authentication"
     href="html/how_to_contribute/gridAuthentication.html" />
+<!--
   <topic
     label="Grid Information System"
     href="html/how_to_contribute/gridInformationSystem.html" />
+-->
   <topic
     label="Grid Data Access"
     href="html/how_to_contribute/gridDataAccess.html" />

@@ -135,6 +135,7 @@
       label="VO Management"
       href="html/concepts/siteadministration/voManagement.html">
     </topic>
+<!--
     <topic 
       label="Monitoring Grid Resources"
       href="html/concepts/siteadministration/monitoring.html">
@@ -147,6 +148,7 @@
       label="Benchmarking Grid Resources"
       href="html/concepts/siteadministration/benchmarking.html">
     </topic>
+-->
     <topic 
       label="The Terminal View"
       href="html/concepts/siteadministration/terminalView.html">
