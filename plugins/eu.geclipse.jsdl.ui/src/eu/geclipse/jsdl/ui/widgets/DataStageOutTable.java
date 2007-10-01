@@ -138,15 +138,15 @@ public class DataStageOutTable {
     tableLayout.addColumnData( data );
     data = new ColumnWeightData( 150 );
     tableLayout.addColumnData( data );
-    nameColumn.setText( "Name" ); //$NON-NLS-1$
+    nameColumn.setText( Messages.getString( "DataStageInTable.name_field_label" ) ); //$NON-NLS-1$
     TableColumn locationColumn = new TableColumn( this.table, SWT.LEFT );
-    locationColumn.setText( "Location" ); //$NON-NLS-1$
+    locationColumn.setText( Messages.getString( "DataStageInTable.target_location_field_label" ) ); //$NON-NLS-1$
     this.tableViewer = new TableViewer( this.table );
     IStructuredContentProvider contentProvider = new DataStageInContentProvider();
     this.tableViewer.setContentProvider( contentProvider );
     this.tableViewer.setColumnProperties( new String[]{
       Messages.getString( "DataStageInTable.name_field_label" ), //$NON-NLS-1$
-      Messages.getString( "DataStageInTable.location_field_label" ) //$NON-NLS-1$
+      Messages.getString( "DataStageInTable.target_location_field_label" ) //$NON-NLS-1$
     } );
     this.tableViewer.setLabelProvider( new DataStageInContentLabelProvider() );
     if( this.input == null ) {
@@ -241,7 +241,7 @@ public class DataStageOutTable {
         if( property.equals( Messages.getString( "DataStageInTable.name_field_label" ) ) ) { //$NON-NLS-1$
           columnIndex = 0;
         }
-        if( property.equals( Messages.getString( "DataStageInTable.location_field_label" ) ) ) { //$NON-NLS-1$
+        if( property.equals( Messages.getString( "DataStageInTable.target_location_field_label" ) ) ) { //$NON-NLS-1$
           columnIndex = 1;
         }
         Object result = null;
@@ -267,7 +267,7 @@ public class DataStageOutTable {
         if( property.equals( Messages.getString( "DataStageInTable.name_field_label" ) ) ) { //$NON-NLS-1$
           columnIndex = 0;
         }
-        if( property.equals( Messages.getString( "DataStageInTable.location_field_label" ) ) ) { //$NON-NLS-1$
+        if( property.equals( Messages.getString( "DataStageInTable.target_location_field_label" ) ) ) { //$NON-NLS-1$
           columnIndex = 1;
         }
         TableItem item = ( TableItem )element;

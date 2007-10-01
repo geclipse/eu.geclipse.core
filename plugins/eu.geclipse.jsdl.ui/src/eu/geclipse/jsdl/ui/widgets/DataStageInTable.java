@@ -138,14 +138,14 @@ public class DataStageInTable {
     tableLayout.addColumnData( data );
     data = new ColumnWeightData( 150 );
     tableLayout.addColumnData( data );
-    nameColumn.setText( Messages.getString( "DataStageInTable.location_field_label" ) ); //$NON-NLS-1$
+    nameColumn.setText( Messages.getString( "DataStageInTable.source_location_field_label" ) ); //$NON-NLS-1$
     TableColumn typeColumn = new TableColumn( this.table, SWT.LEFT );
     typeColumn.setText( Messages.getString( "DataStageInTable.name_field_label" ) ); //$NON-NLS-1$
     this.tableViewer = new TableViewer( this.table );
     IStructuredContentProvider contentProvider = new DataStageInContentProvider();
     this.tableViewer.setContentProvider( contentProvider );
     this.tableViewer.setColumnProperties( new String[]{
-      Messages.getString( "DataStageInTable.location_field_label" ), //$NON-NLS-1$
+      Messages.getString( "DataStageInTable.source_location_field_label" ), //$NON-NLS-1$
       Messages.getString( "DataStageInTable.name_field_label" ) //$NON-NLS-1$
     } );
     this.tableViewer.setLabelProvider( new DataStageInContentLabelProvider() );
@@ -237,7 +237,7 @@ public class DataStageInTable {
 
       public Object getValue( final Object element, final String property ) {
         int columnIndex = -1;
-        if( property.equals( Messages.getString( "DataStageInTable.location_field_label" ) ) ) { //$NON-NLS-1$
+        if( property.equals( Messages.getString( "DataStageInTable.source_location_field_label" ) ) ) { //$NON-NLS-1$
           columnIndex = 0;
         }
         if( property.equals( Messages.getString( "DataStageInTable.name_field_label" ) ) ) { //$NON-NLS-1$
@@ -263,7 +263,7 @@ public class DataStageInTable {
                           final Object value )
       {
         int columnIndex = -1;
-        if( property.equals( Messages.getString( "DataStageInTable.location_field_label" ) ) ) { //$NON-NLS-1$
+        if( property.equals( Messages.getString( "DataStageInTable.source_location_field_label" ) ) ) { //$NON-NLS-1$
           columnIndex = 0;
         }
         if( property.equals( Messages.getString( "DataStageInTable.name_field_label" ) ) ) { //$NON-NLS-1$
