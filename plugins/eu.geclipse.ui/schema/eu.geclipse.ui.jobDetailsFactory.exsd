@@ -133,7 +133,7 @@ If you specify it, then this factory will be used only for IGridJob-s, for which
          <meta.section type="implementation"/>
       </appInfo>
       <documentation>
-         There are no g-Eclipse core implementations of this extension point. See the middleware extensions for reference.
+         eu.geclipse.ui.views.jobdetails.GridJobDetailsFactory - produces Job Details sections: &quot;General&quot; and &quot;Application&quot;
       </documentation>
    </annotation>
 
