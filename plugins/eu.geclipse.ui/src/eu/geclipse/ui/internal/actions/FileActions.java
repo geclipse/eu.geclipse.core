@@ -18,6 +18,7 @@ package eu.geclipse.ui.internal.actions;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISharedImages;
@@ -25,7 +26,9 @@ import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionGroup;
 import org.eclipse.ui.actions.DeleteResourceAction;
+import org.eclipse.ui.actions.RenameResourceAction;
 import org.eclipse.ui.navigator.ICommonMenuConstants;
+
 import eu.geclipse.ui.views.GridModelViewPart;
 
 /**
@@ -59,6 +62,11 @@ public class FileActions extends ActionGroup {
   private DeleteResourceAction deleteAction;
   
   /**
+   * The action for renaming resources in the workspace.
+   */
+  private RenameResourceAction renameAction;
+  
+  /**
    * Construct a new file action group for the specified
    * {@link GridModelViewPart}.
    * 
@@ -80,10 +88,12 @@ public class FileActions extends ActionGroup {
     ImageDescriptor deleteImage 
         = sharedImages.getImageDescriptor( ISharedImages.IMG_TOOL_DELETE );
     this.deleteAction.setImageDescriptor( deleteImage );
+    this.renameAction = new RenameResourceAction( shell );
     
     provider.addSelectionChangedListener( this.copyAction );
     provider.addSelectionChangedListener( this.pasteAction );
     provider.addSelectionChangedListener( this.deleteAction );
+    provider.addSelectionChangedListener( this.renameAction );
     
   }
   
@@ -96,6 +106,7 @@ public class FileActions extends ActionGroup {
     provider.removeSelectionChangedListener( this.copyAction );
     provider.removeSelectionChangedListener( this.pasteAction );
     provider.removeSelectionChangedListener( this.deleteAction );
+    provider.removeSelectionChangedListener( this.renameAction );
     this.clipboard.dispose();
   }
   
@@ -111,6 +122,8 @@ public class FileActions extends ActionGroup {
                           this.pasteAction );
       menu.appendToGroup( ICommonMenuConstants.GROUP_EDIT, 
                           this.deleteAction );
+      menu.appendToGroup( ICommonMenuConstants.GROUP_EDIT,
+                          this.renameAction );
     }
     super.fillContextMenu(menu);
   }
