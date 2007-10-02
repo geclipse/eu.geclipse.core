@@ -317,7 +317,7 @@ public class GridElementTransferOperation
         byte[] buffer = new byte[ 1024 ];
         Integer totalKb = new Integer( (int) Math.ceil((double)length/(double)buffer.length) ) ;
         
-        SubProgressMonitor subMonitor = new SubProgressMonitor( monitor, 85 );
+        SubProgressMonitor subMonitor = new SubProgressMonitor( monitor, 84 );
         subMonitor.beginTask( Messages.getString("GridElementTransferOperation.copying_progress") + from.getName(), totalKb.intValue() ); //$NON-NLS-1$
         subMonitor.subTask( Messages.getString("GridElementTransferOperation.copying_progress") + from.getName() ); //$NON-NLS-1$
         
@@ -359,7 +359,7 @@ public class GridElementTransferOperation
           subMonitor.subTask( String.format( Messages.getString("GridElementTransferOperation.transfer_progress_format"),  //$NON-NLS-1$
                                              fromInfo.getName(),
 //                                             new Integer( (int)(100./length*buffer.length*kb_counter) ),
-                                             new Integer( (int)(100*( (kb_counter-1) * buffer.length + bytesRead ) / length ) ),
+                                             new Integer( (int)(100.*( (double)(kb_counter-1) * (double)buffer.length + bytesRead ) / length ) ),
                                              new Integer( kb_counter ),
                                              totalKb ) );
           

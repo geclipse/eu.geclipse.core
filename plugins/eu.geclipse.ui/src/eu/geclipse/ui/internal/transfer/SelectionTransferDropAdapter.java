@@ -18,6 +18,8 @@ package eu.geclipse.ui.internal.transfer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -26,6 +28,7 @@ import org.eclipse.swt.dnd.DropTargetEvent;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.views.navigator.LocalSelectionTransfer;
+
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 
@@ -119,6 +122,7 @@ public class SelectionTransferDropAdapter
     
     if ( op != null ) {
       op.setUser( true );
+      op.setPriority( Job.LONG );
       op.schedule();
     } else {
       event.detail = DND.DROP_NONE;
