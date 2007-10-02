@@ -20,6 +20,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.IWorkbenchSite;
+import org.eclipse.ui.IWorkbenchWindow;
 
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridConnectionElement;
@@ -27,6 +28,7 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementManager;
 import eu.geclipse.ui.internal.actions.ActionGroupManager;
 import eu.geclipse.ui.internal.actions.ConnectionViewActions;
+import eu.geclipse.ui.internal.actions.NewWizardActions;
 import eu.geclipse.ui.providers.ConfigurableContentProvider;
 import eu.geclipse.ui.providers.ConnectionViewContentProvider;
 import eu.geclipse.ui.providers.ConnectionViewLabelProvider;
@@ -37,6 +39,11 @@ public class GridConnectionView extends ElementManagerViewPart {
   protected void contributeAdditionalActions( final ActionGroupManager groups ) {
     
     IWorkbenchSite site = getSite();
+    IWorkbenchWindow window = site.getWorkbenchWindow();
+    
+    NewWizardActions newWizardActions = new NewWizardActions( window );
+    groups.addGroup( newWizardActions );
+    
     ConnectionViewActions cActions = new ConnectionViewActions( site );
     groups.addGroup( cActions );
      
