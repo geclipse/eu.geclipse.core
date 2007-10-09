@@ -15,6 +15,8 @@
 
 package eu.geclipse.core.model;
 
+import java.io.File;
+import java.io.InputStream;
 import java.net.URI;
 
 /**
@@ -45,5 +47,7 @@ public interface IGridPreferences {
    * of the connection.
    */
   public IGridConnection createTemporaryConnection( final URI uri ) throws GridModelException;
+  
+  public void createStructuralGridTest( final String name, final InputStream inputStream );
 
 }

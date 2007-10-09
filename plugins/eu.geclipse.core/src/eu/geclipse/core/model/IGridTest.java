@@ -12,11 +12,13 @@
  * Contributor(s):
  *     PSNC: 
  *      - Katarzyna Bylec (katis@man.poznan.pl)
- *           
+ *      - Szymon Mueller     
  *****************************************************************************/
 package eu.geclipse.core.model;
 
 import java.util.Calendar;
+
+import org.eclipse.core.runtime.jobs.IJobStatus;
 
 
 
@@ -31,11 +33,23 @@ public interface IGridTest extends IGridElement {
    */
   public Calendar getDate();
   
+  public IGridJobSubmissionService getSubmissionService();
+  
+  public IGridJobDescription getJSDLDescription();
+  
+  /**
+   * Method returns IGridTest representing it's parent (structural) test, or null if it is parent Test
+   * @return
+   */
+  public IGridTest getParentTest();
+  
   /**
    * Returns tested grid resource.
    * @return resource which was tested by this test
    */
   public IGridResource getTestedResource();
+  
+  public boolean isStructural();
   
   /**
    * Returns 
