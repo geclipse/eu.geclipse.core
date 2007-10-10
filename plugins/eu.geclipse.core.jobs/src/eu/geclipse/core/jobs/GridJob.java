@@ -19,11 +19,14 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -50,11 +53,13 @@ import eu.geclipse.core.ExtensionManager;
 import eu.geclipse.core.GridException;
 import eu.geclipse.core.GridJobStatusServiceFactoryManager;
 import eu.geclipse.core.ProblemRegistry;
+import eu.geclipse.core.filesystem.GEclipseURI;
 import eu.geclipse.core.jobs.internal.Activator;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.GridModelProblems;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.core.model.IGridElementManager;
 import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobDescription;
@@ -75,6 +80,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
   final static private String JOBINFO_FILENAME = ".jobInfo"; //$NON-NLS-1$
   final static private String JOBSTATUS_FILENAME = ".jobStatus"; //$NON-NLS-1$
   final static private String JOBINFO_XMLNODENAME = "JobInfo"; //$NON-NLS-1$
+  final static private String XML_CHARSET = "ISO-8859-1"; //$NON-NLS-1$
   final static private String JOBINFO_JOBDESCRIPTION_XMLNODENAME = "JobDescriptionFileName"; //$NON-NLS-1$
   final static private String JOBINFO_SUBMISSIONTIME_XMLNODENAME = "SubmissionTime"; //$NON-NLS-1$
   private GridJobID jobID = null;
@@ -110,7 +116,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
         }
         addElement( this.jobDescription );
       } catch( GridModelException e ) {
-        Activator.logException( e, "Cannot load Job Description of job"
+        Activator.logException( e, Messages.getString("GridJob.errLoadJobDescription") //$NON-NLS-1$
                                    + jobFolder.getName() );
       }
     }
@@ -118,6 +124,9 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     if( factory != null ) {
       this.statusService = factory.getGridJobStatusService( this.jobID );
     }
+    
+    addStagingFolder( jobFolder, Messages.getString("GridJob.FolderInputFiles") ); //$NON-NLS-1$
+    addStagingFolder( jobFolder, Messages.getString("GridJob.FolderOutputFiles") ); //$NON-NLS-1$
   }
 
   public static void createJobStructure( final IFolder jobFolder,
@@ -152,6 +161,9 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     writeJobID( id, jobFolder );
     writeJobStatus( this.jobStatusFile );
     writeJobInfo( description, jobFolder );
+    
+    createStagingFolders( jobFolder );
+    
     // IPath path = jobFolder.getFullPath().append( jobDescriptionFile.getName()
     // );
     // try {
@@ -475,7 +487,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     String xml = ( ( GridJobID )id ).getXML();
     Activator.consoleLog( xml );
     try {
-      byte[] byteArray = xml.getBytes( "ISO-8859-1" ); // choose a charset
+      byte[] byteArray = xml.getBytes( XML_CHARSET ); // choose a charset
       // //$NON-NLS-1$
       ByteArrayInputStream baos = new ByteArrayInputStream( byteArray );
       file.create( baos, true, null );
@@ -508,7 +520,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     // TODO - pawelw - remove it
     Activator.consoleLog( xml );
     try {
-      byteArray = xml.getBytes( "ISO-8859-1" ); // choose a charset
+      byteArray = xml.getBytes( XML_CHARSET ); // choose a charset
       // //$NON-NLS-1$
       baos = new ByteArrayInputStream( byteArray );
       if( _jobStatusFile.exists() ) {
@@ -571,7 +583,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
           + ">"; //$NON-NLS-1$
     Activator.consoleLog( xml );
     try {
-      byteArray = xml.getBytes( "ISO-8859-1" ); // choose a charset
+      byteArray = xml.getBytes( XML_CHARSET ); // choose a charset
       // //$NON-NLS-1$
       baos = new ByteArrayInputStream( byteArray );
       file.create( baos, true, null );
@@ -628,11 +640,11 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
    * directory contains job info file.
    * 
    * @param folder
-   * @return
+   * @return true if job can be created
    */
   public static boolean canCreate( final IFolder folder ) {
     IFile infoFile = folder.getFile( GridJob.JOBINFO_FILENAME );
-    return "job".equalsIgnoreCase( folder.getFileExtension() )
+    return "job".equalsIgnoreCase( folder.getFileExtension() ) //$NON-NLS-1$
                                                               ? infoFile.exists()
                                                               : false;
   }
@@ -647,4 +659,95 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
   protected boolean fetchChildren( final IProgressMonitor monitor ) {
     return true;
   }
+  
+  private void createStagingFolders( final IFolder jobFolder ) throws GridModelException {
+    if( this.jobDescription instanceof JSDLJobDescription ) {
+      JSDLJobDescription jsdlDesc = ( JSDLJobDescription )this.jobDescription;
+      Map<String, String> inStagingMap = jsdlDesc.getDataStagingInStrings();
+      Map<String, String> outStagingMap = jsdlDesc.getDataStagingOutStrings();
+      
+      if( inStagingMap != null
+          && !inStagingMap.isEmpty() ) { 
+        try {
+          IFolder inputFolder = createStagingFilesFolder( jobFolder, Messages.getString("GridJob.FolderInputFiles") ); //$NON-NLS-1$
+          createStagingFilesLinks( inputFolder, inStagingMap );
+        } catch( CoreException exception ) {
+          throw new GridModelException( GridModelProblems.ELEMENT_CREATE_FAILED, exception, Messages.getString("GridJob.errCreateInputFolder") ); //$NON-NLS-1$
+        }        
+      }      
+
+      if( outStagingMap != null
+          && !outStagingMap.isEmpty() ) {
+        try {
+          IFolder outputFolder  = createStagingFilesFolder( jobFolder, Messages.getString("GridJob.FolderOutputFiles") ); //$NON-NLS-1$
+          createStagingFilesLinks( outputFolder, outStagingMap );
+        } catch( CoreException exception ) {
+          throw new GridModelException( GridModelProblems.ELEMENT_CREATE_FAILED, exception, Messages.getString("GridJob.errCreateOutputFolder") ); //$NON-NLS-1$
+        }        
+      }
+      
+    }    
+  }
+  
+  private IFolder createStagingFilesFolder( final IFolder jobFolder, final String folderName ) throws CoreException {
+      IFolder folder = jobFolder.getFolder( folderName );
+      
+      if( !folder.exists() ) {
+        folder.create( true, true, null );
+      }
+      
+      return folder;
+  }
+  
+  private void createStagingFilesLinks( final IFolder localFolder, final Map<String, String> dataStagingMap ) {
+    for( String filename : dataStagingMap.keySet() ) {
+      String uriString = dataStagingMap.get( filename );
+      try {
+        URI uri = new URI( uriString );
+        
+        if( uri.getScheme() != null ) {
+          createFileLink( localFolder, filename, uri );
+        }              
+      } catch( URISyntaxException exception ) {
+        Activator.logException( exception, Messages.getString("GridJob.errCreateLink") + uriString ); //$NON-NLS-1$
+      }            
+    }
+  }
+
+  private void createFileLink( final IFolder localFolder, final String localFilename, final URI uri ) {
+    // TODO mariusz Handle situation when 2 files have the same name
+    IFile file = localFolder.getFile( localFilename );
+    
+    if( !file.exists() ) {
+      GEclipseURI geclURI = new GEclipseURI( uri );
+      try {
+        file.createLink( geclURI.toMasterURI(), IResource.ALLOW_MISSING_LOCAL, null );
+      } catch( CoreException exception ) {
+        Activator.logException( exception, Messages.getString("GridJob.errCreateLink") + uri.toString() ); //$NON-NLS-1$
+      }
+    }
+  }
+
+  private IGridElement createModelElement( final IResource resource ) throws GridModelException {
+    IGridElement element = null;
+    IGridElementCreator creator = findCreator( resource );
+    if ( creator != null ) {
+      element = create( creator );
+    }
+    
+    return element;
+  }
+  
+  private void addStagingFolder( final IFolder jobFolder, final String folderName ) {
+    IFolder folder = jobFolder.getFolder( folderName );
+    
+    if( folder.exists() ) {
+      try {
+        createModelElement( folder );
+      } catch( GridModelException exception ) {        
+        Activator.logException( exception, String.format( Messages.getString("GridJob.errAddFolder"), folderName ) ); //$NON-NLS-1$
+      }
+    }    
+  }
+  
 }
