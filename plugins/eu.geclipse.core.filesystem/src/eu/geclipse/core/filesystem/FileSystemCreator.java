@@ -19,6 +19,7 @@ import java.net.URI;
 
 import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.provider.FileInfo;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -56,7 +57,7 @@ public class FileSystemCreator
     IResource resource = ( IResource ) getObject();
     
     if ( isFileSystemLink( resource ) ) {
-      result = createConnectionRoot( ( IFolder ) resource );
+      result = createConnectionRoot( resource );
     } else {
       result = createConnectionElement( resource );
     }
@@ -84,12 +85,23 @@ public class FileSystemCreator
    * @return A {@link ConnectionRoot} that corresponds to the specified
    * folder.
    */
-  private ConnectionRoot createConnectionRoot( final IFolder folder ) {
-    ConnectionRoot connection = new ConnectionRoot( folder );
+  private ConnectionElement createConnectionRoot( final IResource resource ) {
+    ConnectionElement connection = null;
+    
+    if( resource instanceof IFolder ) {
+      connection = new ConnectionRoot( (IFolder)resource );
+    } else if( resource instanceof IFile ) {
+      connection = new ConnectionRoot( (IFile)resource );
+    }
+    
     try {
       IFileInfo info = connection.getConnectionFileInfo();
       if ( info instanceof FileInfo ) {
+        FileInfo fileInfo = (FileInfo)info;
         ( ( FileInfo ) info ).setExists( true );
+        if( resource instanceof IFile ) {
+          fileInfo.setDirectory( false );
+        }
       }
     } catch ( CoreException cExc ) {
       // Should never happen, if it does just log it
@@ -144,10 +156,10 @@ public class FileSystemCreator
     
     boolean result = false;
     
-    if ( ( resource != null ) && ( resource instanceof IFolder ) ) {
-      IFolder folder = ( IFolder ) resource;
-      if ( folder.isLinked() ) {
-        URI uri = folder.getRawLocationURI();
+    if ( ( resource != null ) 
+        && ( resource instanceof IFolder || resource instanceof IFile ) ) {      
+      if ( resource.isLinked() ) {
+        URI uri = resource.getRawLocationURI();
         if ( uri != null ) { // uri is null if the link target does not exist anymore
           String scheme = uri.getScheme();
           if ( GEclipseURI.getScheme().equals( scheme ) ) {

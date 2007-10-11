@@ -15,6 +15,7 @@
 
 package eu.geclipse.core.filesystem.internal.filesystem;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 
 import eu.geclipse.core.model.GridModel;
@@ -39,7 +40,16 @@ public class ConnectionRoot
   public ConnectionRoot( final IFolder folder ) {
     super( folder );
   }
-
+  
+  /**
+   * Create a new link to file. File can be remotely.
+   * @param file link to remote file (create by {@link IFolder#createLink(java.net.URI, int, org.eclipse.core.runtime.IProgressMonitor)}
+   * This file has to be a file linked to a g-Eclipse URI.
+   */
+  public ConnectionRoot( final IFile file ) {
+    super( file );
+  }
+  
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridConnection#isGlobal()
    */
