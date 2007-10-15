@@ -84,7 +84,14 @@ public class GridConnectionElementSource extends AbstractPropertySource<IGridCon
           parent = parent.getParent();
           lastRelativeSegments++;
         }
-        if( parent != null && parent instanceof IGridConnection ) {
+        
+        if( sourceObject == parent ) {
+          URI uri = sourceObject.getURI();
+          if( uri != null ) {
+            uriString = uri.toString();
+          }
+        }
+        else if( parent != null && parent instanceof IGridConnection ) {
           URI parentUri = ( ( IGridConnection )parent ).getURI();
           IPath localPath = sourceObject.getPath();
           if( lastRelativeSegments <= localPath.segmentCount() ) {
