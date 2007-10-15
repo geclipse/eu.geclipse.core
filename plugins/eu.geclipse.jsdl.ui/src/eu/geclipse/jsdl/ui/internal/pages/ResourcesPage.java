@@ -580,7 +580,7 @@ public final class ResourcesPage extends FormPage
     this.lblOperSystType = toolkit.createLabel( client,
                               Messages.getString( "ResourcesPage_OperSystType" ) ); //$NON-NLS-1$
     this.cmbOperSystType = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
-    this.cmbOperSystType.setData( FormToolkit.KEY_DRAW_BORDER );    
+    this.cmbOperSystType.setData( FormToolkit.KEY_DRAW_BORDER );
     this.resourcesTypeAdapter.attachToOSType( this.cmbOperSystType );
     this.cmbOperSystType.setLayoutData( gd );
     

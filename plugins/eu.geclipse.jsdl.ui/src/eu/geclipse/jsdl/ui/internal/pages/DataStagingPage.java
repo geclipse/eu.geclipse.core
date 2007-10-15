@@ -427,7 +427,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    gd.widthHint = 600;
    gd.heightHint = this.WIDGET_HEIGHT;
    
-   //FIXME This is a work-around for the Bug#: 201705 for Windows.
+   //X
    this.stageOutViewer = new TableViewer( client, SWT.BORDER                                                                                
                                         | SWT.FULL_SELECTION );
    

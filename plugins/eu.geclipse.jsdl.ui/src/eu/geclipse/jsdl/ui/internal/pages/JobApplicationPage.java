@@ -369,7 +369,7 @@ public final class JobApplicationPage extends FormPage
     gd.horizontalSpan = 1;
     gd.widthHint = 250;
     gd.heightHint = this.WIDGET_HEIGHT;
-    this.argumentViewer = new TableViewer( client, SWT.BORDER );
+    this.argumentViewer = new TableViewer( client, SWT.BORDER | SWT.FULL_SELECTION );
     this.tblArgument = this.argumentViewer.getTable();
     this.tblArgument.setHeaderVisible( true );
     this.argumentViewer.setContentProvider( new FeatureContentProvider() );
@@ -500,7 +500,7 @@ public final class JobApplicationPage extends FormPage
     gd.horizontalSpan = 1;
     gd.widthHint = 250;
     gd.heightHint = this.WIDGET_HEIGHT;
-    this.environmentViewer = new TableViewer( client, SWT.BORDER );
+    this.environmentViewer = new TableViewer( client, SWT.BORDER | SWT.FULL_SELECTION );
     this.tblEnvironment = this.environmentViewer.getTable();
     this.tblEnvironment.setHeaderVisible( true );
     this.environmentViewer.setContentProvider( new FeatureContentProvider() );
@@ -767,7 +767,7 @@ public final class JobApplicationPage extends FormPage
         ArgumentType argType = ( ArgumentType )structSelection.getFirstElement();
         dialog.addTextField( Messages.getString( "JobApplicationPage_FileSystemName" ), //$NON-NLS-1$
                              argType.getFilesystemName(),
-                             false );
+                             true );
         dialog.addTextField( Messages.getString( "JobApplicationPage_Value" ), //$NON-NLS-1$
                              argType.getValue(),
                              false );
@@ -776,7 +776,7 @@ public final class JobApplicationPage extends FormPage
       this.value = new Object[ 1 ][ 3 ];
       if( button == this.btnEnVarAdd ) {
         dialog.addTextField( Messages.getString( "JobApplicationPage_Name" ), "", false ); //$NON-NLS-1$ //$NON-NLS-2$
-        dialog.addTextField( Messages.getString( "JobApplicationPage_FileSystemName" ), "", false ); //$NON-NLS-1$ //$NON-NLS-2$
+        dialog.addTextField( Messages.getString( "JobApplicationPage_FileSystemName" ), "", true ); //$NON-NLS-1$ //$NON-NLS-2$
         dialog.addTextField( Messages.getString( "JobApplicationPage_Value" ), "", false ); //$NON-NLS-1$ //$NON-NLS-2$
       } else {
         IStructuredSelection structSelection = ( IStructuredSelection )this.environmentViewer.getSelection();
@@ -786,7 +786,7 @@ public final class JobApplicationPage extends FormPage
                              false );
         dialog.addTextField( Messages.getString( "JobApplicationPage_FileSystemName" ), //$NON-NLS-1$
                              envType.getFilesystemName(),
-                             false );
+                             true );
         dialog.addTextField( Messages.getString( "JobApplicationPage_Value" ), //$NON-NLS-1$
                              envType.getValue(),
                              false );

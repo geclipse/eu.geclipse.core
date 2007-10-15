@@ -22,9 +22,11 @@ package eu.geclipse.jsdl.ui.adapters.jsdl;
  *
  */
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
+
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
@@ -41,6 +43,7 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Text;
+
 import eu.geclipse.jsdl.model.CPUArchitectureType;
 import eu.geclipse.jsdl.model.CandidateHostsType;
 import eu.geclipse.jsdl.model.FileSystemType;
@@ -433,11 +436,18 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
         
     /* Populate the Combo Box with the CPU Architecture Literals */    
     EEnum cFEnum = JsdlPackage.Literals.OPERATING_SYSTEM_TYPE_ENUMERATION;
-       for (int i=0; i<cFEnum.getELiterals().size(); i++){         
+ 
+    
+    for (int i=0; i<cFEnum.getELiterals().size(); i++){         
          widget.add( cFEnum.getEEnumLiteral( i ).toString() );
-       }
-       cFEnum = null;
+    }
+    
+    String[] sortedTypes = widget.getItems();
+    Arrays.sort( sortedTypes );
+    widget.setItems( sortedTypes );
+    
           
+    
         
     widget.addSelectionListener(new SelectionListener() {
       public void widgetSelected(final SelectionEvent e) {
