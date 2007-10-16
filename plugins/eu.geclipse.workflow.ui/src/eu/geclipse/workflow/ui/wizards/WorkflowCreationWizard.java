@@ -61,34 +61,34 @@ public class WorkflowCreationWizard extends Wizard implements INewWizard {
    * @generated
    */
   public IWorkbench getWorkbench() {
-    return workbench;
+    return this.workbench;
   }
 
   /**
    * @generated
    */
   public IStructuredSelection getSelection() {
-    return selection;
+    return this.selection;
   }
 
   /**
    * @generated
    */
   public final Resource getDiagram() {
-    return diagram;
+    return this.diagram;
   }
 
   /**
    * @generated
    */
   public final boolean isOpenNewlyCreatedDiagramEditor() {
-    return openNewlyCreatedDiagramEditor;
+    return this.openNewlyCreatedDiagramEditor;
   }
 
   /**
    * @generated
    */
-  public void setOpenNewlyCreatedDiagramEditor( boolean openNewlyCreatedDiagramEditor )
+  public void setOpenNewlyCreatedDiagramEditor( final boolean openNewlyCreatedDiagramEditor )
   {
     this.openNewlyCreatedDiagramEditor = openNewlyCreatedDiagramEditor;
   }
@@ -96,9 +96,9 @@ public class WorkflowCreationWizard extends Wizard implements INewWizard {
   /**
    * @generated
    */
-  public void init( IWorkbench workbench, IStructuredSelection selection ) {
-    this.workbench = workbench;
-    this.selection = selection;
+  public void init( final IWorkbench workbench1, final IStructuredSelection selection1 ) {
+    this.workbench = workbench1;
+    this.selection = selection1;
     setWindowTitle( "New Workflow Diagram" ); //$NON-NLS-1$
     setDefaultPageImageDescriptor( WorkflowDiagramEditorPlugin.getBundledImageDescriptor( "icons/wizban/NewWorkflowWizard.gif" ) ); //$NON-NLS-1$
     setNeedsProgressMonitor( true );
@@ -107,27 +107,30 @@ public class WorkflowCreationWizard extends Wizard implements INewWizard {
   /**
    * @generated
    */
+  @Override
   public void addPages() {
-    diagramModelFilePage = new WorkflowCreationWizardPage( "DiagramModelFile", getSelection(), "workflow" ); //$NON-NLS-1$ //$NON-NLS-2$
-    diagramModelFilePage.setTitle( "Create Workflow Diagram" ); //$NON-NLS-1$
-    diagramModelFilePage.setDescription( "Select file that will contain diagram and domain models." ); //$NON-NLS-1$
-    addPage( diagramModelFilePage );
+    this.diagramModelFilePage = new WorkflowCreationWizardPage( "DiagramModelFile", getSelection(), "workflow" ); //$NON-NLS-1$ //$NON-NLS-2$
+    this.diagramModelFilePage.setTitle( "Create Workflow Diagram" ); //$NON-NLS-1$
+    this.diagramModelFilePage.setDescription( "Select file that will contain diagram and domain models." ); //$NON-NLS-1$
+    addPage( this.diagramModelFilePage );
   }
 
   /**
    * @generated
    */
+  @Override
   public boolean performFinish() {
     IRunnableWithProgress op = new WorkspaceModifyOperation( null ) {
 
+      @Override
       protected void execute( IProgressMonitor monitor )
         throws CoreException, InterruptedException
       {
-        diagram = WorkflowDiagramEditorUtil.createDiagram( diagramModelFilePage.getURI(),
+        WorkflowCreationWizard.this.diagram = WorkflowDiagramEditorUtil.createDiagram( WorkflowCreationWizard.this.diagramModelFilePage.getURI(),
                                                            monitor );
-        if( isOpenNewlyCreatedDiagramEditor() && diagram != null ) {
+        if( isOpenNewlyCreatedDiagramEditor() && WorkflowCreationWizard.this.diagram != null ) {
           try {
-            WorkflowDiagramEditorUtil.openDiagram( diagram );
+            WorkflowDiagramEditorUtil.openDiagram( WorkflowCreationWizard.this.diagram );
           } catch( PartInitException e ) {
             ErrorDialog.openError( getContainer().getShell(),
                                    "Error opening diagram editor", //$NON-NLS-1$
@@ -153,6 +156,6 @@ public class WorkflowCreationWizard extends Wizard implements INewWizard {
       }
       return false;
     }
-    return diagram != null;
+    return this.diagram != null;
   }
 }
