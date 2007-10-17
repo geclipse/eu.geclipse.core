@@ -26,6 +26,7 @@ import org.eclipse.debug.ui.IDebugUIConstants;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IDialogSettings;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
@@ -61,8 +62,10 @@ public class MultipleInputDialog extends Dialog {
   protected static final int BROWSE = 101;
   protected static final int VARIABLE = 102;
   protected static final int COMBO = 103;
+  protected static final int STORED_COMBO = 104;
   protected Composite panel;
   protected List<FieldSummary> fieldList = new ArrayList<FieldSummary>();
+  protected List<StoredCombo> storedComboList = new ArrayList<StoredCombo>();
   protected List<Text> controlList = new ArrayList<Text>();
   protected List<Validator> validators = new ArrayList<Validator>();
   protected List<Combo> combosList = new ArrayList<Combo>();
@@ -240,6 +243,13 @@ public class MultipleInputDialog extends Dialog {
                            field.allowsEmpty,
                            connected );
         break;
+        case STORED_COMBO:
+          createStoredComboField( field.name,
+                                  field.initialValue,
+                                  field.allowsEmpty,
+                                  connected,
+                                  field.prefID);
+        break;
         case BROWSE:
           createBrowseField( field.name,
                              field.initialValue,
@@ -407,6 +417,143 @@ public class MultipleInputDialog extends Dialog {
       }
     }
   }
+  
+  
+  protected void createStoredComboField( final String labelText,
+                                         final String initialValue,
+                                         final boolean allowEmpty,
+                                         final boolean connected,
+                                         final String prefID)
+  {
+    IPreferenceStore prefs = Activator.getDefault().getPreferenceStore();
+    Label label = new Label( this.panel, SWT.NONE );
+    label.setText( labelText );
+    label.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_BEGINNING ) );
+    final StoredCombo storedCombo = new StoredCombo( this.panel, SWT.SINGLE | SWT.BORDER );
+    storedCombo.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
+    storedCombo.setPreferences( prefs, prefID );
+    storedCombo.setData( FIELD_NAME, labelText );
+    // make sure rows are the same height on both panels.
+    label.setSize( label.getSize().x, storedCombo.getSize().y );
+    if( initialValue != null ) {
+      storedCombo.setText( initialValue );
+    }
+    if( !allowEmpty ) {
+      this.validators.add( new Validator() {
+
+        @Override
+        public boolean validate() {
+          return !storedCombo.getText().equals( "" ); //$NON-NLS-1$
+        }
+      } );
+      storedCombo.addModifyListener( new ModifyListener() {
+
+        public void modifyText( final ModifyEvent e ) {
+          validateFields();
+        }
+      } );
+    }
+    this.storedComboList.add( storedCombo );
+    if( connected ) {
+
+      if( this.connectedFields.containsKey( labelText ) ) {
+        String sourceName = this.connectedFields.get( labelText );
+        Text sourceControl = null;
+        int sourceIndex = -1;
+        int targetIndex = -1;
+        for( Control control : this.storedComboList ) {
+          if( control.getData( FIELD_NAME ).equals( sourceName ) ) {
+            sourceControl = ( Text )control;
+            sourceIndex = this.storedComboList.indexOf( control );
+          } else {
+            if( control.getData( FIELD_NAME ).equals( labelText ) ) {
+              targetIndex = this.storedComboList.indexOf( control );
+            }
+          }
+        }
+        final int targetPosition = targetIndex;
+        final int sourcePosition = sourceIndex;
+        sourceControl.addModifyListener( new ModifyListener() {
+
+          public void modifyText( final ModifyEvent event ) {
+            // String value = "";
+            // Path p = new Path(controlList.get( sourcePosition ).getText());
+            // value = p.lastSegment();
+            // if (controlList.get( targetPosition ).getText() != null &&
+            // controlList.get( targetPosition ).getText().length() == 0 ){
+            // controlList.get( targetPosition ).setText( value );
+            // }
+          }
+        } );
+        sourceControl.addFocusListener( new FocusListener() {
+
+          public void focusGained( final FocusEvent event ) {
+            // do nothing
+          }
+
+          public void focusLost( final FocusEvent event ) {
+            String value = ""; //$NON-NLS-1$
+            Path p = new Path( MultipleInputDialog.this.storedComboList.get( sourcePosition ).getText() );
+            value = p.lastSegment();
+            if( MultipleInputDialog.this.storedComboList.get( targetPosition ).getText() != null
+                && MultipleInputDialog.this.storedComboList.get( targetPosition ).getText().length() == 0 )
+            {
+              MultipleInputDialog.this.storedComboList.get( targetPosition ).setText( value );
+            }
+          }
+        } );
+      } else {
+
+        String targetName = null;
+        for( String name : this.connectedFields.keySet() ) {
+          if( this.connectedFields.get( name ).equals( labelText ) ) {
+            targetName = name;
+          }
+        }
+        Text targetControl = null;
+        int sourceIndex = -1;
+        int targetIndex = -1;
+        for( Control control : this.storedComboList ) {
+          if( control.getData( FIELD_NAME ).equals( targetName ) ) {
+            targetControl = ( Text )control;
+            targetIndex = this.storedComboList.indexOf( control );
+          } else {
+            if( control.getData( FIELD_NAME ).equals( labelText ) ) {
+              sourceIndex = this.storedComboList.indexOf( control );
+            }
+          }
+        }
+        final int sourcePosition = sourceIndex;
+        final int targetPosition = targetIndex;
+        storedCombo.addModifyListener( new ModifyListener() {
+
+          public void modifyText( final ModifyEvent event ) {
+            // controlList.get( targetPosition ).setText( controlList.get(
+            // sourcePosition ).getText() );
+          }
+        } );
+        storedCombo.addFocusListener( new FocusListener() {
+
+          public void focusGained( final FocusEvent event ) {
+            // do nothing
+          }
+
+          public void focusLost( final FocusEvent event ) {
+            String value = ""; //$NON-NLS-1$
+            Path p = new Path( MultipleInputDialog.this.storedComboList.get( sourcePosition ).getText() );
+            value = p.lastSegment();
+            if( MultipleInputDialog.this.storedComboList.get( targetPosition ).getText() != null
+                && MultipleInputDialog.this.storedComboList.get( targetPosition ).getText().length() == 0 )
+            {
+              MultipleInputDialog.this.storedComboList.get( targetPosition ).setText( value );
+            }
+          }
+        } );
+      }
+    }
+  }
+  
+  
 
   public void setConnectedFields( final String sourceFieldName,
                                   final String targetFieldName )
@@ -709,6 +856,13 @@ public class MultipleInputDialog extends Dialog {
                            ( ( Text )control ).getText() );
       }
     }
+    for( Iterator<StoredCombo> i = this.storedComboList.iterator(); i.hasNext(); ) {
+      Control control = i.next();
+      if( control instanceof StoredCombo ) {
+        this.valueMap.put( control.getData( FIELD_NAME ),
+                           ( ( StoredCombo )control ).getText() );
+      }
+    }
     for( Iterator<Combo> i = this.combosList.iterator(); i.hasNext(); ) {
       Control control = i.next();
       if( control instanceof Combo ) {
@@ -789,6 +943,27 @@ public class MultipleInputDialog extends Dialog {
                                           initialValue,
                                           allowsEmpty ) );
   }
+  
+  /**
+   * Method to add stored combo field ({@link StoredCombo}) to {@link MultipleInputDialog}
+   * 
+   * @param labelText label to describe this field
+   * @param initialValue initial value of this field
+   * @param allowsEmpty indicates whether this field can be empty (if
+   *            <code>false</code> dialog cannot be closed until this field
+   *            holds some value)
+   */
+  public void addStoredComboField( final String labelText,
+                                   final String initialValue,
+                                   final boolean allowsEmpty,
+                                   final String prefID)
+  {
+    this.fieldList.add( new FieldSummary( STORED_COMBO,
+                                          labelText,
+                                          initialValue,
+                                          allowsEmpty,
+                                          prefID) );
+  }
 
   // TODO katis - is this method used
   /**
@@ -812,6 +987,7 @@ public class MultipleInputDialog extends Dialog {
     String initialValue;
     boolean allowsEmpty;
     boolean allowLocal;
+    final String prefID; 
 
     /**
      * Creates new instance of {@link FieldSummary}. By default this field will
@@ -821,6 +997,7 @@ public class MultipleInputDialog extends Dialog {
      * @param type type of the field (see {@link MultipleInputDialog#BROWSE},
      *            {@link MultipleInputDialog#COMBO},
      *            {@link MultipleInputDialog#FIELD_NAME},
+     *            {@link MultipleInputDialog#STORED_COMBO},
      *            {@link MultipleInputDialog#TEXT} and
      *            {@link MultipleInputDialog#VARIABLE})
      * @param name name of the field (used to access this field's value by
@@ -845,6 +1022,7 @@ public class MultipleInputDialog extends Dialog {
      * @param type type of the field (see {@link MultipleInputDialog#BROWSE},
      *            {@link MultipleInputDialog#COMBO},
      *            {@link MultipleInputDialog#FIELD_NAME},
+     *            {@link MultipleInputDialog#STORED_COMBO},
      *            {@link MultipleInputDialog#TEXT} and
      *            {@link MultipleInputDialog#VARIABLE})
      * @param name name of the field (used to access this field's value by
@@ -863,14 +1041,36 @@ public class MultipleInputDialog extends Dialog {
                          final String name,
                          final String initialValue,
                          final boolean allowsEmpty,
-                         boolean allowLocal )
+                         final boolean allowLocal )
     {
       this.type = type;
       this.name = name;
       this.initialValue = initialValue;
       this.allowsEmpty = allowsEmpty;
       this.allowLocal = allowLocal;
+      this.prefID = ""; //$NON-NLS-1$
     }
+    
+    /**
+     * @param type
+     * @param name
+     * @param initialValue
+     * @param allowsEmpty
+     * @param prefID
+     */
+    public FieldSummary( final int type,
+                         final String name,
+                         final String initialValue,
+                         final boolean allowsEmpty,
+                         final String prefID)
+    {
+      this.type = type;
+      this.name = name;
+      this.initialValue = initialValue;
+      this.allowsEmpty = allowsEmpty;
+      this.prefID = prefID;
+    }
+    
   }
   protected class Validator {
 

@@ -495,7 +495,7 @@ public final class JobDefinitionPage extends FormPage
     MultipleInputDialog dialog = new MultipleInputDialog( this.getSite().getShell(),
                                                          dialogTitle );
         
-    dialog.addTextField( Messages.getString( "JobDefinitionPage_Value" ), "", false ); //$NON-NLS-1$ //$NON-NLS-2$
+    dialog.addStoredComboField( Messages.getString( "JobDefinitionPage_Value" ), "", false, "JobDefinitionPage_Value"  ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
     
     if( dialog.open() != Window.OK ) {
       

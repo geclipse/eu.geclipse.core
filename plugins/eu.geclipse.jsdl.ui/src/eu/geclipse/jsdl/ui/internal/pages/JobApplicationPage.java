@@ -760,36 +760,42 @@ public final class JobApplicationPage extends FormPage
     if( dialogTitle == Messages.getString( "JobApplicationPage_ArgumentDialog" ) ) { //$NON-NLS-1$
       this.value = new Object[ 1 ][ 2 ];
       if( button == this.btnArgAdd ) {
-        dialog.addTextField( Messages.getString( "JobApplicationPage_FileSystemName" ), "", true ); //$NON-NLS-1$ //$NON-NLS-2$      
-        dialog.addTextField( Messages.getString( "JobApplicationPage_Value" ), "", false ); //$NON-NLS-1$ //$NON-NLS-2$
+        dialog.addStoredComboField( Messages.getString( "JobApplicationPage_FileSystemName" ), "", true, "JobApplicationPage_FileSystemName" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$      
+        dialog.addStoredComboField( Messages.getString( "JobApplicationPage_Value" ), "", false , "JobApplicationPage_Value" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
       } else {
         IStructuredSelection structSelection = ( IStructuredSelection )this.argumentViewer.getSelection();
         ArgumentType argType = ( ArgumentType )structSelection.getFirstElement();
-        dialog.addTextField( Messages.getString( "JobApplicationPage_FileSystemName" ), //$NON-NLS-1$
+        dialog.addStoredComboField( Messages.getString( "JobApplicationPage_FileSystemName" ), //$NON-NLS-1$
                              argType.getFilesystemName(),
-                             true );
-        dialog.addTextField( Messages.getString( "JobApplicationPage_Value" ), //$NON-NLS-1$
+                             true,
+                             "JobApplicationPage_FileSystemName"); //$NON-NLS-1$
+        dialog.addStoredComboField( Messages.getString( "JobApplicationPage_Value" ), //$NON-NLS-1$
                              argType.getValue(),
-                             false );
+                             false,
+                             "JobApplicationPage_Value"); //$NON-NLS-1$
       }
     } else {
       this.value = new Object[ 1 ][ 3 ];
       if( button == this.btnEnVarAdd ) {
-        dialog.addTextField( Messages.getString( "JobApplicationPage_Name" ), "", false ); //$NON-NLS-1$ //$NON-NLS-2$
-        dialog.addTextField( Messages.getString( "JobApplicationPage_FileSystemName" ), "", true ); //$NON-NLS-1$ //$NON-NLS-2$
-        dialog.addTextField( Messages.getString( "JobApplicationPage_Value" ), "", false ); //$NON-NLS-1$ //$NON-NLS-2$
+        dialog.addStoredComboField( Messages.getString( "JobApplicationPage_Name" ), "", false, "JobApplicationPage_Name" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        dialog.addStoredComboField( Messages.getString( "JobApplicationPage_FileSystemName" ), "", true, "JobApplicationPage_FileSystemName" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        dialog.addStoredComboField( Messages.getString( "JobApplicationPage_Value" ), "", false, "JobApplicationPage_Value" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
       } else {
         IStructuredSelection structSelection = ( IStructuredSelection )this.environmentViewer.getSelection();
         EnvironmentType envType = ( EnvironmentType )structSelection.getFirstElement();
-        dialog.addTextField( Messages.getString( "JobApplicationPage_Name" ), //$NON-NLS-1$
+        dialog.addStoredComboField( Messages.getString( "JobApplicationPage_Name" ), //$NON-NLS-1$
                              envType.getName(),
-                             false );
-        dialog.addTextField( Messages.getString( "JobApplicationPage_FileSystemName" ), //$NON-NLS-1$
+                             false,
+                             "JobApplicationPage_Name"); //$NON-NLS-1$
+        dialog.addStoredComboField( Messages.getString( "JobApplicationPage_FileSystemName" ), //$NON-NLS-1$
                              envType.getFilesystemName(),
-                             true );
-        dialog.addTextField( Messages.getString( "JobApplicationPage_Value" ), //$NON-NLS-1$
+                             true,
+                             "JobApplicationPage_FileSystemName"); //$NON-NLS-1$
+        dialog.addStoredComboField( Messages.getString( "JobApplicationPage_Value" ), //$NON-NLS-1$
                              envType.getValue(),
-                             false );
+                             false,
+                             "JobApplicationPage_Value"); //$NON-NLS-1$
+
       }
     }
     
