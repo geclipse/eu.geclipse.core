@@ -25,13 +25,15 @@ import org.eclipse.core.runtime.jobs.IJobStatus;
 /**
  * Interface for structural tests and simple tests.
  */
-public interface IGridTest extends IGridElement {
+public interface IGridTest extends IManageable{
   
   /**
    * Method to access date of a test run.
    * @return date on which this test was submitted
    */
   public Calendar getDate();
+  
+  public String getName();
   
   public IGridJobSubmissionService getSubmissionService();
   
@@ -42,6 +44,8 @@ public interface IGridTest extends IGridElement {
    * @return
    */
   public IGridTest getParentTest();
+  
+  public IGridTest[] getChildren();
   
   /**
    * Returns tested grid resource.

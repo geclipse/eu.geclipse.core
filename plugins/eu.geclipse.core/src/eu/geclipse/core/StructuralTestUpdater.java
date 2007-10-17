@@ -15,7 +15,6 @@
  *****************************************************************************/
 package eu.geclipse.core;
 
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
@@ -27,14 +26,12 @@ import org.eclipse.core.runtime.jobs.Job;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElementCreator;
-import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobID;
 import eu.geclipse.core.model.IGridJobStatus;
 import eu.geclipse.core.model.IGridJobStatusListener;
 import eu.geclipse.core.model.IGridJobStatusService;
 import eu.geclipse.core.model.IGridJobSubmissionService;
 import eu.geclipse.core.model.IGridTest;
-
 
 /**
  * Class is responsible for updating statuses of the test jobs. One StructuralTestUpdater is created

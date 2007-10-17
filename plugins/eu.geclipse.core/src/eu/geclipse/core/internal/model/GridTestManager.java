@@ -17,15 +17,11 @@
 package eu.geclipse.core.internal.model;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 
 import eu.geclipse.core.StructuralTestUpdater;
-import eu.geclipse.core.internal.model.notify.GridModelEvent;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridComputing;
 import eu.geclipse.core.model.IGridElement;
@@ -35,6 +31,7 @@ import eu.geclipse.core.model.IGridResource;
 import eu.geclipse.core.model.IGridService;
 import eu.geclipse.core.model.IGridStorage;
 import eu.geclipse.core.model.IGridTest;
+import eu.geclipse.core.model.IGridTestManager;
 
 /**
  * Abstract class that makes some core's internal interfaces available for
@@ -42,7 +39,7 @@ import eu.geclipse.core.model.IGridTest;
  */
 public class GridTestManager
   extends
-  AbstractGridElementManager implements IGridModelListener
+  AbstractGridElementManager implements IGridModelListener, IGridTestManager
 {
   
   private static GridTestManager singleton;
@@ -56,11 +53,16 @@ public class GridTestManager
   
   //private List<IGridTestStatusListener> listeners = new ArrayList< IGridTestStatusListener >();
   
-  public GridTestManager getManager() {
-    if ( this.singleton == null ) { 
-      this.singleton = new GridTestManager();
+  /**
+   * Gets singleton of this manager.
+   * 
+   * @return Singleton of test manager.
+   */
+  public static GridTestManager getManager() {
+    if ( singleton == null ) { 
+      singleton = new GridTestManager();
     }
-    return this.singleton;
+    return singleton;
   }
   
   public void gridModelChanged( final IGridModelEvent event ) {
@@ -153,6 +155,22 @@ public class GridTestManager
       }
     }
     return result;
+  }
+  
+  public List<IGridTest> getStructuralTests() {
+    List<IGridTest> result = new ArrayList<IGridTest>();
+    Iterator<IGridTest> iter = this.structuralTests.keySet().iterator();
+    while ( iter.hasNext() ) {
+      IGridTest test = iter.next();
+      result.add( test );
+    }
+    return result;
+  }
+
+  public void addStrTest( final IGridTest test ) {
+    StructuralTestUpdater up = new StructuralTestUpdater(test.getName(),test);
+    this.structuralTests.put( test, up );
+    
   }
   
 }

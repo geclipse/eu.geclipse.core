@@ -24,6 +24,7 @@ import eu.geclipse.core.Extensions;
 import eu.geclipse.core.internal.model.ConnectionManager;
 import eu.geclipse.core.internal.model.GridProjectCreator;
 import eu.geclipse.core.internal.model.GridRoot;
+import eu.geclipse.core.internal.model.GridTestManager;
 import eu.geclipse.core.internal.model.HiddenProject;
 import eu.geclipse.core.internal.model.JobManager;
 import eu.geclipse.core.internal.model.LocalResourceCreator;
@@ -65,6 +66,10 @@ public class GridModel {
    */
   public static IGridJobManager getJobManager() {
     return JobManager.getManager();
+  }
+  
+  public static IGridTestManager getTestManager() {
+    return GridTestManager.getManager();
   }
 
   /**
