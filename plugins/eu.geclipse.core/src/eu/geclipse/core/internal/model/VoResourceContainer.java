@@ -142,8 +142,12 @@ public class VoResourceContainer
       } else if ( this.type == ResourceType.Storage ) {
         children = infoService.fetchStorage( this, this.vo, monitor );
       } 
-    }else if ( this.type == ResourceType.Service ) {
-        children = this.vo.getServices();
+    } else if ( this.type == ResourceType.Service ) {
+      children = getVo().getServices();
+    } else if ( this.type == ResourceType.Computing ) {
+      children = getVo().getComputing();
+    } else if ( this.type == ResourceType.Storage ) {
+      children = getVo().getStorage();
     }
     
     // Add children to the container
