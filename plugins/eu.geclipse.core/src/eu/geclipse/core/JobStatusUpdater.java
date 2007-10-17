@@ -53,8 +53,8 @@ public class JobStatusUpdater extends Job {
   Hashtable<IGridJobStatusListener, Integer> listeners=new Hashtable<IGridJobStatusListener, Integer>();
 //  static Hashtable<String, JobStatusUpdater> updaters = new Hashtable<String, JobStatusUpdater>();
   
-  IGridJobID jobID;
-  IGridJob job;
+  IGridJobID jobID = null;
+  IGridJob job = null;
   IGridJobStatus lastStatus=null;
   
   /**
@@ -85,10 +85,6 @@ public class JobStatusUpdater extends Job {
 
   @Override
   protected IStatus run( final IProgressMonitor monitor ) {
-    if( this.job != null ) {
-      // if( JobManager.getManager().getNumberOfRunningUpdaters() <=
-      // Preferences.getUpdatersLimit() )
-      // {
       if( Preferences.getUpdateJobsStatus() ) {
         int oldType = -1;
         if( this.lastStatus != null ) {
@@ -138,7 +134,6 @@ public class JobStatusUpdater extends Job {
           JobManager.getManager().removeUpdater( this );
         }
       }
-    }
     return Status.OK_STATUS;
   }
 

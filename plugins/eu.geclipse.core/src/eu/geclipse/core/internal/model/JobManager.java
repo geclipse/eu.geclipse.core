@@ -266,43 +266,13 @@ public class JobManager extends AbstractGridElementManager
     boolean flag;
     flag = super.addElement( element );
     if( element instanceof IGridJob ) {
-      JobStatusUpdater updater = new JobStatusUpdater( ( ( IGridJob )element ) );
-      this.updaters.put( ( ( IGridJob )element ).getID(), updater );
-      updater.setSystem( true );
-      JobScheduler.getJobScheduler().scheduleNewUpdater( updater );
-      updater.addJobStatusListener( IGridJobStatus._ALL, this );
-      // TODO - Temporary fix to bug id = 199711
-      if( ( ( IGridJob )element ).getID()
-        .getJobID()
-        .equals( Messages.getString( "JobManager.UNKNOWN_STRING" ) ) ) { //$NON-NLS-1$
-        Thread jobIDUpdate = new Thread() {
-
-          private boolean found = false;
-
-          @Override
-          public void run() {
-            try {
-              Thread.sleep( 1000 );
-            } catch( InterruptedException e ) {
-              // empty block
-            }
-            Enumeration<IGridJobID> col = JobManager.this.updaters.keys();
-            while( col.hasMoreElements() && !( this.found ) ) {
-              IGridJobID jobID = col.nextElement();
-              if( jobID.getJobID()
-                .equals( Messages.getString( "JobManager.UNKNOWN_STRING" ) ) ) { //$NON-NLS-1$
-                this.found = true;
-                JobStatusUpdater updaterToRefresh = JobManager.this.updaters.get( jobID );
-                if( updaterToRefresh != null ) {
-                  JobManager.this.updaters.remove( jobID );
-                  JobManager.this.updaters.put( updaterToRefresh.getJob().getID(),
-                                                updaterToRefresh );
-                }
-              }
-            }
-          }
-        };
-        jobIDUpdate.start();
+      //JobStatusUpdater updater = new JobStatusUpdater( ( ( IGridJob )element ) );
+//      this.updaters.put( ( ( IGridJob )element ).getID(), updater );
+      JobStatusUpdater updater = getUpdater( ( IGridJob ) element );
+      if ( updater != null ) {
+        updater.setSystem( true );
+        JobScheduler.getJobScheduler().scheduleNewUpdater( updater );
+        updater.addJobStatusListener( IGridJobStatus._ALL, this );
       }
     }
     return flag;
@@ -316,8 +286,7 @@ public class JobManager extends AbstractGridElementManager
   public void startUpdater( final IGridJobID id)
     throws GridModelException
   {
-    JobStatusUpdater updater = new JobStatusUpdater( id );
-    this.updaters.put( id, updater );
+    JobStatusUpdater updater = getUpdater( id );
     updater.setSystem( true );
     JobScheduler.getJobScheduler().scheduleNewUpdater( updater );
   }
@@ -417,16 +386,14 @@ public class JobManager extends AbstractGridElementManager
   {
     JobStatusUpdater updater = null;
     for( IGridJob job : jobs ) {
-      //updater = this.updaters.get( job.getID() );
-//      if ( updater != null){
-//        updater.addJobStatusListener( status, listener );
-//      } else {
-        for (JobStatusUpdater updaterTemp : this.updaters.values() ){
-          if (updaterTemp.getJob().equals(job)){
-            updaterTemp.addJobStatusListener( status, listener );
-          }
-        }
-//      }
+//        for (JobStatusUpdater updaterTemp : this.updaters.values() ){
+//          if (updaterTemp.getJob().equals(job)){
+//            updaterTemp.addJobStatusListener( status, listener );
+//          }
+//        }
+      updater = getUpdater( job );
+      if ( updater != null )
+      updater.addJobStatusListener( status, listener );
     }
   }
 
@@ -442,7 +409,7 @@ public class JobManager extends AbstractGridElementManager
   {
     JobStatusUpdater updater;
     for( IGridJobID id : ids ) {
-      updater = this.updaters.get( id );
+      updater = getUpdater( id );
       updater.addJobStatusListener( status, listener );
     }
   }
@@ -505,7 +472,7 @@ public class JobManager extends AbstractGridElementManager
   void waitForJob( final IGridJob job )
     throws InterruptedException, NoSuchElementException
   {
-    JobStatusUpdater updater = this.updaters.get( job.getID() );
+    JobStatusUpdater updater = getUpdater( job );
     if( updater == null ) {
       throw new NoSuchElementException();
     }
@@ -522,7 +489,7 @@ public class JobManager extends AbstractGridElementManager
   void waitForJob( final IGridJobID id )
     throws InterruptedException, NoSuchElementException
   {
-    JobStatusUpdater updater = this.updaters.get( id );
+    JobStatusUpdater updater = getUpdater( id );
     if( updater == null ) {
       throw new NoSuchElementException();
     }
@@ -566,29 +533,74 @@ public class JobManager extends AbstractGridElementManager
       for( IGridElement elem : removedElements ) {
         if( elem instanceof IGridJob ) {
           IGridJob job = ( IGridJob )elem;
-          JobStatusUpdater updater = this.updaters.get( job.getID() );
+          JobStatusUpdater updater = this.updaters.remove( job.getID() );
           // check if updater is currently running and wait until it finishes
-          while( updater.getState() == Job.RUNNING ) {
-            try {
-              Thread.sleep( 1000 );
-            } catch( InterruptedException e ) {
-              // empty block
+          if ( updater != null ) {
+            while( updater.getState() == Job.RUNNING ) {
+              try {
+                Thread.sleep( 1000 );
+              } catch( InterruptedException e ) {
+                // empty block
+              }
             }
+            // cancel updater
+            updater.cancel();
+            // remove updater from updaters list
+            this.removeUpdater( updater );
           }
-          // cancel updater
-          updater.cancel();
-          // remove updater from updaters list
-          this.removeUpdater( updater );
         }
       }
     }
   }
   
   public void jobStatusChanged ( final IGridJob job ) {
-    JobStatusUpdater updater = this.updaters.get( job.getID() );
+    JobStatusUpdater updater = getUpdater( job );
     if ( updater != null ) {
       updater.statusUpdated( job.getJobStatus() );
     }
   }
 
+  /**
+   * Method gets updater for the specified job. If the updater doesn't exist, it is created
+   * and added to updaters list. This method shouldn't be used to check if updaters list 
+   * contains updater for the given job - use this.updaters.contains( IGridJob.getID() ) instead.
+   * 
+   * @param job Job for which updater should be recived.
+   * @return Updater form list of registered udpaters if updater existed before or new updater if
+   * job status can change or null if job status can't change
+   */
+  public JobStatusUpdater getUpdater( final IGridJob job ) {
+    JobStatusUpdater result = null;
+    if ( !( this.updaters.containsKey( job.getID() ) ) ) {
+      if ( job.getJobStatus().canChange() ) {
+        JobStatusUpdater updater = new JobStatusUpdater( job );
+        this.updaters.put( job.getID(), updater );
+        result = updater;
+      }
+    } else {
+      result = this.updaters.get( job.getID() );
+    }
+    return result;
+  }
+  
+  /**
+   * Method gets updater for the job with specified id. If the updater doesn't exist, it is created
+   * and added to updaters list. This method shouldn't be used to check if updaters list 
+   * contains updater for the given job id - use this.updaters.contains( IGridJobID ) instead.
+   * 
+   * @param job Job for which updater should be recived.
+   * @return Updater form list of registered udpaters.
+   */
+  public JobStatusUpdater getUpdater( final IGridJobID jobID ) {
+    JobStatusUpdater result = null;
+    if ( !( this.updaters.contains( jobID ) ) ) {
+      JobStatusUpdater updater = new JobStatusUpdater( jobID );
+      this.updaters.put( jobID, updater );
+      result = updater;
+    } else {
+      result = this.updaters.get(  jobID );
+    }
+    return result;
+  }
+  
 }
