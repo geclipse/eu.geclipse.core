@@ -9,7 +9,11 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
+import eu.geclipse.core.CoreProblems;
+import eu.geclipse.core.GridException;
 import eu.geclipse.core.model.IGridVisualization;
+import eu.geclipse.ui.dialogs.NewProblemDialog;
+import eu.geclipse.ui.internal.actions.Messages;
 
 
 /**
@@ -69,16 +73,8 @@ public class VisualizationView extends ViewPart {
    * @param renderingSite 
    */
   public void setPipeline( final IGridVisualization vtkPipeline, String renderingSite ) {
-    //TODO: this could be a better place to do the validation of the pipeline as now it is 
-    // really crucial whereas during the specification of the pipeline the user may want to 
-    // save it even though it is not yet completed.
-    if ( vtkPipeline.isValid() ) {
       this.vtkPipeline = vtkPipeline;
       this.renderingSite = renderingSite;
-    }
-    else {
-      //TODO - display the problem dialog
-    }
   }
 
   /**

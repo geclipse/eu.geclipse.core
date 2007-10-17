@@ -62,7 +62,7 @@ public class RenderLocalVTKPipelineAction extends SelectionListenerAction {
   public void run() {
     Object element
       = getStructuredSelection().getFirstElement();
-    if ( element != null && checkForPipelineCompletion( element ) ) {
+    if ( element != null && ((IGridVisualization) element).isValid() ) {
       try {
         IViewPart view = this.site.getPage().showView( "eu.geclipse.ui.views.visualizationview" ); //$NON-NLS-1$
         view.setFocus();
@@ -83,14 +83,6 @@ public class RenderLocalVTKPipelineAction extends SelectionListenerAction {
                                         Messages.getString( "RenderLocalVTKPipelineAction.errorInfo" ), //$NON-NLS-1$
                                         fileException );
     }
-  }
-
-
-  private boolean checkForPipelineCompletion( final Object element ) {
-    //TODO - validate that the .vtkpipeline file specifies at least the data location,
-    //        appropriate reader for the data type and instruction about how to render 
-    //        the data (i.e. most likely one or more filters' specifications)
-    return true;
   }
 
   /* (non-Javadoc)
