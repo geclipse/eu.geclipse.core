@@ -82,7 +82,7 @@ public class GridProjectView
    */
   @Override
   public boolean isDragSource( final IGridElement element ) {
-    return super.isDragSource( element ) || ( element instanceof IGridStorage );
+    return super.isDragSource( element );
   }
   
   /* (non-Javadoc)
