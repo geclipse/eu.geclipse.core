@@ -15,9 +15,11 @@
 
 package eu.geclipse.ui.wizards;
 
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.Wizard;
@@ -33,6 +35,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
+
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
@@ -239,7 +242,12 @@ public class VoSelectionWizardPage extends WizardPage {
           for ( IGridService service : services ) {
             if ( service != infoService ) {
               text += "\n\tName:\n\t\t" + service.getName();
-              text += "\n\tURI:\n\t\t" + service.getURI().toString();
+              URI uri = service.getURI();
+              if ( uri != null ) {
+                text += "\n\tURI:\n\t\t" + service.getURI().toString();
+              } else {
+                text += "\n\tURI:\n\t\tN/A";
+              }
             }
           }
         } else {

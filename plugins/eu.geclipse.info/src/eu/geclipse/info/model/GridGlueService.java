@@ -52,7 +52,8 @@
      GlueService gs=(GlueService) getGlueElement();
      URI uri=null;
      try {
-       uri=new URI(gs.endpoint);
+       String endpoint = validateEndpoint( gs.endpoint );
+       uri=new URI( endpoint );
      } catch (URISyntaxException e) {
        uri=null;
      }
@@ -65,4 +66,13 @@
   public GlueService getGlueService(){
      return (GlueService)getGlueElement();
    }
- }
+  
+  private String validateEndpoint( final String endpoint ) {
+    String result = endpoint;
+    if ( result.endsWith( ":" ) ) { //$NON-NLS-1$
+      result = result.substring( 0, result.length() - 1 );
+    }
+    return result;
+  }
+  
+}
