@@ -29,6 +29,7 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.views.navigator.LocalSelectionTransfer;
 
+import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 
@@ -267,8 +268,8 @@ public class SelectionTransferDropAdapter
         || ( target == element.getParent() )
         || !target.canContain( element ) ) {
       result = DND.DROP_NONE;
-    } else if ( !target.isLocal() || !element.isLocal() ) {
-      if ( !target.isLocal() && !element.isLocal() ) {
+    } else if ( ! isLocal( target ) || ! isLocal( element ) ) {
+      if ( ! isLocal( target ) && ! isLocal( element ) ) {
         IGridElement targetParent = findLastRemoteElement( target );
         IGridElement elementParent = findLastRemoteElement( element );
         if ( targetParent != elementParent ) {
@@ -298,6 +299,10 @@ public class SelectionTransferDropAdapter
       parent = parent.getParent(); 
     }
     return result;
+  }
+  
+  private boolean isLocal( final IGridElement element ) {
+    return element.isLocal() || ( element instanceof IGridConnection );
   }
 
 }

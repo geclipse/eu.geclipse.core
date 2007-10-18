@@ -71,7 +71,7 @@ public class ConnectionElement
    */
   @Override
   public boolean canContain( final IGridElement element ) {
-    return isFolder() && ( element instanceof IGridConnectionElement );
+    return isFolder();// && ( element instanceof IGridConnectionElement );
   }
 
   /* (non-Javadoc)
@@ -210,9 +210,10 @@ public class ConnectionElement
    * @see eu.geclipse.core.model.IGridElement#getFileStore()
    */
   public IFileStore getFileStore() {
-    URI uri = getResource().getLocationURI();
+    IResource res = getResource();
+    IPath path = res.getWorkspace().getRoot().getLocation().append( res.getFullPath() );
     IFileSystem fileSystem = EFS.getLocalFileSystem();
-    IFileStore fileStore = fileSystem.getStore( uri );
+    IFileStore fileStore = fileSystem.getStore( path );
     return fileStore;
   }
 

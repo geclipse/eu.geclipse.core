@@ -18,10 +18,16 @@ package eu.geclipse.ui.internal.transfer;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.net.URI;
+
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
@@ -30,7 +36,9 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
+
 import eu.geclipse.core.model.GridModelException;
+import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
@@ -428,80 +436,133 @@ public class GridElementTransferOperation
   private IStatus transferElement( final IGridElement element,
                                    final IGridContainer target,
                                    final IProgressMonitor monitor ) {
-
-    // Prepare variables
+    
     IStatus status = Status.OK_STATUS;
-    IFileStore inStore = null;
-    IFileStore outStore = null;
+    monitor.beginTask( Messages.getString("GridElementTransferOperation.transfering_progress") + element.getName(), 10 ); //$NON-NLS-1$
     
-    // Get input file store
-    try {
-      inStore = getFileStore( element );
-    } catch ( CoreException cExc ) {
-      status = new Status( IStatus.ERROR,
-                           Activator.PLUGIN_ID,
-                           IStatus.OK,
-                           String.format( Messages.getString("GridElementTransferOperation.unable_get_filestore"), element.getName() ), //$NON-NLS-1$
-                           cExc );
-    }
-    
-    if ( status.isOK() ) {
+    if ( ! ( element instanceof IGridConnectionElement )
+        && ! ( target instanceof IGridConnectionElement ) ) {
+      
+      IResource sResource = element.getResource();
+      IResource tResource = target.getResource();
+      IPath destination = tResource.getFullPath().append( sResource.getName() );
+      
       try {
-        outStore = getFileStore( target );
+        if ( this.move ) {
+          sResource.move( destination, IResource.NONE, monitor );
+        } else {
+          sResource.copy( destination, IResource.NONE, monitor );
+        }
       } catch ( CoreException cExc ) {
         status = new Status( IStatus.ERROR,
                              Activator.PLUGIN_ID,
                              IStatus.OK,
-                             String.format( Messages.getString("GridElementTransferOperation.unable_get_filestore"), target.getName() ), //$NON-NLS-1$
+                             Messages.getString("GridElementTransferOperation.copy_resources_failed"), //$NON-NLS-1$
                              cExc );
       }
+      
     }
     
-    if ( status.isOK() ) {
+    else if ( ( element instanceof IGridConnection ) 
+        && ! ( target instanceof IGridConnectionElement ) ) {
       
-      monitor.beginTask( Messages.getString("GridElementTransferOperation.transfering_progress") + element.getName(), 10 ); //$NON-NLS-1$
-      
-      // Put in try-finally-clause to ensure that monitor.done() is called
       try {
+      
+        URI uri = ( ( IGridConnection ) element ).getConnectionFileStore().toURI();
+        IResource sResource = element.getResource();
+        IFolder tFolder = ( IFolder ) target.getResource();
+        IFolder folder = tFolder.getFolder( sResource.getName() );      
         
-        // Copy operation
-        IProgressMonitor subMonitor = new SubProgressMonitor( monitor, this.move ? 5 : 9 );
-        status = copy( inStore, outStore, subMonitor );
+        folder.createLink( uri, IResource.NONE, new SubProgressMonitor( monitor, 5 ) );
         
-        if ( status.isOK() ) {
+        if ( this.move ) {
+          sResource.delete( IResource.NONE, new SubProgressMonitor( monitor, 5 ) );
+        }
+        
+      } catch ( CoreException cExc ) {
+        status = new Status( IStatus.ERROR,
+                             Activator.PLUGIN_ID,
+                             IStatus.OK,
+                             Messages.getString("GridElementTransferOperation.copy_linked_resource_failed"), //$NON-NLS-1$
+                             cExc );
+      }
+      
+    }
+
+    else {
+
+      // Prepare variables
+      IFileStore inStore = null;
+      IFileStore outStore = null;
+      
+      // Get input file store
+      try {
+        inStore = getFileStore( element );
+      } catch ( CoreException cExc ) {
+        status = new Status( IStatus.ERROR,
+                             Activator.PLUGIN_ID,
+                             IStatus.OK,
+                             String.format( Messages.getString("GridElementTransferOperation.unable_get_filestore"), element.getName() ), //$NON-NLS-1$
+                             cExc );
+      }
+      
+      if ( status.isOK() ) {
+        try {
+          outStore = getFileStore( target );
+        } catch ( CoreException cExc ) {
+          status = new Status( IStatus.ERROR,
+                               Activator.PLUGIN_ID,
+                               IStatus.OK,
+                               String.format( Messages.getString("GridElementTransferOperation.unable_get_filestore"), target.getName() ), //$NON-NLS-1$
+                               cExc );
+        }
+      }
+      
+      if ( status.isOK() ) {
+        
+        // Put in try-finally-clause to ensure that monitor.done() is called
+        try {
           
-          try {
-            target.refresh( new SubProgressMonitor( monitor, 1 ) );
-          } catch( GridModelException gmExc ) {
-            // refresh errors should not disturb the operation
-            // but should be tracked, therefore just log it
-            Activator.logException( gmExc );
-          }
+          // Copy operation
+          IProgressMonitor subMonitor = new SubProgressMonitor( monitor, this.move ? 5 : 9 );
+          status = copy( inStore, outStore, subMonitor );
           
-          if ( monitor.isCanceled() ) {
-            throw new OperationCanceledException();
-          }
-          
-          if ( this.move ) {
+          if ( status.isOK() ) {
             
-            status = delete( inStore, new SubProgressMonitor( monitor, 3 ) );
+            try {
+              target.refresh( new SubProgressMonitor( monitor, 1 ) );
+            } catch( GridModelException gmExc ) {
+              // refresh errors should not disturb the operation
+              // but should be tracked, therefore just log it
+              Activator.logException( gmExc );
+            }
             
-            if ( status.isOK() ) {
-              try {
-                element.getParent().refresh( new SubProgressMonitor( monitor, 1 ) );
-              } catch( GridModelException gmExc ) {
-                // refresh errors should not disturb the operation
-                // but should be tracked, therefore just log it
-                Activator.logException( gmExc );
+            if ( monitor.isCanceled() ) {
+              throw new OperationCanceledException();
+            }
+            
+            if ( this.move ) {
+              
+              status = delete( inStore, new SubProgressMonitor( monitor, 3 ) );
+              
+              if ( status.isOK() ) {
+                try {
+                  element.getParent().refresh( new SubProgressMonitor( monitor, 1 ) );
+                } catch( GridModelException gmExc ) {
+                  // refresh errors should not disturb the operation
+                  // but should be tracked, therefore just log it
+                  Activator.logException( gmExc );
+                }
               }
+              
             }
             
           }
           
+        } finally {
+          monitor.done();
         }
         
-      } finally {
-        monitor.done();
       }
       
     }
