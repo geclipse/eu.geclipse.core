@@ -80,9 +80,10 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.dialogs.SaveAsDialog;
-import org.eclipse.ui.editors.text.TextEditor;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.part.FileEditorInput;
+import org.eclipse.ui.part.MultiPageEditorSite;
+import org.eclipse.wst.sse.ui.StructuredTextEditor;
 
 import eu.geclipse.jsdl.model.JobDefinitionType;
 import eu.geclipse.jsdl.ui.adapters.jsdl.JsdlAdaptersFactory;
@@ -124,7 +125,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
   protected MarkerHelper markerHelper = new EditUIMarkerHelper();
   protected ComposedAdapterFactory adapterFactory;
   protected JobDefinitionType jobDefType = null;
-  private TextEditor editor = null;
+  private StructuredTextEditor editor = null;
   private int sourcePageIndex;
   private boolean refreshedModel = false;
   private boolean isDirtyFlag = false;
@@ -294,22 +295,46 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
     getSourceEditor().setInput(getEditorInput());
     
   }
-   
+  
+
+  
   /*
    * This method returns a Text Editor for addResourceEditorPage method.
    */
 
-  private TextEditor getSourceEditor()
+  private StructuredTextEditor getSourceEditor()
   {  
     
      if (this.editor == null)
       {
-       this.editor = new TextEditor();   
+       this.editor = new StructuredTextEditor();   
+       this.editor.setEditorPart( this );
       }
       return this.editor;
   }
 
   
+  
+  /**
+   * @see org.eclipse.ui.part.MultiPageEditorPart#createSite(org.eclipse.ui.IEditorPart)
+   */
+  @Override
+  protected IEditorSite createSite(final IEditorPart page) {
+      IEditorSite site = null;
+      if (page == this.editor) {
+          site = new MultiPageEditorSite(this, page) {
+              @Override
+              public String getId() {
+                  // Sets this ID so nested editor is configured for XML source          
+              return "org.eclipse.core.runtime.xml" + ".source";     //$NON-NLS-1$ //$NON-NLS-2$
+              }
+          };
+      }
+      else {
+          site = super.createSite(page);
+      }
+      return site;
+  }
   
   @Override
   public void init(final IEditorSite site, final IEditorInput editorInput){

@@ -2,6 +2,17 @@
 <?eclipse version="3.2"?>
 <plugin>
    <extension-point id="eu.geclipse.jsdl.ui.applicationParameters" name="JSDL Application Parameters" schema="schema/eu.geclipse.jsdl.ui.applicationParameters.exsd"/>
+        
+   <extension
+         id="org.eclipse.core.contenttype.contentTypes"
+         name="JSDL"
+         point="org.eclipse.core.contenttype.contentTypes">
+      <file-association
+            content-type="org.eclipse.core.runtime.xml"
+            file-extensions="jsdl"
+            />
+   </extension>
+   
    <extension
          point="org.eclipse.ui.editors">     
  	  <editor
@@ -10,8 +21,10 @@
           extensions="jsdl"
           icon="icons/jsdlfile.gif"
           id="eu.geclipse.jsdl.ui.JsdlEditor"
-          name="JSDL Editor"/>      
-   </extension>
+          name="JSDL Editor"/> 
+    </extension>
+    
+   
    <extension
          point="org.eclipse.ui.newWizards">
       <wizard
@@ -50,6 +63,10 @@
          </newWizardShortcut>
       </perspectiveExtension>
    </extension>
+   
+   
+
+   
    <extension
          point="org.eclipse.ui.preferencePages">
       <page

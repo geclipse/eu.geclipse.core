@@ -417,6 +417,24 @@ public final class JobDefinitionPage extends FormPage
     this.jobIdentificationTypeAdapter.attachToDelete( this.btnDel, this.lstJobAnnotation);
     this.btnDel.setLayoutData( gd );
     
+//    //TEST
+//    
+//    this.btnAdd = toolkit.createButton( client, 
+//                                        "TEST", //$NON-NLS-1$
+//                                        SWT.PUSH );
+//    this.btnAdd.addSelectionListener( new SelectionAdapter() {
+//      
+//      @Override
+//      public void widgetSelected( final SelectionEvent event ) {
+//     
+//        NewJSDL newJSDL = new NewJSDL();
+//      }
+//
+//     });
+//     
+////     this.btnAdd.setLayoutData( gd );
+
+    
     /* ============================= Job Project =============================*/
     
      this.lblJobProject = toolkit.createLabel( client,
