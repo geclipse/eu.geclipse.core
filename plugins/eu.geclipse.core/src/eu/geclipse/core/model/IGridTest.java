@@ -25,7 +25,9 @@ import org.eclipse.core.runtime.jobs.IJobStatus;
 /**
  * Interface for structural tests and simple tests.
  */
-public interface IGridTest extends IManageable{
+public interface IGridTest extends IGridElement, IManageable {
+  
+  public static String TEST_UNKNOWN_INTERPRETATION = "Unknown";
   
   /**
    * Method to access date of a test run.
@@ -47,6 +49,7 @@ public interface IGridTest extends IManageable{
   
   public IGridTest[] getChildren();
   
+  public void setParentTest( final IGridTest parent );
   /**
    * Returns tested grid resource.
    * @return resource which was tested by this test
@@ -61,4 +64,7 @@ public interface IGridTest extends IManageable{
    */
   public String getInterpretation();
   //TODO change this method to return enumeration type
+  
+  public boolean createChildTest( final IGridTest childTest );
+  
 }

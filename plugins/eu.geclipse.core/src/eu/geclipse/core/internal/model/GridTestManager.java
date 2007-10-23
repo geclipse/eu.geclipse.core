@@ -32,6 +32,8 @@ import eu.geclipse.core.model.IGridService;
 import eu.geclipse.core.model.IGridStorage;
 import eu.geclipse.core.model.IGridTest;
 import eu.geclipse.core.model.IGridTestManager;
+import eu.geclipse.core.model.IGridTestStatusListener;
+import eu.geclipse.core.model.ITestable;
 
 /**
  * Abstract class that makes some core's internal interfaces available for
@@ -52,6 +54,7 @@ public class GridTestManager
   private HashMap< IGridTest, StructuralTestUpdater > structuralTests = new HashMap< IGridTest, StructuralTestUpdater >();
   
   //private List<IGridTestStatusListener> listeners = new ArrayList< IGridTestStatusListener >();
+  private List< IGridTestStatusListener > globalListeners = new ArrayList< IGridTestStatusListener >();
   
   /**
    * Gets singleton of this manager.
@@ -101,6 +104,17 @@ public class GridTestManager
           //TODO throw new NoSuchStructuralTestException();
         }
       }
+      informListeners();
+    }
+    return flag;
+  }
+  
+  @Override
+  public boolean removeElement( final IGridElement element ) {
+    boolean flag;
+    flag = super.removeElement( element );
+    if ( element instanceof IGridTest ) {
+      this.structuralTests.remove( element );
     }
     return flag;
   }
@@ -116,8 +130,8 @@ public class GridTestManager
   public List< IGridTest > getAvaliableTests( final Object resource ) {
     List< IGridTest > tests = null;
     //TODO change to ITestable later on
-    if ( resource instanceof IGridComputing || resource instanceof IGridStorage || resource instanceof IGridService) {
-      searchTestsForResource( ( IGridResource )resource );
+    if ( resource instanceof ITestable ) {
+      tests = searchTestsForResource( ( IGridResource )resource );
     }
     return tests;
   }
@@ -138,8 +152,6 @@ public class GridTestManager
         foundTests.add( test );
       }
     }
-    if (!( foundTests.size() > 0 ))
-      foundTests = null;
     return foundTests;
   }
   
@@ -170,7 +182,41 @@ public class GridTestManager
   public void addStrTest( final IGridTest test ) {
     StructuralTestUpdater up = new StructuralTestUpdater(test.getName(),test);
     this.structuralTests.put( test, up );
-    
+  }
+  
+  public void addTestStatusListener( final IGridTestStatusListener listener ) {
+    if ( !( this.globalListeners.contains( listener ) ) ) {
+      this.globalListeners.add( listener );
+    }
+  }
+  
+  public void informListeners() {
+    for ( IGridTestStatusListener listener: this.globalListeners ) {
+      listener.statusChanged();
+    }
+  }
+
+  public IGridTest getStructuralTest( final String name ) {
+    IGridTest test = null;
+    for ( IGridTest strTest : this.structuralTests.keySet() ) {
+      if ( strTest.getName().equals( name ) ) {
+        test = strTest;
+      } 
+    }
+    return test;
+  }
+
+  public IGridTest getSimpleTest( final String name, final String parentTestName ) {
+    IGridTest test = null;
+    for ( IGridTest strTest: this.structuralTests.keySet() ) {
+      if ( strTest.getName().equals( parentTestName ) ) {
+        for ( IGridTest childTest : strTest.getChildren() ) {
+          if ( childTest.getName().equals( name ) ) 
+            test = childTest;
+        }
+      }
+    }
+    return test;
   }
   
 }

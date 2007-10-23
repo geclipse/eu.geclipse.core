@@ -20,7 +20,7 @@ import java.net.URI;
 /**
  * This is the base interface for every kind of grid service.
  */
-public interface IGridService extends IGridResource {
+public interface IGridService extends IGridResource, ITestable {
   
   /**
    * Get the <code>URI</code> of the service, i.e. its location
