@@ -544,7 +544,7 @@ boolean predicates.
 <!-- Candidate hosts -->
 <xsl:template match="jsdl:CandidateHosts">
   <xsl:if test="position()=1">
-    <xsl:text>member( GlueCEInfoHostName, {</xsl:text>
+    <xsl:text>member( other.GlueCEInfoHostName, {</xsl:text>
   </xsl:if>
   <xsl:for-each select="jsdl:HostName">
     <xsl:text>"</xsl:text><xsl:value-of select="."/><xsl:text>"</xsl:text>
