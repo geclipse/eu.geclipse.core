@@ -161,20 +161,22 @@ public class CandidateHostsDialog extends Dialog {
       
       Collection <String> computingElements =  new ArrayList<String>();
       IGridComputing[] gridComputings = this.jobDescription.getProject().getVO().getComputing() ;
-      
+      String hostnameOnly;
           
       for (int i=0; i < gridComputings.length; i++){        
-        
-      if (this.existingHosts != null ) {       
-        if ( !this.existingHosts.contains( gridComputings[i].getName() )  ) 
-        {
-          computingElements.add( gridComputings[i].getName() );
-
+       
+        hostnameOnly = gridComputings[i].getName().substring( 0 , gridComputings[i].getName().indexOf( ":" ) ); //$NON-NLS-1$
+      
+        if (this.existingHosts != null ) {
+         
+          if ( !this.existingHosts.contains( hostnameOnly)   ) 
+          {
+            computingElements.add( hostnameOnly );
+           }
         }
-      }
-      else {
-        computingElements.add( gridComputings[i].getName() );
-      }
+        else {
+          computingElements.add( hostnameOnly );
+        }
       } // end 
       this.hostsViewer.setInput( computingElements );
     } catch( Exception e ) {
