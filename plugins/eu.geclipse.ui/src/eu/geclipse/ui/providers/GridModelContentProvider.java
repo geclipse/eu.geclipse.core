@@ -185,8 +185,7 @@ public class GridModelContentProvider
     Object element = event.getElement();
     if ( element instanceof IGridContainer ) {
       ( ( IGridContainer ) element ).setDirty();
-      this.treeViewer.setChildCount( element, 0 );
-      this.treeViewer.setChildCount( element, 1 );
+      this.treeViewer.refresh( element, false );
     }
   }
 
