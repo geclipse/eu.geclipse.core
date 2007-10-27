@@ -39,7 +39,7 @@ public class GridProcess {
   protected IFileStore procinfo = null;
   protected Hashtable<String,Integer> values = null;
   
-  private final String[] captions={
+  private final String[] captions = {
     Messages.getString("ProcessStatView.pid"), //$NON-NLS-1$
     Messages.getString("ProcessStatView.comm"), //$NON-NLS-1$
     Messages.getString("ProcessStatView.state"),  //$NON-NLS-1$ 
@@ -81,18 +81,18 @@ public class GridProcess {
     Messages.getString("ProcessStatView.processor"),  //$NON-NLS-1$
     Messages.getString("ProcessStatView.rt_priority"),  //$NON-NLS-1$
     Messages.getString("ProcessStatView.policy"),  //$NON-NLS-1$
-    Messages.getString("ProcessStatView.delayacct_blkio_ticks")}; //$NON-NLS-1$
+    Messages.getString("ProcessStatView.delayacct_blkio_ticks") }; //$NON-NLS-1$
   
   /**
    * Constructs a GridProcess object and associates a /proc/stat IFilesStore resource with it
    * @param proc a valid org.eclipse.core.filesystem.IFileStore representing a processes /proc/stat file
    */
-  public GridProcess(final IFileStore proc){
+  public GridProcess( final IFileStore proc ) {
       
-    if (proc != null && proc.fetchInfo().isDirectory() ){       // roughly check the validity of the FileStore 
+    if ( proc != null && proc.fetchInfo().isDirectory() ) {   // roughly check the validity of the FileStore 
         String dirname = proc.getName();
         this.pid = Integer.parseInt( dirname );
-        if (this.pid > 0){
+        if ( this.pid > 0 ) {
           this.procinfo = proc;
         }
         
@@ -105,27 +105,28 @@ public class GridProcess {
    * @throws GridException
    */
   @SuppressWarnings("null")
-  public void update() throws GridException{
+  public void update() throws GridException {
    
-    if (this.procinfo != null && this.values != null){
+    if ( this.procinfo != null && this.values != null ) {
       this.values.clear();
-      IFileStore stat = this.procinfo.getChild( "stat"); //$NON-NLS-1$
+      IFileStore stat = this.procinfo.getChild( "stat" ); //$NON-NLS-1$
       
-      if (stat != null ){
+      if ( stat != null ) {
         BufferedReader inr = null;
         StringTokenizer filecontents = null;
         try {
-          inr = new BufferedReader (new InputStreamReader(stat.openInputStream( EFS.NONE, null )));
-          filecontents = new StringTokenizer(inr.readLine());
+          inr = new BufferedReader( new InputStreamReader( stat.openInputStream( EFS.NONE, null ) ) );
+          filecontents = new StringTokenizer( inr.readLine() );
           int elemcount = 0;
-          while (filecontents.hasMoreTokens()){
-            this.values.put( this.captions[elemcount++],Integer.valueOf(filecontents.nextToken()));
+          while ( filecontents.hasMoreTokens() ){
+            this.values.put( this.captions[ elemcount++ ], Integer.valueOf( filecontents.nextToken() ) );
           }
-        } catch( Exception e1 ) {
+        } catch ( Exception e1 ) {
           Throwable cause = e1.getCause();
-          throw new GridException(eu.geclipse.core.CoreProblems.CONNECTION_FAILED,cause, "Error reading/parsing stat of remote process "+this.pid); //$NON-NLS-1$
+          throw new GridException( eu.geclipse.core.CoreProblems.CONNECTION_FAILED, cause,
+                                   "Error reading/parsing stat of remote process " + this.pid ); //$NON-NLS-1$
         } 
-        if (inr != null){
+        if ( inr != null ) {
           try {
             inr.close();
           } catch( IOException e ) {
@@ -140,9 +141,7 @@ public class GridProcess {
    * return the processes /proc/stat values as a localized Hashtable
    * @return a localized Hashtable containing /proc/<pid>/stat
    */
-  public Hashtable<String, Integer> getStat(){
-    
+  public Hashtable<String, Integer> getStat() {
     return this.values;
   }
 }
-

@@ -57,10 +57,16 @@ public class GridProcessMonitor {
        @Override
        protected IStatus run( final IProgressMonitor monitor )
        {
-         Status status = new Status(Status.ERROR,"eu.geclipse.core.monitoring","Fetching running process data from "+GridProcessMonitor.this.targeturi.getHost()+" failed"); //$NON-NLS-1$ //$NON-NLS-2$
+         Status status = new Status( IStatus.ERROR,
+                                     "eu.geclipse.core.monitoring", //$NON-NLS-1$
+                                     "Fetching running process data from " //$NON-NLS-1$
+                                       + GridProcessMonitor.this.targeturi.getHost()
+                                       + " failed" ); //$NON-NLS-1$
          try {
-           if(update(monitor)){
-             status = new Status(Status.OK,"eu.geclipse.core.monitoring","Process data fetched successfully."); //$NON-NLS-1$ //$NON-NLS-2$
+           if ( update( monitor ) ) {
+             status = new Status( IStatus.OK,
+                                  "eu.geclipse.core.monitoring", //$NON-NLS-1$
+                                  "Process data fetched successfully." ); //$NON-NLS-1$
            }
          } catch( GridException e ) {
            Activator.logException( e ); 
@@ -70,50 +76,51 @@ public class GridProcessMonitor {
      };
   } 
   
-  protected void scheduleUpdate(){
-    if(this.updateJob.getState()==Job.NONE){
+  protected void scheduleUpdate() {
+    if ( this.updateJob.getState() == Job.NONE ) {
       this.updateJob.schedule();
     }
   }
   
-  protected void stopUpdate(){
+  protected void stopUpdate() {
     this.updateJob.cancel();
   }
   
-  synchronized boolean update(final IProgressMonitor monitor) throws GridException {
+  synchronized boolean update( final IProgressMonitor monitor ) throws GridException {
     
     this.procfs = null;
     String[] procfslist = null;
     
     boolean success = true;
-    monitor.beginTask( "Fetching data from "+this.targeturi.getHost(), 3 ); //$NON-NLS-1$
+    monitor.beginTask( "Fetching data from " + this.targeturi.getHost(), 3 ); //$NON-NLS-1$
     
-    if (this.currentfs == null){
+    if ( this.currentfs == null ) {
       success = this.initialize();
     }
     monitor.worked( 1 );
     
-    if (this.currentfs != null){
+    if ( this.currentfs != null ) {
       
       try {
-        this.procfs = this.currentfs.getStore(this.targeturi);
+        this.procfs = this.currentfs.getStore( this.targeturi );
         procfslist = this.procfs.childNames( EFS.NONE, monitor );
-      } catch( CoreException e ) {
+      } catch ( CoreException e ) {
         Activator.logException( e );
         //Throwable cause = e.getCause();
-        //throw new GridException(eu.geclipse.core.CoreProblems.CONNECTION_FAILED,cause, "updating a temporary Connection failed"); //$NON-NLS-1$
+        //throw new GridException(eu.geclipse.core.CoreProblems.CONNECTION_FAILED,
+        //                        cause, "updating a temporary Connection failed"); //$NON-NLS-1$
         //perhaps better to throw nothing and just return status
         success = false;
-      }  
+      }
       monitor.worked( 1 );
     }
 
-    if (procfslist != null){
+    if ( procfslist != null ) {
       this.proclist.clear();
-      for (String gproc : procfslist ){
+      for ( String gproc : procfslist ) {
           try {
-            this.proclist.add(Integer.valueOf( gproc));
-          }catch (NumberFormatException e){
+            this.proclist.add( Integer.valueOf( gproc ) );
+          } catch ( NumberFormatException e ) {
             // ignore
           }
       }
@@ -129,20 +136,25 @@ public class GridProcessMonitor {
     
     if ( this.targeturi != null ) {
       String path = this.targeturi.getPath();
-      if ((path == null) || (path.length() == 0)) {
+      if ( (path == null) || (path.length() == 0) ) {
         try {
-          this.targeturi = new URI( this.targeturi.getScheme(),this.targeturi.getUserInfo(),this.targeturi.getHost(), this.targeturi.getPort(),"/proc/", "", ""); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        } catch( URISyntaxException e ) {
+          this.targeturi = new URI( this.targeturi.getScheme(),
+                                    this.targeturi.getUserInfo(),
+                                    this.targeturi.getHost(),
+                                    this.targeturi.getPort(),
+                                    "/proc/", "", "" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        } catch ( URISyntaxException e ) {
           // Don't do anything, will be handled later when the connection fails
         }
       }
       try {
-        this.currentfs = EFS.getFileSystem(this.targeturi.getScheme());
+        this.currentfs = EFS.getFileSystem( this.targeturi.getScheme() );
         success = true;
-      } catch( CoreException e ) {
+      } catch ( CoreException e ) {
         Activator.logException( e );
         Throwable cause = e.getCause();
-        throw new GridException(eu.geclipse.core.CoreProblems.CONNECTION_FAILED,cause, "updating a temporary Connection failed"); //$NON-NLS-1$
+        throw new GridException( eu.geclipse.core.CoreProblems.CONNECTION_FAILED,
+                                 cause, "updating a temporary Connection failed" ); //$NON-NLS-1$
       }
     }
     return success;
@@ -155,7 +167,7 @@ public class GridProcessMonitor {
    * @param seconds between two updates
    */
   public void setUpdateInterval( final int seconds ) {
-    if( seconds >= 0 ) {
+    if ( seconds >= 0 ) {
       this.updateinterval = seconds;
       this.updateJob.schedule( this.updateinterval );
     } else {
@@ -173,18 +185,17 @@ public class GridProcessMonitor {
    */
   public GridProcess getProcessInfo( final int pid ) {
     GridProcess newproc = null;
-    if( pid > 0
-        && this.proclist != null
-        && this.proclist.contains( new Integer( pid ) ) )
+    if ( pid > 0
+         && this.proclist != null
+         && this.proclist.contains( new Integer( pid ) ) )
     {
-      if( this.currentfs != null && this.procfs != null) {
-        IFileStore procdirelem = this.procfs.getChild( new Integer(pid).toString() );
+      if ( this.currentfs != null && this.procfs != null ) {
+        IFileStore procdirelem = this.procfs.getChild( new Integer( pid ).toString() );
     
-        if( procdirelem != null )
-        {
-          newproc = new GridProcess( procdirelem );     //perhaps this should be syncronized
-      //    this.proclist.remove( new Integer(pid) );
-      //    this.proclist.add( newproc );               //reserved for future use
+        if ( procdirelem != null ) {
+          newproc = new GridProcess( procdirelem );     // perhaps this should be synchronized
+          // this.proclist.remove( new Integer(pid) );
+          // this.proclist.add( newproc );               // reserved for future use
         }
       }
     }
@@ -196,8 +207,8 @@ public class GridProcessMonitor {
    * 
    * @return a HashSet with PIDs of the remotely running processes
    */
-  public HashSet<Integer> getProcessList(){
-    if (this.proclist.isEmpty()){
+  public HashSet<Integer> getProcessList() {
+    if ( this.proclist.isEmpty() ) {
         this.updateJob.schedule();
         try {
           this.updateJob.join();
@@ -212,26 +223,25 @@ public class GridProcessMonitor {
    * @return the currently run time between two updates. A zero or negative value means that automatic updates
    * are disabled.
    */
-  public int getUpdateInterval(){
+  public int getUpdateInterval() {
     return this.updateinterval;
   }
   
   /**
    * @return the URI of the currently monitored machine
    */
-  public URI getTarget(){
+  public URI getTarget() {
     return this.targeturi;
   }
   
   @Override
-  public boolean equals( final Object o){
+  public boolean equals( final Object o ) {
     
     boolean isequal = false;
-    if (o instanceof GridProcessMonitor){
+    if ( o instanceof GridProcessMonitor ) {
       GridProcessMonitor mon = (GridProcessMonitor)o;
       isequal = this.targeturi.equals( mon.getTarget() );
     }
-    return isequal; 
-    
+    return isequal;
   }
 }
