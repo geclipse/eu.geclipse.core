@@ -23,7 +23,6 @@ import java.net.URI;
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -45,7 +44,7 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.ui.internal.Activator;
 
 /**
- * Job for transfering elements from local to local, local to remote,
+ * Job for transferring elements from local to local, local to remote,
  * remote to local and remote to remote. Elements may either by copied
  * or moved. A move operation is an ordinary copy operation followed
  * by a delete operation. Both files and directories are supported.  
@@ -116,7 +115,10 @@ public class GridElementTransferOperation
       ? new NullProgressMonitor()
       : monitor;
       
-    MultiStatus status = new MultiStatus( Activator.PLUGIN_ID, IStatus.OK, Messages.getString("GridElementTransferOperation.op_status"), null ); //$NON-NLS-1$
+    MultiStatus status = new MultiStatus( Activator.PLUGIN_ID,
+                                          IStatus.OK,
+                                          Messages.getString("GridElementTransferOperation.op_status"), //$NON-NLS-1$
+                                          null );
       
     localMonitor.beginTask( Messages.getString("GridElementTransferOperation.transfering_element_progress"), this.elements.length ); //$NON-NLS-1$
     
@@ -224,7 +226,11 @@ public class GridElementTransferOperation
         if ( status.isOK() ) {
         
           MultiStatus mStatus
-            = new MultiStatus( Activator.PLUGIN_ID, IStatus.OK, Messages.getString("GridElementTransferOperation.copying_members_status") + from.getName(), null ); //$NON-NLS-1$
+            = new MultiStatus( Activator.PLUGIN_ID,
+                               IStatus.OK,
+                               Messages.getString("GridElementTransferOperation.copying_members_status") //$NON-NLS-1$
+                                 + from.getName(),
+                               null );
           
           for ( IFileStore child : children ) {
             
@@ -289,7 +295,8 @@ public class GridElementTransferOperation
         status = new Status( IStatus.ERROR,
                              Activator.PLUGIN_ID,
                              IStatus.OK,
-                             String.format( Messages.getString("GridElementTransferOperation.unable_to_transfer_file"), toStore.getName(), to.getName() ), //$NON-NLS-1$
+                             String.format( Messages.getString("GridElementTransferOperation.unable_to_transfer_file"), //$NON-NLS-1$
+                                            toStore.getName(), to.getName() ),
                              null );
       }
       

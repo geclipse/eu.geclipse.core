@@ -30,17 +30,14 @@ import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.IWizardContainer;
 import org.eclipse.jface.wizard.Wizard;
-import eu.geclipse.core.JobStatusUpdater;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
-import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobCreator;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridJobID;
 import eu.geclipse.core.model.IGridJobSubmissionService;
 import eu.geclipse.core.model.IGridProject;
-import eu.geclipse.ui.UISolutionRegistry;
 import eu.geclipse.ui.dialogs.NewProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.wizards.wizardselection.IInitalizableWizard;
@@ -147,7 +144,7 @@ public abstract class JobSubmissionWizardBase extends Wizard
   }
 
   /**
-   * Method called when wizzard is finished, and job should be submitted
+   * Method called when wizard is finished, and job should be submitted
    * Submission service is then asked to submit job using submitJob method
    * 
    * @return
@@ -204,17 +201,19 @@ public abstract class JobSubmissionWizardBase extends Wizard
     IConfigurationElement[] elements = config.getDeclaringExtension()
       .getConfigurationElements();
     for( IConfigurationElement element : elements ) {
-      if( "job_creator".equals( element.getName() ) ) {
-        Object obj = element.createExecutableExtension( "class" );
+      if( "job_creator".equals( element.getName() ) ) { //$NON-NLS-1$
+        Object obj = element.createExecutableExtension( "class" ); //$NON-NLS-1$
         if( !( obj instanceof IGridJobCreator ) ) {
           Status status = new Status( Status.ERROR,
                                       Activator.PLUGIN_ID,
                                       Status.OK,
-                                      "Job Creator configured in class atribute for job_creator element in eu.geclipse.ou.jobSubmissionWizzard is not implementing IGridJobCreator interface",
+                                      "Job Creator configured in class atribute for job_creator " //$NON-NLS-1$
+                                        + "element in eu.geclipse.ou.jobSubmissionWizzard " //$NON-NLS-1$
+                                        + "is not implementing IGridJobCreator interface", //$NON-NLS-1$
                                       null );
           throw new CoreException( status );
         }
-        creator = ( IGridJobCreator )obj;
+        this.creator = ( IGridJobCreator )obj;
       }
     }
   }

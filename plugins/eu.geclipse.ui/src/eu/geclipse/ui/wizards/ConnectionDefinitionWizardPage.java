@@ -155,23 +155,41 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
     } );
     
     this.uriLabel = new Label( this.mainComp, SWT.NONE );
-    this.uriCombo = createEditorField( this.mainComp, this.uriLabel, Messages.getString("ConnectionDefinitionWizardPage.uri_label") ); //$NON-NLS-1$
+    this.uriCombo = createEditorField( this.mainComp,
+                                       this.uriLabel,
+                                       Messages.getString("ConnectionDefinitionWizardPage.uri_label") ); //$NON-NLS-1$
     this.schemeSpecificPartLabel = new Label( this.mainComp, SWT.NONE );
-    this.schemeSpecificPartCombo = createEditorField( this.mainComp, this.schemeSpecificPartLabel, Messages.getString("ConnectionDefinitionWizardPage.scheme_spec_label") ); //$NON-NLS-1$
+    this.schemeSpecificPartCombo = createEditorField( this.mainComp,
+                                                      this.schemeSpecificPartLabel,
+                                                      Messages.getString("ConnectionDefinitionWizardPage.scheme_spec_label") ); //$NON-NLS-1$
     this.authorityLabel = new Label( this.mainComp, SWT.NONE );
-    this.authorityCombo = createEditorField( this.mainComp, this.authorityLabel, Messages.getString("ConnectionDefinitionWizardPage.authority_label") ); //$NON-NLS-1$
+    this.authorityCombo = createEditorField( this.mainComp,
+                                             this.authorityLabel,
+                                             Messages.getString("ConnectionDefinitionWizardPage.authority_label") ); //$NON-NLS-1$
     this.userInfoLabel = new Label( this.mainComp, SWT.NONE );
-    this.userInfoCombo = createEditorField( this.mainComp, this.userInfoLabel, Messages.getString("ConnectionDefinitionWizardPage.user_info_label") ); //$NON-NLS-1$
+    this.userInfoCombo = createEditorField( this.mainComp,
+                                            this.userInfoLabel,
+                                            Messages.getString("ConnectionDefinitionWizardPage.user_info_label") ); //$NON-NLS-1$
     this.hostLabel = new Label( this.mainComp, SWT.NONE );
-    this.hostCombo = createEditorField( this.mainComp, this.hostLabel, Messages.getString("ConnectionDefinitionWizardPage.host_label") ); //$NON-NLS-1$
+    this.hostCombo = createEditorField( this.mainComp,
+                                        this.hostLabel,
+                                        Messages.getString("ConnectionDefinitionWizardPage.host_label") ); //$NON-NLS-1$
     this.portLabel = new Label( this.mainComp, SWT.NONE );
-    this.portCombo = createEditorField( this.mainComp, this.portLabel, Messages.getString("ConnectionDefinitionWizardPage.port_label") ); //$NON-NLS-1$
+    this.portCombo = createEditorField( this.mainComp,
+                                        this.portLabel,
+                                        Messages.getString("ConnectionDefinitionWizardPage.port_label") ); //$NON-NLS-1$
     this.pathLabel = new Label( this.mainComp, SWT.NONE );
-    this.pathCombo = createEditorField( this.mainComp, this.pathLabel, Messages.getString("ConnectionDefinitionWizardPage.path_label") ); //$NON-NLS-1$
+    this.pathCombo = createEditorField( this.mainComp,
+                                        this.pathLabel,
+                                        Messages.getString("ConnectionDefinitionWizardPage.path_label") ); //$NON-NLS-1$
     this.queryLabel = new Label( this.mainComp, SWT.NONE );
-    this.queryCombo = createEditorField( this.mainComp, this.queryLabel, Messages.getString("ConnectionDefinitionWizardPage.query_label") ); //$NON-NLS-1$
+    this.queryCombo = createEditorField( this.mainComp,
+                                         this.queryLabel,
+                                         Messages.getString("ConnectionDefinitionWizardPage.query_label") ); //$NON-NLS-1$
     this.fragmentLabel = new Label( this.mainComp, SWT.NONE );
-    this.fragmentCombo = createEditorField( this.mainComp, this.fragmentLabel, Messages.getString("ConnectionDefinitionWizardPage.fragment_label") ); //$NON-NLS-1$
+    this.fragmentCombo = createEditorField( this.mainComp,
+                                            this.fragmentLabel,
+                                            Messages.getString("ConnectionDefinitionWizardPage.fragment_label") ); //$NON-NLS-1$
     
     Group browseGroup = new Group( this.mainComp, SWT.NONE );
     browseGroup.setLayout( new GridLayout( 1, false ) );
@@ -317,9 +335,11 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
       }
       
     } catch ( URISyntaxException uriExc ) {
-      setErrorMessage( Messages.getString("ConnectionDefinitionWizardPage.invalid_uri_error") + uriExc.getMessage() ); //$NON-NLS-1$
+      setErrorMessage( Messages.getString("ConnectionDefinitionWizardPage.invalid_uri_error") //$NON-NLS-1$
+                       + uriExc.getMessage() );
     } catch ( NumberFormatException nfExc ) {
-      setErrorMessage( Messages.getString("ConnectionDefinitionWizardPage.invalid_uri_error") + nfExc.getMessage() ); //$NON-NLS-1$
+      setErrorMessage( Messages.getString("ConnectionDefinitionWizardPage.invalid_uri_error") //$NON-NLS-1$
+                       + nfExc.getMessage() );
     }
     
     return uri;
