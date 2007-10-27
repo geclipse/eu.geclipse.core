@@ -15,15 +15,11 @@
  *****************************************************************************/
 package eu.geclipse.core.jobs;
 
-import java.io.File;
-
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 
-import eu.geclipse.core.jobs.internal.Activator;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.GridModelProblems;
 import eu.geclipse.core.model.IGridContainer;
@@ -41,7 +37,7 @@ import eu.geclipse.jsdl.JSDLJobDescription;
  */
 public class GridJobCreator extends AbstractGridJobCreator {
 
-  private static final String TMPJOBFILE = ".job.tmp";
+  private static final String TMPJOBFILE = ".job.tmp"; //$NON-NLS-1$
 
   /*
    * (non-Javadoc)
@@ -141,13 +137,13 @@ public class GridJobCreator extends AbstractGridJobCreator {
   {
     String baseName = description.getPath().removeFileExtension().lastSegment();
     // IFolder folder = ( IFolder )parent.getResource();
-    String name = "." + baseName + ".job"; //$NON-NLS-1$
+    String name = "." + baseName + ".job"; //$NON-NLS-1$ //$NON-NLS-2$
     IFolder jobFolder = folder.getFolder( name );
     // IFile jobFile = folder.getFile( name );
     int jobNum = 0;
     while( jobFolder.exists() ) {
       jobNum++;
-      name = "." + baseName + "[" + jobNum + "].job"; //$NON-NLS-1$
+      name = "." + baseName + "[" + jobNum + "].job"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
       jobFolder = folder.getFolder( name );
     }
     return jobFolder;

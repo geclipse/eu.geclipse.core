@@ -672,7 +672,9 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
           IFolder inputFolder = createStagingFilesFolder( jobFolder, Messages.getString("GridJob.FolderInputFiles") ); //$NON-NLS-1$
           createStagingFilesLinks( inputFolder, inStagingMap );
         } catch( CoreException exception ) {
-          throw new GridModelException( GridModelProblems.ELEMENT_CREATE_FAILED, exception, Messages.getString("GridJob.errCreateInputFolder") ); //$NON-NLS-1$
+          throw new GridModelException( GridModelProblems.ELEMENT_CREATE_FAILED,
+                                        exception,
+                                        Messages.getString("GridJob.errCreateInputFolder") ); //$NON-NLS-1$
         }        
       }      
 
@@ -682,7 +684,9 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
           IFolder outputFolder  = createStagingFilesFolder( jobFolder, Messages.getString("GridJob.FolderOutputFiles") ); //$NON-NLS-1$
           createStagingFilesLinks( outputFolder, outStagingMap );
         } catch( CoreException exception ) {
-          throw new GridModelException( GridModelProblems.ELEMENT_CREATE_FAILED, exception, Messages.getString("GridJob.errCreateOutputFolder") ); //$NON-NLS-1$
+          throw new GridModelException( GridModelProblems.ELEMENT_CREATE_FAILED,
+                                        exception,
+                                        Messages.getString("GridJob.errCreateOutputFolder") ); //$NON-NLS-1$
         }        
       }
       

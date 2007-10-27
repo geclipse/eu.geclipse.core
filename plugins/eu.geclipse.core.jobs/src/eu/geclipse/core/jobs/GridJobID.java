@@ -48,11 +48,11 @@ public class GridJobID implements IGridJobID {
    */
   public GridJobID( final Node jobIDNode ) {
     this();
-    setXMLNode(jobIDNode);
+    setXMLNode( jobIDNode );
   }
     
   final void setXMLNode( final Node statusNode ) {
-      int i;
+    int i;
     Node node;
     NodeList childNodes = statusNode.getChildNodes();
     for( i = 0; i < childNodes.getLength(); i++ ) {
@@ -73,30 +73,34 @@ public class GridJobID implements IGridJobID {
   }
 
   protected void setData( final String data ) {
-//    System.out.println( data );
+    // System.out.println( data );
   }
 
   public final String getXML() {
-    return "<"
+    return "<"                        //$NON-NLS-1$
            + XML_ROOT
-           + " "
+           + " "                      //$NON-NLS-1$
            + XML_ATTRIBUTE_CLASS
-           + "=\""
+           + "=\""                    //$NON-NLS-1$
            + this.getClass().getName()
-           + "\"><Name>"
+           + "\"><Name>"              //$NON-NLS-1$
            + this.jobID
-           + "</Name><Data><![CDATA["
+           + "</Name><Data><![CDATA[" //$NON-NLS-1$
            + getData()
-           + "]]></Data></"
+           + "]]></Data></"           //$NON-NLS-1$
            + XML_ROOT
-           + ">";
+           + ">";                     //$NON-NLS-1$
   }
 
   protected String getData() {
-    return "<test>XML</test>";
+    return "<test>XML</test>"; //$NON-NLS-1$
   }
 
-  public IStatus downloadOutputs(final IFolder jobFolder, final IProgressMonitor monitor) throws GridException {
-    return new Status( IStatus.WARNING, eu.geclipse.core.jobs.internal.Activator.PLUGIN_ID, Messages.getString("GridJobID.errNotImplemented") ); //$NON-NLS-1$
+  public IStatus downloadOutputs( final IFolder jobFolder, final IProgressMonitor monitor )
+    throws GridException
+  {
+    return new Status( IStatus.WARNING,
+                       eu.geclipse.core.jobs.internal.Activator.PLUGIN_ID,
+                       Messages.getString("GridJobID.errNotImplemented") ); //$NON-NLS-1$
   }
 }
