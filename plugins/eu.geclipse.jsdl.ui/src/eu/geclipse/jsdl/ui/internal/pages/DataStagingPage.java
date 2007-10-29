@@ -69,6 +69,7 @@ import eu.geclipse.jsdl.ui.widgets.DataStagingOutDialog;
  */
 public class DataStagingPage extends FormPage implements INotifyChangedListener {
 
+  protected static final String PAGE_ID = "DATA_STAGING"; //$NON-NLS-1$
   protected Composite body = null;
   protected Composite stageInSection = null;
   protected Composite stageOutSection = null;  
@@ -127,8 +128,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
   
   {
    
-   super( editor,"", //$NON-NLS-1$
-         Messages.getString("DataStagingPage_PageTitle") ); //$NON-NLS-1$
+   super( editor, PAGE_ID , Messages.getString("DataStagingPage_PageTitle") ); //$NON-NLS-1$
   
    }
   
