@@ -27,44 +27,44 @@ import org.eclipse.core.runtime.jobs.IJobStatus;
  */
 public interface IGridTest extends IGridElement, IManageable {
   
-  public static String TEST_UNKNOWN_INTERPRETATION = "Unknown";
-  
-  /**
-   * Method to access date of a test run.
-   * @return date on which this test was submitted
-   */
-  public Calendar getDate();
-  
-  public String getName();
-  
-  public IGridJobSubmissionService getSubmissionService();
-  
-  public IGridJobDescription getJSDLDescription();
-  
-  /**
-   * Method returns IGridTest representing it's parent (structural) test, or null if it is parent Test
-   * @return
-   */
-  public IGridTest getParentTest();
-  
-  public IGridTest[] getChildren();
-  
-  public void setParentTest( final IGridTest parent );
-  /**
-   * Returns tested grid resource.
-   * @return resource which was tested by this test
-   */
-  public IGridResource getTestedResource();
-  
-  public boolean isStructural();
-  
-  /**
-   * Returns 
-   * @return
-   */
-  public String getInterpretation();
-  //TODO change this method to return enumeration type
-  
-  public boolean createChildTest( final IGridTest childTest );
-  
+//  public static String TEST_UNKNOWN_INTERPRETATION = "Unknown";
+//  
+//  /**
+//   * Method to access date of a test run.
+//   * @return date on which this test was submitted
+//   */
+//  public Calendar getDate();
+//  
+//  public String getName();
+//  
+//  public IGridJobSubmissionService getSubmissionService();
+//  
+//  public IGridJobDescription getJSDLDescription();
+//  
+//  /**
+//   * Method returns IGridTest representing it's parent (structural) test, or null if it is parent Test
+//   * @return
+//   */
+//  public IGridTest getParentTest();
+//  
+//  public IGridTest[] getChildren();
+//  
+//  public void setParentTest( final IGridTest parent );
+//  /**
+//   * Returns tested grid resource.
+//   * @return resource which was tested by this test
+//   */
+//  public IGridResource getTestedResource();
+//  
+//  public boolean isStructural();
+//  
+//  /**
+//   * Returns 
+//   * @return
+//   */
+//  public String getInterpretation();
+//  //TODO change this method to return enumeration type
+//  
+//  public boolean createChildTest( final IGridTest childTest );
+//  
 }

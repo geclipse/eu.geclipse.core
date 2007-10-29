@@ -14,13 +14,8 @@
  *****************************************************************************/
 package eu.geclipse.core.internal.model;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.net.URI;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -33,7 +28,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 
-import eu.geclipse.core.StructuralTestUpdater;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.GridModelProblems;
@@ -42,7 +36,6 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridPreferences;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IGridRoot;
-import eu.geclipse.core.model.IGridTest;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
 
@@ -191,40 +184,7 @@ public class HiddenProject extends ResourceGridContainer
     return result;
   }
 
-  public IGridTest createStructuralGridTest( final String name,
-                                        final InputStream inputStream )
-  {
-    IGridTest result = null;
-    // IGridTest result = null;
-    try {
-      IFolder folder = getTestFolder();
-      IFile file = folder.getFile( name + ".gtdl"); //$NON-NLS-1$
-      if( !file.exists() ) {
-        file.create( inputStream, IResource.FORCE | IResource.REPLACE, null );
-      }
-      result = GridModel.getTestManager().getStructuralTest( name );
-    } catch( CoreException coreExc ) {
-      // TODO Auto-generated catch block
-      coreExc.printStackTrace();
-    }
-    return result;
-    // return result;
-  }
   
-  public IGridTest createSimpleTest( final String name, final String parentTestName, final InputStream inputStream ) {
-    IGridTest result = null;
-    try {
-      IFolder folder = getTestFolder();
-      IFile file = folder.getFile( name + ".gbdl" );
-      if ( !file.exists() ) {
-        file.create(  inputStream, IResource.FORCE | IResource.REPLACE, null );
-      }
-      result = GridModel.getTestManager().getSimpleTest( name, parentTestName );
-    } catch( CoreException coreExc ) {
-      coreExc.printStackTrace();
-    }
-    return result;
-  }
 
   /*
    * (non-Javadoc)

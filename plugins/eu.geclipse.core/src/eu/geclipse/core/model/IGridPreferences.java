@@ -48,6 +48,5 @@ public interface IGridPreferences {
    */
   public IGridConnection createTemporaryConnection( final URI uri ) throws GridModelException;
   
-  public IGridTest createStructuralGridTest( final String name, final InputStream inputStream );
 
 }
