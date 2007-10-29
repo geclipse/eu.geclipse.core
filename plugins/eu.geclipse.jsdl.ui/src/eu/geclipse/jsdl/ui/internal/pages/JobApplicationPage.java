@@ -124,6 +124,7 @@ public final class JobApplicationPage extends FormPage
   protected Label lblThreadCountLimit = null;
   protected Label lblUserName = null;
   protected Label lblGroupName = null;
+  protected Label lblUnits = null;
   protected Table tblEnvironment = null;
   protected TableViewer environmentViewer = null;
   protected Table tblArgument = null;
@@ -609,7 +610,7 @@ public final class JobApplicationPage extends FormPage
                                                                    parent,
                                                                    sectionTitle,
                                                                    sectionDescripiton,
-                                                                   2,
+                                                                   3,
                                                                    true );
     
     
@@ -620,6 +621,8 @@ public final class JobApplicationPage extends FormPage
     td = new TableWrapData( TableWrapData.FILL_GRAB );
     this.txtWorkingDirectory.setLayoutData( td );
     this.posixApplicationTypeAdapter.attachToWorkingDirectory( this.txtWorkingDirectory );
+    this.lblUnits = toolkit.createLabel( client,
+                                         Messages.getString( "JobApplicationPage_empty" ) ); //$NON-NLS-1$
     
     
     /* ============================ Wall Time Limit ========================= */
@@ -629,7 +632,9 @@ public final class JobApplicationPage extends FormPage
     td = new TableWrapData( TableWrapData.FILL_GRAB );
     this.txtWallTimeLimit.setLayoutData( td );
     this.posixApplicationTypeAdapter.attachToWallTimeLimit(this.txtWallTimeLimit);
-    
+    this.lblUnits = toolkit.createLabel( client,
+                                         Messages.getString( "JobApplicationPage_time" ) ); //$NON-NLS-1$
+
     
     /* ============================ File Size Limit ========================== */
     this.lblFileSizeLimit = toolkit.createLabel( client,
@@ -637,7 +642,10 @@ public final class JobApplicationPage extends FormPage
     this.txtFileSizeLimit = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
     td = new TableWrapData( TableWrapData.FILL_GRAB );
     this.txtFileSizeLimit.setLayoutData( td );
-     this.posixApplicationTypeAdapter.attachToFileSizeLimit( this.txtFileSizeLimit );
+    this.posixApplicationTypeAdapter.attachToFileSizeLimit( this.txtFileSizeLimit );
+    this.lblUnits = toolkit.createLabel( client,
+                                         Messages.getString( "JobApplicationPage_size" ) ); //$NON-NLS-1$
+
     
      
     /* ============================ Core Dump Limit ========================== */
@@ -646,7 +654,9 @@ public final class JobApplicationPage extends FormPage
     this.txtCoreDumpLimit = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
     td = new TableWrapData( TableWrapData.FILL_GRAB );
     this.txtCoreDumpLimit.setLayoutData( td );
-     this.posixApplicationTypeAdapter.attachToCoreDumpLimit( this.txtCoreDumpLimit );
+    this.posixApplicationTypeAdapter.attachToCoreDumpLimit( this.txtCoreDumpLimit );
+    this.lblUnits = toolkit.createLabel( client,
+                                         Messages.getString( "JobApplicationPage_size" ) ); //$NON-NLS-1$
      
      
     /* ==========================Data Segment Limit ========================== */
@@ -656,6 +666,8 @@ public final class JobApplicationPage extends FormPage
     td = new TableWrapData( TableWrapData.FILL_GRAB );
     this.txtDataSegmentLimit.setLayoutData( td );
     this.posixApplicationTypeAdapter.attachToDataSegmentLimit( this.txtDataSegmentLimit );
+    this.lblUnits = toolkit.createLabel( client,
+                                         Messages.getString( "JobApplicationPage_size" ) ); //$NON-NLS-1$
     
     
     /* ======================== Locked Memory Limit ========================== */
@@ -665,6 +677,8 @@ public final class JobApplicationPage extends FormPage
     td = new TableWrapData( TableWrapData.FILL_GRAB );
     this.txtLockedMemoryLimit.setLayoutData( td );
     this.posixApplicationTypeAdapter.attachToLockedMemoryLimit( this.txtLockedMemoryLimit );
+    this.lblUnits = toolkit.createLabel( client,
+                                         Messages.getString( "JobApplicationPage_size" ) ); //$NON-NLS-1$
     
     
     /* =============================== Memory Limit ========================== */
@@ -674,6 +688,8 @@ public final class JobApplicationPage extends FormPage
     td = new TableWrapData( TableWrapData.FILL_GRAB );
     this.txtMemoryLimit.setLayoutData( td );
     this.posixApplicationTypeAdapter.attachToMemoryLimit( this.txtMemoryLimit );
+    this.lblUnits = toolkit.createLabel( client,
+                                         Messages.getString( "JobApplicationPage_size" ) ); //$NON-NLS-1$
     
     
     /* ====================== Open Descriptors Limit ========================= */
@@ -683,6 +699,8 @@ public final class JobApplicationPage extends FormPage
     td = new TableWrapData( TableWrapData.FILL_GRAB );
     this.txtOpenDescriptorsLimit.setLayoutData( td );
     this.posixApplicationTypeAdapter.attachToOpenDesciptorsLimit( this.txtOpenDescriptorsLimit );
+    this.lblUnits = toolkit.createLabel( client,
+                                         Messages.getString( "JobApplicationPage_empty" ) ); //$NON-NLS-1$
     
     
     /* ============================ Pipe Size Limit ========================== */
@@ -692,6 +710,8 @@ public final class JobApplicationPage extends FormPage
     td = new TableWrapData( TableWrapData.FILL_GRAB );
     this.txtPipeSizeLimit.setLayoutData( td );
     this.posixApplicationTypeAdapter.attachToPipeSizeLimit( this.txtPipeSizeLimit );
+    this.lblUnits = toolkit.createLabel( client,
+                                         Messages.getString( "JobApplicationPage_size" ) ); //$NON-NLS-1$
     
     /* =========================== Stack Size Limit ========================== */
     this.lblStackSizeLimit = toolkit.createLabel( client,
@@ -700,6 +720,8 @@ public final class JobApplicationPage extends FormPage
     td = new TableWrapData( TableWrapData.FILL_GRAB );
     this.txtStackSizeLimit.setLayoutData( td );
     this.posixApplicationTypeAdapter.attachToStackSizeLimit( this.txtStackSizeLimit );
+    this.lblUnits = toolkit.createLabel( client,
+                                         Messages.getString( "JobApplicationPage_size" ) ); //$NON-NLS-1$
     
     /* ============================= CPU Time Limit ========================== */
     this.lblCPUTimeLimit = toolkit.createLabel( client,
@@ -708,6 +730,8 @@ public final class JobApplicationPage extends FormPage
     td = new TableWrapData( TableWrapData.FILL_GRAB );
     this.txtCPUTimeLimit.setLayoutData( td );
     this.posixApplicationTypeAdapter.attachToCPUTimeLimit( this.txtCPUTimeLimit );
+    this.lblUnits = toolkit.createLabel( client,
+                                         Messages.getString( "JobApplicationPage_time" ) ); //$NON-NLS-1$
     
     
     /* ====================== Process Count Limit============================ */
@@ -717,6 +741,8 @@ public final class JobApplicationPage extends FormPage
     td = new TableWrapData( TableWrapData.FILL_GRAB );
     this.txtProcessCountLimit.setLayoutData( td );
     this.posixApplicationTypeAdapter.attachToProcessCountLimit( this.txtProcessCountLimit );
+    this.lblUnits = toolkit.createLabel( client,
+                                         Messages.getString( "JobApplicationPage_process" ) ); //$NON-NLS-1$
     
     
     /* ============================= Virtual Memory Limit ==================== */
@@ -726,6 +752,8 @@ public final class JobApplicationPage extends FormPage
     td = new TableWrapData( TableWrapData.FILL_GRAB );
     this.txtVirtualMemoryLimit.setLayoutData( td );
     this.posixApplicationTypeAdapter.attachToVirtualMemoryLimit( this.txtVirtualMemoryLimit );
+    this.lblUnits = toolkit.createLabel( client,
+                                         Messages.getString( "JobApplicationPage_size" ) ); //$NON-NLS-1$
     
     
     /* ========================= Thread Count Limit ========================== */
@@ -735,6 +763,8 @@ public final class JobApplicationPage extends FormPage
     td = new TableWrapData( TableWrapData.FILL_GRAB );
     this.txtThreadCountLimit.setLayoutData( td );
     this.posixApplicationTypeAdapter.attachToThreadCountLimit( this.txtThreadCountLimit );
+    this.lblUnits = toolkit.createLabel( client,
+                                         Messages.getString( "JobApplicationPage_threads" ) ); //$NON-NLS-1$
     
     /* ============================= User Name Limit ======================== */
     this.lblUserName = toolkit.createLabel( client,
@@ -743,6 +773,9 @@ public final class JobApplicationPage extends FormPage
     td = new TableWrapData( TableWrapData.FILL_GRAB );
     this.txtUserName.setLayoutData( td );
     this.posixApplicationTypeAdapter.attachToUserName( this.txtUserName );
+    this.lblUnits = toolkit.createLabel( client,
+                                         Messages.getString( "JobApplicationPage_empty" ) ); //$NON-NLS-1$
+    
     /* ============================= Group Name Limit ======================== */
     this.lblGroupName = toolkit.createLabel( client,
                                              Messages.getString( "JobApplicationPage_GroupName" ) ); //$NON-NLS-1$
@@ -750,6 +783,9 @@ public final class JobApplicationPage extends FormPage
     td = new TableWrapData( TableWrapData.FILL_GRAB );
     this.txtGroupName.setLayoutData( td );
     this.posixApplicationTypeAdapter.attachToGroupName( this.txtGroupName );
+    this.lblUnits = toolkit.createLabel( client,
+                                         Messages.getString( "JobApplicationPage_empty" ) ); //$NON-NLS-1$
+        
     toolkit.paintBordersFor( client );
   }
 
