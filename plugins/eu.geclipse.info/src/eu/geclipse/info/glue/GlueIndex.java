@@ -12,6 +12,7 @@
  * Contributor(s):
  *     UCY (http://www.ucy.cs.ac.cy)
  *      - George Tsouloupas (georget@cs.ucy.ac.cy)
+ *      - Nikolaos Tsioutsias (tnikos@yahoo.com)
  *
  *****************************************************************************/
 package eu.geclipse.info.glue;
@@ -31,9 +32,6 @@ import org.eclipse.core.runtime.IPath;
 import eu.geclipse.info.Activator;
 import java.lang.reflect.Method;
 
-/**
- * @author George Tsouloupas
- */
 public abstract class GlueIndex implements java.io.Serializable {
 
   @SuppressWarnings("nls")
@@ -345,9 +343,9 @@ public abstract class GlueIndex implements java.io.Serializable {
       oos.writeObject( GlueIndex.getInstance() );
       fos.close();
     } catch( FileNotFoundException e ) {
-      e.printStackTrace();
+      Activator.logException( e );
     } catch( IOException e ) {
-      e.printStackTrace();
+      Activator.logException( e );
     }
   }
 
@@ -366,7 +364,7 @@ public abstract class GlueIndex implements java.io.Serializable {
         ObjectInputStream ois = new ObjectInputStream( fis );
         gi= ( GlueIndex )ois.readObject();
       } catch( ClassNotFoundException e ) {
-        e.printStackTrace();
+        Activator.logException( e );
       } catch( Exception exception ) {
         Activator.logException( exception );
         throw new IOException("Could not load cache."); //$NON-NLS-1$
@@ -415,7 +413,7 @@ public abstract class GlueIndex implements java.io.Serializable {
       //
     } catch( NoSuchFieldException e ) {
 
-      e.printStackTrace();
+      Activator.logException( e );
     }
     return null;
   }
@@ -437,16 +435,14 @@ public abstract class GlueIndex implements java.io.Serializable {
       while( enAgt.hasMoreElements() ) {
         agtList.add( enAgt.nextElement() );
       }
-      // System.out.println(ht);
-      //TODO remove printstacktrace
     } catch( SecurityException e ) {
-      e.printStackTrace();
+      Activator.logException( e );
     } catch( NoSuchFieldException e ) {
-      e.printStackTrace();
+      Activator.logException( e );
     } catch( IllegalArgumentException e ) {
-      e.printStackTrace();
+      Activator.logException( e );
     } catch( IllegalAccessException e ) {
-      e.printStackTrace();
+      Activator.logException( e );
     }
     return agtList;
   }
@@ -462,9 +458,6 @@ public abstract class GlueIndex implements java.io.Serializable {
   private void putInFullIndex( final String key,final AbstractGlueTable agt ) {
     String newKey = agt.getClass().getName() + key;
     AbstractGlueTable previous = this.fullIndex.put( newKey, agt );
-    if( previous != null ) {
-      //System.out.println( "Duplicate:\n   " + previous + "\n   " + agt ); //$NON-NLS-1$ //$NON-NLS-2$
-    }
   }
   
 
