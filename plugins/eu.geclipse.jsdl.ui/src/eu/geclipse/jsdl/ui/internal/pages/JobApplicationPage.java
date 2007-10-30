@@ -340,6 +340,7 @@ public final class JobApplicationPage extends FormPage
     this.txtPosixName = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
     this.posixApplicationTypeAdapter.attachPosixApplicationName( this.txtPosixName );
     this.txtPosixName.setLayoutData( gd );
+    
     /* =========================== Executable Widget ======================== */
     gd = new GridData();
     gd.horizontalSpan = 1;
@@ -355,6 +356,7 @@ public final class JobApplicationPage extends FormPage
     gd.verticalAlignment = GridData.CENTER;
     gd.verticalSpan = 1;
     this.txtExecutable.setLayoutData( gd );
+    
     /* ============================= Argument Widget ======================== */
     gd = new GridData();
     gd.verticalSpan = 2;
@@ -449,6 +451,7 @@ public final class JobApplicationPage extends FormPage
     this.posixApplicationTypeAdapter.attachToDelete( this.btnArgDel,
                                                      this.argumentViewer );
     this.btnArgDel.setLayoutData( gd );
+    
     /* ============================= Input Widget =========================== */
     gd = new GridData();
     gd.horizontalSpan = 1;
@@ -462,6 +465,7 @@ public final class JobApplicationPage extends FormPage
     this.txtInput = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
     this.posixApplicationTypeAdapter.attachPosixApplicationInput( this.txtInput );
     this.txtInput.setLayoutData( gd );
+    
     /* ============================= Output Widget =========================== */
     gd = new GridData();
     this.lblOutput = toolkit.createLabel( client,
@@ -474,6 +478,7 @@ public final class JobApplicationPage extends FormPage
     gd.horizontalSpan = 3;
     gd.widthHint = 330;
     this.txtOutput.setLayoutData( gd );
+    
     /* ============================= Error Widget =========================== */
     gd = new GridData();
     this.lblError = toolkit.createLabel( client,
@@ -486,6 +491,7 @@ public final class JobApplicationPage extends FormPage
     this.txtError = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
     this.posixApplicationTypeAdapter.attachPosixApplicationError( this.txtError );
     this.txtError.setLayoutData( gd );
+    
     /* ======================= Environment Widget =========================== */
     gd = new GridData();
     gd.verticalSpan = 2;
@@ -530,9 +536,11 @@ public final class JobApplicationPage extends FormPage
     gd.horizontalSpan = 2;
     gd.verticalSpan = 1;
     gd.widthHint = 60;
+    
     this.btnEnVarAdd = toolkit.createButton( client,
                                              Messages.getString( "JsdlEditor_AddButton" ), //$NON-NLS-1$
                                              SWT.BUTTON1 );
+    
     this.btnEnVarAdd.addSelectionListener( new SelectionListener() {
 
       public void widgetSelected( final SelectionEvent event ) {
@@ -584,6 +592,7 @@ public final class JobApplicationPage extends FormPage
                                                      this.environmentViewer );
     this.btnEnVarDel.setLayoutData( gd );
     toolkit.paintBordersFor( client );
+    
   }
 
   

@@ -198,6 +198,7 @@ public class CandidateHostsDialog extends Dialog {
   }
   
   
+  
   @Override
   public int open() {
     
@@ -205,6 +206,7 @@ public class CandidateHostsDialog extends Dialog {
     
     return super.open();
   }
+  
   
   
   private String getDialogSettingsSectionName() {
@@ -240,8 +242,7 @@ public class CandidateHostsDialog extends Dialog {
     getJobDescription( this.gridElement );
   }
 
-  
-  
+    
   
   /**
    * This is a optional method that allows to filter the Computing Elements shown
@@ -289,6 +290,7 @@ public class CandidateHostsDialog extends Dialog {
               
     return this.selectedHosts;
   }
+
 
   
   private JSDLJobDescription getJobDescription (final IGridElement input) {

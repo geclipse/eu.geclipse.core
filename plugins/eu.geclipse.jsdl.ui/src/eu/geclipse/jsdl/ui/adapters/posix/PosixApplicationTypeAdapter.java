@@ -47,7 +47,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Text;
 
 import eu.geclipse.jsdl.model.ApplicationType;
-import eu.geclipse.jsdl.model.DataStagingType;
 import eu.geclipse.jsdl.model.JobDescriptionType;
 import eu.geclipse.jsdl.model.JsdlFactory;
 import eu.geclipse.jsdl.model.posix.ArgumentType;
@@ -61,6 +60,7 @@ import eu.geclipse.jsdl.model.posix.POSIXApplicationType;
 import eu.geclipse.jsdl.model.posix.PosixFactory;
 import eu.geclipse.jsdl.model.posix.PosixPackage;
 import eu.geclipse.jsdl.model.posix.UserNameType;
+import eu.geclipse.jsdl.ui.internal.Activator;
 
 
 /**
@@ -1056,13 +1056,13 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
   
   
-  protected void checkDataStageMissMatch(final String element) {
-    DataStagingType dataStagingType = JsdlFactory.eINSTANCE.createDataStagingType();
-    dataStagingType = ( DataStagingType )this.jobDescriptionType.getDataStaging();
-    
-
-    
-  }
+//  protected void checkDataStageMissMatch(final String element) {
+//    DataStagingType dataStagingType = JsdlFactory.eINSTANCE.createDataStagingType();
+//    dataStagingType = ( DataStagingType )this.jobDescriptionType.getDataStaging();
+//    
+//
+//    
+//  }
   
   
   /**
@@ -1087,70 +1087,59 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    * @param value
    */
   @SuppressWarnings("unchecked")
-  public void performAdd (final TableViewer tableViewer,
-                        final String name, final Object[][] value) {
+  public void performAdd ( final TableViewer tableViewer,
+                           final String name, final Object[][] value ) {
         
-    if (value[0][0] == null) {
+    if ( value[0][0] == null ) {
       return;
     }
     
-    EStructuralFeature eStructuralFeature = null;   
-    Collection<Object> collection = new ArrayList<Object>();    
     Object[] valuesArray = value[0];  
     
-    EList <EObject> newInputList = (EList<EObject>)tableViewer.getInput(); 
-    
-    
-  
-    if (newInputList == null) {
+    EList <EObject> newInputList = ( EList<EObject> )tableViewer.getInput(); 
+     
+    if (newInputList == null ) {
       newInputList = new BasicEList<EObject>();
     }
         
-    int featureID;
+
     
-    if (name == "argumentViewer"){ //$NON-NLS-1$
+    /* Check if PosixApplication Element Exists */
+    checkPosixApplicationElement();
+    
+    if ( name == "argumentViewer" ) { //$NON-NLS-1$
       
-      featureID = PosixPackage.POSIX_APPLICATION_TYPE__ARGUMENT;
       this.argumentType = PosixFactory.eINSTANCE.createArgumentType();
       this.argumentType.setFilesystemName( valuesArray[0].toString() );
       this.argumentType.setValue( valuesArray[1].toString() );
       newInputList.add( this.argumentType );
       
-    
+      /* Add the Argument to PosixApplication */
+      this.posixApplicationType.getArgument().addAll( newInputList );
+      tableViewer.setInput( this.posixApplicationType.getArgument() );
+
       
     }
     
-    else{
-      
-      featureID = PosixPackage.POSIX_APPLICATION_TYPE__ENVIRONMENT;
+    else {
+    
       this.environmentType = PosixFactory.eINSTANCE.createEnvironmentType();
       this.environmentType.setName( valuesArray[0].toString() );
       this.environmentType.setFilesystemName( valuesArray[1].toString() );
       this.environmentType.setValue( valuesArray[2].toString() );
       newInputList.add( this.environmentType );
       
-    }
-    
-    // Get EStructural Feature.
-    eStructuralFeature = this.posixApplicationType.eClass().getEStructuralFeature( featureID );
-    
-    tableViewer.setInput(newInputList);
-    
-    
-    for ( int i=0; i<tableViewer.getTable().getItemCount(); i++ ) {
-      collection.add( tableViewer.getElementAt( i ) );
-    }
+      /* Add the Environmental Variable to PosixApplication */
+      this.posixApplicationType.getEnvironment().addAll( newInputList );
+      tableViewer.setInput( this.posixApplicationType.getEnvironment() );
 
-    checkPosixApplicationElement();
-    this.posixApplicationType.eSet(eStructuralFeature, collection);
+    }
     
-    tableViewer.refresh();
-   
+    
+    tableViewer.refresh();   
     this.contentChanged();
-    
-    eStructuralFeature = null;
     newInputList = null;
-    collection = null;
+
     
   }
   
@@ -1275,26 +1264,43 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
   
   
-  protected void performDelete(final TableViewer viewer ){
+  protected void performDelete(final TableViewer viewer ) {
     
     IStructuredSelection structSelection 
                                = ( IStructuredSelection ) viewer.getSelection();
     
-    Object feature = structSelection.getFirstElement();
-    
-    
-    if (feature instanceof ArgumentType){
-      
-      ArgumentType argument = (ArgumentType) feature;    
+    Iterator<?> it = structSelection.iterator();
 
-      EcoreUtil.remove( argument);
+    /*
+     * Iterate over the selections and delete them from the model.
+     */
+    while ( it.hasNext() ) {
+    
+      Object feature = structSelection.getFirstElement();
         
-    }
-    else if (feature instanceof EnvironmentType) {
+      if (feature instanceof ArgumentType) {
       
-      EnvironmentType environment = (EnvironmentType) feature;
-      EcoreUtil.remove( environment );
+        ArgumentType argument = (ArgumentType) feature;    
+
+        try {
+          EcoreUtil.remove( argument);
+        
+        } catch( Exception e ) {
+          Activator.logException( e );
+        }
+        
+      } //end ArgumentType
+      else if (feature instanceof EnvironmentType) {
+        EnvironmentType environment = (EnvironmentType) feature;
+        
+        try {
+          EcoreUtil.remove( environment );
+          viewer.setInput( this.posixApplicationType.getEnvironment() );
+        } catch( Exception e ) {
+          Activator.logException( e );
+        }
       
+      } // end EnvironmentType
     }
     
     viewer.refresh();

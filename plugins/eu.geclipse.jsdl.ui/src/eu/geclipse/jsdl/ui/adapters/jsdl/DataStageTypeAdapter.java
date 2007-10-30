@@ -45,6 +45,7 @@ import eu.geclipse.jsdl.model.JobDescriptionType;
 import eu.geclipse.jsdl.model.JsdlFactory;
 import eu.geclipse.jsdl.model.JsdlPackage;
 import eu.geclipse.jsdl.model.SourceTargetType;
+import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.pages.Messages;
 
 
@@ -256,7 +257,7 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
     }
     
     EStructuralFeature eStructuralFeature = null;   
-    Collection<DataStagingType> collection = new ArrayList<DataStagingType>();
+//    Collection<DataStagingType> collection = new ArrayList<DataStagingType>();
     int featureID = JsdlPackage.JOB_DESCRIPTION_TYPE__DATA_STAGING;
 
     
@@ -267,7 +268,6 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
     }
     
     /* Instantiate new DataStage and SourceTarge objects */
-    
 
     DataStagingType newDataStagingType = JsdlFactory.eINSTANCE.createDataStagingType();
     SourceTargetType newSourceTargetType = JsdlFactory.eINSTANCE.createSourceTargetType(); 
@@ -315,18 +315,27 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
     if ( !exists ) {
       newInputList.add( newDataStagingType );
     
+      /* Get the EStructural Feature of the DataStaging Type */
       eStructuralFeature = this.jobDescriptionType.eClass().getEStructuralFeature( featureID );
     
       /* Change the table viewers input. */
-      tableViewer.setInput(newInputList);
-      
+          
       
           
-      for ( int i=0; i<newInputList.size(); i++ ) {      
-        collection.add( newInputList.get( i ) );
+//      for ( int i=0; i<newInputList.size(); i++ ) {      
+//        collection.add( newInputList.get( i ) );
+//      }
+//      collection=newInputList;
+      try {
+        
+//        this.jobDescriptionType.eSet(eStructuralFeature, collection);
+        this.jobDescriptionType.getDataStaging().addAll( newInputList );
+        tableViewer.setInput(this.jobDescriptionType.getDataStaging());  
+        
+      } catch( Exception e ) {
+        Activator.logException( e );
       }
       
-      this.jobDescriptionType.eSet(eStructuralFeature, collection);
     
       /* Refresh the table viewer and notify the editor that
        *  the page content has changed. 
@@ -350,7 +359,7 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
     
     eStructuralFeature = null;
     newInputList = null;
-    collection = null;
+//    collection = null;
   
     
   } // end void performAdd()
@@ -374,6 +383,7 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
   } // end void checkDataStageElement()
   
   
+  
   /**
    * Delete the selected Element in the TableViewer. The selected element must
    * be of type: {@link DataStagingType}
@@ -385,19 +395,37 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
     IStructuredSelection structSelection 
                                = ( IStructuredSelection ) viewer.getSelection();
     
+ 
+  
+    Iterator<?> it = structSelection.iterator();
+
+    /*
+     * Iterate over the selections and delete them from the model.
+     */
+      while ( it.hasNext() ) {
+    
     /* Get the First Element of the selection. */
-    Object feature = structSelection.getFirstElement();
+        Object feature = it.next();
     
     /* Cast the first element to DataStageingType */
-    DataStagingType selectedDataStage = ( DataStagingType ) feature;    
+        DataStagingType selectedDataStage = ( DataStagingType ) feature;    
 
     /* Remove the selected DataStage object from it's container (JobDescription) */
-    EcoreUtil.remove( selectedDataStage );
+        try {
+          EcoreUtil.remove( selectedDataStage );
+      
+        } catch( Exception e ) {
+          Activator.logException( e );
+          
+      } // end while
+    
         
     /* Refresh the viewer and notify the editor that the page content has 
      * changed. */
     viewer.refresh();
     contentChanged();
+    
+    } //end iterator
     
   } // End void performDelete()
   
@@ -607,7 +635,7 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
   {
     
     this.isNotifyAllowed = false;
-    EObject jobDescrEObject  = this.jobDescriptionType;    
+    JobDescriptionType jobDescrEObject  = this.jobDescriptionType;    
     TableViewer tableName = null;
     TableViewer tableName2 = null;
      
@@ -618,7 +646,7 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
       int featureID;
       
       /* Iterate over all EStructural Features of the Job Description element
-       * so as to fine the DataStage Element.
+       * so as to find the DataStage Element.
        */
       
       for (Iterator<EStructuralFeature> iterRef = 

@@ -285,7 +285,8 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    
    //FIXME This is a work-around for the Bug#: 201705 for Windows.
    this.stageInViewer = new TableViewer( client, SWT.BORDER                                                                            
-                                        | SWT.FULL_SELECTION );
+                                        | SWT.FULL_SELECTION
+                                        | SWT.MULTI);
    
    this.tblStageIn = this.stageInViewer.getTable();
    this.tblStageIn .setHeaderVisible( true);   
@@ -429,7 +430,8 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    
    //X
    this.stageOutViewer = new TableViewer( client, SWT.BORDER                                                                                
-                                        | SWT.FULL_SELECTION );
+                                        | SWT.FULL_SELECTION
+                                        | SWT.MULTI );
    
    
    this.tblStageOut = this.stageOutViewer.getTable();
