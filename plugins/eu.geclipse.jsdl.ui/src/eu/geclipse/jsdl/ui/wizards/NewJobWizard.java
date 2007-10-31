@@ -226,8 +226,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
           execName = execNameTemp;
         }
       } catch( URISyntaxException e ) {
-        // TODO katis
-        e.printStackTrace();
+        // TODO katis what to do with this exception?
       }
       jsdl.addPOSIXApplicationDetails( appName1,
                                        execName,

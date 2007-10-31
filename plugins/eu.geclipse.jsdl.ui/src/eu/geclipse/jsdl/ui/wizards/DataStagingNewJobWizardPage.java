@@ -427,8 +427,7 @@ public class DataStagingNewJobWizardPage extends WizardPage {
           newData.setTarget( sourceDataOut );
           this.initialStagingOut.add( newData );
         } catch( Exception e ) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
+          // TODO katis - what to do with this exception?
         }
       }
     }
@@ -456,8 +455,7 @@ public class DataStagingNewJobWizardPage extends WizardPage {
           newData.setSource( sourceDataOut );
           this.initialStagingIn.add( newData );
         } catch( Exception e ) {
-          // TODO Auto-generated catch block
-          e.printStackTrace();
+          // TODO katis - what to do with this exception?
         }
       }
     }

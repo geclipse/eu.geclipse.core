@@ -165,13 +165,11 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
           }
         } catch( CoreException e ) {
           // TODO katis - error handling
-          e.printStackTrace();
         } finally {
           try {
             newFileHandle.delete( true, null );
           } catch( CoreException e ) {
             // TODO katis - error handling
-            e.printStackTrace();
           }
         }
       } else {
@@ -261,7 +259,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       @Override
       public void widgetSelected( final SelectionEvent e ) {
         IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
-                                                                           Messages.getString("ExecutableNewJobWizardPage.grid_file_dialog_title"), //$NON-NLS-1$
+                                                                           Messages.getString( "ExecutableNewJobWizardPage.grid_file_dialog_title" ), //$NON-NLS-1$
                                                                            null,
                                                                            true );
         if( connection != null ) {
@@ -274,7 +272,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     } );
     // Label - arguments list
     Label argumentsLabel = new Label( mainComp, SWT.LEAD );
-    argumentsLabel.setText( Messages.getString("ExecutableNewJobWizardPage.arguments_line_label") ); //$NON-NLS-1$
+    argumentsLabel.setText( Messages.getString( "ExecutableNewJobWizardPage.arguments_line_label" ) ); //$NON-NLS-1$
     layout = new GridData();
     argumentsLabel.setLayoutData( layout );
     // Text - arguments list
@@ -315,7 +313,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       @Override
       public void widgetSelected( final SelectionEvent e ) {
         IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
-                                                                           Messages.getString("ExecutableNewJobWizardPage.grid_file_dialog_title"), //$NON-NLS-1$
+                                                                           Messages.getString( "ExecutableNewJobWizardPage.grid_file_dialog_title" ), //$NON-NLS-1$
                                                                            null,
                                                                            true );
         if( connection != null ) {
@@ -351,7 +349,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       @Override
       public void widgetSelected( final SelectionEvent e ) {
         IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
-                                                                           Messages.getString("ExecutableNewJobWizardPage.grid_file_dialog_title"), //$NON-NLS-1$
+                                                                           Messages.getString( "ExecutableNewJobWizardPage.grid_file_dialog_title" ), //$NON-NLS-1$
                                                                            null,
                                                                            true );
         if( connection != null ) {
@@ -387,7 +385,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       @Override
       public void widgetSelected( final SelectionEvent e ) {
         IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
-                                                                           Messages.getString("ExecutableNewJobWizardPage.grid_file_dialog_title"), //$NON-NLS-1$
+                                                                           Messages.getString( "ExecutableNewJobWizardPage.grid_file_dialog_title" ), //$NON-NLS-1$
                                                                            null,
                                                                            true );
         if( connection != null ) {
@@ -481,14 +479,10 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
           .getApplicationData( appId )
           .getAppPath() );
       } catch( SAXException e1 ) {
-        // TODO Auto-generated catch block
-        e1.printStackTrace();
+        // TODO katis what to do with this exception
       } catch( ParserConfigurationException e1 ) {
-        // TODO Auto-generated catch block
-        e1.printStackTrace();
+        // TODO katis what to do with this exception
       } catch( IOException e1 ) {
-        // TODO Auto-generated catch block
-        e1.printStackTrace();
       }
     } else {
       setSelectedNode( this.basicNode );
@@ -594,13 +588,11 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
           }
         } catch( CoreException e ) {
           // TODO katis - error handling
-          e.printStackTrace();
         } finally {
           try {
             newFileHandle.delete( true, null );
           } catch( CoreException e ) {
             // TODO katis - error handling
-            e.printStackTrace();
           }
         }
       } else {
@@ -624,8 +616,10 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       ExecutableNewJobWizardPage.this.updateButtons();
     }
   }
+
   /**
-   * Method to access value of path to standard error file 
+   * Method to access value of path to standard error file
+   * 
    * @return string value kept in standard error text field
    */
   public String getStderr() {
