@@ -58,11 +58,11 @@ import eu.geclipse.ui.widgets.StoredCombo;
 public class MultipleInputDialog extends Dialog {
 
   protected static final String FIELD_NAME = "FIELD_NAME"; //$NON-NLS-1$
-  protected static final int TEXT = 100;
-  protected static final int BROWSE = 101;
-  protected static final int VARIABLE = 102;
-  protected static final int COMBO = 103;
-  protected static final int STORED_COMBO = 104;
+//  protected static final int TEXT = 100;
+//  protected static final int BROWSE = 101;
+//  protected static final int VARIABLE = 102;
+//  protected static final int COMBO = 103;
+//  protected static final int STORED_COMBO = 104;
   protected Composite panel;
   protected List<FieldSummary> fieldList = new ArrayList<FieldSummary>();
   protected List<StoredCombo> storedComboList = new ArrayList<StoredCombo>();
@@ -126,7 +126,7 @@ public class MultipleInputDialog extends Dialog {
                               final boolean allowsEmpty,
                               final boolean allowLocal )
   {
-    this.fieldList.add( new FieldSummary( BROWSE,
+    this.fieldList.add( new FieldSummary( FieldType.BROWSE,
                                           labelText,
                                           initialValue,
                                           allowsEmpty,
@@ -177,7 +177,7 @@ public class MultipleInputDialog extends Dialog {
                              final String initialValue )
   {
     this.combosData.put( labelText, values );
-    this.fieldList.add( new FieldSummary( COMBO, labelText, initialValue, false ) );
+    this.fieldList.add( new FieldSummary( FieldType.COMBO, labelText, initialValue, false ) );
   }
 
   private boolean checkReadyToConnect( final String name, final int positionInDialog )
@@ -218,6 +218,8 @@ public class MultipleInputDialog extends Dialog {
     return result;
   }
 
+  
+  
   /*
    * (non-Javadoc)
    * 
@@ -257,11 +259,11 @@ public class MultipleInputDialog extends Dialog {
                              connected,
                              field.allowLocal );
         break;
-        case VARIABLE:
-          createVariablesField( field.name,
-                                field.initialValue,
-                                field.allowsEmpty );
-        break;
+//        case VARIABLE:
+//          createVariablesField( field.name,
+//                                field.initialValue,
+//                                field.allowsEmpty );
+//        break;
         case COMBO:
           createComboField( field.name, field.initialValue, field.allowsEmpty );
         break;
@@ -938,7 +940,7 @@ public class MultipleInputDialog extends Dialog {
                             final String initialValue,
                             final boolean allowsEmpty )
   {
-    this.fieldList.add( new FieldSummary( TEXT,
+    this.fieldList.add( new FieldSummary( FieldType.TEXT,
                                           labelText,
                                           initialValue,
                                           allowsEmpty ) );
@@ -958,7 +960,7 @@ public class MultipleInputDialog extends Dialog {
                                    final boolean allowsEmpty,
                                    final String prefID)
   {
-    this.fieldList.add( new FieldSummary( STORED_COMBO,
+    this.fieldList.add( new FieldSummary( FieldType.STORED_COMBO,
                                           labelText,
                                           initialValue,
                                           allowsEmpty,
@@ -966,23 +968,19 @@ public class MultipleInputDialog extends Dialog {
   }
 
   // TODO katis - is this method used
-  /**
-   * @param labelText
-   * @param initialValue
-   * @param allowsEmpty
-   */
-  public void addVariablesField( final String labelText,
-                                 final String initialValue,
-                                 final boolean allowsEmpty )
-  {
-    this.fieldList.add( new FieldSummary( VARIABLE,
-                                          labelText,
-                                          initialValue,
-                                          allowsEmpty ) );
-  }
+  
+//  public void addVariablesField( final String labelText,
+//                                 final String initialValue,
+//                                 final boolean allowsEmpty )
+//  {
+//    this.fieldList.add( new FieldSummary( VARIABLE,
+//                                          labelText,
+//                                          initialValue,
+//                                          allowsEmpty ) );
+//  }
   protected class FieldSummary {
 
-    int type;
+    FieldType type;
     String name;
     String initialValue;
     boolean allowsEmpty;
@@ -1008,7 +1006,7 @@ public class MultipleInputDialog extends Dialog {
      *            <code>false</code> dialog cannot be closed until this field
      *            holds some value)
      */
-    public FieldSummary( final int type,
+    public FieldSummary( final FieldType type,
                          final String name,
                          final String initialValue,
                          final boolean allowsEmpty )
@@ -1037,7 +1035,7 @@ public class MultipleInputDialog extends Dialog {
      *            setting works only for {@link MultipleInputDialog#BROWSE}
      *            field.
      */
-    public FieldSummary( final int type,
+    public FieldSummary( final FieldType type,
                          final String name,
                          final String initialValue,
                          final boolean allowsEmpty,
@@ -1058,7 +1056,7 @@ public class MultipleInputDialog extends Dialog {
      * @param allowsEmpty
      * @param prefID
      */
-    public FieldSummary( final int type,
+    public FieldSummary( final FieldType type,
                          final String name,
                          final String initialValue,
                          final boolean allowsEmpty,
@@ -1078,4 +1076,11 @@ public class MultipleInputDialog extends Dialog {
       return true;
     }
   }
+  
+  enum FieldType{
+    
+    TEXT, BROWSE, COMBO, STORED_COMBO
+    
+  }
+  
 }
