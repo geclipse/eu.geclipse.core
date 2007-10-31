@@ -36,7 +36,6 @@ import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.ETypedElement;
 import org.eclipse.emf.ecore.util.EcoreUtil;
-import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.events.ModifyEvent;
@@ -99,9 +98,6 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
 
   protected ArgumentType argumentType = PosixFactory.eINSTANCE.createArgumentType();
   
-  protected UserNameType userNameType = PosixFactory.eINSTANCE.createUserNameType();
-  
-  protected GroupNameType groupNameType = PosixFactory.eINSTANCE.createGroupNameType();
   
   private Hashtable< Integer, Text > widgetFeaturesMap = 
                                                new Hashtable< Integer, Text >();
@@ -196,6 +192,20 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   }
   
   
+  protected EObject checkProxy(final EObject refEObject) {
+    
+    EObject eObject = refEObject;
+    
+    if (eObject != null && eObject.eIsProxy() ) {
+     
+      eObject =  EcoreUtil.resolve( eObject, 
+                                  PosixApplicationTypeAdapter.this.posixApplicationType );
+    }
+        
+    return eObject;
+    
+  }
+  
   
   /**
    * Adapter interface to attach to the PosixApplication Name text widget.
@@ -238,10 +248,13 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
       FileNameType fileName = PosixFactory.eINSTANCE.createFileNameType();
     public void modifyText( final ModifyEvent e ) {
       checkPosixApplicationElement();
-     
+      
       if (!widget.getText().equals( "" )){ //$NON-NLS-1$
         
         this.fileName.setValue( widget.getText() );
+
+        this.fileName = (FileNameType) checkProxy( this.fileName );
+       
         PosixApplicationTypeAdapter.this.posixApplicationType
                                                   .setExecutable(this.fileName);
       }
@@ -276,8 +289,9 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
       public void modifyText( final ModifyEvent e ) {
       
         checkPosixApplicationElement();
-        if (!widget.getText().equals( "" )){ //$NON-NLS-1$
+        if ( !widget.getText().equals( "" ) ) { //$NON-NLS-1$
           this.fileName.setValue( widget.getText() );
+          this.fileName = (FileNameType) checkProxy( this.fileName );
           PosixApplicationTypeAdapter.this.posixApplicationType
                                                     .setInput(this.fileName);
         }
@@ -310,9 +324,10 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
       FileNameType fileName = PosixFactory.eINSTANCE.createFileNameType();
       public void modifyText( final ModifyEvent e ) {
         
-        if (!widget.getText().equals( "" )){ //$NON-NLS-1$
+        if ( !widget.getText().equals( "" ) ) { //$NON-NLS-1$
           checkPosixApplicationElement();
           this.fileName.setValue( widget.getText() );
+          this.fileName = (FileNameType) checkProxy( this.fileName );
           PosixApplicationTypeAdapter.this.posixApplicationType
                                                     .setOutput(this.fileName);
         }
@@ -344,9 +359,10 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
       FileNameType fileName = PosixFactory.eINSTANCE.createFileNameType();
       public void modifyText( final ModifyEvent e ) {
         
-        if (!widget.getText().equals( "" )){ //$NON-NLS-1$
+        if ( !widget.getText().equals( "" ) ) { //$NON-NLS-1$
           checkPosixApplicationElement();
           this.fileName.setValue( widget.getText() );
+          this.fileName = (FileNameType) checkProxy( this.fileName );
           PosixApplicationTypeAdapter.this.posixApplicationType
                                                     .setError(this.fileName);
         }
@@ -403,17 +419,19 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
     Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__WORKING_DIRECTORY);
     this.widgetFeaturesMap.put( featureID , widget );
     
-    widget.addModifyListener( new ModifyListener(){
+    widget.addModifyListener( new ModifyListener() {
+      DirectoryNameType directoryNameType =
+                        PosixFactory.eINSTANCE.createDirectoryNameType();
+
 
       public void modifyText( final ModifyEvent e ) {
-        DirectoryNameType directoryNameType =
-                              PosixFactory.eINSTANCE.createDirectoryNameType();
         
         if (!widget.getText().equals( "" )){ //$NON-NLS-1$
           checkPosixApplicationElement();          
-          directoryNameType.setValue( widget.getText() );
+          this. directoryNameType.setValue( widget.getText() );
+          this.directoryNameType = (DirectoryNameType) checkProxy( this.directoryNameType );
           PosixApplicationTypeAdapter.this.posixApplicationType
-                                                    .setWorkingDirectory( directoryNameType );
+                                                    .setWorkingDirectory( this.directoryNameType );
         }
         else{
           PosixApplicationTypeAdapter.this.posixApplicationType
@@ -446,7 +464,8 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
         
           if (!text.getText().equals( "" )){ //$NON-NLS-1$ 
            this.bigInteger = new BigInteger(text.getText());
-           this.limits.setValue( this.bigInteger ); 
+           this.limits.setValue( this.bigInteger );
+           this.limits = (LimitsType) checkProxy( this.limits );
             PosixApplicationTypeAdapter.this.posixApplicationType.setWallTimeLimit( this.limits );
           }
           
@@ -486,6 +505,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
       if (!text.getText().equals( "" )) { //$NON-NLS-1$ 
         this.bigInteger = new BigInteger(text.getText());
         this.limits.setValue( this.bigInteger );
+        this.limits = (LimitsType) checkProxy( this.limits );
         PosixApplicationTypeAdapter.this.posixApplicationType.setFileSizeLimit( this.limits );
       }
       
@@ -526,7 +546,8 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
         
         if ( !text.getText().equals( "" ) ) { //$NON-NLS-1$
           this.bigInteger = new BigInteger(text.getText());
-          this.limits.setValue( this.bigInteger );      
+          this.limits.setValue( this.bigInteger );
+          this.limits = (LimitsType) checkProxy( this.limits );
           PosixApplicationTypeAdapter.this.posixApplicationType
                                                 .setCoreDumpLimit( this.limits );
           }
@@ -568,6 +589,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
         if ( !text.getText().equals( "" ) ) { //$NON-NLS-1$
           this.bigInteger = new BigInteger(text.getText());
           this.limits.setValue( this.bigInteger );      
+          this.limits = (LimitsType) checkProxy( this.limits );
           PosixApplicationTypeAdapter.this.posixApplicationType
                                                 .setDataSegmentLimit( this.limits );
           }
@@ -609,6 +631,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
         if ( !text.getText().equals( "" ) ) { //$NON-NLS-1$
           this.bigInteger = new BigInteger(text.getText());
           this.limits.setValue( this.bigInteger );      
+          this.limits = (LimitsType) checkProxy( this.limits );
           PosixApplicationTypeAdapter.this.posixApplicationType
                                                 .setLockedMemoryLimit( this.limits );
           }
@@ -649,7 +672,8 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
 
         if ( !text.getText().equals( "" ) ) { //$NON-NLS-1$
           this.bigInteger = new BigInteger(text.getText());
-          this.limits.setValue( this.bigInteger );      
+          this.limits.setValue( this.bigInteger );    
+          this.limits = (LimitsType) checkProxy( this.limits );
           PosixApplicationTypeAdapter.this.posixApplicationType
                                                 .setMemoryLimit( this.limits );
           }
@@ -690,7 +714,8 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
 
         if ( !text.getText().equals( "" ) ) { //$NON-NLS-1$
           this.bigInteger = new BigInteger(text.getText());
-          this.limits.setValue( this.bigInteger );      
+          this.limits.setValue( this.bigInteger );    
+          this.limits = (LimitsType) checkProxy( this.limits );
           PosixApplicationTypeAdapter.this.posixApplicationType
                                                 .setOpenDescriptorsLimit( this.limits );
           }
@@ -731,7 +756,8 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
 
         if ( !text.getText().equals( "" ) ) { //$NON-NLS-1$
           this.bigInteger = new BigInteger(text.getText());
-          this.limits.setValue( this.bigInteger );      
+          this.limits.setValue( this.bigInteger );   
+          this.limits = (LimitsType) checkProxy( this.limits );
           PosixApplicationTypeAdapter.this.posixApplicationType
                                                 .setPipeSizeLimit( this.limits );
           }
@@ -772,7 +798,8 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
 
         if ( !text.getText().equals( "" ) ) { //$NON-NLS-1$
           this.bigInteger = new BigInteger(text.getText());
-          this.limits.setValue( this.bigInteger );      
+          this.limits.setValue( this.bigInteger );  
+          this.limits = (LimitsType) checkProxy( this.limits );
           PosixApplicationTypeAdapter.this.posixApplicationType
                                                 .setStackSizeLimit( this.limits );
           }
@@ -813,7 +840,8 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
 
         if ( !text.getText().equals( "" ) ) { //$NON-NLS-1$
           this.bigInteger = new BigInteger(text.getText());
-          this.limits.setValue( this.bigInteger );      
+          this.limits.setValue( this.bigInteger ); 
+          this.limits = (LimitsType) checkProxy( this.limits );
           PosixApplicationTypeAdapter.this.posixApplicationType
                                                 .setCPUTimeLimit( this.limits );
           }
@@ -854,7 +882,8 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
 
         if ( !text.getText().equals( "" ) ) { //$NON-NLS-1$
           this.bigInteger = new BigInteger(text.getText());
-          this.limits.setValue( this.bigInteger );      
+          this.limits.setValue( this.bigInteger );  
+          this.limits = (LimitsType) checkProxy( this.limits );
           PosixApplicationTypeAdapter.this.posixApplicationType
                                                 .setProcessCountLimit( this.limits );
           }
@@ -895,7 +924,8 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
 
         if ( !text.getText().equals( "" ) ) { //$NON-NLS-1$
           this.bigInteger = new BigInteger(text.getText());
-          this.limits.setValue( this.bigInteger );      
+          this.limits.setValue( this.bigInteger ); 
+          this.limits = (LimitsType) checkProxy( this.limits );
           PosixApplicationTypeAdapter.this.posixApplicationType
                                                 .setVirtualMemoryLimit( this.limits );
           }
@@ -937,7 +967,8 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
 
         if ( !text.getText().equals( "" ) ) { //$NON-NLS-1$
           this.bigInteger = new BigInteger(text.getText());
-          this.limits.setValue( this.bigInteger );      
+          this.limits.setValue( this.bigInteger ); 
+          this.limits = (LimitsType) checkProxy( this.limits );
           PosixApplicationTypeAdapter.this.posixApplicationType
                                                 .setThreadCountLimit ( this.limits );
           }
@@ -972,14 +1003,16 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
     this.widgetFeaturesMap.put( featureID , text );    
       
       text.addModifyListener( new ModifyListener() {
-        public void modifyText( final ModifyEvent e ) {
+      UserNameType userNameType = PosixFactory.eINSTANCE.createUserNameType();
+
+      public void modifyText( final ModifyEvent e ) {
           checkPosixApplicationElement();
          
-          if (!text.getText().equals( "" )){ //$NON-NLS-1$            
-            PosixApplicationTypeAdapter.this.userNameType.setValue( text.getText() );
+          if ( !text.getText().equals( "" ) ) { //$NON-NLS-1$            
+            this.userNameType.setValue( text.getText() );
+            this.userNameType = (UserNameType) checkProxy( this.userNameType );
             PosixApplicationTypeAdapter.this.posixApplicationType
-                                      .setUserName( PosixApplicationTypeAdapter
-                                                    .this.userNameType );
+                                      .setUserName( this.userNameType );
           }
           else{
            PosixApplicationTypeAdapter.this
@@ -1006,14 +1039,16 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
     this.widgetFeaturesMap.put( featureID , text );    
       
     text.addModifyListener( new ModifyListener() {
+      GroupNameType groupNameType = PosixFactory.eINSTANCE.createGroupNameType();
+      
       public void modifyText( final ModifyEvent e ) {
         checkPosixApplicationElement();
          
         if ( !text.getText().equals( "" ) ) { //$NON-NLS-1$            
-          PosixApplicationTypeAdapter.this.groupNameType.setValue( text.getText() );
+          this.groupNameType.setValue( text.getText() );
+          this.groupNameType = (GroupNameType) checkProxy( this.groupNameType );
           PosixApplicationTypeAdapter.this.posixApplicationType
-                                     .setGroupName( PosixApplicationTypeAdapter.
-                                                    this.groupNameType );
+                                     .setGroupName(this.groupNameType );
         }
        else{
          PosixApplicationTypeAdapter.this.posixApplicationType.setGroupName( null );
@@ -1320,15 +1355,15 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   {
     
     this.isNotifyAllowed = false;
-    EObject posixEObject = this.posixApplicationType;
+//    EObject this.posixApplicationType = this.posixApplicationType;
     Text widgetName = null;
     TableViewer tableName = null;
-    Object eStrFeatValue = null;
+//    Object eStrFeatValue = null;
      
     /* Test if eObject is not empty. */
     
-    if (posixEObject != null) {
-      EClass eClass = posixEObject.eClass();
+    if (this.posixApplicationType != null) {
+      EClass eClass = this.posixApplicationType.eClass();
       
       for (Iterator<EStructuralFeature> iterRef = 
             eClass.getEAllStructuralFeatures().iterator(); iterRef.hasNext();) {
@@ -1342,7 +1377,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
         if (eStructuralFeature instanceof EReference) {
           
           /* Check if Feature is Set ? */
-          if (posixEObject.eIsSet( eStructuralFeature )) {
+          if (this.posixApplicationType.eIsSet( eStructuralFeature )) {
             
           /* Check for the features Multiplicity.
            * and if the associated widget key is contained in the FeatureMap.
@@ -1352,15 +1387,15 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
             != ETypedElement.UNBOUNDED_MULTIPLICITY
             && this.widgetFeaturesMap.containsKey( new Integer(featureID)) ) {
            
-           EObject eObject = (EObject) posixEObject.eGet( eStructuralFeature );           
+           EObject eObject = (EObject) this.posixApplicationType.eGet( eStructuralFeature );           
                 
-           eStrFeatValue = new Object();
+//           eStrFeatValue = new Object();
           
-//           if (ExtendedMetaData.INSTANCE.getContentKind(eObject.eClass()) 
+////           if (ExtendedMetaData.INSTANCE.getContentKind(eObject.eClass()) 
 //               == ExtendedMetaData.SIMPLE_CONTENT) {
-             
-             eStrFeatValue = eObject.eGet(ExtendedMetaData.INSTANCE.
-                                            getSimpleFeature(eObject.eClass())); 
+//             
+//             eStrFeatValue = eObject.eGet(ExtendedMetaData.INSTANCE.
+//                                            getSimpleFeature(eObject.eClass())); 
             
 //           } // End if SIMPLE.CONTENT
 
@@ -1370,101 +1405,123 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
              switch( featureID ) {
               case PosixPackage.POSIX_APPLICATION_TYPE__EXECUTABLE:{
                            
-                widgetName.setText(eStrFeatValue.toString());  
+//                widgetName.setText(eStrFeatValue.toString());
+                widgetName.setText(this.posixApplicationType.getExecutable().getValue());
               } 
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__INPUT:{
                              
-                widgetName.setText(eStrFeatValue.toString());  
+//                widgetName.setText(eStrFeatValue.toString()); 
+                widgetName.setText(this.posixApplicationType.getInput().getValue());
               } 
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__OUTPUT:{
                 
-                widgetName.setText(eStrFeatValue.toString());  
+//                widgetName.setText(eStrFeatValue.toString());  
+                widgetName.setText(this.posixApplicationType.getOutput().getValue());
               } 
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__ERROR:{
                 
-                widgetName.setText(eStrFeatValue.toString());  
+//                widgetName.setText(eStrFeatValue.toString());  
+                widgetName.setText(this.posixApplicationType.getError().getValue());
               } 
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__WORKING_DIRECTORY: {
-                widgetName.setText( eStrFeatValue.toString() );
+//                widgetName.setText( eStrFeatValue.toString() );
+                widgetName.setText(this.posixApplicationType.getWorkingDirectory().getValue());
               }
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__WALL_TIME_LIMIT:{
                 
-                widgetName.setText(eStrFeatValue.toString());
+//                widgetName.setText(eStrFeatValue.toString());
+                widgetName.setText(this.posixApplicationType.getWallTimeLimit().getValue().toString());
               } 
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__FILE_SIZE_LIMIT:{
                 
-                widgetName.setText(eStrFeatValue.toString());
+//                widgetName.setText(eStrFeatValue.toString());
+                widgetName.setText(this.posixApplicationType.getFileSizeLimit().getValue().toString());
               } 
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__CORE_DUMP_LIMIT: {     
 
-                    widgetName.setText(eStrFeatValue.toString());
+//                    widgetName.setText(eStrFeatValue.toString());
+                widgetName.setText(this.posixApplicationType.getCoreDumpLimit().getValue().toString());
+
               } 
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__DATA_SEGMENT_LIMIT: {     
 
-                widgetName.setText(eStrFeatValue.toString());
+//                widgetName.setText(eStrFeatValue.toString());
+                widgetName.setText(this.posixApplicationType.getDataSegmentLimit().getValue().toString());
+
               } 
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__LOCKED_MEMORY_LIMIT: {     
 
-                widgetName.setText(eStrFeatValue.toString());
+//                widgetName.setText(eStrFeatValue.toString());
+                widgetName.setText(this.posixApplicationType.getLockedMemoryLimit().getValue().toString());
               } 
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__MEMORY_LIMIT: {     
 
-                widgetName.setText(eStrFeatValue.toString());
+//                widgetName.setText(eStrFeatValue.toString());
+                widgetName.setText(this.posixApplicationType.getMemoryLimit().getValue().toString());
               }              
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__OPEN_DESCRIPTORS_LIMIT: {     
 
-                widgetName.setText(eStrFeatValue.toString());
+//                widgetName.setText(eStrFeatValue.toString());
+                widgetName.setText(this.posixApplicationType.getOpenDescriptorsLimit().getValue().toString());
               }              
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__PIPE_SIZE_LIMIT: {     
 
-                widgetName.setText(eStrFeatValue.toString());
+//                widgetName.setText(eStrFeatValue.toString());
+                widgetName.setText(this.posixApplicationType.getPipeSizeLimit().getValue().toString());
               }              
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__STACK_SIZE_LIMIT: {     
 
-                widgetName.setText(eStrFeatValue.toString());
+//                widgetName.setText(eStrFeatValue.toString());
+                widgetName.setText(this.posixApplicationType.getStackSizeLimit().getValue().toString());
               }              
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__CPU_TIME_LIMIT: {     
 
-                widgetName.setText(eStrFeatValue.toString());
+//                widgetName.setText(eStrFeatValue.toString());
+                widgetName.setText(this.posixApplicationType.getCPUTimeLimit().getValue().toString());
               }              
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__PROCESS_COUNT_LIMIT: {     
 
-                widgetName.setText(eStrFeatValue.toString());
+//                widgetName.setText(eStrFeatValue.toString());
+                widgetName.setText(this.posixApplicationType.getProcessCountLimit().getValue().toString());
               }              
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__VIRTUAL_MEMORY_LIMIT: {     
 
-                widgetName.setText(eStrFeatValue.toString());
+//                widgetName.setText(eStrFeatValue.toString());
+                widgetName.setText(this.posixApplicationType.getVirtualMemoryLimit().getValue().toString());
               }              
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__THREAD_COUNT_LIMIT: {     
 
-                widgetName.setText(eStrFeatValue.toString());
+//                widgetName.setText(eStrFeatValue.toString());
+                widgetName.setText(this.posixApplicationType.getThreadCountLimit().getValue().toString());
               }              
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__GROUP_NAME: {     
 
-                widgetName.setText(eStrFeatValue.toString());
+//                widgetName.setText(eStrFeatValue.toString());
+                widgetName.setText(this.posixApplicationType.getGroupName().getValue());
               } 
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__USER_NAME: {     
 
-                widgetName.setText(eStrFeatValue.toString());
+//                widgetName.setText(eStrFeatValue.toString());
+                widgetName.setText(this.posixApplicationType.getUserName().getValue());
               } 
               break;
 
@@ -1485,7 +1542,8 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
                
                 tableName = this.tableFeaturesMap.get( new Integer(featureID) );
                                
-                EList<EnvironmentType> valueList = (EList<EnvironmentType>) posixEObject.eGet( eStructuralFeature );                
+//                EList<EnvironmentType> valueList = (EList<EnvironmentType>) this.posixApplicationType.eGet( eStructuralFeature );
+                EList<EnvironmentType> valueList = this.posixApplicationType.getEnvironment();
                 if(/* !this.adapterRefreshed
                     && */this.tableFeaturesMap.containsKey( new Integer(featureID))) {
                   
@@ -1503,7 +1561,8 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
               {                
                 tableName = this.tableFeaturesMap.get( new Integer(featureID) );
                 
-                EList<ArgumentType> valueList = (EList<ArgumentType>) posixEObject.eGet( eStructuralFeature );
+//                EList<ArgumentType> valueList = (EList<ArgumentType>) this.posixApplicationType.eGet( eStructuralFeature );
+                EList<ArgumentType> valueList = this.posixApplicationType.getArgument();
                 
                 
                 if(/* !this.adapterRefreshed 
@@ -1531,10 +1590,10 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
         else if (eStructuralFeature instanceof EAttribute) {
           
           // Get Attribute Value.
-          Object value = posixEObject.eGet( eStructuralFeature );
+          Object value = this.posixApplicationType.eGet( eStructuralFeature );
           
           // Check if Attribute has any value
-          if (posixEObject.eIsSet( eStructuralFeature ) 
+          if (this.posixApplicationType.eIsSet( eStructuralFeature ) 
               && this.widgetFeaturesMap.containsKey( new Integer(featureID) )){ 
             
              widgetName = this.widgetFeaturesMap.get( new Integer(featureID) );

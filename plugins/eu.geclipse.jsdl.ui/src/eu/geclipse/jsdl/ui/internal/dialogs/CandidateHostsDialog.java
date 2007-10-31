@@ -118,19 +118,24 @@ public class CandidateHostsDialog extends Dialog {
   protected Control createDialogArea( final Composite parent ) {
            
     Composite container = ( Composite ) super.createDialogArea( parent );
-    container.setLayout( new GridLayout( 2, false ) );
-    container.setLayoutData( new GridData( GridData.FILL_BOTH ) );
+    GridData gd = new GridData( GridData.FILL_BOTH );
+    container.setLayout( new GridLayout( 1, false ) );
+    gd.grabExcessHorizontalSpace = true;
+    gd.grabExcessVerticalSpace = true;
+    container.setLayoutData( gd );
     this.panel = new Composite( container, SWT.NONE );
-    GridLayout layout = new GridLayout( 2, false );
+    GridLayout layout = new GridLayout( 1, false );
     this.panel.setLayout( layout );
-    this.panel.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
+    gd.grabExcessHorizontalSpace = true;
+    gd.grabExcessVerticalSpace = true;
+    this.panel.setLayoutData( gd );
+    
     
     
     Label label = new Label( this.panel, SWT.NONE );
     label.setText( Messages.getString( "ResourcesPage_NewHostsDialogDescr" ) ); //$NON-NLS-1$
     label.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_BEGINNING ) );
-    GridData gd;
-    
+        
     gd = new GridData( GridData.FILL_BOTH );
     gd.grabExcessHorizontalSpace = true;
     gd.grabExcessVerticalSpace = true;
