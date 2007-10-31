@@ -208,17 +208,21 @@ public class GlueSubCluster extends AbstractGlueTable
   /**
    * 
    */
-  public ArrayList<GlueHostRemoteFileSystem> glueHostRemoteFileSystemList = new ArrayList<GlueHostRemoteFileSystem>();
+  public ArrayList<GlueHostRemoteFileSystem> glueHostRemoteFileSystemList
+    = new ArrayList<GlueHostRemoteFileSystem>();
 
   /**
    * 
    */
-  public ArrayList<GlueSubClusterLocation> glueSubClusterLocationList = new ArrayList<GlueSubClusterLocation>();
+  public ArrayList<GlueSubClusterLocation> glueSubClusterLocationList
+    = new ArrayList<GlueSubClusterLocation>();
 
   /**
    * 
    */
-  public ArrayList<GlueSubClusterSoftwareRunTimeEnvironment> glueSubClusterSoftwareRunTimeEnvironmentList = new ArrayList<GlueSubClusterSoftwareRunTimeEnvironment>();
+  public ArrayList<GlueSubClusterSoftwareRunTimeEnvironment> glueSubClusterSoftwareRunTimeEnvironmentList
+    = new ArrayList<GlueSubClusterSoftwareRunTimeEnvironment>();
+
 
     /* (non-Javadoc)
    * @see eu.geclipse.info.glue.AbstractGlueTable#getID()

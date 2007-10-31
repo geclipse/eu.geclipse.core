@@ -139,152 +139,182 @@ public abstract class GlueIndex implements java.io.Serializable {
   /**
    * 
    */
-  public Hashtable<String, GlueCEAccessControlBaseRule> glueCEAccessControlBaseRule = new Hashtable<String, GlueCEAccessControlBaseRule>();
+  public Hashtable<String, GlueCEAccessControlBaseRule> glueCEAccessControlBaseRule
+    = new Hashtable<String, GlueCEAccessControlBaseRule>();
 
   /**
    * 
    */
-  public Hashtable<String, GlueCEContactString> glueCEContactString = new Hashtable<String, GlueCEContactString>();
+  public Hashtable<String, GlueCEContactString> glueCEContactString
+    = new Hashtable<String, GlueCEContactString>();
 
   /**
    * 
    */
-  public Hashtable<String, GlueCESEBind> glueCESEBind = new Hashtable<String, GlueCESEBind>();
+  public Hashtable<String, GlueCESEBind> glueCESEBind
+    = new Hashtable<String, GlueCESEBind>();
 
   /**
    * 
    */
-  public Hashtable<String, GlueCEVOView> glueCEVOView = new Hashtable<String, GlueCEVOView>();
+  public Hashtable<String, GlueCEVOView> glueCEVOView
+    = new Hashtable<String, GlueCEVOView>();
 
   /**
    * 
    */
-  public Hashtable<String, GlueCEVOViewAccessControlBaseRule> glueCEVOViewAccessControlBaseRule = new Hashtable<String, GlueCEVOViewAccessControlBaseRule>();
+  public Hashtable<String, GlueCEVOViewAccessControlBaseRule> glueCEVOViewAccessControlBaseRule
+    = new Hashtable<String, GlueCEVOViewAccessControlBaseRule>();
 
   /**
    * 
    */
-  public Hashtable<String, GlueHostLocalFileSystem> glueHostLocalFileSystem = new Hashtable<String, GlueHostLocalFileSystem>();
+  public Hashtable<String, GlueHostLocalFileSystem> glueHostLocalFileSystem
+    = new Hashtable<String, GlueHostLocalFileSystem>();
 
   /**
    * 
    */
-  public Hashtable<String, GlueHostNetworkAdapter> glueHostNetworkAdapter = new Hashtable<String, GlueHostNetworkAdapter>();
+  public Hashtable<String, GlueHostNetworkAdapter> glueHostNetworkAdapter
+    = new Hashtable<String, GlueHostNetworkAdapter>();
 
   /**
    * 
    */
-  public Hashtable<String, GlueHostPoolAccount> glueHostPoolAccount = new Hashtable<String, GlueHostPoolAccount>();
+  public Hashtable<String, GlueHostPoolAccount> glueHostPoolAccount
+    = new Hashtable<String, GlueHostPoolAccount>();
 
   /**
    * 
    */
-  public Hashtable<String, GlueHostProcess> glueHostProcess = new Hashtable<String, GlueHostProcess>();
+  public Hashtable<String, GlueHostProcess> glueHostProcess
+    = new Hashtable<String, GlueHostProcess>();
 
   /**
    * 
    */
-  public Hashtable<String, GlueHostRemoteFileSystem> glueHostRemoteFileSystem = new Hashtable<String, GlueHostRemoteFileSystem>();
+  public Hashtable<String, GlueHostRemoteFileSystem> glueHostRemoteFileSystem
+    = new Hashtable<String, GlueHostRemoteFileSystem>();
 
   /**
    * 
    */
-  public Hashtable<String, GlueHostRole> glueHostRole = new Hashtable<String, GlueHostRole>();
+  public Hashtable<String, GlueHostRole> glueHostRole
+    = new Hashtable<String, GlueHostRole>();
 
   /**
    * 
    */
-  public Hashtable<String, GlueSA> glueSA = new Hashtable<String, GlueSA>();
+  public Hashtable<String, GlueSA> glueSA
+    = new Hashtable<String, GlueSA>();
 
   /**
    * 
    */
-  public Hashtable<String, GlueSAAccessControlBaseRule> glueSAAccessControlBaseRule = new Hashtable<String, GlueSAAccessControlBaseRule>();
+  public Hashtable<String, GlueSAAccessControlBaseRule> glueSAAccessControlBaseRule
+    = new Hashtable<String, GlueSAAccessControlBaseRule>();
 
   /**
    * 
    */
-  public Hashtable<String, GlueSEAccessProtocol> glueSEAccessProtocol = new Hashtable<String, GlueSEAccessProtocol>();
+  public Hashtable<String, GlueSEAccessProtocol> glueSEAccessProtocol
+    = new Hashtable<String, GlueSEAccessProtocol>();
 
   /**
    * 
    */
-  public Hashtable<String, GlueSEAccessProtocolCapability> glueSEAccessProtocolCapability = new Hashtable<String, GlueSEAccessProtocolCapability>();
+  public Hashtable<String, GlueSEAccessProtocolCapability> glueSEAccessProtocolCapability
+    = new Hashtable<String, GlueSEAccessProtocolCapability>();
 
   /**
    * 
    */
-  public Hashtable<String, GlueSEAccessProtocolSupportedSecurity> glueSEAccessProtocolSupportedSecurity = new Hashtable<String, GlueSEAccessProtocolSupportedSecurity>();
+  public Hashtable<String, GlueSEAccessProtocolSupportedSecurity> glueSEAccessProtocolSupportedSecurity
+    = new Hashtable<String, GlueSEAccessProtocolSupportedSecurity>();
 
   /**
    * 
    */
-  public Hashtable<String, GlueSEControlProtocol> glueSEControlProtocol = new Hashtable<String, GlueSEControlProtocol>();
+  public Hashtable<String, GlueSEControlProtocol> glueSEControlProtocol
+    = new Hashtable<String, GlueSEControlProtocol>();
 
   /**
    * 
    */
-  public Hashtable<String, GlueSEControlProtocolCapability> glueSEControlProtocolCapability = new Hashtable<String, GlueSEControlProtocolCapability>();
+  public Hashtable<String, GlueSEControlProtocolCapability> glueSEControlProtocolCapability
+    = new Hashtable<String, GlueSEControlProtocolCapability>();
 
   /**
    * 
    */
-  public Hashtable<String, GlueService> glueService = new Hashtable<String, GlueService>();
+  public Hashtable<String, GlueService> glueService
+    = new Hashtable<String, GlueService>();
 
   /**
    * 
    */
-  public Hashtable<String, GlueServiceAccessControlRule> glueServiceAccessControlRule = new Hashtable<String, GlueServiceAccessControlRule>();
+  public Hashtable<String, GlueServiceAccessControlRule> glueServiceAccessControlRule
+    = new Hashtable<String, GlueServiceAccessControlRule>();
 
   /**
    * 
    */
-  public Hashtable<String, GlueServiceAssociation> glueServiceAssociation = new Hashtable<String, GlueServiceAssociation>();
+  public Hashtable<String, GlueServiceAssociation> glueServiceAssociation
+    = new Hashtable<String, GlueServiceAssociation>();
 
   /**
    * 
    */
-  public Hashtable<String, GlueServiceData> glueServiceData = new Hashtable<String, GlueServiceData>();
+  public Hashtable<String, GlueServiceData> glueServiceData
+    = new Hashtable<String, GlueServiceData>();
 
   /**
    * 
    */
-  public Hashtable<String, GlueServiceOwner> glueServiceOwner = new Hashtable<String, GlueServiceOwner>();
+  public Hashtable<String, GlueServiceOwner> glueServiceOwner
+    = new Hashtable<String, GlueServiceOwner>();
 
   /**
    * 
    */
-  public Hashtable<String, GlueServiceStatus> glueServiceStatus = new Hashtable<String, GlueServiceStatus>();
+  public Hashtable<String, GlueServiceStatus> glueServiceStatus
+    = new Hashtable<String, GlueServiceStatus>();
 
   /**
    * 
    */
-  public Hashtable<String, GlueSiteInfo> glueSiteInfo = new Hashtable<String, GlueSiteInfo>();
+  public Hashtable<String, GlueSiteInfo> glueSiteInfo
+    = new Hashtable<String, GlueSiteInfo>();
 
   /**
    * 
    */
-  public Hashtable<String, GlueSiteSponsor> glueSiteSponsor = new Hashtable<String, GlueSiteSponsor>();
+  public Hashtable<String, GlueSiteSponsor> glueSiteSponsor
+    = new Hashtable<String, GlueSiteSponsor>();
 
   /**
    * 
    */
-  public Hashtable<String, GlueSubClusterLocation> glueSubClusterLocation = new Hashtable<String, GlueSubClusterLocation>();
+  public Hashtable<String, GlueSubClusterLocation> glueSubClusterLocation
+    = new Hashtable<String, GlueSubClusterLocation>();
 
   /**
    * 
    */
-  public Hashtable<String, GlueSubClusterSoftwareRunTimeEnvironment> glueSubClusterSoftwareRunTimeEnvironment = new Hashtable<String, GlueSubClusterSoftwareRunTimeEnvironment>();
+  public Hashtable<String, GlueSubClusterSoftwareRunTimeEnvironment> glueSubClusterSoftwareRunTimeEnvironment
+    = new Hashtable<String, GlueSubClusterSoftwareRunTimeEnvironment>();
 
   /**
    * 
    */
-  public Hashtable<String, GlueVO> glueVO = new Hashtable<String, GlueVO>();
+  public Hashtable<String, GlueVO> glueVO
+    = new Hashtable<String, GlueVO>();
 
   /**
    * 
    */
-  public Hashtable<String, AbstractGlueTable> fullIndex = new Hashtable<String, AbstractGlueTable>();
+  public Hashtable<String, AbstractGlueTable> fullIndex
+    = new Hashtable<String, AbstractGlueTable>();
 
   
   protected abstract String getTag();
