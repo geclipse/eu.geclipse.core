@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-Vendor: %Bundle-Vendor
 Bundle-SymbolicName: eu.geclipse.jsdl;singleton:=true
-Bundle-Version: 0.5.0.qualifier
+Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: eu.geclipse.jsdl.internal.JsdlAdaptersPlugin
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.core.runtime,
