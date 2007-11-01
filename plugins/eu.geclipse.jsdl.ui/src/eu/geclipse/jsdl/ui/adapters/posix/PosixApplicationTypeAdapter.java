@@ -1289,7 +1289,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
  
   
-  protected void deleteElement(final int featureID){
+  protected void deleteElement( final int featureID ) {
         
     EStructuralFeature eStructuralFeature = this.posixApplicationType.eClass().getEStructuralFeature( featureID );
     

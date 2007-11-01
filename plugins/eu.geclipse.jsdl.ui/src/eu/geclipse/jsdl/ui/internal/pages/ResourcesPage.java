@@ -522,8 +522,12 @@ public final class ResourcesPage extends FormPage
 
     gd = new GridData(GridData.FILL_BOTH);
     gd.widthHint = 175;
-    this.cmbDiskSpaceRange = new Combo( client, SWT.NONE | SWT.READ_ONLY );
+    this.cmbDiskSpaceRange = new Combo( client, SWT.DROP_DOWN | SWT.READ_ONLY );    
+    this.cmbDiskSpaceRange.add( Messages.getString( "ResourcesPage_LowBoundRange" ) ); //$NON-NLS-1$
+    this.cmbDiskSpaceRange.add( Messages.getString( "ResourcesPage_UpBoundRange" ) ); //$NON-NLS-1$ 
+
     this.cmbDiskSpaceRange.setData( FormToolkit.KEY_DRAW_BORDER );
+    
     this.cmbDiskSpaceRange.setLayoutData( gd );
     
     /* ========================= File System Widgets =========================*/
@@ -805,7 +809,7 @@ public final class ResourcesPage extends FormPage
 
   private Combo createCombo( final Composite composite ) {
     
-    Combo comboRang = new Combo( composite, SWT.DROP_DOWN );    
+    Combo comboRang = new Combo( composite, SWT.DROP_DOWN | SWT.READ_ONLY );    
     comboRang.add( Messages.getString( "ResourcesPage_LowBoundRange" ) ); //$NON-NLS-1$
     comboRang.add( Messages.getString( "ResourcesPage_UpBoundRange" ) ); //$NON-NLS-1$
     comboRang.add( Messages.getString( "ResourcesPage_Exact" ) ); //$NON-NLS-1$

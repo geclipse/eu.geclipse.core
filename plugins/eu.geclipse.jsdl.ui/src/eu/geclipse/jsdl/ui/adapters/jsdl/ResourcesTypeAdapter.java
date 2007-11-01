@@ -26,7 +26,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
-
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
@@ -34,6 +33,7 @@ import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.events.ModifyEvent;
@@ -43,7 +43,7 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Text;
-
+import eu.geclipse.jsdl.model.BoundaryType;
 import eu.geclipse.jsdl.model.CPUArchitectureType;
 import eu.geclipse.jsdl.model.CandidateHostsType;
 import eu.geclipse.jsdl.model.FileSystemType;
@@ -56,6 +56,7 @@ import eu.geclipse.jsdl.model.OperatingSystemType;
 import eu.geclipse.jsdl.model.OperatingSystemTypeEnumeration;
 import eu.geclipse.jsdl.model.OperatingSystemTypeType;
 import eu.geclipse.jsdl.model.ProcessorArchitectureEnumeration;
+import eu.geclipse.jsdl.model.RangeValueType;
 import eu.geclipse.jsdl.model.ResourcesType;
 import eu.geclipse.jsdl.ui.internal.Activator;
 
@@ -175,6 +176,15 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     this.viewerFeaturesMap.put( featureID , widget );
        
   } // End attachToHostName()
+  
+  
+  protected void deleteElement( final int featureID ) {
+    
+    EStructuralFeature eStructuralFeature = this.resourcesType.eClass().getEStructuralFeature( featureID );
+    
+    EcoreUtil.remove( eStructuralFeature );
+    
+  }
   
   
   
@@ -420,6 +430,21 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     }
     
   }
+  
+  
+  protected EObject checkProxy(final EObject refEObject) {
+    
+    EObject eObject = refEObject;
+    
+    if (eObject != null && eObject.eIsProxy() ) {
+     
+      eObject =  EcoreUtil.resolve( eObject, 
+                                  ResourcesTypeAdapter.this.resourcesType );
+    }
+        
+    return eObject;
+    
+  }
 
 
    
@@ -444,17 +469,17 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     
     String[] sortedTypes = widget.getItems();
     Arrays.sort( sortedTypes );
-    widget.setItems( sortedTypes );
-    
-          
+    widget.setItems( sortedTypes );      
     
         
     widget.addSelectionListener(new SelectionListener() {
       public void widgetSelected(final SelectionEvent e) {
-        checkOSElement();        
+        checkOSElement();   
+        String selectedOSName = widget.getItem( widget.getSelectionIndex() );
+
         ResourcesTypeAdapter.this.operatingSystemTypeType
          .setOperatingSystemName(OperatingSystemTypeEnumeration
-                                 .get( widget.getSelectionIndex() ) );
+                                 .get( selectedOSName ) );
         
         ResourcesTypeAdapter.this.operatingSystemType
                              .setOperatingSystemType(
@@ -625,11 +650,20 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     widget.addModifyListener( new ModifyListener() {
       
       public void modifyText( final ModifyEvent e ) {
-        checkFileSystemElement();
-        ResourcesTypeAdapter.this.fileSystemType.setMountPoint( widget.getText() );
-        contentChanged();          
+        
+        if ( !widget.getText().equals( "" ) ) { //$NON-NLS-1$ 
+        
+          checkFileSystemElement();
+          ResourcesTypeAdapter.this.fileSystemType.setMountPoint( widget.getText() );
+          
         }
-      } );    
+        else {
+          ResourcesTypeAdapter.this.fileSystemType.setMountPoint( null );
+        }
+        contentChanged();
+      }
+      
+    } );    
           
   } // End attachToFileSystemMountPoint()
   
@@ -648,29 +682,85 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     
     this.widgetFeaturesMap.put (new Integer(JsdlPackage.FILE_SYSTEM_TYPE__DISK_SPACE)
                                 , text );
-    this.comboFeaturesMap.put( new Integer(JsdlPackage.FILE_SYSTEM_TYPE__DISK_SPACE)
+    this.comboFeaturesMap.put( new Integer(JsdlPackage.DOCUMENT_ROOT__DISK_SPACE)
                                 , combo );
     
-    /* Populate the Combo Box with the CPU Architecture Literals */    
-//    EEnum cFEnum = JsdlPackage.Literals.B
-//       for (int i=0; i<cFEnum.getELiterals().size(); i++){         
-//         combo.add( cFEnum.getEEnumLiteral( i ).toString() );
-//       }
-//       cFEnum = null;
-          
+    
+    
+    /* Event Listener for the Disk Space Text Widget */
+    text.addModifyListener( new ModifyListener() {
+      BoundaryType boundaryType = JsdlFactory.eINSTANCE.createBoundaryType();    
+      RangeValueType rangeValueType = JsdlFactory.eINSTANCE.createRangeValueType();
+      
+      public void modifyText( final ModifyEvent e ) {
         
+        
+        if ( !text.getText().equals( "" ) ) { //$NON-NLS-1$ 
+          
+        checkFileSystemElement();  
+        this.boundaryType.setValue( Double.parseDouble( text.getText() ) );        
+        switch( combo.getSelectionIndex() ) {
+          /* INDEX 0 = UPPER RANGE */
+          case 0 : this.rangeValueType.setLowerBoundedRange( this.boundaryType ); 
+          break;
+          /* INDEX 1 = UPPER RANGE */
+          case 1 : this.rangeValueType.setUpperBoundedRange( this.boundaryType );
+          break;
+          default:
+          break;
+        }
+        
+        this.rangeValueType = (RangeValueType) checkProxy( this.rangeValueType );       
+        ResourcesTypeAdapter.this.fileSystemType.setDiskSpace( this.rangeValueType );
+        }
+        
+        else{
+          ResourcesTypeAdapter.this.fileSystemType.setDiskSpace( null );
+        }
+        contentChanged();
+        
+      }
+    } );
+    
+    /* Event Listener for the Disk Space Range Combo Widget */
     combo.addSelectionListener(new SelectionListener() {
+      BoundaryType boundaryType = JsdlFactory.eINSTANCE.createBoundaryType();    
+      RangeValueType rangeValueType = JsdlFactory.eINSTANCE.createRangeValueType();
+      
       public void widgetSelected(final SelectionEvent e) {
-        //
+        if (!text.getText().equals( "" )) { //$NON-NLS-1$
+          
+        checkFileSystemElement();
+        
+        this.boundaryType.setValue( Double.parseDouble( text.getText() ) );        
+        switch( combo.getSelectionIndex() ) {
+          /* INDEX 0 = UPPER RANGE */
+          case 0 : this.rangeValueType.setLowerBoundedRange( this.boundaryType ); 
+          break;
+          /* INDEX 1 = UPPER RANGE */
+          case 1 : this.rangeValueType.setUpperBoundedRange( this.boundaryType );
+          break;
+          default:
+          break;
+        }
+     
+        ResourcesTypeAdapter.this.fileSystemType.setDiskSpace( this.rangeValueType );
+        ResourcesTypeAdapter.this.contentChanged();
+        
+        } // end_if equals ""
+        
       }
 
       public void widgetDefaultSelected(final SelectionEvent e) {
-        //
+          //Do Nothing
       }
     });
+    
+                
   }
   
   
+
   /**
    * Adapter interface to attach to the FileSystemType combo widget.
    * 
@@ -753,7 +843,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
               
             }
             break;
-            case JsdlPackage.RESOURCES_TYPE__OPERATING_SYSTEM :{
+            case JsdlPackage.RESOURCES_TYPE__OPERATING_SYSTEM : {
               
              this.operatingSystemType = (OperatingSystemType) this.resourcesType
                                                     .eGet( eStructuralFeature );
@@ -827,6 +917,26 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
                 
                 widgetName = this.widgetFeaturesMap
                   .get( new Integer(JsdlPackage.FILE_SYSTEM_TYPE__DISK_SPACE) );
+                
+                comboName = this.comboFeaturesMap
+                   .get( new Integer(JsdlPackage.DOCUMENT_ROOT__DISK_SPACE) );
+                
+                if ( this.fileSystemType.getDiskSpace().getLowerBoundedRange() != null ) {
+                  
+                  widgetName.setText( Double.toString( this.fileSystemType.getDiskSpace()
+                                      .getLowerBoundedRange().getValue() ) );
+                  
+                  /* Select the Lower Bound */                  
+                  comboName.select( 0 );
+                 
+                }
+                
+                else {
+                  widgetName.setText( Double.toString( this.fileSystemType.getDiskSpace()
+                                      .getUpperBoundedRange().getValue() ) );
+                  /* Select the Lower Bound */
+                  comboName.select( 1 );
+                }
                 
 
                 comboName = this.comboFeaturesMap
