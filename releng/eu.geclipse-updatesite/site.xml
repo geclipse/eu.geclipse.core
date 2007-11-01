@@ -2,7 +2,7 @@
 <site mirrorsURL="http://www.eclipse.org/downloads/download.php?file=/technology/geclipse/updates/1.0milestones/site.xml&amp;format=xml">
 
   <description url="http://download.eclipse.org/technology/geclipse/updates/1.0milestones/">
-    g-Eclipse (incubation) Project update site
+    g-Eclipse (incubation) main Update Site
   </description>
 
   <feature url="features/eu.geclipse_1.0.0.qualifier.jar" id="eu.geclipse" version="1.0.0.qualifier">
