@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
-
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -44,7 +43,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Text;
-
 import eu.geclipse.jsdl.model.ApplicationType;
 import eu.geclipse.jsdl.model.JobDescriptionType;
 import eu.geclipse.jsdl.model.JsdlFactory;
@@ -213,16 +211,16 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    * @param widget The SWT text widget which is associated with the 
    * Name attribute of a PosixApplication element in a JSDL document.
    */
-  public void attachPosixApplicationName(final Text widget){
+  public void attachPosixApplicationName( final Text widget ) {
     
-    Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__NAME);
+    Integer featureID = new Integer( PosixPackage.POSIX_APPLICATION_TYPE__NAME );
     this.widgetFeaturesMap.put( featureID, widget );
     
      widget.addModifyListener( new ModifyListener() {
       
       public void modifyText( final ModifyEvent e ) {
         checkPosixApplicationElement();
-        PosixApplicationTypeAdapter.this.posixApplicationType.setName(widget.getText());
+        PosixApplicationTypeAdapter.this.posixApplicationType.setName( widget.getText() );
         contentChanged();
         
       }
@@ -238,7 +236,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    * @param widget The SWT text widget which is associated with the 
    * PosixApplication Executable element of the JSDL document.
    */
-  public void attachPosixApplicationExecutable(final Text widget){
+  public void attachPosixApplicationExecutable( final Text widget ) {
     
     Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__EXECUTABLE);
     this.widgetFeaturesMap.put( featureID , widget );    
@@ -278,9 +276,9 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    * @param widget The SWT text widget which is associated with the 
    * PosixApplication Input element of the JSDL document.
    */
-  public void attachPosixApplicationInput(final Text widget){   
+  public void attachPosixApplicationInput( final Text widget ) {   
     
-    Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__INPUT);
+    Integer featureID = new Integer( PosixPackage.POSIX_APPLICATION_TYPE__INPUT );
     this.widgetFeaturesMap.put( featureID , widget );
 
     
@@ -314,9 +312,9 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    * @param widget The SWT text widget which is associated with the 
    * PosixApplication Output element of the JSDL document.
    */
-  public void attachPosixApplicationOutput(final Text widget){
+  public void attachPosixApplicationOutput( final Text widget ) {
     
-    Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__OUTPUT);
+    Integer featureID = new Integer( PosixPackage.POSIX_APPLICATION_TYPE__OUTPUT );
     this.widgetFeaturesMap.put( featureID, widget );
    
     
@@ -350,8 +348,8 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    * @param widget The SWT text widget which is associated with the 
    * PosixApplication Error element of the JSDL document.
    */
-  public void attachPosixApplicationError(final Text widget){
-    Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__ERROR);
+  public void attachPosixApplicationError( final Text widget ) {
+    Integer featureID = new Integer( PosixPackage.POSIX_APPLICATION_TYPE__ERROR );
     this.widgetFeaturesMap.put( featureID , widget );
   
     
@@ -385,9 +383,9 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    * @param widget The {@link org.eclipse.jface.viewers.TableViewer} which is associated with the 
    * PosixApplication Argument element of the JSDL document.
    */
-  public void attachToPosixApplicationArgument(final TableViewer widget){
+  public void attachToPosixApplicationArgument( final TableViewer widget ) {
     
-    Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__ARGUMENT);
+    Integer featureID = new Integer( PosixPackage.POSIX_APPLICATION_TYPE__ARGUMENT );
     this.tableFeaturesMap.put( featureID , widget );
     
   } // End void attachToPosixApplicationArgument()
@@ -399,9 +397,9 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    * @param widget The {@link org.eclipse.jface.viewers.TableViewer} which is associated with the 
    * PosixApplication Environment element of the JSDL document.
    */
-  public void attachToPosixApplicationEnvironment(final TableViewer widget){
+  public void attachToPosixApplicationEnvironment( final TableViewer widget ) {
     
-    Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__ENVIRONMENT);
+    Integer featureID = new Integer( PosixPackage.POSIX_APPLICATION_TYPE__ENVIRONMENT );
     this.tableFeaturesMap.put( featureID , widget );
     
   } // End void attachToPosixApplicationEnvironment()
@@ -415,7 +413,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    * @param widget The SWT text widget which is associated with the 
    * PosixApplication Working Directory element of the JSDL document.
    */
-  public void attachToWorkingDirectory(final Text widget){    
+  public void attachToWorkingDirectory( final Text widget ) {    
     Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__WORKING_DIRECTORY);
     this.widgetFeaturesMap.put( featureID , widget );
     
@@ -451,7 +449,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   /**
    * @param text
    */
-  public void attachToWallTimeLimit(final Text text){
+  public void attachToWallTimeLimit( final Text text ) {
     
     Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__WALL_TIME_LIMIT);
     this.widgetFeaturesMap.put( featureID , text );    
@@ -489,10 +487,10 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    * @param text The SWT text widget which is associated with the 
    * PosixApplication Working Directory element of the JSDL document.
    */
-  public void attachToFileSizeLimit(final Text text){
+  public void attachToFileSizeLimit( final Text text ) {
     
     Integer featureID = 
-              new Integer(PosixPackage.POSIX_APPLICATION_TYPE__FILE_SIZE_LIMIT);
+              new Integer( PosixPackage.POSIX_APPLICATION_TYPE__FILE_SIZE_LIMIT );
     
     this.widgetFeaturesMap.put( featureID , text );    
       
@@ -997,7 +995,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    * @param text The SWT text widget which is associated with the 
    * PosixApplication UserName element of the JSDL document.
    */  
-  public void attachToUserName(final Text text){
+  public void attachToUserName( final Text text ) {
     
     Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__USER_NAME);
     this.widgetFeaturesMap.put( featureID , text );    
