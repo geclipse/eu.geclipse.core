@@ -28,7 +28,7 @@ project number: FP5-IST-034327  http://www.geclipse.eu/
    </license>
 
    <url>
-      <update label="g-Eclipse Update Site" url="http://download.eclipse.org/technology/geclipse/updates/0.5/site.xml"/>
+      <update label="g-Eclipse Update Site" url="http://download.eclipse.org/technology/geclipse/updates/1.0milestones/site.xml"/>
    </url>
 
    <requires>
