@@ -240,4 +240,22 @@
             name="Generic VO">
       </wizard>
    </extension>
+   <extension
+         id="application"
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run
+               class="eu.geclipse.ui.internal.Application">
+         </run>
+      </application>
+   </extension>
+   <extension
+         id="geclipseProduct"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="eu.geclipse.ui.geclipseApplication"
+            description="g-Eclipse Standalone Application"
+            name="g-Eclipse RCP">
+      </product>
+   </extension>
 </plugin>
