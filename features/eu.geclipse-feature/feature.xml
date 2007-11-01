@@ -7,20 +7,14 @@
       plugin="eu.geclipse">
 
    <description url="http://www.eclipse.org/geclipse">
-      g-Eclipse Feature
-Provides tools and frameworks to access Computing Grids
+      g-Eclipse provides tools and frameworks to access Computing Grids. This feature contains the middleware independent core.
    </description>
 
    <copyright url="http://www.eclipse.org/legal/epl-v10.html">
       Copyright (c) 2006, 2007 g-Eclipse consortium
-All rights reserved. This program and the accompanying materials
-are made available under the terms of the Eclipse Public License v1.0
-which accompanies this distribution, and is available at
+All rights reserved. This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at
 http://www.eclipse.org/legal/epl-v10.html
-
-Initial development of the original code was made for the
-g-Eclipse project founded by European Union
-project number: FP5-IST-034327  http://www.geclipse.eu/
+Initial development of the original code was made for the g-Eclipse project founded by European Union project number: FP5-IST-034327  http://www.geclipse.eu/
    </copyright>
 
    <license url="http://www.eclipse.org/legal/epl-v10.html">
@@ -28,7 +22,7 @@ project number: FP5-IST-034327  http://www.geclipse.eu/
    </license>
 
    <url>
-      <update label="g-Eclipse Update Site" url="http://download.eclipse.org/technology/geclipse/updates/1.0milestones/site.xml"/>
+      <update label="g-Eclipse (incubation) main Update Site" url="http://download.eclipse.org/technology/geclipse/updates/1.0milestones/site.xml"/>
    </url>
 
    <requires>
@@ -61,6 +55,11 @@ project number: FP5-IST-034327  http://www.geclipse.eu/
       <import plugin="org.eclipse.emf"/>
       <import plugin="org.eclipse.emf.common"/>
       <import plugin="org.eclipse.emf.common.ui"/>
+      <import plugin="org.eclipse.wst.xml.core"/>
+      <import plugin="org.eclipse.wst.xml.ui"/>
+      <import plugin="org.eclipse.wst.sse.core"/>
+      <import plugin="org.eclipse.wst.sse.ui"/>
+      <import plugin="org.eclipse.wst.common.ui"/>
       <import plugin="org.eclipse.gmf.runtime.notation"/>
       <import plugin="org.eclipse.gmf.runtime.diagram.ui"/>
       <import plugin="org.eclipse.gmf.runtime.diagram.ui.properties"/>
