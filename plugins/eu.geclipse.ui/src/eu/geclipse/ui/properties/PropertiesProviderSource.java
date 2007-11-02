@@ -7,11 +7,17 @@ import eu.geclipse.core.model.IPropertiesProvider;
 
 
 
+/**
+ * Properties source for object implementing IPropertiesProvider
+ */
 public class PropertiesProviderSource 
 extends AbstractPropertySource<IPropertiesProvider> 
 {
-  private IPropertiesProvider propertyProvider;
+  IPropertiesProvider propertyProvider;
 
+  /**
+   * @param sourceObject
+   */
   public PropertiesProviderSource( final IPropertiesProvider sourceObject ) {
     super( sourceObject );
     this.propertyProvider = sourceObject;
@@ -34,16 +40,13 @@ extends AbstractPropertySource<IPropertiesProvider>
   }
   
   // TODO mariusz Remove hardcoded "LFC". Get category from IPropertiesProvider
-
   private IProperty<IPropertiesProvider> createProperty( final String key ) {
-    return new AbstractProperty( key, "LFC", false ) {
+    return new AbstractProperty<IPropertiesProvider>( key, "LFC", false ) {
 
       @Override
-      public Object getValue( final Object sourceObject ) {
-        return propertyProvider.getPropertyValue( key );
+      public Object getValue( final IPropertiesProvider sourceObject ) {
+        return PropertiesProviderSource.this.propertyProvider.getPropertyValue( key );
       }
     };
   }
-  
-  
 }
