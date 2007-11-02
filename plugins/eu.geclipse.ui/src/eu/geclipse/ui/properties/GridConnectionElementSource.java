@@ -19,12 +19,15 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 
+import eu.geclipse.core.filesystem.internal.filesystem.GEclipseFileStore;
 import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridContainer;
+import eu.geclipse.core.model.IPropertiesProvider;
 import eu.geclipse.ui.internal.Activator;
 
 
@@ -42,11 +45,28 @@ public class GridConnectionElementSource extends AbstractPropertySource<IGridCon
     
     try {
       if( sourceObject.getConnectionFileInfo() != null ) {
-        addChildSource( new FileInfoSource( sourceObject.getConnectionFileInfo() ) );
+        addChildSource( new FileInfoSource( sourceObject.getConnectionFileInfo() ) );        
       }
     } catch ( CoreException cExc ) {
       Activator.logException( cExc );
-    }    
+    }
+    
+    // TODO mariusz/mateusz Don't use GEclipseFileStore. Rather add ConnectionElement#getRemoteFileStore()
+    try {      
+      IFileStore fileStore = sourceObject.getConnectionFileStore();
+      if( fileStore instanceof GEclipseFileStore ) {
+        GEclipseFileStore geclFS = (GEclipseFileStore) fileStore;
+        IFileStore slaveFileStore = geclFS.getSlave();
+        
+        if( slaveFileStore instanceof IPropertiesProvider ) {
+          IPropertiesProvider propProvider = ( IPropertiesProvider )slaveFileStore;
+          addChildSource( new PropertiesProviderSource( propProvider ) );
+        }
+      }      
+    } catch( CoreException exception ) {
+      // TODO mariusz Auto-generated catch block
+      exception.printStackTrace();
+    }
   }
 
   @Override

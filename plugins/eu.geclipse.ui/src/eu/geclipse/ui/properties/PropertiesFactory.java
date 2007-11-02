@@ -18,11 +18,13 @@ package eu.geclipse.ui.properties;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+
 import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridProject;
+import eu.geclipse.core.model.IPropertiesProvider;
 import eu.geclipse.core.model.IVirtualOrganization;
 
 
@@ -64,7 +66,11 @@ public class PropertiesFactory implements IPropertiesFactory {
     
     if( sourceObject instanceof IGridConnectionElement ) {
       sourcesList.add( new GridConnectionElementSource( ( IGridConnectionElement ) sourceObject ) );
-    }    
+    }
+    
+    if( sourceObject instanceof IPropertiesProvider ) {
+      sourcesList.add( new PropertiesProviderSource( (IPropertiesProvider) sourceObject ) );
+    }
     
     return sourcesList;
   }
