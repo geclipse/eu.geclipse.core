@@ -15,6 +15,9 @@
 
 package eu.geclipse.info.model;
 
+import java.net.URI;
+import java.net.URISyntaxException;
+
 import eu.geclipse.core.model.IGridComputing;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.info.glue.GlueCE;
@@ -35,7 +38,7 @@ public class GridGlueComputing
    * @param glueCE The associated glue CE object.
    */
   public GridGlueComputing( final IGridContainer parent,
-                          final GlueCE glueCE ) {
+                            final GlueCE glueCE ) {
     super( parent, glueCE );
   }
   
@@ -46,6 +49,22 @@ public class GridGlueComputing
    */
   public GlueCE getGlueCe() {
     return ( GlueCE ) getGlueElement();
+  }
+  
+  @Override
+  public String getName() {
+    GlueCE ce = getGlueCe();
+    return "CE @ " + ce.UniqueID; 
+  }
+
+  public URI getURI() {
+    URI uri = null;
+    try {
+      uri = new URI( getGlueCe().UniqueID );
+    } catch ( URISyntaxException uriExc ) {
+      // Nothing to do, just catch and return null
+    }
+    return uri;
   }
   
 }

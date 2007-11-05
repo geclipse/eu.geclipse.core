@@ -54,8 +54,8 @@ public class ProcessViewLabelProvider extends LabelProvider
   }
   
   void loadImages(){
-    URL compUrl = Activator.getDefault().getBundle().getEntry( "icons/computing.gif" ); //$NON-NLS-1$
-    URL procUrl = Activator.getDefault().getBundle().getEntry( "icons/job.gif" ); //$NON-NLS-1$
+    URL compUrl = Activator.getDefault().getBundle().getEntry( "icons/obj16/computing_obj.gif" ); //$NON-NLS-1$
+    URL procUrl = Activator.getDefault().getBundle().getEntry( "icons/obj16/job_file_obj.gif" ); //$NON-NLS-1$
     ImageDescriptor compdesc = ImageDescriptor.createFromURL( compUrl ) ;
     ImageDescriptor procdesc = ImageDescriptor.createFromURL( procUrl );
     this.computingImage = compdesc.createImage();

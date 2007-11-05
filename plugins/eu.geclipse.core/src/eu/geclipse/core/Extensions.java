@@ -189,12 +189,6 @@ public class Extensions {
     = "eu.geclipse.core.connectionManagement"; //$NON-NLS-1$
   
   /**
-   * The ID of the grid element creator extension point.
-   */
-  public static final String GRID_ELEMENT_CREATOR_POINT
-    = "eu.geclipse.core.gridElementCreator"; //$NON-NLS-1$
-  
-  /**
    * The ID of the problem provider extension point.
    */
   public static final String PROBLEM_PROVIDER_POINT
@@ -215,11 +209,59 @@ public class Extensions {
     = "class"; //$NON-NLS-1$
   
   /**
+   * The ID of the grid element creator extension point.
+   */
+  public static final String GRID_ELEMENT_CREATOR_POINT
+    = "eu.geclipse.core.gridElementCreator"; //$NON-NLS-1$
+  
+  /**
    * The ID of the Grid element creator configuration element
    * contained in the Grid element creator extension point.
    */
   public static final String GRID_ELEMENT_CREATOR_ELEMENT
     = "creator"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the source configuration element
+   * contained in the Grid element creator extension point.
+   */
+  public static final String GRID_ELEMENT_CREATOR_SOURCE_ELEMENT
+    = "source"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the class attribute of the source configuration element
+   * contained in the Grid element creator extension point.
+   */
+  public static final String GRID_ELEMENT_CREATOR_SOURCE_CLASS_ATTRIBUTE
+    = "class"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the pattern attribute of the source configuration element
+   * contained in the Grid element creator extension point.
+   */
+  public static final String GRID_ELEMENT_CREATOR_SOURCE_PATTERN_ATTRIBUTE
+    = "pattern"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the target configuration element
+   * contained in the Grid element creator extension point.
+   */
+  public static final String GRID_ELEMENT_CREATOR_TARGET_ELEMENT
+    = "target"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the class attribute of the source configuration element
+   * contained in the Grid element creator extension point.
+   */
+  public static final String GRID_ELEMENT_CREATOR_TARGET_CLASS_ATTRIBUTE
+    = "class"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the name attribute of the source configuration element
+   * contained in the Grid element creator extension point.
+   */
+  public static final String GRID_ELEMENT_CREATOR_TARGET_NAME_ATTRIBUTE
+    = "name"; //$NON-NLS-1$
   
   /**
    * The ID of the executable extension of the Grid element creator
@@ -241,6 +283,54 @@ public class Extensions {
    */
   public static final String PROBLEM_PROVIDER_EXECUTABLE
     = "class"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the project folder extension point.
+   */
+  public static final String PROJECT_FOLDER_POINT
+    = "eu.geclipse.core.gridProjectFolder"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the folder element of the project folder
+   * extension point.
+   */
+  public static final String PROJECT_FOLDER_ELEMENT
+    = "folder"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the id attribute of the folder element
+   * of the project folder extension point.
+   */
+  public static final String PROJECT_FOLDER_ID_ATTRIBUTE
+    = "id"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the name attribute of the folder element
+   * of the project folder extension point.
+   */
+  public static final String PROJECT_FOLDER_NAME_ATTRIBUTE
+    = "name"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the label attribute of the folder element
+   * of the project folder extension point.
+   */
+  public static final String PROJECT_FOLDER_LABEL_ATTRIBUTE
+    = "label"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the element class attribute of the folder element
+   * of the project folder extension point.
+   */
+  public static final String PROJECT_FOLDER_ELEMENTCLASS_ATTRIBUTE
+    = "elementClass"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the preset attribute of the folder element
+   * of the project folder extension point.
+   */
+  public static final String PROJECT_FOLDER_PRESET_ATTRIBUTE
+    = "preset"; //$NON-NLS-1$
   
   /**
    * List that holds all known element creators.

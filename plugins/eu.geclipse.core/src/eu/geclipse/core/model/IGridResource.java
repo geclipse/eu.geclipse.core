@@ -15,12 +15,20 @@
 
 package eu.geclipse.core.model;
 
+import java.net.URI;
+
 /**
  * Base interface for all grid elements that represents resources
  * on the Grid.
  */
 public interface IGridResource extends IGridElement {
   
-  // empty implementation
+  /**
+   * Get the <code>URI</code> that corresponds to this grid resource.
+   * 
+   * @return The resource's contact string. May be <code>null</code>
+   * if the resource may not be represented by a <code>URI</code>.
+   */
+  public URI getURI();
   
 }

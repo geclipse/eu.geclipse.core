@@ -80,13 +80,13 @@ public class MonitorComputingAction extends SelectionListenerAction {
     = this.selection.getFirstElement();
     if ( ( element != null ) && ( element instanceof IGridComputing ) ) {
       IGridComputing remote = ( IGridComputing ) element;
+      URI contact = remote.getURI();
       try {
         pviewer = (ProcessStatView)this.site.getPage().showView( Activator.ID_PROCESS_STATUS,
                                      "Monitoring Your CE",
                                      IWorkbenchPage.VIEW_ACTIVATE );
-        
-        
-        URI targeturi = new URI( "gsiftp://"+remote.getName()); //$NON-NLS-1$
+
+        URI targeturi = new URI( "gsiftp://" + contact.toString() );
         URI connecturi = new URI(targeturi.getScheme(),targeturi.getUserInfo(),targeturi.getHost(), 2811,null, null, null); //$NON-NLS-1$
         pviewer.addSite(connecturi);
         

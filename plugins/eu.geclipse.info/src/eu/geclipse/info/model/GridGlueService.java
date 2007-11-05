@@ -44,7 +44,15 @@
    @Override
    public String getName() {
      GlueService gs=(GlueService) getGlueElement();
-     return (gs.endpoint!=null)?gs.endpoint:gs.getID()+" (endpoint missing)"; //$NON-NLS-1$
+     String name = gs.type + " @ ";
+     URI uri = null;
+     try {
+       uri = new URI( gs.endpoint );
+       name += uri.toString();
+     } catch (URISyntaxException e) {
+       name += "[Unknown Endpoint]";
+     }
+     return name;
    }
 
 

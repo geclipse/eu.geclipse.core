@@ -15,8 +15,11 @@
 
 package eu.geclipse.ui.wizards;
 
+import java.util.Hashtable;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IPath;
+
 import eu.geclipse.core.model.IVirtualOrganization;
 
 public class GridProjectProperties {
@@ -28,6 +31,9 @@ public class GridProjectProperties {
   private IVirtualOrganization projectVo;
   
   private IProject[] referencesProjects;
+  
+  private Hashtable< String, String > projectFolders
+    = new Hashtable< String, String >();
 
   public String getProjectName() {
     return this.projectName;
@@ -61,4 +67,18 @@ public class GridProjectProperties {
     this.referencesProjects = referencesProjects;
   }
   
+  public void addProjectFolder( final String id, final String label ) {
+    this.projectFolders.put( id, label );
+  }
+  
+  public void addProjectFolders( final Hashtable< String, String > folders ) {
+    for ( String key : folders.keySet() ) {
+      this.projectFolders.put( key, folders.get( key ) );
+    }
+  }
+  
+  public Hashtable< String, String > getProjectFolders() {
+    return this.projectFolders;
+  }
+
 }

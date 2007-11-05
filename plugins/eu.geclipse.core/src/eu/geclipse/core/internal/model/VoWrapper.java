@@ -25,6 +25,7 @@ import eu.geclipse.core.model.IGridComputing;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridInfoService;
+import eu.geclipse.core.model.IGridJobStatusService;
 import eu.geclipse.core.model.IGridJobSubmissionService;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IGridService;
@@ -47,21 +48,87 @@ public class VoWrapper
   
   protected VoWrapper( final IGridProject project,
                        final IVirtualOrganization vo ) {
+    
     super();
+    
     this.project = project;
     this.vo = vo;
+    
     try {
-      addElement( new VoResourceContainer( this, vo, VoResourceContainer.ResourceType.Service ) );
-      addElement( new VoResourceContainer( this, vo, VoResourceContainer.ResourceType.Computing ) );
-      addElement( new VoResourceContainer( this, vo, VoResourceContainer.ResourceType.Storage ) );
+    
+      QueryContainer computingContainer
+        = new QueryContainer(
+            this,
+            "Computing",
+            new IQueryInputProvider() {
+              public IGridElement[] getInput() throws GridModelException {
+                return getComputing();
+              }
+            } );
+      addElement( computingContainer );
+    
+      QueryContainer storageContainer
+      = new QueryContainer(
+          this,
+          "Storage",
+          new IQueryInputProvider() {
+            public IGridElement[] getInput() throws GridModelException {
+              return getStorage();
+            }
+          } );
+      addElement( storageContainer );
+      
+      QueryContainer serviceContainer
+      = new QueryContainer(
+          this,
+          "Services",
+          new IQueryInputProvider() {
+            public IGridElement[] getInput() throws GridModelException {
+              return getServices();
+            }
+          } );
+      serviceContainer.setQueryAsChildren( false );
+      addElement( serviceContainer );
+      
+      QueryContainer infoServiceContainer
+        = new QueryContainer( serviceContainer, "Info Services" );
+      infoServiceContainer.addFilter(
+        new ClassTypeQueryFilter( IGridInfoService.class, true )
+      );
+      
+      QueryContainer jobStatusServiceContainer
+        = new QueryContainer( serviceContainer, "Job Status Services" );
+      jobStatusServiceContainer.addFilter(
+        new ClassTypeQueryFilter( IGridJobStatusService.class, true )
+      );
+      
+      QueryContainer jobSubmissionServiceContainer
+        = new QueryContainer( serviceContainer, "Job Submission Services" );
+      jobSubmissionServiceContainer.addFilter(
+        new ClassTypeQueryFilter( IGridJobSubmissionService.class, true )
+      );
+      
+      QueryContainer otherServiceContainer
+      = new QueryContainer( serviceContainer, "Other Services" );
+      otherServiceContainer.addFilter(
+        new ClassTypeQueryFilter( IGridInfoService.class, false )
+      );
+      otherServiceContainer.addFilter(
+        new ClassTypeQueryFilter( IGridJobStatusService.class, false )
+      );
+      otherServiceContainer.addFilter(
+        new ClassTypeQueryFilter( IGridJobSubmissionService.class, false )
+      );
+      
     } catch ( GridModelException gmExc ) {
       Activator.logException( gmExc );
     }
+    
   }
   
   @Override
   public boolean canContain( final IGridElement element ) {
-    return element instanceof VoResourceContainer;
+    return element instanceof QueryContainer;
   }
 
   public String getTypeName() {
@@ -75,7 +142,13 @@ public class VoWrapper
   
   public IGridComputing[] getComputing()
       throws GridModelException {
-    return this.vo.getComputing();
+    IGridComputing[] computing = this.vo.getComputing();
+    if ( computing != null ) {
+      for ( int i = 0 ; i < computing.length ; i++ ) {
+        computing[ i ] = new ComputingWrapper( this, computing[ i ] );
+      }
+    }
+    return computing;
   }
 
   public IFileStore getFileStore() {
@@ -110,12 +183,24 @@ public class VoWrapper
   
   public IGridService[] getServices()
       throws GridModelException {
-    return this.vo.getServices();
+    IGridService[] services = this.vo.getServices();
+    if ( services != null ) {
+      for ( int i = 0 ; i < services.length ; i++ ) {
+        services[ i ] = new ServiceWrapper( this, services[ i ] );
+      }
+    }
+    return services;
   }
   
   public IGridStorage[] getStorage()
       throws GridModelException {
-    return this.vo.getStorage();
+    IGridStorage[] storage = this.vo.getStorage();
+    if ( storage != null ) {
+      for ( int i = 0 ; i < storage.length ; i++ ) {
+        storage[ i ] = new StorageWrapper( this, storage[ i ] );
+      }
+    }
+    return storage;
   }
   
   public IGridJobSubmissionService[] getJobSubmissionServices()

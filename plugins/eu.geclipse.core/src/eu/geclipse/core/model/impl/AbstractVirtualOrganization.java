@@ -141,12 +141,20 @@ public abstract class AbstractVirtualOrganization
    */
   public IGridService[] getServices()
       throws GridModelException {
-    IGridService[] services = null;
+    IGridService[] result = null;
     IGridInfoService infoService = getInfoService();
     if ( infoService != null ) {
-      services = infoService.fetchServices( this, this, null );
+      IGridService[] services = infoService.fetchServices( this, this, null );
+      if ( ( services != null ) && ( services.length > 0 ) ) {
+        result = new IGridService[ services.length + 1 ];
+        System.arraycopy( services, 0, result, 0, services.length );
+        result[ services.length ] = infoService;
+      } else {
+        result = new IGridService[ 1 ];
+        result[ 0 ] = infoService;
+      }
     }
-    return services;
+    return result;
   }
   
   public IGridStorage[] getStorage() throws GridModelException {
@@ -204,6 +212,8 @@ public abstract class AbstractVirtualOrganization
     for ( IGridElement child : children ) {
       if ( child instanceof IStorableElement ) {
         ( ( IStorableElement ) child ).save();
+      } else {
+        saveChild( child );
       }
     }
   }
@@ -216,5 +226,9 @@ public abstract class AbstractVirtualOrganization
    * could be loaded.
    */
   protected abstract IGridElement loadChild( final String childName );
+  
+  protected void saveChild( final IGridElement child ) {
+    // empty implementation
+  }
   
 }

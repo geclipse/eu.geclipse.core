@@ -19,7 +19,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.geclipse.core.model.IGridContainer;
+import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IGridStorage;
+import eu.geclipse.core.model.IVirtualOrganization;
+import eu.geclipse.info.glue.GlueCE;
 import eu.geclipse.info.glue.GlueQuery;
 import eu.geclipse.info.glue.GlueSA;
 import eu.geclipse.info.glue.GlueSE;
@@ -48,11 +51,12 @@ public class GridGlueStorage
   public URI[] getAccessTokens() {
     
     ArrayList<URI> uriList=new ArrayList<URI>();
+    IVirtualOrganization vo = getVo();
 
     for( GlueSA sa : getGlueSe().glueSAList ) {
-      if(GlueQuery.saSupportsVO( sa, this.getProject().getVO().getName() )){
+      if( ( vo == null ) || GlueQuery.saSupportsVO( sa, vo.getName() )){
         try {
-          String host = getName();
+          String host = getGlueSe().UniqueID;
           List list=getGlueSe().glueSEAccessProtocolList;
           if ( ( list != null ) && !list.isEmpty() ) {
             int protocolCount=list.size();
@@ -100,6 +104,44 @@ public class GridGlueStorage
    */
   public GlueSE getGlueSe() {
     return ( GlueSE ) getGlueElement();
+  }
+  
+  @Override
+  public String getName() {
+    GlueSE se = getGlueSe();
+    return "SE @ " + se.UniqueID; 
+  }
+  
+  protected IVirtualOrganization getVo() {
+    
+    IVirtualOrganization result = null;
+    IGridProject project = getProject();
+    
+    if ( project != null ) {
+      result = project.getVO();
+    } else {
+      IGridContainer parent = getParent();
+      while ( parent != null ) {
+        if ( parent instanceof IVirtualOrganization ) {
+          result = ( IVirtualOrganization ) parent;
+          break;
+        }
+        parent = parent.getParent();
+      }
+    }
+    
+    return result;
+    
+  }
+
+  public URI getURI() {
+    URI uri = null;
+    try {
+      uri = new URI( getGlueSe().UniqueID );
+    } catch (URISyntaxException e) {
+      // Nothing to do, just catch and return null
+    }
+    return uri;
   }
   
 }

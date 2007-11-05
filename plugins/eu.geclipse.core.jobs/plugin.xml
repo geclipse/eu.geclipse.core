@@ -10,6 +10,10 @@
       <creator
             class="eu.geclipse.core.jobs.GridJobCreator"
             name="Grid Job Creator">
+         <target
+               class="eu.geclipse.core.jobs.GridJob"
+               name="Grid Job">
+         </target>
       </creator>
    </extension>
 

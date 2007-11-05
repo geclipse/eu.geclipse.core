@@ -753,5 +753,10 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
       }
     }    
   }
+
+  public URI getURI() {
+    // TODO pawelw is there something like a contact string?
+    return null;
+  }
   
 }

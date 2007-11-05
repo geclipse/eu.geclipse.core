@@ -32,6 +32,7 @@ import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.GridModelProblems;
 import eu.geclipse.core.model.IGridConnection;
+import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridPreferences;
 import eu.geclipse.core.model.IGridProject;
@@ -44,9 +45,9 @@ import eu.geclipse.core.model.impl.ResourceGridContainer;
  * It implements {@link IGridPreferences} and therefore stores all global
  * preferences in a well defined structure within a project.
  */
-public class HiddenProject extends ResourceGridContainer
-  implements IGridProject, IGridPreferences
-{
+public class HiddenProject
+    extends ResourceGridContainer
+    implements IGridProject, IGridPreferences {
 
   /**
    * The name of the project.
@@ -194,6 +195,14 @@ public class HiddenProject extends ResourceGridContainer
   @Override
   public IGridProject getProject() {
     return this;
+  }
+  
+  public IGridContainer getProjectFolder( final Class< ? extends IGridElement > elementType ) {
+    return null;
+  }
+  
+  public IGridContainer getProjectFolder( final IGridElement element ) {
+    return null;
   }
 
   /*

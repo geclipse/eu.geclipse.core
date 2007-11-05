@@ -16,8 +16,11 @@
 package eu.geclipse.ui.providers;
 
 import java.util.Comparator;
+
 import eu.geclipse.core.model.IGridConnectionElement;
+import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IVirtualOrganization;
 
 /**
  * Comparator implementation for sorting elements within
@@ -51,31 +54,26 @@ public class GridModelComparator
    */
   public int compare( final IGridElement e1,
                       final IGridElement e2 ) {
-    int result = 0;
-    boolean c1 = isFolder( e1 );
-    boolean c2 = isFolder( e2 );
-    if ( c1 == c2 ) {
-      result = e1.getName().compareTo( e2.getName() );
-    } else {
-      result = c1 ? -1 : 1;         
+    int value = getValue( e1 ) - getValue( e2 );
+    if ( value == 0 ) {
+      value = e1.getName().compareTo( e2.getName() );
     }
-    return result;
+    return value;
   }
   
-  /**
-   * Determines if the specified {@link IGridElement} represents a folder.
-   * 
-   * @param element The element to be tested.
-   * @return True if the specified element represents a folder, false
-   * otherwise.
-   */
-  private boolean isFolder( final IGridElement element ) {
-    boolean result = false;
-    if ( element instanceof IGridConnectionElement ) {
-      result = ( ( IGridConnectionElement ) element ).isFolder();
-    }/* else if ( element instanceof IGridContainer ) {
-      result = true;
-    }*/
+  private int getValue( final IGridElement e ) {
+    int result = 0;
+    if ( e instanceof IVirtualOrganization ) {
+      result = 10;
+    } else if ( e instanceof IGridConnectionElement ) {
+      result
+        = ( ( IGridConnectionElement ) e ).isFolder()
+        ? 1 : 2;
+    } else if ( e instanceof IGridContainer ) {
+      result = 1;
+    } else {
+      result = 2;
+    }
     return result;
   }
   

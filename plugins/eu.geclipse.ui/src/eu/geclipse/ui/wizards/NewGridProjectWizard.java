@@ -36,6 +36,8 @@ public class NewGridProjectWizard extends Wizard implements INewWizard {
   
   private VoSelectionWizardPage voPage;
   
+  private GridProjectStructureWizardPage structurePage;
+  
   private WizardNewProjectReferencePage referencePage;
   
   private IProject project = null;
@@ -63,6 +65,9 @@ public class NewGridProjectWizard extends Wizard implements INewWizard {
     this.voPage = new VoSelectionWizardPage( false );
     addPage( this.voPage );
     
+    this.structurePage = new GridProjectStructureWizardPage();
+    addPage( this.structurePage );
+    
     if ( ResourcesPlugin.getWorkspace().getRoot().getProjects().length > 0 ) {
       this.referencePage = new WizardNewProjectReferencePage( "newGridProjectReferencePage" ); //$NON-NLS-1$
       this.referencePage.setTitle( Messages.getString( "NewGridProjectWizard.reference_page_title" ) ); //$NON-NLS-1$
@@ -87,9 +92,13 @@ public class NewGridProjectWizard extends Wizard implements INewWizard {
     if ( ( this.project == null ) && ( this.creationPage != null ) ) {
     
       GridProjectProperties properties = new GridProjectProperties();
+      
       properties.setProjectName( this.creationPage.getProjectName() );
       properties.setProjectLocation( this.creationPage.useDefaults() ? null : this.creationPage.getLocationPath() );
       properties.setProjectVo( this.voPage.getSelectedVos()[0] );
+      
+      properties.addProjectFolders( this.structurePage.getProjectFolders() );
+      
       if ( this.referencePage != null ) {
         properties.setReferencesProjects( this.referencePage.getReferencedProjects() );
       }

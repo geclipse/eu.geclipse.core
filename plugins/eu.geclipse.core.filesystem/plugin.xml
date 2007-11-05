@@ -15,6 +15,13 @@
       <creator
             class="eu.geclipse.core.filesystem.FileSystemCreator"
             name="File System">
+         <source
+               class="org.eclipse.core.resources.IResource">
+         </source>
+         <target
+               class="eu.geclipse.core.model.IGridConnection"
+               name="Grid Connection">
+         </target>
       </creator>
    </extension>
 

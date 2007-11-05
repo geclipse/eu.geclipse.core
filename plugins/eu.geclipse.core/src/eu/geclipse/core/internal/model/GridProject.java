@@ -15,16 +15,23 @@
 
 package eu.geclipse.core.internal.model;
 
+import java.util.Hashtable;
+import java.util.List;
+
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
 
+import eu.geclipse.core.ExtensionManager;
+import eu.geclipse.core.Extensions;
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.GridModelException;
+import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IVirtualOrganization;
@@ -43,9 +50,14 @@ public class GridProject
   
   private static final String PROJECT_NODE = "eu.geclipse.core"; //$NON-NLS-1$
   
+  private static final String PROJECT_FOLDER_NODE = "eu.geclipse.core.folders"; //$NON-NLS-1$
+  
   private static final String VO_ATTRIBUTE = "vo"; //$NON-NLS-1$
   
   private IVirtualOrganization vo;
+  
+  private Hashtable< Class< ? >, IGridContainer > projectFolders
+    = new Hashtable< Class< ? >, IGridContainer >();
   
   /**
    * Default constructor that constructs a grid project out of an
@@ -104,6 +116,21 @@ public class GridProject
     return this;
   }
   
+  public IGridContainer getProjectFolder( final Class< ? extends IGridElement > elementType ) {
+    IGridContainer result = null;
+    for ( Class< ? > cls : this.projectFolders.keySet() ) {
+      if ( cls.isAssignableFrom( elementType ) ) {
+        result = this.projectFolders.get( cls );
+        break;
+      }
+    }
+    return result;
+  }
+  
+  public IGridContainer getProjectFolder( final IGridElement element ) {
+    return getProjectFolder( element.getClass() );
+  }
+  
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridProject#getVO()
    */
@@ -156,9 +183,12 @@ public class GridProject
   }
   
   private void loadProjectProperties( final IProject project ) {
+
     IScopeContext projectScope = new ProjectScope( project );
     Preferences projectNode = projectScope.getNode( PROJECT_NODE );
+    
     try {
+      
       projectNode.sync();
       String voName = projectNode.get( VO_ATTRIBUTE, null );
       this.vo = null;
@@ -169,11 +199,45 @@ public class GridProject
           addElement( new VoWrapper( this, this.vo ) );
         }
       }
+      
+      loadProjectFolders( projectScope );
+      
     } catch( BackingStoreException bsExc ) {
       Activator.logException( bsExc );
     } catch ( GridModelException gmExc ) {
       Activator.logException( gmExc );
     }
+    
+  }
+  
+  private void loadProjectFolders( final IScopeContext projectScope )
+      throws BackingStoreException {
+    
+    this.projectFolders.clear();
+    
+    Preferences folderNode = projectScope.getNode( PROJECT_FOLDER_NODE );
+    
+    ExtensionManager extm = new ExtensionManager();
+    List< IConfigurationElement > configurationElements
+      = extm.getConfigurationElements( Extensions.PROJECT_FOLDER_POINT, Extensions.PROJECT_FOLDER_ELEMENT );
+    
+    for ( IConfigurationElement element : configurationElements ) {
+      String id = element.getAttribute( Extensions.PROJECT_FOLDER_ID_ATTRIBUTE );
+      String label = folderNode.get( id, null );
+      if ( label != null ) {
+        IGridElement child = findChild( label );
+        if ( ( child != null ) && ( child instanceof IGridContainer ) ) {
+          String className = element.getAttribute( Extensions.PROJECT_FOLDER_ELEMENTCLASS_ATTRIBUTE );
+          try {
+            Class< ? > cls = Class.forName( className );
+            this.projectFolders.put( cls, ( IGridContainer ) child );
+          } catch ( ClassNotFoundException cnfExc ) {
+            Activator.logException( cnfExc );
+          }
+        }
+      }
+    }
+    
   }
 
 }

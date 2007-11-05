@@ -25,8 +25,8 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.action.Action;
 
-import eu.geclipse.core.filesystem.GEclipseFileSystem;
 import eu.geclipse.core.filesystem.GEclipseURI;
+import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridProject;
@@ -86,18 +86,18 @@ public class MountAction extends Action {
   protected void createMount( final IGridStorage source )
       throws CoreException {
     IGridProject project = source.getProject();
-    String mountPointName = IGridProject.DIR_MOUNTS;
-    IGridElement mountPoint = project.findChild( mountPointName );
-    if ( mountPoint instanceof IGridContainer ) {
-      IContainer container = ( IContainer ) mountPoint.getResource();
-      if ( container != null ) {
-        IPath path = new Path( getMountName( source ) );
-        IFolder folder = container.getFolder( path );
-        URI accessToken = findAccessToken( this.accessProtocol, source );
-        GEclipseURI geclURI = new GEclipseURI( accessToken );
-        URI masterURI = geclURI.toMasterURI();
-        folder.createLink( masterURI, IResource.ALLOW_MISSING_LOCAL, null );
-      }
+    IGridContainer mountPoint = project.getProjectFolder( IGridConnection.class );
+    if ( mountPoint == null ) {
+      mountPoint = project;
+    }
+    IContainer container = ( IContainer ) mountPoint.getResource();
+    if ( container != null ) {
+      IPath path = new Path( getMountName( source ) );
+      IFolder folder = container.getFolder( path );
+      URI accessToken = findAccessToken( this.accessProtocol, source );
+      GEclipseURI geclURI = new GEclipseURI( accessToken );
+      URI masterURI = geclURI.toMasterURI();
+      folder.createLink( masterURI, IResource.ALLOW_MISSING_LOCAL, null );
     }
   }
   

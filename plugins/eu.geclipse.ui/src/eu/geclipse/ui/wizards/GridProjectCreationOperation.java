@@ -16,6 +16,8 @@
 package eu.geclipse.ui.wizards;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Hashtable;
+
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -99,7 +101,7 @@ public class GridProjectCreationOperation implements IRunnableWithProgress {
     project.create( desc, new SubProgressMonitor( monitor, 50 ) );
     project.open( new SubProgressMonitor( monitor, 50 ) );
     
-    createProjectStructure( project );
+    createProjectStructure( project, props );
     setProjectProperties( project, props );
     
     if ( monitor.isCanceled() ) {
@@ -141,21 +143,24 @@ public class GridProjectCreationOperation implements IRunnableWithProgress {
   
   private void createProjectDirectory( final IProject project,
                                        final String name ) {
-    IFolder folder = project.getFolder( new Path( name ) );
-    if ( !folder.exists() ) {
-      try {
-        folder.create( IResource.FORCE, true, null );
-      } catch( CoreException cExc ) {
-        Activator.logException( cExc );
+    if ( ( name != null ) && ( name.length() != 0 ) ) {
+      IFolder folder = project.getFolder( new Path( name ) );
+      if ( !folder.exists() ) {
+        try {
+          folder.create( IResource.FORCE, true, null );
+        } catch( CoreException cExc ) {
+          Activator.logException( cExc );
+        }
       }
     }
   }
   
-  private void createProjectStructure( final IProject project ) {
-    createProjectDirectory( project, IGridProject.DIR_MOUNTS );
-    createProjectDirectory( project, IGridProject.DIR_JOBDESCRIPTIONS );
-    createProjectDirectory( project, IGridProject.DIR_JOBS );
-    createProjectDirectory( project, IGridProject.DIR_WORKFLOWS );
+  private void createProjectStructure( final IProject project,
+                                       final GridProjectProperties props ) {
+    Hashtable< String, String > projectFolders = props.getProjectFolders();
+    for ( String label : projectFolders.values() ) {
+      createProjectDirectory( project, label );
+    }
   }
   
   private void setProjectProperties( final IProject project,
@@ -164,13 +169,22 @@ public class GridProjectCreationOperation implements IRunnableWithProgress {
     
     IVirtualOrganization projectVo = props.getProjectVo();
     String voName = projectVo.getName();
+    Hashtable< String, String > folders = props.getProjectFolders();
     
     IScopeContext projectScope = new ProjectScope( project );
-    Preferences projectNode = projectScope.getNode( "eu.geclipse.core" ); //$NON-NLS-1$
-    projectNode.put( "vo", voName ); //$NON-NLS-1$
     
     try {
+      
+      Preferences projectNode = projectScope.getNode( "eu.geclipse.core" ); //$NON-NLS-1$
+      projectNode.put( "vo", voName ); //$NON-NLS-1$
       projectNode.flush();
+      
+      Preferences folderNode = projectScope.getNode( "eu.geclipse.core.folders" ); //$NON-NLS-1$
+      for ( String key : folders.keySet() ) {
+        folderNode.put( key, folders.get( key ) );
+      }
+      folderNode.flush();
+      
     } catch( BackingStoreException bsExc ) {
       IStatus status = new Status( IStatus.ERROR,
                                  Activator.PLUGIN_ID,

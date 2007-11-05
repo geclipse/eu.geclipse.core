@@ -15,12 +15,14 @@
 
 package eu.geclipse.core.model;
 
+import java.net.URI;
+
 /**
  * An {@link IGridResource} that represents computing elements in the
  * Grid.
  */
-public interface IGridComputing extends IGridElement, ITestable {
+public interface IGridComputing extends IGridResource, ITestable {
   
-  // empty implementation
+  public URI getURI();
   
 }

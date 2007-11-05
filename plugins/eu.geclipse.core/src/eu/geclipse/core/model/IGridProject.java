@@ -46,6 +46,10 @@ public interface IGridProject extends IGridContainer {
    */
   public static final String DIR_WORKFLOWS = Messages.getString( "IGridProject.dir_workflows" ); //$NON-NLS-1$
   
+  public IGridContainer getProjectFolder( final Class< ? extends IGridElement > elementType );
+  
+  public IGridContainer getProjectFolder( final IGridElement element );
+  
   /**
    * Get the virtual organisation that is associated with this project.
    * 

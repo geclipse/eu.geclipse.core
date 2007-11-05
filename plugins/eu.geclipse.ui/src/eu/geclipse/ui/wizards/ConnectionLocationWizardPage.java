@@ -19,7 +19,6 @@ import java.io.ByteArrayInputStream;
 import java.io.InputStream;
 import java.net.URI;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
@@ -27,6 +26,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 
+import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridProject;
 
@@ -80,7 +80,7 @@ public class ConnectionLocationWizardPage
       for ( Object o : this.initialSelection.toList() ) {
         if ( o instanceof IGridElement ) {
           IGridProject project = ( ( IGridElement ) o ).getProject();
-          IGridElement mountDir = project.findChild( IGridProject.DIR_MOUNTS );
+          IGridElement mountDir = project.getProjectFolder( IGridConnection.class );
           for ( IGridElement e = ( IGridElement ) o ; e != null ; e = e.getParent() ) {
             if ( e == mountDir ) {
               element = ( IGridElement ) o;

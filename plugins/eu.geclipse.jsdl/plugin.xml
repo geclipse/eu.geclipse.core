@@ -7,7 +7,12 @@
          point="eu.geclipse.core.gridElementCreator">
       <creator
             class="eu.geclipse.jsdl.JSDLJobDescriptionCreator"
-            name="JSDL Job"/>
+            name="JSDL Job">
+         <target
+               class="eu.geclipse.jsdl.JSDLJobDescription"
+               name="JSDL Job Description">
+         </target>
+      </creator>
    </extension>
 
 </plugin>
