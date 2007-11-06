@@ -16,6 +16,7 @@ package eu.geclipse.ui.wizards.jobsubmission;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
+
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -30,9 +31,11 @@ import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.IWizardContainer;
 import org.eclipse.jface.wizard.Wizard;
+
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
+import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobCreator;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridJobID;
@@ -152,10 +155,42 @@ public abstract class JobSubmissionWizardBase extends Wizard
   protected abstract IGridJobSubmissionService getSubmissionService();
 
   private IGridContainer buildPath( final IGridJobDescription description )
-    throws CoreException
-  {
+      throws CoreException {
+    
     IGridContainer result = null;
-    IPath descPath = description.getPath().removeLastSegments( 1 );
+    
+    IGridProject project = description.getProject();
+    IPath projectPath = project.getPath();
+    
+    IGridContainer jobFolder = project.getProjectFolder( IGridJob.class );
+    IPath jobFolderPath = jobFolder.getPath();
+    
+    if ( jobFolderPath.equals( projectPath ) ) {
+      result = project;
+    } else {
+    
+      IPath descriptionPath = description.getPath().removeLastSegments( 1 );
+      IGridContainer descriptionFolder = project.getProjectFolder( IGridJobDescription.class );
+      IPath descriptionFolderPath = descriptionFolder.getPath();
+        
+      if ( descriptionFolderPath.isPrefixOf( descriptionPath ) ) {
+        
+        int matchingFirstSegments = descriptionPath.matchingFirstSegments( descriptionFolderPath );
+        IPath appendedPath = descriptionPath.removeFirstSegments( matchingFirstSegments );
+        jobFolderPath = jobFolderPath.append( appendedPath );
+        
+        IWorkspaceRoot workspaceRoot = ( IWorkspaceRoot )GridModel.getRoot().getResource();
+        IFolder folder = workspaceRoot.getFolder( jobFolderPath );
+        createFolder( folder );
+        result = ( IGridContainer ) GridModel.getRoot().findElement( folder );
+        
+      } else {
+        result = jobFolder;
+      }
+      
+    }
+    
+    /*IPath descPath = description.getPath().removeLastSegments( 1 );
     IPath projPath = description.getProject().getPath();
     descPath = descPath.removeFirstSegments( projPath.segmentCount() );
     IPath jobPath = projPath.append( IGridProject.DIR_JOBS );
@@ -166,8 +201,9 @@ public abstract class JobSubmissionWizardBase extends Wizard
       .getResource();
     IFolder folder = workspaceRoot.getFolder( jobPath );
     createFolder( folder );
-    result = ( IGridContainer )GridModel.getRoot().findElement( folder );
+    result = ( IGridContainer )GridModel.getRoot().findElement( folder );*/
     return result;
+    
   }
 
   private void createFolder( final IFolder folder ) throws CoreException {

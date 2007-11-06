@@ -87,9 +87,6 @@ public class MountAction extends Action {
       throws CoreException {
     IGridProject project = source.getProject();
     IGridContainer mountPoint = project.getProjectFolder( IGridConnection.class );
-    if ( mountPoint == null ) {
-      mountPoint = project;
-    }
     IContainer container = ( IContainer ) mountPoint.getResource();
     if ( container != null ) {
       IPath path = new Path( getMountName( source ) );

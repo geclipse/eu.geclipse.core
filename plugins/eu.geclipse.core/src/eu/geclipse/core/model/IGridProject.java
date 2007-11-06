@@ -29,7 +29,7 @@ public interface IGridProject extends IGridContainer {
   /**
    * The name of the job description directory contained in a grid project.
    */
-  public static final String DIR_JOBDESCRIPTIONS = Messages.getString( "IGridProject.dir_jobdescriptions" ); //$NON-NLS-1$
+  //public static final String DIR_JOBDESCRIPTIONS = Messages.getString( "IGridProject.dir_jobdescriptions" ); //$NON-NLS-1$
   
   /**
    * The name of the jobs directory contained in a grid project.
