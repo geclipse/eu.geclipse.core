@@ -25,6 +25,7 @@ import java.util.Map;
 import java.util.Properties;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
@@ -33,6 +34,7 @@ import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PartInitException;
@@ -58,7 +60,7 @@ import eu.geclipse.jsdl.ui.wizards.specific.IApplicationSpecificPage;
 public class NewJobWizard extends Wizard implements INewWizard {
 
   private IStructuredSelection selection;
-  private WizardNewFileCreationPage firstPage;
+  private FirstPage firstPage;
   private IFile file;
   private ExecutableNewJobWizardPage executablePage;
   private DataStagingNewJobWizardPage outputFilesPage;
@@ -71,8 +73,10 @@ public class NewJobWizard extends Wizard implements INewWizard {
                                     this.selection );
     this.firstPage.setTitle( Messages.getString( "NewJobWizard.first_page_title" ) ); //$NON-NLS-1$
     this.firstPage.setDescription( Messages.getString( "NewJobWizard.first_page_description" ) ); //$NON-NLS-1$
-    this.firstPage.setFileName( Messages.getString( "NewJobWizard.first_page_default_new_file_name" ) ); //$NON-NLS-1$
+//    this.firstPage.setFileName( this.firstPage.getUniqueFileName() );
+//    this.firstPage.setFileName( Messages.getString( "NewJobWizard.first_page_default_new_file_name" ) ); //$NON-NLS-1$
     addPage( this.firstPage );
+//    this.firstPage.setFileName( this.firstPage.getUniqueFileName() );
     ArrayList<WizardPage> internal = new ArrayList<WizardPage>();
     this.outputFilesPage = new DataStagingNewJobWizardPage( Messages.getString( "NewJobWizard.files_output_new_job_page_name" ) ); //$NON-NLS-1$;
     internal.add( this.outputFilesPage );
@@ -209,7 +213,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
     } else {
       outName = "stdOut"; //$NON-NLS-1$
     }
-    if (err.equals( "" )){ //$NON-NLS-1$
+    if( err.equals( "" ) ) { //$NON-NLS-1$
       err = null;
     } else {
       errName = "stdErr"; //$NON-NLS-1$
@@ -234,8 +238,8 @@ public class NewJobWizard extends Wizard implements INewWizard {
                                        inName,
                                        out,
                                        outName,
-                                       err, 
-                                       errName);
+                                       err,
+                                       errName );
     }
     if( this.outputFilesPage.isCreated() ) {
       List<DataStagingType> outFiles;
@@ -311,9 +315,9 @@ public class NewJobWizard extends Wizard implements INewWizard {
         }
       }
     }
-    //jsdl.getDataStagingIn();
-//    jsdl.getLocalDataStagingIn();
-//    jsdl.getStdInputDataType();
+    // jsdl.getDataStagingIn();
+    // jsdl.getLocalDataStagingIn();
+    // jsdl.getStdInputDataType();
   }
 
   /**
@@ -353,6 +357,8 @@ public class NewJobWizard extends Wizard implements INewWizard {
   class FirstPage extends WizardNewFileCreationPage {
 
     private IStructuredSelection iniSelection;
+    
+    private final String initFileName = Messages.getString( "NewJobWizard.first_page_default_new_file_name" );
 
     /**
      * Creates new instance of {@link FirstPage}
@@ -365,7 +371,48 @@ public class NewJobWizard extends Wizard implements INewWizard {
     {
       super( pageName, selection );
       this.iniSelection = selection;
+      
     }
+    
+    
+
+    @Override
+    public void createControl( final Composite parent ) {
+      super.createControl( parent );
+      setFileName( getUniqueFileName() );
+    }
+
+
+
+    public String getUniqueFileName() {
+      IPath containerFullPath = getContainerFullPath();
+      String fileName = this.initFileName;
+      String extension = "jsdl";
+      if( containerFullPath  == null ) {
+        containerFullPath = new Path( "" ); //$NON-NLS-1$
+      }
+      if( fileName == null || fileName.trim().length() == 0 ) {
+        fileName = "default"; //$NON-NLS-1$
+      }
+      IPath filePath = containerFullPath.append( fileName );
+      if( extension != null && !extension.equals( filePath.getFileExtension() ) )
+      {
+        filePath = filePath.addFileExtension( extension );
+      }
+      extension = filePath.getFileExtension();
+      fileName = filePath.removeFileExtension().lastSegment();
+      int i = 0;
+      while( ResourcesPlugin.getWorkspace().getRoot().exists( filePath ) ) {
+        i++;
+        filePath = containerFullPath.append( fileName + i );
+        if( extension != null ) {
+          filePath = filePath.addFileExtension( extension );
+        }
+      }
+      return filePath.lastSegment();
+    }
+
+
 
     @Override
     protected boolean validatePage() {
@@ -374,7 +421,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
         result = false;
       }
       if( !getFilePath().toString().endsWith( ".jsdl" ) ) { //$NON-NLS-1$
-        setErrorMessage( Messages.getString("NewJobWizard.wrong_file_extension_error_message") ); //$NON-NLS-1$
+        setErrorMessage( Messages.getString( "NewJobWizard.wrong_file_extension_error_message" ) ); //$NON-NLS-1$
         result = false;
       }
       return result;
@@ -392,17 +439,11 @@ public class NewJobWizard extends Wizard implements INewWizard {
       return path;
     }
 
-    // @Override
-    // public boolean canFlipToNextPage()
-    // {
-    // boolean result = true;
-    // if (super.canFlipToNextPage()){
-    // if (super.validateLinkedResource().isOK()){
-    // result = false;
-    // }
-    // }
-    // return result;
-    // }
+    @Override
+    public boolean canFlipToNextPage() {
+      return super.canFlipToNextPage();
+    }
+
     @Override
     protected void initialPopulateContainerNameField() {
       {
@@ -424,6 +465,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
         } else {
           super.initialPopulateContainerNameField();
         }
+//        setFileName( getUniqueFileName() );
       }
     }
   }
