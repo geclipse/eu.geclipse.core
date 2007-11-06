@@ -15,10 +15,12 @@
  *****************************************************************************/
 package eu.geclipse.core.jobs;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.GridModelProblems;
@@ -104,14 +106,14 @@ public class GridJobCreator extends AbstractGridJobCreator {
     }
     IGridJobDescription description = getDescription();
     IFolder jobFolder = findJobFileName( description,
-                                         ( IFolder )parent.getResource() );
+                                         ( IContainer )parent.getResource() );
     IPath fullPath = jobFolder.getFullPath();
     IPath tmpPath = fullPath;
     // IPath tmpPath = fullPath.addFileExtension( "tmp.job" );
     try {
       // create temporary job folder, to prevent adding new GridJob to project
       // IPath stateLocation = Activator.getDefault().getStateLocation();
-      IFolder tmpJobFolder = ( ( IFolder )parent.getResource() ).getFolder( tmpPath.lastSegment() );
+      IFolder tmpJobFolder = ( ( IContainer )parent.getResource() ).getFolder( tmpPath.removeFirstSegments( tmpPath.segmentCount() - 1 ) );
       tmpJobFolder.delete( true, null );
       tmpJobFolder.create( true, true, null );
       GridJob.createJobStructure( tmpJobFolder, ( GridJobID )id, description );
@@ -133,18 +135,19 @@ public class GridJobCreator extends AbstractGridJobCreator {
    * @return
    */
   private IFolder findJobFileName( final IGridJobDescription description,
-                                   final IFolder folder )
+                                   final IContainer container )
   {
     String baseName = description.getPath().removeFileExtension().lastSegment();
     // IFolder folder = ( IFolder )parent.getResource();
     String name = "." + baseName + ".job"; //$NON-NLS-1$ //$NON-NLS-2$
-    IFolder jobFolder = folder.getFolder( name );
+    IPath path = new Path( name );
+    IFolder jobFolder = container.getFolder( path );
     // IFile jobFile = folder.getFile( name );
     int jobNum = 0;
     while( jobFolder.exists() ) {
       jobNum++;
       name = "." + baseName + "[" + jobNum + "].job"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-      jobFolder = folder.getFolder( name );
+      jobFolder = container.getFolder( path );
     }
     return jobFolder;
   }

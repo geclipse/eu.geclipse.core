@@ -27,11 +27,6 @@ import eu.geclipse.core.Messages;
 public interface IGridProject extends IGridContainer {
   
   /**
-   * The name of the mount directory contained in a grid project.
-   */
-  public static final String DIR_MOUNTS = Messages.getString( "IGridProject.dir_mounts" ); //$NON-NLS-1$
-
-  /**
    * The name of the job description directory contained in a grid project.
    */
   public static final String DIR_JOBDESCRIPTIONS = Messages.getString( "IGridProject.dir_jobdescriptions" ); //$NON-NLS-1$
@@ -46,8 +41,29 @@ public interface IGridProject extends IGridContainer {
    */
   public static final String DIR_WORKFLOWS = Messages.getString( "IGridProject.dir_workflows" ); //$NON-NLS-1$
   
+  /**
+   * Get the project folder that is used by default by this project
+   * to store elements of the specified type. If no such folder is
+   * defined for this project the project itself is returned.
+   * 
+   * @param elementType The type of the element to be stored.
+   * @return The folder that is used by default to store elements of
+   * the specified type or the project itself if no such folder is
+   * defined for this project.
+   */
   public IGridContainer getProjectFolder( final Class< ? extends IGridElement > elementType );
   
+  /**
+   * Get the project folder that is used by default by this project
+   * to store elements of the specified type. If no such folder is
+   * defined for this project the project itself is returned.
+   * 
+   * @param element The element to be stored.
+   * @return The folder that is used by default to store elements of
+   * the specified type or the project itself if no such folder is
+   * defined for this project.
+   * @see #getProjectFolder(Class)
+   */
   public IGridContainer getProjectFolder( final IGridElement element );
   
   /**

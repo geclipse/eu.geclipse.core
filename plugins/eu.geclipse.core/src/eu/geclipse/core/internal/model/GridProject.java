@@ -117,7 +117,7 @@ public class GridProject
   }
   
   public IGridContainer getProjectFolder( final Class< ? extends IGridElement > elementType ) {
-    IGridContainer result = null;
+    IGridContainer result = this;
     for ( Class< ? > cls : this.projectFolders.keySet() ) {
       if ( cls.isAssignableFrom( elementType ) ) {
         result = this.projectFolders.get( cls );
