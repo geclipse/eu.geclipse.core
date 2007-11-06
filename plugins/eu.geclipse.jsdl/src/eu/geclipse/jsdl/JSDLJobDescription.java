@@ -1105,7 +1105,6 @@ public class JSDLJobDescription extends ResourceGridContainer
         }
       } catch( URISyntaxException e ) {
         // TODO katis
-        e.printStackTrace();
       }
     }
     return result;
