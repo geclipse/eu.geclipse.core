@@ -44,6 +44,7 @@ import org.eclipse.ui.ide.IDE;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.jsdl.JSDLJobDescription;
 import eu.geclipse.jsdl.model.DataStagingType;
@@ -452,7 +453,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
           IGridElement element = ( IGridElement )obj;
           IGridProject project = element.getProject();
           if( project != null ) {
-            IGridElement descriptions = project.findChild( IGridProject.DIR_JOBDESCRIPTIONS );
+            IGridElement descriptions = project.getProjectFolder( IGridJobDescription.class );
             if( descriptions != null ) {
               IPath cPath = descriptions.getPath();
               IPath ePath = element.getPath();
