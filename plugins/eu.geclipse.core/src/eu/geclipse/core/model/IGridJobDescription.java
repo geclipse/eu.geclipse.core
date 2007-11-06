@@ -17,7 +17,10 @@
 
 package eu.geclipse.core.model;
 
+import java.net.URI;
 import java.util.List;
+
+import eu.geclipse.core.GridException;
 
 /**
  * A grid element that describes a job on the Grid. Such descriptions are
@@ -41,14 +44,38 @@ public interface IGridJobDescription extends IGridContainer {
   List<String> getExecutableArguments();
   
   /**
-   * @return standard output for job
+   * @return filename on computing element for standard input
    */
-  String getInput();
+  String getStdInputFileName();
   
   /**
-   * @return standard input for job
+   * @return filename on computing element for standard output
    */
-  String getOutput();
+  String getStdOutputFileName();
   
+  /**
+   * @return filename on computing element for standard error
+   */
+  String getStdErrorFileName();  
   
+  /**
+   * @return {@link URI} to file containing standard output
+   * or <code>null</code> if std output is not staged out
+   * @throws GridException if URI cannot be created
+   */
+  URI getStdOutputUri() throws GridException;
+  
+  /**
+   * @return {@link URI} to file containing standard input
+   * or <code>null</code> if std input is not staged in
+   * @throws GridException if URI cannot be created
+   */
+  URI getStdInputUri() throws GridException;
+  
+  /**
+   * @return {@link URI} to file containing standard error
+   * or <code>null</code> if std error is not staged out
+   * @throws GridException if URI cannot be created
+   */
+  URI getStdErrorUri() throws GridException;
 }

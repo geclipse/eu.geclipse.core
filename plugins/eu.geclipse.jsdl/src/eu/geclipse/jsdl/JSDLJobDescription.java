@@ -19,6 +19,7 @@ import java.io.Reader;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -39,6 +40,8 @@ import org.eclipse.emf.ecore.util.FeatureMap.Entry;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMLMapImpl;
 
+import eu.geclipse.core.CoreProblems;
+import eu.geclipse.core.GridException;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
 import eu.geclipse.jsdl.internal.JsdlAdaptersPlugin;
@@ -655,7 +658,7 @@ public class JSDLJobDescription extends ResourceGridContainer
     }
   }
 
-  public String getInput() {
+  public String getStdInputFileName() {
     String inputString = null;
     POSIXApplicationType posixApp = getPosixApplication();
     if( posixApp != null && posixApp.getInput() != null ) {
@@ -664,7 +667,7 @@ public class JSDLJobDescription extends ResourceGridContainer
     return inputString;
   }
 
-  public String getOutput() {
+  public String getStdOutputFileName() {
     String outputString = null;
     POSIXApplicationType posixApp = getPosixApplication();
     if( posixApp != null && posixApp.getOutput() != null ) {
@@ -1028,6 +1031,10 @@ public class JSDLJobDescription extends ResourceGridContainer
     return result;
   }
 
+  /**
+   * @return pairs (filename on CE, source-uri) for staged-in files
+   */
+  @SuppressWarnings("unchecked")
   public Map<String, String> getDataStagingInStrings() {
     Map<String, String> result = new HashMap<String, String>();
     DocumentRoot dRoot = getDocumentRoot();
@@ -1044,6 +1051,9 @@ public class JSDLJobDescription extends ResourceGridContainer
     return result;
   }
 
+  /**
+   * @return pairs (filename on CE, target-uri) for staged-out files
+   */
   public Map<String, String> getDataStagingOutStrings() {
     Map<String, String> result = new HashMap<String, String>();
     DocumentRoot dRoot = getDocumentRoot();
@@ -1099,7 +1109,7 @@ public class JSDLJobDescription extends ResourceGridContainer
         // }
         // }
         if( testURI != null ) {
-          if( testURI.getScheme().equals( "file" ) ) {
+          if( testURI.getScheme().equals( "file" ) ) { //$NON-NLS-1$
             result.add( dataType );
           }
         }
@@ -1119,9 +1129,9 @@ public class JSDLJobDescription extends ResourceGridContainer
    */
   public DataStagingType getStdInputDataType() {
     DataStagingType result = null;
-    if( getInput() != null ) {
+    if( getStdInputFileName() != null ) {
       for( DataStagingType dataType : getDataStagingIn() ) {
-        if( dataType.getFileName().equals( getInput() ) ) {
+        if( dataType.getFileName().equals( getStdInputFileName() ) ) {
           result = dataType;
         }
       }
@@ -1137,4 +1147,133 @@ public class JSDLJobDescription extends ResourceGridContainer
   public void addDataStagingType( final DataStagingType data ) {
     this.jobDescription.getDataStaging().add( data );
   }
+  
+  /**
+   * Find staging with passed filename
+   * @param filename to find
+   * @param output <code>true</code> if search in staged-out files, <code>false</code> if search in staged-in files
+   * @return
+   */
+  @SuppressWarnings("unchecked")
+  private DataStagingType findStaging( final String filename, final boolean output ) {
+    DataStagingType stagingType = null;
+    EList<DataStagingType> dataStaging = this.jobDescription.getDataStaging();
+    
+    for( Iterator<DataStagingType> iterator = dataStaging.iterator(); iterator.hasNext() && stagingType == null; )
+    {
+      DataStagingType curStaging = iterator.next();
+      
+      if( ( ( output &&  curStaging.getTarget() != null )
+          || ( !output && curStaging.getSource() != null ) )
+          && filename.equals( curStaging.getFileName() ) ) {
+        stagingType = curStaging;
+      }
+    }
+    
+    return stagingType;
+  }
+  
+  public java.net.URI getStdOutputUri() throws GridException {
+    java.net.URI uri = null;    
+    String stdOutputFileName = getStdOutputFileName();
+    
+    if( stdOutputFileName != null ) {
+      DataStagingType stdOutputDataType = findStaging( stdOutputFileName, true );
+
+      if( stdOutputDataType != null ) {
+        SourceTargetType target = stdOutputDataType.getTarget();
+        
+        if( target != null
+            && target.getURI() != null ) {
+          DataStagingType targetStaging = findStaging( target.getURI(), true);
+          
+          if( targetStaging != null
+              && targetStaging.getTarget() != null
+              && targetStaging.getTarget().getURI() != null ) {
+            try {              
+              
+              uri = new java.net.URI( targetStaging.getTarget().getURI() );
+            } catch( URISyntaxException exception ) {
+              throw new GridException( CoreProblems.MALFORMED_URL, exception, 
+                                       String.format( Messages.getString("JSDLJobDescription.errWrongOutputUri"), targetStaging.getTarget().getURI() ) ); //$NON-NLS-1$
+            }            
+          }
+        }
+      }
+    }
+
+    return uri;
+  }
+
+  public java.net.URI getStdInputUri() throws GridException {
+    java.net.URI uri = null;    
+    String stdInputFileName = getStdInputFileName();
+    
+    if( stdInputFileName != null ) {
+      DataStagingType stdInputDataType = findStaging( stdInputFileName, false );
+
+      if( stdInputDataType != null ) {
+        SourceTargetType source = stdInputDataType.getSource();
+        
+        if( source != null
+            && source.getURI() != null ) {
+          DataStagingType sourceStaging = findStaging( source.getURI(), false );
+          
+          if( sourceStaging != null
+              && sourceStaging.getSource() != null
+              && sourceStaging.getSource().getURI() != null ) {
+            try {
+              uri = new java.net.URI( sourceStaging.getSource().getURI() );
+            } catch( URISyntaxException exception ) {
+              throw new GridException( CoreProblems.MALFORMED_URL, exception, 
+                                       String.format( Messages.getString("JSDLJobDescription.errWrongInputUri"), sourceStaging.getSource().getURI() ) ); //$NON-NLS-1$
+            }            
+          }
+        }
+      }
+    }
+
+    return uri;
+  }
+
+  public String getStdErrorFileName() {
+    String errorFilename = null;
+    POSIXApplicationType posixApp = getPosixApplication();
+    if( posixApp != null && posixApp.getError() != null ) {
+      errorFilename = posixApp.getError().getValue();
+    }
+    return errorFilename;
+  }
+
+  public java.net.URI getStdErrorUri() throws GridException {
+    java.net.URI uri = null;    
+    String stdErrFileName = getStdErrorFileName();
+    
+    if( stdErrFileName != null ) {
+      DataStagingType stdErrDataType = findStaging( stdErrFileName, true );
+
+      if( stdErrDataType != null ) {
+        SourceTargetType target = stdErrDataType.getTarget();
+        
+        if( target != null
+            && target.getURI() != null ) {
+          DataStagingType targetStaging = findStaging( target.getURI(), true );
+          
+          if( targetStaging != null
+              && targetStaging.getTarget() != null
+              && targetStaging.getTarget().getURI() != null ) {
+            try {              
+              uri = new java.net.URI( targetStaging.getTarget().getURI() );
+            } catch( URISyntaxException exception ) {
+              throw new GridException( CoreProblems.MALFORMED_URL, exception, 
+                                       String.format( Messages.getString("JSDLJobDescription.errWrongErrorUri"), targetStaging.getTarget().getURI() ) ); //$NON-NLS-1$
+            }            
+          }
+        }
+      }
+    }
+
+    return uri;
+  }
+  
 }

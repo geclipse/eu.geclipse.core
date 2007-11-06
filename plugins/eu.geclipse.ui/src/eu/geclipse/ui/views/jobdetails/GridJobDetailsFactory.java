@@ -189,7 +189,7 @@ public class GridJobDetailsFactory implements IJobDetailsFactory {
       protected String getValue( final IGridJob gridJob ) {
         String value = null;
         if( gridJob.getJobDescription() != null ) {
-          value = gridJob.getJobDescription().getInput();
+          value = gridJob.getJobDescription().getStdInputFileName();
         }
         return value;
       }
@@ -206,7 +206,7 @@ public class GridJobDetailsFactory implements IJobDetailsFactory {
       protected String getValue( final IGridJob gridJob ) {
         String value = null;
         if( gridJob.getJobDescription() != null ) {
-          value = gridJob.getJobDescription().getOutput();
+          value = gridJob.getJobDescription().getStdOutputFileName();
         }
         return value;
       }

@@ -15,8 +15,11 @@
  *****************************************************************************/
 package eu.geclipse.ui.properties;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+
+import eu.geclipse.core.GridException;
 import eu.geclipse.core.model.IGridJobDescription;
 
 
@@ -49,12 +52,16 @@ public class GridJobDescSource extends AbstractPropertySource<IGridJobDescriptio
   }
   
   static private List<IProperty<IGridJobDescription>> createProperties() {
-    List<IProperty<IGridJobDescription>> propertiesList = new ArrayList<IProperty<IGridJobDescription>>( 3 );
+    List<IProperty<IGridJobDescription>> propertiesList = new ArrayList<IProperty<IGridJobDescription>>();
     propertiesList.add( createDescription() );
     propertiesList.add( createPropertyExecutable() );
     propertiesList.add( createPropertyExecutableArg() );
     propertiesList.add( createPropertyInput() ); 
     propertiesList.add( createPropertyOutput() );
+    propertiesList.add( createPropertyError() );
+    propertiesList.add( createPropertyStdOutputUri() );
+    propertiesList.add( createPropertyStdInputUri() );
+    propertiesList.add( createPropertyStdErrorUri() );
     return propertiesList;
   }
   
@@ -111,7 +118,7 @@ public class GridJobDescSource extends AbstractPropertySource<IGridJobDescriptio
           @Override
           public Object getValue( final IGridJobDescription jobDescription )
           {
-            return jobDescription.getInput();
+            return jobDescription.getStdInputFileName();
           }      
     };
   }
@@ -123,9 +130,93 @@ public class GridJobDescSource extends AbstractPropertySource<IGridJobDescriptio
           @Override
           public Object getValue( final IGridJobDescription jobDescription )
           {
-            return jobDescription.getOutput();
+            return jobDescription.getStdOutputFileName();
+          }      
+    };
+  }
+  
+  static private IProperty<IGridJobDescription> createPropertyError() {
+    return new AbstractProperty<IGridJobDescription>( Messages.getString("GridJobDescSource.propertyStdErrFilename"), //$NON-NLS-1$
+        Messages.getString( "GridJobDescSource.categoryApplication" ) ) { //$NON-NLS-1$
+
+          @Override
+          public Object getValue( final IGridJobDescription jobDescription )
+          {
+            return jobDescription.getStdErrorFileName();
+          }      
+    };
+  }    
+
+  static private IProperty<IGridJobDescription> createPropertyStdOutputUri() {
+    return new AbstractProperty<IGridJobDescription>( Messages.getString("GridJobDescSource.propertyStdOutputUri"), //$NON-NLS-1$
+        Messages.getString( "GridJobDescSource.categoryApplication" ), false ) { //$NON-NLS-1$
+
+          @Override
+          public Object getValue( final IGridJobDescription jobDescription )
+          {
+            String value = null;
+            
+            try {
+              URI stdOutputUri = jobDescription.getStdOutputUri();
+              
+              if( stdOutputUri != null ) {
+                value = stdOutputUri.toString();
+              }              
+            } catch( GridException exception ) {
+              // ignore exceptions
+            }
+            
+            return value;
           }      
     };
   }  
+  
+  static private IProperty<IGridJobDescription> createPropertyStdInputUri() {
+    return new AbstractProperty<IGridJobDescription>( Messages.getString("GridJobDescSource.propertyStdInputUri"), //$NON-NLS-1$
+        Messages.getString( "GridJobDescSource.categoryApplication" ), false ) { //$NON-NLS-1$
+
+          @Override
+          public Object getValue( final IGridJobDescription jobDescription )
+          {
+            String value = null;
+            
+            try {
+              URI stdInputUri = jobDescription.getStdInputUri();
+              
+              if( stdInputUri != null ) {
+                value = stdInputUri.toString();
+              }              
+            } catch( GridException exception ) {
+              // ignore exceptions
+            }
+            
+            return value;
+          }      
+    };
+  }
+  
+  static private IProperty<IGridJobDescription> createPropertyStdErrorUri() {
+    return new AbstractProperty<IGridJobDescription>( Messages.getString("GridJobDescSource.propertyStdErrUri"), //$NON-NLS-1$
+        Messages.getString( "GridJobDescSource.categoryApplication" ), false ) { //$NON-NLS-1$
+
+          @Override
+          public Object getValue( final IGridJobDescription jobDescription )
+          {
+            String value = null;
+            
+            try {
+              URI stdErrorUri = jobDescription.getStdErrorUri();
+              
+              if( stdErrorUri != null ) {
+                value = stdErrorUri.toString();
+              }              
+            } catch( GridException exception ) {
+              // ignore exceptions
+            }
+            
+            return value;
+          }      
+    };
+  }    
   
 }
