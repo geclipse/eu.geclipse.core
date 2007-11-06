@@ -113,7 +113,7 @@ public class GridJobDescSource extends AbstractPropertySource<IGridJobDescriptio
   
   static private IProperty<IGridJobDescription> createPropertyInput() {
     return new AbstractProperty<IGridJobDescription>( Messages.getString( "GridJobDescSource.propertyInput" ), //$NON-NLS-1$
-        Messages.getString( "GridJobDescSource.categoryApplication" ) ) { //$NON-NLS-1$
+        Messages.getString( "GridJobDescSource.categoryApplication" ), false ) { //$NON-NLS-1$
 
           @Override
           public Object getValue( final IGridJobDescription jobDescription )
@@ -125,7 +125,7 @@ public class GridJobDescSource extends AbstractPropertySource<IGridJobDescriptio
   
   static private IProperty<IGridJobDescription> createPropertyOutput() {
     return new AbstractProperty<IGridJobDescription>( Messages.getString( "GridJobDescSource.propertyOutput" ), //$NON-NLS-1$
-        Messages.getString( "GridJobDescSource.categoryApplication" ) ) { //$NON-NLS-1$
+        Messages.getString( "GridJobDescSource.categoryApplication" ), false ) { //$NON-NLS-1$
 
           @Override
           public Object getValue( final IGridJobDescription jobDescription )
@@ -137,7 +137,7 @@ public class GridJobDescSource extends AbstractPropertySource<IGridJobDescriptio
   
   static private IProperty<IGridJobDescription> createPropertyError() {
     return new AbstractProperty<IGridJobDescription>( Messages.getString("GridJobDescSource.propertyStdErrFilename"), //$NON-NLS-1$
-        Messages.getString( "GridJobDescSource.categoryApplication" ) ) { //$NON-NLS-1$
+        Messages.getString( "GridJobDescSource.categoryApplication" ), false ) { //$NON-NLS-1$
 
           @Override
           public Object getValue( final IGridJobDescription jobDescription )

@@ -19,12 +19,13 @@ import java.io.Reader;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EClass;
@@ -1148,91 +1149,57 @@ public class JSDLJobDescription extends ResourceGridContainer
     this.jobDescription.getDataStaging().add( data );
   }
   
-  /**
-   * Find staging with passed filename
-   * @param filename to find
-   * @param output <code>true</code> if search in staged-out files, <code>false</code> if search in staged-in files
-   * @return
-   */
-  @SuppressWarnings("unchecked")
-  private DataStagingType findStaging( final String filename, final boolean output ) {
-    DataStagingType stagingType = null;
-    EList<DataStagingType> dataStaging = this.jobDescription.getDataStaging();
-    
-    for( Iterator<DataStagingType> iterator = dataStaging.iterator(); iterator.hasNext() && stagingType == null; )
-    {
-      DataStagingType curStaging = iterator.next();
-      
-      if( ( ( output &&  curStaging.getTarget() != null )
-          || ( !output && curStaging.getSource() != null ) )
-          && filename.equals( curStaging.getFileName() ) ) {
-        stagingType = curStaging;
-      }
-    }
-    
-    return stagingType;
-  }
-  
-  public java.net.URI getStdOutputUri() throws GridException {
-    java.net.URI uri = null;    
-    String stdOutputFileName = getStdOutputFileName();
-    
-    if( stdOutputFileName != null ) {
-      DataStagingType stdOutputDataType = findStaging( stdOutputFileName, true );
-
-      if( stdOutputDataType != null ) {
-        SourceTargetType target = stdOutputDataType.getTarget();
-        
-        if( target != null
-            && target.getURI() != null ) {
-          DataStagingType targetStaging = findStaging( target.getURI(), true);
-          
-          if( targetStaging != null
-              && targetStaging.getTarget() != null
-              && targetStaging.getTarget().getURI() != null ) {
-            try {              
-              
-              uri = new java.net.URI( targetStaging.getTarget().getURI() );
-            } catch( URISyntaxException exception ) {
-              throw new GridException( CoreProblems.MALFORMED_URL, exception, 
-                                       String.format( Messages.getString("JSDLJobDescription.errWrongOutputUri"), targetStaging.getTarget().getURI() ) ); //$NON-NLS-1$
-            }            
+  private java.net.URI findStagingAbsoluteUri( final String filename,
+                                               final boolean stageOut )
+    throws GridException
+  {
+    java.net.URI uri = null;
+    Map<String, String> stagingsMap = stageOut
+                                              ? getDataStagingOutStrings()
+                                              : getDataStagingInStrings();
+    try {
+      if( stagingsMap != null ) {
+        String currentFilename = filename;
+        // if current uri is local, then check again if it's staged-out
+        for( String currentUriString = stagingsMap.get( currentFilename );
+              uri == null && currentUriString != null; 
+              currentUriString = stagingsMap.get( currentFilename ) )
+        {
+          java.net.URI currentUri = new java.net.URI( currentUriString );
+          String pathString = currentUri.getPath();
+          if( pathString != null ) {
+            IPath path = new Path( pathString );
+            if( path.isAbsolute() ) {
+              uri = currentUri;
+            }
+            stagingsMap.remove( currentFilename ); // prevent endless iteration
+            currentFilename = currentUriString;
           }
         }
       }
+    } catch( URISyntaxException exception ) {
+      throw new GridException( CoreProblems.MALFORMED_URL,
+                               exception,
+                               String.format( Messages.getString( "errWrongUri" ), filename ) ); //$NON-NLS-1$
     }
-
+    return uri;
+  }
+  
+  public java.net.URI getStdOutputUri() throws GridException {
+    java.net.URI uri = null;
+    String stdOutputFileName = getStdOutputFileName();
+    if( stdOutputFileName != null ) {
+      uri = findStagingAbsoluteUri( stdOutputFileName, true );
+    }
     return uri;
   }
 
   public java.net.URI getStdInputUri() throws GridException {
-    java.net.URI uri = null;    
+    java.net.URI uri = null;
     String stdInputFileName = getStdInputFileName();
-    
     if( stdInputFileName != null ) {
-      DataStagingType stdInputDataType = findStaging( stdInputFileName, false );
-
-      if( stdInputDataType != null ) {
-        SourceTargetType source = stdInputDataType.getSource();
-        
-        if( source != null
-            && source.getURI() != null ) {
-          DataStagingType sourceStaging = findStaging( source.getURI(), false );
-          
-          if( sourceStaging != null
-              && sourceStaging.getSource() != null
-              && sourceStaging.getSource().getURI() != null ) {
-            try {
-              uri = new java.net.URI( sourceStaging.getSource().getURI() );
-            } catch( URISyntaxException exception ) {
-              throw new GridException( CoreProblems.MALFORMED_URL, exception, 
-                                       String.format( Messages.getString("JSDLJobDescription.errWrongInputUri"), sourceStaging.getSource().getURI() ) ); //$NON-NLS-1$
-            }            
-          }
-        }
-      }
+      uri = findStagingAbsoluteUri( stdInputFileName, false );
     }
-
     return uri;
   }
 
@@ -1246,33 +1213,11 @@ public class JSDLJobDescription extends ResourceGridContainer
   }
 
   public java.net.URI getStdErrorUri() throws GridException {
-    java.net.URI uri = null;    
+    java.net.URI uri = null;
     String stdErrFileName = getStdErrorFileName();
-    
     if( stdErrFileName != null ) {
-      DataStagingType stdErrDataType = findStaging( stdErrFileName, true );
-
-      if( stdErrDataType != null ) {
-        SourceTargetType target = stdErrDataType.getTarget();
-        
-        if( target != null
-            && target.getURI() != null ) {
-          DataStagingType targetStaging = findStaging( target.getURI(), true );
-          
-          if( targetStaging != null
-              && targetStaging.getTarget() != null
-              && targetStaging.getTarget().getURI() != null ) {
-            try {              
-              uri = new java.net.URI( targetStaging.getTarget().getURI() );
-            } catch( URISyntaxException exception ) {
-              throw new GridException( CoreProblems.MALFORMED_URL, exception, 
-                                       String.format( Messages.getString("JSDLJobDescription.errWrongErrorUri"), targetStaging.getTarget().getURI() ) ); //$NON-NLS-1$
-            }            
-          }
-        }
-      }
+      uri = findStagingAbsoluteUri( stdErrFileName, true );
     }
-
     return uri;
   }
   
