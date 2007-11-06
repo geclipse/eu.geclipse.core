@@ -16,11 +16,22 @@
  *****************************************************************************/
 package eu.geclipse.core.internal.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import org.eclipse.core.runtime.jobs.Job;
+
+import eu.geclipse.core.JobStatusUpdater;
 import eu.geclipse.core.internal.model.AbstractGridElementManager;
+import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridModelListener;
+import eu.geclipse.core.model.IGridResource;
+import eu.geclipse.core.model.IGridTest;
 import eu.geclipse.core.model.IGridTestManager;
+import eu.geclipse.core.model.ITestable;
 
 /**
  * Abstract class that makes some core's internal interfaces available for
@@ -30,32 +41,70 @@ public class GridTestManager
   extends
   AbstractGridElementManager implements IGridModelListener, IGridTestManager
 {
-  
-private static GridTestManager singleton;
-  
   /**
    * The name of this manager.
    */
   private static final String NAME = ".tests"; //$NON-NLS-1$
 
+  private static GridTestManager singleton;
+  
+  private List<IGridTest> tests = null;
+  
+  public GridTestManager() {
+    super();
+    this.tests = new ArrayList<IGridTest>();
+  }
+  
+  @Override
+  public boolean addElement( final IGridElement element ) throws GridModelException {
+    boolean flag;
+    flag = super.addElement( element );
+    if ( element instanceof IGridTest ) {
+      IGridTest test = (IGridTest) element;
+      this.tests.add( test );
+    }
+    return flag;
+  }
+  
+  @Override
+  public boolean removeElement( final IGridElement element ) {
+    boolean flag;
+    flag = super.removeElement( element );
+    if ( element instanceof IGridTest ) {
+      this.tests.remove( element );
+    }
+    return flag;
+  }
+  
+  @Override
+  public void addGridModelListener( final IGridModelListener listener ) {
+    //TODO
+  }
+  
+  public void addTest( final IGridTest test ) {
+    this.tests.add( test );
+  }
+  
   public void gridModelChanged( final IGridModelEvent event ) {
-    // TODO Auto-generated method stub
-    
+    if( event.getType() == IGridModelEvent.ELEMENTS_REMOVED ) {
+      IGridElement[] removedElements = event.getElements();
+      for( IGridElement elem : removedElements ) {
+        if( elem instanceof IGridTest ) {
+          IGridTest test = ( IGridTest )elem;
+          this.tests.remove( test );
+        }
+      }
+    }
   }
 
   public boolean canManage( final IGridElement element ) {
-    // TODO Auto-generated method stub
-    return false;
+    return element instanceof IGridTest;
   }
 
   public String getName() {
     // TODO Auto-generated method stub
-    return null;
+    return ".tests";
   }
-  
-  
-  
- 
   
   /**
    * Gets singleton of this manager.
@@ -68,6 +117,36 @@ private static GridTestManager singleton;
     }
     return singleton;
   }
+  
+  public List< IGridTest > getAvaliableTests( final Object resource ) {
+    //TODO implement method
+    List< IGridTest > tests = new ArrayList< IGridTest >();
+    if ( resource instanceof IGridTest ) {
+      IGridTest parentTest = ( IGridTest ) resource;
+      for ( IGridTest test : this.tests ) {
+        if ( test.getName().equalsIgnoreCase( parentTest.getName() ) ) {
+          tests = parentTest.getChildrenTests();
+        }
+      }
+    }
+    return tests;
+  }
+  
+  public IGridTest getTest( final String name ) {
+    IGridTest result = null;
+    for ( IGridTest test: this.tests ) {
+      if ( test.getName().equalsIgnoreCase( name ) ) {
+        result = test;
+      }
+    }
+    return result;
+  }
+  
+  public List<IGridTest> getStructuralTests() {
+    //TODO implement method
+    return this.tests;
+  }
+  
 //  
 //  public void gridModelChanged( final IGridModelEvent event ) {
 //    if ( event.getType() == IGridModelEvent.ELEMENTS_REMOVED ) {
@@ -90,52 +169,11 @@ private static GridTestManager singleton;
 //    return result;
 //  }
 //  
-//  @Override
-//  public boolean addElement( final IGridElement element ) throws GridModelException {
-//    boolean flag;
-//    flag = super.addElement( element );
-//    if ( element instanceof IGridTest ) {
-//      IGridTest test = (IGridTest) element;
-//      if ( test.isStructural() ){
-//        StructuralTestUpdater updater = new StructuralTestUpdater( test.getName(), test );
-//        this.structuralTests.put( test, updater );
-//      } else {
-//        IGridTest parent = test.getParentTest();
-//        if ( !( addSingleTest( parent, test ) ) ) {
-//          //TODO throw new NoSuchStructuralTestException();
-//        }
-//      }
-//      informListeners();
-//    }
-//    return flag;
-//  }
-//  
-//  @Override
-//  public boolean removeElement( final IGridElement element ) {
-//    boolean flag;
-//    flag = super.removeElement( element );
-//    if ( element instanceof IGridTest ) {
-//      this.structuralTests.remove( element );
-//    }
-//    return flag;
-//  }
-//
-//  public boolean canManage( final IGridElement element ) {
-//    return element instanceof IGridTest;
-//  }
 //
 //  public String getName() {
 //    return NAME;
 //  }
 //  
-//  public List< IGridTest > getAvaliableTests( final Object resource ) {
-//    List< IGridTest > tests = null;
-//    //TODO change to ITestable later on
-//    if ( resource instanceof ITestable ) {
-//      tests = searchTestsForResource( ( IGridResource )resource );
-//    }
-//    return tests;
-//  }
 //
 //  /**
 //   * Returns structural tests for specified resource 

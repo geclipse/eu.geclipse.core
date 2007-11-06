@@ -18,8 +18,8 @@ package eu.geclipse.core.model;
 
 public interface IGridTestStatusListener {
   
-  public void statusChanged( final IGridTest test );
+  //public void statusChanged( final IGridTest test );
   
-  public void statusChanged();
+ // public void statusChanged();
   
 }

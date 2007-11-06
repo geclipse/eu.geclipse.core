@@ -17,6 +17,7 @@
 package eu.geclipse.core.model;
 
 import java.util.Calendar;
+import java.util.List;
 
 import org.eclipse.core.runtime.jobs.IJobStatus;
 
@@ -26,6 +27,15 @@ import org.eclipse.core.runtime.jobs.IJobStatus;
  * Interface for structural tests and simple tests.
  */
 public interface IGridTest extends IGridElement, IManageable {
+  
+  /*
+   * Method responsible for returning children
+   */
+  public List<IGridTest> getChildrenTests();
+  
+  public String getType();
+  
+  public boolean hasChildrenTests();
   
 //  public static String TEST_UNKNOWN_INTERPRETATION = "Unknown";
 //  

@@ -20,13 +20,16 @@ import java.util.List;
 
 public interface IGridTestManager extends IGridElementManager {
   
-//  public List<IGridTest> getStructuralTests();
+  public List<IGridTest> getStructuralTests();
 //  
 //  public void addStrTest( final IGridTest test );
 //  
-//  public List< IGridTest > getAvaliableTests( final Object resource );
+  public List< IGridTest > getAvaliableTests( final Object resource );
+  
+  //TODO usunac
+  public void addTest( IGridTest test );
 //  
-//  public IGridTest getStructuralTest( final String name );
+  public IGridTest getTest( final String name );
 //  
 //  public IGridTest getSimpleTest( final String name, final String parentTestName );
 }
