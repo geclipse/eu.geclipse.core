@@ -15,10 +15,11 @@
 
 package eu.geclipse.core.internal.model;
 
-import java.util.Hashtable;
 import java.util.List;
 
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -55,9 +56,6 @@ public class GridProject
   private static final String VO_ATTRIBUTE = "vo"; //$NON-NLS-1$
   
   private IVirtualOrganization vo;
-  
-  private Hashtable< Class< ? >, IGridContainer > projectFolders
-    = new Hashtable< Class< ? >, IGridContainer >();
   
   /**
    * Default constructor that constructs a grid project out of an
@@ -117,14 +115,63 @@ public class GridProject
   }
   
   public IGridContainer getProjectFolder( final Class< ? extends IGridElement > elementType ) {
+    
     IGridContainer result = this;
-    for ( Class< ? > cls : this.projectFolders.keySet() ) {
-      if ( cls.isAssignableFrom( elementType ) ) {
-        result = this.projectFolders.get( cls );
-        break;
+    
+    ProjectScope projectScope = new ProjectScope( ( IProject ) getResource() );
+    Preferences folderNode = projectScope.getNode( PROJECT_FOLDER_NODE );
+    
+    ExtensionManager extm = new ExtensionManager();
+    List< IConfigurationElement > configurationElements
+      = extm.getConfigurationElements( Extensions.PROJECT_FOLDER_POINT, Extensions.PROJECT_FOLDER_ELEMENT );
+    
+    for ( IConfigurationElement element : configurationElements ) {
+      
+      String id = element.getAttribute( Extensions.PROJECT_FOLDER_ID_ATTRIBUTE );
+      String label = folderNode.get( id, null );
+      
+      if ( label != null ) {
+        String className = element.getAttribute( Extensions.PROJECT_FOLDER_ELEMENTCLASS_ATTRIBUTE );
+        try {
+          Class< ? > cls = Class.forName( className );
+          if ( cls.isAssignableFrom( elementType ) ) {
+            result = getProjectFolder( label );
+            break;
+          }
+        } catch ( ClassNotFoundException cnfExc ) {
+          Activator.logException( cnfExc );
+        }
       }
+      
     }
+    
     return result;
+    
+  }
+  
+  private LocalFolder getProjectFolder( final String name ) {
+    
+    LocalFolder result = null;
+    
+    IGridElement child = findChild( name );
+    
+    if ( child == null ) {
+      IProject project = ( IProject ) getResource();
+      IFolder folder = project.getFolder( name );
+      if ( ! folder.exists() ) {
+        try {
+          folder.create( IResource.FORCE, true, null );
+          result = getProjectFolder( name );
+        } catch (CoreException e) {
+          // Do nothing, just ignore
+        }
+      }
+    } else if ( child instanceof LocalFolder ) {
+      result = ( LocalFolder ) child;
+    }
+    
+    return result;
+    
   }
   
   public IGridContainer getProjectFolder( final IGridElement element ) {
@@ -200,7 +247,7 @@ public class GridProject
         }
       }
       
-      loadProjectFolders( projectScope );
+      //loadProjectFolders( projectScope );
       
     } catch( BackingStoreException bsExc ) {
       Activator.logException( bsExc );
@@ -210,34 +257,4 @@ public class GridProject
     
   }
   
-  private void loadProjectFolders( final IScopeContext projectScope )
-      throws BackingStoreException {
-    
-    this.projectFolders.clear();
-    
-    Preferences folderNode = projectScope.getNode( PROJECT_FOLDER_NODE );
-    
-    ExtensionManager extm = new ExtensionManager();
-    List< IConfigurationElement > configurationElements
-      = extm.getConfigurationElements( Extensions.PROJECT_FOLDER_POINT, Extensions.PROJECT_FOLDER_ELEMENT );
-    
-    for ( IConfigurationElement element : configurationElements ) {
-      String id = element.getAttribute( Extensions.PROJECT_FOLDER_ID_ATTRIBUTE );
-      String label = folderNode.get( id, null );
-      if ( label != null ) {
-        IGridElement child = findChild( label );
-        if ( ( child != null ) && ( child instanceof IGridContainer ) ) {
-          String className = element.getAttribute( Extensions.PROJECT_FOLDER_ELEMENTCLASS_ATTRIBUTE );
-          try {
-            Class< ? > cls = Class.forName( className );
-            this.projectFolders.put( cls, ( IGridContainer ) child );
-          } catch ( ClassNotFoundException cnfExc ) {
-            Activator.logException( cnfExc );
-          }
-        }
-      }
-    }
-    
-  }
-
 }

@@ -24,6 +24,7 @@ import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ProjectScope;
+import org.eclipse.core.resources.ResourceAttributes;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -141,7 +142,7 @@ public class GridProjectCreationOperation implements IRunnableWithProgress {
     
   }
   
-  private void createProjectDirectory( final IProject project,
+  private void createProjectFolder( final IProject project,
                                        final String name ) {
     if ( ( name != null ) && ( name.length() != 0 ) ) {
       IFolder folder = project.getFolder( new Path( name ) );
@@ -159,7 +160,7 @@ public class GridProjectCreationOperation implements IRunnableWithProgress {
                                        final GridProjectProperties props ) {
     Hashtable< String, String > projectFolders = props.getProjectFolders();
     for ( String label : projectFolders.values() ) {
-      createProjectDirectory( project, label );
+      createProjectFolder( project, label );
     }
   }
   

@@ -15,8 +15,6 @@
 
 package eu.geclipse.core.model;
 
-import eu.geclipse.core.Messages;
-
 /**
  * Grid element for projects in the grid model. These projects
  * have not necessarily to be Grid projects but can also be any
@@ -25,21 +23,6 @@ import eu.geclipse.core.Messages;
  * true, it contains a number of standard folders.
  */
 public interface IGridProject extends IGridContainer {
-  
-  /**
-   * The name of the job description directory contained in a grid project.
-   */
-  //public static final String DIR_JOBDESCRIPTIONS = Messages.getString( "IGridProject.dir_jobdescriptions" ); //$NON-NLS-1$
-  
-  /**
-   * The name of the jobs directory contained in a grid project.
-   */
-  public static final String DIR_JOBS = Messages.getString( "IGridProject.dir_jobs" ); //$NON-NLS-1$
-  
-  /**
-   * The name of the workflows directory contained in a grid project.
-   */
-  public static final String DIR_WORKFLOWS = Messages.getString( "IGridProject.dir_workflows" ); //$NON-NLS-1$
   
   /**
    * Get the project folder that is used by default by this project
@@ -67,7 +50,7 @@ public interface IGridProject extends IGridContainer {
   public IGridContainer getProjectFolder( final IGridElement element );
   
   /**
-   * Get the virtual organisation that is associated with this project.
+   * Get the virtual organization that is associated with this project.
    * 
    * @return The associated {@link IVirtualOrganization}.
    */
@@ -87,5 +70,7 @@ public interface IGridProject extends IGridContainer {
    * @return True if this project is open, false otherwise.
    */
   public boolean isOpen();
+  
+  //public boolean isProjectFolder( final IGridContainer folder );
   
 }
