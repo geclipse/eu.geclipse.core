@@ -165,12 +165,19 @@ public class CandidateHostsDialog extends Dialog {
     try {
       
       Collection <String> computingElements =  new ArrayList<String>();
-      IGridComputing[] gridComputings = this.jobDescription.getProject().getVO().getComputing() ;
+      IGridComputing[] gridComputings =  this.jobDescription.getProject().getVO().getComputing() ;
       String hostnameOnly;
           
       for (int i=0; i < gridComputings.length; i++){        
        
-        hostnameOnly = gridComputings[i].getName().substring( 0 , gridComputings[i].getName().indexOf( ":" ) ); //$NON-NLS-1$
+        /* Get only the CE hostname substring
+         * 
+         * Start from (last occurence of empty space + 1) to remove the "CE @ " prefix.
+         * Finish to the indexOf ":" character to remove any trailing characters.
+         * 
+         */
+        hostnameOnly = gridComputings[i].getName().substring( gridComputings[i].getName().lastIndexOf( " " )+1 //$NON-NLS-1$
+                                                             , gridComputings[i].getName().indexOf( ":" ) ); //$NON-NLS-1$
       
         if (this.existingHosts != null ) {
          

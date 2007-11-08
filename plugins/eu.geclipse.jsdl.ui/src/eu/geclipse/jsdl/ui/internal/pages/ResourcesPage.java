@@ -333,7 +333,8 @@ public final class ResourcesPage extends FormPage
     lblHostName.setLayoutData( gd );
     
     
-    Table tblHosts = new Table( client, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL );
+    Table tblHosts = new Table( client, SWT.BORDER | SWT.H_SCROLL 
+                                      | SWT.V_SCROLL | SWT.MULTI );
     gd = new GridData( GridData.FILL_BOTH );
     gd.grabExcessHorizontalSpace = true;
     gd.grabExcessVerticalSpace = true;

@@ -346,42 +346,60 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     
     int featureID = JsdlPackage.RESOURCES_TYPE__CANDIDATE_HOSTS;
     
+    eStructuralFeature = this.candidateHosts.eClass()
+                                            .getEStructuralFeature( featureID );
+    
     IStructuredSelection structSelection 
                               = ( IStructuredSelection ) viewer.getSelection();
     
-    if (structSelection != null) {
-  
-    
-    eStructuralFeature = this.candidateHosts.eClass()
-                                            .getEStructuralFeature( featureID );
 
-    Object feature = structSelection.getFirstElement();
+    if (structSelection != null) {
+      
     
-    try {
-    /* Delete only Multi-Valued Elements */
+      Iterator<?> it = structSelection.iterator();
+
+      /*
+       * Iterate over the selections and delete them from the model.
+       */
+      while ( it.hasNext() ) {
+    
+        Object feature = it.next();
+    
+        try {
+          /* Delete only Multi-Valued Elements */
+          
+          if (!this.adapterRefreshed) {
       
-      if (!this.adapterRefreshed) {
-      
-    ((java.util.List<?>)this.candidateHosts.eGet(eStructuralFeature))
-                                                             .remove(feature);
-    contentChanged();
+//            ((java.util.List<?>)this.candidateHosts.eGet(eStructuralFeature))
+//                                                             .remove(feature);
+            
+            this.candidateHosts.getHostName().remove( feature );
+            
+            if ( this.candidateHosts.getHostName().size() == 0 ) {
+              EcoreUtil.remove( this.candidateHosts );
+              
+            }
+            contentChanged();
+    
+          }
+        else {
+          viewer.remove( feature );
+        }
+          
+      } //end try
+      catch ( Exception e ) {
+        Activator.logException( e );
       }
-      else {
-        viewer.remove( feature );
-      }
-}
-    catch ( Exception e ) {
-      Activator.logException( e );
-    }
     
     /*
      * Refresh the table viewer and notify the editor that the page content has
      * changed.
      */  
     viewer.refresh();
-//    contentChanged();
     
-    }
+      } // end While
+      
+    }// end_if
     
     
   }

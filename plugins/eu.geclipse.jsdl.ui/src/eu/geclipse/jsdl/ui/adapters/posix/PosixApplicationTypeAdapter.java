@@ -1309,7 +1309,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
      */
     while ( it.hasNext() ) {
     
-      Object feature = structSelection.getFirstElement();
+      Object feature = it.next();
         
       if (feature instanceof ArgumentType) {
       
