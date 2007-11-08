@@ -28,6 +28,11 @@ import org.eclipse.core.runtime.jobs.IJobStatus;
  */
 public interface IGridTest extends IGridElement, IManageable {
   
+  public enum TestType{
+    SAM,
+    OTHER
+  }
+  
   /*
    * Method responsible for returning children
    */
