@@ -121,14 +121,14 @@ public class GridTestManager
   public List< IGridTest > getAvaliableTests( final Object resource ) {
     //TODO implement method
     List< IGridTest > tests = new ArrayList< IGridTest >();
-    if ( resource instanceof IGridTest ) {
-      IGridTest parentTest = ( IGridTest ) resource;
-      for ( IGridTest test : this.tests ) {
-        if ( test.getName().equalsIgnoreCase( parentTest.getName() ) ) {
-          tests = parentTest.getChildrenTests();
-        }
-      }
-    }
+//    if ( resource instanceof IGridTest ) {
+//      IGridTest parentTest = ( IGridTest ) resource;
+//      for ( IGridTest test : this.tests ) {
+//        if ( test.getName().equalsIgnoreCase( parentTest.getName() ) ) {
+//          tests = parentTest.getChildrenTests();
+//        }
+//      }
+//    }
     return tests;
   }
   

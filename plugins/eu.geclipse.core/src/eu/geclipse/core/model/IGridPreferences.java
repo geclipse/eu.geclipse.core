@@ -18,6 +18,7 @@ package eu.geclipse.core.model;
 import java.io.File;
 import java.io.InputStream;
 import java.net.URI;
+import java.util.List;
 
 /**
  * This interface defines some global access points for preferences that
@@ -48,6 +49,6 @@ public interface IGridPreferences {
    */
   public IGridConnection createTemporaryConnection( final URI uri ) throws GridModelException;
   
-  public IGridTest createGridTest( final String name,
-                                   final InputStream inputStream );
+  public IGridTest createGridSAMTest( final String name,
+                                   final InputStream inputStream, final List<IGridSingleTest> tests );
 }

@@ -40,6 +40,8 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridPreferences;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IGridRoot;
+import eu.geclipse.core.model.IGridSAMTest;
+import eu.geclipse.core.model.IGridSingleTest;
 import eu.geclipse.core.model.IGridTest;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
@@ -189,8 +191,8 @@ public class HiddenProject
     return result;
   }
 
-  public IGridTest createGridTest( final String name,
-                                             final InputStream inputStream )
+  public IGridTest createGridSAMTest( final String name, final InputStream inputStream, 
+                                      final List<IGridSingleTest> tests )
        {
          IGridTest result = null;
          // IGridTest result = null;
@@ -204,7 +206,8 @@ public class HiddenProject
            if( !file.exists() ) {
              file.create( inputStream, IResource.FORCE | IResource.REPLACE, null );
            }
-           result = GridModel.getTestManager().getTest( name ); 
+           result = GridModel.getTestManager().getTest( name );
+           ((IGridSAMTest)result).setTests( tests );
          } catch( CoreException coreExc ) {
            // TODO Auto-generated catch block
            coreExc.printStackTrace();

@@ -26,60 +26,34 @@ import org.eclipse.core.runtime.jobs.IJobStatus;
 /**
  * Interface for structural tests and simple tests.
  */
-public interface IGridTest extends IGridElement, IManageable {
+public interface IGridTest {
   
   public enum TestType{
     SAM,
-    OTHER
+    OTHER,
+    SINGLE
   }
+  
+  /**
+   * Method returning test name
+   * @return String
+   */
+  public String getName();
+  
+  /**
+   * Method returning type of the test
+   * @return TestType
+   */
+  public TestType getType();
   
   /*
    * Method responsible for returning children
    */
-  public List<IGridTest> getChildrenTests();
+  //public List<IGridTest> getChildrenTests();
   
-  public String getType();
+  //public String getType();
   
-  public boolean hasChildrenTests();
+  //public boolean hasChildrenTests();
   
-//  public static String TEST_UNKNOWN_INTERPRETATION = "Unknown";
-//  
-//  /**
-//   * Method to access date of a test run.
-//   * @return date on which this test was submitted
-//   */
-//  public Calendar getDate();
-//  
-//  public String getName();
-//  
-//  public IGridJobSubmissionService getSubmissionService();
-//  
-//  public IGridJobDescription getJSDLDescription();
-//  
-//  /**
-//   * Method returns IGridTest representing it's parent (structural) test, or null if it is parent Test
-//   * @return
-//   */
-//  public IGridTest getParentTest();
-//  
-//  public IGridTest[] getChildren();
-//  
-//  public void setParentTest( final IGridTest parent );
-//  /**
-//   * Returns tested grid resource.
-//   * @return resource which was tested by this test
-//   */
-//  public IGridResource getTestedResource();
-//  
-//  public boolean isStructural();
-//  
-//  /**
-//   * Returns 
-//   * @return
-//   */
-//  public String getInterpretation();
-//  //TODO change this method to return enumeration type
-//  
-//  public boolean createChildTest( final IGridTest childTest );
-//  
+
 }
