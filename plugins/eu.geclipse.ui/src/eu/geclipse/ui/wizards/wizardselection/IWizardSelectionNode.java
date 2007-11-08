@@ -22,7 +22,7 @@ import org.eclipse.swt.graphics.Image;
  * Interface to be implemented by nodes to be displayed in a
  * WizardSelectionListPage.
  */
-interface IWizardSelectionNode extends IWizardNode {
+public interface IWizardSelectionNode extends IWizardNode {
 
   /**
    * Returns the name displayed in the WizardSelectionListPage.
