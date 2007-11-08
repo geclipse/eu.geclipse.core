@@ -11,6 +11,7 @@
  *
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
+ *    Nikolaos Tsioutsias
  *****************************************************************************/
 
 package eu.geclipse.ui.providers;
@@ -37,6 +38,8 @@ import eu.geclipse.core.model.IGridStorage;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.ui.internal.Activator;
 
+import eu.geclipse.info.model.*;
+
 /**
  * Label provider implementation to be used by any Grid model view.
  */
@@ -49,6 +52,7 @@ public class GridModelLabelProvider
   private Image folderImage;
   private Image invalidElementImage;
   private Image serviceImage;
+  private Image ServiceUnsupportedImage;
   private Image storageImage;
   private Image virtualFileImage;
   private Image virtualFolderImage;
@@ -98,7 +102,16 @@ public class GridModelLabelProvider
     } else if( element instanceof IGridStorage ) {
       resultImage = getStorageImage();
     } else if( element instanceof IGridService ) {
-      resultImage = getServiceImage();
+      if (element instanceof GridGlueService)
+      {
+        Boolean isSupported = ((GridGlueService) element).getGlueService().isSupported();
+        if (isSupported)
+          resultImage = getServiceImage();
+        else
+          resultImage = getServiceUnsupportedImage();
+      }
+      else
+        resultImage = getServiceImage();
     } else if ( element instanceof IGridElement ) {
       
       IGridElement gElement = ( IGridElement ) element;
@@ -252,6 +265,15 @@ public class GridModelLabelProvider
         .get( "service" ); //$NON-NLS-1$
     }
     return this.serviceImage;
+  }
+  
+  private Image getServiceUnsupportedImage() {
+    if( this.ServiceUnsupportedImage == null ) {
+      this.ServiceUnsupportedImage = Activator.getDefault()
+        .getImageRegistry()
+        .get( "service_unsupported" ); //$NON-NLS-1$
+    }
+    return this.ServiceUnsupportedImage;
   }
 
   /**

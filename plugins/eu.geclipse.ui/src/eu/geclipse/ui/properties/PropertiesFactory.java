@@ -11,7 +11,7 @@
  *
  * Contributor(s):
  *     PSNC - Mariusz Wojtysiak
- *           
+ *     Nikolaos Tsioutsias
  *****************************************************************************/
 package eu.geclipse.ui.properties;
 
@@ -21,11 +21,16 @@ import java.util.List;
 
 import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridConnectionElement;
+import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IPropertiesProvider;
 import eu.geclipse.core.model.IVirtualOrganization;
+import eu.geclipse.core.model.IWrappedElement;
+import eu.geclipse.info.model.GridGlueComputing;
+import eu.geclipse.info.model.GridGlueService;
+import eu.geclipse.info.model.GridGlueStorage;
 
 
 /**
@@ -70,6 +75,28 @@ public class PropertiesFactory implements IPropertiesFactory {
     
     if( sourceObject instanceof IPropertiesProvider ) {
       sourcesList.add( new PropertiesProviderSource( (IPropertiesProvider) sourceObject ) );
+    }
+    
+    if( sourceObject instanceof IWrappedElement ) {
+      
+      IGridElement myElement = ((IWrappedElement)sourceObject).getWrappedElement();
+      if (myElement instanceof GridGlueComputing)
+      {
+        GridGlueComputing gridGlueComputing = null;
+        gridGlueComputing = (GridGlueComputing)myElement;
+        sourcesList.add( new GridGlueComputingSource(gridGlueComputing) );
+      }
+      else if (myElement instanceof GridGlueStorage)
+      {
+        GridGlueStorage gridGlueStorage = null;
+        gridGlueStorage = (GridGlueStorage)myElement;
+        sourcesList.add( new GridGlueStorageSource(gridGlueStorage));
+      }
+    }
+    
+    if( sourceObject instanceof GridGlueService ) {
+      GridGlueService gridGlueService = (GridGlueService)sourceObject;
+      sourcesList.add( new GridGlueServiceSource(gridGlueService) );
     }
     
     return sourcesList;
