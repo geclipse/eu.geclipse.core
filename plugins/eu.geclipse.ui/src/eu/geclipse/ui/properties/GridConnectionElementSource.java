@@ -64,8 +64,7 @@ public class GridConnectionElementSource extends AbstractPropertySource<IGridCon
         }
       }      
     } catch( CoreException exception ) {
-      // TODO mariusz Auto-generated catch block
-      exception.printStackTrace();
+      // ignore exceptions
     }
   }
 

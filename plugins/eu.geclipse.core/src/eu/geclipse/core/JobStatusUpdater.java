@@ -148,7 +148,7 @@ public class JobStatusUpdater extends Job {
     if( this.lastStatus != null ) {
       oldType = this.lastStatus.getType();
     }
-    if ( newStatus != null && this.lastStatus !=null ) {
+    if ( newStatus != null ) {
         int newType = newStatus.getType();
         if ( oldType != newType ) {
           this.lastStatus = newStatus;

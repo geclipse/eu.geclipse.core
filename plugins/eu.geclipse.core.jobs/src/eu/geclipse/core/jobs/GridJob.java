@@ -76,6 +76,16 @@ import eu.geclipse.jsdl.JSDLJobDescription;
  */
 public class GridJob extends ResourceGridContainer implements IGridJob {
 
+  /**
+   * Name for folder containing output files for job
+   */
+  public static final String FOLDERNAME_OUTPUT_FILES = Messages.getString("GridJob.FolderOutputFiles"); //$NON-NLS-1$
+  
+  /**
+   * Name for folder containing input files for job
+   */  
+  public static final String FOLDERNAME_INPUT_FILES = Messages.getString("GridJob.FolderInputFiles"); //$NON-NLS-1$
+  
   final static private String JOBID_FILENAME = ".jobID"; //$NON-NLS-1$
   final static private String JOBINFO_FILENAME = ".jobInfo"; //$NON-NLS-1$
   final static private String JOBSTATUS_FILENAME = ".jobStatus"; //$NON-NLS-1$
@@ -125,10 +135,17 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
       this.statusService = factory.getGridJobStatusService( this.jobID );
     }
     
-    addStagingFolder( jobFolder, Messages.getString("GridJob.FolderInputFiles") ); //$NON-NLS-1$
-    addStagingFolder( jobFolder, Messages.getString("GridJob.FolderOutputFiles") ); //$NON-NLS-1$
+    addStagingFolder( jobFolder, FOLDERNAME_INPUT_FILES );
+    addStagingFolder( jobFolder, FOLDERNAME_OUTPUT_FILES );
   }
 
+  /**
+   * Creates files and folders for job
+   * @param jobFolder folder, in which structure for job will be created
+   * @param id job id
+   * @param description job description
+   * @throws GridModelException
+   */
   public static void createJobStructure( final IFolder jobFolder,
                                          final GridJobID id,
                                          final IGridJobDescription description )
@@ -669,7 +686,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
       if( inStagingMap != null
           && !inStagingMap.isEmpty() ) { 
         try {
-          IFolder inputFolder = createStagingFilesFolder( jobFolder, Messages.getString("GridJob.FolderInputFiles") ); //$NON-NLS-1$
+          IFolder inputFolder = createStagingFilesFolder( jobFolder, FOLDERNAME_INPUT_FILES );
           createStagingFilesLinks( inputFolder, inStagingMap );
         } catch( CoreException exception ) {
           throw new GridModelException( GridModelProblems.ELEMENT_CREATE_FAILED,
@@ -681,7 +698,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
       if( outStagingMap != null
           && !outStagingMap.isEmpty() ) {
         try {
-          IFolder outputFolder  = createStagingFilesFolder( jobFolder, Messages.getString("GridJob.FolderOutputFiles") ); //$NON-NLS-1$
+          IFolder outputFolder  = createStagingFilesFolder( jobFolder, FOLDERNAME_OUTPUT_FILES );
           createStagingFilesLinks( outputFolder, outStagingMap );
         } catch( CoreException exception ) {
           throw new GridModelException( GridModelProblems.ELEMENT_CREATE_FAILED,

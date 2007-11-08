@@ -18,6 +18,8 @@ package eu.geclipse.core.internal.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IFolder;
+
 import eu.geclipse.core.model.IConnectionManager;
 import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridElement;
@@ -65,10 +67,19 @@ public class ConnectionManager
    * @see eu.geclipse.core.model.IGridElementManager#canManage(eu.geclipse.core.model.IGridElement)
    */
   public boolean canManage( final IGridElement element ) {
-    return element instanceof IGridConnection;
+    boolean canManage = false;
+    if( element instanceof IGridConnection ) {
+      IGridConnection connection = ( IGridConnection )element;
+      // links to files on grid (created as ConnectionRoot( IFile )) shouldn't
+      // be treated as connection, and managed by ConnectionManager
+      canManage = ( connection.getResource() instanceof IFolder );
+    }
+    return canManage;
   }
   
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see eu.geclipse.core.model.IConnectionManager#getGlobalConnections()
    */
   public IGridConnection[] getGlobalConnections() {
