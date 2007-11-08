@@ -736,7 +736,6 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
   }
 
   private void createFileLink( final IFolder localFolder, final String localFilename, final URI uri ) {
-    // TODO mariusz Handle situation when 2 files have the same name
     IFile file = localFolder.getFile( localFilename );
     
     if( !file.exists() ) {
