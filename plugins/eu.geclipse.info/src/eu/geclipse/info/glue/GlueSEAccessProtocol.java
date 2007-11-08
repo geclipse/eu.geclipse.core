@@ -12,7 +12,7 @@
  * Contributor(s):
  *     UCY (http://www.ucy.cs.ac.cy)
  *      - George Tsouloupas (georget@cs.ucy.ac.cy)
- *
+ *      - Nikolaos Tsioutsias (tnikos@yahoo.com)
  *****************************************************************************/
 
 package eu.geclipse.info.glue;
@@ -20,10 +20,8 @@ package eu.geclipse.info.glue;
 import java.util.ArrayList;
 import java.util.Date;
 
-/**
- * @author George Tsouloupas
- * TODO Write Comments
- */
+import javax.naming.directory.Attributes;
+
 public class GlueSEAccessProtocol extends AbstractGlueTable
   implements java.io.Serializable
 {
@@ -111,5 +109,30 @@ public class GlueSEAccessProtocol extends AbstractGlueTable
 
   public void setID( final String id ) {
     this.UniqueID = id;
+  }
+  
+  public void processGlueRecord( final Attributes attributes )
+  {
+    this.UniqueID = GlueUtility.getStringAttribute( "GlueChunkKey", attributes );
+    this.UniqueID = this.UniqueID.substring( this.UniqueID.indexOf( '=' ) + 1 );
+    
+    //this.AccessTime
+    this.Endpoint = GlueUtility.getStringAttribute( "GlueSEAccessProtocolEndpoint", attributes );
+    this.Port = GlueUtility.getLongAttribute( "GlueSEAccessProtocolPort", attributes );
+    this.Type = GlueUtility.getStringAttribute( "GlueSEAccessProtocolType", attributes );
+    this.Version = GlueUtility.getStringAttribute( "GlueSEAccessProtocolVersion", attributes );
+  }
+  
+  public boolean equals(final GlueSEAccessProtocol otherObject)
+  {
+    boolean result = false;
+    
+    if (otherObject!= null && this.Endpoint.equals( otherObject.Endpoint ) 
+        && this.Port.equals( otherObject.Port ) 
+        && this.Type.equals( otherObject.Type ) 
+        && this.Version.equals( otherObject.Version ))
+      result = true;
+    
+    return result;
   }
 }

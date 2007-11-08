@@ -12,13 +12,18 @@
  * Contributor(s):
  *     UCY (http://www.ucy.cs.ac.cy)
  *      - George Tsouloupas (georget@cs.ucy.ac.cy)
- *
+ *      - Nikolaos Tsioutsias (tnikos@yahoo.com)
  *****************************************************************************/
 
 package eu.geclipse.info.glue;
 
 import java.util.Date;
 import java.util.ArrayList;
+
+import javax.naming.NamingEnumeration;
+import javax.naming.NamingException;
+import javax.naming.directory.Attribute;
+import javax.naming.directory.Attributes;
 
 /**
  * @author George Tsouloupas
@@ -136,5 +141,51 @@ public class GlueSA extends AbstractGlueTable implements java.io.Serializable {
 
   public void setID( final String id ) {
     this.UniqueID = id;
+  }
+  
+  public void processGlueRecord( final Attributes attributes )
+  {
+    this.UniqueID = GlueUtility.getStringAttribute( "GlueChunkKey", attributes );
+    this.UniqueID = this.UniqueID.substring( this.UniqueID.indexOf( '=' ) + 1 );
+    this.byRefOnly = false;
+   
+    this.keyName = GlueUtility.getStringAttribute( "GlueChunkKey", attributes );
+    this.LocalID = GlueUtility.getStringAttribute( "GlueSALocalID", attributes );
+    this.Path = GlueUtility.getStringAttribute( "GlueSAPath", attributes );
+    this.PolicyFileLifeTime = GlueUtility.getStringAttribute( "GlueSAPolicyFileLifeTime", attributes );
+    this.PolicyMaxData = GlueUtility.getLongAttribute( "GlueSAPolicyMaxData", attributes );
+    this.PolicyMaxFileSize = GlueUtility.getLongAttribute( "GlueSAPolicyMaxFileSize", attributes );
+    this.PolicyMaxNumFiles = GlueUtility.getLongAttribute( "GlueSAPolicyMaxNumFiles", attributes );
+    this.PolicyMaxPinDuration = GlueUtility.getLongAttribute( "GlueSAPolicyMaxPinDuration", attributes ); 
+    this.PolicyMinFileSize = GlueUtility.getLongAttribute( "GlueSAPolicyMinFileSize", attributes );
+    this.PolicyQuota = GlueUtility.getLongAttribute( "GlueSAPolicyQuota", attributes );
+    this.Root = GlueUtility.getStringAttribute( "GlueSARoot", attributes );
+    this.StateAvailableSpace = GlueUtility.getLongAttribute( "GlueSAStateAvailableSpace", attributes );
+    this.StateUsedSpace = GlueUtility.getLongAttribute( "GlueSAStateUsedSpace", attributes );
+    this.Type = GlueUtility.getStringAttribute( "GlueSAType", attributes );
+    
+    try {
+      Attribute attr=attributes.get( "GlueSAAccessControlBaseRule" );
+      if(attr!=null){
+        NamingEnumeration<?> ne = attr.getAll();
+        while( ne.hasMoreElements() ) {
+          String vo=ne.next().toString();
+          GlueSAAccessControlBaseRule rule= new GlueSAAccessControlBaseRule();
+          rule.Value=vo;
+          rule.byRefOnly=false;
+          Boolean exists = false;
+          for (int i=0; i<this.glueSAAccessControlBaseRuleList.size(); i++)
+          {
+            if (this.glueSAAccessControlBaseRuleList.get( i ).Value.equalsIgnoreCase( vo ))
+              exists = true;
+          }
+          if (!exists){
+            this.glueSAAccessControlBaseRuleList.add(rule);
+          }
+        }
+      }
+    } catch( NamingException e ) {
+      //ignore missing fields
+    }
   }
 }

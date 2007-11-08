@@ -12,17 +12,14 @@
  * Contributor(s):
  *     UCY (http://www.ucy.cs.ac.cy)
  *      - George Tsouloupas (georget@cs.ucy.ac.cy)
- *
+ *      - Nikolaos Tsioutsias (tnikos@yahoo.com)
  *****************************************************************************/
 
 package eu.geclipse.info.glue;
 
+import java.util.ArrayList;
 import java.util.Date;
 
-/**
- * @author George Tsouloupas
- * TODO Write Comments
- */
 
 public class GlueSL extends AbstractGlueTable implements java.io.Serializable {
 
@@ -78,6 +75,7 @@ public class GlueSL extends AbstractGlueTable implements java.io.Serializable {
    */
   public Date MeasurementTime;
 
+  public ArrayList<GlueSE> glueSEList = new ArrayList<GlueSE>();
   
   /* (non-Javadoc)
    * @see eu.geclipse.info.glue.AbstractGlueTable#getID()

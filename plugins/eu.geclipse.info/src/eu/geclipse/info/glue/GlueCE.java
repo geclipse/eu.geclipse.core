@@ -12,13 +12,18 @@
  * Contributor(s):
  *     UCY (http://www.ucy.cs.ac.cy)
  *      - George Tsouloupas (georget@cs.ucy.ac.cy)
- *
+ *      - Nikolaos Tsioutsias (tnikos@yahoo.com)
  *****************************************************************************/
 
 package eu.geclipse.info.glue;
 
 import java.util.Date;
 import java.util.ArrayList;
+
+import javax.naming.NamingEnumeration;
+import javax.naming.NamingException;
+import javax.naming.directory.Attribute;
+import javax.naming.directory.Attributes;
 
 /**
  * @author George Tsouloupas
@@ -38,6 +43,7 @@ public class GlueCE extends AbstractGlueTable implements java.io.Serializable{
    */
   public String keyName = "UniqueID"; //$NON-NLS-1$
 
+  public String GlueForeignKey = ""; //$NON-NLS-1$
   /**
    * 
    */
@@ -226,6 +232,71 @@ public class GlueCE extends AbstractGlueTable implements java.io.Serializable{
 
   public void setID( final String id ) {
     this.UniqueID = id;
+  }
+  
+  public void processGlueRecord(final Attributes attributes){
+    glueIndex = GlueIndex.getInstance();
+    
+    try {
+      Attribute attr=attributes.get( "GlueCEUniqueID" );
+      if(attr!=null){
+        String id=attr.get(0).toString();
+        this.UniqueID=id;
+
+
+        this.ApplicationDir = GlueUtility.getStringAttribute( "GlueCEInfoApplicationDir", attributes);
+        this.DataDir = GlueUtility.getStringAttribute( "GlueCEInfoDataDir", attributes);
+        this.GatekeeperPort = GlueUtility.getStringAttribute( "GlueCEInfoGatekeeperPort", attributes);
+        this.HostName = GlueUtility.getStringAttribute( "GlueCEInfoHostName", attributes);
+        this.JobManager = GlueUtility.getStringAttribute( "GlueCEInfoJobManager", attributes);
+        this.LRMSType = GlueUtility.getStringAttribute( "GlueCEInfoLRMSType", attributes);
+        this.LRMSVersion = GlueUtility.getStringAttribute( "GlueCEInfoLRMSVersion", attributes);
+        this.TotalCPUs = GlueUtility.getLongAttribute( "GlueCEInfoTotalCPUs", attributes);
+        this.Name = GlueUtility.getStringAttribute( "GlueCEName", attributes);
+        this.AssignedJobSlots = GlueUtility.getLongAttribute( "GlueCEPolicyAssignedJobSlots", attributes);
+        this.MaxCPUTime = GlueUtility.getLongAttribute( "GlueCEPolicyMaxCPUTime", attributes);
+        this.MaxRunningJobs = GlueUtility.getLongAttribute( "GlueCEPolicyMaxRunningJobs", attributes);
+        this.MaxTotalJobs = GlueUtility.getLongAttribute( "GlueCEPolicyMaxTotalJobs", attributes);
+        this.MaxWallClockTime = GlueUtility.getLongAttribute( "GlueCEPolicyMaxWallClockTime", attributes);
+        this.Priority = GlueUtility.getLongAttribute( "GlueCEPolicyPriority", attributes);
+        this.EstimatedResponseTime = GlueUtility.getLongAttribute( "GlueCEStateEstimatedResponseTime", attributes);
+        this.FreeCpus = GlueUtility.getLongAttribute( "GlueCEStateFreeCPUs", attributes);
+        this.FreeJobSlots = GlueUtility.getLongAttribute( "GlueCEStateFreeJobSlots", attributes);
+        this.RunningJobs = GlueUtility.getIntegerAttribute( "GlueCEStateRunningJobs", attributes);
+        this.Status = GlueUtility.getStringAttribute( "GlueCEStateStatus", attributes);
+        this.TotalJobs = GlueUtility.getLongAttribute( "GlueCEStateTotalJobs", attributes);
+        this.WaitingJobs = GlueUtility.getIntegerAttribute( "GlueCEStateWaitingJobs", attributes);
+        this.WorstResponseTime = GlueUtility.getLongAttribute( "GlueCEStateWorstResponseTime", attributes);
+        
+        this.InformationServiceURL = GlueUtility.getStringAttribute( "GlueInformationServiceURL", attributes );
+        this.InformationServiceURL = this.InformationServiceURL.substring( 0, this.InformationServiceURL.indexOf( "/mds-" ) );
+        
+        this.byRefOnly=false;
+        
+        attr=attributes.get( "GlueCEAccessControlBaseRule" );
+        if(attr!=null){
+          NamingEnumeration<?> ne = attr.getAll();
+          while( ne.hasMoreElements() ) {
+            String vo=ne.next().toString();
+            GlueCEAccessControlBaseRule rule= new GlueCEAccessControlBaseRule();
+            glueIndex.getGlueCEAccessControlBaseRule( vo );
+            rule.Value=vo;
+            rule.byRefOnly=false;
+            Boolean exists = false;
+            for (int i=0; i<this.glueCEAccessControlBaseRuleList.size(); i++)
+            {
+              if (this.glueCEAccessControlBaseRuleList.get( i ).Value.equalsIgnoreCase( vo ))
+                exists = true;
+            }
+            if (!exists){
+              this.glueCEAccessControlBaseRuleList.add(rule);
+            }
+          }
+        }
+      }
+    } catch( NamingException e ) {
+     //ignore missing fields
+    }
   }
 
 }

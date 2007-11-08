@@ -324,14 +324,26 @@ public abstract class GlueIndex implements java.io.Serializable {
    * @return the singleton instance to the Glue information datastructure
    */
   public static GlueIndex getInstance() {
+    Boolean errorFound = false;
+    
     if( glueIndexInstance == null ) {
-      try {
-        glueIndexInstance = loadInstance();
-      } catch( IOException e ) {
+      
+      IPath serPath = getGridInfoLocation();
+      if(serPath!=null && serPath.toFile().length() > 0)
+      {
+        try {
+          glueIndexInstance = loadInstance();
+        } catch( IOException e ) {
+            errorFound = true;
+        }
+      }
+      
+      if (glueIndexInstance == null || errorFound)
+      {
         glueIndexInstance = new GlueIndex() {
-
+  
           private static final long serialVersionUID = 1L;
-
+  
           @Override
           protected String getTag()
           {
@@ -346,7 +358,11 @@ public abstract class GlueIndex implements java.io.Serializable {
   public static void drop(){
     
     glueIndexInstance=null;
-    serializeInstance();
+   
+    IPath serPath = getGridInfoLocation();
+    serPath.toFile().delete(); 
+    
+    //serializeInstance(); Commented out for the bug 204787
   }
   
   private static IPath getGridInfoLocation() {

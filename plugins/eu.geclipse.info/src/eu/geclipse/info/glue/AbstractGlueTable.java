@@ -73,9 +73,19 @@ public abstract class AbstractGlueTable implements Serializable{
       if( f.getGenericType().equals( Integer.class ) ) {
         valueToset = new Integer( ( String )value );
       } else if( f.getGenericType().equals( Long.class ) ) {
-        valueToset = new Long( ( String )value );
+        try {
+          valueToset = new Long( ( String )value );
+        } catch (NumberFormatException ex)
+        {
+          valueToset = 0;
+        }
       } else if( f.getGenericType().equals( Double.class ) ) {
-        valueToset = new Double( ( String )value );
+        try {
+          valueToset = new Double( ( String )value );
+        } catch (NumberFormatException ex)
+        {
+          valueToset = 0.0;
+        }
       }
       f.set( this, valueToset );
       ret = this.getClass().getField( fieldName ).get( this );
