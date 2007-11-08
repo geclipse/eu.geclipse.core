@@ -196,13 +196,13 @@ public class HiddenProject
          // IGridTest result = null;
          try {
            IFolder folder = getTestFolder();
-           IFile file = folder.getFile( name + ".gtdl"); //$NON-NLS-1$
            IFolder simpleTestsFolder = getProjectFolder( DIR_GRID_TESTS+"/"+name );
-           if( !file.exists() ) {
-             file.create( inputStream, IResource.FORCE | IResource.REPLACE, null );
-           }
            if (!simpleTestsFolder.exists() ) {
              simpleTestsFolder.create( IResource.FORCE | IResource.REPLACE, true, null );
+           }
+           IFile file = simpleTestsFolder.getFile( name + ".gtdl"); //$NON-NLS-1$
+           if( !file.exists() ) {
+             file.create( inputStream, IResource.FORCE | IResource.REPLACE, null );
            }
            result = GridModel.getTestManager().getTest( name ); 
          } catch( CoreException coreExc ) {
