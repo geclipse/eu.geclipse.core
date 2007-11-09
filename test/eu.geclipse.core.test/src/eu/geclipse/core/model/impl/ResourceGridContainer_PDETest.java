@@ -16,6 +16,7 @@ package eu.geclipse.core.model.impl;
 
 import org.junit.Assert;
 
+import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -33,6 +34,7 @@ import org.junit.Test;
 public class ResourceGridContainer_PDETest {
 
   private static ResourceGridContainer container;
+  private static IProject project;
   
   /**initial setup: generate an object of the tested class
    * @throws Exception
@@ -42,7 +44,7 @@ public class ResourceGridContainer_PDETest {
  // create a project as an IResource
     String projectName = "test"; //$NON-NLS-1$
     IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
-    IProject project = workspaceRoot.getProject( projectName );
+    project = workspaceRoot.getProject( projectName );
     IProjectDescription desc = project.getWorkspace().newProjectDescription( projectName );
     project.create( desc, null );
     container = new ResourceGridContainer(project);
@@ -74,38 +76,63 @@ public class ResourceGridContainer_PDETest {
     Assert.assertFalse( container.isLazy() );
   }
 
+  /**
+   * tests the method {@link ResourceGridContainer#getFileStore()}
+   */
   @Test
   public void testGetFileStore() {
-    
+    IFileStore store = container.getFileStore();
+    Assert.assertNotNull( store );
+    Assert.assertTrue( store.toString().contains( "test" ) ); //$NON-NLS-1$
   }
 
+  /**
+   * tests the method {@link ResourceGridContainer#getName()}
+   */
   @Test
   public void testGetName() {
-    
+    Assert.assertEquals( "test", container.getName() ); //$NON-NLS-1$
   }
 
+  /**
+   * tests the method {@link ResourceGridContainer#getParent()}
+   */
   @Test
   public void testGetParent() {
-    
-  }
+    Assert.assertNotNull( container.getParent() );
+      }
 
+  /**
+   * tests the method {@link ResourceGridContainer#getPath()}
+   */
   @Test
   public void testGetPath() {
- 
+  Assert.assertEquals( "/test", container.getPath().toString() ); //$NON-NLS-1$
   }
 
+  /**
+   * tests the method {@link ResourceGridContainer#getResource()}
+   */
   @Test
   public void testGetResource() {
-    
+    Assert.assertEquals( "test", container.getResource().getName() ); //$NON-NLS-1$
   }
 
+  /**
+   * tests the method {@link ResourceGridContainer#isLocal()}
+   */
   @Test
   public void testIsLocal() {
-    
+    Assert.assertTrue( container.isLocal() );
   }
 
+  /**
+   * tests the method ResourceGridContainer#findCreator(org.eclipse.core.resources.IResource)
+   */
   @Test
   public void testFindCreator() {
-   
+   Assert.assertNotNull( container.findCreator( project ) );
+   Assert.assertTrue( container.findCreator( project ).toString().
+                      contains( "GridProjectCreator" ) ); //$NON-NLS-1$
   }
 }
