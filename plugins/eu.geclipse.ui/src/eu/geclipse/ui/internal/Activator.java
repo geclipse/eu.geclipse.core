@@ -272,6 +272,7 @@ public class Activator extends AbstractUIPlugin {
 //      { "lightbulb_white", "icons/lightbulb_white_16.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
       { "refresh", "icons/elcl16/refresh_nav.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
       { "service", "icons/obj16/service_obj.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
+      { "service_unsupported", "icons/obj16/service_unsupported_obj.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
       { "storage", "icons/obj16/storage_obj.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
       { "solution", "icons/obj16/quickassist_obj.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
 //      { "view_flat", "icons/view_flat.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
