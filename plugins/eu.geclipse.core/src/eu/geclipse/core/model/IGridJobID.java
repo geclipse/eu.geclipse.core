@@ -15,11 +15,6 @@
 
 package eu.geclipse.core.model;
 
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-
-import eu.geclipse.core.GridException;
 
 
 /**
@@ -32,14 +27,5 @@ public interface IGridJobID {
    * @return TODO pawel
    */
   String getJobID();
-
-  /**
-   * @param jobFolder folder, in which Output folder will be created 
-   * @param monitor the progress monitor
-   * @return status
-   * @throws GridException
-   * @see IGridJobID#downloadOutputs
-   */
-  IStatus downloadOutputs(IFolder jobFolder, IProgressMonitor monitor) throws GridException;
 
 }
