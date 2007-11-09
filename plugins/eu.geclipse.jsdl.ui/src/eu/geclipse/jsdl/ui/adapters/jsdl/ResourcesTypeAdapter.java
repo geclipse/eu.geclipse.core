@@ -187,6 +187,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     
     EcoreUtil.remove( eStructuralFeature );
     
+    
   }
   
   
@@ -374,9 +375,6 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
           
           if (!this.adapterRefreshed) {
       
-//            ((java.util.List<?>)this.candidateHosts.eGet(eStructuralFeature))
-//                                                             .remove(feature);
-            
             this.candidateHosts.getHostName().remove( feature );
             
             if ( this.candidateHosts.getHostName().size() == 0 ) {
@@ -1005,8 +1003,8 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
                 comboName = this.comboFeaturesMap
                 .get (new Integer(JsdlPackage.DOCUMENT_ROOT__FILE_SYSTEM_TYPE));
                 
-                comboName.setText(this.fileSystemType.getFileSystemType()
-                                                                 .getLiteral());
+                comboName.setText( this.fileSystemType.getFileSystemType()
+                                                                 .getLiteral() );
                 }               
                 
               } // End Iterator

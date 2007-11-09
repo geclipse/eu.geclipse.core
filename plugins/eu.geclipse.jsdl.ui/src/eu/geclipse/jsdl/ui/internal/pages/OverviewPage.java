@@ -511,6 +511,7 @@ public final class OverviewPage extends FormPage
                 });
             }
         };
+        
         helpAction.setToolTipText(Messages.getString( "OverviewPage_Help" ));  //$NON-NLS-1$
         URL stageInURL = Activator.getDefault().getBundle().getEntry( "icons/help.gif" ); //$NON-NLS-1$       
         this.helpDesc = ImageDescriptor.createFromURL( stageInURL ) ;   
