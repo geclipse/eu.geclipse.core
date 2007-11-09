@@ -14,14 +14,9 @@
  *****************************************************************************/
 package eu.geclipse.core.jobs;
 
-import org.eclipse.core.resources.IFolder;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import eu.geclipse.core.GridException;
 import eu.geclipse.core.model.IGridJobID;
 
 /**
@@ -94,13 +89,5 @@ public class GridJobID implements IGridJobID {
 
   protected String getData() {
     return "<test>XML</test>"; //$NON-NLS-1$
-  }
-
-  public IStatus downloadOutputs( final IFolder jobFolder, final IProgressMonitor monitor )
-    throws GridException
-  {
-    return new Status( IStatus.WARNING,
-                       eu.geclipse.core.jobs.internal.Activator.PLUGIN_ID,
-                       Messages.getString("GridJobID.errNotImplemented") ); //$NON-NLS-1$
   }
 }

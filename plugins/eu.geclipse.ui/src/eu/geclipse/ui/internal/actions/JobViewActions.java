@@ -29,8 +29,7 @@ import org.eclipse.ui.navigator.ICommonMenuConstants;
 public class JobViewActions extends ActionGroup {
 
   private ToggleUpdateJobsAction toggleJobsUpdateAction;
-  private UpdateJobStatusAction updateSelectedJobStatusAction;
-  private DownloadJobOutputsAction downloadOutputsAction;
+  private UpdateJobStatusAction updateSelectedJobStatusAction;  
   private IWorkbenchSite site;
 
   /**
@@ -40,12 +39,10 @@ public class JobViewActions extends ActionGroup {
   public JobViewActions( final IWorkbenchSite site ) {
     this.site = site;
     this.toggleJobsUpdateAction = new ToggleUpdateJobsAction();
-    this.updateSelectedJobStatusAction = new UpdateJobStatusAction( site.getWorkbenchWindow());
-    this.downloadOutputsAction = new DownloadJobOutputsAction();
+    this.updateSelectedJobStatusAction = new UpdateJobStatusAction( site.getWorkbenchWindow());    
     ISelectionProvider provider = this.site.getSelectionProvider();
     provider.addSelectionChangedListener( this.toggleJobsUpdateAction );
-    provider.addSelectionChangedListener( this.updateSelectedJobStatusAction );
-    provider.addSelectionChangedListener( this.downloadOutputsAction );
+    provider.addSelectionChangedListener( this.updateSelectedJobStatusAction );    
   }
   
   /**
@@ -67,8 +64,7 @@ public class JobViewActions extends ActionGroup {
   public void dispose() {
     ISelectionProvider provider = this.site.getSelectionProvider();
     provider.removeSelectionChangedListener( this.toggleJobsUpdateAction );
-    provider.removeSelectionChangedListener( this.updateSelectedJobStatusAction );
-    provider.removeSelectionChangedListener( this.downloadOutputsAction );
+    provider.removeSelectionChangedListener( this.updateSelectedJobStatusAction );    
   }
 
   @Override
@@ -88,7 +84,5 @@ public class JobViewActions extends ActionGroup {
       }
       super.fillContextMenu( menu );
     }
-    
-    menu.appendToGroup( ICommonMenuConstants.GROUP_BUILD, this.downloadOutputsAction );
   }
 }

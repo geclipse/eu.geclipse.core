@@ -24,7 +24,6 @@ import org.eclipse.ui.forms.FormColors;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
-import eu.geclipse.ui.internal.actions.DownloadJobOutputsAction;
 import eu.geclipse.ui.internal.actions.UpdateJobStatusAction;
 import eu.geclipse.ui.properties.PropertiesAdapterFactory;
 

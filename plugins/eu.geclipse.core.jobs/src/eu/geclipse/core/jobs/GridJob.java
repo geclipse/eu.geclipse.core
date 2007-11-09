@@ -48,11 +48,9 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
-import eu.geclipse.core.AbstractProblem;
 import eu.geclipse.core.ExtensionManager;
 import eu.geclipse.core.GridException;
 import eu.geclipse.core.GridJobStatusServiceFactoryManager;
-import eu.geclipse.core.ProblemRegistry;
 import eu.geclipse.core.filesystem.GEclipseURI;
 import eu.geclipse.core.jobs.internal.Activator;
 import eu.geclipse.core.model.GridModel;
@@ -631,26 +629,6 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
   // public IResource getResource() {
   // return gridJobFolder;
   // }
-  public IStatus downloadOutputs( final IProgressMonitor monitor )
-    throws GridException
-  {
-    IStatus status = null;
-    IResource resource = getResource();
-    if( resource instanceof IFolder ) {
-      IFolder jobFolder = ( IFolder )resource;
-      status = this.getID().downloadOutputs( jobFolder, monitor );
-    } else {
-      throw new GridException( new AbstractProblem( ProblemRegistry.uniqueID(),
-                                                    Messages.getString( "GridJob.errCannotFindJobFolder" ) ) { //$NON-NLS-1$
-
-        @Override
-        protected String getPluginID() {
-          return Activator.PLUGIN_ID;
-        }
-      } );
-    }
-    return status;
-  }
 
   /**
    * Check if a job can be created from this folder. Currently it checks only if
