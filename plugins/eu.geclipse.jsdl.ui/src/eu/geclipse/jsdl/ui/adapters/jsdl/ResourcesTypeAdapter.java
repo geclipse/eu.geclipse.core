@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
+
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
@@ -43,6 +44,7 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Text;
+
 import eu.geclipse.jsdl.model.BoundaryType;
 import eu.geclipse.jsdl.model.CPUArchitectureType;
 import eu.geclipse.jsdl.model.CandidateHostsType;
@@ -115,24 +117,25 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   private boolean isNotifyAllowed = true;  
   
   
+  
   /**
    * ResourcesTypeAdatper Class Constructor
    * 
-   * @param rootJsdlElement The root element of a JSDL document.
+   * @param jobDefinitionRoot The root element of a JSDL document.
    */
-  public ResourcesTypeAdapter( final EObject rootJsdlElement ) {
+  public ResourcesTypeAdapter( final JobDefinitionType jobDefinitionRoot ) {
     
-    getTypeForAdapter(rootJsdlElement);
+    getTypeForAdapter(jobDefinitionRoot);
       
   } // End Class Constructor
   
   
   
-  private void  getTypeForAdapter(final EObject rootJsdlElement){
+  private void  getTypeForAdapter(final JobDefinitionType jobDefinitionRoot){
     
-    this.jobDescriptionType = ((JobDefinitionType ) rootJsdlElement).getJobDescription();
+    this.jobDescriptionType = jobDefinitionRoot.getJobDescription();
     
-    if (this.jobDescriptionType.getResources() != null ) {
+    if ( this.jobDescriptionType.getResources() != null ) {
       this.resourcesType = this.jobDescriptionType.getResources();
     }
 
@@ -143,12 +146,12 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   /**
    * JobIdentificationTypeAdapter Class Constructor
    * 
-   * @param rootJsdlElement The root element of a JSDL document.
+   * @param jobDefinitionRoot The root element of a JSDL document.
    */
-  public void setContent(final EObject rootJsdlElement){
+  public void setContent(final JobDefinitionType jobDefinitionRoot){
     
     this.adapterRefreshed = true;
-    getTypeForAdapter( rootJsdlElement );
+    getTypeForAdapter( jobDefinitionRoot );
     
   }
   
@@ -213,6 +216,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     
     
   }
+  
   
   
   /**
@@ -325,7 +329,6 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
 
     }
   }
-
   
   
   
@@ -338,6 +341,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
       this.resourcesType.eSet( eStructuralFeature, this.candidateHosts );
     }
   }
+  
   
   
   protected void performDelete( final TableViewer viewer ){
@@ -405,6 +409,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   }
   
   
+  
   protected void checkOSElement() {
     
     checkResourcesElement();    
@@ -448,6 +453,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     }
     
   }
+  
   
   
   protected EObject checkProxy(final EObject refEObject) {
@@ -556,6 +562,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   } // End attachToCPUArchitecture
   
   
+  
   /**
    * Adapter interface to attach to the Operating System Version text widget.
    * 
@@ -582,6 +589,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   } // End attachToOSVersion()
   
   
+  
   /**
    * Adapter interface to attach to the Operating System Description text widget.
    * 
@@ -605,6 +613,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
       } );   
         
   } // End attachToOSDescription()
+  
   
   
   /**
@@ -652,6 +661,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
       } );
          
   } // End attachToFileSystemDescription()
+  
   
   
   /**
@@ -810,6 +820,41 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
       }
 
       public void widgetDefaultSelected(final SelectionEvent e) {
+        // Do Nothing
+      }
+    });
+     
+  } // End attachToFileSystemType()
+  
+  
+  
+  /**
+   * Adapter interface to attach to the Exclusive Execution combo widget.
+   * 
+   * @param widget The SWT combo widget which is associated with the 
+   * ExclusiveExecution element of a JSDL document.
+   */
+  public void attachToExclusiveExecution( final Combo widget ){
+    
+    Integer featureID = new Integer(JsdlPackage.RESOURCES_TYPE__EXCLUSIVE_EXECUTION);
+    this.comboFeaturesMap.put( featureID , widget );       
+    
+    widget.add( "true" ); //$NON-NLS-1$
+    widget.add( "false" ); //$NON-NLS-1$
+        
+    widget.addSelectionListener( new SelectionListener() {
+      public void widgetSelected( final SelectionEvent e) {
+
+        checkResourcesElement();
+         ResourcesTypeAdapter.this.resourcesType
+               .setExclusiveExecution( Boolean.parseBoolean( widget.getText() ) );
+        
+        
+        ResourcesTypeAdapter.this.contentChanged();
+        
+      }
+
+      public void widgetDefaultSelected( final SelectionEvent e ) {
         // Do Nothing
       }
     });
@@ -980,16 +1025,30 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
               
               
             break;
+            
             default:
             break;
           }
         }// end_if EReference
         
         else {
-
-             // Do Nothing    
+          /* Check EAttribures */
+          switch( featureID ) {
+            
+            case JsdlPackage.RESOURCES_TYPE__EXCLUSIVE_EXECUTION: {
+              boolean value = this.resourcesType.isExclusiveExecution();
+                            
+             comboName = this.comboFeaturesMap.get( new Integer(featureID) );
+             comboName.setText( Boolean.toString( value ) );
+            }
+              
+              
+            break;
+            default:
+            break;
+          }
         
-        } // End Else
+        } // End Else for EAttributes
         
         } // End isSet()
         

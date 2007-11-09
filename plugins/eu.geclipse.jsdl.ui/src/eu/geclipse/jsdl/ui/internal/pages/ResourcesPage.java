@@ -26,7 +26,6 @@ import java.net.URL;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
@@ -55,9 +54,11 @@ import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.TableWrapData;
+
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridRoot;
+import eu.geclipse.jsdl.model.JobDefinitionType;
 import eu.geclipse.jsdl.ui.adapters.jsdl.JobDefinitionTypeAdapter;
 import eu.geclipse.jsdl.ui.adapters.jsdl.JobIdentificationTypeAdapter;
 import eu.geclipse.jsdl.ui.adapters.jsdl.ResourcesTypeAdapter;
@@ -109,7 +110,8 @@ public final class ResourcesPage extends FormPage
   protected Label lblTotVirtMem = null;
   protected Label lblTotDiskSp = null;
   protected Label lblTotResCount = null;
-  protected Label lblFileSystemName = null;  
+  protected Label lblFileSystemName = null;
+  protected Label lblExclExecution = null;
   protected Button btnAdd = null;
   protected Button btnDel = null;
   protected Button btnEdit = null;  
@@ -137,6 +139,7 @@ public final class ResourcesPage extends FormPage
   private Combo cmbOperSystType = null;
   private Combo cmbCPUArchName = null;
   private Combo cmbFileSystemType = null;
+  private Combo cmbExclExec = null;
   private Combo cmbDiskSpaceRange = null;
   private ImageDescriptor helpDesc = null; 
   private boolean contentRefreshed = false;
@@ -196,7 +199,7 @@ public final class ResourcesPage extends FormPage
    * @see JobDefinitionTypeAdapter
    * @see JobIdentificationTypeAdapter
    *  
-   * @param rootJsdlElement
+   * @param jobDefinitionRoot
    * 
    * @param refreshStatus
    * Set to TRUE if the original page content is already set, but there is a need
@@ -204,15 +207,15 @@ public final class ResourcesPage extends FormPage
    *  from an outside editor.
    * 
    */
-  public void setPageContent( final EObject rootJsdlElement, 
+  public void setPageContent( final JobDefinitionType jobDefinitionRoot, 
                               final boolean refreshStatus ){
 
    if ( refreshStatus ) {
       this.contentRefreshed = true;
-      this.resourcesTypeAdapter.setContent( rootJsdlElement );      
+      this.resourcesTypeAdapter.setContent( jobDefinitionRoot );      
     }
    else{
-      this.resourcesTypeAdapter = new ResourcesTypeAdapter(rootJsdlElement);  
+      this.resourcesTypeAdapter = new ResourcesTypeAdapter(jobDefinitionRoot);  
       this.resourcesTypeAdapter.addListener( this );
    }
           
@@ -276,17 +279,25 @@ public final class ResourcesPage extends FormPage
     /* Create the Candidate Hosts Section */
     createCandidateHostsSection ( this.left , toolkit );
    
-    /* Create the File System Section */
-    createFileSystemSection( this.right, toolkit );
-    
     /* Create the Operating System Section */
     createOSSection( this.left , toolkit  );
+    
+    /* Create the File System Section */
+    createFileSystemSection( this.left, toolkit );
     
     /* Create the CPU Architecture Section */
     createCPUArch( this.right, toolkit );
     
+    /* Create the Exclusive Execution Section */
+    createExclusiveExecutionSection( this.right, toolkit );
+    
     /* Create the Additional Elements Section */
-    createAddElementsSection( this.left, toolkit );
+    createAddElementsSection( this.right, toolkit );
+    
+    
+    
+    
+  
 
    this.resourcesTypeAdapter.load();
    
@@ -487,10 +498,12 @@ public final class ResourcesPage extends FormPage
     
    
     this.txtFileSystemDescr = toolkit.createText( client, "", //$NON-NLS-1$
-                                 SWT.NONE |SWT.H_SCROLL|SWT.V_SCROLL| SWT.WRAP ); 
+                                 SWT.MULTI |SWT.H_SCROLL|SWT.V_SCROLL| SWT.WRAP ); 
     this.resourcesTypeAdapter.attachToFileSystemDescription( this.txtFileSystemDescr );
     
     gd = new GridData( GridData.FILL_BOTH );
+    gd.verticalAlignment = GridData.FILL;
+    gd.grabExcessVerticalSpace = true;
     gd.horizontalSpan = 2;
     gd.widthHint = 285;
     gd.heightHint = this.WIDGET_HEIGHT;
@@ -551,8 +564,7 @@ public final class ResourcesPage extends FormPage
     this.resourcesTypeAdapter
       .attachToFileSystemDiskSpace( this.txtDiskSpace, this.cmbDiskSpaceRange );
     
-    
-    toolkit.paintBordersFor( client);
+     toolkit.paintBordersFor( client);
     
   } //End void FileSystemSubSection()
   
@@ -617,6 +629,8 @@ public final class ResourcesPage extends FormPage
   
   } // End void osSubSection()
   
+
+  
   
   /*
    * Private Method that creates the CPU Architecture Sub-Section
@@ -661,6 +675,44 @@ public final class ResourcesPage extends FormPage
   
   
   /*
+   * Private Method that creates the CPU Architecture Sub-Section
+   */
+  private void createExclusiveExecutionSection ( final Composite parent,
+                                                 final FormToolkit toolkit )
+  {
+    
+    String sectionTitle = Messages.getString( "ResourcesPage_ExclExecSection" ); //$NON-NLS-1$
+    String sectionDescription = Messages.getString( "ResourcesPage_ExclExecDescr" ); //$NON-NLS-1$
+
+    TableWrapData td;
+       
+    Composite client = FormSectionFactory.createStaticSection( toolkit,
+                                           parent,
+                                           sectionTitle,
+                                           sectionDescription,
+                                           2 );
+     
+     td = new TableWrapData( TableWrapData.FILL_GRAB );
+    
+    /*======================= Exclusive Execution Widgets ====================*/
+    
+    this.lblExclExecution = toolkit.createLabel( client,
+                             Messages.getString( "ResourcesPage_ExclExec" ) ); //$NON-NLS-1$
+    
+    this.cmbExclExec = new Combo( client, SWT.SIMPLE 
+                                              | SWT.DROP_DOWN | SWT.READ_ONLY );
+    
+    this.cmbExclExec.setData( FormToolkit.KEY_DRAW_BORDER );    
+    this.resourcesTypeAdapter.attachToExclusiveExecution( this.cmbExclExec );
+    this.cmbExclExec.setLayoutData( td );
+    
+    toolkit.paintBordersFor( client);    
+    
+  } //End void cPUArch()
+  
+  
+  
+  /*
    * Private Method that creates the Additional Elements Sub-Section
    */
   private void createAddElementsSection (final Composite parent,
@@ -672,15 +724,14 @@ public final class ResourcesPage extends FormPage
 
     TableWrapData td;
        
-    Composite client = FormSectionFactory.createExpandableSection( toolkit,
+    Composite client = FormSectionFactory.createStaticSection( toolkit,
                                                                    parent,
                                                                    sectionTitle,
                                                                    sectionDescription,
-                                                                   3,
-                                                                   false );
+                                                                   3
+                                                                   );
     
-    
-    
+
     /*=====================Individual CPU Speed Widgets ======================*/
 
     td = new TableWrapData( TableWrapData.FILL_GRAB );
@@ -810,10 +861,11 @@ public final class ResourcesPage extends FormPage
 
   private Combo createCombo( final Composite composite ) {
     
-    Combo comboRang = new Combo( composite, SWT.DROP_DOWN | SWT.READ_ONLY );    
-    comboRang.add( Messages.getString( "ResourcesPage_LowBoundRange" ) ); //$NON-NLS-1$
-    comboRang.add( Messages.getString( "ResourcesPage_UpBoundRange" ) ); //$NON-NLS-1$
-    comboRang.add( Messages.getString( "ResourcesPage_Exact" ) ); //$NON-NLS-1$
+    Combo comboRang = new Combo( composite, SWT.WRAP | SWT.DROP_DOWN | SWT.READ_ONLY );    
+ 
+    comboRang.add( Messages.getString( "ResourcesPage_LowBoundRange" ).trim() ); //$NON-NLS-1$
+    comboRang.add( Messages.getString( "ResourcesPage_UpBoundRange" ).trim() ); //$NON-NLS-1$
+    comboRang.add( Messages.getString( "ResourcesPage_Exact" ).trim() ); //$NON-NLS-1$
     TableWrapData td = new TableWrapData( TableWrapData.FILL_GRAB );    
     comboRang.setLayoutData( td );
     

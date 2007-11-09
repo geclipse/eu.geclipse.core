@@ -23,13 +23,14 @@ package eu.geclipse.jsdl.ui.adapters.jsdl;
  */
 
 import java.util.HashMap;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Text;
+
 import eu.geclipse.jsdl.model.JobDefinitionType;
 import eu.geclipse.jsdl.model.JsdlFactory;
 import eu.geclipse.jsdl.model.JsdlPackage;
@@ -57,11 +58,11 @@ public final class JobDefinitionTypeAdapter extends JsdlAdaptersFactory {
   /**
    * Constructs a new <code> JobDefinitionTypeAdapter </code>
    * 
-   * @param rootJsdlElement . The root element of a JSDL document.
+   * @param jobDefinitionRoot . The root element of a JSDL document.
    */
-  public JobDefinitionTypeAdapter(final EObject rootJsdlElement) {
+  public JobDefinitionTypeAdapter(final JobDefinitionType jobDefinitionRoot) {
     
-    getTypeForAdapter(rootJsdlElement);
+    getTypeForAdapter( jobDefinitionRoot );
       
   } // End class Constructor
   
@@ -101,11 +102,11 @@ public final class JobDefinitionTypeAdapter extends JsdlAdaptersFactory {
   /**
    * Allows to set the adapter's content on demand and not through the constructor.
    * 
-   * @param rootJsdlElement
+   * @param documentRoot
    */
-  public void setContent(final EObject rootJsdlElement){
+  public void setContent(final JobDefinitionType documentRoot){
     
-    getTypeForAdapter( rootJsdlElement );
+    getTypeForAdapter( documentRoot );
     
   } // End void setContent()
   
@@ -113,9 +114,9 @@ public final class JobDefinitionTypeAdapter extends JsdlAdaptersFactory {
   /*
    * Get the JobDefinition Elements from the Root JSDL Element.
    */
-   private void  getTypeForAdapter(final EObject rootJsdlElement){
+   private void  getTypeForAdapter(final JobDefinitionType jobDefinitionRoot) {
      
-        this.jobDefinitionType = (JobDefinitionType) rootJsdlElement;
+        this.jobDefinitionType = jobDefinitionRoot;
         
    } // End void getTypeForAdapter()
    

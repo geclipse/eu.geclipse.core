@@ -26,7 +26,6 @@ package eu.geclipse.jsdl.ui.internal.pages;
 import java.net.URL;
 
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
@@ -49,6 +48,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 
+import eu.geclipse.jsdl.model.JobDefinitionType;
 import eu.geclipse.jsdl.ui.adapters.jsdl.JobDefinitionTypeAdapter;
 import eu.geclipse.jsdl.ui.adapters.jsdl.JobIdentificationTypeAdapter;
 import eu.geclipse.jsdl.ui.editors.JsdlEditor;
@@ -145,7 +145,7 @@ public final class JobDefinitionPage extends FormPage
    * @see JobDefinitionTypeAdapter
    * @see JobIdentificationTypeAdapter
    *  
-   * @param rootJsdlElement
+   * @param jobDefinitionRoot
    * 
    * @param refreshStatus
    * Set to TRUE if the original page content is already set, but there is a need
@@ -153,18 +153,21 @@ public final class JobDefinitionPage extends FormPage
    *  from an outside editor.
    * 
    */
-  public void setPageContent( final EObject rootJsdlElement, 
+
+  
+  public void setPageContent( final JobDefinitionType jobDefinitionRoot, 
                               final boolean refreshStatus ){
 
+       
    if ( refreshStatus ) {
       this.contentRefreshed = true;
-      this.jobDefinitionTypeAdapter.setContent( rootJsdlElement );
-      this.jobIdentificationTypeAdapter.setContent( rootJsdlElement );
+      this.jobDefinitionTypeAdapter.setContent( jobDefinitionRoot );
+      this.jobIdentificationTypeAdapter.setContent( jobDefinitionRoot );
     }
    else {     
-      this.jobDefinitionTypeAdapter = new JobDefinitionTypeAdapter( rootJsdlElement );
+      this.jobDefinitionTypeAdapter = new JobDefinitionTypeAdapter( jobDefinitionRoot );
       this.jobDefinitionTypeAdapter.addListener( this );
-      this.jobIdentificationTypeAdapter = new JobIdentificationTypeAdapter( rootJsdlElement );
+      this.jobIdentificationTypeAdapter = new JobIdentificationTypeAdapter( jobDefinitionRoot );
       this.jobIdentificationTypeAdapter.addListener( this );
    }
           

@@ -69,17 +69,17 @@ public final class ApplicationTypeAdapter extends JsdlAdaptersFactory {
   /**
    * ApplicationTypeAdapter Class Constructor
    * 
-   * @param rootJsdlElement The root element of a JSDL document.
+   * @param jobDefinitionType The root element of a JSDL document.
    */
-  public ApplicationTypeAdapter (final EObject rootJsdlElement){
-
-    getTypeForAdapter(rootJsdlElement);
+  public ApplicationTypeAdapter ( final JobDefinitionType jobDefinitionType ){
+ 
+    getTypeForAdapter( jobDefinitionType );
     
   } // End Constructor
   
   
   
-  protected void contentChanged(){
+  protected void contentChanged() {
     
     if ( this.isNotifyAllowed ){
       fireNotifyChanged( null );
@@ -91,9 +91,9 @@ public final class ApplicationTypeAdapter extends JsdlAdaptersFactory {
   /*
    * Get the Application Type Element from the root Jsdl Element.
    */  
-  private void  getTypeForAdapter(final EObject rootJsdlElement){
+  private void  getTypeForAdapter( final JobDefinitionType jobDefinitionRoot ){
 
-    this.jobDescriptionType = ((JobDefinitionType ) rootJsdlElement).getJobDescription();
+    this.jobDescriptionType = jobDefinitionRoot.getJobDescription();
     this.applicationType = this.jobDescriptionType.getApplication();
 
   } // End getTypeforAdapter
@@ -104,11 +104,11 @@ public final class ApplicationTypeAdapter extends JsdlAdaptersFactory {
   /**
    * Allows to set the adapter's content on demand and not through the constructor.
    * 
-   * @param rootJsdlElement The root element of a JSDL document.
+   * @param jobDefinitionRoot The root element of a JSDL document.
    */
-  public void setContent( final EObject rootJsdlElement ) {
+  public void setContent( final JobDefinitionType jobDefinitionRoot ) {
 
-    getTypeForAdapter( rootJsdlElement );  
+    getTypeForAdapter( jobDefinitionRoot );  
     
   }
   

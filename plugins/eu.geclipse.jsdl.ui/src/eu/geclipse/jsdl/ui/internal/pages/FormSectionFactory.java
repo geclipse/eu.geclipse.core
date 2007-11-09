@@ -41,11 +41,11 @@ public class FormSectionFactory {
    */
   
   public static Composite createStaticSection(final FormToolkit toolkit, 
-                                        final Composite parent, 
-                                        final String sectionTitle, 
-                                        final String sectionDescription, 
-                                        final int numOfColumns )
-                                         {
+                                              final Composite parent, 
+                                              final String sectionTitle, 
+                                              final String sectionDescription, 
+                                              final int numOfColumns ) {
+    
     Section section;
     
       
@@ -80,33 +80,28 @@ public class FormSectionFactory {
    * @param isInitialyExpanded
    * @return composite
    */
-  public static Composite createExpandableSection(final FormToolkit toolkit, 
-                                              final Composite parent, 
-                                              final String sectionTitle, 
-                                              final String sectionDescription, 
-                                              final int numOfColumns,                                             
-                                              final boolean isInitialyExpanded) {
+  public static Composite createExpandableSection( final FormToolkit toolkit, 
+                                                   final Composite parent, 
+                                                   final String sectionTitle, 
+                                                   final String sectionDescription, 
+                                                   final int numOfColumns,                                             
+                                                   final boolean isInitialyExpanded ) {
     Section section;
          
-    if (isInitialyExpanded) {
+    if ( isInitialyExpanded ) {
               
-      section = toolkit.createSection(parent, ExpandableComposite.TITLE_BAR
-                                            |Section.DESCRIPTION
-                                            |ExpandableComposite.TWISTIE
-                                            | SWT.WRAP);
+      section = toolkit.createSection( parent, ExpandableComposite.TITLE_BAR
+                                              |Section.DESCRIPTION
+                                              |ExpandableComposite.TWISTIE
+                                              | SWT.WRAP );
     }
     else {
       section = toolkit.createSection(parent, ExpandableComposite.TITLE_BAR
-                                      |Section.DESCRIPTION
-                                      |ExpandableComposite.TWISTIE
-                                      );
+                                              |Section.DESCRIPTION
+                                              |ExpandableComposite.TWISTIE );
   
     }
             
-   
-            
-    
-   
           
     section.setText(sectionTitle);    
     section.setDescription( sectionDescription );
@@ -118,7 +113,7 @@ public class FormSectionFactory {
           
     Composite client = toolkit.createComposite(section);
     client.setLayout(FormLayoutFactory.createSectionClientTableWrapLayout(false,
-                                                                       numOfColumns));
+                                                                 numOfColumns));
     section.setClient(client);
     return client;
           

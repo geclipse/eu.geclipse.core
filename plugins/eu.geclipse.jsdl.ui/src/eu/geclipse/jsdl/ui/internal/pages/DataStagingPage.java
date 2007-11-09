@@ -19,7 +19,6 @@ package eu.geclipse.jsdl.ui.internal.pages;
 import java.net.URL;
 
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
@@ -52,6 +51,7 @@ import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 
 import eu.geclipse.jsdl.model.DataStagingType;
+import eu.geclipse.jsdl.model.JobDefinitionType;
 import eu.geclipse.jsdl.ui.adapters.jsdl.DataStageTypeAdapter;
 import eu.geclipse.jsdl.ui.editors.JsdlEditor;
 import eu.geclipse.jsdl.ui.internal.Activator;
@@ -234,7 +234,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    * Associated Type Adapters for this page are: 
    * @see DataStageTypeAdapter
    *  
-   * @param rootJsdlElement
+   * @param jobDefinitionRoot
    * 
    * @param refreshStatus
    * Set to TRUE if the original page content is already set, but there is a need
@@ -242,15 +242,15 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    * from an outside editor.
    * 
    */
-  public void setPageContent( final EObject rootJsdlElement, 
+  public void setPageContent( final JobDefinitionType jobDefinitionRoot, 
                               final boolean refreshStatus ) {
 
   if ( refreshStatus ) {
      this.contentRefreshed = true;
-     this.dataStageTypeAdapter.setContent( rootJsdlElement );
+     this.dataStageTypeAdapter.setContent( jobDefinitionRoot );
    }
   else {     
-     this.dataStageTypeAdapter = new DataStageTypeAdapter( rootJsdlElement );
+     this.dataStageTypeAdapter = new DataStageTypeAdapter( jobDefinitionRoot );
      this.dataStageTypeAdapter.addListener( this );
    }
          

@@ -85,6 +85,7 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorSite;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 
+import eu.geclipse.jsdl.model.DocumentRoot;
 import eu.geclipse.jsdl.model.JobDefinitionType;
 import eu.geclipse.jsdl.ui.adapters.jsdl.JsdlAdaptersFactory;
 import eu.geclipse.jsdl.ui.adapters.posix.PosixAdaptersFactory;
@@ -125,6 +126,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
   protected MarkerHelper markerHelper = new EditUIMarkerHelper();
   protected ComposedAdapterFactory adapterFactory;
   protected JobDefinitionType jobDefType = null;
+  protected DocumentRoot documentRoot = null;
   private StructuredTextEditor editor = null;
   private int sourcePageIndex;
   private boolean refreshedModel = false;
@@ -135,10 +137,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
   private DataStagingPage dataStagingPage = new DataStagingPage(this);
   private ResourcesPage resourcesPage = new ResourcesPage(this);
   
-  
-  
-  
-  
+    
   
   /**
    * JsdlEditor Class Constructor. 
@@ -182,7 +181,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
                 public void run()
                 {
                   
-                  firePropertyChange(IEditorPart.PROP_DIRTY);
+                  firePropertyChange( IEditorPart.PROP_DIRTY );
 
                 }
               });
@@ -221,9 +220,9 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
    * If TRUE then the page is Dirty and a Save operation is needed.
    * 
    */
-  public void setDirty(final boolean dirtyFlag) {
+  public void setDirty( final boolean dirtyFlag ) {
     
-   if (this.isDirtyFlag != dirtyFlag) {
+   if ( this.isDirtyFlag != dirtyFlag ) {
      this.isDirtyFlag = dirtyFlag;     
      this.editorDirtyStateChanged();
    }
@@ -239,15 +238,15 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
       
      try {
       addPage( this.overviewPage );
-      addPage(this.jobDefPage);
-      addPage(this.jobApplicationPage);
-      addPage(this.dataStagingPage);  
-      addPage(this.resourcesPage);      
+      addPage( this.jobDefPage );
+      addPage( this.jobApplicationPage );
+      addPage( this.dataStagingPage );  
+      addPage( this.resourcesPage );      
       addResourceEditorPage();
       pushContentToPages();
       
          }
-   catch (PartInitException e) {     
+   catch ( PartInitException e ) {     
       Activator.logException( e );      
    }
     
@@ -276,7 +275,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
    * @return true if the the JSDL Model was refreshed / changed.
    * This could be caused by an external editor.
    */
-  public boolean isModelRefreshed(){
+  public boolean isModelRefreshed() {
      
     return this.refreshedModel;
   }
@@ -290,9 +289,9 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
     this.sourcePageIndex = addPage(getSourceEditor(), getEditorInput());
     
     
-    setPageText(this.sourcePageIndex, getEditorInput().getName());
+    setPageText( this.sourcePageIndex, getEditorInput().getName() );
 
-    getSourceEditor().setInput(getEditorInput());
+    getSourceEditor().setInput( getEditorInput() );
     
   }
   
@@ -305,7 +304,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
   private StructuredTextEditor getSourceEditor()
   {  
     
-     if (this.editor == null)
+     if ( this.editor == null )
       {
        this.editor = new StructuredTextEditor();   
        this.editor.setEditorPart( this );
@@ -319,10 +318,10 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
    * @see org.eclipse.ui.part.MultiPageEditorPart#createSite(org.eclipse.ui.IEditorPart)
    */
   @Override
-  protected IEditorSite createSite(final IEditorPart page) {
+  protected IEditorSite createSite( final IEditorPart page ) {
       IEditorSite site = null;
-      if (page == this.editor) {
-          site = new MultiPageEditorSite(this, page) {
+      if ( page == this.editor ) {
+          site = new MultiPageEditorSite( this, page ) {
               @Override
               public String getId() {
                   // Sets this ID so nested editor is configured for XML source          
@@ -331,19 +330,19 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
           };
       }
       else {
-          site = super.createSite(page);
+          site = super.createSite( page );
       }
       return site;
   }
   
   @Override
-  public void init(final IEditorSite site, final IEditorInput editorInput){
+  public void init( final IEditorSite site, final IEditorInput editorInput ) {
     setSite(site);
-    setInputWithNotify(editorInput);
-    setPartName(editorInput.getName());
+    setInputWithNotify( editorInput );
+    setPartName( editorInput.getName() );
     ResourcesPlugin.getWorkspace()
-                        .addResourceChangeListener(this.resourceChangeListener,
-                                              IResourceChangeEvent.POST_CHANGE);
+                        .addResourceChangeListener( this.resourceChangeListener,
+                                              IResourceChangeEvent.POST_CHANGE );
   }
 
 
@@ -367,7 +366,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
               protected Collection< Resource > removedRes =
                                                     new ArrayList< Resource >();
 
-              public boolean visit(final IResourceDelta delta)
+              public boolean visit( final IResourceDelta delta )
               {
                 if (delta.getFlags() != IResourceDelta.MARKERS 
                     &&
@@ -545,7 +544,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
     
     
   @Override
-  public void doSave(final IProgressMonitor monitor )
+  public void doSave( final IProgressMonitor monitor )
   {
     /* Do the work within an operation because this is a long running activity
      * that modifies the workbench.
@@ -558,7 +557,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
 
       
         @Override
-        public void execute(final IProgressMonitor monitor)
+        public void execute( final IProgressMonitor monitor )
         {
           // Save the resources to the file system.
           //
@@ -836,10 +835,12 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
     
   }
   
-  protected void refreshEditor(){
+  protected void refreshEditor() {
+    
     this.refreshedModel = true;
     pushContentToPages();
     this.refreshedModel = false;
+    
   }
     
   
@@ -848,19 +849,23 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
    appear. Each JSDL type is then passed as a reference parameter (EList) in the 
    appropriate page of the JSDL editor.   
   */
-  private void getResourceRoot(final Resource resource){
+  private void getResourceRoot( final Resource resource ) {
    
     // Get an iterator to iterate through all contents of the resource.
     TreeIterator <EObject> iterator = resource.getAllContents();
     
      while ( iterator.hasNext (  )  )  {  
 
-       EObject testType = iterator.next();           
+       EObject testElement = iterator.next();           
 
-       // Instaceof checks for each EObject that appears in the resource.
+       /* Instaceof checks for each EObject that appears in the resource. 
+        * We want to get the JobDefinition EObject which is the root Element of 
+        * a JSDL Document.
+        */
       
-       if (testType instanceof JobDefinitionType){         
-         this.jobDefType = (JobDefinitionType) testType;         
+       if ( testElement instanceof JobDefinitionType ) {         
+         this.jobDefType = (JobDefinitionType) testElement;  
+         
        }      
       
       }  

@@ -15,7 +15,6 @@ package eu.geclipse.jsdl.ui.internal.pages;
 import java.net.URL;
 
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
@@ -44,6 +43,8 @@ import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.TableWrapData;
+
+import eu.geclipse.jsdl.model.JobDefinitionType;
 import eu.geclipse.jsdl.model.posix.ArgumentType;
 import eu.geclipse.jsdl.model.posix.EnvironmentType;
 import eu.geclipse.jsdl.ui.adapters.jsdl.ApplicationTypeAdapter;
@@ -198,25 +199,25 @@ public final class JobApplicationPage extends FormPage
    * 
    * @see ApplicationTypeAdapter
    * @see PosixApplicationTypeAdapter
-   * @param rootJsdlElement
+   * @param jobDefinitionRoot
    * @param refreshStatus Set to TRUE if the original page content is already
    *            set, but there is a need to refresh the page because there was a
    *            change to this content from an outside editor.
    */
-  public void setPageContent( final EObject rootJsdlElement,
+  public void setPageContent( final JobDefinitionType jobDefinitionRoot,
                               final boolean refreshStatus )
   {
     if( refreshStatus ) {
       this.contentRefreshed = true;
-      this.applicationTypeAdapter.setContent( rootJsdlElement );
-      this.posixApplicationTypeAdapter.setContent( rootJsdlElement );
+      this.applicationTypeAdapter.setContent( jobDefinitionRoot );
+      this.posixApplicationTypeAdapter.setContent( jobDefinitionRoot );
     } else {
       /* Initialize the ApplicationTypeAdapter for this page */
-      this.applicationTypeAdapter = new ApplicationTypeAdapter( rootJsdlElement );
+      this.applicationTypeAdapter = new ApplicationTypeAdapter( jobDefinitionRoot );
       /* Add Save State change notification listener. */
       this.applicationTypeAdapter.addListener( this );
       /* Initialize the PosixApplicationTypeAdapter for this page */
-      this.posixApplicationTypeAdapter = new PosixApplicationTypeAdapter( rootJsdlElement );
+      this.posixApplicationTypeAdapter = new PosixApplicationTypeAdapter( jobDefinitionRoot );
       /* Add Save State change notification listener. */
       this.posixApplicationTypeAdapter.addListener( this );
     } // End else
@@ -865,7 +866,7 @@ public final class JobApplicationPage extends FormPage
   }
   
   
-  private void addFormPageHelp(final ScrolledForm form ) {
+  private void addFormPageHelp( final ScrolledForm form ) {
     
     final String href = getHelpResource();
     if ( href != null ) {

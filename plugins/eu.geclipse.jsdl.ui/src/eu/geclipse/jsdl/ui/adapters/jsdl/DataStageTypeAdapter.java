@@ -20,11 +20,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
-
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EReference;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -36,7 +34,6 @@ import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
-
 import eu.geclipse.jsdl.model.CreationFlagEnumeration;
 import eu.geclipse.jsdl.model.DataStagingType;
 import eu.geclipse.jsdl.model.DocumentRoot;
@@ -102,17 +99,17 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
   /**
    * DataStageTypeAdapter Class Constructor
    * 
-   * @param rootJsdlElement The root element of a JSDL document.
+   * @param jobDefinitionRoot The root element of a JSDL document.
    */
-  public DataStageTypeAdapter (final EObject rootJsdlElement){
+  public DataStageTypeAdapter ( final JobDefinitionType jobDefinitionRoot ){
 
-    getTypeForAdapter(rootJsdlElement);
+    getTypeForAdapter(jobDefinitionRoot);
     
   } // End Constructor
   
   
   
-  protected void contentChanged(){
+  protected void contentChanged() {
     
     if ( this.isNotifyAllowed )  {
       fireNotifyChanged( null);
@@ -121,9 +118,9 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
   
   
   
-  private void  getTypeForAdapter( final EObject rootJsdlElement ) {
+  private void  getTypeForAdapter( final JobDefinitionType jobDefinitionRoot ) {
 
-    this.jobDescriptionType = ( ( JobDefinitionType ) rootJsdlElement ).getJobDescription();
+    this.jobDescriptionType = jobDefinitionRoot.getJobDescription();
     
   } // End void getTypeforAdapter()
   
@@ -132,12 +129,12 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
   /**
    * Allows to set the adapter's content on demand and not through the constructor.
    * 
-   * @param rootJsdlElement The root element of a JSDL document.
+   * @param jobDefinitionRoot The root element of a JSDL document.
    */
-  public void setContent( final EObject rootJsdlElement ) {
+  public void setContent( final JobDefinitionType jobDefinitionRoot ) {
     
     this.adapterRefreshed = true;
-    getTypeForAdapter( rootJsdlElement );
+    getTypeForAdapter( jobDefinitionRoot );
     
   } // End void setContent()
   

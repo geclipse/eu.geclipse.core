@@ -24,7 +24,6 @@ package eu.geclipse.jsdl.ui.internal.pages;
 import java.net.URL;
 
 import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IStatusLineManager;
@@ -49,6 +48,7 @@ import org.eclipse.ui.forms.widgets.Section;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 import org.eclipse.ui.forms.widgets.TableWrapLayout;
 
+import eu.geclipse.jsdl.model.JobDefinitionType;
 import eu.geclipse.jsdl.ui.adapters.jsdl.ApplicationTypeAdapter;
 import eu.geclipse.jsdl.ui.adapters.posix.PosixApplicationTypeAdapter;
 import eu.geclipse.jsdl.ui.editors.JsdlEditor;
@@ -150,7 +150,7 @@ public final class OverviewPage extends FormPage
    * @see ApplicationTypeAdapter
    * @see PosixApplicationTypeAdapter
    *  
-   * @param rootJsdlElement
+   * @param jobDefinitionRoot
    * 
    * @param refreshStatus
    * Set to TRUE if the original page content is already set, but there is a need
@@ -158,21 +158,21 @@ public final class OverviewPage extends FormPage
    * from an outside editor.
    * 
    */
-  public void setPageContent( final EObject rootJsdlElement, 
+  public void setPageContent( final JobDefinitionType jobDefinitionRoot, 
                              final boolean refreshStatus ) {
 
    if (refreshStatus) {
       this.contentRefreshed = true;
-      this.applicationTypeAdapter.setContent( rootJsdlElement );
-      this.posixApplicationTypeAdapter.setContent( rootJsdlElement );
+      this.applicationTypeAdapter.setContent( jobDefinitionRoot );
+      this.posixApplicationTypeAdapter.setContent( jobDefinitionRoot );
       
     }
    
    else {
      
-      this.applicationTypeAdapter = new ApplicationTypeAdapter(rootJsdlElement);
+      this.applicationTypeAdapter = new ApplicationTypeAdapter(jobDefinitionRoot);
       this.applicationTypeAdapter.addListener( this );
-      this.posixApplicationTypeAdapter = new PosixApplicationTypeAdapter(rootJsdlElement);
+      this.posixApplicationTypeAdapter = new PosixApplicationTypeAdapter(jobDefinitionRoot);
       this.posixApplicationTypeAdapter.addListener( this );
       
    }
