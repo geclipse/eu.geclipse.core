@@ -139,15 +139,14 @@ public class GridJobCreator extends AbstractGridJobCreator {
   {
     String baseName = description.getPath().removeFileExtension().lastSegment();
     // IFolder folder = ( IFolder )parent.getResource();
-    String name = "." + baseName + ".job"; //$NON-NLS-1$ //$NON-NLS-2$
-    IPath path = new Path( name );
-    IFolder jobFolder = container.getFolder( path );
+    String name = "." + baseName + ".job"; //$NON-NLS-1$ //$NON-NLS-2$    
+    IFolder jobFolder = container.getFolder( new Path( name ) );
     // IFile jobFile = folder.getFile( name );
     int jobNum = 0;
     while( jobFolder.exists() ) {
       jobNum++;
       name = "." + baseName + "[" + jobNum + "].job"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-      jobFolder = container.getFolder( path );
+      jobFolder = container.getFolder( new Path( name ) );
     }
     return jobFolder;
   }

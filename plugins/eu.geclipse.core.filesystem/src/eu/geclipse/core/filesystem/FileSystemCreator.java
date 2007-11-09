@@ -56,7 +56,8 @@ public class FileSystemCreator
     IGridElement result = null;
     IResource resource = ( IResource ) getObject();
     
-    if ( isFileSystemLink( resource ) ) {
+    if ( isFileSystemLink( resource )
+        && resource instanceof IFolder ) {
       result = createConnectionRoot( resource );
     } else {
       result = createConnectionElement( resource );
@@ -75,6 +76,20 @@ public class FileSystemCreator
    */
   private ConnectionElement createConnectionElement( final IResource resource ) {
     ConnectionElement element = new ConnectionElement( resource );
+    
+    try {
+      IFileInfo info = element.getConnectionFileInfo();      
+      if ( info instanceof FileInfo ) {
+        FileInfo fileInfo = (FileInfo)info;
+        ( ( FileInfo ) info ).setExists( true );
+        if( resource instanceof IFile ) {
+          fileInfo.setDirectory( false );
+        }
+      }
+    } catch ( CoreException cExc ) {
+      // Should never happen, if it does just log it
+      Activator.logException( cExc );
+    }    
     return element;
   }
   
