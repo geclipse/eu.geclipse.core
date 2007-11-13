@@ -45,15 +45,5 @@ public interface IGridTest {
    * @return TestType
    */
   public TestType getType();
-  
-  /*
-   * Method responsible for returning children
-   */
-  //public List<IGridTest> getChildrenTests();
-  
-  //public String getType();
-  
-  //public boolean hasChildrenTests();
-  
 
 }

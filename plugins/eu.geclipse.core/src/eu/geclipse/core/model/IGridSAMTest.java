@@ -15,7 +15,7 @@ public interface IGridSAMTest extends IGridTest, IGridElement, IManageable {
   
   public String getStatus();
   
-  public List<IGridSingleTest> getTests();
+  public List<IGridSingleSAMTest> getTests();
   
-  public void setTests( final List<IGridSingleTest> tests );
+  public void setTests( final List<IGridSingleSAMTest> tests );
 }

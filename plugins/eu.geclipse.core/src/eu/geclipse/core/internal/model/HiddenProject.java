@@ -41,7 +41,7 @@ import eu.geclipse.core.model.IGridPreferences;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IGridRoot;
 import eu.geclipse.core.model.IGridSAMTest;
-import eu.geclipse.core.model.IGridSingleTest;
+import eu.geclipse.core.model.IGridSingleSAMTest;
 import eu.geclipse.core.model.IGridTest;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
@@ -191,8 +191,8 @@ public class HiddenProject
     return result;
   }
 
-  public IGridTest createGridSAMTest( final String name, final InputStream inputStream, 
-                                      final List<IGridSingleTest> tests )
+  public IGridTest createGridTest( final String name, final InputStream inputStream, 
+                                      final List<IGridSingleSAMTest> tests )
        {
          IGridTest result = null;
          // IGridTest result = null;
