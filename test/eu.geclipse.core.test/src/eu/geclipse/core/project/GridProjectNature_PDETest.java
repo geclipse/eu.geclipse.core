@@ -20,6 +20,7 @@ import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.junit.Assert;
 
 import org.junit.BeforeClass;
@@ -30,7 +31,7 @@ import org.junit.Test;
  * @author tao-j
  *
  */
-public class GridProjectNature_Test {
+public class GridProjectNature_PDETest {
   
   private static GridProjectNature nature;
   private static IProject project;
@@ -46,6 +47,7 @@ public class GridProjectNature_Test {
     project = workspaceRoot.getProject( projectName );
     IProjectDescription desc = project.getWorkspace().newProjectDescription( projectName );
     project.create( desc, null );
+    project.open( new NullProgressMonitor() );
     nature.setProject( project ); //this is needed for configure, otherwise nullpointerExeption
   }
 
