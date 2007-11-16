@@ -32,6 +32,7 @@ import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
@@ -45,6 +46,7 @@ import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PlatformUI;
@@ -64,6 +66,7 @@ import eu.geclipse.jsdl.ui.adapters.jsdl.JobIdentificationTypeAdapter;
 import eu.geclipse.jsdl.ui.adapters.jsdl.ResourcesTypeAdapter;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.dialogs.CandidateHostsDialog;
+import eu.geclipse.jsdl.ui.internal.dialogs.FileSystemsDialog;
 import eu.geclipse.jsdl.ui.providers.FeatureContentProvider;
 import eu.geclipse.jsdl.ui.providers.FeatureLabelProvider;
 
@@ -114,13 +117,10 @@ public final class ResourcesPage extends FormPage
   protected Label lblExclExecution = null;
   protected Button btnAdd = null;
   protected Button btnDel = null;
-  protected Button btnEdit = null;  
-  protected TableViewer hostsViewer = null; 
-  
-  private Text txtFileSystemName = null;
-  private Text txtFileSystemDescr = null;
-  private Text txtMountPoint = null;  
-  private Text txtDiskSpace = null;  
+  protected Button btnFileSystemEdit = null;  
+  protected TableViewer hostsViewer = null;
+  protected TableViewer fileSystemsViewer = null; 
+
   private Text txtOperSystVer = null;
   private Text txtOSDescr = null;  
   private Text txtIndCPUSp = null;
@@ -137,11 +137,11 @@ public final class ResourcesPage extends FormPage
   private Text txtTotDiskSp = null;
   private Text txtTotResCount = null;  
   private Combo cmbOperSystType = null;
-  private Combo cmbCPUArchName = null;
-  private Combo cmbFileSystemType = null;
-  private Combo cmbExclExec = null;
-  private Combo cmbDiskSpaceRange = null;
+  private Combo cmbCPUArchName = null;  
+  private Combo cmbExclExec = null;  
   private ImageDescriptor helpDesc = null; 
+  private Table tblFileSystems = null;
+  private TableColumn column = null;
   private boolean contentRefreshed = false;
   private boolean dirtyFlag = false;
   private final int TXT_LENGTH = 300;
@@ -321,7 +321,7 @@ public final class ResourcesPage extends FormPage
                                              final FormToolkit toolkit)
   
   {
-    String sectionTitle = Messages.getString( "ResourcesPage_CanHost" ); //$NON-NLS-1$
+    String sectionTitle = Messages.getString( "ResourcesPage_CanHost" ); //$NON-NLS-1$txtFileSystemName
     String sectionDescription = Messages.getString( "ResourcesPage_CandHostDesc" ); //$NON-NLS-1$
     
     GridData gd;
@@ -330,19 +330,12 @@ public final class ResourcesPage extends FormPage
                                            parent,
                                            sectionTitle,
                                            sectionDescription,
-                                           3 );
+                                           2 );
     
     gd = new GridData();
     
     /* ========================= Host Name Widgets ===========================*/
-    
-    Label lblHostName = toolkit.createLabel( client, 
-                                  Messages.getString( "ResourcesPage_HostName") ); //$NON-NLS-1$
-    
-    gd.verticalSpan = 5;
-    gd.verticalAlignment = GridData.BEGINNING;
-    lblHostName.setLayoutData( gd );
-    
+   
     
     Table tblHosts = new Table( client, SWT.BORDER | SWT.H_SCROLL 
                                       | SWT.V_SCROLL | SWT.MULTI );
@@ -390,7 +383,7 @@ public final class ResourcesPage extends FormPage
       public void widgetSelected( final SelectionEvent event ) {
         handleAddDialog(Messages.getString( "ResourcesPage_NewHostNameDialog" ), //$NON-NLS-1$
                                                     ( Button ) event.getSource() ); 
-        ResourcesPage.this.resourcesTypeAdapter.performAdd(ResourcesPage.this.hostsViewer,                                                          
+        ResourcesPage.this.resourcesTypeAdapter.addCandidateHosts(ResourcesPage.this.hostsViewer,                                                          
                                                            ResourcesPage.this.value );
       }
 
@@ -443,6 +436,7 @@ public final class ResourcesPage extends FormPage
     this.btnDel.setLayoutData( gd);
         
     toolkit.paintBordersFor( client );
+    updateButtons( this.hostsViewer );
     
   } //End void CandidateHostsSubSection()
   
@@ -451,122 +445,319 @@ public final class ResourcesPage extends FormPage
   /*
    * Private Method that creates the File System Sub-Section
    */ 
-  private void createFileSystemSection ( final Composite parent,
-                                         final FormToolkit toolkit ){
-    
- 
+//  private void createFileSystemSection ( final Composite parent,
+//                                         final FormToolkit toolkit ){
+//    
+// 
+//    String sectionTitle = Messages.getString( "ResourcesPage_FileSystem") ;  //$NON-NLS-1$
+//    String sectionDescription = Messages.getString( "ResourcesPage_FileSystemDesc" ); //$NON-NLS-1$
+//    
+//    GridData gd;
+//       
+//    Composite client = FormSectionFactory.createGridStaticSection( toolkit,
+//                                           parent,
+//                                           sectionTitle,
+//                                           sectionDescription,
+//                                           3 );
+//    
+//     
+//    
+//    gd = new GridData(); 
+//    
+//   
+//    gd.horizontalSpan = 1;
+//    
+  // /* ======================== File System Name Widgets
+  // =====================*/
+  // this.lblFileSystemName = toolkit.createLabel( client,
+  // Messages.getString( "ResourcesPage_FileSystemName" ) ); //$NON-NLS-1$
+  //    
+  // this.lblFileSystemName.setLayoutData( gd );
+  //    
+  // gd = new GridData(GridData.FILL_BOTH);
+  // gd.horizontalSpan = 2;
+  // gd.widthHint = this.TXT_LENGTH;
+  //    
+  // this.txtFileSystemName = toolkit.createText( client, "", SWT.NONE );
+  // //$NON-NLS-1$
+  // this.resourcesTypeAdapter.attachToFileSystemName( this.txtFileSystemName );
+  // this.txtFileSystemName.setLayoutData( gd );
+  //    
+  //    
+  // /* ========================= Description Widgets
+  // =========================*/
+  //    
+  // gd = new GridData();
+  // gd.verticalAlignment = GridData.BEGINNING;
+  // this.lblFileSystemDescr = toolkit.createLabel( client,
+  // Messages.getString( "ResourcesPage_Description" ) ); //$NON-NLS-1$
+  // this.lblFileSystemDescr.setLayoutData( gd );
+  //    
+  //   
+  // this.txtFileSystemDescr = toolkit.createText( client, "", //$NON-NLS-1$
+  // SWT.MULTI |SWT.H_SCROLL|SWT.V_SCROLL| SWT.WRAP );
+  // this.resourcesTypeAdapter.attachToFileSystemDescription(
+  // this.txtFileSystemDescr );
+  //    
+  // gd = new GridData( GridData.FILL_BOTH );
+  // gd.verticalAlignment = GridData.FILL;
+  // gd.grabExcessVerticalSpace = true;
+  // gd.horizontalSpan = 2;
+  // gd.widthHint = 285;
+  // gd.heightHint = this.WIDGET_HEIGHT;
+  // this.txtFileSystemDescr.setLayoutData( gd );
+  //    
+  // /* ========================= Mount Point Widgets
+  // =========================*/
+  // gd = new GridData();
+  // this.lblMountPoint = toolkit.createLabel( client,
+  // Messages.getString( "ResourcesPage_MountPoint" ) ); //$NON-NLS-1$
+  // this.lblMountPoint.setLayoutData( gd );
+  //    
+  // gd = new GridData( GridData.FILL_BOTH );
+  // gd.horizontalSpan = 2;
+  // gd.widthHint = this.TXT_LENGTH;
+  // this.txtMountPoint = toolkit.createText( client, "", SWT.NONE );
+  // //$NON-NLS-1$
+  // this.resourcesTypeAdapter.attachToFileSystemMountP   /* Create the Edit button */
+//gd = new GridData();
+//gd.verticalSpan = 2;
+//gd.verticalAlignment = GridData.END;
+//gd.horizontalAlignment = GridData.FILL;
+//this.btnEdit = toolkit.createButton(client,
+//                                Messages.getString("JsdlEditor_EditButton"), //$NON-NLS-1$
+//                                SWT.BUTTON1);  
+//
+//this.btnEdit.addSelectionListener(new SelectionListener() {
+//  public void widgetSelected(final SelectionEvent event) {
+//    handleAddDialog(Messages.getString( "ResourcesPage_EditHostNameDialog" ), //$NON-NLS-1$
+//                                                (Button) event.getSource()); 
+//    ResourcesPage.this.resourcesTypeAdapter.performEdit(ResourcesPage.this.hostsViewer,                                                          
+//                                                       ResourcesPage.this.value);
+//  }
+//
+//   public void widgetDefaultSelected(final SelectionEvent event) {
+//       // Do Nothing - Required method
+//   }
+// });
+//
+//this.btnEdit.setLayoutData( gd);oint( this.txtMountPoint
+  // );
+  // this.txtMountPoint.setLayoutData(gd);
+  //        
+  // gd = new GridData();
+  // gd.widthHint = 120;
+  //   
+  // /* ======================== Disk Space Widgets
+  // ===========================*/
+  // this.lblDiskSpace = toolkit.createLabel( client,
+  // Messages.getString( "ResourcesPage_DiskSpace" ) ); //$NON-NLS-1$
+  //    
+  // this.lblDiskSpace.setLayoutData( gd );
+  //
+  // this.txtDiskSpace = toolkit.createText( client, "", SWT.NONE );
+  // //$NON-NLS-1$
+  // this.txtDiskSpace.setLayoutData( gd );
+  //
+  // gd = new GridData(GridData.FILL_BOTH);
+  // gd.widthHint = 175;
+  // this.cmbDiskSpaceRange = new Combo( client, SWT.DROP_DOWN | SWT.READ_ONLY
+  // );
+  // this.cmbDiskSpaceRange.add( Messages.getString(
+  // "ResourcesPage_LowBoundRange" ) ); //$NON-NLS-1$
+  // this.cmbDiskSpaceRange.add( Messages.getString(
+  // "ResourcesPage_UpBoundRange" ) ); //$NON-NLS-1$
+  //
+  // this.cmbDiskSpaceRange.setData( FormToolkit.KEY_   /* Create the Edit button */
+//gd = new GridData();
+//gd.verticalSpan = 2;
+//gd.verticalAlignment = GridData.END;
+//gd.horizontalAlignment = GridData.FILL;
+//this.btnEdit = toolkit.createButton(client,
+//                                Messages.getString("JsdlEditor_EditButton"), //$NON-NLS-1$
+//                                SWT.BUTTON1);  
+//
+//this.btnEdit.addSelectionListener(new SelectionListener() {
+//  public void widgetSelected(final SelectionEvent event) {
+//    handleAddDialog(Messages.getString( "ResourcesPage_EditHostNameDialog" ), //$NON-NLS-1$
+//                                                (Button) event.getSource()); 
+//    ResourcesPage.this.resourcesTypeAdapter.performEdit(ResourcesPage.this.hostsViewer,                                                          
+//                                                       ResourcesPage.this.value);
+//  }
+//
+//   public void widgetDefaultSelected(final SelectionEvent event) {
+//       // Do Nothing - Required method
+//   }
+// });
+//
+//this.btnEdit.setLayoutData( gd);DRAW_BORDER );
+  //    
+  // this.cmbDiskSpaceRange.setLayoutData( gd );
+  //    
+  // /* ========================= File System Widgets
+  // =========================*/
+  // gd = new GridData();
+  // gd.horizontalSpan = 1;
+  // gd.widthHint = this.TXT_LENGTH + 5 ;
+  // this.lblFileSystemType = toolkit.createLabel( client,
+  // Messages.getString( "ResourcesPage_FileSysType" ) ); //$NON-NLS-1$
+  //    
+  // gd.widthHint=120;
+  // this.lblFileSystemType.setLayoutData( gd);
+  //    
+  // gd = new GridData( GridData.FILL_BOTH );
+  // gd.horizontalSpan = 2;
+  // this.cmbFileSystemType = new Combo(client, SWT.NONE | SWT.READ_ONLY);
+  // this.cmbFileSystemType.setData( FormToolkit.KEY_DRAW_BORDER );
+  // this.resourcesTypeAdapter.attachToFileSystemType( this.cmbFileSystemType );
+  // this.cmbFileSystemType.setLayoutData(gd);
+  //    
+  //    this.resourcesTypeAdapter
+  //      .attachToFileSystemDiskSpace( this.txtDiskSpace, this.cmbDiskSpaceRange );
+  //    
+  //     toolkit.paintBordersFor( client);
+//    
+//  } //End void FileSystemSubSection()
+  
+  
+  
+  
+  private void createFileSystemSection  ( final Composite parent,
+                                          final FormToolkit toolkit )
+  
+  {
     String sectionTitle = Messages.getString( "ResourcesPage_FileSystem") ;  //$NON-NLS-1$
     String sectionDescription = Messages.getString( "ResourcesPage_FileSystemDesc" ); //$NON-NLS-1$
     
-    GridData gd;
+
        
     Composite client = FormSectionFactory.createGridStaticSection( toolkit,
-                                           parent,
-                                           sectionTitle,
-                                           sectionDescription,
-                                           3 );
-    
-     
-    
-    gd = new GridData(); 
-    
-   
-    gd.horizontalSpan = 1;
-    
-    /* ======================== File System Name Widgets =====================*/
-    this.lblFileSystemName = toolkit.createLabel( client,
-                            Messages.getString( "ResourcesPage_FileSystemName" ) ); //$NON-NLS-1$
-    
-    this.lblFileSystemName.setLayoutData( gd );
-    
-    gd = new GridData(GridData.FILL_BOTH);
-    gd.horizontalSpan = 2;
-    gd.widthHint = this.TXT_LENGTH;
-    
-    this.txtFileSystemName = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
-    this.resourcesTypeAdapter.attachToFileSystemName( this.txtFileSystemName );
-    this.txtFileSystemName.setLayoutData( gd );
-    
-    
-    /* ========================= Description Widgets =========================*/
-    
+                                                               parent,
+                                                               sectionTitle,
+                                                               sectionDescription,
+                                                               2 );
+    GridData gd;
     gd = new GridData();
-    gd.verticalAlignment = GridData.BEGINNING;
-    this.lblFileSystemDescr = toolkit.createLabel( client,
-                               Messages.getString( "ResourcesPage_Description" ) ); //$NON-NLS-1$
-    this.lblFileSystemDescr.setLayoutData( gd );
+    
+    /* ========================= File System Widgets ===========================*/
     
    
-    this.txtFileSystemDescr = toolkit.createText( client, "", //$NON-NLS-1$
-                                 SWT.MULTI |SWT.H_SCROLL|SWT.V_SCROLL| SWT.WRAP ); 
-    this.resourcesTypeAdapter.attachToFileSystemDescription( this.txtFileSystemDescr );
     
+    this.tblFileSystems = new Table( client, SWT.BORDER | SWT.H_SCROLL 
+                                            | SWT.V_SCROLL | SWT.MULTI );
     gd = new GridData( GridData.FILL_BOTH );
-    gd.verticalAlignment = GridData.FILL;
+    gd.grabExcessHorizontalSpace = true;
     gd.grabExcessVerticalSpace = true;
-    gd.horizontalSpan = 2;
-    gd.widthHint = 285;
-    gd.heightHint = this.WIDGET_HEIGHT;
-    this.txtFileSystemDescr.setLayoutData( gd );
-    
-    /* ========================= Mount Point Widgets =========================*/
-    gd = new GridData();
-    this.lblMountPoint = toolkit.createLabel( client,
-                                Messages.getString( "ResourcesPage_MountPoint" ) ); //$NON-NLS-1$
-    this.lblMountPoint.setLayoutData( gd );
-    
-    gd = new GridData( GridData.FILL_BOTH );
-    gd.horizontalSpan = 2;
-    gd.widthHint = this.TXT_LENGTH;
-    this.txtMountPoint = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
-    this.resourcesTypeAdapter.attachToFileSystemMountPoint( this.txtMountPoint );
-    this.txtMountPoint.setLayoutData(gd);        
-        
-    gd = new GridData();
-    gd.widthHint = 120;
-   
-    /* ======================== Disk Space Widgets ===========================*/
-    this.lblDiskSpace = toolkit.createLabel( client,
-                                 Messages.getString( "ResourcesPage_DiskSpace" ) ); //$NON-NLS-1$
-    
-    this.lblDiskSpace.setLayoutData( gd );
-
-    this.txtDiskSpace = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
-    this.txtDiskSpace.setLayoutData( gd );
-
-    gd = new GridData(GridData.FILL_BOTH);
-    gd.widthHint = 175;
-    this.cmbDiskSpaceRange = new Combo( client, SWT.DROP_DOWN | SWT.READ_ONLY );    
-    this.cmbDiskSpaceRange.add( Messages.getString( "ResourcesPage_LowBoundRange" ) ); //$NON-NLS-1$
-    this.cmbDiskSpaceRange.add( Messages.getString( "ResourcesPage_UpBoundRange" ) ); //$NON-NLS-1$ 
-
-    this.cmbDiskSpaceRange.setData( FormToolkit.KEY_DRAW_BORDER );
-    
-    this.cmbDiskSpaceRange.setLayoutData( gd );
-    
-    /* ========================= File System Widgets =========================*/
-    gd = new GridData();
+    gd.verticalSpan = 5;
     gd.horizontalSpan = 1;
-    gd.widthHint = this.TXT_LENGTH + 5 ;
-    this.lblFileSystemType = toolkit.createLabel( client,
-                               Messages.getString( "ResourcesPage_FileSysType" ) ); //$NON-NLS-1$
+    gd.heightHint = this.WIDGET_HEIGHT;
+    gd.widthHint = this.TXT_LENGTH;
     
-    gd.widthHint=120;
-    this.lblFileSystemType.setLayoutData( gd);
+    this.tblFileSystems.setLayoutData( gd );
     
-    gd = new GridData( GridData.FILL_BOTH );
-    gd.horizontalSpan = 2;
-    this.cmbFileSystemType = new Combo(client, SWT.NONE | SWT.READ_ONLY);
-    this.cmbFileSystemType.setData( FormToolkit.KEY_DRAW_BORDER );    
-    this.resourcesTypeAdapter.attachToFileSystemType( this.cmbFileSystemType );
-    this.cmbFileSystemType.setLayoutData(gd);
+    //FIXME This is a work-around for the Bug#: 201705 for Windows.
+    this.fileSystemsViewer = new TableViewer( this.tblFileSystems );
+    this.tblFileSystems = this.fileSystemsViewer.getTable();    
+    this.fileSystemsViewer.setContentProvider( new FeatureContentProvider() );
+    this.fileSystemsViewer.setLabelProvider( new FeatureLabelProvider() );
+    this.tblFileSystems.setHeaderVisible( true );
+    this.column = new TableColumn( this.tblFileSystems, SWT.NONE );
+    this.column.setText( "Name" ); //$NON-NLS-1$
+    this.column.setWidth( 150 );
+    this.column = new TableColumn( this.tblFileSystems, SWT.NONE );
+    this.column.setText( "Type" ); //$NON-NLS-1$
+    this.column.setWidth( 60 );
+    this.column = new TableColumn( this.tblFileSystems, SWT.NONE );
+    this.column.setText( "Mount Point" ); //$NON-NLS-1$
+    this.column.setWidth( 60 );
+        
+    this.fileSystemsViewer.addSelectionChangedListener( new ISelectionChangedListener()
+    {
+
+      public void selectionChanged( final SelectionChangedEvent event ) {
+        updateButtons( ( TableViewer )event.getSource() );
+      }
+    } );
     
-    this.resourcesTypeAdapter
-      .attachToFileSystemDiskSpace( this.txtDiskSpace, this.cmbDiskSpaceRange );
     
-     toolkit.paintBordersFor( client);
+
+    this.tblFileSystems.setData(  FormToolkit.KEY_DRAW_BORDER );
+
+
+    this.resourcesTypeAdapter.attachToFileSystems( this.fileSystemsViewer );
     
-  } //End void FileSystemSubSection()
+    /* Create the Add button */
+    gd = new GridData();
+    gd.verticalSpan = 2;
+    gd.verticalAlignment = GridData.END;
+    gd.horizontalAlignment = GridData.FILL;
+    
+    this.btnAdd = toolkit.createButton( client,
+                                        Messages.getString( "JsdlEditor_AddButton" ), //$NON-NLS-1$
+                                        SWT.BUTTON1);  
+    
+    this.btnAdd.addSelectionListener( new SelectionListener() {
+      public void widgetSelected( final SelectionEvent event ) {
+        handleAddFsDialog(Messages.getString( "ResourcesPage_NewFileSystemsDialog" ), //$NON-NLS-1$
+                                                 ( Button ) event.getSource() ); 
+                
+        ResourcesPage.this.resourcesTypeAdapter.addFileSystem(ResourcesPage.this.fileSystemsViewer,                                                          
+                                                           ResourcesPage.this.value );
+      }
+
+       public void widgetDefaultSelected( final SelectionEvent event ) {
+           // Do Nothing - Required method
+       }
+     });
+    
+    this.btnAdd.setLayoutData( gd );
+    
+    //FIXME Un-comment for Edit Functionality
+    
+    /* Create the Edit button */
+    gd = new GridData();
+    gd.verticalSpan = 2;
+    gd.verticalAlignment = GridData.END;
+    gd.horizontalAlignment = GridData.FILL;
+    this.btnFileSystemEdit = toolkit.createButton(client,
+                                    Messages.getString("JsdlEditor_EditButton"), //$NON-NLS-1$
+                                    SWT.BUTTON1);  
+    
+    this.btnFileSystemEdit.addSelectionListener(new SelectionListener() {
+      public void widgetSelected(final SelectionEvent event) {
+        handleAddFsDialog( Messages.getString( "ResourcesPage_EditHostNameDialog" ), //$NON-NLS-1$
+                                                    (Button) event.getSource()); 
+        ResourcesPage.this.resourcesTypeAdapter.performEdit(ResourcesPage.this.fileSystemsViewer,                                                          
+                                                           ResourcesPage.this.value);
+      }
+
+       public void widgetDefaultSelected(final SelectionEvent event) {
+           // Do Nothing - Required method
+       }
+     });
+    
+    this.btnFileSystemEdit.setLayoutData( gd );
+    
+    
+    /* Create the Remove button */
+    gd = new GridData();
+    gd.verticalSpan = 1;
+    gd.verticalAlignment = GridData.BEGINNING;
+    gd.horizontalAlignment = GridData.FILL;
+    
+    this.btnDel = toolkit.createButton(client, 
+                                 Messages.getString( "JsdlEditor_RemoveButton" ), //$NON-NLS-1$
+                                 SWT.BUTTON1 );
+    
+    this.btnDel.setEnabled( true );
+    
+    this.resourcesTypeAdapter.attachToDelete( this.btnDel, this.fileSystemsViewer );
+    this.btnDel.setLayoutData( gd );
+        
+    toolkit.paintBordersFor( client );
+    
+  } //End void FileSystemsSection()
+  
   
   
   
@@ -649,10 +840,8 @@ public final class ResourcesPage extends FormPage
                                            sectionTitle,
                                            sectionDescription,
                                            2 );
-      
+     
 
-    
-    
 
      td = new TableWrapData( TableWrapData.FILL_GRAB );
     
@@ -708,6 +897,7 @@ public final class ResourcesPage extends FormPage
     
     toolkit.paintBordersFor( client);    
     
+    updateButtons( this.fileSystemsViewer );
   } //End void cPUArch()
   
   
@@ -937,6 +1127,33 @@ public final class ResourcesPage extends FormPage
     
   }
   
+  
+  protected void handleAddFsDialog( final String dialogTitle, final Button button ){
+    
+    this.value = null;
+    
+    FileSystemsDialog fileSystemDialog = new FileSystemsDialog( this.body.getShell(), dialogTitle );
+
+    if (button != this.btnAdd ) {
+    //FIXME Un-comment for Edit Functionality
+       IStructuredSelection structSelection 
+                   = ( IStructuredSelection ) this.fileSystemsViewer.getSelection();
+       
+       fileSystemDialog.setInput( structSelection.getFirstElement() );
+
+    }
+  
+ 
+    if( fileSystemDialog.open() != Window.OK ) {
+    
+        return;
+        
+    }
+    
+      this.value = fileSystemDialog.getValue();
+    
+  }
+  
 
   public void notifyChanged( final Notification notification ) {
     setDirty( true );
@@ -960,10 +1177,17 @@ public final class ResourcesPage extends FormPage
     ISelection selection = tableViewer.getSelection();
     boolean selectionAvailable = !selection.isEmpty();    
     
+    if (tableViewer == this.fileSystemsViewer) {
+    
       this.btnAdd.setEnabled( true );
       this.btnDel.setEnabled( selectionAvailable );
 //      FIXME Un-comment for Edit Functionality
-//      this.btnEdit.setEnabled( selectionAvailable );
+      this.btnFileSystemEdit.setEnabled( selectionAvailable );
+    }
+    else {
+      this.btnAdd.setEnabled( true );
+      this.btnDel.setEnabled( selectionAvailable );
+    }
     
   } // End updateButtons
     

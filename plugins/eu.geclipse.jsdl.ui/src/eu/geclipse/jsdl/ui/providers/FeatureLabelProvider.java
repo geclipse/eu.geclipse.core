@@ -30,6 +30,7 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
+import eu.geclipse.jsdl.model.FileSystemType;
 import eu.geclipse.jsdl.model.posix.ArgumentType;
 import eu.geclipse.jsdl.model.posix.EnvironmentType;
 import eu.geclipse.jsdl.ui.internal.Activator;
@@ -111,6 +112,26 @@ public class FeatureLabelProvider extends LabelProvider implements
           break;
         case 2:
           text = environmentType.getValue();
+          break;
+          default:
+          break;
+          
+      } // end switch
+      
+    } // end else_if EnvironmentType
+    
+    else if ( element instanceof FileSystemType ) {
+      
+      FileSystemType fileSystemType = ( FileSystemType ) element;      
+      switch ( columnIndex ) {
+        case 0:
+          text = fileSystemType.getName();
+          break;
+        case 1:
+          text = fileSystemType.getFileSystemType().toString();
+          break;
+        case 2:
+          text = fileSystemType.getMountPoint();
           break;
           default:
           break;

@@ -168,7 +168,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
  
   
   /**
-   * Adapter interface to attach to the CandidateHosts list widget.
+   * Adapter interface to attach to the CandidateHosts TableViewer widget.
    * 
    * @param widget The SWT list widget which is associated with the 
    * CandidateHosts element of the JSDL document.
@@ -189,6 +189,22 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     
     
   }
+  
+  
+  
+  /**
+   * 
+   * Adapter interface to attach to the FileSystems TableViewer widget.
+   * 
+   * @param widget The SWT TableViewer widget which is associated with the 
+   * FileSystem element of the JSDL document.
+   */
+  public void attachToFileSystems( final TableViewer widget ) {
+    
+    Integer featureID = new Integer(JsdlPackage.RESOURCES_TYPE__FILE_SYSTEM);
+    this.viewerFeaturesMap.put( featureID , widget );
+       
+  } // End attachToHostName()
   
   
   
@@ -225,15 +241,14 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
    * @param value 
    */
   @SuppressWarnings("unchecked")
-  public void performAdd(final TableViewer tableViewer, final Object[] value) {
+  public void addCandidateHosts(final TableViewer tableViewer, final Object[] value) {
     
     if (value == null) {
       return;
     }
-    
-    EStructuralFeature eStructuralFeature = null;
+
     Collection<String> collection = new ArrayList<String>();
-    int featureID = JsdlPackage.RESOURCES_TYPE__CANDIDATE_HOSTS;
+
      
     EList <String> newInputList = ( EList<String> )tableViewer.getInput(); 
         
@@ -250,21 +265,72 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     tableViewer.setInput( newInputList  );
     
     
-    eStructuralFeature = this.candidateHosts.eClass().getEStructuralFeature( featureID );
-    
     for ( int i=0; i<tableViewer.getTable().getItemCount(); i++ ) {      
       collection.add( (String) tableViewer.getElementAt( i ) );
     }
     
     checkCandidateHostsElement();
-    this.candidateHosts.eSet(eStructuralFeature, collection);
+    this.candidateHosts.getHostName().clear();
+    this.candidateHosts.getHostName().addAll( collection );
+
 
     this.contentChanged();
     
-    eStructuralFeature = null;
+
     collection = null;
     
   }
+  
+  
+  /**
+   * @param tableViewer The SWT TableViewer that contains the Structural Features
+   * @param value 
+   */
+  @SuppressWarnings("unchecked")
+  public void addFileSystem(final TableViewer tableViewer, final Object[] value) {
+    
+    if (value == null) {
+      return;
+    }
+
+    Collection<FileSystemType> collection = new ArrayList<FileSystemType>();
+
+     
+    EList <FileSystemType> newInputList = ( EList<FileSystemType> )tableViewer.getInput(); 
+        
+    
+    if (newInputList == null) {
+      newInputList = new BasicEList<FileSystemType>();
+    }
+    
+    for (int i=0; i < value.length; i++) {
+      
+      newInputList.add( (FileSystemType) value[i] );  
+    }
+
+    tableViewer.setInput( newInputList  );
+    
+    
+    for ( int i=0; i<tableViewer.getTable().getItemCount(); i++ ) {      
+      collection.add( (FileSystemType) tableViewer.getElementAt( i ) );
+    }
+    
+    checkFileSystemElement();
+    this.resourcesType.getFileSystem().clear();
+    this.resourcesType.getFileSystem().addAll( collection );
+  
+
+
+    this.contentChanged();
+    
+
+    collection = null;
+    
+  }
+  
+  
+  
+  
   
   
   
@@ -281,7 +347,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     
     EStructuralFeature eStructuralFeature;
     
-    int featureID = JsdlPackage.RESOURCES_TYPE__CANDIDATE_HOSTS;
+    int featureID = JsdlPackage.RESOURCES_TYPE__FILE_SYSTEM;
     
     /*
      * Get the TableViewer Selection
@@ -289,23 +355,29 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     IStructuredSelection structSelection 
                               = ( IStructuredSelection ) tableViewer.getSelection();
   
-    /* If the selection is not null the Change the selected element */
+    /* If the selection is not null then Change the selected element */
     if (structSelection != null) {
       
-      eStructuralFeature = this.candidateHosts.eClass()
+      eStructuralFeature = this.fileSystemType.eClass()
                                             .getEStructuralFeature( featureID );
 
       Object feature = structSelection.getFirstElement();
     
     /* Get the Index of the Element that needs to be changed */
-      int index = (( java.util.List<Object> )this.candidateHosts.eGet(eStructuralFeature))
-                                                           .indexOf( feature  );
+//      int index = (( java.util.List<FileSystemType> )this.resourcesType.eGet(eStructuralFeature))
+//                                                           .indexOf( feature  );
+      
+      int idx = this.resourcesType.getFileSystem().indexOf( feature );
+      System.out.println(idx);
+      System.out.println("VAL: "+ value);
       
     /* Change the element. The element is located through it's index position
      * in the list.
      */
-      (( java.util.List<Object> )this.candidateHosts.eGet( eStructuralFeature ))
-            .set( index, value );
+//      (( java.util.List<Object> )this.resourcesType.eGet( eStructuralFeature ))
+//            .set( index, value );
+      
+      this.resourcesType.getFileSystem().set(idx,value);
   
     /* Refresh the table viewer and notify the editor that
      *  the page content has changed. 
@@ -347,12 +419,12 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   
   protected void performDelete( final TableViewer viewer ){
     
-    EStructuralFeature eStructuralFeature;
-    
-    int featureID = JsdlPackage.RESOURCES_TYPE__CANDIDATE_HOSTS;
-    
-    eStructuralFeature = this.candidateHosts.eClass()
-                                            .getEStructuralFeature( featureID );
+//    EStructuralFeature eStructuralFeature;
+//    
+//    int featureID = JsdlPackage.RESOURCES_TYPE__CANDIDATE_HOSTS;
+//    
+//    eStructuralFeature = this.candidateHosts.eClass()
+//                                            .getEStructuralFeature( featureID );
     
     IStructuredSelection structSelection 
                               = ( IStructuredSelection ) viewer.getSelection();
@@ -373,7 +445,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
         try {
           /* Delete only Multi-Valued Elements */
           
-          if (!this.adapterRefreshed) {
+          if ( !this.adapterRefreshed ) {
       
             this.candidateHosts.getHostName().remove( feature );
             
@@ -938,76 +1010,90 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
             }
             break;            
             case JsdlPackage.RESOURCES_TYPE__FILE_SYSTEM: {
-                            
+            
+              tableViewer = this.viewerFeaturesMap.get( new Integer(featureID) );
               EList<FileSystemType> valueEList = (EList<FileSystemType>) this.resourcesType           
                                                     .eGet( eStructuralFeature );
               
-              for (Iterator<FileSystemType> it = valueEList.iterator(); it.hasNext();){
                 
-                this.fileSystemType = it.next();
+            
+            if(/* !this.adapterRefreshed
+                && */this.viewerFeaturesMap.containsKey( new Integer(featureID))) {
+              
+              for (Iterator<FileSystemType>  it = valueEList.iterator(); it.hasNext();){                    
+                this.fileSystemType = it.next();                   
+                tableViewer.setInput( valueEList );
                 
-                if (this.fileSystemType.getName() != null ) {
-                
-                widgetName = this.widgetFeaturesMap
-                        .get( new Integer(JsdlPackage.FILE_SYSTEM_TYPE__NAME) );
-                
-                widgetName.setText( this.fileSystemType.getName() );
-                
-                }
-                
-                if (this.fileSystemType.getDescription() != null ) {
-                  
-                widgetName = this.widgetFeaturesMap
-                  .get(new Integer(JsdlPackage.FILE_SYSTEM_TYPE__DESCRIPTION) );
-                
-                widgetName.setText( this.fileSystemType.getDescription() );
-                
-                }
-                
-                if (this.fileSystemType.getMountPoint() != null ) {
-                  
-                widgetName = this.widgetFeaturesMap
-                 .get( new Integer(JsdlPackage.FILE_SYSTEM_TYPE__MOUNT_POINT) );
-                
-                widgetName.setText( this.fileSystemType.getMountPoint() );
-                
-                }
-                
-                if (this.fileSystemType.getDiskSpace() != null ) {
-                  
-                
-                widgetName = this.widgetFeaturesMap
-                  .get( new Integer(JsdlPackage.FILE_SYSTEM_TYPE__DISK_SPACE) );
-                
-                comboName = this.comboFeaturesMap
-                   .get( new Integer(JsdlPackage.DOCUMENT_ROOT__DISK_SPACE) );
-                
-                if ( this.fileSystemType.getDiskSpace().getLowerBoundedRange() != null ) {
-                  
-                  widgetName.setText( Double.toString( this.fileSystemType.getDiskSpace()
-                                      .getLowerBoundedRange().getValue() ) );
-                  
-                  /* Select the Lower Bound */                  
-                  comboName.select( 0 );
-                 
-                }
-                
-                else {
-                  widgetName.setText( Double.toString( this.fileSystemType.getDiskSpace()
-                                      .getUpperBoundedRange().getValue() ) );
-                  /* Select the Lower Bound */
-                  comboName.select( 1 );
-                }
-                
-
-                comboName = this.comboFeaturesMap
-                .get (new Integer(JsdlPackage.DOCUMENT_ROOT__FILE_SYSTEM_TYPE));
-                
-                comboName.setText( this.fileSystemType.getFileSystemType()
-                                                                 .getLiteral() );
-                }               
-                
-              } // End Iterator
+                } // End Iterator
+                         
+              } // Endif
+              
+//              for (Iterator<FileSystemType> it = valueEList.iterator(); it.hasNext();){
+//                
+//                this.fileSystemType = it.next();
+//                
+//                if (this.fileSystemType.getName() != null ) {
+//                
+//                widgetName = this.widgetFeaturesMap
+//                        .get( new Integer(JsdlPackage.FILE_SYSTEM_TYPE__NAME) );
+//                
+//                widgetName.setText( this.fileSystemType.getName() );
+//                
+//                }
+//                
+//                if (this.fileSystemType.getDescription() != null ) {
+//                  
+//                widgetName = this.widgetFeaturesMap
+//                  .get(new Integer(JsdlPackage.FILE_SYSTEM_TYPE__DESCRIPTION) );
+//                
+//                widgetName.setText( this.fileSystemType.getDescription() );
+//                
+//                }
+//                
+//                if (this.fileSystemType.getMountPoint() != null ) {
+//                  
+//                widgetName = this.widgetFeaturesMap
+//                 .get( new Integer(JsdlPackage.FILE_SYSTEM_TYPE__MOUNT_POINT) );
+//                
+//                widgetName.setText( this.fileSystemType.getMountPoint() );
+//                
+//                }
+//                
+//                if (this.fileSystemType.getDiskSpace() != null ) {
+//                  
+//                
+//                widgetName = this.widgetFeaturesMap
+//                  .get( new Integer(JsdlPackage.FILE_SYSTEM_TYPE__DISK_SPACE) );
+//                
+//                comboName = this.comboFeaturesMap
+//                   .get( new Integer(JsdlPackage.DOCUMENT_ROOT__DISK_SPACE) );
+//                
+//                if ( this.fileSystemType.getDiskSpace().getLowerBoundedRange() != null ) {
+//                  
+//                  widgetName.setText( Double.toString( this.fileSystemType.getDiskSpace()
+//                                      .getLowerBoundedRange().getValue() ) );
+//                  
+//                  /* Select the Lower Bound */                  
+//                  comboName.select( 0 );
+//                 
+//                }
+//                
+//                else {
+//                  widgetName.setText( Double.toString( this.fileSystemType.getDiskSpace()
+//                                      .getUpperBoundedRange().getValue() ) );
+//                  /* Select the Lower Bound */
+//                  comboName.select( 1 );
+//                }
+//                
+//
+//                comboName = this.comboFeaturesMap
+//                .get (new Integer(JsdlPackage.DOCUMENT_ROOT__FILE_SYSTEM_TYPE));
+//                
+//                comboName.setText( this.fileSystemType.getFileSystemType()
+//                                                                 .getLiteral() );
+//                }               
+//                
+//              } // End Iterator
            
               
             }
