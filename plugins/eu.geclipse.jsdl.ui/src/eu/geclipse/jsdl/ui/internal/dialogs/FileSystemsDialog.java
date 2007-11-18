@@ -53,6 +53,7 @@ import eu.geclipse.jsdl.ui.internal.Activator;
 public class FileSystemsDialog extends Dialog {
   
   protected FileSystemType fileSystemType = JsdlFactory.eINSTANCE.createFileSystemType();
+  protected boolean editMode = false;
   protected Composite panel = null;
   protected Label lblFileSystemName = null;
   protected Label lblMountPoint = null;
@@ -69,7 +70,7 @@ public class FileSystemsDialog extends Dialog {
   private String title = null;
   private final int WIDGET_HEIGHT = 100;
   private FileSystemType[] newFileSystem = null;
-  protected boolean editMode = false;
+  
   
   
   /**
@@ -395,9 +396,15 @@ public class FileSystemsDialog extends Dialog {
     }
     
   });
-    
-     if ( editMode ) {
-       editMode = false;
+  
+  /* Initial Values for Edit Operation */
+  if ( this.editMode ) {
+    this.cmbFileSystemType.setText( this.fileSystemType.getFileSystemType().toString() );
+  }
+  
+  /* Hack to apply initial values to widgets */  
+     if ( this.editMode ) {
+       this.editMode = false;
      }
     Dialog.applyDialogFont( container );
     

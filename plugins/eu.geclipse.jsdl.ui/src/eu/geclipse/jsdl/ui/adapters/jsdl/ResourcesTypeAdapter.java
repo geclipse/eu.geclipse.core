@@ -26,7 +26,6 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
-
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
@@ -44,7 +43,6 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Text;
-
 import eu.geclipse.jsdl.model.BoundaryType;
 import eu.geclipse.jsdl.model.CPUArchitectureType;
 import eu.geclipse.jsdl.model.CandidateHostsType;
@@ -345,9 +343,9 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
       return;
     }
     
-    EStructuralFeature eStructuralFeature;
+//    EStructuralFeature eStructuralFeature;
     
-    int featureID = JsdlPackage.RESOURCES_TYPE__FILE_SYSTEM;
+//    int featureID = JsdlPackage.RESOURCES_TYPE__FILE_SYSTEM;
     
     /*
      * Get the TableViewer Selection
@@ -358,9 +356,10 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     /* If the selection is not null then Change the selected element */
     if (structSelection != null) {
       
-      eStructuralFeature = this.fileSystemType.eClass()
-                                            .getEStructuralFeature( featureID );
+//      eStructuralFeature = this.fileSystemType.eClass()
+//                                            .getEStructuralFeature( featureID );
 
+      
       Object feature = structSelection.getFirstElement();
     
     /* Get the Index of the Element that needs to be changed */
@@ -368,16 +367,20 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
 //                                                           .indexOf( feature  );
       
       int idx = this.resourcesType.getFileSystem().indexOf( feature );
-      System.out.println(idx);
-      System.out.println("VAL: "+ value);
       
     /* Change the element. The element is located through it's index position
      * in the list.
      */
 //      (( java.util.List<Object> )this.resourcesType.eGet( eStructuralFeature ))
 //            .set( index, value );
+    
+      try {
+        this.resourcesType.getFileSystem().set( idx, value );
+      } catch( Exception e ) {
+        Activator.logException( e );
+      }
       
-      this.resourcesType.getFileSystem().set(idx,value);
+      
   
     /* Refresh the table viewer and notify the editor that
      *  the page content has changed. 

@@ -727,8 +727,9 @@ public final class ResourcesPage extends FormPage
       public void widgetSelected(final SelectionEvent event) {
         handleAddFsDialog( Messages.getString( "ResourcesPage_EditHostNameDialog" ), //$NON-NLS-1$
                                                     (Button) event.getSource()); 
+        
         ResourcesPage.this.resourcesTypeAdapter.performEdit(ResourcesPage.this.fileSystemsViewer,                                                          
-                                                           ResourcesPage.this.value);
+                                                           ResourcesPage.this.value[0]);
       }
 
        public void widgetDefaultSelected(final SelectionEvent event) {
