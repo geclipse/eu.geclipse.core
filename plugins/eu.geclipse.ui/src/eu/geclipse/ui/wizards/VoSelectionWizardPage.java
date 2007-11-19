@@ -289,6 +289,10 @@ public class VoSelectionWizardPage extends WizardPage {
           text += "\n\tURI:\n\t\t" + infoService.getURI().toString(); 
         }
 
+        //
+        // This forces an Infosystem query for every click on a VO!! 
+        //   Don't show non-static info here!
+        /*
         IGridService[] services = vo.getServices();
         text += "\n\nOther Services:";
         if ( ( services != null ) && ( services.length > 1 ) ) {
@@ -306,7 +310,7 @@ public class VoSelectionWizardPage extends WizardPage {
         } else {
           text += "\n\tNone";
         }
-
+        */
         this.infoText.setText( text );
       } catch ( GridModelException gmExc ) {
         NewProblemDialog.openProblem( getShell(),
