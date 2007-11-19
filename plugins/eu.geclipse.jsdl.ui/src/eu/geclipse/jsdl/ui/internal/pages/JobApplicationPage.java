@@ -130,6 +130,7 @@ public final class JobApplicationPage extends FormPage
   protected TableViewer environmentViewer = null;
   protected Table tblArgument = null;
   protected TableViewer argumentViewer = null;
+  protected JobDefinitionType jobDefinitionType = null;
   protected ApplicationTypeAdapter applicationTypeAdapter;
   protected PosixApplicationTypeAdapter posixApplicationTypeAdapter;
   protected Object[][] value = null;
@@ -212,6 +213,7 @@ public final class JobApplicationPage extends FormPage
       this.applicationTypeAdapter.setContent( jobDefinitionRoot );
       this.posixApplicationTypeAdapter.setContent( jobDefinitionRoot );
     } else {
+      this.jobDefinitionType = jobDefinitionRoot;
       /* Initialize the ApplicationTypeAdapter for this page */
       this.applicationTypeAdapter = new ApplicationTypeAdapter( jobDefinitionRoot );
       /* Add Save State change notification listener. */
@@ -803,6 +805,8 @@ public final class JobApplicationPage extends FormPage
   {
     MultipleInputDialog dialog = new MultipleInputDialog( this.getSite()
       .getShell(), dialogTitle );
+    
+    
     if( dialogTitle == Messages.getString( "JobApplicationPage_ArgumentDialog" ) ) { //$NON-NLS-1$
       this.value = new Object[ 1 ][ 2 ];
       if( button == this.btnArgAdd ) {
@@ -845,6 +849,7 @@ public final class JobApplicationPage extends FormPage
       }
     }
     
+
     if( dialog.open() != Window.OK ) {
       return;
     }

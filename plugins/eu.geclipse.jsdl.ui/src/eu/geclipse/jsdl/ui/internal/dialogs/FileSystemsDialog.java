@@ -47,7 +47,7 @@ import eu.geclipse.jsdl.ui.internal.Activator;
 
 
 /**
- * @author nloullod
+ * @author nloulloud
  *
  */
 public class FileSystemsDialog extends Dialog {
