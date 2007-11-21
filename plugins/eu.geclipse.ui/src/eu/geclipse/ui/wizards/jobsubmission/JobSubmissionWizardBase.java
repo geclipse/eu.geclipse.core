@@ -25,9 +25,10 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.wizard.IWizardContainer;
 import org.eclipse.jface.wizard.Wizard;
@@ -45,6 +46,9 @@ import eu.geclipse.ui.dialogs.NewProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.wizards.wizardselection.IInitalizableWizard;
 
+/**
+ * Base class for submission wizard
+ */
 public abstract class JobSubmissionWizardBase extends Wizard
   implements IInitalizableWizard, IExecutableExtension
 {
@@ -75,70 +79,58 @@ public abstract class JobSubmissionWizardBase extends Wizard
           public void run( final IProgressMonitor monitor )
             throws InvocationTargetException, InterruptedException
           {
-            monitor.beginTask( "Submitting jobs...",
-                               JobSubmissionWizardBase.this.jobDescriptions.size() );
+            SubMonitor betterMonitor = SubMonitor.convert( monitor, JobSubmissionWizardBase.this.jobDescriptions.size() );
             
             for( IGridJobDescription description : JobSubmissionWizardBase.this.jobDescriptions )
-            {
-              testCanceled( monitor );
-              monitor.subTask( description.getName() );
+            {              
+              testCanceled( betterMonitor );              
+
               if( JobSubmissionWizardBase.this.creator.canCreate( description ) )
-              {
-                
-                SubProgressMonitor subMonitor = new SubProgressMonitor( monitor, 1 );
-                subMonitor.beginTask( "Submitting job " + description.getName(), 10 );
+              {                
+                betterMonitor.setTaskName( String.format( Messages.getString("JobSubmissionWizardBase.taskSubmittingJob"), description.getName() ) ); //$NON-NLS-1$
                 
                 try {
-                  
-                  subMonitor.subTask( "Creating job file" );
                   IGridContainer parent = buildPath( description );
-                  subMonitor.worked( 1 );
-                  testCanceled( subMonitor );
+                  testCanceled( betterMonitor );
                   
                   IGridJobID jobId = null;
-                  if( service != null ) {
-                    
-                    subMonitor.subTask( "Submission in progress" );
-                    jobId = service.submitJob( description, subMonitor );
-                    subMonitor.worked( 9 );
-                    testCanceled( subMonitor );
-                    
+                  if( service != null ) {                    
+                    jobId = service.submitJob( description, betterMonitor.newChild( 1, SubMonitor.SUPPRESS_SETTASKNAME | SubMonitor.SUPPRESS_BEGINTASK ) );     
+                    testCanceled( betterMonitor );                    
                   } else {
                     NewProblemDialog.openProblem( getShell(),
-                                                  "Job submission failed",
-                                                  "Cannot find a Job Submission Service to submit job to.",
+                                                  Messages.getString("JobSubmissionWizardBase.errSubmissionFailed"), //$NON-NLS-1$
+                                                  Messages.getString("JobSubmissionWizardBase.errUnknownSubmissionService"), //$NON-NLS-1$
                                                   null );
                   }
                   // create job
                   JobSubmissionWizardBase.this.creator.create( parent, jobId );
                 } catch( GridModelException gmExc ) {
                   NewProblemDialog.openProblem( getShell(),
-                                                "Job submission failed",
+                                                Messages.getString("JobSubmissionWizardBase.errSubmissionFailed"), //$NON-NLS-1$
                                                 null,
                                                 gmExc );
                 } catch( CoreException cExc ) {
-                  NewProblemDialog.openProblem( getShell(),
-                                                "Job submission failed",
-                                                null,
-                                                cExc );
-                } finally {
-                  subMonitor.done();
+                    NewProblemDialog.openProblem( getShell(),
+                                                  Messages.getString("JobSubmissionWizardBase.errSubmissionFailed"), //$NON-NLS-1$
+                                                  null,
+                                                  cExc );
                 }
               }
             }
-            monitor.done();
+            betterMonitor.worked( 1 );
           }
         } );
       } catch( InvocationTargetException itExc ) {
         NewProblemDialog.openProblem( getShell(),
-                                      "Job submission failed",
-                                      "Job submission failed",
+                                      Messages.getString("JobSubmissionWizardBase.errSubmissionFailed"), //$NON-NLS-1$
+                                      Messages.getString("JobSubmissionWizardBase.errSubmissionFailed"), //$NON-NLS-1$
                                       itExc.getCause() );
         result = false;
       } catch( InterruptedException intExc ) {
         NewProblemDialog.openProblem( getShell(),
-                                      "Job submission interrupted",
-                                      "Job submission interrupted",
+                                      Messages.getString("JobSubmissionWizardBase.errSubmissionInterupted"), //$NON-NLS-1$
+                                      Messages.getString("JobSubmissionWizardBase.errSubmissionInterupted"), //$NON-NLS-1$
                                       intExc );
         result = false;
       }
@@ -154,7 +146,7 @@ public abstract class JobSubmissionWizardBase extends Wizard
    */
   protected abstract IGridJobSubmissionService getSubmissionService();
 
-  private IGridContainer buildPath( final IGridJobDescription description )
+  IGridContainer buildPath( final IGridJobDescription description )
       throws CoreException {
     
     IGridContainer result = null;
@@ -221,6 +213,7 @@ public abstract class JobSubmissionWizardBase extends Wizard
    * 
    * @see eu.geclipse.ui.wizards.wizardselection.IInitalizableWizard#init(java.lang.Object)
    */
+  @SuppressWarnings("unchecked")
   public boolean init( final Object data ) {
     boolean result = false;
     if( data instanceof List ) {
@@ -240,9 +233,9 @@ public abstract class JobSubmissionWizardBase extends Wizard
       if( "job_creator".equals( element.getName() ) ) { //$NON-NLS-1$
         Object obj = element.createExecutableExtension( "class" ); //$NON-NLS-1$
         if( !( obj instanceof IGridJobCreator ) ) {
-          Status status = new Status( Status.ERROR,
+          Status status = new Status( IStatus.ERROR,
                                       Activator.PLUGIN_ID,
-                                      Status.OK,
+                                      IStatus.OK,
                                       "Job Creator configured in class atribute for job_creator " //$NON-NLS-1$
                                         + "element in eu.geclipse.ou.jobSubmissionWizzard " //$NON-NLS-1$
                                         + "is not implementing IGridJobCreator interface", //$NON-NLS-1$
