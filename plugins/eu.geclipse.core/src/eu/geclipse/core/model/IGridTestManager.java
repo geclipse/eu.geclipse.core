@@ -20,7 +20,7 @@ import java.util.List;
 
 public interface IGridTestManager extends IGridElementManager {
   
-  public List<IGridTest> getStructuralTests();
+  public List<IGridTest> getTests();
 //  
 //  public void addStrTest( final IGridTest test );
 //  

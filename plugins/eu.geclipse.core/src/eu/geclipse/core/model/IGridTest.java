@@ -17,6 +17,7 @@
 package eu.geclipse.core.model;
 
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 
 import org.eclipse.core.runtime.jobs.IJobStatus;
@@ -26,10 +27,11 @@ import org.eclipse.core.runtime.jobs.IJobStatus;
 /**
  * Interface for structural tests and simple tests.
  */
-public interface IGridTest {
+public interface IGridTest extends IGridElement, IManageable {
   
   public enum TestType{
     SAM,
+    JOB,
     OTHER,
     SINGLE
   }
@@ -45,5 +47,17 @@ public interface IGridTest {
    * @return TestType
    */
   public TestType getType();
+  
+  /**
+   * Method returning result of the test
+   * @return
+   */
+  public Object getResult();
+  
+  /**
+   * Method returns all the data which needs to be viewed in properties view.
+   * @return
+   */
+  public HashMap<String, String> getDescriptions();
 
 }

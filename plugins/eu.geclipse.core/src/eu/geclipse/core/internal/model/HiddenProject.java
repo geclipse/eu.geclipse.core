@@ -40,8 +40,6 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridPreferences;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IGridRoot;
-import eu.geclipse.core.model.IGridSAMTest;
-import eu.geclipse.core.model.IGridSingleSAMTest;
 import eu.geclipse.core.model.IGridTest;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
@@ -191,8 +189,14 @@ public class HiddenProject
     return result;
   }
 
-  public IGridTest createGridTest( final String name, final InputStream inputStream, 
-                                      final List<IGridSingleSAMTest> tests )
+  /**
+   * 
+   * @param name
+   * @param extenstion of the file to be created. a
+   * @param inputStream
+   * @return
+   */
+  public IGridTest createGridTest( final String name, final String extenstion, final InputStream inputStream )
        {
          IGridTest result = null;
          // IGridTest result = null;
@@ -202,12 +206,11 @@ public class HiddenProject
            if (!simpleTestsFolder.exists() ) {
              simpleTestsFolder.create( IResource.FORCE | IResource.REPLACE, true, null );
            }
-           IFile file = simpleTestsFolder.getFile( name + ".gtdl"); //$NON-NLS-1$
+           IFile file = simpleTestsFolder.getFile( name + "." + extenstion); //$NON-NLS-1$
            if( !file.exists() ) {
              file.create( inputStream, IResource.FORCE | IResource.REPLACE, null );
            }
            result = GridModel.getTestManager().getTest( name );
-           ((IGridSAMTest)result).setTests( tests );
          } catch( CoreException coreExc ) {
            // TODO Auto-generated catch block
            coreExc.printStackTrace();
