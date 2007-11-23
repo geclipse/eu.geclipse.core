@@ -38,15 +38,18 @@ public class JobDetailsSection implements IJobDetailsSection {
   private int order;
   private Section sectionWidget;
   private List<IJobDetail> details = new LinkedList<IJobDetail>();
+  private IViewConfiguration viewConfiguration;
 
   /**
    * @param name section name
    * @param order value used to sort sections before creation
+   * @param viewConfiguration the configuration of view
    */
-  public JobDetailsSection( final String name, final int order ) {
+  public JobDetailsSection( final String name, final int order, final IViewConfiguration viewConfiguration ) {
     super();
     this.name = name;
     this.order = order;
+    this.viewConfiguration = viewConfiguration;
   }
 
   public int getOrder() {
@@ -54,19 +57,18 @@ public class JobDetailsSection implements IJobDetailsSection {
   }
 
   public void refresh( final IGridJob gridJob,
-                       final Composite parent,
-                       final IViewConfiguration viewConfiguration )
+                       final Composite parent )
   {
     boolean atLeastOneDetailSpecified = false;
     if( !isWidgetCreated() ) {
-      createWidgets( parent, viewConfiguration.getFormToolkit() );
+      createWidgets( parent, this.viewConfiguration.getFormToolkit() );
     }
     for( IJobDetail detail : this.details ) {
       atLeastOneDetailSpecified |= detail.refresh( gridJob,
                                                    ( Composite )this.sectionWidget.getClient(),
-                                                   viewConfiguration );
+                                                   this.viewConfiguration );
     }
-    setVisible( viewConfiguration.isShowEmptyEnabled()
+    setVisible( this.viewConfiguration.isShowEmptyEnabled()
                 || atLeastOneDetailSpecified );
   }
 
@@ -129,5 +131,9 @@ public class JobDetailsSection implements IJobDetailsSection {
 
   public List<IJobDetail> getDetails() {
     return this.details;
+  }
+
+  public IGridJob getInputJob() {
+    return this.viewConfiguration.getInputJob();
   }
 }

@@ -150,7 +150,7 @@ implements ISelectionListener, IViewConfiguration, IGridJobStatusListener
    */
   public void refresh() {
     refreshEmptyJobDescription();
-    getSectionsManager().refresh( this.inputJob, this );    
+    getSectionsManager().refresh( this.inputJob );    
     this.topScrolledForm.reflow( true );
   }
 
@@ -188,7 +188,7 @@ implements ISelectionListener, IViewConfiguration, IGridJobStatusListener
 
   public JobDetailSectionsManager getSectionsManager() {
     if( this.sectionsManager == null ) {
-      this.sectionsManager = new JobDetailSectionsManager( this.topScrolledForm.getBody() );
+      this.sectionsManager = new JobDetailSectionsManager( this.topScrolledForm.getBody(), this );
     }
     return this.sectionsManager;
   }
@@ -326,7 +326,7 @@ implements ISelectionListener, IViewConfiguration, IGridJobStatusListener
   /**
    * @return the inputJob
    */
-  IGridJob getInputJob() {
+  public IGridJob getInputJob() {
     return this.inputJob;
   }  
 }

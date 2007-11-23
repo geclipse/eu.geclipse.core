@@ -20,6 +20,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.swt.widgets.Widget;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import eu.geclipse.core.model.IGridJob;
@@ -88,7 +89,7 @@ abstract public class JobTextDetail extends JobDetail {
     }
     return detail != null;
   }
- 
+  
   /* (non-Javadoc)
    * @see eu.geclipse.ui.views.jobdetails.IJobDetail#getId()
    */
@@ -103,18 +104,46 @@ abstract public class JobTextDetail extends JobDetail {
   }
 
   public void dispose() {
-    if( this.descriptionLabel != null && !this.descriptionLabel.isDisposed() ) {
-      this.descriptionLabel.dispose();
-      this.descriptionLabel = null;
-    }
-    if( this.detailText != null && !this.detailText.isDisposed() ) {
-      this.detailText.dispose();
-      this.detailText = null;
+    dispose( this.descriptionLabel );
+    dispose( this.detailText );
+    this.descriptionLabel = null;
+    this.detailText = null;
+  }
+  
+  protected void dispose( final Widget widget) {
+    if( widget != null ) {
+      if( !widget.isDisposed() ) {
+        widget.dispose();
+      }      
     }
   }
 
-  private void setVisible( final boolean visible ) {
+  protected void setVisible( final boolean visible ) {
     setVisible( this.descriptionLabel, visible );
     setVisible( this.detailText, visible );
+  }
+
+  
+  /**
+   * @return the descriptionLabel
+   */
+  protected Label getDescriptionLabel() {
+    return this.descriptionLabel;
+  }
+
+  
+  /**
+   * @return the detailText
+   */
+  protected Text getDetailText() {
+    return this.detailText;
+  }
+
+  
+  /**
+   * @return the name
+   */
+  protected String getName() {
+    return this.name;
   }
 }

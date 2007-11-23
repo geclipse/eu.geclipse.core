@@ -82,4 +82,8 @@ abstract public class JobDetail implements IJobDetail {
     }
     gridData.exclude = !visible;
   }
+  
+  protected IGridJob getInputJob() {
+    return this.section.getInputJob();
+  }
 }

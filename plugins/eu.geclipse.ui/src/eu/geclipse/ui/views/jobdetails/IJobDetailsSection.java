@@ -33,11 +33,9 @@ public interface IJobDetailsSection {
    * 
    * @param gridJob refreshed job
    * @param parent parent, on which widgets should be created
-   * @param viewConfiguration current view configuration
    */
   void refresh( final IGridJob gridJob,
-                final Composite parent,
-                final IViewConfiguration viewConfiguration );
+                final Composite parent );
 
   /**
    * @return position, on which section will be visibled in
@@ -68,4 +66,9 @@ public interface IJobDetailsSection {
    * @return details currently shown in section
    */
   List<IJobDetail> getDetails();
+  
+  /**
+   * @return the job currently shown in view
+   */
+  IGridJob getInputJob();
 }

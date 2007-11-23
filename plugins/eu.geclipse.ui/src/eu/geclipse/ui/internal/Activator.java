@@ -158,7 +158,7 @@ public class Activator extends AbstractUIPlugin {
   public static final String IMG_REFRESH = "refresh"; //$NON-NLS-1$
   
   /**
-   * Image for action {@link DownloadJobOutputsAction}
+   * Image for action DownloadJobOutputsAction
    */
   public static final String IMG_DOWNLOAD_JOB_OUTPUT = "DownloadJobOutput"; //$NON-NLS-1$
   
@@ -166,6 +166,11 @@ public class Activator extends AbstractUIPlugin {
    * Image for action {@link UpdateJobStatusAction}
    */
   public static final String IMG_UPDATE_JOB_STATUS = "UpdateJobStatus";  //$NON-NLS-1$
+  
+  /**
+   * Image for actions "See details", "see more" etc
+   */
+  public static final String IMG_SEE = "See"; //$NON-NLS-1$
   
   /**
    * The shared instance.
@@ -287,7 +292,8 @@ public class Activator extends AbstractUIPlugin {
       { "calendar", "icons/calendar.gif" },  //$NON-NLS-1$//$NON-NLS-2$
       { IMG_REFRESH, "icons/eview16/refresh.gif" },  //$NON-NLS-1$
       { IMG_DOWNLOAD_JOB_OUTPUT, "icons/DownloadJobOutput.gif" }, //$NON-NLS-1$
-      { IMG_UPDATE_JOB_STATUS, "icons/UpdateJobStatus.gif" } //$NON-NLS-1$
+      { IMG_UPDATE_JOB_STATUS, "icons/UpdateJobStatus.gif" }, //$NON-NLS-1$
+      { IMG_SEE, "icons/obj16/see.gif" } //$NON-NLS-1$
     };
     
     ImageDescriptor imgDsc = null;

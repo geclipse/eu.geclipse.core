@@ -70,6 +70,10 @@ public class Messages extends NLS {
    * 
    */
   public static String JobDetailsView_emptyJobDescription;
+  /**
+   * 
+   */
+  public static String JobEditedDetail_editorNameFormat;
   
   private static final String BUNDLE_NAME = "eu.geclipse.ui.views.jobdetails.messages"; //$NON-NLS-1$
   

@@ -39,9 +39,10 @@ public class JobDetailSectionsManager {
   private Composite parent; // parent for sections
   private Map<Integer, IJobDetailsSection> sectionsMap = new HashMap<Integer, IJobDetailsSection>();
   private List<IJobDetail> currentDetails;
+  private IViewConfiguration viewConfiguration;
   
   /**
-   * Enum specyfing order in which sections appears in view
+   * Enum specifying order in which sections appears in view
    */
   public enum SectionOrder {
     /**
@@ -60,18 +61,19 @@ public class JobDetailSectionsManager {
 
   /**
    * @param parent on which {@link IJobDetailsSection}s should be created
+   * @param viewConfiguration the configuration of view, to which manager is connected
    */
-  public JobDetailSectionsManager( final Composite parent ) {
+  public JobDetailSectionsManager( final Composite parent, final IViewConfiguration viewConfiguration ) {
     super();
     this.parent = parent;
+    this.viewConfiguration = viewConfiguration;
   }
 
   private static int getNextId() {
     return nextId++;
   }
 
-  void refresh( final IGridJob inputJob,
-                final IViewConfiguration viewConfiguration )
+  void refresh( final IGridJob inputJob )
   {
     List<IJobDetail> details = getDetails( inputJob );
     List<IJobDetailsSection> sections = getSections( details );
@@ -79,7 +81,7 @@ public class JobDetailSectionsManager {
     dispatchDetailsToSections( details );
     disposeNotUsedSections();
     for( IJobDetailsSection section : sections ) {
-      section.refresh( inputJob, this.parent, viewConfiguration );
+      section.refresh( inputJob, this.parent );
     }
     this.currentDetails = details;
   }
@@ -139,7 +141,7 @@ public class JobDetailSectionsManager {
    */
   public Integer createSection( final String name, final int order ) {
     Integer id = Integer.valueOf( getNextId() );
-    JobDetailsSection section = new JobDetailsSection( name, order );
+    JobDetailsSection section = new JobDetailsSection( name, order, this.viewConfiguration );
     this.sectionsMap.put( id, section );
     return id;
   }

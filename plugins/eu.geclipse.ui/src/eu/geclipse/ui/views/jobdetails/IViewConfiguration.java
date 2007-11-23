@@ -17,6 +17,8 @@ package eu.geclipse.ui.views.jobdetails;
 
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
+import eu.geclipse.core.model.IGridJob;
+
 /**
  * JobDetailsView configuration
  */
@@ -36,4 +38,9 @@ public interface IViewConfiguration {
    * @return form toolkit used to create widgets
    */
   FormToolkit getFormToolkit();
+  
+  /**
+   * @return get job actually shown in view 
+   */
+  IGridJob getInputJob();
 }
