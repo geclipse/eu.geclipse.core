@@ -87,12 +87,14 @@ public class GlueSEAccessProtocol extends AbstractGlueTable
   /**
    * 
    */
-  public ArrayList<GlueSEAccessProtocolCapability> glueSEAccessProtocolCapabilityList = new ArrayList<GlueSEAccessProtocolCapability>();
+  public ArrayList<GlueSEAccessProtocolCapability> glueSEAccessProtocolCapabilityList
+    = new ArrayList<GlueSEAccessProtocolCapability>();
 
   /**
    * 
    */
-  public ArrayList<GlueSEAccessProtocolSupportedSecurity> glueSEAccessProtocolSupportedSecurityList = new ArrayList<GlueSEAccessProtocolSupportedSecurity>();
+  public ArrayList<GlueSEAccessProtocolSupportedSecurity> glueSEAccessProtocolSupportedSecurityList
+    = new ArrayList<GlueSEAccessProtocolSupportedSecurity>();
 
   /**
    * 
