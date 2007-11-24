@@ -341,7 +341,7 @@ public class VoSelectionWizardPage extends WizardPage {
   protected void setInitialSelection() {
     IGridElement defaultVo = GridModel.getVoManager().getDefault();
     if ( defaultVo == null ) {
-      // No default VO, set the first entry active
+      // No default VO, take the first entry if any, null otherwise
       defaultVo = (IGridElement) this.tableViewer.getElementAt( 0 );
     } else {
       // Check if the default VO is of the requested voType
@@ -349,10 +349,15 @@ public class VoSelectionWizardPage extends WizardPage {
       for ( ViewerFilter filter: this.tableViewer.getFilters() ) {
         show &= filter.select( this.tableViewer, this.voList, defaultVo );
       }
-      // If it is not, then select the first of the list
+      // If it is not, then select the first of the list if any, null otherwise
       if ( ! show ) {
         defaultVo = (IGridElement) this.tableViewer.getElementAt( 0 );
       }
+    }
+    
+    // Do nothing if there is no VO to select
+    if ( defaultVo == null ) {
+      return;
     }
     this.tableViewer.setChecked( defaultVo, true );
     this.tableViewer.refresh();
