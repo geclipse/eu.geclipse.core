@@ -115,8 +115,10 @@ public final class ResourcesPage extends FormPage
   protected Label lblTotResCount = null;
   protected Label lblFileSystemName = null;
   protected Label lblExclExecution = null;
-  protected Button btnAdd = null;
-  protected Button btnDel = null;
+  protected Button btnHostsAdd = null;
+  protected Button btnHostsDel = null;
+  protected Button btnFileSystemAdd = null;
+  protected Button btnFileSystemDel = null;
   protected Button btnFileSystemEdit = null;  
   protected TableViewer hostsViewer = null;
   protected TableViewer fileSystemsViewer = null; 
@@ -375,11 +377,11 @@ public final class ResourcesPage extends FormPage
     gd.verticalSpan = 2;
     gd.verticalAlignment = GridData.END;
     gd.horizontalAlignment = GridData.FILL;
-    this.btnAdd = toolkit.createButton( client,
+    this.btnHostsAdd = toolkit.createButton( client,
                                         Messages.getString( "JsdlEditor_AddButton" ), //$NON-NLS-1$
                                         SWT.BUTTON1);  
     
-    this.btnAdd.addSelectionListener( new SelectionListener() {
+    this.btnHostsAdd.addSelectionListener( new SelectionListener() {
       public void widgetSelected( final SelectionEvent event ) {
         handleAddDialog(Messages.getString( "ResourcesPage_NewHostNameDialog" ), //$NON-NLS-1$
                                                     ( Button ) event.getSource() ); 
@@ -392,7 +394,7 @@ public final class ResourcesPage extends FormPage
        }
      });
     
-    this.btnAdd.setLayoutData( gd);
+    this.btnHostsAdd.setLayoutData( gd);
     
     //FIXME Uncomment for Edit Functionality
     
@@ -426,16 +428,17 @@ public final class ResourcesPage extends FormPage
     gd.verticalSpan = 1;
     gd.verticalAlignment = GridData.BEGINNING;
     gd.horizontalAlignment = GridData.FILL;
-    this.btnDel = toolkit.createButton(client, 
+    this.btnHostsDel = toolkit.createButton(client, 
                                  Messages.getString( "JsdlEditor_RemoveButton" ), //$NON-NLS-1$
                                  SWT.BUTTON1 );
     
-    this.btnDel.setEnabled( true );
+    this.btnHostsDel.setEnabled( false );
     
-    this.resourcesTypeAdapter.attachToDelete( this.btnDel, this.hostsViewer );
-    this.btnDel.setLayoutData( gd);
+    this.resourcesTypeAdapter.attachToDelete( this.btnHostsDel, this.hostsViewer );
+    this.btnHostsDel.setLayoutData( gd);
         
     toolkit.paintBordersFor( client );
+    
     updateButtons( this.hostsViewer );
     
   } //End void CandidateHostsSubSection()
@@ -692,11 +695,11 @@ public final class ResourcesPage extends FormPage
     gd.verticalAlignment = GridData.END;
     gd.horizontalAlignment = GridData.FILL;
     
-    this.btnAdd = toolkit.createButton( client,
+    this.btnFileSystemAdd = toolkit.createButton( client,
                                         Messages.getString( "JsdlEditor_AddButton" ), //$NON-NLS-1$
                                         SWT.BUTTON1);  
     
-    this.btnAdd.addSelectionListener( new SelectionListener() {
+    this.btnFileSystemAdd.addSelectionListener( new SelectionListener() {
       public void widgetSelected( final SelectionEvent event ) {
         handleAddFsDialog(Messages.getString( "ResourcesPage_NewFileSystemsDialog" ), //$NON-NLS-1$
                                                  ( Button ) event.getSource() ); 
@@ -710,7 +713,7 @@ public final class ResourcesPage extends FormPage
        }
      });
     
-    this.btnAdd.setLayoutData( gd );
+    this.btnFileSystemAdd.setLayoutData( gd );
     
     //FIXME Un-comment for Edit Functionality
     
@@ -736,7 +739,7 @@ public final class ResourcesPage extends FormPage
            // Do Nothing - Required method
        }
      });
-    
+    this.btnFileSystemEdit.setEnabled( false );
     this.btnFileSystemEdit.setLayoutData( gd );
     
     
@@ -746,14 +749,13 @@ public final class ResourcesPage extends FormPage
     gd.verticalAlignment = GridData.BEGINNING;
     gd.horizontalAlignment = GridData.FILL;
     
-    this.btnDel = toolkit.createButton(client, 
+    this.btnFileSystemDel = toolkit.createButton(client, 
                                  Messages.getString( "JsdlEditor_RemoveButton" ), //$NON-NLS-1$
                                  SWT.BUTTON1 );
     
-    this.btnDel.setEnabled( true );
-    
-    this.resourcesTypeAdapter.attachToDelete( this.btnDel, this.fileSystemsViewer );
-    this.btnDel.setLayoutData( gd );
+    this.btnFileSystemDel.setEnabled( false );
+    this.resourcesTypeAdapter.attachToDelete( this.btnFileSystemDel, this.fileSystemsViewer );
+    this.btnFileSystemDel.setLayoutData( gd );
         
     toolkit.paintBordersFor( client );
     
@@ -898,7 +900,7 @@ public final class ResourcesPage extends FormPage
     
     toolkit.paintBordersFor( client);    
     
-    updateButtons( this.fileSystemsViewer );
+//    updateButtons( this.fileSystemsViewer );
   } //End void cPUArch()
   
   
@@ -1052,11 +1054,13 @@ public final class ResourcesPage extends FormPage
 
   private Combo createCombo( final Composite composite ) {
     
-    Combo comboRang = new Combo( composite, SWT.WRAP | SWT.DROP_DOWN | SWT.READ_ONLY );    
- 
+    Combo comboRang = new Combo( composite, SWT.WRAP | SWT.DROP_DOWN | SWT.READ_ONLY );
+    
+    comboRang.add( "" ); //$NON-NLS-1$
     comboRang.add( Messages.getString( "ResourcesPage_LowBoundRange" ).trim() ); //$NON-NLS-1$
     comboRang.add( Messages.getString( "ResourcesPage_UpBoundRange" ).trim() ); //$NON-NLS-1$
     comboRang.add( Messages.getString( "ResourcesPage_Exact" ).trim() ); //$NON-NLS-1$
+
     TableWrapData td = new TableWrapData( TableWrapData.FILL_GRAB );    
     comboRang.setLayoutData( td );
     
@@ -1106,7 +1110,7 @@ public final class ResourcesPage extends FormPage
     hostsDialog.setDialogInput( element );
     hostsDialog.setExistingCandidateHosts( this.hostsViewer.getInput() );
 
-    if (button != this.btnAdd ) {
+    if (button != this.btnHostsAdd ) {
     //FIXME Un-comment for Edit Functionality
 //       IStructuredSelection structSelection 
 //                   = ( IStructuredSelection ) this.hostsViewer.getSelection();
@@ -1135,7 +1139,7 @@ public final class ResourcesPage extends FormPage
     
     FileSystemsDialog fileSystemDialog = new FileSystemsDialog( this.body.getShell(), dialogTitle );
 
-    if (button != this.btnAdd ) {
+    if (button != this.btnFileSystemAdd ) {
     //FIXME Un-comment for Edit Functionality
        IStructuredSelection structSelection 
                    = ( IStructuredSelection ) this.fileSystemsViewer.getSelection();
@@ -1180,14 +1184,13 @@ public final class ResourcesPage extends FormPage
     
     if (tableViewer == this.fileSystemsViewer) {
     
-      this.btnAdd.setEnabled( true );
-      this.btnDel.setEnabled( selectionAvailable );
-//      FIXME Un-comment for Edit Functionality
+      this.btnFileSystemAdd.setEnabled( true );
       this.btnFileSystemEdit.setEnabled( selectionAvailable );
+      this.btnFileSystemDel.setEnabled( selectionAvailable );
     }
-    else {
-      this.btnAdd.setEnabled( true );
-      this.btnDel.setEnabled( selectionAvailable );
+    else {     
+      this.btnHostsAdd.setEnabled( true );
+      this.btnHostsDel.setEnabled( selectionAvailable );
     }
     
   } // End updateButtons

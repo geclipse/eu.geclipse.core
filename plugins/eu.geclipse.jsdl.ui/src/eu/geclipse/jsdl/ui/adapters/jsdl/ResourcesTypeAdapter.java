@@ -26,6 +26,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
+
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
@@ -43,11 +44,10 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Text;
-import eu.geclipse.jsdl.model.BoundaryType;
+
 import eu.geclipse.jsdl.model.CPUArchitectureType;
 import eu.geclipse.jsdl.model.CandidateHostsType;
 import eu.geclipse.jsdl.model.FileSystemType;
-import eu.geclipse.jsdl.model.FileSystemTypeEnumeration;
 import eu.geclipse.jsdl.model.JobDefinitionType;
 import eu.geclipse.jsdl.model.JobDescriptionType;
 import eu.geclipse.jsdl.model.JsdlFactory;
@@ -56,7 +56,6 @@ import eu.geclipse.jsdl.model.OperatingSystemType;
 import eu.geclipse.jsdl.model.OperatingSystemTypeEnumeration;
 import eu.geclipse.jsdl.model.OperatingSystemTypeType;
 import eu.geclipse.jsdl.model.ProcessorArchitectureEnumeration;
-import eu.geclipse.jsdl.model.RangeValueType;
 import eu.geclipse.jsdl.model.ResourcesType;
 import eu.geclipse.jsdl.ui.internal.Activator;
 
@@ -230,7 +229,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     });
     
     
-  }
+  } // edit void attachToDelete()
   
   
   
@@ -277,7 +276,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
 
     collection = null;
     
-  }
+  } // end void addCandidateHosts()
   
   
   /**
@@ -285,7 +284,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
    * @param value 
    */
   @SuppressWarnings("unchecked")
-  public void addFileSystem(final TableViewer tableViewer, final Object[] value) {
+  public void addFileSystem( final TableViewer tableViewer, final Object[] value ) {
     
     if (value == null) {
       return;
@@ -324,7 +323,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
 
     collection = null;
     
-  }
+  } // end addFileSystem()
   
   
   
@@ -343,10 +342,6 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
       return;
     }
     
-//    EStructuralFeature eStructuralFeature;
-    
-//    int featureID = JsdlPackage.RESOURCES_TYPE__FILE_SYSTEM;
-    
     /*
      * Get the TableViewer Selection
      */
@@ -356,24 +351,17 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     /* If the selection is not null then Change the selected element */
     if (structSelection != null) {
       
-//      eStructuralFeature = this.fileSystemType.eClass()
-//                                            .getEStructuralFeature( featureID );
-
       
       Object feature = structSelection.getFirstElement();
     
     /* Get the Index of the Element that needs to be changed */
-//      int index = (( java.util.List<FileSystemType> )this.resourcesType.eGet(eStructuralFeature))
-//                                                           .indexOf( feature  );
-      
+
       int idx = this.resourcesType.getFileSystem().indexOf( feature );
       
     /* Change the element. The element is located through it's index position
      * in the list.
      */
-//      (( java.util.List<Object> )this.resourcesType.eGet( eStructuralFeature ))
-//            .set( index, value );
-    
+
       try {
         this.resourcesType.getFileSystem().set( idx, value );
       } catch( Exception e ) {
@@ -404,11 +392,12 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
 
 
     }
-  }
+  } // end void checkResourcesElement()
   
   
   
   protected void checkCandidateHostsElement() {
+    
     checkResourcesElement();    
     EStructuralFeature eStructuralFeature = this.resourcesType.eClass()
     .getEStructuralFeature( JsdlPackage.RESOURCES_TYPE__CANDIDATE_HOSTS );
@@ -416,18 +405,13 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     if ( !this.resourcesType.eIsSet( eStructuralFeature ) ) {      
       this.resourcesType.eSet( eStructuralFeature, this.candidateHosts );
     }
-  }
-  
+    
+  } // end void checkCandidateHostsElement()
+    
   
   
   protected void performDelete( final TableViewer viewer ){
     
-//    EStructuralFeature eStructuralFeature;
-//    
-//    int featureID = JsdlPackage.RESOURCES_TYPE__CANDIDATE_HOSTS;
-//    
-//    eStructuralFeature = this.candidateHosts.eClass()
-//                                            .getEStructuralFeature( featureID );
     
     IStructuredSelection structSelection 
                               = ( IStructuredSelection ) viewer.getSelection();
@@ -444,24 +428,50 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
       while ( it.hasNext() ) {
     
         Object feature = it.next();
-    
+           
         try {
           /* Delete only Multi-Valued Elements */
           
           if ( !this.adapterRefreshed ) {
-      
-            this.candidateHosts.getHostName().remove( feature );
             
-            if ( this.candidateHosts.getHostName().size() == 0 ) {
-              EcoreUtil.remove( this.candidateHosts );
+            /*
+             * Check the instance of the Selection.
+             */            
+            if ( feature instanceof String) {
+              
+              /*
+               * If this feature is an instance of String then, this 
+               * is a CandidateHosts instance. Therefore, remove the
+               * CandidataHosts instance.
+               */
+      
+              this.candidateHosts.getHostName().remove( feature );
+              
+              if ( this.candidateHosts.getHostName().size() == 0 ) {
+                EcoreUtil.remove( this.candidateHosts );
+              
+              }
+            }
+            
+            /*
+             * Then this is a FileSystem instance, so we have to remove
+             * the instance from the parent( ResourceType ) object.
+             */
+            else {
+              this.resourcesType.getFileSystem().remove( feature );
+              if ( this.resourcesType.getFileSystem().size() == 0 ) {
+                EcoreUtil.remove(this.fileSystemType);
+              }
               
             }
+            
             contentChanged();
     
           }
         else {
           viewer.remove( feature );
         }
+          
           
       } //end try
       catch ( Exception e ) {
@@ -479,7 +489,11 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     }// end_if
     
     
-  }
+  } //end performDelete()
+  
+  
+  
+  
   
   
   
@@ -492,7 +506,8 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     if ( !this.resourcesType.eIsSet( eStructuralFeature ) ) {      
       this.resourcesType.eSet( eStructuralFeature, this.operatingSystemType );
     }
-  }
+    
+  } // end void checkOSElement()
   
   
   
@@ -509,7 +524,8 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     if ( !this.resourcesType.eIsSet( eStructuralFeature ) ) {      
       this.resourcesType.eSet( eStructuralFeature, collection );
     }
-  }
+    
+  } // end void checkFileSystemElement()
   
 
   
@@ -525,7 +541,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
       this.resourcesType.eSet( eStructuralFeature, this.cpuArchitectureType );
     }
     
-  }
+  } //end void checkCPUArch()
   
   
   
@@ -541,7 +557,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
         
     return eObject;
     
-  }
+  } // end EObject checkProxy()
 
 
    
@@ -687,219 +703,219 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
         
   } // End attachToOSDescription()
   
-  
-  
-  /**
-   * Adapter interface to attach to the FileSystemType Name text widget.
-   * 
-   * @param widget The SWT text widget which is associated with the 
-   * Name attribute of the FileSystemType element in a JSDL document.
-   */
-  public void attachToFileSystemName( final Text widget ){
-    Integer featureID = new Integer( JsdlPackage.FILE_SYSTEM_TYPE__NAME );
-    this.widgetFeaturesMap.put( featureID , widget );
-    
-    widget.addModifyListener( new ModifyListener() {
-      
-      public void modifyText( final ModifyEvent e ) {
+//  
+//  
+//  /**
+//   * Adapter interface to attach to the FileSystemType Name text widget.
+//   * 
+//   * @param widget The SWT text widget which is associated with the 
+//   * Name attribute of the FileSystemType element in a JSDL document.
+//   */
+//  public void attachToFileSystemName( final Text widget ){
+//    Integer featureID = new Integer( JsdlPackage.FILE_SYSTEM_TYPE__NAME );
+//    this.widgetFeaturesMap.put( featureID , widget );
+//    
+//    widget.addModifyListener( new ModifyListener() {
+//      
+//      public void modifyText( final ModifyEvent e ) {
+////        checkFileSystemElement();
+//        ResourcesTypeAdapter.this.fileSystemType.setName( widget.getText() );
+//        contentChanged();
+//          
+//        }
+//      } );
+//    
+//  } // End attachToFileSystemName()
+//  
+//  
+//  
+//  /**
+//   * Adapter interface to attach to the FileSystemType Description text widget.
+//   * 
+//   * @param widget The SWT text widget which is associated with the 
+//   * FileSystemType Description element of the JSDL document.
+//   */
+//  public void attachToFileSystemDescription(final Text widget){
+//    
+//    Integer featureID = new Integer( JsdlPackage.FILE_SYSTEM_TYPE__DESCRIPTION );
+//    this.widgetFeaturesMap.put( featureID , widget );
+//    
+//    widget.addModifyListener( new ModifyListener() {
+//      
+//      public void modifyText( final ModifyEvent e ) {
 //        checkFileSystemElement();
-        ResourcesTypeAdapter.this.fileSystemType.setName( widget.getText() );
-        contentChanged();
-          
-        }
-      } );
-    
-  } // End attachToFileSystemName()
-  
-  
-  
-  /**
-   * Adapter interface to attach to the FileSystemType Description text widget.
-   * 
-   * @param widget The SWT text widget which is associated with the 
-   * FileSystemType Description element of the JSDL document.
-   */
-  public void attachToFileSystemDescription(final Text widget){
-    
-    Integer featureID = new Integer( JsdlPackage.FILE_SYSTEM_TYPE__DESCRIPTION );
-    this.widgetFeaturesMap.put( featureID , widget );
-    
-    widget.addModifyListener( new ModifyListener() {
-      
-      public void modifyText( final ModifyEvent e ) {
-        checkFileSystemElement();
-        ResourcesTypeAdapter.this.fileSystemType.setDescription( widget.getText() );
-        contentChanged();          
-        }
-      } );
-         
-  } // End attachToFileSystemDescription()
-  
-  
-  
-  /**
-   * Adapter interface to attach to the Mount Point text widget.
-   * 
-   * @param widget The SWT text widget which is associated with the 
-   * MountPoint element of the JSDL document.
-   */
-  public void attachToFileSystemMountPoint(final Text widget){
-    
-    Integer featureID = new Integer( JsdlPackage.FILE_SYSTEM_TYPE__MOUNT_POINT );
-    this.widgetFeaturesMap.put( featureID , widget );
-    
-    widget.addModifyListener( new ModifyListener() {
-      
-      public void modifyText( final ModifyEvent e ) {
-        
-        if ( !widget.getText().equals( "" ) ) { //$NON-NLS-1$ 
-        
-          checkFileSystemElement();
-          ResourcesTypeAdapter.this.fileSystemType.setMountPoint( widget.getText() );
-          
-        }
-        else {
-          ResourcesTypeAdapter.this.fileSystemType.setMountPoint( null );
-        }
-        contentChanged();
-      }
-      
-    } );    
-          
-  } // End attachToFileSystemMountPoint()
-  
-  
-  
-  /**
-   * Adapter interface to attach to the Disk Space text widget and to Range Value
-   * combo widget.
-   * 
-   * @param text The SWT text widget which is associated with the 
-   * DiskSpace element of the JSDL document.
-   * @param combo The SWT {@link Combo} widget which is associated with the Disk Space
-   * Range Value element.
-   */
-  public void attachToFileSystemDiskSpace(final Text text, final Combo combo){
-    
-    this.widgetFeaturesMap.put (new Integer(JsdlPackage.FILE_SYSTEM_TYPE__DISK_SPACE)
-                                , text );
-    this.comboFeaturesMap.put( new Integer(JsdlPackage.DOCUMENT_ROOT__DISK_SPACE)
-                                , combo );
-    
-    
-    
-    /* Event Listener for the Disk Space Text Widget */
-    text.addModifyListener( new ModifyListener() {
-      BoundaryType boundaryType = JsdlFactory.eINSTANCE.createBoundaryType();    
-      RangeValueType rangeValueType = JsdlFactory.eINSTANCE.createRangeValueType();
-      
-      public void modifyText( final ModifyEvent e ) {
-        
-        
-        if ( !text.getText().equals( "" ) ) { //$NON-NLS-1$ 
-          
-        checkFileSystemElement();  
-        this.boundaryType.setValue( Double.parseDouble( text.getText() ) );        
-        switch( combo.getSelectionIndex() ) {
-          /* INDEX 0 = UPPER RANGE */
-          case 0 : this.rangeValueType.setLowerBoundedRange( this.boundaryType ); 
-          break;
-          /* INDEX 1 = UPPER RANGE */
-          case 1 : this.rangeValueType.setUpperBoundedRange( this.boundaryType );
-          break;
-          default:
-          break;
-        }
-        
-        this.rangeValueType = (RangeValueType) checkProxy( this.rangeValueType );       
-        ResourcesTypeAdapter.this.fileSystemType.setDiskSpace( this.rangeValueType );
-        }
-        
-        else{
-          ResourcesTypeAdapter.this.fileSystemType.setDiskSpace( null );
-        }
-        contentChanged();
-        
-      }
-    } );
-    
-    /* Event Listener for the Disk Space Range Combo Widget */
-    combo.addSelectionListener(new SelectionListener() {
-      BoundaryType boundaryType = JsdlFactory.eINSTANCE.createBoundaryType();    
-      RangeValueType rangeValueType = JsdlFactory.eINSTANCE.createRangeValueType();
-      
-      public void widgetSelected(final SelectionEvent e) {
-        if (!text.getText().equals( "" )) { //$NON-NLS-1$
-          
-        checkFileSystemElement();
-        
-        this.boundaryType.setValue( Double.parseDouble( text.getText() ) );        
-        switch( combo.getSelectionIndex() ) {
-          /* INDEX 0 = UPPER RANGE */
-          case 0 : this.rangeValueType.setLowerBoundedRange( this.boundaryType ); 
-          break;
-          /* INDEX 1 = UPPER RANGE */
-          case 1 : this.rangeValueType.setUpperBoundedRange( this.boundaryType );
-          break;
-          default:
-          break;
-        }
-     
-        ResourcesTypeAdapter.this.fileSystemType.setDiskSpace( this.rangeValueType );
-        ResourcesTypeAdapter.this.contentChanged();
-        
-        } // end_if equals ""
-        
-      }
-
-      public void widgetDefaultSelected(final SelectionEvent e) {
-          //Do Nothing
-      }
-    });
-    
-                
-  }
-  
-  
-
-  /**
-   * Adapter interface to attach to the FileSystemType combo widget.
-   * 
-   * @param widget The SWT combo widget which is associated with the 
-   * FileSystemType element of a JSDL document.
-   */
-  public void attachToFileSystemType(final Combo widget){
-    
-    Integer featureID = new Integer(JsdlPackage.DOCUMENT_ROOT__FILE_SYSTEM_TYPE);
-    this.comboFeaturesMap.put( featureID , widget );
-        
-    /* Populate the Combo Box with the File System Type Literals */    
-    EEnum cFEnum = JsdlPackage.Literals.FILE_SYSTEM_TYPE_ENUMERATION;
-       for (int i=0; i<cFEnum.getELiterals().size(); i++){         
-         widget.add( cFEnum.getEEnumLiteral( i ).toString() );
-       }
-       cFEnum = null;
-          
-        
-    widget.addSelectionListener(new SelectionListener() {
-      public void widgetSelected(final SelectionEvent e) {
+//        ResourcesTypeAdapter.this.fileSystemType.setDescription( widget.getText() );
+//        contentChanged();          
+//        }
+//      } );
+//         
+//  } // End attachToFileSystemDescription()
+//  
+//  
+//  
+//  /**
+//   * Adapter interface to attach to the Mount Point text widget.
+//   * 
+//   * @param widget The SWT text widget which is associated with the 
+//   * MountPoint element of the JSDL document.
+//   */
+//  public void attachToFileSystemMountPoint(final Text widget){
+//    
+//    Integer featureID = new Integer( JsdlPackage.FILE_SYSTEM_TYPE__MOUNT_POINT );
+//    this.widgetFeaturesMap.put( featureID , widget );
+//    
+//    widget.addModifyListener( new ModifyListener() {
+//      
+//      public void modifyText( final ModifyEvent e ) {
+//        
+//        if ( !widget.getText().equals( "" ) ) { //$NON-NLS-1$ 
+//        
+//          checkFileSystemElement();
+//          ResourcesTypeAdapter.this.fileSystemType.setMountPoint( widget.getText() );
+//          
+//        }
+//        else {
+//          ResourcesTypeAdapter.this.fileSystemType.setMountPoint( null );
+//        }
+//        contentChanged();
+//      }
+//      
+//    } );    
+//          
+//  } // End attachToFileSystemMountPoint()
+//  
+//  
+//  
+//  /**
+//   * Adapter interface to attach to the Disk Space text widget and to Range Value
+//   * combo widget.
+//   * 
+//   * @param text The SWT text widget which is associated with the 
+//   * DiskSpace element of the JSDL document.
+//   * @param combo The SWT {@link Combo} widget which is associated with the Disk Space
+//   * Range Value element.
+//   */
+//  public void attachToFileSystemDiskSpace(final Text text, final Combo combo){
+//    
+//    this.widgetFeaturesMap.put (new Integer(JsdlPackage.FILE_SYSTEM_TYPE__DISK_SPACE)
+//                                , text );
+//    this.comboFeaturesMap.put( new Integer(JsdlPackage.DOCUMENT_ROOT__DISK_SPACE)
+//                                , combo );
+//    
+//    
+//    
+//    /* Event Listener for the Disk Space Text Widget */
+//    text.addModifyListener( new ModifyListener() {
+//      BoundaryType boundaryType = JsdlFactory.eINSTANCE.createBoundaryType();    
+//      RangeValueType rangeValueType = JsdlFactory.eINSTANCE.createRangeValueType();
+//      
+//      public void modifyText( final ModifyEvent e ) {
+//        
+//        
+//        if ( !text.getText().equals( "" ) ) { //$NON-NLS-1$ 
+//          
+//        checkFileSystemElement();  
+//        this.boundaryType.setValue( Double.parseDouble( text.getText() ) );        
+//        switch( combo.getSelectionIndex() ) {
+//          /* INDEX 0 = UPPER RANGE */
+//          case 0 : this.rangeValueType.setLowerBoundedRange( this.boundaryType ); 
+//          break;
+//          /* INDEX 1 = UPPER RANGE */
+//          case 1 : this.rangeValueType.setUpperBoundedRange( this.boundaryType );
+//          break;
+//          default:
+//          break;
+//        }
+//        
+//        this.rangeValueType = (RangeValueType) checkProxy( this.rangeValueType );       
+//        ResourcesTypeAdapter.this.fileSystemType.setDiskSpace( this.rangeValueType );
+//        }
+//        
+//        else{
+//          ResourcesTypeAdapter.this.fileSystemType.setDiskSpace( null );
+//        }
+//        contentChanged();
+//        
+//      }
+//    } );
+//    
+//    /* Event Listener for the Disk Space Range Combo Widget */
+//    combo.addSelectionListener(new SelectionListener() {
+//      BoundaryType boundaryType = JsdlFactory.eINSTANCE.createBoundaryType();    
+//      RangeValueType rangeValueType = JsdlFactory.eINSTANCE.createRangeValueType();
+//      
+//      public void widgetSelected(final SelectionEvent e) {
+//        if (!text.getText().equals( "" )) { //$NON-NLS-1$
+//          
 //        checkFileSystemElement();
-        ResourcesTypeAdapter.this.fileSystemType
-                 .setFileSystemType(FileSystemTypeEnumeration.get( 
-                                                 widget.getSelectionIndex() ) );
-        
-        ResourcesTypeAdapter.this.contentChanged();
-        
-      }
-
-      public void widgetDefaultSelected(final SelectionEvent e) {
-        // Do Nothing
-      }
-    });
-     
-  } // End attachToFileSystemType()
-  
-  
+//        
+//        this.boundaryType.setValue( Double.parseDouble( text.getText() ) );        
+//        switch( combo.getSelectionIndex() ) {
+//          /* INDEX 0 = UPPER RANGE */
+//          case 0 : this.rangeValueType.setLowerBoundedRange( this.boundaryType ); 
+//          break;
+//          /* INDEX 1 = UPPER RANGE */
+//          case 1 : this.rangeValueType.setUpperBoundedRange( this.boundaryType );
+//          break;
+//          default:
+//          break;
+//        }
+//     
+//        ResourcesTypeAdapter.this.fileSystemType.setDiskSpace( this.rangeValueType );
+//        ResourcesTypeAdapter.this.contentChanged();
+//        
+//        } // end_if equals ""
+//        
+//      }
+//
+//      public void widgetDefaultSelected(final SelectionEvent e) {
+//          //Do Nothing
+//      }
+//    });
+//    
+//                
+//  }
+//  
+//  
+//
+//  /**
+//   * Adapter interface to attach to the FileSystemType combo widget.
+//   * 
+//   * @param widget The SWT combo widget which is associated with the 
+//   * FileSystemType element of a JSDL document.
+//   */
+//  public void attachToFileSystemType(final Combo widget){
+//    
+//    Integer featureID = new Integer(JsdlPackage.DOCUMENT_ROOT__FILE_SYSTEM_TYPE);
+//    this.comboFeaturesMap.put( featureID , widget );
+//        
+//    /* Populate the Combo Box with the File System Type Literals */    
+//    EEnum cFEnum = JsdlPackage.Literals.FILE_SYSTEM_TYPE_ENUMERATION;
+//       for (int i=0; i<cFEnum.getELiterals().size(); i++){         
+//         widget.add( cFEnum.getEEnumLiteral( i ).toString() );
+//       }
+//       cFEnum = null;
+//          
+//        
+//    widget.addSelectionListener(new SelectionListener() {
+//      public void widgetSelected(final SelectionEvent e) {
+////        checkFileSystemElement();
+//        ResourcesTypeAdapter.this.fileSystemType
+//                 .setFileSystemType(FileSystemTypeEnumeration.get( 
+//                                                 widget.getSelectionIndex() ) );
+//        
+//        ResourcesTypeAdapter.this.contentChanged();
+//        
+//      }
+//
+//      public void widgetDefaultSelected(final SelectionEvent e) {
+//        // Do Nothing
+//      }
+//    });
+//     
+//  } // End attachToFileSystemType()
+//  
+//  
   
   /**
    * Adapter interface to attach to the Exclusive Execution combo widget.

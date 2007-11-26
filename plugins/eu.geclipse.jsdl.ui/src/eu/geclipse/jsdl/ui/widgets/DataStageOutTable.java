@@ -210,10 +210,10 @@ public class DataStageOutTable {
       protected Object openDialogBox( final Control cellEditorWindow ) {
         String filename = ( String )doGetValue();
         cellEditorWindow.getData();
-        IGridConnectionElement connection = GridFileDialog.openFileDialog( DataStageOutTable.this.mainComp.getShell(),
-                                                                           Messages.getString( "DataStageOutTable.grid_file_dialog_title" ), //$NON-NLS-1$
-                                                                           null,
-                                                                           true );
+        IGridConnectionElement connection = GridFileDialog
+                                        .openFileDialog( DataStageOutTable.this.mainComp.getShell(),
+                                        Messages.getString( "DataStageOutTable.grid_file_dialog_title" ), //$NON-NLS-1$
+                                        null, true );
         if( connection != null ) {
           try {
             filename = connection.getConnectionFileStore().toString();
@@ -237,15 +237,21 @@ public class DataStageOutTable {
       }
 
       public Object getValue( final Object element, final String property ) {
+        
         int columnIndex = -1;
-        if( property.equals( Messages.getString( "DataStageInTable.name_field_label" ) ) ) { //$NON-NLS-1$
+        
+        if( property.equals( 
+                      Messages.getString( "DataStageInTable.name_field_label" ) ) ) { //$NON-NLS-1$
           columnIndex = 0;
         }
-        if( property.equals( Messages.getString( "DataStageInTable.target_location_field_label" ) ) ) { //$NON-NLS-1$
+        
+        if( property.equals( 
+                      Messages.getString( "DataStageInTable.target_location_field_label" ) ) ) { //$NON-NLS-1$
           columnIndex = 1;
         }
+        
         Object result = null;
-        DataStagingType data1 = ( DataStagingType )element;
+        DataStagingType data1 = ( DataStagingType ) element;
         switch( columnIndex ) {
           case 0:
             result = data1.getFileName();
@@ -257,21 +263,28 @@ public class DataStageOutTable {
             result = ""; //$NON-NLS-1$
         }
         return result;
+        
       }
 
       public void modify( final Object element,
                           final String property,
                           final Object value )
       {
+        
         int columnIndex = -1;
-        if( property.equals( Messages.getString( "DataStageInTable.name_field_label" ) ) ) { //$NON-NLS-1$
+        
+        if( property.equals( Messages
+                             .getString( "DataStageInTable.name_field_label" ) ) ) { //$NON-NLS-1$
           columnIndex = 0;
         }
-        if( property.equals( Messages.getString( "DataStageInTable.target_location_field_label" ) ) ) { //$NON-NLS-1$
+        
+        if( property.equals( Messages
+                             .getString( "DataStageInTable.target_location_field_label" ) ) ) { //$NON-NLS-1$
           columnIndex = 1;
         }
-        TableItem item = ( TableItem )element;
-        DataStagingType dataOld = ( DataStagingType )item.getData();
+        
+        TableItem item = ( TableItem ) element;
+        DataStagingType dataOld = ( DataStagingType ) item.getData();
         DataStagingType dataNew = null;
         switch( columnIndex ) {
           case 0:
@@ -286,55 +299,75 @@ public class DataStageOutTable {
                 DataStageOutTable.this.input.remove( dataOld );
                 DataStageOutTable.this.tableViewer.refresh();
               } else {
-                MessageDialog.openError( DataStageOutTable.this.mainComp.getShell(),
-                                         Messages.getString( "DataStageOutTable.edit_dialog_title" ), //$NON-NLS-1$
-                                         Messages.getString( "DataStageOutTable.data_exists_error" ) ); //$NON-NLS-1$
+                
+                MessageDialog
+                  .openError( DataStageOutTable.this.mainComp.getShell(),
+                              Messages.getString( "DataStageOutTable.edit_dialog_title" ), //$NON-NLS-1$
+                              Messages.getString( "DataStageOutTable.data_exists_error" ) ); //$NON-NLS-1$
               }
+              
             }
+            
           break;
           case 1:
             dataNew = getNewDataStagingType( dataOld.getFileName(),
                                              ( String )value );
+            
             if( !dataNew.getFileName().equals( dataOld.getFileName() )
                 || !dataNew.getTarget().getURI().equals( dataOld.getTarget()
                   .getURI() ) )
             {
+              
               if( !isDataInInput( dataNew ) ) {
                 DataStageOutTable.this.input.add( dataNew );
                 DataStageOutTable.this.input.remove( dataOld );
                 DataStageOutTable.this.tableViewer.refresh();
+                
               } else {
-                MessageDialog.openError( DataStageOutTable.this.mainComp.getShell(),
-                                         Messages.getString( "DataStageOutTable.edit_dialog_title" ), //$NON-NLS-1$
-                                         Messages.getString( "DataStageOutTable.data_exists_error" ) ); //$NON-NLS-1$
+                
+                MessageDialog
+                  .openError( DataStageOutTable.this.mainComp.getShell(),
+                              Messages.getString( "DataStageOutTable.edit_dialog_title" ), //$NON-NLS-1$
+                              Messages.getString( "DataStageOutTable.data_exists_error" ) ); //$NON-NLS-1$
               }
+              
             }
+            
           break;
         }
       }
     } );
-    CellEditor[] edTable = new CellEditor[]{
+    
+    CellEditor[] edTable = new CellEditor[] {
       new TextCellEditor( this.tableViewer.getTable() ), editor
     };
     this.tableViewer.setCellEditors( edTable );
     TableViewerEditor.create( this.tableViewer,
                               new ColumnViewerEditorActivationStrategy( this.tableViewer ),
                               ColumnViewerEditor.TABBING_HORIZONTAL
-                                  | ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR
-                                  | ColumnViewerEditor.TABBING_VERTICAL );
+                              | ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR
+                              | ColumnViewerEditor.TABBING_VERTICAL );
     updateButtons();
+    
   }
 
   DataStagingType getSelectedObject() {
+    
     DataStagingType result = null;
     IStructuredSelection selection = ( IStructuredSelection )this.tableViewer.getSelection();
     Object obj = selection.getFirstElement();
+    
     if( obj instanceof DataStagingType ) {
+      
       result = ( DataStagingType )obj;
+      
     }
     return result;
+    
   }
 
+  
+    
   /**
    * Returns data kept in table
    * 
@@ -344,18 +377,25 @@ public class DataStageOutTable {
     return this.input;
   }
 
+  
+  
   /**
    * @param input
    */
-  public void setInput(final List<DataStagingType> input ) {
+  public void setInput( final List<DataStagingType> input ) {
+    
     this.input = input;
     if( this.input == null ) {
       this.input = new ArrayList<DataStagingType>();
     }
     this.tableViewer.setInput( this.input );
+    
   }
 
+  
+  
   void editDataStagingEntry( final DataStagingType selectedObject ) {
+    
     DataStagingOutDialog dialog;
     if( selectedObject == null ) {
       dialog = new DataStagingOutDialog( this.mainComp.getShell(),
@@ -366,10 +406,12 @@ public class DataStageOutTable {
         if( !isDataInInput( newData ) ) {
           this.input.add( newData );
         } else {
-          MessageDialog.openError( this.mainComp.getShell(),
-                                   Messages.getString( "DataStageOutTable.new_dialog_title" ), //$NON-NLS-1$
-                                   Messages.getString( "DataStageOutTable.data_exists_error" ) ); //$NON-NLS-1$
+          MessageDialog
+            .openError( this.mainComp.getShell(),
+                        Messages.getString( "DataStageOutTable.new_dialog_title" ), //$NON-NLS-1$
+                        Messages.getString( "DataStageOutTable.data_exists_error" ) ); //$NON-NLS-1$
         }
+        
         this.tableViewer.refresh();
       }
     } else {
@@ -381,25 +423,36 @@ public class DataStageOutTable {
       if( dialog.open() == Window.OK ) {
         DataStagingType newData = getNewDataStagingType( dialog.getName(),
                                                          dialog.getPath() );
+        
         if( !newData.getFileName().equals( selectedObject.getFileName() )
             || !newData.getTarget().getURI().equals( selectedObject.getTarget()
               .getURI() ) )
         {
           if( !isDataInInput( newData ) ) {
+            
             this.input.add( newData );
             this.input.remove( selectedObject );
             this.tableViewer.refresh();
+            
           } else {
-            MessageDialog.openError( this.mainComp.getShell(),
-                                     Messages.getString( "DataStageOutTable.edit_dialog_title" ), //$NON-NLS-1$
-                                     Messages.getString( "DataStageOutTable.data_exists_error" ) ); //$NON-NLS-1$
-          }
-        }
-      }
-    }
-  }
-
+            MessageDialog
+              .openError( this.mainComp.getShell(),
+                          Messages.getString( "DataStageOutTable.edit_dialog_title" ), //$NON-NLS-1$
+                          Messages.getString( "DataStageOutTable.data_exists_error" ) ); //$NON-NLS-1$
+          } // end else
+          
+        } // end_if(!isDataInInput( newData ))
+        
+      } // end_if (dialog.open())
+      
+    } // end else
+    
+  } // end void editDataStagingEntry()
+  
+  
+  
   boolean isDataInInput( final DataStagingType newData ) {
+    
     boolean result = false;
     for( DataStagingType data : this.input ) {
       if( data.getFileName().equals( newData.getFileName() )
@@ -409,8 +462,11 @@ public class DataStageOutTable {
       }
     }
     return result;
+    
   }
 
+  
+  
   DataStagingType getNewDataStagingType( final String name, final String path )
   {
     DataStagingType result = JSDLModelFacade.getDataStagingType();

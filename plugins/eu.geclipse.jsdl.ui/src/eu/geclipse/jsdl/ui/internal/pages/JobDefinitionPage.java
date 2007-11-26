@@ -516,7 +516,10 @@ public final class JobDefinitionPage extends FormPage
     MultipleInputDialog dialog = new MultipleInputDialog( this.getSite().getShell(),
                                                          dialogTitle );
         
-    dialog.addStoredComboField( Messages.getString( "JobDefinitionPage_Value" ), "", false, "JobDefinitionPage_Value"  ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+    dialog.addStoredComboField( Messages.getString( "JobDefinitionPage_Value" ), //$NON-NLS-1$
+                                "", //$NON-NLS-1$
+                                false,
+                                "JobDefinitionPage_Value"  ); //$NON-NLS-1$
     
     if( dialog.open() != Window.OK ) {
       
@@ -548,7 +551,7 @@ public final class JobDefinitionPage extends FormPage
             }
         };
         helpAction.setToolTipText( Messages.getString( "JobDefinitionPage_Help" ) );  //$NON-NLS-1$
-        URL stageInURL = Activator.getDefault().getBundle().getEntry( "icons/help.gif" ); //$NON-NLS-1$       
+        URL stageInURL = Activator.getDefault().getBundle().getEntry( "icons/help.gif" ); //$NON-NLS-1$
         this.helpDesc = ImageDescriptor.createFromURL( stageInURL ) ;   
         helpAction.setImageDescriptor( this.helpDesc );
         manager.add(helpAction);
@@ -560,7 +563,7 @@ public final class JobDefinitionPage extends FormPage
   
   protected String getHelpResource() {
     return "/eu.geclipse.doc.user/html/concepts/jobmanagement/editorpages/jobdefinition.html"; //$NON-NLS-1$
-  }
+    }
 
   
   

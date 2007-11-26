@@ -159,12 +159,13 @@ public class DataStagingInDialog extends Dialog {
       @Override
       public void widgetSelected( final SelectionEvent event ) {
         String filename = null;
-        IGridConnectionElement connection = GridFileDialog.openFileDialog( PlatformUI.getWorkbench()
-                                                                             .getActiveWorkbenchWindow()
-                                                                             .getShell(),
-                                                                           Messages.getString( "DataStageInTable.grid_file_dialog_title" ), //$NON-NLS-1$
-                                                                           null,
-                                                                           true );
+        IGridConnectionElement connection = GridFileDialog
+                                      .openFileDialog( PlatformUI.getWorkbench()
+                                      .getActiveWorkbenchWindow()
+                                      .getShell(),
+                                      Messages.getString( "DataStageInTable.grid_file_dialog_title" ), //$NON-NLS-1$
+                                      null,
+                                      true );
         if( connection != null ) {
           filename = connection.getURI().toString();
           if( filename != null ) {

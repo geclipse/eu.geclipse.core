@@ -288,16 +288,20 @@ public final class JobApplicationPage extends FormPage
     this.txtApplicationName.setLayoutData( gd );
     this.applicationTypeAdapter.attachToApplicationName( this.txtApplicationName );
     // Create Label and Text for Application Version
-    this.lblApplicationVersion = toolkit.createLabel( client,
-                                                      Messages.getString( "JobApplicationPage_ApplicationVersion" ) ); //$NON-NLS-1$
+    this.lblApplicationVersion = toolkit
+                                  .createLabel( client,
+                                                Messages.getString( "JobApplicationPage_ApplicationVersion" ) ); //$NON-NLS-1$
+    
     this.txtApplicationVersion = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
     gd = new GridData();
     gd.widthHint = 300;
     this.txtApplicationVersion.setLayoutData( gd );
     this.applicationTypeAdapter.attachToApplicationVersion( this.txtApplicationVersion );
     // Create Label and Text for Application Description Element
-    this.lblApplicationDescription = toolkit.createLabel( client,
-                                                          Messages.getString( "JobApplicationPage_ApplicationDescr" ) ); //$NON-NLS-1$
+    this.lblApplicationDescription = toolkit
+                                       .createLabel( client,
+                                                     Messages.getString( "JobApplicationPage_ApplicationDescr" ) ); //$NON-NLS-1$
+    
     this.txtDescription = toolkit.createText( client, "", //$NON-NLS-1$
                                               SWT.NONE
                                                   | SWT.V_SCROLL
@@ -309,6 +313,7 @@ public final class JobApplicationPage extends FormPage
     this.txtDescription.setLayoutData( gd );
     this.applicationTypeAdapter.attachToApplicationDescription( this.txtDescription );
     toolkit.paintBordersFor( client );
+    
   } // End void createApplicationSection()
   
   
@@ -322,6 +327,7 @@ public final class JobApplicationPage extends FormPage
   private void createPosixSection( final Composite parent,
                                    final FormToolkit toolkit )
   {
+    
     String sectionTitle = Messages.getString( "JobApplicationPage_PosixApplicationtitle" ); //$NON-NLS-1$
     String sectionDescripiton = Messages.getString( "JobApplicationPage_PosixApplicationDescription" ); //$NON-NLS-1$
     GridData gd;
@@ -409,9 +415,10 @@ public final class JobApplicationPage extends FormPage
       public void widgetSelected( final SelectionEvent event ) {
         handleAddDialog( Messages.getString( "JobApplicationPage_ArgumentDialog" ), //$NON-NLS-1$
                          ( Button )event.getSource() );
-        JobApplicationPage.this.posixApplicationTypeAdapter.performAdd( JobApplicationPage.this.argumentViewer,
-                                                                        "argumentViewer", //$NON-NLS-1$
-                                                                        JobApplicationPage.this.value );
+        JobApplicationPage.this.posixApplicationTypeAdapter
+                            .performAdd( JobApplicationPage.this.argumentViewer,
+                                         "argumentViewer", //$NON-NLS-1$
+                                         JobApplicationPage.this.value );
       }
 
       public void widgetDefaultSelected( final SelectionEvent event ) {
@@ -427,19 +434,22 @@ public final class JobApplicationPage extends FormPage
     this.btnArgEdit = toolkit.createButton( client,
                                             Messages.getString( "JsdlEditor_EditButton" ), //$NON-NLS-1$
                                             SWT.PUSH );
+    
     this.btnArgEdit.addSelectionListener( new SelectionListener() {
 
       public void widgetSelected( final SelectionEvent event ) {
         handleAddDialog( Messages.getString( "JobApplicationPage_ArgumentDialog" ), //$NON-NLS-1$
                          ( Button )event.getSource() );
-        JobApplicationPage.this.posixApplicationTypeAdapter.performEdit( JobApplicationPage.this.argumentViewer,
-                                                                         JobApplicationPage.this.value );
+        JobApplicationPage.this.posixApplicationTypeAdapter
+                           .performEdit( JobApplicationPage.this.argumentViewer,
+                           JobApplicationPage.this.value );
       }
 
       public void widgetDefaultSelected( final SelectionEvent event ) {
         // Do Nothing - Required method
       }
     } );
+    
     this.btnArgEdit.setLayoutData( gd );
     /* Create "Remove" Button */
     gd = new GridData();
@@ -549,15 +559,18 @@ public final class JobApplicationPage extends FormPage
       public void widgetSelected( final SelectionEvent event ) {
         handleAddDialog( Messages.getString( "JobApplicationPage_EnvironmentDialog" ), //$NON-NLS-1$
                          ( Button )event.getSource() );
-        JobApplicationPage.this.posixApplicationTypeAdapter.performAdd( JobApplicationPage.this.environmentViewer,
-                                                                        "environmentiewer", //$NON-NLS-1$
-                                                                        JobApplicationPage.this.value );
+        
+        JobApplicationPage.this.posixApplicationTypeAdapter
+                         .performAdd( JobApplicationPage.this.environmentViewer,
+                         "environmentiewer", //$NON-NLS-1$
+                         JobApplicationPage.this.value );
       }
 
       public void widgetDefaultSelected( final SelectionEvent event ) {
         // Do Nothing - Required method
       }
     } );
+    
     this.btnEnVarAdd.setLayoutData( gd );
     /* Create "Edit" Button */
     gd = new GridData();
@@ -567,19 +580,24 @@ public final class JobApplicationPage extends FormPage
     this.btnEnVarEdit = toolkit.createButton( client,
                                               Messages.getString( "JsdlEditor_EditButton" ), //$NON-NLS-1$
                                               SWT.PUSH );
+    
     this.btnEnVarEdit.addSelectionListener( new SelectionListener() {
 
       public void widgetSelected( final SelectionEvent event ) {
         handleAddDialog( Messages.getString( "JobApplicationPage_EnvironmentDialog" ), //$NON-NLS-1$
                          ( Button )event.getSource() );
-        JobApplicationPage.this.posixApplicationTypeAdapter.performEdit( JobApplicationPage.this.environmentViewer,
-                                                                         JobApplicationPage.this.value );
+        
+        JobApplicationPage.this.posixApplicationTypeAdapter
+                        .performEdit( JobApplicationPage.this.environmentViewer,
+                                      JobApplicationPage.this.value );
+        
       }
 
       public void widgetDefaultSelected( final SelectionEvent event ) {
         // Do Nothing - Required method
       }
     } );
+    
     this.btnEnVarEdit.setLayoutData( gd );
     /* Create "Remove" Button */
     gd = new GridData();
@@ -629,6 +647,7 @@ public final class JobApplicationPage extends FormPage
     /* ========================= Working Directory =========================== */
     this.lblWorkingDirectory = toolkit.createLabel( client,
                                                     Messages.getString( "JobApplicationPage_WorkingDirectory" ) ); //$NON-NLS-1$
+    
     this.txtWorkingDirectory = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
     td = new TableWrapData( TableWrapData.FILL_GRAB );
     this.txtWorkingDirectory.setLayoutData( td );
@@ -674,6 +693,7 @@ public final class JobApplicationPage extends FormPage
     /* ==========================Data Segment Limit ========================== */
     this.lblDataSegmentLimit = toolkit.createLabel( client,
                                                     Messages.getString( "JobApplicationPage_DataSegmentLimit" ) ); //$NON-NLS-1$
+    
     this.txtDataSegmentLimit = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
     td = new TableWrapData( TableWrapData.FILL_GRAB );
     this.txtDataSegmentLimit.setLayoutData( td );
@@ -810,15 +830,26 @@ public final class JobApplicationPage extends FormPage
     if( dialogTitle == Messages.getString( "JobApplicationPage_ArgumentDialog" ) ) { //$NON-NLS-1$
       this.value = new Object[ 1 ][ 2 ];
       if( button == this.btnArgAdd ) {
-        dialog.addStoredComboField( Messages.getString( "JobApplicationPage_FileSystemName" ), "", true, "JobApplicationPage_FileSystemName" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$      
-        dialog.addStoredComboField( Messages.getString( "JobApplicationPage_Value" ), "", false , "JobApplicationPage_Value" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        dialog.addStoredComboField( 
+                                   Messages.getString( "JobApplicationPage_FileSystemName" ), //$NON-NLS-1$
+                                   "", //$NON-NLS-1$
+                                   true,
+                                   "JobApplicationPage_FileSystemName" );        //$NON-NLS-1$
+        
+        dialog.addStoredComboField( Messages.getString( "JobApplicationPage_Value" ), //$NON-NLS-1$
+                                    "", //$NON-NLS-1$
+                                    false,
+                                    "JobApplicationPage_Value" ); //$NON-NLS-1$ 
+        
       } else {
         IStructuredSelection structSelection = ( IStructuredSelection )this.argumentViewer.getSelection();
         ArgumentType argType = ( ArgumentType )structSelection.getFirstElement();
+        
         dialog.addStoredComboField( Messages.getString( "JobApplicationPage_FileSystemName" ), //$NON-NLS-1$
                              argType.getFilesystemName(),
                              true,
                              "JobApplicationPage_FileSystemName"); //$NON-NLS-1$
+        
         dialog.addStoredComboField( Messages.getString( "JobApplicationPage_Value" ), //$NON-NLS-1$
                              argType.getValue(),
                              false,
@@ -827,20 +858,36 @@ public final class JobApplicationPage extends FormPage
     } else {
       this.value = new Object[ 1 ][ 3 ];
       if( button == this.btnEnVarAdd ) {
-        dialog.addStoredComboField( Messages.getString( "JobApplicationPage_Name" ), "", false, "JobApplicationPage_Name" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        dialog.addStoredComboField( Messages.getString( "JobApplicationPage_FileSystemName" ), "", true, "JobApplicationPage_FileSystemName" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-        dialog.addStoredComboField( Messages.getString( "JobApplicationPage_Value" ), "", false, "JobApplicationPage_Value" ); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+        
+        dialog.addStoredComboField( Messages.getString( "JobApplicationPage_Name" ), //$NON-NLS-1$
+                                    "", //$NON-NLS-1$
+                                    false,
+                                    "JobApplicationPage_Name" ); //$NON-NLS-1$ 
+        
+        dialog.addStoredComboField( Messages.getString( "JobApplicationPage_FileSystemName" ), //$NON-NLS-1$
+                                    "", //$NON-NLS-1$
+                                    true,
+                                    "JobApplicationPage_FileSystemName" ); //$NON-NLS-1$
+        
+        dialog.addStoredComboField( Messages.getString( "JobApplicationPage_Value" ), //$NON-NLS-1$
+                                    "", //$NON-NLS-1$
+                                    false,
+                                    "JobApplicationPage_Value" ); //$NON-NLS-1$
+        
       } else {
         IStructuredSelection structSelection = ( IStructuredSelection )this.environmentViewer.getSelection();
         EnvironmentType envType = ( EnvironmentType )structSelection.getFirstElement();
+        
         dialog.addStoredComboField( Messages.getString( "JobApplicationPage_Name" ), //$NON-NLS-1$
                              envType.getName(),
                              false,
                              "JobApplicationPage_Name"); //$NON-NLS-1$
+        
         dialog.addStoredComboField( Messages.getString( "JobApplicationPage_FileSystemName" ), //$NON-NLS-1$
                              envType.getFilesystemName(),
                              true,
                              "JobApplicationPage_FileSystemName"); //$NON-NLS-1$
+        
         dialog.addStoredComboField( Messages.getString( "JobApplicationPage_Value" ), //$NON-NLS-1$
                              envType.getValue(),
                              false,
@@ -852,17 +899,22 @@ public final class JobApplicationPage extends FormPage
 
     if( dialog.open() != Window.OK ) {
       return;
-    }
+    } // end if ( dialog.open() )
     
     if( this.value[ 0 ].length == 2 ) {
+      
       this.value[ 0 ][ 0 ] = dialog.getStringValue( Messages.getString( "JobApplicationPage_FileSystemName" ) ); //$NON-NLS-1$
       this.value[ 0 ][ 1 ] = dialog.getStringValue( Messages.getString( "JobApplicationPage_Value" ) ); //$NON-NLS-1$
+      
     } else {
+      
       this.value[ 0 ][ 0 ] = dialog.getStringValue( Messages.getString( "JobApplicationPage_Name" ) ); //$NON-NLS-1$
-      this.value[ 0 ][ 1 ] = dialog.getStringValue( Messages.getString( "JobApplicationPage_FileSystemName" ) ); //$NON-NLS-1$  
+      this.value[ 0 ][ 1 ] = dialog.getStringValue( Messages.getString( "JobApplicationPage_FileSystemName" ) ); //$NON-NLS-1$
       this.value[ 0 ][ 2 ] = dialog.getStringValue( Messages.getString( "JobApplicationPage_Value" ) ); //$NON-NLS-1$
-    }
-  }
+      
+    } // end else
+    
+  } //end if
   
   
   
@@ -909,17 +961,21 @@ public final class JobApplicationPage extends FormPage
     boolean selectionAvailable = !selection.isEmpty();
     
     if( tableViewer == this.argumentViewer ) {
+      
       this.btnArgAdd.setEnabled( true );
       this.btnArgEdit.setEnabled( selectionAvailable );
       this.btnArgDel.setEnabled( selectionAvailable );
+      
     } else {
+      
       this.btnEnVarAdd.setEnabled( true );
       this.btnEnVarEdit.setEnabled( selectionAvailable );
       this.btnEnVarDel.setEnabled( selectionAvailable );
-    }
+      
+    } // end else
     
   } // End updateButtons
   
   
   
-} // End Class
+} // End JobApplicationPage Class

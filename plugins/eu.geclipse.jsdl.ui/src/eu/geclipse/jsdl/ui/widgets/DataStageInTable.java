@@ -173,7 +173,10 @@ public class DataStageInTable {
     buttonsComp.setLayoutData( gData );
     gData = new GridData( GridData.FILL_BOTH );
     this.addButton.setLayoutData( gData );
-    this.addButton.setText( Messages.getString( "DataStageInTable.add_button_label" ) ); //$NON-NLS-1$
+    
+    this.addButton.setText( Messages
+             .getString( "DataStageInTable.add_button_label" ) ); //$NON-NLS-1$
+    
     this.addButton.addSelectionListener( new SelectionAdapter() {
 
       @Override
@@ -184,7 +187,10 @@ public class DataStageInTable {
     this.editButton = new Button( buttonsComp, SWT.PUSH );
     gData = new GridData( GridData.FILL_BOTH );
     this.editButton.setLayoutData( gData );
-    this.editButton.setText( Messages.getString( "DataStageInTable.edit_button_label" ) ); //$NON-NLS-1$
+    
+    this.editButton.setText( Messages
+             .getString( "DataStageInTable.edit_button_label" ) ); //$NON-NLS-1$
+    
     this.editButton.addSelectionListener( new SelectionAdapter() {
 
       @Override
@@ -195,7 +201,10 @@ public class DataStageInTable {
     this.removeButton = new Button( buttonsComp, SWT.PUSH );
     gData = new GridData( GridData.FILL_BOTH );
     this.removeButton.setLayoutData( gData );
-    this.removeButton.setText( Messages.getString( "DataStageInTable.remove_button_label" ) ); //$NON-NLS-1$
+    
+    this.removeButton.setText( Messages
+           .getString( "DataStageInTable.remove_button_label" ) ); //$NON-NLS-1$
+    
     this.removeButton.addSelectionListener( new SelectionAdapter() {
 
       @Override
@@ -209,18 +218,20 @@ public class DataStageInTable {
       @Override
       protected Object openDialogBox( final Control cellEditorWindow ) {
         String filename = ( String )doGetValue();
-        IGridConnectionElement connection = GridFileDialog.openFileDialog( DataStageInTable.this.mainComp.getShell(),
-                                                                           Messages.getString( "DataStageInTable.grid_file_dialog_title" ), //$NON-NLS-1$
-                                                                           null,
-                                                                           true );
+        IGridConnectionElement connection = GridFileDialog
+                .openFileDialog( DataStageInTable.this.mainComp.getShell(),
+                Messages.getString( "DataStageInTable.grid_file_dialog_title" ), //$NON-NLS-1$
+                null, true );
+        
         if( connection != null ) {
           try {
             filename = connection.getConnectionFileStore().toString();
           } catch( CoreException cExc ) {
-            NewProblemDialog.openProblem( DataStageInTable.this.mainComp.getShell(),
-                                          Messages.getString( "DataStageInTable.error" ), //$NON-NLS-1$
-                                          Messages.getString( "DataStageInTable.error" ), //$NON-NLS-1$
-                                          cExc );
+            NewProblemDialog
+              .openProblem( DataStageInTable.this.mainComp.getShell(),
+                   Messages.getString( "DataStageInTable.error" ), //$NON-NLS-1$
+                   Messages.getString( "DataStageInTable.error" ), //$NON-NLS-1$
+                   cExc );
           }
         }
         return filename;
@@ -237,10 +248,16 @@ public class DataStageInTable {
 
       public Object getValue( final Object element, final String property ) {
         int columnIndex = -1;
-        if( property.equals( Messages.getString( "DataStageInTable.source_location_field_label" ) ) ) { //$NON-NLS-1$
+        
+        if( property.equals( Messages
+                .getString( "DataStageInTable.source_location_field_label" ) ) ) { //$NON-NLS-1$
+          
           columnIndex = 0;
         }
-        if( property.equals( Messages.getString( "DataStageInTable.name_field_label" ) ) ) { //$NON-NLS-1$
+        
+        if( property.equals( Messages
+                        .getString( "DataStageInTable.name_field_label" ) ) ) { //$NON-NLS-1$
+          
           columnIndex = 1;
         }
         Object result = null;
@@ -263,11 +280,16 @@ public class DataStageInTable {
                           final Object value )
       {
         int columnIndex = -1;
-        if( property.equals( Messages.getString( "DataStageInTable.source_location_field_label" ) ) ) { //$NON-NLS-1$
+        
+        if( property.equals( Messages
+                              .getString( "DataStageInTable.source_location_field_label" ) ) ) { //$NON-NLS-1$
           columnIndex = 0;
         }
-        if( property.equals( Messages.getString( "DataStageInTable.name_field_label" ) ) ) { //$NON-NLS-1$
+        
+        if( property.equals( Messages
+                              .getString( "DataStageInTable.name_field_label" ) ) ) { //$NON-NLS-1$
           columnIndex = 1;
+          
         }
         TableItem item = ( TableItem )element;
         DataStagingType dataOld = ( DataStagingType )item.getData();
@@ -276,6 +298,7 @@ public class DataStageInTable {
           case 0:
             dataNew = getNewDataStagingType( dataOld.getFileName(),
                                              ( String )value );
+            
             if( !dataNew.getFileName().equals( dataOld.getFileName() )
                 || !dataNew.getSource().getURI().equals( dataOld.getSource()
                   .getURI() ) )
@@ -325,8 +348,8 @@ public class DataStageInTable {
     TableViewerEditor.create( this.tableViewer,
                               new ColumnViewerEditorActivationStrategy( this.tableViewer ),
                               ColumnViewerEditor.TABBING_HORIZONTAL
-                                  | ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR
-                                  | ColumnViewerEditor.TABBING_VERTICAL );
+                              | ColumnViewerEditor.TABBING_MOVE_TO_ROW_NEIGHBOR
+                              | ColumnViewerEditor.TABBING_VERTICAL );
     updateButtons();
   }
 
@@ -372,9 +395,10 @@ public class DataStageInTable {
           this.input.add( newData );
           this.tableViewer.refresh();
         } else {
-          MessageDialog.openError( this.mainComp.getShell(),
-                                   Messages.getString( "DataStageInTable.value_exists_dialog_title" ), //$NON-NLS-1$
-                                   Messages.getString( "DataStagingPage_New_DuplicateEntryDialog_Message" ) ); //$NON-NLS-1$
+          MessageDialog
+              .openError( this.mainComp.getShell(),
+                          Messages.getString( "DataStageInTable.value_exists_dialog_title" ), //$NON-NLS-1$
+                          Messages.getString( "DataStagingPage_New_DuplicateEntryDialog_Message" ) ); //$NON-NLS-1$
         }
       }
     } else {
@@ -406,9 +430,10 @@ public class DataStageInTable {
                                newData.getSource() );
             this.tableViewer.refresh();
           } else {
-            MessageDialog.openError( this.mainComp.getShell(),
-                                     Messages.getString( "DataStageInTable.edit_dialog_title" ), //$NON-NLS-1$
-                                     Messages.getString( "DataStageInTable.value_exists_dialog_message" ) ); //$NON-NLS-1$
+            MessageDialog
+              .openError( this.mainComp.getShell(),
+                          Messages.getString( "DataStageInTable.edit_dialog_title" ), //$NON-NLS-1$
+                          Messages.getString( "DataStageInTable.value_exists_dialog_message" ) ); //$NON-NLS-1$
           }
         }
       }
@@ -424,6 +449,7 @@ public class DataStageInTable {
   }
 
   boolean isDataInInput( final DataStagingType newData ) {
+    
     boolean result = false;
     for( DataStagingType data : this.input ) {
       if( data.getFileName().equals( newData.getFileName() )
@@ -433,16 +459,19 @@ public class DataStageInTable {
       }
     }
     return result;
+    
   }
 
   DataStagingType getNewDataStagingType( final String name, final String path )
   {
+    
     DataStagingType result = JSDLModelFacade.getDataStagingType();
     result.setFileName( name );
     SourceTargetType source = JSDLModelFacade.getSourceTargetType();
     source.setURI( path );
     result.setSource( source );
     return result;
+    
   }
 
   protected void updateButtons() {
@@ -451,7 +480,9 @@ public class DataStageInTable {
     this.addButton.setEnabled( true );
     this.removeButton.setEnabled( selectionAvailable );
     this.editButton.setEnabled( selectionAvailable );
+    
   }
+  
   class DataStageInContentProvider implements IStructuredContentProvider {
 
     @SuppressWarnings("unchecked")
