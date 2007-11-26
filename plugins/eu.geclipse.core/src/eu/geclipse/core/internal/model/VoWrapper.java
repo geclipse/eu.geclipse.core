@@ -135,11 +135,6 @@ public class VoWrapper
     return this.vo.getTypeName();
   }
 
-  @Override
-  public void dispose() {
-    this.vo.dispose();
-  }
-  
   public IGridComputing[] getComputing()
       throws GridModelException {
     IGridComputing[] computing = this.vo.getComputing();
