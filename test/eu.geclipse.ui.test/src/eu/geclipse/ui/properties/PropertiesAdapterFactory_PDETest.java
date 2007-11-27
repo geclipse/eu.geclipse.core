@@ -29,13 +29,13 @@ import org.eclipse.ui.views.properties.IPropertySource;
 /**
  * This test check how class eu.geclipse.ui.properties.PropertiesAdapterFactory implements interface IPropertySource
  */
-public class PropertiesAdapterFactoryTest extends TestCase {
+public class PropertiesAdapterFactory_PDETest extends TestCase {
   private URI uri;  
 
   /**
    * @param name
    */
-  public PropertiesAdapterFactoryTest( final String name ) {
+  public PropertiesAdapterFactory_PDETest( final String name ) {
     super( name );
     try {
       this.uri = new URI( "ftp://hydra.gup.uni-linz.ac.at:2811/home/local/agrid/geclipse/" ); //$NON-NLS-1$

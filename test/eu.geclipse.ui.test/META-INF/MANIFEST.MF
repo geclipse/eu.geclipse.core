@@ -1,16 +1,12 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: %Bundle-Name
+Bundle-Name: Test Fragment
 Bundle-SymbolicName: eu.geclipse.ui.test
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: eu.geclipse.ui.internal.Activator
-Bundle-Vendor: %Bundle-Vendor
-Bundle-Localization: plugin
+Bundle-Vendor: Eclipse.org
+Fragment-Host: eu.geclipse.ui;bundle-version="0.5.0"
 Require-Bundle: org.eclipse.ui,
- org.eclipse.core.filesystem,
  org.eclipse.core.runtime,
  org.junit4,
- eu.geclipse.ui,
  org.eclipse.ui.views
-Eclipse-LazyStart: true
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
