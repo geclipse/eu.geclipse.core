@@ -8,5 +8,7 @@ Fragment-Host: eu.geclipse.ui;bundle-version="0.5.0"
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.junit4,
- org.eclipse.ui.views
+ org.eclipse.ui.views,
+ eu.geclipse.test,
+ eu.geclipse.globus
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
