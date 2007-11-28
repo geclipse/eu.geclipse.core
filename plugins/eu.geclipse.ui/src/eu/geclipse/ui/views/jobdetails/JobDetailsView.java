@@ -99,6 +99,12 @@ implements ISelectionListener, IViewConfiguration, IGridJobStatusListener
     fillContextMenu();
     readState();
     this.topScrolledForm = getFormToolkit().createScrolledForm( parent );
+    
+    // bug #210764
+    // Fix system default font for this control, to avoid 
+    // checking by FormToolkit system fonts during creating children of this control 
+    this.topScrolledForm.getBody().setFont( this.topScrolledForm.getBody().getFont() );
+    
     this.topScrolledForm.getBody().setLayout( new GridLayout( 2, false ) );
     this.topScrolledForm.setBackground( getFormToolkit().getColors()
       .getBackground() );
