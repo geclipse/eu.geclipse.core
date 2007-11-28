@@ -27,14 +27,16 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 
-/**tests the methods in the class {@link TarInputStream}
+/**
+ * tests the methods in the class {@link TarInputStream}
  * @author tao-j
- *
  */
 public class TarInputStream_PDETest {
 
   private static TarInputStream instream;
-  /**initialization
+  
+  /**
+   * initialization
    * @throws Exception
    */
   @BeforeClass
@@ -61,8 +63,8 @@ public class TarInputStream_PDETest {
       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
       0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
     };
-    InputStream stream = new ByteArrayInputStream(data2);
-    instream = new TarInputStream(stream);
+    InputStream stream = new ByteArrayInputStream( data2 );
+    instream = new TarInputStream( stream );
   }
 
   /**
@@ -70,7 +72,7 @@ public class TarInputStream_PDETest {
    */
   @Test
   public void testTarInputStream() {
-   Assert.assertNotNull( instream );
+    Assert.assertNotNull( instream );
   }
 
   /**
@@ -79,9 +81,9 @@ public class TarInputStream_PDETest {
    */
   @Test
   public void testGetNextEntry() throws TarArchiveException {
-  TarEntry entry = instream.getNextEntry();
-  Assert.assertNotNull( entry );
-  Assert.assertEquals( new Long(2408), new Long( entry.getSize()) );
+    TarEntry entry = instream.getNextEntry();
+    Assert.assertNotNull( entry );
+    Assert.assertEquals( new Long( 2408 ), new Long( entry.getSize() ) );
   }
 
   /**
@@ -95,4 +97,5 @@ public class TarInputStream_PDETest {
     instream.copyEntryContents( outstream );
     outstream.close();
   }
+
 }
