@@ -59,7 +59,7 @@ import eu.geclipse.ui.wizards.wizardselection.ExtPointWizardSelectionListPage;
 
 public class VoSelectionWizardPage extends WizardPage {
   
-  private java.util.List< IVirtualOrganization > voList;
+  java.util.List< IVirtualOrganization > voList;
   CheckboxTableViewer tableViewer;
   
   private Text infoText;
@@ -190,6 +190,8 @@ public class VoSelectionWizardPage extends WizardPage {
       public void widgetSelected( final SelectionEvent e ) {
         createNewVO();
         updateVoList();
+        VoSelectionWizardPage.this.tableViewer.setInput( VoSelectionWizardPage.this.voList );
+        setInitialSelection();
         showSelectedInfo();
         setPageComplete( getSelectedVos() != null );
       }
