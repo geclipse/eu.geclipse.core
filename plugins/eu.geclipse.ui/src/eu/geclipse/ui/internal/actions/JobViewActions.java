@@ -70,7 +70,8 @@ public class JobViewActions extends ActionGroup {
   @Override
   public void fillActionBars( final IActionBars actionBars ) {
     IToolBarManager manager = actionBars.getToolBarManager();
-    manager.add( this.toggleJobsUpdateAction );
+    manager.add( this.updateSelectedJobStatusAction );
+    manager.add( this.toggleJobsUpdateAction );    
   }
 
   @Override
