@@ -1172,9 +1172,9 @@ public class JSDLJobDescription extends ResourceGridContainer
             if( path.isAbsolute() ) {
               uri = currentUri;
             }
-            stagingsMap.remove( currentFilename ); // prevent endless iteration
-            currentFilename = currentUriString;
           }
+          stagingsMap.remove( currentFilename ); // prevent endless iteration
+          currentFilename = currentUriString; 
         }
       }
     } catch( URISyntaxException exception ) {
