@@ -333,6 +333,33 @@ public class Extensions {
     = "preset"; //$NON-NLS-1$
   
   /**
+   * The ID of the VO loader extension point.
+   */
+  public static final String VO_LOADER_POINT
+    = "eu.geclipse.core.voLoader"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the VO loader configuration element
+   * of the VO loader extension point.
+   */
+  public static final String VO_LOADER_ELEMENT
+    = "loader"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the name attribute of the loader configuration element
+   * of the VO loader extension point.
+   */
+  public static final String VO_LOADER_NAME_ATTRIBUTE
+    = "name"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the class attribute of the loader configuration element
+   * of the VO loader extension point.
+   */
+  public static final String VO_LOADER_CLASS_ATTRIBUTE
+    = "class"; //$NON-NLS-1$
+  
+  /**
    * List that holds all known element creators.
    */
   private static List< IGridElementCreator > elementCreators = null;

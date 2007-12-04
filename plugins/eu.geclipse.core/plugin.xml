@@ -9,6 +9,7 @@
    <extension-point id="applicationDeployment" name="Application Deployment" schema="schema/applicationDeployment.exsd"/>
    <extension-point id="caCertificateLoader" name="CA Certificate Loader" schema="schema/caCertificateLoader.exsd"/>
    <extension-point id="gridProjectFolder" name="Grid Project Folder" schema="schema/gridProjectFolder.exsd"/>
+   <extension-point id="voLoader" name="VO Loader" schema="schema/voLoader.exsd"/>
    <extension
          id="eu.geclipse.core.internal.PreferenceInitializer"
          name="%extension.preferenceInitializer"
