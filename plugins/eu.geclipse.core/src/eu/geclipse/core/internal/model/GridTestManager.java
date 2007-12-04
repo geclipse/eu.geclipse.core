@@ -120,8 +120,8 @@ public class GridTestManager
   
   public List< IGridTest > getAvaliableTests( final Object resource ) {
     //TODO implement method
-    List< IGridTest > tests = new ArrayList< IGridTest >();
-    return tests;
+//    List< IGridTest > tests = new ArrayList< IGridTest >();
+    return this.tests;
   }
   
   public IGridTest getTest( final String name ) {

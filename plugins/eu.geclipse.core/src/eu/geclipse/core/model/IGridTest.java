@@ -33,7 +33,8 @@ public interface IGridTest extends IGridElement, IManageable {
     SAM,
     JOB,
     OTHER,
-    SINGLE
+    SINGLE, 
+    CERT
   }
   
   /**
