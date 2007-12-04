@@ -196,7 +196,7 @@ public class HiddenProject
    * @param inputStream
    * @return
    */
-  public IGridTest createGridTest( final String name, final String extenstion, final InputStream inputStream )
+  public IGridTest createGridTest( final String name, final String extenstion, final InputStream inputStream, final boolean forceOverride )
        {
          IGridTest result = null;
          // IGridTest result = null;
@@ -208,6 +208,9 @@ public class HiddenProject
            }
            IFile file = simpleTestsFolder.getFile( name + "." + extenstion); //$NON-NLS-1$
            if( !file.exists() ) {
+             file.create( inputStream, IResource.FORCE | IResource.REPLACE, null );
+           } else if (forceOverride){
+             file.delete( true, null );
              file.create( inputStream, IResource.FORCE | IResource.REPLACE, null );
            }
            result = GridModel.getTestManager().getTest( name );
