@@ -368,4 +368,14 @@ public class VoSelectionWizardPage extends WizardPage {
     this.tableViewer.setSelection( sel, true );
   }
 
+  /**
+   * Set selection (and check checkbox) on the given VO
+   * @param selectedVO VO to select on the list
+   */
+  public void setSelectedVo(final IVirtualOrganization selectedVO){
+    if (selectedVO != null){
+      this.tableViewer.setChecked( selectedVO, true );
+    }
+  }
+  
 }
