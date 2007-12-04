@@ -21,6 +21,10 @@
     <parser 
        type="jsdl" 
        class="eu.geclipse.jsdl.model.util.JsdlResourceFactoryImpl" />
+    <parser
+          class="eu.geclipse.jsdl.model.util.JsdlResourceFactoryImpl"
+          type="jtdl">
+    </parser>
   </extension>
 
   <extension point="org.eclipse.emf.ecore.generated_package">
