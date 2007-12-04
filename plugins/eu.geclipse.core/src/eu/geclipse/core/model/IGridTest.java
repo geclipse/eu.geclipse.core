@@ -17,6 +17,7 @@
 package eu.geclipse.core.model;
 
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -61,4 +62,6 @@ public interface IGridTest extends IGridElement, IManageable {
    */
   public HashMap<String, String> getDescriptions();
 
+  public Date getDate();
+  
 }
