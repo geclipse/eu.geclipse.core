@@ -30,6 +30,8 @@ public interface IGridTestManager extends IGridElementManager {
   public void addTest( IGridTest test );
 //  
   public IGridTest getTest( final String name );
+  
+  public void addTestStatusListener( IGridTestStatusListener listener );
 //  
 //  public IGridTest getSimpleTest( final String name, final String parentTestName );
 }

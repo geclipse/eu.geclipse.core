@@ -31,6 +31,7 @@ import eu.geclipse.core.model.IGridModelListener;
 import eu.geclipse.core.model.IGridResource;
 import eu.geclipse.core.model.IGridTest;
 import eu.geclipse.core.model.IGridTestManager;
+import eu.geclipse.core.model.IGridTestStatusListener;
 import eu.geclipse.core.model.ITestable;
 
 /**
@@ -39,7 +40,7 @@ import eu.geclipse.core.model.ITestable;
  */
 public class GridTestManager
   extends
-  AbstractGridElementManager implements IGridModelListener, IGridTestManager
+  AbstractGridElementManager implements IGridModelListener, IGridTestManager, IGridTestStatusListener
 {
   /**
    * The name of this manager.
@@ -50,9 +51,13 @@ public class GridTestManager
   
   private List<IGridTest> tests = null;
   
+  private List<IGridTestStatusListener> listeners;
+  
   public GridTestManager() {
     super();
     this.tests = new ArrayList<IGridTest>();
+    this.listeners = new ArrayList<IGridTestStatusListener>();
+    
   }
   
   @Override
@@ -79,6 +84,10 @@ public class GridTestManager
   @Override
   public void addGridModelListener( final IGridModelListener listener ) {
     //TODO
+  }
+  
+  public void addTestStatusListener( final IGridTestStatusListener listener ) {
+    this.listeners.add( listener );
   }
   
   public void addTest( final IGridTest test ) {
@@ -136,6 +145,13 @@ public class GridTestManager
   
   public List< IGridTest > getTests() {
     return this.tests;
+  }
+
+  public void statusChanged( final IGridTest test ) {
+    for ( IGridTestStatusListener listener: this.listeners ) {
+      listener.statusChanged( test );
+    }
+    
   }
   
 }
