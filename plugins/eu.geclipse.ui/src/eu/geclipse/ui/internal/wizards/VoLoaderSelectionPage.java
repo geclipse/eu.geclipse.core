@@ -16,6 +16,7 @@
 package eu.geclipse.ui.internal.wizards;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -30,43 +31,39 @@ import org.eclipse.swt.widgets.List;
 
 import eu.geclipse.core.ExtensionManager;
 import eu.geclipse.core.Extensions;
-import eu.geclipse.core.auth.ICaCertificateLoader;
+import eu.geclipse.core.model.IVoLoader;
 import eu.geclipse.ui.internal.Activator;
 
 /**
- * This wizard page is used by the {@link CaCertificateImportWizard} in order to
+ * This wizard page is used by the {@link VoImportWizard} in order to
  * chose an available VO loader.
  */
-public class CertificateLoaderSelectionPage extends WizardPage {
+public class VoLoaderSelectionPage extends WizardPage {
   
   protected List list;
   
-  private CaCertificateImportWizard.ImportMethod importMethod;
-  
   private java.util.List< IConfigurationElement > loaders;
   
+  private Hashtable< String, IVoLoader > formerlySelectedLoaders
+    = new Hashtable< String, IVoLoader >();
+  
   /**
-   * Construct a new <code>CertificateLoaderSelectionPage</code>
-   * that shows all available loader for the selected import
-   * method.
-   * 
-   * @param importMethod Either <code>LOCAL</code> or <code>REMOTE</code>.
+   * Standard constructor.
    */
-  public CertificateLoaderSelectionPage( final CaCertificateImportWizard.ImportMethod importMethod ) {
-    super( "certLoaderPage", //$NON-NLS-1$
-           Messages.getString("CertificateLoaderSelectionPage.title"), //$NON-NLS-1$
+  public VoLoaderSelectionPage() {
+    super( "voLoaderPage", //$NON-NLS-1$
+           Messages.getString("VoLoaderSelectionPage.title"), //$NON-NLS-1$
            null );
-    setDescription( Messages.getString("CertificateLoaderSelectionPage.description") ); //$NON-NLS-1$
-    this.importMethod = importMethod;
+    setDescription( Messages.getString("VoLoaderSelectionPage.description") ); //$NON-NLS-1$
   }
   
-  public int initCertificateLoaders() {
+  public int initVoLoaderList() {
     ExtensionManager manager = new ExtensionManager();
     this.loaders = new ArrayList< IConfigurationElement >();
     this.loaders.addAll(
       manager.getConfigurationElements(
-          Extensions.CA_CERT_LOADER_POINT, 
-          Extensions.CA_CERT_LOADER_ELEMENT
+          Extensions.VO_LOADER_POINT, 
+          Extensions.VO_LOADER_ELEMENT
       )
     );
     return this.loaders.size();
@@ -90,7 +87,7 @@ public class CertificateLoaderSelectionPage extends WizardPage {
     this.list.addSelectionListener( new SelectionAdapter() {
       @Override
       public void widgetSelected( final SelectionEvent e ) {
-        setPageComplete( CertificateLoaderSelectionPage.this.list.getSelectionCount() > 0 );
+        setPageComplete( VoLoaderSelectionPage.this.list.getSelectionCount() > 0 );
       }
     } );
     
@@ -102,35 +99,42 @@ public class CertificateLoaderSelectionPage extends WizardPage {
   }
   
   /**
-   * Get the currently selected certificate loader or <code>null</code>
+   * Get the currently selected VO loader or <code>null</code>
    * if no loader is selected.
    * 
-   * @return The currently selected certificate loader.
+   * @return The currently selected VO loader.
    */
-  public ICaCertificateLoader getSelectedLoader() {
+  public IVoLoader getSelectedLoader() {
     
-    ICaCertificateLoader result = null;
+    IVoLoader result = null;
     
     String[] selection = new String[] {
-        this.loaders.get( 0 ).getAttribute( Extensions.CA_CERT_LOADER_NAME_ATTRIBUTE )
+        this.loaders.get( 0 ).getAttribute( Extensions.VO_LOADER_NAME_ATTRIBUTE )
     };
     
-    if ( this.list != null ) {
+    if ( this.list != null ) { 
       selection = this.list.getSelection();
     }
     
     if ( ( selection != null ) && ( selection.length > 0 ) ) {
       
-      for ( IConfigurationElement element : this.loaders ) {
-        String name = element.getAttribute( Extensions.CA_CERT_LOADER_NAME_ATTRIBUTE );
-        if ( selection[ 0 ].equals( name ) ) {
-          try {
-            result = ( ICaCertificateLoader ) element.createExecutableExtension( Extensions.CA_CERT_LOADER_CLASS_ATTRIBUTE );
-          } catch ( CoreException cExc ) {
-            Activator.logException( cExc );
+      result = this.formerlySelectedLoaders.get( selection[ 0 ] );
+      
+      if ( result == null ) {
+      
+        for ( IConfigurationElement element : this.loaders ) {
+          String name = element.getAttribute( Extensions.VO_LOADER_NAME_ATTRIBUTE );
+          if ( selection[ 0 ].equals( name ) ) {
+            try {
+              result = ( IVoLoader ) element.createExecutableExtension( Extensions.VO_LOADER_CLASS_ATTRIBUTE );
+              this.formerlySelectedLoaders.put( selection[ 0 ], result );
+            } catch ( CoreException cExc ) {
+              Activator.logException( cExc );
+            }
+            break;
           }
-          break;
         }
+        
       }
       
     }
@@ -142,30 +146,16 @@ public class CertificateLoaderSelectionPage extends WizardPage {
   protected void populateList() {
     
     this.list.removeAll();
-    
+  
     if ( this.loaders == null ) {
-      initCertificateLoaders();
+      initVoLoaderList();
     }
 
     for ( IConfigurationElement element : this.loaders ) {
-      
-      boolean methodSupported = false;
-      
-      if ( this.importMethod == CaCertificateImportWizard.ImportMethod.LOCAL ) {
-        String fromLocal = element.getAttribute( Extensions.CA_CERT_LOADER_FROM_LOCAL_ATTRIBUTE );
-        methodSupported = Boolean.parseBoolean( fromLocal );
-      } else if ( this.importMethod == CaCertificateImportWizard.ImportMethod.REMOTE ) {
-        String fromRemote = element.getAttribute( Extensions.CA_CERT_LOADER_FROM_REMOTE_ATTRIBUTE );
-        methodSupported = Boolean.parseBoolean( fromRemote );
-      }
-      
-      if ( methodSupported ) {
-        String name = element.getAttribute( Extensions.CA_CERT_LOADER_NAME_ATTRIBUTE );
-        this.list.add( name );
-      }
-      
+      String name = element.getAttribute( Extensions.CA_CERT_LOADER_NAME_ATTRIBUTE );
+      this.list.add( name );
     }
-    
+
   }
-  
+
 }

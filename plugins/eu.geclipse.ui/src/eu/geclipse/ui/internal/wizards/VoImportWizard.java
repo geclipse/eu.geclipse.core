@@ -31,99 +31,69 @@ import org.eclipse.jface.wizard.WizardPage;
 import eu.geclipse.core.GridException;
 import eu.geclipse.core.auth.CaCertManager;
 import eu.geclipse.core.auth.ICaCertificate;
-import eu.geclipse.core.auth.ICaCertificateLoader;
+import eu.geclipse.core.model.IVirtualOrganization;
+import eu.geclipse.core.model.IVoLoader;
 import eu.geclipse.ui.dialogs.NewProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 
 /**
- * This wizard is used to import CA certificates either from a
- * local directory or file or from a remote location. Therefore
- * it queries the extension registry for all available extensions
- * of the <code>eu.geclipse.core.caCertificateLoader</code>
- * extension point and uses them to import the certificates.
+ * Wizard that is used by the VO preference page to import
+ * virtual organizations from remote repositories.
  */
-public class CaCertificateImportWizard extends Wizard {
+public class VoImportWizard extends Wizard {
+  
+  private VoLoaderSelectionPage selectionPage;
+  
+  private VoImportLocationChooserPage locationPage;
+  
+  private VoChooserPage chooserPage;
   
   /**
-   * The import method used to import certificates.
+   * Standard constructor.
    */
-  public enum ImportMethod {
-    
-    /**
-     * Local state parameter. 
-     */
-    LOCAL,
-    
-    /**
-     * Remote state parameter. 
-     */
-    REMOTE
-    
-  }
-  
-  private ImportMethod importMethod;
-  
-  private CertificateLoaderSelectionPage selectionPage;
-  
-  private AbstractLocationChooserPage locationPage;
-  
-  private CertificateChooserPage certPage;
-  
-  /**
-   * Create a new CA import wizard that either imports certificates
-   * from a local file/directory or from a remote repository.
-   * 
-   * @param importType The import type. Either <code>LOCAL</code>
-   * or <code>REMOTE</code>.
-   */
-  public CaCertificateImportWizard( final ImportMethod importType ) {
+  public VoImportWizard() {
     super();
-    this.importMethod = importType;
     setNeedsProgressMonitor( true );
-    URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/wizban/cacert_wiz.gif" ); //$NON-NLS-1$
+    URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/wizban/vo_wiz.gif" ); //$NON-NLS-1$
     setDefaultPageImageDescriptor( ImageDescriptor.createFromURL( imgUrl ) );
   }
   
   @Override
   public void addPages() {
     
-    this.selectionPage = new CertificateLoaderSelectionPage( this.importMethod );
-    if ( this.selectionPage.initCertificateLoaders() > 1 ) {
+    this.selectionPage = new VoLoaderSelectionPage();
+    if ( this.selectionPage.initVoLoaderList() > 1 ) {
       addPage( this.selectionPage );
     }
     
-    if ( this.importMethod == ImportMethod.LOCAL ) {
-      this.locationPage = new LocalLocationChooserPage( this.selectionPage );
-    } else if ( this.importMethod == ImportMethod.REMOTE ) {
-      this.locationPage = new RemoteLocationChooserPage( this.selectionPage );
-    }
+    this.locationPage = new VoImportLocationChooserPage( this.selectionPage );
     addPage( this.locationPage );
     
-    this.certPage = new CertificateChooserPage( this.locationPage );
-    addPage( this.certPage );
+    this.chooserPage = new VoChooserPage( this.locationPage );
+    addPage( this.chooserPage );
     
   }
   
   @Override
   public boolean canFinish() {
-    return getContainer().getCurrentPage() == this.certPage;
+    return getContainer().getCurrentPage() == this.chooserPage;
   }
   
   @Override
   public String getWindowTitle() {
-    return Messages.getString("CaCertificateImportWizard.title"); //$NON-NLS-1$
+    return Messages.getString("VoImportWizard.title"); //$NON-NLS-1$
   }
 
   @Override
   public boolean performFinish() {
-    
+
     boolean result = true;
     WizardPage currentPage = ( WizardPage ) getContainer().getCurrentPage();
     currentPage.setErrorMessage( null );
     
-    final ICaCertificateLoader loader = this.selectionPage.getSelectedLoader();
+    final IVoLoader loader = this.selectionPage.getSelectedLoader();
     final URI location = this.locationPage.getSelectedLocation();
-    final String[] certificates = this.certPage.getSelectedCertificates();
+    final String[] certificates = this.chooserPage.getSelectedVos();
     
     try {
       
@@ -131,28 +101,27 @@ public class CaCertificateImportWizard extends Wizard {
         public void run( final IProgressMonitor monitor )
             throws InvocationTargetException, InterruptedException {
           
-          monitor.beginTask( Messages.getString("CaCertificateImportWizard.fetching_task"), certificates.length ); //$NON-NLS-1$
-          List< ICaCertificate > certList = new ArrayList< ICaCertificate >();
+          monitor.beginTask( "Loading...", certificates.length );
           
           try {
             for ( String certID : certificates ) {
               SubProgressMonitor subMonitor = new SubProgressMonitor( monitor, 1 );
-              ICaCertificate certificate = loader.getCertificate( location, certID, subMonitor );
-              if ( certificate != null ) {
+              IVirtualOrganization vo = loader.getVo( location, certID, subMonitor );
+              /*if ( vo != null ) {
                 certList.add( certificate );
-              }
+              }*/
             }
           } catch ( GridException gExc ) {
             throw new InvocationTargetException( gExc );
           } finally {
             monitor.done();
           }
-          
+          /*
           if ( !certList.isEmpty() ) {
             ICaCertificate[] certArray = certList.toArray( new ICaCertificate[ certList.size() ] );
             CaCertManager.getManager().addCertificates( certArray );
           }
-          
+          */
         }
       } );
       
@@ -160,8 +129,8 @@ public class CaCertificateImportWizard extends Wizard {
       Throwable cause = itExc.getCause();
       NewProblemDialog.openProblem(
           getShell(),
-          Messages.getString("CaCertificateImportWizard.import_failed_title"), //$NON-NLS-1$
-          Messages.getString("CaCertificateImportWizard.import_failed_description"), //$NON-NLS-1$
+          "Import failed",
+          "Import failed",
           cause
       );
       currentPage.setErrorMessage( cause.getLocalizedMessage() );

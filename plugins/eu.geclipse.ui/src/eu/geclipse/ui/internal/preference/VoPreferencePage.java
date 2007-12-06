@@ -65,6 +65,7 @@ import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.IVoManager;
 import eu.geclipse.ui.dialogs.NewProblemDialog;
 import eu.geclipse.ui.internal.Activator;
+import eu.geclipse.ui.internal.wizards.VoImportWizard;
 import eu.geclipse.ui.wizards.wizardselection.ExtPointWizardSelectionListPage;
 
 /**
@@ -187,6 +188,11 @@ public class VoPreferencePage
    * The button that triggers the creation of a new VO.
    */
   private Button addButton;
+  
+  /**
+   * The button that triggers the opening of the VO import wizard. 
+   */
+  private Button importButton;
   
   /**
    * The button that triggers the deletion of an existing VO.
@@ -331,6 +337,10 @@ public class VoPreferencePage
     this.addButton.setText( Messages.getString("VoPreferencePage.add_button") ); //$NON-NLS-1$
     gData = new GridData( GridData.FILL_HORIZONTAL );
     this.addButton.setLayoutData( gData );
+    this.importButton = new Button( buttons, SWT.PUSH );
+    this.importButton.setText( Messages.getString("VoPreferencePage.import_button") ); //$NON-NLS-1$
+    gData = new GridData( GridData.FILL_HORIZONTAL );
+    this.importButton.setLayoutData( gData );
     this.editButton = new Button( buttons, SWT.PUSH );
     this.editButton.setText( Messages.getString("VoPreferencePage.edit_button") ); //$NON-NLS-1$
     gData = new GridData( GridData.FILL_HORIZONTAL );
@@ -351,6 +361,12 @@ public class VoPreferencePage
       @Override
       public void widgetSelected( final SelectionEvent e ) {
         editVO( null );
+      }
+    } );
+    this.importButton.addSelectionListener( new SelectionAdapter() {
+      @Override
+      public void widgetSelected( final SelectionEvent e ) {
+        importVOs();
       }
     } );
     this.editButton.addSelectionListener( new SelectionAdapter() {
@@ -416,7 +432,7 @@ public class VoPreferencePage
    * 
    * @param vo To {@link IVirtualOrganization} to be edited. 
    */
-  public void editVO( final IVirtualOrganization vo ) {
+  protected void editVO( final IVirtualOrganization vo ) {
     URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/wizban/vo_wiz.gif" ); //$NON-NLS-1$
     Wizard wizard = new Wizard() {
       @Override
@@ -447,10 +463,16 @@ public class VoPreferencePage
     dialog.open();
   }
   
+  protected void importVOs() {
+    VoImportWizard wizard = new VoImportWizard();
+    WizardDialog dialog = new WizardDialog( getShell(), wizard );
+    dialog.open();
+  }
+  
   /**
    * Remove all VOs that are currently selected in the table control.
    */
-  public void removeSelectedVOs() {
+  protected void removeSelectedVOs() {
     List< IVirtualOrganization > vos = getSelectedVos();
     if ( !vos.isEmpty() ) {
       boolean confirm = !MessageDialog.openConfirm( getShell(),
@@ -508,15 +530,11 @@ public class VoPreferencePage
    */
   protected void updateButtons() {
     
-    /*java.util.List< IVoDescription > registeredVODescriptions
-      = Extensions.getRegisteredVODescriptions();
-    boolean managersAvailable
-      = ( registeredVODescriptions != null ) && ( registeredVODescriptions.size() > 0 );
-    */
     ISelection selection = this.voViewer.getSelection();
     boolean selectionAvailable = !selection.isEmpty();
     
-    this.addButton.setEnabled( true ); // TODO mathias
+    this.addButton.setEnabled( true );
+    this.importButton.setEnabled( true );
     this.removeButton.setEnabled( selectionAvailable );
     this.editButton.setEnabled( selectionAvailable );
     
