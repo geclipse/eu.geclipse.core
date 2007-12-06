@@ -16,7 +16,6 @@
 
 package eu.geclipse.ui.wizards;
 
-import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -30,8 +29,8 @@ import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.viewers.ViewerFilter;
-import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -51,7 +50,6 @@ import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridInfoService;
-import eu.geclipse.core.model.IGridService;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.ui.dialogs.NewProblemDialog;
 import eu.geclipse.ui.internal.Activator;
@@ -59,14 +57,12 @@ import eu.geclipse.ui.wizards.wizardselection.ExtPointWizardSelectionListPage;
 
 public class VoSelectionWizardPage extends WizardPage {
   
-  java.util.List< IVirtualOrganization > voList;
   CheckboxTableViewer tableViewer;
-  
-  private Text infoText;
-  
+  java.util.List< IVirtualOrganization > voList;
+  Class< ? > voType;
   boolean allowMultiSelection;
   
-  Class< ? > voType;
+  private Text infoText;
   
   
   public VoSelectionWizardPage( final boolean allowMultiSelection ) {
@@ -121,7 +117,7 @@ public class VoSelectionWizardPage extends WizardPage {
       }
     } );
     
-    this.tableViewer.setSorter( new ViewerSorter() {
+    this.tableViewer.setComparator( new ViewerComparator() {
       @Override
       public int compare( final Viewer viewer, final Object vo1, final Object vo2 ) {
         String name1 = ( (IVirtualOrganization) vo1 ).getName();
@@ -367,15 +363,15 @@ public class VoSelectionWizardPage extends WizardPage {
     StructuredSelection sel = new StructuredSelection( defaultVo );
     this.tableViewer.setSelection( sel, true );
   }
-
+  
   /**
    * Set selection (and check checkbox) on the given VO
    * @param selectedVO VO to select on the list
    */
-  public void setSelectedVo(final IVirtualOrganization selectedVO){
-    if (selectedVO != null){
+  public void setSelectedVo( final IVirtualOrganization selectedVO ) {
+    if ( selectedVO != null ) {
       this.tableViewer.setChecked( selectedVO, true );
     }
   }
-  
+
 }
