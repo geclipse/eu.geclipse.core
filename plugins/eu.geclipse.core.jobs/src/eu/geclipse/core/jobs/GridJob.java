@@ -26,6 +26,7 @@ import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -164,7 +165,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
                       final IGridJobDescription description )
     throws GridModelException
   {
-    this.submissionTime = Calendar.getInstance().getTime();
+    this.submissionTime = Calendar.getInstance().getTime(); 
     this.jobStatusFile = jobFolder.getFile( JOBSTATUS_FILENAME );
     this.jobIdFile = jobFolder.getFile( JOBID_FILENAME );
     this.jobInfoFile = jobFolder.getFile( JOBINFO_FILENAME );
@@ -221,7 +222,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
           {
             DateFormat df = DateFormat.getDateTimeInstance();
             try {
-              this.submissionTime = df.parse( node.getTextContent() );
+              this.submissionTime = getXmlDateFormatter().parse( node.getTextContent() );
             } catch( DOMException e ) {
               // empty implementation
             } catch( ParseException e ) {
@@ -589,7 +590,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
           + "<" //$NON-NLS-1$
           + JOBINFO_SUBMISSIONTIME_XMLNODENAME
           + ">" //$NON-NLS-1$
-          + this.submissionTime
+          + ( this.submissionTime != null ? getXmlDateFormatter().format( this.submissionTime ) : "" )
           + "</" //$NON-NLS-1$
           + JOBINFO_SUBMISSIONTIME_XMLNODENAME
           + ">" //$NON-NLS-1$
@@ -753,4 +754,15 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     return null;
   }
   
+  private DateFormat getXmlDateFormatter() {
+    DateFormat formatter = DateFormat.getDateTimeInstance( DateFormat.SHORT,
+                                                           DateFormat.SHORT,
+                                                           new Locale( "Locale.US" ) ); //$NON-NLS-1$
+    if( formatter == null ) {
+      formatter = DateFormat.getDateTimeInstance( DateFormat.SHORT,
+                                                  DateFormat.SHORT );
+    }
+    return formatter;
+
+  }  
 }
