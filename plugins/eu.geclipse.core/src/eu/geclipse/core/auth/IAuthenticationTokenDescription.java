@@ -52,4 +52,7 @@ public interface IAuthenticationTokenDescription {
    * @return the wizard for this token type.
    */
   public String getWizardId();
+  
+  public boolean matches( final IAuthenticationTokenDescription otherToken );
+  
 }

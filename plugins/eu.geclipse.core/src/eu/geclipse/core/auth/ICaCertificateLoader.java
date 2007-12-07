@@ -23,7 +23,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import eu.geclipse.core.GridException;
 
 /**
- * Definition of a certificate loader. A certificate loader is
+ * Definition of a certificate loader. A certificate loader is a
  * mechanism to import CA certificates of a dediacted type from
  * a dedicated source, i.e. a remote repository or
  * alternatively a local directory or file.
