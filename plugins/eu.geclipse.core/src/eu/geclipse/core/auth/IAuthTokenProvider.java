@@ -47,6 +47,6 @@ public interface IAuthTokenProvider {
    * type of the token that is requested.
    * @return A token that matches the specified token description.
    */
-  public IAuthenticationToken requestToken( final IAuthenticationTokenDescription description );
+  public IAuthenticationToken requestToken( final AuthTokenRequest request );
   
 }

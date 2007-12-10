@@ -17,6 +17,7 @@ package eu.geclipse.ui;
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
@@ -33,11 +34,12 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.cheatsheets.CheatSheetListener;
 import org.eclipse.ui.cheatsheets.ICheatSheetEvent;
 import org.eclipse.ui.cheatsheets.ICheatSheetManager;
+
+import eu.geclipse.core.auth.AuthTokenRequest;
 import eu.geclipse.core.auth.AuthenticationException;
 import eu.geclipse.core.auth.CoreAuthTokenProvider;
 import eu.geclipse.core.auth.IAuthTokenProvider;
 import eu.geclipse.core.auth.IAuthenticationToken;
-import eu.geclipse.core.auth.IAuthenticationTokenDescription;
 import eu.geclipse.ui.dialogs.NewProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.wizards.wizardselection.ExtPointWizardSelectionListPage;
@@ -62,7 +64,7 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
     /**
      * The token description for which to retrieve a token.
      */
-    IAuthenticationTokenDescription description;
+    AuthTokenRequest request;
     
     /**
      * The token that was found or created.
@@ -73,30 +75,44 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
      * Construct a new Runner used to find a token for the specified
      * token description.
      * 
-     * @param description The {@link IAuthenticationTokenDescription} for
+     * @param request The {@link AuthTokenRequest} for
      * which to find an {@link IAuthenticationToken}.
      */
-    public Runner( final IAuthenticationTokenDescription description ) {
-      this.description = description;
+    public Runner( final AuthTokenRequest request ) {
+      this.request = request;
     }
     
     /* (non-Javadoc)
      * @see java.lang.Runnable#run()
      */
     public void run() {
+      
       CoreAuthTokenProvider cProvider = new CoreAuthTokenProvider();
-      this.token = cProvider.requestToken( this.description );
+      this.token = cProvider.requestToken( this.request );
+      
       if( this.token == null ) {
+        
         // No token could be found, so create one
-        boolean result = MessageDialog.openQuestion( UIAuthTokenProvider.this.shell,
-                                                     Messages.getString( "UIAuthTokenProvider.req_token_title" ), //$NON-NLS-1$
-                                                     Messages.getString( "UIAuthTokenProvider.new_token_question" ) ); //$NON-NLS-1$
+        
+        String title = this.request.getRequester();
+        if ( title == null ) {
+          title = Messages.getString( "UIAuthTokenProvider.req_token_title" ); //$NON-NLS-1$
+        }
+        
+        String message = this.request.getPurpose();
+        if ( message == null ) {
+          message = Messages.getString( "UIAuthTokenProvider.new_token_question" ); //$NON-NLS-1$
+        }
+        
+        boolean result = MessageDialog.openQuestion( UIAuthTokenProvider.this.shell, title, message );
+        
         if( result ) {
-          String tokenWizardId = this.description.getWizardId();
+          String tokenWizardId = this.request.getDescription().getWizardId();
           if ( showNewTokenWizard( tokenWizardId ) ) {
-            this.token = cProvider.requestToken( this.description );
+            this.token = cProvider.requestToken( this.request );
           }
         }
+        
       }
       if( this.token != null ) {
         Throwable thr = null;
@@ -176,7 +192,7 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
    * <code>requestToken(null)</code>.
    * 
    * @return Any token that could be found.
-   * @see #requestToken(IAuthenticationTokenDescription)
+   * @see #requestToken(AuthTokenRequest)
    */
   public IAuthenticationToken requestToken() {
     return requestToken( null );
@@ -201,13 +217,13 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
    * valid or not active it is validated and respectively activated. If
    * something wents wrong during this process an error message will pop up.
    * 
-   * @param description A <code>IAuthenticationTokenDescription</code> that
+   * @param request An {@link AuthTokenRequest} that
    *          describes the token that is requested.
    * @return A token of the type that is described by the specified description
    *         or null if no such token could be found or created.
    */
-  public IAuthenticationToken requestToken( final IAuthenticationTokenDescription description ) {
-    Runner runner = new Runner( description );
+  public IAuthenticationToken requestToken( final AuthTokenRequest request ) {
+    Runner runner = new Runner( request );
     this.display.syncExec( runner );
     return runner.token;
   }

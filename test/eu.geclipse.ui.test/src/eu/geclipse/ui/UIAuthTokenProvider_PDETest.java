@@ -22,6 +22,7 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import eu.geclipse.core.auth.AuthTokenRequest;
 import eu.geclipse.core.auth.IAuthenticationToken;
 import eu.geclipse.core.auth.IAuthenticationTokenDescription;
 import eu.geclipse.globus.auth.GlobusProxyDescription;
@@ -68,7 +69,8 @@ public class UIAuthTokenProvider_PDETest {
   @Test
   public void testRequestTokenIAuthenticationTokenDescription() {
     IAuthenticationTokenDescription testtoken = new GlobusProxyDescription();
-    Assert.assertNotNull( provider.requestToken( testtoken ));
+    AuthTokenRequest testrequest = new AuthTokenRequest( testtoken, null, null );
+    Assert.assertNotNull( provider.requestToken( testrequest ));
   }
 
   /**

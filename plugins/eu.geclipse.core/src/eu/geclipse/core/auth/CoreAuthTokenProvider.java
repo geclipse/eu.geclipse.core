@@ -15,12 +15,12 @@
 
 package eu.geclipse.core.auth;
 
+import java.util.List;
+
 /**
  * Core implementation of the {@link eu.geclipse.core.auth.IAuthTokenProvider}
  * interface to give a core extension for the authentication management
  * extension point.
- * 
- * @author stuempert-m
  */
 public class CoreAuthTokenProvider extends AbstractAuthTokenProvider {
 
@@ -28,34 +28,23 @@ public class CoreAuthTokenProvider extends AbstractAuthTokenProvider {
    * @see eu.geclipse.core.auth.IAuthTokenProvider#requestToken()
    */
   public IAuthenticationToken requestToken() {
-    return requestToken( null );
+    return requestToken( new AuthTokenRequest( null, null, null ) );
   }
   
   /* (non-Javadoc)
    * @see eu.geclipse.core.auth.IAuthTokenProvider#requestToken(eu.geclipse.core.auth.IAuthenticationTokenDescription)
    */
-  public IAuthenticationToken requestToken( final IAuthenticationTokenDescription description ) {
+  public IAuthenticationToken requestToken( final AuthTokenRequest request ) {
     
-    // Try to find an appropriate token
-    AuthenticationTokenManager manager = AuthenticationTokenManager.getManager();
-    IAuthenticationToken token = manager.getDefaultToken();
-    if ( ( token != null ) && ( description != null ) ) {
-      IAuthenticationTokenDescription tDesc = token.getDescription();
-      if ( !description.getClass().isAssignableFrom( tDesc.getClass() ) ) {
-        token = null;
-        for( IAuthenticationToken t : manager.getTokens() ) {
-          tDesc = t.getDescription();
-          if( description.getClass().isAssignableFrom( tDesc.getClass() ) ) {
-            token = t;
-            manager.setDefaultToken( token );
-            break;
-          }
-        }
-      }
+    IAuthenticationTokenDescription description = request.getDescription();    
+    IAuthenticationToken token = checkDefaultToken( description );
+    
+    if ( token == null ) {
+      token = checkAnyToken( description );
     }
     
-    // Validate and activate the token if necessary
     if ( token != null ) {
+      AuthenticationTokenManager.getManager().setDefaultToken( token );
       try {
         if ( !token.isValid() ) {
           token.validate();
@@ -69,6 +58,53 @@ public class CoreAuthTokenProvider extends AbstractAuthTokenProvider {
     }
     
     return token;
+    
+  }
+  
+  private IAuthenticationToken checkDefaultToken( final IAuthenticationTokenDescription description ) {
+    
+    IAuthenticationToken result = null;
+    
+    AuthenticationTokenManager manager = AuthenticationTokenManager.getManager();
+    IAuthenticationToken token = manager.getDefaultToken();
+    
+    if ( checkToken( token, description ) ) {
+      result = token;
+    }
+    
+    return result;
+    
+  }
+  
+  private IAuthenticationToken checkAnyToken( final IAuthenticationTokenDescription description ) {
+    
+    IAuthenticationToken result = null;
+    
+    AuthenticationTokenManager manager = AuthenticationTokenManager.getManager();
+    List< IAuthenticationToken > tokens = manager.getTokens();
+    
+    for ( IAuthenticationToken token : tokens ) {
+      if ( checkToken( token, description ) ) {
+        result = token;
+        break;
+      }
+    }
+    
+    return result;
+    
+  }
+  
+  private boolean checkToken( final IAuthenticationToken token,
+                              final IAuthenticationTokenDescription description ) {
+    
+    boolean result = false;
+    
+    if ( token != null ) {
+      IAuthenticationTokenDescription tokenDescription = token.getDescription();
+      result = description.matches( tokenDescription );
+    }
+    
+    return result;
     
   }
   
