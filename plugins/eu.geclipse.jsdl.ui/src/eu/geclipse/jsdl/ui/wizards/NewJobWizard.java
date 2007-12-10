@@ -220,6 +220,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
       errName = "stdErr"; //$NON-NLS-1$
     }
     String execName = this.executablePage.getExecutableFile();
+    jsdl.setApplicationName(appName1);
     if( !execName.equals( "" ) ) { //$NON-NLS-1$
       try {
         URI test = new URI( execName );
