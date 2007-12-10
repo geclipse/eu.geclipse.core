@@ -16,6 +16,7 @@
 package eu.geclipse.terminal.ssh.internal;
 
 import java.util.ArrayList;
+
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -33,7 +34,7 @@ import org.eclipse.swt.widgets.Text;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
-import eu.geclipse.core.util.HostnameChecker;
+import eu.geclipse.core.util.TokenValidator;
 import eu.geclipse.info.glue.AbstractGlueTable;
 import eu.geclipse.info.glue.GlueQuery;
 import eu.geclipse.ui.widgets.NumberVerifier;
@@ -164,7 +165,7 @@ class SSHConnectionComposite extends Composite {
     } else if ( !validPort ) {
       status = new Status( IStatus.ERROR, Activator.PLUGIN_ID, IStatus.OK,
                            Messages.getString("SSHConnectionComposite.AValidPortNumberMustBeEntered"), null ); //$NON-NLS-1$
-    } else if ( !HostnameChecker.checkHostname( this.hostnameCombo.getText() ) ) {
+    } else if ( !TokenValidator.validateFQHN( this.hostnameCombo.getText() ) ) {
       status = new Status( IStatus.WARNING, Activator.PLUGIN_ID, IStatus.OK,
                            Messages.getString("SSHConnectionComposite.invalidHostname"), null ); //$NON-NLS-1$
     } else if ( this.passwordText.getText().length() == 0 ) {
