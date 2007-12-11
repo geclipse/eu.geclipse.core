@@ -196,24 +196,24 @@ public class HiddenProject
    * @param inputStream
    * @return
    */
-  public IGridTest createGridTest( final String name, final String extenstion, final InputStream inputStream, final boolean forceOverride )
+  public IGridTest createGridTest( final String folderName, final String testName, final String extenstion, final InputStream inputStream, final boolean forceOverride )
        {
          IGridTest result = null;
          // IGridTest result = null;
          try {
            IFolder folder = getTestFolder();
-           IFolder simpleTestsFolder = getProjectFolder( DIR_GRID_TESTS+"/"+name );
+           IFolder simpleTestsFolder = getProjectFolder( DIR_GRID_TESTS+ "/" + folderName );
            if (!simpleTestsFolder.exists() ) {
              simpleTestsFolder.create( IResource.FORCE | IResource.REPLACE, true, null );
            }
-           IFile file = simpleTestsFolder.getFile( name + "." + extenstion); //$NON-NLS-1$
+           IFile file = simpleTestsFolder.getFile( testName + "." + extenstion); //$NON-NLS-1$
            if( !file.exists() ) {
              file.create( inputStream, IResource.FORCE | IResource.REPLACE, null );
            } else if (forceOverride){
              file.delete( true, null );
              file.create( inputStream, IResource.FORCE | IResource.REPLACE, null );
            }
-           result = GridModel.getTestManager().getTest( name );
+           result = GridModel.getTestManager().getTest( folderName );
          } catch( CoreException coreExc ) {
            // TODO Auto-generated catch block
            coreExc.printStackTrace();
