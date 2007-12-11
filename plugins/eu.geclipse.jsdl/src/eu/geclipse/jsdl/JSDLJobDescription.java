@@ -1221,9 +1221,30 @@ public class JSDLJobDescription extends ResourceGridContainer
     return uri;
   }
 
-  public void setApplicationName( String applicationName ) {
+  /**
+   * @param applicationName
+   */
+  public void setApplicationName( final String applicationName ) {
     this.jobDescription.getApplication().setApplicationName( applicationName );
     
+  }
+  
+  /**
+   * @return application name
+   */
+  public String getApplicationName() {
+    String applicationName = null;
+    
+    DocumentRoot dRoot = getDocumentRoot();    
+    JobDescriptionType description = getJobDescription( dRoot );
+    
+    if( description != null ) {
+      ApplicationType application = description.getApplication();
+      
+      applicationName = application.getApplicationName();
+    }
+    
+    return applicationName;
   }
   
 }

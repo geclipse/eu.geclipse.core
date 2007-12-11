@@ -15,23 +15,27 @@
 
 package eu.geclipse.ui.wizards.jobsubmission;
 
-import java.util.Hashtable;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
+
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
+
 import eu.geclipse.core.model.IGridJobCreator;
 import eu.geclipse.ui.wizards.wizardselection.ExtPointWizardSelectionListPage;
 
+/**
+ *
+ */
 public class JobCreatorSelectionWizardPage
   extends ExtPointWizardSelectionListPage
 {
 
-  static final String EXTPOINT_NAME = "eu.geclipse.ui.jobSubmissionWizard";
+  static final String EXTPOINT_NAME = "eu.geclipse.ui.jobSubmissionWizard"; //$NON-NLS-1$
   static final String EXT_CLASS = "class"; //$NON-NLS-1$
   static final String EXT_WIZARD = "wizard"; //$NON-NLS-1$
   static final String EXT_JOBCREATOR = "job_creator"; //$NON-NLS-1$
@@ -39,11 +43,11 @@ public class JobCreatorSelectionWizardPage
   protected JobCreatorSelectionWizardPage( final JobCreatorSelectionWizard parent )
   {
     super( "jobCreationPage", //$NON-NLS-1$
-           "eu.geclipse.ui.jobSubmissionWizard",
+           "eu.geclipse.ui.jobSubmissionWizard", //$NON-NLS-1$
            getFilterList( parent ),
-           "Job Creation",
-           "Select the type of job to create",
-           "No job creators for this type of job description available." );
+           Messages.getString("JobCreatorSelectionWizardPage.wizardJobCreatorTitle"), //$NON-NLS-1$
+           Messages.getString("JobCreatorSelectionWizardPage.wizardJobCreatorDescription"), //$NON-NLS-1$
+           Messages.getString("JobCreatorSelectionWizardPage.wizardJobCreatorNoneSelectedMsg") ); //$NON-NLS-1$
   }
 
   /**
@@ -55,26 +59,38 @@ public class JobCreatorSelectionWizardPage
    */
   private static List<String> getFilterList( final JobCreatorSelectionWizard parent )
   {
-    Map<String, String> wizardCreators = getWizardCreators();
-    List<String> filterList = new LinkedList<String>();
-    List<IGridJobCreator> jobCreators = parent.getJobCreators();
-    for( final IGridJobCreator creator : jobCreators ) {
-      String creatorId = creator.getClass().getName();
-      String wizardId = wizardCreators.get( creatorId );
-      if( wizardId != null ) {
-        filterList.add( wizardId );
-      }
-      // String id = creator.getJobSubmissionWizardId();
-      // if ( id != null ) filterList.add( id );
+    List<String> filteredWizardsList = new LinkedList<String>();
+    List<JobSubmissionWizard> allWizards = getJobSubmissionWizards();
+    
+    // TODO mariusz Get only job creators for selected VO (if it's possible)
+    
+    for( IGridJobCreator jobCreator : parent.getJobCreators() ) {
+      for( JobSubmissionWizard wizard : allWizards ) {
+        if( wizard.creatorId.equals( jobCreator.getClass().getName() ) ) {
+          filteredWizardsList.add( wizard.wizardId );
+        }
+      }      
     }
-    return filterList;
+    
+    return filteredWizardsList;
   }
 
+  static class JobSubmissionWizard {
+    String wizardId;
+    String creatorId;
+    
+    JobSubmissionWizard( final String wizardId, final String creatorId ) {
+      super();
+      this.wizardId = wizardId;
+      this.creatorId = creatorId;
+    }
+  }
+  
   /**
    * @return
    */
-  private static Map<String, String> getWizardCreators() {
-    Hashtable<String, String> data = new Hashtable<String, String>();
+  private static List<JobSubmissionWizard> getJobSubmissionWizards() {
+    List<JobSubmissionWizard> wizards = new ArrayList<JobSubmissionWizard>(); 
     IExtensionRegistry registry = Platform.getExtensionRegistry();
     IExtensionPoint extensionPoint = registry.getExtensionPoint( EXTPOINT_NAME );
     if( extensionPoint != null ) {
@@ -93,9 +109,11 @@ public class JobCreatorSelectionWizardPage
             wizard = element.getAttribute( EXT_CLASS );
           }
         }
-        data.put( creator, wizard );
+        
+       
+        wizards.add( new JobSubmissionWizard( wizard, creator ) );
       }
     }
-    return data;
+    return wizards;
   }
 }
