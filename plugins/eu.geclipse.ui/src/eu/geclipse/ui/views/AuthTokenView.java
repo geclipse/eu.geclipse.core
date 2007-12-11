@@ -304,7 +304,7 @@ public class AuthTokenView extends ViewPart implements IContentChangeListener {
    */
   class TokenColumnSelectionListener implements SelectionListener {
     
-    public void widgetSelected( SelectionEvent e ) {
+    public void widgetSelected( final SelectionEvent e ) {
       // This listener is only for the columns of the token table
       assert e.getSource() instanceof TableColumn;
       
@@ -323,7 +323,7 @@ public class AuthTokenView extends ViewPart implements IContentChangeListener {
       AuthTokenView.this.tokenList.refresh();
     }
   
-    public void widgetDefaultSelected( SelectionEvent e ) {
+    public void widgetDefaultSelected( final SelectionEvent e ) {
       // Empty implementation
     }
   }
