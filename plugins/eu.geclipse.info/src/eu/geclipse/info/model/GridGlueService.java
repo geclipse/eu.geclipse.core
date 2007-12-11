@@ -61,7 +61,7 @@
      URI uri=null;
      try {
        String endpoint = validateEndpoint( gs.endpoint );
-       uri=new URI( endpoint );
+       uri=new URI( gs.uri );
      } catch (URISyntaxException e) {
        uri=null;
      }
