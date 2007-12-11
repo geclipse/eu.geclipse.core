@@ -400,10 +400,12 @@ public class Terminal extends Canvas implements ISelectionProvider {
         else if ( ch == FF ) eraseScreen();
         else if ( ch == SWT.BS ) backspace(); 
         else if ( ch == SWT.ESC ) parseEscSequence();
+        else if ( ch == -1 ) continue;
         else if ( ch < ' ' ) {
           Activator.logMessage( IStatus.WARNING,
                                 Messages.formatMessage( "Terminal.unhandledCtrlChar", //$NON-NLS-1$
-                                                        new Character( (char) ch ) ) );
+                                                        new Character( (char) ch ),
+                                                        new Integer( ch ) ) );
         } else {
           this.input.unread( ch );
           readText();
