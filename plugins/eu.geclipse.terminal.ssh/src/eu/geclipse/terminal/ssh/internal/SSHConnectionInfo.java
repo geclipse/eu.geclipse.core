@@ -105,9 +105,11 @@ class SSHConnectionInfo implements UserInfo {
   }
 
   public void showMessage( final String message ) {
-    MessageDialog.openInformation( null,
-                                   Messages.getString( "SshShell.sshTerminal" ), //$NON-NLS-1$
-                                   message );
+    if (message != null && message.trim().length() != 0) {
+      MessageDialog.openInformation( null,
+                                     Messages.getString( "SshShell.sshTerminal" ), //$NON-NLS-1$
+                                     message );
+    }
   }
 
   /**
