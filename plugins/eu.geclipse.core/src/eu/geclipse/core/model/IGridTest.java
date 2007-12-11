@@ -41,11 +41,11 @@ public interface IGridTest extends IGridElement, IManageable {
   public List<String> getTestedResourcesNames();
 
   /**
-   * Method to access dates of all submissions of this test
+   * Method to access dates of all submissions for given resource for this test
    * 
    * @return List of dates of test submission
    */
-  public List<Date> getTestSubmissionDates();
+  public List<Date> getTestSubmissionDates(final String resourceName);
 
   /**
    * Method to access text interpretation of single test for given single test's
