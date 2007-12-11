@@ -60,9 +60,9 @@ import eu.geclipse.ui.views.filters.JobViewFilterConfiguration;
 public class GridJobView extends ElementManagerViewPart
   implements IGridJobStatusListener, IFilterConfigurationListener
 {
+  JobViewActions jobActions;
   private static String XML_MEMENTO_FILTERS = "Filters"; //$NON-NLS-1$
   private static String PREFERENCE_NAME_FILTERS = "GridJobViewFilters"; //$NON-NLS-1$
-  private JobViewActions jobActions;
   private GridFilterConfigurationsManager filterConfigurationsManager;
 
   @Override
