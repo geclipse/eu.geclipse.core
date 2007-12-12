@@ -72,14 +72,21 @@ public abstract class WorkflowElementImpl extends EObjectImpl implements IWorkfl
   protected static final String ID_EDEFAULT = null;
 
   /**
-   * The cached value of the '{@link #getName() <em>Name</em>}' attribute.
+   * The cached value of the '{@link #getId() <em>Id</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see #getName()
+   * @see #getId()
    * @generated NOT
    * @ordered
    */
-  protected String id = ID_EDEFAULT;
+  protected String id;
+  
+  /**
+   * A prefix used for the generated ids.
+   */
+  protected static final String idPrefix = "W";
+  
+  protected static int aCounter = 0;
 
   /**
    * <!-- begin-user-doc -->
@@ -127,26 +134,46 @@ public abstract class WorkflowElementImpl extends EObjectImpl implements IWorkfl
 
   /**
    * <!-- begin-user-doc -->
+   * This method generates and caches an id as and when required.
    * <!-- end-user-doc -->
-   * @generated NOT
    */
   public String getId()
   {
+    if (id == null)
+    {
+      id = generateId();
+    }
     return id;
   }
 
   /**
+   * This method generates a random id based on the current time.
+   * @return the generated id
+   */
+  public synchronized String generateId()
+  {
+    long currentTime = System.currentTimeMillis();
+    return idPrefix + currentTime + aCounter++;
+  }
+  
+  /**
    * <!-- begin-user-doc -->
+   * This method sets an id.
    * <!-- end-user-doc -->
-   * @generated NOT
    */
   public void setId(String newId)
   {
     String oldId = id;
-    id = newId;
+    if (newId == null && id == null)
+    {
+      id = generateId();
+    }
+    else
+    {
+      id = newId;
+    }
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, IWorkflowPackage.IWORKFLOW_ELEMENT__ID, oldId, id));
-
   }
 
   /**
