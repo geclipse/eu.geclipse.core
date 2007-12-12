@@ -103,18 +103,25 @@ public class OutputPortItemProvider extends PortItemProvider
   }
 
   /**
-   * This returns the label text for the adapted class. <!-- begin-user-doc -->
+   * This returns the label text for the adapted class. 
+   * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * 
-   * @generated
    */
   @Override
   public String getText( Object object )
   {
-    String label = ( ( IOutputPort )object ).getName();
+    IOutputPort outPort = ( IOutputPort )object;
+    String label = ""; //$NON-NLS-1$
+    
+    String portName = outPort.getNode().getName();
+    
+    if (!( portName == null || portName.length() == 0 ))
+      label = " belonging to " + portName; //$NON-NLS-1$
+    
     return label == null || label.length() == 0
-                                               ? getString( "_UI_IOutputPort_type" )
-                                               : getString( "_UI_IOutputPort_type" )
+                                               ? getString( "_UI_IOutputPort_type" ) //$NON-NLS-1$
+                                               : getString( "_UI_IOutputPort_type" ) //$NON-NLS-1$
                                                  + " "
                                                  + label;
   }

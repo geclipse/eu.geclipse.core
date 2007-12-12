@@ -77,10 +77,10 @@ public class InputPortItemProvider extends PortItemProvider
   protected void addLinksPropertyDescriptor( Object object ) {
     itemPropertyDescriptors.add( createItemPropertyDescriptor( ( ( ComposeableAdapterFactory )adapterFactory ).getRootAdapterFactory(),
                                                                getResourceLocator(),
-                                                               getString( "_UI_IInputPort_links_feature" ),
-                                                               getString( "_UI_PropertyDescriptor_description",
-                                                                          "_UI_IInputPort_links_feature",
-                                                                          "_UI_IInputPort_type" ),
+                                                               getString( "_UI_IInputPort_links_feature" ), //$NON-NLS-1$
+                                                               getString( "_UI_PropertyDescriptor_description", //$NON-NLS-1$
+                                                                          "_UI_IInputPort_links_feature", //$NON-NLS-1$
+                                                                          "_UI_IInputPort_type" ), //$NON-NLS-1$
                                                                IWorkflowPackage.Literals.IINPUT_PORT__LINKS,
                                                                true,
                                                                false,
@@ -99,23 +99,30 @@ public class InputPortItemProvider extends PortItemProvider
   public Object getImage( Object object )
   {
     return overlayImage( object,
-                         getResourceLocator().getImage( "full/obj16/InputPort" ) );
+                         getResourceLocator().getImage( "full/obj16/InputPort" ) ); //$NON-NLS-1$
   }
 
   /**
-   * This returns the label text for the adapted class. <!-- begin-user-doc -->
+   * This returns the label text for the adapted class. 
+   * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * 
-   * @generated
    */
   @Override
   public String getText( Object object )
   {
-    String label = ( ( IInputPort )object ).getName();
-    return label == null || label.length() == 0
-                                               ? getString( "_UI_IInputPort_type" )
-                                               : getString( "_UI_IInputPort_type" )
-                                                 + " "
+    IInputPort inPort = ( IInputPort )object;
+    String label = ""; //$NON-NLS-1$
+    
+    String portName = inPort.getNode().getName();
+    
+    if (!(portName == null || portName.length() == 0))
+      label += " belonging to " + portName; //$NON-NLS-1$
+    
+        return label == null || label.length() == 0
+                                               ? getString( "_UI_IInputPort_type" ) //$NON-NLS-1$
+                                               : getString( "_UI_IInputPort_type" ) //$NON-NLS-1$
+                                                 + " " //$NON-NLS-1$
                                                  + label;
   }
 

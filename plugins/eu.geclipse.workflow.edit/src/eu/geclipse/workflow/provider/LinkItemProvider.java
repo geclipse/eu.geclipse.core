@@ -77,10 +77,10 @@ public class LinkItemProvider extends WorkflowElementItemProvider
   protected void addTargetPropertyDescriptor( Object object ) {
     itemPropertyDescriptors.add( createItemPropertyDescriptor( ( ( ComposeableAdapterFactory )adapterFactory ).getRootAdapterFactory(),
                                                                getResourceLocator(),
-                                                               getString( "_UI_ILink_target_feature" ),
-                                                               getString( "_UI_PropertyDescriptor_description",
-                                                                          "_UI_ILink_target_feature",
-                                                                          "_UI_ILink_type" ),
+                                                               getString( "_UI_ILink_target_feature" ), //$NON-NLS-1$
+                                                               getString( "_UI_PropertyDescriptor_description", //$NON-NLS-1$
+                                                                          "_UI_ILink_target_feature", //$NON-NLS-1$
+                                                                          "_UI_ILink_type" ), //$NON-NLS-1$
                                                                IWorkflowPackage.Literals.ILINK__TARGET,
                                                                true,
                                                                false,
@@ -99,10 +99,10 @@ public class LinkItemProvider extends WorkflowElementItemProvider
   protected void addSourcePropertyDescriptor( Object object ) {
     itemPropertyDescriptors.add( createItemPropertyDescriptor( ( ( ComposeableAdapterFactory )adapterFactory ).getRootAdapterFactory(),
                                                                getResourceLocator(),
-                                                               getString( "_UI_ILink_source_feature" ),
-                                                               getString( "_UI_PropertyDescriptor_description",
-                                                                          "_UI_ILink_source_feature",
-                                                                          "_UI_ILink_type" ),
+                                                               getString( "_UI_ILink_source_feature" ), //$NON-NLS-1$
+                                                               getString( "_UI_PropertyDescriptor_description", //$NON-NLS-1$
+                                                                          "_UI_ILink_source_feature", //$NON-NLS-1$
+                                                                          "_UI_ILink_type" ), //$NON-NLS-1$
                                                                IWorkflowPackage.Literals.ILINK__SOURCE,
                                                                true,
                                                                false,
@@ -121,23 +121,33 @@ public class LinkItemProvider extends WorkflowElementItemProvider
   public Object getImage( Object object )
   {
     return overlayImage( object,
-                         getResourceLocator().getImage( "full/obj16/Link" ) );
+                         getResourceLocator().getImage( "full/obj16/Link" ) ); //$NON-NLS-1$
   }
 
   /**
-   * This returns the label text for the adapted class. <!-- begin-user-doc -->
+   * This returns the label text for the adapted class. 
+   * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * 
-   * @generated
    */
   @Override
   public String getText( Object object )
   {
-    String label = ( ( ILink )object ).getName();
+    ILink l = (ILink)object;
+    String label = ""; //$NON-NLS-1$
+    // String label = getString("_UI_ILink_type");
+
+    String fromNode = l.getSource().getNode().getName();
+    String toNode = l.getTarget().getNode().getName();
+
+    if (!(fromNode == null || fromNode.length() == 0))
+      label += " from " + fromNode; //$NON-NLS-1$
+    if (!(toNode == null || toNode.length() == 0))
+      label += " to " + toNode; //$NON-NLS-1$
+    
     return label == null || label.length() == 0
-                                               ? getString( "_UI_ILink_type" )
-                                               : getString( "_UI_ILink_type" )
-                                                 + " "
+                                               ? getString( "_UI_ILink_type" ) //$NON-NLS-1$
+                                               : getString( "_UI_ILink_type" ) //$NON-NLS-1$
+                                                 + " " //$NON-NLS-1$
                                                  + label;
   }
 
