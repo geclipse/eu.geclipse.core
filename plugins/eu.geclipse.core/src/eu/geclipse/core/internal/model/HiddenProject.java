@@ -239,6 +239,10 @@ public class HiddenProject
   public IGridContainer getProjectFolder( final IGridElement element ) {
     return null;
   }
+  
+  public String getProjectFolderID( final IGridContainer folder ) {
+    return null;
+  }
 
   /*
    * (non-Javadoc)
@@ -313,4 +317,5 @@ public class HiddenProject
     }
     return folder;
   }
+
 }
