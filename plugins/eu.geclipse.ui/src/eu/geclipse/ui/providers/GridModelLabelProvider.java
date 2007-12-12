@@ -184,7 +184,7 @@ public class GridModelLabelProvider
       result = getStorageImage();
     } else if( element instanceof IGridService ) {
       if ( element instanceof GridGlueService ) {
-        boolean isSupported = ( ( GridGlueService ) element ).getGlueService().isSupported().booleanValue();
+        boolean isSupported = ( ( GridGlueService ) element ).getGlueService().isSupported();
         if ( isSupported ) {
           result = getServiceImage();
         } else {
