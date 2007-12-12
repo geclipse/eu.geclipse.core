@@ -18,10 +18,14 @@
 package eu.geclipse.info.glue;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import javax.naming.directory.Attributes;
 
+/**
+ * 
+ * @author George Tsouloupas
+ *
+ */
 public class GlueSEAccessProtocol extends AbstractGlueTable
   implements java.io.Serializable
 {
@@ -77,12 +81,12 @@ public class GlueSEAccessProtocol extends AbstractGlueTable
   /**
    * 
    */
-  public Date MeasurementDate;
+  //public Date MeasurementDate;
 
   /**
    * 
    */
-  public Date MeasurementTime;
+  //public Date MeasurementTime;
 
   /**
    * 
@@ -99,7 +103,7 @@ public class GlueSEAccessProtocol extends AbstractGlueTable
   /**
    * 
    */
-  public GlueIndex glueIndex;
+  //private GlueIndex glueIndex;
 
   /* (non-Javadoc)
    * @see eu.geclipse.info.glue.AbstractGlueTable#getID()
@@ -109,22 +113,37 @@ public class GlueSEAccessProtocol extends AbstractGlueTable
     return this.UniqueID;
   }
 
+  /**
+   * Set this.UniqueID
+   * @param id
+   */
   public void setID( final String id ) {
     this.UniqueID = id;
   }
   
+  /**
+   * Process the attributes and fill the values of the GlueSE 
+   * @param attributes
+   */
   public void processGlueRecord( final Attributes attributes )
   {
-    this.UniqueID = GlueUtility.getStringAttribute( "GlueChunkKey", attributes );
+    this.UniqueID = GlueUtility.getStringAttribute( "GlueChunkKey", attributes ); //$NON-NLS-1$
     this.UniqueID = this.UniqueID.substring( this.UniqueID.indexOf( '=' ) + 1 );
     
     //this.AccessTime
-    this.Endpoint = GlueUtility.getStringAttribute( "GlueSEAccessProtocolEndpoint", attributes );
-    this.Port = GlueUtility.getLongAttribute( "GlueSEAccessProtocolPort", attributes );
-    this.Type = GlueUtility.getStringAttribute( "GlueSEAccessProtocolType", attributes );
-    this.Version = GlueUtility.getStringAttribute( "GlueSEAccessProtocolVersion", attributes );
+    this.Endpoint = GlueUtility.getStringAttribute( "GlueSEAccessProtocolEndpoint", attributes ); //$NON-NLS-1$
+    this.Port = GlueUtility.getLongAttribute( "GlueSEAccessProtocolPort", attributes ); //$NON-NLS-1$
+    this.Type = GlueUtility.getStringAttribute( "GlueSEAccessProtocolType", attributes ); //$NON-NLS-1$
+    this.Version = GlueUtility.getStringAttribute( "GlueSEAccessProtocolVersion", attributes ); //$NON-NLS-1$
   }
   
+  /**
+   * It compares two GlueSE
+   * @param otherObject the object to compare the current object with
+   * @return Returns true if both objects have the same values in the following 
+   * fields: Endpoint, Port, Type and Version. False otherwise or 
+   * if otherObject=null.
+   */
   public boolean equals(final GlueSEAccessProtocol otherObject)
   {
     boolean result = false;

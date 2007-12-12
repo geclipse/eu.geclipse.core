@@ -20,6 +20,8 @@ package eu.geclipse.info.glue;
 import java.util.Date;
 import java.util.ArrayList;
 
+import javax.naming.directory.Attributes;
+
 /**
  * @author George Tsouloupas
  * TODO Write Comments
@@ -44,7 +46,7 @@ public class GlueCEVOView extends AbstractGlueTable
   /**
    * 
    */
-  public GlueCE glueCE; // GlueCEUniqueID
+  //public GlueCE glueCE; // GlueCEUniqueID
 
   /**
    * 
@@ -99,17 +101,17 @@ public class GlueCEVOView extends AbstractGlueTable
   /**
    * 
    */
-  public Long FreeCpus;
+  //public Long FreeCpus;
 
   /**
    * 
    */
-  public Date MeasurementDate;
+  //public Date MeasurementDate;
 
   /**
    * 
    */
-  public Date MeasurementTime;
+  //public Date MeasurementTime;
 
   /**
    * 
@@ -118,8 +120,8 @@ public class GlueCEVOView extends AbstractGlueTable
   /**
    * 
    */
-  public ArrayList<GlueCEVOViewAccessControlBaseRule> glueCEVOViewAccessControlBaseRuleList 
-    = new ArrayList<GlueCEVOViewAccessControlBaseRule>();
+  //public ArrayList<GlueCEVOViewAccessControlBaseRule> glueCEVOViewAccessControlBaseRuleList 
+  //  = new ArrayList<GlueCEVOViewAccessControlBaseRule>();
 
   /**
    * 
@@ -134,7 +136,34 @@ public class GlueCEVOView extends AbstractGlueTable
     return this.UniqueID;
   }
 
+  /**
+   * Set the unique id
+   * @param id
+   */
   public void setID( final String id ) {
     this.UniqueID = id;
+  }
+  
+  /**
+   * Fill the GlueCEVOView
+   * @param attributes
+   */
+  public void processGlueRecord(final Attributes attributes)
+  {
+    this.byRefOnly = false;
+    this.ApplicationDir = GlueUtility.getStringAttribute( "GlueCEInfoApplicationDir", attributes ); //$NON-NLS-1$
+    this.DataDir = GlueUtility.getStringAttribute( "GlueCEInfoDataDir", attributes ); //$NON-NLS-1$
+    this.DefaultSE = GlueUtility.getStringAttribute( "GlueCEInfoDefaultSE", attributes ); //$NON-NLS-1$
+    this.EstimatedResponseTime = GlueUtility.getLongAttribute( "GlueCEStateEstimatedResponseTime", attributes ); //$NON-NLS-1$
+    this.FreeJobSlots = GlueUtility.getLongAttribute( "GlueCEStateFreeJobSlots", attributes ); //$NON-NLS-1$
+    this.key = GlueUtility.getStringAttribute( "GlueChunkKey", attributes ); //$NON-NLS-1$
+    this.keyName = GlueUtility.getStringAttribute( "GlueChunkKey", attributes ); //$NON-NLS-1$
+    this.LocalID = GlueUtility.getStringAttribute( "GlueVOViewLocalID", attributes ); //$NON-NLS-1$
+    this.RunningJobs = GlueUtility.getLongAttribute( "GlueCEStateRunningJobs", attributes ); //$NON-NLS-1$
+    this.tableName = "GlueCEVOView"; //$NON-NLS-1$
+    this.TotalJobs = GlueUtility.getLongAttribute( "GlueCEStateTotalJobs", attributes ); //$NON-NLS-1$
+    this.UniqueID = GlueUtility.getStringAttribute( "GlueChunkKey", attributes ); //$NON-NLS-1$
+    this.WaitingJobs = GlueUtility.getLongAttribute( "GlueCEStateWaitingJobs", attributes ); //$NON-NLS-1$
+    this.WorstResponseTime = GlueUtility.getLongAttribute( "GlueCEStateWorstResponseTime", attributes ); //$NON-NLS-1$
   }
 }

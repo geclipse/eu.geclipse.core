@@ -17,7 +17,6 @@
 
 package eu.geclipse.info.glue;
 
-import java.util.Date;
 
 /**
  * @author George Tsouloupas
@@ -41,17 +40,17 @@ public class GlueCEAccessControlBaseRule extends AbstractGlueTable implements ja
   /**
    * 
    */
-  public Date MeasurementDate;
+  //public Date MeasurementDate;
 
   /**
    * 
    */
-  public Date MeasurementTime;
+  //public Date MeasurementTime;
 
   /**
    * 
    */
-  public GlueIndex glueIndex;
+  //public GlueIndex glueIndex;
 
   /* (non-Javadoc)
    * @see eu.geclipse.info.glue.AbstractGlueTable#getID()
@@ -61,6 +60,10 @@ public class GlueCEAccessControlBaseRule extends AbstractGlueTable implements ja
     return this.Value;
   }
 
+  /**
+   * Set the unique id
+   * @param id
+   */
   public void setID( final String id ) {
     this.Value = id;
   }

@@ -12,12 +12,12 @@
  * Contributor(s):
  *     UCY (http://www.ucy.cs.ac.cy)
  *      - George Tsouloupas (georget@cs.ucy.ac.cy)
- *
+ *      - Nikolaos Tsioutsias
  *****************************************************************************/
 
 package eu.geclipse.info.glue;
 
-import java.util.Date;
+import javax.naming.directory.Attributes;
 
 /**
  * @author George Tsouloupas
@@ -33,18 +33,18 @@ public class GlueCESEBind extends AbstractGlueTable
   /**
    * 
    */
-  public GlueCE glueCE; // GlueCEUniqueID
+  //public GlueCE glueCE; // GlueCEUniqueID
 
   /**
    * 
    */
-  public GlueSE glueSE; // GlueSEUniqueID
+  //public GlueSE glueSE; // GlueSEUniqueID
 
   /**
    * 
    */
   public String Accesspoint;
-
+  
   /**
    * 
    */
@@ -58,19 +58,38 @@ public class GlueCESEBind extends AbstractGlueTable
   /**
    * 
    */
-  public Date MeasurementDate;
+  //public Date MeasurementDate;
 
   /**
    * 
    */
-  public Date MeasurementTime;
+  //public Date MeasurementTime;
 
   /**
    * 
    */
   public GlueIndex glueIndex;
 
+  /**
+   * Set the unique id
+   * @param id
+   */
   public void setID( final String id ) {
     this.key = id;
+  }
+  
+  /**
+   * Fills tha values of a GlueCESEBind
+   * @param attributes the attributes to process
+   */
+  public void processGlueRecord(final Attributes attributes)
+  {
+    this.byRefOnly = false;
+    this.Accesspoint = GlueUtility.getStringAttribute( "GlueCESEBindCEAccesspoint", attributes ); //$NON-NLS-1$
+    this.key = GlueUtility.getStringAttribute( "GlueCESEBindSEUniqueID", attributes ); //$NON-NLS-1$
+    this.keyName = GlueUtility.getStringAttribute( "GlueCESEBindSEUniqueID", attributes ); //$NON-NLS-1$
+    this.MountInfo = GlueUtility.getStringAttribute( "GlueCESEBindMountInfo", attributes ); //$NON-NLS-1$
+    this.tableName = "GlueCESEBind"; //$NON-NLS-1$
+    this.Weight = GlueUtility.getLongAttribute( "GlueCESEBindWeight", attributes );//$NON-NLS-1$
   }
 }

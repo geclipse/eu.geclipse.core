@@ -16,7 +16,6 @@
  *****************************************************************************/
 package eu.geclipse.info.glue;
 
-import java.util.Date;
 
 /**
  * @author George Tsouloupas
@@ -44,12 +43,12 @@ public class GlueVO extends AbstractGlueTable implements java.io.Serializable {
   /**
    * 
    */
-  public Date MeasurementDate;
+  //public Date MeasurementDate;
 
   /**
    * 
    */
-  public Date MeasurementTime;
+  //public Date MeasurementTime;
 
   /* (non-Javadoc)
    * @see eu.geclipse.info.glue.AbstractGlueTable#getID()
@@ -59,6 +58,10 @@ public class GlueVO extends AbstractGlueTable implements java.io.Serializable {
     return this.Name;
   }
 
+  /**
+   * Set this.Name
+   * @param id
+   */
   public void setID( final String id ) {
     this.Name = id;
   }

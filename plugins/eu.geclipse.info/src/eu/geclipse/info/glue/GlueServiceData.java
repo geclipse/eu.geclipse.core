@@ -67,6 +67,10 @@ public class GlueServiceData extends AbstractGlueTable
     return this.DataKey;
   }
 
+  /**
+   * Set this.DataKey
+   * @param id
+   */
   public void setID( final String id ) {
     this.DataKey = id;
   }

@@ -17,8 +17,6 @@
 
 package eu.geclipse.info.glue;
 
-import java.util.Date;
-
 /**
  * @author George Tsouloupas
  * TODO Write Comments
@@ -47,12 +45,12 @@ public class GlueSiteSponsor extends AbstractGlueTable
   /**
    * 
    */
-  public Date MeasurementDate;
+  //private Date MeasurementDate;
 
   /**
    * 
    */
-  public Date MeasurementTime;
+  //public Date MeasurementTime;
 
   /* (non-Javadoc)
    * @see eu.geclipse.info.glue.AbstractGlueTable#getID()
@@ -62,6 +60,10 @@ public class GlueSiteSponsor extends AbstractGlueTable
     return this.Sponsor;
   }
 
+  /**
+   * Set this.Sponsor
+   * @param id
+   */
   public void setID( final String id ) {
     this.Sponsor = id;
   }

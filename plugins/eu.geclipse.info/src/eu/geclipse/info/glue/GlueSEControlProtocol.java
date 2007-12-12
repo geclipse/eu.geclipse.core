@@ -18,7 +18,6 @@
 package eu.geclipse.info.glue;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 /**
  * @author George Tsouloupas
@@ -69,12 +68,12 @@ public class GlueSEControlProtocol extends AbstractGlueTable
   /**
    * 
    */
-  public Date MeasurementDate;
+  //public Date MeasurementDate;
 
   /**
    * 
    */
-  public Date MeasurementTime;
+  //public Date MeasurementTime;
 
   /**
    * 
@@ -84,7 +83,7 @@ public class GlueSEControlProtocol extends AbstractGlueTable
   /**
    * 
    */
-  public GlueIndex glueIndex;
+  //private GlueIndex glueIndex;
 
   /* (non-Javadoc)
    * @see eu.geclipse.info.glue.AbstractGlueTable#getID()
@@ -94,6 +93,10 @@ public class GlueSEControlProtocol extends AbstractGlueTable
     return this.UniqueID;
   }
 
+  /**
+   * Set this.UniqueID
+   * @param id
+   */
   public void setID( final String id ) {
     this.UniqueID = id;
   }

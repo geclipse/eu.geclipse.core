@@ -17,8 +17,12 @@
 
 package eu.geclipse.info.glue;
 
-import java.util.Date;
 import java.util.ArrayList;
+
+import javax.naming.NamingEnumeration;
+import javax.naming.NamingException;
+import javax.naming.directory.Attribute;
+import javax.naming.directory.Attributes;
 
 /**
  * @author George Tsouloupas
@@ -28,11 +32,6 @@ public class GlueSite extends AbstractGlueTable implements java.io.Serializable
 {
 
   private static final long serialVersionUID = 1L;
-
-  /**
-   * 
-   */
-  public GlueIndex glueIndex;
 
   /**
    * 
@@ -88,16 +87,15 @@ public class GlueSite extends AbstractGlueTable implements java.io.Serializable
    * 
    */
   public String Web;
+  /**
+   * 
+   */
+  //public Date MeasurementDate;
 
   /**
    * 
    */
-  public Date MeasurementDate;
-
-  /**
-   * 
-   */
-  public Date MeasurementTime;
+  //public Date MeasurementTime;
 
   /**
    * 
@@ -132,7 +130,98 @@ public class GlueSite extends AbstractGlueTable implements java.io.Serializable
     return this.UniqueId;
   }
 
+  /**
+   * Set this.UniqueId
+   * @param id
+   */
   public void setID( final String id ) {
     this.UniqueId = id;
+  }
+  
+  /**
+   * 
+   * @param attributes
+   */
+  public void processGlueRecord(final Attributes attributes)
+  {
+    this.UniqueId = GlueUtility.getStringAttribute( "GlueSiteUniqueID", attributes ); //$NON-NLS-1$
+    this.keyName = GlueUtility.getStringAttribute( "GlueSiteUniqueID", attributes ); //$NON-NLS-1$
+    this.Name = GlueUtility.getStringAttribute( "GlueSiteName", attributes ); //$NON-NLS-1$
+    this.Description = GlueUtility.getStringAttribute( "GlueSiteDescription", attributes ); //$NON-NLS-1$
+    this.SysAdminContact = GlueUtility.getStringAttribute( "GlueSiteSysAdminContact", attributes ); //$NON-NLS-1$
+    this.UserSupportContact = GlueUtility.getStringAttribute( "GlueSiteUserSupportContact", attributes ); //$NON-NLS-1$
+    this.SecurityContact = GlueUtility.getStringAttribute( "GlueSiteSecurityContact", attributes ); //$NON-NLS-1$
+    this.Location = GlueUtility.getStringAttribute( "GlueSiteLocation", attributes ); //$NON-NLS-1$
+    try {
+      this.Latitude = new Double( GlueUtility.getStringAttribute( "GlueSiteLatitude", attributes ) ); //$NON-NLS-1$
+    } catch( NumberFormatException e ) {
+      // Ignore Exception
+    }
+    try {
+      this.Longitude = new Double( GlueUtility.getStringAttribute( "GlueSiteLongitude", attributes ) ); //$NON-NLS-1$
+    } catch( NumberFormatException e ) {
+      // Ignore Exception
+    }
+    this.Web = GlueUtility.getStringAttribute( "GlueSiteWeb", attributes ); //$NON-NLS-1$
+    this.byRefOnly = false;
+    this.tableName = "GlueSite"; //$NON-NLS-1$
+    
+    // Get the other info
+    Attribute attr=attributes.get( "GlueSiteOtherInfo" ); //$NON-NLS-1$
+    if(attr!=null){
+      try {
+        NamingEnumeration<?> ne = attr.getAll();
+        while( ne.hasMoreElements() ) {
+          String otherInfo =ne.next().toString();
+          GlueSiteInfo mySiteInfo = new GlueSiteInfo();
+          mySiteInfo.key = otherInfo;
+          mySiteInfo.byRefOnly = false;
+          mySiteInfo.OtherInfo = otherInfo;
+          mySiteInfo.tableName = "GlueSiteOtherInfo"; //$NON-NLS-1$
+          
+          boolean exists = false;
+          for (int i=0; i<this.glueSiteInfoList.size(); i++)
+          {
+            if (this.glueSiteInfoList.get( i ).OtherInfo.equalsIgnoreCase( otherInfo ))
+              exists = true;
+          }
+          if (!exists){
+            this.glueSiteInfoList.add(mySiteInfo);
+          }
+        }
+      } catch( NamingException e ) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    }
+    
+    // Get the sponsor
+    attr=attributes.get( "GlueSiteSponsor" ); //$NON-NLS-1$
+    if(attr!=null){
+      try {
+        NamingEnumeration<?> ne = attr.getAll();
+        while( ne.hasMoreElements() ) {
+          String sponsorName =ne.next().toString();
+          GlueSiteSponsor mySiteSponsor = new GlueSiteSponsor();
+          mySiteSponsor.key = sponsorName;
+          mySiteSponsor.byRefOnly = false;
+          mySiteSponsor.Sponsor = sponsorName;
+          mySiteSponsor.tableName = "GlueSiteSponsor"; //$NON-NLS-1$
+            
+          boolean exists = false;
+          for (int i=0; i<this.glueSiteSponsorList.size(); i++)
+          {
+            if (this.glueSiteSponsorList.get( i ).Sponsor.equalsIgnoreCase( sponsorName ))
+              exists = true;
+          }
+          if (!exists){
+            this.glueSiteSponsorList.add( mySiteSponsor );
+          }
+        }
+      } catch( NamingException e ) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+    }
   }
 }

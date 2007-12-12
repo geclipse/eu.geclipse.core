@@ -17,8 +17,6 @@
 
 package eu.geclipse.info.glue;
 
-import java.util.Date;
-
 /**
  * @author George Tsouloupas
  * TODO Write Comments
@@ -43,13 +41,17 @@ public class GlueServiceAccessControlRule extends AbstractGlueTable
   /**
    * 
    */
-  public Date MeasurementDate;
+ // public Date MeasurementDate;
 
   /**
    * 
    */
-  public Date MeasurementTime;
+  //public Date MeasurementTime;
 
+  /**
+   * Set this.key
+   * @param id
+   */
   public void setID( final String id ) {
     this.key = id;
   }

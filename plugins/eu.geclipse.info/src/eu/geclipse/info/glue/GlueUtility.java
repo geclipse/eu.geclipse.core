@@ -21,15 +21,17 @@ import javax.naming.directory.Attributes;
 
 
 /**
- * @author nickl
+ * @author Nikolaos Tsioutsias
  *
  */
 public class GlueUtility {
   
   /**
-   * @param attribute
-   * @param attributes
-   * @return
+   * 
+   * @param attribute The name of the attribute
+   * @param attributes The list of attributes
+   * @return returns an empty String if a wrong attribute name is passed or
+   * a String with the value of the attribute.
    */
   public static String getStringAttribute( final String attribute,
                                            final Attributes attributes )
@@ -47,40 +49,46 @@ public class GlueUtility {
   }
 
   /**
-   * @param attribute
-   * @param attributes
-   * @return
+   * @param attribute The name of the attribute
+   * @param attributes The list of attributes
+   * @return returns an Integer object with value of -1 if the wrong name is passed or the
+   * value of the attribute.
    */
-  public static int getIntegerAttribute( final String attribute,
+  public static Integer getIntegerAttribute( final String attribute,
                                    final Attributes attributes )
   {
-    int result = -1;
+    Integer result = new Integer(-1);
     Attribute attr = attributes.get( attribute );
     if( attr != null ) {
       try {
-        result =  Integer.parseInt( attr.get().toString() );
+        result =  new Integer(Integer.parseInt( attr.get().toString() ));
       } catch( NamingException e ) {
         // ignore missing fields
+      } catch( NumberFormatException e ) {
+        // Ignore Exception
       }
     }
     return result;
   }
 
   /**
-   * @param attribute
-   * @param attributes
-   * @return
+   * @param attribute The name of the attribute
+   * @param attributes The list of attributes
+   * @return returns a Long object with value of -1 if the wrong name is passed or the
+   * value of the attribute.
    */
-  public static long getLongAttribute( final String attribute,
+  public static Long getLongAttribute( final String attribute,
                                        final Attributes attributes )
   {
-    long result = -1;
+    Long result = new Long(-1);
     Attribute attr = attributes.get( attribute );
     if( attr != null ) {
       try {
-        result =  Long.parseLong( attr.get().toString() );
+        result =  new Long(Long.parseLong( attr.get().toString() ));
       } catch( NamingException e ) {
         // ignore missing fields
+      } catch( NumberFormatException e ) {
+        // Ignore Exception
       }
     }
     return result;

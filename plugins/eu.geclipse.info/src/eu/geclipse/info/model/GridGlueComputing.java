@@ -54,7 +54,7 @@ public class GridGlueComputing
   @Override
   public String getName() {
     GlueCE ce = getGlueCe();
-    return "CE @ " + ce.UniqueID; 
+    return "CE @ " + ce.UniqueID; //$NON-NLS-1$
   }
 
   public URI getURI() {

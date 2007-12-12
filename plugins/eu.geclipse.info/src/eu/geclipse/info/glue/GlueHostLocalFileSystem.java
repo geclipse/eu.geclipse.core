@@ -118,6 +118,10 @@ public class GlueHostLocalFileSystem extends AbstractGlueTable
     return this.Name;
   }
 
+  /**
+   * Set this.name
+   * @param id
+   */
   public void setID( final String id ) {
     this.Name = id;
   }

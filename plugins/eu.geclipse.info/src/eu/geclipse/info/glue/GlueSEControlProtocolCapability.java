@@ -63,6 +63,10 @@ public class GlueSEControlProtocolCapability extends AbstractGlueTable
     return this.Value;
   }
 
+  /**
+   * Set this.Value
+   * @param id
+   */
   public void setID( final String id ) {
     this.Value = id;
   }

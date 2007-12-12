@@ -17,7 +17,6 @@
 
 package eu.geclipse.info.glue;
 
-import java.util.Date;
 import java.util.ArrayList;
 
 /**
@@ -198,12 +197,12 @@ public class GlueSubCluster extends AbstractGlueTable
   /**
    * 
    */
-  public Date MeasurementDate;
+  //public Date MeasurementDate;
 
   /**
    * 
    */
-  public Date MeasurementTime;
+  //public Date MeasurementTime;
 
   /**
    * 
@@ -232,6 +231,10 @@ public class GlueSubCluster extends AbstractGlueTable
     return this.UniqueID;
   }
 
+  /**
+   * Set this.UniqueID
+   * @param id
+   */
   public void setID( final String id ) {
     this.UniqueID = id;
   }

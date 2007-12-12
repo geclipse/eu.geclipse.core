@@ -20,7 +20,11 @@ package eu.geclipse.info.glue;
 import java.util.ArrayList;
 import java.util.Date;
 
-
+/**
+ * 
+ * @author George Tsouloupas
+ *
+ */
 public class GlueSL extends AbstractGlueTable implements java.io.Serializable {
 
   private static final long serialVersionUID = 1L;
@@ -75,6 +79,9 @@ public class GlueSL extends AbstractGlueTable implements java.io.Serializable {
    */
   public Date MeasurementTime;
 
+  /**
+   * 
+   */
   public ArrayList<GlueSE> glueSEList = new ArrayList<GlueSE>();
   
   /* (non-Javadoc)
@@ -85,6 +92,10 @@ public class GlueSL extends AbstractGlueTable implements java.io.Serializable {
     return this.UniqueID;
   }
 
+  /**
+   * Set the unique id
+   * @param id
+   */
   public void setID( final String id ) {
     this.UniqueID = id;
   }

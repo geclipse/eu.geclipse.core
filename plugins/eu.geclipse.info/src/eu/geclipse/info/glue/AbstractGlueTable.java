@@ -45,11 +45,6 @@ public abstract class AbstractGlueTable implements Serializable{
   public String getID(){
     return this.key;
   }
-  
-//  public void addReference( AbstractGlueTable agt ) {
-//    String referencedTableName = agt.getClass().getSimpleName();
-//    System.out.println( referencedTableName + " " + agt.keyName ); //$NON-NLS-1$
-//  }
 
   /**
    * Update the value of an attribute of the Glue object. If there is no 
@@ -62,6 +57,9 @@ public abstract class AbstractGlueTable implements Serializable{
    * @throws IllegalAccessException
    */
 
+  @SuppressWarnings({
+    "boxing", "unchecked"
+  })
   public Object setFieldByName( final String fieldName, final Object value  )
   throws RuntimeException, IllegalAccessException//, NoSuchFieldException
   {

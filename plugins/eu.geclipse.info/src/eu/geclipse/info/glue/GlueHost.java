@@ -377,6 +377,10 @@ public class GlueHost extends AbstractGlueTable implements java.io.Serializable
     return this.UniqueID;
   }
 
+  /**
+   * Set the unique id
+   * @param id
+   */
   public void setID( final String id ) {
     this.UniqueID = id;
   }

@@ -12,12 +12,10 @@
  * Contributor(s):
  *     UCY (http://www.ucy.cs.ac.cy)
  *      - George Tsouloupas (georget@cs.ucy.ac.cy)
- *
+ *      - Nikolaos Tsioutsias
  *****************************************************************************/
 
 package eu.geclipse.info.glue;
-
-import java.util.Date;
 
 /**
  * @author George Tsouloupas
@@ -31,7 +29,7 @@ public class GlueCEContactString extends AbstractGlueTable implements java.io.Se
   /**
    * 
    */
-  public GlueCE glueCE; //GlueCEUniqueID
+  //public GlueCE glueCE; //GlueCEUniqueID
 
   /**
    * 
@@ -41,12 +39,12 @@ public class GlueCEContactString extends AbstractGlueTable implements java.io.Se
   /**
    * 
    */
-  public Date MeasurementDate;
+  //public Date MeasurementDate;
 
   /**
    * 
    */
-  public Date MeasurementTime;
+  //public Date MeasurementTime;
 
   /**
    * 
@@ -61,6 +59,10 @@ public class GlueCEContactString extends AbstractGlueTable implements java.io.Se
     return this.Value;
   }
 
+  /**
+   * Set the unique id
+   * @param id
+   */
   public void setID( final String id ) {
     this.Value = id;
   }

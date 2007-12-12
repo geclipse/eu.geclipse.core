@@ -87,6 +87,10 @@ public class GlueSubClusterLocation extends AbstractGlueTable
     return this.UniqueID;
   }
 
+  /**
+   * Set this.UniqueID
+   * @param id
+   */
   public void setID( final String id ) {
     this.UniqueID = id;
   }

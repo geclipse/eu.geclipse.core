@@ -22,7 +22,6 @@ import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IGridStorage;
 import eu.geclipse.core.model.IVirtualOrganization;
-import eu.geclipse.info.glue.GlueCE;
 import eu.geclipse.info.glue.GlueQuery;
 import eu.geclipse.info.glue.GlueSA;
 import eu.geclipse.info.glue.GlueSE;
@@ -57,7 +56,7 @@ public class GridGlueStorage
       if( ( vo == null ) || GlueQuery.saSupportsVO( sa, vo.getName() )){
         try {
           String host = getGlueSe().UniqueID;
-          List list=getGlueSe().glueSEAccessProtocolList;
+          List<GlueSEAccessProtocol> list=getGlueSe().glueSEAccessProtocolList;
           if ( ( list != null ) && !list.isEmpty() ) {
             int protocolCount=list.size();
             for( int i = 0; i < protocolCount; i++ ) {
@@ -109,7 +108,7 @@ public class GridGlueStorage
   @Override
   public String getName() {
     GlueSE se = getGlueSe();
-    return "SE @ " + se.UniqueID; 
+    return "SE @ " + se.UniqueID; //$NON-NLS-1$
   }
   
   protected IVirtualOrganization getVo() {

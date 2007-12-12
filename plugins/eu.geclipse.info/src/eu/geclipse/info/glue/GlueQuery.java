@@ -26,54 +26,71 @@ import java.util.Enumeration;
  */
 public class GlueQuery {
 
+  /**
+   * Get the glue table
+   * @param tableName the name of the table line GlueCE, GlueSE
+   * @param vo the vo
+   * @return an ArrayList of AbstractGlueTable.
+   */
   public static ArrayList<AbstractGlueTable> getGlueTable(final String tableName, final String vo){
     ArrayList<AbstractGlueTable> inArray=GlueIndex.getInstance().getList(tableName);
     ArrayList<AbstractGlueTable> outArray=new ArrayList<AbstractGlueTable>();
+    ArrayList<AbstractGlueTable> result = new ArrayList<AbstractGlueTable>();
     if(vo==null || vo.equals("none")){ //$NON-NLS-1$
-      return inArray;
+       result = inArray;
     }
-
-    if(tableName.equals("GlueCE")){ //$NON-NLS-1$
-      for (AbstractGlueTable table : inArray) {
-        GlueCE ce=(GlueCE) table;
-        if(ceSupportsVO(ce, vo)){
-          outArray.add(ce);
+    else {
+      if(tableName.equals("GlueCE")){ //$NON-NLS-1$
+        for (AbstractGlueTable table : inArray) {
+          GlueCE ce=(GlueCE) table;
+          if(ceSupportsVO(ce, vo)){
+            outArray.add(ce);
+          }
         }
-      }
-    }else if(tableName.equals("GlueSE")){ //$NON-NLS-1$
-      for (AbstractGlueTable table : inArray) {
-        GlueSE se=(GlueSE) table;
-        if(seSupportsVO(se, vo)){
-          outArray.add(se);
+      }else if(tableName.equals("GlueSE")){ //$NON-NLS-1$
+        for (AbstractGlueTable table : inArray) {
+          GlueSE se=(GlueSE) table;
+          if(seSupportsVO(se, vo)){
+            outArray.add(se);
+          }
         }
-      }
-    }else if(tableName.equals("GlueService")){ //$NON-NLS-1$
-      for (AbstractGlueTable table : inArray) {
-        GlueService service=(GlueService) table;
-        if(serviceSupportsVO(service, vo)){
-          outArray.add(service);
+      }else if(tableName.equals("GlueService")){ //$NON-NLS-1$
+        for (AbstractGlueTable table : inArray) {
+          GlueService service=(GlueService) table;
+          if(serviceSupportsVO(service, vo)){
+            outArray.add(service);
+          }
         }
-      }
-    }else if(tableName.equals("GlueSite")){ //$NON-NLS-1$
-      for (AbstractGlueTable table : inArray) {
-        GlueSite site=(GlueSite) table;
-        if(siteSupportsVO(site,vo)){
-          outArray.add(site);
+      }else if(tableName.equals("GlueSite")){ //$NON-NLS-1$
+        for (AbstractGlueTable table : inArray) {
+          GlueSite site=(GlueSite) table;
+          if(siteSupportsVO(site,vo)){
+            outArray.add(site);
+          }
         }
-      }
-    }else if(tableName.equals("GlueSA")){ //$NON-NLS-1$
-      for (AbstractGlueTable table : inArray) {
-        GlueSA sa=(GlueSA) table;
-        if(saSupportsVO(sa,vo)){
-          outArray.add(sa);
+      }else if(tableName.equals("GlueSA")){ //$NON-NLS-1$
+        for (AbstractGlueTable table : inArray) {
+          GlueSA sa=(GlueSA) table;
+          if(saSupportsVO(sa,vo)){
+            outArray.add(sa);
+          }
         }
+      }else{
+        outArray=inArray;
       }
-    }else{
-      outArray=inArray;
+      
+      result = outArray;
     }
-    return outArray;
+    
+    return result;
   }
 
+  /**
+   * Check if the storage elements supports the vo
+   * @param se The Storage Element
+   * @param vo the name of the vo
+   * @return true if it supports it or false otherwise.
+   */
   public static boolean seSupportsVO(final GlueSE se, final String vo){
     boolean found=false;
     for (GlueSA sa : se.glueSAList) {
@@ -90,6 +107,12 @@ public class GlueQuery {
     return found;
   }
 
+  /**
+   * Chech if the computing elements supports the vo
+   * @param ce the computing element
+   * @param vo the name of the vo
+   * @return true if it supports it or false otherwise.
+   */
   public static boolean ceSupportsVO(final GlueCE ce, final String vo){
     boolean found=false;
     for (GlueCEAccessControlBaseRule rule : ce.glueCEAccessControlBaseRuleList) {
@@ -101,6 +124,12 @@ public class GlueQuery {
     return found;
   }
 
+  /**
+   * Check if the service supports the vo
+   * @param service the service
+   * @param vo the name of the vo
+   * @return true if it supports it or false otherwise.
+   */
   public static boolean serviceSupportsVO(final GlueService service, final String vo){
     boolean found=false;
     for (GlueServiceAccessControlRule rule : service.glueServiceAccessControlRuleList) {
@@ -112,6 +141,12 @@ public class GlueQuery {
     return found;
   }
 
+  /**
+   * Check if the storage access supports the vo
+   * @param sa the storage access
+   * @param vo the name of the vo
+   * @return true if it supports it or false otherwise.
+   */
   public static boolean saSupportsVO(final GlueSA sa, final String vo){
     boolean found=false;
     for (GlueSAAccessControlBaseRule rule : sa.glueSAAccessControlBaseRuleList) {
@@ -123,6 +158,12 @@ public class GlueQuery {
     return found;
   }
 
+  /**
+   * Check if the sites supports the vo
+   * @param site the site
+   * @param vo the name of the vo
+   * @return true if it supports it or false otherwise.
+   */
   public static boolean siteSupportsVO(final GlueSite site, final String vo){
     boolean found=false;
     for (GlueSE se: site.glueSEList) {
@@ -147,6 +188,11 @@ public class GlueQuery {
     return found;
   }
 
+  /**
+   * Get the storage elements
+   * @param vo the name of the vo
+   * @return an ArrayList of AbstractGlueTable
+   */
   public static ArrayList<AbstractGlueTable> getStorageElements(final String vo){
     ArrayList<AbstractGlueTable> agtList=new ArrayList<AbstractGlueTable>();
     Enumeration<GlueSE> enSE= GlueIndex.getInstance().glueSE.elements();

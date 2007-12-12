@@ -20,18 +20,23 @@ package eu.geclipse.info.glue;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.ArrayList;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+//import java.io.FileInputStream;
+//import java.io.FileNotFoundException;
+//import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+//import java.io.ObjectInputStream;
+//import java.io.ObjectOutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import org.eclipse.core.runtime.IPath;
 import eu.geclipse.info.Activator;
 import java.lang.reflect.Method;
 
+/**
+ * 
+ * @author George Tsouloupas
+ *
+ */
 public abstract class GlueIndex implements java.io.Serializable {
 
   @SuppressWarnings("nls")
@@ -324,7 +329,7 @@ public abstract class GlueIndex implements java.io.Serializable {
    * @return the singleton instance to the Glue information datastructure
    */
   public static GlueIndex getInstance() {
-    Boolean errorFound = false;
+    boolean errorFound = false;
     
     if( glueIndexInstance == null ) {
       
@@ -355,6 +360,10 @@ public abstract class GlueIndex implements java.io.Serializable {
     return glueIndexInstance;
   }
 
+  /**
+   * Delete the file where the glue information is stored and set 
+   * glueIndexInstance to null.
+   */
   public static void drop(){
     
     glueIndexInstance=null;
@@ -382,6 +391,8 @@ public abstract class GlueIndex implements java.io.Serializable {
    * Serialize the contents of the Glue data-structure to disk
    */
   public static void serializeInstance() {
+    /* Commented out so that the GLUE file will not be saved when 
+     * eclipse is exited.
     try {
       IPath serPath = getGridInfoLocation();
       FileOutputStream fos = new FileOutputStream( serPath.toFile() );
@@ -393,16 +404,25 @@ public abstract class GlueIndex implements java.io.Serializable {
     } catch( IOException e ) {
       Activator.logException( e );
     }
+    */
   }
 
+  /**
+   * Delete the file where the glue infomation is stored. 
+   */
   public static void dropCachePersistenceFile(){
     IPath serPath = getGridInfoLocation();
     serPath.toFile().delete();
   }
   
+  @SuppressWarnings("unused")
   private static GlueIndex loadInstance() throws IOException {
     IPath serPath = getGridInfoLocation();
     GlueIndex gi=null;
+    
+    /* Commented out so that the file of the glue will not be read
+       when g-eclipse starts. 
+     
     if(serPath!=null){
       try {
         FileInputStream fis;
@@ -418,6 +438,7 @@ public abstract class GlueIndex implements java.io.Serializable {
     }else{
       throw new IOException("Could not load cache."); //$NON-NLS-1$
     }
+    */
     return gi;
   }
 
@@ -428,8 +449,11 @@ public abstract class GlueIndex implements java.io.Serializable {
    * @param onlyIfExists 
    * @return The Glue object with the specified key, null otherwise
    */
+  @SuppressWarnings("unchecked")
   public AbstractGlueTable get( final String objectName, final String key, final boolean onlyIfExists ) {
-    Class[] c = new Class[ 1 ];
+    AbstractGlueTable result = null;
+    
+    Class<?>[] c = new Class<?>[ 1 ];
     c[ 0 ] = String.class;
     Method m;
     
@@ -438,14 +462,14 @@ public abstract class GlueIndex implements java.io.Serializable {
       if(onlyIfExists){
         String fieldName = objectName.substring( 0, 1 ).toLowerCase()
         + objectName.substring( 1 );
-        Hashtable ht=(Hashtable)this.getClass().getField( fieldName ).get( this );
+        Hashtable<String, String> ht=(Hashtable<String, String>) this.getClass().getField( fieldName ).get( this );
         returnIt=ht.containsKey( key );
       }
       if(returnIt){
         m = GlueIndex.class.getMethod( "get" + objectName, c ); //$NON-NLS-1$
         Object[] o = new Object[ 1 ];
         o[ 0 ] = key;
-        return ( AbstractGlueTable )m.invoke( getInstance(), o );
+        result =  ( AbstractGlueTable )m.invoke( getInstance(), o );
       }
     } catch( SecurityException e ) {
       //
@@ -461,7 +485,7 @@ public abstract class GlueIndex implements java.io.Serializable {
 
       Activator.logException( e );
     }
-    return null;
+    return result;
   }
 
   /**
@@ -469,6 +493,7 @@ public abstract class GlueIndex implements java.io.Serializable {
    * such as "GlueSite", "GlueCE", "GlueSE" ...
    * @return a list of all Glue objects of the provided type
    */
+  @SuppressWarnings("unchecked")
   public ArrayList<AbstractGlueTable> getList( final String objectName ) {
     ArrayList<AbstractGlueTable> agtList = new ArrayList<AbstractGlueTable>();
     try {
@@ -476,10 +501,12 @@ public abstract class GlueIndex implements java.io.Serializable {
                          + objectName.substring( 1 );
       Field f = GlueIndex.class.getField( fieldName );
       Object o = f.get( this );
-      Hashtable<String, AbstractGlueTable> ht=( Hashtable<String, AbstractGlueTable> )o;
-      Enumeration<AbstractGlueTable> enAgt = ht.elements();
-      while( enAgt.hasMoreElements() ) {
-        agtList.add( enAgt.nextElement() );
+      if (o instanceof Hashtable) {
+        Hashtable<String, AbstractGlueTable> ht=( Hashtable<String, AbstractGlueTable> )o;
+        Enumeration<AbstractGlueTable> enAgt = ht.elements();
+        while( enAgt.hasMoreElements() ) {
+          agtList.add( enAgt.nextElement() );
+        }
       }
     } catch( SecurityException e ) {
       Activator.logException( e );
@@ -502,678 +529,874 @@ public abstract class GlueIndex implements java.io.Serializable {
   
 
   private void putInFullIndex( final String key,final AbstractGlueTable agt ) {
-    String newKey = agt.getClass().getName() + key;
-    AbstractGlueTable previous = this.fullIndex.put( newKey, agt );
+    //String newKey = agt.getClass().getName() + key;
+    //AbstractGlueTable previous = this.fullIndex.put( newKey, agt );
   }
   
-
+  /**
+   * Get the GlueHost
+   * @param key the name of the GlueHost
+   * @return the GlueHost or null.
+   */
   public GlueHost getGlueHost( final String key ) {
-    if( key == null ) {
-      return null;
+    GlueHost result = null;
+    
+    if( key != null ) {
+      
+      result = this.glueHost.get( key );
+      if( result == null ) {
+        result = new GlueHost();
+  
+        result.setID( key );
+        this.glueHost.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueHost out = this.glueHost.get( key );
-    if( out == null ) {
-      out = new GlueHost();
-
-      out.setID( key );
-      this.glueHost.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // //out.fresh=false;
-    }
-    return out;
+    
+    return result;
   }
 
+  /**
+   * Get the Glue Site.
+   * @param key the name of the glue site
+   * @return the GlueSite or null
+   */
   public GlueSite getGlueSite( final String key ) {
-    if( key == null ) {
-      return null;
+    GlueSite result = null;
+    
+    if( key != null ) 
+    {      
+      result = this.glueSite.get( key );
+      if( result == null ) {
+        result = new GlueSite();
+  
+        result.setID( key );
+        this.glueSite.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueSite out = this.glueSite.get( key );
-    if( out == null ) {
-      out = new GlueSite();
-
-      out.setID( key );
-      this.glueSite.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // //out.fresh=false;
-    }
-    return out;
+    return result;
   }
 
+  /**
+   * Get the Glue Storage Element
+   * @param key the name of the GlueSE
+   * @return the GlueSE or null
+   */
   public GlueSE getGlueSE( final String key ) {
-    if( key == null ) {
-      return null;
+    GlueSE result = null;
+    
+    if( key != null ) {
+       
+      result = this.glueSE.get( key );
+      if( result == null ) {
+        result = new GlueSE();
+  
+        result.setID( key );
+        this.glueSE.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueSE out = this.glueSE.get( key );
-    if( out == null ) {
-      out = new GlueSE();
-
-      out.setID( key );
-      this.glueSE.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // //out.fresh=false;
-    }
-    return out;
+    
+    return result;
   }
 
+  /**
+   * Get the GlueSL
+   * @param key the name of the GlueSL
+   * @return the GlueSL or null
+   */
   public GlueSL getGlueSL( final String key ) {
-    if( key == null ) {
-      return null;
+    GlueSL result = null;
+    
+    if( key != null ) {
+      
+      result = this.glueSL.get( key );
+      if( result == null ) {
+        result = new GlueSL();
+  
+        result.setID( key );
+        this.glueSL.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueSL out = this.glueSL.get( key );
-    if( out == null ) {
-      out = new GlueSL();
-
-      out.setID( key );
-      this.glueSL.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // out.fresh=false;
-    }
-    return out;
+    return result;
   }
 
+  /**
+   * Get the GlueCluster
+   * @param key the name of the GlueCluster
+   * @return the GlueCluster or null
+   */
   public GlueCluster getGlueCluster( final String key ) {
-    if( key == null ) {
-      return null;
+    GlueCluster result = null;
+    
+    if( key != null ) {
+      
+      result = this.glueCluster.get( key );
+      if( result == null ) {
+        result = new GlueCluster();
+  
+        result.setID( key );
+        this.glueCluster.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueCluster out = this.glueCluster.get( key );
-    if( out == null ) {
-      out = new GlueCluster();
-
-      out.setID( key );
-      this.glueCluster.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // out.fresh=false;
-    }
-    return out;
+    return result;
   }
 
+  /**
+   * Get the GlueSubCluster
+   * @param key the name of the GlueSubCluster
+   * @return the GlueSubCluster or null
+   */
   public GlueSubCluster getGlueSubCluster( final String key ) {
-    if( key == null ) {
-      return null;
+    GlueSubCluster result = null;
+    
+    if( key != null ) {
+      
+      result = this.glueSubCluster.get( key );
+      if( result == null ) {
+        result = new GlueSubCluster();
+  
+        result.setID( key );
+        this.glueSubCluster.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueSubCluster out = this.glueSubCluster.get( key );
-    if( out == null ) {
-      out = new GlueSubCluster();
-
-      out.setID( key );
-      this.glueSubCluster.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // out.fresh=false;
-    }
-    return out;
+    
+    return result;
   }
 
+  /**
+   * Get the GlueCE
+   * @param key the name of the GlueCE
+   * @return the GlueCE or null
+   */
   public GlueCE getGlueCE( final String key ) {
-    if( key == null ) {
-      return null;
+    GlueCE result = null;
+    
+    if( key != null ) {
+      
+      result = this.glueCE.get( key );
+      if( result == null ) {
+        result = new GlueCE();
+  
+        result.setID( key );
+        this.glueCE.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueCE out = this.glueCE.get( key );
-    if( out == null ) {
-      out = new GlueCE();
-
-      out.setID( key );
-      this.glueCE.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // out.fresh=false;
-    }
-    return out;
+    return result;
   }
 
+  /**
+   * Get the GlueBatchJob
+   * @param key the name of the GlueBatchJob
+   * @return the GlueBatchJob or null
+   */
   public GlueBatchJob getGlueBatchJob( final String key ) {
-    if( key == null ) {
-      return null;
+    GlueBatchJob result = null;
+    
+    if( key != null ) {
+      
+      result = this.glueBatchJob.get( key );
+      if( result == null ) {
+        result = new GlueBatchJob();
+  
+        result.setID( key );
+        this.glueBatchJob.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueBatchJob out = this.glueBatchJob.get( key );
-    if( out == null ) {
-      out = new GlueBatchJob();
-
-      out.setID( key );
-      this.glueBatchJob.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // out.fresh=false;
-    }
-    return out;
+    return result;
   }
 
+  /**
+   * Get the GlueBatchQueue
+   * @param key the name of the GlueBatchQueue
+   * @return the GlueBatchQueue or null.
+   */
   public GlueBatchQueue getGlueBatchQueue( final String key ) {
-    if( key == null ) {
-      return null;
+    GlueBatchQueue result = null;
+    
+    if( key != null ) {
+      
+      result = this.glueBatchQueue.get( key );
+      if( result == null ) {
+        result = new GlueBatchQueue();
+  
+        result.setID( key );
+        this.glueBatchQueue.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueBatchQueue out = this.glueBatchQueue.get( key );
-    if( out == null ) {
-      out = new GlueBatchQueue();
-
-      out.setID( key );
-      this.glueBatchQueue.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // out.fresh=false;
-    }
-    return out;
+    return result;
   }
 
+  /**
+   * Get the GlueBatchSystem
+   * @param key the name of the GlueBatchSystem
+   * @return the GlueBatchSystem or null
+   */
   public GlueBatchSystem getGlueBatchSystem( final String key ) {
-    if( key == null ) {
-      return null;
+    GlueBatchSystem result = null;
+    
+    if( key != null ) {
+      
+      result = this.glueBatchSystem.get( key );
+      if( result == null ) {
+        result = new GlueBatchSystem();
+  
+        result.setID( key );
+        this.glueBatchSystem.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueBatchSystem out = this.glueBatchSystem.get( key );
-    if( out == null ) {
-      out = new GlueBatchSystem();
-
-      out.setID( key );
-      this.glueBatchSystem.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // out.fresh=false;
-    }
-    return out;
+    return result;
   }
 
+  /**
+   * Get the GlueCEAccessControlBaseRule
+   * @param key the name of the GlueCEAccessControlBaseRule
+   * @return the GlueCEAccessControlBaseRule or null
+   */
   public GlueCEAccessControlBaseRule getGlueCEAccessControlBaseRule( final String key )
   {
-    if( key == null ) {
-      return null;
+    GlueCEAccessControlBaseRule result = null;
+    
+    if( key != null ) {
+      
+      result = this.glueCEAccessControlBaseRule.get( key );
+      if( result == null ) {
+        result = new GlueCEAccessControlBaseRule();
+  
+        result.setID( key );
+        this.glueCEAccessControlBaseRule.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueCEAccessControlBaseRule out = this.glueCEAccessControlBaseRule.get( key );
-    if( out == null ) {
-      out = new GlueCEAccessControlBaseRule();
-
-      out.setID( key );
-      this.glueCEAccessControlBaseRule.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // out.fresh=false;
-    }
-    return out;
+    
+    return result;
   }
 
+  /**
+   * Get the GlueCEContactString
+   * @param key the name of the GlueCEContactString
+   * @return the GlueCEContactString or null
+   */
   public GlueCEContactString getGlueCEContactString( final String key ) {
-    if( key == null ) {
-      return null;
+    GlueCEContactString result = null;
+    
+    if( key != null ) {
+    
+      result = this.glueCEContactString.get( key );
+      if( result == null ) {
+        result = new GlueCEContactString();
+  
+        result.setID( key );
+        this.glueCEContactString.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueCEContactString out = this.glueCEContactString.get( key );
-    if( out == null ) {
-      out = new GlueCEContactString();
-
-      out.setID( key );
-      this.glueCEContactString.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // out.fresh=false;
-    }
-    return out;
+    return result;
   }
 
+  /**
+   * Get the GlueCESEBind
+   * @param key the name of the GlueCESEBind to get
+   * @return the GlueCESEBind or null
+   */
   public GlueCESEBind getGlueCESEBind( final String key ) {
-    if( key == null ) {
-      return null;
+    GlueCESEBind result = null;
+    
+    if( key != null ) {
+      result = this.glueCESEBind.get( key );
+      if( result == null ) {
+        result = new GlueCESEBind();
+  
+        result.setID( key );
+        this.glueCESEBind.put( key, result );
+      }
     }
-    GlueCESEBind out = this.glueCESEBind.get( key );
-    if( out == null ) {
-      out = new GlueCESEBind();
-
-      out.setID( key );
-      this.glueCESEBind.put( key, out );
-    } else {
-      // out.fresh=false;
-    }
-    return out;
+    return result;
   } 
 
+  /**
+   * Get the GlueCEVOView
+   * @param key the name of the GlueCEVOView to get
+   * @return the GlueCEVOView or null.
+   */
   public GlueCEVOView getGlueCEVOView( final String key ) {
-    if( key == null ) {
-      return null;
+    GlueCEVOView result = null;
+    
+    if( key != null ) {
+      
+      result = this.glueCEVOView.get( key );
+      if( result == null ) {
+        result = new GlueCEVOView();
+  
+        result.setID( key );
+        this.glueCEVOView.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueCEVOView out = this.glueCEVOView.get( key );
-    if( out == null ) {
-      out = new GlueCEVOView();
-
-      out.setID( key );
-      this.glueCEVOView.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // out.fresh=false;
-    }
-    return out;
+    return result;
   }
 
+  /**
+   * Get the GlueCEVOViewAccessControlBaseRule
+   * @param key the name of the GlueCEVOViewAccessControlBaseRule to get
+   * @return the GlueCEVOViewAccessControlBaseRule or null
+   */
   public GlueCEVOViewAccessControlBaseRule getGlueCEVOViewAccessControlBaseRule( final String key )
   {
-    if( key == null ) {
-      return null;
+    GlueCEVOViewAccessControlBaseRule result = null;
+    
+    if( key != null ) {
+      
+      result = this.glueCEVOViewAccessControlBaseRule.get( key );
+      if( result == null ) {
+        result = new GlueCEVOViewAccessControlBaseRule();
+  
+        result.setID( key );
+        this.glueCEVOViewAccessControlBaseRule.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueCEVOViewAccessControlBaseRule out = this.glueCEVOViewAccessControlBaseRule.get( key );
-    if( out == null ) {
-      out = new GlueCEVOViewAccessControlBaseRule();
-
-      out.setID( key );
-      this.glueCEVOViewAccessControlBaseRule.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // out.fresh=false;
-    }
-    return out;
+    return result;
   }
 
+  /**
+   * Get the GlueHostLocalFileSystem
+   * @param key the name of the GlueHostLocalFileSystem to get
+   * @return the GlueHostLocalFileSystem or null
+   */
   public GlueHostLocalFileSystem getGlueHostLocalFileSystem( final String key ) {
-    if( key == null ) {
-      return null;
+    GlueHostLocalFileSystem result = null;
+    
+    if( key != null ) {
+      
+      result = this.glueHostLocalFileSystem.get( key );
+      if( result == null ) {
+        result = new GlueHostLocalFileSystem();
+  
+        result.setID( key );
+        this.glueHostLocalFileSystem.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueHostLocalFileSystem out = this.glueHostLocalFileSystem.get( key );
-    if( out == null ) {
-      out = new GlueHostLocalFileSystem();
-
-      out.setID( key );
-      this.glueHostLocalFileSystem.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // out.fresh=false;
-    }
-    return out;
+    return result;
   }
 
+  /**
+   * Get the GlueHostNetworkAdapter
+   * @param key the name of the GlueHostNetworkAdapter to get
+   * @return GlueHostNetworkAdapter or null
+   */
   public GlueHostNetworkAdapter getGlueHostNetworkAdapter( final String key ) {
-    if( key == null ) {
-      return null;
+    GlueHostNetworkAdapter result = null;
+    
+    if( key != null ) {
+      
+      result = this.glueHostNetworkAdapter.get( key );
+      if( result == null ) {
+        result = new GlueHostNetworkAdapter();
+  
+        result.setID( key );
+        this.glueHostNetworkAdapter.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueHostNetworkAdapter out = this.glueHostNetworkAdapter.get( key );
-    if( out == null ) {
-      out = new GlueHostNetworkAdapter();
-
-      out.setID( key );
-      this.glueHostNetworkAdapter.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // out.fresh=false;
-    }
-    return out;
+    return result;
   }
 
+  /**
+   * Get the GlueHostPoolAccount
+   * @param key the name of the GlueHostPoolAccount
+   * @return the GlueHostPoolAccount or null
+   */
   public GlueHostPoolAccount getGlueHostPoolAccount( final String key ) {
-    if( key == null ) {
-      return null;
+    GlueHostPoolAccount result = null;
+    if( key != null ) {
+      result = this.glueHostPoolAccount.get( key );
+      if( result == null ) {
+        result = new GlueHostPoolAccount();
+  
+        result.setID( key );
+        this.glueHostPoolAccount.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueHostPoolAccount out = this.glueHostPoolAccount.get( key );
-    if( out == null ) {
-      out = new GlueHostPoolAccount();
-
-      out.setID( key );
-      this.glueHostPoolAccount.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // out.fresh=false;
-    }
-    return out;
+    return result;
   }
 
+  /**
+   * Get the GlueHostProcess
+   * @param key the name of the GlueHostProcess to get
+   * @return the GlueHostProcess or null
+   */
   public GlueHostProcess getGlueHostProcess( final String key ) {
-    if( key == null ) {
-      return null;
+    GlueHostProcess result = null;
+    
+    if( key != null ) {
+      
+      result = this.glueHostProcess.get( key );
+      if( result == null ) {
+        result = new GlueHostProcess();
+  
+        result.setID( key );
+        this.glueHostProcess.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueHostProcess out = this.glueHostProcess.get( key );
-    if( out == null ) {
-      out = new GlueHostProcess();
-
-      out.setID( key );
-      this.glueHostProcess.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // out.fresh=false;
-    }
-    return out;
+    return result;
   }
 
+  /**
+   * Get the GlueHostRemoteFileSystem
+   * @param key the name of the GlueHostRemoteFileSystem to get
+   * @return the GlueHostRemoteFileSystem or null
+   */
   public GlueHostRemoteFileSystem getGlueHostRemoteFileSystem( final String key ) {
-    if( key == null ) {
-      return null;
+    GlueHostRemoteFileSystem result = null;
+    if( key != null ) {
+      
+      result = this.glueHostRemoteFileSystem.get( key );
+      if( result == null ) {
+        result = new GlueHostRemoteFileSystem();
+  
+        result.setID( key );
+        this.glueHostRemoteFileSystem.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueHostRemoteFileSystem out = this.glueHostRemoteFileSystem.get( key );
-    if( out == null ) {
-      out = new GlueHostRemoteFileSystem();
-
-      out.setID( key );
-      this.glueHostRemoteFileSystem.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // out.fresh=false;
-    }
-    return out;
+    return result;
   }
 
+  /**
+   * Get the GlueHostRole
+   * @param key the name of the GlueHostRole to get
+   * @return the GlueHostRole or null
+   */
   public GlueHostRole getGlueHostRole( final String key ) {
-    if( key == null ) {
-      return null;
+    GlueHostRole result = null;
+    
+    if( key != null ) {
+      
+      result = this.glueHostRole.get( key );
+      if( result == null ) {
+        result = new GlueHostRole();
+  
+        result.setID( key );
+        this.glueHostRole.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueHostRole out = this.glueHostRole.get( key );
-    if( out == null ) {
-      out = new GlueHostRole();
-
-      out.setID( key );
-      this.glueHostRole.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // out.fresh=false;
-    }
-    return out;
+    
+    return result;
   }
 
+  /**
+   * Get the GlueSA
+   * @param key the name of the GlueSA to get
+   * @return the GlueSA or null
+   */
   public GlueSA getGlueSA( final String key ) {
-    if( key == null ) {
-      return null;
+    GlueSA result = null;
+    
+    if( key != null ) {
+      
+      result = this.glueSA.get( key );
+      if( result == null ) {
+        result = new GlueSA();
+  
+        result.setID( key );
+        this.glueSA.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueSA out = this.glueSA.get( key );
-    if( out == null ) {
-      out = new GlueSA();
-
-      out.setID( key );
-      this.glueSA.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // out.fresh=false;
-    }
-    return out;
+    return result;
   }
 
+  /**
+   * Get the GlueSAAccessControlBaseRule
+   * @param key the name of the GlueSAAccessControlBaseRule
+   * @return the GlueSAAccessControlBaseRule or null
+   */
   public GlueSAAccessControlBaseRule getGlueSAAccessControlBaseRule( final String key )
   {
-    if( key == null ) {
-      return null;
+    GlueSAAccessControlBaseRule result = null;
+    
+    if( key != null ) {
+      
+      result = this.glueSAAccessControlBaseRule.get( key );
+      if( result == null ) {
+        result = new GlueSAAccessControlBaseRule();
+  
+        result.setID( key );
+        this.glueSAAccessControlBaseRule.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueSAAccessControlBaseRule out = this.glueSAAccessControlBaseRule.get( key );
-    if( out == null ) {
-      out = new GlueSAAccessControlBaseRule();
-
-      out.setID( key );
-      this.glueSAAccessControlBaseRule.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // out.fresh=false;
-    }
-    return out;
+    return result;
   }
 
+  /**
+   * Get the GlueSEAccessProtocol
+   * @param key the name of the GlueSEAccessProtocol to get
+   * @return the GlueSEAccessProtocol or null
+   */
   public GlueSEAccessProtocol getGlueSEAccessProtocol( final String key ) {
-    if( key == null ) {
-      return null;
+    GlueSEAccessProtocol result = null;
+    
+    if( key != null ) {
+    
+      result = this.glueSEAccessProtocol.get( key );
+      if( result == null ) {
+        result = new GlueSEAccessProtocol();
+  
+        result.setID( key );
+        this.glueSEAccessProtocol.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueSEAccessProtocol out = this.glueSEAccessProtocol.get( key );
-    if( out == null ) {
-      out = new GlueSEAccessProtocol();
-
-      out.setID( key );
-      this.glueSEAccessProtocol.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // out.fresh=false;
-    }
-    return out;
+    
+    return result;
   }
 
+  /**
+   * Get the GlueSEAccessProtocolCapability
+   * @param key the name of the GlueSEAccessProtocolCapability to get
+   * @return the GlueSEAccessProtocolCapability or null
+   */
   public GlueSEAccessProtocolCapability getGlueSEAccessProtocolCapability( final String key )
   {
-    if( key == null ) {
-      return null;
+    GlueSEAccessProtocolCapability result = null;
+    
+    if( key != null ) {
+      
+      result = this.glueSEAccessProtocolCapability.get( key );
+      if( result == null ) {
+        result = new GlueSEAccessProtocolCapability();
+  
+        result.setID( key );
+        this.glueSEAccessProtocolCapability.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueSEAccessProtocolCapability out = this.glueSEAccessProtocolCapability.get( key );
-    if( out == null ) {
-      out = new GlueSEAccessProtocolCapability();
-
-      out.setID( key );
-      this.glueSEAccessProtocolCapability.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // out.fresh=false;
-    }
-    return out;
+    return result;
   }
 
+  /**
+   * Get the GlueSEAccessProtocolSupportedSecurity
+   * @param key the name of the GlueSEAccessProtocolSupportedSecurity to get
+   * @return the GlueSEAccessProtocolSupportedSecurity or null
+   */
   public GlueSEAccessProtocolSupportedSecurity getGlueSEAccessProtocolSupportedSecurity( final String key )
   {
-    if( key == null ) {
-      return null;
+    GlueSEAccessProtocolSupportedSecurity result = null;
+    
+    if( key != null ) {
+      
+      result = this.glueSEAccessProtocolSupportedSecurity.get( key );
+      if( result == null ) {
+        result = new GlueSEAccessProtocolSupportedSecurity();
+  
+        result.setID( key );
+        this.glueSEAccessProtocolSupportedSecurity.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueSEAccessProtocolSupportedSecurity out = this.glueSEAccessProtocolSupportedSecurity.get( key );
-    if( out == null ) {
-      out = new GlueSEAccessProtocolSupportedSecurity();
-
-      out.setID( key );
-      this.glueSEAccessProtocolSupportedSecurity.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // out.fresh=false;
-    }
-    return out;
+    return result;
   }
 
+  /**
+   * Get the GlueSEControlProtocol
+   * @param key the name of the GlueSEControlProtocol
+   * @return the GlueSEControlProtocol or null
+   */
   public GlueSEControlProtocol getGlueSEControlProtocol( final String key ) {
-    if( key == null ) {
-      return null;
+    GlueSEControlProtocol result = null;
+    
+    if( key != null ) {
+      
+      result = this.glueSEControlProtocol.get( key );
+      if( result == null ) {
+        result = new GlueSEControlProtocol();
+  
+        result.setID( key );
+        this.glueSEControlProtocol.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueSEControlProtocol out = this.glueSEControlProtocol.get( key );
-    if( out == null ) {
-      out = new GlueSEControlProtocol();
-
-      out.setID( key );
-      this.glueSEControlProtocol.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // out.fresh=false;
-    }
-    return out;
+    return result;
   }
 
+  /**
+   * Get the GlueSEControlProtocolCapability
+   * @param key the name of the GlueSEControlProtocolCapability to get
+   * @return the GlueSEControlProtocolCapability or null
+   */
   public GlueSEControlProtocolCapability getGlueSEControlProtocolCapability( final String key )
   {
-    if( key == null ) {
-      return null;
+    GlueSEControlProtocolCapability result = null;
+    
+    if( key != null ) {
+      
+      result = this.glueSEControlProtocolCapability.get( key );
+      if( result == null ) {
+        result = new GlueSEControlProtocolCapability();
+  
+        result.setID( key );
+        this.glueSEControlProtocolCapability.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueSEControlProtocolCapability out = this.glueSEControlProtocolCapability.get( key );
-    if( out == null ) {
-      out = new GlueSEControlProtocolCapability();
-
-      out.setID( key );
-      this.glueSEControlProtocolCapability.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // out.fresh=false;
-    }
-    return out;
+    return result;
   }
 
+  /**
+   * Get the GlueService
+   * @param key the name of the GlueService to get
+   * @return the GlueService or null
+   */
   public GlueService getGlueService( final String key ) {
-    if( key == null ) {
-      return null;
+    GlueService result = null;
+    
+    if( key != null ) {
+    
+      result = this.glueService.get( key );
+      if( result == null ) {
+        result = new GlueService();
+  
+        result.setID( key );
+        this.glueService.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueService out = this.glueService.get( key );
-    if( out == null ) {
-      out = new GlueService();
-
-      out.setID( key );
-      this.glueService.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // out.fresh=false;
-    }
-    return out;
+    return result;
   }
 
+  /**
+   * Get the GlueServiceAccessControlRule
+   * @param key the name of the GlueServiceAccessControlRule to get
+   * @return the GlueServiceAccessControlRule or null
+   */
   public GlueServiceAccessControlRule getGlueServiceAccessControlRule( final String key )
   {
-    if( key == null ) {
-      return null;
+    GlueServiceAccessControlRule result = null;
+    
+    if( key != null ) {
+    
+      result = this.glueServiceAccessControlRule.get( key );
+      if( result == null ) {
+        result = new GlueServiceAccessControlRule();
+  
+        result.setID( key );
+        this.glueServiceAccessControlRule.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueServiceAccessControlRule out = this.glueServiceAccessControlRule.get( key );
-    if( out == null ) {
-      out = new GlueServiceAccessControlRule();
-
-      out.setID( key );
-      this.glueServiceAccessControlRule.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // out.fresh=false;
-    }
-    return out;
+    return result;
   }
 
+  /**
+   * Get the GlueServiceAssociation
+   * @param key the name of the GlueServiceAssociation to get
+   * @return the GlueServiceAssociation or null
+   */
   public GlueServiceAssociation getGlueServiceAssociation( final String key ) {
-    if( key == null ) {
-      return null;
+    GlueServiceAssociation result = null;
+    
+    if( key != null ) {
+      
+      result = this.glueServiceAssociation.get( key );
+      if( result == null ) {
+        result = new GlueServiceAssociation();
+  
+        result.setID( key );
+        this.glueServiceAssociation.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueServiceAssociation out = this.glueServiceAssociation.get( key );
-    if( out == null ) {
-      out = new GlueServiceAssociation();
-
-      out.setID( key );
-      this.glueServiceAssociation.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // out.fresh=false;
-    }
-    return out;
+    return result;
   }
 
+  /**
+   * Get the GlueServiceData
+   * @param key the name of the GlueServiceData to get
+   * @return the GlueServiceData or null
+   */
   public GlueServiceData getGlueServiceData( final String key ) {
-    if( key == null ) {
-      return null;
+    GlueServiceData result = null;
+    
+    if( key != null ) {
+      
+      result = this.glueServiceData.get( key );
+      if( result == null ) {
+        result = new GlueServiceData();
+  
+        result.setID( key );
+        this.glueServiceData.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueServiceData out = this.glueServiceData.get( key );
-    if( out == null ) {
-      out = new GlueServiceData();
-
-      out.setID( key );
-      this.glueServiceData.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // out.fresh=false;
-    }
-    return out;
+    return result;
   }
 
+  /**
+   * Get the GlueServiceOwner
+   * @param key the name of the GlueServiceOwner to get
+   * @return  the GlueServiceOwner or null
+   */
   public GlueServiceOwner getGlueServiceOwner( final String key ) {
-    if( key == null ) {
-      return null;
+    GlueServiceOwner result = null;
+    
+    if( key != null ) {
+      
+      result = this.glueServiceOwner.get( key );
+      if( result == null ) {
+        result = new GlueServiceOwner();
+  
+        result.setID( key );
+        this.glueServiceOwner.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueServiceOwner out = this.glueServiceOwner.get( key );
-    if( out == null ) {
-      out = new GlueServiceOwner();
-
-      out.setID( key );
-      this.glueServiceOwner.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // out.fresh=false;
-    }
-    return out;
+    return result;
   }
 
+  /**
+   * Get the GlueServiceStatus
+   * @param key the name of the GlueServiceStatus to get
+   * @return the GlueServiceStatus or null
+   */
   public GlueServiceStatus getGlueServiceStatus( final String key ) {
-    if( key == null ) {
-      return null;
+    GlueServiceStatus result = null;
+    
+    if( key != null ) {
+      
+      result = this.glueServiceStatus.get( key );
+      if( result == null ) {
+        result = new GlueServiceStatus();
+  
+        result.setID( key );
+        this.glueServiceStatus.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueServiceStatus out = this.glueServiceStatus.get( key );
-    if( out == null ) {
-      out = new GlueServiceStatus();
-
-      out.setID( key );
-      this.glueServiceStatus.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // out.fresh=false;
-    }
-    return out;
+    return result;
   }
 
+  /**
+   * Get the GlueSiteInfo
+   * @param key the name of the GlueSiteInfo
+   * @return the GlueSiteInfo or null
+   */
   public GlueSiteInfo getGlueSiteInfo( final String key ) {
-    if( key == null ) {
-      return null;
+    GlueSiteInfo result = null;
+    
+    if( key != null ) {
+    
+      result = this.glueSiteInfo.get( key );
+      if( result == null ) {
+        result = new GlueSiteInfo();
+  
+        result.setID( key );
+        this.glueSiteInfo.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueSiteInfo out = this.glueSiteInfo.get( key );
-    if( out == null ) {
-      out = new GlueSiteInfo();
-
-      out.setID( key );
-      this.glueSiteInfo.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // out.fresh=false;
-    }
-    return out;
+    return result;
   }
 
+  /**
+   * Get the GlueSiteSponsor
+   * @param key the name of the GlueSiteSponsor
+   * @return the GlueSiteSponsor or null
+   */
   public GlueSiteSponsor getGlueSiteSponsor( final String key ) {
-    if( key == null ) {
-      return null;
+    GlueSiteSponsor result = null;
+    
+    if( key != null ) {
+      
+      result = this.glueSiteSponsor.get( key );
+      if( result == null ) {
+        result = new GlueSiteSponsor();
+  
+        result.setID( key );
+        this.glueSiteSponsor.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueSiteSponsor out = this.glueSiteSponsor.get( key );
-    if( out == null ) {
-      out = new GlueSiteSponsor();
-
-      out.setID( key );
-      this.glueSiteSponsor.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // out.fresh=false;
-    }
-    return out;
+    return result;
   }
 
+  /**
+   * Get the GlueSubClusterLocation
+   * @param key the name of the GlueSubClusterLocation to get
+   * @return the GlueSubClusterLocation or null
+   */
   public GlueSubClusterLocation getGlueSubClusterLocation( final String key ) {
-    if( key == null ) {
-      return null;
+    GlueSubClusterLocation result = null;
+    
+    if( key != null ) {
+      
+      result = this.glueSubClusterLocation.get( key );
+      if( result == null ) {
+        result = new GlueSubClusterLocation();
+  
+        result.setID( key );
+        this.glueSubClusterLocation.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueSubClusterLocation out = this.glueSubClusterLocation.get( key );
-    if( out == null ) {
-      out = new GlueSubClusterLocation();
-
-      out.setID( key );
-      this.glueSubClusterLocation.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // out.fresh=false;
-    }
-    return out;
+    return result;
   }
 
+  /**
+   * Get the GlueSubClusterSoftwareRunTimeEnvironment
+   * @param key the name of the GlueSubClusterSoftwareRunTimeEnvironment
+   * @return the GlueSubClusterSoftwareRunTimeEnvironment or null
+   */
   public GlueSubClusterSoftwareRunTimeEnvironment getGlueSubClusterSoftwareRunTimeEnvironment( final String key )
   {
-    if( key == null ) {
-      return null;
+    GlueSubClusterSoftwareRunTimeEnvironment result = null;
+    
+    if( key != null ) {
+      
+      result = this.glueSubClusterSoftwareRunTimeEnvironment.get( key );
+      if( result == null ) {
+        result = new GlueSubClusterSoftwareRunTimeEnvironment();
+  
+        result.setID( key );
+        this.glueSubClusterSoftwareRunTimeEnvironment.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueSubClusterSoftwareRunTimeEnvironment out = this.glueSubClusterSoftwareRunTimeEnvironment.get( key );
-    if( out == null ) {
-      out = new GlueSubClusterSoftwareRunTimeEnvironment();
-
-      out.setID( key );
-      this.glueSubClusterSoftwareRunTimeEnvironment.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // out.fresh=false;
-    }
-    return out;
+    return result;
   }
 
+  /**
+   * Get the GlueVO
+   * @param key the name of the GlueVO to get
+   * @return the GlueVO or null
+   */
   public GlueVO getGlueVO( final String key ) {
-    if( key == null ) {
-      return null;
+    GlueVO result = null;
+    
+    if( key != null ) {
+      
+      result = this.glueVO.get( key );
+      if( result == null ) {
+        result = new GlueVO();
+  
+        result.setID( key );
+        this.glueVO.put( key, result );
+        putInFullIndex( key, result );
+      }
     }
-    GlueVO out = this.glueVO.get( key );
-    if( out == null ) {
-      out = new GlueVO();
-
-      out.setID( key );
-      this.glueVO.put( key, out );
-      putInFullIndex( key, out );
-    } else {
-      // out.fresh=false;
-    }
-    return out;
+    return result;
   }
 }

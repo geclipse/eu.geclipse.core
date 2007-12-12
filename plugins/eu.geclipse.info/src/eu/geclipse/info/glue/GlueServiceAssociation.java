@@ -49,6 +49,10 @@ public class GlueServiceAssociation extends AbstractGlueTable
    */
   public Date MeasurementTime;
 
+  /**
+   * Set this.key
+   * @param id
+   */
   public void setID( final String id ) {
     this.key = id;
   }

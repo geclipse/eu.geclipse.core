@@ -17,8 +17,6 @@
 
 package eu.geclipse.info.glue;
 
-import java.util.Date;
-
 /**
  * @author George Tsouloupas
  * TODO Write Comments
@@ -38,16 +36,15 @@ public class GlueServiceOwner extends AbstractGlueTable
    * 
    */
   public String Owner; // PK
+  /**
+   * 
+   */
+  //public Date MeasurementDate;
 
   /**
    * 
    */
-  public Date MeasurementDate;
-
-  /**
-   * 
-   */
-  public Date MeasurementTime;
+  //public Date MeasurementTime;
 
   /**
    * 
@@ -62,6 +59,10 @@ public class GlueServiceOwner extends AbstractGlueTable
     return this.Owner;
   }
 
+  /**
+   * Set this.Owner
+   * @param id
+   */
   public void setID( final String id ) {
     this.Owner = id;
   }
