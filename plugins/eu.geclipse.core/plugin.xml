@@ -84,34 +84,4 @@
          </target>
       </creator>
    </extension>
-   <extension
-         point="eu.geclipse.core.gridProjectFolder">
-      <folder
-            elementClass="eu.geclipse.core.model.IGridJob"
-            id="eu.geclipse.core.projectfolder.jobs"
-            label="Jobs"
-            name="Grid Job Folder"
-            preset="true">
-      </folder>
-      <folder
-            elementClass="eu.geclipse.core.model.IGridJobDescription"
-            id="eu.geclipse.core.projectfolder.jobdescriptions"
-            label="Job Descriptions"
-            name="Grid Job Description Folder"
-            preset="true">
-      </folder>
-      <folder
-            elementClass="eu.geclipse.core.model.IGridConnection"
-            id="eu.geclipse.core.projectfolder.connections"
-            label="Connections"
-            name="Grid Connection Folder"
-            preset="true">
-      </folder>
-      <folder
-            elementClass="eu.geclipse.core.model.IGridWorkflow"
-            id="eu.geclipse.core.projectfolder.workflows"
-            label="Workflows"
-            name="Grid Workflow Folder">
-      </folder>
-   </extension>
 </plugin>

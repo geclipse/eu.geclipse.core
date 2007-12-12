@@ -10,7 +10,11 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
+import org.eclipse.jface.viewers.DecoratingLabelProvider;
 import org.eclipse.jface.viewers.ICheckStateListener;
+import org.eclipse.jface.viewers.ILabelDecorator;
+import org.eclipse.jface.viewers.ILabelProvider;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
@@ -38,6 +42,7 @@ import eu.geclipse.core.ExtensionManager;
 import eu.geclipse.core.Extensions;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.providers.ArrayTableLabelProvider;
+import eu.geclipse.ui.providers.GridModelLabelProvider;
 
 public class GridProjectStructureWizardPage extends WizardPage {
   

@@ -216,6 +216,18 @@
             </objectClass>
          </enablement>
       </decorator>
+      <decorator
+            adaptable="false"
+            class="eu.geclipse.ui.decorators.GridProjectFolderDecorator"
+            id="eu.geclipse.ui.gridProjectFolderDecorator"
+            label="Grid Project Folder Decorator"
+            lightweight="true"
+            state="true">
+         <enablement>
+            <objectClass
+                  name="eu.geclipse.core.model.IGridContainer">
+            </objectClass></enablement>
+      </decorator>
    </extension>
    <extension
          point="eu.geclipse.core.authTokenProvider">
@@ -257,5 +269,32 @@
             description="g-Eclipse Standalone Application"
             name="g-Eclipse RCP">
       </product>
+   </extension>
+   <extension
+         point="eu.geclipse.core.gridProjectFolder">
+      <folder
+            elementClass="eu.geclipse.core.model.IGridJob"
+            icon="icons/ovr16/job_ovr.gif"
+            id="eu.geclipse.core.projectfolder.jobs"
+            label="Jobs"
+            name="Grid Job Folder"
+            preset="true">
+      </folder>
+      <folder
+            elementClass="eu.geclipse.core.model.IGridJobDescription"
+            icon="icons/ovr16/jsdl_file_ovr.gif"
+            id="eu.geclipse.core.projectfolder.jobdescriptions"
+            label="Job Descriptions"
+            name="Grid Job Description Folder"
+            preset="true">
+      </folder>
+      <folder
+            elementClass="eu.geclipse.core.model.IGridConnection"
+            icon="icons/ovr16/connection_ovr.gif"
+            id="eu.geclipse.core.projectfolder.connections"
+            label="Connections"
+            name="Grid Connection Folder"
+            preset="true">
+      </folder>
    </extension>
 </plugin>

@@ -527,4 +527,13 @@
            </editor>
          </paletteProvider>
    </extension>
+   <extension point="eu.geclipse.core.gridProjectFolder">
+      <folder
+            elementClass="eu.geclipse.core.model.IGridWorkflow"
+            icon="icons/ovr16/workflow_ovr.gif"
+            id="eu.geclipse.core.projectfolder.workflows"
+            label="Workflows"
+            name="Grid Workflow Folder">
+      </folder>
+   </extension>
 </plugin>

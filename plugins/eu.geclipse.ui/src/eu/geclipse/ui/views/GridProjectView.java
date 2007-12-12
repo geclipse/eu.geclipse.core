@@ -15,8 +15,11 @@
 
 package eu.geclipse.ui.views;
 
+import org.eclipse.jface.viewers.DecoratingLabelProvider;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.IContentProvider;
+import org.eclipse.jface.viewers.ILabelDecorator;
+import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
@@ -24,10 +27,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridElement;
-import eu.geclipse.core.model.IGridStorage;
 import eu.geclipse.ui.internal.actions.ActionGroupManager;
 import eu.geclipse.ui.internal.actions.BuildActions;
 import eu.geclipse.ui.internal.actions.DeployActions;
@@ -149,8 +152,10 @@ public class GridProjectView
    */
   @Override
   protected IBaseLabelProvider createLabelProvider() {
-    IBaseLabelProvider labelProvider = new GridModelLabelProvider();
-    return labelProvider;
+    ILabelProvider provider = new GridModelLabelProvider();
+    ILabelDecorator decorator = PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator();
+    DecoratingLabelProvider result = new DecoratingLabelProvider( provider, decorator );
+    return result;
   }
 
   /* (non-Javadoc)

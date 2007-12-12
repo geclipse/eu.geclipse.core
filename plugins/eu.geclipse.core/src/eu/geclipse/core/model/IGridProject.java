@@ -49,6 +49,8 @@ public interface IGridProject extends IGridContainer {
    */
   public IGridContainer getProjectFolder( final IGridElement element );
   
+  public String getProjectFolderID( final IGridContainer folder );
+  
   /**
    * Get the virtual organization that is associated with this project.
    * 
@@ -70,7 +72,5 @@ public interface IGridProject extends IGridContainer {
    * @return True if this project is open, false otherwise.
    */
   public boolean isOpen();
-  
-  //public boolean isProjectFolder( final IGridContainer folder );
   
 }

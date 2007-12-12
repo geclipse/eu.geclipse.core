@@ -333,6 +333,13 @@ public class Extensions {
     = "preset"; //$NON-NLS-1$
   
   /**
+   * The ID of the icon attribute of the folder element
+   * of the project folder extension point.
+   */
+  public static final String PROJECT_FOLDER_ICON_ATTRIBUTE
+    = "icon"; //$NON-NLS-1$
+  
+  /**
    * The ID of the VO loader extension point.
    */
   public static final String VO_LOADER_POINT

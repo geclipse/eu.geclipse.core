@@ -272,6 +272,8 @@ public class Activator extends AbstractUIPlugin {
       { "geclipse_logo_prefs", "icons/extras/geclipse_logo_prefs.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
       { "inactivestate", "icons/elcl16/deactivate.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
       { "invalidelement", "icons/obj16/invalid_element_obj.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
+      { "job", "icons/obj16/job_file_obj.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
+      { "jobdescription", "icons/obj16/jsdl_file_obj.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
 //      { "lightbulb_green", "icons/lightbulb_green_16.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
 //      { "lightbulb_red", "icons/lightbulb_red_16.gif" }, //$NON-NLS-1$ //$NON-NLS-2$
 //      { "lightbulb_white", "icons/lightbulb_white_16.gif" }, //$NON-NLS-1$ //$NON-NLS-2$

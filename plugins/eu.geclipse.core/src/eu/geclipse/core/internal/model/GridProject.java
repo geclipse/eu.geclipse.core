@@ -178,6 +178,39 @@ public class GridProject
     return getProjectFolder( element.getClass() );
   }
   
+  public String getProjectFolderID( final IGridContainer folder ) {
+    
+    String result = null;
+    
+    if ( folder.getParent() == this ) {
+      
+      String name = folder.getName();
+      
+      ProjectScope projectScope = new ProjectScope( ( IProject ) getResource() );
+      Preferences folderNode = projectScope.getNode( PROJECT_FOLDER_NODE );
+      
+      try {
+      
+        String[] keys = folderNode.keys();
+        
+        for ( String key : keys ) {
+          String label = folderNode.get( key, null );
+          if ( name.equals( label ) ) {
+            result = key;
+            break;
+          }
+        }
+        
+      } catch ( BackingStoreException bsExc ) {
+        Activator.logException( bsExc );
+      }
+      
+    }
+    
+    return result;
+    
+  }
+  
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridProject#getVO()
    */
