@@ -43,7 +43,7 @@ public class WorkflowFactoryImpl extends EFactoryImpl implements IWorkflowFactor
   {
     try
     {
-      IWorkflowFactory theWorkflowFactory = (IWorkflowFactory)EPackage.Registry.INSTANCE.getEFactory("http:///eu/geclipse/workflow.ecore"); 
+      IWorkflowFactory theWorkflowFactory = (IWorkflowFactory)EPackage.Registry.INSTANCE.getEFactory("http:///eu/geclipse/workflow.ecore");  //$NON-NLS-1$
       if (theWorkflowFactory != null)
       {
         return theWorkflowFactory;
@@ -83,7 +83,7 @@ public class WorkflowFactoryImpl extends EFactoryImpl implements IWorkflowFactor
       case IWorkflowPackage.IWORKFLOW: return createIWorkflow();
       case IWorkflowPackage.IWORKFLOW_JOB: return createIWorkflowJob();
       default:
-        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
+        throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
   }
 

@@ -174,7 +174,7 @@ public class WorkflowPackageImpl extends EPackageImpl implements IWorkflowPackag
    */
   public EClass getIPort()
   {
-    return iPortEClass;
+    return this.iPortEClass;
   }
 
   /**
@@ -184,7 +184,7 @@ public class WorkflowPackageImpl extends EPackageImpl implements IWorkflowPackag
    */
   public EClass getILink()
   {
-    return iLinkEClass;
+    return this.iLinkEClass;
   }
 
   /**
@@ -194,7 +194,7 @@ public class WorkflowPackageImpl extends EPackageImpl implements IWorkflowPackag
    */
   public EReference getILink_Workflow()
   {
-    return (EReference)iLinkEClass.getEStructuralFeatures().get(0);
+    return (EReference)this.iLinkEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -204,7 +204,7 @@ public class WorkflowPackageImpl extends EPackageImpl implements IWorkflowPackag
    */
   public EReference getILink_Target()
   {
-    return (EReference)iLinkEClass.getEStructuralFeatures().get(1);
+    return (EReference)this.iLinkEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -214,7 +214,7 @@ public class WorkflowPackageImpl extends EPackageImpl implements IWorkflowPackag
    */
   public EReference getILink_Source()
   {
-    return (EReference)iLinkEClass.getEStructuralFeatures().get(2);
+    return (EReference)this.iLinkEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -224,7 +224,7 @@ public class WorkflowPackageImpl extends EPackageImpl implements IWorkflowPackag
    */
   public EClass getIInputPort()
   {
-    return iInputPortEClass;
+    return this.iInputPortEClass;
   }
 
   /**
@@ -234,7 +234,7 @@ public class WorkflowPackageImpl extends EPackageImpl implements IWorkflowPackag
    */
   public EReference getIInputPort_Node()
   {
-    return (EReference)iInputPortEClass.getEStructuralFeatures().get(0);
+    return (EReference)this.iInputPortEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -244,7 +244,7 @@ public class WorkflowPackageImpl extends EPackageImpl implements IWorkflowPackag
    */
   public EReference getIInputPort_Links()
   {
-    return (EReference)iInputPortEClass.getEStructuralFeatures().get(1);
+    return (EReference)this.iInputPortEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -254,7 +254,7 @@ public class WorkflowPackageImpl extends EPackageImpl implements IWorkflowPackag
    */
   public EClass getIOutputPort()
   {
-    return iOutputPortEClass;
+    return this.iOutputPortEClass;
   }
 
   /**
@@ -264,7 +264,7 @@ public class WorkflowPackageImpl extends EPackageImpl implements IWorkflowPackag
    */
   public EReference getIOutputPort_Node()
   {
-    return (EReference)iOutputPortEClass.getEStructuralFeatures().get(0);
+    return (EReference)this.iOutputPortEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -274,7 +274,7 @@ public class WorkflowPackageImpl extends EPackageImpl implements IWorkflowPackag
    */
   public EReference getIOutputPort_Links()
   {
-    return (EReference)iOutputPortEClass.getEStructuralFeatures().get(1);
+    return (EReference)this.iOutputPortEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -284,7 +284,7 @@ public class WorkflowPackageImpl extends EPackageImpl implements IWorkflowPackag
    */
   public EClass getIWorkflow()
   {
-    return iWorkflowEClass;
+    return this.iWorkflowEClass;
   }
 
   /**
@@ -294,7 +294,7 @@ public class WorkflowPackageImpl extends EPackageImpl implements IWorkflowPackag
    */
   public EReference getIWorkflow_Nodes()
   {
-    return (EReference)iWorkflowEClass.getEStructuralFeatures().get(0);
+    return (EReference)this.iWorkflowEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -304,7 +304,7 @@ public class WorkflowPackageImpl extends EPackageImpl implements IWorkflowPackag
    */
   public EReference getIWorkflow_Links()
   {
-    return (EReference)iWorkflowEClass.getEStructuralFeatures().get(1);
+    return (EReference)this.iWorkflowEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -314,7 +314,7 @@ public class WorkflowPackageImpl extends EPackageImpl implements IWorkflowPackag
    */
   public EClass getIWorkflowJob()
   {
-    return iWorkflowJobEClass;
+    return this.iWorkflowJobEClass;
   }
 
   /**
@@ -324,7 +324,7 @@ public class WorkflowPackageImpl extends EPackageImpl implements IWorkflowPackag
    */
   public EAttribute getIWorkflowJob_JobDescription()
   {
-    return (EAttribute)iWorkflowJobEClass.getEStructuralFeatures().get(0);
+    return (EAttribute)this.iWorkflowJobEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -334,7 +334,7 @@ public class WorkflowPackageImpl extends EPackageImpl implements IWorkflowPackag
    */
   public EClass getIWorkflowElement()
   {
-    return iWorkflowElementEClass;
+    return this.iWorkflowElementEClass;
   }
 
   /**
@@ -344,7 +344,7 @@ public class WorkflowPackageImpl extends EPackageImpl implements IWorkflowPackag
    */
   public EAttribute getIWorkflowElement_Name()
   {
-    return (EAttribute)iWorkflowElementEClass.getEStructuralFeatures().get(0);
+    return (EAttribute)this.iWorkflowElementEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -354,7 +354,7 @@ public class WorkflowPackageImpl extends EPackageImpl implements IWorkflowPackag
    */
   public EAttribute getIWorkflowElement_Id()
   {
-    return (EAttribute)iWorkflowElementEClass.getEStructuralFeatures().get(1);
+    return (EAttribute)this.iWorkflowElementEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -364,7 +364,7 @@ public class WorkflowPackageImpl extends EPackageImpl implements IWorkflowPackag
    */
   public EClass getIWorkflowNode()
   {
-    return iWorkflowNodeEClass;
+    return this.iWorkflowNodeEClass;
   }
 
   /**
@@ -374,7 +374,7 @@ public class WorkflowPackageImpl extends EPackageImpl implements IWorkflowPackag
    */
   public EReference getIWorkflowNode_Workflow()
   {
-    return (EReference)iWorkflowNodeEClass.getEStructuralFeatures().get(0);
+    return (EReference)this.iWorkflowNodeEClass.getEStructuralFeatures().get(0);
   }
 
   /**
@@ -384,7 +384,7 @@ public class WorkflowPackageImpl extends EPackageImpl implements IWorkflowPackag
    */
   public EReference getIWorkflowNode_Outputs()
   {
-    return (EReference)iWorkflowNodeEClass.getEStructuralFeatures().get(1);
+    return (EReference)this.iWorkflowNodeEClass.getEStructuralFeatures().get(1);
   }
 
   /**
@@ -394,7 +394,7 @@ public class WorkflowPackageImpl extends EPackageImpl implements IWorkflowPackag
    */
   public EReference getIWorkflowNode_Inputs()
   {
-    return (EReference)iWorkflowNodeEClass.getEStructuralFeatures().get(2);
+    return (EReference)this.iWorkflowNodeEClass.getEStructuralFeatures().get(2);
   }
 
   /**
@@ -404,7 +404,7 @@ public class WorkflowPackageImpl extends EPackageImpl implements IWorkflowPackag
    */
   public EAttribute getIWorkflowNode_IsStart()
   {
-    return (EAttribute)iWorkflowNodeEClass.getEStructuralFeatures().get(3);
+    return (EAttribute)this.iWorkflowNodeEClass.getEStructuralFeatures().get(3);
   }
 
   /**
@@ -414,7 +414,7 @@ public class WorkflowPackageImpl extends EPackageImpl implements IWorkflowPackag
    */
   public EAttribute getIWorkflowNode_IsFinish()
   {
-    return (EAttribute)iWorkflowNodeEClass.getEStructuralFeatures().get(4);
+    return (EAttribute)this.iWorkflowNodeEClass.getEStructuralFeatures().get(4);
   }
 
   /**
@@ -443,42 +443,42 @@ public class WorkflowPackageImpl extends EPackageImpl implements IWorkflowPackag
    */
   public void createPackageContents()
   {
-    if (isCreated) return;
-    isCreated = true;
+    if (this.isCreated) return;
+    this.isCreated = true;
 
     // Create classes and their features
-    iPortEClass = createEClass(IPORT);
+    this.iPortEClass = createEClass(IPORT);
 
-    iLinkEClass = createEClass(ILINK);
-    createEReference(iLinkEClass, ILINK__WORKFLOW);
-    createEReference(iLinkEClass, ILINK__TARGET);
-    createEReference(iLinkEClass, ILINK__SOURCE);
+    this.iLinkEClass = createEClass(ILINK);
+    createEReference(this.iLinkEClass, ILINK__WORKFLOW);
+    createEReference(this.iLinkEClass, ILINK__TARGET);
+    createEReference(this.iLinkEClass, ILINK__SOURCE);
 
-    iInputPortEClass = createEClass(IINPUT_PORT);
-    createEReference(iInputPortEClass, IINPUT_PORT__NODE);
-    createEReference(iInputPortEClass, IINPUT_PORT__LINKS);
+    this.iInputPortEClass = createEClass(IINPUT_PORT);
+    createEReference(this.iInputPortEClass, IINPUT_PORT__NODE);
+    createEReference(this.iInputPortEClass, IINPUT_PORT__LINKS);
 
-    iOutputPortEClass = createEClass(IOUTPUT_PORT);
-    createEReference(iOutputPortEClass, IOUTPUT_PORT__NODE);
-    createEReference(iOutputPortEClass, IOUTPUT_PORT__LINKS);
+    this.iOutputPortEClass = createEClass(IOUTPUT_PORT);
+    createEReference(this.iOutputPortEClass, IOUTPUT_PORT__NODE);
+    createEReference(this.iOutputPortEClass, IOUTPUT_PORT__LINKS);
 
-    iWorkflowEClass = createEClass(IWORKFLOW);
-    createEReference(iWorkflowEClass, IWORKFLOW__NODES);
-    createEReference(iWorkflowEClass, IWORKFLOW__LINKS);
+    this.iWorkflowEClass = createEClass(IWORKFLOW);
+    createEReference(this.iWorkflowEClass, IWORKFLOW__NODES);
+    createEReference(this.iWorkflowEClass, IWORKFLOW__LINKS);
 
-    iWorkflowJobEClass = createEClass(IWORKFLOW_JOB);
-    createEAttribute(iWorkflowJobEClass, IWORKFLOW_JOB__JOB_DESCRIPTION);
+    this.iWorkflowJobEClass = createEClass(IWORKFLOW_JOB);
+    createEAttribute(this.iWorkflowJobEClass, IWORKFLOW_JOB__JOB_DESCRIPTION);
 
-    iWorkflowElementEClass = createEClass(IWORKFLOW_ELEMENT);
-    createEAttribute(iWorkflowElementEClass, IWORKFLOW_ELEMENT__NAME);
-    createEAttribute(iWorkflowElementEClass, IWORKFLOW_ELEMENT__ID);
+    this.iWorkflowElementEClass = createEClass(IWORKFLOW_ELEMENT);
+    createEAttribute(this.iWorkflowElementEClass, IWORKFLOW_ELEMENT__NAME);
+    createEAttribute(this.iWorkflowElementEClass, IWORKFLOW_ELEMENT__ID);
 
-    iWorkflowNodeEClass = createEClass(IWORKFLOW_NODE);
-    createEReference(iWorkflowNodeEClass, IWORKFLOW_NODE__WORKFLOW);
-    createEReference(iWorkflowNodeEClass, IWORKFLOW_NODE__OUTPUTS);
-    createEReference(iWorkflowNodeEClass, IWORKFLOW_NODE__INPUTS);
-    createEAttribute(iWorkflowNodeEClass, IWORKFLOW_NODE__IS_START);
-    createEAttribute(iWorkflowNodeEClass, IWORKFLOW_NODE__IS_FINISH);
+    this.iWorkflowNodeEClass = createEClass(IWORKFLOW_NODE);
+    createEReference(this.iWorkflowNodeEClass, IWORKFLOW_NODE__WORKFLOW);
+    createEReference(this.iWorkflowNodeEClass, IWORKFLOW_NODE__OUTPUTS);
+    createEReference(this.iWorkflowNodeEClass, IWORKFLOW_NODE__INPUTS);
+    createEAttribute(this.iWorkflowNodeEClass, IWORKFLOW_NODE__IS_START);
+    createEAttribute(this.iWorkflowNodeEClass, IWORKFLOW_NODE__IS_FINISH);
   }
 
   /**
@@ -497,8 +497,8 @@ public class WorkflowPackageImpl extends EPackageImpl implements IWorkflowPackag
    */
   public void initializePackageContents()
   {
-    if (isInitialized) return;
-    isInitialized = true;
+    if (this.isInitialized) return;
+    this.isInitialized = true;
 
     // Initialize package
     setName(eNAME);
@@ -510,47 +510,47 @@ public class WorkflowPackageImpl extends EPackageImpl implements IWorkflowPackag
     // Set bounds for type parameters
 
     // Add supertypes to classes
-    iPortEClass.getESuperTypes().add(this.getIWorkflowElement());
-    iLinkEClass.getESuperTypes().add(this.getIWorkflowElement());
-    iInputPortEClass.getESuperTypes().add(this.getIPort());
-    iOutputPortEClass.getESuperTypes().add(this.getIPort());
-    iWorkflowEClass.getESuperTypes().add(this.getIWorkflowElement());
-    iWorkflowJobEClass.getESuperTypes().add(this.getIWorkflowNode());
-    iWorkflowNodeEClass.getESuperTypes().add(this.getIWorkflowElement());
+    this.iPortEClass.getESuperTypes().add(this.getIWorkflowElement());
+    this.iLinkEClass.getESuperTypes().add(this.getIWorkflowElement());
+    this.iInputPortEClass.getESuperTypes().add(this.getIPort());
+    this.iOutputPortEClass.getESuperTypes().add(this.getIPort());
+    this.iWorkflowEClass.getESuperTypes().add(this.getIWorkflowElement());
+    this.iWorkflowJobEClass.getESuperTypes().add(this.getIWorkflowNode());
+    this.iWorkflowNodeEClass.getESuperTypes().add(this.getIWorkflowElement());
 
     // Initialize classes and features; add operations and parameters
-    initEClass(iPortEClass, IPort.class, "IPort", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEClass(this.iPortEClass, IPort.class, "IPort", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
 
-    initEClass(iLinkEClass, ILink.class, "ILink", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getILink_Workflow(), this.getIWorkflow(), this.getIWorkflow_Links(), "workflow", null, 1, 1, ILink.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getILink_Target(), this.getIInputPort(), this.getIInputPort_Links(), "target", null, 1, 1, ILink.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getILink_Source(), this.getIOutputPort(), this.getIOutputPort_Links(), "source", null, 1, 1, ILink.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(this.iLinkEClass, ILink.class, "ILink", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getILink_Workflow(), this.getIWorkflow(), this.getIWorkflow_Links(), "workflow", null, 1, 1, ILink.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+    initEReference(getILink_Target(), this.getIInputPort(), this.getIInputPort_Links(), "target", null, 1, 1, ILink.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+    initEReference(getILink_Source(), this.getIOutputPort(), this.getIOutputPort_Links(), "source", null, 1, 1, ILink.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-    initEClass(iInputPortEClass, IInputPort.class, "IInputPort", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getIInputPort_Node(), this.getIWorkflowNode(), this.getIWorkflowNode_Inputs(), "node", null, 1, 1, IInputPort.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getIInputPort_Links(), this.getILink(), this.getILink_Target(), "links", null, 0, -1, IInputPort.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(this.iInputPortEClass, IInputPort.class, "IInputPort", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getIInputPort_Node(), this.getIWorkflowNode(), this.getIWorkflowNode_Inputs(), "node", null, 1, 1, IInputPort.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+    initEReference(getIInputPort_Links(), this.getILink(), this.getILink_Target(), "links", null, 0, -1, IInputPort.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-    initEClass(iOutputPortEClass, IOutputPort.class, "IOutputPort", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getIOutputPort_Node(), this.getIWorkflowNode(), this.getIWorkflowNode_Outputs(), "node", null, 1, 1, IOutputPort.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getIOutputPort_Links(), this.getILink(), this.getILink_Source(), "links", null, 0, -1, IOutputPort.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(this.iOutputPortEClass, IOutputPort.class, "IOutputPort", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getIOutputPort_Node(), this.getIWorkflowNode(), this.getIWorkflowNode_Outputs(), "node", null, 1, 1, IOutputPort.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+    initEReference(getIOutputPort_Links(), this.getILink(), this.getILink_Source(), "links", null, 0, -1, IOutputPort.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-    initEClass(iWorkflowEClass, IWorkflow.class, "IWorkflow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getIWorkflow_Nodes(), this.getIWorkflowNode(), this.getIWorkflowNode_Workflow(), "nodes", null, 0, -1, IWorkflow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getIWorkflow_Links(), this.getILink(), this.getILink_Workflow(), "links", null, 0, -1, IWorkflow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(this.iWorkflowEClass, IWorkflow.class, "IWorkflow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getIWorkflow_Nodes(), this.getIWorkflowNode(), this.getIWorkflowNode_Workflow(), "nodes", null, 0, -1, IWorkflow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+    initEReference(getIWorkflow_Links(), this.getILink(), this.getILink_Workflow(), "links", null, 0, -1, IWorkflow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-    initEClass(iWorkflowJobEClass, IWorkflowJob.class, "IWorkflowJob", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getIWorkflowJob_JobDescription(), ecorePackage.getEString(), "jobDescription", null, 1, 1, IWorkflowJob.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(this.iWorkflowJobEClass, IWorkflowJob.class, "IWorkflowJob", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getIWorkflowJob_JobDescription(), this.ecorePackage.getEString(), "jobDescription", null, 1, 1, IWorkflowJob.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-    initEClass(iWorkflowElementEClass, IWorkflowElement.class, "IWorkflowElement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEAttribute(getIWorkflowElement_Name(), ecorePackage.getEString(), "name", null, 0, 1, IWorkflowElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getIWorkflowElement_Id(), ecorePackage.getEString(), "id", null, 1, 1, IWorkflowElement.class, !IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(this.iWorkflowElementEClass, IWorkflowElement.class, "IWorkflowElement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEAttribute(getIWorkflowElement_Name(), this.ecorePackage.getEString(), "name", null, 0, 1, IWorkflowElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+    initEAttribute(getIWorkflowElement_Id(), this.ecorePackage.getEString(), "id", null, 1, 1, IWorkflowElement.class, !IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
 
-    initEClass(iWorkflowNodeEClass, IWorkflowNode.class, "IWorkflowNode", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getIWorkflowNode_Workflow(), this.getIWorkflow(), this.getIWorkflow_Nodes(), "workflow", null, 1, 1, IWorkflowNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getIWorkflowNode_Outputs(), this.getIOutputPort(), this.getIOutputPort_Node(), "outputs", null, 1, -1, IWorkflowNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getIWorkflowNode_Inputs(), this.getIInputPort(), this.getIInputPort_Node(), "inputs", null, 1, -1, IWorkflowNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getIWorkflowNode_IsStart(), ecorePackage.getEBoolean(), "isStart", "false", 1, 1, IWorkflowNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEAttribute(getIWorkflowNode_IsFinish(), ecorePackage.getEBoolean(), "isFinish", "false", 1, 1, IWorkflowNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEClass(this.iWorkflowNodeEClass, IWorkflowNode.class, "IWorkflowNode", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEReference(getIWorkflowNode_Workflow(), this.getIWorkflow(), this.getIWorkflow_Nodes(), "workflow", null, 1, 1, IWorkflowNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+    initEReference(getIWorkflowNode_Outputs(), this.getIOutputPort(), this.getIOutputPort_Node(), "outputs", null, 1, -1, IWorkflowNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+    initEReference(getIWorkflowNode_Inputs(), this.getIInputPort(), this.getIInputPort_Node(), "inputs", null, 1, -1, IWorkflowNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+    initEAttribute(getIWorkflowNode_IsStart(), this.ecorePackage.getEBoolean(), "isStart", "false", 1, 1, IWorkflowNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
+    initEAttribute(getIWorkflowNode_IsFinish(), this.ecorePackage.getEBoolean(), "isFinish", "false", 1, 1, IWorkflowNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
 
     // Create resource
     createResource(eNS_URI);

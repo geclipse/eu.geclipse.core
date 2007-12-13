@@ -61,11 +61,11 @@ public class InputPortItemProvider extends PortItemProvider
   @Override
   public List<IItemPropertyDescriptor> getPropertyDescriptors( Object object )
   {
-    if( itemPropertyDescriptors == null ) {
+    if( this.itemPropertyDescriptors == null ) {
       super.getPropertyDescriptors( object );
       addLinksPropertyDescriptor( object );
     }
-    return itemPropertyDescriptors;
+    return this.itemPropertyDescriptors;
   }
 
   /**
@@ -75,7 +75,7 @@ public class InputPortItemProvider extends PortItemProvider
    * @generated
    */
   protected void addLinksPropertyDescriptor( Object object ) {
-    itemPropertyDescriptors.add( createItemPropertyDescriptor( ( ( ComposeableAdapterFactory )adapterFactory ).getRootAdapterFactory(),
+    this.itemPropertyDescriptors.add( createItemPropertyDescriptor( ( ( ComposeableAdapterFactory )this.adapterFactory ).getRootAdapterFactory(),
                                                                getResourceLocator(),
                                                                getString( "_UI_IInputPort_links_feature" ), //$NON-NLS-1$
                                                                getString( "_UI_PropertyDescriptor_description", //$NON-NLS-1$
@@ -91,7 +91,9 @@ public class InputPortItemProvider extends PortItemProvider
   }
 
   /**
-   * This returns IInputPort.gif. <!-- begin-user-doc --> <!-- end-user-doc -->
+   * This returns IInputPort.gif. 
+   * <!-- begin-user-doc --> 
+   * <!-- end-user-doc -->
    * 
    * @generated
    */

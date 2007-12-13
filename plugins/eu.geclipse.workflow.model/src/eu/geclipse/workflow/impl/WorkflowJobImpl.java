@@ -75,7 +75,7 @@ public class WorkflowJobImpl extends WorkflowNodeImpl implements IWorkflowJob
    */
   public String getJobDescription()
   {
-    return jobDescription;
+    return this.jobDescription;
   }
 
   /**
@@ -83,10 +83,10 @@ public class WorkflowJobImpl extends WorkflowNodeImpl implements IWorkflowJob
    */
   public void setJobDescription(String newJobDescription)
   {
-    String oldJobDescription = jobDescription;
-    jobDescription = newJobDescription;
+    String oldJobDescription = this.jobDescription;
+    this.jobDescription = newJobDescription;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, IWorkflowPackage.IWORKFLOW_JOB__JOB_DESCRIPTION, oldJobDescription, jobDescription));
+      eNotify(new ENotificationImpl(this, Notification.SET, IWorkflowPackage.IWORKFLOW_JOB__JOB_DESCRIPTION, oldJobDescription, this.jobDescription));
   }
 
   /**
@@ -142,7 +142,7 @@ public class WorkflowJobImpl extends WorkflowNodeImpl implements IWorkflowJob
     switch (featureID)
     {
       case IWorkflowPackage.IWORKFLOW_JOB__JOB_DESCRIPTION:
-        return JOB_DESCRIPTION_EDEFAULT == null ? jobDescription != null : !JOB_DESCRIPTION_EDEFAULT.equals(jobDescription);
+        return JOB_DESCRIPTION_EDEFAULT == null ? this.jobDescription != null : !JOB_DESCRIPTION_EDEFAULT.equals(this.jobDescription);
     }
     return super.eIsSet(featureID);
   }
@@ -156,8 +156,8 @@ public class WorkflowJobImpl extends WorkflowNodeImpl implements IWorkflowJob
     if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (jobDescription: ");
-    result.append(jobDescription);
+    result.append(" (jobDescription: "); //$NON-NLS-1$
+    result.append(this.jobDescription);
     result.append(')');
     return result.toString();
   }

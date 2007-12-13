@@ -96,11 +96,11 @@ public class WorkflowImpl extends WorkflowElementImpl implements IWorkflow
    */
   public EList<IWorkflowNode> getNodes()
   {
-    if (nodes == null)
+    if (this.nodes == null)
     {
-      nodes = new EObjectContainmentWithInverseEList<IWorkflowNode>(IWorkflowNode.class, this, IWorkflowPackage.IWORKFLOW__NODES, IWorkflowPackage.IWORKFLOW_NODE__WORKFLOW);
+      this.nodes = new EObjectContainmentWithInverseEList<IWorkflowNode>(IWorkflowNode.class, this, IWorkflowPackage.IWORKFLOW__NODES, IWorkflowPackage.IWORKFLOW_NODE__WORKFLOW);
     }
-    return nodes;
+    return this.nodes;
   }
 
   /**
@@ -110,11 +110,11 @@ public class WorkflowImpl extends WorkflowElementImpl implements IWorkflow
    */
   public EList<ILink> getLinks()
   {
-    if (links == null)
+    if (this.links == null)
     {
-      links = new EObjectContainmentWithInverseEList<ILink>(ILink.class, this, IWorkflowPackage.IWORKFLOW__LINKS, IWorkflowPackage.ILINK__WORKFLOW);
+      this.links = new EObjectContainmentWithInverseEList<ILink>(ILink.class, this, IWorkflowPackage.IWORKFLOW__LINKS, IWorkflowPackage.ILINK__WORKFLOW);
     }
-    return links;
+    return this.links;
   }
 
   /**
@@ -226,9 +226,9 @@ public class WorkflowImpl extends WorkflowElementImpl implements IWorkflow
     switch (featureID)
     {
       case IWorkflowPackage.IWORKFLOW__NODES:
-        return nodes != null && !nodes.isEmpty();
+        return this.nodes != null && !this.nodes.isEmpty();
       case IWorkflowPackage.IWORKFLOW__LINKS:
-        return links != null && !links.isEmpty();
+        return this.links != null && !this.links.isEmpty();
     }
     return super.eIsSet(featureID);
   }

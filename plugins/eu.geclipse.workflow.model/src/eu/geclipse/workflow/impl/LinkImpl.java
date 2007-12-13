@@ -96,7 +96,7 @@ public class LinkImpl extends WorkflowElementImpl implements ILink
    */
   public IWorkflow getWorkflow()
   {
-    if (eContainerFeatureID != IWorkflowPackage.ILINK__WORKFLOW) return null;
+    if (this.eContainerFeatureID != IWorkflowPackage.ILINK__WORKFLOW) return null;
     return (IWorkflow)eContainer();
   }
 
@@ -118,10 +118,10 @@ public class LinkImpl extends WorkflowElementImpl implements ILink
    */
   public void setWorkflow(IWorkflow newWorkflow)
   {
-    if (newWorkflow != eInternalContainer() || (eContainerFeatureID != IWorkflowPackage.ILINK__WORKFLOW && newWorkflow != null))
+    if (newWorkflow != eInternalContainer() || (this.eContainerFeatureID != IWorkflowPackage.ILINK__WORKFLOW && newWorkflow != null))
     {
       if (EcoreUtil.isAncestor(this, newWorkflow))
-        throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
+        throw new IllegalArgumentException("Recursive containment not allowed for " + toString()); //$NON-NLS-1$
       NotificationChain msgs = null;
       if (eInternalContainer() != null)
         msgs = eBasicRemoveFromContainer(msgs);
@@ -141,17 +141,17 @@ public class LinkImpl extends WorkflowElementImpl implements ILink
    */
   public IInputPort getTarget()
   {
-    if (target != null && target.eIsProxy())
+    if (this.target != null && this.target.eIsProxy())
     {
-      InternalEObject oldTarget = (InternalEObject)target;
-      target = (IInputPort)eResolveProxy(oldTarget);
-      if (target != oldTarget)
+      InternalEObject oldTarget = (InternalEObject)this.target;
+      this.target = (IInputPort)eResolveProxy(oldTarget);
+      if (this.target != oldTarget)
       {
         if (eNotificationRequired())
-          eNotify(new ENotificationImpl(this, Notification.RESOLVE, IWorkflowPackage.ILINK__TARGET, oldTarget, target));
+          eNotify(new ENotificationImpl(this, Notification.RESOLVE, IWorkflowPackage.ILINK__TARGET, oldTarget, this.target));
       }
     }
-    return target;
+    return this.target;
   }
 
   /**
@@ -161,7 +161,7 @@ public class LinkImpl extends WorkflowElementImpl implements ILink
    */
   public IInputPort basicGetTarget()
   {
-    return target;
+    return this.target;
   }
 
   /**
@@ -171,8 +171,8 @@ public class LinkImpl extends WorkflowElementImpl implements ILink
    */
   public NotificationChain basicSetTarget(IInputPort newTarget, NotificationChain msgs)
   {
-    IInputPort oldTarget = target;
-    target = newTarget;
+    IInputPort oldTarget = this.target;
+    this.target = newTarget;
     if (eNotificationRequired())
     {
       ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, IWorkflowPackage.ILINK__TARGET, oldTarget, newTarget);
@@ -188,11 +188,11 @@ public class LinkImpl extends WorkflowElementImpl implements ILink
    */
   public void setTarget(IInputPort newTarget)
   {
-    if (newTarget != target)
+    if (newTarget != this.target)
     {
       NotificationChain msgs = null;
-      if (target != null)
-        msgs = ((InternalEObject)target).eInverseRemove(this, IWorkflowPackage.IINPUT_PORT__LINKS, IInputPort.class, msgs);
+      if (this.target != null)
+        msgs = ((InternalEObject)this.target).eInverseRemove(this, IWorkflowPackage.IINPUT_PORT__LINKS, IInputPort.class, msgs);
       if (newTarget != null)
         msgs = ((InternalEObject)newTarget).eInverseAdd(this, IWorkflowPackage.IINPUT_PORT__LINKS, IInputPort.class, msgs);
       msgs = basicSetTarget(newTarget, msgs);
@@ -209,17 +209,17 @@ public class LinkImpl extends WorkflowElementImpl implements ILink
    */
   public IOutputPort getSource()
   {
-    if (source != null && source.eIsProxy())
+    if (this.source != null && this.source.eIsProxy())
     {
-      InternalEObject oldSource = (InternalEObject)source;
-      source = (IOutputPort)eResolveProxy(oldSource);
-      if (source != oldSource)
+      InternalEObject oldSource = (InternalEObject)this.source;
+      this.source = (IOutputPort)eResolveProxy(oldSource);
+      if (this.source != oldSource)
       {
         if (eNotificationRequired())
-          eNotify(new ENotificationImpl(this, Notification.RESOLVE, IWorkflowPackage.ILINK__SOURCE, oldSource, source));
+          eNotify(new ENotificationImpl(this, Notification.RESOLVE, IWorkflowPackage.ILINK__SOURCE, oldSource, this.source));
       }
     }
-    return source;
+    return this.source;
   }
 
   /**
@@ -229,7 +229,7 @@ public class LinkImpl extends WorkflowElementImpl implements ILink
    */
   public IOutputPort basicGetSource()
   {
-    return source;
+    return this.source;
   }
 
   /**
@@ -239,8 +239,8 @@ public class LinkImpl extends WorkflowElementImpl implements ILink
    */
   public NotificationChain basicSetSource(IOutputPort newSource, NotificationChain msgs)
   {
-    IOutputPort oldSource = source;
-    source = newSource;
+    IOutputPort oldSource = this.source;
+    this.source = newSource;
     if (eNotificationRequired())
     {
       ENotificationImpl notification = new ENotificationImpl(this, Notification.SET, IWorkflowPackage.ILINK__SOURCE, oldSource, newSource);
@@ -256,11 +256,11 @@ public class LinkImpl extends WorkflowElementImpl implements ILink
    */
   public void setSource(IOutputPort newSource)
   {
-    if (newSource != source)
+    if (newSource != this.source)
     {
       NotificationChain msgs = null;
-      if (source != null)
-        msgs = ((InternalEObject)source).eInverseRemove(this, IWorkflowPackage.IOUTPUT_PORT__LINKS, IOutputPort.class, msgs);
+      if (this.source != null)
+        msgs = ((InternalEObject)this.source).eInverseRemove(this, IWorkflowPackage.IOUTPUT_PORT__LINKS, IOutputPort.class, msgs);
       if (newSource != null)
         msgs = ((InternalEObject)newSource).eInverseAdd(this, IWorkflowPackage.IOUTPUT_PORT__LINKS, IOutputPort.class, msgs);
       msgs = basicSetSource(newSource, msgs);
@@ -285,12 +285,12 @@ public class LinkImpl extends WorkflowElementImpl implements ILink
           msgs = eBasicRemoveFromContainer(msgs);
         return basicSetWorkflow((IWorkflow)otherEnd, msgs);
       case IWorkflowPackage.ILINK__TARGET:
-        if (target != null)
-          msgs = ((InternalEObject)target).eInverseRemove(this, IWorkflowPackage.IINPUT_PORT__LINKS, IInputPort.class, msgs);
+        if (this.target != null)
+          msgs = ((InternalEObject)this.target).eInverseRemove(this, IWorkflowPackage.IINPUT_PORT__LINKS, IInputPort.class, msgs);
         return basicSetTarget((IInputPort)otherEnd, msgs);
       case IWorkflowPackage.ILINK__SOURCE:
-        if (source != null)
-          msgs = ((InternalEObject)source).eInverseRemove(this, IWorkflowPackage.IOUTPUT_PORT__LINKS, IOutputPort.class, msgs);
+        if (this.source != null)
+          msgs = ((InternalEObject)this.source).eInverseRemove(this, IWorkflowPackage.IOUTPUT_PORT__LINKS, IOutputPort.class, msgs);
         return basicSetSource((IOutputPort)otherEnd, msgs);
     }
     return super.eInverseAdd(otherEnd, featureID, msgs);
@@ -324,7 +324,7 @@ public class LinkImpl extends WorkflowElementImpl implements ILink
   @Override
   public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs)
   {
-    switch (eContainerFeatureID)
+    switch (this.eContainerFeatureID)
     {
       case IWorkflowPackage.ILINK__WORKFLOW:
         return eInternalContainer().eInverseRemove(this, IWorkflowPackage.IWORKFLOW__LINKS, IWorkflow.class, msgs);
@@ -413,9 +413,9 @@ public class LinkImpl extends WorkflowElementImpl implements ILink
       case IWorkflowPackage.ILINK__WORKFLOW:
         return getWorkflow() != null;
       case IWorkflowPackage.ILINK__TARGET:
-        return target != null;
+        return this.target != null;
       case IWorkflowPackage.ILINK__SOURCE:
-        return source != null;
+        return this.source != null;
     }
     return super.eIsSet(featureID);
   }

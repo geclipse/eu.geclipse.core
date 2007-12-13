@@ -84,7 +84,7 @@ public abstract class WorkflowElementImpl extends EObjectImpl implements IWorkfl
   /**
    * A prefix used for the generated ids.
    */
-  protected static final String idPrefix = "W";
+  protected static final String idPrefix = "W"; //$NON-NLS-1$
   
   protected static int aCounter = 0;
 
@@ -116,7 +116,7 @@ public abstract class WorkflowElementImpl extends EObjectImpl implements IWorkfl
    */
   public String getName()
   {
-    return name;
+    return this.name;
   }
 
   /**
@@ -126,10 +126,10 @@ public abstract class WorkflowElementImpl extends EObjectImpl implements IWorkfl
    */
   public void setName(String newName)
   {
-    String oldName = name;
-    name = newName;
+    String oldName = this.name;
+    this.name = newName;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, IWorkflowPackage.IWORKFLOW_ELEMENT__NAME, oldName, name));
+      eNotify(new ENotificationImpl(this, Notification.SET, IWorkflowPackage.IWORKFLOW_ELEMENT__NAME, oldName, this.name));
   }
 
   /**
@@ -139,11 +139,11 @@ public abstract class WorkflowElementImpl extends EObjectImpl implements IWorkfl
    */
   public String getId()
   {
-    if (id == null)
+    if (this.id == null)
     {
-      id = generateId();
+      this.id = generateId();
     }
-    return id;
+    return this.id;
   }
 
   /**
@@ -163,17 +163,17 @@ public abstract class WorkflowElementImpl extends EObjectImpl implements IWorkfl
    */
   public void setId(String newId)
   {
-    String oldId = id;
-    if (newId == null && id == null)
+    String oldId = this.id;
+    if (newId == null && this.id == null)
     {
-      id = generateId();
+      this.id = generateId();
     }
     else
     {
-      id = newId;
+      this.id = newId;
     }
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, IWorkflowPackage.IWORKFLOW_ELEMENT__ID, oldId, id));
+      eNotify(new ENotificationImpl(this, Notification.SET, IWorkflowPackage.IWORKFLOW_ELEMENT__ID, oldId, this.id));
   }
 
   /**
@@ -245,7 +245,7 @@ public abstract class WorkflowElementImpl extends EObjectImpl implements IWorkfl
     switch (featureID)
     {
       case IWorkflowPackage.IWORKFLOW_ELEMENT__NAME:
-        return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+        return NAME_EDEFAULT == null ? this.name != null : !NAME_EDEFAULT.equals(this.name);
       case IWorkflowPackage.IWORKFLOW_ELEMENT__ID:
         return ID_EDEFAULT == null ? getId() != null : !ID_EDEFAULT.equals(getId());
     }
@@ -263,8 +263,8 @@ public abstract class WorkflowElementImpl extends EObjectImpl implements IWorkfl
     if (eIsProxy()) return super.toString();
 
     StringBuffer result = new StringBuffer(super.toString());
-    result.append(" (name: ");
-    result.append(name);
+    result.append(" (name: "); //$NON-NLS-1$
+    result.append(this.name);
     result.append(')');
     return result.toString();
   }

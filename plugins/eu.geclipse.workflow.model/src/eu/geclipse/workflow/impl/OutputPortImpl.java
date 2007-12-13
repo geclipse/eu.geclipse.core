@@ -90,7 +90,7 @@ public class OutputPortImpl extends PortImpl implements IOutputPort
    */
   public IWorkflowNode getNode()
   {
-    if (eContainerFeatureID != IWorkflowPackage.IOUTPUT_PORT__NODE) return null;
+    if (this.eContainerFeatureID != IWorkflowPackage.IOUTPUT_PORT__NODE) return null;
     return (IWorkflowNode)eContainer();
   }
 
@@ -112,10 +112,10 @@ public class OutputPortImpl extends PortImpl implements IOutputPort
    */
   public void setNode(IWorkflowNode newNode)
   {
-    if (newNode != eInternalContainer() || (eContainerFeatureID != IWorkflowPackage.IOUTPUT_PORT__NODE && newNode != null))
+    if (newNode != eInternalContainer() || (this.eContainerFeatureID != IWorkflowPackage.IOUTPUT_PORT__NODE && newNode != null))
     {
       if (EcoreUtil.isAncestor(this, newNode))
-        throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
+        throw new IllegalArgumentException("Recursive containment not allowed for " + toString()); //$NON-NLS-1$
       NotificationChain msgs = null;
       if (eInternalContainer() != null)
         msgs = eBasicRemoveFromContainer(msgs);
@@ -135,11 +135,11 @@ public class OutputPortImpl extends PortImpl implements IOutputPort
    */
   public EList<ILink> getLinks()
   {
-    if (links == null)
+    if (this.links == null)
     {
-      links = new EObjectWithInverseResolvingEList<ILink>(ILink.class, this, IWorkflowPackage.IOUTPUT_PORT__LINKS, IWorkflowPackage.ILINK__SOURCE);
+      this.links = new EObjectWithInverseResolvingEList<ILink>(ILink.class, this, IWorkflowPackage.IOUTPUT_PORT__LINKS, IWorkflowPackage.ILINK__SOURCE);
     }
-    return links;
+    return this.links;
   }
 
   /**
@@ -189,7 +189,7 @@ public class OutputPortImpl extends PortImpl implements IOutputPort
   @Override
   public NotificationChain eBasicRemoveFromContainerFeature(NotificationChain msgs)
   {
-    switch (eContainerFeatureID)
+    switch (this.eContainerFeatureID)
     {
       case IWorkflowPackage.IOUTPUT_PORT__NODE:
         return eInternalContainer().eInverseRemove(this, IWorkflowPackage.IWORKFLOW_NODE__OUTPUTS, IWorkflowNode.class, msgs);
@@ -270,7 +270,7 @@ public class OutputPortImpl extends PortImpl implements IOutputPort
       case IWorkflowPackage.IOUTPUT_PORT__NODE:
         return getNode() != null;
       case IWorkflowPackage.IOUTPUT_PORT__LINKS:
-        return links != null && !links.isEmpty();
+        return this.links != null && !this.links.isEmpty();
     }
     return super.eIsSet(featureID);
   }

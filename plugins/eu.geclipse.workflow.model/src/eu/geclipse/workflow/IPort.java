@@ -28,4 +28,5 @@ package eu.geclipse.workflow;
  */
 public interface IPort extends IWorkflowElement
 {
+  //
 } // IPort
