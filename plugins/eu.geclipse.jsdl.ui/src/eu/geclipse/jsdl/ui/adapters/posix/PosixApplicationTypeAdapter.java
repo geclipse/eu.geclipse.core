@@ -1121,13 +1121,13 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    */
   @SuppressWarnings("unchecked")
   public void performAdd ( final TableViewer tableViewer,
-                           final String name, final Object[][] value ) {
+                           final String name, final Object value ) {
         
-    if ( value[0][0] == null ) {
+    if ( value == null ) {
       return;
     }
     
-    Object[] valuesArray = value[0];  
+//    Object[] valuesArray = value[0];  
     
     EList <EObject> newInputList = ( EList<EObject> )tableViewer.getInput(); 
      
@@ -1143,8 +1143,9 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
     if ( name == "argumentViewer" ) { //$NON-NLS-1$
       
       this.argumentType = PosixFactory.eINSTANCE.createArgumentType();
-      this.argumentType.setFilesystemName( valuesArray[0].toString() );
-      this.argumentType.setValue( valuesArray[1].toString() );
+      this.argumentType = (ArgumentType) value;
+//      this.argumentType.setFilesystemName( valuesArray[0].toString() );
+//      this.argumentType.setValue( valuesArray[1].toString() );
       newInputList.add( this.argumentType );
       
       /* Add the Argument to PosixApplication */
@@ -1157,9 +1158,10 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
     else {
     
       this.environmentType = PosixFactory.eINSTANCE.createEnvironmentType();
-      this.environmentType.setName( valuesArray[0].toString() );
-      this.environmentType.setFilesystemName( valuesArray[1].toString() );
-      this.environmentType.setValue( valuesArray[2].toString() );
+      this.environmentType = (EnvironmentType) value;
+//      this.environmentType.setName( valuesArray[0].toString() );
+//      this.environmentType.setFilesystemName( valuesArray[1].toString() );
+//      this.environmentType.setValue( valuesArray[2].toString() );
       newInputList.add( this.environmentType );
       
       /* Add the Environmental Variable to PosixApplication */
@@ -1183,16 +1185,16 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    * @param value 
    */
   @SuppressWarnings("unchecked")
-  public void performEdit(final TableViewer tableViewer, final Object[][] value) {
+  public void performEdit(final TableViewer tableViewer, final Object value) {
     
     TableViewer table = null;
     int featureID;
     
-    if (value[0][0] == null) {
+    if (value == null) {
       return;
     }
     
-    Object[] valuesArray = value[0];
+//    Object[] valuesArray = value[0];
         
     EStructuralFeature eStructuralFeature;
     
@@ -1226,9 +1228,12 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
          * Create a new Argument Type EObject with the new values that will 
          * substitute the old EObject.
          */
+//        this.argumentType = PosixFactory.eINSTANCE.createArgumentType();
+//        this.argumentType.setFilesystemName( valuesArray[0].toString() );
+//        this.argumentType.setValue( valuesArray[1].toString() );
+        
         this.argumentType = PosixFactory.eINSTANCE.createArgumentType();
-        this.argumentType.setFilesystemName( valuesArray[0].toString() );
-        this.argumentType.setValue( valuesArray[1].toString() );
+        this.argumentType = (ArgumentType) value;
         
         
         /* Change the element. The element is located through it's index position
@@ -1256,9 +1261,10 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
          * substitute the old EObject.
          */
         this.environmentType = PosixFactory.eINSTANCE.createEnvironmentType();
-        this.environmentType.setName( valuesArray[0].toString() );
-        this.environmentType.setFilesystemName( valuesArray[1].toString() );
-        this.environmentType.setValue( valuesArray[2].toString() );
+        this.environmentType = ( EnvironmentType ) value;
+//        this.environmentType.setName( valuesArray[0].toString() );
+//        this.environmentType.setFilesystemName( valuesArray[1].toString() );
+//        this.environmentType.setValue( valuesArray[2].toString() );
         
         
         /* Change the element. The element is located through it's index position

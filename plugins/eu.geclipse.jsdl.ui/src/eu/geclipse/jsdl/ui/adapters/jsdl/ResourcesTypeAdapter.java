@@ -178,14 +178,17 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   } // End attachToHostName()
   
   
-  protected void deleteElement( final int featureID ) {
+  protected void deleteElement( final EObject eStructuralFeature ) {
     
-    EStructuralFeature eStructuralFeature = this.resourcesType.eClass().getEStructuralFeature( featureID );
+//    EStructuralFeature eStructuralFeature = this.resourcesType.eClass().getEStructuralFeature( featureID );
     
-    EcoreUtil.remove( eStructuralFeature );
+    try {
+      EcoreUtil.remove( eStructuralFeature );  
+    } catch( Exception e ) {
+      Activator.logException( e );
+    }
     
-    
-  }
+  } //end void deleteElement()
   
   
   
@@ -623,24 +626,52 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
         
     /* Populate the Combo Box with the CPU Architecture Literals */    
     EEnum cFEnum = JsdlPackage.Literals.PROCESSOR_ARCHITECTURE_ENUMERATION;
-       for (int i=0; i<cFEnum.getELiterals().size(); i++){         
+    /* 
+     * Add an EMPTY item value so that the user can disable the specific 
+     * feature 
+     */
+    widget.add(""); //$NON-NLS-1$
+    
+    /*
+     * Add the CPUArchitecture Enumeration Literals to the 
+     * appropriate SWT Combo widget.
+     */
+    for (int i=0; i<cFEnum.getELiterals().size(); i++){         
          widget.add( cFEnum.getEEnumLiteral( i ).toString() );
-       }
-       cFEnum = null;
+    }
+    cFEnum = null;
+    
+    String[] sortedTypes = widget.getItems();
+    Arrays.sort( sortedTypes );
+    widget.setItems( sortedTypes );    
+    
+    
           
         
     widget.addSelectionListener(new SelectionListener() {
       public void widgetSelected(final SelectionEvent e) {
-        checkCPUArch();
-        ResourcesTypeAdapter.this.cpuArchitectureType.setCPUArchitectureName(
-                                              ProcessorArchitectureEnumeration
-                                             .get( widget.getSelectionIndex()));
         
-          ResourcesTypeAdapter.this.resourcesType
-            .setCPUArchitecture( ResourcesTypeAdapter.this.cpuArchitectureType );
+        String selectedCPUArch = widget.getItem( widget.getSelectionIndex() );
+        
+        if (widget.getItem( widget.getSelectionIndex() ) == "") { //$NON-NLS-1$
+          
+          deleteElement( ResourcesTypeAdapter.this.cpuArchitectureType );
+          ResourcesTypeAdapter.this.cpuArchitectureType = null;
+                    
+        }
+        else {
+          checkCPUArch();
+          ResourcesTypeAdapter.this.cpuArchitectureType.setCPUArchitectureName(
+                                              ProcessorArchitectureEnumeration
+                                             .get( selectedCPUArch ) );
+        
+            ResourcesTypeAdapter.this.resourcesType
+              .setCPUArchitecture( ResourcesTypeAdapter.this.cpuArchitectureType );
 
         
-        ResourcesTypeAdapter.this.contentChanged();
+          ResourcesTypeAdapter.this.contentChanged();
+        }
+        contentChanged();
       }
 
       public void widgetDefaultSelected(final SelectionEvent e) {
@@ -927,19 +958,34 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     
     Integer featureID = new Integer(JsdlPackage.RESOURCES_TYPE__EXCLUSIVE_EXECUTION);
     this.comboFeaturesMap.put( featureID , widget );       
-    
+    /* 
+     * Add an EMPTY item value so that the user can disable the specific 
+     * feature 
+     */
+    widget.add(""); //$NON-NLS-1$
     widget.add( "true" ); //$NON-NLS-1$
     widget.add( "false" ); //$NON-NLS-1$
         
     widget.addSelectionListener( new SelectionListener() {
-      public void widgetSelected( final SelectionEvent e) {
+      public void widgetSelected( final SelectionEvent e ) {
+        
+        /*
+         * If the EMPTY item is selected then the ExclusiveExecution
+         * element has to be unset.
+         */
+        if (widget.getItem( widget.getSelectionIndex() ) == "") { //$NON-NLS-1$
+          
+          ResourcesTypeAdapter.this.resourcesType.unsetExclusiveExecution();
+                              
+        }
+        else {
 
         checkResourcesElement();
          ResourcesTypeAdapter.this.resourcesType
                .setExclusiveExecution( Boolean.parseBoolean( widget.getText() ) );
+        }
         
-        
-        ResourcesTypeAdapter.this.contentChanged();
+         contentChanged();
         
       }
 

@@ -36,41 +36,46 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-
 import eu.geclipse.jsdl.model.FileSystemType;
 import eu.geclipse.jsdl.model.JobDefinitionType;
 import eu.geclipse.jsdl.model.JsdlFactory;
-import eu.geclipse.jsdl.model.posix.ArgumentType;
+import eu.geclipse.jsdl.model.posix.EnvironmentType;
 import eu.geclipse.jsdl.model.posix.PosixFactory;
 import eu.geclipse.jsdl.ui.internal.Activator;
 
 
 /**
- * @author nloulloud
+ * @author nickl
  *
  */
-public class ArgumentsDialog extends Dialog {
-  
 
+
+
+public class EnvironmentVarDialog extends Dialog {
+  
   protected JobDefinitionType jobDefinitionType = JsdlFactory.eINSTANCE.createJobDefinitionType();
+  protected EnvironmentType environmentType = PosixFactory.eINSTANCE.createEnvironmentType();
   protected FileSystemType fileSystemType = JsdlFactory.eINSTANCE.createFileSystemType();
-  protected ArgumentType argumentType = PosixFactory.eINSTANCE.createArgumentType();
+  protected Label lblName = null;
   protected Label lblValue = null;
   protected Label lblFileSystemName = null;
   protected Combo cmbFileSystemName = null;
   protected Text txtValue = null;
+  protected Text txtName = null;
   protected boolean editMode = false;
   protected Composite panel = null;
+ 
   private String title = null;
+  
 
   /**
    * @param parentShell The Dialog's Parent shell
    * @param title Dialog Title.
    * @param jsdlRoot The Root element ( {@link JobDefinitionType} ) of the JSDL document.
    */
-  public ArgumentsDialog( final Shell parentShell, final String title, 
-                          final JobDefinitionType jsdlRoot ) {
-    
+  public EnvironmentVarDialog( final Shell parentShell , 
+                                  final String title, 
+                                  final JobDefinitionType jsdlRoot ) {
     super( parentShell );
     
     this.title = title;
@@ -81,8 +86,7 @@ public class ArgumentsDialog extends Dialog {
     setShellStyle( getShellStyle() | SWT.RESIZE |SWT.APPLICATION_MODAL  );
     
     
-
-  } // End class Constructor
+  } // end class Constructor
   
   
   @Override
@@ -133,6 +137,37 @@ public class ArgumentsDialog extends Dialog {
     this.panel.setLayoutData( gd );
     
     
+    /* =========================== Name Widgets =============================*/
+    
+    gd = new GridData( GridData.HORIZONTAL_ALIGN_FILL );
+    gd.grabExcessHorizontalSpace = true;
+    gd.horizontalSpan = 2;
+
+    this.lblName = new Label( this.panel, SWT.NONE );
+    this.lblName.setText( Messages.getString( "Dialog_Name" ) ); //$NON-NLS-1$
+    
+    
+    this.txtName = new Text( this.panel , SWT.SINGLE | SWT.BORDER);
+    
+    /* Initial Values for Edit Operation */
+    if ( this.editMode ) {
+      this.txtName.setText( this.environmentType.getValue() );
+    }
+
+    
+    this.txtName.addModifyListener( new ModifyListener() {
+
+      public void modifyText( final ModifyEvent e ) {
+
+        EnvironmentVarDialog.this.environmentType.setValue( ( EnvironmentVarDialog.this.txtName.getText() ) ); 
+        validateFields();
+      }
+      
+    });
+    
+    this.txtName.setLayoutData( gd );
+    
+    
     /* ======================== File System Name Widgets =====================*/
     
     gd = new GridData( GridData.HORIZONTAL_ALIGN_FILL );
@@ -171,8 +206,8 @@ public class ArgumentsDialog extends Dialog {
     
     /* Initial Values for Edit Operation */
     if ( this.editMode ) {
-      if (this.argumentType.getFilesystemName() != null ){ 
-        this.cmbFileSystemName.setText( this.argumentType.getFilesystemName() );
+      if (this.environmentType.getFilesystemName() != null ){ 
+        this.cmbFileSystemName.setText( this.environmentType.getFilesystemName() );
       }
     }
     
@@ -185,8 +220,8 @@ public class ArgumentsDialog extends Dialog {
       }
 
       public void widgetSelected( final SelectionEvent e ) {
-        ArgumentsDialog.this.argumentType.setFilesystemName( ArgumentsDialog.this.cmbFileSystemName
-                                                             .getItem(ArgumentsDialog.this.cmbFileSystemName.getSelectionIndex() ) );
+        EnvironmentVarDialog.this.environmentType.setFilesystemName( EnvironmentVarDialog.this.cmbFileSystemName
+                                                             .getItem(EnvironmentVarDialog.this.cmbFileSystemName.getSelectionIndex() ) );
         validateFields();
         
       }
@@ -210,7 +245,7 @@ public class ArgumentsDialog extends Dialog {
     
     /* Initial Values for Edit Operation */
     if ( this.editMode ) {
-      this.txtValue.setText( this.argumentType.getValue() );
+      this.txtValue.setText( this.environmentType.getValue() );
     }
 
     
@@ -218,13 +253,14 @@ public class ArgumentsDialog extends Dialog {
 
       public void modifyText( final ModifyEvent e ) {
 
-        ArgumentsDialog.this.argumentType.setValue( ( ArgumentsDialog.this.txtValue.getText() ) ); 
+        EnvironmentVarDialog.this.environmentType.setValue( ( EnvironmentVarDialog.this.txtValue.getText() ) ); 
         validateFields();
       }
       
     });
     
     this.txtValue.setLayoutData( gd );
+    
     Dialog.applyDialogFont( container );
     
     return parent;
@@ -246,7 +282,7 @@ public class ArgumentsDialog extends Dialog {
    */
   public void setInput( final Object dialogInput ) {
     
-    this.argumentType = ( ArgumentType ) dialogInput;
+    this.environmentType = ( EnvironmentType ) dialogInput;
     this.editMode = true;
     
   }
@@ -254,7 +290,7 @@ public class ArgumentsDialog extends Dialog {
   
   
   private String getDialogSettingsSectionName() {
-    return IDebugUIConstants.PLUGIN_ID + ".ARGUMENTS_DIALOG"; //$NON-NLS-1$
+    return IDebugUIConstants.PLUGIN_ID + ".ENVIRONMENT_VAR_DIALOG"; //$NON-NLS-1$
   }
   
   
@@ -266,7 +302,7 @@ public class ArgumentsDialog extends Dialog {
    */
   public Object getValue() {
               
-    return this.argumentType;
+    return this.environmentType;
   }
   
   
@@ -308,5 +344,7 @@ public class ArgumentsDialog extends Dialog {
   } // end IDialogSetting getDialogBoundsSettings()
   
   
+
   
-} // end FeatureDialog Class
+  
+} // end EnvironmentVarDialog class
