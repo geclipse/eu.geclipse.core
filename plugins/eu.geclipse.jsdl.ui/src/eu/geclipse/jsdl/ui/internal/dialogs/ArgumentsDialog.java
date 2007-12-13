@@ -260,9 +260,9 @@ public class ArgumentsDialog extends Dialog {
   
   
   /**
-   * Get's the new File System
-   * FileSystemType
-   * @return The new File System
+   * Get's the new {@link ArgumentType}
+   * 
+   * @return The new {@link ArgumentType}
    */
   public Object getValue() {
               

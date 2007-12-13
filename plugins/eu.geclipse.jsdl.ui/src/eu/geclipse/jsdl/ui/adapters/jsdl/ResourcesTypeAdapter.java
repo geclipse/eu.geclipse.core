@@ -390,11 +390,27 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     EStructuralFeature eStructuralFeature = this.jobDescriptionType.eClass()
           .getEStructuralFeature( JsdlPackage.JOB_DESCRIPTION_TYPE__RESOURCES );
     
+    /*
+     * Check if the Resources element is not set. If not set then set it to its 
+     * container (JobDescriptionType).
+     */
     if (!this.jobDescriptionType.eIsSet( eStructuralFeature )) {      
       this.jobDescriptionType.eSet( eStructuralFeature, this.resourcesType );
-
-
     }
+    /* 
+     * If the Resources Element is set, check for any possible contents which may
+     * be set. Also check if the Exclusive Execution attribute is set.
+     * If none of the above are true, then delete the Resources Element from it's
+     * container (JobDescriptionType).
+     */
+    else {
+      if ( !this.resourcesType.isExclusiveExecution() && this.resourcesType.eContents().size() == 0) {
+        EcoreUtil.remove( this.resourcesType );
+      }
+    }
+
+    
+    
   } // end void checkResourcesElement()
   
   
@@ -451,7 +467,10 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
               this.candidateHosts.getHostName().remove( feature );
               
               if ( this.candidateHosts.getHostName().size() == 0 ) {
+                
                 EcoreUtil.remove( this.candidateHosts );
+                
+                checkResourcesElement();
               
               }
             }
@@ -464,6 +483,8 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
               this.resourcesType.getFileSystem().remove( feature );
               if ( this.resourcesType.getFileSystem().size() == 0 ) {
                 EcoreUtil.remove(this.fileSystemType);
+                checkResourcesElement();
+
               }
               
             }

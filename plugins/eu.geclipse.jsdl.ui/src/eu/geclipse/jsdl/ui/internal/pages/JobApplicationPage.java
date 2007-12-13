@@ -820,105 +820,11 @@ public final class JobApplicationPage extends FormPage
     toolkit.paintBordersFor( client );
   }
 
-//  protected void handleAddDialog( final String dialogTitle, final Button button )
-//  {
-//    MultipleInputDialog dialog = new MultipleInputDialog( this.getSite()
-//      .getShell(), dialogTitle );
-//    
-//    
-//    if( dialogTitle == Messages.getString( "JobApplicationPage_ArgumentDialog" ) ) { //$NON-NLS-1$
-//      
-//      this.value = new Object[ 1 ][ 2 ];
-//      if( button == this.btnArgAdd ) {
-//        dialog.addStoredComboField( 
-//                                   Messages.getString( "JobApplicationPage_FileSystemName" ), //$NON-NLS-1$
-//                                   "", //$NON-NLS-1$
-//                                   true,
-//                                   "JobApplicationPage_FileSystemName" );        //$NON-NLS-1$
-//        
-//        dialog.addStoredComboField( Messages.getString( "JobApplicationPage_Value" ), //$NON-NLS-1$
-//                                    "", //$NON-NLS-1$
-//                                    false,
-//                                    "JobApplicationPage_Value" ); //$NON-NLS-1$ 
-//        
-//      } else {
-//        IStructuredSelection structSelection = ( IStructuredSelection )this.argumentViewer.getSelection();
-//        ArgumentType argType = ( ArgumentType )structSelection.getFirstElement();
-//        
-//        dialog.addStoredComboField( Messages.getString( "JobApplicationPage_FileSystemName" ), //$NON-NLS-1$
-//                             argType.getFilesystemName(),
-//                             true,
-//                             "JobApplicationPage_FileSystemName"); //$NON-NLS-1$
-//        
-//        dialog.addStoredComboField( Messages.getString( "JobApplicationPage_Value" ), //$NON-NLS-1$
-//                             argType.getValue(),
-//                             false,
-//                             "JobApplicationPage_Value"); //$NON-NLS-1$
-//      }
-//    } else {
-//      this.value = new Object[ 1 ][ 3 ];
-//      if( button == this.btnEnVarAdd ) {
-//        
-//        dialog.addStoredComboField( Messages.getString( "JobApplicationPage_Name" ), //$NON-NLS-1$
-//                                    "", //$NON-NLS-1$
-//                                    false,
-//                                    "JobApplicationPage_Name" ); //$NON-NLS-1$ 
-//        
-//        dialog.addStoredComboField( Messages.getString( "JobApplicationPage_FileSystemName" ), //$NON-NLS-1$
-//                                    "", //$NON-NLS-1$
-//                                    true,
-//                                    "JobApplicationPage_FileSystemName" ); //$NON-NLS-1$
-//        
-//        dialog.addStoredComboField( Messages.getString( "JobApplicationPage_Value" ), //$NON-NLS-1$
-//                                    "", //$NON-NLS-1$
-//                                    false,
-//                                    "JobApplicationPage_Value" ); //$NON-NLS-1$
-//        
-//      } else {
-//        IStructuredSelection structSelection = ( IStructuredSelection )this.environmentViewer.getSelection();
-//        EnvironmentType envType = ( EnvironmentType )structSelection.getFirstElement();
-//        
-//        dialog.addStoredComboField( Messages.getString( "JobApplicationPage_Name" ), //$NON-NLS-1$
-//                             envType.getName(),
-//                             false,
-//                             "JobApplicationPage_Name"); //$NON-NLS-1$
-//        
-//        dialog.addStoredComboField( Messages.getString( "JobApplicationPage_FileSystemName" ), //$NON-NLS-1$
-//                             envType.getFilesystemName(),
-//                             true,
-//                             "JobApplicationPage_FileSystemName"); //$NON-NLS-1$
-//        
-//        dialog.addStoredComboField( Messages.getString( "JobApplicationPage_Value" ), //$NON-NLS-1$
-//                             envType.getValue(),
-//                             false,
-//                             "JobApplicationPage_Value"); //$NON-NLS-1$
-//
-//      }
-//    }
-//        
-//
-//    if( dialog.open() != Window.OK ) {
-//      return;
-//    } // end if ( dialog.open() )
-//    
-//    if( this.value[ 0 ].length == 2 ) {
-//      
-//      this.value[ 0 ][ 0 ] = dialog.getStringValue( Messages.getString( "JobApplicationPage_FileSystemName" ) ); //$NON-NLS-1$
-//      this.value[ 0 ][ 1 ] = dialog.getStringValue( Messages.getString( "JobApplicationPage_Value" ) ); //$NON-NLS-1$
-//      
-//    } else {
-//      
-//      this.value[ 0 ][ 0 ] = dialog.getStringValue( Messages.getString( "JobApplicationPage_Name" ) ); //$NON-NLS-1$
-//      this.value[ 0 ][ 1 ] = dialog.getStringValue( Messages.getString( "JobApplicationPage_FileSystemName" ) ); //$NON-NLS-1$
-//      this.value[ 0 ][ 2 ] = dialog.getStringValue( Messages.getString( "JobApplicationPage_Value" ) ); //$NON-NLS-1$
-//      
-//    } // end else
-//    
-//  } //end if
-  
   
   
   protected void handleArguments( final String dialogTitle, final Button button ) {
+    
+    this.value = null;
     
     ArgumentsDialog dialog = new ArgumentsDialog( this.getSite().getShell(),
                                                   dialogTitle,
@@ -946,13 +852,15 @@ public final class JobApplicationPage extends FormPage
 
   protected void handleEnvironmentVar( final String dialogTitle, final Button button ) {
     
+    this.value = null;
+    
     EnvironmentVarDialog dialog = new EnvironmentVarDialog( this.getSite().getShell(),
                                                             dialogTitle,
                                                             this.jobDefinitionType);
     
        
     if ( button == this.btnEnVarEdit ) {
-      IStructuredSelection structSelection = ( IStructuredSelection )this.argumentViewer.getSelection();
+      IStructuredSelection structSelection = ( IStructuredSelection )this.environmentViewer.getSelection();
       EnvironmentType envType = ( EnvironmentType )structSelection.getFirstElement();
       
       dialog.setInput( envType );
@@ -969,9 +877,11 @@ public final class JobApplicationPage extends FormPage
   } // end void handleArguments
   
   
+  
   public void notifyChanged( final Notification notification ) {
     setDirty( true );
   }
+  
   
   
   private void addFormPageHelp( final ScrolledForm form ) {

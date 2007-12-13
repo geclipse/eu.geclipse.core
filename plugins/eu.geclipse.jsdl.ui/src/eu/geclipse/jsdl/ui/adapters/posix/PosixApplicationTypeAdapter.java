@@ -1127,8 +1127,6 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
       return;
     }
     
-//    Object[] valuesArray = value[0];  
-    
     EList <EObject> newInputList = ( EList<EObject> )tableViewer.getInput(); 
      
     if (newInputList == null ) {
@@ -1144,8 +1142,6 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
       
       this.argumentType = PosixFactory.eINSTANCE.createArgumentType();
       this.argumentType = (ArgumentType) value;
-//      this.argumentType.setFilesystemName( valuesArray[0].toString() );
-//      this.argumentType.setValue( valuesArray[1].toString() );
       newInputList.add( this.argumentType );
       
       /* Add the Argument to PosixApplication */
@@ -1159,9 +1155,6 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
     
       this.environmentType = PosixFactory.eINSTANCE.createEnvironmentType();
       this.environmentType = (EnvironmentType) value;
-//      this.environmentType.setName( valuesArray[0].toString() );
-//      this.environmentType.setFilesystemName( valuesArray[1].toString() );
-//      this.environmentType.setValue( valuesArray[2].toString() );
       newInputList.add( this.environmentType );
       
       /* Add the Environmental Variable to PosixApplication */
@@ -1193,8 +1186,6 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
     if (value == null) {
       return;
     }
-    
-//    Object[] valuesArray = value[0];
         
     EStructuralFeature eStructuralFeature;
     
@@ -1228,10 +1219,6 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
          * Create a new Argument Type EObject with the new values that will 
          * substitute the old EObject.
          */
-//        this.argumentType = PosixFactory.eINSTANCE.createArgumentType();
-//        this.argumentType.setFilesystemName( valuesArray[0].toString() );
-//        this.argumentType.setValue( valuesArray[1].toString() );
-        
         this.argumentType = PosixFactory.eINSTANCE.createArgumentType();
         this.argumentType = (ArgumentType) value;
         
@@ -1262,10 +1249,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
          */
         this.environmentType = PosixFactory.eINSTANCE.createEnvironmentType();
         this.environmentType = ( EnvironmentType ) value;
-//        this.environmentType.setName( valuesArray[0].toString() );
-//        this.environmentType.setFilesystemName( valuesArray[1].toString() );
-//        this.environmentType.setValue( valuesArray[2].toString() );
-        
+       
         
         /* Change the element. The element is located through it's index position
          *   in the list.
@@ -1278,7 +1262,6 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
       }
     
 
-  
   
    /* Refresh the table viewer and notify the editor that
    *  the page content has changed. 

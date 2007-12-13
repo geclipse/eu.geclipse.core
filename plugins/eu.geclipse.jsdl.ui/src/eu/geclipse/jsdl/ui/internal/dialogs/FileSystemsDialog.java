@@ -223,7 +223,9 @@ public class FileSystemsDialog extends Dialog {
   this.txtMountPoint = new Text (this.panel, SWT.SINGLE | SWT.BORDER );
   /* Initial Values for Edit Operation */
   if ( this.editMode ) {
-    this.txtMountPoint.setText( this.fileSystemType.getMountPoint() );
+    if ( this.fileSystemType.getMountPoint() != null ) {
+      this.txtMountPoint.setText( this.fileSystemType.getMountPoint() );
+    }
   }
   
   this.txtMountPoint.addModifyListener( new ModifyListener() {
@@ -331,30 +333,34 @@ public class FileSystemsDialog extends Dialog {
     
     BoundaryType boundaryType = JsdlFactory.eINSTANCE.createBoundaryType();
     
-    if ( this.fileSystemType.getDiskSpace().getLowerBoundedRange() != null ) {
+    if (this.fileSystemType.getDiskSpace() != null ){
     
-      boundaryType = this.fileSystemType.getDiskSpace().getLowerBoundedRange();
+      if ( this.fileSystemType.getDiskSpace().getLowerBoundedRange() != null ) {
     
-      /* check for Lazy Loading */
-      boundaryType = (BoundaryType) checkProxy( boundaryType );
+        boundaryType = this.fileSystemType.getDiskSpace().getLowerBoundedRange();
+        
+        /* check for Lazy Loading */
+        boundaryType = (BoundaryType) checkProxy( boundaryType );
     
-    this.txtDiskSpace.setText( Double.toString( boundaryType.getValue() ) );
+        this.txtDiskSpace.setText( Double.toString( boundaryType.getValue() ) );
     
-    /* Select the Lower Bound */                  
-    this.cmbDiskSpaceRange.select( 0 );
+        /* Select the Lower Bound */                  
+        this.cmbDiskSpaceRange.select( 0 );
    
-  }
+      }
   
-  else {
-    boundaryType = this.fileSystemType.getDiskSpace().getUpperBoundedRange();
+      else {
+        boundaryType = this.fileSystemType.getDiskSpace().getUpperBoundedRange();
     
-    /* check for Lazy Loading */
-    boundaryType = (BoundaryType) checkProxy( boundaryType );
+        /* check for Lazy Loading */
+        boundaryType = (BoundaryType) checkProxy( boundaryType );
   
-    this.txtDiskSpace.setText( Double.toString( boundaryType.getValue() ) );
-    /* Select the Lower Bound */
-    this.cmbDiskSpaceRange.select( 1 );
-    }
+        this.txtDiskSpace.setText( Double.toString( boundaryType.getValue() ) );
+        /* Select the Lower Bound */
+        this.cmbDiskSpaceRange.select( 1 );
+      }
+      
+    } //end_if (this.fileSystemType.getDiskSpace() != null )
     
   }
   

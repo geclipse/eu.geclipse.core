@@ -151,7 +151,7 @@ public class EnvironmentVarDialog extends Dialog {
     
     /* Initial Values for Edit Operation */
     if ( this.editMode ) {
-      this.txtName.setText( this.environmentType.getValue() );
+      this.txtName.setText( this.environmentType.getName() );
     }
 
     
@@ -159,7 +159,7 @@ public class EnvironmentVarDialog extends Dialog {
 
       public void modifyText( final ModifyEvent e ) {
 
-        EnvironmentVarDialog.this.environmentType.setValue( ( EnvironmentVarDialog.this.txtName.getText() ) ); 
+        EnvironmentVarDialog.this.environmentType.setName( ( EnvironmentVarDialog.this.txtName.getText() ) ); 
         validateFields();
       }
       
@@ -296,9 +296,9 @@ public class EnvironmentVarDialog extends Dialog {
   
   
   /**
-   * Get's the new File System
-   * FileSystemType
-   * @return The new File System
+   * Get's the new {@link EnvironmentType} 
+   *  
+   * @return The new {@link EnvironmentType} System
    */
   public Object getValue() {
               
