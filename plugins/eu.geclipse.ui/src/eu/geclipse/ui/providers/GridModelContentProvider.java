@@ -54,11 +54,14 @@ public class GridModelContentProvider
    */
   public Object[] getChildren( final Object parentElement ) {
     Object[] children = null;
-    if ( hasChildren( parentElement ) ) {
-      children = getChildren( ( IGridContainer ) parentElement );
-    }
-    if ( children != null ) {
-      Arrays.sort( children, this.comparator );
+
+    synchronized ( parentElement ) { // Multiple threads have access to this element the same time
+      if ( hasChildren( parentElement ) ) {
+        children = getChildren( ( IGridContainer ) parentElement );
+      }
+      if ( children != null ) {
+        Arrays.sort( children, this.comparator );
+      }
     }
     return children;
   }
@@ -68,6 +71,7 @@ public class GridModelContentProvider
    */
   public Object getParent( final Object element ) {
     Object parent = null;
+
     if ( element instanceof IGridElement ) {
       parent = ( ( IGridElement ) element ).getParent();
     }
@@ -79,6 +83,7 @@ public class GridModelContentProvider
    */
   public boolean hasChildren( final Object element ) {
     boolean result = false;
+
     if ( element instanceof IGridContainer ) {
       result = ( ( IGridContainer ) element ).hasChildren();
     }
@@ -184,8 +189,12 @@ public class GridModelContentProvider
   public void treeCollapsed( final TreeExpansionEvent event ) {
     Object element = event.getElement();
     if ( element instanceof IGridContainer ) {
-      ( ( IGridContainer ) element ).setDirty();
-      this.treeViewer.refresh( element, false );
+      synchronized ( element ) { // Multiple threads have access to this element the same time
+        if ( ( ( IGridContainer ) element ).getChildCount() > 0 ) {
+          ( ( IGridContainer ) element ).setDirty();
+          this.treeViewer.refresh( element, false );
+        }
+      }
     }
   }
 

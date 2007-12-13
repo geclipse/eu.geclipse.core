@@ -15,7 +15,6 @@
 
 package eu.geclipse.ui.providers;
 
-import org.eclipse.jface.viewers.AbstractTreeViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Control;
@@ -120,7 +119,6 @@ public class ProgressRunner implements Runnable {
           display.asyncExec( new Runnable() {
             public void run() {
               viewer.refresh( ProgressRunner.this.container );
-              viewer.collapseToLevel( ProgressRunner.this.container, AbstractTreeViewer.ALL_LEVELS );
             }
           } );
         }
