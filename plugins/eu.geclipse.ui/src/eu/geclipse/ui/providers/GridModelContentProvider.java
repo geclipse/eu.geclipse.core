@@ -55,13 +55,11 @@ public class GridModelContentProvider
   public Object[] getChildren( final Object parentElement ) {
     Object[] children = null;
 
-    synchronized ( parentElement ) { // Multiple threads have access to this element the same time
-      if ( hasChildren( parentElement ) ) {
-        children = getChildren( ( IGridContainer ) parentElement );
-      }
-      if ( children != null ) {
-        Arrays.sort( children, this.comparator );
-      }
+    if ( hasChildren( parentElement ) ) {
+      children = getChildren( ( IGridContainer ) parentElement );
+    }
+    if ( children != null ) {
+      Arrays.sort( children, this.comparator );
     }
     return children;
   }
