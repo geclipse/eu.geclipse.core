@@ -54,12 +54,9 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
@@ -87,6 +84,8 @@ import eu.geclipse.ui.cheatsheets.OpenAuthTokenDialogAction;
 import eu.geclipse.ui.dialogs.AuthTokenInfoDialog;
 import eu.geclipse.ui.dialogs.NewProblemDialog;
 import eu.geclipse.ui.internal.Activator;
+import eu.geclipse.ui.internal.comparators.TableColumnComparator;
+import eu.geclipse.ui.internal.listeners.TableColumnListener;
 
 
 /**
@@ -251,83 +250,7 @@ public class AuthTokenView extends ViewPart implements IContentChangeListener {
     
   }
 
-  /**
-   * This internal class is used to sort the authentication tokens
-   * according to different criteria.
-   * 
-   * @author agarcia
-   */
-  class AuthenticationTokenViewerComparator extends ViewerComparator {
-    @Override
-    public int compare( final Viewer viewer, final Object token1, final Object token2 ) {
-      assert token1 instanceof IAuthenticationToken;
-      assert token2 instanceof IAuthenticationToken;
-      
-      Table table = AuthTokenView.this.tokenTable;
-      ITableLabelProvider labelProvider = (ITableLabelProvider) AuthTokenView.this.tokenList.getLabelProvider();
-      
-      int col;
-      if ( table.getSortColumn() == null ) {
-        col = 0;
-      } else {
-        col = table.indexOf( table.getSortColumn() );
-      }
-      
-      String value1 = labelProvider.getColumnText( token1, col );
-      String value2 = labelProvider.getColumnText( token2, col );
-      
-      int order = ( table.getSortDirection() == SWT.DOWN )
-                    ? SWT.DOWN
-                    : SWT.UP;
-      
-      int result;
-      if ( order == SWT.UP ) {
-        result = value1.compareTo( value2 );
-      } else {
-        result = value2.compareTo( value1 );
-      }
-      // If tokens compare equal, sort next by ascending ID
-      if ( result == 0 ) {
-        value1 = labelProvider.getColumnText( token1, 0 );
-        value2 = labelProvider.getColumnText( token2, 0 );
-        result = value1.compareTo( value2 );
-      }
-      
-      return result;
-    }
-  }
-  
-  /**
-   * This internal class is the listener for setting column sorting.
-   * 
-   * @author agarcia
-   */
-  class TokenColumnSelectionListener implements SelectionListener {
-    
-    public void widgetSelected( final SelectionEvent e ) {
-      // This listener is only for the columns of the token table
-      assert e.getSource() instanceof TableColumn;
-      
-      Table table = AuthTokenView.this.tokenTable;
-      TableColumn clickedColumn = (TableColumn) e.getSource();
-      TableColumn oldSortingColumn = table.getSortColumn();
-      
-      if ( clickedColumn == oldSortingColumn ) {
-        table.setSortDirection( table.getSortDirection() == SWT.UP
-                                  ? SWT.DOWN
-                                  : SWT.UP );
-      } else {
-        table.setSortColumn( clickedColumn );
-        table.setSortDirection( SWT.UP );
-      }
-      AuthTokenView.this.tokenList.refresh();
-    }
-  
-    public void widgetDefaultSelected( final SelectionEvent e ) {
-      // Empty implementation
-    }
-  }
-  
+
   /**
    * The table used to present the currently available authentication tokens.
    */
@@ -444,7 +367,12 @@ public class AuthTokenView extends ViewPart implements IContentChangeListener {
     this.tokenTable.setHeaderVisible( true );
     this.tokenTable.setLinesVisible( true );
     
-    TokenColumnSelectionListener columnListener = new TokenColumnSelectionListener();
+    AuthenticationTokenManager manager = AuthenticationTokenManager.getManager();
+    this.tokenList = new CheckboxTableViewer( this.tokenTable );
+    this.tokenList.setLabelProvider( new AuthenticationTokenLabelProvider() );
+    this.tokenList.setContentProvider( new AuthenticationTokenContentProvider() );
+    
+    TableColumnListener columnListener = new TableColumnListener( this.tokenList );
     
     TableColumn idColumn = new TableColumn( this.tokenTable, SWT.LEFT );
     idColumn.setText( Messages.getString("AuthTokenView.id_column_label") ); //$NON-NLS-1$
@@ -467,14 +395,11 @@ public class AuthTokenView extends ViewPart implements IContentChangeListener {
     lifetimeColumn.setAlignment( SWT.CENTER );
     lifetimeColumn.addSelectionListener( columnListener );
     
-    AuthenticationTokenManager manager = AuthenticationTokenManager.getManager();
-    this.tokenList = new CheckboxTableViewer( this.tokenTable );
-    this.tokenList.setLabelProvider( new AuthenticationTokenLabelProvider() );
-    this.tokenList.setContentProvider( new AuthenticationTokenContentProvider() );
-    // Initially we sort the table by its first column, ascending
-    this.tokenTable.setSortColumn( this.tokenTable.getColumn( 0 ) );
+    // Initially we sort the tokens by ID, ascending
+    this.tokenTable.setSortColumn( idColumn );
     this.tokenTable.setSortDirection( SWT.UP );
-    this.tokenList.setComparator( new AuthenticationTokenViewerComparator() );
+    this.tokenList.setComparator( new TableColumnComparator( this.tokenList, idColumn ) );
+    
     this.tokenList.setInput( manager );
     IAuthenticationToken defaultToken = manager.getDefaultToken();
     if ( defaultToken != null ) {

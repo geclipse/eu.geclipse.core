@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
+
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -55,6 +56,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
+
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
@@ -65,6 +67,8 @@ import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.IVoManager;
 import eu.geclipse.ui.dialogs.NewProblemDialog;
 import eu.geclipse.ui.internal.Activator;
+import eu.geclipse.ui.internal.comparators.TableColumnComparator;
+import eu.geclipse.ui.internal.listeners.TableColumnListener;
 import eu.geclipse.ui.internal.wizards.VoImportWizard;
 import eu.geclipse.ui.wizards.wizardselection.ExtPointWizardSelectionListPage;
 
@@ -290,6 +294,16 @@ public class VoPreferencePage
     this.voViewer = new CheckboxTableViewer( voTable );
     this.voViewer.setLabelProvider( new VoLabelProvider() );
     this.voViewer.setContentProvider( new VoContentProvider() );
+    
+    TableColumnListener columnListener = new TableColumnListener( this.voViewer );
+    nameColumn.addSelectionListener( columnListener );
+    typeColumn.addSelectionListener( columnListener );
+    
+    // Initially we sort the VOs by name, ascending
+    voTable.setSortColumn( nameColumn );
+    voTable.setSortDirection( SWT.UP );
+    this.voViewer.setComparator( new TableColumnComparator( this.voViewer, nameColumn ) );
+    
     this.voViewer.setInput( manager );
     this.voViewer.addSelectionChangedListener( new ISelectionChangedListener() {
       public void selectionChanged( final SelectionChangedEvent event ) {
