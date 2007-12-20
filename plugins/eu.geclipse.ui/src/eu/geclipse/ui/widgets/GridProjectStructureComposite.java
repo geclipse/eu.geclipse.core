@@ -1,21 +1,20 @@
-package eu.geclipse.ui.wizards;
+package eu.geclipse.ui.widgets;
 
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
-import org.eclipse.jface.viewers.DecoratingLabelProvider;
 import org.eclipse.jface.viewers.ICheckStateListener;
-import org.eclipse.jface.viewers.ILabelDecorator;
-import org.eclipse.jface.viewers.ILabelProvider;
-import org.eclipse.jface.viewers.TreeViewer;
-import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.ModifyEvent;
@@ -37,18 +36,22 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.osgi.framework.Bundle;
+import org.osgi.service.prefs.Preferences;
 
 import eu.geclipse.core.ExtensionManager;
 import eu.geclipse.core.Extensions;
+import eu.geclipse.core.model.GridModel;
+import eu.geclipse.core.model.IGridContainer;
+import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.providers.ArrayTableLabelProvider;
-import eu.geclipse.ui.providers.GridModelLabelProvider;
-import eu.geclipse.ui.widgets.GridProjectStructureComposite;
+import eu.geclipse.ui.wizards.GridProjectStructureWizardPage;
 
-public class GridProjectStructureWizardPage extends WizardPage {
+public class GridProjectStructureComposite extends Composite {
   
-  /*private static final int LABEL_COLUMN = 1;
-
+  private static final int LABEL_COLUMN = 1;
+  
   protected TableEditor editor;
   
   private Tree previewTree;
@@ -59,41 +62,21 @@ public class GridProjectStructureWizardPage extends WizardPage {
   
   private CheckboxTableViewer viewer;
   
-  private Hashtable< String, Class< ? > > creatorTargets;*/
-  
-  private GridProjectStructureComposite projectStructureComposite;
-    
-  public GridProjectStructureWizardPage() {
-    super( "gridProjectFolders",
-           "Grid Project Folders",
-           null );
-    setDescription( "Specify the folders that should be available for your Grid project" );
-    //initialize();
-  }
+  private Hashtable< String, Class< ? > > creatorTargets;
 
-  public void createControl( final Composite parent ) {
+  public GridProjectStructureComposite( final Composite parent, final int style ) {
     
-    this.projectStructureComposite = new GridProjectStructureComposite( parent, SWT.NULL );
+    super(parent, style);
     
-    setControl( this.projectStructureComposite );
-    
-  }
-  
-  public Hashtable< String, String > getProjectFolders() {
-    return this.projectStructureComposite.getProjectFolders();
-  }
-
-    /*
     GridData gData;
     
-    Composite mainComp = new Composite( parent, SWT.NONE );
-    mainComp.setLayout( new GridLayout( 3, false ) );
+    setLayout( new GridLayout( 3, false ) );
     gData = new GridData( GridData.FILL_BOTH );
     gData.grabExcessHorizontalSpace = true;
     gData.grabExcessVerticalSpace = true;
-    mainComp.setLayoutData( gData );
+    setLayoutData( gData );
     
-    Composite previewComp = new Composite( mainComp, SWT.NONE );
+    Composite previewComp = new Composite( this, SWT.NONE );
     previewComp.setLayout( new GridLayout( 1, false ) );
     gData = new GridData( GridData.FILL_VERTICAL );
     gData.grabExcessVerticalSpace = true;
@@ -118,7 +101,7 @@ public class GridProjectStructureWizardPage extends WizardPage {
         .getImage( IDE.SharedImages.IMG_OBJ_PROJECT )
     );
     
-    Composite settingsComp = new Composite( mainComp, SWT.NONE );
+    Composite settingsComp = new Composite( this, SWT.NONE );
     settingsComp.setLayout( new GridLayout( 1, false ) );
     gData = new GridData( GridData.FILL_BOTH );
     gData.grabExcessVerticalSpace = true;
@@ -160,35 +143,80 @@ public class GridProjectStructureWizardPage extends WizardPage {
     this.viewer.setContentProvider( new ArrayContentProvider() );
     this.viewer.setLabelProvider( new ArrayTableLabelProvider() );
     
-    List< String[] > input = new ArrayList< String[] >();
-    List< String[] > checked = new ArrayList< String[] >();
-    ExtensionManager extm = new ExtensionManager();
-    List< IConfigurationElement > configurationElements
-      = extm.getConfigurationElements( Extensions.PROJECT_FOLDER_POINT, Extensions.PROJECT_FOLDER_ELEMENT );
-    for ( IConfigurationElement element : configurationElements ) {
-      String id = element.getAttribute( Extensions.PROJECT_FOLDER_ID_ATTRIBUTE );
-      String name = element.getAttribute( Extensions.PROJECT_FOLDER_NAME_ATTRIBUTE );
-      String label = element.getAttribute( Extensions.PROJECT_FOLDER_LABEL_ATTRIBUTE );
-      String cls = element.getAttribute( Extensions.PROJECT_FOLDER_ELEMENTCLASS_ATTRIBUTE );
-      boolean preset = Boolean.parseBoolean( element.getAttribute( Extensions.PROJECT_FOLDER_PRESET_ATTRIBUTE ) );
-      String[] row = new String[] { name, label, id, cls };
-      input.add( row );
-      if ( preset ) {
-        checked.add( row );
-      }
-    }
-    this.viewer.setInput( input );
-    this.viewer.setCheckedElements( checked.toArray() );
-    
     this.viewer.addCheckStateListener( new ICheckStateListener() {
       public void checkStateChanged( final CheckStateChangedEvent e ) {
         updateTree();
       }
     } );
     
+    loadProjectFolders();
+    initialize();
     updateTree();
     
-    setControl( mainComp );
+  }
+  
+  public Hashtable< String, String > getProjectFolders() {
+    
+    Hashtable< String, String > result = new Hashtable< String, String >();
+    
+    List< String[] > input = ( List< String[] > ) this.viewer.getInput();
+    TableItem[] items = this.table.getItems();
+    
+    for ( int i = 0 ; i < items.length ; i++ ) {
+      if ( items[i].getChecked() ) {
+        String id = input.get( i )[2];
+        String label = items[i].getText( 1 );
+        result.put( id, label );
+      }
+    }
+    
+    return result;
+    
+  }
+  
+  public void performDefaults() {
+    loadProjectFolders();
+    updateTree();
+  }
+    
+  public void setProject( final IProject project ) throws CoreException {
+    
+    Hashtable< String, String > projectFolders = new Hashtable< String, String >();
+    IGridProject gridProject = ( IGridProject ) GridModel.getRoot().findElement( project );
+    
+    IResource[] members = project.members();
+    for ( IResource resource : members ) {
+      String name = resource.getName();
+      IGridElement element = gridProject.findChild( name );
+      if ( ( element != null ) && ( element instanceof IGridContainer ) ) {
+        String id = gridProject.getProjectFolderID( ( IGridContainer ) element );
+        if ( id != null ) {
+          projectFolders.put( id, name );
+        }
+      }
+    }
+    
+    setProjectFolders( projectFolders );
+    
+  }
+  
+  public void setProjectFolders( final Hashtable< String, String > projectFolders ) {
+    
+    List< String[] > input = ( List< String[] > ) this.viewer.getInput();
+    TableItem[] items = this.table.getItems();
+    
+    for ( int i = 0 ; i < input.size() ; i++ ) {
+      String id = input.get( i )[2];
+      String name = projectFolders.get( id );
+      if ( name != null ) {
+        items[ i ].setChecked( true );
+        items[ i ].setText( 1, name );
+      } else {
+        items[ i ].setChecked( false );
+      }
+    }
+    
+    updateTree();
     
   }
   
@@ -245,34 +273,6 @@ public class GridProjectStructureWizardPage extends WizardPage {
     
   }
   
-  private void startEditing( final TableItem item ) {
-    
-    Control oldEditor = this.editor.getEditor();
-    if ( oldEditor != null ) {
-      oldEditor.dispose();
-    }
-    
-    if ( item != null ) {
-      
-      Text text = new Text( this.table, SWT.NONE );
-      text.setText( item.getText( LABEL_COLUMN ) );
-      
-      text.addModifyListener( new ModifyListener() {
-        public void modifyText( final ModifyEvent e ) {
-          Text t = ( Text ) GridProjectStructureWizardPage.this.editor.getEditor();
-          GridProjectStructureWizardPage.this.editor.getItem().setText( LABEL_COLUMN, t.getText() );
-          updateTree();
-        }
-      } );
-      
-      text.selectAll();
-      text.setFocus();
-      this.editor.setEditor( text, item, LABEL_COLUMN );
-      
-    }
-    
-  }
-  
   private void initialize() {
     
     if ( this.creatorTargets == null ) {
@@ -308,5 +308,59 @@ public class GridProjectStructureWizardPage extends WizardPage {
     }
     
   }
-*/
+  
+  private void loadProjectFolders() {
+    
+    List< String[] > input = new ArrayList< String[] >();
+    List< String[] > checked = new ArrayList< String[] >();
+    ExtensionManager extm = new ExtensionManager();
+    List< IConfigurationElement > configurationElements
+      = extm.getConfigurationElements( Extensions.PROJECT_FOLDER_POINT, Extensions.PROJECT_FOLDER_ELEMENT );
+    
+    for ( IConfigurationElement element : configurationElements ) {
+      String id = element.getAttribute( Extensions.PROJECT_FOLDER_ID_ATTRIBUTE );
+      String name = element.getAttribute( Extensions.PROJECT_FOLDER_NAME_ATTRIBUTE );
+      String label = element.getAttribute( Extensions.PROJECT_FOLDER_LABEL_ATTRIBUTE );
+      String cls = element.getAttribute( Extensions.PROJECT_FOLDER_ELEMENTCLASS_ATTRIBUTE );
+      boolean preset = Boolean.parseBoolean( element.getAttribute( Extensions.PROJECT_FOLDER_PRESET_ATTRIBUTE ) );
+      String[] row = new String[] { name, label, id, cls };
+      input.add( row );
+      if ( preset ) {
+        checked.add( row );
+      }
+    }
+    
+    this.viewer.setInput( input );
+    this.viewer.setCheckedElements( checked.toArray() );
+    
+  }
+  
+  private void startEditing( final TableItem item ) {
+    
+    Control oldEditor = this.editor.getEditor();
+    if ( oldEditor != null ) {
+      oldEditor.dispose();
+    }
+    
+    if ( item != null ) {
+      
+      Text text = new Text( this.table, SWT.NONE );
+      text.setText( item.getText( LABEL_COLUMN ) );
+      
+      text.addModifyListener( new ModifyListener() {
+        public void modifyText( final ModifyEvent e ) {
+          Text t = ( Text ) GridProjectStructureComposite.this.editor.getEditor();
+          GridProjectStructureComposite.this.editor.getItem().setText( LABEL_COLUMN, t.getText() );
+          updateTree();
+        }
+      } );
+      
+      text.selectAll();
+      text.setFocus();
+      this.editor.setEditor( text, item, LABEL_COLUMN );
+      
+    }
+    
+  }
+
 }

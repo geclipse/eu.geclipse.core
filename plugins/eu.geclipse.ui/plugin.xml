@@ -297,4 +297,21 @@
             preset="true">
       </folder>
    </extension>
+   <extension
+         point="org.eclipse.ui.propertyPages">
+      <page
+            adaptable="false"
+            class="eu.geclipse.ui.properties.GridProjectFoldersPropertiesPage"
+            id="eu.geclipse.ui.gridProjectFolders"
+            name="Grid Project Folders">
+         <enabledWhen>
+            <adapt
+                  type="org.eclipse.core.resources.IProject">
+               <test
+                     property="org.eclipse.core.resources.projectNature"
+                     value="eu.geclipse.core.project.GridProjectNature">
+               </test>
+            </adapt></enabledWhen>
+      </page>
+   </extension>
 </plugin>

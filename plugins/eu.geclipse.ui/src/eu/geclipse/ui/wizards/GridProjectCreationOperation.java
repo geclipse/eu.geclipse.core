@@ -143,7 +143,7 @@ public class GridProjectCreationOperation implements IRunnableWithProgress {
   }
   
   private void createProjectFolder( final IProject project,
-                                       final String name ) {
+                                    final String name ) {
     if ( ( name != null ) && ( name.length() != 0 ) ) {
       IFolder folder = project.getFolder( new Path( name ) );
       if ( !folder.exists() ) {
@@ -181,8 +181,9 @@ public class GridProjectCreationOperation implements IRunnableWithProgress {
       projectNode.flush();
       
       Preferences folderNode = projectScope.getNode( "eu.geclipse.core.folders" ); //$NON-NLS-1$
-      for ( String key : folders.keySet() ) {
-        folderNode.put( key, folders.get( key ) );
+      for ( String id : folders.keySet() ) {
+        String label = folders.get( id );
+        folderNode.put( id, label );
       }
       folderNode.flush();
       

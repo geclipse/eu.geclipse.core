@@ -37,11 +37,14 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IDecoratorManager;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionContext;
 import org.eclipse.ui.actions.ActionGroup;
 import org.eclipse.ui.navigator.ICommonMenuConstants;
 import org.eclipse.ui.part.ViewPart;
 
+import eu.geclipse.core.Extensions;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridModelEvent;
@@ -96,6 +99,7 @@ public abstract class GridModelViewPart
     createContextMenu( this.viewer );
     
     GridModel.getRoot().addGridModelListener( this );
+    
   }
   
   @Override
@@ -166,6 +170,8 @@ public abstract class GridModelViewPart
     Display display = this.viewer.getControl().getDisplay();
     display.asyncExec( new Runnable() {
       public void run() {
+        IDecoratorManager decoratorManager = PlatformUI.getWorkbench().getDecoratorManager();
+        decoratorManager.update( eu.geclipse.ui.Extensions.PROJECT_FOLDER_DECORATOR_POINT );
         if ( element == null ) {
           GridModelViewPart.this.viewer.refresh();
         } else {

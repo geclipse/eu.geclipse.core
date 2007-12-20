@@ -107,6 +107,12 @@ public class Extensions {
    */
   public static final String CONNECTION_WIZARD_POINT = "eu.geclipse.ui.connectionWizard"; //$NON-NLS-1$
   
+  /**
+   * ID of the grid project folder decorator extension point.
+   */
+  public static final String PROJECT_FOLDER_DECORATOR_POINT
+    = "eu.geclipse.ui.gridProjectFolderDecorator"; //$NON-NLS-1$
+  
   private static final String PROPERTIES_FACTORY_POINT = "eu.geclipse.ui.propertiesFactory";  //$NON-NLS-1$
   private static final String PROPERTIES_FACTORY_ELEMENT = "PropertiesFactory"; //$NON-NLS-1$
   private static final String PROPERTIES_FACTORY_SOURCECLASS_ATTR = "sourceObjectClass"; //$NON-NLS-1$
