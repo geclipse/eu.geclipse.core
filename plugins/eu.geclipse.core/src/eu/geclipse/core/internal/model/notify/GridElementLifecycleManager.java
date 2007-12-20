@@ -18,14 +18,21 @@ package eu.geclipse.core.internal.model.notify;
 import java.util.List;
 
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
+import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
+import org.osgi.service.prefs.Preferences;
 
 import eu.geclipse.core.Extensions;
 import eu.geclipse.core.internal.Activator;
+import eu.geclipse.core.internal.model.GridProject;
 import eu.geclipse.core.internal.model.GridRoot;
+import eu.geclipse.core.internal.model.LocalFile;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
@@ -111,6 +118,16 @@ public class GridElementLifecycleManager
     return true;
     
   }
+    
+  private void elementChanged( final IGridElement element ) {
+    
+    int type = IGridModelEvent.ELEMENT_CHANGED;
+    IGridContainer source = element.getParent();
+    IGridElement[] elements = new IGridElement[] { element };
+    
+    queueEvent( type, source, elements );
+    
+  }
   
   /**
    * Handle a project state changed, i.e. project opened or project closed.
@@ -125,6 +142,14 @@ public class GridElementLifecycleManager
       : IGridModelEvent.PROJECT_CLOSED;
     IGridContainer source = project.getParent();
     IGridElement[] elements = new IGridElement[] { project };
+    
+    queueEvent( type, source, elements );
+    
+  }
+  
+  private void queueEvent( final int type,
+                           final IGridElement source,
+                           final IGridElement[] elements ) {
     
     IGridModelEvent event = new GridModelEvent( type, source, elements );
     GridRoot.getGridNotificationService().queueEvent( event );
@@ -162,6 +187,15 @@ public class GridElementLifecycleManager
       if ( element != null ) {
         if ( ( element instanceof IGridProject ) && ( ( flags & IResourceDelta.OPEN ) != 0 ) ) {
           projectStateChanged( ( IGridProject ) element );
+        } else if ( element instanceof LocalFile ) {
+          LocalFile localFile = ( LocalFile ) element;
+          if ( localFile.isProjectFoldersProperties() || localFile.isProjectProperties() ) {
+            elementChanged( localFile.getProject() );
+          } else {
+            elementChanged( element );
+          }
+        } else {
+          elementChanged( element );
         }
       }
     }
