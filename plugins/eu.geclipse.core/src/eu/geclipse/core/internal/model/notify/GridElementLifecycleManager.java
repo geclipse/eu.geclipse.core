@@ -121,7 +121,7 @@ public class GridElementLifecycleManager
     
   private void elementChanged( final IGridElement element ) {
     
-    int type = IGridModelEvent.ELEMENT_CHANGED;
+    int type = IGridModelEvent.ELEMENTS_CHANGED;
     IGridContainer source = element.getParent();
     IGridElement[] elements = new IGridElement[] { element };
     

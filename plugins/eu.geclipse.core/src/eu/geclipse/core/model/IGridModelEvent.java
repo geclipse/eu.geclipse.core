@@ -36,7 +36,7 @@ public interface IGridModelEvent {
   /**
    * ID for an element changed operation.
    */
-  public static final int ELEMENT_CHANGED = 3;
+  public static final int ELEMENTS_CHANGED = 3;
   
   /**
    * ID for an project opened operation.
