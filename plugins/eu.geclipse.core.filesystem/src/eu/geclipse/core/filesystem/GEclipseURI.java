@@ -163,7 +163,7 @@ public class GEclipseURI {
     
     URI result = uri;
     
-    if ( isMasterURI( uri ) ) {
+    if ( uri != null && isMasterURI( uri ) ) {
       
       String scheme = null;
       String userInfo = uri.getUserInfo();
