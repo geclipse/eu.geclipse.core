@@ -16,6 +16,12 @@
 package eu.geclipse.core.internal.model;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ProjectScope;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
+import org.osgi.service.prefs.Preferences;
+
 import eu.geclipse.core.model.impl.ResourceGridElement;
 
 /**
@@ -38,6 +44,14 @@ public class LocalFile extends ResourceGridElement {
     super( file );
   }
   
+  public boolean isProjectFoldersProperties() {
+    return isPropertiesFile( GridProject.PROJECT_FOLDER_NODE );
+  }
+  
+  public boolean isProjectProperties() {
+    return isPropertiesFile( GridProject.PROJECT_NODE );
+  }
+  
   /**
    * Convenience method that returns the <code>IFile</code> out
    * of the resource.
@@ -46,6 +60,27 @@ public class LocalFile extends ResourceGridElement {
    */
   protected IFile getFile() {
     return ( IFile ) getResource();
+  }
+  
+  private boolean isPropertiesFile( final String nodeName ) {
+    
+    IPath folderPath = getPath();
+    IPath folderComparePath = folderPath.removeFileExtension();
+    
+    IPath propertiesPath = getPropertiesPath( nodeName );
+    IPath propertiesComparePath = new Path( getProject().getName() );
+    propertiesComparePath = propertiesComparePath.append( ".settings" );
+    propertiesComparePath.append( propertiesPath.lastSegment() );
+
+    return folderComparePath.equals( propertiesComparePath );
+    
+  }
+  
+  private IPath getPropertiesPath( final String node ) {
+    IProject project = ( IProject ) getProject().getResource();
+    ProjectScope projectScope = new ProjectScope( project );
+    Preferences folderNode = projectScope.getNode( GridProject.PROJECT_FOLDER_NODE );
+    return new Path( folderNode.absolutePath() );
   }
   
 }

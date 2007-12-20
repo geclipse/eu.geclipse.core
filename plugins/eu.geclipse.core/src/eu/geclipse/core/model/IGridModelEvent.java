@@ -34,14 +34,19 @@ public interface IGridModelEvent {
   public static final int ELEMENTS_REMOVED = 2;
   
   /**
+   * ID for an element changed operation.
+   */
+  public static final int ELEMENT_CHANGED = 3;
+  
+  /**
    * ID for an project opened operation.
    */
-  public static final int PROJECT_OPENED = 3;
+  public static final int PROJECT_OPENED = 4;
   
   /**
    * ID for an project closed operation.
    */
-  public static final int PROJECT_CLOSED = 4;
+  public static final int PROJECT_CLOSED = 5;
 
   /**
    * Get the affected elements.
@@ -60,7 +65,7 @@ public interface IGridModelEvent {
   /**
    * Get the type of this event.
    * 
-   * @return Either {@link #ELEMENTS_ADDED} or {@link #ELEMENTS_REMOVED}.
+   * @return The event's type.
    */
   public int getType();
   

@@ -24,6 +24,10 @@ import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.QualifiedName;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
@@ -49,11 +53,14 @@ public class GridProject
     extends ResourceGridContainer
     implements IGridProject {
   
-  private static final String PROJECT_NODE = "eu.geclipse.core"; //$NON-NLS-1$
+  public static final String PROJECT_NODE = "eu.geclipse.core"; //$NON-NLS-1$
   
-  private static final String PROJECT_FOLDER_NODE = "eu.geclipse.core.folders"; //$NON-NLS-1$
+  public static final String PROJECT_FOLDER_NODE = "eu.geclipse.core.folders"; //$NON-NLS-1$
   
   private static final String VO_ATTRIBUTE = "vo"; //$NON-NLS-1$
+  
+  private static final QualifiedName PROJECT_FOLDER_ID_QN
+    = new QualifiedName( Activator.PLUGIN_ID, "grid.project.folder.id" ); //$NON-NLS-1$ //$NON-NLS-2$
   
   private IVirtualOrganization vo;
   
@@ -239,6 +246,28 @@ public class GridProject
     return ( ( IProject ) getResource() ).isOpen();
   }
   
+  //@Override
+  protected IGridElement addElement( final IGridElement element ) throws GridModelException {
+    
+    IGridElement result = super.addElement( element );
+    
+    if ( ( result != null ) && ( result instanceof IGridContainer ) && ! result.isVirtual() ) {
+      try {
+        boolean updated = updateProjectProperties( ( IGridContainer ) element );
+        if ( ! updated ) {
+          updateProjectFolderProperties( ( IGridContainer ) element );
+        }
+      } catch ( CoreException cExc ) {
+        Activator.logException( cExc );
+      } catch ( BackingStoreException bsExc ) {
+        Activator.logException( bsExc );
+      }
+    }
+    
+    return result;
+    
+  }
+  
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.impl.AbstractGridContainer#fetchChildren(org.eclipse.core.runtime.IProgressMonitor)
    */
@@ -280,13 +309,75 @@ public class GridProject
         }
       }
       
-      //loadProjectFolders( projectScope );
-      
     } catch( BackingStoreException bsExc ) {
       Activator.logException( bsExc );
     } catch ( GridModelException gmExc ) {
       Activator.logException( gmExc );
     }
+    
+  }
+  
+  private boolean updateProjectFolderProperties( final IGridContainer folder )
+      throws CoreException, BackingStoreException {
+    
+    boolean result = false;
+    
+    String name = folder.getName();
+    
+    IScopeContext projectScope = new ProjectScope( ( IProject ) getResource() );
+    Preferences folderNode = projectScope.getNode( PROJECT_FOLDER_NODE );
+    
+    for ( String id : folderNode.keys() ) {
+      String label = folderNode.get( id, null );
+      if ( name.equals( label ) ) {
+        IResource resource = folder.getResource();
+        resource.setSessionProperty( PROJECT_FOLDER_ID_QN, id );
+        result = true;
+      }
+    }
+    
+    return result;
+    
+  }
+  
+  private boolean updateProjectProperties( final IGridContainer folder )
+      throws CoreException, BackingStoreException {
+    
+    boolean result = false;
+    
+    IResource resource = folder.getResource();
+    String id = ( String ) resource.getSessionProperty( PROJECT_FOLDER_ID_QN );
+    String name = folder.getName();
+    
+    if ( id != null ) {
+      
+      IScopeContext projectScope = new ProjectScope( ( IProject ) getResource() );
+      final Preferences folderNode = projectScope.getNode( PROJECT_FOLDER_NODE );
+      
+      String label = folderNode.get( id, null );
+      if ( ! name.equals( label ) ) {
+        folderNode.put( id, name );
+        Job syncJob = new Job( "syncProjectPreferences@" + getName() ) {
+          @Override
+          protected IStatus run( final IProgressMonitor monitor ) {
+            IStatus status = Status.OK_STATUS;
+            try {
+              folderNode.flush();
+            } catch ( BackingStoreException bsExc ) {
+              Activator.logException( bsExc );
+              status = Status.CANCEL_STATUS;
+            }
+            return status;
+          }
+        };
+        syncJob.setSystem( true );
+        syncJob.schedule();
+        result = true;
+      }
+      
+    }
+    
+    return result;
     
   }
   
