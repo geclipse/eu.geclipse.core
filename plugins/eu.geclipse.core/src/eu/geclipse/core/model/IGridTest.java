@@ -45,7 +45,7 @@ public interface IGridTest extends IGridElement, IManageable {
    * 
    * @return List of dates of test submission
    */
-  public List<Date> getTestSubmissionDates(final String resourceName);
+  public List<Date> getTestSubmissionDates( final String resourceName );
 
   /**
    * Method to access text interpretation of single test for given single test's
@@ -94,4 +94,20 @@ public interface IGridTest extends IGridElement, IManageable {
    * @return date of last test submission
    */
   public Date getLastUpdate();
+
+  /**
+   * This method gives access to ordered collection of sub tests result. All
+   * test results returned by this method are results for given resource. Those
+   * results are grouped by date - which means that collection itself is divided
+   * into another collections, each of which keeps test result for given
+   * resource and date. In other words this method returns collection of
+   * collections. Those internal collections keep test result for given resource
+   * and date.<br>
+   * <br>
+   * Method used by providers for Test Details View.
+   * 
+   * @param resourceName name of tested resource (e.g. host name)
+   * @return List of List of
+   */
+  public List<List<IGridTestResult>> getTestResultsForResourceForDate( final String resourceName);
 }
