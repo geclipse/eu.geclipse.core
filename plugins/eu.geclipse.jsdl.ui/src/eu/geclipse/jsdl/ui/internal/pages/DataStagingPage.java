@@ -104,7 +104,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
   
   private ImageDescriptor helpDesc = null;
   private TableColumn column;    
-  private final int WIDGET_HEIGHT = 100;
+  private final int WIDGET_HEIGHT = 170;
   private boolean contentRefreshed = false;
   private boolean dirtyFlag = false;
   
