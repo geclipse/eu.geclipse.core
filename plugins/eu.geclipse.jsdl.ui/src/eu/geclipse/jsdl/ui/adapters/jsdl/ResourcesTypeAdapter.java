@@ -112,6 +112,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     
   private boolean adapterRefreshed = false;
   private boolean isNotifyAllowed = true;  
+  private final String EMPTY_STRING = ""; //$NON-NLS-1$
   
   
   
@@ -527,7 +528,11 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     EStructuralFeature eStructuralFeature = this.resourcesType.eClass()
     .getEStructuralFeature( JsdlPackage.RESOURCES_TYPE__OPERATING_SYSTEM );
     
-    if ( !this.resourcesType.eIsSet( eStructuralFeature ) ) {      
+    if ( !this.resourcesType.eIsSet( eStructuralFeature ) ) {
+      // Make sure the Operating System Type is not NULL. If NULL then instantiate it.
+      if (this.operatingSystemType == null) {
+        this.operatingSystemType = JsdlFactory.eINSTANCE.createOperatingSystemType();
+      }
       this.resourcesType.eSet( eStructuralFeature, this.operatingSystemType );
     }
     
@@ -543,9 +548,14 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     .getEStructuralFeature( JsdlPackage.RESOURCES_TYPE__FILE_SYSTEM);
     
     Collection<FileSystemType> collection = new ArrayList<FileSystemType>();
+
+    // Make sure the FileSystem Type is not NULL. If NULL then instantiate it.
+    if (this.fileSystemType == null) {
+        this.fileSystemType = JsdlFactory.eINSTANCE.createFileSystemType();
+    }
     collection.add( this.fileSystemType );
     
-    if ( !this.resourcesType.eIsSet( eStructuralFeature ) ) {      
+    if ( !this.resourcesType.eIsSet( eStructuralFeature ) ) {   
       this.resourcesType.eSet( eStructuralFeature, collection );
     }
     
@@ -561,7 +571,11 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     .getEStructuralFeature( JsdlPackage.RESOURCES_TYPE__CPU_ARCHITECTURE );
     
      
-    if ( !this.resourcesType.eIsSet( eStructuralFeature ) ) {      
+    if ( !this.resourcesType.eIsSet( eStructuralFeature ) ) {
+      // Make sure the CPU Architecture Type is not NULL. If NULL then instantiate it.
+      if (this.cpuArchitectureType == null) {
+        this.cpuArchitectureType = JsdlFactory.eINSTANCE.createCPUArchitectureType();
+      }
       this.resourcesType.eSet( eStructuralFeature, this.cpuArchitectureType );
     }
     
@@ -599,6 +613,8 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     /* Populate the Combo Box with the CPU Architecture Literals */    
     EEnum cFEnum = JsdlPackage.Literals.OPERATING_SYSTEM_TYPE_ENUMERATION;
  
+    // Adding Empty String to allow disabling O/S Type.
+    widget.add(this.EMPTY_STRING);
     
     for (int i=0; i<cFEnum.getELiterals().size(); i++){         
          widget.add( cFEnum.getEEnumLiteral( i ).toString() );
@@ -611,16 +627,29 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
         
     widget.addSelectionListener(new SelectionListener() {
       public void widgetSelected(final SelectionEvent e) {
-        checkOSElement();   
+          
         String selectedOSName = widget.getItem( widget.getSelectionIndex() );
+        if ( selectedOSName == ResourcesTypeAdapter.this.EMPTY_STRING ) { 
+          
+          deleteElement( ResourcesTypeAdapter.this.operatingSystemType );
+          ResourcesTypeAdapter.this.operatingSystemType = null;
+                    
+        }
+        else {
+          checkOSElement();   
+          
 
-        ResourcesTypeAdapter.this.operatingSystemTypeType
-         .setOperatingSystemName(OperatingSystemTypeEnumeration
-                                 .get( selectedOSName ) );
+          ResourcesTypeAdapter.this.operatingSystemTypeType
+                           .setOperatingSystemName(OperatingSystemTypeEnumeration
+                                   .get( selectedOSName ) );
         
-        ResourcesTypeAdapter.this.operatingSystemType
-                             .setOperatingSystemType(
-                             ResourcesTypeAdapter.this.operatingSystemTypeType);
+        
+          ResourcesTypeAdapter.this.operatingSystemType
+                                  .setOperatingSystemType(
+                                  ResourcesTypeAdapter.this.operatingSystemTypeType);
+        
+          
+        }
         ResourcesTypeAdapter.this.contentChanged();
       }
 
@@ -983,7 +1012,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
      * Add an EMPTY item value so that the user can disable the specific 
      * feature 
      */
-    widget.add(""); //$NON-NLS-1$
+    widget.add(this.EMPTY_STRING);
     widget.add( "true" ); //$NON-NLS-1$
     widget.add( "false" ); //$NON-NLS-1$
         
