@@ -14,6 +14,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Reader;
 import java.net.URISyntaxException;
@@ -43,7 +44,11 @@ import org.eclipse.emf.ecore.xmi.impl.XMLMapImpl;
 
 import eu.geclipse.core.CoreProblems;
 import eu.geclipse.core.GridException;
+import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridJobDescription;
+import eu.geclipse.core.model.IGridModelEvent;
+import eu.geclipse.core.model.IGridModelListener;
+import eu.geclipse.core.model.impl.AbstractGridContainer;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
 import eu.geclipse.jsdl.internal.JsdlAdaptersPlugin;
 import eu.geclipse.jsdl.model.ApplicationType;
@@ -107,6 +112,10 @@ public class JSDLJobDescription extends ResourceGridContainer
   private JobDescriptionType jobDescription;
   private JobIdentificationType jobIdentification;
   private DocumentRoot documentRoot;
+  
+  static { 
+    AbstractGridContainer.staticAddGridModelListener( createGridModelListener() );
+  }
 
   /**
    * Create a new JSDL job description from the specified {@link IFile}.
@@ -116,14 +125,55 @@ public class JSDLJobDescription extends ResourceGridContainer
   public JSDLJobDescription( final IFile file ) {
     super( file );
     try {
-      if( file.getContents().read() != -1 ) {
-        loadModel( file );
+      InputStream fileContent = file.getContents();
+      try {
+        if( fileContent.read() != -1 ) {
+          loadModel( file );
+        }
+      }
+      catch( IOException e ) {
+        // TODO katis - error handling        
+      } finally {
+        try {
+          fileContent.close();
+        } catch( IOException exception ) {         
+          // ignore closing errors
+        }
       }
     } catch( CoreException e ) {
       // TODO katis - error handling
-    } catch( IOException e ) {
-      // TODO katis - error handling
     }
+  }
+
+  private static IGridModelListener createGridModelListener() {
+    return new IGridModelListener() {
+
+      public void gridModelChanged( final IGridModelEvent event ) {
+        switch( event.getType() ) {
+          case IGridModelEvent.ELEMENTS_CHANGED:
+            if( event.getElements().length > 0 ) {
+              IGridElement element = event.getElements()[0];
+
+              if( element instanceof JSDLJobDescription ) {
+                onJsdlChanged( event.getElements() );                
+              }
+            }
+            break;
+        }
+        
+      }
+
+      private void onJsdlChanged( final IGridElement[] elements ) {
+        for( IGridElement gridElement : elements ) {
+          if( gridElement instanceof JSDLJobDescription ) {
+            JSDLJobDescription jsdlDescription = ( JSDLJobDescription )gridElement;
+
+            jsdlDescription.loadModel( (IFile)jsdlDescription.getResource() );     
+          }
+        }        
+      }
+      
+    };
   }
 
   /**
