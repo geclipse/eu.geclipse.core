@@ -19,7 +19,7 @@ package eu.geclipse.core.model;
 /**
  * An interfaces for integrating visualisation into the Grid model.
  */
-public interface IGridVisualization extends IGridContainer {
+public interface IGridVisualisation extends IGridContainer {
 
   /**
    * @return user's description for the specific VTK pipeline 
