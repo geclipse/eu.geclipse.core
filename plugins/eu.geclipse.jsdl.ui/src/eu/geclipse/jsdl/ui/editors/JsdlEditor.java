@@ -34,7 +34,6 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
@@ -84,7 +83,6 @@ import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorSite;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
-
 import eu.geclipse.jsdl.model.DocumentRoot;
 import eu.geclipse.jsdl.model.JobDefinitionType;
 import eu.geclipse.jsdl.ui.adapters.jsdl.JsdlAdaptersFactory;
@@ -172,7 +170,8 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
      commandStack.addCommandStackListener
       (new CommandStackListener()
        {
-         public void commandStackChanged(final EventObject event)
+         @SuppressWarnings("synthetic-access")
+        public void commandStackChanged(final EventObject event)
          {
            Composite container2 = getContainer();
           container2.getDisplay().asyncExec
@@ -335,6 +334,8 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
       return site;
   }
   
+    
+  
   @Override
   public void init( final IEditorSite site, final IEditorInput editorInput ) {
     setSite(site);
@@ -481,7 +482,9 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
           this.changedResources.clear();
           this.savedResources.clear();
         }
-      }
+    }
+    
+    
     
     protected void handleChangedResources()
       {
