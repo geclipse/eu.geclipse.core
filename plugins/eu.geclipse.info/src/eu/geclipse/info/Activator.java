@@ -17,10 +17,17 @@
 
 package eu.geclipse.info;
 
+import java.util.ArrayList;
+
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.osgi.framework.BundleContext;
+
+import eu.geclipse.info.glue.AbstractGlueTable;
+import eu.geclipse.info.model.IExtentedGridInfoService;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -38,6 +45,40 @@ public class Activator extends Plugin {
    */
   public Activator() {
     plugin = this;
+    
+    Job storeInitializeJob=new Job("BDIIStore Initializer"){ //$NON-NLS-1$
+      
+      @Override
+      protected IStatus run( final IProgressMonitor monitor )
+      {
+        ArrayList<IExtentedGridInfoService> infoServicesArray = null;
+        infoServicesArray = InfoServiceFactory.getAllExistingInfoService();
+ 
+        for (int i=0; i<infoServicesArray.size(); i++)
+        {
+          IExtentedGridInfoService infoService = infoServicesArray.get( i );
+          infoService.scheduleFetch();
+          infoService.getStore().addListener( new IGlueStoreChangeListerner(){
+            public void infoChanged( final ArrayList<AbstractGlueTable> modifiedGlueEntries ) {
+              //Do nothing, just listen so the the glueStore starts fetching
+            }      
+          }, null );
+              
+        }
+
+        /*
+        BDIIService.scheduleFetch();
+        BDIIService.glueStore.addListener( new IGlueStoreChangeListerner(){
+          public void infoChanged( final ArrayList<AbstractGlueTable> modifiedGlueEntries ) {
+            //Do nothing, just listen so the the glueStore starts fetching
+          }      
+        }, null );
+        */
+        return new Status(Status.OK,"eu.geclipse.glite.info","BDII initialized");  //$NON-NLS-1$  //$NON-NLS-2$
+      }
+      
+    };
+    storeInitializeJob.schedule( );
   }
 
   /*

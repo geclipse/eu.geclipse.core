@@ -31,7 +31,7 @@ public interface IGlueInfoStore {
   public void addListener(IGlueStoreChangeListerner listener, String objectName);
 
   /**
-   * Remove a specvific listener
+   * Remove a specific listener
    * @param listener
    * @param resourceTypeName
    */

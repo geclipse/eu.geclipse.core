@@ -1,5 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.2"?>
 <plugin>
-
+   <extension-point id="infoService" name="InfoService" schema="schema/infoService.exsd"/>
+	<extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension targetID="eu.geclipse.ui.gEclipsePerspective">
+         <view
+               id="eu.geclipse.info.views.GlueInfoViewer"
+               ratio="0.5"
+               relationship="right"
+               relative="org.eclipse.ui.views.TaskList"/>
+      </perspectiveExtension>
+      <perspectiveExtension targetID="eu.geclipse.ui.gEclipsePerspective">
+         <view
+               id="eu.geclipse.info.views.MetricsViewer"
+               ratio="0.5"
+               relationship="right"
+               relative="org.eclipse.ui.views.TaskList"/>
+      </perspectiveExtension>
+   </extension>
+	<extension
+         point="org.eclipse.ui.views">
+      <view
+            category="eu.geclipse.ui.viewcategory"
+            class="eu.geclipse.info.views.GlueInfoViewer"
+            icon="icons/eview16/glueinfo.gif"
+            id="eu.geclipse.info.views.GlueInfoViewer"
+            name="Glue Information Viewer"/>
+   </extension>
 </plugin>
