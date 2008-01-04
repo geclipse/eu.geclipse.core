@@ -23,17 +23,17 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
-import eu.geclipse.core.model.IGridVisualization;
+import eu.geclipse.core.model.IGridVisualisation;
 
 
 /**
  * @author sgirtel
  *
  */
-public class VisualizationView extends ViewPart {
+public class VisualisationView extends ViewPart {
 
   private CTabFolder cTabFolder;
-  private IGridVisualization vtkPipeline = null;
+  private IGridVisualisation vtkPipeline = null;
   private String renderingSite;
 
   @Override
@@ -82,7 +82,7 @@ public class VisualizationView extends ViewPart {
    * @param vtkPipeline 
    * @param renderingSite 
    */
-  public void setPipeline( final IGridVisualization vtkPipeline, String renderingSite ) {
+  public void setPipeline( final IGridVisualisation vtkPipeline, String renderingSite ) {
       this.vtkPipeline = vtkPipeline;
       this.renderingSite = renderingSite;
   }

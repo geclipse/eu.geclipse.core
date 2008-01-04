@@ -26,9 +26,9 @@ import org.eclipse.ui.actions.SelectionListenerAction;
 
 import eu.geclipse.core.CoreProblems;
 import eu.geclipse.core.GridException;
-import eu.geclipse.core.model.IGridVisualization;
+import eu.geclipse.core.model.IGridVisualisation;
 import eu.geclipse.ui.dialogs.NewProblemDialog;
-import eu.geclipse.ui.views.VisualizationView;
+import eu.geclipse.ui.views.VisualisationView;
 
 
 /**
@@ -39,7 +39,7 @@ public class RenderLocalVTKPipelineAction extends SelectionListenerAction {
 
   private IWorkbenchSite site;
 
-  private ArrayList< IGridVisualization > vis;
+  private ArrayList< IGridVisualisation > vis;
   
   protected RenderLocalVTKPipelineAction( String text ) {
     super( text );
@@ -62,12 +62,12 @@ public class RenderLocalVTKPipelineAction extends SelectionListenerAction {
   public void run() {
     Object element
       = getStructuredSelection().getFirstElement();
-    if ( element != null && ((IGridVisualization) element).isValid() ) {
+    if ( element != null && ((IGridVisualisation) element).isValid() ) {
       try {
-        IViewPart view = this.site.getPage().showView( "eu.geclipse.ui.views.visualizationview" ); //$NON-NLS-1$
+        IViewPart view = this.site.getPage().showView( "eu.geclipse.ui.views.visualisationview" ); //$NON-NLS-1$
         view.setFocus();
-        ( ( VisualizationView )view ).setPipeline( (IGridVisualization) element, "local" ); //$NON-NLS-1$
-        ( ( VisualizationView )view ).render();
+        ( ( VisualisationView )view ).setPipeline( (IGridVisualisation) element, "local" ); //$NON-NLS-1$
+        ( ( VisualisationView )view ).render();
       } catch( PartInitException e ) {
         NewProblemDialog.openProblem( null,
                                       Messages.getString( "RenderLocalVTKPipelineAction.errorDialogTitle" ), //$NON-NLS-1$
@@ -90,7 +90,7 @@ public class RenderLocalVTKPipelineAction extends SelectionListenerAction {
    */
   @Override
   protected boolean updateSelection( final IStructuredSelection selection ) {
-    this.vis = new ArrayList< IGridVisualization >();
+    this.vis = new ArrayList< IGridVisualisation >();
     boolean enabled = super.updateSelection( selection );
     Iterator< ? > iter = selection.iterator();
     while( iter.hasNext() && enabled ) {
@@ -98,13 +98,13 @@ public class RenderLocalVTKPipelineAction extends SelectionListenerAction {
       boolean isVisualizableFile = isVisualizable( element );
       enabled &= isVisualizableFile;
       if( isVisualizableFile ) {
-        this.vis.add( ( IGridVisualization )element );
+        this.vis.add( ( IGridVisualisation )element );
       }
     }
     return enabled;
   }
   
   protected boolean isVisualizable( final Object element ) {
-    return element instanceof eu.geclipse.core.model.IGridVisualization;
+    return element instanceof eu.geclipse.core.model.IGridVisualisation;
   }
 }

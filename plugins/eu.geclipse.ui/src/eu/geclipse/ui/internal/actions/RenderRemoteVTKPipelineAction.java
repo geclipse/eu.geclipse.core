@@ -26,7 +26,7 @@ import org.eclipse.ui.actions.SelectionListenerAction;
 
 import eu.geclipse.core.CoreProblems;
 import eu.geclipse.core.GridException;
-import eu.geclipse.core.model.IGridVisualization;
+import eu.geclipse.core.model.IGridVisualisation;
 import eu.geclipse.ui.dialogs.NewProblemDialog;
 
 
@@ -37,7 +37,7 @@ import eu.geclipse.ui.dialogs.NewProblemDialog;
 public class RenderRemoteVTKPipelineAction extends SelectionListenerAction {
 
   private IWorkbenchSite site;
-  private ArrayList< IGridVisualization > vis;
+  private ArrayList< IGridVisualisation > vis;
   
   protected RenderRemoteVTKPipelineAction( String text ) {
     super( text );
@@ -95,7 +95,7 @@ public class RenderRemoteVTKPipelineAction extends SelectionListenerAction {
    */
   @Override
   protected boolean updateSelection( final IStructuredSelection selection ) {
-    this.vis = new ArrayList<IGridVisualization>();
+    this.vis = new ArrayList<IGridVisualisation>();
     boolean enabled = super.updateSelection( selection );
     Iterator<?> iter = selection.iterator();
     while( iter.hasNext() && enabled ) {
@@ -103,13 +103,13 @@ public class RenderRemoteVTKPipelineAction extends SelectionListenerAction {
       boolean isVisualizableFile = isVisualizable( element );
       enabled &= isVisualizableFile;
       if( isVisualizableFile ) {
-        this.vis.add( ( IGridVisualization )element );
+        this.vis.add( ( IGridVisualisation )element );
       }
     }
     return enabled;
   }
 
   protected boolean isVisualizable( final Object element ) {
-    return element instanceof eu.geclipse.core.model.IGridVisualization;
+    return element instanceof eu.geclipse.core.model.IGridVisualisation;
   }
 }

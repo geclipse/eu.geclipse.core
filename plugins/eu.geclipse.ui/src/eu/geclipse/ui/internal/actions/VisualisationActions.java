@@ -25,7 +25,7 @@ import org.eclipse.ui.navigator.ICommonMenuConstants;
  * @author sgirtel
  *
  */
-public class VisualizationActions extends ActionGroup {
+public class VisualisationActions extends ActionGroup {
   
   /**
    * The workbench this action group belongs to.
@@ -38,7 +38,7 @@ public class VisualizationActions extends ActionGroup {
   /**
    * @param site
    */
-  public VisualizationActions(final IWorkbenchPartSite site){
+  public VisualisationActions(final IWorkbenchPartSite site){
     this.site = site;
     ISelectionProvider selectionProvider = site.getSelectionProvider();
     this.renderLocalPipelineAction = new RenderLocalVTKPipelineAction( site );
