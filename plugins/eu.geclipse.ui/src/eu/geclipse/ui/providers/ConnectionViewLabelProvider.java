@@ -48,9 +48,7 @@ public class ConnectionViewLabelProvider
     "G", //$NON-NLS-1$
     "T", //$NON-NLS-1$
     "P", //$NON-NLS-1$
-    "E", //$NON-NLS-1$
-    "Z", //$NON-NLS-1$
-    "Y" //$NON-NLS-1$
+    "E" //$NON-NLS-1$
   };
   
   /**
@@ -61,7 +59,7 @@ public class ConnectionViewLabelProvider
   /**
    * Format string for the file size format.
    */
-  private static final String FILE_SIZE_FORMAT = "0.###"; //$NON-NLS-1$
+  private static final String FILE_SIZE_FORMAT = "0.#"; //$NON-NLS-1$
   
   /**
    * Date format used to format the modification time.
@@ -144,11 +142,23 @@ public class ConnectionViewLabelProvider
     String result = "N/A"; //$NON-NLS-1$
     if ( fileInfo != null ) {
       long length = fileInfo.getLength();
-      if ( length != EFS.NONE ) {
+      /*
+       * getLength() returns 0 (EFS.NONE) if the size could not be
+       * computed or the file doesn't exist. But we rather show "0 B"
+       * for strange cases than "N/A" for true empty files...
+       */
+      if ( length == 0 ) {
+        result = "0 " + FILE_SIZE_UNIT; //$NON-NLS-1$
+      } else if ( length > 0 ) {
         double mag = Math.floor( Math.log( length ) / Math.log( 1024 ) );
         if ( mag >= prefixes.length ) mag = prefixes.length - 1;
         double ref = Math.pow( 1024., mag );
         double value = length / ref;
+        /*
+         * The DecimalFormat.format() method rounds the number up if necessary.
+         * So we will end up with "1024 kB" if the file is a few Bytes smaller than
+         * 1024 kB... What do other tools do?
+         */
         result
           = this.sizeFormat.format( value )
           + " " + prefixes[ ( int ) mag ] + FILE_SIZE_UNIT; //$NON-NLS-1$

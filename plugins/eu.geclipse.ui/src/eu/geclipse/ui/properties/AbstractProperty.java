@@ -101,12 +101,14 @@ abstract public class AbstractProperty<ESourceType>
   protected String getBytesFormattedString( final double value ) {
     String formattedString;
     double smallerValue = value;
-    ArrayList<String> suffixList = new ArrayList<String>( 5 );
+    ArrayList<String> suffixList = new ArrayList<String>( 7 );
     suffixList.add( "B" );  //$NON-NLS-1$
     suffixList.add( "kB" );  //$NON-NLS-1$
     suffixList.add( "MB" );  //$NON-NLS-1$
     suffixList.add( "GB" );  //$NON-NLS-1$
     suffixList.add( "TB" );  //$NON-NLS-1$
+    suffixList.add( "PB" );  //$NON-NLS-1$
+    suffixList.add( "EB" );  //$NON-NLS-1$
     Iterator<String> iterator = suffixList.iterator();
     String suffixString = iterator.next();
     while( iterator.hasNext() && smallerValue > 1024 ) {
