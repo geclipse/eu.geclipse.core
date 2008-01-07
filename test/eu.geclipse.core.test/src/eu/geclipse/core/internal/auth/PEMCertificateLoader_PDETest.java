@@ -25,6 +25,7 @@ import org.junit.Test;
 
 import eu.geclipse.core.GridException;
 import eu.geclipse.core.auth.ICaCertificate;
+import eu.geclipse.core.reporting.ProblemException;
 
 /**this class tests the methods in {@link PEMCertificateLoader}
  * @author tao-j
@@ -58,10 +59,11 @@ public class PEMCertificateLoader_PDETest {
 
   /**tests the method {@link PEMCertificateLoader#getCertificate(IPath)}
    * @throws GridException 
+   * @throws ProblemException 
    * 
    */
   @Test
-  public void testGetCertificateIPath() throws GridException {
+  public void testGetCertificateIPath() throws ProblemException {
       IPath certpath = new Path( "file:///d:/geclipsetest/"); //$NON-NLS-1$
       ICaCertificate cert = loader.getCertificate( certpath );
       Assert.assertNull( cert );

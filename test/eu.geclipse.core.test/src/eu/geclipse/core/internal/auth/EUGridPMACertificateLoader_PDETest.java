@@ -26,6 +26,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import eu.geclipse.core.GridException;
+import eu.geclipse.core.reporting.ProblemException;
 
 
 /**this class tests the methods in {@link EUGridPMACertificateLoader}
@@ -72,9 +73,10 @@ public class EUGridPMACertificateLoader_PDETest {
    *   (URI, String, org.eclipse.core.runtime.IProgressMonitor)}
    * @throws URISyntaxException 
    * @throws GridException 
+   * @throws ProblemException 
    */
   @Test
-  public void testGetCertificateURIStringIProgressMonitor() throws URISyntaxException, GridException {
+  public void testGetCertificateURIStringIProgressMonitor() throws URISyntaxException, ProblemException {
     URI uri = new URI( "http://www.eugridpma.org/distribution/igtf/current/accredited/tgz"); //$NON-NLS-1$
     Assert.assertEquals( "AEGIS",loader.getCertificate( uri, "ca_AEGIS-1.16.tar.gz", new NullProgressMonitor() ).getID()); //$NON-NLS-1$ //$NON-NLS-2$
   }
@@ -83,10 +85,11 @@ public class EUGridPMACertificateLoader_PDETest {
    *   (URI, org.eclipse.core.runtime.IProgressMonitor)}
    * @throws URISyntaxException 
    * @throws GridException 
+   * @throws ProblemException 
    * 
    */
   @Test
-  public void testGetCertificateList() throws URISyntaxException, GridException {
+  public void testGetCertificateList() throws URISyntaxException, ProblemException {
     URI uri = new URI( "http://www.eugridpma.org/distribution/igtf/current/accredited/tgz"); //$NON-NLS-1$
     String[] list = loader.getCertificateList( uri, null );
     Assert.assertNotNull( list );
