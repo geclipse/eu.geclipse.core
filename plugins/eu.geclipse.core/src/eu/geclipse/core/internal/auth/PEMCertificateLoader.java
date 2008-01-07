@@ -25,10 +25,11 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 
-import eu.geclipse.core.CoreProblems;
-import eu.geclipse.core.GridException;
+import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.auth.ICaCertificate;
 import eu.geclipse.core.auth.ICaCertificateLoader;
+import eu.geclipse.core.internal.Activator;
+import eu.geclipse.core.reporting.ProblemException;
 
 /**
  * Certificate loader for {@link PEMCertificate}s.
@@ -37,16 +38,16 @@ public class PEMCertificateLoader
     implements ICaCertificateLoader {
   
   public ICaCertificate getCertificate( final IPath path )
-      throws GridException {
+      throws ProblemException {
     try {
       return PEMCertificate.readFromFile( path );
     } catch ( IOException ioExc ) {
-      throw new GridException( CoreProblems.UNSPECIFIED_IO_PROBLEM, ioExc );
+      throw new ProblemException( ICoreProblems.UNSPECIFIED_IO_PROBLEM, ioExc, Activator.PLUGIN_ID );
     }
   }
 
   public ICaCertificate getCertificate( final URI uri, final String certID, final IProgressMonitor monitor )
-      throws GridException {
+      throws ProblemException {
     
     IProgressMonitor lMonitor
       = monitor == null
@@ -64,7 +65,7 @@ public class PEMCertificateLoader
       result = PEMCertificate.readFromFile( filePath );
       lMonitor.worked( 1 );
     } catch ( IOException ioExc ) {
-      throw new GridException( CoreProblems.UNSPECIFIED_IO_PROBLEM, ioExc );
+      throw new ProblemException( ICoreProblems.UNSPECIFIED_IO_PROBLEM, ioExc, Activator.PLUGIN_ID );
     } finally {
       lMonitor.done();
     }
@@ -74,7 +75,7 @@ public class PEMCertificateLoader
   }
 
   public String[] getCertificateList( final URI uri, final IProgressMonitor monitor )
-      throws GridException {
+      throws ProblemException {
     File dirFile = new File( uri );
     String[] result = dirFile.list( new FilenameFilter() {
       public boolean accept( final File dir, final String name ) {

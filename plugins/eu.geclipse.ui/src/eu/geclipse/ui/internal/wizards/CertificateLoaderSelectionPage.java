@@ -19,8 +19,12 @@ import java.util.ArrayList;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.jface.wizard.IWizardContainer;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
@@ -91,6 +95,16 @@ public class CertificateLoaderSelectionPage extends WizardPage {
       @Override
       public void widgetSelected( final SelectionEvent e ) {
         setPageComplete( CertificateLoaderSelectionPage.this.list.getSelectionCount() > 0 );
+      }
+    } );
+    this.list.addMouseListener( new MouseAdapter() {
+      @SuppressWarnings("synthetic-access")
+      @Override
+      public void mouseDoubleClick( final MouseEvent e ) {
+        setPageComplete( CertificateLoaderSelectionPage.this.list.getSelectionCount() > 0 );
+        IWizardPage nextPage = CertificateLoaderSelectionPage.this.getNextPage();
+        IWizardContainer container = CertificateLoaderSelectionPage.this.getContainer();
+        container.showPage( nextPage );
       }
     } );
     

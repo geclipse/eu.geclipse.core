@@ -28,14 +28,13 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 
-import eu.geclipse.core.GridException;
 import eu.geclipse.core.auth.ICaCertificateLoader;
-import eu.geclipse.ui.dialogs.NewProblemDialog;
+import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 
 public class CertificateChooserPage extends WizardPage {
   
@@ -167,14 +166,14 @@ public class CertificateChooserPage extends WizardPage {
           try {
             String[] certificateList = loader.getCertificateList( uri, monitor );
             CertificateChooserPage.this.viewer.setInput( certificateList );
-          } catch ( GridException gExc ) {
-            throw new InvocationTargetException( gExc );
+          } catch ( ProblemException pExc ) {
+            throw new InvocationTargetException( pExc );
           }
         }
       } );
     } catch ( InvocationTargetException itExc ) {
       Throwable cause = itExc.getCause();
-      NewProblemDialog.openProblem(
+      ProblemDialog.openProblem(
           getShell(),
           "Import Failed",
           "Unable to load certificate list",

@@ -87,55 +87,6 @@
    </extension>
    <extension
          point="eu.geclipse.core.problemReporting">
-      <problem
-            description="Failed to establish internet connection"
-            id="eu.geclipse.core.problem.connectionFailed"
-            mailto="contact@geclipse.eu"
-            text="Unable to establish connection">
-         <solutionReference
-               referenceID="eu.geclipse.core.solution.checkInternetConnection">
-         </solutionReference>
-         <solutionReference
-               referenceID="eu.geclipse.core.solution.checkProxySettings">
-         </solutionReference>
-      </problem>
-      <problem
-            description="A timeout has occurred on a socket read or accept"
-            id="eu.geclipse.core.problem.connectionTimeout"
-            mailto="contact@geclipse.eu">
-         <solutionReference
-               referenceID="eu.geclipse.core.solution.serverDown">
-         </solutionReference>
-         <solutionReference
-               referenceID="eu.geclipse.core.solution.checkTimeoutSettings">
-         </solutionReference>
-      </problem>
-      <problem
-            description="Unspecified IO problem"
-            id="eu.geclipse.core.problem.unspecifiedIO"
-            mailto="contact@geclipse.eu">
-      </problem>
-      <solution
-            description="Check your internet connection"
-            id="eu.geclipse.core.solution.checkInternetConnection"
-            text="Check your internet connection">
-      </solution>
-      <solution
-            description="Check your proxy settings"
-            id="eu.geclipse.core.solution.checkProxySettings"
-            text="Check your proxy settings">
-         <showPreferencePageTag
-               preferencePageID="org.eclipse.ui.net.NetPreferences">
-         </showPreferencePageTag>
-      </solution>
-      <solution
-            description="Set your connection timeout settings to a higher value"
-            id="eu.geclipse.core.solution.checkTimeoutSettings">
-      </solution>
-      <solution
-            description="The server may be down. Contact the administrator."
-            id="eu.geclipse.core.solution.serverDown">
-      </solution>
    </extension>
    <extension
          point="eu.geclipse.core.reporting.problemReporting">

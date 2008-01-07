@@ -34,11 +34,12 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
-import eu.geclipse.core.CoreProblems;
-import eu.geclipse.core.GridException;
+import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.Preferences;
 import eu.geclipse.core.auth.ICaCertificate;
 import eu.geclipse.core.auth.ICaCertificateLoader;
+import eu.geclipse.core.internal.Activator;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.core.util.tar.TarArchiveException;
 import eu.geclipse.core.util.tar.TarEntry;
 import eu.geclipse.core.util.tar.TarInputStream;
@@ -54,16 +55,16 @@ public class EUGridPMACertificateLoader
     = "http://www.eugridpma.org/distribution/igtf/current/accredited/tgz"; //$NON-NLS-1$
   
   public ICaCertificate getCertificate( final IPath path )
-      throws GridException {
+      throws ProblemException {
     try {
       return EUGridPMACertificate.readFromFile( path );
     } catch ( IOException ioExc ) {
-      throw new GridException( CoreProblems.UNSPECIFIED_IO_PROBLEM, ioExc );
+      throw new ProblemException( ICoreProblems.UNSPECIFIED_IO_PROBLEM, ioExc, Activator.PLUGIN_ID );
     }
   }
   
   public ICaCertificate getCertificate( final URI uri, final String certID, final IProgressMonitor monitor )
-      throws GridException {
+      throws ProblemException {
     
     IProgressMonitor lMonitor
       = monitor == null
@@ -86,7 +87,7 @@ public class EUGridPMACertificateLoader
       try {
         connection.connect();
       } catch ( SocketTimeoutException toExc ) {
-        throw new GridException( CoreProblems.CONNECTION_TIMEOUT, toExc );
+        throw new ProblemException( ICoreProblems.CONNECTION_TIMEOUT, toExc, Activator.PLUGIN_ID );
       }
       lMonitor.worked( 1 );
       
@@ -96,21 +97,25 @@ public class EUGridPMACertificateLoader
       GZIPInputStream zStream = new GZIPInputStream( bStream );
       TarInputStream tiStream = new TarInputStream( zStream );
       TarEntry tEntry;
-      while ( ( tEntry = tiStream.getNextEntry() ) != null ) {
-        if ( !tEntry.isDirectory() ) {
-          
-          IPath oPath = tEntry.getPath();
-          String extension = oPath.getFileExtension();
-          
-          if ( PEMCertificate.CERT_FILE_EXTENSION.equalsIgnoreCase( extension ) ) {
-            certificateData = readFromStream( tiStream );
+      try {
+        while ( ( tEntry = tiStream.getNextEntry() ) != null ) {
+          if ( !tEntry.isDirectory() ) {
+            
+            IPath oPath = tEntry.getPath();
+            String extension = oPath.getFileExtension();
+            
+            if ( PEMCertificate.CERT_FILE_EXTENSION.equalsIgnoreCase( extension ) ) {
+              certificateData = readFromStream( tiStream );
+            }
+            
+            else if ( EUGridPMACertificate.INFO_FILE_EXTENSION.equalsIgnoreCase( extension ) ) {
+              infoData = readFromStream( tiStream );
+            }
+            
           }
-          
-          else if ( EUGridPMACertificate.INFO_FILE_EXTENSION.equalsIgnoreCase( extension ) ) {
-            infoData = readFromStream( tiStream );
-          }
-          
         }
+      } catch ( TarArchiveException taExc ) {
+        throw new ProblemException( ICoreProblems.UNSPECIFIED_IO_PROBLEM, taExc, Activator.PLUGIN_ID );
       }
       lMonitor.done();
       
@@ -121,7 +126,7 @@ public class EUGridPMACertificateLoader
       lMonitor.worked( 1 );
       
     } catch ( IOException ioExc ) {
-      throw new GridException( CoreProblems.CONNECTION_FAILED, ioExc );
+      throw new ProblemException( ICoreProblems.CONNECTION_FAILED, ioExc, Activator.PLUGIN_ID );
     } finally {
       lMonitor.done();
     }
@@ -131,7 +136,7 @@ public class EUGridPMACertificateLoader
   }
 
   public String[] getCertificateList( final URI uri, final IProgressMonitor monitor )
-      throws GridException {
+      throws ProblemException {
     
     IProgressMonitor lMonitor
       = monitor == null
@@ -149,7 +154,7 @@ public class EUGridPMACertificateLoader
       try {
         connection.connect();
       } catch ( SocketTimeoutException toExc ) {
-        throw new GridException( CoreProblems.CONNECTION_TIMEOUT, toExc );
+        throw new ProblemException( ICoreProblems.CONNECTION_TIMEOUT, toExc, Activator.PLUGIN_ID );
       }
       lMonitor.worked( 1 );
       
@@ -181,7 +186,7 @@ public class EUGridPMACertificateLoader
       lMonitor.done();
       
     } catch ( IOException ioExc ) {
-      throw new GridException( CoreProblems.CONNECTION_FAILED, ioExc );
+      throw new ProblemException( ICoreProblems.CONNECTION_FAILED, ioExc, Activator.PLUGIN_ID );
     } finally {
       lMonitor.done();
     }

@@ -20,11 +20,11 @@ import java.net.URI;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import eu.geclipse.core.GridException;
+import eu.geclipse.core.reporting.ProblemException;
 
 /**
  * Definition of a certificate loader. A certificate loader is a
- * mechanism to import CA certificates of a dediacted type from
+ * mechanism to import CA certificates of a dedicated type from
  * a dedicated source, i.e. a remote repository or
  * alternatively a local directory or file.
  */
@@ -41,11 +41,11 @@ public interface ICaCertificateLoader {
    * @return The imported certificate or <code>null</code> if
    * this certificate loader was not able to retrieve a certificate
    * from the specified path.
-   * @throws GridException If an error occures while the certificate
+   * @throws ProblemException If an error occurs while the certificate
    * is imported.
    */
   public ICaCertificate getCertificate( final IPath path )
-    throws GridException;
+    throws ProblemException;
   
   /**
    * Get the certificate with the specified ID from the specified
@@ -61,13 +61,13 @@ public interface ICaCertificateLoader {
    * indicate the progress of the import operation.
    * @return The imported certificate or <code>null</code> if no
    * certificate could be imported from the specified location.
-   * @throws GridException If an error occurs while the
+   * @throws ProblemException If an error occurs while the
    * certificate is imported.
    */
   public ICaCertificate getCertificate( final URI uri,
                                         final String certID,
                                         final IProgressMonitor monitor )
-    throws GridException;
+    throws ProblemException;
 
   /**
    * Get a list of certificate IDs that are found at the specified
@@ -78,16 +78,16 @@ public interface ICaCertificateLoader {
    * @param uri The location to be queried for available certificates.
    * @param monitor A progress monitor for monitoring the progress of
    * this operation.
-   * @return A list of certifcate IDs that could be found at the
+   * @return A list of certificate IDs that could be found at the
    * specified location. This may be <code>null</code> if no certificates
    * could be found.
-   * @throws GridException If an error occurs while querying the specified
+   * @throws ProblemException If an error occurs while querying the specified
    * location.
    * @see #getCertificate(URI, String, IProgressMonitor)
    */
   public String[] getCertificateList( final URI uri,
                                       final IProgressMonitor monitor )
-    throws GridException;
+    throws ProblemException;
   
   /**
    * Get a list of predefined import location for this certificate

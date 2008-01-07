@@ -28,11 +28,11 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
 
-import eu.geclipse.core.GridException;
 import eu.geclipse.core.auth.CaCertManager;
 import eu.geclipse.core.auth.ICaCertificate;
 import eu.geclipse.core.auth.ICaCertificateLoader;
-import eu.geclipse.ui.dialogs.NewProblemDialog;
+import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 
 /**
@@ -142,8 +142,8 @@ public class CaCertificateImportWizard extends Wizard {
                 certList.add( certificate );
               }
             }
-          } catch ( GridException gExc ) {
-            throw new InvocationTargetException( gExc );
+          } catch ( ProblemException pExc ) {
+            throw new InvocationTargetException( pExc );
           } finally {
             monitor.done();
           }
@@ -158,7 +158,7 @@ public class CaCertificateImportWizard extends Wizard {
       
     } catch ( InvocationTargetException itExc ) {
       Throwable cause = itExc.getCause();
-      NewProblemDialog.openProblem(
+      ProblemDialog.openProblem(
           getShell(),
           Messages.getString("CaCertificateImportWizard.import_failed_title"), //$NON-NLS-1$
           Messages.getString("CaCertificateImportWizard.import_failed_description"), //$NON-NLS-1$

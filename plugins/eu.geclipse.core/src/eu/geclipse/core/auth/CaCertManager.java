@@ -27,8 +27,8 @@ import org.eclipse.core.runtime.ListenerList;
 
 import eu.geclipse.core.ExtensionManager;
 import eu.geclipse.core.Extensions;
-import eu.geclipse.core.GridException;
 import eu.geclipse.core.internal.Activator;
+import eu.geclipse.core.reporting.ProblemException;
 
 /**
  * This class manages all CA certificates that are currently loaded in the
@@ -48,12 +48,14 @@ public class CaCertManager implements IContentChangeNotifier {
   /**
    * The list holds the currently managed certificates.
    */
-  private Hashtable< String, ICaCertificate > certs = new Hashtable< String, ICaCertificate >();
+  private Hashtable< String, ICaCertificate > certs
+    = new Hashtable< String, ICaCertificate >();
   
   /**
    * This list holds the currently registered IContentChangeListeners. 
    */
-  private ListenerList ccListeners = new ListenerList();
+  private ListenerList ccListeners
+    = new ListenerList();
   
   /**
    * Private constructor. The created manager is initialised with all
@@ -225,8 +227,8 @@ public class CaCertManager implements IContentChangeNotifier {
                 internalAddCertificate( certificate );
                 break;
               }
-            } catch ( GridException gExc ) {
-              Activator.logException( gExc );
+            } catch ( ProblemException pExc ) {
+              Activator.logException( pExc );
             }
           }
         }
