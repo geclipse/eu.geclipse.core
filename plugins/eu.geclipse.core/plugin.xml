@@ -10,6 +10,7 @@
    <extension-point id="caCertificateLoader" name="CA Certificate Loader" schema="schema/caCertificateLoader.exsd"/>
    <extension-point id="gridProjectFolder" name="Grid Project Folder" schema="schema/gridProjectFolder.exsd"/>
    <extension-point id="voLoader" name="VO Loader" schema="schema/voLoader.exsd"/>
+   <extension-point id="problemReporting" name="Problem Reporting" schema="schema/problemReporting.exsd"/>
    <extension
          id="eu.geclipse.core.internal.PreferenceInitializer"
          name="%extension.preferenceInitializer"
@@ -83,5 +84,106 @@
                name="Generic Virtual Organization">
          </target>
       </creator>
+   </extension>
+   <extension
+         point="eu.geclipse.core.problemReporting">
+      <problem
+            description="Failed to establish internet connection"
+            id="eu.geclipse.core.problem.connectionFailed"
+            mailto="contact@geclipse.eu"
+            text="Unable to establish connection">
+         <solutionReference
+               referenceID="eu.geclipse.core.solution.checkInternetConnection">
+         </solutionReference>
+         <solutionReference
+               referenceID="eu.geclipse.core.solution.checkProxySettings">
+         </solutionReference>
+      </problem>
+      <problem
+            description="A timeout has occurred on a socket read or accept"
+            id="eu.geclipse.core.problem.connectionTimeout"
+            mailto="contact@geclipse.eu">
+         <solutionReference
+               referenceID="eu.geclipse.core.solution.serverDown">
+         </solutionReference>
+         <solutionReference
+               referenceID="eu.geclipse.core.solution.checkTimeoutSettings">
+         </solutionReference>
+      </problem>
+      <problem
+            description="Unspecified IO problem"
+            id="eu.geclipse.core.problem.unspecifiedIO"
+            mailto="contact@geclipse.eu">
+      </problem>
+      <solution
+            description="Check your internet connection"
+            id="eu.geclipse.core.solution.checkInternetConnection"
+            text="Check your internet connection">
+      </solution>
+      <solution
+            description="Check your proxy settings"
+            id="eu.geclipse.core.solution.checkProxySettings"
+            text="Check your proxy settings">
+         <showPreferencePageTag
+               preferencePageID="org.eclipse.ui.net.NetPreferences">
+         </showPreferencePageTag>
+      </solution>
+      <solution
+            description="Set your connection timeout settings to a higher value"
+            id="eu.geclipse.core.solution.checkTimeoutSettings">
+      </solution>
+      <solution
+            description="The server may be down. Contact the administrator."
+            id="eu.geclipse.core.solution.serverDown">
+      </solution>
+   </extension>
+   <extension
+         point="eu.geclipse.core.reporting.problemReporting">
+      <problem
+            description="Unspecified IO problem"
+            id="eu.geclipse.problem.io.unspecified"
+            mailto="contact@geclipse.eu">
+      </problem>
+      <problem
+            description="Failed to establish internet connection"
+            id="eu.geclipse.problem.net.connectionFailed"
+            mailto="contact@geclipse.eu">
+         <reference
+               referenceID="eu.geclipse.solution.net.checkInternetConnection">
+         </reference>
+         <reference
+               referenceID="eu.geclipse.solution.net.checkProxySettings">
+         </reference>
+      </problem>
+      <problem
+            description="A timeout has occurred on a socket read or accept"
+            id="eu.geclipse.problem.net.connectionTimeout"
+            mailto="contact@geclipse.eu">
+         <reference
+               referenceID="eu.geclipse.solution.net.serverDown">
+         </reference>
+         <reference
+               referenceID="eu.geclipse.solution.net.checkTimeoutSettings">
+         </reference>
+      </problem>
+      <solution
+            description="Check your internet connection"
+            id="eu.geclipse.solution.net.checkInternetConnection">
+      </solution>
+      <solution
+            description="Check your proxy settings"
+            id="eu.geclipse.solution.net.checkProxySettings">
+         <preferenceTag
+               pageID="org.eclipse.ui.net.NetPreferences">
+         </preferenceTag>
+      </solution>
+      <solution
+            description="Set your connection timeout settings to a higher value"
+            id="eu.geclipse.solution.net.checkTimeoutSettings">
+      </solution>
+      <solution
+            description="The server may be down, contact the administrator"
+            id="eu.geclipse.solution.net.serverDown">
+      </solution>
    </extension>
 </plugin>

@@ -306,4 +306,30 @@
             </adapt></enabledWhen>
       </page>
    </extension>
+   <extension
+         point="eu.geclipse.core.problemReporting">
+      <solution
+            description="Show Preference Page Solver"
+            id="showPreferencePageTag"
+            solver="eu.geclipse.ui.problems.ShowPreferencePageSolver">
+      </solution>
+      <solution
+            description="Show View Solver"
+            id="showViewTag"
+            solver="eu.geclipse.ui.problems.ShowViewSolver">
+      </solution>
+   </extension>
+   <extension
+         point="eu.geclipse.core.reporting.problemReporting">
+      <solution
+            description="Show Preference Page Solver"
+            id="preferenceTag"
+            solver="eu.geclipse.ui.problems.ShowPreferencePageSolver">
+      </solution>
+      <solution
+            description="Show View Solver"
+            id="viewTag"
+            solver="eu.geclipse.ui.problems.ShowViewSolver">
+      </solution>
+   </extension>
 </plugin>
