@@ -51,7 +51,7 @@ public class Problem implements IProblem {
   private String mailto;
   
   /**
-   * The ID of the plug-in where this problem occured.
+   * The ID of the plug-in where this problem occurred.
    */
   private String pluginID;
   
