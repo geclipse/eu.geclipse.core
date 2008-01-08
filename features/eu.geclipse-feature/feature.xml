@@ -204,4 +204,11 @@ Initial development of the original code was made for the g-Eclipse project foun
          install-size="0"
          version="0.0.0"/>
 
+   <plugin
+         id="eu.geclipse.core.reporting"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
 </feature>
