@@ -27,7 +27,7 @@ public interface ISolver {
   /**
    * Try to solve an associated problem.
    * 
-   * @throws InvocationTargetException If an exception occures
+   * @throws InvocationTargetException If an exception occurs
    * during the attempt to solve the problem. The exception will be
    * wrapped by an {@link InvocationTargetException}.
    */
