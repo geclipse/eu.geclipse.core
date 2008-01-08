@@ -25,55 +25,55 @@ import eu.geclipse.core.reporting.internal.ReportingService;
  */
 public class ReportingPlugin extends Plugin {
 
-	// The shared instance
-	private static ReportingPlugin plugin;
+  // The shared instance
+  private static ReportingPlugin plugin;
+  
+  private IReportingService reportingService;
 	
-	private IReportingService reportingService;
-	
-	/**
-	 * The constructor
-	 */
-	public ReportingPlugin() {
-	  this.reportingService = ReportingService.getService();
-	}
+  /**
+   * The constructor
+   */
+  public ReportingPlugin() {
+    this.reportingService = ReportingService.getService();
+  }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.core.runtime.Plugins#start(org.osgi.framework.BundleContext)
-	 */
-	@Override
+  /*
+   * (non-Javadoc)
+   * @see org.eclipse.core.runtime.Plugins#start(org.osgi.framework.BundleContext)
+   */
+  @Override
   public void start(BundleContext context) throws Exception {
-		super.start(context);
-		plugin = this;
-	}
+    super.start(context);
+    plugin = this;
+  }
 
-	/*
-	 * (non-Javadoc)
-	 * @see org.eclipse.core.runtime.Plugin#stop(org.osgi.framework.BundleContext)
-	 */
-	@Override
+  /*
+   * (non-Javadoc)
+   * @see org.eclipse.core.runtime.Plugin#stop(org.osgi.framework.BundleContext)
+   */
+  @Override
   public void stop(BundleContext context) throws Exception {
-		plugin = null;
-		super.stop(context);
-	}
+    plugin = null;
+    super.stop(context);
+  }
 
-	/**
-	 * Returns the shared instance.
-	 *
-	 * @return the shared instance.
-	 */
-	public static ReportingPlugin getPlugin() {
-		return plugin;
-	}
-	
-	/**
-	 * Get the reporting service.
-	 * 
-	 * @return The {@link IReportingService} that is provided
-	 * by the reporting plug-in.
-	 */
-	public static IReportingService getReportingService() {
-	  return getPlugin().reportingService;
-	}
+  /**
+   * Returns the shared instance.
+   *
+   * @return the shared instance.
+   */
+  public static ReportingPlugin getPlugin() {
+    return plugin;
+  }
+  
+  /**
+   * Get the reporting service.
+   * 
+   * @return The {@link IReportingService} that is provided
+   * by the reporting plug-in.
+   */
+  public static IReportingService getReportingService() {
+    return getPlugin().reportingService;
+  }
 
 }
