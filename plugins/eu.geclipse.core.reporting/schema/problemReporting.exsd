@@ -6,7 +6,7 @@
          <meta.schema plugin="eu.geclipse.core.reporting" id="problemReporting" name="Problem Reporting"/>
       </appInfo>
       <documentation>
-         This extension point is used to define problems, solutions and there interconnections within the problem reporting mechanism. It is the base of the declarative part of the problem reporting.
+         This extension point is used to define problems, solutions and their interconnections within the problem reporting mechanism. It is the base of the declarative part of the problem reporting.
       </documentation>
    </annotation>
 

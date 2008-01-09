@@ -60,7 +60,7 @@ public interface IReportingService {
    * @param exception A {@link Throwable} that may have caused
    * this problem. May be <code>null</code>.
    * @param mailto An email-address that may be used to send
-   * and automated error report.
+   * an automated error report.
    * @param pluginID The ID of the plug-in where the problem
    * happened.
    * @return The newly created problem. This problem will not
