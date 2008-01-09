@@ -98,9 +98,9 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
   private IFile jobDescriptionFile=null;
   private IFile jobIdFile=null;
   private IFile jobStatusFile=null;
-  private IFile jobInfoFile=null;
-  private IGridJobStatusService statusService;
+  private IFile jobInfoFile=null;  
   private Date submissionTime;
+  private IGridJobStatusService statusService = null;   // don't use it directly! Use getJobStatusService()
 
   /**
    * @param jobFolder
@@ -128,10 +128,6 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
         Activator.logException( e, Messages.getString("GridJob.errLoadJobDescription") //$NON-NLS-1$
                                    + jobFolder.getName() );
       }
-    }
-    IGridJobStatusServiceFactory factory = GridJobStatusServiceFactoryManager.getFactory( this.jobID.getClass() );
-    if( factory != null ) {
-      this.statusService = factory.getGridJobStatusService( this.jobID );
     }
     
     addStagingFolder( jobFolder, FOLDERNAME_INPUT_FILES );
@@ -179,25 +175,6 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     writeJobInfo( description, jobFolder );
     
     createStagingFolders( jobFolder );
-    
-    // IPath path = jobFolder.getFullPath().append( jobDescriptionFile.getName()
-    // );
-    // try {
-    // jobDescriptionFile.copy( path, true, null );
-    // } catch( CoreException e ) {
-    // throw new GridModelException( GridModelProblems.ELEMENT_CREATE_FAILED,
-    // e,
-    // "Problem while creating job description file" );
-    // }
-    // IGridElementCreator creator = findCreator( jobDescriptionFile );
-    // if( creator != null ) {
-    // create( creator );
-    // }
-    // IGridJobStatusServiceFactory factory =
-    // GridJobStatusServiceFactoryManager.getFactory( id.getClass() );
-    // if( factory != null ) {
-    // statusService = factory.getGridJobStatusService( id );
-    // }
   }
 
   private void readJobInfo( final IFolder jobFolder ) {
@@ -219,8 +196,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
             this.jobDescriptionFile = jobFolder.getFile( filename );
           }
           if( JOBINFO_SUBMISSIONTIME_XMLNODENAME.equals( node.getNodeName() ) )
-          {
-            DateFormat df = DateFormat.getDateTimeInstance();
+          {            
             try {
               this.submissionTime = getXmlDateFormatter().parse( node.getTextContent() );
             } catch( DOMException e ) {
@@ -322,11 +298,13 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
 
   public IGridJobStatus updateJobStatus() {
     IGridJobStatus newJobStatus = null;
+    IGridJobStatusService service = getJobStatusService();
+    
     try {
-      if( this.statusService != null
+      if( service != null
           && this.jobID.getJobID() != GridJobID.UNKNOWN )
       {
-        newJobStatus = this.statusService.getJobStatus( this.jobID );
+        newJobStatus = service.getJobStatus( this.jobID );
       }
       if( newJobStatus != null && newJobStatus instanceof GridJobStatus ) {
         this.jobStatus = ( GridJobStatus )newJobStatus;
@@ -590,7 +568,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
           + "<" //$NON-NLS-1$
           + JOBINFO_SUBMISSIONTIME_XMLNODENAME
           + ">" //$NON-NLS-1$
-          + ( this.submissionTime != null ? getXmlDateFormatter().format( this.submissionTime ) : "" )
+          + ( this.submissionTime != null ? getXmlDateFormatter().format( this.submissionTime ) : "" ) //$NON-NLS-1$
           + "</" //$NON-NLS-1$
           + JOBINFO_SUBMISSIONTIME_XMLNODENAME
           + ">" //$NON-NLS-1$
@@ -764,5 +742,20 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     }
     return formatter;
 
-  }  
+  }
+
+  /**
+   * JobStatusService has to be created as lazy, because of bug #209160
+   * @return service for checking current status of this job
+   */
+  private IGridJobStatusService getJobStatusService() {
+    if( this.statusService == null ) {
+      IGridJobStatusServiceFactory factory = GridJobStatusServiceFactoryManager.getFactory( this.jobID.getClass() );
+      if( factory != null ) {
+        this.statusService = factory.getGridJobStatusService( this );
+      }
+    }
+    return this.statusService;
+  }
+  
 }

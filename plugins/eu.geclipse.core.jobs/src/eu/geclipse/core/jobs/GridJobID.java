@@ -32,14 +32,14 @@ public class GridJobID implements IGridJobID {
   protected String jobID = UNKNOWN;
 
   /**
-   * 
+   * Empty constructor for JobId created in past g-Eclipse sessions
    */
   public GridJobID() {
     // default constructor
   }
 
   /**
-   * @param jobIDNode
+   * @param jobIDNode xml node, from which data about job should be read
    */
   public GridJobID( final Node jobIDNode ) {
     this();
@@ -71,7 +71,7 @@ public class GridJobID implements IGridJobID {
     // System.out.println( data );
   }
 
-  public final String getXML() {
+  final String getXML() {
     return "<"                        //$NON-NLS-1$
            + XML_ROOT
            + " "                      //$NON-NLS-1$

@@ -15,28 +15,20 @@
 
 package eu.geclipse.core.model;
 
-import java.net.URI;
 
 
 
 /**
  * This class is the factory for GridJobStatus services. The factory is responsible
- * for creation of GridJobStatus service for the given IGridJobID or location URI
+ * for creation of GridJobStatus service for the given job
  *
  */
 public interface IGridJobStatusServiceFactory {
 
+
 /**
- * Creates GridJobStatusService that can be used to ask about the specific jobId
- * @param id - The IGridJobID for which service shuold be creater
- * @return GridJobStatusService
+ * @param job the job, for which status service should be returned
+ * @return service, which can ba asked about current job status
  */
-public IGridJobStatusService getGridJobStatusService(IGridJobID id);
-  
-/**
- * Creates GridJobStatusService from remote service location URI.
- * @param uri that represents the remote service
- * @return GridJobStatusService
- */
-public IGridJobStatusService getGridJobStatusService(URI uri);
+public IGridJobStatusService getGridJobStatusService( final IGridJob job );
 }
