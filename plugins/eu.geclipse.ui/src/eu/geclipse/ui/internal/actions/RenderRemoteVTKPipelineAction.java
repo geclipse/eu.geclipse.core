@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.PartInitException;
@@ -38,8 +37,8 @@ public class RenderRemoteVTKPipelineAction extends SelectionListenerAction {
 
   private IWorkbenchSite site;
   private ArrayList< IGridVisualisation > vis;
-  
-  protected RenderRemoteVTKPipelineAction( String text ) {
+
+  protected RenderRemoteVTKPipelineAction( final String text ) {
     super( text );
     // TODO Auto-generated constructor stub
   }
@@ -47,7 +46,7 @@ public class RenderRemoteVTKPipelineAction extends SelectionListenerAction {
   /**
    * @param site
    */
-  public RenderRemoteVTKPipelineAction( IWorkbenchPartSite site ) {
+  public RenderRemoteVTKPipelineAction( final IWorkbenchPartSite site ) {
     super( Messages.getString( "RenderRemoteVTKPipelineAction.title" ) ); //$NON-NLS-1$
     this.site = site;
   }
@@ -60,10 +59,10 @@ public class RenderRemoteVTKPipelineAction extends SelectionListenerAction {
     //TODO - open GVid view enabled and start job submission wizard
     Object element
       = getStructuredSelection().getFirstElement();
-    if ( element != null && checkForPipelineCompletion( element ) ) {
+    if ( ( element != null ) && checkForPipelineCompletion( element ) ) {
       try {
         this.site.getPage().showView( "eu.geclipse.gvid.views.GVidView" ); //$NON-NLS-1$
-        //TODO make a job that executes the rendering remotely and creates a client 
+        //TODO make a job that executes the rendering remotely and creates a client
         //that intercepts the steaming data locally
       } catch( PartInitException e ) {
         NewProblemDialog.openProblem( null,
@@ -83,9 +82,10 @@ public class RenderRemoteVTKPipelineAction extends SelectionListenerAction {
     }
   }
 
-  private boolean checkForPipelineCompletion( Object element ) {
+  private boolean checkForPipelineCompletion( @SuppressWarnings("unused")
+  final Object element ) {
     //TODO - validate that the .vtkpipeline file specifies at least the data location,
-    //        appropriate reader for the data type and instruction about how to render 
+    //        appropriate reader for the data type and instruction about how to render
     //        the data (i.e. most likely one or more filters' specifications)
     return true;
   }
