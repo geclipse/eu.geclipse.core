@@ -32,7 +32,6 @@ import org.eclipse.ui.PlatformUI;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.ui.internal.actions.ActionGroupManager;
-import eu.geclipse.ui.internal.actions.BatchServiceActions;
 import eu.geclipse.ui.internal.actions.BuildActions;
 import eu.geclipse.ui.internal.actions.DeployActions;
 import eu.geclipse.ui.internal.actions.EditorActions;
@@ -133,9 +132,6 @@ public class GridProjectView
     
     VisualisationActions visualizationActions = new VisualisationActions ( site );
     groups.addGroup ( visualizationActions );
-    
-    BatchServiceActions batchServiceActions = new BatchServiceActions (site);
-    groups.addGroup( batchServiceActions );
     
     this.editorActions = new EditorActions( this );
     groups.addGroup( this.editorActions );
