@@ -15,6 +15,7 @@
  *****************************************************************************/
 package eu.geclipse.ui.widgets;
 
+import java.lang.reflect.InvocationTargetException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -40,10 +41,9 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import eu.geclipse.core.GridException;
-import eu.geclipse.core.IProblem;
-import eu.geclipse.ui.DateTimeSolutionRegistry;
-import eu.geclipse.ui.UIProblems;
+import eu.geclipse.core.reporting.IProblem;
+import eu.geclipse.core.reporting.ISolution;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.dialogs.NewProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 
@@ -109,22 +109,27 @@ public class DateTimeText {
   
   /**
    * @return Date entered in control, or null if allowEmpty is true and entered date is empty
-   * @throws GridException thrown when user entered date in wrong format
+   * @throws ProblemException thrown when user entered date in wrong format
    * @see NewProblemDialog#openProblem(Shell, String, String, Throwable)
    */
-  public Date getDate() throws GridException {
+  public Date getDate() throws ProblemException {
     Date date = null;
     try {
       date = internalGetDate();
     } catch( ParseException exception ) {
-      GridException gridException = new GridException( UIProblems.DATETIME_PARSE_PROBLEM );
-      IProblem problem = gridException.getProblem();
-      problem.addSolution( DateTimeSolutionRegistry.getRegistry().findSolution( DateTimeSolutionRegistry.USE_CALENDAR_BUTTON, this ) );
-      problem.addSolution( DateTimeSolutionRegistry.getRegistry().findSolution( DateTimeSolutionRegistry.APPLY_VALID_DATEFORMAT, this ) );
+      ProblemException problemExc = new ProblemException( "eu.geclipse.problem.widget.DateTimeText.WrongFormat", //$NON-NLS-1$
+                                                          exception,
+                                                          Activator.PLUGIN_ID );
+      IProblem problem = problemExc.getProblem();
+      problem.addSolution( createUseCalendarSolution() );
+      problem.addSolution( "eu.geclipse.solution.widget.DateTimeText.UseCorrectFormat", //$NON-NLS-1$
+                           String.format( Messages.getString("DateTimeText.solutionEnterDateInCorrectFormat"), //$NON-NLS-1$
+                                          getValidDateFormat() ) );
       if( this.allowEmpty ) {
-        problem.addSolution( DateTimeSolutionRegistry.getRegistry().findSolution( DateTimeSolutionRegistry.DELETE_ENTERED_DATE, this ) );
+        problem.addSolution( "eu.geclipse.solution.widget.DateTimeText.DeleteValue", //$NON-NLS-1$
+                             null );
       }
-      throw gridException;
+      throw problemExc;
     }
     return date;
   }
@@ -333,7 +338,7 @@ public class DateTimeText {
 
       try {
         setDate( DateTimeText.this.getDate() );
-      } catch( GridException exception ) {
+      } catch( ProblemException exception ) {
         // ignore exception
       }
       
@@ -443,7 +448,7 @@ public class DateTimeText {
    */
   public void setEnabled( final boolean enabled ) {
     this.text.setEnabled( enabled );
-    this.calendarButton.setEnabled( enabled );    
+    this.calendarButton.setEnabled( enabled );
   }
 
   /**
@@ -453,4 +458,26 @@ public class DateTimeText {
     return this.text.setFocus();
   }
 
+  private ISolution createUseCalendarSolution() {
+    return new ISolution() {
+
+      public String getDescription() {
+        return Messages.getString("DateTimeText.solutionUseButton"); //$NON-NLS-1$
+      }
+
+      public String getID() {
+        return null;
+      }
+
+      public boolean isActive() {
+        return true;
+      }
+
+      public void solve() throws InvocationTargetException {
+        openCalendarDialog();        
+      }
+      
+    };    
+  }
+  
 }

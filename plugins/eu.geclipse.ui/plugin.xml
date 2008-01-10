@@ -169,12 +169,6 @@
             icon="icons/obj16/fslink_obj.gif"/>
    </extension>
    <extension
-         id="eu.geclipse.ui.problemProvider"
-         name="UIProblems"
-         point="eu.geclipse.core.problemProvider">
-      <provider class="eu.geclipse.ui.UIProblems"/>
-   </extension>
-   <extension
          point="eu.geclipse.ui.propertiesFactory">
       <PropertiesFactory
             class="eu.geclipse.ui.properties.PropertiesFactory"
@@ -330,6 +324,21 @@
             description="Show View Solver"
             id="viewTag"
             solver="eu.geclipse.ui.problems.ShowViewSolver">
+      </solution>
+      <problem
+            description="Entered Date has invalid format."
+            id="eu.geclipse.problem.widget.DateTimeText.WrongFormat">
+         <reference
+               referenceID="eu.geclipse.solution.widget.DateTimeText.UseCalendarButton">
+         </reference>
+      </problem>
+      <solution
+            description="Delete entered Date"
+            id="eu.geclipse.solution.widget.DateTimeText.DeleteValue">
+      </solution>
+      <solution
+            description="Enter date in correct format"
+            id="eu.geclipse.solution.widget.DateTimeText.UseCorrectFormat">
       </solution>
    </extension>
 </plugin>

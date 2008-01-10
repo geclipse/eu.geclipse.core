@@ -24,8 +24,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 
-import eu.geclipse.core.GridException;
-import eu.geclipse.ui.dialogs.NewProblemDialog;
+import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.views.filters.IGridFilterConfiguration;
 import eu.geclipse.ui.views.filters.JobSubmissionTimeFilter;
 import eu.geclipse.ui.views.filters.JobViewFilterConfiguration;
@@ -82,16 +82,18 @@ public class JobSubmissionTimeComposite implements IFilterComposite {
           Date beforeDate = this.beforeDateTimeText.getDate();
           this.filter.setDates( afterDate, beforeDate );
           success = true;
-        } catch( GridException exception ) {
+        } catch( ProblemException exception ) {
           this.beforeDateTimeText.setFocus();
-          NewProblemDialog.openProblem( this.parent.getShell(),
-                                        Messages.getString( "JobSubmissionTimeComposite.ErrTitle" ),  //$NON-NLS-1$
-                                        Messages.getString( "JobSubmissionTimeComposite.ErrSavingBeforeDate" ),  //$NON-NLS-1$
-                                        exception );
+          ProblemDialog.openProblem( this.parent.getShell(),
+                                     Messages.getString( "JobSubmissionTimeComposite.ErrTitle" ), //$NON-NLS-1$
+                                     Messages.getString( "JobSubmissionTimeComposite.ErrSavingBeforeDate" ), //$NON-NLS-1$
+                                     exception );
+          // TODO mariusz Auto-generated catch block
+          exception.printStackTrace();
         }
-      } catch( GridException exception ) {
+      } catch( ProblemException exception ) {
         this.afterDateTimeText.setFocus();
-        NewProblemDialog.openProblem( this.parent.getShell(),
+        ProblemDialog.openProblem( this.parent.getShell(),
                                       Messages.getString( "JobSubmissionTimeComposite.ErrTitle" ),  //$NON-NLS-1$
                                       Messages.getString( "JobSubmissionTimeComposite.ErrSavingAfterDate" ),  //$NON-NLS-1$
                                       exception );
