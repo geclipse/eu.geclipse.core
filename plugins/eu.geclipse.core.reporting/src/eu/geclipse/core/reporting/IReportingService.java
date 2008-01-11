@@ -26,6 +26,28 @@ package eu.geclipse.core.reporting;
 public interface IReportingService {
   
   /**
+   * Programmatically create a problem from the specified
+   * description and exception. The {@link IProblem#addReason(String)}
+   * and {@link IProblem#addSolution(ISolution)}/{@link IProblem#addSolution(String,String)}
+   * may be used afterwards to further customize the problem.
+   * 
+   * @param description A descriptive text that gives a short
+   * explanation of the problem.
+   * @param exception A {@link Throwable} that may have caused
+   * this problem. May be <code>null</code>.
+   * @param mailto An email-address that may be used to send
+   * an automated error report.
+   * @param pluginID The ID of the plug-in where the problem
+   * happened.
+   * @return The newly created problem. This problem will not
+   * be stored in the internal registry.
+   */
+  public IProblem createProblem( final String description,
+                                 final Throwable exception,
+                                 final String mailto,
+                                 final String pluginID );
+  
+  /**
    * Get a problem that was declaratively defined via the
    * eu.geclipse.core.reporting.problemReporting extension
    * point.
@@ -50,26 +72,19 @@ public interface IReportingService {
                               final String pluginID );
   
   /**
-   * Programmatically create a problem from the specified
-   * description and exception. The {@link IProblem#addReason(String)}
-   * and {@link IProblem#addSolution(ISolution)}/{@link IProblem#addSolution(String,String)}
-   * may be used afterwards to further customize the problem.
+   * Programmatically create a solution from the specified
+   * description and solver.
    * 
    * @param description A descriptive text that gives a short
-   * explanation of the problem.
-   * @param exception A {@link Throwable} that may have caused
-   * this problem. May be <code>null</code>.
-   * @param mailto An email-address that may be used to send
-   * an automated error report.
-   * @param pluginID The ID of the plug-in where the problem
-   * happened.
-   * @return The newly created problem. This problem will not
+   * explanation of the solution.
+   * @param solver An instance of the {@link ISolver}-interface
+   * that provides dedicated problem solving strategies. If this
+   * is <code>null</code> the solution will be passive.
+   * @return The newly created solution. This solution will not
    * be stored in the internal registry.
    */
-  public IProblem getProblem( final String description,
-                              final Throwable exception,
-                              final String mailto,
-                              final String pluginID );
+  public ISolution createSolution( final String description,
+                                   final ISolver solver );
   
   /**
    * Get a solution that was declaratively defined via the
@@ -89,19 +104,4 @@ public interface IReportingService {
   public ISolution getSolution( final String solutionID,
                                 final String description );
   
-  /**
-   * Programmatically create a solution from the specified
-   * description and solver.
-   * 
-   * @param description A descriptive text that gives a short
-   * explanation of the solution.
-   * @param solver An instance of the {@link ISolver}-interface
-   * that provides dedicated problem solving strategies. If this
-   * is <code>null</code> the solution will be passive.
-   * @return The newly created solution. This solution will not
-   * be stored in the internal registry.
-   */
-  public ISolution getSolution( final String description,
-                                final ISolver solver );
-
 }

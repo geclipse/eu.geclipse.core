@@ -49,6 +49,16 @@ public class ReportingService
     }
     return singleton;
   }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.reporting.IReportingService#createProblem(java.lang.String, java.lang.Throwable, java.lang.String, java.lang.String)
+   */
+  public IProblem createProblem( final String description,
+                                 final Throwable exception,
+                                 final String mailto,
+                                 final String pluginID ) {
+    return new Problem( null, description, exception, mailto, pluginID );
+  }
 
   /* (non-Javadoc)
    * @see eu.geclipse.core.reporting.IReportingService#getProblem(java.lang.String, java.lang.String, java.lang.Throwable, java.lang.String)
@@ -59,15 +69,13 @@ public class ReportingService
                               final String pluginID ) {
     return ProblemFactory.getFactory().getProblem( problemID, description, exception, pluginID );
   }
-
+  
   /* (non-Javadoc)
-   * @see eu.geclipse.core.reporting.IReportingService#getProblem(java.lang.String, java.lang.Throwable, java.lang.String, java.lang.String)
+   * @see eu.geclipse.core.reporting.IReportingService#createSolution(java.lang.String, eu.geclipse.core.reporting.ISolver)
    */
-  public IProblem getProblem( final String description,
-                              final Throwable exception,
-                              final String mailto,
-                              final String pluginID ) {
-    return new Problem( null, description, exception, mailto, pluginID );
+  public ISolution createSolution( final String description,
+                                   final ISolver solver ) {
+    return new Solution( null, description, solver );
   }
 
   /* (non-Javadoc)
@@ -76,14 +84,6 @@ public class ReportingService
   public ISolution getSolution( final String solutionID,
                                 final String description ) {
     return SolutionFactory.getFactory().getSolution( solutionID, description );
-  }
-
-  /* (non-Javadoc)
-   * @see eu.geclipse.core.reporting.IReportingService#getSolution(java.lang.String, eu.geclipse.core.reporting.ISolver)
-   */
-  public ISolution getSolution( final String description,
-                                final ISolver solver ) {
-    return new Solution( null, description, solver );
   }
 
 }
