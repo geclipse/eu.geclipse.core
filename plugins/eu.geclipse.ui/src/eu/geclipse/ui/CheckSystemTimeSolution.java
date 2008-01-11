@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2007 g-Eclipse Consortium 
+ * Copyright (c) 2007, 2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,7 +10,7 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributors:
- *    Ariel Garcia - initial implementation
+ *    Ariel Garcia - initial API and implementation
  *****************************************************************************/
 
 package eu.geclipse.ui;
