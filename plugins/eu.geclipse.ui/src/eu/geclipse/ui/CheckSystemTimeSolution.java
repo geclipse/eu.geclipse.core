@@ -21,18 +21,18 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.ProgressMonitorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.swt.widgets.Shell;
-import eu.geclipse.core.GridException;
 import eu.geclipse.core.ISolution;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.core.util.TimeChecker;
 import eu.geclipse.ui.Messages;
-import eu.geclipse.ui.dialogs.NewProblemDialog;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 
 
 /**
  * {@link UISolution} for checking the system time against
  * a set of reference time servers.
  * 
- * @author ariel
+ * @author agarcia
  */
 public class CheckSystemTimeSolution extends UISolution {
   
@@ -70,8 +70,8 @@ public class CheckSystemTimeSolution extends UISolution {
       {
         try {
           tr.checkSysTime( monitor );
-        } catch( GridException ge ) {
-          throw new InvocationTargetException( ge );
+        } catch( ProblemException pe ) {
+          throw new InvocationTargetException( pe );
         }
       }
     };
@@ -85,10 +85,10 @@ public class CheckSystemTimeSolution extends UISolution {
     } catch( InvocationTargetException ite ) {
       // The system time check failed, inform the user
       Throwable cause = ite.getCause();
-      if ( cause instanceof GridException ) {
+      if ( cause instanceof ProblemException ) {
         String title = Messages.getString( "CheckSystemTimeSolution.failed_dialog_title" ); //$NON-NLS-1$
         String msg = Messages.getString( "CheckSystemTimeSolution.failed_check_system_time" ); //$NON-NLS-1$
-        NewProblemDialog.openProblem( getShell(), title, msg, cause );
+        ProblemDialog.openProblem( getShell(), title, msg, cause );
         timeCheckValid = false;
       }
     }
