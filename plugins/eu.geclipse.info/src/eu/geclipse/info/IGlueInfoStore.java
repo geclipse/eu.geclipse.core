@@ -16,6 +16,10 @@
  *****************************************************************************/
 package eu.geclipse.info;
 
+import java.util.ArrayList;
+
+import eu.geclipse.info.glue.AbstractGlueTable;
+
 /**
  * Interface that all Information stores should implement
  * @author George Tsouloupas
@@ -58,5 +62,7 @@ public interface IGlueInfoStore {
    * Remove all state listeners
    */
   public void removeAllStateListeners();
+  
+  public void notifyListeners( final ArrayList<AbstractGlueTable> agtList );
     
 }

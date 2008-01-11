@@ -6,7 +6,7 @@
          <meta.schema plugin="eu.geclipse.info" id="infoService" name="InfoService"/>
       </appInfo>
       <documentation>
-         [Enter description of this extension point.]
+         This extension is used to add info services.
       </documentation>
    </annotation>
 
@@ -85,7 +85,20 @@
          <meta.section type="examples"/>
       </appInfo>
       <documentation>
-         [Enter extension point usage example here.]
+         The following is an example of an information service extension point:
+&lt;p&gt;
+&lt;pre&gt;
+ &lt;extension
+         point=&quot;eu.geclipse.info.infoService&quot;&gt;
+      &lt;infoService
+            class=&quot;eu.geclipse.glite.info.bdii.BDIIService&quot;
+            id=&quot;eu.geclipse.glite.info.bdii.BDIIService&quot;
+            name=&quot;BDII Info Service&quot;&gt;&lt;/infoService&gt;
+   &lt;/extension&gt;
+&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+The class attribute must be a class implementing eu.geclipse.core.model.IGridInfoService interface.
       </documentation>
    </annotation>
 
@@ -103,7 +116,10 @@
          <meta.section type="implementation"/>
       </appInfo>
       <documentation>
-         [Enter information about supplied implementation of this extension point.]
+         The classes that are usefull to check are eu.geclipse.glite.info.bdii.BDIIService and eu.geclipse.gria.info.GriaInfoService.
+
+You should also check eu.geclipse.info.InfoServiceFactory and eu.geclipse.info.views.GlueInfoViewer.
+
       </documentation>
    </annotation>
 

@@ -21,7 +21,7 @@ public interface IExtentedGridInfoService extends IGridInfoService {
 
   public IGlueInfoStore getStore();
   
-  public void scheduleFetch();
+  public void scheduleFetch(final IProgressMonitor monitor);
   
   public void setVO(IVirtualOrganization vo);
   

@@ -79,7 +79,8 @@ public abstract class GlueIndex implements java.io.Serializable {
     "GlueSiteSponsor",
     "GlueSubClusterLocation",
     "GlueSubClusterSoftwareRunTimeEnvironment",
-    "GlueVO"
+    "GlueVO",
+    "GriaService"
   };
   
   private static GlueIndex glueIndexInstance;
@@ -321,6 +322,8 @@ public abstract class GlueIndex implements java.io.Serializable {
   public Hashtable<String, AbstractGlueTable> fullIndex
     = new Hashtable<String, AbstractGlueTable>();
 
+  public Hashtable<String, GriaService> griaService
+  = new Hashtable<String, GriaService>();
   
   protected abstract String getTag();
   
@@ -531,6 +534,28 @@ public abstract class GlueIndex implements java.io.Serializable {
   private void putInFullIndex( final String key,final AbstractGlueTable agt ) {
     //String newKey = agt.getClass().getName() + key;
     //AbstractGlueTable previous = this.fullIndex.put( newKey, agt );
+  }
+  
+  /**
+   * Get the GlueHost
+   * @param key the name of the GlueHost
+   * @return the GlueHost or null.
+   */
+  public GriaService getGriaService( final String key ) {
+    GriaService result = null;
+    
+    if( key != null ) {
+      
+      result = this.griaService.get( key );
+      if( result == null ) {
+        result = new GriaService();
+  
+        result.setID( key );
+        this.griaService.put( key, result );
+      }
+    }
+    
+    return result;
   }
   
   /**

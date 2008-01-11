@@ -26,6 +26,9 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.osgi.framework.BundleContext;
 
+import eu.geclipse.core.model.GridModel;
+import eu.geclipse.core.model.GridModelException;
+import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.info.glue.AbstractGlueTable;
 import eu.geclipse.info.model.IExtentedGridInfoService;
 
@@ -46,34 +49,55 @@ public class Activator extends Plugin {
   public Activator() {
     plugin = this;
     
-    Job storeInitializeJob=new Job("BDIIStore Initializer"){ //$NON-NLS-1$
+    Job storeInitializeJob=new Job("Retrieving information"){ //$NON-NLS-1$
       
       @Override
       protected IStatus run( final IProgressMonitor monitor )
       {
         ArrayList<IExtentedGridInfoService> infoServicesArray = null;
         infoServicesArray = InfoServiceFactory.getAllExistingInfoService();
- 
-        for (int i=0; i<infoServicesArray.size(); i++)
-        {
-          IExtentedGridInfoService infoService = infoServicesArray.get( i );
-          infoService.scheduleFetch();
-          infoService.getStore().addListener( new IGlueStoreChangeListerner(){
-            public void infoChanged( final ArrayList<AbstractGlueTable> modifiedGlueEntries ) {
-              //Do nothing, just listen so the the glueStore starts fetching
-            }      
-          }, null );
-              
+        
+        // Get the number of projects. The number is used for the monitor.
+        int gridProjectNumbers = 0;
+        IGridElement[] projectElements;
+        try {
+          projectElements = GridModel.getRoot().getChildren( null );
+          if (projectElements!= null) {
+            gridProjectNumbers = projectElements.length;
+          }
+        } catch( GridModelException e ) {
+          Activator.logException( e );
         }
 
-        /*
-        BDIIService.scheduleFetch();
-        BDIIService.glueStore.addListener( new IGlueStoreChangeListerner(){
-          public void infoChanged( final ArrayList<AbstractGlueTable> modifiedGlueEntries ) {
-            //Do nothing, just listen so the the glueStore starts fetching
-          }      
-        }, null );
-        */
+        // Set the monitor task. Each task has 10 work units.
+        monitor.beginTask( "Retrieving information", gridProjectNumbers * 10 ); //$NON-NLS-1$
+        
+        for (int i=0; infoServicesArray != null && i<infoServicesArray.size(); i++)
+        {
+          IExtentedGridInfoService infoService = infoServicesArray.get( i );
+          infoService.scheduleFetch(monitor);
+          if (infoService.getStore() != null)
+          {
+            infoService.getStore().addListener( new IGlueStoreChangeListerner(){
+              public void infoChanged( final ArrayList<AbstractGlueTable> modifiedGlueEntries ) {
+                //Do nothing, just listen so the the glueStore starts fetching
+              }
+            }, null );
+          }
+        }
+        
+        // Notify the listeners that the info has changed.
+        for (int i=0; infoServicesArray != null && i<infoServicesArray.size(); i++)
+        {
+          IExtentedGridInfoService infoService = infoServicesArray.get( i );
+          if (infoService != null && infoService.getStore() != null)
+          {
+            infoService.getStore().notifyListeners( null );
+          }
+        }
+        
+        monitor.done();
+        
         return new Status(Status.OK,"eu.geclipse.glite.info","BDII initialized");  //$NON-NLS-1$  //$NON-NLS-2$
       }
       

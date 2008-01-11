@@ -22,6 +22,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
@@ -61,6 +65,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.ViewPart;
 import eu.geclipse.core.model.GridModel;
+import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridModelListener;
@@ -71,6 +76,7 @@ import eu.geclipse.info.IGlueStoreChangeListerner;
 import eu.geclipse.info.glue.AbstractGlueTable;
 import eu.geclipse.info.glue.GlueCE;
 import eu.geclipse.info.glue.GlueCEAccessControlBaseRule;
+import eu.geclipse.info.glue.GlueIndex;
 import eu.geclipse.info.glue.GlueQuery;
 import eu.geclipse.info.model.IExtentedGridInfoService;
 
@@ -86,8 +92,8 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener{
   private Action actionSetSourceRGMA;
   private Action actionSetSourceBDII;
   private Action doubleClickAction;
+  private Job fetchJob;
   //private Action benchmarkAction;
-
   //private MetricsView metricsView;
 
   private TreeViewer viewer;
@@ -347,6 +353,10 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener{
       queryArray[ 0 ] = "GlueSE"; //$NON-NLS-1$
       queryArray[ 1 ] = "Storage Elements"; //$NON-NLS-1$
       list.add( queryArray );
+      queryArray = new String[ 3 ];
+      queryArray[ 0 ] = "GriaService"; //$NON-NLS-1$
+      queryArray[ 1 ] = "Gria Services"; //$NON-NLS-1$
+      list.add( queryArray );
       this.glueRoot = new TreeParent( list );
     }
   }
@@ -410,16 +420,6 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener{
       
       public void run() {
         
-        /*
-        while(BDIIService.glueStore==null){
-          try {
-            sleep(1000);
-          } catch( InterruptedException e ) {
-            //ignore interrupted exception
-          }
-          
-        }*/
-        
         ArrayList<IExtentedGridInfoService> infoServicesArray = InfoServiceFactory.getAllExistingInfoService();
         for (int i=0; i<infoServicesArray.size(); i++)
         {
@@ -437,12 +437,63 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener{
             infoService.getStore().addListener( GlueInfoViewer.this, null );
            
         }
-        
-        //BDIIService.glueStore.addListener( GlueInfoViewer.this, null );
       }
       
     };
     t.start();
+    
+    this.fetchJob = new Job( " Retrieving Information" ) { //$NON-NLS-1$
+
+      @Override
+      protected IStatus run( final IProgressMonitor monitor ) {
+        GlueIndex.drop(); // Clear the glue index.
+        Status status = new Status( Status.ERROR,
+                                    "eu.geclipse.glite.info", //$NON-NLS-1$
+                                    "BDII fetch from " //$NON-NLS-1$
+                                        + " Failed" ); //$NON-NLS-1$
+        ArrayList<IExtentedGridInfoService> infoServicesArray = null;
+        infoServicesArray = InfoServiceFactory.getAllExistingInfoService();
+        
+        // Get the number of projects. The number is used in the monitor.
+        int gridProjectNumbers = 0;
+        IGridElement[] projectElements;
+        try {
+          projectElements = GridModel.getRoot().getChildren( null );
+          if (projectElements!= null) {
+            gridProjectNumbers = projectElements.length;
+          }
+        } catch( GridModelException e ) {
+        }
+        
+        monitor.beginTask( "Retrieving information", gridProjectNumbers * 10 ); //$NON-NLS-1$
+        
+        // Get the information from the info systems to file the glue view.
+        for (int i=0; infoServicesArray!= null && i<infoServicesArray.size(); i++)
+        {
+          IExtentedGridInfoService infoService = infoServicesArray.get( i );
+          if (infoService != null)
+          {
+            infoService.scheduleFetch(monitor);
+          }
+        }
+        
+        // Notify the listeners that the info has changed.
+        for (int i=0; infoServicesArray != null && i<infoServicesArray.size(); i++)
+        {
+          IExtentedGridInfoService infoService = infoServicesArray.get( i );
+          if (infoService != null && infoService.getStore() != null)
+          {
+            infoService.getStore().notifyListeners( null );
+          }
+        }
+        
+        monitor.done();
+        status = new Status( Status.OK,
+                             "eu.geclipse.glite.info", //$NON-NLS-1$
+                             "BDII data fetched successfully." ); //$NON-NLS-1$
+        return status;
+      }
+    };
   }
   
   /**
@@ -598,22 +649,12 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener{
     // manager.add( actionSetSourceRGMA );
     // manager.add( actionSetSourceBDII );
     // manager.add( new Separator() );
+    
     IAction refreshAction = new Action() {
       @Override
       public void run() {
-//        GlueIndex.drop();
-        //BDIIService.scheduleFetch();
-        ArrayList<IExtentedGridInfoService> infoServicesArray = null;
-        infoServicesArray = InfoServiceFactory.getAllExistingInfoService();
-        for (int i=0; i<infoServicesArray.size(); i++)
-        {
-          IExtentedGridInfoService infoService = infoServicesArray.get( i );
-          if (infoService != null)
-          {
-            infoService.scheduleFetch();
-          }
-        }
         
+        fetchJob.schedule();
       }
     };
     refreshAction.setToolTipText( "Refresh" );  //$NON-NLS-1$
@@ -664,88 +705,6 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener{
     this.actionSetSourceBDII.setImageDescriptor( PlatformUI.getWorkbench()
                                             .getSharedImages()
                                             .getImageDescriptor( ISharedImages.IMG_OBJS_INFO_TSK ) );
-    
-    
-    
-    /*
-    // Commented out because it is not needed
-     * @SuppressWarnings("unused")
-    Action benchmarkTestAction;
-    benchmarkTestAction = new Action() {
-      @Override
-      public void run() {
-        ISelection selection = GlueInfoViewer.this.viewer.getSelection();
-
-        IStructuredSelection sSelection=( IStructuredSelection )selection;
-
-        for( Object ce : sSelection.toList() ) {
-          String cmTemp=ce.toString();
-          final String cm=cmTemp.substring( 0, cmTemp.lastIndexOf( ':' ) );//+"/jobmanager-fork";
-
-          if(true){
-            Benchmark b=GBUtil.getMockBenchmarks().get( cm );
-            if(b!=null){
-              getMetricsView().addBenchmark(b);
-            }
-          }else{//TODO switch from mock benchmark execution to job submission
-            JSDLJobDescriptionCreator jsdlDescriptionCreator=null;
-            List<IGridElementCreator> creators=GridModel.getElementCreators();
-            for( IGridElementCreator creator : creators ) {
-              if(creator instanceof JSDLJobDescriptionCreator ){
-                jsdlDescriptionCreator=(JSDLJobDescriptionCreator)creator;
-              }
-            }
-            JSDLJobDescription desc=null;
-            try {
-              IGridElement benchmarkJobDescription=null;
-              for( IGridElement element : GridModel.getRoot().getChildren( null ) ) {
-               if (element instanceof IGridProject){
-                 IGridProject proj=(IGridProject) element;
-                 AbstractGridContainer jobDefFolder=(AbstractGridContainer) proj.findChild( "Job Descriptions" );  //$NON-NLS-1$
-                 for( IGridElement jobDef : jobDefFolder.getChildren( null )){
-                   desc=( JSDLJobDescription )jobDef;
-                 }
-               }
-               if(desc!=null){
-                 break;
-               }
-              }              
-            } catch( GridModelException e ) {
-              // TODO handle this
-            }
-
-            URI wmsURI=null;
-            try {
-              wmsURI = new URI( "https://wmslb103.grid.ucy.ac.cy:7443/glite_wms_wmproxy_server" );  //$NON-NLS-1$
-            } catch( URISyntaxException e1 ) {
-              //TODO remove hard-coded URI
-            }
-            
-            try {//"https://wmslb103.grid.ucy.ac.cy:7443/glite_wms_wmproxy_server"
-              
-              IGridJobID jobID = GliteJobAPI.submitJob(desc,wmsURI);
-              
-              IGridJobID[] jobIDs=new IGridJobID[1];
-              jobIDs[0]=jobID;
-              IGridJobStatusListener listener=new IGridJobStatusListener(){
-                public void statusChanged( final IGridJob job ) {
-                  // Log or display the changed info
-                }
-              };
-              //((JobManager) GridModel.getJobManager()).
-              GridModel.getJobManager().addJobStatusListener( jobIDs, IGridJobStatus._ALL , listener );
-              
-              // Log or display the changed info
-            } catch( GridException e ) {
-              // TODO handle this
-            }
-            
-          }
-        }
-
-      }
-    };
-    */
      
 
     this.doubleClickAction = new Action() {
@@ -834,7 +793,7 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener{
         GlueInfoViewer.this.viewer.refresh();
         // Remember the expanded status of the tree.
         GlueInfoViewer.this.viewer.setExpandedElements(currentExpanded);
-      }    
+      }
     } );
   }
   
@@ -855,17 +814,7 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener{
 
         for( IGridElement gridElement : event.getElements() ) {
           if(gridElement instanceof IGridProject){
-            
-            ArrayList<IExtentedGridInfoService> infoServicesArray = InfoServiceFactory.getAllExistingInfoService();
-            for (int i=0; i<infoServicesArray.size(); i++)
-            {
-              IExtentedGridInfoService infoService = infoServicesArray.get( i );
-              if (infoService != null)
-              {
-                infoService.scheduleFetch();
-              }
-            }
-            //BDIIService.scheduleFetch();
+            this.fetchJob.schedule(); // Getting the information from the info services.
             break;
           }
         }
