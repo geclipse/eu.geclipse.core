@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2007 g-Eclipse Consortium 
+ * Copyright (c) 2007, 2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,7 +10,7 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributors:
- *    Ariel Garcia - initial implementation
+ *    Ariel Garcia - initial API and implementation
  *****************************************************************************/
 
 package eu.geclipse.core.util;
@@ -25,18 +25,21 @@ import java.text.DateFormat;
 import java.util.Arrays;
 import java.util.Date;
 import org.eclipse.core.runtime.IProgressMonitor;
-import eu.geclipse.core.GridException;
-import eu.geclipse.core.CoreProblems;
-import eu.geclipse.core.ISolution;
+import eu.geclipse.core.ICoreProblems;
+import eu.geclipse.core.ICoreSolutions;
 import eu.geclipse.core.Messages;
-import eu.geclipse.core.SolutionRegistry;
+import eu.geclipse.core.internal.Activator;
+import eu.geclipse.core.reporting.IProblem;
+import eu.geclipse.core.reporting.ISolution;
+import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.core.reporting.ReportingPlugin;
 
 
 /**
  * A time checker using the TIME protocol (RFC 868),
  * also known as rdate protocol.
  * 
- * @author ariel
+ * @author agarcia
  */
 public class TimeChecker {
 
@@ -98,7 +101,7 @@ public class TimeChecker {
    * Gets the time from some rdate time servers and compares it
    * to the system time. In the worst case, this method can take
    * up to TIMEOUT * SERVERS.length seconds (currently 15s) to
-   * return. DNS timouts would add to this delay, but they should
+   * return. DNS timeouts would add to this delay, but they should
    * be a pathological case only.
    * The method <code>{@link #getTimeCheckStatus}</code> must be
    * called afterwards to get the result of the system time check.
@@ -110,11 +113,12 @@ public class TimeChecker {
    * @throws InterruptedException if the operation was canceled by the user
    */
   public void checkSysTime( final IProgressMonitor monitor )
-    throws GridException, InterruptedException
+    throws ProblemException, InterruptedException
   {
     long[] time = new long[ SERVERS.length ];
     long mean = 0;
     long disp = 0;
+    ProblemException problemExc = null;
 
     // Time from 1970 in seconds...
     this.sysTime = System.currentTimeMillis() / 1000;
@@ -129,9 +133,11 @@ public class TimeChecker {
                        + " " + SERVERS[ i ] + "..." ); //$NON-NLS-1$ //$NON-NLS-2$
       try {
         time[ i ] = queryTime( SERVERS[ i ] );
-      } catch ( GridException ge ) {
+      } catch ( ProblemException pe ) {
         // We don't care about individual servers failing
         time[ i ] = 0;
+        // Keep the last exception, we propagate it to the user if this check as a whole fails
+        problemExc = pe;
       }
       monitor.worked( 1 );
       if ( monitor.isCanceled() ) {
@@ -155,13 +161,21 @@ public class TimeChecker {
     }
     // No servers could be contacted
     if ( i_min == SERVERS.length ) {
-      GridException gExc = new GridException( CoreProblems.SYSTEM_TIME_CHECK_FAILED,
-                                              Messages.getString( "TimeChecker.no_servers_reachable" ) ); //$NON-NLS-1$
-      ISolution sol = SolutionRegistry.getRegistry().getSolution( SolutionRegistry.CHECK_INTERNET_CONNECTION );
-      gExc.getProblem().addSolution( sol );
-      sol = SolutionRegistry.getRegistry().getSolution( SolutionRegistry.CHECK_FIREWALL );
-      gExc.getProblem().addSolution( sol );
-      throw gExc;
+      IProblem problem;
+      problem = ReportingPlugin.getReportingService()
+                  .getProblem( ICoreProblems.SYSTEM_TIME_CHECK_FAILED,
+                               null,
+                               problemExc,
+                               Activator.PLUGIN_ID );
+      problem.addReason( Messages.getString( "TimeChecker.no_servers_reachable" ) ); //$NON-NLS-1$
+      ISolution solution;
+      solution = ReportingPlugin.getReportingService()
+                   .getSolution( ICoreSolutions.CHECK_INTERNET_CONNECTION, null );
+      problem.addSolution( solution );
+      solution = ReportingPlugin.getReportingService()
+                   .getSolution( ICoreSolutions.CHECK_FIREWALL, null );
+      problem.addSolution( solution );
+      throw new ProblemException( problem );
     }
     mean = mean / ( SERVERS.length - i_min );
     this.referenceTime = mean;
@@ -169,11 +183,16 @@ public class TimeChecker {
     // The servers don't agree among themselves
     disp = time[ SERVERS.length -1 ] - time[ i_min ];
     if ( disp >= MAX_SERVER_SPREAD ) {
-      GridException gExc = new GridException( CoreProblems.SYSTEM_TIME_CHECK_FAILED,
-                                              Messages.getString( "TimeChecker.inconsistent_servers" ) ); //$NON-NLS-1$
-      ISolution solution = SolutionRegistry.getRegistry().getSolution( SolutionRegistry.CONTACT_SERVER_ADMINS );
-      gExc.getProblem().addSolution( solution );
-      throw gExc;
+      IProblem problem = ReportingPlugin.getReportingService()
+                           .getProblem( ICoreProblems.SYSTEM_TIME_CHECK_FAILED,
+                                        null,
+                                        problemExc,
+                                        Activator.PLUGIN_ID );
+      problem.addReason( Messages.getString( "TimeChecker.inconsistent_servers" ) ); //$NON-NLS-1$
+      ISolution solution = ReportingPlugin.getReportingService()
+                             .getSolution( ICoreSolutions.CONTACT_SERVER_ADMIN, null );
+      problem.addSolution( solution );
+      throw new ProblemException( problem );
     }
   }
   
@@ -187,7 +206,7 @@ public class TimeChecker {
    * @throws GridException if the server could not be contacted
    */
   protected static long queryTime( final String serverHostname )
-    throws GridException
+    throws ProblemException
   {
     long time = 0;
     InetAddress addr;
@@ -196,7 +215,7 @@ public class TimeChecker {
     try {
       addr = InetAddress.getByName( serverHostname );
     } catch ( UnknownHostException uhe ) {
-      throw new GridException( CoreProblems.UNKNOWN_HOST, uhe );
+      throw new ProblemException( ICoreProblems.UNKNOWN_HOST, uhe, Activator.PLUGIN_ID );
     }
     
     /*
@@ -209,7 +228,7 @@ public class TimeChecker {
       s = new DatagramSocket();
       s.setSoTimeout( TIMEOUT );
     } catch ( SocketException se ) {
-      throw new GridException( CoreProblems.BIND_FAILED, se );
+      throw new ProblemException( ICoreProblems.BIND_FAILED, se, Activator.PLUGIN_ID );
     }
     
     // Empty datagram to be sent to the rdate server
@@ -220,7 +239,7 @@ public class TimeChecker {
     try {      
       s.send( p );
     } catch ( Exception exc ) {
-      throw new GridException( CoreProblems.CONNECTION_FAILED, exc );
+      throw new ProblemException( ICoreProblems.CONNECTION_FAILED, exc, Activator.PLUGIN_ID );
     }
     
     // Datagram to collect the server's answer, 4 bytes
@@ -231,7 +250,7 @@ public class TimeChecker {
     try {
       s.receive( p );
     } catch ( Exception exc ) {
-      throw new GridException( CoreProblems.CONNECTION_TIMEOUT, exc );
+      throw new ProblemException( ICoreProblems.CONNECTION_TIMEOUT, exc, Activator.PLUGIN_ID );
     }
     
     // Read value from the buffer

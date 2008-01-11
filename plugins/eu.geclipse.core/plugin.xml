@@ -96,11 +96,24 @@
             mailto="contact@geclipse.eu">
       </problem>
       <problem
+            description="Could not bind socket"
+            id="eu.geclipse.problem.net.bindFailed">
+         <reference
+               referenceID="eu.geclipse.solution.net.checkPortAlreadyInUse">
+         </reference>
+         <reference
+               referenceID="eu.geclipse.solution.net.useAnotherPort">
+         </reference>
+      </problem>
+      <problem
             description="Failed to establish internet connection"
             id="eu.geclipse.problem.net.connectionFailed"
             mailto="contact@geclipse.eu">
          <reference
                referenceID="eu.geclipse.solution.net.checkInternetConnection">
+         </reference>
+         <reference
+               referenceID="eu.geclipse.solution.net.checkServerURL">
          </reference>
          <reference
                referenceID="eu.geclipse.solution.net.checkProxySettings">
@@ -111,15 +124,38 @@
             id="eu.geclipse.problem.net.connectionTimeout"
             mailto="contact@geclipse.eu">
          <reference
-               referenceID="eu.geclipse.solution.net.serverDown">
+               referenceID="eu.geclipse.solution.net.contactServerAdmin">
          </reference>
          <reference
                referenceID="eu.geclipse.solution.net.checkTimeoutSettings">
          </reference>
       </problem>
+      <problem
+            description="Unknown hostname"
+            id="eu.geclipse.problem.net.unknownHost">
+         <reference
+               referenceID="eu.geclipse.solution.net.checkInternetConnection">
+         </reference>
+         <reference
+               referenceID="eu.geclipse.solution.net.checkServerURL">
+         </reference>
+      </problem>
+      <problem
+            description="Could not determine a reference time via the network"
+            id="eu.geclipse.problem.sys.systemTimeCheckFailed"
+            mailto="contact@geclipse.eu">
+      </problem>
+      <solution
+            description="Check if a firewall blocks your connections"
+            id="eu.geclipse.solution.net.checkFirewall">
+      </solution>
       <solution
             description="Check your internet connection"
             id="eu.geclipse.solution.net.checkInternetConnection">
+      </solution>
+      <solution
+            description="Check if the port is already in use"
+            id="eu.geclipse.solution.net.checkPortAlreadyInUse">
       </solution>
       <solution
             description="Check your proxy settings"
@@ -129,12 +165,20 @@
          </preferenceTag>
       </solution>
       <solution
+            description="Check your server URL"
+            id="eu.geclipse.solution.net.checkServerURL">
+      </solution>
+      <solution
             description="Set your connection timeout settings to a higher value"
             id="eu.geclipse.solution.net.checkTimeoutSettings">
       </solution>
       <solution
-            description="The server may be down, contact the administrator"
-            id="eu.geclipse.solution.net.serverDown">
+            description="Contact the administrator, the server may be down"
+            id="eu.geclipse.solution.net.contactServerAdmin">
+      </solution>
+      <solution
+            description="Use another port if possible"
+            id="eu.geclipse.solution.net.useAnotherPort">
       </solution>
    </extension>
 </plugin>
