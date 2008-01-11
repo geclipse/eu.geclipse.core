@@ -23,13 +23,13 @@ import java.util.Date;
 import java.text.ParseException;
 import java.text.DateFormat;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import eu.geclipse.core.GridException;
+import eu.geclipse.core.reporting.ProblemException;
 
 
 /**
  * Test class for the {@link eu.geclipse.core.util.TimeChecker} class.
  * 
- * @author ariel
+ * @author agarcia
  */
 public class TimeChecker_Test {
 
@@ -55,7 +55,7 @@ public class TimeChecker_Test {
     try {
       this.tr.checkSysTime( new NullProgressMonitor() );
       this.timeOK = this.tr.getTimeCheckStatus();
-    } catch ( GridException ge ) {
+    } catch ( ProblemException pe ) {
       this.timeOK = false;
     } catch ( InterruptedException ie ) {
       // The operation can only be interrupted from the UI
@@ -75,7 +75,7 @@ public class TimeChecker_Test {
     for ( int i = 0; i < TimeChecker.SERVERS.length; ++i ) {
       try {
         time[ i ] = TimeChecker.queryTime( TimeChecker.SERVERS[ i ] );
-      } catch ( GridException ge ) {
+      } catch ( ProblemException pe ) {
         String msg = "Server " + TimeChecker.SERVERS[ i ] + " could not be contacted!"; //$NON-NLS-1$ //$NON-NLS-2$
         throw new AssertionFailedError( msg );
       }
