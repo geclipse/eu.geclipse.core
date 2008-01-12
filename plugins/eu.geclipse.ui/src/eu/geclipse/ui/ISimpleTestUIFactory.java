@@ -16,8 +16,11 @@
  *****************************************************************************/
 package eu.geclipse.ui;
 
+import java.util.List;
+
 import org.eclipse.swt.widgets.Shell;
 
+import eu.geclipse.core.model.IGridResource;
 import eu.geclipse.core.simpleTest.ISimpleTest;
 import eu.geclipse.core.simpleTest.ISimpleTestDescription;
 import eu.geclipse.ui.dialogs.AbstractSimpleTestDialog;
@@ -36,14 +39,17 @@ public interface ISimpleTestUIFactory {
    * perform the simple test.
    * 
    * @param test The test from which to show the dialog.
+   * @param resources The resources that this test should be applied to.
    * @param parentShell The parent shell for the dialog.
    * @return An {@link AbstractSimpleTestDialog} that is dedicated
    * to a certain type of test.
    */
-  public AbstractSimpleTestDialog getSimpleTestDialog( final ISimpleTest test, final Shell parentShell );
+  public AbstractSimpleTestDialog getSimpleTestDialog( final ISimpleTest test, 
+                                                       final List< IGridResource > resources, 
+                                                       final Shell parentShell );
 
   /**
-   * Get an {@link ISimpleTestDescription} that represents the tokens
+   * Get an {@link ISimpleTestDescription} that represents the tests
    * and descriptions that are supported by this factory.
    * 
    * @return An simple test description describing the supported tests.

@@ -16,10 +16,13 @@
  *****************************************************************************/
 package eu.geclipse.ui.dialogs;
 
+import java.util.List;
+
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Shell;
 
+import eu.geclipse.core.model.IGridResource;
 import eu.geclipse.core.simpleTest.ISimpleTest;
 
 
@@ -35,17 +38,24 @@ public abstract class AbstractSimpleTestDialog extends Dialog {
   protected ISimpleTest test;
   
   /**
+   * The list of resources which this test should be applied to.
+   */
+  protected List< IGridResource > resources; 
+
+  /**
    * Construct a new dialog from the specified test.
    * 
    * @param test The <code>ISimpleTest</code> for which to create the dialog for.
+   * @param resources The resources that this test should be applied to.
    * @param parentShell  The parent shell of this dialog.
    */
-  public AbstractSimpleTestDialog( final ISimpleTest test, final Shell parentShell ) {
+  public AbstractSimpleTestDialog( final ISimpleTest test, final List< IGridResource > resources, final Shell parentShell ) {
     super( parentShell );
     
     setShellStyle( SWT.CLOSE | SWT.TITLE | SWT.BORDER | SWT.APPLICATION_MODAL
                    | SWT.RESIZE | SWT.MIN | SWT.MAX );
     
     this.test = test;
+    this.resources = resources;
   }
 }

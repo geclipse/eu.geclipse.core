@@ -16,6 +16,10 @@
  *****************************************************************************/
 package eu.geclipse.core.simpleTest;
 
+import java.util.List;
+
+import eu.geclipse.core.model.IGridResource;
+
 /**
  * Abstract implementation of the {@link ISimpleTest} interface.
  * 
@@ -23,7 +27,6 @@ package eu.geclipse.core.simpleTest;
  *
  */
 public abstract class AbstractSimpleTest implements ISimpleTest {
-  
   /**
    * The simple test description that was used to initialize this test.
    */

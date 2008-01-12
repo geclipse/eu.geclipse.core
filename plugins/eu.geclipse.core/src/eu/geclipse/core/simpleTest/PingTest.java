@@ -18,6 +18,9 @@ package eu.geclipse.core.simpleTest;
 
 import java.io.IOException;
 import java.net.InetAddress;
+import java.util.List;
+
+import eu.geclipse.core.model.IGridResource;
 
 /**
  * @author harald
@@ -57,7 +60,7 @@ public class PingTest extends AbstractSimpleTest {
       end = System.nanoTime();
     
       if ( reached )
-        ret = ( end - start ) * 1000; // Covert from ns to ms
+        ret = ( end - start ) / 1000000; // Covert from ns to ms
     }
     
     return ret;

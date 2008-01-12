@@ -17,15 +17,14 @@
 package eu.geclipse.ui.simpleTest;
 
 import java.net.InetAddress;
+import java.net.URI;
 import java.net.UnknownHostException;
+import java.util.List;
 
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Rectangle;
@@ -35,156 +34,86 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Button;
 
+import eu.geclipse.core.model.IGridResource;
 import eu.geclipse.core.simpleTest.ISimpleTest;
 import eu.geclipse.core.simpleTest.PingTest;
 import eu.geclipse.ui.dialogs.AbstractSimpleTestDialog;
 
 
+/**
+ * @author harald
+ *
+ */
 public class PingTestDialog extends AbstractSimpleTestDialog  {
-
-  public PingTestDialog( final ISimpleTest test, final Shell parentShell ) {
-    super( test, parentShell );
-  }
-
   private Label numberOfPings = null;
   private Text outPut = null;
   private Label delayLabel = null;
   private Spinner numberSpn = null;
   private Spinner delaySpn = null;
   private Label outPutLabel = null;
-  private Button startButton = null;
-  private Button cancelButton = null;
-  private Button exitButton = null;
+  private Button pingButton = null;
+
+  /**
+   * Construct a new dialog from the specified test.
+   * 
+   * @param test The <code>ISimpleTest</code> for which to create the dialog for.
+   * @param resources The resources that this test should be applied to.
+   * @param parentShell  The parent shell of this dialog.
+   */
+  public PingTestDialog( final ISimpleTest test, final List< IGridResource > resources, final Shell parentShell ) {
+    super( test, resources, parentShell );
+  }
 
   /* (non-Javadoc)
    * @see org.eclipse.jface.dialogs.Dialog#createDialogArea(org.eclipse.swt.widgets.Composite)
    */
   @Override
   protected Control createDialogArea( final Composite parent ) {
-//    createContents( parent );
-    //this.createDialogArea( parent );
-//    createMessageArea(parent);
-
     GridData gData;
     
     Composite mainComp = new Composite( parent, SWT.NONE );
-    mainComp.setLayout( new GridLayout( 2, false ) );
     gData = new GridData( GridData.FILL_BOTH );
     gData.grabExcessHorizontalSpace = true;
     gData.grabExcessVerticalSpace = true;
-    gData.widthHint = 313;
+    gData.widthHint = 413;
     gData.heightHint = 338;
     mainComp.setLayoutData( gData );
     
-    
-    numberOfPings = new Label( mainComp, SWT.NONE );
-    numberOfPings.setText("Number of pings:");
-    numberOfPings.setBounds(new Rectangle(15, 15, 166, 24));
-    outPut = new Text(mainComp, SWT.MULTI | SWT.WRAP | SWT.V_SCROLL);
-    outPut.setBounds(new Rectangle(15, 105, 271, 136));
-    delayLabel = new Label(mainComp, SWT.NONE);
-    delayLabel.setBounds(new Rectangle(15, 45, 166, 26));
-    delayLabel.setText("Delay between pings (sec):");
-    numberSpn = new Spinner(mainComp, SWT.NONE);
-    numberSpn.setBounds(new Rectangle(195, 15, 59, 30));
-    delaySpn = new Spinner(mainComp, SWT.NONE);
-    delaySpn.setBounds(new Rectangle(195, 45, 59, 30));
-    outPutLabel = new Label(mainComp, SWT.NONE);
-    outPutLabel.setBounds(new Rectangle(15, 90, 61, 16));
-    outPutLabel.setText("Output:");
-    startButton = new Button(mainComp, SWT.NONE);
-    startButton.setBounds(new Rectangle(15, 255, 76, 28));
-    startButton.setText("&Start");
-    startButton.addSelectionListener( new org.eclipse.swt.events.SelectionListener()
-    {
-      public void widgetDefaultSelected( org.eclipse.swt.events.SelectionEvent e ) {
-        PingTestDialog.this.runTest();
-      }
-      public void widgetSelected( org.eclipse.swt.events.SelectionEvent e ) {
-        PingTestDialog.this.runTest();
+    this.numberOfPings = new Label( mainComp, SWT.NONE );
+    this.numberOfPings.setText( Messages.getString( "PingTestDialog.nPingsLabel" ) ); //$NON-NLS-1$
+    this.numberOfPings.setBounds( new Rectangle( 15, 15, 166, 24 ) );
 
+    this.outPut = new Text( mainComp, SWT.MULTI | SWT.WRAP | SWT.V_SCROLL );
+    this.outPut.setBounds( new Rectangle( 15, 105, 371, 136 ) );
+    this.outPut.setEditable( false );
+
+    this.delayLabel = new Label( mainComp, SWT.NONE );
+    this.delayLabel.setBounds( new Rectangle( 15, 45, 166, 26 ) );
+    this.delayLabel.setText( Messages.getString( "PingTestDialog.delayLabel" ) ); //$NON-NLS-1$
+
+    this.numberSpn = new Spinner( mainComp, SWT.NONE );
+    this.numberSpn.setBounds( new Rectangle( 195, 15, 59, 30 ) );
+    this.numberSpn.setValues( 3, 1, 100, 0, 1, 10 );
+
+    this.delaySpn = new Spinner( mainComp, SWT.NONE );
+    this.delaySpn.setBounds( new Rectangle( 195, 45, 59, 30 ) );
+    this.delaySpn.setValues( 1, 1, 10, 0, 1, 10 );
+    
+    this.outPutLabel = new Label( mainComp, SWT.NONE );
+    this.outPutLabel.setBounds( new Rectangle( 15, 90, 61, 16 ) );
+    this.outPutLabel.setText( Messages.getString( "PingTestDialog.outPutLabel" ) ); //$NON-NLS-1$
+
+    this.pingButton = new Button( mainComp, SWT.NONE );
+    this.pingButton.setBounds( new Rectangle( 110, 255, 76, 28 ) );
+    this.pingButton.setText( Messages.getString( "PingTestDialog.pingButton" ) ); //$NON-NLS-1$
+    this.pingButton.addSelectionListener( new SelectionAdapter() {
+      @Override
+      public void widgetSelected( final SelectionEvent e) {
+        PingTestDialog.this.runPing();
       }
-    } );
-    exitButton = new Button(mainComp, SWT.NONE);
-    exitButton.setBounds(new Rectangle(225, 255, 76, 28));
-    exitButton.setText("&Exit");
-    exitButton.addSelectionListener( new org.eclipse.swt.events.SelectionListener()
-    {
-      public void widgetSelected( org.eclipse.swt.events.SelectionEvent e ) {
-        System.out.println( "widgetSelected()" ); // TODO Auto-generated Event stub widgetSelected()
-      }
-      public void widgetDefaultSelected( org.eclipse.swt.events.SelectionEvent e ) {
-      }
-    } );
+    });
     
     return mainComp;
-    
-    
-    
-    /*
-     lData = new GridData();
-    lData.minimumHeight = 0;
-
-    this.mainComp = new Composite( parent, SWT.NONE );
-    this.mainComp.setLayout( new GridLayout( 2, false ) );
-    gData = new GridData( GridData.FILL_HORIZONTAL );
-    gData.grabExcessHorizontalSpace = true;
-    this.mainComp.setLayoutData( gData );
-
-    this.numberLabel = new Label( this.mainComp, SWT.NONE );
-    this.numberLabel.setText( Messages.getString( "PingTestWizardPage.numberLabel" ) ); //$NON-NLS-1$
-    this.numberLabel.setLayoutData( lData );    
-    
-    this.numberSpinner = new Spinner( this.mainComp, SWT.BORDER );
-    this.numberSpinner.setValues( 10, 1, 100, 0, 1, 10 );
-    gData = new GridData( GridData.FILL_HORIZONTAL );
-    gData.grabExcessHorizontalSpace = true;
-    this.numberSpinner.setLayoutData( gData );
-
-    this.delayLabel = new Label( this.mainComp, SWT.RIGHT | SWT.NONE );
-    this.delayLabel.setText( Messages.getString( "PingTestWizardPage.delayLabel" ) ); //$NON-NLS-1$
-    this.delayLabel.setLayoutData( lData );
-
-    this.delaySpinner = new Spinner( this.mainComp, SWT.BORDER );
-    this.delaySpinner.setValues( 1, 1, 10, 0, 1, 10 );
-    gData = new GridData( GridData.FILL_HORIZONTAL );
-    gData.grabExcessHorizontalSpace = true;
-    this.delaySpinner.setLayoutData( gData );
-    
-    this.outPut = new Text ( this.mainComp, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL );
-    this.outPut.setEditable( false );
-    gData = new GridData( GridData.FILL_HORIZONTAL );
-    gData.grabExcessHorizontalSpace = true;
-    this.outPut.setLayoutData( gData );
-    
-    this.test = new Button( this.mainComp, SWT.PUSH );
-    gData = new GridData( GridData.FILL_HORIZONTAL );
-    gData.grabExcessHorizontalSpace = true;
-    this.test.setLayoutData( gData );
-    
-    this.test.addSelectionListener( new SelectionAdapter() {
-      @Override
-      public void widgetSelected( final SelectionEvent e) {
-        PingTestWizardPage.this.runTest();
-      }
-    });
-    
-    this.cancel = new Button( this.mainComp, SWT.PUSH );
-    gData = new GridData( GridData.FILL_HORIZONTAL );
-    gData.grabExcessHorizontalSpace = true;
-    this.cancel.setLayoutData( gData );
-
-    this.cancel.addSelectionListener( new SelectionAdapter() {
-      @Override
-      public void widgetSelected( final SelectionEvent e) {
-        PingTestWizardPage.this.cancelTest();
-      }
-    });
-
-    
-    setControl( this.mainComp );
-
-    */
   }
 
   /*  
@@ -194,8 +123,10 @@ public class PingTestDialog extends AbstractSimpleTestDialog  {
   3 packets transmitted, 3 packets received, 0% packet loss
   round-trip min/avg/max/stddev = 0.390/0.444/0.532/0.063 ms
 */
-  protected void runTest() {
+  protected void runPing() {
     long pingDelay;
+    String host;
+    InetAddress adr = null;
     long min = Long.MAX_VALUE; 
     long max = Long.MIN_VALUE;
     long avg = 0;
@@ -204,44 +135,52 @@ public class PingTestDialog extends AbstractSimpleTestDialog  {
     int delay = this.delaySpn.getSelection();
     int number = this.numberSpn.getSelection();
 
-    InetAddress adr = null;
-   
-    try {
-      adr = InetAddress.getByName( "194.42.27.239" );
-    } catch( UnknownHostException e ) {
-    }
-    
-    // Clear the text field 
-    this.outPut.selectAll();
-    this.outPut.clearSelection();
-   
-    for ( int i = 0; i < number; ++i ) {
-      pingDelay = ( ( PingTest )this.test ).ping( adr );
-      
-      if ( -1 == pingDelay ) {
-        ++nFailed;
-        this.outPut.append( "Ping " + i + ": Host not rechable" + this.outPut.getLineDelimiter() );
-      }
-      else {
-        ++nOk;
-        if ( pingDelay < min )
-          min = pingDelay;
-        if ( pingDelay > max )
-          max = pingDelay;
-        avg += pingDelay;
+    if ( null != this.resources ) {
+      // Clear the text field 
+      this.outPut.selectAll();
+      this.outPut.clearSelection();
+
+      // For each of the hosts to test
+      for ( int i = 0; i < this.resources.size(); ++i ) {
+
+        // Initialize the counters
+        min = Long.MAX_VALUE; 
+        max = Long.MIN_VALUE;
+        avg = 0;
+        nOk = 0;
+        nFailed = 0;
+        URI uri = this.resources.get( i ).getURI();
+        host = uri.getScheme();//.getHost();
+        try {
+          adr = InetAddress.getByName( host );
+        } catch( UnknownHostException e ) {
+          // TODO fix tis
+        }
+
+        // Print out which host we ping
+        this.outPut.append( "Pinging: " + host + this.outPut.getLineDelimiter() );
         
-        this.outPut.append( "Ping " + i + ": time=" + pingDelay + " ms" + this.outPut.getLineDelimiter() );
-      }
+        for ( int j = 0; j < number; ++j ) {
+          pingDelay = ( ( PingTest )this.test).ping( adr );
       
-      // Write the summary
-      this.outPut.append( "round-trip min/avg/max/stddev = " + min +"/" + avg/nOk + "/" + max + " ms" + this.outPut.getLineDelimiter() );
+          if ( -1 == pingDelay ) {
+            ++nFailed;
+            this.outPut.append( "Ping " + i + ": Host not reachable" + this.outPut.getLineDelimiter() );
+          }
+          else {
+            ++nOk;
+            if ( pingDelay < min )
+              min = pingDelay;
+            if ( pingDelay > max )
+              max = pingDelay;
+            avg += pingDelay;
+        
+            this.outPut.append( "Ping " + j + ": time=" + pingDelay + " ms" + this.outPut.getLineDelimiter() );
+          }
+        }
+        // Write the summary
+        this.outPut.append( "round-trip min/avg/max/stddev = " + min +"/" + avg/nOk + "/" + max + " ms" + this.outPut.getLineDelimiter() );
+      }
     }
   }
-  
-  
-/*  @Override
-  protected Image getImage() {
-    return getInfoImage();
-  }
-  */
 }

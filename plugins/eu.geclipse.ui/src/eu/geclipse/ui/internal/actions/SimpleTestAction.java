@@ -25,6 +25,8 @@ import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.actions.SelectionListenerAction;
 
 import eu.geclipse.core.model.IGridResource;
+import eu.geclipse.core.simpleTest.ISimpleTest;
+import eu.geclipse.core.simpleTest.ISimpleTestDescription;
 import eu.geclipse.ui.ISimpleTestUIFactory;
 
 import eu.geclipse.ui.dialogs.AbstractSimpleTestDialog;
@@ -58,7 +60,10 @@ public class SimpleTestAction extends SelectionListenerAction {
   @Override
   public void run() {
     if ( this.factory != null ) {
-      AbstractSimpleTestDialog infoDialog = this.factory.getSimpleTestDialog( null, this.site.getShell() );
+      ISimpleTestDescription description = this.factory.getSupportedDescription();
+      ISimpleTest test = description.createSimpleTest();
+      
+      AbstractSimpleTestDialog infoDialog = this.factory.getSimpleTestDialog( test, this.resources, this.site.getShell() );
       infoDialog.open();
     }
   }

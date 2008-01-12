@@ -16,8 +16,11 @@
  *****************************************************************************/
 package eu.geclipse.ui.simpleTest;
 
+import java.util.List;
+
 import org.eclipse.swt.widgets.Shell;
 
+import eu.geclipse.core.model.IGridResource;
 import eu.geclipse.core.simpleTest.ISimpleTest;
 import eu.geclipse.core.simpleTest.ISimpleTestDescription;
 import eu.geclipse.core.simpleTest.PingTestDescription;
@@ -33,8 +36,10 @@ import eu.geclipse.ui.dialogs.AbstractSimpleTestDialog;
  */
 public class PingTestUIFactory extends AbstractSimpleTestUIFactory {
 
-  public AbstractSimpleTestDialog getSimpleTestDialog( final ISimpleTest test, final Shell parentShell ) {
-    PingTestDialog dialog = new PingTestDialog( test, parentShell );
+  public AbstractSimpleTestDialog getSimpleTestDialog( final ISimpleTest test, 
+                                                       final List< IGridResource > resources, 
+                                                       final Shell parentShell ) {
+    PingTestDialog dialog = new PingTestDialog( test, resources, parentShell );
     return dialog;
   }
   
