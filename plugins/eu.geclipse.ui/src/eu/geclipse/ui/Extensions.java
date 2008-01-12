@@ -17,6 +17,7 @@
 package eu.geclipse.ui;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
@@ -112,6 +113,36 @@ public class Extensions {
    */
   public static final String PROJECT_FOLDER_DECORATOR_POINT
     = "eu.geclipse.ui.gridProjectFolderDecorator"; //$NON-NLS-1$
+
+  /**
+   * The ID of the simple test extension point.
+   */
+  public static final String SIMPLE_TEST_POINT = "eu.geclipse.core.simpleTests"; //$NON-NLS-1$
+  /**
+   * The ID of the simple test ui extension point.
+   */
+  public static final String SIMPLE_TEST_UI_POINT = "eu.geclipse.ui.simpleTestUI"; //$NON-NLS-1$
+  /**
+   * The ID of the name attribute of the wizard element of the
+   * simple test extension point.
+   */
+  public static final String SIMPLE_TEST_ELEMENT = "test"; //$NON-NLS-1$
+  /**
+   * The ID of the name attribute of the wizard element of the
+   * simple test extension point.
+   */
+  public static final String SIMPLE_TEST_NAME_ATTRIBUTE = "name"; //$NON-NLS-1$
+  /**
+   * The ID of the simple test ui factory element contained in the
+   * simple test ui extension point.
+   */
+  public static final String SIMPLE_TEST_FACTORY_ELEMENT = "factory"; //$NON-NLS-1$
+  /**
+   * The ID of the executable extension of the simple test ui factory
+   * configuration element.
+   */
+  public static final String SIMPLE_TEST_FACTORY_EXECUTABLE = "class"; //$NON-NLS-1$
+  
   
   private static final String PROPERTIES_FACTORY_POINT = "eu.geclipse.ui.propertiesFactory";  //$NON-NLS-1$
   private static final String PROPERTIES_FACTORY_ELEMENT = "PropertiesFactory"; //$NON-NLS-1$
@@ -122,7 +153,12 @@ public class Extensions {
   private static final String JOBDETAILS_FACTORY_SOURCEJOB_CLASS = "sourceJobClass"; //$NON-NLS-1$
   private static final String JOBDETAILS_FACTORY_SOURCEJOBSTATUS_CLASS = "sourceJobStatusClass"; //$NON-NLS-1$
   private static final String JOBDETAILS_FACTORY_IMPLEMENTATION_CLASS = "class"; //$NON-NLS-1$
-  
+
+  /**
+   * List containing the names of all known simple test wizards.
+   */
+  private static List< String > simpleTestNames;
+
   /**
    * Get a list of all currently registered authentication token ui factories.
    * 
@@ -305,5 +341,51 @@ public class Extensions {
     
     return support;
   }
+
   
+  /**
+   * Get a list with the names of all registered simple tests.
+   * The list will be sorted alphabetically.
+   * 
+   * @return A list containing the names of the types of all
+   * currently available simple tests.
+   */
+  public static List< String > getRegisteredSimpleTestNames() {
+    if ( simpleTestNames == null ) {
+      List< String > resultList = new ArrayList< String >();
+      ExtensionManager manager = new ExtensionManager();
+      List< IConfigurationElement > cElements
+        = manager.getConfigurationElements( SIMPLE_TEST_POINT,
+                                            SIMPLE_TEST_ELEMENT );
+      for ( IConfigurationElement element : cElements ) {
+        String name = element.getAttribute( SIMPLE_TEST_NAME_ATTRIBUTE );
+        if ( name != null ) {
+          resultList.add( name );
+        }
+      }
+      Collections.sort( resultList );
+      simpleTestNames = resultList;
+    }
+    return simpleTestNames;
+  }
+  
+  /**
+   * Get a list of all currently registered simple test ui factories.
+   * 
+   * @return A list containing instances of all currently registered extensions
+   *         of the simple test ui configuration elements.
+   */
+  static public List< ISimpleTestUIFactory > getRegisteredSimpleTestUIFactories() {
+    List< ISimpleTestUIFactory > resultList = new ArrayList< ISimpleTestUIFactory >();
+    ExtensionManager browser = new ExtensionManager();
+    List< Object > objectList = browser.getExecutableExtensions( SIMPLE_TEST_UI_POINT,
+                                                               SIMPLE_TEST_FACTORY_ELEMENT,
+                                                               SIMPLE_TEST_FACTORY_EXECUTABLE );
+    for( Object o : objectList ) {
+      if( o instanceof ISimpleTestUIFactory ) {
+        resultList.add( ( ISimpleTestUIFactory )o );
+      }
+    }
+    return resultList;
+  }
 }

@@ -23,6 +23,7 @@ Export-Package: eu.geclipse.core,
  eu.geclipse.core.portforward,
  eu.geclipse.core.project,
  eu.geclipse.core.security,
+ eu.geclipse.core.simpleTest,
  eu.geclipse.core.util,
  eu.geclipse.core.util.tar
 Bundle-RequiredExecutionEnvironment: J2SE-1.5

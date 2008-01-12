@@ -39,6 +39,7 @@ import eu.geclipse.ui.internal.actions.MonitorActions;
 import eu.geclipse.ui.internal.actions.MountActions;
 import eu.geclipse.ui.internal.actions.NewWizardActions;
 import eu.geclipse.ui.internal.actions.ProjectActions;
+import eu.geclipse.ui.internal.actions.SimpleTestActions;
 import eu.geclipse.ui.internal.actions.SubmitJobActions;
 import eu.geclipse.ui.internal.actions.TransferJsdl2JdlActions;
 import eu.geclipse.ui.internal.actions.VisualisationActions;
@@ -132,7 +133,10 @@ public class GridProjectView
     
     VisualisationActions visualizationActions = new VisualisationActions ( site );
     groups.addGroup ( visualizationActions );
-    
+
+    SimpleTestActions simpleTestActions = new SimpleTestActions( site );
+    groups.addGroup( simpleTestActions );
+
     this.editorActions = new EditorActions( this );
     groups.addGroup( this.editorActions );
     

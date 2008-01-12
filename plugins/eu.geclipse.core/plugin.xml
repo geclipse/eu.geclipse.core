@@ -11,6 +11,7 @@
    <extension-point id="gridProjectFolder" name="Grid Project Folder" schema="schema/gridProjectFolder.exsd"/>
    <extension-point id="voLoader" name="VO Loader" schema="schema/voLoader.exsd"/>
    <extension-point id="problemReporting" name="Problem Reporting" schema="schema/problemReporting.exsd"/>
+   <extension-point id="simpleTests" name="Simple Tests" schema="schema/simpleTests.exsd"/>
    <extension
          id="eu.geclipse.core.internal.PreferenceInitializer"
          name="%extension.preferenceInitializer"
@@ -180,5 +181,13 @@
             description="Use another port if possible"
             id="eu.geclipse.solution.net.useAnotherPort">
       </solution>
+   </extension>
+   <extension
+         point="eu.geclipse.core.simpleTests">
+      <test
+            description="eu.geclipse.core.simpleTest.ISimpleTestDescription"
+            id="eu.geclipse.core.simpleTest.pingTest"
+            name="Ping Test">
+      </test>
    </extension>
 </plugin>
