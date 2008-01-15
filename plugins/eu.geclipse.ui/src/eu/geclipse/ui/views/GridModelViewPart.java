@@ -44,7 +44,6 @@ import org.eclipse.ui.actions.ActionGroup;
 import org.eclipse.ui.navigator.ICommonMenuConstants;
 import org.eclipse.ui.part.ViewPart;
 
-import eu.geclipse.core.Extensions;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridModelEvent;
