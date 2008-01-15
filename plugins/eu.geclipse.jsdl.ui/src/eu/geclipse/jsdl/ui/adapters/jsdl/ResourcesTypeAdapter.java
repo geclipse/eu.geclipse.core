@@ -17,10 +17,6 @@
 package eu.geclipse.jsdl.ui.adapters.jsdl;
 
 
-/**
- * @author nloulloud
- *
- */
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -58,6 +54,7 @@ import eu.geclipse.jsdl.model.OperatingSystemTypeType;
 import eu.geclipse.jsdl.model.ProcessorArchitectureEnumeration;
 import eu.geclipse.jsdl.model.ResourcesType;
 import eu.geclipse.jsdl.ui.internal.Activator;
+import eu.geclipse.jsdl.ui.internal.pages.JobDefinitionPage;
 
 
 
@@ -117,18 +114,21 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   
   
   /**
-   * ResourcesTypeAdatper Class Constructor
+   * Constructs a new <code> {@link ResourcesTypeAdapter} </code>
    * 
-   * @param jobDefinitionRoot The root element of a JSDL document.
+   * @param jobDefinitionRoot . The root element of a JSDL document ({@link JobDefinitionType}).
    */
   public ResourcesTypeAdapter( final JobDefinitionType jobDefinitionRoot ) {
     
-    getTypeForAdapter(jobDefinitionRoot);
+    getTypeForAdapter( jobDefinitionRoot );
       
   } // End Class Constructor
   
   
   
+  /*
+   * Get the Application Type Element from the root Jsdl Element.
+   */  
   private void  getTypeForAdapter(final JobDefinitionType jobDefinitionRoot){
     
     this.jobDescriptionType = jobDefinitionRoot.getJobDescription();
@@ -142,11 +142,11 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   
   
   /**
-   * JobIdentificationTypeAdapter Class Constructor
+   * Allows to set the adapter's content on demand and not through the constructor.
    * 
    * @param jobDefinitionRoot The root element of a JSDL document.
    */
-  public void setContent(final JobDefinitionType jobDefinitionRoot){
+  public void setContent( final JobDefinitionType jobDefinitionRoot ) { 
     
     this.adapterRefreshed = true;
     getTypeForAdapter( jobDefinitionRoot );
@@ -154,8 +154,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   }
   
   
-  
-  protected void contentChanged(){
+  protected void contentChanged() {
     
     if (this.isNotifyAllowed){
       fireNotifyChanged( null);
@@ -166,10 +165,10 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
  
   
   /**
-   * Adapter interface to attach to the CandidateHosts TableViewer widget.
+   * The attach point that handles the {@link TableViewer} widget which is responsible for the 
+   * Resources <b>CandidateHosts</b> element.
    * 
-   * @param widget The SWT list widget which is associated with the 
-   * CandidateHosts element of the JSDL document.
+   * @param widget The TableViewer widget responsible for Resources CandidateHosts element.
    */
   public void attachToHostName(final TableViewer widget){
     
@@ -180,9 +179,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   
   
   protected void deleteElement( final EObject eStructuralFeature ) {
-    
-//    EStructuralFeature eStructuralFeature = this.resourcesType.eClass().getEStructuralFeature( featureID );
-    
+   
     try {
       EcoreUtil.remove( eStructuralFeature );  
     } catch( Exception e ) {
@@ -192,13 +189,11 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   } //end void deleteElement()
   
   
-  
   /**
+   * The attach point that handles the {@link TableViewer} widget which is responsible for the 
+   * Resources <b>FileSystem</b> element.
    * 
-   * Adapter interface to attach to the FileSystems TableViewer widget.
-   * 
-   * @param widget The SWT TableViewer widget which is associated with the 
-   * FileSystem element of the JSDL document.
+   * @param widget The TableViewer widget responsible for Resources FileSystem element.
    */
   public void attachToFileSystems( final TableViewer widget ) {
     
@@ -238,8 +233,11 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   
   
   /**
-   * @param tableViewer The SWT TableViewer that contains the Structural Features
-   * @param value 
+   * 
+   * Method that adds a list of Candidate Hosts .
+   * 
+   * @param tableViewer The {@link TableViewer} that will hold the Candidate Hosts.
+   * @param value The list of Candidate Hosts.
    */
   @SuppressWarnings("unchecked")
   public void addCandidateHosts(final TableViewer tableViewer, final Object[] value) {
@@ -283,9 +281,13 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   } // end void addCandidateHosts()
   
   
+  
   /**
-   * @param tableViewer The SWT TableViewer that contains the Structural Features
-   * @param value 
+   * 
+   * Method that adds a list of File Systems.
+   * 
+   * @param tableViewer The {@link TableViewer} that will hold the File Systems.
+   * @param value The list of File Systems.
    */
   @SuppressWarnings("unchecked")
   public void addFileSystem( final TableViewer tableViewer, final Object[] value ) {
@@ -328,16 +330,15 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     collection = null;
     
   } // end addFileSystem()
-  
-  
-  
-  
-  
+    
   
   
   /**
-   * @param tableViewer The SWT TableViewer that contains the Structural Features
-   * @param value 
+   * 
+   * Method that edits a list a FileSystem .
+   * 
+   * @param tableViewer The {@link TableViewer} that will hold the Candidate Hosts.
+   * @param value The new value of the File System.
    */
   @SuppressWarnings("unchecked")
   public void performEdit(final TableViewer tableViewer, final Object value) {
@@ -518,10 +519,6 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   
   
   
-  
-  
-  
-  
   protected void checkOSElement() {
     
     checkResourcesElement();    
@@ -583,7 +580,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   
   
   
-  protected EObject checkProxy(final EObject refEObject) {
+  protected EObject checkProxy( final EObject refEObject ) {
     
     EObject eObject = refEObject;
     
@@ -600,10 +597,12 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
 
    
   /**
-   * Adapter interface to attach to the Operating System Type Combo widget.
+   * The attach point that handles the {@link Combo} widget which is responsible for the 
+   * Resources <b>OperatingSystem</b> element. This attach point provides a {@link SelectionListener}
+   * that listens to changes in the text box and commits this changes to the underlying
+   * model.
    * 
-   * @param widget The SWT {@link Combo} widget which is associated with the 
-   * OperatingSystemType element of the JSDL document.
+   * @param widget The Text widget responsible for Resources Operating System element.
    */
   public void attachToOSType( final Combo widget ) {     
     
@@ -663,10 +662,12 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   
   
   /**
-   * Adapter interface to attach to the CPU Architecture combo widget.
+   * The attach point that handles the {@link Combo} widget which is responsible for the 
+   * Resources <b>CPUArchitecture</b> element. This attach point provides a {@link SelectionListener}
+   * that listens to changes in the text box and commits this changes to the underlying
+   * model.
    * 
-   * @param widget The SWT combo widget which is associated with the 
-   * CPUArchitecture element of the JSDL document.
+   * @param widget The Text widget responsible for Resources CPUArchitecture element.
    */
   public void attachToCPUArchitecture(final Combo widget){
     
@@ -734,10 +735,12 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   
   
   /**
-   * Adapter interface to attach to the Operating System Version text widget.
+   * The attach point that handles the {@link Text} widget which is responsible for the 
+   * Resources <b>OperatingSystemVersion</b> element. This attach point provides a {@link ModifyListener}
+   * that listens to changes in the text box and commits this changes to the underlying
+   * model.
    * 
-   * @param widget The SWT combo widget which is associated with the 
-   * OperatingSystemVersion element of the JSDL document.
+   * @param widget The Text widget responsible for Resources OperatingSystemVersion element.
    */
   public void attachToOSVersion(final Text widget){
     
@@ -761,10 +764,12 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   
   
   /**
-   * Adapter interface to attach to the Operating System Description text widget.
+   * The attach point that handles the {@link Text} widget which is responsible for the 
+   * Resources <b>OperatingSystemDescription</b> element. This attach point provides a {@link ModifyListener}
+   * that listens to changes in the text box and commits this changes to the underlying
+   * model.
    * 
-   * @param widget The SWT text widget which is associated with the 
-   * OperatingSystem Description element of the JSDL document.
+   * @param widget The Text widget responsible for Resources OperatingSystemDescription element.
    */
   public void attachToOSDescription(final Text widget){
     
@@ -783,226 +788,16 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
       } );   
         
   } // End attachToOSDescription()
+ 
   
-//  
-//  
-//  /**
-//   * Adapter interface to attach to the FileSystemType Name text widget.
-//   * 
-//   * @param widget The SWT text widget which is associated with the 
-//   * Name attribute of the FileSystemType element in a JSDL document.
-//   */
-//  public void attachToFileSystemName( final Text widget ){
-//    Integer featureID = new Integer( JsdlPackage.FILE_SYSTEM_TYPE__NAME );
-//    this.widgetFeaturesMap.put( featureID , widget );
-//    
-//    widget.addModifyListener( new ModifyListener() {
-//      
-//      public void modifyText( final ModifyEvent e ) {
-////        checkFileSystemElement();
-//        ResourcesTypeAdapter.this.fileSystemType.setName( widget.getText() );
-//        contentChanged();
-//          
-//        }
-//      } );
-//    
-//  } // End attachToFileSystemName()
-//  
-//  
-//  
-//  /**
-//   * Adapter interface to attach to the FileSystemType Description text widget.
-//   * 
-//   * @param widget The SWT text widget which is associated with the 
-//   * FileSystemType Description element of the JSDL document.
-//   */
-//  public void attachToFileSystemDescription(final Text widget){
-//    
-//    Integer featureID = new Integer( JsdlPackage.FILE_SYSTEM_TYPE__DESCRIPTION );
-//    this.widgetFeaturesMap.put( featureID , widget );
-//    
-//    widget.addModifyListener( new ModifyListener() {
-//      
-//      public void modifyText( final ModifyEvent e ) {
-//        checkFileSystemElement();
-//        ResourcesTypeAdapter.this.fileSystemType.setDescription( widget.getText() );
-//        contentChanged();          
-//        }
-//      } );
-//         
-//  } // End attachToFileSystemDescription()
-//  
-//  
-//  
-//  /**
-//   * Adapter interface to attach to the Mount Point text widget.
-//   * 
-//   * @param widget The SWT text widget which is associated with the 
-//   * MountPoint element of the JSDL document.
-//   */
-//  public void attachToFileSystemMountPoint(final Text widget){
-//    
-//    Integer featureID = new Integer( JsdlPackage.FILE_SYSTEM_TYPE__MOUNT_POINT );
-//    this.widgetFeaturesMap.put( featureID , widget );
-//    
-//    widget.addModifyListener( new ModifyListener() {
-//      
-//      public void modifyText( final ModifyEvent e ) {
-//        
-//        if ( !widget.getText().equals( "" ) ) { //$NON-NLS-1$ 
-//        
-//          checkFileSystemElement();
-//          ResourcesTypeAdapter.this.fileSystemType.setMountPoint( widget.getText() );
-//          
-//        }
-//        else {
-//          ResourcesTypeAdapter.this.fileSystemType.setMountPoint( null );
-//        }
-//        contentChanged();
-//      }
-//      
-//    } );    
-//          
-//  } // End attachToFileSystemMountPoint()
-//  
-//  
-//  
-//  /**
-//   * Adapter interface to attach to the Disk Space text widget and to Range Value
-//   * combo widget.
-//   * 
-//   * @param text The SWT text widget which is associated with the 
-//   * DiskSpace element of the JSDL document.
-//   * @param combo The SWT {@link Combo} widget which is associated with the Disk Space
-//   * Range Value element.
-//   */
-//  public void attachToFileSystemDiskSpace(final Text text, final Combo combo){
-//    
-//    this.widgetFeaturesMap.put (new Integer(JsdlPackage.FILE_SYSTEM_TYPE__DISK_SPACE)
-//                                , text );
-//    this.comboFeaturesMap.put( new Integer(JsdlPackage.DOCUMENT_ROOT__DISK_SPACE)
-//                                , combo );
-//    
-//    
-//    
-//    /* Event Listener for the Disk Space Text Widget */
-//    text.addModifyListener( new ModifyListener() {
-//      BoundaryType boundaryType = JsdlFactory.eINSTANCE.createBoundaryType();    
-//      RangeValueType rangeValueType = JsdlFactory.eINSTANCE.createRangeValueType();
-//      
-//      public void modifyText( final ModifyEvent e ) {
-//        
-//        
-//        if ( !text.getText().equals( "" ) ) { //$NON-NLS-1$ 
-//          
-//        checkFileSystemElement();  
-//        this.boundaryType.setValue( Double.parseDouble( text.getText() ) );        
-//        switch( combo.getSelectionIndex() ) {
-//          /* INDEX 0 = UPPER RANGE */
-//          case 0 : this.rangeValueType.setLowerBoundedRange( this.boundaryType ); 
-//          break;
-//          /* INDEX 1 = UPPER RANGE */
-//          case 1 : this.rangeValueType.setUpperBoundedRange( this.boundaryType );
-//          break;
-//          default:
-//          break;
-//        }
-//        
-//        this.rangeValueType = (RangeValueType) checkProxy( this.rangeValueType );       
-//        ResourcesTypeAdapter.this.fileSystemType.setDiskSpace( this.rangeValueType );
-//        }
-//        
-//        else{
-//          ResourcesTypeAdapter.this.fileSystemType.setDiskSpace( null );
-//        }
-//        contentChanged();
-//        
-//      }
-//    } );
-//    
-//    /* Event Listener for the Disk Space Range Combo Widget */
-//    combo.addSelectionListener(new SelectionListener() {
-//      BoundaryType boundaryType = JsdlFactory.eINSTANCE.createBoundaryType();    
-//      RangeValueType rangeValueType = JsdlFactory.eINSTANCE.createRangeValueType();
-//      
-//      public void widgetSelected(final SelectionEvent e) {
-//        if (!text.getText().equals( "" )) { //$NON-NLS-1$
-//          
-//        checkFileSystemElement();
-//        
-//        this.boundaryType.setValue( Double.parseDouble( text.getText() ) );        
-//        switch( combo.getSelectionIndex() ) {
-//          /* INDEX 0 = UPPER RANGE */
-//          case 0 : this.rangeValueType.setLowerBoundedRange( this.boundaryType ); 
-//          break;
-//          /* INDEX 1 = UPPER RANGE */
-//          case 1 : this.rangeValueType.setUpperBoundedRange( this.boundaryType );
-//          break;
-//          default:
-//          break;
-//        }
-//     
-//        ResourcesTypeAdapter.this.fileSystemType.setDiskSpace( this.rangeValueType );
-//        ResourcesTypeAdapter.this.contentChanged();
-//        
-//        } // end_if equals ""
-//        
-//      }
-//
-//      public void widgetDefaultSelected(final SelectionEvent e) {
-//          //Do Nothing
-//      }
-//    });
-//    
-//                
-//  }
-//  
-//  
-//
-//  /**
-//   * Adapter interface to attach to the FileSystemType combo widget.
-//   * 
-//   * @param widget The SWT combo widget which is associated with the 
-//   * FileSystemType element of a JSDL document.
-//   */
-//  public void attachToFileSystemType(final Combo widget){
-//    
-//    Integer featureID = new Integer(JsdlPackage.DOCUMENT_ROOT__FILE_SYSTEM_TYPE);
-//    this.comboFeaturesMap.put( featureID , widget );
-//        
-//    /* Populate the Combo Box with the File System Type Literals */    
-//    EEnum cFEnum = JsdlPackage.Literals.FILE_SYSTEM_TYPE_ENUMERATION;
-//       for (int i=0; i<cFEnum.getELiterals().size(); i++){         
-//         widget.add( cFEnum.getEEnumLiteral( i ).toString() );
-//       }
-//       cFEnum = null;
-//          
-//        
-//    widget.addSelectionListener(new SelectionListener() {
-//      public void widgetSelected(final SelectionEvent e) {
-////        checkFileSystemElement();
-//        ResourcesTypeAdapter.this.fileSystemType
-//                 .setFileSystemType(FileSystemTypeEnumeration.get( 
-//                                                 widget.getSelectionIndex() ) );
-//        
-//        ResourcesTypeAdapter.this.contentChanged();
-//        
-//      }
-//
-//      public void widgetDefaultSelected(final SelectionEvent e) {
-//        // Do Nothing
-//      }
-//    });
-//     
-//  } // End attachToFileSystemType()
-//  
-//  
   
   /**
-   * Adapter interface to attach to the Exclusive Execution combo widget.
+   * The attach point that handles the {@link Combo} widget which is responsible for the 
+   * Resources <b>ExclusiveExecution</b> element. This attach point provides a {@link SelectionListener}
+   * that listens to changes in the text box and commits this changes to the underlying
+   * model.
    * 
-   * @param widget The SWT combo widget which is associated with the 
-   * ExclusiveExecution element of a JSDL document.
+   * @param widget The Text widget responsible for Resources ExclusiveExecution element.
    */
   public void attachToExclusiveExecution( final Combo widget ){
     
@@ -1049,8 +844,9 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   
   
   /**
-   * This method populates the model content to the widgets registered with the
-   * ResourcesType adapter.
+   * Method which populates the content of the underlying model to the widgets that are
+   * attached to this adapter. The method is called from the {@link JobDefinitionPage} when
+   * the appropriate widgets are created and also every time the page becomes active. 
    */
   @SuppressWarnings("unchecked")
   public void load() {
@@ -1142,74 +938,6 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
                 } // End Iterator
                          
               } // Endif
-              
-//              for (Iterator<FileSystemType> it = valueEList.iterator(); it.hasNext();){
-//                
-//                this.fileSystemType = it.next();
-//                
-//                if (this.fileSystemType.getName() != null ) {
-//                
-//                widgetName = this.widgetFeaturesMap
-//                        .get( new Integer(JsdlPackage.FILE_SYSTEM_TYPE__NAME) );
-//                
-//                widgetName.setText( this.fileSystemType.getName() );
-//                
-//                }
-//                
-//                if (this.fileSystemType.getDescription() != null ) {
-//                  
-//                widgetName = this.widgetFeaturesMap
-//                  .get(new Integer(JsdlPackage.FILE_SYSTEM_TYPE__DESCRIPTION) );
-//                
-//                widgetName.setText( this.fileSystemType.getDescription() );
-//                
-//                }
-//                
-//                if (this.fileSystemType.getMountPoint() != null ) {
-//                  
-//                widgetName = this.widgetFeaturesMap
-//                 .get( new Integer(JsdlPackage.FILE_SYSTEM_TYPE__MOUNT_POINT) );
-//                
-//                widgetName.setText( this.fileSystemType.getMountPoint() );
-//                
-//                }
-//                
-//                if (this.fileSystemType.getDiskSpace() != null ) {
-//                  
-//                
-//                widgetName = this.widgetFeaturesMap
-//                  .get( new Integer(JsdlPackage.FILE_SYSTEM_TYPE__DISK_SPACE) );
-//                
-//                comboName = this.comboFeaturesMap
-//                   .get( new Integer(JsdlPackage.DOCUMENT_ROOT__DISK_SPACE) );
-//                
-//                if ( this.fileSystemType.getDiskSpace().getLowerBoundedRange() != null ) {
-//                  
-//                  widgetName.setText( Double.toString( this.fileSystemType.getDiskSpace()
-//                                      .getLowerBoundedRange().getValue() ) );
-//                  
-//                  /* Select the Lower Bound */                  
-//                  comboName.select( 0 );
-//                 
-//                }
-//                
-//                else {
-//                  widgetName.setText( Double.toString( this.fileSystemType.getDiskSpace()
-//                                      .getUpperBoundedRange().getValue() ) );
-//                  /* Select the Lower Bound */
-//                  comboName.select( 1 );
-//                }
-//                
-//
-//                comboName = this.comboFeaturesMap
-//                .get (new Integer(JsdlPackage.DOCUMENT_ROOT__FILE_SYSTEM_TYPE));
-//                
-//                comboName.setText( this.fileSystemType.getFileSystemType()
-//                                                                 .getLiteral() );
-//                }               
-//                
-//              } // End Iterator
-           
               
             }
             break;

@@ -98,14 +98,15 @@ public final class JobDefinitionPage extends FormPage
   
   
   /**
-   * JobDefinitionPage Class constructor.
-   * @param editor The JSDL Editor.
+   * <code>JobDefinitionPage</code> class constructor. Creates the page by
+   * passing as an argument the container JSDL editor.
+   * 
+   * @param editor The JSDL editor.
    */
-  public JobDefinitionPage( final JsdlEditor editor) {
-   
+  public JobDefinitionPage( final JsdlEditor editor) { 
     
-    super(editor, PAGE_ID,
-                  Messages.getString("JobDefinitionPage_JobDefinitionTitle")); //$NON-NLS-1$   
+    super( editor, PAGE_ID, 
+           Messages.getString("JobDefinitionPage_JobDefinitionTitle") ); //$NON-NLS-1$   
     
   }
   
@@ -122,7 +123,7 @@ public final class JobDefinitionPage extends FormPage
       
     } // end_if active
     
-  }
+  } // end void setActive()
   
   
   
@@ -137,28 +138,25 @@ public final class JobDefinitionPage extends FormPage
   
   /**
    * Method that set's the JobDefinition Page content. The content is the root 
-   * JSDL element. Also this method is responsible to initialize the associated 
-   * type adapters for the elements of this page.  This method must be called only
+   * JSDL element. This method is also responsible to initialize the associated 
+   * type adapters for the elements of this page. This method must be called only
    * from the JSDL Editor.
    * 
    * Associated Type Adapters for this page are: 
    * @see JobDefinitionTypeAdapter
    * @see JobIdentificationTypeAdapter
    *  
-   * @param jobDefinitionRoot
+   * @param jobDefinitionRoot The root element ({@link JobDefinitionType}) of a JSDL #
+   * document.
    * 
-   * @param refreshStatus
-   * Set to TRUE if the original page content is already set, but there is a need
-   * to refresh the page because there was a change to this content
-   *  from an outside editor.
+   * @param refreshStatus Set to TRUE if the original page content is already set,
+   * but there is a need to refresh the page because there was a change to its content
+   * from an outside editor.
    * 
-   */
-
-  
+   */  
   public void setPageContent( final JobDefinitionType jobDefinitionRoot, 
-                              final boolean refreshStatus ){
-
-       
+                              final boolean refreshStatus ) {
+      
    if ( refreshStatus ) {
       this.contentRefreshed = true;
       this.jobDefinitionTypeAdapter.setContent( jobDefinitionRoot );
@@ -185,8 +183,8 @@ public final class JobDefinitionPage extends FormPage
   /**
    * This method set's the dirty status of the page.
    * 
-   * @param dirty
-   * If TRUE then the page is Dirty and a Save operation is needed.
+   * @param dirty TRUE when the page is Dirty (content has been changed) and hence a 
+   * Save operation is needed.
    * 
    */
   public void setDirty( final boolean dirty ) {
@@ -196,7 +194,7 @@ public final class JobDefinitionPage extends FormPage
       this.getEditor().editorDirtyStateChanged();  
     }
     
-  }
+  } // end void setDirty()
 
  
 
@@ -419,24 +417,6 @@ public final class JobDefinitionPage extends FormPage
     
     this.jobIdentificationTypeAdapter.attachToDelete( this.btnDel, this.lstJobAnnotation);
     this.btnDel.setLayoutData( gd );
-    
-//    //TEST
-//    
-//    this.btnAdd = toolkit.createButton( client, 
-//                                        "TEST", //$NON-NLS-1$
-//                                        SWT.PUSH );
-//    this.btnAdd.addSelectionListener( new SelectionAdapter() {
-//      
-//      @Override
-//      public void widgetSelected( final SelectionEvent event ) {
-//     
-//        NewJSDL newJSDL = new NewJSDL();
-//      }
-//
-//     });
-//     
-////     this.btnAdd.setLayoutData( gd );
-
     
     /* ============================= Job Project =============================*/
     

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
+
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EClass;
@@ -34,6 +35,7 @@ import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
+
 import eu.geclipse.jsdl.model.CreationFlagEnumeration;
 import eu.geclipse.jsdl.model.DataStagingType;
 import eu.geclipse.jsdl.model.DocumentRoot;
@@ -44,13 +46,6 @@ import eu.geclipse.jsdl.model.JsdlPackage;
 import eu.geclipse.jsdl.model.SourceTargetType;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.pages.Messages;
-
-
-
-/**
- * @author nloulloud
- *
- */
 
 
 /**
@@ -97,11 +92,11 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
   
   
   /**
-   * DataStageTypeAdapter Class Constructor
+   * Constructs a new <code> {@link DataStageTypeAdapter} </code>
    * 
-   * @param jobDefinitionRoot The root element of a JSDL document.
+   * @param jobDefinitionRoot . The root element of a JSDL document ({@link JobDefinitionType}).
    */
-  public DataStageTypeAdapter ( final JobDefinitionType jobDefinitionRoot ){
+  public DataStageTypeAdapter ( final JobDefinitionType jobDefinitionRoot ) {
 
     getTypeForAdapter(jobDefinitionRoot);
     
@@ -117,7 +112,9 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
   } // End void contenctChanged()
   
   
-  
+  /*
+   * Get the DataStage Type Element from the root Jsdl Element.
+   */ 
   private void  getTypeForAdapter( final JobDefinitionType jobDefinitionRoot ) {
 
     this.jobDescriptionType = jobDefinitionRoot.getJobDescription();
@@ -253,11 +250,6 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
       return;
     }
     
-    EStructuralFeature eStructuralFeature = null;   
-//    Collection<DataStagingType> collection = new ArrayList<DataStagingType>();
-    int featureID = JsdlPackage.JOB_DESCRIPTION_TYPE__DATA_STAGING;
-
-    
     EList <DataStagingType> newInputList = ( EList<DataStagingType> )tableViewer.getInput(); 
     
     if ( newInputList == null ) {
@@ -313,26 +305,17 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
       newInputList.add( newDataStagingType );
     
       /* Get the EStructural Feature of the DataStaging Type */
-      eStructuralFeature = this.jobDescriptionType.eClass().getEStructuralFeature( featureID );
     
       /* Change the table viewers input. */
           
-      
-          
-//      for ( int i=0; i<newInputList.size(); i++ ) {      
-//        collection.add( newInputList.get( i ) );
-//      }
-//      collection=newInputList;
       try {
         
-//        this.jobDescriptionType.eSet(eStructuralFeature, collection);
         this.jobDescriptionType.getDataStaging().addAll( newInputList );
         tableViewer.setInput(this.jobDescriptionType.getDataStaging());  
         
       } catch( Exception e ) {
         Activator.logException( e );
       }
-      
     
       /* Refresh the table viewer and notify the editor that
        *  the page content has changed. 
@@ -342,8 +325,7 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
       
     }
       
-    else {
-      
+    else {      
             
       /*
        * Show the Error Dialog, this means that the new values that are to be added 
@@ -354,16 +336,13 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
                                Messages.getString( "DataStagingPage_New_DuplicateEntryDialog_Message" ) ); //$NON-NLS-1$
     }
     
-    eStructuralFeature = null;
     newInputList = null;
-//    collection = null;
-  
     
   } // end void performAdd()
   
   
   
-  protected void checkDataStageElement(){
+  protected void checkDataStageElement() {
     
     EStructuralFeature eStructuralFeature = this.documentRoot.eClass()
     .getEStructuralFeature( JsdlPackage.JOB_DESCRIPTION_TYPE__DATA_STAGING );

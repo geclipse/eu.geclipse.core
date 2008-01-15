@@ -53,7 +53,6 @@ import org.eclipse.ui.forms.widgets.TableWrapData;
 import eu.geclipse.jsdl.model.DataStagingType;
 import eu.geclipse.jsdl.model.JobDefinitionType;
 import eu.geclipse.jsdl.ui.adapters.jsdl.DataStageTypeAdapter;
-import eu.geclipse.jsdl.ui.editors.JsdlEditor;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.providers.DataStageInLabelProvider;
 import eu.geclipse.jsdl.ui.providers.DataStageOutLabelProvider;
@@ -62,10 +61,10 @@ import eu.geclipse.jsdl.ui.providers.FeatureLabelProvider;
 import eu.geclipse.jsdl.ui.widgets.DataStagingInDialog;
 import eu.geclipse.jsdl.ui.widgets.DataStagingOutDialog;
 
-
 /**
- * @author nloulloud
- *
+ * This class provides the Data Staging page that appears in the JSDL editor.
+ * It provides a graphical user interface to the DataStage elements of a JSDL
+ * document. 
  */
 public class DataStagingPage extends FormPage implements INotifyChangedListener {
 
@@ -110,27 +109,29 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
   
   
   /**
-   * This class provides the DataStaging Page page that appears in the JSDL editor.
-   * It provides a graphical user interface to the following DataStaging elements
-   * of a JSDL document:
-   * 
+   * <code>DataStagingPage</code> class constructor. Creates the page by
+   * passing as an argument the container JSDL editor.
+   * <p>
    * - FileName
+   * <p>
    * - FileSystemName
+   * <p>
    * - Source/Target Location
+   * <p>
    * - CreationFlag
+   * <p>
    * - DeleteOnTermination
+   * <p>
    * 
-   * @param editor The parent {@link JsdlEditor}. 
-   * 
-   * 
+   * @param editor The parent Jsdl Editor .
+   *  
    */
-  public DataStagingPage( final FormEditor editor )
-  
-  {
+  public DataStagingPage( final FormEditor editor ) {
    
    super( editor, PAGE_ID , Messages.getString("DataStagingPage_PageTitle") ); //$NON-NLS-1$
   
    }
+  
   
   
   public void notifyChanged( final Notification arg0 ) {
@@ -142,8 +143,8 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
   /**
    * This method set's the dirty status of the page.
    * 
-   * @param dirty
-   * If TRUE then the page is Dirty and a Save operation is needed.
+   * @param dirty TRUE when the page is Dirty (content has been changed) and hence a 
+   * Save operation is needed.
    * 
    */
   public void setDirty( final boolean dirty ) {
@@ -283,7 +284,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    gd.widthHint = 600;
    gd.heightHint = this.WIDGET_HEIGHT;
    
-   //FIXME This is a work-around for the Bug#: 201705 for Windows.
+   //FIXME nloulloud - This is a work-around for the Bug#: 201705 for Windows.
    this.stageInViewer = new TableViewer( client, SWT.BORDER                                                                            
                                         | SWT.FULL_SELECTION
                                         | SWT.MULTI);
@@ -402,6 +403,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
  }
  
  
+  
  /* This function creates the Stage-Out Section of the DateStage Page */
   private void createStageOutSection( final Composite parent,
                                       final FormToolkit toolkit )                                             
@@ -573,6 +575,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
   }
   
   
+  
   protected String getHelpResource() {
     return "/eu.geclipse.doc.user/html/concepts/jobmanagement/editorpages/datastaging.html"; //$NON-NLS-1$
   }
@@ -604,6 +607,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
      this.btnStageOutEdit.setEnabled( selectionAvailable );
    }
  } // End updateButtons
+   
    
    
    protected DataStagingType getViewerSelectionObject( final TableViewer tableViewer ) {
@@ -696,7 +700,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
        }
        
      }
-   }
+   } // end void handleEventDialog()
   
 } // End Class
 

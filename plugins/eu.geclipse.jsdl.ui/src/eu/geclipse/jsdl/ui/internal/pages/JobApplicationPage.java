@@ -56,12 +56,10 @@ import eu.geclipse.jsdl.ui.providers.FeatureLabelProvider;
 
 /**
  * This class provides the Job Application page that appears in the JSDL editor.
- * It provides a graphical user interface to the following elements of a JSDL
- * document: Application Name Application Version Application Description
+ * It provides a graphical user interface to the generic and POSIX elements of a JSDL
+ * document. 
  */
-public final class JobApplicationPage extends FormPage
-  implements INotifyChangedListener
-{
+public final class JobApplicationPage extends FormPage implements INotifyChangedListener {
 
   protected static final String PAGE_ID = "APPLICATION"; //$NON-NLS-1$
   protected Composite body = null;
@@ -143,10 +141,10 @@ public final class JobApplicationPage extends FormPage
   
   
   /**
-   * JobApplicationPage class constructor. Initializes the JobApplica Page by
+   * <code>JobApplicationPage</code> class constructor. Creates the page by
    * passing as an argument the container JSDL editor.
    * 
-   * @param editor
+   * @param editor The JSDL editor.
    */
   public JobApplicationPage( final FormEditor editor ) {
     super( editor, PAGE_ID, Messages.getString( "JobApplicationPage_PageTitle" ) ); //$NON-NLS-1$
@@ -176,7 +174,9 @@ public final class JobApplicationPage extends FormPage
   /**
    * This method set's the dirty status of the page.
    * 
-   * @param dirty If TRUE then the page is Dirty and a Save operation is needed.
+   * @param dirty TRUE when the page is Dirty (content has been changed) and hence a 
+   * Save operation is needed.
+   * 
    */
   public void setDirty( final boolean dirty ) {
     if( this.dirtyFlag != dirty ) {
@@ -185,6 +185,8 @@ public final class JobApplicationPage extends FormPage
     }
   } // End void setDirty()
 
+  
+  
   private boolean isContentRefreshed() {
     return this.contentRefreshed;
   }

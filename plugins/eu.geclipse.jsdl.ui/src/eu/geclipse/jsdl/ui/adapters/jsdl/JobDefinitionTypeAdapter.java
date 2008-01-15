@@ -17,10 +17,6 @@
 
 package eu.geclipse.jsdl.ui.adapters.jsdl;
 
-/**
- * @author nloulloud
- *
- */
 
 import java.util.HashMap;
 
@@ -34,13 +30,14 @@ import org.eclipse.swt.widgets.Text;
 import eu.geclipse.jsdl.model.JobDefinitionType;
 import eu.geclipse.jsdl.model.JsdlFactory;
 import eu.geclipse.jsdl.model.JsdlPackage;
+import eu.geclipse.jsdl.ui.internal.pages.JobDefinitionPage;
 
 
 /**
- * JobDefinitionTypeAdapter Class.
+ * <code>JobDefinitionTypeAdapter</code> Class.
  * <p>
  * This class provides adapters for manipulating <b>Job Definition </b> 
- * elements  through the Job Definition Page of the JSDL editor. 
+ * elements through the Job Definition Page of the JSDL editor. 
  * Supported JobDefinition attributes are:
  * <p>
  * - ID
@@ -58,7 +55,7 @@ public final class JobDefinitionTypeAdapter extends JsdlAdaptersFactory {
   /**
    * Constructs a new <code> JobDefinitionTypeAdapter </code>
    * 
-   * @param jobDefinitionRoot . The root element of a JSDL document.
+   * @param jobDefinitionRoot . The root element of a JSDL document ({@link JobDefinitionType}).
    */
   public JobDefinitionTypeAdapter(final JobDefinitionType jobDefinitionRoot) {
     
@@ -68,8 +65,9 @@ public final class JobDefinitionTypeAdapter extends JsdlAdaptersFactory {
   
   
   
-  protected void contentChanged(){
-    if ( this.isNotifyAllowed ){
+  protected void contentChanged() {
+    
+    if ( this.isNotifyAllowed ) { 
       
       fireNotifyChanged( null);
     }
@@ -79,7 +77,12 @@ public final class JobDefinitionTypeAdapter extends JsdlAdaptersFactory {
   
   
   /**
-   * @param widget The Text widget that handles the JobDefinition ID.
+   * The attach point that handles the {@link Text} widget which is responsible for the 
+   * JobDefinition ID element. This attach point provides a {@link ModifyListener}
+   * that listens to changes in the text box and commits this changes to the underlying
+   * model.
+   * 
+   * @param widget The Text widget responsible for JobDefinition ID element.
    */
   public void attachID(final Text widget){
     
@@ -100,15 +103,16 @@ public final class JobDefinitionTypeAdapter extends JsdlAdaptersFactory {
   
     
   /**
-   * Allows to set the adapter's content on demand and not through the constructor.
+   * Allows to set the adapter's content on demand and not through the adapter constructor.
    * 
-   * @param documentRoot
+   * @param documentRoot. The root element of a JSDL document ({@link JobDefinitionType}). 
    */
   public void setContent(final JobDefinitionType documentRoot){
     
     getTypeForAdapter( documentRoot );
     
   } // End void setContent()
+  
   
    
   /*
@@ -123,13 +127,14 @@ public final class JobDefinitionTypeAdapter extends JsdlAdaptersFactory {
    
  
    /**
-   * 
+   * Method which populates the content of the underlying model to the widgets that are
+   * attached to this adapter. The method is called from the {@link JobDefinitionPage} when
+   * the appropriate widgets are created and also every time the page becomes active. 
    */
   public void load()
    {
     
      this.isNotifyAllowed = false;
-//     EObject eObject = this.jobDefinitionType;
      Text widgetName = null;
        
      // Test if eObject is not empty.
@@ -167,9 +172,11 @@ public final class JobDefinitionTypeAdapter extends JsdlAdaptersFactory {
    
    
    /**
-   * @return TRUE if the adapter is empty. If it is empty, it means that there 
-   * is no JobDefinition element in the JSDL document. 
-   */
+    * Method that check whether the adapter is empty. 
+    * 
+    * @return TRUE if the adapter is empty. If it is empty, it means that there 
+    * is no JobDefinition element in the JSDL document. 
+    */
   public boolean isEmpty() {
      boolean status = false;
  

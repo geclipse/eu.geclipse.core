@@ -17,10 +17,6 @@
 
 package eu.geclipse.jsdl.ui.internal.pages;
 
-/**
- * @author nloulloud
- *
- */
 
 import java.net.URL;
 
@@ -72,16 +68,9 @@ import eu.geclipse.jsdl.ui.providers.FeatureLabelProvider;
 
 
 /**
- * This class provides the Resources Page page that appears in the JSDL editor.
- * It provides a graphical user interface to the following elements of a JSDL 
- * document:
- * 
- * 
- * 
- * 
+ * This class provides the Resources page that appears in the JSDL editor.
  */
-public final class ResourcesPage extends FormPage 
-                                            implements INotifyChangedListener {
+public final class ResourcesPage extends FormPage implements INotifyChangedListener {
   
    
   protected static final String PAGE_ID = "RESOURCES";  //$NON-NLS-1$
@@ -152,21 +141,20 @@ public final class ResourcesPage extends FormPage
   
   
   /**
-   * 
-   * ResourcesPage class constructor. Initializes the Resources Page by 
+   * <code>ResourcesPage</code> class constructor. Creates the page by
    * passing as an argument the container JSDL editor.
-   * @param editor
    * 
+   * @param editor The JSDL editor.
    */
-  public ResourcesPage( final FormEditor editor )
-                            
-   {
+  public ResourcesPage( final FormEditor editor ) {
    
     super( editor, PAGE_ID ,
            Messages.getString("ResourcesPage_PageTitle") ); //$NON-NLS-1$
         
-    } // End Class Constructor.
+  } // End Class Constructor.
 
+  
+  
   /*
    * (non-Javadoc)
    * @see org.eclipse.ui.forms.editor.FormPage#setActive(boolean)
@@ -183,6 +171,7 @@ public final class ResourcesPage extends FormPage
   } // End void setActive()
   
   
+  
   /*
    * Checks if the Page Content has been refreshed. 
    */
@@ -190,6 +179,8 @@ public final class ResourcesPage extends FormPage
     
     return this.contentRefreshed;
   }
+  
+  
   
   /**
    * Method that set's the Resources Page content. The content is the root 
@@ -237,8 +228,8 @@ public final class ResourcesPage extends FormPage
   /**
    * This method set's the dirty status of the page.
    * 
-   * @param dirty
-   * If TRUE then the page is Dirty and a Save operation is needed.
+   * @param dirty TRUE when the page is Dirty (content has been changed) and hence a 
+   * Save operation is needed.
    * 
    */
   public void setDirty( final boolean dirty ) {
@@ -253,13 +244,12 @@ public final class ResourcesPage extends FormPage
   
   @Override
   /*
-   *  This method is used to create the Forms content by
+   * This method is used to create the Forms content by
    * creating the form layout and then creating the form
    * Sub-Sections
    */
   protected void createFormContent( final IManagedForm managedForm ) {
-    
-        
+            
     ScrolledForm form = managedForm.getForm();    
     FormToolkit toolkit = managedForm.getToolkit();
     
@@ -296,11 +286,6 @@ public final class ResourcesPage extends FormPage
     /* Create the Additional Elements Section */
     createAddElementsSection( this.right, toolkit );
     
-    
-    
-    
-  
-
    this.resourcesTypeAdapter.load();
    
    /* Set Form Background */
@@ -313,9 +298,7 @@ public final class ResourcesPage extends FormPage
   }
   
 
-
   
-
   /*
    * Private Method that creates the Candidate Hosts Sub-Section
    */
@@ -366,7 +349,6 @@ public final class ResourcesPage extends FormPage
     } );
     
     
-
     tblHosts.setData(  FormToolkit.KEY_DRAW_BORDER );
 
 
@@ -396,32 +378,6 @@ public final class ResourcesPage extends FormPage
     
     this.btnHostsAdd.setLayoutData( gd);
     
-    //FIXME Uncomment for Edit Functionality
-    
-    /* Create the Edit button */
-//    gd = new GridData();
-//    gd.verticalSpan = 2;
-//    gd.verticalAlignment = GridData.END;
-//    gd.horizontalAlignment = GridData.FILL;
-//    this.btnEdit = toolkit.createButton(client,
-//                                    Messages.getString("JsdlEditor_EditButton"), //$NON-NLS-1$
-//                                    SWT.BUTTON1);  
-//    
-//    this.btnEdit.addSelectionListener(new SelectionListener() {
-//      public void widgetSelected(final SelectionEvent event) {
-//        handleAddDialog(Messages.getString( "ResourcesPage_EditHostNameDialog" ), //$NON-NLS-1$
-//                                                    (Button) event.getSource()); 
-//        ResourcesPage.this.resourcesTypeAdapter.performEdit(ResourcesPage.this.hostsViewer,                                                          
-//                                                           ResourcesPage.this.value);
-//      }
-//
-//       public void widgetDefaultSelected(final SelectionEvent event) {
-//           // Do Nothing - Required method
-//       }
-//     });
-//    
-//    this.btnEdit.setLayoutData( gd);
-    
     
     /* Create the Remove button */
     gd = new GridData();
@@ -443,192 +399,11 @@ public final class ResourcesPage extends FormPage
     
   } //End void CandidateHostsSubSection()
   
-  
-  
-  /*
-   * Private Method that creates the File System Sub-Section
-   */ 
-//  private void createFileSystemSection ( final Composite parent,
-//                                         final FormToolkit toolkit ){
-//    
-// 
-//    String sectionTitle = Messages.getString( "ResourcesPage_FileSystem") ;  //$NON-NLS-1$
-//    String sectionDescription = Messages.getString( "ResourcesPage_FileSystemDesc" ); //$NON-NLS-1$
-//    
-//    GridData gd;
-//       
-//    Composite client = FormSectionFactory.createGridStaticSection( toolkit,
-//                                           parent,
-//                                           sectionTitle,
-//                                           sectionDescription,
-//                                           3 );
-//    
-//     
-//    
-//    gd = new GridData(); 
-//    
-//   
-//    gd.horizontalSpan = 1;
-//    
-  // /* ======================== File System Name Widgets
-  // =====================*/
-  // this.lblFileSystemName = toolkit.createLabel( client,
-  // Messages.getString( "ResourcesPage_FileSystemName" ) ); //$NON-NLS-1$
-  //    
-  // this.lblFileSystemName.setLayoutData( gd );
-  //    
-  // gd = new GridData(GridData.FILL_BOTH);
-  // gd.horizontalSpan = 2;
-  // gd.widthHint = this.TXT_LENGTH;
-  //    
-  // this.txtFileSystemName = toolkit.createText( client, "", SWT.NONE );
-  // //$NON-NLS-1$
-  // this.resourcesTypeAdapter.attachToFileSystemName( this.txtFileSystemName );
-  // this.txtFileSystemName.setLayoutData( gd );
-  //    
-  //    
-  // /* ========================= Description Widgets
-  // =========================*/
-  //    
-  // gd = new GridData();
-  // gd.verticalAlignment = GridData.BEGINNING;
-  // this.lblFileSystemDescr = toolkit.createLabel( client,
-  // Messages.getString( "ResourcesPage_Description" ) ); //$NON-NLS-1$
-  // this.lblFileSystemDescr.setLayoutData( gd );
-  //    
-  //   
-  // this.txtFileSystemDescr = toolkit.createText( client, "", //$NON-NLS-1$
-  // SWT.MULTI |SWT.H_SCROLL|SWT.V_SCROLL| SWT.WRAP );
-  // this.resourcesTypeAdapter.attachToFileSystemDescription(
-  // this.txtFileSystemDescr );
-  //    
-  // gd = new GridData( GridData.FILL_BOTH );
-  // gd.verticalAlignment = GridData.FILL;
-  // gd.grabExcessVerticalSpace = true;
-  // gd.horizontalSpan = 2;
-  // gd.widthHint = 285;
-  // gd.heightHint = this.WIDGET_HEIGHT;
-  // this.txtFileSystemDescr.setLayoutData( gd );
-  //    
-  // /* ========================= Mount Point Widgets
-  // =========================*/
-  // gd = new GridData();
-  // this.lblMountPoint = toolkit.createLabel( client,
-  // Messages.getString( "ResourcesPage_MountPoint" ) ); //$NON-NLS-1$
-  // this.lblMountPoint.setLayoutData( gd );
-  //    
-  // gd = new GridData( GridData.FILL_BOTH );
-  // gd.horizontalSpan = 2;
-  // gd.widthHint = this.TXT_LENGTH;
-  // this.txtMountPoint = toolkit.createText( client, "", SWT.NONE );
-  // //$NON-NLS-1$
-  // this.resourcesTypeAdapter.attachToFileSystemMountP   /* Create the Edit button */
-//gd = new GridData();
-//gd.verticalSpan = 2;
-//gd.verticalAlignment = GridData.END;
-//gd.horizontalAlignment = GridData.FILL;
-//this.btnEdit = toolkit.createButton(client,
-//                                Messages.getString("JsdlEditor_EditButton"), //$NON-NLS-1$
-//                                SWT.BUTTON1);  
-//
-//this.btnEdit.addSelectionListener(new SelectionListener() {
-//  public void widgetSelected(final SelectionEvent event) {
-//    handleAddDialog(Messages.getString( "ResourcesPage_EditHostNameDialog" ), //$NON-NLS-1$
-//                                                (Button) event.getSource()); 
-//    ResourcesPage.this.resourcesTypeAdapter.performEdit(ResourcesPage.this.hostsViewer,                                                          
-//                                                       ResourcesPage.this.value);
-//  }
-//
-//   public void widgetDefaultSelected(final SelectionEvent event) {
-//       // Do Nothing - Required method
-//   }
-// });
-//
-//this.btnEdit.setLayoutData( gd);oint( this.txtMountPoint
-  // );
-  // this.txtMountPoint.setLayoutData(gd);
-  //        
-  // gd = new GridData();
-  // gd.widthHint = 120;
-  //   
-  // /* ======================== Disk Space Widgets
-  // ===========================*/
-  // this.lblDiskSpace = toolkit.createLabel( client,
-  // Messages.getString( "ResourcesPage_DiskSpace" ) ); //$NON-NLS-1$
-  //    
-  // this.lblDiskSpace.setLayoutData( gd );
-  //
-  // this.txtDiskSpace = toolkit.createText( client, "", SWT.NONE );
-  // //$NON-NLS-1$
-  // this.txtDiskSpace.setLayoutData( gd );
-  //
-  // gd = new GridData(GridData.FILL_BOTH);
-  // gd.widthHint = 175;
-  // this.cmbDiskSpaceRange = new Combo( client, SWT.DROP_DOWN | SWT.READ_ONLY
-  // );
-  // this.cmbDiskSpaceRange.add( Messages.getString(
-  // "ResourcesPage_LowBoundRange" ) ); //$NON-NLS-1$
-  // this.cmbDiskSpaceRange.add( Messages.getString(
-  // "ResourcesPage_UpBoundRange" ) ); //$NON-NLS-1$
-  //
-  // this.cmbDiskSpaceRange.setData( FormToolkit.KEY_   /* Create the Edit button */
-//gd = new GridData();
-//gd.verticalSpan = 2;
-//gd.verticalAlignment = GridData.END;
-//gd.horizontalAlignment = GridData.FILL;
-//this.btnEdit = toolkit.createButton(client,
-//                                Messages.getString("JsdlEditor_EditButton"), //$NON-NLS-1$
-//                                SWT.BUTTON1);  
-//
-//this.btnEdit.addSelectionListener(new SelectionListener() {
-//  public void widgetSelected(final SelectionEvent event) {
-//    handleAddDialog(Messages.getString( "ResourcesPage_EditHostNameDialog" ), //$NON-NLS-1$
-//                                                (Button) event.getSource()); 
-//    ResourcesPage.this.resourcesTypeAdapter.performEdit(ResourcesPage.this.hostsViewer,                                                          
-//                                                       ResourcesPage.this.value);
-//  }
-//
-//   public void widgetDefaultSelected(final SelectionEvent event) {
-//       // Do Nothing - Required method
-//   }
-// });
-//
-//this.btnEdit.setLayoutData( gd);DRAW_BORDER );
-  //    
-  // this.cmbDiskSpaceRange.setLayoutData( gd );
-  //    
-  // /* ========================= File System Widgets
-  // =========================*/
-  // gd = new GridData();
-  // gd.horizontalSpan = 1;
-  // gd.widthHint = this.TXT_LENGTH + 5 ;
-  // this.lblFileSystemType = toolkit.createLabel( client,
-  // Messages.getString( "ResourcesPage_FileSysType" ) ); //$NON-NLS-1$
-  //    
-  // gd.widthHint=120;
-  // this.lblFileSystemType.setLayoutData( gd);
-  //    
-  // gd = new GridData( GridData.FILL_BOTH );
-  // gd.horizontalSpan = 2;
-  // this.cmbFileSystemType = new Combo(client, SWT.NONE | SWT.READ_ONLY);
-  // this.cmbFileSystemType.setData( FormToolkit.KEY_DRAW_BORDER );
-  // this.resourcesTypeAdapter.attachToFileSystemType( this.cmbFileSystemType );
-  // this.cmbFileSystemType.setLayoutData(gd);
-  //    
-  //    this.resourcesTypeAdapter
-  //      .attachToFileSystemDiskSpace( this.txtDiskSpace, this.cmbDiskSpaceRange );
-  //    
-  //     toolkit.paintBordersFor( client);
-//    
-//  } //End void FileSystemSubSection()
-  
-  
-  
-  
+ 
+   
   private void createFileSystemSection  ( final Composite parent,
-                                          final FormToolkit toolkit )
-  
-  {
+                                          final FormToolkit toolkit ) {
+    
     String sectionTitle = Messages.getString( "ResourcesPage_FileSystem") ;  //$NON-NLS-1$
     String sectionDescription = Messages.getString( "ResourcesPage_FileSystemDesc" ); //$NON-NLS-1$
     
@@ -760,17 +535,15 @@ public final class ResourcesPage extends FormPage
     toolkit.paintBordersFor( client );
     
   } //End void FileSystemsSection()
-  
-  
+   
   
   
   /*
    * Private Method that creates the Operating System Sub-Section
    */
   private void createOSSection ( final Composite parent,
-                                 final FormToolkit toolkit )
-  
-  {
+                                 final FormToolkit toolkit ) {
+    
     String sectionTitle = Messages.getString( "ResourcesPage_OperSyst" ); //$NON-NLS-1$
     String sectionDescription = Messages.getString( "ResourcesPage_OperSystDescr" ); //$NON-NLS-1$
     
@@ -781,9 +554,7 @@ public final class ResourcesPage extends FormPage
                                            sectionTitle,
                                            sectionDescription,
                                            2 );
-      
-
-    
+          
     gd = new GridData();
     gd.widthHint = 280;    
 
@@ -824,14 +595,12 @@ public final class ResourcesPage extends FormPage
   } // End void osSubSection()
   
 
-  
-  
+ 
   /*
    * Private Method that creates the CPU Architecture Sub-Section
    */
   private void createCPUArch ( final Composite parent,
-                               final FormToolkit toolkit )
-  {
+                               final FormToolkit toolkit ) {
     
     String sectionTitle = Messages.getString( "ResourcesPage_CPUArch" ); //$NON-NLS-1$
     String sectionDescription = Messages.getString( "ResourcesPage_CPUArchDescr" ); //$NON-NLS-1$
@@ -870,8 +639,7 @@ public final class ResourcesPage extends FormPage
    * Private Method that creates the CPU Architecture Sub-Section
    */
   private void createExclusiveExecutionSection ( final Composite parent,
-                                                 final FormToolkit toolkit )
-  {
+                                                 final FormToolkit toolkit ) {
     
     String sectionTitle = Messages.getString( "ResourcesPage_ExclExecSection" ); //$NON-NLS-1$
     String sectionDescription = Messages.getString( "ResourcesPage_ExclExecDescr" ); //$NON-NLS-1$
@@ -899,8 +667,7 @@ public final class ResourcesPage extends FormPage
     this.cmbExclExec.setLayoutData( td );
     
     toolkit.paintBordersFor( client);    
-    
-//    updateButtons( this.fileSystemsViewer );
+
   } //End void cPUArch()
   
   
@@ -1097,8 +864,11 @@ public final class ResourcesPage extends FormPage
   
   
   
+  /*
+   * Method which opens a Dialog for selecting Candidate Hosts for Job Submission.
+   */
   @SuppressWarnings("unchecked")
-  protected void handleAddDialog( final String dialogTitle, final Button button ){
+  protected void handleAddDialog( final String dialogTitle, final Button button ) {
     
     this.value = null;
     
@@ -1110,60 +880,49 @@ public final class ResourcesPage extends FormPage
     hostsDialog.setDialogInput( element );
     hostsDialog.setExistingCandidateHosts( this.hostsViewer.getInput() );
 
-    if (button != this.btnHostsAdd ) {
-    //FIXME Un-comment for Edit Functionality
-//       IStructuredSelection structSelection 
-//                   = ( IStructuredSelection ) this.hostsViewer.getSelection();
-//    
-       
-//       java.util.List<String> list =  structSelection.toList();
-       
-
-    }
-  
  
     if( hostsDialog.open() != Window.OK ) {
-    
-        return;
+      return;
         
-    }
-    
+    }    
       this.value = hostsDialog.getValue();
     
   }
   
   
+  
+  /*
+   * Method which opens a Dialog for adding new File Systems.
+   */
   protected void handleAddFsDialog( final String dialogTitle, final Button button ){
     
     this.value = null;
     
     FileSystemsDialog fileSystemDialog = new FileSystemsDialog( this.body.getShell(), dialogTitle );
 
+    /* Edit Element */ 
     if (button != this.btnFileSystemAdd ) {
-    //FIXME Un-comment for Edit Functionality
        IStructuredSelection structSelection 
                    = ( IStructuredSelection ) this.fileSystemsViewer.getSelection();
        
        fileSystemDialog.setInput( structSelection.getFirstElement() );
 
-    }
-  
+    }  
  
     if( fileSystemDialog.open() != Window.OK ) {
-    
-        return;
-        
+      return;        
     }
     
       this.value = fileSystemDialog.getValue();
     
   }
   
+  
 
   public void notifyChanged( final Notification notification ) {
-    setDirty( true );
-    
+    setDirty( true );    
   }
+  
   
   
   protected String getHelpResource() {
@@ -1193,8 +952,7 @@ public final class ResourcesPage extends FormPage
       this.btnHostsDel.setEnabled( selectionAvailable );
     }
     
-  } // End updateButtons
-    
+  } // End updateButtons    
 
 
-}
+} // end ResourcesPage class

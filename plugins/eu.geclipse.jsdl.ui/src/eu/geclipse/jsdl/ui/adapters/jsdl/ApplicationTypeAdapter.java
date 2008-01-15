@@ -16,11 +16,6 @@
   *****************************************************************************/
 package eu.geclipse.jsdl.ui.adapters.jsdl;
 
-/**
- * @author nloulloud
- *
- */
-
 import java.util.Hashtable;
 
 import org.eclipse.emf.common.util.EList;
@@ -36,14 +31,15 @@ import eu.geclipse.jsdl.model.JobDefinitionType;
 import eu.geclipse.jsdl.model.JobDescriptionType;
 import eu.geclipse.jsdl.model.JsdlFactory;
 import eu.geclipse.jsdl.model.JsdlPackage;
+import eu.geclipse.jsdl.ui.internal.pages.JobDefinitionPage;
 
 
 
 /**
  * ApplicationTypeAdapter Class.
  * <p>
- * This class provides adapters for manipulating <b>Application </b> 
- * elements  through the Application Page of the JSDL editor. 
+ * This class provides adapters for manipulating generic <b>Application </b> 
+ * elements through the Application Page of the JSDL editor. 
  * Supported Application elements are:
  * <p>
  * - ApplicationName
@@ -60,16 +56,15 @@ public final class ApplicationTypeAdapter extends JsdlAdaptersFactory {
   protected ApplicationType applicationType = JsdlFactory.eINSTANCE
                                                        .createApplicationType();
   private boolean isNotifyAllowed = true;
-//  private boolean adapterRefreshed = false;
   
   private Hashtable< Integer, Text > widgetFeaturesMap = 
                                                new Hashtable< Integer, Text >();
   
     
   /**
-   * ApplicationTypeAdapter Class Constructor
+   * Constructs a new <code> {@link ApplicationTypeAdapter} </code>
    * 
-   * @param jobDefinitionType The root element of a JSDL document.
+   * @param jobDefinitionRoot . The root element of a JSDL document ({@link JobDefinitionType}).
    */
   public ApplicationTypeAdapter ( final JobDefinitionType jobDefinitionType ){
  
@@ -115,10 +110,12 @@ public final class ApplicationTypeAdapter extends JsdlAdaptersFactory {
   
   
   /**
-   * Adapter interface to attach to the ApplicationName text widget.
+   * The attach point that handles the {@link Text} widget which is responsible for the 
+   * JobApplication <b>Name</b> element. This attach point provides a {@link ModifyListener}
+   * that listens to changes in the text box and commits this changes to the underlying
+   * model.
    * 
-   * @param widget The SWT text widget which is associated with the 
-   * ApplicationName element of the JSDL document.
+   * @param widget The Text widget responsible for JobApplication Name element.
    */
   public void attachToApplicationName( final Text widget ) {
     
@@ -139,11 +136,13 @@ public final class ApplicationTypeAdapter extends JsdlAdaptersFactory {
   
   
   /**
-   * Adapter interface to attach to the ApplicationName text widget.
+   * The attach point that handles the {@link Text} widget which is responsible for the 
+   * JobApplication <b>Version</b> element. This attach point provides a {@link ModifyListener}
+   * that listens to changes in the text box and commits this changes to the underlying
+   * model.
    * 
-   * @param widget The SWT text widget which is associated with the 
-   * ApplicationVersion element of the JSDL document.
-   */  
+   * @param widget The Text widget responsible for JobApplication Version element.
+   */ 
   public void attachToApplicationVersion( final Text widget ) {
     
     Integer featureID = new Integer( JsdlPackage.APPLICATION_TYPE__APPLICATION_VERSION );
@@ -163,11 +162,13 @@ public final class ApplicationTypeAdapter extends JsdlAdaptersFactory {
   
   
   /**
-   * Adapter interface to attach to the ApplicationDescription text widget.
+   * The attach point that handles the {@link Text} widget which is responsible for the 
+   * JobApplication <b>Description</b> element. This attach point provides a {@link ModifyListener}
+   * that listens to changes in the text box and commits this changes to the underlying
+   * model.
    * 
-   * @param widget The SWT text widget which is associated with the 
-   * ApplicationDescription element of the JSDL document.
-   */ 
+   * @param widget The Text widget responsible for JobApplication Description element.
+   */
   public void attachToApplicationDescription( final Text widget ) {
     Integer featureID = new Integer( JsdlPackage.APPLICATION_TYPE__DESCRIPTION );
     this.widgetFeaturesMap.put( featureID , widget );
@@ -184,9 +185,11 @@ public final class ApplicationTypeAdapter extends JsdlAdaptersFactory {
   } // end void attachToApplicationDescription()
   
  
+  
   /**
-   * This method populates the model content to the widgets registered with the
-   * ApplicationType adapter.
+   * Method which populates the content of the underlying model to the widgets that are
+   * attached to this adapter. The method is called from the {@link JobDefinitionPage} when
+   * the appropriate widgets are created and also every time the page becomes active. 
    */
   public void load()
   {
@@ -244,6 +247,8 @@ public final class ApplicationTypeAdapter extends JsdlAdaptersFactory {
   
   
   /**
+   * Method that check whether the adapter is empty. 
+   * 
    * @return TRUE if the adapter is empty. If it is empty, it means that there 
    * is no JobDefinition element in the JSDL document. 
    */

@@ -34,6 +34,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceChangeEvent;
@@ -83,6 +84,7 @@ import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorSite;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
+
 import eu.geclipse.jsdl.model.DocumentRoot;
 import eu.geclipse.jsdl.model.JobDefinitionType;
 import eu.geclipse.jsdl.ui.adapters.jsdl.JsdlAdaptersFactory;
@@ -781,15 +783,15 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
       }
 
       @Override
-      protected void setTarget(final Resource target)
+      protected void setTarget( final Resource target )
       {
-        basicSetTarget(target);
+        basicSetTarget( target );
       }
 
       @Override
-      protected void unsetTarget(final Resource target)
+      protected void unsetTarget( final Resource target )
       {
-        basicUnsetTarget(target);
+        basicUnsetTarget( target );
       }
     };
   
@@ -800,7 +802,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
   * The resource is passed to the getResourceRoot method.
   */
  
-  public void getJsdlModel(){
+  public void getJsdlModel() {
     
     // Assumes that the input is a file object.
     //
@@ -811,11 +813,11 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
     try
     {
       // Load the resource through the editing domain.
-      //
+     
       resource = this.editingDomain.getResourceSet().getResource(resourceURI, true);
       
     }
-    catch (Exception e)
+    catch ( Exception e )
     {
       exception = e;
       resource = this.editingDomain.getResourceSet().getResource(resourceURI, false);
@@ -828,11 +830,11 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
     }
       this.editingDomain.getResourceSet().eAdapters().add(this.problemIndicationAdapter);
 
-    getResourceRoot(resource); 
+    getResourceRoot( resource ); 
     
     // This means the file was edited from an external editor so
     // push the new JSDL model to the pages.
-    if (!this.changedResources.isEmpty()){
+    if ( !this.changedResources.isEmpty() ) {
         refreshEditor();
     }
     
@@ -871,64 +873,67 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
          
        }      
       
-      }  
-     } 
+     }
+     
+  } 
   
-   
-
-     /**
-       * This looks up a string in plugin.properties, making a substitution.
-       *  Returns a dignostic describing the errors and warnings listed in 
-       *  the resource and the specified exception
-       * @param resource 
-       * @param exception 
-       * @return Diagnostic
-       * 
-       */
- 
-  public Diagnostic analyzeResourceProblems(final Resource resource, final Exception exception) 
-      {
-        if (!resource.getErrors().isEmpty() || !resource.getWarnings().isEmpty())
-        {
-          BasicDiagnostic basicDiagnostic =
-            new BasicDiagnostic
-              (Diagnostic.ERROR,
-               Activator.PLUGIN_ID,
-               0,
-               Messages.getString("JsdlMultiPageEditor.CreateModelErrorMessage"),  //$NON-NLS-1$
-               new Object [] { exception == null ? (Object)resource : exception });
-          basicDiagnostic.merge(EcoreUtil.computeDiagnostic(resource, true));
-          return basicDiagnostic;
-        }
-        else if (exception != null)
-        {
-          return
-            new BasicDiagnostic
-              (Diagnostic.ERROR,
-                  Activator.PLUGIN_ID,
-               0,
-               Messages.getString("JsdlMultiPageEditor.CreateModelErrorMessage"),  //$NON-NLS-1$
-               new Object[] { exception });
+  
+  
+  /**
+   * This looks up a string in plug-in.properties, making a substitution.
+   *  Returns a diagnostic describing the errors and warnings listed in 
+   *  the resource and the specified exception.
+   *  
+   * @param resource The Resource. 
+   * @param exception The Exception.
+   * @return Diagnostic The Diagnostic.
+   */
+  public Diagnostic analyzeResourceProblems( final Resource resource, final Exception exception ) {
+    
+    Diagnostic basicDiagnostic = null;
+    
+    if ( !resource.getErrors().isEmpty() || !resource.getWarnings().isEmpty() ) {
+        
+      basicDiagnostic = new BasicDiagnostic(Diagnostic.ERROR,
+                                            Activator.PLUGIN_ID,
+                                            0,
+                                            Messages.getString( "JsdlMultiPageEditor.CreateModelErrorMessage" ),  //$NON-NLS-1$
+                                            new Object [] { exception == null ? ( Object )resource : exception } );
+      
+      ( ( BasicDiagnostic ) basicDiagnostic ).merge( EcoreUtil.computeDiagnostic( resource, true ) );
+              
+      }
+        else if ( exception != null ) {
+          
+          basicDiagnostic =  new BasicDiagnostic( Diagnostic.ERROR,
+                                                  Activator.PLUGIN_ID,
+                                                  0,
+                                                  Messages.getString("JsdlMultiPageEditor.CreateModelErrorMessage"),  //$NON-NLS-1$
+                                                  new Object[] { exception } );
         }
         else
         {
-          return Diagnostic.OK_INSTANCE;
+          basicDiagnostic = Diagnostic.OK_INSTANCE;
         }
-      }
-  
-  
-  public EditingDomain getEditingDomain()
-  {
-    return this.editingDomain;
+    return basicDiagnostic;
+    
   }
   
-  protected boolean isPersisted(final Resource resource)
+  
+  
+  public EditingDomain getEditingDomain() {
+    return this.editingDomain;
+  }
+
+  
+  
+  protected boolean isPersisted( final Resource resource )
   {
     boolean result = false;
     try
     {
       InputStream stream = this.editingDomain.getResourceSet().getURIConverter().createInputStream(resource.getURI());
-      if (stream != null)
+      if ( stream != null )
         
 
       {
@@ -936,18 +941,20 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
         stream.close();
       }
     }
-    catch (IOException e)
+    catch ( IOException e )
     {
-      //
+      Activator.logException( e );
     }
     return result;
   }
   
+  
+  
   // Method triggered when there are changes between the form pages.
     @Override
-    protected void pageChange(final int pageIndex)
-     {      
-        super.pageChange(pageIndex);
+    protected void pageChange( final int pageIndex ) {
+      
+        super.pageChange( pageIndex );
 
      }
   

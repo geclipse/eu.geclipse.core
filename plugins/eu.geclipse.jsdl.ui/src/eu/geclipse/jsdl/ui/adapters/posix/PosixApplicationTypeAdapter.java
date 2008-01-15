@@ -16,15 +16,13 @@
   *****************************************************************************/
 package eu.geclipse.jsdl.ui.adapters.posix;
 
-/**
- * @author nickl
- *
- */
+
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.Iterator;
+
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -43,7 +41,9 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Text;
+
 import eu.geclipse.jsdl.model.ApplicationType;
+import eu.geclipse.jsdl.model.JobDefinitionType;
 import eu.geclipse.jsdl.model.JobDescriptionType;
 import eu.geclipse.jsdl.model.JsdlFactory;
 import eu.geclipse.jsdl.model.posix.ArgumentType;
@@ -58,26 +58,15 @@ import eu.geclipse.jsdl.model.posix.PosixFactory;
 import eu.geclipse.jsdl.model.posix.PosixPackage;
 import eu.geclipse.jsdl.model.posix.UserNameType;
 import eu.geclipse.jsdl.ui.internal.Activator;
+import eu.geclipse.jsdl.ui.internal.pages.JobDefinitionPage;
 
 
 /**
  * PosixApplicationTypeAdapter Class
  *
  * This class provides adapters for manipulating <b>POSIXApplication</b> elements 
- * through the Application Page of the JSDL editor. Supported POSIXApplication 
- * elements are:
- * <p>
- * - Executable
- * <p>
- * - Argument
- * <p>
- * - Input
- * <p>
- * - Output
- * <p>
- * - Error
- * <p>
- * - Environment
+ * through the Application Page of the JSDL editor.
+ * 
  */
 public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
@@ -111,8 +100,9 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
   
   /**
-   * PosixApplicationTypeAdapter Class Constructor
-   * @param rootJsdlElement
+   * Constructs a new <code> {@link PosixApplicationTypeAdapter} </code>
+   * 
+   * @param jobDefinitionRoot . The root element of a JSDL document ({@link JobDefinitionType}).
    */
   public PosixApplicationTypeAdapter(final EObject rootJsdlElement){
     
@@ -153,9 +143,9 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   /**
    * Allows to set the adapter's content on demand and not through the constructor.
    * 
-   * @param rootJsdlElement The root element of a JSDL document.
+   * @param jobDefinitionRoot The root element of a JSDL document.
    */
-  public void setContent(final EObject rootJsdlElement){
+  public void setContent( final EObject rootJsdlElement ) { 
     
    this.adapterRefreshed = true; 
    getTypeForAdapter( rootJsdlElement );   
@@ -164,7 +154,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
   
   
-  protected void contentChanged(){
+  protected void contentChanged() {
     
     if (this.isNotifyAllowed){
       fireNotifyChanged( null);
@@ -173,7 +163,8 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   } // End void contentChanged()
   
   
-  protected void checkPosixApplicationElement(){
+  
+  protected void checkPosixApplicationElement() {
     
     EStructuralFeature eStructuralFeature = this.documentRoot.eClass()
     .getEStructuralFeature( PosixPackage.DOCUMENT_ROOT__POSIX_APPLICATION );
@@ -190,7 +181,10 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   }
   
   
-  protected EObject checkProxy(final EObject refEObject) {
+  /*
+   * Check if the EObject is lazy loaded.
+   */
+  protected EObject checkProxy( final EObject refEObject ) {
     
     EObject eObject = refEObject;
     
@@ -206,10 +200,12 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
   
   /**
-   * Adapter interface to attach to the PosixApplication Name text widget.
+   * The attach point that handles the {@link Text} widget which is responsible for the 
+   * PosixApplication <b>Name</b> element. This attach point provides a {@link ModifyListener}
+   * that listens to changes in the text box and commits this changes to the underlying
+   * model.
    * 
-   * @param widget The SWT text widget which is associated with the 
-   * Name attribute of a PosixApplication element in a JSDL document.
+   * @param widget The Text widget responsible for PosixApplication Name element.
    */
   public void attachPosixApplicationName( final Text widget ) {
     
@@ -231,10 +227,12 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
   
   /**
-   * Adapter interface to attach to the PosixApplication Executable text widget.
+   * The attach point that handles the {@link Text} widget which is responsible for the 
+   * PosixApplication <b>Executable</b> element. This attach point provides a {@link ModifyListener}
+   * that listens to changes in the text box and commits this changes to the underlying
+   * model.
    * 
-   * @param widget The SWT text widget which is associated with the 
-   * PosixApplication Executable element of the JSDL document.
+   * @param widget The Text widget responsible for PosixApplication Executable element.
    */
   public void attachPosixApplicationExecutable( final Text widget ) {
     
@@ -271,10 +269,12 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
   
   /**
-   * Adapter interface to attach to the PosixApplication Input text widget.
+   * The attach point that handles the {@link Text} widget which is responsible for the 
+   * PosixApplication <b>Input</b> element. This attach point provides a {@link ModifyListener}
+   * that listens to changes in the text box and commits this changes to the underlying
+   * model.
    * 
-   * @param widget The SWT text widget which is associated with the 
-   * PosixApplication Input element of the JSDL document.
+   * @param widget The Text widget responsible for PosixApplication Input element.
    */
   public void attachPosixApplicationInput( final Text widget ) {   
     
@@ -307,10 +307,12 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
   
   /**
-   * Adapter interface to attach to the PosixApplication Output text widget.
+   * The attach point that handles the {@link Text} widget which is responsible for the 
+   * PosixApplication <b>Output</b> element. This attach point provides a {@link ModifyListener}
+   * that listens to changes in the text box and commits this changes to the underlying
+   * model.
    * 
-   * @param widget The SWT text widget which is associated with the 
-   * PosixApplication Output element of the JSDL document.
+   * @param widget The Text widget responsible for PosixApplication Output element.
    */
   public void attachPosixApplicationOutput( final Text widget ) {
     
@@ -343,10 +345,12 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
   
   /**
-   * Adapter interface to attach to the PosixApplication Error text widget.
+   * The attach point that handles the {@link Text} widget which is responsible for the 
+   * PosixApplication <b>Error</b> element. This attach point provides a {@link ModifyListener}
+   * that listens to changes in the text box and commits this changes to the underlying
+   * model.
    * 
-   * @param widget The SWT text widget which is associated with the 
-   * PosixApplication Error element of the JSDL document.
+   * @param widget The Text widget responsible for PosixApplication Error element.
    */
   public void attachPosixApplicationError( final Text widget ) {
     Integer featureID = new Integer( PosixPackage.POSIX_APPLICATION_TYPE__ERROR );
@@ -378,10 +382,10 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
   
   /**
-   * Adapter interface to attach to the PosixApplication Argument text widget.
+   * The attach point that handles the {@link TableViewer} widget which is responsible for the 
+   * PosixApplication <b>Argument</b> element.
    * 
-   * @param widget The {@link org.eclipse.jface.viewers.TableViewer} which is associated with the 
-   * PosixApplication Argument element of the JSDL document.
+   * @param widget The TableViewer widget responsible for PosixApplication Argument element.
    */
   public void attachToPosixApplicationArgument( final TableViewer widget ) {
     
@@ -391,11 +395,12 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   } // End void attachToPosixApplicationArgument()
   
   
+  
   /**
-   * Adapter interface to attach to the PosixApplication Enivronment text widget.
+   * The attach point that handles the {@link TableViewer} widget which is responsible for the 
+   * PosixApplication <b>Environment</b> element.
    * 
-   * @param widget The {@link org.eclipse.jface.viewers.TableViewer} which is associated with the 
-   * PosixApplication Environment element of the JSDL document.
+   * @param widget The TableViewer widget responsible for PosixApplication Environment element.
    */
   public void attachToPosixApplicationEnvironment( final TableViewer widget ) {
     
@@ -407,11 +412,12 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
   
   /**
-   * Adapter interface to attach to the PosixApplication WorkingDirectory text 
-   * widget.
-   *     
-   * @param widget The SWT text widget which is associated with the 
-   * PosixApplication Working Directory element of the JSDL document.
+   * The attach point that handles the {@link Text} widget which is responsible for the 
+   * PosixApplication <b>Working Directory</b> element. This attach point provides a {@link ModifyListener}
+   * that listens to changes in the text box and commits this changes to the underlying
+   * model.
+   * 
+   * @param widget The Text widget responsible for PosixApplication Working Directory element.
    */
   public void attachToWorkingDirectory( final Text widget ) {    
     Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__WORKING_DIRECTORY);
@@ -442,12 +448,17 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
       
     });
 
-  }
+  } // end void attachToWorkingDirectory()
   
   
  
   /**
-   * @param text
+   * The attach point that handles the {@link Text} widget which is responsible for the 
+   * PosixApplication <b>WallTimeLimit</b> element. This attach point provides a {@link ModifyListener}
+   * that listens to changes in the text box and commits this changes to the underlying
+   * model.
+   * 
+   * @param widget The Text widget responsible for PosixApplication WallTimeLimit element.
    */
   public void attachToWallTimeLimit( final Text text ) {
     
@@ -476,16 +487,18 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
         
         }
       } );
-    }
+      
+    } // end void attachToWallTimeLimit()
   
   
   
   /**
-   * Adapter interface to attach to the PosixApplication FileSizeLimit text 
-   * widget.
+   * The attach point that handles the {@link Text} widget which is responsible for the 
+   * PosixApplication <b>FileSizeLimit</b> element. This attach point provides a {@link ModifyListener}
+   * that listens to changes in the text box and commits this changes to the underlying
+   * model.
    * 
-   * @param text The SWT text widget which is associated with the 
-   * PosixApplication Working Directory element of the JSDL document.
+   * @param widget The Text widget responsible for PosixApplication FileSizeLimit element.
    */
   public void attachToFileSizeLimit( final Text text ) {
     
@@ -523,11 +536,12 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
   
   /**
-   * Adapter interface to attach to the PosixApplication CoreDumpLimit text 
-   * widget.
+   * The attach point that handles the {@link Text} widget which is responsible for the 
+   * PosixApplication <b>CoreDumpLimit</b> element. This attach point provides a {@link ModifyListener}
+   * that listens to changes in the text box and commits this changes to the underlying
+   * model.
    * 
-   * @param text The SWT text widget which is associated with the 
-   * PosixApplication CoreDumpLimit element of the JSDL document.
+   * @param widget The Text widget responsible for PosixApplication CoreDumpLimit element.
    */
   public void attachToCoreDumpLimit( final Text text ) {
     
@@ -565,11 +579,12 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
   
   /**
-   * Adapter interface to attach to the PosixApplication DataSegmentLimit text 
-   * widget.
+   * The attach point that handles the {@link Text} widget which is responsible for the 
+   * PosixApplication <b>DataSegmentLimit</b> element. This attach point provides a {@link ModifyListener}
+   * that listens to changes in the text box and commits this changes to the underlying
+   * model.
    * 
-   * @param text The SWT text widget which is associated with the 
-   * PosixApplication DataSegmentLimit element of the JSDL document.
+   * @param widget The Text widget responsible for PosixApplication DataSegment element.
    */
   public void attachToDataSegmentLimit( final Text text ) {
     
@@ -585,7 +600,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
       public void modifyText( final ModifyEvent e ) {
 
         if ( !text.getText().equals( "" ) ) { //$NON-NLS-1$
-          this.bigInteger = new BigInteger(text.getText());
+          this.bigInteger = new BigInteger( text.getText() );
           this.limits.setValue( this.bigInteger );      
           this.limits = (LimitsType) checkProxy( this.limits );
           PosixApplicationTypeAdapter.this.posixApplicationType
@@ -607,11 +622,12 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
   
   /**
-   * Adapter interface to attach to the PosixApplication LockedMemoryLimit text 
-   * widget.
+   * The attach point that handles the {@link Text} widget which is responsible for the 
+   * PosixApplication <b>LockedMemoryLimit</b> element. This attach point provides a {@link ModifyListener}
+   * that listens to changes in the text box and commits this changes to the underlying
+   * model.
    * 
-   * @param text The SWT text widget which is associated with the 
-   * PosixApplication LockedMemoryLimit element of the JSDL document.
+   * @param widget The Text widget responsible for PosixApplication LockedMemoryLimit element.
    */
   public void attachToLockedMemoryLimit( final Text text ) {
     
@@ -649,11 +665,12 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
   
   /**
-   * Adapter interface to attach to the PosixApplication MemoryLimit text 
-   * widget.
+   * The attach point that handles the {@link Text} widget which is responsible for the 
+   * PosixApplication <b>MemoryLimit</b> element. This attach point provides a {@link ModifyListener}
+   * that listens to changes in the text box and commits this changes to the underlying
+   * model.
    * 
-   * @param text The SWT text widget which is associated with the 
-   * PosixApplication MemoryLimit element of the JSDL document.
+   * @param widget The Text widget responsible for PosixApplication MemoryLimit element.
    */
   public void attachToMemoryLimit( final Text text ) {
     
@@ -691,11 +708,12 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
   
   /**
-   * Adapter interface to attach to the PosixApplication OpenDescriptorLimit text 
-   * widget.
+   * The attach point that handles the {@link Text} widget which is responsible for the 
+   * PosixApplication <b>OpenDescriptorsLimit</b> element. This attach point provides a {@link ModifyListener}
+   * that listens to changes in the text box and commits this changes to the underlying
+   * model.
    * 
-   * @param text The SWT text widget which is associated with the 
-   * PosixApplication OpenDescriptorLimit element of the JSDL document.
+   * @param widget The Text widget responsible for PosixApplication OpemDescriptorsLimit element.
    */
   public void attachToOpenDesciptorsLimit( final Text text ) {
     
@@ -733,11 +751,12 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
   
   /**
-   * Adapter interface to attach to the PosixApplication OpenDescriptorLimit text 
-   * widget.
+   * The attach point that handles the {@link Text} widget which is responsible for the 
+   * PosixApplication <b>PipeSizeLimit</b> element. This attach point provides a {@link ModifyListener}
+   * that listens to changes in the text box and commits this changes to the underlying
+   * model.
    * 
-   * @param text The SWT text widget which is associated with the 
-   * PosixApplication OpenDescriptorLimit element of the JSDL document.
+   * @param widget The Text widget responsible for PosixApplication PipeSizeLimit element.
    */
   public void attachToPipeSizeLimit( final Text text ) {
     
@@ -775,11 +794,12 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
   
   /**
-   * Adapter interface to attach to the PosixApplication StackSizeLimit text 
-   * widget.
+   * The attach point that handles the {@link Text} widget which is responsible for the 
+   * PosixApplication <b>StackSizeLimit</b> element. This attach point provides a {@link ModifyListener}
+   * that listens to changes in the text box and commits this changes to the underlying
+   * model.
    * 
-   * @param text The SWT text widget which is associated with the 
-   * PosixApplication StackSizeLimit element of the JSDL document.
+   * @param widget The Text widget responsible for PosixApplication StackSizeLimit element.
    */
   public void attachToStackSizeLimit( final Text text ) {
     
@@ -817,11 +837,12 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
   
   /**
-   * Adapter interface to attach to the PosixApplication CPUTimeLimit text 
-   * widget.
+   * The attach point that handles the {@link Text} widget which is responsible for the 
+   * PosixApplication <b>CPUTimeLimit</b> element. This attach point provides a {@link ModifyListener}
+   * that listens to changes in the text box and commits this changes to the underlying
+   * model.
    * 
-   * @param text The SWT text widget which is associated with the 
-   * PosixApplication CPUTimeLimit element of the JSDL document.
+   * @param widget The Text widget responsible for PosixApplication CPUTimeLimit element.
    */
   public void attachToCPUTimeLimit( final Text text ) {
     
@@ -859,11 +880,12 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
   
   /**
-   * Adapter interface to attach to the PosixApplication ProcessCountLimit( text 
-   * widget.
+   * The attach point that handles the {@link Text} widget which is responsible for the 
+   * PosixApplication <b>ProcessCountLimit</b> element. This attach point provides a {@link ModifyListener}
+   * that listens to changes in the text box and commits this changes to the underlying
+   * model.
    * 
-   * @param text The SWT text widget which is associated with the 
-   * PosixApplication ProcessCountLimit( element of the JSDL document.
+   * @param widget The Text widget responsible for PosixApplication ProcessCountLimit element.
    */
   public void attachToProcessCountLimit( final Text text ) {
     
@@ -899,13 +921,13 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   } // End void attachToProcessCountLimit()
   
   
-  
   /**
-   * Adapter interface to attach to the PosixApplication ProcessCountLimit( text 
-   * widget.
+   * The attach point that handles the {@link Text} widget which is responsible for the 
+   * PosixApplication <b>VirtualMemoryLimit</b> element. This attach point provides a {@link ModifyListener}
+   * that listens to changes in the text box and commits this changes to the underlying
+   * model.
    * 
-   * @param text The SWT text widget which is associated with the 
-   * PosixApplication ProcessCountLimit( element of the JSDL document.
+   * @param widget The Text widget responsible for PosixApplication VirtualMemoryLimit element.
    */
   public void attachToVirtualMemoryLimit( final Text text ) {
     
@@ -944,11 +966,12 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
   
   /**
-   * Adapter interface to attach to the PosixApplication ProcessCountLimit( text 
-   * widget.
+   * The attach point that handles the {@link Text} widget which is responsible for the 
+   * PosixApplication <b>ThreadCountLimit</b> element. This attach point provides a {@link ModifyListener}
+   * that listens to changes in the text box and commits this changes to the underlying
+   * model.
    * 
-   * @param text The SWT text widget which is associated with the 
-   * PosixApplication ProcessCountLimit( element of the JSDL document.
+   * @param widget The Text widget responsible for PosixApplication ThreadCountLimit element.
    */
   public void attachToThreadCountLimit( final Text text ) {
     
@@ -989,12 +1012,13 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
   
   /**
-   * Adapter interface to attach to the PosixApplication UserName text 
-   * widget.
+   * The attach point that handles the {@link Text} widget which is responsible for the 
+   * PosixApplication <b>UserName</b> element. This attach point provides a {@link ModifyListener}
+   * that listens to changes in the text box and commits this changes to the underlying
+   * model.
    * 
-   * @param text The SWT text widget which is associated with the 
-   * PosixApplication UserName element of the JSDL document.
-   */  
+   * @param widget The Text widget responsible for PosixApplication UserName element.
+   */
   public void attachToUserName( final Text text ) {
     
     Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__USER_NAME);
@@ -1025,12 +1049,13 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
   
   /**
-   * Adapter interface to attach to the PosixApplication GroupName text 
-   * widget.
+   * The attach point that handles the {@link Text} widget which is responsible for the 
+   * PosixApplication <b>GroupName</b> element. This attach point provides a {@link ModifyListener}
+   * that listens to changes in the text box and commits this changes to the underlying
+   * model.
    * 
-   * @param text The SWT text widget which is associated with the 
-   * PosixApplication GroupName element of the JSDL document.
-   */  
+   * @param widget The Text widget responsible for PosixApplication GroupName element.
+   */ 
   public void attachToGroupName( final Text text ) {
     
     Integer featureID = new Integer( PosixPackage.POSIX_APPLICATION_TYPE__GROUP_NAME );
@@ -1065,28 +1090,23 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    * Adapter interface to attach to the PosixApplication Delete button
    * widget.
    *  
-   * @param button The SWT Button that triggered the Delete event.
-   * @param viewer The {@link org.eclipse.jface.viewers.TableViewer}
-   * containing the element to be deleted.
+   * @param button The {@link Button} that triggered the Delete event.
+   * @param viewer The {@link TableViewer} containing the element to be deleted.
    */
-  public void attachToDelete(final Button button, final TableViewer viewer){
-
-
+  public void attachToDelete( final Button button, final TableViewer viewer ) {
+    
     button.addSelectionListener(new SelectionListener() {
 
-      public void widgetSelected(final SelectionEvent event) {        
-        performDelete(viewer);
+      public void widgetSelected( final SelectionEvent event ) {        
+        performDelete( viewer );
+        }
 
-      }
-
-      public void widgetDefaultSelected(final SelectionEvent event) {
+      public void widgetDefaultSelected( final SelectionEvent event ) {
           // Do Nothing - Required method
       }
     });
-    
-    
+       
   } // End void attachToDelete()
-  
   
   
 //  protected void checkDataStageMissMatch(final String element) {
@@ -1099,12 +1119,15 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
   
   /**
-   * @return true if the PosixApplicationTypeAdapter is Empty. 
+   * Method that check whether the adapter is empty. 
+   * 
+   * @return TRUE if the adapter is empty. If it is empty, it means that there 
+   * is no JobDefinition element in the JSDL document. 
    */
-  public boolean isEmpty(){
+  public boolean isEmpty() {
     boolean status = false;
 
-    if (!this.posixApplicationType.equals( null )){       
+    if ( !this.posixApplicationType.equals( null ) ){       
       status = true;
     }
     
@@ -1115,9 +1138,11 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
   
   /**
-   * @param tableViewer
-   * @param name
-   * @param value
+   * Add an element to a Table Viewers input.
+   * 
+   * @param tableViewer The {@link TableViewer} in which the new element will be added.
+   * @param name The name of the button that triggered the add operation.
+   * @param value The new element that will be added.
    */
   @SuppressWarnings("unchecked")
   public void performAdd ( final TableViewer tableViewer,
@@ -1174,11 +1199,13 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
   
   /**
-   * @param tableViewer The SWT TableViewer that contains the Structural Features
-   * @param value 
+   * Edit an element that appears in a Table Viewers.
+   * 
+   * @param tableViewer The {@link TableViewer} in which the new element appears.
+   * @param value The new value of the element.
    */
   @SuppressWarnings("unchecked")
-  public void performEdit(final TableViewer tableViewer, final Object value) {
+  public void performEdit( final TableViewer tableViewer, final Object value ) {
     
     TableViewer table = null;
     int featureID;
@@ -1333,19 +1360,18 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
  
   /**
-   * 
-   * This method populates the model content to the widgets registered with the
-   * PosixApplication adapter.
-   */ 
+   * Method which populates the content of the underlying model to the widgets that are
+   * attached to this adapter. The method is called from the {@link JobDefinitionPage} when
+   * the appropriate widgets are created and also every time the page becomes active. 
+   */
   @SuppressWarnings("unchecked")
   public void load()
   {
     
     this.isNotifyAllowed = false;
-//    EObject this.posixApplicationType = this.posixApplicationType;
     Text widgetName = null;
     TableViewer tableName = null;
-//    Object eStrFeatValue = null;
+
      
     /* Test if eObject is not empty. */
     
@@ -1391,127 +1417,87 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
                         
              switch( featureID ) {
               case PosixPackage.POSIX_APPLICATION_TYPE__EXECUTABLE:{
-                           
-//                widgetName.setText(eStrFeatValue.toString());
                 widgetName.setText(this.posixApplicationType.getExecutable().getValue());
               } 
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__INPUT:{
-                             
-//                widgetName.setText(eStrFeatValue.toString()); 
                 widgetName.setText(this.posixApplicationType.getInput().getValue());
               } 
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__OUTPUT:{
-                
-//                widgetName.setText(eStrFeatValue.toString());  
                 widgetName.setText(this.posixApplicationType.getOutput().getValue());
               } 
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__ERROR:{
-                
-//                widgetName.setText(eStrFeatValue.toString());  
                 widgetName.setText(this.posixApplicationType.getError().getValue());
               } 
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__WORKING_DIRECTORY: {
-//                widgetName.setText( eStrFeatValue.toString() );
                 widgetName.setText(this.posixApplicationType.getWorkingDirectory().getValue());
               }
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__WALL_TIME_LIMIT:{
-                
-//                widgetName.setText(eStrFeatValue.toString());
                 widgetName.setText(this.posixApplicationType.getWallTimeLimit().getValue().toString());
               } 
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__FILE_SIZE_LIMIT:{
-                
-//                widgetName.setText(eStrFeatValue.toString());
                 widgetName.setText(this.posixApplicationType.getFileSizeLimit().getValue().toString());
               } 
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__CORE_DUMP_LIMIT: {     
-
-//                    widgetName.setText(eStrFeatValue.toString());
                 widgetName.setText(this.posixApplicationType.getCoreDumpLimit().getValue().toString());
 
               } 
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__DATA_SEGMENT_LIMIT: {     
-
-//                widgetName.setText(eStrFeatValue.toString());
                 widgetName.setText(this.posixApplicationType.getDataSegmentLimit().getValue().toString());
 
               } 
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__LOCKED_MEMORY_LIMIT: {     
-
-//                widgetName.setText(eStrFeatValue.toString());
                 widgetName.setText(this.posixApplicationType.getLockedMemoryLimit().getValue().toString());
               } 
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__MEMORY_LIMIT: {     
-
-//                widgetName.setText(eStrFeatValue.toString());
                 widgetName.setText(this.posixApplicationType.getMemoryLimit().getValue().toString());
               }              
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__OPEN_DESCRIPTORS_LIMIT: {     
-
-//                widgetName.setText(eStrFeatValue.toString());
                 widgetName.setText(this.posixApplicationType.getOpenDescriptorsLimit().getValue().toString());
               }              
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__PIPE_SIZE_LIMIT: {     
-
-//                widgetName.setText(eStrFeatValue.toString());
                 widgetName.setText(this.posixApplicationType.getPipeSizeLimit().getValue().toString());
               }              
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__STACK_SIZE_LIMIT: {     
-
-//                widgetName.setText(eStrFeatValue.toString());
                 widgetName.setText(this.posixApplicationType.getStackSizeLimit().getValue().toString());
               }              
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__CPU_TIME_LIMIT: {     
-
-//                widgetName.setText(eStrFeatValue.toString());
                 widgetName.setText(this.posixApplicationType.getCPUTimeLimit().getValue().toString());
               }              
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__PROCESS_COUNT_LIMIT: {     
-
-//                widgetName.setText(eStrFeatValue.toString());
                 widgetName.setText(this.posixApplicationType.getProcessCountLimit().getValue().toString());
               }              
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__VIRTUAL_MEMORY_LIMIT: {     
-
-//                widgetName.setText(eStrFeatValue.toString());
                 widgetName.setText(this.posixApplicationType.getVirtualMemoryLimit().getValue().toString());
               }              
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__THREAD_COUNT_LIMIT: {     
-
-//                widgetName.setText(eStrFeatValue.toString());
                 widgetName.setText(this.posixApplicationType.getThreadCountLimit().getValue().toString());
               }              
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__GROUP_NAME: {     
-
-//                widgetName.setText(eStrFeatValue.toString());
                 widgetName.setText(this.posixApplicationType.getGroupName().getValue());
               } 
               break;
               case PosixPackage.POSIX_APPLICATION_TYPE__USER_NAME: {     
-
-//                widgetName.setText(eStrFeatValue.toString());
                 widgetName.setText(this.posixApplicationType.getUserName().getValue());
               } 
               break;
-
               case PosixPackage.POSIX_APPLICATION_TYPE__ANY_ATTRIBUTE:               
               break;
               
@@ -1526,10 +1512,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
             switch( featureID ) {
               case PosixPackage.POSIX_APPLICATION_TYPE__ENVIRONMENT:                
               {
-               
                 tableName = this.tableFeaturesMap.get( new Integer(featureID) );
-                               
-//                EList<EnvironmentType> valueList = (EList<EnvironmentType>) this.posixApplicationType.eGet( eStructuralFeature );
                 EList<EnvironmentType> valueList = this.posixApplicationType.getEnvironment();
                 if(/* !this.adapterRefreshed
                     && */this.tableFeaturesMap.containsKey( new Integer(featureID))) {
@@ -1547,8 +1530,6 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
               case PosixPackage.POSIX_APPLICATION_TYPE__ARGUMENT:                
               {                
                 tableName = this.tableFeaturesMap.get( new Integer(featureID) );
-                
-//                EList<ArgumentType> valueList = (EList<ArgumentType>) this.posixApplicationType.eGet( eStructuralFeature );
                 EList<ArgumentType> valueList = this.posixApplicationType.getArgument();
                 
                 

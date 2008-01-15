@@ -46,8 +46,11 @@ import eu.geclipse.jsdl.ui.providers.FeatureLabelProvider;
 
 
 /**
- * @author nloulloud
- *
+ * 
+ * Create a new <code>CandidateHostsDialog</code>. The dialog consists of 
+ * a {@link CheckboxTableViewer} that displays all Computing
+ * Elements that support a specific Virtual Organization (VO). 
+ * This VO is the same as the VO of the Grid Project the JSDL file belongs. 
  */
 public class CandidateHostsDialog extends Dialog {
  
@@ -57,18 +60,16 @@ public class CandidateHostsDialog extends Dialog {
   protected List<Validator> validators = new ArrayList<Validator>();  
   private IGridElement gridElement = null;
   private JSDLJobDescription jobDescription = null;
-  private List<String> existingHosts = new ArrayList<String>();  
+  private List<String> existingHostsInViewer = new ArrayList<String>();  
   private String[] selectedHosts = null;
 
   
 
   /**
-   * This class creates a Dialog for adding Candidate Hosts to a JSDL file. The 
-   * dialog consists of a {@link CheckboxTableViewer} that displays all Computing
-   * Elements that support a specific Virtual Organization (VO). This VO is the
-   * same as the VO of the Grid Project the JSDL file belongs. 
+   * <code>CandidateHostsDialog</code> class constructor. Create a new dialog with
+   * the following:
    * 
-   * @param shell The parent shell
+   * @param shell The Parent shell.
    * @param title The dialog title.
    */
   public CandidateHostsDialog( final Shell shell, final String title ) {
@@ -109,7 +110,7 @@ public class CandidateHostsDialog extends Dialog {
     
       getButton( IDialogConstants.OK_ID ).setEnabled( value );
           
-  } // end void validateFields()
+  } // end void enableOKButton()
   
   
   
@@ -169,24 +170,35 @@ public class CandidateHostsDialog extends Dialog {
           
       for (int i=0; i < gridComputings.length; i++){        
        
-        /* Get only the CE hostname substring
+        /* Get only the CE host name substring
          * 
-         * Start from (last occurence of empty space + 1) to remove the "CE @ " prefix.
+         * Start from (last occurrence of empty space + 1) to remove the "CE @ " prefix.
          * Finish to the indexOf ":" character to remove any trailing characters.
          * 
          */
         hostnameOnly = gridComputings[i].getName().substring( gridComputings[i].getName().lastIndexOf( " " )+1 //$NON-NLS-1$
                                                              , gridComputings[i].getName().indexOf( ":" ) ); //$NON-NLS-1$
       
-        if (this.existingHosts != null ) {
-         
-          if ( !this.existingHosts.contains( hostnameOnly)   ) 
+        /*
+         * If there are elements in the Candidate Hosts Table Viewer then
+         */
+        if ( this.existingHostsInViewer != null ) {
+          /* check to see if the host name is already included. If not add it.*/
+          if ( !this.existingHostsInViewer.contains( hostnameOnly)   ) 
           {
-            computingElements.add( hostnameOnly );
+            /* Check if the host name appears twice from the InfoSystem and if it does do not
+             * include it twice.
+             */
+            if ( !computingElements.contains( hostnameOnly ) )
+              computingElements.add( hostnameOnly );
            }
         }
         else {
-          computingElements.add( hostnameOnly );
+          /* Check if the host name appears twice from the InfoSystem and if it does do not
+           * include it twice.
+           */
+          if ( !computingElements.contains( hostnameOnly ) )
+            computingElements.add( hostnameOnly );
         }
       } // end 
       this.hostsViewer.setInput( computingElements );
@@ -266,7 +278,7 @@ public class CandidateHostsDialog extends Dialog {
   @SuppressWarnings("unchecked")
   public void setExistingCandidateHosts( final Object input ) {
     
-    this.existingHosts = (List<String>) input;   
+    this.existingHostsInViewer = (List<String>) input;   
     
     
   }
