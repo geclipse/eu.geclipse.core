@@ -17,13 +17,11 @@
 package eu.geclipse.ui.providers;
 
 import org.eclipse.core.resources.IResource;
-import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.LabelProviderChangedEvent;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 
 import eu.geclipse.core.model.IGridComputing;
@@ -66,9 +64,6 @@ public class GridModelLabelProvider
   private ILabelProvider workbenchLabelProvider
     = WorkbenchLabelProvider.getDecoratingWorkbenchLabelProvider();
   
-  private ILabelDecorator labelDecorator
-    = PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator();
-
   /**
    * Construct a new <code>GridModelLabelProvider</code>.
    */
@@ -122,10 +117,6 @@ public class GridModelLabelProvider
     
     if( element instanceof IGridElement ) {
       resultText = ( ( IGridElement )element ).getName();
-      IResource resource = ( ( IGridElement )element ).getResource();
-      if( ( resource != null ) && ( resource.getProject() != null ) ) {
-        resultText = this.labelDecorator.decorateText( resultText, element );
-      }
     } else if( element instanceof ProgressTreeNode ) {
       resultText = element.toString();
     }
