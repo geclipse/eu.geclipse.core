@@ -142,6 +142,16 @@
             id="eu.geclipse.problem.sys.systemTimeCheckFailed"
             mailto="contact@geclipse.eu">
       </problem>
+      <problem
+            description="Error creating credential"
+            id="eu.geclipse.problem.auth.errorCreatingCredential"
+            mailto="contact@geclipse.eu">
+      </problem>
+      <problem
+            description="Login failed"
+            id="eu.geclipse.problem.auth.loginFailed"
+            mailto="contact@geclipse.eu">
+      </problem>
       <solution
             description="Check if a firewall blocks your connections"
             id="eu.geclipse.solution.net.checkFirewall">
