@@ -343,7 +343,7 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
     }
 
     void updateButtons() {
-      if( !this.appName.getText().equals( "" ) && !this.appPath.getText().equals( "" ) && !this.xmlPath.getText().equals( "" ) ) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+      if( !this.appName.getText().equals( "" ) && /*!this.appPath.getText().equals( "" ) &&*/ !this.xmlPath.getText().equals( "" ) ) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
         super.getButton( IDialogConstants.OK_ID ).setEnabled( true );
       } else {
         super.getButton( IDialogConstants.OK_ID ).setEnabled( false );

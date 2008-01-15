@@ -317,6 +317,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
         }
       }
     }
+    
     // jsdl.getDataStagingIn();
     // jsdl.getLocalDataStagingIn();
     // jsdl.getStdInputDataType();
