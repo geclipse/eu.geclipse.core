@@ -18,4 +18,29 @@
             name="SSH"
             icon="icons/obj16/ssh.png"/>
    </extension>
+   <extension
+         point="eu.geclipse.core.reporting.problemReporting">
+      <problem
+            description="Authentification failed"
+            id="eu.geclipse.terminal.ssh.problem.auth_failed">
+         <reference
+               referenceID="eu.geclipse.terminal.ssh.solution.check_username_and_passwd">
+         </reference>
+      </problem>
+      <problem
+            description="Did not get SSH service"
+            id="eu.geclipse.terminal.ssh.problem.no_ssh_service">
+         <reference
+               referenceID="eu.geclipse.terminal.ssh.solution.check_install">
+         </reference>
+      </problem>
+      <solution
+            description="Check username and password."
+            id="eu.geclipse.terminal.ssh.solution.check_username_and_passwd">
+      </solution>
+      <solution
+            description="Check your installation (JSch plugin)."
+            id="eu.geclipse.terminal.ssh.solution.check_install">
+      </solution>
+   </extension>
 </plugin>

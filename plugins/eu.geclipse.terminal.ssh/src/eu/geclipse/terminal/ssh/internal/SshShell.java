@@ -25,17 +25,14 @@ import org.eclipse.swt.widgets.Display;
 import com.jcraft.jsch.ChannelShell;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
-import eu.geclipse.core.CoreProblems;
-import eu.geclipse.core.GridException;
 import eu.geclipse.core.IBidirectionalConnection;
-import eu.geclipse.core.IProblem;
-import eu.geclipse.core.SolutionRegistry;
 import eu.geclipse.core.portforward.ForwardType;
 import eu.geclipse.core.portforward.IForward;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.terminal.ITerminalListener;
 import eu.geclipse.terminal.ITerminalPage;
 import eu.geclipse.terminal.ITerminalView;
-import eu.geclipse.ui.dialogs.NewProblemDialog;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.widgets.IDropDownEntry;
 
 /**
@@ -83,11 +80,11 @@ public class SshShell implements IDropDownEntry<ITerminalView>, ITerminalListene
     try {
       IJSchService service = Activator.getDefault().getJSchService();
       if (service == null) {
-        GridException gridException = new GridException( CoreProblems.GET_SSH_SERVICE_FAILED );
-        NewProblemDialog.openProblem( null,
-                                      Messages.getString( "SshShell.sshTerminal" ), //$NON-NLS-1$
-                                      Messages.getString( "SshShell.couldNotGetService" ), //$NON-NLS-1$
-                                      gridException );
+        ProblemException problemException = new ProblemException( "eu.geclipse.terminal.ssh.problem.no_ssh_service", Activator.PLUGIN_ID );
+        ProblemDialog.openProblem( null,
+                                   Messages.getString( "SshShell.sshTerminal" ), //$NON-NLS-1$
+                                   Messages.getString( "SshShell.couldNotGetService" ), //$NON-NLS-1$
+                                   problemException );
       } else {
         this.userInfo = sshConnectionInfo;
         final Session session = service.createSession( this.userInfo.getHostname(),
@@ -135,14 +132,11 @@ public class SshShell implements IDropDownEntry<ITerminalView>, ITerminalListene
       }
     } catch ( JSchException exception ) {
       if ( !this.userInfo.getCanceledPWValue() ) {
-        GridException gridException = new GridException( CoreProblems.LOGIN_FAILED, exception );
-        IProblem problem = gridException.getProblem();
-        problem.addSolution( SolutionRegistry.CHECK_USERNAME_AND_PASSWORD );
-        problem.addSolution( SolutionRegistry.CHECK_SSH_SERVER_CONFIG );
-        NewProblemDialog.openProblem( null,
-                                      Messages.getString( "SshShell.sshTerminal" ), //$NON-NLS-1$
-                                      Messages.getString( "SshShell.authFailed" ), //$NON-NLS-1$
-                                      gridException );
+        ProblemException problemException = new ProblemException( "eu.geclipse.terminal.ssh.problem.auth_failed", exception, Activator.PLUGIN_ID );
+        ProblemDialog.openProblem( null,
+                                   Messages.getString( "SshShell.sshTerminal" ), //$NON-NLS-1$
+                                   Messages.getString( "SshShell.authFailed" ), //$NON-NLS-1$
+                                   problemException );
       }
     } catch( Exception exception ){
       Activator.logException( exception );
