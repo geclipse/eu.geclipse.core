@@ -187,6 +187,21 @@
             description="Use another port if possible"
             id="eu.geclipse.solution.net.useAnotherPort">
       </solution>
+      <problem
+            description="JobSubmissionFailed"
+            id="eu.geclipse.core.problemJobSubmissionFailed">
+      </problem>
+      <problem
+            description="URL is nor correct"
+            id="eu.geclipse.core.problemMalformedURL">
+         <reference
+               referenceID="eu.geclipse.core.solutionCheckUrl">
+         </reference>
+      </problem>
+      <solution
+            description="Check if URL is correct"
+            id="eu.geclipse.core.solutionCheckUrl">
+      </solution>
    </extension>
    <extension
          point="eu.geclipse.core.simpleTests">

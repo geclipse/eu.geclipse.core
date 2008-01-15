@@ -42,7 +42,7 @@ import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridJobID;
 import eu.geclipse.core.model.IGridJobSubmissionService;
 import eu.geclipse.core.model.IGridProject;
-import eu.geclipse.ui.dialogs.NewProblemDialog;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.wizards.wizardselection.IInitalizableWizard;
 
@@ -99,7 +99,7 @@ public abstract class JobSubmissionWizardBase extends Wizard
                   jobId = service.submitJob( description, monitor );
                   monitor.setTaskName( "job submitted" );
                 } else {
-                  NewProblemDialog.openProblem( getShell(),
+                  ProblemDialog.openProblem( getShell(),
                                                 Messages.getString( "JobSubmissionWizardBase.errSubmissionFailed" ), //$NON-NLS-1$
                                                 Messages.getString( "JobSubmissionWizardBase.errUnknownSubmissionService" ), //$NON-NLS-1$
                                                 null );
@@ -107,12 +107,12 @@ public abstract class JobSubmissionWizardBase extends Wizard
                 // create job
                 JobSubmissionWizardBase.this.creator.create( parent, jobId );
               } catch( GridModelException gmExc ) {
-                NewProblemDialog.openProblem( getShell(),
+                ProblemDialog.openProblem( getShell(),
                                               Messages.getString( "JobSubmissionWizardBase.errSubmissionFailed" ), //$NON-NLS-1$
                                               null,
                                               gmExc );
               } catch( CoreException cExc ) {
-                NewProblemDialog.openProblem( getShell(),
+                ProblemDialog.openProblem( getShell(),
                                               Messages.getString( "JobSubmissionWizardBase.errSubmissionFailed" ), //$NON-NLS-1$
                                               null,
                                               cExc );

@@ -50,7 +50,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import eu.geclipse.core.ExtensionManager;
-import eu.geclipse.core.GridException;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.core.GridJobStatusServiceFactoryManager;
 import eu.geclipse.core.filesystem.GEclipseURI;
 import eu.geclipse.core.jobs.internal.Activator;
@@ -68,6 +68,7 @@ import eu.geclipse.core.model.IGridJobStatusService;
 import eu.geclipse.core.model.IGridJobStatusServiceFactory;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
 import eu.geclipse.core.model.impl.ResourceGridElement;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.jsdl.JSDLJobDescription;
 
 /**
@@ -303,7 +304,10 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
         this.jobStatus = ( GridJobStatus )newJobStatus;
         writeJobStatus( this.jobStatusFile );
       }
-    } catch( GridException e ) {
+    }catch (GridModelException gmex){
+      Activator.logException( gmex );
+    }
+    catch( ProblemException e ) {
       Activator.logException( e );
     }
     // jobStatus = new GridJobStatus( jobID );
