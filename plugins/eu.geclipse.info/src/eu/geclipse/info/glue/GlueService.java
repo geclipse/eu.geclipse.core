@@ -188,6 +188,15 @@ public class GlueService extends AbstractGlueTable
     
   }
   
+  public void processCreamService(final Attributes attributes)
+  {
+    this.uniqueId = "http://" + GlueUtility.getStringAttribute( "GlueCEUniqueID", attributes ); //$NON-NLS-1$
+    this.byRefOnly = false;
+    this.endpoint = "http://" + GlueUtility.getStringAttribute( "GlueCEUniqueID", attributes ); //$NON-NLS-1$
+    this.type = "org.glite.cream";
+    this.uri = "http://" + GlueUtility.getStringAttribute( "GlueCEUniqueID", attributes ); //$NON-NLS-1$
+  }
+  
   /**
    * Checks if the current service is supported by g-eclipse 
    * @return true if it is supported and false otherwise.
