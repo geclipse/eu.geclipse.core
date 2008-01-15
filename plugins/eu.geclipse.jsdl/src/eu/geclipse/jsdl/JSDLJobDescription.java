@@ -112,8 +112,7 @@ public class JSDLJobDescription extends ResourceGridContainer
   private JobDescriptionType jobDescription;
   private JobIdentificationType jobIdentification;
   private DocumentRoot documentRoot;
-  
-  static { 
+  static {
     AbstractGridContainer.staticAddGridModelListener( createGridModelListener() );
   }
 
@@ -130,13 +129,12 @@ public class JSDLJobDescription extends ResourceGridContainer
         if( fileContent.read() != -1 ) {
           loadModel( file );
         }
-      }
-      catch( IOException e ) {
-        // TODO katis - error handling        
+      } catch( IOException e ) {
+        // TODO katis - error handling
       } finally {
         try {
           fileContent.close();
-        } catch( IOException exception ) {         
+        } catch( IOException exception ) {
           // ignore closing errors
         }
       }
@@ -152,27 +150,23 @@ public class JSDLJobDescription extends ResourceGridContainer
         switch( event.getType() ) {
           case IGridModelEvent.ELEMENTS_CHANGED:
             if( event.getElements().length > 0 ) {
-              IGridElement element = event.getElements()[0];
-
+              IGridElement element = event.getElements()[ 0 ];
               if( element instanceof JSDLJobDescription ) {
-                onJsdlChanged( event.getElements() );                
+                onJsdlChanged( event.getElements() );
               }
             }
-            break;
+          break;
         }
-        
       }
 
       private void onJsdlChanged( final IGridElement[] elements ) {
         for( IGridElement gridElement : elements ) {
           if( gridElement instanceof JSDLJobDescription ) {
             JSDLJobDescription jsdlDescription = ( JSDLJobDescription )gridElement;
-
-            jsdlDescription.loadModel( (IFile)jsdlDescription.getResource() );     
+            jsdlDescription.loadModel( ( IFile )jsdlDescription.getResource() );
           }
-        }        
+        }
       }
-      
     };
   }
 
@@ -386,7 +380,7 @@ public class JSDLJobDescription extends ResourceGridContainer
       outputFile.setValue( outName );
       posixApp.setOutput( outputFile );
     }
-    if (err != null){
+    if( err != null ) {
       FileNameType errorFile = this.posixFactory.createFileNameType();
       errorFile.setValue( errName );
       posixApp.setError( errorFile );
@@ -417,7 +411,7 @@ public class JSDLJobDescription extends ResourceGridContainer
       dataOut.setTarget( sourceDataOut );
       this.jobDescription.getDataStaging().add( dataOut );
     }
-    if (err != null){
+    if( err != null ) {
       DataStagingType dataErr = this.jsdlFactory.createDataStagingType();
       dataErr.setCreationFlag( CreationFlagEnumeration.OVERWRITE_LITERAL );
       dataErr.setDeleteOnTermination( false );
@@ -1198,7 +1192,7 @@ public class JSDLJobDescription extends ResourceGridContainer
   public void addDataStagingType( final DataStagingType data ) {
     this.jobDescription.getDataStaging().add( data );
   }
-  
+
   private java.net.URI findStagingAbsoluteUri( final String filename,
                                                final boolean stageOut )
     throws GridException
@@ -1211,9 +1205,8 @@ public class JSDLJobDescription extends ResourceGridContainer
       if( stagingsMap != null ) {
         String currentFilename = filename;
         // if current uri is local, then check again if it's staged-out
-        for( String currentUriString = stagingsMap.get( currentFilename );
-              uri == null && currentUriString != null; 
-              currentUriString = stagingsMap.get( currentFilename ) )
+        for( String currentUriString = stagingsMap.get( currentFilename ); uri == null
+                                                                           && currentUriString != null; currentUriString = stagingsMap.get( currentFilename ) )
         {
           java.net.URI currentUri = new java.net.URI( currentUriString );
           String pathString = currentUri.getPath();
@@ -1224,7 +1217,7 @@ public class JSDLJobDescription extends ResourceGridContainer
             }
           }
           stagingsMap.remove( currentFilename ); // prevent endless iteration
-          currentFilename = currentUriString; 
+          currentFilename = currentUriString;
         }
       }
     } catch( URISyntaxException exception ) {
@@ -1234,7 +1227,7 @@ public class JSDLJobDescription extends ResourceGridContainer
     }
     return uri;
   }
-  
+
   public java.net.URI getStdOutputUri() throws GridException {
     java.net.URI uri = null;
     String stdOutputFileName = getStdOutputFileName();
@@ -1276,25 +1269,47 @@ public class JSDLJobDescription extends ResourceGridContainer
    */
   public void setApplicationName( final String applicationName ) {
     this.jobDescription.getApplication().setApplicationName( applicationName );
-    
   }
-  
+
   /**
    * @return application name
    */
   public String getApplicationName() {
     String applicationName = null;
-    
-    DocumentRoot dRoot = getDocumentRoot();    
+    DocumentRoot dRoot = getDocumentRoot();
     JobDescriptionType description = getJobDescription( dRoot );
-    
     if( description != null ) {
       ApplicationType application = description.getApplication();
-      
       applicationName = application.getApplicationName();
     }
-    
     return applicationName;
   }
+
+  public void removeAllSourceElements() {
+    DocumentRoot dRoot = getDocumentRoot();
+    if( getJobDescription( dRoot ) != null ) {
+      List<DataStagingType> temp = this.jobDescription.getDataStaging();
+      if( temp != null ) {
+        for( DataStagingType dataType : temp ) {
+          if( dataType.getSource() != null ) {
+            dataType.setSource( null );
+          }
+        }
+      }
+    }
+  }
   
+  public void removeAllTargetElements() {
+    DocumentRoot dRoot = getDocumentRoot();
+    if( getJobDescription( dRoot ) != null ) {
+      List<DataStagingType> temp = this.jobDescription.getDataStaging();
+      if( temp != null ) {
+        for( DataStagingType dataType : temp ) {
+          if( dataType.getTarget() != null ) {
+            dataType.setTarget( null );
+          }
+        }
+      }
+    }
+  }
 }
