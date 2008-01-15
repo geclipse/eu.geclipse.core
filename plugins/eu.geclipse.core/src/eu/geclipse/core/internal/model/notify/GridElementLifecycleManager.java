@@ -18,19 +18,13 @@ package eu.geclipse.core.internal.model.notify;
 import java.util.List;
 
 import org.eclipse.core.resources.IContainer;
-import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
-import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
-import org.osgi.service.prefs.Preferences;
 
 import eu.geclipse.core.Extensions;
 import eu.geclipse.core.internal.Activator;
-import eu.geclipse.core.internal.model.GridProject;
 import eu.geclipse.core.internal.model.GridRoot;
 import eu.geclipse.core.internal.model.LocalFile;
 import eu.geclipse.core.model.GridModel;
