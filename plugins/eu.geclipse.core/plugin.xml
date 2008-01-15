@@ -30,8 +30,7 @@
          id="eu.geclipse.core.project.GridProjectBuilder"
          name="%extension.gridProjectBuilder"
          point="org.eclipse.core.resources.builders">
-      <builder
-            >
+      <builder>
          <run class="eu.geclipse.core.project.GridProjectBuilder"/>
       </builder>
    </extension>
@@ -85,9 +84,6 @@
                name="Generic Virtual Organization">
          </target>
       </creator>
-   </extension>
-   <extension
-         point="eu.geclipse.core.problemReporting">
    </extension>
    <extension
          point="eu.geclipse.core.reporting.problemReporting">
