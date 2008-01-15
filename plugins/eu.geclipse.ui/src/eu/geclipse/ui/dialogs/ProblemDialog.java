@@ -34,10 +34,12 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PlatformUI;
 
 import eu.geclipse.core.reporting.IProblem;
 import eu.geclipse.core.reporting.ISolution;
@@ -69,15 +71,25 @@ public class ProblemDialog extends ErrorDialog {
                                  final String message,
                                  final Throwable exc ) {
     
-    final ProblemDialog dialog
-      = new ProblemDialog( parent, dialogTitle, message, exc );
-
-    Shell execShell = ( parent == null ) ? Display.getDefault().getShells()[0] : parent;
-    execShell.getDisplay().syncExec( new Runnable() {
-      public void run() {
-        dialog.open();
+    Shell shell = parent;
+    if ( shell == null ) {
+      IWorkbench workbench = PlatformUI.getWorkbench();
+      IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
+      if ( window != null ) { 
+        shell = window.getShell();
       }
-    } );
+    }
+    
+    final ProblemDialog dialog
+      = new ProblemDialog( shell, dialogTitle, message, exc );
+    
+    if ( shell != null ) {
+      shell.getDisplay().syncExec( new Runnable() {
+        public void run() {
+          dialog.open();
+        }
+      } );
+    }
     
     return dialog.getReturnCode();
     
