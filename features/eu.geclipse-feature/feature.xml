@@ -27,7 +27,7 @@ Initial development of the original code was made for the g-Eclipse project foun
 
    <requires>
       <import plugin="org.eclipse.ui"/>
-      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.core.runtime" version="3.3.0" match="greaterOrEqual"/>
       <import plugin="org.eclipse.core.filesystem"/>
       <import plugin="org.eclipse.compare"/>
       <import plugin="org.eclipse.debug.ui"/>
@@ -41,12 +41,10 @@ Initial development of the original code was made for the g-Eclipse project foun
       <import plugin="org.eclipse.ui.cheatsheets"/>
       <import plugin="org.eclipse.ui.editors"/>
       <import plugin="org.eclipse.jsch.core"/>
-      <import plugin="com.jcraft.jsch"/>
       <import plugin="org.eclipse.jface.text"/>
       <import plugin="org.eclipse.core.resources"/>
       <import plugin="org.eclipse.ui.workbench.texteditor"/>
       <import plugin="org.eclipse.core.net"/>
-      <import plugin="org.apache.log4j"/>
       <import plugin="org.eclipse.emf.edit"/>
       <import plugin="org.eclipse.swt"/>
       <import plugin="org.eclipse.jface"/>
