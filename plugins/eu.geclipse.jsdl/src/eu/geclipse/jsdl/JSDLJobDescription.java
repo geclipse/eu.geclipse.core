@@ -23,6 +23,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -41,6 +44,8 @@ import org.eclipse.emf.ecore.util.FeatureMapUtil;
 import org.eclipse.emf.ecore.util.FeatureMap.Entry;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 import org.eclipse.emf.ecore.xmi.impl.XMLMapImpl;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 import eu.geclipse.core.CoreProblems;
 import eu.geclipse.core.GridException;
@@ -1311,5 +1316,29 @@ public class JSDLJobDescription extends ResourceGridContainer
         }
       }
     }
+  }
+  
+  public Document getXml() {
+    Document doc = null;
+
+    try {
+      DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+      factory.setNamespaceAware( true );
+      doc = factory.newDocumentBuilder().parse( ((IFile)getResource( )).getContents() );
+    } catch( SAXException exception ) {
+      // TODO mariusz Auto-generated catch block
+      exception.printStackTrace();
+    } catch( IOException exception ) {
+      // TODO mariusz Auto-generated catch block
+      exception.printStackTrace();
+    } catch( ParserConfigurationException exception ) {
+      // TODO mariusz Auto-generated catch block
+      exception.printStackTrace();
+    } catch( CoreException exception ) {
+      // TODO mariusz Auto-generated catch block
+      exception.printStackTrace();
+    }
+
+    return doc;
   }
 }
