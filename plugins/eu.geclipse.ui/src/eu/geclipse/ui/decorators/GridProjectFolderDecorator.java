@@ -12,9 +12,11 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IDecoration;
-import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
-import org.eclipse.swt.graphics.Image;
+import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.LabelProviderChangedEvent;
+import org.eclipse.ui.IDecoratorManager;
+import org.eclipse.ui.PlatformUI;
 import org.osgi.framework.Bundle;
 
 import eu.geclipse.core.ExtensionManager;
@@ -24,10 +26,29 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.ui.internal.Activator;
 
-public class GridProjectFolderDecorator implements ILightweightLabelDecorator {
+public class GridProjectFolderDecorator
+    extends LabelProvider
+    implements ILightweightLabelDecorator {
   
+  private static final String ID
+    = "eu.geclipse.ui.gridProjectFolderDecorator"; //$NON-NLS-1$
+
   private Hashtable< String, ImageDescriptor > images
     = new Hashtable< String, ImageDescriptor >();
+  
+  public static GridProjectFolderDecorator getDecorator() {
+    
+    GridProjectFolderDecorator result = null;
+    IDecoratorManager decoratorManager = PlatformUI.getWorkbench().getDecoratorManager();
+    
+    if ( decoratorManager.getEnabled( ID ) ) {
+      result = 
+        ( GridProjectFolderDecorator ) decoratorManager.getBaseLabelProvider( ID );
+    }
+    
+    return result;
+    
+  }
   
   public GridProjectFolderDecorator() {
     
@@ -71,21 +92,17 @@ public class GridProjectFolderDecorator implements ILightweightLabelDecorator {
       decorate( ( IGridContainer ) element, decoration );
     }
   }
-
-  public void addListener( final ILabelProviderListener listener ) {
-    // TODO mathias
+  
+  public void refresh( final IGridElement toUpdate ) {
+    LabelProviderChangedEvent event
+      = new LabelProviderChangedEvent( getDecorator(), toUpdate );
+    fireLabelProviderChanged( event );
   }
-
-  public void dispose() {
-    // TODO mathias
-  }
-
-  public boolean isLabelProperty( final Object element, final String property ) {
-    return true;
-  }
-
-  public void removeListener( final ILabelProviderListener listener ) {
-    // TODO mathias
+  
+  public void refresh( final IGridElement[] toUpdate ) {
+    LabelProviderChangedEvent event
+      = new LabelProviderChangedEvent( getDecorator(), toUpdate );
+    fireLabelProviderChanged( event );
   }
   
   private void decorate( final IGridContainer container, final IDecoration decoration ) {

@@ -18,9 +18,7 @@ package eu.geclipse.ui.providers;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.viewers.ILabelProvider;
-import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.LabelProviderChangedEvent;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 
@@ -40,8 +38,7 @@ import eu.geclipse.ui.internal.Activator;
  * Label provider implementation to be used by any Grid model view.
  */
 public class GridModelLabelProvider
-    extends LabelProvider
-    implements ILabelProviderListener {
+    extends LabelProvider {
 
   private Image computingImage;
   
@@ -68,16 +65,7 @@ public class GridModelLabelProvider
    * Construct a new <code>GridModelLabelProvider</code>.
    */
   public GridModelLabelProvider() {
-    this.workbenchLabelProvider.addListener( this );
-  }
-
-  /* (non-Javadoc)
-   * @see org.eclipse.jface.viewers.BaseLabelProvider#dispose()
-   */
-  @Override
-  public void dispose() {
-    this.workbenchLabelProvider.removeListener( this );
-    super.dispose();
+    // empty implementation
   }
 
   /* (non-Javadoc)
@@ -98,15 +86,6 @@ public class GridModelLabelProvider
     
   }
   
-  /* (non-Javadoc)
-   * @see org.eclipse.jface.viewers.ILabelProviderListener#labelProviderChanged(org.eclipse.jface.viewers.LabelProviderChangedEvent)
-   */
-  public void labelProviderChanged( final LabelProviderChangedEvent event ) {
-    // TODO find the grid element to the IRessource for only updating necessary
-    // nodes
-    fireLabelProviderChanged( new LabelProviderChangedEvent( this ) );
-  }
-
   /* (non-Javadoc)
    * @see org.eclipse.jface.viewers.LabelProvider#getText(java.lang.Object)
    */

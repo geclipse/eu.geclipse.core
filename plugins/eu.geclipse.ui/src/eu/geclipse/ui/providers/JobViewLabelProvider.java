@@ -17,6 +17,8 @@ package eu.geclipse.ui.providers;
 
 import java.text.DateFormat;
 import org.eclipse.jface.viewers.ITableLabelProvider;
+import org.eclipse.swt.graphics.Image;
+
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobStatus;
@@ -30,7 +32,6 @@ import eu.geclipse.ui.views.GridJobView;
  */
 public class JobViewLabelProvider
     extends ElementManagerLabelProvider {
-
   
   @Override
   protected String getColumnText( final IGridElement element,
@@ -68,7 +69,6 @@ public class JobViewLabelProvider
       }
     }
     return text;
-  }
-  
+  }  
     
 }

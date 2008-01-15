@@ -37,8 +37,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.IDecoratorManager;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionContext;
 import org.eclipse.ui.actions.ActionGroup;
 import org.eclipse.ui.navigator.ICommonMenuConstants;
@@ -129,8 +127,14 @@ public abstract class GridModelViewPart
    * @see eu.geclipse.core.model.IGridModelListener#gridModelChanged(eu.geclipse.core.model.IGridModelEvent)
    */
   public void gridModelChanged( final IGridModelEvent event ) {
-    IGridElement source = event.getSource();
-    refreshViewer( source );
+    if ( ( event.getType() == IGridModelEvent.ELEMENTS_ADDED )
+        || ( event.getType() == IGridModelEvent.ELEMENTS_REMOVED ) ) {
+      refreshViewer( event.getSource() );
+    } else {
+      for ( IGridElement element : event.getElements() ) {
+        refreshViewer( element );
+      }
+    }
   }
   
   /**
@@ -169,12 +173,12 @@ public abstract class GridModelViewPart
     Display display = this.viewer.getControl().getDisplay();
     display.asyncExec( new Runnable() {
       public void run() {
-        IDecoratorManager decoratorManager = PlatformUI.getWorkbench().getDecoratorManager();
-        decoratorManager.update( eu.geclipse.ui.Extensions.PROJECT_FOLDER_DECORATOR_POINT );
-        if ( element == null ) {
-          GridModelViewPart.this.viewer.refresh();
-        } else {
-          GridModelViewPart.this.viewer.refresh( element );
+        if ( ! GridModelViewPart.this.viewer.getControl().isDisposed() ) {
+          if ( element == null ) {
+            GridModelViewPart.this.viewer.refresh( false );
+          } else {
+            GridModelViewPart.this.viewer.refresh( element, false );
+          }
         }
       }
     } );

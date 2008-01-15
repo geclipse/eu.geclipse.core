@@ -24,7 +24,9 @@ import org.eclipse.core.runtime.preferences.InstanceScope;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
+import org.eclipse.jface.viewers.DecoratingLabelProvider;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
+import org.eclipse.jface.viewers.ILabelDecorator;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
@@ -34,6 +36,7 @@ import org.eclipse.ui.IMemento;
 import org.eclipse.ui.IViewSite;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.WorkbenchException;
 import org.eclipse.ui.XMLMemento;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
@@ -43,6 +46,7 @@ import eu.geclipse.core.model.IGridElementManager;
 import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobManager;
 import eu.geclipse.core.model.IGridJobStatusListener;
+import eu.geclipse.ui.decorators.GridJobDecorator;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.internal.actions.ActionGroupManager;
 import eu.geclipse.ui.internal.actions.FilterActions;
@@ -77,7 +81,10 @@ public class GridJobView extends ElementManagerViewPart
   }
 
   public void statusChanged( final IGridJob job ) {
-    refreshViewer( job );
+    GridJobDecorator decorator = GridJobDecorator.getDecorator();
+    if ( decorator != null ) {
+      decorator.refresh( job );
+    }
   }
 
   /*
@@ -97,7 +104,10 @@ public class GridJobView extends ElementManagerViewPart
    */
   @Override
   protected IBaseLabelProvider createLabelProvider() {
-    return new JobViewLabelProvider();
+    JobViewLabelProvider provider = new JobViewLabelProvider();
+    ILabelDecorator decorator = PlatformUI.getWorkbench().getDecoratorManager().getLabelDecorator();
+    DecoratingLabelProvider result = new DecoratingLabelProvider( provider, decorator );
+    return result;
   }
 
   /*

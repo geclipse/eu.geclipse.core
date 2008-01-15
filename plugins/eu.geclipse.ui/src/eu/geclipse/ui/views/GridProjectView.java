@@ -31,6 +31,9 @@ import org.eclipse.ui.PlatformUI;
 
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridJob;
+import eu.geclipse.core.model.IGridJobStatusListener;
+import eu.geclipse.ui.decorators.GridJobDecorator;
 import eu.geclipse.ui.internal.actions.ActionGroupManager;
 import eu.geclipse.ui.internal.actions.BuildActions;
 import eu.geclipse.ui.internal.actions.DeployActions;
@@ -54,7 +57,8 @@ import eu.geclipse.ui.providers.GridModelLabelProvider;
  * {@link eu.geclipse.core.model.IGridRoot} itself.
  */
 public class GridProjectView
-    extends TreeControlViewPart {
+    extends TreeControlViewPart
+    implements IGridJobStatusListener {
   
   private EditorActions editorActions;
   
@@ -71,6 +75,8 @@ public class GridProjectView
     this.partListener = new GridProjectPartListener( this.editorActions );
     getSite().getPage().addPartListener( this.partListener );
     
+    GridModel.getJobManager().addJobStatusListener( this );
+    
   }
   
   /* (non-Javadoc)
@@ -79,6 +85,7 @@ public class GridProjectView
   @Override
   public void dispose() {
     getSite().getPage().removePartListener( this.partListener );
+    GridModel.getJobManager().removeJobStatusListener( this );
   }
   
   /* (non-Javadoc)
@@ -89,12 +96,12 @@ public class GridProjectView
     return super.isDragSource( element );
   }
   
-  /* (non-Javadoc)
-   * @see org.eclipse.core.resources.IResourceChangeListener#resourceChanged(org.eclipse.core.resources.IResourceChangeEvent)
-   */
-  /*public void resourceChanged( final IResourceChangeEvent event ) {
-    refreshViewer();
-  }*/
+  public void statusChanged( final IGridJob job ) {
+    GridJobDecorator decorator = GridJobDecorator.getDecorator();
+    if ( decorator != null ) {
+      decorator.refresh( job );
+    }
+  }
   
   /* (non-Javadoc)
    * @see eu.geclipse.ui.views.GridModelViewPart#contributeAdditionalActions(eu.geclipse.ui.internal.actions.ActionGroupManager)
@@ -179,5 +186,5 @@ public class GridProjectView
     IGridElement rootElement = GridModel.getRoot();
     return rootElement;
   }
-  
+
 }

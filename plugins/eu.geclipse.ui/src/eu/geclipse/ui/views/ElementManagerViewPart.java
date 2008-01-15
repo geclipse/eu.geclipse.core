@@ -21,9 +21,9 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.ui.actions.ActionGroup;
+
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementManager;
-import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridModelListener;
 import eu.geclipse.ui.internal.actions.ActionGroupManager;
 import eu.geclipse.ui.internal.actions.ViewModeActions;
@@ -51,10 +51,10 @@ public abstract class ElementManagerViewPart
   /* (non-Javadoc)
    * @see org.eclipse.compare.IContentChangeListener#contentChanged(org.eclipse.compare.IContentChangeNotifier)
    */
-  @Override
+  /*@Override
   public void gridModelChanged( final IGridModelEvent event ) {
     refreshViewer( event.getSource() );
-  }
+  }*/
   
   /* (non-Javadoc)
    * @see org.eclipse.ui.part.WorkbenchPart#dispose()
