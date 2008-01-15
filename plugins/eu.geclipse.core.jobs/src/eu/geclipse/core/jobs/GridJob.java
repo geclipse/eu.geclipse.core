@@ -116,13 +116,6 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     if( this.jobDescriptionFile != null ) {
       readJobDescription();
       try {
-        ResourceAttributes attributes = this.jobDescription.getResource().getResourceAttributes();
-        attributes.setReadOnly( true );
-        try {
-          this.jobDescription.getResource().setResourceAttributes(attributes);
-        } catch( CoreException e ) {
-          Activator.logException( e );
-        }
         addElement( this.jobDescription );
       } catch( GridModelException e ) {
         Activator.logException( e, Messages.getString("GridJob.errLoadJobDescription") //$NON-NLS-1$
