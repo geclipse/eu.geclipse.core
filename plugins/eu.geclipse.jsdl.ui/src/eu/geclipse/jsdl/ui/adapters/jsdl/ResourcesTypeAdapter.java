@@ -77,6 +77,7 @@ import eu.geclipse.jsdl.ui.internal.pages.JobDefinitionPage;
 
 public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   
+  private static final String EMPTY_STRING = ""; //$NON-NLS-1$
   protected Hashtable< Integer, Text > widgetFeaturesMap = new Hashtable< Integer, Text >();
   protected Hashtable< Integer, TableViewer > viewerFeaturesMap = new Hashtable< Integer, TableViewer >();
   protected Hashtable< Integer, Combo > comboFeaturesMap = new Hashtable< Integer, Combo >();
@@ -109,7 +110,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
     
   private boolean adapterRefreshed = false;
   private boolean isNotifyAllowed = true;  
-  private final String EMPTY_STRING = ""; //$NON-NLS-1$
+  
   
   
   
@@ -172,7 +173,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
    */
   public void attachToHostName(final TableViewer widget){
     
-    Integer featureID = new Integer(JsdlPackage.RESOURCES_TYPE__CANDIDATE_HOSTS);
+    Integer featureID = Integer.valueOf(JsdlPackage.RESOURCES_TYPE__CANDIDATE_HOSTS);
     this.viewerFeaturesMap.put( featureID , widget );
        
   } // End attachToHostName()
@@ -197,7 +198,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
    */
   public void attachToFileSystems( final TableViewer widget ) {
     
-    Integer featureID = new Integer(JsdlPackage.RESOURCES_TYPE__FILE_SYSTEM);
+    Integer featureID = Integer.valueOf(JsdlPackage.RESOURCES_TYPE__FILE_SYSTEM);
     this.viewerFeaturesMap.put( featureID , widget );
        
   } // End attachToHostName()
@@ -606,14 +607,14 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
    */
   public void attachToOSType( final Combo widget ) {     
     
-    Integer featureID = new Integer(JsdlPackage.RESOURCES_TYPE__OPERATING_SYSTEM);
+    Integer featureID = Integer.valueOf(JsdlPackage.RESOURCES_TYPE__OPERATING_SYSTEM);
     this.comboFeaturesMap.put( featureID , widget );
         
     /* Populate the Combo Box with the CPU Architecture Literals */    
     EEnum cFEnum = JsdlPackage.Literals.OPERATING_SYSTEM_TYPE_ENUMERATION;
  
     // Adding Empty String to allow disabling O/S Type.
-    widget.add(this.EMPTY_STRING);
+    widget.add(EMPTY_STRING);
     
     for (int i=0; i<cFEnum.getELiterals().size(); i++){         
          widget.add( cFEnum.getEEnumLiteral( i ).toString() );
@@ -628,7 +629,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
       public void widgetSelected(final SelectionEvent e) {
           
         String selectedOSName = widget.getItem( widget.getSelectionIndex() );
-        if ( selectedOSName == ResourcesTypeAdapter.this.EMPTY_STRING ) { 
+        if ( selectedOSName == EMPTY_STRING ) { 
           
           deleteElement( ResourcesTypeAdapter.this.operatingSystemType );
           ResourcesTypeAdapter.this.operatingSystemType = null;
@@ -671,7 +672,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
    */
   public void attachToCPUArchitecture(final Combo widget){
     
-    Integer featureID = new Integer (JsdlPackage.RESOURCES_TYPE__CPU_ARCHITECTURE);
+    Integer featureID = Integer.valueOf (JsdlPackage.RESOURCES_TYPE__CPU_ARCHITECTURE);
 
     this.comboFeaturesMap.put( featureID, widget );
         
@@ -744,7 +745,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
    */
   public void attachToOSVersion(final Text widget){
     
-    Integer featureID = new Integer (JsdlPackage.DOCUMENT_ROOT__OPERATING_SYSTEM_VERSION);
+    Integer featureID = Integer.valueOf (JsdlPackage.DOCUMENT_ROOT__OPERATING_SYSTEM_VERSION);
     this.widgetFeaturesMap.put( featureID , widget );
     
     widget.addModifyListener( new ModifyListener() {
@@ -773,7 +774,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
    */
   public void attachToOSDescription(final Text widget){
     
-    Integer featureID = new Integer(JsdlPackage.DOCUMENT_ROOT__DESCRIPTION);
+    Integer featureID = Integer.valueOf(JsdlPackage.DOCUMENT_ROOT__DESCRIPTION);
     this.widgetFeaturesMap.put( featureID , widget );
     
     widget.addModifyListener( new ModifyListener() {
@@ -801,13 +802,13 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
    */
   public void attachToExclusiveExecution( final Combo widget ){
     
-    Integer featureID = new Integer(JsdlPackage.RESOURCES_TYPE__EXCLUSIVE_EXECUTION);
+    Integer featureID = Integer.valueOf(JsdlPackage.RESOURCES_TYPE__EXCLUSIVE_EXECUTION);
     this.comboFeaturesMap.put( featureID , widget );       
     /* 
      * Add an EMPTY item value so that the user can disable the specific 
      * feature 
      */
-    widget.add(this.EMPTY_STRING);
+    widget.add(EMPTY_STRING);
     widget.add( "true" ); //$NON-NLS-1$
     widget.add( "false" ); //$NON-NLS-1$
         
@@ -876,7 +877,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
             case JsdlPackage.RESOURCES_TYPE__ANY :
             break;            
             case JsdlPackage.RESOURCES_TYPE__CANDIDATE_HOSTS :{
-              tableViewer = this.viewerFeaturesMap.get( new Integer( featureID ) );
+              tableViewer = this.viewerFeaturesMap.get(  Integer.valueOf( featureID ) );
               
               this.candidateHosts = (CandidateHostsType) this.resourcesType
                                                     .eGet( eStructuralFeature );
@@ -894,7 +895,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
              
              if ( this.operatingSystemType.getOperatingSystemType() !=null ) {
                
-               comboName = this.comboFeaturesMap.get( new Integer( featureID  ) );
+               comboName = this.comboFeaturesMap.get( Integer.valueOf( featureID  ) );
                comboName.setText(this.operatingSystemType.getOperatingSystemType()
                                        .getOperatingSystemName().getLiteral());
              
@@ -902,7 +903,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
              
              if (this.operatingSystemType.getOperatingSystemVersion() != null ) {
                
-               widgetName = this.widgetFeaturesMap.get( new Integer
+               widgetName = this.widgetFeaturesMap.get( Integer.valueOf
                         ( JsdlPackage.DOCUMENT_ROOT__OPERATING_SYSTEM_VERSION ) );
                widgetName.setText( this.operatingSystemType
                                                   .getOperatingSystemVersion());
@@ -913,7 +914,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
                
              
                widgetName = this.widgetFeaturesMap
-                    .get( new Integer(JsdlPackage.DOCUMENT_ROOT__DESCRIPTION) );
+                    .get( Integer.valueOf(JsdlPackage.DOCUMENT_ROOT__DESCRIPTION) );
             
                widgetName.setText( this.operatingSystemType.getDescription());
              }
@@ -922,14 +923,14 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
             break;            
             case JsdlPackage.RESOURCES_TYPE__FILE_SYSTEM: {
             
-              tableViewer = this.viewerFeaturesMap.get( new Integer(featureID) );
+              tableViewer = this.viewerFeaturesMap.get( Integer.valueOf(featureID) );
               EList<FileSystemType> valueEList = (EList<FileSystemType>) this.resourcesType           
                                                     .eGet( eStructuralFeature );
               
                 
             
             if(/* !this.adapterRefreshed
-                && */this.viewerFeaturesMap.containsKey( new Integer(featureID))) {
+                && */this.viewerFeaturesMap.containsKey( Integer.valueOf(featureID))) {
               
               for (Iterator<FileSystemType>  it = valueEList.iterator(); it.hasNext();){                    
                 this.fileSystemType = it.next();                   
@@ -945,7 +946,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
               this.cpuArchitectureType = (CPUArchitectureType) this.resourcesType
                                                     .eGet( eStructuralFeature );
                             
-             comboName = this.comboFeaturesMap.get( new Integer(featureID) );
+             comboName = this.comboFeaturesMap.get( Integer.valueOf(featureID) );
              comboName.setText( this.cpuArchitectureType.getCPUArchitectureName()
                                                                  .getLiteral());
             }
@@ -965,7 +966,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
             case JsdlPackage.RESOURCES_TYPE__EXCLUSIVE_EXECUTION: {
               boolean value = this.resourcesType.isExclusiveExecution();
                             
-             comboName = this.comboFeaturesMap.get( new Integer(featureID) );
+             comboName = this.comboFeaturesMap.get( Integer.valueOf(featureID) );
              comboName.setText( Boolean.toString( value ) );
             }
               
