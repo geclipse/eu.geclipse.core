@@ -101,7 +101,7 @@ public class RenderLocalVTKPipelineAction extends SelectionListenerAction {
         this.vis.add( ( IGridVisualisation )element );
       }
     }
-    return enabled;
+    return enabled && !this.vis.isEmpty();
   }
   
   protected boolean isVisualizable( final Object element ) {

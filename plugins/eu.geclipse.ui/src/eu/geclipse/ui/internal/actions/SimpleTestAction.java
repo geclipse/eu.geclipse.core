@@ -84,7 +84,7 @@ public class SimpleTestAction extends SelectionListenerAction {
         this.resources.add( ( IGridResource ) element );
       }
     }
-    return enabled;
+    return enabled && !this.resources.isEmpty();
   }
 
   protected boolean isResourcePhysical( final Object element ) {
