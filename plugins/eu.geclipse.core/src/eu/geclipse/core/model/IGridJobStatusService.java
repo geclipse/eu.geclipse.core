@@ -15,7 +15,7 @@
 
 package eu.geclipse.core.model;
 
-import eu.geclipse.core.GridException;
+import eu.geclipse.core.reporting.ProblemException;
 
 
 /**
@@ -31,6 +31,6 @@ public interface IGridJobStatusService extends IGridService{
    * @return TODO pawel
    * @throws GridException TODO pawel
    */
-  public IGridJobStatus getJobStatus( final IGridJobID id ) throws GridException;
+  public IGridJobStatus getJobStatus( final IGridJobID id ) throws ProblemException;
 
 }
