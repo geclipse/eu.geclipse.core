@@ -948,7 +948,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
    */
   protected void createExtendedMetaDataAnnotations()
   {
-    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";		
+    String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
     addAnnotation
       (allowedVirtualOrganizationsTypeEClass, 
        source, 
@@ -956,7 +956,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        {
        "name", "AllowedVirtualOrganizationsType",
        "kind", "elementOnly"
-       });		
+       });
     addAnnotation
       (getAllowedVirtualOrganizationsType_VOName(), 
        source, 
@@ -965,7 +965,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        "kind", "element",
        "name", "VOName",
        "namespace", "##targetNamespace"
-       });		
+       });
     addAnnotation
       (boundaryTypeEClass, 
        source, 
@@ -973,7 +973,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        {
        "name", "Boundary_Type",
        "kind", "simple"
-       });		
+       });
     addAnnotation
       (getBoundaryType_Value(), 
        source, 
@@ -981,7 +981,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        {
        "name", ":0",
        "kind", "simple"
-       });		
+       });
     addAnnotation
       (getBoundaryType_ExclusiveBound(), 
        source, 
@@ -989,7 +989,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        {
        "kind", "attribute",
        "name", "exclusiveBound"
-       });		
+       });
     addAnnotation
       (getBoundaryType_AnyAttribute(), 
        source, 
@@ -999,7 +999,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        "wildcards", "##other",
        "name", ":2",
        "processing", "lax"
-       });		
+       });
     addAnnotation
       (descriptionTypeEDataType, 
        source, 
@@ -1007,7 +1007,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        {
        "name", "Description_Type",
        "baseType", "http://www.eclipse.org/emf/2003/XMLType#string"
-       });		
+       });
     addAnnotation
       (documentRootEClass, 
        source, 
@@ -1015,7 +1015,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        {
        "name", "",
        "kind", "mixed"
-       });		
+       });
     addAnnotation
       (getDocumentRoot_Mixed(), 
        source, 
@@ -1023,7 +1023,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        {
        "kind", "elementWildcard",
        "name", ":mixed"
-       });		
+       });
     addAnnotation
       (getDocumentRoot_XMLNSPrefixMap(), 
        source, 
@@ -1031,7 +1031,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        {
        "kind", "attribute",
        "name", "xmlns:prefix"
-       });		
+       });
     addAnnotation
       (getDocumentRoot_XSISchemaLocation(), 
        source, 
@@ -1039,7 +1039,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        {
        "kind", "attribute",
        "name", "xsi:schemaLocation"
-       });		
+       });
     addAnnotation
       (getDocumentRoot_AllowedVirtualOrganizations(), 
        source, 
@@ -1048,7 +1048,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        "kind", "element",
        "name", "AllowedVirtualOrganizations",
        "namespace", "##targetNamespace"
-       });		
+       });
     addAnnotation
       (getDocumentRoot_AssignedResources(), 
        source, 
@@ -1057,7 +1057,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        "kind", "element",
        "name", "AssignedResources",
        "namespace", "##targetNamespace"
-       });		
+       });
     addAnnotation
       (getDocumentRoot_CPUTimeLimit(), 
        source, 
@@ -1066,7 +1066,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        "kind", "element",
        "name", "CPUTimeLimit",
        "namespace", "##targetNamespace"
-       });		
+       });
     addAnnotation
       (getDocumentRoot_Description(), 
        source, 
@@ -1075,7 +1075,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        "kind", "element",
        "name", "Description",
        "namespace", "##targetNamespace"
-       });		
+       });
     addAnnotation
       (getDocumentRoot_JobsInQueue(), 
        source, 
@@ -1084,7 +1084,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        "kind", "element",
        "name", "JobsInQueue",
        "namespace", "##targetNamespace"
-       });		
+       });
     addAnnotation
       (getDocumentRoot_Priority(), 
        source, 
@@ -1093,7 +1093,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        "kind", "element",
        "name", "Priority",
        "namespace", "##targetNamespace"
-       });		
+       });
     addAnnotation
       (getDocumentRoot_Queue(), 
        source, 
@@ -1102,7 +1102,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        "kind", "element",
        "name", "Queue",
        "namespace", "##targetNamespace"
-       });		
+       });
     addAnnotation
       (getDocumentRoot_QueueStatus(), 
        source, 
@@ -1111,7 +1111,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        "kind", "element",
        "name", "QueueStatus",
        "namespace", "##targetNamespace"
-       });		
+       });
     addAnnotation
       (getDocumentRoot_QueueType(), 
        source, 
@@ -1120,7 +1120,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        "kind", "element",
        "name", "QueueType",
        "namespace", "##targetNamespace"
-       });		
+       });
     addAnnotation
       (getDocumentRoot_RunningJobs(), 
        source, 
@@ -1129,7 +1129,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        "kind", "element",
        "name", "RunningJobs",
        "namespace", "##targetNamespace"
-       });		
+       });
     addAnnotation
       (getDocumentRoot_VOName(), 
        source, 
@@ -1138,7 +1138,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        "kind", "element",
        "name", "VOName",
        "namespace", "##targetNamespace"
-       });		
+       });
     addAnnotation
       (getDocumentRoot_WallTimeLimit(), 
        source, 
@@ -1147,7 +1147,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        "kind", "element",
        "name", "WallTimeLimit",
        "namespace", "##targetNamespace"
-       });		
+       });
     addAnnotation
       (exactTypeEClass, 
        source, 
@@ -1155,7 +1155,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        {
        "name", "Exact_Type",
        "kind", "simple"
-       });		
+       });
     addAnnotation
       (getExactType_Value(), 
        source, 
@@ -1163,7 +1163,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        {
        "name", ":0",
        "kind", "simple"
-       });		
+       });
     addAnnotation
       (getExactType_Epsilon(), 
        source, 
@@ -1171,7 +1171,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        {
        "kind", "attribute",
        "name", "epsilon"
-       });		
+       });
     addAnnotation
       (getExactType_AnyAttribute(), 
        source, 
@@ -1181,14 +1181,14 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        "wildcards", "##other",
        "name", ":2",
        "processing", "lax"
-       });		
+       });
     addAnnotation
       (queueStatusEnumerationEEnum, 
        source, 
        new String[] 
        {
        "name", "QueueStatusEnumeration"
-       });		
+       });
     addAnnotation
       (queueStatusEnumerationObjectEDataType, 
        source, 
@@ -1196,7 +1196,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        {
        "name", "QueueStatusEnumeration:Object",
        "baseType", "QueueStatusEnumeration"
-       });		
+       });
     addAnnotation
       (queueTypeEClass, 
        source, 
@@ -1204,7 +1204,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        {
        "name", "Queue_Type",
        "kind", "elementOnly"
-       });		
+       });
     addAnnotation
       (getQueueType_QueueName(), 
        source, 
@@ -1213,7 +1213,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        "kind", "element",
        "name", "QueueName",
        "namespace", "##targetNamespace"
-       });		
+       });
     addAnnotation
       (getQueueType_Description(), 
        source, 
@@ -1222,7 +1222,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        "kind", "element",
        "name", "Description",
        "namespace", "##targetNamespace"
-       });		
+       });
     addAnnotation
       (getQueueType_QueueType(), 
        source, 
@@ -1231,7 +1231,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        "kind", "element",
        "name", "QueueType",
        "namespace", "##targetNamespace"
-       });		
+       });
     addAnnotation
       (getQueueType_QueueStatus(), 
        source, 
@@ -1240,7 +1240,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        "kind", "element",
        "name", "QueueStatus",
        "namespace", "##targetNamespace"
-       });		
+       });
     addAnnotation
       (getQueueType_CPUTimeLimit(), 
        source, 
@@ -1249,7 +1249,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        "kind", "element",
        "name", "CPUTimeLimit",
        "namespace", "##targetNamespace"
-       });		
+       });
     addAnnotation
       (getQueueType_WallTimeLimit(), 
        source, 
@@ -1258,7 +1258,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        "kind", "element",
        "name", "WallTimeLimit",
        "namespace", "##targetNamespace"
-       });		
+       });
     addAnnotation
       (getQueueType_AllowedVirtualOrganizations(), 
        source, 
@@ -1267,7 +1267,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        "kind", "element",
        "name", "AllowedVirtualOrganizations",
        "namespace", "##targetNamespace"
-       });		
+       });
     addAnnotation
       (getQueueType_Priority(), 
        source, 
@@ -1276,7 +1276,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        "kind", "element",
        "name", "Priority",
        "namespace", "##targetNamespace"
-       });		
+       });
     addAnnotation
       (getQueueType_RunningJobs(), 
        source, 
@@ -1285,7 +1285,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        "kind", "element",
        "name", "RunningJobs",
        "namespace", "##targetNamespace"
-       });		
+       });
     addAnnotation
       (getQueueType_JobsInQueue(), 
        source, 
@@ -1294,7 +1294,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        "kind", "element",
        "name", "JobsInQueue",
        "namespace", "##targetNamespace"
-       });		
+       });
     addAnnotation
       (getQueueType_AssignedResources(), 
        source, 
@@ -1303,14 +1303,14 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        "kind", "element",
        "name", "AssignedResources",
        "namespace", "##targetNamespace"
-       });		
+       });
     addAnnotation
       (queueTypeEnumerationEEnum, 
        source, 
        new String[] 
        {
        "name", "QueueTypeEnumeration"
-       });		
+       });
     addAnnotation
       (queueTypeEnumerationObjectEDataType, 
        source, 
@@ -1318,7 +1318,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        {
        "name", "QueueTypeEnumeration:Object",
        "baseType", "QueueTypeEnumeration"
-       });		
+       });
     addAnnotation
       (rangeTypeEClass, 
        source, 
@@ -1326,7 +1326,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        {
        "name", "Range_Type",
        "kind", "elementOnly"
-       });		
+       });
     addAnnotation
       (getRangeType_LowerBound(), 
        source, 
@@ -1335,7 +1335,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        "kind", "element",
        "name", "LowerBound",
        "namespace", "##targetNamespace"
-       });		
+       });
     addAnnotation
       (getRangeType_UpperBound(), 
        source, 
@@ -1344,7 +1344,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        "kind", "element",
        "name", "UpperBound",
        "namespace", "##targetNamespace"
-       });		
+       });
     addAnnotation
       (getRangeType_AnyAttribute(), 
        source, 
@@ -1354,7 +1354,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        "wildcards", "##other",
        "name", ":2",
        "processing", "lax"
-       });		
+       });
     addAnnotation
       (rangeValueTypeEClass, 
        source, 
@@ -1362,7 +1362,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        {
        "name", "RangeValue_Type",
        "kind", "elementOnly"
-       });		
+       });
     addAnnotation
       (getRangeValueType_UpperBoundedRange(), 
        source, 
@@ -1371,7 +1371,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        "kind", "element",
        "name", "UpperBoundedRange",
        "namespace", "##targetNamespace"
-       });		
+       });
     addAnnotation
       (getRangeValueType_LowerBoundedRange(), 
        source, 
@@ -1380,7 +1380,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        "kind", "element",
        "name", "LowerBoundedRange",
        "namespace", "##targetNamespace"
-       });		
+       });
     addAnnotation
       (getRangeValueType_Exact(), 
        source, 
@@ -1389,7 +1389,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        "kind", "element",
        "name", "Exact",
        "namespace", "##targetNamespace"
-       });		
+       });
     addAnnotation
       (getRangeValueType_Range(), 
        source, 
@@ -1398,7 +1398,7 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
        "kind", "element",
        "name", "Range",
        "namespace", "##targetNamespace"
-       });		
+       });
     addAnnotation
       (getRangeValueType_AnyAttribute(), 
        source, 
