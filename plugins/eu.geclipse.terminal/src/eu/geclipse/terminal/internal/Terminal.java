@@ -467,8 +467,10 @@ public class Terminal extends Canvas implements ISelectionProvider {
             startCol = 0;
             line = this.cursor.line;
             colsToUpdate = 0;
+          } else {
+            triggerRedraw( numColsInLine( this.cursor.line ) - 1, this.cursor.line, 1, 1 );
+            scrollUp();
           }
-          else this.cursor.col = numColsInLine( this.cursor.line ) - 1;
         } else {
           this.cursor.col = numColsInLine( this.cursor.line ) - 1;
         }
