@@ -19,7 +19,7 @@ package eu.geclipse.batch.ui.internal;
 import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Vector;
+import java.util.ArrayList;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -62,8 +62,8 @@ public class BatchUpdate {
   private ComputingElement computingElement;
   private LinkedHashMap<String, WorkerNode> workerNodes = new LinkedHashMap<String, WorkerNode>();
   private LinkedHashMap<String, Queue> queues = new LinkedHashMap<String, Queue>();
-  private List<BatchResource> newResources = new Vector<BatchResource>();
-  private List<BatchResource> removedResources = new Vector<BatchResource>();
+  private List<BatchResource> newResources = new ArrayList<BatchResource>();
+  private List<BatchResource> removedResources = new ArrayList<BatchResource>();
   private boolean firstTime;
   private ProgressDialog initProgress; 
   
@@ -212,6 +212,7 @@ public class BatchUpdate {
 
           try {
             drawBatchInfo();
+
             status = new Status( IStatus.OK, Activator.PLUGIN_ID, 
                                  Messages.getString( "BatchUpdate.Ok.StatusUpdate" ) );  //$NON-NLS-1$
           } catch ( Exception exc ) {
@@ -281,7 +282,7 @@ public class BatchUpdate {
           wn.setLocation( pointWN );
 
           if ( null == newReses )
-            newReses = new Vector< BatchResource >();
+            newReses = new ArrayList< BatchResource >();
           newReses.add( wn );
           
           this.newResources.add( wn );
@@ -317,7 +318,7 @@ public class BatchUpdate {
           queue.setLocation( pointQ );
 
           if ( null == newReses )
-            newReses = new Vector< BatchResource >();
+            newReses = new ArrayList< BatchResource >();
           newReses.add( queue );
           
           this.newResources.add( queue );
@@ -369,7 +370,7 @@ public class BatchUpdate {
       this.computingElement.setLocation( pointCE );
       //this.diagram.addChild( this.computingElement );
       if ( null == newReses )
-        newReses = new Vector< BatchResource >();
+        newReses = new ArrayList< BatchResource >();
       newReses.add( this.computingElement );
       
       if ( this.firstTime )

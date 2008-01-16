@@ -19,7 +19,7 @@ package eu.geclipse.batch.pbs;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Vector;
+import java.util.ArrayList;
 
 import eu.geclipse.batch.AbstractBatchService;
 import eu.geclipse.batch.BatchException;
@@ -196,8 +196,8 @@ public final class PBSBatchService extends AbstractBatchService {
     String tmpJob;
     String line = null;
     WorkerNodeInfo wnInfo;
-    List<IWorkerNodeInfo> wns = new Vector<IWorkerNodeInfo>();
-    List<String> jobs = null;
+    List<IWorkerNodeInfo> wns = new ArrayList< IWorkerNodeInfo >();
+    List< String> jobs = null;
 
     while ( -1 != ( endIndex = nodeLines.indexOf( '\n', beginIndex ) ) ) {
       // clear any empty lines
@@ -278,7 +278,7 @@ public final class PBSBatchService extends AbstractBatchService {
           // Add the job to the jobs
           if ( null != job ) {
             if ( null == jobs )
-              jobs = new Vector< String >();
+              jobs = new ArrayList< String >();
             
             // Multiple jobs may be separated with a ',' on the same line
             beginJobIdx = 0;
@@ -386,7 +386,7 @@ public final class PBSBatchService extends AbstractBatchService {
     String outPut;
     BatchJobInfo jobInfo;
     String line;
-    List<IBatchJobInfo> jobs = new Vector<IBatchJobInfo>();
+    List<IBatchJobInfo> jobs = new ArrayList< IBatchJobInfo >();
 
     outPut = this.connection.execCommand( this.pbsPath + "qstat" ); //$NON-NLS-1$
 
@@ -647,7 +647,7 @@ public final class PBSBatchService extends AbstractBatchService {
     outPut = this.connection.execCommand( this.pbsPath + "qstat -q" ); //$NON-NLS-1$
 
     if ( null != outPut ) {
-      queues = new Vector<IQueueInfo>();
+      queues = new ArrayList< IQueueInfo >();
 
       int endIndex, beginIndex = 0;
       int skip = 0;

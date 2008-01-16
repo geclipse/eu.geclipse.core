@@ -18,7 +18,7 @@ package eu.geclipse.batch.ui.internal.model;
 
 import java.beans.PropertyChangeListener;
 import java.util.List;
-import java.util.Vector;
+import java.util.ArrayList;
 import org.eclipse.jface.viewers.ICellEditorValidator;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
@@ -123,7 +123,7 @@ public final class WorkerNode extends BatchResource {
   public WorkerNode() {
     super();
 
-    this.jobIds = new Vector<String>();
+    this.jobIds = new ArrayList<String>();
   }
 
   /**
