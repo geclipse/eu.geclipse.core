@@ -18,10 +18,6 @@
 
 package eu.geclipse.jsdl.ui.editors;
 
-/**
- * @author nickl
- *
- */
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -229,6 +225,31 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
    }
    
   } // End void setDirty()
+  
+  
+  public void dispose() {
+    
+    updateProblemIndication = false;
+
+    ResourcesPlugin.getWorkspace().removeResourceChangeListener(resourceChangeListener);
+    
+    adapterFactory.dispose();
+    
+    super.dispose();
+
+    if( this.documentRoot != null ) {
+      this.documentRoot.eResource().unload();
+      this.documentRoot = null;
+    }
+    if( this.jobDefType != null ) {
+      this.jobDefType.eResource().unload();
+      this.jobDefType = null;
+    }
+    
+    if (this.editor != null) {
+      this.editor = null;
+    }
+  }
   
   
   
