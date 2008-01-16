@@ -174,7 +174,7 @@ public class JobStatusUpdater extends Job {
    * @param listener - listener to be notifies about the change.
    */
   public void addJobStatusListener( final int status, final IGridJobStatusListener listener ) {
-    this.listeners.put( listener, new Integer( status ) );
+    this.listeners.put( listener, Integer.valueOf( status ) );
   }
 
   /**

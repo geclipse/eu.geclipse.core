@@ -115,8 +115,8 @@ public class Connection implements IConnection {
     if( amount > this.bytesInBuffer ) {
       Activator.logMessage( IStatus.ERROR, 
                             Messages.formatMessage( "Connection.amountGreaterBufferContents", //$NON-NLS-1$
-                                                     new Integer( amount ),
-                                                     new Integer( this.bytesInBuffer ) ) );
+                                                     Integer.valueOf( amount ),
+                                                     Integer.valueOf( this.bytesInBuffer ) ) );
       realAmount = this.bytesInBuffer;
     }
     this.bytesInBuffer -= realAmount;

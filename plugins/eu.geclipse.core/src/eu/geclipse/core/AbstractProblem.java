@@ -97,7 +97,7 @@ public abstract class AbstractProblem implements IProblem {
    * @see eu.geclipse.core.IProblem#addSolution(int)
    */
   public void addSolution( final int solutionID ) {
-    Integer value = new Integer( solutionID );
+    Integer value = Integer.valueOf( solutionID );
     if ( !this.solutionIDs.contains( value ) ) {
       this.solutionIDs.add( value );
     }
@@ -113,7 +113,7 @@ public abstract class AbstractProblem implements IProblem {
       this.solutionIDs.remove( oldSolution.getID() );
     }
     this.solutions.add( solution );
-    this.solutionIDs.add( new Integer( solution.getID() ) );
+    this.solutionIDs.add( Integer.valueOf( solution.getID() ) );
   }
   
   /* (non-Javadoc)

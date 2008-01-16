@@ -104,7 +104,7 @@ class GVidPage extends Composite implements IGVidStatsListener, IGVidPage {
   public void statsUpdated( final GVidStatsEvent event ) {
     final String transferStats = 
       Messages.formatMessage( "GVidView.statsLine", //$NON-NLS-1$
-                              new Integer( event.getFps() ),
+                              Integer.valueOf( event.getFps() ),
                               new Double( ( int )( event.getSendSpeed() / 102.4 ) / 10.0 ),
                               new Double( ( int )( event.getRecvSpeed() / 102.4 ) / 10.0 ) );
     Display.getDefault().syncExec(new Runnable() {
