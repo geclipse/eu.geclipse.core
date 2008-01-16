@@ -170,6 +170,9 @@ public abstract class AbstractVirtualOrganization
     List< IGridJobSubmissionService > jsServices
       = new ArrayList< IGridJobSubmissionService >();
     IGridService[] services = getServices();
+    if (services == null){
+      services = new IGridService[0];
+    }
     for ( IGridService service : services ) {
       if ( service instanceof IGridJobSubmissionService ) {
         jsServices.add( ( IGridJobSubmissionService ) service );
