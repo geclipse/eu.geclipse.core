@@ -89,12 +89,16 @@ public abstract class AbstractGridContainer
   public void delete( final IGridElement child )
       throws GridModelException {
     removeElement( child );
+    unregisterFromManager( child );
+    child.dispose();
+  }
+
+  private void unregisterFromManager( final IGridElement child ) {
     if ( child instanceof IManageable ) {
       IGridElementManager manager
         = ( ( IManageable ) child ).getManager();
       manager.removeElement( child );
     }
-    child.dispose();
   }
   
   /* (non-Javadoc)
@@ -252,6 +256,7 @@ public abstract class AbstractGridContainer
   protected void deleteAll() {
     if ( ( this.children != null ) && !this.children.isEmpty() ) {
       for ( IGridElement child : this.children ) {
+        unregisterFromManager( child );
         child.dispose();
       }
       IGridElement[] elements
