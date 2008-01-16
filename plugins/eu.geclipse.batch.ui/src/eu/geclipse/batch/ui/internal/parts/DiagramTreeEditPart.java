@@ -121,6 +121,18 @@ public class DiagramTreeEditPart extends AbstractTreeEditPart
         }  
       } 
       );       
+    } else if ( BatchDiagram.CHILDREN_ADDED_PROP.equals( prop ) ) {
+      // Add a child to this edit part
+      this.display.syncExec( new Runnable() {  
+        @SuppressWarnings("synthetic-access")
+        public void run() { 
+          List < BatchResource > children = ( List < BatchResource > ) evt.getNewValue();
+          for ( BatchResource child : children ) {
+            addChild( createChild( child ), -1 );
+          }
+        }  
+      } 
+      );  
     } else if ( BatchDiagram.CHILD_REMOVED_PROP.equals( prop ) ) {
       // Remove a child from this edit part
       this.display.syncExec( new Runnable() {  

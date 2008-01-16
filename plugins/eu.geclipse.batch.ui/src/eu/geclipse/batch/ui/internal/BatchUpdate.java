@@ -247,8 +247,9 @@ public class BatchUpdate {
     List<IQueueInfo> queueis = null;
     WorkerNode wn;
     IWorkerNodeInfo wni;
-    List<IWorkerNodeInfo> wnis = null;
-    List<IBatchJobInfo> jobis = null;
+    List< IWorkerNodeInfo > wnis = null;
+    List< BatchResource > newReses = null;
+    List< IBatchJobInfo > jobis = null;
     Dimension dimCE;
     Point pointCE, pointWN, pointQ;
 
@@ -279,7 +280,10 @@ public class BatchUpdate {
           pointWN = pointWN.setLocation( 400, loc );
           wn.setLocation( pointWN );
 
-          this.diagram.addChild( wn );
+          if ( null == newReses )
+            newReses = new Vector< BatchResource >();
+          newReses.add( wn );
+          
           this.newResources.add( wn );
 
           if ( this.firstTime )
@@ -312,7 +316,10 @@ public class BatchUpdate {
 
           queue.setLocation( pointQ );
 
-          this.diagram.addChild( queue );
+          if ( null == newReses )
+            newReses = new Vector< BatchResource >();
+          newReses.add( queue );
+          
           this.newResources.add( queue );
 
           if ( this.firstTime )
@@ -338,7 +345,7 @@ public class BatchUpdate {
         }
       }
     }
-    
+        
     // Create the ce
     if ( null == this.computingElement ) {
       if ( this.firstTime )
@@ -360,10 +367,18 @@ public class BatchUpdate {
       pointCE = pointCE.setLocation( 200, loc );
 
       this.computingElement.setLocation( pointCE );
-      this.diagram.addChild( this.computingElement );
-
+      //this.diagram.addChild( this.computingElement );
+      if ( null == newReses )
+        newReses = new Vector< BatchResource >();
+      newReses.add( this.computingElement );
+      
       if ( this.firstTime )
         this.initProgress.moveNextMinor();
+    }
+    
+    // Draw all the new elements at the same time
+    if ( null != newReses ) {
+      this.diagram.addChildren( newReses );
     }
 
     // See if the dynamic information about the ce have changed

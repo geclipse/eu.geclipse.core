@@ -135,7 +135,9 @@ public class DiagramEditPart extends AbstractGraphicalEditPart
    */
   public void propertyChange( final PropertyChangeEvent evt ) {
     String prop = evt.getPropertyName();
-    if ( BatchDiagram.CHILD_ADDED_PROP.equals( prop ) || BatchDiagram.CHILD_REMOVED_PROP.equals( prop ) ) {
+    if ( BatchDiagram.CHILD_ADDED_PROP.equals( prop )
+        || BatchDiagram.CHILDREN_ADDED_PROP.equals( prop )
+        || BatchDiagram.CHILD_REMOVED_PROP.equals( prop ) ) {
       this.display.syncExec( new Runnable() {
 
         @SuppressWarnings("synthetic-access")

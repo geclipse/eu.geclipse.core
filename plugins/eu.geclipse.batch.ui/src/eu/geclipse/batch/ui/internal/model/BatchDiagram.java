@@ -29,12 +29,16 @@ public class BatchDiagram extends ModelElement {
    */
   public static final String CHILD_ADDED_PROP = "BatchDiagram.ChildAdded"; //$NON-NLS-1$
   /**
+   * Property ID to use when children are added to this diagram.
+   */
+  public static final String CHILDREN_ADDED_PROP = "BatchDiagram.ChildrenAdded"; //$NON-NLS-1$
+  /**
    * Property ID to use when a child is removed from this diagram.
    */
   public static final String CHILD_REMOVED_PROP = "BatchDiagram.ChildRemoved"; //$NON-NLS-1$
 
   private static final long serialVersionUID = 1;
-  private List<BatchResource> resources = new ArrayList<BatchResource>();
+  private List<BatchResource> resources = new ArrayList< BatchResource >();
 
   /**
    * Add a resource to this diagram.
@@ -48,6 +52,22 @@ public class BatchDiagram extends ModelElement {
       ret = true;
 
       firePropertyChange( CHILD_ADDED_PROP, null, resource );
+    }
+    return ret;
+  }
+
+  /**
+   * Add a list of resources to this diagram.
+   * @param reses a list of non-null resource instance.
+   * @return <code>true</code>, if the resource was added, <code>false</code> otherwise.
+   */
+  public boolean addChildren( final List < BatchResource > reses ) {
+    boolean ret = false;
+
+    if ( reses != null && this.resources.addAll( reses ) ) {
+      ret = true;
+      
+      firePropertyChange( CHILDREN_ADDED_PROP, null, reses );
     }
     return ret;
   }
