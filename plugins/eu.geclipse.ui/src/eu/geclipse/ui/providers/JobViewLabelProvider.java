@@ -16,8 +16,12 @@
 package eu.geclipse.ui.providers;
 
 import java.text.DateFormat;
+
+import org.eclipse.jface.viewers.DecoratingLabelProvider;
+import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.swt.graphics.Image;
+import org.eclipse.ui.PlatformUI;
 
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridJob;
@@ -30,45 +34,71 @@ import eu.geclipse.ui.views.GridJobView;
  * {@link ITableLabelProvider} to give the user more information
  * about his jobs.
  */
-public class JobViewLabelProvider
-    extends ElementManagerLabelProvider {
-  
-  @Override
-  protected String getColumnText( final IGridElement element,
-                                  final int columnIndex ) {
-    String text = ""; //$NON-NLS-1$
-    
-    if ( element instanceof IGridJob ) {
-      IGridJob job = ( IGridJob ) element;
-      switch ( columnIndex ) {
-        case 2:
-          text = job.getID().getJobID();
-          break;
-        case 3:
-        {
-          IGridJobStatus status = job.getJobStatus();
-          if ( status != null ) {
-            text = status.getName();
+public class JobViewLabelProvider extends DecoratingLabelProvider
+  implements ITableLabelProvider
+{
+
+  ITableLabelProvider tableLabelProvider;
+
+  public JobViewLabelProvider() {
+    super( createPureLabelProvider(), PlatformUI.getWorkbench()
+      .getDecoratorManager()
+      .getLabelDecorator() );
+    tableLabelProvider = ( ITableLabelProvider )getLabelProvider();
+  }
+
+  private static ILabelProvider createPureLabelProvider() {
+    return new ElementManagerLabelProvider() {
+
+      @Override
+      protected String getColumnText( final IGridElement element,
+                                      final int columnIndex )
+      {
+        String text = ""; //$NON-NLS-1$
+        if( element instanceof IGridJob ) {
+          IGridJob job = ( IGridJob )element;
+          switch( columnIndex ) {
+            case 2:
+              text = job.getID().getJobID();
+            break;
+            case 3: {
+              IGridJobStatus status = job.getJobStatus();
+              if( status != null ) {
+                text = status.getName();
+              }
+              break;
+            }
+            case 4: {
+              IGridJobStatus status = job.getJobStatus();
+              if( status != null ) {
+                text = status.getReason();
+              }
+              break;
+            }
+            case 5:
+              if( job.getJobStatus() != null
+                  && job.getJobStatus().getLastUpdateTime() != null )
+              {
+                text = DateFormat.getDateTimeInstance()
+                  .format( job.getJobStatus().getLastUpdateTime() );
+              }
+            break;
           }
-          break;
         }
-        case 4:
-        {
-          IGridJobStatus status = job.getJobStatus();
-          if ( status != null ) {
-            text = status.getReason();
-          }          
-          break;
-        }
-        case 5:        
-          if ( job.getJobStatus() != null
-              && job.getJobStatus().getLastUpdateTime() != null ) {
-            text = DateFormat.getDateTimeInstance().format( job.getJobStatus().getLastUpdateTime() );
-          }          
-          break;        
+        return text;
       }
+    };
+  }
+
+  public Image getColumnImage( final Object element, final int columnIndex ) {
+    Image image = null;
+    if( columnIndex == 0 ) {
+      image = getImage( element );
     }
-    return text;
-  }  
-    
+    return image;
+  }
+
+  public String getColumnText( final Object element, final int columnIndex ) {
+    return tableLabelProvider.getColumnText( element, columnIndex );
+  }
 }
