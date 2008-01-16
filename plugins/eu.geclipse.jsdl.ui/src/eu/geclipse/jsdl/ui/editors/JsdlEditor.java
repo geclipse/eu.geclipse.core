@@ -123,17 +123,181 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
   protected ComposedAdapterFactory adapterFactory;
   protected JobDefinitionType jobDefType = null;
   protected DocumentRoot documentRoot = null;
-  private StructuredTextEditor editor = null;
-  private int sourcePageIndex;
-  private boolean refreshedModel = false;
-  private boolean isDirtyFlag = false;
-  private OverviewPage overviewPage = new OverviewPage(this);
-  private JobDefinitionPage jobDefPage = new JobDefinitionPage(this);
-  private JobApplicationPage jobApplicationPage = new JobApplicationPage(this);
-  private DataStagingPage dataStagingPage = new DataStagingPage(this);
-  private ResourcesPage resourcesPage = new ResourcesPage(this);
   
+  
+  protected IResourceChangeListener resourceChangeListener =
+    new IResourceChangeListener()
+    {
+      public void resourceChanged(final IResourceChangeEvent event)
+      {
+        // Only listening to these.
+        // if (event.getType() == IResourceDelta.POST_CHANGE)
+        {
+          IResourceDelta delta = event.getDelta();
+          try
+          {
+            class ResourceDeltaVisitor implements IResourceDeltaVisitor
+            {
+              protected ResourceSet resourceSet = 
+                                 JsdlEditor.this.editingDomain.getResourceSet();
+              protected Collection< Resource > changedRes= 
+                                                    new ArrayList< Resource >();
+              protected Collection< Resource > removedRes =
+                                                    new ArrayList< Resource >();
+
+              public boolean visit( final IResourceDelta delta )
+              {
+                if (delta.getFlags() != IResourceDelta.MARKERS 
+                    &&
+                    delta.getResource().getType() == IResource.FILE)
+                {
+                  if ((delta.getKind() & (IResourceDelta.CHANGED | IResourceDelta.REMOVED)) != 0)
+                  {
+                    Resource resource = this.resourceSet.getResource(URI.createURI(delta.getFullPath().toString()), false);
+                    if (resource != null)
+                    {
+                      if ((delta.getKind() & IResourceDelta.REMOVED) != 0)
+                      {
+                        this.removedRes.add(resource);
+                      }
+                      else if (!JsdlEditor.this.savedResources.remove(resource))
+                      {
+                        this.changedRes.add(resource);
+                      }
+                    }
+                  }
+                }
+
+                return true;
+              }
+
+              public Collection< Resource > getChangedResources()
+              {
+                return this.changedRes;
+              }
+
+              public Collection< Resource > getRemovedResources()
+              {
+                return this.removedRes;
+              }
+            }
+
+            ResourceDeltaVisitor visitor = new ResourceDeltaVisitor();
+            delta.accept(visitor);
+
+            if (!visitor.getRemovedResources().isEmpty())
+            {
+              JsdlEditor.this.removedResources.addAll(visitor.getRemovedResources());
+              if (!isDirty())
+              {
+                getSite().getShell().getDisplay().asyncExec
+                  (new Runnable()
+                   {
+                     public void run()
+                     {
+                       getSite().getPage().closeEditor(JsdlEditor.this, false);
+                       JsdlEditor.this.dispose();
+                     }
+                   });
+              }
+            }
+
+            if (!visitor.getChangedResources().isEmpty())
+            {
+              JsdlEditor.this.changedResources.addAll(visitor.getChangedResources());
+              if (getSite().getPage().getActiveEditor() == JsdlEditor.this)
+              {
+                getSite().getShell().getDisplay().asyncExec
+                  (new Runnable()
+                   {
+                     public void run()
+                     {
+                       handleActivate();
+                     }
+                   });
+              }
+            }
+          }
+          catch (CoreException exception)
+          {
+            Activator.logException( exception);
+          }
+        }
+      }
+    };
     
+    
+    
+    protected EContentAdapter problemIndicationAdapter = 
+      new EContentAdapter()
+      {
+        @Override
+        public void notifyChanged(final Notification notification)
+        {
+          if (notification.getNotifier() instanceof Resource)
+          {
+            switch (notification.getFeatureID(Resource.class))
+            {
+              case Resource.RESOURCE__IS_LOADED:
+              case Resource.RESOURCE__ERRORS:
+              case Resource.RESOURCE__WARNINGS:
+              {
+                Resource resource = (Resource)notification.getNotifier();
+                Diagnostic diagnostic = analyzeResourceProblems((Resource)notification.getNotifier(), null);
+                if (diagnostic.getSeverity() != Diagnostic.OK)
+                {
+                  JsdlEditor.this.resourceToDiagnosticMap.put(resource, diagnostic);
+                }
+                else
+                {
+                  JsdlEditor.this.resourceToDiagnosticMap.remove(resource);
+                }
+
+                if (JsdlEditor.this.updateProblemIndication)
+                {
+                  getSite().getShell().getDisplay().asyncExec
+                    (new Runnable()
+                     {
+                       public void run()
+                       {
+                         updateProblemIndication();
+                       }
+                     });
+                }
+              }
+            }
+          }
+          else
+          {
+            super.notifyChanged(notification);
+          }
+        }
+
+        @Override
+        protected void setTarget( final Resource target )
+        {
+          basicSetTarget( target );
+        }
+
+        @Override
+        protected void unsetTarget( final Resource target )
+        {
+          basicUnsetTarget( target );
+        }
+      };
+    
+    
+    private StructuredTextEditor editor = null;
+    private int sourcePageIndex;
+    private boolean refreshedModel = false;
+    private boolean isDirtyFlag = false;
+    private OverviewPage overviewPage = new OverviewPage(this);
+    private JobDefinitionPage jobDefPage = new JobDefinitionPage(this);
+    private JobApplicationPage jobApplicationPage = new JobApplicationPage(this);
+    private DataStagingPage dataStagingPage = new DataStagingPage(this);
+    private ResourcesPage resourcesPage = new ResourcesPage(this);
+
+  
   
   /**
    * JsdlEditor Class Constructor. 
@@ -370,107 +534,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
   }
 
 
-  protected IResourceChangeListener resourceChangeListener =
-    new IResourceChangeListener()
-    {
-      public void resourceChanged(final IResourceChangeEvent event)
-      {
-        // Only listening to these.
-        // if (event.getType() == IResourceDelta.POST_CHANGE)
-        {
-          IResourceDelta delta = event.getDelta();
-          try
-          {
-            class ResourceDeltaVisitor implements IResourceDeltaVisitor
-            {
-              protected ResourceSet resourceSet = 
-                                 JsdlEditor.this.editingDomain.getResourceSet();
-              protected Collection< Resource > changedRes= 
-                                                    new ArrayList< Resource >();
-              protected Collection< Resource > removedRes =
-                                                    new ArrayList< Resource >();
-
-              public boolean visit( final IResourceDelta delta )
-              {
-                if (delta.getFlags() != IResourceDelta.MARKERS 
-                    &&
-                    delta.getResource().getType() == IResource.FILE)
-                {
-                  if ((delta.getKind() & (IResourceDelta.CHANGED | IResourceDelta.REMOVED)) != 0)
-                  {
-                    Resource resource = this.resourceSet.getResource(URI.createURI(delta.getFullPath().toString()), false);
-                    if (resource != null)
-                    {
-                      if ((delta.getKind() & IResourceDelta.REMOVED) != 0)
-                      {
-                        this.removedRes.add(resource);
-                      }
-                      else if (!JsdlEditor.this.savedResources.remove(resource))
-                      {
-                        this.changedRes.add(resource);
-                      }
-                    }
-                  }
-                }
-
-                return true;
-              }
-
-              public Collection< Resource > getChangedResources()
-              {
-                return this.changedRes;
-              }
-
-              public Collection< Resource > getRemovedResources()
-              {
-                return this.removedRes;
-              }
-            }
-
-            ResourceDeltaVisitor visitor = new ResourceDeltaVisitor();
-            delta.accept(visitor);
-
-            if (!visitor.getRemovedResources().isEmpty())
-            {
-              JsdlEditor.this.removedResources.addAll(visitor.getRemovedResources());
-              if (!isDirty())
-              {
-                getSite().getShell().getDisplay().asyncExec
-                  (new Runnable()
-                   {
-                     public void run()
-                     {
-                       getSite().getPage().closeEditor(JsdlEditor.this, false);
-                       JsdlEditor.this.dispose();
-                     }
-                   });
-              }
-            }
-
-            if (!visitor.getChangedResources().isEmpty())
-            {
-              JsdlEditor.this.changedResources.addAll(visitor.getChangedResources());
-              if (getSite().getPage().getActiveEditor() == JsdlEditor.this)
-              {
-                getSite().getShell().getDisplay().asyncExec
-                  (new Runnable()
-                   {
-                     public void run()
-                     {
-                       handleActivate();
-                     }
-                   });
-              }
-            }
-          }
-          catch (CoreException exception)
-          {
-            Activator.logException( exception);
-          }
-        }
-      }
-    };
-  
+    
     protected void handleActivate()
       {
         // Recompute the read only state.
@@ -758,63 +822,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
   
  
     
-   protected EContentAdapter problemIndicationAdapter = 
-    new EContentAdapter()
-    {
-      @Override
-      public void notifyChanged(final Notification notification)
-      {
-        if (notification.getNotifier() instanceof Resource)
-        {
-          switch (notification.getFeatureID(Resource.class))
-          {
-            case Resource.RESOURCE__IS_LOADED:
-            case Resource.RESOURCE__ERRORS:
-            case Resource.RESOURCE__WARNINGS:
-            {
-              Resource resource = (Resource)notification.getNotifier();
-              Diagnostic diagnostic = analyzeResourceProblems((Resource)notification.getNotifier(), null);
-              if (diagnostic.getSeverity() != Diagnostic.OK)
-              {
-                JsdlEditor.this.resourceToDiagnosticMap.put(resource, diagnostic);
-              }
-              else
-              {
-                JsdlEditor.this.resourceToDiagnosticMap.remove(resource);
-              }
-
-              if (JsdlEditor.this.updateProblemIndication)
-              {
-                getSite().getShell().getDisplay().asyncExec
-                  (new Runnable()
-                   {
-                     public void run()
-                     {
-                       updateProblemIndication();
-                     }
-                   });
-              }
-            }
-          }
-        }
-        else
-        {
-          super.notifyChanged(notification);
-        }
-      }
-
-      @Override
-      protected void setTarget( final Resource target )
-      {
-        basicSetTarget( target );
-      }
-
-      @Override
-      protected void unsetTarget( final Resource target )
-      {
-        basicUnsetTarget( target );
-      }
-    };
+   
   
   
     
