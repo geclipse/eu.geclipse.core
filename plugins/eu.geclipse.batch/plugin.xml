@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension-point id="batchService" name="Batch Service" schema="schema/batchService.exsd"/>
+   <extension-point id="batchServiceProvider" name="Batch Service Provider" schema="schema/batchServiceProvider.exsd"/>
+   <extension
+         id="eu.geclipse.batch.batchCreator"
+         name="Batch creator"
+         point="eu.geclipse.core.gridElementCreator">
+      <creator
+            class="eu.geclipse.batch.BatchConnectionInfoCreator"
+            name="Batch Service">
+         <target
+               class="eu.geclipse.batch.BatchConnectionInfo"
+               name="Batch Service Description">
+         </target>
+      </creator>
+      <creator
+            class="eu.geclipse.batch.BatchQueueDescriptionCreator"
+            name="Batch Queue Configuration">
+         <target
+               class="eu.geclipse.batch.BatchQueueDescriptionCreator"
+               name="Batch Queue Configuration Description">
+         </target>
+      </creator>
+   </extension>
+   <extension
+         point="eu.geclipse.batch.batchService">
+      <service
+            description="eu.geclipse.batch.pbs.PBSBatchServiceDescription"
+            id="eu.geclipse.batch.pbs"
+            name="pbs">
+      </service>
+   </extension>
+   <extension
+         point="eu.geclipse.core.problemProvider">
+      <provider
+            class="eu.geclipse.batch.BatchProblems">
+      </provider>
+   </extension>
+
+</plugin>
