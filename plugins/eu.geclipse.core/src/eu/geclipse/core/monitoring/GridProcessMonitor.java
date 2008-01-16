@@ -187,7 +187,7 @@ public class GridProcessMonitor {
     GridProcess newproc = null;
     if ( pid > 0
          && this.proclist != null
-         && this.proclist.contains( new Integer( pid ) ) )
+         && this.proclist.contains( Integer.valueOf( pid ) ) )
     {
       if ( this.currentfs != null && this.procfs != null ) {
         IFileStore procdirelem = this.procfs.getChild( new Integer( pid ).toString() );
