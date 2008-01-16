@@ -209,7 +209,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    */
   public void attachPosixApplicationName( final Text widget ) {
     
-    Integer featureID = new Integer( PosixPackage.POSIX_APPLICATION_TYPE__NAME );
+    Integer featureID = Integer.valueOf(  PosixPackage.POSIX_APPLICATION_TYPE__NAME );
     this.widgetFeaturesMap.put( featureID, widget );
     
      widget.addModifyListener( new ModifyListener() {
@@ -236,7 +236,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    */
   public void attachPosixApplicationExecutable( final Text widget ) {
     
-    Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__EXECUTABLE);
+    Integer featureID = Integer.valueOf(PosixPackage.POSIX_APPLICATION_TYPE__EXECUTABLE);
     this.widgetFeaturesMap.put( featureID , widget );    
     
    
@@ -278,7 +278,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    */
   public void attachPosixApplicationInput( final Text widget ) {   
     
-    Integer featureID = new Integer( PosixPackage.POSIX_APPLICATION_TYPE__INPUT );
+    Integer featureID = Integer.valueOf( PosixPackage.POSIX_APPLICATION_TYPE__INPUT );
     this.widgetFeaturesMap.put( featureID , widget );
 
     
@@ -316,7 +316,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    */
   public void attachPosixApplicationOutput( final Text widget ) {
     
-    Integer featureID = new Integer( PosixPackage.POSIX_APPLICATION_TYPE__OUTPUT );
+    Integer featureID = Integer.valueOf( PosixPackage.POSIX_APPLICATION_TYPE__OUTPUT );
     this.widgetFeaturesMap.put( featureID, widget );
    
     
@@ -353,7 +353,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    * @param widget The Text widget responsible for PosixApplication Error element.
    */
   public void attachPosixApplicationError( final Text widget ) {
-    Integer featureID = new Integer( PosixPackage.POSIX_APPLICATION_TYPE__ERROR );
+    Integer featureID = Integer.valueOf( PosixPackage.POSIX_APPLICATION_TYPE__ERROR );
     this.widgetFeaturesMap.put( featureID , widget );
   
     
@@ -389,7 +389,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    */
   public void attachToPosixApplicationArgument( final TableViewer widget ) {
     
-    Integer featureID = new Integer( PosixPackage.POSIX_APPLICATION_TYPE__ARGUMENT );
+    Integer featureID = Integer.valueOf(  PosixPackage.POSIX_APPLICATION_TYPE__ARGUMENT );
     this.tableFeaturesMap.put( featureID , widget );
     
   } // End void attachToPosixApplicationArgument()
@@ -404,7 +404,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    */
   public void attachToPosixApplicationEnvironment( final TableViewer widget ) {
     
-    Integer featureID = new Integer( PosixPackage.POSIX_APPLICATION_TYPE__ENVIRONMENT );
+    Integer featureID = Integer.valueOf( PosixPackage.POSIX_APPLICATION_TYPE__ENVIRONMENT );
     this.tableFeaturesMap.put( featureID , widget );
     
   } // End void attachToPosixApplicationEnvironment()
@@ -420,7 +420,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    * @param widget The Text widget responsible for PosixApplication Working Directory element.
    */
   public void attachToWorkingDirectory( final Text widget ) {    
-    Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__WORKING_DIRECTORY);
+    Integer featureID = Integer.valueOf(PosixPackage.POSIX_APPLICATION_TYPE__WORKING_DIRECTORY);
     this.widgetFeaturesMap.put( featureID , widget );
     
     widget.addModifyListener( new ModifyListener() {
@@ -462,7 +462,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    */
   public void attachToWallTimeLimit( final Text text ) {
     
-    Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__WALL_TIME_LIMIT);
+    Integer featureID = Integer.valueOf(PosixPackage.POSIX_APPLICATION_TYPE__WALL_TIME_LIMIT);
     this.widgetFeaturesMap.put( featureID , text );    
       
       text.addModifyListener( new ModifyListener() {  
@@ -503,7 +503,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   public void attachToFileSizeLimit( final Text text ) {
     
     Integer featureID = 
-              new Integer( PosixPackage.POSIX_APPLICATION_TYPE__FILE_SIZE_LIMIT );
+      Integer.valueOf(  PosixPackage.POSIX_APPLICATION_TYPE__FILE_SIZE_LIMIT );
     
     this.widgetFeaturesMap.put( featureID , text );    
       
@@ -546,7 +546,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   public void attachToCoreDumpLimit( final Text text ) {
     
     Integer featureID = 
-              new Integer( PosixPackage.POSIX_APPLICATION_TYPE__CORE_DUMP_LIMIT );
+      Integer.valueOf(  PosixPackage.POSIX_APPLICATION_TYPE__CORE_DUMP_LIMIT );
     
     this.widgetFeaturesMap.put( featureID , text );    
       
@@ -589,7 +589,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   public void attachToDataSegmentLimit( final Text text ) {
     
     Integer featureID = 
-              new Integer( PosixPackage.POSIX_APPLICATION_TYPE__DATA_SEGMENT_LIMIT );
+      Integer.valueOf( PosixPackage.POSIX_APPLICATION_TYPE__DATA_SEGMENT_LIMIT );
     
     this.widgetFeaturesMap.put( featureID , text );    
       
@@ -632,7 +632,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   public void attachToLockedMemoryLimit( final Text text ) {
     
     Integer featureID = 
-              new Integer( PosixPackage.POSIX_APPLICATION_TYPE__LOCKED_MEMORY_LIMIT );
+      Integer.valueOf( PosixPackage.POSIX_APPLICATION_TYPE__LOCKED_MEMORY_LIMIT );
     
     this.widgetFeaturesMap.put( featureID , text );    
       
@@ -675,7 +675,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   public void attachToMemoryLimit( final Text text ) {
     
     Integer featureID = 
-              new Integer( PosixPackage.POSIX_APPLICATION_TYPE__MEMORY_LIMIT );
+      Integer.valueOf( PosixPackage.POSIX_APPLICATION_TYPE__MEMORY_LIMIT );
     
     this.widgetFeaturesMap.put( featureID , text );    
       
@@ -718,7 +718,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   public void attachToOpenDesciptorsLimit( final Text text ) {
     
     Integer featureID = 
-              new Integer( PosixPackage.POSIX_APPLICATION_TYPE__OPEN_DESCRIPTORS_LIMIT );
+      Integer.valueOf( PosixPackage.POSIX_APPLICATION_TYPE__OPEN_DESCRIPTORS_LIMIT );
     
     this.widgetFeaturesMap.put( featureID , text );    
       
@@ -761,7 +761,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   public void attachToPipeSizeLimit( final Text text ) {
     
     Integer featureID = 
-              new Integer( PosixPackage.POSIX_APPLICATION_TYPE__PIPE_SIZE_LIMIT );
+      Integer.valueOf( PosixPackage.POSIX_APPLICATION_TYPE__PIPE_SIZE_LIMIT );
     
     this.widgetFeaturesMap.put( featureID , text );    
       
@@ -804,7 +804,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   public void attachToStackSizeLimit( final Text text ) {
     
     Integer featureID = 
-              new Integer( PosixPackage.POSIX_APPLICATION_TYPE__STACK_SIZE_LIMIT );
+      Integer.valueOf( PosixPackage.POSIX_APPLICATION_TYPE__STACK_SIZE_LIMIT );
     
     this.widgetFeaturesMap.put( featureID , text );    
       
@@ -847,7 +847,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   public void attachToCPUTimeLimit( final Text text ) {
     
     Integer featureID = 
-              new Integer( PosixPackage.POSIX_APPLICATION_TYPE__CPU_TIME_LIMIT );
+      Integer.valueOf( PosixPackage.POSIX_APPLICATION_TYPE__CPU_TIME_LIMIT );
     
     this.widgetFeaturesMap.put( featureID , text );    
       
@@ -890,7 +890,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   public void attachToProcessCountLimit( final Text text ) {
     
     Integer featureID = 
-              new Integer( PosixPackage.POSIX_APPLICATION_TYPE__PROCESS_COUNT_LIMIT );
+      Integer.valueOf( PosixPackage.POSIX_APPLICATION_TYPE__PROCESS_COUNT_LIMIT );
     
     this.widgetFeaturesMap.put( featureID , text );    
       
@@ -932,7 +932,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   public void attachToVirtualMemoryLimit( final Text text ) {
     
     Integer featureID = 
-              new Integer( PosixPackage.POSIX_APPLICATION_TYPE__VIRTUAL_MEMORY_LIMIT );
+      Integer.valueOf( PosixPackage.POSIX_APPLICATION_TYPE__VIRTUAL_MEMORY_LIMIT );
     
     this.widgetFeaturesMap.put( featureID , text );    
       
@@ -976,7 +976,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   public void attachToThreadCountLimit( final Text text ) {
     
     Integer featureID = 
-              new Integer( PosixPackage.POSIX_APPLICATION_TYPE__THREAD_COUNT_LIMIT );
+      Integer.valueOf( PosixPackage.POSIX_APPLICATION_TYPE__THREAD_COUNT_LIMIT );
     
     this.widgetFeaturesMap.put( featureID , text );    
       
@@ -1021,7 +1021,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    */
   public void attachToUserName( final Text text ) {
     
-    Integer featureID = new Integer(PosixPackage.POSIX_APPLICATION_TYPE__USER_NAME);
+    Integer featureID = Integer.valueOf(PosixPackage.POSIX_APPLICATION_TYPE__USER_NAME);
     this.widgetFeaturesMap.put( featureID , text );    
       
       text.addModifyListener( new ModifyListener() {
@@ -1058,7 +1058,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    */ 
   public void attachToGroupName( final Text text ) {
     
-    Integer featureID = new Integer( PosixPackage.POSIX_APPLICATION_TYPE__GROUP_NAME );
+    Integer featureID = Integer.valueOf( PosixPackage.POSIX_APPLICATION_TYPE__GROUP_NAME );
     this.widgetFeaturesMap.put( featureID , text );    
       
     text.addModifyListener( new ModifyListener() {
@@ -1163,7 +1163,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
     /* Check if PosixApplication Element Exists */
     checkPosixApplicationElement();
     
-    if ( name == "argumentViewer" ) { //$NON-NLS-1$
+    if ( name.equals("argumentViewer") ) { //$NON-NLS-1$
       
       this.argumentType = PosixFactory.eINSTANCE.createArgumentType();
       this.argumentType = (ArgumentType) value;
@@ -1227,7 +1227,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
     
       Object feature = structSelection.getFirstElement();
       
-      table = this.tableFeaturesMap.get( new Integer (PosixPackage.POSIX_APPLICATION_TYPE__ARGUMENT) );
+      table = this.tableFeaturesMap.get( Integer.valueOf( PosixPackage.POSIX_APPLICATION_TYPE__ARGUMENT) );
     
       if (tableViewer == table) {
     
@@ -1398,7 +1398,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
           
           if (eStructuralFeature.getUpperBound() 
             != ETypedElement.UNBOUNDED_MULTIPLICITY
-            && this.widgetFeaturesMap.containsKey( new Integer(featureID)) ) {
+            && this.widgetFeaturesMap.containsKey( Integer.valueOf(featureID)) ) {
            
            EObject eObject = (EObject) this.posixApplicationType.eGet( eStructuralFeature );           
                 
@@ -1566,7 +1566,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
             
              widgetName = this.widgetFeaturesMap.get( new Integer(featureID) );
              
-             if (eStructuralFeature.getName().toString() != "any"){ //$NON-NLS-1$
+             if (eStructuralFeature.getName() != "any"){ //$NON-NLS-1$
                widgetName.setText(value.toString());
            } // End if
           

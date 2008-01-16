@@ -119,7 +119,7 @@ public final class ApplicationTypeAdapter extends JsdlAdaptersFactory {
    */
   public void attachToApplicationName( final Text widget ) {
     
-    Integer featureID = new Integer(JsdlPackage.APPLICATION_TYPE__APPLICATION_NAME);
+    Integer featureID = Integer.valueOf(JsdlPackage.APPLICATION_TYPE__APPLICATION_NAME);
     this.widgetFeaturesMap.put( featureID, widget );
     
     widget.addModifyListener( new ModifyListener() {
@@ -145,7 +145,7 @@ public final class ApplicationTypeAdapter extends JsdlAdaptersFactory {
    */ 
   public void attachToApplicationVersion( final Text widget ) {
     
-    Integer featureID = new Integer( JsdlPackage.APPLICATION_TYPE__APPLICATION_VERSION );
+    Integer featureID = Integer.valueOf( JsdlPackage.APPLICATION_TYPE__APPLICATION_VERSION );
     this.widgetFeaturesMap.put( featureID , widget );
         
     widget.addModifyListener( new ModifyListener() {
@@ -170,7 +170,7 @@ public final class ApplicationTypeAdapter extends JsdlAdaptersFactory {
    * @param widget The Text widget responsible for JobApplication Description element.
    */
   public void attachToApplicationDescription( final Text widget ) {
-    Integer featureID = new Integer( JsdlPackage.APPLICATION_TYPE__DESCRIPTION );
+    Integer featureID = Integer.valueOf( JsdlPackage.APPLICATION_TYPE__DESCRIPTION );
     this.widgetFeaturesMap.put( featureID , widget );
     
     widget.addModifyListener( new ModifyListener() {
@@ -214,9 +214,9 @@ public final class ApplicationTypeAdapter extends JsdlAdaptersFactory {
                       
         //Check if Attribute has any value
         if (object.eIsSet( attribute ) 
-            && this.widgetFeaturesMap.containsKey( new Integer( featureID  ) ) ) {
+            && this.widgetFeaturesMap.containsKey( Integer.valueOf( featureID  ) ) ) {
           
-           widgetName = this.widgetFeaturesMap.get( new Integer ( featureID ) );
+           widgetName = this.widgetFeaturesMap.get( Integer.valueOf( featureID ) );
            
            switch( featureID ) {             
              case JsdlPackage.APPLICATION_TYPE__APPLICATION_NAME:

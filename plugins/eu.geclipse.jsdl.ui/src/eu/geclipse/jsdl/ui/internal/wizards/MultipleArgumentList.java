@@ -75,7 +75,7 @@ public class MultipleArgumentList extends TabComponent<String> {
     if( name != null
         && name.length() > 0 )
     {
-      addVariable( new String( name.trim() ) );
+      addVariable( name.trim() );
     }
   }
 
@@ -97,7 +97,7 @@ public class MultipleArgumentList extends TabComponent<String> {
       } else {
         String name = dialog.getStringValue( Messages.getString("MultipleArgumentList.new_value") );  //$NON-NLS-1$
         if( !originalName.equals( name ) ) {
-          if( addVariable( new String( name ) ) ) {
+          if( addVariable( name ) ) {
             this.table.remove( var );
           }
         } else {

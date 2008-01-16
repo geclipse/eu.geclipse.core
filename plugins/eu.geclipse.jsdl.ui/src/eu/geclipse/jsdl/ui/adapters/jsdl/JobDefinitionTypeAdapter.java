@@ -86,7 +86,7 @@ public final class JobDefinitionTypeAdapter extends JsdlAdaptersFactory {
    */
   public void attachID(final Text widget){
     
-    Integer featureID = new Integer (JsdlPackage.JOB_DEFINITION_TYPE__ID);
+    Integer featureID = Integer.valueOf( JsdlPackage.JOB_DEFINITION_TYPE__ID);
     this.widgetFeaturesMap.put( featureID, widget );
     
       widget.addModifyListener( new ModifyListener() {
@@ -150,7 +150,7 @@ public final class JobDefinitionTypeAdapter extends JsdlAdaptersFactory {
          int featureID =  attribute.getFeatureID();
          
          if (this.jobDefinitionType.eIsSet( attribute )){ 
-           widgetName = this.widgetFeaturesMap.get( new Integer ( featureID ) );
+           widgetName = this.widgetFeaturesMap.get( Integer.valueOf(  featureID ) );
       
            switch( featureID ) {
              

@@ -233,7 +233,7 @@ public class DataStagingInDialog extends Dialog {
       this.deleteOnTerminationCombo.add( "false" ); //$NON-NLS-1$
       
       if( this.initDeleteFlag != null ) {
-        int indexOfDelete = this.deleteOnTerminationCombo.indexOf( this.initDeleteFlag.toString() );
+        int indexOfDelete = this.deleteOnTerminationCombo.indexOf( this.initDeleteFlag );
         this.deleteOnTerminationCombo.select( indexOfDelete );
       } else {
         this.deleteOnTerminationCombo.select( 0 );
@@ -293,7 +293,7 @@ public class DataStagingInDialog extends Dialog {
     if( this.dialogStyle == ADVANCED_DIALOG ) {
       this.returnCreationFlag = this.creationFlagCombo.getSelectionIndex();
       if( this.deleteOnTerminationCombo.getSelectionIndex() != -1 ) {
-        this.returnDeleteFlag = new Boolean( Boolean.parseBoolean( this.deleteOnTerminationCombo.getItem( this.deleteOnTerminationCombo.getSelectionIndex() ) ));
+        this.returnDeleteFlag = Boolean.valueOf( Boolean.parseBoolean( this.deleteOnTerminationCombo.getItem( this.deleteOnTerminationCombo.getSelectionIndex() ) ));
       }
     }
     super.okPressed();

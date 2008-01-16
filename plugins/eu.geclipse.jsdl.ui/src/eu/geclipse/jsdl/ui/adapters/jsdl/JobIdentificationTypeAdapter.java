@@ -143,7 +143,7 @@ public final class JobIdentificationTypeAdapter extends JsdlAdaptersFactory {
    */
   public void attachToJobName(final Text widget){ 
     
-    Integer featureID = new Integer (JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_NAME);
+    Integer featureID = Integer.valueOf( JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_NAME);
     this.widgetFeaturesMap.put( featureID, widget );
         
     widget.addModifyListener( new ModifyListener() {
@@ -167,7 +167,7 @@ public final class JobIdentificationTypeAdapter extends JsdlAdaptersFactory {
    */
   public void attachToJobDescription(final Text widget){    
     
-    Integer featureID = new Integer (JsdlPackage.JOB_IDENTIFICATION_TYPE__DESCRIPTION);
+    Integer featureID = Integer.valueOf( JsdlPackage.JOB_IDENTIFICATION_TYPE__DESCRIPTION);
     this.widgetFeaturesMap.put( featureID , widget );
     
     widget.addModifyListener( new ModifyListener() {
@@ -191,7 +191,7 @@ public final class JobIdentificationTypeAdapter extends JsdlAdaptersFactory {
    */
   public void attachToJobProject(final List widget){  
     
-    Integer featureID = new Integer (JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_PROJECT);
+    Integer featureID = Integer.valueOf( JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_PROJECT);
     this.listFeaturesMap.put( featureID, widget );
     
   }
@@ -205,7 +205,7 @@ public final class JobIdentificationTypeAdapter extends JsdlAdaptersFactory {
    */
   public void attachToJobAnnotation(final List widget){
     
-    Integer featureID = new Integer(JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_ANNOTATION);
+    Integer featureID = Integer.valueOf( JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_ANNOTATION);
     this.listFeaturesMap.put( featureID, widget );
     
   }
@@ -300,7 +300,7 @@ public final class JobIdentificationTypeAdapter extends JsdlAdaptersFactory {
     Collection<String> collection = new ArrayList<String>();
     int featureID;
     
-    if (name == "lstJobAnnotation"){ //$NON-NLS-1$
+    if (name.equals("lstJobAnnotation")) { //$NON-NLS-1$
       featureID = JsdlPackage.JOB_IDENTIFICATION_TYPE__JOB_ANNOTATION;
     }
     else{
@@ -356,7 +356,7 @@ public final class JobIdentificationTypeAdapter extends JsdlAdaptersFactory {
         //Get Attribute Value.
         Object value = object.eGet( eStructuralFeature );        
              
-        Integer featureID =  new Integer(eStructuralFeature.getFeatureID());
+        Integer featureID =  Integer.valueOf(eStructuralFeature.getFeatureID());
       
         //Check if Attribute has any value
         if (object.eIsSet( eStructuralFeature )

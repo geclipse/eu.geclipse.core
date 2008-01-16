@@ -256,7 +256,7 @@ public class ApplicationSpecificRegistry implements IContentChangeNotifier {
     for( ApplicationSpecificObject appSO : this.apps ) {
       if( numberOfOccurences.containsKey( appSO.getAppName() ) ) {
         numberOfOccurences.put( appSO.getAppName(),
-                                new Integer( numberOfOccurences.get( appSO.getAppName() )
+                                Integer.valueOf( numberOfOccurences.get( appSO.getAppName() )
                                   .intValue() + 1 ) );
       } else {
         numberOfOccurences.put( appSO.getAppName(), new Integer( 1 ) );

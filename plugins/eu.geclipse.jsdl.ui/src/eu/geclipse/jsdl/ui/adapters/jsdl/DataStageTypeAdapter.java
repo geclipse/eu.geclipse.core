@@ -150,7 +150,7 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
    */
   public void attachToStageIn( final TableViewer widget ) {
      
-    Integer featureID = new Integer( JsdlPackage.DATA_STAGING_TYPE__SOURCE );
+    Integer featureID = Integer.valueOf( JsdlPackage.DATA_STAGING_TYPE__SOURCE );
     this.tableFeaturesMap.put( featureID , widget );
     
     widget.addFilter(new ViewerFilter() {
@@ -176,7 +176,7 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
    */
   public void attachToStageOut( final TableViewer widget ) {
     
-    Integer featureID = new Integer( JsdlPackage.DATA_STAGING_TYPE__TARGET );
+    Integer featureID = Integer.valueOf(  JsdlPackage.DATA_STAGING_TYPE__TARGET );
     this.tableFeaturesMap.put( featureID , widget );
     widget.addFilter( new ViewerFilter() {
       @Override
@@ -243,7 +243,7 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
      * elements.
      */ 
     stageInViewer = this.tableFeaturesMap
-                     .get( new Integer( JsdlPackage.DATA_STAGING_TYPE__SOURCE ) );
+                     .get( Integer.valueOf(  JsdlPackage.DATA_STAGING_TYPE__SOURCE ) );
 
     /* Check if the values from the dialog are null. */
     if (value[0] == null) {
@@ -424,7 +424,7 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
      * elements.
      */ 
     stageInViewer = this.tableFeaturesMap
-                     .get( new Integer( JsdlPackage.DATA_STAGING_TYPE__SOURCE ) );
+                     .get( Integer.valueOf(  JsdlPackage.DATA_STAGING_TYPE__SOURCE ) );
 
     /* Check if the values from the dialog are null. */
     if (value[0] == null) {
@@ -642,9 +642,9 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
               case JsdlPackage.JOB_DESCRIPTION_TYPE__DATA_STAGING:               
               { 
                 tableName = this.tableFeaturesMap
-                    .get( new Integer(JsdlPackage.DATA_STAGING_TYPE__SOURCE) );
+                    .get( Integer.valueOf( JsdlPackage.DATA_STAGING_TYPE__SOURCE) );
                 tableName2 = this.tableFeaturesMap
-                     .get(new Integer( JsdlPackage.DATA_STAGING_TYPE__TARGET ));
+                     .get( Integer.valueOf( JsdlPackage.DATA_STAGING_TYPE__TARGET ));
                 
                        
           
