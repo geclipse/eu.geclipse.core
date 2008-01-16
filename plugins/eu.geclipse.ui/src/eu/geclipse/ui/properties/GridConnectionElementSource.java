@@ -16,6 +16,7 @@
 package eu.geclipse.ui.properties;
 
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,19 +104,18 @@ public class GridConnectionElementSource extends AbstractPropertySource<IGridCon
           parent = parent.getParent();
           lastRelativeSegments++;
         }
-        
         if( sourceObject == parent ) {
           URI uri = sourceObject.getURI();
           if( uri != null ) {
             uriString = uri.toString();
           }
-        }
-        else if( parent != null && parent instanceof IGridConnection ) {
+        } else if( parent != null && parent instanceof IGridConnection ) {
           URI parentUri = ( ( IGridConnection )parent ).getURI();
           IPath localPath = sourceObject.getPath();
           if( lastRelativeSegments <= localPath.segmentCount() ) {
             IPath relativePath = localPath.removeFirstSegments( localPath.segmentCount()
                                                                 - lastRelativeSegments );
+            parentUri = addSeparator( parentUri );
             try {
               URI newUri = parentUri.resolve( relativePath.toString() );
               uriString = newUri.toString();
@@ -125,6 +125,28 @@ public class GridConnectionElementSource extends AbstractPropertySource<IGridCon
           }
         }
         return uriString;
+      }
+
+      private URI addSeparator( final URI uri ) {
+        URI separatedUri = uri;
+        String path = uri.getPath();
+        if( path != null
+            && path.length() > 0
+            && path.charAt( path.length() - 1 ) != IPath.SEPARATOR )
+        {
+          try {
+            separatedUri = new URI( uri.getScheme(),
+                                    uri.getUserInfo(),
+                                    uri.getHost(),
+                                    uri.getPort(),
+                                    path.concat( Character.toString( IPath.SEPARATOR ) ),
+                                    uri.getQuery(),
+                                    uri.getFragment() );
+          } catch( URISyntaxException exception ) {
+            // ignore errors
+          }
+        }
+        return separatedUri;
       }
     };
   }  
