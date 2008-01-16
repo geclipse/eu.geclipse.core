@@ -237,8 +237,8 @@ public class Terminal extends Canvas implements ISelectionProvider {
             else if ( Arrays.binarySearch( unhandledKeycodes, event.keyCode ) < 0 ) {
               Activator.logMessage( IStatus.WARNING,
                                     Messages.formatMessage( "Terminal.unhandledKeycode", //$NON-NLS-1$
-                                                            new Integer( event.keyCode ),
-                                                            new Integer( event.character) ) ); 
+                                                            Integer.valueOf( event.keyCode ),
+                                                            Integer.valueOf( event.character) ) ); 
             }
             out.flush();
           }
@@ -404,8 +404,8 @@ public class Terminal extends Canvas implements ISelectionProvider {
         else if ( ch < ' ' ) {
           Activator.logMessage( IStatus.WARNING,
                                 Messages.formatMessage( "Terminal.unhandledCtrlChar", //$NON-NLS-1$
-                                                        new Character( (char) ch ),
-                                                        new Integer( ch ) ) );
+                                                        Character.valueOf( (char) ch ),
+                                                        Integer.valueOf(  ch ) ) );
         } else {
           this.input.unread( ch );
           readText();
@@ -421,7 +421,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
 
   private void tabulator() {
     int oldCol = this.cursor.col;
-    Integer cursorCol = new Integer( this.cursor.col + 1 );
+    Integer cursorCol = Integer.valueOf( this.cursor.col + 1 );
     Integer[] tabArray = this.tabulatorPositons.toArray( new Integer[0] );
     int pos = Arrays.binarySearch( tabArray, cursorCol );
     if ( pos < 0 ) {
@@ -535,7 +535,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
     switch(ch) {
       case '[':
         do {
-          params.add( new Integer(readNumber()) );
+          params.add( Integer.valueOf(readNumber()) );
           ch = read();
         }while(ch == ';');
         executeControlSequence( listToArray(params), ch );
@@ -630,13 +630,13 @@ public class Terminal extends Canvas implements ISelectionProvider {
       default:
         Activator.logMessage( IStatus.WARNING,
                               Messages.formatMessage( "Terminal.unknownEscSeq", //$NON-NLS-1$
-                                                      new Character( (char) ch ) ) );
+                                                      Character.valueOf( (char) ch ) ) );
         break;
     }
   }
 
   private void horizontalTabulationSet() {
-    Integer cursorCol = new Integer( this.cursor.col );
+    Integer cursorCol = Integer.valueOf( this.cursor.col );
     if ( !this.tabulatorPositons.contains( cursorCol ) ) {
       this.tabulatorPositons.add( cursorCol );
     }
@@ -740,7 +740,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
       default:
         Activator.logMessage( IStatus.WARNING, 
                               Messages.formatMessage( "Terminal.unknownDecCommand", //$NON-NLS-1$
-                                                       new Character( (char) ch ) ) );
+                                                      Character.valueOf( (char) ch ) ) );
     }
   }
 
@@ -802,7 +802,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
       default:
         Activator.logMessage( IStatus.WARNING,
                               Messages.formatMessage( "Terminal.unknownOsCommand", //$NON-NLS-1$
-                                                      new Integer( commandNr ) ) );
+                                                      Integer.valueOf( commandNr ) ) );
         break;
     }
   }
@@ -916,7 +916,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
       default:
         Activator.logMessage( IStatus.WARNING,
                               Messages.formatMessage("Terminal.unknownCtrlSeq", //$NON-NLS-1$
-                                                     new Character( (char) command ) ) );
+                                                     Character.valueOf( (char) command ) ) );
         break;
     }
   }
@@ -1045,7 +1045,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
         default:
           Activator.logMessage( IStatus.WARNING,
                                 Messages.formatMessage("Terminal.unknownSetModeParam", //$NON-NLS-1$
-                                                       new Integer( param ) ) );
+                                                       Integer.valueOf( param ) ) );
           break;
       }
     }
@@ -1103,14 +1103,14 @@ public class Terminal extends Canvas implements ISelectionProvider {
         default:
           Activator.logMessage( IStatus.WARNING,
                                 Messages.formatMessage( "Terminal.unknownResetModeParam", //$NON-NLS-1$
-                                                        new Integer( param ) ) );
+                                                        Integer.valueOf( param ) ) );
           break;
       }
     }
   }
 
   private void tabulationClear( final int[] params ) {
-    Integer cursorCol = new Integer( this.cursor.col );
+    Integer cursorCol = Integer.valueOf( this.cursor.col );
     int val = 0;
     if ( params.length > 0 ) val = params[ 0 ];
     switch (val) {
@@ -1234,8 +1234,8 @@ public class Terminal extends Canvas implements ISelectionProvider {
     } else if ( bottom >= this.numLines ) {
       Activator.logMessage( IStatus.WARNING,
                             Messages.formatMessage( "Terminal.bottomOutOfScreen", //$NON-NLS-1$
-                                                    new Integer( bottom ),
-                                                    new Integer( this.numLines ) ) );
+                                                    Integer.valueOf( bottom ),
+                                                    Integer.valueOf( this.numLines ) ) );
     } else {
       this.topMargin = top;
       this.bottomMargin = bottom;
@@ -1326,7 +1326,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
         default:
           Activator.logMessage( IStatus.WARNING,
                                 Messages.formatMessage( "Terminal.unknownGraphRendParam", //$NON-NLS-1$
-                                                        new Integer( val ) ));
+                                                        Integer.valueOf( val ) ));
           break;
       }
       idx++;
@@ -1374,7 +1374,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
       default:
         Activator.logMessage( IStatus.WARNING,
                               Messages.formatMessage("Terminal.unknownEraseInDispParam", //$NON-NLS-1$
-                                                     new Integer( val ) ) );
+                                                     Integer.valueOf( val ) ) );
         break;
     }
   }
@@ -1402,7 +1402,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
       default:
         Activator.logMessage( IStatus.WARNING,
                               Messages.formatMessage( "Terminal.unknownEraseInLineParam", //$NON-NLS-1$
-                                                      new Integer( val ) ) );
+                                                      Integer.valueOf( val ) ) );
         break;
     }
   }
@@ -1423,7 +1423,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
     } else {
       Activator.logMessage( IStatus.WARNING,
                             Messages.formatMessage("Terminal.invalidLoadLedsParam", //$NON-NLS-1$
-                                                   new Integer( val ) ) );
+                                                   Integer.valueOf( val ) ) );
     }
   }
 
