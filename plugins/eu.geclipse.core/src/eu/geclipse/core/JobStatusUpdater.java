@@ -34,6 +34,7 @@ import eu.geclipse.core.model.IGridJobID;
 import eu.geclipse.core.model.IGridJobStatus;
 import eu.geclipse.core.model.IGridJobStatusListener;
 import eu.geclipse.core.model.IGridJobStatusService;
+import eu.geclipse.core.reporting.ProblemException;
 
 /**
  * The class for updating job status in the background. There is one JobStatusUpdater 
@@ -105,7 +106,7 @@ public class JobStatusUpdater extends Job {
                   newStatus = service.getJobStatus( this.jobID );
                 } catch( GridModelException e ) {
                   // empty implementation
-                } catch( GridException e ) {
+                } catch( ProblemException e ) {
                   // empty implementation
                 }
               }
