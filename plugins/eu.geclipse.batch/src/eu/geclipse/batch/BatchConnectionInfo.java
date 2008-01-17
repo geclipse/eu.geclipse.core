@@ -102,19 +102,31 @@ public class BatchConnectionInfo extends ResourceGridContainer implements IGridS
    * @see eu.geclipse.core.model.IStoreableElement#load()
    */ 
   public void load() throws GridModelException {
+    BufferedReader bReader = null;
     try {
       IFileStore fileStore = getFileStore();
       InputStream iStream =  fileStore.openInputStream( EFS.NONE, null ); 
       InputStreamReader iReader = new InputStreamReader( iStream );
-      BufferedReader bReader = new BufferedReader( iReader );
+      bReader = new BufferedReader( iReader );
       this.batchName = bReader.readLine();
       this.account = bReader.readLine();
       this.batchType = bReader.readLine();
-      this.updateInterval = Integer.parseInt( bReader.readLine() );
+
+      String str = bReader.readLine();
+      if ( null == str )
+        throw new GridModelException( GridModelProblems.ELEMENT_LOAD_FAILED );
+      this.updateInterval = Integer.parseInt( str );
     } catch ( IOException ioExc ) {
       throw new GridModelException( GridModelProblems.ELEMENT_LOAD_FAILED, ioExc );
     } catch ( CoreException cExc ) {
       throw new GridModelException( GridModelProblems.ELEMENT_LOAD_FAILED, cExc );
+    } finally {
+      if ( null != bReader )
+        try {
+          bReader.close();
+        } catch( IOException e ) {
+          // Ignore this exception
+        }
     }
   }
 
@@ -131,7 +143,7 @@ public class BatchConnectionInfo extends ResourceGridContainer implements IGridS
       bWriter.newLine();
       bWriter.write( this.account );
       bWriter.newLine();
-      bWriter.write( this.batchType.toString() );
+      bWriter.write( this.batchType );
       bWriter.newLine();
       bWriter.write( String.valueOf( this.updateInterval ) );
       bWriter.close();

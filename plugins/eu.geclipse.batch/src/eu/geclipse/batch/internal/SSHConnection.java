@@ -124,7 +124,9 @@ public class SSHConnection {
    * @return Returns the output of the executed command if executed 
    * successfully, if no output of the successfully executed command 
    * <code>null</code> is returned.
-   * @throws BatchException If the command is not successfully executed.
+   * @throws BatchExcep          // TODO Auto-generated catch block
+          e.printStackTrace();
+tion If the command is not successfully executed.
    */
   public String execCommand( final String command ) throws BatchException {
     String line;
@@ -209,6 +211,22 @@ public class SSHConnection {
       problem.addSolution( SolutionRegistry.SERVER_DOWN );
       
       throw batchException;
+    } finally {
+      if ( null != stdoutReader ) {
+        try {
+          stdoutReader.close();
+        } catch( IOException e ) {
+          // Ignore this exception
+        }
+      }
+      
+      if ( null != stderrReader ) {
+        try {
+          stderrReader.close();
+        } catch( IOException e ) {
+          // Ignore this exception
+        }
+      }
     }
 
     // Was the command executed successfully 

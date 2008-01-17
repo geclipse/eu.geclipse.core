@@ -206,6 +206,8 @@ public class WorkerNodeInfo implements IWorkerNodeInfo {
 
         if ( -1 != endIndex )
           kernel = this.status.substring( beginIndex, endIndex );
+        else
+          kernel = Messages.getString( "WorkerNodeInfo.Unknown" ); //$NON-NLS-1$
       } else
         kernel = Messages.getString( "WorkerNodeInfo.Unknown" ); //$NON-NLS-1$
     } else
@@ -229,6 +231,8 @@ public class WorkerNodeInfo implements IWorkerNodeInfo {
 
         if ( -1 != endIndex )
           mem = this.status.substring( beginIndex, endIndex );
+        else
+          mem = Messages.getString( "WorkerNodeInfo.Unknown" ); //$NON-NLS-1$
       } else
         mem = Messages.getString( "WorkerNodeInfo.Unknown" ); //$NON-NLS-1$
     } else
