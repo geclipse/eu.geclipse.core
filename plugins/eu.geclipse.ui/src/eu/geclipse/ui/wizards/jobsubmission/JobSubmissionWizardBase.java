@@ -32,6 +32,9 @@ import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.swt.widgets.Display;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.PlatformUI;
 
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
@@ -48,7 +51,6 @@ import eu.geclipse.ui.wizards.wizardselection.IInitalizableWizard;
 
 /**
  * Base class for submission wizard
- * 
  */
 public abstract class JobSubmissionWizardBase extends Wizard
   implements IInitalizableWizard, IExecutableExtension
@@ -56,6 +58,7 @@ public abstract class JobSubmissionWizardBase extends Wizard
 
   protected IGridJobCreator creator;
   protected List<IGridJobDescription> jobDescriptions;
+  boolean finishResult;
 
   protected JobSubmissionWizardBase() {
     setNeedsProgressMonitor( true );
@@ -69,7 +72,9 @@ public abstract class JobSubmissionWizardBase extends Wizard
   @Override
   public boolean performFinish() {
     {
-      boolean result = true;
+      // final boolean result = true;
+      final JobSubmissionWizardBase base = this;
+      finishResult = true;
       Job job = new Job( "Grid Job Submission" ) {
 
         // create the service for the job submission
@@ -81,9 +86,10 @@ public abstract class JobSubmissionWizardBase extends Wizard
          */
         protected IStatus run( final IProgressMonitor monitor ) {
           /*
-           * we loop over all selected jobs in the workspace yes, we
-           * can submit more than one job at a time
+           * we loop over all selected jobs in the workspace yes, we can submit
+           * more than one job at a time
            */
+          IStatus result = Status.OK_STATUS;
           for( IGridJobDescription description : JobSubmissionWizardBase.this.jobDescriptions )
           {
             if( JobSubmissionWizardBase.this.creator.canCreate( description ) )
@@ -97,47 +103,95 @@ public abstract class JobSubmissionWizardBase extends Wizard
                    * here we submit the job
                    */
                   jobId = service.submitJob( description, monitor );
+                  IWorkbench workbench = PlatformUI.getWorkbench();
+                  Display display = workbench.getDisplay();
+                  display.asyncExec( new Runnable() {
+
+                    public void run() {
+                      base.dispose();
+                    }
+                  } );
                   monitor.setTaskName( "job submitted" );
                 } else {
                   ProblemDialog.openProblem( getShell(),
-                                                Messages.getString( "JobSubmissionWizardBase.errSubmissionFailed" ), //$NON-NLS-1$
-                                                Messages.getString( "JobSubmissionWizardBase.errUnknownSubmissionService" ), //$NON-NLS-1$
-                                                null );
+                                             Messages.getString( "JobSubmissionWizardBase.errSubmissionFailed" ), //$NON-NLS-1$
+                                             Messages.getString( "JobSubmissionWizardBase.errUnknownSubmissionService" ), //$NON-NLS-1$
+                                             null );
+                  result = new Status( Status.INFO,
+                                       Activator.getDefault().PLUGIN_ID,
+                                       Status.OK,
+                                       "Job not submitted",
+                                       null );
+                  IWorkbench workbench = PlatformUI.getWorkbench();
+                  Display display = workbench.getDisplay();
+                  display.asyncExec( new Runnable() {
+
+                    public void run() {
+                      base.getShell().setVisible( true );
+                    }
+                  } );
                 }
                 // create job
                 JobSubmissionWizardBase.this.creator.create( parent, jobId );
               } catch( GridModelException gmExc ) {
                 ProblemDialog.openProblem( getShell(),
-                                              Messages.getString( "JobSubmissionWizardBase.errSubmissionFailed" ), //$NON-NLS-1$
-                                              null,
-                                              gmExc );
+                                           Messages.getString( "JobSubmissionWizardBase.errSubmissionFailed" ), //$NON-NLS-1$
+                                           null,
+                                           gmExc );
+                result = new Status( Status.INFO,
+                                     Activator.getDefault().PLUGIN_ID,
+                                     Status.OK,
+                                     "Job not submitted",
+                                     gmExc );
+                IWorkbench workbench = PlatformUI.getWorkbench();
+                Display display = workbench.getDisplay();
+                display.asyncExec( new Runnable() {
+
+                  public void run() {
+                    base.getShell().setVisible( true );
+                  }
+                } );
               } catch( CoreException cExc ) {
                 ProblemDialog.openProblem( getShell(),
-                                              Messages.getString( "JobSubmissionWizardBase.errSubmissionFailed" ), //$NON-NLS-1$
-                                              null,
-                                              cExc );
+                                           Messages.getString( "JobSubmissionWizardBase.errSubmissionFailed" ), //$NON-NLS-1$
+                                           null,
+                                           cExc );
+                result = new Status( Status.INFO,
+                                     Activator.getDefault().PLUGIN_ID,
+                                     Status.OK,
+                                     "Job not submitted",
+                                     cExc );
+                IWorkbench workbench = PlatformUI.getWorkbench();
+                Display display = workbench.getDisplay();
+                display.asyncExec( new Runnable() {
+
+                  public void run() {
+                    base.getShell().setVisible( true );
+                  }
+                } );
+                // /
               }
             }
             monitor.worked( 1 );
           }
-          return Status.OK_STATUS;
+          return result;
         }
       };
       job.addJobChangeListener( new JobChangeAdapter() {
 
         @Override
         public void done( final IJobChangeEvent event ) {
-          if( event.getResult().isOK() )
-            // FIXME remove println
-            System.out.println( "Job completed successfully" );
-          else
-            // FIXME remove println
-            System.out.println( "Job did not complete successfully" );
+          if( event.getResult().isOK() ) {
+          } else {
+            JobSubmissionWizardBase.this.finishResult = false;
+          }
         }
       } );
       job.setUser( true );
       job.schedule(); // start as soon as possible
-      return result;
+      // return this.finishResult;
+      base.getShell().setVisible( false );
+      return false;
     }
   }
 
@@ -152,49 +206,35 @@ public abstract class JobSubmissionWizardBase extends Wizard
   IGridContainer buildPath( final IGridJobDescription description )
     throws CoreException
   {
-
     IGridContainer result = null;
-
     IGridProject project = description.getProject();
     IPath projectPath = project.getPath();
-
     IGridContainer jobFolder = project.getProjectFolder( IGridJob.class );
     IPath jobFolderPath = jobFolder.getPath();
-
     if( jobFolderPath.equals( projectPath ) ) {
       result = project;
     } else {
-
       IPath descriptionPath = description.getPath().removeLastSegments( 1 );
-      IGridContainer descriptionFolder 
-        = project.getProjectFolder( IGridJobDescription.class );
+      IGridContainer descriptionFolder = project.getProjectFolder( IGridJobDescription.class );
       IPath descriptionFolderPath = descriptionFolder.getPath();
-
-      if (descriptionFolderPath.isPrefixOf(descriptionPath)) {
-
-        int matchingFirstSegments 
-          = descriptionPath.matchingFirstSegments( descriptionFolderPath );
-        IPath appendedPath 
-          = descriptionPath.removeFirstSegments( matchingFirstSegments );
+      if( descriptionFolderPath.isPrefixOf( descriptionPath ) ) {
+        int matchingFirstSegments = descriptionPath.matchingFirstSegments( descriptionFolderPath );
+        IPath appendedPath = descriptionPath.removeFirstSegments( matchingFirstSegments );
         jobFolderPath = jobFolderPath.append( appendedPath );
-
-        IWorkspaceRoot workspaceRoot 
-          = ( IWorkspaceRoot )GridModel.getRoot().getResource();
+        IWorkspaceRoot workspaceRoot = ( IWorkspaceRoot )GridModel.getRoot()
+          .getResource();
         IFolder folder = workspaceRoot.getFolder( jobFolderPath );
         createFolder( folder );
         result = ( IGridContainer )GridModel.getRoot().findElement( folder );
-
       } else {
         result = jobFolder;
       }
-
     }
-
     /*
      * IPath descPath = description.getPath().removeLastSegments( 1 ); IPath
      * projPath = description.getProject().getPath(); descPath =
-     * descPath.removeFirstSegments( projPath.segmentCount() ); IPath
-     * jobPath = projPath.append( IGridProject.DIR_JOBS ); if (
+     * descPath.removeFirstSegments( projPath.segmentCount() ); IPath jobPath =
+     * projPath.append( IGridProject.DIR_JOBS ); if (
      * IGridProject.DIR_JOBDESCRIPTIONS.equals( descPath.segment( 0 ) ) ) {
      * jobPath = jobPath.append( descPath.removeFirstSegments( 1 ) ); }
      * IWorkspaceRoot workspaceRoot = ( IWorkspaceRoot )GridModel.getRoot()
@@ -203,7 +243,6 @@ public abstract class JobSubmissionWizardBase extends Wizard
      * )GridModel.getRoot().findElement( folder );
      */
     return result;
-
   }
 
   private void createFolder( final IFolder folder ) throws CoreException {
@@ -241,10 +280,9 @@ public abstract class JobSubmissionWizardBase extends Wizard
       if( "job_creator".equals( element.getName() ) ) { //$NON-NLS-1$
         Object obj = element.createExecutableExtension( "class" ); //$NON-NLS-1$
         if( !( obj instanceof IGridJobCreator ) ) {
-          String errorMessage 
-            = "Job Creator configured in class atribute for job_creator "
-              + "element in eu.geclipse.ou.jobSubmissionWizzard "
-              + "is not implementing IGridJobCreator interface";
+          String errorMessage = "Job Creator configured in class atribute for job_creator "
+                                + "element in eu.geclipse.ou.jobSubmissionWizzard "
+                                + "is not implementing IGridJobCreator interface";
           Status status = new Status( IStatus.ERROR,
                                       Activator.PLUGIN_ID,
                                       IStatus.OK,
@@ -256,4 +294,6 @@ public abstract class JobSubmissionWizardBase extends Wizard
       }
     }
   }
+
+
 }
