@@ -33,7 +33,7 @@ import eu.geclipse.jsdl.model.JsdlFactory;
 import eu.geclipse.test.GridTestStub;
 
 /**
- * Class to execute JobDefinitionTypeAdapter class. 
+ * Class to test JobDefinitionTypeAdapter class. 
  */
 public class JobDefinitionTypeAdapter_PDETest {
   
@@ -75,7 +75,7 @@ public class JobDefinitionTypeAdapter_PDETest {
 
   @Test
   public void testAttachID() {
-    // Cannot test UI related methods
+    /* Cannot test methods that deal with UI widgets */
   }
 
   @Test
