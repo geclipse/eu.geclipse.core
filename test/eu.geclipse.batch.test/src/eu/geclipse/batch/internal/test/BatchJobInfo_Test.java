@@ -12,86 +12,83 @@
  * Contributor(s):
  *     UCY (http://www.cs.ucy.ac.cy)
  *      - Christodoulos Efstathiades (cs05ce1@cs.ucy.ac.cy)
+ *      - Harald Gjermundrod (harald@cs.ucy.ac.cy)
  *
  *****************************************************************************/
 package eu.geclipse.batch.internal.test;
 
+import static org.junit.Assert.*;
+
+import org.junit.BeforeClass;
+import org.junit.Test;
+
+import eu.geclipse.batch.IBatchJobInfo;
 import eu.geclipse.batch.internal.BatchJobInfo;
-import junit.framework.TestCase;
 
 /**
  * @author cs05ce1
  */
-public class JobInfoTest extends TestCase {
+public class BatchJobInfo_Test {
 
-  private BatchJobInfo job;
-
-  /**
-   * 
-   * @param name
-   */
-  public JobInfoTest( final String name ) {
-    super( name );
-  }
+  private static BatchJobInfo job;
 
   /**
    * @throws java.lang.Exception
    */
-  @Override
-  protected void setUp() throws Exception {
-    this.job = new BatchJobInfo( null, null, null, null, null, null, null );
-  }
-
-  /**
-   * @throws java.lang.Exception
-   */
-  @Override
-  protected void tearDown() throws Exception {
-    // No code needed
+  @BeforeClass
+  public static void setUpBeforeClass() throws Exception {
+    job = new BatchJobInfo( "job1", "job", null, null, null, null, null ); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   /**
    * Test method for {@link eu.geclipse.batch.internal.BatchJobInfo#getQueueName()}.
    */
+  @Test
   public void testGetQueueName() {
-    this.job.setQueueName( null );
-    assertNotNull( "Queue Name is set to NULL", this.job.getQueueName() ); //$NON-NLS-1$
+    job.setQueueName( "queue" ); //$NON-NLS-1$
+    assertEquals( job.getQueueName(), "queue" ); //$NON-NLS-1$
   }
 
   /**
    * Test method for {@link eu.geclipse.batch.internal.BatchJobInfo#getStatus()}.
    */
+  @Test
   public void testGetStatus() {
-    this.job.setStatus( null );
-    assertNotNull( "Status is set to NULL", this.job.getStatus() ); //$NON-NLS-1$
+    job.setStatus( IBatchJobInfo.JobState.H );
+    assertEquals( job.getStatus(), IBatchJobInfo.JobState.H );
   }
 
   /**
    * Test method for {@link eu.geclipse.batch.internal.BatchJobInfo#getTimeUse()}.
    */
+  @Test
   public void testGetTimeUse() {
-    assertNotNull( "Time Use is set to NULL", this.job.getTimeUse() ); //$NON-NLS-1$
+    job.setTimeUse( "100" ); //$NON-NLS-1$
+    assertEquals( job.getTimeUse(), "100" ); //$NON-NLS-1$
   }
 
   /**
    * Test method for {@link eu.geclipse.batch.internal.BatchJobInfo#getUserAccount()}.
    */
+  @Test
   public void testGetUserAccount() {
-    this.job.setUserAccount( null );
-    assertNotNull( "User Account is set to NULL", this.job.getUserAccount() ); //$NON-NLS-1$
+    job.setUserAccount( "user1" ); //$NON-NLS-1$
+    assertEquals( job.getUserAccount(), "user1" ); //$NON-NLS-1$
   }
 
   /**
    * Test method for {@link eu.geclipse.batch.internal.BatchJobInfo#getJobId()}.
    */
+  @Test
   public void testGetJobId() {
-    assertNotNull( "Job ID is set to NULL", this.job.getJobId() ); //$NON-NLS-1$
+    assertEquals( job.getJobId(), "job1" ); //$NON-NLS-1$
   }
 
   /**
    * Test method for {@link eu.geclipse.batch.internal.BatchJobInfo#getJobName()}.
    */
+  @Test
   public void testGetJobName() {
-    assertNotNull( "Job Name is set to NULL", this.job.getJobName() ); //$NON-NLS-1$
+    assertEquals( job.getJobName(), "job" ); //$NON-NLS-1$
   }
 }

@@ -16,7 +16,6 @@
  *****************************************************************************/
 package eu.geclipse.batch.test;
 
-import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -30,7 +29,7 @@ import eu.geclipse.batch.pbs.PBSBatchServiceDescription;
 /**
  * Class to execute tests on the PBSWrapper.
  */
-public class PBSWrapperTest {
+public class PBSBatchService_Test {
   /**
    * The PBS wrapper object.
    */
@@ -41,15 +40,7 @@ public class PBSWrapperTest {
    */
   @Before
   public void setUp() throws Exception {
-    this.pbsWrapper = new PBSBatchService( new PBSBatchServiceDescription(), null );
-  }
-
-  /**
-   * @throws java.lang.Exception
-   */
-  @After
-  public void tearDown() throws Exception {
-    // No code needed yet
+    this.pbsWrapper = new PBSBatchService( new PBSBatchServiceDescription(), "test.batch" ); //$NON-NLS-1$
   }
 
   /**
