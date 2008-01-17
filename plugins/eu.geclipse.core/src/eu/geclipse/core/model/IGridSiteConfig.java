@@ -20,7 +20,7 @@ package eu.geclipse.core.model;
  * This is at the moment just a declarative interfaces for
  * integrating site configuration into the Grid model.
  */
-public interface IGridSiteConfig extends IGridContainer {
+public interface IGridSiteConfig extends IGridContainer, IStorableElement {
   
   // currently empty implementation
 }
