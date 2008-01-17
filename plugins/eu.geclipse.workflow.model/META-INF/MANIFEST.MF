@@ -9,6 +9,7 @@ Bundle-Localization: plugin
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Export-Package: eu.geclipse.workflow,
  eu.geclipse.workflow.impl,
+ eu.geclipse.workflow.resources,
  eu.geclipse.workflow.util
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.ecore,

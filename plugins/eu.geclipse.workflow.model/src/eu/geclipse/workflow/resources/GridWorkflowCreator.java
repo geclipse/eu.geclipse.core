@@ -13,7 +13,7 @@
  *     FZK (http://www.fzk.de)
  *     - Mathias Stumpert - initial API and implementation
  ******************************************************************************/
-package eu.geclipse.workflow.internal.model;
+package eu.geclipse.workflow.resources;
 
 import org.eclipse.core.resources.IFile;
 

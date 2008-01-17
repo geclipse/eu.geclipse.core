@@ -30,7 +30,7 @@
          name="Workflow Creator"
          point="eu.geclipse.core.gridElementCreator">
       <creator
-            class="eu.geclipse.workflow.internal.model.GridWorkflowCreator"
+            class="eu.geclipse.workflow.resources.GridWorkflowCreator"
             name="Grid Workflow">
          <target
                class="eu.geclipse.core.model.IGridWorkflow"

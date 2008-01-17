@@ -31,6 +31,7 @@ import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridJobID;
 import eu.geclipse.core.model.impl.AbstractGridJobCreator;
 import eu.geclipse.jsdl.JSDLJobDescription;
+import eu.geclipse.workflow.resources.GridWorkflow;
 
 /**
  * GridJobCreator create grid job. This is middleware independent. Grid job
@@ -73,7 +74,8 @@ public class GridJobCreator extends AbstractGridJobCreator {
    */
   @Override
   protected boolean internalCanCreate( final IGridJobDescription description ) {
-    return ( description instanceof JSDLJobDescription );
+    return ( description instanceof JSDLJobDescription ||
+             description instanceof GridWorkflow);
   }
 
   /*

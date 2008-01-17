@@ -18,10 +18,12 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.actions.SelectionListenerAction;
 
 import eu.geclipse.core.model.IGridWorkflow;
+import eu.geclipse.ui.wizards.jobsubmission.JobCreatorSelectionWizard;
 
 public class SubmitWorkflowAction extends SelectionListenerAction {
 
@@ -43,10 +45,10 @@ public class SubmitWorkflowAction extends SelectionListenerAction {
    */
   @Override
   public void run() {
-    // JobCreatorSelectionWizard wizard = new JobCreatorSelectionWizard(
-    // this.workflow, this.workflow);
-    // WizardDialog dialog = new WizardDialog(this.site.getShell(), wizard);
-    // dialog.open();
+//     JobCreatorSelectionWizard wizard = new JobCreatorSelectionWizard(
+//     this.workflow, this.workflow);
+//     WizardDialog dialog = new WizardDialog(this.site.getShell(), wizard);
+//     dialog.open();
   }
 
   /*
