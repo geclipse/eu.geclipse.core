@@ -20,7 +20,6 @@ import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
@@ -59,7 +58,7 @@ public class QueryContainer
   
   @Override
   public boolean canContain( final IGridElement element ) {
-    return ( element instanceof IGridElement );
+    return ( true );
   }
   
   public boolean getQueryAsChildren() {
@@ -74,6 +73,7 @@ public class QueryContainer
     this.queryAsChildren = b;
   }
   
+  @Override
   protected boolean fetchChildren( final IProgressMonitor monitor )
       throws GridModelException {
     

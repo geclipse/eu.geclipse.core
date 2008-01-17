@@ -45,9 +45,6 @@ public class PingTestDescription implements ISimpleTestDescription {
     boolean result = false;
     
     if ( otherTest instanceof PingTestDescription ) {
-      
-      PingTestDescription ptDesc = ( PingTestDescription ) otherTest;
-
       result = true;
     }
     

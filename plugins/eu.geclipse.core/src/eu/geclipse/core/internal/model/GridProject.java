@@ -63,7 +63,7 @@ public class GridProject
   private static final String VO_ATTRIBUTE = "vo"; //$NON-NLS-1$
   
   private static final QualifiedName PROJECT_FOLDER_ID_QN
-    = new QualifiedName( Activator.PLUGIN_ID, "grid.project.folder.id" ); //$NON-NLS-1$ //$NON-NLS-2$
+    = new QualifiedName( Activator.PLUGIN_ID, "grid.project.folder.id" ); //$NON-NLS-1$
   
   private IVirtualOrganization vo;
   
@@ -369,7 +369,7 @@ public class GridProject
       String label = folderNode.get( id, null );
       if ( ! name.equals( label ) ) {
         folderNode.put( id, name );
-        Job syncJob = new Job( "syncProjectPreferences@" + getName() ) {
+        Job syncJob = new Job( "syncProjectPreferences@" + getName() ) { //$NON-NLS-1$
           @Override
           protected IStatus run( final IProgressMonitor monitor ) {
             IStatus status = Status.OK_STATUS;

@@ -59,7 +59,7 @@ public class VoWrapper
       QueryContainer computingContainer
         = new QueryContainer(
             this,
-            "Computing",
+            Messages.getString( "VoWrapper.computing" ), //$NON-NLS-1$
             new IQueryInputProvider() {
               public IGridElement[] getInput() throws GridModelException {
                 return getComputing();
@@ -70,7 +70,7 @@ public class VoWrapper
       QueryContainer storageContainer
       = new QueryContainer(
           this,
-          "Storage",
+          Messages.getString( "VoWrapper.storage" ), //$NON-NLS-1$
           new IQueryInputProvider() {
             public IGridElement[] getInput() throws GridModelException {
               return getStorage();
@@ -81,7 +81,7 @@ public class VoWrapper
       QueryContainer serviceContainer
       = new QueryContainer(
           this,
-          "Services",
+          Messages.getString( "VoWrapper.services" ), //$NON-NLS-1$
           new IQueryInputProvider() {
             public IGridElement[] getInput() throws GridModelException {
               return getServices();
@@ -91,25 +91,25 @@ public class VoWrapper
       addElement( serviceContainer );
       
       QueryContainer infoServiceContainer
-        = new QueryContainer( serviceContainer, "Info Services" );
+        = new QueryContainer( serviceContainer, Messages.getString( "VoWrapper.infoServices" ) ); //$NON-NLS-1$
       infoServiceContainer.addFilter(
         new ClassTypeQueryFilter( IGridInfoService.class, true )
       );
       
       QueryContainer jobStatusServiceContainer
-        = new QueryContainer( serviceContainer, "Job Status Services" );
+        = new QueryContainer( serviceContainer, Messages.getString( "VoWrapper.jobStatusServices" ) ); //$NON-NLS-1$
       jobStatusServiceContainer.addFilter(
         new ClassTypeQueryFilter( IGridJobStatusService.class, true )
       );
       
       QueryContainer jobSubmissionServiceContainer
-        = new QueryContainer( serviceContainer, "Job Submission Services" );
+        = new QueryContainer( serviceContainer, Messages.getString( "VoWrapper.jobSubmissionServices" ) ); //$NON-NLS-1$
       jobSubmissionServiceContainer.addFilter(
         new ClassTypeQueryFilter( IGridJobSubmissionService.class, true )
       );
       
       QueryContainer otherServiceContainer
-      = new QueryContainer( serviceContainer, "Other Services" );
+      = new QueryContainer( serviceContainer, Messages.getString( "VoWrapper.otherServices" ) ); //$NON-NLS-1$
       otherServiceContainer.addFilter(
         new ClassTypeQueryFilter( IGridInfoService.class, false )
       );
@@ -215,7 +215,7 @@ public class VoWrapper
     return true;
   }
 
-  @SuppressWarnings("unchecked")
+  @SuppressWarnings( "unchecked" )
   @Override
   public Object getAdapter( final Class adapter ) {
     return this.vo.getAdapter( adapter );

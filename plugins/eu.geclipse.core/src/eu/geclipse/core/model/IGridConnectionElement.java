@@ -15,8 +15,6 @@
 
 package eu.geclipse.core.model;
 
-import java.net.URI;
-
 import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.runtime.CoreException;

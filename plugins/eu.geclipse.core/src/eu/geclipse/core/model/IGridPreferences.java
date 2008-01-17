@@ -12,12 +12,11 @@
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
  *****************************************************************************/
+
 package eu.geclipse.core.model;
 
-import java.io.File;
 import java.io.InputStream;
 import java.net.URI;
-import java.util.List;
 
 /**
  * This interface defines some global access points for preferences that are not

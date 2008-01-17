@@ -12,13 +12,10 @@
  * Contributor(s):
  *     UCY (http://www.cs.ucy.ac.cy)
  *      - Harald Gjermundrod (harald@cs.ucy.ac.cy)
- *
  *****************************************************************************/
+
 package eu.geclipse.core.simpleTest;
 
-import java.util.List;
-
-import eu.geclipse.core.model.IGridResource;
 
 /**
  * Abstract implementation of the {@link ISimpleTest} interface.

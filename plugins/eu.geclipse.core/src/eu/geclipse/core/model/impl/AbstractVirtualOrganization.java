@@ -230,7 +230,8 @@ public abstract class AbstractVirtualOrganization
    */
   protected abstract IGridElement loadChild( final String childName );
   
-  protected void saveChild( final IGridElement child ) {
+  protected void saveChild( @SuppressWarnings("unused")
+                            final IGridElement child ) {
     // empty implementation
   }
   

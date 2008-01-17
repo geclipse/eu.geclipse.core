@@ -69,14 +69,15 @@ public class LocalFile extends ResourceGridElement {
     
     IPath propertiesPath = getPropertiesPath( nodeName );
     IPath propertiesComparePath = new Path( getProject().getName() );
-    propertiesComparePath = propertiesComparePath.append( ".settings" );
+    propertiesComparePath = propertiesComparePath.append( ".settings" ); //$NON-NLS-1$
     propertiesComparePath.append( propertiesPath.lastSegment() );
 
     return folderComparePath.equals( propertiesComparePath );
     
   }
   
-  private IPath getPropertiesPath( final String node ) {
+  private IPath getPropertiesPath( @SuppressWarnings("unused")
+                                   final String node ) {
     IProject project = ( IProject ) getProject().getResource();
     ProjectScope projectScope = new ProjectScope( project );
     Preferences folderNode = projectScope.getNode( GridProject.PROJECT_FOLDER_NODE );

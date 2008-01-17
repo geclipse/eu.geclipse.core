@@ -19,20 +19,14 @@ package eu.geclipse.core.internal.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.jobs.Job;
-
-import eu.geclipse.core.JobStatusUpdater;
 import eu.geclipse.core.internal.model.AbstractGridElementManager;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
-import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridModelListener;
-import eu.geclipse.core.model.IGridResource;
 import eu.geclipse.core.model.IGridTest;
 import eu.geclipse.core.model.IGridTestManager;
 import eu.geclipse.core.model.IGridTestStatusListener;
-import eu.geclipse.core.model.ITestable;
 
 /**
  * Abstract class that makes some core's internal interfaces available for
@@ -112,7 +106,7 @@ public class GridTestManager
 
   public String getName() {
     // TODO Auto-generated method stub
-    return ".tests";
+    return NAME;
   }
   
   /**

@@ -14,9 +14,9 @@
  *****************************************************************************/
 package eu.geclipse.core.internal.model;
 
+import java.io.File;
 import java.io.InputStream;
 import java.net.URI;
-import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
@@ -201,20 +201,21 @@ public class HiddenProject
          IGridTest result = null;
          // IGridTest result = null;
          try {
-           IFolder folder = getTestFolder();
-           IFolder simpleTestsFolder = getProjectFolder( DIR_GRID_TESTS+ "/" + folderName );
-           if (!simpleTestsFolder.exists() ) {
+           IFolder simpleTestsFolder = getProjectFolder( DIR_GRID_TESTS
+                                                         + File.separatorChar
+                                                         + folderName );
+           if ( ! simpleTestsFolder.exists() ) {
              simpleTestsFolder.create( IResource.FORCE | IResource.REPLACE, true, null );
            }
            IFile file = simpleTestsFolder.getFile( testName + "." + extenstion); //$NON-NLS-1$
-           if( !file.exists() ) {
+           if( ! file.exists() ) {
              file.create( inputStream, IResource.FORCE | IResource.REPLACE, null );
-           } else if (forceOverride){
+           } else if ( forceOverride ) {
              file.delete( true, null );
              file.create( inputStream, IResource.FORCE | IResource.REPLACE, null );
            }
            result = GridModel.getTestManager().getTest( folderName );
-         } catch( CoreException coreExc ) {
+         } catch ( CoreException coreExc ) {
            // TODO Auto-generated catch block
            coreExc.printStackTrace();
          }
@@ -282,7 +283,7 @@ public class HiddenProject
 
   protected IProject getAccessibleProject() throws CoreException {
     IProject project = ( IProject )getResource();
-    if( !project.isOpen() ) {
+    if( ! project.isOpen() ) {
       project.open( null );
     }
     return project;
@@ -312,7 +313,7 @@ public class HiddenProject
   private IFolder getProjectFolder( final String name ) throws CoreException {
     IProject project = getAccessibleProject();
     IFolder folder = project.getFolder( new Path( name ) );
-    if( !folder.exists() ) {
+    if( ! folder.exists() ) {
       folder.create( IResource.FORCE, true, null );
     }
     return folder;

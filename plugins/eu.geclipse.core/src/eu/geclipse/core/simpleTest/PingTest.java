@@ -14,13 +14,12 @@
  *      - Harald Gjermundrod (harald@cs.ucy.ac.cy)
  *
  *****************************************************************************/
+
 package eu.geclipse.core.simpleTest;
 
 import java.io.IOException;
 import java.net.InetAddress;
-import java.util.List;
 
-import eu.geclipse.core.model.IGridResource;
 
 /**
  * @author harald
