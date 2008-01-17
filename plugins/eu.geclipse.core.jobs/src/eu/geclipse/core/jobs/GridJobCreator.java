@@ -39,8 +39,6 @@ import eu.geclipse.jsdl.JSDLJobDescription;
  */
 public class GridJobCreator extends AbstractGridJobCreator {
 
-  private static final String TMPJOBFILE = ".job.tmp"; //$NON-NLS-1$
-
   /*
    * (non-Javadoc)
    * 
@@ -102,7 +100,7 @@ public class GridJobCreator extends AbstractGridJobCreator {
     if( !( id instanceof GridJobID ) ) {
       throw new GridModelException( GridModelProblems.ELEMENT_CREATE_FAILED,
                                     null,
-                                    "Cannot create GridJob from job id not implementing GriJobID " );
+                                    Messages.getString( "GridJobCreator.cannotCreateJobFromID" ) ); //$NON-NLS-1$
     }
     IGridJobDescription description = getDescription();
     IFolder jobFolder = findJobFileName( description,
@@ -124,7 +122,7 @@ public class GridJobCreator extends AbstractGridJobCreator {
     } catch( CoreException cExc ) {
       throw new GridModelException( GridModelProblems.ELEMENT_CREATE_FAILED,
                                     cExc,
-                                    "Problem while creating job folder "
+                                    Messages.getString( "GridJobCreator.problemCreatingFolder" ) //$NON-NLS-1$
                                         + jobFolder.getName() );
     }
   }

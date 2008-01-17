@@ -67,8 +67,9 @@ public class GridJobID implements IGridJobID {
     return this.jobID;
   }
 
-  protected void setData( final String data ) {
-    // System.out.println( data );
+  protected void setData( @SuppressWarnings("unused")
+                          final String data ) {
+    // Empty implementation, subclasses override
   }
 
   final String getXML() {
