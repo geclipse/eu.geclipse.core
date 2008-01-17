@@ -35,9 +35,12 @@ import org.osgi.service.prefs.Preferences;
 import eu.geclipse.core.ExtensionManager;
 import eu.geclipse.core.Extensions;
 import eu.geclipse.core.internal.Activator;
+import eu.geclipse.core.internal.model.notify.GridModelEvent;
+import eu.geclipse.core.internal.model.notify.GridNotificationService;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
@@ -246,17 +249,19 @@ public class GridProject
     return ( ( IProject ) getResource() ).isOpen();
   }
   
-  //@Override
+  @Override
   protected IGridElement addElement( final IGridElement element ) throws GridModelException {
     
     IGridElement result = super.addElement( element );
     
     if ( ( result != null ) && ( result instanceof IGridContainer ) && ! result.isVirtual() ) {
       try {
+        GridNotificationService.getInstance().lock();
         boolean updated = updateProjectProperties( ( IGridContainer ) element );
         if ( ! updated ) {
           updateProjectFolderProperties( ( IGridContainer ) element );
         }
+        GridNotificationService.getInstance().unlock();
       } catch ( CoreException cExc ) {
         Activator.logException( cExc );
       } catch ( BackingStoreException bsExc ) {
@@ -336,12 +341,19 @@ public class GridProject
       }
     }
     
+    if ( result ) {
+      GridModelEvent event = new GridModelEvent( IGridModelEvent.PROJECT_FOLDER_CHANGED,
+                                                 this,
+                                                 new IGridElement[] { folder } );
+      GridNotificationService.getInstance().queueEvent( event );
+    }
+    
     return result;
     
   }
   
   private boolean updateProjectProperties( final IGridContainer folder )
-      throws CoreException, BackingStoreException {
+      throws CoreException {
     
     boolean result = false;
     
@@ -375,6 +387,13 @@ public class GridProject
         result = true;
       }
       
+    }
+    
+    if ( result ) {
+      GridModelEvent event = new GridModelEvent( IGridModelEvent.PROJECT_FOLDER_CHANGED,
+                                                 this,
+                                                 new IGridElement[] { folder } );
+      GridNotificationService.getInstance().queueEvent( event );
     }
     
     return result;

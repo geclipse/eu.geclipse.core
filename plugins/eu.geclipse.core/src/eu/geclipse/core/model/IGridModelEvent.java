@@ -47,6 +47,11 @@ public interface IGridModelEvent {
    * ID for an project closed operation.
    */
   public static final int PROJECT_CLOSED = 5;
+  
+  /**
+   * ID for the change of a project folder.
+   */
+  public static final int PROJECT_FOLDER_CHANGED = 6;
 
   /**
    * Get the affected elements.

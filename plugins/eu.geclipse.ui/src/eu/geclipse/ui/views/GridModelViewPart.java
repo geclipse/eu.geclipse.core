@@ -46,6 +46,7 @@ import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridModelListener;
+import eu.geclipse.ui.decorators.GridProjectFolderDecorator;
 import eu.geclipse.ui.internal.actions.ActionGroupManager;
 import eu.geclipse.ui.internal.actions.CommonActions;
 import eu.geclipse.ui.internal.actions.FileActions;
@@ -130,6 +131,12 @@ public abstract class GridModelViewPart
     if ( ( event.getType() == IGridModelEvent.ELEMENTS_ADDED )
         || ( event.getType() == IGridModelEvent.ELEMENTS_REMOVED ) ) {
       refreshViewer( event.getSource() );
+    } else if ( event.getType() == IGridModelEvent.PROJECT_FOLDER_CHANGED ) {
+      GridProjectFolderDecorator decorator
+        = GridProjectFolderDecorator.getDecorator();
+      if ( decorator != null ) {
+        decorator.refresh( event.getElements() );
+      }
     } else {
       for ( IGridElement element : event.getElements() ) {
         refreshViewer( element );
