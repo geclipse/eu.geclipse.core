@@ -22,43 +22,40 @@ import org.eclipse.ui.navigator.ICommonMenuConstants;
 
 public class WorkflowActions extends ActionGroup {
 
-	  /**
-	   * The workbench this action group belongs to.
-	   */
-	  private IWorkbenchPartSite site;
-	  private SubmitWorkflowAction submitAction;
-	  
-	  public WorkflowActions( final IWorkbenchPartSite site ) {
-		  this.site = site;
-		  ISelectionProvider selectionProvider = site.getSelectionProvider();
-		  this.submitAction = new SubmitWorkflowAction( site );
-		  selectionProvider.addSelectionChangedListener( this.submitAction );
-	  }
+  /**
+   * The workbench this action group belongs to.
+   */
+  private IWorkbenchPartSite site;
+  private SubmitWorkflowAction submitAction;
 
-	  /*
-	   * (non-Javadoc)
-	   * 
-	   * @see org.eclipse.ui.actions.ActionGroup#dispose()
-	   */
-	  @Override
-	  public void dispose()
-	  {
-	    ISelectionProvider selectionProvider = this.site.getSelectionProvider();
-	    selectionProvider.removeSelectionChangedListener( this.submitAction );
-	  }
+  public WorkflowActions( final IWorkbenchPartSite site ) {
+    this.site = site;
+    ISelectionProvider selectionProvider = site.getSelectionProvider();
+    this.submitAction = new SubmitWorkflowAction( site );
+    selectionProvider.addSelectionChangedListener( this.submitAction );
+  }
 
-	  /*
-	   * (non-Javadoc)
-	   * 
-	   * @see org.eclipse.ui.actions.ActionGroup#fillContextMenu(org.eclipse.jface.action.IMenuManager)
-	   */
-	  @Override
-	  public void fillContextMenu( final IMenuManager mgr )
-	  {
-	    super.fillContextMenu( mgr );
-	    if ( this.submitAction.isEnabled() ) {
-	      mgr.appendToGroup( ICommonMenuConstants.GROUP_BUILD, this.submitAction );
-	    }
-	  }
-	  
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.eclipse.ui.actions.ActionGroup#dispose()
+   */
+  @Override
+  public void dispose() {
+    ISelectionProvider selectionProvider = this.site.getSelectionProvider();
+    selectionProvider.removeSelectionChangedListener( this.submitAction );
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see org.eclipse.ui.actions.ActionGroup#fillContextMenu(org.eclipse.jface.action.IMenuManager)
+   */
+  @Override
+  public void fillContextMenu( final IMenuManager mgr ) {
+    super.fillContextMenu( mgr );
+    if( this.submitAction.isEnabled() ) {
+      mgr.appendToGroup( ICommonMenuConstants.GROUP_BUILD, this.submitAction );
+    }
+  }
 }
