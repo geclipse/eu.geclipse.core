@@ -11,6 +11,7 @@
  *
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
+ *    Harald Kornmayer 
  *****************************************************************************/
 
 package eu.geclipse.ui.wizards;
@@ -30,6 +31,12 @@ import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 import org.eclipse.ui.dialogs.WizardNewProjectReferencePage;
 import eu.geclipse.ui.internal.Activator;
 
+/**
+ * Wizard to create Grid Project in the Eclipse workspace. 
+ * 
+ * @author korn
+ */
+
 public class NewGridProjectWizard extends Wizard implements INewWizard {
   
   private WizardNewProjectCreationPage creationPage;
@@ -42,18 +49,28 @@ public class NewGridProjectWizard extends Wizard implements INewWizard {
   
   private IProject project = null;
 
+  /**
+   *  when the wizard is finished, the Grid project is created. 
+   */
   @Override
   public boolean performFinish() {
     IProject proj = createNewProject();
     return proj != null;
   }
 
+  /**
+   * Initialize the Grid project in the Grid project in the workspace
+   */
   public void init( final IWorkbench workbench, final IStructuredSelection selection ) {
     setWindowTitle( Messages.getString("NewGridProjectWizard.windowTitle") ); //$NON-NLS-1$
     URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/wizban/newgridprj_wiz.gif" ); //$NON-NLS-1$
     setDefaultPageImageDescriptor( ImageDescriptor.createFromURL( imgUrl ) );
   }
   
+  /**
+   * Adds the different pages for the wizard i.e. for VO selection, Project Structure,
+   * reference projects.  
+   */
   @Override
   public void addPages() {
     
@@ -87,6 +104,10 @@ public class NewGridProjectWizard extends Wizard implements INewWizard {
     return result;
   }
   
+  /**
+   * Creates the Grid Project in the workspace and 
+   * @return
+   */
   private IProject createNewProject() {
     
     if ( ( this.project == null ) && ( this.creationPage != null ) ) {
@@ -114,12 +135,8 @@ public class NewGridProjectWizard extends Wizard implements INewWizard {
         eu.geclipse.ui.internal.Activator.logException( intExc );
       } catch ( InvocationTargetException itExc ) {
         eu.geclipse.ui.internal.Activator.logException( itExc );
-      }
-      
+      } 
     }
-    
-    return this.project;
-    
+    return this.project; 
   }
-
 }
