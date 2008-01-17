@@ -5,4 +5,5 @@ Bundle-SymbolicName: eu.geclipse.jsdl.ui.test
 Bundle-Version: 1.0.0
 Bundle-Vendor: eclipse.org
 Fragment-Host: eu.geclipse.jsdl.ui;bundle-version="1.0.0"
-Require-Bundle: org.junit4
+Require-Bundle: org.junit4,
+ eu.geclipse.test
