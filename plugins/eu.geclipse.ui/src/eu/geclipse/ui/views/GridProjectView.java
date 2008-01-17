@@ -46,7 +46,6 @@ import eu.geclipse.ui.internal.actions.SimpleTestActions;
 import eu.geclipse.ui.internal.actions.SubmitJobActions;
 import eu.geclipse.ui.internal.actions.TransferJsdl2JdlActions;
 import eu.geclipse.ui.internal.actions.VisualisationActions;
-import eu.geclipse.ui.internal.actions.WorkflowActions;
 import eu.geclipse.ui.providers.GridModelContentProvider;
 import eu.geclipse.ui.providers.GridModelLabelProvider;
 
@@ -141,9 +140,6 @@ public class GridProjectView
     
     VisualisationActions visualizationActions = new VisualisationActions ( site );
     groups.addGroup ( visualizationActions );
-    
-    WorkflowActions workflowActions = new WorkflowActions( site );
-    groups.addGroup( workflowActions );
 
     SimpleTestActions simpleTestActions = new SimpleTestActions( site );
     groups.addGroup( simpleTestActions );
