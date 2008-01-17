@@ -29,14 +29,17 @@ import eu.geclipse.core.model.IGridJobStatus;
 
 public class GridJobStatus implements IGridJobStatus {
 
-  final static public String XML_ROOT = "JobStatus";
-  final static public String XML_STATUSNAME = "Name";
-  final static public String XML_STATUSTYPE = "Type";
-  final static public String XML_STATUSREASON = "Reason";
-  final static public String XML_STATUSDATA = "Data";
-  final static public String XML_STATUSUPDATEDATE = "UpdateDate";
-  public static final String XML_ATTRIBUTE_CLASS = "class";
+  final static public String XML_ROOT = Messages.getString( "GridJobStatus.jobStatus" ); //$NON-NLS-1$
+  final static public String XML_STATUSNAME = Messages.getString( "GridJobStatus.name" ); //$NON-NLS-1$
+  final static public String XML_STATUSTYPE = Messages.getString( "GridJobStatus.type" ); //$NON-NLS-1$
+  final static public String XML_STATUSREASON = Messages.getString( "GridJobStatus.reason" ); //$NON-NLS-1$
+  final static public String XML_STATUSDATA = Messages.getString( "GridJobStatus.data" ); //$NON-NLS-1$
+  final static public String XML_STATUSUPDATEDATE = Messages.getString( "GridJobStatus.updateDate" ); //$NON-NLS-1$
+  
+  final static public String XML_ATTRIBUTE_CLASS = "class"; //$NON-NLS-1$
+  
   final static public GridJobStatus UNKNOWN_STATUS = new GridJobStatus();
+
   protected int type;
   protected String name = null;
   protected String reason = null;
@@ -44,27 +47,29 @@ public class GridJobStatus implements IGridJobStatus {
   private String data = null;
 
   public GridJobStatus() {
-    name = "Unknown";
-    type = UNKNOWN;
-    reason = "";
-    data = null;
-    updateDate = Calendar.getInstance().getTime();
+    this.name = Messages.getString( "GridJobStatus.unknown" ); //$NON-NLS-1$
+    this.type = UNKNOWN;
+    this.reason = ""; //$NON-NLS-1$
+    this.data = null;
+    this.updateDate = Calendar.getInstance().getTime();
   }
 
   public GridJobStatus( final String aReason ) {
-    name = "Unknown";
-    type = UNKNOWN;
-    reason = aReason;
-    data = null;
+    this.name = Messages.getString( "GridJobStatus.unknown" ); //$NON-NLS-1$
+    this.type = UNKNOWN;
+    this.reason = aReason;
+    this.data = null;
   }
 
   public GridJobStatus( final String name, final int type ) {
     this.name = name;
     this.type = type;
-    data = null;
+    this.data = null;
   }
 
-  public GridJobStatus( final IGridJobID id ) {
+  public GridJobStatus( @SuppressWarnings("unused")
+                        final IGridJobID id ) {
+    // Empty implementation
   }
 
   public GridJobStatus( final Node statusNode ) {
@@ -79,18 +84,18 @@ public class GridJobStatus implements IGridJobStatus {
     for( i = 0; i < childNodes.getLength(); i++ ) {
       node = childNodes.item( i );
       if( XML_STATUSNAME.equals( node.getNodeName() ) ) {
-        name = node.getTextContent();
-        if( name != null )
-          name = name.trim();
+        this.name = node.getTextContent();
+        if( this.name != null )
+          this.name = this.name.trim();
       }
       if( XML_STATUSREASON.equals( node.getNodeName() ) ) {
-        reason = node.getTextContent();
-        if( reason != null )
-          reason = reason.trim();
+        this.reason = node.getTextContent();
+        if( this.reason != null )
+          this.reason = this.reason.trim();
       }
       if( XML_STATUSUPDATEDATE.equals( node.getNodeName() ) ) {        
         try {
-          updateDate = getXmlDateFormatter().parse( node.getTextContent() );
+          this.updateDate = getXmlDateFormatter().parse( node.getTextContent() );
         } catch( DOMException e ) {
           // empty implementation
         } catch( ParseException e ) {
@@ -99,9 +104,9 @@ public class GridJobStatus implements IGridJobStatus {
       }
       if( XML_STATUSTYPE.equals( node.getNodeName() ) ) {
         try {
-          type = Integer.parseInt( node.getTextContent() );
+          this.type = Integer.parseInt( node.getTextContent() );
         } catch( Exception e ) {
-          type = 0;
+          this.type = 0;
         }
       }
       if( XML_STATUSDATA.equals( node.getNodeName() ) ) {
@@ -112,7 +117,7 @@ public class GridJobStatus implements IGridJobStatus {
 
   public boolean canChange() {
     boolean canChange = true;
-    switch( type ) {
+    switch( this.type ) {
       case DONE:
       case PURGED:
       case ABORTED:
@@ -125,27 +130,28 @@ public class GridJobStatus implements IGridJobStatus {
    * Default behaviour. Can be overritten in subclasses.
    */
   public boolean isSuccessful() {
-    return ( type == DONE );
+    return ( this.type == DONE );
   }
 
   public String getJobStatusData() {
-    return data;
+    return this.data;
   }
-
+  
+  @SuppressWarnings( "nls" )
   public final String getXML() {
     String xml = "";
     xml += "<" + GridJobStatus.XML_ROOT + ">\n";
     xml += "  <"
            + GridJobStatus.XML_STATUSNAME
            + ">"
-           + name
+           + this.name
            + "</"
            + GridJobStatus.XML_STATUSNAME
            + ">\n";
     xml += "  <"
            + GridJobStatus.XML_STATUSTYPE
            + ">"
-           + type
+           + this.type
            + "</"
            + GridJobStatus.XML_STATUSTYPE
            + ">\n";
@@ -160,11 +166,11 @@ public class GridJobStatus implements IGridJobStatus {
              + ">\n";
     }
     
-    if( reason != null ) {
+    if( this.reason != null ) {
       xml += "  <"
              + GridJobStatus.XML_STATUSREASON
              + ">"
-             + reason.replaceAll( "&", "" )
+             + this.reason.replaceAll( "&", "" )
              + "</"
              + GridJobStatus.XML_STATUSREASON
              + ">\n";
@@ -193,26 +199,28 @@ public class GridJobStatus implements IGridJobStatus {
   }
 
   public String getName() {
-    return name;
+    return this.name;
   }
 
   public int getType() {
-    return type;
+    return this.type;
   }
 
   public String getReason() {
-    return reason;
+    return this.reason;
   }
 
   public Date getLastUpdateTime() {
-    return updateDate;
+    return this.updateDate;
   }
 
-  // Below method should be overriten by child classes
+  // This method should be overwritten by child classes
   protected String getData() {
     return null;
   }
 
-  protected void setData( final String data ) {
+  protected void setData( @SuppressWarnings("unused")
+                          final String data ) {
+    // Empty implementation
   }
 }
