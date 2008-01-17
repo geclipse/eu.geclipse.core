@@ -324,4 +324,29 @@ public class GEclipseFileStore
     this.isActive = active;
   }
 
+  /* (non-Javadoc)
+   * @see org.eclipse.core.filesystem.provider.FileStore#move(org.eclipse.core.filesystem.IFileStore, int, org.eclipse.core.runtime.IProgressMonitor)
+   */
+  @Override
+  public void move( final IFileStore destination,
+                    final int options,
+                    final IProgressMonitor monitor ) throws CoreException
+  {
+    boolean done = false;
+    if( destination instanceof GEclipseFileStore ) {
+      IFileStore src = this.slave;
+      IFileStore dst = ( ( GEclipseFileStore )destination ).getSlave();
+
+      if( src.getFileSystem().getScheme().equalsIgnoreCase( dst.getFileSystem().getScheme() ) ) {
+        if (src.toURI().getHost().equalsIgnoreCase( dst.toURI().getHost() ) ) {
+          src.move( dst, options, monitor );
+          done = true;
+        }
+      }
+    }
+    if (!done) {
+      super.move( destination, options, monitor );
+    }
+  }
+
 }
