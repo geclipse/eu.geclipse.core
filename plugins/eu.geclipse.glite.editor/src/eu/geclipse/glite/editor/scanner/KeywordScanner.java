@@ -19,10 +19,8 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Display;
 
 /**
- * <p>
- * Der KeywordScanner erkennt die definierten Schluesselwoerter und weist ihnen
- * spezielle Textattribute zu.
- * </p>
+ * The KeywordScanner recognizes the defined keywords and assigns them
+ * special text attributes.
  * 
  * @author Leif Frenzel
  */
@@ -71,9 +69,8 @@ public class KeywordScanner extends RuleBasedScanner {
     return new Token( ta );
   }
   
-  // inner class
-  //////////////
-  private class WordDetector implements IWordDetector {
+  // Inner class
+  class WordDetector implements IWordDetector {
 
     public boolean isWordPart( final char character ) {
       return Character.isJavaIdentifierPart( character );
