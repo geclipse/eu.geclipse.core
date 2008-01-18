@@ -22,6 +22,10 @@ import org.eclipse.core.runtime.IPath;
 
 import eu.geclipse.core.model.IVirtualOrganization;
 
+/**
+ * Class which contains the Properties of a Grid Project. 
+ * Propoerties are Name, Location, VirtualOrganisation, ... 
+ */
 public class GridProjectProperties {
   
   private String projectName;
@@ -35,48 +39,95 @@ public class GridProjectProperties {
   private Hashtable< String, String > projectFolders
     = new Hashtable< String, String >();
 
+  /**
+   * return project name
+   * @return
+   */
   public String getProjectName() {
     return this.projectName;
   }
   
+  /**
+   * set the ProjectName()
+   * @param projectName
+   */
   public void setProjectName( final String projectName ) {
     this.projectName = projectName;
   }
   
+  /**
+   * set ProjectLocation
+   * @return
+   */
   public IPath getProjectLocation() {
     return this.projectLocation;
   }
   
+  /**
+   * get ProjectLocation
+   * @param projectLocation
+   */
   public void setProjectLocation( final IPath projectLocation ) {
     this.projectLocation = projectLocation;
   }
   
+  /**
+   * get Virtual Organization of the Project
+   * @return
+   */
   public IVirtualOrganization getProjectVo() {
     return this.projectVo;
   }
   
+  /**
+   * set the Virtual Organization of the Project 
+   * @param vo
+   */
   public void setProjectVo( final IVirtualOrganization vo ) {
     this.projectVo = vo;
   }
   
+  /**
+   * get the list of reference projects
+   * @return
+   */
   public IProject[] getReferencesProjects() {
     return this.referencesProjects;
   }
 
+  /**
+   * set the list of references projects
+   * @param referencesProjects
+   */
   public void setReferencesProjects( final IProject[] referencesProjects ) {
     this.referencesProjects = referencesProjects;
   }
   
+  /**
+   * add a folder to the projects structure
+   * 
+   * @param id
+   * @param label
+   */
   public void addProjectFolder( final String id, final String label ) {
     this.projectFolders.put( id, label );
   }
   
+  /** 
+   * adds a list of project folders
+   * 
+   * @param folders
+   */
   public void addProjectFolders( final Hashtable< String, String > folders ) {
     for ( String key : folders.keySet() ) {
       this.projectFolders.put( key, folders.get( key ) );
     }
   }
   
+  /** 
+   * adds a list of project folders 
+   * @return
+   */
   public Hashtable< String, String > getProjectFolders() {
     return this.projectFolders;
   }
