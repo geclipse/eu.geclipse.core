@@ -92,7 +92,7 @@ public class GridJobDecorator
   public void decorate( final Object element, final IDecoration decoration ) {
     if ( element instanceof GridJob ) {
       IGridJobStatus status = ((GridJob)element).getJobStatus();      
-      ImageDescriptor decorator = getIcon( (int)System.currentTimeMillis() % 2 + 1 );//status.getType() );
+      ImageDescriptor decorator = getIcon( status.getType() );
       decoration.addOverlay( decorator, IDecoration.BOTTOM_LEFT );
     }
   }
@@ -114,10 +114,15 @@ public class GridJobDecorator
   }
 
   private ImageDescriptor getIcon( final int type ) {
-    ImageDescriptor decorator=null;
-    String fileName=imageNames.get( new Integer( type ) );
-    URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/ovr16/"+fileName ); //$NON-NLS-1$
-    decorator= ImageDescriptor.createFromURL( imgUrl );
+    ImageDescriptor decorator = null;
+    String fileName = imageNames.get( new Integer( type ) );
+    if( fileName == null ) {
+      fileName = imageNames.get( Integer.valueOf( STATUS_UNKNOWN_IMG ) );
+    }
+    URL imgUrl = Activator.getDefault()
+      .getBundle()
+      .getEntry( "icons/ovr16/" + fileName ); //$NON-NLS-1$
+    decorator = ImageDescriptor.createFromURL( imgUrl );
     return decorator;
   }
 
