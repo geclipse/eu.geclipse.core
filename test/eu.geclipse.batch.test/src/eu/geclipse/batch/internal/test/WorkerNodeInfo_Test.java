@@ -25,6 +25,7 @@ import eu.geclipse.batch.internal.WorkerNodeInfo;
 import eu.geclipse.batch.IWorkerNodeInfo;
 
 /**
+ * Testing all the methods in the WorkerNodeInfo class
  * @author hgjermund
  *
  */
