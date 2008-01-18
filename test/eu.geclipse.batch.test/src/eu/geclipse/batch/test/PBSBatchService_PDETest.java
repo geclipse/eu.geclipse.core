@@ -16,20 +16,23 @@
  *****************************************************************************/
 package eu.geclipse.batch.test;
 
+import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import eu.geclipse.batch.BatchException;
 import eu.geclipse.batch.BatchProblems;
+import eu.geclipse.batch.BatchServiceManager;
+import eu.geclipse.batch.Extensions;
 import eu.geclipse.batch.IBatchService;
-import eu.geclipse.batch.pbs.PBSBatchService;
-import eu.geclipse.batch.pbs.PBSBatchServiceDescription;
+import eu.geclipse.batch.IBatchServiceDescription;
 
 /**
  * Class to execute tests on the PBSWrapper.
  */
-public class PBSBatchService_Test {
+public class PBSBatchService_PDETest {
   /**
    * The PBS wrapper object.
    */
@@ -40,7 +43,19 @@ public class PBSBatchService_Test {
    */
   @Before
   public void setUp() throws Exception {
-    this.pbsWrapper = new PBSBatchService( new PBSBatchServiceDescription(), "test.batch" ); //$NON-NLS-1$
+    List< IBatchServiceDescription > services = Extensions.getRegisteredBatchServiceDescriptions(); 
+    
+    // Do we have an implementation to open this batch service
+    for ( IBatchServiceDescription description : services ) {
+      if ( description.supportsService( "pbs" ) ) { //$NON-NLS-1$
+        try {
+          this.pbsWrapper = BatchServiceManager.getManager().createService( description, "test.batch" ); //$NON-NLS-1$
+        } catch( BatchException e ) {
+          // No code needed
+        }
+      }
+    }
+    //this.pbsWrapper = new PBSBatchService( new PBSBatchServiceDescription(), "test.batch" ); //$NON-NLS-1$
   }
 
   /**
