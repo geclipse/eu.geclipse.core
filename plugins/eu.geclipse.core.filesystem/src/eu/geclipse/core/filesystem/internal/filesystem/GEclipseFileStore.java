@@ -215,7 +215,7 @@ public class GEclipseFileStore
   
   /**
    * Determines if this file store is a local store. Local stores
-   * are stores that have a slave store comming from the
+   * are stores that have a slave store coming from the
    * {@link EFS#getLocalFileSystem()}.
    * 
    * @return True if this store is a local mount.

@@ -117,7 +117,7 @@ public class GEclipseURI {
     
     URI result = uri;
     
-    if ( ! isMasterURI ( uri ) ) {
+    if ( ! isMasterURI( uri ) ) {
       
       String scheme = SCHEME;
       String userInfo = uri.getUserInfo();
@@ -130,12 +130,12 @@ public class GEclipseURI {
       if ( ! isEmptyString( query ) ) {
         query += QUERY_TOKEN_SEPARATOR;
       } else {
-        query = "";
+        query = ""; //$NON-NLS-1$
       }
       
       query += QUERY_SLAVE_SCHEME_TOKEN + QUERY_TOKEN_ASSIGN + uri.getScheme();
       
-      String uid = "";
+      String uid = ""; //$NON-NLS-1$
       if ( ( host != null ) && ( host.length() > 0 ) ) {
         uid += host;
       }
@@ -174,7 +174,7 @@ public class GEclipseURI {
       String fragment = uri.getFragment();
       
       String[] tokens = query.split( QUERY_TOKEN_SEPARATOR );
-      query = "";
+      query = ""; //$NON-NLS-1$
       
       for ( String token : tokens ) {
         
