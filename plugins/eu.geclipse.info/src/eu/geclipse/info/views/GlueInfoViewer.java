@@ -84,20 +84,17 @@ import eu.geclipse.info.model.IExtentedGridInfoService;
  * @author George Tsouloupas
  */
 public class GlueInfoViewer extends ViewPart
-implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener{
+implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener {
 
-  //private static Integer callNumber = 0;
   private String currentVO = null;
   private DrillDownAdapter drillDownAdapter;
   private Action actionSetSourceRGMA;
   private Action actionSetSourceBDII;
-  private Action doubleClickAction;
-  private Job fetchJob;
-  //private Action benchmarkAction;
-  //private MetricsView metricsView;
 
-  private TreeViewer viewer;
-
+  Action doubleClickAction;
+  Job fetchJob;
+  TreeViewer viewer;
+  
   private boolean SHOW_VO_LIST=false;
   private Combo comboVOList;
   private Label label = null;
@@ -154,7 +151,8 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener{
   }
   class TreeParent extends TreeObject {
 
-    private AbstractGlueTable agt;
+    AbstractGlueTable agt;
+    
     private ArrayList<AbstractGlueTable> agtList;
     private ArrayList<String[]> queries;
     private String[] query;
@@ -447,7 +445,7 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener{
       @Override
       protected IStatus run( final IProgressMonitor monitor ) {
         GlueIndex.drop(); // Clear the glue index.
-        Status status = new Status( Status.ERROR,
+        Status status = new Status( IStatus.ERROR,
                                     "eu.geclipse.glite.info", //$NON-NLS-1$
                                     "BDII fetch from " //$NON-NLS-1$
                                         + " Failed" ); //$NON-NLS-1$
@@ -463,6 +461,7 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener{
             gridProjectNumbers = projectElements.length;
           }
         } catch( GridModelException e ) {
+          // Do nothing
         }
         
         monitor.beginTask( "Retrieving information", gridProjectNumbers * 10 ); //$NON-NLS-1$
@@ -488,7 +487,7 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener{
         }
         
         monitor.done();
-        status = new Status( Status.OK,
+        status = new Status( IStatus.OK,
                              "eu.geclipse.glite.info", //$NON-NLS-1$
                              "BDII data fetched successfully." ); //$NON-NLS-1$
         return status;
@@ -654,7 +653,7 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener{
       @Override
       public void run() {
         
-        fetchJob.schedule();
+        GlueInfoViewer.this.fetchJob.schedule();
       }
     };
     refreshAction.setToolTipText( "Refresh" );  //$NON-NLS-1$
