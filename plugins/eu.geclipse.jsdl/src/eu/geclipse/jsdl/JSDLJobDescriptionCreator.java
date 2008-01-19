@@ -29,6 +29,8 @@ import eu.geclipse.core.model.impl.AbstractFileElementCreator;
 public class JSDLJobDescriptionCreator
     extends AbstractFileElementCreator {
 
+  private static final String JSDL_FILE_EXT = "jsdl"; //$NON-NLS-1$
+
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridElementCreator#canCreate(java.lang.Class)
    */
@@ -53,7 +55,7 @@ public class JSDLJobDescriptionCreator
    */
   @Override
   protected boolean internalCanCreate( final String fileExtension ) {
-    return "jsdl".equalsIgnoreCase( fileExtension ); //$NON-NLS-1$
+    return JSDL_FILE_EXT.equalsIgnoreCase( fileExtension );
   }
   
 }
