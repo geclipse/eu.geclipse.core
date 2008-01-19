@@ -32,7 +32,7 @@ import eu.geclipse.core.model.IGridJobStatus;
 import eu.geclipse.ui.internal.Activator;
 
 /**
- * Addes an error decorator to RSL icon in case the file can not be parsed.
+ * Adds an error decorator to RSL icons in case the file can not be parsed.
  */
 public class GridJobDecorator
     extends LabelProvider
@@ -65,14 +65,14 @@ public class GridJobDecorator
   private static Hashtable<Integer, String> imageNames;
   
   static {
-  imageNames=new Hashtable<Integer, String>();
-  imageNames.put( new Integer( IGridJobStatus.UNKNOWN ), STATUS_UNKNOWN_IMG ); 
-  imageNames.put( new Integer( IGridJobStatus.SUBMITTED ), STATUS_SUBMITTED_IMG ); 
-  imageNames.put( new Integer( IGridJobStatus.WAITING ), STATUS_WAITING_IMG ); 
-  imageNames.put( new Integer( IGridJobStatus.RUNNING ), STATUS_RUNNING_IMG ); 
-  imageNames.put( new Integer( IGridJobStatus.DONE ), STATUS_DONE_IMG ); 
-  imageNames.put( new Integer( IGridJobStatus.ABORTED ), STATUS_ABORTED_IMG ); 
-  imageNames.put( new Integer( IGridJobStatus.PURGED ), STATUS_ABANDONED_IMG ); 
+    imageNames = new Hashtable< Integer, String >();
+    imageNames.put( new Integer( IGridJobStatus.UNKNOWN ), STATUS_UNKNOWN_IMG ); 
+    imageNames.put( new Integer( IGridJobStatus.SUBMITTED ), STATUS_SUBMITTED_IMG ); 
+    imageNames.put( new Integer( IGridJobStatus.WAITING ), STATUS_WAITING_IMG ); 
+    imageNames.put( new Integer( IGridJobStatus.RUNNING ), STATUS_RUNNING_IMG ); 
+    imageNames.put( new Integer( IGridJobStatus.DONE ), STATUS_DONE_IMG ); 
+    imageNames.put( new Integer( IGridJobStatus.ABORTED ), STATUS_ABORTED_IMG ); 
+    imageNames.put( new Integer( IGridJobStatus.PURGED ), STATUS_ABANDONED_IMG ); 
   }
   
   public static GridJobDecorator getDecorator() {
@@ -86,12 +86,11 @@ public class GridJobDecorator
     }
     
     return result;
-    
   }
   
   public void decorate( final Object element, final IDecoration decoration ) {
     if ( element instanceof GridJob ) {
-      IGridJobStatus status = ((GridJob)element).getJobStatus();      
+      IGridJobStatus status = ( ( GridJob ) element ).getJobStatus();      
       ImageDescriptor decorator = getIcon( status.getType() );
       decoration.addOverlay( decorator, IDecoration.BOTTOM_LEFT );
     }
@@ -100,16 +99,16 @@ public class GridJobDecorator
   public void refresh( final IGridElement toUpdate ) {
     LabelProviderChangedEvent event
       = toUpdate == null 
-      ? new LabelProviderChangedEvent( getDecorator() )
-      : new LabelProviderChangedEvent( getDecorator(), toUpdate );
+        ? new LabelProviderChangedEvent( getDecorator() )
+        : new LabelProviderChangedEvent( getDecorator(), toUpdate );
     fireLabelProviderChanged( event );
   }
   
   public void refresh( final IGridElement[] toUpdate ) {
     LabelProviderChangedEvent event
       = toUpdate == null || toUpdate.length == 0
-      ? new LabelProviderChangedEvent( getDecorator() )
-      : new LabelProviderChangedEvent( getDecorator(), toUpdate );
+        ? new LabelProviderChangedEvent( getDecorator() )
+        : new LabelProviderChangedEvent( getDecorator(), toUpdate );
     fireLabelProviderChanged( event );
   }
 
@@ -120,8 +119,8 @@ public class GridJobDecorator
       fileName = imageNames.get( Integer.valueOf( STATUS_UNKNOWN_IMG ) );
     }
     URL imgUrl = Activator.getDefault()
-      .getBundle()
-      .getEntry( "icons/ovr16/" + fileName ); //$NON-NLS-1$
+			       .getBundle()
+                   .getEntry( "icons/ovr16/" + fileName ); //$NON-NLS-1$
     decorator = ImageDescriptor.createFromURL( imgUrl );
     return decorator;
   }
