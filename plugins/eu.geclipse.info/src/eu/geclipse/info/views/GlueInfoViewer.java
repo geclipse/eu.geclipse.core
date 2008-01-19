@@ -771,11 +771,11 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener {
 
   public void removeSelectionChangedListener( final ISelectionChangedListener arg0 )
   {
-    removeSelectionChangedListener( arg0 );
+    this.viewer.removeSelectionChangedListener( arg0 );
   }
 
   public void setSelection( final ISelection arg0 ) {
-    setSelection( arg0 );
+    this.viewer.setSelection( arg0 );
   }
 
   public void infoChanged( final ArrayList<AbstractGlueTable> modifiedGlueEntries ) {
