@@ -16,12 +16,12 @@
 package eu.geclipse.core.model;
 
 /**
- * This is at the moment just a declarative interfaces for
+ * This is at the moment just a declarative interface for
  * integrating workflows into the Grid model.
  */
 public interface IGridWorkflow
     extends IGridJobDescription {
   
-  // currently empty implememtation
+  // Currently empty implementation
   
 }
