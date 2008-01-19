@@ -29,14 +29,14 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridJobID;
+import eu.geclipse.core.model.IGridWorkflow;
 import eu.geclipse.core.model.impl.AbstractGridJobCreator;
 import eu.geclipse.jsdl.JSDLJobDescription;
-import eu.geclipse.workflow.resources.GridWorkflow;
 
 /**
- * GridJobCreator create grid job. This is middleware independent. Grid job
- * contains of GridJobID, IGridJobDescription and GridJobStatus. And those three
- * components can be middleware dependent.
+ * GridJobCreator creates grid jobs. A GridJob object is middleware independent
+ * and contains a GridJobID, IGridJobDescription and GridJobStatus. These
+ * last three components can be middleware dependent.
  */
 public class GridJobCreator extends AbstractGridJobCreator {
 
@@ -75,7 +75,7 @@ public class GridJobCreator extends AbstractGridJobCreator {
   @Override
   protected boolean internalCanCreate( final IGridJobDescription description ) {
     return ( description instanceof JSDLJobDescription ||
-             description instanceof GridWorkflow);
+             description instanceof IGridWorkflow);
   }
 
   /*
