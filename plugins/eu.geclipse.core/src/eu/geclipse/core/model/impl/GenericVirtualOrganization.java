@@ -70,11 +70,12 @@ public class GenericVirtualOrganization
   public boolean equals( final Object o ) {
     boolean result = false;
     if ( o instanceof GenericVirtualOrganization ) {
-      result = equals( ( GenericVirtualOrganization ) o );
+      GenericVirtualOrganization vo = ( GenericVirtualOrganization ) o;
+      result = getName().equals( vo.getName() );
     }
     return result;
   }
-
+  
   public String getTypeName() {
     return VO_TYPE_NAME;
   }
@@ -130,9 +131,4 @@ public class GenericVirtualOrganization
   public String getWizardId() {
     return "eu.geclipse.ui.wizards.GenericVoWizard"; //$NON-NLS-1$
   }
-  
-  private boolean equals( final GenericVirtualOrganization vo ) {
-    return getName().equals( vo.getName() );
-  }
-  
 }
