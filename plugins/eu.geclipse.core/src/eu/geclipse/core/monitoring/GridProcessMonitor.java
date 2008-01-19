@@ -207,12 +207,12 @@ public class GridProcessMonitor {
    * 
    * @return a HashSet with PIDs of the remotely running processes
    */
-  public HashSet<Integer> getProcessList() {
+  public HashSet< Integer > getProcessList() {
     if ( this.proclist.isEmpty() ) {
         this.updateJob.schedule();
         try {
           this.updateJob.join();
-        } catch( InterruptedException e ) {
+        } catch ( InterruptedException e ) {
           // if we are interrupted by something perhaps the joblist is unfetchable
         }  
     }
@@ -239,9 +239,18 @@ public class GridProcessMonitor {
     
     boolean isequal = false;
     if ( o instanceof GridProcessMonitor ) {
-      GridProcessMonitor mon = (GridProcessMonitor)o;
+      GridProcessMonitor mon = ( GridProcessMonitor ) o;
       isequal = this.targeturi.equals( mon.getTarget() );
     }
     return isequal;
+  }
+  
+  /*
+   * If equals() is overridden hashCode() must be also, equal objects
+   * must have equal hashes.
+   */
+  @Override
+  public int hashCode() {
+    return this.targeturi.hashCode();
   }
 }

@@ -76,6 +76,15 @@ public class GenericVirtualOrganization
     return result;
   }
   
+  /*
+   * If equals() is overridden hashCode() must be also, equal objects
+   * must have equal hashes.
+   */
+  @Override
+  public int hashCode() {
+    return this.name.hashCode();
+  }
+  
   public String getTypeName() {
     return VO_TYPE_NAME;
   }
