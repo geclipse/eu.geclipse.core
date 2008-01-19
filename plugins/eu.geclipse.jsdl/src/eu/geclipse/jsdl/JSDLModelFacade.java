@@ -22,7 +22,7 @@ import eu.geclipse.jsdl.model.SourceTargetType;
 
 /**
  * This class is for obtaining instances of model's objects. It hides subsequent
- * factories calls.
+ * factory calls.
  * 
  * @author Kasia
  */
