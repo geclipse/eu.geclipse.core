@@ -274,7 +274,7 @@ public class JSDLJobDescription extends ResourceGridContainer
       this.resource.getContents().add( jsdlRoot );
     }
     // Setting XML encoding.. This could be changed later.
-    Map options = new HashMap();
+    Map<String, String> options = new HashMap<String, String>();
     options.put( XMLResource.OPTION_ENCODING, UTF_8 );
     try {
       this.resource.save( options );
@@ -672,7 +672,7 @@ public class JSDLJobDescription extends ResourceGridContainer
     ArgumentType arg;
     if( argValues != null && !argValues.isEmpty() ) {
       if( posixApp != null ) {
-        EList argumentList = posixApp.getArgument();
+        EList<ArgumentType> argumentList = posixApp.getArgument();
         if( argName != null && !argName.equals( "" ) ) { //$NON-NLS-1$
           arg = this.posixFactory.createArgumentType();
           arg.setValue( argName );
@@ -699,7 +699,7 @@ public class JSDLJobDescription extends ResourceGridContainer
     POSIXApplicationType posixApp = getPosixApplication();
     ArgumentType arg;
     if( posixApp != null ) {
-      EList argumentList = posixApp.getArgument();
+      EList<ArgumentType> argumentList = posixApp.getArgument();
       if( argName != null && !argName.equals( "" ) ) { //$NON-NLS-1$
         arg = this.posixFactory.createArgumentType();
         arg.setValue( argName );
