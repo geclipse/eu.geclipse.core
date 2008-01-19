@@ -78,11 +78,11 @@ public class ValueWithEpsilon {
   public boolean equals( final Object obj )
   {
     boolean result = false;
-    if (super.equals( obj )){
+    if ( super.equals( obj ) ) {
       result = true;
     } else {
-      if (obj instanceof ValueWithEpsilon){
-        ValueWithEpsilon val = (ValueWithEpsilon) obj;
+      if ( obj instanceof ValueWithEpsilon ) {
+        ValueWithEpsilon val = ( ValueWithEpsilon ) obj;
         if ( this.value == val.getValue() && this.epsilon == val.getEpsilon() ) {
           result = true;
         }
@@ -91,6 +91,16 @@ public class ValueWithEpsilon {
     return result;
   }
   
+  
+  /*
+   * If equals() is overridden hashCode() must be also, equal objects
+   * must have equal hashes.
+   */
+  @Override
+  public int hashCode() {
+    String string = Double.toString( this.value ) + Double.toString( this.epsilon );
+    return string.hashCode();
+  }
   
   
 }

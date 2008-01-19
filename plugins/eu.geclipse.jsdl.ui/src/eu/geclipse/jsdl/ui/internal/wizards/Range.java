@@ -92,5 +92,15 @@ public class Range{
   }
   
   
+  /*
+   * If equals() is overridden hashCode() must be also, equal objects
+   * must have equal hashes.
+   */
+  @Override
+  public int hashCode() {
+    String string = Double.toString( this.start ) + Double.toString( this.end );
+    return string.hashCode();
+  }
+  
   
 }
