@@ -89,16 +89,15 @@ public class GridProjectFolderDecorator
       
       else {
         if ( standardImage == null ) {
-          URL url = Activator.getDefault().getBundle().getEntry( "icons/ovr16/project_ovr.gif" );
+          URL url = Activator.getDefault().getBundle()
+                      .getEntry( "icons/ovr16/project_ovr.gif" ); //$NON-NLS-1$
           standardImage = ImageDescriptor.createFromURL( url );
         }
         image = standardImage;
       }
       
       this.images.put( id, image );
-      
     }
-    
   }
 
   public void decorate( final Object element, final IDecoration decoration ) {
