@@ -113,7 +113,8 @@ public class GridJobCreator extends AbstractGridJobCreator {
     try {
       // create temporary job folder, to prevent adding new GridJob to project
       // IPath stateLocation = Activator.getDefault().getStateLocation();
-      IFolder tmpJobFolder = ( ( IContainer )parent.getResource() ).getFolder( tmpPath.removeFirstSegments( tmpPath.segmentCount() - 1 ) );
+      IFolder tmpJobFolder = ( ( IContainer ) parent.getResource() )
+                               .getFolder( tmpPath.removeFirstSegments( tmpPath.segmentCount() - 1 ) );
       tmpJobFolder.delete( true, null );
       tmpJobFolder.create( true, true, null );
       GridJob.createJobStructure( tmpJobFolder, ( GridJobID )id, description );
