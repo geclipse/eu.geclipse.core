@@ -13,7 +13,8 @@
  *     Mariusz Wojtysiak - initial API and implementation
  *     
  *****************************************************************************/
-package eu.geclipse.ui.internal.dialogs.ConfigureFilters;
+
+package eu.geclipse.ui.internal.dialogs.configureFilters;
 
 import java.util.Date;
 
@@ -30,6 +31,7 @@ import eu.geclipse.ui.views.filters.IGridFilterConfiguration;
 import eu.geclipse.ui.views.filters.JobSubmissionTimeFilter;
 import eu.geclipse.ui.views.filters.JobViewFilterConfiguration;
 import eu.geclipse.ui.widgets.DateTimeText;
+
 
 /**
  * Composite to edit {@link JobSubmissionTimeFilter}
@@ -70,7 +72,7 @@ public class JobSubmissionTimeComposite implements IFilterComposite {
   /*
    * (non-Javadoc)
    * 
-   * @see eu.geclipse.ui.internal.dialogs.ConfigureFilters.IFilterComposite#saveToFilter()
+   * @see eu.geclipse.ui.internal.dialogs.configureFilters.IFilterComposite#saveToFilter()
    */
   public boolean saveToFilter() {
     boolean success = false;
@@ -105,7 +107,7 @@ public class JobSubmissionTimeComposite implements IFilterComposite {
   /*
    * (non-Javadoc)
    * 
-   * @see eu.geclipse.ui.internal.dialogs.ConfigureFilters.IFilterComposite#setFilter(eu.geclipse.ui.views.filters.IGridFilterConfiguration)
+   * @see eu.geclipse.ui.internal.dialogs.configureFilters.IFilterComposite#setFilter(eu.geclipse.ui.views.filters.IGridFilterConfiguration)
    */
   public void setFilter( final IGridFilterConfiguration filterConfiguration ) {
     if( filterConfiguration != null ) {
@@ -127,7 +129,7 @@ public class JobSubmissionTimeComposite implements IFilterComposite {
   /*
    * (non-Javadoc)
    * 
-   * @see eu.geclipse.ui.internal.dialogs.ConfigureFilters.IFilterComposite#setEnabled(boolean)
+   * @see eu.geclipse.ui.internal.dialogs.configureFilters.IFilterComposite#setEnabled(boolean)
    */
   public void setEnabled( final boolean enabled ) {
     this.afterDateTimeText.setEnabled( enabled );

@@ -44,8 +44,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 
 import eu.geclipse.ui.internal.Activator;
-import eu.geclipse.ui.internal.dialogs.ConfigureFilters.FilterCompositeFactory;
-import eu.geclipse.ui.internal.dialogs.ConfigureFilters.IFilterComposite;
+import eu.geclipse.ui.internal.dialogs.configureFilters.FilterCompositeFactory;
+import eu.geclipse.ui.internal.dialogs.configureFilters.IFilterComposite;
 import eu.geclipse.ui.views.filters.GridFilterConfigurationsManager;
 import eu.geclipse.ui.views.filters.IGridFilter;
 import eu.geclipse.ui.views.filters.IGridFilterConfiguration;

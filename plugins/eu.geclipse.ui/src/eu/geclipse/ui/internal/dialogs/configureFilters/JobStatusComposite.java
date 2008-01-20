@@ -13,7 +13,8 @@
  *     Mariusz Wojtysiak - initial API and implementation
  *     
  *****************************************************************************/
-package eu.geclipse.ui.internal.dialogs.ConfigureFilters;
+
+package eu.geclipse.ui.internal.dialogs.configureFilters;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +29,7 @@ import eu.geclipse.core.model.IGridJobStatus;
 import eu.geclipse.ui.views.filters.IGridFilterConfiguration;
 import eu.geclipse.ui.views.filters.JobStatusFilter;
 import eu.geclipse.ui.views.filters.JobViewFilterConfiguration;
+
 
 /**
  * Composite to edit {@link JobStatusFilter}

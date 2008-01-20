@@ -13,10 +13,12 @@
  *     Mariusz Wojtysiak - initial API and implementation
  *     
  *****************************************************************************/
-package eu.geclipse.ui.internal.dialogs.ConfigureFilters;
+
+package eu.geclipse.ui.internal.dialogs.configureFilters;
 
 import eu.geclipse.ui.views.filters.IGridFilter;
 import eu.geclipse.ui.views.filters.IGridFilterConfiguration;
+
 
 /**
  * Composite implementing user interface to configure specific {@link IGridFilter}

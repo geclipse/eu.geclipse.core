@@ -13,7 +13,8 @@
  *     Mariusz Wojtysiak - initial API and implementation
  *     
  *****************************************************************************/
-package eu.geclipse.ui.internal.dialogs.ConfigureFilters;
+
+package eu.geclipse.ui.internal.dialogs.configureFilters;
 
 import org.eclipse.swt.widgets.Composite;
 
@@ -21,6 +22,7 @@ import eu.geclipse.ui.dialogs.ConfigureFiltersDialog;
 import eu.geclipse.ui.views.filters.IGridFilter;
 import eu.geclipse.ui.views.filters.JobStatusFilter;
 import eu.geclipse.ui.views.filters.JobSubmissionTimeFilter;
+
 
 /**
  * Factory creating composites for specific {@link IFilterComposite}. Produced
