@@ -174,7 +174,7 @@ protected CheckboxTableViewer viewer;
       NewProblemDialog.openProblem(
           getShell(),
           "Import Failed",
-          "Unable to load certificate list",
+          "Unable to load VO list",
           cause
       );
       setErrorMessage( cause.getLocalizedMessage() );
