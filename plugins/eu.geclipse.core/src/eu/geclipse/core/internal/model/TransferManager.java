@@ -115,7 +115,8 @@ public class TransferManager
   }
   
   /* (non-Javadoc)
-   * @see eu.geclipse.core.model.ITransferManager#queueTransfer(eu.geclipse.core.model.IGridElement[], eu.geclipse.core.model.IGridContainer)
+   * @see eu.geclipse.core.model.ITransferManager#queueTransfer(eu.geclipse.core.model.IGridElement[],
+   *                                                            eu.geclipse.core.model.IGridContainer)
    */
   public void queueTransfer( final IGridElement[] sources,
                              final IGridContainer target )
