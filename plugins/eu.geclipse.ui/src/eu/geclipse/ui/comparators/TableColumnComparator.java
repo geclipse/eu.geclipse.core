@@ -13,7 +13,7 @@
  *    Ariel Garcia - initial API and implementation
  *****************************************************************************/
 
-package eu.geclipse.ui.internal.comparators;
+package eu.geclipse.ui.comparators;
 
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;

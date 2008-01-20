@@ -81,10 +81,10 @@ import eu.geclipse.ui.AbstractAuthTokenUIFactory;
 import eu.geclipse.ui.IAuthTokenUIFactory;
 import eu.geclipse.ui.UIAuthTokenProvider;
 import eu.geclipse.ui.cheatsheets.OpenAuthTokenDialogAction;
+import eu.geclipse.ui.comparators.TableColumnComparator;
 import eu.geclipse.ui.dialogs.AuthTokenInfoDialog;
 import eu.geclipse.ui.dialogs.NewProblemDialog;
 import eu.geclipse.ui.internal.Activator;
-import eu.geclipse.ui.internal.comparators.TableColumnComparator;
 import eu.geclipse.ui.internal.listeners.TableColumnListener;
 
 
