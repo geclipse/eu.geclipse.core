@@ -22,8 +22,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeColumn;
+
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.ui.comparators.TreeColumnComparator;
+import eu.geclipse.ui.listeners.TreeColumnListener;
 
 public abstract class TreeControlViewPart extends GridModelViewPart {
   
@@ -57,7 +61,21 @@ public abstract class TreeControlViewPart extends GridModelViewPart {
     boolean hasColumns = createTreeColumns( tree );
     if ( hasColumns ) {
       tree.setHeaderVisible( true );
+
+      // Add listener for column sorting
+      TreeColumnListener columnListener = new TreeColumnListener( tViewer );
+      for ( TreeColumn column : tree.getColumns() ) {
+        column.addSelectionListener( columnListener );
+      }
+      
+      // Initially sort by the first column, ascending
+      TreeColumn firstColumn = tree.getColumn( 0 );
+      tree.setSortColumn( firstColumn );
+      tree.setSortDirection( SWT.UP );
+      // Set also the first column as fallback sorting column
+      tViewer.setComparator( new TreeColumnComparator( firstColumn ) );
     }
+    
     return tViewer;
   }
   
