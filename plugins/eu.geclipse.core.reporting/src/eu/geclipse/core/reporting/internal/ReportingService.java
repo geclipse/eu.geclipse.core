@@ -51,7 +51,8 @@ public class ReportingService
   }
   
   /* (non-Javadoc)
-   * @see eu.geclipse.core.reporting.IReportingService#createProblem(java.lang.String, java.lang.Throwable, java.lang.String, java.lang.String)
+   * @see eu.geclipse.core.reporting.IReportingService#createProblem(java.lang.String, java.lang.Throwable,
+   *                                                                 java.lang.String, java.lang.String)
    */
   public IProblem createProblem( final String description,
                                  final Throwable exception,
@@ -61,7 +62,8 @@ public class ReportingService
   }
 
   /* (non-Javadoc)
-   * @see eu.geclipse.core.reporting.IReportingService#getProblem(java.lang.String, java.lang.String, java.lang.Throwable, java.lang.String)
+   * @see eu.geclipse.core.reporting.IReportingService#getProblem(java.lang.String, java.lang.String,
+   *                                                              java.lang.Throwable, java.lang.String)
    */
   public IProblem getProblem( final String problemID,
                               final String description,
@@ -71,7 +73,8 @@ public class ReportingService
   }
   
   /* (non-Javadoc)
-   * @see eu.geclipse.core.reporting.IReportingService#createSolution(java.lang.String, eu.geclipse.core.reporting.ISolver)
+   * @see eu.geclipse.core.reporting.IReportingService#createSolution(java.lang.String,
+   *                                                                  eu.geclipse.core.reporting.ISolver)
    */
   public ISolution createSolution( final String description,
                                    final ISolver solver ) {
