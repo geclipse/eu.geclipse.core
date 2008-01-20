@@ -32,7 +32,8 @@ public interface IGridJobSubmissionService extends IGridService{
    * @return TODO pawel
    * @throws GridException TODO pawel
    */
-  public IGridJobID submitJob( final IGridJobDescription parent, final IProgressMonitor monitor ) throws ProblemException, GridModelException;
+  public IGridJobID submitJob( final IGridJobDescription parent, final IProgressMonitor monitor )
+    throws ProblemException, GridModelException;
 
 //  /**
 //   * TODO pawel
@@ -42,6 +43,7 @@ public interface IGridJobSubmissionService extends IGridService{
 //   * @return TODO pawel
 //   * @throws GridModelException TODO pawel
 //   */
-//  public IGridJobID submitJob( final IGridJobDescription parent, final String destination ) throws GridException;
+//  public IGridJobID submitJob( final IGridJobDescription parent, final String destination )
+//    throws GridException;
   
 }
