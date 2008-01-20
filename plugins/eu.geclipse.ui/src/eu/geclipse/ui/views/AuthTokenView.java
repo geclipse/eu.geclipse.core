@@ -398,7 +398,7 @@ public class AuthTokenView extends ViewPart implements IContentChangeListener {
     // Initially we sort the tokens by ID, ascending
     this.tokenTable.setSortColumn( idColumn );
     this.tokenTable.setSortDirection( SWT.UP );
-    this.tokenList.setComparator( new TableColumnComparator( this.tokenList, idColumn ) );
+    this.tokenList.setComparator( new TableColumnComparator( idColumn ) );
     
     this.tokenList.setInput( manager );
     IAuthenticationToken defaultToken = manager.getDefaultToken();

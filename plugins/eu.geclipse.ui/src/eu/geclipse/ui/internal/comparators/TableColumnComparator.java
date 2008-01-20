@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2007 g-Eclipse Consortium 
+ * Copyright (c) 2007-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -15,6 +15,7 @@
 
 package eu.geclipse.ui.internal.comparators;
 
+import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
@@ -37,22 +38,26 @@ public class TableColumnComparator extends ViewerComparator {
   private TableColumn defaultSortColumn;
   
   /**
-   * Construct a <code>ViewerComparator</code> for the given <code>TableViewer</code>
-   * and with the given column as fallback sorting column.
+   * Construct a <code>ViewerComparator</code> to use for a <code>TableViewer</code>,
+   * with the given column as fallback sorting column. Remark that each TableViewer
+   * needs a new instance of this TableColumnComparator.
    * 
-   * @param viewer The <code>TableViewer</code> whose elements need to be compared.
    * @param defaultSortColumn The sorting column used as fallback if elements compare equal.
    */
-  public TableColumnComparator( final TableViewer viewer, final TableColumn defaultSortColumn ) {
-    super();
-    this.tableViewer = viewer;
-    this.table = this.tableViewer.getTable();
-    this.labelProvider = (ITableLabelProvider) this.tableViewer.getLabelProvider();
+  public TableColumnComparator( final TableColumn defaultSortColumn ) {
     this.defaultSortColumn = defaultSortColumn;
   }
 
   @Override
   public int compare( final Viewer viewer, final Object element1, final Object element2 ) {
+    
+    /*
+     * The object's fields are set only once, at the first method call. The LabelProvider
+     * can change after the Viewer is set up, so we cannot do this in the constructor.
+     */
+    if ( this.labelProvider == null ) {
+      initialize( viewer );
+    }
     
     int col;
     // Sort the table by the first column if there is no sorting defined
@@ -83,4 +88,23 @@ public class TableColumnComparator extends ViewerComparator {
     
     return result;
   }
+
+  /**
+   * Set the private fields according from the viewer
+   * @param viewer 
+   */
+  private void initialize( final Viewer viewer ) {
+    
+    // This comparator is only for tables
+    assert viewer instanceof TableViewer;
+    
+    this.tableViewer = ( TableViewer ) viewer;
+    this.table = this.tableViewer.getTable();
+    
+    IBaseLabelProvider lProvider = this.tableViewer.getLabelProvider();
+    if ( lProvider instanceof ITableLabelProvider ) {
+      this.labelProvider = ( ITableLabelProvider ) lProvider;
+    }
+  }
+
 }

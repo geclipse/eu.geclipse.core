@@ -302,7 +302,7 @@ public class VoPreferencePage
     // Initially we sort the VOs by name, ascending
     voTable.setSortColumn( nameColumn );
     voTable.setSortDirection( SWT.UP );
-    this.voViewer.setComparator( new TableColumnComparator( this.voViewer, nameColumn ) );
+    this.voViewer.setComparator( new TableColumnComparator( nameColumn ) );
     
     this.voViewer.setInput( manager );
     this.voViewer.addSelectionChangedListener( new ISelectionChangedListener() {
