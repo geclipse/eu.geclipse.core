@@ -217,55 +217,68 @@ public class SolutionRegistry {
     ISolution solution = null;
     
     if ( solutionID == CHECK_AUTH_DATA ) {
-      solution = new Solution( CHECK_AUTH_DATA, Messages.getString("SolutionRegistry.check_auth_data") ); //$NON-NLS-1$
+      solution = new Solution( CHECK_AUTH_DATA,
+                               Messages.getString("SolutionRegistry.check_auth_data") ); //$NON-NLS-1$
     }
     
     else if ( solutionID == CHECK_AUTH_TOKENS ) {
-      solution = new Solution( CHECK_AUTH_TOKENS, Messages.getString("SolutionRegistry.check_auth_tokens") ); //$NON-NLS-1$
+      solution = new Solution( CHECK_AUTH_TOKENS,
+                               Messages.getString("SolutionRegistry.check_auth_tokens") ); //$NON-NLS-1$
     }
     
     else if ( solutionID == CHECK_CA_CERTIFICATES ) {
-      solution = new Solution( CHECK_CA_CERTIFICATES, Messages.getString("SolutionRegistry.check_ca_certificates") ); //$NON-NLS-1$
+      solution = new Solution( CHECK_CA_CERTIFICATES,
+                               Messages.getString("SolutionRegistry.check_ca_certificates") ); //$NON-NLS-1$
     }
     
     else if ( solutionID == CHECK_HOSTNAME_SETTINGS ) {
-      solution = new Solution( CHECK_HOSTNAME_SETTINGS, Messages.getString("SolutionRegistry.check_hostname_settings") ); //$NON-NLS-1$
+      solution = new Solution( CHECK_HOSTNAME_SETTINGS,
+                               Messages.getString("SolutionRegistry.check_hostname_settings") ); //$NON-NLS-1$
     }
     
     else if ( solutionID == CHECK_INTERNET_CONNECTION ) {
-      solution = new Solution( CHECK_INTERNET_CONNECTION, Messages.getString("SolutionRegistry.check_internet_connection") ); //$NON-NLS-1$
+      solution = new Solution( CHECK_INTERNET_CONNECTION,
+                               Messages.getString("SolutionRegistry.check_internet_connection") ); //$NON-NLS-1$
     }
     
     else if ( solutionID == CHECK_FIREWALL ) {
-      solution = new Solution( CHECK_FIREWALL, Messages.getString("SolutionRegistry.check_firewall") ); //$NON-NLS-1$
+      solution = new Solution( CHECK_FIREWALL,
+                               Messages.getString("SolutionRegistry.check_firewall") ); //$NON-NLS-1$
     }
     
     else if ( solutionID == CHECK_PROXY_SETTINGS ) {
-      solution = new Solution( CHECK_PROXY_SETTINGS, Messages.getString("SolutionRegistry.check_proxy_settings") ); //$NON-NLS-1$
+      solution = new Solution( CHECK_PROXY_SETTINGS,
+                               Messages.getString("SolutionRegistry.check_proxy_settings") ); //$NON-NLS-1$
     }
 
     else if ( solutionID == CHECK_SERVER_URL ) {
-      solution = new Solution( CHECK_SERVER_URL, Messages.getString("SolutionRegistry.check_server_url")); //$NON-NLS-1$
+      solution = new Solution( CHECK_SERVER_URL,
+                               Messages.getString("SolutionRegistry.check_server_url") ); //$NON-NLS-1$
     }
     
     else if ( solutionID == CHECK_SYSTEM_TIME ) {
-      solution = new Solution( CHECK_SYSTEM_TIME, Messages.getString("SolutionRegistry.check_system_time")); //$NON-NLS-1$
+      solution = new Solution( CHECK_SYSTEM_TIME,
+                               Messages.getString("SolutionRegistry.check_system_time") ); //$NON-NLS-1$
     }
     
     else if ( solutionID == CHECK_TIMEOUT_SETTINGS ) {
-      solution = new Solution( CHECK_TIMEOUT_SETTINGS, Messages.getString("SolutionRegistry.check_timeout_settings") ); //$NON-NLS-1$
+      solution = new Solution( CHECK_TIMEOUT_SETTINGS,
+                               Messages.getString("SolutionRegistry.check_timeout_settings") ); //$NON-NLS-1$
     }
     
     else if ( solutionID == CHECK_VO_SETTINGS ) {
-      solution = new Solution( CHECK_VO_SETTINGS, Messages.getString("SolutionRegistry.check_vo_settings") ); //$NON-NLS-1$
+      solution = new Solution( CHECK_VO_SETTINGS,
+                               Messages.getString("SolutionRegistry.check_vo_settings") ); //$NON-NLS-1$
     }
     
     else if ( solutionID == SERVER_DOWN ) {
-      solution = new Solution( SERVER_DOWN, Messages.getString("SolutionRegistry.server_down")); //$NON-NLS-1$
+      solution = new Solution( SERVER_DOWN,
+                               Messages.getString("SolutionRegistry.server_down") ); //$NON-NLS-1$
     }
     
     else if ( solutionID == CONTACT_SERVER_ADMINS ) {
-      solution = new Solution( CONTACT_SERVER_ADMINS, Messages.getString("SolutionRegistry.contact_server_admins")); //$NON-NLS-1$
+      solution = new Solution( CONTACT_SERVER_ADMINS,
+                               Messages.getString("SolutionRegistry.contact_server_admins") ); //$NON-NLS-1$
     }
     
     else if( solutionID == DOWNLOAD_FILE_AGAIN ) {
@@ -289,35 +302,43 @@ public class SolutionRegistry {
     }
 
     else if ( solutionID == CHECK_PUBLIC_IP_ADDR ) {
-      solution = new Solution( CHECK_PUBLIC_IP_ADDR, Messages.getString("SolutionRegistry.check_public_ip_addr") ); //$NON-NLS-1$
+      solution = new Solution( CHECK_PUBLIC_IP_ADDR,
+                               Messages.getString("SolutionRegistry.check_public_ip_addr") ); //$NON-NLS-1$
     }
     
     else if ( solutionID == CHECK_HOSTNAME_MATCHES_IP_ADDR ) {
-      solution = new Solution( CHECK_HOSTNAME_MATCHES_IP_ADDR, Messages.getString("SolutionRegistry.check_hostname_matches_ip_addr") ); //$NON-NLS-1$
+      solution = new Solution( CHECK_HOSTNAME_MATCHES_IP_ADDR,
+                               Messages.getString("SolutionRegistry.check_hostname_matches_ip_addr") ); //$NON-NLS-1$
     }
 
     else if ( solutionID == CHECK_PORT_ALREADY_IN_USE ) {
-      solution = new Solution( CHECK_PORT_ALREADY_IN_USE, Messages.getString("SolutionRegistry.check_port_already_in_use") ); //$NON-NLS-1$
+      solution = new Solution( CHECK_PORT_ALREADY_IN_USE,
+                               Messages.getString("SolutionRegistry.check_port_already_in_use") ); //$NON-NLS-1$
     }
 
     else if ( solutionID == USE_ANOTHER_PORT ) {
-      solution = new Solution( USE_ANOTHER_PORT, Messages.getString("SolutionRegistry.use_another_port") ); //$NON-NLS-1$
+      solution = new Solution( USE_ANOTHER_PORT,
+                               Messages.getString("SolutionRegistry.use_another_port") ); //$NON-NLS-1$
     }
 
     else if ( solutionID == CHECK_INSTALLATION ) {
-      solution = new Solution( CHECK_INSTALLATION, Messages.getString("SolutionRegistry.check_installation") ); //$NON-NLS-1$
+      solution = new Solution( CHECK_INSTALLATION,
+                               Messages.getString("SolutionRegistry.check_installation") ); //$NON-NLS-1$
     }
 
     else if ( solutionID == CHECK_USERNAME_AND_PASSWORD ) {
-      solution = new Solution( CHECK_USERNAME_AND_PASSWORD, Messages.getString("SolutionRegistry.check_username_and_password") ); //$NON-NLS-1$
+      solution = new Solution( CHECK_USERNAME_AND_PASSWORD,
+                               Messages.getString("SolutionRegistry.check_username_and_password") ); //$NON-NLS-1$
     }
 
     else if ( solutionID == CHECK_SSH_SERVER_CONFIG ) {
-      solution = new Solution( CHECK_SSH_SERVER_CONFIG, Messages.getString("SolutionRegistry.check_ssh_server_config") ); //$NON-NLS-1$
+      solution = new Solution( CHECK_SSH_SERVER_CONFIG,
+                               Messages.getString("SolutionRegistry.check_ssh_server_config") ); //$NON-NLS-1$
     }
 
     else if ( solutionID == CHECK_FOR_VALID_PROXY ) {
-      solution = new Solution( CHECK_FOR_VALID_PROXY, Messages.getString("SolutionRegistry.checkForValidProxy") ); //$NON-NLS-1$
+      solution = new Solution( CHECK_FOR_VALID_PROXY,
+                               Messages.getString("SolutionRegistry.checkForValidProxy") ); //$NON-NLS-1$
     }
 
     return solution;
