@@ -43,8 +43,9 @@ public class TreeColumnListener implements SelectionListener {
   }
   
   public void widgetSelected( final SelectionEvent e ) {
-    // This listener is only for the columns of a table
-    assert e.getSource() instanceof TreeColumn;
+    // This listener is only for the columns of a tree
+    assert e.getSource() instanceof TreeColumn
+      : "This listener should only be used for Trees"; //$NON-NLS-1$
     
     TreeColumn clickedColumn = (TreeColumn) e.getSource();
     TreeColumn oldSortingColumn = this.tree.getSortColumn();
