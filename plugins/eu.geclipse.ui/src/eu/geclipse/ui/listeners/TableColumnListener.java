@@ -13,7 +13,7 @@
  *    Ariel Garcia - initial API and implementation
  *****************************************************************************/
 
-package eu.geclipse.ui.internal.listeners;
+package eu.geclipse.ui.listeners;
 
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.swt.SWT;
@@ -44,7 +44,8 @@ public class TableColumnListener implements SelectionListener {
   
   public void widgetSelected( final SelectionEvent e ) {
     // This listener is only for the columns of a table
-    assert e.getSource() instanceof TableColumn;
+    assert e.getSource() instanceof TableColumn
+      : "This listener should only be used for Tables"; //$NON-NLS-1$
     
     TableColumn clickedColumn = (TableColumn) e.getSource();
     TableColumn oldSortingColumn = this.table.getSortColumn();

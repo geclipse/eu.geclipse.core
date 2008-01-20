@@ -85,7 +85,7 @@ import eu.geclipse.ui.comparators.TableColumnComparator;
 import eu.geclipse.ui.dialogs.AuthTokenInfoDialog;
 import eu.geclipse.ui.dialogs.NewProblemDialog;
 import eu.geclipse.ui.internal.Activator;
-import eu.geclipse.ui.internal.listeners.TableColumnListener;
+import eu.geclipse.ui.listeners.TableColumnListener;
 
 
 /**
