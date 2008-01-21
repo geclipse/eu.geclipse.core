@@ -30,7 +30,7 @@ public interface IGridPreferences {
    * 
    * @param name The name of the connection.
    * @param uri The URI from which to create the connection.
-   * @throws GridModelException If an error occures during the creation of the
+   * @throws GridModelException If an error occurs during the creation of the
    *             connection.
    */
   public void createGlobalConnection( final String name, final URI uri )
@@ -43,7 +43,7 @@ public interface IGridPreferences {
    * 
    * @param uri The URI from which to create the connection.
    * @return The created connection.
-   * @throws GridModelException If an error occures during the creation of the
+   * @throws GridModelException If an error occurs during the creation of the
    *             connection.
    */
   public IGridConnection createTemporaryConnection( final URI uri )
@@ -53,5 +53,6 @@ public interface IGridPreferences {
                                    final String testName,
                                    final String extenstion,
                                    final InputStream inputStream,
-                                   final boolean forceOverride );
+                                   final boolean forceOverride )
+  throws GridModelException;
 }
