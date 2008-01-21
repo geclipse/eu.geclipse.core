@@ -90,8 +90,6 @@ public class JobSubmissionTimeComposite implements IFilterComposite {
                                      Messages.getString( "JobSubmissionTimeComposite.ErrTitle" ), //$NON-NLS-1$
                                      Messages.getString( "JobSubmissionTimeComposite.ErrSavingBeforeDate" ), //$NON-NLS-1$
                                      exception );
-          // TODO mariusz Auto-generated catch block
-          exception.printStackTrace();
         }
       } catch( ProblemException exception ) {
         this.afterDateTimeText.setFocus();
