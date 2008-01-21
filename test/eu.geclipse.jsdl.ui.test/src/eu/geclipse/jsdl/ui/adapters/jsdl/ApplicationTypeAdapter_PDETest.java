@@ -41,7 +41,7 @@ public class ApplicationTypeAdapter_PDETest {
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
     jobDefinitionType = JsdlFactory.eINSTANCE.createJobDefinitionType();
-    applicationTypeAdapter = new ApplicationTypeAdapter(jobDefinitionType);
+    //applicationTypeAdapter = new ApplicationTypeAdapter(jobDefinitionType);
     GridTestStub.setUpVO();
     GridTestStub.setUpProject();
     IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
@@ -52,6 +52,7 @@ public class ApplicationTypeAdapter_PDETest {
     file.createLink( localLocation, 0, null );
     JSDLJobDescription jsdlfile = new JSDLJobDescription(file);
     jobDefinitionType = jsdlfile.getRoot().getJobDefinition();
+    applicationTypeAdapter = new ApplicationTypeAdapter(jobDefinitionType);
   }
 
   /**
@@ -63,11 +64,11 @@ public class ApplicationTypeAdapter_PDETest {
   }
 
   /**
-   * Test method for {@link eu.geclipse.jsdl.ui.adapters.jsdl.ApplicationTypeAdapter#contentChanged()}.
+   * Test method for eu.geclipse.jsdl.ui.adapters.jsdl.ApplicationTypeAdapter#contentChanged()
    */
   @Test
   public void testContentChanged() {
-    
+    applicationTypeAdapter.contentChanged();
   }
 
   /**
@@ -75,7 +76,7 @@ public class ApplicationTypeAdapter_PDETest {
    */
   @Test
   public void testSetContent() {
-    Assert.assertFalse( applicationTypeAdapter.isEmpty() );
+    Assert.assertTrue( applicationTypeAdapter.isEmpty() );
   }
 
   /**
@@ -118,6 +119,6 @@ public class ApplicationTypeAdapter_PDETest {
    */
   @Test
   public void testIsEmpty() {
-    Assert.assertFalse( applicationTypeAdapter.isEmpty() );
+    Assert.assertTrue( applicationTypeAdapter.isEmpty() );
   }
 }

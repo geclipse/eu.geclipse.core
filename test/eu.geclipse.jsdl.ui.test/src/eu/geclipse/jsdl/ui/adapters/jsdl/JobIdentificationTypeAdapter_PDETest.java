@@ -44,7 +44,7 @@ public class JobIdentificationTypeAdapter_PDETest {
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
     jobDefinitionType = JsdlFactory.eINSTANCE.createJobDefinitionType();
-    jobIdentificationTypeAdapter = new JobIdentificationTypeAdapter(jobDefinitionType);
+    // jobIdentificationTypeAdapter = new JobIdentificationTypeAdapter(jobDefinitionType);
     GridTestStub.setUpVO();
     GridTestStub.setUpProject();
     IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
@@ -55,6 +55,7 @@ public class JobIdentificationTypeAdapter_PDETest {
     file.createLink( localLocation, 0, null );
     JSDLJobDescription jsdlfile = new JSDLJobDescription(file);
     jobDefinitionType = jsdlfile.getRoot().getJobDefinition();
+    jobIdentificationTypeAdapter = new JobIdentificationTypeAdapter(jobDefinitionType);
   }
 
   /**
@@ -74,13 +75,11 @@ public class JobIdentificationTypeAdapter_PDETest {
   }
 
   /**
-   * Test method for {@link eu.geclipse.jsdl.ui.adapters.jsdl.JobIdentificationTypeAdapter#contentChanged()}.
+   * Test method for eu.geclipse.jsdl.ui.adapters.jsdl.JobIdentificationTypeAdapter#contentChanged()
    */
   @Test
   public void testContentChanged() {
-    /*
-     * 
-     */
+    jobIdentificationTypeAdapter.contentChanged();
   }
 
   /**
@@ -124,7 +123,9 @@ public class JobIdentificationTypeAdapter_PDETest {
   }
 
   /**
-   * Test method for {@link eu.geclipse.jsdl.ui.adapters.jsdl.JobIdentificationTypeAdapter#performDelete(org.eclipse.swt.widgets.List, java.lang.String)}.
+   * Test method for eu.geclipse.jsdl.ui.adapters.
+   * jsdl.JobIdentificationTypeAdapter#performDelete
+   * (org.eclipse.swt.widgets.List, java.lang.String)
    */
   @Test
   public void testPerformDelete() {
@@ -155,6 +156,6 @@ public class JobIdentificationTypeAdapter_PDETest {
    */
   @Test
   public void testIsEmpty() {
-    Assert.assertFalse( jobIdentificationTypeAdapter.isEmpty() );
+    Assert.assertTrue( jobIdentificationTypeAdapter.isEmpty() );
   }
 }

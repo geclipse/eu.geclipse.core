@@ -48,10 +48,13 @@ public class JobDefinitionTypeAdapter_PDETest {
    */
   private static JobDefinitionTypeAdapter jobDefinitionTypeAdapter;
 
+  /**initialization
+   * @throws Exception
+   */
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
     jobDefinitionType = JsdlFactory.eINSTANCE.createJobDefinitionType();
-    jobDefinitionTypeAdapter = new JobDefinitionTypeAdapter(jobDefinitionType);
+   // jobDefinitionTypeAdapter = new JobDefinitionTypeAdapter(jobDefinitionType);
     GridTestStub.setUpVO();
     GridTestStub.setUpProject();
     IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
@@ -62,27 +65,44 @@ public class JobDefinitionTypeAdapter_PDETest {
     file.createLink( localLocation, 0, null );
     JSDLJobDescription jsdlfile = new JSDLJobDescription(file);
     jobDefinitionType = jsdlfile.getRoot().getJobDefinition();
+    jobDefinitionTypeAdapter = new JobDefinitionTypeAdapter(jobDefinitionType);
   }
 
+  /**
+   * tests the method {@link JobDefinitionTypeAdapter#JobDefinitionTypeAdapter(JobDefinitionType)}
+   */
   @Test
   public void testJobDefinitionTypeAdapter() {
    Assert.assertNotNull( jobDefinitionTypeAdapter );
   }
 
+  /**
+   * tests the method JobDefinitionTypeAdapter#contentChanged()
+   */
   @Test
   public void testContentChanged() {
+    jobDefinitionTypeAdapter.contentChanged();
   }
 
+  /**
+   * tests the method {@link JobDefinitionTypeAdapter#attachID(org.eclipse.swt.widgets.Text)}
+   */
   @Test
   public void testAttachID() {
     /* Cannot test methods that deal with UI widgets */
   }
 
+  /**
+   * tests the method {@link JobDefinitionTypeAdapter#setContent(JobDefinitionType)}
+   */
   @Test
   public void testSetContent() {
     Assert.assertNotNull( jobDefinitionType );    
   }
 
+  /**
+   * tests the method {@link JobDefinitionTypeAdapter#load()}
+   */
   @Test
   public void testLoad() {
     /*
@@ -91,8 +111,11 @@ public class JobDefinitionTypeAdapter_PDETest {
      */    
   }
 
+  /**
+   * tests the method {@link JobDefinitionTypeAdapter#isEmpty()}
+   */
   @Test
   public void testIsEmpty() {
-    Assert.assertFalse( jobDefinitionTypeAdapter.isEmpty() );
+    Assert.assertTrue( jobDefinitionTypeAdapter.isEmpty() );
   }
 }
