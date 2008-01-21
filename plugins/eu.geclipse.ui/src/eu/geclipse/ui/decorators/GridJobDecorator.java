@@ -118,8 +118,7 @@ public class GridJobDecorator
     if( fileName == null ) {
       fileName = imageNames.get( Integer.valueOf( STATUS_UNKNOWN_IMG ) );
     }
-    URL imgUrl = Activator.getDefault()
-			       .getBundle()
+    URL imgUrl = Activator.getDefault().getBundle()
                    .getEntry( "icons/ovr16/" + fileName ); //$NON-NLS-1$
     decorator = ImageDescriptor.createFromURL( imgUrl );
     return decorator;
