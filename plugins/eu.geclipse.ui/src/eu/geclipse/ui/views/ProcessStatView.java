@@ -241,6 +241,5 @@ protected void initializeBrowser() {
 
   public void contentChanged( final IContentChangeNotifier source ) {
     this.viewer.refresh();
-    System.out.println("content changed"); //$NON-NLS-1$
   }
 }
