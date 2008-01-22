@@ -199,32 +199,31 @@ public class HiddenProject
   public IGridTest createGridTest( final String folderName, final String testName,
                                    final String extenstion, final InputStream inputStream,
                                    final boolean forceOverride )
-    throws GridModelException
-  {
-    IGridTest result = null;
-    // IGridTest result = null;
-    try {
-      IFolder simpleTestsFolder = getProjectFolder( DIR_GRID_TESTS
-                                                    + File.separatorChar
-                                                    + folderName );
-      if ( ! simpleTestsFolder.exists() ) {
-        simpleTestsFolder.create( IResource.FORCE | IResource.REPLACE, true, null );
-      }
-      IFile file = simpleTestsFolder.getFile( testName + "." + extenstion); //$NON-NLS-1$
-      if( ! file.exists() ) {
-        file.create( inputStream, IResource.FORCE | IResource.REPLACE, null );
-      } else if ( forceOverride ) {
-        file.delete( true, null );
-        file.create( inputStream, IResource.FORCE | IResource.REPLACE, null );
-      }
-      result = GridModel.getTestManager().getTest( folderName );
-    } catch ( CoreException coreExc ) {
-      throw new GridModelException( GridModelProblems.ELEMENT_CREATE_FAILED,
-                                    coreExc );
-    }
-    return result;
-    // return result;
-  }
+       {
+         IGridTest result = null;
+         // IGridTest result = null;
+         try {
+           IFolder simpleTestsFolder = getProjectFolder( DIR_GRID_TESTS );
+           simpleTestsFolder = getProjectFolder( DIR_GRID_TESTS + File.separatorChar
+                                                         + folderName );
+           if ( ! simpleTestsFolder.exists() ) {
+             simpleTestsFolder.create( IResource.FORCE | IResource.REPLACE, true, null );
+           }
+           IFile file = simpleTestsFolder.getFile( testName + "." + extenstion); //$NON-NLS-1$
+           if( ! file.exists() ) {
+             file.create( inputStream, IResource.FORCE | IResource.REPLACE, null );
+           } else if ( forceOverride ) {
+             file.delete( true, null );
+             file.create( inputStream, IResource.FORCE | IResource.REPLACE, null );
+           }
+           result = GridModel.getTestManager().getTest( folderName );
+         } catch ( CoreException coreExc ) {
+           // TODO Auto-generated catch block
+           coreExc.printStackTrace();
+         }
+         return result;
+         // return result;
+       }
 
   /*
    * (non-Javadoc)
