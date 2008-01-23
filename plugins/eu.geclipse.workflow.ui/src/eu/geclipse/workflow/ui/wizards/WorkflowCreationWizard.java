@@ -109,7 +109,9 @@ public class WorkflowCreationWizard extends Wizard implements INewWizard {
    */
   @Override
   public void addPages() {
-    this.diagramModelFilePage = new WorkflowCreationWizardPage( "DiagramModelFile", getSelection(), "workflow" ); //$NON-NLS-1$ //$NON-NLS-2$
+    this.diagramModelFilePage = new WorkflowCreationWizardPage( "DiagramModelFile",  //$NON-NLS-1$
+                                                                getSelection(), 
+                                                                "workflow" );  //$NON-NLS-1$
     this.diagramModelFilePage.setTitle( "Create Workflow Diagram" ); //$NON-NLS-1$
     this.diagramModelFilePage.setDescription( "Select file that will contain diagram and domain models." ); //$NON-NLS-1$
     addPage( this.diagramModelFilePage );
@@ -127,7 +129,7 @@ public class WorkflowCreationWizard extends Wizard implements INewWizard {
         throws CoreException, InterruptedException
       {
         WorkflowCreationWizard.this.diagram = WorkflowDiagramEditorUtil.createDiagram( WorkflowCreationWizard.this.diagramModelFilePage.getURI(),
-                                                           monitor );
+                                                                                       monitor );
         if( isOpenNewlyCreatedDiagramEditor() && WorkflowCreationWizard.this.diagram != null ) {
           try {
             WorkflowDiagramEditorUtil.openDiagram( WorkflowCreationWizard.this.diagram );

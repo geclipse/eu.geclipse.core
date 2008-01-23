@@ -148,11 +148,16 @@ public class WorkflowPackageImpl extends EPackageImpl implements IWorkflowPackag
    */
   public static IWorkflowPackage init()
   {
-    if (isInited) return (IWorkflowPackage)EPackage.Registry.INSTANCE.getEPackage(IWorkflowPackage.eNS_URI);
+    if( isInited )
+      return ( IWorkflowPackage )EPackage.Registry.INSTANCE.getEPackage( IWorkflowPackage.eNS_URI );
 
     // Obtain or create and register package
-    WorkflowPackageImpl theWorkflowPackage = (WorkflowPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(eNS_URI) instanceof WorkflowPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(eNS_URI) : new WorkflowPackageImpl());
-
+    WorkflowPackageImpl theWorkflowPackage;
+    if ( EPackage.Registry.INSTANCE.getEPackage( eNS_URI ) instanceof WorkflowPackageImpl )
+      theWorkflowPackage = (WorkflowPackageImpl) EPackage.Registry.INSTANCE.getEPackage( eNS_URI );
+    else 
+      theWorkflowPackage = new WorkflowPackageImpl();
+    
     isInited = true;
 
     // Create package meta-data objects
@@ -161,7 +166,7 @@ public class WorkflowPackageImpl extends EPackageImpl implements IWorkflowPackag
     // Initialize created meta-data
     theWorkflowPackage.initializePackageContents();
 
-    // Mark meta-data to indicate it can't be changed
+    // Mark meta-data to indicate it cannot be changed
     theWorkflowPackage.freeze();
 
     return theWorkflowPackage;
@@ -519,38 +524,339 @@ public class WorkflowPackageImpl extends EPackageImpl implements IWorkflowPackag
     this.iWorkflowNodeEClass.getESuperTypes().add(this.getIWorkflowElement());
 
     // Initialize classes and features; add operations and parameters
-    initEClass(this.iPortEClass, IPort.class, "IPort", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
+    initEClass( this.iPortEClass,
+                IPort.class,
+                "IPort",  //$NON-NLS-1$
+                IS_ABSTRACT, 
+                !IS_INTERFACE, 
+                IS_GENERATED_INSTANCE_CLASS ); 
+    
+    initEClass( this.iLinkEClass,
+                ILink.class,
+                "ILink",  //$NON-NLS-1$
+                !IS_ABSTRACT, 
+                !IS_INTERFACE, 
+                IS_GENERATED_INSTANCE_CLASS ); 
+    initEReference( getILink_Workflow(),
+                    this.getIWorkflow(),
+                    this.getIWorkflow_Links(),
+                    "workflow",  //$NON-NLS-1$
+                    null, 
+                    1, 
+                    1, 
+                    ILink.class, 
+                    !IS_TRANSIENT, 
+                    !IS_VOLATILE, 
+                    IS_CHANGEABLE, 
+                    !IS_COMPOSITE, 
+                    !IS_RESOLVE_PROXIES, 
+                    !IS_UNSETTABLE, 
+                    IS_UNIQUE, 
+                    !IS_DERIVED, 
+                    IS_ORDERED ); 
+    initEReference( getILink_Target(),
+                    this.getIInputPort(),
+                    this.getIInputPort_Links(),
+                    "target",  //$NON-NLS-1$
+                    null, 
+                    1, 
+                    1, 
+                    ILink.class, 
+                    !IS_TRANSIENT, 
+                    !IS_VOLATILE, 
+                    IS_CHANGEABLE, 
+                    !IS_COMPOSITE, 
+                    IS_RESOLVE_PROXIES, 
+                    !IS_UNSETTABLE, 
+                    IS_UNIQUE, 
+                    !IS_DERIVED, 
+                    IS_ORDERED );
+    initEReference( getILink_Source(),
+                    this.getIOutputPort(),
+                    this.getIOutputPort_Links(),
+                    "source",  //$NON-NLS-1$
+                    null, 
+                    1, 
+                    1, 
+                    ILink.class, 
+                    !IS_TRANSIENT, 
+                    !IS_VOLATILE, 
+                    IS_CHANGEABLE, 
+                    !IS_COMPOSITE, 
+                    IS_RESOLVE_PROXIES, 
+                    !IS_UNSETTABLE, 
+                    IS_UNIQUE, 
+                    !IS_DERIVED, 
+                    IS_ORDERED );
 
-    initEClass(this.iLinkEClass, ILink.class, "ILink", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-    initEReference(getILink_Workflow(), this.getIWorkflow(), this.getIWorkflow_Links(), "workflow", null, 1, 1, ILink.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-    initEReference(getILink_Target(), this.getIInputPort(), this.getIInputPort_Links(), "target", null, 1, 1, ILink.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-    initEReference(getILink_Source(), this.getIOutputPort(), this.getIOutputPort_Links(), "source", null, 1, 1, ILink.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+    initEClass( this.iInputPortEClass,
+                IInputPort.class,
+                "IInputPort",  //$NON-NLS-1$
+                !IS_ABSTRACT, 
+                !IS_INTERFACE, 
+                IS_GENERATED_INSTANCE_CLASS ); 
+    initEReference( getIInputPort_Node(),
+                    this.getIWorkflowNode(),
+                    this.getIWorkflowNode_Inputs(),
+                    "node",  //$NON-NLS-1$
+                    null, 
+                    1, 
+                    1, 
+                    IInputPort.class, 
+                    !IS_TRANSIENT, 
+                    !IS_VOLATILE, 
+                    IS_CHANGEABLE, 
+                    !IS_COMPOSITE, 
+                    !IS_RESOLVE_PROXIES, 
+                    !IS_UNSETTABLE, 
+                    IS_UNIQUE, 
+                    !IS_DERIVED, 
+                    IS_ORDERED ); 
+    initEReference( getIInputPort_Links(),
+                    this.getILink(),
+                    this.getILink_Target(),
+                    "links",  //$NON-NLS-1$
+                    null, 
+                    0, 
+                    -1, 
+                    IInputPort.class, 
+                    !IS_TRANSIENT, 
+                    !IS_VOLATILE, 
+                    IS_CHANGEABLE, 
+                    !IS_COMPOSITE, 
+                    IS_RESOLVE_PROXIES, 
+                    !IS_UNSETTABLE, 
+                    IS_UNIQUE, 
+                    !IS_DERIVED, 
+                    IS_ORDERED ); 
 
-    initEClass(this.iInputPortEClass, IInputPort.class, "IInputPort", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-    initEReference(getIInputPort_Node(), this.getIWorkflowNode(), this.getIWorkflowNode_Inputs(), "node", null, 1, 1, IInputPort.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-    initEReference(getIInputPort_Links(), this.getILink(), this.getILink_Target(), "links", null, 0, -1, IInputPort.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+    initEClass( this.iOutputPortEClass,
+                IOutputPort.class,
+                "IOutputPort",  //$NON-NLS-1$
+                !IS_ABSTRACT, 
+                !IS_INTERFACE, 
+                IS_GENERATED_INSTANCE_CLASS ); 
+    initEReference( getIOutputPort_Node(),
+                    this.getIWorkflowNode(),
+                    this.getIWorkflowNode_Outputs(),
+                    "node",  //$NON-NLS-1$
+                    null, 
+                    1, 
+                    1, 
+                    IOutputPort.class, 
+                    !IS_TRANSIENT, 
+                    !IS_VOLATILE, 
+                    IS_CHANGEABLE, 
+                    !IS_COMPOSITE, 
+                    !IS_RESOLVE_PROXIES, 
+                    !IS_UNSETTABLE, 
+                    IS_UNIQUE, 
+                    !IS_DERIVED, 
+                    IS_ORDERED );
+    initEReference( getIOutputPort_Links(),
+                    this.getILink(),
+                    this.getILink_Source(),
+                    "links",  //$NON-NLS-1$
+                    null, 
+                    0, 
+                    -1, 
+                    IOutputPort.class, 
+                    !IS_TRANSIENT, 
+                    !IS_VOLATILE, 
+                    IS_CHANGEABLE, 
+                    !IS_COMPOSITE, 
+                    IS_RESOLVE_PROXIES, 
+                    !IS_UNSETTABLE, 
+                    IS_UNIQUE, 
+                    !IS_DERIVED, 
+                    IS_ORDERED ); 
 
-    initEClass(this.iOutputPortEClass, IOutputPort.class, "IOutputPort", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-    initEReference(getIOutputPort_Node(), this.getIWorkflowNode(), this.getIWorkflowNode_Outputs(), "node", null, 1, 1, IOutputPort.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-    initEReference(getIOutputPort_Links(), this.getILink(), this.getILink_Source(), "links", null, 0, -1, IOutputPort.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+    initEClass( this.iWorkflowEClass,
+                IWorkflow.class,
+                "IWorkflow",  //$NON-NLS-1$
+                !IS_ABSTRACT, 
+                !IS_INTERFACE, 
+                IS_GENERATED_INSTANCE_CLASS ); 
+    initEReference( getIWorkflow_Nodes(),
+                    this.getIWorkflowNode(),
+                    this.getIWorkflowNode_Workflow(),
+                    "nodes",  //$NON-NLS-1$
+                    null, 
+                    0, 
+                    -1, 
+                    IWorkflow.class, 
+                    !IS_TRANSIENT, 
+                    !IS_VOLATILE, 
+                    IS_CHANGEABLE, 
+                    IS_COMPOSITE, 
+                    !IS_RESOLVE_PROXIES, 
+                    !IS_UNSETTABLE, 
+                    IS_UNIQUE, 
+                    !IS_DERIVED, 
+                    IS_ORDERED ); 
+    initEReference( getIWorkflow_Links(),
+                    this.getILink(),
+                    this.getILink_Workflow(),
+                    "links",  //$NON-NLS-1$
+                    null, 
+                    0, 
+                    -1, 
+                    IWorkflow.class, 
+                    !IS_TRANSIENT, 
+                    !IS_VOLATILE, 
+                    IS_CHANGEABLE, 
+                    IS_COMPOSITE, 
+                    !IS_RESOLVE_PROXIES, 
+                    !IS_UNSETTABLE, 
+                    IS_UNIQUE, 
+                    !IS_DERIVED, 
+                    IS_ORDERED );
 
-    initEClass(this.iWorkflowEClass, IWorkflow.class, "IWorkflow", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-    initEReference(getIWorkflow_Nodes(), this.getIWorkflowNode(), this.getIWorkflowNode_Workflow(), "nodes", null, 0, -1, IWorkflow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-    initEReference(getIWorkflow_Links(), this.getILink(), this.getILink_Workflow(), "links", null, 0, -1, IWorkflow.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+    initEClass( this.iWorkflowJobEClass,
+                IWorkflowJob.class,
+                "IWorkflowJob",  //$NON-NLS-1$
+                !IS_ABSTRACT, 
+                !IS_INTERFACE, 
+                IS_GENERATED_INSTANCE_CLASS );
+    initEAttribute( getIWorkflowJob_JobDescription(),
+                    this.ecorePackage.getEString(),
+                    "jobDescription",  //$NON-NLS-1$
+                    null, 
+                    1, 
+                    1, 
+                    IWorkflowJob.class, 
+                    !IS_TRANSIENT, 
+                    !IS_VOLATILE, 
+                    IS_CHANGEABLE, 
+                    !IS_UNSETTABLE, 
+                    !IS_ID, 
+                    IS_UNIQUE, 
+                    !IS_DERIVED, 
+                    IS_ORDERED ); 
 
-    initEClass(this.iWorkflowJobEClass, IWorkflowJob.class, "IWorkflowJob", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-    initEAttribute(getIWorkflowJob_JobDescription(), this.ecorePackage.getEString(), "jobDescription", null, 1, 1, IWorkflowJob.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
+    initEClass( this.iWorkflowElementEClass,
+                IWorkflowElement.class,
+                "IWorkflowElement",  //$NON-NLS-1$
+                IS_ABSTRACT, 
+                !IS_INTERFACE, 
+                IS_GENERATED_INSTANCE_CLASS );
+    initEAttribute( getIWorkflowElement_Name(),
+                    this.ecorePackage.getEString(),
+                    "name",  //$NON-NLS-1$
+                    null, 
+                    0, 
+                    1, 
+                    IWorkflowElement.class, 
+                    !IS_TRANSIENT, 
+                    !IS_VOLATILE, 
+                    IS_CHANGEABLE, 
+                    !IS_UNSETTABLE, 
+                    !IS_ID, 
+                    IS_UNIQUE, 
+                    !IS_DERIVED, 
+                    IS_ORDERED );
+    initEAttribute( getIWorkflowElement_Id(),
+                    this.ecorePackage.getEString(),
+                    "id",  //$NON-NLS-1$
+                    null, 
+                    1, 
+                    1, 
+                    IWorkflowElement.class, 
+                    !IS_TRANSIENT, 
+                    IS_VOLATILE, 
+                    IS_CHANGEABLE, 
+                    !IS_UNSETTABLE, 
+                    IS_ID, 
+                    IS_UNIQUE, 
+                    !IS_DERIVED, 
+                    IS_ORDERED ); 
 
-    initEClass(this.iWorkflowElementEClass, IWorkflowElement.class, "IWorkflowElement", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-    initEAttribute(getIWorkflowElement_Name(), this.ecorePackage.getEString(), "name", null, 0, 1, IWorkflowElement.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-    initEAttribute(getIWorkflowElement_Id(), this.ecorePackage.getEString(), "id", null, 1, 1, IWorkflowElement.class, !IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-
-    initEClass(this.iWorkflowNodeEClass, IWorkflowNode.class, "IWorkflowNode", IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS); //$NON-NLS-1$
-    initEReference(getIWorkflowNode_Workflow(), this.getIWorkflow(), this.getIWorkflow_Nodes(), "workflow", null, 1, 1, IWorkflowNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-    initEReference(getIWorkflowNode_Outputs(), this.getIOutputPort(), this.getIOutputPort_Node(), "outputs", null, 1, -1, IWorkflowNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-    initEReference(getIWorkflowNode_Inputs(), this.getIInputPort(), this.getIInputPort_Node(), "inputs", null, 1, -1, IWorkflowNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$
-    initEAttribute(getIWorkflowNode_IsStart(), this.ecorePackage.getEBoolean(), "isStart", "false", 1, 1, IWorkflowNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
-    initEAttribute(getIWorkflowNode_IsFinish(), this.ecorePackage.getEBoolean(), "isFinish", "false", 1, 1, IWorkflowNode.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED); //$NON-NLS-1$ //$NON-NLS-2$
+    initEClass( this.iWorkflowNodeEClass,
+                IWorkflowNode.class,
+                "IWorkflowNode",  //$NON-NLS-1$
+                IS_ABSTRACT, 
+                !IS_INTERFACE, 
+                IS_GENERATED_INSTANCE_CLASS );
+    initEReference( getIWorkflowNode_Workflow(),
+                    this.getIWorkflow(),
+                    this.getIWorkflow_Nodes(),
+                    "workflow",  //$NON-NLS-1$
+                    null, 
+                    1, 
+                    1, 
+                    IWorkflowNode.class, 
+                    !IS_TRANSIENT, 
+                    !IS_VOLATILE, 
+                    IS_CHANGEABLE, 
+                    !IS_COMPOSITE, 
+                    !IS_RESOLVE_PROXIES, 
+                    !IS_UNSETTABLE, 
+                    IS_UNIQUE, 
+                    !IS_DERIVED, 
+                    IS_ORDERED ); 
+    initEReference( getIWorkflowNode_Outputs(),
+                    this.getIOutputPort(),
+                    this.getIOutputPort_Node(),
+                    "outputs",  //$NON-NLS-1$
+                    null, 
+                    1, 
+                    -1, 
+                    IWorkflowNode.class, 
+                    !IS_TRANSIENT, 
+                    !IS_VOLATILE, 
+                    IS_CHANGEABLE, 
+                    IS_COMPOSITE, 
+                    !IS_RESOLVE_PROXIES, 
+                    !IS_UNSETTABLE, 
+                    IS_UNIQUE, 
+                    !IS_DERIVED, 
+                    IS_ORDERED );
+    initEReference( getIWorkflowNode_Inputs(),
+                    this.getIInputPort(),
+                    this.getIInputPort_Node(),
+                    "inputs",  //$NON-NLS-1$
+                    null, 
+                    1, 
+                    -1, 
+                    IWorkflowNode.class, 
+                    !IS_TRANSIENT, 
+                    !IS_VOLATILE, 
+                    IS_CHANGEABLE, 
+                    IS_COMPOSITE, 
+                    !IS_RESOLVE_PROXIES, 
+                    !IS_UNSETTABLE, 
+                    IS_UNIQUE, 
+                    !IS_DERIVED, 
+                    IS_ORDERED );
+    initEAttribute( getIWorkflowNode_IsStart(),
+                    this.ecorePackage.getEBoolean(),
+                    "isStart",  //$NON-NLS-1$
+                    "false",  //$NON-NLS-1$
+                    1, 
+                    1, 
+                    IWorkflowNode.class, 
+                    !IS_TRANSIENT, 
+                    !IS_VOLATILE, 
+                    IS_CHANGEABLE, 
+                    !IS_UNSETTABLE, 
+                    !IS_ID, 
+                    IS_UNIQUE, 
+                    !IS_DERIVED, 
+                    IS_ORDERED ); 
+    initEAttribute( getIWorkflowNode_IsFinish(),
+                    this.ecorePackage.getEBoolean(),
+                    "isFinish",  //$NON-NLS-1$
+                    "false",  //$NON-NLS-1$
+                    1, 
+                    1, 
+                    IWorkflowNode.class, 
+                    !IS_TRANSIENT, 
+                    !IS_VOLATILE, 
+                    IS_CHANGEABLE, 
+                    !IS_UNSETTABLE, 
+                    !IS_ID, IS_UNIQUE, 
+                    !IS_DERIVED, 
+                    IS_ORDERED ); 
 
     // Create resource
     createResource(eNS_URI);

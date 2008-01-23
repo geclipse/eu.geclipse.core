@@ -38,7 +38,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>IOutput Port</b></em>'.
+ * An implementation of the model object '<em><b>IOutputPort</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
@@ -101,7 +101,9 @@ public class OutputPortImpl extends PortImpl implements IOutputPort
    */
   public NotificationChain basicSetNode(IWorkflowNode newNode, NotificationChain msgs)
   {
-    msgs = eBasicSetContainer((InternalEObject)newNode, IWorkflowPackage.IOUTPUT_PORT__NODE, msgs);
+    msgs = eBasicSetContainer( ( InternalEObject )newNode,
+                               IWorkflowPackage.IOUTPUT_PORT__NODE,
+                               msgs );
     return msgs;
   }
 
@@ -112,7 +114,8 @@ public class OutputPortImpl extends PortImpl implements IOutputPort
    */
   public void setNode(IWorkflowNode newNode)
   {
-    if (newNode != eInternalContainer() || (this.eContainerFeatureID != IWorkflowPackage.IOUTPUT_PORT__NODE && newNode != null))
+    if( newNode != eInternalContainer()
+        || ( this.eContainerFeatureID != IWorkflowPackage.IOUTPUT_PORT__NODE && newNode != null ) )
     {
       if (EcoreUtil.isAncestor(this, newNode))
         throw new IllegalArgumentException("Recursive containment not allowed for " + toString()); //$NON-NLS-1$
@@ -120,12 +123,19 @@ public class OutputPortImpl extends PortImpl implements IOutputPort
       if (eInternalContainer() != null)
         msgs = eBasicRemoveFromContainer(msgs);
       if (newNode != null)
-        msgs = ((InternalEObject)newNode).eInverseAdd(this, IWorkflowPackage.IWORKFLOW_NODE__OUTPUTS, IWorkflowNode.class, msgs);
+        msgs = ( ( InternalEObject )newNode ).eInverseAdd( this,
+                                                           IWorkflowPackage.IWORKFLOW_NODE__OUTPUTS,
+                                                           IWorkflowNode.class,
+                                                           msgs );
       msgs = basicSetNode(newNode, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, IWorkflowPackage.IOUTPUT_PORT__NODE, newNode, newNode));
+      eNotify( new ENotificationImpl( this,
+                                      Notification.SET,
+                                      IWorkflowPackage.IOUTPUT_PORT__NODE,
+                                      newNode,
+                                      newNode ) );
   }
 
   /**
@@ -137,7 +147,10 @@ public class OutputPortImpl extends PortImpl implements IOutputPort
   {
     if (this.links == null)
     {
-      this.links = new EObjectWithInverseResolvingEList<ILink>(ILink.class, this, IWorkflowPackage.IOUTPUT_PORT__LINKS, IWorkflowPackage.ILINK__SOURCE);
+      this.links = new EObjectWithInverseResolvingEList<ILink>( ILink.class,
+                                                                this,
+                                                                IWorkflowPackage.IOUTPUT_PORT__LINKS,
+                                                                IWorkflowPackage.ILINK__SOURCE );
     }
     return this.links;
   }
@@ -149,7 +162,9 @@ public class OutputPortImpl extends PortImpl implements IOutputPort
    */
   @SuppressWarnings("unchecked")
   @Override
-  public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+  public NotificationChain eInverseAdd( InternalEObject otherEnd,
+                                        int featureID,
+                                        NotificationChain msgs )
   {
     switch (featureID)
     {
@@ -169,7 +184,9 @@ public class OutputPortImpl extends PortImpl implements IOutputPort
    * @generated
    */
   @Override
-  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+  public NotificationChain eInverseRemove( InternalEObject otherEnd,
+                                           int featureID,
+                                           NotificationChain msgs )
   {
     switch (featureID)
     {
@@ -192,7 +209,10 @@ public class OutputPortImpl extends PortImpl implements IOutputPort
     switch (this.eContainerFeatureID)
     {
       case IWorkflowPackage.IOUTPUT_PORT__NODE:
-        return eInternalContainer().eInverseRemove(this, IWorkflowPackage.IWORKFLOW_NODE__OUTPUTS, IWorkflowNode.class, msgs);
+        return eInternalContainer().eInverseRemove( this,
+                                                    IWorkflowPackage.IWORKFLOW_NODE__OUTPUTS,
+                                                    IWorkflowNode.class,
+                                                    msgs );
     }
     return super.eBasicRemoveFromContainerFeature(msgs);
   }

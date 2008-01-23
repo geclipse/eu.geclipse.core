@@ -45,7 +45,7 @@ public class WorkflowPaletteFactory {
    * @generated NOT
    */
   private PaletteContainer createWorkflowGroup() {
-    PaletteGroup paletteContainer = new PaletteGroup( Messages.getString("WorkflowGroup_title") ); //$NON-NLS-1$
+    PaletteGroup paletteContainer = new PaletteGroup( Messages.getString( "WorkflowGroup_title" ) ); //$NON-NLS-1$
     paletteContainer.setDescription( Messages.getString("WorkflowGroup_desc") ); //$NON-NLS-1$
     paletteContainer.add( createLinkCreationTool() );
     paletteContainer.add( createInputPortCreationTool() );

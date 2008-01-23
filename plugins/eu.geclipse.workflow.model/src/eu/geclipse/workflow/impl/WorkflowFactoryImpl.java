@@ -27,7 +27,7 @@ import org.eclipse.emf.ecore.plugin.EcorePlugin;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model <b>Factory</b>.
+ * An implementation of the model <b>IWorkflowFactory</b>.
  * <!-- end-user-doc -->
  * @generated
  */
@@ -43,7 +43,7 @@ public class WorkflowFactoryImpl extends EFactoryImpl implements IWorkflowFactor
   {
     try
     {
-      IWorkflowFactory theWorkflowFactory = (IWorkflowFactory)EPackage.Registry.INSTANCE.getEFactory("http:///eu/geclipse/workflow.ecore");  //$NON-NLS-1$
+      IWorkflowFactory theWorkflowFactory = ( IWorkflowFactory )EPackage.Registry.INSTANCE.getEFactory( "http:///eu/geclipse/workflow.ecore" ); //$NON-NLS-1$
       if (theWorkflowFactory != null)
       {
         return theWorkflowFactory;

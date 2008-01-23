@@ -90,7 +90,7 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
       throw new CoreException( new Status( IStatus.ERROR,
                                            WorkflowDiagramEditorPlugin.ID,
                                            0,
-                                           NLS.bind( Messages.getString("WorkflowDocumentProvider_IncorrectInputError"), //$NON-NLS-1$
+                                           NLS.bind( Messages.getString( "WorkflowDocumentProvider_IncorrectInputError" ), //$NON-NLS-1$
                                                      new Object[]{
                                                        element,
                                                        "org.eclipse.ui.part.FileEditorInput", "org.eclipse.emf.common.ui.URIEditorInput"} ), //$NON-NLS-1$ //$NON-NLS-2$ 
@@ -115,7 +115,7 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
       throw new CoreException( new Status( IStatus.ERROR,
                                            WorkflowDiagramEditorPlugin.ID,
                                            0,
-                                           NLS.bind( Messages.getString("WorkflowDocumentProvider_IncorrectInputError"), //$NON-NLS-1$
+                                           NLS.bind( Messages.getString( "WorkflowDocumentProvider_IncorrectInputError" ), //$NON-NLS-1$
                                                      new Object[]{
                                                        element,
                                                        "org.eclipse.ui.part.FileEditorInput", "org.eclipse.emf.common.ui.URIEditorInput"} ), //$NON-NLS-1$ //$NON-NLS-2$ 
@@ -261,7 +261,7 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
             }
           }
         }
-        throw new RuntimeException( Messages.getString("WorkflowDocumentProvider_NoDiagramInResourceError") ); //$NON-NLS-1$
+        throw new RuntimeException( Messages.getString( "WorkflowDocumentProvider_NoDiagramInResourceError" ) ); //$NON-NLS-1$
       } catch( Exception e ) {
         CoreException thrownExcp = null;
         if( e instanceof CoreException ) {
@@ -377,7 +377,8 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
         } catch( CoreException ex ) {
           WorkflowDiagramEditorPlugin.getInstance()
             .logError( Messages.getString("WorkflowDocumentProvider_isModifiable"), ex ); //$NON-NLS-1$
-          // Error message to log was initially taken from org.eclipse.gmf.runtime.diagram.ui.resources.editor.ide.internal.l10n.EditorMessages.StorageDocumentProvider_isModifiable
+          // Error message to log was initially taken from 
+          // org.eclipse.gmf.runtime.diagram.ui.resources.editor.ide.internal.l10n.EditorMessages.StorageDocumentProvider_isModifiable
         }
       }
       return info.isReadOnly();
@@ -405,7 +406,8 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
         } catch( CoreException ex ) {
           WorkflowDiagramEditorPlugin.getInstance()
             .logError( Messages.getString("WorkflowDocumentProvider_isModifiable"), ex ); //$NON-NLS-1$
-          // Error message to log was initially taken from org.eclipse.gmf.runtime.diagram.ui.resources.editor.ide.internal.l10n.EditorMessages.StorageDocumentProvider_isModifiable
+          // Error message to log was initially taken from 
+          // org.eclipse.gmf.runtime.diagram.ui.resources.editor.ide.internal.l10n.EditorMessages.StorageDocumentProvider_isModifiable
         }
       }
       return info.isModifiable();
@@ -661,7 +663,8 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
                                              NLS.bind( Messages.getString("WorkflowDocumentProvider_IncorrectInputError"), //$NON-NLS-1$
                                                        new Object[]{
                                                          element,
-                                                         "org.eclipse.ui.part.FileEditorInput", "org.eclipse.emf.common.ui.URIEditorInput"} ), //$NON-NLS-1$ //$NON-NLS-2$ 
+                                                         "org.eclipse.ui.part.FileEditorInput",  //$NON-NLS-1$
+                                                         "org.eclipse.emf.common.ui.URIEditorInput"} ), //$NON-NLS-1$  
                                              null ) );
       }
       if( false == document instanceof IDiagramDocument ) {
@@ -669,7 +672,8 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
         throw new CoreException( new Status( IStatus.ERROR,
                                              WorkflowDiagramEditorPlugin.ID,
                                              0,
-                                             "Incorrect document used: " + document + " instead of org.eclipse.gmf.runtime.diagram.ui.resources.editor.document.IDiagramDocument", null ) ); //$NON-NLS-1$ //$NON-NLS-2$
+                                             "Incorrect document used: " + document + " instead of org.eclipse.gmf.runtime.diagram.ui.resources.editor.document.IDiagramDocument",  //$NON-NLS-1$ //$NON-NLS-2$
+                                             null ) );
       }
       IDiagramDocument diagramDocument = ( IDiagramDocument )document;
       final Resource newResource = diagramDocument.getEditingDomain()
@@ -727,7 +731,8 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
         WorkflowDiagramEditorPlugin.getInstance()
           .logError( Messages.getString("WorkflowDocumentProvider_handleElementContentChanged"), //$NON-NLS-1$
                      ex );
-        // Error message to log was initially taken from org.eclipse.gmf.runtime.diagram.ui.resources.editor.ide.internal.l10n.EditorMessages.FileDocumentProvider_handleElementContentChanged
+        // Error message to log was initially taken from 
+        // org.eclipse.gmf.runtime.diagram.ui.resources.editor.ide.internal.l10n.EditorMessages.FileDocumentProvider_handleElementContentChanged
       }
     }
     changedResource.unload();

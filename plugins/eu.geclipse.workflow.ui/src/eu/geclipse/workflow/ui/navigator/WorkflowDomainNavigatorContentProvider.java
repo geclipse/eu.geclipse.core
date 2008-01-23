@@ -44,7 +44,7 @@ public class WorkflowDomainNavigatorContentProvider implements ICommonContentPro
   /**
    * @generated
    */
-  private AdapterFactoryContentProvider myAdapterFctoryContentProvier;
+  private AdapterFactoryContentProvider myAdapterFactoryContentProvider;
   /**
    * @generated
    */
@@ -70,7 +70,7 @@ public class WorkflowDomainNavigatorContentProvider implements ICommonContentPro
    * @generated
    */
   public WorkflowDomainNavigatorContentProvider() {
-    myAdapterFctoryContentProvier = new AdapterFactoryContentProvider( WorkflowDiagramEditorPlugin.getInstance()
+    myAdapterFactoryContentProvider = new AdapterFactoryContentProvider( WorkflowDiagramEditorPlugin.getInstance()
       .getItemProvidersAdapterFactory() );
     TransactionalEditingDomain editingDomain = GMFEditingDomainFactory.INSTANCE.createEditingDomain();
     myEditingDomain = ( AdapterFactoryEditingDomain )editingDomain;
@@ -217,11 +217,11 @@ public class WorkflowDomainNavigatorContentProvider implements ICommonContentPro
         .toString(), true );
       Resource resource = myEditingDomain.getResourceSet()
         .getResource( fileURI, true );
-      return wrapEObjects( myAdapterFctoryContentProvier.getChildren( resource ),
+      return wrapEObjects( myAdapterFactoryContentProvider.getChildren( resource ),
                            parentElement );
     }
     if( parentElement instanceof WorkflowDomainNavigatorItem ) {
-      return wrapEObjects( myAdapterFctoryContentProvier.getChildren( ( ( WorkflowDomainNavigatorItem )parentElement ).getEObject() ),
+      return wrapEObjects( myAdapterFactoryContentProvider.getChildren( ( ( WorkflowDomainNavigatorItem )parentElement ).getEObject() ),
                            parentElement );
     }
     return EMPTY_ARRAY;
@@ -236,7 +236,7 @@ public class WorkflowDomainNavigatorContentProvider implements ICommonContentPro
       if( objects[ i ] instanceof EObject ) {
         result.add( new WorkflowDomainNavigatorItem( ( EObject )objects[ i ],
                                                      parentElement,
-                                                     myAdapterFctoryContentProvier ) );
+                                                     myAdapterFactoryContentProvider ) );
       }
     }
     return result.toArray();

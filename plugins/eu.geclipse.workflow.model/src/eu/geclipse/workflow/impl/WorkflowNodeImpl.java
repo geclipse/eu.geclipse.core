@@ -39,7 +39,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
 
 /**
  * <!-- begin-user-doc -->
- * An implementation of the model object '<em><b>IWorkflow Node</b></em>'.
+ * An implementation of the model object '<em><b>IWorkflowNode</b></em>'.
  * <!-- end-user-doc -->
  * <p>
  * The following features are implemented:
@@ -144,7 +144,8 @@ public abstract class WorkflowNodeImpl extends WorkflowElementImpl implements IW
    */
   public IWorkflow getWorkflow()
   {
-    if (this.eContainerFeatureID != IWorkflowPackage.IWORKFLOW_NODE__WORKFLOW) return null;
+    if (this.eContainerFeatureID != IWorkflowPackage.IWORKFLOW_NODE__WORKFLOW) 
+      return null;
     return (IWorkflow)eContainer();
   }
 
@@ -155,7 +156,9 @@ public abstract class WorkflowNodeImpl extends WorkflowElementImpl implements IW
    */
   public NotificationChain basicSetWorkflow(IWorkflow newWorkflow, NotificationChain msgs)
   {
-    msgs = eBasicSetContainer((InternalEObject)newWorkflow, IWorkflowPackage.IWORKFLOW_NODE__WORKFLOW, msgs);
+    msgs = eBasicSetContainer( ( InternalEObject )newWorkflow,
+                               IWorkflowPackage.IWORKFLOW_NODE__WORKFLOW,
+                               msgs );
     return msgs;
   }
 
@@ -166,7 +169,8 @@ public abstract class WorkflowNodeImpl extends WorkflowElementImpl implements IW
    */
   public void setWorkflow(IWorkflow newWorkflow)
   {
-    if (newWorkflow != eInternalContainer() || (this.eContainerFeatureID != IWorkflowPackage.IWORKFLOW_NODE__WORKFLOW && newWorkflow != null))
+    if( newWorkflow != eInternalContainer()
+        || ( this.eContainerFeatureID != IWorkflowPackage.IWORKFLOW_NODE__WORKFLOW && newWorkflow != null ) )
     {
       if (EcoreUtil.isAncestor(this, newWorkflow))
         throw new IllegalArgumentException("Recursive containment not allowed for " + toString());
@@ -174,12 +178,19 @@ public abstract class WorkflowNodeImpl extends WorkflowElementImpl implements IW
       if (eInternalContainer() != null)
         msgs = eBasicRemoveFromContainer(msgs);
       if (newWorkflow != null)
-        msgs = ((InternalEObject)newWorkflow).eInverseAdd(this, IWorkflowPackage.IWORKFLOW__NODES, IWorkflow.class, msgs);
+        msgs = ( ( InternalEObject )newWorkflow ).eInverseAdd( this,
+                                                               IWorkflowPackage.IWORKFLOW__NODES,
+                                                               IWorkflow.class,
+                                                               msgs );
       msgs = basicSetWorkflow(newWorkflow, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, IWorkflowPackage.IWORKFLOW_NODE__WORKFLOW, newWorkflow, newWorkflow));
+      eNotify( new ENotificationImpl( this,
+                                      Notification.SET,
+                                      IWorkflowPackage.IWORKFLOW_NODE__WORKFLOW,
+                                      newWorkflow,
+                                      newWorkflow ) );
   }
 
   /**
@@ -191,7 +202,10 @@ public abstract class WorkflowNodeImpl extends WorkflowElementImpl implements IW
   {
     if (this.outputs == null)
     {
-      this.outputs = new EObjectContainmentWithInverseEList<IOutputPort>(IOutputPort.class, this, IWorkflowPackage.IWORKFLOW_NODE__OUTPUTS, IWorkflowPackage.IOUTPUT_PORT__NODE);
+      this.outputs = new EObjectContainmentWithInverseEList<IOutputPort>( IOutputPort.class,
+                                                                          this,
+                                                                          IWorkflowPackage.IWORKFLOW_NODE__OUTPUTS,
+                                                                          IWorkflowPackage.IOUTPUT_PORT__NODE );
     }
     return this.outputs;
   }
@@ -205,7 +219,10 @@ public abstract class WorkflowNodeImpl extends WorkflowElementImpl implements IW
   {
     if (this.inputs == null)
     {
-      this.inputs = new EObjectContainmentWithInverseEList<IInputPort>(IInputPort.class, this, IWorkflowPackage.IWORKFLOW_NODE__INPUTS, IWorkflowPackage.IINPUT_PORT__NODE);
+      this.inputs = new EObjectContainmentWithInverseEList<IInputPort>( IInputPort.class,
+                                                                        this,
+                                                                        IWorkflowPackage.IWORKFLOW_NODE__INPUTS,
+                                                                        IWorkflowPackage.IINPUT_PORT__NODE );
     }
     return this.inputs;
   }
@@ -230,7 +247,11 @@ public abstract class WorkflowNodeImpl extends WorkflowElementImpl implements IW
     boolean oldIsStart = this.isStart;
     this.isStart = newIsStart;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, IWorkflowPackage.IWORKFLOW_NODE__IS_START, oldIsStart, this.isStart));
+      eNotify( new ENotificationImpl( this,
+                                      Notification.SET,
+                                      IWorkflowPackage.IWORKFLOW_NODE__IS_START,
+                                      oldIsStart,
+                                      this.isStart ) );
   }
 
   /**
@@ -253,7 +274,11 @@ public abstract class WorkflowNodeImpl extends WorkflowElementImpl implements IW
     boolean oldIsFinish = this.isFinish;
     this.isFinish = newIsFinish;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, IWorkflowPackage.IWORKFLOW_NODE__IS_FINISH, oldIsFinish, this.isFinish));
+      eNotify( new ENotificationImpl( this,
+                                      Notification.SET,
+                                      IWorkflowPackage.IWORKFLOW_NODE__IS_FINISH,
+                                      oldIsFinish,
+                                      this.isFinish ) );
   }
 
   /**
@@ -263,7 +288,9 @@ public abstract class WorkflowNodeImpl extends WorkflowElementImpl implements IW
    */
   @SuppressWarnings("unchecked")
   @Override
-  public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+  public NotificationChain eInverseAdd( InternalEObject otherEnd,
+                                        int featureID,
+                                        NotificationChain msgs )
   {
     switch (featureID)
     {
@@ -272,9 +299,11 @@ public abstract class WorkflowNodeImpl extends WorkflowElementImpl implements IW
           msgs = eBasicRemoveFromContainer(msgs);
         return basicSetWorkflow((IWorkflow)otherEnd, msgs);
       case IWorkflowPackage.IWORKFLOW_NODE__OUTPUTS:
-        return ((InternalEList<InternalEObject>)(InternalEList<?>)getOutputs()).basicAdd(otherEnd, msgs);
+        return ( ( InternalEList<InternalEObject> )( InternalEList<?> )getOutputs() ).basicAdd( otherEnd,
+                                                                                                msgs );
       case IWorkflowPackage.IWORKFLOW_NODE__INPUTS:
-        return ((InternalEList<InternalEObject>)(InternalEList<?>)getInputs()).basicAdd(otherEnd, msgs);
+        return ( ( InternalEList<InternalEObject> )( InternalEList<?> )getInputs() ).basicAdd( otherEnd,
+                                                                                               msgs );
     }
     return super.eInverseAdd(otherEnd, featureID, msgs);
   }
@@ -285,7 +314,9 @@ public abstract class WorkflowNodeImpl extends WorkflowElementImpl implements IW
    * @generated
    */
   @Override
-  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+  public NotificationChain eInverseRemove( InternalEObject otherEnd,
+                                           int featureID,
+                                           NotificationChain msgs )
   {
     switch (featureID)
     {
@@ -310,7 +341,10 @@ public abstract class WorkflowNodeImpl extends WorkflowElementImpl implements IW
     switch (this.eContainerFeatureID)
     {
       case IWorkflowPackage.IWORKFLOW_NODE__WORKFLOW:
-        return eInternalContainer().eInverseRemove(this, IWorkflowPackage.IWORKFLOW__NODES, IWorkflow.class, msgs);
+        return eInternalContainer().eInverseRemove( this,
+                                                    IWorkflowPackage.IWORKFLOW__NODES,
+                                                    IWorkflow.class,
+                                                    msgs );
     }
     return super.eBasicRemoveFromContainerFeature(msgs);
   }

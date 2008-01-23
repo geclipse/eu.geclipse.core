@@ -32,8 +32,9 @@ import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
 /**
  * This is the item provider adapter for a
- * {@link eu.geclipse.workflow.IInputPort} object. <!-- begin-user-doc --> <!--
- * end-user-doc -->
+ * {@link eu.geclipse.workflow.IInputPort} object. 
+ * <!-- begin-user-doc --> 
+ * <!-- end-user-doc -->
  * 
  * @generated
  */
@@ -43,8 +44,9 @@ public class InputPortItemProvider extends PortItemProvider
 {
 
   /**
-   * This constructs an instance from a factory and a notifier. <!--
-   * begin-user-doc --> <!-- end-user-doc -->
+   * This constructs an instance from a factory and a notifier. 
+   * <!-- begin-user-doc --> 
+   * <!-- end-user-doc -->
    * 
    * @generated
    */
@@ -53,8 +55,9 @@ public class InputPortItemProvider extends PortItemProvider
   }
 
   /**
-   * This returns the property descriptors for the adapted class. <!--
-   * begin-user-doc --> <!-- end-user-doc -->
+   * This returns the property descriptors for the adapted class. 
+   * <!-- begin-user-doc --> 
+   * <!-- end-user-doc -->
    * 
    * @generated
    */
@@ -69,13 +72,14 @@ public class InputPortItemProvider extends PortItemProvider
   }
 
   /**
-   * This adds a property descriptor for the Links feature. <!-- begin-user-doc
-   * --> <!-- end-user-doc -->
+   * This adds a property descriptor for the Links feature. 
+   * <!-- begin-user-doc --> 
+   * <!-- end-user-doc -->
    * 
    * @generated
    */
   protected void addLinksPropertyDescriptor( Object object ) {
-    this.itemPropertyDescriptors.add( createItemPropertyDescriptor( ( ( ComposeableAdapterFactory )this.adapterFactory ).getRootAdapterFactory(),
+    this.itemPropertyDescriptors.add( createItemPropertyDescriptor( ( ( ComposeableAdapterFactory )adapterFactory ).getRootAdapterFactory(),
                                                                getResourceLocator(),
                                                                getString( "_UI_IInputPort_links_feature" ), //$NON-NLS-1$
                                                                getString( "_UI_PropertyDescriptor_description", //$NON-NLS-1$
@@ -91,11 +95,11 @@ public class InputPortItemProvider extends PortItemProvider
   }
 
   /**
-   * This returns IInputPort.gif. 
+   * This returns InputPort.gif. 
    * <!-- begin-user-doc --> 
    * <!-- end-user-doc -->
    * 
-   * @generated
+   * @generated NOT
    */
   @Override
   public Object getImage( Object object )
@@ -131,8 +135,9 @@ public class InputPortItemProvider extends PortItemProvider
   /**
    * This handles model notifications by calling {@link #updateChildren} to
    * update any cached children and by creating a viewer notification, which it
-   * passes to {@link #fireNotifyChanged}. <!-- begin-user-doc --> <!--
-   * end-user-doc -->
+   * passes to {@link #fireNotifyChanged}. 
+   * <!-- begin-user-doc --> 
+   * <!-- end-user-doc -->
    * 
    * @generated
    */

@@ -98,7 +98,10 @@ public class WorkflowImpl extends WorkflowElementImpl implements IWorkflow
   {
     if (this.nodes == null)
     {
-      this.nodes = new EObjectContainmentWithInverseEList<IWorkflowNode>(IWorkflowNode.class, this, IWorkflowPackage.IWORKFLOW__NODES, IWorkflowPackage.IWORKFLOW_NODE__WORKFLOW);
+      this.nodes = new EObjectContainmentWithInverseEList<IWorkflowNode>( IWorkflowNode.class,
+                                                                          this,
+                                                                          IWorkflowPackage.IWORKFLOW__NODES,
+                                                                          IWorkflowPackage.IWORKFLOW_NODE__WORKFLOW );
     }
     return this.nodes;
   }
@@ -112,7 +115,10 @@ public class WorkflowImpl extends WorkflowElementImpl implements IWorkflow
   {
     if (this.links == null)
     {
-      this.links = new EObjectContainmentWithInverseEList<ILink>(ILink.class, this, IWorkflowPackage.IWORKFLOW__LINKS, IWorkflowPackage.ILINK__WORKFLOW);
+      this.links = new EObjectContainmentWithInverseEList<ILink>( ILink.class,
+                                                                  this,
+                                                                  IWorkflowPackage.IWORKFLOW__LINKS,
+                                                                  IWorkflowPackage.ILINK__WORKFLOW );
     }
     return this.links;
   }
@@ -124,14 +130,18 @@ public class WorkflowImpl extends WorkflowElementImpl implements IWorkflow
    */
   @SuppressWarnings("unchecked")
   @Override
-  public NotificationChain eInverseAdd(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+  public NotificationChain eInverseAdd( InternalEObject otherEnd,
+                                        int featureID,
+                                        NotificationChain msgs )
   {
     switch (featureID)
     {
       case IWorkflowPackage.IWORKFLOW__NODES:
-        return ((InternalEList<InternalEObject>)(InternalEList<?>)getNodes()).basicAdd(otherEnd, msgs);
+        return ( ( InternalEList<InternalEObject> )( InternalEList<?> )getNodes() ).basicAdd( otherEnd,
+                                                                                              msgs );
       case IWorkflowPackage.IWORKFLOW__LINKS:
-        return ((InternalEList<InternalEObject>)(InternalEList<?>)getLinks()).basicAdd(otherEnd, msgs);
+        return ( ( InternalEList<InternalEObject> )( InternalEList<?> )getLinks() ).basicAdd( otherEnd,
+                                                                                              msgs );
     }
     return super.eInverseAdd(otherEnd, featureID, msgs);
   }
@@ -142,7 +152,9 @@ public class WorkflowImpl extends WorkflowElementImpl implements IWorkflow
    * @generated
    */
   @Override
-  public NotificationChain eInverseRemove(InternalEObject otherEnd, int featureID, NotificationChain msgs)
+  public NotificationChain eInverseRemove( InternalEObject otherEnd,
+                                           int featureID,
+                                           NotificationChain msgs )
   {
     switch (featureID)
     {

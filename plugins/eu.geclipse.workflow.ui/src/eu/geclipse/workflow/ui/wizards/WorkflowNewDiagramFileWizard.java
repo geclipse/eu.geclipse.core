@@ -187,8 +187,9 @@ public class WorkflowNewDiagramFileWizard extends Wizard {
     /**
      * @generated NOT
      */
+    @Override
     protected boolean validatePage() {
-      if( selectedModelElement == null ) {
+      if( this.selectedModelElement == null ) {
         setErrorMessage( Messages.getString("WorkflowNewDiagramFileWizard_RootSelectionPageNoSelectionMessage") ); //$NON-NLS-1$
         return false;
       }

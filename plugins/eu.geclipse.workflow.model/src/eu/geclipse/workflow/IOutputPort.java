@@ -19,7 +19,7 @@ import org.eclipse.emf.common.util.EList;
 
 /**
  * <!-- begin-user-doc -->
- * A representation of the model object '<em><b>IOutput Port</b></em>'.
+ * A representation of the model object '<em><b>IOutputPort</b></em>'.
  * <!-- end-user-doc -->
  *
  * <p>
@@ -38,12 +38,9 @@ public interface IOutputPort extends IPort
 {
   /**
    * Returns the value of the '<em><b>Node</b></em>' container reference.
-   * It is bidirectional and its opposite is '{@link eu.geclipse.workflow.IWorkflowNode#getOutputs <em>Outputs</em>}'.
+   * It is bidirectional and its opposite is 
+   * '{@link eu.geclipse.workflow.IWorkflowNode#getOutputs <em>Outputs</em>}'.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Node</em>' container reference isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Node</em>' container reference.
    * @see #setNode(IWorkflowNode)
@@ -55,7 +52,8 @@ public interface IOutputPort extends IPort
   IWorkflowNode getNode();
 
   /**
-   * Sets the value of the '{@link eu.geclipse.workflow.IOutputPort#getNode <em>Node</em>}' container reference.
+   * Sets the value of the 
+   * '{@link eu.geclipse.workflow.IOutputPort#getNode <em>Node</em>}' container reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Node</em>' container reference.
@@ -67,12 +65,9 @@ public interface IOutputPort extends IPort
   /**
    * Returns the value of the '<em><b>Links</b></em>' reference list.
    * The list contents are of type {@link eu.geclipse.workflow.ILink}.
-   * It is bidirectional and its opposite is '{@link eu.geclipse.workflow.ILink#getSource <em>Source</em>}'.
+   * It is bidirectional and its opposite is 
+   * '{@link eu.geclipse.workflow.ILink#getSource <em>Source</em>}'.
    * <!-- begin-user-doc -->
-   * <p>
-   * If the meaning of the '<em>Links</em>' reference list isn't clear,
-   * there really should be more of a description here...
-   * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Links</em>' reference list.
    * @see eu.geclipse.workflow.IWorkflowPackage#getIOutputPort_Links()

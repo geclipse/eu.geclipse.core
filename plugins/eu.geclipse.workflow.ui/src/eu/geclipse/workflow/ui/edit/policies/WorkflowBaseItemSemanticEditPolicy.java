@@ -112,7 +112,8 @@ public class WorkflowBaseItemSemanticEditPolicy extends SemanticEditPolicy {
     IEditCommandRequest completedRequest = completeRequest( request );
     Object editHelperContext = completedRequest.getEditHelperContext();
     if( editHelperContext instanceof View
-        || ( editHelperContext instanceof IEditHelperContext && ( ( IEditHelperContext )editHelperContext ).getEObject() instanceof View ) )
+        || ( editHelperContext instanceof IEditHelperContext 
+            && ( ( IEditHelperContext )editHelperContext ).getEObject() instanceof View ) )
     {
       // no semantic commands are provided for pure design elements
       return null;
@@ -338,7 +339,9 @@ public class WorkflowBaseItemSemanticEditPolicy extends SemanticEditPolicy {
     for( Iterator it = view.getDiagram().getChildren().iterator(); it.hasNext(); )
     {
       View nextView = ( View )it.next();
-      if( nextView.getEAnnotation( "Shortcut" ) == null || !nextView.isSetElement() || nextView.getElement() != view.getElement() ) { //$NON-NLS-1$
+      if( nextView.getEAnnotation( "Shortcut" ) == null  //$NON-NLS-1$
+          || !nextView.isSetElement() 
+          || nextView.getElement() != view.getElement() ) { 
         continue;
       }
       command.add( getDestroyElementCommand( nextView ) );

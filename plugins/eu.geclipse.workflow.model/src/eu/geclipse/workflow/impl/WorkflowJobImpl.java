@@ -86,7 +86,11 @@ public class WorkflowJobImpl extends WorkflowNodeImpl implements IWorkflowJob
     String oldJobDescription = this.jobDescription;
     this.jobDescription = newJobDescription;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, IWorkflowPackage.IWORKFLOW_JOB__JOB_DESCRIPTION, oldJobDescription, this.jobDescription));
+      eNotify( new ENotificationImpl( this,
+                                      Notification.SET,
+                                      IWorkflowPackage.IWORKFLOW_JOB__JOB_DESCRIPTION,
+                                      oldJobDescription,
+                                      this.jobDescription ) );
   }
 
   /**
@@ -142,7 +146,9 @@ public class WorkflowJobImpl extends WorkflowNodeImpl implements IWorkflowJob
     switch (featureID)
     {
       case IWorkflowPackage.IWORKFLOW_JOB__JOB_DESCRIPTION:
-        return JOB_DESCRIPTION_EDEFAULT == null ? this.jobDescription != null : !JOB_DESCRIPTION_EDEFAULT.equals(this.jobDescription);
+        return JOB_DESCRIPTION_EDEFAULT == null
+                                               ? this.jobDescription != null
+                                               : !JOB_DESCRIPTION_EDEFAULT.equals( this.jobDescription );
     }
     return super.eIsSet(featureID);
   }
