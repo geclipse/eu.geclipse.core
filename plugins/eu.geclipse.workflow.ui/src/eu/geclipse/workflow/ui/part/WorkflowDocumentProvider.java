@@ -56,7 +56,6 @@ import org.eclipse.gmf.runtime.diagram.ui.resources.editor.document.DiagramDocum
 import org.eclipse.gmf.runtime.diagram.ui.resources.editor.document.IDiagramDocument;
 import org.eclipse.gmf.runtime.diagram.ui.resources.editor.document.IDiagramDocumentProvider;
 import org.eclipse.gmf.runtime.diagram.ui.resources.editor.document.IDocument;
-import org.eclipse.gmf.runtime.diagram.ui.resources.editor.internal.EditorStatusCodes;
 import org.eclipse.gmf.runtime.diagram.ui.resources.editor.internal.util.DiagramIOUtil;
 import org.eclipse.gmf.runtime.emf.commands.core.command.AbstractTransactionalCommand;
 import org.eclipse.gmf.runtime.emf.core.resources.GMFResourceFactory;
@@ -77,6 +76,30 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
   implements IDiagramDocumentProvider
 {
 
+  /**
+   * NOTE: The following four codes are hard-coded into this file from 
+   * org.eclipse.gmf.runtime.diagram.ui.resources.editor.internal.EditorStatusCodes
+   * as the use of internal classes is discouraged and the GMF guys did not seem
+   * to have a solution to this problem.
+   */
+  public static final int OK = 0;
+  public static final int ERROR = 1;
+  /**
+   * Status code indicating that an error occurred with a resource, such as
+   * loading an image file.
+   * 
+   * Set to 5 to be consistent with CommonUIStatusCodes.
+   */
+  public static final int RESOURCE_FAILURE = 5;
+  public static final int WARNING = 7;
+  /**
+   * NOTE: The above four codes are hard-coded into this file from 
+   * org.eclipse.gmf.runtime.diagram.ui.resources.editor.internal.EditorStatusCodes
+   * as the use of internal classes is discouraged and the GMF guys did not seem
+   * to have a solution to this problem.
+   */
+
+  
   /**
    * @generated NOT
    */
@@ -169,6 +192,7 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
     document.setEditingDomain( createEditingDomain() );
     return document;
   }
+
 
   /**
    * @generated
@@ -631,7 +655,8 @@ public class WorkflowDocumentProvider extends AbstractDocumentProvider
               fireElementStateChangeFailed( element );
               throw new CoreException( new Status( IStatus.ERROR,
                                                    WorkflowDiagramEditorPlugin.ID,
-                                                   EditorStatusCodes.RESOURCE_FAILURE,
+//                                                   EditorStatusCodes.RESOURCE_FAILURE,
+                                                   RESOURCE_FAILURE, 
                                                    e.getLocalizedMessage(),
                                                    null ) );
             }
