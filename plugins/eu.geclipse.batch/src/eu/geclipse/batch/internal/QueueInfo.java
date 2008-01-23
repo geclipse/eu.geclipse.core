@@ -141,27 +141,6 @@ public class QueueInfo implements IQueueInfo {
   }
 
   /**
-   * Returns a string representation of the state.
-   *
-   * @return The state as a string.
-   */
-  public String getStateAsString( ) {
-    String str = null;
-    switch (this.state) {
-      case E:
-        str = "enable"; //$NON-NLS-1$
-        break;
-      case D:
-        str = "disable"; //$NON-NLS-1$
-        break;
-      default:
-        str = ""; //$NON-NLS-1$
-    }
-
-    return str;
-  }
-
-  /**
    * @param state the state to set
    */
   public void setState( final QueueState state ) {
@@ -173,27 +152,6 @@ public class QueueInfo implements IQueueInfo {
    */
   public QueueRunState getRunState() {
     return this.runState;
-  }
-
-  /**
-   * Returns a string representation of the runState.
-   *
-   * @return The runState as a string.
-   */
-  public String getRunStateAsString( ) {
-    String str = null;
-    switch (this.runState) {
-      case R:
-        str = "running"; //$NON-NLS-1$
-        break;
-      case S:
-        str = "stopped"; //$NON-NLS-1$
-        break;
-      default:
-        str = ""; //$NON-NLS-1$
-    }
-
-    return str;
   }
 
   /**

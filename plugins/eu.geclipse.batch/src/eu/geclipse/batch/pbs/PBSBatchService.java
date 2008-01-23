@@ -1018,13 +1018,13 @@ public final class PBSBatchService extends AbstractBatchService {
   
   
   static int getMinutesFromDouble( final double value ) {
+    String m;
+    int result;
     
     BigDecimal b = new BigDecimal(String.valueOf( value ));
     long c = b.longValue();
     b = b.subtract(new BigDecimal(c));
     int s = b.toString().length();
-    String m = "";
-    int result;
     if( s == 3 ) {
       m = b.toString().substring(2, s);
       result = Integer.parseInt( m ) * 10;

@@ -162,13 +162,6 @@ public interface IQueueInfo {
   public QueueState getState();
 
   /**
-   * Returns a string representation of the state.
-   *
-   * @return The state as a string.
-   */
-  public String getStateAsString( );
-
-  /**
    * @param state the state to set
    */
   public void setState( QueueState state );
@@ -177,13 +170,6 @@ public interface IQueueInfo {
    * @return the runState
    */
   public QueueRunState getRunState();
-
-  /**
-   * Returns a string representation of the runState.
-   *
-   * @return The runState as a string.
-   */
-  public String getRunStateAsString( );
 
   /**
    * @param runState the runState to set

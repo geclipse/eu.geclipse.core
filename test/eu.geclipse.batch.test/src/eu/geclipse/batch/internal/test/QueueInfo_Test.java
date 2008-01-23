@@ -38,16 +38,18 @@ public class QueueInfo_Test {
    */
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
-    queue = new QueueInfo( "queue1", 0, null, null, null, 0, 0, null, 
+    queue = new QueueInfo( "queue1", 0, null, null, null, 0, 0, null,  //$NON-NLS-1$
                            IQueueInfo.QueueState.D, IQueueInfo.QueueRunState.R );
   }
 
   /**
-   * Test method for {@link eu.geclipse.batch.internal.QueueInfo#QueueInfo(java.lang.String, int, java.lang.String, java.lang.String, java.lang.String, int, int, java.lang.String, eu.geclipse.batch.IQueueInfo.QueueState, eu.geclipse.batch.IQueueInfo.QueueRunState)}.
+   * Test method for {@link eu.geclipse.batch.internal.QueueInfo#QueueInfo(java.lang.String, 
+   * int, java.lang.String, java.lang.String, java.lang.String, int, int, 
+   * java.lang.String, eu.geclipse.batch.IQueueInfo.QueueState, eu.geclipse.batch.IQueueInfo.QueueRunState)}.
    */
   @Test
   public void testQueueInfo() {
-    fail( "Not yet implemented" );
+    assertNotNull( queue );
   }
 
   /**
@@ -55,7 +57,8 @@ public class QueueInfo_Test {
    */
   @Test
   public void testGetLm() {
-    fail( "Not yet implemented" );
+    queue.setLm( "test" ); //$NON-NLS-1$
+    assertTrue( "test".equals( queue.getLm() ) ); //$NON-NLS-1$
   }
 
   /**
@@ -63,7 +66,8 @@ public class QueueInfo_Test {
    */
   @Test
   public void testSetLm() {
-    fail( "Not yet implemented" );
+    queue.setLm( "test2" ); //$NON-NLS-1$
+    assertTrue( "test2".equals( queue.getLm() ) ); //$NON-NLS-1$
   }
 
   /**
@@ -71,7 +75,8 @@ public class QueueInfo_Test {
    */
   @Test
   public void testGetMemory() {
-    fail( "Not yet implemented" );
+    queue.setMemory( 100 ); 
+    assertTrue( 100 == queue.getMemory() );
   }
 
   /**
@@ -79,7 +84,8 @@ public class QueueInfo_Test {
    */
   @Test
   public void testSetMemory() {
-    fail( "Not yet implemented" );
+    queue.setMemory( 101 ); 
+    assertTrue( 101 == queue.getMemory() );
   }
 
   /**
@@ -87,7 +93,8 @@ public class QueueInfo_Test {
    */
   @Test
   public void testGetNode() {
-    fail( "Not yet implemented" );
+    queue.setNode( "node" ); //$NON-NLS-1$ 
+    assertTrue( "node".equals( queue.getNode() ) ); //$NON-NLS-1$
   }
 
   /**
@@ -95,7 +102,8 @@ public class QueueInfo_Test {
    */
   @Test
   public void testSetNode() {
-    fail( "Not yet implemented" );
+    queue.setNode( "node1" ); //$NON-NLS-1$ 
+    assertTrue( "node1".equals( queue.getNode() ) ); //$NON-NLS-1$
   }
 
   /**
@@ -103,7 +111,8 @@ public class QueueInfo_Test {
    */
   @Test
   public void testGetQue() {
-    fail( "Not yet implemented" );
+    queue.setQue( 100 ); 
+    assertTrue( 100 == queue.getQue() ); 
   }
 
   /**
@@ -111,7 +120,8 @@ public class QueueInfo_Test {
    */
   @Test
   public void testSetQue() {
-    fail( "Not yet implemented" );
+    queue.setQue( 101 ); 
+    assertTrue( 101 == queue.getQue() ); 
   }
 
   /**
@@ -119,7 +129,8 @@ public class QueueInfo_Test {
    */
   @Test
   public void testGetRun() {
-    fail( "Not yet implemented" );
+    queue.setRun( 100 ); 
+    assertTrue( 100 == queue.getRun() ); 
   }
 
   /**
@@ -127,7 +138,8 @@ public class QueueInfo_Test {
    */
   @Test
   public void testSetRun() {
-    fail( "Not yet implemented" );
+    queue.setRun( 101 ); 
+    assertTrue( 101 == queue.getRun() ); 
   }
 
   /**
@@ -135,15 +147,8 @@ public class QueueInfo_Test {
    */
   @Test
   public void testGetState() {
-    fail( "Not yet implemented" );
-  }
-
-  /**
-   * Test method for {@link eu.geclipse.batch.internal.QueueInfo#getStateAsString()}.
-   */
-  @Test
-  public void testGetStateAsString() {
-    fail( "Not yet implemented" );
+    queue.setState( QueueInfo.QueueState.D ); 
+    assertEquals( QueueInfo.QueueState.D, queue.getState() ); 
   }
 
   /**
@@ -151,7 +156,8 @@ public class QueueInfo_Test {
    */
   @Test
   public void testSetState() {
-    fail( "Not yet implemented" );
+    queue.setState( QueueInfo.QueueState.E ); 
+    assertEquals( QueueInfo.QueueState.E, queue.getState() ); 
   }
 
   /**
@@ -159,23 +165,18 @@ public class QueueInfo_Test {
    */
   @Test
   public void testGetRunState() {
-    fail( "Not yet implemented" );
+    queue.setRunState( QueueInfo.QueueRunState.R ); 
+    assertEquals( QueueInfo.QueueRunState.R, queue.getRunState() ); 
   }
 
   /**
-   * Test method for {@link eu.geclipse.batch.internal.QueueInfo#getRunStateAsString()}.
-   */
-  @Test
-  public void testGetRunStateAsString() {
-    fail( "Not yet implemented" );
-  }
-
-  /**
-   * Test method for {@link eu.geclipse.batch.internal.QueueInfo#setRunState(eu.geclipse.batch.IQueueInfo.QueueRunState)}.
+   * Test method for 
+   * {@link eu.geclipse.batch.internal.QueueInfo#setRunState(eu.geclipse.batch.IQueueInfo.QueueRunState)}.
    */
   @Test
   public void testSetRunState() {
-    fail( "Not yet implemented" );
+    queue.setRunState( QueueInfo.QueueRunState.S ); 
+    assertEquals( QueueInfo.QueueRunState.S, queue.getRunState() ); 
   }
 
   /**
@@ -183,7 +184,8 @@ public class QueueInfo_Test {
    */
   @Test
   public void testGetTimeCPU() {
-    fail( "Not yet implemented" );
+    queue.setTimeCPU( "10:10" );  //$NON-NLS-1$
+    assertTrue( "10:10".equals( queue.getTimeCPU() ) );  //$NON-NLS-1$
   }
 
   /**
@@ -191,7 +193,8 @@ public class QueueInfo_Test {
    */
   @Test
   public void testSetTimeCPU() {
-    fail( "Not yet implemented" );
+    queue.setTimeCPU( "11:10" );  //$NON-NLS-1$
+    assertTrue( "11:10".equals( queue.getTimeCPU() ) );  //$NON-NLS-1$
   }
 
   /**
@@ -199,7 +202,8 @@ public class QueueInfo_Test {
    */
   @Test
   public void testGetTimeWall() {
-    fail( "Not yet implemented" );
+    queue.setTimeWall( "10:10" );  //$NON-NLS-1$
+    assertTrue( "10:10".equals( queue.getTimeWall() ) );  //$NON-NLS-1$
   }
 
   /**
@@ -207,7 +211,8 @@ public class QueueInfo_Test {
    */
   @Test
   public void testSetTimeWall() {
-    fail( "Not yet implemented" );
+    queue.setTimeWall( "11:10" );  //$NON-NLS-1$
+    assertTrue( "11:10".equals( queue.getTimeWall() ) );  //$NON-NLS-1$
   }
 
   /**
@@ -215,6 +220,6 @@ public class QueueInfo_Test {
    */
   @Test
   public void testGetQueueName() {
-    fail( "Not yet implemented" );
+    assertTrue( "queue1".equals( queue.getQueueName() ) ); //$NON-NLS-1$
   }
 }

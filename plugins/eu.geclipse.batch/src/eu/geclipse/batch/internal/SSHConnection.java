@@ -124,9 +124,7 @@ public class SSHConnection {
    * @return Returns the output of the executed command if executed 
    * successfully, if no output of the successfully executed command 
    * <code>null</code> is returned.
-   * @throws BatchExcep          // TODO Auto-generated catch block
-          e.printStackTrace();
-tion If the command is not successfully executed.
+   * @throws BatchException If the command is not successfully executed.
    */
   public String execCommand( final String command ) throws BatchException {
     String line;
