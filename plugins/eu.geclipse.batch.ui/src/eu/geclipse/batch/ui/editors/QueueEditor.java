@@ -127,7 +127,8 @@ public class QueueEditor extends FormEditor implements IEditingDomainProvider {
                 {
                   if ((delta.getKind() & (IResourceDelta.CHANGED | IResourceDelta.REMOVED)) != 0)
                   {
-                    Resource resource = this.resourceSet.getResource(URI.createURI(delta.getFullPath().toString()), false);
+                    Resource resource = this.resourceSet.getResource( URI.createURI( delta.getFullPath().toString() ), 
+                                                                      false );
                     if (resource != null)
                     {
                       if ((delta.getKind() & IResourceDelta.REMOVED) != 0)
@@ -412,18 +413,16 @@ public class QueueEditor extends FormEditor implements IEditingDomainProvider {
           // Save the resources to the file system.
           //
           boolean first = true;
-          for (Iterator<?> i = QueueEditor.this.editingDomain.getResourceSet().getResources().iterator(); i.hasNext(); )
-          {
+          for ( Iterator<?> i = QueueEditor.this.editingDomain.getResourceSet().getResources().iterator(); 
+                i.hasNext(); ) {
             Resource resource = (Resource)i.next();
-            if ((first || !resource.getContents().isEmpty() || isPersisted(resource)) && !QueueEditor.this.editingDomain.isReadOnly(resource))
-            {
-              try
-              {
+            if ( ( first || !resource.getContents().isEmpty() 
+                || isPersisted(resource)) && !QueueEditor.this.editingDomain.isReadOnly(resource)) {
+              try {
                 QueueEditor.this.savedResources.add(resource);
                 resource.save(Collections.EMPTY_MAP);
               }
-              catch (Exception exception)
-              {
+              catch (Exception exception) {
                 QueueEditor.this.resourceToDiagnosticMap.put(resource, analyzeResourceProblems(resource, exception));
 
                 //setDirty( false );
@@ -455,8 +454,7 @@ public class QueueEditor extends FormEditor implements IEditingDomainProvider {
       refreshEditor();
 
     }
-    catch (Exception exception)
-    {
+    catch (Exception exception) {
       // Something went wrong that shouldn't.
 
       Activator.logException( exception );

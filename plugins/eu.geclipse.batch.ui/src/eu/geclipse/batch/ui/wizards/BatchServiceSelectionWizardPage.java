@@ -173,7 +173,7 @@ public class BatchServiceSelectionWizardPage extends WizardPage {
   
   
   /**
-   * @return TRUE if the Queue configuration has been commited to the selected batch services or
+   * @return TRUE if the Queue configuration has been committed to the selected batch services or
    * FALSE if not.
    * 
    */
@@ -194,35 +194,38 @@ public class BatchServiceSelectionWizardPage extends WizardPage {
           }
 
           public void run( final IProgressMonitor monitor )
-            throws InvocationTargetException, InterruptedException
-          {
+            throws InvocationTargetException, InterruptedException {
             IBatchService batchWrapper = null;    
             BatchQueueDescription batchQueue = null;
             
             SubMonitor betterMonitor = SubMonitor.convert( monitor, checkedElements.length );
             
-            for( Object element : checkedElements )
-            {              
+            for( Object element : checkedElements ) {              
               testCanceled( betterMonitor );              
 
-              if( element instanceof IBatchService )
-              {                
-                betterMonitor.setTaskName( String.format( Messages.getString("BatchServiceSelectionDialog.task.Service"), ((IBatchService) element).getName() ) ); //$NON-NLS-1$
+              if( element instanceof IBatchService ) {                
+                betterMonitor.setTaskName( 
+                          String.format( Messages.getString( "BatchServiceSelectionDialog.task.Service" ), //$NON-NLS-1$ 
+                          ( ( IBatchService ) element).getName() ) ); 
 
                 batchWrapper = (IBatchService) element;
                 testCanceled( betterMonitor );
-                  for( IGridBatchQueueDescription queueDescription : BatchServiceSelectionWizardPage.this.queueDescList ) {
+                  for( IGridBatchQueueDescription queueDescription 
+                      : BatchServiceSelectionWizardPage.this.queueDescList ) {
                     batchQueue = (BatchQueueDescription) queueDescription;
                     try {
                       batchQueue.load(queueDescription.getResource().getFullPath().toString());
                       try {
-                        betterMonitor.setTaskName( String.format( Messages.getString("BatchServiceSelectionDialog.task.Configuration"), queueDescription.getResource().getName() ) ); //$NON-NLS-1$
+                        betterMonitor.setTaskName( 
+                              String.format( 
+                                  Messages.getString( "BatchServiceSelectionDialog.task.Configuration" ), //$NON-NLS-1$ 
+                              queueDescription.getResource().getName() ) ); 
                         batchWrapper.createQueue( batchQueue.getRoot() );
                         testCanceled( betterMonitor ); 
                       } catch( BatchException e ) {
                         NewProblemDialog.openProblem( getShell(),
-                                                  Messages.getString( "AddQueueWizard.error_manipulate_title" ),  //$NON-NLS-1$
-                                                  Messages.getString( "AddQueueWizard.error_manipulate_message" ), //$NON-NLS-1$
+                                         Messages.getString( "AddQueueWizard.error_manipulate_title" ),  //$NON-NLS-1$
+                                         Messages.getString( "AddQueueWizard.error_manipulate_message" ), //$NON-NLS-1$
                                                   e );      
                       } 
                     } catch( GridModelException e ) {
@@ -238,15 +241,15 @@ public class BatchServiceSelectionWizardPage extends WizardPage {
         } );
       } catch( InvocationTargetException itExc ) {
         NewProblemDialog.openProblem( getShell(),
-                                      Messages.getString("BatchServiceSelectionDialog.QueueConfigurationFailed"), //$NON-NLS-1$
-                                      Messages.getString("BatchServiceSelectionDialog.QueueConfigurationFailed"), //$NON-NLS-1$
-                                      itExc.getCause() );
+                         Messages.getString("BatchServiceSelectionDialog.QueueConfigurationFailed"), //$NON-NLS-1$
+                         Messages.getString("BatchServiceSelectionDialog.QueueConfigurationFailed"), //$NON-NLS-1$
+                         itExc.getCause() );
         result = false;
       } catch( InterruptedException intExc ) {
         NewProblemDialog.openProblem( getShell(),
-                                      Messages.getString("BatchServiceSelectionDialog.QueueConfigurationInterupted"), //$NON-NLS-1$
-                                      Messages.getString("BatchServiceSelectionDialog.QueueConfigurationInterupted"), //$NON-NLS-1$
-                                      intExc );
+                         Messages.getString("BatchServiceSelectionDialog.QueueConfigurationInterupted"), //$NON-NLS-1$
+                         Messages.getString("BatchServiceSelectionDialog.QueueConfigurationInterupted"), //$NON-NLS-1$
+                         intExc );
         result = false;
       }
   } // end if ( isServiceSelectionValid() )

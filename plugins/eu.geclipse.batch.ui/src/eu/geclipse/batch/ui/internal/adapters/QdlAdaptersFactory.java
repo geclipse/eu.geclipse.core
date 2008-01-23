@@ -69,7 +69,8 @@ public class QdlAdaptersFactory extends QdlAdapterFactory
   }
 
   /* (non-Javadoc)
-   * @see org.eclipse.emf.edit.provider.ComposeableAdapterFactory#setParentAdapterFactory(org.eclipse.emf.edit.provider.ComposedAdapterFactory)
+   * @see org.eclipse.emf.edit.provider.ComposeableAdapterFactory#setParentAdapterFactory(
+   * org.eclipse.emf.edit.provider.ComposedAdapterFactory)
    */
   public void setParentAdapterFactory( final ComposedAdapterFactory parentAdapterFactory )
   {
@@ -77,7 +78,8 @@ public class QdlAdaptersFactory extends QdlAdapterFactory
   }
 
   /* (non-Javadoc)
-   * @see org.eclipse.emf.edit.provider.IChangeNotifier#addListener(org.eclipse.emf.edit.provider.INotifyChangedListener)
+   * @see org.eclipse.emf.edit.provider.IChangeNotifier#addListener(
+   * org.eclipse.emf.edit.provider.INotifyChangedListener)
    */
   public void addListener( final INotifyChangedListener notifyChangedListener ) {
     if ( ! this.listeners.contains( notifyChangedListener ) ) {
@@ -95,7 +97,8 @@ public class QdlAdaptersFactory extends QdlAdapterFactory
   }
 
   /* (non-Javadoc)
-   * @see org.eclipse.emf.edit.provider.IChangeNotifier#removeListener(org.eclipse.emf.edit.provider.INotifyChangedListener)
+   * @see org.eclipse.emf.edit.provider.IChangeNotifier#removeListener(
+   * org.eclipse.emf.edit.provider.INotifyChangedListener)
    */
   public void removeListener( final INotifyChangedListener notifyChangedListener ) {
     this.listeners.remove( notifyChangedListener );
