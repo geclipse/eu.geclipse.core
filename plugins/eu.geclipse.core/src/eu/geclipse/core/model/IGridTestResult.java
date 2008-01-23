@@ -18,15 +18,41 @@ package eu.geclipse.core.model;
 
 import java.util.Date;
 
-
+/**
+ * Interface for single grid test result.<br>
+ * <br>
+ * Basic implementation of this interface (in form of SOJO bean) is in
+ * eu.geclipse.test.framework plug-in (<code>GridTestResult</code> class).
+ */
 public interface IGridTestResult {
-  
+
+  /**
+   * Method to access String representation of test result (e.g OK, FAILED,
+   * etc.).
+   * 
+   * @return test result
+   */
   String getResult();
-  
+
+  /**
+   * Method to access name of the tested resource (e.g. host's URL).
+   * 
+   * @return name of tested resource in form of String
+   */
   String getResourceName();
-  
+
+  /**
+   * Method to access information when this test was run.
+   * 
+   * @return date of test's run
+   */
   Date getDate();
-  
+
+  /**
+   * In case of complex tests this method returns sub-test name. If test was
+   * simple test returned value will be name of the test.
+   * 
+   * @return sub-test name
+   */
   String getSubTestName();
-  
 }

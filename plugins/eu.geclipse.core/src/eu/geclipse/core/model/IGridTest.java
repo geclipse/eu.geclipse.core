@@ -42,6 +42,7 @@ public interface IGridTest extends IGridElement, IManageable {
 
   /**
    * Method to access dates of all submissions for given resource for this test
+   * @param resourceName name of the tested resources
    * 
    * @return List of dates of test submission
    */
