@@ -16,6 +16,9 @@
 package eu.geclipse.core.model;
 
 
+/**
+ * This empty interface is used for distinguishing testable IGridResources
+ */
 public interface ITestable {
   
   // This empty interface is used for distinguishing testable IGridResources
