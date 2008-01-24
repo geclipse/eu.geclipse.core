@@ -45,10 +45,10 @@ public abstract class AbstractAuthTokenProvider implements IAuthTokenProvider {
     return provider == null ? null : provider.requestToken();
   }
   
-  public static synchronized IAuthenticationToken staticRequestToken( final IAuthenticationTokenDescription description ) {
+  /*public static synchronized IAuthenticationToken staticRequestToken( final IAuthenticationTokenDescription description ) {
     AuthTokenRequest request = new AuthTokenRequest( description, null, null );
     return staticRequestToken( request );
-  }
+  }*/
   
   /**
    * Static access method that calls the corresponding method of the
