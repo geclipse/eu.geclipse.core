@@ -179,7 +179,10 @@ public class PingTestDialog extends AbstractSimpleTestDialog  {
           }
         }
         // Write the summary
-        this.outPut.append( "round-trip min/avg/max/stddev = " + min +"/" + avg/nOk + "/" + max + " ms" + this.outPut.getLineDelimiter() );
+        if ( nOk > 0 )
+          this.outPut.append( "round-trip min/avg/max/stddev = " + min +"/" + avg/nOk + "/" + max + " ms" + this.outPut.getLineDelimiter() );
+        else
+          this.outPut.append( "All ping msg failed" + this.outPut.getLineDelimiter() );
       }
     }
   }
