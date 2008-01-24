@@ -41,7 +41,7 @@ public class OpenAuthTokenDialogAction extends Action implements
       public void run() {
         UIAuthTokenProvider tokenProvider
           = new UIAuthTokenProvider( Display.getDefault().getActiveShell() );
-        boolean success = tokenProvider.showNewTokenWizard( null );
+        boolean success = tokenProvider.showNewTokenWizard( null, null );
         notifyResult(success);
       }
     } );

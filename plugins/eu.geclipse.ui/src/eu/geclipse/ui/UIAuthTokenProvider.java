@@ -40,6 +40,7 @@ import eu.geclipse.core.auth.AuthenticationException;
 import eu.geclipse.core.auth.CoreAuthTokenProvider;
 import eu.geclipse.core.auth.IAuthTokenProvider;
 import eu.geclipse.core.auth.IAuthenticationToken;
+import eu.geclipse.core.auth.IAuthenticationTokenDescription;
 import eu.geclipse.ui.dialogs.NewProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.wizards.wizardselection.ExtPointWizardSelectionListPage;
@@ -107,8 +108,9 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
         boolean result = MessageDialog.openQuestion( UIAuthTokenProvider.this.shell, title, message );
         
         if( result ) {
-          String tokenWizardId = this.request.getDescription().getWizardId();
-          if ( showNewTokenWizard( tokenWizardId ) ) {
+          IAuthenticationTokenDescription description = this.request.getDescription();
+          String tokenWizardId = description.getWizardId();
+          if ( showNewTokenWizard( tokenWizardId, description ) ) {
             this.token = cProvider.requestToken( this.request );
           }
         }
@@ -235,9 +237,12 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
    * the type of the he wants to create.
    * 
    * @param tokenWizardId The ID of the token type that should be created or null.
+   * @param description Token description passed to the token specific wizard pages in
+   * order to allow initialisation for a predefined token type.
    * @return True if the token dialog was closed with status {@link Window#OK}.
    */
-  public boolean showNewTokenWizard( final String tokenWizardId ) {
+  public boolean showNewTokenWizard( final String tokenWizardId,
+                                     final IAuthenticationTokenDescription description ) {
     URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/wizban/newtoken_wiz.gif" ); //$NON-NLS-1$
 
     Wizard wizard =  new Wizard() {
@@ -255,6 +260,7 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
             Messages.getString( "UIAuthTokenProvider.wizard_first_page_description" ), //$NON-NLS-1$
             Messages.getString( "UIAuthTokenProvider.noTokenCreator" ) ); //$NON-NLS-1$
         page.setPreselectedId( tokenWizardId, true );
+        page.setInitData( description );
         page.setCheatSheetManager(cheatSheetManager);
         addPage( page );
       }

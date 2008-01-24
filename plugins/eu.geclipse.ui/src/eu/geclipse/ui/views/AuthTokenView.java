@@ -74,6 +74,7 @@ import org.eclipse.ui.part.ViewPart;
 
 import eu.geclipse.core.ExtensionManager;
 import eu.geclipse.core.Extensions;
+import eu.geclipse.core.auth.AuthTokenRequest;
 import eu.geclipse.core.auth.AuthenticationException;
 import eu.geclipse.core.auth.AuthenticationTokenManager;
 import eu.geclipse.core.auth.IAuthenticationToken;
@@ -738,7 +739,7 @@ public class AuthTokenView extends ViewPart implements IContentChangeListener {
               public void run() {
                 UIAuthTokenProvider tokenProvider
                   = new UIAuthTokenProvider( getSite().getShell() );
-                tokenProvider.showNewTokenWizard( wizardId );
+                tokenProvider.showNewTokenWizard( wizardId, null );
               }
             };
             action.setText( name );
