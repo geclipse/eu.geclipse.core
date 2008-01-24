@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2007 g-Eclipse consortium
+ * Copyright (c) 2007, 2008 g-Eclipse consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -12,7 +12,7 @@
  * Contributor(s):
  *     UCY (http://www.ucy.cs.ac.cy)
  *      - George Tsouloupas (georget@cs.ucy.ac.cy)
- *      - Nikolaos Tsioutsias (tnikos@yahoo.com)
+ *      - Nikolaos Tsioutsias
  *****************************************************************************/
 
 package eu.geclipse.info.glue;
@@ -86,16 +86,8 @@ public class GlueService extends AbstractGlueTable
    */
   public GlueSite glueSite; // GlueSite_UniqueId
 
-  /**
-   * 
-   */
- // public Date MeasurementDate;
-
-  /**
-   * 
-   */
-  //public Date MeasurementTime;
-
+  public ArrayList<GlueService> glueServiceList = new ArrayList<GlueService>();
+  
   /**
    * 
    */
@@ -216,5 +208,11 @@ public class GlueService extends AbstractGlueTable
       result = true;
     
     return result;
+  }
+  
+  //TODO tnikos: write documentation
+  public void processGriaRecord()
+  {
+    
   }
 }

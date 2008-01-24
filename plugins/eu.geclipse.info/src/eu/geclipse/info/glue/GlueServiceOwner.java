@@ -36,15 +36,6 @@ public class GlueServiceOwner extends AbstractGlueTable
    * 
    */
   public String Owner; // PK
-  /**
-   * 
-   */
-  //public Date MeasurementDate;
-
-  /**
-   * 
-   */
-  //public Date MeasurementTime;
 
   /**
    * 

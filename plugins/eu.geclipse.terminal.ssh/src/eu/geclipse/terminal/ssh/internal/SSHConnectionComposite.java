@@ -77,7 +77,7 @@ class SSHConnectionComposite extends Composite {
     try {
       IGridElement[] vos = GridModel.getVoManager().getChildren(null);
       for ( IGridElement vo : vos ) {
-        ArrayList<AbstractGlueTable> ceTable = GlueQuery.getGlueTable( "GlueCE", vo.getName() ); //$NON-NLS-1$
+        ArrayList<AbstractGlueTable> ceTable = GlueQuery.getGlueTable( "GlueCE", "GlueCE", vo.getName() ); //$NON-NLS-1$
         for ( AbstractGlueTable table : ceTable ) {
           try {
             String hostname = ( String ) table.getFieldByName( "HostName" ); //$NON-NLS-1$

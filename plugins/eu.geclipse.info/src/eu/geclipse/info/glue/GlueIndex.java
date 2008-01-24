@@ -321,9 +321,6 @@ public abstract class GlueIndex implements java.io.Serializable {
    */
   public Hashtable<String, AbstractGlueTable> fullIndex
     = new Hashtable<String, AbstractGlueTable>();
-
-  public Hashtable<String, GriaService> griaService
-  = new Hashtable<String, GriaService>();
   
   protected abstract String getTag();
   
@@ -490,25 +487,36 @@ public abstract class GlueIndex implements java.io.Serializable {
     }
     return result;
   }
-
+  
   /**
-   * @param objectName String representing the name of the Glue Object 
-   * such as "GlueSite", "GlueCE", "GlueSE" ...
-   * @return a list of all Glue objects of the provided type
+   * 
+   * @param glueObjectName String representing the name of the Glue Object 
+   * such as "GlueSite", "GlueCE", "GlueSE" ... and is a AbstractGlueTable
+   * @param objectTableName A string that defines the value that the parameter tableName of
+   * the Glue Object
+   * 
+   * @return An ArrayList containing the GlueObject passed in the gluetableName parameter or an
+   * empty ArrayList
+   * 
+   * @see eu.geclipse.info.glue.AbstractGlueTable
    */
   @SuppressWarnings("unchecked")
-  public ArrayList<AbstractGlueTable> getList( final String objectName ) {
+  public ArrayList<AbstractGlueTable> getList( final String glueObjectName, final String objectTableName ) {
     ArrayList<AbstractGlueTable> agtList = new ArrayList<AbstractGlueTable>();
     try {
-      String fieldName = objectName.substring( 0, 1 ).toLowerCase()
-                         + objectName.substring( 1 );
+      String fieldName = glueObjectName.substring( 0, 1 ).toLowerCase()
+                         + glueObjectName.substring( 1 );
       Field f = GlueIndex.class.getField( fieldName );
       Object o = f.get( this );
-      if (o instanceof Hashtable) {
+      if (o instanceof Hashtable ) {
         Hashtable<String, AbstractGlueTable> ht=( Hashtable<String, AbstractGlueTable> )o;
         Enumeration<AbstractGlueTable> enAgt = ht.elements();
         while( enAgt.hasMoreElements() ) {
-          agtList.add( enAgt.nextElement() );
+          AbstractGlueTable myElement = enAgt.nextElement();
+          if (objectTableName == null || objectTableName.equals( "" ))
+            agtList.add( myElement );
+          else if (myElement.tableName!= null && myElement.tableName.equals( objectTableName ))
+            agtList.add( myElement );
         }
       }
     } catch( SecurityException e ) {
@@ -534,28 +542,6 @@ public abstract class GlueIndex implements java.io.Serializable {
   private void putInFullIndex( final String key,final AbstractGlueTable agt ) {
     //String newKey = agt.getClass().getName() + key;
     //AbstractGlueTable previous = this.fullIndex.put( newKey, agt );
-  }
-  
-  /**
-   * Get the GlueHost
-   * @param key the name of the GlueHost
-   * @return the GlueHost or null.
-   */
-  public GriaService getGriaService( final String key ) {
-    GriaService result = null;
-    
-    if( key != null ) {
-      
-      result = this.griaService.get( key );
-      if( result == null ) {
-        result = new GriaService();
-  
-        result.setID( key );
-        this.griaService.put( key, result );
-      }
-    }
-    
-    return result;
   }
   
   /**

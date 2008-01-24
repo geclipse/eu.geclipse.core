@@ -212,7 +212,7 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener {
         }
       } 
       if ( this.query != null ) {
-        this.agtList = GlueQuery.getGlueTable( this.query[ 0 ], getCurrentVO() );
+        this.agtList = GlueQuery.getGlueTable( this.query[ 0 ], this.query[ 2 ], getCurrentVO() );
       } 
       if ( this.agt != null ) {
         String fieldName;
@@ -339,21 +339,25 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener {
     private void buildTopLevel() {
       ArrayList<String[]> list = new ArrayList<String[]>();
       String[] queryArray;
-      queryArray = new String[ 2 ];
+      queryArray = new String[ 3 ];
       queryArray[ 0 ] = "GlueSite"; //$NON-NLS-1$
       queryArray[ 1 ] = "Sites"; //$NON-NLS-1$
-      list.add( queryArray );
-      queryArray = new String[ 2 ];
-      queryArray[ 0 ] = "GlueCE"; //$NON-NLS-1$
-      queryArray[ 1 ] = "Computing Elements"; //$NON-NLS-1$
-      list.add( queryArray );
-      queryArray = new String[ 2 ];
-      queryArray[ 0 ] = "GlueSE"; //$NON-NLS-1$
-      queryArray[ 1 ] = "Storage Elements"; //$NON-NLS-1$
+      queryArray[ 2 ] = "GlueSite"; //$NON-NLS-1$
       list.add( queryArray );
       queryArray = new String[ 3 ];
-      queryArray[ 0 ] = "GriaService"; //$NON-NLS-1$
+      queryArray[ 0 ] = "GlueCE"; //$NON-NLS-1$
+      queryArray[ 1 ] = "Computing Elements"; //$NON-NLS-1$
+      queryArray[ 2 ] = "GlueCE"; //$NON-NLS-1$
+      list.add( queryArray );
+      queryArray = new String[ 3 ];
+      queryArray[ 0 ] = "GlueSE"; //$NON-NLS-1$
+      queryArray[ 1 ] = "Storage Elements"; //$NON-NLS-1$
+      queryArray[ 2 ] = "GlueSE"; //$NON-NLS-1$
+      list.add( queryArray );
+      queryArray = new String[ 3 ];
+      queryArray[ 0 ] = "GlueService"; //$NON-NLS-1$
       queryArray[ 1 ] = "Gria Services"; //$NON-NLS-1$
+      queryArray[ 2] = "GriaService"; //$NON-NLS-1$
       list.add( queryArray );
       this.glueRoot = new TreeParent( list );
     }
@@ -578,7 +582,7 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener {
   }
 
   void updateVOList() {
-    ArrayList<AbstractGlueTable> agtList = GlueQuery.getGlueTable( "GlueCEAccessControlBaseRule", null ); //$NON-NLS-1$
+    ArrayList<AbstractGlueTable> agtList = GlueQuery.getGlueTable( "GlueCEAccessControlBaseRule", "GlueCEAccessControlBaseRule", null ); //$NON-NLS-1$
     ArrayList<String> vos = new ArrayList<String>();
     int i = 0;
     for( AbstractGlueTable table : agtList ) {

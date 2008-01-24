@@ -246,7 +246,8 @@ public class BatchDefinitionWizardPage extends WizardPage {
    * Provides a default list of computing elements in the Host field.
    */
   private void addComputingElements() {
-    ArrayList<AbstractGlueTable> ceTable = GlueQuery.getGlueTable( "GlueCE", null ); //$NON-NLS-1$
+    ArrayList<AbstractGlueTable> ceTable = 
+      GlueQuery.getGlueTable( "GlueCE", "GlueCE", null ); //$NON-NLS-1$ //$NON-NLS-2$
     for ( AbstractGlueTable table : ceTable ) {
       try {
         String hostname = ( String ) table.getFieldByName( "HostName" ); //$NON-NLS-1$

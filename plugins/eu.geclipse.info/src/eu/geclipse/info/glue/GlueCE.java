@@ -282,7 +282,7 @@ public class GlueCE extends AbstractGlueTable implements java.io.Serializable{
         this.InformationServiceURL = this.InformationServiceURL.substring( 0, this.InformationServiceURL.indexOf( "/mds-" ) ); //$NON-NLS-1$
         this.GlueForeignKey = GlueUtility.getStringAttribute( "GlueForeignKey", attributes ); //$NON-NLS-1$
         this.GRAMVersion = GlueUtility.getStringAttribute( "GRAMVersion", attributes ); //$NON-NLS-1$
-        
+        this.tableName = "GlueCE";
         this.byRefOnly=false;
         
         attr=attributes.get( "GlueCEAccessControlBaseRule" ); //$NON-NLS-1$
