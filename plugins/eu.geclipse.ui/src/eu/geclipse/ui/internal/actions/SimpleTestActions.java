@@ -22,6 +22,7 @@ import java.util.List;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.actions.ActionGroup;
 import org.eclipse.ui.navigator.ICommonMenuConstants;
@@ -94,5 +95,24 @@ public class SimpleTestActions extends ActionGroup {
     menu.appendToGroup( ICommonMenuConstants.GROUP_BUILD, this.dropDownMenuMgr );
 
     super.fillContextMenu(menu);
+  }
+
+  /* (non-Javadoc)
+   * @see org.eclipse.ui.actions.ActionGroup#updateActionBars()
+   */
+  @Override
+  public void updateActionBars() {
+    super.updateActionBars();
+    
+    IStructuredSelection selection = null;
+    
+    if( getContext() != null
+        && getContext().getSelection() instanceof IStructuredSelection ) {
+      selection = (IStructuredSelection)getContext().getSelection();
+    }
+    
+    for( SimpleTestAction action : this.testActions ) {
+      action.selectionChanged( selection );      
+    }
   }
 }

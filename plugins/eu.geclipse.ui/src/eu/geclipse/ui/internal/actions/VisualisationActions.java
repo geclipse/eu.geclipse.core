@@ -16,6 +16,7 @@ package eu.geclipse.ui.internal.actions;
 
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.actions.ActionGroup;
 import org.eclipse.ui.navigator.ICommonMenuConstants;
@@ -75,5 +76,23 @@ public class VisualisationActions extends ActionGroup {
     if ( this.renderRemotePipelineAction.isEnabled() ) {
       mgr.appendToGroup( ICommonMenuConstants.GROUP_BUILD, this.renderRemotePipelineAction );
     }
+  }
+
+  /* (non-Javadoc)
+   * @see org.eclipse.ui.actions.ActionGroup#updateActionBars()
+   */
+  @Override
+  public void updateActionBars() {
+    super.updateActionBars();
+    
+    IStructuredSelection selection = null;
+    
+    if( getContext() != null
+        && getContext().getSelection() instanceof IStructuredSelection ) {
+      selection = (IStructuredSelection)getContext().getSelection();
+    }
+    
+    this.renderLocalPipelineAction.selectionChanged( selection );
+    this.renderRemotePipelineAction.selectionChanged( selection );
   }
 }

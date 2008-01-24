@@ -98,8 +98,17 @@ public abstract class GridModelViewPart
     
     GridModel.getRoot().addGridModelListener( this );
     
+    updateActionBars();
   }
   
+  private void updateActionBars() {
+    if( this.actions != null) {
+      ISelection selection = this.viewer.getSelection();
+      this.actions.setContext(new ActionContext(selection));
+      this.actions.updateActionBars();
+    }
+  }
+
   @Override
   public void dispose() {
     

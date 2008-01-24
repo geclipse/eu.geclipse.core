@@ -116,4 +116,21 @@ public class OpenActions extends ActionGroup {
     }
   }
 
+  /* (non-Javadoc)
+   * @see org.eclipse.ui.actions.ActionGroup#updateActionBars()
+   */
+  @Override
+  public void updateActionBars() {
+    super.updateActionBars();
+    
+    IStructuredSelection selection = null;
+    
+    if( getContext() != null
+        && getContext().getSelection() instanceof IStructuredSelection ) {
+      selection = (IStructuredSelection)getContext().getSelection();
+    }
+    
+    this.openElementAction.selectionChanged( selection );
+  }
+
 }

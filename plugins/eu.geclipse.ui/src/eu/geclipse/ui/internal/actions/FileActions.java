@@ -18,7 +18,7 @@ package eu.geclipse.ui.internal.actions;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelectionProvider;
-import org.eclipse.swt.SWT;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISharedImages;
@@ -126,6 +126,26 @@ public class FileActions extends ActionGroup {
                           this.renameAction );
     }
     super.fillContextMenu(menu);
+  }
+
+  /* (non-Javadoc)
+   * @see org.eclipse.ui.actions.ActionGroup#updateActionBars()
+   */
+  @Override
+  public void updateActionBars() {
+    super.updateActionBars();
+    
+    IStructuredSelection selection = null;
+    
+    if( getContext() != null
+        && getContext().getSelection() instanceof IStructuredSelection ) {
+      selection = (IStructuredSelection)getContext().getSelection();
+    }
+    
+    this.copyAction.selectionChanged( selection );
+    this.pasteAction.selectionChanged( selection );
+    this.deleteAction.selectionChanged( selection );
+    this.renameAction.selectionChanged( selection );
   }
   
 }

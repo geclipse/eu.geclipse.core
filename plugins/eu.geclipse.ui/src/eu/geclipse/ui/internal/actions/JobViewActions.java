@@ -18,6 +18,7 @@ package eu.geclipse.ui.internal.actions;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.viewers.ISelectionProvider;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.actions.ActionGroup;
@@ -86,4 +87,22 @@ public class JobViewActions extends ActionGroup {
       super.fillContextMenu( menu );
     }
   }
+
+  /* (non-Javadoc)
+   * @see org.eclipse.ui.actions.ActionGroup#updateActionBars()
+   */
+  @Override
+  public void updateActionBars() {
+    super.updateActionBars();
+    
+    IStructuredSelection selection = null;
+    
+    if( getContext() != null
+        && getContext().getSelection() instanceof IStructuredSelection ) {
+      selection = (IStructuredSelection)getContext().getSelection();
+    }
+    
+    this.updateSelectedJobStatusAction.selectionChanged( selection );
+  }  
+  
 }

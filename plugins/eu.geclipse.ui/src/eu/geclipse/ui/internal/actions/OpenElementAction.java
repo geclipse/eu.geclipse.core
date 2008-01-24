@@ -98,7 +98,7 @@ public class OpenElementAction
     
     if ( isGridJob( selection ) ) {
       this.activeAction = this.openJobAction;
-    } else {
+    } else if( !selection.isEmpty() ) {
       this.activeAction = this.openFileAction;
     }
     
