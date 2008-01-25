@@ -64,6 +64,7 @@ public final class OverviewPage extends FormPage
                                             IHyperlinkListener{
   
   protected static final String PAGE_ID = "OVERVIEW";  //$NON-NLS-1$
+  private static final int WIDGET_MAX_WIDTH = 100;
   protected ApplicationTypeAdapter applicationTypeAdapter;
   protected PosixApplicationTypeAdapter posixApplicationTypeAdapter;   
   protected Composite composite = null;
@@ -81,8 +82,7 @@ public final class OverviewPage extends FormPage
   
   private FormToolkit toolkit;     
   private boolean contentRefreshed = false;
-  private boolean dirtyFlag = false;  
-  private final int WIDGET_MAX_WIDTH = 100;  
+  private boolean dirtyFlag = false;
   private ImageDescriptor helpDesc; 
   
   /**
@@ -304,7 +304,7 @@ public final class OverviewPage extends FormPage
                                    Messages.getString( "OverviewPage_ApplName" ) ); //$NON-NLS-1$
     
     td = new TableWrapData( TableWrapData.FILL_GRAB );
-    td.maxWidth = this.WIDGET_MAX_WIDTH;
+    td.maxWidth = OverviewPage.WIDGET_MAX_WIDTH;
     
     this.txtApplicationName = this.toolkit.createText( client,"", SWT.NONE );     //$NON-NLS-1$
     
@@ -319,7 +319,7 @@ public final class OverviewPage extends FormPage
                                  Messages.getString( "OverviewPage_Executable" ) ); //$NON-NLS-1$
                         
      td = new TableWrapData( TableWrapData.FILL_GRAB );
-     td.maxWidth = this.WIDGET_MAX_WIDTH;
+     td.maxWidth = OverviewPage.WIDGET_MAX_WIDTH;
      
      this.txtExecutable = this.toolkit.createText( client,"", SWT.NONE );     //$NON-NLS-1$
      
@@ -334,7 +334,7 @@ public final class OverviewPage extends FormPage
                                   Messages.getString( "OverviewPage_Input" ) ); //$NON-NLS-1$
                                           
      td = new TableWrapData( TableWrapData.FILL_GRAB );
-     td.maxWidth = this.WIDGET_MAX_WIDTH;
+     td.maxWidth = OverviewPage.WIDGET_MAX_WIDTH;
                        
      this.txtInput = this.toolkit.createText( client,"", SWT.NONE );     //$NON-NLS-1$
      
@@ -348,7 +348,7 @@ public final class OverviewPage extends FormPage
                                   Messages.getString( "OverviewPage_Output" ) ); //$NON-NLS-1$
                                                       
      td = new TableWrapData( TableWrapData.FILL_GRAB );
-     td.maxWidth = this.WIDGET_MAX_WIDTH;
+     td.maxWidth = OverviewPage.WIDGET_MAX_WIDTH;
      
                                    
      this.txtOutput = this.toolkit.createText( client, "" , SWT.NONE );     //$NON-NLS-1$
@@ -366,7 +366,7 @@ public final class OverviewPage extends FormPage
                                       Messages.getString( "OverviewPage_Error" ) ); //$NON-NLS-1$
                                                                
      td = new TableWrapData( TableWrapData.FILL_GRAB );
-     td.maxWidth = this.WIDGET_MAX_WIDTH;
+     td.maxWidth = OverviewPage.WIDGET_MAX_WIDTH;
                                             
      this.txtError = this.toolkit.createText( client,"", SWT.NONE );     //$NON-NLS-1$
      

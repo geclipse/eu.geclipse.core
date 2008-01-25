@@ -683,23 +683,7 @@ public class DataStageTypeAdapter extends JsdlAdaptersFactory {
     this.isNotifyAllowed = true;
     
   }// end load()
-  
-  
-  
-  /**
-   * @return TRUE if the adapter is empty. If it is empty, it means that there 
-   * is no DataStaging element in the JSDL document. 
-   */ 
-  public boolean isEmpty() {
-    boolean status = false;
-
-    if ( !this.dataStagingType.equals( null ) ) {       
-      status = true;
-    }
-    
-    return status;
-  } // End isEmpty()
-  
+ 
   
   
 } // End Class

@@ -52,7 +52,8 @@ import eu.geclipse.jsdl.ui.internal.Activator;
  */
 public class FileSystemsDialog extends Dialog {
   
-  protected FileSystemType fileSystemType = JsdlFactory.eINSTANCE.createFileSystemType();
+  private static final int WIDGET_HEIGHT = 100;
+  protected FileSystemType fileSystemType = JsdlFactory.eINSTANCE.createFileSystemType();  
   protected boolean editMode = false;
   protected Composite panel = null;
   protected Label lblFileSystemName = null;
@@ -68,7 +69,6 @@ public class FileSystemsDialog extends Dialog {
   protected Combo cmbFileSystemType = null;
   protected Combo cmbDiskSpaceRange = null;
   private String title = null;
-  private final int WIDGET_HEIGHT = 100;
   private FileSystemType[] newFileSystem = null;
   
   
@@ -194,7 +194,7 @@ public class FileSystemsDialog extends Dialog {
   gd = new GridData( GridData.FILL_HORIZONTAL);
   gd.grabExcessVerticalSpace = true;
   gd.horizontalSpan = 2;
-  gd.heightHint = this.WIDGET_HEIGHT;
+  gd.heightHint = FileSystemsDialog.WIDGET_HEIGHT;
   
   /* Initial Values for Edit Operation */
   if ( this.editMode ) {

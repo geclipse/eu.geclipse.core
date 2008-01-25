@@ -62,6 +62,7 @@ import eu.geclipse.jsdl.ui.providers.FeatureLabelProvider;
 public final class JobApplicationPage extends FormPage implements INotifyChangedListener {
 
   protected static final String PAGE_ID = "APPLICATION"; //$NON-NLS-1$
+  private static final int WIDGET_HEIGHT = 100;
   protected Composite body = null;
   protected Composite aS = null;
   protected Composite pS = null;
@@ -136,7 +137,7 @@ public final class JobApplicationPage extends FormPage implements INotifyChanged
   private TableColumn column;
   private boolean contentRefreshed = false;
   private boolean dirtyFlag = false;
-  private final int WIDGET_HEIGHT = 100;
+
 
   
   
@@ -310,7 +311,7 @@ public final class JobApplicationPage extends FormPage implements INotifyChanged
     gd = new GridData();
     gd.verticalSpan = 3;
     gd.widthHint = 285;
-    gd.heightHint = this.WIDGET_HEIGHT;
+    gd.heightHint = JobApplicationPage.WIDGET_HEIGHT;
     this.txtDescription.setLayoutData( gd );
     this.applicationTypeAdapter.attachToApplicationDescription( this.txtDescription );
     toolkit.paintBordersFor( client );
@@ -381,7 +382,7 @@ public final class JobApplicationPage extends FormPage implements INotifyChanged
     gd.verticalSpan = 3;
     gd.horizontalSpan = 1;
     gd.widthHint = 250;
-    gd.heightHint = this.WIDGET_HEIGHT;
+    gd.heightHint = JobApplicationPage.WIDGET_HEIGHT;
     this.argumentViewer = new TableViewer( client, SWT.BORDER | SWT.FULL_SELECTION );
     this.tblArgument = this.argumentViewer.getTable();
     this.tblArgument.setHeaderVisible( true );
@@ -520,7 +521,7 @@ public final class JobApplicationPage extends FormPage implements INotifyChanged
     gd.verticalSpan = 3;
     gd.horizontalSpan = 1;
     gd.widthHint = 250;
-    gd.heightHint = this.WIDGET_HEIGHT;
+    gd.heightHint = JobApplicationPage.WIDGET_HEIGHT;
     this.environmentViewer = new TableViewer( client, SWT.BORDER | SWT.FULL_SELECTION );
     this.tblEnvironment = this.environmentViewer.getTable();
     this.tblEnvironment.setHeaderVisible( true );

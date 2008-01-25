@@ -211,7 +211,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     // Combo - application name
     this.applicationName = new Combo( mainComp, SWT.SINGLE );
     for( String value : this.appsWithExtraAttributes.values() ) {
-      this.applicationName.add( value.toString() );
+      this.applicationName.add( value );
     }
     for( String value : this.appsWithParametersFromPrefs.keySet() ) {
       this.applicationName.add( value );

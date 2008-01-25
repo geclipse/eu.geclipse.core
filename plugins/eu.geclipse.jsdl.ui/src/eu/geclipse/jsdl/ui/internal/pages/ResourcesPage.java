@@ -74,6 +74,9 @@ public final class ResourcesPage extends FormPage implements INotifyChangedListe
   
    
   protected static final String PAGE_ID = "RESOURCES";  //$NON-NLS-1$
+  private static final int TXT_LENGTH = 300;
+  private static final int WIDGET_HEIGHT = 100;
+  
   protected ResourcesTypeAdapter resourcesTypeAdapter;
   protected Object[] value = null;  
   protected Composite body = null;
@@ -134,9 +137,7 @@ public final class ResourcesPage extends FormPage implements INotifyChangedListe
   private Table tblFileSystems = null;
   private TableColumn column = null;
   private boolean contentRefreshed = false;
-  private boolean dirtyFlag = false;
-  private final int TXT_LENGTH = 300;
-  private final int WIDGET_HEIGHT = 100;
+  private boolean dirtyFlag = false;  
   
   
   
@@ -329,8 +330,8 @@ public final class ResourcesPage extends FormPage implements INotifyChangedListe
     gd.grabExcessVerticalSpace = true;
     gd.verticalSpan = 5;
     gd.horizontalSpan = 1;
-    gd.heightHint = this.WIDGET_HEIGHT;
-    gd.widthHint = this.TXT_LENGTH;
+    gd.heightHint = ResourcesPage.WIDGET_HEIGHT;
+    gd.widthHint = ResourcesPage.TXT_LENGTH;
 
     tblHosts.setLayoutData( gd );
     
@@ -428,8 +429,8 @@ public final class ResourcesPage extends FormPage implements INotifyChangedListe
     gd.grabExcessVerticalSpace = true;
     gd.verticalSpan = 5;
     gd.horizontalSpan = 1;
-    gd.heightHint = this.WIDGET_HEIGHT;
-    gd.widthHint = this.TXT_LENGTH;
+    gd.heightHint = ResourcesPage.WIDGET_HEIGHT;
+    gd.widthHint = ResourcesPage.TXT_LENGTH;
     
     this.tblFileSystems.setLayoutData( gd );
     
@@ -587,7 +588,7 @@ public final class ResourcesPage extends FormPage implements INotifyChangedListe
     this.resourcesTypeAdapter.attachToOSDescription( this.txtOSDescr );
 
     gd.widthHint = 265;
-    gd.heightHint=this.WIDGET_HEIGHT;
+    gd.heightHint=ResourcesPage.WIDGET_HEIGHT;
     this.txtOSDescr.setLayoutData(gd);
     
     toolkit.paintBordersFor( client);

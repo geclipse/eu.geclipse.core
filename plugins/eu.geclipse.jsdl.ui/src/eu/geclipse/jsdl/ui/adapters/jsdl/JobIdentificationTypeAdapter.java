@@ -414,19 +414,5 @@ public final class JobIdentificationTypeAdapter extends JsdlAdaptersFactory {
   }
   
     
-  
-  /**
-   * @return TRUE if the adapter is empty. If it is empty, it means that there 
-   * is no JobDefinition element in the JSDL document. 
-   */ 
-  public boolean isEmpty() {
-    boolean status = true;
-
-    if ( !this.jobIdentificationType.equals( null ) ) {       
-      status = false;
-    }
-    
-    return status;
-  }
-  
+ 
 } // End Class

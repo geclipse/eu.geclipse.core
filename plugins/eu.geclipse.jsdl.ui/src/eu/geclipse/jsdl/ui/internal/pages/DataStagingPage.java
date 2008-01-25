@@ -69,6 +69,7 @@ import eu.geclipse.jsdl.ui.widgets.DataStagingOutDialog;
 public class DataStagingPage extends FormPage implements INotifyChangedListener {
 
   protected static final String PAGE_ID = "DATA_STAGING"; //$NON-NLS-1$
+  private static final int WIDGET_HEIGHT = 170;
   protected Composite body = null;
   protected Composite stageInSection = null;
   protected Composite stageOutSection = null;  
@@ -102,8 +103,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
   protected FeatureLabelProvider featureLabelProvider = new FeatureLabelProvider();
   
   private ImageDescriptor helpDesc = null;
-  private TableColumn column;    
-  private final int WIDGET_HEIGHT = 170;
+  private TableColumn column;
   private boolean contentRefreshed = false;
   private boolean dirtyFlag = false;
   
@@ -282,7 +282,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    gd.verticalSpan = 3;
    gd.horizontalSpan = 1;
    gd.widthHint = 600;
-   gd.heightHint = this.WIDGET_HEIGHT;
+   gd.heightHint = DataStagingPage.WIDGET_HEIGHT;
    
    //FIXME nloulloud - This is a work-around for the Bug#: 201705 for Windows.
    this.stageInViewer = new TableViewer( client, SWT.BORDER                                                                            
@@ -428,7 +428,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    gd.verticalSpan = 3;
    gd.horizontalSpan = 1;
    gd.widthHint = 600;
-   gd.heightHint = this.WIDGET_HEIGHT;
+   gd.heightHint = DataStagingPage.WIDGET_HEIGHT;
    
    //X
    this.stageOutViewer = new TableViewer( client, SWT.BORDER                                                                                

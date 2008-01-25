@@ -1118,24 +1118,6 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
 //  }
   
   
-  /**
-   * Method that check whether the adapter is empty. 
-   * 
-   * @return TRUE if the adapter is empty. If it is empty, it means that there 
-   * is no JobDefinition element in the JSDL document. 
-   */
-  public boolean isEmpty() {
-    boolean status = false;
-
-    if ( !this.posixApplicationType.equals( null ) ){       
-      status = true;
-    }
-    
-    return status;
-    
-  } // End boolean isEmpty()
-  
-  
   
   /**
    * Add an element to a Table Viewers input.

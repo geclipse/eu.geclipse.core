@@ -45,6 +45,7 @@ import org.eclipse.ui.forms.widgets.TableWrapData;
 public class ProblemPage extends FormPage {
   
   protected static final String PAGE_ID = "PROBLEM_PAGE"; //$NON-NLS-1$
+  private static final int WIDGET_HEIGHT = 250;
   protected Diagnostic diagnostic;
   protected MarkerHelper markerUtil;
   protected Composite body = null;
@@ -52,7 +53,7 @@ public class ProblemPage extends FormPage {
   protected Button button = null;
   protected Composite problemsSection = null;
   protected TreeViewer problemsViewer = null;
-  private final int WIDGET_HEIGHT = 250;
+  
   
 
   public ProblemPage( final FormEditor editor ) {

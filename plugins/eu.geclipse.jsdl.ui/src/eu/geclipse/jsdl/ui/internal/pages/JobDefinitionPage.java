@@ -71,6 +71,8 @@ public final class JobDefinitionPage extends FormPage
                                             implements INotifyChangedListener {
   
   protected static final String PAGE_ID = "JOB_DEFINITION";  //$NON-NLS-1$
+  private static final int widgetHeight = 100; 
+
   protected Object value = null;
   protected Text txtId = null;
   protected Text txtDescription = null;
@@ -93,7 +95,6 @@ public final class JobDefinitionPage extends FormPage
   private ImageDescriptor helpDesc = null; 
   private boolean contentRefreshed = false;
   private boolean dirtyFlag = false;  
-  private final int widgetHeight = 100; 
    
   
   
@@ -354,7 +355,7 @@ public final class JobDefinitionPage extends FormPage
     gd.verticalSpan = 1;
     gd.horizontalSpan = 3;
     gd.widthHint = 285;
-    gd.heightHint = this.widgetHeight;
+    gd.heightHint = JobDefinitionPage.widgetHeight;
     this.txtDescription.setLayoutData( gd );
  
     
@@ -374,7 +375,7 @@ public final class JobDefinitionPage extends FormPage
     gd.horizontalSpan = 1;
     gd.verticalSpan = 2;    
     gd.widthHint = 250;
-    gd.heightHint = this.widgetHeight;
+    gd.heightHint = JobDefinitionPage.widgetHeight;
 
     
     this.lstJobAnnotation = new List(client, SWT.None);
@@ -441,7 +442,7 @@ public final class JobDefinitionPage extends FormPage
      gd.verticalSpan = 2;
      gd.horizontalSpan = 1;
      gd.widthHint = 250;
-     gd.heightHint = this.widgetHeight;
+     gd.heightHint = JobDefinitionPage.widgetHeight;
      
 
      this.lstJobProject = new List( client,  SWT.NONE );
