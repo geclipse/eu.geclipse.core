@@ -66,9 +66,9 @@ public final class ApplicationTypeAdapter extends JsdlAdaptersFactory {
    * 
    * @param jobDefinitionRoot . The root element of a JSDL document ({@link JobDefinitionType}).
    */
-  public ApplicationTypeAdapter ( final JobDefinitionType jobDefinitionType ){
+  public ApplicationTypeAdapter ( final JobDefinitionType jobDefinitionRoot ){
  
-    getTypeForAdapter( jobDefinitionType );
+    getTypeForAdapter( jobDefinitionRoot );
     
   } // End Constructor
   

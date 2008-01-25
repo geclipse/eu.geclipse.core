@@ -91,10 +91,6 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   private Hashtable< Integer, TableViewer > tableFeaturesMap = 
                                         new Hashtable< Integer, TableViewer >();
 
-  
-  
-  
-  
   private boolean adapterRefreshed = false;
   private boolean isNotifyAllowed = true;
   
@@ -104,9 +100,9 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    * 
    * @param jobDefinitionRoot . The root element of a JSDL document ({@link JobDefinitionType}).
    */
-  public PosixApplicationTypeAdapter(final EObject rootJsdlElement){
+  public PosixApplicationTypeAdapter( final EObject jobDefinitionRoot ) {
     
-     getTypeForAdapter(rootJsdlElement);
+     getTypeForAdapter( jobDefinitionRoot );
     
   } // End Class Constructor
   
@@ -145,10 +141,10 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    * 
    * @param jobDefinitionRoot The root element of a JSDL document.
    */
-  public void setContent( final EObject rootJsdlElement ) { 
+  public void setContent( final EObject jobDefinitionRoot ) { 
     
    this.adapterRefreshed = true; 
-   getTypeForAdapter( rootJsdlElement );   
+   getTypeForAdapter( jobDefinitionRoot );   
    
   } // End setContent()
   
@@ -458,7 +454,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    * that listens to changes in the text box and commits this changes to the underlying
    * model.
    * 
-   * @param widget The Text widget responsible for PosixApplication WallTimeLimit element.
+   * @param text The Text widget responsible for PosixApplication WallTimeLimit element.
    */
   public void attachToWallTimeLimit( final Text text ) {
     
@@ -498,7 +494,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    * that listens to changes in the text box and commits this changes to the underlying
    * model.
    * 
-   * @param widget The Text widget responsible for PosixApplication FileSizeLimit element.
+   * @param text The Text widget responsible for PosixApplication FileSizeLimit element.
    */
   public void attachToFileSizeLimit( final Text text ) {
     
@@ -541,7 +537,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    * that listens to changes in the text box and commits this changes to the underlying
    * model.
    * 
-   * @param widget The Text widget responsible for PosixApplication CoreDumpLimit element.
+   * @param text The Text widget responsible for PosixApplication CoreDumpLimit element.
    */
   public void attachToCoreDumpLimit( final Text text ) {
     
@@ -584,7 +580,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    * that listens to changes in the text box and commits this changes to the underlying
    * model.
    * 
-   * @param widget The Text widget responsible for PosixApplication DataSegment element.
+   * @param text The Text widget responsible for PosixApplication DataSegment element.
    */
   public void attachToDataSegmentLimit( final Text text ) {
     
@@ -627,7 +623,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    * that listens to changes in the text box and commits this changes to the underlying
    * model.
    * 
-   * @param widget The Text widget responsible for PosixApplication LockedMemoryLimit element.
+   * @param text The Text widget responsible for PosixApplication LockedMemoryLimit element.
    */
   public void attachToLockedMemoryLimit( final Text text ) {
     
@@ -670,7 +666,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    * that listens to changes in the text box and commits this changes to the underlying
    * model.
    * 
-   * @param widget The Text widget responsible for PosixApplication MemoryLimit element.
+   * @param text The Text widget responsible for PosixApplication MemoryLimit element.
    */
   public void attachToMemoryLimit( final Text text ) {
     
@@ -713,7 +709,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    * that listens to changes in the text box and commits this changes to the underlying
    * model.
    * 
-   * @param widget The Text widget responsible for PosixApplication OpemDescriptorsLimit element.
+   * @param text The Text widget responsible for PosixApplication OpemDescriptorsLimit element.
    */
   public void attachToOpenDesciptorsLimit( final Text text ) {
     
@@ -756,7 +752,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    * that listens to changes in the text box and commits this changes to the underlying
    * model.
    * 
-   * @param widget The Text widget responsible for PosixApplication PipeSizeLimit element.
+   * @param text The Text widget responsible for PosixApplication PipeSizeLimit element.
    */
   public void attachToPipeSizeLimit( final Text text ) {
     
@@ -799,7 +795,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    * that listens to changes in the text box and commits this changes to the underlying
    * model.
    * 
-   * @param widget The Text widget responsible for PosixApplication StackSizeLimit element.
+   * @param text The Text widget responsible for PosixApplication StackSizeLimit element.
    */
   public void attachToStackSizeLimit( final Text text ) {
     
@@ -842,7 +838,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    * that listens to changes in the text box and commits this changes to the underlying
    * model.
    * 
-   * @param widget The Text widget responsible for PosixApplication CPUTimeLimit element.
+   * @param text The Text widget responsible for PosixApplication CPUTimeLimit element.
    */
   public void attachToCPUTimeLimit( final Text text ) {
     
@@ -885,7 +881,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    * that listens to changes in the text box and commits this changes to the underlying
    * model.
    * 
-   * @param widget The Text widget responsible for PosixApplication ProcessCountLimit element.
+   * @param text The Text widget responsible for PosixApplication ProcessCountLimit element.
    */
   public void attachToProcessCountLimit( final Text text ) {
     
@@ -927,7 +923,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    * that listens to changes in the text box and commits this changes to the underlying
    * model.
    * 
-   * @param widget The Text widget responsible for PosixApplication VirtualMemoryLimit element.
+   * @param text The Text widget responsible for PosixApplication VirtualMemoryLimit element.
    */
   public void attachToVirtualMemoryLimit( final Text text ) {
     
@@ -971,7 +967,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    * that listens to changes in the text box and commits this changes to the underlying
    * model.
    * 
-   * @param widget The Text widget responsible for PosixApplication ThreadCountLimit element.
+   * @param text The Text widget responsible for PosixApplication ThreadCountLimit element.
    */
   public void attachToThreadCountLimit( final Text text ) {
     
@@ -1017,7 +1013,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    * that listens to changes in the text box and commits this changes to the underlying
    * model.
    * 
-   * @param widget The Text widget responsible for PosixApplication UserName element.
+   * @param text The Text widget responsible for PosixApplication UserName element.
    */
   public void attachToUserName( final Text text ) {
     
@@ -1054,7 +1050,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
    * that listens to changes in the text box and commits this changes to the underlying
    * model.
    * 
-   * @param widget The Text widget responsible for PosixApplication GroupName element.
+   * @param text The Text widget responsible for PosixApplication GroupName element.
    */ 
   public void attachToGroupName( final Text text ) {
     

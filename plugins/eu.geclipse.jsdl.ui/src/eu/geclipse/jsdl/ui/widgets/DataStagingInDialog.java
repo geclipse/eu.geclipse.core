@@ -293,7 +293,8 @@ public class DataStagingInDialog extends Dialog {
     if( this.dialogStyle == ADVANCED_DIALOG ) {
       this.returnCreationFlag = this.creationFlagCombo.getSelectionIndex();
       if( this.deleteOnTerminationCombo.getSelectionIndex() != -1 ) {
-        this.returnDeleteFlag = Boolean.valueOf( Boolean.parseBoolean( this.deleteOnTerminationCombo.getItem( this.deleteOnTerminationCombo.getSelectionIndex() ) ));
+        this.returnDeleteFlag = Boolean.valueOf( Boolean.parseBoolean( this.deleteOnTerminationCombo
+                                                                       .getItem( this.deleteOnTerminationCombo.getSelectionIndex() ) ));
       }
     }
     super.okPressed();

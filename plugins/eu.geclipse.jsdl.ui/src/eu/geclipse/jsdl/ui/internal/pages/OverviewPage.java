@@ -244,7 +244,7 @@ public final class OverviewPage extends FormPage
 /*
  * Un-comment for Context-Sensitive Help system
  */
-//    PlatformUI.getWorkbench().getHelpSystem().setHelp(form.getBody(), "/eu.geclipse.doc.user/html/concepts/jobmanagement/creatingJSDL.html");
+// PlatformUI.getWorkbench().getHelpSystem().setHelp(form.getBody(), "/eu.geclipse.doc.user/html/concepts/jobmanagement/creatingJSDL.html");
     addFormPageHelp( form );
    
   }

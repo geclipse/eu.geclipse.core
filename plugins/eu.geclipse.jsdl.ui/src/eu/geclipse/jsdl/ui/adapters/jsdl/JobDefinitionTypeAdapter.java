@@ -109,7 +109,7 @@ public final class JobDefinitionTypeAdapter extends JsdlAdaptersFactory {
   /**
    * Allows to set the adapter's content on demand and not through the adapter constructor.
    * 
-   * @param documentRoot. The root element of a JSDL document ({@link JobDefinitionType}). 
+   * @param documentRoot The root element of a JSDL document ({@link JobDefinitionType}). 
    */
   public void setContent( final JobDefinitionType documentRoot ) {
     

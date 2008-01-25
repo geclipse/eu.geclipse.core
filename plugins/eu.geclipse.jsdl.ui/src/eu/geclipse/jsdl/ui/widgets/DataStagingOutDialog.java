@@ -169,12 +169,13 @@ public class DataStagingOutDialog extends Dialog {
       @Override
       public void widgetSelected( final SelectionEvent e ) {
         String filename = null;
-        IGridConnectionElement connection = GridFileDialog.openFileDialog( PlatformUI.getWorkbench()
-                                                                             .getActiveWorkbenchWindow()
-                                                                             .getShell(),
-                                                                           Messages.getString( "DataStageOutTable.grid_file_dialog_title" ), //$NON-NLS-1$
-                                                                           null,
-                                                                           true );
+        IGridConnectionElement connection = GridFileDialog
+                                                .openFileDialog( PlatformUI.getWorkbench()
+                                                                 .getActiveWorkbenchWindow()
+                                                                 .getShell(),
+                                                            Messages.getString( "DataStageOutTable.grid_file_dialog_title" ), //$NON-NLS-1$
+                                                            null,
+                                                            true );
         if( connection != null ) {
           filename = connection.getURI().toString();
           if( filename != null ) {
@@ -288,7 +289,8 @@ public class DataStagingOutDialog extends Dialog {
     if( this.dialogStyle == ADVANCED_DIALOG ) {
       this.returnCreationFlag = this.creationFlagCombo.getSelectionIndex();
       if( this.deleteOnTerminationCombo.getSelectionIndex() != -1 ) {
-        this.returnDeleteFlag = Boolean.valueOf( Boolean.parseBoolean( this.deleteOnTerminationCombo.getItem( this.deleteOnTerminationCombo.getSelectionIndex() ) ) );
+        this.returnDeleteFlag = Boolean.valueOf( Boolean.parseBoolean( this.deleteOnTerminationCombo
+                                                                       .getItem( this.deleteOnTerminationCombo.getSelectionIndex() ) ) );
       }
     }
     super.okPressed();
