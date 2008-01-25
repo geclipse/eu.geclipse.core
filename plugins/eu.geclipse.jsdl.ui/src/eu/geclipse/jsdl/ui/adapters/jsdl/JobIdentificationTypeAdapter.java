@@ -16,10 +16,7 @@
   *****************************************************************************/
 package eu.geclipse.jsdl.ui.adapters.jsdl;
 
-/**
- * @author nickl
- *
- */
+
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -335,8 +332,7 @@ public final class JobIdentificationTypeAdapter extends JsdlAdaptersFactory {
    * JobIdentificationType adapter.
    */
   @SuppressWarnings("unchecked")
-  public void load()
-  {
+  public void load() {
     
     this.isNotifyAllowed = false;
     EObject object = this.jobIdentificationType;
@@ -344,55 +340,55 @@ public final class JobIdentificationTypeAdapter extends JsdlAdaptersFactory {
     List listName = null;
     
     // Test if eObject is not empty.
-    if(object != null) {
+    if( object != null ) {
       EClass eClass = object.eClass();
              
         
         EList<EStructuralFeature> allEStructuralFeatures =
                                              eClass.getEAllStructuralFeatures();
-        for( EStructuralFeature eStructuralFeature : allEStructuralFeatures) {
+        for( EStructuralFeature eStructuralFeature : allEStructuralFeatures ) {
       
         
         //Get Attribute Value.
         Object value = object.eGet( eStructuralFeature );        
              
-        Integer featureID =  Integer.valueOf(eStructuralFeature.getFeatureID());
+        Integer featureID =  Integer.valueOf( eStructuralFeature.getFeatureID() );
       
         //Check if Attribute has any value
-        if (object.eIsSet( eStructuralFeature )
-            && this.widgetFeaturesMap.containsKey( featureID )){   
+        if ( object.eIsSet( eStructuralFeature )
+            && this.widgetFeaturesMap.containsKey( featureID ) ){   
           
         
-          if (eStructuralFeature.getUpperBound() == 1){ 
+          if ( eStructuralFeature.getUpperBound() == 1 ) { 
           
            widgetName = this.widgetFeaturesMap.get( featureID );
         
            
-             if (eStructuralFeature.getFeatureID() 
-                                   != JsdlPackage.JOB_IDENTIFICATION_TYPE__ANY){
-               widgetName.setText(value.toString());
+             if ( eStructuralFeature.getFeatureID() 
+                                   != JsdlPackage.JOB_IDENTIFICATION_TYPE__ANY ){
+               widgetName.setText( value.toString() );
              } //end if "ANY"
            }//end if UpperBound == 1                        
               
         // Add Multiplicity-Many Elements to attached Lists.
-        else if (eStructuralFeature.getUpperBound()  
-                                 == ETypedElement.UNBOUNDED_MULTIPLICITY) {
+        else if ( eStructuralFeature.getUpperBound()  
+                                 == ETypedElement.UNBOUNDED_MULTIPLICITY ) {
                         
             listName = this.listFeaturesMap.get( featureID );
                      
-            EList valueArray = (EList) value;       
+            EList valueArray = ( EList ) value;       
             
              
             Object eFeatureInst = null;
           
-            if(!this.adapterRefreshed) {
-              for (Iterator it = valueArray.iterator(); it.hasNext();){
+            if( !this.adapterRefreshed ) {
+              for ( Iterator it = valueArray.iterator(); it.hasNext(); ){
                             
                 eFeatureInst = it.next();             
                 this.eStructuralFeaturesMap.put( eFeatureInst.toString(),
                                               eStructuralFeature );
               
-                listName.add( eFeatureInst.toString());
+                listName.add( eFeatureInst.toString() );
               } // End for
             } // End if
           }// End UNBOUNDED_MULTIPLICITY
@@ -411,7 +407,7 @@ public final class JobIdentificationTypeAdapter extends JsdlAdaptersFactory {
   
   
   
-  private void removeFromMap (final Object key){
+  private void removeFromMap ( final Object key ){
     
     this.eStructuralFeaturesMap.remove( key );
     
@@ -423,11 +419,11 @@ public final class JobIdentificationTypeAdapter extends JsdlAdaptersFactory {
    * @return TRUE if the adapter is empty. If it is empty, it means that there 
    * is no JobDefinition element in the JSDL document. 
    */ 
-  public boolean isEmpty(){
-    boolean status = false;
+  public boolean isEmpty() {
+    boolean status = true;
 
-    if (!this.jobIdentificationType.equals( null )){       
-      status = true;
+    if ( !this.jobIdentificationType.equals( null ) ) {       
+      status = false;
     }
     
     return status;

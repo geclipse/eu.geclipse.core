@@ -47,7 +47,6 @@ import org.eclipse.emf.common.command.CommandStackListener;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.notify.impl.AdapterFactoryImpl;
 import org.eclipse.emf.common.ui.MarkerHelper;
-import org.eclipse.emf.common.ui.editor.ProblemEditorPart;
 import org.eclipse.emf.common.util.BasicDiagnostic;
 import org.eclipse.emf.common.util.Diagnostic;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -90,6 +89,7 @@ import eu.geclipse.jsdl.ui.internal.pages.DataStagingPage;
 import eu.geclipse.jsdl.ui.internal.pages.JobApplicationPage;
 import eu.geclipse.jsdl.ui.internal.pages.JobDefinitionPage;
 import eu.geclipse.jsdl.ui.internal.pages.OverviewPage;
+import eu.geclipse.jsdl.ui.internal.pages.ProblemPage;
 import eu.geclipse.jsdl.ui.internal.pages.ResourcesPage;
 
 
@@ -125,6 +125,9 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
   protected DocumentRoot documentRoot = null;
   
   
+  /**
+   * This listens for workspace changes.
+   */
   protected IResourceChangeListener resourceChangeListener =
     new IResourceChangeListener()
     {
@@ -158,11 +161,11 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
                     {
                       if ((delta.getKind() & IResourceDelta.REMOVED) != 0)
                       {
-                        this.removedRes.add(resource);
+                        this.removedRes.add( resource );
                       }
-                      else if (!JsdlEditor.this.savedResources.remove(resource))
+                      else if ( !JsdlEditor.this.savedResources.remove( resource ) )
                       {
-                        this.changedRes.add(resource);
+                        this.changedRes.add( resource );
                       }
                     }
                   }
@@ -202,10 +205,10 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
               }
             }
 
-            if (!visitor.getChangedResources().isEmpty())
+            if ( !visitor.getChangedResources().isEmpty() )
             {
-              JsdlEditor.this.changedResources.addAll(visitor.getChangedResources());
-              if (getSite().getPage().getActiveEditor() == JsdlEditor.this)
+              JsdlEditor.this.changedResources.addAll( visitor.getChangedResources() );
+              if ( getSite().getPage().getActiveEditor() == JsdlEditor.this )
               {
                 getSite().getShell().getDisplay().asyncExec
                   (new Runnable()
@@ -227,7 +230,9 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
     };
     
     
-    
+    /**
+     * Adapter used to update the problem indication when resources are demanded loaded.
+     */
     protected EContentAdapter problemIndicationAdapter = 
       new EContentAdapter()
       {
@@ -242,18 +247,18 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
               case Resource.RESOURCE__ERRORS:
               case Resource.RESOURCE__WARNINGS:
               {
-                Resource resource = (Resource)notification.getNotifier();
-                Diagnostic diagnostic = analyzeResourceProblems((Resource)notification.getNotifier(), null);
-                if (diagnostic.getSeverity() != Diagnostic.OK)
+                Resource resource = ( Resource )notification.getNotifier();
+                Diagnostic diagnostic = analyzeResourceProblems( ( Resource )notification.getNotifier(), null );
+                if ( diagnostic.getSeverity() != Diagnostic.OK )
                 {
-                  JsdlEditor.this.resourceToDiagnosticMap.put(resource, diagnostic);
+                  JsdlEditor.this.resourceToDiagnosticMap.put( resource, diagnostic );
                 }
                 else
                 {
-                  JsdlEditor.this.resourceToDiagnosticMap.remove(resource);
+                  JsdlEditor.this.resourceToDiagnosticMap.remove( resource );
                 }
 
-                if (JsdlEditor.this.updateProblemIndication)
+                if ( JsdlEditor.this.updateProblemIndication )
                 {
                   getSite().getShell().getDisplay().asyncExec
                     (new Runnable()
@@ -269,7 +274,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
           }
           else
           {
-            super.notifyChanged(notification);
+            super.notifyChanged( notification );
           }
         }
 
@@ -296,13 +301,17 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
     private JobApplicationPage jobApplicationPage = new JobApplicationPage(this);
     private DataStagingPage dataStagingPage = new DataStagingPage(this);
     private ResourcesPage resourcesPage = new ResourcesPage(this);
+    private ProblemPage problemPage = null;
+    
 
   
   
   /**
    * JsdlEditor Class Constructor. 
    */
-  public JsdlEditor(){
+  public JsdlEditor() {
+    
+    super();
     
     /*
      *  Create an adapter factory that yields item providers.
@@ -333,7 +342,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
       (new CommandStackListener()
        {
          @SuppressWarnings("synthetic-access")
-        public void commandStackChanged(final EventObject event)
+        public void commandStackChanged( final EventObject event )
          {
            Composite container2 = getContainer();
           container2.getDisplay().asyncExec
@@ -355,8 +364,9 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
      *  Create the editing domain with a special command stack.
      */
     
-    this.editingDomain = new AdapterFactoryEditingDomain(this.adapterFactory, 
-      commandStack, new HashMap<Resource, Boolean>()); 
+    this.editingDomain = new AdapterFactoryEditingDomain( this.adapterFactory,
+                                                          commandStack,
+                                                          new HashMap<Resource, Boolean>() ); 
         
       }
   
@@ -418,21 +428,21 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
   
   
   @Override
-  protected void addPages()
-  {
-    getJsdlModel();   
+  protected void addPages() {
       
      try {
-      addPage( this.overviewPage );
-      addPage( this.jobDefPage );
-      addPage( this.jobApplicationPage );
-      addPage( this.dataStagingPage );  
-      addPage( this.resourcesPage );      
-      addResourceEditorPage();
-      pushContentToPages();
-      
-         }
-   catch ( PartInitException e ) {     
+       if ( getJsdlModel() ) { 
+         addPage( this.overviewPage );
+         addPage( this.jobDefPage );
+         addPage( this.jobApplicationPage );
+         addPage( this.dataStagingPage );  
+         addPage( this.resourcesPage );
+         pushContentToPages(); 
+       }
+      updateProblemIndication();
+      addResourceEditorPage();  
+      }
+     catch ( PartInitException e ) {     
       Activator.logException( e );      
    }
     
@@ -447,11 +457,21 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
   
   private void pushContentToPages() {
     
-    this.overviewPage.setPageContent( this.jobDefType, isModelRefreshed() );
-    this.jobDefPage.setPageContent( this.jobDefType, isModelRefreshed() );
-    this.jobApplicationPage.setPageContent( this.jobDefType, isModelRefreshed() );
-    this.resourcesPage.setPageContent( this.jobDefType, isModelRefreshed() );
-    this.dataStagingPage.setPageContent( this.jobDefType, isModelRefreshed() );    
+    if (this.overviewPage != null ) {
+      this.overviewPage.setPageContent( this.jobDefType, isModelRefreshed() );
+    }
+    if (this.jobDefPage != null ){
+      this.jobDefPage.setPageContent( this.jobDefType, isModelRefreshed() );
+    }
+    if ( this.jobApplicationPage != null ) {
+      this.jobApplicationPage.setPageContent( this.jobDefType, isModelRefreshed() );
+    }
+    if (this.resourcesPage != null) {
+      this.resourcesPage.setPageContent( this.jobDefType, isModelRefreshed() );
+    }
+    if ( this.dataStagingPage != null ){
+      this.dataStagingPage.setPageContent( this.jobDefType, isModelRefreshed() );
+    }
     
   }
   
@@ -467,13 +487,13 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
   }
   
  
+  
   /*
    * This method adds the Resource Editor Page to the JSDL editor
    */
-  private void addResourceEditorPage()throws PartInitException{
+  private void addResourceEditorPage()throws PartInitException {
         
-    this.sourcePageIndex = addPage(getSourceEditor(), getEditorInput());
-    
+    this.sourcePageIndex = addPage( getSourceEditor(), getEditorInput() );    
     
     setPageText( this.sourcePageIndex, getEditorInput().getName() );
 
@@ -487,11 +507,9 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
    * This method returns a Text Editor for addResourceEditorPage method.
    */
 
-  private StructuredTextEditor getSourceEditor()
-  {  
+  private StructuredTextEditor getSourceEditor() {  
     
-     if ( this.editor == null )
-      {
+     if ( this.editor == null ) {
        this.editor = new StructuredTextEditor();   
        this.editor.setEditorPart( this );
       }
@@ -535,35 +553,35 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
 
 
     
-    protected void handleActivate()
-      {
+    protected void handleActivate() {
+      
         // Recompute the read only state.
 
-        if (this.editingDomain.getResourceToReadOnlyMap() != null)
-        {
+        if ( this.editingDomain.getResourceToReadOnlyMap() != null ) {
+          
           this.editingDomain.getResourceToReadOnlyMap().clear();
 
           // Refresh any actions that may become enabled or disabled.
 
-          setSelection(getSelection());
+          setSelection( getSelection() );
         }
 
-        if (!this.removedResources.isEmpty())
-        {
-          if (handleDirtyConflict())
-          {
+        if ( !this.removedResources.isEmpty() ) {
+          
+          if ( handleDirtyConflict() ) {
+            
             getSite().getPage().closeEditor(JsdlEditor.this, false);
             JsdlEditor.this.dispose();
           }
-          else
-          {
+          else {
+            
             this.removedResources.clear();
             this.changedResources.clear();
             this.savedResources.clear();
           }
         }
-        else if (!this.changedResources.isEmpty())
-        {
+        else if ( !this.changedResources.isEmpty() ) {
+          
           this.changedResources.removeAll(this.savedResources);
           handleChangedResources();
           this.changedResources.clear();
@@ -573,28 +591,23 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
     
     
     
-    protected void handleChangedResources()
-      {
-        if (!this.changedResources.isEmpty() && (!isDirty() || handleDirtyConflict()))
-        {
+    protected void handleChangedResources() {
+      
+        if ( !this.changedResources.isEmpty() && ( !isDirty() || handleDirtyConflict() ) ) {
           this.editingDomain.getCommandStack().flush();
 
           this.updateProblemIndication = false;
-          for (Iterator< Resource > i = this.changedResources.iterator(); i.hasNext(); )
-          {
+          for ( Iterator< Resource > i = this.changedResources.iterator(); i.hasNext(); ) {
             Resource resource = i.next();
-            if (resource.isLoaded())
-            {
+            
+            if ( resource.isLoaded() ) {
               resource.unload();
-              try
-              {
-                resource.load(Collections.EMPTY_MAP);
+              try {
+                resource.load( Collections.EMPTY_MAP );
               }
-              catch (IOException exception)
-              {
-                if (!this.resourceToDiagnosticMap.containsKey(resource))
-                {
-                  this.resourceToDiagnosticMap.put(resource, analyzeResourceProblems(resource, exception));
+              catch ( IOException exception ) {
+                if ( !this.resourceToDiagnosticMap.containsKey(resource) ) {
+                  this.resourceToDiagnosticMap.put(resource, analyzeResourceProblems( resource, exception) );
                 }
               }
             }
@@ -605,6 +618,8 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
         }
       }
 
+    
+    
     protected boolean handleDirtyConflict()
       {
         return
@@ -636,6 +651,12 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
   @Override
   public void doSave( final IProgressMonitor monitor )
   {
+    // Save only resources that have actually changed.
+    //
+    final Map<Object, Object> saveOptions = new HashMap<Object, Object>();
+    saveOptions.put(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER);
+    
+    
     /* Do the work within an operation because this is a long running activity
      * that modifies the workbench.
      */
@@ -660,7 +681,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
               try
               {
                 JsdlEditor.this.savedResources.add(resource);
-                resource.save(Collections.EMPTY_MAP);
+                resource.save(saveOptions);
               }
               catch (Exception exception)
               {
@@ -683,11 +704,11 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
     {
       // This runs the options, and shows progress.
 
-      new ProgressMonitorDialog(getSite().getShell()).run(true, false, operation);
+      new ProgressMonitorDialog( getSite().getShell() ).run( true, false, operation );
 
       // Refresh the necessary state.
 
-      ((BasicCommandStack)this.editingDomain.getCommandStack()).saveIsDone();
+      ( ( BasicCommandStack) this.editingDomain.getCommandStack() ).saveIsDone();
 
       //setDirty( false );
       doTextEditorSave();
@@ -710,24 +731,25 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
   
 
   @Override
-  public void doSaveAs()
-  {
-    SaveAsDialog saveAsDialog= new SaveAsDialog(getSite().getShell());
+  public void doSaveAs() {
+    
+    SaveAsDialog saveAsDialog= new SaveAsDialog( getSite().getShell() );
     saveAsDialog.open();
     IPath path= saveAsDialog.getResult();
-    if (path != null)
-    {
-      IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
-      if (file != null)
-      {
-        doSaveAs(URI.createPlatformResourceURI(file.getFullPath().toString(), false), new FileEditorInput(file));
+    if ( path != null ) {
+      IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile( path );
+      if ( file != null ) {
+        doSaveAs( URI.createPlatformResourceURI( file.getFullPath().toString(), false ), new FileEditorInput( file ) );
       }
     }
     
   }
   
-  // Save the JSDL file (used as the editor input) as a different name.
   
+  
+  /*
+   *  Save the JSDL file (used as the editor input) as a different name.
+   */  
   protected void doSaveAs(final URI uri, final IEditorInput editorInput)
   {
     this.editingDomain.getResourceSet().getResources().get(0).setURI(uri);
@@ -737,12 +759,16 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
     doSave(progressMonitor);
   }
  
+  
+  
   protected void doTextEditorSave(){
     
     this.editor.doSave( null );
     
   }
 
+  
+  
   @Override
   public boolean isSaveAsAllowed()
   {
@@ -756,8 +782,8 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
   protected void updateProblemIndication()
   {
     
-    if (this.updateProblemIndication)
-    {
+    if (this.updateProblemIndication) {
+      
       BasicDiagnostic diagnostic =
         new BasicDiagnostic
           (Diagnostic.OK,
@@ -765,54 +791,59 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
            0,
            null,
            new Object [] { this.editingDomain.getResourceSet() });
-      for (Iterator<Diagnostic> i = this.resourceToDiagnosticMap.values().iterator(); i.hasNext(); )
-      {
+      
+      for (Iterator<Diagnostic> i = this.resourceToDiagnosticMap.values().iterator(); i.hasNext(); ) {
+        
         Diagnostic childDiagnostic = i.next();
-        if (childDiagnostic.getSeverity() != Diagnostic.OK)
-        {
+        if (childDiagnostic.getSeverity() != Diagnostic.OK) {
+          
           diagnostic.add(childDiagnostic);
-        }
-      }
-
-      int lastEditorPage = getPageCount() - 1;
-      if (lastEditorPage >= 0 && getEditor(lastEditorPage) instanceof ProblemEditorPart)
-      {
-        ((ProblemEditorPart)getEditor(lastEditorPage)).setDiagnostic(diagnostic);
-        if (diagnostic.getSeverity() != Diagnostic.OK)
-        {
-          setActivePage(lastEditorPage);
-        }
-      }
-      else if (diagnostic.getSeverity() != Diagnostic.OK)
-      {
-        ProblemEditorPart problemEditorPart = new ProblemEditorPart();
-        problemEditorPart.setDiagnostic(diagnostic);
-        problemEditorPart.setMarkerHelper(this.markerHelper);
-        try
-        {
-          addPage(++lastEditorPage, problemEditorPart, getEditorInput());
-          setPageText(lastEditorPage, problemEditorPart.getPartName());
-          setActivePage(lastEditorPage);
-        }
-        catch (PartInitException exception)
-        {
-          Activator.logException( exception );        
+          /*
+           * There are errors in the resource so add the Markers.
+           */
+          try {
+            markerHelper.createMarkers( diagnostic );
+            editor.update();
+            
+          } catch( CoreException e ) {
+            // TODO Auto-generated catch block
+            Activator.logException( e );
+          }
           
         }
       }
-
-      if (this.markerHelper.hasMarkers(this.editingDomain.getResourceSet()))
-      {
-        this.markerHelper.deleteMarkers(this.editingDomain.getResourceSet());
-        if (diagnostic.getSeverity() != Diagnostic.OK)
-        {
-          try
-          {
-            this.markerHelper.createMarkers(diagnostic);
+      
+//      if ( problemPage != null ) {
+//        if ( diagnostic.getSeverity() != Diagnostic.OK ) {
+//          setActivePage( problemPage.getId() );
+//          problemPage.setDiagnostic( diagnostic );
+//          
+//        }
+//        
+//      }      
+//      else if ( diagnostic.getSeverity() != Diagnostic.OK ) {
+//        this.problemPage = new ProblemPage( this );
+//
+//        try {
+//          addPage( problemPage );
+//          /* Make the page active so that all widgets are created */
+//          setActivePage( problemPage.getId() );
+//          problemPage.setDiagnostic( diagnostic );
+//          problemPage.setMarkerHelper(markerHelper);
+//        } catch( PartInitException e ) {
+//          Activator.logException( e ); 
+//        }
+//      }
+      
+      
+      if ( markerHelper.hasMarkers( editingDomain.getResourceSet() ) ) {
+        markerHelper.deleteMarkers( editingDomain.getResourceSet() );
+        if (diagnostic.getSeverity() != Diagnostic.OK) {
+          try {
+            markerHelper.createMarkers( diagnostic );
           }
-          catch (CoreException exception)
-          {
-            Activator.logException( exception );            
+          catch ( CoreException exception ) {
+            Activator.logException( exception );
           }
         }
       }
@@ -821,53 +852,54 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
   }
   
  
-    
-   
-  
-  
     
   /**
   * Responsible for de-serializing the model from the resource file.
   * The resource is passed to the getResourceRoot method.
   */
  
-  public void getJsdlModel() {
+  public boolean getJsdlModel() {
+    
+    boolean result = false;
     
     // Assumes that the input is a file object.
     //
-    IFileEditorInput modelFile = (IFileEditorInput)getEditorInput();
-    URI resourceURI = URI.createPlatformResourceURI(modelFile.getFile().getFullPath().toString(), false);
+    IFileEditorInput modelFile = ( IFileEditorInput )getEditorInput();
+    URI resourceURI = URI.createPlatformResourceURI( modelFile.getFile().getFullPath().toString(), false );
     Exception exception = null;
     Resource resource = null;
-    try
-    {
-      // Load the resource through the editing domain.
-     
-      resource = this.editingDomain.getResourceSet().getResource(resourceURI, true);
-      
+    
+    try {      
+      /* Load the resource through the editing domain. */     
+      resource = this.editingDomain.getResourceSet().getResource( resourceURI, true );      
     }
-    catch ( Exception e )
-    {
+    catch ( Exception e ) {
       exception = e;
-      resource = this.editingDomain.getResourceSet().getResource(resourceURI, false);
+      resource = this.editingDomain.getResourceSet().getResource( resourceURI, false );
     }
 
-    Diagnostic diagnostic = analyzeResourceProblems(resource, exception);
-    if (diagnostic.getSeverity() != Diagnostic.OK)
-    {
-      this.resourceToDiagnosticMap.put(resource,  analyzeResourceProblems(resource, exception));
+    Diagnostic diagnostic = analyzeResourceProblems( resource, exception );
+    if ( diagnostic.getSeverity() != Diagnostic.OK ) {
+      
+      this.resourceToDiagnosticMap.put( resource, analyzeResourceProblems( resource, exception) );
+      result = false;
     }
-      this.editingDomain.getResourceSet().eAdapters().add(this.problemIndicationAdapter);
-
-    getResourceRoot( resource ); 
+    else{
+      
+      getResourceRoot( resource );
+      result = true;
+    }
+    this.editingDomain.getResourceSet().eAdapters().add( this.problemIndicationAdapter );
     
     // This means the file was edited from an external editor so
     // push the new JSDL model to the pages.
     if ( !this.changedResources.isEmpty() ) {
         refreshEditor();
     }
-    
+    return result;
   }
+  
+  
   
   protected void refreshEditor() {
     
@@ -877,6 +909,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
     
   }
     
+  
   
   /*
    This method parses the resource in order to find which JSDL types
@@ -892,7 +925,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
 
        EObject testElement = iterator.next();           
 
-       /* Instaceof checks for each EObject that appears in the resource. 
+       /* Instace-of checks for each EObject that appears in the resource. 
         * We want to get the JobDefinition EObject which is the root Element of 
         * a JSDL Document.
         */
@@ -926,7 +959,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
       basicDiagnostic = new BasicDiagnostic(Diagnostic.ERROR,
                                             Activator.PLUGIN_ID,
                                             0,
-                                            Messages.getString( "JsdlMultiPageEditor.CreateModelErrorMessage" ),  //$NON-NLS-1$
+                                            String.format( Messages.getString( "JsdlEditor.CreateModelErrorMessage" ), resource.getURI() ),  //$NON-NLS-1$
                                             new Object [] { exception == null ? ( Object )resource : exception } );
       
       ( ( BasicDiagnostic ) basicDiagnostic ).merge( EcoreUtil.computeDiagnostic( resource, true ) );
@@ -940,8 +973,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
                                                   Messages.getString("JsdlMultiPageEditor.CreateModelErrorMessage"),  //$NON-NLS-1$
                                                   new Object[] { exception } );
         }
-        else
-        {
+        else { 
           basicDiagnostic = Diagnostic.OK_INSTANCE;
         }
     return basicDiagnostic;
@@ -956,30 +988,30 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
 
   
   
-  protected boolean isPersisted( final Resource resource )
-  {
+  protected boolean isPersisted( final Resource resource ) {
+    
     boolean result = false;
-    try
-    {
-      InputStream stream = this.editingDomain.getResourceSet().getURIConverter().createInputStream(resource.getURI());
-      if ( stream != null )
-        
-
-      {
+    try {
+      
+      InputStream stream = this.editingDomain.getResourceSet().getURIConverter().createInputStream( resource.getURI() );
+      if ( stream != null ) {
         result = true;
         stream.close();
       }
     }
-    catch ( IOException e )
-    {
+    catch ( IOException e ) {
       Activator.logException( e );
     }
+    
     return result;
+    
   }
   
   
   
-  // Method triggered when there are changes between the form pages.
+  /*
+   *  Method triggered when there are changes between the form pages.
+   */
     @Override
     protected void pageChange( final int pageIndex ) {
       

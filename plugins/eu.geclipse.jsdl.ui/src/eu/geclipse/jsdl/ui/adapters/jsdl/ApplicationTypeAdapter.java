@@ -88,8 +88,13 @@ public final class ApplicationTypeAdapter extends JsdlAdaptersFactory {
    */  
   private void  getTypeForAdapter( final JobDefinitionType jobDefinitionRoot ){
 
-    this.jobDescriptionType = jobDefinitionRoot.getJobDescription();
-    this.applicationType = this.jobDescriptionType.getApplication();
+    if ( jobDefinitionRoot.getJobDescription() != null ) {
+      this.jobDescriptionType = jobDefinitionRoot.getJobDescription();
+      if ( this.jobDescriptionType.getApplication() != null ) {
+        this.applicationType = this.jobDescriptionType.getApplication();    
+      }
+    }
+    
 
   } // End getTypeforAdapter
   
@@ -254,10 +259,10 @@ public final class ApplicationTypeAdapter extends JsdlAdaptersFactory {
    */
   public boolean isEmpty() {
     
-    boolean status = false;
+    boolean status = true;
 
     if ( !this.applicationType.equals( null ) ) {       
-      status = true;
+      status = false;
     }
     
     return status;

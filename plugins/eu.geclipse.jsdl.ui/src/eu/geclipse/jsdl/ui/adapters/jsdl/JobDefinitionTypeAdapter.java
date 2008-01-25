@@ -84,8 +84,10 @@ public final class JobDefinitionTypeAdapter extends JsdlAdaptersFactory {
    * 
    * @param widget The Text widget responsible for JobDefinition ID element.
    */
-  public void attachID(final Text widget){
+  public void attachID( final Text widget ) {
     
+    if ( widget != null) {
+      
     Integer featureID = Integer.valueOf( JsdlPackage.JOB_DEFINITION_TYPE__ID);
     this.widgetFeaturesMap.put( featureID, widget );
     
@@ -96,7 +98,9 @@ public final class JobDefinitionTypeAdapter extends JsdlAdaptersFactory {
         contentChanged();
         
       }
-    } );   
+    } );
+      
+    }
       
   } // End void attachID()
   
@@ -107,7 +111,7 @@ public final class JobDefinitionTypeAdapter extends JsdlAdaptersFactory {
    * 
    * @param documentRoot. The root element of a JSDL document ({@link JobDefinitionType}). 
    */
-  public void setContent(final JobDefinitionType documentRoot){
+  public void setContent( final JobDefinitionType documentRoot ) {
     
     getTypeForAdapter( documentRoot );
     
@@ -118,7 +122,7 @@ public final class JobDefinitionTypeAdapter extends JsdlAdaptersFactory {
   /*
    * Get the JobDefinition Elements from the Root JSDL Element.
    */
-   private void  getTypeForAdapter(final JobDefinitionType jobDefinitionRoot) {
+   private void  getTypeForAdapter( final JobDefinitionType jobDefinitionRoot ) {
      
         this.jobDefinitionType = jobDefinitionRoot;
         
@@ -178,10 +182,10 @@ public final class JobDefinitionTypeAdapter extends JsdlAdaptersFactory {
     * is no JobDefinition element in the JSDL document. 
     */
   public boolean isEmpty() {
-     boolean status = false;
+     boolean status = true;
  
      if ( !this.jobDefinitionType.equals( null ) ) {       
-       status = true;
+       status = false;
      }
      
      return status;

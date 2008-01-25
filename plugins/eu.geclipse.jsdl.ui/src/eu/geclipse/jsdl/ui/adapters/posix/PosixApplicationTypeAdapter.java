@@ -173,7 +173,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
                                           new ArrayList<POSIXApplicationType>();
     collection.add( this.posixApplicationType);
         
-    if (!this.applicationType.eIsSet( eStructuralFeature )){      
+    if ( !this.applicationType.eIsSet( eStructuralFeature ) ){      
       this.applicationType.eSet( eStructuralFeature, collection );
 
 
