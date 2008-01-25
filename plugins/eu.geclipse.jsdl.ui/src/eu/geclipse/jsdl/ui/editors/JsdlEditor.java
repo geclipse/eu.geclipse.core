@@ -89,7 +89,6 @@ import eu.geclipse.jsdl.ui.internal.pages.DataStagingPage;
 import eu.geclipse.jsdl.ui.internal.pages.JobApplicationPage;
 import eu.geclipse.jsdl.ui.internal.pages.JobDefinitionPage;
 import eu.geclipse.jsdl.ui.internal.pages.OverviewPage;
-import eu.geclipse.jsdl.ui.internal.pages.ProblemPage;
 import eu.geclipse.jsdl.ui.internal.pages.ResourcesPage;
 
 
@@ -108,7 +107,7 @@ import eu.geclipse.jsdl.ui.internal.pages.ResourcesPage;
  * <p>
  *
  */
-public final class JsdlEditor extends FormEditor implements IEditingDomainProvider{
+public final class JsdlEditor extends FormEditor implements IEditingDomainProvider {
   
 
   
@@ -145,17 +144,17 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
               protected Collection< Resource > changedRes = new ArrayList< Resource >();
               protected Collection< Resource > removedRes = new ArrayList< Resource >();
 
-              public boolean visit( final IResourceDelta delta )
+              public boolean visit( final IResourceDelta visitDelta )
               {
-                if ( delta.getFlags() != IResourceDelta.MARKERS 
-                    && delta.getResource().getType() == IResource.FILE ) {
+                if ( visitDelta.getFlags() != IResourceDelta.MARKERS 
+                    && visitDelta.getResource().getType() == IResource.FILE ) {
                   
-                  if ( ( delta.getKind() & ( IResourceDelta.CHANGED | IResourceDelta.REMOVED ) ) != 0 ) {
+                  if ( ( visitDelta.getKind() & ( IResourceDelta.CHANGED | IResourceDelta.REMOVED ) ) != 0 ) {
                     
-                    Resource resource = this.resourceSet.getResource( URI.createURI( delta.getFullPath().toString() ), false );
+                    Resource resource = this.resourceSet.getResource( URI.createURI( visitDelta.getFullPath().toString() ), false );
                     
                     if ( resource != null ) {
-                      if ( ( delta.getKind() & IResourceDelta.REMOVED ) != 0 ) {
+                      if ( ( visitDelta.getKind() & IResourceDelta.REMOVED ) != 0 ) {
                         this.removedRes.add( resource );
                       }
                       else if ( !JsdlEditor.this.savedResources.remove( resource ) )
@@ -222,6 +221,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
         }
       }
     };
+    
     
     
     /**
@@ -294,8 +294,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
     private JobDefinitionPage jobDefPage = new JobDefinitionPage(this);
     private JobApplicationPage jobApplicationPage = new JobApplicationPage(this);
     private DataStagingPage dataStagingPage = new DataStagingPage(this);
-    private ResourcesPage resourcesPage = new ResourcesPage(this);
-    private ProblemPage problemPage = null;
+    private ResourcesPage resourcesPage = new ResourcesPage(this);    
     
 
   
@@ -641,10 +640,11 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
 
       
         @Override
-        public void execute( final IProgressMonitor monitor )
+        public void execute( @SuppressWarnings("hiding")
+        final IProgressMonitor monitor )
         {
           // Save the resources to the file system.
-          //
+          
           boolean first = true;
           for (Iterator<?> i = JsdlEditor.this.editingDomain.getResourceSet().getResources().iterator(); i.hasNext(); )
           {
@@ -743,19 +743,16 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
   
   
   @Override
-  public boolean isSaveAsAllowed()
-  {
+  public boolean isSaveAsAllowed() {
     
-    return true;
-    
+    return true;    
   }
  
  
   
-  protected void updateProblemIndication()
-  {
+  protected void updateProblemIndication() {
     
-    if (this.updateProblemIndication) {
+    if ( this.updateProblemIndication ) {
       
       BasicDiagnostic diagnostic =
         new BasicDiagnostic
@@ -776,38 +773,18 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
            */
           try {
             this.markerHelper.createMarkers( diagnostic );
-            this.editor.update();
-            
+            if (this.editor != null) {
+              /* The source editor is the last page of the JSDL editor. So activate it to show the errors
+               * for manual correction */
+              this.setActivePage( getPageCount() );
+              this.editor.update();
+            }            
           } catch( CoreException e ) {
-            // TODO Auto-generated catch block
             Activator.logException( e );
           }
           
         }
       }
-      
-//      if ( problemPage != null ) {
-//        if ( diagnostic.getSeverity() != Diagnostic.OK ) {
-//          setActivePage( problemPage.getId() );
-//          problemPage.setDiagnostic( diagnostic );
-//          
-//        }
-//        
-//      }      
-//      else if ( diagnostic.getSeverity() != Diagnostic.OK ) {
-//        this.problemPage = new ProblemPage( this );
-//
-//        try {
-//          addPage( problemPage );
-//          /* Make the page active so that all widgets are created */
-//          setActivePage( problemPage.getId() );
-//          problemPage.setDiagnostic( diagnostic );
-//          problemPage.setMarkerHelper(markerHelper);
-//        } catch( PartInitException e ) {
-//          Activator.logException( e ); 
-//        }
-//      }
-      
       
       if ( this.markerHelper.hasMarkers( this.editingDomain.getResourceSet() ) ) {
         this.markerHelper.deleteMarkers( this.editingDomain.getResourceSet() );
@@ -823,6 +800,13 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
     }
     
   }
+  
+  
+//  private void disposePages(){
+//    if (this.jobDefPage != null){
+//      this.jobDefPage.dispose();
+//    }
+//  }
   
  
     

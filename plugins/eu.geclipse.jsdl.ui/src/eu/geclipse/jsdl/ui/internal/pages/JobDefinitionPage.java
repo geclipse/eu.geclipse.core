@@ -135,6 +135,14 @@ public final class JobDefinitionPage extends FormPage
   }
   
   
+  @Override
+  public void dispose() {
+    super.dispose();
+    this.jobDefinitionTypeAdapter = null;
+    this.jobIdentificationTypeAdapter = null;
+  }
+  
+  
   
   /**
    * Method that set's the JobDefinition Page content. The content is the root 
