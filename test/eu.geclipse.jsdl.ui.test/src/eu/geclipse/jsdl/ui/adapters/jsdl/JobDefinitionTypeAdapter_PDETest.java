@@ -111,11 +111,4 @@ public class JobDefinitionTypeAdapter_PDETest {
      */    
   }
 
-  /**
-   * tests the method {@link JobDefinitionTypeAdapter#isEmpty()}
-   */
-  @Test
-  public void testIsEmpty() {
-    Assert.assertTrue( jobDefinitionTypeAdapter.isEmpty() );
-  }
 }

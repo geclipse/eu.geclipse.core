@@ -151,11 +151,4 @@ public class JobIdentificationTypeAdapter_PDETest {
      */ 
   }
 
-  /**
-   * Test method for {@link eu.geclipse.jsdl.ui.adapters.jsdl.JobIdentificationTypeAdapter#isEmpty()}.
-   */
-  @Test
-  public void testIsEmpty() {
-    Assert.assertTrue( jobIdentificationTypeAdapter.isEmpty() );
-  }
 }

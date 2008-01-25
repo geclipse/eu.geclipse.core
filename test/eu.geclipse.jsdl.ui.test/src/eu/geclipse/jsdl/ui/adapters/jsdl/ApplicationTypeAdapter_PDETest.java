@@ -76,7 +76,7 @@ public class ApplicationTypeAdapter_PDETest {
    */
   @Test
   public void testSetContent() {
-    Assert.assertTrue( applicationTypeAdapter.isEmpty() );
+    Assert.assertNull( applicationTypeAdapter );
   }
 
   /**
@@ -114,11 +114,4 @@ public class ApplicationTypeAdapter_PDETest {
      */    
   }
 
-  /**
-   * Test method for {@link eu.geclipse.jsdl.ui.adapters.jsdl.ApplicationTypeAdapter#isEmpty()}.
-   */
-  @Test
-  public void testIsEmpty() {
-    Assert.assertTrue( applicationTypeAdapter.isEmpty() );
-  }
 }
