@@ -63,6 +63,10 @@ public interface IGlueInfoStore {
    */
   public void removeAllStateListeners();
   
+  /**
+   * Notify that a change has been made.
+   * @param agtList
+   */
   public void notifyListeners( final ArrayList<AbstractGlueTable> agtList );
     
 }

@@ -18,7 +18,13 @@ import org.eclipse.jface.viewers.IElementComparer;
 
 import eu.geclipse.info.views.GlueInfoViewer.TreeParent;
 
-
+/**
+ * This class is used to sort the elements in the GlueInfoView.
+ * The TreeParent obhects are shown first as the considered to 
+ * be folders  
+ * @author tnikos
+ *
+ */
 public class GlueInfoComparator implements IElementComparer
 {
 
