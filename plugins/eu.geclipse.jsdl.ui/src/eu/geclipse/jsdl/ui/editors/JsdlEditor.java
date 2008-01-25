@@ -131,7 +131,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
   protected IResourceChangeListener resourceChangeListener =
     new IResourceChangeListener()
     {
-      public void resourceChanged(final IResourceChangeEvent event)
+      public void resourceChanged( final IResourceChangeEvent event )
       {
         // Only listening to these.
         // if (event.getType() == IResourceDelta.POST_CHANGE)
@@ -141,26 +141,21 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
           {
             class ResourceDeltaVisitor implements IResourceDeltaVisitor
             {
-              protected ResourceSet resourceSet = 
-                                 JsdlEditor.this.editingDomain.getResourceSet();
-              protected Collection< Resource > changedRes= 
-                                                    new ArrayList< Resource >();
-              protected Collection< Resource > removedRes =
-                                                    new ArrayList< Resource >();
+              protected ResourceSet resourceSet = JsdlEditor.this.editingDomain.getResourceSet();
+              protected Collection< Resource > changedRes = new ArrayList< Resource >();
+              protected Collection< Resource > removedRes = new ArrayList< Resource >();
 
               public boolean visit( final IResourceDelta delta )
               {
-                if (delta.getFlags() != IResourceDelta.MARKERS 
-                    &&
-                    delta.getResource().getType() == IResource.FILE)
-                {
-                  if ((delta.getKind() & (IResourceDelta.CHANGED | IResourceDelta.REMOVED)) != 0)
-                  {
-                    Resource resource = this.resourceSet.getResource(URI.createURI(delta.getFullPath().toString()), false);
-                    if (resource != null)
-                    {
-                      if ((delta.getKind() & IResourceDelta.REMOVED) != 0)
-                      {
+                if ( delta.getFlags() != IResourceDelta.MARKERS 
+                    && delta.getResource().getType() == IResource.FILE ) {
+                  
+                  if ( ( delta.getKind() & ( IResourceDelta.CHANGED | IResourceDelta.REMOVED ) ) != 0 ) {
+                    
+                    Resource resource = this.resourceSet.getResource( URI.createURI( delta.getFullPath().toString() ), false );
+                    
+                    if ( resource != null ) {
+                      if ( ( delta.getKind() & IResourceDelta.REMOVED ) != 0 ) {
                         this.removedRes.add( resource );
                       }
                       else if ( !JsdlEditor.this.savedResources.remove( resource ) )
@@ -188,17 +183,16 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
             ResourceDeltaVisitor visitor = new ResourceDeltaVisitor();
             delta.accept(visitor);
 
-            if (!visitor.getRemovedResources().isEmpty())
-            {
-              JsdlEditor.this.removedResources.addAll(visitor.getRemovedResources());
-              if (!isDirty())
-              {
+            if ( !visitor.getRemovedResources().isEmpty() ) {
+              JsdlEditor.this.removedResources.addAll( visitor.getRemovedResources() );
+              
+              if ( !isDirty() ) {
                 getSite().getShell().getDisplay().asyncExec
                   (new Runnable()
                    {
                      public void run()
                      {
-                       getSite().getPage().closeEditor(JsdlEditor.this, false);
+                       getSite().getPage().closeEditor( JsdlEditor.this, false );
                        JsdlEditor.this.dispose();
                      }
                    });
@@ -221,7 +215,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
               }
             }
           }
-          catch (CoreException exception)
+          catch ( CoreException exception )
           {
             Activator.logException( exception);
           }
@@ -285,9 +279,9 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
         }
 
         @Override
-        protected void unsetTarget( final Resource target )
+        protected void unsetTarget( final Resource unSetTarget )
         {
-          basicUnsetTarget( target );
+          basicUnsetTarget( unSetTarget );
         }
       };
     
@@ -315,15 +309,14 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
     
     /*
      *  Create an adapter factory that yields item providers.
-     */
-        
+     */        
     List<AdapterFactoryImpl> factories = new ArrayList<AdapterFactoryImpl>();
-    factories.add(new ResourceItemProviderAdapterFactory() );
+    factories.add( new ResourceItemProviderAdapterFactory() );
     factories.add( new JsdlAdaptersFactory() );
     factories.add( new PosixAdaptersFactory() );
-    factories.add(new ReflectiveItemProviderAdapterFactory() );
+    factories.add( new ReflectiveItemProviderAdapterFactory() );
 
-    this.adapterFactory = new ComposedAdapterFactory(factories);
+    this.adapterFactory = new ComposedAdapterFactory( factories );
     
 
     /*
@@ -368,10 +361,9 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
                                                           commandStack,
                                                           new HashMap<Resource, Boolean>() ); 
         
-      }
+  }
   
 
- 
   
   protected void cleanDirtyState() {
     
@@ -384,6 +376,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
   }
 
 
+  
   /**
    * This method set's the dirty status of the editor.
    * 
@@ -401,13 +394,15 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
   } // End void setDirty()
   
   
+  
+  @Override
   public void dispose() {
     
-    updateProblemIndication = false;
+    this.updateProblemIndication = false;
 
-    ResourcesPlugin.getWorkspace().removeResourceChangeListener(resourceChangeListener);
+    ResourcesPlugin.getWorkspace().removeResourceChangeListener(this.resourceChangeListener);
     
-    adapterFactory.dispose();
+    this.adapterFactory.dispose();
     
     super.dispose();
 
@@ -447,6 +442,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
    }
     
   }
+  
   
   
   /*
@@ -563,7 +559,6 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
 
           // Refresh any actions that may become enabled or disabled.
 
-          setSelection( getSelection() );
         }
 
         if ( !this.removedResources.isEmpty() ) {
@@ -628,35 +623,13 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
              "JsdlEditor_FileConflict_label", //$NON-NLS-1$
              "JsdlEditor_WARN_FileConflict"); //$NON-NLS-1$
       }
-  
-    /**
-     * @return editorSelection
-     */
-    public ISelection getSelection()
-      {
-        return this.editorSelection;
-      }
     
-    /**
-     * @param selection
-     */
-    public void setSelection(final ISelection selection)
-      {
-        this.editorSelection = selection;
 
-      }
-        
-    
     
   @Override
   public void doSave( final IProgressMonitor monitor )
   {
-    // Save only resources that have actually changed.
-    //
-    final Map<Object, Object> saveOptions = new HashMap<Object, Object>();
-    saveOptions.put(Resource.OPTION_SAVE_ONLY_IF_CHANGED, Resource.OPTION_SAVE_ONLY_IF_CHANGED_MEMORY_BUFFER);
-    
-    
+   
     /* Do the work within an operation because this is a long running activity
      * that modifies the workbench.
      */
@@ -681,7 +654,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
               try
               {
                 JsdlEditor.this.savedResources.add(resource);
-                resource.save(saveOptions);
+                resource.save(Collections.EMPTY_MAP);
               }
               catch (Exception exception)
               {
@@ -795,15 +768,15 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
       for (Iterator<Diagnostic> i = this.resourceToDiagnosticMap.values().iterator(); i.hasNext(); ) {
         
         Diagnostic childDiagnostic = i.next();
-        if (childDiagnostic.getSeverity() != Diagnostic.OK) {
+        if ( childDiagnostic.getSeverity() != Diagnostic.OK ) {
           
           diagnostic.add(childDiagnostic);
           /*
            * There are errors in the resource so add the Markers.
            */
           try {
-            markerHelper.createMarkers( diagnostic );
-            editor.update();
+            this.markerHelper.createMarkers( diagnostic );
+            this.editor.update();
             
           } catch( CoreException e ) {
             // TODO Auto-generated catch block
@@ -836,11 +809,11 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
 //      }
       
       
-      if ( markerHelper.hasMarkers( editingDomain.getResourceSet() ) ) {
-        markerHelper.deleteMarkers( editingDomain.getResourceSet() );
+      if ( this.markerHelper.hasMarkers( this.editingDomain.getResourceSet() ) ) {
+        this.markerHelper.deleteMarkers( this.editingDomain.getResourceSet() );
         if (diagnostic.getSeverity() != Diagnostic.OK) {
           try {
-            markerHelper.createMarkers( diagnostic );
+            this.markerHelper.createMarkers( diagnostic );
           }
           catch ( CoreException exception ) {
             Activator.logException( exception );
@@ -856,6 +829,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
   /**
   * Responsible for de-serializing the model from the resource file.
   * The resource is passed to the getResourceRoot method.
+   * @return Returns TRUE if the Model was loaded.
   */
  
   public boolean getJsdlModel() {
