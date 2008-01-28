@@ -36,14 +36,15 @@ public class ClassTypeQueryFilter implements IQueryFilter {
     java.util.List< IGridElement > result = new ArrayList< IGridElement >();
     
     for ( IGridElement element : input ) {
-      if ( element instanceof IWrappedElement ) {
-        element = ( ( IWrappedElement ) element ).getWrappedElement();
-      }
+      IGridElement matcher
+        = element instanceof IWrappedElement 
+        ? ( ( IWrappedElement ) element ).getWrappedElement()
+        : element;
       if ( this.allow
-          && this.classType.isAssignableFrom( element.getClass() ) ) {
+          && this.classType.isAssignableFrom( matcher.getClass() ) ) {
         result.add( element );
       } else if ( ! this.allow
-          && ! this.classType.isAssignableFrom( element.getClass() ) ) {
+          && ! this.classType.isAssignableFrom( matcher.getClass() ) ) {
         result.add( element );
       }
     }
