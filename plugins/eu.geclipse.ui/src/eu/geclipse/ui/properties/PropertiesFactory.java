@@ -92,11 +92,11 @@ public class PropertiesFactory implements IPropertiesFactory {
         gridGlueStorage = (GridGlueStorage)myElement;
         sourcesList.add( new GridGlueStorageSource(gridGlueStorage));
       }
-    }
-    
-    if( sourceObject instanceof GridGlueService ) {
-      GridGlueService gridGlueService = (GridGlueService)sourceObject;
-      sourcesList.add( new GridGlueServiceSource(gridGlueService) );
+      else if (myElement instanceof GridGlueService)
+      {
+        GridGlueService gridGlueService = (GridGlueService)myElement;
+        sourcesList.add( new GridGlueServiceSource(gridGlueService) );
+      }
     }
     
     return sourcesList;
