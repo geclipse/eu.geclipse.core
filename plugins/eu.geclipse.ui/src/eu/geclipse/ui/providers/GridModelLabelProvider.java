@@ -31,6 +31,7 @@ import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridService;
 import eu.geclipse.core.model.IGridStorage;
 import eu.geclipse.core.model.IVirtualOrganization;
+import eu.geclipse.core.model.IWrappedElement;
 import eu.geclipse.info.model.GridGlueService;
 import eu.geclipse.ui.internal.Activator;
 
@@ -153,12 +154,19 @@ public class GridModelLabelProvider
     } else if( element instanceof IGridStorage ) {
       result = getStorageImage();
     } else if( element instanceof IGridService ) {
-      if ( element instanceof GridGlueService ) {
-        boolean isSupported = ( ( GridGlueService ) element ).getGlueService().isSupported();
-        if ( isSupported ) {
+      if ( element instanceof IWrappedElement ) {
+        IGridElement wrappedElement = ((IWrappedElement) element ).getWrappedElement();
+        if (wrappedElement instanceof GridGlueService)
+        {
+          boolean isSupported = ( ( GridGlueService ) wrappedElement ).getGlueService().isSupported();
+          if ( isSupported ) {
+            result = getServiceImage();
+          } else {
+            result = getUnsupportedServiceImage();
+          }
+        }
+        else {
           result = getServiceImage();
-        } else {
-          result = getUnsupportedServiceImage();
         }
       } else {
         result = getServiceImage();
