@@ -341,6 +341,10 @@
             description="Enter date in correct format"
             id="eu.geclipse.solution.widget.DateTimeText.UseCorrectFormat">
       </solution>
+      <problem
+            description="File already exists"
+            id="eu.geclipse.problem.transfer.fileAlreadyExists">
+      </problem>
    </extension>
    <extension
          point="eu.geclipse.ui.simpleTestUI">
