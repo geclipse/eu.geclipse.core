@@ -40,8 +40,8 @@ import eu.geclipse.ui.widgets.IDropDownEntry;
  */
 public class SshShell implements IDropDownEntry<ITerminalView>, ITerminalListener {
   ChannelShell channel;
-  private ITerminalPage terminal;
-  private SSHConnectionInfo userInfo;
+  ITerminalPage terminal;
+  SSHConnectionInfo userInfo;
   private int preConnectCols = -1;
   private int preConnectLines;
   private int preConnectXPix;
@@ -80,11 +80,15 @@ public class SshShell implements IDropDownEntry<ITerminalView>, ITerminalListene
     try {
       IJSchService service = Activator.getDefault().getJSchService();
       if (service == null) {
-        ProblemException problemException = new ProblemException( "eu.geclipse.terminal.ssh.problem.no_ssh_service", Activator.PLUGIN_ID );
-        ProblemDialog.openProblem( null,
-                                   Messages.getString( "SshShell.sshTerminal" ), //$NON-NLS-1$
-                                   Messages.getString( "SshShell.couldNotGetService" ), //$NON-NLS-1$
-                                   problemException );
+        Display.getDefault().asyncExec( new Runnable() {
+          public void run() {
+            ProblemException problemException = new ProblemException( "eu.geclipse.terminal.ssh.problem.no_ssh_service", Activator.PLUGIN_ID );
+            ProblemDialog.openProblem( null,
+                                       Messages.getString( "SshShell.sshTerminal" ), //$NON-NLS-1$
+                                       Messages.getString( "SshShell.couldNotGetService" ), //$NON-NLS-1$
+                                       problemException );
+          }
+        } );
       } else {
         this.userInfo = sshConnectionInfo;
         final Session session = service.createSession( this.userInfo.getHostname(),
@@ -105,7 +109,7 @@ public class SshShell implements IDropDownEntry<ITerminalView>, ITerminalListene
           }
         }
         session.connect();
-        IBidirectionalConnection connection = new IBidirectionalConnection() {
+        final IBidirectionalConnection connection = new IBidirectionalConnection() {
           public void close() {
             SshShell.this.channel.disconnect();
             session.disconnect();
@@ -119,24 +123,36 @@ public class SshShell implements IDropDownEntry<ITerminalView>, ITerminalListene
         };
   
         this.channel = (ChannelShell) session.openChannel( "shell" ); //$NON-NLS-1$
-        this.terminal = terminalView.addTerminal( connection, this );
-        this.terminal.setTabName( this.userInfo.getHostname() );
-        this.terminal.setDescription( Messages.formatMessage( "SshShell.descriptionWithoutWinTitle", //$NON-NLS-1$
-                                                              this.userInfo.getUsername(),
-                                                              this.userInfo.getHostname() ) );
+        Display.getDefault().syncExec( new Runnable() {
+          public void run() {
+            try {
+              SshShell.this.terminal = terminalView.addTerminal( connection, SshShell.this );
+              SshShell.this.terminal.setTabName( SshShell.this.userInfo.getHostname() );
+              SshShell.this.terminal.setDescription( Messages.formatMessage( "SshShell.descriptionWithoutWinTitle", //$NON-NLS-1$
+                                                     SshShell.this.userInfo.getUsername(),
+                                                     SshShell.this.userInfo.getHostname() ) );
+            } catch( final IOException exception ) {
+              Activator.logException( exception );
+            }
+          }
+        } );
         this.channel.connect();
         if ( this.preConnectCols != -1 ) {
           windowSizeChanged( this.preConnectCols, this.preConnectLines,
                              this.preConnectXPix, this.preConnectYPix );
         }
       }
-    } catch ( JSchException exception ) {
+    } catch ( final JSchException exception ) {
       if ( !this.userInfo.getCanceledPWValue() ) {
-        ProblemException problemException = new ProblemException( "eu.geclipse.terminal.ssh.problem.auth_failed", exception, Activator.PLUGIN_ID );
-        ProblemDialog.openProblem( null,
-                                   Messages.getString( "SshShell.sshTerminal" ), //$NON-NLS-1$
-                                   Messages.getString( "SshShell.authFailed" ), //$NON-NLS-1$
-                                   problemException );
+        Display.getDefault().asyncExec( new Runnable() {
+          public void run() {
+            ProblemException problemException = new ProblemException( "eu.geclipse.terminal.ssh.problem.auth_failed", exception, Activator.PLUGIN_ID );
+            ProblemDialog.openProblem( null,
+                                       Messages.getString( "SshShell.sshTerminal" ), //$NON-NLS-1$
+                                       Messages.getString( "SshShell.authFailed" ), //$NON-NLS-1$
+                                       problemException );
+          }
+        } );
       }
     } catch( Exception exception ){
       Activator.logException( exception );
