@@ -141,10 +141,13 @@ public class MountMenu
     List< URI > result = new ArrayList< URI >();
     List< String > schemes = Extensions.getRegisteredFilesystemSchemes();
     
-    for ( URI protocol : list ) {
-      String scheme = protocol.getScheme();
-      if ( schemes.contains( scheme ) ) {
-        result.add( protocol );
+    if (list != null)
+    {
+      for ( URI protocol : list ) {
+        String scheme = protocol.getScheme();
+        if ( schemes.contains( scheme ) ) {
+          result.add( protocol );
+        }
       }
     }
     
