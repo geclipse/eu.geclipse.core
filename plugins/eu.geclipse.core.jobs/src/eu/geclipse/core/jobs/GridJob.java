@@ -722,10 +722,26 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     }    
   }
 
+  /*
+   * (non-Javadoc)
+   * 
+   * @see eu.geclipse.core.model.getURI#getURI()
+   */
   public URI getURI() {
     // TODO pawelw is there something like a contact string?
     return null;
   }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see eu.geclipse.core.model.IGridResource#getHostName()
+   */
+  public String getHostName() {
+    // A job is not a physical resource so we will always return null
+    return null;
+  }
+  
   
   private DateFormat getXmlDateFormatter() {
     DateFormat formatter = DateFormat.getDateTimeInstance( DateFormat.SHORT,

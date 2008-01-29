@@ -11,14 +11,16 @@
  *
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
- *****************************************************************************/package eu.geclipse.info.model;
+ *    Harald Gjermundrod - added the getHostName method
+ *****************************************************************************/
+package eu.geclipse.info.model;
 
  import java.net.URI;
  import java.net.URISyntaxException;
 
  import eu.geclipse.core.model.IGridContainer;
  import eu.geclipse.core.model.IGridService;
- import eu.geclipse.info.glue.GlueService;
+import eu.geclipse.info.glue.GlueService;
 
  /**
   * Implementation of the {@link eu.geclipse.core.model.IGridElement}
@@ -55,19 +57,44 @@
      return name;
    }
 
-
+   /*
+    * (non-Javadoc)
+    * 
+    * @see eu.geclipse.core.model.getURI#getURI()
+    */
    public URI getURI() {
-     GlueService gs=(GlueService) getGlueElement();
+     GlueService gs = ( GlueService ) getGlueElement();
      URI uri=null;
      try {
        String endpoint = validateEndpoint( gs.endpoint );
-       uri=new URI( gs.uri );
+       uri = new URI( endpoint );
+       
+       //uri = new URI( gs.uri );
      } catch (URISyntaxException e) {
-       uri=null;
+       // Nothing to do, just catch and return null;
      }
      return uri;
    }
 
+   /*
+    * (non-Javadoc)
+    * 
+    * @see eu.geclipse.core.model.IGridResource#getHostName()
+    */
+   public String getHostName() {
+     String str = null;
+     URI uriTmp = getURI();
+     
+     if ( null != uriTmp ) {
+       str = uriTmp.getHost();
+       
+       if ( null == str )
+         str = uriTmp.getScheme();
+     }
+
+     return str;
+   } 
+   
    /**
    * @return GlueService
    */

@@ -105,7 +105,12 @@ public class ConnectionElement
     }
     return error;
   }
-  
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see eu.geclipse.core.model.getURI#getURI()
+   */  
   public URI getURI() {
     URI result = null;
     try {
@@ -115,6 +120,25 @@ public class ConnectionElement
       Activator.logException( cExc );
     }
     return result;
+  }
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see eu.geclipse.core.model.IGridResource#getHostName()
+   */
+  public String getHostName() {
+    String str = null;
+    URI uri = getURI();
+    
+    if ( null != uri ) {
+      str = uri.getHost();
+
+      if ( null == str )
+        str = uri.getScheme();
+    }
+    
+    return str;
   }
   
   /* (non-Javadoc)

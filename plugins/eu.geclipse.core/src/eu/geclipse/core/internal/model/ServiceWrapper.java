@@ -11,6 +11,7 @@
  *
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
+ *    Harald Gjermundrod - added the getHostName method
  *****************************************************************************/
 
 package eu.geclipse.core.internal.model;
@@ -25,13 +26,31 @@ public class ServiceWrapper
     extends WrappedElement
     implements IGridService {
 
+  /**
+   * The argument constructor for this class.
+   * @param parent The container for this service.
+   * @param wrapped The wrapper that holds this service.
+   */
   public ServiceWrapper( final IGridContainer parent,
                          final IGridElement wrapped ) {
     super( parent, wrapped );
   }
 
+  /*
+   * (non-Javadoc)
+   * 
+   * @see eu.geclipse.core.model.getURI#getURI()
+   */
   public URI getURI() {
     return ( ( IGridService ) getWrappedElement() ).getURI();
   }
-
+  
+  /*
+   * (non-Javadoc)
+   * 
+   * @see eu.geclipse.core.model.IGridResource#getHostName()
+   */
+  public String getHostName() {
+    return ( ( IGridService ) getWrappedElement() ).getHostName();
+  }
 }

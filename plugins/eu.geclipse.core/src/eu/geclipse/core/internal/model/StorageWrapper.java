@@ -11,6 +11,7 @@
  *
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
+ *    Harald Gjermundrod - added the getHostName method
  *****************************************************************************/
 
 package eu.geclipse.core.internal.model;
@@ -24,6 +25,11 @@ public class StorageWrapper
     extends WrappedElement
     implements IGridStorage {
 
+  /**
+   * The argument constructor for this class.
+   * @param parent The container for this storage.
+   * @param storage The storage that is wrapped.
+   */
   public StorageWrapper( final IGridContainer parent,
                          final IGridStorage storage ) {
     super( parent, storage );
@@ -33,8 +39,21 @@ public class StorageWrapper
     return ( ( IGridStorage ) getWrappedElement() ).getAccessTokens();
   }
 
+  /*
+   * (non-Javadoc)
+   * 
+   * @see eu.geclipse.core.model.getURI#getURI()
+   */
   public URI getURI() {
     return ( ( IGridStorage ) getWrappedElement() ).getURI();
   }
 
+  /*
+   * (non-Javadoc)
+   * 
+   * @see eu.geclipse.core.model.IGridResource#getHostName()
+   */
+  public String getHostName() {
+    return ( ( IGridStorage ) getWrappedElement() ).getHostName();
+  }
 }

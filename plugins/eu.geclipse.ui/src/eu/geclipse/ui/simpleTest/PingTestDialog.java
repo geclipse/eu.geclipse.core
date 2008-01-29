@@ -149,35 +149,39 @@ public class PingTestDialog extends AbstractSimpleTestDialog  {
         avg = 0;
         nOk = 0;
         nFailed = 0;
-        URI uri = this.resources.get( i ).getURI();
-        host = uri.getScheme();//.getHost();
-        try {
-          adr = InetAddress.getByName( host );
-        } catch( UnknownHostException e ) {
-          // TODO fix tis
-        }
+        host = this.resources.get( i ).getHostName();
 
-        // Print out which host we ping
-        this.outPut.append( "Pinging: " + host + this.outPut.getLineDelimiter() );
+        if ( null != host ) {
+          try {
+            adr = InetAddress.getByName( host );
+          } catch( UnknownHostException e ) {
+            // TODO fix tis
+          }
+
+          // Print out which host we ping
+          this.outPut.append( "Pinging: " + host + this.outPut.getLineDelimiter() );
         
-        for ( int j = 0; j < number; ++j ) {
-          pingDelay = ( ( PingTest )this.test).ping( adr );
+          for ( int j = 0; j < number; ++j ) {
+            pingDelay = ( ( PingTest )this.test).ping( adr );
       
-          if ( -1 == pingDelay ) {
-            ++nFailed;
-            this.outPut.append( "Ping " + i + ": Host not reachable" + this.outPut.getLineDelimiter() );
-          }
-          else {
-            ++nOk;
-            if ( pingDelay < min )
-              min = pingDelay;
-            if ( pingDelay > max )
-              max = pingDelay;
-            avg += pingDelay;
+            if ( -1 == pingDelay ) {
+              ++nFailed;
+              this.outPut.append( "Ping " + i + ": Host not reachable" + this.outPut.getLineDelimiter() );
+            }
+            else {
+              ++nOk;
+              if ( pingDelay < min )
+                min = pingDelay;
+              if ( pingDelay > max )
+                max = pingDelay;
+              avg += pingDelay;
         
-            this.outPut.append( "Ping " + j + ": time=" + pingDelay + " ms" + this.outPut.getLineDelimiter() );
+              this.outPut.append( "Ping " + j + ": time=" + pingDelay + " ms" + this.outPut.getLineDelimiter() );
+            }
           }
-        }
+        } else
+          this.outPut.append( "The " + i + "th selection cannot be resolved." );
+        
         // Write the summary
         if ( nOk > 0 )
           this.outPut.append( "round-trip min/avg/max/stddev = " + min +"/" + avg/nOk + "/" + max + " ms" + this.outPut.getLineDelimiter() );

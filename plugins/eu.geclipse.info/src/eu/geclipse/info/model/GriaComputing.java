@@ -41,8 +41,10 @@ public class GriaComputing extends GridGlueElement implements IGridComputing {
     super( parent, glueService );
   }
   
-  /**
-   * Returns the URI of a gria application or <code>null</code>
+  /*
+   * (non-Javadoc)
+   * 
+   * @see eu.geclipse.core.model.getURI#getURI()
    */
   public URI getURI() {
     URI uri = null;
@@ -52,6 +54,16 @@ public class GriaComputing extends GridGlueElement implements IGridComputing {
       // Nothing to do, just catch and return null
     }
     return uri;
+  }
+  
+  /*
+   * (non-Javadoc)
+   * 
+   * @see eu.geclipse.core.model.IGridResource#getHostName()
+   */
+  public String getHostName() {
+    // This is not a physical machine, but the application name
+    return null;
   }
   
   /**

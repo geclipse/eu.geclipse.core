@@ -11,6 +11,7 @@
  *
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
+ *    Harald Gjermundrod - added the getHostName method
  *****************************************************************************/
 
 package eu.geclipse.core.model;
@@ -31,4 +32,13 @@ public interface IGridResource extends IGridElement {
    */
   public URI getURI();
   
+  /**
+   * Get the host name of the machine (physical or virtual) that represent
+   * this resource. This name should either be the DNS entry or IP address
+   * of this host. 
+   *   
+   * @return Returns the hostname of the machine, may be <code>null</code>
+   * if the resource cannot provide its hostname.
+   */
+  public String getHostName();
 }

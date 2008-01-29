@@ -57,6 +57,11 @@ public class GridGlueComputing
     return "CE @ " + ce.UniqueID; //$NON-NLS-1$
   }
 
+  /*
+   * (non-Javadoc)
+   * 
+   * @see eu.geclipse.core.model.getURI#getURI()
+   */
   public URI getURI() {
     URI uri = null;
     try {
@@ -66,5 +71,23 @@ public class GridGlueComputing
     }
     return uri;
   }
-  
+
+  /*
+   * (non-Javadoc)
+   * 
+   * @see eu.geclipse.core.model.IGridResource#getHostName()
+   */
+  public String getHostName() {
+    String str = null;
+    URI uri = getURI();
+    
+    if ( null != uri ) {
+      str = uri.getHost();
+
+      if ( null == str )
+        str = uri.getScheme();
+    }
+    
+    return str;
+  } 
 }
