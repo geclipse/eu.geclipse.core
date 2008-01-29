@@ -40,8 +40,8 @@ public class RenderLocalVTKPipelineAction extends SelectionListenerAction {
   private IWorkbenchSite site;
 
   private ArrayList< IGridVisualisation > vis;
-  
-  protected RenderLocalVTKPipelineAction( String text ) {
+
+  protected RenderLocalVTKPipelineAction( final String text ) {
     super( text );
     // TODO Auto-generated constructor stub
   }
@@ -49,12 +49,12 @@ public class RenderLocalVTKPipelineAction extends SelectionListenerAction {
   /**
    * @param site
    */
-  public RenderLocalVTKPipelineAction( IWorkbenchPartSite site ) {
+  public RenderLocalVTKPipelineAction( final IWorkbenchPartSite site ) {
     super ( Messages.getString( "RenderLocalVTKPipelineAction.title" ) ); //$NON-NLS-1$
     this.site = site;
   }
 
-  
+
   /* (non-Javadoc)
    * @see org.eclipse.jface.action.Action#run()
    */
@@ -62,7 +62,7 @@ public class RenderLocalVTKPipelineAction extends SelectionListenerAction {
   public void run() {
     Object element
       = getStructuredSelection().getFirstElement();
-    if ( element != null && ((IGridVisualisation) element).isValid() ) {
+    if ( ( element != null ) && ((IGridVisualisation) element).isValid() ) {
       try {
         IViewPart view = this.site.getPage().showView( "eu.geclipse.ui.views.visualisationview" ); //$NON-NLS-1$
         view.setFocus();
@@ -70,23 +70,24 @@ public class RenderLocalVTKPipelineAction extends SelectionListenerAction {
         ( ( VisualisationView )view ).render();
       } catch( PartInitException e ) {
         NewProblemDialog.openProblem( null,
-                                      Messages.getString( "RenderLocalVTKPipelineAction.errorDialogTitle" ), //$NON-NLS-1$
-                                      Messages.getString( "RenderLocalVTKPipelineAction.errorOpeningView"), //$NON-NLS-1$
-                                      e );
+               Messages.getString( "RenderLocalVTKPipelineAction.errorDialogTitle" ), //$NON-NLS-1$
+               Messages.getString( "RenderLocalVTKPipelineAction.errorOpeningView"), //$NON-NLS-1$
+               e );
       }
     }
     else {
       final GridException fileException = new GridException( CoreProblems.FILE_ACCESS_PROBLEM,
-                                                             Messages.getString( "RenderLocalVTKPipelineAction.elementNotVisualizable" ) ); //$NON-NLS-1$
+                    Messages.getString( "RenderLocalVTKPipelineAction.elementNotVisualizable" ) ); //$NON-NLS-1$
           NewProblemDialog.openProblem( null,
-                                        Messages.getString( "RenderLocalVTKPipelineAction.errorDialogTitle" ), //$NON-NLS-1$
-                                        Messages.getString( "RenderLocalVTKPipelineAction.errorInfo" ), //$NON-NLS-1$
-                                        fileException );
+                    Messages.getString( "RenderLocalVTKPipelineAction.errorDialogTitle" ), //$NON-NLS-1$
+                    Messages.getString( "RenderLocalVTKPipelineAction.errorInfo" ), //$NON-NLS-1$
+                    fileException );
     }
   }
 
   /* (non-Javadoc)
-   * @see org.eclipse.ui.actions.BaseSelectionListenerAction#updateSelection(org.eclipse.jface.viewers.IStructuredSelection)
+   * @see org.eclipse.ui.actions.BaseSelectionListenerAction#updateSelection
+   * (org.eclipse.jface.viewers.IStructuredSelection)
    */
   @Override
   protected boolean updateSelection( final IStructuredSelection selection ) {
@@ -103,7 +104,7 @@ public class RenderLocalVTKPipelineAction extends SelectionListenerAction {
     }
     return enabled && !this.vis.isEmpty();
   }
-  
+
   protected boolean isVisualizable( final Object element ) {
     return element instanceof eu.geclipse.core.model.IGridVisualisation;
   }

@@ -66,19 +66,19 @@ public class RenderRemoteVTKPipelineAction extends SelectionListenerAction {
         //that intercepts the steaming data locally
       } catch( PartInitException e ) {
         NewProblemDialog.openProblem( null,
-                                      Messages.getString( "RenderLocalVTKPipelineAction.errorDialogTitle" ), //$NON-NLS-1$
-                                      Messages.getString( "RenderLocalVTKPipelineAction.errorOpeningView"), //$NON-NLS-1$
-                                      e );
+             Messages.getString( "RenderLocalVTKPipelineAction.errorDialogTitle" ), //$NON-NLS-1$
+             Messages.getString( "RenderLocalVTKPipelineAction.errorOpeningView"), //$NON-NLS-1$
+             e );
       }
     }
     else {
       final GridException fileException = new GridException( CoreProblems.FILE_ACCESS_PROBLEM,
-                                                             Messages.getString( "RenderLocalVTKPipelineAction.elementNotVisualizable" ) ); //$NON-NLS-1$
+             Messages.getString( "RenderLocalVTKPipelineAction.elementNotVisualizable" ) ); //$NON-NLS-1$
 
           NewProblemDialog.openProblem( null,
-                                        Messages.getString( "RenderLocalVTKPipelineAction.errorDialogTitle" ), //$NON-NLS-1$
-                                        Messages.getString( "RenderLocalVTKPipelineAction.errorInfo" ), //$NON-NLS-1$
-                                        fileException );
+             Messages.getString( "RenderLocalVTKPipelineAction.errorDialogTitle" ), //$NON-NLS-1$
+             Messages.getString( "RenderLocalVTKPipelineAction.errorInfo" ), //$NON-NLS-1$
+             fileException );
     }
   }
 
@@ -91,7 +91,8 @@ public class RenderRemoteVTKPipelineAction extends SelectionListenerAction {
   }
 
   /* (non-Javadoc)
-   * @see org.eclipse.ui.actions.BaseSelectionListenerAction#updateSelection(org.eclipse.jface.viewers.IStructuredSelection)
+   * @see org.eclipse.ui.actions.BaseSelectionListenerAction#updateSelection
+   * (org.eclipse.jface.viewers.IStructuredSelection)
    */
   @Override
   protected boolean updateSelection( final IStructuredSelection selection ) {
