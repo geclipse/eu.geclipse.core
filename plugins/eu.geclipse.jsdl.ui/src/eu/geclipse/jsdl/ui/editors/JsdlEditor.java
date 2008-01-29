@@ -649,7 +649,8 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
           for (Iterator<?> i = JsdlEditor.this.editingDomain.getResourceSet().getResources().iterator(); i.hasNext(); )
           {
             Resource resource = (Resource)i.next();
-            if ((first || !resource.getContents().isEmpty() || isPersisted(resource)) && !JsdlEditor.this.editingDomain.isReadOnly(resource))
+            if ((first || !resource.getContents().isEmpty() || isPersisted(resource)) 
+                && !JsdlEditor.this.editingDomain.isReadOnly(resource))
             {
               try
               {
@@ -917,7 +918,8 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
       basicDiagnostic = new BasicDiagnostic(Diagnostic.ERROR,
                                             Activator.PLUGIN_ID,
                                             0,
-                                            String.format( Messages.getString( "JsdlEditor.CreateModelErrorMessage" ), resource.getURI() ),  //$NON-NLS-1$
+                                            String.format( Messages.getString( "JsdlEditor.CreateModelErrorMessage" ), //$NON-NLS-1$
+                                                           resource.getURI() ),
                                             new Object [] { exception == null ? ( Object )resource : exception } );
       
       ( ( BasicDiagnostic ) basicDiagnostic ).merge( EcoreUtil.computeDiagnostic( resource, true ) );
