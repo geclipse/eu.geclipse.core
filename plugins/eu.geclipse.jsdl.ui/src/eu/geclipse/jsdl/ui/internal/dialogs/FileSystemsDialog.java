@@ -47,8 +47,9 @@ import eu.geclipse.jsdl.ui.internal.Activator;
 
 
 /**
- * @author nloulloud
- *
+ * 
+ * Create a new <code>FileSystemsDialog</code>. The dialog consists of 
+ * Text fields and Combo fields for specifying or editing a new File System.  
  */
 public class FileSystemsDialog extends Dialog {
   
