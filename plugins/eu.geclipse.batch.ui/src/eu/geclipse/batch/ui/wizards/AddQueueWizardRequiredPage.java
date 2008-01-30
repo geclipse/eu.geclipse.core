@@ -194,10 +194,10 @@ public class AddQueueWizardRequiredPage extends WizardPage {
     this.timeWallHourSpin.setValues( 172800, 0, 9999999, 0, 1000, 2000 );
 //    this.timeWallHourSpin.setValues( 72, 0, 999, 0, 1, 2 );
     
-    new Label( timeComp, SWT.NONE ).setText( ":" ); //$NON-NLS-1$
-    
-    this.timeWallMinSpin = new Spinner( timeComp, SWT.NONE );
-    this.timeWallMinSpin.setValues( 0, 0, 59, 0, 1, 2 );
+//    new Label( timeComp, SWT.NONE ).setText( ":" ); //$NON-NLS-1$
+//    
+//    this.timeWallMinSpin = new Spinner( timeComp, SWT.NONE );
+//    this.timeWallMinSpin.setValues( 0, 0, 59, 0, 1, 2 );
     
     // Add the VO names
     voTableData = new GridData( 100, 100, true, true );
