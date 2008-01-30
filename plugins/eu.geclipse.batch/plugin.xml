@@ -38,5 +38,36 @@
             class="eu.geclipse.batch.BatchProblems">
       </provider>
    </extension>
+   <extension
+         point="eu.geclipse.core.reporting.problemReporting">
+      <problem
+            description="IO error occured during the connection"
+            id="eu.geclipse.batch.problem.io_error">
+      </problem>
+      <problem
+            description="The command to the batch service failed"
+            id="eu.geclipse.batch.problem.command_failed">
+      </problem>
+      <problem
+            description="Authorization on the remote service failed"
+            id="eu.geclipse.batch.problem.no_authorization">
+      </problem>
+      <problem
+            description="Login to the service failed"
+            id="eu.geclipse.batch.problem.login_failed">
+      </problem>
+      <problem
+            description="Could not get the ssh service"
+            id="eu.geclipse.batch.problem.get_ssh_service_failed">
+      </problem>
+      <solution
+            description="Check the username of password"
+            id="eu.geclipse.batch.solution.check_username_password">
+      </solution>
+      <solution
+            description="Check the setting of the ssh service"
+            id="eu.geclipse.batch.solution.check_ssh_server_config">
+      </solution>
+   </extension>
 
 </plugin>

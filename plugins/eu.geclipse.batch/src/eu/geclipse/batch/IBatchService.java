@@ -22,7 +22,7 @@ import java.util.List;
 import eu.geclipse.batch.IQueueInfo.QueueType;
 import eu.geclipse.batch.internal.WorkerNodeInfo;
 import eu.geclipse.batch.model.qdl.DocumentRoot;
-import eu.geclipse.core.GridException;
+import eu.geclipse.core.reporting.ProblemException;
 
 /**
  * Wrapper for executing commands on a batch service.
@@ -51,9 +51,9 @@ public interface IBatchService {
    * connection with the PBS server.
    * @return Returns <code>true</code> if the connection is established,
    *  <code>false</code> otherwise.
-   * @throws GridException In case of connection problem to service
+   * @throws ProblemException In case of connection problem to service
    */
-  public abstract boolean connectToServer( final ISSHConnectionInfo sshConnectionInfo ) throws GridException;
+  public abstract boolean connectToServer( final ISSHConnectionInfo sshConnectionInfo ) throws ProblemException;
 
   /**
    * Tears down an already established ssh-connection to the server.
@@ -65,17 +65,17 @@ public interface IBatchService {
    * error then this method will return <code>null</code>.
    *
    * @return A {@link List} of {@link IBatchJobInfo} or <code>null</code>.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public abstract List<IBatchJobInfo> getJobs() throws BatchException;
+  public abstract List<IBatchJobInfo> getJobs() throws ProblemException;
 
   /**
    * Deletes a job in the queues of the batch service.
    *
    * @param jobId The identifier of the job to be deleted.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public abstract void delJob( final String jobId ) throws BatchException;
+  public abstract void delJob( final String jobId ) throws ProblemException;
 
   /**
    * Moves a job in the batch system to another batch system and/or queue.
@@ -83,11 +83,11 @@ public interface IBatchService {
    * @param jobId The identifier of the job to be moved.
    * @param destQueue The destination queue, <code>null</code> if no destination queue.
    * @param destServer The destination server, <code>null</code> if no destination server.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
   public abstract void moveJob( final String jobId, 
                                    final String destQueue, 
-                                   final String destServer ) throws BatchException;
+                                   final String destServer ) throws ProblemException;
 
   /**
    * Move jobs in the batch system to another batch system and/or queue.
@@ -95,43 +95,43 @@ public interface IBatchService {
    * @param jobIds The identifier of the jobs to be moved.
    * @param destQueue The destination queue, <code>null</code> if no destination queue.
    * @param destServer The destination server, <code>null</code> if no destination server.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
   public abstract void moveJobs( final String[] jobIds, 
                                    final String destQueue, 
-                                   final String destServer ) throws BatchException;
+                                   final String destServer ) throws ProblemException;
 
   /**
    * Puts a hold on a job in the queue of the batch service.
    *
    * @param jobId The identifier of the job to be held.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public abstract void holdJob( final String jobId ) throws BatchException;
+  public abstract void holdJob( final String jobId ) throws ProblemException;
 
   /**
    * Puts a hold on one or more jobs in the queue of the batch service.
    *
    * @param jobIds The identifiers of the jobs to be held.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public abstract void holdJobs( final String[] jobIds ) throws BatchException;
+  public abstract void holdJobs( final String[] jobIds ) throws ProblemException;
 
   /**
    * Release a job with a previous hold in queue of the batch system.
    *
    * @param jobId The identifier of the job to be released.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public abstract void releaseJob( final String jobId ) throws BatchException;
+  public abstract void releaseJob( final String jobId ) throws ProblemException;
 
   /**
    * Release one or more jobs with a previous hold in queue of the batch system.
    *
    * @param jobIds The identifiers of the jobs to be released.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public abstract void releaseJobs( final String[] jobIds ) throws BatchException;
+  public abstract void releaseJobs( final String[] jobIds ) throws ProblemException;
   
   /**
    * Executes pbsnodes on the PBS server and returns a list of the workernodes as
@@ -140,102 +140,102 @@ public interface IBatchService {
    * follows:
    *
    * @return A {@link List} of {@link IWorkerNodeInfo} or <code>null</code>.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public abstract List<IWorkerNodeInfo> getWorkerNodes() throws BatchException;
+  public abstract List<IWorkerNodeInfo> getWorkerNodes() throws ProblemException;
 
   /**
    * Changes the state of a workernode to offline, no jobs will be placed on
    * this workernode.
    *
    * @param nodeId The identifier of the node to be disabled.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public abstract void disableWN( final String nodeId ) throws BatchException;
+  public abstract void disableWN( final String nodeId ) throws ProblemException;
 
   /**
    * Changes the state of a workernode to enable, jobs will be placed on
    * this workernode.
    *
    * @param nodeId The identifier of the node to be disabled.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public abstract void enableWN( final String nodeId ) throws BatchException;
+  public abstract void enableWN( final String nodeId ) throws ProblemException;
 
   /**
    * Returns a list of the queues as {@link IQueueInfo}. If no queues or error
    * then this method will return <code>null</code>.
    *
    * @return A {@link List} of {@link IQueueInfo} or <code>null</code>.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public abstract List<IQueueInfo> getQueues() throws BatchException;
+  public abstract List<IQueueInfo> getQueues() throws ProblemException;
 
   /**
    * Sets the specified queue to be disabled, i.e. closes it for new jobs.
    *
    * @param queueId The identifier of the queue to be disabled.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public abstract void disableQueue( final String queueId ) throws BatchException;
+  public abstract void disableQueue( final String queueId ) throws ProblemException;
 
   /**
    * Sets the specified queues to be disabled, i.e. closes them for new jobs.
    *
    * @param queueIds The identifiers of the queues to be drained.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public abstract void disableQueues( final String[] queueIds ) throws BatchException;
+  public abstract void disableQueues( final String[] queueIds ) throws ProblemException;
 
   /**
    * Enable the specified queue, i.e. new jobs can be inserted into the
    * queue.
    *
    * @param queueId The identifier of the queue to be enabled.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public abstract void enableQueue( final String queueId ) throws BatchException;
+  public abstract void enableQueue( final String queueId ) throws ProblemException;
 
   /**
    * Enables the specified queues, i.e. new jobs can be inserted into the
    * queues.
    *
    * @param queueIds The identifiers of the queues to be enabled.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public abstract void enableQueues( final String[] queueIds ) throws BatchException;
+  public abstract void enableQueues( final String[] queueIds ) throws ProblemException;
 
   /**
    * Executes qstart to start a specific queue.
    *
    * @param queueId The identifier of the queue to be started.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public abstract void startQueue( final String queueId ) throws BatchException;
+  public abstract void startQueue( final String queueId ) throws ProblemException;
   
   /**
    * Executes qstart to start all specified queues.
    *
    * @param queueIds The identifiers of the queues to be started.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public abstract void startQueues( final String[] queueIds ) throws BatchException;
+  public abstract void startQueues( final String[] queueIds ) throws ProblemException;
   
   /**
    * Executes qstop to stop a specific queue.
    *
    * @param queueId The identifier of the queue to be stopped.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public abstract void stopQueue( final String queueId ) throws BatchException;
+  public abstract void stopQueue( final String queueId ) throws ProblemException;
   
   /**
    * Executes qstop to stop all specified queues.
    *
    * @param queueIds The identifiers of the queues to be stopped.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public abstract void stopQueues( final String[] queueIds ) throws BatchException;
+  public abstract void stopQueues( final String[] queueIds ) throws ProblemException;
   
   /**
    * Executes command that will create a new queue with minimum arguments.
@@ -246,11 +246,11 @@ public interface IBatchService {
    * @param timeCPU Maximum allowed CPU time for any job. 
    * @param timeWall Maximum allowed wall time for any job.
    * @param vos Only allow access to the specified vos, <code>null</code> no restriction is applied.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
   public abstract void createQueue( final String queueName, final QueueType type, 
                                        final boolean enabled, final double timeCPU, 
-                                       final double timeWall, final List<String> vos ) throws BatchException; 
+                                       final double timeWall, final List<String> vos ) throws ProblemException; 
   
   /**
    * Executes command that will create a new queue with a "default" number of argument.
@@ -265,13 +265,13 @@ public interface IBatchService {
    * @param queMax Maximum allowed jobs in the queue
    * @param assignedResources 
    * @param vos Only allow access to the specified vos, <code>null</code> no restriction is applied.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
   public abstract void createQueue( final String queueName, final int priority, 
                                        final QueueType type, final boolean enabled, 
                                        final int runMax, final double timeCPU, 
                                        final double timeWall, final int queMax, 
-                                       final int assignedResources, final List<String> vos ) throws BatchException;
+                                       final int assignedResources, final List<String> vos ) throws ProblemException;
   
   
   /**
@@ -280,24 +280,24 @@ public interface IBatchService {
    * and argument.
    * 
    * @param documentRoot The root element of a QDL document.
-   * @throws BatchException
+   * @throws ProblemException
    */
-  public abstract void createQueue( final DocumentRoot documentRoot ) throws BatchException;
+  public abstract void createQueue( final DocumentRoot documentRoot ) throws ProblemException;
   
   /**
    * Deletes the specified queue.
    *
    * @param queueId The identifier of the queue to be deleted.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public abstract void delQueue( final String queueId ) throws BatchException;
+  public abstract void delQueue( final String queueId ) throws ProblemException;
 
   /**
    * Executes command that will change the maximum allowed wall time of a specific queue.
    *
    * @param queueName The name of the queue to be modified.
    * @param timeWall The new maximum allowed wall time for any job.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public abstract void setMaxWallTime( final String queueName, final String timeWall ) throws BatchException;
+  public abstract void setMaxWallTime( final String queueName, final String timeWall ) throws ProblemException;
 }

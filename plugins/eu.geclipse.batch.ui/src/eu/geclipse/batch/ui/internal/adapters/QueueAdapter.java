@@ -552,7 +552,7 @@ public class QueueAdapter extends QdlAdaptersFactory {
                     spinner = this.spinnerWidgetMap.get( new Integer(QdlPackage.QUEUE_TYPE__CPU_TIME_LIMIT) );
                     
                     rangeValueType = this.queue.getCPUTimeLimit();
-                    if (rangeValueType.getUpperBoundedRange() != null) {
+                    if ( rangeValueType.getUpperBoundedRange() != null ) {
                       boundaryType = rangeValueType.getUpperBoundedRange();
                     }
                     else{
@@ -568,7 +568,7 @@ public class QueueAdapter extends QdlAdaptersFactory {
                     spinner = this.spinnerWidgetMap.get( new Integer(QdlPackage.QUEUE_TYPE__WALL_TIME_LIMIT) );
                     
                     rangeValueType = this.queue.getWallTimeLimit();
-                    if (rangeValueType.getUpperBoundedRange() != null) {
+                    if ( rangeValueType.getUpperBoundedRange() != null ) {
                       boundaryType = rangeValueType.getUpperBoundedRange();
                     }
                     else{

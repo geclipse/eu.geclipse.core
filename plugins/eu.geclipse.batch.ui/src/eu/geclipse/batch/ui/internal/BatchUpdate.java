@@ -31,7 +31,6 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.swt.widgets.Shell;
 
-import eu.geclipse.batch.BatchException;
 import eu.geclipse.batch.IBatchService;
 import eu.geclipse.batch.IBatchJobInfo;
 import eu.geclipse.batch.IQueueInfo;
@@ -43,6 +42,7 @@ import eu.geclipse.batch.ui.internal.model.Connection;
 import eu.geclipse.batch.ui.internal.model.Queue;
 import eu.geclipse.batch.ui.internal.model.WorkerNode;
 import eu.geclipse.batch.ui.dialogs.*;
+import eu.geclipse.core.reporting.ProblemException;
 
 /**
  * Class that runs a job to synchronize the current view of the batch service
@@ -264,7 +264,7 @@ public class BatchUpdate {
     // Do the worker nodes
     try {
       wnis = this.batchWrapper.getWorkerNodes();
-    } catch( BatchException exc ) {
+    } catch( ProblemException exc ) {
       Activator.logException( exc );
     }
 
@@ -299,7 +299,7 @@ public class BatchUpdate {
 
       // Do the queues
       queueis = this.batchWrapper.getQueues();
-    } catch( BatchException exc ) {
+    } catch( ProblemException exc ) {
       Activator.logException( exc );
     }
 

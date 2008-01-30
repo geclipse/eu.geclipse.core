@@ -17,7 +17,7 @@
 package eu.geclipse.batch;
 
 import eu.geclipse.batch.internal.SSHConnection;
-import eu.geclipse.core.GridException;
+import eu.geclipse.core.reporting.ProblemException;
 
 /**
  * Common methods for interacting with a batch service. 
@@ -78,9 +78,9 @@ public abstract class AbstractBatchService implements IBatchService {
    * connection with the PBS server.
    * @return Returns <code>true</code> if the connection is established,
    *  <code>false</code> otherwise.
-   * @throws GridException If the ssh connection cannot be established
+   * @throws ProblemException If the ssh connection cannot be established
    */
-  public synchronized boolean connectToServer( final ISSHConnectionInfo sshConnectionInfo )  throws GridException {
+  public synchronized boolean connectToServer( final ISSHConnectionInfo sshConnectionInfo )  throws ProblemException {
     this.connection.createSession( sshConnectionInfo, null );
     return this.connection.isSessionActive();
   }

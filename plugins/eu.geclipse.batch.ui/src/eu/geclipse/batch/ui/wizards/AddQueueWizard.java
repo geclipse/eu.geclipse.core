@@ -22,10 +22,10 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import eu.geclipse.batch.ui.internal.Messages;
-import eu.geclipse.batch.BatchException;
 import eu.geclipse.batch.IBatchService;
 import eu.geclipse.batch.IQueueInfo;
-import eu.geclipse.ui.dialogs.NewProblemDialog;
+import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 
 /**
  * Wizard to create a new queue
@@ -111,12 +111,12 @@ public class AddQueueWizard extends Wizard implements INewWizard {
                                      this.requiredPage.getTimeCPU(), 
                                      this.requiredPage.getTimeWall(),
                                      this.requiredPage.getVONames() );
-    } catch( BatchException excp ) {
+    } catch( ProblemException excp ) {
       // Display error dialog
-      NewProblemDialog.openProblem( this.getShell(),
-                                    Messages.getString( "AddQueueWizard.error_manipulate_title" ),  //$NON-NLS-1$
-                                    Messages.getString( "AddQueueWizard.error_manipulate_message" ), //$NON-NLS-1$
-                                    excp );      
+      ProblemDialog.openProblem( this.getShell(),
+                                 Messages.getString( "AddQueueWizard.error_manipulate_title" ),  //$NON-NLS-1$
+                                 Messages.getString( "AddQueueWizard.error_manipulate_message" ), //$NON-NLS-1$
+                                 excp );      
     }
   }
 
@@ -142,12 +142,12 @@ public class AddQueueWizard extends Wizard implements INewWizard {
                                      this.optionalPage.getMaxQueue(),
                                      this.optionalPage.getAssignedResources(),
                                      this.requiredPage.getVONames() );
-    } catch( BatchException excp ) {
+    } catch( ProblemException excp ) {
       // Display error dialog
-      NewProblemDialog.openProblem( this.getShell(),
-                                    Messages.getString( "AddQueueWizard.error_manipulate_title" ),  //$NON-NLS-1$
-                                    Messages.getString( "AddQueueWizard.error_manipulate_message" ), //$NON-NLS-1$
-                                    excp );      
+      ProblemDialog.openProblem( this.getShell(),
+                                 Messages.getString( "AddQueueWizard.error_manipulate_title" ),  //$NON-NLS-1$
+                                 Messages.getString( "AddQueueWizard.error_manipulate_message" ), //$NON-NLS-1$
+                                 excp );      
     }
   }
   

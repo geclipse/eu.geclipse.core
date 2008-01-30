@@ -44,7 +44,6 @@ import org.eclipse.gef.ui.actions.ZoomOutAction;
 import org.eclipse.jface.action.IAction;
 
 import eu.geclipse.batch.BatchConnectionInfo;
-import eu.geclipse.batch.BatchProblems;
 import eu.geclipse.batch.BatchServiceManager;
 import eu.geclipse.batch.Extensions;
 import eu.geclipse.batch.IBatchService;
@@ -61,11 +60,9 @@ import eu.geclipse.batch.ui.internal.WorkerNodeAction;
 import eu.geclipse.batch.ui.internal.model.BatchDiagram;
 import eu.geclipse.batch.ui.internal.parts.BatchEditPartFactory;
 import eu.geclipse.batch.ui.internal.parts.BatchTreeEditPartFactory;
-import eu.geclipse.core.CoreProblems;
-import eu.geclipse.core.GridException;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.core.model.GridModelException;
-import eu.geclipse.ui.dialogs.NewProblemDialog;
-import eu.geclipse.batch.BatchException;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 
 /**
  * A graphical editor that can edit .batch files. The
@@ -175,23 +172,11 @@ public class BatchEditor extends GraphicalEditor {
                                             this.batchInfo.getBatchType(), this.batchInfo.getUpdateInterval() );
           this.updateJob.startUpdate();
         }
-      } catch ( GridException gExc ) {
-        if ( CoreProblems.GET_SSH_SERVICE_FAILED == gExc.getProblem().getID() ) {
-          NewProblemDialog.openProblem( null,
-                                        Messages.getString( "BatchEditor.SSHConnection.sshConnection" ) , //$NON-NLS-1$
-                                        Messages.getString( "BatchEditor.SSHConnection.couldNotGetService" ), //$NON-NLS-1$
-                                        gExc );
-        } else if ( CoreProblems.LOGIN_FAILED == gExc.getProblem().getID() ) { 
-          NewProblemDialog.openProblem( null,
-                                        Messages.getString( "BatchEditor.SSHConnection.sshConnection" ) , //$NON-NLS-1$
-                                        Messages.getString( "BatchEditor.SSHConnection.authFailed" ), //$NON-NLS-1$
-                                        gExc );          
-        } else if ( gExc.getProblem().getID() == BatchProblems.COMMAND_FAILED  ){
-          NewProblemDialog.openProblem( null,
-                                        Messages.getString( "BatchEditor.BatchException.FirstTime" ) , //$NON-NLS-1$
-                                        Messages.getString( "BatchEditor.BatchException.initialize" ), //$NON-NLS-1$
-                                        gExc );          
-        }
+      } catch ( ProblemException gExc ) {
+          ProblemDialog.openProblem( null,
+                                     Messages.getString( "BatchEditor.Connection.Error" ) , //$NON-NLS-1$
+                                     null,
+                                     gExc );
       }
     }
   }
@@ -213,10 +198,10 @@ public class BatchEditor extends GraphicalEditor {
       this.batchInfo.load();
     } catch( GridModelException e ) {
       error = true;
-      NewProblemDialog.openProblem( getSite().getShell(),
-                                    Messages.getString( "BatchEditor.Error.LoadConfFileTitle" ), //$NON-NLS-1$
-                                    Messages.getString( "BatchEditor.Error.LoadConfFile" ), //$NON-NLS-1$
-                                    e );
+      ProblemDialog.openProblem( getSite().getShell(),
+                                 Messages.getString( "BatchEditor.Error.LoadConfFileTitle" ), //$NON-NLS-1$
+                                 Messages.getString( "BatchEditor.Error.LoadConfFile" ), //$NON-NLS-1$
+                                 e );
     }
 
     // Search through the extensions to find a implementation that supports this batch service type
@@ -230,12 +215,12 @@ public class BatchEditor extends GraphicalEditor {
             this.batchWrapper = BatchServiceManager.getManager().createService( description, file.getName() );
             found = true;
             //this.batchWrapper = description.createService();
-          } catch( BatchException e ) {
+          } catch( ProblemException e ) {
             error = true;
-            NewProblemDialog.openProblem( getSite().getShell(),
-                                          Messages.getString( "BatchEditor.Error.CreateServiceTitle" ), //$NON-NLS-1$
-                                          Messages.getString( "BatchEditor.Error.CreateService" ), //$NON-NLS-1$
-                                          e );
+            ProblemDialog.openProblem( getSite().getShell(),
+                                       Messages.getString( "BatchEditor.Error.CreateServiceTitle" ), //$NON-NLS-1$
+                                       Messages.getString( "BatchEditor.Error.CreateService" ), //$NON-NLS-1$
+                                       e );
           }
 
           // Set the tab name

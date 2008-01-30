@@ -124,10 +124,12 @@ public class DiagramTreeEditPart extends AbstractTreeEditPart
     } else if ( BatchDiagram.CHILDREN_ADDED_PROP.equals( prop ) ) {
       // Add a child to this edit part
       this.display.syncExec( new Runnable() {  
-        @SuppressWarnings("synthetic-access")
+        @SuppressWarnings({
+          "synthetic-access", "unchecked"
+        })
         public void run() { 
-          List < BatchResource > children = ( List < BatchResource > ) evt.getNewValue();
-          for ( BatchResource child : children ) {
+          List < BatchResource > childrenTmp = ( List < BatchResource > ) evt.getNewValue();
+          for ( BatchResource child : childrenTmp ) {
             addChild( createChild( child ), -1 );
           }
         }  

@@ -26,14 +26,18 @@ import com.jcraft.jsch.Channel;
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.JSchException;
 import com.jcraft.jsch.Session;
-import eu.geclipse.core.CoreProblems;
-import eu.geclipse.core.GridException;
-import eu.geclipse.core.IProblem;
-import eu.geclipse.core.SolutionRegistry;
+
+import eu.geclipse.core.ICoreProblems;
+import eu.geclipse.core.ICoreSolutions;
+import eu.geclipse.core.reporting.IProblem;
+import eu.geclipse.core.reporting.ISolution;
+import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.core.reporting.ReportingPlugin;
+
 import eu.geclipse.core.portforward.ForwardType;
 import eu.geclipse.core.portforward.IForward;
-import eu.geclipse.batch.BatchException;
-import eu.geclipse.batch.BatchProblems;
+import eu.geclipse.batch.IBatchProblems;
+import eu.geclipse.batch.IBatchSolutions;
 import eu.geclipse.batch.ISSHConnectionInfo;
 
 /**
@@ -49,15 +53,21 @@ public class SSHConnection {
    * @param sshConnectionInfo the connection information describing the ssh
    *                          session.
    * @param forwards list of port forwards to create.
-   * @throws GridException If the ssh connection cannot be established
+   * @throws ProblemException If the ssh connection cannot be established
    */
   public void createSession( final ISSHConnectionInfo sshConnectionInfo,
-                             final List<IForward> forwards ) throws GridException {
+                             final List<IForward> forwards ) throws ProblemException {
     try {
       IJSchService service = Activator.getDefault().getJSchService();
-      if ( service == null )
-        throw new GridException( CoreProblems.GET_SSH_SERVICE_FAILED );
-
+      if ( service == null ) {
+        IProblem problem;
+        problem = ReportingPlugin.getReportingService()
+                    .getProblem( IBatchProblems.GET_SSH_SERVICE_FAILED,
+                                 null,
+                                 null,
+                                 Activator.PLUGIN_ID );
+        throw new ProblemException( problem );      
+      }
       this.userInfo = sshConnectionInfo;
       this.session = service.createSession( this.userInfo.getHostname(),
                                               this.userInfo.getPort(),
@@ -82,12 +92,21 @@ public class SSHConnection {
     } catch ( JSchException exception ) {
       // The user wanted to cancel, so ignore the exception
       if ( !sshConnectionInfo.getCanceledPWValue() ) {
-        GridException gridException = new GridException( CoreProblems.LOGIN_FAILED, exception );
-        IProblem problem = gridException.getProblem();
-        problem.addSolution( SolutionRegistry.CHECK_USERNAME_AND_PASSWORD );
-        problem.addSolution( SolutionRegistry.CHECK_SSH_SERVER_CONFIG );
+        IProblem problem;
+        problem = ReportingPlugin.getReportingService()
+                    .getProblem( IBatchProblems.LOGIN_FAILED,
+                                 null,
+                                 exception,
+                                 Activator.PLUGIN_ID );
+        ISolution solution;
+        solution = ReportingPlugin.getReportingService()
+                                     .getSolution( IBatchSolutions.CHECK_USERNAME_AND_PASSWORD, null );
+        problem.addSolution( solution );
         
-        throw gridException;
+        solution = ReportingPlugin.getReportingService().getSolution( IBatchSolutions.CHECK_SSH_SERVER_CONFIG, null );
+        problem.addSolution( solution );
+
+        throw new ProblemException( problem );      
       }
     } catch( Exception exception ){
       Activator.logException( exception );
@@ -124,9 +143,9 @@ public class SSHConnection {
    * @return Returns the output of the executed command if executed 
    * successfully, if no output of the successfully executed command 
    * <code>null</code> is returned.
-   * @throws BatchException If the command is not successfully executed.
+   * @throws ProblemException If the command is not successfully executed.
    */
-  public String execCommand( final String command ) throws BatchException {
+  public String execCommand( final String command ) throws ProblemException {
     String line;
     Channel channel = null;
     InputStream stdout = null;
@@ -140,11 +159,18 @@ public class SSHConnection {
     
     // We throw exception if we don't have a session 
     if ( ! this.isSessionActive() ) {
-      BatchException batchException = new BatchException( BatchProblems.CONNECTION_FAILED );
-      IProblem problem = batchException.getProblem();
-      problem.addSolution( SolutionRegistry.SERVER_DOWN );
+      IProblem problem;
+      problem = ReportingPlugin.getReportingService()
+                  .getProblem( ICoreProblems.CONNECTION_FAILED,
+                               null,
+                               null,
+                               Activator.PLUGIN_ID );
+      ISolution solution;
+      solution = ReportingPlugin.getReportingService()
+                   .getSolution( ICoreSolutions.CHECK_INTERNET_CONNECTION, null );
+      problem.addSolution( solution );
       
-      throw batchException;
+      throw new ProblemException( problem );
     }
     
     try {
@@ -197,18 +223,35 @@ public class SSHConnection {
 
       channel.disconnect();
     } catch( JSchException jschExc ) {
-      BatchException batchException = new BatchException( BatchProblems.CONNECTION_FAILED );
-      IProblem problem = batchException.getProblem();
-      problem.addSolution( SolutionRegistry.CHECK_USERNAME_AND_PASSWORD );
-      problem.addSolution( SolutionRegistry.SERVER_DOWN );
+      IProblem problem;
+      problem = ReportingPlugin.getReportingService()
+                  .getProblem( ICoreProblems.CONNECTION_FAILED,
+                               null,
+                               jschExc,
+                               Activator.PLUGIN_ID );
+      ISolution solution;
+      solution = ReportingPlugin.getReportingService().getSolution( ICoreSolutions.CHECK_INTERNET_CONNECTION, null );
+      problem.addSolution( solution );
+
+      solution = ReportingPlugin.getReportingService().getSolution( IBatchSolutions.CHECK_USERNAME_AND_PASSWORD, null );
+      problem.addSolution( solution );
       
-      throw batchException;
-    } catch( IOException ioExc ) {
-      BatchException batchException = new BatchException( BatchProblems.CONNECTION_IO_ERROR );
-      IProblem problem = batchException.getProblem();
-      problem.addSolution( SolutionRegistry.SERVER_DOWN );
-      
-      throw batchException;
+      solution = ReportingPlugin.getReportingService().getSolution( ICoreSolutions.CHECK_FIREWALL, null );
+      problem.addSolution( solution );
+
+      throw new ProblemException( problem );
+    } catch ( IOException ioExc ) {
+      IProblem problem;
+      problem = ReportingPlugin.getReportingService()
+                  .getProblem( IBatchProblems.CONNECTION_IO_ERROR,
+                               null,
+                               ioExc,
+                               Activator.PLUGIN_ID );
+      ISolution solution = ReportingPlugin.getReportingService()
+      .getSolution( ICoreSolutions.CHECK_INTERNET_CONNECTION, null );
+      problem.addSolution( solution );
+
+      throw new ProblemException( problem );
     } finally {
       if ( null != stdoutReader ) {
         try {
@@ -230,11 +273,24 @@ public class SSHConnection {
     // Was the command executed successfully 
     if ( ( 0 != exitStatus || 0 < errResult.length() ) && 0 == result.length() ) {
       if ( 0 < errResult.length() ) {
-        BatchException batchException = new BatchException( BatchProblems.COMMAND_FAILED, errResult );
-        throw batchException;
+        IProblem problem;
+        problem = ReportingPlugin.getReportingService()
+                    .getProblem( IBatchProblems.COMMAND_FAILED,
+                                 errResult,
+                                 null,
+                                 Activator.PLUGIN_ID );
+
+        throw new ProblemException( problem );
       }
 
-      throw new BatchException( BatchProblems.COMMAND_FAILED );  
+      IProblem problem;
+      problem = ReportingPlugin.getReportingService()
+                  .getProblem( IBatchProblems.COMMAND_FAILED,
+                               null,
+                               null,
+                               Activator.PLUGIN_ID );
+
+      throw new ProblemException( problem );
     }
     
     //  If no output 

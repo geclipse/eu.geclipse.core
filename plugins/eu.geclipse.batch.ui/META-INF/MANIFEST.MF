@@ -5,21 +5,22 @@ Bundle-SymbolicName: eu.geclipse.batch.ui; singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: eu.geclipse.batch.ui.internal.Activator
 Bundle-Localization: plugin
-Require-Bundle: org.eclipse.core.runtime,
+Require-Bundle: com.jcraft.jsch,
+ org.eclipse.core.runtime,
  org.eclipse.compare,
  org.eclipse.ui.ide,
  org.eclipse.ui.forms,
  org.eclipse.gef,
- eu.geclipse.batch,
- eu.geclipse.ui,
- eu.geclipse.core,
- eu.geclipse.info,
- com.jcraft.jsch,
- eu.geclipse.batch.model,
  org.eclipse.emf.ecore.edit,
  org.eclipse.wst.sse.ui,
  org.eclipse.emf.edit.ui,
- org.eclipse.debug.ui
+ org.eclipse.debug.ui,
+ eu.geclipse.core,
+ eu.geclipse.core.reporting,
+ eu.geclipse.batch,
+ eu.geclipse.batch.model,
+ eu.geclipse.info,
+ eu.geclipse.ui
 Eclipse-LazyStart: true
 Export-Package: eu.geclipse.batch.ui.wizards,
  eu.geclipse.batch.ui.editors,

@@ -33,17 +33,15 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
-import eu.geclipse.batch.BatchException;
 import eu.geclipse.batch.BatchQueueDescription;
 import eu.geclipse.batch.BatchServiceManager;
 import eu.geclipse.batch.IBatchService;
-import eu.geclipse.batch.ui.internal.Activator;
 import eu.geclipse.batch.ui.internal.Messages;
 import eu.geclipse.batch.ui.internal.providers.BatchServiceTreeContentProvider;
 import eu.geclipse.batch.ui.internal.providers.BatchServiceTreeLabelProvider;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridBatchQueueDescription;
-import eu.geclipse.ui.dialogs.NewProblemDialog;
+import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 
 
 /**
@@ -58,9 +56,6 @@ public class BatchServiceSelectionWizardPage extends WizardPage {
   protected CheckboxTreeViewer treeViewer;
   private Composite mainComp;   
   private int servicesCount = BatchServiceManager.getManager().getServiceCount();
-  
-  
-  
 
   protected BatchServiceSelectionWizardPage( final String pageName ) {
     super( pageName );
@@ -72,13 +67,10 @@ public class BatchServiceSelectionWizardPage extends WizardPage {
    * @see org.eclipse.jface.dialogs.IDialogPage#createControl(org.eclipse.swt.widgets.Composite)
    */
   public void createControl( final Composite parent ) {
-    
     GridData gd;
-    
     
     this.mainComp = new Composite( parent, SWT.NONE );
     this.mainComp.setLayout( new GridLayout( 1, false ) );
-    
     
     gd = new GridData( GridData.FILL_BOTH );
     gd.grabExcessHorizontalSpace = true;
@@ -118,21 +110,16 @@ public class BatchServiceSelectionWizardPage extends WizardPage {
     this.treeViewer.expandAll();
     
     setControl( this.mainComp );
-    
   }
-  
   
   /*
    * Get the Registered Batch Services through the Extension Points.
    */
   private List<String> initialViewerInput() {
-    
     List<String> registeredServices = eu.geclipse.batch.Extensions.getRegisteredBatchServiceNames();
     
     return registeredServices;    
   }
-  
-  
   
   /**
    * Initial Data that will be used in the Wizard Page.
@@ -142,8 +129,6 @@ public class BatchServiceSelectionWizardPage extends WizardPage {
   public void setInitialData(final List<IGridBatchQueueDescription> list){
     this.queueDescList = list;
   }
-  
-
   
   /* (non-Javadoc)
    * @see org.eclipse.jface.wizard.WizardPage#isPageComplete()
@@ -164,13 +149,9 @@ public class BatchServiceSelectionWizardPage extends WizardPage {
     return ret;
   }
   
-  
   protected void updateUI() {
     setPageComplete( isServiceSelectionValid() );
   }
-  
-  
-  
   
   /**
    * @return TRUE if the Queue configuration has been committed to the selected batch services or
@@ -178,83 +159,80 @@ public class BatchServiceSelectionWizardPage extends WizardPage {
    * 
    */
   public boolean finish() {
-  boolean result = true;
+    boolean result = true;
 
-  if ( isServiceSelectionValid() ) { 
-    final Object[] checkedElements = this.treeViewer.getCheckedElements();
-    final IWizardContainer container = getContainer();
+    if ( isServiceSelectionValid() ) { 
+      final Object[] checkedElements = this.treeViewer.getCheckedElements();
+      final IWizardContainer container = getContainer();
     
       try {
         container.run( true, true, new IRunnableWithProgress() {
           
-          protected void testCanceled( final IProgressMonitor monitor ) {
-            if ( monitor.isCanceled() ) {
-              throw new OperationCanceledException();
-            }
+        protected void testCanceled( final IProgressMonitor monitor ) {
+          if ( monitor.isCanceled() ) {
+            throw new OperationCanceledException();
           }
+        }
 
-          public void run( final IProgressMonitor monitor )
-            throws InvocationTargetException, InterruptedException {
-            IBatchService batchWrapper = null;    
-            BatchQueueDescription batchQueue = null;
+        public void run( final IProgressMonitor monitor )
+          throws InvocationTargetException, InterruptedException {
+          IBatchService batchWrapper = null;    
+          BatchQueueDescription batchQueue = null;
             
-            SubMonitor betterMonitor = SubMonitor.convert( monitor, checkedElements.length );
+          SubMonitor betterMonitor = SubMonitor.convert( monitor, checkedElements.length );
             
-            for( Object element : checkedElements ) {              
-              testCanceled( betterMonitor );              
+          for( Object element : checkedElements ) {              
+            testCanceled( betterMonitor );              
 
-              if( element instanceof IBatchService ) {                
-                betterMonitor.setTaskName( 
-                          String.format( Messages.getString( "BatchServiceSelectionDialog.task.Service" ), //$NON-NLS-1$ 
-                          ( ( IBatchService ) element).getName() ) ); 
+            if( element instanceof IBatchService ) {                
+              betterMonitor.setTaskName( 
+                        String.format( Messages.getString( "BatchServiceSelectionDialog.task.Service" ), //$NON-NLS-1$ 
+                        ( ( IBatchService ) element).getName() ) ); 
 
-                batchWrapper = (IBatchService) element;
-                testCanceled( betterMonitor );
-                  for( IGridBatchQueueDescription queueDescription 
+              batchWrapper = (IBatchService) element;
+              testCanceled( betterMonitor );
+              for( IGridBatchQueueDescription queueDescription 
                       : BatchServiceSelectionWizardPage.this.queueDescList ) {
-                    batchQueue = (BatchQueueDescription) queueDescription;
-                    try {
-                      batchQueue.load(queueDescription.getResource().getFullPath().toString());
-                      try {
-                        betterMonitor.setTaskName( 
+                batchQueue = (BatchQueueDescription) queueDescription;
+//                try {
+                  batchQueue.load(queueDescription.getResource().getFullPath().toString());
+                  try {
+                    betterMonitor.setTaskName( 
                               String.format( 
                                   Messages.getString( "BatchServiceSelectionDialog.task.Configuration" ), //$NON-NLS-1$ 
                               queueDescription.getResource().getName() ) ); 
-                        batchWrapper.createQueue( batchQueue.getRoot() );
-                        testCanceled( betterMonitor ); 
-                      } catch( BatchException e ) {
-                        NewProblemDialog.openProblem( getShell(),
-                                         Messages.getString( "AddQueueWizard.error_manipulate_title" ),  //$NON-NLS-1$
-                                         Messages.getString( "AddQueueWizard.error_manipulate_message" ), //$NON-NLS-1$
-                                                  e );      
-                      } 
-                    } catch( GridModelException e ) {
-                      Activator.logException( e );
-                    }
-                                
-                  } // end for
-   
-              } // end if ( element instanceof IBatchService )
-            }
-            betterMonitor.worked( 1 );
+                    batchWrapper.createQueue( batchQueue.getRoot() );
+                    testCanceled( betterMonitor ); 
+                  } catch( ProblemException e ) {
+                    ProblemDialog.openProblem( getShell(),
+                                               Messages.getString( "AddQueueWizard.error_manipulate_title" ),  //$NON-NLS-1$
+                                               Messages.getString( "AddQueueWizard.error_manipulate_message" ), //$NON-NLS-1$
+                                               e );
+                  } 
+//                } catch( GridModelException e ) {
+//                  Activator.logException( e );
+//                }
+              } // end for
+            } // end if ( element instanceof IBatchService )
           }
+          betterMonitor.worked( 1 );
+        }
         } );
       } catch( InvocationTargetException itExc ) {
-        NewProblemDialog.openProblem( getShell(),
+        ProblemDialog.openProblem( getShell(),
                          Messages.getString("BatchServiceSelectionDialog.QueueConfigurationFailed"), //$NON-NLS-1$
                          Messages.getString("BatchServiceSelectionDialog.QueueConfigurationFailed"), //$NON-NLS-1$
                          itExc.getCause() );
         result = false;
       } catch( InterruptedException intExc ) {
-        NewProblemDialog.openProblem( getShell(),
+        ProblemDialog.openProblem( getShell(),
                          Messages.getString("BatchServiceSelectionDialog.QueueConfigurationInterupted"), //$NON-NLS-1$
                          Messages.getString("BatchServiceSelectionDialog.QueueConfigurationInterupted"), //$NON-NLS-1$
                          intExc );
         result = false;
       }
-  } // end if ( isServiceSelectionValid() )
+    } // end if ( isServiceSelectionValid() )
     return result;
-    
   }
       
 }

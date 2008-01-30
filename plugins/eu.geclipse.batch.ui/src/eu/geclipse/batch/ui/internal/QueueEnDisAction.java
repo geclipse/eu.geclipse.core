@@ -19,13 +19,13 @@ package eu.geclipse.batch.ui.internal;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.IWorkbenchPart;
-import eu.geclipse.batch.BatchException;
 import eu.geclipse.batch.IBatchService;
 import eu.geclipse.batch.IQueueInfo.QueueState;
 import eu.geclipse.batch.ui.internal.model.Queue;
 import eu.geclipse.batch.ui.internal.parts.BatchTreeEditPart;
 import eu.geclipse.batch.ui.internal.parts.QueueEditPart;
-import eu.geclipse.ui.dialogs.NewProblemDialog;
+import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 
 /**
  * Class that handles the actions that can be applied to the Batch queues.
@@ -83,12 +83,12 @@ public class QueueEnDisAction extends SelectionAction {
           this.batchWrapper.enableQueue( strName );
         else
           this.batchWrapper.disableQueue( strName );
-      } catch( BatchException excp ) {
+      } catch( ProblemException excp ) {
         // Action could not be performed
-        NewProblemDialog.openProblem( this.getWorkbenchPart().getSite().getShell(),
-                                      Messages.getString( "QueueEnDisAction.error_manipulate_title" ),  //$NON-NLS-1$
-                                      Messages.getString( "QueueEnDisAction.error_manipulate_message" ), //$NON-NLS-1$
-                                      excp );      
+        ProblemDialog.openProblem( this.getWorkbenchPart().getSite().getShell(),
+                                   Messages.getString( "QueueEnDisAction.error_manipulate_title" ),  //$NON-NLS-1$
+                                   Messages.getString( "QueueEnDisAction.error_manipulate_message" ), //$NON-NLS-1$
+                                   excp );      
       }
     }
   }

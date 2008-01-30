@@ -22,6 +22,7 @@ import java.util.List;
 import org.eclipse.compare.IContentChangeListener;
 import org.eclipse.compare.IContentChangeNotifier;
 import org.eclipse.core.runtime.ListenerList;
+import eu.geclipse.core.reporting.ProblemException;
 
 
 /**
@@ -79,11 +80,11 @@ public class BatchServiceManager implements IContentChangeNotifier {
    * @param name batch service name, i.e. the configuration file that were 
    *             used to instantiate this service
    * @return A new batch service constructed from the specified description.
-   * @throws BatchException If an error occurs while creating= new BufferedReader( new InputStreamReader( stdout ) ); the service
+   * @throws ProblemException If an error occurs while creating the service
    * @see IBatchServiceDescription#createService( String name )
    */
   public IBatchService createService( final IBatchServiceDescription description, final String name )
-    throws BatchException
+    throws ProblemException
   {
     IBatchService service = description.createService( name );
     addService( service );

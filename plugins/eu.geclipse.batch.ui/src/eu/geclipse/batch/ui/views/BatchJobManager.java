@@ -23,8 +23,8 @@ import org.eclipse.compare.IContentChangeListener;
 import org.eclipse.compare.IContentChangeNotifier;
 import org.eclipse.core.runtime.ListenerList;
 
-import eu.geclipse.batch.BatchException;
 import eu.geclipse.batch.IBatchJobInfo;
+import eu.geclipse.core.reporting.ProblemException;
 
 /**
  * The <code>BatchJobManager</code> manages all types of jobs present in the batch system.
@@ -176,9 +176,9 @@ public class BatchJobManager implements IContentChangeNotifier {
    * specified job is removed from the list of currently managed jobs. 
    *  
    * @param job The {@link IBatchJobInfo} to be deleted.
-   * @throws BatchException If the job could not be successfully deleted.
+   * @throws ProblemException If the job could not be successfully deleted.
    */
-  public void deleteJob( final IBatchJobInfo job ) throws BatchException {
+  public void deleteJob( final IBatchJobInfo job ) throws ProblemException {
     if ( job.isDeletable() ) {
       job.deleteJob();
       removeJob( job );
@@ -192,10 +192,10 @@ public class BatchJobManager implements IContentChangeNotifier {
    * @param job The {@link IBatchJobInfo} to be deleted.
    * @param destQueue The destination queue.
    * @param destServer The destination server.
-   * @throws BatchException If the job could not be successfully moved.
+   * @throws ProblemException If the job could not be successfully moved.
    */
   public void moveJob( final IBatchJobInfo job, final String destQueue, 
-                       final String destServer ) throws BatchException {
+                       final String destServer ) throws ProblemException {
     if ( job.isMovable() ) {
       job.moveJob( destQueue, destServer );
       removeJob( job );
@@ -206,9 +206,9 @@ public class BatchJobManager implements IContentChangeNotifier {
    * Puts the specified {@link IBatchJobInfo} on hold.
    *
    * @param job The {@link IBatchJobInfo} to be put on hold.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public void holdJob( final IBatchJobInfo job ) throws BatchException {
+  public void holdJob( final IBatchJobInfo job ) throws ProblemException {
     if ( job.isHoldable() ) {
       job.holdJob();
       job.setStatus( IBatchJobInfo.JobState.H );
@@ -220,9 +220,9 @@ public class BatchJobManager implements IContentChangeNotifier {
    * Release the specified {@link IBatchJobInfo}.
    *
    * @param job The {@link IBatchJobInfo} to be released.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public void releaseJob( final IBatchJobInfo job ) throws BatchException {
+  public void releaseJob( final IBatchJobInfo job ) throws ProblemException {
     if ( job.isReleasable() ) {
       job.releaseJob();
       job.setStatus( IBatchJobInfo.JobState.Q );

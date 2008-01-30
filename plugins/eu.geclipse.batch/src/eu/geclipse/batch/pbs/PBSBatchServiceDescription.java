@@ -16,10 +16,10 @@
  *****************************************************************************/
 package eu.geclipse.batch.pbs;
 
-import eu.geclipse.batch.BatchException;
 import eu.geclipse.batch.IBatchService;
 import eu.geclipse.batch.IBatchServiceDescription;
 import eu.geclipse.batch.internal.Messages;
+import eu.geclipse.core.reporting.ProblemException;
 
 /**
  * A batch service description that is dedicated to pbs. 
@@ -35,7 +35,7 @@ public class PBSBatchServiceDescription implements IBatchServiceDescription {
    *             used to instantiate this service
    * @return A pbs batch service that can safely be casted to {@link PBSBatchService}.
    */
-  public IBatchService createService( final String name ) throws BatchException {
+  public IBatchService createService( final String name ) throws ProblemException {
     return new PBSBatchService( this, name );
   }
 

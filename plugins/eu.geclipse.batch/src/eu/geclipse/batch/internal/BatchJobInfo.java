@@ -17,9 +17,9 @@
 
 package eu.geclipse.batch.internal;
 
-import eu.geclipse.batch.BatchException;
 import eu.geclipse.batch.IBatchJobInfo;
 import eu.geclipse.batch.IBatchService;
+import eu.geclipse.core.reporting.ProblemException;
 
 /**
  * Class for holding information about a specific Grid job.
@@ -160,9 +160,9 @@ public class BatchJobInfo implements IBatchJobInfo {
 
   /**
    * Deletes this job from the batch service.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public void deleteJob()  throws BatchException {
+  public void deleteJob()  throws ProblemException {
     if ( isDeletable() ) {
       this.batchWrapper.delJob( this.jobId );
     }
@@ -172,9 +172,9 @@ public class BatchJobInfo implements IBatchJobInfo {
    * Move this job to another worker node or batch service.
    * @param destQueue The destination queue, <code>null</code> if no destination queue.
    * @param destServer The destination server, <code>null</code> if no destination server.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public void moveJob( final String destQueue, final String destServer )  throws BatchException {
+  public void moveJob( final String destQueue, final String destServer )  throws ProblemException {
     if ( isMovable() && ( null != destQueue || null != destServer ) ) {
       this.batchWrapper.moveJob( this.jobId, destQueue, destServer );
     }
@@ -183,9 +183,9 @@ public class BatchJobInfo implements IBatchJobInfo {
   /**
    * Puts a hold on a job in the queue of the batch service.
    *
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public void holdJob() throws BatchException {
+  public void holdJob() throws ProblemException {
     if ( isHoldable() ) {
       this.batchWrapper.holdJob( this.jobId );
     }
@@ -194,9 +194,9 @@ public class BatchJobInfo implements IBatchJobInfo {
   /**
    * Release a job with a previous hold in queue of the batch system.
    *
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public void releaseJob() throws BatchException {
+  public void releaseJob() throws ProblemException {
     if ( isReleasable() ) {
       this.batchWrapper.releaseJob( this.jobId );
     }

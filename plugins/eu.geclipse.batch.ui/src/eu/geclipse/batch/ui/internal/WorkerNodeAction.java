@@ -22,13 +22,13 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.jface.resource.ImageDescriptor;
-import eu.geclipse.batch.BatchException;
 import eu.geclipse.batch.IBatchService;
 import eu.geclipse.batch.IWorkerNodeInfo.WorkerNodeState;
 import eu.geclipse.batch.ui.internal.model.WorkerNode;
 import eu.geclipse.batch.ui.internal.parts.BatchTreeEditPart;
 import eu.geclipse.batch.ui.internal.parts.WorkerNodeEditPart;
-import eu.geclipse.ui.dialogs.NewProblemDialog;
+import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 
 /**
  * Action for enabling or disabling a worker node.
@@ -85,12 +85,12 @@ public class WorkerNodeAction extends SelectionAction {
           this.batchWrapper.enableWN( strName );
         else
           this.batchWrapper.disableWN( strName );
-      } catch( BatchException excp ) {
+      } catch( ProblemException excp ) {
         // Action could not be performed
-        NewProblemDialog.openProblem( this.getWorkbenchPart().getSite().getShell(),
-                                      Messages.getString( "WorkerNodeAction.error_manipulate_title" ),  //$NON-NLS-1$
-                                      Messages.getString( "WorkerNodeAction.error_manipulate_message" ), //$NON-NLS-1$
-                                      excp );      
+        ProblemDialog.openProblem( this.getWorkbenchPart().getSite().getShell(),
+                                   Messages.getString( "WorkerNodeAction.error_manipulate_title" ),  //$NON-NLS-1$
+                                   Messages.getString( "WorkerNodeAction.error_manipulate_message" ), //$NON-NLS-1$
+                                   excp );      
       }
     }
   }

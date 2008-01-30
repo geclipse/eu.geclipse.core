@@ -22,8 +22,6 @@ import java.util.List;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.FontData;
@@ -54,20 +52,17 @@ import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableFontProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.wizard.WizardDialog;
 
-import eu.geclipse.batch.BatchException;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.batch.IBatchJobInfo;
 import eu.geclipse.batch.ui.dialogs.BatchJobInfoDialog;
 import eu.geclipse.batch.ui.internal.Activator;
@@ -80,7 +75,10 @@ import eu.geclipse.batch.ui.internal.model.ComputingElement;
 import eu.geclipse.batch.ui.internal.model.Queue;
 import eu.geclipse.batch.ui.internal.model.WorkerNode;
 import eu.geclipse.batch.ui.wizards.MoveJobWizard;
-import eu.geclipse.ui.dialogs.NewProblemDialog;
+import eu.geclipse.ui.dialogs.ProblemDialog;
+import eu.geclipse.ui.comparators.TableColumnComparator;
+import eu.geclipse.ui.listeners.TableColumnListener;
+
 
 /**
  * Viewer of Batch jobs that are either placed in a Worker Node,
@@ -222,83 +220,6 @@ public class BatchJobView extends ViewPart implements IContentChangeListener {
     }
     
   }
-
-  /**
-   * This internal class is used to sort the batch jobs
-   * according to different criteria.
-   * 
-   * @author agarcia
-   */
-  class BatchJobViewerComparator extends ViewerComparator {
-    @Override
-    public int compare( final Viewer viewer, final Object job1, final Object job2 ) {
-      assert job1 instanceof IBatchJobInfo;
-      assert job2 instanceof IBatchJobInfo;
-      
-      Table table = BatchJobView.this.jobTable;
-      ITableLabelProvider labelProvider = (ITableLabelProvider) BatchJobView.this.jobList.getLabelProvider();
-      
-      int col;
-      if ( table.getSortColumn() == null ) {
-        col = 0;
-      } else {
-        col = table.indexOf( table.getSortColumn() );
-      }
-      
-      String value1 = labelProvider.getColumnText( job1, col );
-      String value2 = labelProvider.getColumnText( job2, col );
-      
-      int order = ( table.getSortDirection() == SWT.DOWN )
-                    ? SWT.DOWN
-                    : SWT.UP;
-      
-      int result;
-      if ( order == SWT.UP ) {
-        result = value1.compareTo( value2 );
-      } else {
-        result = value2.compareTo( value1 );
-      }
-      // If tokens compare equal, sort next by ascending ID
-      if ( result == 0 ) {
-        value1 = labelProvider.getColumnText( job1, 0 );
-        value2 = labelProvider.getColumnText( job2, 0 );
-        result = value1.compareTo( value2 );
-      }
-      
-      return result;
-    }
-  }
-  
-  /**
-   * This internal class is the listener for setting column sorting.
-   * 
-   * @author agarcia
-   */
-  class BatchJobColumnSelectionListener implements SelectionListener {
-    
-    public void widgetSelected( final SelectionEvent e ) {
-      // This listener is only for the columns of the token table
-      assert e.getSource() instanceof TableColumn;
-      
-      Table table = BatchJobView.this.jobTable;
-      TableColumn clickedColumn = (TableColumn) e.getSource();
-      TableColumn oldSortingColumn = table.getSortColumn();
-      
-      if ( clickedColumn == oldSortingColumn ) {
-        table.setSortDirection( table.getSortDirection() == SWT.UP
-                                  ? SWT.DOWN
-                                  : SWT.UP );
-      } else {
-        table.setSortColumn( clickedColumn );
-        table.setSortDirection( SWT.UP );
-      }
-      BatchJobView.this.jobList.refresh();
-    }
-  
-    public void widgetDefaultSelected( final SelectionEvent e ) {
-      // Empty implementation
-    }
-  }
   
   /**
    * The table used to present the jobs.
@@ -343,21 +264,59 @@ public class BatchJobView extends ViewPart implements IContentChangeListener {
   @Override
   public void createPartControl( final Composite parent )
   {
-    this.jobTable = buildAndLayoutTable( parent );
-
+    this.jobTable = new Table( parent, SWT.MULTI | SWT.FULL_SELECTION );
+    this.jobTable.setHeaderVisible( true );
+    this.jobTable.setLinesVisible( true );    
+    
     BatchJobManager manager = BatchJobManager.getManager();
     this.jobList = new TableViewer( this.jobTable );
-    
     this.jobList.setLabelProvider( new JobLabelProvider() );
     this.jobList.setContentProvider( new JobContentProvider() );
-    this.jobList.setComparator( new BatchJobViewerComparator() );
-    this.jobList.setInput( manager );
 
-    this.jobList.addSelectionChangedListener( new ISelectionChangedListener() {
-      public void selectionChanged( final SelectionChangedEvent event ) {
-        updateActions();
-      }
-    });
+    TableColumnListener columnListener = new TableColumnListener( this.jobList );
+
+    TableColumn idColumn = new TableColumn( this.jobTable, SWT.NONE );
+    idColumn.setText( Messages.getString( "BatchJobView.JobId" ) ); //$NON-NLS-1$
+    idColumn.setWidth( 150 );    
+    idColumn.setAlignment( SWT.LEFT );
+    idColumn.addSelectionListener( columnListener );
+
+    TableColumn nameColumn = new TableColumn( this.jobTable, SWT.CENTER );
+    nameColumn.setText( Messages.getString( "BatchJobView.JobName" ) ); //$NON-NLS-1$
+    nameColumn.setWidth( 75 );    
+    nameColumn.setAlignment( SWT.CENTER );
+    nameColumn.addSelectionListener( columnListener );
+    
+    TableColumn queueColumn = new TableColumn( this.jobTable, SWT.CENTER );
+    queueColumn.setText( Messages.getString( "BatchJobView.Queue" ) ); //$NON-NLS-1$
+    queueColumn.setWidth( 150 );    
+    queueColumn.setAlignment( SWT.CENTER );
+    queueColumn.addSelectionListener( columnListener );
+    
+    TableColumn userColumn = new TableColumn( this.jobTable, SWT.CENTER );
+    userColumn.setText( Messages.getString( "BatchJobView.UserAccount" ) ); //$NON-NLS-1$
+    userColumn.setWidth( 150 );    
+    userColumn.setAlignment( SWT.CENTER );
+    userColumn.addSelectionListener( columnListener );
+    
+    TableColumn timeColumn = new TableColumn( this.jobTable, SWT.CENTER );
+    timeColumn.setText( Messages.getString( "BatchJobView.Time" ) ); //$NON-NLS-1$
+    timeColumn.setWidth( 75 );    
+    timeColumn.setAlignment( SWT.CENTER );
+    timeColumn.addSelectionListener( columnListener );
+    
+    TableColumn statusColumn = new TableColumn( this.jobTable, SWT.CENTER );
+    statusColumn.setText( Messages.getString( "BatchJobView.Status" ) ); //$NON-NLS-1$
+    statusColumn.setWidth( 75 );    
+    statusColumn.setAlignment( SWT.CENTER );
+    statusColumn.addSelectionListener( columnListener );
+    
+    // Initially we sort the jobs by ID, ascending
+    this.jobTable.setSortColumn( idColumn );
+    this.jobTable.setSortDirection( SWT.UP );
+
+    this.jobList.setComparator( new TableColumnComparator( idColumn ) );
+    this.jobList.setInput( manager );
 
     this.jobList.addDoubleClickListener( new IDoubleClickListener() {
       public void doubleClick( final DoubleClickEvent e ) {
@@ -449,57 +408,6 @@ public class BatchJobView extends ViewPart implements IContentChangeListener {
     createContextMenu();
   }
 
-  /**
-   * Creates the table and its layout for the view.
-   * @param composite The composite were the table will be placed.
-   * @return Returns the created <code>Table</code>.
-   */
-  private Table buildAndLayoutTable( final Composite composite ) {
-    Table tbl = new Table( composite, /*SWT.CHECK |*/ SWT.MULTI | SWT.FULL_SELECTION );
-    tbl.setHeaderVisible( true );
-    tbl.setLinesVisible( true );
-    
-    BatchJobColumnSelectionListener columnListener = new BatchJobColumnSelectionListener();
-    
-    TableColumn idColumn = new TableColumn( tbl, SWT.NONE );
-    idColumn.setText( Messages.getString( "BatchJobView.JobId" ) ); //$NON-NLS-1$
-    idColumn.setWidth( 150 );    
-    idColumn.setAlignment( SWT.LEFT );
-    idColumn.addSelectionListener( columnListener );
-
-    TableColumn nameColumn = new TableColumn( tbl, SWT.CENTER );
-    nameColumn.setText( Messages.getString( "BatchJobView.JobName" ) ); //$NON-NLS-1$
-    nameColumn.setWidth( 75 );    
-    nameColumn.setAlignment( SWT.CENTER );
-    nameColumn.addSelectionListener( columnListener );
-    
-    TableColumn queueColumn = new TableColumn( tbl, SWT.CENTER );
-    queueColumn.setText( Messages.getString( "BatchJobView.Queue" ) ); //$NON-NLS-1$
-    queueColumn.setWidth( 150 );    
-    queueColumn.setAlignment( SWT.CENTER );
-    queueColumn.addSelectionListener( columnListener );
-    
-    TableColumn userColumn = new TableColumn( tbl, SWT.CENTER );
-    userColumn.setText( Messages.getString( "BatchJobView.UserAccount" ) ); //$NON-NLS-1$
-    userColumn.setWidth( 150 );    
-    userColumn.setAlignment( SWT.CENTER );
-    userColumn.addSelectionListener( columnListener );
-    
-    TableColumn timeColumn = new TableColumn( tbl, SWT.CENTER );
-    timeColumn.setText( Messages.getString( "BatchJobView.Time" ) ); //$NON-NLS-1$
-    timeColumn.setWidth( 75 );    
-    timeColumn.setAlignment( SWT.CENTER );
-    timeColumn.addSelectionListener( columnListener );
-    
-    TableColumn statusColumn = new TableColumn( tbl, SWT.CENTER );
-    statusColumn.setText( Messages.getString( "BatchJobView.Status" ) ); //$NON-NLS-1$
-    statusColumn.setWidth( 75 );    
-    statusColumn.setAlignment( SWT.CENTER );
-    statusColumn.addSelectionListener( columnListener );
-    
-    return tbl;
-  }
-
   /* (non-Javadoc)
    * @see org.eclipse.ui.part.WorkbenchPart#dispose()
    */
@@ -579,12 +487,12 @@ public class BatchJobView extends ViewPart implements IContentChangeListener {
         for ( IBatchJobInfo job : jobs ) {
           try {
             manager.deleteJob( job );
-          } catch( BatchException excp ) {
+          } catch( ProblemException excp ) {
             // Action could not be performed
-            NewProblemDialog.openProblem( getSite().getShell(),
-                                          Messages.getString( "BatchJobView.error_delete_title" ), //$NON-NLS-1$
-                                          Messages.getString( "BatchJobView.error_delete_message" ), //$NON-NLS-1$
-                                          excp );      
+            ProblemDialog.openProblem( getSite().getShell(),
+                                       Messages.getString( "BatchJobView.error_delete_title" ), //$NON-NLS-1$
+                                       Messages.getString( "BatchJobView.error_delete_message" ), //$NON-NLS-1$
+                                       excp );      
           }
         }
         updateActions();
@@ -608,12 +516,12 @@ public class BatchJobView extends ViewPart implements IContentChangeListener {
         for ( IBatchJobInfo job : jobs ) {
           try {
             manager.holdJob( job );
-          } catch( BatchException excp ) {
+          } catch( ProblemException excp ) {
             // Action could not be performed
-            NewProblemDialog.openProblem( getSite().getShell(),
-                                          Messages.getString( "BatchJobView.error_hold_title" ), //$NON-NLS-1$
-                                          Messages.getString( "BatchJobView.error_hold_message" ), //$NON-NLS-1$
-                                          excp );      
+            ProblemDialog.openProblem( getSite().getShell(),
+                                       Messages.getString( "BatchJobView.error_hold_title" ), //$NON-NLS-1$
+                                       Messages.getString( "BatchJobView.error_hold_message" ), //$NON-NLS-1$
+                                        excp );      
           }
 //        }
         updateActions();
@@ -637,12 +545,12 @@ public class BatchJobView extends ViewPart implements IContentChangeListener {
         for ( IBatchJobInfo job : jobs ) {
           try {
             manager.releaseJob( job );
-          } catch( BatchException excp ) {
+          } catch( ProblemException excp ) {
             // Action could not be performed
-            NewProblemDialog.openProblem( getSite().getShell(),
-                                          Messages.getString( "BatchJobView.error_release_title" ), //$NON-NLS-1$
-                                          Messages.getString( "BatchJobView.error_release_message" ), //$NON-NLS-1$
-                                          excp );      
+            ProblemDialog.openProblem( getSite().getShell(),
+                                       Messages.getString( "BatchJobView.error_release_title" ), //$NON-NLS-1$
+                                       Messages.getString( "BatchJobView.error_release_message" ), //$NON-NLS-1$
+                                       excp );      
           }
 //        }
         updateActions();

@@ -17,6 +17,8 @@
 
 package eu.geclipse.batch;
 
+import eu.geclipse.core.reporting.ProblemException;
+
 /**
  * This interface is the base for all classes that describe specialized
  * batch services like pbs. 
@@ -33,10 +35,10 @@ public interface IBatchServiceDescription {
    *             used to instantiate this service
    * @return A new batch service that is created from the settings
    *         of this <code>IBatchServiceDescription</code>.
-   * @throws BatchException If the service could not be created due
+   * @throws ProblemException If the service could not be created due
    *                        to some error.
    */
-  public IBatchService createService( final String name ) throws BatchException;
+  public IBatchService createService( final String name ) throws ProblemException;
   
   /**
    * Get the name of the service type that is described by this description. This

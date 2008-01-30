@@ -39,23 +39,19 @@ public class QueueContentProvider implements IStructuredContentProvider {
     Object[] result = null;
 
     
-    if (inputElement instanceof AllowedVirtualOrganizationsType){
-      AllowedVirtualOrganizationsType allowedVOs = (AllowedVirtualOrganizationsType) inputElement;
+    if ( inputElement instanceof AllowedVirtualOrganizationsType ) {
+      AllowedVirtualOrganizationsType allowedVOs = ( AllowedVirtualOrganizationsType ) inputElement;
       
-      EList<String>list = allowedVOs.getVOName();
+      EList< String >list = allowedVOs.getVOName();
       result = list.toArray( new Object[ list.size() ] );
   
     }
-    else if (inputElement instanceof Object[]) {     
+    else if ( inputElement instanceof Object[] ) {     
       result = (Object[]) inputElement;
     }
-    else if (inputElement instanceof Collection) {    
-      result = ((Collection) inputElement).toArray();
+    else if ( inputElement instanceof Collection ) {    
+      result = ( ( Collection ) inputElement ).toArray();
     }
-    else {      
-     result = null;
-    }
-      
     
     return result;
   }

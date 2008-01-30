@@ -24,11 +24,11 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
-import eu.geclipse.batch.BatchException;
 import eu.geclipse.batch.IBatchJobInfo;
 import eu.geclipse.batch.ui.internal.Messages;
 import eu.geclipse.batch.ui.views.BatchJobManager;
-import eu.geclipse.ui.dialogs.NewProblemDialog;
+import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 
 /**
  * A wizard to move a job to another batch service and/or queue.
@@ -108,12 +108,12 @@ public class MoveJobWizard extends Wizard implements INewWizard {
     for ( IBatchJobInfo batchJob : this.jobs ) {  
       try {
         this.jobManager.moveJob( batchJob, qName, ceName );
-      } catch( BatchException excp ) {
+      } catch( ProblemException excp ) {
         // Display error dialog
-        NewProblemDialog.openProblem( this.getShell(),
-                                    Messages.getString( "MoveJobWizard.error_manipulate_title" ),  //$NON-NLS-1$
-                                    Messages.getString( "MoveJobWizard.error_manipulate_message" ), //$NON-NLS-1$
-                                    excp );      
+        ProblemDialog.openProblem( this.getShell(),
+                                   Messages.getString( "MoveJobWizard.error_manipulate_title" ),  //$NON-NLS-1$
+                                   Messages.getString( "MoveJobWizard.error_manipulate_message" ), //$NON-NLS-1$
+                                   excp );      
       }
     }
   }

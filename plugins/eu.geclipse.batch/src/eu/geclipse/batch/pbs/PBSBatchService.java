@@ -22,7 +22,6 @@ import java.util.List;
 import java.util.ArrayList;
 
 import eu.geclipse.batch.AbstractBatchService;
-import eu.geclipse.batch.BatchException;
 import eu.geclipse.batch.IBatchJobInfo;
 import eu.geclipse.batch.IBatchServiceDescription;
 import eu.geclipse.batch.IQueueInfo;
@@ -39,7 +38,7 @@ import eu.geclipse.batch.internal.WorkerNodeInfo;
 import eu.geclipse.batch.model.qdl.DocumentRoot;
 import eu.geclipse.batch.model.qdl.QueueStatusEnumeration;
 import eu.geclipse.batch.model.qdl.QueueTypeEnumeration;
-import eu.geclipse.core.GridException;
+import eu.geclipse.core.reporting.ProblemException;
 
 /**
  * Class for executing PBS commands on a Computing Element.
@@ -333,10 +332,10 @@ public final class PBSBatchService extends AbstractBatchService {
    * connection with the PBS server.
    * @return Returns <code>true</code> if the connection is established,
    *  <code>false</code> otherwise.
-   * @throws GridException If the ssh connection cannot be established
+   * @throws ProblemException If the ssh connection cannot be established
    */
   @Override
-  public synchronized boolean connectToServer( final ISSHConnectionInfo sshConnectionInfo )  throws GridException {
+  public synchronized boolean connectToServer( final ISSHConnectionInfo sshConnectionInfo )  throws ProblemException {
     boolean ret;
 
     ret = super.connectToServer( sshConnectionInfo ); 
@@ -348,7 +347,7 @@ public final class PBSBatchService extends AbstractBatchService {
 
         // No path needed
         this.pbsPath = ""; //$NON-NLS-1$
-      } catch ( BatchException bexp ) {
+      } catch ( ProblemException bexp ) {
         // TODO when in the model fix this
         //if ( bexp.getProblem().getID() == BatchProblems.COMMAND_FAILED  ){
           String cmd = "find / -xdev -maxdepth 10 -type f -name qstat 2> /dev/null"; //$NON-NLS-1$
@@ -380,9 +379,9 @@ public final class PBSBatchService extends AbstractBatchService {
    * 969.ce201           blahjob_RT8482   see001                 0 R see
    *
    * @return A {@link List} of {@link BatchJobInfo} or <code>null</code> if no jobs.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public synchronized List<IBatchJobInfo> getJobs() throws BatchException {
+  public synchronized List<IBatchJobInfo> getJobs() throws ProblemException {
     String outPut;
     BatchJobInfo jobInfo;
     String line;
@@ -417,9 +416,9 @@ public final class PBSBatchService extends AbstractBatchService {
    * Executes qdel on the PBS server and returns if the command was executed of not.
    *
    * @param jobId The identifier of the job to be deleted.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public synchronized void delJob( final String jobId ) throws BatchException {
+  public synchronized void delJob( final String jobId ) throws ProblemException {
     if ( null != jobId )
       this.connection.execCommand( this.pbsPath + "qdel "+ jobId ); //$NON-NLS-1$
   }
@@ -430,11 +429,11 @@ public final class PBSBatchService extends AbstractBatchService {
    * @param jobId The identifier of the job to be moved.
    * @param destQueue The destination queue, <code>null</code> if no destination queue.
    * @param destServer The destination server, <code>null</code> if no destination server.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
   public synchronized void moveJob( final String jobId, 
                                        final String destQueue, 
-                                       final String destServer ) throws BatchException {
+                                       final String destServer ) throws ProblemException {
     String cmd = "qmove "; //$NON-NLS-1$
 
     if ( null != jobId ) {
@@ -457,11 +456,11 @@ public final class PBSBatchService extends AbstractBatchService {
    * @param jobIds The identifier of the jobs to be moved.
    * @param destQueue The destination queue, <code>null</code> if no destination queue.
    * @param destServer The destination server, <code>null</code> if no destination server.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
   public synchronized void moveJobs( final String[] jobIds, 
                                        final String destQueue, 
-                                       final String destServer ) throws BatchException {
+                                       final String destServer ) throws ProblemException {
     String strJobs = null;
     String cmd = "qmove "; //$NON-NLS-1$
 
@@ -491,9 +490,9 @@ public final class PBSBatchService extends AbstractBatchService {
    * Puts a hold on a job in the queue of the batch service.
    *
    * @param jobId The identifier of the job to be held.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public void holdJob( final String jobId ) throws BatchException {
+  public void holdJob( final String jobId ) throws ProblemException {
     if ( null != jobId ) {
       String cmd = "qhold " + jobId; //$NON-NLS-1$
 
@@ -505,9 +504,9 @@ public final class PBSBatchService extends AbstractBatchService {
    * Puts a hold on one or more jobs in the queue of the batch service.
    *
    * @param jobIds The identifiers of the jobs to be held.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public void holdJobs( final String[] jobIds ) throws BatchException {
+  public void holdJobs( final String[] jobIds ) throws ProblemException {
     String strJobs = null;
     String cmd = "qhold "; //$NON-NLS-1$
 
@@ -526,9 +525,9 @@ public final class PBSBatchService extends AbstractBatchService {
    * Release a job with a previous hold in queue of the batch system.
    *
    * @param jobId The identifier of the job to be released.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public void releaseJob( final String jobId ) throws BatchException {
+  public void releaseJob( final String jobId ) throws ProblemException {
     if ( null != jobId ) {
       String cmd = "qrls " + jobId; //$NON-NLS-1$
 
@@ -540,9 +539,9 @@ public final class PBSBatchService extends AbstractBatchService {
    * Release one or more jobs with a previous hold in queue of the batch system.
    *
    * @param jobIds The identifiers of the jobs to be released.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public void releaseJobs( final String[] jobIds ) throws BatchException {
+  public void releaseJobs( final String[] jobIds ) throws ProblemException {
     String strJobs = null;
     String cmd = "qrls "; //$NON-NLS-1$
 
@@ -572,9 +571,9 @@ public final class PBSBatchService extends AbstractBatchService {
    *          physmem=768916kb,ncpus=1,loadave=0.00,netload=637790691,state=free,jobs=? 0,rectime=1180422371
    *
    * @return A {@link List} of {@link WorkerNodeInfo} or <code>null</code>.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public synchronized List<IWorkerNodeInfo> getWorkerNodes() throws BatchException {
+  public synchronized List<IWorkerNodeInfo> getWorkerNodes() throws ProblemException {
     List<IWorkerNodeInfo> wns = null;
     String outPut;
 
@@ -591,9 +590,9 @@ public final class PBSBatchService extends AbstractBatchService {
    * this workernode.
    *
    * @param nodeId The identifier of the node to be disabled.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public synchronized void disableWN( final String nodeId ) throws BatchException {
+  public synchronized void disableWN( final String nodeId ) throws ProblemException {
     if ( null != nodeId ) {
       String cmd = "qmgr -c \"set node "; //$NON-NLS-1$
       cmd += nodeId;
@@ -608,9 +607,9 @@ public final class PBSBatchService extends AbstractBatchService {
    * this workernode.
    *
    * @param nodeId The identifier of the node to be disabled.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public synchronized void enableWN( final String nodeId ) throws BatchException {
+  public synchronized void enableWN( final String nodeId ) throws ProblemException {
     if ( null != nodeId ) {
       String cmd = "qmgr -c \"set node "; //$NON-NLS-1$
       cmd += nodeId;
@@ -636,9 +635,9 @@ public final class PBSBatchService extends AbstractBatchService {
    *                                                    0     0
    *
    * @return A {@link List} of {@link QueueInfo} or <code>null</code>.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public synchronized List<IQueueInfo> getQueues() throws BatchException {
+  public synchronized List<IQueueInfo> getQueues() throws ProblemException {
     String outPut;
     QueueInfo queueInfo;
     String line;
@@ -675,9 +674,9 @@ public final class PBSBatchService extends AbstractBatchService {
    * Executes qdisable to disable a specific queue.
    *
    * @param queueId The identifier of the queue to be disable.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public synchronized void disableQueue( final String queueId ) throws BatchException {
+  public synchronized void disableQueue( final String queueId ) throws ProblemException {
     if ( null != queueId )
       this.connection.execCommand( this.pbsPath + "qdisable "+ queueId ); //$NON-NLS-1$
   }
@@ -686,9 +685,9 @@ public final class PBSBatchService extends AbstractBatchService {
    * Executes qdisable to disable all specified queues.
    *
    * @param queueIds The identifiers of the queues to be disable.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public synchronized void disableQueues( final String[] queueIds ) throws BatchException {
+  public synchronized void disableQueues( final String[] queueIds ) throws ProblemException {
     if ( null != queueIds ) {
       if ( 0 < queueIds.length ) { 
         String queues = ""; //$NON-NLS-1$
@@ -705,9 +704,9 @@ public final class PBSBatchService extends AbstractBatchService {
    * Executes qenable to enable a specific queue.
    *
    * @param queueId The identifier of the queue to be enabled.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public synchronized void enableQueue( final String queueId ) throws BatchException {
+  public synchronized void enableQueue( final String queueId ) throws ProblemException {
     if ( null != queueId )
       this.connection.execCommand( this.pbsPath + "qenable "+ queueId ); //$NON-NLS-1$
   }
@@ -716,9 +715,9 @@ public final class PBSBatchService extends AbstractBatchService {
    * Executes qenable to enable all specified queues.
    *
    * @param queueIds The identifiers of the queues to be enabled.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public synchronized void enableQueues( final String[] queueIds ) throws BatchException {
+  public synchronized void enableQueues( final String[] queueIds ) throws ProblemException {
     if ( null != queueIds ) {
       if ( 0 < queueIds.length ) { 
         String queues = ""; //$NON-NLS-1$
@@ -735,9 +734,9 @@ public final class PBSBatchService extends AbstractBatchService {
    * Executes qstart to start a specific queue.
    *
    * @param queueId The identifier of the queue to be started.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public synchronized void startQueue( final String queueId ) throws BatchException {
+  public synchronized void startQueue( final String queueId ) throws ProblemException {
     if ( null != queueId )
       this.connection.execCommand( this.pbsPath + "qstart "+ queueId ); //$NON-NLS-1$
   }
@@ -746,9 +745,9 @@ public final class PBSBatchService extends AbstractBatchService {
    * Executes qstart to start all specified queues.
    *
    * @param queueIds The identifiers of the queues to be started.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public synchronized void startQueues( final String[] queueIds ) throws BatchException {
+  public synchronized void startQueues( final String[] queueIds ) throws ProblemException {
     if ( null != queueIds ) {
       if ( 0 < queueIds.length ) { 
         String queues = ""; //$NON-NLS-1$
@@ -765,9 +764,9 @@ public final class PBSBatchService extends AbstractBatchService {
    * Executes qstop to stop a specific queue.
    *
    * @param queueId The identifier of the queue to be stopped.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public synchronized void stopQueue( final String queueId ) throws BatchException {
+  public synchronized void stopQueue( final String queueId ) throws ProblemException {
     if ( null != queueId )
       this.connection.execCommand( this.pbsPath + "qstop "+ queueId ); //$NON-NLS-1$
   }
@@ -776,9 +775,9 @@ public final class PBSBatchService extends AbstractBatchService {
    * Executes qstop to stop all specified queues.
    *
    * @param queueIds The identifiers of the queues to be stopped.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public synchronized void stopQueues( final String[] queueIds ) throws BatchException {
+  public synchronized void stopQueues( final String[] queueIds ) throws ProblemException {
     if ( null != queueIds ) {
       if ( 0 < queueIds.length ) { 
         String queues = ""; //$NON-NLS-1$
@@ -800,11 +799,11 @@ public final class PBSBatchService extends AbstractBatchService {
    * @param timeCPU Maximum allowed CPU time for any job. 
    * @param timeWall Maximum allowed wall time for any job.
    * @param vos Only allow access to the specified vos, <code>null</code> no restriction is applied.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
   public synchronized void createQueue( final String queueName, final QueueType type, 
                                            final boolean enabled, final double timeCPU, 
-                                           final double timeWall, final List<String> vos ) throws BatchException {
+                                           final double timeWall, final List<String> vos ) throws ProblemException {
 
     if ( null != queueName && null != type && -1 != timeCPU && -1 != timeWall ) { 
      
@@ -865,12 +864,12 @@ public final class PBSBatchService extends AbstractBatchService {
    * @param queMax Maximum allowed jobs in the queue
    * @param assignedResources 
    * @param vos Only allow access to the specified vos, <code>null</code> no restriction is applied.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
   public synchronized void createQueue( final String queueName, final int priority, final QueueType type, 
                                            final boolean enabled, final int runMax, final double timeCPU, 
                                            final double timeWall, final int queMax, final int assignedResources, 
-                                           final List<String> vos ) throws BatchException {
+                                           final List<String> vos ) throws ProblemException {
 
     if ( null != queueName && null != type && -1 != timeCPU && -1 != timeWall ) { 
       
@@ -933,9 +932,9 @@ public final class PBSBatchService extends AbstractBatchService {
    *
    * @param queueName The name of the queue to be modified.
    * @param timeWall The new maximum allowed wall time for any job.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public synchronized void setMaxWallTime( final String queueName, final String timeWall ) throws BatchException {
+  public synchronized void setMaxWallTime( final String queueName, final String timeWall ) throws ProblemException {
     if ( null != queueName && null != timeWall ) {
       String cmd = this.pbsPath + "qmgr -c \"set queue " + queueName; //$NON-NLS-1$
 
@@ -952,9 +951,9 @@ public final class PBSBatchService extends AbstractBatchService {
    * Deletes the specified queue.
    *
    * @param queueId The identifier of the queue to be deleted.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public synchronized void delQueue( final String queueId ) throws BatchException {
+  public synchronized void delQueue( final String queueId ) throws ProblemException {
     if ( null != queueId ) {
       this.connection.execCommand( this.pbsPath 
                                               + "qmgr -c \"delete queue "  //$NON-NLS-1$
@@ -963,7 +962,7 @@ public final class PBSBatchService extends AbstractBatchService {
   }
 
 
-  public void createQueue( final DocumentRoot documentRoot ) throws BatchException {
+  public void createQueue( final DocumentRoot documentRoot ) throws ProblemException {
     
     eu.geclipse.batch.model.qdl.QueueType queue;
     QueueType type;

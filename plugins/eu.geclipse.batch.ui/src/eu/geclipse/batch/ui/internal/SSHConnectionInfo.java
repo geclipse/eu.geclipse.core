@@ -23,7 +23,6 @@ import eu.geclipse.ui.dialogs.PasswordDialog;
 import eu.geclipse.batch.ISSHConnectionInfo;
 import eu.geclipse.core.auth.PasswordManager;
 
-
 /**
  * Class containing information needed to establish an ssh connection.
  */

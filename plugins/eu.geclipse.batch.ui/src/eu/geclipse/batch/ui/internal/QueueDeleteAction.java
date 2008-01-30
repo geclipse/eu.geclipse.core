@@ -22,14 +22,14 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PlatformUI;
 
-import eu.geclipse.batch.BatchException;
 import eu.geclipse.batch.IBatchService;
 import eu.geclipse.batch.IQueueInfo.QueueRunState;
 import eu.geclipse.batch.IQueueInfo.QueueState;
 import eu.geclipse.batch.ui.internal.model.Queue;
 import eu.geclipse.batch.ui.internal.parts.BatchTreeEditPart;
 import eu.geclipse.batch.ui.internal.parts.QueueEditPart;
-import eu.geclipse.ui.dialogs.NewProblemDialog;
+import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 
 
 /**
@@ -87,12 +87,12 @@ public class QueueDeleteAction extends SelectionAction {
 
         try {
           this.batchWrapper.delQueue( q.getQueneName() );
-        } catch( BatchException excp ) {
+        } catch( ProblemException excp ) {
           // Action could not be performed
-          NewProblemDialog.openProblem( this.getWorkbenchPart().getSite().getShell(),
-                                        Messages.getString( "QueueDeleteAction.error_manipulate_title" ),  //$NON-NLS-1$
-                                        Messages.getString( "QueueDeleteAction.error_manipulate_message" ), //$NON-NLS-1$
-                                        excp );      
+          ProblemDialog.openProblem( this.getWorkbenchPart().getSite().getShell(),
+                                     Messages.getString( "QueueDeleteAction.error_manipulate_title" ),  //$NON-NLS-1$
+                                     Messages.getString( "QueueDeleteAction.error_manipulate_message" ), //$NON-NLS-1$
+                                     excp );      
         }
       }
     }

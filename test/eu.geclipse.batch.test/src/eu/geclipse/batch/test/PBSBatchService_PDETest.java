@@ -22,12 +22,11 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import eu.geclipse.batch.BatchException;
-import eu.geclipse.batch.BatchProblems;
 import eu.geclipse.batch.BatchServiceManager;
 import eu.geclipse.batch.Extensions;
 import eu.geclipse.batch.IBatchService;
 import eu.geclipse.batch.IBatchServiceDescription;
+import eu.geclipse.core.reporting.ProblemException;
 
 /**
  * Class to execute tests on the PBSWrapper.
@@ -50,7 +49,7 @@ public class PBSBatchService_PDETest {
       if ( description.supportsService( "pbs" ) ) { //$NON-NLS-1$
         try {
           this.pbsWrapper = BatchServiceManager.getManager().createService( description, "test.batch" ); //$NON-NLS-1$
-        } catch( BatchException e ) {
+        } catch( ProblemException e ) {
           // No code needed
         }
       }
@@ -66,17 +65,25 @@ public class PBSBatchService_PDETest {
   @SuppressWarnings("boxing")
   @Test
   public final void testPBSWrapperWithoutConnection() {
+    boolean except = false;
+    
     try {
       this.pbsWrapper.enableQueue( "test" ); //$NON-NLS-1$
-    } catch( BatchException e ) {
-      Assert.assertEquals( BatchProblems.CONNECTION_FAILED, e.getProblem().getID() );
+    } catch( ProblemException e ) {
+      except = true; 
     } 
 
+    Assert.assertTrue( except );
+      
+    except = false;
+    
     try {
       this.pbsWrapper.disableQueue( "test" ); //$NON-NLS-1$
-    } catch( BatchException e ) {
-      Assert.assertEquals( BatchProblems.CONNECTION_FAILED, e.getProblem().getID() );
+    } catch( ProblemException e ) {
+      except = true; 
     } 
+
+    Assert.assertTrue( except );
   }
 
 }

@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.geclipse.batch.BatchQueueDescription;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.ui.properties.AbstractProperty;
 import eu.geclipse.ui.properties.AbstractPropertySource;
 import eu.geclipse.ui.properties.IProperty;
@@ -88,11 +87,11 @@ public class BatchQueueDescriptionPropertySource extends AbstractPropertySource<
       public Object getValue( final BatchQueueDescription source ) {
         if ( null == source.getQueueName() ){
                 
-          try {
+         // try {
             source.load(source.getResource().getFullPath().toString());
-          } catch( GridModelException e ) {
+         // } catch( GridModelException e ) {
             // Ignore for now
-          }
+         // }
         }
         return source.getQueueName();
       }
@@ -108,11 +107,11 @@ public class BatchQueueDescriptionPropertySource extends AbstractPropertySource<
       public Object getValue( final BatchQueueDescription source ) {
         if ( null == source.getQueueType() ){
                 
-          try {
+         // try {
             source.load(source.getResource().getFullPath().toString());
-          } catch( GridModelException e ) {
+         // } catch( GridModelException e ) {
             // Ignore for now
-          }
+         // }
         }
         return source.getQueueType();
       }
@@ -128,11 +127,11 @@ public class BatchQueueDescriptionPropertySource extends AbstractPropertySource<
       public Object getValue( final BatchQueueDescription source ) {
         if ( null == source.getQueueStatus() ){
                 
-          try {
+        //  try {
             source.load(source.getResource().getFullPath().toString());
-          } catch( GridModelException e ) {
+        //  } catch( GridModelException e ) {
             // Ignore for now
-          }
+        //  }
         }
         return source.getQueueStatus();
       }
@@ -147,11 +146,11 @@ public class BatchQueueDescriptionPropertySource extends AbstractPropertySource<
       public Object getValue( final BatchQueueDescription source ) {
         if ( null == source.getQueueMaxCPUTime() ){
                 
-          try {
+        //  try {
             source.load(source.getResource().getFullPath().toString());
-          } catch( GridModelException e ) {
+        //  } catch( GridModelException e ) {
             // Ignore for now
-          }
+        //  }
         }
         return new Double(source.getQueueMaxCPUTimeValue());
       }
@@ -167,11 +166,11 @@ public class BatchQueueDescriptionPropertySource extends AbstractPropertySource<
       public Object getValue( final BatchQueueDescription source ) {
         if ( null == source.getQueueMaxWallTime() ){
                 
-          try {
+         // try {
             source.load(source.getResource().getFullPath().toString());
-          } catch( GridModelException e ) {
+         // } catch( GridModelException e ) {
             // Ignore for now
-          }
+          //}
         }
         return new Double(source.getQueueMaxCPUTimeValue());
       }
@@ -187,11 +186,11 @@ public class BatchQueueDescriptionPropertySource extends AbstractPropertySource<
       public Object getValue( final BatchQueueDescription source ) {
         if ( 0 == source.getAllowedVirtualOrganizations().size() ){
                 
-          try {
+          //try {
             source.load(source.getResource().getFullPath().toString());
-          } catch( GridModelException e ) {
+         // } catch( GridModelException e ) {
             // Ignore for now
-          }
+         // }
         }
         return source.getAllowedVirtualOrganizations();
       }

@@ -17,6 +17,7 @@
 package eu.geclipse.batch;
 
 import eu.geclipse.batch.internal.Messages;
+import eu.geclipse.core.reporting.ProblemException;
 
 /**
  * Interface for holding information about a specific Grid job.
@@ -179,31 +180,31 @@ public interface IBatchJobInfo {
 
   /**
    * Deletes this job from the batch service.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public void deleteJob() throws BatchException;
+  public void deleteJob() throws ProblemException;
   
   /**
    * Move this job to another worker node or batch service.
    * @param destQueue The destination queue, <code>null</code> if no destination queue.
    * @param destServer The destination server, <code>null</code> if no destination server.
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public void moveJob( final String destQueue, final String destServer ) throws BatchException;
+  public void moveJob( final String destQueue, final String destServer ) throws ProblemException;
 
   /**
    * Puts a hold on the job in the queue of the batch service.
    *
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public void holdJob() throws BatchException;
+  public void holdJob() throws ProblemException;
 
   /**
    * Release the job with a previous hold in queue of the batch system.
    *
-   * @throws BatchException If command is not executed successfully
+   * @throws ProblemException If command is not executed successfully
    */
-  public void releaseJob() throws BatchException;
+  public void releaseJob() throws ProblemException;
   
   /**
    * Return the type of batch service name that handles this batch job.

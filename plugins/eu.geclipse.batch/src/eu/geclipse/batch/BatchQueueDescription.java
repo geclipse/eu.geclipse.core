@@ -41,7 +41,6 @@ import eu.geclipse.batch.model.qdl.QueueType;
 import eu.geclipse.batch.model.qdl.QueueTypeEnumeration;
 import eu.geclipse.batch.model.qdl.RangeValueType;
 import eu.geclipse.batch.model.qdl.util.QdlResourceFactoryImpl;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridBatchQueueDescription;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
 
@@ -51,8 +50,7 @@ import eu.geclipse.core.model.impl.ResourceGridContainer;
  *
  */
 public class BatchQueueDescription extends ResourceGridContainer
-  implements IGridBatchQueueDescription
-{
+  implements IGridBatchQueueDescription {
 
   protected DocumentRoot documentRoot = null;
   protected QueueType queueType = null;
@@ -319,9 +317,8 @@ public class BatchQueueDescription extends ResourceGridContainer
 
   /**
    * @param path
-   * @throws GridModelException
    */
-  public void load( final String path ) throws GridModelException {
+  public void load( final String path ) /*throws GridModelException*/ {
     String filePath = path;
     URI uri = URI.createPlatformResourceURI( filePath, false );
     ResourceSet resourceSet = new ResourceSetImpl();
