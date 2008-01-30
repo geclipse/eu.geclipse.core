@@ -58,13 +58,14 @@ public class FileSystemsDialog extends Dialog {
   protected Composite panel = null;
   protected Label lblFileSystemName = null;
   protected Label lblMountPoint = null;
-  protected Label lblMountSource = null;
+  protected Label lblMountSource = null;  
   protected Label lblDiskSpace = null;
   protected Label lblFileSystemType = null;
   protected Label lblFileSystemDescr = null;
   protected Text txtFileSystemName = null;
   protected Text txtFileSystemDescr = null;
   protected Text txtMountPoint = null;  
+  protected Text txtMountSource = null;
   protected Text txtDiskSpace = null;
   protected Combo cmbFileSystemType = null;
   protected Combo cmbDiskSpaceRange = null;
@@ -132,14 +133,6 @@ public class FileSystemsDialog extends Dialog {
     this.panel.setLayout( layout );
     gd = new GridData(GridData.FILL_HORIZONTAL);
     this.panel.setLayoutData( gd );
-    
-//    gd = new GridData( GridData.FILL_BOTH );
-//    gd.horizontalAlignment = GridData.HORIZONTAL_ALIGN_BEGINNING;
-//    gd.horizontalSpan = 2;    
-//    Label label = new Label( this.panel, SWT.NONE );
-//    label.setText( Messages.getString( "ResourcesPage_NewHostsDialogDescr" ) ); //$NON-NLS-1$
-//    label.setLayoutData( gd );
-//          
     
     /* ======================== File System Name Widgets =====================*/
   
@@ -237,8 +230,39 @@ public class FileSystemsDialog extends Dialog {
     
   });
   this.txtMountPoint.setLayoutData(gd);
+  
+  
+  /* ========================= Mount Source Widget ============================*/
+  gd = new GridData();
+  this.lblMountSource = new Label(this.panel, SWT.NONE);
+  this.lblMountSource.setText( Messages.getString( "ResourcesPage_MountSource" ) ); //$NON-NLS-1$
+    
+  gd = new GridData( GridData.FILL_BOTH );
+  gd.horizontalSpan = 2;
+
+  this.txtMountSource = new Text (this.panel, SWT.SINGLE | SWT.BORDER );
+  /* Initial Values for Edit Operation */
+  
+  //TODO: nloulloud MountSource Not yet defined in the Model
+//  if ( this.editMode ) {
+//    if ( this.fileSystemType.get() != null ) {
+//      this.txtMountSource.setText( this.fileSystemType.getMountPoint() );
+//    }
+//  }
+//  
+//  this.txtMountSource.addModifyListener( new ModifyListener() {
+//
+//    public void modifyText( final ModifyEvent e ) {
+//      FileSystemsDialog.this.fileSystemType.setMountPoint( FileSystemsDialog.this.txtMountSource.getText() );
+//      
+//    }
+//    
+//  });
+  this.txtMountSource.setLayoutData(gd);
+
 
   /* ======================== Disk Space Widgets =============================*/
+  
   
   gd = new GridData();
   this.lblDiskSpace = new Label( this.panel, SWT.None );
