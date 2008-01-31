@@ -51,20 +51,20 @@ public class UserPerspectiveFactory
       = layout.createFolder( "leftbottom", IPageLayout.BOTTOM, 0.75f, editorArea ); //$NON-NLS-1$
     leftBottomFolder.addView( eu.geclipse.ui.internal.Activator.ID_CONNECTION_VIEW );
     leftBottomFolder.addView( eu.geclipse.ui.internal.Activator.ID_JOBS_VIEW );
+    leftBottomFolder.addView( eu.geclipse.ui.internal.Activator.ID_AUTH_VIEW );
+    leftBottomFolder.addView( IPageLayout.ID_PROP_SHEET);
     leftBottomFolder.addPlaceholder( eu.geclipse.ui.internal.Activator.ID_WEB_VIEW );
     leftBottomFolder.addPlaceholder( IPageLayout.ID_PROBLEM_VIEW );
     leftBottomFolder.addPlaceholder( NewSearchUI.SEARCH_VIEW_ID );
     leftBottomFolder.addPlaceholder( IPageLayout.ID_BOOKMARKS );
     leftBottomFolder.addPlaceholder( IProgressConstants.PROGRESS_VIEW_ID );
 
-    IFolderLayout rightBottomFolder
-    = layout.createFolder( "rightbottom", IPageLayout.RIGHT, 0.5f, eu.geclipse.ui.internal.Activator.ID_JOBS_VIEW ); //$NON-NLS-1$
-    rightBottomFolder.addView( eu.geclipse.ui.internal.Activator.ID_AUTH_VIEW );
-    rightBottomFolder.addPlaceholder( eu.geclipse.ui.internal.Activator.ID_JOBDETAILS_VIEW );
+    IFolderLayout middleFolder
+    = layout.createFolder( "middle", IPageLayout.BOTTOM, 0.5f, eu.geclipse.ui.internal.Activator.ID_JOBS_VIEW ); //$NON-NLS-1$
+    middleFolder.addPlaceholder( eu.geclipse.ui.internal.Activator.ID_JOBDETAILS_VIEW );
 
-    IFolderLayout rightFolder
-    = layout.createFolder( "right", IPageLayout.RIGHT, 0.8f, editorArea ); //$NON-NLS-1$
-    rightFolder.addView( IPageLayout.ID_PROP_SHEET);
+//    IFolderLayout rightFolder
+//    = layout.createFolder( "right", IPageLayout.RIGHT, 0.8f, editorArea ); //$NON-NLS-1$
     
     
     layout.addShowViewShortcut( eu.geclipse.ui.internal.Activator.ID_AUTH_VIEW );
