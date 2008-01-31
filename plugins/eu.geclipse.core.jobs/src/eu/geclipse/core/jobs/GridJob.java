@@ -350,7 +350,17 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
   }
 
   private void readJobDescription() {
-    this.jobDescription = new JSDLJobDescription( this.jobDescriptionFile );
+    try {
+      IGridElementCreator elementCreator = GridModel.getElementCreator( this.jobDescriptionFile, IGridJobDescription.class );
+      if(elementCreator!=null)
+      {
+        IGridElement description = elementCreator.create( this );
+        this.jobDescription = (IGridJobDescription)description;
+      }
+    } catch( Exception e ) {
+      // TODO Auto-generated catch block
+      e.printStackTrace();
+    }
   }
 
   private Document createXmlDocument( final IFile xmlFile ) {
