@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2007 g-Eclipse consortium
+ * Copyright (c) 2008 g-Eclipse consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -17,19 +17,20 @@
 package eu.geclipse.ui.simpleTest;
 
 import java.net.InetAddress;
-import java.net.URI;
 import java.net.UnknownHostException;
+import java.text.DecimalFormat;
 import java.util.List;
 
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Button;
@@ -41,18 +42,18 @@ import eu.geclipse.ui.dialogs.AbstractSimpleTestDialog;
 
 
 /**
- * @author harald
+ * A dialog that allows the user to ping selected resources. 
+ * @author hgjermund
  *
  */
 public class PingTestDialog extends AbstractSimpleTestDialog  {
-  private Label numberOfPings = null;
+  private static DecimalFormat df = new DecimalFormat( "0.000" ); //$NON-NLS-1$
+
+  protected boolean running = false;
+
   private Text outPut = null;
-  private Label delayLabel = null;
   private Spinner numberSpn = null;
   private Spinner delaySpn = null;
-  private Label outPutLabel = null;
-  private Button pingButton = null;
-
   /**
    * Construct a new dialog from the specified test.
    * 
@@ -72,47 +73,98 @@ public class PingTestDialog extends AbstractSimpleTestDialog  {
     GridData gData;
     
     Composite mainComp = new Composite( parent, SWT.NONE );
+    mainComp.setLayout( new GridLayout( 1, false ) );
+    
+    Group settingsGroup = new Group( mainComp, SWT.NONE );
+    settingsGroup.setLayout( new GridLayout( 3, false ) );
+    settingsGroup.setText( Messages.getString( "PingTestDialog.settings_group" ) ); //$NON-NLS-1$
+    gData = new GridData( GridData.FILL_HORIZONTAL );
+    gData.grabExcessHorizontalSpace = true;
+    settingsGroup.setLayoutData( gData );
+
+    Label numPingsLabel = new Label( settingsGroup, SWT.LEFT  );
+    numPingsLabel.setText( Messages.getString( "PingTestDialog.nPingsLabel" ) ); //$NON-NLS-1$
+    gData = new GridData();
+    numPingsLabel.setLayoutData( gData );
+    
+    this.numberSpn = new Spinner( settingsGroup, SWT.LEFT | SWT.SINGLE | SWT.BORDER );
+    this.numberSpn.setValues( 2, 1, 10, 0, 1, 2 );
+    gData = new GridData( GridData.FILL_HORIZONTAL );
+    gData.horizontalSpan = 2;
+    gData.grabExcessHorizontalSpace = true;
+    this.numberSpn.setLayoutData( gData );    
+
+    Label delayLabel = new Label( settingsGroup, SWT.LEFT );
+    delayLabel.setText( Messages.getString( "PingTestDialog.delayLabel" ) ); //$NON-NLS-1$
+    gData = new GridData();
+    delayLabel.setLayoutData( gData );
+
+    this.delaySpn = new Spinner( settingsGroup, SWT.LEFT | SWT.SINGLE | SWT.BORDER );
+    this.delaySpn.setValues( 1, 1, 10, 0, 1, 10 );
+    gData = new GridData( GridData.FILL_HORIZONTAL );
+    gData.horizontalSpan = 2;
+    gData.grabExcessHorizontalSpace = true;
+    this.delaySpn.setLayoutData( gData );    
+    
+    Group outPutGroup = new Group( mainComp, SWT.NONE );
+    outPutGroup.setLayout( new GridLayout( 3, false ) );
+    outPutGroup.setText( Messages.getString( "PingTestDialog.output_group" ) ); //$NON-NLS-1$
     gData = new GridData( GridData.FILL_BOTH );
     gData.grabExcessHorizontalSpace = true;
     gData.grabExcessVerticalSpace = true;
-    gData.widthHint = 413;
-    gData.heightHint = 338;
-    mainComp.setLayoutData( gData );
+    outPutGroup.setLayoutData( gData );
     
-    this.numberOfPings = new Label( mainComp, SWT.NONE );
-    this.numberOfPings.setText( Messages.getString( "PingTestDialog.nPingsLabel" ) ); //$NON-NLS-1$
-    this.numberOfPings.setBounds( new Rectangle( 15, 15, 166, 24 ) );
-
-    this.outPut = new Text( mainComp, SWT.MULTI | SWT.WRAP | SWT.V_SCROLL );
-    this.outPut.setBounds( new Rectangle( 15, 105, 371, 136 ) );
+    Label outPutLabel = new Label( outPutGroup, SWT.LEFT );
+    outPutLabel.setText( Messages.getString( "PingTestDialog.outPutLabel" ) ); //$NON-NLS-1$
+    gData = new GridData();
+    gData.horizontalSpan = 3;
+    outPutLabel.setLayoutData( gData );
+    
+    this.outPut = new Text( outPutGroup, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.MULTI );
     this.outPut.setEditable( false );
+    gData = new GridData( 385, 200 );
+//    gData.horizontalSpan = 2;
+    gData.grabExcessHorizontalSpace = true;
+    gData.grabExcessVerticalSpace = true;
+    this.outPut.setLayoutData( gData );
 
-    this.delayLabel = new Label( mainComp, SWT.NONE );
-    this.delayLabel.setBounds( new Rectangle( 15, 45, 166, 26 ) );
-    this.delayLabel.setText( Messages.getString( "PingTestDialog.delayLabel" ) ); //$NON-NLS-1$
-
-    this.numberSpn = new Spinner( mainComp, SWT.NONE );
-    this.numberSpn.setBounds( new Rectangle( 195, 15, 59, 30 ) );
-    this.numberSpn.setValues( 3, 1, 100, 0, 1, 10 );
-
-    this.delaySpn = new Spinner( mainComp, SWT.NONE );
-    this.delaySpn.setBounds( new Rectangle( 195, 45, 59, 30 ) );
-    this.delaySpn.setValues( 1, 1, 10, 0, 1, 10 );
+    Composite outControls = new Composite( outPutGroup, SWT.NONE );
+    GridLayout gLayout = new GridLayout( 1, false );
+    gLayout.marginHeight = 0;
+    gLayout.marginWidth = 0;
+    outControls.setLayout( gLayout );
+    gData = new GridData( GridData.VERTICAL_ALIGN_BEGINNING );
+    outControls.setLayoutData( gData );    
     
-    this.outPutLabel = new Label( mainComp, SWT.NONE );
-    this.outPutLabel.setBounds( new Rectangle( 15, 90, 61, 16 ) );
-    this.outPutLabel.setText( Messages.getString( "PingTestDialog.outPutLabel" ) ); //$NON-NLS-1$
+    Button pingButton = new Button( outControls, SWT.PUSH );
+    pingButton.setText( Messages.getString( "PingTestDialog.pingButton" ) ); //$NON-NLS-1$
+    gData = new GridData( GridData.FILL_HORIZONTAL );
+    gData.verticalAlignment = GridData.BEGINNING;
+    pingButton.setLayoutData( gData );
 
-    this.pingButton = new Button( mainComp, SWT.NONE );
-    this.pingButton.setBounds( new Rectangle( 110, 255, 76, 28 ) );
-    this.pingButton.setText( Messages.getString( "PingTestDialog.pingButton" ) ); //$NON-NLS-1$
-    this.pingButton.addSelectionListener( new SelectionAdapter() {
+    Button stopButton = new Button( outControls, SWT.PUSH );
+    stopButton.setText( Messages.getString( "PingTestDialog.stopButton" ) ); //$NON-NLS-1$
+    gData = new GridData( GridData.FILL_HORIZONTAL );
+    gData.verticalAlignment = GridData.BEGINNING;
+    stopButton.setLayoutData( gData );
+    
+    pingButton.addSelectionListener( new SelectionAdapter() {
       @Override
       public void widgetSelected( final SelectionEvent e) {
-        PingTestDialog.this.runPing();
+
+        if ( !PingTestDialog.this.running ) { 
+          PingTestDialog.this.running = true;
+          PingTestDialog.this.runPing();
+        }
       }
     });
     
+    stopButton.addSelectionListener( new SelectionAdapter() {
+      @Override
+      public void widgetSelected( final SelectionEvent e) {
+        PingTestDialog.this.running = false;
+      }
+    });
     return mainComp;
   }
 
@@ -124,16 +176,10 @@ public class PingTestDialog extends AbstractSimpleTestDialog  {
   round-trip min/avg/max/stddev = 0.390/0.444/0.532/0.063 ms
 */
   protected void runPing() {
-    long pingDelay;
     String host;
     InetAddress adr = null;
-    long min = Long.MAX_VALUE; 
-    long max = Long.MIN_VALUE;
-    long avg = 0;
-    int nOk = 0;
-    int nFailed = 0;
-    int delay = this.delaySpn.getSelection();
     int number = this.numberSpn.getSelection();
+    boolean exception = false;
 
     if ( null != this.resources ) {
       // Clear the text field 
@@ -141,53 +187,84 @@ public class PingTestDialog extends AbstractSimpleTestDialog  {
       this.outPut.clearSelection();
 
       // For each of the hosts to test
-      for ( int i = 0; i < this.resources.size(); ++i ) {
-
+      for ( int i = 0; i < this.resources.size() && this.running; ++i ) {
         // Initialize the counters
-        min = Long.MAX_VALUE; 
-        max = Long.MIN_VALUE;
-        avg = 0;
-        nOk = 0;
-        nFailed = 0;
         host = this.resources.get( i ).getHostName();
 
         if ( null != host ) {
           try {
             adr = InetAddress.getByName( host );
           } catch( UnknownHostException e ) {
-            // TODO fix tis
+            exception = true;
           }
 
-          // Print out which host we ping
-          this.outPut.append( "Pinging: " + host + this.outPut.getLineDelimiter() );
-        
-          for ( int j = 0; j < number; ++j ) {
-            pingDelay = ( ( PingTest )this.test).ping( adr );
-      
-            if ( -1 == pingDelay ) {
-              ++nFailed;
-              this.outPut.append( "Ping " + i + ": Host not reachable" + this.outPut.getLineDelimiter() );
-            }
-            else {
-              ++nOk;
-              if ( pingDelay < min )
-                min = pingDelay;
-              if ( pingDelay > max )
-                max = pingDelay;
-              avg += pingDelay;
-        
-              this.outPut.append( "Ping " + j + ": time=" + pingDelay + " ms" + this.outPut.getLineDelimiter() );
-            }
-          }
+          if ( exception )
+            // Print out which host we ping
+            this.outPut.append( Messages.getString( "PingTestDialog.UnknownHostException" )  //$NON-NLS-1$
+                                + host + this.outPut.getLineDelimiter() );
+          else
+            pingHost( adr, number );
         } else
-          this.outPut.append( "The " + i + "th selection cannot be resolved." );
-        
-        // Write the summary
-        if ( nOk > 0 )
-          this.outPut.append( "round-trip min/avg/max/stddev = " + min +"/" + avg/nOk + "/" + max + " ms" + this.outPut.getLineDelimiter() );
-        else
-          this.outPut.append( "All ping msg failed" + this.outPut.getLineDelimiter() );
+          this.outPut.append( Messages.getString( "PingTestDialog.thePlusSpace" ) + i  //$NON-NLS-1$
+                              + Messages.getString( "PingTestDialog.notResouved" ) ); //$NON-NLS-1$
+       
       }
     }
+    
+    this.running = false;
+  }
+  
+  private void pingHost( final InetAddress host, final int number ) {
+    double pingDelay;
+    double min = Long.MAX_VALUE; 
+    double max = Long.MIN_VALUE;
+    double avg = 0;
+    int nOk = 0;
+    int nFailed = 0;
+
+    // Print out which host we ping
+    this.outPut.append( Messages.getString( "PingTestDialog.pingMsg" )  //$NON-NLS-1$
+                        + host + this.outPut.getLineDelimiter() );
+
+    for ( int j = 0; j < number && this.running; ++j ) {
+      pingDelay = ( ( PingTest )this.test ).ping( host );
+
+      if ( -1 == pingDelay ) {
+        ++nFailed;
+       this.outPut.append( "Ping " + j + ": "   //$NON-NLS-1$//$NON-NLS-2$
+                            + Messages.getString( "PingTestDialog.notReachable" )  //$NON-NLS-1$
+                            + this.outPut.getLineDelimiter() );
+      }
+      else {
+        ++nOk;
+        if ( pingDelay < min )
+          min = pingDelay;
+        if ( pingDelay > max )
+          max = pingDelay;
+        avg += pingDelay;
+
+        this.outPut.append( "Ping " + j + ": " //$NON-NLS-1$ //$NON-NLS-2$
+                            + Messages.getString( "PingTestDialog.time" )  //$NON-NLS-1$
+                            + df.format( pingDelay ) + " ms"  //$NON-NLS-1$
+                            + this.outPut.getLineDelimiter() );
+      }
+    }
+    
+    // Write the summary
+    this.outPut.append( number + Messages.getString( "PingTestDialog.transmitted" )  //$NON-NLS-1$
+                        + nOk + Messages.getString( "PingTestDialog.receivedPlusSpace" )  //$NON-NLS-1$
+                        + df.format( ( ( ( double )nFailed ) / number ) * 100 ) 
+                        + Messages.getString( "PingTestDialog.packetLoss" )  //$NON-NLS-1$
+                        + this.outPut.getLineDelimiter() ); 
+    
+    if ( nOk > 0 )
+      this.outPut.append( Messages.getString( "PingTestDialog.summaryPlusSpace" )  //$NON-NLS-1$
+                          + df.format( min ) + "/"  //$NON-NLS-1$
+                          + df.format( avg/nOk ) + "/"  //$NON-NLS-1$
+                          + df.format( max ) + " ms"  //$NON-NLS-1$
+                          + this.outPut.getLineDelimiter() + this.outPut.getLineDelimiter() );
+    else
+      this.outPut.append( Messages.getString( "PingTestDialog.summaryFailed" )  //$NON-NLS-1$
+                          + this.outPut.getLineDelimiter() + this.outPut.getLineDelimiter() );
   }
 }

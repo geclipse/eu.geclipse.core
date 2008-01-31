@@ -43,9 +43,9 @@ public class PingTest extends AbstractSimpleTest {
    * @param address The machine to be pinged
    * @return Returns the time it took to reach the host in ms, -1 if the operation failed.
    */
-  public long ping( final InetAddress address ) {
+  public double ping( final InetAddress address ) {
     boolean reached = false;
-    long ret = -1;
+    double ret = -1;
     long start;
     long end;
 
@@ -59,7 +59,7 @@ public class PingTest extends AbstractSimpleTest {
       end = System.nanoTime();
     
       if ( reached )
-        ret = ( end - start ) / 1000000; // Covert from ns to ms
+        ret = ( ( double ) ( end - start ) ) / 1000000; // Covert from ns to ms
     }
     
     return ret;
