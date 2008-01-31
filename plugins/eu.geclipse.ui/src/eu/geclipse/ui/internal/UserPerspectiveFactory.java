@@ -20,6 +20,7 @@ import org.eclipse.search.ui.NewSearchUI;
 import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
+import org.eclipse.ui.IPlaceholderFolderLayout;
 import org.eclipse.ui.progress.IProgressConstants;
 
 
@@ -48,7 +49,7 @@ public class UserPerspectiveFactory
     bottomLeftFolder.addView( eu.geclipse.ui.internal.Activator.ID_GLUE_INFO_VIEW );
     
     IFolderLayout leftBottomFolder
-      = layout.createFolder( "leftbottom", IPageLayout.BOTTOM, 0.75f, editorArea ); //$NON-NLS-1$
+      = layout.createFolder( "leftbottom", IPageLayout.BOTTOM, 0.70f, editorArea ); //$NON-NLS-1$
     leftBottomFolder.addView( eu.geclipse.ui.internal.Activator.ID_CONNECTION_VIEW );
     leftBottomFolder.addView( eu.geclipse.ui.internal.Activator.ID_JOBS_VIEW );
     leftBottomFolder.addView( eu.geclipse.ui.internal.Activator.ID_AUTH_VIEW );
@@ -59,10 +60,10 @@ public class UserPerspectiveFactory
     leftBottomFolder.addPlaceholder( IPageLayout.ID_BOOKMARKS );
     leftBottomFolder.addPlaceholder( IProgressConstants.PROGRESS_VIEW_ID );
 
-    IFolderLayout middleFolder
-    = layout.createFolder( "middle", IPageLayout.BOTTOM, 0.5f, eu.geclipse.ui.internal.Activator.ID_JOBS_VIEW ); //$NON-NLS-1$
+    
+    IPlaceholderFolderLayout middleFolder = layout.createPlaceholderFolder( "middle", IPageLayout.BOTTOM, 0.5f, editorArea ); //$NON-NLS-1$
     middleFolder.addPlaceholder( eu.geclipse.ui.internal.Activator.ID_JOBDETAILS_VIEW );
-
+    
 //    IFolderLayout rightFolder
 //    = layout.createFolder( "right", IPageLayout.RIGHT, 0.8f, editorArea ); //$NON-NLS-1$
     
