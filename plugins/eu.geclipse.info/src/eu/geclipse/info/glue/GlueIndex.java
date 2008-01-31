@@ -513,7 +513,7 @@ public abstract class GlueIndex implements java.io.Serializable {
         Enumeration<AbstractGlueTable> enAgt = ht.elements();
         while( enAgt.hasMoreElements() ) {
           AbstractGlueTable myElement = enAgt.nextElement();
-          if (objectTableName == null || objectTableName.equals( "" ))
+          if (objectTableName == null || objectTableName.equals( "" )) //$NON-NLS-1$
             agtList.add( myElement );
           else if (myElement.tableName!= null && myElement.tableName.equals( objectTableName ))
             agtList.add( myElement );

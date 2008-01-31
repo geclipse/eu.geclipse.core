@@ -86,14 +86,14 @@ import eu.geclipse.info.model.IExtentedGridInfoService;
 public class GlueInfoViewer extends ViewPart
 implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener {
 
+  Action doubleClickAction;
+  Job fetchJob;
+  TreeViewer viewer;
+  
   private String currentVO = null;
   private DrillDownAdapter drillDownAdapter;
   private Action actionSetSourceRGMA;
   private Action actionSetSourceBDII;
-
-  Action doubleClickAction;
-  Job fetchJob;
-  TreeViewer viewer;
   
   private boolean SHOW_VO_LIST=false;
   private Combo comboVOList;
@@ -354,11 +354,13 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener {
       queryArray[ 1 ] = "Storage Elements"; //$NON-NLS-1$
       queryArray[ 2 ] = "GlueSE"; //$NON-NLS-1$
       list.add( queryArray );
+      /* todo tnikos: create the top level elements dynamicaly using extension points
       queryArray = new String[ 3 ];
       queryArray[ 0 ] = "GlueService"; //$NON-NLS-1$
       queryArray[ 1 ] = "Gria Services"; //$NON-NLS-1$
       queryArray[ 2] = "GriaService"; //$NON-NLS-1$
       list.add( queryArray );
+      */
       this.glueRoot = new TreeParent( list );
     }
   }
@@ -582,7 +584,9 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener {
   }
 
   void updateVOList() {
-    ArrayList<AbstractGlueTable> agtList = GlueQuery.getGlueTable( "GlueCEAccessControlBaseRule", "GlueCEAccessControlBaseRule", null ); //$NON-NLS-1$
+    ArrayList<AbstractGlueTable> agtList = 
+      GlueQuery.getGlueTable( "GlueCEAccessControlBaseRule", //$NON-NLS-1$
+                              "GlueCEAccessControlBaseRule", null ); //$NON-NLS-1$
     ArrayList<String> vos = new ArrayList<String>();
     int i = 0;
     for( AbstractGlueTable table : agtList ) {

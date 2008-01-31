@@ -78,7 +78,8 @@ public class GlueSEControlProtocol extends AbstractGlueTable
   /**
    * 
    */
-  public ArrayList<GlueSEControlProtocolCapability> glueSEControlProtocolCapabilityList = new ArrayList<GlueSEControlProtocolCapability>();
+  public ArrayList<GlueSEControlProtocolCapability> glueSEControlProtocolCapabilityList = 
+    new ArrayList<GlueSEControlProtocolCapability>();
 
   /**
    * 

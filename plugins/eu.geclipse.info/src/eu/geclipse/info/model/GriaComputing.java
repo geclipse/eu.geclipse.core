@@ -74,7 +74,11 @@ public class GriaComputing extends GridGlueElement implements IGridComputing {
     return ( GlueService ) getGlueElement();
   }
   
+  /**
+   * Get the name of the computing
+   */
+  @Override
   public String getName() {
-    return getGlueService().name; //$NON-NLS-1$
+    return getGlueService().name;
   }
 }

@@ -86,6 +86,9 @@ public class GlueService extends AbstractGlueTable
    */
   public GlueSite glueSite; // GlueSite_UniqueId
 
+  /**
+   * 
+   */
   public ArrayList<GlueService> glueServiceList = new ArrayList<GlueService>();
   
   /**
@@ -180,13 +183,20 @@ public class GlueService extends AbstractGlueTable
     
   }
   
+  /**
+   * Process the attributes and fill the values of the current object
+   * @param attributes the attributes to process
+   */
   public void processCreamService(final Attributes attributes)
   {
-    this.uniqueId = "http://" + GlueUtility.getStringAttribute( "GlueCEUniqueID", attributes ); //$NON-NLS-1$
+    this.uniqueId = "http://" + //$NON-NLS-1$
+                    GlueUtility.getStringAttribute( "GlueCEUniqueID", attributes ); //$NON-NLS-1$
     this.byRefOnly = false;
-    this.endpoint = "http://" + GlueUtility.getStringAttribute( "GlueCEUniqueID", attributes ); //$NON-NLS-1$
-    this.type = "org.glite.cream";
-    this.uri = "http://" + GlueUtility.getStringAttribute( "GlueCEUniqueID", attributes ); //$NON-NLS-1$
+    this.endpoint = "http://" + //$NON-NLS-1$
+                    GlueUtility.getStringAttribute( "GlueCEUniqueID", attributes ); //$NON-NLS-1$
+    this.type = "org.glite.cream"; //$NON-NLS-1$
+    this.uri = "http://" + //$NON-NLS-1$
+               GlueUtility.getStringAttribute( "GlueCEUniqueID", attributes ); //$NON-NLS-1$
   }
   
   /**
@@ -208,11 +218,5 @@ public class GlueService extends AbstractGlueTable
       result = true;
     
     return result;
-  }
-  
-  //TODO tnikos: write documentation
-  public void processGriaRecord()
-  {
-    
   }
 }

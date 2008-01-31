@@ -202,7 +202,8 @@ public class GlueCE extends AbstractGlueTable implements java.io.Serializable{
   /**
    * 
    */
-  public ArrayList<GlueCEAccessControlBaseRule> glueCEAccessControlBaseRuleList = new ArrayList<GlueCEAccessControlBaseRule>();
+  public ArrayList<GlueCEAccessControlBaseRule> glueCEAccessControlBaseRuleList = 
+    new ArrayList<GlueCEAccessControlBaseRule>();
   
   /**
    * 
@@ -263,26 +264,32 @@ public class GlueCE extends AbstractGlueTable implements java.io.Serializable{
         this.LRMSVersion = GlueUtility.getStringAttribute( "GlueCEInfoLRMSVersion", attributes); //$NON-NLS-1$
         this.TotalCPUs = GlueUtility.getLongAttribute( "GlueCEInfoTotalCPUs", attributes); //$NON-NLS-1$
         this.Name = GlueUtility.getStringAttribute( "GlueCEName", attributes); //$NON-NLS-1$
-        this.AssignedJobSlots = GlueUtility.getLongAttribute( "GlueCEPolicyAssignedJobSlots", attributes); //$NON-NLS-1$
+        this.AssignedJobSlots = 
+          GlueUtility.getLongAttribute( "GlueCEPolicyAssignedJobSlots", attributes); //$NON-NLS-1$
         this.MaxCPUTime = GlueUtility.getLongAttribute( "GlueCEPolicyMaxCPUTime", attributes); //$NON-NLS-1$
         this.MaxRunningJobs = GlueUtility.getLongAttribute( "GlueCEPolicyMaxRunningJobs", attributes); //$NON-NLS-1$
         this.MaxTotalJobs = GlueUtility.getLongAttribute( "GlueCEPolicyMaxTotalJobs", attributes); //$NON-NLS-1$
-        this.MaxWallClockTime = GlueUtility.getLongAttribute( "GlueCEPolicyMaxWallClockTime", attributes); //$NON-NLS-1$
+        this.MaxWallClockTime = 
+          GlueUtility.getLongAttribute( "GlueCEPolicyMaxWallClockTime", attributes); //$NON-NLS-1$
         this.Priority = GlueUtility.getLongAttribute( "GlueCEPolicyPriority", attributes); //$NON-NLS-1$
-        this.EstimatedResponseTime = GlueUtility.getLongAttribute( "GlueCEStateEstimatedResponseTime", attributes); //$NON-NLS-1$
+        this.EstimatedResponseTime = 
+          GlueUtility.getLongAttribute( "GlueCEStateEstimatedResponseTime", attributes); //$NON-NLS-1$
         this.FreeCpus = GlueUtility.getLongAttribute( "GlueCEStateFreeCPUs", attributes); //$NON-NLS-1$
         this.FreeJobSlots = GlueUtility.getLongAttribute( "GlueCEStateFreeJobSlots", attributes); //$NON-NLS-1$
         this.RunningJobs = GlueUtility.getIntegerAttribute( "GlueCEStateRunningJobs", attributes); //$NON-NLS-1$
         this.Status = GlueUtility.getStringAttribute( "GlueCEStateStatus", attributes); //$NON-NLS-1$
         this.TotalJobs = GlueUtility.getLongAttribute( "GlueCEStateTotalJobs", attributes); //$NON-NLS-1$
         this.WaitingJobs = GlueUtility.getIntegerAttribute( "GlueCEStateWaitingJobs", attributes); //$NON-NLS-1$
-        this.WorstResponseTime = GlueUtility.getLongAttribute( "GlueCEStateWorstResponseTime", attributes); //$NON-NLS-1$
+        this.WorstResponseTime = 
+          GlueUtility.getLongAttribute( "GlueCEStateWorstResponseTime", attributes); //$NON-NLS-1$
         this.DefaultSE = GlueUtility.getStringAttribute( "GlueCEInfoDefaultSE", attributes ); //$NON-NLS-1$
-        this.InformationServiceURL = GlueUtility.getStringAttribute( "GlueInformationServiceURL", attributes ); //$NON-NLS-1$
-        this.InformationServiceURL = this.InformationServiceURL.substring( 0, this.InformationServiceURL.indexOf( "/mds-" ) ); //$NON-NLS-1$
+        this.InformationServiceURL = 
+          GlueUtility.getStringAttribute( "GlueInformationServiceURL", attributes ); //$NON-NLS-1$
+        this.InformationServiceURL = 
+          this.InformationServiceURL.substring( 0, this.InformationServiceURL.indexOf( "/mds-" ) ); //$NON-NLS-1$
         this.GlueForeignKey = GlueUtility.getStringAttribute( "GlueForeignKey", attributes ); //$NON-NLS-1$
         this.GRAMVersion = GlueUtility.getStringAttribute( "GRAMVersion", attributes ); //$NON-NLS-1$
-        this.tableName = "GlueCE";
+        this.tableName = "GlueCE"; //$NON-NLS-1$
         this.byRefOnly=false;
         
         attr=attributes.get( "GlueCEAccessControlBaseRule" ); //$NON-NLS-1$

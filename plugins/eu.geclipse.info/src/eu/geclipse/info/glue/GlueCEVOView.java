@@ -17,9 +17,6 @@
 
 package eu.geclipse.info.glue;
 
-import java.util.Date;
-import java.util.ArrayList;
-
 import javax.naming.directory.Attributes;
 
 /**

@@ -46,13 +46,13 @@ import eu.geclipse.info.glue.GlueService;
    @Override
    public String getName() {
      GlueService gs=(GlueService) getGlueElement();
-     String name = gs.type + " @ ";
+     String name = gs.type + " @ "; //$NON-NLS-1$
      URI uri = null;
      try {
        uri = new URI( gs.endpoint );
        name += uri.toString();
      } catch (URISyntaxException e) {
-       name += "[Unknown Endpoint]";
+       name += "[Unknown Endpoint]"; //$NON-NLS-1$
      }
      return name;
    }
