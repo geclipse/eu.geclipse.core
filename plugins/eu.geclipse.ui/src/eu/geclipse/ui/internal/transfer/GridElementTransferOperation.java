@@ -18,8 +18,9 @@ package eu.geclipse.ui.internal.transfer;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
+import java.text.DateFormat;
+import java.util.Date;
 
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileInfo;
@@ -36,17 +37,17 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
+import eu.geclipse.core.filesystem.GEclipseURI;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
-import eu.geclipse.core.reporting.ISolution;
-import eu.geclipse.core.reporting.ProblemException;
-import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 
 /**
@@ -58,7 +59,20 @@ import eu.geclipse.ui.internal.Activator;
 public class GridElementTransferOperation
     extends Job {
   
-  boolean overwriteAllExistingFiles = false;
+  private enum OverwriteMode {
+    /**
+     * 
+     */
+    ASK,
+    /**
+     * 
+     */
+    OVERWRITE_ALL,
+    /**
+     * 
+     */
+    IGNORE_ALL
+  }
   
   /**
    * The target of the transfer operation.
@@ -73,7 +87,9 @@ public class GridElementTransferOperation
   /**
    * Determines if this is a copy or a move operation. 
    */
-  private boolean move;  
+  private boolean move;
+  
+  private OverwriteMode overwriteMode = OverwriteMode.ASK;
   
   /**
    * Create a new transfer operation. This may either be a copy or a
@@ -274,13 +290,16 @@ public class GridElementTransferOperation
    * so its cannot be passed as normal parameters.
    */
   private class TransferParams {
+    IFileStore sourceFile;
     IFileStore targetDirectory;
     IFileStore targetFile;
+    IFileInfo sourceFileInfo;
     IStatus status = Status.OK_STATUS;
     IProgressMonitor monitor;
     
-    TransferParams( final IFileStore toDirectory, final IFileStore to, final IProgressMonitor monitor ) {
+    TransferParams( final IFileStore sourceFile, final IFileInfo sourceFileInfo, final IFileStore toDirectory, final IFileStore to, final IProgressMonitor monitor ) {
       super();
+      this.sourceFile = sourceFile;
       this.targetDirectory = toDirectory;
       this.targetFile = to;
       this.monitor = monitor;
@@ -299,21 +318,21 @@ public class GridElementTransferOperation
   private IStatus copyFile( final IFileStore from,
                             final IFileStore to,
                             final IProgressMonitor monitor ) {
-    
+
+    TransferParams data = new TransferParams( from, null, to, to.getChild( from.getName() ), monitor );
     // Prepare copy operation
     monitor.beginTask( Messages.getString("GridElementTransferOperation.copying_progress") + from.getName(), 100 ); //$NON-NLS-1$
     monitor.setTaskName( Messages.getString("GridElementTransferOperation.copying_progress") + from.getName() ); //$NON-NLS-1$
     InputStream inStream = null;
     OutputStream outStream = null;    
-    TransferParams data = new TransferParams( to, to.getChild( from.getName() ), monitor );
     
     // Put in try-catch-clause to ensure that monitor.done() is called and streams are closed
     try {
       
       // Fetch file info
-      IFileInfo fromInfo = from.fetchInfo();
-      long length = fromInfo.getLength();            
-
+      data.sourceFileInfo = from.fetchInfo();
+      long length = data.sourceFileInfo.getLength();            
+      
       checkExistingTarget( data );
       
       // Open input stream
@@ -388,7 +407,7 @@ public class GridElementTransferOperation
           kb_counter++;
           subMonitor.worked( 1 );
           subMonitor.subTask( String.format( Messages.getString("GridElementTransferOperation.transfer_progress_format"),  //$NON-NLS-1$
-                                             fromInfo.getName(),
+                                             data.sourceFileInfo.getName(),
 //                                             new Integer( (int)(100./length*buffer.length*kb_counter) ),
                                              new Integer( (int)(100.*( (double)(kb_counter-1) * (double)buffer.length + bytesRead ) / length ) ),
                                              new Integer( kb_counter ),
@@ -612,136 +631,165 @@ public class GridElementTransferOperation
       result = element.getFileStore();
     }
     
-    return result;
-    
+    return result; 
   }
   
   private void checkExistingTarget( final TransferParams data ) {
-    while( data.status.equals( Status.OK_STATUS )
-        && data.targetFile.fetchInfo().exists() ) {
-      
-      ISolution overwriteFileSolution = createOverwriteFileSolution( data );
-      
-      if( this.overwriteAllExistingFiles ) {
-        try {
-          overwriteFileSolution.solve();
-        } catch( InvocationTargetException exception ) {
-          data.status = new Status( IStatus.ERROR, Activator.PLUGIN_ID, Messages.getString("GridElementTransferOperation.errTargetFileExists"), exception ); //$NON-NLS-1$
-        }
-      } else {
-        String message = String.format( Messages.getString("GridElementTransferOperation.msgCannotTransferFile"), data.targetFile.getName(), data.targetDirectory.getName() ); //$NON-NLS-1$
-        String reason = String.format( Messages.getString("GridElementTransferOperation.errTargetFileNameExists"), data.targetFile.getName() ); //$NON-NLS-1$
-        ProblemException problemException = new ProblemException( "eu.geclipse.problem.transfer.fileAlreadyExists", //$NON-NLS-1$
-                                                                  reason,
-                                                                  Activator.PLUGIN_ID );
-        
-        problemException.getProblem().addSolution( overwriteFileSolution );
-        problemException.getProblem().addSolution( createOverwriteAllFilesSolution( data, overwriteFileSolution ) );
-        problemException.getProblem().addSolution( createCancelSolution( data ) );
     
-        if( openProblemDialog( Messages.getString( "GridElementTransferOperation.transfer_name" ), //$NON-NLS-1$
-                               message,
-                               problemException ) != ProblemDialog.SOLVE )
-        {
-          data.status = Status.CANCEL_STATUS;
-        }
+    IFileInfo targetInfo = data.targetFile.fetchInfo();
+    if( targetInfo.exists() ) {
+      
+      switch( this.overwriteMode ) {
+        case ASK:
+        askOverwrite( data, targetInfo );
+        break;
+        case OVERWRITE_ALL:
+          deleteTarget( data );
+          break;
+        case IGNORE_ALL:
+          ignoreTransfer( data );
+          break;
+      }
+      
+      //ISolution overwriteFileSolution = createOverwriteFileSolution( data );
+      
+//      if( this.overwriteAllExistingFiles ) {
+//        try {
+//          overwriteFileSolution.solve();
+//        } catch( InvocationTargetException exception ) {
+//          data.status = new Status( IStatus.ERROR, Activator.PLUGIN_ID, Messages.getString("GridElementTransferOperation.errTargetFileExists"), exception ); //$NON-NLS-1$
+//        }
+//      } else {
+        
+        
+//        String message = String.format( Messages.getString("GridElementTransferOperation.msgCannotTransferFile"), data.targetFile.getName(), data.targetDirectory.getName() ); //$NON-NLS-1$
+//        String reason = String.format( Messages.getString("GridElementTransferOperation.errTargetFileNameExists"), data.targetFile.getName() ); //$NON-NLS-1$
+//        ProblemException problemException = new ProblemException( "eu.geclipse.problem.transfer.fileAlreadyExists", //$NON-NLS-1$
+//                                                                  reason,
+//                                                                  Activator.PLUGIN_ID );
+//        
+//        problemException.getProblem().addSolution( overwriteFileSolution );
+//        problemException.getProblem().addSolution( createOverwriteAllFilesSolution( data, overwriteFileSolution ) );
+//        problemException.getProblem().addSolution( createCancelSolution( data ) );
+//    
+//        if( openProblemDialog( Messages.getString( "GridElementTransferOperation.transfer_name" ), //$NON-NLS-1$
+//                               message,
+//                               problemException ) != ProblemDialog.SOLVE )
+//        {
+//          data.status = Status.CANCEL_STATUS;
+//        }
       }
     }
-  }
-
-
-  private int openProblemDialog( final String dialogTitle,
-                                 final String message,
-                                 final ProblemException problemException )
-  { 
+  
+  
+  private void askOverwrite( final TransferParams data, final IFileInfo targetInfo ) {
+    
+    
     class Runner implements Runnable {
       int exitCode;
+      private final Display display;
+      
+      Runner( final Display display ) {
+        this.display = display;
+      }
 
-      public void run() {
-        this.exitCode = ProblemDialog.openProblem( null, dialogTitle, message, problemException );
+      public void run() {        
+        Shell shell = null;
+        String[] labels = { Messages.getString("GridElementTransferOperation.buttonYes"), Messages.getString("GridElementTransferOperation.buttonYesAll"), Messages.getString("GridElementTransferOperation.buttonNo"), Messages.getString("GridElementTransferOperation.buttonNoAll"), Messages.getString("GridElementTransferOperation.buttonCancel") }; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$ //$NON-NLS-5$
+        
+        if( this.display != null ) {
+          shell = this.display.getActiveShell();
+        }        
+        
+        String message = String.format( Messages.getString("GridElementTransferOperation.overwriteMsg"),  //$NON-NLS-1$
+                                        data.targetFile.getName(),
+                                        formatURI( data.targetFile.toURI() ),
+                                        formatDate( targetInfo.getLastModified() ), 
+                                        formatURI( data.sourceFile.toURI() ),
+                                        formatDate( data.sourceFileInfo.getLastModified() )
+                                        );        
+        
+        MessageDialog dialog = new MessageDialog( shell,
+                                                  Messages.getString("GridElementTransferOperation.overwriteTitle"), //$NON-NLS-1$
+                                                  null,
+                                                  message,
+                                                  MessageDialog.QUESTION,
+                                                  labels,
+                                                  0 );
+        this.exitCode = dialog.open();     
       }      
     }
     
     Display display = PlatformUI.getWorkbench().getDisplay();
-    Runner runner = new Runner();    
+    Runner runner = new Runner( display );
     display.syncExec( runner );
-    return runner.exitCode;    
-  }
-
-  protected ISolution createOverwriteFileSolution( final TransferParams data ) {
-    return new ISolution() {
-
-      public String getDescription() {
-        return Messages.getString("GridElementTransferOperation.solutionOverwriteFile"); //$NON-NLS-1$
-      }
-
-      public String getID() {
-        return null;
-      }
-
-      public boolean isActive() {
-        return true;
-      }
-
-      public void solve() throws InvocationTargetException {
-        String filename = data.targetFile.getName();
-
-        try {          
-          data.monitor.subTask( String.format( Messages.getString("GridElementTransferOperation.deletingTarget"), filename ) ); //$NON-NLS-1$
-          data.targetFile.delete( EFS.NONE, data.monitor );
-          
-          if( !data.monitor.isCanceled() ) {
-            data.targetFile = data.targetDirectory.getChild( filename );
-          }
-        } catch( CoreException exception ) {
-          throw new InvocationTargetException( exception, String.format( Messages.getString("GridElementTransferOperation.errCannotDeleteTarget"), filename ) ); //$NON-NLS-1$
-        }
-      }
-      
-    };
-  }
-  
-  private ISolution createCancelSolution( final TransferParams data ) {
-    return new ISolution() {
-
-      public String getDescription() {
-        return Messages.getString("GridElementTransferOperation.solutionCancelWholeTransfer"); //$NON-NLS-1$
-      }
-
-      public String getID() {
-        return null;
-      }
-
-      public boolean isActive() {
-        return true;
-      }
-
-      public void solve() throws InvocationTargetException {
+    
+    switch( runner.exitCode ) {
+      case 0:
+        deleteTarget( data );
+        break;
+        
+      case 1:
+        this.overwriteMode = OverwriteMode.OVERWRITE_ALL;
+        deleteTarget( data );
+        break;
+        
+      case 2:
+        ignoreTransfer( data );
+        break;
+        
+      case 3:
+        this.overwriteMode = OverwriteMode.IGNORE_ALL;
+        ignoreTransfer( data );
+        break;
+        
+      case 4:
         data.status = Status.CANCEL_STATUS;
         data.monitor.setCanceled( true );
-      }      
-    };
-  }  
+        break;
+    }
+  } 
 
-  private ISolution createOverwriteAllFilesSolution( final TransferParams data, final ISolution overwriteSingleFileSolution ) {
-    return new ISolution() {
-
-      public String getDescription() {
-        return Messages.getString("GridElementTransferOperation.solutionOverwriteAll"); //$NON-NLS-1$
-      }
-
-      public String getID() {
-        return null;
-      }
-
-      public boolean isActive() {
-        return true;
-      }
-
-      public void solve() throws InvocationTargetException {
-        GridElementTransferOperation.this.overwriteAllExistingFiles = true;
-        overwriteSingleFileSolution.solve();
-      }      
-    };
+  public String formatURI( final URI uri ) {
+    String uriString = ""; //$NON-NLS-1$
+    GEclipseURI gUri = new GEclipseURI( uri );
+    URI slaveURI = gUri.toSlaveURI();
+    
+    if( slaveURI == null ) {
+      uriString = uri.toString();
+    } else {
+      uriString = slaveURI.toString();
+    }
+    return uriString;
   }
+
+  String formatDate( final long lastModified ) {
+    String dateString = ""; //$NON-NLS-1$
+    
+    if( lastModified != EFS.NONE ) {      
+      dateString = DateFormat.getDateTimeInstance().format( new Date( lastModified ) );
+    }
+    
+    return dateString;
+  }
+
+  private void deleteTarget( final TransferParams data ) {
+    String filename = data.targetFile.getName();
+
+    try {          
+      data.monitor.subTask( String.format( "", filename ) ); 
+      data.targetFile.delete( EFS.NONE, data.monitor );
+      
+      if( !data.monitor.isCanceled() ) {
+        data.targetFile = data.targetDirectory.getChild( filename );
+      }
+    } catch( CoreException exception ) {
+      data.status = new Status( IStatus.ERROR, Activator.PLUGIN_ID, String.format( Messages.getString("GridElementTransferOperation.errCannotDeleteTarget"), data.targetFile.getName() ), exception ); //$NON-NLS-1$
+    }
+  }
+  
+  private void ignoreTransfer( final TransferParams data ) {
+    data.status = new Status( IStatus.INFO, Activator.PLUGIN_ID, Messages.getString("GridElementTransferOperation.targetExists") ); //$NON-NLS-1$
+  }
+
 }
