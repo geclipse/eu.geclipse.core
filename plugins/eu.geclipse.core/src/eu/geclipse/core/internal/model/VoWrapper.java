@@ -156,7 +156,7 @@ public class VoWrapper
   }
 
   public String getName() {
-    return this.vo.getName();
+    return this.vo != null ? this.vo.getName() : "Vo-Wrapper"; //$NON-NLS-1$
   }
 
   public IGridContainer getParent() {
