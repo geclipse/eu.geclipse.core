@@ -52,11 +52,13 @@ import org.eclipse.jface.resource.JFaceResources;
 import org.eclipse.jface.viewers.DoubleClickEvent;
 import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITableFontProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.Viewer;
@@ -324,6 +326,12 @@ public class BatchJobView extends ViewPart implements IContentChangeListener {
       }
     });
 
+    this.jobList.addSelectionChangedListener( new ISelectionChangedListener() {
+      public void selectionChanged( final SelectionChangedEvent event ) {
+        updateActions();
+      }
+    });
+    
     this.jobTable.addKeyListener( new KeyAdapter() {
       @Override
       public void keyPressed( final KeyEvent event ) {
