@@ -365,7 +365,7 @@ public class GridElementTransferOperation
       if ( data.status.isOK() && ( inStream != null ) && ( outStream != null ) ) {
         
         byte[] buffer = new byte[ 1024 ];
-        Integer totalKb = new Integer( (int) Math.ceil((double)length/(double)buffer.length) ) ;
+        Integer totalKb =Integer.valueOf( (int) Math.ceil((double)length/(double)buffer.length) ) ;
         
         SubProgressMonitor subMonitor = new SubProgressMonitor( monitor, 84 );
         subMonitor.beginTask( Messages.getString("GridElementTransferOperation.copying_progress") + from.getName(), totalKb.intValue() ); //$NON-NLS-1$

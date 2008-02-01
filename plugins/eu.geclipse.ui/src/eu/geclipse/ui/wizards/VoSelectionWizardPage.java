@@ -278,7 +278,7 @@ public class VoSelectionWizardPage extends WizardPage {
       IVirtualOrganization vo
         = (IVirtualOrganization) this.tableViewer.getElementAt( index );
       try {
-        String text = new String();
+        String text = "";
         text += "Name:\n\t" + vo.getName() + '\n';
         text += "Type:\n\t" + vo.getTypeName() + '\n';
         IGridInfoService infoService = vo.getInfoService();

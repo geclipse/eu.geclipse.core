@@ -32,13 +32,13 @@ class PortForwardingTableLabelProvider implements ITableLabelProvider {
         result = forward.getType().toString();
         break;
       case 1:
-        result = new Integer( forward.getBindPort() ).toString();
+        result = Integer.valueOf( forward.getBindPort() ).toString();
         break;
       case 2:
         result = forward.getHostname();
         break;
       case 3:
-        result = new Integer( forward.getPort() ).toString();
+        result = Integer.valueOf( forward.getPort() ).toString();
         break;
       default:
         break;

@@ -66,13 +66,13 @@ public class GridJobDecorator
   
   static {
     imageNames = new Hashtable< Integer, String >();
-    imageNames.put( new Integer( IGridJobStatus.UNKNOWN ), STATUS_UNKNOWN_IMG ); 
-    imageNames.put( new Integer( IGridJobStatus.SUBMITTED ), STATUS_SUBMITTED_IMG ); 
-    imageNames.put( new Integer( IGridJobStatus.WAITING ), STATUS_WAITING_IMG ); 
-    imageNames.put( new Integer( IGridJobStatus.RUNNING ), STATUS_RUNNING_IMG ); 
-    imageNames.put( new Integer( IGridJobStatus.DONE ), STATUS_DONE_IMG ); 
-    imageNames.put( new Integer( IGridJobStatus.ABORTED ), STATUS_ABORTED_IMG ); 
-    imageNames.put( new Integer( IGridJobStatus.PURGED ), STATUS_ABANDONED_IMG ); 
+    imageNames.put( Integer.valueOf( IGridJobStatus.UNKNOWN ), STATUS_UNKNOWN_IMG ); 
+    imageNames.put( Integer.valueOf( IGridJobStatus.SUBMITTED ), STATUS_SUBMITTED_IMG ); 
+    imageNames.put( Integer.valueOf( IGridJobStatus.WAITING ), STATUS_WAITING_IMG ); 
+    imageNames.put( Integer.valueOf( IGridJobStatus.RUNNING ), STATUS_RUNNING_IMG ); 
+    imageNames.put( Integer.valueOf( IGridJobStatus.DONE ), STATUS_DONE_IMG ); 
+    imageNames.put( Integer.valueOf( IGridJobStatus.ABORTED ), STATUS_ABORTED_IMG ); 
+    imageNames.put( Integer.valueOf( IGridJobStatus.PURGED ), STATUS_ABANDONED_IMG ); 
   }
   
   public static GridJobDecorator getDecorator() {
@@ -114,7 +114,7 @@ public class GridJobDecorator
 
   private ImageDescriptor getIcon( final int type ) {
     ImageDescriptor decorator = null;
-    String fileName = imageNames.get( new Integer( type ) );
+    String fileName = imageNames.get( Integer.valueOf( type ) );
     if( fileName == null ) {
       fileName = imageNames.get( Integer.valueOf( STATUS_UNKNOWN_IMG ) );
     }

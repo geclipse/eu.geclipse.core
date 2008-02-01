@@ -223,10 +223,10 @@ public class AuthTokenView extends ViewPart implements IContentChangeListener {
                 int minutes = ( int )( ( lifetime % 3600 ) / 60 );
                 int seconds = ( int )( lifetime % 60 );
                 columnText = String.format( "%1$3dd %2$2dh %3$2dm %4$2ds", //$NON-NLS-1$
-                                            new Integer( days ),
-                                            new Integer( hours ),
-                                            new Integer( minutes ),
-                                            new Integer( seconds ) );
+                                            Integer.valueOf( days ),
+                                            Integer.valueOf( hours ),
+                                            Integer.valueOf( minutes ),
+                                            Integer.valueOf( seconds ) );
               }
             }
             break;
