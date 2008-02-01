@@ -1,3 +1,17 @@
+/*****************************************************************************
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
 package eu.geclipse.jsdl;
 
 import java.io.BufferedReader;
@@ -45,6 +59,7 @@ import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridModelListener;
 import eu.geclipse.core.model.impl.AbstractGridContainer;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
+import eu.geclipse.jsdl.internal.Activator;
 import eu.geclipse.jsdl.internal.JsdlAdaptersPlugin;
 import eu.geclipse.jsdl.model.ApplicationType;
 import eu.geclipse.jsdl.model.BoundaryType;
@@ -1315,19 +1330,16 @@ public class JSDLJobDescription extends ResourceGridContainer
     try {
       DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
       factory.setNamespaceAware( true );
-      doc = factory.newDocumentBuilder().parse( ((IFile)getResource( )).getContents() );
+      doc = factory.newDocumentBuilder().parse( ( ( IFile )getResource() ).getContents() );
     } catch( SAXException exception ) {
-      // TODO mariusz Auto-generated catch block
+      Activator.logException( exception );
       exception.printStackTrace();
     } catch( IOException exception ) {
-      // TODO mariusz Auto-generated catch block
-      exception.printStackTrace();
+      Activator.logException( exception );
     } catch( ParserConfigurationException exception ) {
-      // TODO mariusz Auto-generated catch block
-      exception.printStackTrace();
+      Activator.logException( exception );
     } catch( CoreException exception ) {
-      // TODO mariusz Auto-generated catch block
-      exception.printStackTrace();
+      Activator.logException( exception );
     }
 
     return doc;

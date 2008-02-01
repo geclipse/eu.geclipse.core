@@ -24,12 +24,13 @@ import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
 
+import eu.geclipse.info.Activator;
+
 /**
  * @author George Tsouloupas
  * TODO Write Comments
  */
-public class GlueSite extends AbstractGlueTable implements java.io.Serializable
-{
+public class GlueSite extends AbstractGlueTable implements java.io.Serializable {
 
   private static final long serialVersionUID = 1L;
 
@@ -100,27 +101,27 @@ public class GlueSite extends AbstractGlueTable implements java.io.Serializable
   /**
    * 
    */
-  public ArrayList<GlueSE> glueSEList = new ArrayList<GlueSE>();
+  public ArrayList< GlueSE > glueSEList = new ArrayList< GlueSE >();
 
   /**
    * 
    */
-  public ArrayList<GlueCluster> glueClusterList = new ArrayList<GlueCluster>();
+  public ArrayList< GlueCluster > glueClusterList = new ArrayList< GlueCluster >();
 
   /**
    * 
    */
-  public ArrayList<GlueService> glueServiceList = new ArrayList<GlueService>();
+  public ArrayList< GlueService > glueServiceList = new ArrayList< GlueService >();
 
   /**
    * 
    */
-  public ArrayList<GlueSiteInfo> glueSiteInfoList = new ArrayList<GlueSiteInfo>();
+  public ArrayList< GlueSiteInfo > glueSiteInfoList = new ArrayList< GlueSiteInfo >();
 
   /**
    * 
    */
-  public ArrayList<GlueSiteSponsor> glueSiteSponsorList = new ArrayList<GlueSiteSponsor>();
+  public ArrayList< GlueSiteSponsor > glueSiteSponsorList = new ArrayList< GlueSiteSponsor >();
 
   /* (non-Javadoc)
    * @see eu.geclipse.info.glue.AbstractGlueTable#getID()
@@ -142,8 +143,7 @@ public class GlueSite extends AbstractGlueTable implements java.io.Serializable
    * 
    * @param attributes
    */
-  public void processGlueRecord(final Attributes attributes)
-  {
+  public void processGlueRecord( final Attributes attributes ) {
     this.UniqueId = GlueUtility.getStringAttribute( "GlueSiteUniqueID", attributes ); //$NON-NLS-1$
     this.keyName = GlueUtility.getStringAttribute( "GlueSiteUniqueID", attributes ); //$NON-NLS-1$
     this.Name = GlueUtility.getStringAttribute( "GlueSiteName", attributes ); //$NON-NLS-1$
@@ -167,10 +167,10 @@ public class GlueSite extends AbstractGlueTable implements java.io.Serializable
     this.tableName = "GlueSite"; //$NON-NLS-1$
     
     // Get the other info
-    Attribute attr=attributes.get( "GlueSiteOtherInfo" ); //$NON-NLS-1$
-    if(attr!=null){
+    Attribute attr = attributes.get( "GlueSiteOtherInfo" ); //$NON-NLS-1$
+    if( attr != null ) {
       try {
-        NamingEnumeration<?> ne = attr.getAll();
+        NamingEnumeration< ? > ne = attr.getAll();
         while( ne.hasMoreElements() ) {
           String otherInfo =ne.next().toString();
           GlueSiteInfo mySiteInfo = new GlueSiteInfo();
@@ -180,28 +180,27 @@ public class GlueSite extends AbstractGlueTable implements java.io.Serializable
           mySiteInfo.tableName = "GlueSiteOtherInfo"; //$NON-NLS-1$
           
           boolean exists = false;
-          for (int i=0; i<this.glueSiteInfoList.size(); i++)
-          {
-            if (this.glueSiteInfoList.get( i ).OtherInfo.equalsIgnoreCase( otherInfo ))
+          for ( int i = 0; i < this.glueSiteInfoList.size(); i++ ) {
+            if ( this.glueSiteInfoList.get( i ).OtherInfo.equalsIgnoreCase( otherInfo ) )
               exists = true;
           }
-          if (!exists){
-            this.glueSiteInfoList.add(mySiteInfo);
+          if ( !exists ) {
+            this.glueSiteInfoList.add( mySiteInfo );
           }
         }
       } catch( NamingException e ) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
+        // Just log the exception 
+        Activator.logException( e );
       }
     }
     
     // Get the sponsor
-    attr=attributes.get( "GlueSiteSponsor" ); //$NON-NLS-1$
-    if(attr!=null){
+    attr = attributes.get( "GlueSiteSponsor" ); //$NON-NLS-1$
+    if( attr != null ) {
       try {
-        NamingEnumeration<?> ne = attr.getAll();
+        NamingEnumeration< ? > ne = attr.getAll();
         while( ne.hasMoreElements() ) {
-          String sponsorName =ne.next().toString();
+          String sponsorName = ne.next().toString();
           GlueSiteSponsor mySiteSponsor = new GlueSiteSponsor();
           mySiteSponsor.key = sponsorName;
           mySiteSponsor.byRefOnly = false;
@@ -209,18 +208,18 @@ public class GlueSite extends AbstractGlueTable implements java.io.Serializable
           mySiteSponsor.tableName = "GlueSiteSponsor"; //$NON-NLS-1$
             
           boolean exists = false;
-          for (int i=0; i<this.glueSiteSponsorList.size(); i++)
+          for ( int i = 0; i < this.glueSiteSponsorList.size(); i++ )
           {
-            if (this.glueSiteSponsorList.get( i ).Sponsor.equalsIgnoreCase( sponsorName ))
+            if ( this.glueSiteSponsorList.get( i ).Sponsor.equalsIgnoreCase( sponsorName ) )
               exists = true;
           }
-          if (!exists){
+          if ( !exists ) {
             this.glueSiteSponsorList.add( mySiteSponsor );
           }
         }
       } catch( NamingException e ) {
-        // TODO Auto-generated catch block
-        e.printStackTrace();
+        // Just log the exception 
+        Activator.logException( e );
       }
     }
   }
