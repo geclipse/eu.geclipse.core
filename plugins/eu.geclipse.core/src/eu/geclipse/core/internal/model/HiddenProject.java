@@ -31,6 +31,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 
+import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.GridModelProblems;
@@ -218,8 +219,7 @@ public class HiddenProject
            }
            result = GridModel.getTestManager().getTest( folderName );
          } catch ( CoreException coreExc ) {
-           // TODO Auto-generated catch block
-           coreExc.printStackTrace();
+           Activator.logException( coreExc );
          }
          return result;
          // return result;
