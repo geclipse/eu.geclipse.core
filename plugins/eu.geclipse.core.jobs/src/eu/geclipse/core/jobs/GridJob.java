@@ -358,8 +358,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
         this.jobDescription = (IGridJobDescription)description;
       }
     } catch( Exception e ) {
-      // TODO Auto-generated catch block
-      e.printStackTrace();
+      Activator.logException( e );
     }
   }
 
