@@ -22,12 +22,12 @@ import com.jcraft.jsch.UserInfo;
 import eu.geclipse.ui.dialogs.PasswordDialog;
 
 class SSHConnectionInfo implements UserInfo {
+  String passphrase;
+  String passwd;
+  boolean canceledPWValue;
   private String user;
   private String host;
-  private String passwd;
-  private String passphrase;
   private int port;
-  private boolean canceledPWValue;
   private boolean promptPasswd;
   private boolean promptPassphrase;
 
@@ -62,9 +62,15 @@ class SSHConnectionInfo implements UserInfo {
   }
 
   public boolean promptYesNo( final String str ) {
-    return MessageDialog.openQuestion( null,
-                                       Messages.getString( "SshShell.sshTerminal" ), //$NON-NLS-1$
-                                       str );
+    final boolean[] result = { false };
+    Display.getDefault().syncExec( new Runnable() {
+      public void run() {
+        result[0] = MessageDialog.openQuestion( null,
+                                                Messages.getString( "SshShell.sshTerminal" ), //$NON-NLS-1$
+                                                str );
+      }
+    } );
+    return result[0];
   }
 
   public String getPassphrase() {
@@ -73,42 +79,54 @@ class SSHConnectionInfo implements UserInfo {
   }
 
   public boolean promptPassphrase( final String message ) {
-    int result = Window.OK;
+    final int[] result = { Window.OK };
 
     if ( this.promptPassphrase ) {
-      PasswordDialog dlg = new PasswordDialog( Display.getCurrent().getActiveShell(),
-                                               Messages.getString( "SshShell.sshTerminal" ), //$NON-NLS-1$
-                                               message, null, null);
-      result = dlg.open();
-      if ( result == Window.OK )
-        this.passphrase = dlg.getValue();
-      else
-        this.canceledPWValue = true;
+      Display.getDefault().syncExec( new Runnable() {
+        public void run() {
+          PasswordDialog dlg = new PasswordDialog( Display.getCurrent().getActiveShell(),
+                                                   Messages.getString( "SshShell.sshTerminal" ), //$NON-NLS-1$
+                                                   message, null, null);
+          result[0] = dlg.open();
+          if ( result[0] == Window.OK )
+            SSHConnectionInfo.this.passphrase = dlg.getValue();
+          else
+            SSHConnectionInfo.this.canceledPWValue = true;
+        }
+      } );
     }
-    return result == Window.OK;
+    return result[0] == Window.OK;
   }
 
   public boolean promptPassword( final String message ) {
-    int result = Window.OK;
+    final int[] result = { Window.OK };
     
     if ( this.promptPasswd ) {
-      PasswordDialog dlg = new PasswordDialog( Display.getCurrent().getActiveShell(),
-                                               Messages.getString( "SshShell.sshTerminal" ), //$NON-NLS-1$
-                                               message, null, null);
-      result = dlg.open();
-      if ( result == Window.OK )
-        this.passwd = dlg.getValue();
-      else
-        this.canceledPWValue = true;
+      Display.getDefault().syncExec( new Runnable() {
+        public void run() {
+          PasswordDialog dlg = new PasswordDialog( Display.getCurrent().getActiveShell(),
+                                                   Messages.getString( "SshShell.sshTerminal" ), //$NON-NLS-1$
+                                                   message, null, null);
+          result[0] = dlg.open();
+          if ( result[0] == Window.OK )
+            SSHConnectionInfo.this.passwd = dlg.getValue();
+          else
+            SSHConnectionInfo.this.canceledPWValue = true;
+        }
+      } );
     }
-    return result == Window.OK;
+    return result[0] == Window.OK;
   }
 
   public void showMessage( final String message ) {
     if (message != null && message.trim().length() != 0) {
-      MessageDialog.openInformation( null,
-                                     Messages.getString( "SshShell.sshTerminal" ), //$NON-NLS-1$
-                                     message );
+      Display.getDefault().syncExec( new Runnable() {
+        public void run() {
+          MessageDialog.openInformation( null,
+                                         Messages.getString( "SshShell.sshTerminal" ), //$NON-NLS-1$
+                                         message );
+        }
+      } );
     }
   }
 
