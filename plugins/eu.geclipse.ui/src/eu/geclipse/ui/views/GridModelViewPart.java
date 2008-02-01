@@ -34,6 +34,7 @@ import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.IActionBars;
@@ -186,18 +187,23 @@ public abstract class GridModelViewPart
    * @see StructuredViewer#refresh(Object)
    */
   public void refreshViewer( final IGridElement element ) {
-    Display display = this.viewer.getControl().getDisplay();
-    display.asyncExec( new Runnable() {
-      public void run() {
-        if ( ! GridModelViewPart.this.viewer.getControl().isDisposed() ) {
-          if ( element == null ) {
-            GridModelViewPart.this.viewer.refresh( false );
-          } else {
-            GridModelViewPart.this.viewer.refresh( element, false );
+    if ( this.viewer != null ) {
+      Control control = this.viewer.getControl();
+      if ( ! control.isDisposed() ) {
+        Display display = control.getDisplay();
+        display.asyncExec( new Runnable() {
+          public void run() {
+            if ( ! GridModelViewPart.this.viewer.getControl().isDisposed() ) {
+              if ( element == null ) {
+                GridModelViewPart.this.viewer.refresh( false );
+              } else {
+                GridModelViewPart.this.viewer.refresh( element, false );
+              }
+            }
           }
-        }
+        } );
       }
-    } );
+    }
   }
 
   /* (non-Javadoc)
