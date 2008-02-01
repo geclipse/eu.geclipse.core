@@ -113,62 +113,62 @@ public abstract class JobSubmissionWizardBase extends Wizard
                   } );
                   monitor.setTaskName( "job submitted" );
                 } else {
-                  ProblemDialog.openProblem( getShell(),
-                                             Messages.getString( "JobSubmissionWizardBase.errSubmissionFailed" ), //$NON-NLS-1$
-                                             Messages.getString( "JobSubmissionWizardBase.errUnknownSubmissionService" ), //$NON-NLS-1$
-                                             null );
-                  result = new Status( Status.INFO,
+//                  ProblemDialog.openProblem( getShell(),
+//                                             Messages.getString( "JobSubmissionWizardBase.errSubmissionFailed" ), //$NON-NLS-1$
+//                                             Messages.getString( "JobSubmissionWizardBase.errUnknownSubmissionService" ), //$NON-NLS-1$
+//                                             null );
+                  result = new Status( Status.ERROR,
                                        Activator.getDefault().PLUGIN_ID,
                                        Status.OK,
                                        "Job not submitted",
                                        null );
-                  IWorkbench workbench = PlatformUI.getWorkbench();
-                  Display display = workbench.getDisplay();
-                  display.asyncExec( new Runnable() {
-
-                    public void run() {
-                      base.getShell().setVisible( true );
-                    }
-                  } );
+//                  IWorkbench workbench = PlatformUI.getWorkbench();
+//                  Display display = workbench.getDisplay();
+//                  display.asyncExec( new Runnable() {
+//
+//                    public void run() {
+//                      base.getShell().setVisible( true );
+//                    }
+//                  } );
                 }
                 // create job
                 JobSubmissionWizardBase.this.creator.create( parent, jobId );
               } catch( GridModelException gmExc ) {
-                ProblemDialog.openProblem( getShell(),
-                                           Messages.getString( "JobSubmissionWizardBase.errSubmissionFailed" ), //$NON-NLS-1$
-                                           null,
-                                           gmExc );
-                result = new Status( Status.INFO,
+//                ProblemDialog.openProblem( getShell(),
+//                                           Messages.getString( "JobSubmissionWizardBase.errSubmissionFailed" ), //$NON-NLS-1$
+//                                           null,
+//                                           gmExc );
+                result = new Status( Status.ERROR,
                                      Activator.getDefault().PLUGIN_ID,
                                      Status.OK,
                                      "Job not submitted",
                                      gmExc );
-                IWorkbench workbench = PlatformUI.getWorkbench();
-                Display display = workbench.getDisplay();
-                display.asyncExec( new Runnable() {
-
-                  public void run() {
-                    base.getShell().setVisible( true );
-                  }
-                } );
+//                IWorkbench workbench = PlatformUI.getWorkbench();
+//                Display display = workbench.getDisplay();
+//                display.asyncExec( new Runnable() {
+//
+//                  public void run() {
+//                    base.getShell().setVisible( true );
+//                  }
+//                } );
               } catch( CoreException cExc ) {
-                ProblemDialog.openProblem( getShell(),
-                                           Messages.getString( "JobSubmissionWizardBase.errSubmissionFailed" ), //$NON-NLS-1$
-                                           null,
-                                           cExc );
-                result = new Status( Status.INFO,
+//                ProblemDialog.openProblem( getShell(),
+//                                           Messages.getString( "JobSubmissionWizardBase.errSubmissionFailed" ), //$NON-NLS-1$
+//                                           null,
+//                                           cExc );
+                result = new Status( Status.ERROR,
                                      Activator.getDefault().PLUGIN_ID,
                                      Status.OK,
                                      "Job not submitted",
                                      cExc );
-                IWorkbench workbench = PlatformUI.getWorkbench();
-                Display display = workbench.getDisplay();
-                display.asyncExec( new Runnable() {
-
-                  public void run() {
-                    base.getShell().setVisible( true );
-                  }
-                } );
+//                IWorkbench workbench = PlatformUI.getWorkbench();
+//                Display display = workbench.getDisplay();
+//                display.asyncExec( new Runnable() {
+//
+//                  public void run() {
+//                    base.getShell().setVisible( true );
+//                  }
+//                } );
                 // /
               }
             }
@@ -190,8 +190,8 @@ public abstract class JobSubmissionWizardBase extends Wizard
       job.setUser( true );
       job.schedule(); // start as soon as possible
       // return this.finishResult;
-      base.getShell().setVisible( false );
-      return false;
+//      base.getShell().setVisible( false );
+      return true;
     }
   }
 
