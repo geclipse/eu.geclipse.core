@@ -29,7 +29,7 @@ public class TransferAction extends SelectionListenerAction {
   private Clipboard clipboard;
   
   /**
-   * Construct a new trasnfer action with the specified title that
+   * Construct a new transfer action with the specified title that
    * uses the specified clipboard.
    * 
    * @param text The title of the action.
