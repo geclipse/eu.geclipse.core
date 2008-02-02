@@ -77,7 +77,7 @@ public class TransferJsdl2JdlAction extends SelectionListenerAction {
    *  
    *  This methods
    *  
-   *  1. Checks if there is already an JDL with the name "XXX.jsdl.jdl"
+   *  1. Checks if there is already an JDL with the name "*.jsdl.jdl"
    *    if true then delete it
    *    
    *  2. Creates an transformator from an XSL File. 
