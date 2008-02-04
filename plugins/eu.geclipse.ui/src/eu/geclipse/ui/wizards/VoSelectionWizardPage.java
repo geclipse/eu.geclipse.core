@@ -18,6 +18,7 @@ package eu.geclipse.ui.wizards;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
@@ -63,6 +64,8 @@ public class VoSelectionWizardPage extends WizardPage {
   boolean allowMultiSelection;
   
   private Text infoText;
+  
+  private List<IVirtualOrganization> selectedVOs = new ArrayList<IVirtualOrganization>();
   
   
   public VoSelectionWizardPage( final boolean allowMultiSelection ) {
@@ -338,7 +341,9 @@ public class VoSelectionWizardPage extends WizardPage {
   
   protected void setInitialSelection() {
     IGridElement defaultVo = GridModel.getVoManager().getDefault();
-    if ( defaultVo == null ) {
+    if (! this.selectedVOs.isEmpty()){
+      defaultVo = this.selectedVOs.get( 0 );
+    } else if ( defaultVo == null ) {
       // No default VO, take the first entry if any, null otherwise
       defaultVo = (IGridElement) this.tableViewer.getElementAt( 0 );
     } else {
@@ -368,10 +373,8 @@ public class VoSelectionWizardPage extends WizardPage {
    * Set selection (and check checkbox) on the given VO
    * @param selectedVO VO to select on the list
    */
-  public void setSelectedVo( final IVirtualOrganization selectedVO ) {
-    if ( selectedVO != null ) {
-      this.tableViewer.setChecked( selectedVO, true );
-    }
+  public void setSelectedVos( final List<IVirtualOrganization> selectedVos ) {
+    this.selectedVOs = selectedVos;
   }
 
 }
