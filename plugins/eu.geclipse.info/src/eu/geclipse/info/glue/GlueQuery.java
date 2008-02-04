@@ -161,7 +161,7 @@ public class GlueQuery {
   public static boolean saSupportsVO(final GlueSA sa, final String vo){
     boolean found=false;
     for (GlueSAAccessControlBaseRule rule : sa.glueSAAccessControlBaseRuleList) {
-      if(rule.Value.equals(vo)){
+      if(rule.Value.equalsIgnoreCase(vo)){
         found=true;
         break;
       }
