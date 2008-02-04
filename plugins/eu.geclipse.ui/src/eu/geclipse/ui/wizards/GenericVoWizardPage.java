@@ -63,7 +63,7 @@ public class GenericVoWizardPage
     mainComp.setLayout( new GridLayout( 2, false ) );
     
     Label nameLabel = new Label( mainComp, SWT.NULL );
-    nameLabel.setText( "VO Name:" );
+    nameLabel.setText( "&VO Name:" );
     gData = new GridData();
     nameLabel.setLayoutData( gData );
     

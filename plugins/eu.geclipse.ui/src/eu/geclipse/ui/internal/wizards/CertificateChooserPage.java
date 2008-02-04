@@ -75,17 +75,17 @@ public class CertificateChooserPage extends WizardPage {
     
     
     Button selectAllButton = new Button( buttonComp, SWT.PUSH );
-    selectAllButton.setText( "Select All" );
+    selectAllButton.setText( "&Select All" );
     gData = new GridData();
     selectAllButton.setLayoutData( gData );
     
     Button deselectAllButton = new Button( buttonComp, SWT.PUSH );
-    deselectAllButton.setText( "Deselect All" );
+    deselectAllButton.setText( "&Deselect All" );
     gData = new GridData();
     deselectAllButton.setLayoutData( gData );
     
     Button revertButton = new Button( buttonComp, SWT.PUSH );
-    revertButton.setText( "Revert Selection" );
+    revertButton.setText( "&Revert Selection" );
     gData = new GridData();
     revertButton.setLayoutData( gData );
     
