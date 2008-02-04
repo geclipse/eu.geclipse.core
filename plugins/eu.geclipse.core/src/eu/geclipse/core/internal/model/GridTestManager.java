@@ -97,6 +97,14 @@ public class GridTestManager
           this.tests.remove( test );
         }
       }
+    } else if (event.getType() == IGridModelEvent.ELEMENTS_CHANGED){
+      IGridElement[] changedElements = event.getElements();
+      for (IGridElement element: changedElements){
+        if( element instanceof IGridTest ) {
+          IGridTest test = ( IGridTest )element;
+          test.update();       
+        }
+      }
     }
   }
 

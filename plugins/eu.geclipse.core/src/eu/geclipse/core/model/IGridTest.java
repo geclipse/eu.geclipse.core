@@ -42,8 +42,8 @@ public interface IGridTest extends IGridElement, IManageable {
 
   /**
    * Method to access dates of all submissions for given resource for this test
-   * @param resourceName name of the tested resources
    * 
+   * @param resourceName name of the tested resources
    * @return List of dates of test submission
    */
   public List<Date> getTestSubmissionDates( final String resourceName );
@@ -110,5 +110,11 @@ public interface IGridTest extends IGridElement, IManageable {
    * @param resourceName name of tested resource (e.g. host name)
    * @return List of List of
    */
-  public List<List<IGridTestResult>> getTestResultsForResourceForDate( final String resourceName);
+  public List<List<IGridTestResult>> getTestResultsForResourceForDate( final String resourceName );
+
+  /**
+   * Does an object update. Should be called if e.g. XML file describing this
+   * object was changed, etc.
+   */
+  public void update();
 }
