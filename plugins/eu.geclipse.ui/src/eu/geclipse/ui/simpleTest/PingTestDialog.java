@@ -206,8 +206,8 @@ public class PingTestDialog extends AbstractSimpleTestDialog  {
             pingHost( adr, number );
         } else
           this.outPut.append( Messages.getString( "PingTestDialog.thePlusSpace" ) + i  //$NON-NLS-1$
-                              + Messages.getString( "PingTestDialog.notResouved" ) ); //$NON-NLS-1$
-       
+                              + Messages.getString( "PingTestDialog.notResolved" )  //$NON-NLS-1$
+                              + this.outPut.getLineDelimiter() );
       }
     }
     
