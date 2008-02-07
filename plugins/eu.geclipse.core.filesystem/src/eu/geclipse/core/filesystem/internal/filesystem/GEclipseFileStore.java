@@ -338,7 +338,10 @@ public class GEclipseFileStore
       IFileStore dst = ( ( GEclipseFileStore )destination ).getSlave();
 
       if( src.getFileSystem().getScheme().equalsIgnoreCase( dst.getFileSystem().getScheme() ) ) {
-        if (src.toURI().getHost().equalsIgnoreCase( dst.toURI().getHost() ) ) {
+        String srcHost = src.toURI().getHost();
+        
+        if( srcHost != null
+            && srcHost.equalsIgnoreCase( dst.toURI().getHost() ) ) {
           src.move( dst, options, monitor );
           done = true;
         }
