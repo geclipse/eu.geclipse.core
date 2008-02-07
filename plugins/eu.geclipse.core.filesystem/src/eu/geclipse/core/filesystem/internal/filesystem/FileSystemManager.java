@@ -112,4 +112,20 @@ public class FileSystemManager {
     return EFS.getFileSystem( uri.getSlaveScheme() );
   }
 
+  /**
+   * Called when filestore for given uri was changed (e.g. user fetchChildren()
+   * was called to force refreshing)
+   * 
+   * @param uri of file, which was changed
+   * @param fileStore filestore for changed file
+   */
+  public void onFileChanged( final URI uri, final IFileStore fileStore ) {
+    GEclipseURI geclURI = new GEclipseURI( uri );
+    FileStoreRegistry registry = FileStoreRegistry.getInstance();
+    GEclipseFileStore cachedStore = registry.getStore( geclURI );
+    
+    if( cachedStore != null ) {      
+      registry.putStore( new GEclipseFileStore( (GEclipseFileSystem)cachedStore.getFileSystem(), fileStore ) );
+    }
+  }
 }

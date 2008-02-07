@@ -33,7 +33,6 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.core.model.IGridElementManager;
 import eu.geclipse.core.model.IGridModelEvent;
-import eu.geclipse.core.model.IGridModelListener;
 import eu.geclipse.core.model.IManageable;
 
 /**
@@ -332,17 +331,6 @@ public abstract class AbstractGridContainer
   static private GridNotificationService getGridNotificationService() {
     return GridNotificationService.getInstance();
   }
-  
-  /**
-   * To register IGridModelListener within constructor or static method, I cannot call GridRoot.getInstance().
-   * For reason @see bug #209160
-   * So instead of GridRoot, this method is used to register IGridModelListener
-   * @param listener
-   */
-  static protected void staticAddGridModelListener( final IGridModelListener listener ) {
-    getGridNotificationService().addListener( listener );
-  }
-
   
   /**
    * Test if this container can contain the specified element

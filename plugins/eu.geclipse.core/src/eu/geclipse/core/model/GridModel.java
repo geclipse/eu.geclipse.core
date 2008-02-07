@@ -30,6 +30,7 @@ import eu.geclipse.core.internal.model.JobManager;
 import eu.geclipse.core.internal.model.LocalResourceCreator;
 import eu.geclipse.core.internal.model.TransferManager;
 import eu.geclipse.core.internal.model.VoManager;
+import eu.geclipse.core.internal.model.notify.GridNotificationService;
 
 /**
  * The <code>GridModel</code> class is mainly a helper class for dealing
@@ -307,5 +308,17 @@ public class GridModel {
   public static IVoManager getVoManager() {
     return VoManager.getManager();
   }
-  
+ 
+  /**
+   * Add the specified {@link IGridModelListener} to the list of listeners,
+   * which be notified about modifications in grid model. This static method is
+   * used within constructors and class initializers, where cannot call
+   * GridRoot.getInstance().
+   * 
+   * @see "bug 209160 for reason, why cannot call GridRoot.getInstance() within constructors"
+   * @param listener
+   */
+  public static void addGridModelListener( final IGridModelListener listener ) {
+    GridNotificationService.getInstance().addListener( listener );
+  }  
 }

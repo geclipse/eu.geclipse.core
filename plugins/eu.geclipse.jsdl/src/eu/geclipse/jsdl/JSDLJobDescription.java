@@ -53,11 +53,11 @@ import org.xml.sax.SAXException;
 
 import eu.geclipse.core.CoreProblems;
 import eu.geclipse.core.GridException;
+import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridModelListener;
-import eu.geclipse.core.model.impl.AbstractGridContainer;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
 import eu.geclipse.jsdl.internal.Activator;
 import eu.geclipse.jsdl.internal.JsdlAdaptersPlugin;
@@ -123,7 +123,7 @@ public class JSDLJobDescription extends ResourceGridContainer
   private JobIdentificationType jobIdentification;
   private DocumentRoot documentRoot;
   static {
-    AbstractGridContainer.staticAddGridModelListener( createGridModelListener() );
+    GridModel.addGridModelListener( createGridModelListener() );
   }
 
   /**
