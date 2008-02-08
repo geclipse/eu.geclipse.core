@@ -29,7 +29,7 @@ public class ReportingPlugin extends Plugin {
   private static ReportingPlugin plugin;
   
   private IReportingService reportingService;
-	
+
   /**
    * The constructor
    */
