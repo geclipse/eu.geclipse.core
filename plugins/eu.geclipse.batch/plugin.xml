@@ -33,12 +33,6 @@
       </service>
    </extension>
    <extension
-         point="eu.geclipse.core.problemProvider">
-      <provider
-            class="eu.geclipse.batch.BatchProblems">
-      </provider>
-   </extension>
-   <extension
          point="eu.geclipse.core.reporting.problemReporting">
       <problem
             description="IO error occured during the connection"
