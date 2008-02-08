@@ -24,6 +24,8 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 
 import eu.geclipse.core.portforward.IForward;
 import eu.geclipse.terminal.ITerminalView;
@@ -37,7 +39,21 @@ public class SSHWizard extends Wizard implements IInitalizableWizard {
   SSHConnectionWizardPage mainPage;
   ITerminalView termView;
   PortForwardOptionsWizardPage portForwardPage;
-  
+  private String preSelectedHostname;
+
+  public SSHWizard() {
+    // empty constructor
+  }
+
+  public SSHWizard( final String preSelectedHostname ) {
+    this.preSelectedHostname = preSelectedHostname;
+    try {
+      this.termView = (ITerminalView) PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().showView("eu.geclipse.terminal.views.TerminalView");
+    } catch( PartInitException exception ) {
+      Activator.logException( exception );
+    }
+  }
+
   @Override
   public boolean performFinish() {
     final SSHConnectionInfo info = this.mainPage.getConnectionInfo();
@@ -61,6 +77,7 @@ public class SSHWizard extends Wizard implements IInitalizableWizard {
   @Override
   public void addPages() {
     this.mainPage = new SSHConnectionWizardPage( Messages.getString( "SSHWizard.ssh" ) ); //$NON-NLS-1$
+    this.mainPage.setPreselectedHostname( this.preSelectedHostname );
     this.portForwardPage = new PortForwardOptionsWizardPage( Messages.getString( "SSHWizard.ssh" ) ); //$NON-NLS-1$
     addPage( this.mainPage );
     addPage( this.portForwardPage );

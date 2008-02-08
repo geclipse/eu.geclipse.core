@@ -53,13 +53,16 @@ class SSHConnectionComposite extends Composite {
   private Label portLabel = null;
   private Text portText = null;
 
-  SSHConnectionComposite( final Composite parent, final int style, final Listener page ) {
+  SSHConnectionComposite( final Composite parent, final int style, final Listener page, final String preSelectedHostname ) {
     super( parent, style );
     initialize();
     Activator activator = Activator.getDefault();
     IPreferenceStore preferenceStore = activator.getPreferenceStore();
     this.usernameCombo.setPreferences( preferenceStore, USERNAMES );
     this.hostnameCombo.setPreferences( preferenceStore, HOSTNAMES );
+    if ( preSelectedHostname != null ) {
+      this.hostnameCombo.setText( preSelectedHostname );
+    }
     this.usernameCombo.addListener( SWT.Modify, page );
     this.hostnameCombo.addListener( SWT.Modify, page );
     this.passwordText.addListener( SWT.Modify, page );
@@ -77,7 +80,7 @@ class SSHConnectionComposite extends Composite {
     try {
       IGridElement[] vos = GridModel.getVoManager().getChildren(null);
       for ( IGridElement vo : vos ) {
-        ArrayList<AbstractGlueTable> ceTable = GlueQuery.getGlueTable( "GlueCE", "GlueCE", vo.getName() ); //$NON-NLS-1$
+        ArrayList<AbstractGlueTable> ceTable = GlueQuery.getGlueTable( "GlueCE", "GlueCE", vo.getName() ); //$NON-NLS-1$ //$NON-NLS-2$
         for ( AbstractGlueTable table : ceTable ) {
           try {
             String hostname = ( String ) table.getFieldByName( "HostName" ); //$NON-NLS-1$

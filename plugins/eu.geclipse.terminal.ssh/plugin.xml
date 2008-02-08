@@ -43,4 +43,18 @@
             id="eu.geclipse.terminal.ssh.solution.check_install">
       </solution>
    </extension>
+   <extension
+		point="org.eclipse.ui.popupMenus">
+	  <objectContribution
+            id="eu.geclipse.test.framework.objectContribution1"
+            objectClass="eu.geclipse.core.model.IGridComputing">
+         <action
+              class="eu.geclipse.terminal.ssh.internal.OpenAction"
+              enablesFor="?"
+              id="eu.geclipse.terminal.ssh.internal.OpenAction"
+              label="Open SSH terminal...">
+         </action>
+      </objectContribution>
+   </extension>
+   
 </plugin>

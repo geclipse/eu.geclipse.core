@@ -25,17 +25,22 @@ import org.eclipse.swt.widgets.Listener;
 
 class SSHConnectionWizardPage extends WizardPage implements Listener {
   private SSHConnectionComposite composite;
+  private String preSelectedHostname = null;
 
   protected SSHConnectionWizardPage( final String pageName ) {
     super( pageName );
   }
 
   public void createControl( final Composite parent ) {
-    this.composite = new SSHConnectionComposite( parent, SWT.NONE, this );
+    this.composite = new SSHConnectionComposite( parent, SWT.NONE, this, this.preSelectedHostname );
     setPageComplete( false );
     setControl( this.composite );
     IStatus status = this.composite.getStatus();
     setPageComplete( status.getSeverity() != IStatus.ERROR );
+  }
+
+  void setPreselectedHostname( final String hostname ) {
+    this.preSelectedHostname  = hostname;
   }
 
   @Override
