@@ -320,6 +320,7 @@ public class GridElementTransferOperation
                             final IProgressMonitor monitor ) {
 
     TransferParams data = new TransferParams( from, null, to, to.getChild( from.getName() ), monitor );
+
     // Prepare copy operation
     monitor.beginTask( Messages.getString("GridElementTransferOperation.copying_progress") + from.getName(), 100 ); //$NON-NLS-1$
     monitor.setTaskName( Messages.getString("GridElementTransferOperation.copying_progress") + from.getName() ); //$NON-NLS-1$
@@ -572,7 +573,9 @@ public class GridElementTransferOperation
           if ( status.isOK() ) {
             
             try {
-              target.refresh( new SubProgressMonitor( monitor, 1 ) );
+              // bug #216867 File copied into folder expanded on view is not visibled
+              target.setDirty();
+              target.getChildren( new SubProgressMonitor( monitor, 1 ) );              
             } catch( GridModelException gmExc ) {
               // refresh errors should not disturb the operation
               // but should be tracked, therefore just log it
@@ -635,51 +638,21 @@ public class GridElementTransferOperation
   }
   
   private void checkExistingTarget( final TransferParams data ) {
-    
     IFileInfo targetInfo = data.targetFile.fetchInfo();
     if( targetInfo.exists() ) {
-      
       switch( this.overwriteMode ) {
         case ASK:
-        askOverwrite( data, targetInfo );
+          askOverwrite( data, targetInfo );
         break;
         case OVERWRITE_ALL:
           deleteTarget( data );
-          break;
+        break;
         case IGNORE_ALL:
           ignoreTransfer( data );
-          break;
-      }
-      
-      //ISolution overwriteFileSolution = createOverwriteFileSolution( data );
-      
-//      if( this.overwriteAllExistingFiles ) {
-//        try {
-//          overwriteFileSolution.solve();
-//        } catch( InvocationTargetException exception ) {
-//          data.status = new Status( IStatus.ERROR, Activator.PLUGIN_ID, Messages.getString("GridElementTransferOperation.errTargetFileExists"), exception ); //$NON-NLS-1$
-//        }
-//      } else {
-        
-        
-//        String message = String.format( Messages.getString("GridElementTransferOperation.msgCannotTransferFile"), data.targetFile.getName(), data.targetDirectory.getName() ); //$NON-NLS-1$
-//        String reason = String.format( Messages.getString("GridElementTransferOperation.errTargetFileNameExists"), data.targetFile.getName() ); //$NON-NLS-1$
-//        ProblemException problemException = new ProblemException( "eu.geclipse.problem.transfer.fileAlreadyExists", //$NON-NLS-1$
-//                                                                  reason,
-//                                                                  Activator.PLUGIN_ID );
-//        
-//        problemException.getProblem().addSolution( overwriteFileSolution );
-//        problemException.getProblem().addSolution( createOverwriteAllFilesSolution( data, overwriteFileSolution ) );
-//        problemException.getProblem().addSolution( createCancelSolution( data ) );
-//    
-//        if( openProblemDialog( Messages.getString( "GridElementTransferOperation.transfer_name" ), //$NON-NLS-1$
-//                               message,
-//                               problemException ) != ProblemDialog.SOLVE )
-//        {
-//          data.status = Status.CANCEL_STATUS;
-//        }
+        break;
       }
     }
+  }
   
   
   private void askOverwrite( final TransferParams data, final IFileInfo targetInfo ) {
@@ -750,7 +723,7 @@ public class GridElementTransferOperation
     }
   } 
 
-  public String formatURI( final URI uri ) {
+  String formatURI( final URI uri ) {
     String uriString = ""; //$NON-NLS-1$
     GEclipseURI gUri = new GEclipseURI( uri );
     URI slaveURI = gUri.toSlaveURI();
@@ -777,7 +750,7 @@ public class GridElementTransferOperation
     String filename = data.targetFile.getName();
 
     try {          
-      data.monitor.subTask( String.format( "", filename ) ); 
+      data.monitor.subTask( String.format( Messages.getString("GridElementTransferOperation.deletingTarget"), filename ) );  //$NON-NLS-1$
       data.targetFile.delete( EFS.NONE, data.monitor );
       
       if( !data.monitor.isCanceled() ) {
