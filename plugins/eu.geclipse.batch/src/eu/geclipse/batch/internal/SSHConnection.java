@@ -231,14 +231,14 @@ public class SSHConnection {
                                Activator.PLUGIN_ID );
       ISolution solution;
       solution = ReportingPlugin.getReportingService()
-      			   .getSolution( ICoreSolutions.NET_CHECK_INTERNET_CONNECTION, null );
+                          .getSolution( ICoreSolutions.NET_CHECK_INTERNET_CONNECTION, null );
       problem.addSolution( solution );
 
       solution = ReportingPlugin.getReportingService().getSolution( IBatchSolutions.CHECK_USERNAME_AND_PASSWORD, null );
       problem.addSolution( solution );
       
       solution = ReportingPlugin.getReportingService()
-      			   .getSolution( ICoreSolutions.NET_CHECK_FIREWALL, null );
+                     .getSolution( ICoreSolutions.NET_CHECK_FIREWALL, null );
       problem.addSolution( solution );
 
       throw new ProblemException( problem );
@@ -250,7 +250,7 @@ public class SSHConnection {
                                ioExc,
                                Activator.PLUGIN_ID );
       ISolution solution = ReportingPlugin.getReportingService()
-						     .getSolution( ICoreSolutions.NET_CHECK_INTERNET_CONNECTION, null );
+                             .getSolution( ICoreSolutions.NET_CHECK_INTERNET_CONNECTION, null );
       problem.addSolution( solution );
 
       throw new ProblemException( problem );
