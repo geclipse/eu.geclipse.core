@@ -77,8 +77,8 @@ public class AuthenticationTokenManager implements IContentChangeNotifier {
    * to the list of managed tokens.
    * 
    * @param description The description from which to create the new token.
-   * @return A new authentication token constructed from the specfied description.
-   * @throws AuthenticationException If an error occures while creating the token
+   * @return A new authentication token constructed from the specified description.
+   * @throws AuthenticationException If an error occurs while creating the token
    * @see IAuthenticationTokenDescription#createToken()
    */
   public IAuthenticationToken createToken( final IAuthenticationTokenDescription description )
