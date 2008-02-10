@@ -87,14 +87,44 @@
    <extension
          point="eu.geclipse.core.reporting.problemReporting">
       <problem
-            description="Error creating credential"
-            id="eu.geclipse.core.problem.auth.errorCreatingCredential"
-            mailto="contact@geclipse.eu">
+            description="Unable to load certificate"
+            id="eu.geclipse.core.problem.auth.certificateLoadFailed"
+            mailto="">
+      </problem>
+      <problem
+            description="Unable to create credential"
+            id="eu.geclipse.core.problem.auth.credentialCreateFailed"
+            mailto="">
+      </problem>
+      <problem
+            description="Unable to save credential"
+            id="eu.geclipse.core.problem.auth.credentialSaveFailed"
+            mailto="">
+      </problem>
+      <problem
+            description="Invalid token description"
+            id="eu.geclipse.core.problem.auth.invalidTokenDescription"
+            mailto="">
+      </problem>
+      <problem
+            description="Unable to load key file"
+            id="eu.geclipse.core.problem.auth.keyLoadFailed"
+            mailto="">
       </problem>
       <problem
             description="Login failed"
             id="eu.geclipse.core.problem.auth.loginFailed"
             mailto="contact@geclipse.eu">
+      </problem>
+      <problem
+            description="Unable to activate token"
+            id="eu.geclipse.core.problem.auth.tokenActivateFailed"
+            mailto="">
+      </problem>
+      <problem
+            description="Authentication token has not been activated yet"
+            id="eu.geclipse.core.problem.auth.tokenNotYetValid"
+            mailto="">
       </problem>
       <problem
             description="Corrupted file"
