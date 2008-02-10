@@ -40,7 +40,6 @@ import eu.geclipse.core.auth.ICaCertificate;
 import eu.geclipse.core.auth.ICaCertificateLoader;
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.reporting.ProblemException;
-import eu.geclipse.core.util.tar.TarArchiveException;
 import eu.geclipse.core.util.tar.TarEntry;
 import eu.geclipse.core.util.tar.TarInputStream;
 
@@ -97,25 +96,18 @@ public class EUGridPMACertificateLoader
       GZIPInputStream zStream = new GZIPInputStream( bStream );
       TarInputStream tiStream = new TarInputStream( zStream );
       TarEntry tEntry;
-      try {
-        while ( ( tEntry = tiStream.getNextEntry() ) != null ) {
-          if ( !tEntry.isDirectory() ) {
-            
-            IPath oPath = tEntry.getPath();
-            String extension = oPath.getFileExtension();
-            
-            if ( PEMCertificate.CERT_FILE_EXTENSION.equalsIgnoreCase( extension ) ) {
-              certificateData = readFromStream( tiStream );
-            }
-            
-            else if ( EUGridPMACertificate.INFO_FILE_EXTENSION.equalsIgnoreCase( extension ) ) {
-              infoData = readFromStream( tiStream );
-            }
-            
+      while ( ( tEntry = tiStream.getNextEntry() ) != null ) {
+        if ( !tEntry.isDirectory() ) {
+
+          IPath oPath = tEntry.getPath();
+          String extension = oPath.getFileExtension();
+
+          if ( PEMCertificate.CERT_FILE_EXTENSION.equalsIgnoreCase( extension ) ) {
+            certificateData = readFromStream( tiStream );
+          } else if ( EUGridPMACertificate.INFO_FILE_EXTENSION.equalsIgnoreCase( extension ) ) {
+            infoData = readFromStream( tiStream );
           }
         }
-      } catch ( TarArchiveException taExc ) {
-        throw new ProblemException( ICoreProblems.IO_UNSPECIFIED_PROBLEM, taExc, Activator.PLUGIN_ID );
       }
       
       lMonitor.done();
@@ -211,7 +203,7 @@ public class EUGridPMACertificateLoader
   }
   
   private byte[] readFromStream( final TarInputStream inputStream )
-      throws TarArchiveException {
+      throws ProblemException {
     ByteArrayOutputStream baoStream = new ByteArrayOutputStream();
     inputStream.copyEntryContents( baoStream );
     return baoStream.toByteArray();

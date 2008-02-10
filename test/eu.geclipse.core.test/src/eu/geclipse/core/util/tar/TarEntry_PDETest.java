@@ -11,16 +11,19 @@
  *
  * Contributors:
  *    Ariel Garcia - initial implementation
+ *                 -  updated to new problem reporting
  *****************************************************************************/
 
 package eu.geclipse.core.util.tar;
 
-import org.junit.Test;
+import java.util.Random;
 import static org.junit.Assert.*;
 import junit.framework.AssertionFailedError;
-import java.util.Random;
+import org.junit.Test;
+
 import org.eclipse.core.runtime.Path;
-import eu.geclipse.core.util.tar.TarArchiveException;
+
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.core.util.tar.TarEntry;
 
 /**
@@ -155,7 +158,7 @@ public class TarEntry_PDETest {
     try {
       new TarEntry( new byte[ BLOCK_SZ + 1 ] );
       throw new AssertionFailedError();
-    } catch ( TarArchiveException tExc ) {
+    } catch ( ProblemException tExc ) {
       // The test was ok, we expect an exception here
     }
 
@@ -171,7 +174,7 @@ public class TarEntry_PDETest {
     try {
       new TarEntry( corruptedHeader );
       throw new AssertionFailedError();
-    } catch ( TarArchiveException tExc ) {
+    } catch ( ProblemException tExc ) {
       // The test was ok, we expect an exception here
     }
   }
@@ -211,7 +214,7 @@ public class TarEntry_PDETest {
       assertTrue( header_dir2_size == entry.getSize() );
       assertEquals( new Path( header_dir2_name ), entry.getPath() );
 
-    } catch ( TarArchiveException tExc ) {
+    } catch ( ProblemException tExc ) {
       throw new AssertionFailedError();
     }
         
@@ -235,7 +238,7 @@ public class TarEntry_PDETest {
       entry = new TarEntry( header_file );
       assertFalse( entry.isNull() );
       
-    } catch ( TarArchiveException tExc ) {
+    } catch ( ProblemException tExc ) {
       throw new AssertionFailedError();
     }
   }
@@ -258,7 +261,7 @@ public class TarEntry_PDETest {
       entry = new TarEntry( header_dir );
       assertTrue( entry.isDirectory() );
       
-    } catch ( TarArchiveException tExc ) {
+    } catch ( ProblemException tExc ) {
       throw new AssertionFailedError();
     }
   }

@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2007, 2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,6 +11,7 @@
  *
  * Contributors:
  *    Jie Tao - test class (Plug-in test)
+ *    Ariel Garcia -  updated to new problem reporting
  *****************************************************************************/
 
 package eu.geclipse.core.util.tar;
@@ -22,9 +23,10 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import org.junit.Assert;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
+
+import eu.geclipse.core.reporting.ProblemException;
 
 
 /**
@@ -77,10 +79,10 @@ public class TarInputStream_PDETest {
 
   /**
    * tests the method {@link TarInputStream#getNextEntry()}
-   * @throws TarArchiveException 
+   * @throws ProblemException 
    */
   @Test
-  public void testGetNextEntry() throws TarArchiveException {
+  public void testGetNextEntry() throws ProblemException {
     TarEntry entry = instream.getNextEntry();
     Assert.assertNotNull( entry );
     Assert.assertEquals( new Long( 2408 ), new Long( entry.getSize() ) );
@@ -88,11 +90,11 @@ public class TarInputStream_PDETest {
 
   /**
    * tests the method {@link TarInputStream#copyEntryContents(java.io.OutputStream)}
-   * @throws TarArchiveException 
+   * @throws ProblemException 
    * @throws IOException 
    */
   @Test
-  public void testCopyEntryContents() throws TarArchiveException, IOException {
+  public void testCopyEntryContents() throws ProblemException, IOException {
     OutputStream outstream = new ByteArrayOutputStream();
     instream.copyEntryContents( outstream );
     outstream.close();

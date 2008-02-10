@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2007 g-Eclipse Consortium 
+ * Copyright (c) 2007, 2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,18 +11,25 @@
  *
  * Contributors:
  *    Ariel Garcia - initial implementation
+ *                 - updated to new problem reporting
  *****************************************************************************/
 
 package eu.geclipse.core.util.tar;
 
 import java.lang.Exception;
+
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+
+import eu.geclipse.core.ICoreProblems;
+import eu.geclipse.core.internal.Activator;
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * An entry in a tar file, either a folder or a file.
  * 
- * @author ariel
+ * @author agarcia
  */
 public class TarEntry {
 
@@ -78,14 +85,14 @@ public class TarEntry {
    * Creates a new TarEntry from the given metadata block.
    * 
    * @param header A 512 bytes block which is to be parsed for tar metadata
-   * @throws TarArchiveException if the header could not be parsed or
+   * @throws ProblemException if the header could not be parsed or
    * some unsupported feature was found
    */
-  public TarEntry( final byte[] header ) throws TarArchiveException {
+  public TarEntry( final byte[] header ) throws ProblemException {
 
     // The metadata block must be BLOCK_SZ bytes
     if ( header.length != BLOCK_SZ ) {
-      throw new TarArchiveException( TarProblems.WRONG_HEADER_SIZE );
+      throw new ProblemException( ICoreProblems.TAR_WRONG_HEADER_SIZE, Activator.PLUGIN_ID );
     }
 
     // Check if the block is a null entry
@@ -105,9 +112,9 @@ public class TarEntry {
      */
     String version = readString( header, OFFSET_MAGIC, LENGTH_MAGIC );
     if ( ! version.equals( MAGIC )
-        || (header[ OFFSET_VERSION ] != SPACE)
-        || (header[ OFFSET_VERSION + 1 ] != 0) ) {
-      throw new TarArchiveException( TarProblems.UNSUPPORTED_ENTRY_TYPE );
+        || ( header[ OFFSET_VERSION ] != SPACE )
+        || ( header[ OFFSET_VERSION + 1 ] != 0 ) ) {
+      throw new ProblemException( ICoreProblems.TAR_UNSUPPORTED_ENTRY_TYPE, Activator.PLUGIN_ID );
     }
         
     /*
@@ -136,11 +143,11 @@ public class TarEntry {
       size = size.replaceAll( "^ +", "" ); //$NON-NLS-1$ //$NON-NLS-2$
       this.entrySize = Long.parseLong( size, 8 );
     } catch ( Exception exc ) {
-      throw new TarArchiveException( TarProblems.INVALID_ENTRY_SIZE, exc );
+      throw new ProblemException( ICoreProblems.TAR_INVALID_ENTRY_SIZE, exc, Activator.PLUGIN_ID );
     }
     if ( (header[ OFFSET_SIZE + LENGTH_SIZE - 1 ] != 0)
       && (header[ OFFSET_SIZE + LENGTH_SIZE - 1 ] != SPACE) ) {
-        throw new TarArchiveException( TarProblems.INVALID_ENTRY_SIZE ) ;
+        throw new ProblemException( ICoreProblems.TAR_INVALID_ENTRY_SIZE, Activator.PLUGIN_ID ) ;
     }
 
     // Get the entry type, a single char flag
@@ -154,12 +161,12 @@ public class TarEntry {
       case ENTRY_TYPE_CHARDEV:
       case ENTRY_TYPE_BLOCKDEV:
       case ENTRY_TYPE_FIFO:
-        throw new TarArchiveException( TarProblems.UNSUPPORTED_ENTRY_TYPE );
+        throw new ProblemException( ICoreProblems.TAR_UNSUPPORTED_ENTRY_TYPE, Activator.PLUGIN_ID );
       case ENTRY_TYPE_DIR:
         this.entryType = ENTRY_FLAG_DIR;
         break;
       default:
-        throw new TarArchiveException( TarProblems.INVALID_ENTRY_TYPE );
+        throw new ProblemException( ICoreProblems.TAR_INVALID_ENTRY_TYPE, Activator.PLUGIN_ID );
     }
   }
   
@@ -176,7 +183,7 @@ public class TarEntry {
     StringBuffer result = new StringBuffer();
 
     int i = 0;
-    while ( (buffer[ offset + i ] != 0) && i < length ) {
+    while ( ( buffer[ offset + i ] != 0 ) && i < length ) {
       result = result.append( (char) buffer[ offset + i ] );
       i++;
     }
@@ -187,7 +194,7 @@ public class TarEntry {
    * Verify the header's checksum
    */
   private void verifyChecksum( final byte[] header )
-    throws TarArchiveException
+    throws ProblemException
   {
     int checksum = 0;
     int storedChecksum;
@@ -214,15 +221,15 @@ public class TarEntry {
       s = s.replaceAll( "^ +", "" ); //$NON-NLS-1$ //$NON-NLS-2$
       storedChecksum = Integer.parseInt( s, 8 );
     } catch ( Exception exc ) {
-      throw new TarArchiveException( TarProblems.BAD_HEADER_CHECKSUM, exc );
+      throw new ProblemException( ICoreProblems.TAR_BAD_HEADER_CHECKSUM, exc, Activator.PLUGIN_ID );
     }
-    if ( (header[ OFFSET_CHECKSUM + LENGTH_CHECKSUM - 2 ] != 0)
-      || (header[ OFFSET_CHECKSUM + LENGTH_CHECKSUM - 1 ] != SPACE) ) {
-      throw new TarArchiveException( TarProblems.BAD_HEADER_CHECKSUM ) ;
+    if ( ( header[ OFFSET_CHECKSUM + LENGTH_CHECKSUM - 2 ] != 0 )
+      || ( header[ OFFSET_CHECKSUM + LENGTH_CHECKSUM - 1 ] != SPACE ) ) {
+      throw new ProblemException( ICoreProblems.TAR_BAD_HEADER_CHECKSUM, Activator.PLUGIN_ID ) ;
     }
     
     if ( checksum != storedChecksum ) {
-      throw new TarArchiveException( TarProblems.BAD_HEADER_CHECKSUM );
+      throw new ProblemException( ICoreProblems.TAR_BAD_HEADER_CHECKSUM, Activator.PLUGIN_ID );
     }
   }
 

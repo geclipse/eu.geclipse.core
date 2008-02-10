@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2007 g-Eclipse Consortium 
+ * Copyright (c) 2007, 2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,6 +11,7 @@
  *
  * Contributors:
  *    Ariel Garcia - initial implementation
+ *                 - updated to new problem reporting
  *****************************************************************************/
 
 package eu.geclipse.core.util.tar;
@@ -19,11 +20,15 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.IOException;
 
+import eu.geclipse.core.ICoreProblems;
+import eu.geclipse.core.internal.Activator;
+import eu.geclipse.core.reporting.ProblemException;
+
 /**
  * This class provides tar extraction capabilities.
  * It does <b>not</b> extend {@link InputStream}.
  * 
- * @author ariel
+ * @author agarcia
  */
 public class TarInputStream {
 
@@ -59,15 +64,14 @@ public class TarInputStream {
    * Gets the next entry in the tar archive.
    * 
    * @return A TarEntry object, the next entry in the tar
-   * @throws TarArchiveException if some issue was found reading
-   * the tar stream
+   * @throws ProblemException if some issue was found reading the tar stream
    */
-  public TarEntry getNextEntry() throws TarArchiveException {
+  public TarEntry getNextEntry() throws ProblemException {
 
     TarEntry nextEntry;
     
     // Pending data must be flushed first
-    if ( (this.currentEntry != null) && this.dataPending ) {
+    if ( ( this.currentEntry != null ) && this.dataPending ) {
       copyEntryContents( (OutputStream) null );
     }
     
@@ -82,13 +86,11 @@ public class TarInputStream {
        */
       if ( nextEntry.isNull() )  {
         nextEntry = new TarEntry( readBlock( BLOCK_SZ ) );
-        /*if ( nextEntry.isNull() ) {
-          return null;
-        }*/
       }
     } catch ( IOException ioExc ) {
-      throw new TarArchiveException( TarProblems.UNSPECIFIED_IO_PROBLEM,
-                                     ioExc );
+      throw new ProblemException( ICoreProblems.IO_UNSPECIFIED_PROBLEM,
+                                  ioExc,
+                                  Activator.PLUGIN_ID );
     }
     
     if ( ! nextEntry.isNull() ) {
@@ -99,11 +101,10 @@ public class TarInputStream {
       }
   
       this.currentEntry = nextEntry;
-      
     }
-
-    return nextEntry.isNull() ? null : this.currentEntry;
     
+    // Two consecutive null entries mark the end of the tarball
+    return nextEntry.isNull() ? null : this.currentEntry;
   }
 
   /**
@@ -136,11 +137,10 @@ public class TarInputStream {
   /**
    * Copy the contents of the entry to the given output stream.
    * 
-   * @throws TarArchiveException if some issue was found reading
-   * the tar stream
+   * @throws ProblemException if some issue was found reading the tar stream
    */
   public void copyEntryContents( final OutputStream outStream )
-    throws TarArchiveException
+    throws ProblemException
   {
     /*
      * The files are stored in BLOCK_SZ byte blocks.
@@ -163,15 +163,17 @@ public class TarInputStream {
         // We use outStream = null to flush the data
         if ( outStream != null ) {
           // The last block can be partially filled
-          if ( (blocks == 1) && (remain != 0) ) {
+          if ( ( blocks == 1 ) && ( remain != 0 ) ) {
             oSize = remain;
           }
           outStream.write( buffer, 0, oSize );
         }
         blocks--;
       }
-    } catch (IOException ioExc) {
-      throw new TarArchiveException( TarProblems.UNSPECIFIED_IO_PROBLEM );
+    } catch ( IOException ioExc ) {
+      throw new ProblemException( ICoreProblems.IO_UNSPECIFIED_PROBLEM,
+                                  ioExc,
+                                  Activator.PLUGIN_ID );
     }
     
     // File data has been read from the tarStream now
