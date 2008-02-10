@@ -46,7 +46,6 @@
       <provider class="eu.geclipse.core.auth.AuthenticationProblems"/>
       <provider class="eu.geclipse.core.security.GridGSSProblems"/>
       <provider class="eu.geclipse.core.model.GridModelProblems"/>
-      <provider class="eu.geclipse.core.util.tar.TarProblems"/>
    </extension>
    <extension
          point="eu.geclipse.core.authTokenProvider">
