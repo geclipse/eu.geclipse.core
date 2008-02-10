@@ -237,6 +237,14 @@
             mailto="contact@geclipse.eu">
       </problem>
       <solution
+            description="Check your imported CA-certificates"
+            id="eu.geclipse.core.solution.auth.checkCaCertificates">
+      </solution>
+      <solution
+            description="Check your VO settings"
+            id="eu.geclipse.core.solution.auth.checkVoSettings">
+      </solution>
+      <solution
             description="Download the file(s) again"
             id="eu.geclipse.core.solution.io.downloadFileAgain">
       </solution>
@@ -278,6 +286,10 @@
       <solution
             description="Use another port if possible"
             id="eu.geclipse.core.solution.net.useAnotherPort">
+      </solution>
+      <solution
+            description="Check your system&apos;s time"
+            id="eu.geclipse.core.solution.sys.checkSystemTime">
       </solution>
    </extension>
    <extension

@@ -21,6 +21,12 @@ public interface ICoreSolutions {
    * Please keep the list sorted by extensionID!
    */
   
+  // Auth
+  public static final String AUTH_CHECK_CA_CERTIFICATES
+    = "eu.geclipse.core.solution.auth.checkCaCertificates"; //$NON-NLS-1$
+  public static final String AUTH_CHECK_VO_SETTINGS
+    = "eu.geclipse.core.solution.auth.checkVoSettings"; //$NON-NLS-1$
+  
   // IO
   public static final String IO_DOWNLOAD_FILE_AGAIN
     = "eu.geclipse.core.solution.io.downloadFileAgain"; //$NON-NLS-1$
@@ -29,7 +35,7 @@ public interface ICoreSolutions {
   
   // Net
   public static final String NET_CHECK_FIREWALL
-    = "eu.geclipse.core.solution.net.checkInternetConnection"; //$NON-NLS-1$
+    = "eu.geclipse.core.solution.net.checkFirewall"; //$NON-NLS-1$
   public static final String NET_CHECK_INTERNET_CONNECTION
     = "eu.geclipse.core.solution.net.checkInternetConnection"; //$NON-NLS-1$
   public static final String NET_CHECK_PORT_ALREADY_IN_USE
@@ -44,5 +50,9 @@ public interface ICoreSolutions {
     = "eu.geclipse.core.solution.net.contactServerAdmin"; //$NON-NLS-1$
   public static final String NET_USE_ANOTHER_PORT
     = "eu.geclipse.core.solution.net.useAnotherPort"; //$NON-NLS-1$
+  
+  // Sys
+  public static final String SYS_CHECK_SYSTEM_TIME
+    = "eu.geclipse.core.solution.sys.checkSystemTime"; //$NON-NLS-1$
 
 }
