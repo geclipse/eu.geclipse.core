@@ -21,16 +21,49 @@ public interface ICoreProblems {
   /*
    * Please keep the list sorted by extensionID!
    */
+  
+  // Auth
+  public static final String AUTH_ERROR_CREATING_CREDENTIAL
+    = "eu.geclipse.core.problem.auth.errorCreatingCredential"; //$NON-NLS-1$
+  public static final String AUTH_LOGIN_FAILED
+    = "eu.geclipse.core.problem.auth.loginFailed"; //$NON-NLS-1$
+  
   // IO
-  public static final String UNSPECIFIED_IO_PROBLEM = "eu.geclipse.problem.io.unspecified"; //$NON-NLS-1$
+  public static final String IO_CORRUPTED_FILE
+    = "eu.geclipse.core.problem.io.corruptedFile"; //$NON-NLS-1$
+  public static final String IO_UNSPECIFIED_PROBLEM
+    = "eu.geclipse.core.problem.io.unspecified"; //$NON-NLS-1$
+  
+  // Jobs
+  public static final String JOB_SUBMISSION_FAILED
+    = "eu.geclipse.core.problem.job.submissionFailed"; //$NON-NLS-1$
+  
   // Net
-  public static final String BIND_FAILED = "eu.geclipse.problem.net.bindFailed"; //$NON-NLS-1$
-  public static final String CONNECTION_FAILED = "eu.geclipse.problem.net.connectionFailed"; //$NON-NLS-1$
-  public static final String CONNECTION_TIMEOUT = "eu.geclipse.problem.net.connectionTimeout"; //$NON-NLS-1$
-  public static final String UNKNOWN_HOST = "eu.geclipse.problem.net.unknownHost"; //$NON-NLS-1$
-  public static final String MALFORMED_URL = "eu.geclipse.core.problemMalformedURL"; //$NON-NLS-1$
+  public static final String NET_BIND_FAILED
+    = "eu.geclipse.core.problem.net.bindFailed"; //$NON-NLS-1$
+  public static final String NET_CONNECTION_FAILED
+    = "eu.geclipse.core.problem.net.connectionFailed"; //$NON-NLS-1$
+  public static final String NET_CONNECTION_TIMEOUT
+    = "eu.geclipse.core.problem.net.connectionTimeout"; //$NON-NLS-1$
+  public static final String NET_MALFORMED_URL
+    = "eu.geclipse.core.problem.malformedURL"; //$NON-NLS-1$
+  public static final String NET_UNKNOWN_HOST
+    = "eu.geclipse.core.problem.net.unknownHost"; //$NON-NLS-1$
+  
   // System
-  public static final String SYSTEM_TIME_CHECK_FAILED = "eu.geclipse.problem.sys.systemTimeCheckFailed"; //$NON-NLS-1$
-  // gEclipse core
-  public static final String JOB_SUBMISSION_FAILED = "eu.geclipse.core.problemJobSubmissionFailed"; //$NON-NLS-1$
+  public static final String SYS_SYSTEM_TIME_CHECK_FAILED
+    = "eu.geclipse.core.problem.sys.systemTimeCheckFailed"; //$NON-NLS-1$
+  
+  // Tar
+  public static final String TAR_BAD_HEADER_CHECKSUM
+    = "eu.geclipse.core.problem.tar.badHeaderChecksum"; //$NON-NLS-1$
+  public static final String TAR_INVALID_ENTRY_SIZE
+    = "eu.geclipse.core.problem.tar.invalidEntrySize"; //$NON-NLS-1$
+  public static final String TAR_INVALID_ENTRY_TYPE
+    = "eu.geclipse.core.problem.tar.invalidEntryType"; //$NON-NLS-1$
+  public static final String TAR_UNSUPPORTED_ENTRY_TYPE
+    = "eu.geclipse.core.problem.tar.unsupportedEntryType"; //$NON-NLS-1$
+  public static final String TAR_WRONG_HEADER_SIZE
+    = "eu.geclipse.core.problem.tar.wrongHeaderSize"; //$NON-NLS-1$
+
 }

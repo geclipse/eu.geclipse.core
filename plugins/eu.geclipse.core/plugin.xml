@@ -88,119 +88,167 @@
    <extension
          point="eu.geclipse.core.reporting.problemReporting">
       <problem
-            description="Unspecified IO problem"
-            id="eu.geclipse.problem.io.unspecified"
-            mailto="contact@geclipse.eu">
-      </problem>
-      <problem
-            description="Could not bind socket"
-            id="eu.geclipse.problem.net.bindFailed">
-         <reference
-               referenceID="eu.geclipse.solution.net.checkPortAlreadyInUse">
-         </reference>
-         <reference
-               referenceID="eu.geclipse.solution.net.useAnotherPort">
-         </reference>
-      </problem>
-      <problem
-            description="Failed to establish internet connection"
-            id="eu.geclipse.problem.net.connectionFailed"
-            mailto="contact@geclipse.eu">
-         <reference
-               referenceID="eu.geclipse.solution.net.checkInternetConnection">
-         </reference>
-         <reference
-               referenceID="eu.geclipse.solution.net.checkServerURL">
-         </reference>
-         <reference
-               referenceID="eu.geclipse.solution.net.checkProxySettings">
-         </reference>
-      </problem>
-      <problem
-            description="A timeout has occurred on a socket read or accept"
-            id="eu.geclipse.problem.net.connectionTimeout"
-            mailto="contact@geclipse.eu">
-         <reference
-               referenceID="eu.geclipse.solution.net.contactServerAdmin">
-         </reference>
-         <reference
-               referenceID="eu.geclipse.solution.net.checkTimeoutSettings">
-         </reference>
-      </problem>
-      <problem
-            description="Unknown hostname"
-            id="eu.geclipse.problem.net.unknownHost">
-         <reference
-               referenceID="eu.geclipse.solution.net.checkInternetConnection">
-         </reference>
-         <reference
-               referenceID="eu.geclipse.solution.net.checkServerURL">
-         </reference>
-      </problem>
-      <problem
-            description="Could not determine a reference time via the network"
-            id="eu.geclipse.problem.sys.systemTimeCheckFailed"
-            mailto="contact@geclipse.eu">
-      </problem>
-      <problem
             description="Error creating credential"
-            id="eu.geclipse.problem.auth.errorCreatingCredential"
+            id="eu.geclipse.core.problem.auth.errorCreatingCredential"
             mailto="contact@geclipse.eu">
       </problem>
       <problem
             description="Login failed"
-            id="eu.geclipse.problem.auth.loginFailed"
+            id="eu.geclipse.core.problem.auth.loginFailed"
+            mailto="contact@geclipse.eu">
+      </problem>
+      <problem
+            description="Corrupted file"
+            id="eu.geclipse.core.problem.io.corruptedFile">
+      </problem>
+      <problem
+            description="Unspecified IO problem"
+            id="eu.geclipse.core.problem.io.unspecified"
+            mailto="contact@geclipse.eu">
+      </problem>      
+      <problem
+            description="Job submission failed"
+            id="eu.geclipse.core.problem.job.submissionFailed">
+      </problem>
+      <problem
+            description="Could not bind socket"
+            id="eu.geclipse.core.problem.net.bindFailed">
+         <reference
+               referenceID="eu.geclipse.core.solution.net.checkPortAlreadyInUse">
+         </reference>
+         <reference
+               referenceID="eu.geclipse.core.solution.net.useAnotherPort">
+         </reference>
+      </problem>
+      <problem
+            description="Failed to establish internet connection"
+            id="eu.geclipse.core.problem.net.connectionFailed"
+            mailto="contact@geclipse.eu">
+         <reference
+               referenceID="eu.geclipse.core.solution.net.checkInternetConnection">
+         </reference>
+         <reference
+               referenceID="eu.geclipse.core.solution.net.checkServerURL">
+         </reference>
+         <reference
+               referenceID="eu.geclipse.core.solution.net.checkProxySettings">
+         </reference>
+      </problem>
+      <problem
+            description="A timeout has occurred on a socket read or accept"
+            id="eu.geclipse.core.problem.net.connectionTimeout"
+            mailto="contact@geclipse.eu">
+         <reference
+               referenceID="eu.geclipse.core.solution.net.contactServerAdmin">
+         </reference>
+         <reference
+               referenceID="eu.geclipse.core.solution.net.checkTimeoutSettings">
+         </reference>
+      </problem>
+      <problem
+            description="URL is nor correct"
+            id="eu.geclipse.core.problem.net.malformedURL">
+         <reference
+               referenceID="eu.geclipse.core.solution.net.checkServerURL">
+         </reference>
+      </problem>
+      <problem
+            description="Unknown hostname"
+            id="eu.geclipse.core.problem.net.unknownHost">
+         <reference
+               referenceID="eu.geclipse.core.solution.net.checkInternetConnection">
+         </reference>
+         <reference
+               referenceID="eu.geclipse.core.solution.net.checkServerURL">
+         </reference>
+      </problem>
+      <problem
+            description="Could not determine a reference time via the network"
+            id="eu.geclipse.core.problem.sys.systemTimeCheckFailed"
+            mailto="contact@geclipse.eu">
+      </problem>
+      <problem
+            description="Bad checksum in tar entry, file might be corrupted"
+            id="eu.geclipse.core.problem.tar.badHeaderChecksum">
+         <reference
+               referenceID="eu.geclipse.core.solution.io.downloadFileAgain">
+         </reference>
+         <reference
+               referenceID="eu.geclipse.core.solution.io.downloadFromAnotherSource">
+         </reference>
+      </problem>
+      <problem
+            description="Wrong size field in tar entry, file might be corrupted"
+            id="eu.geclipse.core.problem.tar.invalidEntrySize">
+         <reference
+               referenceID="eu.geclipse.core.solution.io.downloadFileAgain">
+         </reference>
+         <reference
+               referenceID="eu.geclipse.core.solution.io.downloadFromAnotherSource">
+         </reference>
+      </problem>
+      <problem
+            description="Unknown entry type in tar entry, file might be corrupted"
+            id="eu.geclipse.core.problem.tar.invalidEntryType">
+         <reference
+               referenceID="eu.geclipse.core.solution.io.downloadFileAgain">
+         </reference>
+         <reference
+               referenceID="eu.geclipse.core.solution.io.downloadFromAnotherSource">
+         </reference>
+      </problem>
+      <problem
+            description="Unsupported entry type found in tarball"
+            id="eu.geclipse.core.problem.tar.unsupportedEntryType"
+            mailto="contact@geclipse.eu">
+      </problem>
+      <problem
+            description="Internal error, wrong tar entry header length"
+            id="eu.geclipse.core.problem.tar.wrongHeaderSize"
             mailto="contact@geclipse.eu">
       </problem>
       <solution
+            description="Download the file(s) again"
+            id="eu.geclipse.core.solution.io.downloadFileAgain">
+      </solution>
+      <solution
+            description="Download the file(s) from another source"
+            id="eu.geclipse.core.solution.io.downloadFromAnotherSource">
+      </solution>
+      <solution
             description="Check if a firewall blocks your connections"
-            id="eu.geclipse.solution.net.checkFirewall">
+            id="eu.geclipse.core.solution.net.checkFirewall">
       </solution>
       <solution
             description="Check your internet connection"
-            id="eu.geclipse.solution.net.checkInternetConnection">
+            id="eu.geclipse.core.solution.net.checkInternetConnection">
       </solution>
       <solution
             description="Check if the port is already in use"
-            id="eu.geclipse.solution.net.checkPortAlreadyInUse">
+            id="eu.geclipse.core.solution.net.checkPortAlreadyInUse">
       </solution>
       <solution
             description="Check your proxy settings"
-            id="eu.geclipse.solution.net.checkProxySettings">
+            id="eu.geclipse.core.solution.net.checkProxySettings">
          <preferenceTag
                pageID="org.eclipse.ui.net.NetPreferences">
          </preferenceTag>
       </solution>
       <solution
             description="Check your server URL"
-            id="eu.geclipse.solution.net.checkServerURL">
+            id="eu.geclipse.core.solution.net.checkServerURL">
       </solution>
       <solution
             description="Set your connection timeout settings to a higher value"
-            id="eu.geclipse.solution.net.checkTimeoutSettings">
+            id="eu.geclipse.core.solution.net.checkTimeoutSettings">
       </solution>
       <solution
             description="Contact the administrator, the server may be down"
-            id="eu.geclipse.solution.net.contactServerAdmin">
+            id="eu.geclipse.core.solution.net.contactServerAdmin">
       </solution>
       <solution
             description="Use another port if possible"
-            id="eu.geclipse.solution.net.useAnotherPort">
-      </solution>
-      <problem
-            description="JobSubmissionFailed"
-            id="eu.geclipse.core.problemJobSubmissionFailed">
-      </problem>
-      <problem
-            description="URL is nor correct"
-            id="eu.geclipse.core.problemMalformedURL">
-         <reference
-               referenceID="eu.geclipse.core.solutionCheckUrl">
-         </reference>
-      </problem>
-      <solution
-            description="Check if URL is correct"
-            id="eu.geclipse.core.solutionCheckUrl">
+            id="eu.geclipse.core.solution.net.useAnotherPort">
       </solution>
    </extension>
    <extension

@@ -59,7 +59,7 @@ public class EUGridPMACertificateLoader
     try {
       return EUGridPMACertificate.readFromFile( path );
     } catch ( IOException ioExc ) {
-      throw new ProblemException( ICoreProblems.UNSPECIFIED_IO_PROBLEM, ioExc, Activator.PLUGIN_ID );
+      throw new ProblemException( ICoreProblems.IO_UNSPECIFIED_PROBLEM, ioExc, Activator.PLUGIN_ID );
     }
   }
   
@@ -87,7 +87,7 @@ public class EUGridPMACertificateLoader
       try {
         connection.connect();
       } catch ( SocketTimeoutException toExc ) {
-        throw new ProblemException( ICoreProblems.CONNECTION_TIMEOUT, toExc, Activator.PLUGIN_ID );
+        throw new ProblemException( ICoreProblems.NET_CONNECTION_TIMEOUT, toExc, Activator.PLUGIN_ID );
       }
       lMonitor.worked( 1 );
       
@@ -115,8 +115,9 @@ public class EUGridPMACertificateLoader
           }
         }
       } catch ( TarArchiveException taExc ) {
-        throw new ProblemException( ICoreProblems.UNSPECIFIED_IO_PROBLEM, taExc, Activator.PLUGIN_ID );
+        throw new ProblemException( ICoreProblems.IO_UNSPECIFIED_PROBLEM, taExc, Activator.PLUGIN_ID );
       }
+      
       lMonitor.done();
       
       lMonitor.subTask( Messages.getString("EUGridPMACertificateLoader.generate_cert_task") ); //$NON-NLS-1$
@@ -126,7 +127,7 @@ public class EUGridPMACertificateLoader
       lMonitor.worked( 1 );
       
     } catch ( IOException ioExc ) {
-      throw new ProblemException( ICoreProblems.CONNECTION_FAILED, ioExc, Activator.PLUGIN_ID );
+      throw new ProblemException( ICoreProblems.NET_CONNECTION_FAILED, ioExc, Activator.PLUGIN_ID );
     } finally {
       lMonitor.done();
     }
@@ -154,7 +155,7 @@ public class EUGridPMACertificateLoader
       try {
         connection.connect();
       } catch ( SocketTimeoutException toExc ) {
-        throw new ProblemException( ICoreProblems.CONNECTION_TIMEOUT, toExc, Activator.PLUGIN_ID );
+        throw new ProblemException( ICoreProblems.NET_CONNECTION_TIMEOUT, toExc, Activator.PLUGIN_ID );
       }
       lMonitor.worked( 1 );
       
@@ -186,7 +187,7 @@ public class EUGridPMACertificateLoader
       lMonitor.done();
       
     } catch ( IOException ioExc ) {
-      throw new ProblemException( ICoreProblems.CONNECTION_FAILED, ioExc, Activator.PLUGIN_ID );
+      throw new ProblemException( ICoreProblems.NET_CONNECTION_FAILED, ioExc, Activator.PLUGIN_ID );
     } finally {
       lMonitor.done();
     }

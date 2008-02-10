@@ -42,7 +42,7 @@ public class PEMCertificateLoader
     try {
       return PEMCertificate.readFromFile( path );
     } catch ( IOException ioExc ) {
-      throw new ProblemException( ICoreProblems.UNSPECIFIED_IO_PROBLEM, ioExc, Activator.PLUGIN_ID );
+      throw new ProblemException( ICoreProblems.IO_UNSPECIFIED_PROBLEM, ioExc, Activator.PLUGIN_ID );
     }
   }
 
@@ -65,7 +65,7 @@ public class PEMCertificateLoader
       result = PEMCertificate.readFromFile( filePath );
       lMonitor.worked( 1 );
     } catch ( IOException ioExc ) {
-      throw new ProblemException( ICoreProblems.UNSPECIFIED_IO_PROBLEM, ioExc, Activator.PLUGIN_ID );
+      throw new ProblemException( ICoreProblems.IO_UNSPECIFIED_PROBLEM, ioExc, Activator.PLUGIN_ID );
     } finally {
       lMonitor.done();
     }

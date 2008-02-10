@@ -163,17 +163,17 @@ public class TimeChecker {
     if ( i_min == SERVERS.length ) {
       IProblem problem;
       problem = ReportingPlugin.getReportingService()
-                  .getProblem( ICoreProblems.SYSTEM_TIME_CHECK_FAILED,
+                  .getProblem( ICoreProblems.SYS_SYSTEM_TIME_CHECK_FAILED,
                                null,
                                problemExc,
                                Activator.PLUGIN_ID );
       problem.addReason( Messages.getString( "TimeChecker.no_servers_reachable" ) ); //$NON-NLS-1$
       ISolution solution;
       solution = ReportingPlugin.getReportingService()
-                   .getSolution( ICoreSolutions.CHECK_INTERNET_CONNECTION, null );
+                   .getSolution( ICoreSolutions.NET_CHECK_INTERNET_CONNECTION, null );
       problem.addSolution( solution );
       solution = ReportingPlugin.getReportingService()
-                   .getSolution( ICoreSolutions.CHECK_FIREWALL, null );
+                   .getSolution( ICoreSolutions.NET_CHECK_FIREWALL, null );
       problem.addSolution( solution );
       throw new ProblemException( problem );
     }
@@ -184,13 +184,13 @@ public class TimeChecker {
     disp = time[ SERVERS.length -1 ] - time[ i_min ];
     if ( disp >= MAX_SERVER_SPREAD ) {
       IProblem problem = ReportingPlugin.getReportingService()
-                           .getProblem( ICoreProblems.SYSTEM_TIME_CHECK_FAILED,
+                           .getProblem( ICoreProblems.SYS_SYSTEM_TIME_CHECK_FAILED,
                                         null,
                                         problemExc,
                                         Activator.PLUGIN_ID );
       problem.addReason( Messages.getString( "TimeChecker.inconsistent_servers" ) ); //$NON-NLS-1$
       ISolution solution = ReportingPlugin.getReportingService()
-                             .getSolution( ICoreSolutions.CONTACT_SERVER_ADMIN, null );
+                             .getSolution( ICoreSolutions.NET_CONTACT_SERVER_ADMIN, null );
       problem.addSolution( solution );
       throw new ProblemException( problem );
     }
@@ -215,7 +215,7 @@ public class TimeChecker {
     try {
       addr = InetAddress.getByName( serverHostname );
     } catch ( UnknownHostException uhe ) {
-      throw new ProblemException( ICoreProblems.UNKNOWN_HOST, uhe, Activator.PLUGIN_ID );
+      throw new ProblemException( ICoreProblems.NET_UNKNOWN_HOST, uhe, Activator.PLUGIN_ID );
     }
     
     /*
@@ -228,7 +228,7 @@ public class TimeChecker {
       s = new DatagramSocket();
       s.setSoTimeout( TIMEOUT );
     } catch ( SocketException se ) {
-      throw new ProblemException( ICoreProblems.BIND_FAILED, se, Activator.PLUGIN_ID );
+      throw new ProblemException( ICoreProblems.NET_BIND_FAILED, se, Activator.PLUGIN_ID );
     }
     
     // Empty datagram to be sent to the rdate server
@@ -239,7 +239,7 @@ public class TimeChecker {
     try {      
       s.send( p );
     } catch ( Exception exc ) {
-      throw new ProblemException( ICoreProblems.CONNECTION_FAILED, exc, Activator.PLUGIN_ID );
+      throw new ProblemException( ICoreProblems.NET_CONNECTION_FAILED, exc, Activator.PLUGIN_ID );
     }
     
     // Datagram to collect the server's answer, 4 bytes
@@ -250,7 +250,7 @@ public class TimeChecker {
     try {
       s.receive( p );
     } catch ( Exception exc ) {
-      throw new ProblemException( ICoreProblems.CONNECTION_TIMEOUT, exc, Activator.PLUGIN_ID );
+      throw new ProblemException( ICoreProblems.NET_CONNECTION_TIMEOUT, exc, Activator.PLUGIN_ID );
     }
     
     // Read value from the buffer

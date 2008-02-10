@@ -161,13 +161,13 @@ public class SSHConnection {
     if ( ! this.isSessionActive() ) {
       IProblem problem;
       problem = ReportingPlugin.getReportingService()
-                  .getProblem( ICoreProblems.CONNECTION_FAILED,
+                  .getProblem( ICoreProblems.NET_CONNECTION_FAILED,
                                null,
                                null,
                                Activator.PLUGIN_ID );
       ISolution solution;
       solution = ReportingPlugin.getReportingService()
-                   .getSolution( ICoreSolutions.CHECK_INTERNET_CONNECTION, null );
+                   .getSolution( ICoreSolutions.NET_CHECK_INTERNET_CONNECTION, null );
       problem.addSolution( solution );
       
       throw new ProblemException( problem );
@@ -225,18 +225,20 @@ public class SSHConnection {
     } catch( JSchException jschExc ) {
       IProblem problem;
       problem = ReportingPlugin.getReportingService()
-                  .getProblem( ICoreProblems.CONNECTION_FAILED,
+                  .getProblem( ICoreProblems.NET_CONNECTION_FAILED,
                                null,
                                jschExc,
                                Activator.PLUGIN_ID );
       ISolution solution;
-      solution = ReportingPlugin.getReportingService().getSolution( ICoreSolutions.CHECK_INTERNET_CONNECTION, null );
+      solution = ReportingPlugin.getReportingService()
+      			   .getSolution( ICoreSolutions.NET_CHECK_INTERNET_CONNECTION, null );
       problem.addSolution( solution );
 
       solution = ReportingPlugin.getReportingService().getSolution( IBatchSolutions.CHECK_USERNAME_AND_PASSWORD, null );
       problem.addSolution( solution );
       
-      solution = ReportingPlugin.getReportingService().getSolution( ICoreSolutions.CHECK_FIREWALL, null );
+      solution = ReportingPlugin.getReportingService()
+      			   .getSolution( ICoreSolutions.NET_CHECK_FIREWALL, null );
       problem.addSolution( solution );
 
       throw new ProblemException( problem );
@@ -248,7 +250,7 @@ public class SSHConnection {
                                ioExc,
                                Activator.PLUGIN_ID );
       ISolution solution = ReportingPlugin.getReportingService()
-      .getSolution( ICoreSolutions.CHECK_INTERNET_CONNECTION, null );
+						     .getSolution( ICoreSolutions.NET_CHECK_INTERNET_CONNECTION, null );
       problem.addSolution( solution );
 
       throw new ProblemException( problem );
