@@ -160,9 +160,6 @@
             id="eu.geclipse.ui.connection.managers.srm.SRMConnectionWizard"
             name="SRM"
             icon="icons/obj16/fslink_obj.gif"/>
-   </extension>
-   <extension
-         point="eu.geclipse.ui.connectionWizard">
       <wizard
             class="eu.geclipse.ui.wizards.connection.managers.local.LocalConnectionWizard"
             id="eu.geclipse.ui.wizards.connection.managers.local.LocalConnectionWizard"
