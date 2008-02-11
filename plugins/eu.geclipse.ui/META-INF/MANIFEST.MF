@@ -6,21 +6,21 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: eu.geclipse.ui.internal.Activator
 Bundle-Vendor: %Bundle-Vendor
 Bundle-Localization: plugin
-Require-Bundle: org.eclipse.core.filesystem,
+Require-Bundle: org.eclipse.compare,
+ org.eclipse.core.filesystem,
  org.eclipse.core.runtime,
- org.eclipse.compare,
  org.eclipse.debug.ui,
+ org.eclipse.emf.edit.ui,
+ org.eclipse.help,
  org.eclipse.search,
+ org.eclipse.ui.forms,
  org.eclipse.ui.ide,
  org.eclipse.ui.navigator,
  eu.geclipse.core,
- org.eclipse.help,
- org.eclipse.ui.forms,
- org.eclipse.emf.edit.ui,
- eu.geclipse.core.jobs,
  eu.geclipse.core.filesystem,
- eu.geclipse.info,
- eu.geclipse.core.reporting
+ eu.geclipse.core.jobs,
+ eu.geclipse.core.reporting,
+ eu.geclipse.info
 Eclipse-LazyStart: true
 Export-Package: eu.geclipse.ui,
  eu.geclipse.ui.adapters,
