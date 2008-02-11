@@ -365,15 +365,15 @@ public class GridElementTransferOperation
       // Prepare copy operation
       if ( data.status.isOK() && ( inStream != null ) && ( outStream != null ) ) {
         
-        byte[] buffer = new byte[ 1024 ];
-        Integer totalKb =Integer.valueOf( (int) Math.ceil((double)length/(double)buffer.length) ) ;
+        byte[] buffer = new byte[ 1024 * 64 ];
+        Integer totalKb = Integer.valueOf( (int) Math.ceil((double)length/1024) ) ;
         
         SubProgressMonitor subMonitor = new SubProgressMonitor( monitor, 84 );
-        subMonitor.beginTask( Messages.getString("GridElementTransferOperation.copying_progress") + from.getName(), totalKb.intValue() ); //$NON-NLS-1$
+        subMonitor.beginTask( Messages.getString("GridElementTransferOperation.copying_progress") + from.getName(), (int)length ); //$NON-NLS-1$
         subMonitor.subTask( Messages.getString("GridElementTransferOperation.copying_progress") + from.getName() ); //$NON-NLS-1$
         
         // Copy the data
-        int kb_counter = 0;
+        long byteCounter = 0;
         while ( !subMonitor.isCanceled() && data.status.isOK() ) {
           
           int bytesRead = -1;
@@ -393,7 +393,7 @@ public class GridElementTransferOperation
           if ( bytesRead == -1 ) {
             break;
           }
-          
+
           // Write data to target
           try {
             outStream.write( buffer, 0, bytesRead );
@@ -405,13 +405,12 @@ public class GridElementTransferOperation
                                  ioExc );
           }
           
-          kb_counter++;
-          subMonitor.worked( 1 );
+          byteCounter += bytesRead;
+          subMonitor.worked( bytesRead );
           subMonitor.subTask( String.format( Messages.getString("GridElementTransferOperation.transfer_progress_format"),  //$NON-NLS-1$
                                              data.sourceFileInfo.getName(),
-//                                             new Integer( (int)(100./length*buffer.length*kb_counter) ),
-                                             new Integer( (int)(100.*( (double)(kb_counter-1) * (double)buffer.length + bytesRead ) / length ) ),
-                                             new Integer( kb_counter ),
+                                             new Integer( (int)(100.* byteCounter / length ) ),
+                                             new Integer( (int)(byteCounter/1024) ),
                                              totalKb ) );
           
         }
