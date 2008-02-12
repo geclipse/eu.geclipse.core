@@ -43,9 +43,8 @@
    <extension
          point="eu.geclipse.core.problemProvider">
       <provider class="eu.geclipse.core.CoreProblems"/>
-      <provider class="eu.geclipse.core.auth.AuthenticationProblems"/>
-      <provider class="eu.geclipse.core.security.GridGSSProblems"/>
       <provider class="eu.geclipse.core.model.GridModelProblems"/>
+      <provider class="eu.geclipse.core.security.GridGSSProblems"/>
    </extension>
    <extension
          point="eu.geclipse.core.authTokenProvider">
