@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,11 +11,14 @@
  *
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
+ *    Ariel Garcia      - updated to new problem reporting
  *****************************************************************************/
 
 package eu.geclipse.core.auth;
 
-import eu.geclipse.core.GridException;
+import eu.geclipse.core.reporting.IProblem;
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * This exception is thrown by methods dealing with security tokens.
@@ -23,43 +26,87 @@ import eu.geclipse.core.GridException;
  * @author stuempert-m
  */
 public class AuthenticationException
-    extends GridException {
+    extends ProblemException {
   
   /**
    * The serial version uid.
    */
-  private static final long serialVersionUID = 2736623942948428527L;
-
+  private static final long serialVersionUID = 2736623942948428528L;
+    
   /**
    * Create a new Authentication Exception with the specified problem ID.
    * 
-   * @param problemID The unique ID of the corresponding problem.
+   * @param problemID   The ID of the problem that should be reported.
+   * @param pluginID    The ID of the plug-in where the problem happened.
+   * 
+   * @see #ProblemException(String,String)
    */
-  public AuthenticationException( final int problemID ) {
-    super( problemID );
+  public AuthenticationException( final String problemID,
+                                  final String pluginID ) {
+    super( problemID, pluginID );
   }
   
   /**
-   * Create a new Authentication Exception with the specified problem ID and
-   * a string that contains the description.
+   * Create a new Authentication Exception with the specified problem ID
+   * and the causing exception.
    * 
-   * @param problemID The unique ID of the corresponding problem.
-   * @param description Description string of the problem
+   * @param problemID   The ID of the problem that should be reported.
+   * @param exception   A {@link Throwable} that may have caused the problem.
+   * @param pluginID    The ID of the plug-in where the problem happened.
+   * 
+   * @see #ProblemException(String,Throwable,String)
    */
-  public AuthenticationException( final int problemID,
-                                  final String description ) {
-    super( problemID, description );
+  public AuthenticationException( final String problemID,
+                                  final Throwable exception,
+                                  final String pluginID ) {
+    super( problemID, exception, pluginID );
   }
-
+  
   /**
-   * Create a new Authentication Exception with the specified problem ID.
+   * Create a new Authentication Exception with the specified problem ID
+   * and an alternate description.
    * 
-   * @param problemID The unique ID of the corresponding problem.
-   * @param exc The exception that caused the problem.
+   * @param problemID   The ID of the problem that should be reported.
+   * @param description A description that will replace the problems standard description.
+   * @param pluginID    The ID of the plug-in where the problem happened.
+   * 
+   * @see #ProblemException(String,String,String)
    */
-  public AuthenticationException( final int problemID,
-                                  final Throwable exc ) {
-    super( problemID, exc );
+  public AuthenticationException( final String problemID,
+                                  final String description,
+                                  final String pluginID ) {
+    super( problemID, description, pluginID );
+  }
+  
+  /**
+   * Create a new Authentication Exception with the specified problem ID,
+   * an alternate description, and the causing exception.
+   * 
+   * @param problemID   The ID of the problem that should be reported.
+   * @param description An optional description that may replace the
+   *                    problems standard description.
+   * @param exception   An optional {@link Throwable} that may have caused
+   *                    the problem.
+   * @param pluginID    The ID of the plug-in where the problem happened.
+   * 
+   * @see #ProblemException(String,String,Throwable,String)
+   */
+  public AuthenticationException( final String problemID,
+                                  final String description,
+                                  final Throwable exception,
+                                  final String pluginID ) {
+    super( problemID, description, exception, pluginID );
+  }
+  
+  /**
+   * Create a new Authentication Exception with the specified associated problem.
+   * 
+   * @param problem The problem associated to this exception.
+   * 
+   * @see #ProblemException(IProblem)
+   */
+  public AuthenticationException( final IProblem problem ) {
+    super( problem );
   }
 
 }

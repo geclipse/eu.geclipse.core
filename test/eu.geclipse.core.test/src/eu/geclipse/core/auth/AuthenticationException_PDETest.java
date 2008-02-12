@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,7 +10,8 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributors:
- *    Jie Tao - test class (Plug-in test)
+ *    Jie Tao      - test class (Plug-in test)
+ *    Ariel Garcia - updated to new problem reporting
  *****************************************************************************/
 
 package eu.geclipse.core.auth;
@@ -18,56 +19,103 @@ package eu.geclipse.core.auth;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import eu.geclipse.core.CoreProblems;
 
-/** this class test the constructors in class AuthenticationException
- * all constructors are tested
+import eu.geclipse.core.ICoreProblems;
+import eu.geclipse.core.internal.Activator;
+import eu.geclipse.core.reporting.IProblem;
+import eu.geclipse.core.reporting.ReportingPlugin;
+
+
+/**
+ * This class tests all the constructors in the AuthenticationException class.
+ * 
  * @author tao-j
- *
  */
 public class AuthenticationException_PDETest {
 
-  int problemid;
+  IProblem problem;
+  String problemId;
+  String problemDesc;
   
-  /**setup
+  /**
+   * Setup
    * @throws Exception
    */
   @Before
   public void setUp() throws Exception
   {
-    this.problemid = CoreProblems.JOB_SUBMISSION_FAILED;
+    this.problemId = ICoreProblems.JOB_SUBMISSION_FAILED;
+    this.problem = ReportingPlugin.getReportingService()
+                     .getProblem( this.problemId, null, null, Activator.PLUGIN_ID );
+    this.problemDesc = this.problem.getDescription();
   }
 
-  /** Tests the method {@link AuthenticationException#AuthenticationException(int)}
-   * 
+  /**
+   * Test the method {@link AuthenticationException#AuthenticationException(String,String)}
    */
   @Test
-  public void testAuthenticationExceptionInt()
+  public void testAuthenticationExceptionStrStr()
   {
-    AuthenticationException auex = new AuthenticationException (this.problemid);
-    Assert.assertEquals( new Integer( this.problemid ), new Integer( auex.getProblem().getID()) );
+    AuthenticationException auExc = new AuthenticationException( this.problemId,
+                                                                 Activator.PLUGIN_ID );
+    Assert.assertNotNull( auExc );
+    Assert.assertEquals( this.problemDesc, auExc.getProblem().getDescription() );
+  }
+  
+  /**
+   * Test the method {@link AuthenticationException#AuthenticationException(String,Throwable,String)}
+   */
+  @Test
+  public void testAuthenticationExceptionStrThrowableStr()
+  {
+    Throwable exception = new Throwable();
+    AuthenticationException auExc = new AuthenticationException( this.problemId,
+                                                                 exception,
+                                                                 Activator.PLUGIN_ID );
+    Assert.assertNotNull( auExc );
+    Assert.assertEquals( exception, auExc.getProblem().getException() );
+  }
+  
+  /**
+   * Test the method {@link AuthenticationException#AuthenticationException(String,String,String)}
+   */
+  @Test
+  public void testAuthenticationExceptionStrStrStr()
+  {
+    String message = new String( "Test new description" ); //$NON-NLS-1$
+    AuthenticationException auExc = new AuthenticationException( this.problemId,
+                                                                 message,
+                                                                 Activator.PLUGIN_ID );
+    Assert.assertNotNull( auExc );
+    Assert.assertEquals( message, auExc.getProblem().getDescription() );
+  }
+  
+  /**
+   * Test the method {@link AuthenticationException#AuthenticationException(String,String,Throwable,String)}
+   */
+  @Test
+  public void testAuthenticationExceptionStrStrThrowableStr()
+  {
+    String message = new String( "Test new description" ); //$NON-NLS-1$
+    Throwable exception = new Throwable();
+    AuthenticationException auExc = new AuthenticationException( this.problemId,
+                                                                 message,
+                                                                 exception,
+                                                                 Activator.PLUGIN_ID );
+    Assert.assertNotNull( auExc );
+    Assert.assertEquals( message, auExc.getProblem().getDescription() );
+    Assert.assertEquals( exception, auExc.getProblem().getException() );
+  }
+  
+  /**
+   * Test the method {@link AuthenticationException#AuthenticationException(IProblem)}
+   */
+  @Test
+  public void testAuthenticationExceptionIProblem()
+  {
+    AuthenticationException auExc = new AuthenticationException( this.problem );
+    Assert.assertNotNull( auExc );
+    Assert.assertEquals( this.problem, auExc.getProblem() );
   }
 
-  /** Tests the method {@link AuthenticationException#AuthenticationException(int, String)}
-   * 
-   */
-  @Test
-  public void testAuthenticationExceptionIntString()
-  {
-   String message = new String( "jobsubfailed"); //$NON-NLS-1$
-   AuthenticationException auex = new AuthenticationException (this.problemid,message);
-   Assert.assertEquals( new Integer( this.problemid ), new Integer( auex.getProblem().getID()) );
-   Assert.assertEquals("Job Submission failed",auex.getProblem().getText() ); //$NON-NLS-1$
-  }
-
-  /** Tests the method {@link AuthenticationException#AuthenticationException(int, Throwable)}
-   * 
-   */
-  @Test
-  public void testAuthenticationExceptionIntThrowable()
-  {
-    Throwable exc = new Throwable();
-    AuthenticationException auex = new AuthenticationException (this.problemid,exc);
-    Assert.assertEquals( new Integer( this.problemid ), new Integer( auex.getProblem().getID()) );
-  }
 }
