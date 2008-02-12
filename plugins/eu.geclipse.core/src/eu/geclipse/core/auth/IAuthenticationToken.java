@@ -37,7 +37,7 @@ public interface IAuthenticationToken {
    * {@link #setActive(boolean, IProgressMonitor)} method instead. 
    * 
    * @param active If true the token will be activated, otherwise it will be deactivated.
-   * @throws AuthenticationException If an error occures while activating this token.
+   * @throws AuthenticationException If an error occurs while activating this token.
    * @see #setActive(boolean, IProgressMonitor)
    */
   public void setActive( final boolean active ) throws AuthenticationException;
@@ -50,7 +50,7 @@ public interface IAuthenticationToken {
    * @param progress A progress monitor to show the progress of the activation procedure.
    * Normally this is not used when deactivating the token. If the activation procedure is
    * not time critical use {@link #setActive(boolean)} instead.
-   * @throws AuthenticationException If an error occures while activating this token.
+   * @throws AuthenticationException If an error occurs while activating this token.
    * @see #setActive(boolean)
    */
   public void setActive( final boolean active, final IProgressMonitor progress ) throws AuthenticationException;
@@ -62,7 +62,7 @@ public interface IAuthenticationToken {
    * connection to the Grid. After the token was successfully validated it should have an
    * unique ID.
    * 
-   * @throws AuthenticationException If an error occures while validating this token.
+   * @throws AuthenticationException If an error occurs while validating this token.
    * @see #validate(IProgressMonitor)
    */
   public void validate() throws AuthenticationException;
@@ -77,7 +77,7 @@ public interface IAuthenticationToken {
    * @param progress A progress monitor to show the progress of the validation procedure.
    * Normally this is not used when deactivating the token. If the activation procedure is
    * not time critical use {@link #validate()} instead.
-   * @throws AuthenticationException If an error occures while validating this token.
+   * @throws AuthenticationException If an error occurs while validating this token.
    * @see #validate()
    */
   public void validate( final IProgressMonitor progress ) throws AuthenticationException;

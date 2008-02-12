@@ -70,7 +70,7 @@ public interface IGridContainer extends IGridElement {
    * method.
    * 
    * @param child The element to be deleted.
-   * @throws GridModelException If a problem occures during the deletion.
+   * @throws GridModelException If a problem occurs during the deletion.
    * @see IGridElement#dispose()
    */
   public void delete( final IGridElement child ) throws GridModelException;
@@ -110,7 +110,7 @@ public interface IGridContainer extends IGridElement {
    * for lazy containers. May be null. 
    * @return This container's children.
    * @throws GridModelException If this is a lazy container it may be
-   * possible that an exception occures while the children are fetched.
+   * possible that an exception occurs while the children are fetched.
    */
   public IGridElement[] getChildren( final IProgressMonitor monitor ) throws GridModelException;
   
@@ -159,7 +159,7 @@ public interface IGridContainer extends IGridElement {
    * 
    * @param monitor A progress monitor used to give the caller feedback about
    * the progress of the operation.
-   * @throws GridModelException If a problem occures during the refresh
+   * @throws GridModelException If a problem occurs during the refresh
    * operation.
    */
   public void refresh( final IProgressMonitor monitor ) throws GridModelException;

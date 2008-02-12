@@ -292,7 +292,7 @@ public abstract class AbstractGridElementManager
    * 
    * @param element The element to be added.
    * @return True if the operation was successful. 
-   * @throws GridModelException If an error occures.
+   * @throws GridModelException If an error occurs.
    */
   public boolean addElement( final IGridElement element ) throws GridModelException {
     boolean result = false;

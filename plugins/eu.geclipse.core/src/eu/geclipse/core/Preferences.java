@@ -48,7 +48,7 @@ public class Preferences {
    * @param url The {@link URL} from which to create the connection.
    * @return The connection created from the specified URL and initialised
    * with the current proxy and timeout settings.
-   * @throws IOException If an IO-error occures while this connection is
+   * @throws IOException If an IO-error occurs while this connection is
    * created. 
    */
   static public URLConnection getURLConnection( final URL url )

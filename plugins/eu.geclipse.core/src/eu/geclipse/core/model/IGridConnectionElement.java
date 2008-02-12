@@ -37,7 +37,7 @@ public interface IGridConnectionElement extends IGridResource, IGridContainer {
    * May be <code>null</code>.
    * 
    * @return The file info or <code>null</code>.
-   * @throws CoreException If a problem occures when creating the file info.
+   * @throws CoreException If a problem occurs when creating the file info.
    */
   public IFileInfo getConnectionFileInfo() throws CoreException;
   

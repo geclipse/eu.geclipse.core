@@ -279,7 +279,7 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
    * separate thread and provides a progress monitor for the validation process.
    * 
    * @param token The token to be validated.
-   * @throws InvocationTargetException Thrown if an exception occures in the
+   * @throws InvocationTargetException Thrown if an exception occurs in the
    *           validation thread.
    * @throws InterruptedException Thrown if the validation thread is
    *           interrupted.
@@ -307,7 +307,7 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
    * thread and provides a progress monitor for the activation process.
    * 
    * @param token The token to be activated.
-   * @throws InvocationTargetException Thrown if an exception occures in the
+   * @throws InvocationTargetException Thrown if an exception occurs in the
    *           activation thread.
    * @throws InterruptedException Thrown if the activation thread is
    *           interrupted.

@@ -30,7 +30,7 @@ public interface IStorableElementManager
    * elements should be saved (one per file or all in one big
    * file...).
    * 
-   * @throws GridModelException If an error occures during the
+   * @throws GridModelException If an error occurs during the
    * save operation. This may for example be due to an
    * <code>IOException</code>.
    */
@@ -45,7 +45,7 @@ public interface IStorableElementManager
    * formerly contained elements are deleted before the managers loads
    * the new elements.
    * 
-   * @throws GridModelException If an error occures during the
+   * @throws GridModelException If an error occurs during the
    * load operation. This may for example be due to an
    * <code>IOException</code>.
    */

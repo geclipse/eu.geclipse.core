@@ -28,7 +28,7 @@ public interface ITransferManager
    * 
    * @param sources The elements to be transfered.
    * @param target The destination of the transfer.
-   * @throws GridModelException If any error occures.
+   * @throws GridModelException If any error occurs.
    */
   public void queueTransfer( final IGridElement[] sources,
                              final IGridContainer target )

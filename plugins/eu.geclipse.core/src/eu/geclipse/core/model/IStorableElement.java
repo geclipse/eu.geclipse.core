@@ -31,7 +31,7 @@ public interface IStorableElement extends IGridElement {
    * loaded properties. The element itself has to know from
    * where to load itself.
    * 
-   * @throws GridModelException If an error occures while loading
+   * @throws GridModelException If an error occurs while loading
    * this element. This is mainly due to <code>IOException</code>s.
    */
   public void load() throws GridModelException;
@@ -40,7 +40,7 @@ public interface IStorableElement extends IGridElement {
    * Write the properties of this element. The element itself has
    * to know where to save itself. 
    * 
-   * @throws GridModelException If an error occures while saving
+   * @throws GridModelException If an error occurs while saving
    * this element. This is mainly due to <code>IOException</code>s.
    */
   public void save() throws GridModelException;

@@ -33,7 +33,7 @@ public interface IVirtualOrganization
    * 
    * @return The info service that can be queried for VO related
    * information. 
-   * @throws GridModelException If an error occures while the service
+   * @throws GridModelException If an error occurs while the service
    * is fetched.
    */
   public IGridInfoService getInfoService() throws GridModelException;
@@ -43,7 +43,7 @@ public interface IVirtualOrganization
    * 
    * @return All services that are currently available for
    * this VO.
-   * @throws GridModelException If an error occures while the services
+   * @throws GridModelException If an error occurs while the services
    * are fetched.
    */
   public IGridService[] getServices() throws GridModelException;
@@ -55,7 +55,7 @@ public interface IVirtualOrganization
    * this virtual organization.
    * 
    * @return A list of all currently available job submission services.
-   * @throws GridModelException If an error occures while retrieving
+   * @throws GridModelException If an error occurs while retrieving
    * the services.
    */
   public IGridJobSubmissionService[] getJobSubmissionServices() throws GridModelException;

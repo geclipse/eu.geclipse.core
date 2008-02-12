@@ -620,7 +620,7 @@ public class GridElementTransferOperation
    *  
    * @param element The element to get the file store from.
    * @return The element's file store.
-   * @throws CoreException If an error occures while retrieving the file store.
+   * @throws CoreException If an error occurs while retrieving the file store.
    */
   private IFileStore getFileStore( final IGridElement element )
       throws CoreException {
