@@ -272,7 +272,7 @@ public abstract class AbstractGridContainer
    * be deleted.
    * 
    * @param element The new child of this container or <code>null</code>
-   * if an error occures.
+   * if an error occurs.
    * @return The newly added element.
    */
   protected IGridElement addElement( final IGridElement element )
