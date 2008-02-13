@@ -22,7 +22,11 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 
+import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.internal.model.GridRoot;
 import eu.geclipse.core.internal.model.notify.GridModelEvent;
 import eu.geclipse.core.internal.model.notify.GridNotificationService;
@@ -33,7 +37,9 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.core.model.IGridElementManager;
 import eu.geclipse.core.model.IGridModelEvent;
+import eu.geclipse.core.model.IGridModelListener;
 import eu.geclipse.core.model.IManageable;
+import eu.geclipse.core.util.MasterMonitor;
 
 /**
  * Base implementation of the {@link IGridContainer} interface that
@@ -42,6 +48,49 @@ import eu.geclipse.core.model.IManageable;
 public abstract class AbstractGridContainer
     extends AbstractGridElement
     implements IGridContainer {
+  
+  private class ChildFetcher
+      extends Job {
+    
+    private AbstractGridContainer container;
+    
+    private IProgressMonitor externalMonitor;
+    
+    public ChildFetcher( final AbstractGridContainer container ) {
+      super( "Child Fetcher @ " + container.getName() );
+      this.container = container;
+    }
+    
+    public boolean isFetching() {
+      return getState() != NONE;
+    }
+    
+    public void setExternalMonitor( final IProgressMonitor monitor ) {
+      this.externalMonitor = monitor;
+    }
+    
+    @Override
+    protected IStatus run( final IProgressMonitor monitor ) {
+      
+      IStatus status = Status.CANCEL_STATUS;
+      IProgressMonitor mon = new MasterMonitor( monitor, this.externalMonitor );
+      
+      this.container.lock();
+      
+      try {
+        this.container.deleteAll();
+        status = this.container.fetchChildren( mon );
+      } catch ( GridModelException gmExc ) {
+        status = new Status( IStatus.ERROR, Activator.PLUGIN_ID, "Fetch Failed", gmExc );
+      } finally {
+        this.container.unlock();
+      }
+      
+      return status;
+      
+    }
+    
+  }
   
   /**
    * List of currently know children.
@@ -53,6 +102,11 @@ public abstract class AbstractGridContainer
    * Dirty flag of this container.
    */
   private boolean dirty;
+  
+  /**
+   * Job used internally for fetching the containers children.
+   */
+  private ChildFetcher fetcher;
 
   protected AbstractGridContainer() {
     setDirty();
@@ -127,23 +181,11 @@ public abstract class AbstractGridContainer
    */
   public IGridElement[] getChildren( final IProgressMonitor monitor )
       throws GridModelException {
-    
-    lock();
-    
-    try {
-    
-      if ( isLazy() && isDirty() ) {
-        deleteAll();
-        boolean result = fetchChildren( monitor );
-        setDirty( !result );
-      }
-      
-    } finally {
-      unlock();
+    if ( isLazy() && isDirty() ) {
+      IStatus status = startFetch( monitor );
+      setDirty( ! status.isOK() );
     }
-    
     return this.children.toArray( new IGridElement[ this.children.size() ] );
-    
   }
 
   /* (non-Javadoc)
@@ -277,10 +319,10 @@ public abstract class AbstractGridContainer
    * @return True if the operation was successful.
    */
   @SuppressWarnings("unused")
-  protected boolean fetchChildren( @SuppressWarnings("unused")
+  protected IStatus fetchChildren( @SuppressWarnings("unused")
                                    final IProgressMonitor monitor )
       throws GridModelException {
-    return true;
+    return Status.OK_STATUS;
   }
   
   protected void removeElement( final IGridElement element ) {
@@ -299,6 +341,9 @@ public abstract class AbstractGridContainer
   protected void setDirty( final boolean d ) {
     this.dirty = d;
     if ( d ) {
+      if ( ( this.fetcher != null ) && ( this.fetcher.isFetching() ) ) {
+        this.fetcher.cancel();
+      }
       for ( IGridElement child : this.children ) {
         if ( child instanceof IGridContainer ) {
           ( ( IGridContainer ) child ).setDirty();
@@ -312,7 +357,7 @@ public abstract class AbstractGridContainer
   }
   
   protected void unlock() {
-    getGridNotificationService().unlock();
+    getGridNotificationService().unlock( false );
   }
   
   private void fireGridModelEvent( final int type,
@@ -330,6 +375,37 @@ public abstract class AbstractGridContainer
   
   static private GridNotificationService getGridNotificationService() {
     return GridNotificationService.getInstance();
+  }
+  
+  /**
+   * To register IGridModelListener within constructor or static method, I cannot call GridRoot.getInstance().
+   * For reason @see bug #209160
+   * So instead of GridRoot, this method is used to register IGridModelListener
+   * @param listener
+   */
+  static protected void staticAddGridModelListener( final IGridModelListener listener ) {
+    getGridNotificationService().addListener( listener );
+  }
+  
+  private IStatus startFetch( final IProgressMonitor monitor ) {
+
+    if ( this.fetcher == null ) {
+      this.fetcher = new ChildFetcher( this );
+    }
+    
+    if ( ! this.fetcher.isFetching() ) {
+      this.fetcher.setExternalMonitor( monitor );
+      this.fetcher.schedule();
+    }
+    
+    try {
+      this.fetcher.join();
+    } catch ( InterruptedException intExc ) {
+      // Silently ignored
+    }
+    
+    return this.fetcher.getResult();
+    
   }
   
   /**

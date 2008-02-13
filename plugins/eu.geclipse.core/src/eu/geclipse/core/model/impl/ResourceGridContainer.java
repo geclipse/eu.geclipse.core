@@ -26,7 +26,9 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Status;
 
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.internal.Messages;
@@ -123,14 +125,15 @@ public class ResourceGridContainer
    * @see eu.geclipse.core.model.impl.AbstractGridContainer#fetchChildren(org.eclipse.core.runtime.IProgressMonitor)
    */
   @Override
-  protected boolean fetchChildren( final IProgressMonitor monitor ) {
+  protected IStatus fetchChildren( final IProgressMonitor monitor ) {
     
     IProgressMonitor localMonitor
       = monitor != null
       ? monitor
       : new NullProgressMonitor();
 
-    boolean result = false;
+    IStatus result = Status.CANCEL_STATUS;
+    
     deleteAll();
     if ( ( this.resource != null ) && ( this.resource instanceof IContainer ) ) {
       lock();
@@ -152,16 +155,16 @@ public class ResourceGridContainer
             Activator.logException( throwable );
           }
         }
-        result = true;
+        result = Status.OK_STATUS;
       } catch ( CoreException cExc ) {
         Activator.logException( cExc );
+        result = new Status( IStatus.ERROR, Activator.PLUGIN_ID, "Fetch Error", cExc );
       } finally {
         unlock();
       }
     }
 
     localMonitor.done();
-    setDirty( !result );
 
     return result;
 

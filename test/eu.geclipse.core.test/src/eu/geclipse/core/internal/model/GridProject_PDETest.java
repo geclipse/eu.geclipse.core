@@ -93,7 +93,7 @@ public class GridProject_PDETest {
    */
   @Test
   public void testFetchChildren() {
-   Assert.assertTrue( gridproject.fetchChildren( null ) );
+   Assert.assertTrue( gridproject.fetchChildren( null ).isOK() );
   }
 
   /**tests the method GridProject#GridProject(IProject)

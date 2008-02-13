@@ -31,6 +31,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import eu.geclipse.core.filesystem.GEclipseFileSystem;
 import eu.geclipse.core.filesystem.GEclipseURI;
 import eu.geclipse.core.filesystem.internal.Activator;
+import eu.geclipse.core.util.MasterMonitor;
 
 /**
  * Implementation of {@link IFileStore} for the g-Eclipse file system.
@@ -63,6 +64,11 @@ public class GEclipseFileStore
    * The names of the children if yet fetched.
    */
   private String[] childNames;
+  
+  /**
+   * External progress monitor used to show progress information.
+   */
+  private IProgressMonitor externalMonitor;
   
   /**
    * Create a new master store from the specified slave store. The
@@ -121,7 +127,7 @@ public class GEclipseFileStore
     if ( isActive() ) {
       setActive( false );
       try {
-        result = getSlave().childNames( options, monitor );
+        result = getSlave().childNames( options, monitor( monitor ) );
       } catch ( CoreException cExc ) {
         Activator.logException( cExc );
         throw cExc;
@@ -144,7 +150,7 @@ public class GEclipseFileStore
   public void delete( final int options,
                       final IProgressMonitor monitor )
       throws CoreException {
-    getSlave().delete( options, monitor );
+    getSlave().delete( options, monitor( monitor ) );
   }
 
   /* (non-Javadoc)
@@ -154,7 +160,7 @@ public class GEclipseFileStore
   public IFileInfo fetchInfo( final int options,
                               final IProgressMonitor monitor )
       throws CoreException {
-    IFileInfo fileInfo = getSlave().fetchInfo( options, monitor );
+    IFileInfo fileInfo = getSlave().fetchInfo( options, monitor( monitor ) );
     return fileInfo; 
   }
 
@@ -236,7 +242,7 @@ public class GEclipseFileStore
       throws CoreException {
     GEclipseFileStore result = this;
     if ( ! fetchInfo().exists() ) {
-      IFileStore dir = getSlave().mkdir( options, monitor );
+      IFileStore dir = getSlave().mkdir( options, monitor( monitor ) );
       FileStoreRegistry registry = FileStoreRegistry.getInstance();
       result = registry.getStore( dir );
       if ( result == null ) {
@@ -254,7 +260,7 @@ public class GEclipseFileStore
   public InputStream openInputStream( final int options,
                                       final IProgressMonitor monitor )
       throws CoreException {
-    return getSlave().openInputStream( options, monitor );
+    return getSlave().openInputStream( options, monitor( monitor ) );
   }
   
   /* (non-Javadoc)
@@ -264,7 +270,7 @@ public class GEclipseFileStore
   public OutputStream openOutputStream( final int options,
                                         final IProgressMonitor monitor )
       throws CoreException {
-    return getSlave().openOutputStream( options, monitor );
+    return getSlave().openOutputStream( options, monitor( monitor ) );
   }
   
   /* (non-Javadoc)
@@ -275,7 +281,7 @@ public class GEclipseFileStore
                        final int options,
                        final IProgressMonitor monitor)
       throws CoreException {
-    getSlave().putInfo( info, options, monitor );
+    getSlave().putInfo( info, options, monitor( monitor ) );
   }
   
   /**
@@ -284,6 +290,10 @@ public class GEclipseFileStore
    */
   public void reset() {
     this.childNames = null;
+  }
+  
+  public void setExternalMonitor( final IProgressMonitor monitor ) {
+    this.externalMonitor = monitor;
   }
   
   /**
@@ -348,8 +358,12 @@ public class GEclipseFileStore
       }
     }
     if (!done) {
-      super.move( destination, options, monitor );
+      super.move( destination, options, monitor( monitor ) );
     }
+  }
+  
+  private IProgressMonitor monitor( final IProgressMonitor monitor ) {
+    return new MasterMonitor( monitor, this.externalMonitor );
   }
 
 }

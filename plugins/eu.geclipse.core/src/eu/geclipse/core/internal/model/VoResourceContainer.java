@@ -16,6 +16,9 @@
 package eu.geclipse.core.internal.model;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridComputing;
 import eu.geclipse.core.model.IGridContainer;
@@ -127,7 +130,7 @@ public class VoResourceContainer
    * @see eu.geclipse.core.internal.model.VirtualGridContainer#fetchChildren()
    */
   @Override
-  protected boolean fetchChildren( final IProgressMonitor monitor )
+  protected IStatus fetchChildren( final IProgressMonitor monitor )
       throws GridModelException {
     
     IGridElement[] children = null;
@@ -153,7 +156,7 @@ public class VoResourceContainer
       }
     }
     
-    return true;
+    return Status.OK_STATUS;
     
   }
   

@@ -26,8 +26,9 @@ import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubMonitor;
 
 import eu.geclipse.core.filesystem.GEclipseFileSystem;
 import eu.geclipse.core.filesystem.internal.Activator;
@@ -200,33 +201,43 @@ public class ConnectionElement
    * @see eu.geclipse.core.model.impl.AbstractGridContainer#fetchChildren(org.eclipse.core.runtime.IProgressMonitor)
    */
   @Override
-  protected synchronized boolean fetchChildren( final IProgressMonitor monitor ) {
+  protected IStatus fetchChildren( final IProgressMonitor monitor ) {
     
-    IProgressMonitor lMonitor
-      = monitor == null
-      ? new NullProgressMonitor()
-      : monitor;
+    SubMonitor sMonitor = SubMonitor.convert(
+        monitor,
+        String.format( Messages.getString("ConnectionElement.fetching_children_progress"), getName() ), //$NON-NLS-1$
+        100
+    );
     
+    IStatus result = Status.CANCEL_STATUS;
     this.fetchError = null;
-    
-    lMonitor.beginTask( String.format( Messages.getString("ConnectionElement.fetching_children_progress"), getName() ), 100 ); //$NON-NLS-1$
     
     try {
     
       IResource res = getResource();
       GEclipseFileStore fileStore = ( GEclipseFileStore ) getConnectionFileStore();
       fileStore.reset();
-      res.refreshLocal( IResource.DEPTH_INFINITE, new SubProgressMonitor( lMonitor, 10 ) );
+      fileStore.setExternalMonitor( sMonitor.newChild( 10 ) );
+      res.refreshLocal( IResource.DEPTH_INFINITE, null );
+      
+      if ( sMonitor.isCanceled() ) {
+        return Status.CANCEL_STATUS;
+      }
+      
       fileStore.activate();
-      res.refreshLocal( IResource.DEPTH_ONE, new SubProgressMonitor( lMonitor, 90 ) );
+      fileStore.setExternalMonitor( sMonitor.newChild( 90 ) );
+      res.refreshLocal( IResource.DEPTH_ONE, null );
+      
+      result = Status.OK_STATUS;
       
     } catch ( CoreException cExc ) {
       this.fetchError = cExc;
+      result = new Status( IStatus.ERROR, Activator.PLUGIN_ID, "Fetch Error", cExc );
     } finally {
-      lMonitor.done();
+      sMonitor.done();
     }
     
-    return this.fetchError == null;
+    return result;
     
   }
 

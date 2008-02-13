@@ -127,10 +127,10 @@ public class GridNotificationService {
    * 
    * @see #lock()
    */
-  public void unlock() {
+  public void unlock( final boolean forceProcess ) {
     if ( this.lockCounter > 0 ) {
       this.lockCounter--;
-      if ( this.lockCounter == 0 ) {
+      if ( ( this.lockCounter == 0 ) || forceProcess ) {
         processEvents();
       }
     }

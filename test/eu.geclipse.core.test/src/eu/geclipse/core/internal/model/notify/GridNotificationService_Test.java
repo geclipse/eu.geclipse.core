@@ -71,7 +71,7 @@ public class GridNotificationService_Test {
   @Test
   public void testLockUnlock() {
     service.lock();
-    service.unlock();
+    service.unlock( true );
   }
 
   /**

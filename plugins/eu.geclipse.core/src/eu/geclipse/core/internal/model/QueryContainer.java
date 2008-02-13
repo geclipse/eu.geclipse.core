@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
@@ -74,7 +76,7 @@ public class QueryContainer
   }
   
   @Override
-  protected boolean fetchChildren( final IProgressMonitor monitor )
+  protected IStatus fetchChildren( final IProgressMonitor monitor )
       throws GridModelException {
     
     for ( IGridElement permantenChild : this.permanentChildren ) {
@@ -99,7 +101,7 @@ public class QueryContainer
       
     }
 
-    return true;
+    return Status.OK_STATUS;
 
   }
 

@@ -634,8 +634,8 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
    * @see eu.geclipse.core.model.impl.ResourceGridContainer#fetchChildren(org.eclipse.core.runtime.IProgressMonitor)
    */
   @Override
-  protected boolean fetchChildren( final IProgressMonitor monitor ) {
-    return true;
+  protected IStatus fetchChildren( final IProgressMonitor monitor ) {
+    return Status.OK_STATUS;
   }
   
   private void createStagingFolders( final IFolder jobFolder ) throws GridModelException {

@@ -15,16 +15,20 @@
 
 package eu.geclipse.ui.providers;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.ITreeViewerListener;
 import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
@@ -54,7 +58,6 @@ public class GridModelContentProvider
    */
   public Object[] getChildren( final Object parentElement ) {
     Object[] children = null;
-
     if ( hasChildren( parentElement ) ) {
       children = getChildren( ( IGridContainer ) parentElement );
     }
@@ -69,7 +72,6 @@ public class GridModelContentProvider
    */
   public Object getParent( final Object element ) {
     Object parent = null;
-
     if ( element instanceof IGridElement ) {
       parent = ( ( IGridElement ) element ).getParent();
     }
@@ -81,7 +83,6 @@ public class GridModelContentProvider
    */
   public boolean hasChildren( final Object element ) {
     boolean result = false;
-
     if ( element instanceof IGridContainer ) {
       result = ( ( IGridContainer ) element ).hasChildren();
     }
@@ -131,10 +132,16 @@ public class GridModelContentProvider
   protected Object[] getChildren( final IGridContainer container ) {
     Object[] children = null;
     if ( container.isLazy() && container.isDirty() ) {
-      ProgressRunner runner = new ProgressRunner( this.treeViewer, container );
+      /*ProgressRunner runner = new ProgressRunner( this.treeViewer, container );
       ProgressTreeNode monitor = runner.getMonitor();
       Thread thread = new Thread( runner );
       thread.start();
+      children = new Object[] { monitor };*/
+      FetchChildrenJob fetcher = new FetchChildrenJob( container );
+      ProgressTreeNode monitor = new ProgressTreeNode( this.treeViewer );
+      fetcher.setExternalMonitor( monitor );
+      fetcher.setSystem( true );
+      fetcher.schedule();
       children = new Object[] { monitor };
     } else {
       try {
@@ -187,12 +194,10 @@ public class GridModelContentProvider
   public void treeCollapsed( final TreeExpansionEvent event ) {
     Object element = event.getElement();
     if ( element instanceof IGridContainer ) {
-      synchronized ( element ) { // Multiple threads have access to this element the same time
-        if ( ( ( IGridContainer ) element ).getChildCount() > 0 ) {
-          ( ( IGridContainer ) element ).setDirty();
-          this.treeViewer.refresh( element, false );
-        }
-      }
+      IGridContainer container = ( IGridContainer ) element;
+      this.treeViewer.setChildCount( element, 0 );
+      this.treeViewer.setChildCount( element, 1 );
+      container.setDirty();
     }
   }
 
@@ -200,7 +205,14 @@ public class GridModelContentProvider
    * @see org.eclipse.jface.viewers.ITreeViewerListener#treeExpanded(org.eclipse.jface.viewers.TreeExpansionEvent)
    */
   public void treeExpanded( final TreeExpansionEvent event ) {
-    // empty implementation
+    /*Object element = event.getElement();
+    if ( element instanceof IGridContainer ) {
+      synchronized ( element ) {
+        if ( ( ( IGridContainer ) element ).isDirty() ) {
+          this.treeViewer.refresh( element, false );
+        }
+      }
+    }*/
   }
   
 }

@@ -71,7 +71,7 @@ public class ResourceNotificationService
         Activator.logException( cExc );
       }
       
-      gridNotificationService.unlock();
+      gridNotificationService.unlock( false );
       
     }
     

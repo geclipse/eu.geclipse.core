@@ -261,7 +261,7 @@ public class GridProject
         if ( ! updated ) {
           updateProjectFolderProperties( ( IGridContainer ) element );
         }
-        GridNotificationService.getInstance().unlock();
+        GridNotificationService.getInstance().unlock( false );
       } catch ( CoreException cExc ) {
         Activator.logException( cExc );
       } catch ( BackingStoreException bsExc ) {
@@ -277,8 +277,8 @@ public class GridProject
    * @see eu.geclipse.core.model.impl.AbstractGridContainer#fetchChildren(org.eclipse.core.runtime.IProgressMonitor)
    */
   @Override
-  protected boolean fetchChildren( final IProgressMonitor monitor ) {
-    boolean result = false;
+  protected IStatus fetchChildren( final IProgressMonitor monitor ) {
+    IStatus result = Status.CANCEL_STATUS;
     if ( isOpen() ) {
       result = super.fetchChildren( monitor );
     }

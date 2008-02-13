@@ -30,6 +30,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Status;
 
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.GridModel;
@@ -275,8 +276,8 @@ public class HiddenProject
   }
 
   @Override
-  protected boolean fetchChildren( final IProgressMonitor monitor ) {
-    boolean result = false;
+  protected IStatus fetchChildren( final IProgressMonitor monitor ) {
+    IStatus result = Status.CANCEL_STATUS;
     if( isOpen() ) {
       result = super.fetchChildren( monitor );
     }
