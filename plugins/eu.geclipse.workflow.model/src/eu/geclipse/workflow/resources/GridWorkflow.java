@@ -20,9 +20,9 @@ import java.util.List;
 
 import org.eclipse.core.resources.IResource;
 
-import eu.geclipse.core.GridException;
 import eu.geclipse.core.model.IGridWorkflow;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
+import eu.geclipse.core.reporting.ProblemException;
 
 public class GridWorkflow
     extends ResourceGridContainer
@@ -52,7 +52,7 @@ public class GridWorkflow
     return null;
   }
 
-  public URI getStdErrorUri() throws GridException {
+  public URI getStdErrorUri() throws ProblemException {
     // TODO Auto-generated method stub
     return null;
   }
@@ -62,7 +62,7 @@ public class GridWorkflow
     return null;
   }
 
-  public URI getStdInputUri() throws GridException {
+  public URI getStdInputUri() throws ProblemException {
     // TODO Auto-generated method stub
     return null;
   }
@@ -72,7 +72,7 @@ public class GridWorkflow
     return null;
   }
 
-  public URI getStdOutputUri() throws GridException {
+  public URI getStdOutputUri() throws ProblemException {
     // TODO Auto-generated method stub
     return null;
   }

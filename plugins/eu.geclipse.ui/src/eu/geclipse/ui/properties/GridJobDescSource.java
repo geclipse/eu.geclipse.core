@@ -19,8 +19,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import eu.geclipse.core.GridException;
 import eu.geclipse.core.model.IGridJobDescription;
+import eu.geclipse.core.reporting.ProblemException;
 
 
 /**
@@ -162,7 +162,7 @@ public class GridJobDescSource extends AbstractPropertySource<IGridJobDescriptio
               if( stdOutputUri != null ) {
                 value = stdOutputUri.toString();
               }              
-            } catch( GridException exception ) {
+            } catch( ProblemException exception ) {
               // ignore exceptions
             }
             
@@ -186,7 +186,7 @@ public class GridJobDescSource extends AbstractPropertySource<IGridJobDescriptio
               if( stdInputUri != null ) {
                 value = stdInputUri.toString();
               }              
-            } catch( GridException exception ) {
+            } catch( ProblemException exception ) {
               // ignore exceptions
             }
             
@@ -210,7 +210,7 @@ public class GridJobDescSource extends AbstractPropertySource<IGridJobDescriptio
               if( stdErrorUri != null ) {
                 value = stdErrorUri.toString();
               }              
-            } catch( GridException exception ) {
+            } catch( ProblemException exception ) {
               // ignore exceptions
             }
             

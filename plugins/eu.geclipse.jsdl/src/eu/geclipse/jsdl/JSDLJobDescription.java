@@ -51,14 +51,13 @@ import org.eclipse.emf.ecore.xmi.impl.XMLMapImpl;
 import org.w3c.dom.Document;
 import org.xml.sax.SAXException;
 
-import eu.geclipse.core.CoreProblems;
-import eu.geclipse.core.GridException;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridModelListener;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.jsdl.internal.Activator;
 import eu.geclipse.jsdl.internal.JsdlAdaptersPlugin;
 import eu.geclipse.jsdl.model.ApplicationType;
@@ -1109,6 +1108,7 @@ public class JSDLJobDescription extends ResourceGridContainer
   /**
    * @return pairs (filename on CE, target-uri) for staged-out files
    */
+  @SuppressWarnings("unchecked")
   public Map<String, String> getDataStagingOutStrings() {
     Map<String, String> result = new HashMap<String, String>();
     DocumentRoot dRoot = getDocumentRoot();
@@ -1205,7 +1205,7 @@ public class JSDLJobDescription extends ResourceGridContainer
 
   private java.net.URI findStagingAbsoluteUri( final String filename,
                                                final boolean stageOut )
-    throws GridException
+    throws ProblemException
   {
     java.net.URI uri = null;
     Map<String, String> stagingsMap = stageOut
@@ -1232,14 +1232,14 @@ public class JSDLJobDescription extends ResourceGridContainer
         }
       }
     } catch( URISyntaxException exception ) {
-      throw new GridException( CoreProblems.MALFORMED_URL,
+      throw new ProblemException( "eu.geclipse.core.problem.net.malformedURL", //$NON-NLS-1$
                                exception,
                                String.format( Messages.getString( "errWrongUri" ), filename ) ); //$NON-NLS-1$
     }
     return uri;
   }
 
-  public java.net.URI getStdOutputUri() throws GridException {
+  public java.net.URI getStdOutputUri() throws ProblemException {
     java.net.URI uri = null;
     String stdOutputFileName = getStdOutputFileName();
     if( stdOutputFileName != null ) {
@@ -1248,7 +1248,7 @@ public class JSDLJobDescription extends ResourceGridContainer
     return uri;
   }
 
-  public java.net.URI getStdInputUri() throws GridException {
+  public java.net.URI getStdInputUri() throws ProblemException {
     java.net.URI uri = null;
     String stdInputFileName = getStdInputFileName();
     if( stdInputFileName != null ) {
@@ -1266,7 +1266,7 @@ public class JSDLJobDescription extends ResourceGridContainer
     return errorFilename;
   }
 
-  public java.net.URI getStdErrorUri() throws GridException {
+  public java.net.URI getStdErrorUri() throws ProblemException {
     java.net.URI uri = null;
     String stdErrFileName = getStdErrorFileName();
     if( stdErrFileName != null ) {
