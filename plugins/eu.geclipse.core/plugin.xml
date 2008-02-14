@@ -133,10 +133,55 @@
             description="Unspecified IO problem"
             id="eu.geclipse.core.problem.io.unspecified"
             mailto="contact@geclipse.eu">
-      </problem>      
+      </problem>
       <problem
             description="Job submission failed"
             id="eu.geclipse.core.problem.job.submissionFailed">
+      </problem>
+      <problem
+            description="Container cannot contain elements of the specified type"
+            id="eu.geclipse.core.problem.model.containerCanNotContain">
+      </problem>
+      <problem
+            description="Failed to create grid element"
+            id="eu.geclipse.core.problem.model.elementCreateFailed">
+      </problem>
+      <problem
+            description="Error while deleting model element"
+            id="eu.geclipse.core.problem.model.elementDeleteFailed">
+      </problem>
+      <problem
+            description="Failed to load grid element"
+            id="eu.geclipse.core.problem.model.elementLoadFailed">
+      </problem>
+      <problem
+            description="The manager cannot manage the specified element"
+            id="eu.geclipse.core.problem.model.elementNotManageable">
+      </problem>
+      <problem
+            description="Failed to save grid element"
+            id="eu.geclipse.core.problem.model.elementSaveFailed">
+      </problem>
+      <problem
+            description="Failed to fetch children"
+            id="eu.geclipse.core.problem.model.fetchChildrenFailed">
+         <reference
+               referenceID="eu.geclipse.core.solution.net.checkProxySettings">
+         </reference>
+         <reference
+               referenceID="eu.geclipse.core.solution.auth.checkTokens">
+         </reference>
+         <reference
+               referenceID="eu.geclipse.core.solution.auth.checkCaCertificates">
+         </reference>
+      </problem>
+      <problem
+            description="Unable to create preferences"
+            id="eu.geclipse.core.problem.model.preferenceCreationFailed">
+      </problem>
+      <problem
+            description="Failed to refresh container"
+            id="eu.geclipse.core.problem.model.refreshFailed">
       </problem>
       <problem
             description="Could not bind socket"
@@ -238,6 +283,10 @@
       <solution
             description="Check your imported CA-certificates"
             id="eu.geclipse.core.solution.auth.checkCaCertificates">
+      </solution>
+      <solution
+            description="Check your authentication tokens"
+            id="eu.geclipse.core.solution.auth.checkTokens">
       </solution>
       <solution
             description="Check your VO settings"

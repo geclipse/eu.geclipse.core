@@ -50,6 +50,26 @@ public interface ICoreProblems {
   public static final String JOB_SUBMISSION_FAILED
     = "eu.geclipse.core.problem.job.submissionFailed"; //$NON-NLS-1$
   
+  // Model
+  public static final String MODEL_CONTAINER_CAN_NOT_CONTAIN
+    = "eu.geclipse.core.problem.model.containerCanNotContain"; //$NON-NLS-1$
+  public static final String MODEL_ELEMENT_CREATE_FAILED
+    = "eu.geclipse.core.problem.model.elementCreateFailed"; //$NON-NLS-1$
+  public static final String MODEL_ELEMENT_DELETE_FAILED
+    = "eu.geclipse.core.problem.model.elementDeleteFailed"; //$NON-NLS-1$
+  public static final String MODEL_ELEMENT_LOAD_FAILED
+    = "eu.geclipse.core.problem.model.elementLoadFailed"; //$NON-NLS-1$
+  public static final String MODEL_ELEMENT_NOT_MANAGEABLE
+    = "eu.geclipse.core.problem.model.elementNotManageable"; //$NON-NLS-1$
+  public static final String MODEL_ELEMENT_SAVE_FAILED
+    = "eu.geclipse.core.problem.model.elementSaveFailed"; //$NON-NLS-1$
+  public static final String MODEL_FETCH_CHILDREN_FAILED
+    = "eu.geclipse.core.problem.model.fetchChildrenFailed"; //$NON-NLS-1$
+  public static final String MODEL_PREFERENCE_CREATION_FAILED
+    = "eu.geclipse.core.problem.model.preferenceCreationFailed"; //$NON-NLS-1$
+  public static final String MODEL_REFRESH_FAILED
+    = "eu.geclipse.core.problem.model.refreshFailed"; //$NON-NLS-1$
+  
   // Net
   public static final String NET_BIND_FAILED
     = "eu.geclipse.core.problem.net.bindFailed"; //$NON-NLS-1$
