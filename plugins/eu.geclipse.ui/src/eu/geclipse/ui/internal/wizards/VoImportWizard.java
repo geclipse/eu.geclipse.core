@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,6 +11,7 @@
  *
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
+ *    Ariel Garcia      - updated to new problem reporting
  *****************************************************************************/
 
 package eu.geclipse.ui.internal.wizards;
@@ -18,8 +19,6 @@ package eu.geclipse.ui.internal.wizards;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.SubProgressMonitor;
@@ -28,13 +27,13 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
 
-import eu.geclipse.core.GridException;
-import eu.geclipse.core.auth.CaCertManager;
-import eu.geclipse.core.auth.ICaCertificate;
+import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.IVoLoader;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.dialogs.NewProblemDialog;
 import eu.geclipse.ui.internal.Activator;
+
 
 /**
  * Wizard that is used by the VO preference page to import
@@ -111,8 +110,11 @@ public class VoImportWizard extends Wizard {
                 certList.add( certificate );
               }*/
             }
-          } catch ( GridException gExc ) {
-            throw new InvocationTargetException( gExc );
+          // TODO ariel just a partial step, will be removed next
+          } catch( GridModelException gmExc ) {
+            throw new InvocationTargetException( gmExc );
+          } catch ( ProblemException pExc ) {
+            throw new InvocationTargetException( pExc );
           } finally {
             monitor.done();
           }

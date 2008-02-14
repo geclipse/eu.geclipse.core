@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,7 +11,9 @@
  *
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
+ *    Ariel Garcia      - updated to new problem reporting
  *****************************************************************************/
+
 package eu.geclipse.ui.internal.wizards;
 
 import java.lang.reflect.InvocationTargetException;
@@ -31,9 +33,10 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 
-import eu.geclipse.core.GridException;
 import eu.geclipse.core.model.IVoLoader;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.dialogs.NewProblemDialog;
+
 
 public class VoChooserPage extends WizardPage {
   
@@ -164,8 +167,8 @@ protected CheckboxTableViewer viewer;
           try {
             String[] certificateList = loader.getVoList( uri, monitor );
             VoChooserPage.this.viewer.setInput( certificateList );
-          } catch ( GridException gExc ) {
-            throw new InvocationTargetException( gExc );
+          } catch ( ProblemException pExc ) {
+            throw new InvocationTargetException( pExc );
           }
         }
       } );

@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,6 +11,7 @@
  *
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
+ *    Ariel Garcia      - updated to new problem reporting
  *****************************************************************************/
 
 package eu.geclipse.core.model;
@@ -19,7 +20,8 @@ import java.net.URI;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 
-import eu.geclipse.core.GridException;
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * Definition of a VO loader. A VO loader is a
@@ -38,13 +40,14 @@ public interface IVoLoader {
    * indicate the progress of the import operation.
    * @return The imported VO or <code>null</code> if no
    * VO could be imported from the specified location.
-   * @throws GridException If an error occurs while the
+   * @throws ProblemException If an error occurs while the
    * VO is imported.
    */
+  // TODO ariel just a partial step, will be removed next
   public IVirtualOrganization getVo( final URI uri,
                                      final String name,
                                      final IProgressMonitor monitor )
-    throws GridException;
+    throws ProblemException, GridModelException;
   
   /**
    * Get a list of VO names that are found at the specified
@@ -58,13 +61,13 @@ public interface IVoLoader {
    * @return A list of VO names that could be found at the
    * specified location. This may be <code>null</code> if no VOs
    * could be found.
-   * @throws GridException If an error occurs while querying the specified
+   * @throws ProblemException If an error occurs while querying the specified
    * location.
    * @see #getVo(URI, String, IProgressMonitor)
    */
   public String[] getVoList( final URI uri,
                              final IProgressMonitor monitor )
-    throws GridException; 
+    throws ProblemException; 
   
   /**
    * Get a list of predefined import location for this VO
