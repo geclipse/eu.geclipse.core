@@ -29,7 +29,7 @@ public interface IGridJobStatusService extends IGridService{
    * 
    * @param id TODO pawel
    * @return TODO pawel
-   * @throws GridException TODO pawel
+   * @throws ProblemException TODO pawel
    */
   public IGridJobStatus getJobStatus( final IGridJobID id ) throws ProblemException;
 

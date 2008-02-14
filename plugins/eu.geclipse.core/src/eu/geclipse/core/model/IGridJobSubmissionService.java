@@ -30,7 +30,7 @@ public interface IGridJobSubmissionService extends IGridService{
    * 
    * @param parent TODO pawel
    * @return TODO pawel
-   * @throws GridException TODO pawel
+   * @throws ProblemException TODO pawel
    */
   public IGridJobID submitJob( final IGridJobDescription parent, final IProgressMonitor monitor )
     throws ProblemException, GridModelException;
