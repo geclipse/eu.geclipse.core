@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2007 g-Eclipse consortium
+ * Copyright (c) 2007,2008 g-Eclipse consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -29,6 +29,7 @@ import org.osgi.framework.BundleContext;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.info.glue.AbstractGlueTable;
 import eu.geclipse.info.model.IExtentedGridInfoService;
 
@@ -57,18 +58,29 @@ public class Activator extends Plugin {
         ArrayList<IExtentedGridInfoService> infoServicesArray = null;
         infoServicesArray = InfoServiceFactory.getAllExistingInfoService();
         
-        // Get the number of projects. The number is used for the monitor.
+        // Get the number of projects. The number is used in the monitor.
         int gridProjectNumbers = 0;
+        ArrayList<String> existingVoTypes = new ArrayList<String>();
         IGridElement[] projectElements;
         try {
           projectElements = GridModel.getRoot().getChildren( null );
-          if (projectElements!= null) {
-            gridProjectNumbers = projectElements.length;
+          for (int i=0; projectElements != null && i<projectElements.length; i++)
+          {
+            IGridProject igp = (IGridProject)projectElements[i];
+            if (igp!= null && !igp.isHidden())
+            {
+              String voTypeName = igp.getVO().getTypeName();
+              if ( !existingVoTypes.contains( voTypeName ))
+              {
+                gridProjectNumbers++;
+                existingVoTypes.add(voTypeName);
+              }
+            }
           }
         } catch( GridModelException e ) {
           Activator.logException( e );
         }
-
+        
         // Set the monitor task. Each task has 10 work units.
         monitor.beginTask( "Retrieving information", gridProjectNumbers * 10 ); //$NON-NLS-1$
         

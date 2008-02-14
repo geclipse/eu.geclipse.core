@@ -29,14 +29,14 @@ import eu.geclipse.info.glue.GlueService;
  * @author tnikos
  * @see eu.geclipse.info.glue.GlueService
  */
-public class GriaComputing extends GridGlueElement implements IGridComputing {
+public class GridGlueServiceComputing extends GridGlueElement implements IGridComputing {
 
   /**
    * The constructor of a GriaComputing that symbolizes a gria application
    * @param parent the parent container
    * @param glueService a GlueService with the information for a gria application.
    */
-  public GriaComputing( final IGridContainer parent,
+  public GridGlueServiceComputing( final IGridContainer parent,
                         final GlueService glueService ) {
     super( parent, glueService );
   }

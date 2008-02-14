@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2007 g-Eclipse consortium
+ * Copyright (c) 2007,2008 g-Eclipse consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -12,7 +12,7 @@
  * Contributor(s):
  *     UCY (http://www.ucy.cs.ac.cy)
  *      - George Tsouloupas (georget@cs.ucy.ac.cy)
- *
+ *      - Nikolaos Tsioutsias
  *****************************************************************************/
 package eu.geclipse.info.views;
 
@@ -20,6 +20,8 @@ import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Iterator;
 
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -64,15 +66,17 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.part.DrillDownAdapter;
 import org.eclipse.ui.part.ViewPart;
+
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridInfoService;
 import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridModelListener;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.info.Activator;
-import eu.geclipse.info.InfoServiceFactory;
 import eu.geclipse.info.IGlueStoreChangeListerner;
+import eu.geclipse.info.InfoServiceFactory;
 import eu.geclipse.info.glue.AbstractGlueTable;
 import eu.geclipse.info.glue.GlueCE;
 import eu.geclipse.info.glue.GlueCEAccessControlBaseRule;
@@ -256,22 +260,18 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener {
           }
         }
       }
-//      if(toList.size()<1){
-//        TreeObject[] nodat=new TreeObject[1];
-//        nodat[0]=new TreeObject("no data");
-//        return nodat;
-//      }
-      //System.out.println("getChilren "+this.getName()+" "+toList.size());
 
       TreeObject[] treeObjectArray=toList.toArray( new TreeObject[ toList.size() ] );
       return treeObjectArray;
     }
 
+    /**
+     * Always returns true
+     * @return always true
+     */
     public boolean hasChildren() {
       boolean hc = true;
-      //hc=getChildren().length>0;
       return hc;
-      // return children.size() > 0;
     }
 
   }
@@ -335,32 +335,40 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener {
     private void initialize() {
       buildTopLevel();
     }
-
+    
     private void buildTopLevel() {
+      
       ArrayList<String[]> list = new ArrayList<String[]>();
-      String[] queryArray;
-      queryArray = new String[ 3 ];
-      queryArray[ 0 ] = "GlueSite"; //$NON-NLS-1$
-      queryArray[ 1 ] = "Sites"; //$NON-NLS-1$
-      queryArray[ 2 ] = "GlueSite"; //$NON-NLS-1$
-      list.add( queryArray );
-      queryArray = new String[ 3 ];
-      queryArray[ 0 ] = "GlueCE"; //$NON-NLS-1$
-      queryArray[ 1 ] = "Computing Elements"; //$NON-NLS-1$
-      queryArray[ 2 ] = "GlueCE"; //$NON-NLS-1$
-      list.add( queryArray );
-      queryArray = new String[ 3 ];
-      queryArray[ 0 ] = "GlueSE"; //$NON-NLS-1$
-      queryArray[ 1 ] = "Storage Elements"; //$NON-NLS-1$
-      queryArray[ 2 ] = "GlueSE"; //$NON-NLS-1$
-      list.add( queryArray );
-      /* todo tnikos: create the top level elements dynamicaly using extension points
-      queryArray = new String[ 3 ];
-      queryArray[ 0 ] = "GlueService"; //$NON-NLS-1$
-      queryArray[ 1 ] = "Gria Services"; //$NON-NLS-1$
-      queryArray[ 2] = "GriaService"; //$NON-NLS-1$
-      list.add( queryArray );
-      */
+      HashSet<GlueInfoTopTreeElement> uniqueList = new HashSet<GlueInfoTopTreeElement>();
+      
+      // We build the top level elements according to the existing projects
+      IGridElement[] projectElements;
+      try {
+        projectElements = GridModel.getRoot().getChildren( null );
+        for( IGridElement element : projectElements ) {
+          IGridProject igp=(IGridProject)element;
+          if(igp.isOpen() && igp.getVO()!=null){
+            IGridInfoService infoService = igp.getVO().getInfoService();
+            if ( infoService != null && infoService instanceof IExtentedGridInfoService) {
+              ArrayList<GlueInfoTopTreeElement> result = ((IExtentedGridInfoService)infoService).getTopTreeElements();
+              for (int i=0; i<result.size(); i++)
+              {
+                GlueInfoTopTreeElement currentElement = result.get( i );
+                if (!uniqueList.contains( currentElement ))
+                  uniqueList.add(currentElement);
+              }
+            }
+          }
+        }
+          
+      } catch( GridModelException e ) {
+        Activator.logException( e );
+      }
+      
+      Iterator<GlueInfoTopTreeElement> it = uniqueList.iterator();
+      while (it.hasNext()) {
+          list.add( it.next().toArray() );
+      }
       this.glueRoot = new TreeParent( list );
     }
   }
@@ -451,6 +459,7 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener {
       @Override
       protected IStatus run( final IProgressMonitor monitor ) {
         GlueIndex.drop(); // Clear the glue index.
+        
         Status status = new Status( IStatus.ERROR,
                                     "eu.geclipse.glite.info", //$NON-NLS-1$
                                     "BDII fetch from " //$NON-NLS-1$
@@ -460,14 +469,25 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener {
         
         // Get the number of projects. The number is used in the monitor.
         int gridProjectNumbers = 0;
+        ArrayList<String> existingVoTypes = new ArrayList<String>();
         IGridElement[] projectElements;
         try {
           projectElements = GridModel.getRoot().getChildren( null );
-          if (projectElements!= null) {
-            gridProjectNumbers = projectElements.length;
+          for (int i=0; projectElements != null && i<projectElements.length; i++)
+          {
+            IGridProject igp = (IGridProject)projectElements[i];
+            if (igp!= null && !igp.isHidden())
+            {
+              String voTypeName = igp.getVO().getTypeName();
+              if ( !existingVoTypes.contains( voTypeName ))
+              {
+                gridProjectNumbers++;
+                existingVoTypes.add(voTypeName);
+              }
+            }
           }
         } catch( GridModelException e ) {
-          // Do nothing
+          Activator.logException( e );
         }
         
         monitor.beginTask( "Retrieving information", gridProjectNumbers * 10 ); //$NON-NLS-1$
@@ -796,6 +816,7 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener {
         
         // Get the expanded nodes
         Object[] currentExpanded = GlueInfoViewer.this.viewer.getExpandedElements();
+        GlueInfoViewer.this.viewer.setContentProvider( new ViewContentProvider() );
         // Refresh the tree with the new model
         GlueInfoViewer.this.viewer.refresh();
         // Remember the expanded status of the tree.

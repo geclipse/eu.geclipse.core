@@ -12,7 +12,7 @@
  * Contributor(s):
  *     UCY (http://www.ucy.cs.ac.cy)
  *      - George Tsouloupas (georget@cs.ucy.ac.cy)
- *      - Nikolaos Tsioutsias (tnikos@yahoo.com)
+ *      - Nikolaos Tsioutsias
  *
  *****************************************************************************/
 package eu.geclipse.info.glue;
