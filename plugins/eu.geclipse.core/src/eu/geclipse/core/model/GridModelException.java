@@ -18,7 +18,7 @@ package eu.geclipse.core.model;
 import eu.geclipse.core.GridException;
 
 /**
- * Grid exception that is specific for problems occuring in the model.
+ * Grid exception that is specific for problems occurring in the model.
  */
 public class GridModelException extends GridException {
 
@@ -31,7 +31,7 @@ public class GridModelException extends GridException {
    * Construct a new <code>GridModelException</code> with the specified
    * problem ID.
    * 
-   * @param problemID The unique ID of the problem tha occurred.
+   * @param problemID The unique ID of the problem that occurred.
    */
   public GridModelException( final int problemID ) {
     super( problemID );
@@ -41,7 +41,7 @@ public class GridModelException extends GridException {
    * Construct a new <code>GridModelException</code> with the specified
    * problem ID and a specific problem description.
    * 
-   * @param problemID The unique ID of the problem tha occurred.
+   * @param problemID The unique ID of the problem that occurred.
    * @param description A more detailed description of the problem. 
    */
   public GridModelException( final int problemID,
