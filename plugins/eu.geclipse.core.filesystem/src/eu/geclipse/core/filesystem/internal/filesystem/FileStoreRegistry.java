@@ -24,7 +24,7 @@ import eu.geclipse.core.filesystem.GEclipseURI;
 
 /**
  * Central repository for all {@link GEclipseFileStore}s. The file stores
- * are cached in order to workaround some issues that occure when new
+ * are cached in order to workaround some issues that occur when new
  * file stores are created whenever {@link IFileStore#getChild(String)}
  * is called. 
  */

@@ -202,7 +202,7 @@ public class GVidClient extends Component implements Runnable {
           public void run() {
             NewProblemDialog.openProblem( null,
                                           "Error during video decoding",
-                                          "An error occured during video decoding (is the right codec selected?)",
+                                          "An error occurred during video decoding (is the right codec selected?)",
                                           gridException, null );
           }
         } );

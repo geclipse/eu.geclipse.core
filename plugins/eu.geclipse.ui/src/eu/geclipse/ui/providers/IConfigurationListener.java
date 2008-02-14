@@ -26,7 +26,7 @@ public interface IConfigurationListener {
    * changes.
    * 
    * @param source The {@link ConfigurableContentProvider} where the change
-   * occured.
+   * occurred.
    */
   public void configurationChanged( final ConfigurableContentProvider source );
   

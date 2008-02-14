@@ -371,7 +371,7 @@ public abstract class GridModelViewPart
   protected abstract IGridElement getRootElement();
   
   /**
-   * Handle a double click event that occured in the viewer of this
+   * Handle a double click event that occurred in the viewer of this
    * view.
    * 
    * @param event The associated {@link DoubleClickEvent}.
@@ -393,7 +393,7 @@ public abstract class GridModelViewPart
   }
   
   /**
-   * Handle an open event that occured in the associated viewer.
+   * Handle an open event that occurred in the associated viewer.
    * 
    * @param event The associated {@link OpenEvent}.
    */

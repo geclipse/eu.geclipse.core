@@ -51,7 +51,7 @@ public class ConnectionElement
   private IResource resource;
   
   /**
-   * An error that may have occured during the last fetch operation.
+   * An error that may have occurred during the last fetch operation.
    */
   private Throwable fetchError;
   

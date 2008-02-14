@@ -31,7 +31,7 @@ public class GridModelException extends GridException {
    * Construct a new <code>GridModelException</code> with the specified
    * problem ID.
    * 
-   * @param problemID The unique ID of the problem tha occured.
+   * @param problemID The unique ID of the problem tha occurred.
    */
   public GridModelException( final int problemID ) {
     super( problemID );
@@ -41,7 +41,7 @@ public class GridModelException extends GridException {
    * Construct a new <code>GridModelException</code> with the specified
    * problem ID and a specific problem description.
    * 
-   * @param problemID The unique ID of the problem tha occured.
+   * @param problemID The unique ID of the problem tha occurred.
    * @param description A more detailed description of the problem. 
    */
   public GridModelException( final int problemID,
@@ -53,7 +53,7 @@ public class GridModelException extends GridException {
    * Construct a new <code>GridModelException</code> with the specified
    * problem ID and an exception that caused this problem.
    * 
-   * @param problemID The unique ID of the problem tha occured.
+   * @param problemID The unique ID of the problem that occurred.
    * @param exc The exception that caused this problem. 
    */
   public GridModelException( final int problemID,
@@ -66,7 +66,7 @@ public class GridModelException extends GridException {
    * problem ID, an exception that caused this problem and a specific
    * problem description.
    * 
-   * @param problemID The unique ID of the problem tha occured.
+   * @param problemID The unique ID of the problem that occurred.
    * @param exc The exception that caused this problem.
    * @param description A more detailed description of the problem.
    */

@@ -24,10 +24,10 @@ public interface IGridModelListener
     extends EventListener {
   
   /**
-   * The method is called everytime a change in the model occured and the
+   * The method is called everytime a change in the model occurred and the
    * event processing is active.
    * 
-   * @param event The event that occured in the model.
+   * @param event The event that occurred in the model.
    */
   public void gridModelChanged( final IGridModelEvent event );
   

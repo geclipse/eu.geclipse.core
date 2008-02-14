@@ -30,7 +30,7 @@ public class GridModelEvent implements IGridModelEvent {
   private int type;
   
   /**
-   * The source where the event occured.
+   * The source where the event occurred.
    */
   private IGridElement source;
   
@@ -45,7 +45,7 @@ public class GridModelEvent implements IGridModelEvent {
    * @param type The type of this event. This may be one of
    * {@link IGridModelEvent#ELEMENTS_ADDED} and
    * {@link IGridModelEvent#ELEMENTS_REMOVED}.
-   * @param source The element where the event occured.
+   * @param source The element where the event occurred.
    * @param elements The elements that are affected by this event.
    */
   public GridModelEvent( final int type,

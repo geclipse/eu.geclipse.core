@@ -42,7 +42,7 @@ public interface IGridConnectionElement extends IGridResource, IGridContainer {
   public IFileInfo getConnectionFileInfo() throws CoreException;
   
   /**
-   * Get an error message that describes an error that occured
+   * Get an error message that describes an error that occurred
    * during the last operation. This functionality is not yet
    * fully defined.
    * 
