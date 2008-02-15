@@ -13,12 +13,6 @@
    <extension-point id="problemReporting" name="Problem Reporting" schema="schema/problemReporting.exsd"/>
    <extension-point id="simpleTests" name="Simple Tests" schema="schema/simpleTests.exsd"/>
    <extension
-         id="eu.geclipse.core.internal.PreferenceInitializer"
-         name="%extension.preferenceInitializer"
-         point="org.eclipse.core.runtime.preferences">
-      <initializer class="eu.geclipse.core.internal.PreferenceInitializer"/>
-   </extension>
-   <extension
          id="eu.geclipse.core.project.GridProjectNature"
          name="%extension.gridProjectNature"
          point="org.eclipse.core.resources.natures">
@@ -33,6 +27,12 @@
       <builder>
          <run class="eu.geclipse.core.project.GridProjectBuilder"/>
       </builder>
+   </extension>
+   <extension
+         id="eu.geclipse.core.internal.PreferenceInitializer"
+         name="%extension.preferenceInitializer"
+         point="org.eclipse.core.runtime.preferences">
+      <initializer class="eu.geclipse.core.internal.PreferenceInitializer"/>
    </extension>
    <extension
          point="org.eclipse.core.runtime.preferences">
@@ -281,6 +281,10 @@
       <solution
             description="Check your imported CA-certificates"
             id="eu.geclipse.core.solution.auth.checkCaCertificates">
+      </solution>
+      <solution
+            description="Check your authentication data"
+            id="eu.geclipse.core.solution.auth.checkData">
       </solution>
       <solution
             description="Check your authentication tokens"

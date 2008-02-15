@@ -24,6 +24,8 @@ public interface ICoreSolutions {
   // Auth
   public static final String AUTH_CHECK_CA_CERTIFICATES
     = "eu.geclipse.core.solution.auth.checkCaCertificates"; //$NON-NLS-1$
+  public static final String AUTH_CHECK_DATA
+    = "eu.geclipse.core.solution.auth.checkData"; //$NON-NLS-1$
   public static final String AUTH_CHECK_TOKENS
     = "eu.geclipse.core.solution.auth.checkTokens"; //$NON-NLS-1$
   public static final String AUTH_CHECK_VO_SETTINGS
