@@ -25,6 +25,7 @@ import org.eclipse.core.runtime.CoreException;
  * from existing {@link IProblemProvider}s or have to implement their own
  * problem provider in order to define new problems and related solutions. 
  */
+@Deprecated
 public class GridException extends CoreException {
   
   /**

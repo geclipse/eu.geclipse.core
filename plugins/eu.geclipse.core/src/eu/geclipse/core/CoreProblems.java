@@ -21,6 +21,7 @@ import eu.geclipse.core.internal.Activator;
  * Problem provider implementation for core related
  * problems. 
  */
+@Deprecated
 public class CoreProblems implements IProblemProvider {
   
   /**

@@ -20,6 +20,7 @@ package eu.geclipse.core;
  * A problem provider maps unique IDs for problems to concrete implementations
  * of the {@link IProblem} interface. 
  */
+@Deprecated
 public interface IProblemProvider {
   
   /**

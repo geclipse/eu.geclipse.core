@@ -21,6 +21,7 @@ package eu.geclipse.core;
  * the interface by themselves. This standard implementation is a passive
  * solution so {@link #solve()} does nothing. 
  */
+@Deprecated
 public class Solution implements ISolution {
   
   /**

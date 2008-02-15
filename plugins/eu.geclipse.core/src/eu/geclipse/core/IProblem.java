@@ -25,6 +25,7 @@ import org.eclipse.core.runtime.IStatus;
  * the framework. It may additionally give hints how to avoid this problem with the
  * help of a list of {@link ISolution}s.
  */
+@Deprecated
 public interface IProblem {
   
   /**

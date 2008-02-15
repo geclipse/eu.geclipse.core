@@ -24,6 +24,7 @@ import eu.geclipse.core.internal.Activator;
  * no other registry is specified this standard registry is used to query
  * solutions. 
  */
+@Deprecated
 public class SolutionRegistry {
   
   /**

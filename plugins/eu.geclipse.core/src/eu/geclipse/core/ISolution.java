@@ -28,6 +28,7 @@ package eu.geclipse.core;
  * that could be a solution for all problems that are related to networking.
  * Therefore solutions are reusable by their unique ID.
  */
+@Deprecated
 public interface ISolution {
   
   /**

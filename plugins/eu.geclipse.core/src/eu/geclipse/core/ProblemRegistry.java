@@ -29,6 +29,7 @@ import eu.geclipse.core.internal.Activator;
  * providers. If no problem could be found for the specified ID a default problem
  * is generated that denotes an unknown problem.
  */
+@Deprecated
 public class ProblemRegistry {
 
   /**
