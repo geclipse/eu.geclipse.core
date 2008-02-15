@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2007 g-Eclipse Consortium 
+ * Copyright (c) 2007-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -48,6 +48,7 @@ import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.internal.LogExceptionSolution;
 import eu.geclipse.ui.internal.MailToSolution;
 
+
 public class ProblemDialog extends ErrorDialog {
   
   /**
@@ -92,7 +93,6 @@ public class ProblemDialog extends ErrorDialog {
     }
     
     return dialog.getReturnCode();
-    
   }
   
   /* (non-Javadoc)
@@ -150,17 +150,13 @@ public class ProblemDialog extends ErrorDialog {
         reasonLabel.setLayoutData( gData );
         
         for ( String reason : reasons ) {
-          
           Label label = new Label( reasonComposite, SWT.NONE );
           label.setText( "- " + reason ); //$NON-NLS-1$
           gData = new GridData();
           gData.horizontalAlignment = GridData.BEGINNING;
           label.setLayoutData( gData );
-          
         }
-        
       }
-      
     }
     
     List< ISolution > solutions = new ArrayList< ISolution >();
@@ -230,9 +226,8 @@ public class ProblemDialog extends ErrorDialog {
       }
       
     }
-      
-    return composite;
     
+    return composite;
   }
   
   private static IStatus getStatus( final Throwable throwable ) {
@@ -246,7 +241,7 @@ public class ProblemDialog extends ErrorDialog {
     else {
       String message = throwable.getMessage();
       if ( message == null ) {
-        message = "No further information available";
+        message = Messages.getString( "ProblemDialog.no_further_info" ); //$NON-NLS-1$
       }
       result = new Status( IStatus.ERROR,
                         Activator.PLUGIN_ID,
@@ -256,7 +251,6 @@ public class ProblemDialog extends ErrorDialog {
     }
     
     return result;
-    
   }
 
 }
