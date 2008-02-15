@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -41,7 +41,7 @@ import eu.geclipse.core.auth.CoreAuthTokenProvider;
 import eu.geclipse.core.auth.IAuthTokenProvider;
 import eu.geclipse.core.auth.IAuthenticationToken;
 import eu.geclipse.core.auth.IAuthenticationTokenDescription;
-import eu.geclipse.ui.dialogs.NewProblemDialog;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.wizards.wizardselection.ExtPointWizardSelectionListPage;
 
@@ -135,10 +135,10 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
           thr = intExc;
         }
         if ( thr != null ) {
-          NewProblemDialog.openProblem( UIAuthTokenProvider.this.shell,
-                                        Messages.getString("UIAuthTokenProvider.token_activation_error_title"), //$NON-NLS-1$
-                                        Messages.getString("UIAuthTokenProvider.token_activation_error_message"), //$NON-NLS-1$
-                                        thr );
+          ProblemDialog.openProblem( UIAuthTokenProvider.this.shell,
+                                     Messages.getString("UIAuthTokenProvider.token_activation_error_title"), //$NON-NLS-1$
+                                     Messages.getString("UIAuthTokenProvider.token_activation_error_message"), //$NON-NLS-1$
+                                     thr );
         }
       }
     }
