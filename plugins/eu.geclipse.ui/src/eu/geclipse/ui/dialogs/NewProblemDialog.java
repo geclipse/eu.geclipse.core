@@ -52,6 +52,7 @@ import eu.geclipse.ui.internal.Activator;
  * {@link CoreException}s, so it may completely replace the
  * {@link ErrorDialog}.
  */
+@Deprecated
 public class NewProblemDialog extends ErrorDialog {
   
   /**

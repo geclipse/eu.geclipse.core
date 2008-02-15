@@ -23,6 +23,7 @@ import eu.geclipse.ui.internal.Activator;
 /**
  * Solution registry for all general solutions related to the UI.
  */
+@Deprecated
 public class UISolutionRegistry extends SolutionRegistry {
   
   /**
@@ -71,6 +72,7 @@ public class UISolutionRegistry extends SolutionRegistry {
 
     ISolution solution = super.findSolution( solutionID );
     
+    // Changed to AUTH_CHECK_TOKENS
     if ( solutionID == SolutionRegistry.CHECK_AUTH_TOKENS ) {
       solution = new ShowViewSolution( solution,
                                        Activator.ID_AUTH_VIEW );

@@ -24,6 +24,7 @@ import eu.geclipse.core.Solution;
  * intended to trigger UI actions. UI solutions may either be stand-alone
  * or wrappers for non-UI solutions.
  */
+@Deprecated
 public abstract class UISolution extends Solution {
   
   /**
