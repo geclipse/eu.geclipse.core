@@ -35,7 +35,7 @@ import org.eclipse.swt.widgets.Table;
 
 import eu.geclipse.core.model.IVoLoader;
 import eu.geclipse.core.reporting.ProblemException;
-import eu.geclipse.ui.dialogs.NewProblemDialog;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 
 
 public class VoChooserPage extends WizardPage {
@@ -174,12 +174,10 @@ protected CheckboxTableViewer viewer;
       } );
     } catch ( InvocationTargetException itExc ) {
       Throwable cause = itExc.getCause();
-      NewProblemDialog.openProblem(
-          getShell(),
-          "Import Failed",
-          "Unable to load VO list",
-          cause
-      );
+      ProblemDialog.openProblem( getShell(),
+                                 "Import Failed",
+                                 "Unable to load VO list",
+                                 cause );
       setErrorMessage( cause.getLocalizedMessage() );
     } catch ( InterruptedException intExc ) {
       // Do nothing on user interrupt

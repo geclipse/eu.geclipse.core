@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -59,7 +59,7 @@ import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridModelListener;
 import eu.geclipse.core.model.IGridPreferences;
 import eu.geclipse.ui.Extensions;
-import eu.geclipse.ui.dialogs.NewProblemDialog;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.providers.ConnectionViewContentProvider;
 import eu.geclipse.ui.providers.ConnectionViewLabelProvider;
@@ -428,10 +428,10 @@ public class ConnectionDefinitionWizardPage extends WizardPage {
         
       } catch ( GridModelException gmExc ) {
         setErrorMessage( Messages.getString("ConnectionDefinitionWizardPage.temp_connection_error") + gmExc.getMessage() ); //$NON-NLS-1$
-        NewProblemDialog.openProblem( getShell(),
-                                      Messages.getString("ConnectionDefinitionWizardPage.connection_error_title"), //$NON-NLS-1$
-                                      Messages.getString("ConnectionDefinitionWizardPage.connection_error_text"), //$NON-NLS-1$
-                                      gmExc );
+        ProblemDialog.openProblem( getShell(),
+                                   Messages.getString("ConnectionDefinitionWizardPage.connection_error_title"), //$NON-NLS-1$
+                                   Messages.getString("ConnectionDefinitionWizardPage.connection_error_text"), //$NON-NLS-1$
+                                   gmExc );
       }
       
       /*

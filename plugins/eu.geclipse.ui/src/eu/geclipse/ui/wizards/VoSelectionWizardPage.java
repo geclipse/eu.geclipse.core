@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -52,7 +52,7 @@ import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridInfoService;
 import eu.geclipse.core.model.IVirtualOrganization;
-import eu.geclipse.ui.dialogs.NewProblemDialog;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.wizards.wizardselection.ExtPointWizardSelectionListPage;
 
@@ -281,7 +281,7 @@ public class VoSelectionWizardPage extends WizardPage {
       IVirtualOrganization vo
         = (IVirtualOrganization) this.tableViewer.getElementAt( index );
       try {
-        String text = "";
+        String text = ""; //$NON-NLS-1$
         text += "Name:\n\t" + vo.getName() + '\n';
         text += "Type:\n\t" + vo.getTypeName() + '\n';
         IGridInfoService infoService = vo.getInfoService();
@@ -314,10 +314,10 @@ public class VoSelectionWizardPage extends WizardPage {
         */
         this.infoText.setText( text );
       } catch ( GridModelException gmExc ) {
-        NewProblemDialog.openProblem( getShell(),
-                                      "VO info problem",
-                                      "Unable to query services for VO " + vo.getName(),
-                                      gmExc );
+        ProblemDialog.openProblem( getShell(),
+                                   "VO info problem",
+                                   "Unable to query services for VO " + vo.getName(),
+                                   gmExc );
       }
     } else {
       this.infoText.setText( "" ); //$NON-NLS-1$
@@ -332,10 +332,10 @@ public class VoSelectionWizardPage extends WizardPage {
         this.voList.add( (IVirtualOrganization) vo );
       }
     } catch ( GridModelException gmExc ) {
-      NewProblemDialog.openProblem( getShell(),
-                                    "VO list problem",
-                                    "Unable to query registered VOs",
-                                    gmExc );
+      ProblemDialog.openProblem( getShell(),
+                                 "VO list problem",
+                                 "Unable to query registered VOs",
+                                 gmExc );
     }
   }
   

@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -74,7 +74,6 @@ import org.eclipse.ui.part.ViewPart;
 
 import eu.geclipse.core.ExtensionManager;
 import eu.geclipse.core.Extensions;
-import eu.geclipse.core.auth.AuthTokenRequest;
 import eu.geclipse.core.auth.AuthenticationException;
 import eu.geclipse.core.auth.AuthenticationTokenManager;
 import eu.geclipse.core.auth.IAuthenticationToken;
@@ -84,7 +83,7 @@ import eu.geclipse.ui.UIAuthTokenProvider;
 import eu.geclipse.ui.cheatsheets.OpenAuthTokenDialogAction;
 import eu.geclipse.ui.comparators.TableColumnComparator;
 import eu.geclipse.ui.dialogs.AuthTokenInfoDialog;
-import eu.geclipse.ui.dialogs.NewProblemDialog;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.listeners.TableColumnListener;
 
@@ -542,13 +541,13 @@ public class AuthTokenView extends ViewPart implements IContentChangeListener {
     if ( exc != null ) {
       String errMsg
         = active
-        ? Messages.getString("AuthTokenView.token_activation_error") //$NON-NLS-1$
-        : Messages.getString("AuthTokenView.token_deactivation_error"); //$NON-NLS-1$
-      NewProblemDialog.openProblem( getSite().getShell(),
-                                    Messages.getString("AuthTokenView.token_activation_error_title"), //$NON-NLS-1$
-                                    errMsg, exc );
+          ? Messages.getString("AuthTokenView.token_activation_error") //$NON-NLS-1$
+          : Messages.getString("AuthTokenView.token_deactivation_error"); //$NON-NLS-1$
+      ProblemDialog.openProblem( getSite().getShell(),
+                                 Messages.getString("AuthTokenView.token_activation_error_title"), //$NON-NLS-1$
+                                 errMsg,
+                                 exc );
     }
-    
   }
 
   /**

@@ -44,7 +44,6 @@ import org.eclipse.swt.widgets.Text;
 import eu.geclipse.core.reporting.IProblem;
 import eu.geclipse.core.reporting.ISolution;
 import eu.geclipse.core.reporting.ProblemException;
-import eu.geclipse.ui.dialogs.NewProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 
 /**
@@ -97,7 +96,7 @@ public class DateTimeText {
   }
 
   /**
-   * @param date date, which will be visibled in widget
+   * @param date date which will be shown in widget
    */
   public void setDate( final Date date ) {
     String valueString = ""; //$NON-NLS-1$
@@ -200,7 +199,7 @@ public class DateTimeText {
         date = formatter.parse( dateString );
       } catch( ParseException exception ) {
         // if declared parser doesn't work for entered data, try to use other
-        // parsers (maybe user ommited some date parts)?
+        // parsers (maybe user omitted some date parts)?
         date = parseOtherFormats( dateString );
         
         if( date == null ) {

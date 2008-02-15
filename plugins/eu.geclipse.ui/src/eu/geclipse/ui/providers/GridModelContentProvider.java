@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -15,26 +15,23 @@
 
 package eu.geclipse.ui.providers;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.ITreeViewerListener;
 import org.eclipse.jface.viewers.TreeExpansionEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
-import eu.geclipse.ui.dialogs.NewProblemDialog;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
+
 
 /**
  * Tree content provider for data contained in the grid model.
@@ -156,10 +153,10 @@ public class GridModelContentProvider
       } catch( GridModelException gmExc ) {
         if ( this.treeViewer != null ) {
           Shell shell = this.treeViewer.getControl().getShell();
-          NewProblemDialog.openProblem( shell,
-                                        Messages.getString("GridModelContentProvider.problem_title"), //$NON-NLS-1$
-                                        Messages.getString("GridModelContentProvider.problem_text") + container.getName(), //$NON-NLS-1$
-                                        gmExc );
+          ProblemDialog.openProblem( shell,
+                                     Messages.getString("GridModelContentProvider.problem_title"), //$NON-NLS-1$
+                                     Messages.getString("GridModelContentProvider.problem_text") + container.getName(), //$NON-NLS-1$
+                                     gmExc );
         } else {
           Activator.logException( gmExc );
         }

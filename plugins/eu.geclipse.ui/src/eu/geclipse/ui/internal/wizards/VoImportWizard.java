@@ -27,11 +27,10 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
 
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.IVoLoader;
 import eu.geclipse.core.reporting.ProblemException;
-import eu.geclipse.ui.dialogs.NewProblemDialog;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 
 
@@ -126,12 +125,10 @@ public class VoImportWizard extends Wizard {
       
     } catch ( InvocationTargetException itExc ) {
       Throwable cause = itExc.getCause();
-      NewProblemDialog.openProblem(
-          getShell(),
-          "Import failed",
-          "Import failed",
-          cause
-      );
+      ProblemDialog.openProblem( getShell(),
+                                 "Import failed",
+                                 "Import failed",
+                                 cause );
       currentPage.setErrorMessage( cause.getLocalizedMessage() );
       result = false;
     } catch ( InterruptedException intExc ) {

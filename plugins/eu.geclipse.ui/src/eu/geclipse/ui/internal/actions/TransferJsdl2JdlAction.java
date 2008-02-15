@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,6 +11,7 @@
  *
  * Contributors:
  *    Harald Kornmayer - initial API and implementation
+ *    Ariel Garcia     - updated to new problem reporting
  *****************************************************************************/
 
 package eu.geclipse.ui.internal.actions;
@@ -46,7 +47,7 @@ import org.osgi.framework.Bundle;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridJobCreator;
 import eu.geclipse.core.model.IGridJobDescription;
-import eu.geclipse.ui.dialogs.NewProblemDialog;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 
 /**
@@ -161,25 +162,25 @@ public class TransferJsdl2JdlAction extends SelectionListenerAction {
     
       page.openEditor( new FileEditorInput( outfile ), desc.getId() );
     } catch( CoreException e ) {
-      NewProblemDialog.openProblem( this.site.getShell(),
-                                    Messages.getString("TransferJsdl2JdlAction.DialogTitleCoreException"), //$NON-NLS-1$
-                                    Messages.getString("TransferJsdl2JdlAction.DialogMessageCoreException"), //$NON-NLS-1$
-                                    e );
+      ProblemDialog.openProblem( this.site.getShell(),
+                                 Messages.getString("TransferJsdl2JdlAction.DialogTitleCoreException"), //$NON-NLS-1$
+                                 Messages.getString("TransferJsdl2JdlAction.DialogMessageCoreException"), //$NON-NLS-1$
+                                 e );
     } catch( IOException e ) {
-      NewProblemDialog.openProblem( this.site.getShell(),
-                                    Messages.getString("TransferJsdl2JdlAction.DialogTitleIOException"), //$NON-NLS-1$
-                                    Messages.getString("TransferJsdl2JdlAction.DialogMessageIOException"), //$NON-NLS-1$
-                                    e );
+      ProblemDialog.openProblem( this.site.getShell(),
+                                 Messages.getString("TransferJsdl2JdlAction.DialogTitleIOException"), //$NON-NLS-1$
+                                 Messages.getString("TransferJsdl2JdlAction.DialogMessageIOException"), //$NON-NLS-1$
+                                 e );
     } catch( TransformerConfigurationException e ) {
-      NewProblemDialog.openProblem( this.site.getShell(),
-                                    Messages.getString("TransferJsdl2JdlAction.DialogTitleTransformerConfigException"), //$NON-NLS-1$
-                                    Messages.getString("TransferJsdl2JdlAction.DialogMessageTransformationConfigException"), //$NON-NLS-1$
-                                    e );
+      ProblemDialog.openProblem( this.site.getShell(),
+                                 Messages.getString("TransferJsdl2JdlAction.DialogTitleTransformerConfigException"), //$NON-NLS-1$
+                                 Messages.getString("TransferJsdl2JdlAction.DialogMessageTransformationConfigException"), //$NON-NLS-1$
+                                 e );
     } catch( TransformerException e ) {
-      NewProblemDialog.openProblem( this.site.getShell(),
-                                    Messages.getString("TransferJsdl2JdlAction.DialogTitleTransformerException"), //$NON-NLS-1$
-                                    Messages.getString("TransferJsdl2JdlAction.DialogMessageTransformerException"), //$NON-NLS-1$
-                                    e ); 
+      ProblemDialog.openProblem( this.site.getShell(),
+                                 Messages.getString("TransferJsdl2JdlAction.DialogTitleTransformerException"), //$NON-NLS-1$
+                                 Messages.getString("TransferJsdl2JdlAction.DialogMessageTransformerException"), //$NON-NLS-1$
+                                 e ); 
     }
   }
 
