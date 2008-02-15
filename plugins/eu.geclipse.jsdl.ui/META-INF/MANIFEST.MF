@@ -6,9 +6,9 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: eu.geclipse.jsdl.ui.internal.Activator
 Bundle-Vendor: %Bundle-Vendor
 Bundle-Localization: plugin
-Require-Bundle: org.eclipse.core.filesystem,
+Require-Bundle: org.eclipse.compare,
+ org.eclipse.core.filesystem,
  org.eclipse.core.runtime,
- org.eclipse.compare,
  org.eclipse.debug.ui,
  org.eclipse.emf.edit.ui,
  org.eclipse.ui.forms,
@@ -16,6 +16,7 @@ Require-Bundle: org.eclipse.core.filesystem,
  org.eclipse.wst.sse.ui,
  org.eclipse.wst.xml.core,
  eu.geclipse.core,
+ eu.geclipse.core.reporting,
  eu.geclipse.jsdl,
  eu.geclipse.jsdl.model,
  eu.geclipse.ui

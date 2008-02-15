@@ -110,9 +110,6 @@ public class VoImportWizard extends Wizard {
                 certList.add( certificate );
               }*/
             }
-          // TODO ariel just a partial step, will be removed next
-          } catch( GridModelException gmExc ) {
-            throw new InvocationTargetException( gmExc );
           } catch ( ProblemException pExc ) {
             throw new InvocationTargetException( pExc );
           } finally {

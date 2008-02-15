@@ -43,11 +43,10 @@ public interface IVoLoader {
    * @throws ProblemException If an error occurs while the
    * VO is imported.
    */
-  // TODO ariel just a partial step, will be removed next
   public IVirtualOrganization getVo( final URI uri,
                                      final String name,
                                      final IProgressMonitor monitor )
-    throws ProblemException, GridModelException;
+    throws ProblemException;
   
   /**
    * Get a list of VO names that are found at the specified

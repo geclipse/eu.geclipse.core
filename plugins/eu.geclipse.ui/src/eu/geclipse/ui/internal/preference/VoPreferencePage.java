@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,6 +11,7 @@
  *
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
+ *    Ariel Garcia      - updated to new problem reporting
  *****************************************************************************/
 
 package eu.geclipse.ui.internal.preference;
@@ -66,11 +67,12 @@ import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.IVoManager;
 import eu.geclipse.ui.comparators.TableColumnComparator;
-import eu.geclipse.ui.dialogs.NewProblemDialog;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.internal.wizards.VoImportWizard;
 import eu.geclipse.ui.listeners.TableColumnListener;
 import eu.geclipse.ui.wizards.wizardselection.ExtPointWizardSelectionListPage;
+
 
 /**
  * This class represents a preference page that is contributed to the
@@ -114,10 +116,10 @@ public class VoPreferencePage
           } );
         } catch ( GridModelException gmExc ) {
           if ( this.shell != null ) {
-            NewProblemDialog.openProblem( this.shell,
-                                          Messages.getString("VoPreferencePage.content_provider_problem"), //$NON-NLS-1$
-                                          Messages.getString("VoPreferencePage.query_vo_failed"), //$NON-NLS-1$
-                                          gmExc );
+            ProblemDialog.openProblem( this.shell,
+                                       Messages.getString("VoPreferencePage.content_provider_problem"), //$NON-NLS-1$
+                                       Messages.getString("VoPreferencePage.query_vo_failed"), //$NON-NLS-1$
+                                       gmExc );
           } else {
             Activator.logException( gmExc );
           }
@@ -526,11 +528,11 @@ public class VoPreferencePage
             try {
               manager.delete( vo );
             } catch( GridModelException gmExc ) {
-              NewProblemDialog.openProblem( this.getShell(),
-                                            Messages.getString("VoPreferencePage.error"), //$NON-NLS-1$
-                                            Messages.getString("VoPreferencePage.delete_vo_failed") + " " + vo.getName(), //$NON-NLS-1$ //$NON-NLS-2$
-                                            gmExc,
-                                            null );
+              ProblemDialog.openProblem( this.getShell(),
+                                         Messages.getString("VoPreferencePage.error"), //$NON-NLS-1$
+                                         Messages.getString("VoPreferencePage.delete_vo_failed") //$NON-NLS-1$
+                                           + " " + vo.getName(), //$NON-NLS-1$
+                                         gmExc );
             }
           }
         }

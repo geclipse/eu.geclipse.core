@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2007 g-Eclipse consortium
+ * Copyright (c) 2007, 2008 g-Eclipse consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -12,7 +12,7 @@
  * Contributor(s):
  *     UCY (http://www.cs.ucy.ac.cy)
  *      - Harald Gjermundrod (harald@cs.ucy.ac.cy)
- *
+ *     FZK - Ariel Garcia - updated to new problem reporting
  *****************************************************************************/
 package eu.geclipse.batch;
 
@@ -29,8 +29,9 @@ import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 
+import eu.geclipse.batch.internal.Activator;
+import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.model.GridModelException;
-import eu.geclipse.core.model.GridModelProblems;
 import eu.geclipse.core.model.IGridSiteConfig;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
 
@@ -114,12 +115,12 @@ public class BatchConnectionInfo extends ResourceGridContainer implements IGridS
 
       String str = bReader.readLine();
       if ( null == str )
-        throw new GridModelException( GridModelProblems.ELEMENT_LOAD_FAILED );
+        throw new GridModelException( ICoreProblems.MODEL_ELEMENT_LOAD_FAILED, Activator.PLUGIN_ID );
       this.updateInterval = Integer.parseInt( str );
     } catch ( IOException ioExc ) {
-      throw new GridModelException( GridModelProblems.ELEMENT_LOAD_FAILED, ioExc );
+      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_LOAD_FAILED, ioExc, Activator.PLUGIN_ID );
     } catch ( CoreException cExc ) {
-      throw new GridModelException( GridModelProblems.ELEMENT_LOAD_FAILED, cExc );
+      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_LOAD_FAILED, cExc, Activator.PLUGIN_ID );
     } finally {
       if ( null != bReader )
         try {
@@ -148,9 +149,9 @@ public class BatchConnectionInfo extends ResourceGridContainer implements IGridS
       bWriter.write( String.valueOf( this.updateInterval ) );
       bWriter.close();
     } catch ( CoreException cExc ) {
-      throw new GridModelException( GridModelProblems.ELEMENT_SAVE_FAILED, cExc );
+      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_SAVE_FAILED, cExc, Activator.PLUGIN_ID );
     } catch ( IOException ioExc ) {
-      throw new GridModelException( GridModelProblems.ELEMENT_SAVE_FAILED, ioExc );
+      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_SAVE_FAILED, ioExc, Activator.PLUGIN_ID );
     }
   }
 }

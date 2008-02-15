@@ -17,26 +17,30 @@ package eu.geclipse.core;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
 //import eu.geclipse.core.auth.AuthenticationProblems;
-import eu.geclipse.core.model.GridModelProblems;
+//import eu.geclipse.core.model.GridModelProblems;
 
 /**
  * This is a combined test between different classes and packages
  * Including: eu.eclipse.core.IproblemProvider, ProblemRegistry, Solution, 
  * SolutionRegistry, CoreProblems, eu.geclipse.core.auth.AuthenticationProblems,
  * eu.geclipse.core.model.GridmodelProblems
+ * 
+ * TODO: This test has to be updated to the new problem reporting or has to be deleted. Ariel
+ * 
  * @author jie
- *
  */
-
+@Deprecated
 public class ProblemSolutionProviderRegistry_Test {
 
   CoreProblems coreproblem;
   SolutionRegistry solutionregister;
-  GridModelProblems gridmodelproblem;
+  //GridModelProblems gridmodelproblem;
   //AuthenticationProblems authproblem;
   
   /**setup
@@ -48,7 +52,7 @@ public class ProblemSolutionProviderRegistry_Test {
     this.coreproblem = new CoreProblems();
     //this.authproblem = new AuthenticationProblems();
     this.solutionregister = SolutionRegistry.getRegistry();
-    this.gridmodelproblem = new GridModelProblems();
+    //this.gridmodelproblem = new GridModelProblems();
   }
   
   /**
@@ -63,13 +67,12 @@ public class ProblemSolutionProviderRegistry_Test {
    * methods. Worklow:
    * 1. assume there be a "connection failed" error
    * 2. find the solution(s) for it
-   * 3. assume a "certiication load ailed" error
+   * 3. assume a "certification load failed" error
    * 4. find the solution
    * 5. assume a "fetch children failed" error
    * 6. search the solution
    * @author jie
    */
-  
   @Test
   public void testProblem_Provider_Solu_Registry()
   {
@@ -96,12 +99,13 @@ public class ProblemSolutionProviderRegistry_Test {
 //    Assert.assertEquals( new Integer( 0 ),new Integer( solutions.size()));
 //    Assert.assertEquals( "Unable to load certificate",problem.getText()); //$NON-NLS-1$
     
-    problem_id = GridModelProblems.FETCH_CHILDREN_FAILED;
-    problem = this.gridmodelproblem.getProblem( problem_id, exc );
+//    problem_id = GridModelProblems.FETCH_CHILDREN_FAILED;
+//    problem = this.gridmodelproblem.getProblem( problem_id, exc );
     solutions = problem.getSolutions( this.solutionregister );
     Assert.assertEquals( new Integer( SolutionRegistry.CHECK_CA_CERTIFICATES ),
                          new Integer( solutions.get( 0 ).getID() ));
     Assert.assertEquals( "Check your imported CA-certificates",solutions.get( 0 ).getText() ); //$NON-NLS-1$
+    // Changed to AUTH_CHECK_TOKENS
     Assert.assertEquals( new Integer( SolutionRegistry.CHECK_AUTH_TOKENS ),
                          new Integer( solutions.get( 1 ).getID() ));
     Assert.assertEquals( "Check your authentication tokens",solutions.get( 1 ).getText() ); //$NON-NLS-1$

@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -12,6 +12,7 @@
  * Contributors:
  *    Pawel Wolniewicz 
  *    Mariusz Wojtysiak
+ *    Ariel Garcia      - updated to new problem reporting
  *****************************************************************************/
 package eu.geclipse.core.jobs;
 
@@ -22,8 +23,9 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
+import eu.geclipse.core.ICoreProblems;
+import eu.geclipse.core.jobs.internal.Activator;
 import eu.geclipse.core.model.GridModelException;
-import eu.geclipse.core.model.GridModelProblems;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridJob;
@@ -32,6 +34,7 @@ import eu.geclipse.core.model.IGridJobID;
 import eu.geclipse.core.model.IGridWorkflow;
 import eu.geclipse.core.model.impl.AbstractGridJobCreator;
 import eu.geclipse.jsdl.JSDLJobDescription;
+
 
 /**
  * GridJobCreator creates grid jobs. A GridJob object is middleware independent
@@ -59,10 +62,12 @@ public class GridJobCreator extends AbstractGridJobCreator {
   {
     IResource resource = ( IResource )getObject();
     if( resource == null ) {
-      throw new GridModelException( GridModelProblems.ELEMENT_CREATE_FAILED );
+      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
+                                    Activator.PLUGIN_ID );
     }
     if( !( resource instanceof IFolder ) ) {
-      throw new GridModelException( GridModelProblems.ELEMENT_CREATE_FAILED );
+      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
+                                    Activator.PLUGIN_ID );
     }
     return new GridJob( ( IFolder )resource );
   }
@@ -100,9 +105,9 @@ public class GridJobCreator extends AbstractGridJobCreator {
     throws GridModelException
   {
     if( !( id instanceof GridJobID ) ) {
-      throw new GridModelException( GridModelProblems.ELEMENT_CREATE_FAILED,
-                                    null,
-                                    Messages.getString( "GridJobCreator.cannotCreateJobFromID" ) ); //$NON-NLS-1$
+      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
+                                    Messages.getString( "GridJobCreator.cannotCreateJobFromID" ), //$NON-NLS-1$
+                                    Activator.PLUGIN_ID );
     }
     IGridJobDescription description = getDescription();
     IFolder jobFolder = findJobFileName( description,
@@ -123,10 +128,11 @@ public class GridJobCreator extends AbstractGridJobCreator {
       // move folder to its final location. This will add job to the project
       // tmpJobFolder.move( fullPath, true, null );
     } catch( CoreException cExc ) {
-      throw new GridModelException( GridModelProblems.ELEMENT_CREATE_FAILED,
-                                    cExc,
+      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
                                     Messages.getString( "GridJobCreator.problemCreatingFolder" ) //$NON-NLS-1$
-                                        + jobFolder.getName() );
+                                      + jobFolder.getName(),
+                                    cExc,
+                                    Activator.PLUGIN_ID );
     }
   }
 

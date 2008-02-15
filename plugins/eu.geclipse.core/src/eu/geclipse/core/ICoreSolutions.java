@@ -38,12 +38,16 @@ public interface ICoreSolutions {
   // Net
   public static final String NET_CHECK_FIREWALL
     = "eu.geclipse.core.solution.net.checkFirewall"; //$NON-NLS-1$
+  public static final String NET_CHECK_HOSTNAME_MATCHES_IP_ADDRESS
+    = "eu.geclipse.core.solution.net.checkHostnameMatchesIPAddress"; //$NON-NLS-1$
   public static final String NET_CHECK_INTERNET_CONNECTION
     = "eu.geclipse.core.solution.net.checkInternetConnection"; //$NON-NLS-1$
   public static final String NET_CHECK_PORT_ALREADY_IN_USE
     = "eu.geclipse.core.solution.net.checkPortAlreadyInUse"; //$NON-NLS-1$
   public static final String NET_CHECK_PROXY_SETTINGS
     = "eu.geclipse.core.solution.net.checkProxySettings"; //$NON-NLS-1$
+  public static final String NET_CHECK_PUBLIC_IP_ADDRESS
+    = "eu.geclipse.core.solution.net.checkPublicIPAddress"; //$NON-NLS-1$
   public static final String NET_CHECK_SERVER_URL
     = "eu.geclipse.core.solution.net.checkServerURL"; //$NON-NLS-1$
   public static final String NET_CHECK_TIMEOUT_SETTINGS

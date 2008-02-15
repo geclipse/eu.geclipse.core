@@ -43,8 +43,6 @@
    <extension
          point="eu.geclipse.core.problemProvider">
       <provider class="eu.geclipse.core.CoreProblems"/>
-      <provider class="eu.geclipse.core.model.GridModelProblems"/>
-      <provider class="eu.geclipse.core.security.GridGSSProblems"/>
    </extension>
    <extension
          point="eu.geclipse.core.authTokenProvider">
@@ -305,6 +303,10 @@
             id="eu.geclipse.core.solution.net.checkFirewall">
       </solution>
       <solution
+            description="Make sure your hostname matches the DNS entry for your IP address"
+            id="eu.geclipse.core.solution.net.checkHostnameMatchesIPAddress">
+      </solution>
+      <solution
             description="Check your internet connection"
             id="eu.geclipse.core.solution.net.checkInternetConnection">
       </solution>
@@ -318,6 +320,10 @@
          <preferenceTag
                pageID="org.eclipse.ui.net.NetPreferences">
          </preferenceTag>
+      </solution>
+      <solution
+            description="Make sure you have a public IP address"
+            id="eu.geclipse.core.solution.net.checkPublicIPAddress">
       </solution>
       <solution
             description="Check your server URL"

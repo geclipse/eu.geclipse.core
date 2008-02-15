@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,7 +11,9 @@
  *
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
+ *    Ariel Garcia      - updated to new problem reporting
  *****************************************************************************/
+
 package eu.geclipse.core.internal.model;
 
 import java.io.File;
@@ -32,10 +34,10 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 
+import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
-import eu.geclipse.core.model.GridModelProblems;
 import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
@@ -45,6 +47,7 @@ import eu.geclipse.core.model.IGridRoot;
 import eu.geclipse.core.model.IGridTest;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
+
 
 /**
  * The hidden project is a project that is not visible in the Grid model views.
@@ -119,9 +122,10 @@ public class HiddenProject
       IStatus status = ResourcesPlugin.getWorkspace()
         .validateProjectLocation( project, projectPath );
       if( status.getSeverity() != IStatus.OK ) {
-        throw new GridModelException( GridModelProblems.PREFERENCE_CREATION_FAILED,
+        throw new GridModelException( ICoreProblems.MODEL_PREFERENCE_CREATION_FAILED,
+                                      status.getMessage(),
                                       status.getException(),
-                                      status.getMessage() );
+                                      Activator.PLUGIN_ID );
       }
       IProjectDescription desc = project.getWorkspace()
         .newProjectDescription( projectName );
@@ -129,8 +133,9 @@ public class HiddenProject
       try {
         project.create( desc, null );
       } catch( CoreException cExc ) {
-        throw new GridModelException( GridModelProblems.PREFERENCE_CREATION_FAILED,
-                                      cExc );
+        throw new GridModelException( ICoreProblems.MODEL_PREFERENCE_CREATION_FAILED,
+                                      cExc,
+                                      Activator.PLUGIN_ID );
       }
     }
     return new HiddenProject( project );
@@ -160,8 +165,9 @@ public class HiddenProject
       IFolder connection = folder.getFolder( name );
       connection.createLink( masterURI, IResource.ALLOW_MISSING_LOCAL, null );
     } catch( CoreException cExc ) {
-      throw new GridModelException( GridModelProblems.ELEMENT_CREATE_FAILED,
-                                    cExc );
+      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
+                                    cExc,
+                                    Activator.PLUGIN_ID );
     }
   }
 
@@ -185,8 +191,9 @@ public class HiddenProject
       result = ( IGridConnection )GridModel.getConnectionManager()
         .findChild( TEMP_CONNECTION_NAME );
     } catch( CoreException cExc ) {
-      throw new GridModelException( GridModelProblems.ELEMENT_CREATE_FAILED,
-                                    cExc );
+      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
+                                    cExc,
+                                    Activator.PLUGIN_ID );
     }
     return result;
   }

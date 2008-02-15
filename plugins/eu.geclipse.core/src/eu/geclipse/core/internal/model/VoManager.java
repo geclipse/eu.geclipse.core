@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,6 +11,7 @@
  *
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
+ *    Ariel Garcia      - updated to new problem reporting
  *****************************************************************************/
 
 package eu.geclipse.core.internal.model;
@@ -19,11 +20,12 @@ import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.runtime.CoreException;
+
+import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.Preferences;
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
-import eu.geclipse.core.model.GridModelProblems;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IStorableElement;
 import eu.geclipse.core.model.IStorableElementCreator;
@@ -122,7 +124,9 @@ public class VoManager
     try {
       childStores = fileStore.childStores( EFS.NONE, null );
     } catch( CoreException cExc ) {
-      throw new GridModelException( GridModelProblems.ELEMENT_LOAD_FAILED, cExc );
+      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_LOAD_FAILED,
+                                    cExc,
+                                    Activator.PLUGIN_ID );
     }
     
     for ( IFileStore childStore : childStores ) {

@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -12,6 +12,7 @@
  * Contributors:
  *    Pawel Wolniewicz 
  *    Mariusz Wojtysiak
+ *    Ariel Garcia      - updated to new problem reporting
  *****************************************************************************/
 package eu.geclipse.core.jobs;
 
@@ -49,13 +50,13 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import eu.geclipse.core.ExtensionManager;
+import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.core.GridJobStatusServiceFactoryManager;
 import eu.geclipse.core.filesystem.GEclipseURI;
 import eu.geclipse.core.jobs.internal.Activator;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
-import eu.geclipse.core.model.GridModelProblems;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.core.model.IGridElementManager;
@@ -68,6 +69,7 @@ import eu.geclipse.core.model.IGridJobStatusServiceFactory;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
 import eu.geclipse.core.model.impl.ResourceGridElement;
 import eu.geclipse.jsdl.JSDLJobDescription;
+
 
 /**
  * Class representing submitted job.
@@ -454,13 +456,15 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
       this.jobDescriptionFile.create( is, true, null );
       is.close();
     } catch( CoreException cExc ) {
-      throw new GridModelException( GridModelProblems.ELEMENT_CREATE_FAILED,
+      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
+                                    "Problem while creating job description file", //$NON-NLS-1$
                                     cExc,
-                                    "Problem while creating job description file" ); //$NON-NLS-1$
+                                    Activator.PLUGIN_ID );
     } catch( IOException ioExc ) {
-      throw new GridModelException( GridModelProblems.ELEMENT_CREATE_FAILED,
+      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
+                                    "Problem while creating job description file", //$NON-NLS-1$
                                     ioExc,
-                                    "Problem while creating job description file" ); //$NON-NLS-1$
+                                    Activator.PLUGIN_ID );
     }
   }
 
@@ -478,9 +482,10 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     // create jobID file
     file = jobFolder.getFile( GridJob.JOBID_FILENAME );
     if( !( id instanceof GridJobID ) ) {
-      throw new GridModelException( GridModelProblems.ELEMENT_SAVE_FAILED,
+      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_SAVE_FAILED,
                                     "GridJobID was expected instead of " //$NON-NLS-1$
-                                        + id.getClass() );
+                                        + id.getClass(),
+                                    Activator.PLUGIN_ID );
     }
     String xml = ( ( GridJobID )id ).getXML();
     Activator.consoleLog( xml );
@@ -490,14 +495,16 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
       ByteArrayInputStream baos = new ByteArrayInputStream( byteArray );
       file.create( baos, true, null );
     } catch( CoreException cExc ) {
-      throw new GridModelException( GridModelProblems.ELEMENT_CREATE_FAILED,
-                                    cExc,
+      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
                                     "Problem while creating job ID file " //$NON-NLS-1$
-                                        + file.getName() );
+                                        + file.getName(),
+                                    cExc,
+                                    Activator.PLUGIN_ID );
     } catch( UnsupportedEncodingException e ) {
-      throw new GridModelException( GridModelProblems.ELEMENT_CREATE_FAILED,
+      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
+                                    "Problem while creating job ID file ", //$NON-NLS-1$
                                     e,
-                                    "Problem while creating job ID file " ); //$NON-NLS-1$
+                                    Activator.PLUGIN_ID );
     }
   }
 
@@ -519,7 +526,6 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     Activator.consoleLog( xml );
     try {
       byteArray = xml.getBytes( XML_CHARSET ); // choose a charset
-      // //$NON-NLS-1$
       baos = new ByteArrayInputStream( byteArray );
       if( _jobStatusFile.exists() ) {
         _jobStatusFile.setContents( baos, true, true, null );
@@ -527,14 +533,16 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
         _jobStatusFile.create( baos, true, null );
       }
     } catch( CoreException cExc ) {
-      throw new GridModelException( GridModelProblems.ELEMENT_CREATE_FAILED,
-                                    cExc,
+      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
                                     "Problem while writing job status file " //$NON-NLS-1$
-                                        + _jobStatusFile.getName() );
+                                        + _jobStatusFile.getName(),
+                                    cExc,
+                                    Activator.PLUGIN_ID );
     } catch( UnsupportedEncodingException e ) {
-      throw new GridModelException( GridModelProblems.ELEMENT_CREATE_FAILED,
+      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
+                                    "Problem while creating job status file ", //$NON-NLS-1$
                                     e,
-                                    "Problem while creating job status file " ); //$NON-NLS-1$
+                                    Activator.PLUGIN_ID );
     }
   }
 
@@ -586,14 +594,16 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
       baos = new ByteArrayInputStream( byteArray );
       file.create( baos, true, null );
     } catch( CoreException cExc ) {
-      throw new GridModelException( GridModelProblems.ELEMENT_CREATE_FAILED,
-                                    cExc,
+      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
                                     "Problem while creating job information file " //$NON-NLS-1$
-                                        + file.getName() );
+                                        + file.getName(),
+                                    cExc,
+                                    Activator.PLUGIN_ID );
     } catch( UnsupportedEncodingException e ) {
-      throw new GridModelException( GridModelProblems.ELEMENT_CREATE_FAILED,
+      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
+                                    "Problem while creating job information file ", //$NON-NLS-1$
                                     e,
-                                    "Problem while creating job information file " ); //$NON-NLS-1$
+                                    Activator.PLUGIN_ID );
     }
   }
 
@@ -623,8 +633,8 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
   public static boolean canCreate( final IFolder folder ) {
     IFile infoFile = folder.getFile( GridJob.JOBINFO_FILENAME );
     return "job".equalsIgnoreCase( folder.getFileExtension() ) //$NON-NLS-1$
-                                                              ? infoFile.exists()
-                                                              : false;
+                   ? infoFile.exists()
+                   : false;
   }
 
   /*
@@ -650,9 +660,10 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
           IFolder inputFolder = createStagingFilesFolder( jobFolder, FOLDERNAME_INPUT_FILES );
           createStagingFilesLinks( inputFolder, inStagingMap );
         } catch( CoreException exception ) {
-          throw new GridModelException( GridModelProblems.ELEMENT_CREATE_FAILED,
+          throw new GridModelException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
+                                        Messages.getString("GridJob.errCreateInputFolder"), //$NON-NLS-1$
                                         exception,
-                                        Messages.getString("GridJob.errCreateInputFolder") ); //$NON-NLS-1$
+                                        Activator.PLUGIN_ID );
         }        
       }      
 
@@ -662,9 +673,10 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
           IFolder outputFolder  = createStagingFilesFolder( jobFolder, FOLDERNAME_OUTPUT_FILES );
           createStagingFilesLinks( outputFolder, outStagingMap );
         } catch( CoreException exception ) {
-          throw new GridModelException( GridModelProblems.ELEMENT_CREATE_FAILED,
+          throw new GridModelException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
+                                        Messages.getString("GridJob.errCreateOutputFolder"), //$NON-NLS-1$
                                         exception,
-                                        Messages.getString("GridJob.errCreateOutputFolder") ); //$NON-NLS-1$
+                                        Activator.PLUGIN_ID );
         }        
       }
       

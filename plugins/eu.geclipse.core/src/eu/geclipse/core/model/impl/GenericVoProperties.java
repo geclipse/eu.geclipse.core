@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,6 +11,7 @@
  *
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
+ *    Ariel Garcia      - updated to new problem reporting
  *****************************************************************************/
 
 package eu.geclipse.core.model.impl;
@@ -26,10 +27,12 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 
+import eu.geclipse.core.ICoreProblems;
+import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.GridModelException;
-import eu.geclipse.core.model.GridModelProblems;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IStorableElement;
+
 
 /**
  * Properties for the {@link GenericVirtualOrganization}.
@@ -87,9 +90,13 @@ public class GenericVoProperties
       bWriter.write( this.vo.getName() );
       bWriter.close();
     } catch ( CoreException cExc ) {
-      throw new GridModelException( GridModelProblems.ELEMENT_SAVE_FAILED, cExc );
+      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_SAVE_FAILED,
+                                    cExc,
+                                    Activator.PLUGIN_ID );
     } catch ( IOException ioExc ) {
-      throw new GridModelException( GridModelProblems.ELEMENT_SAVE_FAILED, ioExc );
+      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_SAVE_FAILED,
+                                    ioExc,
+                                    Activator.PLUGIN_ID );
     }
   }
 

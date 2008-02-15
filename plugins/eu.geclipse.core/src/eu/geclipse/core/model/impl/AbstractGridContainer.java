@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,6 +11,7 @@
  *
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
+ *    Ariel Garcia      - updated to new problem reporting
  *****************************************************************************/
 
 package eu.geclipse.core.model.impl;
@@ -26,12 +27,12 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
+import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.internal.model.GridRoot;
 import eu.geclipse.core.internal.model.notify.GridModelEvent;
 import eu.geclipse.core.internal.model.notify.GridNotificationService;
 import eu.geclipse.core.model.GridModelException;
-import eu.geclipse.core.model.GridModelProblems;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
@@ -40,6 +41,7 @@ import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridModelListener;
 import eu.geclipse.core.model.IManageable;
 import eu.geclipse.core.util.MasterMonitor;
+
 
 /**
  * Base implementation of the {@link IGridContainer} interface that
@@ -243,14 +245,18 @@ public abstract class AbstractGridContainer
         try {
           container.refreshLocal( IResource.DEPTH_INFINITE, monitor );
         } catch( CoreException cExc ) {
-          throw new GridModelException( GridModelProblems.REFRESH_FAILED, cExc );
+          throw new GridModelException( ICoreProblems.MODEL_REFRESH_FAILED,
+                                        cExc,
+                                        Activator.PLUGIN_ID );
         }
       } else {
         setDirty();
         try {
           getChildren( monitor );
         } catch ( GridModelException gmExc ) {
-          throw new GridModelException( GridModelProblems.REFRESH_FAILED, gmExc );
+          throw new GridModelException( ICoreProblems.MODEL_REFRESH_FAILED,
+                                        gmExc,
+                                        Activator.PLUGIN_ID );
         }
       }
     } finally {
@@ -420,11 +426,11 @@ public abstract class AbstractGridContainer
   private void testCanContain( final IGridElement element )
       throws GridModelException {
     if ( !canContain( element ) ) {
-      throw new GridModelException( GridModelProblems.CONTAINER_CAN_NOT_CONTAIN,
+      throw new GridModelException( ICoreProblems.MODEL_CONTAINER_CAN_NOT_CONTAIN,
           String.format(
               Messages.getString("AbstractGridContainer.can_not_contain_error"), //$NON-NLS-1$
-              getClass().getName(), element.getClass().getName()
-          ) );
+              getClass().getName(), element.getClass().getName() ),
+          Activator.PLUGIN_ID );
     }
   }
   
