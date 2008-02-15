@@ -25,6 +25,7 @@ import org.eclipse.core.runtime.Status;
 /**
  * Abstract implementation of the {@link IProblem} interface. 
  */
+@Deprecated
 public abstract class AbstractProblem implements IProblem {
   
   /**
