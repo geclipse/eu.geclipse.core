@@ -25,6 +25,7 @@ import eu.geclipse.core.ISolution;
  * preference page in order to point the user to the place where
  * some erroneous settings may cause a problem.
  */
+@Deprecated
 public class PreferenceSolution extends UISolution {
   
   /**

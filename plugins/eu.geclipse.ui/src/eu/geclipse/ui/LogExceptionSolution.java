@@ -21,6 +21,7 @@ import eu.geclipse.ui.internal.Activator;
  * Solution implementation for logging an exception to the
  * log and to bring the log view to front. 
  */
+@Deprecated
 public class LogExceptionSolution
     extends ShowViewSolution {
   

@@ -23,6 +23,7 @@ import org.eclipse.ui.PlatformUI;
 import eu.geclipse.core.ISolution;
 import eu.geclipse.ui.internal.Activator;
 
+@Deprecated
 public class ShowViewSolution extends UISolution {
   
   private String viewID;
