@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,6 +11,7 @@
  *
  * Contributors:
  *    Martin Polak GUP, JKU - initial implementation
+ *    Ariel Garcia          - updated to new problem reporting
  *****************************************************************************/
 
 package eu.geclipse.core.monitoring;
@@ -24,15 +25,17 @@ import java.util.StringTokenizer;
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
 
-import eu.geclipse.core.GridException;
+import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.Messages;
+import eu.geclipse.core.internal.Activator;
+import eu.geclipse.core.reporting.ProblemException;
 
 
 /**
  * Contains the /proc/stat values of a process identified via a EFS
  * IFilesore and serves its data as a localized java.util.Hashtable
+ * 
  * @author mpolak
- *
  */
 public class GridProcess {
   protected int pid = 0;
@@ -95,17 +98,18 @@ public class GridProcess {
         if ( this.pid > 0 ) {
           this.procinfo = proc;
         }
-        
     }
     this.values = new Hashtable<String, Integer>();
   }
   
   /**
-   * calling this method causes the process data associated with this object to be re-read
-   * @throws GridException
+   * Calling this method causes the process data associated with
+   * this object to be re-read
+   * 
+   * @throws ProblemException
    */
   @SuppressWarnings("null")
-  public void update() throws GridException {
+  public void update() throws ProblemException {
    
     if ( this.procinfo != null && this.values != null ) {
       this.values.clear();
@@ -123,8 +127,10 @@ public class GridProcess {
           }
         } catch ( Exception e1 ) {
           Throwable cause = e1.getCause();
-          throw new GridException( eu.geclipse.core.CoreProblems.CONNECTION_FAILED, cause,
-                                   "Error reading/parsing stat of remote process " + this.pid ); //$NON-NLS-1$
+          throw new ProblemException( ICoreProblems.NET_CONNECTION_FAILED,
+                                      "Error reading/parsing stat of remote process " + this.pid, //$NON-NLS-1$
+                                      cause,
+                                      Activator.PLUGIN_ID );
         } 
         if ( inr != null ) {
           try {

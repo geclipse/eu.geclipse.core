@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,6 +11,7 @@
  *
  * Contributors:
  *    Martin Polak GUP, JKU - initial implementation
+ *    Ariel Garcia          - updated to new problem reporting
  *****************************************************************************/
 
 package eu.geclipse.core.monitoring;
@@ -28,13 +29,14 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
-import eu.geclipse.core.GridException;
+import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.internal.Activator;
+import eu.geclipse.core.reporting.ProblemException;
 
 
 /**
+ * 
  * @author Martin Polak
- *
  */
 public class GridProcessMonitor {
   protected URI targeturi = null;
@@ -68,7 +70,7 @@ public class GridProcessMonitor {
                                   "eu.geclipse.core.monitoring", //$NON-NLS-1$
                                   "Process data fetched successfully." ); //$NON-NLS-1$
            }
-         } catch( GridException e ) {
+         } catch ( ProblemException e ) {
            Activator.logException( e ); 
          }
          return status;
@@ -86,7 +88,7 @@ public class GridProcessMonitor {
     this.updateJob.cancel();
   }
   
-  synchronized boolean update( final IProgressMonitor monitor ) throws GridException {
+  synchronized boolean update( final IProgressMonitor monitor ) throws ProblemException {
     
     this.procfs = null;
     String[] procfslist = null;
@@ -107,8 +109,9 @@ public class GridProcessMonitor {
       } catch ( CoreException e ) {
         Activator.logException( e );
         //Throwable cause = e.getCause();
-        //throw new GridException(eu.geclipse.core.CoreProblems.CONNECTION_FAILED,
-        //                        cause, "updating a temporary Connection failed"); //$NON-NLS-1$
+        //throw new ProblemException( ICoreProblems.NET_CONNECTION_FAILED,
+        //                        "Updating a temporary Connection failed",
+        //                        cause, Activator.PLUGIN_ID );
         //perhaps better to throw nothing and just return status
         success = false;
       }
@@ -131,7 +134,7 @@ public class GridProcessMonitor {
   }
   
   
-  boolean initialize() throws GridException {
+  boolean initialize() throws ProblemException {
     boolean success = false;
     
     if ( this.targeturi != null ) {
@@ -153,8 +156,10 @@ public class GridProcessMonitor {
       } catch ( CoreException e ) {
         Activator.logException( e );
         Throwable cause = e.getCause();
-        throw new GridException( eu.geclipse.core.CoreProblems.CONNECTION_FAILED,
-                                 cause, "updating a temporary Connection failed" ); //$NON-NLS-1$
+        throw new ProblemException( ICoreProblems.NET_CONNECTION_FAILED,
+                                    "updating a temporary Connection failed", //$NON-NLS-1$
+                                    cause,
+                                    Activator.PLUGIN_ID );
       }
     }
     return success;
