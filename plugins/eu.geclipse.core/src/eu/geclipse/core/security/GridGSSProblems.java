@@ -24,6 +24,7 @@ import eu.geclipse.core.internal.Activator;
 /**
  * Problem provider that maps GSS error codes to g-Eclipse problems.
  */
+@Deprecated
 public class GridGSSProblems implements IProblemProvider {
   
   /**
