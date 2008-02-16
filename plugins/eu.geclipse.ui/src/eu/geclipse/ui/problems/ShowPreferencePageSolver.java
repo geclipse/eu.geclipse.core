@@ -10,7 +10,7 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributor(s):
- *    Mathias Stümpert
+ *    Mathias Stuempert
  *           
  *****************************************************************************/
 package eu.geclipse.ui.problems;
@@ -24,6 +24,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.PreferencesUtil;
 
 import eu.geclipse.core.reporting.IConfigurableSolver;
+
 
 public class ShowPreferencePageSolver
     implements IConfigurableSolver {

@@ -10,7 +10,7 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributor(s):
- *    Mathias Stümpert
+ *    Mathias Stuempert
  *           
  *****************************************************************************/
 package eu.geclipse.ui.problems;
@@ -25,6 +25,7 @@ import org.eclipse.ui.PlatformUI;
 
 import eu.geclipse.core.reporting.IConfigurableSolver;
 import eu.geclipse.ui.internal.Activator;
+
 
 public class ShowViewSolver
     implements IConfigurableSolver {
