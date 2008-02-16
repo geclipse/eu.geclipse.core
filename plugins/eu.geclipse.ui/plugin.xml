@@ -12,6 +12,97 @@
    <extension-point id="eu.geclipse.ui.jobDetailsFactory" name="eu.geclipse.ui.jobDetailsFactory" schema="schema/eu.geclipse.ui.jobDetailsFactory.exsd"/>
    <extension-point id="simpleTestUI" name="Simple Test UI Contributions" schema="schema/simpleTestUI.exsd"/>
    <extension
+         id="application"
+         point="org.eclipse.core.runtime.applications">
+      <application>
+         <run
+               class="eu.geclipse.ui.internal.Application">
+         </run>
+      </application>
+   </extension>
+   <extension
+         id="geclipseProduct"
+         point="org.eclipse.core.runtime.products">
+      <product
+            application="eu.geclipse.ui.geclipseApplication"
+            description="g-Eclipse Standalone Application"
+            name="g-Eclipse RCP">
+      </product>
+   </extension>
+   <extension
+         point="org.eclipse.ui.decorators">
+      <decorator
+            adaptable="false"
+            class="eu.geclipse.ui.decorators.GridJobDecorator"
+            id="eu.geclipse.ui.gridJobDecorator"
+            label="Grid Job Decorator"
+            lightweight="true"
+            state="true">
+         <description>
+            RSL Decorator
+         </description>
+         <enablement>
+            <objectClass
+                  name="eu.geclipse.core.jobs.GridJob">
+            </objectClass>
+         </enablement>
+      </decorator>
+      <decorator
+            adaptable="false"
+            class="eu.geclipse.ui.decorators.GridProjectFolderDecorator"
+            id="eu.geclipse.ui.gridProjectFolderDecorator"
+            label="Grid Project Folder Decorator"
+            lightweight="true"
+            state="true">
+         <enablement>
+            <objectClass
+                  name="eu.geclipse.core.model.IGridContainer">
+            </objectClass></enablement>
+      </decorator>
+   </extension>
+   <extension
+         point="org.eclipse.ui.ide.projectNatureImages">
+      <image
+            natureId="eu.geclipse.core.project.GridProjectNature"
+            icon="icons/ovr16/project_ovr.gif"
+            id="eu.geclipse.ui.NatureImage"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="eu.geclipse.ui.newResourceCategory"
+            name="%category.name.0"/>
+      <wizard
+            canFinishEarly="true"
+            category="eu.geclipse.ui.newResourceCategory"
+            class="eu.geclipse.ui.wizards.NewGridProjectWizard"
+            finalPerspective="eu.geclipse.ui.gEclipsePerspective"
+            hasPages="true"
+            icon="icons/etool16/newgridprj_wiz.gif"
+            id="eu.geclipse.ui.wizards.gridProjectWizard"
+            name="%wizard.gridProject"
+            preferredPerspectives="eu.geclipse.ui.gEclipsePerspective"
+            project="true">
+         <description>
+            %wizard.gridProject.createProject
+         </description>
+      </wizard>
+      <wizard
+            canFinishEarly="true"
+            category="eu.geclipse.ui.newResourceCategory"
+            class="eu.geclipse.ui.wizards.ConnectionWizard"
+            finalPerspective="eu.geclipse.ui.gEclipsePerspective"
+            hasPages="true"
+            icon="icons/etool16/newconn_wiz.gif"
+            id="eu.geclipse.ui.wizards.connectionWizard"
+            name="%wizard.gridConnection"
+            preferredPerspectives="eu.geclipse.ui.gEclipsePerspective">
+         <description>
+            %wizard.gridConnection.createFS
+         </description>
+      </wizard>
+   </extension>
+   <extension
          point="org.eclipse.ui.perspectives">
       <perspective
             class="eu.geclipse.ui.internal.UserPerspectiveFactory"
@@ -96,18 +187,18 @@
             id="eu.geclipse.ui.views.gridProjectView"
             name="%view.gridProject"/>
       <view
-            category="eu.geclipse.ui.viewcategory"
-            class="eu.geclipse.ui.views.GridJobView"
-            icon="icons/eview16/jobs.gif"
-            id="eu.geclipse.ui.views.jobView"
-            name="Jobs"/>
-      <view
             allowMultiple="true"
             category="eu.geclipse.ui.viewcategory"
             class="eu.geclipse.ui.views.GridConnectionView"
             icon="icons/eview16/connections.gif"
             id="eu.geclipse.ui.views.connectionView"
             name="Connections"/>
+      <view
+            category="eu.geclipse.ui.viewcategory"
+            class="eu.geclipse.ui.views.GridJobView"
+            icon="icons/eview16/jobs.gif"
+            id="eu.geclipse.ui.views.jobView"
+            name="Jobs"/>
       <view
             allowMultiple="false"
             category="eu.geclipse.ui.viewcategory"
@@ -122,79 +213,6 @@
             icon="icons/job.gif"
             id="eu.geclipse.ui.views.ProcessStatView"
             name="Process Status Viewer"/>
-   </extension>
-   <extension
-         point="org.eclipse.ui.decorators">
-      <decorator
-            adaptable="false"
-            class="eu.geclipse.ui.decorators.GridJobDecorator"
-            id="eu.geclipse.ui.gridJobDecorator"
-            label="Grid Job Decorator"
-            lightweight="true"
-            state="true">
-         <description>
-            RSL Decorator
-         </description>
-         <enablement>
-            <objectClass
-                  name="eu.geclipse.core.jobs.GridJob">
-            </objectClass>
-         </enablement>
-      </decorator>
-      <decorator
-            adaptable="false"
-            class="eu.geclipse.ui.decorators.GridProjectFolderDecorator"
-            id="eu.geclipse.ui.gridProjectFolderDecorator"
-            label="Grid Project Folder Decorator"
-            lightweight="true"
-            state="true">
-         <enablement>
-            <objectClass
-                  name="eu.geclipse.core.model.IGridContainer">
-            </objectClass></enablement>
-      </decorator>
-   </extension>
-   <extension
-         point="org.eclipse.ui.newWizards">
-      <category
-            id="eu.geclipse.ui.newResourceCategory"
-            name="%category.name.0"/>
-      <wizard
-            canFinishEarly="true"
-            category="eu.geclipse.ui.newResourceCategory"
-            class="eu.geclipse.ui.wizards.NewGridProjectWizard"
-            finalPerspective="eu.geclipse.ui.gEclipsePerspective"
-            hasPages="true"
-            icon="icons/etool16/newgridprj_wiz.gif"
-            id="eu.geclipse.ui.wizards.gridProjectWizard"
-            name="%wizard.gridProject"
-            preferredPerspectives="eu.geclipse.ui.gEclipsePerspective"
-            project="true">
-         <description>
-            %wizard.gridProject.createProject
-         </description>
-      </wizard>
-      <wizard
-            canFinishEarly="true"
-            category="eu.geclipse.ui.newResourceCategory"
-            class="eu.geclipse.ui.wizards.ConnectionWizard"
-            finalPerspective="eu.geclipse.ui.gEclipsePerspective"
-            hasPages="true"
-            icon="icons/etool16/newconn_wiz.gif"
-            id="eu.geclipse.ui.wizards.connectionWizard"
-            name="%wizard.gridConnection"
-            preferredPerspectives="eu.geclipse.ui.gEclipsePerspective">
-         <description>
-            %wizard.gridConnection.createFS
-         </description>
-      </wizard>
-   </extension>
-   <extension
-         point="org.eclipse.ui.ide.projectNatureImages">
-      <image
-            natureId="eu.geclipse.core.project.GridProjectNature"
-            icon="icons/ovr16/project_ovr.gif"
-            id="eu.geclipse.ui.NatureImage"/>
    </extension>
    <extension
          point="eu.geclipse.core.authTokenProvider">
@@ -231,19 +249,6 @@
       </folder>
    </extension>
    <extension
-         point="eu.geclipse.core.problemReporting">
-      <solution
-            description="Show Preference Page Solver"
-            id="showPreferencePageTag"
-            solver="eu.geclipse.ui.problems.ShowPreferencePageSolver">
-      </solution>
-      <solution
-            description="Show View Solver"
-            id="showViewTag"
-            solver="eu.geclipse.ui.problems.ShowViewSolver">
-      </solution>
-   </extension>
-   <extension
          point="eu.geclipse.core.reporting.problemReporting">
       <solution
             description="Show Preference Page Solver"
@@ -256,7 +261,7 @@
             solver="eu.geclipse.ui.problems.ShowViewSolver">
       </solution>
       <problem
-            description="Entered Date has invalid format."
+            description="Entered Date has invalid format"
             id="eu.geclipse.problem.widget.DateTimeText.WrongFormat">
          <reference
                referenceID="eu.geclipse.solution.widget.DateTimeText.UseCalendarButton">
@@ -270,6 +275,7 @@
             description="Enter date in correct format"
             id="eu.geclipse.solution.widget.DateTimeText.UseCorrectFormat">
       </solution>
+      
    </extension>
    <extension
          point="eu.geclipse.ui.connectionWizard">
@@ -288,6 +294,15 @@
             id="eu.geclipse.ui.wizards.connection.managers.local.LocalConnectionWizard"
             name="Local"
             icon="icons/obj16/fslink_obj.gif"/>
+   </extension>
+   <extension
+         point="eu.geclipse.ui.efs">
+      <filesystem
+            scheme="file">
+         <opaque
+               scheme-specific-part="Local Directory">
+         </opaque>
+      </filesystem>
    </extension>
    <extension
          point="eu.geclipse.ui.jobDetailsFactory">
@@ -311,33 +326,6 @@
             class="eu.geclipse.ui.properties.PropertiesFactory"
             id="eu.geclipse.ui.properties.PropertiesFactory"
             sourceObjectClass="java.lang.Object"/>
-   </extension>
-   <extension
-         point="eu.geclipse.ui.efs">
-      <filesystem
-            scheme="file">
-         <opaque
-               scheme-specific-part="Local Directory">
-         </opaque>
-      </filesystem>
-   </extension>
-   <extension
-         id="application"
-         point="org.eclipse.core.runtime.applications">
-      <application>
-         <run
-               class="eu.geclipse.ui.internal.Application">
-         </run>
-      </application>
-   </extension>
-   <extension
-         id="geclipseProduct"
-         point="org.eclipse.core.runtime.products">
-      <product
-            application="eu.geclipse.ui.geclipseApplication"
-            description="g-Eclipse Standalone Application"
-            name="g-Eclipse RCP">
-      </product>
    </extension>
    <extension
          point="eu.geclipse.ui.simpleTestUI">

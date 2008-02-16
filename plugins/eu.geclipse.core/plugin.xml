@@ -10,7 +10,6 @@
    <extension-point id="caCertificateLoader" name="CA Certificate Loader" schema="schema/caCertificateLoader.exsd"/>
    <extension-point id="gridProjectFolder" name="Grid Project Folder" schema="schema/gridProjectFolder.exsd"/>
    <extension-point id="voLoader" name="VO Loader" schema="schema/voLoader.exsd"/>
-   <extension-point id="problemReporting" name="Problem Reporting" schema="schema/problemReporting.exsd"/>
    <extension-point id="simpleTests" name="Simple Tests" schema="schema/simpleTests.exsd"/>
    <extension
          id="eu.geclipse.core.project.GridProjectNature"
@@ -192,7 +191,7 @@
          </reference>
       </problem>
       <problem
-            description="Failed to establish internet connection"
+            description="Failed to establish a network connection"
             id="eu.geclipse.core.problem.net.connectionFailed"
             mailto="contact@geclipse.eu">
          <reference
