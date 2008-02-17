@@ -595,6 +595,7 @@ public class AuthTokenView extends ViewPart implements IContentChangeListener {
    * Update the enabled state of the actions according to the current content of this view and
    * the content's state.
    */
+  @SuppressWarnings("null")
   protected void updateActions() {
     IAuthenticationToken token = getSelectedToken();
     boolean selected = token != null;
