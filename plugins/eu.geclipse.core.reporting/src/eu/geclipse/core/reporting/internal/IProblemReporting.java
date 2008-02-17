@@ -105,14 +105,14 @@ public interface IProblemReporting {
     = "referenceID"; //$NON-NLS-1$
   
   /**
-   * The ID of the properties tag element within the problem reporting
+   * The ID of the preference tag element within the problem reporting
    * extension point.
    */
   public static final String PREFERENCE_TAG_ELEMENT
     = "preferenceTag"; //$NON-NLS-1$
   
   /**
-   * The ID of the page ID attribute of the properties element within
+   * The ID of the preference page ID attribute of the properties element within
    * the problem reporting extension point.
    */
   public static final String PROPERTIES_ID_ATTRIBUTE
@@ -140,7 +140,7 @@ public interface IProblemReporting {
     = "wizardTag"; //$NON-NLS-1$
   
   /**
-   * The ID of the view ID attribute of the properties element within
+   * The ID of the wizard page ID attribute of the properties element within
    * the problem reporting extension point.
    */
   public static final String PAGE_ID_ATTRIBUTE
