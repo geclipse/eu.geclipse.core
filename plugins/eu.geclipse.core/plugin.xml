@@ -109,8 +109,7 @@
       </problem>
       <problem
             description="Login failed"
-            id="eu.geclipse.core.problem.auth.loginFailed"
-            mailto="contact@geclipse.eu">
+            id="eu.geclipse.core.problem.auth.loginFailed">
       </problem>
       <problem
             description="Unable to activate token"
@@ -137,7 +136,8 @@
       </problem>
       <problem
             description="Container cannot contain elements of the specified type"
-            id="eu.geclipse.core.problem.model.containerCanNotContain">
+            id="eu.geclipse.core.problem.model.containerCanNotContain"
+            mailto="contact@geclipse.eu">
       </problem>
       <problem
             description="Failed to create grid element"
@@ -192,8 +192,7 @@
       </problem>
       <problem
             description="Failed to establish a network connection"
-            id="eu.geclipse.core.problem.net.connectionFailed"
-            mailto="contact@geclipse.eu">
+            id="eu.geclipse.core.problem.net.connectionFailed">
          <reference
                referenceID="eu.geclipse.core.solution.net.checkInternetConnection">
          </reference>
@@ -206,8 +205,7 @@
       </problem>
       <problem
             description="A timeout has occurred on a socket read or accept"
-            id="eu.geclipse.core.problem.net.connectionTimeout"
-            mailto="contact@geclipse.eu">
+            id="eu.geclipse.core.problem.net.connectionTimeout">
          <reference
                referenceID="eu.geclipse.core.solution.net.contactServerAdmin">
          </reference>
@@ -280,6 +278,9 @@
       <solution
             description="Check your imported CA-certificates"
             id="eu.geclipse.core.solution.auth.checkCaCertificates">
+         <preferenceTag
+               pageID="eu.geclipse.ui.internal.preference.CaCertPreferencePage">
+         </preferenceTag>
       </solution>
       <solution
             description="Check your authentication data"
@@ -288,10 +289,16 @@
       <solution
             description="Check your authentication tokens"
             id="eu.geclipse.core.solution.auth.checkTokens">
+         <viewTag
+               viewID="eu.geclipse.ui.views.authenticationTokenView">
+         </viewTag>
       </solution>
       <solution
             description="Check your VO settings"
             id="eu.geclipse.core.solution.auth.checkVoSettings">
+         <preferenceTag
+               pageID="eu.geclipse.ui.internal.preference.VOPreferencePage">
+         </preferenceTag>
       </solution>
       <solution
             description="Download the file(s) again"
@@ -335,6 +342,9 @@
       <solution
             description="Set your connection timeout settings to a higher value"
             id="eu.geclipse.core.solution.net.checkTimeoutSettings">
+         <preferenceTag
+               pageID="org.eclipse.ui.net.NetPreferences">
+         </preferenceTag>
       </solution>
       <solution
             description="Contact the administrator, the server may be down"
