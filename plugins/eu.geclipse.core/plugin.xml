@@ -12,20 +12,20 @@
    <extension-point id="voLoader" name="VO Loader" schema="schema/voLoader.exsd"/>
    <extension-point id="simpleTests" name="Simple Tests" schema="schema/simpleTests.exsd"/>
    <extension
-         id="eu.geclipse.core.project.GridProjectNature"
-         name="%extension.gridProjectNature"
-         point="org.eclipse.core.resources.natures">
-      <runtime>
-         <run class="eu.geclipse.core.project.GridProjectNature"/>
-      </runtime>
-   </extension>
-   <extension
          id="eu.geclipse.core.project.GridProjectBuilder"
          name="%extension.gridProjectBuilder"
          point="org.eclipse.core.resources.builders">
       <builder>
          <run class="eu.geclipse.core.project.GridProjectBuilder"/>
       </builder>
+   </extension>
+   <extension
+         id="eu.geclipse.core.project.GridProjectNature"
+         name="%extension.gridProjectNature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run class="eu.geclipse.core.project.GridProjectNature"/>
+      </runtime>
    </extension>
    <extension
          id="eu.geclipse.core.internal.PreferenceInitializer"
@@ -356,7 +356,8 @@
       </solution>
       <solution
             description="Check your system&apos;s time"
-            id="eu.geclipse.core.solution.sys.checkSystemTime">
+            id="eu.geclipse.core.solution.sys.checkSystemTime"
+            solver="eu.geclipse.ui.problems.CheckSystemTimeSolution">
       </solution>
    </extension>
    <extension
