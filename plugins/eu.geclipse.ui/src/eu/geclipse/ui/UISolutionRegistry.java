@@ -102,9 +102,9 @@ public class UISolutionRegistry extends SolutionRegistry {
                                          PreferenceSolution.VO_PREFERENCE_PAGE );
     }
     
-    else if ( solutionID == SolutionRegistry.CHECK_SYSTEM_TIME ) {
-      solution = new CheckSystemTimeSolution( solution, this.shell );
-    }
+//    else if ( solutionID == SolutionRegistry.CHECK_SYSTEM_TIME ) {
+//      solution = new CheckSystemTimeSolution( solution, this.shell );
+//    }
 
     return solution;
 
