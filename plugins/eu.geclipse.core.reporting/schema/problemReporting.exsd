@@ -91,6 +91,7 @@
             <choice minOccurs="0" maxOccurs="1">
                <element ref="preferenceTag"/>
                <element ref="viewTag"/>
+               <element ref="wizardTag"/>
             </choice>
             <element ref="reference" minOccurs="0" maxOccurs="unbounded"/>
          </sequence>
@@ -169,6 +170,23 @@
             <annotation>
                <documentation>
                   The unique ID of a view that should be opened.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="wizardTag">
+      <annotation>
+         <documentation>
+            Tag denoting a wizard solution. This tag is used for a solution that should open a specific page of an already open wizard.
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="pageID" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The unique ID of a wizard page that should be opened.
                </documentation>
             </annotation>
          </attribute>

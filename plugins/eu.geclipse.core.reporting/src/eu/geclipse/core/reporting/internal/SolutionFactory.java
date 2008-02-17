@@ -187,6 +187,8 @@ public class SolutionFactory {
       result = SolutionFactory.getFactory().getSolution( name, null );
     } else if ( IProblemReporting.VIEW_TAG_ELEMENT.equals( name ) ) {
       result = SolutionFactory.getFactory().getSolution( name, null );
+    } else if ( IProblemReporting.WIZARD_TAG_ELEMENT.equals( name ) ) {
+      result = SolutionFactory.getFactory().getSolution( name, null );
     }
     
     if ( result instanceof IConfigurableSolver ) {

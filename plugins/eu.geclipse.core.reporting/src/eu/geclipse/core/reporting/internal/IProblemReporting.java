@@ -131,5 +131,19 @@ public interface IProblemReporting {
    */
   public static final String VIEW_ID_ATTRIBUTE
     = "viewID"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the wizard tag element within the problem reporting
+   * extension point.
+   */
+  public static final String WIZARD_TAG_ELEMENT
+    = "wizardTag"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the view ID attribute of the properties element within
+   * the problem reporting extension point.
+   */
+  public static final String PAGE_ID_ATTRIBUTE
+    = "pageID"; //$NON-NLS-1$
 
 }
