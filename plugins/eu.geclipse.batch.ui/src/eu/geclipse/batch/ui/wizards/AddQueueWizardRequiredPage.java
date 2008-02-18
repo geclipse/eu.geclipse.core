@@ -11,7 +11,7 @@
  *
  * Contributor(s):
  *     UCY (http://www.cs.ucy.ac.cy)
- *      - Neophytos Theodorou (TODO)
+ *      - Neophytos Theodorou (phytosth@cs.ucy.ac.cy)
  *
  *****************************************************************************/
 package eu.geclipse.batch.ui.wizards;
@@ -46,7 +46,7 @@ import eu.geclipse.batch.model.qdl.QdlFactory;
 import eu.geclipse.batch.model.qdl.QueueTypeEnumeration;
 import eu.geclipse.batch.model.qdl.RangeValueType;
 import eu.geclipse.batch.ui.internal.Messages;
-import eu.geclipse.ui.dialogs.NewProblemDialog;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 
 /**
  * Required page for the create Queue wizard 
@@ -397,7 +397,7 @@ public class AddQueueWizardRequiredPage extends WizardPage {
        
     } catch( Exception excp ) {
       // Display error dialog
-      NewProblemDialog.openProblem( this.getShell(),
+      ProblemDialog.openProblem( this.getShell(),
                                     Messages.getString( "AddQueueWizard.error_manipulate_title" ),  //$NON-NLS-1$
                                     Messages.getString( "AddQueueWizard.error_manipulate_message" ), //$NON-NLS-1$
                                     excp );      
