@@ -109,7 +109,7 @@ public class DateTimeText {
   /**
    * @return Date entered in control, or null if allowEmpty is true and entered date is empty
    * @throws ProblemException thrown when user entered date in wrong format
-   * @see NewProblemDialog#openProblem(Shell, String, String, Throwable)
+   * @see eu.geclipse.ui.dialogs.ProblemDialog#openProblem(Shell, String, String, Throwable)
    */
   public Date getDate() throws ProblemException {
     Date date = null;
