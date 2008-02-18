@@ -83,6 +83,12 @@ public class ProblemFactory {
     
     if ( element != null ) {
       result = createProblem( element, description, exception, pluginID );
+    } else {
+      result = new Problem( "unknownProblem", //$NON-NLS-1$
+                            description,
+                            exception,
+                            null,
+                            pluginID );
     }
     
     return result;
