@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2006 g-Eclipse consortium
+ * Copyright (c) 2006-2008 g-Eclipse consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -23,10 +23,11 @@ import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.SelectionListenerAction;
 
-import eu.geclipse.core.CoreProblems;
-import eu.geclipse.core.GridException;
+import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.model.IGridVisualisation;
-import eu.geclipse.ui.dialogs.NewProblemDialog;
+import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.ui.dialogs.ProblemDialog;
+import eu.geclipse.ui.internal.Activator;
 
 
 /**
@@ -65,20 +66,22 @@ public class RenderRemoteVTKPipelineAction extends SelectionListenerAction {
         //TODO make a job that executes the rendering remotely and creates a client
         //that intercepts the steaming data locally
       } catch( PartInitException e ) {
-        NewProblemDialog.openProblem( null,
+        ProblemDialog.openProblem( null,
              Messages.getString( "RenderLocalVTKPipelineAction.errorDialogTitle" ), //$NON-NLS-1$
              Messages.getString( "RenderLocalVTKPipelineAction.errorOpeningView"), //$NON-NLS-1$
              e );
       }
     }
     else {
-      final GridException fileException = new GridException( CoreProblems.FILE_ACCESS_PROBLEM,
-             Messages.getString( "RenderLocalVTKPipelineAction.elementNotVisualizable" ) ); //$NON-NLS-1$
+      // TODO: check, we have here a very general IO error, is this right??
+      final ProblemException fileException = new ProblemException( ICoreProblems.IO_OPERATION_FAILED,
+                Messages.getString( "RenderLocalVTKPipelineAction.elementNotVisualizable" ), //$NON-NLS-1$
+                Activator.PLUGIN_ID );
 
-          NewProblemDialog.openProblem( null,
-             Messages.getString( "RenderLocalVTKPipelineAction.errorDialogTitle" ), //$NON-NLS-1$
-             Messages.getString( "RenderLocalVTKPipelineAction.errorInfo" ), //$NON-NLS-1$
-             fileException );
+      ProblemDialog.openProblem( null,
+          Messages.getString( "RenderLocalVTKPipelineAction.errorDialogTitle" ), //$NON-NLS-1$
+          Messages.getString( "RenderLocalVTKPipelineAction.errorInfo" ), //$NON-NLS-1$
+          fileException );
     }
   }
 
