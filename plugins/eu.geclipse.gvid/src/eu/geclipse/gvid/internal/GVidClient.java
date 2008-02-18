@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -31,13 +31,13 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.widgets.Display;
 
-import eu.geclipse.core.GridException;
-import eu.geclipse.core.ProblemRegistry;
+import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.core.reporting.ReportingPlugin;
 import eu.geclipse.gvid.Activator;
 import eu.geclipse.gvid.IDecoder;
 import eu.geclipse.gvid.IGVidStatsListener;
 import eu.geclipse.gvid.internal.preferences.PreferenceConstants;
-import eu.geclipse.ui.dialogs.NewProblemDialog;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 
 /**
  * Output client for GVid. Allows to interact with remote rendered interactive
@@ -99,10 +99,10 @@ public class GVidClient extends Component implements Runnable {
       // Activator.logException( coreException );
     }
     if ( decoderImpl == null || exception != null) {
-      NewProblemDialog.openProblem( Display.getCurrent().getActiveShell(),
-                                    Messages.getString( "GVidClient.gvid" ), //$NON-NLS-1$
-                                    Messages.formatMessage( "GVidClient.cantInstanciateCodec", codecName ), //$NON-NLS-1$
-                                    exception );
+      ProblemDialog.openProblem( Display.getCurrent().getActiveShell(),
+                                 Messages.getString( "GVidClient.gvid" ), //$NON-NLS-1$
+                                 Messages.formatMessage( "GVidClient.cantInstanciateCodec", codecName ), //$NON-NLS-1$
+                                 exception );
     }
     return decoderImpl;
   }
@@ -197,13 +197,15 @@ public class GVidClient extends Component implements Runnable {
         this.running = false;
       } catch( Exception exception ) {
         this.running = false;
-        final GridException gridException = new GridException( ProblemRegistry.UNKNOWN_PROBLEM, exception );
+        final ProblemException pException = new ProblemException(
+            ReportingPlugin.getReportingService()
+              .getProblem( null, null, exception, Activator.PLUGIN_ID ) );
         Display.getDefault().asyncExec( new Runnable() {
           public void run() {
-            NewProblemDialog.openProblem( null,
-                                          "Error during video decoding",
-                                          "An error occurred during video decoding (is the right codec selected?)",
-                                          gridException, null );
+            ProblemDialog.openProblem( null,
+                                       "Error during video decoding",
+                                       "An error occurred during video decoding (is the right codec selected?)",
+                                       pException );
           }
         } );
       }

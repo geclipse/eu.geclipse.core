@@ -5,6 +5,12 @@
    <extension-point id="newGVidWizards" name="newGVidWizards" schema="schema/newGVidWizards.exsd"/>
    <extension-point id="dropDownEntry" name="GVid connection factory" schema="schema/dropDownEntry.exsd"/>
    <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="eu.geclipse.gvid.internal.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
          point="org.eclipse.ui.preferencePages">
       <page
             name="GVid"
@@ -12,12 +18,6 @@
             class="eu.geclipse.gvid.internal.preferences.GVidPreferencePage"
             id="eu.geclipse.gvid.internal.preferences.GVidPreferencePage">
       </page>
-   </extension>
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="eu.geclipse.gvid.internal.preferences.PreferenceInitializer">
-      </initializer>
    </extension>
    <extension
          point="org.eclipse.ui.views">
@@ -44,9 +44,10 @@
       </perspectiveExtension>
    </extension>
    <extension
-         point="eu.geclipse.core.problemProvider">
-      <provider
-            class="eu.geclipse.gvid.GVidProblems">
-      </provider>
+         point="eu.geclipse.core.reporting.problemReporting">
+      <problem
+            description="Cannot instantiate codec"
+            id="eu.geclipse.gvid.problem.codecInstantiationFailed">
+      </problem>
    </extension>
 </plugin>
