@@ -189,12 +189,6 @@ public class Extensions {
     = "eu.geclipse.core.connectionManagement"; //$NON-NLS-1$
   
   /**
-   * The ID of the problem provider extension point.
-   */
-  public static final String PROBLEM_PROVIDER_POINT
-    = "eu.geclipse.core.problemProvider"; //$NON-NLS-1$
-  
-  /**
    * The ID of the connection protocol configuration element
    * contained in the connection management extension point. 
    */
@@ -268,20 +262,6 @@ public class Extensions {
    * configuration element.
    */
   public static final String GRID_ELEMENT_CREATOR_EXECUTABLE
-    = "class"; //$NON-NLS-1$
-  
-  /**
-   * The ID of the problem provider configuration element
-   * contained in the problem provider extension point.
-   */
-  public static final String PROBLEM_PROVIDER_ELEMENT
-    = "provider"; //$NON-NLS-1$
-
-  /**
-   * The ID of the executable extension of the problem provider
-   * configuration element.
-   */
-  public static final String PROBLEM_PROVIDER_EXECUTABLE
     = "class"; //$NON-NLS-1$
   
   /**
@@ -377,11 +357,6 @@ public class Extensions {
   private static List<IAuthenticationTokenDescription> authTokenDescriptions;
 
   /**
-   * List that holds all known problem providers.
-   */
-  private static List<IProblemProvider> problemProviders;
-
-  /**
    * List containing the names of all known authentication token.
    */
   private static List<String> authTokenNames;
@@ -465,31 +440,6 @@ public class Extensions {
       elementCreators = resultList;
     }
     return elementCreators;
-  }
-  
-  /**
-   * Get a list of all currently registered problem providers.
-   * 
-   * @return A list containing instances of all currently registered
-   * extensions of the problem provider configuration elements.
-   */
-  public static List< IProblemProvider > getRegisteredProblemProviders() {
-    if( problemProviders == null ) {
-      List< IProblemProvider > resultList
-      = new ArrayList< IProblemProvider >();
-      ExtensionManager manager = new ExtensionManager();
-      List< Object > objectList
-      = manager.getExecutableExtensions( PROBLEM_PROVIDER_POINT,
-                                         PROBLEM_PROVIDER_ELEMENT,
-                                         PROBLEM_PROVIDER_EXECUTABLE );
-      for ( Object o : objectList ) {
-        if ( o instanceof IProblemProvider ) {
-          resultList.add( ( IProblemProvider ) o );
-        }
-      }
-      problemProviders = resultList;
-    }
-    return problemProviders;
   }
   
   /**
