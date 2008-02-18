@@ -55,4 +55,6 @@ public interface IGridTestResult {
    * @return sub-test name
    */
   String getSubTestName();
+  
+  String toString();
 }
