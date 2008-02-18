@@ -12,7 +12,6 @@
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
  *****************************************************************************/
-
 package eu.geclipse.jsdl.ui.internal;
 
 import org.eclipse.core.runtime.IStatus;
@@ -27,7 +26,10 @@ public class Activator extends AbstractUIPlugin {
 
   /** The plug-in ID */
   public static final String PLUGIN_ID = "eu.geclipse.jsdl.ui"; //$NON-NLS-1$
-  
+  /**
+   * The ID of problem with XML parsing for application specific pages.
+   */
+  public static final String XML_ASP_PARSING_PROBLEM_ID = "eu.geclipse.jsdl.ui.applicationSpecificPages.XMLProblem"; //$NON-NLS-1$
   // The shared instance
   private static Activator plugin;
 
@@ -44,8 +46,7 @@ public class Activator extends AbstractUIPlugin {
    * @see org.eclipse.ui.plugin.AbstractUIPlugin#start(org.osgi.framework.BundleContext)
    */
   @Override
-  public void start( final BundleContext context ) throws Exception
-  {
+  public void start( final BundleContext context ) throws Exception {
     super.start( context );
   }
 
@@ -55,8 +56,7 @@ public class Activator extends AbstractUIPlugin {
    * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
    */
   @Override
-  public void stop( final BundleContext context ) throws Exception
-  {
+  public void stop( final BundleContext context ) throws Exception {
     plugin = null;
     super.stop( context );
   }
@@ -69,7 +69,7 @@ public class Activator extends AbstractUIPlugin {
   public static Activator getDefault() {
     return plugin;
   }
-  
+
   /**
    * Logs an exception to the eclipse logger.
    * 
@@ -95,6 +95,4 @@ public class Activator extends AbstractUIPlugin {
   public static void logStatus( final IStatus status ) {
     getDefault().getLog().log( status );
   }
- 
-   
 }

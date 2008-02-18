@@ -82,5 +82,12 @@
             id="eu.geclipse.jsdl.ui.PropertiesFactory"
             sourceObjectClass="eu.geclipse.jsdl.JSDLJobDescription"/>
    </extension>
+   <extension
+         point="eu.geclipse.core.reporting.problemReporting">
+      <problem
+            description="XML parsing problem - malformed application specific information."
+            id="eu.geclipse.jsdl.ui.applicationSpecificPages.XMLProblem">
+      </problem>
+   </extension>
 
 </plugin>

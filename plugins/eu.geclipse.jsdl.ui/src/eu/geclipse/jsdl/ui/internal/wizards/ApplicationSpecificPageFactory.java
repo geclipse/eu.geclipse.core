@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -28,6 +29,7 @@ import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
+
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Platform;
@@ -38,12 +40,15 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+
+import eu.geclipse.core.ICoreProblems;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.wizards.nodes.SpecificWizardPart;
 import eu.geclipse.jsdl.ui.wizards.specific.ApplicationSpecificLastPage;
 import eu.geclipse.jsdl.ui.wizards.specific.ApplicationSpecificPage;
 import eu.geclipse.jsdl.ui.wizards.specific.IApplicationSpecificPage;
-import eu.geclipse.ui.dialogs.NewProblemDialog;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 
 /**
  * Class to generate instances of {@link IApplicationSpecificPage}
@@ -74,19 +79,17 @@ public class ApplicationSpecificPageFactory {
     try {
       fileURL = FileLocator.toFileURL( fileURL );
     } catch( IOException ioException ) {
-      NewProblemDialog.openProblem( PlatformUI.getWorkbench()
-                                      .getActiveWorkbenchWindow()
-                                      .getShell(),
-                                    Messages.getString( "ApplicationSpecificPageFactory.XML_problems_title" ), //$NON-NLS-1$
-                                    Messages.getString( "ApplicationSpecificPageFactory.XML_problems_text" ), //$NON-NLS-1$
-                                    ioException );
+      ProblemException exception = new ProblemException( ICoreProblems.NET_MALFORMED_URL,
+                                                         ioException,
+                                                         Activator.PLUGIN_ID );
+      ProblemDialog.openProblem( PlatformUI.getWorkbench()
+                                   .getActiveWorkbenchWindow()
+                                   .getShell(),
+                                 Messages.getString( "ApplicationSpecificPageFactory.XML_problems_title" ), //$NON-NLS-1$
+                                 Messages.getString( "ApplicationSpecificPageFactory.XML_problems_text" ), //$NON-NLS-1$
+                                 exception );
     } catch( NullPointerException nullExc ) {
-      NewProblemDialog.openProblem( PlatformUI.getWorkbench()
-                                      .getActiveWorkbenchWindow()
-                                      .getShell(),
-                                    Messages.getString( "ApplicationSpecificPageFactory.XML_problems_title" ), //$NON-NLS-1$
-                                    Messages.getString( "ApplicationSpecificPageFactory.XML_problems_text" ), //$NON-NLS-1$
-                                    nullExc );
+      Activator.logException( nullExc );
     }
     String temp = fileURL.toString();
     temp = temp.substring( temp.indexOf( fileURL.getProtocol() )
@@ -101,12 +104,15 @@ public class ApplicationSpecificPageFactory {
       Source source = new StreamSource( xmlFile );
       validator.validate( source );
     } catch( IOException ioException ) {
-      NewProblemDialog.openProblem( PlatformUI.getWorkbench()
-                                      .getActiveWorkbenchWindow()
-                                      .getShell(),
-                                    Messages.getString( "ApplicationSpecificPageFactory.XML_problems_title" ), //$NON-NLS-1$
-                                    Messages.getString( "ApplicationSpecificPageFactory.XML_problems_text" ), //$NON-NLS-1$
-                                    ioException );
+      ProblemException exception = new ProblemException( Activator.XML_ASP_PARSING_PROBLEM_ID,
+                                                         ioException,
+                                                         Activator.PLUGIN_ID );
+      ProblemDialog.openProblem( PlatformUI.getWorkbench()
+                                   .getActiveWorkbenchWindow()
+                                   .getShell(),
+                                 Messages.getString( "ApplicationSpecificPageFactory.XML_problems_title" ), //$NON-NLS-1$
+                                 Messages.getString( "ApplicationSpecificPageFactory.XML_problems_text" ), //$NON-NLS-1$
+                                 exception );
     }
   }
 

@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.ui.IDebugUIConstants;
@@ -43,10 +44,13 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+
+import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.model.IGridConnectionElement;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.ui.dialogs.GridFileDialog;
-import eu.geclipse.ui.dialogs.NewProblemDialog;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.widgets.StoredCombo;
 
 /**
@@ -58,11 +62,7 @@ import eu.geclipse.ui.widgets.StoredCombo;
 public class MultipleInputDialog extends Dialog {
 
   protected static final String FIELD_NAME = "FIELD_NAME"; //$NON-NLS-1$
-//  protected static final int TEXT = 100;
-//  protected static final int BROWSE = 101;
-//  protected static final int VARIABLE = 102;
-//  protected static final int COMBO = 103;
-//  protected static final int STORED_COMBO = 104;
+
   protected Composite panel;
   protected List<FieldSummary> fieldList = new ArrayList<FieldSummary>();
   protected List<StoredCombo> storedComboList = new ArrayList<StoredCombo>();
@@ -630,7 +630,8 @@ public class MultipleInputDialog extends Dialog {
                 text.setText( filename );
               }
             } catch( CoreException cExc ) {
-              NewProblemDialog.openProblem( getShell(), "error", "error", cExc );
+              ProblemException exception = new ProblemException(ICoreProblems.NET_CONNECTION_FAILED, cExc, Activator.PLUGIN_ID);
+              ProblemDialog.openProblem( getShell(), "error", "error", exception );
             }
           }
         }

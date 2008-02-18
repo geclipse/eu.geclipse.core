@@ -36,11 +36,13 @@ import org.eclipse.ui.PlatformUI;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.model.IGridConnectionElement;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.wizards.specific.IApplicationSpecificPage;
 import eu.geclipse.ui.dialogs.GridFileDialog;
-import eu.geclipse.ui.dialogs.NewProblemDialog;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 
 /**
  * Class to handle ui definition in XML from
@@ -61,20 +63,20 @@ public class ApplicationSpecificControlsFactory {
    * eu.geclipse.jsdl.ui.applicationParameters extension point
    * 
    * @param element element form xml (page element child) describing controls
-   *          used on {@link IApplicationSpecificPage} for which those controls
-   *          will be created
+   *            used on {@link IApplicationSpecificPage} for which those
+   *            controls will be created
    * @param composite composite to create the controls on
    * @param textFieldsWithFileChooser list holding all Text composites to which
-   *          access from GridFileDialog is required
+   *            access from GridFileDialog is required
    * @param controlsParametersNames map used by wizard containing application
-   *          specific page (for which controls are created by this factory), to
-   *          bind value held by control with parameter name in JSDL
+   *            specific page (for which controls are created by this factory),
+   *            to bind value held by control with parameter name in JSDL
    * @param stagingIn list to keep data ({@link DataStageControlsData}) of
-   *          controls that hold parameters and values of files that need to be
-   *          stage in to executable host
+   *            controls that hold parameters and values of files that need to
+   *            be stage in to executable host
    * @param stagingOut list to keep data ({@link DataStageControlsData}) of
-   *          controls that hold parameters and values of files that need to be
-   *          stage out from executable host
+   *            controls that hold parameters and values of files that need to
+   *            be stage out from executable host
    */
   public void createControls( final Element element,
                               final Composite composite,
@@ -223,8 +225,12 @@ public class ApplicationSpecificControlsFactory {
                        listValues );
       }
     } catch( IllegalArgumentException iaExc ) {
-      //TODO katis error handling
-      Activator.logException( iaExc );
+      ProblemException exception = new ProblemException( Activator.XML_ASP_PARSING_PROBLEM_ID,
+                                                         iaExc,
+                                                         Activator.PLUGIN_ID );
+      ProblemDialog.openProblem( PlatformUI.getWorkbench()
+        .getActiveWorkbenchWindow()
+        .getShell(), "Problem", "There was a problem with XML", exception );
     }
   }
 
@@ -348,21 +354,25 @@ public class ApplicationSpecificControlsFactory {
     this.adapters.add( new SelectionAdapter() {
 
       @Override
-      public void widgetSelected( final SelectionEvent e )
-      {
+      public void widgetSelected( final SelectionEvent e ) {
         String filename = null;
         IGridConnectionElement connection = GridFileDialog.openFileDialog( PlatformUI.getWorkbench()
                                                                              .getActiveWorkbenchWindow()
                                                                              .getShell(),
-                                                                           Messages.getString("ApplicationSpecificControlsFactory.choose_a_file_message"), //$NON-NLS-1$
-                                                                           null, true );
+                                                                           Messages.getString( "ApplicationSpecificControlsFactory.choose_a_file_message" ), //$NON-NLS-1$
+                                                                           null,
+                                                                           true );
         if( connection != null ) {
           try {
             filename = connection.getConnectionFileStore().toString();
           } catch( CoreException cExc ) {
-            NewProblemDialog.openProblem( PlatformUI.getWorkbench()
-              .getActiveWorkbenchWindow()
-              .getShell(), Messages.getString("ApplicationSpecificControlsFactory.error_dialog_title"), Messages.getString("ApplicationSpecificControlsFactory.error_dialog_message"), cExc );  //$NON-NLS-1$ //$NON-NLS-2$
+            ProblemException exception = new ProblemException( ICoreProblems.NET_CONNECTION_FAILED,
+                                                               cExc,
+                                                               Activator.PLUGIN_ID );
+            ProblemDialog.openProblem( PlatformUI.getWorkbench()
+                                         .getActiveWorkbenchWindow()
+                                         .getShell(),
+                                       Messages.getString( "ApplicationSpecificControlsFactory.error_dialog_title" ), Messages.getString( "ApplicationSpecificControlsFactory.error_dialog_message" ), exception ); //$NON-NLS-1$ //$NON-NLS-2$
           }
         }
         if( filename != null ) {
@@ -529,7 +539,7 @@ public class ApplicationSpecificControlsFactory {
     if( this.textFieldsFromParent.isEmpty() ) {
       this.textFieldsFromParent.add( textControl );
     } else {
-      // make sure that newly added Text ist last in ArrayList
+      // make sure that newly added Text is last in ArrayList
       this.textFieldsFromParent.add( this.textFieldsFromParent.size(),
                                      textControl );
     }
@@ -542,13 +552,13 @@ public class ApplicationSpecificControlsFactory {
     this.adapters.add( new SelectionAdapter() {
 
       @Override
-      public void widgetSelected( final SelectionEvent e )
-      {
+      public void widgetSelected( final SelectionEvent e ) {
         IGridConnectionElement connection = GridFileDialog.openFileDialog( PlatformUI.getWorkbench()
                                                                              .getActiveWorkbenchWindow()
                                                                              .getShell(),
-                                                                           Messages.getString("ApplicationSpecificControlsFactory.choose_a_file_message"), //$NON-NLS-1$
-                                                                           null, true );
+                                                                           Messages.getString( "ApplicationSpecificControlsFactory.choose_a_file_message" ), //$NON-NLS-1$
+                                                                           null,
+                                                                           true );
         if( connection != null ) {
           try {
             String filename = connection.getConnectionFileStore().toString();
@@ -557,9 +567,13 @@ public class ApplicationSpecificControlsFactory {
                 .setText( filename );
             }
           } catch( CoreException cExc ) {
-            NewProblemDialog.openProblem( PlatformUI.getWorkbench()
-              .getActiveWorkbenchWindow()
-              .getShell(), Messages.getString("ApplicationSpecificControlsFactory.error_dialog_title"), Messages.getString("ApplicationSpecificControlsFactory.error_dialog_message"), cExc ); //$NON-NLS-1$ //$NON-NLS-2$
+            ProblemException exception = new ProblemException( ICoreProblems.NET_CONNECTION_FAILED,
+                                                               cExc,
+                                                               Activator.PLUGIN_ID );
+            ProblemDialog.openProblem( PlatformUI.getWorkbench()
+                                         .getActiveWorkbenchWindow()
+                                         .getShell(),
+                                       Messages.getString( "ApplicationSpecificControlsFactory.error_dialog_title" ), Messages.getString( "ApplicationSpecificControlsFactory.error_dialog_message" ), exception ); //$NON-NLS-1$ //$NON-NLS-2$
           }
         }
       }
