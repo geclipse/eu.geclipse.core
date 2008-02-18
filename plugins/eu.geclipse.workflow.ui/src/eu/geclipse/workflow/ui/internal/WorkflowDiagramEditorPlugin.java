@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials 
  * are made available under the terms of the Eclipse Public License v1.0 
  * which accompanies this distribution, and is available at 
@@ -33,8 +33,6 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
-import eu.geclipse.ui.dialogs.NewProblemDialog;
-import eu.geclipse.ui.wizards.Messages;
 import eu.geclipse.workflow.provider.WorkflowItemProviderAdapterFactory;
 import eu.geclipse.workflow.ui.part.WorkflowDocumentProvider;
 
@@ -261,10 +259,10 @@ public class WorkflowDiagramEditorPlugin extends AbstractUIPlugin {
 //    }
 //    if( throwable != null ) {
 //      throwable.printStackTrace();
-//      NewProblemDialog.openProblem( getSite().getShell(),
-//                                    Messages.getString("Title goes here"), //$NON-NLS-1$
-//                                    Messages.getString("Actual text of error goes here"), //$NON-NLS-1$
-//                                    throwable );
+//      ProblemDialog.openProblem( getSite().getShell(),
+//                                 Messages.getString("Title goes here"), //$NON-NLS-1$
+//                                 Messages.getString("Actual text of error goes here"), //$NON-NLS-1$
+//                                 throwable );
 //    }
 //  }
 }

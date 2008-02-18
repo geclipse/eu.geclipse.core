@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials 
  * are made available under the terms of the Eclipse Public License v1.0 
  * which accompanies this distribution, and is available at 
@@ -33,7 +33,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
-import eu.geclipse.ui.dialogs.NewProblemDialog;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowEditPart;
 import eu.geclipse.workflow.ui.editor.WorkflowDiagramEditorUtil;
 import eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin;
@@ -99,7 +99,7 @@ public class WorkflowInitDiagramFileAction implements IObjectActionDelegate {
         .logError( "Unable to load resource: " + domainModelURI, ex ); //$NON-NLS-1$
     }
     if( diagramRoot == null ) {
-      NewProblemDialog.openProblem( getShell(),
+      ProblemDialog.openProblem( getShell(),
           Messages.getString("WorkflowInitDiagramFileAction_InitDiagramFileResourceErrorDialogTitle"), //$NON-NLS-1$
           Messages.getString("WorkflowInitDiagramFileAction_InitDiagramFileResourceErrorDialogMessage"), //$NON-NLS-1$
           null );
