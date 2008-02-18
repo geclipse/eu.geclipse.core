@@ -78,7 +78,7 @@ public interface ICoreProblems {
   public static final String NET_CONNECTION_TIMEOUT
     = "eu.geclipse.core.problem.net.connectionTimeout"; //$NON-NLS-1$
   public static final String NET_MALFORMED_URL
-    = "eu.geclipse.core.problem.malformedURL"; //$NON-NLS-1$
+    = "eu.geclipse.core.problem.net.malformedURL"; //$NON-NLS-1$
   public static final String NET_UNKNOWN_HOST
     = "eu.geclipse.core.problem.net.unknownHost"; //$NON-NLS-1$
   
