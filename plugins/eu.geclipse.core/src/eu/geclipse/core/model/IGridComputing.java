@@ -23,6 +23,6 @@ import java.net.URI;
  */
 public interface IGridComputing extends IGridResource, ITestable {
   
-  public URI getURI();
+//  public URI getURI();
   
 }

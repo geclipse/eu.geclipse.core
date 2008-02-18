@@ -27,7 +27,7 @@ public interface IGridStorage extends IGridResource, ITestable {
    * Get tokens that offer ways to access this storage in the form of
    * an {@link URI}. The scheme part is used to determine the protocol
    * to access the token with the help of the <code>EFS</code>
-   * mechanims.
+   * mechanisms.
    * 
    * @return Access tokens to access this storage.
    */

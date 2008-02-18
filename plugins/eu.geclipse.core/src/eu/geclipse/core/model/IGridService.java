@@ -28,6 +28,6 @@ public interface IGridService extends IGridResource, ITestable {
    * 
    * @return The service's <code>URI</code>.
    */
-  public URI getURI();
+//  public URI getURI();
   
 }

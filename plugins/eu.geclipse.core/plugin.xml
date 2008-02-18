@@ -126,6 +126,10 @@
             id="eu.geclipse.core.problem.io.corruptedFile">
       </problem>
       <problem
+            description="A file or folder operation failed"
+            id="eu.geclipse.core.problem.io.operationFailed">
+      </problem>
+      <problem
             description="Unspecified IO problem"
             id="eu.geclipse.core.problem.io.unspecified"
             mailto="contact@geclipse.eu">
