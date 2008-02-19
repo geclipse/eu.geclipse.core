@@ -81,14 +81,19 @@ public class ProblemFactory {
     
     IConfigurationElement element = getProblemElement( problemID );
     
+    if ( element == null ) {
+      element = getProblemElement( IProblemReporting.UNKNOWN_PROBLEM_ID );
+    }
+    
     if ( element != null ) {
       result = createProblem( element, description, exception, pluginID );
     } else {
-      result = new Problem( "unknownProblem", //$NON-NLS-1$
-                            description,
-                            exception,
-                            null,
-                            pluginID );
+      result = new Problem(
+          IProblemReporting.UNKNOWN_PROBLEM_ID,
+          description,
+          exception,
+          null,
+          pluginID );
     }
     
     return result;

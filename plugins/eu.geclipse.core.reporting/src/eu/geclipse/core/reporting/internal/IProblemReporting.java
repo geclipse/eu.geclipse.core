@@ -145,5 +145,11 @@ public interface IProblemReporting {
    */
   public static final String PAGE_ID_ATTRIBUTE
     = "pageID"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the unknown problem.
+   */
+  public static final String UNKNOWN_PROBLEM_ID
+    = "eu.geclipse.core.reporting.problem.unknown"; //$NON-NLS-1$
 
 }
