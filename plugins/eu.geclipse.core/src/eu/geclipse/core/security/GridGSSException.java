@@ -20,15 +20,13 @@ import org.ietf.jgss.GSSException;
 
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.reporting.IProblem;
+import eu.geclipse.core.reporting.IReportingService;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.core.reporting.ReportingPlugin;
-
 
 /**
  * Problem exception that is dedicated to {@link GSSException}s and manages
  * the mapping of the GSS error codes to {@link IProblem}s.
- * 
- * @see GridGSSProblems
  */
 public class GridGSSException extends ProblemException {
   
@@ -43,17 +41,35 @@ public class GridGSSException extends ProblemException {
    * problem.
    *  
    * @param exc The {@link GSSException} to be wrapped up.
+   * @param pluginID The id of the plug-in where the exception happened.
    */
-  public GridGSSException( final GSSException exc ) {
+  public GridGSSException( final GSSException exc, final String pluginID ) {
+    super( createProblem( exc, null ) );
+  }
+  
+  /**
+   * Create a problem from the specified {@link GSSException}.
+   * 
+   * @param exc The exception that caused the problem.
+   * @param pluginID The ID of the plug-in where the problem occurred.
+   * If this is <code>null</code> the plug-in ID of the core is used
+   * instead.
+   * @return A problem created from the specified exception.
+   */
+  private static IProblem createProblem( final GSSException exc, final String pluginID ) {
     
-    // Ugly, but super() has to come first... otherwise we need to create it twice...
-    // TODO ariel decide if we need/want the GSS problems in the registry
-    super( ReportingPlugin.getReportingService()
-             .createProblem( exc.getMajorString() + " ("     //$NON-NLS-1$
-                               + exc.getMinorString() + ")", //$NON-NLS-1$
-                             exc,
-                             null,
-                             Activator.PLUGIN_ID ) );
+    String pid = pluginID != null ? pluginID : Activator.PLUGIN_ID;
+    
+    IReportingService reportingService = ReportingPlugin.getReportingService();
+    
+    IProblem result = reportingService.createProblem( exc.getMajorString(), exc, null, pid );
+    
+    String reason = exc.getMinorString();
+    if ( reason != null ) {
+      result.addReason( exc.getMinorString() );
+    }
+    
+    return result;
     
   }
   
