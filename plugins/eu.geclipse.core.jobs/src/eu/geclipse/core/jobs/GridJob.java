@@ -271,7 +271,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
       String className = rootElement.getAttribute( GridJobStatus.XML_ATTRIBUTE_CLASS );
       if( className != null && !className.equals( "" ) ) { //$NON-NLS-1$
         ExtensionManager manager = new ExtensionManager();
-        List<IConfigurationElement> list = manager.getConfigurationElements( "eu.geclipse.grid.jobStatu", //$NON-NLS-1$
+        List<IConfigurationElement> list = manager.getConfigurationElements( "eu.geclipse.core.jobs.jobStatus", //$NON-NLS-1$
                                                                              "JobStatus" ); //$NON-NLS-1$
         for( IConfigurationElement element : list ) {
           String attr = element.getAttribute( "class" ); //$NON-NLS-1$

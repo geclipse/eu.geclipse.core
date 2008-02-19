@@ -35,11 +35,8 @@ public class GridJobStatus implements IGridJobStatus {
   final static public String XML_STATUSREASON = Messages.getString( "GridJobStatus.reason" ); //$NON-NLS-1$
   final static public String XML_STATUSDATA = Messages.getString( "GridJobStatus.data" ); //$NON-NLS-1$
   final static public String XML_STATUSUPDATEDATE = Messages.getString( "GridJobStatus.updateDate" ); //$NON-NLS-1$
-  
   final static public String XML_ATTRIBUTE_CLASS = "class"; //$NON-NLS-1$
-  
   final static public GridJobStatus UNKNOWN_STATUS = new GridJobStatus();
-
   protected int type;
   protected String name = null;
   protected String reason = null;
@@ -68,7 +65,8 @@ public class GridJobStatus implements IGridJobStatus {
   }
 
   public GridJobStatus( @SuppressWarnings("unused")
-                        final IGridJobID id ) {
+  final IGridJobID id )
+  {
     // Empty implementation
   }
 
@@ -93,7 +91,7 @@ public class GridJobStatus implements IGridJobStatus {
         if( this.reason != null )
           this.reason = this.reason.trim();
       }
-      if( XML_STATUSUPDATEDATE.equals( node.getNodeName() ) ) {        
+      if( XML_STATUSUPDATEDATE.equals( node.getNodeName() ) ) {
         try {
           this.updateDate = getXmlDateFormatter().parse( node.getTextContent() );
         } catch( DOMException e ) {
@@ -136,11 +134,17 @@ public class GridJobStatus implements IGridJobStatus {
   public String getJobStatusData() {
     return this.data;
   }
-  
-  @SuppressWarnings( "nls" )
+
+  @SuppressWarnings("nls")
   public final String getXML() {
     String xml = "";
-    xml += "<" + GridJobStatus.XML_ROOT + ">\n";
+    xml += "<"
+           + GridJobStatus.XML_ROOT
+           + " "
+           + XML_ATTRIBUTE_CLASS
+           + "=\""
+           + this.getClass().getName()
+           + "\">";
     xml += "  <"
            + GridJobStatus.XML_STATUSNAME
            + ">"
@@ -155,7 +159,6 @@ public class GridJobStatus implements IGridJobStatus {
            + "</"
            + GridJobStatus.XML_STATUSTYPE
            + ">\n";
-
     if( this.updateDate != null ) {
       xml += "  <"
              + GridJobStatus.XML_STATUSUPDATEDATE
@@ -165,7 +168,6 @@ public class GridJobStatus implements IGridJobStatus {
              + GridJobStatus.XML_STATUSUPDATEDATE
              + ">\n";
     }
-    
     if( this.reason != null ) {
       xml += "  <"
              + GridJobStatus.XML_STATUSREASON
@@ -195,7 +197,6 @@ public class GridJobStatus implements IGridJobStatus {
                                                   DateFormat.SHORT );
     }
     return formatter;
-
   }
 
   public String getName() {
@@ -220,7 +221,8 @@ public class GridJobStatus implements IGridJobStatus {
   }
 
   protected void setData( @SuppressWarnings("unused")
-                          final String data ) {
+  final String data )
+  {
     // Empty implementation
   }
 }
