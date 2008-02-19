@@ -16,7 +16,12 @@
  *****************************************************************************/
 package eu.geclipse.core.jobs;
 
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.List;
+
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -32,6 +37,8 @@ import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridJobID;
 import eu.geclipse.core.model.IGridWorkflow;
+import eu.geclipse.core.model.IGridWorkflowJob;
+import eu.geclipse.core.model.IGridWorkflowJobID;
 import eu.geclipse.core.model.impl.AbstractGridJobCreator;
 import eu.geclipse.jsdl.JSDLJobDescription;
 
@@ -122,7 +129,14 @@ public class GridJobCreator extends AbstractGridJobCreator {
                                .getFolder( tmpPath.removeFirstSegments( tmpPath.segmentCount() - 1 ) );
       tmpJobFolder.delete( true, null );
       tmpJobFolder.create( true, true, null );
-      GridJob.createJobStructure( tmpJobFolder, ( GridJobID )id, description );
+      
+      GridJob job = GridJob.createJobStructure( tmpJobFolder, ( GridJobID )id, description );
+      
+      if( description instanceof IGridWorkflow
+          && id instanceof IGridWorkflowJobID ) {
+        createWorkflowJobStructure( job, tmpJobFolder, (IGridWorkflowJobID)id, (IGridWorkflow)description );
+      }
+      
       this.canCreate( tmpJobFolder );
       parent.create( this );// .refresh( null );
       // move folder to its final location. This will add job to the project
@@ -157,4 +171,70 @@ public class GridJobCreator extends AbstractGridJobCreator {
     }
     return jobFolder;
   }
+  
+  private void createWorkflowJobStructure( final GridJob workflowJob, final IFolder jobFolder,
+                                           final IGridWorkflowJobID id,
+                                           final IGridWorkflow workflowDescription ) throws GridModelException
+  {
+    List<IGridWorkflowJobID> childrenIds = id.getChildrenJobs();
+    
+    if( childrenIds != null ) {
+      for( IGridWorkflowJobID childId : childrenIds ) {
+        IGridWorkflowJob childJob = findJob( workflowDescription, childId.getName() ); 
+        
+        if( childJob != null ) {          
+          JSDLJobDescription childJobDescription = createJobDescription( jobFolder, childJob );
+          
+          if( this.canCreate( childJobDescription ) ) {
+            this.create( workflowJob, childId );
+          }
+          
+          // TODO mariusz remove unecessary tmp jsdl file
+        }
+      }
+    }
+    
+  }
+
+  private IGridWorkflowJob findJob( final IGridWorkflow workflowDescription,
+                                   final String jobName )
+  {
+    IGridWorkflowJob job = null;    
+    
+    for( IGridWorkflowJob curJob : workflowDescription.getChildrenJobs() ) {
+      if( curJob.getName().equals( jobName ) ) {
+        job = curJob;
+        break;
+      }
+    }
+    
+    return job;
+  }
+  
+  private JSDLJobDescription createJobDescription( final IFolder jobFolder, final IGridWorkflowJob childJob ) {
+    JSDLJobDescription description = null;
+    ByteArrayInputStream inputStream = new ByteArrayInputStream( childJob.getDescription().getBytes() );
+    String tmpJsdlFileName = String.format( "%s.jsdl", childJob.getName() );
+    IFile outputFile = jobFolder.getFile( tmpJsdlFileName );    
+    
+    try {
+      outputFile.create( inputStream, true, null );
+      description = new JSDLJobDescription( outputFile );
+      } catch( CoreException exception ) {
+        // TODO mariusz Auto-generated catch block
+        exception.printStackTrace();
+      } finally {
+      if( inputStream != null ) {
+        try {
+          inputStream.close();
+        } catch( IOException exception ) {
+         // ignore errors
+        }
+      }
+    }
+
+    return description;
+  }
+
+  
 }

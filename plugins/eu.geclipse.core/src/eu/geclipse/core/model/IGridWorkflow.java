@@ -15,6 +15,8 @@
 
 package eu.geclipse.core.model;
 
+import java.util.List;
+
 /**
  * This is at the moment just a declarative interface for
  * integrating workflows into the Grid model.
@@ -22,6 +24,6 @@ package eu.geclipse.core.model;
 public interface IGridWorkflow
     extends IGridJobDescription {
   
-  // Currently empty implementation
+  List<IGridWorkflowJob> getChildrenJobs();
   
 }

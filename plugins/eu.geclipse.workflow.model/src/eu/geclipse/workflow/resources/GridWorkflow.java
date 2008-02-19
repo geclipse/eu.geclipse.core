@@ -15,18 +15,34 @@
  ******************************************************************************/
 package eu.geclipse.workflow.resources;
 
+import java.io.IOException;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.emf.ecore.resource.Resource;
+import org.eclipse.emf.ecore.resource.ResourceSet;
+import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
+import org.eclipse.emf.ecore.xmi.XMLResource;
 
 import eu.geclipse.core.model.IGridWorkflow;
+import eu.geclipse.core.model.IGridWorkflowJob;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
 import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.workflow.IWorkflowJob;
+import eu.geclipse.workflow.IWorkflowNode;
+import eu.geclipse.workflow.impl.WorkflowImpl;
 
 public class GridWorkflow
     extends ResourceGridContainer
-    implements IGridWorkflow {
+    implements IGridWorkflow {  
+
+  private WorkflowImpl rootImpl;
+  private List<IGridWorkflowJob> jobs;
 
   protected GridWorkflow( final IResource resource ) {
     super( resource );
@@ -76,5 +92,47 @@ public class GridWorkflow
     // TODO Auto-generated method stub
     return null;
   }
+  
+  public List<IGridWorkflowJob> getChildrenJobs() {
+    if( this.jobs == null ) {
+      WorkflowImpl root = getRoot();
+      this.jobs = new ArrayList<IGridWorkflowJob>();
+      
+      for( IWorkflowNode node : root.getNodes() ) {
+        if( node instanceof IWorkflowJob ) {
+          this.jobs.add( new GridWorkflowJob( ( IWorkflowJob )node ) );        
+        }        
+      }
+    }
+    
+    return this.jobs;
+  }
+  
+  private WorkflowImpl getRoot() {
+    if( this.rootImpl == null ) {
+      loadModel( (IFile)getResource() );
+    }
+    
+    return this.rootImpl;
+  }
 
+  // TODO mariusz make it private:
+  private void loadModel( final IFile file ) {
+    String filePath = file.getFullPath().toString();
+    org.eclipse.emf.common.util.URI uri = org.eclipse.emf.common.util.URI.createPlatformResourceURI( filePath, false );
+    ResourceSet resourceSet = new ResourceSetImpl();
+    Resource resource = resourceSet.createResource( uri );
+//    XMLMapImpl xmlmap = new XMLMapImpl();
+//    xmlmap.setNoNamespacePackage( JsdlPackage.eINSTANCE );
+    Map<String, Object> options = new HashMap<String, Object>();
+//    options.put( XMLResource.OPTION_XML_MAP, xmlmap );
+    options.put( XMLResource.OPTION_ENCODING, "UTF8" ); //$NON-NLS-1$
+    try {
+      resource.load( options );
+      rootImpl = (WorkflowImpl)resource.getContents().get( 0 );
+    } catch( IOException ioEx ) {
+      // TODO mariusz 
+      ioEx.printStackTrace();
+    }
+  }
 }

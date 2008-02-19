@@ -50,9 +50,8 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import eu.geclipse.core.ExtensionManager;
-import eu.geclipse.core.ICoreProblems;
-import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.core.GridJobStatusServiceFactoryManager;
+import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.filesystem.GEclipseURI;
 import eu.geclipse.core.jobs.internal.Activator;
 import eu.geclipse.core.model.GridModel;
@@ -68,6 +67,7 @@ import eu.geclipse.core.model.IGridJobStatusService;
 import eu.geclipse.core.model.IGridJobStatusServiceFactory;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
 import eu.geclipse.core.model.impl.ResourceGridElement;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.jsdl.JSDLJobDescription;
 
 
@@ -75,6 +75,8 @@ import eu.geclipse.jsdl.JSDLJobDescription;
  * Class representing submitted job.
  */
 public class GridJob extends ResourceGridContainer implements IGridJob {
+  
+  static String JOBFILE_EXTENSION = ".job";
 
   /**
    * Name for folder containing output files for job
@@ -114,6 +116,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     readJobInfo( jobFolder );
     // gridJobFolder = new GridJobFolder( jobFolder, this );
     readJobID();
+    readChildrenJobs();
     if( this.jobDescriptionFile != null ) {
       readJobDescription();
       try {
@@ -135,13 +138,14 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
    * @param description job description
    * @throws GridModelException
    */
-  public static void createJobStructure( final IFolder jobFolder,
+  public static GridJob createJobStructure( final IFolder jobFolder,
                                          final GridJobID id,
                                          final IGridJobDescription description )
     throws GridModelException
   {
     GridJob job = new GridJob( jobFolder );
     job.create( jobFolder, id, description );
+    return job;
   }
 
   /**
@@ -429,7 +433,8 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
   public boolean canContain( final IGridElement element ) {
     return ( element instanceof IGridJobDescription )
            || ( element instanceof ResourceGridElement )
-           || ( element instanceof ResourceGridContainer );
+           || ( element instanceof ResourceGridContainer )
+           || ( element instanceof IGridJob );
   }
 
   @Override
@@ -789,5 +794,23 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     }
     return this.statusService;
   }
-  
+
+  private void readChildrenJobs() {
+    IFolder jobFolder = (IFolder)this.getResource();
+    
+    try {
+      for( IResource child : jobFolder.members( true ) ) {
+        if( child instanceof IFolder
+            && child.getName().endsWith( JOBFILE_EXTENSION ) ) {
+          createModelElement( child );
+        }
+      }
+    } catch( CoreException exception ) {
+      // TODO mariusz Auto-generated catch block
+      exception.printStackTrace();
+    }
+    
+    
+  }
+
 }
