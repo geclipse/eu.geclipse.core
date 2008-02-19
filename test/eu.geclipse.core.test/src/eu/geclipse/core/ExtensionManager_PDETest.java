@@ -82,10 +82,10 @@ public class ExtensionManager_PDETest {
   {
     IExtensionRegistry registry = Platform.getExtensionRegistry();
     this.extensionmanager = new ExtensionManager( registry);
-    String point_ID = "eu.geclipse.core.problemProvider"; //$NON-NLS-1$
+    String point_ID = "eu.geclipse.core.applicationDeployment"; //$NON-NLS-1$
     IExtensionPoint point = this.extensionmanager.getExtensionPoint( point_ID );
     Assert.assertNotNull( point );
-    Assert.assertEquals( "eu.geclipse.core.problemProvider",point.getUniqueIdentifier() ); //$NON-NLS-1$
+    Assert.assertEquals( "eu.geclipse.core.applicationDeployment",point.getUniqueIdentifier() ); //$NON-NLS-1$
   }
 
   /** test the method {@link ExtensionManager#getExtensions(String)}
@@ -101,7 +101,7 @@ public class ExtensionManager_PDETest {
     List< IExtension > extentions;
     String point_ID = "eu.geclipse.core.gridElementCreator"; //$NON-NLS-1$
     extentions = this.extensionmanager.getExtensions( point_ID );
-    Assert.assertEquals( new Integer( 5 ),new Integer( extentions.size() ));
+    Assert.assertEquals( new Integer( 16 ),new Integer( extentions.size() ));
     Assert.assertEquals( "eu.geclipse.core.gridElementCreator",extentions.get( 0 ).getExtensionPointUniqueIdentifier() ); //$NON-NLS-1$
   }
   
@@ -116,11 +116,11 @@ public class ExtensionManager_PDETest {
     IExtensionRegistry registry = Platform.getExtensionRegistry();
     this.extensionmanager = new ExtensionManager( registry);
     List< IConfigurationElement > elements;
-    String point_ID = "eu.geclipse.core.authenticationTokenManagement"; //$NON-NLS-1$
+    String point_ID = "eu.geclipse.core.authTokens"; //$NON-NLS-1$
     String element = "token"; //$NON-NLS-1$
     elements = this.extensionmanager.getConfigurationElements( point_ID,element );
     Assert.assertEquals("eu.geclipse.globus.auth.proxy",elements.get( 0 ).getAttribute( "id" )); //$NON-NLS-1$ //$NON-NLS-2$
-    Assert.assertEquals("eu.geclipse.voms.auth.vomsProxy",elements.get( 1 ).getAttribute( "id" )); //$NON-NLS-1$ //$NON-NLS-2$
+    Assert.assertEquals("eu.geclipse.gria.auth.keyStore",elements.get( 1 ).getAttribute( "id" )); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   /** test the method {@link ExtensionManager#getExecutableExtensions(String, String, String)}
@@ -133,12 +133,12 @@ public class ExtensionManager_PDETest {
   {
     IExtensionRegistry registry = Platform.getExtensionRegistry();
     this.extensionmanager = new ExtensionManager( registry);
-    String point_ID = "eu.geclipse.core.problemProvider"; //$NON-NLS-1$
-    String configelement = Extensions.PROBLEM_PROVIDER_ELEMENT; 
-    String property = Extensions.PROBLEM_PROVIDER_EXECUTABLE;
+    String point_ID = "eu.geclipse.core.applicationDeployment"; //$NON-NLS-1$
+    String configelement = Extensions.APPLICATION_DEPLOYMENT_ELEMENT; 
+    String property = Extensions.APPLICATION_DEPLOYMENT_EXECUTABLE;
     List< Object > executables;
     executables = this.extensionmanager.getExecutableExtensions( point_ID, configelement, property );
     Assert.assertNotNull( executables );
-    Assert.assertEquals("eu.geclipse.core.CoreProblems",executables.get( 0 ).getClass().getName()); //$NON-NLS-1$
+    Assert.assertEquals("eu.geclipse.glite.deployment.JDLBasedApplicationDeployment",executables.get( 0 ).getClass().getName()); //$NON-NLS-1$
   }
 }
