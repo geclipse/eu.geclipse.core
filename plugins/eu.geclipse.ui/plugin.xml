@@ -159,14 +159,20 @@
             class="eu.geclipse.ui.properties.GridProjectFoldersPropertiesPage"
             id="eu.geclipse.ui.gridProjectFolders"
             name="Grid Project Folders">
+         <filter
+               name="nature"
+               value="eu.geclipse.core.project.GridProjectNature">
+         </filter>
+      </page>
+      <page
+            adaptable="false"
+            class="eu.geclipse.ui.properties.GridConnectionPropertiesPage"
+            id="eu.geclipse.ui.gridConnections"            name="Grid Connections">
          <enabledWhen>
-            <adapt
-                  type="org.eclipse.core.resources.IProject">
-               <test
-                     property="org.eclipse.core.resources.projectNature"
-                     value="eu.geclipse.core.project.GridProjectNature">
-               </test>
-            </adapt></enabledWhen>
+            <test
+                  property="eu.geclipse.core.isGridConnection">
+            </test>
+         </enabledWhen>
       </page>
    </extension>
    <extension
