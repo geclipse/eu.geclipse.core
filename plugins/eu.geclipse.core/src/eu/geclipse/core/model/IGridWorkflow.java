@@ -24,6 +24,9 @@ import java.util.List;
 public interface IGridWorkflow
     extends IGridJobDescription {
   
+  /**
+   * @return jobs, which are inside this workflow
+   */
   List<IGridWorkflowJob> getChildrenJobs();
   
 }

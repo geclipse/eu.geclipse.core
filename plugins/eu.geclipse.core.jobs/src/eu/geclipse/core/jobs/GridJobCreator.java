@@ -86,8 +86,8 @@ public class GridJobCreator extends AbstractGridJobCreator {
    */
   @Override
   protected boolean internalCanCreate( final IGridJobDescription description ) {
-    return ( description instanceof JSDLJobDescription ||
-             description instanceof IGridWorkflow);
+    return ( description instanceof JSDLJobDescription 
+        || description instanceof IGridWorkflow);
   }
 
   /*
@@ -183,7 +183,7 @@ public class GridJobCreator extends AbstractGridJobCreator {
         IGridWorkflowJob childJob = findJob( workflowDescription, childId.getName() ); 
         
         if( childJob != null ) {          
-          JSDLJobDescription childJobDescription = createJobDescription( jobFolder, childJob );
+          JSDLJobDescription childJobDescription = createChildJobDescription( jobFolder, childJob );
           
           if( this.canCreate( childJobDescription ) ) {
             this.create( workflowJob, childId );
@@ -211,18 +211,17 @@ public class GridJobCreator extends AbstractGridJobCreator {
     return job;
   }
   
-  private JSDLJobDescription createJobDescription( final IFolder jobFolder, final IGridWorkflowJob childJob ) {
+  private JSDLJobDescription createChildJobDescription( final IFolder jobFolder, final IGridWorkflowJob childJob ) {
     JSDLJobDescription description = null;
     ByteArrayInputStream inputStream = new ByteArrayInputStream( childJob.getDescription().getBytes() );
-    String tmpJsdlFileName = String.format( "%s.jsdl", childJob.getName() );
+    String tmpJsdlFileName = String.format( "%s.jsdl", childJob.getName() ); //$NON-NLS-1$
     IFile outputFile = jobFolder.getFile( tmpJsdlFileName );    
     
     try {
       outputFile.create( inputStream, true, null );
       description = new JSDLJobDescription( outputFile );
       } catch( CoreException exception ) {
-        // TODO mariusz Auto-generated catch block
-        exception.printStackTrace();
+        Activator.logException( exception, "Cannot create jsdl job description for child job." ); //$NON-NLS-1$
       } finally {
       if( inputStream != null ) {
         try {

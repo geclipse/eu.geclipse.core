@@ -36,7 +36,11 @@ import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.workflow.IWorkflowJob;
 import eu.geclipse.workflow.IWorkflowNode;
 import eu.geclipse.workflow.impl.WorkflowImpl;
+import eu.geclipse.workflow.internal.Activator;
 
+/**
+ * Grid element for workflow description
+ */
 public class GridWorkflow
     extends ResourceGridContainer
     implements IGridWorkflow {  
@@ -96,12 +100,15 @@ public class GridWorkflow
   public List<IGridWorkflowJob> getChildrenJobs() {
     if( this.jobs == null ) {
       WorkflowImpl root = getRoot();
-      this.jobs = new ArrayList<IGridWorkflowJob>();
       
-      for( IWorkflowNode node : root.getNodes() ) {
-        if( node instanceof IWorkflowJob ) {
-          this.jobs.add( new GridWorkflowJob( ( IWorkflowJob )node ) );        
-        }        
+      if( root != null ) {
+        this.jobs = new ArrayList<IGridWorkflowJob>();
+        
+        for( IWorkflowNode node : root.getNodes() ) {
+          if( node instanceof IWorkflowJob ) {
+            this.jobs.add( new GridWorkflowJob( ( IWorkflowJob )node ) );        
+          }        
+        }
       }
     }
     
@@ -115,24 +122,19 @@ public class GridWorkflow
     
     return this.rootImpl;
   }
-
-  // TODO mariusz make it private:
+ 
   private void loadModel( final IFile file ) {
     String filePath = file.getFullPath().toString();
     org.eclipse.emf.common.util.URI uri = org.eclipse.emf.common.util.URI.createPlatformResourceURI( filePath, false );
     ResourceSet resourceSet = new ResourceSetImpl();
     Resource resource = resourceSet.createResource( uri );
-//    XMLMapImpl xmlmap = new XMLMapImpl();
-//    xmlmap.setNoNamespacePackage( JsdlPackage.eINSTANCE );
     Map<String, Object> options = new HashMap<String, Object>();
-//    options.put( XMLResource.OPTION_XML_MAP, xmlmap );
     options.put( XMLResource.OPTION_ENCODING, "UTF8" ); //$NON-NLS-1$
     try {
       resource.load( options );
-      rootImpl = (WorkflowImpl)resource.getContents().get( 0 );
+      this.rootImpl = (WorkflowImpl)resource.getContents().get( 0 );
     } catch( IOException ioEx ) {
-      // TODO mariusz 
-      ioEx.printStackTrace();
+      Activator.logException( ioEx );
     }
   }
 }

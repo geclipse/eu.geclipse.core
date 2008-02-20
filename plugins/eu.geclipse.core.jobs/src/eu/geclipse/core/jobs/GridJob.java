@@ -74,9 +74,7 @@ import eu.geclipse.jsdl.JSDLJobDescription;
 /**
  * Class representing submitted job.
  */
-public class GridJob extends ResourceGridContainer implements IGridJob {
-  
-  static String JOBFILE_EXTENSION = ".job";
+public class GridJob extends ResourceGridContainer implements IGridJob {  
 
   /**
    * Name for folder containing output files for job
@@ -87,6 +85,8 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
    * Name for folder containing input files for job
    */  
   public static final String FOLDERNAME_INPUT_FILES = Messages.getString("GridJob.FolderInputFiles"); //$NON-NLS-1$
+  
+  static String JOBFILE_EXTENSION = ".job"; //$NON-NLS-1$
   
   final static private String JOBID_FILENAME = ".jobID"; //$NON-NLS-1$
   final static private String JOBINFO_FILENAME = ".jobInfo"; //$NON-NLS-1$
@@ -136,6 +136,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
    * @param jobFolder folder, in which structure for job will be created
    * @param id job id
    * @param description job description
+   * @return created job
    * @throws GridModelException
    */
   public static GridJob createJobStructure( final IFolder jobFolder,
@@ -806,11 +807,8 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
         }
       }
     } catch( CoreException exception ) {
-      // TODO mariusz Auto-generated catch block
-      exception.printStackTrace();
+      Activator.logException( exception, "Cannot read children jobs." ); //$NON-NLS-1$
     }
-    
-    
   }
 
 }

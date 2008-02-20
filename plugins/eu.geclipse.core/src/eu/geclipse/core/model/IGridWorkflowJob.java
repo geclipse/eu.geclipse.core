@@ -20,6 +20,14 @@ package eu.geclipse.core.model;
  * Job, which is part of workflow
  */
 public interface IGridWorkflowJob {
+  
+  /**
+   * @return job name
+   */
   String getName();
+  
+  /**
+   * @return job description. Now only jsdl content is returned as description.
+   */
   String getDescription();
 }

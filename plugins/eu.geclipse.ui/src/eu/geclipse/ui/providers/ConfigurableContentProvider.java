@@ -87,8 +87,13 @@ public class ConfigurableContentProvider
   public Object[] getElements( final Object inputElement ) {
     this.rootElement = inputElement;
     Object[] elements = super.getElements( inputElement );
-    if ( this.mode == MODE_HIERARCHICAL ) {
-      elements = remapElements( inputElement, elements );
+    switch( this.mode ) {
+      case MODE_HIERARCHICAL:
+        elements = remapElements( inputElement, elements );
+        break;
+      case MODE_FLAT:
+        elements = filterHierarchicalChildrens( elements );
+        break;
     }
     return elements;
   }
@@ -228,5 +233,44 @@ public class ConfigurableContentProvider
     }
     return result;
   }
+  
+  /**
+   * Removes elements, which parent already is on element list (this elements
+   * will be visibled as children)
+   * 
+   * @param elements
+   * @return
+   */
+  private Object[] filterHierarchicalChildrens( final Object[] elements ) {
+    List< Object > result = new ArrayList< Object >();
+    
+    for( Object object : elements ) {
+      if( object instanceof IGridElement ) {
+        IGridElement gridElement = ( IGridElement )object;
+        
+        IGridContainer parent = gridElement.getParent();
+        
+        if( !isOnList( elements, parent ) ) {
+          result.add( object );
+        }
+      }
+      
+    }
+    
+    return result.toArray( new Object[ result.size() ] );
+  }
+
+  private boolean isOnList( final Object[] elements, final Object object ) {    
+    boolean onList = false;
+    
+    for( Object curObject : elements ) {
+      if( curObject == object ) {
+        onList = true;
+        break;
+      }
+    }
+    return onList;
+  }
+
     
 }

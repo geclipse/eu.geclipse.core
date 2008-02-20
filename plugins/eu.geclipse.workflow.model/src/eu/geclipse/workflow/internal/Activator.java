@@ -15,7 +15,9 @@
  ******************************************************************************/
 package eu.geclipse.workflow.internal;
 
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
+import org.eclipse.core.runtime.Status;
 import org.osgi.framework.BundleContext;
 
 /**
@@ -67,4 +69,19 @@ public class Activator extends Plugin {
     return plugin;
   }
 
+  /**
+   * Logs an exception to the eclipse logger.
+   * 
+   * @param exc The exception to be logged.
+   */
+  public static void logException( final Throwable exc ) {
+    String message = exc.getLocalizedMessage();
+    if ( message == null ) message = exc.getClass().getName();
+    IStatus status = new Status( IStatus.ERROR,
+                                 PLUGIN_ID,
+                                 IStatus.OK,
+                                 message,
+                                 exc );
+    getDefault().getLog().log( status );
+  }
 }
