@@ -82,6 +82,7 @@ import eu.geclipse.batch.model.qdl.QueueType;
 import eu.geclipse.batch.model.qdl.util.QdlAdapterFactory;
 import eu.geclipse.batch.ui.internal.Activator;
 import eu.geclipse.batch.ui.internal.Messages;
+import eu.geclipse.batch.ui.internal.pages.AdvancedQueueConfigPage;
 import eu.geclipse.batch.ui.internal.pages.SimpleQueueConfigPage;
 
 
@@ -238,6 +239,7 @@ public class QueueEditor extends FormEditor implements IEditingDomainProvider {
   private boolean refreshedModel = false;
   private boolean isDirtyFlag = false;
   private SimpleQueueConfigPage simpleQueueConfigPage = new SimpleQueueConfigPage(this);
+  private AdvancedQueueConfigPage advancedQueueConfigPage = new AdvancedQueueConfigPage(this);
   
   
   
@@ -299,6 +301,7 @@ public class QueueEditor extends FormEditor implements IEditingDomainProvider {
   
   protected void cleanDirtyState() {
     this.simpleQueueConfigPage.setDirty( false );
+    this.advancedQueueConfigPage.setDirty( false );
   }
   
   
@@ -331,6 +334,7 @@ public class QueueEditor extends FormEditor implements IEditingDomainProvider {
     
     try {
       addPage( this.simpleQueueConfigPage );
+      addPage( this.advancedQueueConfigPage );
       addResourceEditorPage();
       pushContentToPages();
     } catch( PartInitException e ) {
@@ -342,6 +346,7 @@ public class QueueEditor extends FormEditor implements IEditingDomainProvider {
   
   private void pushContentToPages() {
     this.simpleQueueConfigPage.setPageContent( this.queue, isModelRefreshed() );
+    this.advancedQueueConfigPage.setPageContent( this.queue, isModelRefreshed() );
   }
   
   

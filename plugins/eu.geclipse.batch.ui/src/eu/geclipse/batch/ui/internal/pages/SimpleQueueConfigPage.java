@@ -213,13 +213,12 @@ public class SimpleQueueConfigPage extends FormPage
    }
    
    
-   /* 
-    * Create the Job Definition Section which includes the following:
-    *  -Job ID (String)
-    */
-     
+  /* 
+   * Create the Simple Section which includes the following:
+   *  
+   */  
    private void createSimpleSection( final Composite parent,
-                                            final FormToolkit toolkit )
+                                     final FormToolkit toolkit )
    {
      
      String sectionTitle =  Messages.getString( "SimpleQueueConfigPage_RequiredTitle" );  //$NON-NLS-1$
