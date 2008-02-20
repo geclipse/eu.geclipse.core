@@ -24,10 +24,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
@@ -46,7 +42,6 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
@@ -74,14 +69,14 @@ import eu.geclipse.core.model.IGridInfoService;
 import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridModelListener;
 import eu.geclipse.core.model.IGridProject;
-import eu.geclipse.info.Activator;
 import eu.geclipse.info.IGlueStoreChangeListerner;
 import eu.geclipse.info.InfoServiceFactory;
 import eu.geclipse.info.glue.AbstractGlueTable;
 import eu.geclipse.info.glue.GlueCE;
 import eu.geclipse.info.glue.GlueCEAccessControlBaseRule;
-import eu.geclipse.info.glue.GlueIndex;
 import eu.geclipse.info.glue.GlueQuery;
+import eu.geclipse.info.internal.Activator;
+import eu.geclipse.info.model.FetchJob;
 import eu.geclipse.info.model.IExtentedGridInfoService;
 
 /**
@@ -91,7 +86,7 @@ public class GlueInfoViewer extends ViewPart
 implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener {
 
   Action doubleClickAction;
-  Job fetchJob;
+  FetchJob fetchJob;
   TreeViewer viewer;
   
   private String currentVO = null;
@@ -149,6 +144,7 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener {
      * 
      * @see org.eclipse.core.runtime.IAdaptable#getAdapter(java.lang.Class)
      */
+    @SuppressWarnings("unchecked")
     public Object getAdapter( final Class key ) {
       return null;
     }
@@ -454,71 +450,7 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener {
     };
     t.start();
     
-    this.fetchJob = new Job( " Retrieving Information" ) { //$NON-NLS-1$
-
-      @Override
-      protected IStatus run( final IProgressMonitor monitor ) {
-        GlueIndex.drop(); // Clear the glue index.
-        
-        Status status = new Status( IStatus.ERROR,
-                                    "eu.geclipse.glite.info", //$NON-NLS-1$
-                                    "BDII fetch from " //$NON-NLS-1$
-                                        + " Failed" ); //$NON-NLS-1$
-        ArrayList<IExtentedGridInfoService> infoServicesArray = null;
-        infoServicesArray = InfoServiceFactory.getAllExistingInfoService();
-        
-        // Get the number of projects. The number is used in the monitor.
-        int gridProjectNumbers = 0;
-        ArrayList<String> existingVoTypes = new ArrayList<String>();
-        IGridElement[] projectElements;
-        try {
-          projectElements = GridModel.getRoot().getChildren( null );
-          for (int i=0; projectElements != null && i<projectElements.length; i++)
-          {
-            IGridProject igp = (IGridProject)projectElements[i];
-            if (igp!= null && !igp.isHidden())
-            {
-              String voTypeName = igp.getVO().getTypeName();
-              if ( !existingVoTypes.contains( voTypeName ))
-              {
-                gridProjectNumbers++;
-                existingVoTypes.add(voTypeName);
-              }
-            }
-          }
-        } catch( GridModelException e ) {
-          Activator.logException( e );
-        }
-        
-        monitor.beginTask( "Retrieving information", gridProjectNumbers * 10 ); //$NON-NLS-1$
-        
-        // Get the information from the info systems to file the glue view.
-        for (int i=0; infoServicesArray!= null && i<infoServicesArray.size(); i++)
-        {
-          IExtentedGridInfoService infoService = infoServicesArray.get( i );
-          if (infoService != null)
-          {
-            infoService.scheduleFetch(monitor);
-          }
-        }
-        
-        // Notify the listeners that the info has changed.
-        for (int i=0; infoServicesArray != null && i<infoServicesArray.size(); i++)
-        {
-          IExtentedGridInfoService infoService = infoServicesArray.get( i );
-          if (infoService != null && infoService.getStore() != null)
-          {
-            infoService.getStore().notifyListeners( null );
-          }
-        }
-        
-        monitor.done();
-        status = new Status( IStatus.OK,
-                             "eu.geclipse.glite.info", //$NON-NLS-1$
-                             "BDII data fetched successfully." ); //$NON-NLS-1$
-        return status;
-      }
-    };
+    this.fetchJob = new FetchJob(" Retrieving Information"); //$NON-NLS-1$
   }
   
   /**
@@ -588,15 +520,8 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener {
         }
       } );
     }
-    addSelectionChangedListener( new ISelectionChangedListener() {
-
-      public void selectionChanged( final SelectionChangedEvent arg0 ) {
-        IStructuredSelection selection = ( IStructuredSelection ) arg0.getSelection();
-      }
-    } );
     makeActions();
     hookContextMenu();
-    hookDoubleClickAction();
     contributeToActionBars();
     
     GridModel.getRoot().addGridModelListener( this );
@@ -732,39 +657,7 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener {
     this.actionSetSourceBDII.setImageDescriptor( PlatformUI.getWorkbench()
                                             .getSharedImages()
                                             .getImageDescriptor( ISharedImages.IMG_OBJS_INFO_TSK ) );
-     
-
-    this.doubleClickAction = new Action() {
-      @Override
-      public void run() {
-        ISelection selection = GlueInfoViewer.this.viewer.getSelection();
-        Object obj = ( ( IStructuredSelection )selection ).getFirstElement();
-      }
-     
-    };
-    
   }
-
-  private void hookDoubleClickAction() {
-    this.viewer.addDoubleClickListener( new IDoubleClickListener() {
-
-      public void doubleClick( final DoubleClickEvent event ) {
-        GlueInfoViewer.this.doubleClickAction.run();
-      }
-    } );
-  }
-
-  /*
-  MetricsView getMetricsView() {
-    if ( this.metricsView == null ) {
-      IWorkbenchPage activePage = PlatformUI.getWorkbench()
-      .getActiveWorkbenchWindow()
-      .getActivePage();
-      this.metricsView = ( MetricsView )activePage.findView( "eu.geclipse.gridbench.views.MetricsView" ); //$NON-NLS-1$
-    }
-    return this.metricsView;
-  }
-  */
 
   /**
    * Passing the focus request to the viewer's control.

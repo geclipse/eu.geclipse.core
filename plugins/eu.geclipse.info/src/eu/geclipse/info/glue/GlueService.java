@@ -121,6 +121,7 @@ public class GlueService extends AbstractGlueTable
    */
   public ArrayList<GlueServiceStatus> glueServiceStatusList = new ArrayList<GlueServiceStatus>();
 
+  protected boolean isSupported = false;
   /* (non-Javadoc)
    * @see eu.geclipse.info.glue.AbstractGlueTable#getID()
    */
@@ -138,85 +139,11 @@ public class GlueService extends AbstractGlueTable
   }
   
   /**
-   * Process the attributes and fill the values of the current object
-   * @param attributes the attributes to process
-   */
-  public void processGlueRecord( final Attributes attributes )
-  {
-    this.uniqueId = GlueUtility.getStringAttribute( "GlueServiceUniqueID", attributes ); //$NON-NLS-1$
-    this.byRefOnly = false;
-    this.endpoint = GlueUtility.getStringAttribute( "GlueServiceEndpoint", attributes ); //$NON-NLS-1$
-    
-
-    this.name = GlueUtility.getStringAttribute( "GlueServiceName", attributes ); //$NON-NLS-1$
-    this.semantics = GlueUtility.getStringAttribute( "GlueServiceSemantics", attributes ); //$NON-NLS-1$
-    this.status = GlueUtility.getStringAttribute( "GlueServiceStatus", attributes ); //$NON-NLS-1$
-    this.type = GlueUtility.getStringAttribute( "GlueServiceType", attributes ); //$NON-NLS-1$
-    this.version = GlueUtility.getStringAttribute( "GlueServiceVersion", attributes ); //$NON-NLS-1$
-    this.wsdl = GlueUtility.getStringAttribute( "GlueServiceWSDL", attributes ); //$NON-NLS-1$
-    this.uri = GlueUtility.getStringAttribute( "GlueServiceURI", attributes ); //$NON-NLS-1$
-    
-    
-    try {
-      Attribute attr=attributes.get( "GlueServiceAccessControlRule" ); //$NON-NLS-1$
-      if(attr!=null){
-        NamingEnumeration<?> ne = attr.getAll();
-        while( ne.hasMoreElements() ) {
-          String vo=ne.next().toString();
-          GlueServiceAccessControlRule rule= new GlueServiceAccessControlRule();
-          rule.value=vo;
-          rule.byRefOnly=false;
-          boolean exists = false;
-          for (int i=0; i<this.glueServiceAccessControlRuleList.size(); i++)
-          {
-            if (this.glueServiceAccessControlRuleList.get( i ).value.equalsIgnoreCase( vo ))
-              exists = true;
-          }
-          if (!exists){
-            this.glueServiceAccessControlRuleList.add(rule);
-          }
-        }
-      }
-    } catch( NamingException e ) {
-   //ignore missing fields
-    }
-    
-  }
-  
-  /**
-   * Process the attributes and fill the values of the current object
-   * @param attributes the attributes to process
-   */
-  public void processCreamService(final Attributes attributes)
-  {
-    this.uniqueId = "http://" + //$NON-NLS-1$
-                    GlueUtility.getStringAttribute( "GlueCEUniqueID", attributes ); //$NON-NLS-1$
-    this.byRefOnly = false;
-    this.endpoint = "http://" + //$NON-NLS-1$
-                    GlueUtility.getStringAttribute( "GlueCEUniqueID", attributes ); //$NON-NLS-1$
-    this.type = "org.glite.cream"; //$NON-NLS-1$
-    this.uri = "http://" + //$NON-NLS-1$
-               GlueUtility.getStringAttribute( "GlueCEUniqueID", attributes ); //$NON-NLS-1$
-  }
-  
-  /**
    * Checks if the current service is supported by g-eclipse 
    * @return true if it is supported and false otherwise.
    */
   public boolean isSupported()
   {
-    boolean result = false;
-    
-    if (this.type.equalsIgnoreCase( "org.glite.wms" )) //$NON-NLS-1$
-      result = true;
-    else if ((this.type.equalsIgnoreCase( "srm" ) || this.type.equalsIgnoreCase( "srm_v1" )) //$NON-NLS-1$  //$NON-NLS-2$
-             && this.version.equals( "2.1.1" )) //$NON-NLS-1$
-      result = true;
-    else if (this.type.equalsIgnoreCase( "lcg-local-file-catalog" )) //$NON-NLS-1$
-      result = true;
-    else if (this.type.equalsIgnoreCase("org.glite.ce")) //$NON-NLS-1$
-      result = true;
-    
-    return result;
+    return this.isSupported;
   }
 }

@@ -29,7 +29,9 @@ import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import org.eclipse.core.runtime.IPath;
-import eu.geclipse.info.Activator;
+
+import eu.geclipse.info.internal.Activator;
+
 import java.lang.reflect.Method;
 
 /**
@@ -375,7 +377,7 @@ public abstract class GlueIndex implements java.io.Serializable {
   }
   
   private static IPath getGridInfoLocation() {
-    Activator activator= eu.geclipse.info.Activator.getDefault();
+    Activator activator= eu.geclipse.info.internal.Activator.getDefault();
     IPath location = null;
     if(activator!=null){
       location = activator.getStateLocation();

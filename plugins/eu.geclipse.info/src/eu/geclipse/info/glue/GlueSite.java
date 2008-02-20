@@ -24,7 +24,7 @@ import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
 
-import eu.geclipse.info.Activator;
+import eu.geclipse.info.internal.Activator;
 
 /**
  * @author George Tsouloupas

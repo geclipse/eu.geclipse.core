@@ -15,7 +15,7 @@
  *
  *****************************************************************************/
 
-package eu.geclipse.info;
+package eu.geclipse.info.internal;
 
 import java.util.ArrayList;
 
@@ -30,6 +30,8 @@ import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridProject;
+import eu.geclipse.info.IGlueStoreChangeListerner;
+import eu.geclipse.info.InfoServiceFactory;
 import eu.geclipse.info.glue.AbstractGlueTable;
 import eu.geclipse.info.model.IExtentedGridInfoService;
 
