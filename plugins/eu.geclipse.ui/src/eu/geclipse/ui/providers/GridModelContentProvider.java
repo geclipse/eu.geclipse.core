@@ -135,7 +135,7 @@ public class GridModelContentProvider
       thread.start();
       children = new Object[] { monitor };*/
       FetchChildrenJob fetcher = new FetchChildrenJob( container );
-      ProgressTreeNode monitor = new ProgressTreeNode( this.treeViewer );
+      NewProgressTreeNode monitor = new NewProgressTreeNode( this.treeViewer );
       fetcher.setExternalMonitor( monitor );
       fetcher.setSystem( true );
       fetcher.schedule();
