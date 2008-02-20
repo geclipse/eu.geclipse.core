@@ -28,7 +28,6 @@ import eu.geclipse.core.internal.model.GridTestManager;
 import eu.geclipse.core.internal.model.HiddenProject;
 import eu.geclipse.core.internal.model.JobManager;
 import eu.geclipse.core.internal.model.LocalResourceCreator;
-import eu.geclipse.core.internal.model.TransferManager;
 import eu.geclipse.core.internal.model.VoManager;
 import eu.geclipse.core.internal.model.notify.GridNotificationService;
 
@@ -274,18 +273,7 @@ public class GridModel {
   public static IGridPreferences getPreferences() throws GridModelException {
     return HiddenProject.getInstance();
   }
-  
-  /**
-   * Get the manager that is dedicated to the management of
-   * {@link IGridTransfer}s.
-   * 
-   * @return The core implementation of the {@link ITransferManager}
-   * interface.
-   */
-  public static ITransferManager getTransferManager() {
-    return TransferManager.getManager();
-  }
-  
+
   /**
    * Get all element creators that are able to create
    * {@link IVirtualOrganization}s.
