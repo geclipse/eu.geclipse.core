@@ -44,7 +44,7 @@ public class GridGSSException extends ProblemException {
    * @param pluginID The id of the plug-in where the exception happened.
    */
   public GridGSSException( final GSSException exc, final String pluginID ) {
-    super( createProblem( exc, null ) );
+    super( createProblem( exc, pluginID ) );
   }
   
   /**
