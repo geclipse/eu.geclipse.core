@@ -367,4 +367,14 @@
             name="Ping Test">
       </test>
    </extension>
+   <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="eu.geclipse.core.model.impl.GridModelPropertyTester"
+            id="eu.geclipse.core.resourceTester"
+            namespace="eu.geclipse.core"
+            properties="isGridConnection"
+            type="org.eclipse.core.resources.IResource">
+      </propertyTester>
+   </extension>
 </plugin>
