@@ -66,11 +66,10 @@
          point="eu.geclipse.core.gridProjectFolder">
       <folder
             elementClass="eu.geclipse.core.model.IGridSiteConfig"
-            icon="ovr16/siteconfig_ovr.gif"
+            icon="icons/ovr16/siteconfig_ovr.gif"
             id="eu.geclipse.core.projectfolder.siteconfig"
-            label="SiteConfig"
-            name="Grid Site Config Folder"
-            preset="false">
+            label="Site Configurations"
+            name="Grid Site Configuration Folder">
       </folder>
    </extension>
    
