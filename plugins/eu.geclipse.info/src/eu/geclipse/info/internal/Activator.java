@@ -17,23 +17,13 @@
 
 package eu.geclipse.info.internal;
 
-import java.util.ArrayList;
-
-import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.osgi.framework.BundleContext;
 
-import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.GridModelException;
-import eu.geclipse.core.model.IGridElement;
-import eu.geclipse.core.model.IGridProject;
-import eu.geclipse.info.IGlueStoreChangeListerner;
-import eu.geclipse.info.InfoServiceFactory;
-import eu.geclipse.info.glue.AbstractGlueTable;
-import eu.geclipse.info.model.IExtentedGridInfoService;
+import eu.geclipse.info.model.FetchJob;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -52,70 +42,9 @@ public class Activator extends Plugin {
   public Activator() {
     plugin = this;
     
-    Job storeInitializeJob=new Job("Retrieving information"){ //$NON-NLS-1$
+    // Fetch the glue information for the existing grid projects
+    Job storeInitializeJob=new FetchJob("Retrieving information"); //$NON-NLS-1$
       
-      @Override
-      protected IStatus run( final IProgressMonitor monitor )
-      {
-        ArrayList<IExtentedGridInfoService> infoServicesArray = null;
-        infoServicesArray = InfoServiceFactory.getAllExistingInfoService();
-        
-        // Get the number of projects. The number is used in the monitor.
-        int gridProjectNumbers = 0;
-        ArrayList<String> existingVoTypes = new ArrayList<String>();
-        IGridElement[] projectElements;
-        try {
-          projectElements = GridModel.getRoot().getChildren( null );
-          for (int i=0; projectElements != null && i<projectElements.length; i++)
-          {
-            IGridProject igp = (IGridProject)projectElements[i];
-            if (igp!= null && !igp.isHidden())
-            {
-              String voTypeName = igp.getVO().getTypeName();
-              if ( !existingVoTypes.contains( voTypeName ))
-              {
-                gridProjectNumbers++;
-                existingVoTypes.add(voTypeName);
-              }
-            }
-          }
-        } catch( GridModelException e ) {
-          Activator.logException( e );
-        }
-        
-        // Set the monitor task. Each task has 10 work units.
-        monitor.beginTask( "Retrieving information", gridProjectNumbers * 10 ); //$NON-NLS-1$
-        
-        for (int i=0; infoServicesArray != null && i<infoServicesArray.size(); i++)
-        {
-          IExtentedGridInfoService infoService = infoServicesArray.get( i );
-          infoService.scheduleFetch(monitor);
-          if (infoService.getStore() != null)
-          {
-            infoService.getStore().addListener( new IGlueStoreChangeListerner(){
-              public void infoChanged( final ArrayList<AbstractGlueTable> modifiedGlueEntries ) {
-                //Do nothing, just listen so the the glueStore starts fetching
-              }
-            }, null );
-          }
-        }
-        
-        // Notify the listeners that the info has changed.
-        for (int i=0; infoServicesArray != null && i<infoServicesArray.size(); i++)
-        {
-          IExtentedGridInfoService infoService = infoServicesArray.get( i );
-          if (infoService != null && infoService.getStore() != null)
-          {
-            infoService.getStore().notifyListeners( null );
-          }
-        }
-        
-        monitor.done();
-        
-        return new Status(Status.OK,"eu.geclipse.glite.info","BDII initialized");  //$NON-NLS-1$  //$NON-NLS-2$
-      }
-      
-    };
     storeInitializeJob.schedule( );
   }
 
