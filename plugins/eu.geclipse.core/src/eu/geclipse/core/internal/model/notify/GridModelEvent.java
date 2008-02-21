@@ -76,5 +76,70 @@ public class GridModelEvent implements IGridModelEvent {
   public int getType() {
     return this.type;
   }
+  
+  public String toString() {
+    
+    StringBuffer buffer = new StringBuffer( "GridModelEvent(");
+    
+    switch ( this.type ) {
+    
+      case IGridModelEvent.ELEMENTS_ADDED:
+        buffer.append( "ELEMENTS_ADDED, " );
+        break;
+        
+      case IGridModelEvent.ELEMENTS_REMOVED:
+        buffer.append( "ELEMENTS_REMOVED, " );
+        break;
+        
+      case IGridModelEvent.ELEMENTS_CHANGED:
+        buffer.append( "ELEMENTS_CHANGED, " );
+        break;
+        
+      case IGridModelEvent.PROJECT_CLOSED:
+        buffer.append( "PROJECT_CLOSED, " );
+        break;
+        
+      case IGridModelEvent.PROJECT_FOLDER_CHANGED:
+        buffer.append( "PROJECT_FOLDER_CHANGES, " );
+        break;
+        
+      case IGridModelEvent.PROJECT_OPENED:
+        buffer.append( "PROJECT_OPENED, " );
+        break;
+        
+      default:
+        buffer.append( "INVALID, " );
+        break;
+      
+    }
+    
+    if ( this.source != null ) {
+      buffer.append( source.getName() + ", " );
+    } else {
+      buffer.append( "null, " );
+    }
+    
+    if ( this.elements != null ) {
+      buffer.append( "{" );
+      for ( int i = 0 ; i < this.elements.length ; i++ ) {
+        if ( i > 0 ) {
+          buffer.append( ", " );
+        }
+        if ( this.elements[ i ] != null ) {
+          buffer.append( this.elements[ i ].getName() );
+        } else {
+          buffer.append( "null" );
+        }
+      }
+      buffer.append( "}" );
+    } else {
+      buffer.append( "null" );
+    }
+    
+    buffer.append( ")" );
+    
+    return buffer.toString();
+    
+  }
 
 }
