@@ -19,8 +19,11 @@ package eu.geclipse.batch.ui.internal.pages;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
@@ -56,6 +59,9 @@ public class AdvancedQueueConfigPage extends FormPage
   protected Spinner maxJobsSpin;
   protected Spinner jobsInQueueSpin;
   protected Spinner resourcesSpin;
+  protected Button btnUnlimitedRunningJobs = null;
+  protected Button btnUnlimitedJobsInQueue = null;
+  
   
   protected AdvancedQueueAdapter advancedQueueAdapter = null;  
   private boolean contentRefreshed = false;
@@ -174,7 +180,7 @@ public class AdvancedQueueConfigPage extends FormPage
                                                                    parent,
                                                                    sectionTitle,
                                                                    sectionDescription,
-                                                                   2 );
+                                                                   3 );
     /*==================== Priority Widgets =====================*/    
     Composite priorityComp;
 
@@ -189,10 +195,11 @@ public class AdvancedQueueConfigPage extends FormPage
     priorityComp.setLayout( new GridLayout( 1, false ) );
     
     this.prioritySpin = new Spinner( priorityComp, SWT.BORDER );
-    this.prioritySpin.setValues( 172800, 0, 9999999, 0, 1000, 2000 );
+    this.prioritySpin.setValues( 80, 0, Integer.MAX_VALUE, 0, 10, 10  );
+    this.advancedQueueAdapter.attachPrioritySpinner( this.prioritySpin );
 
 
-    gd.horizontalSpan = 1;
+    gd.horizontalSpan = 2;
     priorityComp.setLayoutData( gd );
     
     /*==================== Max. Running Jobs Widgets =====================*/
@@ -212,13 +219,29 @@ public class AdvancedQueueConfigPage extends FormPage
     runningJobsComp.setLayout( new GridLayout( 1, false ) );
     
     this.maxJobsSpin = new Spinner( runningJobsComp, SWT.BORDER );
-    this.maxJobsSpin.setValues( 172800, 0, 9999999, 0, 1000, 2000 );
-
+    this.maxJobsSpin.setValues( 5, 0, Integer.MAX_VALUE, 0, 1, 1 );
     
     gd.horizontalSpan = 1;
     runningJobsComp.setLayoutData( gd );
     
-    /*==================== Max. Running Jobs Widgets =====================*/    
+    this.btnUnlimitedRunningJobs = new Button( client, SWT.CHECK );
+    this.btnUnlimitedRunningJobs.setText( Messages.getString( "AdvancedQueueConfigPage.Unlimited" ) ); //$NON-NLS-1$
+    this.btnUnlimitedRunningJobs.setSelection( false );     
+    this.btnUnlimitedRunningJobs.addSelectionListener( new SelectionAdapter(){      
+      @Override
+      public void widgetSelected( final SelectionEvent e ) {
+        AdvancedQueueConfigPage.this.maxJobsSpin
+                                    .setEnabled( !( AdvancedQueueConfigPage.this.btnUnlimitedRunningJobs.getSelection() ) );
+        AdvancedQueueConfigPage.this.advancedQueueAdapter.setUnlimitedRunningJobs();
+      }     
+    } );
+    
+    this.advancedQueueAdapter.attachRunningJobsSpinner( this.maxJobsSpin,
+                                                        this.btnUnlimitedRunningJobs );
+    
+
+    
+    /*==================== Jobs in Queue Widgets =====================*/    
     Composite maxJobsComp;
 
     
@@ -231,31 +254,29 @@ public class AdvancedQueueConfigPage extends FormPage
     maxJobsComp = new Composite( client, SWT.NONE );
     maxJobsComp.setLayout( new GridLayout( 3, false ) );
     
-    this.maxJobsSpin = new Spinner( maxJobsComp, SWT.BORDER );
-    this.maxJobsSpin.setValues( 172800, 0, 9999999, 0, 1000, 2000 );
-
+    this.jobsInQueueSpin = new Spinner( maxJobsComp, SWT.BORDER );
+    this.jobsInQueueSpin.setValues( 10, 0, Integer.MAX_VALUE, 0, 1, 1 );
     
     gd.horizontalSpan = 1;
     maxJobsComp.setLayoutData( gd );
     
-    /*==================== Max. Running Jobs Widgets =====================*/    
-    Composite jobsInQueueComp;
-
     
-    gd = new GridData();
-    gd.horizontalSpan = 1;
-
-    this.lblJobsinQueue = toolkit.createLabel( client,
-                                            Messages.getString( "AdvancedQueueConfigPage_MaxJobsInQueue" ) ); //$NON-NLS-1$
-   
-    jobsInQueueComp = new Composite( client, SWT.NONE );
-    jobsInQueueComp.setLayout( new GridLayout( 3, false ) );
+    this.btnUnlimitedJobsInQueue = new Button( client, SWT.CHECK );
+    this.btnUnlimitedJobsInQueue.setText( Messages.getString( "AdvancedQueueConfigPage.Unlimited" ) ); //$NON-NLS-1$
+    this.btnUnlimitedJobsInQueue.setSelection( false );     
+    this.btnUnlimitedJobsInQueue.addSelectionListener( new SelectionAdapter() {
+      @Override
+      public void widgetSelected( final SelectionEvent e ) {
+        AdvancedQueueConfigPage.this.jobsInQueueSpin
+                                    .setEnabled( !( AdvancedQueueConfigPage.this.btnUnlimitedJobsInQueue.getSelection() ) );
+        AdvancedQueueConfigPage.this.advancedQueueAdapter.setUnlimitedJobsInQueue();
+      }     
+    } );
     
-    this.jobsInQueueSpin = new Spinner( jobsInQueueComp, SWT.BORDER );
-    this.jobsInQueueSpin.setValues( 172800, 0, 9999999, 0, 1000, 2000 );
+    this.advancedQueueAdapter.attachJobsInQueueSpinner( this.jobsInQueueSpin,
+                                                        this.btnUnlimitedJobsInQueue );
     
-    gd.horizontalSpan = 1;
-    jobsInQueueComp.setLayoutData( gd );
+    
     
     /*==================== AssignedResources Widgets =====================*/    
     Composite resourcesComp;
@@ -271,9 +292,10 @@ public class AdvancedQueueConfigPage extends FormPage
     resourcesComp.setLayout( new GridLayout( 3, false ) );
     
     this.resourcesSpin = new Spinner( resourcesComp, SWT.BORDER );
-    this.resourcesSpin.setValues( 172800, 0, 9999999, 0, 1000, 2000 );
+    this.resourcesSpin.setValues( 2, 1, 32000, 0, 1, 1  );
+    this.advancedQueueAdapter.attachAssignedResourcesSpinner( this.resourcesSpin );
     
-    gd.horizontalSpan = 1;
+    gd.horizontalSpan = 2;
     resourcesComp.setLayoutData( gd );
                           
     
