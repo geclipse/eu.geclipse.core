@@ -129,11 +129,6 @@ public class GridModelContentProvider
   protected Object[] getChildren( final IGridContainer container ) {
     Object[] children = null;
     if ( container.isLazy() && container.isDirty() ) {
-      /*ProgressRunner runner = new ProgressRunner( this.treeViewer, container );
-      ProgressTreeNode monitor = runner.getMonitor();
-      Thread thread = new Thread( runner );
-      thread.start();
-      children = new Object[] { monitor };*/
       FetchChildrenJob fetcher = new FetchChildrenJob( container );
       NewProgressTreeNode monitor = new NewProgressTreeNode( this.treeViewer );
       fetcher.setExternalMonitor( monitor );
