@@ -185,7 +185,7 @@ public class ConnectionElement
     } catch ( CoreException cExc ) {
       Activator.logException( cExc );
     }
-    
+      
     return result;
     
   }
@@ -220,24 +220,24 @@ public class ConnectionElement
       fileStore.setExternalMonitor( sMonitor.newChild( 10 ) );
       res.refreshLocal( IResource.DEPTH_INFINITE, null );
       
-      if ( sMonitor.isCanceled() ) {
-        return Status.CANCEL_STATUS;
+      if ( ! sMonitor.isCanceled() ) {
+        
+        fileStore.activate();
+        fileStore.setExternalMonitor( sMonitor.newChild( 90 ) );
+        res.refreshLocal( IResource.DEPTH_ONE, null );
+      
+        result = Status.OK_STATUS;
+        
       }
-      
-      fileStore.activate();
-      fileStore.setExternalMonitor( sMonitor.newChild( 90 ) );
-      res.refreshLocal( IResource.DEPTH_ONE, null );
-      
-      result = Status.OK_STATUS;
       
     } catch ( CoreException cExc ) {
       this.fetchError = cExc;
-      result = new Status( IStatus.ERROR, Activator.PLUGIN_ID, "Fetch Error", cExc );
+      result = new Status( IStatus.ERROR, Activator.PLUGIN_ID, Messages.getString("ConnectionElement.fetch_error"), cExc ); //$NON-NLS-1$
     } finally {
       sMonitor.done();
     }
     
-    return result;
+    return sMonitor.isCanceled() ? Status.CANCEL_STATUS : result;
     
   }
 
