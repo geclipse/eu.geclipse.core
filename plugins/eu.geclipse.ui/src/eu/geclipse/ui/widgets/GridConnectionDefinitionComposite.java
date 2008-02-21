@@ -1,3 +1,18 @@
+/*****************************************************************************
+ * Copyright (c) 2008 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.ui.widgets;
 
 import java.net.URI;
@@ -51,62 +66,155 @@ import eu.geclipse.ui.providers.ConnectionViewContentProvider;
 import eu.geclipse.ui.providers.ConnectionViewLabelProvider;
 import eu.geclipse.ui.wizards.IConnectionTokenValidator;
 
+/**
+ * A composite for specifying the settings of a new connection. In fact
+ * it holds all necessary widgets to create an {@link URI} with any of
+ * the available constructors. It may be contextualized with the
+ * eu.geclipse.ui.efs extension point.
+ */
 public class GridConnectionDefinitionComposite extends Composite {
   
+  /**
+   * Hard-coded separator used for preferences.
+   */
   private static final String SEPARATOR = ":"; //$NON-NLS-1$
 
+  /**
+   * Tree viewer used for the temporary connection.
+   */
   protected TreeViewer viewer;
   
+  /**
+   * Type of the currently edited URI.
+   */
   private String currentURIType;
   
+  /**
+   * Label of the scheme combo.
+   */
   private Label schemeLabel;
   
+  /**
+   * Label of the uri combo.
+   */
   private Label uriLabel;
   
+  /**
+   * Label of the scheme spec part combo.
+   */
   private Label schemeSpecificPartLabel;
   
+  /**
+   * Label of the authority combo.
+   */
   private Label authorityLabel;
   
+  /**
+   * Label of the user info combo.
+   */
   private Label userInfoLabel;
   
+  /**
+   * Label of the host combo.
+   */
   private Label hostLabel;
   
+  /**
+   * Label of the port combo.
+   */
   private Label portLabel;
   
+  /**
+   * Label of the path combo.
+   */
   private Label pathLabel;
   
+  /**
+   * Label of the query combo.
+   */
   private Label queryLabel;
   
+  /**
+   * Label of the fragment combo.
+   */
   private Label fragmentLabel;
 
+  /**
+   * Combo for editing the URI's scheme. 
+   */
   private Combo schemeCombo;
   
+  /**
+   * Combo for editing the URI itself. 
+   */
   private StoredCombo uriCombo;
   
+  /**
+   * Combo for editing the URI's scheme spec part. 
+   */
   private StoredCombo schemeSpecificPartCombo;
   
+  /**
+   * Combo for editing the URI's authority. 
+   */
   private StoredCombo authorityCombo;
   
+  /**
+   * Combo for editing the URI's user info. 
+   */
   private StoredCombo userInfoCombo;
   
+  /**
+   * Combo for editing the URI's host. 
+   */
   private StoredCombo hostCombo;
   
+  /**
+   * Combo for editing the URI's port. 
+   */
   private StoredCombo portCombo;
   
+  /**
+   * Combo for editing the URI's path. 
+   */
   private StoredCombo pathCombo;
   
+  /**
+   * Combo for editing the URI's query. 
+   */
   private StoredCombo queryCombo;
   
+  /**
+   * Combo for editing the URI's fragment. 
+   */
   private StoredCombo fragmentCombo;
   
+  /**
+   * Link for creating a temporary connection. 
+   */
   private Link pathLink;
   
+  /**
+   * Validator used to validate the tokens or the URI.
+   */
   private IConnectionTokenValidator validator;
   
+  /**
+   * List of registered ModifyListeners.
+   */
   private List< ModifyListener > listeners;
   
+  /**
+   * Cached error message.
+   */
   private String errorMessage;
 
+  /**
+   * Create a new connection definition composite.
+   * 
+   * @param parent The parent of the composite.
+   * @param style The composite's style.
+   */
   public GridConnectionDefinitionComposite( final Composite parent, final int style ) {
     
     super(parent, style);
@@ -250,6 +358,12 @@ public class GridConnectionDefinitionComposite extends Composite {
     
   }
   
+  /**
+   * Add a {@link ModifyListener} to the list of listeners. Modify
+   * listeners are informed whenever a URI specific token was edited.
+   * 
+   * @param l The listener to be added.
+   */
   public void addModifyListener( final ModifyListener l ) {
     if ( this.listeners == null ) {
       this.listeners = new ArrayList< ModifyListener >();
@@ -259,10 +373,25 @@ public class GridConnectionDefinitionComposite extends Composite {
     }
   }
   
+  /**
+   * Get the cached error message if any or <code>null</code> otherwise.
+   * 
+   * @return The error message of the last critical operation or
+   * <code>null</code> if this operation did not cause an error. 
+   */
   public String getErrorMessage() {
     return this.errorMessage;
   }
   
+  /**
+   * Construct a URI from the currently specified parameters. If this
+   * method fails to construct a URI it returns <code>null</code>. In
+   * this case {@link #getErrorMessage()} will return an
+   * appropriate error message.
+   * 
+   * @return A URI from the currently specified parameters or
+   * <code>null</code> in the case of an error.
+   */
   public URI getURI() {
     
     String oldErrorMessage = getErrorMessage();
@@ -320,6 +449,15 @@ public class GridConnectionDefinitionComposite extends Composite {
     
   }
   
+  /**
+   * Validates the current settings of the composite controls. If
+   * any setting turns out to be invalid <code>false</code> will be
+   * returned. In this case {@link #getErrorMessage()} will contain
+   * an appropriate error message.
+   * 
+   * @return <code>True</code> if all settings are valid,
+   * <code>false</code> otherwise.
+   */
   public boolean isValid() {
     
     String oldErrorMessage = getErrorMessage();
@@ -392,12 +530,54 @@ public class GridConnectionDefinitionComposite extends Composite {
     
   }
   
+  /**
+   * Removes the specified listener from the list of listeners.
+   * 
+   * @param l The {@link ModifyListener} to be removed.
+   */
   public void removeModifyListener( final ModifyListener l ) {
     if ( this.listeners != null ) {
       this.listeners.remove( l );
     }
   }
   
+  /**
+   * Set the {@link URI} represented by the controls of this
+   * composite. No validation is done by this method.
+   * 
+   * @param uri The {@link URI} to be set.
+   */
+  public void setURI( final URI uri ) {
+    
+    String scheme = uri.getScheme();
+    this.schemeCombo.setText( scheme );
+    setupFields();
+    
+    String uris = uri.toString();
+    String schemeSpecificPart = uri.getSchemeSpecificPart();
+    String authority = uri.getAuthority();
+    String userInfo = uri.getUserInfo();
+    String host = uri.getHost();
+    int port = uri.getPort();
+    String path = uri.getPath();
+    String query = uri.getQuery();
+    String fragment = uri.getFragment();
+    
+    this.uriCombo.setText( uris != null ? uris : "" ); //$NON-NLS-1$
+    this.schemeSpecificPartCombo.setText( schemeSpecificPart != null ? schemeSpecificPart : "" ); //$NON-NLS-1$
+    this.authorityCombo.setText( authority != null ? authority : "" ); //$NON-NLS-1$
+    this.userInfoCombo.setText( userInfo != null ? userInfo : "" ); //$NON-NLS-1$
+    this.hostCombo.setText( host != null ? host : "" ); //$NON-NLS-1$
+    this.portCombo.setText( port != -1 ? String.valueOf( uri.getPort() ) : "" ); //$NON-NLS-1$
+    this.pathCombo.setText( path != null ? path : "" ); //$NON-NLS-1$
+    this.queryCombo.setText( query != null ? query : "" ); //$NON-NLS-1$
+    this.fragmentCombo.setText( fragment != null ? fragment : "" ); //$NON-NLS-1$
+    
+  }
+  
+  /**
+   * Notify all {@link ModifyListener}s of a change.
+   */
   protected void fireModifyEvent() {
     if ( this.listeners != null ) {
       Event event = new Event();
@@ -409,6 +589,9 @@ public class GridConnectionDefinitionComposite extends Composite {
     }    
   }
   
+  /**
+   * Handle a double click event in the tree viewer.
+   */
   protected void handleDoubleClick() {
     IStructuredSelection selection
       = ( IStructuredSelection )this.viewer.getSelection();
@@ -419,6 +602,11 @@ public class GridConnectionDefinitionComposite extends Composite {
     }
   }
   
+  /**
+   * Handle a grid model event.
+   * 
+   * @param event The event to be handled.
+   */
   protected void handleGridModelChanged( final IGridModelEvent event ) {
     Control control = this.viewer.getControl();
     if ( ! control.isDisposed() ) {
@@ -434,6 +622,11 @@ public class GridConnectionDefinitionComposite extends Composite {
     }
   }
   
+  /**
+   * Handle the change of a selection within the tree viewer.
+   * 
+   * @param selection The new selection.
+   */
   protected void handleSelectionChanged( final ISelection selection ) {
     
     if ( selection instanceof IStructuredSelection ) {
@@ -473,6 +666,9 @@ public class GridConnectionDefinitionComposite extends Composite {
     
   }
   
+  /**
+   * Initialize the tree viewer in order to browse the specified {@link URI}.
+   */
   protected void initializeBrowser() {
     
     this.viewer.setInput( null );
@@ -503,6 +699,9 @@ public class GridConnectionDefinitionComposite extends Composite {
     
   }
   
+  /**
+   * Reset all controls.
+   */
   protected void resetFields() {
     
     setActive( this.uriCombo, this.uriLabel, eu.geclipse.ui.widgets.Messages.getString("GridConnectionDefinitionComposite.uri_label") ); //$NON-NLS-1$
@@ -525,6 +724,9 @@ public class GridConnectionDefinitionComposite extends Composite {
     
   }
   
+  /**
+   * Setup all controls according to the scheme specified in the scheme combo.
+   */
   protected void setupFields() {
     
     resetFields();
@@ -559,6 +761,9 @@ public class GridConnectionDefinitionComposite extends Composite {
     
   }
   
+  /**
+   * Update the UI and notify all {@link ModifyListener}s.
+   */
   protected void updateUI() {
     URI uri = getURI();
     this.viewer.getTree().setEnabled( uri != null );
@@ -566,9 +771,17 @@ public class GridConnectionDefinitionComposite extends Composite {
     fireModifyEvent();
   }
   
+  /**
+   * Helper method to create a field editor for a specific part of a {@link URI}.
+   * 
+   * @param parent The parent of the created controls.
+   * @param label The label of the created combo.
+   * @param text The text of the label.
+   * @return The combo used as editor.
+   */
   private StoredCombo createEditorField( final Composite parent,
-                                           final Label label,
-                                           final String text ) {
+                                         final Label label,
+                                         final String text ) {
 
     label.setText( text );
     GridData lData = new GridData();
@@ -591,6 +804,11 @@ public class GridConnectionDefinitionComposite extends Composite {
 
   }
   
+  /**
+   * Load all available schemes from the org.eclipse.core.filesystem.filesystems
+   * extension point and initialize the scheme combo with these schemes.
+   * @param combo
+   */
   private void initializeSchemeCombo( final Combo combo ) {
     List< String > schemes
       = eu.geclipse.core.Extensions.getRegisteredFilesystemSchemes();
@@ -599,6 +817,12 @@ public class GridConnectionDefinitionComposite extends Composite {
     combo.setItems( schemeArray );
   }
   
+  /**
+   * Helper method to test the speficied String if it is empty.
+   * 
+   * @param s The String to be tested.
+   * @return True if the String is <code>null</code> or its length is 0.
+   */
   private boolean isEmpty( final String s ) {
     return ( s == null ) || ( s.length() == 0 );
   }

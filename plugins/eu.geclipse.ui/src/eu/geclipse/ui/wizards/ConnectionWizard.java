@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006, 2007, 2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -39,7 +39,10 @@ import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridPreferences;
 import eu.geclipse.ui.internal.Activator;
 
-
+/**
+ * Wizard for the creation of new connections. Can both create local
+ * and global connections.
+ */
 public class ConnectionWizard
     extends Wizard
     implements INewWizard {
@@ -56,12 +59,21 @@ public class ConnectionWizard
     
   private ConnectionDefinitionWizardPage definitionPage;
   
+  /**
+   * Create a new connection wizard for local connections.
+   */
   public ConnectionWizard() {
     this( false );
   }
   
+  /**
+   * Create a new connection wizard.
+   * 
+   * @param createGlobalConnection If true a connection wizard for
+   * the creation of global connections will be initialized.
+   */
   public ConnectionWizard( final boolean createGlobalConnection ) {
-    URL imgURL = Activator.getDefault().getBundle().getResource( "icons/wizban/newconn_wiz.gif" );
+    URL imgURL = Activator.getDefault().getBundle().getResource( "icons/wizban/newconn_wiz.gif" ); //$NON-NLS-1$
     setDefaultPageImageDescriptor( ImageDescriptor.createFromURL( imgURL ) );
     setNeedsProgressMonitor( true );
     this.createGlobalConnection = createGlobalConnection;

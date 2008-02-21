@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2007 g-Eclipse consortium 
+ * Copyright (c) 2007, 2008 g-Eclipse consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,8 +10,9 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributor(s):
- *     Mariusz Wojtysiak - initial API and implementation
+ *     Mathias Stuempert - initial API and implementation
  *****************************************************************************/
+
 package eu.geclipse.ui.properties;
 
 import java.util.Hashtable;
@@ -39,11 +40,20 @@ import org.osgi.service.prefs.Preferences;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.widgets.GridProjectStructureComposite;
 
+/**
+ * A property page for modifying the project folders of a Grid project.
+ */
 public class GridProjectFoldersPropertiesPage
     extends PropertyPage {
   
+  /**
+   * Internally used project structure composite.
+   */
   private GridProjectStructureComposite projectStructureComposite;
 
+  /* (non-Javadoc)
+   * @see org.eclipse.jface.preference.PreferencePage#performOk()
+   */
   @Override
   public boolean performOk() {
 
@@ -108,7 +118,7 @@ public class GridProjectFoldersPropertiesPage
         }
         
         if ( updateNeeded ) {
-          WorkspaceJob updater = new WorkspaceJob( "project_folder_updater" ) {
+          WorkspaceJob updater = new WorkspaceJob( "project_folder_updater" ) { //$NON-NLS-1$
             @Override
             public IStatus runInWorkspace( final IProgressMonitor monitor )
                 throws CoreException {
@@ -118,7 +128,7 @@ public class GridProjectFoldersPropertiesPage
               } catch ( BackingStoreException bsExc ) {
                 jobResult = new Status( IStatus.ERROR,
                                         Activator.PLUGIN_ID,
-                                        "Error while writing project preferences",
+                                        Messages.getString("GridProjectFoldersPropertiesPage.project_setup_error"), //$NON-NLS-1$
                                         bsExc );
               }
               return jobResult;
@@ -127,9 +137,7 @@ public class GridProjectFoldersPropertiesPage
           updater.setRule( project );
           updater.setSystem( true );
           updater.schedule();
-          /*
-            Activator.logException( cExc );
-          }*/
+
         }
         
       } catch ( BackingStoreException bsExc ) {
@@ -143,12 +151,18 @@ public class GridProjectFoldersPropertiesPage
     
   }
   
+  /* (non-Javadoc)
+   * @see org.eclipse.ui.dialogs.PropertyPage#setElement(org.eclipse.core.runtime.IAdaptable)
+   */
   @Override
   public void setElement( final IAdaptable element ) {
     super.setElement( element );
     updateProjectStructureComposite();
   }
   
+  /* (non-Javadoc)
+   * @see org.eclipse.jface.preference.PreferencePage#createContents(org.eclipse.swt.widgets.Composite)
+   */
   @Override
   protected Control createContents( final Composite parent ) {
     this.projectStructureComposite = new GridProjectStructureComposite( parent, SWT.NULL );
@@ -156,12 +170,19 @@ public class GridProjectFoldersPropertiesPage
     return this.projectStructureComposite;
   }
   
+  /* (non-Javadoc)
+   * @see org.eclipse.jface.preference.PreferencePage#performDefaults()
+   */
   @Override
   protected void performDefaults() {
     this.projectStructureComposite.performDefaults();
     super.performDefaults();
   }
   
+  /**
+   * Update the project structure composite if it is already
+   * available, i.e. set its project to be the selected element.
+   */
   private void updateProjectStructureComposite() {
     if ( this.projectStructureComposite != null ) {
       IProject project = ( IProject ) getElement().getAdapter( IProject.class );
