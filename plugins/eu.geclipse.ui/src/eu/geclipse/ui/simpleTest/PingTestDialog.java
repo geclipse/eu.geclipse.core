@@ -64,6 +64,13 @@ public class PingTestDialog extends AbstractSimpleTestDialog  {
   public PingTestDialog( final ISimpleTest test, final List< IGridResource > resources, final Shell parentShell ) {
     super( test, resources, parentShell );
   }
+  
+  @Override
+  protected void configureShell( final Shell newShell ) {
+    super.configureShell( newShell );
+    newShell.setMinimumSize( 500, 400 );
+    newShell.setText( Messages.getString( "PingTestDialog.dialogTitle" ) ); //$NON-NLS-1$
+  }
 
   /* (non-Javadoc)
    * @see org.eclipse.jface.dialogs.Dialog#createDialogArea(org.eclipse.swt.widgets.Composite)
@@ -74,6 +81,8 @@ public class PingTestDialog extends AbstractSimpleTestDialog  {
     
     Composite mainComp = new Composite( parent, SWT.NONE );
     mainComp.setLayout( new GridLayout( 1, false ) );
+    gData = new GridData( SWT.FILL, SWT.FILL, true, true);
+    mainComp.setLayoutData( gData );
     
     Group settingsGroup = new Group( mainComp, SWT.NONE );
     settingsGroup.setLayout( new GridLayout( 3, false ) );
@@ -122,7 +131,7 @@ public class PingTestDialog extends AbstractSimpleTestDialog  {
     
     this.outPut = new Text( outPutGroup, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.MULTI );
     this.outPut.setEditable( false );
-    gData = new GridData( 385, 200 );
+    gData = new GridData( SWT.FILL, SWT.FILL, true, true );
 //    gData.horizontalSpan = 2;
     gData.grabExcessHorizontalSpace = true;
     gData.grabExcessVerticalSpace = true;
