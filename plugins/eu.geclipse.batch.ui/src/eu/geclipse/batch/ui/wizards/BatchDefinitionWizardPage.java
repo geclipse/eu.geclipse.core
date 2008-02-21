@@ -23,11 +23,11 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.CCombo;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
@@ -64,7 +64,7 @@ public class BatchDefinitionWizardPage extends WizardPage {
 
   private Spinner intervalSpinner;
 
-  private CCombo batchTypeCombo;
+  private Combo batchTypeCombo;
 
   /**
    * The default constructor.
@@ -119,7 +119,7 @@ public class BatchDefinitionWizardPage extends WizardPage {
     this.batchTypeLabel.setText( Messages.getString( "BatchDefinitionWizardPage.BatchType" ) ); //$NON-NLS-1$
     this.batchTypeLabel.setLayoutData( lData );
 
-    this.batchTypeCombo = new CCombo( this.mainComp, SWT.BORDER );
+    this.batchTypeCombo = new Combo( this.mainComp, SWT.BORDER | SWT.READ_ONLY );
     gData = new GridData( GridData.FILL_HORIZONTAL );
     gData.grabExcessHorizontalSpace = true;
     gData.minimumHeight = 0;
@@ -132,9 +132,8 @@ public class BatchDefinitionWizardPage extends WizardPage {
       setErrorMessage( Messages.getString( "BatchDefinitionWizardPage.BatchTypeError" ) ); //$NON-NLS-1$
     else
       this.batchTypeCombo.select(0);
-    this.batchTypeCombo.setEditable(false);
 
-    this.intervalLabel = new Label( this.mainComp, SWT.RIGHT | SWT.NONE );
+    this.intervalLabel = new Label( this.mainComp, SWT.RIGHT );
     this.intervalLabel.setText( Messages.getString( "BatchDefinitionWizardPage.Interval" ) ); //$NON-NLS-1$
     this.intervalLabel.setLayoutData( lData );
 
@@ -175,7 +174,7 @@ public class BatchDefinitionWizardPage extends WizardPage {
     return editor;
   }
 
-  protected void initializeServiceCombo( final CCombo combo ) {
+  protected void initializeServiceCombo( final Combo combo ) {
     List< String > serviceNames
       = eu.geclipse.batch.Extensions.getRegisteredBatchServiceNames();
     String[] schemeArray
