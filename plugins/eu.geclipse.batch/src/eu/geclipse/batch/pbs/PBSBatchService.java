@@ -18,8 +18,8 @@ package eu.geclipse.batch.pbs;
 
 
 import java.math.BigDecimal;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 import eu.geclipse.batch.AbstractBatchService;
 import eu.geclipse.batch.IBatchJobInfo;
@@ -970,6 +970,10 @@ public final class PBSBatchService extends AbstractBatchService {
     boolean queueStatus = false;
     double timeCPU;
     double timeWall;
+    int priority = -1;
+    int runningJobs = -1;
+    int jobsInQueue = -1;
+    int assignedResources = -1;
     List<String> vos = null;
     
     
@@ -1000,7 +1004,44 @@ public final class PBSBatchService extends AbstractBatchService {
     }
     
     timeWall = queue.getWallTimeLimit().getUpperBoundedRange().getValue();
+   
+    /* Get QUEUE__TYPE_PRIORITY */
+    if ( null != queue.getPriority() ) {
+      if (queue.getPriority().getUpperBoundedRange() != null) {
+        priority = queue.getPriority().getUpperBoundedRange().getValue().intValue();
+      }
+      else {
+        priority = queue.getPriority().getLowerBoundedRange().getValue().intValue();
+      }
+    }
     
+    /* Get QUEUE__TYPE_RUNNING_JOBS */    
+    if ( null != queue.getRunningJobs() ) {
+      if (queue.getRunningJobs().getUpperBoundedRange() != null) {
+        runningJobs = queue.getRunningJobs().getUpperBoundedRange().getValue().intValue();
+      }
+      else {
+        runningJobs = queue.getRunningJobs().getLowerBoundedRange().getValue().intValue();
+      }
+    }
+    
+    /* Get QUEUE__TYPE_JOBS_IN_QUEUE */
+    if ( null != queue.getJobsInQueue() ) {
+      if (queue.getJobsInQueue().getUpperBoundedRange() != null) {
+        jobsInQueue = queue.getJobsInQueue().getUpperBoundedRange().getValue().intValue();
+      }
+      else {
+        jobsInQueue = queue.getJobsInQueue().getLowerBoundedRange().getValue().intValue();
+      }
+    }
+    
+    /* Get QUEUE__TYPE_JOBS_ASSIGNED_RESOURCES */
+    if ( null != queue.getAssignedResources() ) {
+      if (queue.getAssignedResources().getExact() != null) {
+        jobsInQueue = queue.getJobsInQueue().getUpperBoundedRange().getValue().intValue();
+      }
+    }
+
     createQueue( queueName, type, queueStatus, timeCPU, timeWall, vos );
     
         
