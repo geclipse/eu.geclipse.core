@@ -347,6 +347,208 @@ public interface QdlPackage extends EPackage
   int EXACT_TYPE_FEATURE_COUNT = 3;
 
   /**
+   * The meta object id for the '{@link eu.geclipse.batch.model.qdl.impl.IntegerBoundaryTypeImpl <em>Integer Boundary Type</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see eu.geclipse.batch.model.qdl.impl.IntegerBoundaryTypeImpl
+   * @see eu.geclipse.batch.model.qdl.impl.QdlPackageImpl#getIntegerBoundaryType()
+   * @generated
+   */
+  int INTEGER_BOUNDARY_TYPE = 4;
+
+  /**
+   * The feature id for the '<em><b>Value</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INTEGER_BOUNDARY_TYPE__VALUE = 0;
+
+  /**
+   * The feature id for the '<em><b>Exclusive Bound</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INTEGER_BOUNDARY_TYPE__EXCLUSIVE_BOUND = 1;
+
+  /**
+   * The feature id for the '<em><b>Any Attribute</b></em>' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INTEGER_BOUNDARY_TYPE__ANY_ATTRIBUTE = 2;
+
+  /**
+   * The number of structural features of the '<em>Integer Boundary Type</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INTEGER_BOUNDARY_TYPE_FEATURE_COUNT = 3;
+
+  /**
+   * The meta object id for the '{@link eu.geclipse.batch.model.qdl.impl.IntegerExactTypeImpl <em>Integer Exact Type</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see eu.geclipse.batch.model.qdl.impl.IntegerExactTypeImpl
+   * @see eu.geclipse.batch.model.qdl.impl.QdlPackageImpl#getIntegerExactType()
+   * @generated
+   */
+  int INTEGER_EXACT_TYPE = 5;
+
+  /**
+   * The feature id for the '<em><b>Value</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INTEGER_EXACT_TYPE__VALUE = 0;
+
+  /**
+   * The feature id for the '<em><b>Epsilon</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INTEGER_EXACT_TYPE__EPSILON = 1;
+
+  /**
+   * The feature id for the '<em><b>Any Attribute</b></em>' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INTEGER_EXACT_TYPE__ANY_ATTRIBUTE = 2;
+
+  /**
+   * The number of structural features of the '<em>Integer Exact Type</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INTEGER_EXACT_TYPE_FEATURE_COUNT = 3;
+
+  /**
+   * The meta object id for the '{@link eu.geclipse.batch.model.qdl.impl.IntegerRangeTypeImpl <em>Integer Range Type</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see eu.geclipse.batch.model.qdl.impl.IntegerRangeTypeImpl
+   * @see eu.geclipse.batch.model.qdl.impl.QdlPackageImpl#getIntegerRangeType()
+   * @generated
+   */
+  int INTEGER_RANGE_TYPE = 6;
+
+  /**
+   * The feature id for the '<em><b>Integer Lower Bound</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INTEGER_RANGE_TYPE__INTEGER_LOWER_BOUND = 0;
+
+  /**
+   * The feature id for the '<em><b>Integer Upper Bound</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INTEGER_RANGE_TYPE__INTEGER_UPPER_BOUND = 1;
+
+  /**
+   * The feature id for the '<em><b>Any Attribute</b></em>' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INTEGER_RANGE_TYPE__ANY_ATTRIBUTE = 2;
+
+  /**
+   * The number of structural features of the '<em>Integer Range Type</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INTEGER_RANGE_TYPE_FEATURE_COUNT = 3;
+
+  /**
+   * The meta object id for the '{@link eu.geclipse.batch.model.qdl.impl.IntegerRangeValueTypeImpl <em>Integer Range Value Type</em>}' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see eu.geclipse.batch.model.qdl.impl.IntegerRangeValueTypeImpl
+   * @see eu.geclipse.batch.model.qdl.impl.QdlPackageImpl#getIntegerRangeValueType()
+   * @generated
+   */
+  int INTEGER_RANGE_VALUE_TYPE = 7;
+
+  /**
+   * The feature id for the '<em><b>Upper Bounded Range</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INTEGER_RANGE_VALUE_TYPE__UPPER_BOUNDED_RANGE = 0;
+
+  /**
+   * The feature id for the '<em><b>Lower Bounded Range</b></em>' containment reference.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INTEGER_RANGE_VALUE_TYPE__LOWER_BOUNDED_RANGE = 1;
+
+  /**
+   * The feature id for the '<em><b>Exact</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INTEGER_RANGE_VALUE_TYPE__EXACT = 2;
+
+  /**
+   * The feature id for the '<em><b>Range</b></em>' containment reference list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INTEGER_RANGE_VALUE_TYPE__RANGE = 3;
+
+  /**
+   * The feature id for the '<em><b>Any Attribute</b></em>' attribute list.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INTEGER_RANGE_VALUE_TYPE__ANY_ATTRIBUTE = 4;
+
+  /**
+   * The number of structural features of the '<em>Integer Range Value Type</em>' class.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int INTEGER_RANGE_VALUE_TYPE_FEATURE_COUNT = 5;
+
+  /**
    * The meta object id for the '{@link eu.geclipse.batch.model.qdl.impl.QueueTypeImpl <em>Queue Type</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -354,7 +556,7 @@ public interface QdlPackage extends EPackage
    * @see eu.geclipse.batch.model.qdl.impl.QdlPackageImpl#getQueueType()
    * @generated
    */
-  int QUEUE_TYPE = 4;
+  int QUEUE_TYPE = 8;
 
   /**
    * The feature id for the '<em><b>Queue Name</b></em>' attribute.
@@ -472,7 +674,7 @@ public interface QdlPackage extends EPackage
    * @see eu.geclipse.batch.model.qdl.impl.QdlPackageImpl#getRangeType()
    * @generated
    */
-  int RANGE_TYPE = 5;
+  int RANGE_TYPE = 9;
 
   /**
    * The feature id for the '<em><b>Lower Bound</b></em>' containment reference.
@@ -518,7 +720,7 @@ public interface QdlPackage extends EPackage
    * @see eu.geclipse.batch.model.qdl.impl.QdlPackageImpl#getRangeValueType()
    * @generated
    */
-  int RANGE_VALUE_TYPE = 6;
+  int RANGE_VALUE_TYPE = 10;
 
   /**
    * The feature id for the '<em><b>Upper Bounded Range</b></em>' containment reference.
@@ -582,7 +784,7 @@ public interface QdlPackage extends EPackage
    * @see eu.geclipse.batch.model.qdl.impl.QdlPackageImpl#getQueueStatusEnumeration()
    * @generated
    */
-  int QUEUE_STATUS_ENUMERATION = 7;
+  int QUEUE_STATUS_ENUMERATION = 11;
 
   /**
    * The meta object id for the '{@link eu.geclipse.batch.model.qdl.QueueTypeEnumeration <em>Queue Type Enumeration</em>}' enum.
@@ -592,7 +794,7 @@ public interface QdlPackage extends EPackage
    * @see eu.geclipse.batch.model.qdl.impl.QdlPackageImpl#getQueueTypeEnumeration()
    * @generated
    */
-  int QUEUE_TYPE_ENUMERATION = 8;
+  int QUEUE_TYPE_ENUMERATION = 12;
 
   /**
    * The meta object id for the '<em>Description Type</em>' data type.
@@ -602,7 +804,7 @@ public interface QdlPackage extends EPackage
    * @see eu.geclipse.batch.model.qdl.impl.QdlPackageImpl#getDescriptionType()
    * @generated
    */
-  int DESCRIPTION_TYPE = 9;
+  int DESCRIPTION_TYPE = 13;
 
   /**
    * The meta object id for the '<em>Queue Status Enumeration Object</em>' data type.
@@ -612,7 +814,7 @@ public interface QdlPackage extends EPackage
    * @see eu.geclipse.batch.model.qdl.impl.QdlPackageImpl#getQueueStatusEnumerationObject()
    * @generated
    */
-  int QUEUE_STATUS_ENUMERATION_OBJECT = 10;
+  int QUEUE_STATUS_ENUMERATION_OBJECT = 14;
 
   /**
    * The meta object id for the '<em>Queue Type Enumeration Object</em>' data type.
@@ -622,7 +824,7 @@ public interface QdlPackage extends EPackage
    * @see eu.geclipse.batch.model.qdl.impl.QdlPackageImpl#getQueueTypeEnumerationObject()
    * @generated
    */
-  int QUEUE_TYPE_ENUMERATION_OBJECT = 11;
+  int QUEUE_TYPE_ENUMERATION_OBJECT = 15;
 
 
   /**
@@ -906,6 +1108,200 @@ public interface QdlPackage extends EPackage
    * @generated
    */
   EAttribute getExactType_AnyAttribute();
+
+  /**
+   * Returns the meta object for class '{@link eu.geclipse.batch.model.qdl.IntegerBoundaryType <em>Integer Boundary Type</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Integer Boundary Type</em>'.
+   * @see eu.geclipse.batch.model.qdl.IntegerBoundaryType
+   * @generated
+   */
+  EClass getIntegerBoundaryType();
+
+  /**
+   * Returns the meta object for the attribute '{@link eu.geclipse.batch.model.qdl.IntegerBoundaryType#getValue <em>Value</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Value</em>'.
+   * @see eu.geclipse.batch.model.qdl.IntegerBoundaryType#getValue()
+   * @see #getIntegerBoundaryType()
+   * @generated
+   */
+  EAttribute getIntegerBoundaryType_Value();
+
+  /**
+   * Returns the meta object for the attribute '{@link eu.geclipse.batch.model.qdl.IntegerBoundaryType#getExclusiveBound <em>Exclusive Bound</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Exclusive Bound</em>'.
+   * @see eu.geclipse.batch.model.qdl.IntegerBoundaryType#getExclusiveBound()
+   * @see #getIntegerBoundaryType()
+   * @generated
+   */
+  EAttribute getIntegerBoundaryType_ExclusiveBound();
+
+  /**
+   * Returns the meta object for the attribute list '{@link eu.geclipse.batch.model.qdl.IntegerBoundaryType#getAnyAttribute <em>Any Attribute</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute list '<em>Any Attribute</em>'.
+   * @see eu.geclipse.batch.model.qdl.IntegerBoundaryType#getAnyAttribute()
+   * @see #getIntegerBoundaryType()
+   * @generated
+   */
+  EAttribute getIntegerBoundaryType_AnyAttribute();
+
+  /**
+   * Returns the meta object for class '{@link eu.geclipse.batch.model.qdl.IntegerExactType <em>Integer Exact Type</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Integer Exact Type</em>'.
+   * @see eu.geclipse.batch.model.qdl.IntegerExactType
+   * @generated
+   */
+  EClass getIntegerExactType();
+
+  /**
+   * Returns the meta object for the attribute '{@link eu.geclipse.batch.model.qdl.IntegerExactType#getValue <em>Value</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Value</em>'.
+   * @see eu.geclipse.batch.model.qdl.IntegerExactType#getValue()
+   * @see #getIntegerExactType()
+   * @generated
+   */
+  EAttribute getIntegerExactType_Value();
+
+  /**
+   * Returns the meta object for the attribute '{@link eu.geclipse.batch.model.qdl.IntegerExactType#getEpsilon <em>Epsilon</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Epsilon</em>'.
+   * @see eu.geclipse.batch.model.qdl.IntegerExactType#getEpsilon()
+   * @see #getIntegerExactType()
+   * @generated
+   */
+  EAttribute getIntegerExactType_Epsilon();
+
+  /**
+   * Returns the meta object for the attribute list '{@link eu.geclipse.batch.model.qdl.IntegerExactType#getAnyAttribute <em>Any Attribute</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute list '<em>Any Attribute</em>'.
+   * @see eu.geclipse.batch.model.qdl.IntegerExactType#getAnyAttribute()
+   * @see #getIntegerExactType()
+   * @generated
+   */
+  EAttribute getIntegerExactType_AnyAttribute();
+
+  /**
+   * Returns the meta object for class '{@link eu.geclipse.batch.model.qdl.IntegerRangeType <em>Integer Range Type</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Integer Range Type</em>'.
+   * @see eu.geclipse.batch.model.qdl.IntegerRangeType
+   * @generated
+   */
+  EClass getIntegerRangeType();
+
+  /**
+   * Returns the meta object for the containment reference '{@link eu.geclipse.batch.model.qdl.IntegerRangeType#getIntegerLowerBound <em>Integer Lower Bound</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Integer Lower Bound</em>'.
+   * @see eu.geclipse.batch.model.qdl.IntegerRangeType#getIntegerLowerBound()
+   * @see #getIntegerRangeType()
+   * @generated
+   */
+  EReference getIntegerRangeType_IntegerLowerBound();
+
+  /**
+   * Returns the meta object for the containment reference '{@link eu.geclipse.batch.model.qdl.IntegerRangeType#getIntegerUpperBound <em>Integer Upper Bound</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Integer Upper Bound</em>'.
+   * @see eu.geclipse.batch.model.qdl.IntegerRangeType#getIntegerUpperBound()
+   * @see #getIntegerRangeType()
+   * @generated
+   */
+  EReference getIntegerRangeType_IntegerUpperBound();
+
+  /**
+   * Returns the meta object for the attribute list '{@link eu.geclipse.batch.model.qdl.IntegerRangeType#getAnyAttribute <em>Any Attribute</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute list '<em>Any Attribute</em>'.
+   * @see eu.geclipse.batch.model.qdl.IntegerRangeType#getAnyAttribute()
+   * @see #getIntegerRangeType()
+   * @generated
+   */
+  EAttribute getIntegerRangeType_AnyAttribute();
+
+  /**
+   * Returns the meta object for class '{@link eu.geclipse.batch.model.qdl.IntegerRangeValueType <em>Integer Range Value Type</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for class '<em>Integer Range Value Type</em>'.
+   * @see eu.geclipse.batch.model.qdl.IntegerRangeValueType
+   * @generated
+   */
+  EClass getIntegerRangeValueType();
+
+  /**
+   * Returns the meta object for the containment reference '{@link eu.geclipse.batch.model.qdl.IntegerRangeValueType#getUpperBoundedRange <em>Upper Bounded Range</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Upper Bounded Range</em>'.
+   * @see eu.geclipse.batch.model.qdl.IntegerRangeValueType#getUpperBoundedRange()
+   * @see #getIntegerRangeValueType()
+   * @generated
+   */
+  EReference getIntegerRangeValueType_UpperBoundedRange();
+
+  /**
+   * Returns the meta object for the containment reference '{@link eu.geclipse.batch.model.qdl.IntegerRangeValueType#getLowerBoundedRange <em>Lower Bounded Range</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Lower Bounded Range</em>'.
+   * @see eu.geclipse.batch.model.qdl.IntegerRangeValueType#getLowerBoundedRange()
+   * @see #getIntegerRangeValueType()
+   * @generated
+   */
+  EReference getIntegerRangeValueType_LowerBoundedRange();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link eu.geclipse.batch.model.qdl.IntegerRangeValueType#getExact <em>Exact</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Exact</em>'.
+   * @see eu.geclipse.batch.model.qdl.IntegerRangeValueType#getExact()
+   * @see #getIntegerRangeValueType()
+   * @generated
+   */
+  EReference getIntegerRangeValueType_Exact();
+
+  /**
+   * Returns the meta object for the containment reference list '{@link eu.geclipse.batch.model.qdl.IntegerRangeValueType#getRange <em>Range</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference list '<em>Range</em>'.
+   * @see eu.geclipse.batch.model.qdl.IntegerRangeValueType#getRange()
+   * @see #getIntegerRangeValueType()
+   * @generated
+   */
+  EReference getIntegerRangeValueType_Range();
+
+  /**
+   * Returns the meta object for the attribute list '{@link eu.geclipse.batch.model.qdl.IntegerRangeValueType#getAnyAttribute <em>Any Attribute</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute list '<em>Any Attribute</em>'.
+   * @see eu.geclipse.batch.model.qdl.IntegerRangeValueType#getAnyAttribute()
+   * @see #getIntegerRangeValueType()
+   * @generated
+   */
+  EAttribute getIntegerRangeValueType_AnyAttribute();
 
   /**
    * Returns the meta object for class '{@link eu.geclipse.batch.model.qdl.QueueType <em>Queue Type</em>}'.
@@ -1440,6 +1836,158 @@ public interface QdlPackage extends EPackage
      * @generated
      */
     EAttribute EXACT_TYPE__ANY_ATTRIBUTE = eINSTANCE.getExactType_AnyAttribute();
+
+    /**
+     * The meta object literal for the '{@link eu.geclipse.batch.model.qdl.impl.IntegerBoundaryTypeImpl <em>Integer Boundary Type</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see eu.geclipse.batch.model.qdl.impl.IntegerBoundaryTypeImpl
+     * @see eu.geclipse.batch.model.qdl.impl.QdlPackageImpl#getIntegerBoundaryType()
+     * @generated
+     */
+    EClass INTEGER_BOUNDARY_TYPE = eINSTANCE.getIntegerBoundaryType();
+
+    /**
+     * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute INTEGER_BOUNDARY_TYPE__VALUE = eINSTANCE.getIntegerBoundaryType_Value();
+
+    /**
+     * The meta object literal for the '<em><b>Exclusive Bound</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute INTEGER_BOUNDARY_TYPE__EXCLUSIVE_BOUND = eINSTANCE.getIntegerBoundaryType_ExclusiveBound();
+
+    /**
+     * The meta object literal for the '<em><b>Any Attribute</b></em>' attribute list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute INTEGER_BOUNDARY_TYPE__ANY_ATTRIBUTE = eINSTANCE.getIntegerBoundaryType_AnyAttribute();
+
+    /**
+     * The meta object literal for the '{@link eu.geclipse.batch.model.qdl.impl.IntegerExactTypeImpl <em>Integer Exact Type</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see eu.geclipse.batch.model.qdl.impl.IntegerExactTypeImpl
+     * @see eu.geclipse.batch.model.qdl.impl.QdlPackageImpl#getIntegerExactType()
+     * @generated
+     */
+    EClass INTEGER_EXACT_TYPE = eINSTANCE.getIntegerExactType();
+
+    /**
+     * The meta object literal for the '<em><b>Value</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute INTEGER_EXACT_TYPE__VALUE = eINSTANCE.getIntegerExactType_Value();
+
+    /**
+     * The meta object literal for the '<em><b>Epsilon</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute INTEGER_EXACT_TYPE__EPSILON = eINSTANCE.getIntegerExactType_Epsilon();
+
+    /**
+     * The meta object literal for the '<em><b>Any Attribute</b></em>' attribute list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute INTEGER_EXACT_TYPE__ANY_ATTRIBUTE = eINSTANCE.getIntegerExactType_AnyAttribute();
+
+    /**
+     * The meta object literal for the '{@link eu.geclipse.batch.model.qdl.impl.IntegerRangeTypeImpl <em>Integer Range Type</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see eu.geclipse.batch.model.qdl.impl.IntegerRangeTypeImpl
+     * @see eu.geclipse.batch.model.qdl.impl.QdlPackageImpl#getIntegerRangeType()
+     * @generated
+     */
+    EClass INTEGER_RANGE_TYPE = eINSTANCE.getIntegerRangeType();
+
+    /**
+     * The meta object literal for the '<em><b>Integer Lower Bound</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference INTEGER_RANGE_TYPE__INTEGER_LOWER_BOUND = eINSTANCE.getIntegerRangeType_IntegerLowerBound();
+
+    /**
+     * The meta object literal for the '<em><b>Integer Upper Bound</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference INTEGER_RANGE_TYPE__INTEGER_UPPER_BOUND = eINSTANCE.getIntegerRangeType_IntegerUpperBound();
+
+    /**
+     * The meta object literal for the '<em><b>Any Attribute</b></em>' attribute list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute INTEGER_RANGE_TYPE__ANY_ATTRIBUTE = eINSTANCE.getIntegerRangeType_AnyAttribute();
+
+    /**
+     * The meta object literal for the '{@link eu.geclipse.batch.model.qdl.impl.IntegerRangeValueTypeImpl <em>Integer Range Value Type</em>}' class.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @see eu.geclipse.batch.model.qdl.impl.IntegerRangeValueTypeImpl
+     * @see eu.geclipse.batch.model.qdl.impl.QdlPackageImpl#getIntegerRangeValueType()
+     * @generated
+     */
+    EClass INTEGER_RANGE_VALUE_TYPE = eINSTANCE.getIntegerRangeValueType();
+
+    /**
+     * The meta object literal for the '<em><b>Upper Bounded Range</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference INTEGER_RANGE_VALUE_TYPE__UPPER_BOUNDED_RANGE = eINSTANCE.getIntegerRangeValueType_UpperBoundedRange();
+
+    /**
+     * The meta object literal for the '<em><b>Lower Bounded Range</b></em>' containment reference feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference INTEGER_RANGE_VALUE_TYPE__LOWER_BOUNDED_RANGE = eINSTANCE.getIntegerRangeValueType_LowerBoundedRange();
+
+    /**
+     * The meta object literal for the '<em><b>Exact</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference INTEGER_RANGE_VALUE_TYPE__EXACT = eINSTANCE.getIntegerRangeValueType_Exact();
+
+    /**
+     * The meta object literal for the '<em><b>Range</b></em>' containment reference list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EReference INTEGER_RANGE_VALUE_TYPE__RANGE = eINSTANCE.getIntegerRangeValueType_Range();
+
+    /**
+     * The meta object literal for the '<em><b>Any Attribute</b></em>' attribute list feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute INTEGER_RANGE_VALUE_TYPE__ANY_ATTRIBUTE = eINSTANCE.getIntegerRangeValueType_AnyAttribute();
 
     /**
      * The meta object literal for the '{@link eu.geclipse.batch.model.qdl.impl.QueueTypeImpl <em>Queue Type</em>}' class.

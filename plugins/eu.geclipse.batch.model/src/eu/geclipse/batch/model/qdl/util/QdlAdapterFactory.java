@@ -109,6 +109,26 @@ public class QdlAdapterFactory extends AdapterFactoryImpl
         return createExactTypeAdapter();
       }
       @Override
+      public Adapter caseIntegerBoundaryType(IntegerBoundaryType object)
+      {
+        return createIntegerBoundaryTypeAdapter();
+      }
+      @Override
+      public Adapter caseIntegerExactType(IntegerExactType object)
+      {
+        return createIntegerExactTypeAdapter();
+      }
+      @Override
+      public Adapter caseIntegerRangeType(IntegerRangeType object)
+      {
+        return createIntegerRangeTypeAdapter();
+      }
+      @Override
+      public Adapter caseIntegerRangeValueType(IntegerRangeValueType object)
+      {
+        return createIntegerRangeValueTypeAdapter();
+      }
+      @Override
       public Adapter caseQueueType(QueueType object)
       {
         return createQueueTypeAdapter();
@@ -201,6 +221,66 @@ public class QdlAdapterFactory extends AdapterFactoryImpl
    * @generated
    */
   public Adapter createExactTypeAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link eu.geclipse.batch.model.qdl.IntegerBoundaryType <em>Integer Boundary Type</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see eu.geclipse.batch.model.qdl.IntegerBoundaryType
+   * @generated
+   */
+  public Adapter createIntegerBoundaryTypeAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link eu.geclipse.batch.model.qdl.IntegerExactType <em>Integer Exact Type</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see eu.geclipse.batch.model.qdl.IntegerExactType
+   * @generated
+   */
+  public Adapter createIntegerExactTypeAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link eu.geclipse.batch.model.qdl.IntegerRangeType <em>Integer Range Type</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see eu.geclipse.batch.model.qdl.IntegerRangeType
+   * @generated
+   */
+  public Adapter createIntegerRangeTypeAdapter()
+  {
+    return null;
+  }
+
+  /**
+   * Creates a new adapter for an object of class '{@link eu.geclipse.batch.model.qdl.IntegerRangeValueType <em>Integer Range Value Type</em>}'.
+   * <!-- begin-user-doc -->
+   * This default implementation returns null so that we can easily ignore cases;
+   * it's useful to ignore a case when inheritance will catch all the cases anyway.
+   * <!-- end-user-doc -->
+   * @return the new adapter.
+   * @see eu.geclipse.batch.model.qdl.IntegerRangeValueType
+   * @generated
+   */
+  public Adapter createIntegerRangeValueTypeAdapter()
   {
     return null;
   }

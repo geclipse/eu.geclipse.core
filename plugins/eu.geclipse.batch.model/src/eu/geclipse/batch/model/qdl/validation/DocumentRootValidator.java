@@ -17,6 +17,7 @@
 package eu.geclipse.batch.model.qdl.validation;
 
 import eu.geclipse.batch.model.qdl.AllowedVirtualOrganizationsType;
+import eu.geclipse.batch.model.qdl.IntegerRangeValueType;
 import eu.geclipse.batch.model.qdl.QueueStatusEnumeration;
 import eu.geclipse.batch.model.qdl.QueueType;
 import eu.geclipse.batch.model.qdl.QueueTypeEnumeration;
@@ -40,14 +41,22 @@ public interface DocumentRootValidator
   boolean validateXMLNSPrefixMap(EMap<String, String> value);
   boolean validateXSISchemaLocation(EMap<String, String> value);
   boolean validateAllowedVirtualOrganizations(AllowedVirtualOrganizationsType value);
+  boolean validateAssignedResources(IntegerRangeValueType value);
+
   boolean validateAssignedResources(RangeValueType value);
   boolean validateCPUTimeLimit(RangeValueType value);
   boolean validateDescription(String value);
+  boolean validateJobsInQueue(IntegerRangeValueType value);
+
+  boolean validatePriority(IntegerRangeValueType value);
+
   boolean validateJobsInQueue(RangeValueType value);
   boolean validatePriority(RangeValueType value);
   boolean validateQueue(QueueType value);
   boolean validateQueueStatus(QueueStatusEnumeration value);
   boolean validateQueueType(QueueTypeEnumeration value);
+  boolean validateRunningJobs(IntegerRangeValueType value);
+
   boolean validateRunningJobs(RangeValueType value);
   boolean validateVOName(String value);
   boolean validateWallTimeLimit(RangeValueType value);

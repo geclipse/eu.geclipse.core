@@ -17,6 +17,7 @@
 package eu.geclipse.batch.model.qdl.validation;
 
 import eu.geclipse.batch.model.qdl.AllowedVirtualOrganizationsType;
+import eu.geclipse.batch.model.qdl.IntegerRangeValueType;
 import eu.geclipse.batch.model.qdl.QueueStatusEnumeration;
 import eu.geclipse.batch.model.qdl.QueueTypeEnumeration;
 import eu.geclipse.batch.model.qdl.RangeValueType;
@@ -38,6 +39,14 @@ public interface QueueTypeValidator
   boolean validateCPUTimeLimit(RangeValueType value);
   boolean validateWallTimeLimit(RangeValueType value);
   boolean validateAllowedVirtualOrganizations(AllowedVirtualOrganizationsType value);
+  boolean validatePriority(IntegerRangeValueType value);
+
+  boolean validateRunningJobs(IntegerRangeValueType value);
+
+  boolean validateJobsInQueue(IntegerRangeValueType value);
+
+  boolean validateAssignedResources(IntegerRangeValueType value);
+
   boolean validatePriority(RangeValueType value);
   boolean validateRunningJobs(RangeValueType value);
   boolean validateJobsInQueue(RangeValueType value);

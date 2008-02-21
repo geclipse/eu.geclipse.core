@@ -73,6 +73,42 @@ public interface QdlFactory extends EFactory
   ExactType createExactType();
 
   /**
+   * Returns a new object of class '<em>Integer Boundary Type</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Integer Boundary Type</em>'.
+   * @generated
+   */
+  IntegerBoundaryType createIntegerBoundaryType();
+
+  /**
+   * Returns a new object of class '<em>Integer Exact Type</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Integer Exact Type</em>'.
+   * @generated
+   */
+  IntegerExactType createIntegerExactType();
+
+  /**
+   * Returns a new object of class '<em>Integer Range Type</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Integer Range Type</em>'.
+   * @generated
+   */
+  IntegerRangeType createIntegerRangeType();
+
+  /**
+   * Returns a new object of class '<em>Integer Range Value Type</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Integer Range Value Type</em>'.
+   * @generated
+   */
+  IntegerRangeValueType createIntegerRangeValueType();
+
+  /**
    * Returns a new object of class '<em>Queue Type</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->

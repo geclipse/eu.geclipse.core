@@ -134,6 +134,34 @@ public class QdlSwitch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
+      case QdlPackage.INTEGER_BOUNDARY_TYPE:
+      {
+        IntegerBoundaryType integerBoundaryType = (IntegerBoundaryType)theEObject;
+        T result = caseIntegerBoundaryType(integerBoundaryType);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case QdlPackage.INTEGER_EXACT_TYPE:
+      {
+        IntegerExactType integerExactType = (IntegerExactType)theEObject;
+        T result = caseIntegerExactType(integerExactType);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case QdlPackage.INTEGER_RANGE_TYPE:
+      {
+        IntegerRangeType integerRangeType = (IntegerRangeType)theEObject;
+        T result = caseIntegerRangeType(integerRangeType);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
+      case QdlPackage.INTEGER_RANGE_VALUE_TYPE:
+      {
+        IntegerRangeValueType integerRangeValueType = (IntegerRangeValueType)theEObject;
+        T result = caseIntegerRangeValueType(integerRangeValueType);
+        if (result == null) result = defaultCase(theEObject);
+        return result;
+      }
       case QdlPackage.QUEUE_TYPE:
       {
         QueueType queueType = (QueueType)theEObject;
@@ -219,6 +247,70 @@ public class QdlSwitch<T>
    * @generated
    */
   public T caseExactType(ExactType object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Integer Boundary Type</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Integer Boundary Type</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseIntegerBoundaryType(IntegerBoundaryType object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Integer Exact Type</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Integer Exact Type</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseIntegerExactType(IntegerExactType object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Integer Range Type</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Integer Range Type</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseIntegerRangeType(IntegerRangeType object)
+  {
+    return null;
+  }
+
+  /**
+   * Returns the result of interpreting the object as an instance of '<em>Integer Range Value Type</em>'.
+   * <!-- begin-user-doc -->
+   * This implementation returns null;
+   * returning a non-null result will terminate the switch.
+   * <!-- end-user-doc -->
+   * @param object the target of the switch.
+   * @return the result of interpreting the object as an instance of '<em>Integer Range Value Type</em>'.
+   * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
+   * @generated
+   */
+  public T caseIntegerRangeValueType(IntegerRangeValueType object)
   {
     return null;
   }

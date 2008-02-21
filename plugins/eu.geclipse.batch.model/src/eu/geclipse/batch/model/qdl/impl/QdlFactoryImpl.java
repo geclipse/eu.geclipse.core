@@ -86,6 +86,10 @@ public class QdlFactoryImpl extends EFactoryImpl implements QdlFactory
       case QdlPackage.BOUNDARY_TYPE: return createBoundaryType();
       case QdlPackage.DOCUMENT_ROOT: return createDocumentRoot();
       case QdlPackage.EXACT_TYPE: return createExactType();
+      case QdlPackage.INTEGER_BOUNDARY_TYPE: return createIntegerBoundaryType();
+      case QdlPackage.INTEGER_EXACT_TYPE: return createIntegerExactType();
+      case QdlPackage.INTEGER_RANGE_TYPE: return createIntegerRangeType();
+      case QdlPackage.INTEGER_RANGE_VALUE_TYPE: return createIntegerRangeValueType();
       case QdlPackage.QUEUE_TYPE: return createQueueType();
       case QdlPackage.RANGE_TYPE: return createRangeType();
       case QdlPackage.RANGE_VALUE_TYPE: return createRangeValueType();
@@ -186,6 +190,50 @@ public class QdlFactoryImpl extends EFactoryImpl implements QdlFactory
   {
     ExactTypeImpl exactType = new ExactTypeImpl();
     return exactType;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public IntegerBoundaryType createIntegerBoundaryType()
+  {
+    IntegerBoundaryTypeImpl integerBoundaryType = new IntegerBoundaryTypeImpl();
+    return integerBoundaryType;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public IntegerExactType createIntegerExactType()
+  {
+    IntegerExactTypeImpl integerExactType = new IntegerExactTypeImpl();
+    return integerExactType;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public IntegerRangeType createIntegerRangeType()
+  {
+    IntegerRangeTypeImpl integerRangeType = new IntegerRangeTypeImpl();
+    return integerRangeType;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public IntegerRangeValueType createIntegerRangeValueType()
+  {
+    IntegerRangeValueTypeImpl integerRangeValueType = new IntegerRangeValueTypeImpl();
+    return integerRangeValueType;
   }
 
   /**

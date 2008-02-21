@@ -306,13 +306,13 @@ public interface QueueType extends EObject
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Priority</em>' containment reference.
-   * @see #setPriority(RangeValueType)
+   * @see #setPriority(IntegerRangeValueType)
    * @see eu.geclipse.batch.model.qdl.QdlPackage#getQueueType_Priority()
    * @model containment="true" required="true"
    *        extendedMetaData="kind='element' name='Priority' namespace='##targetNamespace'"
    * @generated
    */
-  RangeValueType getPriority();
+  IntegerRangeValueType getPriority();
 
   /**
    * Sets the value of the '{@link eu.geclipse.batch.model.qdl.QueueType#getPriority <em>Priority</em>}' containment reference.
@@ -322,7 +322,7 @@ public interface QueueType extends EObject
    * @see #getPriority()
    * @generated
    */
-  void setPriority(RangeValueType value);
+  void setPriority(IntegerRangeValueType value);
 
   /**
    * Returns the value of the '<em><b>Running Jobs</b></em>' containment reference.
@@ -333,13 +333,13 @@ public interface QueueType extends EObject
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Running Jobs</em>' containment reference.
-   * @see #setRunningJobs(RangeValueType)
+   * @see #setRunningJobs(IntegerRangeValueType)
    * @see eu.geclipse.batch.model.qdl.QdlPackage#getQueueType_RunningJobs()
    * @model containment="true" required="true"
    *        extendedMetaData="kind='element' name='RunningJobs' namespace='##targetNamespace'"
    * @generated
    */
-  RangeValueType getRunningJobs();
+  IntegerRangeValueType getRunningJobs();
 
   /**
    * Sets the value of the '{@link eu.geclipse.batch.model.qdl.QueueType#getRunningJobs <em>Running Jobs</em>}' containment reference.
@@ -349,7 +349,7 @@ public interface QueueType extends EObject
    * @see #getRunningJobs()
    * @generated
    */
-  void setRunningJobs(RangeValueType value);
+  void setRunningJobs(IntegerRangeValueType value);
 
   /**
    * Returns the value of the '<em><b>Jobs In Queue</b></em>' containment reference.
@@ -360,13 +360,13 @@ public interface QueueType extends EObject
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Jobs In Queue</em>' containment reference.
-   * @see #setJobsInQueue(RangeValueType)
+   * @see #setJobsInQueue(IntegerRangeValueType)
    * @see eu.geclipse.batch.model.qdl.QdlPackage#getQueueType_JobsInQueue()
    * @model containment="true" required="true"
    *        extendedMetaData="kind='element' name='JobsInQueue' namespace='##targetNamespace'"
    * @generated
    */
-  RangeValueType getJobsInQueue();
+  IntegerRangeValueType getJobsInQueue();
 
   /**
    * Sets the value of the '{@link eu.geclipse.batch.model.qdl.QueueType#getJobsInQueue <em>Jobs In Queue</em>}' containment reference.
@@ -376,7 +376,7 @@ public interface QueueType extends EObject
    * @see #getJobsInQueue()
    * @generated
    */
-  void setJobsInQueue(RangeValueType value);
+  void setJobsInQueue(IntegerRangeValueType value);
 
   /**
    * Returns the value of the '<em><b>Assigned Resources</b></em>' containment reference.
@@ -387,13 +387,13 @@ public interface QueueType extends EObject
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Assigned Resources</em>' containment reference.
-   * @see #setAssignedResources(RangeValueType)
+   * @see #setAssignedResources(IntegerRangeValueType)
    * @see eu.geclipse.batch.model.qdl.QdlPackage#getQueueType_AssignedResources()
    * @model containment="true" required="true"
    *        extendedMetaData="kind='element' name='AssignedResources' namespace='##targetNamespace'"
    * @generated
    */
-  RangeValueType getAssignedResources();
+  IntegerRangeValueType getAssignedResources();
 
   /**
    * Sets the value of the '{@link eu.geclipse.batch.model.qdl.QueueType#getAssignedResources <em>Assigned Resources</em>}' containment reference.
@@ -403,6 +403,6 @@ public interface QueueType extends EObject
    * @see #getAssignedResources()
    * @generated
    */
-  void setAssignedResources(RangeValueType value);
+  void setAssignedResources(IntegerRangeValueType value);
 
 } // QueueType

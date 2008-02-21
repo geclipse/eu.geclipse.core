@@ -20,21 +20,43 @@ Package qdl <http://www.eclipse.org/geclipse/qdl>
     Reference xMLNSPrefixMap : EStringToStringMapEntry<<0..*>>
     Reference xSISchemaLocation : EStringToStringMapEntry<<0..*>>
     Reference /allowedVirtualOrganizations : AllowedVirtualOrganizationsType<<0..?>>
-    Reference /assignedResources : RangeValueType<<0..?>>
+    Reference /assignedResources : IntegerRangeValueType<<0..?>>
     Reference /cPUTimeLimit : RangeValueType<<0..?>>
     Attribute /description : DescriptionType<<0..?>>
-    Reference /jobsInQueue : RangeValueType<<0..?>>
-    Reference /priority : RangeValueType<<0..?>>
+    Reference /jobsInQueue : IntegerRangeValueType<<0..?>>
+    Reference /priority : IntegerRangeValueType<<0..?>>
     Reference /queue : QueueType<<0..?>>
     Attribute /queueStatus : QueueStatusEnumeration<<0..?>>
     Attribute /queueType : QueueTypeEnumeration<<0..?>>
-    Reference /runningJobs : RangeValueType<<0..?>>
+    Reference /runningJobs : IntegerRangeValueType<<0..?>>
     Attribute /vOName : String<<0..?>>
     Reference /wallTimeLimit : RangeValueType<<0..?>>
 
   Class ExactType
     Attribute value : Double
     Attribute epsilon : Double
+    Attribute anyAttribute : EFeatureMapEntry<<0..*>>
+
+  Class IntegerBoundaryType
+    Attribute value : IntObject
+    Attribute exclusiveBound : IntObject
+    Attribute anyAttribute : EFeatureMapEntry<<0..*>>
+
+  Class IntegerExactType
+    Attribute value : IntObject
+    Attribute epsilon : IntObject
+    Attribute anyAttribute : EFeatureMapEntry<<0..*>>
+
+  Class IntegerRangeType
+    Reference integerLowerBound : IntegerBoundaryType<<1..1>>
+    Reference integerUpperBound : IntegerBoundaryType<<1..1>>
+    Attribute anyAttribute : EFeatureMapEntry<<0..*>>
+
+  Class IntegerRangeValueType
+    Reference upperBoundedRange : IntegerBoundaryType
+    Reference lowerBoundedRange : IntegerBoundaryType
+    Reference exact : IntegerExactType<<0..*>>
+    Reference range : IntegerRangeType<<0..*>>
     Attribute anyAttribute : EFeatureMapEntry<<0..*>>
 
   Class QueueType
@@ -45,10 +67,10 @@ Package qdl <http://www.eclipse.org/geclipse/qdl>
     Reference cPUTimeLimit : RangeValueType<<1..1>>
     Reference wallTimeLimit : RangeValueType<<1..1>>
     Reference allowedVirtualOrganizations : AllowedVirtualOrganizationsType
-    Reference priority : RangeValueType<<1..1>>
-    Reference runningJobs : RangeValueType<<1..1>>
-    Reference jobsInQueue : RangeValueType<<1..1>>
-    Reference assignedResources : RangeValueType<<1..1>>
+    Reference priority : IntegerRangeValueType<<1..1>>
+    Reference runningJobs : IntegerRangeValueType<<1..1>>
+    Reference jobsInQueue : IntegerRangeValueType<<1..1>>
+    Reference assignedResources : IntegerRangeValueType<<1..1>>
 
   Class RangeType
     Reference lowerBound : BoundaryType<<1..1>>

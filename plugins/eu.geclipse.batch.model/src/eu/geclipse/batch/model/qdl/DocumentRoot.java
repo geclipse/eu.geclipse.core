@@ -143,13 +143,13 @@ public interface DocumentRoot extends EObject
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Assigned Resources</em>' containment reference.
-   * @see #setAssignedResources(RangeValueType)
+   * @see #setAssignedResources(IntegerRangeValueType)
    * @see eu.geclipse.batch.model.qdl.QdlPackage#getDocumentRoot_AssignedResources()
    * @model containment="true" upper="-2" transient="true" volatile="true" derived="true"
    *        extendedMetaData="kind='element' name='AssignedResources' namespace='##targetNamespace'"
    * @generated
    */
-  RangeValueType getAssignedResources();
+  IntegerRangeValueType getAssignedResources();
 
   /**
    * Sets the value of the '{@link eu.geclipse.batch.model.qdl.DocumentRoot#getAssignedResources <em>Assigned Resources</em>}' containment reference.
@@ -159,7 +159,7 @@ public interface DocumentRoot extends EObject
    * @see #getAssignedResources()
    * @generated
    */
-  void setAssignedResources(RangeValueType value);
+  void setAssignedResources(IntegerRangeValueType value);
 
   /**
    * Returns the value of the '<em><b>CPU Time Limit</b></em>' containment reference.
@@ -224,13 +224,13 @@ public interface DocumentRoot extends EObject
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Jobs In Queue</em>' containment reference.
-   * @see #setJobsInQueue(RangeValueType)
+   * @see #setJobsInQueue(IntegerRangeValueType)
    * @see eu.geclipse.batch.model.qdl.QdlPackage#getDocumentRoot_JobsInQueue()
    * @model containment="true" upper="-2" transient="true" volatile="true" derived="true"
    *        extendedMetaData="kind='element' name='JobsInQueue' namespace='##targetNamespace'"
    * @generated
    */
-  RangeValueType getJobsInQueue();
+  IntegerRangeValueType getJobsInQueue();
 
   /**
    * Sets the value of the '{@link eu.geclipse.batch.model.qdl.DocumentRoot#getJobsInQueue <em>Jobs In Queue</em>}' containment reference.
@@ -240,7 +240,7 @@ public interface DocumentRoot extends EObject
    * @see #getJobsInQueue()
    * @generated
    */
-  void setJobsInQueue(RangeValueType value);
+  void setJobsInQueue(IntegerRangeValueType value);
 
   /**
    * Returns the value of the '<em><b>Priority</b></em>' containment reference.
@@ -251,13 +251,13 @@ public interface DocumentRoot extends EObject
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Priority</em>' containment reference.
-   * @see #setPriority(RangeValueType)
+   * @see #setPriority(IntegerRangeValueType)
    * @see eu.geclipse.batch.model.qdl.QdlPackage#getDocumentRoot_Priority()
    * @model containment="true" upper="-2" transient="true" volatile="true" derived="true"
    *        extendedMetaData="kind='element' name='Priority' namespace='##targetNamespace'"
    * @generated
    */
-  RangeValueType getPriority();
+  IntegerRangeValueType getPriority();
 
   /**
    * Sets the value of the '{@link eu.geclipse.batch.model.qdl.DocumentRoot#getPriority <em>Priority</em>}' containment reference.
@@ -267,7 +267,7 @@ public interface DocumentRoot extends EObject
    * @see #getPriority()
    * @generated
    */
-  void setPriority(RangeValueType value);
+  void setPriority(IntegerRangeValueType value);
 
   /**
    * Returns the value of the '<em><b>Queue</b></em>' containment reference.
@@ -367,13 +367,13 @@ public interface DocumentRoot extends EObject
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Running Jobs</em>' containment reference.
-   * @see #setRunningJobs(RangeValueType)
+   * @see #setRunningJobs(IntegerRangeValueType)
    * @see eu.geclipse.batch.model.qdl.QdlPackage#getDocumentRoot_RunningJobs()
    * @model containment="true" upper="-2" transient="true" volatile="true" derived="true"
    *        extendedMetaData="kind='element' name='RunningJobs' namespace='##targetNamespace'"
    * @generated
    */
-  RangeValueType getRunningJobs();
+  IntegerRangeValueType getRunningJobs();
 
   /**
    * Sets the value of the '{@link eu.geclipse.batch.model.qdl.DocumentRoot#getRunningJobs <em>Running Jobs</em>}' containment reference.
@@ -383,7 +383,7 @@ public interface DocumentRoot extends EObject
    * @see #getRunningJobs()
    * @generated
    */
-  void setRunningJobs(RangeValueType value);
+  void setRunningJobs(IntegerRangeValueType value);
 
   /**
    * Returns the value of the '<em><b>VO Name</b></em>' attribute.

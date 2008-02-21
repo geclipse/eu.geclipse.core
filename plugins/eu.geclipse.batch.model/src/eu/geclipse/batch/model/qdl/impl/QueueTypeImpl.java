@@ -17,6 +17,7 @@
 package eu.geclipse.batch.model.qdl.impl;
 
 import eu.geclipse.batch.model.qdl.AllowedVirtualOrganizationsType;
+import eu.geclipse.batch.model.qdl.IntegerRangeValueType;
 import eu.geclipse.batch.model.qdl.QdlPackage;
 import eu.geclipse.batch.model.qdl.QueueStatusEnumeration;
 import eu.geclipse.batch.model.qdl.QueueType;
@@ -193,7 +194,7 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    * @generated
    * @ordered
    */
-  protected RangeValueType priority;
+  protected IntegerRangeValueType priority;
 
   /**
    * The cached value of the '{@link #getRunningJobs() <em>Running Jobs</em>}' containment reference.
@@ -203,7 +204,7 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    * @generated
    * @ordered
    */
-  protected RangeValueType runningJobs;
+  protected IntegerRangeValueType runningJobs;
 
   /**
    * The cached value of the '{@link #getJobsInQueue() <em>Jobs In Queue</em>}' containment reference.
@@ -213,7 +214,7 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    * @generated
    * @ordered
    */
-  protected RangeValueType jobsInQueue;
+  protected IntegerRangeValueType jobsInQueue;
 
   /**
    * The cached value of the '{@link #getAssignedResources() <em>Assigned Resources</em>}' containment reference.
@@ -223,7 +224,7 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    * @generated
    * @ordered
    */
-  protected RangeValueType assignedResources;
+  protected IntegerRangeValueType assignedResources;
 
   /**
    * <!-- begin-user-doc -->
@@ -541,7 +542,7 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    * <!-- end-user-doc -->
    * @generated
    */
-  public RangeValueType getPriority()
+  public IntegerRangeValueType getPriority()
   {
     return priority;
   }
@@ -551,9 +552,9 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetPriority(RangeValueType newPriority, NotificationChain msgs)
+  public NotificationChain basicSetPriority(IntegerRangeValueType newPriority, NotificationChain msgs)
   {
-    RangeValueType oldPriority = priority;
+    IntegerRangeValueType oldPriority = priority;
     priority = newPriority;
     if (eNotificationRequired())
     {
@@ -568,7 +569,7 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setPriority(RangeValueType newPriority)
+  public void setPriority(IntegerRangeValueType newPriority)
   {
     if (newPriority != priority)
     {
@@ -589,7 +590,7 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    * <!-- end-user-doc -->
    * @generated
    */
-  public RangeValueType getRunningJobs()
+  public IntegerRangeValueType getRunningJobs()
   {
     return runningJobs;
   }
@@ -599,9 +600,9 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetRunningJobs(RangeValueType newRunningJobs, NotificationChain msgs)
+  public NotificationChain basicSetRunningJobs(IntegerRangeValueType newRunningJobs, NotificationChain msgs)
   {
-    RangeValueType oldRunningJobs = runningJobs;
+    IntegerRangeValueType oldRunningJobs = runningJobs;
     runningJobs = newRunningJobs;
     if (eNotificationRequired())
     {
@@ -616,7 +617,7 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setRunningJobs(RangeValueType newRunningJobs)
+  public void setRunningJobs(IntegerRangeValueType newRunningJobs)
   {
     if (newRunningJobs != runningJobs)
     {
@@ -637,7 +638,7 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    * <!-- end-user-doc -->
    * @generated
    */
-  public RangeValueType getJobsInQueue()
+  public IntegerRangeValueType getJobsInQueue()
   {
     return jobsInQueue;
   }
@@ -647,9 +648,9 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetJobsInQueue(RangeValueType newJobsInQueue, NotificationChain msgs)
+  public NotificationChain basicSetJobsInQueue(IntegerRangeValueType newJobsInQueue, NotificationChain msgs)
   {
-    RangeValueType oldJobsInQueue = jobsInQueue;
+    IntegerRangeValueType oldJobsInQueue = jobsInQueue;
     jobsInQueue = newJobsInQueue;
     if (eNotificationRequired())
     {
@@ -664,7 +665,7 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setJobsInQueue(RangeValueType newJobsInQueue)
+  public void setJobsInQueue(IntegerRangeValueType newJobsInQueue)
   {
     if (newJobsInQueue != jobsInQueue)
     {
@@ -685,7 +686,7 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    * <!-- end-user-doc -->
    * @generated
    */
-  public RangeValueType getAssignedResources()
+  public IntegerRangeValueType getAssignedResources()
   {
     return assignedResources;
   }
@@ -695,9 +696,9 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetAssignedResources(RangeValueType newAssignedResources, NotificationChain msgs)
+  public NotificationChain basicSetAssignedResources(IntegerRangeValueType newAssignedResources, NotificationChain msgs)
   {
-    RangeValueType oldAssignedResources = assignedResources;
+    IntegerRangeValueType oldAssignedResources = assignedResources;
     assignedResources = newAssignedResources;
     if (eNotificationRequired())
     {
@@ -712,7 +713,7 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setAssignedResources(RangeValueType newAssignedResources)
+  public void setAssignedResources(IntegerRangeValueType newAssignedResources)
   {
     if (newAssignedResources != assignedResources)
     {
@@ -824,16 +825,16 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
         setAllowedVirtualOrganizations((AllowedVirtualOrganizationsType)newValue);
         return;
       case QdlPackage.QUEUE_TYPE__PRIORITY:
-        setPriority((RangeValueType)newValue);
+        setPriority((IntegerRangeValueType)newValue);
         return;
       case QdlPackage.QUEUE_TYPE__RUNNING_JOBS:
-        setRunningJobs((RangeValueType)newValue);
+        setRunningJobs((IntegerRangeValueType)newValue);
         return;
       case QdlPackage.QUEUE_TYPE__JOBS_IN_QUEUE:
-        setJobsInQueue((RangeValueType)newValue);
+        setJobsInQueue((IntegerRangeValueType)newValue);
         return;
       case QdlPackage.QUEUE_TYPE__ASSIGNED_RESOURCES:
-        setAssignedResources((RangeValueType)newValue);
+        setAssignedResources((IntegerRangeValueType)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -871,16 +872,16 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
         setAllowedVirtualOrganizations((AllowedVirtualOrganizationsType)null);
         return;
       case QdlPackage.QUEUE_TYPE__PRIORITY:
-        setPriority((RangeValueType)null);
+        setPriority((IntegerRangeValueType)null);
         return;
       case QdlPackage.QUEUE_TYPE__RUNNING_JOBS:
-        setRunningJobs((RangeValueType)null);
+        setRunningJobs((IntegerRangeValueType)null);
         return;
       case QdlPackage.QUEUE_TYPE__JOBS_IN_QUEUE:
-        setJobsInQueue((RangeValueType)null);
+        setJobsInQueue((IntegerRangeValueType)null);
         return;
       case QdlPackage.QUEUE_TYPE__ASSIGNED_RESOURCES:
-        setAssignedResources((RangeValueType)null);
+        setAssignedResources((IntegerRangeValueType)null);
         return;
     }
     super.eUnset(featureID);

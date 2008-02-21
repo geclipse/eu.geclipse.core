@@ -56,6 +56,38 @@
 		</xsd:sequence>
 		<xsd:anyAttribute namespace="##other" processContents="lax"/>
 	</xsd:complexType>
+		<xsd:complexType name="Integer_Boundary_Type">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:int">
+				<xsd:attribute name="exclusiveBound" type="xsd:int" use="optional"/>
+				<xsd:anyAttribute namespace="##other" processContents="lax"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="Integer_Exact_Type">
+		<xsd:simpleContent>
+			<xsd:extension base="xsd:int">
+				<xsd:attribute name="epsilon" type="xsd:int" use="optional"/>
+				<xsd:anyAttribute namespace="##other" processContents="lax"/>
+			</xsd:extension>
+		</xsd:simpleContent>
+	</xsd:complexType>
+	<xsd:complexType name="Integer_Range_Type">
+		<xsd:sequence>
+			<xsd:element name="Integer_LowerBound" type="qdl:Integer_Boundary_Type"/>
+			<xsd:element name="Integer_UpperBound" type="qdl:Integer_Boundary_Type"/>
+		</xsd:sequence>
+		<xsd:anyAttribute namespace="##other" processContents="lax"/>
+	</xsd:complexType>
+	<xsd:complexType name="Integer_RangeValue_Type">
+		<xsd:sequence>
+			<xsd:element name="UpperBoundedRange" type="qdl:Integer_Boundary_Type" minOccurs="0"/>
+			<xsd:element name="LowerBoundedRange" type="qdl:Integer_Boundary_Type" minOccurs="0"/>
+			<xsd:element name="Exact" type="qdl:Integer_Exact_Type" minOccurs="0" maxOccurs="unbounded"/>
+			<xsd:element name="Range" type="qdl:Integer_Range_Type" minOccurs="0" maxOccurs="unbounded"/>
+		</xsd:sequence>
+		<xsd:anyAttribute namespace="##other" processContents="lax"/>
+	</xsd:complexType>
 	<!--========================================================================-->	
 	<xsd:complexType name="Queue_Type">
 		<xsd:sequence>
@@ -87,8 +119,8 @@
 	<xsd:element name="WallTimeLimit" type="qdl:RangeValue_Type"/>
 	<xsd:element name="VOName" type="xsd:string"/>
 	<xsd:element name="AllowedVirtualOrganizations" type="qdl:AllowedVirtualOrganizationsType"/>
-	<xsd:element name="Priority" type="qdl:RangeValue_Type"/>
-	<xsd:element name="RunningJobs" type="qdl:RangeValue_Type"/>
-	<xsd:element name="JobsInQueue" type="qdl:RangeValue_Type"/>
-	<xsd:element name="AssignedResources" type="qdl:RangeValue_Type"/>	
+	<xsd:element name="Priority" type="qdl:Integer_RangeValue_Type"/>
+	<xsd:element name="RunningJobs" type="qdl:Integer_RangeValue_Type"/>
+	<xsd:element name="JobsInQueue" type="qdl:Integer_RangeValue_Type"/>
+	<xsd:element name="AssignedResources" type="qdl:Integer_RangeValue_Type"/>	
 </xsd:schema>

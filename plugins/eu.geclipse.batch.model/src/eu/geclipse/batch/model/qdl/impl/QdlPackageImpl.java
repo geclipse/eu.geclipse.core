@@ -20,6 +20,10 @@ import eu.geclipse.batch.model.qdl.AllowedVirtualOrganizationsType;
 import eu.geclipse.batch.model.qdl.BoundaryType;
 import eu.geclipse.batch.model.qdl.DocumentRoot;
 import eu.geclipse.batch.model.qdl.ExactType;
+import eu.geclipse.batch.model.qdl.IntegerBoundaryType;
+import eu.geclipse.batch.model.qdl.IntegerExactType;
+import eu.geclipse.batch.model.qdl.IntegerRangeType;
+import eu.geclipse.batch.model.qdl.IntegerRangeValueType;
 import eu.geclipse.batch.model.qdl.QdlFactory;
 import eu.geclipse.batch.model.qdl.QdlPackage;
 import eu.geclipse.batch.model.qdl.QueueStatusEnumeration;
@@ -74,6 +78,34 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
    * @generated
    */
   private EClass exactTypeEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass integerBoundaryTypeEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass integerExactTypeEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass integerRangeTypeEClass = null;
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  private EClass integerRangeValueTypeEClass = null;
 
   /**
    * <!-- begin-user-doc -->
@@ -469,6 +501,186 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
    * <!-- end-user-doc -->
    * @generated
    */
+  public EClass getIntegerBoundaryType()
+  {
+    return integerBoundaryTypeEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getIntegerBoundaryType_Value()
+  {
+    return (EAttribute)integerBoundaryTypeEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getIntegerBoundaryType_ExclusiveBound()
+  {
+    return (EAttribute)integerBoundaryTypeEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getIntegerBoundaryType_AnyAttribute()
+  {
+    return (EAttribute)integerBoundaryTypeEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getIntegerExactType()
+  {
+    return integerExactTypeEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getIntegerExactType_Value()
+  {
+    return (EAttribute)integerExactTypeEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getIntegerExactType_Epsilon()
+  {
+    return (EAttribute)integerExactTypeEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getIntegerExactType_AnyAttribute()
+  {
+    return (EAttribute)integerExactTypeEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getIntegerRangeType()
+  {
+    return integerRangeTypeEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getIntegerRangeType_IntegerLowerBound()
+  {
+    return (EReference)integerRangeTypeEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getIntegerRangeType_IntegerUpperBound()
+  {
+    return (EReference)integerRangeTypeEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getIntegerRangeType_AnyAttribute()
+  {
+    return (EAttribute)integerRangeTypeEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EClass getIntegerRangeValueType()
+  {
+    return integerRangeValueTypeEClass;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getIntegerRangeValueType_UpperBoundedRange()
+  {
+    return (EReference)integerRangeValueTypeEClass.getEStructuralFeatures().get(0);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getIntegerRangeValueType_LowerBoundedRange()
+  {
+    return (EReference)integerRangeValueTypeEClass.getEStructuralFeatures().get(1);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getIntegerRangeValueType_Exact()
+  {
+    return (EReference)integerRangeValueTypeEClass.getEStructuralFeatures().get(2);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EReference getIntegerRangeValueType_Range()
+  {
+    return (EReference)integerRangeValueTypeEClass.getEStructuralFeatures().get(3);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public EAttribute getIntegerRangeValueType_AnyAttribute()
+  {
+    return (EAttribute)integerRangeValueTypeEClass.getEStructuralFeatures().get(4);
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public EClass getQueueType()
   {
     return queueTypeEClass;
@@ -794,6 +1006,28 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
     createEAttribute(exactTypeEClass, EXACT_TYPE__EPSILON);
     createEAttribute(exactTypeEClass, EXACT_TYPE__ANY_ATTRIBUTE);
 
+    integerBoundaryTypeEClass = createEClass(INTEGER_BOUNDARY_TYPE);
+    createEAttribute(integerBoundaryTypeEClass, INTEGER_BOUNDARY_TYPE__VALUE);
+    createEAttribute(integerBoundaryTypeEClass, INTEGER_BOUNDARY_TYPE__EXCLUSIVE_BOUND);
+    createEAttribute(integerBoundaryTypeEClass, INTEGER_BOUNDARY_TYPE__ANY_ATTRIBUTE);
+
+    integerExactTypeEClass = createEClass(INTEGER_EXACT_TYPE);
+    createEAttribute(integerExactTypeEClass, INTEGER_EXACT_TYPE__VALUE);
+    createEAttribute(integerExactTypeEClass, INTEGER_EXACT_TYPE__EPSILON);
+    createEAttribute(integerExactTypeEClass, INTEGER_EXACT_TYPE__ANY_ATTRIBUTE);
+
+    integerRangeTypeEClass = createEClass(INTEGER_RANGE_TYPE);
+    createEReference(integerRangeTypeEClass, INTEGER_RANGE_TYPE__INTEGER_LOWER_BOUND);
+    createEReference(integerRangeTypeEClass, INTEGER_RANGE_TYPE__INTEGER_UPPER_BOUND);
+    createEAttribute(integerRangeTypeEClass, INTEGER_RANGE_TYPE__ANY_ATTRIBUTE);
+
+    integerRangeValueTypeEClass = createEClass(INTEGER_RANGE_VALUE_TYPE);
+    createEReference(integerRangeValueTypeEClass, INTEGER_RANGE_VALUE_TYPE__UPPER_BOUNDED_RANGE);
+    createEReference(integerRangeValueTypeEClass, INTEGER_RANGE_VALUE_TYPE__LOWER_BOUNDED_RANGE);
+    createEReference(integerRangeValueTypeEClass, INTEGER_RANGE_VALUE_TYPE__EXACT);
+    createEReference(integerRangeValueTypeEClass, INTEGER_RANGE_VALUE_TYPE__RANGE);
+    createEAttribute(integerRangeValueTypeEClass, INTEGER_RANGE_VALUE_TYPE__ANY_ATTRIBUTE);
+
     queueTypeEClass = createEClass(QUEUE_TYPE);
     createEAttribute(queueTypeEClass, QUEUE_TYPE__QUEUE_NAME);
     createEAttribute(queueTypeEClass, QUEUE_TYPE__DESCRIPTION);
@@ -876,15 +1110,15 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
     initEReference(getDocumentRoot_XMLNSPrefixMap(), ecorePackage.getEStringToStringMapEntry(), null, "xMLNSPrefixMap", null, 0, -1, null, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getDocumentRoot_XSISchemaLocation(), ecorePackage.getEStringToStringMapEntry(), null, "xSISchemaLocation", null, 0, -1, null, IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getDocumentRoot_AllowedVirtualOrganizations(), this.getAllowedVirtualOrganizationsType(), null, "allowedVirtualOrganizations", null, 0, -2, null, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
-    initEReference(getDocumentRoot_AssignedResources(), this.getRangeValueType(), null, "assignedResources", null, 0, -2, null, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+    initEReference(getDocumentRoot_AssignedResources(), this.getIntegerRangeValueType(), null, "assignedResources", null, 0, -2, null, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
     initEReference(getDocumentRoot_CPUTimeLimit(), this.getRangeValueType(), null, "cPUTimeLimit", null, 0, -2, null, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
     initEAttribute(getDocumentRoot_Description(), this.getDescriptionType(), "description", null, 0, -2, null, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, IS_DERIVED, IS_ORDERED);
-    initEReference(getDocumentRoot_JobsInQueue(), this.getRangeValueType(), null, "jobsInQueue", null, 0, -2, null, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
-    initEReference(getDocumentRoot_Priority(), this.getRangeValueType(), null, "priority", null, 0, -2, null, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+    initEReference(getDocumentRoot_JobsInQueue(), this.getIntegerRangeValueType(), null, "jobsInQueue", null, 0, -2, null, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+    initEReference(getDocumentRoot_Priority(), this.getIntegerRangeValueType(), null, "priority", null, 0, -2, null, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
     initEReference(getDocumentRoot_Queue(), this.getQueueType(), null, "queue", null, 0, -2, null, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
     initEAttribute(getDocumentRoot_QueueStatus(), this.getQueueStatusEnumeration(), "queueStatus", "Enabled", 0, -2, null, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, IS_DERIVED, IS_ORDERED);
     initEAttribute(getDocumentRoot_QueueType(), this.getQueueTypeEnumeration(), "queueType", "Execution", 0, -2, null, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, IS_DERIVED, IS_ORDERED);
-    initEReference(getDocumentRoot_RunningJobs(), this.getRangeValueType(), null, "runningJobs", null, 0, -2, null, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
+    initEReference(getDocumentRoot_RunningJobs(), this.getIntegerRangeValueType(), null, "runningJobs", null, 0, -2, null, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
     initEAttribute(getDocumentRoot_VOName(), theXMLTypePackage.getString(), "vOName", null, 0, -2, null, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, IS_DERIVED, IS_ORDERED);
     initEReference(getDocumentRoot_WallTimeLimit(), this.getRangeValueType(), null, "wallTimeLimit", null, 0, -2, null, IS_TRANSIENT, IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, IS_DERIVED, IS_ORDERED);
 
@@ -892,6 +1126,28 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
     initEAttribute(getExactType_Value(), theXMLTypePackage.getDouble(), "value", null, 0, 1, ExactType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getExactType_Epsilon(), theXMLTypePackage.getDouble(), "epsilon", null, 0, 1, ExactType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getExactType_AnyAttribute(), ecorePackage.getEFeatureMapEntry(), "anyAttribute", null, 0, -1, ExactType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(integerBoundaryTypeEClass, IntegerBoundaryType.class, "IntegerBoundaryType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getIntegerBoundaryType_Value(), theXMLTypePackage.getIntObject(), "value", null, 0, 1, IntegerBoundaryType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getIntegerBoundaryType_ExclusiveBound(), theXMLTypePackage.getIntObject(), "exclusiveBound", null, 0, 1, IntegerBoundaryType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getIntegerBoundaryType_AnyAttribute(), ecorePackage.getEFeatureMapEntry(), "anyAttribute", null, 0, -1, IntegerBoundaryType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(integerExactTypeEClass, IntegerExactType.class, "IntegerExactType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEAttribute(getIntegerExactType_Value(), theXMLTypePackage.getIntObject(), "value", null, 0, 1, IntegerExactType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getIntegerExactType_Epsilon(), theXMLTypePackage.getIntObject(), "epsilon", null, 0, 1, IntegerExactType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getIntegerExactType_AnyAttribute(), ecorePackage.getEFeatureMapEntry(), "anyAttribute", null, 0, -1, IntegerExactType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(integerRangeTypeEClass, IntegerRangeType.class, "IntegerRangeType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getIntegerRangeType_IntegerLowerBound(), this.getIntegerBoundaryType(), null, "integerLowerBound", null, 1, 1, IntegerRangeType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getIntegerRangeType_IntegerUpperBound(), this.getIntegerBoundaryType(), null, "integerUpperBound", null, 1, 1, IntegerRangeType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getIntegerRangeType_AnyAttribute(), ecorePackage.getEFeatureMapEntry(), "anyAttribute", null, 0, -1, IntegerRangeType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+
+    initEClass(integerRangeValueTypeEClass, IntegerRangeValueType.class, "IntegerRangeValueType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
+    initEReference(getIntegerRangeValueType_UpperBoundedRange(), this.getIntegerBoundaryType(), null, "upperBoundedRange", null, 0, 1, IntegerRangeValueType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getIntegerRangeValueType_LowerBoundedRange(), this.getIntegerBoundaryType(), null, "lowerBoundedRange", null, 0, 1, IntegerRangeValueType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getIntegerRangeValueType_Exact(), this.getIntegerExactType(), null, "exact", null, 0, -1, IntegerRangeValueType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getIntegerRangeValueType_Range(), this.getIntegerRangeType(), null, "range", null, 0, -1, IntegerRangeValueType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEAttribute(getIntegerRangeValueType_AnyAttribute(), ecorePackage.getEFeatureMapEntry(), "anyAttribute", null, 0, -1, IntegerRangeValueType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(queueTypeEClass, QueueType.class, "QueueType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEAttribute(getQueueType_QueueName(), theXMLTypePackage.getString(), "queueName", null, 1, 1, QueueType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -901,10 +1157,10 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
     initEReference(getQueueType_CPUTimeLimit(), this.getRangeValueType(), null, "cPUTimeLimit", null, 1, 1, QueueType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getQueueType_WallTimeLimit(), this.getRangeValueType(), null, "wallTimeLimit", null, 1, 1, QueueType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEReference(getQueueType_AllowedVirtualOrganizations(), this.getAllowedVirtualOrganizationsType(), null, "allowedVirtualOrganizations", null, 0, 1, QueueType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getQueueType_Priority(), this.getRangeValueType(), null, "priority", null, 1, 1, QueueType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getQueueType_RunningJobs(), this.getRangeValueType(), null, "runningJobs", null, 1, 1, QueueType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getQueueType_JobsInQueue(), this.getRangeValueType(), null, "jobsInQueue", null, 1, 1, QueueType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getQueueType_AssignedResources(), this.getRangeValueType(), null, "assignedResources", null, 1, 1, QueueType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getQueueType_Priority(), this.getIntegerRangeValueType(), null, "priority", null, 1, 1, QueueType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getQueueType_RunningJobs(), this.getIntegerRangeValueType(), null, "runningJobs", null, 1, 1, QueueType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getQueueType_JobsInQueue(), this.getIntegerRangeValueType(), null, "jobsInQueue", null, 1, 1, QueueType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getQueueType_AssignedResources(), this.getIntegerRangeValueType(), null, "assignedResources", null, 1, 1, QueueType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(rangeTypeEClass, RangeType.class, "RangeType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
     initEReference(getRangeType_LowerBound(), this.getBoundaryType(), null, "lowerBound", null, 1, 1, RangeType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
@@ -949,466 +1205,414 @@ public class QdlPackageImpl extends EPackageImpl implements QdlPackage
   protected void createExtendedMetaDataAnnotations()
   {
     String source = "http:///org/eclipse/emf/ecore/util/ExtendedMetaData";
-    addAnnotation
-      (allowedVirtualOrganizationsTypeEClass, 
-       source, 
-       new String[] 
-       {
-       "name", "AllowedVirtualOrganizationsType",
-       "kind", "elementOnly"
-       });
-    addAnnotation
-      (getAllowedVirtualOrganizationsType_VOName(), 
-       source, 
-       new String[] 
-       {
-       "kind", "element",
-       "name", "VOName",
-       "namespace", "##targetNamespace"
-       });
-    addAnnotation
-      (boundaryTypeEClass, 
-       source, 
-       new String[] 
-       {
-       "name", "Boundary_Type",
-       "kind", "simple"
-       });
-    addAnnotation
-      (getBoundaryType_Value(), 
-       source, 
-       new String[] 
-       {
-       "name", ":0",
-       "kind", "simple"
-       });
-    addAnnotation
-      (getBoundaryType_ExclusiveBound(), 
-       source, 
-       new String[] 
-       {
-       "kind", "attribute",
-       "name", "exclusiveBound"
-       });
-    addAnnotation
-      (getBoundaryType_AnyAttribute(), 
-       source, 
-       new String[] 
-       {
-       "kind", "attributeWildcard",
-       "wildcards", "##other",
-       "name", ":2",
-       "processing", "lax"
-       });
-    addAnnotation
-      (descriptionTypeEDataType, 
-       source, 
-       new String[] 
-       {
-       "name", "Description_Type",
-       "baseType", "http://www.eclipse.org/emf/2003/XMLType#string"
-       });
-    addAnnotation
-      (documentRootEClass, 
-       source, 
-       new String[] 
-       {
-       "name", "",
-       "kind", "mixed"
-       });
-    addAnnotation
-      (getDocumentRoot_Mixed(), 
-       source, 
-       new String[] 
-       {
-       "kind", "elementWildcard",
-       "name", ":mixed"
-       });
-    addAnnotation
-      (getDocumentRoot_XMLNSPrefixMap(), 
-       source, 
-       new String[] 
-       {
-       "kind", "attribute",
-       "name", "xmlns:prefix"
-       });
-    addAnnotation
-      (getDocumentRoot_XSISchemaLocation(), 
-       source, 
-       new String[] 
-       {
-       "kind", "attribute",
-       "name", "xsi:schemaLocation"
-       });
-    addAnnotation
-      (getDocumentRoot_AllowedVirtualOrganizations(), 
-       source, 
-       new String[] 
-       {
-       "kind", "element",
-       "name", "AllowedVirtualOrganizations",
-       "namespace", "##targetNamespace"
-       });
-    addAnnotation
-      (getDocumentRoot_AssignedResources(), 
-       source, 
-       new String[] 
-       {
-       "kind", "element",
-       "name", "AssignedResources",
-       "namespace", "##targetNamespace"
-       });
-    addAnnotation
-      (getDocumentRoot_CPUTimeLimit(), 
-       source, 
-       new String[] 
-       {
-       "kind", "element",
-       "name", "CPUTimeLimit",
-       "namespace", "##targetNamespace"
-       });
-    addAnnotation
-      (getDocumentRoot_Description(), 
-       source, 
-       new String[] 
-       {
-       "kind", "element",
-       "name", "Description",
-       "namespace", "##targetNamespace"
-       });
-    addAnnotation
-      (getDocumentRoot_JobsInQueue(), 
-       source, 
-       new String[] 
-       {
-       "kind", "element",
-       "name", "JobsInQueue",
-       "namespace", "##targetNamespace"
-       });
-    addAnnotation
-      (getDocumentRoot_Priority(), 
-       source, 
-       new String[] 
-       {
-       "kind", "element",
-       "name", "Priority",
-       "namespace", "##targetNamespace"
-       });
-    addAnnotation
-      (getDocumentRoot_Queue(), 
-       source, 
-       new String[] 
-       {
-       "kind", "element",
-       "name", "Queue",
-       "namespace", "##targetNamespace"
-       });
-    addAnnotation
-      (getDocumentRoot_QueueStatus(), 
-       source, 
-       new String[] 
-       {
-       "kind", "element",
-       "name", "QueueStatus",
-       "namespace", "##targetNamespace"
-       });
-    addAnnotation
-      (getDocumentRoot_QueueType(), 
-       source, 
-       new String[] 
-       {
-       "kind", "element",
-       "name", "QueueType",
-       "namespace", "##targetNamespace"
-       });
-    addAnnotation
-      (getDocumentRoot_RunningJobs(), 
-       source, 
-       new String[] 
-       {
-       "kind", "element",
-       "name", "RunningJobs",
-       "namespace", "##targetNamespace"
-       });
-    addAnnotation
-      (getDocumentRoot_VOName(), 
-       source, 
-       new String[] 
-       {
-       "kind", "element",
-       "name", "VOName",
-       "namespace", "##targetNamespace"
-       });
-    addAnnotation
-      (getDocumentRoot_WallTimeLimit(), 
-       source, 
-       new String[] 
-       {
-       "kind", "element",
-       "name", "WallTimeLimit",
-       "namespace", "##targetNamespace"
-       });
-    addAnnotation
-      (exactTypeEClass, 
-       source, 
-       new String[] 
-       {
-       "name", "Exact_Type",
-       "kind", "simple"
-       });
-    addAnnotation
-      (getExactType_Value(), 
-       source, 
-       new String[] 
-       {
-       "name", ":0",
-       "kind", "simple"
-       });
-    addAnnotation
-      (getExactType_Epsilon(), 
-       source, 
-       new String[] 
-       {
-       "kind", "attribute",
-       "name", "epsilon"
-       });
-    addAnnotation
-      (getExactType_AnyAttribute(), 
-       source, 
-       new String[] 
-       {
-       "kind", "attributeWildcard",
-       "wildcards", "##other",
-       "name", ":2",
-       "processing", "lax"
-       });
-    addAnnotation
-      (queueStatusEnumerationEEnum, 
-       source, 
-       new String[] 
-       {
-       "name", "QueueStatusEnumeration"
-       });
-    addAnnotation
-      (queueStatusEnumerationObjectEDataType, 
-       source, 
-       new String[] 
-       {
-       "name", "QueueStatusEnumeration:Object",
-       "baseType", "QueueStatusEnumeration"
-       });
-    addAnnotation
-      (queueTypeEClass, 
-       source, 
-       new String[] 
-       {
-       "name", "Queue_Type",
-       "kind", "elementOnly"
-       });
-    addAnnotation
-      (getQueueType_QueueName(), 
-       source, 
-       new String[] 
-       {
-       "kind", "element",
-       "name", "QueueName",
-       "namespace", "##targetNamespace"
-       });
-    addAnnotation
-      (getQueueType_Description(), 
-       source, 
-       new String[] 
-       {
-       "kind", "element",
-       "name", "Description",
-       "namespace", "##targetNamespace"
-       });
-    addAnnotation
-      (getQueueType_QueueType(), 
-       source, 
-       new String[] 
-       {
-       "kind", "element",
-       "name", "QueueType",
-       "namespace", "##targetNamespace"
-       });
-    addAnnotation
-      (getQueueType_QueueStatus(), 
-       source, 
-       new String[] 
-       {
-       "kind", "element",
-       "name", "QueueStatus",
-       "namespace", "##targetNamespace"
-       });
-    addAnnotation
-      (getQueueType_CPUTimeLimit(), 
-       source, 
-       new String[] 
-       {
-       "kind", "element",
-       "name", "CPUTimeLimit",
-       "namespace", "##targetNamespace"
-       });
-    addAnnotation
-      (getQueueType_WallTimeLimit(), 
-       source, 
-       new String[] 
-       {
-       "kind", "element",
-       "name", "WallTimeLimit",
-       "namespace", "##targetNamespace"
-       });
-    addAnnotation
-      (getQueueType_AllowedVirtualOrganizations(), 
-       source, 
-       new String[] 
-       {
-       "kind", "element",
-       "name", "AllowedVirtualOrganizations",
-       "namespace", "##targetNamespace"
-       });
-    addAnnotation
-      (getQueueType_Priority(), 
-       source, 
-       new String[] 
-       {
-       "kind", "element",
-       "name", "Priority",
-       "namespace", "##targetNamespace"
-       });
-    addAnnotation
-      (getQueueType_RunningJobs(), 
-       source, 
-       new String[] 
-       {
-       "kind", "element",
-       "name", "RunningJobs",
-       "namespace", "##targetNamespace"
-       });
-    addAnnotation
-      (getQueueType_JobsInQueue(), 
-       source, 
-       new String[] 
-       {
-       "kind", "element",
-       "name", "JobsInQueue",
-       "namespace", "##targetNamespace"
-       });
-    addAnnotation
-      (getQueueType_AssignedResources(), 
-       source, 
-       new String[] 
-       {
-       "kind", "element",
-       "name", "AssignedResources",
-       "namespace", "##targetNamespace"
-       });
-    addAnnotation
-      (queueTypeEnumerationEEnum, 
-       source, 
-       new String[] 
-       {
-       "name", "QueueTypeEnumeration"
-       });
-    addAnnotation
-      (queueTypeEnumerationObjectEDataType, 
-       source, 
-       new String[] 
-       {
-       "name", "QueueTypeEnumeration:Object",
-       "baseType", "QueueTypeEnumeration"
-       });
-    addAnnotation
-      (rangeTypeEClass, 
-       source, 
-       new String[] 
-       {
-       "name", "Range_Type",
-       "kind", "elementOnly"
-       });
-    addAnnotation
-      (getRangeType_LowerBound(), 
-       source, 
-       new String[] 
-       {
-       "kind", "element",
-       "name", "LowerBound",
-       "namespace", "##targetNamespace"
-       });
-    addAnnotation
-      (getRangeType_UpperBound(), 
-       source, 
-       new String[] 
-       {
-       "kind", "element",
-       "name", "UpperBound",
-       "namespace", "##targetNamespace"
-       });
-    addAnnotation
-      (getRangeType_AnyAttribute(), 
-       source, 
-       new String[] 
-       {
-       "kind", "attributeWildcard",
-       "wildcards", "##other",
-       "name", ":2",
-       "processing", "lax"
-       });
-    addAnnotation
-      (rangeValueTypeEClass, 
-       source, 
-       new String[] 
-       {
-       "name", "RangeValue_Type",
-       "kind", "elementOnly"
-       });
-    addAnnotation
-      (getRangeValueType_UpperBoundedRange(), 
-       source, 
-       new String[] 
-       {
-       "kind", "element",
-       "name", "UpperBoundedRange",
-       "namespace", "##targetNamespace"
-       });
-    addAnnotation
-      (getRangeValueType_LowerBoundedRange(), 
-       source, 
-       new String[] 
-       {
-       "kind", "element",
-       "name", "LowerBoundedRange",
-       "namespace", "##targetNamespace"
-       });
-    addAnnotation
-      (getRangeValueType_Exact(), 
-       source, 
-       new String[] 
-       {
-       "kind", "element",
-       "name", "Exact",
-       "namespace", "##targetNamespace"
-       });
-    addAnnotation
-      (getRangeValueType_Range(), 
-       source, 
-       new String[] 
-       {
-       "kind", "element",
-       "name", "Range",
-       "namespace", "##targetNamespace"
-       });
-    addAnnotation
-      (getRangeValueType_AnyAttribute(), 
-       source, 
-       new String[] 
-       {
-       "kind", "attributeWildcard",
-       "wildcards", "##other",
-       "name", ":4",
-       "processing", "lax"
-       });
+    addAnnotation( allowedVirtualOrganizationsTypeEClass, source, new String[]{
+      "name", "AllowedVirtualOrganizationsType", "kind", "elementOnly"
+    } );
+    addAnnotation( getAllowedVirtualOrganizationsType_VOName(),
+                   source,
+                   new String[]{
+                     "kind",
+                     "element",
+                     "name",
+                     "VOName",
+                     "namespace",
+                     "##targetNamespace"
+                   } );
+    addAnnotation( boundaryTypeEClass, source, new String[]{
+      "name", "Boundary_Type", "kind", "simple"
+    } );
+    addAnnotation( getBoundaryType_Value(), source, new String[]{
+      "name", ":0", "kind", "simple"
+    } );
+    addAnnotation( getBoundaryType_ExclusiveBound(), source, new String[]{
+      "kind", "attribute", "name", "exclusiveBound"
+    } );
+    addAnnotation( getBoundaryType_AnyAttribute(), source, new String[]{
+      "kind",
+      "attributeWildcard",
+      "wildcards",
+      "##other",
+      "name",
+      ":2",
+      "processing",
+      "lax"
+    } );
+    addAnnotation( descriptionTypeEDataType, source, new String[]{
+      "name",
+      "Description_Type",
+      "baseType",
+      "http://www.eclipse.org/emf/2003/XMLType#string"
+    } );
+    addAnnotation( documentRootEClass, source, new String[]{
+      "name", "", "kind", "mixed"
+    } );
+    addAnnotation( getDocumentRoot_Mixed(), source, new String[]{
+      "kind", "elementWildcard", "name", ":mixed"
+    } );
+    addAnnotation( getDocumentRoot_XMLNSPrefixMap(), source, new String[]{
+      "kind", "attribute", "name", "xmlns:prefix"
+    } );
+    addAnnotation( getDocumentRoot_XSISchemaLocation(), source, new String[]{
+      "kind", "attribute", "name", "xsi:schemaLocation"
+    } );
+    addAnnotation( getDocumentRoot_AllowedVirtualOrganizations(),
+                   source,
+                   new String[]{
+                     "kind",
+                     "element",
+                     "name",
+                     "AllowedVirtualOrganizations",
+                     "namespace",
+                     "##targetNamespace"
+                   } );
+    addAnnotation( getDocumentRoot_AssignedResources(), source, new String[]{
+      "kind",
+      "element",
+      "name",
+      "AssignedResources",
+      "namespace",
+      "##targetNamespace"
+    } );
+    addAnnotation( getDocumentRoot_CPUTimeLimit(), source, new String[]{
+      "kind",
+      "element",
+      "name",
+      "CPUTimeLimit",
+      "namespace",
+      "##targetNamespace"
+    } );
+    addAnnotation( getDocumentRoot_Description(), source, new String[]{
+      "kind",
+      "element",
+      "name",
+      "Description",
+      "namespace",
+      "##targetNamespace"
+    } );
+    addAnnotation( getDocumentRoot_JobsInQueue(), source, new String[]{
+      "kind",
+      "element",
+      "name",
+      "JobsInQueue",
+      "namespace",
+      "##targetNamespace"
+    } );
+    addAnnotation( getDocumentRoot_Priority(), source, new String[]{
+      "kind", "element", "name", "Priority", "namespace", "##targetNamespace"
+    } );
+    addAnnotation( getDocumentRoot_Queue(), source, new String[]{
+      "kind", "element", "name", "Queue", "namespace", "##targetNamespace"
+    } );
+    addAnnotation( getDocumentRoot_QueueStatus(), source, new String[]{
+      "kind",
+      "element",
+      "name",
+      "QueueStatus",
+      "namespace",
+      "##targetNamespace"
+    } );
+    addAnnotation( getDocumentRoot_QueueType(), source, new String[]{
+      "kind", "element", "name", "QueueType", "namespace", "##targetNamespace"
+    } );
+    addAnnotation( getDocumentRoot_RunningJobs(), source, new String[]{
+      "kind",
+      "element",
+      "name",
+      "RunningJobs",
+      "namespace",
+      "##targetNamespace"
+    } );
+    addAnnotation( getDocumentRoot_VOName(), source, new String[]{
+      "kind", "element", "name", "VOName", "namespace", "##targetNamespace"
+    } );
+    addAnnotation( getDocumentRoot_WallTimeLimit(), source, new String[]{
+      "kind",
+      "element",
+      "name",
+      "WallTimeLimit",
+      "namespace",
+      "##targetNamespace"
+    } );
+    addAnnotation( exactTypeEClass, source, new String[]{
+      "name", "Exact_Type", "kind", "simple"
+    } );
+    addAnnotation( getExactType_Value(), source, new String[]{
+      "name", ":0", "kind", "simple"
+    } );
+    addAnnotation( getExactType_Epsilon(), source, new String[]{
+      "kind", "attribute", "name", "epsilon"
+    } );
+    addAnnotation( getExactType_AnyAttribute(), source, new String[]{
+      "kind",
+      "attributeWildcard",
+      "wildcards",
+      "##other",
+      "name",
+      ":2",
+      "processing",
+      "lax"
+    } );
+    addAnnotation( integerBoundaryTypeEClass, source, new String[]{
+      "name", "Integer_Boundary_Type", "kind", "simple"
+    } );
+    addAnnotation( getIntegerBoundaryType_Value(), source, new String[]{
+      "name", ":0", "kind", "simple"
+    } );
+    addAnnotation( getIntegerBoundaryType_ExclusiveBound(),
+                   source,
+                   new String[]{
+                     "kind", "attribute", "name", "exclusiveBound"
+                   } );
+    addAnnotation( getIntegerBoundaryType_AnyAttribute(), source, new String[]{
+      "kind",
+      "attributeWildcard",
+      "wildcards",
+      "##other",
+      "name",
+      ":2",
+      "processing",
+      "lax"
+    } );
+    addAnnotation( integerExactTypeEClass, source, new String[]{
+      "name", "Integer_Exact_Type", "kind", "simple"
+    } );
+    addAnnotation( getIntegerExactType_Value(), source, new String[]{
+      "name", ":0", "kind", "simple"
+    } );
+    addAnnotation( getIntegerExactType_Epsilon(), source, new String[]{
+      "kind", "attribute", "name", "epsilon"
+    } );
+    addAnnotation( getIntegerExactType_AnyAttribute(), source, new String[]{
+      "kind",
+      "attributeWildcard",
+      "wildcards",
+      "##other",
+      "name",
+      ":2",
+      "processing",
+      "lax"
+    } );
+    addAnnotation( integerRangeTypeEClass, source, new String[]{
+      "name", "Integer_Range_Type", "kind", "elementOnly"
+    } );
+    addAnnotation( getIntegerRangeType_IntegerLowerBound(),
+                   source,
+                   new String[]{
+                     "kind",
+                     "element",
+                     "name",
+                     "Integer_LowerBound",
+                     "namespace",
+                     "##targetNamespace"
+                   } );
+    addAnnotation( getIntegerRangeType_IntegerUpperBound(),
+                   source,
+                   new String[]{
+                     "kind",
+                     "element",
+                     "name",
+                     "Integer_UpperBound",
+                     "namespace",
+                     "##targetNamespace"
+                   } );
+    addAnnotation( getIntegerRangeType_AnyAttribute(), source, new String[]{
+      "kind",
+      "attributeWildcard",
+      "wildcards",
+      "##other",
+      "name",
+      ":2",
+      "processing",
+      "lax"
+    } );
+    addAnnotation( integerRangeValueTypeEClass, source, new String[]{
+      "name", "Integer_RangeValue_Type", "kind", "elementOnly"
+    } );
+    addAnnotation( getIntegerRangeValueType_UpperBoundedRange(),
+                   source,
+                   new String[]{
+                     "kind",
+                     "element",
+                     "name",
+                     "UpperBoundedRange",
+                     "namespace",
+                     "##targetNamespace"
+                   } );
+    addAnnotation( getIntegerRangeValueType_LowerBoundedRange(),
+                   source,
+                   new String[]{
+                     "kind",
+                     "element",
+                     "name",
+                     "LowerBoundedRange",
+                     "namespace",
+                     "##targetNamespace"
+                   } );
+    addAnnotation( getIntegerRangeValueType_Exact(), source, new String[]{
+      "kind", "element", "name", "Exact", "namespace", "##targetNamespace"
+    } );
+    addAnnotation( getIntegerRangeValueType_Range(), source, new String[]{
+      "kind", "element", "name", "Range", "namespace", "##targetNamespace"
+    } );
+    addAnnotation( getIntegerRangeValueType_AnyAttribute(),
+                   source,
+                   new String[]{
+                     "kind",
+                     "attributeWildcard",
+                     "wildcards",
+                     "##other",
+                     "name",
+                     ":4",
+                     "processing",
+                     "lax"
+                   } );
+    addAnnotation( queueStatusEnumerationEEnum, source, new String[]{
+      "name", "QueueStatusEnumeration"
+    } );
+    addAnnotation( queueStatusEnumerationObjectEDataType, source, new String[]{
+      "name",
+      "QueueStatusEnumeration:Object",
+      "baseType",
+      "QueueStatusEnumeration"
+    } );
+    addAnnotation( queueTypeEClass, source, new String[]{
+      "name", "Queue_Type", "kind", "elementOnly"
+    } );
+    addAnnotation( getQueueType_QueueName(), source, new String[]{
+      "kind", "element", "name", "QueueName", "namespace", "##targetNamespace"
+    } );
+    addAnnotation( getQueueType_Description(), source, new String[]{
+      "kind",
+      "element",
+      "name",
+      "Description",
+      "namespace",
+      "##targetNamespace"
+    } );
+    addAnnotation( getQueueType_QueueType(), source, new String[]{
+      "kind", "element", "name", "QueueType", "namespace", "##targetNamespace"
+    } );
+    addAnnotation( getQueueType_QueueStatus(), source, new String[]{
+      "kind",
+      "element",
+      "name",
+      "QueueStatus",
+      "namespace",
+      "##targetNamespace"
+    } );
+    addAnnotation( getQueueType_CPUTimeLimit(), source, new String[]{
+      "kind",
+      "element",
+      "name",
+      "CPUTimeLimit",
+      "namespace",
+      "##targetNamespace"
+    } );
+    addAnnotation( getQueueType_WallTimeLimit(), source, new String[]{
+      "kind",
+      "element",
+      "name",
+      "WallTimeLimit",
+      "namespace",
+      "##targetNamespace"
+    } );
+    addAnnotation( getQueueType_AllowedVirtualOrganizations(),
+                   source,
+                   new String[]{
+                     "kind",
+                     "element",
+                     "name",
+                     "AllowedVirtualOrganizations",
+                     "namespace",
+                     "##targetNamespace"
+                   } );
+    addAnnotation( getQueueType_Priority(), source, new String[]{
+      "kind", "element", "name", "Priority", "namespace", "##targetNamespace"
+    } );
+    addAnnotation( getQueueType_RunningJobs(), source, new String[]{
+      "kind",
+      "element",
+      "name",
+      "RunningJobs",
+      "namespace",
+      "##targetNamespace"
+    } );
+    addAnnotation( getQueueType_JobsInQueue(), source, new String[]{
+      "kind",
+      "element",
+      "name",
+      "JobsInQueue",
+      "namespace",
+      "##targetNamespace"
+    } );
+    addAnnotation( getQueueType_AssignedResources(), source, new String[]{
+      "kind",
+      "element",
+      "name",
+      "AssignedResources",
+      "namespace",
+      "##targetNamespace"
+    } );
+    addAnnotation( queueTypeEnumerationEEnum, source, new String[]{
+      "name", "QueueTypeEnumeration"
+    } );
+    addAnnotation( queueTypeEnumerationObjectEDataType, source, new String[]{
+      "name", "QueueTypeEnumeration:Object", "baseType", "QueueTypeEnumeration"
+    } );
+    addAnnotation( rangeTypeEClass, source, new String[]{
+      "name", "Range_Type", "kind", "elementOnly"
+    } );
+    addAnnotation( getRangeType_LowerBound(), source, new String[]{
+      "kind", "element", "name", "LowerBound", "namespace", "##targetNamespace"
+    } );
+    addAnnotation( getRangeType_UpperBound(), source, new String[]{
+      "kind", "element", "name", "UpperBound", "namespace", "##targetNamespace"
+    } );
+    addAnnotation( getRangeType_AnyAttribute(), source, new String[]{
+      "kind",
+      "attributeWildcard",
+      "wildcards",
+      "##other",
+      "name",
+      ":2",
+      "processing",
+      "lax"
+    } );
+    addAnnotation( rangeValueTypeEClass, source, new String[]{
+      "name", "RangeValue_Type", "kind", "elementOnly"
+    } );
+    addAnnotation( getRangeValueType_UpperBoundedRange(), source, new String[]{
+      "kind",
+      "element",
+      "name",
+      "UpperBoundedRange",
+      "namespace",
+      "##targetNamespace"
+    } );
+    addAnnotation( getRangeValueType_LowerBoundedRange(), source, new String[]{
+      "kind",
+      "element",
+      "name",
+      "LowerBoundedRange",
+      "namespace",
+      "##targetNamespace"
+    } );
+    addAnnotation( getRangeValueType_Exact(), source, new String[]{
+      "kind", "element", "name", "Exact", "namespace", "##targetNamespace"
+    } );
+    addAnnotation( getRangeValueType_Range(), source, new String[]{
+      "kind", "element", "name", "Range", "namespace", "##targetNamespace"
+    } );
+    addAnnotation( getRangeValueType_AnyAttribute(), source, new String[]{
+      "kind",
+      "attributeWildcard",
+      "wildcards",
+      "##other",
+      "name",
+      ":4",
+      "processing",
+      "lax"
+    } );
   }
 
 } //QdlPackageImpl

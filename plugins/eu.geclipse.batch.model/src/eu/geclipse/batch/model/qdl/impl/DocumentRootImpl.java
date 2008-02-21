@@ -18,6 +18,7 @@ package eu.geclipse.batch.model.qdl.impl;
 
 import eu.geclipse.batch.model.qdl.AllowedVirtualOrganizationsType;
 import eu.geclipse.batch.model.qdl.DocumentRoot;
+import eu.geclipse.batch.model.qdl.IntegerRangeValueType;
 import eu.geclipse.batch.model.qdl.QdlPackage;
 import eu.geclipse.batch.model.qdl.QueueStatusEnumeration;
 import eu.geclipse.batch.model.qdl.QueueType;
@@ -238,9 +239,9 @@ public class DocumentRootImpl extends EObjectImpl implements DocumentRoot
    * <!-- end-user-doc -->
    * @generated
    */
-  public RangeValueType getAssignedResources()
+  public IntegerRangeValueType getAssignedResources()
   {
-    return (RangeValueType)getMixed().get(QdlPackage.Literals.DOCUMENT_ROOT__ASSIGNED_RESOURCES, true);
+    return (IntegerRangeValueType)getMixed().get(QdlPackage.Literals.DOCUMENT_ROOT__ASSIGNED_RESOURCES, true);
   }
 
   /**
@@ -248,7 +249,7 @@ public class DocumentRootImpl extends EObjectImpl implements DocumentRoot
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetAssignedResources(RangeValueType newAssignedResources, NotificationChain msgs)
+  public NotificationChain basicSetAssignedResources(IntegerRangeValueType newAssignedResources, NotificationChain msgs)
   {
     return ((FeatureMap.Internal)getMixed()).basicAdd(QdlPackage.Literals.DOCUMENT_ROOT__ASSIGNED_RESOURCES, newAssignedResources, msgs);
   }
@@ -258,7 +259,7 @@ public class DocumentRootImpl extends EObjectImpl implements DocumentRoot
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setAssignedResources(RangeValueType newAssignedResources)
+  public void setAssignedResources(IntegerRangeValueType newAssignedResources)
   {
     ((FeatureMap.Internal)getMixed()).set(QdlPackage.Literals.DOCUMENT_ROOT__ASSIGNED_RESOURCES, newAssignedResources);
   }
@@ -318,9 +319,9 @@ public class DocumentRootImpl extends EObjectImpl implements DocumentRoot
    * <!-- end-user-doc -->
    * @generated
    */
-  public RangeValueType getJobsInQueue()
+  public IntegerRangeValueType getJobsInQueue()
   {
-    return (RangeValueType)getMixed().get(QdlPackage.Literals.DOCUMENT_ROOT__JOBS_IN_QUEUE, true);
+    return (IntegerRangeValueType)getMixed().get(QdlPackage.Literals.DOCUMENT_ROOT__JOBS_IN_QUEUE, true);
   }
 
   /**
@@ -328,7 +329,7 @@ public class DocumentRootImpl extends EObjectImpl implements DocumentRoot
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetJobsInQueue(RangeValueType newJobsInQueue, NotificationChain msgs)
+  public NotificationChain basicSetJobsInQueue(IntegerRangeValueType newJobsInQueue, NotificationChain msgs)
   {
     return ((FeatureMap.Internal)getMixed()).basicAdd(QdlPackage.Literals.DOCUMENT_ROOT__JOBS_IN_QUEUE, newJobsInQueue, msgs);
   }
@@ -338,7 +339,7 @@ public class DocumentRootImpl extends EObjectImpl implements DocumentRoot
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setJobsInQueue(RangeValueType newJobsInQueue)
+  public void setJobsInQueue(IntegerRangeValueType newJobsInQueue)
   {
     ((FeatureMap.Internal)getMixed()).set(QdlPackage.Literals.DOCUMENT_ROOT__JOBS_IN_QUEUE, newJobsInQueue);
   }
@@ -348,9 +349,9 @@ public class DocumentRootImpl extends EObjectImpl implements DocumentRoot
    * <!-- end-user-doc -->
    * @generated
    */
-  public RangeValueType getPriority()
+  public IntegerRangeValueType getPriority()
   {
-    return (RangeValueType)getMixed().get(QdlPackage.Literals.DOCUMENT_ROOT__PRIORITY, true);
+    return (IntegerRangeValueType)getMixed().get(QdlPackage.Literals.DOCUMENT_ROOT__PRIORITY, true);
   }
 
   /**
@@ -358,7 +359,7 @@ public class DocumentRootImpl extends EObjectImpl implements DocumentRoot
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetPriority(RangeValueType newPriority, NotificationChain msgs)
+  public NotificationChain basicSetPriority(IntegerRangeValueType newPriority, NotificationChain msgs)
   {
     return ((FeatureMap.Internal)getMixed()).basicAdd(QdlPackage.Literals.DOCUMENT_ROOT__PRIORITY, newPriority, msgs);
   }
@@ -368,7 +369,7 @@ public class DocumentRootImpl extends EObjectImpl implements DocumentRoot
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setPriority(RangeValueType newPriority)
+  public void setPriority(IntegerRangeValueType newPriority)
   {
     ((FeatureMap.Internal)getMixed()).set(QdlPackage.Literals.DOCUMENT_ROOT__PRIORITY, newPriority);
   }
@@ -448,9 +449,9 @@ public class DocumentRootImpl extends EObjectImpl implements DocumentRoot
    * <!-- end-user-doc -->
    * @generated
    */
-  public RangeValueType getRunningJobs()
+  public IntegerRangeValueType getRunningJobs()
   {
-    return (RangeValueType)getMixed().get(QdlPackage.Literals.DOCUMENT_ROOT__RUNNING_JOBS, true);
+    return (IntegerRangeValueType)getMixed().get(QdlPackage.Literals.DOCUMENT_ROOT__RUNNING_JOBS, true);
   }
 
   /**
@@ -458,7 +459,7 @@ public class DocumentRootImpl extends EObjectImpl implements DocumentRoot
    * <!-- end-user-doc -->
    * @generated
    */
-  public NotificationChain basicSetRunningJobs(RangeValueType newRunningJobs, NotificationChain msgs)
+  public NotificationChain basicSetRunningJobs(IntegerRangeValueType newRunningJobs, NotificationChain msgs)
   {
     return ((FeatureMap.Internal)getMixed()).basicAdd(QdlPackage.Literals.DOCUMENT_ROOT__RUNNING_JOBS, newRunningJobs, msgs);
   }
@@ -468,7 +469,7 @@ public class DocumentRootImpl extends EObjectImpl implements DocumentRoot
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setRunningJobs(RangeValueType newRunningJobs)
+  public void setRunningJobs(IntegerRangeValueType newRunningJobs)
   {
     ((FeatureMap.Internal)getMixed()).set(QdlPackage.Literals.DOCUMENT_ROOT__RUNNING_JOBS, newRunningJobs);
   }
@@ -629,7 +630,7 @@ public class DocumentRootImpl extends EObjectImpl implements DocumentRoot
         setAllowedVirtualOrganizations((AllowedVirtualOrganizationsType)newValue);
         return;
       case QdlPackage.DOCUMENT_ROOT__ASSIGNED_RESOURCES:
-        setAssignedResources((RangeValueType)newValue);
+        setAssignedResources((IntegerRangeValueType)newValue);
         return;
       case QdlPackage.DOCUMENT_ROOT__CPU_TIME_LIMIT:
         setCPUTimeLimit((RangeValueType)newValue);
@@ -638,10 +639,10 @@ public class DocumentRootImpl extends EObjectImpl implements DocumentRoot
         setDescription((String)newValue);
         return;
       case QdlPackage.DOCUMENT_ROOT__JOBS_IN_QUEUE:
-        setJobsInQueue((RangeValueType)newValue);
+        setJobsInQueue((IntegerRangeValueType)newValue);
         return;
       case QdlPackage.DOCUMENT_ROOT__PRIORITY:
-        setPriority((RangeValueType)newValue);
+        setPriority((IntegerRangeValueType)newValue);
         return;
       case QdlPackage.DOCUMENT_ROOT__QUEUE:
         setQueue((QueueType)newValue);
@@ -653,7 +654,7 @@ public class DocumentRootImpl extends EObjectImpl implements DocumentRoot
         setQueueType((QueueTypeEnumeration)newValue);
         return;
       case QdlPackage.DOCUMENT_ROOT__RUNNING_JOBS:
-        setRunningJobs((RangeValueType)newValue);
+        setRunningJobs((IntegerRangeValueType)newValue);
         return;
       case QdlPackage.DOCUMENT_ROOT__VO_NAME:
         setVOName((String)newValue);
@@ -688,7 +689,7 @@ public class DocumentRootImpl extends EObjectImpl implements DocumentRoot
         setAllowedVirtualOrganizations((AllowedVirtualOrganizationsType)null);
         return;
       case QdlPackage.DOCUMENT_ROOT__ASSIGNED_RESOURCES:
-        setAssignedResources((RangeValueType)null);
+        setAssignedResources((IntegerRangeValueType)null);
         return;
       case QdlPackage.DOCUMENT_ROOT__CPU_TIME_LIMIT:
         setCPUTimeLimit((RangeValueType)null);
@@ -697,10 +698,10 @@ public class DocumentRootImpl extends EObjectImpl implements DocumentRoot
         setDescription(DESCRIPTION_EDEFAULT);
         return;
       case QdlPackage.DOCUMENT_ROOT__JOBS_IN_QUEUE:
-        setJobsInQueue((RangeValueType)null);
+        setJobsInQueue((IntegerRangeValueType)null);
         return;
       case QdlPackage.DOCUMENT_ROOT__PRIORITY:
-        setPriority((RangeValueType)null);
+        setPriority((IntegerRangeValueType)null);
         return;
       case QdlPackage.DOCUMENT_ROOT__QUEUE:
         setQueue((QueueType)null);
@@ -712,7 +713,7 @@ public class DocumentRootImpl extends EObjectImpl implements DocumentRoot
         setQueueType(QUEUE_TYPE_EDEFAULT);
         return;
       case QdlPackage.DOCUMENT_ROOT__RUNNING_JOBS:
-        setRunningJobs((RangeValueType)null);
+        setRunningJobs((IntegerRangeValueType)null);
         return;
       case QdlPackage.DOCUMENT_ROOT__VO_NAME:
         setVOName(VO_NAME_EDEFAULT);
