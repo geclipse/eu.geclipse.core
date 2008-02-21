@@ -41,6 +41,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.Status;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
@@ -95,6 +96,8 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
   final static private String XML_CHARSET = "ISO-8859-1"; //$NON-NLS-1$
   final static private String JOBINFO_JOBDESCRIPTION_XMLNODENAME = "JobDescriptionFileName"; //$NON-NLS-1$
   final static private String JOBINFO_SUBMISSIONTIME_XMLNODENAME = "SubmissionTime"; //$NON-NLS-1$
+  final static private String FOLDER_PROPERTIES_QUALIFIER = "eu.geclipse.core.jobs.GridJob";  //$NON-NLS-1$
+  final static private String FOLDER_PROPERTY_JOBID_CLASS = "JobID.class"; //$NON-NLS-1$
   private GridJobID jobID = null;
   private IGridJobDescription jobDescription = null;
   private GridJobStatus jobStatus = null;
@@ -117,6 +120,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     // gridJobFolder = new GridJobFolder( jobFolder, this );
     readJobID();
     readChildrenJobs();
+    setJobFolderProperties( jobFolder );
     if( this.jobDescriptionFile != null ) {
       readJobDescription();
       try {
@@ -809,6 +813,39 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     } catch( CoreException exception ) {
       Activator.logException( exception, "Cannot read children jobs." ); //$NON-NLS-1$
     }
+  }
+  
+  private void setJobFolderProperties( final IFolder jobFolder ) {
+    try {
+      jobFolder.setSessionProperty( new QualifiedName( FOLDER_PROPERTIES_QUALIFIER,
+                                                       FOLDER_PROPERTY_JOBID_CLASS ),
+                                    this.jobID.getClass().getName() );
+    } catch( CoreException exception ) {
+      Activator.logException( exception,
+                              String.format( "Cannot set property for job folder " //$NON-NLS-1$
+                                             + jobFolder.getName() ) );
+    }
+  }
+  
+  /**
+   * Using job folder, get info about class implemented {@link IGridJobID} (it helps to recognize GridJob middleware)
+   * @param jobFolder
+   * @return class implementing {@link IGridJobID}, or null if this information cannot be got
+   */
+  public static String getJobIdClass( final IFolder jobFolder ) {
+    String jobIdClass = null;
+    try {
+      Object property = jobFolder.getSessionProperty( new QualifiedName( FOLDER_PROPERTIES_QUALIFIER,
+                                                                         FOLDER_PROPERTY_JOBID_CLASS ) );
+      if( property instanceof String ) {
+        jobIdClass = ( String )property;
+      }
+    } catch( CoreException exception ) {
+      Activator.logException( exception,
+                              String.format( "Cannot get property for job folder " //$NON-NLS-1$
+                                             + jobFolder.getName() ) );
+    }
+    return jobIdClass;
   }
 
 }
