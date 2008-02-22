@@ -34,7 +34,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
-import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
@@ -66,7 +65,7 @@ public class LocalLocationChooserPage extends AbstractLocationChooserPage {
     mainComp.setLayoutData( gData );
     
     Label label = new Label( mainComp, SWT.NONE );
-    label.setText( "Local File or Directory:" );
+    label.setText( "&Local File or Directory:" );
     gData = new GridData();
     gData.horizontalSpan = 2;
     label.setLayoutData( gData );
@@ -112,6 +111,7 @@ public class LocalLocationChooserPage extends AbstractLocationChooserPage {
   
   protected String openDirectoryDialog() {
     DirectoryDialog dialog = new DirectoryDialog( getShell(), SWT.OPEN );
+    dialog.setText( "Select PEM file directory" );
     String dir = dialog.open();
     return dir;
   }
