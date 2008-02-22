@@ -23,6 +23,7 @@ import org.eclipse.core.runtime.CoreException;
 
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.internal.model.GridRoot;
+import eu.geclipse.core.model.GridModel;
 
 /**
  * This class tracks changes in the Eclipse resource tree and
@@ -61,7 +62,7 @@ public class ResourceNotificationService
       GridNotificationService gridNotificationService
         = GridRoot.getGridNotificationService();
       
-      gridNotificationService.lock();
+      gridNotificationService.lock( GridModel.getRoot() );
       
       GridElementLifecycleManager visitor = new GridElementLifecycleManager();
       
@@ -71,7 +72,7 @@ public class ResourceNotificationService
         Activator.logException( cExc );
       }
       
-      gridNotificationService.unlock( false );
+      gridNotificationService.unlock( GridModel.getRoot() );
       
     }
     

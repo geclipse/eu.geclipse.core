@@ -147,11 +147,11 @@ public abstract class GridModelViewPart
       if ( decorator != null ) {
         decorator.refresh( event.getElements() );
       }
-    } else {
+    }/* else {
       for ( IGridElement element : event.getElements() ) {
         refreshViewer( element );
       }
-    }
+    }*/
   }
   
   /**

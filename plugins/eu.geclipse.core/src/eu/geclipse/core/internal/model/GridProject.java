@@ -256,12 +256,12 @@ public class GridProject
     
     if ( ( result != null ) && ( result instanceof IGridContainer ) && ! result.isVirtual() ) {
       try {
-        GridNotificationService.getInstance().lock();
+        GridNotificationService.getInstance().lock( this );
         boolean updated = updateProjectProperties( ( IGridContainer ) element );
         if ( ! updated ) {
           updateProjectFolderProperties( ( IGridContainer ) element );
         }
-        GridNotificationService.getInstance().unlock( false );
+        GridNotificationService.getInstance().unlock( this );
       } catch ( CoreException cExc ) {
         Activator.logException( cExc );
       } catch ( BackingStoreException bsExc ) {

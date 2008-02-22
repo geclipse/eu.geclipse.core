@@ -212,23 +212,34 @@ public class ConnectionElement
     IStatus result = Status.CANCEL_STATUS;
     this.fetchError = null;
     
-    try {
+    // The child fetching is done in 3 steps:
+    // 1) Reset the file store and refresh the folder. This ensures that all
+    //    formerly available IResources are deleted.
+    // 2) Load the file stores children directly without a refresh. This ensures
+    //    that this long lasting operation is not blocked by other workspace
+    //    operations.
+    // 3) Locally refresh the folder. Since the file store is not active at this
+    //    time not remote actions are initiated. Instead just the formerly
+    //    fetched children are returned.
     
+    try {
+      
       IResource res = getResource();
       GEclipseFileStore fileStore = ( GEclipseFileStore ) getConnectionFileStore();
+
+      // Step 1: Reset and Refresh
       fileStore.reset();
       fileStore.setExternalMonitor( sMonitor.newChild( 10 ) );
       res.refreshLocal( IResource.DEPTH_INFINITE, null );
       
-      if ( ! sMonitor.isCanceled() ) {
-        
-        fileStore.activate();
-        fileStore.setExternalMonitor( sMonitor.newChild( 90 ) );
-        res.refreshLocal( IResource.DEPTH_ONE, null );
+      // Step 2: Activate and fetch children remotely
+      fileStore.activate();
+      fileStore.childNames( EFS.NONE, sMonitor.newChild( 80 ) );
       
-        result = Status.OK_STATUS;
-        
-      }
+      // Step 3: Refresh again
+      fileStore.setExternalMonitor( sMonitor.newChild( 10 ) );
+      res.refreshLocal( IResource.DEPTH_ONE, null );
+      result = Status.OK_STATUS;
       
     } catch ( CoreException cExc ) {
       this.fetchError = cExc;

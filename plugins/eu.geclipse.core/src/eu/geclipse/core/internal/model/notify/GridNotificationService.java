@@ -16,7 +16,10 @@
 package eu.geclipse.core.internal.model.notify;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
+
+import org.eclipse.core.runtime.Assert;
 
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridModelEvent;
@@ -46,13 +49,13 @@ public class GridNotificationService {
   /**
    * Counter for all applied locks.
    */
-  private int lockCounter;
+  private Hashtable< IGridElement, Integer > locks;
   
   /**
    * Private constructor.
    */
   private GridNotificationService() {
-    this.lockCounter = 0;
+    this.locks = new Hashtable< IGridElement, Integer >();
   }
   
   /**
@@ -88,14 +91,26 @@ public class GridNotificationService {
    * Locks the notification service. A locked service will collect all events
    * without delivering them to the listeners unless it is unlocked again.
    * For each lock an unlock has to be called. An internal counter in incremented
-   * when <code>lock</code> is called and decremented again when {@link #unlock()}
+   * when {@link #lock()} is called and decremented again when {@link #unlock(boolean)}
    * is called. So only if all locks are unlocked again the pending events will
    * be delivered.
    * 
    * @see #unlock()
    */
-  public void lock() {
-    this.lockCounter++;
+  public void lock( final IGridElement owner ) {
+    
+    Assert.isNotNull( owner );
+    
+    Integer counter = this.locks.get( owner );
+    
+    if ( counter == null ) {
+      counter = new Integer( 1 );
+    } else {
+      counter = new Integer( counter.intValue() + 1 );
+    }
+    
+    this.locks.put( owner, counter );
+    
   }
   
   /**
@@ -107,7 +122,7 @@ public class GridNotificationService {
    */
   public void queueEvent( final IGridModelEvent event ) {
     incorporateEvent( event );
-    processEvents();
+    processEvents( event.getSource() );
   }
   
   /**
@@ -127,13 +142,26 @@ public class GridNotificationService {
    * 
    * @see #lock()
    */
-  public void unlock( final boolean forceProcess ) {
-    if ( this.lockCounter > 0 ) {
-      this.lockCounter--;
-      if ( ( this.lockCounter == 0 ) || forceProcess ) {
-        processEvents();
-      }
+  public void unlock( final IGridElement owner ) {
+    
+    Assert.isNotNull( owner );
+    
+    Integer counter = this.locks.get( owner );
+    
+    if ( counter != null ) {
+      counter = new Integer( counter.intValue() - 1 );
+    } else {
+      counter = new Integer( 0 );
     }
+    
+    if ( counter.intValue() <= 0 ) {
+      this.locks.remove( owner );
+    } else {
+      this.locks.put( owner, counter );
+    }
+    
+    processEvents( owner );
+    
   }
   
   /**
@@ -197,17 +225,30 @@ public class GridNotificationService {
    * service is not locked all pending events are delivered to the registered
    * listeners.
    */
-  private void processEvents() {
+  private void processEvents( final IGridElement owner ) {
     
-    if ( this.lockCounter == 0 ) {
+    Assert.isNotNull( owner );
+    
+    Integer counter = this.locks.get( owner );
+    
+    if ( ( counter == null ) || ( counter.intValue() <= 0 ) ) {
       
-      List< IGridModelEvent > localCopy;
-      
+      List< IGridModelEvent > localCopy = new ArrayList< IGridModelEvent >();
+    
       synchronized ( this.eventList ) {
-        localCopy = new ArrayList< IGridModelEvent >( this.eventList );
-        this.eventList.clear();
+        
+        for ( IGridModelEvent event : this.eventList ) {
+          if ( ( owner == null ) || ( event.getSource() == owner ) ) {
+            localCopy.add( event );
+          }
+        }
+        
+        for ( IGridModelEvent event : localCopy ) {
+          this.eventList.remove( event );
+        }
+        
       }
-      
+        
       for ( IGridModelEvent event : localCopy ) {
         for ( IGridModelListener listener : this.listeners ) {
           listener.gridModelChanged( event );

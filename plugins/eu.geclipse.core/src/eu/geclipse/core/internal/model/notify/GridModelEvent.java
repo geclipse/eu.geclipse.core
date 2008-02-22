@@ -15,6 +15,8 @@
 
 package eu.geclipse.core.internal.model.notify;
 
+import org.eclipse.core.runtime.Assert;
+
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridModelEvent;
 
@@ -51,9 +53,13 @@ public class GridModelEvent implements IGridModelEvent {
   public GridModelEvent( final int type,
                          final IGridElement source,
                          final IGridElement[] elements ) {
+    
+    Assert.isNotNull( source );
+    
     this.type = type;
     this.source = source;
     this.elements = elements;
+    
   }
 
   /* (non-Javadoc)

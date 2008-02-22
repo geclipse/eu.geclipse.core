@@ -145,7 +145,9 @@ public class GridElementLifecycleManager
                            final IGridElement source,
                            final IGridElement[] elements ) {
     
-    IGridModelEvent event = new GridModelEvent( type, source, elements );
+    IGridElement src = source == null ? GridModel.getRoot() : source;
+    
+    IGridModelEvent event = new GridModelEvent( type, src, elements );
     GridRoot.getGridNotificationService().queueEvent( event );
     
   }

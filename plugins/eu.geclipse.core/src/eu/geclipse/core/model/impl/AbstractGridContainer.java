@@ -318,7 +318,8 @@ public abstract class AbstractGridContainer
    * the children are fetched when the container is constructed. For
    * lazy containers the children are fetched by the
    * {@link #getChildren(IProgressMonitor)} method if the container is
-   * dirty.
+   * dirty. Implementers have to enclose any resource operations between
+   * a call to {@link #lock()} and {@link #unlock()}.   * 
    * 
    * @param monitor A progress monitor to monitor the progress of this
    * maybe long running method.
@@ -359,11 +360,11 @@ public abstract class AbstractGridContainer
   }
   
   protected void lock() {
-    getGridNotificationService().lock();
+    getGridNotificationService().lock( this );
   }
   
   protected void unlock() {
-    getGridNotificationService().unlock( false );
+    getGridNotificationService().unlock( this );
   }
   
   private void fireGridModelEvent( final int type,
