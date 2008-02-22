@@ -16,6 +16,8 @@
 package eu.geclipse.ui.dialogs;
 
 import java.util.Date;
+
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.dialogs.IconAndMessageDialog;
 import org.eclipse.swt.SWT;
@@ -218,4 +220,9 @@ public class AuthTokenInfoDialog extends IconAndMessageDialog {
     shell.setText( tokenType + " " + Messages.getString("AuthTokenInfoDialog.info_suffix") ); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
+  @Override
+  protected void createButtonsForButtonBar( final Composite parent) {
+    createButton(parent, IDialogConstants.CANCEL_ID,
+            "Close", false);
+  }
 }
