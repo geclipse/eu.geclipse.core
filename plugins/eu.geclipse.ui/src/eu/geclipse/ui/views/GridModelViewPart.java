@@ -44,6 +44,7 @@ import org.eclipse.ui.navigator.ICommonMenuConstants;
 import org.eclipse.ui.part.ViewPart;
 
 import eu.geclipse.core.model.GridModel;
+import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridModelListener;
@@ -147,11 +148,10 @@ public abstract class GridModelViewPart
       if ( decorator != null ) {
         decorator.refresh( event.getElements() );
       }
-    }/* else {
-      for ( IGridElement element : event.getElements() ) {
-        refreshViewer( element );
-      }
-    }*/
+    } else if ( event.getType() == IGridModelEvent.ELEMENTS_CHANGED
+        && ( event.getSource() instanceof IGridConnectionElement ) ){
+      refreshViewer( event.getSource() );
+    }
   }
   
   /**

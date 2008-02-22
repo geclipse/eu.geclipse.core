@@ -21,6 +21,7 @@ import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.filesystem.IFileSystem;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
@@ -36,6 +37,7 @@ import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.impl.AbstractGridContainer;
 
 /**
@@ -240,6 +242,13 @@ public class ConnectionElement
       fileStore.setExternalMonitor( sMonitor.newChild( 10 ) );
       res.refreshLocal( IResource.DEPTH_ONE, null );
       result = Status.OK_STATUS;
+      
+      if ( res instanceof IContainer ) {
+        IResource[] members = ( ( IContainer ) res ).members();
+        if ( ( members == null ) || ( members.length == 0 ) ) {
+          fireGridModelEvent( IGridModelEvent.ELEMENTS_CHANGED, this );
+        }
+      }
       
     } catch ( CoreException cExc ) {
       this.fetchError = cExc;
