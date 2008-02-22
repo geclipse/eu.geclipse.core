@@ -127,7 +127,7 @@
       <problem
             description="Unspecified IO problem"
             id="eu.geclipse.core.problem.io.unspecified"
-            mailto="contact@geclipse.eu">
+            mailto="bugreports@geclipse.eu">
       </problem>
       <problem
             description="Job submission failed"
@@ -136,7 +136,7 @@
       <problem
             description="Container cannot contain elements of the specified type"
             id="eu.geclipse.core.problem.model.containerCanNotContain"
-            mailto="contact@geclipse.eu">
+            mailto="bugreports@geclipse.eu">
       </problem>
       <problem
             description="Failed to create grid element"
@@ -232,7 +232,7 @@
       <problem
             description="Could not determine a reference time via the network"
             id="eu.geclipse.core.problem.sys.systemTimeCheckFailed"
-            mailto="contact@geclipse.eu">
+            mailto="bugreports@geclipse.eu">
       </problem>
       <problem
             description="Bad checksum in tar entry, file might be corrupted"
@@ -267,12 +267,12 @@
       <problem
             description="Unsupported entry type found in tarball"
             id="eu.geclipse.core.problem.tar.unsupportedEntryType"
-            mailto="contact@geclipse.eu">
+            mailto="bugreports@geclipse.eu">
       </problem>
       <problem
             description="Internal error, wrong tar entry header length"
             id="eu.geclipse.core.problem.tar.wrongHeaderSize"
-            mailto="contact@geclipse.eu">
+            mailto="bugreports@geclipse.eu">
       </problem>
       <solution
             description="Check your imported CA-certificates"
