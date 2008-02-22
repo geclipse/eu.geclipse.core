@@ -96,20 +96,18 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
     GridLayout gLayout = new GridLayout( 1, false );
     gLayout.marginHeight = 0;
     gLayout.marginWidth = 0;
+    GridData gData;
+    gData = new GridData( SWT.FILL, SWT.FILL, true, true );
+    mainComp.setLayoutData( gData );
     mainComp.setLayout( gLayout );
     initializeDialogUnits( mainComp );
-    GridData gData;
     this.appsTable = new Table( mainComp, SWT.BORDER
                                           | SWT.VIRTUAL
                                           | SWT.MULTI
                                           | SWT.FULL_SELECTION );
     this.appsTable.setHeaderVisible( true );
     this.appsTable.setLinesVisible( true );
-    gData = new GridData( GridData.FILL_BOTH );
-    gData.horizontalSpan = 1;
-    gData.grabExcessVerticalSpace = true;
-    gData.widthHint = 400;
-    gData.heightHint = 100;
+    gData = new GridData( SWT.FILL, SWT.FILL, true, true );
     this.appsTable.setLayoutData( gData );
     TableLayout tableLayout = new TableLayout();
     this.appsTable.setLayout( tableLayout );
@@ -149,7 +147,6 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
     gData = new GridData( GridData.VERTICAL_ALIGN_BEGINNING
                           | GridData.HORIZONTAL_ALIGN_END );
     gData.horizontalSpan = 1;
-    gData.grabExcessVerticalSpace = true;
     buttonsComp.setLayoutData( gData );
     this.addButton = new Button( buttonsComp, SWT.PUSH );
     gData = new GridData( GridData.FILL_BOTH );
