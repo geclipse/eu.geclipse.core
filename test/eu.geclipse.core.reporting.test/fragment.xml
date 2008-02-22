@@ -6,7 +6,7 @@
       <problem
             description="This is the Example Problem"
             id="eu.geclipse.core.reporting.test.ExampleProblem"
-            mailto="contact@g-eclipse.eu">
+            mailto="bugreports@g-eclipse.eu">
          <reference
                referenceID="eu.geclipse.core.reporting.test.ExampleSolution1">
          </reference>
