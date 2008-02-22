@@ -340,7 +340,7 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
     }
 
     void updateButtons() {
-      if( !this.appName.getText().equals( "" ) && /*!this.appPath.getText().equals( "" ) &&*/ !this.xmlPath.getText().equals( "" ) ) { //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+      if( !this.appName.getText().equals( "" ) && /*!this.appPath.getText().equals( "" ) &&*/ !this.xmlPath.getText().equals( "" ) ) { //$NON-NLS-1$ //$NON-NLS-2$
         super.getButton( IDialogConstants.OK_ID ).setEnabled( true );
       } else {
         super.getButton( IDialogConstants.OK_ID ).setEnabled( false );
@@ -349,6 +349,7 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
 
     @Override
     protected Control createDialogArea( final Composite parent ) {
+      getShell().setText( Messages.getString("ApplicationSpecificPreferencePage.editDialogTitle") ); //$NON-NLS-1$
       Composite composite = ( Composite )super.createDialogArea( parent );
       composite.setLayout( new GridLayout( 1, false ) );
       composite.setLayoutData( new GridData( GridData.FILL_BOTH ) );
@@ -406,6 +407,7 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
         @Override
         public void widgetSelected( final SelectionEvent event ) {
           FileDialog file = new FileDialog( getShell() );
+          file.setText( Messages.getString("ApplicationSpecificPreferencePage.selectXmlFile") ); //$NON-NLS-1$
           String connection = file.open();
           if( connection != null ) {
             EditDialog.this.xmlPath.setText( connection );
@@ -435,6 +437,7 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
         @Override
         public void widgetSelected( final SelectionEvent event ) {
           FileDialog file = new FileDialog( getShell() );
+          file.setText( Messages.getString("ApplicationSpecificPreferencePage.selectJsdlFile") ); //$NON-NLS-1$
           String connection = file.open();
           if( connection != null ) {
             EditDialog.this.jsdlPath.setText( connection );
