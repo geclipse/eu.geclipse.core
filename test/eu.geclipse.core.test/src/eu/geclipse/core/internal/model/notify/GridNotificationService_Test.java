@@ -15,10 +15,10 @@
 package eu.geclipse.core.internal.model.notify;
 
 import org.junit.Assert;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridModelListener;
 
@@ -70,8 +70,8 @@ public class GridNotificationService_Test {
    */
   @Test
   public void testLockUnlock() {
-    service.lock();
-    service.unlock( true );
+    service.lock( GridModel.getRoot() );
+    service.unlock( GridModel.getRoot() );
   }
 
   /**
