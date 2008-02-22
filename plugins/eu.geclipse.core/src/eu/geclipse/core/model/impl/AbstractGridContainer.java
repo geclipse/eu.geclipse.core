@@ -17,6 +17,7 @@
 package eu.geclipse.core.model.impl;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.resources.IContainer;
@@ -318,8 +319,7 @@ public abstract class AbstractGridContainer
    * the children are fetched when the container is constructed. For
    * lazy containers the children are fetched by the
    * {@link #getChildren(IProgressMonitor)} method if the container is
-   * dirty. Implementers have to enclose any resource operations between
-   * a call to {@link #lock()} and {@link #unlock()}.   * 
+   * dirty.
    * 
    * @param monitor A progress monitor to monitor the progress of this
    * maybe long running method.
@@ -351,9 +351,12 @@ public abstract class AbstractGridContainer
       if ( ( this.fetcher != null ) && ( this.fetcher.isFetching() ) ) {
         this.fetcher.cancel();
       }
-      for ( IGridElement child : this.children ) {
-        if ( child instanceof IGridContainer ) {
-          ( ( IGridContainer ) child ).setDirty();
+      List< IGridElement > synchronizedList = Collections.synchronizedList( this.children );
+      synchronized ( synchronizedList ) {
+        for ( IGridElement child : synchronizedList ) {
+          if ( child instanceof IGridContainer ) {
+            ( ( IGridContainer ) child ).setDirty();
+          }
         }
       }
     }
@@ -367,12 +370,12 @@ public abstract class AbstractGridContainer
     getGridNotificationService().unlock( this );
   }
   
-  private void fireGridModelEvent( final int type,
+  protected void fireGridModelEvent( final int type,
                                    final IGridElement element ) {
     fireGridModelEvent( type, new IGridElement[] { element } );
   }
   
-  private void fireGridModelEvent( final int type,
+  protected void fireGridModelEvent( final int type,
                                    final IGridElement[] elements ) {
     if ( ( elements != null ) && ( elements.length > 0 ) ) {
       IGridModelEvent event = new GridModelEvent( type, this, elements );
