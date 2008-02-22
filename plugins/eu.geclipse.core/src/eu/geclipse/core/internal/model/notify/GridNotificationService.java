@@ -28,7 +28,10 @@ import eu.geclipse.core.model.IGridModelListener;
 /**
  * The <code>NotificationService</code> is the central point that
  * manages all event notifications from the Grid model to the
- * outside world.
+ * outside world. It collects and merges events according to their
+ * source. If there is no lock for the source the events are delivered
+ * immediately. Otherwise the events are collected until the lock for
+ * the owner is released. 
  */
 public class GridNotificationService {
   
@@ -88,14 +91,16 @@ public class GridNotificationService {
   }
   
   /**
-   * Locks the notification service. A locked service will collect all events
-   * without delivering them to the listeners unless it is unlocked again.
+   * Locks the notification service for a specific owner. A locked service will
+   * collect all events having the owner as the events source without delivering
+   * them to the listeners unless it is unlocked by this owner again.
    * For each lock an unlock has to be called. An internal counter in incremented
-   * when {@link #lock()} is called and decremented again when {@link #unlock(boolean)}
-   * is called. So only if all locks are unlocked again the pending events will
-   * be delivered.
+   * when {@link #lock(IGridElement)} is called and decremented again when
+   * {@link #unlock(IGridElement)} is called. So only if all locks for a specific
+   * owner are unlocked again the pending events will be delivered.
    * 
-   * @see #unlock()
+   * @param owner The owner of the lock.
+   * @see #unlock(IGridElement)
    */
   public void lock( final IGridElement owner ) {
     
@@ -138,9 +143,12 @@ public class GridNotificationService {
   }
   
   /**
-   * Unlock the service.
+   * Unlock the service for the specified owner. If the lock counter
+   * for the owner is equal or less than 0 all pending events are
+   * delivered.
    * 
-   * @see #lock()
+   * @param owner The owner of the lock.
+   * @see #lock(IGridElement)
    */
   public void unlock( final IGridElement owner ) {
     
