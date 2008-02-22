@@ -18,10 +18,13 @@ package eu.geclipse.batch.ui.internal.model;
 
 import java.beans.PropertyChangeListener;
 import java.util.List;
+
 import org.eclipse.jface.viewers.ICellEditorValidator;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
+
+import eu.geclipse.batch.BatchJobManager;
 import eu.geclipse.batch.IBatchJobInfo;
 import eu.geclipse.batch.ui.internal.Activator;
 import eu.geclipse.batch.ui.internal.Messages;
@@ -66,7 +69,6 @@ public class ComputingElement extends BatchResource {
   private int numWn;
   private int numQueue;
   private int numJobs;
-  private List<IBatchJobInfo> jobs;
 
   /*
    * Initializes the property descriptors array.
@@ -106,12 +108,14 @@ public class ComputingElement extends BatchResource {
   } // static
 
   /**
-   * The default constructor.
+   * The default constructor
+   * 
+   * @param jobManager The manager of all the jobs residing in this batch service
    */
-  public ComputingElement() {
-    super();
+  public ComputingElement( final BatchJobManager jobManager ) {
+    super( jobManager );
   }
-
+  
   /**
    * Returns an array of IPropertyDescriptors for this Worker Node.
    * <p>The returned array is used to fill the property view, when the edit-part corresponding
@@ -219,23 +223,10 @@ public class ComputingElement extends BatchResource {
    * Sets the number of jobs present in this computing element.
    * @param newNumJobs The number of jobs.
    */
-  private void setNumJobs( final int newNumJobs ) {
+  public void setNumJobs( final int newNumJobs ) {
     int oldNumJobs = this.numJobs;
     this.numJobs = newNumJobs;
     this.pcsDelegate.firePropertyChange( PROPERTY_NUM_JOBS, oldNumJobs, newNumJobs );
-  }
-
-  /**
-   * Sets the current number of jobs in the batch service.
-   * @param jobs The current number of jobs.
-   */
-  public void setJobs( final List<IBatchJobInfo> jobs ) {
-    this.jobs = jobs;
-
-    if ( null != this.jobs && ( this.jobs.size() != this.numJobs ) )
-      setNumJobs( this.jobs.size() );
-    else if ( null == this.jobs && 0 < this.numJobs ) // No more jobs, clear it.
-      setNumJobs( 0 );
   }
 
   /**
@@ -276,8 +267,8 @@ public class ComputingElement extends BatchResource {
   /**
    * @return Returns the running jobs.
    */
-  public List<IBatchJobInfo> getJobs() {
-    return this.jobs;
+  public List< IBatchJobInfo > getJobs() {
+    return this.jobManager.getJobs();
   }
 
   /**

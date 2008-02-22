@@ -31,6 +31,7 @@ import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 import org.eclipse.swt.widgets.Shell;
 
+import eu.geclipse.batch.BatchJobManager;
 import eu.geclipse.batch.IBatchService;
 import eu.geclipse.batch.IBatchJobInfo;
 import eu.geclipse.batch.IQueueInfo;
@@ -59,6 +60,7 @@ public class BatchUpdate {
   private BatchDiagram diagram;
   private String batchName;
   private String batchType;
+  private BatchJobManager jobManager;
   private ComputingElement computingElement;
   private LinkedHashMap<String, WorkerNode> workerNodes = new LinkedHashMap<String, WorkerNode>();
   private LinkedHashMap<String, Queue> queues = new LinkedHashMap<String, Queue>();
@@ -85,6 +87,8 @@ public class BatchUpdate {
     this.updateInterval = updateInterval;
     this.updateRunnable = null;
     this.updateJob = null;
+    this.jobManager = new BatchJobManager();
+    
     this.executor = Executors.newSingleThreadScheduledExecutor();
     
     this.firstTime = true;
@@ -119,7 +123,7 @@ public class BatchUpdate {
     else {
       final Dimension dimWN = new Dimension( 100, 40 );
 
-      wn = new WorkerNode();
+      wn = new WorkerNode( this.jobManager );
 
       wn.setFQDN( wni.getWnFQN() );
       wn.setKernelVersion( wni.getKernelVersion() );
@@ -152,16 +156,12 @@ public class BatchUpdate {
     //  Check if any of the fields have been modified
     if ( null != queue ) {
       queue.updateState( queuei );
-
-      // Give the queue a reference to all the jobs
-      queue.setJobs( jobis );
-
       queue = null;
     }
     else {
       final Dimension dimQ = new Dimension( 100, 55 );
 
-      queue = new Queue();
+      queue = new Queue( this.jobManager );
 
       queue.setQueueName( queuei.getQueueName() );
       queue.setState( queuei.getState() );
@@ -175,9 +175,6 @@ public class BatchUpdate {
       queue.setNode( queuei.getNode() );
 
       queue.setSize( dimQ );
-
-      // Give the queue a reference to all the jobs
-      queue.setJobs( jobis );
 
       this.queues.put( queuei.getQueueName(), queue );
     }
@@ -193,6 +190,10 @@ public class BatchUpdate {
     if ( null != this.updateJob ) {
       this.executor.shutdownNow();
       this.updateJob.cancel();
+    }
+    
+    if ( null != this.jobManager ) {
+      this.jobManager.removeAll();
     }
   }
 
@@ -295,7 +296,7 @@ public class BatchUpdate {
 
     try {
       // Do the jobs
-      jobis = this.batchWrapper.getJobs();
+      this.batchWrapper.getJobs( this.jobManager );
 
       // Do the queues
       queueis = this.batchWrapper.getQueues();
@@ -352,7 +353,7 @@ public class BatchUpdate {
       if ( this.firstTime )
         this.initProgress.moveNextMajorTask( 1 );
 
-      this.computingElement = new ComputingElement( );
+      this.computingElement = new ComputingElement( this.jobManager );
       this.computingElement.setSize( dimCE );
       this.computingElement.setFQDN( this.batchName );
       this.computingElement.setType( this.batchType );
@@ -393,9 +394,9 @@ public class BatchUpdate {
     else if ( null == wnis && 0 < this.computingElement.getNumWNs() )
       this.computingElement.setNumWNs( 0 );
 
-    // Set the jobs
-    this.computingElement.setJobs( jobis );
-
+    if ( this.jobManager.getJobCount() != this.computingElement.getNumJobs() )
+      this.computingElement.setNumJobs( this.jobManager.getJobCount() );
+    
     // Only draw the line on the next iteration
     if ( ! this.newResources.isEmpty() ) {
       

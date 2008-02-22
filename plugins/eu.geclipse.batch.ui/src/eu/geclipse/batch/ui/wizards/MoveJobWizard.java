@@ -24,9 +24,10 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
+import eu.geclipse.batch.BatchJobManager;
 import eu.geclipse.batch.IBatchJobInfo;
 import eu.geclipse.batch.ui.internal.Messages;
-import eu.geclipse.batch.ui.views.BatchJobManager;
+
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 

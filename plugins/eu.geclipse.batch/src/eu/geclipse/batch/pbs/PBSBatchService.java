@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.geclipse.batch.AbstractBatchService;
+import eu.geclipse.batch.BatchJobManager;
 import eu.geclipse.batch.IBatchJobInfo;
 import eu.geclipse.batch.IBatchServiceDescription;
 import eu.geclipse.batch.IQueueInfo;
@@ -47,6 +48,8 @@ public final class PBSBatchService extends AbstractBatchService {
 
   private String pbsPath;
 
+  private List< IBatchJobInfo > tmpJobs = new ArrayList< IBatchJobInfo >();
+  
   /**
    * Create a new PBSWrapper.
    * @param description The {@link IBatchServiceDescription} from which
@@ -67,8 +70,8 @@ public final class PBSBatchService extends AbstractBatchService {
    * @param jobLine The string containing the information about the specific job.
    * @return A job {@link BatchJobInfo} or <code>null</code>.
    */
-  private BatchJobInfo parseJobLine( final String jobLine ) {
-    BatchJobInfo jobInfo = null;
+  private IBatchJobInfo parseJobLine( final String jobLine, final BatchJobManager manager ) {
+    IBatchJobInfo jobInfo = null;
     String jobId, jobName, queueName;
     String userAccount, timeUse;
     JobState status = null;
@@ -92,7 +95,8 @@ public final class PBSBatchService extends AbstractBatchService {
 
       // Only if all the fields have qualified values.
       if ( null != status )
-        jobInfo = new BatchJobInfo( jobId, jobName, userAccount, timeUse, status, queueName, this );
+        jobInfo = manager.addMerge( jobId, jobName, userAccount, timeUse, status, queueName, this );
+        //jobInfo = new BatchJobInfo( jobId, jobName, userAccount, timeUse, status, queueName, this );
     }
 
     return jobInfo;
@@ -176,6 +180,24 @@ public final class PBSBatchService extends AbstractBatchService {
     return str;
   }
 
+  private String findJobId( final String jobIdLine ) {
+    int beginIndex, endIndex;
+    String ret;
+    // NOTE if not found -1 is returned, but with the +1 our index is 
+    // still at 0 so no need to test for no existance 
+    beginIndex = jobIdLine.indexOf( '/' ) + 1;
+    
+    // If there are any text after the second '.', then we want to cut it
+    endIndex = jobIdLine.indexOf( '.') + 1;
+    
+    
+    if ( -1 == jobIdLine.indexOf( '.', endIndex ) )
+      ret = jobIdLine.substring( beginIndex ); // only one '.' so no cutting at the end
+    else
+      ret = jobIdLine.substring( beginIndex, jobIdLine.indexOf( '.', endIndex ) );
+    
+    return ret;
+  }
   /**
    * Parses a string containing information about all the workernodes and
    * returns it as a List of {@link WorkerNodeInfo}. If the string is malformed
@@ -286,7 +308,7 @@ public final class PBSBatchService extends AbstractBatchService {
             while ( -1 != endJobIdx ) {
               tmpJob = job.substring( beginJobIdx, endJobIdx );
               tmpJob = tmpJob.trim();
-              jobs.add( tmpJob );
+              jobs.add( findJobId( tmpJob ) );
               
               beginJobIdx = endJobIdx+1;
               endJobIdx = job.indexOf( ',', beginJobIdx );
@@ -295,7 +317,7 @@ public final class PBSBatchService extends AbstractBatchService {
             // Do the last one
             tmpJob = job.substring( beginJobIdx );
             tmpJob = tmpJob.trim();
-            jobs.add( tmpJob );
+            jobs.add( findJobId( tmpJob ) );
           }
           else // We have past the last job, we have moved to the properties
             status = getRightHandSide( line, "status = " ); //$NON-NLS-1$
@@ -377,17 +399,17 @@ public final class PBSBatchService extends AbstractBatchService {
    * ------------------- ---------------- --------------- -------- - -----
    * 968.ce201           blahjob_KJ8465   see001                 0 R see
    * 969.ce201           blahjob_RT8482   see001                 0 R see
-   *
-   * @return A {@link List} of {@link BatchJobInfo} or <code>null</code> if no jobs.
+   * 
+   * @param manager The manager where the jobs will be merged into. 
    * @throws ProblemException If command is not executed successfully
    */
-  public synchronized List<IBatchJobInfo> getJobs() throws ProblemException {
+  public synchronized void getJobs( final BatchJobManager manager ) throws ProblemException {
     String outPut;
-    BatchJobInfo jobInfo;
+    IBatchJobInfo jobInfo;
     String line;
-    List<IBatchJobInfo> jobs = new ArrayList< IBatchJobInfo >();
 
     outPut = this.connection.execCommand( this.pbsPath + "qstat" ); //$NON-NLS-1$
+    this.tmpJobs.clear(); // clear the old holder
 
     if ( null != outPut ) {
       int endIndex, beginIndex = 0;
@@ -397,19 +419,17 @@ public final class PBSBatchService extends AbstractBatchService {
 
         // Skip first two lines
         if ( 2 < ++skip ) {
-          jobInfo = parseJobLine( line );
+          jobInfo = parseJobLine( line, manager );
           if ( null != jobInfo )
-          jobs.add( jobInfo );
+            this.tmpJobs.add( jobInfo );
         }
 
         beginIndex = endIndex+1;
       }
     }
 
-    if ( jobs.isEmpty() )
-      jobs = null;
-
-    return jobs;
+    // Remove the deleted jobs from the manager
+    manager.removeOld( this.tmpJobs );
   }
 
   /**

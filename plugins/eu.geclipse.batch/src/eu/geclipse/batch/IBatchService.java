@@ -63,11 +63,11 @@ public interface IBatchService {
   /**
    * Returns a List of the jobs as {@link IBatchJobInfo}. If no jobs are running or
    * error then this method will return <code>null</code>.
-   *
-   * @return A {@link List} of {@link IBatchJobInfo} or <code>null</code>.
+   * 
+   * @param manager The manager where the jobs will be merged into. 
    * @throws ProblemException If command is not executed successfully
    */
-  public abstract List<IBatchJobInfo> getJobs() throws ProblemException;
+  public abstract void getJobs( final BatchJobManager manager ) throws ProblemException;
 
   /**
    * Deletes a job in the queues of the batch service.

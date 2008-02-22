@@ -22,6 +22,8 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 
+import eu.geclipse.batch.BatchJobManager;
+
 /**
  * Base class for the various model classes that models a batch resource.
  */
@@ -43,14 +45,28 @@ public abstract class BatchResource extends ModelElement {
    * Property ID to use when the list of incoming connections is modified.
    */
   public static final String TARGET_CONNECTIONS_PROP = "BatchResource.TargetConn"; //$NON-NLS-1$
-
+  
   private static final long serialVersionUID = 1;
+
+  /**
+   * The manager that keeps track of all the jobs in the batch service
+   */
+  protected BatchJobManager jobManager; 
 
   private Point location = new Point( 0, 0 );
   private Dimension size = new Dimension( 50, 50 );
   private List<Connection> sourceConnections = new ArrayList<Connection>();
   private List<Connection> targetConnections = new ArrayList<Connection>();
 
+  /**
+   * The default constructor
+   * 
+   * @param jobManager The manager of all the jobs residing in this batch service
+   */
+  public BatchResource( final BatchJobManager jobManager ) {
+    this.jobManager = jobManager;
+  }
+  
   /**
    * Add an incoming or outgoing connection to this shape.
    * @param conn a non-null connection instance
@@ -151,6 +167,16 @@ public abstract class BatchResource extends ModelElement {
     }
   }
 
+  /**
+   * Returns the job manager for this batch resource. 
+   * 
+   * @return returns the manager {@link BatchJobManager} of this batch 
+   * resource. 
+   */
+  public BatchJobManager getJobManager() {
+    return this.jobManager;
+  }
+  
   /**
    * Returns a string describing the model element, to be used for the outline 
    * view. 

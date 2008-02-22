@@ -65,11 +65,14 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.WizardDialog;
 
 import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.batch.BatchJobManager;
 import eu.geclipse.batch.IBatchJobInfo;
 import eu.geclipse.batch.ui.dialogs.BatchJobInfoDialog;
 import eu.geclipse.batch.ui.internal.Activator;
 import eu.geclipse.batch.ui.internal.Messages;
+import eu.geclipse.batch.ui.internal.parts.BatchTreeEditPart;
 import eu.geclipse.batch.ui.internal.parts.ComputingElementEditPart;
+import eu.geclipse.batch.ui.internal.parts.ConnectionEditPart;
 import eu.geclipse.batch.ui.internal.parts.DiagramEditPart;
 import eu.geclipse.batch.ui.internal.parts.QueueEditPart;
 import eu.geclipse.batch.ui.internal.parts.WorkerNodeEditPart;
@@ -80,7 +83,6 @@ import eu.geclipse.batch.ui.wizards.MoveJobWizard;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.comparators.TableColumnComparator;
 import eu.geclipse.ui.listeners.TableColumnListener;
-
 
 /**
  * Viewer of Batch jobs that are either placed in a Worker Node,
@@ -101,11 +103,28 @@ public class BatchJobView extends ViewPart implements IContentChangeListener {
      */
     public Object[] getElements( final Object input ) {
       Object[] resultArray = null;
-      if ( input instanceof BatchJobManager ) {
-        List< IBatchJobInfo > jobs = ( ( BatchJobManager ) input ).getJobs();
+
+      if ( input instanceof Queue ) {
+        Queue q = ( Queue )input;
+        List< IBatchJobInfo > jobs = q.getJobManager().getJobs( q.getQueneName() );
         IBatchJobInfo[] jobArray = new IBatchJobInfo[ jobs.size() ];
         resultArray = jobs.toArray( jobArray ); 
+      } else if ( input instanceof ComputingElement ) {
+        ComputingElement ce = ( ComputingElement ) input;
+        List< IBatchJobInfo > jobs = ce.getJobManager().getJobs( );
+        IBatchJobInfo[] jobArray = new IBatchJobInfo[ jobs.size() ];
+        resultArray = jobs.toArray( jobArray ); 
+      } else if ( input instanceof WorkerNode ) {
+        WorkerNode wn = ( WorkerNode ) input;
+        List< String > jobIds = wn.getJobIds();
+        List< IBatchJobInfo > jobs = wn.getJobManager().getJobs(jobIds );
+        IBatchJobInfo[] jobArray = new IBatchJobInfo[ jobs.size() ];
+        resultArray = jobs.toArray( jobArray ); 
+      } else if ( input instanceof DiagramEditPart || input instanceof ConnectionEditPart ) {
+        IBatchJobInfo[] jobArray = new IBatchJobInfo[ 0 ];
+        resultArray = jobArray;
       }
+      
       return resultArray;
     }
     
@@ -117,6 +136,10 @@ public class BatchJobView extends ViewPart implements IContentChangeListener {
                               final Object oldInput,
                               final Object newInput) {
       // empty implementation
+     /* if ( oldInput instanceof BatchJobManager ) {
+        ( ( BatchJobManager ) oldInput).clear();
+      }
+*/
     }
     
     /* (non-Javadoc)
@@ -233,6 +256,11 @@ public class BatchJobView extends ViewPart implements IContentChangeListener {
    * in a more elegant way.
    */
   protected TableViewer jobList;
+
+  /**
+   * This is the object that are currently selected and which jobs are listed 
+   */
+  protected BatchJobManager jobManager;
   
   /**
    * Action for deleting jobs.
@@ -270,7 +298,6 @@ public class BatchJobView extends ViewPart implements IContentChangeListener {
     this.jobTable.setHeaderVisible( true );
     this.jobTable.setLinesVisible( true );    
     
-    BatchJobManager manager = BatchJobManager.getManager();
     this.jobList = new TableViewer( this.jobTable );
     this.jobList.setLabelProvider( new JobLabelProvider() );
     this.jobList.setContentProvider( new JobContentProvider() );
@@ -318,8 +345,6 @@ public class BatchJobView extends ViewPart implements IContentChangeListener {
     this.jobTable.setSortDirection( SWT.UP );
 
     this.jobList.setComparator( new TableColumnComparator( idColumn ) );
-    this.jobList.setInput( manager );
-
     this.jobList.addDoubleClickListener( new IDoubleClickListener() {
       public void doubleClick( final DoubleClickEvent e ) {
         showSelectedJobInfo();
@@ -340,76 +365,95 @@ public class BatchJobView extends ViewPart implements IContentChangeListener {
         }
       }
     });
-
+    
     getSite().getWorkbenchWindow().getSelectionService().addSelectionListener( new ISelectionListener() {
       @SuppressWarnings("unchecked")
       public void selectionChanged( final IWorkbenchPart part, final ISelection selection ) {
         if ( selection instanceof StructuredSelection ) {
-          StructuredSelection ss = (StructuredSelection) selection;
-          List<StructuredSelection> sList = ss.toList();
+          StructuredSelection ss = ( StructuredSelection ) selection;
+          List< StructuredSelection > sList = ss.toList();
 
-          BatchJobManager innerManager = BatchJobManager.getManager();
+          //BatchJobManager innerManager = BatchJobManager.getManager();
         
           for ( Iterator<StructuredSelection> iterator = sList.iterator(); iterator.hasNext(); ) {
             Object obj = iterator.next();
 
             //See if it implements IAdaptable
             if ( obj instanceof QueueEditPart ) {
-              // Clear old contents first
-              innerManager.clear();
-           
-              QueueEditPart qEdit = (QueueEditPart)obj;
-              Queue q = (Queue)qEdit.getModel();
+              QueueEditPart qEdit = ( QueueEditPart )obj;
+              Queue q = ( Queue )qEdit.getModel();
 
-              List<IBatchJobInfo> jobs = q.getJobs();
-
-              if ( null != jobs ) {
-                for ( IBatchJobInfo job : jobs ) {
-                  if ( 0 == q.getQueneName().compareTo( job.getQueueName() ) ) {
-                    innerManager.addJob( job );
-                  }
-                }
+              if ( null == BatchJobView.this.jobManager ) {
+                BatchJobView.this.jobManager = q.getJobManager();
+                BatchJobView.this.jobManager.addContentChangeListener( BatchJobView.this );
               }
-              // Could list the jobs on this
+              
+              BatchJobView.this.jobList.setInput( q );
             } else if ( obj instanceof ComputingElementEditPart ) {
-              // Clear old contents first
-              innerManager.clear();
+              ComputingElementEditPart ceEdit = ( ComputingElementEditPart )obj;
+              ComputingElement ce = ( ComputingElement )ceEdit.getModel();
 
-              ComputingElementEditPart ceEdit = (ComputingElementEditPart)obj;
-              ComputingElement ce = (ComputingElement)ceEdit.getModel();
-
-              List<IBatchJobInfo> jobs = ce.getJobs();
-
-              if ( null != jobs ) {
-                for ( IBatchJobInfo job : jobs ) {
-                  innerManager.addJob( job );
-                }
+              if ( null == BatchJobView.this.jobManager ) {
+                BatchJobView.this.jobManager = ce.getJobManager();
+                BatchJobView.this.jobManager.addContentChangeListener( BatchJobView.this );
               }
+
+              BatchJobView.this.jobList.setInput( ce );
             } else if ( obj instanceof WorkerNodeEditPart ) {
-              // Clear old contents first
-              innerManager.clear();
+              WorkerNodeEditPart wnEdit = ( WorkerNodeEditPart )obj;
+              WorkerNode wn = ( WorkerNode )wnEdit.getModel();
 
-              WorkerNodeEditPart wnEdit = (WorkerNodeEditPart)obj;
-              WorkerNode wn = (WorkerNode)wnEdit.getModel();
-
-              List< String > jobIds = wn.getJobIds();
-
-              if ( null != jobIds ) {
-                String na = Messages.getString( "BatchJobView.na" );  //$NON-NLS-1$
-                for ( String jobId : jobIds ) {
-                  innerManager.addJob( new BatchJobMinInfo( jobId, na, na, na, IBatchJobInfo.JobState.R, na ) );
-                }
+              if ( null == BatchJobView.this.jobManager ) {
+                BatchJobView.this.jobManager = wn.getJobManager();
+                BatchJobView.this.jobManager.addContentChangeListener( BatchJobView.this );
               }
-            } else if ( obj instanceof DiagramEditPart ) {
+
+              BatchJobView.this.jobList.setInput( wn );
+            } else if ( obj instanceof DiagramEditPart || obj instanceof ConnectionEditPart ) {
               // clear all the content
-              innerManager.clear();
+              if ( null != BatchJobView.this.jobManager ) {
+                BatchJobView.this.jobManager.removeContentChangeListener( BatchJobView.this );
+                BatchJobView.this.jobManager = null;
+              }
+
+              BatchJobView.this.jobList.setInput( obj );
+            } else if ( obj instanceof BatchTreeEditPart ) {
+              BatchTreeEditPart treeEdit = ( BatchTreeEditPart )obj;
+              Object obj2 = treeEdit.getModel();
+
+              if ( obj2 instanceof ComputingElement ) {
+                ComputingElement ce = ( ComputingElement )obj2;
+              
+                if ( null == BatchJobView.this.jobManager ) {
+                  BatchJobView.this.jobManager =ce.getJobManager();
+                  BatchJobView.this.jobManager.addContentChangeListener( BatchJobView.this );
+                }
+
+                BatchJobView.this.jobList.setInput( ce );
+              } else if ( obj2 instanceof Queue ) {
+                Queue q = ( Queue )obj2;
+                
+                if ( null == BatchJobView.this.jobManager ) {
+                  BatchJobView.this.jobManager = q.getJobManager();
+                  BatchJobView.this.jobManager.addContentChangeListener( BatchJobView.this );
+                }
+
+                BatchJobView.this.jobList.setInput( q );
+              } else if ( obj2 instanceof WorkerNode ) {
+                WorkerNode wn = ( WorkerNode )obj2;
+                
+                if ( null == BatchJobView.this.jobManager ) {
+                  BatchJobView.this.jobManager = wn.getJobManager();
+                  BatchJobView.this.jobManager.addContentChangeListener( BatchJobView.this );
+                }
+
+                BatchJobView.this.jobList.setInput( wn );
+              }
             }
           }
         }
       }
     });
-    
-    manager.addContentChangeListener( this );
     
     createActions();
     createToolbar();
@@ -421,17 +465,23 @@ public class BatchJobView extends ViewPart implements IContentChangeListener {
    */
   @Override
   public void dispose() {
-    BatchJobManager manager = BatchJobManager.getManager();
-    manager.removeContentChangeListener( this );
+    if ( null != this.jobManager ) {
+      this.jobManager.removeContentChangeListener( this );
+      this.jobManager = null;
+    }
   }
   
   /* (non-Javadoc)
    * @see org.eclipse.compare.IContentChangeListener#contentChanged(org.eclipse.compare.IContentChangeNotifier)
    */
   public void contentChanged( final IContentChangeNotifier source ) {
-    BatchJobView.this.jobList.refresh();
 
-    updateActions();
+    getSite().getWorkbenchWindow().getShell().getDisplay().asyncExec( new Runnable() {  
+      public void run() {  
+        BatchJobView.this.jobList.refresh(); 
+        updateActions();
+      }
+    });
   }
   
   
@@ -491,10 +541,13 @@ public class BatchJobView extends ViewPart implements IContentChangeListener {
                                          Messages.getString( "BatchJobView.confirm_delete_title" ), //$NON-NLS-1$
                                          Messages.getString( "BatchJobView.confirm_delete_message" ) );  //$NON-NLS-1$
       if ( !confirm ) {
-        BatchJobManager manager = BatchJobManager.getManager();
+        //BatchJobManager manager = BatchJobManager.getManager();
         for ( IBatchJobInfo job : jobs ) {
           try {
-            manager.deleteJob( job );
+            if ( null != this.jobManager ) {
+              this.jobManager.deleteJob( job );
+              this.jobList.refresh(); 
+            }
           } catch( ProblemException excp ) {
             // Action could not be performed
             ProblemDialog.openProblem( getSite().getShell(),
@@ -516,22 +569,20 @@ public class BatchJobView extends ViewPart implements IContentChangeListener {
   protected void holdSelectedJobs() {
     List< IBatchJobInfo > jobs = getSelectedJobs();
     if ( !jobs.isEmpty() ) {
-//      boolean confirm = !MessageDialog.openConfirm( getSite().getShell(),
-//                                         Messages.getString( "BatchJobView.confirm_delete_title" ), //$NON-NLS-1$
-//                                         Messages.getString( "BatchJobView.confirm_delete_message" ) );  //$NON-NLS-1$
-//      if ( !confirm ) {
-        BatchJobManager manager = BatchJobManager.getManager();
-        for ( IBatchJobInfo job : jobs ) {
-          try {
-            manager.holdJob( job );
-          } catch( ProblemException excp ) {
-            // Action could not be performed
-            ProblemDialog.openProblem( getSite().getShell(),
-                                       Messages.getString( "BatchJobView.error_hold_title" ), //$NON-NLS-1$
-                                       Messages.getString( "BatchJobView.error_hold_message" ), //$NON-NLS-1$
-                                        excp );      
+      for ( IBatchJobInfo job : jobs ) {
+        try {
+          if ( null != this.jobManager ) {
+            this.jobManager.holdJob( job );
+            this.jobList.refresh(); 
           }
-//        }
+        } catch( ProblemException excp ) {
+          // Action could not be performed
+          ProblemDialog.openProblem( getSite().getShell(),
+                                     Messages.getString( "BatchJobView.error_hold_title" ), //$NON-NLS-1$
+                                     Messages.getString( "BatchJobView.error_hold_message" ), //$NON-NLS-1$
+                                      excp );      
+        }
+
         updateActions();
       }
     }
@@ -545,22 +596,20 @@ public class BatchJobView extends ViewPart implements IContentChangeListener {
   protected void releaseSelectedJobs() {
     List< IBatchJobInfo > jobs = getSelectedJobs();
     if ( !jobs.isEmpty() ) {
-//      boolean confirm = !MessageDialog.openConfirm( getSite().getShell(),
-//                                         Messages.getString( "BatchJobView.confirm_delete_title" ), //$NON-NLS-1$
-//                                         Messages.getString( "BatchJobView.confirm_delete_message" ) );  //$NON-NLS-1$
-//      if ( !confirm ) {
-        BatchJobManager manager = BatchJobManager.getManager();
-        for ( IBatchJobInfo job : jobs ) {
-          try {
-            manager.releaseJob( job );
-          } catch( ProblemException excp ) {
-            // Action could not be performed
-            ProblemDialog.openProblem( getSite().getShell(),
-                                       Messages.getString( "BatchJobView.error_release_title" ), //$NON-NLS-1$
-                                       Messages.getString( "BatchJobView.error_release_message" ), //$NON-NLS-1$
-                                       excp );      
+      for ( IBatchJobInfo job : jobs ) {
+        try {
+          if ( null != this.jobManager ) {
+            this.jobManager.releaseJob( job );
+            this.jobList.refresh(); 
           }
-//        }
+        } catch( ProblemException excp ) {
+          // Action could not be performed
+          ProblemDialog.openProblem( getSite().getShell(),
+                                     Messages.getString( "BatchJobView.error_release_title" ), //$NON-NLS-1$
+                                     Messages.getString( "BatchJobView.error_release_message" ), //$NON-NLS-1$
+                                     excp );      
+        }
+
         updateActions();
       }
     }
@@ -574,14 +623,14 @@ public class BatchJobView extends ViewPart implements IContentChangeListener {
   protected void moveSelectedJobs() {
     List< IBatchJobInfo > jobs = getSelectedJobs();
     if ( !jobs.isEmpty() ) {
-      BatchJobManager manager = BatchJobManager.getManager();
-
-      MoveJobWizard wizard = new MoveJobWizard( manager, jobs );
-      wizard.init( this.getSite().getWorkbenchWindow().getWorkbench(), null );
+      if ( null != this.jobManager ) {
+        MoveJobWizard wizard = new MoveJobWizard( this.jobManager, jobs );
+        wizard.init( this.getSite().getWorkbenchWindow().getWorkbench(), null );
      
-      WizardDialog dialog = new WizardDialog ( this.getSite().getShell(), wizard );
-      dialog.create();
-      dialog.open();
+        WizardDialog dialog = new WizardDialog ( this.getSite().getShell(), wizard );
+        dialog.create();
+        dialog.open();
+      }
     }
   }
   

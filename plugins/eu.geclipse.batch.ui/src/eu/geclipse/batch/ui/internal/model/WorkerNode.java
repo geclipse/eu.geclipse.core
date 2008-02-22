@@ -23,6 +23,8 @@ import org.eclipse.jface.viewers.ICellEditorValidator;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
+
+import eu.geclipse.batch.BatchJobManager;
 import eu.geclipse.batch.IWorkerNodeInfo;
 import eu.geclipse.batch.IWorkerNodeInfo.WorkerNodeState;
 import eu.geclipse.batch.ui.internal.Activator;
@@ -116,16 +118,17 @@ public final class WorkerNode extends BatchResource {
     }
   } // static
 
-
   /**
-   * The default constructor.
+   * The default constructor
+   * 
+   * @param jobManager The manager of all the jobs residing in this batch service
    */
-  public WorkerNode() {
-    super();
-
+  public WorkerNode( final BatchJobManager jobManager ) {
+    super( jobManager );
+    
     this.jobIds = new ArrayList<String>();
   }
-
+  
   /**
    * Returns an array of IPropertyDescriptors for this Worker Node.
    * <p>The returned array is used to fill the property view, when the edit-part corresponding

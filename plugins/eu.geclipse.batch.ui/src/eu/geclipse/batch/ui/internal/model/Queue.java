@@ -23,6 +23,8 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
+
+import eu.geclipse.batch.BatchJobManager;
 import eu.geclipse.batch.IBatchJobInfo;
 import eu.geclipse.batch.IQueueInfo;
 import eu.geclipse.batch.IQueueInfo.QueueRunState;
@@ -101,7 +103,6 @@ public final class Queue extends BatchResource {
   private int run;
   private int que;
   private String lm;
-  private List<IBatchJobInfo> jobs;
 
   /*
    * Initializes the property descriptors array.
@@ -141,12 +142,14 @@ public final class Queue extends BatchResource {
   } // static
 
   /**
-   * The default constructor.
+   * The default constructor
+   * 
+   * @param jobManager The manager of all the jobs residing in this batch service
    */
-  public Queue() {
-    super();
+  public Queue( final BatchJobManager jobManager ) {
+    super( jobManager );
   }
-
+  
   /**
    * Returns an array of IPropertyDescriptors for this Worker Node.
    * <p>The returned array is used to fill the property view, when the edit-part corresponding
@@ -309,9 +312,9 @@ public final class Queue extends BatchResource {
    * lazy filtering on the jobs belonging to this Queue when needed.
    * @param jobs The current number of jobs.
    */
-  public synchronized void setJobs( final List<IBatchJobInfo> jobs ) {
-    this.jobs = jobs;
-  }
+//  public synchronized void setJobs( final List<IBatchJobInfo> jobs ) {
+//    this.jobs = jobs;
+//  }
 
   /**
    * @return Returns the name.
@@ -337,8 +340,8 @@ public final class Queue extends BatchResource {
   /**
    * @return Returns the running jobs.
    */
-  public List<IBatchJobInfo> getJobs() {
-    return this.jobs;
+  public List< IBatchJobInfo > getJobs() {
+    return this.jobManager.getJobs();
   }
 
   /**
@@ -347,8 +350,10 @@ public final class Queue extends BatchResource {
   public synchronized boolean isQueueEmpty() {
     boolean ret = true;
     
-    if ( null != this.jobs ) {
-      for ( IBatchJobInfo job : this.jobs ) {
+    List < IBatchJobInfo > jobs = this.getJobs();
+    
+    if ( null != jobs ) {
+      for ( IBatchJobInfo job : jobs ) {
         if ( job.getQueueName().equals( this.queueName ) ) {
           ret = false;
           break;
