@@ -8,12 +8,12 @@ Bundle-Vendor: %Bundle-Vendor
 Bundle-Localization: plugin
 Require-Bundle: org.apache.log4j,
  org.eclipse.compare,
+ org.eclipse.core.expressions,
  org.eclipse.core.filesystem,
  org.eclipse.core.net,
  org.eclipse.core.resources,
  org.eclipse.core.runtime;bundle-version="3.3.0",
- eu.geclipse.core.reporting,
- org.eclipse.core.expressions
+ eu.geclipse.core.reporting
 Eclipse-LazyStart: true
 Export-Package: eu.geclipse.core,
  eu.geclipse.core.auth,
