@@ -27,7 +27,6 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 
-import eu.geclipse.core.reporting.ISolution;
 import eu.geclipse.core.reporting.ISolver;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.core.util.TimeChecker;
