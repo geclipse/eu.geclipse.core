@@ -11,6 +11,7 @@
  *
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
+ *    Ariel Garcia      - added the cheatsheet and help tags
  *****************************************************************************/
 
 package eu.geclipse.core.reporting.internal;
@@ -183,7 +184,11 @@ public class SolutionFactory {
     
     String name = element.getName();
     
-    if ( IProblemReporting.PREFERENCE_TAG_ELEMENT.equals( name ) ) {
+    if ( IProblemReporting.CHEATSHEET_TAG_ELEMENT.equals( name ) ) {
+      result = SolutionFactory.getFactory().getSolution( name, null );
+    } else if ( IProblemReporting.HELP_TAG_ELEMENT.equals( name ) ) {
+      result = SolutionFactory.getFactory().getSolution( name, null );
+    } else if ( IProblemReporting.PREFERENCE_TAG_ELEMENT.equals( name ) ) {
       result = SolutionFactory.getFactory().getSolution( name, null );
     } else if ( IProblemReporting.VIEW_TAG_ELEMENT.equals( name ) ) {
       result = SolutionFactory.getFactory().getSolution( name, null );

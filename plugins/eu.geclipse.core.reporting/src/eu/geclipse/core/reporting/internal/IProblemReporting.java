@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2007, 2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,6 +11,7 @@
  *
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
+ *    Ariel Garcia      - added the cheatsheet and help tags
  *****************************************************************************/
 
 package eu.geclipse.core.reporting.internal;
@@ -104,46 +105,77 @@ public interface IProblemReporting {
   public static final String REFERENCE_ID_ATTRIBUTE
     = "referenceID"; //$NON-NLS-1$
   
+  
+  // All possible tags come here
+  
   /**
-   * The ID of the preference tag element within the problem reporting
+   * The ID of the cheatsheet-tag element within the problem reporting
+   * extension point.
+   */
+  public static final String CHEATSHEET_TAG_ELEMENT
+    = "cheatsheetTag"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the cheatsheet page ID attribute of the cheatsheet-tag element within
+   * the problem reporting extension point.
+   */
+  public static final String CHEATSHEET_ID_ATTRIBUTE
+    = "cheatsheetID"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the help-tag element within the problem reporting
+   * extension point.
+   */
+  public static final String HELP_TAG_ELEMENT
+    = "helpTag"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the help page path attribute of the help-tag element within
+   * the problem reporting extension point.
+   */
+  public static final String HELP_ID_ATTRIBUTE
+    = "pagePath"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the preference-tag element within the problem reporting
    * extension point.
    */
   public static final String PREFERENCE_TAG_ELEMENT
     = "preferenceTag"; //$NON-NLS-1$
   
   /**
-   * The ID of the preference page ID attribute of the properties element within
+   * The ID of the preference page ID attribute of the preference-tag element within
    * the problem reporting extension point.
    */
-  public static final String PROPERTIES_ID_ATTRIBUTE
+  public static final String PREFERENCE_ID_ATTRIBUTE
     = "pageID"; //$NON-NLS-1$
   
   /**
-   * The ID of the view tag element within the problem reporting
+   * The ID of the view-tag element within the problem reporting
    * extension point.
    */
   public static final String VIEW_TAG_ELEMENT
     = "viewTag"; //$NON-NLS-1$
   
   /**
-   * The ID of the view ID attribute of the properties element within
+   * The ID of the view ID attribute of the view-tag element within
    * the problem reporting extension point.
    */
   public static final String VIEW_ID_ATTRIBUTE
     = "viewID"; //$NON-NLS-1$
   
   /**
-   * The ID of the wizard tag element within the problem reporting
+   * The ID of the wizard-tag element within the problem reporting
    * extension point.
    */
   public static final String WIZARD_TAG_ELEMENT
     = "wizardTag"; //$NON-NLS-1$
   
   /**
-   * The ID of the wizard page ID attribute of the properties element within
+   * The ID of the page ID attribute of the wizard-tag element within
    * the problem reporting extension point.
    */
-  public static final String PAGE_ID_ATTRIBUTE
+  public static final String WIZARD_ID_ATTRIBUTE
     = "pageID"; //$NON-NLS-1$
   
   /**

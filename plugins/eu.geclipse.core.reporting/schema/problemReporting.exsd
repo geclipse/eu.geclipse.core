@@ -89,6 +89,8 @@
       <complexType>
          <sequence>
             <choice minOccurs="0" maxOccurs="1">
+               <element ref="cheatsheetTag"/>
+               <element ref="helpTag"/>
                <element ref="preferenceTag"/>
                <element ref="viewTag"/>
                <element ref="wizardTag"/>
@@ -136,6 +138,40 @@
             <annotation>
                <documentation>
                   The unique ID of either a problem (if the reference is used within a solution definition) or a solution (if the reference is used within a problem definition).
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="cheatsheetTag">
+      <annotation>
+         <documentation>
+            Tag denoting a cheatsheet page solution. This tag is used for a solution that should open a specific cheatsheet page.
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="cheatsheetID" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The unique ID of a cheatsheet page that should be opened.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="helpTag">
+      <annotation>
+         <documentation>
+            Tag denoting a help page solution. This tag is used for a solution that should open a specific help page.
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="pagePath" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The resource path of the help page that should be opened.
                </documentation>
             </annotation>
          </attribute>
@@ -212,12 +248,18 @@
   &lt;problem
     description=&quot;Failed to establish internet connection&quot;
     id=&quot;eu.geclipse.problem.net.connectionFailed&quot;
-    mailto=&quot;contact@geclipse.eu&quot;&gt;
+    mailto=&quot;bugreports@geclipse.eu&quot;&gt;
     &lt;reference
       referenceID=&quot;eu.geclipse.solution.net.checkInternetConnection&quot;&gt;
     &lt;/reference&gt;
     &lt;reference
       referenceID=&quot;eu.geclipse.solution.net.checkProxySettings&quot;&gt;
+    &lt;/reference&gt;
+    &lt;reference
+      referenceID=&quot;eu.geclipse.solution.net.followGettingStarted&quot;&gt;
+    &lt;/reference&gt;
+    &lt;reference
+      referenceID=&quot;eu.geclipse.solution.net.openPrerequisitesHelp&quot;&gt;
     &lt;/reference&gt;
   &lt;/problem&gt;
   &lt;solution
@@ -230,6 +272,20 @@
     &lt;propertiesTag
       pageID=&quot;org.eclipse.ui.net.NetPreferences&quot;&gt;
     &lt;/propertiesTag&gt;
+  &lt;/solution&gt;
+  &lt;solution
+    description=&quot;Follow the &apos;Getting started&apos; tutorial&quot;
+    id=&quot;eu.geclipse.solution.net.followGettingStarted&quot;&gt;
+    &lt;cheatsheetTag
+      cheatsheetID=&quot;eu.geclipse.doc.user.gettingStarted&quot;&gt;
+    &lt;/cheatsheetTag&gt;
+  &lt;/solution&gt;
+  &lt;solution
+    description=&quot;Read the introductory help&quot;
+    id=&quot;eu.geclipse.solution.net.openPrerequisitesHelp&quot;&gt;
+    &lt;helpTag
+      pagePath=&quot;/eu.geclipse.doc.user/html/gettingstarted/prerequisites.html&quot;&gt;
+    &lt;/helpTag&gt;
   &lt;/solution&gt;
 &lt;/extension&gt;
 &lt;/pre&gt;

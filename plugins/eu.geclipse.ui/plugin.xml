@@ -257,6 +257,16 @@
    <extension
          point="eu.geclipse.core.reporting.problemReporting">
       <solution
+            description="Show Cheatsheet Solver"
+            id="cheatsheetTag"
+            solver="eu.geclipse.ui.problems.ShowCheatsheetSolver">
+      </solution>
+      <solution
+            description="Show Help Page Solver"
+            id="helpTag"
+            solver="eu.geclipse.ui.problems.ShowHelpPageSolver">
+      </solution>
+      <solution
             description="Show Preference Page Solver"
             id="preferenceTag"
             solver="eu.geclipse.ui.problems.ShowPreferencePageSolver">

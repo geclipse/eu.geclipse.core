@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2007, 2008 g-Eclipse consortium 
+ * Copyright (c) 2008 g-Eclipse consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,32 +10,29 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributor(s):
- *    Mathias Stuempert
+ *    Ariel Garcia - initial API and implementation
  *****************************************************************************/
 
 package eu.geclipse.ui.problems;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.ui.IWorkbench;
-import org.eclipse.ui.IWorkbenchPage;
-import org.eclipse.ui.IWorkbenchWindow;
-import org.eclipse.ui.PartInitException;
-import org.eclipse.ui.PlatformUI;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.cheatsheets.CheatSheetViewerFactory;
+import org.eclipse.ui.cheatsheets.ICheatSheetViewer;
 
 import eu.geclipse.core.reporting.IConfigurableSolver;
-import eu.geclipse.ui.internal.Activator;
 
 
 /**
- * This Solver opens the view with the requested viewID.
+ * This Solver takes care of opening the Cheatsheet viewer at the
+ * requested cheatsheet ID.
  */
-public class ShowViewSolver
-    implements IConfigurableSolver {
+public class ShowCheatsheetSolver implements IConfigurableSolver {
   
-  public static final String VIEW_ID_ATTRIBUTE = "viewID"; //$NON-NLS-1$
+  public static final String CHEATSHEET_ID_ATTRIBUTE = "cheatsheetID"; //$NON-NLS-1$
   
-  private String viewID;
+  private String cheatsheetID;
   
   /*
    * (non-Javadoc)
@@ -45,7 +42,7 @@ public class ShowViewSolver
                                      final String propertyName,
                                      final Object data)
       throws CoreException {
-    this.viewID = config.getAttribute( VIEW_ID_ATTRIBUTE );
+    this.cheatsheetID = config.getAttribute( CHEATSHEET_ID_ATTRIBUTE );
   }
   
   /*
@@ -53,14 +50,19 @@ public class ShowViewSolver
    * @see eu.geclipse.core.reporting.ISolver#solve()
    */
   public void solve() {
-    IWorkbench workbench = PlatformUI.getWorkbench();
-    IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
-    IWorkbenchPage page = window.getActivePage();
-    try {
-      page.showView( this.viewID );
-    } catch ( PartInitException piExc ) {
-      Activator.logException( piExc );
-    }
+    ICheatSheetViewer viewer = CheatSheetViewerFactory.createCheatSheetView();
+    viewer.setInput( this.cheatsheetID );
+    viewer.reset( null );
+    viewer.createPartControl( getContainer() );
+    viewer.setFocus();
+  }
+  
+  private Composite getContainer() {
+    Composite container = null;
+    
+    // TODO ariel
+    
+    return container;
   }
 
 }
