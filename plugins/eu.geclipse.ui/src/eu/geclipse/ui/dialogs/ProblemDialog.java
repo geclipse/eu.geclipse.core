@@ -144,7 +144,7 @@ public class ProblemDialog extends ErrorDialog {
         reasonComposite.setLayout( new GridLayout( 1, false ) );
         
         Label reasonLabel = new Label( reasonComposite, SWT.NONE );
-        reasonLabel.setText( Messages.getString("NewProblemDialog.further_reasons") ); //$NON-NLS-1$
+        reasonLabel.setText( Messages.getString("ProblemDialog.further_reasons") ); //$NON-NLS-1$
         gData = new GridData();
         gData.horizontalAlignment = GridData.BEGINNING;
         reasonLabel.setLayoutData( gData );
