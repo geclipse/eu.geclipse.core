@@ -26,6 +26,7 @@ import org.eclipse.jface.util.IPropertyChangeListener;
 import org.eclipse.jface.util.PropertyChangeEvent;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.StructuredViewer;
+import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Tree;
@@ -60,11 +61,16 @@ import eu.geclipse.ui.views.filters.JobViewFilterConfiguration;
  */
 public class GridJobView extends ElementManagerViewPart
   implements IGridJobStatusListener, IFilterConfigurationListener
-{
-  JobViewActions jobActions;
+{  
   private static String XML_MEMENTO_FILTERS = "Filters"; //$NON-NLS-1$
-  private static String PREFERENCE_NAME_FILTERS = "GridJobViewFilters"; //$NON-NLS-1$
-  private GridFilterConfigurationsManager filterConfigurationsManager;
+  private static String XML_MEMENTO_COLUMNS = "GridJobViewColumns"; //$NON-NLS-1$
+  private static String XML_MEMENTO_COLUMN_WIDTH = "ColumnWidth%d";  //$NON-NLS-1$
+  private static String XML_MEMENTO_COLUMN_SORTED = "SortedBy"; //$NON-NLS-1$
+  private static String XML_MEMENTO_COLUMN_SORTED_DIRECTON = "SortedDirection";  //$NON-NLS-1$
+  private static String PREFERENCE_NAME_FILTERS = "GridJobViewFilters"; //$NON-NLS-1$  
+  JobViewActions jobActions;
+  private GridFilterConfigurationsManager filterConfigurationsManager;  
+  private IMemento stateMemento;
 
   @Override
   public void dispose() {
@@ -73,7 +79,8 @@ public class GridJobView extends ElementManagerViewPart
       this.filterConfigurationsManager.removeConfigurationListener( this );
     }
     
-    saveFilters();    
+    savePreferences();    
+    
     super.dispose();
   }
 
@@ -124,10 +131,16 @@ public class GridJobView extends ElementManagerViewPart
     reasonColumn.setText( Messages.getString( "GridJobView.reason_column" ) ); //$NON-NLS-1$
     reasonColumn.setAlignment( SWT.LEFT );
     reasonColumn.setWidth( 100 );
+    
+    TreeColumn submissionTimeColumn = new TreeColumn( tree, SWT.NONE );
+    submissionTimeColumn.setText( Messages.getString("GridJobView.columnSubmitted") ); //$NON-NLS-1$
+    submissionTimeColumn.setWidth( 120 );
+    
     TreeColumn lastUpdateColumn = new TreeColumn( tree, SWT.NONE );
     lastUpdateColumn.setText( Messages.getString( "GridJobView.last_update_column" ) ); //$NON-NLS-1$
     lastUpdateColumn.setAlignment( SWT.LEFT );
     lastUpdateColumn.setWidth( 120 );
+    
     return true;
   }
 
@@ -158,7 +171,9 @@ public class GridJobView extends ElementManagerViewPart
     throws PartInitException
   {
     super.init( site, mem );
-    GridModel.getJobManager().addJobStatusListener( this );
+    this.stateMemento = mem;
+    GridModel.getJobManager().addJobStatusListener( this );    
+    
     IPreferenceStore preferenceStore = new ScopedPreferenceStore( new InstanceScope(),
                                                                   "eu.geclipse.core" ); //$NON-NLS-1$
     preferenceStore.addPropertyChangeListener( new IPropertyChangeListener() {
@@ -179,12 +194,8 @@ public class GridJobView extends ElementManagerViewPart
   @Override
   protected void initViewer( final StructuredViewer sViewer ) {
     super.initViewer( sViewer );
-    initFilters( sViewer );
-  }
-
-  private void initFilters( final StructuredViewer sViewer ) {
     createFilterConfigurationsManager( sViewer );
-    readFilters();
+    readPreferences();
   }
 
   private void createFilterConfigurationsManager( final StructuredViewer sViewer )
@@ -210,34 +221,111 @@ public class GridJobView extends ElementManagerViewPart
     }
   }
 
-  private void saveFilters() {
+  private void savePreferences() {
+    Preferences preferences = Activator.getDefault().getPluginPreferences();
+    saveFilters( preferences );    
+    Activator.getDefault().savePluginPreferences();
+  }
+
+  private void saveFilters( final Preferences preferences ) {
     XMLMemento memento = XMLMemento.createWriteRoot( XML_MEMENTO_FILTERS );
     if( this.filterConfigurationsManager != null ) {
       this.filterConfigurationsManager.saveState( memento );
     }
+    preferences.setValue( PREFERENCE_NAME_FILTERS, getMementoString( memento ) );
+  }
+  
+  private String getMementoString( final XMLMemento memento ) {
     StringWriter writer = new StringWriter();
     try {
       memento.save( writer );
     } catch( IOException exc ) {
       Activator.logException( exc );
     }
-    
-    Preferences preferences = Activator.getDefault().getPluginPreferences();
-    preferences.setValue( PREFERENCE_NAME_FILTERS, writer.toString() );
-    Activator.getDefault().savePluginPreferences();
+    return writer.toString();
   }
   
-  private void readFilters() {    
-    String preference = Activator.getDefault().getPluginPreferences().getString( PREFERENCE_NAME_FILTERS );
+  private void readPreferences() {
+    Preferences pluginPreferences = Activator.getDefault()
+      .getPluginPreferences();
+    readFilters( pluginPreferences );
+    readColumns( this.stateMemento );
+  }
 
-    if( preference != null
-        && preference.length() > 0 ) {
-      StringReader reader = new StringReader( preference );
+  private void readFilters( final Preferences preferences ) {
+    XMLMemento memento = createMemento( preferences.getString( PREFERENCE_NAME_FILTERS ) );
+    if( memento != null ) {
+      this.filterConfigurationsManager.readState( memento );
+    }
+  }
+  
+  private XMLMemento createMemento( final String string ) {
+    XMLMemento memento = null;
+    if( string != null && string.length() > 0 ) {
       try {
-        this.filterConfigurationsManager.readState( XMLMemento.createReadRoot( reader ) );
-      } catch (WorkbenchException exc) {
-        Activator.logException( exc );
+        memento = XMLMemento.createReadRoot( new StringReader( string ) );
+      } catch( WorkbenchException exception ) {
+        Activator.logException( exception );
       }
     }
-  }  
+    return memento;
+  }
+  
+  private void saveColumns( final IMemento parent ) {
+    IMemento memento = parent.createChild( XML_MEMENTO_COLUMNS );
+    TreeViewer vwr = ( TreeViewer )getViewer();
+    Tree tree = vwr.getTree();
+    int colNr = 0, sorted = 0;
+    for( TreeColumn column : tree.getColumns() ) {
+      memento.putInteger( String.format( XML_MEMENTO_COLUMN_WIDTH,
+                                         Integer.valueOf( colNr ) ),
+                          column.getWidth() );
+      if( tree.getSortColumn().equals( column ) ) {
+        sorted = colNr;
+      }
+      colNr++;
+    }
+    
+    memento.putInteger( XML_MEMENTO_COLUMN_SORTED, sorted );
+    memento.putInteger( XML_MEMENTO_COLUMN_SORTED_DIRECTON, tree.getSortDirection() );
+  }
+  
+  private void readColumns( final IMemento parent ) {
+    IMemento memento = parent.getChild( XML_MEMENTO_COLUMNS );
+    
+    if( memento != null ) {
+      TreeViewer vwr = ( TreeViewer )getViewer();
+      Tree tree = vwr.getTree();
+      int colNr = 0;      
+      for( TreeColumn column : tree.getColumns() ) {
+        Integer width = memento.getInteger( String.format( XML_MEMENTO_COLUMN_WIDTH, Integer.valueOf( colNr ) ) );
+        
+        if( width != null ) {
+          column.setWidth( width.intValue() );
+        }
+        colNr++;
+      }
+      
+      Integer sortedColumn = memento.getInteger( XML_MEMENTO_COLUMN_SORTED );
+      Integer sortDirection = memento.getInteger( XML_MEMENTO_COLUMN_SORTED_DIRECTON );
+      if( sortedColumn != null
+          && sortDirection != null
+          && sortedColumn.intValue() < tree.getColumnCount() ) {
+          tree.setSortColumn( tree.getColumn( sortedColumn.intValue() ) );
+          tree.setSortDirection( sortDirection.intValue() );
+      }
+    }
+  }
+
+  /* (non-Javadoc)
+   * @see org.eclipse.ui.part.ViewPart#saveState(org.eclipse.ui.IMemento)
+   */
+  @Override
+  public void saveState( final IMemento mem ) {
+    saveColumns( mem );
+    super.saveState( this.stateMemento );
+  }
+  
+  
+  
 }

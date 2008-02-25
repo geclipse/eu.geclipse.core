@@ -76,6 +76,13 @@ public class JobViewLabelProvider extends DecoratingLabelProvider
               break;
             }
             case 5:
+              if( job.getSubmissionTime() != null ) {
+                text = DateFormat.getDateTimeInstance()
+                  .format( job.getSubmissionTime() );              
+              }
+              
+              break;
+            case 6:
               if( job.getJobStatus() != null
                   && job.getJobStatus().getLastUpdateTime() != null )
               {
