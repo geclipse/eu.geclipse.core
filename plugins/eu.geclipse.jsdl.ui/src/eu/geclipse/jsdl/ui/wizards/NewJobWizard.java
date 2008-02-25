@@ -49,8 +49,8 @@ import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.jsdl.JSDLJobDescription;
 import eu.geclipse.jsdl.model.DataStagingType;
 import eu.geclipse.jsdl.ui.internal.Activator;
-import eu.geclipse.jsdl.ui.internal.preference.ApplicationSpecificRegistry;
 import eu.geclipse.jsdl.ui.internal.wizards.FileType;
+import eu.geclipse.jsdl.ui.preference.ApplicationSpecificRegistry;
 import eu.geclipse.jsdl.ui.wizards.specific.IApplicationSpecificPage;
 
 /**

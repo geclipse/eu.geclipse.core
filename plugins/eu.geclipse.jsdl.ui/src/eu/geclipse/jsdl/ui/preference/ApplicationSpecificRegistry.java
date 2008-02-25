@@ -13,7 +13,7 @@
  *     PSNC - Katarzyna Bylec
  *           
  *****************************************************************************/
-package eu.geclipse.jsdl.ui.internal.preference;
+package eu.geclipse.jsdl.ui.preference;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -87,7 +87,7 @@ public class ApplicationSpecificRegistry implements IContentChangeNotifier {
     ApplicationSpecificObject result = null;
     File file = filePath.toFile();
     if( file.isFile() ) {
-      BufferedReader in;
+      BufferedReader in = null;
       try {
         in = new BufferedReader( new FileReader( file ) );
         String line;
@@ -121,11 +121,21 @@ public class ApplicationSpecificRegistry implements IContentChangeNotifier {
                                                   jsdlPath );
           this.appSpecObjectsToFiles.put( result, filePath.lastSegment() );
           this.currentIdPointer++;
+          
         }
       } catch( FileNotFoundException fileNotFoundExc ) {
         Activator.logException( fileNotFoundExc );
       } catch( IOException ioExc ) {
         Activator.logException( ioExc );
+      } finally {
+        try {
+          if (in != null){
+          in.close();
+          }
+        } catch( IOException e ) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
       }
     }
     return result;
@@ -184,7 +194,7 @@ public class ApplicationSpecificRegistry implements IContentChangeNotifier {
   public void addApplicationSpecificData( final String name,
                                           final String path,
                                           final IPath xmlPath,
-                                          final Path jsdlPath )
+                                          final IPath jsdlPath )
   {
     ApplicationSpecificObject newObject = new ApplicationSpecificObject( this.currentIdPointer,
                                                                          name,
@@ -314,6 +324,7 @@ public class ApplicationSpecificRegistry implements IContentChangeNotifier {
     path = path.append( ApplicationSpecificRegistry.DIRECTORY_NAME );
     path = path.append( fileName );
     File file = path.toFile();
+    file.exists();
     if( file.delete() ) {
       this.apps.remove( selectedAppSpecificObject );
       notifyListeners();
@@ -367,6 +378,24 @@ public class ApplicationSpecificRegistry implements IContentChangeNotifier {
     } catch( IOException exc ) {
       // TODO katis: problem dialog
       Activator.logException( exc );
+    }
+  }
+
+  public void removeApplicationSpecificData( final String appName,
+                                             final String appPath,
+                                             final IPath xmlPath,
+                                             final IPath jsdlPath )
+  {
+    for( ApplicationSpecificObject object : apps ) {
+      if( object.getAppName().equalsIgnoreCase( appName )
+          && object.getAppPath().equals( appPath )
+          && object.getXmlPath().equals( xmlPath )
+          && object.getJsdlPath().equals( jsdlPath ) )
+      {
+//        apps.remove( object );
+        removeApplicationSpecificData( object );
+        break;
+      }
     }
   }
 }

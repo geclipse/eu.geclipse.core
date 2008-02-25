@@ -13,7 +13,7 @@
  *     PSNC - Katarzyna Bylec
  *           
  *****************************************************************************/
-package eu.geclipse.jsdl.ui.internal.preference;
+package eu.geclipse.jsdl.ui.preference;
 
 import org.eclipse.core.runtime.IPath;
 

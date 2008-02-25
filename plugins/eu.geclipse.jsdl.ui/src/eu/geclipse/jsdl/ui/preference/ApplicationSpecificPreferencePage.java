@@ -45,6 +45,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
@@ -55,9 +56,8 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
+
 import eu.geclipse.jsdl.ui.internal.Activator;
-import eu.geclipse.jsdl.ui.internal.preference.ApplicationSpecificObject;
-import eu.geclipse.jsdl.ui.internal.preference.ApplicationSpecificRegistry;
 
 /**
  * Class providing contents of Application Parameters Preferences Page
@@ -69,7 +69,7 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
   private Button addButton;
   private Button editButton;
   private Button removeButton;
-  private TableViewer appsViewer;
+  TableViewer appsViewer;
   private Table appsTable;
 
   /**
@@ -507,6 +507,14 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
   }
 
   public void contentChanged( final IContentChangeNotifier source ) {
-    this.appsViewer.refresh();
+    PlatformUI.getWorkbench().getDisplay().asyncExec( new Runnable(){
+
+      public void run() {
+        ApplicationSpecificPreferencePage.this.appsViewer.refresh();
+        
+      }
+      
+    });
+//    this.appsViewer.refresh();
   }
 }

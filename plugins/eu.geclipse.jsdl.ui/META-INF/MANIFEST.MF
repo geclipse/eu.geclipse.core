@@ -25,6 +25,7 @@ Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Export-Package: eu.geclipse.jsdl.ui.adapters.jsdl,
  eu.geclipse.jsdl.ui.adapters.posix,
  eu.geclipse.jsdl.ui.editors,
+ eu.geclipse.jsdl.ui.preference,
  eu.geclipse.jsdl.ui.widgets,
  eu.geclipse.jsdl.ui.wizards,
  eu.geclipse.jsdl.ui.wizards.nodes,
