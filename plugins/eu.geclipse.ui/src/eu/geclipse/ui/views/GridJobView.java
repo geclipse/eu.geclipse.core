@@ -294,7 +294,7 @@ public class GridJobView extends ElementManagerViewPart
   
   private void readColumns( final IMemento parent ) {
     IMemento memento = parent.getChild( XML_MEMENTO_COLUMNS );    
-    int sortedDirection = SWT.UP;
+    int sortedDirection = SWT.DOWN;
     TreeViewer vwr = ( TreeViewer )getViewer();
     Tree tree = vwr.getTree();   
     TreeColumn sortedColumn = tree.getColumn( 5 );
