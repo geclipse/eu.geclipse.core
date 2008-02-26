@@ -134,12 +134,14 @@ public class GridJobView extends ElementManagerViewPart
     
     TreeColumn submissionTimeColumn = new TreeColumn( tree, SWT.NONE );
     submissionTimeColumn.setText( Messages.getString("GridJobView.columnSubmitted") ); //$NON-NLS-1$
-    submissionTimeColumn.setWidth( 120 );
+    submissionTimeColumn.setWidth( 120 );    
     
     TreeColumn lastUpdateColumn = new TreeColumn( tree, SWT.NONE );
     lastUpdateColumn.setText( Messages.getString( "GridJobView.last_update_column" ) ); //$NON-NLS-1$
     lastUpdateColumn.setAlignment( SWT.LEFT );
     lastUpdateColumn.setWidth( 120 );
+    
+    tree.setSortColumn( submissionTimeColumn );
     
     return true;
   }
@@ -291,11 +293,13 @@ public class GridJobView extends ElementManagerViewPart
   }
   
   private void readColumns( final IMemento parent ) {
-    IMemento memento = parent.getChild( XML_MEMENTO_COLUMNS );
+    IMemento memento = parent.getChild( XML_MEMENTO_COLUMNS );    
+    int sortedDirection = SWT.UP;
+    TreeViewer vwr = ( TreeViewer )getViewer();
+    Tree tree = vwr.getTree();   
+    TreeColumn sortedColumn = tree.getColumn( 5 );
     
     if( memento != null ) {
-      TreeViewer vwr = ( TreeViewer )getViewer();
-      Tree tree = vwr.getTree();
       int colNr = 0;      
       for( TreeColumn column : tree.getColumns() ) {
         Integer width = memento.getInteger( String.format( XML_MEMENTO_COLUMN_WIDTH, Integer.valueOf( colNr ) ) );
@@ -306,15 +310,19 @@ public class GridJobView extends ElementManagerViewPart
         colNr++;
       }
       
-      Integer sortedColumn = memento.getInteger( XML_MEMENTO_COLUMN_SORTED );
-      Integer sortDirection = memento.getInteger( XML_MEMENTO_COLUMN_SORTED_DIRECTON );
-      if( sortedColumn != null
-          && sortDirection != null
-          && sortedColumn.intValue() < tree.getColumnCount() ) {
-          tree.setSortColumn( tree.getColumn( sortedColumn.intValue() ) );
-          tree.setSortDirection( sortDirection.intValue() );
+      Integer sortedColumnInt = memento.getInteger( XML_MEMENTO_COLUMN_SORTED );
+      Integer sortDirectionInt = memento.getInteger( XML_MEMENTO_COLUMN_SORTED_DIRECTON );
+      
+      if( sortedColumnInt != null
+          && sortDirectionInt != null
+          && sortedColumnInt.intValue() < tree.getColumnCount() ) {
+        sortedColumn = tree.getColumn( sortedColumnInt.intValue() );
+        sortedDirection = sortDirectionInt.intValue();
       }
     }
+
+    tree.setSortColumn( sortedColumn );
+    tree.setSortDirection( sortedDirection );    
   }
 
   /* (non-Javadoc)
