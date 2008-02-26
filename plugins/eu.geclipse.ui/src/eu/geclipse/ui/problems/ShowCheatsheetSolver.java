@@ -15,13 +15,19 @@
 
 package eu.geclipse.ui.problems;
 
+import java.lang.reflect.Method;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.cheatsheets.CheatSheetViewerFactory;
-import org.eclipse.ui.cheatsheets.ICheatSheetViewer;
+import org.eclipse.ui.IViewPart;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchWindow;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 
 import eu.geclipse.core.reporting.IConfigurableSolver;
+import eu.geclipse.ui.internal.Activator;
 
 
 /**
@@ -30,9 +36,14 @@ import eu.geclipse.core.reporting.IConfigurableSolver;
  */
 public class ShowCheatsheetSolver implements IConfigurableSolver {
   
-  public static final String CHEATSHEET_ID_ATTRIBUTE = "cheatsheetID"; //$NON-NLS-1$
+  private static final String CHEATSHEET_VIEW_ID
+    = "org.eclipse.ui.cheatsheets.views.CheatSheetView"; //$NON-NLS-1$
+  
+  private static final String CHEATSHEET_ID_ATTRIBUTE
+    = "cheatsheetID"; //$NON-NLS-1$
   
   private String cheatsheetID;
+  
   
   /*
    * (non-Javadoc)
@@ -50,19 +61,35 @@ public class ShowCheatsheetSolver implements IConfigurableSolver {
    * @see eu.geclipse.core.reporting.ISolver#solve()
    */
   public void solve() {
-    ICheatSheetViewer viewer = CheatSheetViewerFactory.createCheatSheetView();
-    viewer.setInput( this.cheatsheetID );
-    viewer.reset( null );
-    viewer.createPartControl( getContainer() );
-    viewer.setFocus();
-  }
-  
-  private Composite getContainer() {
-    Composite container = null;
     
-    // TODO ariel
+    IWorkbench workbench = PlatformUI.getWorkbench();
+    IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
+    IWorkbenchPage page = window.getActivePage();
     
-    return container;
+    IViewPart view = page.findView( CHEATSHEET_VIEW_ID );
+    if ( view == null ) {
+      try {
+        view = page.showView( CHEATSHEET_VIEW_ID );
+      } catch ( PartInitException piExc ) {
+        // The view could not be initialized... why?
+      }
+    }
+    
+    /*
+     * The CheatSheetView class is eclipse-ui private, so we cannot
+     * simply cast here, we use reflection to run the method...
+     */
+    try {
+      Class< ? >[] params = new Class< ? >[ 1 ];
+      params[ 0 ] = String.class;
+      Method method = view.getClass().getDeclaredMethod( "setInput", params ); //$NON-NLS-1$
+      method.invoke( view, this.cheatsheetID );
+    } catch ( Exception exc ) {
+      Activator.logException( exc );
+    }
+    
+    page.activate( view );
+    page.bringToTop( view );
   }
 
 }
