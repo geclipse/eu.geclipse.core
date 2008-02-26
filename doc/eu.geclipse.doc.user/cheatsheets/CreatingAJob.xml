@@ -22,7 +22,7 @@
 		Alternatively, you may right-click in the <b>Grid Project</b> view and choose <b>New &gt; Job Description</b>.<br/>
 		This wizard will generate a file in the Job Submission Description Language (JSDL).
       </description>
-      <command serialization="org.eclipse.ui.newWizard(newWizardId=eu.geclipse.ui.wizards.gridJobWizard)"/>
+      <command serialization="org.eclipse.ui.newWizard(newWizardId=eu.geclipse.jsdl.ui.newFileWizard)"/>
    </item>
    <item title="Choose location and name of new jsdl file.">
          <description>
