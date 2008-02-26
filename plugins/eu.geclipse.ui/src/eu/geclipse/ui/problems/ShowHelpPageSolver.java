@@ -28,7 +28,7 @@ import eu.geclipse.core.reporting.IConfigurableSolver;
  */
 public class ShowHelpPageSolver implements IConfigurableSolver {
   
-  public static final String HELP_PAGE_ID_ATTRIBUTE = "pagePath"; //$NON-NLS-1$
+  private static final String HELP_PAGE_ID_ATTRIBUTE = "pagePath"; //$NON-NLS-1$
   
   private String helpPageHRef;
   

@@ -33,7 +33,7 @@ import eu.geclipse.ui.internal.Activator;
 public class ShowViewSolver
     implements IConfigurableSolver {
   
-  public static final String VIEW_ID_ATTRIBUTE = "viewID"; //$NON-NLS-1$
+  private static final String VIEW_ID_ATTRIBUTE = "viewID"; //$NON-NLS-1$
   
   private String viewID;
   

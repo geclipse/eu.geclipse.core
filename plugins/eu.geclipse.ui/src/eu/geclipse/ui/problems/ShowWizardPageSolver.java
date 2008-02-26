@@ -33,7 +33,7 @@ import eu.geclipse.core.reporting.IConfigurableSolver;
 public class ShowWizardPageSolver
     implements IConfigurableSolver {
   
-  public static final String PAGE_ID_ATTRIBUTE = "pageID"; //$NON-NLS-1$
+  private static final String PAGE_ID_ATTRIBUTE = "pageID"; //$NON-NLS-1$
   
   private String pageID;
   
