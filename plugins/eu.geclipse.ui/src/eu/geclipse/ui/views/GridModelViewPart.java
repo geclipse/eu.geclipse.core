@@ -148,9 +148,6 @@ public abstract class GridModelViewPart
       if ( decorator != null ) {
         decorator.refresh( event.getElements() );
       }
-    } else if ( event.getType() == IGridModelEvent.ELEMENTS_CHANGED
-        && ( event.getSource() instanceof IGridConnectionElement ) ){
-      refreshViewer( event.getSource() );
     }
   }
   
