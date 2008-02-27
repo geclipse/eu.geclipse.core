@@ -24,4 +24,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.core.expressions,
  eu.geclipse.ui,
  eu.geclipse.core,
- org.eclipse.ui.navigator
+ org.eclipse.ui.navigator,
+ org.eclipse.gmf.runtime.diagram.ui.providers,
+ org.eclipse.gmf.runtime.diagram.ui.providers.ide,
+ org.eclipse.gmf.runtime.diagram.ui.render
