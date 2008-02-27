@@ -51,6 +51,8 @@ public class FetchChildrenJob extends Job {
       result = Status.OK_STATUS;
     } catch ( GridModelException gmExc ) {
       result = new Status( IStatus.ERROR, Activator.PLUGIN_ID, "Fetch Error", gmExc );
+    } finally {
+      mMonitor.done();
     }
     
     return result;

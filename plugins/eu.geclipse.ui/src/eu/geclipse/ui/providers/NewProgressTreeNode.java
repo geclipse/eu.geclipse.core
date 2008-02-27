@@ -18,6 +18,9 @@ package eu.geclipse.ui.providers;
 import java.net.URL;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
@@ -51,6 +54,8 @@ public class NewProgressTreeNode
      */
     private String lastProgress;
     
+    private boolean wasAlreadyDone;
+    
     /**
      * Construct a new updater for the specified {@link ProgressTreeNode}.
      * 
@@ -58,16 +63,22 @@ public class NewProgressTreeNode
      */
     public ProgressNodeUpdater( final NewProgressTreeNode node ) {
       this.node = node;
+      this.wasAlreadyDone = false;
     }
     
     /* (non-Javadoc)
      * @see java.lang.Runnable#run()
      */
     public void run() {
+      System.out.println( this.node.isDone() );
       String progress = this.node.toString();
       if ( ( progress != null ) && !progress.equals( this.lastProgress ) ) {
         this.lastProgress = progress;
         this.node.getViewer().update( this.node, null );
+      } else if ( this.node.isDone() && ! this.wasAlreadyDone ) {
+        System.out.println( "go" );
+        this.wasAlreadyDone = true;
+        this.node.getViewer().getTree().redraw();
       }
     }
     
@@ -85,12 +96,18 @@ public class NewProgressTreeNode
   
   private static Image fullProgress;
   
+  private static Image emptyFolder;
+  
   static {
     URL emptyURL = Activator.getDefault().getBundle().getEntry( "icons/extras/progress_bar_empty.gif" );
     emptyProgress = ImageDescriptor.createFromURL( emptyURL ).createImage();
     URL fullURL = Activator.getDefault().getBundle().getEntry( "icons/extras/progress_bar_full.gif" );
     fullProgress = ImageDescriptor.createFromURL( fullURL ).createImage();
+    URL efURL = Activator.getDefault().getBundle().getEntry( "icons/obj16/ihigh_obj.gif" );
+    emptyFolder = ImageDescriptor.createFromURL( efURL ).createImage();
   }
+  
+  protected boolean done;
   
   private int tWork;
   
@@ -99,8 +116,6 @@ public class NewProgressTreeNode
   private String taskName;
   
   private boolean canceled;
-  
-  private boolean done;
   
   private TreeViewer viewer;
   
@@ -143,8 +158,18 @@ public class NewProgressTreeNode
 
   public void done() {
     this.worked = this.tWork;
-    this.done = true;
     update();
+    Job doneJob = new Job( "DoneJob" ) {
+      @Override
+      protected IStatus run( final IProgressMonitor monitor ) {
+        NewProgressTreeNode.this.done = true;
+        update();
+        return Status.OK_STATUS;
+      }
+    };
+    doneJob.setSystem( true );
+    doneJob.setPriority( Job.SHORT );
+    doneJob.schedule( 100 );
   }
   
   public TreeViewer getViewer() {
@@ -242,12 +267,12 @@ public class NewProgressTreeNode
   private void measureItem( final Event event ) {
     
     int textHeight = event.gc.getFontMetrics().getHeight();
-    int imageHeight = emptyProgress.getBounds().height;
+    int imageWidth = isDone() ? emptyFolder.getBounds().width : emptyProgress.getBounds().width;
+    int imageHeight = isDone() ? emptyFolder.getBounds().height : emptyProgress.getBounds().height;
     int textWidth
       = this.taskName == null
       ? 0
       : event.gc.textExtent( this.taskName ).x;
-    int imageWidth = emptyProgress.getBounds().width;
     
     event.height = Math.max( textHeight, imageHeight );
     event.width = textWidth + imageWidth + 2;
@@ -260,35 +285,52 @@ public class NewProgressTreeNode
    * @param event The event triggering this paint.
    */
   protected void paintItem( final Event event ) {
-
+    
     Display display = this.viewer.getTree().getDisplay();
     Color black = display.getSystemColor( SWT.COLOR_BLACK );
-    Color white = display.getSystemColor( SWT.COLOR_WHITE );
-    
-    int progress = getProgressPercent();
-    
-    int barwidth = fullProgress.getBounds().width;
-    int barheight = fullProgress.getBounds().height;
-    int bary = event.y + ( event.height-barheight ) / 2;
-    int barp = barwidth*progress/100;
-    
     event.gc.fillRectangle( event.x, event.y, event.width, event.height );
     
-    event.gc.drawImage( emptyProgress, barp, 0, barwidth-barp, barheight, event.x+barp+2, bary, barwidth-barp, barheight );
-    event.gc.drawImage( fullProgress, 0, 0, barp, barheight, event.x+2, bary, barp, barheight );
-    
-    String progressString = isDone() ? "done" : String.valueOf( progress )+"%"; //$NON-NLS-1$ //$NON-NLS-2$
-    Point textExtend = event.gc.textExtent( progressString );
-    int progressX = event.x + 2 + ( barwidth - textExtend.x ) / 2;
-    event.gc.setForeground( white );
-    event.gc.drawText( progressString, progressX+1, event.y + 2, true );
-    event.gc.setForeground( black );
-    event.gc.drawText( progressString, progressX, event.y + 1, true );
-    
-    int textX = event.x + 6 + barwidth;
-    if ( this.taskName != null ) {
+    if ( ! isDone() ) {
+
+      Color white = display.getSystemColor( SWT.COLOR_WHITE );
+      
+      int progress = getProgressPercent();
+      
+      int barwidth = fullProgress.getBounds().width;
+      int barheight = fullProgress.getBounds().height;
+      int bary = event.y + ( event.height - barheight ) / 2;
+      int barp = barwidth * progress / 100;
+      
+      event.gc.drawImage( emptyProgress, barp, 0, barwidth-barp, barheight, event.x+barp+2, bary, barwidth-barp, barheight );
+      event.gc.drawImage( fullProgress, 0, 0, barp, barheight, event.x+2, bary, barp, barheight );
+      
+      String progressString = String.valueOf( progress )+"%"; //$NON-NLS-1$ //$NON-NLS-2$
+      Point textExtend = event.gc.textExtent( progressString );
+      int progressX = event.x + 2 + ( barwidth - textExtend.x ) / 2;
+      event.gc.setForeground( white );
+      event.gc.drawText( progressString, progressX+1, event.y + 2, true );
       event.gc.setForeground( black );
-      event.gc.drawText( this.taskName, textX, event.y + 1, true );
+      event.gc.drawText( progressString, progressX, event.y + 1, true );
+      
+      int textX = event.x + 6 + barwidth;
+      if ( this.taskName != null ) {
+        event.gc.setForeground( black );
+        event.gc.drawText( this.taskName, textX, event.y + 1, true );
+      }
+      
+    } else {
+      
+      int imgwidth = emptyFolder.getBounds().width;
+      int imgheight = emptyFolder.getBounds().height;
+      int imgy = event.y + ( event.height - imgheight ) / 2;
+      
+      event.gc.drawImage( emptyFolder, event.x + 2, imgy );
+      String emptyString = "Folder is empty";
+      int textX = event.x + 6 + imgwidth;
+      
+      event.gc.setForeground( black );
+      event.gc.drawText( emptyString, textX, event.y + 1, true );
+      
     }
     
   }
@@ -296,7 +338,7 @@ public class NewProgressTreeNode
   /**
    * Update the tree in order to repaint this node.
    */
-  private void update() {
+  protected void update() {
     Tree tree = getViewer().getTree();
     if ( !tree.isDisposed() ) {
       Display display = tree.getDisplay();
