@@ -27,6 +27,7 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Shell;
 
 import eu.geclipse.core.model.GridModelException;
+import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.ui.dialogs.ProblemDialog;
@@ -123,7 +124,7 @@ public class GridModelContentProvider
    * be started immediately by this method.
    * 
    * @param container The container from which to fetch the children.
-   * @return An array containing either the list of childen or a
+   * @return An array containing either the list of children or a
    * {@link ProgressRunner} object.
    */
   protected Object[] getChildren( final IGridContainer container ) {
@@ -185,10 +186,10 @@ public class GridModelContentProvider
    */
   public void treeCollapsed( final TreeExpansionEvent event ) {
     Object element = event.getElement();
-    if ( element instanceof IGridContainer ) {
+    if ( ( element instanceof IGridContainer ) && ( ( IGridContainer ) element ).isLazy() ) {
       IGridContainer container = ( IGridContainer ) element;
-      this.treeViewer.setChildCount( element, 0 );
-      this.treeViewer.setChildCount( element, 1 );
+      this.treeViewer.setChildCount( container, 0 );
+      this.treeViewer.setChildCount( container, 1 );
       container.setDirty();
     }
   }
@@ -199,10 +200,8 @@ public class GridModelContentProvider
   public void treeExpanded( final TreeExpansionEvent event ) {
     /*Object element = event.getElement();
     if ( element instanceof IGridContainer ) {
-      synchronized ( element ) {
-        if ( ( ( IGridContainer ) element ).isDirty() ) {
-          this.treeViewer.refresh( element, false );
-        }
+      IGridContainer container = ( IGridContainer ) element;
+      if ( container.isLazy() && container.isDirty() ) {
       }
     }*/
   }
