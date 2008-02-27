@@ -83,6 +83,7 @@ public abstract class AbstractGridContainer
       try {
         this.container.deleteAll();
         status = this.container.fetchChildren( mon );
+        this.container.setDirty( ! status.isOK() );
       } catch ( GridModelException gmExc ) {
         status = new Status( IStatus.ERROR, Activator.PLUGIN_ID, "Fetch Failed", gmExc );
       } finally {
@@ -186,7 +187,6 @@ public abstract class AbstractGridContainer
       throws GridModelException {
     if ( isLazy() && isDirty() ) {
       IStatus status = startFetch( monitor );
-      setDirty( ! status.isOK() );
     }
     return this.children.toArray( new IGridElement[ this.children.size() ] );
   }
