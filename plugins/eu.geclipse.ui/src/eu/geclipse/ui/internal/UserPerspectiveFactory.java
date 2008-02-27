@@ -44,21 +44,21 @@ public class UserPerspectiveFactory
     topLeftFolder.addView( eu.geclipse.ui.internal.Activator.ID_GPROJECT_VIEW );
     topLeftFolder.addPlaceholder( IPageLayout.ID_RES_NAV );
     
-    IFolderLayout bottomLeftFolder
+    IPlaceholderFolderLayout bottomLeftFolder
       = layout.createFolder( "bottomleft", IPageLayout.BOTTOM, 0.5f, eu.geclipse.ui.internal.Activator.ID_GPROJECT_VIEW ); //$NON-NLS-1$
-    bottomLeftFolder.addView( eu.geclipse.ui.internal.Activator.ID_GLUE_INFO_VIEW );
+    bottomLeftFolder.addPlaceholder( eu.geclipse.ui.internal.Activator.ID_GLUE_INFO_VIEW );
     
-    IFolderLayout leftBottomFolder
+    IFolderLayout bottomFolder
       = layout.createFolder( "leftbottom", IPageLayout.BOTTOM, 0.70f, editorArea ); //$NON-NLS-1$
-    leftBottomFolder.addView( eu.geclipse.ui.internal.Activator.ID_CONNECTION_VIEW );
-    leftBottomFolder.addView( eu.geclipse.ui.internal.Activator.ID_JOBS_VIEW );
-    leftBottomFolder.addView( eu.geclipse.ui.internal.Activator.ID_AUTH_VIEW );
-    leftBottomFolder.addView( IPageLayout.ID_PROP_SHEET);
-    leftBottomFolder.addPlaceholder( eu.geclipse.ui.internal.Activator.ID_WEB_VIEW );
-    leftBottomFolder.addPlaceholder( IPageLayout.ID_PROBLEM_VIEW );
-    leftBottomFolder.addPlaceholder( NewSearchUI.SEARCH_VIEW_ID );
-    leftBottomFolder.addPlaceholder( IPageLayout.ID_BOOKMARKS );
-    leftBottomFolder.addPlaceholder( IProgressConstants.PROGRESS_VIEW_ID );
+    bottomFolder.addView( eu.geclipse.ui.internal.Activator.ID_CONNECTION_VIEW );
+    bottomFolder.addView( eu.geclipse.ui.internal.Activator.ID_JOBS_VIEW );
+    bottomFolder.addView( eu.geclipse.ui.internal.Activator.ID_AUTH_VIEW );
+    bottomFolder.addView( IPageLayout.ID_PROP_SHEET);
+    bottomFolder.addPlaceholder( eu.geclipse.ui.internal.Activator.ID_WEB_VIEW );
+    bottomFolder.addPlaceholder( IPageLayout.ID_PROBLEM_VIEW );
+    bottomFolder.addPlaceholder( NewSearchUI.SEARCH_VIEW_ID );
+    bottomFolder.addPlaceholder( IPageLayout.ID_BOOKMARKS );
+    bottomFolder.addPlaceholder( IProgressConstants.PROGRESS_VIEW_ID );
 
     
     IPlaceholderFolderLayout middleFolder = layout.createPlaceholderFolder( "middle", IPageLayout.BOTTOM, 0.5f, editorArea ); //$NON-NLS-1$
@@ -80,7 +80,7 @@ public class UserPerspectiveFactory
     layout.addNewWizardShortcut( eu.geclipse.ui.internal.Activator.ID_PROJECT_WIZARD );
     layout.addNewWizardShortcut( eu.geclipse.ui.internal.Activator.ID_CONNECTION_WIZARD );
     layout.addNewWizardShortcut( eu.geclipse.ui.internal.Activator.ID_WORKFLOW_WIZARD );
-//    layout.addNewWizardShortcut( "org.eclipse.ui.wizards.new.file" );//$NON-NLS-1$
+    layout.addNewWizardShortcut( "org.eclipse.ui.wizards.new.file" );//$NON-NLS-1$
 //    layout.addNewWizardShortcut( "org.eclipse.ui.editors.wizards.UntitledTextFileWizard" );//$NON-NLS-1$
     
     layout.addPerspectiveShortcut( Activator.ID_OPERATOR_PERSPECTIVE );
