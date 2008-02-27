@@ -67,10 +67,10 @@ public class GridJobView extends ElementManagerViewPart
   private static String XML_MEMENTO_COLUMN_WIDTH = "ColumnWidth%d";  //$NON-NLS-1$
   private static String XML_MEMENTO_COLUMN_SORTED = "SortedBy"; //$NON-NLS-1$
   private static String XML_MEMENTO_COLUMN_SORTED_DIRECTON = "SortedDirection";  //$NON-NLS-1$
-  private static String PREFERENCE_NAME_FILTERS = "GridJobViewFilters"; //$NON-NLS-1$  
+  private static String PREFERENCE_NAME_FILTERS = "GridJobViewFilters"; //$NON-NLS-1$
+  private static String PREFERENCE_NAME_COLUMNS = "GridJobViewColumns"; //$NON-NLS-1$
   JobViewActions jobActions;
   private GridFilterConfigurationsManager filterConfigurationsManager;  
-  private IMemento stateMemento;
 
   @Override
   public void dispose() {
@@ -172,8 +172,7 @@ public class GridJobView extends ElementManagerViewPart
   public void init( final IViewSite site, final IMemento mem )
     throws PartInitException
   {
-    super.init( site, mem );
-    this.stateMemento = mem;
+    super.init( site, mem );    
     GridModel.getJobManager().addJobStatusListener( this );    
     
     IPreferenceStore preferenceStore = new ScopedPreferenceStore( new InstanceScope(),
@@ -251,7 +250,7 @@ public class GridJobView extends ElementManagerViewPart
     Preferences pluginPreferences = Activator.getDefault()
       .getPluginPreferences();
     readFilters( pluginPreferences );
-    readColumns( this.stateMemento );
+    readColumns( createMemento( pluginPreferences.getString( PREFERENCE_NAME_COLUMNS ) ) );
   }
 
   private void readFilters( final Preferences preferences ) {
@@ -293,31 +292,34 @@ public class GridJobView extends ElementManagerViewPart
   }
   
   private void readColumns( final IMemento parent ) {
-    IMemento memento = parent.getChild( XML_MEMENTO_COLUMNS );    
     int sortedDirection = SWT.DOWN;
     TreeViewer vwr = ( TreeViewer )getViewer();
     Tree tree = vwr.getTree();   
     TreeColumn sortedColumn = tree.getColumn( 5 );
     
-    if( memento != null ) {
-      int colNr = 0;      
-      for( TreeColumn column : tree.getColumns() ) {
-        Integer width = memento.getInteger( String.format( XML_MEMENTO_COLUMN_WIDTH, Integer.valueOf( colNr ) ) );
-        
-        if( width != null ) {
-          column.setWidth( width.intValue() );
+    if( parent != null ) {
+      IMemento memento = parent.getChild( XML_MEMENTO_COLUMNS );
+      
+      if( memento != null ) {
+        int colNr = 0;      
+        for( TreeColumn column : tree.getColumns() ) {
+          Integer width = memento.getInteger( String.format( XML_MEMENTO_COLUMN_WIDTH, Integer.valueOf( colNr ) ) );
+          
+          if( width != null ) {
+            column.setWidth( width.intValue() );
+          }
+          colNr++;
         }
-        colNr++;
-      }
-      
-      Integer sortedColumnInt = memento.getInteger( XML_MEMENTO_COLUMN_SORTED );
-      Integer sortDirectionInt = memento.getInteger( XML_MEMENTO_COLUMN_SORTED_DIRECTON );
-      
-      if( sortedColumnInt != null
-          && sortDirectionInt != null
-          && sortedColumnInt.intValue() < tree.getColumnCount() ) {
-        sortedColumn = tree.getColumn( sortedColumnInt.intValue() );
-        sortedDirection = sortDirectionInt.intValue();
+        
+        Integer sortedColumnInt = memento.getInteger( XML_MEMENTO_COLUMN_SORTED );
+        Integer sortDirectionInt = memento.getInteger( XML_MEMENTO_COLUMN_SORTED_DIRECTON );
+        
+        if( sortedColumnInt != null
+            && sortDirectionInt != null
+            && sortedColumnInt.intValue() < tree.getColumnCount() ) {
+          sortedColumn = tree.getColumn( sortedColumnInt.intValue() );
+          sortedDirection = sortDirectionInt.intValue();
+        }
       }
     }
 
@@ -330,8 +332,13 @@ public class GridJobView extends ElementManagerViewPart
    */
   @Override
   public void saveState( final IMemento mem ) {
-    saveColumns( mem );
-    super.saveState( this.stateMemento );
+    // eclipse memento is not stored, when view is closed during closing
+    // eclipse, so we are using our own memento
+    XMLMemento memento = XMLMemento.createWriteRoot( XML_MEMENTO_COLUMNS );
+    saveColumns( memento );    
+    Activator.getDefault().getPluginPreferences().setValue( PREFERENCE_NAME_COLUMNS, getMementoString( memento ) );
+    
+    super.saveState( mem );
   }
   
   
