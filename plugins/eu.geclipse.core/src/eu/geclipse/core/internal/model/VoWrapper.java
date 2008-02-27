@@ -18,6 +18,7 @@ package eu.geclipse.core.internal.model;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.GridModelException;
@@ -61,8 +62,8 @@ public class VoWrapper
             this,
             Messages.getString( "VoWrapper.computing" ), //$NON-NLS-1$
             new IQueryInputProvider() {
-              public IGridElement[] getInput() throws GridModelException {
-                return getComputing();
+              public IGridElement[] getInput( final IProgressMonitor monitor ) throws GridModelException {
+                return getComputing( monitor );
               }
             } );
       addElement( computingContainer );
@@ -72,8 +73,9 @@ public class VoWrapper
           this,
           Messages.getString( "VoWrapper.storage" ), //$NON-NLS-1$
           new IQueryInputProvider() {
-            public IGridElement[] getInput() throws GridModelException {
-              return getStorage();
+            public IGridElement[] getInput( final IProgressMonitor monitor )
+                throws GridModelException {
+              return getStorage( monitor );
             }
           } );
       addElement( storageContainer );
@@ -83,8 +85,8 @@ public class VoWrapper
           this,
           Messages.getString( "VoWrapper.services" ), //$NON-NLS-1$
           new IQueryInputProvider() {
-            public IGridElement[] getInput() throws GridModelException {
-              return getServices();
+            public IGridElement[] getInput( final IProgressMonitor monitor ) throws GridModelException {
+              return getServices( monitor );
             }
           } );
       serviceContainer.setQueryAsChildren( false );
@@ -135,9 +137,9 @@ public class VoWrapper
     return this.vo.getTypeName();
   }
 
-  public IGridComputing[] getComputing()
+  public IGridComputing[] getComputing( final IProgressMonitor monitor )
       throws GridModelException {
-    IGridComputing[] computing = this.vo.getComputing();
+    IGridComputing[] computing = this.vo.getComputing( monitor );
     if ( computing != null ) {
       for ( int i = 0 ; i < computing.length ; i++ ) {
         computing[ i ] = new ComputingWrapper( this, computing[ i ] );
@@ -176,9 +178,9 @@ public class VoWrapper
     return null;
   }
   
-  public IGridService[] getServices()
+  public IGridService[] getServices( final IProgressMonitor monitor )
       throws GridModelException {
-    IGridService[] services = this.vo.getServices();
+    IGridService[] services = this.vo.getServices( monitor );
     if ( services != null ) {
       for ( int i = 0 ; i < services.length ; i++ ) {
         services[ i ] = new ServiceWrapper( this, services[ i ] );
@@ -187,9 +189,9 @@ public class VoWrapper
     return services;
   }
   
-  public IGridStorage[] getStorage()
+  public IGridStorage[] getStorage( final IProgressMonitor monitor )
       throws GridModelException {
-    IGridStorage[] storage = this.vo.getStorage();
+    IGridStorage[] storage = this.vo.getStorage( monitor );
     if ( storage != null ) {
       for ( int i = 0 ; i < storage.length ; i++ ) {
         storage[ i ] = new StorageWrapper( this, storage[ i ] );
@@ -198,9 +200,9 @@ public class VoWrapper
     return storage;
   }
   
-  public IGridJobSubmissionService[] getJobSubmissionServices()
+  public IGridJobSubmissionService[] getJobSubmissionServices( final IProgressMonitor monitor )
       throws GridModelException {
-    return this.vo.getJobSubmissionServices();
+    return this.vo.getJobSubmissionServices( monitor );
   }
   
   public IGridElement getWrappedElement() {

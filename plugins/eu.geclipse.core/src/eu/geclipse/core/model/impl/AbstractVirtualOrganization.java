@@ -25,6 +25,7 @@ import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
 
 import eu.geclipse.core.ICoreProblems;
@@ -75,11 +76,11 @@ public abstract class AbstractVirtualOrganization
     }
   }
   
-  public IGridComputing[] getComputing() throws GridModelException {
+  public IGridComputing[] getComputing( final IProgressMonitor monitor ) throws GridModelException {
     IGridComputing[] computing = null;
     IGridInfoService infoService = getInfoService();
     if ( infoService != null ) {
-      computing = infoService.fetchComputing( this, this, null );
+      computing = infoService.fetchComputing( this, this, monitor );
     }
     return computing;
   }
@@ -141,12 +142,12 @@ public abstract class AbstractVirtualOrganization
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IVirtualOrganization#getServices()
    */
-  public IGridService[] getServices()
+  public IGridService[] getServices( final IProgressMonitor monitor )
       throws GridModelException {
     IGridService[] result = null;
     IGridInfoService infoService = getInfoService();
     if ( infoService != null ) {
-      IGridService[] services = infoService.fetchServices( this, this, null );
+      IGridService[] services = infoService.fetchServices( this, this, monitor );
       if ( ( services != null ) && ( services.length > 0 ) ) {
         result = new IGridService[ services.length + 1 ];
         System.arraycopy( services, 0, result, 0, services.length );
@@ -159,19 +160,19 @@ public abstract class AbstractVirtualOrganization
     return result;
   }
   
-  public IGridStorage[] getStorage() throws GridModelException {
+  public IGridStorage[] getStorage( final IProgressMonitor monitor ) throws GridModelException {
     IGridStorage[] storage = null;
     IGridInfoService infoService = getInfoService();
     if ( infoService != null ) {
-      storage = infoService.fetchStorage( this, this, null );
+      storage = infoService.fetchStorage( this, this, monitor );
     }
     return storage;
   }
   
-  public IGridJobSubmissionService[] getJobSubmissionServices() throws GridModelException {
+  public IGridJobSubmissionService[] getJobSubmissionServices( final IProgressMonitor monitor ) throws GridModelException {
     List< IGridJobSubmissionService > jsServices
       = new ArrayList< IGridJobSubmissionService >();
-    IGridService[] services = getServices();
+    IGridService[] services = getServices( monitor );
     if (services == null){
       services = new IGridService[0];
     }

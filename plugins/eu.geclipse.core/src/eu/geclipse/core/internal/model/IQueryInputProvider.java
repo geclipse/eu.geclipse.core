@@ -15,11 +15,13 @@
 
 package eu.geclipse.core.internal.model;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
 
 public interface IQueryInputProvider {
 
-  public IGridElement[] getInput() throws GridModelException;
+  public IGridElement[] getInput( final IProgressMonitor monitor ) throws GridModelException;
   
 }

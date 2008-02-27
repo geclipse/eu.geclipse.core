@@ -85,7 +85,7 @@ public class QueryContainer
 
     if ( this.queryAsChildren ) {
     
-      IGridElement[] query = query();
+      IGridElement[] query = query( monitor );
   
       // Add the children to the container
       if ( ( query != null ) && ( query.length > 0 ) ) {
@@ -105,18 +105,20 @@ public class QueryContainer
 
   }
 
-  protected IGridElement[] query() throws GridModelException {
-    IGridElement[] input = getInput();
+  protected IGridElement[] query( final IProgressMonitor monitor )
+      throws GridModelException {
+    IGridElement[] input = getInput( monitor );
     for ( IQueryFilter filter : this.filters ) {
       input = filter.filter( input );
     }
     return input;
   }
 
-  public IGridElement[] getInput() throws GridModelException {
+  public IGridElement[] getInput( final IProgressMonitor monitor )
+      throws GridModelException {
     return this.inputProvider instanceof QueryContainer
-    ? ( ( QueryContainer ) this.inputProvider ).query()
-        : this.inputProvider.getInput();
+    ? ( ( QueryContainer ) this.inputProvider ).query( monitor )
+        : this.inputProvider.getInput( monitor );
   }
   
 }

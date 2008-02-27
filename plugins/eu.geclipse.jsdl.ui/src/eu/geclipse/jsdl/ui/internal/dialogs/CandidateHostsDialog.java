@@ -165,7 +165,7 @@ public class CandidateHostsDialog extends Dialog {
     try {
       
       Collection <String> computingElements =  new ArrayList<String>();
-      IGridComputing[] gridComputings =  this.jobDescription.getProject().getVO().getComputing() ;
+      IGridComputing[] gridComputings =  this.jobDescription.getProject().getVO().getComputing( null ) ;
       String hostnameOnly;
           
       for (int i=0; i < gridComputings.length; i++){        

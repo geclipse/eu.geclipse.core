@@ -15,6 +15,8 @@
 
 package eu.geclipse.core.model;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+
 /**
  * This is the base interface that all implementations of
  * virtual organizations have to implement. It is basically
@@ -26,7 +28,7 @@ package eu.geclipse.core.model;
 public interface IVirtualOrganization
     extends IGridContainer, IStorableElement {
   
-  public IGridComputing[] getComputing() throws GridModelException;
+  public IGridComputing[] getComputing( final IProgressMonitor monitor ) throws GridModelException;
   
   /**
    * Get the info service of this VO.
@@ -46,9 +48,9 @@ public interface IVirtualOrganization
    * @throws GridModelException If an error occurs while the services
    * are fetched.
    */
-  public IGridService[] getServices() throws GridModelException;
+  public IGridService[] getServices( final IProgressMonitor monitor ) throws GridModelException;
   
-  public IGridStorage[] getStorage() throws GridModelException;
+  public IGridStorage[] getStorage( final IProgressMonitor monitor ) throws GridModelException;
   
   /**
    * Get a list of all job submission services that are available for
@@ -58,7 +60,7 @@ public interface IVirtualOrganization
    * @throws GridModelException If an error occurs while retrieving
    * the services.
    */
-  public IGridJobSubmissionService[] getJobSubmissionServices() throws GridModelException;
+  public IGridJobSubmissionService[] getJobSubmissionServices( final IProgressMonitor monitor ) throws GridModelException;
   
   /**
    * Get a string that denotes the type of this VO. This string
