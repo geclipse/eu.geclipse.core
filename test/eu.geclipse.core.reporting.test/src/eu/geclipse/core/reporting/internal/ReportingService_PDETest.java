@@ -24,7 +24,6 @@ import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.ICoreSolutions;
 import eu.geclipse.core.reporting.IProblem;
 import eu.geclipse.core.reporting.ISolution;
-import eu.geclipse.voms.IVomsProblems;
 
 
 /**tests the methods in class {@link ReportingService}
@@ -127,32 +126,6 @@ public class ReportingService_PDETest {
     Assert.assertNotNull( service.getProblem( ICoreProblems.TAR_UNSUPPORTED_ENTRY_TYPE, 
                                               null, null, null ) );
     Assert.assertNotNull( service.getProblem( ICoreProblems.TAR_WRONG_HEADER_SIZE, 
-                                              null, null, null ) );
-    Assert.assertNotNull( service.getProblem( IVomsProblems.AC_ENCODING_FAILED, 
-                                              null, null, null ) );
-    Assert.assertNotNull( service.getProblem( IVomsProblems.BAD_RESPONSE, 
-                                              null, null, null ) );
-    Assert.assertNotNull( service.getProblem( IVomsProblems.CIC_QUERY_FAILED, 
-                                              null, null, null ) );
-    Assert.assertNotNull( service.getProblem( IVomsProblems.FQAN_ELEMENT_SYNTAX_ERROR, 
-                                              null, null, null ) );
-    Assert.assertNotNull( service.getProblem( IVomsProblems.REQUEST_BUILD_FAILED, 
-                                              null, null, null ) );
-    Assert.assertNotNull( service.getProblem( IVomsProblems.REQUEST_WRITE_FAILED, 
-                                              null, null, null ) );
-    Assert.assertNotNull( service.getProblem( IVomsProblems.RESPONSE_READ_FAILED, 
-                                              null, null, null ) );
-    Assert.assertNotNull( service.getProblem( IVomsProblems.VO_BAD_TYPE, 
-                                              null, null, null ) );
-    Assert.assertNotNull( service.getProblem( IVomsProblems.VO_NOT_DEFINED, 
-                                              null, null, null ) );
-    Assert.assertNotNull( service.getProblem( IVomsProblems.VOMS_ERRORS, 
-                                              null, null, null ) );
-    Assert.assertNotNull( service.getProblem( IVomsProblems.VOMS_SERVER_CONNECT_FAILED, 
-                                              null, null, null ) );
-    Assert.assertNotNull( service.getProblem( IVomsProblems.VOMS_SERVER_QUERY_FAILED, 
-                                              null, null, null ) );
-    Assert.assertNotNull( service.getProblem( IVomsProblems.VOMS_SERVER_REQUEST_FAILED, 
                                               null, null, null ) );
   }
 
