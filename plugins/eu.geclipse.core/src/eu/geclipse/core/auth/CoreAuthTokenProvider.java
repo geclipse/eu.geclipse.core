@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006, 2007, 2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,6 +11,7 @@
  *
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
+ *    Jie Tao -- extensions
  *****************************************************************************/
 
 package eu.geclipse.core.auth;
@@ -36,11 +37,16 @@ public class CoreAuthTokenProvider extends AbstractAuthTokenProvider {
    */
   public IAuthenticationToken requestToken( final AuthTokenRequest request ) {
     
+    IAuthenticationToken token = null;
+    if (request == null)
+      token = checkAnyToken( );
+    else {
     IAuthenticationTokenDescription description = request.getDescription();    
-    IAuthenticationToken token = checkDefaultToken( description );
+    token = checkDefaultToken( description );
     
     if ( token == null ) {
       token = checkAnyToken( description );
+    }
     }
     
     if ( token != null ) {
@@ -74,6 +80,21 @@ public class CoreAuthTokenProvider extends AbstractAuthTokenProvider {
     
     return result;
     
+  }
+  
+  private IAuthenticationToken checkAnyToken( ) {
+    
+    IAuthenticationToken result = null;
+    
+    AuthenticationTokenManager manager = AuthenticationTokenManager.getManager();
+    List< IAuthenticationToken > tokens = manager.getTokens();
+    
+    for ( IAuthenticationToken token : tokens ) {
+        result = token;
+        break;
+      }
+    
+    return result;  
   }
   
   private IAuthenticationToken checkAnyToken( final IAuthenticationTokenDescription description ) {
