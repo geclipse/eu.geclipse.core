@@ -14,12 +14,18 @@
  *****************************************************************************/
 package eu.geclipse.info.model;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 
+import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.ui.IWorkbench;
 
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
@@ -48,6 +54,10 @@ public class FetchJob extends Job {
 
   @Override
   protected IStatus run( final IProgressMonitor monitor ) {
+    
+    //TODO tnikos: remove the measurements
+    long start = System.currentTimeMillis();
+    
     GlueIndex.drop(); // Clear the glue index.
     
     Status status = new Status( IStatus.ERROR,
@@ -94,6 +104,17 @@ public class FetchJob extends Job {
       {
         infoService.getStore().notifyListeners( null );
       }
+    }
+    
+    // Get the path where to write the file and write the file
+    long elapsed = System.currentTimeMillis() - start;
+    String myPath = Platform.getLocation().toString();
+    try {
+      BufferedWriter out = new BufferedWriter(new FileWriter(myPath + "/debug_fetchTotal.txt", true));
+      out.write("Elapsed time to fetch the Services from bdii " + elapsed + " ms\n");
+      out.close();
+    } catch( IOException e ) {
+      // Ignore Exception
     }
     
     monitor.done();
