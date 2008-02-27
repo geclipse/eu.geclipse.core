@@ -70,13 +70,11 @@ public class NewProgressTreeNode
      * @see java.lang.Runnable#run()
      */
     public void run() {
-      System.out.println( this.node.isDone() );
       String progress = this.node.toString();
       if ( ( progress != null ) && !progress.equals( this.lastProgress ) ) {
         this.lastProgress = progress;
         this.node.getViewer().update( this.node, null );
       } else if ( this.node.isDone() && ! this.wasAlreadyDone ) {
-        System.out.println( "go" );
         this.wasAlreadyDone = true;
         this.node.getViewer().getTree().redraw();
       }
