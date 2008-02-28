@@ -37,12 +37,27 @@
   	<mkdir dir="${dest}" />
   	
     <record name="${basedir}/platformconvert.txt" action="start"/>
-    <pde.convertSchemaToHTML manifest="../${repositoryStructure}eu.geclipse.core/plugin.xml" destination="${dest}" />
-    <pde.convertSchemaToHTML manifest="../${repositoryStructure}eu.geclipse.core.filesystem/plugin.xml" destination="${dest}" />
-    <pde.convertSchemaToHTML manifest="../${repositoryStructure}eu.geclipse.core.jobs/plugin.xml" destination="${dest}" />
-    <pde.convertSchemaToHTML manifest="../${repositoryStructure}eu.geclipse.gvid/plugin.xml" destination="${dest}" />
-    <pde.convertSchemaToHTML manifest="../${repositoryStructure}eu.geclipse.info/plugin.xml" destination="${dest}" />
-    <pde.convertSchemaToHTML manifest="../${repositoryStructure}eu.geclipse.ui/plugin.xml" destination="${dest}" />
+  	<pde.convertSchemaToHTML manifest="../${repositoryStructure}eu.geclipse.batch.model/plugin.xml" destination="${dest}" />
+  	<pde.convertSchemaToHTML manifest="../${repositoryStructure}eu.geclipse.batch/plugin.xml" destination="${dest}" />
+  	<pde.convertSchemaToHTML manifest="../${repositoryStructure}eu.geclipse.batch.ui/plugin.xml" destination="${dest}" />
+  	<pde.convertSchemaToHTML manifest="../${repositoryStructure}eu.geclipse.core.filesystem/plugin.xml" destination="${dest}" />
+  	<pde.convertSchemaToHTML manifest="../${repositoryStructure}eu.geclipse.core.jobs/plugin.xml" destination="${dest}" />
+  	<pde.convertSchemaToHTML manifest="../${repositoryStructure}eu.geclipse.core/plugin.xml" destination="${dest}" />
+  	<pde.convertSchemaToHTML manifest="../${repositoryStructure}eu.geclipse.core.reporting/plugin.xml" destination="${dest}" />
+  	<pde.convertSchemaToHTML manifest="../${repositoryStructure}eu.geclipse.glite.editor/plugin.xml" destination="${dest}" />
+  	<pde.convertSchemaToHTML manifest="../${repositoryStructure}eu.geclipse.gvid/plugin.xml" destination="${dest}" />
+  	<pde.convertSchemaToHTML manifest="../${repositoryStructure}eu.geclipse.gvid.uncompressed/plugin.xml" destination="${dest}" />
+  	<pde.convertSchemaToHTML manifest="../${repositoryStructure}eu.geclipse.info/plugin.xml" destination="${dest}" />
+  	<pde.convertSchemaToHTML manifest="../${repositoryStructure}eu.geclipse.jsdl.model/plugin.xml" destination="${dest}" />
+  	<pde.convertSchemaToHTML manifest="../${repositoryStructure}eu.geclipse.jsdl/plugin.xml" destination="${dest}" />
+  	<pde.convertSchemaToHTML manifest="../${repositoryStructure}eu.geclipse.jsdl.ui/plugin.xml" destination="${dest}" />
+  	<pde.convertSchemaToHTML manifest="../${repositoryStructure}eu.geclipse.terminal/plugin.xml" destination="${dest}" />
+  	<pde.convertSchemaToHTML manifest="../${repositoryStructure}eu.geclipse.terminal.ssh/plugin.xml" destination="${dest}" />
+  	<pde.convertSchemaToHTML manifest="../${repositoryStructure}eu.geclipse.ui/plugin.xml" destination="${dest}" />
+  	<pde.convertSchemaToHTML manifest="../${repositoryStructure}eu.geclipse.webview/plugin.xml" destination="${dest}" />
+  	<pde.convertSchemaToHTML manifest="../${repositoryStructure}eu.geclipse.workflow.edit/plugin.xml" destination="${dest}" />
+  	<pde.convertSchemaToHTML manifest="../${repositoryStructure}eu.geclipse.workflow.model/plugin.xml" destination="${dest}" />
+  	<pde.convertSchemaToHTML manifest="../${repositoryStructure}eu.geclipse.workflow.ui/plugin.xml" destination="${dest}" />
     <record name="${basedir}/platformconvert.txt" action="stop"/>
   </target>
 
