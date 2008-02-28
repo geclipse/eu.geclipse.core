@@ -870,69 +870,86 @@ public final class PBSBatchService extends AbstractBatchService {
       this.connection.execCommand( this.pbsPath + cmd );
     }  
   }
-  
+    
   /**
-   * Executes command that will create a new queue with a "default" number of agrument.
+   * Executes command that will create a new queue with a "default" number of argument.
    *
    * @param queueName The name of the new queue.
    * @param priority The priority of the new queue.
    * @param type The type of the new queue.
    * @param enabled The state of the new queue.
-   * @param runMax Maximum running jobs at any given time from the queue.
+   * @param started If the new queue will be started when created.
+   * @param maxRunningJobs Maximum running jobs at any given time from the queue.
    * @param timeCPU Maximum allowed CPU time for any job. 
    * @param timeWall Maximum allowed wall time for any job.
-   * @param queMax Maximum allowed jobs in the queue
+   * @param maxJobsInQueue Maximum allowed jobs in the queue
    * @param assignedResources 
    * @param vos Only allow access to the specified vos, <code>null</code> no restriction is applied.
    * @throws ProblemException If command is not executed successfully
    */
   public synchronized void createQueue( final String queueName, final int priority, final QueueType type, 
-                                           final boolean enabled, final int runMax, final double timeCPU, 
-                                           final double timeWall, final int queMax, final int assignedResources, 
-                                           final List<String> vos ) throws ProblemException {
+                                           final boolean enabled, final boolean started, final int maxRunningJobs,
+                                           final double timeCPU, final double timeWall, final int maxJobsInQueue,
+                                           final int assignedResources, final List<String> vos )
+                                      throws ProblemException {
 
     if ( null != queueName && null != type && -1 != timeCPU && -1 != timeWall ) { 
       
       String adaptedTimeWall, adaptedTimeCPU  = null;
-      int newTimeCPUMins = 0;
-      int newTimeWallMins = 0;
       double newTimeWallHours = (timeWall / 3600);
       double newTimeCPUHours = (timeCPU / 3600);
-      newTimeCPUMins = (int) ((newTimeCPUHours - (int)newTimeCPUHours) *100 ) ;
-      newTimeWallMins = (int) ((newTimeWallHours - (int)newTimeWallHours) *100 ) ;
       
-      adaptedTimeWall = String.format( "%.0f:%02d:00", //$NON-NLS-1$
-                                            new Double(newTimeWallHours),
-                                            new Integer(newTimeWallMins));
-      
-   
-      adaptedTimeCPU = String.format( "%.0f:%02d:00", //$NON-NLS-1$
-                                            new Double(newTimeCPUHours),
-                                            new Integer(newTimeCPUMins)); 
+      adaptedTimeWall = String.format( "%02d:%02d:00", //$NON-NLS-1$
+                                       new Integer( getHoursFromDouble( newTimeWallHours ) ),
+                                       new Integer( getMinutesFromDouble( newTimeWallHours) ) );
+ 
+
+      adaptedTimeCPU = String.format( "%02d:%02d:00", //$NON-NLS-1$
+                                       new Integer( getHoursFromDouble( newTimeCPUHours ) ),
+                                       new Integer( getMinutesFromDouble( newTimeCPUHours ) ) );
       
       
       String cmd = this.pbsPath + "qmgr -c \"create queue "; //$NON-NLS-1$
       String setAttr = " ; qmgr -c \"set queue " + queueName; //$NON-NLS-1$
 
+      
       // Build up the command
       cmd += queueName;
       cmd += " queue_type=" + type.name() + "\""; //$NON-NLS-1$ //$NON-NLS-2$
 
-      if ( !enabled )
-        cmd += setAttr + " enabled=false\""; //$NON-NLS-1$
+      
+      if ( !enabled ){
+        cmd += setAttr + " enabled = False\""; //$NON-NLS-1$
+      }else {
+        cmd += setAttr + " enabled = True\""; //$NON-NLS-1$
+      }
+      
+      if (!started ){
+        cmd += setAttr + " started = False\""; //$NON-NLS-1$
+      }else {
+        cmd += setAttr + " started = True\""; //$NON-NLS-1$
+      }
 
-      cmd += setAttr + " priority=" + priority + "\""; //$NON-NLS-1$ //$NON-NLS-2$
-    
+      if ( -1 != priority ) { 
+        cmd += setAttr + " priority=" + priority + "\""; //$NON-NLS-1$ //$NON-NLS-2$
+      }
+      
       cmd += setAttr + " resources_max.walltime=" + adaptedTimeWall + "\""; //$NON-NLS-1$ //$NON-NLS-2$
     
       cmd += setAttr + " resources_max.cput=" + adaptedTimeCPU + "\""; //$NON-NLS-1$ //$NON-NLS-2$
 
-      cmd += setAttr + " max_running=" + runMax + "\""; //$NON-NLS-1$ //$NON-NLS-2$
+      if ( -1 != maxRunningJobs ){
+        cmd += setAttr + " max_running=" + maxRunningJobs + "\""; //$NON-NLS-1$ //$NON-NLS-2$
+      }
+      
+      if ( -1 != maxJobsInQueue ){
+        cmd += setAttr + " max_queuable=" + maxJobsInQueue + "\""; //$NON-NLS-1$ //$NON-NLS-2$
+      }
 
-      cmd += setAttr + " max_queuable=" + queMax + "\""; //$NON-NLS-1$ //$NON-NLS-2$
-
-      cmd += setAttr + " resources_assigned.nodect=" + assignedResources+"\""; //$NON-NLS-1$ //$NON-NLS-2$
-
+      if ( -1 !=assignedResources ){
+        cmd += setAttr + " resources_assigned.nodect=" + assignedResources+"\""; //$NON-NLS-1$ //$NON-NLS-2$
+      }
+      
       // If access control on vos, add the allowed vos
       if ( null != vos ) {
         cmd += setAttr + " acl_group_enable=true\""; //$NON-NLS-1$
@@ -947,6 +964,7 @@ public final class PBSBatchService extends AbstractBatchService {
     }
   }
   
+ 
   /**
    * Executes command that will change the maximum allowed wall time of a specific queue.
    *
@@ -988,18 +1006,19 @@ public final class PBSBatchService extends AbstractBatchService {
     QueueType type;
     String queueName = null;
     boolean queueStatus = false;
+    boolean queueStarted = false;
     double timeCPU;
     double timeWall;
     int priority = -1;
-    int runningJobs = -1;
-    int jobsInQueue = -1;
+    int maxRunningJobs = -1;
+    int maxJobsInQueue = -1;
     int assignedResources = -1;
     List<String> vos = null;
     
     
     queue = documentRoot.getQueue();
     
-    
+    /* Get Queue Type ( EXECUTION || ROUTE ) */
     if(queue.getQueueType().equals( QueueTypeEnumeration.EXECUTION )){
       type = IQueueInfo.QueueType.execution;
     }
@@ -1007,18 +1026,23 @@ public final class PBSBatchService extends AbstractBatchService {
       type = IQueueInfo.QueueType.route;
     }
     
+    /* Get Queue Name */
     queueName = queue.getQueueName();
     
+    /* Get Queue Status ( ENABLED || DISABLED )*/
     if(queue.getQueueStatus().equals( QueueStatusEnumeration.ENABLED )){
       queueStatus = true;
+    }   
+    
+    /* Get Queue Started ( TRUE || FALSE )*/
+    if( queue.isQueueStarted() == true ){
+      queueStarted = true;
     }
-    else {
-      queueStatus = false;
-    }
+    
     
     timeCPU = queue.getCPUTimeLimit().getUpperBoundedRange().getValue();
         
-      
+    /* Get the list of VOs that are allowed to use the queue */ 
     if ( queue.getAllowedVirtualOrganizations() != null ) {
       vos = queue.getAllowedVirtualOrganizations().getVOName();
     }
@@ -1028,44 +1052,49 @@ public final class PBSBatchService extends AbstractBatchService {
     /* Get QUEUE__TYPE_PRIORITY */
     if ( null != queue.getPriority() ) {
       if (queue.getPriority().getUpperBoundedRange() != null) {
-        priority = queue.getPriority().getUpperBoundedRange().getValue().intValue();
+        priority = queue.getPriority().getUpperBoundedRange().getValue();
       }
       else {
-        priority = queue.getPriority().getLowerBoundedRange().getValue().intValue();
+        priority = queue.getPriority().getLowerBoundedRange().getValue();
       }
     }
     
     /* Get QUEUE__TYPE_RUNNING_JOBS */    
     if ( null != queue.getRunningJobs() ) {
       if (queue.getRunningJobs().getUpperBoundedRange() != null) {
-        runningJobs = queue.getRunningJobs().getUpperBoundedRange().getValue().intValue();
+        maxRunningJobs = queue.getRunningJobs().getUpperBoundedRange().getValue();
       }
       else {
-        runningJobs = queue.getRunningJobs().getLowerBoundedRange().getValue().intValue();
+        maxRunningJobs = queue.getRunningJobs().getLowerBoundedRange().getValue();
       }
     }
     
     /* Get QUEUE__TYPE_JOBS_IN_QUEUE */
     if ( null != queue.getJobsInQueue() ) {
       if (queue.getJobsInQueue().getUpperBoundedRange() != null) {
-        jobsInQueue = queue.getJobsInQueue().getUpperBoundedRange().getValue().intValue();
+        maxJobsInQueue = queue.getJobsInQueue().getUpperBoundedRange().getValue();
       }
       else {
-        jobsInQueue = queue.getJobsInQueue().getLowerBoundedRange().getValue().intValue();
+        maxJobsInQueue = queue.getJobsInQueue().getLowerBoundedRange().getValue();
       }
     }
     
     /* Get QUEUE__TYPE_JOBS_ASSIGNED_RESOURCES */
     if ( null != queue.getAssignedResources() ) {
       if (queue.getAssignedResources().getExact() != null) {
-        jobsInQueue = queue.getJobsInQueue().getUpperBoundedRange().getValue().intValue();
+        maxJobsInQueue = queue.getJobsInQueue().getUpperBoundedRange().getValue();
       }
     }
 
-    createQueue( queueName, type, queueStatus, timeCPU, timeWall, vos );
-    
-        
+//    createQueue( queueName, type, queueStatus, timeCPU, timeWall, vos );
+    createQueue( queueName, priority,
+                 type, queueStatus, queueStarted,
+                 maxRunningJobs, timeCPU,
+                 timeWall, maxJobsInQueue,
+                 assignedResources, vos);
+            
   }
+  
   
   static int getHoursFromDouble( final double value ) {
     
