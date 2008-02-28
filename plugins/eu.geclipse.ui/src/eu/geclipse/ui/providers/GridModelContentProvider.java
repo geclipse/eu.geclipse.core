@@ -188,8 +188,9 @@ public class GridModelContentProvider
     Object element = event.getElement();
     if ( ( element instanceof IGridContainer ) && ( ( IGridContainer ) element ).isLazy() ) {
       IGridContainer container = ( IGridContainer ) element;
-      this.treeViewer.setChildCount( container, 0 );
-      this.treeViewer.setChildCount( container, 1 );
+      //this.treeViewer.setChildCount( container, 0 );
+      //this.treeViewer.setChildCount( container, size );
+      container.dispose();
       container.setDirty();
     }
   }
