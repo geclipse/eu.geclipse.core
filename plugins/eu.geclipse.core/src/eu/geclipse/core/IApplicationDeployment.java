@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006, 2007, 2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,7 +10,9 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributors:
- *    Yifan Zhou
+ *    FZK:
+ *      - Yifan Zhou
+ *      - Jie Tao
  *****************************************************************************/
 
 package eu.geclipse.core;
@@ -20,8 +22,18 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import eu.geclipse.core.model.IGridElement;
 
 
+/** an interface for the extension point ApplicationDeployment
+ * @author tao-j
+ *
+ */
 public interface IApplicationDeployment {
   
+  /** this method is used to deploy the source element to the target
+   * @param deploySource
+   * @param deployTarget
+   * @param deploytag
+   * @param monitor
+   */
   public void deploy( final IGridElement[] deploySource, 
                       final IGridElement[] deployTarget, 
                       final String deploytag, 
