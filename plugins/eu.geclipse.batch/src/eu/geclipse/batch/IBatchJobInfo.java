@@ -97,6 +97,7 @@ public interface IBatchJobInfo {
           str = Messages.getString( "IBatchJobInfo.JobStateS" ); //$NON-NLS-1$
           break;
         default:
+          str = Messages.getString( "IBatchJobInfo.JobStateUnknown" ); //$NON-NLS-1$
           break;
       }
 

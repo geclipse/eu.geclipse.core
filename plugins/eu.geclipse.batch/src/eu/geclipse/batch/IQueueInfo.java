@@ -50,6 +50,7 @@ public interface IQueueInfo {
           str = Messages.getString( "IQueueInfo.QueueStateD" ); //$NON-NLS-1$
           break;
         default:
+          str = Messages.getString( "IQueueInfo.QueueStateUnknown" ); //$NON-NLS-1$
           break;
       }
       return str;
@@ -83,6 +84,7 @@ public interface IQueueInfo {
           str = Messages.getString( "IQueueInfo.QueueStateS" ); //$NON-NLS-1$
           break;
         default:
+          str = Messages.getString( "IQueueInfo.QueueStateUnknown" ); //$NON-NLS-1$
           break;
       }
       return str;

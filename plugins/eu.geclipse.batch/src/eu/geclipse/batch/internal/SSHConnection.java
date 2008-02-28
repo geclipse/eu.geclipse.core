@@ -150,8 +150,8 @@ public class SSHConnection {
     Channel channel = null;
     InputStream stdout = null;
     InputStream stderr = null;
-    String result = new String();
-    String errResult = new String();
+    String result = ""; //$NON-NLS-1$
+    String errResult = ""; //$NON-NLS-1$
     int exitStatus = -1;
     
     BufferedReader stdoutReader = null;

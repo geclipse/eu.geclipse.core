@@ -512,7 +512,7 @@ public final class PBSBatchService extends AbstractBatchService {
    * @param jobId The identifier of the job to be held.
    * @throws ProblemException If command is not executed successfully
    */
-  public void holdJob( final String jobId ) throws ProblemException {
+  public synchronized void holdJob( final String jobId ) throws ProblemException {
     if ( null != jobId ) {
       String cmd = "qhold " + jobId; //$NON-NLS-1$
 
@@ -526,7 +526,7 @@ public final class PBSBatchService extends AbstractBatchService {
    * @param jobIds The identifiers of the jobs to be held.
    * @throws ProblemException If command is not executed successfully
    */
-  public void holdJobs( final String[] jobIds ) throws ProblemException {
+  public synchronized void holdJobs( final String[] jobIds ) throws ProblemException {
     String strJobs = null;
     String cmd = "qhold "; //$NON-NLS-1$
 
@@ -547,7 +547,7 @@ public final class PBSBatchService extends AbstractBatchService {
    * @param jobId The identifier of the job to be released.
    * @throws ProblemException If command is not executed successfully
    */
-  public void releaseJob( final String jobId ) throws ProblemException {
+  public synchronized void releaseJob( final String jobId ) throws ProblemException {
     if ( null != jobId ) {
       String cmd = "qrls " + jobId; //$NON-NLS-1$
 
@@ -561,7 +561,7 @@ public final class PBSBatchService extends AbstractBatchService {
    * @param jobIds The identifiers of the jobs to be released.
    * @throws ProblemException If command is not executed successfully
    */
-  public void releaseJobs( final String[] jobIds ) throws ProblemException {
+  public synchronized void releaseJobs( final String[] jobIds ) throws ProblemException {
     String strJobs = null;
     String cmd = "qrls "; //$NON-NLS-1$
 
@@ -834,13 +834,13 @@ public final class PBSBatchService extends AbstractBatchService {
      
       
       adaptedTimeWall = String.format( "%02d:%02d:00", //$NON-NLS-1$
-                                            new Integer( getHoursFromDouble( newTimeWallHours ) ),
-                                            new Integer( getMinutesFromDouble( newTimeWallHours) ) );
+                                            Integer.valueOf( getHoursFromDouble( newTimeWallHours ) ),
+                                            Integer.valueOf( getMinutesFromDouble( newTimeWallHours) ) );
       
    
       adaptedTimeCPU = String.format( "%02d:%02d:00", //$NON-NLS-1$
-                                            new Integer( getHoursFromDouble( newTimeCPUHours ) ),
-                                            new Integer( getMinutesFromDouble( newTimeCPUHours ) ) ); 
+                                            Integer.valueOf( getHoursFromDouble( newTimeCPUHours ) ),
+                                            Integer.valueOf( getMinutesFromDouble( newTimeCPUHours ) ) ); 
       
       
       String cmd = this.pbsPath + "qmgr -c \"create queue "; //$NON-NLS-1$
@@ -900,13 +900,13 @@ public final class PBSBatchService extends AbstractBatchService {
       double newTimeCPUHours = (timeCPU / 3600);
       
       adaptedTimeWall = String.format( "%02d:%02d:00", //$NON-NLS-1$
-                                       new Integer( getHoursFromDouble( newTimeWallHours ) ),
-                                       new Integer( getMinutesFromDouble( newTimeWallHours) ) );
+                                       Integer.valueOf( getHoursFromDouble( newTimeWallHours ) ),
+                                       Integer.valueOf( getMinutesFromDouble( newTimeWallHours) ) );
  
 
       adaptedTimeCPU = String.format( "%02d:%02d:00", //$NON-NLS-1$
-                                       new Integer( getHoursFromDouble( newTimeCPUHours ) ),
-                                       new Integer( getMinutesFromDouble( newTimeCPUHours ) ) );
+                                       Integer.valueOf( getHoursFromDouble( newTimeCPUHours ) ),
+                                       Integer.valueOf( getMinutesFromDouble( newTimeCPUHours ) ) );
       
       
       String cmd = this.pbsPath + "qmgr -c \"create queue "; //$NON-NLS-1$
@@ -1100,7 +1100,6 @@ public final class PBSBatchService extends AbstractBatchService {
     
     BigDecimal b = new BigDecimal( String.valueOf( value) );
     double c = b.longValue();
-    b = b.subtract(new BigDecimal(c));
       
     return (int) c; 
   }
