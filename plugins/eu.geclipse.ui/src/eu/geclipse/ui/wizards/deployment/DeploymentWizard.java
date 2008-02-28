@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006, 2007, 2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,6 +11,7 @@
  *
  * Contributors:
  *    Yifan Zhou - initial API and implementation
+ *    Jie Tao -- extensions
  *****************************************************************************/
 
 package eu.geclipse.ui.wizards.deployment;
@@ -19,17 +20,25 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.filesystem.IFileStore;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 
 import eu.geclipse.core.IApplicationDeployment;
 import eu.geclipse.core.model.GridModel;
+import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridElementCreator;
+import eu.geclipse.core.model.IGridJobCreator;
 import eu.geclipse.ui.internal.Activator;
 
 /**
@@ -37,6 +46,7 @@ import eu.geclipse.ui.internal.Activator;
  */
 public class DeploymentWizard extends Wizard {
   
+ 
   public static final String EXT_CLASS = "class"; //$NON-NLS-1$
   
   public static final String EXT_NAME = "name"; //$NON-NLS-1$
@@ -74,6 +84,9 @@ public class DeploymentWizard extends Wizard {
    */
   private IGridElement[] referencedProjects;
   
+  /**the wizard for acquring source files and target CEs
+   * @param structuredSelection
+   */
   public DeploymentWizard( final IStructuredSelection structuredSelection ) {
     super();
     this.setForcePreviousAndNextButtons( true );
@@ -106,6 +119,8 @@ public class DeploymentWizard extends Wizard {
         sourceList.add( element );
       }
     }
+    String tarfile = this.sourcePage.getTarFile();
+    
     IGridElement[] source = sourceList.toArray( new IGridElement[ sourceList.size() ] );
     List< Object > targetList = new ArrayList< Object >();
     Object[] ceObjects = this.targetPage.getCETree().getCheckedElements();
@@ -187,10 +202,17 @@ public class DeploymentWizard extends Wizard {
 //    return newFolder;
 //  }
 
+  /**get the referenced project. A project to be deployed 
+   * must be combined with a grid project
+   * @return IGridElement[]
+   */
   public IGridElement[] getReferencedProjects() {
     return this.referencedProjects;
   }
 
+  /** return the grid project
+   * @return IGridElement
+   */
   public IGridElement getGridProject() {
     return this.trueGridProject;
   }

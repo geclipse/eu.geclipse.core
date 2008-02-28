@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006, 2007, 2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,6 +11,7 @@
  *
  * Contributors:
  *    Yifan Zhou - initial API and implementation
+ *    Jie Tao -- extensions
  *****************************************************************************/
 
 package eu.geclipse.ui.wizards.deployment;
@@ -47,7 +48,7 @@ import eu.geclipse.ui.providers.GridModelLabelProvider;
 
 /**
  * @author Yifan Zhou
- *
+ * @author Jie Tao
  */
 public class DeploymentTarget extends WizardPage {
 
@@ -88,11 +89,13 @@ public class DeploymentTarget extends WizardPage {
     ceSelectAll.addSelectionListener( new SelectionAdapter() {
       @Override
       public void widgetSelected( final SelectionEvent event ) {
-        for ( Object ceElement 
+        /*for ( Object ceElement 
             : ( ( DeploymentTargetTreeContentProvider ) getCETree()
                 .getContentProvider() ).getElements( getCERootElement() ) ) {
           getCETree().setSubtreeChecked( ceElement, true );
-        }
+        }*/
+        getCETree().setAllChecked( true );
+        //selectAll();
         updatePageComplete();
       }
     });
@@ -127,6 +130,7 @@ public class DeploymentTarget extends WizardPage {
                 .getContentProvider() ).getElements( getSERootElement() ) ) {
           getSETree().setSubtreeChecked( seElement, true );
         }
+        //selectAll();
         updatePageComplete();
       }
     });
@@ -143,6 +147,11 @@ public class DeploymentTarget extends WizardPage {
     this.setControl( composite );
   }
 
+  protected void selectAll() {
+    this.seTree.setAllChecked( true );
+  }
+  
+  
   @Override
   public void setVisible( final boolean visible )
   {
