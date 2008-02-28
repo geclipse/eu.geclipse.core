@@ -4,6 +4,15 @@
 <toc
   label="Extension Point Reference"
   link_to="toc.xml#geclipse_reference_extpoint">
+
+  <topic
+    label="eu.geclipse.batch.batchService"
+    href="html/extension-points/eu_geclipse_batch_batchService.html">
+  </topic>
+  <topic
+    label="eu.geclipse.batch.batchServiceProvider"
+    href="html/extension-points/eu_geclipse_batch_batchServiceProvider.html">
+  </topic>
   <topic
     label="eu.geclipse.core.applicationDeployment"
     href="html/extension-points/eu_geclipse_core_applicationDeployment.html">
@@ -29,8 +38,8 @@
     href="html/extension-points/eu_geclipse_core_gridJobStatusServiceManager.html">
   </topic>
   <topic
-    label="eu.geclipse.core.problemProvider"
-    href="html/extension-points/eu_geclipse_core_problemProvider.html">
+    label="eu.geclipse.core.gridProjectFolder"
+    href="html/extension-points/eu_geclipse_core_gridProjectFolder.html">
   </topic>
   <topic
     label="eu.geclipse.core.jobs.jobID"
@@ -39,6 +48,18 @@
   <topic
     label="eu.geclipse.core.jobs.jobStatus"
     href="html/extension-points/eu_geclipse_core_jobs_jobStatus.html">
+  </topic>
+  <topic
+    label="eu.geclipse.core.reporting.problemReporting"
+    href="html/extension-points/eu_geclipse_core_reporting_problemReporting.html">
+  </topic>
+  <topic
+    label="eu.geclipse.core.simpleTests"
+    href="html/extension-points/eu_geclipse_core_simpleTests.html">
+  </topic>
+  <topic
+    label="eu.geclipse.core.voLoader"
+    href="html/extension-points/eu_geclipse_core_voLoader.html">
   </topic>
   <topic
     label="eu.geclipse.gvid.codec"
@@ -51,6 +72,22 @@
   <topic
     label="eu.geclipse.gvid.newGVidWizards"
     href="html/extension-points/eu_geclipse_gvid_newGVidWizards.html">
+  </topic>
+  <topic
+    label="eu.geclipse.info.infoService"
+    href="html/extension-points/eu_geclipse_info_infoService.html">
+  </topic>
+  <topic
+    label="eu.geclipse.jsdl.ui.applicationParameters"
+    href="html/extension-points/eu_geclipse_jsdl_ui_applicationParameters.html">
+  </topic>
+  <topic
+    label="eu.geclipse.terminal.dropDownEntry"
+    href="html/extension-points/eu_geclipse_terminal_dropDownEntry.html">
+  </topic>
+  <topic
+    label="eu.geclipse.terminal.newTerminalWizards"
+    href="html/extension-points/eu_geclipse_terminal_newTerminalWizards.html">
   </topic>
   <topic
     label="eu.geclipse.ui.authTokenUI"
@@ -76,5 +113,10 @@
     label="eu.geclipse.ui.propertiesFactory"
     href="html/extension-points/eu_geclipse_ui_propertiesFactory.html">
   </topic>
+  <topic
+    label="eu.geclipse.ui.simpleTestUI"
+    href="html/extension-points/eu_geclipse_ui_simpleTestUI.html">
+  </topic>
+
   <anchor id="geclipse_reference_extpoint_ext" />
 </toc>
