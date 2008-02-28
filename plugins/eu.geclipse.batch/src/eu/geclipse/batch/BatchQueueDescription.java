@@ -186,13 +186,21 @@ public class BatchQueueDescription extends ResourceGridContainer
   /**
    * @param status Set's the Queue Status to be ENABLED or DISABLED.
    */
-  public void isQueueEnabled(final boolean status) {
+  public void enableQueue(final boolean status) {
     if (status){
       this.queueType.setQueueStatus( QueueStatusEnumeration.ENABLED );
     }
     else{
       this.queueType.setQueueStatus( QueueStatusEnumeration.DISABLED );
     }
+  }
+  
+  
+  /**
+   * @param value Start or Stop the Queue.
+   */
+  public void startQueue( final boolean value ){
+    this.queueType.setQueueStarted( value );    
   }
   
   /**
