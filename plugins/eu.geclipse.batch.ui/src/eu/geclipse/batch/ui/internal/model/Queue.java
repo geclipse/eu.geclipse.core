@@ -326,7 +326,7 @@ public final class Queue extends BatchResource {
   /**
    * @return Returns the state.
    */
-  public QueueState getState() {
+  public synchronized QueueState getState() {
     return this.state;
   }
 

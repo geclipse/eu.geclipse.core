@@ -100,7 +100,7 @@ public class ComputingElementFigure extends Figure implements IComputingElementF
    * @param type The batch service type.
    */
   public void setType( final String type ) {
-    this.labType.setText( Messages.getString( "ComputingElementFigure.ServiceType" ) + type.toString() ); //$NON-NLS-1$
+    this.labType.setText( Messages.getString( "ComputingElementFigure.ServiceType" ) + type ); //$NON-NLS-1$
   }
 
   /**

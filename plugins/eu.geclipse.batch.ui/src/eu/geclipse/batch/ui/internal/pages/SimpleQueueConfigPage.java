@@ -92,7 +92,7 @@ public class SimpleQueueConfigPage extends FormPage
   
   private boolean contentRefreshed = false;
   private boolean dirtyFlag = false;
-  private final int WIDGET_HEIGHT = 100;
+  private static final int WIDGET_HEIGHT = 100;
    
   
   

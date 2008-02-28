@@ -123,7 +123,7 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
     */
    public void attachPrioritySpinner( final Spinner spinner ){
      
-     Integer featureID = new Integer (QdlPackage.QUEUE_TYPE__PRIORITY);
+     Integer featureID = Integer.valueOf (QdlPackage.QUEUE_TYPE__PRIORITY);
      this.spinnerWidgetMap.put( featureID,spinner );
      
      spinner.addModifyListener( new ModifyListener(){
@@ -157,7 +157,7 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
    public void attachRunningJobsSpinner( final Spinner spinner,
                                          final Button button ){
      
-     Integer featureID = new Integer (QdlPackage.QUEUE_TYPE__RUNNING_JOBS);
+     Integer featureID = Integer.valueOf (QdlPackage.QUEUE_TYPE__RUNNING_JOBS);
      this.spinnerWidgetMap.put( featureID,spinner );
      this.buttonWidgetMap.put( featureID, button );
      
@@ -191,7 +191,7 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
    public void attachJobsInQueueSpinner( final Spinner spinner,
                                          final Button button){
      
-     Integer featureID = new Integer (QdlPackage.QUEUE_TYPE__JOBS_IN_QUEUE);
+     Integer featureID = Integer.valueOf (QdlPackage.QUEUE_TYPE__JOBS_IN_QUEUE);
      this.spinnerWidgetMap.put( featureID,spinner );
      this.buttonWidgetMap.put( featureID, button );
      
@@ -223,7 +223,7 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
     */
    public void attachAssignedResourcesSpinner( final Spinner spinner ){
      
-     Integer featureID = new Integer (QdlPackage.QUEUE_TYPE__ASSIGNED_RESOURCES);
+     Integer featureID = Integer.valueOf (QdlPackage.QUEUE_TYPE__ASSIGNED_RESOURCES);
      this.spinnerWidgetMap.put( featureID,spinner );
      
      spinner.addModifyListener( new ModifyListener(){
@@ -319,7 +319,7 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
              switch( featureID ) {
                case QdlPackage.QUEUE_TYPE__PRIORITY: {
                  if (this.queue.getCPUTimeLimit() != null ){
-                   spinner = this.spinnerWidgetMap.get( new Integer(QdlPackage.QUEUE_TYPE__PRIORITY) );
+                   spinner = this.spinnerWidgetMap.get( Integer.valueOf(QdlPackage.QUEUE_TYPE__PRIORITY) );
                    
                    integerRangeValueType = this.queue.getPriority();
                    if ( integerRangeValueType.getUpperBoundedRange() != null ) {
@@ -335,8 +335,8 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
                break;
                case QdlPackage.QUEUE_TYPE__RUNNING_JOBS: {
                  if (this.queue.getCPUTimeLimit() != null ){
-                   spinner = this.spinnerWidgetMap.get( new Integer(QdlPackage.QUEUE_TYPE__RUNNING_JOBS) );
-                   button = this.buttonWidgetMap.get( new Integer(QdlPackage.QUEUE_TYPE__RUNNING_JOBS) );
+                   spinner = this.spinnerWidgetMap.get( Integer.valueOf(QdlPackage.QUEUE_TYPE__RUNNING_JOBS) );
+                   button = this.buttonWidgetMap.get( Integer.valueOf(QdlPackage.QUEUE_TYPE__RUNNING_JOBS) );
                    
                    integerRangeValueType = this.queue.getRunningJobs();
                    if ( integerRangeValueType.getUpperBoundedRange() != null ) {
@@ -360,8 +360,8 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
                break;
                case QdlPackage.QUEUE_TYPE__JOBS_IN_QUEUE: {
                  if (this.queue.getCPUTimeLimit() != null ){
-                   spinner = this.spinnerWidgetMap.get( new Integer(QdlPackage.QUEUE_TYPE__JOBS_IN_QUEUE) );
-                   button = this.buttonWidgetMap.get( new Integer(QdlPackage.QUEUE_TYPE__JOBS_IN_QUEUE) );
+                   spinner = this.spinnerWidgetMap.get( Integer.valueOf(QdlPackage.QUEUE_TYPE__JOBS_IN_QUEUE) );
+                   button = this.buttonWidgetMap.get( Integer.valueOf(QdlPackage.QUEUE_TYPE__JOBS_IN_QUEUE) );
                    
                    integerRangeValueType = this.queue.getJobsInQueue();
                    if ( integerRangeValueType.getUpperBoundedRange() != null ) {
@@ -384,7 +384,7 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
                break;
                case QdlPackage.QUEUE_TYPE__ASSIGNED_RESOURCES: {
                  if (this.queue.getCPUTimeLimit() != null ){
-                   spinner = this.spinnerWidgetMap.get( new Integer(QdlPackage.QUEUE_TYPE__ASSIGNED_RESOURCES) );                      
+                   spinner = this.spinnerWidgetMap.get( Integer.valueOf(QdlPackage.QUEUE_TYPE__ASSIGNED_RESOURCES) );                      
                    integerRangeValueType = this.queue.getAssignedResources();                   
                    if ( integerRangeValueType.getUpperBoundedRange() != null ) {
                      integerBoundaryType = integerRangeValueType.getUpperBoundedRange();

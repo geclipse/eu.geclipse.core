@@ -118,22 +118,6 @@ public class QueueAdapter extends QdlAdaptersFactory {
    
    
    
-   /**
-    * @return TRUE if the adapter is empty. If it is empty, it means that there 
-    * is no Queue element in the QDL document. 
-    */
-   public boolean isEmpty() {
-      boolean status = false;
-  
-      if ( !this.queue.equals( null ) ) {       
-        status = true;
-      }
-      
-      return status;
-      
-    }// End boolean isEmpty()
-   
-   
    protected EObject checkProxy(final EObject refEObject) {
      
      EObject eObject = refEObject;
@@ -154,7 +138,7 @@ public class QueueAdapter extends QdlAdaptersFactory {
     */
    public void attachQueueName(final Text text){
      
-     Integer featureID = new Integer (QdlPackage.QUEUE_TYPE__QUEUE_NAME);
+     Integer featureID = Integer.valueOf (QdlPackage.QUEUE_TYPE__QUEUE_NAME);
      this.textWidgetMap.put( featureID, text );
      
        text.addModifyListener( new ModifyListener() {
@@ -175,7 +159,7 @@ public class QueueAdapter extends QdlAdaptersFactory {
     */
    public void attachQueueDescription(final Text text){
      
-     Integer featureID = new Integer (QdlPackage.QUEUE_TYPE__DESCRIPTION);
+     Integer featureID = Integer.valueOf (QdlPackage.QUEUE_TYPE__DESCRIPTION);
      this.textWidgetMap.put( featureID, text );
      
        text.addModifyListener( new ModifyListener() {
@@ -196,7 +180,7 @@ public class QueueAdapter extends QdlAdaptersFactory {
     */
    public void attachQueueType(final Combo combo){
      
-     Integer featureID = new Integer (QdlPackage.QUEUE_TYPE__QUEUE_TYPE);
+     Integer featureID = Integer.valueOf (QdlPackage.QUEUE_TYPE__QUEUE_TYPE);
      this.comboWidgetMap.put( featureID, combo );
      
      /* Populate the Combo Box with the QDL Status Literals. */    
@@ -230,7 +214,7 @@ public class QueueAdapter extends QdlAdaptersFactory {
     */
    public void attachQueueStatus(final Combo combo){
      
-     Integer featureID = new Integer (QdlPackage.QUEUE_TYPE__QUEUE_STATUS);
+     Integer featureID = Integer.valueOf (QdlPackage.QUEUE_TYPE__QUEUE_STATUS);
      this.comboWidgetMap.put( featureID, combo );
      
      /* Populate the Combo Box with the QDL Status Literals. */    
@@ -265,7 +249,7 @@ public class QueueAdapter extends QdlAdaptersFactory {
     */
    public void attachQueueStarted(final Combo combo){
      
-     Integer featureID = new Integer (QdlPackage.QUEUE_TYPE__QUEUE_STARTED);
+     Integer featureID = Integer.valueOf (QdlPackage.QUEUE_TYPE__QUEUE_STARTED);
      this.comboWidgetMap.put( featureID, combo );
      
      combo.add( "true" ); //$NON-NLS-1$
@@ -296,7 +280,7 @@ public class QueueAdapter extends QdlAdaptersFactory {
     */
    public void attachMaxCPUTimeSpinner(final Spinner spinner){
      
-     Integer featureID = new Integer (QdlPackage.QUEUE_TYPE__CPU_TIME_LIMIT);
+     Integer featureID = Integer.valueOf (QdlPackage.QUEUE_TYPE__CPU_TIME_LIMIT);
      this.spinnerWidgetMap.put( featureID,spinner );
      
      spinner.addModifyListener( new ModifyListener(){
@@ -327,7 +311,7 @@ public class QueueAdapter extends QdlAdaptersFactory {
     */
    public void attachMaxWallTimeSpinner(final Spinner spinner){
      
-     Integer featureID = new Integer (QdlPackage.QUEUE_TYPE__WALL_TIME_LIMIT);
+     Integer featureID = Integer.valueOf (QdlPackage.QUEUE_TYPE__WALL_TIME_LIMIT);
      this.spinnerWidgetMap.put( featureID,spinner );
      
      spinner.addModifyListener( new ModifyListener(){
@@ -358,7 +342,7 @@ public class QueueAdapter extends QdlAdaptersFactory {
     */
    public void attachAllowedVOs(final TableViewer tableViewer){
      
-     Integer featureID = new Integer(QdlPackage.QUEUE_TYPE__ALLOWED_VIRTUAL_ORGANIZATIONS);
+     Integer featureID = Integer.valueOf(QdlPackage.QUEUE_TYPE__ALLOWED_VIRTUAL_ORGANIZATIONS);
      this.viewerWidgetMap.put( featureID , tableViewer );
         
    } // End attachToHostName()
@@ -566,7 +550,7 @@ public class QueueAdapter extends QdlAdaptersFactory {
               
               switch( featureID ) {
                 case QdlPackage.QUEUE_TYPE__ALLOWED_VIRTUAL_ORGANIZATIONS : {
-                  tableViewer = this.viewerWidgetMap.get( new Integer( featureID ) );
+                  tableViewer = this.viewerWidgetMap.get( Integer.valueOf( featureID ) );
                   
                   this.allowedVOs = (AllowedVirtualOrganizationsType) this.queue
                                                         .eGet( eStructuralFeature );
@@ -579,7 +563,7 @@ public class QueueAdapter extends QdlAdaptersFactory {
                 break;
                 case QdlPackage.QUEUE_TYPE__CPU_TIME_LIMIT: {
                   if (this.queue.getCPUTimeLimit() != null ){
-                    spinner = this.spinnerWidgetMap.get( new Integer(QdlPackage.QUEUE_TYPE__CPU_TIME_LIMIT) );
+                    spinner = this.spinnerWidgetMap.get( Integer.valueOf(QdlPackage.QUEUE_TYPE__CPU_TIME_LIMIT) );
                     
                     rangeValueType = this.queue.getCPUTimeLimit();
                     if ( rangeValueType.getUpperBoundedRange() != null ) {
