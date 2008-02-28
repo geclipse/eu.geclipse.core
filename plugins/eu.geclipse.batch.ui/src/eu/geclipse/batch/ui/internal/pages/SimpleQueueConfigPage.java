@@ -68,6 +68,7 @@ public class SimpleQueueConfigPage extends FormPage
   protected Label lblQueueName = null;
   protected Label lblQueueType = null;
   protected Label lblQueueStatus = null;
+  protected Label lblQueueStarted = null;
   protected Label lblMaxCPUTime = null;
   protected Label lblMaxWallTime = null;
   protected Label lblVOS = null;
@@ -75,6 +76,7 @@ public class SimpleQueueConfigPage extends FormPage
   protected Text txtQueueName = null;
   protected Combo cmbQueueType = null;
   protected Combo cmbQueueStatus = null;
+  protected Combo cmbQueueStarted = null;
   protected Spinner timeCPUHourSpin = null;
   protected Spinner timeCPUMinSpin = null;
   protected Spinner timeWallHourSpin = null;
@@ -264,7 +266,15 @@ public class SimpleQueueConfigPage extends FormPage
      this.cmbQueueStatus.setData( FormToolkit.KEY_DRAW_BORDER );
      this.queueAdapter.attachQueueStatus( this.cmbQueueStatus );
      gd.horizontalSpan = 3;
-     this.cmbQueueStatus.setLayoutData( gd );
+     this.cmbQueueStatus.setLayoutData( gd ); 
+     /*==================== Queue Started Widgets =====================*/
+     this.lblQueueStarted  = toolkit.createLabel( client,
+                               Messages.getString( "SimpleQueueConfigPage_QueueStarted" ) ); //$NON-NLS-1$
+     this.cmbQueueStarted = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
+     this.cmbQueueStarted.setData( FormToolkit.KEY_DRAW_BORDER );
+     this.queueAdapter.attachQueueStarted( this.cmbQueueStarted );
+     gd.horizontalSpan = 3;
+     this.cmbQueueStarted.setLayoutData( gd );
      /*==================== Max CPU Time Widgets =====================*/
      Composite timeComp;
 

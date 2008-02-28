@@ -258,6 +258,36 @@ public class QueueAdapter extends QdlAdaptersFactory {
    } // End void attachQueueStatus()
    
    
+   
+   /**
+    * 
+    * @param combo The {@link Combo} widget that handles operations on the Queue Status.
+    */
+   public void attachQueueStarted(final Combo combo){
+     
+     Integer featureID = new Integer (QdlPackage.QUEUE_TYPE__QUEUE_STARTED);
+     this.comboWidgetMap.put( featureID, combo );
+     
+     combo.add( "true" ); //$NON-NLS-1$
+     combo.add( "false" ); //$NON-NLS-1$
+     
+     combo.addSelectionListener( new SelectionListener() {
+
+      public void widgetDefaultSelected( final SelectionEvent e ) {
+        // Auto-generated method stub
+      }
+
+      public void widgetSelected( final SelectionEvent e ) {
+
+        QueueAdapter.this.queue.setQueueStarted( Boolean.parseBoolean( combo.getText() ) );
+        contentChanged();
+      }
+       
+     });
+      
+   } // End void attachQueueStatus()
+   
+   
    /**
     * Adapter interface to attach to the Max CPU Time Spinner widget.
     * 
@@ -606,6 +636,12 @@ public class QueueAdapter extends QdlAdaptersFactory {
                     combo = this.comboWidgetMap.get( new Integer(QdlPackage.QUEUE_TYPE__QUEUE_STATUS) );
                     combo.setText( this.queue.getQueueStatus().getLiteral() );
                   }
+                }                  
+                break;
+                case QdlPackage.QUEUE_TYPE__QUEUE_STARTED: {                  
+                    combo = this.comboWidgetMap.get( new Integer(QdlPackage.QUEUE_TYPE__QUEUE_STARTED) );
+                    combo.setText( Boolean.toString( this.queue.isQueueStarted() ) );
+                  
                 }                  
                 break;
                 case QdlPackage.QUEUE_TYPE__QUEUE_TYPE: {

@@ -328,7 +328,7 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
                    else{
                      integerBoundaryType = integerRangeValueType.getLowerBoundedRange();
                    }
-                   spinner.setSelection( integerBoundaryType.getValue().intValue() );
+                   spinner.setSelection( integerBoundaryType.getValue() );
                    
                  }
                }                  
@@ -345,7 +345,7 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
                    else{
                      integerBoundaryType = integerRangeValueType.getLowerBoundedRange();
                    }
-                   int value = integerBoundaryType.getValue().intValue();
+                   int value = integerBoundaryType.getValue();
                    spinner.setSelection( value );
                    
                    if ( value == Integer.MAX_VALUE) {
@@ -371,7 +371,7 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
                      integerBoundaryType = integerRangeValueType.getLowerBoundedRange();
                    }
                    
-                   int value = integerBoundaryType.getValue().intValue();
+                   int value = integerBoundaryType.getValue();
                    spinner.setSelection( value );
                    
                    if ( value == Integer.MAX_VALUE) {
@@ -388,16 +388,16 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
                    integerRangeValueType = this.queue.getAssignedResources();                   
                    if ( integerRangeValueType.getUpperBoundedRange() != null ) {
                      integerBoundaryType = integerRangeValueType.getUpperBoundedRange();
-                     spinner.setSelection( integerBoundaryType.getValue().intValue() );
+                     spinner.setSelection( integerBoundaryType.getValue() );
                    }
                    else if ( integerRangeValueType.getLowerBoundedRange() != null ){
                      integerBoundaryType = integerRangeValueType.getLowerBoundedRange();
-                     spinner.setSelection( integerBoundaryType.getValue().intValue() );
+                     spinner.setSelection( integerBoundaryType.getValue() );
                    }
                    else{
                      integerExactType = integerRangeValueType.getExact().get( 0 );
                    }
-                   spinner.setSelection( integerExactType.getValue().intValue() );                 }
+                   spinner.setSelection( integerExactType.getValue() );                 }
                }                  
                break;
                default:

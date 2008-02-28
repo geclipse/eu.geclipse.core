@@ -124,18 +124,22 @@ public class AddQueueWizard extends Wizard implements INewWizard {
    * Creates a queue if user have the rights, if not an error dialog is displayed 
    */
   public void createAdvQueue() {
-    IQueueInfo.QueueType type;
+    IQueueInfo.QueueType type;    
     
     if ( this.requiredPage.typeCombo.getText().equals( Messages.getString( "AddQueueRequiredPage.Type_Execution" ) ) ) //$NON-NLS-1$
       type = IQueueInfo.QueueType.execution;
     else
       type = IQueueInfo.QueueType.route;
-
+    
+     
+    
+    /* Create the queue and by default set is to be Started */
     try {
       this.batchWrapper.createQueue( this.requiredPage.nameText.getText(),
                                      this.optionalPage.getPriority(),
                                      type,
                                      this.requiredPage.enabledButton.getSelection(),
+                                     true, /* Started mode */
                                      this.optionalPage.getMaxRun(),
                                      this.requiredPage.getTimeCPU(), 
                                      this.requiredPage.getTimeWall(),

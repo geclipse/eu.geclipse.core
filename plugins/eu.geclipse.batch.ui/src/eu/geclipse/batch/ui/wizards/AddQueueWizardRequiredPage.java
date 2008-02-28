@@ -335,8 +335,7 @@ public class AddQueueWizardRequiredPage extends WizardPage {
   protected int getTimeWall() {
     return this.timeWallHourSpin.getSelection(); 
   }
-
-  
+ 
   
   /**
    * Creates a queue if user have the rights, if not an error dialog is displayed 
@@ -361,10 +360,10 @@ public class AddQueueWizardRequiredPage extends WizardPage {
           batchQueueDescription.queueType( QueueTypeEnumeration.ROUTE );
 
         if ( this.enabledButton.getSelection() == true) {
-          batchQueueDescription.isQueueEnabled( true );
+          batchQueueDescription.enableQueue( true );
         }
         else {
-          batchQueueDescription.isQueueEnabled( false );
+          batchQueueDescription.enableQueue( false );
         }
         
         /* Set Max CPU Time Limit */
