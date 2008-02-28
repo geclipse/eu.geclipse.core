@@ -95,6 +95,7 @@
 			<xsd:element ref="qdl:Description"/>
 			<xsd:element ref="qdl:QueueType"/>
 			<xsd:element ref="qdl:QueueStatus" minOccurs="1" maxOccurs="1"/>
+			<xsd:element ref="qdl:QueueStarted" minOccurs="1" maxOccurs="1"/>
 			<xsd:element ref="qdl:CPUTimeLimit" minOccurs="1" maxOccurs="1"/>
 			<xsd:element ref="qdl:WallTimeLimit" minOccurs="1" maxOccurs="1"/>
 			<xsd:element ref="qdl:AllowedVirtualOrganizations" minOccurs="0"/>
@@ -114,6 +115,7 @@
 	<xsd:element name="Queue" type="qdl:Queue_Type"/>
 	<xsd:element name="QueueType" type="qdl:QueueTypeEnumeration"/>	
 	<xsd:element name="QueueStatus" type="qdl:QueueStatusEnumeration"/>
+	<xsd:element name="QueueStarted" type="xsd:boolean"/>
 	<xsd:element name="Description" type="qdl:Description_Type"/>
 	<xsd:element name="CPUTimeLimit" type="qdl:RangeValue_Type"/>
 	<xsd:element name="WallTimeLimit" type="qdl:RangeValue_Type"/>
