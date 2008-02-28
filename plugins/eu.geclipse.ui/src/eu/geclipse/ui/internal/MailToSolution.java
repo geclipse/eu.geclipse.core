@@ -67,26 +67,26 @@ public class MailToSolution implements ISolution {
     StringBuffer buffer = new StringBuffer();
     
     buffer.append(
-        "Description: " + problem.getDescription() + "%0A%0A" +
-        "Plugin: " + problem.getPluginID() + "%0A%0A"
+        "Description: " + problem.getDescription() + "%0A%0A" + //$NON-NLS-2$
+        "Plugin: " + problem.getPluginID() + "%0A%0A" //$NON-NLS-2$
     );
     
     String[] reasons = problem.getReasons();
     if ( ( reasons != null ) && ( reasons.length > 0 ) ) {
       buffer.append( "Reasons:%0A" );
       for ( String reason : reasons ) {
-        buffer.append( " - " + reason + "%0A" );
+        buffer.append( " - " + reason + "%0A" ); //$NON-NLS-1$ //$NON-NLS-2$
       }
-      buffer.append( "%0A" );
+      buffer.append( "%0A" ); //$NON-NLS-1$
     }
     
     ISolution[] solutions = problem.getSolutions();
     if ( ( solutions != null ) && ( solutions.length > 0 ) ) {
       buffer.append( "Solutions:%0A" );
       for ( ISolution solution : solutions ) {
-        buffer.append( " - " + solution.getDescription() + "%0A" );
+        buffer.append( " - " + solution.getDescription() + "%0A" ); //$NON-NLS-1$ //$NON-NLS-2$
       }
-      buffer.append( "%0A" );
+      buffer.append( "%0A" ); //$NON-NLS-1$
     }
     
     Throwable exc = problem.getException();
@@ -100,7 +100,7 @@ public class MailToSolution implements ISolution {
       pWriter.close();
     }
     
-    String body = buffer.toString().replaceAll( "[\r\n]", "%0A" );
+    String body = buffer.toString().replaceAll( "[\r\n]", "%0A" ); //$NON-NLS-1$ //$NON-NLS-2$
     
     return body;
     
