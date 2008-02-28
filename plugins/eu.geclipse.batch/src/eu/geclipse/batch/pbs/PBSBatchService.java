@@ -896,17 +896,17 @@ public final class PBSBatchService extends AbstractBatchService {
     if ( null != queueName && null != type && -1 != timeCPU && -1 != timeWall ) { 
       
       String adaptedTimeWall, adaptedTimeCPU  = null;
-      double newTimeWallHours = (timeWall / 3600);
-      double newTimeCPUHours = (timeCPU / 3600);
+//      double newTimeWallHours = (timeWall / 3600);
+//      double newTimeCPUHours = (timeCPU / 3600);
       
       adaptedTimeWall = String.format( "%02d:%02d:00", //$NON-NLS-1$
-                                       Integer.valueOf( getHoursFromDouble( newTimeWallHours ) ),
-                                       Integer.valueOf( getMinutesFromDouble( newTimeWallHours) ) );
+                                       Integer.valueOf( getHoursFromDouble( timeWall ) ),
+                                       Integer.valueOf( getMinutesFromDouble( timeWall) ) );
  
 
       adaptedTimeCPU = String.format( "%02d:%02d:00", //$NON-NLS-1$
-                                       Integer.valueOf( getHoursFromDouble( newTimeCPUHours ) ),
-                                       Integer.valueOf( getMinutesFromDouble( newTimeCPUHours ) ) );
+                                       Integer.valueOf( getHoursFromDouble( timeCPU ) ),
+                                       Integer.valueOf( getMinutesFromDouble( timeCPU ) ) );
       
       
       String cmd = this.pbsPath + "qmgr -c \"create queue "; //$NON-NLS-1$
@@ -1098,29 +1098,18 @@ public final class PBSBatchService extends AbstractBatchService {
   
   static int getHoursFromDouble( final double value ) {
     
-    BigDecimal b = new BigDecimal( String.valueOf( value) );
-    double c = b.longValue();
-      
-    return (int) c; 
+    BigDecimal b = new BigDecimal( value/3600 );
+    double c = b.longValue();    
+    return (int) c;
+    
   }
   
   
   static int getMinutesFromDouble( final double value ) {
-    String m;
+    
     int result;
     
-    BigDecimal b = new BigDecimal(String.valueOf( value ));
-    long c = b.longValue();
-    b = b.subtract(new BigDecimal(c));
-    int s = b.toString().length();
-    if( s == 3 ) {
-      m = b.toString().substring(2, s);
-      result = Integer.parseInt( m ) * 10;
-    }    
-    else {
-      m = b.toString().substring(2, 4);
-      result = Integer.parseInt( m );
-    }
+    result = (int)((value %3600)/60);
      
    return result;
   }
