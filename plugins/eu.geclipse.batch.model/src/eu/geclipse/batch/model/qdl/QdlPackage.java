@@ -247,13 +247,22 @@ public interface QdlPackage extends EPackage
   int DOCUMENT_ROOT__QUEUE = 9;
 
   /**
+   * The feature id for the '<em><b>Queue Started</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int DOCUMENT_ROOT__QUEUE_STARTED = 10;
+
+  /**
    * The feature id for the '<em><b>Queue Status</b></em>' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int DOCUMENT_ROOT__QUEUE_STATUS = 10;
+  int DOCUMENT_ROOT__QUEUE_STATUS = 11;
 
   /**
    * The feature id for the '<em><b>Queue Type</b></em>' attribute.
@@ -262,7 +271,7 @@ public interface QdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int DOCUMENT_ROOT__QUEUE_TYPE = 11;
+  int DOCUMENT_ROOT__QUEUE_TYPE = 12;
 
   /**
    * The feature id for the '<em><b>Running Jobs</b></em>' containment reference.
@@ -271,7 +280,7 @@ public interface QdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int DOCUMENT_ROOT__RUNNING_JOBS = 12;
+  int DOCUMENT_ROOT__RUNNING_JOBS = 13;
 
   /**
    * The feature id for the '<em><b>VO Name</b></em>' attribute.
@@ -280,7 +289,7 @@ public interface QdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int DOCUMENT_ROOT__VO_NAME = 13;
+  int DOCUMENT_ROOT__VO_NAME = 14;
 
   /**
    * The feature id for the '<em><b>Wall Time Limit</b></em>' containment reference.
@@ -289,7 +298,7 @@ public interface QdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int DOCUMENT_ROOT__WALL_TIME_LIMIT = 14;
+  int DOCUMENT_ROOT__WALL_TIME_LIMIT = 15;
 
   /**
    * The number of structural features of the '<em>Document Root</em>' class.
@@ -298,7 +307,7 @@ public interface QdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int DOCUMENT_ROOT_FEATURE_COUNT = 15;
+  int DOCUMENT_ROOT_FEATURE_COUNT = 16;
 
   /**
    * The meta object id for the '{@link eu.geclipse.batch.model.qdl.impl.ExactTypeImpl <em>Exact Type</em>}' class.
@@ -595,13 +604,22 @@ public interface QdlPackage extends EPackage
   int QUEUE_TYPE__QUEUE_STATUS = 3;
 
   /**
+   * The feature id for the '<em><b>Queue Started</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  int QUEUE_TYPE__QUEUE_STARTED = 4;
+
+  /**
    * The feature id for the '<em><b>CPU Time Limit</b></em>' containment reference.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-  int QUEUE_TYPE__CPU_TIME_LIMIT = 4;
+  int QUEUE_TYPE__CPU_TIME_LIMIT = 5;
 
   /**
    * The feature id for the '<em><b>Wall Time Limit</b></em>' containment reference.
@@ -610,7 +628,7 @@ public interface QdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int QUEUE_TYPE__WALL_TIME_LIMIT = 5;
+  int QUEUE_TYPE__WALL_TIME_LIMIT = 6;
 
   /**
    * The feature id for the '<em><b>Allowed Virtual Organizations</b></em>' containment reference.
@@ -619,7 +637,7 @@ public interface QdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int QUEUE_TYPE__ALLOWED_VIRTUAL_ORGANIZATIONS = 6;
+  int QUEUE_TYPE__ALLOWED_VIRTUAL_ORGANIZATIONS = 7;
 
   /**
    * The feature id for the '<em><b>Priority</b></em>' containment reference.
@@ -628,7 +646,7 @@ public interface QdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int QUEUE_TYPE__PRIORITY = 7;
+  int QUEUE_TYPE__PRIORITY = 8;
 
   /**
    * The feature id for the '<em><b>Running Jobs</b></em>' containment reference.
@@ -637,7 +655,7 @@ public interface QdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int QUEUE_TYPE__RUNNING_JOBS = 8;
+  int QUEUE_TYPE__RUNNING_JOBS = 9;
 
   /**
    * The feature id for the '<em><b>Jobs In Queue</b></em>' containment reference.
@@ -646,7 +664,7 @@ public interface QdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int QUEUE_TYPE__JOBS_IN_QUEUE = 9;
+  int QUEUE_TYPE__JOBS_IN_QUEUE = 10;
 
   /**
    * The feature id for the '<em><b>Assigned Resources</b></em>' containment reference.
@@ -655,7 +673,7 @@ public interface QdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int QUEUE_TYPE__ASSIGNED_RESOURCES = 10;
+  int QUEUE_TYPE__ASSIGNED_RESOURCES = 11;
 
   /**
    * The number of structural features of the '<em>Queue Type</em>' class.
@@ -664,7 +682,7 @@ public interface QdlPackage extends EPackage
    * @generated
    * @ordered
    */
-  int QUEUE_TYPE_FEATURE_COUNT = 11;
+  int QUEUE_TYPE_FEATURE_COUNT = 12;
 
   /**
    * The meta object id for the '{@link eu.geclipse.batch.model.qdl.impl.RangeTypeImpl <em>Range Type</em>}' class.
@@ -1012,6 +1030,17 @@ public interface QdlPackage extends EPackage
   EReference getDocumentRoot_Queue();
 
   /**
+   * Returns the meta object for the attribute '{@link eu.geclipse.batch.model.qdl.DocumentRoot#isQueueStarted <em>Queue Started</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Queue Started</em>'.
+   * @see eu.geclipse.batch.model.qdl.DocumentRoot#isQueueStarted()
+   * @see #getDocumentRoot()
+   * @generated
+   */
+  EAttribute getDocumentRoot_QueueStarted();
+
+  /**
    * Returns the meta object for the attribute '{@link eu.geclipse.batch.model.qdl.DocumentRoot#getQueueStatus <em>Queue Status</em>}'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -1356,6 +1385,17 @@ public interface QdlPackage extends EPackage
    * @generated
    */
   EAttribute getQueueType_QueueStatus();
+
+  /**
+   * Returns the meta object for the attribute '{@link eu.geclipse.batch.model.qdl.QueueType#isQueueStarted <em>Queue Started</em>}'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return the meta object for the attribute '<em>Queue Started</em>'.
+   * @see eu.geclipse.batch.model.qdl.QueueType#isQueueStarted()
+   * @see #getQueueType()
+   * @generated
+   */
+  EAttribute getQueueType_QueueStarted();
 
   /**
    * Returns the meta object for the containment reference '{@link eu.geclipse.batch.model.qdl.QueueType#getCPUTimeLimit <em>CPU Time Limit</em>}'.
@@ -1764,6 +1804,14 @@ public interface QdlPackage extends EPackage
     EReference DOCUMENT_ROOT__QUEUE = eINSTANCE.getDocumentRoot_Queue();
 
     /**
+     * The meta object literal for the '<em><b>Queue Started</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute DOCUMENT_ROOT__QUEUE_STARTED = eINSTANCE.getDocumentRoot_QueueStarted();
+
+    /**
      * The meta object literal for the '<em><b>Queue Status</b></em>' attribute feature.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
@@ -2030,6 +2078,14 @@ public interface QdlPackage extends EPackage
      * @generated
      */
     EAttribute QUEUE_TYPE__QUEUE_STATUS = eINSTANCE.getQueueType_QueueStatus();
+
+    /**
+     * The meta object literal for the '<em><b>Queue Started</b></em>' attribute feature.
+     * <!-- begin-user-doc -->
+     * <!-- end-user-doc -->
+     * @generated
+     */
+    EAttribute QUEUE_TYPE__QUEUE_STARTED = eINSTANCE.getQueueType_QueueStarted();
 
     /**
      * The meta object literal for the '<em><b>CPU Time Limit</b></em>' containment reference feature.

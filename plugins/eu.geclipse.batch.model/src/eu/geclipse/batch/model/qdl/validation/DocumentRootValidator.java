@@ -53,6 +53,8 @@ public interface DocumentRootValidator
   boolean validateJobsInQueue(RangeValueType value);
   boolean validatePriority(RangeValueType value);
   boolean validateQueue(QueueType value);
+  boolean validateQueueStarted(boolean value);
+
   boolean validateQueueStatus(QueueStatusEnumeration value);
   boolean validateQueueType(QueueTypeEnumeration value);
   boolean validateRunningJobs(IntegerRangeValueType value);

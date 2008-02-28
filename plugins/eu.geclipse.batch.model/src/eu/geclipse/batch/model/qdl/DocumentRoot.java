@@ -40,6 +40,7 @@ import org.eclipse.emf.ecore.util.FeatureMap;
  *   <li>{@link eu.geclipse.batch.model.qdl.DocumentRoot#getJobsInQueue <em>Jobs In Queue</em>}</li>
  *   <li>{@link eu.geclipse.batch.model.qdl.DocumentRoot#getPriority <em>Priority</em>}</li>
  *   <li>{@link eu.geclipse.batch.model.qdl.DocumentRoot#getQueue <em>Queue</em>}</li>
+ *   <li>{@link eu.geclipse.batch.model.qdl.DocumentRoot#isQueueStarted <em>Queue Started</em>}</li>
  *   <li>{@link eu.geclipse.batch.model.qdl.DocumentRoot#getQueueStatus <em>Queue Status</em>}</li>
  *   <li>{@link eu.geclipse.batch.model.qdl.DocumentRoot#getQueueType <em>Queue Type</em>}</li>
  *   <li>{@link eu.geclipse.batch.model.qdl.DocumentRoot#getRunningJobs <em>Running Jobs</em>}</li>
@@ -295,6 +296,33 @@ public interface DocumentRoot extends EObject
    * @generated
    */
   void setQueue(QueueType value);
+
+  /**
+   * Returns the value of the '<em><b>Queue Started</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Queue Started</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Queue Started</em>' attribute.
+   * @see #setQueueStarted(boolean)
+   * @see eu.geclipse.batch.model.qdl.QdlPackage#getDocumentRoot_QueueStarted()
+   * @model unique="false" dataType="org.eclipse.emf.ecore.xml.type.Boolean" upper="-2" transient="true" volatile="true" derived="true"
+   *        extendedMetaData="kind='element' name='QueueStarted' namespace='##targetNamespace'"
+   * @generated
+   */
+  boolean isQueueStarted();
+
+  /**
+   * Sets the value of the '{@link eu.geclipse.batch.model.qdl.DocumentRoot#isQueueStarted <em>Queue Started</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Queue Started</em>' attribute.
+   * @see #isQueueStarted()
+   * @generated
+   */
+  void setQueueStarted(boolean value);
 
   /**
    * Returns the value of the '<em><b>Queue Status</b></em>' attribute.

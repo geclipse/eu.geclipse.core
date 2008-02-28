@@ -51,23 +51,50 @@ public interface IntegerExactType extends EObject
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Value</em>' attribute.
-   * @see #setValue(Integer)
+   * @see #isSetValue()
+   * @see #unsetValue()
+   * @see #setValue(int)
    * @see eu.geclipse.batch.model.qdl.QdlPackage#getIntegerExactType_Value()
-   * @model dataType="org.eclipse.emf.ecore.xml.type.IntObject"
+   * @model unsettable="true" dataType="org.eclipse.emf.ecore.xml.type.Int"
    *        extendedMetaData="name=':0' kind='simple'"
    * @generated
    */
-  Integer getValue();
+  int getValue();
 
   /**
    * Sets the value of the '{@link eu.geclipse.batch.model.qdl.IntegerExactType#getValue <em>Value</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Value</em>' attribute.
+   * @see #isSetValue()
+   * @see #unsetValue()
    * @see #getValue()
    * @generated
    */
-  void setValue(Integer value);
+  void setValue(int value);
+
+  /**
+   * Unsets the value of the '{@link eu.geclipse.batch.model.qdl.IntegerExactType#getValue <em>Value</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isSetValue()
+   * @see #getValue()
+   * @see #setValue(int)
+   * @generated
+   */
+  void unsetValue();
+
+  /**
+   * Returns whether the value of the '{@link eu.geclipse.batch.model.qdl.IntegerExactType#getValue <em>Value</em>}' attribute is set.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return whether the value of the '<em>Value</em>' attribute is set.
+   * @see #unsetValue()
+   * @see #getValue()
+   * @see #setValue(int)
+   * @generated
+   */
+  boolean isSetValue();
 
   /**
    * Returns the value of the '<em><b>Epsilon</b></em>' attribute.
@@ -78,23 +105,50 @@ public interface IntegerExactType extends EObject
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Epsilon</em>' attribute.
-   * @see #setEpsilon(Integer)
+   * @see #isSetEpsilon()
+   * @see #unsetEpsilon()
+   * @see #setEpsilon(int)
    * @see eu.geclipse.batch.model.qdl.QdlPackage#getIntegerExactType_Epsilon()
-   * @model dataType="org.eclipse.emf.ecore.xml.type.IntObject"
+   * @model unsettable="true" dataType="org.eclipse.emf.ecore.xml.type.Int"
    *        extendedMetaData="kind='attribute' name='epsilon'"
    * @generated
    */
-  Integer getEpsilon();
+  int getEpsilon();
 
   /**
    * Sets the value of the '{@link eu.geclipse.batch.model.qdl.IntegerExactType#getEpsilon <em>Epsilon</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Epsilon</em>' attribute.
+   * @see #isSetEpsilon()
+   * @see #unsetEpsilon()
    * @see #getEpsilon()
    * @generated
    */
-  void setEpsilon(Integer value);
+  void setEpsilon(int value);
+
+  /**
+   * Unsets the value of the '{@link eu.geclipse.batch.model.qdl.IntegerExactType#getEpsilon <em>Epsilon</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isSetEpsilon()
+   * @see #getEpsilon()
+   * @see #setEpsilon(int)
+   * @generated
+   */
+  void unsetEpsilon();
+
+  /**
+   * Returns whether the value of the '{@link eu.geclipse.batch.model.qdl.IntegerExactType#getEpsilon <em>Epsilon</em>}' attribute is set.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return whether the value of the '<em>Epsilon</em>' attribute is set.
+   * @see #unsetEpsilon()
+   * @see #getEpsilon()
+   * @see #setEpsilon(int)
+   * @generated
+   */
+  boolean isSetEpsilon();
 
   /**
    * Returns the value of the '<em><b>Any Attribute</b></em>' attribute list.

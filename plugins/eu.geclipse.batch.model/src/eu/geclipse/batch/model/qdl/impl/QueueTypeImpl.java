@@ -44,6 +44,7 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  *   <li>{@link eu.geclipse.batch.model.qdl.impl.QueueTypeImpl#getDescription <em>Description</em>}</li>
  *   <li>{@link eu.geclipse.batch.model.qdl.impl.QueueTypeImpl#getQueueType <em>Queue Type</em>}</li>
  *   <li>{@link eu.geclipse.batch.model.qdl.impl.QueueTypeImpl#getQueueStatus <em>Queue Status</em>}</li>
+ *   <li>{@link eu.geclipse.batch.model.qdl.impl.QueueTypeImpl#isQueueStarted <em>Queue Started</em>}</li>
  *   <li>{@link eu.geclipse.batch.model.qdl.impl.QueueTypeImpl#getCPUTimeLimit <em>CPU Time Limit</em>}</li>
  *   <li>{@link eu.geclipse.batch.model.qdl.impl.QueueTypeImpl#getWallTimeLimit <em>Wall Time Limit</em>}</li>
  *   <li>{@link eu.geclipse.batch.model.qdl.impl.QueueTypeImpl#getAllowedVirtualOrganizations <em>Allowed Virtual Organizations</em>}</li>
@@ -155,6 +156,35 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
    * @ordered
    */
   protected boolean queueStatusESet;
+
+  /**
+   * The default value of the '{@link #isQueueStarted() <em>Queue Started</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isQueueStarted()
+   * @generated
+   * @ordered
+   */
+  protected static final boolean QUEUE_STARTED_EDEFAULT = false;
+
+  /**
+   * The cached value of the '{@link #isQueueStarted() <em>Queue Started</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isQueueStarted()
+   * @generated
+   * @ordered
+   */
+  protected boolean queueStarted = QUEUE_STARTED_EDEFAULT;
+
+  /**
+   * This is true if the Queue Started attribute has been set.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  protected boolean queueStartedESet;
 
   /**
    * The cached value of the '{@link #getCPUTimeLimit() <em>CPU Time Limit</em>}' containment reference.
@@ -391,6 +421,56 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
   public boolean isSetQueueStatus()
   {
     return queueStatusESet;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public boolean isQueueStarted()
+  {
+    return queueStarted;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setQueueStarted(boolean newQueueStarted)
+  {
+    boolean oldQueueStarted = queueStarted;
+    queueStarted = newQueueStarted;
+    boolean oldQueueStartedESet = queueStartedESet;
+    queueStartedESet = true;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.SET, QdlPackage.QUEUE_TYPE__QUEUE_STARTED, oldQueueStarted, queueStarted, !oldQueueStartedESet));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void unsetQueueStarted()
+  {
+    boolean oldQueueStarted = queueStarted;
+    boolean oldQueueStartedESet = queueStartedESet;
+    queueStarted = QUEUE_STARTED_EDEFAULT;
+    queueStartedESet = false;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.UNSET, QdlPackage.QUEUE_TYPE__QUEUE_STARTED, oldQueueStarted, QUEUE_STARTED_EDEFAULT, oldQueueStartedESet));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public boolean isSetQueueStarted()
+  {
+    return queueStartedESet;
   }
 
   /**
@@ -775,6 +855,8 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
         return getQueueType();
       case QdlPackage.QUEUE_TYPE__QUEUE_STATUS:
         return getQueueStatus();
+      case QdlPackage.QUEUE_TYPE__QUEUE_STARTED:
+        return isQueueStarted() ? Boolean.TRUE : Boolean.FALSE;
       case QdlPackage.QUEUE_TYPE__CPU_TIME_LIMIT:
         return getCPUTimeLimit();
       case QdlPackage.QUEUE_TYPE__WALL_TIME_LIMIT:
@@ -814,6 +896,9 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
         return;
       case QdlPackage.QUEUE_TYPE__QUEUE_STATUS:
         setQueueStatus((QueueStatusEnumeration)newValue);
+        return;
+      case QdlPackage.QUEUE_TYPE__QUEUE_STARTED:
+        setQueueStarted(((Boolean)newValue).booleanValue());
         return;
       case QdlPackage.QUEUE_TYPE__CPU_TIME_LIMIT:
         setCPUTimeLimit((RangeValueType)newValue);
@@ -862,6 +947,9 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
       case QdlPackage.QUEUE_TYPE__QUEUE_STATUS:
         unsetQueueStatus();
         return;
+      case QdlPackage.QUEUE_TYPE__QUEUE_STARTED:
+        unsetQueueStarted();
+        return;
       case QdlPackage.QUEUE_TYPE__CPU_TIME_LIMIT:
         setCPUTimeLimit((RangeValueType)null);
         return;
@@ -905,6 +993,8 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
         return isSetQueueType();
       case QdlPackage.QUEUE_TYPE__QUEUE_STATUS:
         return isSetQueueStatus();
+      case QdlPackage.QUEUE_TYPE__QUEUE_STARTED:
+        return isSetQueueStarted();
       case QdlPackage.QUEUE_TYPE__CPU_TIME_LIMIT:
         return cPUTimeLimit != null;
       case QdlPackage.QUEUE_TYPE__WALL_TIME_LIMIT:
@@ -942,6 +1032,8 @@ public class QueueTypeImpl extends EObjectImpl implements QueueType
     if (queueTypeESet) result.append(queueType); else result.append("<unset>");
     result.append(", queueStatus: ");
     if (queueStatusESet) result.append(queueStatus); else result.append("<unset>");
+    result.append(", queueStarted: ");
+    if (queueStartedESet) result.append(queueStarted); else result.append("<unset>");
     result.append(')');
     return result.toString();
   }

@@ -37,6 +37,7 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference qdl.ecore#//DocumentRoot/jobsInQueue"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference qdl.ecore#//DocumentRoot/priority"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference qdl.ecore#//DocumentRoot/queue"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute qdl.ecore#//DocumentRoot/queueStarted"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute qdl.ecore#//DocumentRoot/queueStatus"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute qdl.ecore#//DocumentRoot/queueType"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference qdl.ecore#//DocumentRoot/runningJobs"/>
@@ -48,11 +49,34 @@
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute qdl.ecore#//ExactType/epsilon"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute qdl.ecore#//ExactType/anyAttribute"/>
     </genClasses>
+    <genClasses ecoreClass="qdl.ecore#//IntegerBoundaryType">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute qdl.ecore#//IntegerBoundaryType/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute qdl.ecore#//IntegerBoundaryType/exclusiveBound"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute qdl.ecore#//IntegerBoundaryType/anyAttribute"/>
+    </genClasses>
+    <genClasses ecoreClass="qdl.ecore#//IntegerExactType">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute qdl.ecore#//IntegerExactType/value"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute qdl.ecore#//IntegerExactType/epsilon"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute qdl.ecore#//IntegerExactType/anyAttribute"/>
+    </genClasses>
+    <genClasses ecoreClass="qdl.ecore#//IntegerRangeType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference qdl.ecore#//IntegerRangeType/integerLowerBound"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference qdl.ecore#//IntegerRangeType/integerUpperBound"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute qdl.ecore#//IntegerRangeType/anyAttribute"/>
+    </genClasses>
+    <genClasses ecoreClass="qdl.ecore#//IntegerRangeValueType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference qdl.ecore#//IntegerRangeValueType/upperBoundedRange"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference qdl.ecore#//IntegerRangeValueType/lowerBoundedRange"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference qdl.ecore#//IntegerRangeValueType/exact"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference qdl.ecore#//IntegerRangeValueType/range"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute qdl.ecore#//IntegerRangeValueType/anyAttribute"/>
+    </genClasses>
     <genClasses ecoreClass="qdl.ecore#//QueueType">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute qdl.ecore#//QueueType/queueName"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute qdl.ecore#//QueueType/description"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute qdl.ecore#//QueueType/queueType"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute qdl.ecore#//QueueType/queueStatus"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute qdl.ecore#//QueueType/queueStarted"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference qdl.ecore#//QueueType/cPUTimeLimit"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference qdl.ecore#//QueueType/wallTimeLimit"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference qdl.ecore#//QueueType/allowedVirtualOrganizations"/>

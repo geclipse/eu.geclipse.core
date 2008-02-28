@@ -20,6 +20,10 @@ public interface IntegerBoundaryTypeValidator
 {
   boolean validate();
 
+  boolean validateValue(int value);
+
+  boolean validateExclusiveBound(int value);
+
   boolean validateValue(Integer value);
 
   boolean validateExclusiveBound(Integer value);

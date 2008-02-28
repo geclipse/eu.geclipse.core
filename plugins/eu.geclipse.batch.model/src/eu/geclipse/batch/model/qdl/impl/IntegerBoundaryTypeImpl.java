@@ -49,7 +49,7 @@ public class IntegerBoundaryTypeImpl extends EObjectImpl implements IntegerBound
    * @generated
    * @ordered
    */
-  protected static final Integer VALUE_EDEFAULT = null;
+  protected static final int VALUE_EDEFAULT = 0;
 
   /**
    * The cached value of the '{@link #getValue() <em>Value</em>}' attribute.
@@ -59,7 +59,16 @@ public class IntegerBoundaryTypeImpl extends EObjectImpl implements IntegerBound
    * @generated
    * @ordered
    */
-  protected Integer value = VALUE_EDEFAULT;
+  protected int value = VALUE_EDEFAULT;
+
+  /**
+   * This is true if the Value attribute has been set.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  protected boolean valueESet;
 
   /**
    * The default value of the '{@link #getExclusiveBound() <em>Exclusive Bound</em>}' attribute.
@@ -69,7 +78,7 @@ public class IntegerBoundaryTypeImpl extends EObjectImpl implements IntegerBound
    * @generated
    * @ordered
    */
-  protected static final Integer EXCLUSIVE_BOUND_EDEFAULT = null;
+  protected static final int EXCLUSIVE_BOUND_EDEFAULT = 0;
 
   /**
    * The cached value of the '{@link #getExclusiveBound() <em>Exclusive Bound</em>}' attribute.
@@ -79,7 +88,16 @@ public class IntegerBoundaryTypeImpl extends EObjectImpl implements IntegerBound
    * @generated
    * @ordered
    */
-  protected Integer exclusiveBound = EXCLUSIVE_BOUND_EDEFAULT;
+  protected int exclusiveBound = EXCLUSIVE_BOUND_EDEFAULT;
+
+  /**
+   * This is true if the Exclusive Bound attribute has been set.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   * @ordered
+   */
+  protected boolean exclusiveBoundESet;
 
   /**
    * The cached value of the '{@link #getAnyAttribute() <em>Any Attribute</em>}' attribute list.
@@ -117,7 +135,7 @@ public class IntegerBoundaryTypeImpl extends EObjectImpl implements IntegerBound
    * <!-- end-user-doc -->
    * @generated
    */
-  public Integer getValue()
+  public int getValue()
   {
     return value;
   }
@@ -127,12 +145,14 @@ public class IntegerBoundaryTypeImpl extends EObjectImpl implements IntegerBound
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setValue(Integer newValue)
+  public void setValue(int newValue)
   {
-    Integer oldValue = value;
+    int oldValue = value;
     value = newValue;
+    boolean oldValueESet = valueESet;
+    valueESet = true;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, QdlPackage.INTEGER_BOUNDARY_TYPE__VALUE, oldValue, value));
+      eNotify(new ENotificationImpl(this, Notification.SET, QdlPackage.INTEGER_BOUNDARY_TYPE__VALUE, oldValue, value, !oldValueESet));
   }
 
   /**
@@ -140,7 +160,32 @@ public class IntegerBoundaryTypeImpl extends EObjectImpl implements IntegerBound
    * <!-- end-user-doc -->
    * @generated
    */
-  public Integer getExclusiveBound()
+  public void unsetValue()
+  {
+    int oldValue = value;
+    boolean oldValueESet = valueESet;
+    value = VALUE_EDEFAULT;
+    valueESet = false;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.UNSET, QdlPackage.INTEGER_BOUNDARY_TYPE__VALUE, oldValue, VALUE_EDEFAULT, oldValueESet));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public boolean isSetValue()
+  {
+    return valueESet;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public int getExclusiveBound()
   {
     return exclusiveBound;
   }
@@ -150,12 +195,39 @@ public class IntegerBoundaryTypeImpl extends EObjectImpl implements IntegerBound
    * <!-- end-user-doc -->
    * @generated
    */
-  public void setExclusiveBound(Integer newExclusiveBound)
+  public void setExclusiveBound(int newExclusiveBound)
   {
-    Integer oldExclusiveBound = exclusiveBound;
+    int oldExclusiveBound = exclusiveBound;
     exclusiveBound = newExclusiveBound;
+    boolean oldExclusiveBoundESet = exclusiveBoundESet;
+    exclusiveBoundESet = true;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, QdlPackage.INTEGER_BOUNDARY_TYPE__EXCLUSIVE_BOUND, oldExclusiveBound, exclusiveBound));
+      eNotify(new ENotificationImpl(this, Notification.SET, QdlPackage.INTEGER_BOUNDARY_TYPE__EXCLUSIVE_BOUND, oldExclusiveBound, exclusiveBound, !oldExclusiveBoundESet));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void unsetExclusiveBound()
+  {
+    int oldExclusiveBound = exclusiveBound;
+    boolean oldExclusiveBoundESet = exclusiveBoundESet;
+    exclusiveBound = EXCLUSIVE_BOUND_EDEFAULT;
+    exclusiveBoundESet = false;
+    if (eNotificationRequired())
+      eNotify(new ENotificationImpl(this, Notification.UNSET, QdlPackage.INTEGER_BOUNDARY_TYPE__EXCLUSIVE_BOUND, oldExclusiveBound, EXCLUSIVE_BOUND_EDEFAULT, oldExclusiveBoundESet));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public boolean isSetExclusiveBound()
+  {
+    return exclusiveBoundESet;
   }
 
   /**
@@ -199,9 +271,9 @@ public class IntegerBoundaryTypeImpl extends EObjectImpl implements IntegerBound
     switch (featureID)
     {
       case QdlPackage.INTEGER_BOUNDARY_TYPE__VALUE:
-        return getValue();
+        return new Integer(getValue());
       case QdlPackage.INTEGER_BOUNDARY_TYPE__EXCLUSIVE_BOUND:
-        return getExclusiveBound();
+        return new Integer(getExclusiveBound());
       case QdlPackage.INTEGER_BOUNDARY_TYPE__ANY_ATTRIBUTE:
         if (coreType) return getAnyAttribute();
         return ((FeatureMap.Internal)getAnyAttribute()).getWrapper();
@@ -220,10 +292,10 @@ public class IntegerBoundaryTypeImpl extends EObjectImpl implements IntegerBound
     switch (featureID)
     {
       case QdlPackage.INTEGER_BOUNDARY_TYPE__VALUE:
-        setValue((Integer)newValue);
+        setValue(((Integer)newValue).intValue());
         return;
       case QdlPackage.INTEGER_BOUNDARY_TYPE__EXCLUSIVE_BOUND:
-        setExclusiveBound((Integer)newValue);
+        setExclusiveBound(((Integer)newValue).intValue());
         return;
       case QdlPackage.INTEGER_BOUNDARY_TYPE__ANY_ATTRIBUTE:
         ((FeatureMap.Internal)getAnyAttribute()).set(newValue);
@@ -243,10 +315,10 @@ public class IntegerBoundaryTypeImpl extends EObjectImpl implements IntegerBound
     switch (featureID)
     {
       case QdlPackage.INTEGER_BOUNDARY_TYPE__VALUE:
-        setValue(VALUE_EDEFAULT);
+        unsetValue();
         return;
       case QdlPackage.INTEGER_BOUNDARY_TYPE__EXCLUSIVE_BOUND:
-        setExclusiveBound(EXCLUSIVE_BOUND_EDEFAULT);
+        unsetExclusiveBound();
         return;
       case QdlPackage.INTEGER_BOUNDARY_TYPE__ANY_ATTRIBUTE:
         getAnyAttribute().clear();
@@ -266,9 +338,9 @@ public class IntegerBoundaryTypeImpl extends EObjectImpl implements IntegerBound
     switch (featureID)
     {
       case QdlPackage.INTEGER_BOUNDARY_TYPE__VALUE:
-        return VALUE_EDEFAULT == null ? value != null : !VALUE_EDEFAULT.equals(value);
+        return isSetValue();
       case QdlPackage.INTEGER_BOUNDARY_TYPE__EXCLUSIVE_BOUND:
-        return EXCLUSIVE_BOUND_EDEFAULT == null ? exclusiveBound != null : !EXCLUSIVE_BOUND_EDEFAULT.equals(exclusiveBound);
+        return isSetExclusiveBound();
       case QdlPackage.INTEGER_BOUNDARY_TYPE__ANY_ATTRIBUTE:
         return anyAttribute != null && !anyAttribute.isEmpty();
     }
@@ -287,9 +359,9 @@ public class IntegerBoundaryTypeImpl extends EObjectImpl implements IntegerBound
 
     StringBuffer result = new StringBuffer(super.toString());
     result.append(" (value: ");
-    result.append(value);
+    if (valueESet) result.append(value); else result.append("<unset>");
     result.append(", exclusiveBound: ");
-    result.append(exclusiveBound);
+    if (exclusiveBoundESet) result.append(exclusiveBound); else result.append("<unset>");
     result.append(", anyAttribute: ");
     result.append(anyAttribute);
     result.append(')');

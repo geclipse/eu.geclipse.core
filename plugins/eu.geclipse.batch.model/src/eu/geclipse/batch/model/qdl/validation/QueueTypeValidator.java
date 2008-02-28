@@ -36,6 +36,8 @@ public interface QueueTypeValidator
   boolean validateDescription(String value);
   boolean validateQueueType(QueueTypeEnumeration value);
   boolean validateQueueStatus(QueueStatusEnumeration value);
+  boolean validateQueueStarted(boolean value);
+
   boolean validateCPUTimeLimit(RangeValueType value);
   boolean validateWallTimeLimit(RangeValueType value);
   boolean validateAllowedVirtualOrganizations(AllowedVirtualOrganizationsType value);

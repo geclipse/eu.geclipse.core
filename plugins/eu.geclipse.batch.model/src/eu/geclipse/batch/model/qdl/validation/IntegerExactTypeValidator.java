@@ -20,6 +20,10 @@ public interface IntegerExactTypeValidator
 {
   boolean validate();
 
+  boolean validateValue(int value);
+
+  boolean validateEpsilon(int value);
+
   boolean validateValue(Integer value);
 
   boolean validateEpsilon(Integer value);

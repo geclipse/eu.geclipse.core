@@ -59,6 +59,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *   <li>{@link eu.geclipse.batch.model.qdl.impl.DocumentRootImpl#getJobsInQueue <em>Jobs In Queue</em>}</li>
  *   <li>{@link eu.geclipse.batch.model.qdl.impl.DocumentRootImpl#getPriority <em>Priority</em>}</li>
  *   <li>{@link eu.geclipse.batch.model.qdl.impl.DocumentRootImpl#getQueue <em>Queue</em>}</li>
+ *   <li>{@link eu.geclipse.batch.model.qdl.impl.DocumentRootImpl#isQueueStarted <em>Queue Started</em>}</li>
  *   <li>{@link eu.geclipse.batch.model.qdl.impl.DocumentRootImpl#getQueueStatus <em>Queue Status</em>}</li>
  *   <li>{@link eu.geclipse.batch.model.qdl.impl.DocumentRootImpl#getQueueType <em>Queue Type</em>}</li>
  *   <li>{@link eu.geclipse.batch.model.qdl.impl.DocumentRootImpl#getRunningJobs <em>Running Jobs</em>}</li>
@@ -110,6 +111,16 @@ public class DocumentRootImpl extends EObjectImpl implements DocumentRoot
    * @ordered
    */
   protected static final String DESCRIPTION_EDEFAULT = null;
+
+  /**
+   * The default value of the '{@link #isQueueStarted() <em>Queue Started</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isQueueStarted()
+   * @generated
+   * @ordered
+   */
+  protected static final boolean QUEUE_STARTED_EDEFAULT = false;
 
   /**
    * The default value of the '{@link #getQueueStatus() <em>Queue Status</em>}' attribute.
@@ -409,6 +420,26 @@ public class DocumentRootImpl extends EObjectImpl implements DocumentRoot
    * <!-- end-user-doc -->
    * @generated
    */
+  public boolean isQueueStarted()
+  {
+    return ((Boolean)getMixed().get(QdlPackage.Literals.DOCUMENT_ROOT__QUEUE_STARTED, true)).booleanValue();
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  public void setQueueStarted(boolean newQueueStarted)
+  {
+    ((FeatureMap.Internal)getMixed()).set(QdlPackage.Literals.DOCUMENT_ROOT__QUEUE_STARTED, new Boolean(newQueueStarted));
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
   public QueueStatusEnumeration getQueueStatus()
   {
     return (QueueStatusEnumeration)getMixed().get(QdlPackage.Literals.DOCUMENT_ROOT__QUEUE_STATUS, true);
@@ -593,6 +624,8 @@ public class DocumentRootImpl extends EObjectImpl implements DocumentRoot
         return getPriority();
       case QdlPackage.DOCUMENT_ROOT__QUEUE:
         return getQueue();
+      case QdlPackage.DOCUMENT_ROOT__QUEUE_STARTED:
+        return isQueueStarted() ? Boolean.TRUE : Boolean.FALSE;
       case QdlPackage.DOCUMENT_ROOT__QUEUE_STATUS:
         return getQueueStatus();
       case QdlPackage.DOCUMENT_ROOT__QUEUE_TYPE:
@@ -646,6 +679,9 @@ public class DocumentRootImpl extends EObjectImpl implements DocumentRoot
         return;
       case QdlPackage.DOCUMENT_ROOT__QUEUE:
         setQueue((QueueType)newValue);
+        return;
+      case QdlPackage.DOCUMENT_ROOT__QUEUE_STARTED:
+        setQueueStarted(((Boolean)newValue).booleanValue());
         return;
       case QdlPackage.DOCUMENT_ROOT__QUEUE_STATUS:
         setQueueStatus((QueueStatusEnumeration)newValue);
@@ -706,6 +742,9 @@ public class DocumentRootImpl extends EObjectImpl implements DocumentRoot
       case QdlPackage.DOCUMENT_ROOT__QUEUE:
         setQueue((QueueType)null);
         return;
+      case QdlPackage.DOCUMENT_ROOT__QUEUE_STARTED:
+        setQueueStarted(QUEUE_STARTED_EDEFAULT);
+        return;
       case QdlPackage.DOCUMENT_ROOT__QUEUE_STATUS:
         setQueueStatus(QUEUE_STATUS_EDEFAULT);
         return;
@@ -755,6 +794,8 @@ public class DocumentRootImpl extends EObjectImpl implements DocumentRoot
         return getPriority() != null;
       case QdlPackage.DOCUMENT_ROOT__QUEUE:
         return getQueue() != null;
+      case QdlPackage.DOCUMENT_ROOT__QUEUE_STARTED:
+        return isQueueStarted() != QUEUE_STARTED_EDEFAULT;
       case QdlPackage.DOCUMENT_ROOT__QUEUE_STATUS:
         return getQueueStatus() != QUEUE_STATUS_EDEFAULT;
       case QdlPackage.DOCUMENT_ROOT__QUEUE_TYPE:

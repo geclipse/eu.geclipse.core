@@ -51,23 +51,50 @@ public interface IntegerBoundaryType extends EObject
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Value</em>' attribute.
-   * @see #setValue(Integer)
+   * @see #isSetValue()
+   * @see #unsetValue()
+   * @see #setValue(int)
    * @see eu.geclipse.batch.model.qdl.QdlPackage#getIntegerBoundaryType_Value()
-   * @model dataType="org.eclipse.emf.ecore.xml.type.IntObject"
+   * @model unsettable="true" dataType="org.eclipse.emf.ecore.xml.type.Int"
    *        extendedMetaData="name=':0' kind='simple'"
    * @generated
    */
-  Integer getValue();
+  int getValue();
 
   /**
    * Sets the value of the '{@link eu.geclipse.batch.model.qdl.IntegerBoundaryType#getValue <em>Value</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Value</em>' attribute.
+   * @see #isSetValue()
+   * @see #unsetValue()
    * @see #getValue()
    * @generated
    */
-  void setValue(Integer value);
+  void setValue(int value);
+
+  /**
+   * Unsets the value of the '{@link eu.geclipse.batch.model.qdl.IntegerBoundaryType#getValue <em>Value</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isSetValue()
+   * @see #getValue()
+   * @see #setValue(int)
+   * @generated
+   */
+  void unsetValue();
+
+  /**
+   * Returns whether the value of the '{@link eu.geclipse.batch.model.qdl.IntegerBoundaryType#getValue <em>Value</em>}' attribute is set.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return whether the value of the '<em>Value</em>' attribute is set.
+   * @see #unsetValue()
+   * @see #getValue()
+   * @see #setValue(int)
+   * @generated
+   */
+  boolean isSetValue();
 
   /**
    * Returns the value of the '<em><b>Exclusive Bound</b></em>' attribute.
@@ -78,23 +105,50 @@ public interface IntegerBoundaryType extends EObject
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Exclusive Bound</em>' attribute.
-   * @see #setExclusiveBound(Integer)
+   * @see #isSetExclusiveBound()
+   * @see #unsetExclusiveBound()
+   * @see #setExclusiveBound(int)
    * @see eu.geclipse.batch.model.qdl.QdlPackage#getIntegerBoundaryType_ExclusiveBound()
-   * @model dataType="org.eclipse.emf.ecore.xml.type.IntObject"
+   * @model unsettable="true" dataType="org.eclipse.emf.ecore.xml.type.Int"
    *        extendedMetaData="kind='attribute' name='exclusiveBound'"
    * @generated
    */
-  Integer getExclusiveBound();
+  int getExclusiveBound();
 
   /**
    * Sets the value of the '{@link eu.geclipse.batch.model.qdl.IntegerBoundaryType#getExclusiveBound <em>Exclusive Bound</em>}' attribute.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
    * @param value the new value of the '<em>Exclusive Bound</em>' attribute.
+   * @see #isSetExclusiveBound()
+   * @see #unsetExclusiveBound()
    * @see #getExclusiveBound()
    * @generated
    */
-  void setExclusiveBound(Integer value);
+  void setExclusiveBound(int value);
+
+  /**
+   * Unsets the value of the '{@link eu.geclipse.batch.model.qdl.IntegerBoundaryType#getExclusiveBound <em>Exclusive Bound</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isSetExclusiveBound()
+   * @see #getExclusiveBound()
+   * @see #setExclusiveBound(int)
+   * @generated
+   */
+  void unsetExclusiveBound();
+
+  /**
+   * Returns whether the value of the '{@link eu.geclipse.batch.model.qdl.IntegerBoundaryType#getExclusiveBound <em>Exclusive Bound</em>}' attribute is set.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return whether the value of the '<em>Exclusive Bound</em>' attribute is set.
+   * @see #unsetExclusiveBound()
+   * @see #getExclusiveBound()
+   * @see #setExclusiveBound(int)
+   * @generated
+   */
+  boolean isSetExclusiveBound();
 
   /**
    * Returns the value of the '<em><b>Any Attribute</b></em>' attribute list.

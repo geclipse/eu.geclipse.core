@@ -30,6 +30,7 @@ import org.eclipse.emf.ecore.EObject;
  *   <li>{@link eu.geclipse.batch.model.qdl.QueueType#getDescription <em>Description</em>}</li>
  *   <li>{@link eu.geclipse.batch.model.qdl.QueueType#getQueueType <em>Queue Type</em>}</li>
  *   <li>{@link eu.geclipse.batch.model.qdl.QueueType#getQueueStatus <em>Queue Status</em>}</li>
+ *   <li>{@link eu.geclipse.batch.model.qdl.QueueType#isQueueStarted <em>Queue Started</em>}</li>
  *   <li>{@link eu.geclipse.batch.model.qdl.QueueType#getCPUTimeLimit <em>CPU Time Limit</em>}</li>
  *   <li>{@link eu.geclipse.batch.model.qdl.QueueType#getWallTimeLimit <em>Wall Time Limit</em>}</li>
  *   <li>{@link eu.geclipse.batch.model.qdl.QueueType#getAllowedVirtualOrganizations <em>Allowed Virtual Organizations</em>}</li>
@@ -215,6 +216,60 @@ public interface QueueType extends EObject
    * @generated
    */
   boolean isSetQueueStatus();
+
+  /**
+   * Returns the value of the '<em><b>Queue Started</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Queue Started</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Queue Started</em>' attribute.
+   * @see #isSetQueueStarted()
+   * @see #unsetQueueStarted()
+   * @see #setQueueStarted(boolean)
+   * @see eu.geclipse.batch.model.qdl.QdlPackage#getQueueType_QueueStarted()
+   * @model unsettable="true" dataType="org.eclipse.emf.ecore.xml.type.Boolean" required="true"
+   *        extendedMetaData="kind='element' name='QueueStarted' namespace='##targetNamespace'"
+   * @generated
+   */
+  boolean isQueueStarted();
+
+  /**
+   * Sets the value of the '{@link eu.geclipse.batch.model.qdl.QueueType#isQueueStarted <em>Queue Started</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Queue Started</em>' attribute.
+   * @see #isSetQueueStarted()
+   * @see #unsetQueueStarted()
+   * @see #isQueueStarted()
+   * @generated
+   */
+  void setQueueStarted(boolean value);
+
+  /**
+   * Unsets the value of the '{@link eu.geclipse.batch.model.qdl.QueueType#isQueueStarted <em>Queue Started</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @see #isSetQueueStarted()
+   * @see #isQueueStarted()
+   * @see #setQueueStarted(boolean)
+   * @generated
+   */
+  void unsetQueueStarted();
+
+  /**
+   * Returns whether the value of the '{@link eu.geclipse.batch.model.qdl.QueueType#isQueueStarted <em>Queue Started</em>}' attribute is set.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return whether the value of the '<em>Queue Started</em>' attribute is set.
+   * @see #unsetQueueStarted()
+   * @see #isQueueStarted()
+   * @see #setQueueStarted(boolean)
+   * @generated
+   */
+  boolean isSetQueueStarted();
 
   /**
    * Returns the value of the '<em><b>CPU Time Limit</b></em>' containment reference.

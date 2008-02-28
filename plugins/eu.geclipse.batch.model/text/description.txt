@@ -26,6 +26,7 @@ Package qdl <http://www.eclipse.org/geclipse/qdl>
     Reference /jobsInQueue : IntegerRangeValueType<<0..?>>
     Reference /priority : IntegerRangeValueType<<0..?>>
     Reference /queue : QueueType<<0..?>>
+    Attribute /queueStarted : Boolean<<0..?>>
     Attribute /queueStatus : QueueStatusEnumeration<<0..?>>
     Attribute /queueType : QueueTypeEnumeration<<0..?>>
     Reference /runningJobs : IntegerRangeValueType<<0..?>>
@@ -38,13 +39,13 @@ Package qdl <http://www.eclipse.org/geclipse/qdl>
     Attribute anyAttribute : EFeatureMapEntry<<0..*>>
 
   Class IntegerBoundaryType
-    Attribute value : IntObject
-    Attribute exclusiveBound : IntObject
+    Attribute value : Int
+    Attribute exclusiveBound : Int
     Attribute anyAttribute : EFeatureMapEntry<<0..*>>
 
   Class IntegerExactType
-    Attribute value : IntObject
-    Attribute epsilon : IntObject
+    Attribute value : Int
+    Attribute epsilon : Int
     Attribute anyAttribute : EFeatureMapEntry<<0..*>>
 
   Class IntegerRangeType
@@ -64,6 +65,7 @@ Package qdl <http://www.eclipse.org/geclipse/qdl>
     Attribute description : DescriptionType<<1..1>>
     Attribute queueType : QueueTypeEnumeration<<1..1>>
     Attribute queueStatus : QueueStatusEnumeration<<1..1>>
+    Attribute queueStarted : Boolean<<1..1>>
     Reference cPUTimeLimit : RangeValueType<<1..1>>
     Reference wallTimeLimit : RangeValueType<<1..1>>
     Reference allowedVirtualOrganizations : AllowedVirtualOrganizationsType
