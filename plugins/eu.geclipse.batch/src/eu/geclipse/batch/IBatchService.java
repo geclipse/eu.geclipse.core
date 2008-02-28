@@ -259,6 +259,7 @@ public interface IBatchService {
    * @param priority The priority of the new queue.
    * @param type The type of the new queue.
    * @param enabled The state of the new queue.
+   * @param started If the new queue will be started when created.
    * @param runMax Maximum running jobs at any given time from the queue.
    * @param timeCPU Maximum allowed CPU time for any job. 
    * @param timeWall Maximum allowed wall time for any job.
@@ -268,7 +269,7 @@ public interface IBatchService {
    * @throws ProblemException If command is not executed successfully
    */
   public abstract void createQueue( final String queueName, final int priority, 
-                                       final QueueType type, final boolean enabled, 
+                                       final QueueType type, final boolean enabled, final boolean started, 
                                        final int runMax, final double timeCPU, 
                                        final double timeWall, final int queMax, 
                                        final int assignedResources, final List<String> vos ) throws ProblemException;
