@@ -188,10 +188,8 @@ public class GridModelContentProvider
     Object element = event.getElement();
     if ( ( element instanceof IGridContainer ) && ( ( IGridContainer ) element ).isLazy() ) {
       IGridContainer container = ( IGridContainer ) element;
-      //this.treeViewer.setChildCount( container, 0 );
-      //this.treeViewer.setChildCount( container, size );
-      container.dispose();
       container.setDirty();
+      container.dispose();
     }
   }
 
@@ -199,12 +197,7 @@ public class GridModelContentProvider
    * @see org.eclipse.jface.viewers.ITreeViewerListener#treeExpanded(org.eclipse.jface.viewers.TreeExpansionEvent)
    */
   public void treeExpanded( final TreeExpansionEvent event ) {
-    /*Object element = event.getElement();
-    if ( element instanceof IGridContainer ) {
-      IGridContainer container = ( IGridContainer ) element;
-      if ( container.isLazy() && container.isDirty() ) {
-      }
-    }*/
+    // empty implementation
   }
   
 }

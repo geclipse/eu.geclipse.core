@@ -32,6 +32,7 @@ import eu.geclipse.core.model.IGridService;
 import eu.geclipse.core.model.IGridStorage;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.IWrappedElement;
+import eu.geclipse.core.model.impl.EmptyLazyContainerMarker;
 import eu.geclipse.info.model.GridGlueService;
 import eu.geclipse.ui.internal.Activator;
 
@@ -42,6 +43,8 @@ public class GridModelLabelProvider
     extends LabelProvider {
 
   private Image computingImage;
+  
+  private Image emptyFolderMarkerImage;
   
   private Image jobImage;
   
@@ -79,6 +82,7 @@ public class GridModelLabelProvider
     
     if ( element instanceof IGridElement ) {
       result = getImage( ( IGridElement ) element );
+      
     } else {
       result = super.getImage( element );
     }
@@ -172,12 +176,21 @@ public class GridModelLabelProvider
       }
     } else if ( element instanceof IGridContainer ) {
       result = getVirtualContainerImage();
+    } else if ( element instanceof EmptyLazyContainerMarker ) {
+      result = getEmptyFolderMarkerImage();
     } else {
       result = getVirtualElementImage();
     }
     
     return result;
     
+  }
+  
+  private Image getEmptyFolderMarkerImage() {
+    if ( this.emptyFolderMarkerImage == null ) {
+      this.emptyFolderMarkerImage = Activator.getDefault().getImageRegistry().get( "emptyfoldermarker" );
+    }
+    return this.emptyFolderMarkerImage;
   }
   
   private Image getJobImage() {

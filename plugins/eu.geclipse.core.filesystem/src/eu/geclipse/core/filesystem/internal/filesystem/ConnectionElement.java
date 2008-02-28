@@ -39,6 +39,7 @@ import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.impl.AbstractGridContainer;
+import eu.geclipse.core.model.impl.EmptyLazyContainerMarker;
 
 /**
  * Internal implementation of the {@link IGridConnectionElement}.
@@ -246,7 +247,7 @@ public class ConnectionElement
       if ( res instanceof IContainer ) {
         IResource[] members = ( ( IContainer ) res ).members();
         if ( ( members == null ) || ( members.length == 0 ) ) {
-          fireGridModelEvent( IGridModelEvent.ELEMENTS_CHANGED, this );
+          addElement( new EmptyLazyContainerMarker ( this ) );
         }
       }
       

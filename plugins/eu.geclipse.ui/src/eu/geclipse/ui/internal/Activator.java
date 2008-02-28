@@ -295,7 +295,8 @@ public class Activator extends AbstractUIPlugin {
       { IMG_REFRESH, "icons/eview16/refresh.gif" },  //$NON-NLS-1$
       { IMG_DOWNLOAD_JOB_OUTPUT, "icons/DownloadJobOutput.gif" }, //$NON-NLS-1$
       { IMG_UPDATE_JOB_STATUS, "icons/UpdateJobStatus.gif" }, //$NON-NLS-1$
-      { IMG_SEE, "icons/obj16/see.gif" } //$NON-NLS-1$
+      { IMG_SEE, "icons/obj16/see.gif" }, //$NON-NLS-1$
+      { "emptyfoldermarker", "icons/obj16/ihigh_obj.gif" }  //$NON-NLS-1$//$NON-NLS-2$
     };
     
     ImageDescriptor imgDsc = null;
