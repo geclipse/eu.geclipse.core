@@ -43,7 +43,7 @@ public class TableColumnListener implements SelectionListener {
   }
   
   public void widgetSelected( final SelectionEvent e ) {
-    // This listener is only for the columns of a table
+    // This listener is only for the columns of a table
     assert e.getSource() instanceof TableColumn
       : "This listener should only be used for Tables"; //$NON-NLS-1$
     
