@@ -10,9 +10,7 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributors:
- *    FZK:
- *      - Yifan Zhou
- *      - Jie Tao
+ *    Yifan Zhou
  *****************************************************************************/
 
 package eu.geclipse.core;
@@ -24,8 +22,6 @@ import eu.geclipse.core.model.IGridElement;
 
 /**
  * An interface for the ApplicationDeployment extension point.
- *
- * @author tao-j
  */
 public interface IApplicationDeployment {
   
