@@ -12,6 +12,7 @@
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
  *    Ariel Garcia      - updated to new problem reporting
+ *                      - added handling of default VO when adding/importing
  *****************************************************************************/
 
 package eu.geclipse.ui.internal.preference;
@@ -477,12 +478,36 @@ public class VoPreferencePage
     wizard.setDefaultPageImageDescriptor( ImageDescriptor.createFromURL( imgUrl ) );
     WizardDialog dialog = new WizardDialog( this.getShell(), wizard );
     dialog.open();
+    
+    // If no VOs were present before calling the wizard, select the new VO as default.
+    IVoManager manager = GridModel.getVoManager();
+    if ( ( vo == null ) && ( manager.getChildCount() == 1 ) ) {
+      try {
+        IVirtualOrganization newVo =
+          ( IVirtualOrganization ) manager.getChildren( null )[ 0 ];
+        manager.setDefault( newVo );
+        VoPreferencePage.this.voViewer.setCheckedElements( new Object[] { newVo } );
+      } catch ( GridModelException gme ) {
+        // Nothing we can do
+      }
+    }
+  
   }
   
   protected void importVOs() {
     VoImportWizard wizard = new VoImportWizard();
     WizardDialog dialog = new WizardDialog( getShell(), wizard );
     dialog.open();
+    
+    /*
+     * If no VOs were present before importing, the VoImportWizard will
+     * have selected one, and we need to mark it.
+     */
+    IGridElement element = GridModel.getVoManager().getDefault();
+    if ( element instanceof IVirtualOrganization ) {
+      IVirtualOrganization vo = ( IVirtualOrganization ) element;
+      VoPreferencePage.this.voViewer.setCheckedElements( new Object[] { vo } );
+    }
   }
   
   /**
@@ -510,7 +535,7 @@ public class VoPreferencePage
         for ( IVirtualOrganization vo : vos ) {
           // Check if the given VO is used by some GridProject on the WS
           boolean used = false;
-          for( IGridElement element : projectElements ) {
+          for ( IGridElement element : projectElements ) {
             igp = (IGridProject) element;
             if ( igp.isGridProject() && ( vo == igp.getVO() ) ) {
               used = true;
@@ -527,7 +552,7 @@ public class VoPreferencePage
           } else {
             try {
               manager.delete( vo );
-            } catch( GridModelException gmExc ) {
+            } catch ( GridModelException gmExc ) {
               ProblemDialog.openProblem( this.getShell(),
                                          Messages.getString("VoPreferencePage.error"), //$NON-NLS-1$
                                          Messages.getString("VoPreferencePage.delete_vo_failed") //$NON-NLS-1$
@@ -576,7 +601,7 @@ public class VoPreferencePage
   public boolean performOk() {
     try {
       GridModel.getVoManager().saveElements();
-    } catch( GridModelException gmExc ) {
+    } catch ( GridModelException gmExc ) {
       // TODO mathias
       Activator.logException( gmExc );
     }
@@ -590,7 +615,7 @@ public class VoPreferencePage
   protected void performDefaults() {
     try {
       GridModel.getVoManager().loadElements();
-    } catch( GridModelException gmExc ) {
+    } catch ( GridModelException gmExc ) {
       // TODO mathias
       Activator.logException( gmExc );
     }

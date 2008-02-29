@@ -11,7 +11,7 @@
  *
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
- *    Ariel Garcia      - updated to new problem reporting
+ *    Ariel Garcia      - updated to new problem reporting, set default vo
  *****************************************************************************/
 
 package eu.geclipse.ui.internal.wizards;
@@ -27,8 +27,11 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
 
+import eu.geclipse.core.model.GridModel;
+import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.IVoLoader;
+import eu.geclipse.core.model.IVoManager;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
@@ -98,7 +101,9 @@ public class VoImportWizard extends Wizard {
       getContainer().run( false, false, new IRunnableWithProgress() {
         public void run( final IProgressMonitor monitor )
             throws InvocationTargetException, InterruptedException {
-          
+
+          IVoManager manager = GridModel.getVoManager();
+
           monitor.beginTask( "Loading...", certificates.length );
           
           try {
@@ -108,6 +113,15 @@ public class VoImportWizard extends Wizard {
               /*if ( vo != null ) {
                 certList.add( certificate );
               }*/
+
+              // If there is no default VO we set the (first) newly added one as default
+              if ( ( manager.getDefault() == null ) && ( vo != null ) ) {
+                try {
+                  manager.setDefault( vo );
+                } catch ( GridModelException gme ) {
+                  // This could happen only if 'vo' is not a IVirtualOrganization...
+                }
+              }
             }
           } catch ( ProblemException pExc ) {
             throw new InvocationTargetException( pExc );
