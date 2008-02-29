@@ -716,12 +716,12 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
           ResourcesTypeAdapter.this.cpuArchitectureType.setCPUArchitectureName(
                                               ProcessorArchitectureEnumeration
                                              .get( selectedCPUArch ) );
-        
-            ResourcesTypeAdapter.this.resourcesType
+          
+          ResourcesTypeAdapter.this.cpuArchitectureType = (CPUArchitectureType) checkProxy( ResourcesTypeAdapter.this.cpuArchitectureType );
+          
+          ResourcesTypeAdapter.this.resourcesType
               .setCPUArchitecture( ResourcesTypeAdapter.this.cpuArchitectureType );
 
-        
-          ResourcesTypeAdapter.this.contentChanged();
         }
         contentChanged();
       }
@@ -781,8 +781,14 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
       
       public void modifyText( final ModifyEvent e ) {
         checkOSElement();
-        ResourcesTypeAdapter.this.operatingSystemType
-                                            .setDescription( widget.getText() );  
+        
+        if (!widget.getText().equals( EMPTY_STRING ) ) {
+          ResourcesTypeAdapter.this.operatingSystemType
+                                            .setDescription( widget.getText() );
+        }else{
+          ResourcesTypeAdapter.this.operatingSystemType.setDescription( null );
+        }
+          
         contentChanged();
           
         }

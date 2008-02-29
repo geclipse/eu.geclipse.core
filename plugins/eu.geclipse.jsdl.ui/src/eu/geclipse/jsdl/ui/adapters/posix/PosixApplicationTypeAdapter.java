@@ -704,6 +704,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
   
   /**
+   * 
    * The attach point that handles the {@link Text} widget which is responsible for the 
    * PosixApplication <b>OpenDescriptorsLimit</b> element. This attach point provides a {@link ModifyListener}
    * that listens to changes in the text box and commits this changes to the underlying
@@ -764,6 +765,7 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
     text.addModifyListener( new ModifyListener() {   
       BigInteger bigInteger ;
       LimitsType limits = PosixFactory.eINSTANCE.createLimitsType();
+     
       
       public void modifyText( final ModifyEvent e ) {
 
