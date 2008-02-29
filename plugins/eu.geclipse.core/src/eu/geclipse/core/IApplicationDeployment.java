@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007, 2008 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -22,13 +22,16 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import eu.geclipse.core.model.IGridElement;
 
 
-/** an interface for the extension point ApplicationDeployment
- * @author tao-j
+/**
+ * An interface for the ApplicationDeployment extension point.
  *
+ * @author tao-j
  */
 public interface IApplicationDeployment {
   
-  /** this method is used to deploy the source element to the target
+  /**
+   * This method is used to deploy the source element to the target.
+   *
    * @param deploySource
    * @param deployTarget
    * @param deploytag
