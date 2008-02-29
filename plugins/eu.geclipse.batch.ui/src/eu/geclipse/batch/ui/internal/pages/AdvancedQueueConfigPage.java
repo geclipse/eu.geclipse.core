@@ -269,7 +269,7 @@ public class AdvancedQueueConfigPage extends FormPage
       public void widgetSelected( final SelectionEvent e ) {
         AdvancedQueueConfigPage.this.jobsInQueueSpin
                                     .setEnabled( !( AdvancedQueueConfigPage.this.btnUnlimitedJobsInQueue.getSelection() ) );
-        AdvancedQueueConfigPage.this.advancedQueueAdapter.setUnlimitedJobsInQueue();
+        AdvancedQueueConfigPage.this.advancedQueueAdapter.setUnlimitedJobsInQueue();        
       }     
     } );
     
