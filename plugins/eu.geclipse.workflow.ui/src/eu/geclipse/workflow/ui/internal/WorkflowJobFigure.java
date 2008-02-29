@@ -16,11 +16,10 @@
 package eu.geclipse.workflow.ui.internal;
 
 
+import org.eclipse.draw2d.FlowLayout;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.RoundedRectangle;
-import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
-//import org.eclipse.gmf.runtime.draw2d.ui.figures.WrapLabel;
 import org.eclipse.swt.graphics.Color;
 
 /**
@@ -35,7 +34,7 @@ public class WorkflowJobFigure extends RoundedRectangle {
     /**
      * The preferred size for this figure
      */
-    private static final Dimension SIZE = new Dimension( 100, 50 );
+    private static final Dimension SIZE = new Dimension( 100, 40 );
 
     private boolean myUseLocalCoordinates = false;
 
@@ -48,12 +47,12 @@ public class WorkflowJobFigure extends RoundedRectangle {
      * Default Constructor. This creates the WorkflowJobFigure.
      */
     public WorkflowJobFigure() {
-      ToolbarLayout layoutThis = new ToolbarLayout();
+      FlowLayout layoutThis = new FlowLayout();
       
       layoutThis.setStretchMinorAxis( false );
-      layoutThis.setMinorAlignment( ToolbarLayout.ALIGN_TOPLEFT );
-      layoutThis.setSpacing( 5 );
-      layoutThis.setVertical( true );
+      layoutThis.setMajorAlignment( FlowLayout.ALIGN_CENTER );
+      layoutThis.setMinorAlignment( FlowLayout.ALIGN_LEFTTOP );
+      layoutThis.setMajorSpacing( 5 );
       
       this.setLayoutManager( layoutThis );
       this.setPreferredSize( SIZE );
