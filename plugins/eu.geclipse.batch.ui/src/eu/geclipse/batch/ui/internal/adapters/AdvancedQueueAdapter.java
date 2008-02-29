@@ -38,7 +38,7 @@ import eu.geclipse.batch.model.qdl.QueueType;
 
 
 /**
- * @author nickl
+ * @author nloulloud
  *
  */
 public class AdvancedQueueAdapter extends QdlAdaptersFactory {
@@ -115,6 +115,7 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
    }
    
    
+   
    /**
     * Adapter interface to attach to the Priority Spinner widget.
     * 
@@ -129,6 +130,7 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
      spinner.addModifyListener( new ModifyListener(){
        IntegerRangeValueType integerRangeValueType = QdlFactory.eINSTANCE.createIntegerRangeValueType();
        IntegerBoundaryType integerBoundaryType = QdlFactory.eINSTANCE.createIntegerBoundaryType();
+      @SuppressWarnings("boxing")
       public void modifyText( final ModifyEvent e ) {
         
         this.integerBoundaryType.setValue( Integer.valueOf( spinner.getSelection() ) );
@@ -164,7 +166,9 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
      spinner.addModifyListener( new ModifyListener(){
        IntegerRangeValueType integerRangeValueTupe = QdlFactory.eINSTANCE.createIntegerRangeValueType();
        IntegerBoundaryType integerBoundaryType = QdlFactory.eINSTANCE.createIntegerBoundaryType();
+      @SuppressWarnings("boxing")
       public void modifyText( final ModifyEvent e ) {
+        
         
         this.integerBoundaryType.setValue( Integer.valueOf( spinner.getSelection() ) );
         this.integerBoundaryType = (IntegerBoundaryType) checkProxy( this.integerBoundaryType );
@@ -178,6 +182,7 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
      });
      
    }
+   
    
    
    /**
@@ -198,6 +203,7 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
      spinner.addModifyListener( new ModifyListener(){
        IntegerRangeValueType integerRangeValueTupe = QdlFactory.eINSTANCE.createIntegerRangeValueType();
        IntegerBoundaryType boundaryType = QdlFactory.eINSTANCE.createIntegerBoundaryType();
+      @SuppressWarnings("boxing")
       public void modifyText( final ModifyEvent e ) {
         
         this.boundaryType.setValue( Integer.valueOf( spinner.getSelection() ) );
@@ -229,6 +235,7 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
      spinner.addModifyListener( new ModifyListener(){
        IntegerRangeValueType integerRangeValueTupe = QdlFactory.eINSTANCE.createIntegerRangeValueType();
        IntegerExactType exactType = QdlFactory.eINSTANCE.createIntegerExactType();
+      @SuppressWarnings("boxing")
       public void modifyText( final ModifyEvent e ) {
         
         this.exactType.setValue( Integer.valueOf( spinner.getSelection() ) );
@@ -245,11 +252,13 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
    }
    
    
+   
    /**
    * Method to set the Maximum Running Jobs in a Queue to the maximum value an integer number
    * can be have, 2<sup>31</sup>-1.
    * 
    */
+  @SuppressWarnings("boxing")
   public void setUnlimitedRunningJobs() {
      
      IntegerRangeValueType integerRangeValueTupe = QdlFactory.eINSTANCE.createIntegerRangeValueType();
@@ -268,9 +277,9 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
    
   /**
    * Method to set the Maximum Jobs in a Queue to the maximum value an integer number
-   * can be have, 2<sup>31</sup>-1.
-   * 
+   * can be have, 2<sup>31</sup>-1. 
    */
+  @SuppressWarnings("boxing")
   public void setUnlimitedJobsInQueue() {
      
      IntegerRangeValueType integerRangeValueType = QdlFactory.eINSTANCE.createIntegerRangeValueType();
