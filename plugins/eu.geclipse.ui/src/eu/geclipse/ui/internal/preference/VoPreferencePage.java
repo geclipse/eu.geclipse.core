@@ -62,6 +62,7 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridElementManager;
 import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridModelListener;
 import eu.geclipse.core.model.IGridProject;
@@ -479,18 +480,11 @@ public class VoPreferencePage
     WizardDialog dialog = new WizardDialog( this.getShell(), wizard );
     dialog.open();
     
-    // If no VOs were present before calling the wizard, select the new VO as default.
-    IVoManager manager = GridModel.getVoManager();
-    if ( ( vo == null ) && ( manager.getChildCount() == 1 ) ) {
-      try {
-        IVirtualOrganization newVo =
-          ( IVirtualOrganization ) manager.getChildren( null )[ 0 ];
-        manager.setDefault( newVo );
-        VoPreferencePage.this.voViewer.setCheckedElements( new Object[] { newVo } );
-      } catch ( GridModelException gme ) {
-        // Nothing we can do
-      }
-    }
+    /*
+     * If no VOs were present before calling the wizard, there is now a default
+     * VO to mark as checked.
+     */
+    checkDefaultVo();
   
   }
   
@@ -500,14 +494,11 @@ public class VoPreferencePage
     dialog.open();
     
     /*
-     * If no VOs were present before importing, the VoImportWizard will
-     * have selected one, and we need to mark it.
+     * If no VOs were present before importing, the VoManager will have set
+     * the first new one as default. Thus we have to update the viewer's
+     * checked element.
      */
-    IGridElement element = GridModel.getVoManager().getDefault();
-    if ( element instanceof IVirtualOrganization ) {
-      IVirtualOrganization vo = ( IVirtualOrganization ) element;
-      VoPreferencePage.this.voViewer.setCheckedElements( new Object[] { vo } );
-    }
+    checkDefaultVo();
   }
   
   /**
@@ -561,8 +552,26 @@ public class VoPreferencePage
             }
           }
         }
+        
+        /*
+         * If the default VO was removed, another one was selected arbitrarily
+         * by the VoManager. So we have to update the viewer's checked element.
+         */
+        checkDefaultVo();
+        
         updateButtons();
       }
+    }
+  }
+  
+  /**
+   * Mark the default VO checked in the voViewer table.
+   */
+  private void checkDefaultVo() {
+    IVoManager manager = GridModel.getVoManager();
+    if ( ( manager.getChildCount() > 0 ) ) {
+      Object[] checked = new Object[] { manager.getDefault() };
+      VoPreferencePage.this.voViewer.setCheckedElements( checked );
     }
   }
   
