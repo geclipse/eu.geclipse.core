@@ -1,25 +1,25 @@
 -public
 -sourcepath "../@repDirectory@eu.geclipse.batch.model/src
-../@repDirectory@eu.geclipse.batch/src
-../@repDirectory@eu.geclipse.batch.ui/src
-../@repDirectory@eu.geclipse.core.filesystem/src
-../@repDirectory@eu.geclipse.core.jobs/src
-../@repDirectory@eu.geclipse.core.reporting/src
-../@repDirectory@eu.geclipse.core/src
-../@repDirectory@eu.geclipse.glite.editor/src
-../@repDirectory@eu.geclipse.gvid/src
-../@repDirectory@eu.geclipse.gvid.uncompressed/src
-../@repDirectory@eu.geclipse.info/src
-../@repDirectory@eu.geclipse.jsdl.model/src
-../@repDirectory@eu.geclipse.jsdl/src
-../@repDirectory@eu.geclipse.jsdl.ui/src
-../@repDirectory@eu.geclipse.terminal/src
-../@repDirectory@eu.geclipse.terminal.ssh/src
-../@repDirectory@eu.geclipse.ui/src
-../@repDirectory@eu.geclipse.webview/src
-../@repDirectory@eu.geclipse.workflow.edit/src
-../@repDirectory@eu.geclipse.workflow.model/src
-../@repDirectory@eu.geclipse.workflow.ui/src"
+;../@repDirectory@eu.geclipse.batch/src
+;../@repDirectory@eu.geclipse.batch.ui/src
+;../@repDirectory@eu.geclipse.core.filesystem/src
+;../@repDirectory@eu.geclipse.core.jobs/src
+;../@repDirectory@eu.geclipse.core.reporting/src
+;../@repDirectory@eu.geclipse.core/src
+;../@repDirectory@eu.geclipse.glite.editor/src
+;../@repDirectory@eu.geclipse.gvid/src
+;../@repDirectory@eu.geclipse.gvid.uncompressed/src
+;../@repDirectory@eu.geclipse.info/src
+;../@repDirectory@eu.geclipse.jsdl.model/src
+;../@repDirectory@eu.geclipse.jsdl/src
+;../@repDirectory@eu.geclipse.jsdl.ui/src
+;../@repDirectory@eu.geclipse.terminal/src
+;../@repDirectory@eu.geclipse.terminal.ssh/src
+;../@repDirectory@eu.geclipse.ui/src
+;../@repDirectory@eu.geclipse.webview/src
+;../@repDirectory@eu.geclipse.workflow.edit/src
+;../@repDirectory@eu.geclipse.workflow.model/src
+;../@repDirectory@eu.geclipse.workflow.ui/src"
 -encoding "iso-8859-1"
 -charset "iso-8859-1"
 -d html/api_reference
