@@ -30,6 +30,7 @@
 -doctitle "g-Eclipse API Specification"
 -header "<b>g-Eclipse</b><br>Release 1.0.0"
 -keywords
+
 eu.geclipse.batch
 eu.geclipse.batch.model.qdl
 eu.geclipse.batch.model.qdl.impl
