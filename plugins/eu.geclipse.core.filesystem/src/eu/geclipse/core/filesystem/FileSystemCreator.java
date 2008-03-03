@@ -109,20 +109,24 @@ public class FileSystemCreator
       connection = new ConnectionRoot( (IFile)resource );
     }
     
-    try {
-      IFileInfo info = connection.getConnectionFileInfo();
-      if ( info instanceof FileInfo ) {
-        FileInfo fileInfo = (FileInfo)info;
-        ( ( FileInfo ) info ).setExists( true );
-        if( resource instanceof IFile ) {
-          fileInfo.setDirectory( false );
+    if ( connection != null ) {
+      try {
+        IFileInfo info = connection.getConnectionFileInfo();
+        if ( info instanceof FileInfo ) {
+          FileInfo fileInfo = (FileInfo)info;
+          ( ( FileInfo ) info ).setExists( true );
+          if( resource instanceof IFile ) {
+            fileInfo.setDirectory( false );
+          }
         }
+      } catch ( CoreException cExc ) {
+        // Should never happen, if it does just log it
+        Activator.logException( cExc );
       }
-    } catch ( CoreException cExc ) {
-      // Should never happen, if it does just log it
-      Activator.logException( cExc );
     }
+    
     return connection;
+    
   }
   
   /* (non-Javadoc)

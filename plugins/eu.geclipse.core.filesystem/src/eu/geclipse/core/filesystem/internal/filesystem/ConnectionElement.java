@@ -34,12 +34,12 @@ import org.eclipse.core.runtime.SubMonitor;
 import eu.geclipse.core.filesystem.GEclipseFileSystem;
 import eu.geclipse.core.filesystem.internal.Activator;
 import eu.geclipse.core.model.GridModel;
+import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
-import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.impl.AbstractGridContainer;
-import eu.geclipse.core.model.impl.EmptyLazyContainerMarker;
+import eu.geclipse.core.model.impl.ContainerMarker;
 
 /**
  * Internal implementation of the {@link IGridConnectionElement}.
@@ -247,13 +247,33 @@ public class ConnectionElement
       if ( res instanceof IContainer ) {
         IResource[] members = ( ( IContainer ) res ).members();
         if ( ( members == null ) || ( members.length == 0 ) ) {
-          addElement( new EmptyLazyContainerMarker ( this ) );
+          addElement(
+              new ContainerMarker (
+                  this,
+                  ContainerMarker.MarkerType.INFO,
+                  Messages.getString("ConnectionElement.foler_empty_message") //$NON-NLS-1$
+              )
+          );
         }
       }
       
     } catch ( CoreException cExc ) {
+      
       this.fetchError = cExc;
       result = new Status( IStatus.ERROR, Activator.PLUGIN_ID, Messages.getString("ConnectionElement.fetch_error"), cExc ); //$NON-NLS-1$
+      
+      try {
+        addElement(
+            new ContainerMarker (
+                this,
+                ContainerMarker.MarkerType.ERROR,
+                cExc.getMessage()
+            )
+        );
+      } catch ( GridModelException gmExc ) {
+        Activator.logException( gmExc );
+      }
+      
     } finally {
       sMonitor.done();
     }

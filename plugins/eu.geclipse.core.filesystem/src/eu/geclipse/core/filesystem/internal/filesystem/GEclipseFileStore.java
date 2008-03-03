@@ -126,12 +126,7 @@ public class GEclipseFileStore
     
     if ( isActive() ) {
       setActive( false );
-      try {
-        result = getSlave().childNames( options, monitor( monitor ) );
-      } catch ( CoreException cExc ) {
-        Activator.logException( cExc );
-        throw cExc;
-      }
+      result = getSlave().childNames( options, monitor( monitor ) );
       this.childNames = result;
     }
     
@@ -292,6 +287,11 @@ public class GEclipseFileStore
     this.childNames = null;
   }
   
+  /**
+   * Set an external progress monitor.
+   * 
+   * @param monitor The progress monitor.
+   */
   public void setExternalMonitor( final IProgressMonitor monitor ) {
     this.externalMonitor = monitor;
   }

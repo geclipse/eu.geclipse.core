@@ -103,7 +103,6 @@ public class GEclipseFileSystem
    */
   @Override
   public IFileStore getStore( final URI uri ) {
-    //System.out.println( "GEclipseFileSystem#getStore@" + uri );
     GEclipseFileStore result = null;
     FileSystemManager manager = FileSystemManager.getInstance();
     result = manager.getStore( this, uri );
