@@ -19,7 +19,7 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 /**
- * Returns the localised messages for this package.
+ * Returns the localized messages for this package.
  */
 public class Messages {
   private static final String BUNDLE_NAME = "eu.geclipse.core.internal.messages"; //$NON-NLS-1$
@@ -30,10 +30,10 @@ public class Messages {
   }
 
   /**
-   * Returns a localised version of a message.
+   * Returns a localized version of a message.
    * 
    * @param key key for the message.
-   * @return the localised string.
+   * @return the localized string.
    */
   public static String getString( final String key ) {
     String message;
