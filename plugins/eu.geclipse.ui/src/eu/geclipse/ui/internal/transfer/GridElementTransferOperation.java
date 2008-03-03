@@ -138,14 +138,14 @@ public class GridElementTransferOperation
       = monitor == null
       ? new NullProgressMonitor()
       : monitor;
-      
+    
     MultiStatus status = new MultiStatus( Activator.PLUGIN_ID,
                                           IStatus.OK,
                                           Messages.getString("GridElementTransferOperation.op_status"), //$NON-NLS-1$
                                           null );
       
     localMonitor.beginTask( Messages.getString("GridElementTransferOperation.transfering_element_progress"), this.elements.length ); //$NON-NLS-1$
-    
+
     for ( IGridElement element : this.elements ) {
       
       localMonitor.subTask( element.getName() );
@@ -162,7 +162,7 @@ public class GridElementTransferOperation
       }
       
     }
-    
+   
     return status;
     
   }
@@ -318,7 +318,7 @@ public class GridElementTransferOperation
   private IStatus copyFile( final IFileStore from,
                             final IFileStore to,
                             final IProgressMonitor monitor ) {
-
+    
     TransferParams data = new TransferParams( from, null, to, to.getChild( from.getName() ), monitor );
 
     // Prepare copy operation
@@ -444,7 +444,7 @@ public class GridElementTransferOperation
       monitor.done();
       
     }
-    
+
     return data.status;
         
   }
@@ -573,12 +573,11 @@ public class GridElementTransferOperation
             
             try {
               // bug #216867 File copied into folder expanded on view is not visibled
-              target.setDirty();
-              target.getChildren( new SubProgressMonitor( monitor, 1 ) );              
-            } catch( GridModelException gmExc ) {
+              target.getResource().refreshLocal( IResource.DEPTH_ONE, new SubProgressMonitor( monitor, 1 ) );
+            } catch( CoreException cExc ) {
               // refresh errors should not disturb the operation
               // but should be tracked, therefore just log it
-              Activator.logException( gmExc );
+              Activator.logException( cExc );
             }
             
             if ( monitor.isCanceled() ) {
