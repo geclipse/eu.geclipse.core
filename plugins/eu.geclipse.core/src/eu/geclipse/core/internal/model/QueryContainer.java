@@ -25,7 +25,7 @@ import org.eclipse.core.runtime.Status;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
-import eu.geclipse.core.model.impl.EmptyLazyContainerMarker;
+import eu.geclipse.core.model.impl.ContainerMarker;
 
 public class QueryContainer
     extends VirtualGridContainer
@@ -99,7 +99,7 @@ public class QueryContainer
           unlock();
         }
       } else {
-        addElement( new EmptyLazyContainerMarker( this ) );
+        addElement( new ContainerMarker( this, ContainerMarker.MarkerType.INFO, "No matching elements found" ) );
       }
       
     }

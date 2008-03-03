@@ -59,38 +59,77 @@ public abstract class AbstractGridContainer
     
     private IProgressMonitor externalMonitor;
     
+    private Throwable exception;
+    
+    /**
+     * Construct a new child fetcher for the specified container.
+     *  
+     * @param container The container whose children should be fetched.
+     */
     public ChildFetcher( final AbstractGridContainer container ) {
-      super( "Child Fetcher @ " + container.getName() );
+      super( "Child Fetcher @ " + container.getName() ); //$NON-NLS-1$
       this.container = container;
     }
     
+    /**
+     * Get an exception that occurred during child
+     * fetching or <code>null</code> of no such exception occurred.
+     *  
+     * @return The exception of <code>null</code> if either the
+     * fetcher did not yet run or no exception occurred.
+     */
+    public Throwable getException() {
+      return this.exception;
+    }
+    
+    /**
+     * True if this fetcher has not yet run, i.e. it is currently
+     * scheduled, or if it currently runs.
+     * 
+     * @return True if the job has not yet finished.
+     */
     public boolean isFetching() {
       return getState() != NONE;
     }
     
+    /**
+     * Set a progress monitor that is used in the run method in parallel
+     * with the monitor provided by the run method parameter.
+     * 
+     * @param monitor The external monitor.
+     */
     public void setExternalMonitor( final IProgressMonitor monitor ) {
       this.externalMonitor = monitor;
     }
     
+    /* (non-Javadoc)
+     * @see org.eclipse.core.runtime.jobs.Job#run(org.eclipse.core.runtime.IProgressMonitor)
+     */
     @Override
     protected IStatus run( final IProgressMonitor monitor ) {
       
-      IStatus status = Status.CANCEL_STATUS;
       IProgressMonitor mon = new MasterMonitor( monitor, this.externalMonitor );
       
       this.container.lock();
       
       try {
+        
         this.container.deleteAll();
-        status = this.container.fetchChildren( mon );
-        this.container.setDirty( ! status.isOK() );
+        IStatus status = this.container.fetchChildren( mon );
+        //this.container.setDirty( ! status.isOK() );
+        
+        if ( ! status.isOK() ) {
+          this.exception = status.getException();
+        }
+        
       } catch ( GridModelException gmExc ) {
-        status = new Status( IStatus.ERROR, Activator.PLUGIN_ID, "Fetch Failed", gmExc );
+        this.exception = gmExc;
       } finally {
+        this.container.setDirty( false );
         this.container.unlock();
       }
       
-      return status;
+      return Status.OK_STATUS;
       
     }
     
@@ -186,7 +225,14 @@ public abstract class AbstractGridContainer
   public IGridElement[] getChildren( final IProgressMonitor monitor )
       throws GridModelException {
     if ( isLazy() && isDirty() ) {
-      IStatus status = startFetch( monitor );
+      try {
+        startFetch( monitor );
+      } catch ( Throwable t ) {
+        if ( t instanceof GridModelException ) {
+          throw ( GridModelException ) t;
+        }
+        throw new GridModelException( ICoreProblems.MODEL_FETCH_CHILDREN_FAILED, t, Activator.PLUGIN_ID );
+      }
     }
     return this.children.toArray( new IGridElement[ this.children.size() ] );
   }
@@ -397,7 +443,8 @@ public abstract class AbstractGridContainer
     getGridNotificationService().addListener( listener );
   }
   
-  private IStatus startFetch( final IProgressMonitor monitor ) {
+  private void startFetch( final IProgressMonitor monitor )
+      throws Throwable {
 
     if ( this.fetcher == null ) {
       this.fetcher = new ChildFetcher( this );
@@ -414,7 +461,11 @@ public abstract class AbstractGridContainer
       // Silently ignored
     }
     
-    return this.fetcher.getResult();
+    Throwable exc = this.fetcher.getException();
+    
+    if ( exc != null ) {
+      throw exc;
+    }
     
   }
   
