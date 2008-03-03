@@ -18,10 +18,12 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.swt.widgets.Shell;
 
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.util.MasterMonitor;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 
 public class FetchChildrenJob extends Job {
@@ -30,9 +32,12 @@ public class FetchChildrenJob extends Job {
   
   private IProgressMonitor externalMonitor;
   
-  public FetchChildrenJob( final IGridContainer container ) {
+  private Shell shell;
+  
+  public FetchChildrenJob( final IGridContainer container, final Shell shell ) {
     super( "Fetching Children of " + container.getName() );
     this.container = container;
+    this.shell = shell;
   }
   
   public void setExternalMonitor( final IProgressMonitor monitor ) {
@@ -42,7 +47,7 @@ public class FetchChildrenJob extends Job {
   @Override
   protected IStatus run( final IProgressMonitor monitor ) {
 
-    IStatus result = Status.CANCEL_STATUS;
+    IStatus result = Status.OK_STATUS;
     MasterMonitor mMonitor = new MasterMonitor( monitor, this.externalMonitor );
     
     try {
@@ -50,7 +55,10 @@ public class FetchChildrenJob extends Job {
       this.container.getChildren( mMonitor );
       result = Status.OK_STATUS;
     } catch ( GridModelException gmExc ) {
-      result = new Status( IStatus.ERROR, Activator.PLUGIN_ID, "Fetch Error", gmExc );
+      ProblemDialog.openProblem( this.shell,
+                                 "Fetch Error",
+                                 "Error while fetching children of " + this.container.getName(),
+                                 gmExc );
     } finally {
       mMonitor.done();
     }

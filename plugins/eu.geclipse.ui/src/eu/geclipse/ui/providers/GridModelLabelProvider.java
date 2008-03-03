@@ -16,7 +16,11 @@
 
 package eu.geclipse.ui.providers;
 
+import java.net.URL;
+import java.util.Hashtable;
+
 import org.eclipse.core.resources.IResource;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
@@ -32,7 +36,8 @@ import eu.geclipse.core.model.IGridService;
 import eu.geclipse.core.model.IGridStorage;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.IWrappedElement;
-import eu.geclipse.core.model.impl.EmptyLazyContainerMarker;
+import eu.geclipse.core.model.impl.ContainerMarker;
+import eu.geclipse.core.model.impl.ContainerMarker.MarkerType;
 import eu.geclipse.info.model.GridGlueService;
 import eu.geclipse.ui.internal.Activator;
 
@@ -41,10 +46,15 @@ import eu.geclipse.ui.internal.Activator;
  */
 public class GridModelLabelProvider
     extends LabelProvider {
+  
+  public static final String INFO_MARKER = "icons/obj16/info_obj.gif"; //$NON-NLS-1$
+
+  public static final String ERROR_MARKER = "icons/obj16/ihigh_obj.gif"; //$NON-NLS-1$
+  
+  private static Hashtable< String, Image > images
+    = new Hashtable< String, Image >();
 
   private Image computingImage;
-  
-  private Image emptyFolderMarkerImage;
   
   private Image jobImage;
   
@@ -176,8 +186,8 @@ public class GridModelLabelProvider
       }
     } else if ( element instanceof IGridContainer ) {
       result = getVirtualContainerImage();
-    } else if ( element instanceof EmptyLazyContainerMarker ) {
-      result = getEmptyFolderMarkerImage();
+    } else if ( element instanceof ContainerMarker ) {
+      result = getContainerMarkerImage( ( ContainerMarker ) element );
     } else {
       result = getVirtualElementImage();
     }
@@ -186,11 +196,19 @@ public class GridModelLabelProvider
     
   }
   
-  private Image getEmptyFolderMarkerImage() {
-    if ( this.emptyFolderMarkerImage == null ) {
-      this.emptyFolderMarkerImage = Activator.getDefault().getImageRegistry().get( "emptyfoldermarker" );
+  private Image getContainerMarkerImage( final ContainerMarker marker ) {
+    
+    Image result = null;
+    ContainerMarker.MarkerType type = marker.getType();
+    
+    if ( type == MarkerType.INFO ) {
+      result = getImage( INFO_MARKER );
+    } else if ( type == MarkerType.ERROR ) {
+      result = getImage( ERROR_MARKER );
     }
-    return this.emptyFolderMarkerImage;
+    
+    return result;
+    
   }
   
   private Image getJobImage() {
@@ -282,6 +300,25 @@ public class GridModelLabelProvider
         .get( "computing" ); //$NON-NLS-1$
     }
     return this.computingImage;
+  }
+  
+  private static Image getImage( final String path ) {
+    
+    Image image = images.get( path );
+    
+    if ( image == null ) {
+      image = loadImage( path );
+      images.put( path, image );
+    }
+    
+    return image;
+    
+  }
+  
+  private static Image loadImage( final String path ) {
+    URL url = Activator.getDefault().getBundle().getEntry( path );
+    ImageDescriptor descriptor = ImageDescriptor.createFromURL( url );
+    return descriptor.createImage();
   }
 
 }

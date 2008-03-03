@@ -27,7 +27,6 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Shell;
 
 import eu.geclipse.core.model.GridModelException;
-import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.ui.dialogs.ProblemDialog;
@@ -130,7 +129,7 @@ public class GridModelContentProvider
   protected Object[] getChildren( final IGridContainer container ) {
     Object[] children = null;
     if ( container.isLazy() && container.isDirty() ) {
-      FetchChildrenJob fetcher = new FetchChildrenJob( container );
+      FetchChildrenJob fetcher = new FetchChildrenJob( container, this.treeViewer.getControl().getShell() );
       NewProgressTreeNode monitor = new NewProgressTreeNode( this.treeViewer );
       fetcher.setExternalMonitor( monitor );
       fetcher.setSystem( true );
