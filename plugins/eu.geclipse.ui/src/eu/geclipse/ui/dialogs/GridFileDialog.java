@@ -45,6 +45,7 @@ import org.eclipse.ui.PlatformUI;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IConnectionManager;
 import eu.geclipse.core.model.IGridConnectionElement;
+import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridModelListener;
@@ -59,7 +60,7 @@ import eu.geclipse.ui.providers.IConfigurationListener;
 
 /**
  * This is an implementation of a file dialog for browsing remote connections
- * via EFS that are defined in the {@link ConnectionManager}. The dialog allows
+ * via EFS that are defined in the {@link IConnectionManager}. The dialog allows
  * to select a remote file and also provides functionality to filter files by
  * there file extensions.
  */
@@ -219,7 +220,9 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
    */
   @Override
   protected Control createDialogArea( final Composite parent ) {
+    
     GridData gData;
+    
     Composite mainComp = new Composite( parent, SWT.NONE );
     mainComp.setLayout( new GridLayout( 1, false ) );
     gData = new GridData( GridData.FILL_BOTH );
@@ -228,6 +231,7 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
     gData.widthHint = 400;
     gData.heightHint = 400;
     mainComp.setLayoutData( gData );
+    
     Composite treeComp = new Composite( mainComp, SWT.BORDER );
     GridLayout treeCompLayout = new GridLayout( 1, false );
     treeCompLayout.marginWidth = 0;
@@ -239,13 +243,15 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
     gData.grabExcessHorizontalSpace = true;
     gData.grabExcessVerticalSpace = true;
     treeComp.setLayoutData( gData );
+    
     ToolBarManager tbManager = new ToolBarManager( SWT.FLAT );
     ToolBar toolBar = tbManager.createControl( treeComp );
     gData = new GridData();
     gData.horizontalAlignment = GridData.FILL;
     gData.verticalAlignment = GridData.BEGINNING;
     toolBar.setLayoutData( gData );
-    int treeStyle = SWT.VIRTUAL | SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL;
+    
+    int treeStyle = SWT.SINGLE | SWT.H_SCROLL | SWT.V_SCROLL;
     this.treeViewer = new TreeViewer( treeComp, treeStyle );
     ConnectionViewContentProvider cProvider = new ConnectionViewContentProvider();
     this.treeViewer.setContentProvider( cProvider );
@@ -253,20 +259,24 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
     this.treeViewer.setLabelProvider( lProvider );
     IConnectionManager cManager = GridModel.getConnectionManager();
     this.treeViewer.setInput( cManager );
+    
     Tree tree = this.treeViewer.getTree();
     tree.setHeaderVisible( true );
     gData = new GridData( GridData.FILL_BOTH );
     gData.grabExcessHorizontalSpace = true;
     gData.grabExcessVerticalSpace = true;
     tree.setLayoutData( gData );
+    
     TreeColumn nameColumn = new TreeColumn( tree, SWT.NONE );
     nameColumn.setText( Messages.getString( "GridFileDialog.name_column" ) ); //$NON-NLS-1$
     nameColumn.setAlignment( SWT.LEFT );
     nameColumn.setWidth( 300 );
+    
     this.projectColumn = new TreeColumn( tree, SWT.NONE );
     this.projectColumn.setText( Messages.getString( "GridFileDialog.project_column" ) ); //$NON-NLS-1$
     this.projectColumn.setAlignment( SWT.LEFT );
     this.projectColumn.setWidth( this.lastProjectColumnWidth );
+    
     IWorkbenchWindow wWindow = PlatformUI.getWorkbench()
       .getActiveWorkbenchWindow();
     IAction newConnectionAction = new NewConnectionAction( wWindow );
@@ -274,56 +284,61 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
     IAction modeAction = new ViewModeToggleAction( cProvider );
     tbManager.add( modeAction );
     tbManager.update( true );
+    
     Composite fileComp = new Composite( mainComp, SWT.NONE );
     fileComp.setLayout( new GridLayout( 2, false ) );
     gData = new GridData( GridData.FILL_HORIZONTAL );
     gData.grabExcessHorizontalSpace = true;
     fileComp.setLayoutData( gData );
+    
     Label filenameLabel = new Label( fileComp, SWT.NONE );
     filenameLabel.setText( Messages.getString( "GridFileDialog.filename_label" ) ); //$NON-NLS-1$
     gData = new GridData();
     gData.horizontalAlignment = GridData.BEGINNING;
     filenameLabel.setLayoutData( gData );
+    
     this.filenameText = new Text( fileComp, SWT.BORDER );
     gData = new GridData( GridData.FILL_HORIZONTAL );
     gData.grabExcessHorizontalSpace = true;
     this.filenameText.setLayoutData( gData );
+    
     Label filetypeLabel = new Label( fileComp, SWT.NONE );
     filetypeLabel.setText( Messages.getString( "GridFileDialog.filetype_label" ) ); //$NON-NLS-1$
     gData = new GridData();
     gData.horizontalAlignment = GridData.BEGINNING;
     filetypeLabel.setLayoutData( gData );
+    
     this.filetypeCombo = new Combo( fileComp, SWT.BORDER | SWT.READ_ONLY );
     gData = new GridData( GridData.FILL_HORIZONTAL );
     gData.grabExcessHorizontalSpace = true;
     this.filetypeCombo.setLayoutData( gData );
-    this.treeViewer.addSelectionChangedListener( new ISelectionChangedListener()
-    {
-
+    
+    this.treeViewer.addSelectionChangedListener( new ISelectionChangedListener() {
       public void selectionChanged( final SelectionChangedEvent event ) {
         ISelection selection = event.getSelection();
         handleSelectionChanged( selection );
       }
     } );
     this.treeViewer.addDoubleClickListener( new IDoubleClickListener() {
-
       public void doubleClick( final DoubleClickEvent event ) {
         handleDoubleClick();
       }
     } );
     GridModel.getRoot().addGridModelListener( this );
     cProvider.addConfigurationListener( new IConfigurationListener() {
-
-      public void configurationChanged( final ConfigurableContentProvider source )
-      {
+      public void configurationChanged( final ConfigurableContentProvider source ) {
         handleConfigurationChanged( source );
       }
     } );
+    
     this.filter.link( this.treeViewer, this.filetypeCombo );
+    
     if( this.protocolFilter != null ) {
       this.treeViewer.addFilter( this.protocolFilter );
     }
+    
     return mainComp;
+    
   }
 
   /**
@@ -347,8 +362,10 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
    * @see eu.geclipse.core.model.IGridModelListener#gridModelChanged(eu.geclipse.core.model.IGridModelEvent)
    */
   public void gridModelChanged( final IGridModelEvent event ) {
-    IGridElement source = event.getSource();
-    refreshViewer( source );
+    if ( ( event.getType() == IGridModelEvent.ELEMENTS_ADDED )
+        || ( event.getType() == IGridModelEvent.ELEMENTS_REMOVED ) ) {
+      refreshViewer( event.getSource() );
+    }
   }
 
   /**
@@ -359,8 +376,7 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
    * @param provider The {@link ConfigurableContentProvider} that changed its
    *            configuration.
    */
-  protected void handleConfigurationChanged( final ConfigurableContentProvider provider )
-  {
+  protected void handleConfigurationChanged( final ConfigurableContentProvider provider ) {
     int mode = provider.getMode();
     if( mode == ConfigurableContentProvider.MODE_FLAT ) {
       this.projectColumn.setWidth( this.lastProjectColumnWidth );
@@ -440,10 +456,21 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
    */
   private void refreshViewer( final IGridElement element ) {
     Display display = this.treeViewer.getControl().getDisplay();
-    display.syncExec( new Runnable() {
+    display.asyncExec( new Runnable() {
       public void run() {
-        GridFileDialog.this.treeViewer.refresh();
+        if ( element == null ) {
+          GridFileDialog.this.treeViewer.refresh( false );
+        } else {
+          if ( element instanceof IGridContainer ) {
+            IGridContainer container = ( IGridContainer ) element;
+            if ( container.isLazy() && container.isDirty() ) {
+              GridFileDialog.this.treeViewer.setChildCount( container, container.getChildCount() );
+            }
+          }
+          GridFileDialog.this.treeViewer.refresh( element, false );
+        }
       }
     } );
   }
+  
 }

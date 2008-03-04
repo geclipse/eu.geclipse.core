@@ -17,6 +17,7 @@ package eu.geclipse.ui.internal;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.viewers.StructuredViewer;
@@ -25,9 +26,11 @@ import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Combo;
+
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridContainer;
-import eu.geclipse.ui.providers.ProgressTreeNode;
+import eu.geclipse.core.model.impl.ContainerMarker;
+import eu.geclipse.ui.providers.NewProgressTreeNode;
 
 /**
  * Implementation of a {@link ViewerFilter} that may be used in conjunction
@@ -166,9 +169,9 @@ public class GridConnectionFilter extends ViewerFilter {
     boolean result = false;
     if ( element instanceof IGridConnectionElement ) {
       result = select( ( IGridConnectionElement  ) element );
-    } else if ( element instanceof IGridContainer ) {
-      result = true;
-    } else if ( element instanceof ProgressTreeNode ) {
+    } else if ( ( element instanceof IGridContainer )
+        || ( element instanceof NewProgressTreeNode )
+        || ( element instanceof ContainerMarker ) ) {
       result = true;
     }
     return result;
