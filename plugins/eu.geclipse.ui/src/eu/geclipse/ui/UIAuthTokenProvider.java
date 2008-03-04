@@ -17,6 +17,8 @@ package eu.geclipse.ui;
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.util.LinkedList;
+import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -253,13 +255,19 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
   
       @Override
       public void addPages() {
+        List<String> filterList = null;
+        if (tokenWizardId != null) {
+          filterList = new LinkedList<String>();
+          filterList.add( tokenWizardId );
+        }
         ExtPointWizardSelectionListPage page = new ExtPointWizardSelectionListPage(
             WIZARD_PAGE_NAME,
             Extensions.AUTH_TOKEN_UI_POINT,
+            filterList,
             Messages.getString( "UIAuthTokenProvider.wizard_first_page_title" ), //$NON-NLS-1$
             Messages.getString( "UIAuthTokenProvider.wizard_first_page_description" ), //$NON-NLS-1$
             Messages.getString( "UIAuthTokenProvider.noTokenCreator" ) ); //$NON-NLS-1$
-        page.setPreselectedId( tokenWizardId, true );
+//        page.setPreselectedId( tokenWizardId, true );
         page.setInitData( description );
         page.setCheatSheetManager(cheatSheetManager);
         addPage( page );

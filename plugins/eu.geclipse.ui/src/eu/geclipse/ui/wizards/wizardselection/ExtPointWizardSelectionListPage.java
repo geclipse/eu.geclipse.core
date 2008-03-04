@@ -37,6 +37,7 @@ public class ExtPointWizardSelectionListPage extends WizardSelectionListPage {
   static final String EXT_NAME = "name"; //$NON-NLS-1$
   static final String EXT_ICON = "icon"; //$NON-NLS-1$
   static final String EXT_ID = "id"; //$NON-NLS-1$
+  static final String EXT_CAN_REPLACE = "canReplace"; //$NON-NLS-1$
 
   /**
    * Creates a wizard page which allows to select a wizard for the next steps.
@@ -121,25 +122,38 @@ public class ExtPointWizardSelectionListPage extends WizardSelectionListPage {
         for( IConfigurationElement element : elements ) {
           if( EXT_WIZARD.equals( element.getName() ) ) {
             String id = element.getAttribute( EXT_ID );
-            if ( filterList == null || filterList.contains( id ) ) {
-              String name = element.getAttribute( EXT_NAME );
-              String iconName = element.getAttribute( EXT_ICON );
-              Image icon = null;
-              ImageDescriptor iconDesc = null;
-              if ( iconName != null ) {
-                String pluginId = element.getContributor().getName();
-                iconDesc = AbstractUIPlugin.imageDescriptorFromPlugin( pluginId, iconName );
+            if ( filterList == null || filterList.isEmpty() ) addElement( nodes, element );
+            else if ( filterList.contains( id ) ) addElement( nodes, element );
+            else {
+              for( IConfigurationElement replElement : element.getChildren( EXT_CAN_REPLACE ) ) {
+                String replId = replElement.getAttribute( EXT_ID );
+                if ( filterList.contains( replId ) ) {
+                  addElement( nodes, element );
+                  break;
+                }
               }
-              if ( iconDesc != null ) {
-                icon = iconDesc.createImage();
-              }
-              IWizardSelectionNode wizardNode = new ExtPointWizardSelectionNode( element, id, name, icon );
-              nodes.add( wizardNode );
             }
           }
         }
       }
     }
     return nodes.toArray( new IWizardSelectionNode[0] );
+  }
+  
+  private static void addElement( final Vector<IWizardSelectionNode> nodes, final IConfigurationElement element ) {
+    String id = element.getAttribute( EXT_ID );
+    String name = element.getAttribute( EXT_NAME );
+    String iconName = element.getAttribute( EXT_ICON );
+    Image icon = null;
+    ImageDescriptor iconDesc = null;
+    if ( iconName != null ) {
+      String pluginId = element.getContributor().getName();
+      iconDesc = AbstractUIPlugin.imageDescriptorFromPlugin( pluginId, iconName );
+    }
+    if ( iconDesc != null ) {
+      icon = iconDesc.createImage();
+    }
+    IWizardSelectionNode wizardNode = new ExtPointWizardSelectionNode( element, id, name, icon );
+    nodes.add( wizardNode );    
   }
 }

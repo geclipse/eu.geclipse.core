@@ -77,6 +77,9 @@
 
    <element name="wizard">
       <complexType>
+         <sequence>
+            <element ref="canReplace" minOccurs="0" maxOccurs="unbounded"/>
+         </sequence>
          <attribute name="id" type="string" use="required">
             <annotation>
                <documentation>
@@ -108,6 +111,18 @@
             <annotation>
                <documentation>
                   An icon that is used to graphically represent this wizard in the UI.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="canReplace">
+      <complexType>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
                </documentation>
             </annotation>
          </attribute>
