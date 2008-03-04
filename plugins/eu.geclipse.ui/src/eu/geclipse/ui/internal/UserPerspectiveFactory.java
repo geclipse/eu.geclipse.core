@@ -45,7 +45,7 @@ public class UserPerspectiveFactory
     topLeftFolder.addPlaceholder( IPageLayout.ID_RES_NAV );
     
     IPlaceholderFolderLayout bottomLeftFolder
-      = layout.createFolder( "bottomleft", IPageLayout.BOTTOM, 0.5f, eu.geclipse.ui.internal.Activator.ID_GPROJECT_VIEW ); //$NON-NLS-1$
+      = layout.createPlaceholderFolder( "bottomleft", IPageLayout.BOTTOM, 0.5f, eu.geclipse.ui.internal.Activator.ID_GPROJECT_VIEW ); //$NON-NLS-1$
     bottomLeftFolder.addPlaceholder( eu.geclipse.ui.internal.Activator.ID_GLUE_INFO_VIEW );
     
     IFolderLayout bottomFolder
@@ -69,7 +69,8 @@ public class UserPerspectiveFactory
     
     
     layout.addShowViewShortcut( eu.geclipse.ui.internal.Activator.ID_AUTH_VIEW );
-    layout.addShowViewShortcut( eu.geclipse.ui.internal.Activator.ID_JOBDETAILS_VIEW );
+    layout.addShowViewShortcut( eu.geclipse.ui.internal.Activator.ID_JOBS_VIEW );
+    layout.addShowViewShortcut( eu.geclipse.ui.internal.Activator.ID_CONNECTION_VIEW );
     layout.addShowViewShortcut( IPageLayout.ID_PROBLEM_VIEW );
     layout.addShowViewShortcut( IPageLayout.ID_PROP_SHEET );
     layout.addShowViewShortcut( IPageLayout.ID_RES_NAV );
