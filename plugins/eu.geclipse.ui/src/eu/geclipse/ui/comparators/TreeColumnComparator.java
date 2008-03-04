@@ -75,8 +75,8 @@ public class TreeColumnComparator extends ViewerComparator {
                   : SWT.UP;
     
     int result = ( order == SWT.UP )
-                   ? value1.compareTo( value2 )
-                   : value2.compareTo( value1 );
+                   ? value1.compareToIgnoreCase( value2 )
+                   : value2.compareToIgnoreCase( value1 );
     
     // If the elements compare equal, sort by ascending value of the preselected column
     if ( result == 0 ) {
@@ -95,7 +95,7 @@ public class TreeColumnComparator extends ViewerComparator {
    */
   private void initialize( final Viewer viewer ) {
     
-    // This comparator is only for trees
+    // This comparator is only for trees
     assert viewer instanceof TreeViewer;
     
     this.treeViewer = ( TreeViewer ) viewer;
