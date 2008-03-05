@@ -26,7 +26,7 @@ import eu.geclipse.core.model.IGridContainer;
  * as invalid or empty.
  */
 public class ContainerMarker extends AbstractGridElement {
-  
+    
   /**
    * The type of this marker. May have influence how the marker
    * will be presented in the UI,
@@ -65,6 +65,14 @@ public class ContainerMarker extends AbstractGridElement {
     this.container = container;
     this.type = type;
     this.message = message;
+  }
+  
+  public static ContainerMarker getEmptyFolderMarker( final IGridContainer container ) {
+    return new ContainerMarker( container, MarkerType.INFO, "Folder is empty" );
+  }
+  
+  public static ContainerMarker getErrorMarker( final IGridContainer container, final Throwable t ) {
+    return new ContainerMarker( container, MarkerType.ERROR, t.getLocalizedMessage() );
   }
 
   /* (non-Javadoc)
