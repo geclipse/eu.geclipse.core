@@ -96,12 +96,10 @@ public class VoSelectionWizardPage extends WizardPage {
     gData.grabExcessVerticalSpace = true;
     mainComp.setLayoutData( gData );
     
-    Group voGroup = new Group( mainComp, SWT.SHADOW_OUT );
+    Group voGroup = new Group( mainComp, SWT.NONE );
     voGroup.setLayout( new GridLayout( 1, false ) );
     voGroup.setText( "&Available VOs" );
-    gData = new GridData( GridData.FILL_BOTH );
-    gData.grabExcessHorizontalSpace = true;
-    gData.grabExcessVerticalSpace = true;
+    gData = new GridData( SWT.FILL, SWT.FILL, true, true );
     gData.heightHint = 120;
     voGroup.setLayoutData( gData );
     
@@ -196,12 +194,10 @@ public class VoSelectionWizardPage extends WizardPage {
       }
     } );
     
-    Group infoGroup = new Group( mainComp, SWT.SHADOW_OUT );
+    Group infoGroup = new Group( mainComp, SWT.NONE );
     infoGroup.setLayout( new GridLayout( 1, false ) );
     infoGroup.setText( "&VO Info" );
-    gData = new GridData( GridData.FILL_BOTH );
-    gData.grabExcessHorizontalSpace = true;
-    gData.grabExcessVerticalSpace = true;
+    gData = new GridData( SWT.FILL, SWT.FILL, true, true );
     gData.heightHint = 120;
     infoGroup.setLayoutData( gData );
     
