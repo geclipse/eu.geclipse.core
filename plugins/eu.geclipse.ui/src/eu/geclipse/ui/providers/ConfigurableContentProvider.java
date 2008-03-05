@@ -245,19 +245,21 @@ public class ConfigurableContentProvider
     List< Object > result = new ArrayList< Object >();
     
     for( Object object : elements ) {
+      
       if( object instanceof IGridElement ) {
         IGridElement gridElement = ( IGridElement )object;
-        
         IGridContainer parent = gridElement.getParent();
-        
         if( !isOnList( elements, parent ) ) {
           result.add( object );
         }
+      } else if ( object instanceof NewProgressTreeNode ) {
+        result.add( object );
       }
       
     }
     
     return result.toArray( new Object[ result.size() ] );
+    
   }
 
   private boolean isOnList( final Object[] elements, final Object object ) {    

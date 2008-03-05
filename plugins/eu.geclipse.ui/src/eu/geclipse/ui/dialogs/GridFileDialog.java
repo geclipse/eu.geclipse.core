@@ -57,6 +57,7 @@ import eu.geclipse.ui.providers.ConfigurableContentProvider;
 import eu.geclipse.ui.providers.ConnectionViewContentProvider;
 import eu.geclipse.ui.providers.ConnectionViewLabelProvider;
 import eu.geclipse.ui.providers.IConfigurationListener;
+import eu.geclipse.ui.widgets.GridConnectionDefinitionComposite;
 
 /**
  * This is an implementation of a file dialog for browsing remote connections
@@ -455,22 +456,27 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
    *            includes the element's children.
    */
   private void refreshViewer( final IGridElement element ) {
-    Display display = this.treeViewer.getControl().getDisplay();
-    display.asyncExec( new Runnable() {
-      public void run() {
-        if ( element == null ) {
-          GridFileDialog.this.treeViewer.refresh( false );
-        } else {
-          if ( element instanceof IGridContainer ) {
-            IGridContainer container = ( IGridContainer ) element;
-            if ( container.isLazy() && container.isDirty() ) {
-              GridFileDialog.this.treeViewer.setChildCount( container, container.getChildCount() );
+    Control control = this.treeViewer.getControl();
+    if ( ! control.isDisposed() ) {
+      Display display = control.getDisplay();
+      display.asyncExec( new Runnable() {
+        public void run() {
+          if ( ! GridFileDialog.this.treeViewer.getControl().isDisposed() ) {
+            if ( element == null ) {
+              GridFileDialog.this.treeViewer.refresh( false );
+            } else {
+              if ( element instanceof IGridContainer ) {
+                IGridContainer container = ( IGridContainer ) element;
+                if ( container.isLazy() && container.isDirty() ) {
+                  GridFileDialog.this.treeViewer.setChildCount( container, container.getChildCount() );
+                }
+              }
+              GridFileDialog.this.treeViewer.refresh( element, false );
             }
           }
-          GridFileDialog.this.treeViewer.refresh( element, false );
         }
-      }
-    } );
+      } );
+    }
   }
   
 }

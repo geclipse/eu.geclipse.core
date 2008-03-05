@@ -17,6 +17,7 @@ package eu.geclipse.ui.providers;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Hashtable;
 import java.util.List;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -43,6 +44,9 @@ public class GridModelContentProvider
    * The associated tree viewer.
    */
   protected TreeViewer treeViewer;
+  
+  private Hashtable< IGridContainer, NewProgressTreeNode > progressNodes
+    = new Hashtable< IGridContainer, NewProgressTreeNode >();
   
   /**
    * The comparator used for sorting the children of a node.
@@ -127,15 +131,30 @@ public class GridModelContentProvider
    * {@link ProgressRunner} object.
    */
   protected Object[] getChildren( final IGridContainer container ) {
+    
     Object[] children = null;
+    
     if ( container.isLazy() && container.isDirty() ) {
-      FetchChildrenJob fetcher = new FetchChildrenJob( container, this.treeViewer.getControl().getShell() );
-      NewProgressTreeNode monitor = new NewProgressTreeNode( this.treeViewer );
-      fetcher.setExternalMonitor( monitor );
-      fetcher.setSystem( true );
-      fetcher.schedule();
+      
+      NewProgressTreeNode monitor = this.progressNodes.get( container );
+      
+      if ( monitor == null ) {
+      
+        FetchChildrenJob fetcher = new FetchChildrenJob( container, this.treeViewer.getControl().getShell() );
+        monitor = new NewProgressTreeNode( this.treeViewer );
+        this.progressNodes.put( container, monitor );
+        fetcher.setExternalMonitor( monitor );
+        fetcher.setSystem( true );
+        fetcher.schedule();
+        
+      }
+      
       children = new Object[] { monitor };
+      
     } else {
+      
+      this.progressNodes.remove( container );
+      
       try {
         IGridElement[] childElements = container.getChildren( null );
         List< IGridElement > visibleChildren = new ArrayList< IGridElement >();
@@ -156,8 +175,11 @@ public class GridModelContentProvider
           Activator.logException( gmExc );
         }
       }
+      
     }
+    
     return children;
+    
   }
   
   /**

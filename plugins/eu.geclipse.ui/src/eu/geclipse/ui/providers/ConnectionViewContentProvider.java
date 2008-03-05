@@ -34,7 +34,7 @@ public class ConnectionViewContentProvider extends ConfigurableContentProvider {
   @Override
   protected boolean isVisible( final IGridElement element ) {
     boolean visible = element instanceof IGridConnectionElement;
-    if ( !visible ) {
+    if ( ! visible ) {
       visible = super.isVisible( element );
     }
     return visible;

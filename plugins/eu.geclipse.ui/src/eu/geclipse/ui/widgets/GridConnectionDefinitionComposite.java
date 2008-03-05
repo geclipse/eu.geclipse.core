@@ -55,6 +55,7 @@ import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridConnectionElement;
+import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridModelListener;
@@ -64,6 +65,7 @@ import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.providers.ConnectionViewContentProvider;
 import eu.geclipse.ui.providers.ConnectionViewLabelProvider;
+import eu.geclipse.ui.providers.GridModelLabelProvider;
 import eu.geclipse.ui.wizards.IConnectionTokenValidator;
 
 /**
@@ -83,6 +85,16 @@ public class GridConnectionDefinitionComposite extends Composite {
    * Tree viewer used for the temporary connection.
    */
   protected TreeViewer viewer;
+  
+  /**
+   * Cached error message.
+   */
+  protected String errorMessage;
+  
+  /**
+   * Link for creating a temporary connection. 
+   */
+  protected Link pathLink;
   
   /**
    * Type of the currently edited URI.
@@ -190,11 +202,6 @@ public class GridConnectionDefinitionComposite extends Composite {
   private StoredCombo fragmentCombo;
   
   /**
-   * Link for creating a temporary connection. 
-   */
-  private Link pathLink;
-  
-  /**
    * Validator used to validate the tokens or the URI.
    */
   private IConnectionTokenValidator validator;
@@ -204,11 +211,6 @@ public class GridConnectionDefinitionComposite extends Composite {
    */
   private List< ModifyListener > listeners;
   
-  /**
-   * Cached error message.
-   */
-  private String errorMessage;
-
   /**
    * Create a new connection definition composite.
    * 
@@ -296,11 +298,9 @@ public class GridConnectionDefinitionComposite extends Composite {
     this.pathLink.setLayoutData( gData );
     
     this.viewer = new TreeViewer( browseGroup, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.SINGLE );
-    ConnectionViewContentProvider cProvider
-      = new ConnectionViewContentProvider();
+    ConnectionViewContentProvider cProvider = new ConnectionViewContentProvider();
     this.viewer.setContentProvider( cProvider );
-    ConnectionViewLabelProvider lProvider
-      = new ConnectionViewLabelProvider();
+    GridModelLabelProvider lProvider = new GridModelLabelProvider();
     this.viewer.setLabelProvider( lProvider );
     this.viewer.addFilter( new ViewerFilter() {
       @Override
@@ -608,17 +608,9 @@ public class GridConnectionDefinitionComposite extends Composite {
    * @param event The event to be handled.
    */
   protected void handleGridModelChanged( final IGridModelEvent event ) {
-    Control control = this.viewer.getControl();
-    if ( ! control.isDisposed() ) {
-      Display display = control.getDisplay();
-      display.asyncExec( new Runnable() {
-        public void run() {
-          if ( ! GridConnectionDefinitionComposite.this.viewer.getControl().isDisposed() ) {
-            IGridElement element = event.getSource();
-            GridConnectionDefinitionComposite.this.viewer.refresh( element );
-          }
-        }
-      } );
+    if ( ( event.getType() == IGridModelEvent.ELEMENTS_ADDED )
+        || ( event.getType() == IGridModelEvent.ELEMENTS_REMOVED ) ) {
+      refreshViewer( event.getSource() );
     }
   }
   
@@ -671,31 +663,41 @@ public class GridConnectionDefinitionComposite extends Composite {
    */
   protected void initializeBrowser() {
     
-    this.viewer.setInput( null );
-    
-    URI slaveURI = getURI();
-    
-    if ( slaveURI != null ) {
+    getDisplay().asyncExec( new Runnable() {
       
-      try {
-      
-        GEclipseURI geclURI = new GEclipseURI( slaveURI );
-        URI masterURI = geclURI.toMasterURI();
-        IGridPreferences preferences = GridModel.getPreferences();
-        IGridConnection connection
-          = preferences.createTemporaryConnection( masterURI );
-        this.viewer.setInput( connection );
+      public void run() {
+            
+        GridConnectionDefinitionComposite.this.pathLink.setEnabled( false );
         
-      } catch ( GridModelException gmExc ) {
-        this.errorMessage = eu.geclipse.ui.widgets.Messages.getString("GridConnectionDefinitionComposite.invalid_temp_conn_error"); //$NON-NLS-1$
-        fireModifyEvent();
-        ProblemDialog.openProblem( getShell(),
-                                   eu.geclipse.ui.widgets.Messages.getString("GridConnectionDefinitionComposite.conn_error"), //$NON-NLS-1$
-                                   eu.geclipse.ui.widgets.Messages.getString("GridConnectionDefinitionComposite.invalid_temp_conn_error"), //$NON-NLS-1$
-                                   gmExc );
+        URI slaveURI = getURI();
+        
+        if ( slaveURI != null ) {
+          
+          try {
+          
+            GEclipseURI geclURI = new GEclipseURI( slaveURI );
+            URI masterURI = geclURI.toMasterURI();
+            IGridPreferences preferences = GridModel.getPreferences();
+            IGridConnection connection
+              = preferences.createTemporaryConnection( masterURI );
+            GridConnectionDefinitionComposite.this.viewer.setInput( connection );
+            
+          } catch ( GridModelException gmExc ) {
+            GridConnectionDefinitionComposite.this.errorMessage = eu.geclipse.ui.widgets.Messages.getString("GridConnectionDefinitionComposite.invalid_temp_conn_error"); //$NON-NLS-1$
+            fireModifyEvent();
+            ProblemDialog.openProblem( getShell(),
+                                       eu.geclipse.ui.widgets.Messages.getString("GridConnectionDefinitionComposite.conn_error"), //$NON-NLS-1$
+                                       eu.geclipse.ui.widgets.Messages.getString("GridConnectionDefinitionComposite.invalid_temp_conn_error"), //$NON-NLS-1$
+                                       gmExc );
+          } finally {
+            GridConnectionDefinitionComposite.this.pathLink.setEnabled( true );
+          }
+          
+        }
+      
       }
       
-    }
+    } );
     
   }
   
@@ -930,6 +932,38 @@ public class GridConnectionDefinitionComposite extends Composite {
     this.uriCombo.setPreferences( preferenceStore,
         scheme + SEPARATOR + Extensions.EFS_URI_ATT );
     
+  }
+  
+  /**
+   * Refreshes the {@link TreeViewer} starting with the specified element. If
+   * the element is <code>null</code> the whole {@link TreeViewer} will be
+   * refreshed.
+   * 
+   * @param element The {@link IGridElement} that will be refreshed. This also
+   *            includes the element's children.
+   */
+  private void refreshViewer( final IGridElement element ) {
+    Control control = this.viewer.getControl();
+    if ( ! control.isDisposed() ) {
+      Display display = control.getDisplay();
+      display.asyncExec( new Runnable() {
+        public void run() {
+          if ( ! GridConnectionDefinitionComposite.this.viewer.getControl().isDisposed() ) {
+            if ( element == null ) {
+              GridConnectionDefinitionComposite.this.viewer.refresh( false );
+            } else {
+              if ( element instanceof IGridContainer ) {
+                IGridContainer container = ( IGridContainer ) element;
+                if ( container.isLazy() && container.isDirty() ) {
+                  GridConnectionDefinitionComposite.this.viewer.setChildCount( container, container.getChildCount() );
+                }
+              }
+              GridConnectionDefinitionComposite.this.viewer.refresh( element, false );
+            }
+          }
+        }
+      } );
+    }
   }
   
   private void setActive( final StoredCombo editor,
