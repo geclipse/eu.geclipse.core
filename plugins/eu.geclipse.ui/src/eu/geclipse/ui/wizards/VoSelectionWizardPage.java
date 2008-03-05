@@ -97,7 +97,7 @@ public class VoSelectionWizardPage extends WizardPage {
     mainComp.setLayoutData( gData );
     
     Group voGroup = new Group( mainComp, SWT.NONE );
-    voGroup.setLayout( new GridLayout( 1, false ) );
+    voGroup.setLayout( new GridLayout( 2, false ) );
     voGroup.setText( "&Available VOs" );
     gData = new GridData( SWT.FILL, SWT.FILL, true, true );
     gData.heightHint = 120;
