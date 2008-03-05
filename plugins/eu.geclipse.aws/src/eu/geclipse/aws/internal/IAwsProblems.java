@@ -27,6 +27,18 @@ public interface IAwsProblems {
     = "eu.geclipse.aws.problem.service.s3.rest.creationFailed"; //$NON-NLS-1$
   
   /**
+   * ID for the bucket creation failed problem.
+   */
+  public static final String S3_BUCKET_CREATION_FAILED
+    = "eu.geclipse.aws.problem.s3.bucketCreateFailed"; //$NON-NLS-1$
+  
+  /**
+   * ID for the bucket creation failed problem.
+   */
+  public static final String S3_BUCKET_IN_BUCKET_FAILED
+    = "eu.geclipse.aws.problem.s3.bucketInBucketFailed"; //$NON-NLS-1$
+  
+  /**
    * ID for the list failed problem.
    */
   public static final String S3_LIST_FAILED =

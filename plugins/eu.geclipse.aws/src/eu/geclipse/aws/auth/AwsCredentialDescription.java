@@ -35,7 +35,7 @@ public class AwsCredentialDescription
    * The id of the wizard used to create this type of token.
    */
   private static final String WIZARD_ID
-    = "eu.geclipse.amazon.s3.ui.wizards.AwsCredentialWizard"; //$NON-NLS-1$
+    = "eu.geclipse.aws.ui.wizards.AwsCredentialWizard"; //$NON-NLS-1$
   
   /**
    * The credential's access key ID.

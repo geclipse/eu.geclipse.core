@@ -55,14 +55,15 @@ public class S3FileSystem
     String accessKeyID = uri.getAuthority();
     String bucketName = uri.getPath();
     
+    if ( ( bucketName != null ) && bucketName.startsWith( IS3Constants.S3_PATH_SEPARATOR ) ){
+      bucketName = bucketName.substring( 1 );
+    }
+    
     if ( ( bucketName == null ) || bucketName.length() == 0 ) {
       result = new S3FileStore( accessKeyID );
     } else {
-      if ( bucketName.startsWith( IS3Constants.S3_PATH_SEPARATOR ) ) {
-        bucketName = bucketName.substring( 1 );
-      }
       S3FileStore parent = new S3FileStore( accessKeyID );
-      result = new S3FileStore( parent, bucketName );
+      result = ( S3FileStore ) parent.getChild( bucketName );
     }
     
     return result;

@@ -7,7 +7,7 @@
             description="eu.geclipse.aws.auth.AwsCredentialDescription"
             id="eu.geclipse.amazon.auth.credential"
             name="AWS Credential"
-            wizard="eu.geclipse.amazon.s3.ui.wizards.AwsCredentialWizard">
+            wizard="eu.geclipse.aws.ui.wizards.AwsCredentialWizard">
       </token>
    </extension>
    <extension
@@ -44,6 +44,14 @@
       <problem
             description="Error while deleting object"
             id="eu.geclipse.aws.problem.s3.deleteFailed">
+      </problem>
+      <problem
+            description="Bucket creation failed. Note that bucket names have to be unique. Therefore it is recommended to prefix them with the access key ID."
+            id="eu.geclipse.aws.problem.s3.bucketCreateFailed">
+      </problem>
+      <problem
+            description="Bucket creation failed. Note that buckets can not be created within other buckets."
+            id="eu.geclipse.aws.problem.s3.bucketInBucketFailed">
       </problem>
    </extension>
 

@@ -162,6 +162,31 @@ public class S3FileStore
   }
   
   /* (non-Javadoc)
+   * @see org.eclipse.core.filesystem.provider.FileStore#mkdir(int, org.eclipse.core.runtime.IProgressMonitor)
+   */
+  @Override
+  public IFileStore mkdir( final int options, final IProgressMonitor monitor )
+      throws CoreException {
+    
+    if ( ! isBucket() ) {
+      throw new ProblemException( IAwsProblems.S3_BUCKET_IN_BUCKET_FAILED, Activator.PLUGIN_ID );
+    }
+    
+    S3Service service = getService();
+    try {
+      service.createBucket( getName() );
+      this.storeInfo = null;
+    } catch ( S3ServiceException s3Exc ) {
+      ProblemException pExc
+        = new ProblemException( IAwsProblems.S3_BUCKET_CREATION_FAILED, s3Exc, Activator.PLUGIN_ID );
+      throw pExc;
+    }
+    
+    return this;
+    
+  }
+  
+  /* (non-Javadoc)
    * @see org.eclipse.core.filesystem.provider.FileStore#openInputStream(int, org.eclipse.core.runtime.IProgressMonitor)
    */
   @Override
@@ -295,7 +320,9 @@ public class S3FileStore
         this.storeInfo.setExists( service != null );
       } else if ( isBucket() ) {
         try {
-          this.storeInfo.setExists( ( service != null ) && service.isBucketAccessible( getName() ) );
+          boolean exists = ( service != null ) && service.isBucketAccessible( getName() );
+          this.storeInfo.setExists( exists );
+          this.storeInfo.setDirectory( exists );
         } catch ( S3ServiceException s3Exc ) {
           // Just ignore and leave exists to be false
         }

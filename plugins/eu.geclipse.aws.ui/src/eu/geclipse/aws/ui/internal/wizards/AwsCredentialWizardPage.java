@@ -90,7 +90,7 @@ public class AwsCredentialWizardPage
     GridData gData;
     
     Composite mainComp = new Composite( parent, SWT.NONE );
-    mainComp.setLayout( new GridLayout( 1, false ) );
+    mainComp.setLayout( new GridLayout( 2, false ) );
     
     Label idLabel = new Label( mainComp, SWT.NULL );
     idLabel.setText( Messages.getString("AwsCredentialWizardPage.key_id_label") ); //$NON-NLS-1$

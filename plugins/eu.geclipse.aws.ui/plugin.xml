@@ -5,7 +5,7 @@
          point="eu.geclipse.ui.authTokenUI">
       <wizard
             class="eu.geclipse.aws.ui.internal.wizards.AwsCredentialWizard"
-            id="eu.geclipse.amazon.s3.ui.wizards.AwsCredentialWizard"
+            id="eu.geclipse.aws.ui.wizards.AwsCredentialWizard"
             icon="icons/obj16/credential.gif"
             name="AWS Credential">
       </wizard>
@@ -18,7 +18,8 @@
    <extension
          point="eu.geclipse.ui.efs">
       <filesystem
-            scheme="s3">
+            scheme="s3"
+            validator="eu.geclipse.aws.ui.internal.S3TokenValidator">
          <hierarchical
                authority="Access Key ID"
                path="Bucket Name">
