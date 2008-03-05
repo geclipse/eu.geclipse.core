@@ -18,6 +18,7 @@ package eu.geclipse.ui.wizards;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -242,9 +243,21 @@ public class VoSelectionWizardPage extends WizardPage {
     Wizard wizard = new Wizard() {
       @Override
       public void addPages() {
+        List<String> filterList = null;
+        if ( VoSelectionWizardPage.this.voType != null ) {
+          try {
+            filterList = new LinkedList<String>();
+            filterList.add( ((IVirtualOrganization)VoSelectionWizardPage.this.voType.newInstance()).getWizardId() );
+          } catch( InstantiationException exception ) {
+            Activator.logException( exception );
+          } catch( IllegalAccessException exception ) {
+            Activator.logException( exception );
+          }
+        }
         ExtPointWizardSelectionListPage page = new ExtPointWizardSelectionListPage(
             "pagename",
             "eu.geclipse.ui.newVoWizards",
+            filterList,
             "Create a new VO",
             "Create a new Virtual Organization of the selected type.",
             "No VO providers registered." );
