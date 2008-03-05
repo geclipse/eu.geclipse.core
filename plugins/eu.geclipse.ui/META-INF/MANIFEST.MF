@@ -16,12 +16,12 @@ Require-Bundle: org.eclipse.compare,
  org.eclipse.ui.forms,
  org.eclipse.ui.ide,
  org.eclipse.ui.navigator,
+ org.eclipse.ui.net,
  eu.geclipse.core,
  eu.geclipse.core.filesystem,
  eu.geclipse.core.jobs,
  eu.geclipse.core.reporting,
- eu.geclipse.info,
- org.eclipse.ui.net
+ eu.geclipse.info
 Eclipse-LazyStart: true
 Export-Package: eu.geclipse.ui,
  eu.geclipse.ui.adapters,
