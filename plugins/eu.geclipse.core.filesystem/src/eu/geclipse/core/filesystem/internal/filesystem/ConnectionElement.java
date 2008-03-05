@@ -247,13 +247,7 @@ public class ConnectionElement
       if ( res instanceof IContainer ) {
         IResource[] members = ( ( IContainer ) res ).members();
         if ( ( members == null ) || ( members.length == 0 ) ) {
-          addElement(
-              new ContainerMarker (
-                  this,
-                  ContainerMarker.MarkerType.INFO,
-                  Messages.getString("ConnectionElement.foler_empty_message") //$NON-NLS-1$
-              )
-          );
+          addElement( ContainerMarker.getEmptyFolderMarker( this ) );
         }
       }
       
@@ -263,13 +257,7 @@ public class ConnectionElement
       result = new Status( IStatus.ERROR, Activator.PLUGIN_ID, Messages.getString("ConnectionElement.fetch_error"), cExc ); //$NON-NLS-1$
       
       try {
-        addElement(
-            new ContainerMarker (
-                this,
-                ContainerMarker.MarkerType.ERROR,
-                cExc.getMessage()
-            )
-        );
+        addElement( ContainerMarker.getErrorMarker( this, cExc ) );
       } catch ( GridModelException gmExc ) {
         Activator.logException( gmExc );
       }
