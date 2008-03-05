@@ -232,7 +232,7 @@ public final class Queue extends BatchResource {
    * Sets a new name for the queue.
    * @param newName The new name.
    */
-  public synchronized void setQueueName( final String newName ) {
+  public void setQueueName( final String newName ) {
     String oldName = this.queueName;
     this.queueName = newName;
     this.pcsDelegate.firePropertyChange( PROPERTY_NAME, oldName, newName );
@@ -291,7 +291,7 @@ public final class Queue extends BatchResource {
    * Sets a new state of the queue.
    * @param newState The new state.
    */
-  public synchronized void setState( final QueueState newState ) {
+  public void setState( final QueueState newState ) {
     QueueState oldState = this.state;
     this.state = newState;
     this.pcsDelegate.firePropertyChange( PROPERTY_STATE, oldState, newState );
@@ -307,16 +307,6 @@ public final class Queue extends BatchResource {
   }
 
   /**
-   * Sets the current number of jobs in the batch service.
-   * IMPORTANT: These are all the job in the batch service, we will do
-   * lazy filtering on the jobs belonging to this Queue when needed.
-   * @param jobs The current number of jobs.
-   */
-//  public synchronized void setJobs( final List<IBatchJobInfo> jobs ) {
-//    this.jobs = jobs;
-//  }
-
-  /**
    * @return Returns the name.
    */
   public String getQueneName() {
@@ -326,7 +316,7 @@ public final class Queue extends BatchResource {
   /**
    * @return Returns the state.
    */
-  public synchronized QueueState getState() {
+  public QueueState getState() {
     return this.state;
   }
 
@@ -338,29 +328,12 @@ public final class Queue extends BatchResource {
   }
 
   /**
-   * @return Returns the running jobs.
-   */
-  public List< IBatchJobInfo > getJobs() {
-    return this.jobManager.getJobs();
-  }
-
-  /**
    * @return Returns <code>true</code> if there are jobs in this queue, <code>false</code> otherwise. 
    */
-  public synchronized boolean isQueueEmpty() {
-    boolean ret = true;
-    
-    List < IBatchJobInfo > jobs = this.getJobs();
-    
-    if ( null != jobs ) {
-      for ( IBatchJobInfo job : jobs ) {
-        if ( job.getQueueName().equals( this.queueName ) ) {
-          ret = false;
-          break;
-        }
-      }
-    }
-    return ret;
+  public boolean isQueueEmpty() {
+    List < IBatchJobInfo > jobs = this.jobManager.getJobs( this.queueName );
+
+    return jobs.isEmpty();
   }
   
   /**
