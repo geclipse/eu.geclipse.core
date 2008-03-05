@@ -15,6 +15,8 @@
 
 package eu.geclipse.ui.comparators;
 
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.TableViewer;
@@ -47,7 +49,32 @@ public class TableColumnComparator extends ViewerComparator {
   public TableColumnComparator( final TableColumn defaultSortColumn ) {
     this.defaultSortColumn = defaultSortColumn;
   }
+  
+  @Override
+  public int category( final Object element ) {
+    int type = 0;
+    IResource res = null;
 
+    /*
+     * Analyze the element to be sorted to determine if it is a folder, file,
+     * project, etc.
+     */
+    if ( element instanceof IAdaptable ) {
+      IAdaptable adaptable = ( IAdaptable )element;
+      res = ( IResource )adaptable.getAdapter( IResource.class );
+    }
+    if ( res != null ) {
+      /*
+       * The IResource types FILE, FOLDER, PROJECT, ROOT have non-zero values...
+       * and FILEs should come last in the (ascending) sorting, thus the '-' 
+       */
+      type = - res.getType();
+    }
+
+    // We return 0 if the element is not a IResource
+    return type;
+  }
+  
   @Override
   public int compare( final Viewer viewer, final Object element1, final Object element2 ) {
     
@@ -59,39 +86,48 @@ public class TableColumnComparator extends ViewerComparator {
       initialize( viewer );
     }
     
-    int col;
-    // Sort the table by the first column if there is no sorting defined
-    if ( this.table.getSortColumn() == null ) {
-      col = 0;
-    } else {
-      col = this.table.indexOf( this.table.getSortColumn() );
+    int cat1 = category( element1 );
+    int cat2 = category( element2 );
+    
+    int result = cat1 - cat2;
+    
+    // Elements of different type (file, folder,...) are not mixed in the sorting
+    if ( result == 0 ) {
+      int col;
+      // Sort the table by the first column if there is no sorting defined
+      if ( this.table.getSortColumn() == null ) {
+        col = 0;
+      } else {
+        col = this.table.indexOf( this.table.getSortColumn() );
+      }
+      
+      int order = ( this.table.getSortDirection() == SWT.DOWN )
+                    ? SWT.DOWN
+                    : SWT.UP;
+      
+      String value1 = this.labelProvider.getColumnText( element1, col );
+      String value2 = this.labelProvider.getColumnText( element2, col );
+      
+      result = ( order == SWT.UP )
+                 ? value1.compareToIgnoreCase( value2 )
+                 : value2.compareToIgnoreCase( value1 );
     }
-    
-    String value1 = this.labelProvider.getColumnText( element1, col );
-    String value2 = this.labelProvider.getColumnText( element2, col );
-    
-    int order = ( this.table.getSortDirection() == SWT.DOWN )
-                  ? SWT.DOWN
-                  : SWT.UP;
-    
-    int result = ( order == SWT.UP )
-                   ? value1.compareToIgnoreCase( value2 )
-                   : value2.compareToIgnoreCase( value1 );
     
     // If the elements compare equal, sort by ascending value of the preselected column
     if ( result == 0 ) {
       int sCol = this.table.indexOf( this.defaultSortColumn );
-      value1 = this.labelProvider.getColumnText( element1, sCol );
-      value2 = this.labelProvider.getColumnText( element2, sCol );
-      result = value1.compareTo( value2 );
+      String value1 = this.labelProvider.getColumnText( element1, sCol );
+      String value2 = this.labelProvider.getColumnText( element2, sCol );
+      result = value1.compareToIgnoreCase( value2 );
     }
     
     return result;
   }
 
   /**
-   * Set the private fields according from the viewer
-   * @param viewer 
+   * Initialize the private fields according to the viewer.
+   * 
+   * @param viewer The viewer whose elements are to be sorted
    */
   private void initialize( final Viewer viewer ) {
     
