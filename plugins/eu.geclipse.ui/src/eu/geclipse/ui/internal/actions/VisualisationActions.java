@@ -27,14 +27,13 @@ import org.eclipse.ui.navigator.ICommonMenuConstants;
  *
  */
 public class VisualisationActions extends ActionGroup {
-  
+
   /**
    * The workbench this action group belongs to.
    */
-  private IWorkbenchPartSite site;
-  
-  private RenderLocalVTKPipelineAction renderLocalPipelineAction;
-  private RenderRemoteVTKPipelineAction renderRemotePipelineAction;
+  private final IWorkbenchPartSite site;
+
+  private final RenderVTKPipelineAction renderLocalPipelineAction;
 
   /**
    * @param site
@@ -42,15 +41,13 @@ public class VisualisationActions extends ActionGroup {
   public VisualisationActions(final IWorkbenchPartSite site){
     this.site = site;
     ISelectionProvider selectionProvider = site.getSelectionProvider();
-    this.renderLocalPipelineAction = new RenderLocalVTKPipelineAction( site );
-    this.renderRemotePipelineAction = new RenderRemoteVTKPipelineAction( site );
+    this.renderLocalPipelineAction = new RenderVTKPipelineAction( site );
     selectionProvider.addSelectionChangedListener( this.renderLocalPipelineAction );
-    selectionProvider.addSelectionChangedListener( this.renderRemotePipelineAction );
   }
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see org.eclipse.ui.actions.ActionGroup#dispose()
    */
   @Override
@@ -58,12 +55,11 @@ public class VisualisationActions extends ActionGroup {
   {
     ISelectionProvider selectionProvider = this.site.getSelectionProvider();
     selectionProvider.removeSelectionChangedListener( this.renderLocalPipelineAction );
-    selectionProvider.removeSelectionChangedListener( this.renderRemotePipelineAction );
   }
 
   /*
    * (non-Javadoc)
-   * 
+   *
    * @see org.eclipse.ui.actions.ActionGroup#fillContextMenu(org.eclipse.jface.action.IMenuManager)
    */
   @Override
@@ -73,9 +69,6 @@ public class VisualisationActions extends ActionGroup {
     if ( this.renderLocalPipelineAction.isEnabled() ) {
       mgr.appendToGroup( ICommonMenuConstants.GROUP_BUILD, this.renderLocalPipelineAction );
     }
-    if ( this.renderRemotePipelineAction.isEnabled() ) {
-      mgr.appendToGroup( ICommonMenuConstants.GROUP_BUILD, this.renderRemotePipelineAction );
-    }
   }
 
   /* (non-Javadoc)
@@ -84,15 +77,14 @@ public class VisualisationActions extends ActionGroup {
   @Override
   public void updateActionBars() {
     super.updateActionBars();
-    
+
     IStructuredSelection selection = null;
-    
-    if( getContext() != null
-        && getContext().getSelection() instanceof IStructuredSelection ) {
+
+    if( ( getContext() != null )
+        && ( getContext().getSelection() instanceof IStructuredSelection ) ) {
       selection = (IStructuredSelection)getContext().getSelection();
     }
-    
+
     this.renderLocalPipelineAction.selectionChanged( selection );
-    this.renderRemotePipelineAction.selectionChanged( selection );
   }
 }

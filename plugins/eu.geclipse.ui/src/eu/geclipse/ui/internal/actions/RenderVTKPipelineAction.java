@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.ui.IViewPart;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.PartInitException;
@@ -28,18 +29,20 @@ import eu.geclipse.core.model.IGridVisualisation;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
+import eu.geclipse.ui.views.VisualisationView;
 
 
 /**
  * @author sgirtel
  *
  */
-public class RenderRemoteVTKPipelineAction extends SelectionListenerAction {
+public class RenderVTKPipelineAction extends SelectionListenerAction {
 
   private IWorkbenchSite site;
+
   private ArrayList< IGridVisualisation > vis;
 
-  protected RenderRemoteVTKPipelineAction( final String text ) {
+  protected RenderVTKPipelineAction( final String text ) {
     super( text );
     // TODO Auto-generated constructor stub
   }
@@ -47,50 +50,43 @@ public class RenderRemoteVTKPipelineAction extends SelectionListenerAction {
   /**
    * @param site
    */
-  public RenderRemoteVTKPipelineAction( final IWorkbenchPartSite site ) {
-    super( Messages.getString( "RenderRemoteVTKPipelineAction.title" ) ); //$NON-NLS-1$
+  public RenderVTKPipelineAction( final IWorkbenchPartSite site ) {
+    super ( Messages.getString( "RenderVTKPipelineAction.title" ) ); //$NON-NLS-1$
     this.site = site;
   }
+
 
   /* (non-Javadoc)
    * @see org.eclipse.jface.action.Action#run()
    */
   @Override
   public void run() {
-    //TODO - open GVid view enabled and start job submission wizard
     Object element
       = getStructuredSelection().getFirstElement();
-    if ( ( element != null ) && checkForPipelineCompletion( element ) ) {
+    if ( ( element != null ) && ((IGridVisualisation) element).isValid() ) {
       try {
-        this.site.getPage().showView( "eu.geclipse.gvid.views.GVidView" ); //$NON-NLS-1$
-        //TODO make a job that executes the rendering remotely and creates a client
-        //that intercepts the steaming data locally
+        IViewPart view = this.site.getPage().showView( "eu.geclipse.ui.views.visualisationview" ); //$NON-NLS-1$
+        view.setFocus();
+        ( ( VisualisationView )view ).setPipeline( (IGridVisualisation) element );
+        ( ( VisualisationView )view ).render();
       } catch( PartInitException e ) {
         ProblemDialog.openProblem( null,
-             Messages.getString( "RenderLocalVTKPipelineAction.errorDialogTitle" ), //$NON-NLS-1$
-             Messages.getString( "RenderLocalVTKPipelineAction.errorOpeningView"), //$NON-NLS-1$
-             e );
+               Messages.getString( "RenderVTKPipelineAction.errorDialogTitle" ), //$NON-NLS-1$
+               Messages.getString( "RenderVTKPipelineAction.errorOpeningView"), //$NON-NLS-1$
+               e );
       }
     }
     else {
       // TODO: check, we have here a very general IO error, is this right??
       final ProblemException fileException = new ProblemException( ICoreProblems.IO_OPERATION_FAILED,
-                Messages.getString( "RenderLocalVTKPipelineAction.elementNotVisualizable" ), //$NON-NLS-1$
+                Messages.getString( "RenderVTKPipelineAction.elementNotVisualizable" ), //$NON-NLS-1$
                 Activator.PLUGIN_ID );
 
       ProblemDialog.openProblem( null,
-          Messages.getString( "RenderLocalVTKPipelineAction.errorDialogTitle" ), //$NON-NLS-1$
-          Messages.getString( "RenderLocalVTKPipelineAction.errorInfo" ), //$NON-NLS-1$
+          Messages.getString( "RenderVTKPipelineAction.errorDialogTitle" ), //$NON-NLS-1$
+          Messages.getString( "RenderVTKPipelineAction.errorInfo" ), //$NON-NLS-1$
           fileException );
     }
-  }
-
-  private boolean checkForPipelineCompletion( @SuppressWarnings("unused")
-  final Object element ) {
-    //TODO - validate that the .vtkpipeline file specifies at least the data location,
-    //        appropriate reader for the data type and instruction about how to render
-    //        the data (i.e. most likely one or more filters' specifications)
-    return true;
   }
 
   /* (non-Javadoc)
@@ -99,9 +95,9 @@ public class RenderRemoteVTKPipelineAction extends SelectionListenerAction {
    */
   @Override
   protected boolean updateSelection( final IStructuredSelection selection ) {
-    this.vis = new ArrayList<IGridVisualisation>();
+    this.vis = new ArrayList< IGridVisualisation >();
     boolean enabled = super.updateSelection( selection );
-    Iterator<?> iter = selection.iterator();
+    Iterator< ? > iter = selection.iterator();
     while( iter.hasNext() && enabled ) {
       Object element = iter.next();
       boolean isVisualizableFile = isVisualizable( element );

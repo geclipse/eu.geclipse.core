@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -34,10 +34,9 @@ public class VisualisationView extends ViewPart {
 
   private CTabFolder cTabFolder;
   private IGridVisualisation vtkPipeline = null;
-  private String renderingSite;
 
   @Override
-  public void createPartControl( Composite parent ) {
+  public void createPartControl( final Composite parent ) {
 
     GridData gridData = new GridData();
     gridData.horizontalAlignment = GridData.FILL;
@@ -64,12 +63,13 @@ public class VisualisationView extends ViewPart {
    */
   @Override
   public void setFocus() {
-    if( this.cTabFolder != null )
+    if( this.cTabFolder != null ) {
       this.cTabFolder.setFocus();
+    }
   }
 
   public CTabItem getCTabItem() {
-    CTabItem cTabItem = this.cTabFolder != 
+    CTabItem cTabItem = this.cTabFolder !=
       null ? this.cTabFolder.getSelection() : null;
     return cTabItem;
   }
@@ -79,25 +79,20 @@ public class VisualisationView extends ViewPart {
   }
 
   /**
-   * @param vtkPipeline 
-   * @param renderingSite 
+   * @param vtkPipeline
    */
-  public void setPipeline( final IGridVisualisation vtkPipeline, String renderingSite ) {
+  public void setPipeline( final IGridVisualisation vtkPipeline ) {
       this.vtkPipeline = vtkPipeline;
-      this.renderingSite = renderingSite;
   }
 
   /**
    * Invokes the rendering process as described by the preset vtkPipeline.
    */
   public void render() {
-    
-    if ( this.vtkPipeline == null )
+
+    if ( this.vtkPipeline == null ) {
       return;
-    
-    if ( this.renderingSite.compareToIgnoreCase( "local" ) == 0 ) { //$NON-NLS-1$
-      this.vtkPipeline.renderLocal();
     }
-    else this.vtkPipeline.renderRemote();
+    this.vtkPipeline.render();
   }
 }
