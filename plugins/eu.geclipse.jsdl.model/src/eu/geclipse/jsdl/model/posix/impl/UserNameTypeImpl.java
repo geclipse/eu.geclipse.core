@@ -10,7 +10,7 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributor(s):
- *    Mathias Stümpert
+ *    Mathias Stï¿½mpert
  *           
  *****************************************************************************/
 
@@ -76,7 +76,7 @@ public class UserNameTypeImpl extends EObjectImpl implements UserNameType
    * @generated
    * @ordered
    */
-	protected FeatureMap anyAttribute = null;
+	protected FeatureMap anyAttribute;
 
   /**
    * <!-- begin-user-doc -->

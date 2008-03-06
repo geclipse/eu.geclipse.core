@@ -10,7 +10,7 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributor(s):
- *    Mathias Stümpert
+ *    Mathias Stï¿½mpert
  *           
  *****************************************************************************/
 package eu.geclipse.jsdl.model.impl;
@@ -58,7 +58,7 @@ public class JobDefinitionTypeImpl extends EObjectImpl implements JobDefinitionT
    * @generated
    * @ordered
    */
-	protected JobDescriptionType jobDescription = null;
+	protected JobDescriptionType jobDescription;
 
   /**
    * The cached value of the '{@link #getAny() <em>Any</em>}' attribute list.
@@ -68,7 +68,7 @@ public class JobDefinitionTypeImpl extends EObjectImpl implements JobDefinitionT
    * @generated
    * @ordered
    */
-	protected FeatureMap any = null;
+	protected FeatureMap any;
 
   /**
    * The default value of the '{@link #getId() <em>Id</em>}' attribute.
@@ -98,7 +98,7 @@ public class JobDefinitionTypeImpl extends EObjectImpl implements JobDefinitionT
    * @generated
    * @ordered
    */
-	protected FeatureMap anyAttribute = null;
+	protected FeatureMap anyAttribute;
 
   /**
    * <!-- begin-user-doc -->

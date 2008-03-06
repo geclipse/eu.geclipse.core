@@ -10,7 +10,7 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributor(s):
- *    Mathias Stümpert
+ *    Mathias Stï¿½mpert
  *           
  *****************************************************************************/
 
@@ -124,7 +124,7 @@ public class DataStagingTypeImpl extends EObjectImpl implements DataStagingType
    * @generated
    * @ordered
    */
-	protected boolean creationFlagESet = false;
+	protected boolean creationFlagESet;
 
   /**
    * The default value of the '{@link #isDeleteOnTermination() <em>Delete On Termination</em>}' attribute.
@@ -153,7 +153,7 @@ public class DataStagingTypeImpl extends EObjectImpl implements DataStagingType
    * @generated
    * @ordered
    */
-	protected boolean deleteOnTerminationESet = false;
+	protected boolean deleteOnTerminationESet;
 
   /**
    * The cached value of the '{@link #getSource() <em>Source</em>}' containment reference.
@@ -163,7 +163,7 @@ public class DataStagingTypeImpl extends EObjectImpl implements DataStagingType
    * @generated
    * @ordered
    */
-	protected SourceTargetType source = null;
+	protected SourceTargetType source;
 
   /**
    * The cached value of the '{@link #getTarget() <em>Target</em>}' containment reference.
@@ -173,7 +173,7 @@ public class DataStagingTypeImpl extends EObjectImpl implements DataStagingType
    * @generated
    * @ordered
    */
-	protected SourceTargetType target = null;
+	protected SourceTargetType target;
 
   /**
    * The cached value of the '{@link #getAny() <em>Any</em>}' attribute list.
@@ -183,7 +183,7 @@ public class DataStagingTypeImpl extends EObjectImpl implements DataStagingType
    * @generated
    * @ordered
    */
-	protected FeatureMap any = null;
+	protected FeatureMap any;
 
   /**
    * The default value of the '{@link #getName() <em>Name</em>}' attribute.
@@ -213,7 +213,7 @@ public class DataStagingTypeImpl extends EObjectImpl implements DataStagingType
    * @generated
    * @ordered
    */
-	protected FeatureMap anyAttribute = null;
+	protected FeatureMap anyAttribute;
 
   /**
    * <!-- begin-user-doc -->

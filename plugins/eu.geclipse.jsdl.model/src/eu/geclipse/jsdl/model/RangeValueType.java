@@ -20,8 +20,8 @@ import org.eclipse.emf.ecore.util.FeatureMap;
  * <p>
  * The following features are supported:
  * <ul>
- *   <li>{@link eu.geclipse.jsdl.model.RangeValueType#getUpperBoundedRange <em>Upper Bounded Range</em>}</li>
- *   <li>{@link eu.geclipse.jsdl.model.RangeValueType#getLowerBoundedRange <em>Lower Bounded Range</em>}</li>
+ *   <li>{@link eu.geclipse.jsdl.model.RangeValueType#getUpperBound <em>Upper Bound</em>}</li>
+ *   <li>{@link eu.geclipse.jsdl.model.RangeValueType#getLowerBound <em>Lower Bound</em>}</li>
  *   <li>{@link eu.geclipse.jsdl.model.RangeValueType#getExact <em>Exact</em>}</li>
  *   <li>{@link eu.geclipse.jsdl.model.RangeValueType#getRange <em>Range</em>}</li>
  *   <li>{@link eu.geclipse.jsdl.model.RangeValueType#getAnyAttribute <em>Any Attribute</em>}</li>
@@ -35,58 +35,58 @@ import org.eclipse.emf.ecore.util.FeatureMap;
 public interface RangeValueType extends EObject
 {
   /**
-   * Returns the value of the '<em><b>Upper Bounded Range</b></em>' containment reference.
+   * Returns the value of the '<em><b>Upper Bound</b></em>' containment reference.
    * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Upper Bounded Range</em>' containment reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-   * @return the value of the '<em>Upper Bounded Range</em>' containment reference.
-   * @see #setUpperBoundedRange(BoundaryType)
-   * @see eu.geclipse.jsdl.model.JsdlPackage#getRangeValueType_UpperBoundedRange()
+   * <p>
+   * If the meaning of the '<em>Upper Bound</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Upper Bound</em>' containment reference.
+   * @see #setUpperBound(BoundaryType)
+   * @see eu.geclipse.jsdl.model.JsdlPackage#getRangeValueType_UpperBound()
    * @model containment="true"
    *        extendedMetaData="kind='element' name='UpperBoundedRange' namespace='##targetNamespace'"
    * @generated
    */
-	BoundaryType getUpperBoundedRange();
+  BoundaryType getUpperBound();
 
   /**
-   * Sets the value of the '{@link eu.geclipse.jsdl.model.RangeValueType#getUpperBoundedRange <em>Upper Bounded Range</em>}' containment reference.
+   * Sets the value of the '{@link eu.geclipse.jsdl.model.RangeValueType#getUpperBound <em>Upper Bound</em>}' containment reference.
    * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Upper Bounded Range</em>' containment reference.
-   * @see #getUpperBoundedRange()
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Upper Bound</em>' containment reference.
+   * @see #getUpperBound()
    * @generated
    */
-	void setUpperBoundedRange(BoundaryType value);
+  void setUpperBound(BoundaryType value);
 
   /**
-   * Returns the value of the '<em><b>Lower Bounded Range</b></em>' containment reference.
+   * Returns the value of the '<em><b>Lower Bound</b></em>' containment reference.
    * <!-- begin-user-doc -->
-	 * <p>
-	 * If the meaning of the '<em>Lower Bounded Range</em>' containment reference isn't clear,
-	 * there really should be more of a description here...
-	 * </p>
-	 * <!-- end-user-doc -->
-   * @return the value of the '<em>Lower Bounded Range</em>' containment reference.
-   * @see #setLowerBoundedRange(BoundaryType)
-   * @see eu.geclipse.jsdl.model.JsdlPackage#getRangeValueType_LowerBoundedRange()
+   * <p>
+   * If the meaning of the '<em>Lower Bound</em>' containment reference isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Lower Bound</em>' containment reference.
+   * @see #setLowerBound(BoundaryType)
+   * @see eu.geclipse.jsdl.model.JsdlPackage#getRangeValueType_LowerBound()
    * @model containment="true"
    *        extendedMetaData="kind='element' name='LowerBoundedRange' namespace='##targetNamespace'"
    * @generated
    */
-	BoundaryType getLowerBoundedRange();
+  BoundaryType getLowerBound();
 
   /**
-   * Sets the value of the '{@link eu.geclipse.jsdl.model.RangeValueType#getLowerBoundedRange <em>Lower Bounded Range</em>}' containment reference.
+   * Sets the value of the '{@link eu.geclipse.jsdl.model.RangeValueType#getLowerBound <em>Lower Bound</em>}' containment reference.
    * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-   * @param value the new value of the '<em>Lower Bounded Range</em>' containment reference.
-   * @see #getLowerBoundedRange()
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Lower Bound</em>' containment reference.
+   * @see #getLowerBound()
    * @generated
    */
-	void setLowerBoundedRange(BoundaryType value);
+  void setLowerBound(BoundaryType value);
 
   /**
    * Returns the value of the '<em><b>Exact</b></em>' containment reference list.

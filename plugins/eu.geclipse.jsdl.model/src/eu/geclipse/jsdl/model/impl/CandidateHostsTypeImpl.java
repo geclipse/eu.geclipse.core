@@ -10,7 +10,7 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributor(s):
- *    Mathias Stümpert
+ *    Mathias Stï¿½mpert
  *           
  *****************************************************************************/
 package eu.geclipse.jsdl.model.impl;
@@ -51,7 +51,7 @@ public class CandidateHostsTypeImpl extends EObjectImpl implements CandidateHost
    * @generated
    * @ordered
    */
-	protected EList hostName = null;
+	protected EList hostName;
 
   /**
    * <!-- begin-user-doc -->

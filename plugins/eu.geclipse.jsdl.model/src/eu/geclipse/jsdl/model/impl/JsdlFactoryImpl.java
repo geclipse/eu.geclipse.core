@@ -10,7 +10,7 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributor(s):
- *    Mathias Stümpert
+ *    Mathias Stï¿½mpert
  *           
  *****************************************************************************/
 
@@ -449,7 +449,7 @@ public class JsdlFactoryImpl extends EFactoryImpl implements JsdlFactory
    */
 	public CreationFlagEnumeration createCreationFlagEnumerationObjectFromString(EDataType eDataType, String initialValue)
   {
-    return (CreationFlagEnumeration)createCreationFlagEnumerationFromString(JsdlPackage.Literals.CREATION_FLAG_ENUMERATION, initialValue);
+    return createCreationFlagEnumerationFromString(JsdlPackage.Literals.CREATION_FLAG_ENUMERATION, initialValue);
   }
 
   /**
@@ -489,7 +489,7 @@ public class JsdlFactoryImpl extends EFactoryImpl implements JsdlFactory
    */
 	public FileSystemTypeEnumeration createFileSystemTypeEnumerationObjectFromString(EDataType eDataType, String initialValue)
   {
-    return (FileSystemTypeEnumeration)createFileSystemTypeEnumerationFromString(JsdlPackage.Literals.FILE_SYSTEM_TYPE_ENUMERATION, initialValue);
+    return createFileSystemTypeEnumerationFromString(JsdlPackage.Literals.FILE_SYSTEM_TYPE_ENUMERATION, initialValue);
   }
 
   /**
@@ -509,7 +509,7 @@ public class JsdlFactoryImpl extends EFactoryImpl implements JsdlFactory
    */
 	public OperatingSystemTypeEnumeration createOperatingSystemTypeEnumerationObjectFromString(EDataType eDataType, String initialValue)
   {
-    return (OperatingSystemTypeEnumeration)createOperatingSystemTypeEnumerationFromString(JsdlPackage.Literals.OPERATING_SYSTEM_TYPE_ENUMERATION, initialValue);
+    return createOperatingSystemTypeEnumerationFromString(JsdlPackage.Literals.OPERATING_SYSTEM_TYPE_ENUMERATION, initialValue);
   }
 
   /**
@@ -529,7 +529,7 @@ public class JsdlFactoryImpl extends EFactoryImpl implements JsdlFactory
    */
 	public ProcessorArchitectureEnumeration createProcessorArchitectureEnumerationObjectFromString(EDataType eDataType, String initialValue)
   {
-    return (ProcessorArchitectureEnumeration)createProcessorArchitectureEnumerationFromString(JsdlPackage.Literals.PROCESSOR_ARCHITECTURE_ENUMERATION, initialValue);
+    return createProcessorArchitectureEnumerationFromString(JsdlPackage.Literals.PROCESSOR_ARCHITECTURE_ENUMERATION, initialValue);
   }
 
   /**

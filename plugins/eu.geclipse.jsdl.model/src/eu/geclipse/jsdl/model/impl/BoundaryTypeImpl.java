@@ -10,7 +10,7 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributor(s):
- *    Mathias Stümpert
+ *    Mathias Stï¿½mpert
  *           
  *****************************************************************************/
 package eu.geclipse.jsdl.model.impl;
@@ -75,7 +75,7 @@ public class BoundaryTypeImpl extends EObjectImpl implements BoundaryType
    * @generated
    * @ordered
    */
-	protected boolean valueESet = false;
+	protected boolean valueESet;
 
   /**
    * The default value of the '{@link #isExclusiveBound() <em>Exclusive Bound</em>}' attribute.
@@ -104,7 +104,7 @@ public class BoundaryTypeImpl extends EObjectImpl implements BoundaryType
    * @generated
    * @ordered
    */
-	protected boolean exclusiveBoundESet = false;
+	protected boolean exclusiveBoundESet;
 
   /**
    * The cached value of the '{@link #getAnyAttribute() <em>Any Attribute</em>}' attribute list.
@@ -114,7 +114,7 @@ public class BoundaryTypeImpl extends EObjectImpl implements BoundaryType
    * @generated
    * @ordered
    */
-	protected FeatureMap anyAttribute = null;
+	protected FeatureMap anyAttribute;
 
   /**
    * <!-- begin-user-doc -->

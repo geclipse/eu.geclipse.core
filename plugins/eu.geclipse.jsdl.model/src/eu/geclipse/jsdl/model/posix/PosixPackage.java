@@ -10,7 +10,7 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributor(s):
- *    Mathias Stümpert
+ *    Mathias Stï¿½mpert
  *           
  *****************************************************************************/
 
@@ -44,7 +44,7 @@ public interface PosixPackage extends EPackage
 	 * <!-- end-user-doc -->
    * @generated
    */
-	String eNAME = "posix";
+	String eNAME = "model.posix";
 
   /**
    * The package namespace URI.

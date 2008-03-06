@@ -10,7 +10,7 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributor(s):
- *    Mathias Stümpert
+ *    Mathias Stï¿½mpert
  *           
  *****************************************************************************/
 
@@ -84,7 +84,7 @@ public class ResourcesTypeImpl extends EObjectImpl implements ResourcesType
    * @generated
    * @ordered
    */
-	protected CandidateHostsType candidateHosts = null;
+	protected CandidateHostsType candidateHosts;
 
   /**
    * The cached value of the '{@link #getFileSystem() <em>File System</em>}' containment reference list.
@@ -94,7 +94,7 @@ public class ResourcesTypeImpl extends EObjectImpl implements ResourcesType
    * @generated
    * @ordered
    */
-	protected EList fileSystem = null;
+	protected EList fileSystem;
 
   /**
    * The default value of the '{@link #isExclusiveExecution() <em>Exclusive Execution</em>}' attribute.
@@ -123,7 +123,7 @@ public class ResourcesTypeImpl extends EObjectImpl implements ResourcesType
    * @generated
    * @ordered
    */
-	protected boolean exclusiveExecutionESet = false;
+	protected boolean exclusiveExecutionESet;
 
   /**
    * The cached value of the '{@link #getOperatingSystem() <em>Operating System</em>}' containment reference.
@@ -133,7 +133,7 @@ public class ResourcesTypeImpl extends EObjectImpl implements ResourcesType
    * @generated
    * @ordered
    */
-	protected OperatingSystemType operatingSystem = null;
+	protected OperatingSystemType operatingSystem;
 
   /**
    * The cached value of the '{@link #getCPUArchitecture() <em>CPU Architecture</em>}' containment reference.
@@ -143,7 +143,7 @@ public class ResourcesTypeImpl extends EObjectImpl implements ResourcesType
    * @generated
    * @ordered
    */
-	protected CPUArchitectureType cPUArchitecture = null;
+	protected CPUArchitectureType cPUArchitecture;
 
   /**
    * The cached value of the '{@link #getIndividualCPUSpeed() <em>Individual CPU Speed</em>}' containment reference.
@@ -153,7 +153,7 @@ public class ResourcesTypeImpl extends EObjectImpl implements ResourcesType
    * @generated
    * @ordered
    */
-	protected RangeValueType individualCPUSpeed = null;
+	protected RangeValueType individualCPUSpeed;
 
   /**
    * The cached value of the '{@link #getIndividualCPUTime() <em>Individual CPU Time</em>}' containment reference.
@@ -163,7 +163,7 @@ public class ResourcesTypeImpl extends EObjectImpl implements ResourcesType
    * @generated
    * @ordered
    */
-	protected RangeValueType individualCPUTime = null;
+	protected RangeValueType individualCPUTime;
 
   /**
    * The cached value of the '{@link #getIndividualCPUCount() <em>Individual CPU Count</em>}' containment reference.
@@ -173,7 +173,7 @@ public class ResourcesTypeImpl extends EObjectImpl implements ResourcesType
    * @generated
    * @ordered
    */
-	protected RangeValueType individualCPUCount = null;
+	protected RangeValueType individualCPUCount;
 
   /**
    * The cached value of the '{@link #getIndividualNetworkBandwidth() <em>Individual Network Bandwidth</em>}' containment reference.
@@ -183,7 +183,7 @@ public class ResourcesTypeImpl extends EObjectImpl implements ResourcesType
    * @generated
    * @ordered
    */
-	protected RangeValueType individualNetworkBandwidth = null;
+	protected RangeValueType individualNetworkBandwidth;
 
   /**
    * The cached value of the '{@link #getIndividualPhysicalMemory() <em>Individual Physical Memory</em>}' containment reference.
@@ -193,7 +193,7 @@ public class ResourcesTypeImpl extends EObjectImpl implements ResourcesType
    * @generated
    * @ordered
    */
-	protected RangeValueType individualPhysicalMemory = null;
+	protected RangeValueType individualPhysicalMemory;
 
   /**
    * The cached value of the '{@link #getIndividualVirtualMemory() <em>Individual Virtual Memory</em>}' containment reference.
@@ -203,7 +203,7 @@ public class ResourcesTypeImpl extends EObjectImpl implements ResourcesType
    * @generated
    * @ordered
    */
-	protected RangeValueType individualVirtualMemory = null;
+	protected RangeValueType individualVirtualMemory;
 
   /**
    * The cached value of the '{@link #getIndividualDiskSpace() <em>Individual Disk Space</em>}' containment reference.
@@ -213,7 +213,7 @@ public class ResourcesTypeImpl extends EObjectImpl implements ResourcesType
    * @generated
    * @ordered
    */
-	protected RangeValueType individualDiskSpace = null;
+	protected RangeValueType individualDiskSpace;
 
   /**
    * The cached value of the '{@link #getTotalCPUTime() <em>Total CPU Time</em>}' containment reference.
@@ -223,7 +223,7 @@ public class ResourcesTypeImpl extends EObjectImpl implements ResourcesType
    * @generated
    * @ordered
    */
-	protected RangeValueType totalCPUTime = null;
+	protected RangeValueType totalCPUTime;
 
   /**
    * The cached value of the '{@link #getTotalCPUCount() <em>Total CPU Count</em>}' containment reference.
@@ -233,7 +233,7 @@ public class ResourcesTypeImpl extends EObjectImpl implements ResourcesType
    * @generated
    * @ordered
    */
-	protected RangeValueType totalCPUCount = null;
+	protected RangeValueType totalCPUCount;
 
   /**
    * The cached value of the '{@link #getTotalPhysicalMemory() <em>Total Physical Memory</em>}' containment reference.
@@ -243,7 +243,7 @@ public class ResourcesTypeImpl extends EObjectImpl implements ResourcesType
    * @generated
    * @ordered
    */
-	protected RangeValueType totalPhysicalMemory = null;
+	protected RangeValueType totalPhysicalMemory;
 
   /**
    * The cached value of the '{@link #getTotalVirtualMemory() <em>Total Virtual Memory</em>}' containment reference.
@@ -253,7 +253,7 @@ public class ResourcesTypeImpl extends EObjectImpl implements ResourcesType
    * @generated
    * @ordered
    */
-	protected RangeValueType totalVirtualMemory = null;
+	protected RangeValueType totalVirtualMemory;
 
   /**
    * The cached value of the '{@link #getTotalDiskSpace() <em>Total Disk Space</em>}' containment reference.
@@ -263,7 +263,7 @@ public class ResourcesTypeImpl extends EObjectImpl implements ResourcesType
    * @generated
    * @ordered
    */
-	protected RangeValueType totalDiskSpace = null;
+	protected RangeValueType totalDiskSpace;
 
   /**
    * The cached value of the '{@link #getTotalResourceCount() <em>Total Resource Count</em>}' containment reference.
@@ -273,7 +273,7 @@ public class ResourcesTypeImpl extends EObjectImpl implements ResourcesType
    * @generated
    * @ordered
    */
-	protected RangeValueType totalResourceCount = null;
+	protected RangeValueType totalResourceCount;
 
   /**
    * The cached value of the '{@link #getAny() <em>Any</em>}' attribute list.
@@ -283,7 +283,7 @@ public class ResourcesTypeImpl extends EObjectImpl implements ResourcesType
    * @generated
    * @ordered
    */
-	protected FeatureMap any = null;
+	protected FeatureMap any;
 
   /**
    * The cached value of the '{@link #getAnyAttribute() <em>Any Attribute</em>}' attribute list.
@@ -293,7 +293,7 @@ public class ResourcesTypeImpl extends EObjectImpl implements ResourcesType
    * @generated
    * @ordered
    */
-	protected FeatureMap anyAttribute = null;
+	protected FeatureMap anyAttribute;
 
   /**
    * <!-- begin-user-doc -->

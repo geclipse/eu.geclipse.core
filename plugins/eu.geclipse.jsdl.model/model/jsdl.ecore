@@ -1141,7 +1141,7 @@
       <details key="name" value="RangeValue_Type"/>
       <details key="kind" value="elementOnly"/>
     </eAnnotations>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="upperBoundedRange" eType="#//BoundaryType"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="UpperBound" eType="#//BoundaryType"
         containment="true" resolveProxies="false">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="element"/>
@@ -1149,7 +1149,7 @@
         <details key="namespace" value="##targetNamespace"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="lowerBoundedRange" eType="#//BoundaryType"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="LowerBound" eType="#//BoundaryType"
         containment="true" resolveProxies="false">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="element"/>
@@ -1157,7 +1157,7 @@
         <details key="namespace" value="##targetNamespace"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="exact" upperBound="-1"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Exact" upperBound="-1"
         eType="#//ExactType" containment="true" resolveProxies="false">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="element"/>
@@ -1165,7 +1165,7 @@
         <details key="namespace" value="##targetNamespace"/>
       </eAnnotations>
     </eStructuralFeatures>
-    <eStructuralFeatures xsi:type="ecore:EReference" name="range" upperBound="-1"
+    <eStructuralFeatures xsi:type="ecore:EReference" name="Range" upperBound="-1"
         eType="#//RangeType" containment="true" resolveProxies="false">
       <eAnnotations source="http:///org/eclipse/emf/ecore/util/ExtendedMetaData">
         <details key="kind" value="element"/>

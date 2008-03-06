@@ -18,7 +18,7 @@ import org.eclipse.emf.common.util.AbstractEnumerator;
  * and utility methods for working with them.
  * <!-- end-user-doc -->
  * @see eu.geclipse.jsdl.model.JsdlPackage#getCreationFlagEnumeration()
- * @model
+ * @model extendedMetaData="name='CreationFlagEnumeration'"
  * @generated
  */
 public final class CreationFlagEnumeration extends AbstractEnumerator {
@@ -171,7 +171,7 @@ public final class CreationFlagEnumeration extends AbstractEnumerator {
       case APPEND: return APPEND_LITERAL;
       case DONT_OVERWRITE: return DONT_OVERWRITE_LITERAL;
     }
-    return null;	
+    return null;
   }
 
   /**

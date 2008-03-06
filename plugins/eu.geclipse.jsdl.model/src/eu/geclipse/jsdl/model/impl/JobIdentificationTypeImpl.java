@@ -10,7 +10,7 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributor(s):
- *    Mathias Stümpert
+ *    Mathias Stï¿½mpert
  *           
  *****************************************************************************/
 
@@ -105,7 +105,7 @@ public class JobIdentificationTypeImpl extends EObjectImpl implements JobIdentif
    * @generated
    * @ordered
    */
-	protected EList jobAnnotation = null;
+	protected EList jobAnnotation;
 
   /**
    * The cached value of the '{@link #getJobProject() <em>Job Project</em>}' attribute list.
@@ -115,7 +115,7 @@ public class JobIdentificationTypeImpl extends EObjectImpl implements JobIdentif
    * @generated
    * @ordered
    */
-	protected EList jobProject = null;
+	protected EList jobProject;
 
   /**
    * The cached value of the '{@link #getAny() <em>Any</em>}' attribute list.
@@ -125,7 +125,7 @@ public class JobIdentificationTypeImpl extends EObjectImpl implements JobIdentif
    * @generated
    * @ordered
    */
-	protected FeatureMap any = null;
+	protected FeatureMap any;
 
   /**
    * The cached value of the '{@link #getAnyAttribute() <em>Any Attribute</em>}' attribute list.
@@ -135,7 +135,7 @@ public class JobIdentificationTypeImpl extends EObjectImpl implements JobIdentif
    * @generated
    * @ordered
    */
-	protected FeatureMap anyAttribute = null;
+	protected FeatureMap anyAttribute;
 
   /**
    * <!-- begin-user-doc -->

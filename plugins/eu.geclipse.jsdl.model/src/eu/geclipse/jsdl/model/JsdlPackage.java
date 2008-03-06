@@ -36,7 +36,7 @@ public interface JsdlPackage extends EPackage
 	 * <!-- end-user-doc -->
    * @generated
    */
-	String eNAME = "jsdl";
+	String eNAME = "jsdl.model";
 
   /**
    * The package namespace URI.
@@ -1293,22 +1293,22 @@ public interface JsdlPackage extends EPackage
 	int RANGE_VALUE_TYPE = 14;
 
   /**
-   * The feature id for the '<em><b>Upper Bounded Range</b></em>' containment reference.
+   * The feature id for the '<em><b>Upper Bound</b></em>' containment reference.
    * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-	int RANGE_VALUE_TYPE__UPPER_BOUNDED_RANGE = 0;
+  int RANGE_VALUE_TYPE__UPPER_BOUND = 0;
 
   /**
-   * The feature id for the '<em><b>Lower Bounded Range</b></em>' containment reference.
+   * The feature id for the '<em><b>Lower Bound</b></em>' containment reference.
    * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    * @ordered
    */
-	int RANGE_VALUE_TYPE__LOWER_BOUNDED_RANGE = 1;
+  int RANGE_VALUE_TYPE__LOWER_BOUND = 1;
 
   /**
    * The feature id for the '<em><b>Exact</b></em>' containment reference list.
@@ -2999,26 +2999,26 @@ public interface JsdlPackage extends EPackage
 	EClass getRangeValueType();
 
   /**
-   * Returns the meta object for the containment reference '{@link eu.geclipse.jsdl.model.RangeValueType#getUpperBoundedRange <em>Upper Bounded Range</em>}'.
+   * Returns the meta object for the containment reference '{@link eu.geclipse.jsdl.model.RangeValueType#getUpperBound <em>Upper Bound</em>}'.
    * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Upper Bounded Range</em>'.
-   * @see eu.geclipse.jsdl.model.RangeValueType#getUpperBoundedRange()
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Upper Bound</em>'.
+   * @see eu.geclipse.jsdl.model.RangeValueType#getUpperBound()
    * @see #getRangeValueType()
    * @generated
    */
-	EReference getRangeValueType_UpperBoundedRange();
+  EReference getRangeValueType_UpperBound();
 
   /**
-   * Returns the meta object for the containment reference '{@link eu.geclipse.jsdl.model.RangeValueType#getLowerBoundedRange <em>Lower Bounded Range</em>}'.
+   * Returns the meta object for the containment reference '{@link eu.geclipse.jsdl.model.RangeValueType#getLowerBound <em>Lower Bound</em>}'.
    * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
-   * @return the meta object for the containment reference '<em>Lower Bounded Range</em>'.
-   * @see eu.geclipse.jsdl.model.RangeValueType#getLowerBoundedRange()
+   * <!-- end-user-doc -->
+   * @return the meta object for the containment reference '<em>Lower Bound</em>'.
+   * @see eu.geclipse.jsdl.model.RangeValueType#getLowerBound()
    * @see #getRangeValueType()
    * @generated
    */
-	EReference getRangeValueType_LowerBoundedRange();
+  EReference getRangeValueType_LowerBound();
 
   /**
    * Returns the meta object for the containment reference list '{@link eu.geclipse.jsdl.model.RangeValueType#getExact <em>Exact</em>}'.
@@ -3373,7 +3373,7 @@ public interface JsdlPackage extends EPackage
    * @return the meta object for data type '<em>Creation Flag Enumeration Object</em>'.
    * @see eu.geclipse.jsdl.model.CreationFlagEnumeration
    * @model instanceClass="eu.geclipse.jsdl.model.CreationFlagEnumeration"
-   *        extendedMetaData="name='CreationFlagEnumeration:Object' baseType='CreationFlagEnumeration'" 
+   *        extendedMetaData="name='CreationFlagEnumeration:Object' baseType='CreationFlagEnumeration'"
    * @generated
    */
 	EDataType getCreationFlagEnumerationObject();
@@ -3385,7 +3385,7 @@ public interface JsdlPackage extends EPackage
    * @return the meta object for data type '<em>Description Type</em>'.
    * @see java.lang.String
    * @model instanceClass="java.lang.String"
-   *        extendedMetaData="name='Description_Type' baseType='http://www.eclipse.org/emf/2003/XMLType#string'" 
+   *        extendedMetaData="name='Description_Type' baseType='http://www.eclipse.org/emf/2003/XMLType#string'"
    * @generated
    */
 	EDataType getDescriptionType();
@@ -3397,7 +3397,7 @@ public interface JsdlPackage extends EPackage
    * @return the meta object for data type '<em>File System Type Enumeration Object</em>'.
    * @see eu.geclipse.jsdl.model.FileSystemTypeEnumeration
    * @model instanceClass="eu.geclipse.jsdl.model.FileSystemTypeEnumeration"
-   *        extendedMetaData="name='FileSystemTypeEnumeration:Object' baseType='FileSystemTypeEnumeration'" 
+   *        extendedMetaData="name='FileSystemTypeEnumeration:Object' baseType='FileSystemTypeEnumeration'"
    * @generated
    */
 	EDataType getFileSystemTypeEnumerationObject();
@@ -3409,7 +3409,7 @@ public interface JsdlPackage extends EPackage
    * @return the meta object for data type '<em>Operating System Type Enumeration Object</em>'.
    * @see eu.geclipse.jsdl.model.OperatingSystemTypeEnumeration
    * @model instanceClass="eu.geclipse.jsdl.model.OperatingSystemTypeEnumeration"
-   *        extendedMetaData="name='OperatingSystemTypeEnumeration:Object' baseType='OperatingSystemTypeEnumeration'" 
+   *        extendedMetaData="name='OperatingSystemTypeEnumeration:Object' baseType='OperatingSystemTypeEnumeration'"
    * @generated
    */
 	EDataType getOperatingSystemTypeEnumerationObject();
@@ -3421,7 +3421,7 @@ public interface JsdlPackage extends EPackage
    * @return the meta object for data type '<em>Processor Architecture Enumeration Object</em>'.
    * @see eu.geclipse.jsdl.model.ProcessorArchitectureEnumeration
    * @model instanceClass="eu.geclipse.jsdl.model.ProcessorArchitectureEnumeration"
-   *        extendedMetaData="name='ProcessorArchitectureEnumeration:Object' baseType='ProcessorArchitectureEnumeration'" 
+   *        extendedMetaData="name='ProcessorArchitectureEnumeration:Object' baseType='ProcessorArchitectureEnumeration'"
    * @generated
    */
 	EDataType getProcessorArchitectureEnumerationObject();
@@ -4448,20 +4448,20 @@ public interface JsdlPackage extends EPackage
 		EClass RANGE_VALUE_TYPE = eINSTANCE.getRangeValueType();
 
     /**
-     * The meta object literal for the '<em><b>Upper Bounded Range</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Upper Bound</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-		EReference RANGE_VALUE_TYPE__UPPER_BOUNDED_RANGE = eINSTANCE.getRangeValueType_UpperBoundedRange();
+    EReference RANGE_VALUE_TYPE__UPPER_BOUND = eINSTANCE.getRangeValueType_UpperBound();
 
     /**
-     * The meta object literal for the '<em><b>Lower Bounded Range</b></em>' containment reference feature.
+     * The meta object literal for the '<em><b>Lower Bound</b></em>' containment reference feature.
      * <!-- begin-user-doc -->
-		 * <!-- end-user-doc -->
+     * <!-- end-user-doc -->
      * @generated
      */
-		EReference RANGE_VALUE_TYPE__LOWER_BOUNDED_RANGE = eINSTANCE.getRangeValueType_LowerBoundedRange();
+    EReference RANGE_VALUE_TYPE__LOWER_BOUND = eINSTANCE.getRangeValueType_LowerBound();
 
     /**
      * The meta object literal for the '<em><b>Exact</b></em>' containment reference list feature.

@@ -10,7 +10,7 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributor(s):
- *    Mathias Stümpert
+ *    Mathias Stï¿½mpert
  *           
  *****************************************************************************/
 
@@ -1535,20 +1535,20 @@ public class JsdlPackageImpl extends EPackageImpl implements JsdlPackage
 
   /**
    * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
-	public EReference getRangeValueType_UpperBoundedRange()
+  public EReference getRangeValueType_UpperBound()
   {
     return (EReference)rangeValueTypeEClass.getEStructuralFeatures().get(0);
   }
 
   /**
    * <!-- begin-user-doc -->
-	 * <!-- end-user-doc -->
+   * <!-- end-user-doc -->
    * @generated
    */
-	public EReference getRangeValueType_LowerBoundedRange()
+  public EReference getRangeValueType_LowerBound()
   {
     return (EReference)rangeValueTypeEClass.getEStructuralFeatures().get(1);
   }
@@ -2088,8 +2088,8 @@ public class JsdlPackageImpl extends EPackageImpl implements JsdlPackage
     createEAttribute(rangeTypeEClass, RANGE_TYPE__ANY_ATTRIBUTE);
 
     rangeValueTypeEClass = createEClass(RANGE_VALUE_TYPE);
-    createEReference(rangeValueTypeEClass, RANGE_VALUE_TYPE__UPPER_BOUNDED_RANGE);
-    createEReference(rangeValueTypeEClass, RANGE_VALUE_TYPE__LOWER_BOUNDED_RANGE);
+    createEReference(rangeValueTypeEClass, RANGE_VALUE_TYPE__UPPER_BOUND);
+    createEReference(rangeValueTypeEClass, RANGE_VALUE_TYPE__LOWER_BOUND);
     createEReference(rangeValueTypeEClass, RANGE_VALUE_TYPE__EXACT);
     createEReference(rangeValueTypeEClass, RANGE_VALUE_TYPE__RANGE);
     createEAttribute(rangeValueTypeEClass, RANGE_VALUE_TYPE__ANY_ATTRIBUTE);
@@ -2300,10 +2300,10 @@ public class JsdlPackageImpl extends EPackageImpl implements JsdlPackage
     initEAttribute(getRangeType_AnyAttribute(), ecorePackage.getEFeatureMapEntry(), "anyAttribute", null, 0, -1, RangeType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(rangeValueTypeEClass, RangeValueType.class, "RangeValueType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
-    initEReference(getRangeValueType_UpperBoundedRange(), this.getBoundaryType(), null, "upperBoundedRange", null, 0, 1, RangeValueType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getRangeValueType_LowerBoundedRange(), this.getBoundaryType(), null, "lowerBoundedRange", null, 0, 1, RangeValueType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getRangeValueType_Exact(), this.getExactType(), null, "exact", null, 0, -1, RangeValueType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
-    initEReference(getRangeValueType_Range(), this.getRangeType(), null, "range", null, 0, -1, RangeValueType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getRangeValueType_UpperBound(), this.getBoundaryType(), null, "UpperBound", null, 0, 1, RangeValueType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getRangeValueType_LowerBound(), this.getBoundaryType(), null, "LowerBound", null, 0, 1, RangeValueType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getRangeValueType_Exact(), this.getExactType(), null, "Exact", null, 0, -1, RangeValueType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
+    initEReference(getRangeValueType_Range(), this.getRangeType(), null, "Range", null, 0, -1, RangeValueType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, IS_COMPOSITE, !IS_RESOLVE_PROXIES, !IS_UNSETTABLE, IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
     initEAttribute(getRangeValueType_AnyAttribute(), ecorePackage.getEFeatureMapEntry(), "anyAttribute", null, 0, -1, RangeValueType.class, !IS_TRANSIENT, !IS_VOLATILE, IS_CHANGEABLE, !IS_UNSETTABLE, !IS_ID, !IS_UNIQUE, !IS_DERIVED, IS_ORDERED);
 
     initEClass(resourcesTypeEClass, ResourcesType.class, "ResourcesType", !IS_ABSTRACT, !IS_INTERFACE, IS_GENERATED_INSTANCE_CLASS);
@@ -3606,7 +3606,7 @@ public class JsdlPackageImpl extends EPackageImpl implements JsdlPackage
        "kind", "elementOnly"
        });		
     addAnnotation
-      (getRangeValueType_UpperBoundedRange(), 
+      (getRangeValueType_UpperBound(), 
        source, 
        new String[] 
        {
@@ -3615,7 +3615,7 @@ public class JsdlPackageImpl extends EPackageImpl implements JsdlPackage
        "namespace", "##targetNamespace"
        });		
     addAnnotation
-      (getRangeValueType_LowerBoundedRange(), 
+      (getRangeValueType_LowerBound(), 
        source, 
        new String[] 
        {

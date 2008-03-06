@@ -18,7 +18,7 @@ import org.eclipse.emf.common.util.AbstractEnumerator;
  * and utility methods for working with them.
  * <!-- end-user-doc -->
  * @see eu.geclipse.jsdl.model.JsdlPackage#getFileSystemTypeEnumeration()
- * @model
+ * @model extendedMetaData="name='FileSystemTypeEnumeration'"
  * @generated
  */
 public final class FileSystemTypeEnumeration extends AbstractEnumerator {
@@ -198,7 +198,7 @@ public final class FileSystemTypeEnumeration extends AbstractEnumerator {
       case SPOOL: return SPOOL_LITERAL;
       case NORMAL: return NORMAL_LITERAL;
     }
-    return null;	
+    return null;
   }
 
   /**

@@ -10,7 +10,7 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributor(s):
- *    Mathias Stümpert
+ *    Mathias Stï¿½mpert
  *           
  *****************************************************************************/
 
@@ -60,7 +60,7 @@ public class OperatingSystemTypeImpl extends EObjectImpl implements OperatingSys
    * @generated
    * @ordered
    */
-	protected OperatingSystemTypeType operatingSystemType = null;
+	protected OperatingSystemTypeType operatingSystemType;
 
   /**
    * The default value of the '{@link #getOperatingSystemVersion() <em>Operating System Version</em>}' attribute.
@@ -110,7 +110,7 @@ public class OperatingSystemTypeImpl extends EObjectImpl implements OperatingSys
    * @generated
    * @ordered
    */
-	protected FeatureMap any = null;
+	protected FeatureMap any;
 
   /**
    * The cached value of the '{@link #getAnyAttribute() <em>Any Attribute</em>}' attribute list.
@@ -120,7 +120,7 @@ public class OperatingSystemTypeImpl extends EObjectImpl implements OperatingSys
    * @generated
    * @ordered
    */
-	protected FeatureMap anyAttribute = null;
+	protected FeatureMap anyAttribute;
 
   /**
    * <!-- begin-user-doc -->

@@ -10,7 +10,7 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributor(s):
- *    Mathias Stümpert
+ *    Mathias Stï¿½mpert
  *           
  *****************************************************************************/
 
@@ -174,13 +174,13 @@ public class PosixSwitch
   }
 
   /**
-   * Returns the result of interpretting the object as an instance of '<em>Argument Type</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Argument Type</em>'.
    * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpretting the object as an instance of '<em>Argument Type</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Argument Type</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
@@ -190,13 +190,13 @@ public class PosixSwitch
   }
 
   /**
-   * Returns the result of interpretting the object as an instance of '<em>Directory Name Type</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Directory Name Type</em>'.
    * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpretting the object as an instance of '<em>Directory Name Type</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Directory Name Type</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
@@ -206,13 +206,13 @@ public class PosixSwitch
   }
 
   /**
-   * Returns the result of interpretting the object as an instance of '<em>Document Root</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Document Root</em>'.
    * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpretting the object as an instance of '<em>Document Root</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Document Root</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
@@ -222,13 +222,13 @@ public class PosixSwitch
   }
 
   /**
-   * Returns the result of interpretting the object as an instance of '<em>Environment Type</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Environment Type</em>'.
    * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpretting the object as an instance of '<em>Environment Type</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Environment Type</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
@@ -238,13 +238,13 @@ public class PosixSwitch
   }
 
   /**
-   * Returns the result of interpretting the object as an instance of '<em>File Name Type</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>File Name Type</em>'.
    * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpretting the object as an instance of '<em>File Name Type</em>'.
+   * @return the result of interpreting the object as an instance of '<em>File Name Type</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
@@ -254,13 +254,13 @@ public class PosixSwitch
   }
 
   /**
-   * Returns the result of interpretting the object as an instance of '<em>Group Name Type</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Group Name Type</em>'.
    * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpretting the object as an instance of '<em>Group Name Type</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Group Name Type</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
@@ -270,13 +270,13 @@ public class PosixSwitch
   }
 
   /**
-   * Returns the result of interpretting the object as an instance of '<em>Limits Type</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Limits Type</em>'.
    * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpretting the object as an instance of '<em>Limits Type</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Limits Type</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
@@ -286,13 +286,13 @@ public class PosixSwitch
   }
 
   /**
-   * Returns the result of interpretting the object as an instance of '<em>POSIX Application Type</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>POSIX Application Type</em>'.
    * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpretting the object as an instance of '<em>POSIX Application Type</em>'.
+   * @return the result of interpreting the object as an instance of '<em>POSIX Application Type</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
@@ -302,13 +302,13 @@ public class PosixSwitch
   }
 
   /**
-   * Returns the result of interpretting the object as an instance of '<em>User Name Type</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>User Name Type</em>'.
    * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpretting the object as an instance of '<em>User Name Type</em>'.
+   * @return the result of interpreting the object as an instance of '<em>User Name Type</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
@@ -318,13 +318,13 @@ public class PosixSwitch
   }
 
   /**
-   * Returns the result of interpretting the object as an instance of '<em>EObject</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>EObject</em>'.
    * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch, but this is the last case anyway.
 	 * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpretting the object as an instance of '<em>EObject</em>'.
+   * @return the result of interpreting the object as an instance of '<em>EObject</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject)
    * @generated
    */

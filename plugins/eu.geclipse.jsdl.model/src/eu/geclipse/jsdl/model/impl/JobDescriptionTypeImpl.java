@@ -10,7 +10,7 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributor(s):
- *    Mathias Stümpert
+ *    Mathias Stï¿½mpert
  *           
  *****************************************************************************/
 
@@ -69,7 +69,7 @@ public class JobDescriptionTypeImpl extends EObjectImpl implements JobDescriptio
    * @generated
    * @ordered
    */
-	protected JobIdentificationType jobIdentification = null;
+	protected JobIdentificationType jobIdentification;
 
   /**
    * The cached value of the '{@link #getApplication() <em>Application</em>}' containment reference.
@@ -79,7 +79,7 @@ public class JobDescriptionTypeImpl extends EObjectImpl implements JobDescriptio
    * @generated
    * @ordered
    */
-	protected ApplicationType application = null;
+	protected ApplicationType application;
 
   /**
    * The cached value of the '{@link #getResources() <em>Resources</em>}' containment reference.
@@ -89,7 +89,7 @@ public class JobDescriptionTypeImpl extends EObjectImpl implements JobDescriptio
    * @generated
    * @ordered
    */
-	protected ResourcesType resources = null;
+	protected ResourcesType resources;
 
   /**
    * The cached value of the '{@link #getDataStaging() <em>Data Staging</em>}' containment reference list.
@@ -99,7 +99,7 @@ public class JobDescriptionTypeImpl extends EObjectImpl implements JobDescriptio
    * @generated
    * @ordered
    */
-	protected EList dataStaging = null;
+	protected EList dataStaging;
 
   /**
    * The cached value of the '{@link #getAny() <em>Any</em>}' attribute list.
@@ -109,7 +109,7 @@ public class JobDescriptionTypeImpl extends EObjectImpl implements JobDescriptio
    * @generated
    * @ordered
    */
-	protected FeatureMap any = null;
+	protected FeatureMap any;
 
   /**
    * The cached value of the '{@link #getAnyAttribute() <em>Any Attribute</em>}' attribute list.
@@ -119,7 +119,7 @@ public class JobDescriptionTypeImpl extends EObjectImpl implements JobDescriptio
    * @generated
    * @ordered
    */
-	protected FeatureMap anyAttribute = null;
+	protected FeatureMap anyAttribute;
 
   /**
    * <!-- begin-user-doc -->

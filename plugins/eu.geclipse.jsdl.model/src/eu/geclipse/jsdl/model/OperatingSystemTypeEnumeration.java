@@ -18,7 +18,7 @@ import org.eclipse.emf.common.util.AbstractEnumerator;
  * and utility methods for working with them.
  * <!-- end-user-doc -->
  * @see eu.geclipse.jsdl.model.JsdlPackage#getOperatingSystemTypeEnumeration()
- * @model
+ * @model extendedMetaData="name='OperatingSystemTypeEnumeration'"
  * @generated
  */
 public final class OperatingSystemTypeEnumeration extends AbstractEnumerator {
@@ -1953,7 +1953,7 @@ public final class OperatingSystemTypeEnumeration extends AbstractEnumerator {
       case ZOS: return ZOS_LITERAL;
       case OTHER: return OTHER_LITERAL;
     }
-    return null;	
+    return null;
   }
 
   /**

@@ -10,7 +10,7 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributor(s):
- *    Mathias Stümpert
+ *    Mathias Stï¿½mpert
  *           
  *****************************************************************************/
 
@@ -76,7 +76,7 @@ public class ExactTypeImpl extends EObjectImpl implements ExactType
    * @generated
    * @ordered
    */
-	protected boolean valueESet = false;
+	protected boolean valueESet;
 
   /**
    * The default value of the '{@link #getEpsilon() <em>Epsilon</em>}' attribute.
@@ -105,7 +105,7 @@ public class ExactTypeImpl extends EObjectImpl implements ExactType
    * @generated
    * @ordered
    */
-	protected boolean epsilonESet = false;
+	protected boolean epsilonESet;
 
   /**
    * The cached value of the '{@link #getAnyAttribute() <em>Any Attribute</em>}' attribute list.
@@ -115,7 +115,7 @@ public class ExactTypeImpl extends EObjectImpl implements ExactType
    * @generated
    * @ordered
    */
-	protected FeatureMap anyAttribute = null;
+	protected FeatureMap anyAttribute;
 
   /**
    * <!-- begin-user-doc -->

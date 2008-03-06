@@ -18,7 +18,7 @@ import org.eclipse.emf.common.util.AbstractEnumerator;
  * and utility methods for working with them.
  * <!-- end-user-doc -->
  * @see eu.geclipse.jsdl.model.JsdlPackage#getProcessorArchitectureEnumeration()
- * @model
+ * @model extendedMetaData="name='ProcessorArchitectureEnumeration'"
  * @generated
  */
 public final class ProcessorArchitectureEnumeration extends AbstractEnumerator {
@@ -360,7 +360,7 @@ public final class ProcessorArchitectureEnumeration extends AbstractEnumerator {
       case ARM: return ARM_LITERAL;
       case OTHER: return OTHER_LITERAL;
     }
-    return null;	
+    return null;
   }
 
   /**

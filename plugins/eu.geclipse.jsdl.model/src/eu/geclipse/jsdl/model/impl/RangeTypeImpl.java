@@ -10,7 +10,7 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributor(s):
- *    Mathias Stümpert
+ *    Mathias Stï¿½mpert
  *           
  *****************************************************************************/
 
@@ -58,7 +58,7 @@ public class RangeTypeImpl extends EObjectImpl implements RangeType
    * @generated
    * @ordered
    */
-	protected BoundaryType lowerBound = null;
+	protected BoundaryType lowerBound;
 
   /**
    * The cached value of the '{@link #getUpperBound() <em>Upper Bound</em>}' containment reference.
@@ -68,7 +68,7 @@ public class RangeTypeImpl extends EObjectImpl implements RangeType
    * @generated
    * @ordered
    */
-	protected BoundaryType upperBound = null;
+	protected BoundaryType upperBound;
 
   /**
    * The cached value of the '{@link #getAnyAttribute() <em>Any Attribute</em>}' attribute list.
@@ -78,7 +78,7 @@ public class RangeTypeImpl extends EObjectImpl implements RangeType
    * @generated
    * @ordered
    */
-	protected FeatureMap anyAttribute = null;
+	protected FeatureMap anyAttribute;
 
   /**
    * <!-- begin-user-doc -->

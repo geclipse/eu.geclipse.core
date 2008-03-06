@@ -10,7 +10,7 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributor(s):
- *    Mathias Stümpert
+ *    Mathias Stï¿½mpert
  *           
  *****************************************************************************/
 
@@ -90,7 +90,7 @@ public class POSIXApplicationTypeImpl extends EObjectImpl implements POSIXApplic
    * @generated
    * @ordered
    */
-	protected FileNameType executable = null;
+	protected FileNameType executable;
 
   /**
    * The cached value of the '{@link #getArgument() <em>Argument</em>}' containment reference list.
@@ -100,7 +100,7 @@ public class POSIXApplicationTypeImpl extends EObjectImpl implements POSIXApplic
    * @generated
    * @ordered
    */
-	protected EList argument = null;
+	protected EList argument;
 
   /**
    * The cached value of the '{@link #getInput() <em>Input</em>}' containment reference.
@@ -110,7 +110,7 @@ public class POSIXApplicationTypeImpl extends EObjectImpl implements POSIXApplic
    * @generated
    * @ordered
    */
-	protected FileNameType input = null;
+	protected FileNameType input;
 
   /**
    * The cached value of the '{@link #getOutput() <em>Output</em>}' containment reference.
@@ -120,7 +120,7 @@ public class POSIXApplicationTypeImpl extends EObjectImpl implements POSIXApplic
    * @generated
    * @ordered
    */
-	protected FileNameType output = null;
+	protected FileNameType output;
 
   /**
    * The cached value of the '{@link #getError() <em>Error</em>}' containment reference.
@@ -130,7 +130,7 @@ public class POSIXApplicationTypeImpl extends EObjectImpl implements POSIXApplic
    * @generated
    * @ordered
    */
-	protected FileNameType error = null;
+	protected FileNameType error;
 
   /**
    * The cached value of the '{@link #getWorkingDirectory() <em>Working Directory</em>}' containment reference.
@@ -140,7 +140,7 @@ public class POSIXApplicationTypeImpl extends EObjectImpl implements POSIXApplic
    * @generated
    * @ordered
    */
-	protected DirectoryNameType workingDirectory = null;
+	protected DirectoryNameType workingDirectory;
 
   /**
    * The cached value of the '{@link #getEnvironment() <em>Environment</em>}' containment reference list.
@@ -150,7 +150,7 @@ public class POSIXApplicationTypeImpl extends EObjectImpl implements POSIXApplic
    * @generated
    * @ordered
    */
-	protected EList environment = null;
+	protected EList environment;
 
   /**
    * The cached value of the '{@link #getWallTimeLimit() <em>Wall Time Limit</em>}' containment reference.
@@ -160,7 +160,7 @@ public class POSIXApplicationTypeImpl extends EObjectImpl implements POSIXApplic
    * @generated
    * @ordered
    */
-	protected LimitsType wallTimeLimit = null;
+	protected LimitsType wallTimeLimit;
 
   /**
    * The cached value of the '{@link #getFileSizeLimit() <em>File Size Limit</em>}' containment reference.
@@ -170,7 +170,7 @@ public class POSIXApplicationTypeImpl extends EObjectImpl implements POSIXApplic
    * @generated
    * @ordered
    */
-	protected LimitsType fileSizeLimit = null;
+	protected LimitsType fileSizeLimit;
 
   /**
    * The cached value of the '{@link #getCoreDumpLimit() <em>Core Dump Limit</em>}' containment reference.
@@ -180,7 +180,7 @@ public class POSIXApplicationTypeImpl extends EObjectImpl implements POSIXApplic
    * @generated
    * @ordered
    */
-	protected LimitsType coreDumpLimit = null;
+	protected LimitsType coreDumpLimit;
 
   /**
    * The cached value of the '{@link #getDataSegmentLimit() <em>Data Segment Limit</em>}' containment reference.
@@ -190,7 +190,7 @@ public class POSIXApplicationTypeImpl extends EObjectImpl implements POSIXApplic
    * @generated
    * @ordered
    */
-	protected LimitsType dataSegmentLimit = null;
+	protected LimitsType dataSegmentLimit;
 
   /**
    * The cached value of the '{@link #getLockedMemoryLimit() <em>Locked Memory Limit</em>}' containment reference.
@@ -200,7 +200,7 @@ public class POSIXApplicationTypeImpl extends EObjectImpl implements POSIXApplic
    * @generated
    * @ordered
    */
-	protected LimitsType lockedMemoryLimit = null;
+	protected LimitsType lockedMemoryLimit;
 
   /**
    * The cached value of the '{@link #getMemoryLimit() <em>Memory Limit</em>}' containment reference.
@@ -210,7 +210,7 @@ public class POSIXApplicationTypeImpl extends EObjectImpl implements POSIXApplic
    * @generated
    * @ordered
    */
-	protected LimitsType memoryLimit = null;
+	protected LimitsType memoryLimit;
 
   /**
    * The cached value of the '{@link #getOpenDescriptorsLimit() <em>Open Descriptors Limit</em>}' containment reference.
@@ -220,7 +220,7 @@ public class POSIXApplicationTypeImpl extends EObjectImpl implements POSIXApplic
    * @generated
    * @ordered
    */
-	protected LimitsType openDescriptorsLimit = null;
+	protected LimitsType openDescriptorsLimit;
 
   /**
    * The cached value of the '{@link #getPipeSizeLimit() <em>Pipe Size Limit</em>}' containment reference.
@@ -230,7 +230,7 @@ public class POSIXApplicationTypeImpl extends EObjectImpl implements POSIXApplic
    * @generated
    * @ordered
    */
-	protected LimitsType pipeSizeLimit = null;
+	protected LimitsType pipeSizeLimit;
 
   /**
    * The cached value of the '{@link #getStackSizeLimit() <em>Stack Size Limit</em>}' containment reference.
@@ -240,7 +240,7 @@ public class POSIXApplicationTypeImpl extends EObjectImpl implements POSIXApplic
    * @generated
    * @ordered
    */
-	protected LimitsType stackSizeLimit = null;
+	protected LimitsType stackSizeLimit;
 
   /**
    * The cached value of the '{@link #getCPUTimeLimit() <em>CPU Time Limit</em>}' containment reference.
@@ -250,7 +250,7 @@ public class POSIXApplicationTypeImpl extends EObjectImpl implements POSIXApplic
    * @generated
    * @ordered
    */
-	protected LimitsType cPUTimeLimit = null;
+	protected LimitsType cPUTimeLimit;
 
   /**
    * The cached value of the '{@link #getProcessCountLimit() <em>Process Count Limit</em>}' containment reference.
@@ -260,7 +260,7 @@ public class POSIXApplicationTypeImpl extends EObjectImpl implements POSIXApplic
    * @generated
    * @ordered
    */
-	protected LimitsType processCountLimit = null;
+	protected LimitsType processCountLimit;
 
   /**
    * The cached value of the '{@link #getVirtualMemoryLimit() <em>Virtual Memory Limit</em>}' containment reference.
@@ -270,7 +270,7 @@ public class POSIXApplicationTypeImpl extends EObjectImpl implements POSIXApplic
    * @generated
    * @ordered
    */
-	protected LimitsType virtualMemoryLimit = null;
+	protected LimitsType virtualMemoryLimit;
 
   /**
    * The cached value of the '{@link #getThreadCountLimit() <em>Thread Count Limit</em>}' containment reference.
@@ -280,7 +280,7 @@ public class POSIXApplicationTypeImpl extends EObjectImpl implements POSIXApplic
    * @generated
    * @ordered
    */
-	protected LimitsType threadCountLimit = null;
+	protected LimitsType threadCountLimit;
 
   /**
    * The cached value of the '{@link #getUserName() <em>User Name</em>}' containment reference.
@@ -290,7 +290,7 @@ public class POSIXApplicationTypeImpl extends EObjectImpl implements POSIXApplic
    * @generated
    * @ordered
    */
-	protected UserNameType userName = null;
+	protected UserNameType userName;
 
   /**
    * The cached value of the '{@link #getGroupName() <em>Group Name</em>}' containment reference.
@@ -300,7 +300,7 @@ public class POSIXApplicationTypeImpl extends EObjectImpl implements POSIXApplic
    * @generated
    * @ordered
    */
-	protected GroupNameType groupName = null;
+	protected GroupNameType groupName;
 
   /**
    * The default value of the '{@link #getName() <em>Name</em>}' attribute.
@@ -330,7 +330,7 @@ public class POSIXApplicationTypeImpl extends EObjectImpl implements POSIXApplic
    * @generated
    * @ordered
    */
-	protected FeatureMap anyAttribute = null;
+	protected FeatureMap anyAttribute;
 
   /**
    * <!-- begin-user-doc -->

@@ -10,7 +10,7 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributor(s):
- *    Mathias Stümpert
+ *    Mathias Stï¿½mpert
  *           
  *****************************************************************************/
 
@@ -230,13 +230,13 @@ public class JsdlSwitch
   }
 
   /**
-   * Returns the result of interpretting the object as an instance of '<em>Application Type</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Application Type</em>'.
    * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpretting the object as an instance of '<em>Application Type</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Application Type</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
@@ -246,13 +246,13 @@ public class JsdlSwitch
   }
 
   /**
-   * Returns the result of interpretting the object as an instance of '<em>Boundary Type</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Boundary Type</em>'.
    * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpretting the object as an instance of '<em>Boundary Type</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Boundary Type</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
@@ -262,13 +262,13 @@ public class JsdlSwitch
   }
 
   /**
-   * Returns the result of interpretting the object as an instance of '<em>Candidate Hosts Type</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Candidate Hosts Type</em>'.
    * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpretting the object as an instance of '<em>Candidate Hosts Type</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Candidate Hosts Type</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
@@ -278,13 +278,13 @@ public class JsdlSwitch
   }
 
   /**
-   * Returns the result of interpretting the object as an instance of '<em>CPU Architecture Type</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>CPU Architecture Type</em>'.
    * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpretting the object as an instance of '<em>CPU Architecture Type</em>'.
+   * @return the result of interpreting the object as an instance of '<em>CPU Architecture Type</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
@@ -294,13 +294,13 @@ public class JsdlSwitch
   }
 
   /**
-   * Returns the result of interpretting the object as an instance of '<em>Data Staging Type</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Data Staging Type</em>'.
    * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpretting the object as an instance of '<em>Data Staging Type</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Data Staging Type</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
@@ -310,13 +310,13 @@ public class JsdlSwitch
   }
 
   /**
-   * Returns the result of interpretting the object as an instance of '<em>Document Root</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Document Root</em>'.
    * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpretting the object as an instance of '<em>Document Root</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Document Root</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
@@ -326,13 +326,13 @@ public class JsdlSwitch
   }
 
   /**
-   * Returns the result of interpretting the object as an instance of '<em>Exact Type</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Exact Type</em>'.
    * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpretting the object as an instance of '<em>Exact Type</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Exact Type</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
@@ -342,13 +342,13 @@ public class JsdlSwitch
   }
 
   /**
-   * Returns the result of interpretting the object as an instance of '<em>File System Type</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>File System Type</em>'.
    * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpretting the object as an instance of '<em>File System Type</em>'.
+   * @return the result of interpreting the object as an instance of '<em>File System Type</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
@@ -358,13 +358,13 @@ public class JsdlSwitch
   }
 
   /**
-   * Returns the result of interpretting the object as an instance of '<em>Job Definition Type</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Job Definition Type</em>'.
    * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpretting the object as an instance of '<em>Job Definition Type</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Job Definition Type</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
@@ -374,13 +374,13 @@ public class JsdlSwitch
   }
 
   /**
-   * Returns the result of interpretting the object as an instance of '<em>Job Description Type</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Job Description Type</em>'.
    * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpretting the object as an instance of '<em>Job Description Type</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Job Description Type</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
@@ -390,13 +390,13 @@ public class JsdlSwitch
   }
 
   /**
-   * Returns the result of interpretting the object as an instance of '<em>Job Identification Type</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Job Identification Type</em>'.
    * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpretting the object as an instance of '<em>Job Identification Type</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Job Identification Type</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
@@ -406,13 +406,13 @@ public class JsdlSwitch
   }
 
   /**
-   * Returns the result of interpretting the object as an instance of '<em>Operating System Type</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Operating System Type</em>'.
    * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpretting the object as an instance of '<em>Operating System Type</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Operating System Type</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
@@ -422,13 +422,13 @@ public class JsdlSwitch
   }
 
   /**
-   * Returns the result of interpretting the object as an instance of '<em>Operating System Type Type</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Operating System Type Type</em>'.
    * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpretting the object as an instance of '<em>Operating System Type Type</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Operating System Type Type</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
@@ -438,13 +438,13 @@ public class JsdlSwitch
   }
 
   /**
-   * Returns the result of interpretting the object as an instance of '<em>Range Type</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Range Type</em>'.
    * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpretting the object as an instance of '<em>Range Type</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Range Type</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
@@ -454,13 +454,13 @@ public class JsdlSwitch
   }
 
   /**
-   * Returns the result of interpretting the object as an instance of '<em>Range Value Type</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Range Value Type</em>'.
    * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpretting the object as an instance of '<em>Range Value Type</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Range Value Type</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
@@ -470,13 +470,13 @@ public class JsdlSwitch
   }
 
   /**
-   * Returns the result of interpretting the object as an instance of '<em>Resources Type</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Resources Type</em>'.
    * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpretting the object as an instance of '<em>Resources Type</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Resources Type</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
@@ -486,13 +486,13 @@ public class JsdlSwitch
   }
 
   /**
-   * Returns the result of interpretting the object as an instance of '<em>Source Target Type</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>Source Target Type</em>'.
    * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch.
 	 * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpretting the object as an instance of '<em>Source Target Type</em>'.
+   * @return the result of interpreting the object as an instance of '<em>Source Target Type</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
@@ -502,13 +502,13 @@ public class JsdlSwitch
   }
 
   /**
-   * Returns the result of interpretting the object as an instance of '<em>EObject</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>EObject</em>'.
    * <!-- begin-user-doc -->
 	 * This implementation returns null;
 	 * returning a non-null result will terminate the switch, but this is the last case anyway.
 	 * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpretting the object as an instance of '<em>EObject</em>'.
+   * @return the result of interpreting the object as an instance of '<em>EObject</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject)
    * @generated
    */

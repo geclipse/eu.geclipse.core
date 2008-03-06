@@ -10,7 +10,7 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributor(s):
- *    Mathias Stümpert
+ *    Mathias Stï¿½mpert
  *           
  *****************************************************************************/
 
@@ -82,7 +82,7 @@ public class FileSystemTypeImpl extends EObjectImpl implements FileSystemType
    * @generated
    * @ordered
    */
-	protected boolean fileSystemTypeESet = false;
+	protected boolean fileSystemTypeESet;
 
   /**
    * The default value of the '{@link #getDescription() <em>Description</em>}' attribute.
@@ -132,7 +132,7 @@ public class FileSystemTypeImpl extends EObjectImpl implements FileSystemType
    * @generated
    * @ordered
    */
-	protected RangeValueType diskSpace = null;
+	protected RangeValueType diskSpace;
 
   /**
    * The cached value of the '{@link #getAny() <em>Any</em>}' attribute list.
@@ -142,7 +142,7 @@ public class FileSystemTypeImpl extends EObjectImpl implements FileSystemType
    * @generated
    * @ordered
    */
-	protected FeatureMap any = null;
+	protected FeatureMap any;
 
   /**
    * The default value of the '{@link #getName() <em>Name</em>}' attribute.
@@ -172,7 +172,7 @@ public class FileSystemTypeImpl extends EObjectImpl implements FileSystemType
    * @generated
    * @ordered
    */
-	protected FeatureMap anyAttribute = null;
+	protected FeatureMap anyAttribute;
 
   /**
    * <!-- begin-user-doc -->

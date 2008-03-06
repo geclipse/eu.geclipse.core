@@ -100,7 +100,7 @@ public interface JobIdentificationType extends EObject
 	 * <!-- end-user-doc -->
    * @return the value of the '<em>Job Annotation</em>' attribute list.
    * @see eu.geclipse.jsdl.model.JsdlPackage#getJobIdentificationType_JobAnnotation()
-   * @model type="java.lang.String" unique="false" dataType="org.eclipse.emf.ecore.xml.type.String"
+   * @model unique="false" dataType="org.eclipse.emf.ecore.xml.type.String"
    *        extendedMetaData="kind='element' name='JobAnnotation' namespace='##targetNamespace'"
    * @generated
    */
@@ -117,7 +117,7 @@ public interface JobIdentificationType extends EObject
 	 * <!-- end-user-doc -->
    * @return the value of the '<em>Job Project</em>' attribute list.
    * @see eu.geclipse.jsdl.model.JsdlPackage#getJobIdentificationType_JobProject()
-   * @model type="java.lang.String" unique="false" dataType="org.eclipse.emf.ecore.xml.type.String"
+   * @model unique="false" dataType="org.eclipse.emf.ecore.xml.type.String"
    *        extendedMetaData="kind='element' name='JobProject' namespace='##targetNamespace'"
    * @generated
    */

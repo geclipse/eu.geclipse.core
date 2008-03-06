@@ -39,7 +39,7 @@ public interface CandidateHostsType extends EObject
 	 * <!-- end-user-doc -->
    * @return the value of the '<em>Host Name</em>' attribute list.
    * @see eu.geclipse.jsdl.model.JsdlPackage#getCandidateHostsType_HostName()
-   * @model type="java.lang.String" unique="false" dataType="org.eclipse.emf.ecore.xml.type.String" required="true"
+   * @model unique="false" dataType="org.eclipse.emf.ecore.xml.type.String" required="true"
    *        extendedMetaData="kind='element' name='HostName' namespace='##targetNamespace'"
    * @generated
    */
