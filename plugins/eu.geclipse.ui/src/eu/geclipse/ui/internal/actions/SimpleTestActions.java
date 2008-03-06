@@ -92,7 +92,7 @@ public class SimpleTestActions extends ActionGroup {
       }
     }
     
-    menu.appendToGroup( ICommonMenuConstants.GROUP_BUILD, this.dropDownMenuMgr );
+    menu.appendToGroup( ICommonMenuConstants.GROUP_ADDITIONS, this.dropDownMenuMgr );
 
     super.fillContextMenu(menu);
   }

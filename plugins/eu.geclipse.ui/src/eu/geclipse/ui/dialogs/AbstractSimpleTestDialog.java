@@ -52,7 +52,7 @@ public abstract class AbstractSimpleTestDialog extends Dialog {
   public AbstractSimpleTestDialog( final ISimpleTest test, final List< IGridResource > resources, final Shell parentShell ) {
     super( parentShell );
     
-    setShellStyle( SWT.CLOSE | SWT.TITLE | SWT.BORDER | SWT.APPLICATION_MODAL
+    setShellStyle( SWT.OK | SWT.TITLE | SWT.BORDER | SWT.APPLICATION_MODAL
                    | SWT.RESIZE | SWT.MIN | SWT.MAX );
     
     this.test = test;

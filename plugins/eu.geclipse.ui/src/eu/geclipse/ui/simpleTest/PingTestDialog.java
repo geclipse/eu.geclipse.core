@@ -18,7 +18,7 @@ package eu.geclipse.ui.simpleTest;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.swt.widgets.Shell;
@@ -47,13 +47,13 @@ import eu.geclipse.ui.dialogs.AbstractSimpleTestDialog;
  *
  */
 public class PingTestDialog extends AbstractSimpleTestDialog  {
-  private static DecimalFormat df = new DecimalFormat( "0.000" ); //$NON-NLS-1$
-
-  protected boolean running = false;
+  protected ArrayList< PingHostJob > pingJobs = new ArrayList< PingHostJob >();
 
   private Text outPut = null;
   private Spinner numberSpn = null;
   private Spinner delaySpn = null;
+  private ArrayList< InetAddress > hostAdrs = new ArrayList< InetAddress >();  
+
   /**
    * Construct a new dialog from the specified test.
    * 
@@ -70,8 +70,26 @@ public class PingTestDialog extends AbstractSimpleTestDialog  {
     super.configureShell( newShell );
     newShell.setMinimumSize( 500, 400 );
     newShell.setText( Messages.getString( "PingTestDialog.dialogTitle" ) ); //$NON-NLS-1$
+    
+    // Escape stops all the pinging
+//    newShell.addListener( SWT.Traverse, new Listener() {
+//      public void handleEvent( final Event e ) {
+//        for ( PingHostJob job : PingTestDialog.this.pingJobs ) {
+//          job.cancel();
+//        }
+//      }
+//    });
   }
 
+  @Override
+  public boolean close() {
+    for ( PingHostJob job : PingTestDialog.this.pingJobs ) {
+      job.cancel();
+    }
+
+    return super.close(); 
+  }
+  
   /* (non-Javadoc)
    * @see org.eclipse.jface.dialogs.Dialog#createDialogArea(org.eclipse.swt.widgets.Composite)
    */
@@ -97,7 +115,7 @@ public class PingTestDialog extends AbstractSimpleTestDialog  {
     numPingsLabel.setLayoutData( gData );
     
     this.numberSpn = new Spinner( settingsGroup, SWT.LEFT | SWT.SINGLE | SWT.BORDER );
-    this.numberSpn.setValues( 2, 1, 10, 0, 1, 2 );
+    this.numberSpn.setValues( 2, 1, 100, 0, 1, 2 );
     gData = new GridData( GridData.FILL_HORIZONTAL );
     gData.horizontalSpan = 2;
     gData.grabExcessHorizontalSpace = true;
@@ -161,119 +179,82 @@ public class PingTestDialog extends AbstractSimpleTestDialog  {
       @Override
       public void widgetSelected( final SelectionEvent e) {
 
-        if ( !PingTestDialog.this.running ) { 
-          PingTestDialog.this.running = true;
-          PingTestDialog.this.runPing();
+        // Make sure the potential current pings are done
+        boolean done = true;
+        for ( PingHostJob job : PingTestDialog.this.pingJobs ) {
+          if ( null == job.getResult() )
+            done = false;
         }
+        // At least one of the prev. jobs haven't finished yet
+        if ( done )
+          PingTestDialog.this.runPing();
       }
     });
     
     stopButton.addSelectionListener( new SelectionAdapter() {
       @Override
       public void widgetSelected( final SelectionEvent e) {
-        PingTestDialog.this.running = false;
+        for ( PingHostJob job : PingTestDialog.this.pingJobs ) {
+          job.cancel();
+        }
+        
+        PingTestDialog.this.pingJobs.clear();
       }
     });
+    
+
+    
     return mainComp;
   }
 
-  /*  
-  64 bytes from 194.42.27.239: icmp_seq=2 ttl=63 time=0.409 ms
-  ^C
-  --- 194.42.27.239 ping statistics ---
-  3 packets transmitted, 3 packets received, 0% packet loss
-  round-trip min/avg/max/stddev = 0.390/0.444/0.532/0.063 ms
-*/
   protected void runPing() {
     String host;
     InetAddress adr = null;
     int number = this.numberSpn.getSelection();
-    boolean exception = false;
+    int delay = this.delaySpn.getSelection();
 
     if ( null != this.resources ) {
       // Clear the text field 
       this.outPut.selectAll();
       this.outPut.clearSelection();
 
+      // Clear the previous jobs
+      this.hostAdrs.clear();
+      this.pingJobs.clear();
+      
       // For each of the hosts to test
-      for ( int i = 0; i < this.resources.size() && this.running; ++i ) {
-        // Initialize the counters
+      this.outPut.append( Messages.getString( "PingTestDialog.pingHostsPlusSpace" )  //$NON-NLS-1$
+                          + this.outPut.getLineDelimiter() );
+        
+      for ( int i = 0; i < this.resources.size(); ++i ) {
         host = this.resources.get( i ).getHostName();
 
-        if ( null != host ) {
-          try {
-            adr = InetAddress.getByName( host );
-          } catch( UnknownHostException e ) {
-            exception = true;
-          }
-
-          if ( exception )
-            // Print out which host we ping
-            this.outPut.append( Messages.getString( "PingTestDialog.UnknownHostException" )  //$NON-NLS-1$
-                                + host + this.outPut.getLineDelimiter() );
-          else
-            pingHost( adr, number );
-        } else
+        if ( null == host ) {
           this.outPut.append( Messages.getString( "PingTestDialog.thePlusSpace" ) + i  //$NON-NLS-1$
                               + Messages.getString( "PingTestDialog.notResolved" )  //$NON-NLS-1$
                               + this.outPut.getLineDelimiter() );
+        } else {
+          try {
+            adr = InetAddress.getByName( host );
+            this.hostAdrs.add( adr );
+            
+            this.outPut.append( host + this.outPut.getLineDelimiter() );
+          } catch( UnknownHostException e ) {
+            // Print out which host we ping
+            this.outPut.append( Messages.getString( "PingTestDialog.UnknownHostException" )  //$NON-NLS-1$
+                                + host + this.outPut.getLineDelimiter() );
+          }
+        }
       }
+      
+      this.outPut.append( this.outPut.getLineDelimiter() );
+      
+      for ( InetAddress tmpAdr : this.hostAdrs ) { 
+        PingHostJob pingJob = new PingHostJob( tmpAdr, number, delay, this.outPut, ( PingTest )this.test );
+        pingJob.schedule();
+        
+        this.pingJobs.add( pingJob );
+      }        
     }
-    
-    this.running = false;
-  }
-  
-  private void pingHost( final InetAddress host, final int number ) {
-    double pingDelay;
-    double min = Long.MAX_VALUE; 
-    double max = Long.MIN_VALUE;
-    double avg = 0;
-    int nOk = 0;
-    int nFailed = 0;
-
-    // Print out which host we ping
-    this.outPut.append( Messages.getString( "PingTestDialog.pingMsg" )  //$NON-NLS-1$
-                        + host + this.outPut.getLineDelimiter() );
-
-    for ( int j = 0; j < number && this.running; ++j ) {
-      pingDelay = ( ( PingTest )this.test ).ping( host );
-
-      if ( -1 == pingDelay ) {
-        ++nFailed;
-       this.outPut.append( "Ping " + j + ": "   //$NON-NLS-1$//$NON-NLS-2$
-                            + Messages.getString( "PingTestDialog.notReachable" )  //$NON-NLS-1$
-                            + this.outPut.getLineDelimiter() );
-      }
-      else {
-        ++nOk;
-        if ( pingDelay < min )
-          min = pingDelay;
-        if ( pingDelay > max )
-          max = pingDelay;
-        avg += pingDelay;
-
-        this.outPut.append( "Ping " + j + ": " //$NON-NLS-1$ //$NON-NLS-2$
-                            + Messages.getString( "PingTestDialog.time" )  //$NON-NLS-1$
-                            + df.format( pingDelay ) + " ms"  //$NON-NLS-1$
-                            + this.outPut.getLineDelimiter() );
-      }
-    }
-    
-    // Write the summary
-    this.outPut.append( number + Messages.getString( "PingTestDialog.transmitted" )  //$NON-NLS-1$
-                        + nOk + Messages.getString( "PingTestDialog.receivedPlusSpace" )  //$NON-NLS-1$
-                        + df.format( ( ( ( double )nFailed ) / number ) * 100 ) 
-                        + Messages.getString( "PingTestDialog.packetLoss" )  //$NON-NLS-1$
-                        + this.outPut.getLineDelimiter() ); 
-    
-    if ( nOk > 0 )
-      this.outPut.append( Messages.getString( "PingTestDialog.summaryPlusSpace" )  //$NON-NLS-1$
-                          + df.format( min ) + "/"  //$NON-NLS-1$
-                          + df.format( avg/nOk ) + "/"  //$NON-NLS-1$
-                          + df.format( max ) + " ms"  //$NON-NLS-1$
-                          + this.outPut.getLineDelimiter() + this.outPut.getLineDelimiter() );
-    else
-      this.outPut.append( Messages.getString( "PingTestDialog.summaryFailed" )  //$NON-NLS-1$
-                          + this.outPut.getLineDelimiter() + this.outPut.getLineDelimiter() );
   }
 }
