@@ -104,17 +104,17 @@ public class JsdlJobDescSource
         StringBuilder stringBuilder = new StringBuilder();
         RangeValueType diskSpaceRange = sourceObject.getFilesystemDiskSpace();
         if( diskSpaceRange != null ) {
-          if( diskSpaceRange.getLowerBoundedRange() != null ) {
+          if( diskSpaceRange.getLowerBound() != null ) {
             stringBuilder.append( Messages.JsdlJobDescSource_Min ); 
-            stringBuilder.append( getBytesFormattedString( diskSpaceRange.getLowerBoundedRange()
+            stringBuilder.append( getBytesFormattedString( diskSpaceRange.getLowerBound()
               .getValue() ) );
           }
-          if( diskSpaceRange.getUpperBoundedRange() != null ) {
+          if( diskSpaceRange.getUpperBound() != null ) {
             if( stringBuilder.length() > 0 ) {
               stringBuilder.append( " - " );  //$NON-NLS-1$
             }
             stringBuilder.append( Messages.JsdlJobDescSource_Max ); 
-            stringBuilder.append( getBytesFormattedString( diskSpaceRange.getUpperBoundedRange()
+            stringBuilder.append( getBytesFormattedString( diskSpaceRange.getUpperBound()
               .getValue() ) );
           }
         }

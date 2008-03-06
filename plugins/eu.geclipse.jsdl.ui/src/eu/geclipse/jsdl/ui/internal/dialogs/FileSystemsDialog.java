@@ -296,10 +296,10 @@ public class FileSystemsDialog extends Dialog {
         this.boundaryType.setValue( Double.parseDouble( FileSystemsDialog.this.txtDiskSpace.getText() ) );        
         switch( FileSystemsDialog.this.cmbDiskSpaceRange.getSelectionIndex() ) {
           /* INDEX 0 = UPPER RANGE */
-          case 0 : this.rangeValueType.setLowerBoundedRange( this.boundaryType ); 
+          case 0 : this.rangeValueType.setLowerBound( this.boundaryType ); 
           break;
           /* INDEX 1 = UPPER RANGE */
-          case 1 : this.rangeValueType.setUpperBoundedRange( this.boundaryType );
+          case 1 : this.rangeValueType.setUpperBound( this.boundaryType );
           break;
           default:
           break;
@@ -329,10 +329,10 @@ public class FileSystemsDialog extends Dialog {
       this.boundaryType.setValue( Double.parseDouble( FileSystemsDialog.this.txtDiskSpace.getText() ) );        
       switch( FileSystemsDialog.this.cmbDiskSpaceRange.getSelectionIndex() ) {
         /* INDEX 0 = UPPER RANGE */
-        case 0 : this.rangeValueType.setLowerBoundedRange( this.boundaryType ); 
+        case 0 : this.rangeValueType.setLowerBound( this.boundaryType ); 
         break;
         /* INDEX 1 = UPPER RANGE */
-        case 1 : this.rangeValueType.setUpperBoundedRange( this.boundaryType );
+        case 1 : this.rangeValueType.setUpperBound( this.boundaryType );
         break;
         default:
         break;
@@ -360,9 +360,9 @@ public class FileSystemsDialog extends Dialog {
     
     if (this.fileSystemType.getDiskSpace() != null ){
     
-      if ( this.fileSystemType.getDiskSpace().getLowerBoundedRange() != null ) {
+      if ( this.fileSystemType.getDiskSpace().getLowerBound() != null ) {
     
-        boundaryType = this.fileSystemType.getDiskSpace().getLowerBoundedRange();
+        boundaryType = this.fileSystemType.getDiskSpace().getLowerBound();
         
         /* check for Lazy Loading */
         boundaryType = (BoundaryType) checkProxy( boundaryType );
@@ -375,7 +375,7 @@ public class FileSystemsDialog extends Dialog {
       }
   
       else {
-        boundaryType = this.fileSystemType.getDiskSpace().getUpperBoundedRange();
+        boundaryType = this.fileSystemType.getDiskSpace().getUpperBound();
     
         /* check for Lazy Loading */
         boundaryType = (BoundaryType) checkProxy( boundaryType );
