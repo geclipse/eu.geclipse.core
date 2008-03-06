@@ -97,6 +97,15 @@ public interface IGridTest extends IGridElement, IManageable {
   public Date getLastUpdate();
 
   /**
+   * The same as {@link IGridTest#getLastUpdate()}, but should be used in case
+   * there can be difference in number of test runs for each tested resource.
+   * 
+   * @param singleTest
+   * @return
+   */
+  public Date getLastUpdate( final String testedResourceName );
+
+  /**
    * This method gives access to ordered collection of sub tests result. All
    * test results returned by this method are results for given resource. Those
    * results are grouped by date - which means that collection itself is divided
