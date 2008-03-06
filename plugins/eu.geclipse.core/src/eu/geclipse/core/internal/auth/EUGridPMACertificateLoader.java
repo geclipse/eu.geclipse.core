@@ -170,7 +170,8 @@ public class EUGridPMACertificateLoader
         int endIndex = content.indexOf( "\">", index+7 ); //$NON-NLS-1$
         if ( endIndex > 0 ) {
           String file = content.substring( index+7, endIndex );
-          if ( file.toLowerCase().endsWith( ".tar.gz" ) ) { //$NON-NLS-1$
+          if ( file.toLowerCase().endsWith( ".tar.gz" ) //$NON-NLS-1$
+               || file.toLowerCase().endsWith( ".tgz" ) ) { //$NON-NLS-1$
             result.add( file );
           }
         }
