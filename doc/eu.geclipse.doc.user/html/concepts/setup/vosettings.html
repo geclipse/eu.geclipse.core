@@ -26,6 +26,7 @@
 <ul>
 <li><a href="#overview">Overview</a></li>
 <li><a href="#createVO">Creating a new VO</a></li>
+<li><a href="#importVO">Importing a VO</a></li>
 <li><a href="#editVO">Editing a VO</a></li>
 <li><a href="#deleteVO">Deleting VOs</a></li>
 </ul>
@@ -61,7 +62,7 @@ may also be used as a base class for developers to define their own VO.</p>
 <img src="PLUGINS_ROOT/org.eclipse.help/command_link.png">
 <b>g-Eclipse &gt; VO-Declarations</b></a> preference page to declare a new
 Virtual Organization. There, you can click <b>Add...</b> to start the
-<b>VO Wizard</b>. If you installed g-Eclipse with a middleware extension,
+<b>VO Wizard</b>. If you have installed g-Eclipse with a middleware extension,
 the <b>VO Wizard</b> may show up a first page that let you choose the
 type of the VO you want to create:</p>
 
@@ -83,6 +84,52 @@ for setting up a generic VO:</p>
 All you have to do here is to enter a name for your generic VO and to press
 <b>Finish</b>. The newly create VO will then be shown in the VO
 preference page.</p>
+
+<h2><a name="importVO">Importing a new VO</a></h2>
+
+<p>Declaring a VO by hand is sometimes not very easy since the necessary
+parameters are most often not easily accessible especially for new
+users. Therefore g-Eclipse provides mechanism for importing VOs from
+a repository. If such a functionality is available stringly depends on
+the middleware. Currently g-Eclipse does only provide an importer for
+VOMS VOs.</p>
+
+<p>To import a VO go to the
+<a class="command-link" href='javascript:executeCommand("org.eclipse.ui.window.preferences(preferencePageId=eu.geclipse.ui.internal.preference.VOPreferencePage)")'>
+<img src="PLUGINS_ROOT/org.eclipse.help/command_link.png">
+<b>g-Eclipse &gt; VO-Declarations</b></a> preference page and click
+<b>Import...</b> to start the <b>VO Import Wizard</b>. If there are more
+than one VO importer installed a first wizard page will give you the chance
+to select the used importer. If there is only the VOMS VO importer installed
+the wizard will directly switch to the second page that let you specify
+a repository location from which to import VO settings. Most likely this
+location will be preselected by the importer by may be changed to another
+location:</p>
+
+<p>
+<img border="0" src="images/VOImportLocationPage.png" alt="Wizard page for specifying an import location">
+</p>
+
+<p>After specifying the repository location and clicking <b>Next</b> the wizard
+will query the specified location for available VOs. If this query is successful
+the next wizard page will show a list of VOs that are available for import:</p>
+
+<p>
+<img border="0" src="images/VOImportVosPage.png" alt="Wizard page for specifying the VOs to be imported">
+</p>
+
+<p>Within this page you have the possibility to select the VOs you would like
+to import. After doing so and after clicking <b>Finish</b> the selected VOs
+will be imported and will be afterwards available in the VO preference page.</p>
+
+<p><font color="#ff0000"><b>IMPORTANT!!!</b></font><br>
+Importing VOs may fail or may result in wrong VO values. This is not a problem
+with g-Eclipse but with the information provided from the repositories. Most
+often it is the VO administrators responsibility to maintain the information
+contained in these repositories. So if you find that the information for your
+VO is invalid please contact your VO administrator and ask him to correct the
+information in the corresponding repository. In any case you should carefully
+check the information of your newly imported VOs.</p>
 
 <h2><a name="editVO">Editing a VO</a></h2>
 
