@@ -15,6 +15,9 @@
  *****************************************************************************/
 package eu.geclipse.jsdl.ui.preference;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.compare.IContentChangeListener;
 import org.eclipse.compare.IContentChangeNotifier;
 import org.eclipse.core.runtime.Path;
@@ -45,7 +48,6 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
@@ -66,10 +68,10 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
   implements IWorkbenchPreferencePage, IContentChangeListener
 {
 
+  TableViewer appsViewer;
   private Button addButton;
   private Button editButton;
   private Button removeButton;
-  TableViewer appsViewer;
   private Table appsTable;
 
   /**
@@ -178,8 +180,10 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
 
       @Override
       public void widgetSelected( final SelectionEvent event ) {
-        ApplicationSpecificRegistry.getInstance()
-          .removeApplicationSpecificData( getSelectedAppSpecificObject() );
+        for( ApplicationSpecificObject obj : getSelectedAppSpecificObjects() ) {
+          ApplicationSpecificRegistry.getInstance()
+            .removeApplicationSpecificData( obj );
+        }
       }
     } );
     updateButtons();
@@ -230,6 +234,23 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
     Object obj = selection.getFirstElement();
     if( obj instanceof ApplicationSpecificObject ) {
       selectedASO = ( ApplicationSpecificObject )obj;
+    }
+    return selectedASO;
+  }
+
+  /**
+   * Returns {@link ApplicationSpecificObject} corresponding to entry selected
+   * in table.
+   * 
+   * @return ApplicationSpecificObject selected in table
+   */
+  public List<ApplicationSpecificObject> getSelectedAppSpecificObjects() {
+    List<ApplicationSpecificObject> selectedASO = new ArrayList<ApplicationSpecificObject>();
+    IStructuredSelection selection = ( IStructuredSelection )this.appsViewer.getSelection();
+    for( Object selObject : selection.toList() ) {
+      if( selObject instanceof ApplicationSpecificObject ) {
+        selectedASO.add( ( ApplicationSpecificObject )selObject );
+      }
     }
     return selectedASO;
   }
@@ -340,7 +361,7 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
     }
 
     void updateButtons() {
-      if( !this.appName.getText().equals( "" ) && /*!this.appPath.getText().equals( "" ) &&*/ !this.xmlPath.getText().equals( "" ) ) { //$NON-NLS-1$ //$NON-NLS-2$
+      if( !this.appName.getText().equals( "" ) && /* !this.appPath.getText().equals( "" ) && */!this.xmlPath.getText().equals( "" ) ) { //$NON-NLS-1$ //$NON-NLS-2$
         super.getButton( IDialogConstants.OK_ID ).setEnabled( true );
       } else {
         super.getButton( IDialogConstants.OK_ID ).setEnabled( false );
@@ -349,7 +370,7 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
 
     @Override
     protected Control createDialogArea( final Composite parent ) {
-      getShell().setText( Messages.getString("ApplicationSpecificPreferencePage.editDialogTitle") ); //$NON-NLS-1$
+      getShell().setText( Messages.getString( "ApplicationSpecificPreferencePage.editDialogTitle" ) ); //$NON-NLS-1$
       Composite composite = ( Composite )super.createDialogArea( parent );
       composite.setLayout( new GridLayout( 1, false ) );
       composite.setLayoutData( new GridData( GridData.FILL_BOTH ) );
@@ -407,7 +428,7 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
         @Override
         public void widgetSelected( final SelectionEvent event ) {
           FileDialog file = new FileDialog( getShell() );
-          file.setText( Messages.getString("ApplicationSpecificPreferencePage.selectXmlFile") ); //$NON-NLS-1$
+          file.setText( Messages.getString( "ApplicationSpecificPreferencePage.selectXmlFile" ) ); //$NON-NLS-1$
           String connection = file.open();
           if( connection != null ) {
             EditDialog.this.xmlPath.setText( connection );
@@ -437,7 +458,7 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
         @Override
         public void widgetSelected( final SelectionEvent event ) {
           FileDialog file = new FileDialog( getShell() );
-          file.setText( Messages.getString("ApplicationSpecificPreferencePage.selectJsdlFile") ); //$NON-NLS-1$
+          file.setText( Messages.getString( "ApplicationSpecificPreferencePage.selectJsdlFile" ) ); //$NON-NLS-1$
           String connection = file.open();
           if( connection != null ) {
             EditDialog.this.jsdlPath.setText( connection );
@@ -507,14 +528,12 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
   }
 
   public void contentChanged( final IContentChangeNotifier source ) {
-    PlatformUI.getWorkbench().getDisplay().asyncExec( new Runnable(){
+    PlatformUI.getWorkbench().getDisplay().asyncExec( new Runnable() {
 
       public void run() {
         ApplicationSpecificPreferencePage.this.appsViewer.refresh();
-        
       }
-      
-    });
-//    this.appsViewer.refresh();
+    } );
+    // this.appsViewer.refresh();
   }
 }

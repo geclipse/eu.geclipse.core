@@ -121,7 +121,6 @@ public class ApplicationSpecificRegistry implements IContentChangeNotifier {
                                                   jsdlPath );
           this.appSpecObjectsToFiles.put( result, filePath.lastSegment() );
           this.currentIdPointer++;
-          
         }
       } catch( FileNotFoundException fileNotFoundExc ) {
         Activator.logException( fileNotFoundExc );
@@ -129,8 +128,8 @@ public class ApplicationSpecificRegistry implements IContentChangeNotifier {
         Activator.logException( ioExc );
       } finally {
         try {
-          if (in != null){
-          in.close();
+          if( in != null ) {
+            in.close();
           }
         } catch( IOException e ) {
           // TODO Auto-generated catch block
@@ -381,6 +380,15 @@ public class ApplicationSpecificRegistry implements IContentChangeNotifier {
     }
   }
 
+  /**
+   * Removes application with given name, path, xml and jsdl path from the
+   * registry and notifies registered listeners.
+   * 
+   * @param appName
+   * @param appPath
+   * @param xmlPath
+   * @param jsdlPath
+   */
   public void removeApplicationSpecificData( final String appName,
                                              final String appPath,
                                              final IPath xmlPath,
@@ -392,7 +400,7 @@ public class ApplicationSpecificRegistry implements IContentChangeNotifier {
           && object.getXmlPath().equals( xmlPath )
           && object.getJsdlPath().equals( jsdlPath ) )
       {
-//        apps.remove( object );
+        // apps.remove( object );
         removeApplicationSpecificData( object );
         break;
       }
