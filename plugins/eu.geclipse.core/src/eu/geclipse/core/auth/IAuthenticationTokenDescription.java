@@ -53,6 +53,17 @@ public interface IAuthenticationTokenDescription {
    */
   public String getWizardId();
   
+  /**
+   * Determine if this token matches the specified one. Implementations have to
+   * test all available parameters of a token. Parameters that are <code>null</code>
+   * within this token are not checked against the other token. All other
+   * parameters have to be not zero for the other token and have to be the
+   * same for both tokens.
+   * 
+   * @param otherToken The token to be checked against this token.
+   * @return <code>true</code> if all non-null parameters of this token
+   * match the parameters of the specified token. 
+   */
   public boolean matches( final IAuthenticationTokenDescription otherToken );
   
 }
