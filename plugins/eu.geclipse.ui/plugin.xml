@@ -269,6 +269,11 @@
             solver="eu.geclipse.ui.problems.ShowPreferencePageSolver">
       </solution>
       <solution
+            description="Open URL Solver"
+            id="urlTag"
+            solver="eu.geclipse.ui.problems.OpenUrlSolver">
+      </solution>
+      <solution
             description="Show View Solver"
             id="viewTag"
             solver="eu.geclipse.ui.problems.ShowViewSolver">
