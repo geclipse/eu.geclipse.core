@@ -151,6 +151,20 @@ public interface IProblemReporting {
     = "pageID"; //$NON-NLS-1$
   
   /**
+   * The ID of the URL-tag element within the problem reporting
+   * extension point.
+   */
+  public static final String URL_TAG_ELEMENT
+    = "urlTag"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the URL attribute of the URL-tag element within the problem reporting
+   * extension point.
+   */
+  public static final String URL_ATTRIBUTE
+    = "url"; //$NON-NLS-1$
+  
+  /**
    * The ID of the view-tag element within the problem reporting
    * extension point.
    */

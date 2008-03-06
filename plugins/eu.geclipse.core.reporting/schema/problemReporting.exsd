@@ -92,6 +92,7 @@
                <element ref="cheatsheetTag"/>
                <element ref="helpTag"/>
                <element ref="preferenceTag"/>
+               <element ref="urlTag"/>
                <element ref="viewTag"/>
                <element ref="wizardTag"/>
             </choice>
@@ -189,6 +190,23 @@
             <annotation>
                <documentation>
                   The unique ID of a properties page that should be opened.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="urlTag">
+      <annotation>
+         <documentation>
+            Tag denoting an URL solution. This tag is used for a solution that should open a specific web page in the web browser.
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="url" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
                </documentation>
             </annotation>
          </attribute>
