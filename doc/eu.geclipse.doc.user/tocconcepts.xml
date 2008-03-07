@@ -140,10 +140,12 @@
       label="Monitoring Grid Resources"
       href="html/concepts/siteadministration/monitoring.html">
     </topic>
+-->
     <topic 
       label="Testing Grid Resources"
       href="html/concepts/siteadministration/testing.html">
     </topic>
+<!-- 
     <topic 
       label="Benchmarking Grid Resources"
       href="html/concepts/siteadministration/benchmarking.html">
