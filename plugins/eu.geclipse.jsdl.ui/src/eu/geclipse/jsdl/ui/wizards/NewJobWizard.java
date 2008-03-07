@@ -207,7 +207,11 @@ public class NewJobWizard extends Wizard implements INewWizard {
     if( in.equals( "" ) ) { //$NON-NLS-1$
       in = null;
     } else {
-      inName = "stdIn"; //$NON-NLS-1$
+      if (in.lastIndexOf( "/" ) != -1){
+        inName = in.substring( in.lastIndexOf( "/" ) + 1); //$NON-NLS-1$
+      } else {
+        inName = "stdIn";
+      }
     }
     if( out.equals( "" ) ) { //$NON-NLS-1$
       out = null;
