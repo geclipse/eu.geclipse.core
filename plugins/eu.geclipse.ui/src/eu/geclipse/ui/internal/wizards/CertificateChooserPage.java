@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,6 +11,7 @@
  *
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
+ *    Ariel Garcia      - handle errors when downloading CAs
  *****************************************************************************/
 
 package eu.geclipse.ui.internal.wizards;
@@ -130,14 +131,6 @@ public class CertificateChooserPage extends WizardPage {
     
   }
   
-  @Override
-  public void setVisible( final boolean visible ) {
-    super.setVisible( visible );
-    if ( visible ) {
-      loadCertificateList();
-    }
-  }
-  
   protected void selectAll() {
     this.viewer.setAllChecked( true );
   }
@@ -154,8 +147,17 @@ public class CertificateChooserPage extends WizardPage {
     }
   }
   
-  private void loadCertificateList() {
-   
+  /**
+   * This method gets called by the IPageChangedListener set up in
+   * the CaCertPreferencePage. That listener takes care of jumping the
+   * WizardPage back if an error happens.
+   * 
+   * @return true if the certificate list could be retrieved successfully
+   */
+  public boolean loadCertificateList() {
+    
+    boolean result = false;
+    
     final ICaCertificateLoader loader = this.locationChooserPage.getLoader();
     final URI uri = this.locationChooserPage.getSelectedLocation();
     
@@ -171,6 +173,9 @@ public class CertificateChooserPage extends WizardPage {
           }
         }
       } );
+      
+      result = true;
+      
     } catch ( InvocationTargetException itExc ) {
       Throwable cause = itExc.getCause();
       ProblemDialog.openProblem(
@@ -184,6 +189,7 @@ public class CertificateChooserPage extends WizardPage {
       // Do nothing on user interrupt
     }
     
+    return result;
   }
 
 }

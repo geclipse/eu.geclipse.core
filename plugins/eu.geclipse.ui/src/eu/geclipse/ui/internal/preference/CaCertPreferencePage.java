@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -11,6 +11,7 @@
  *
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
+ *    Ariel Garcia      - handle errors when downloading CAs
  *****************************************************************************/
 
 package eu.geclipse.ui.internal.preference;
@@ -20,8 +21,12 @@ import java.util.Comparator;
 
 import org.eclipse.compare.IContentChangeListener;
 import org.eclipse.compare.IContentChangeNotifier;
+import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.preference.PreferencePage;
+import org.eclipse.jface.wizard.IWizardContainer;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
@@ -42,6 +47,8 @@ import eu.geclipse.core.auth.CaCertManager;
 import eu.geclipse.core.auth.ICaCertificate;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.internal.wizards.CaCertificateImportWizard;
+import eu.geclipse.ui.internal.wizards.CertificateChooserPage;
+
 
 /**
  * Preference page to import and manage CA certificates. 
@@ -206,7 +213,7 @@ public class CaCertPreferencePage
   }
   
   /**
-   * Synchonize the UI list with the {@link CaCertManager}.
+   * Synchronize the UI list with the {@link CaCertManager}.
    */
   public void updateCaList() {
     this.caList.removeAll();
@@ -261,7 +268,50 @@ public class CaCertPreferencePage
     CaCertificateImportWizard wizard
       = new CaCertificateImportWizard( importMethod );
     WizardDialog dialog = new WizardDialog( getShell(), wizard );
+    
+    // Add a listener which moves back the wizard page if there is an error
+    dialog.addPageChangedListener( new CertPageChangedListener() );
     dialog.open();
+  }
+  
+  /**
+   * This listener checks if the CA-certificates download was successful,
+   * and jumps the wizard page back if not.
+   * 
+   * @see org.eclipse.jface.dialogs.IPageChangedListener
+   */
+  class CertPageChangedListener implements IPageChangedListener {
+    
+    /*
+     * (non-Javadoc)
+     * @see org.eclipse.jface.dialogs.IPageChangedListener#pageChanged(org.eclipse.jface.dialogs.PageChangedEvent)
+     */
+    public void pageChanged( final PageChangedEvent event ) {
+      
+      Object cPage = event.getSelectedPage();
+      CertificateChooserPage currentPage = null;
+      
+      if ( cPage instanceof CertificateChooserPage ) {
+        currentPage = ( CertificateChooserPage ) cPage;
+      } else {
+        // Not on the CertificateChooserPage yet, do nothing
+        return;
+      }
+      
+      /*
+       * Let the CertificateChooserPage fetch the certificates and decide
+       * if the page should be jumped back or not.
+       */
+      if ( ! currentPage.loadCertificateList() ) {
+        IWizardContainer container = currentPage.getWizard().getContainer();
+        IWizardPage previousPage = currentPage.getPreviousPage();
+        IWizardPage prePreviousPage = previousPage.getPreviousPage();
+        
+        container.showPage( previousPage );
+        
+        previousPage.setPreviousPage( prePreviousPage );
+      }
+    }
   }
 
 }
