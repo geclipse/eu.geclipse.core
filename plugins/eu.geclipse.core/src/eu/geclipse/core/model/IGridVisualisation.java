@@ -14,6 +14,8 @@
  *****************************************************************************/
 package eu.geclipse.core.model;
 
+import eu.geclipse.core.reporting.ProblemException;
+
 
 
 /**
@@ -33,8 +35,9 @@ public interface IGridVisualisation extends IGridContainer {
   void render();
 
   /**
-   * @return true if the vtkpipeline specification is complete and correct.
+   * @throws ProblemException
    */
-  boolean isValid();
+  void validate() throws ProblemException;
+
 
 }
