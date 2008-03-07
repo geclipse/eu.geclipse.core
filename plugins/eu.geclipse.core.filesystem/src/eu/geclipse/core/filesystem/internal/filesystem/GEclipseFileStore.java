@@ -82,7 +82,13 @@ public class GEclipseFileStore
     Assert.isNotNull( fileSystem );
     Assert.isNotNull( slave );
     this.fileSystem = fileSystem;
-    this.parent = null;
+    IFileStore slaveParent = slave.getParent();
+    if ( slaveParent != null ) {
+      FileStoreRegistry registry = FileStoreRegistry.getInstance();
+      this.parent = registry.getStore( slaveParent );
+    } else {
+      this.parent = null;
+    }
     this.slave = slave;
     setActive( false );
   }
