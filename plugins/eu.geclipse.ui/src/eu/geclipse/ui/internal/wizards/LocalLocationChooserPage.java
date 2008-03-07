@@ -101,6 +101,7 @@ public class LocalLocationChooserPage extends AbstractLocationChooserPage {
     
   }
   
+  @Override
   public URI getSelectedLocation() {
     String pathString = this.combo.getText();
     IPath path = new Path( pathString );
