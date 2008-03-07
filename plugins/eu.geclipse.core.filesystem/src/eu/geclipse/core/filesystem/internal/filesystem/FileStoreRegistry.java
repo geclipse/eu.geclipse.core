@@ -96,4 +96,13 @@ public class FileStoreRegistry {
     return getStore( uri );
   }
   
+  void removeStore( final GEclipseURI uri ) {
+    this.registeredStores.remove( uri.toSlaveURI() );
+  }
+  
+  void removeStore( final IFileStore fileStore ) {
+    GEclipseURI uri = new GEclipseURI( fileStore.toURI() );
+    removeStore( uri );
+  }
+  
 }

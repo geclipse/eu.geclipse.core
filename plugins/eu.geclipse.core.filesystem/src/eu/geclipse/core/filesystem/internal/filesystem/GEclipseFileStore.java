@@ -126,6 +126,13 @@ public class GEclipseFileStore
     
     if ( isActive() ) {
       setActive( false );
+      if ( result != null ) {
+        FileStoreRegistry registry = FileStoreRegistry.getInstance();
+        for ( String name : result ) {
+          IFileStore child = getChild( name );
+          registry.removeStore( child );
+        }
+      }
       result = getSlave().childNames( options, monitor( monitor ) );
       this.childNames = result;
     }
@@ -146,6 +153,8 @@ public class GEclipseFileStore
                       final IProgressMonitor monitor )
       throws CoreException {
     getSlave().delete( options, monitor( monitor ) );
+    FileStoreRegistry registry = FileStoreRegistry.getInstance();
+    registry.removeStore( this );
   }
 
   /* (non-Javadoc)
