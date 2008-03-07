@@ -24,11 +24,9 @@ import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.SelectionListenerAction;
 
-import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.model.IGridVisualisation;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.dialogs.ProblemDialog;
-import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.views.VisualisationView;
 
 
@@ -61,32 +59,40 @@ public class RenderVTKPipelineAction extends SelectionListenerAction {
    */
   @Override
   public void run() {
-    Object element
-      = getStructuredSelection().getFirstElement();
-    if ( ( element != null ) && ((IGridVisualisation) element).isValid() ) {
+    Object element = getStructuredSelection().getFirstElement();
+    if( ( element != null ) ) {
       try {
+        ( ( IGridVisualisation )element ).validate();
         IViewPart view = this.site.getPage().showView( "eu.geclipse.ui.views.visualisationview" ); //$NON-NLS-1$
         view.setFocus();
-        ( ( VisualisationView )view ).setPipeline( (IGridVisualisation) element );
+        ( ( VisualisationView )view ).setPipeline( ( IGridVisualisation )element );
         ( ( VisualisationView )view ).render();
       } catch( PartInitException e ) {
         ProblemDialog.openProblem( null,
-               Messages.getString( "RenderVTKPipelineAction.errorDialogTitle" ), //$NON-NLS-1$
-               Messages.getString( "RenderVTKPipelineAction.errorOpeningView"), //$NON-NLS-1$
-               e );
+                                   Messages.getString( "RenderVTKPipelineAction.errorDialogTitle" ), //$NON-NLS-1$
+                                   Messages.getString( "RenderVTKPipelineAction.errorOpeningView" ), //$NON-NLS-1$
+                                   e );
+      } catch( ProblemException pipelineExc ) {
+        ProblemDialog.openProblem( null,
+                                   Messages.getString( "RenderVTKPipelineAction.errorDialogTitle" ), //$NON-NLS-1$
+                                   Messages.getString( "RenderVTKPipelineAction.errorInfo" ), //$NON-NLS-1$
+                                   pipelineExc );
       }
     }
-    else {
-      // TODO: check, we have here a very general IO error, is this right??
-      final ProblemException fileException = new ProblemException( ICoreProblems.IO_OPERATION_FAILED,
-                Messages.getString( "RenderVTKPipelineAction.elementNotVisualizable" ), //$NON-NLS-1$
-                Activator.PLUGIN_ID );
-
-      ProblemDialog.openProblem( null,
-          Messages.getString( "RenderVTKPipelineAction.errorDialogTitle" ), //$NON-NLS-1$
-          Messages.getString( "RenderVTKPipelineAction.errorInfo" ), //$NON-NLS-1$
-          fileException );
-    }
+    // else {
+    // // TODO: check, we have here a very general IO error, is this right??
+    // final ProblemException fileException = new ProblemException(
+    // ICoreProblems.IO_OPERATION_FAILED,
+    // Messages.getString( "RenderVTKPipelineAction.elementNotVisualizable" ),
+    // //$NON-NLS-1$
+    // Activator.PLUGIN_ID );
+    //
+    // ProblemDialog.openProblem( null,
+    // Messages.getString( "RenderVTKPipelineAction.errorDialogTitle" ),
+    // //$NON-NLS-1$
+    // Messages.getString( "RenderVTKPipelineAction.errorInfo" ), //$NON-NLS-1$
+    //          fileException );
+    //    }
   }
 
   /* (non-Javadoc)

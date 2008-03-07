@@ -68,12 +68,19 @@ public class VisualisationView extends ViewPart {
     }
   }
 
+  /**
+   * @return tab item
+   */
   public CTabItem getCTabItem() {
-    CTabItem cTabItem = this.cTabFolder !=
-      null ? this.cTabFolder.getSelection() : null;
+    CTabItem cTabItem = this.cTabFolder != null
+                                               ? this.cTabFolder.getSelection()
+                                               : null;
     return cTabItem;
   }
 
+  /**
+   * @return folder of tabs
+   */
   public CTabFolder getCTabFolder() {
     return this.cTabFolder;
   }
