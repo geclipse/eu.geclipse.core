@@ -228,9 +228,9 @@ public class PingTestDialog extends AbstractSimpleTestDialog  {
         
       for ( int i = 0; i < this.resources.size(); ++i ) {
         host = this.resources.get( i ).getHostName();
-
+        
         if ( null == host ) {
-          this.outPut.append( Messages.getString( "PingTestDialog.thePlusSpace" ) + i  //$NON-NLS-1$
+          this.outPut.append( this.resources.get( i ).getName() 
                               + Messages.getString( "PingTestDialog.notResolved" )  //$NON-NLS-1$
                               + this.outPut.getLineDelimiter() );
         } else {
