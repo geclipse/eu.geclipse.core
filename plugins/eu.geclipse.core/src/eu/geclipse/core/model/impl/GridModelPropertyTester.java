@@ -7,6 +7,7 @@ import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridElement;
 
+
 public class GridModelPropertyTester extends PropertyTester {
 
   public boolean test( final Object receiver,
@@ -17,7 +18,7 @@ public class GridModelPropertyTester extends PropertyTester {
     boolean result = false;
     
     IResource resource = ( IResource ) receiver;
-    if ( "isGridConnection".equals( property ) ) {
+    if ( "isGridConnection".equals( property ) ) { //$NON-NLS-1$
       IGridElement element = GridModel.getRoot().findElement( resource );
       if ( ( element != null ) && ( element instanceof IGridConnection ) ) {
         result = true;

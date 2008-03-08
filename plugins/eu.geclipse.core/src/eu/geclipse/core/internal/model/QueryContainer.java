@@ -99,7 +99,9 @@ public class QueryContainer
           unlock();
         }
       } else {
-        addElement( new ContainerMarker( this, ContainerMarker.MarkerType.INFO, "No matching elements found" ) );
+        addElement( new ContainerMarker( this,
+                                         ContainerMarker.MarkerType.INFO,
+                                         "No matching elements found" ) );
       }
       
     }

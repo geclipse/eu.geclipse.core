@@ -15,19 +15,12 @@
 
 package eu.geclipse.core.model;
 
-import java.net.URI;
 
 /**
  * This is the base interface for every kind of grid service.
  */
 public interface IGridService extends IGridResource, ITestable {
   
-  /**
-   * Get the <code>URI</code> of the service, i.e. its location
-   * on the web.
-   * 
-   * @return The service's <code>URI</code>.
-   */
-//  public URI getURI();
-  
+  // Interface without additional methods
+
 }

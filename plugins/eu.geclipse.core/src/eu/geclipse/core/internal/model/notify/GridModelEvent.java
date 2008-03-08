@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -83,66 +83,67 @@ public class GridModelEvent implements IGridModelEvent {
     return this.type;
   }
   
+  @Override
   public String toString() {
     
-    StringBuffer buffer = new StringBuffer( "GridModelEvent(");
+    StringBuffer buffer = new StringBuffer( "GridModelEvent("); //$NON-NLS-1$
     
     switch ( this.type ) {
     
       case IGridModelEvent.ELEMENTS_ADDED:
-        buffer.append( "ELEMENTS_ADDED, " );
+        buffer.append( "ELEMENTS_ADDED, " ); //$NON-NLS-1$
         break;
         
       case IGridModelEvent.ELEMENTS_REMOVED:
-        buffer.append( "ELEMENTS_REMOVED, " );
+        buffer.append( "ELEMENTS_REMOVED, " ); //$NON-NLS-1$
         break;
         
       case IGridModelEvent.ELEMENTS_CHANGED:
-        buffer.append( "ELEMENTS_CHANGED, " );
+        buffer.append( "ELEMENTS_CHANGED, " ); //$NON-NLS-1$
         break;
         
       case IGridModelEvent.PROJECT_CLOSED:
-        buffer.append( "PROJECT_CLOSED, " );
+        buffer.append( "PROJECT_CLOSED, " ); //$NON-NLS-1$
         break;
         
       case IGridModelEvent.PROJECT_FOLDER_CHANGED:
-        buffer.append( "PROJECT_FOLDER_CHANGES, " );
+        buffer.append( "PROJECT_FOLDER_CHANGES, " ); //$NON-NLS-1$
         break;
         
       case IGridModelEvent.PROJECT_OPENED:
-        buffer.append( "PROJECT_OPENED, " );
+        buffer.append( "PROJECT_OPENED, " ); //$NON-NLS-1$
         break;
         
       default:
-        buffer.append( "INVALID, " );
+        buffer.append( "INVALID, " ); //$NON-NLS-1$
         break;
       
     }
     
     if ( this.source != null ) {
-      buffer.append( source.getName() + ", " );
+      buffer.append( this.source.getName() + ", " ); //$NON-NLS-1$
     } else {
-      buffer.append( "null, " );
+      buffer.append( "null, " ); //$NON-NLS-1$
     }
     
     if ( this.elements != null ) {
-      buffer.append( "{" );
+      buffer.append( "{" ); //$NON-NLS-1$
       for ( int i = 0 ; i < this.elements.length ; i++ ) {
         if ( i > 0 ) {
-          buffer.append( ", " );
+          buffer.append( ", " ); //$NON-NLS-1$
         }
         if ( this.elements[ i ] != null ) {
           buffer.append( this.elements[ i ].getName() );
         } else {
-          buffer.append( "null" );
+          buffer.append( "null" ); //$NON-NLS-1$
         }
       }
-      buffer.append( "}" );
+      buffer.append( "}" ); //$NON-NLS-1$
     } else {
-      buffer.append( "null" );
+      buffer.append( "null" ); //$NON-NLS-1$
     }
     
-    buffer.append( ")" );
+    buffer.append( ")" ); //$NON-NLS-1$
     
     return buffer.toString();
     

@@ -15,7 +15,6 @@
 
 package eu.geclipse.core.model;
 
-import java.net.URI;
 
 /**
  * An {@link IGridResource} that represents computing elements in the
@@ -23,6 +22,6 @@ import java.net.URI;
  */
 public interface IGridComputing extends IGridResource, ITestable {
   
-//  public URI getURI();
-  
+  // Interface without additional methods
+
 }
