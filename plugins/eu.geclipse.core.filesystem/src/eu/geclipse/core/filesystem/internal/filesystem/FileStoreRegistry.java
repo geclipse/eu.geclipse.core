@@ -38,8 +38,8 @@ public class FileStoreRegistry {
   /**
    * List of all registered file stores.
    */
-  private Hashtable< URI, GEclipseFileStore > registeredStores
-    = new Hashtable< URI, GEclipseFileStore >();
+  private Hashtable< String, GEclipseFileStore > registeredStores
+    = new Hashtable< String, GEclipseFileStore >();
   
   /**
    * Private constructor.
@@ -68,7 +68,8 @@ public class FileStoreRegistry {
    */
   void putStore( final GEclipseFileStore store ) {
     GEclipseURI uri = new GEclipseURI( store.toURI() );
-    this.registeredStores.put( uri.toSlaveURI(), store );
+    String key = getKey( uri.toSlaveURI() );
+    this.registeredStores.put( key, store );
   }
   
   /**
@@ -80,7 +81,8 @@ public class FileStoreRegistry {
    * store is yet registered.
    */
   GEclipseFileStore getStore( final GEclipseURI uri ) {
-    GEclipseFileStore fileStore = this.registeredStores.get( uri.toSlaveURI() );
+    String key = getKey( uri.toSlaveURI() );
+    GEclipseFileStore fileStore = this.registeredStores.get( key );
     return fileStore;
   }
   
@@ -96,13 +98,64 @@ public class FileStoreRegistry {
     return getStore( uri );
   }
   
-  void removeStore( final GEclipseURI uri ) {
-    this.registeredStores.remove( uri.toSlaveURI() );
+  GEclipseFileStore removeStore( final GEclipseURI uri ) {
+    String key = getKey( uri.toSlaveURI() );
+    return this.registeredStores.remove( key );
   }
   
-  void removeStore( final IFileStore fileStore ) {
+  GEclipseFileStore removeStore( final IFileStore fileStore ) {
     GEclipseURI uri = new GEclipseURI( fileStore.toURI() );
-    removeStore( uri );
+    return removeStore( uri );
+  }
+  
+  private String getKey( final URI uri ) {
+    
+    String scheme = uri.getScheme();
+    String userInfo = uri.getUserInfo();
+    String host = uri.getHost();
+    int port = uri.getPort();
+    String path = uri.getPath();
+    String query = uri.getQuery();
+    String fragment = uri.getFragment();
+    
+    StringBuffer buffer = new StringBuffer();
+    
+    if ( scheme != null ) {
+      buffer.append( cleanupToken( scheme ) );
+    }
+    
+    if ( userInfo != null ) {
+      buffer.append( cleanupToken( userInfo ) );
+    }
+    
+    if ( host != null ) {
+      buffer.append( host );
+    }
+    
+    if ( port >= 0 ) {
+      buffer.append( cleanupToken( String.valueOf( port ) ) );
+    }
+    
+    if ( path != null ) {
+      path = cleanupToken( path );
+      path = path.replaceAll( "^/+|/+$", "" ); //$NON-NLS-1$ //$NON-NLS-2$
+      buffer.append( path );
+    }
+    
+    if ( query != null ) {
+      buffer.append( cleanupToken( query ) );
+    }
+    
+    if ( fragment != null ) {
+      buffer.append( cleanupToken( fragment ) );
+    }
+    
+    return buffer.toString();
+    
+  }
+  
+  private String cleanupToken( final String token ) {
+    return token.replaceAll( "^[ \t\0]+|[ \t\0]$", "" );
   }
   
 }
