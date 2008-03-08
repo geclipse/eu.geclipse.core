@@ -155,7 +155,7 @@ public class FileStoreRegistry {
   }
   
   private String cleanupToken( final String token ) {
-    return token.replaceAll( "^[ \t\0]+|[ \t\0]$", "" );
+    return token.replaceAll( "^[ \t\0]+|[ \t\0]$", "" ); //$NON-NLS-1$ //$NON-NLS-2$
   }
   
 }
