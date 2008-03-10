@@ -573,8 +573,7 @@ public class GridElementTransferOperation
             
             try {
               // bug #216867 File copied into folder expanded on view is not visibled
-              target.setDirty();
-              target.getChildren( new SubProgressMonitor( monitor, 1 ) );
+              target.refresh( new SubProgressMonitor( monitor, 1 ) );
             } catch( CoreException cExc ) {
               // refresh errors should not disturb the operation
               // but should be tracked, therefore just log it
