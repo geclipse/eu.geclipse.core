@@ -64,7 +64,6 @@ import eu.geclipse.ui.Extensions;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.providers.ConnectionViewContentProvider;
-import eu.geclipse.ui.providers.ConnectionViewLabelProvider;
 import eu.geclipse.ui.providers.GridModelLabelProvider;
 import eu.geclipse.ui.wizards.IConnectionTokenValidator;
 
