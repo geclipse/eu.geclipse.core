@@ -283,31 +283,33 @@ public abstract class AbstractGridContainer
   
   public void refresh( final IProgressMonitor monitor )
       throws GridModelException {
-    
-    lock();
-    
-    try {
-      if ( isLocal() ) {
-        IContainer container = ( IContainer ) getResource();
-        try {
-          container.refreshLocal( IResource.DEPTH_INFINITE, monitor );
-        } catch( CoreException cExc ) {
-          throw new GridModelException( ICoreProblems.MODEL_REFRESH_FAILED,
-                                        cExc,
-                                        Activator.PLUGIN_ID );
-        }
-      } else {
-        setDirty();
-        try {
-          getChildren( monitor );
-        } catch ( GridModelException gmExc ) {
-          throw new GridModelException( ICoreProblems.MODEL_REFRESH_FAILED,
-                                        gmExc,
-                                        Activator.PLUGIN_ID );
-        }
+
+    if ( isLocal() ) {
+      IContainer container = ( IContainer ) getResource();
+      try {
+        lock();
+        container.refreshLocal( IResource.DEPTH_INFINITE, monitor );
+      } catch( CoreException cExc ) {
+        throw new GridModelException( ICoreProblems.MODEL_REFRESH_FAILED,
+            cExc,
+            Activator.PLUGIN_ID );
+      } finally {
+        unlock();
       }
-    } finally {
-      unlock();
+    }
+
+    else {
+      setDirty();
+      try {
+        startFetch( monitor );
+      } catch ( Throwable t ) {
+        if ( t instanceof GridModelException ) {
+          throw ( GridModelException ) t;
+        }
+        throw new GridModelException( ICoreProblems.MODEL_REFRESH_FAILED,
+            t,
+            Activator.PLUGIN_ID );
+      }
     }
     
   }
@@ -330,7 +332,9 @@ public abstract class AbstractGridContainer
    */
   protected IGridElement addElement( final IGridElement element )
       throws GridModelException {
+    
     if ( element != null ) {
+    
       testCanContain( element );
       IGridElement oldChild = findChild( element.getName() );
       if ( oldChild != null ) {
@@ -339,8 +343,20 @@ public abstract class AbstractGridContainer
       this.children.add( element );
       GridRoot.registerElement( element );
       fireGridModelEvent( IGridModelEvent.ELEMENTS_ADDED, element );
+      
+      if ( ! ( element instanceof ContainerMarker ) ) {
+        for ( IGridElement child : this.children ) {
+          if ( child instanceof ContainerMarker ) {
+            removeElement( child );
+            break;
+          }
+        }
+      }
+      
     }
+    
     return element;
+    
   }
   
   /**
@@ -378,10 +394,14 @@ public abstract class AbstractGridContainer
     return Status.OK_STATUS;
   }
   
-  protected void removeElement( final IGridElement element ) {
+  protected void removeElement( final IGridElement element )
+      throws GridModelException {
     boolean result = this.children.remove( element );
     if ( result ) {
       fireGridModelEvent( IGridModelEvent.ELEMENTS_REMOVED, element );
+      if ( this.children.isEmpty() && ! ( element instanceof ContainerMarker ) ) {
+        addElement( ContainerMarker.getEmptyFolderMarker( this ) );
+      }
     }
   }
     
