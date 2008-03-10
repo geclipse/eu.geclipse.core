@@ -27,7 +27,7 @@
    <extension
          point="eu.geclipse.core.reporting.problemReporting">
       <problem
-            description="You have unsufficient rights"
+            description="You have insufficient access rights"
             id="eu.geclipse.core.filesystem.problem.accessDenied">
       </problem>
    </extension>
