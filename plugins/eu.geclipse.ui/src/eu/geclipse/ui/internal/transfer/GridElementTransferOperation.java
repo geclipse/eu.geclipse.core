@@ -20,7 +20,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
 import java.text.DateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileInfo;
@@ -144,14 +146,14 @@ public class GridElementTransferOperation
                                           Messages.getString("GridElementTransferOperation.op_status"), //$NON-NLS-1$
                                           null );
       
-    localMonitor.beginTask( Messages.getString("GridElementTransferOperation.transfering_element_progress"), this.elements.length ); //$NON-NLS-1$
+    localMonitor.beginTask( Messages.getString("GridElementTransferOperation.transfering_element_progress"), this.elements.length + 1 ); //$NON-NLS-1$
 
-    for ( IGridElement element : this.elements ) {
+    for ( int i = 0 ; i < this.elements.length ; i++ ) {
       
-      localMonitor.subTask( element.getName() );
+      localMonitor.subTask( this.elements[i].getName() );
       
       IProgressMonitor subMonitor = new SubProgressMonitor( localMonitor, 1 );
-      IStatus tempStatus = transferElement( element, this.globalTarget, subMonitor );
+      IStatus tempStatus = transferElement( this.elements[i], this.globalTarget, subMonitor );
       
       if ( !tempStatus.isOK() ) {
         status.merge( tempStatus );
@@ -161,6 +163,31 @@ public class GridElementTransferOperation
         throw new OperationCanceledException();
       }
       
+      if ( this.move ) {
+        IGridContainer parent = this.elements[i].getParent();
+        boolean refresh = true;
+        for ( int j = i+1 ; j < this.elements.length ; j++ ) {
+          if ( this.elements[j].getParent().equals( parent ) ) {
+            refresh = false;
+            break;
+          }
+        }
+        if ( refresh ) {
+          try {
+            // TODO mathias progress monitoring
+            parent.refresh( null );
+          } catch ( GridModelException gmExc ) {
+            status.merge( gmExc.getStatus() );
+          }
+        }
+      }
+      
+    }
+    
+    try {
+      this.globalTarget.refresh( new SubProgressMonitor( localMonitor, 1 ) );
+    } catch ( GridModelException gmExc ) {
+      status.merge( gmExc.getStatus() );
     }
    
     return status;
@@ -566,19 +593,20 @@ public class GridElementTransferOperation
         try {
           
           // Copy operation
-          IProgressMonitor subMonitor = new SubProgressMonitor( monitor, this.move ? 5 : 9 );
+          IProgressMonitor subMonitor = new SubProgressMonitor( monitor, this.move ? 9 : 10 );
           status = copy( inStore, outStore, subMonitor );
           
+          if ( monitor.isCanceled() ) {
+            throw new OperationCanceledException();
+          }
+          
+          if ( status.isOK() && this.move ) {
+            status = delete( inStore, new SubProgressMonitor( monitor, 1 ) );
+          }
+          /*
           if ( status.isOK() ) {
             
-            try {
-              // bug #216867 File copied into folder expanded on view is not visibled
-              target.refresh( new SubProgressMonitor( monitor, 1 ) );
-            } catch( CoreException cExc ) {
-              // refresh errors should not disturb the operation
-              // but should be tracked, therefore just log it
-              Activator.logException( cExc );
-            }
+            startRefresh( target );
             
             if ( monitor.isCanceled() ) {
               throw new OperationCanceledException();
@@ -589,19 +617,13 @@ public class GridElementTransferOperation
               status = delete( inStore, new SubProgressMonitor( monitor, 3 ) );
               
               if ( status.isOK() ) {
-                try {
-                  element.getParent().refresh( new SubProgressMonitor( monitor, 1 ) );
-                } catch( GridModelException gmExc ) {
-                  // refresh errors should not disturb the operation
-                  // but should be tracked, therefore just log it
-                  Activator.logException( gmExc );
-                }
+                startRefresh( element.getParent() );
               }
               
             }
             
           }
-          
+          */
         } finally {
           monitor.done();
         }
@@ -762,5 +784,23 @@ public class GridElementTransferOperation
   private void ignoreTransfer( final TransferParams data ) {
     data.status = new Status( IStatus.INFO, Activator.PLUGIN_ID, Messages.getString("GridElementTransferOperation.targetExists") ); //$NON-NLS-1$
   }
-
+  /*
+  private void startRefresh( final IGridContainer container ) {
+    
+    Job refreshJob = new Job( "Refresh @ " + container.getName() ) {
+      @Override
+      protected IStatus run( final IProgressMonitor monitor ) {
+        try {
+          container.refresh( new SubProgressMonitor( monitor, 1 ) );
+        } catch ( GridModelException gmExc ) {
+          Activator.logException( gmExc );
+        }
+        return Status.OK_STATUS;
+      }
+    };
+    refreshJob.setSystem( true );
+    refreshJob.schedule();
+    
+  }
+  */
 }
