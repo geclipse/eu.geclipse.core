@@ -31,6 +31,8 @@ import javax.xml.transform.TransformerException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.FileLocator;
 import org.eclipse.core.runtime.IPath;
@@ -45,6 +47,7 @@ import org.eclipse.ui.part.FileEditorInput;
 import org.osgi.framework.Bundle;
 
 import eu.geclipse.core.model.GridModel;
+import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridJobCreator;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.ui.dialogs.ProblemDialog;
@@ -106,12 +109,20 @@ public class TransferJsdl2JdlAction extends SelectionListenerAction {
       /* 
        * check if an JDL already exists for the JSDL file. 
        */
-      String jdlName = jsdl.getName() + ".jdl";           //$NON-NLS-1$
-      IFolder folder = ( IFolder )jsdl.getParent().getResource();
-      IFile outfile = folder.getFile( jdlName );
+      String jdlName = jsdl.getName() + ".jdl"; //$NON-NLS-1$
+      IResource resource = jsdl.getParent().getResource();
+      IFile outfile = null;
+      if ( resource instanceof IProject ) {
+        IProject project = ( IProject ) resource;
+        outfile = project.getFile( jdlName );
+      } else if ( resource instanceof IFolder ) {
+        IFolder folder = ( IFolder ) resource;
+        outfile = folder.getFile( jdlName );
+      }
 
-      if (outfile.exists())
-        outfile.delete( true, null ) ;
+      if ( outfile.exists() ) {
+        outfile.delete( true, null );
+      }
 
       /*
        * get the XSLT file from this plugin! 
