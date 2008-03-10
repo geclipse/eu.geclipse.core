@@ -24,5 +24,12 @@
          </target>
       </creator>
    </extension>
+   <extension
+         point="eu.geclipse.core.reporting.problemReporting">
+      <problem
+            description="You have unsufficient rights"
+            id="eu.geclipse.core.filesystem.problem.accessDenied">
+      </problem>
+   </extension>
 
 </plugin>
