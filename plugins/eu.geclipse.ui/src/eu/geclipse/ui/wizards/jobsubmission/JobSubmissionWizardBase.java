@@ -45,6 +45,7 @@ import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridJobID;
 import eu.geclipse.core.model.IGridJobSubmissionService;
 import eu.geclipse.core.model.IGridProject;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.wizards.wizardselection.IInitalizableWizard;
@@ -133,16 +134,21 @@ public abstract class JobSubmissionWizardBase extends Wizard
                 }
                 // create job
                 JobSubmissionWizardBase.this.creator.create( parent, jobId );
-              } catch( GridModelException gmExc ) {
+              } catch( ProblemException pExc ) {
 //                ProblemDialog.openProblem( getShell(),
 //                                           Messages.getString( "JobSubmissionWizardBase.errSubmissionFailed" ), //$NON-NLS-1$
 //                                           null,
 //                                           gmExc );
+                String message=pExc.getMessage().trim()+System.getProperty( "line.separator" );;
+                for(String r:pExc.getProblem().getReasons()){
+                  message+=r+System.getProperty( "line.separator" ).trim();
+                }
+//                result = pExc.getStatus();
                 result = new Status( Status.ERROR,
                                      Activator.getDefault().PLUGIN_ID,
                                      Status.OK,
-                                     "Job not submitted",
-                                     gmExc );
+                                     message,
+                                     pExc.getCause() );
 //                IWorkbench workbench = PlatformUI.getWorkbench();
 //                Display display = workbench.getDisplay();
 //                display.asyncExec( new Runnable() {
