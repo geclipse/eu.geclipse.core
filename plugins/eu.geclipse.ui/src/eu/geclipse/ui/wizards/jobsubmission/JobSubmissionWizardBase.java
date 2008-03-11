@@ -37,7 +37,6 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
 import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobCreator;
@@ -46,7 +45,6 @@ import eu.geclipse.core.model.IGridJobID;
 import eu.geclipse.core.model.IGridJobSubmissionService;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.reporting.ProblemException;
-import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.wizards.wizardselection.IInitalizableWizard;
 
@@ -139,16 +137,16 @@ public abstract class JobSubmissionWizardBase extends Wizard
 //                                           Messages.getString( "JobSubmissionWizardBase.errSubmissionFailed" ), //$NON-NLS-1$
 //                                           null,
 //                                           gmExc );
-                String message=pExc.getMessage().trim()+System.getProperty( "line.separator" );;
+                String message=pExc.getMessage().trim();
                 for(String r:pExc.getProblem().getReasons()){
-                  message+=r+System.getProperty( "line.separator" ).trim();
+                  message += System.getProperty( "line.separator" ) + r.trim();
                 }
 //                result = pExc.getStatus();
                 result = new Status( Status.ERROR,
                                      Activator.getDefault().PLUGIN_ID,
                                      Status.OK,
                                      message,
-                                     pExc.getCause() );
+                                     pExc );
 //                IWorkbench workbench = PlatformUI.getWorkbench();
 //                Display display = workbench.getDisplay();
 //                display.asyncExec( new Runnable() {
