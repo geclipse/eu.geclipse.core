@@ -28,15 +28,15 @@ Initial development of the original code was made for the g-Eclipse project foun
    <requires>
       <import plugin="org.eclipse.ui"/>
       <import plugin="org.eclipse.core.runtime" version="3.3.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.core.filesystem"/>
       <import plugin="org.eclipse.compare"/>
+      <import plugin="org.eclipse.core.filesystem"/>
       <import plugin="org.eclipse.debug.ui"/>
+      <import plugin="org.eclipse.emf.edit.ui"/>
+      <import plugin="org.eclipse.help"/>
       <import plugin="org.eclipse.search"/>
+      <import plugin="org.eclipse.ui.forms"/>
       <import plugin="org.eclipse.ui.ide"/>
       <import plugin="org.eclipse.ui.navigator"/>
-      <import plugin="org.eclipse.help"/>
-      <import plugin="org.eclipse.ui.forms"/>
-      <import plugin="org.eclipse.emf.edit.ui"/>
       <import plugin="org.eclipse.debug.core"/>
       <import plugin="org.eclipse.ui.cheatsheets"/>
       <import plugin="org.eclipse.ui.editors"/>
@@ -44,6 +44,7 @@ Initial development of the original code was made for the g-Eclipse project foun
       <import plugin="org.eclipse.jface.text"/>
       <import plugin="org.eclipse.core.resources"/>
       <import plugin="org.eclipse.ui.workbench.texteditor"/>
+      <import plugin="org.eclipse.core.expressions"/>
       <import plugin="org.eclipse.core.net"/>
       <import plugin="org.eclipse.emf.edit"/>
       <import plugin="org.eclipse.emf.ecore.xmi"/>
@@ -54,7 +55,10 @@ Initial development of the original code was made for the g-Eclipse project foun
       <import plugin="org.eclipse.gmf.runtime.diagram.ui"/>
       <import plugin="org.eclipse.gmf.runtime.diagram.ui.properties"/>
       <import plugin="org.eclipse.gmf.runtime.diagram.ui.resources.editor"/>
-      <import plugin="org.eclipse.core.expressions"/>
+      <import plugin="org.eclipse.ui.net"/>
+      <import plugin="org.eclipse.gmf.runtime.diagram.ui.providers"/>
+      <import plugin="org.eclipse.gmf.runtime.diagram.ui.providers.ide"/>
+      <import plugin="org.eclipse.gmf.runtime.diagram.ui.render"/>
    </requires>
 
    <plugin
