@@ -122,8 +122,8 @@ public abstract class AbstractGridContainer
           this.exception = status.getException();
         }
         
-      } catch ( GridModelException gmExc ) {
-        this.exception = gmExc;
+      } catch ( Throwable t ) {
+        this.exception = t;
       } finally {
         this.container.setDirty( false );
         this.container.unlock();

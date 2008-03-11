@@ -62,7 +62,8 @@ public abstract class AbstractGridElement
   }
   
   public boolean isHidden() {
-    return getName().startsWith( HIDDEN_PREFIX );
+    String name = getName();
+    return ( name != null ) && ( getName().startsWith( HIDDEN_PREFIX ) );
   }
 
   /* (non-Javadoc)

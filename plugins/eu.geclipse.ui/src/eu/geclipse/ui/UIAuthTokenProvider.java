@@ -90,10 +90,17 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
      */
     public void run() {
       
+      Throwable t = null;
+      this.token = null;
       CoreAuthTokenProvider cProvider = new CoreAuthTokenProvider();
-      this.token = cProvider.requestToken( this.request );
       
-      if( this.token == null ) {
+      try {
+        this.token = cProvider.requestToken( this.request );
+      } catch ( Exception e ) {
+        t = e;
+      }
+      
+      if ( ( this.token == null ) && ( t == null ) ) {
         
         // No token could be found, so create one
         
@@ -118,8 +125,8 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
         }
         
       }
+      
       if( this.token != null ) {
-        Throwable thr = null;
         // Check if the token is both valid and active
         try {
           if( !this.token.isValid() ) {
@@ -129,20 +136,23 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
             activateToken( this.token );
           }
         } catch( InvocationTargetException itExc ) {
-          thr = itExc.getCause();
-          if( thr == null ) {
-            thr = itExc;
+          t = itExc.getCause();
+          if( t == null ) {
+            t = itExc;
           }
         } catch( InterruptedException intExc ) {
-          thr = intExc;
-        }
-        if ( thr != null ) {
-          ProblemDialog.openProblem( UIAuthTokenProvider.this.shell,
-                                     Messages.getString("UIAuthTokenProvider.token_activation_error_title"), //$NON-NLS-1$
-                                     Messages.getString("UIAuthTokenProvider.token_activation_error_message"), //$NON-NLS-1$
-                                     thr );
+          t = intExc;
         }
       }
+      
+      if ( t != null ) {
+        ProblemDialog.openProblem( UIAuthTokenProvider.this.shell,
+                                   Messages.getString("UIAuthTokenProvider.token_activation_error_title"), //$NON-NLS-1$
+                                   Messages.getString("UIAuthTokenProvider.token_activation_error_message"), //$NON-NLS-1$
+                                   t );
+        this.token = null;
+      }
+      
     }
     
   }

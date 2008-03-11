@@ -251,13 +251,13 @@ public class ConnectionElement
         }
       }
       
-    } catch ( CoreException cExc ) {
+    } catch ( Throwable t ) {
       
-      this.fetchError = cExc;
-      result = new Status( IStatus.ERROR, Activator.PLUGIN_ID, Messages.getString("ConnectionElement.fetch_error"), cExc ); //$NON-NLS-1$
+      this.fetchError = t;
+      result = new Status( IStatus.ERROR, Activator.PLUGIN_ID, Messages.getString("ConnectionElement.fetch_error"), t ); //$NON-NLS-1$
       
       try {
-        addElement( ContainerMarker.getErrorMarker( this, cExc ) );
+        addElement( ContainerMarker.getErrorMarker( this, t ) );
       } catch ( GridModelException gmExc ) {
         Activator.logException( gmExc );
       }
