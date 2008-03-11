@@ -65,6 +65,10 @@ public class GridExplorerPerspective
     layout.addPerspectiveShortcut( Activator.ID_USER_PERSPECTIVE );
     layout.addPerspectiveShortcut( Activator.ID_OPERATOR_PERSPECTIVE );
     layout.addPerspectiveShortcut( Activator.ID_DEVELOPER_PERSPECTIVE );
+
+    layout.addNewWizardShortcut( "org.eclipse.ui.wizards.new.folder" );//$NON-NLS-1$
+    layout.addNewWizardShortcut( "org.eclipse.ui.wizards.new.file" );//$NON-NLS-1$
+    layout.addNewWizardShortcut( eu.geclipse.ui.internal.Activator.ID_CONNECTION_WIZARD );
     
   }
   
