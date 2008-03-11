@@ -110,13 +110,7 @@ public class GridModelLabelProvider
     String resultText = null;
     
     if( element instanceof IGridElement ) {
-      if ( ( element instanceof IGridConnectionElement )
-          && ! ( ( IGridConnectionElement )element ).isValid() ) {
-        IGridConnectionElement connection = ( IGridConnectionElement )element;
-        resultText += "(Error: " + connection.getError() + ")"; //$NON-NLS-1$ //$NON-NLS-2$
-      } else {
-        resultText = ( ( IGridElement )element ).getName();
-      }
+      resultText = ( ( IGridElement )element ).getName();
     } else {
       resultText = element.toString();
     }
