@@ -400,7 +400,10 @@ public abstract class AbstractGridContainer
     if ( result ) {
       fireGridModelEvent( IGridModelEvent.ELEMENTS_REMOVED, element );
       if ( this.children.isEmpty() && ! ( element instanceof ContainerMarker ) ) {
-        addElement( ContainerMarker.getEmptyFolderMarker( this ) );
+        ContainerMarker marker = ContainerMarker.getEmptyFolderMarker( this );
+        if ( canContain( marker ) ) {
+          addElement( marker );
+        }
       }
     }
   }
