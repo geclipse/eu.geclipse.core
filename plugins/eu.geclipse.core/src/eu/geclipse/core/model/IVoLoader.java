@@ -19,6 +19,7 @@ package eu.geclipse.core.model;
 import java.net.URI;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
 
 import eu.geclipse.core.reporting.ProblemException;
 
@@ -30,7 +31,7 @@ import eu.geclipse.core.reporting.ProblemException;
 public interface IVoLoader {
   
   /**
-   * Get the VO with the specified name from the specified
+   * Create the VO with the specified name from the specified
    * <code>URI</code>. The <code>URI</code> may be a remote or local
    * repository or file.
    * 
@@ -38,15 +39,13 @@ public interface IVoLoader {
    * @param name The name of the VO.
    * @param monitor A {@link IProgressMonitor} that is used to
    * indicate the progress of the import operation.
-   * @return The imported VO or <code>null</code> if no
-   * VO could be imported from the specified location.
-   * @throws ProblemException If an error occurs while the
-   * VO is imported.
+   * @return An {@link IStatus} that may give hints if the creation of
+   * the VO was successful and if the import process may only be partially
+   * successful.
    */
-  public IVirtualOrganization getVo( final URI uri,
-                                     final String name,
-                                     final IProgressMonitor monitor )
-    throws ProblemException;
+  public IStatus createVo( final URI uri,
+                           final String name,
+                           final IProgressMonitor monitor );
   
   /**
    * Get a list of VO names that are found at the specified
