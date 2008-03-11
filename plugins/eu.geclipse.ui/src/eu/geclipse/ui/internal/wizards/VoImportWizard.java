@@ -21,15 +21,17 @@ import java.net.URI;
 import java.net.URL;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.MultiStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
 
-import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.IVoLoader;
-import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 
@@ -45,6 +47,58 @@ public class VoImportWizard extends Wizard {
   private VoImportLocationChooserPage locationPage;
   
   private VoChooserPage chooserPage;
+  
+  private class VoImportOperation implements IRunnableWithProgress {
+    
+    private IVoLoader loader;
+    
+    private URI location; 
+    
+    private String[] vos;
+    
+    private IStatus result;
+    
+    VoImportOperation( final IVoLoader loader,
+                              final URI location,
+                              final String[] vos ) {
+      this.loader = loader;
+      this.location = location;
+      this.vos = vos;
+    }
+    
+    /**
+     * Get the status of the operation.
+     * 
+     * @return The merged status of all nested import operations.
+     */
+    public IStatus getStatus() {
+      return this.result;
+    }
+
+    public void run( final IProgressMonitor monitor )
+        throws InvocationTargetException, InterruptedException {
+      
+      monitor.beginTask( Messages.getString("VoImportWizard.loading_progress"), this.vos.length ); //$NON-NLS-1$
+      MultiStatus mStatus = null;
+      
+      for ( String certID : this.vos ) {
+        SubProgressMonitor subMonitor = new SubProgressMonitor( monitor, 1 );
+        IStatus status = loader.createVo( this.location, certID, subMonitor );
+        if ( ! status.isOK() ) {
+          if ( mStatus == null ) {
+            mStatus = new MultiStatus( Activator.PLUGIN_ID, 0, Messages.getString("VoImportWizard.import_problem"), null ); //$NON-NLS-1$
+          }
+          mStatus.merge( status );
+        }
+      }
+      
+      monitor.done();
+      
+      this.result = mStatus == null ? Status.OK_STATUS : mStatus;
+      
+    }
+    
+  }
   
   /**
    * Standard constructor.
@@ -91,49 +145,33 @@ public class VoImportWizard extends Wizard {
     
     final IVoLoader loader = this.selectionPage.getSelectedLoader();
     final URI location = this.locationPage.getSelectedLocation();
-    final String[] certificates = this.chooserPage.getSelectedVos();
+    final String[] vos = this.chooserPage.getSelectedVos();
+    
+    VoImportOperation op = new VoImportOperation( loader, location, vos );
     
     try {
-      
-      getContainer().run( false, false, new IRunnableWithProgress() {
-        public void run( final IProgressMonitor monitor )
-            throws InvocationTargetException, InterruptedException {
-          
-          monitor.beginTask( "Loading...", certificates.length );
-          
-          try {
-            for ( String certID : certificates ) {
-              SubProgressMonitor subMonitor = new SubProgressMonitor( monitor, 1 );
-              IVirtualOrganization vo = loader.getVo( location, certID, subMonitor );
-              /*if ( vo != null ) {
-                certList.add( certificate );
-              }*/
-            }
-          } catch ( ProblemException pExc ) {
-            throw new InvocationTargetException( pExc );
-          } finally {
-            monitor.done();
-          }
-          /*
-          if ( !certList.isEmpty() ) {
-            ICaCertificate[] certArray = certList.toArray( new ICaCertificate[ certList.size() ] );
-            CaCertManager.getManager().addCertificates( certArray );
-          }
-          */
-        }
-      } );
-      
+      getContainer().run( false, false, op );
     } catch ( InvocationTargetException itExc ) {
       Throwable cause = itExc.getCause();
       ProblemDialog.openProblem( getShell(),
-                                 "Import failed",
-                                 "Import failed",
+                                 Messages.getString("VoImportWizard.import_failed"), //$NON-NLS-1$
+                                 Messages.getString("VoImportWizard.import_failed"), //$NON-NLS-1$
                                  cause );
       currentPage.setErrorMessage( cause.getLocalizedMessage() );
       result = false;
     } catch ( InterruptedException intExc ) {
       currentPage.setErrorMessage( intExc.getLocalizedMessage() );
       result = false;
+    }
+    
+    IStatus status = op.getStatus();
+    
+    if ( ! status.isOK() ) {
+      ErrorDialog.openError(
+          getShell(),
+          Messages.getString("VoImportWizard.error_dialog_title"), //$NON-NLS-1$
+          Messages.getString("VoImportWizard.error_dialog_text"), //$NON-NLS-1$
+          status );   
     }
     
     return result;
