@@ -180,7 +180,8 @@ public class GEclipseFileStore
   public IFileStore getChild( final String name ) {
     
     GEclipseFileStore result = null;
-    IFileStore child = getSlave().getChild( name );
+    
+    IFileStore child = getSlave().getChild( name.trim() );
     
     if ( child != null ) {
       FileStoreRegistry registry = FileStoreRegistry.getInstance();
