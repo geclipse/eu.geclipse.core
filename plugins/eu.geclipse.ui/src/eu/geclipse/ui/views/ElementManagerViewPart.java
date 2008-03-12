@@ -49,14 +49,6 @@ public abstract class ElementManagerViewPart
   }
   
   /* (non-Javadoc)
-   * @see org.eclipse.compare.IContentChangeListener#contentChanged(org.eclipse.compare.IContentChangeNotifier)
-   */
-  /*@Override
-  public void gridModelChanged( final IGridModelEvent event ) {
-    refreshViewer( event.getSource() );
-  }*/
-  
-  /* (non-Javadoc)
    * @see org.eclipse.ui.part.WorkbenchPart#dispose()
    */
   @Override
