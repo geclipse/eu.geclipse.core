@@ -24,14 +24,14 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.action.Action;
+import org.eclipse.swt.widgets.Shell;
 
 import eu.geclipse.core.filesystem.GEclipseURI;
 import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridContainer;
-import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IGridStorage;
-import eu.geclipse.ui.internal.Activator;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 
 /**
  * Action for mounting storage elements as Grid connections.
@@ -48,16 +48,21 @@ public class MountAction extends Action {
    */
   private IGridStorage[] sources;
   
+  private Shell shell;
+  
   /**
    * Construct a new <code>MountAction</code> for the specified
    * storage elements using the specified protocol.
    * 
+   * @param shell A shell used to report errors.
    * @param sources The elements that should be mounted.
    * @param protocol The protocol that should be used for the mount.
    */
-  protected MountAction( final IGridStorage[] sources,
+  protected MountAction( final Shell shell,
+                         final IGridStorage[] sources,
                          final String protocol ) {
     super( protocol );
+    this.shell = shell;
     this.accessProtocol = protocol;
     this.sources = sources;
   }
@@ -71,7 +76,12 @@ public class MountAction extends Action {
       try {
         createMount( source );
       } catch( CoreException cExc ) {
-        Activator.logException( cExc );
+        ProblemDialog.openProblem(
+            this.shell,
+            Messages.getString("MountAction.problem_dialog_title"), //$NON-NLS-1$
+            Messages.getString("MountAction.problem_dialog_text"), //$NON-NLS-1$
+            cExc
+        );
       }
     }
   }

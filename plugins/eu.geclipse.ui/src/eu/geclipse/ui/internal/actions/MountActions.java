@@ -45,7 +45,7 @@ public class MountActions extends ActionGroup {
    */
   public MountActions( final IWorkbenchPartSite site ) {
     this.site = site;
-    this.mountMenu = new MountMenu();
+    this.mountMenu = new MountMenu( site.getShell() );
     ISelectionProvider selectionProvider
       = this.site.getSelectionProvider();
     selectionProvider.addSelectionChangedListener( this.mountMenu );

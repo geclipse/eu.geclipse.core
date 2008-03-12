@@ -18,6 +18,7 @@ package eu.geclipse.ui.internal.actions;
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.eclipse.jface.action.ActionContributionItem;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionItem;
@@ -25,6 +26,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.actions.CompoundContributionItem;
 
 import eu.geclipse.core.Extensions;
@@ -50,10 +52,13 @@ public class MountMenu
   private List< IGridStorage > sources
     = new ArrayList< IGridStorage >();
   
+  private Shell shell;
+  
   /**
    * Standard constructor.
    */
-  protected MountMenu() {
+  protected MountMenu( final Shell shell ) {
+    this.shell = shell;
     checkVisible();
   }
 
@@ -105,7 +110,7 @@ public class MountMenu
   protected IAction getAction( final String protocol ) {
     IGridStorage[] srcArray
       = this.sources.toArray( new IGridStorage[ this.sources.size() ] );
-    MountAction action = new MountAction( srcArray, protocol );
+    MountAction action = new MountAction( this.shell, srcArray, protocol );
     return action;
   }
   
