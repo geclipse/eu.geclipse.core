@@ -1,0 +1,88 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+<meta
+  http-equiv="Content-Type"
+  content="text/html; charset=iso-8859-1">
+<META
+  HTTP-EQUIV="Content-Style-Type"
+  CONTENT="text/css">
+<LINK
+  REL="STYLESHEET"
+  HREF="PLUGINS_ROOT/eu.geclipse.doc.user/book.css"
+  CHARSET="ISO-8859-1"
+  TYPE="text/css">
+<title>Managing Authentication Tokens</title>
+<script
+  language="JavaScript"
+  src="PLUGINS_ROOT/org.eclipse.help/livehelp.js"> </script>
+</head>
+
+<body BGCOLOR="#ffffff">
+
+<h1>Managing Authentication Tokens</h1>
+
+<ul>
+<li><a href="#overview">Overview</a>
+<li><a href="#managing">Managing Authentication Tokens</a>
+</ul>
+
+<h2><a name="overview">Overview</a></h2>
+<p> Working on a Grid infrastructure can require the management of more than one 
+Authentication/Authorization token by the user. Imaging you are working one two 
+different Grid projects at the same time using different middlewares. Or you work 
+in the same project with different roles (i.e user and admin). For both 
+cases, g-Eclipse offers the management of Authentication Tokens with the 
+g-Eclipse Authentication Tokens View. </p>
+<img border="0" src="images/AuthView2.png" alt="Authentication Tokens View 2">
+<p>The Authentication Tokens View shows a list of created tokens by name, type, state and 
+the valid time left. Be aware, that tokens are in state inactive after the creation 
+and need to be activated with the help of this view. Activated tokens are written 
+in bold letters. The radio checkbox on the left selected the token which is used 
+by default for all Grid actions. The user can change the default with the help of 
+this view. </p>
+
+<h2><a name="managing">Managing Authentication Tokens</a></h2>
+<p> The Authentication and Authorization Tokens can be managed by the 
+Authentication Tokens View in the following manner:
+<ul>
+	<li> Create a token 
+	<img border="0" src="images/new_wiz.gif" alt="New Token Button">
+	<br> After the selection of the Token type, the Authentication Token Wizards starts (more detail 
+	<a href="./creating.html">here</a>).
+	<br>
+	
+	<li> Delete a token
+	<img border="0" src="images/delete_obj.gif" alt="Delete Token Button">
+	<br> Select a token in the list and push the button to delete the Token from the list. 
+	The selected token is highlighted. 
+	<br>
+	
+	<li> Activate a token 
+	<img border="0" src="PLUGINS_ROOT/eu.geclipse.ui/icons/activestate.gif" alt="Activate Token Button">
+	<br> Select an inactive  token in the list and push the button to activate the token. 
+	Activation is needed to use the tokens. 
+	<br>
+	
+	<li> De-activate a token
+	<img border="0" src="PLUGINS_ROOT/eu.geclipse.ui/icons/inactivestate.gif" alt="Deactivate Token Button">
+	<br> Select an active  token in the list and push the button to deactivate the token. 
+	<br>
+	
+	<li> Get token information
+	<img border="0" src="images/info_tsk.gif" alt=" Token Info Button">
+	<br> Select a token and push the button to get informed about the token in more details 
+	in a separate window. 
+	<br>
+	
+	<li> Refresh the token list 
+	<img border="0" src="PLUGINS_ROOT/eu.geclipse.ui/icons/refresh.gif" alt="Refresh Token Button">
+	<br> As the valid time left for a token is changing continuesly, the refresh Button updates
+	the information on the user's request. 
+	
+	<br>
+</ul>
+</p>
+</body>
+</html>
