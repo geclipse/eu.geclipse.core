@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %Bundle-Name
+Bundle-SymbolicName: eu.geclipse.core.reporting.test;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Fragment-Host: eu.geclipse.core.reporting;bundle-version="0.5.0"
+Require-Bundle: org.junit4,
+ eu.geclipse.core
