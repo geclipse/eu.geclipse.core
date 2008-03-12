@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %Bundle-Name
+Bundle-Vendor: %Bundle-Vendor
+Bundle-SymbolicName: eu.geclipse.aws.ui;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: eu.geclipse.aws.ui.internal.Activator
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Bundle-Localization: plugin
+Require-Bundle: eu.geclipse.aws,
+ eu.geclipse.core,
+ eu.geclipse.core.reporting,
+ eu.geclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.ui
+Eclipse-LazyStart: true

@@ -1,0 +1,135 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="eu.geclipse.batch">
+<annotation>
+      <appInfo>
+         <meta.schema plugin="eu.geclipse.batch" id="batchService" name="Batch Service"/>
+      </appInfo>
+      <documentation>
+         This extension point is used to define new types of batch services.
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <complexType>
+         <sequence>
+            <element ref="service" minOccurs="1" maxOccurs="unbounded"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute translatable="true"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="service">
+      <complexType>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  A unique ID that is used to internally refer to a batch service implementation.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  A user readable name that denotes the service type name. This name is used by the UI whenever refering to a specific service implementation.
+               </documentation>
+               <appInfo>
+                  <meta.attribute translatable="true"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="description" type="string" use="required">
+            <annotation>
+               <documentation>
+                  Implementation of the &lt;code&gt;eu.geclipse.batch.IBatchServiceDescription&lt;/code&gt; interface that is used as an entry point to an batch service implementation.
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn=":eu.geclipse.batch.IBatchServiceDescription"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="since"/>
+      </appInfo>
+      <documentation>
+         1.0
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="examples"/>
+      </appInfo>
+      <documentation>
+         &lt;pre&gt;
+&lt;extension point=&quot;eu.geclipse.batch.batchService&quot;&gt;
+  &lt;token
+    description=&quot;eu.geclipse.batch.pbs.PBSBatchDescription&quot;
+    id=&quot;eu.geclipse.batch.pbs.pbsBatchService&quot;
+    name=&quot;PBS Batch Service&quot;
+    wizard=&quot;eu.geclipse.batch.ui.wizards.BatchCreationWizard&quot;&gt;
+  &lt;/token&gt;
+&lt;/extension&gt;
+&lt;/pre&gt;
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="apiInfo"/>
+      </appInfo>
+      <documentation>
+         See the &lt;code&gt;eu.geclipse.batch.IBatchDescription&lt;/code&gt; interface.
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="implementation"/>
+      </appInfo>
+      <documentation>
+         The g-Eclipse core does currently not provide any batch services. It is up to the middleware implementation to provide a specific implementations.
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="copyright"/>
+      </appInfo>
+      <documentation>
+         Copyright (c) 2006, 2007 g-Eclipse Consortium
+&lt;br&gt;&lt;br&gt;
+All rights reserved. This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at &lt;a href=&quot;http://www.eclipse.org/legal/epl-v10.html&quot;&gt;http://www.eclipse.org/legal/epl-v10.html&lt;/a&gt;.
+&lt;br&gt;&lt;br&gt;
+Initial development of the original code was made for the g-Eclipse project founded by European Union project number: FP6-IST-034327 &lt;a href=&quot;http://www.geclipse.eu&quot;&gt;http://www.geclipse.eu&lt;/a&gt;.
+      </documentation>
+   </annotation>
+
+</schema>
