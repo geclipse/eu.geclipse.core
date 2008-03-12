@@ -110,6 +110,7 @@ public abstract class AbstractGridContainer
       
       IProgressMonitor mon = new MasterMonitor( monitor, this.externalMonitor );
       
+      this.exception = null;
       this.container.lock();
       
       try {
