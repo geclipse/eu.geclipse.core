@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site mirrorsURL="http://www.eclipse.org/downloads/download.php?file=/technology/geclipse/updates/1.0milestones/site.xml&amp;format=xml">
+
+  <description url="http://download.eclipse.org/technology/geclipse/updates/1.0milestones/">
+    g-Eclipse (Incubation) main Update Site.
+  </description>
+
+  <feature url="features/eu.geclipse_1.0.0.qualifier.jar" id="eu.geclipse" version="1.0.0.qualifier">
+    <category name="g-Eclipse"/>
+  </feature>
+
+  <category-def name="g-Eclipse" label="g-Eclipse">
+    <description>
+      This is the basic g-Eclipse feature that comes with middleware independent functionalities, i.e. the g-Eclipse core.
+    </description>
+  </category-def>
+
+</site>
