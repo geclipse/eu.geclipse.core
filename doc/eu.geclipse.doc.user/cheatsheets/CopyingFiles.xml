@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cheatsheet title="Copying files between the local machine and the grid">
+   <intro>
+      <description>
+         Sometimes you have prepared files containing data on your local machine which should be processed by a job running on the grid.<br/>
+Additionally, jobs can produce results in files which you would want to have on your local machine.<br/>
+In this cheat sheet you will learn how to copy files between your local machine and the grid.
+      </description>
+   </intro>
+   <item title="Open the  &quot;Grid Exploring&quot; Perspective" dialog="true" skip="true">
+      <description>
+         If you are not already in the &quot;Grid Exploring&quot; Perspective, from the main menu, select <b>Window &gt; Open Perspective &gt; Grid Exploring</b> or click on the &quot;Click to Perform&quot; link.
+      </description>
+      <command serialization="org.eclipse.ui.perspectives.showPerspective(org.eclipse.ui.perspectives.showPerspective.perspectiveId=eu.geclipse.ui.explorerPerspective)" confirm="false">
+      </command>
+   </item>
+   <item title="Open the &quot;Grid Projects&quot; view" dialog="true" skip="true">
+      <description>
+         From menu select <b>Window -&gt; Show View -&gt; Other -&gt; g-Eclipse -&gt; Grid Projects</b>
+      </description>
+      <command serialization="org.eclipse.ui.views.showView(org.eclipse.ui.views.showView.viewId=eu.geclipse.ui.views.gridProjectView)" confirm="false">
+      </command>
+   </item>
+   <item title="Create connection to local machine" dialog="true" skip="true">
+      <description>
+      </description>
+      <subitem label="Find left &quot;Connections&quot; view and on its toolbar click &quot;New connection&quot;." skip="false">
+         <command serialization="org.eclipse.ui.newWizard(newWizardId=eu.geclipse.ui.wizards.connectionWizard)" confirm="false">
+         </command>
+      </subitem>
+      <subitem label="Enter the connection name (e.g. &quot;localhost&quot;) and press &quot;Next&quot;." skip="false">
+      </subitem>
+      <subitem label="Select scheme &quot;file&quot; and enter local directory, to which you want to connect to (e.g. &quot;C:\&quot;). If you want to find subfolder on folders tree, click on link &quot;create a temporary connection&quot; and select desired folder. Press &quot;Finish&quot;." skip="false">
+      </subitem>
+   </item>
+   <item title="Create connection to Storage on the Grid" dialog="true" skip="true">
+      <description>
+      </description>
+      <subitem label="Go to the &quot;Grid Project&quot; view, expand the Virtual Organization in your project (blue icon), and expand &quot;Storage&quot;." skip="false">
+      </subitem>
+      <subitem label="Select any storage element. From the context menu choose &quot;Mount&quot;." skip="false">
+      </subitem>
+      <subitem label="Note that a new connection has appeared in the &quot;Filesystems&quot; folder in your Grid Project and in the &quot;Connections&quot; view." skip="true">
+      </subitem>
+   </item>
+   <item title="Copying files" dialog="true" skip="false">
+      <description>
+         As you now have local and grid connections, you can explore these storage areas and copy files between them using Drag&amp;Drop.
+<br/>The best way to do it is to open your local and grid connections in two separate &quot;Connections&quot; views.
+      </description>
+      <subitem label="In the left &quot;Connections&quot; view, find the destination directory to which you want to copy files." skip="false">
+      </subitem>
+      <subitem label="On the right &quot;Connections&quot; view explore the source connection and select files which you want to copy." skip="false">
+      </subitem>
+      <subitem label="Drag the selected files, move to the directory you found previously, and drop it there." skip="false">
+      </subitem>
+   </item>
+</cheatsheet>

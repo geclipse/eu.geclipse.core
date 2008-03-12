@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cheatsheet title="Declaring a Virtual Organisation">
+   <intro href="/eu.geclipse.doc.user/html/concepts/setup/vosettings.html">
+      <description>
+          This cheat sheet will walk you through the steps involved in declaring a 
+          Virtual Organisation (VO).
+      </description>
+   </intro>
+   <item title="Open the VO Declaration Dialog Box" dialog="true" skip="true">
+      <description>
+          Go to <b>Window &gt; Preferences</b>, expand the g-Eclipse sub-tree 
+          and select VO-Declarations.
+          You can click the <b>Click to Perform</b> button to have the 
+       	  Preferences dialog box open automatically.<br/>
+      </description>
+      <command confirm="true" returns="result" serialization=
+      "org.eclipse.ui.window.preferences(preferencePageId=eu.geclipse.ui.internal.preference.VOPreferencePage)" 
+      />
+   </item>
+   <item title="Add a Virtual Organisation" dialog="true" skip="true">
+   		<description>To add a Virtual Organisation, click on the  <b>Add</b> button.<br/>
+            In the dialog that opens, put in the VO specific settings such as Name, 
+            Host, Port number, Host DN, and Information System Endpoint. 
+            Click Finish when done.<br/>
+        </description>        
+   </item>
+   <item title="Complete the declaration process" dialog="true" skip="true">
+        <description> 
+           Back in the VO-Declarations Preference Page, select the VO that you just created 
+           and click <b>OK</b> to complete the process. 
+        </description>
+   </item>   
+</cheatsheet>
+      
