@@ -345,7 +345,7 @@ public abstract class AbstractGridContainer
       GridRoot.registerElement( element );
       fireGridModelEvent( IGridModelEvent.ELEMENTS_ADDED, element );
       
-      if ( ! ( element instanceof ContainerMarker ) ) {
+      if ( isLazy() && ! ( element instanceof ContainerMarker ) ) {
         for ( IGridElement child : this.children ) {
           if ( child instanceof ContainerMarker ) {
             removeElement( child );
@@ -400,7 +400,7 @@ public abstract class AbstractGridContainer
     boolean result = this.children.remove( element );
     if ( result ) {
       fireGridModelEvent( IGridModelEvent.ELEMENTS_REMOVED, element );
-      if ( this.children.isEmpty() && ! ( element instanceof ContainerMarker ) ) {
+      if ( this.children.isEmpty() && isLazy() && ! ( element instanceof ContainerMarker ) ) {
         ContainerMarker marker = ContainerMarker.getEmptyFolderMarker( this );
         if ( canContain( marker ) ) {
           addElement( marker );
