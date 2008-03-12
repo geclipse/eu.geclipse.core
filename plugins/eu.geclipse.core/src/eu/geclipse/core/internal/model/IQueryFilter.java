@@ -17,8 +17,18 @@ package eu.geclipse.core.internal.model;
 
 import eu.geclipse.core.model.IGridElement;
 
+/**
+ * Interface definition for a Grid element filter that provides
+ * a specific filtering mechanism for an array of input elements.
+ */
 public interface IQueryFilter {
   
+  /**
+   * Filter the specified input elements.
+   * 
+   * @param input The Grid elements to be filtered.
+   * @return An array that may contain a subset of the input array.
+   */
   public IGridElement[] filter( final IGridElement[] input );
 
 }
