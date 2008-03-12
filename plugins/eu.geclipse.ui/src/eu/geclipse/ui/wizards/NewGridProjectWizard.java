@@ -47,6 +47,7 @@ import org.eclipse.ui.internal.WorkbenchPlugin;
 import org.eclipse.ui.internal.registry.PerspectiveDescriptor;
 
 import eu.geclipse.ui.internal.Activator;
+import eu.geclipse.ui.internal.preference.PerspectivePreferencePage;
 
 /**
  * Wizard to create Grid Project in the Eclipse workspace. 
@@ -89,11 +90,26 @@ public class NewGridProjectWizard extends Wizard implements INewWizard {
         if( window != null ) {
           page = window.getActivePage();
           if( page != null ) {
+            IPreferenceStore ps = Activator.getDefault()
+            .getPreferenceStore();
+            String newPerspectiveId=ps.getString( PerspectivePreferencePage.KEY_DEFAULT_PERSPECTIVE  );
+            if( newPerspectiveId==null){
+              return;
+            }
             IPerspectiveDescriptor perspectiveDescriptor = page.getPerspective();
             if( perspectiveDescriptor != null
                 && !perspectiveDescriptor.getId()
-                  .equals( Activator.ID_USER_PERSPECTIVE ) )
+                  .equals( newPerspectiveId ) )
             {
+              //check if we are in one of g-Eclipse perspectives
+              if(perspectiveDescriptor.getId().equals( Activator.ID_USER_PERSPECTIVE )
+                ||perspectiveDescriptor.getId().equals( Activator.ID_OPERATOR_PERSPECTIVE )
+                ||perspectiveDescriptor.getId().equals( Activator.ID_DEVELOPER_PERSPECTIVE)){
+                //check if it is allowed to switch from g-Eclipse perspective
+                if(ps.getBoolean( PerspectivePreferencePage.KEY_NOT_SWITCH_FROM_GECLIPSE_PERSPECTIVE )){
+                  return;
+                }
+              }
               try {
                 String newLine = System.getProperty( "line.separator" ); //$NON-NLS-1$
                 String message = Messages.getString("NewGridProjectWizard.PerspectiveSwitchingInfo_line1"); //$NON-NLS-1$
@@ -102,10 +118,7 @@ public class NewGridProjectWizard extends Wizard implements INewWizard {
                 message += newLine + newLine;
                 message += Messages.getString("NewGridProjectWizard.PerspectiveSwitchingInfo_line3"); //$NON-NLS-1$
                 String toggleMessage = Messages.getString("NewGridProjectWizard.RememberQuestion"); //$NON-NLS-1$
-                String key = "RememberSwitchingPerspective"; //$NON-NLS-1$
-                IPreferenceStore ps = Activator.getDefault()
-                  .getPreferenceStore();
-                String ask=ps.getString( key );
+                String ask=ps.getString( PerspectivePreferencePage.KEY_REMEMBER_SWITCHING );
                 if(MessageDialogWithToggle.NEVER.equalsIgnoreCase( ask )){
                   return;
                 }
@@ -116,11 +129,12 @@ public class NewGridProjectWizard extends Wizard implements INewWizard {
                                                                   toggleMessage,
                                                                   false,
                                                                   ps,
-                                                                  key )
+                                                                  PerspectivePreferencePage.KEY_REMEMBER_SWITCHING )
                       .getReturnCode() == IDialogConstants.YES_ID )
                 {
+                  String pId=ps.getString( PerspectivePreferencePage.KEY_DEFAULT_PERSPECTIVE );
                   window.getWorkbench()
-                    .showPerspective( Activator.ID_USER_PERSPECTIVE, window );
+                    .showPerspective( pId, window );
                 }
               } catch( Exception e ) {
                 Status status = new Status( Status.ERROR,

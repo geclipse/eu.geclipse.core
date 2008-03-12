@@ -148,6 +148,12 @@
             class="eu.geclipse.ui.internal.preference.JobUpdatersPreferencePage"
             id="eu.geclipse.ui.internal.preference.JobsPreferencePage"
             name="%page.jobUpdates"/>
+      <page
+            category="eu.geclipse.ui.internal.preference.GEclipsePreferencePage"
+            class="eu.geclipse.ui.internal.preference.PerspectivePreferencePage"
+            id="eu.geclipse.ui.internal.preference.PerspectivePreferencePage"
+            name="%page.perspectives">
+      </page>
    </extension>
    <extension
          point="org.eclipse.ui.propertyPages">
