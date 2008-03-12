@@ -260,6 +260,7 @@ public class GridFileDialog extends Dialog implements IGridModelListener {
     this.treeViewer.setLabelProvider( lProvider );
     IConnectionManager cManager = GridModel.getConnectionManager();
     this.treeViewer.setInput( cManager );
+    cManager.addGridModelListener( this );
     
     Tree tree = this.treeViewer.getTree();
     tree.setHeaderVisible( true );
