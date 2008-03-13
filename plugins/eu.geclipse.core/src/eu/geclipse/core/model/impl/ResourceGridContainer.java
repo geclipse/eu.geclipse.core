@@ -31,7 +31,6 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 
 import eu.geclipse.core.internal.Activator;
-import eu.geclipse.core.internal.Messages;
 import eu.geclipse.core.internal.model.notify.GridElementLifecycleManager;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridContainer;
