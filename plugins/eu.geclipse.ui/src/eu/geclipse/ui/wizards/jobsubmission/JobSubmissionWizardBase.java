@@ -28,9 +28,7 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.IJobChangeEvent;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.core.runtime.jobs.JobChangeAdapter;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.IWorkbench;
@@ -45,6 +43,7 @@ import eu.geclipse.core.model.IGridJobID;
 import eu.geclipse.core.model.IGridJobSubmissionService;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.wizards.wizardselection.IInitalizableWizard;
 
@@ -54,10 +53,8 @@ import eu.geclipse.ui.wizards.wizardselection.IInitalizableWizard;
 public abstract class JobSubmissionWizardBase extends Wizard
   implements IInitalizableWizard, IExecutableExtension
 {
-
   protected IGridJobCreator creator;
-  protected List<IGridJobDescription> jobDescriptions;
-  boolean finishResult;
+  protected List<IGridJobDescription> jobDescriptions;  
 
   protected JobSubmissionWizardBase() {
     setNeedsProgressMonitor( true );
@@ -71,130 +68,10 @@ public abstract class JobSubmissionWizardBase extends Wizard
   @Override
   public boolean performFinish() {
     {
-      // final boolean result = true;
-      final JobSubmissionWizardBase base = this;
-      finishResult = true;
-      Job job = new Job( "Grid Job Submission" ) {
-
-        // create the service for the job submission
-        final IGridJobSubmissionService service = getSubmissionService();
-
-        /**
-         * the run method for the Background job create the JobSubmissionWizard
-         * and call the service
-         */
-        protected IStatus run( final IProgressMonitor monitor ) {
-          /*
-           * we loop over all selected jobs in the workspace yes, we can submit
-           * more than one job at a time
-           */
-          IStatus result = Status.OK_STATUS;
-          for( IGridJobDescription description : JobSubmissionWizardBase.this.jobDescriptions )
-          {
-            if( JobSubmissionWizardBase.this.creator.canCreate( description ) )
-            {
-              try {
-                IGridContainer parent = buildPath( description );
-                IGridJobID jobId = null;
-                if( this.service != null ) {
-                  monitor.setTaskName( "service there" );
-                  /*
-                   * here we submit the job
-                   */
-                  jobId = service.submitJob( description, monitor );
-                  IWorkbench workbench = PlatformUI.getWorkbench();
-                  Display display = workbench.getDisplay();
-                  display.asyncExec( new Runnable() {
-
-                    public void run() {
-                      base.dispose();
-                    }
-                  } );
-                  monitor.setTaskName( "job submitted" );
-                } else {
-//                  ProblemDialog.openProblem( getShell(),
-//                                             Messages.getString( "JobSubmissionWizardBase.errSubmissionFailed" ), //$NON-NLS-1$
-//                                             Messages.getString( "JobSubmissionWizardBase.errUnknownSubmissionService" ), //$NON-NLS-1$
-//                                             null );
-                  result = new Status( Status.ERROR,
-                                       Activator.getDefault().PLUGIN_ID,
-                                       Status.OK,
-                                       "Job not submitted",
-                                       null );
-//                  IWorkbench workbench = PlatformUI.getWorkbench();
-//                  Display display = workbench.getDisplay();
-//                  display.asyncExec( new Runnable() {
-//
-//                    public void run() {
-//                      base.getShell().setVisible( true );
-//                    }
-//                  } );
-                }
-                // create job
-                JobSubmissionWizardBase.this.creator.create( parent, jobId );
-              } catch( ProblemException pExc ) {
-//                ProblemDialog.openProblem( getShell(),
-//                                           Messages.getString( "JobSubmissionWizardBase.errSubmissionFailed" ), //$NON-NLS-1$
-//                                           null,
-//                                           gmExc );
-                String message=pExc.getMessage().trim();
-                for(String r:pExc.getProblem().getReasons()){
-                  message += System.getProperty( "line.separator" ) + r.trim();
-                }
-//                result = pExc.getStatus();
-                result = new Status( Status.ERROR,
-                                     Activator.getDefault().PLUGIN_ID,
-                                     Status.OK,
-                                     message,
-                                     pExc );
-//                IWorkbench workbench = PlatformUI.getWorkbench();
-//                Display display = workbench.getDisplay();
-//                display.asyncExec( new Runnable() {
-//
-//                  public void run() {
-//                    base.getShell().setVisible( true );
-//                  }
-//                } );
-              } catch( CoreException cExc ) {
-//                ProblemDialog.openProblem( getShell(),
-//                                           Messages.getString( "JobSubmissionWizardBase.errSubmissionFailed" ), //$NON-NLS-1$
-//                                           null,
-//                                           cExc );
-                result = new Status( Status.ERROR,
-                                     Activator.getDefault().PLUGIN_ID,
-                                     Status.OK,
-                                     "Job not submitted",
-                                     cExc );
-//                IWorkbench workbench = PlatformUI.getWorkbench();
-//                Display display = workbench.getDisplay();
-//                display.asyncExec( new Runnable() {
-//
-//                  public void run() {
-//                    base.getShell().setVisible( true );
-//                  }
-//                } );
-                // /
-              }
-            }
-            monitor.worked( 1 );
-          }
-          return result;
-        }
-      };
-      job.addJobChangeListener( new JobChangeAdapter() {
-
-        @Override
-        public void done( final IJobChangeEvent event ) {
-          if( event.getResult().isOK() ) {
-          } else {
-            JobSubmissionWizardBase.this.finishResult = false;
-          }
-        }
-      } );
+      final JobSubmissionWizardBase base = this;      
+      Job job = new JobSubmissionJob();
       job.setUser( true );
       job.schedule(); // start as soon as possible
-      // return this.finishResult;
-//      base.getShell().setVisible( false );
       return true;
     }
   }
@@ -299,5 +176,69 @@ public abstract class JobSubmissionWizardBase extends Wizard
     }
   }
 
+  
+  private class JobSubmissionJob extends Job {
+    
+    // create the service for the job submission
+    final IGridJobSubmissionService service = getSubmissionService();
+    
+    private JobSubmissionJob() {
+      super( "Grid Job Submission" );
+    }
+    
+    /**
+     * the run method for the Background job create the JobSubmissionWizard
+     * and call the service
+     */
+    protected IStatus run( final IProgressMonitor monitor ) {
+      /*
+       * we loop over all selected jobs in the workspace yes, we can submit
+       * more than one job at a time
+       */      
+      for( IGridJobDescription description : JobSubmissionWizardBase.this.jobDescriptions )
+      {
+        if( JobSubmissionWizardBase.this.creator.canCreate( description ) )
+        {
+          try {
+            IGridContainer parent = buildPath( description );
+            IGridJobID jobId = null;
+            if( this.service != null ) {
+              jobId = service.submitJob( description, monitor );              
+              monitor.setTaskName( "job submitted" );
+            } 
+            
+            // create job
+            JobSubmissionWizardBase.this.creator.create( parent, jobId );
+          } catch( ProblemException pExc ) {
+            showProblem( pExc );
+          } catch( CoreException cExc ) {
+            showProblem( cExc );
+          }
+        }
+        monitor.worked( 1 );
+      }
+  
+      return Status.OK_STATUS;
+    }
 
+    private void showProblem( final Throwable exc ) {      
+      
+      IWorkbench workbench = PlatformUI.getWorkbench();
+      Display display = workbench.getDisplay();
+      display.asyncExec( new Runnable() {        
+  
+        public void run() {
+          ProblemDialog.openProblem( getShell(),
+                                     Messages.getString( "JobSubmissionWizardBase.errSubmissionFailed" ), //$NON-NLS-1$
+                                     null,
+                                     exc );
+        }
+
+      } );
+      
+    }
+  }
+        
+  
 }
+
