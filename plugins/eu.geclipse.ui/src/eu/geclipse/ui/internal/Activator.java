@@ -17,6 +17,8 @@ package eu.geclipse.ui.internal;
 
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.jface.dialogs.MessageDialogWithToggle;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.widgets.Display;
@@ -25,6 +27,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 import eu.geclipse.ui.internal.actions.UpdateJobStatusAction;
+import eu.geclipse.ui.internal.preference.PerspectivePreferencePage;
 import eu.geclipse.ui.properties.PropertiesAdapterFactory;
 
 
@@ -200,8 +203,17 @@ public class Activator extends AbstractUIPlugin {
   {
     super.start( context );
     PropertiesAdapterFactory.register();
+    setPreferencesDefaults();
   }
   
+  private void setPreferencesDefaults() {
+    IPreferenceStore preferenceStore = Activator.getDefault()
+    .getPreferenceStore();
+    preferenceStore.setDefault( PerspectivePreferencePage.KEY_NOT_SWITCH_FROM_GECLIPSE_PERSPECTIVE, true );
+    preferenceStore.setDefault( PerspectivePreferencePage.KEY_DEFAULT_PERSPECTIVE, Activator.ID_USER_PERSPECTIVE );
+    preferenceStore.setDefault( PerspectivePreferencePage.KEY_REMEMBER_SWITCHING, MessageDialogWithToggle.PROMPT );
+  }
+
   /*
    * (non-Javadoc)
    * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
