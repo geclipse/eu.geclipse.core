@@ -51,9 +51,6 @@ public class PerspectivePreferencePage extends FieldEditorPreferencePage
     IPreferenceStore preferenceStore = Activator.getDefault()
       .getPreferenceStore();
     setPreferenceStore( preferenceStore );
-    preferenceStore.setDefault( KEY_NOT_SWITCH_FROM_GECLIPSE_PERSPECTIVE, true );
-    preferenceStore.setDefault( KEY_DEFAULT_PERSPECTIVE, Activator.ID_USER_PERSPECTIVE );
-    preferenceStore.setDefault( KEY_REMEMBER_SWITCHING, MessageDialogWithToggle.PROMPT );
     setDescription( "These settings control perspectives for running grid projects. A perspective can automatically open when new grid project is created." );
   }
 
