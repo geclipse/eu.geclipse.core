@@ -24,7 +24,6 @@ import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ProjectScope;
-import org.eclipse.core.resources.ResourceAttributes;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -38,7 +37,7 @@ import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.osgi.service.prefs.BackingStoreException;
 import org.osgi.service.prefs.Preferences;
-import eu.geclipse.core.model.IGridProject;
+
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.project.GridProjectNature;
 import eu.geclipse.ui.internal.Activator;

@@ -18,20 +18,16 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jface.viewers.ISelection;
+
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.SelectionListenerAction;
+
 import eu.geclipse.core.model.IGridComputing;
-import eu.geclipse.core.model.IGridJob;
-import eu.geclipse.core.model.IGridStorage;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.views.ProcessStatView;
-import eu.geclipse.ui.views.jobdetails.JobDetailsView;
 
 /**
  * Contributes an action to the context menu of a GridProject that allows the user

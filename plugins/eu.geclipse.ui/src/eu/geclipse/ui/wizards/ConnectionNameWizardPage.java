@@ -15,14 +15,8 @@
 
 package eu.geclipse.ui.wizards;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.net.URI;
-import java.util.List;
 
-import org.eclipse.core.filesystem.EFS;
-import org.eclipse.core.filesystem.IFileStore;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -36,7 +30,6 @@ import org.eclipse.swt.widgets.Text;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IConnectionManager;
 import eu.geclipse.core.model.IGridConnection;
-import eu.geclipse.core.model.IGridElementCreator;
 
 public class ConnectionNameWizardPage extends WizardPage {
   

@@ -15,15 +15,12 @@
 
 package eu.geclipse.ui.internal.preference;
 
-import java.net.URL;
-
 import org.eclipse.jface.dialogs.MessageDialogWithToggle;
 import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.preference.RadioGroupFieldEditor;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.ui.IPerspectiveDescriptor;
@@ -31,7 +28,6 @@ import org.eclipse.ui.IPerspectiveRegistry;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
-import org.eclipse.ui.internal.WorkbenchPlugin;
 
 import eu.geclipse.ui.internal.Activator;
 
@@ -139,6 +135,6 @@ public class PerspectivePreferencePage extends FieldEditorPreferencePage
     addField(bfe);
   }
 
-  public void init( IWorkbench workbench ) {
+  public void init( final IWorkbench workbench ) {
   }
 }

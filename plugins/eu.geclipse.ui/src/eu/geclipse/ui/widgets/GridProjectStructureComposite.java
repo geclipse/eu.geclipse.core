@@ -20,11 +20,9 @@ import java.util.List;
 
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
@@ -50,7 +48,6 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.ide.IDE;
 import org.osgi.framework.Bundle;
-import org.osgi.service.prefs.Preferences;
 
 import eu.geclipse.core.ExtensionManager;
 import eu.geclipse.core.Extensions;
@@ -60,7 +57,6 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.providers.ArrayTableLabelProvider;
-import eu.geclipse.ui.wizards.GridProjectStructureWizardPage;
 
 public class GridProjectStructureComposite extends Composite {
   
