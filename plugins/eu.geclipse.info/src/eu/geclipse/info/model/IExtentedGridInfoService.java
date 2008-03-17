@@ -21,7 +21,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 import eu.geclipse.core.model.IGridInfoService;
 import eu.geclipse.core.model.IVirtualOrganization;
-import eu.geclipse.info.IGlueInfoStore;
 import eu.geclipse.info.views.GlueInfoTopTreeElement;
 
 

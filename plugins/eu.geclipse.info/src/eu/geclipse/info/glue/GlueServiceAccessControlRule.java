@@ -53,6 +53,6 @@ public class GlueServiceAccessControlRule extends AbstractGlueTable
    * @param id
    */
   public void setID( final String id ) {
-    this.key = id;
+    this.setKey( id );
   }
 }

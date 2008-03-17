@@ -14,51 +14,21 @@
  *      - George Tsouloupas (georget@cs.ucy.ac.cy)
  *
  *****************************************************************************/
+package eu.geclipse.info.model;
 
-package eu.geclipse.info.glue;
+import java.util.ArrayList;
 
-import java.util.Date;
+import eu.geclipse.info.glue.AbstractGlueTable;
 
 /**
  * @author George Tsouloupas
  * TODO Write Comments
  */
-public class GlueServiceStatus extends AbstractGlueTable
-  implements java.io.Serializable
-{
-
-  private static final long serialVersionUID = 1L;
-  
-  /**
-   * 
-   */
-  public GlueService glueService; // GlueService_UniqueId
+public interface IGlueStoreChangeListerner {
 
   /**
-   * 
+   * Notify that the glue info has changed
+   * @param modifiedGlueEntries The modified glue entries
    */
-  public String Status;
-
-  /**
-   * 
-   */
-  public String Message;
-
-  /**
-   * 
-   */
-  public Date MeasurementDate;
-
-  /**
-   * 
-   */
-  public Date MeasurementTime;
-
-  /**
-   * Set this.key
-   * @param id
-   */
-  public void setID( final String id ) {
-    this.setKey( id );
-  }
+  public void infoChanged( final ArrayList<AbstractGlueTable> modifiedGlueEntries );
 }

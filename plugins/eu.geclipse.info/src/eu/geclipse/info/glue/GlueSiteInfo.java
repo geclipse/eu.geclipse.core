@@ -42,15 +42,6 @@ public class GlueSiteInfo extends AbstractGlueTable
    */
   public String OtherInfo; // PK
 
-  /**
-   * 
-   */
-  //public Date MeasurementDate;
-
-  /**
-   * 
-   */
-  //public Date MeasurementTime;
 
   /* (non-Javadoc)
    * @see eu.geclipse.info.glue.AbstractGlueTable#getID()

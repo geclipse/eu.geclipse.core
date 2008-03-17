@@ -14,18 +14,12 @@
  *****************************************************************************/
 package eu.geclipse.info.model;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 
-import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.ui.IWorkbench;
 
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;

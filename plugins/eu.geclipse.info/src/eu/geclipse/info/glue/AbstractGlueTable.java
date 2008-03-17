@@ -32,20 +32,58 @@ public abstract class AbstractGlueTable implements Serializable{
   public String tableName;
   
   /**
+   * The name that will be shown on the tree in the glue info view.
+   */
+  public String displayName = null;
+  
+  /**
    * 
    */
   public boolean byRefOnly = true;
-  
-  protected String key;
   protected String keyName;
+  private String key;
+  private String voType = ""; //$NON-NLS-1$
   
+  
+  /**
+   * Set the type of the vo that this glue table belongs to.
+   * @param voType a string of the VO type, like gria or glite
+   */
+  public void setVoType(final String voType)
+  {
+    if (voType != null)
+      this.voType = voType;
+  }
+  
+  /**
+   * Get the type of the vo that this glue table belongs to.
+   * @return the type of the vo or an empty string.
+   */
+  public String getVotype()
+  {
+    return this.voType;
+  }
   /**
    * @return The unique identified for this Glue entry
    */
   public String getID(){
-    return this.key;
+    return this.getKey();
   }
 
+  /**
+   * 
+   * @return the display name for this Glue entry
+   */
+  public String getDisplayName() {
+    String result = ""; //$NON-NLS-1$
+    
+    if (this.displayName == null || this.displayName.equals( "" )) //$NON-NLS-1$
+        result = this.getID();
+    else
+      result = this.displayName;
+    
+    return result;
+  }
   /**
    * Update the value of an attribute of the Glue object. If there is no 
    * attribute with the provided name and there is an attribute named fieldName<b>List</b> 
@@ -117,6 +155,21 @@ public abstract class AbstractGlueTable implements Serializable{
     Object ret = null;
     ret = this.getClass().getField( fieldName ).get( this );
     return ret;
+  }
+/**
+ * Set the key 
+ * @param key
+ */
+  public void setKey( final String key ) {
+    this.key = key;
+  }
+
+  /**
+   * Get the key
+   * @return They key as String or null
+   */
+  public String getKey() {
+    return this.key;
   }
   
 }

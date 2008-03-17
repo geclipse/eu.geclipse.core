@@ -14,7 +14,7 @@
  *      - George Tsouloupas (georget@cs.ucy.ac.cy)
  *
  *****************************************************************************/
-package eu.geclipse.info;
+package eu.geclipse.info.model;
 
 import java.util.ArrayList;
 

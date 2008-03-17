@@ -2,6 +2,7 @@
 <?eclipse version="3.2"?>
 <plugin>
    <extension-point id="infoService" name="InfoService" schema="schema/infoService.exsd"/>
+   <extension-point id="infoViewerFilter" name="infoViewerFilter" schema="schema/infoViewerFilter.exsd"/>
 	<extension
          point="org.eclipse.ui.perspectiveExtensions">
       <perspectiveExtension targetID="eu.geclipse.ui.gEclipsePerspective">

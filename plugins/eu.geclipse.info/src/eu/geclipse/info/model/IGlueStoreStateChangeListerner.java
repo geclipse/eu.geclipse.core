@@ -14,51 +14,17 @@
  *      - George Tsouloupas (georget@cs.ucy.ac.cy)
  *
  *****************************************************************************/
-
-package eu.geclipse.info.glue;
-
-import java.util.Date;
+package eu.geclipse.info.model;
 
 /**
  * @author George Tsouloupas
  * TODO Write Comments
  */
-public class GlueServiceStatus extends AbstractGlueTable
-  implements java.io.Serializable
-{
-
-  private static final long serialVersionUID = 1L;
-  
-  /**
-   * 
-   */
-  public GlueService glueService; // GlueService_UniqueId
+public interface IGlueStoreStateChangeListerner {
 
   /**
    * 
+   * @param state
    */
-  public String Status;
-
-  /**
-   * 
-   */
-  public String Message;
-
-  /**
-   * 
-   */
-  public Date MeasurementDate;
-
-  /**
-   * 
-   */
-  public Date MeasurementTime;
-
-  /**
-   * Set this.key
-   * @param id
-   */
-  public void setID( final String id ) {
-    this.setKey( id );
-  }
+  public void stateChanged( String state );
 }

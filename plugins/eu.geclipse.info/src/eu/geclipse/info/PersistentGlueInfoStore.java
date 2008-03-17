@@ -16,6 +16,10 @@
  *****************************************************************************/
 package eu.geclipse.info;
 
+import eu.geclipse.info.model.IGlueInfoStore;
+
+
+
 /**
  * @author George Tsouloupas
  */

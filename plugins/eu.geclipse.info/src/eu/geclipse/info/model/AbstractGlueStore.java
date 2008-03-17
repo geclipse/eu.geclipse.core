@@ -17,9 +17,6 @@ package eu.geclipse.info.model;
 import java.util.ArrayList;
 
 import eu.geclipse.core.model.IVirtualOrganization;
-import eu.geclipse.info.IGlueInfoStore;
-import eu.geclipse.info.IGlueStoreChangeListerner;
-import eu.geclipse.info.IGlueStoreStateChangeListerner;
 import eu.geclipse.info.glue.AbstractGlueTable;
 
 /**

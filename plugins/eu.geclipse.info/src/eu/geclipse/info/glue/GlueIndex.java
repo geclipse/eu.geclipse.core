@@ -30,7 +30,16 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import org.eclipse.core.runtime.IPath;
 
+import eu.geclipse.core.model.GridModel;
+import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridModelEvent;
+import eu.geclipse.core.model.IGridModelListener;
+import eu.geclipse.core.model.IGridProject;
+import eu.geclipse.info.InfoServiceFactory;
 import eu.geclipse.info.internal.Activator;
+import eu.geclipse.info.model.FetchJob;
+import eu.geclipse.info.model.IExtentedGridInfoService;
+import eu.geclipse.info.views.GlueInfoViewer;
 
 import java.lang.reflect.Method;
 
@@ -39,7 +48,8 @@ import java.lang.reflect.Method;
  * @author George Tsouloupas
  *
  */
-public abstract class GlueIndex implements java.io.Serializable {
+public abstract class GlueIndex  
+implements IGridModelListener, java.io.Serializable {
 
   @SuppressWarnings("nls")
   private static final String[] tableList = {
@@ -325,7 +335,29 @@ public abstract class GlueIndex implements java.io.Serializable {
     = new Hashtable<String, AbstractGlueTable>();
   
   protected abstract String getTag();
-  
+
+  public void gridModelChanged( final IGridModelEvent event ) {
+    
+    int type=event.getType();    
+    switch( type ) {
+      case IGridModelEvent.ELEMENTS_ADDED:
+      case IGridModelEvent.ELEMENTS_REMOVED:
+      case IGridModelEvent.PROJECT_CLOSED:
+      case IGridModelEvent.PROJECT_OPENED:
+
+        for( IGridElement gridElement : event.getElements() ) {
+          if(gridElement instanceof IGridProject){
+            FetchJob fetchJob = new FetchJob(" Retrieving Information"); //$NON-NLS-1$
+            fetchJob.schedule(); // Getting the information from the info services.
+            System.out.println("Grid Model Changed in Glue Index"); //$NON-NLS-1$
+            break;
+          }
+        }
+        break;
+      default:
+        break;
+    }
+  }
 
   /**
    * @return the singleton instance to the Glue information datastructure
@@ -357,6 +389,8 @@ public abstract class GlueIndex implements java.io.Serializable {
             return "basis"; //$NON-NLS-1$
           }
         };
+        
+        GridModel.getRoot().addGridModelListener( glueIndexInstance );
       }
     }
     return glueIndexInstance;

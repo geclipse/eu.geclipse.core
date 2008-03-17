@@ -75,7 +75,7 @@ public class GlueCESEBind extends AbstractGlueTable
    * @param id
    */
   public void setID( final String id ) {
-    this.key = id;
+    this.setKey( id );
   }
   
   /**
@@ -86,10 +86,11 @@ public class GlueCESEBind extends AbstractGlueTable
   {
     this.byRefOnly = false;
     this.Accesspoint = GlueUtility.getStringAttribute( "GlueCESEBindCEAccesspoint", attributes ); //$NON-NLS-1$
-    this.key = GlueUtility.getStringAttribute( "GlueCESEBindSEUniqueID", attributes ); //$NON-NLS-1$
+    this.setKey( GlueUtility.getStringAttribute( "GlueCESEBindSEUniqueID", attributes ) ); //$NON-NLS-1$
     this.keyName = GlueUtility.getStringAttribute( "GlueCESEBindSEUniqueID", attributes ); //$NON-NLS-1$
     this.MountInfo = GlueUtility.getStringAttribute( "GlueCESEBindMountInfo", attributes ); //$NON-NLS-1$
     this.tableName = "GlueCESEBind"; //$NON-NLS-1$
     this.Weight = GlueUtility.getLongAttribute( "GlueCESEBindWeight", attributes );//$NON-NLS-1$
+    this.setVoType( "glite" ); //$NON-NLS-1$
   }
 }

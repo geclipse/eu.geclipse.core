@@ -23,7 +23,13 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.IExtensionPoint;
+import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IMenuListener;
@@ -64,10 +70,7 @@ import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridInfoService;
-import eu.geclipse.core.model.IGridModelEvent;
-import eu.geclipse.core.model.IGridModelListener;
 import eu.geclipse.core.model.IGridProject;
-import eu.geclipse.info.IGlueStoreChangeListerner;
 import eu.geclipse.info.InfoServiceFactory;
 import eu.geclipse.info.glue.AbstractGlueTable;
 import eu.geclipse.info.glue.GlueCE;
@@ -76,12 +79,14 @@ import eu.geclipse.info.glue.GlueQuery;
 import eu.geclipse.info.internal.Activator;
 import eu.geclipse.info.model.FetchJob;
 import eu.geclipse.info.model.IExtentedGridInfoService;
+import eu.geclipse.info.model.IGlueStoreChangeListerner;
+import eu.geclipse.info.model.InfoViewerFilter;
 
 /**
  * @author George Tsouloupas
  */
 public class GlueInfoViewer extends ViewPart
-implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener {
+implements ISelectionProvider, IGlueStoreChangeListerner {
 
   Action doubleClickAction;
   FetchJob fetchJob;
@@ -89,14 +94,16 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener {
   
   private String currentVO = null;
   private DrillDownAdapter drillDownAdapter;
-  private Action actionSetSourceRGMA;
-  private Action actionSetSourceBDII;
   
   private boolean SHOW_VO_LIST=false;
   private Combo comboVOList;
   private Label label = null;
 
-  class TreeObject implements IAdaptable {
+  /**
+   * @author George Tsouloupas
+   *
+   */
+  public class TreeObject implements IAdaptable {
 
     private String prefix;
     private String name;
@@ -147,14 +154,17 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener {
       return null;
     }
   }
-  class TreeParent extends TreeObject {
+  /**
+   * @author George Tsouloupas
+   *
+   */
+  public class TreeParent extends TreeObject {
 
-    AbstractGlueTable agt;
+    private AbstractGlueTable agt;
     
     private ArrayList<AbstractGlueTable> agtList;
-    private ArrayList<String[]> queries;
-    private String[] query;
-    //String prefix; 
+    private ArrayList<GlueInfoTopTreeElement> queries;
+    private GlueInfoTopTreeElement query;
     
 
     /**
@@ -162,8 +172,8 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener {
      * @param prefix
      */
     public TreeParent( final AbstractGlueTable agt,final String prefix ) {
-      super( agt.getID(),prefix );
-      this.agt = agt;
+      super( agt.getDisplayName(),prefix );
+      this.setAgt( agt );
     }
 
     /**
@@ -171,7 +181,7 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener {
      * @param query
      * @param agtList
      */
-    public TreeParent( final String name,final String[] query,
+    public TreeParent( final String name, final GlueInfoTopTreeElement query,
                        final ArrayList<AbstractGlueTable> agtList )
     {
       super( name,null );
@@ -193,9 +203,18 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener {
     /**
      * @param queries
      */
-    public TreeParent( final ArrayList<String[]> queries) {
+    public TreeParent( final ArrayList<GlueInfoTopTreeElement> queries) {
       super( "",null  ); //$NON-NLS-1$
       this.queries = queries;
+    }
+    
+    /**
+     * Gets the query
+     * @return a GlueInfoTopTreeElement object or null
+     */
+    public GlueInfoTopTreeElement getQuery()
+    {
+      return this.query;
     }
     
     /**
@@ -204,23 +223,32 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener {
     @SuppressWarnings("unchecked")
     public TreeObject[] getChildren() {
       ArrayList<TreeObject> toList = new ArrayList<TreeObject>();
+      
+      // Create the tree parents that will be the top level tree elements
       if ( this.queries != null ) {
-        for ( String[] s : this.queries ) {
-          toList.add( new TreeParent( s[ 1 ],s, null ) );
+        for ( GlueInfoTopTreeElement s : this.queries ) {
+          toList.add( new TreeParent( s.getDisplayName(), s, null ) );
         }
       } 
       if ( this.query != null ) {
-        this.agtList = GlueQuery.getGlueTable( this.query[ 0 ], this.query[ 2 ], getCurrentVO() );
+        this.agtList = new ArrayList<AbstractGlueTable>();
+        for (int i=0; i<this.query.getObjectTableName().size(); i++)
+        {
+          String myObjectTableName = this.query.getObjectTableName().get( i );
+          this.agtList.addAll( GlueQuery.getGlueTable( this.query.getGlueObjectName(), 
+                                                 myObjectTableName, 
+                                                 getCurrentVO() ) );
+        }
       } 
-      if ( this.agt != null ) {
+      if ( this.getAgt() != null ) {
         String fieldName;
-        Field[] fields = this.agt.getClass().getFields();
+        Field[] fields = this.getAgt().getClass().getFields();
         for( int i = 0; i < fields.length; i++ ) {
           Field field = fields[ i ];
           Object value;
           try {
             fieldName=field.getName();
-            value = field.get( this.agt );
+            value = field.get( this.getAgt() );
             if( fieldName.endsWith( "List" ) ) { //$NON-NLS-1$
               ArrayList<AbstractGlueTable> list = ( ArrayList<AbstractGlueTable> ) value;
               TreeObject to = new TreeParent( fieldName, list );
@@ -230,7 +258,8 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener {
               toList.add( new TreeParent(agt1,agt1.tableName) );
             } else if ( !( ( fieldName.equals( "byRefOnly" ) || fieldName.equals( "key" )  //$NON-NLS-1$  //$NON-NLS-2$
                 || fieldName.equals( "keyName" ) || fieldName.equals( "tableName" ) //$NON-NLS-1$  //$NON-NLS-2$
-                || fieldName.equals( "glueIndex" ) || fieldName.equals( "glueService" ))) ){//$NON-NLS-1$//$NON-NLS-2$
+                || fieldName.equals( "glueIndex" ) || fieldName.equals( "glueService" ) //$NON-NLS-1$ //$NON-NLS-2$
+                || fieldName.equals( "displayName" ))) ){//$NON-NLS-1$
                 String s = fieldName + " = " //$NON-NLS-1$
                 + ( ( value == null || value == "" ) //$NON-NLS-1$
                     ? "Not available from the information service" : value.toString() ); //$NON-NLS-1$
@@ -266,6 +295,20 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener {
     public boolean hasChildren() {
       boolean hc = true;
       return hc;
+    }
+
+    /**
+     * @param agt an AbstractGlueTable
+     */
+    public void setAgt( final AbstractGlueTable agt ) {
+      this.agt = agt;
+    }
+
+    /**
+     * @return an AbstractGlueTable or null
+     */
+    public AbstractGlueTable getAgt() {
+      return this.agt;
     }
 
   }
@@ -330,9 +373,40 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener {
       buildTopLevel();
     }
     
+    /**
+     * This method adds the ObjectTableName of the other object to an equal one
+     * that uniqueList has.
+     * @param uniqueList a HashSet with GlueInfoTopTreeElement elemnts
+     * @param otherElement the element to add
+     */
+    private void addObjectTablename(final HashSet<GlueInfoTopTreeElement> uniqueList,
+                                    final GlueInfoTopTreeElement otherElement)
+    {
+      if (uniqueList != null && otherElement != null)
+      {
+        Iterator<GlueInfoTopTreeElement> it = uniqueList.iterator();
+        while (it.hasNext()) {
+          GlueInfoTopTreeElement currentElement = it.next();
+          if ( currentElement != null 
+              && currentElement.getObjectTableName() != null
+              && otherElement.getObjectTableName() != null
+              && currentElement.equals( otherElement ))
+          {
+            ArrayList<String> currentObjectTablename = currentElement.getObjectTableName();
+            for (int i=0; i < otherElement.getObjectTableName().size(); i++)
+            {
+              if (! (currentObjectTablename.contains( otherElement.getObjectTableName().get( i ) ) ) )
+              {
+                currentObjectTablename.add( otherElement.getObjectTableName().get( i ) );
+              }
+            }
+          }
+        }
+      }
+    }
+    
     private void buildTopLevel() {
-      
-      ArrayList<String[]> list = new ArrayList<String[]>();
+      ArrayList<GlueInfoTopTreeElement> list = new ArrayList<GlueInfoTopTreeElement>();
       HashSet<GlueInfoTopTreeElement> uniqueList = new HashSet<GlueInfoTopTreeElement>();
       
       // We build the top level elements according to the existing projects
@@ -349,7 +423,10 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener {
               {
                 GlueInfoTopTreeElement currentElement = result.get( i );
                 if (!uniqueList.contains( currentElement ))
-                  uniqueList.add(currentElement);
+                  uniqueList.add( currentElement );
+                else
+                  addObjectTablename(uniqueList, currentElement);
+                  
               }
             }
           }
@@ -361,7 +438,7 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener {
       
       Iterator<GlueInfoTopTreeElement> it = uniqueList.iterator();
       while (it.hasNext()) {
-          list.add( it.next().toArray() );
+        list.add( it.next() );
       }
       this.glueRoot = new TreeParent( list );
     }
@@ -518,11 +595,9 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener {
         }
       } );
     }
-    makeActions();
     hookContextMenu();
     contributeToActionBars();
     
-    GridModel.getRoot().addGridModelListener( this );
     setCurrentVO( "none" );  //$NON-NLS-1$
   }
 
@@ -573,9 +648,56 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener {
   }
 
   private void fillLocalPullDown( final IMenuManager manager ) {
-    // manager.add( actionSetSourceRGMA );
-    // manager.add( new Separator() );
-    manager.add( this.actionSetSourceBDII );
+    
+    // Create a new action for every filter that exists.
+    ArrayList<InfoViewerFilter> infoFilterArray = new ArrayList<InfoViewerFilter>();
+    InfoViewerFilter infoFilter = null;
+    IExtensionRegistry myRegistry = Platform.getExtensionRegistry();
+    IExtensionPoint extensionPoint = myRegistry.getExtensionPoint( "eu.geclipse.info.infoViewerFilter"); //$NON-NLS-1$
+    IExtension[] extensions = extensionPoint.getExtensions();
+    
+    for (int i = 0; i < extensions.length; i++)
+    {
+      IExtension extension = extensions[i];
+ 
+      IConfigurationElement[] elements = extension.getConfigurationElements();
+      for( IConfigurationElement element : elements ) {
+        
+        try {
+          infoFilter = (InfoViewerFilter) element.createExecutableExtension( "class" ); //$NON-NLS-1$
+          if (infoFilter != null)
+          {
+            infoFilterArray.add( infoFilter );
+          }
+        } catch( CoreException e ) {
+          // do nothing
+        }
+      }
+    }
+    
+    // Add the default Filter
+    FilterAction filterAction = new FilterAction(null, GlueInfoViewer.this.viewer); 
+    filterAction.setText( "Show everything" ); //$NON-NLS-1$
+    filterAction.setToolTipText( "Show everything" ); //$NON-NLS-1$
+    filterAction.setImageDescriptor( PlatformUI.getWorkbench()
+                                     .getSharedImages()
+                                     .getImageDescriptor( ISharedImages.IMG_OBJS_INFO_TSK ) );
+    manager.add( filterAction );
+    
+    // Create an action for each filter and show it in the view
+    for (int i=0; i<infoFilterArray.size(); i++)
+    {
+      filterAction = new FilterAction(infoFilterArray.get( i ),
+                                      GlueInfoViewer.this.viewer);
+      
+      filterAction.setText( infoFilterArray.get( i ).getText());
+      filterAction.setToolTipText( infoFilterArray.get( i ).getText() );
+      filterAction.setImageDescriptor( PlatformUI.getWorkbench()
+                                       .getSharedImages()
+                                       .getImageDescriptor( ISharedImages.IMG_OBJS_INFO_TSK ) );
+      manager.add( filterAction );
+    }
+    
   }
 
   void fillContextMenu( final IMenuManager manager ) {
@@ -583,7 +705,7 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener {
     Object obj = ( ( IStructuredSelection )selection ).getFirstElement();
     if ( obj instanceof TreeParent ){
       TreeParent tp = ( TreeParent ) obj;
-      if ( tp.agt instanceof GlueCE ) {
+      if ( tp.getAgt() instanceof GlueCE ) {
         //manager.add( this.benchmarkAction );
         manager.add( new Separator() );
         
@@ -612,49 +734,6 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener {
     refreshAction.setImageDescriptor( ImageDescriptor.createFromURL( imgUrl ) );
     manager.add( refreshAction );
     this.drillDownAdapter.addNavigationActions( manager );
-  }
-
-  private void makeActions() {
-    this.actionSetSourceRGMA = new Action() {
-
-      @Override
-      public void run() {
-        // if( glueStore != null ) {
-        // glueStore.removeListener( ( IGlueStoreChangeListerner
-        // )viewer.getContentProvider(),
-        // "GlueSite" ); //$NON-NLS-1$
-        // }
-        // glueStore = new RGMAStore();
-        // glueStore.addListener( ( IGlueStoreChangeListerner
-        // )viewer.getContentProvider(),
-        // "GlueSite" ); //$NON-NLS-1$
-        // ArrayList<GlueSite> siteList=new ArrayList<GlueSite>();
-        //        
-        // ArrayList<AbstractGlueTable> agtList=GlueQuery.getGlueTable(
-        // "GlueSite", null );
-        // for( AbstractGlueTable table : agtList ) {
-        // siteList.add( (GlueSite) table );
-        // }
-        // getGrid3DView().setSiteList( siteList );
-      }
-    };
-    this.actionSetSourceRGMA.setText( "RGMA" ); //$NON-NLS-1$
-    this.actionSetSourceRGMA.setToolTipText( "Set Datasource to RGMA" ); //$NON-NLS-1$
-    this.actionSetSourceRGMA.setImageDescriptor( PlatformUI.getWorkbench() 
-                                            .getSharedImages()
-                                            .getImageDescriptor( ISharedImages.IMG_OBJS_INFO_TSK ) );
-    this.actionSetSourceBDII = new Action() {
-      @Override
-      public void run() {
-        //
-      }
-    };
-    
-    this.actionSetSourceBDII.setText( "BDII" ); //$NON-NLS-1$
-    this.actionSetSourceBDII.setToolTipText( "Set Datasource to BDII" ); //$NON-NLS-1$
-    this.actionSetSourceBDII.setImageDescriptor( PlatformUI.getWorkbench()
-                                            .getSharedImages()
-                                            .getImageDescriptor( ISharedImages.IMG_OBJS_INFO_TSK ) );
   }
 
   /**
@@ -721,25 +800,5 @@ implements ISelectionProvider, IGlueStoreChangeListerner, IGridModelListener {
     MessageDialog.openInformation( this.viewer.getControl().getShell(),
                                    "Grid Information View",  //$NON-NLS-1$
                                    message );
-  }
-
-  public void gridModelChanged( final IGridModelEvent event ) {
-    int type=event.getType();    
-    switch( type ) {
-      case IGridModelEvent.ELEMENTS_ADDED:
-      case IGridModelEvent.ELEMENTS_REMOVED:
-      case IGridModelEvent.PROJECT_CLOSED:
-      case IGridModelEvent.PROJECT_OPENED:
-
-        for( IGridElement gridElement : event.getElements() ) {
-          if(gridElement instanceof IGridProject){
-            this.fetchJob.schedule(); // Getting the information from the info services.
-            break;
-          }
-        }
-        break;
-      default:
-        break;
-    }
   }
 }

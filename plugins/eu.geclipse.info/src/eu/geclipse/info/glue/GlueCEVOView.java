@@ -153,7 +153,7 @@ public class GlueCEVOView extends AbstractGlueTable
     this.DefaultSE = GlueUtility.getStringAttribute( "GlueCEInfoDefaultSE", attributes ); //$NON-NLS-1$
     this.EstimatedResponseTime = GlueUtility.getLongAttribute( "GlueCEStateEstimatedResponseTime", attributes ); //$NON-NLS-1$
     this.FreeJobSlots = GlueUtility.getLongAttribute( "GlueCEStateFreeJobSlots", attributes ); //$NON-NLS-1$
-    this.key = GlueUtility.getStringAttribute( "GlueChunkKey", attributes ); //$NON-NLS-1$
+    this.setKey( GlueUtility.getStringAttribute( "GlueChunkKey", attributes ) ); //$NON-NLS-1$
     this.keyName = GlueUtility.getStringAttribute( "GlueChunkKey", attributes ); //$NON-NLS-1$
     this.LocalID = GlueUtility.getStringAttribute( "GlueVOViewLocalID", attributes ); //$NON-NLS-1$
     this.RunningJobs = GlueUtility.getLongAttribute( "GlueCEStateRunningJobs", attributes ); //$NON-NLS-1$
@@ -162,5 +162,6 @@ public class GlueCEVOView extends AbstractGlueTable
     this.UniqueID = GlueUtility.getStringAttribute( "GlueChunkKey", attributes ); //$NON-NLS-1$
     this.WaitingJobs = GlueUtility.getLongAttribute( "GlueCEStateWaitingJobs", attributes ); //$NON-NLS-1$
     this.WorstResponseTime = GlueUtility.getLongAttribute( "GlueCEStateWorstResponseTime", attributes ); //$NON-NLS-1$
+    this.setVoType( "glite" ); //$NON-NLS-1$
   }
 }
