@@ -30,6 +30,7 @@ import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.wizard.Wizard;
@@ -218,8 +219,8 @@ public abstract class JobSubmissionWizardBase extends Wizard
         
         while( iterator.hasNext() )
         {
-          IGridJobDescription description = iterator.next();
-          
+          testCancelled( monitor );
+          IGridJobDescription description = iterator.next();          
           if( JobSubmissionWizardBase.this.creator.canCreate( description ) )
           {
               IGridContainer parent = buildPath( description );
@@ -227,12 +228,13 @@ public abstract class JobSubmissionWizardBase extends Wizard
               if( this.service != null ) {
                 jobId = this.service.submitJob( description, monitor );
                 monitor.setTaskName( Messages.getString("JobSubmissionWizardBase.taskNameSubmitted") ); //$NON-NLS-1$
-              } 
+              }
 
+              testCancelled( monitor );
               JobSubmissionWizardBase.this.creator.create( parent, jobId );
          
               // don't submit this job again during again submission after error
-              iterator.remove();              
+              iterator.remove();
           }
           monitor.worked( 1 );
         }          
@@ -250,6 +252,12 @@ public abstract class JobSubmissionWizardBase extends Wizard
       }
   
       return Status.OK_STATUS;
+    }
+
+    private void testCancelled( final IProgressMonitor monitor ) {
+      if( monitor.isCanceled() ) {
+        throw new OperationCanceledException();
+      }
     }
 
     void closeWizard() {
@@ -321,9 +329,7 @@ public abstract class JobSubmissionWizardBase extends Wizard
           JobSubmissionWizardBase.this.getContainer().getShell().setVisible( true );    
         }} );
     }
-  }
-
-        
+  }        
   
 }
 
