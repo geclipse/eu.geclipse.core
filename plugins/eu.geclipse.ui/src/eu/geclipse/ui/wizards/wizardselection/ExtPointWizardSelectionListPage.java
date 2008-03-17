@@ -12,7 +12,6 @@
  * Contributors:
  *    Thomas Koeckerbauer GUP, JKU - initial API and implementation
  *****************************************************************************/
-
 package eu.geclipse.ui.wizards.wizardselection;
 
 import java.util.List;
@@ -32,6 +31,7 @@ import org.eclipse.ui.plugin.AbstractUIPlugin;
  * point.
  */
 public class ExtPointWizardSelectionListPage extends WizardSelectionListPage {
+
   static final String EXT_CLASS = "class"; //$NON-NLS-1$
   static final String EXT_WIZARD = "wizard"; //$NON-NLS-1$
   static final String EXT_NAME = "name"; //$NON-NLS-1$
@@ -42,19 +42,21 @@ public class ExtPointWizardSelectionListPage extends WizardSelectionListPage {
   /**
    * Creates a wizard page which allows to select a wizard for the next steps.
    * The wizard list is queried from an extension point.
+   * 
    * @param pageName Name of the wizard page.
    * @param extensionPointId Id of the extension point to query the wizard list
-   *                         from.
+   *            from.
    * @param title Title of the page.
    * @param desc Description text of the page.
    * @param emptyListErrMsg error message that should be displayed if the list
-   *                        is empty
+   *            is empty
    */
   public ExtPointWizardSelectionListPage( final String pageName,
                                           final String extensionPointId,
                                           final String title,
                                           final String desc,
-                                          final String emptyListErrMsg ) {
+                                          final String emptyListErrMsg )
+  {
     super( pageName,
            getWizardList( extensionPointId, null ),
            title,
@@ -65,26 +67,58 @@ public class ExtPointWizardSelectionListPage extends WizardSelectionListPage {
   /**
    * Creates a wizard page which allows to select a wizard for the next steps.
    * The wizard list is queried from an extension point.
+   * 
    * @param pageName Name of the wizard page.
    * @param extensionPointId Id of the extension point to query the wizard list
-   *                         from.
+   *            from.
+   * @param title Title of the page.
+   * @param desc Description text of the page.
+   * @param emptyListErrMsg error message that should be displayed if the list
+   *            is empty
+   * @param quickSelection flag to define wizard behavior in case there is only
+   *            one wizard to select. If <code>true</code> wizard should skip
+   *            this (wizard selection) page. If <code>false</code> wizard
+   *            should stop on this page (the normal wizard behavior).
+   */
+  public ExtPointWizardSelectionListPage( final String pageName,
+                                          final String extensionPointId,
+                                          final String title,
+                                          final String desc,
+                                          final String emptyListErrMsg,
+                                          final boolean quickSelection )
+  {
+    super( pageName,
+           getWizardList( extensionPointId, null ),
+           title,
+           desc,
+           emptyListErrMsg,
+           quickSelection );
+  }
+
+  /**
+   * Creates a wizard page which allows to select a wizard for the next steps.
+   * The wizard list is queried from an extension point.
+   * 
+   * @param pageName Name of the wizard page.
+   * @param extensionPointId Id of the extension point to query the wizard list
+   *            from.
    * @param filterList List of wizard Ids of wizards which are allowed to be
-   *                   displayed in the wizard list, if the Id of a wizard is
-   *                   not in the list it won't be displayed in the list.
+   *            displayed in the wizard list, if the Id of a wizard is not in
+   *            the list it won't be displayed in the list.
    * @param title Title of the page.
    * @param desc Description text of the page.
    * @param emptyListErrMsg error message that should be displayed if the
-   *                        filtered list is empty
-
+   *            filtered list is empty
    */
   public ExtPointWizardSelectionListPage( final String pageName,
                                           final String extensionPointId,
                                           final List<String> filterList,
                                           final String title,
                                           final String desc,
-                                          final String emptyListErrMsg ) {
+                                          final String emptyListErrMsg )
+  {
     super( pageName,
-           getWizardList( extensionPointId , filterList ),
+           getWizardList( extensionPointId, filterList ),
            title,
            desc,
            emptyListErrMsg );
@@ -94,40 +128,45 @@ public class ExtPointWizardSelectionListPage extends WizardSelectionListPage {
    * Sets the Id of the wizard which should be preselected. If set the
    * WizardSelectionListPage will be skiped and the first page of the
    * preselected wizard will be displayed.
+   * 
    * @param id Id representing the wizard to be preselected.
    * @param hidePrevPage true if it should not be possible to go back to the
-   *                     WizardSelectionListPage to select another wizard,
-   *                     false otherwise.
+   *            WizardSelectionListPage to select another wizard, false
+   *            otherwise.
    */
   public void setPreselectedId( final String id, final boolean hidePrevPage ) {
-    if ( id != null ) {
-      for ( IWizardSelectionNode node : this.wizardSelectionNodes ) {
-        ExtPointWizardSelectionNode extPointNode = ( ExtPointWizardSelectionNode ) node;
-        if ( id.equals( extPointNode.getId() ) ) {
+    if( id != null ) {
+      for( IWizardSelectionNode node : this.wizardSelectionNodes ) {
+        ExtPointWizardSelectionNode extPointNode = ( ExtPointWizardSelectionNode )node;
+        if( id.equals( extPointNode.getId() ) ) {
           setPreselectedNode( extPointNode, hidePrevPage );
         }
       }
     }
   }
-  
+
   private static IWizardSelectionNode[] getWizardList( final String extensionPointId,
-                                                       final List<String> filterList ) {
+                                                       final List<String> filterList )
+  {
     IExtensionRegistry registry = Platform.getExtensionRegistry();
     IExtensionPoint extensionPoint = registry.getExtensionPoint( extensionPointId );
     Vector<IWizardSelectionNode> nodes = new Vector<IWizardSelectionNode>();
-    if ( extensionPoint != null ) {
+    if( extensionPoint != null ) {
       IExtension[] extensions = extensionPoint.getExtensions();
       for( IExtension extension : extensions ) {
         IConfigurationElement[] elements = extension.getConfigurationElements();
         for( IConfigurationElement element : elements ) {
           if( EXT_WIZARD.equals( element.getName() ) ) {
             String id = element.getAttribute( EXT_ID );
-            if ( filterList == null || filterList.isEmpty() ) addElement( nodes, element );
-            else if ( filterList.contains( id ) ) addElement( nodes, element );
+            if( filterList == null || filterList.isEmpty() )
+              addElement( nodes, element );
+            else if( filterList.contains( id ) )
+              addElement( nodes, element );
             else {
-              for( IConfigurationElement replElement : element.getChildren( EXT_CAN_REPLACE ) ) {
+              for( IConfigurationElement replElement : element.getChildren( EXT_CAN_REPLACE ) )
+              {
                 String replId = replElement.getAttribute( EXT_ID );
-                if ( filterList.contains( replId ) ) {
+                if( filterList.contains( replId ) ) {
                   addElement( nodes, element );
                   break;
                 }
@@ -137,23 +176,28 @@ public class ExtPointWizardSelectionListPage extends WizardSelectionListPage {
         }
       }
     }
-    return nodes.toArray( new IWizardSelectionNode[0] );
+    return nodes.toArray( new IWizardSelectionNode[ 0 ] );
   }
-  
-  private static void addElement( final Vector<IWizardSelectionNode> nodes, final IConfigurationElement element ) {
+
+  private static void addElement( final Vector<IWizardSelectionNode> nodes,
+                                  final IConfigurationElement element )
+  {
     String id = element.getAttribute( EXT_ID );
     String name = element.getAttribute( EXT_NAME );
     String iconName = element.getAttribute( EXT_ICON );
     Image icon = null;
     ImageDescriptor iconDesc = null;
-    if ( iconName != null ) {
+    if( iconName != null ) {
       String pluginId = element.getContributor().getName();
       iconDesc = AbstractUIPlugin.imageDescriptorFromPlugin( pluginId, iconName );
     }
-    if ( iconDesc != null ) {
+    if( iconDesc != null ) {
       icon = iconDesc.createImage();
     }
-    IWizardSelectionNode wizardNode = new ExtPointWizardSelectionNode( element, id, name, icon );
-    nodes.add( wizardNode );    
+    IWizardSelectionNode wizardNode = new ExtPointWizardSelectionNode( element,
+                                                                       id,
+                                                                       name,
+                                                                       icon );
+    nodes.add( wizardNode );
   }
 }
