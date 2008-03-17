@@ -16,6 +16,9 @@
  *****************************************************************************/
 package eu.geclipse.ui.wizards.jobsubmission;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.resources.IContainer;
@@ -30,7 +33,9 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
@@ -42,6 +47,8 @@ import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridJobID;
 import eu.geclipse.core.model.IGridJobSubmissionService;
 import eu.geclipse.core.model.IGridProject;
+import eu.geclipse.core.reporting.IProblem;
+import eu.geclipse.core.reporting.ISolution;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
@@ -67,12 +74,19 @@ public abstract class JobSubmissionWizardBase extends Wizard
    */
   @Override
   public boolean performFinish() {
-    {
-      final JobSubmissionWizardBase base = this;      
+    {      
       Job job = new JobSubmissionJob();
       job.setUser( true );
+      
+      Shell shell = getWizardShell();
+      
+      if( shell != null ) {
+        shell.setVisible( false );
+      }      
+      
       job.schedule(); // start as soon as possible
-      return true;
+      
+      return false;
     }
   }
 
@@ -140,12 +154,12 @@ public abstract class JobSubmissionWizardBase extends Wizard
    * (non-Javadoc)
    * 
    * @see eu.geclipse.ui.wizards.wizardselection.IInitalizableWizard#init(java.lang.Object)
-   */
+   */  
   @SuppressWarnings("unchecked")
   public boolean init( final Object data ) {
     boolean result = false;
     if( data instanceof List ) {
-      this.jobDescriptions = ( List<IGridJobDescription> )data;
+      this.jobDescriptions = new ArrayList<IGridJobDescription>( ( List<IGridJobDescription> )data );
       result = true;
     }
     return result;
@@ -161,9 +175,9 @@ public abstract class JobSubmissionWizardBase extends Wizard
       if( "job_creator".equals( element.getName() ) ) { //$NON-NLS-1$
         Object obj = element.createExecutableExtension( "class" ); //$NON-NLS-1$
         if( !( obj instanceof IGridJobCreator ) ) {
-          String errorMessage = "Job Creator configured in class atribute for job_creator "
-                                + "element in eu.geclipse.ou.jobSubmissionWizzard "
-                                + "is not implementing IGridJobCreator interface";
+          String errorMessage = "Job Creator configured in class atribute for job_creator " //$NON-NLS-1$
+                                + "element in eu.geclipse.ou.jobSubmissionWizzard " //$NON-NLS-1$
+                                + "is not implementing IGridJobCreator interface"; //$NON-NLS-1$
           Status status = new Status( IStatus.ERROR,
                                       Activator.PLUGIN_ID,
                                       IStatus.OK,
@@ -182,62 +196,133 @@ public abstract class JobSubmissionWizardBase extends Wizard
     // create the service for the job submission
     final IGridJobSubmissionService service = getSubmissionService();
     
-    private JobSubmissionJob() {
-      super( "Grid Job Submission" );
+    JobSubmissionJob() {
+      super( Messages.getString("JobSubmissionWizardBase.jobName") ); //$NON-NLS-1$
     }
     
     /**
      * the run method for the Background job create the JobSubmissionWizard
      * and call the service
      */
+    @Override
     protected IStatus run( final IProgressMonitor monitor ) {
-      /*
-       * we loop over all selected jobs in the workspace yes, we can submit
-       * more than one job at a time
-       */      
-      for( IGridJobDescription description : JobSubmissionWizardBase.this.jobDescriptions )
-      {
-        if( JobSubmissionWizardBase.this.creator.canCreate( description ) )
+      boolean closeWizard = true;
+      
+      try {
+        /*
+         * we loop over all selected jobs in the workspace yes, we can submit
+         * more than one job at a time
+         */      
+             
+        Iterator<IGridJobDescription> iterator = JobSubmissionWizardBase.this.jobDescriptions.iterator();
+        
+        while( iterator.hasNext() )
         {
-          try {
-            IGridContainer parent = buildPath( description );
-            IGridJobID jobId = null;
-            if( this.service != null ) {
-              jobId = service.submitJob( description, monitor );              
-              monitor.setTaskName( "job submitted" );
-            } 
-            
-            // create job
-            JobSubmissionWizardBase.this.creator.create( parent, jobId );
-          } catch( ProblemException pExc ) {
-            showProblem( pExc );
-          } catch( CoreException cExc ) {
-            showProblem( cExc );
+          IGridJobDescription description = iterator.next();
+          
+          if( JobSubmissionWizardBase.this.creator.canCreate( description ) )
+          {
+              IGridContainer parent = buildPath( description );
+              IGridJobID jobId = null;
+              if( this.service != null ) {
+                jobId = this.service.submitJob( description, monitor );
+                monitor.setTaskName( Messages.getString("JobSubmissionWizardBase.taskNameSubmitted") ); //$NON-NLS-1$
+              } 
+
+              JobSubmissionWizardBase.this.creator.create( parent, jobId );
+         
+              // don't submit this job again during again submission after error
+              iterator.remove();              
           }
-        }
-        monitor.worked( 1 );
+          monitor.worked( 1 );
+        }          
+      }
+      catch( ProblemException pExc ) {
+        showProblem( pExc );
+        closeWizard = false;
+      } catch( CoreException cExc ) {
+        showProblem( cExc );
+        closeWizard = false;
+      }
+      
+      if( closeWizard ) {
+        closeWizard();
       }
   
       return Status.OK_STATUS;
     }
 
-    private void showProblem( final Throwable exc ) {      
+    void closeWizard() {
+      IWorkbench workbench = PlatformUI.getWorkbench();
+      Display display = workbench.getDisplay();
+      
+      display.asyncExec( new Runnable() {
+        public void run() {
+          WizardDialog dialog = ( WizardDialog )getContainer();
+          dialog.close();
+        }
+      } );
+    }
+
+    private void showProblem( final Throwable exc ) {
       
       IWorkbench workbench = PlatformUI.getWorkbench();
       Display display = workbench.getDisplay();
       display.asyncExec( new Runnable() {        
   
         public void run() {
+          addShowWizardSolution( exc );
           ProblemDialog.openProblem( getShell(),
                                      Messages.getString( "JobSubmissionWizardBase.errSubmissionFailed" ), //$NON-NLS-1$
                                      null,
                                      exc );
+          
+          // if "show wizard" action wasn't called, we can definitely close the wizard
+          if( !JobSubmissionWizardBase.this.getContainer().getShell().isVisible() ) {
+            JobSubmissionWizardBase.this.getContainer().getShell().close();
+          }
         }
 
       } );
       
     }
   }
+  
+  private Shell getWizardShell() {
+    Shell shell = null;
+        
+    if( getContainer() != null ) {
+      shell = getContainer().getShell();
+    }
+    
+    return shell;
+  }
+
+  protected void addShowWizardSolution( final Throwable exc ) {
+    if( exc instanceof ProblemException ) {
+      ProblemException problemExc = ( ProblemException )exc;
+      IProblem problem = problemExc.getProblem();
+      
+      problem.addSolution( new ISolution() {
+
+        public String getDescription() {
+          return Messages.getString("JobSubmissionWizardBase.solutionOpenWizard"); //$NON-NLS-1$
+        }
+
+        public String getID() {
+          return null;
+        }
+
+        public boolean isActive() {
+          return true;
+        }
+
+        public void solve() throws InvocationTargetException {
+          JobSubmissionWizardBase.this.getContainer().getShell().setVisible( true );    
+        }} );
+    }
+  }
+
         
   
 }

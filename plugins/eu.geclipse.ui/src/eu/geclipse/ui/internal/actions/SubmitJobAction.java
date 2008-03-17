@@ -55,6 +55,7 @@ public class SubmitJobAction extends SelectionListenerAction {
     JobCreatorSelectionWizard wizard
       = new JobCreatorSelectionWizard( this.jobDescriptions, this.jobCreators );
     WizardDialog dialog = new WizardDialog( this.site.getShell(), wizard );
+    dialog.setBlockOnOpen( false );
     dialog.open();
   }
 
