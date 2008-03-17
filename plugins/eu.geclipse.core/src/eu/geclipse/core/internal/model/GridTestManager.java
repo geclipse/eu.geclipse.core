@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2007 g-Eclipse consortium 
+ * Copyright (c) 2007, 2008 g-Eclipse consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -24,6 +24,7 @@ import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridModelListener;
+import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IGridTest;
 import eu.geclipse.core.model.IGridTestManager;
 import eu.geclipse.core.model.IGridTestStatusListener;
@@ -135,11 +136,12 @@ public class GridTestManager
     return this.tests;
   }
   
-  public IGridTest getTest( final String name ) {
+  public IGridTest getTest( final String name, final IGridProject project ) {
     IGridTest result = null;
     for ( IGridTest test: this.tests ) {
-      if ( test.getName().equalsIgnoreCase( name ) ) {
+      if ( test.getName().equalsIgnoreCase( name ) && test.getProject().equals( project )) {
         result = test;
+        break;
       }
     }
     return result;
