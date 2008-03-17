@@ -12,10 +12,8 @@
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
  *****************************************************************************/
-
 package eu.geclipse.core.model;
 
-import java.io.InputStream;
 import java.net.URI;
 
 /**
@@ -48,11 +46,4 @@ public interface IGridPreferences {
    */
   public IGridConnection createTemporaryConnection( final URI uri )
     throws GridModelException;
-
-  public IGridTest createGridTest( final String folderName,
-                                   final String testName,
-                                   final String extenstion,
-                                   final InputStream inputStream,
-                                   final boolean forceOverride )
-  throws GridModelException;
 }

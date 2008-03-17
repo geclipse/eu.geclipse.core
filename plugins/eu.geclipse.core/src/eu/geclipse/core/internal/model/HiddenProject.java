@@ -13,14 +13,10 @@
  *    Mathias Stuempert - initial API and implementation
  *    Ariel Garcia      - updated to new problem reporting
  *****************************************************************************/
-
 package eu.geclipse.core.internal.model;
 
-import java.io.File;
-import java.io.InputStream;
 import java.net.URI;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
@@ -44,19 +40,17 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridPreferences;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IGridRoot;
-import eu.geclipse.core.model.IGridTest;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
-
 
 /**
  * The hidden project is a project that is not visible in the Grid model views.
  * It implements {@link IGridPreferences} and therefore stores all global
  * preferences in a well defined structure within a project.
  */
-public class HiddenProject
-    extends ResourceGridContainer
-    implements IGridProject, IGridPreferences {
+public class HiddenProject extends ResourceGridContainer
+  implements IGridProject, IGridPreferences
+{
 
   /**
    * The name of the project.
@@ -74,10 +68,6 @@ public class HiddenProject
    * Name of the temporary connection.
    */
   private static final String TEMP_CONNECTION_NAME = ".tmp_connection"; //$NON-NLS-1$
-  /**
-   * Folder name of the grid tests results.
-   */
-  private static final String DIR_GRID_TESTS = ".tests"; //$NON-NLS-1$
 
   /**
    * Private constructor.
@@ -198,41 +188,6 @@ public class HiddenProject
     return result;
   }
 
-  /**
-   * 
-   * @param name
-   * @param extenstion of the file to be created. a
-   * @param inputStream
-   * @return
-   */
-  public IGridTest createGridTest( final String folderName, final String testName,
-                                   final String extenstion, final InputStream inputStream,
-                                   final boolean forceOverride )
-       {
-         IGridTest result = null;
-         // IGridTest result = null;
-         try {
-           IFolder simpleTestsFolder = getProjectFolder( DIR_GRID_TESTS );
-           simpleTestsFolder = getProjectFolder( DIR_GRID_TESTS + File.separatorChar
-                                                         + folderName );
-           if ( ! simpleTestsFolder.exists() ) {
-             simpleTestsFolder.create( IResource.FORCE | IResource.REPLACE, true, null );
-           }
-           IFile file = simpleTestsFolder.getFile( testName + "." + extenstion); //$NON-NLS-1$
-           if( ! file.exists() ) {
-             file.create( inputStream, IResource.FORCE | IResource.REPLACE, null );
-           } else if ( forceOverride ) {
-             file.delete( true, null );
-             file.create( inputStream, IResource.FORCE | IResource.REPLACE, null );
-           }
-           result = GridModel.getTestManager().getTest( folderName );
-         } catch ( CoreException coreExc ) {
-           Activator.logException( coreExc );
-         }
-         return result;
-         // return result;
-       }
-
   /*
    * (non-Javadoc)
    * 
@@ -242,15 +197,16 @@ public class HiddenProject
   public IGridProject getProject() {
     return this;
   }
-  
-  public IGridContainer getProjectFolder( final Class< ? extends IGridElement > elementType ) {
+
+  public IGridContainer getProjectFolder( final Class<? extends IGridElement> elementType )
+  {
     return null;
   }
-  
+
   public IGridContainer getProjectFolder( final IGridElement element ) {
     return null;
   }
-  
+
   public String getProjectFolderID( final IGridContainer folder ) {
     return null;
   }
@@ -293,7 +249,7 @@ public class HiddenProject
 
   protected IProject getAccessibleProject() throws CoreException {
     IProject project = ( IProject )getResource();
-    if( ! project.isOpen() ) {
+    if( !project.isOpen() ) {
       project.open( null );
     }
     return project;
@@ -309,11 +265,6 @@ public class HiddenProject
     return folder;
   }
 
-  protected IFolder getTestFolder() throws CoreException {
-    IFolder result = getProjectFolder( DIR_GRID_TESTS );
-    return result;
-  }
-
   /**
    * Create and/or retrieve a directory within the project.
    * 
@@ -323,10 +274,9 @@ public class HiddenProject
   private IFolder getProjectFolder( final String name ) throws CoreException {
     IProject project = getAccessibleProject();
     IFolder folder = project.getFolder( new Path( name ) );
-    if( ! folder.exists() ) {
+    if( !folder.exists() ) {
       folder.create( IResource.FORCE, true, null );
     }
     return folder;
   }
-
 }
