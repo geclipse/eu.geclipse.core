@@ -110,7 +110,7 @@ public class MountMenu
   protected IAction getAction( final String protocol ) {
     IGridStorage[] srcArray
       = this.sources.toArray( new IGridStorage[ this.sources.size() ] );
-    MountAction action = new MountAction( this.shell, srcArray, protocol );
+    StorageMountAction action = new StorageMountAction( this.shell, srcArray, protocol );
     return action;
   }
   

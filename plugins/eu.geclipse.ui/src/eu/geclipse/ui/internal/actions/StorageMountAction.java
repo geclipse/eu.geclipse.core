@@ -36,7 +36,7 @@ import eu.geclipse.ui.dialogs.ProblemDialog;
 /**
  * Action for mounting storage elements as Grid connections.
  */
-public class MountAction extends Action {
+public class StorageMountAction extends Action {
   
   /**
    * The access protocol used for the mount.
@@ -58,9 +58,9 @@ public class MountAction extends Action {
    * @param sources The elements that should be mounted.
    * @param protocol The protocol that should be used for the mount.
    */
-  protected MountAction( final Shell shell,
-                         final IGridStorage[] sources,
-                         final String protocol ) {
+  protected StorageMountAction( final Shell shell,
+                                final IGridStorage[] sources,
+                                final String protocol ) {
     super( protocol );
     this.shell = shell;
     this.accessProtocol = protocol;

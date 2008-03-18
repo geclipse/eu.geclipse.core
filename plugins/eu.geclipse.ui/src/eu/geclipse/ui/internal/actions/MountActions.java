@@ -19,6 +19,7 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.search.ui.IContextMenuConstants;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchPartSite;
 import org.eclipse.ui.actions.ActionGroup;
 
@@ -37,6 +38,8 @@ public class MountActions extends ActionGroup {
    */
   private MountMenu mountMenu;
   
+  private ConnectionMountAction connectionMount;
+  
   /**
    * Construct a new mount action group for the specified workbench part site.
    * 
@@ -44,11 +47,18 @@ public class MountActions extends ActionGroup {
    * action group.
    */
   public MountActions( final IWorkbenchPartSite site ) {
+    
     this.site = site;
-    this.mountMenu = new MountMenu( site.getShell() );
+    Shell shell = site.getShell();
     ISelectionProvider selectionProvider
       = this.site.getSelectionProvider();
+    
+    this.mountMenu = new MountMenu( shell );
+    this.connectionMount = new ConnectionMountAction( shell );
+    
     selectionProvider.addSelectionChangedListener( this.mountMenu );
+    selectionProvider.addSelectionChangedListener( this.connectionMount );
+    
   }
   
   /* (non-Javadoc)
@@ -56,10 +66,15 @@ public class MountActions extends ActionGroup {
    */
   @Override
   public void dispose() {
+    
     ISelectionProvider selectionProvider
       = this.site.getSelectionProvider();
+    
     selectionProvider.removeSelectionChangedListener( this.mountMenu );
+    selectionProvider.removeSelectionChangedListener( this.connectionMount );
+    
     this.mountMenu.dispose();
+
   }
   
   /* (non-Javadoc)
@@ -67,11 +82,24 @@ public class MountActions extends ActionGroup {
    */
   @Override
   public void fillContextMenu( final IMenuManager menu ) {
-    if ( this.mountMenu.isVisible() ) {
+    
+    if ( this.connectionMount.isEnabled() || this.mountMenu.isVisible() ) {
+      
       IMenuManager subMenu = new MenuManager( Messages.getString("MountActions.mount_actions_text") ); //$NON-NLS-1$
       menu.appendToGroup( IContextMenuConstants.GROUP_OPEN, subMenu );
-      subMenu.add( this.mountMenu );
+      
+      if ( this.connectionMount.isEnabled() ) {
+        subMenu.add( this.connectionMount );
+      }
+      
+      if ( this.mountMenu.isVisible() ) {
+        subMenu.add( this.mountMenu );
+      }
+      
     }
+    
+    super.fillContextMenu( menu );
+    
   }
   
 }
