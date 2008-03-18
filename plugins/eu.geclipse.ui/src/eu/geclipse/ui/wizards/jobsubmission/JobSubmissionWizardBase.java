@@ -32,6 +32,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -209,35 +210,38 @@ public abstract class JobSubmissionWizardBase extends Wizard
     protected IStatus run( final IProgressMonitor monitor ) {
       boolean closeWizard = true;
       
+      SubMonitor betterMonitor = SubMonitor.convert( monitor, JobSubmissionWizardBase.this.jobDescriptions.size() );
+      
       try {
         /*
          * we loop over all selected jobs in the workspace yes, we can submit
          * more than one job at a time
-         */      
+         */        
              
-        Iterator<IGridJobDescription> iterator = JobSubmissionWizardBase.this.jobDescriptions.iterator();
+        Iterator<IGridJobDescription> iterator = JobSubmissionWizardBase.this.jobDescriptions.iterator();        
         
         while( iterator.hasNext() )
         {
-          testCancelled( monitor );
-          IGridJobDescription description = iterator.next();          
+          testCancelled( betterMonitor );
+          IGridJobDescription description = iterator.next();
+          betterMonitor.setTaskName( String.format( Messages.getString("JobSubmissionWizardBase.taskNameSubmitting"), description.getName() ) ); //$NON-NLS-1$
+          
           if( JobSubmissionWizardBase.this.creator.canCreate( description ) )
           {
               IGridContainer parent = buildPath( description );
               IGridJobID jobId = null;
               if( this.service != null ) {
-                jobId = this.service.submitJob( description, monitor );
-                monitor.setTaskName( Messages.getString("JobSubmissionWizardBase.taskNameSubmitted") ); //$NON-NLS-1$
+                jobId = this.service.submitJob( description, betterMonitor.newChild( 1 ) );                
               }
 
-              testCancelled( monitor );
+              testCancelled( betterMonitor );
               JobSubmissionWizardBase.this.creator.create( parent, jobId );
          
               // don't submit this job again during again submission after error
               iterator.remove();
-          }
-          monitor.worked( 1 );
-        }          
+          }          
+        }  
+        betterMonitor.worked( 1 );
       }
       catch( ProblemException pExc ) {
         showProblem( pExc );
@@ -245,6 +249,8 @@ public abstract class JobSubmissionWizardBase extends Wizard
       } catch( CoreException cExc ) {
         showProblem( cExc );
         closeWizard = false;
+      } finally {
+        betterMonitor.done();
       }
       
       if( closeWizard ) {
