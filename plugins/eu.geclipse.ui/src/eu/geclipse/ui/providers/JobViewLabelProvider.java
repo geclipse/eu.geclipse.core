@@ -57,32 +57,29 @@ public class JobViewLabelProvider extends DecoratingLabelProvider
         String text = ""; //$NON-NLS-1$
         if( element instanceof IGridJob ) {
           IGridJob job = ( IGridJob )element;
-          switch( columnIndex ) {
-            case 2:
-              text = job.getID().getJobID();
-            break;
-            case 3: {
+          switch( columnIndex ) {            
+            case 2: {
               IGridJobStatus status = job.getJobStatus();
               if( status != null ) {
                 text = status.getName();
               }
               break;
             }
-            case 4: {
+            case 3: {
               IGridJobStatus status = job.getJobStatus();
               if( status != null ) {
                 text = status.getReason();
               }
               break;
             }
-            case 5:
+            case 4:
               if( job.getSubmissionTime() != null ) {
                 text = DateFormat.getDateTimeInstance()
                   .format( job.getSubmissionTime() );              
               }
               
               break;
-            case 6:
+            case 5:
               if( job.getJobStatus() != null
                   && job.getJobStatus().getLastUpdateTime() != null )
               {
@@ -90,6 +87,9 @@ public class JobViewLabelProvider extends DecoratingLabelProvider
                   .format( job.getJobStatus().getLastUpdateTime() );
               }
             break;
+            case 6:
+              text = job.getID().getJobID();            
+              break;
           }
         }
         return text;
