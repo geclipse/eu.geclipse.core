@@ -38,4 +38,9 @@ public interface IPropertiesProvider {
    */
   public String getPropertyValue( final String value );
   
+  /**
+   * @return category, in which all properties will be shown. May be <code>null</code>
+   */
+  public String getCategory();
+  
 }
