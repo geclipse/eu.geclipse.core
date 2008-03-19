@@ -79,20 +79,6 @@ public class RenderVTKPipelineAction extends SelectionListenerAction {
                                    pipelineExc );
       }
     }
-    // else {
-    // // TODO: check, we have here a very general IO error, is this right??
-    // final ProblemException fileException = new ProblemException(
-    // ICoreProblems.IO_OPERATION_FAILED,
-    // Messages.getString( "RenderVTKPipelineAction.elementNotVisualizable" ),
-    // //$NON-NLS-1$
-    // Activator.PLUGIN_ID );
-    //
-    // ProblemDialog.openProblem( null,
-    // Messages.getString( "RenderVTKPipelineAction.errorDialogTitle" ),
-    // //$NON-NLS-1$
-    // Messages.getString( "RenderVTKPipelineAction.errorInfo" ), //$NON-NLS-1$
-    //          fileException );
-    //    }
   }
 
   /* (non-Javadoc)

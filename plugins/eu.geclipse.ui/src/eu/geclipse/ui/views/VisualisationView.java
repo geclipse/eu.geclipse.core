@@ -35,6 +35,9 @@ public class VisualisationView extends ViewPart {
   private CTabFolder cTabFolder;
   private IGridVisualisation vtkPipeline = null;
 
+  /* (non-Javadoc)
+   * @see org.eclipse.ui.part.WorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
+   */
   @Override
   public void createPartControl( final Composite parent ) {
 
@@ -72,10 +75,15 @@ public class VisualisationView extends ViewPart {
    * @return tab item
    */
   public CTabItem getCTabItem() {
-    CTabItem cTabItem = this.cTabFolder != null
-                                               ? this.cTabFolder.getSelection()
-                                               : null;
+    CTabItem cTabItem = this.cTabFolder
+    != null ? makeNewTab() : null;
     return cTabItem;
+  }
+
+  private CTabItem makeNewTab() {
+    CTabItem tabItem = new CTabItem( this.cTabFolder, SWT.CLOSE );
+    this.cTabFolder.setSelection( tabItem );
+    return tabItem;
   }
 
   /**
