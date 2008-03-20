@@ -98,11 +98,7 @@
 	      <topic
 	        label="Manually updating Job Status"
 	        href="html/concepts/jobmanagement/submittedJobManagement/manualStatusUpdate.html">
-	      </topic>
-	      <topic
-	        label="Downloading Output Files for Finished Jobs"
-	        href="html/concepts/jobmanagement/submittedJobManagement/jobOutputDownload.html">
-	      </topic>	      
+	      </topic>    
     </topic>
     <topic 
       label="Creating a Grid Workflow"

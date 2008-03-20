@@ -2,30 +2,23 @@
 <cheatsheet title="Submitting a Grid Job">
    <intro href="/eu.geclipse.doc.user/html/concepts/jobmanagement/jobsubmit.html">
       <description>
-          This cheat sheet will show you how to submit a grid job.
+         This cheat sheet will show you how to submit a grid job.
       </description>
    </intro>
-   <item title="Open the g-Eclipse user perspective">
+   <item title="Open the g-Eclipse user perspective" dialog="true" skip="false">
       <description>
-          If you are not already in the g-Eclipse user perspective, in the main menu
+         If you are not already in the g-Eclipse user perspective, in the main menu
           select <b>Window &gt; Open Perspective &gt; g-Eclipse (User)</b> or click
           on the &quot;Click to Perform&quot; link below.
       </description>
-	  <action
-	          pluginId="org.eclipse.ui.cheatsheets"
-			  class="org.eclipse.ui.internal.cheatsheets.actions.OpenPerspective"
-			  param1="eu.geclipse.ui.userPerspective"/>
+      <action class="org.eclipse.ui.internal.cheatsheets.actions.OpenPerspective" pluginId="org.eclipse.ui.cheatsheets" confirm="false" param1="eu.geclipse.ui.userPerspective">
+      </action>
    </item>
-   <item title="Select the job description file and submit it.">
+   <item title="Select the job description file and submit it." dialog="true" skip="false">
       <description>
-		Right-click on the job description file in the <b>Job Description</b> folder and choose 
-		<b>Submit Job</b>. 
-      </description>
-   </item>
-   <item title="Choose the WMS server.">
-      <description>
-          Choose the Workload Management Server (WMS) you would like to submit your job to and click <b>Finish</b>.
+         Right-click on the job description file in the <b>Job Description</b> folder and choose <b>Submit...</b>.<br/>
+In opened wizard choose <b>type of job</b> you want to submit.<br/>
+Press button <b>Finish</b> to submit a job.
       </description>
    </item>
 </cheatsheet>
-      
