@@ -128,7 +128,7 @@ public class TarEntry {
       // Check if we need to add a path-separator
       String sep = System.getProperty( "file.separator" ); //$NON-NLS-1$
       if ( ! prefix.endsWith( sep ) ) {
-        prefix.concat( sep );
+        prefix = prefix.concat( sep );
       }
       name = prefix.concat( name );
     }
