@@ -30,7 +30,8 @@ import org.eclipse.ui.navigator.ICommonMenuConstants;
 public class JobViewActions extends ActionGroup {
 
   private ToggleUpdateJobsAction toggleJobsUpdateAction;
-  private UpdateJobStatusAction updateSelectedJobStatusAction;  
+  private UpdateJobStatusAction updateSelectedJobStatusAction;
+  private SubmitJobAction submitJobAction;
   private IWorkbenchSite site;
 
   /**
@@ -40,10 +41,12 @@ public class JobViewActions extends ActionGroup {
   public JobViewActions( final IWorkbenchSite site ) {
     this.site = site;
     this.toggleJobsUpdateAction = new ToggleUpdateJobsAction();
-    this.updateSelectedJobStatusAction = new UpdateJobStatusAction( site.getWorkbenchWindow());    
+    this.updateSelectedJobStatusAction = new UpdateJobStatusAction( site.getWorkbenchWindow() );
+    this.submitJobAction = new SubmitJobAction( site );
     ISelectionProvider provider = this.site.getSelectionProvider();
     provider.addSelectionChangedListener( this.toggleJobsUpdateAction );
-    provider.addSelectionChangedListener( this.updateSelectedJobStatusAction );    
+    provider.addSelectionChangedListener( this.updateSelectedJobStatusAction );
+    provider.addSelectionChangedListener( this.submitJobAction );
   }
   
   /**
@@ -66,13 +69,14 @@ public class JobViewActions extends ActionGroup {
     ISelectionProvider provider = this.site.getSelectionProvider();
     provider.removeSelectionChangedListener( this.toggleJobsUpdateAction );
     provider.removeSelectionChangedListener( this.updateSelectedJobStatusAction );    
+    provider.removeSelectionChangedListener( this.submitJobAction );
   }
 
   @Override
   public void fillActionBars( final IActionBars actionBars ) {
     IToolBarManager manager = actionBars.getToolBarManager();
     manager.add( this.updateSelectedJobStatusAction );
-    manager.add( this.toggleJobsUpdateAction );    
+    manager.add( this.toggleJobsUpdateAction );
   }
 
   @Override
@@ -84,6 +88,8 @@ public class JobViewActions extends ActionGroup {
         menu.appendToGroup( ICommonMenuConstants.GROUP_BUILD,
                             this.updateSelectedJobStatusAction );
       }
+      
+      menu.appendToGroup( ICommonMenuConstants.GROUP_BUILD, this.submitJobAction );
       super.fillContextMenu( menu );
     }
   }

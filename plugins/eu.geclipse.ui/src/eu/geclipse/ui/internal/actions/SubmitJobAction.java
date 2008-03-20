@@ -19,11 +19,14 @@ package eu.geclipse.ui.internal.actions;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.actions.SelectionListenerAction;
+
 import eu.geclipse.core.model.GridModel;
+import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobCreator;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.ui.wizards.jobsubmission.JobCreatorSelectionWizard;
@@ -70,12 +73,12 @@ public class SubmitJobAction extends SelectionListenerAction {
     Iterator< ? > iter = selection.iterator();
     while ( iter.hasNext() && enabled ) {
       Object element = iter.next();
-      boolean isDescription = isJobDescription( element );
-      enabled &= isDescription;
-      if ( isDescription ) {
-        this.jobDescriptions.add( ( IGridJobDescription ) element );
+      IGridJobDescription jobDescription = getJobDescription( element );
+      enabled &= ( jobDescription != null );
+      if ( jobDescription != null ) {
+        this.jobDescriptions.add( jobDescription );
         List< IGridJobCreator > creators
-          = GridModel.getJobCreators( ( IGridJobDescription ) element );
+          = GridModel.getJobCreators( ( IGridJobDescription ) jobDescription );
         if ( this.jobCreators == null ) {
           this.jobCreators = creators;
         } else {
@@ -86,8 +89,17 @@ public class SubmitJobAction extends SelectionListenerAction {
     return enabled && ( this.jobCreators != null );
   }
   
-  protected boolean isJobDescription( final Object element ) {
-    return element instanceof eu.geclipse.core.model.IGridJobDescription;
+  private IGridJobDescription getJobDescription( final Object element ) {
+    IGridJobDescription description = null;
+    
+    if( element instanceof IGridJobDescription ) {
+      description = ( IGridJobDescription )element;      
+    } else if( element instanceof IGridJob ) {
+      IGridJob job = ( IGridJob )element;
+      description = job.getJobDescription();
+    }
+    
+    return description;
   }
   
   private List< IGridJobCreator > mergeCreators( final List< IGridJobCreator > orig,

@@ -160,6 +160,7 @@ public class GridJobView extends ElementManagerViewPart
     groups.addGroup( this.jobActions );
     groups.addGroup( new FilterActions( getSite(),
                                         this.filterConfigurationsManager ) );
+        
     super.contributeAdditionalActions( groups );
   }
 
