@@ -176,7 +176,20 @@ public class SecureFile extends File {
                                    Activator.PLUGIN_ID, 
                                    SECURE_PERMISSIONS_FAILED + msg );
       Activator.logStatus( status );
+      try {
+        eB.close();
+        oB.close();
+      } catch ( IOException ioe ) {
+        // Nothing we can do now here
+      }
       return false;
+    }
+    
+    try {
+      eB.close();
+      oB.close();
+    } catch ( IOException ioe ) {
+      // Nothing we can do now here
     }
 
     return true;
