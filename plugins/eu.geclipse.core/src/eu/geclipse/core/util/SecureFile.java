@@ -39,6 +39,8 @@ public class SecureFile extends File {
 
   private static final String SECURE_PERMISSIONS_FAILED 
     = "Failed to set secure permissions: "; //$NON-NLS-1$
+  private static final String WARNING_FILE_NOT_DELETED
+    = ". Warning: insecure file could not be deleted."; //$NON-NLS-1$
   
   /** Declare some serialVersionUID */
   private static final long serialVersionUID = 101010123456789010L;
@@ -165,7 +167,7 @@ public class SecureFile extends File {
       String msg = "chmod command returned non-zero value: "; //$NON-NLS-1$
       try {
         while ( (line = eB.readLine()) != null ) {
-          msg.concat( line + " -- " ); //$NON-NLS-1$
+          msg = msg.concat( line + " -- " ); //$NON-NLS-1$
         }
       } catch ( IOException ioe ) {
         //
@@ -231,10 +233,13 @@ public class SecureFile extends File {
     if ( ret != true ) {
       // CreateNewFile succeeded, but setting the secure permissions didn't...
       File dfile = new File( filePath );
-      dfile.delete();
+      String msg = ""; //$NON-NLS-1$
+      if ( ! dfile.delete() ) {
+        msg = WARNING_FILE_NOT_DELETED;
+      }
       // TODO: check this method's policy regarding return value and
       //       exception throwing in the superclass...
-      throw new IOException( SECURE_PERMISSIONS_FAILED + filePath );
+      throw new IOException( SECURE_PERMISSIONS_FAILED + filePath + msg );
     }
     return ret;
   }
