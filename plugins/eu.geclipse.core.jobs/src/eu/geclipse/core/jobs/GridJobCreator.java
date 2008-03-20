@@ -189,9 +189,20 @@ public class GridJobCreator extends AbstractGridJobCreator {
             this.create( workflowJob, childId );
           }
           
-          // TODO mariusz remove unecessary tmp jsdl file
+          deleteTmpJobDescription( childJobDescription );
         }
       }
+    }
+    
+  }
+
+  private void deleteTmpJobDescription( final JSDLJobDescription childJobDescription ) {
+    IResource resource = childJobDescription.getResource();
+    
+    try {
+      resource.delete( true, null );
+    } catch( CoreException exception ) {
+      // don't break submission, when error occur here
     }
     
   }
