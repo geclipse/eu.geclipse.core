@@ -24,25 +24,7 @@ import org.eclipse.jface.viewers.ViewerFilter;
  *
  */
 public class InfoViewerFilter extends ViewerFilter{
-  private ViewerFilter filter;
   private String text;
-  
-
-  /**
-   * Get the filter
-   * @return a ViewerFilter or null
-   */
-  public ViewerFilter getFilter() {
-    return this.filter;
-  }
-  
-  /**
-   * Set the filter
-   * @param filter a ViewerFilter to set as filter
-   */
-  public void setFilter(final ViewerFilter filter) {
-    this.filter = filter;
-  }
   
   /**
    * Set the description of the info viewer filter

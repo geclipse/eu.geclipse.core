@@ -17,17 +17,14 @@
  *****************************************************************************/
 package eu.geclipse.info.glue;
 
-import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.ArrayList;
-//import java.io.FileInputStream;
-//import java.io.FileNotFoundException;
-//import java.io.FileOutputStream;
 import java.io.IOException;
-//import java.io.ObjectInputStream;
-//import java.io.ObjectOutputStream;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.Hashtable;
+
 import org.eclipse.core.runtime.IPath;
 
 import eu.geclipse.core.model.GridModel;
@@ -35,13 +32,8 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridModelListener;
 import eu.geclipse.core.model.IGridProject;
-import eu.geclipse.info.InfoServiceFactory;
 import eu.geclipse.info.internal.Activator;
 import eu.geclipse.info.model.FetchJob;
-import eu.geclipse.info.model.IExtentedGridInfoService;
-import eu.geclipse.info.views.GlueInfoViewer;
-
-import java.lang.reflect.Method;
 
 /**
  * 
@@ -349,7 +341,6 @@ implements IGridModelListener, java.io.Serializable {
           if(gridElement instanceof IGridProject){
             FetchJob fetchJob = new FetchJob(" Retrieving Information"); //$NON-NLS-1$
             fetchJob.schedule(); // Getting the information from the info services.
-            System.out.println("Grid Model Changed in Glue Index"); //$NON-NLS-1$
             break;
           }
         }

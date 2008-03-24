@@ -232,12 +232,13 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
       } 
       if ( this.query != null ) {
         this.agtList = new ArrayList<AbstractGlueTable>();
-        for (int i=0; i<this.query.getObjectTableName().size(); i++)
+        for (int i=0; i<this.query.getGlueInfoTopTreeCategory().size(); i++)
         {
-          String myObjectTableName = this.query.getObjectTableName().get( i );
-          this.agtList.addAll( GlueQuery.getGlueTable( this.query.getGlueObjectName(), 
-                                                 myObjectTableName, 
-                                                 getCurrentVO() ) );
+          String myObjectTableName = this.query.getGlueInfoTopTreeCategory().get( i ).getObjectTableName();
+          String myGlueObjectName = this.query.getGlueInfoTopTreeCategory().get( i ).getGlueObjectName();
+          this.agtList.addAll( GlueQuery.getGlueTable( myGlueObjectName, 
+                                                       myObjectTableName, 
+                                                       getCurrentVO() ) );
         }
       } 
       if ( this.getAgt() != null ) {
@@ -250,7 +251,7 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
             fieldName=field.getName();
             value = field.get( this.getAgt() );
             if( fieldName.endsWith( "List" ) ) { //$NON-NLS-1$
-              ArrayList<AbstractGlueTable> list = ( ArrayList<AbstractGlueTable> ) value;
+              ArrayList<AbstractGlueTable> list  = ( ArrayList<AbstractGlueTable> ) value;
               TreeObject to = new TreeParent( fieldName, list );
               toList.add( to );
             } else if ( value instanceof AbstractGlueTable ) { 
@@ -373,12 +374,7 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
       buildTopLevel();
     }
     
-    /**
-     * This method adds the ObjectTableName of the other object to an equal one
-     * that uniqueList has.
-     * @param uniqueList a HashSet with GlueInfoTopTreeElement elemnts
-     * @param otherElement the element to add
-     */
+
     private void addObjectTablename(final HashSet<GlueInfoTopTreeElement> uniqueList,
                                     final GlueInfoTopTreeElement otherElement)
     {
@@ -388,16 +384,17 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
         while (it.hasNext()) {
           GlueInfoTopTreeElement currentElement = it.next();
           if ( currentElement != null 
-              && currentElement.getObjectTableName() != null
-              && otherElement.getObjectTableName() != null
+              && currentElement.getGlueInfoTopTreeCategory() != null
+              && otherElement.getGlueInfoTopTreeCategory() != null
               && currentElement.equals( otherElement ))
           {
-            ArrayList<String> currentObjectTablename = currentElement.getObjectTableName();
-            for (int i=0; i < otherElement.getObjectTableName().size(); i++)
+            ArrayList<GlueInfoTopTreeCategory> currentGlueInfoTopTreeCategory = 
+              currentElement.getGlueInfoTopTreeCategory();
+            for (int i=0; i < otherElement.getGlueInfoTopTreeCategory().size(); i++)
             {
-              if (! (currentObjectTablename.contains( otherElement.getObjectTableName().get( i ) ) ) )
+              if (! (currentGlueInfoTopTreeCategory.contains( otherElement.getGlueInfoTopTreeCategory().get( i ) ) ) )
               {
-                currentObjectTablename.add( otherElement.getObjectTableName().get( i ) );
+                currentGlueInfoTopTreeCategory.add( otherElement.getGlueInfoTopTreeCategory().get( i ) );
               }
             }
           }

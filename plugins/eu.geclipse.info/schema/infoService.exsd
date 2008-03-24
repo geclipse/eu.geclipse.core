@@ -50,7 +50,7 @@
                   
                </documentation>
                <appInfo>
-                  <meta.attribute kind="java" basedOn=":eu.geclipse.core.model.IGridInfoService"/>
+                  <meta.attribute kind="java" basedOn=":eu.geclipse.info.model.IExtentedGridInfoService"/>
                </appInfo>
             </annotation>
          </attribute>
@@ -119,7 +119,6 @@ The class attribute must be a class implementing eu.geclipse.core.model.IGridInf
          The classes that are usefull to check are eu.geclipse.glite.info.bdii.BDIIService and eu.geclipse.gria.info.GriaInfoService.
 
 You should also check eu.geclipse.info.InfoServiceFactory and eu.geclipse.info.views.GlueInfoViewer.
-
       </documentation>
    </annotation>
 

@@ -27,42 +27,35 @@ import java.util.ArrayList;
  */
 public class GlueInfoTopTreeElement {
   
-  private String glueObjectName;
   private String displayName;
-  private ArrayList<String> objectTableName;
+  private ArrayList<GlueInfoTopTreeCategory> glueInfoTopTreeCategory;
+  
   /**
-   * @param glueObjectName String representing the name of the Glue Object 
-   * such as "GlueSite", "GlueCE", "GlueSE" ... and is a AbstractGlueTable
+   * 
+   * @param glueInfoTopTreeCategory a GlueInfoTopTreeCategory
    * @param displayName The name to display in the info view
-   * @param objectTableName A string that defines the value that the parameter tableName of
-   * the Glue Object
    */
-  public GlueInfoTopTreeElement(final String glueObjectName,
-                                final String displayName,
-                                final ArrayList<String> objectTableName)
+  public GlueInfoTopTreeElement(final ArrayList<GlueInfoTopTreeCategory> glueInfoTopTreeCategory,
+                                final String displayName)
   { 
-    if (glueObjectName == null)
-      this.glueObjectName = ""; //$NON-NLS-1$
+    if (glueInfoTopTreeCategory == null)
+      this.glueInfoTopTreeCategory = new ArrayList<GlueInfoTopTreeCategory>();
     else
-      this.glueObjectName = glueObjectName;
+      this.glueInfoTopTreeCategory = glueInfoTopTreeCategory;
     
     if (displayName == null)
       this.displayName = ""; //$NON-NLS-1$
     else
       this.displayName = displayName;
     
-    if (objectTableName == null)
-      this.objectTableName = new ArrayList<String>();
-    else
-      this.objectTableName = objectTableName;
   }
   
   /**
-   * The name of the Glue Object 
-   * @return A String with the Glue Object name or an empty string
+   * Get the GlueInfoTopTreeCategory.
+   * @return a GlueInfoTopTreeCategory or null
    */
-  public String getGlueObjectName() {
-    return this.glueObjectName;
+  public ArrayList<GlueInfoTopTreeCategory> getGlueInfoTopTreeCategory() {
+    return this.glueInfoTopTreeCategory;
   }
   
   /**
@@ -72,18 +65,8 @@ public class GlueInfoTopTreeElement {
   public String getDisplayName() {
     return this.displayName;
   }
-  
-  /**
-   * The value of the parameter tableName of the Glue Object
-   * @return An ArrayList of String elements that defines the value that the parameter tableName of
-   * the Glue Object or an empty string
-   */
-  public ArrayList<String> getObjectTableName() {
-    return this.objectTableName;
-  }
 
   @Override
-  // Automatically created by eclipse
   public int hashCode() {
     final int prime = 31;
     int result = 1;
@@ -92,19 +75,10 @@ public class GlueInfoTopTreeElement {
              + ( ( this.displayName == null )
                                         ? 0
                                         : this.displayName.hashCode() );
-    result = prime
-             * result
-             + ( ( this.glueObjectName == null )
-                                           ? 0
-                                           : this.glueObjectName.hashCode() );
     return result;
   }
 
   @Override
-  // Automatically created by eclipse
-  /**
-   * The check is based on variable displayName, glueObjectName.
-   */
   public boolean equals( final Object obj ) {
     if( this == obj )
       return true;
@@ -118,50 +92,8 @@ public class GlueInfoTopTreeElement {
         return false;
     } else if( !this.displayName.equals( other.displayName ) )
       return false;
-    if( this.glueObjectName == null ) {
-      if( other.glueObjectName != null )
-        return false;
-    } else if( !this.glueObjectName.equals( other.glueObjectName ) )
-      return false;
-    if( (this.objectTableName == null && other.objectTableName != null)
-        || (this.objectTableName != null && other.objectTableName == null) ) {
-        return false;
-    }
-    /*
-    else if (this.objectTableName != null && other.objectTableName != null)
-    {
-      // Check if all the elements in the array of the first object exist in the array of the second
-      // and of the sizes are equal.
-      boolean result = true;
-      
-      if (this.objectTableName.size() != other.objectTableName.size())
-        result = false;
-      else
-      {
-        for (int i=0; i<this.objectTableName.size(); i++)
-          if (! (this.objectTableName.contains( other.objectTableName.get( i )) ))
-            result= false;
-      }
-      
-      return result;
-    }
-    */
     return true;
   }
   
-  /**
-   * Return the object as a three dimensional array of String
-   * @return A three dimensional array of String
-   */
-  /*
-  public String[] toArray()
-  {
-    String[] result = new String[3];
-    result[0] = this.glueObjectName;
-    result[1] = this.displayName;
-    //result[2] = this.objectTableName;
-    
-    return result; 
-  }
-  */
+  
 }
