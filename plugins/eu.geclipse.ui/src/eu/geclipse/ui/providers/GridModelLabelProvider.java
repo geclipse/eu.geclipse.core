@@ -27,7 +27,6 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 
 import eu.geclipse.core.model.IGridComputing;
-import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridJob;
@@ -92,7 +91,6 @@ public class GridModelLabelProvider
     
     if ( element instanceof IGridElement ) {
       result = getImage( ( IGridElement ) element );
-      
     } else {
       result = super.getImage( element );
     }
