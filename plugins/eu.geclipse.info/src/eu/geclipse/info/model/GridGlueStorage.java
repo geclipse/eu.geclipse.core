@@ -30,12 +30,10 @@ import eu.geclipse.info.glue.GlueSE;
 import eu.geclipse.info.glue.GlueSEAccessProtocol;
 
 /**
- * Implementation of the {@link eu.geclipse.core.model.IGridElement}
- * interface for a {@link GlueSE}.
+ * Implementation of the {@link eu.geclipse.core.model.IGridElement} interface
+ * for a {@link GlueSE}.
  */
-public class GridGlueStorage
-    extends GridGlueElement
-    implements IGridStorage {
+public class GridGlueStorage extends GridGlueElement implements IGridStorage {
 
   /**
    * Construct a new <code>GridGlueStorage</code> for the specified
@@ -44,43 +42,38 @@ public class GridGlueStorage
    * @param parent The parent of this element.
    * @param glueSE The associated glue SE object.
    */
-  public GridGlueStorage( final IGridContainer parent,
-                          final GlueSE glueSE ) {
+  public GridGlueStorage( final IGridContainer parent, final GlueSE glueSE ) {
     super( parent, glueSE );
   }
-  
-  public URI[] getAccessTokens() {
-    
-    ArrayList<URI> uriList=new ArrayList<URI>();
-    IVirtualOrganization vo = getVo();
 
+  public URI[] getAccessTokens() {
+    ArrayList<URI> uriList = new ArrayList<URI>();
+    IVirtualOrganization vo = getVo();
     for( GlueSA sa : getGlueSe().glueSAList ) {
-      if( ( vo == null ) || GlueQuery.saSupportsVO( sa, vo.getName() )){
+      if( ( vo == null ) || GlueQuery.saSupportsVO( sa, vo.getName() ) ) {
         try {
           String host = getGlueSe().UniqueID;
-          List<GlueSEAccessProtocol> list=getGlueSe().glueSEAccessProtocolList;
-          if ( ( list != null ) && !list.isEmpty() ) {
-            int protocolCount=list.size();
+          List<GlueSEAccessProtocol> list = getGlueSe().glueSEAccessProtocolList;
+          if( ( list != null ) && !list.isEmpty() ) {
+            int protocolCount = list.size();
             for( int i = 0; i < protocolCount; i++ ) {
-              GlueSEAccessProtocol ap=getGlueSe().glueSEAccessProtocolList.get( i );
-              String scheme=null;
-              if(ap.Type.startsWith( "srm" ) ){ //$NON-NLS-1$
-                String[] vNumbers=ap.Version.split( "\\." ); //$NON-NLS-1$
-                StringBuilder sBuilder=new StringBuilder("srm-v"); //$NON-NLS-1$
-                for( String n : vNumbers ) {
-                  sBuilder.append( n );
-                }
-                scheme=sBuilder.toString();
-              }else{
-                scheme=ap.Type;
+              GlueSEAccessProtocol ap = getGlueSe().glueSEAccessProtocolList.get( i );
+              String scheme = null;
+              if( ap.Type.toLowerCase().startsWith( "srm" ) ) {
+                scheme = ap.Type.toLowerCase();
+              } else {
+                scheme = ap.Type;
               }
-              
-              String newPath =  sa.Path.endsWith( "/" ) ? sa.Path : sa.Path + "/"; //$NON-NLS-1$ //$NON-NLS-2$
-              uriList.add(new URI( scheme, null, host, 
-                                   ap.Port.intValue(), newPath,
-                                   null, null ));
+              String newPath = sa.Path.endsWith( "/" ) ? sa.Path : sa.Path + "/"; //$NON-NLS-1$ //$NON-NLS-2$
+              uriList.add( new URI( scheme,
+                                    null,
+                                    host,
+                                    ap.Port.intValue(),
+                                    newPath,
+                                    null,
+                                    null ) );
             }
-          }        
+          }
         } catch( RuntimeException e ) {
           // Just catch and do nothing here
         } catch( URISyntaxException e ) {
@@ -88,51 +81,46 @@ public class GridGlueStorage
         }
       }
     }
-    URI[] result = new URI[uriList.size()];
-    int i=0;
+    URI[] result = new URI[ uriList.size() ];
+    int i = 0;
     for( URI uri : uriList ) {
-      result[i]=uri;
+      result[ i ] = uri;
       ++i;
     }
     return result;
-    
   }
-  
+
   /**
    * Convenience method for getting the glue SE.
    * 
    * @return The associated {@link GlueSE} object.
    */
   public GlueSE getGlueSe() {
-    return ( GlueSE ) getGlueElement();
+    return ( GlueSE )getGlueElement();
   }
-  
+
   @Override
   public String getName() {
     GlueSE se = getGlueSe();
     return "SE @ " + se.UniqueID; //$NON-NLS-1$
   }
-  
+
   protected IVirtualOrganization getVo() {
-    
     IVirtualOrganization result = null;
     IGridProject project = getProject();
-    
-    if ( project != null ) {
+    if( project != null ) {
       result = project.getVO();
     } else {
       IGridContainer parent = getParent();
-      while ( parent != null ) {
-        if ( parent instanceof IVirtualOrganization ) {
-          result = ( IVirtualOrganization ) parent;
+      while( parent != null ) {
+        if( parent instanceof IVirtualOrganization ) {
+          result = ( IVirtualOrganization )parent;
           break;
         }
         parent = parent.getParent();
       }
     }
-    
     return result;
-    
   }
 
   /*
@@ -144,7 +132,7 @@ public class GridGlueStorage
     URI uri = null;
     try {
       uri = new URI( getGlueSe().UniqueID );
-    } catch (URISyntaxException e) {
+    } catch( URISyntaxException e ) {
       // Nothing to do, just catch and return null
     }
     return uri;
@@ -158,14 +146,11 @@ public class GridGlueStorage
   public String getHostName() {
     String str = null;
     URI uri = getURI();
-    
-    if ( null != uri ) {
+    if( null != uri ) {
       str = uri.getHost();
-
-      if ( null == str )
+      if( null == str )
         str = uri.getPath();
     }
-    
     return str;
-  }  
+  }
 }
