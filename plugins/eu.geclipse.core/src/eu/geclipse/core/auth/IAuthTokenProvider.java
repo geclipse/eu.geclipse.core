@@ -43,7 +43,7 @@ public interface IAuthTokenProvider {
    * token is not of the specified type but an appropriate token could be
    * found this token will be set to be the new default token.
    * 
-   * @param description A token description that is used to determine the
+   * @param request A token request that is used to determine the
    * type of the token that is requested.
    * @return A token that matches the specified token description.
    */
