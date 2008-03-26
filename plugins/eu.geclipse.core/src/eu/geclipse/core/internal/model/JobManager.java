@@ -447,6 +447,12 @@ public class JobManager extends AbstractGridElementManager
       listener.statusChanged( job );
     }
   }
+  
+  public void statusUpdated( final IGridJob job ) {
+    for ( IGridJobStatusListener listener : this.globalListeners ) {
+      listener.statusUpdated( job );
+    }    
+  }
 
   // void waitForJob(final String id) throws InterruptedException,
   // IllegalAccessException{
@@ -588,7 +594,7 @@ public class JobManager extends AbstractGridElementManager
    * and added to updaters list. This method shouldn't be used to check if updaters list 
    * contains updater for the given job id - use this.updaters.contains( IGridJobID ) instead.
    * 
-   * @param job Job for which updater should be recived.
+   * @param jobID Job for which updater should be recived.
    * @return Updater form list of registered udpaters.
    */
   public JobStatusUpdater getUpdater( final IGridJobID jobID ) {
@@ -601,6 +607,13 @@ public class JobManager extends AbstractGridElementManager
       result = this.updaters.get(  jobID );
     }
     return result;
+  }
+
+  public void jobStatusUpdated( final IGridJob job ) {
+    for( IGridJobStatusListener listener : this.globalListeners ) {
+      listener.statusUpdated( job );
+    }
+    
   }
   
 }

@@ -103,6 +103,11 @@ public class GridProjectView
     }
   }
   
+  public void statusUpdated( final IGridJob job ) {
+    // react only if status changed. See statusChanged()    
+  }
+
+  
   /* (non-Javadoc)
    * @see eu.geclipse.ui.views.GridModelViewPart#contributeAdditionalActions(eu.geclipse.ui.internal.actions.ActionGroupManager)
    */

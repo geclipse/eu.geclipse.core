@@ -62,4 +62,10 @@ public interface IGridJobManager
    * @param job Job, which status has changed.
    */
   public void jobStatusChanged( final IGridJob job );
+
+  /**
+   * Tells updater of the given job that status has been updated (maybe no changed)
+   * @param job
+   */
+  public void jobStatusUpdated( IGridJob job );
 }

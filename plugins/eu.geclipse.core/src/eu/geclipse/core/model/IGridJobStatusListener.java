@@ -14,6 +14,8 @@
  *****************************************************************************/
 package eu.geclipse.core.model;
 
+import eu.geclipse.core.internal.model.JobManager;
+
 /**
  * Interface for listener called when job status is updated
  */
@@ -31,5 +33,16 @@ public interface IGridJobStatusListener {
    * @param job
    */
   public void statusChanged( IGridJob job );
+  
+  /**
+   * Called after every update of job status, even if status wasn't changed
+   * during update. <br>
+   * Warning: now this method is called only for listeners, which listen for
+   * changes of all jobs registered using method
+   * {@link JobManager#addJobStatusListener(IGridJobStatusListener)}
+   * 
+   * @param job for which, status has been updated
+   */
+  public void statusUpdated( IGridJob job );
   
 }

@@ -85,11 +85,16 @@ public class GridJobView extends ElementManagerViewPart
   }
 
   public void statusChanged( final IGridJob job ) {
+    // method ignored, decorator is refreshed in statusUpdated()
+  }
+  
+  public void statusUpdated( final IGridJob job ) {
     GridJobDecorator decorator = GridJobDecorator.getDecorator();
     if ( decorator != null ) {
       decorator.refresh( job );
     }
   }
+
 
   /*
    * (non-Javadoc)

@@ -76,6 +76,7 @@ public class UpdateJobStatusAction extends SelectionListenerAction {
                 new SubProgressMonitor( monitor, 1 );
                 jobToUpdate.updateJobStatus();
                 GridModel.getJobManager().jobStatusChanged( jobToUpdate );
+                GridModel.getJobManager().jobStatusUpdated( jobToUpdate );
                 monitor.worked( 1 );
               }
             }

@@ -43,8 +43,6 @@ import org.eclipse.ui.part.ViewPart;
 
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridJob;
-import eu.geclipse.core.model.IGridJobManager;
-import eu.geclipse.core.model.IGridJobStatus;
 import eu.geclipse.core.model.IGridJobStatusListener;
 import eu.geclipse.ui.internal.actions.JobDetailsViewActions;
 
@@ -109,7 +107,8 @@ implements ISelectionListener, IViewConfiguration, IGridJobStatusListener
     this.topScrolledForm.setBackground( getFormToolkit().getColors()
       .getBackground() );
     getSite().getPage().addSelectionListener( this );
-    setInputJob( findSelectedJob() );
+    setInputJob( findSelectedJob() );    
+    GridModel.getJobManager().addJobStatusListener( this );
   }
 
   @Override
@@ -135,18 +134,7 @@ implements ISelectionListener, IViewConfiguration, IGridJobStatusListener
    * @param gridJob
    */
   protected void setInputJob( final IGridJob gridJob ) {
-    IGridJobManager jobManager = GridModel.getJobManager();
-    
-    if( this.inputJob != null ) {
-      jobManager.removeJobStatusListener( this );
-    }
-    
-    this.inputJob = gridJob;
-    
-    if( this.inputJob != null ) {
-      jobManager.addJobStatusListener( new IGridJob[] { this.inputJob }, IGridJobStatus._ALL, this );
-    }
-    
+    this.inputJob = gridJob;        
     refresh();
     getJobSelectionProvider().fireSelectionChanged();
   }
@@ -229,7 +217,11 @@ implements ISelectionListener, IViewConfiguration, IGridJobStatusListener
     getActions().saveState( currentMemento );
   }
 
-  public void statusChanged( final IGridJob job ) {
+  /**
+   * Refresh view - may be called from any thread
+   * 
+   */
+  private void scheduleRefresh() {
     IWorkbenchPartSite site = this.getSite();
     if( site != null ) {
       Shell shell = site.getShell();
@@ -239,13 +231,26 @@ implements ISelectionListener, IViewConfiguration, IGridJobStatusListener
           display.asyncExec( new Runnable() {
 
             public void run() {
-              setInputJob( job );
+              refresh();
             }
           } );
         }
       }
     }
+  }  
+  
+  public void statusChanged( final IGridJob job ) {
+    if( this.inputJob == job ) {
+      scheduleRefresh();
+    }
   }
+  
+  public void statusUpdated( final IGridJob job ) {
+    if( this.inputJob == job ) {
+      scheduleRefresh();
+    }
+  }
+
 
   private JobDetailsViewActions getActions() {
     if( this.actions == null ) {
