@@ -21,8 +21,6 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.eclipse.compare.IContentChangeListener;
-import org.eclipse.compare.IContentChangeNotifier;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.action.Action;
@@ -77,6 +75,8 @@ import eu.geclipse.core.Extensions;
 import eu.geclipse.core.auth.AuthenticationException;
 import eu.geclipse.core.auth.AuthenticationTokenManager;
 import eu.geclipse.core.auth.IAuthenticationToken;
+import eu.geclipse.core.auth.ISecurityManager;
+import eu.geclipse.core.auth.ISecurityManagerListener;
 import eu.geclipse.ui.AbstractAuthTokenUIFactory;
 import eu.geclipse.ui.IAuthTokenUIFactory;
 import eu.geclipse.ui.UIAuthTokenProvider;
@@ -97,7 +97,9 @@ import eu.geclipse.ui.listeners.TableColumnListener;
  *
  * @author stuempert-m
  */
-public class AuthTokenView extends ViewPart implements IContentChangeListener {
+public class AuthTokenView
+    extends ViewPart
+    implements ISecurityManagerListener {
   
   /**
    * This internal class is used to present the currently available authentication
@@ -437,7 +439,7 @@ public class AuthTokenView extends ViewPart implements IContentChangeListener {
         }
       }
     });
-    manager.addContentChangeListener( this );
+    manager.addListener( this );
     
     createActions();
     createToolbar();
@@ -451,13 +453,10 @@ public class AuthTokenView extends ViewPart implements IContentChangeListener {
   @Override
   public void dispose() {
     AuthenticationTokenManager manager = AuthenticationTokenManager.getManager();
-    manager.removeContentChangeListener( this );
+    manager.removeListener( this );
   }
   
-  /* (non-Javadoc)
-   * @see org.eclipse.compare.IContentChangeListener#contentChanged(org.eclipse.compare.IContentChangeNotifier)
-   */
-  public void contentChanged( final IContentChangeNotifier source ) {
+  public void contentChanged( final ISecurityManager manager ) {
     AuthTokenView.this.tokenList.refresh();
     AuthenticationTokenManager innerManager = AuthenticationTokenManager.getManager();
     IAuthenticationToken innerDefaultToken = innerManager.getDefaultToken();

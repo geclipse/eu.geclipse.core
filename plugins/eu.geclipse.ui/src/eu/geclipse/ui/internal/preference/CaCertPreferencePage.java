@@ -19,8 +19,6 @@ package eu.geclipse.ui.internal.preference;
 import java.util.Arrays;
 import java.util.Comparator;
 
-import org.eclipse.compare.IContentChangeListener;
-import org.eclipse.compare.IContentChangeNotifier;
 import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.PageChangedEvent;
@@ -45,6 +43,8 @@ import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import eu.geclipse.core.auth.CaCertManager;
 import eu.geclipse.core.auth.ICaCertificate;
+import eu.geclipse.core.auth.ISecurityManager;
+import eu.geclipse.core.auth.ISecurityManagerListener;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.internal.wizards.CaCertificateImportWizard;
 import eu.geclipse.ui.internal.wizards.CertificateChooserPage;
@@ -55,7 +55,7 @@ import eu.geclipse.ui.internal.wizards.CertificateChooserPage;
  */
 public class CaCertPreferencePage
     extends PreferencePage
-    implements IWorkbenchPreferencePage, IContentChangeListener {
+    implements IWorkbenchPreferencePage, ISecurityManagerListener {
   
   /**
    * The list containing all currently available CA certificates.
@@ -83,10 +83,10 @@ public class CaCertPreferencePage
   public CaCertPreferencePage() {
     super();
     setDescription( Messages.getString( "CaCertPreferencePage.description" ) ); //$NON-NLS-1$
-    CaCertManager.getManager().addContentChangeListener( this );
+    CaCertManager.getManager().addListener( this );
   }
   
-  public void contentChanged( final IContentChangeNotifier source ) {
+  public void contentChanged( final ISecurityManager manager ) {
     getControl().getDisplay().asyncExec( new Runnable() {
       public void run() {
         updateCaList();
@@ -96,7 +96,7 @@ public class CaCertPreferencePage
   
   @Override
   public void dispose() {
-    CaCertManager.getManager().removeContentChangeListener( this );
+    CaCertManager.getManager().removeListener( this );
     super.dispose();
   }
 

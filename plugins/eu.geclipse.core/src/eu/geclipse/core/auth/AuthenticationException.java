@@ -39,7 +39,7 @@ public class AuthenticationException
    * @param problemID   The ID of the problem that should be reported.
    * @param pluginID    The ID of the plug-in where the problem happened.
    * 
-   * @see #ProblemException(String,String)
+   * @see ProblemException#ProblemException(String, String)
    */
   public AuthenticationException( final String problemID,
                                   final String pluginID ) {
@@ -54,7 +54,7 @@ public class AuthenticationException
    * @param exception   A {@link Throwable} that may have caused the problem.
    * @param pluginID    The ID of the plug-in where the problem happened.
    * 
-   * @see #ProblemException(String,Throwable,String)
+   * @see ProblemException#ProblemException(String,Throwable,String)
    */
   public AuthenticationException( final String problemID,
                                   final Throwable exception,
@@ -70,7 +70,7 @@ public class AuthenticationException
    * @param description A description that will replace the problems standard description.
    * @param pluginID    The ID of the plug-in where the problem happened.
    * 
-   * @see #ProblemException(String,String,String)
+   * @see ProblemException#ProblemException(String,String,String)
    */
   public AuthenticationException( final String problemID,
                                   final String description,
@@ -89,7 +89,7 @@ public class AuthenticationException
    *                    the problem.
    * @param pluginID    The ID of the plug-in where the problem happened.
    * 
-   * @see #ProblemException(String,String,Throwable,String)
+   * @see ProblemException#ProblemException(String,String,Throwable,String)
    */
   public AuthenticationException( final String problemID,
                                   final String description,
@@ -103,7 +103,7 @@ public class AuthenticationException
    * 
    * @param problem The problem associated to this exception.
    * 
-   * @see #ProblemException(IProblem)
+   * @see ProblemException#ProblemException(IProblem)
    */
   public AuthenticationException( final IProblem problem ) {
     super( problem );

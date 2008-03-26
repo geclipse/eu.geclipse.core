@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -55,10 +55,10 @@ public abstract class AbstractAuthTokenProvider implements IAuthTokenProvider {
    * token provider with the highest priority of all currently
    * registered providers.
    * 
-   * @param description type of token to return.
+   * @param request Request parameters for the token.
    * @return An authentication token if at least one provider is 
    * registered and a token could be found.
-   * @see eu.geclipse.core.auth.IAuthTokenProvider#requestToken(IAuthenticationTokenDescription)
+   * @see eu.geclipse.core.auth.IAuthTokenProvider#requestToken(AuthTokenRequest)
    */
   public static synchronized IAuthenticationToken staticRequestToken( final AuthTokenRequest request ) {
     IAuthTokenProvider provider = getHighestPriorityProvider();

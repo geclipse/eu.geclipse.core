@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -20,10 +20,7 @@ import java.io.IOException;
 import java.util.Hashtable;
 import java.util.List;
 
-import org.eclipse.compare.IContentChangeListener;
-import org.eclipse.compare.IContentChangeNotifier;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.ListenerList;
 
 import eu.geclipse.core.ExtensionManager;
 import eu.geclipse.core.Extensions;
@@ -35,10 +32,9 @@ import eu.geclipse.core.reporting.ProblemException;
  * workspace. It also provides methods for retrieving new certificates from
  * local or remote repositories. The {@link #getCaCertLocation()} method
  * can be used to initialise external packages like the org.globus.
- * 
- * @author stuempert-m
  */
-public class CaCertManager implements IContentChangeNotifier {
+public class CaCertManager
+    extends BaseSecurityManager {
   
   /**
    * The singleton.
@@ -50,12 +46,6 @@ public class CaCertManager implements IContentChangeNotifier {
    */
   private Hashtable< String, ICaCertificate > certs
     = new Hashtable< String, ICaCertificate >();
-  
-  /**
-   * This list holds the currently registered IContentChangeListeners. 
-   */
-  private ListenerList ccListeners
-    = new ListenerList();
   
   /**
    * Private constructor. The created manager is initialised with all
@@ -180,20 +170,6 @@ public class CaCertManager implements IContentChangeNotifier {
     }
     return location;
   }
-
-  /* (non-Javadoc)
-   * @see org.eclipse.compare.IContentChangeNotifier#addContentChangeListener(org.eclipse.compare.IContentChangeListener)
-   */
-  public void addContentChangeListener( final IContentChangeListener listener ) {
-    this.ccListeners.add( listener );
-  }
-
-  /* (non-Javadoc)
-   * @see org.eclipse.compare.IContentChangeNotifier#removeContentChangeListener(org.eclipse.compare.IContentChangeListener)
-   */
-  public void removeContentChangeListener( final IContentChangeListener listener ) {
-    this.ccListeners.remove( listener );
-  }
   
   /**
    * Update this manager.
@@ -235,19 +211,6 @@ public class CaCertManager implements IContentChangeNotifier {
       }
     }
     
-  }
-
-  /**
-   * Notify all registered IContentChangeListeners about content changes.
-   */
-  private void fireContentChanged() {
-    Object[] list = this.ccListeners.getListeners();
-    for ( int i = 0 ; i < list.length ; i++ ) {
-      if ( list[i] instanceof IContentChangeListener ) {
-        IContentChangeListener listener = ( IContentChangeListener ) list[i];
-        listener.contentChanged( this );
-      }
-    }
   }
   
   private boolean internalAddCertificate( final ICaCertificate certificate ) {

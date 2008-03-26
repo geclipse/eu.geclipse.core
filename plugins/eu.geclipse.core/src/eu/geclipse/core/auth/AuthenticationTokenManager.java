@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -17,9 +17,7 @@ package eu.geclipse.core.auth;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.eclipse.compare.IContentChangeListener;
-import org.eclipse.compare.IContentChangeNotifier;
-import org.eclipse.core.runtime.ListenerList;
+
 
 /**
  * The <code>AuthenticationTokenManager</code> manages all types of authentication tokens.
@@ -29,7 +27,8 @@ import org.eclipse.core.runtime.ListenerList;
  * 
  * @author stuempert-m
  */
-public class AuthenticationTokenManager implements IContentChangeNotifier {
+public class AuthenticationTokenManager
+    extends BaseSecurityManager {
   
   /**
    * The singleton that holds the instance of this
@@ -46,11 +45,6 @@ public class AuthenticationTokenManager implements IContentChangeNotifier {
    * The token used as default.
    */
   private IAuthenticationToken defaultToken;
-  
-  /**
-   * This list holds the currently registered IContentChangeListeners. 
-   */
-  private ListenerList ccListeners = new ListenerList();
   
   /**
    * Private constructor. Use the {@link getManager} method to get the singleton.
@@ -180,32 +174,6 @@ public class AuthenticationTokenManager implements IContentChangeNotifier {
   }
   
   /**
-   * Add a new {@link IContentChangeListener} to the list of listeners. The listeners are
-   * always informed when a new token is added to or an old token is removed from the
-   * internal list of managed tokens.
-   * 
-   * @param listener The {@link IContentChangeListener} that should be added to the list
-   *                 of listeners.
-   * @see #removeContentChangeListener(IContentChangeListener)
-   * @see org.eclipse.compare.IContentChangeNotifier#addContentChangeListener(org.eclipse.compare.IContentChangeListener)
-   */
-  public void addContentChangeListener( final IContentChangeListener listener ) {
-    this.ccListeners.add( listener );
-  }
-
-  
-  /**
-   * Remove the specified {@link IContentChangeListener} from the list of listener. This
-   * listener will not longer be informed about changes made to the list of managed tokens.
-   * 
-   * @param listener The {@link IContentChangeListener} that should be removed.
-   * @see org.eclipse.compare.IContentChangeNotifier#removeContentChangeListener(org.eclipse.compare.IContentChangeListener)
-   */
-  public void removeContentChangeListener( final IContentChangeListener listener ) {
-    this.ccListeners.remove( listener );
-  }
-  
-  /**
    * Add the specified IAuthenticationToken to the list of managed tokens.
    * 
    * @param token The token to be added.
@@ -229,20 +197,6 @@ public class AuthenticationTokenManager implements IContentChangeNotifier {
       fireContentChanged();
     }
     return result;
-  }
-  
-  /**
-   * Notify all registered IContentChangeListeners about content changes, i.e. a new token was
-   * added or an existing token was removed.
-   */
-  protected void fireContentChanged() {
-    Object[] list = this.ccListeners.getListeners();
-    for ( int i = 0 ; i < list.length ; i++ ) {
-      if ( list[i] instanceof IContentChangeListener ) {
-        IContentChangeListener listener = ( IContentChangeListener ) list[i];
-        listener.contentChanged( this );
-      }
-    }
   }
   
   /**
