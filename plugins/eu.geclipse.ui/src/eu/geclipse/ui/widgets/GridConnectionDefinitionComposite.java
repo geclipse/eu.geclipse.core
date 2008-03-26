@@ -18,8 +18,11 @@ package eu.geclipse.ui.widgets;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
+import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -74,6 +77,10 @@ import eu.geclipse.ui.wizards.IConnectionTokenValidator;
  * eu.geclipse.ui.efs extension point.
  */
 public class GridConnectionDefinitionComposite extends Composite {
+  
+  private static final String FS_GECL = "gecl"; //$NON-NLS-1$
+  
+  private static final String FS_NULL = EFS.getNullFileSystem().getScheme();
   
   /**
    * Hard-coded separator used for preferences.
@@ -811,11 +818,24 @@ public class GridConnectionDefinitionComposite extends Composite {
    * @param combo
    */
   private void initializeSchemeCombo( final Combo combo ) {
+    
+    combo.removeAll();
+    
     List< String > schemes
       = eu.geclipse.core.Extensions.getRegisteredFilesystemSchemes();
-    String[] schemeArray
-      = schemes.toArray( new String[ schemes.size() ] );
-    combo.setItems( schemeArray );
+    Collections.sort( schemes, new Comparator< String >() {
+      public int compare( final String s1, final String s2 ) {
+        return s1.compareToIgnoreCase( s2 );
+      }
+    } );
+    
+    for ( String scheme : schemes ) {
+      if ( ! scheme.equalsIgnoreCase( FS_GECL )
+          && ! scheme.equalsIgnoreCase( FS_NULL ) ) {
+        combo.add( scheme );
+      }
+    }
+    
   }
   
   /**
