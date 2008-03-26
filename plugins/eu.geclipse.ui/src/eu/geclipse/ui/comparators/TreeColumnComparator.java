@@ -15,6 +15,8 @@
 
 package eu.geclipse.ui.comparators;
 
+import org.eclipse.core.filesystem.IFileInfo;
+import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.viewers.IBaseLabelProvider;
@@ -59,16 +61,19 @@ public class TreeColumnComparator extends ViewerComparator {
      * Analyze the element to be sorted to determine if it is a folder, file,
      * project, etc.
      */
-    if ( element instanceof IAdaptable ) {
+    if ( element instanceof IFileStore ) {
+      IFileInfo info = ( ( IFileStore ) element ).fetchInfo();
+      type = info.isDirectory() ? 0 : 1;
+    } else if ( element instanceof IAdaptable ) {
       IAdaptable adaptable = ( IAdaptable )element;
       res = ( IResource )adaptable.getAdapter( IResource.class );
-    }
-    if ( res != null ) {
-      /*
-       * The IResource types FILE, FOLDER, PROJECT, ROOT have non-zero values...
-       * and FILEs should come last in the (ascending) sorting, thus the '-' 
-       */
-      type = - res.getType();
+      if ( res != null ) {
+        /*
+         * The IResource types FILE, FOLDER, PROJECT, ROOT have non-zero values...
+         * and FILEs should come last in the (ascending) sorting, thus the '-' 
+         */
+        type = - res.getType();
+      }
     }
 
     // We return 0 if the element is not a IResource
