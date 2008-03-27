@@ -29,6 +29,10 @@ import java.util.Set;
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
@@ -52,6 +56,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -70,6 +75,7 @@ import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridModelListener;
+import eu.geclipse.core.model.IGridRoot;
 import eu.geclipse.ui.comparators.TreeColumnComparator;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.listeners.TreeColumnListener;
@@ -126,10 +132,16 @@ public class NewGridFileDialog
     public static final int HOME_MODE = 2;
     
     /**
+     * Mode constant for the local mode with the workspace
+     * as root directory.
+     */
+    public static final int WS_MODE = 3;
+    
+    /**
      * Mode constant for the local mode with the system's root
      * as root directory.
      */
-    public static final int ROOT_MODE = 3;
+    public static final int ROOT_MODE = 4;
     
     /**
      * Identifier used to tag the {@link ToolItem}s.
@@ -348,6 +360,17 @@ public class NewGridFileDialog
           boolean isDir = ( ( IGridConnectionElement ) element ).isFolder();
           String name = ( ( IGridConnectionElement ) element ).getName();
           result = isDir || name.endsWith( PREFIX_SEPARATOR + this.prefix );
+        } else if ( element instanceof IGridContainer ) {
+          IResource resource = ( ( IGridContainer ) element ).getResource();
+          if ( ( resource != null ) && ( resource.getType() == IResource.FILE ) ) {
+            String name = resource.getName();
+            result = name.endsWith( PREFIX_SEPARATOR + this.prefix );
+          } else {
+            result = true;
+          }
+        } else if ( element instanceof IGridElement ) {
+          String name = ( ( IGridElement ) element ).getName();
+          result = name.endsWith( PREFIX_SEPARATOR + this.prefix );
         } else if ( element instanceof NewProgressTreeNode ){
           result = true;
         }
@@ -551,8 +574,18 @@ public class NewGridFileDialog
     return super.close();
   }
   
+  /* (non-Javadoc)
+   * @see org.eclipse.jface.dialogs.Dialog#create()
+   */
+  @Override
+  public void create() {
+    super.create();
+    validate();
+  }
+  
   /**
-   * Get all currently selected {@link IFileStore}s.
+   * Get all currently selected {@link IFileStore}s that meet the style of
+   * this dialog.
    * 
    * @return Array containing the {@link IFileStore}s of all selected elements
    * or <code>null</code> if no selection is available.
@@ -561,37 +594,19 @@ public class NewGridFileDialog
     
     IFileStore[] result = null;
     
-    if ( ! this.currentSelection.isEmpty() ) {
+    IFileStore[] stores = internalGetSelectedFileStores();
+    
+    if ( ( stores != null ) && ( stores.length > 0 ) ) {
       
       List< IFileStore > list = new ArrayList< IFileStore >();
-      Iterator< ? > iterator = this.currentSelection.iterator();
       
-      while ( iterator.hasNext() ) {
-        
-        Object o = iterator.next();
-        
-        if ( o instanceof IFileStore ) {
-          IFileStore store = ( IFileStore ) o;
-          if ( ( ! hasStyle( STYLE_ALLOW_ONLY_FILES ) && ! hasStyle( STYLE_ALLOW_ONLY_FOLDERS ))
-              || ( hasStyle( STYLE_ALLOW_ONLY_FILES ) && ! store.fetchInfo().isDirectory() )
-              || ( hasStyle( STYLE_ALLOW_ONLY_FOLDERS ) && store.fetchInfo().isDirectory() ) ) {
-            list.add( store );
-          }
+      for ( IFileStore store : stores ) {
+        if ( store.fetchInfo().exists()
+            && ( ( ! hasStyle( STYLE_ALLOW_ONLY_FILES ) && ! hasStyle( STYLE_ALLOW_ONLY_FOLDERS ))
+                || ( hasStyle( STYLE_ALLOW_ONLY_FILES ) && ! store.fetchInfo().isDirectory() )
+                || ( hasStyle( STYLE_ALLOW_ONLY_FOLDERS ) && store.fetchInfo().isDirectory() ) ) ) {
+          list.add( store );
         }
-        
-        else if ( o instanceof IGridConnectionElement ) {
-          IGridConnectionElement element = ( IGridConnectionElement ) o;
-          if ( ( ! hasStyle( STYLE_ALLOW_ONLY_FILES ) && ! hasStyle( STYLE_ALLOW_ONLY_FOLDERS ))
-              || ( hasStyle( STYLE_ALLOW_ONLY_FILES ) && ! element.isFolder() )
-              || ( hasStyle( STYLE_ALLOW_ONLY_FOLDERS ) && element.isFolder() ) ) {
-            try {
-              list.add( element.getConnectionFileStore() );
-            } catch (CoreException e) {
-              // Silently ignored
-            }
-          }
-        }
-        
       }
       
       if ( ! list.isEmpty() ) {
@@ -676,13 +691,6 @@ public class NewGridFileDialog
       }
     } );
     
-    URL connURL = Activator.getDefault().getBundle().getResource( "icons/extras/grid_file_dialog_conn_mode.gif" ); //$NON-NLS-1$
-    ImageDescriptor connDesc = ImageDescriptor.createFromURL( connURL );
-    URL rootURL = Activator.getDefault().getBundle().getResource( "icons/extras/grid_file_dialog_root_mode.gif" ); //$NON-NLS-1$
-    ImageDescriptor rootDesc = ImageDescriptor.createFromURL( rootURL );
-    URL homeURL = Activator.getDefault().getBundle().getResource( "icons/extras/grid_file_dialog_home_mode.gif" ); //$NON-NLS-1$
-    ImageDescriptor homeDesc = ImageDescriptor.createFromURL( homeURL );
-
     GridData gData;
     
     Composite mainComp = new Composite( parent, SWT.NONE );
@@ -725,18 +733,37 @@ public class NewGridFileDialog
       modeBar.setLayoutData( gData );
       
       if ( ! hasStyle( STYLE_ALLOW_ONLY_LOCAL ) ) {
+        
+        URL connURL = Activator.getDefault().getBundle().getResource( "icons/extras/grid_file_dialog_conn_mode.gif" ); //$NON-NLS-1$
+        ImageDescriptor connDesc = ImageDescriptor.createFromURL( connURL );
+        
         ToolItem connItem = new ToolItem( modeBar, SWT.CHECK );
         connItem.setImage( connDesc.createImage() );
         connItem.setToolTipText( "Switch to connections" );
         this.modeManager.addModeItem( connItem, ModeManager.CONNECTION_MODE );
+        
       }
       
       if ( ! hasStyle( STYLE_ALLOW_ONLY_CONNECTIONS | STYLE_ALLOW_ONLY_REMOTE_CONNECTIONS ) ) {
 
+        URL homeURL = Activator.getDefault().getBundle().getResource( "icons/extras/grid_file_dialog_home_mode.gif" ); //$NON-NLS-1$
+        ImageDescriptor homeDesc = ImageDescriptor.createFromURL( homeURL );
+        
         ToolItem homeItem = new ToolItem( modeBar, SWT.CHECK );
         homeItem.setImage( homeDesc.createImage() );
         homeItem.setToolTipText( "Switch to home directory" );
         this.modeManager.addModeItem( homeItem, ModeManager.HOME_MODE );
+        
+        URL wsURL = Activator.getDefault().getBundle().getResource( "icons/extras/grid_file_dialog_ws_mode.gif" ); //$NON-NLS-1$
+        ImageDescriptor wsDesc = ImageDescriptor.createFromURL( wsURL );
+        
+        ToolItem wsItem = new ToolItem( modeBar, SWT.CHECK );
+        wsItem.setImage( wsDesc.createImage() );
+        wsItem.setToolTipText( "Switch to workspace" );
+        this.modeManager.addModeItem( wsItem, ModeManager.WS_MODE );
+        
+        URL rootURL = Activator.getDefault().getBundle().getResource( "icons/extras/grid_file_dialog_root_mode.gif" ); //$NON-NLS-1$
+        ImageDescriptor rootDesc = ImageDescriptor.createFromURL( rootURL );
         
         ToolItem rootItem = new ToolItem( modeBar, SWT.CHECK );
         rootItem.setImage( rootDesc.createImage() );
@@ -934,14 +961,9 @@ public class NewGridFileDialog
       boolean state = this.treeViewer.getExpandedState( object );
       this.treeViewer.setExpandedState( object, ! state );
     } else {
-      IFileStore[] stores = getSelectedFileStores();
-      if ( ( stores != null ) && ( stores.length > 0 ) ) {
-        if ( ( ! hasStyle( STYLE_ALLOW_ONLY_FILES ) && ! hasStyle( STYLE_ALLOW_ONLY_FOLDERS ) )
-            || ( hasStyle( STYLE_ALLOW_ONLY_FILES ) && ! stores[ 0 ].fetchInfo().isDirectory() )
-            || ( hasStyle( STYLE_ALLOW_ONLY_FOLDERS ) && stores[ 0 ].fetchInfo().isDirectory() ) ) {
-          setReturnCode( IDialogConstants.OK_ID );
-          close();
-        }
+      if ( validate() ) {
+        setReturnCode( IDialogConstants.OK_ID );
+        close();
       }
     }
   }
@@ -956,6 +978,7 @@ public class NewGridFileDialog
     try {
       URI uri = new URI( this.uriCombo.getText() );
       setSelectedURI( uri, false, true );
+      validate();
     } catch ( URISyntaxException uriExc ) {
       this.filenameCombo.setText( EMPTY_STRING );
       setErrorMessage( "Invalid URI - " + uriExc.getLocalizedMessage() );
@@ -988,6 +1011,7 @@ public class NewGridFileDialog
           uri.getFragment()
       );
       setSelectedURI( uri, true, false );
+      validate();
     } catch ( URISyntaxException uriExc ) {
       setErrorMessage( "Invalid URI - " + uriExc.getLocalizedMessage() ); //$NON-NLS-1$
     }
@@ -1000,6 +1024,7 @@ public class NewGridFileDialog
       IFileStore[] stores = getSelectedFileStores();
       setSelectedStore( ( ( stores != null ) && ( stores.length > 0 ) ) ? stores[ 0 ] : null, true, true );
     }
+    validate();
   }
   
   protected void setMode( final int mode ) {
@@ -1014,7 +1039,11 @@ public class NewGridFileDialog
         String home = System.getProperty( HOME_PROPERTY );
         this.treeViewer.setInput( EFS.getLocalFileSystem().getStore( new Path( home ) ) );
         break;
+      case ModeManager.WS_MODE:
+        this.treeViewer.setInput( GridModel.getRoot() );
+        break;
     }
+    validate();
   }
   
   /**
@@ -1113,6 +1142,51 @@ public class NewGridFileDialog
   }
   
   /**
+   * Get all currently selected {@link IFileStore}s.
+   * 
+   * @return Array containing the {@link IFileStore}s of all selected elements
+   * or <code>null</code> if no selection is available.
+   */
+  private IFileStore[] internalGetSelectedFileStores() {
+    
+    IFileStore[] result = null;
+    
+    if ( ( this.currentSelection != null ) && ! this.currentSelection.isEmpty() ) {
+      
+      List< IFileStore > list = new ArrayList< IFileStore >();
+      Iterator< ? > iterator = this.currentSelection.iterator();
+      
+      while ( iterator.hasNext() ) {
+        
+        Object o = iterator.next();
+        
+        if ( o instanceof IGridConnectionElement ) {
+          try {
+            o = ( ( IGridConnectionElement ) o ).getConnectionFileStore();
+          } catch ( CoreException cExc ) {
+            // Silently ignored
+          }
+        } else if ( o instanceof IGridElement ) {
+          o = ( ( IGridElement ) o ).getFileStore();
+        }
+        
+        if ( o instanceof IFileStore ) {
+          list.add( ( IFileStore ) o );
+        }
+        
+      }
+      
+      if ( ! list.isEmpty() ) {
+        result = list.toArray( new IFileStore[ list.size() ] );
+      }
+      
+    }
+    
+    return result;
+    
+  }
+  
+  /**
    * Set the specified {@link IFileStore} as selected. This method
    * updates the uri and the filename combo if the corresponding flags
    * are <code>true</code>.
@@ -1147,12 +1221,10 @@ public class NewGridFileDialog
           && ( ( hasStyle( STYLE_ALLOW_ONLY_FILES ) && store.fetchInfo().isDirectory() )
               || ( hasStyle( STYLE_ALLOW_ONLY_FOLDERS ) && ! store.fetchInfo().isDirectory() ) ) ) ) {
         this.filenameCombo.setText( EMPTY_STRING );
-        getButton( IDialogConstants.OK_ID ).setEnabled( false );
       } else {
         IPath path = new Path( uri.getPath() );
         String fd = path.lastSegment();
         this.filenameCombo.setText( fd == null ? EMPTY_STRING : fd );
-        getButton( IDialogConstants.OK_ID ).setEnabled( ( fd != null ) && ( fd.length() > 0 ) );
       }
     }
     
@@ -1179,6 +1251,60 @@ public class NewGridFileDialog
     } catch ( CoreException cExc ) {
       setErrorMessage( "Invalid URI - " + cExc.getLocalizedMessage() ); //$NON-NLS-1$
     }
+    
+  }
+  
+  private boolean validate() {
+
+    boolean valid = true;
+    String errorMsg = null;
+    setErrorMessage( null );
+    IFileStore[] stores = internalGetSelectedFileStores();
+    
+    if ( ( stores == null ) || ( stores.length == 0 ) ) {
+      valid = false;
+    }
+    
+    else {
+      
+      for ( IFileStore store : stores ) {
+        
+        IFileInfo info = store.fetchInfo();
+        
+        boolean onlyExisting = hasStyle( STYLE_ALLOW_ONLY_EXISTING );
+        boolean onlyDirs = hasStyle( STYLE_ALLOW_ONLY_FOLDERS );
+        boolean onlyFiles = hasStyle( STYLE_ALLOW_ONLY_FILES );
+        boolean exists = info.exists();
+        boolean isDir = info.isDirectory();
+        boolean isFile = ! info.isDirectory();
+        
+        if ( onlyExisting && ! exists ) {
+          errorMsg = "Only existing files/directories can be selected";
+        }
+        
+        else if ( onlyFiles && ! isFile ) {
+          errorMsg = "The dialog is in file-only-mode but at least one directory is selected";
+        }
+        
+        else if ( onlyDirs && ! isDir ) {
+          errorMsg = "The dialog is in directory-only-mode but at least one file is selected";
+        }
+
+      }
+      
+    }
+    
+    if ( errorMsg != null ) {
+      valid = false;
+      setErrorMessage( errorMsg );
+    }
+    
+    Button button = getButton( IDialogConstants.OK_ID );
+    if ( button != null ) {
+      button.setEnabled( valid );
+    }
+    
+    return valid;
     
   }
   
