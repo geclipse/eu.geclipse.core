@@ -151,8 +151,8 @@ public class BatchJobView extends ViewPart implements IContentChangeListener {
   }
 
   /**
-   * This internal class is used to present the currently available authentication
-   * tokens in a structured way to the user. The standard presentation uses a table.
+   * This internal class is used to present the currently available batch jobs
+   * in a structured way to the user. The standard presentation uses a table.
    * 
    * @author harald
    * @see JobContentProvider
