@@ -304,12 +304,12 @@ public class CaCertPreferencePage
        */
       if ( ! currentPage.loadCertificateList() ) {
         IWizardContainer container = currentPage.getWizard().getContainer();
-        IWizardPage previousPage = currentPage.getPreviousPage();
-        IWizardPage prePreviousPage = previousPage.getPreviousPage();
-        
-        container.showPage( previousPage );
-        
-        previousPage.setPreviousPage( prePreviousPage );
+        if ( container != null ) {
+          IWizardPage previousPage = currentPage.getPreviousPage();
+          IWizardPage prePreviousPage = previousPage.getPreviousPage();
+          container.showPage( previousPage );
+          previousPage.setPreviousPage( prePreviousPage );
+        }
       }
     }
   }
