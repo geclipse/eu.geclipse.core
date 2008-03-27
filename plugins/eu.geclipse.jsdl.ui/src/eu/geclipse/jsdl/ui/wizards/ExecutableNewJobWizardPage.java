@@ -17,6 +17,7 @@
 package eu.geclipse.jsdl.ui.wizards;
 
 import java.io.IOException;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -64,6 +65,7 @@ import eu.geclipse.jsdl.ui.wizards.nodes.SpecificWizardPart;
 import eu.geclipse.jsdl.ui.wizards.specific.ApplicationSpecificPage;
 import eu.geclipse.jsdl.ui.wizards.specific.IApplicationSpecificPage;
 import eu.geclipse.ui.dialogs.GridFileDialog;
+import eu.geclipse.ui.dialogs.NewGridFileDialog;
 import eu.geclipse.ui.widgets.StoredCombo;
 
 /**
@@ -258,7 +260,17 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
 
       @Override
       public void widgetSelected( final SelectionEvent e ) {
-        IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
+        int style = NewGridFileDialog.STYLE_ALLOW_ONLY_FILES | NewGridFileDialog.STYLE_MULTI_SELECTION;
+        NewGridFileDialog dialog = new NewGridFileDialog( getShell(), style );
+        dialog.addFileTypeFilter( "txt", "Text files (*.txt)" );
+        dialog.addFileTypeFilter( "exe", "Windows executables (*.exe)" );
+        if ( dialog.open() == dialog.OK ) {
+          URI[] result = dialog.getSelectedURIs();
+          if ( result != null ) {
+            ExecutableNewJobWizardPage.this.executableFile.setText( result[ 0 ].toString() );
+          }
+        }
+        /*IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
                                                                            Messages.getString( "ExecutableNewJobWizardPage.grid_file_dialog_title" ), //$NON-NLS-1$
                                                                            null,
                                                                            true );
@@ -267,7 +279,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
           if( filename != null ) {
             ExecutableNewJobWizardPage.this.executableFile.setText( filename );
           }
-        }
+        }*/
       }
     } );
     // Label - arguments list

@@ -14,12 +14,14 @@
  *****************************************************************************/
 package eu.geclipse.ui.wizards.wizardselection;
 
+import org.eclipse.jface.dialogs.IPageChangeProvider;
 import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.IWizard;
+import org.eclipse.jface.wizard.IWizardContainer;
 import org.eclipse.jface.wizard.IWizardNode;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -35,9 +37,9 @@ import org.eclipse.ui.cheatsheets.ICheatSheetManager;
  * Wizard page for providing a list of other wizards which can be used for the
  * next steps in the wizard.
  */
-public class WizardSelectionListPage extends WizardSelectionPage
-  implements IPageChangedListener
-{
+public class WizardSelectionListPage
+    extends WizardSelectionPage
+    implements IPageChangedListener {
 
   protected ICheatSheetManager cheatSheetManager = null;
   protected IWizardSelectionNode[] wizardSelectionNodes;
@@ -205,10 +207,7 @@ public class WizardSelectionListPage extends WizardSelectionPage
           ( ( IInitalizableWizard )wizard ).init( this.initData );
         }
         wizard.addPages();
-        if( this.cheatSheetManager != null
-            && this.cheatSheetManager.getData( "startingPageName" ) == "none" ) { //$NON-NLS-1$ //$NON-NLS-2$
-          this.cheatSheetManager.setData( "startingPageName", wizard.getStartingPage().getName() ); //$NON-NLS-1$
-        }
+        updateCheatSheetManager( wizard );
       }
     }
     return wizard;
@@ -252,8 +251,18 @@ public class WizardSelectionListPage extends WizardSelectionPage
    * 
    * @param cheatSheetManager the cheat sheet manager.
    */
-  public void setCheatSheetManager( final ICheatSheetManager cheatSheetManager )
-  {
+  public void setCheatSheetManager( final ICheatSheetManager cheatSheetManager ) {
     this.cheatSheetManager = cheatSheetManager;
+    updateCheatSheetManager( getWizard() );
   }
+  
+  private void updateCheatSheetManager( final IWizard wizard ) {
+    if ( ( this.cheatSheetManager != null ) && ( wizard != null ) ) {
+      IWizardPage startingPage = wizard.getStartingPage();
+      if ( startingPage != null ) {
+        this.cheatSheetManager.setData( "startingPageName", startingPage.getName() ); //$NON-NLS-1$
+      }
+    }
+  }
+  
 }

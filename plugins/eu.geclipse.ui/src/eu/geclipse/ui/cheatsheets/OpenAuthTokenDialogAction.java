@@ -37,15 +37,17 @@ public class OpenAuthTokenDialogAction extends Action implements
   }
 
   public void run( final String[] params, final ICheatSheetManager manager ) {
-    Display.getDefault().syncExec( new Runnable() {
-      public void run() {
-        UIAuthTokenProvider tokenProvider
-          = new UIAuthTokenProvider( Display.getDefault().getActiveShell() );
-        boolean success = tokenProvider.showNewTokenWizard( null, null );
-        notifyResult(success);
-      }
-    } );
-
+    Display display = Display.getDefault();
+    if ( ! display.isDisposed() ) {
+      display.syncExec( new Runnable() {
+        public void run() {
+          UIAuthTokenProvider tokenProvider
+            = new UIAuthTokenProvider( Display.getDefault().getActiveShell() );
+          boolean success = tokenProvider.showNewTokenWizard( null, null );
+          notifyResult(success);
+        }
+      } );
+    }
   }
   
   @Override
