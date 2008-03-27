@@ -260,17 +260,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
 
       @Override
       public void widgetSelected( final SelectionEvent e ) {
-        int style = NewGridFileDialog.STYLE_ALLOW_ONLY_FILES | NewGridFileDialog.STYLE_MULTI_SELECTION;
-        NewGridFileDialog dialog = new NewGridFileDialog( getShell(), style );
-        dialog.addFileTypeFilter( "txt", "Text files (*.txt)" );
-        dialog.addFileTypeFilter( "exe", "Windows executables (*.exe)" );
-        if ( dialog.open() == dialog.OK ) {
-          URI[] result = dialog.getSelectedURIs();
-          if ( result != null ) {
-            ExecutableNewJobWizardPage.this.executableFile.setText( result[ 0 ].toString() );
-          }
-        }
-        /*IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
+        IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
                                                                            Messages.getString( "ExecutableNewJobWizardPage.grid_file_dialog_title" ), //$NON-NLS-1$
                                                                            null,
                                                                            true );
@@ -279,7 +269,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
           if( filename != null ) {
             ExecutableNewJobWizardPage.this.executableFile.setText( filename );
           }
-        }*/
+        }
       }
     } );
     // Label - arguments list
