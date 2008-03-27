@@ -30,7 +30,14 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.TabFolder;
+import org.eclipse.swt.widgets.TabItem;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Button;
@@ -48,12 +55,15 @@ import eu.geclipse.ui.dialogs.AbstractSimpleTestDialog;
  */
 public class PingTestDialog extends AbstractSimpleTestDialog  {
   protected ArrayList< PingHostJob > pingJobs = new ArrayList< PingHostJob >();
+  protected Table tableOutPut = null;
+  protected String[][] itemStrings;
 
   private Text outPut = null;
   private Spinner numberSpn = null;
   private Spinner delaySpn = null;
   private ArrayList< InetAddress > hostAdrs = new ArrayList< InetAddress >();  
-
+  private ArrayList< String > hostNames = new ArrayList< String >();
+  
   /**
    * Construct a new dialog from the specified test.
    * 
@@ -63,6 +73,21 @@ public class PingTestDialog extends AbstractSimpleTestDialog  {
    */
   public PingTestDialog( final ISimpleTest test, final List< IGridResource > resources, final Shell parentShell ) {
     super( test, resources, parentShell );
+
+    // First we gather the host name of all the resources
+    String name;
+    for ( int i = 0; i < this.resources.size(); ++i ) {
+      name = this.resources.get( i ).getHostName();
+
+      if ( null != name )
+        this.hostNames.add( name );
+    }
+  
+    // Then we prepare the datastructure for the table of results with the hostnames 
+    this.itemStrings = new String [ this.hostNames.size() ] [ 6 ];  
+    
+    for ( int i = 0; i < this.hostNames.size(); ++i )
+      this.itemStrings[ i ] [ 0 ] = this.hostNames.get( i ); 
   }
   
   @Override
@@ -70,15 +95,6 @@ public class PingTestDialog extends AbstractSimpleTestDialog  {
     super.configureShell( newShell );
     newShell.setMinimumSize( 500, 400 );
     newShell.setText( Messages.getString( "PingTestDialog.dialogTitle" ) ); //$NON-NLS-1$
-    
-    // Escape stops all the pinging
-//    newShell.addListener( SWT.Traverse, new Listener() {
-//      public void handleEvent( final Event e ) {
-//        for ( PingHostJob job : PingTestDialog.this.pingJobs ) {
-//          job.cancel();
-//        }
-//      }
-//    });
   }
 
   @Override
@@ -140,21 +156,73 @@ public class PingTestDialog extends AbstractSimpleTestDialog  {
     gData.grabExcessHorizontalSpace = true;
     gData.grabExcessVerticalSpace = true;
     outPutGroup.setLayoutData( gData );
+
+    // Create the tabbed panel with the results 
+    TabFolder tabFolder = new TabFolder ( outPutGroup, SWT.NONE );
+
+    TabItem itemTblOutPut = new TabItem ( tabFolder, SWT.NULL );
+    itemTblOutPut.setText ( Messages.getString( "PingTestDialog.results" ) ); //$NON-NLS-1$
+
+    // Create the table that holds the result
+    this.tableOutPut = new Table( tabFolder, SWT.MULTI | SWT.VIRTUAL | SWT.BORDER );
+    this.tableOutPut.setHeaderVisible( true );
+    this.tableOutPut.setLinesVisible( true );    
     
-    Label outPutLabel = new Label( outPutGroup, SWT.LEFT );
-    outPutLabel.setText( Messages.getString( "PingTestDialog.outPutLabel" ) ); //$NON-NLS-1$
-    gData = new GridData();
-    gData.horizontalSpan = 3;
-    outPutLabel.setLayoutData( gData );
+    TableColumn hostColumn = new TableColumn( this.tableOutPut, SWT.NONE );
+    hostColumn.setText( Messages.getString( "PingTestDialog.hostName" ) ); //$NON-NLS-1$
+    hostColumn.setWidth( 150 );    
+    hostColumn.setAlignment( SWT.LEFT );
+
+    TableColumn sndColumn = new TableColumn( this.tableOutPut, SWT.CENTER );
+    sndColumn.setText( Messages.getString( "PingTestDialog.snd" ) ); //$NON-NLS-1$
+    sndColumn.setWidth( 75 );    
+    sndColumn.setAlignment( SWT.CENTER );
     
-    this.outPut = new Text( outPutGroup, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.MULTI );
+    TableColumn recColumn = new TableColumn( this.tableOutPut, SWT.CENTER );
+    recColumn.setText( Messages.getString( "PingTestDialog.rec" ) ); //$NON-NLS-1$
+    recColumn.setWidth( 75 );    
+    recColumn.setAlignment( SWT.CENTER );
+    
+    TableColumn minColumn = new TableColumn( this.tableOutPut, SWT.CENTER );
+    minColumn.setText( Messages.getString( "PingTestDialog.min" ) ); //$NON-NLS-1$
+    minColumn.setWidth( 75 );    
+    minColumn.setAlignment( SWT.CENTER );
+    
+    TableColumn avgColumn = new TableColumn( this.tableOutPut, SWT.CENTER );
+    avgColumn.setText( Messages.getString( "PingTestDialog.avg" ) ); //$NON-NLS-1$
+    avgColumn.setWidth( 75 );    
+    avgColumn.setAlignment( SWT.CENTER );
+    
+    TableColumn maxColumn = new TableColumn( this.tableOutPut, SWT.CENTER );
+    maxColumn.setText( Messages.getString( "PingTestDialog.max" ) ); //$NON-NLS-1$
+    maxColumn.setWidth( 75 );    
+    maxColumn.setAlignment( SWT.CENTER );
+    
+    itemTblOutPut.setControl( this.tableOutPut );
+    
+    // Listener that waits for the results to be presented
+    this.tableOutPut.addListener( SWT.SetData, new Listener() {
+      public void handleEvent( final Event event ) {
+        TableItem item = ( TableItem ) event.item;
+        int index = PingTestDialog.this.tableOutPut.indexOf( item );
+        item.setText( PingTestDialog.this.itemStrings [ index ] );
+      }
+    });
+
+    this.tableOutPut.setItemCount( this.hostNames.size() );
+    
+    TabItem itemRawOutPut = new TabItem ( tabFolder, SWT.NULL );
+    itemRawOutPut.setText ( Messages.getString( "PingTestDialog.logging" ) ); //$NON-NLS-1$
+    
+    this.outPut = new Text( tabFolder, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.MULTI );
     this.outPut.setEditable( false );
+    itemRawOutPut.setControl( this.outPut );
+    
     gData = new GridData( SWT.FILL, SWT.FILL, true, true );
-//    gData.horizontalSpan = 2;
     gData.grabExcessHorizontalSpace = true;
     gData.grabExcessVerticalSpace = true;
-    this.outPut.setLayoutData( gData );
-
+    tabFolder.setLayoutData( gData );
+    
     Composite outControls = new Composite( outPutGroup, SWT.NONE );
     GridLayout gLayout = new GridLayout( 1, false );
     gLayout.marginHeight = 0;
@@ -202,13 +270,14 @@ public class PingTestDialog extends AbstractSimpleTestDialog  {
       }
     });
     
-
-    
     return mainComp;
   }
 
+  /**
+   * Method that initiates a job for each of the hosts that we want to ping. 
+   * The jobs then performs the ping and the GUIs are updated with the result
+   */
   protected void runPing() {
-    String host;
     InetAddress adr = null;
     int number = this.numberSpn.getSelection();
     int delay = this.delaySpn.getSelection();
@@ -221,40 +290,56 @@ public class PingTestDialog extends AbstractSimpleTestDialog  {
       // Clear the previous jobs
       this.hostAdrs.clear();
       this.pingJobs.clear();
+
+      // Also clear the table 
+      this.clearItemString();
       
       // For each of the hosts to test
       this.outPut.append( Messages.getString( "PingTestDialog.pingHostsPlusSpace" )  //$NON-NLS-1$
                           + this.outPut.getLineDelimiter() );
         
-      for ( int i = 0; i < this.resources.size(); ++i ) {
-        host = this.resources.get( i ).getHostName();
-        
-        if ( null == host ) {
-          this.outPut.append( this.resources.get( i ).getName() 
-                              + Messages.getString( "PingTestDialog.notResolved" )  //$NON-NLS-1$
-                              + this.outPut.getLineDelimiter() );
-        } else {
-          try {
-            adr = InetAddress.getByName( host );
-            this.hostAdrs.add( adr );
+      for ( String host : this.hostNames ) {
+        try {
+          adr = InetAddress.getByName( host );
+          this.hostAdrs.add( adr );
             
-            this.outPut.append( host + this.outPut.getLineDelimiter() );
-          } catch( UnknownHostException e ) {
-            // Print out which host we ping
-            this.outPut.append( Messages.getString( "PingTestDialog.UnknownHostException" )  //$NON-NLS-1$
-                                + host + this.outPut.getLineDelimiter() );
-          }
+          this.outPut.append( host + this.outPut.getLineDelimiter() );
+        } catch( UnknownHostException e ) {
+          this.hostAdrs.add( null );
+          // Print out which host we ping
+          this.outPut.append( Messages.getString( "PingTestDialog.UnknownHostException" )  //$NON-NLS-1$
+                              + host + this.outPut.getLineDelimiter() );
         }
       }
       
       this.outPut.append( this.outPut.getLineDelimiter() );
       
-      for ( InetAddress tmpAdr : this.hostAdrs ) { 
-        PingHostJob pingJob = new PingHostJob( tmpAdr, number, delay, this.outPut, ( PingTest )this.test );
-        pingJob.schedule();
-        
-        this.pingJobs.add( pingJob );
+      for ( int i = 0; i <  this.hostAdrs.size(); ++i ) {
+        InetAddress tmpAdr = this.hostAdrs.get( i );
+      
+        if ( null != tmpAdr ) { 
+          PingHostJob pingJob = new PingHostJob( tmpAdr, number, delay, this.outPut, this.tableOutPut, 
+                                                 this.itemStrings[ i ], i, ( PingTest )this.test );
+          pingJob.schedule();
+          this.pingJobs.add( pingJob );
+        } else {
+          this.itemStrings[ i ][ 1 ] = Messages.getString( "PingTestDialog.n_a" ); //$NON-NLS-1$
+          this.itemStrings[ i ][ 2 ] = Messages.getString( "PingTestDialog.n_a" ); //$NON-NLS-1$ 
+          this.itemStrings[ i ][ 3 ] = Messages.getString( "PingTestDialog.n_a" ); //$NON-NLS-1$
+          this.itemStrings[ i ][ 4 ] = Messages.getString( "PingTestDialog.n_a" ); //$NON-NLS-1$
+          this.itemStrings[ i ][ 5 ] = Messages.getString( "PingTestDialog.n_a" ); //$NON-NLS-1$
+          this.tableOutPut.clear( i );
+        }
       }        
     }
   }
+  
+  private void clearItemString() {
+    for ( int i = 0; i < this.hostNames.size(); ++i ) {
+      for ( int j = 1; j < 6; ++j ) {
+        this.itemStrings[ i ][ j ] = null;
+      }
+    }
+    this.tableOutPut.clearAll();
+   }
 }
