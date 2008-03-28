@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cheatsheet title="Creating a new g-Eclipse Grid Project">
+   <intro href="/eu.geclipse.doc.user/html/concepts/gridproject/creating.html">
+      <description>
+          This cheat sheet will show you how to create a new g-Eclipse Grid Project.
+      </description>
+   </intro>
+   <item title="Open the g-Eclipse user perspective" skip="true">
+      <description>
+          If you are not already in the g-Eclipse user perspective, in the main menu
+          select <b>Window &gt; Open Perspective &gt; g-Eclipse (User)</b> or click
+          on the &quot;Click to Perform&quot; link below.
+      </description>
+      <command serialization="org.eclipse.ui.perspectives.showPerspective(org.eclipse.ui.perspectives.showPerspective.perspectiveId=eu.geclipse.ui.userPerspective)" confirm="false"/>
+   </item>
+   <item title="Select the Grid Project View" skip="true">
+      <description>
+          Select the Grid Project View on your g-Eclipse Workbench.
+      </description>
+      <command serialization="org.eclipse.ui.views.showView(org.eclipse.ui.views.showView.viewId=eu.geclipse.ui.views.gridProjectView)"/>
+   </item>
+   <item title="Launch the Grid Project Wizard" dialog="true" skip="true">
+      <description>
+          Right-click into that view and select <b>New &gt; Grid Project</b> to launch the wizard.
+      </description>
+      <command confirm="false" serialization="org.eclipse.ui.newWizard(newWizardId=eu.geclipse.ui.wizards.gridProjectWizard)"/>
+   </item>
+   <item title="Basic Information">
+   	  <description>Step through the pages in the Grid Project Wizard.</description>
+      <subitem label="Name and Location">
+      	  Specify the name you want your grid project to be called and the location where you want to 
+          store it's settings on your local harddisk. For the location you may accept 
+          the default settings. Then click the <b>Next</b> button.
+      </subitem>
+      <subitem label="VO">
+      	  Select your VO from the list and click the <b>Next</b> button.
+      	  Or, if you have no VO available in the list, you can create a new one by clicking on 
+      	  the <b>New VO</b> button, selecting the type of VO and clicking the <b>Next</b> button.
+ <!--     	<subitem label="New VO">
+      	  Enter the name for your VO, host, port, host DN and Information System Endpoint 
+      	  and click the <b>Finish</b> Button. Then select your VO from the list
+      	  and click <b>Next</b> to get to the last page of this wizard.
+      	</subitem> -->
+      </subitem>
+      <subitem label="Referenced Project">
+      	  Select the referenced project and click the <b>Finish</b> button to complete the 
+      	  new grid project creation. Your newly created project will appear in the 
+      	  "Grid Projects" view panel.
+      </subitem>
+   </item>
+</cheatsheet>
+      
