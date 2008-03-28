@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %Bundle-Name
+Bundle-SymbolicName: eu.geclipse.core.test
+Bundle-Version: 1.0.0.qualifier
+Fragment-Host: eu.geclipse.core;bundle-version="0.5.0"
+Bundle-Localization: plugin
+Require-Bundle: org.junit4
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Export-Package: eu.geclipse.core,
+ eu.geclipse.core.auth,
+ eu.geclipse.core.model,
+ eu.geclipse.core.security,
+ eu.geclipse.core.util.tar

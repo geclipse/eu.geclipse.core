@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<fragment>
+   <extension
+         point="eu.geclipse.core.reporting.problemReporting">
+      <problem
+            description="This is the Example Problem"
+            id="eu.geclipse.core.reporting.test.ExampleProblem"
+            mailto="bugreports@g-eclipse.eu">
+         <reference
+               referenceID="eu.geclipse.core.reporting.test.ExampleSolution1">
+         </reference>
+      </problem>
+      <solution
+            description="This is the Example Solution 1"
+            id="eu.geclipse.core.reporting.test.ExampleSolution1">
+      </solution>
+      <solution
+            description="This is the Example Solution 2"
+            id="eu.geclipse.core.reporting.test.ExampleSolution2">
+         <reference
+               referenceID="eu.geclipse.core.reporting.test.ExampleProblem">
+         </reference>
+      </solution>
+   </extension>
+
+</fragment>
