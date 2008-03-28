@@ -1,0 +1,380 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension-point id="applicationDeployment" name="Application Deployment" schema="schema/applicationDeployment.exsd"/>
+   <extension-point id="authTokenProvider" name="Authentication Token Provider" schema="schema/authTokenProvider.exsd"/>
+   <extension-point id="authTokens" name="Authentication Tokens" schema="schema/authTokens.exsd"/>
+   <extension-point id="caCertificateLoader" name="CA Certificate Loader" schema="schema/caCertificateLoader.exsd"/>
+   <extension-point id="gridElementCreator" name="%extension-point.gridElementCreator" schema="schema/gridElementCreator.exsd"/>
+   <extension-point id="eu.geclipse.core.gridJobStatusServiceManager" name="GridJobStatusServiceManager" schema="schema/eu.geclipse.core.gridJobStatusServiceManager.exsd"/>
+   <extension-point id="gridProjectFolder" name="Grid Project Folder" schema="schema/gridProjectFolder.exsd"/>
+   <extension-point id="simpleTests" name="Simple Tests" schema="schema/simpleTests.exsd"/>
+   <extension-point id="voLoader" name="VO Loader" schema="schema/voLoader.exsd"/>
+   <extension
+         id="eu.geclipse.core.project.GridProjectBuilder"
+         name="%extension.gridProjectBuilder"
+         point="org.eclipse.core.resources.builders">
+      <builder>
+         <run class="eu.geclipse.core.project.GridProjectBuilder"/>
+      </builder>
+   </extension>
+   <extension
+         id="eu.geclipse.core.project.GridProjectNature"
+         name="%extension.gridProjectNature"
+         point="org.eclipse.core.resources.natures">
+      <runtime>
+         <run class="eu.geclipse.core.project.GridProjectNature"/>
+      </runtime>
+   </extension>
+   <extension
+         id="eu.geclipse.core.internal.PreferenceInitializer"
+         name="%extension.preferenceInitializer"
+         point="org.eclipse.core.runtime.preferences">
+      <initializer class="eu.geclipse.core.internal.PreferenceInitializer"/>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <scope
+            class="eu.geclipse.core.project.GridProjectScope"
+            name="eu.geclipse.core.projectScope"/>
+   </extension>
+   <extension
+         point="eu.geclipse.core.authTokenProvider">
+      <provider
+            class="eu.geclipse.core.auth.CoreAuthTokenProvider"
+            priority="0">
+      </provider>
+   </extension>
+   <extension
+         point="eu.geclipse.core.caCertificateLoader">
+      <loader
+            class="eu.geclipse.core.internal.auth.EUGridPMACertificateLoader"
+            fromLocal="true"
+            fromRemote="true"
+            name="European Policy Management Authority for Grid Authentication">
+      </loader>
+      <loader
+            class="eu.geclipse.core.internal.auth.PEMCertificateLoader"
+            fromLocal="true"
+            fromRemote="false"
+            name="PEM Based Certificate Loader">
+      </loader>
+   </extension>
+   <extension
+         point="eu.geclipse.core.gridElementCreator">
+      <creator
+            class="eu.geclipse.core.model.impl.GenericVoCreator"
+            name="Generic VO"
+            wizard="eu.geclipse.ui.wizards.GenericVoWizard">
+         <source
+               class="org.eclipse.core.filesystem.IFileStore">
+         </source>
+         <target
+               class="eu.geclipse.core.model.impl.GenericVirtualOrganization"
+               name="Generic Virtual Organization">
+         </target>
+      </creator>
+   </extension>
+   <extension
+         point="eu.geclipse.core.reporting.problemReporting">
+      <problem
+            description="Unable to load certificate"
+            id="eu.geclipse.core.problem.auth.certificateLoadFailed"
+            mailto="">
+      </problem>
+      <problem
+            description="Unable to create credential"
+            id="eu.geclipse.core.problem.auth.credentialCreateFailed"
+            mailto="">
+      </problem>
+      <problem
+            description="Unable to save credential"
+            id="eu.geclipse.core.problem.auth.credentialSaveFailed"
+            mailto="">
+      </problem>
+      <problem
+            description="Invalid token description"
+            id="eu.geclipse.core.problem.auth.invalidTokenDescription"
+            mailto="">
+      </problem>
+      <problem
+            description="Unable to load key file"
+            id="eu.geclipse.core.problem.auth.keyLoadFailed"
+            mailto="">
+      </problem>
+      <problem
+            description="Login failed"
+            id="eu.geclipse.core.problem.auth.loginFailed">
+      </problem>
+      <problem
+            description="Unable to activate token"
+            id="eu.geclipse.core.problem.auth.tokenActivateFailed"
+            mailto="">
+      </problem>
+      <problem
+            description="Authentication token has not been activated yet"
+            id="eu.geclipse.core.problem.auth.tokenNotYetValid"
+            mailto="">
+      </problem>
+      <problem
+            description="Corrupted file"
+            id="eu.geclipse.core.problem.io.corruptedFile">
+      </problem>
+      <problem
+            description="A file or folder operation failed"
+            id="eu.geclipse.core.problem.io.operationFailed">
+      </problem>
+      <problem
+            description="Unspecified IO problem"
+            id="eu.geclipse.core.problem.io.unspecified"
+            mailto="bugreports@geclipse.eu">
+      </problem>
+      <problem
+            description="Job submission failed"
+            id="eu.geclipse.core.problem.job.submissionFailed">
+      </problem>
+      <problem
+            description="Container cannot contain elements of the specified type"
+            id="eu.geclipse.core.problem.model.containerCanNotContain"
+            mailto="bugreports@geclipse.eu">
+      </problem>
+      <problem
+            description="Failed to create grid element"
+            id="eu.geclipse.core.problem.model.elementCreateFailed">
+      </problem>
+      <problem
+            description="Error while deleting model element"
+            id="eu.geclipse.core.problem.model.elementDeleteFailed">
+      </problem>
+      <problem
+            description="Failed to load grid element"
+            id="eu.geclipse.core.problem.model.elementLoadFailed">
+      </problem>
+      <problem
+            description="The manager cannot manage the specified element"
+            id="eu.geclipse.core.problem.model.elementNotManageable">
+      </problem>
+      <problem
+            description="Failed to save grid element"
+            id="eu.geclipse.core.problem.model.elementSaveFailed">
+      </problem>
+      <problem
+            description="Failed to fetch children"
+            id="eu.geclipse.core.problem.model.fetchChildrenFailed">
+         <reference
+               referenceID="eu.geclipse.core.solution.net.checkProxySettings">
+         </reference>
+         <reference
+               referenceID="eu.geclipse.core.solution.auth.checkTokens">
+         </reference>
+         <reference
+               referenceID="eu.geclipse.core.solution.auth.checkCaCertificates">
+         </reference>
+      </problem>
+      <problem
+            description="Unable to create preferences"
+            id="eu.geclipse.core.problem.model.preferenceCreationFailed">
+      </problem>
+      <problem
+            description="Failed to refresh container"
+            id="eu.geclipse.core.problem.model.refreshFailed">
+      </problem>
+      <problem
+            description="Could not bind socket"
+            id="eu.geclipse.core.problem.net.bindFailed">
+         <reference
+               referenceID="eu.geclipse.core.solution.net.checkPortAlreadyInUse">
+         </reference>
+         <reference
+               referenceID="eu.geclipse.core.solution.net.useAnotherPort">
+         </reference>
+      </problem>
+      <problem
+            description="Failed to establish a network connection"
+            id="eu.geclipse.core.problem.net.connectionFailed">
+         <reference
+               referenceID="eu.geclipse.core.solution.net.checkInternetConnection">
+         </reference>
+         <reference
+               referenceID="eu.geclipse.core.solution.net.checkServerURL">
+         </reference>
+         <reference
+               referenceID="eu.geclipse.core.solution.net.checkProxySettings">
+         </reference>
+      </problem>
+      <problem
+            description="A timeout has occurred on a socket read or accept"
+            id="eu.geclipse.core.problem.net.connectionTimeout">
+         <reference
+               referenceID="eu.geclipse.core.solution.net.contactServerAdmin">
+         </reference>
+         <reference
+               referenceID="eu.geclipse.core.solution.net.checkTimeoutSettings">
+         </reference>
+      </problem>
+      <problem
+            description="URL is nor correct"
+            id="eu.geclipse.core.problem.net.malformedURL">
+         <reference
+               referenceID="eu.geclipse.core.solution.net.checkServerURL">
+         </reference>
+      </problem>
+      <problem
+            description="Unknown hostname"
+            id="eu.geclipse.core.problem.net.unknownHost">
+         <reference
+               referenceID="eu.geclipse.core.solution.net.checkInternetConnection">
+         </reference>
+         <reference
+               referenceID="eu.geclipse.core.solution.net.checkServerURL">
+         </reference>
+      </problem>
+      <problem
+            description="Could not determine a reference time via the network"
+            id="eu.geclipse.core.problem.sys.systemTimeCheckFailed"
+            mailto="bugreports@geclipse.eu">
+      </problem>
+      <problem
+            description="Bad checksum in tar entry, file might be corrupted"
+            id="eu.geclipse.core.problem.tar.badHeaderChecksum">
+         <reference
+               referenceID="eu.geclipse.core.solution.io.downloadFileAgain">
+         </reference>
+         <reference
+               referenceID="eu.geclipse.core.solution.io.downloadFromAnotherSource">
+         </reference>
+      </problem>
+      <problem
+            description="Wrong size field in tar entry, file might be corrupted"
+            id="eu.geclipse.core.problem.tar.invalidEntrySize">
+         <reference
+               referenceID="eu.geclipse.core.solution.io.downloadFileAgain">
+         </reference>
+         <reference
+               referenceID="eu.geclipse.core.solution.io.downloadFromAnotherSource">
+         </reference>
+      </problem>
+      <problem
+            description="Unknown entry type in tar entry, file might be corrupted"
+            id="eu.geclipse.core.problem.tar.invalidEntryType">
+         <reference
+               referenceID="eu.geclipse.core.solution.io.downloadFileAgain">
+         </reference>
+         <reference
+               referenceID="eu.geclipse.core.solution.io.downloadFromAnotherSource">
+         </reference>
+      </problem>
+      <problem
+            description="Unsupported entry type found in tarball"
+            id="eu.geclipse.core.problem.tar.unsupportedEntryType"
+            mailto="bugreports@geclipse.eu">
+      </problem>
+      <problem
+            description="Internal error, wrong tar entry header length"
+            id="eu.geclipse.core.problem.tar.wrongHeaderSize"
+            mailto="bugreports@geclipse.eu">
+      </problem>
+      <solution
+            description="Check your imported CA-certificates"
+            id="eu.geclipse.core.solution.auth.checkCaCertificates">
+         <preferenceTag
+               pageID="eu.geclipse.ui.internal.preference.CaCertPreferencePage">
+         </preferenceTag>
+      </solution>
+      <solution
+            description="Check your authentication data"
+            id="eu.geclipse.core.solution.auth.checkData">
+      </solution>
+      <solution
+            description="Check your authentication tokens"
+            id="eu.geclipse.core.solution.auth.checkTokens">
+         <viewTag
+               viewID="eu.geclipse.ui.views.authenticationTokenView">
+         </viewTag>
+      </solution>
+      <solution
+            description="Check your VO settings"
+            id="eu.geclipse.core.solution.auth.checkVoSettings">
+         <preferenceTag
+               pageID="eu.geclipse.ui.internal.preference.VOPreferencePage">
+         </preferenceTag>
+      </solution>
+      <solution
+            description="Download the file(s) again"
+            id="eu.geclipse.core.solution.io.downloadFileAgain">
+      </solution>
+      <solution
+            description="Download the file(s) from another source"
+            id="eu.geclipse.core.solution.io.downloadFromAnotherSource">
+      </solution>
+      <solution
+            description="Check if a firewall blocks your connections"
+            id="eu.geclipse.core.solution.net.checkFirewall">
+      </solution>
+      <solution
+            description="Make sure your hostname matches the DNS entry for your IP address"
+            id="eu.geclipse.core.solution.net.checkHostnameMatchesIPAddress">
+      </solution>
+      <solution
+            description="Check your internet connection"
+            id="eu.geclipse.core.solution.net.checkInternetConnection">
+      </solution>
+      <solution
+            description="Check if the port is already in use"
+            id="eu.geclipse.core.solution.net.checkPortAlreadyInUse">
+      </solution>
+      <solution
+            description="Check your proxy settings"
+            id="eu.geclipse.core.solution.net.checkProxySettings">
+         <preferenceTag
+               pageID="org.eclipse.ui.net.NetPreferences">
+         </preferenceTag>
+      </solution>
+      <solution
+            description="Make sure you have a public IP address"
+            id="eu.geclipse.core.solution.net.checkPublicIPAddress">
+      </solution>
+      <solution
+            description="Check your server URL"
+            id="eu.geclipse.core.solution.net.checkServerURL">
+      </solution>
+      <solution
+            description="Set your connection timeout settings to a higher value"
+            id="eu.geclipse.core.solution.net.checkTimeoutSettings">
+         <preferenceTag
+               pageID="org.eclipse.ui.net.NetPreferences">
+         </preferenceTag>
+      </solution>
+      <solution
+            description="Contact the administrator, the server may be down"
+            id="eu.geclipse.core.solution.net.contactServerAdmin">
+      </solution>
+      <solution
+            description="Use another port if possible"
+            id="eu.geclipse.core.solution.net.useAnotherPort">
+      </solution>
+      <solution
+            description="Check your system&apos;s time"
+            id="eu.geclipse.core.solution.sys.checkSystemTime"
+            solver="eu.geclipse.ui.problems.CheckSystemTimeSolution">
+      </solution>
+   </extension>
+   <extension
+         point="eu.geclipse.core.simpleTests">
+      <test
+            description="eu.geclipse.core.simpleTest.ISimpleTestDescription"
+            id="eu.geclipse.core.simpleTest.pingTest"
+            name="Ping Test">
+      </test>
+   </extension>
+   <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="eu.geclipse.core.model.impl.GridModelPropertyTester"
+            id="eu.geclipse.core.resourceTester"
+            namespace="eu.geclipse.core"
+            properties="isGridConnection"
+            type="org.eclipse.core.resources.IResource">
+      </propertyTester>
+   </extension>
+</plugin>
