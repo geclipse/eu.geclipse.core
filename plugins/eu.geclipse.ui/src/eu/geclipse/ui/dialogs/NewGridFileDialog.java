@@ -352,15 +352,20 @@ public class NewGridFileDialog
       boolean result = false;
       
       if ( this.prefix != null ) {
+        
         if ( element instanceof IFileStore ) {
           boolean isDir = ( ( IFileStore ) element ).fetchInfo().isDirectory();
           String name = ( ( IFileStore ) element ).getName();
           result = isDir || name.endsWith( PREFIX_SEPARATOR + this.prefix );
-        } else if ( element instanceof IGridConnectionElement ) {
+        }
+        
+        else if ( element instanceof IGridConnectionElement ) {
           boolean isDir = ( ( IGridConnectionElement ) element ).isFolder();
           String name = ( ( IGridConnectionElement ) element ).getName();
           result = isDir || name.endsWith( PREFIX_SEPARATOR + this.prefix );
-        } else if ( element instanceof IGridContainer ) {
+        }
+        
+        else if ( element instanceof IGridContainer ) {
           IResource resource = ( ( IGridContainer ) element ).getResource();
           if ( ( resource != null ) && ( resource.getType() == IResource.FILE ) ) {
             String name = resource.getName();
@@ -368,13 +373,19 @@ public class NewGridFileDialog
           } else {
             result = true;
           }
-        } else if ( element instanceof IGridElement ) {
+        }
+        
+        else if ( element instanceof IGridElement ) {
           String name = ( ( IGridElement ) element ).getName();
           result = name.endsWith( PREFIX_SEPARATOR + this.prefix );
-        } else if ( element instanceof NewProgressTreeNode ){
+        }
+        
+        else if ( element instanceof NewProgressTreeNode ){
           result = true;
         }
+        
       }
+      
       
       else {
         result = true;
