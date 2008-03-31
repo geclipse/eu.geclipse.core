@@ -17,6 +17,7 @@ package eu.geclipse.ui.wizards.jobsubmission;
 import java.net.URL;
 import java.util.List;
 
+import org.eclipse.core.resources.IResource;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.Wizard;
 
@@ -54,7 +55,7 @@ public class JobCreatorSelectionWizard extends Wizard {
     return this.folderSelection.getJobNames();
   }
   
-  public ILocalFolder getDestinationFolder(){
+  public IResource getDestinationFolder(){
     return this.folderSelection.getDestinationFolder();
   }
 

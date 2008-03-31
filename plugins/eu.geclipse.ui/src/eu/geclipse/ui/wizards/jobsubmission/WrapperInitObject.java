@@ -19,6 +19,8 @@ package eu.geclipse.ui.wizards.jobsubmission;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IResource;
+
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.ILocalFolder;
 
@@ -29,9 +31,9 @@ public class WrapperInitObject {
   
   private List<String> jobNames = new ArrayList<String>();
   
-  private ILocalFolder destinationFolder;
+  private IResource destinationFolder;
   
-  WrapperInitObject(final List<IGridJobDescription> jobDescriptions, final List<String> jobNames, final ILocalFolder destinationFolder){
+  WrapperInitObject(final List<IGridJobDescription> jobDescriptions, final List<String> jobNames, final IResource destinationFolder){
     this.jobDescriptions = jobDescriptions;
     this.jobNames = jobNames;
     this.destinationFolder = destinationFolder;
@@ -48,7 +50,7 @@ public class WrapperInitObject {
   }
 
   
-  public ILocalFolder getDestinationFolder() {
+  public IResource getDestinationFolder() {
     return this.destinationFolder;
   }
   

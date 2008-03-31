@@ -20,14 +20,18 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.filesystem.IFileInfo;
+import org.eclipse.core.filesystem.IFileStore;
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -42,15 +46,16 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 
 import eu.geclipse.core.model.GridModelException;
+import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridProject;
-import eu.geclipse.core.model.IGridRoot;
 import eu.geclipse.core.model.ILocalFolder;
 import eu.geclipse.core.model.IVirtualOrganization;
-import eu.geclipse.core.model.impl.ResourceGridContainer;
 import eu.geclipse.ui.internal.Activator;
+import eu.geclipse.ui.providers.GridFileDialogContentProvider;
+import eu.geclipse.ui.providers.NewProgressTreeNode;
 
 public class FolderSelectionWizardPage extends WizardPage {
 
@@ -58,6 +63,7 @@ public class FolderSelectionWizardPage extends WizardPage {
   private Tree tree;
   private Text jobNameText;
   private List<IGridJobDescription> jobDescriptions;
+  private TreeViewer treeViewer;
 
   public FolderSelectionWizardPage( final String pageName,
                                     final IGridProject project,
@@ -78,11 +84,11 @@ public class FolderSelectionWizardPage extends WizardPage {
     gd.horizontalSpan = 2;
     gd.heightHint = 300;
     gd.widthHint = 250;
-    final TreeViewer treeViewer = new TreeViewer( mainComp, SWT.SINGLE
-                                                            | SWT.BORDER );
-    treeViewer.setContentProvider( new CProvider() );
+    treeViewer = new TreeViewer( mainComp, SWT.SINGLE | SWT.BORDER );
+    treeViewer.setContentProvider( new RProvider() );
+    // treeViewer.setContentProvider( new GridFileDialogContentProvider() );
     treeViewer.setLabelProvider( new LProvider() );
-    treeViewer.setInput( this.project );
+    treeViewer.setInput( this.project.getResource() );
     this.setTree( treeViewer.getTree() );
     this.getTree().setLayoutData( gd );
     this.tree.addSelectionListener( new SelectionAdapter() {
@@ -108,7 +114,6 @@ public class FolderSelectionWizardPage extends WizardPage {
 
       @Override
       public void widgetSelected( final SelectionEvent e ) {
-        // getTree().getSelection();
         FolderSelectionWizardPage.this.updateButtons();
       }
     } );
@@ -124,7 +129,7 @@ public class FolderSelectionWizardPage extends WizardPage {
   @Override
   public boolean canFlipToNextPage() {
     boolean result = false;
-    if( !this.jobNameText.getText().equals( "" )
+    if( !this.jobNameText.getText().equals( "" ) //$NON-NLS-1$
         && ( this.getDestinationFolder() != null ) )
     {
       result = true;
@@ -141,11 +146,11 @@ public class FolderSelectionWizardPage extends WizardPage {
     this.tree = tree;
   }
 
-  public ILocalFolder getDestinationFolder() {
-    ILocalFolder result = null;
+  public IResource getDestinationFolder() {
+    IResource result = null;
     for( TreeItem item : this.tree.getSelection() ) {
-      if( item.getData() instanceof ILocalFolder ) {
-        result = ( ILocalFolder )item.getData();
+      if( item.getData() instanceof IContainer ) {
+        result = ( IContainer )item.getData();
       }
     }
     return result;
@@ -167,50 +172,48 @@ public class FolderSelectionWizardPage extends WizardPage {
   private Tree getTree() {
     return tree;
   }
-  class CProvider implements ITreeContentProvider {
+  class RProvider implements ITreeContentProvider {
 
     public Object[] getChildren( final Object parentElement ) {
-      // Object[] result = new Object[0];
-      ArrayList<IGridContainer> containers = new ArrayList<IGridContainer>();
-      if( parentElement instanceof IGridContainer ) {
+      List<IResource> list = new ArrayList<IResource>();
+      if( parentElement instanceof IContainer ) {
         try {
-          for( IGridElement elem : ( ( IGridContainer )parentElement ).getChildren( null ) )
-          {
-            if( elem instanceof ILocalFolder
-                && !( elem.isHidden() )
-                && !( elem instanceof IVirtualOrganization ) )
+          if( ( ( IContainer )parentElement ).members().length != 0 ) {
+            for( IResource member : ( ( IContainer )parentElement ).members() )
             {
-              containers.add( ( IGridContainer )elem );
+              if( member instanceof IContainer
+                  && !( member.getName().startsWith( "." ) ) ) //$NON-NLS-1$
+              {
+                list.add( member );
+              }
             }
           }
-        } catch( GridModelException e ) {
+        } catch( CoreException e ) {
           // TODO Auto-generated catch block
           e.printStackTrace();
         }
       }
-      return containers.toArray();
+      return list.toArray();
     }
 
     public Object getParent( final Object element ) {
-      // TODO katis ???
-      return new Object();
+      // TODO Auto-generated method stub
+      return null;
     }
 
     public boolean hasChildren( final Object element ) {
       boolean result = false;
-      if( element instanceof IGridContainer ) {
+      if( element instanceof IContainer ) {
         try {
-          for( IGridElement elem : ( ( IGridContainer )element ).getChildren( null ) )
-          {
-            if( elem instanceof ILocalFolder
-                && !( elem.isHidden() )
-                && !( elem instanceof IVirtualOrganization ) )
+          for( IResource member : ( ( IContainer )element ).members() ) {
+            if( member instanceof IContainer
+                && !( member.getName().startsWith( "." ) ) ) //$NON-NLS-1$
             {
               result = true;
               break;
             }
           }
-        } catch( GridModelException e ) {
+        } catch( CoreException e ) {
           // TODO Auto-generated catch block
           e.printStackTrace();
         }
@@ -219,29 +222,28 @@ public class FolderSelectionWizardPage extends WizardPage {
     }
 
     public Object[] getElements( final Object inputElement ) {
-      ArrayList<IGridContainer> folders = new ArrayList<IGridContainer>();
-      if( inputElement instanceof IGridContainer ) {
-        // IGridContainer[] elements = null;
-        IGridContainer project = ( IGridContainer )inputElement;
+      List<IResource> list = new ArrayList<IResource>();
+      if( inputElement instanceof IContainer ) {
         try {
-          for( IGridElement element : project.getChildren( null ) ) {
-            if( element instanceof ILocalFolder
-                && !( element.isHidden() )
-                && !( element instanceof IVirtualOrganization ) )
-            {
-              folders.add( ( IGridContainer )element );
+          if( ( ( IContainer )inputElement ).members().length != 0 ) {
+            for( IResource member : ( ( IContainer )inputElement ).members() ) {
+              if( member instanceof IContainer
+                  && !( member.getName().startsWith( "." ) ) )
+              {
+                list.add( member );
+              }
             }
           }
-        } catch( GridModelException e ) {
+        } catch( CoreException e ) {
           // TODO Auto-generated catch block
           e.printStackTrace();
         }
       }
-      return folders.toArray();
+      return list.toArray();
     }
 
     public void dispose() {
-      // empty implementation
+      // TODO Auto-generated method stub
     }
 
     public void inputChanged( final Viewer viewer,
@@ -272,7 +274,7 @@ public class FolderSelectionWizardPage extends WizardPage {
     }
 
     public String getText( final Object element ) {
-      return ( ( IGridContainer )element ).getName();
+      return ( ( IResource )element ).getName();
     }
 
     public void addListener( final ILabelProviderListener listener ) {
