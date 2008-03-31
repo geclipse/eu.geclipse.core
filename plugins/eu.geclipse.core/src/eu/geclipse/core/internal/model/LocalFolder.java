@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006, 2007, 2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -12,51 +12,50 @@
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
  *****************************************************************************/
-
 package eu.geclipse.core.internal.model;
 
 import org.eclipse.core.resources.IFolder;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.ILocalFolder;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
 
 /**
  * This class represents local folders in the workspace. Each
  * <code>IFolder</code> that is not handled by any registered
- * {@link eu.geclipse.core.model.IGridElementCreator} will be
- * represented by a <code>LocalFolder</code> - at least if this
- * <code>IFolder</code> is visible within the
- * {@link eu.geclipse.core.model.GridModel}. 
+ * {@link eu.geclipse.core.model.IGridElementCreator} will be represented by a
+ * <code>LocalFolder</code> - at least if this <code>IFolder</code> is
+ * visible within the {@link eu.geclipse.core.model.GridModel}.
  */
-public class LocalFolder
-    extends ResourceGridContainer {
-  
+public class LocalFolder extends ResourceGridContainer implements ILocalFolder {
+
   /**
-   * Construct a new local folder with the specified parent and the
-   * specified corresponding <code>IFolder</code>.
-   *  
+   * Construct a new local folder with the specified parent and the specified
+   * corresponding <code>IFolder</code>.
+   * 
    * @param parent The parent element of this folder.
    * @param folder The corresponding <code>IFolder</code>.
    */
   LocalFolder( final IFolder folder ) {
     super( folder );
   }
-  
-  /* (non-Javadoc)
+
+  /*
+   * (non-Javadoc)
+   * 
    * @see eu.geclipse.core.model.impl.AbstractGridContainer#canContain(eu.geclipse.core.model.IGridElement)
    */
   @Override
   public boolean canContain( final IGridElement element ) {
     return true;
   }
-  
+
   /**
-   * Convenience method that returns the <code>IFolder</code> out
-   * of the resource.
+   * Convenience method that returns the <code>IFolder</code> out of the
+   * resource.
    * 
    * @return The corresponding <code>IFolder</code>.
    */
-  protected IFolder getFolder() {
-    return ( IFolder ) getResource();
+  public IFolder getFolder() {
+    return ( IFolder )getResource();
   }
-  
 }
