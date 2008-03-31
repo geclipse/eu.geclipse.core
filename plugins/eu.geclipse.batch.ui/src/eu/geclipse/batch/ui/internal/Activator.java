@@ -217,23 +217,25 @@ public class Activator extends AbstractUIPlugin {
   @Override
   protected void initializeImageRegistry( final ImageRegistry reg )
   {
+    String prefix = "icons" + System.getProperty( "file.separator" );//$NON-NLS-1$ //$NON-NLS-2$
+    
     String[][] images = {
-      { IMG_REFRESH, "icons" + System.getProperty( "file.separator" ) + "refresh.gif" },  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-      { IMG_MOVEJOB, "icons" + System.getProperty( "file.separator" ) + "moveJob.gif" },  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-      { IMG_HOLDJOB, "icons" + System.getProperty( "file.separator" ) + "holdJob.gif" },  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-      { IMG_RELEASEJOB, "icons" + System.getProperty( "file.separator" ) + "releaseJob.gif" },  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-      { IMG_ENABLE, "icons" + System.getProperty( "file.separator" ) + "enableCL16.gif" },  //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-      { IMG_DRAIN, "icons" + System.getProperty( "file.separator" ) + "drain_mix_yy.gif" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-      { IMG_NEWQUEUE, "icons" + System.getProperty( "file.separator" ) + "queueCL16.gif" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-      { IMG_START, "icons" + System.getProperty( "file.separator" ) + "start.gif" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-      { IMG_STOP, "icons" + System.getProperty( "file.separator" ) + "stop.gif" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-      { IMG_QUEUE, "icons" + System.getProperty( "file.separator" ) + "queue16.gif" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-      { IMG_COMPUTING_ELEMENT, "icons" + System.getProperty( "file.separator" ) +"ce16.gif" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-      { IMG_WORKER_NODE, "icons" + System.getProperty( "file.separator" ) +"wn16.gif" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-      { IMG_BUSY_ARROW1, "icons" + System.getProperty( "file.separator" ) +"busyArrow1.gif" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-      { IMG_BUSY_ARROW2, "icons" + System.getProperty( "file.separator" ) +"busyArrow2.gif" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-      { IMG_BUSY_ARROW3, "icons" + System.getProperty( "file.separator" ) +"busyArrow3.gif" }, //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-      { IMG_BUSY_ARROW4, "icons" + System.getProperty( "file.separator" ) +"busyArrow4.gif" } //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+      { IMG_REFRESH, prefix + "refresh.gif" }, //$NON-NLS-1$
+      { IMG_MOVEJOB, prefix + "moveJob.gif" }, //$NON-NLS-1$
+      { IMG_HOLDJOB, prefix + "holdJob.gif" }, //$NON-NLS-1$
+      { IMG_RELEASEJOB, prefix + "releaseJob.gif" }, //$NON-NLS-1$
+      { IMG_ENABLE, prefix + "enableCL16.gif" }, //$NON-NLS-1$
+      { IMG_DRAIN, prefix + "drain_mix_yy.gif" }, //$NON-NLS-1$
+      { IMG_NEWQUEUE, prefix + "queueCL16.gif" }, //$NON-NLS-1$
+      { IMG_START, prefix + "start.gif" }, //$NON-NLS-1$
+      { IMG_STOP, prefix + "stop.gif" }, //$NON-NLS-1$
+      { IMG_QUEUE, prefix + "queue16.gif" }, //$NON-NLS-1$
+      { IMG_COMPUTING_ELEMENT, prefix +"ce16.gif" }, //$NON-NLS-1$
+      { IMG_WORKER_NODE, prefix + "wn16.gif" }, //$NON-NLS-1$
+      { IMG_BUSY_ARROW1, prefix + "busyArrow1.gif" }, //$NON-NLS-1$
+      { IMG_BUSY_ARROW2, prefix + "busyArrow2.gif" }, //$NON-NLS-1$
+      { IMG_BUSY_ARROW3, prefix + "busyArrow3.gif" }, //$NON-NLS-1$
+      { IMG_BUSY_ARROW4, prefix + "busyArrow4.gif" } //$NON-NLS-1$
     };
     
     ImageDescriptor imgDsc = null;
