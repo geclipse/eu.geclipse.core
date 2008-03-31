@@ -65,6 +65,7 @@ public abstract class JobSubmissionWizardBase extends Wizard
 
   protected IGridJobCreator creator;
   protected List<IGridJobDescription> jobDescriptions;
+  private WrapperInitObject initObject;
 
   protected JobSubmissionWizardBase() {
     setNeedsProgressMonitor( true );
@@ -157,8 +158,9 @@ public abstract class JobSubmissionWizardBase extends Wizard
   @SuppressWarnings("unchecked")
   public boolean init( final Object data ) {
     boolean result = false;
-    if( data instanceof List ) {
-      this.jobDescriptions = new ArrayList<IGridJobDescription>( ( List<IGridJobDescription> )data );
+    if( data instanceof WrapperInitObject ) {
+      this.initObject = (WrapperInitObject)data;
+      this.jobDescriptions = new ArrayList<IGridJobDescription>( this.initObject.getJobDescriptions() );
       result = true;
     }
     return result;
