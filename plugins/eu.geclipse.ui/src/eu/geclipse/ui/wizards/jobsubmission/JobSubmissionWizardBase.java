@@ -62,8 +62,9 @@ import eu.geclipse.ui.wizards.wizardselection.IInitalizableWizard;
 public abstract class JobSubmissionWizardBase extends Wizard
   implements IInitalizableWizard, IExecutableExtension
 {
+
   protected IGridJobCreator creator;
-  protected List<IGridJobDescription> jobDescriptions;  
+  protected List<IGridJobDescription> jobDescriptions;
 
   protected JobSubmissionWizardBase() {
     setNeedsProgressMonitor( true );
@@ -76,18 +77,14 @@ public abstract class JobSubmissionWizardBase extends Wizard
    */
   @Override
   public boolean performFinish() {
-    {      
+    {
       Job job = new JobSubmissionJob();
       job.setUser( true );
-      
       Shell shell = getWizardShell();
-      
       if( shell != null ) {
         shell.setVisible( false );
-      }      
-      
+      }
       job.schedule(); // start as soon as possible
-      
       return false;
     }
   }
@@ -156,7 +153,7 @@ public abstract class JobSubmissionWizardBase extends Wizard
    * (non-Javadoc)
    * 
    * @see eu.geclipse.ui.wizards.wizardselection.IInitalizableWizard#init(java.lang.Object)
-   */  
+   */
   @SuppressWarnings("unchecked")
   public boolean init( final Object data ) {
     boolean result = false;
@@ -191,59 +188,49 @@ public abstract class JobSubmissionWizardBase extends Wizard
       }
     }
   }
-
-  
   private class JobSubmissionJob extends Job {
-    
+
     // create the service for the job submission
     final IGridJobSubmissionService service = getSubmissionService();
-    
+
     JobSubmissionJob() {
-      super( Messages.getString("JobSubmissionWizardBase.jobName") ); //$NON-NLS-1$
+      super( Messages.getString( "JobSubmissionWizardBase.jobName" ) ); //$NON-NLS-1$
     }
-    
+
     /**
-     * the run method for the Background job create the JobSubmissionWizard
-     * and call the service
+     * the run method for the Background job create the JobSubmissionWizard and
+     * call the service
      */
     @Override
     protected IStatus run( final IProgressMonitor monitor ) {
       boolean closeWizard = true;
-      
-      SubMonitor betterMonitor = SubMonitor.convert( monitor, JobSubmissionWizardBase.this.jobDescriptions.size() );
-      
+      SubMonitor betterMonitor = SubMonitor.convert( monitor,
+                                                     JobSubmissionWizardBase.this.jobDescriptions.size() );
       try {
         /*
          * we loop over all selected jobs in the workspace yes, we can submit
          * more than one job at a time
-         */        
-             
-        Iterator<IGridJobDescription> iterator = JobSubmissionWizardBase.this.jobDescriptions.iterator();        
-        
-        while( iterator.hasNext() )
-        {
+         */
+        Iterator<IGridJobDescription> iterator = JobSubmissionWizardBase.this.jobDescriptions.iterator();
+        while( iterator.hasNext() ) {
           testCancelled( betterMonitor );
           IGridJobDescription description = iterator.next();
-          betterMonitor.setTaskName( String.format( Messages.getString("JobSubmissionWizardBase.taskNameSubmitting"), description.getName() ) ); //$NON-NLS-1$
-          
-          if( JobSubmissionWizardBase.this.creator.canCreate( description ) )
-          {
-              IGridContainer parent = buildPath( description );
-              IGridJobID jobId = null;
-              if( this.service != null ) {
-                jobId = this.service.submitJob( description, betterMonitor.newChild( 1 ) );                
-              }
-
-              testCancelled( betterMonitor );
-              JobSubmissionWizardBase.this.creator.create( parent, jobId );
-         
-              // don't submit this job again during again submission after error
-              iterator.remove();
-          }          
-        }  
+          betterMonitor.setTaskName( String.format( Messages.getString( "JobSubmissionWizardBase.taskNameSubmitting" ), description.getName() ) ); //$NON-NLS-1$
+          if( JobSubmissionWizardBase.this.creator.canCreate( description ) ) {
+            IGridContainer parent = buildPath( description );
+            IGridJobID jobId = null;
+            if( this.service != null ) {
+              jobId = this.service.submitJob( description,
+                                              betterMonitor.newChild( 1 ) );
+            }
+            testCancelled( betterMonitor );
+            JobSubmissionWizardBase.this.creator.create( parent, jobId );
+            // don't submit this job again during again submission after error
+            iterator.remove();
+          }
+        }
         betterMonitor.worked( 1 );
-      }
-      catch( ProblemException pExc ) {
+      } catch( ProblemException pExc ) {
         showProblem( pExc );
         closeWizard = false;
       } catch( CoreException cExc ) {
@@ -252,11 +239,9 @@ public abstract class JobSubmissionWizardBase extends Wizard
       } finally {
         betterMonitor.done();
       }
-      
       if( closeWizard ) {
         closeWizard();
       }
-  
       return Status.OK_STATUS;
     }
 
@@ -269,8 +254,8 @@ public abstract class JobSubmissionWizardBase extends Wizard
     void closeWizard() {
       IWorkbench workbench = PlatformUI.getWorkbench();
       Display display = workbench.getDisplay();
-      
       display.asyncExec( new Runnable() {
+
         public void run() {
           WizardDialog dialog = ( WizardDialog )getContainer();
           dialog.close();
@@ -279,36 +264,34 @@ public abstract class JobSubmissionWizardBase extends Wizard
     }
 
     private void showProblem( final Throwable exc ) {
-      
       IWorkbench workbench = PlatformUI.getWorkbench();
       Display display = workbench.getDisplay();
-      display.asyncExec( new Runnable() {        
-  
+      display.asyncExec( new Runnable() {
+
         public void run() {
           addShowWizardSolution( exc );
           ProblemDialog.openProblem( getShell(),
                                      Messages.getString( "JobSubmissionWizardBase.errSubmissionFailed" ), //$NON-NLS-1$
                                      null,
                                      exc );
-          
-          // if "show wizard" action wasn't called, we can definitely close the wizard
-          if( !JobSubmissionWizardBase.this.getContainer().getShell().isVisible() ) {
+          // if "show wizard" action wasn't called, we can definitely close the
+          // wizard
+          if( !JobSubmissionWizardBase.this.getContainer()
+            .getShell()
+            .isVisible() )
+          {
             JobSubmissionWizardBase.this.getContainer().getShell().close();
           }
         }
-
       } );
-      
     }
   }
-  
+
   private Shell getWizardShell() {
     Shell shell = null;
-        
     if( getContainer() != null ) {
       shell = getContainer().getShell();
     }
-    
     return shell;
   }
 
@@ -316,11 +299,10 @@ public abstract class JobSubmissionWizardBase extends Wizard
     if( exc instanceof ProblemException ) {
       ProblemException problemExc = ( ProblemException )exc;
       IProblem problem = problemExc.getProblem();
-      
       problem.addSolution( new ISolution() {
 
         public String getDescription() {
-          return Messages.getString("JobSubmissionWizardBase.solutionOpenWizard"); //$NON-NLS-1$
+          return Messages.getString( "JobSubmissionWizardBase.solutionOpenWizard" ); //$NON-NLS-1$
         }
 
         public String getID() {
@@ -332,10 +314,11 @@ public abstract class JobSubmissionWizardBase extends Wizard
         }
 
         public void solve() throws InvocationTargetException {
-          JobSubmissionWizardBase.this.getContainer().getShell().setVisible( true );    
-        }} );
+          JobSubmissionWizardBase.this.getContainer()
+            .getShell()
+            .setVisible( true );
+        }
+      } );
     }
-  }        
-  
+  }
 }
-
