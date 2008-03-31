@@ -16,6 +16,7 @@
 package eu.geclipse.core.reporting.internal;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.eclipse.core.runtime.IStatus;
@@ -24,6 +25,7 @@ import org.eclipse.core.runtime.Status;
 
 import eu.geclipse.core.reporting.IProblem;
 import eu.geclipse.core.reporting.ISolution;
+import eu.geclipse.core.reporting.ProblemException;
 
 /**
  * Plug-in internal implementation of the {@link IProblem}-interface.
@@ -174,15 +176,18 @@ public class Problem implements IProblem {
    */
   public String[] getReasons() {
 
-    String[] result;
+    List< String > result = new ArrayList< String >();
     
     if ( this.reasons != null ) {
-      result = this.reasons.toArray( new String[ this.reasons.size() ] );
-    } else {
-      result = new String[ 0 ];
+      result.addAll( this.reasons );
     }
     
-    return result;
+    if ( ( this.exception != null ) && ( this.exception instanceof ProblemException ) ) {
+      IProblem slave = ( ( ProblemException ) this.exception ).getProblem();
+      result.addAll( Arrays.asList( slave.getReasons() ) );
+    }
+    
+    return result.toArray( new String[ result.size() ] );
     
   }
 
@@ -191,15 +196,18 @@ public class Problem implements IProblem {
    */
   public ISolution[] getSolutions() {
 
-    ISolution[] result;
+    List< ISolution > result = new ArrayList< ISolution >();
     
     if ( this.solutions != null ) {
-      result = this.solutions.toArray( new ISolution[ this.solutions.size() ] );
-    } else {
-      result = new ISolution[ 0 ];
+      result.addAll( this.solutions );
     }
     
-    return result;
+    if ( ( this.exception != null ) && ( this.exception instanceof ProblemException ) ) {
+      IProblem slave = ( ( ProblemException ) this.exception ).getProblem();
+      result.addAll( Arrays.asList( slave.getSolutions() ) );
+    }
+    
+    return result.toArray( new ISolution[ result.size() ] );
     
   }
   
