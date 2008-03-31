@@ -30,6 +30,8 @@ public interface ICoreSolutions {
     = "eu.geclipse.core.solution.auth.checkTokens"; //$NON-NLS-1$
   public static final String AUTH_CHECK_VO_SETTINGS
     = "eu.geclipse.core.solution.auth.checkVoSettings"; //$NON-NLS-1$
+  public static final String AUTH_UNRESTRICTED_POLICY
+    = "eu.geclipse.core.solution.auth.jceUnrestrictedPolicyFile"; //$NON-NLS-1$
   
   // IO
   public static final String IO_DOWNLOAD_FILE_AGAIN
