@@ -108,7 +108,7 @@ public class GridJobCreator extends AbstractGridJobCreator {
    * @see eu.geclipse.core.model.IGridJobCreator#create(eu.geclipse.core.model.IGridContainer,
    *      eu.geclipse.core.model.IGridJobID)
    */
-  public void create( final IGridContainer parent, final IGridJobID id )
+  public void create( final IGridContainer parent, final IGridJobID id, final String jobName )
     throws GridModelException
   {
     if( !( id instanceof GridJobID ) ) {
@@ -117,7 +117,7 @@ public class GridJobCreator extends AbstractGridJobCreator {
                                     Activator.PLUGIN_ID );
     }
     IGridJobDescription description = getDescription();
-    IFolder jobFolder = findJobFileName( description,
+    IFolder jobFolder = findJobFileName( jobName,
                                          ( IContainer )parent.getResource() );
     IPath fullPath = jobFolder.getFullPath();
     IPath tmpPath = fullPath;
@@ -155,18 +155,18 @@ public class GridJobCreator extends AbstractGridJobCreator {
    * @param folder
    * @return
    */
-  private IFolder findJobFileName( final IGridJobDescription description,
+  private IFolder findJobFileName( final String jobName,
                                    final IContainer container )
-  {
-    String baseName = description.getPath().removeFileExtension().lastSegment();
+  {    
+    
     // IFolder folder = ( IFolder )parent.getResource();
-    String name = "." + baseName + ".job"; //$NON-NLS-1$ //$NON-NLS-2$    
+    String name = "." + ( jobName != null ? jobName : "job" ) + ".job"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$    
     IFolder jobFolder = container.getFolder( new Path( name ) );
     // IFile jobFile = folder.getFile( name );
     int jobNum = 0;
     while( jobFolder.exists() ) {
       jobNum++;
-      name = "." + baseName + "[" + jobNum + "].job"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
+      name = "." + jobName + "[" + jobNum + "].job"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
       jobFolder = container.getFolder( new Path( name ) );
     }
     return jobFolder;
@@ -186,7 +186,7 @@ public class GridJobCreator extends AbstractGridJobCreator {
           JSDLJobDescription childJobDescription = createChildJobDescription( jobFolder, childJob );
           
           if( this.canCreate( childJobDescription ) ) {
-            this.create( workflowJob, childId );
+            this.create( workflowJob, childId, childJobDescription.getPath().removeFileExtension().lastSegment() );
           }
           
           deleteTmpJobDescription( childJobDescription );

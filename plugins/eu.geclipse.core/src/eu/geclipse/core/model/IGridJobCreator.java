@@ -35,8 +35,9 @@ public interface IGridJobCreator extends IGridElementCreator {
    * 
    * @param parent - The porent node in GridProjectView
    * @param id - Identifier of job
+   * @param jobName - name under which job should be stored in the workspace
    * @throws GridModelException
    */
-  public void create( final IGridContainer parent, IGridJobID id )
+  public void create( final IGridContainer parent, IGridJobID id, final String jobName )
     throws GridModelException;
 }

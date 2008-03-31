@@ -62,10 +62,10 @@ import eu.geclipse.ui.wizards.wizardselection.IInitalizableWizard;
 public abstract class JobSubmissionWizardBase extends Wizard
   implements IInitalizableWizard, IExecutableExtension
 {
-
   protected IGridJobCreator creator;
   protected List<IGridJobDescription> jobDescriptions;
-  private WrapperInitObject initObject;
+  ArrayList<String> jobNames;
+  WrapperInitObject initObject;
 
   protected JobSubmissionWizardBase() {
     setNeedsProgressMonitor( true );
@@ -140,7 +140,7 @@ public abstract class JobSubmissionWizardBase extends Wizard
     return result;
   }
 
-  private void createFolder( final IFolder folder ) throws CoreException {
+  void createFolder( final IFolder folder ) throws CoreException {
     IContainer parent = folder.getParent();
     if( ( parent != null ) && ( parent instanceof IFolder ) ) {
       createFolder( ( IFolder )parent );
@@ -161,6 +161,7 @@ public abstract class JobSubmissionWizardBase extends Wizard
     if( data instanceof WrapperInitObject ) {
       this.initObject = (WrapperInitObject)data;
       this.jobDescriptions = new ArrayList<IGridJobDescription>( this.initObject.getJobDescriptions() );
+      this.jobNames = new ArrayList<String>( this.initObject.getJobNames() );
       result = true;
     }
     return result;
@@ -214,24 +215,25 @@ public abstract class JobSubmissionWizardBase extends Wizard
          * more than one job at a time
          */
         Iterator<IGridJobDescription> iterator = JobSubmissionWizardBase.this.jobDescriptions.iterator();
+        Iterator<String> namesIterator = JobSubmissionWizardBase.this.jobNames.iterator();
         while( iterator.hasNext() ) {
           testCancelled( betterMonitor );
           IGridJobDescription description = iterator.next();
           betterMonitor.setTaskName( String.format( Messages.getString( "JobSubmissionWizardBase.taskNameSubmitting" ), description.getName() ) ); //$NON-NLS-1$
           if( JobSubmissionWizardBase.this.creator.canCreate( description ) ) {
-            IGridContainer parent = buildPath( description );
+            IGridContainer parent = buildTargetFolder( description, (IFolder)JobSubmissionWizardBase.this.initObject.getDestinationFolder() );
             IGridJobID jobId = null;
             if( this.service != null ) {
               jobId = this.service.submitJob( description,
                                               betterMonitor.newChild( 1 ) );
             }
             testCancelled( betterMonitor );
-            JobSubmissionWizardBase.this.creator.create( parent, jobId );
+            JobSubmissionWizardBase.this.creator.create( parent, jobId, namesIterator.next() );
             // don't submit this job again during again submission after error
             iterator.remove();
-          }
+            namesIterator.remove();
+          }          
         }
-        betterMonitor.worked( 1 );
       } catch( ProblemException pExc ) {
         showProblem( pExc );
         closeWizard = false;
@@ -245,6 +247,25 @@ public abstract class JobSubmissionWizardBase extends Wizard
         closeWizard();
       }
       return Status.OK_STATUS;
+    }
+
+    private IGridContainer buildTargetFolder( final IGridJobDescription description,
+                                              final IFolder folder ) throws CoreException
+    {
+      IFolder targetFolder = folder;
+      IGridProject project = description.getProject();
+      IPath descriptionPath = description.getPath().removeLastSegments( 1 );
+      IPath descriptionFolderPath = project.getProjectFolder( IGridJobDescription.class ).getPath();
+      // if jsdl is in subfolder of JsdlContainer, then build that subfolder structure also in JobContainer
+      if( descriptionFolderPath.isPrefixOf( descriptionPath ) ) {
+        int matchingFirstSegments = descriptionPath.matchingFirstSegments( descriptionFolderPath );
+        IPath appendedPath = descriptionPath.removeFirstSegments( matchingFirstSegments );
+        IWorkspaceRoot workspaceRoot = ( IWorkspaceRoot )GridModel.getRoot().getResource();
+        
+        targetFolder = workspaceRoot.getFolder( targetFolder.getFullPath().append( appendedPath ) ); 
+        createFolder( targetFolder );
+      }
+      return ( IGridContainer )GridModel.getRoot().findElement( targetFolder );
     }
 
     private void testCancelled( final IProgressMonitor monitor ) {
