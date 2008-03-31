@@ -22,7 +22,6 @@ import java.util.List;
 import org.eclipse.core.resources.IResource;
 
 import eu.geclipse.core.model.IGridJobDescription;
-import eu.geclipse.core.model.ILocalFolder;
 
 
 public class WrapperInitObject {

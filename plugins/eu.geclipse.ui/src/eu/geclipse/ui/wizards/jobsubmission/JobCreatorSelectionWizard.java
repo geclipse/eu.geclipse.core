@@ -23,7 +23,6 @@ import org.eclipse.jface.wizard.Wizard;
 
 import eu.geclipse.core.model.IGridJobCreator;
 import eu.geclipse.core.model.IGridJobDescription;
-import eu.geclipse.core.model.ILocalFolder;
 import eu.geclipse.ui.internal.Activator;
 
 public class JobCreatorSelectionWizard extends Wizard {

@@ -15,8 +15,8 @@
 package eu.geclipse.core.internal.model;
 
 import org.eclipse.core.resources.IFolder;
+
 import eu.geclipse.core.model.IGridElement;
-import eu.geclipse.core.model.ILocalFolder;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
 
 /**
@@ -26,7 +26,7 @@ import eu.geclipse.core.model.impl.ResourceGridContainer;
  * <code>LocalFolder</code> - at least if this <code>IFolder</code> is
  * visible within the {@link eu.geclipse.core.model.GridModel}.
  */
-public class LocalFolder extends ResourceGridContainer implements ILocalFolder {
+public class LocalFolder extends ResourceGridContainer{
 
   /**
    * Construct a new local folder with the specified parent and the specified

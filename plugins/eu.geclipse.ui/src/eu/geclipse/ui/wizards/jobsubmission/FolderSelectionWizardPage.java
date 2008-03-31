@@ -20,8 +20,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.filesystem.IFileInfo;
-import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -31,7 +29,6 @@ import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -45,17 +42,9 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 
-import eu.geclipse.core.model.GridModelException;
-import eu.geclipse.core.model.IGridConnectionElement;
-import eu.geclipse.core.model.IGridContainer;
-import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridProject;
-import eu.geclipse.core.model.ILocalFolder;
-import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.ui.internal.Activator;
-import eu.geclipse.ui.providers.GridFileDialogContentProvider;
-import eu.geclipse.ui.providers.NewProgressTreeNode;
 
 public class FolderSelectionWizardPage extends WizardPage {
 
@@ -99,7 +88,7 @@ public class FolderSelectionWizardPage extends WizardPage {
       }
     } );
     for( TreeItem item : this.tree.getItems() ) {
-      if( item.getData() instanceof ILocalFolder ) {
+      if( item.getData() instanceof IContainer ) {
         this.tree.setSelection( item );
         break;
       }
