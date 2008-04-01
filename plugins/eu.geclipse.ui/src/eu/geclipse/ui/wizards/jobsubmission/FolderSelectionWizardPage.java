@@ -31,6 +31,8 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.graphics.Image;
@@ -104,37 +106,33 @@ public class FolderSelectionWizardPage extends WizardPage {
     gd = new GridData();
     jobNameLabel.setLayoutData( gd );
     this.jobNameText = new Text( mainComp, SWT.LEAD | SWT.BORDER );
+    String name = this.jobDescriptions.get( 0 ).getName();
+    name = name.substring( 0, name.indexOf( "." ) );
+    this.jobNameText.setText( name );
     if( this.jobDescriptions.size() > 1 ) {
       this.jobNameText.setEnabled( false );
-    } else {
-      this.jobNameText.addSelectionListener( new SelectionAdapter() {
-
-        @Override
-        public void widgetSelected( final SelectionEvent e ) {
-          FolderSelectionWizardPage.this.updateButtons();
-        }
-      } );
     }
+    this.jobNameText.addModifyListener( new ModifyListener(){
+
+      public void modifyText( final ModifyEvent e ) {
+        FolderSelectionWizardPage.this.updateButtons();
+        
+      }} );
     gd = new GridData( GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL );
     this.jobNameText.setLayoutData( gd );
-    
-    
     IGridContainer jobFolder = this.project.getProjectFolder( IGridJob.class );
     IResource jobFolderResource = jobFolder.getResource();
-    
-    for (TreeItem item: this.tree.getItems()){
-      if (item.getData() instanceof IContainer){
-        if (item.getData().equals( jobFolderResource )){
+    for( TreeItem item : this.tree.getItems() ) {
+      if( item.getData() instanceof IContainer ) {
+        if( item.getData().equals( jobFolderResource ) ) {
           this.tree.setSelection( item );
           break;
         }
       }
     }
-    
-//    for (){
-//      jobFolder.getResource();
-//    }
-    
+    // for (){
+    // jobFolder.getResource();
+    // }
     setControl( mainComp );
   }
 
