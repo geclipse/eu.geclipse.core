@@ -108,16 +108,24 @@ public class FolderSelectionWizardPage extends WizardPage {
     this.jobNameText = new Text( mainComp, SWT.LEAD | SWT.BORDER );
     String name = this.jobDescriptions.get( 0 ).getName();
     name = name.substring( 0, name.indexOf( "." ) );
-    this.jobNameText.setText( name );
     if( this.jobDescriptions.size() > 1 ) {
       this.jobNameText.setEnabled( false );
-    }
-    this.jobNameText.addModifyListener( new ModifyListener(){
+      String longName = "";
+        for (IGridJobDescription jobDesc: this.jobDescriptions){
+          longName = longName + jobDesc.getName().substring( 0, jobDesc.getName().indexOf( "." ) ) + ", ";
+        }
+      longName = longName.substring( 0, longName.lastIndexOf( "," ) );
+      this.jobNameText.setText( longName );
+      }else{
+        this.jobNameText.setText( name );
+      }
+    
+    this.jobNameText.addModifyListener( new ModifyListener() {
 
       public void modifyText( final ModifyEvent e ) {
         FolderSelectionWizardPage.this.updateButtons();
-        
-      }} );
+      }
+    } );
     gd = new GridData( GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL );
     this.jobNameText.setLayoutData( gd );
     IGridContainer jobFolder = this.project.getProjectFolder( IGridJob.class );
@@ -172,13 +180,19 @@ public class FolderSelectionWizardPage extends WizardPage {
 
   public List<String> getJobNames() {
     List<String> result = new ArrayList<String>();
-    String baseName = this.jobNameText.getText();
-    int i = 1;
-    String sufix = "";
-    for( IGridJobDescription jobDescr : this.jobDescriptions ) {
-      result.add( baseName + sufix );
-      sufix = "_" + Integer.valueOf( i ).toString();
-      i++;
+    if( this.jobDescriptions.size() > 1 ) {
+      for (IGridJobDescription jobDesc: this.jobDescriptions){
+        result.add( jobDesc.getName().substring( 0, jobDesc.getName().indexOf( "." ) ) );
+      }
+    } else {
+      String baseName = this.jobNameText.getText();
+      int i = 1;
+      String sufix = "";
+      for( IGridJobDescription jobDescr : this.jobDescriptions ) {
+        result.add( baseName + sufix );
+        sufix = "_" + Integer.valueOf( i ).toString();
+        i++;
+      }
     }
     return result;
   }
