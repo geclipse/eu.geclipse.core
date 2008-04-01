@@ -74,10 +74,11 @@ public class NewJobWizard extends Wizard implements INewWizard {
                                     this.selection );
     this.firstPage.setTitle( Messages.getString( "NewJobWizard.first_page_title" ) ); //$NON-NLS-1$
     this.firstPage.setDescription( Messages.getString( "NewJobWizard.first_page_description" ) ); //$NON-NLS-1$
-//    this.firstPage.setFileName( this.firstPage.getUniqueFileName() );
-//    this.firstPage.setFileName( Messages.getString( "NewJobWizard.first_page_default_new_file_name" ) ); //$NON-NLS-1$
+    // this.firstPage.setFileName( this.firstPage.getUniqueFileName() );
+    // this.firstPage.setFileName( Messages.getString(
+    // "NewJobWizard.first_page_default_new_file_name" ) ); //$NON-NLS-1$
     addPage( this.firstPage );
-//    this.firstPage.setFileName( this.firstPage.getUniqueFileName() );
+    // this.firstPage.setFileName( this.firstPage.getUniqueFileName() );
     ArrayList<WizardPage> internal = new ArrayList<WizardPage>();
     this.outputFilesPage = new DataStagingNewJobWizardPage( Messages.getString( "NewJobWizard.files_output_new_job_page_name" ) ); //$NON-NLS-1$;
     internal.add( this.outputFilesPage );
@@ -187,10 +188,16 @@ public class NewJobWizard extends Wizard implements INewWizard {
         jsdl.addJobDescription();
       }
     }
-    jsdl.addJobIdentification( this.executablePage.getApplicationName(), null );
+    String applicationName = this.executablePage.getApplicationName();
+    if( applicationName.equals( "" ) ) {
+      applicationName = this.file.getName();
+      applicationName = applicationName.substring( 0,
+                                                   applicationName.indexOf( "." ) );
+    }
+    jsdl.addJobIdentification( applicationName, null );
     String appName1 = ""; //$NON-NLS-1$
     if( this.executablePage.getApplicationName().equals( "" ) ) { //$NON-NLS-1$
-      appName1 = "example_name"; //$NON-NLS-1$
+      appName1 = applicationName; //$NON-NLS-1$
     } else {
       appName1 = this.executablePage.getApplicationName();
     }
@@ -207,8 +214,8 @@ public class NewJobWizard extends Wizard implements INewWizard {
     if( in.equals( "" ) ) { //$NON-NLS-1$
       in = null;
     } else {
-      if (in.lastIndexOf( "/" ) != -1){
-        inName = in.substring( in.lastIndexOf( "/" ) + 1); //$NON-NLS-1$
+      if( in.lastIndexOf( "/" ) != -1 ) {
+        inName = in.substring( in.lastIndexOf( "/" ) + 1 ); //$NON-NLS-1$
       } else {
         inName = "stdIn";
       }
@@ -224,7 +231,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
       errName = "stdErr"; //$NON-NLS-1$
     }
     String execName = this.executablePage.getExecutableFile();
-    jsdl.setApplicationName(appName1);
+    jsdl.setApplicationName( appName1 );
     if( !execName.equals( "" ) ) { //$NON-NLS-1$
       try {
         URI test = new URI( execName );
@@ -321,7 +328,6 @@ public class NewJobWizard extends Wizard implements INewWizard {
         }
       }
     }
-    
     // jsdl.getDataStagingIn();
     // jsdl.getLocalDataStagingIn();
     // jsdl.getStdInputDataType();
@@ -364,7 +370,6 @@ public class NewJobWizard extends Wizard implements INewWizard {
   class FirstPage extends WizardNewFileCreationPage {
 
     private IStructuredSelection iniSelection;
-    
     private final String initFileName = Messages.getString( "NewJobWizard.first_page_default_new_file_name" );
 
     /**
@@ -378,10 +383,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
     {
       super( pageName, selection );
       this.iniSelection = selection;
-      
     }
-    
-    
 
     @Override
     public void createControl( final Composite parent ) {
@@ -389,13 +391,11 @@ public class NewJobWizard extends Wizard implements INewWizard {
       setFileName( getUniqueFileName() );
     }
 
-
-
     public String getUniqueFileName() {
       IPath containerFullPath = getContainerFullPath();
       String fileName = this.initFileName;
       String extension = "jsdl";
-      if( containerFullPath  == null ) {
+      if( containerFullPath == null ) {
         containerFullPath = new Path( "" ); //$NON-NLS-1$
       }
       if( fileName == null || fileName.trim().length() == 0 ) {
@@ -418,8 +418,6 @@ public class NewJobWizard extends Wizard implements INewWizard {
       }
       return filePath.lastSegment();
     }
-
-
 
     @Override
     protected boolean validatePage() {
@@ -472,7 +470,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
         } else {
           super.initialPopulateContainerNameField();
         }
-//        setFileName( getUniqueFileName() );
+        // setFileName( getUniqueFileName() );
       }
     }
   }
