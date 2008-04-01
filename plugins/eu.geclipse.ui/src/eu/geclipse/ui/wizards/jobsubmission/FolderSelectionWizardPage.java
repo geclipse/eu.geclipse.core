@@ -41,7 +41,10 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.ui.model.WorkbenchLabelProvider;
 
+import eu.geclipse.core.model.IGridContainer;
+import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.ui.internal.Activator;
@@ -59,6 +62,8 @@ public class FolderSelectionWizardPage extends WizardPage {
                                     final List<IGridJobDescription> jobDescriptions )
   {
     super( pageName );
+    super.setTitle( "Submit job description" );
+    super.setDescription( "Choose location and name for job." );
     this.project = project;
     this.jobDescriptions = jobDescriptions;
   }
@@ -76,7 +81,7 @@ public class FolderSelectionWizardPage extends WizardPage {
     treeViewer = new TreeViewer( mainComp, SWT.SINGLE | SWT.BORDER );
     treeViewer.setContentProvider( new RProvider() );
     // treeViewer.setContentProvider( new GridFileDialogContentProvider() );
-    treeViewer.setLabelProvider( new LProvider() );
+    treeViewer.setLabelProvider( WorkbenchLabelProvider.getDecoratingWorkbenchLabelProvider() );
     treeViewer.setInput( this.project.getResource() );
     this.setTree( treeViewer.getTree() );
     this.getTree().setLayoutData( gd );
@@ -99,15 +104,37 @@ public class FolderSelectionWizardPage extends WizardPage {
     gd = new GridData();
     jobNameLabel.setLayoutData( gd );
     this.jobNameText = new Text( mainComp, SWT.LEAD | SWT.BORDER );
-    this.jobNameText.addSelectionListener( new SelectionAdapter() {
+    if( this.jobDescriptions.size() > 1 ) {
+      this.jobNameText.setEnabled( false );
+    } else {
+      this.jobNameText.addSelectionListener( new SelectionAdapter() {
 
-      @Override
-      public void widgetSelected( final SelectionEvent e ) {
-        FolderSelectionWizardPage.this.updateButtons();
-      }
-    } );
+        @Override
+        public void widgetSelected( final SelectionEvent e ) {
+          FolderSelectionWizardPage.this.updateButtons();
+        }
+      } );
+    }
     gd = new GridData( GridData.GRAB_HORIZONTAL | GridData.FILL_HORIZONTAL );
     this.jobNameText.setLayoutData( gd );
+    
+    
+    IGridContainer jobFolder = this.project.getProjectFolder( IGridJob.class );
+    IResource jobFolderResource = jobFolder.getResource();
+    
+    for (TreeItem item: this.tree.getItems()){
+      if (item.getData() instanceof IContainer){
+        if (item.getData().equals( jobFolderResource )){
+          this.tree.setSelection( item );
+          break;
+        }
+      }
+    }
+    
+//    for (){
+//      jobFolder.getResource();
+//    }
+    
     setControl( mainComp );
   }
 
@@ -239,47 +266,6 @@ public class FolderSelectionWizardPage extends WizardPage {
                               final Object oldInput,
                               final Object newInput )
     {
-      // empty implementation
-    }
-  }
-  class LProvider implements ILabelProvider {
-
-    private Image projectImage;
-
-    /**
-     * Constructor of label provider for project selection page
-     */
-    public LProvider() {
-      super();
-      URL argsURL = Activator.getDefault()
-        .getBundle()
-        .getEntry( "icons/gridprojects.gif" ); //$NON-NLS-1$
-      ImageDescriptor argsDesc = ImageDescriptor.createFromURL( argsURL );
-      this.projectImage = argsDesc.createImage();
-    }
-
-    public Image getImage( final Object element ) {
-      return this.projectImage;
-    }
-
-    public String getText( final Object element ) {
-      return ( ( IResource )element ).getName();
-    }
-
-    public void addListener( final ILabelProviderListener listener ) {
-      // empty implementation
-    }
-
-    public void dispose() {
-      this.projectImage.dispose();
-    }
-
-    public boolean isLabelProperty( final Object element, final String property )
-    {
-      return false;
-    }
-
-    public void removeListener( final ILabelProviderListener listener ) {
       // empty implementation
     }
   }
