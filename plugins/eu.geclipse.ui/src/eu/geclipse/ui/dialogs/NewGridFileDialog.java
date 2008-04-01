@@ -42,6 +42,7 @@ import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
@@ -608,8 +609,8 @@ public class NewGridFileDialog
       List< IFileStore > list = new ArrayList< IFileStore >();
       
       for ( IFileStore store : stores ) {
-        if ( store.fetchInfo().exists()
-            && ( ( ! hasStyle( STYLE_ALLOW_ONLY_FILES ) && ! hasStyle( STYLE_ALLOW_ONLY_FOLDERS ))
+        if ( ( store.fetchInfo().exists() || ! hasStyle( STYLE_ALLOW_ONLY_EXISTING ) ) 
+            && ( ( ! hasStyle( STYLE_ALLOW_ONLY_FILES ) && ! hasStyle( STYLE_ALLOW_ONLY_FOLDERS ) )
                 || ( hasStyle( STYLE_ALLOW_ONLY_FILES ) && ! store.fetchInfo().isDirectory() )
                 || ( hasStyle( STYLE_ALLOW_ONLY_FOLDERS ) && store.fetchInfo().isDirectory() ) ) ) {
           list.add( store );
@@ -1254,6 +1255,7 @@ public class NewGridFileDialog
     
     try {
       IFileStore store = EFS.getStore( uri );
+      this.currentSelection = new StructuredSelection( store );
       setSelectedStore( store, updateURI, updateFilename );
     } catch ( CoreException cExc ) {
       setErrorMessage( "Invalid URI - " + cExc.getLocalizedMessage() ); //$NON-NLS-1$
