@@ -11,7 +11,7 @@
  *
  * Contributors:
  *    Ariel Garcia - initial implementation
- *                 -  updated to new problem reporting
+ *                 - updated to new problem reporting
  *****************************************************************************/
 
 package eu.geclipse.core.util.tar;
