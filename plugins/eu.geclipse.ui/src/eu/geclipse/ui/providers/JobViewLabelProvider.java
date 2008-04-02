@@ -40,11 +40,14 @@ public class JobViewLabelProvider extends DecoratingLabelProvider
 
   ITableLabelProvider tableLabelProvider;
 
+  /**
+   * 
+   */
   public JobViewLabelProvider() {
     super( createPureLabelProvider(), PlatformUI.getWorkbench()
       .getDecoratorManager()
       .getLabelDecorator() );
-    tableLabelProvider = ( ITableLabelProvider )getLabelProvider();
+    this.tableLabelProvider = ( ITableLabelProvider )getLabelProvider();
   }
 
   private static ILabelProvider createPureLabelProvider() {
@@ -106,6 +109,14 @@ public class JobViewLabelProvider extends DecoratingLabelProvider
   }
 
   public String getColumnText( final Object element, final int columnIndex ) {
-    return tableLabelProvider.getColumnText( element, columnIndex );
+    String text = ""; //$NON-NLS-1$
+    if( columnIndex == 0
+        && element instanceof IGridJob ) {
+      text = ((IGridJob)element).getJobName();      
+    } else {
+      text = this.tableLabelProvider.getColumnText( element, columnIndex );
+    }
+    
+    return text;
   }
 }

@@ -56,7 +56,7 @@ public class GridJobDetailsFactory implements IJobDetailsFactory {
 
       @Override
       protected String getValue( final IGridJob gridJob ) {
-        return gridJob.getName();
+        return gridJob.getJobName();
       }
     };
   }

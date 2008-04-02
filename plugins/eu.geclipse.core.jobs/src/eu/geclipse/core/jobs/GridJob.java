@@ -96,6 +96,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
   final static private String XML_CHARSET = "ISO-8859-1"; //$NON-NLS-1$
   final static private String JOBINFO_JOBDESCRIPTION_XMLNODENAME = "JobDescriptionFileName"; //$NON-NLS-1$
   final static private String JOBINFO_SUBMISSIONTIME_XMLNODENAME = "SubmissionTime"; //$NON-NLS-1$
+  final static private String JOBINFO_JOBNAME = "JobName"; //$NON-NLS-1$
   final static private String FOLDER_PROPERTIES_QUALIFIER = "eu.geclipse.core.jobs.GridJob";  //$NON-NLS-1$
   final static private String FOLDER_PROPERTY_JOBID_CLASS = "JobID.class"; //$NON-NLS-1$
   private GridJobID jobID = null;
@@ -107,6 +108,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
   private IFile jobInfoFile=null;  
   private Date submissionTime;
   private IGridJobStatusService statusService = null;   // don't use it directly! Use getJobStatusService()
+  private String jobName;
 
   /**
    * @param jobFolder
@@ -116,6 +118,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     this.jobStatusFile = jobFolder.getFile( JOBSTATUS_FILENAME );
     this.jobIdFile = jobFolder.getFile( JOBID_FILENAME );
     this.jobInfoFile = jobFolder.getFile( JOBINFO_FILENAME );
+    this.jobName = getName();
     readJobInfo( jobFolder );
     // gridJobFolder = new GridJobFolder( jobFolder, this );
     readJobID();
@@ -145,11 +148,12 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
    */
   public static GridJob createJobStructure( final IFolder jobFolder,
                                          final GridJobID id,
-                                         final IGridJobDescription description )
+                                         final IGridJobDescription description,
+                                         final String uniqueJobName )
     throws GridModelException
   {
     GridJob job = new GridJob( jobFolder );
-    job.create( jobFolder, id, description );
+    job.create( jobFolder, id, description, uniqueJobName );
     return job;
   }
 
@@ -157,11 +161,12 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
    * @param jobFolder
    * @param id
    * @param description
+   * @param uniqueJobName 
    * @throws GridModelException
    */
   public void create( final IFolder jobFolder,
                       final GridJobID id,
-                      final IGridJobDescription description )
+                      final IGridJobDescription description, final String uniqueJobName )
     throws GridModelException
   {
     this.submissionTime = Calendar.getInstance().getTime(); 
@@ -172,6 +177,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     this.jobDescription = description;
     this.jobStatus = new GridJobStatus( Messages.getString( "GridJob.jobStatusSubmitted" ), //$NON-NLS-1$
                                         IGridJobStatus.SUBMITTED );
+    this.jobName = uniqueJobName;
     writeJobDescription( description, jobFolder );
     writeJobID( id, jobFolder );
     writeJobStatus( this.jobStatusFile );
@@ -198,15 +204,22 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
               filename = filename.trim();
             this.jobDescriptionFile = jobFolder.getFile( filename );
           }
-          if( JOBINFO_SUBMISSIONTIME_XMLNODENAME.equals( node.getNodeName() ) )
+          else if( JOBINFO_SUBMISSIONTIME_XMLNODENAME.equals( node.getNodeName() ) )
           {            
             try {
-              this.submissionTime = getXmlDateFormatter().parse( node.getTextContent() );
+              String textContent = node.getTextContent();
+              
+              if( textContent != null 
+                  && textContent.length() > 0 ) {
+                this.submissionTime = getXmlDateFormatter().parse( textContent );
+              }
             } catch( DOMException e ) {
               // empty implementation
             } catch( ParseException e ) {
               // empty implementation
             }
+          } else if( JOBINFO_JOBNAME.equals( node.getNodeName() ) ) {
+            this.jobName = node.getTextContent();
           }
         }
       }
@@ -594,6 +607,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
           + "</" //$NON-NLS-1$
           + JOBINFO_SUBMISSIONTIME_XMLNODENAME
           + ">" //$NON-NLS-1$
+          + "<" + JOBINFO_JOBNAME + ">" + this.jobName + "</" + JOBINFO_JOBNAME + ">" 
           + "</" //$NON-NLS-1$
           + JOBINFO_XMLNODENAME
           + ">"; //$NON-NLS-1$
@@ -848,4 +862,8 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     return jobIdClass;
   }
 
+  public String getJobName() {
+    return this.jobName;
+  }
+  
 }

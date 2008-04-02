@@ -69,4 +69,8 @@ public interface IGridJob
    */
   public Date getSubmissionTime();
   
+  /**
+   * @return name of job without additional decorations, file extensions etc
+   */
+  public String getJobName();
 }

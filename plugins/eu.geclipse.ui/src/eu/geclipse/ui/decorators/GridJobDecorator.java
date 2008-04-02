@@ -75,6 +75,9 @@ public class GridJobDecorator
     imageNames.put( Integer.valueOf( IGridJobStatus.PURGED ), STATUS_ABANDONED_IMG ); 
   }
   
+  /**
+   * @return decorator
+   */
   public static GridJobDecorator getDecorator() {
     
     GridJobDecorator result = null;
@@ -96,6 +99,9 @@ public class GridJobDecorator
     }
   }
   
+  /**
+   * @param toUpdate refreshed element
+   */
   public void refresh( final IGridElement toUpdate ) {
     LabelProviderChangedEvent event
       = toUpdate == null 
@@ -104,6 +110,9 @@ public class GridJobDecorator
     fireLabelProviderChanged( event );
   }
   
+  /**
+   * @param toUpdate refreshed elements
+   */
   public void refresh( final IGridElement[] toUpdate ) {
     LabelProviderChangedEvent event
       = toUpdate == null || toUpdate.length == 0

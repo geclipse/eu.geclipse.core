@@ -25,7 +25,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 
 import eu.geclipse.core.ICoreProblems;
@@ -116,31 +115,27 @@ public class GridJobCreator extends AbstractGridJobCreator {
                                     Messages.getString( "GridJobCreator.cannotCreateJobFromID" ), //$NON-NLS-1$
                                     Activator.PLUGIN_ID );
     }
+    IContainer container = ( IContainer )parent.getResource();
     IGridJobDescription description = getDescription();
-    IFolder jobFolder = findJobFileName( jobName,
-                                         ( IContainer )parent.getResource() );
-    IPath fullPath = jobFolder.getFullPath();
-    IPath tmpPath = fullPath;
-    // IPath tmpPath = fullPath.addFileExtension( "tmp.job" );
+    
+    String uniqueJobName = findJobFileName( jobName, container );
+    IFolder jobFolder = getJobFolder( container, uniqueJobName );
+
     try {
       // create temporary job folder, to prevent adding new GridJob to project
-      // IPath stateLocation = Activator.getDefault().getStateLocation();
-      IFolder tmpJobFolder = ( ( IContainer ) parent.getResource() )
-                               .getFolder( tmpPath.removeFirstSegments( tmpPath.segmentCount() - 1 ) );
-      tmpJobFolder.delete( true, null );
-      tmpJobFolder.create( true, true, null );
+      // IPath stateLocation = Activator.getDefault().getStateLocation();      
+      jobFolder.delete( true, null );
+      jobFolder.create( true, true, null );
       
-      GridJob job = GridJob.createJobStructure( tmpJobFolder, ( GridJobID )id, description );
+      GridJob job = GridJob.createJobStructure( jobFolder, ( GridJobID )id, description, uniqueJobName );
       
       if( description instanceof IGridWorkflow
           && id instanceof IGridWorkflowJobID ) {
-        createWorkflowJobStructure( job, tmpJobFolder, (IGridWorkflowJobID)id, (IGridWorkflow)description );
+        createWorkflowJobStructure( job, jobFolder, (IGridWorkflowJobID)id, (IGridWorkflow)description );
       }
       
-      this.canCreate( tmpJobFolder );
-      parent.create( this );// .refresh( null );
-      // move folder to its final location. This will add job to the project
-      // tmpJobFolder.move( fullPath, true, null );
+      this.canCreate( jobFolder );
+      parent.create( this );
     } catch( CoreException cExc ) {
       throw new GridModelException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
                                     Messages.getString( "GridJobCreator.problemCreatingFolder" ) //$NON-NLS-1$
@@ -155,21 +150,26 @@ public class GridJobCreator extends AbstractGridJobCreator {
    * @param folder
    * @return
    */
-  private IFolder findJobFileName( final String jobName,
+  private String findJobFileName( final String jobName,
                                    final IContainer container )
-  {    
+  {
+    String baseJobName = jobName != null ? jobName : Messages.getString("GridJobCreator.defaultJobName"); //$NON-NLS-1$
+    String uniqueJobName = baseJobName;
     
-    // IFolder folder = ( IFolder )parent.getResource();
-    String name = "." + ( jobName != null ? jobName : "job" ) + ".job"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$    
-    IFolder jobFolder = container.getFolder( new Path( name ) );
-    // IFile jobFile = folder.getFile( name );
-    int jobNum = 0;
-    while( jobFolder.exists() ) {
-      jobNum++;
-      name = "." + jobName + "[" + jobNum + "].job"; //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
-      jobFolder = container.getFolder( new Path( name ) );
+    int jobNr = 0;
+    
+    for( IFolder jobFolder = getJobFolder( container, uniqueJobName ); 
+      jobFolder.exists();
+      jobFolder = getJobFolder( container, uniqueJobName ) ) {
+      uniqueJobName = String.format( "%s[%d]", baseJobName, Integer.valueOf( ++jobNr ) );      //$NON-NLS-1$
     }
-    return jobFolder;
+    
+    return uniqueJobName;
+  }
+  
+  private IFolder getJobFolder( final IContainer container, final String uniqueJobName ) {
+    String folderName = String.format( ".%s%s", uniqueJobName, GridJob.JOBFILE_EXTENSION ); //$NON-NLS-1$
+    return container.getFolder( new Path( folderName ) );
   }
   
   private void createWorkflowJobStructure( final GridJob workflowJob, final IFolder jobFolder,

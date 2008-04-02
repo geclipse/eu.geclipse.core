@@ -107,7 +107,10 @@ public class GridModelLabelProvider
     
     String resultText = null;
     
-    if( element instanceof IGridElement ) {
+    if( element instanceof IGridJob ) {
+      resultText = ((IGridJob)element).getJobName();
+    }
+    else if( element instanceof IGridElement ) {
       resultText = ( ( IGridElement )element ).getName();
     } else {
       resultText = element.toString();
