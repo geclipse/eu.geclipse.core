@@ -95,6 +95,11 @@ public class JobViewLabelProvider extends DecoratingLabelProvider
               break;
           }
         }
+        
+        if( text == null ) {
+          text = ""; //$NON-NLS-1$
+        }
+        
         return text;
       }
     };
