@@ -108,7 +108,7 @@ class JobScheduler extends Job {
         && ( getNumberOfRunningUpdaters() < Preferences.getUpdatersLimit() ) )
     {
       JobStatusUpdater updaterToWakeUp = null;
-      if( this.sleepingUpdaters.contains( new Integer( UPDATER_HIGH_PRIORITY ) ) )
+      if( this.sleepingUpdaters.contains( Integer.valueOf( UPDATER_HIGH_PRIORITY ) ) )
       {
         JobStatusUpdater tempUpdater = null;
         for( Enumeration<JobStatusUpdater> enumeration = this.sleepingUpdaters.keys(); enumeration.hasMoreElements(); )
@@ -128,7 +128,7 @@ class JobScheduler extends Job {
         updaterToWakeUp.wakeUp();
         updaterToWakeUp.schedule( Preferences.getUpdateJobsPeriod() );
       }
-      this.workingUpdaters.put(  updaterToWakeUp, new Integer( UPDATER_NORMAL_PRIORITY ));
+      this.workingUpdaters.put(  updaterToWakeUp, Integer.valueOf( UPDATER_NORMAL_PRIORITY ) );
       this.sleepingUpdaters.remove( updaterToWakeUp );
     }
     
@@ -153,9 +153,9 @@ class JobScheduler extends Job {
     if( Preferences.getUpdateJobsStatus() && ( getNumberOfRunningUpdaters() < Preferences.getUpdatersLimit() ) ) {
       int updatePeriod = Preferences.getUpdateJobsPeriod();
       updater.schedule( updatePeriod ); 
-      this.workingUpdaters.put( updater, new Integer( UPDATER_NORMAL_PRIORITY ) );
+      this.workingUpdaters.put( updater, Integer.valueOf( UPDATER_NORMAL_PRIORITY ) );
     } else {
-      this.sleepingUpdaters.put( updater, new Integer( UPDATER_NORMAL_PRIORITY ) );
+      this.sleepingUpdaters.put( updater, Integer.valueOf( UPDATER_NORMAL_PRIORITY ) );
     }
   }
 
@@ -179,7 +179,7 @@ class JobScheduler extends Job {
     if ( this.workingUpdaters.containsKey( updater ) ) {
       result = true;
       updater.sleep();
-      this.sleepingUpdaters.put( updater, new Integer( UPDATER_NORMAL_PRIORITY ) );
+      this.sleepingUpdaters.put( updater, Integer.valueOf( UPDATER_NORMAL_PRIORITY ) );
       this.workingUpdaters.remove( updater );
     }
     return result;
@@ -205,7 +205,7 @@ class JobScheduler extends Job {
     if ( this.sleepingUpdaters.containsKey( updater ) ) {
       result = true;
       updater.wakeUp();
-      this.workingUpdaters.put( updater, new Integer( UPDATER_NORMAL_PRIORITY ) );
+      this.workingUpdaters.put( updater, Integer.valueOf( UPDATER_NORMAL_PRIORITY ) );
       this.sleepingUpdaters.remove( updater );
     }
     return result;

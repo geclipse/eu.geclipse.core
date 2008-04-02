@@ -52,7 +52,7 @@ public abstract class AbstractGridContainer
     extends AbstractGridElement
     implements IGridContainer {
   
-  private class ChildFetcher
+  private static class ChildFetcher
       extends Job {
     
     private AbstractGridContainer container;

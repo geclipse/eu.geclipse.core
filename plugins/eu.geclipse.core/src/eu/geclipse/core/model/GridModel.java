@@ -68,6 +68,13 @@ public class GridModel {
     return JobManager.getManager();
   }
   
+  /**
+   * Get the manager that is dedicated to the management of
+   * {@link IGridTest}s.
+   * 
+   * @return The core implementation of the {@link IGridTestManager}
+   * interface. 
+   */
   public static IGridTestManager getTestManager() {
     return GridTestManager.getManager();
   }
@@ -100,8 +107,10 @@ public class GridModel {
   public static List< IGridElementCreator > getStandardCreators() {
     if ( standardCreators == null ) {
       standardCreators = new ArrayList< IGridElementCreator >();
-      standardCreators.add( new GridProjectCreator() );
-      standardCreators.add( new LocalResourceCreator() );
+      synchronized ( standardCreators ) {
+        standardCreators.add( new GridProjectCreator() );
+        standardCreators.add( new LocalResourceCreator() );
+      }
     }
     return standardCreators;
   }

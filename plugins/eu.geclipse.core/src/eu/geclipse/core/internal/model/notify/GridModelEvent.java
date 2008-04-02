@@ -58,7 +58,12 @@ public class GridModelEvent implements IGridModelEvent {
     
     this.type = type;
     this.source = source;
-    this.elements = elements;
+    this.elements = null;
+    if ( elements != null ) {
+      int length = elements.length;
+      this.elements = new IGridElement[ length ];
+      System.arraycopy( elements, 0, this.elements, 0, length );
+    }
     
   }
 

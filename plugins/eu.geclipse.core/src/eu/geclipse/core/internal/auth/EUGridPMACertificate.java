@@ -92,7 +92,13 @@ public class EUGridPMACertificate
    * @return The certificates raw info data.
    */
   public byte[] getInfoData() {
-    return this.infoData;
+    byte[] copy = null;
+    if ( this.infoData != null ) {
+      int length = this.infoData.length;
+      copy = new byte[ length ];
+      System.arraycopy( this.infoData, 0, copy, 0, length );
+    }
+    return copy;
   }
   
   @Override

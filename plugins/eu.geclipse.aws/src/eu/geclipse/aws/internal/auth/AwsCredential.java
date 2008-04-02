@@ -139,7 +139,7 @@ public class AwsCredential
   protected String createID() {
     IAuthenticationTokenDescription desc = getDescription();
     String name = desc.getTokenTypeName();
-    Integer counter = new Integer( ++awsCredentialCounter );
+    Integer counter = Integer.valueOf( ++awsCredentialCounter );
     return String.format( "%1$s#%2$02d", name, counter ); //$NON-NLS-1$
   }
 

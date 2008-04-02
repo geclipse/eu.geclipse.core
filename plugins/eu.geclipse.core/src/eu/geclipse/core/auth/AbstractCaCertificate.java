@@ -19,6 +19,10 @@ import java.io.File;
 
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+
+import eu.geclipse.core.internal.Activator;
 
 /**
  * Abstract implementation of the {@link ICaCertificate} interface that
@@ -32,26 +36,40 @@ public abstract class AbstractCaCertificate
   
   private String id;
   
-  private byte[] certfificateData;
+  private byte[] certificateData;
   
   protected AbstractCaCertificate( final String id,
                                    final byte[] certificateData ) {
     Assert.isNotNull( id );
     Assert.isNotNull( certificateData );
     this.id = id;
-    this.certfificateData = certificateData;
+    this.certificateData = certificateData;
   }
   
   public void delete( final IPath fromDirectory ) {
     String[] fileNames = getFileNames();
     for ( String fileName : fileNames ) {
       File file = fromDirectory.append( fileName ).toFile();
-      file.delete();
+      if ( ! file.delete() ) {
+        Activator.logStatus(
+            new Status(
+                IStatus.WARNING,
+                Activator.PLUGIN_ID,
+                String.format( Messages.getString("AbstractCaCertificate.deletion_failed_status"), getID() ) //$NON-NLS-1$
+            )
+        );
+      }
     }
   }
   
   public byte[] getCertificateData() {
-    return this.certfificateData;
+    byte[] copy = null;
+    if ( this.certificateData != null ) {
+      int length = this.certificateData.length;
+      copy = new byte[ length ];
+      System.arraycopy( this.certificateData, 0, copy, 0, length );
+    }
+    return copy;
   }
   
   public String getID() {

@@ -195,7 +195,7 @@ public class GridProcessMonitor {
          && this.proclist.contains( Integer.valueOf( pid ) ) )
     {
       if ( this.currentfs != null && this.procfs != null ) {
-        IFileStore procdirelem = this.procfs.getChild( new Integer( pid ).toString() );
+        IFileStore procdirelem = this.procfs.getChild( String.valueOf( pid ) );
     
         if ( procdirelem != null ) {
           newproc = new GridProcess( procdirelem );     // perhaps this should be synchronized

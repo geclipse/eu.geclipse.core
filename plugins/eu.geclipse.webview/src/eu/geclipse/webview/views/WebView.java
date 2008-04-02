@@ -37,9 +37,9 @@ import eu.geclipse.webview.preferences.PreferenceConstants;
 public class WebView extends ViewPart {
 
   protected Browser browser;
-  protected String ProjectHomeUrl;
-  protected String ProjectUserSupport;
-  protected String ProjectVoms;
+  protected String projectHomeUrl;
+  protected String projectUserSupport;
+  protected String projectVoms;
   private Action gEclipseHomeAction;
   private Action projectHomeAction;
   private Action ggusAction;
@@ -58,7 +58,7 @@ public class WebView extends ViewPart {
     updateUrlsFromPreferences();
     try {
       this.browser = new Browser( parent, SWT.BORDER );
-      this.browser.setUrl( this.ProjectHomeUrl );
+      this.browser.setUrl( this.projectHomeUrl );
       GridData gridData = new GridData( GridData.FILL_BOTH );
       gridData.grabExcessHorizontalSpace = true;
       gridData.grabExcessVerticalSpace = true;
@@ -111,9 +111,9 @@ public class WebView extends ViewPart {
    */
   private void updateUrlsFromPreferences() {
     Preferences prefs = Activator.getDefault().getPluginPreferences();
-    this.ProjectHomeUrl = prefs.getString( PreferenceConstants.PROJECT_URL );
-    this.ProjectUserSupport = prefs.getString( PreferenceConstants.USERSUPPORT_URL );
-    this.ProjectVoms = prefs.getString( PreferenceConstants.VOMS_URL );
+    this.projectHomeUrl = prefs.getString( PreferenceConstants.PROJECT_URL );
+    this.projectUserSupport = prefs.getString( PreferenceConstants.USERSUPPORT_URL );
+    this.projectVoms = prefs.getString( PreferenceConstants.VOMS_URL );
   }
 
   private void fillLocalToolBar( final IToolBarManager manager ) {
@@ -144,7 +144,7 @@ public class WebView extends ViewPart {
       @Override
       public void run()
       {
-        setUrl( WebView.this.ProjectHomeUrl );
+        setUrl( WebView.this.projectHomeUrl );
       }
     };
     this.projectHomeAction.setText( Messages.WebView_project_home );
@@ -155,7 +155,7 @@ public class WebView extends ViewPart {
       @Override
       public void run()
       {
-        setUrl( WebView.this.ProjectUserSupport );
+        setUrl( WebView.this.projectUserSupport );
       }
     };
     this.ggusAction.setText( Messages.WebView_GGUS );
@@ -166,7 +166,7 @@ public class WebView extends ViewPart {
       @Override
       public void run()
       {
-        setUrl( WebView.this.ProjectVoms );
+        setUrl( WebView.this.projectVoms );
       }
     };
     this.dgridAction.setText( Messages.WebView_VOMS );

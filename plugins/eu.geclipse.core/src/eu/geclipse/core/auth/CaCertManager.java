@@ -21,6 +21,8 @@ import java.util.Hashtable;
 import java.util.List;
 
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 
 import eu.geclipse.core.ExtensionManager;
 import eu.geclipse.core.Extensions;
@@ -166,7 +168,15 @@ public class CaCertManager
     location = location.append( ".certs" ); //$NON-NLS-1$
     File file = location.toFile();
     if ( !file.exists() ) {
-      file.mkdir();
+      if ( ! file.mkdir() ) {
+        Activator.logStatus(
+            new Status(
+                IStatus.WARNING,
+                Activator.PLUGIN_ID,
+                Messages.getString("CaCertManager.ca_dir_creation_failed_status") //$NON-NLS-1$
+            )
+        );
+      }
     }
     return location;
   }

@@ -260,7 +260,18 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
 
       @Override
       public void widgetSelected( final SelectionEvent e ) {
-        IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
+        NewGridFileDialog dialog = new NewGridFileDialog( getShell(), NewGridFileDialog.STYLE_NONE );
+        dialog.addFileTypeFilter( "jsdl", "Job Description Files (*.jsdl)" );
+        dialog.addFileTypeFilter( "txt", "Text Files (*.txt)" );
+        if ( dialog.open() == NewGridFileDialog.OK ) {
+          URI[] uris = dialog.getSelectedURIs();
+          if ( ( uris != null ) && ( uris.length > 0 ) ) {
+            ExecutableNewJobWizardPage.this.executableFile.setText( uris[ 0 ].toString() );
+          } else {
+            ExecutableNewJobWizardPage.this.executableFile.setText( "" );
+          }
+        }
+        /*IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
                                                                            Messages.getString( "ExecutableNewJobWizardPage.grid_file_dialog_title" ), //$NON-NLS-1$
                                                                            null,
                                                                            true );
@@ -269,7 +280,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
           if( filename != null ) {
             ExecutableNewJobWizardPage.this.executableFile.setText( filename );
           }
-        }
+        }*/
       }
     } );
     // Label - arguments list

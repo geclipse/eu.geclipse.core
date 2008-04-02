@@ -109,9 +109,9 @@ public class GridNotificationService {
     Integer counter = this.locks.get( owner );
     
     if ( counter == null ) {
-      counter = new Integer( 1 );
+      counter = Integer.valueOf( 1 );
     } else {
-      counter = new Integer( counter.intValue() + 1 );
+      counter = Integer.valueOf( counter.intValue() + 1 );
     }
     
     this.locks.put( owner, counter );
@@ -157,9 +157,9 @@ public class GridNotificationService {
     Integer counter = this.locks.get( owner );
     
     if ( counter != null ) {
-      counter = new Integer( counter.intValue() - 1 );
+      counter = Integer.valueOf( counter.intValue() - 1 );
     } else {
-      counter = new Integer( 0 );
+      counter = Integer.valueOf( 0 );
     }
     
     if ( counter.intValue() <= 0 ) {
