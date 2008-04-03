@@ -119,9 +119,10 @@ public class TarInputStream {
    *             not exceed the size of <code>block</code> or an
    *             IndexOutOfBoundsException will be thrown.
    * @throws IOException if reading the stream failed
+   * @throws ProblemException if EOF was reached while reading a TAR entry
    */
   private void readBlock( final byte[] block, final int size )
-      throws IOException {
+      throws IOException, ProblemException {
     
     /*
      * Not all InputStream subclasses implement the available() method,
@@ -134,6 +135,11 @@ public class TarInputStream {
     
     do {
       n = this.tarStream.read( block, off, len );
+      if ( n == -1 ) {
+        throw new ProblemException( ICoreProblems.IO_CORRUPTED_FILE,
+                                    Messages.getString( "TarInputStream.EOF_reading_tar" ), //$NON-NLS-1$
+                                    Activator.PLUGIN_ID );
+      }
       off += n;
       len -= n;
     } while ( off < size );
