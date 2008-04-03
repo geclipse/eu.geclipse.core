@@ -257,7 +257,8 @@ public abstract class JobSubmissionWizardBase extends Wizard
       IPath descriptionPath = description.getPath().removeLastSegments( 1 );
       IPath descriptionFolderPath = project.getProjectFolder( IGridJobDescription.class ).getPath();
       // if jsdl is in subfolder of JsdlContainer, then build that subfolder structure also in JobContainer
-      if( descriptionFolderPath.isPrefixOf( descriptionPath ) ) {
+      if( descriptionFolderPath.isPrefixOf( descriptionPath )
+          && folder.getFullPath().equals( project.getProjectFolder( IGridJob.class ).getPath() ) ) {
         int matchingFirstSegments = descriptionPath.matchingFirstSegments( descriptionFolderPath );
         IPath appendedPath = descriptionPath.removeFirstSegments( matchingFirstSegments );
         IWorkspaceRoot workspaceRoot = ( IWorkspaceRoot )GridModel.getRoot().getResource();
