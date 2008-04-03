@@ -76,8 +76,11 @@ public class TarInputStream {
     }
     
     try {
+      byte[] block = new byte[ BLOCK_SZ ];
+      
       // Read the next block, might be a new entry or a null block
-      nextEntry = new TarEntry( readBlock( BLOCK_SZ ) );
+      readBlock( block, BLOCK_SZ );
+      nextEntry = new TarEntry( block );
 
       /*
        * Two consecutive null entries mark the end of the tarball.
@@ -85,7 +88,8 @@ public class TarInputStream {
        * we skip over it and continue.
        */
       if ( nextEntry.isNull() )  {
-        nextEntry = new TarEntry( readBlock( BLOCK_SZ ) );
+        readBlock( block, BLOCK_SZ );
+        nextEntry = new TarEntry( block );
       }
     } catch ( IOException ioExc ) {
       throw new ProblemException( ICoreProblems.IO_UNSPECIFIED_PROBLEM,
@@ -110,12 +114,15 @@ public class TarInputStream {
   /**
    * Private method to read a block from the tar stream.
    * 
-   * @return The newly read block
+   * @param block A byte array where the read data shall be stored.
+   * @param size The amount of bytes to read from the stream. Must
+   *             not exceed the size of <code>block</code> or an
+   *             IndexOutOfBoundsException will be thrown.
    * @throws IOException if reading the stream failed
    */
-  private byte[] readBlock( final int size ) throws IOException {
-    byte[] block = new byte[ size ];
-
+  private void readBlock( final byte[] block, final int size )
+      throws IOException {
+    
     /*
      * Not all InputStream subclasses implement the available() method,
      * or even return always 1 on available data, like InflaterInputStream,
@@ -131,7 +138,6 @@ public class TarInputStream {
       len -= n;
     } while ( off < size );
     
-    return block;
   }
 
   /**
@@ -159,7 +165,7 @@ public class TarInputStream {
     int oSize = BLOCK_SZ;
     try {
       while ( blocks > 0 ) {
-        buffer = readBlock( BLOCK_SZ );
+        readBlock( buffer, BLOCK_SZ );
         // We use outStream = null to flush the data
         if ( outStream != null ) {
           // The last block can be partially filled
