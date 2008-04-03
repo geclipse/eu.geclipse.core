@@ -18,6 +18,7 @@ package eu.geclipse.jsdl.ui.wizards;
 
 import java.io.IOException;
 import java.net.URI;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -31,6 +32,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.IWizardNode;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
@@ -49,8 +51,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 import org.xml.sax.SAXException;
 
 import eu.geclipse.core.model.GridModel;
@@ -195,8 +195,8 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     // mainComposite
     Composite mainComp = new Composite( parent, SWT.NONE );
     IPreferenceStore prefs = Activator.getDefault().getPreferenceStore();
-    ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
-    Image fileImage = sharedImages.getImage( ISharedImages.IMG_OBJ_FILE );
+    URL openFileIcon = Activator.getDefault().getBundle().getEntry( "icons/obj16/open_file.gif" );
+    Image openFileImage = ImageDescriptor.createFromURL( openFileIcon ).createImage();
     GridLayout gLayout = new GridLayout( 3, false );
     gLayout.horizontalSpacing = 10;
     gLayout.verticalSpacing = 12;
@@ -251,7 +251,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     } );
     // Button - browsing for executable file
     this.gridFileDialogButton = new Button( mainComp, SWT.PUSH );
-    this.gridFileDialogButton.setImage( fileImage );
+    this.gridFileDialogButton.setImage( openFileImage );
     layout = new GridData( GridData.HORIZONTAL_ALIGN_FILL
                            | GridData.VERTICAL_ALIGN_FILL
                            | GridData.VERTICAL_ALIGN_CENTER );
@@ -316,7 +316,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     this.stdin.setLayoutData( layout );
     // Button - browsing for stdin file
     this.chooseButton = new Button( this.stdFilesGroup, SWT.PUSH );
-    this.chooseButton.setImage( fileImage );
+    this.chooseButton.setImage( openFileImage );
     layout = new GridData( GridData.HORIZONTAL_ALIGN_FILL
                            | GridData.VERTICAL_ALIGN_FILL
                            | GridData.VERTICAL_ALIGN_CENTER );
@@ -352,7 +352,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     this.stdout.setLayoutData( layout );
     // Button - browsing for stdout files (only remote)
     this.outButton = new Button( this.stdFilesGroup, SWT.PUSH );
-    this.outButton.setImage( fileImage );
+    this.outButton.setImage( openFileImage );
     layout = new GridData( GridData.HORIZONTAL_ALIGN_FILL
                            | GridData.VERTICAL_ALIGN_FILL
                            | GridData.VERTICAL_ALIGN_CENTER );
@@ -388,7 +388,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
     this.stderr.setLayoutData( layout );
     // Button - browsing for stderr file (only remote)
     this.errButton = new Button( this.stdFilesGroup, SWT.PUSH );
-    this.errButton.setImage( fileImage );
+    this.errButton.setImage( openFileImage );
     layout = new GridData( GridData.HORIZONTAL_ALIGN_FILL
                            | GridData.VERTICAL_ALIGN_FILL
                            | GridData.VERTICAL_ALIGN_CENTER );

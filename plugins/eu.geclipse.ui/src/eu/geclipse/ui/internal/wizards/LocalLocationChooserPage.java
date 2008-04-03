@@ -17,12 +17,14 @@ package eu.geclipse.ui.internal.wizards;
 
 import java.io.File;
 import java.net.URI;
+import java.net.URL;
 
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.filesystem.IFileSystem;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -35,9 +37,8 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 
+import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.widgets.StoredCombo;
 
 public class LocalLocationChooserPage extends AbstractLocationChooserPage {
@@ -53,9 +54,8 @@ public class LocalLocationChooserPage extends AbstractLocationChooserPage {
   }
 
   public void createControl( final Composite parent ) {
-    
-    ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
-    Image fileImage = sharedImages.getImage( ISharedImages.IMG_OBJ_FILE );
+    URL openFileIcon = Activator.getDefault().getBundle().getEntry( "icons/obj16/open_file.gif" ); //$NON-NLS-1$
+    Image openFileImage = ImageDescriptor.createFromURL( openFileIcon ).createImage();
 
     GridData gData;
     
@@ -76,7 +76,7 @@ public class LocalLocationChooserPage extends AbstractLocationChooserPage {
     this.combo.setLayoutData( gData );
     
     Button button = new Button( mainComp, SWT.PUSH );
-    button.setImage( fileImage );
+    button.setImage( openFileImage );
     gData = new GridData();
     button.setLayoutData( gData );
     

@@ -15,6 +15,7 @@
  *****************************************************************************/
 package eu.geclipse.jsdl.ui.preference;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +25,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.preference.PreferencePage;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ColumnLayoutData;
 import org.eclipse.jface.viewers.ColumnWeightData;
 import org.eclipse.jface.viewers.ISelection;
@@ -54,7 +56,6 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 import org.eclipse.ui.PlatformUI;
@@ -420,9 +421,9 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
       Button browseButton = new Button( panel, SWT.PUSH );
       gd = new GridData();
       browseButton.setLayoutData( gd );
-      ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
-      Image fileImage = sharedImages.getImage( ISharedImages.IMG_OBJ_FILE );
-      browseButton.setImage( fileImage );
+      URL openFileIcon = Activator.getDefault().getBundle().getEntry( "icons/obj16/open_file.gif" );
+      Image openFileImage = ImageDescriptor.createFromURL( openFileIcon ).createImage();
+      browseButton.setImage( openFileImage );
       browseButton.addSelectionListener( new SelectionAdapter() {
 
         @Override
@@ -452,7 +453,7 @@ public class ApplicationSpecificPreferencePage extends PreferencePage
       Button browseButton1 = new Button( panel, SWT.PUSH );
       gd = new GridData();
       browseButton1.setLayoutData( gd );
-      browseButton1.setImage( fileImage );
+      browseButton1.setImage( openFileImage );
       browseButton1.addSelectionListener( new SelectionAdapter() {
 
         @Override
