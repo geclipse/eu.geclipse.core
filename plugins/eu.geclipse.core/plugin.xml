@@ -11,6 +11,16 @@
    <extension-point id="simpleTests" name="Simple Tests" schema="schema/simpleTests.exsd"/>
    <extension-point id="voLoader" name="VO Loader" schema="schema/voLoader.exsd"/>
    <extension
+         point="org.eclipse.core.expressions.propertyTesters">
+      <propertyTester
+            class="eu.geclipse.core.model.impl.GridModelPropertyTester"
+            id="eu.geclipse.core.resourceTester"
+            namespace="eu.geclipse.core"
+            properties="isGridConnection"
+            type="org.eclipse.core.resources.IResource">
+      </propertyTester>
+   </extension>
+   <extension
          id="eu.geclipse.core.project.GridProjectBuilder"
          name="%extension.gridProjectBuilder"
          point="org.eclipse.core.resources.builders">
@@ -373,15 +383,5 @@
             id="eu.geclipse.core.simpleTest.pingTest"
             name="Ping Test">
       </test>
-   </extension>
-   <extension
-         point="org.eclipse.core.expressions.propertyTesters">
-      <propertyTester
-            class="eu.geclipse.core.model.impl.GridModelPropertyTester"
-            id="eu.geclipse.core.resourceTester"
-            namespace="eu.geclipse.core"
-            properties="isGridConnection"
-            type="org.eclipse.core.resources.IResource">
-      </propertyTester>
    </extension>
 </plugin>
