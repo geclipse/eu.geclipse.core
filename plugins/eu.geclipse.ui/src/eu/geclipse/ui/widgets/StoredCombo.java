@@ -142,7 +142,7 @@ public class StoredCombo extends Combo {
       for( String item : items ) {
         if ( isValidItem( item ) ) add( item );
       }
-      String lastItem = this.prefStore.getString( this.prefID+LAST_ITEM_PREFIX );
+      String lastItem = this.prefStore.getString( this.prefID + LAST_ITEM_PREFIX );
       if ( isValidItem( lastItem ) ) {
         boolean save = this.allowCompletion;
         this.allowCompletion = false;
@@ -202,23 +202,23 @@ public class StoredCombo extends Combo {
   protected void savePreferences() {
     if ( this.prefStore != null ) {
       String cText = getText();
-      this.prefStore.setValue( this.prefID+LAST_ITEM_PREFIX, cText );
+      this.prefStore.setValue( this.prefID + LAST_ITEM_PREFIX, cText );
       List< String > itemList = new ArrayList< String >();
       if ( cText.length() > 0 && isValidItem( cText ) ) {
         itemList.add( cText );
       }
       String[] items = getItems();
       for( String item : items ) {
-        if ( isValidItem( item ) && !itemList.contains( item ) ) {
+        if ( isValidItem( item ) && ! itemList.contains( item ) ) {
           itemList.add( item );
         }
       }
       StringBuilder buffer = new StringBuilder();
       for ( String item : itemList ) {
-        buffer.append( item+StoredCombo.prefSeparator );
+        buffer.append( item + StoredCombo.prefSeparator );
       }
       if ( buffer.length() > 0 ) {
-        String s = buffer.substring( 0, buffer.length()-1 );
+        String s = buffer.substring( 0, buffer.length() - 1 );
         this.prefStore.setValue( this.prefID, s );
       }      
     }
