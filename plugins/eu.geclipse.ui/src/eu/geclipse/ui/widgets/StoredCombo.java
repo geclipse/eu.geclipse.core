@@ -80,7 +80,7 @@ public class StoredCombo extends Combo {
     addModifyListener( new ModifyListener() {
       private boolean alreadyModifing = false;
       public void modifyText( final ModifyEvent event ) {
-        if ( !this.alreadyModifing && StoredCombo.this.allowCompletion ) {
+        if ( ! this.alreadyModifing && StoredCombo.this.allowCompletion ) {
           this.alreadyModifing = true;
           doAutoCompletion();
           this.alreadyModifing = false;
