@@ -258,6 +258,7 @@ public class VoSelectionWizardPage extends WizardPage {
             "pagename",
             "eu.geclipse.ui.newVoWizards",
             filterList,
+            false,
             "Create a new VO",
             "Create a new Virtual Organization of the selected type.",
             "No VO providers registered." );

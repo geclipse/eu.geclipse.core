@@ -45,6 +45,7 @@ public class JobCreatorSelectionWizardPage
     super( "jobCreationPage", //$NON-NLS-1$
            "eu.geclipse.ui.jobSubmissionWizard", //$NON-NLS-1$
            getFilterList( parent ),
+           false,
            Messages.getString("JobCreatorSelectionWizardPage.wizardJobCreatorTitle"), //$NON-NLS-1$
            Messages.getString("JobCreatorSelectionWizardPage.wizardJobCreatorDescription"), //$NON-NLS-1$
            Messages.getString("JobCreatorSelectionWizardPage.wizardJobCreatorNoneSelectedMsg") ); //$NON-NLS-1$

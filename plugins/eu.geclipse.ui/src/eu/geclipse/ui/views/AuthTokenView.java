@@ -738,7 +738,7 @@ public class AuthTokenView
               public void run() {
                 UIAuthTokenProvider tokenProvider
                   = new UIAuthTokenProvider( getSite().getShell() );
-                tokenProvider.showNewTokenWizard( wizardId, null );
+                tokenProvider.showNewTokenWizard( wizardId, true, null );
               }
             };
             action.setText( name );

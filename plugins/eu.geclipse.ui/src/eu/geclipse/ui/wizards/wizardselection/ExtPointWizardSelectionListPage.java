@@ -58,7 +58,7 @@ public class ExtPointWizardSelectionListPage extends WizardSelectionListPage {
                                           final String emptyListErrMsg )
   {
     super( pageName,
-           getWizardList( extensionPointId, null ),
+           getWizardList( extensionPointId, null, false ),
            title,
            desc,
            emptyListErrMsg );
@@ -88,7 +88,7 @@ public class ExtPointWizardSelectionListPage extends WizardSelectionListPage {
                                           final boolean quickSelection )
   {
     super( pageName,
-           getWizardList( extensionPointId, null ),
+           getWizardList( extensionPointId, null, false ),
            title,
            desc,
            emptyListErrMsg,
@@ -104,7 +104,10 @@ public class ExtPointWizardSelectionListPage extends WizardSelectionListPage {
    *            from.
    * @param filterList List of wizard Ids of wizards which are allowed to be
    *            displayed in the wizard list, if the Id of a wizard is not in
-   *            the list it won't be displayed in the list.
+   *            the list and is not compatible to one in the list it won't be
+   *            displayed in the list.
+   * @param forceWizardIds specifies that only the wizards with the Ids in the
+   *                       filterList are allowed (and no compatible ones).
    * @param title Title of the page.
    * @param desc Description text of the page.
    * @param emptyListErrMsg error message that should be displayed if the
@@ -113,12 +116,13 @@ public class ExtPointWizardSelectionListPage extends WizardSelectionListPage {
   public ExtPointWizardSelectionListPage( final String pageName,
                                           final String extensionPointId,
                                           final List<String> filterList,
+                                          final boolean forceWizardIds,
                                           final String title,
                                           final String desc,
                                           final String emptyListErrMsg )
   {
     super( pageName,
-           getWizardList( extensionPointId, filterList ),
+           getWizardList( extensionPointId, filterList, forceWizardIds ),
            title,
            desc,
            emptyListErrMsg );
@@ -146,7 +150,8 @@ public class ExtPointWizardSelectionListPage extends WizardSelectionListPage {
   }
 
   private static IWizardSelectionNode[] getWizardList( final String extensionPointId,
-                                                       final List<String> filterList )
+                                                       final List<String> filterList,
+                                                       final boolean forceWizardIds)
   {
     IExtensionRegistry registry = Platform.getExtensionRegistry();
     IExtensionPoint extensionPoint = registry.getExtensionPoint( extensionPointId );
@@ -162,7 +167,7 @@ public class ExtPointWizardSelectionListPage extends WizardSelectionListPage {
               addElement( nodes, element );
             else if( filterList.contains( id ) )
               addElement( nodes, element );
-            else {
+            else if ( !forceWizardIds ) {
               for( IConfigurationElement replElement : element.getChildren( EXT_CAN_REPLACE ) )
               {
                 String replId = replElement.getAttribute( EXT_ID );

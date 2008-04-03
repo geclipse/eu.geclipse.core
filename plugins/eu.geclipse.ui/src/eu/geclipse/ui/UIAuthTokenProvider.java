@@ -119,7 +119,7 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
         if( result ) {
           IAuthenticationTokenDescription description = this.request.getDescription();
           String tokenWizardId = description.getWizardId();
-          if ( showNewTokenWizard( tokenWizardId, description ) ) {
+          if ( showNewTokenWizard( tokenWizardId, false, description ) ) {
             this.token = cProvider.requestToken( this.request );
           }
         }
@@ -254,6 +254,7 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
    * @return True if the token dialog was closed with status {@link Window#OK}.
    */
   public boolean showNewTokenWizard( final String tokenWizardId,
+                                     final boolean forceWizardId,
                                      final IAuthenticationTokenDescription description ) {
     URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/wizban/newtoken_wiz.gif" ); //$NON-NLS-1$
 
@@ -274,6 +275,7 @@ public class UIAuthTokenProvider extends CheatSheetListener implements IAuthToke
             WIZARD_PAGE_NAME,
             Extensions.AUTH_TOKEN_UI_POINT,
             filterList,
+            forceWizardId,
             Messages.getString( "UIAuthTokenProvider.wizard_first_page_title" ), //$NON-NLS-1$
             Messages.getString( "UIAuthTokenProvider.wizard_first_page_description" ), //$NON-NLS-1$
             Messages.getString( "UIAuthTokenProvider.noTokenCreator" ) ); //$NON-NLS-1$
