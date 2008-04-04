@@ -16,10 +16,10 @@
  *****************************************************************************/
 package eu.geclipse.jsdl.ui.widgets;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.CellEditor;
 import org.eclipse.jface.viewers.ColumnLayoutData;
@@ -54,15 +54,10 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
-import eu.geclipse.core.ICoreProblems;
-import eu.geclipse.core.model.IGridConnectionElement;
-import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.jsdl.JSDLModelFacade;
 import eu.geclipse.jsdl.model.DataStagingType;
 import eu.geclipse.jsdl.model.SourceTargetType;
-import eu.geclipse.jsdl.ui.internal.Activator;
-import eu.geclipse.ui.dialogs.GridFileDialog;
-import eu.geclipse.ui.dialogs.ProblemDialog;
+import eu.geclipse.ui.dialogs.NewGridFileDialog;
 
 /**
  * Set of controls used to handle presentation of Data Staging Out (see
@@ -215,23 +210,31 @@ public class DataStageOutTable {
       protected Object openDialogBox( final Control cellEditorWindow ) {
         String filename = ( String )doGetValue();
         cellEditorWindow.getData();
-        IGridConnectionElement connection = GridFileDialog.openFileDialog( DataStageOutTable.this.mainComp.getShell(),
-                                                                           Messages.getString( "DataStageOutTable.grid_file_dialog_title" ), //$NON-NLS-1$
-                                                                           null,
-                                                                           true );
-        if( connection != null ) {
-          try {
-            filename = connection.getConnectionFileStore().toString();
-          } catch( CoreException cExc ) {
-            ProblemException exception = new ProblemException( ICoreProblems.NET_CONNECTION_FAILED,
-                                                               cExc,
-                                                               Activator.PLUGIN_ID );
-            ProblemDialog.openProblem( DataStageOutTable.this.mainComp.getShell(),
-                                       Messages.getString( "DataStageOutTable.error" ), //$NON-NLS-1$
-                                       Messages.getString( "DataStageOutTable.error" ), //$NON-NLS-1$
-                                       exception );
+        NewGridFileDialog dialog = new NewGridFileDialog( DataStageOutTable.this.mainComp.getShell(),
+                                                          NewGridFileDialog.STYLE_ALLOW_ONLY_FILES );
+        if( dialog.open() == Window.OK ) {
+          URI[] uris = dialog.getSelectedURIs();
+          if( ( uris != null ) && ( uris.length > 0 ) ) {
+            filename = uris[0].toString();
           }
         }
+//        IGridConnectionElement connection = GridFileDialog.openFileDialog( DataStageOutTable.this.mainComp.getShell(),
+//                                                                           Messages.getString( "DataStageOutTable.grid_file_dialog_title" ), //$NON-NLS-1$
+//                                                                           null,
+//                                                                           true );
+//        if( connection != null ) {
+//          try {
+//            filename = connection.getConnectionFileStore().toString();
+//          } catch( CoreException cExc ) {
+//            ProblemException exception = new ProblemException( ICoreProblems.NET_CONNECTION_FAILED,
+//                                                               cExc,
+//                                                               Activator.PLUGIN_ID );
+//            ProblemDialog.openProblem( DataStageOutTable.this.mainComp.getShell(),
+//                                       Messages.getString( "DataStageOutTable.error" ), //$NON-NLS-1$
+//                                       Messages.getString( "DataStageOutTable.error" ), //$NON-NLS-1$
+//                                       exception );
+//          }
+//        }
         return filename;
       }
     };

@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2007 g-Eclipse consortium 
+ * Copyright (c) 2007 - 2008 g-Eclipse consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -16,9 +16,12 @@
  *****************************************************************************/
 package eu.geclipse.jsdl.ui.widgets;
 
+import java.net.URI;
+
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -37,9 +40,8 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
-import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.jsdl.model.JsdlPackage;
-import eu.geclipse.ui.dialogs.GridFileDialog;
+import eu.geclipse.ui.dialogs.NewGridFileDialog;
 
 /**
  * @author nickl
@@ -169,16 +171,12 @@ public class DataStagingOutDialog extends Dialog {
       @Override
       public void widgetSelected( final SelectionEvent e ) {
         String filename = null;
-        IGridConnectionElement connection = GridFileDialog
-                                                .openFileDialog( PlatformUI.getWorkbench()
-                                                                 .getActiveWorkbenchWindow()
-                                                                 .getShell(),
-                                                            Messages.getString( "DataStageOutTable.grid_file_dialog_title" ), //$NON-NLS-1$
-                                                            null,
-                                                            true );
-        if( connection != null ) {
-          filename = connection.getURI().toString();
-          if( filename != null ) {
+        
+        NewGridFileDialog dialog = new NewGridFileDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), NewGridFileDialog.STYLE_ALLOW_ONLY_FILES);
+        if (dialog.open() == Window.OK){
+          URI[] uris = dialog.getSelectedURIs();
+          if ((uris!=null)&&(uris.length > 0)){
+            filename = uris[0].toString();
             DataStagingOutDialog.this.pathText.setText( filename );
             if( DataStagingOutDialog.this.nameText.getText().equals( "" ) ) { //$NON-NLS-1$
               String nameToSet = ""; //$NON-NLS-1$
@@ -188,6 +186,29 @@ public class DataStagingOutDialog extends Dialog {
             }
           }
         }
+        
+// IGridConnectionElement connection = GridFileDialog
+        // .openFileDialog( PlatformUI.getWorkbench()
+        // .getActiveWorkbenchWindow()
+        // .getShell(),
+        // Messages.getString( "DataStageOutTable.grid_file_dialog_title" ),
+        // //$NON-NLS-1$
+        // null,
+        // true );
+        // if( connection != null ) {
+        // filename = connection.getURI().toString();
+        // if( filename != null ) {
+        // DataStagingOutDialog.this.pathText.setText( filename );
+        // if( DataStagingOutDialog.this.nameText.getText().equals( "" ) ) {
+        // //$NON-NLS-1$
+        // String nameToSet = ""; //$NON-NLS-1$
+        // nameToSet = filename.substring( filename.lastIndexOf( "/" ) + 1,
+        // //$NON-NLS-1$
+        // filename.length() );
+        // DataStagingOutDialog.this.nameText.setText( nameToSet );
+        // }
+        // }
+        // }
         updateButtons();
       }
     } );

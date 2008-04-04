@@ -15,19 +15,20 @@
  *****************************************************************************/
 package eu.geclipse.jsdl.ui.internal.dialogs;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.debug.ui.IDebugUIConstants;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
@@ -45,12 +46,8 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import eu.geclipse.core.ICoreProblems;
-import eu.geclipse.core.model.IGridConnectionElement;
-import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.jsdl.ui.internal.Activator;
-import eu.geclipse.ui.dialogs.GridFileDialog;
-import eu.geclipse.ui.dialogs.ProblemDialog;
+import eu.geclipse.ui.dialogs.NewGridFileDialog;
 import eu.geclipse.ui.widgets.StoredCombo;
 
 /**
@@ -62,7 +59,6 @@ import eu.geclipse.ui.widgets.StoredCombo;
 public class MultipleInputDialog extends Dialog {
 
   protected static final String FIELD_NAME = "FIELD_NAME"; //$NON-NLS-1$
-
   protected Composite panel;
   protected List<FieldSummary> fieldList = new ArrayList<FieldSummary>();
   protected List<StoredCombo> storedComboList = new ArrayList<StoredCombo>();
@@ -177,10 +173,14 @@ public class MultipleInputDialog extends Dialog {
                              final String initialValue )
   {
     this.combosData.put( labelText, values );
-    this.fieldList.add( new FieldSummary( FieldType.COMBO, labelText, initialValue, false ) );
+    this.fieldList.add( new FieldSummary( FieldType.COMBO,
+                                          labelText,
+                                          initialValue,
+                                          false ) );
   }
 
-  private boolean checkReadyToConnect( final String name, final int positionInDialog )
+  private boolean checkReadyToConnect( final String name,
+                                       final int positionInDialog )
   {
     boolean result = false;
     if( this.connectedFields.containsKey( name ) ) {
@@ -218,8 +218,6 @@ public class MultipleInputDialog extends Dialog {
     return result;
   }
 
-  
-  
   /*
    * (non-Javadoc)
    * 
@@ -250,7 +248,7 @@ public class MultipleInputDialog extends Dialog {
                                   field.initialValue,
                                   field.allowsEmpty,
                                   connected,
-                                  field.prefID);
+                                  field.prefID );
         break;
         case BROWSE:
           createBrowseField( field.name,
@@ -259,11 +257,11 @@ public class MultipleInputDialog extends Dialog {
                              connected,
                              field.allowLocal );
         break;
-//        case VARIABLE:
-//          createVariablesField( field.name,
-//                                field.initialValue,
-//                                field.allowsEmpty );
-//        break;
+        // case VARIABLE:
+        // createVariablesField( field.name,
+        // field.initialValue,
+        // field.allowsEmpty );
+        // break;
         case COMBO:
           createComboField( field.name, field.initialValue, field.allowsEmpty );
         break;
@@ -339,35 +337,42 @@ public class MultipleInputDialog extends Dialog {
         }
         final int targetPosition = targetIndex;
         final int sourcePosition = sourceIndex;
-        sourceControl.addModifyListener( new ModifyListener() {
+        if( sourceControl != null ) {
+          sourceControl.addModifyListener( new ModifyListener() {
 
-          public void modifyText( final ModifyEvent event ) {
-            // String value = "";
-            // Path p = new Path(controlList.get( sourcePosition ).getText());
-            // value = p.lastSegment();
-            // if (controlList.get( targetPosition ).getText() != null &&
-            // controlList.get( targetPosition ).getText().length() == 0 ){
-            // controlList.get( targetPosition ).setText( value );
-            // }
-          }
-        } );
-        sourceControl.addFocusListener( new FocusListener() {
-
-          public void focusGained( final FocusEvent event ) {
-            // do nothing
-          }
-
-          public void focusLost( final FocusEvent event ) {
-            String value = ""; //$NON-NLS-1$
-            Path p = new Path( MultipleInputDialog.this.controlList.get( sourcePosition ).getText() );
-            value = p.lastSegment();
-            if( MultipleInputDialog.this.controlList.get( targetPosition ).getText() != null
-                && MultipleInputDialog.this.controlList.get( targetPosition ).getText().length() == 0 )
-            {
-              MultipleInputDialog.this.controlList.get( targetPosition ).setText( value );
+            public void modifyText( final ModifyEvent event ) {
+              // String value = "";
+              // Path p = new Path(controlList.get( sourcePosition ).getText());
+              // value = p.lastSegment();
+              // if (controlList.get( targetPosition ).getText() != null &&
+              // controlList.get( targetPosition ).getText().length() == 0 ){
+              // controlList.get( targetPosition ).setText( value );
+              // }
             }
-          }
-        } );
+          } );
+          sourceControl.addFocusListener( new FocusListener() {
+
+            public void focusGained( final FocusEvent event ) {
+              // do nothing
+            }
+
+            public void focusLost( final FocusEvent event ) {
+              String value = ""; //$NON-NLS-1$
+              Path p = new Path( MultipleInputDialog.this.controlList.get( sourcePosition )
+                .getText() );
+              value = p.lastSegment();
+              if( MultipleInputDialog.this.controlList.get( targetPosition )
+                .getText() != null
+                  && MultipleInputDialog.this.controlList.get( targetPosition )
+                    .getText()
+                    .length() == 0 )
+              {
+                MultipleInputDialog.this.controlList.get( targetPosition )
+                  .setText( value );
+              }
+            }
+          } );
+        }
       } else {
         // mamy source, do niego dodac listenera, znalezc target
         // szukanie targetu
@@ -407,31 +412,36 @@ public class MultipleInputDialog extends Dialog {
 
           public void focusLost( final FocusEvent event ) {
             String value = ""; //$NON-NLS-1$
-            Path p = new Path( MultipleInputDialog.this.controlList.get( sourcePosition ).getText() );
+            Path p = new Path( MultipleInputDialog.this.controlList.get( sourcePosition )
+              .getText() );
             value = p.lastSegment();
-            if( MultipleInputDialog.this.controlList.get( targetPosition ).getText() != null
-                && MultipleInputDialog.this.controlList.get( targetPosition ).getText().length() == 0 )
+            if( MultipleInputDialog.this.controlList.get( targetPosition )
+              .getText() != null
+                && MultipleInputDialog.this.controlList.get( targetPosition )
+                  .getText()
+                  .length() == 0 )
             {
-              MultipleInputDialog.this.controlList.get( targetPosition ).setText( value );
+              MultipleInputDialog.this.controlList.get( targetPosition )
+                .setText( value );
             }
           }
         } );
       }
     }
   }
-  
-  
+
   protected void createStoredComboField( final String labelText,
                                          final String initialValue,
                                          final boolean allowEmpty,
                                          final boolean connected,
-                                         final String prefID)
+                                         final String prefID )
   {
     IPreferenceStore prefs = Activator.getDefault().getPreferenceStore();
     Label label = new Label( this.panel, SWT.NONE );
     label.setText( labelText );
     label.setLayoutData( new GridData( GridData.HORIZONTAL_ALIGN_BEGINNING ) );
-    final StoredCombo storedCombo = new StoredCombo( this.panel, SWT.SINGLE | SWT.BORDER );
+    final StoredCombo storedCombo = new StoredCombo( this.panel, SWT.SINGLE
+                                                                 | SWT.BORDER );
     storedCombo.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
     storedCombo.setPreferences( prefs, prefID );
     storedCombo.setData( FIELD_NAME, labelText );
@@ -457,7 +467,6 @@ public class MultipleInputDialog extends Dialog {
     }
     this.storedComboList.add( storedCombo );
     if( connected ) {
-
       if( this.connectedFields.containsKey( labelText ) ) {
         String sourceName = this.connectedFields.get( labelText );
         Text sourceControl = null;
@@ -495,17 +504,21 @@ public class MultipleInputDialog extends Dialog {
 
           public void focusLost( final FocusEvent event ) {
             String value = ""; //$NON-NLS-1$
-            Path p = new Path( MultipleInputDialog.this.storedComboList.get( sourcePosition ).getText() );
+            Path p = new Path( MultipleInputDialog.this.storedComboList.get( sourcePosition )
+              .getText() );
             value = p.lastSegment();
-            if( MultipleInputDialog.this.storedComboList.get( targetPosition ).getText() != null
-                && MultipleInputDialog.this.storedComboList.get( targetPosition ).getText().length() == 0 )
+            if( MultipleInputDialog.this.storedComboList.get( targetPosition )
+              .getText() != null
+                && MultipleInputDialog.this.storedComboList.get( targetPosition )
+                  .getText()
+                  .length() == 0 )
             {
-              MultipleInputDialog.this.storedComboList.get( targetPosition ).setText( value );
+              MultipleInputDialog.this.storedComboList.get( targetPosition )
+                .setText( value );
             }
           }
         } );
       } else {
-
         String targetName = null;
         for( String name : this.connectedFields.keySet() ) {
           if( this.connectedFields.get( name ).equals( labelText ) ) {
@@ -542,20 +555,23 @@ public class MultipleInputDialog extends Dialog {
 
           public void focusLost( final FocusEvent event ) {
             String value = ""; //$NON-NLS-1$
-            Path p = new Path( MultipleInputDialog.this.storedComboList.get( sourcePosition ).getText() );
+            Path p = new Path( MultipleInputDialog.this.storedComboList.get( sourcePosition )
+              .getText() );
             value = p.lastSegment();
-            if( MultipleInputDialog.this.storedComboList.get( targetPosition ).getText() != null
-                && MultipleInputDialog.this.storedComboList.get( targetPosition ).getText().length() == 0 )
+            if( MultipleInputDialog.this.storedComboList.get( targetPosition )
+              .getText() != null
+                && MultipleInputDialog.this.storedComboList.get( targetPosition )
+                  .getText()
+                  .length() == 0 )
             {
-              MultipleInputDialog.this.storedComboList.get( targetPosition ).setText( value );
+              MultipleInputDialog.this.storedComboList.get( targetPosition )
+                .setText( value );
             }
           }
         } );
       }
     }
   }
-  
-  
 
   public void setConnectedFields( final String sourceFieldName,
                                   final String targetFieldName )
@@ -612,28 +628,47 @@ public class MultipleInputDialog extends Dialog {
       @Override
       public void widgetSelected( final SelectionEvent e ) {
         {
-          IGridConnectionElement connection = GridFileDialog.openFileDialog( getShell(),
-                                                                             "Choose a file",
-                                                                             null,
-                                                                             allowLocal );
-          if( connection != null ) {
-            try {
-              String filename = connection.getConnectionFileStore().toString();
-              if( connection.getConnectionFileStore()
-                .getFileSystem()
-                .getScheme()
-                .equalsIgnoreCase( "file" ) )
-              {
-                filename = "file://" + filename;
-              }
-              if( filename != null ) {
-                text.setText( filename );
-              }
-            } catch( CoreException cExc ) {
-              ProblemException exception = new ProblemException(ICoreProblems.NET_CONNECTION_FAILED, cExc, Activator.PLUGIN_ID);
-              ProblemDialog.openProblem( getShell(), "error", "error", exception );
+          NewGridFileDialog dialog = new NewGridFileDialog( getShell(),
+                                                            NewGridFileDialog.STYLE_NONE );
+          
+          if( dialog.open() == Window.OK ) {
+            URI[] uris = dialog.getSelectedURIs();
+            if ((uris != null) && (uris.length > 0)){
+              text.setText( uris[0].toString() );
+            } else {
+              text.setText( "" ); //$NON-NLS-1$
             }
           }
+          //
+          // IGridConnectionElement connection = GridFileDialog.openFileDialog(
+          // getShell(),
+          // "Choose a file",
+          // null,
+          // allowLocal );
+          // if( connection != null ) {
+          // try {
+          // String filename = connection.getConnectionFileStore().toString();
+          // if( connection.getConnectionFileStore()
+          // .getFileSystem()
+          // .getScheme()
+          // .equalsIgnoreCase( "file" ) )
+          // {
+          // filename = "file://" + filename;
+          // }
+          // if( filename != null ) {
+          // text.setText( filename );
+          // }
+          // } catch( CoreException cExc ) {
+          // ProblemException exception = new ProblemException(
+          // ICoreProblems.NET_CONNECTION_FAILED,
+          // cExc,
+          // Activator.PLUGIN_ID );
+          // ProblemDialog.openProblem( getShell(),
+          // "error",
+          // "error",
+          // exception );
+          // }
+          // }
         }
       }
     } );
@@ -714,18 +749,18 @@ public class MultipleInputDialog extends Dialog {
         final int targetPosition = targetIndex;
         text.addModifyListener( new ModifyListener() {
 
-          public void modifyText( ModifyEvent e ) {
+          public void modifyText( final ModifyEvent e ) {
             // controlList.get( targetPosition ).setText( controlList.get(
             // sourcePosition ).getText() );
           }
         } );
         text.addFocusListener( new FocusListener() {
 
-          public void focusGained( FocusEvent e ) {
+          public void focusGained( final FocusEvent e ) {
             // do nothing
           }
 
-          public void focusLost( FocusEvent e ) {
+          public void focusLost( final FocusEvent e ) {
             String value = "";
             Path p = new Path( MultipleInputDialog.this.controlList.get( sourcePosition )
               .getText() );
@@ -859,7 +894,8 @@ public class MultipleInputDialog extends Dialog {
                            ( ( Text )control ).getText() );
       }
     }
-    for( Iterator<StoredCombo> i = this.storedComboList.iterator(); i.hasNext(); ) {
+    for( Iterator<StoredCombo> i = this.storedComboList.iterator(); i.hasNext(); )
+    {
       Control control = i.next();
       if( control instanceof StoredCombo ) {
         this.valueMap.put( control.getData( FIELD_NAME ),
@@ -946,9 +982,10 @@ public class MultipleInputDialog extends Dialog {
                                           initialValue,
                                           allowsEmpty ) );
   }
-  
+
   /**
-   * Method to add stored combo field ({@link StoredCombo}) to {@link MultipleInputDialog}
+   * Method to add stored combo field ({@link StoredCombo}) to
+   * {@link MultipleInputDialog}
    * 
    * @param labelText label to describe this field
    * @param initialValue initial value of this field
@@ -959,26 +996,24 @@ public class MultipleInputDialog extends Dialog {
   public void addStoredComboField( final String labelText,
                                    final String initialValue,
                                    final boolean allowsEmpty,
-                                   final String prefID)
+                                   final String prefID )
   {
     this.fieldList.add( new FieldSummary( FieldType.STORED_COMBO,
                                           labelText,
                                           initialValue,
                                           allowsEmpty,
-                                          prefID) );
+                                          prefID ) );
   }
-
   // TODO katis - is this method used
-  
-//  public void addVariablesField( final String labelText,
-//                                 final String initialValue,
-//                                 final boolean allowsEmpty )
-//  {
-//    this.fieldList.add( new FieldSummary( VARIABLE,
-//                                          labelText,
-//                                          initialValue,
-//                                          allowsEmpty ) );
-//  }
+  // public void addVariablesField( final String labelText,
+  // final String initialValue,
+  // final boolean allowsEmpty )
+  // {
+  // this.fieldList.add( new FieldSummary( VARIABLE,
+  // labelText,
+  // initialValue,
+  // allowsEmpty ) );
+  // }
   protected class FieldSummary {
 
     FieldType type;
@@ -986,7 +1021,7 @@ public class MultipleInputDialog extends Dialog {
     String initialValue;
     boolean allowsEmpty;
     boolean allowLocal;
-    final String prefID; 
+    final String prefID;
 
     /**
      * Creates new instance of {@link FieldSummary}. By default this field will
@@ -1049,7 +1084,7 @@ public class MultipleInputDialog extends Dialog {
       this.allowLocal = allowLocal;
       this.prefID = ""; //$NON-NLS-1$
     }
-    
+
     /**
      * @param type
      * @param name
@@ -1061,7 +1096,7 @@ public class MultipleInputDialog extends Dialog {
                          final String name,
                          final String initialValue,
                          final boolean allowsEmpty,
-                         final String prefID)
+                         final String prefID )
     {
       this.type = type;
       this.name = name;
@@ -1069,7 +1104,6 @@ public class MultipleInputDialog extends Dialog {
       this.allowsEmpty = allowsEmpty;
       this.prefID = prefID;
     }
-    
   }
   protected class Validator {
 
@@ -1077,11 +1111,7 @@ public class MultipleInputDialog extends Dialog {
       return true;
     }
   }
-  
-  enum FieldType{
-    
+  enum FieldType {
     TEXT, BROWSE, COMBO, STORED_COMBO
-    
   }
-  
 }

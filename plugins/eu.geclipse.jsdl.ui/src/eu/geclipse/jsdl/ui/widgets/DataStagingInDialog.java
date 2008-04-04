@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2007 g-Eclipse consortium 
+ * Copyright (c) 2007, 2008 g-Eclipse consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -16,9 +16,12 @@
  *****************************************************************************/
 package eu.geclipse.jsdl.ui.widgets;
 
+import java.net.URI;
+
 import org.eclipse.emf.ecore.EEnum;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -37,16 +40,14 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
-import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.jsdl.model.JsdlPackage;
-import eu.geclipse.ui.dialogs.GridFileDialog;
+import eu.geclipse.ui.dialogs.NewGridFileDialog;
 
 /**
  * @author nickl
  */
 public class DataStagingInDialog extends Dialog {
 
-  
   /**
    * Variable that specifies that a simple dialog should be created.
    */
@@ -62,7 +63,6 @@ public class DataStagingInDialog extends Dialog {
   protected Text pathText;
   Text nameText;
   private int dialogStyle;
-  
   private String returnName;
   private String returnPath;
   private String initCreationFlag;
@@ -159,24 +159,44 @@ public class DataStagingInDialog extends Dialog {
       @Override
       public void widgetSelected( final SelectionEvent event ) {
         String filename = null;
-        IGridConnectionElement connection = GridFileDialog
-                                      .openFileDialog( PlatformUI.getWorkbench()
-                                      .getActiveWorkbenchWindow()
-                                      .getShell(),
-                                      Messages.getString( "DataStageInTable.grid_file_dialog_title" ), //$NON-NLS-1$
-                                      null,
-                                      true );
-        if( connection != null ) {
-          filename = connection.getURI().toString();
-          if( filename != null ) {
+        NewGridFileDialog dialog = new NewGridFileDialog( PlatformUI.getWorkbench()
+                                                            .getActiveWorkbenchWindow()
+                                                            .getShell(),
+                                                          NewGridFileDialog.STYLE_ALLOW_ONLY_EXISTING
+                                                              | NewGridFileDialog.STYLE_ALLOW_ONLY_FILES );
+        if( dialog.open() == Window.OK ) {
+          URI[] uris = dialog.getSelectedURIs();
+          if ((uris != null)&&(uris.length > 0)){
+            filename = uris[0].toString();
             DataStagingInDialog.this.pathText.setText( filename );
-            if (DataStagingInDialog.this.nameText.getText().equals( "" )){ //$NON-NLS-1$
+            if( DataStagingInDialog.this.nameText.getText().equals( "" ) ) { //$NON-NLS-1$
               String nameToSet = ""; //$NON-NLS-1$
-              nameToSet = filename.substring( filename.lastIndexOf( "/" ) + 1, filename.length()); //$NON-NLS-1$
+              nameToSet = filename.substring( filename.lastIndexOf( "/" ) + 1, filename.length() ); //$NON-NLS-1$
               DataStagingInDialog.this.nameText.setText( nameToSet );
             }
           }
         }
+        // IGridConnectionElement connection = GridFileDialog.openFileDialog(
+        // PlatformUI.getWorkbench()
+        // .getActiveWorkbenchWindow()
+        // .getShell(),
+        // Messages.getString( "DataStageInTable.grid_file_dialog_title" ),
+        // //$NON-NLS-1$
+        // null,
+        // true );
+        // if( connection != null ) {
+        // filename = connection.getURI().toString();
+        // if( filename != null ) {
+        // DataStagingInDialog.this.pathText.setText( filename );
+        // if( DataStagingInDialog.this.nameText.getText().equals( "" ) ) {
+        // //$NON-NLS-1$
+        // String nameToSet = ""; //$NON-NLS-1$
+        // nameToSet = filename.substring( filename.lastIndexOf( "/" ) + 1,
+        // filename.length() ); //$NON-NLS-1$
+        // DataStagingInDialog.this.nameText.setText( nameToSet );
+        // }
+        // }
+        // }
         updateButtons();
       }
     } );
@@ -231,7 +251,6 @@ public class DataStagingInDialog extends Dialog {
       /* Populate the Combo Box with the Delete On Termination Literals */
       this.deleteOnTerminationCombo.add( "true" ); //$NON-NLS-1$
       this.deleteOnTerminationCombo.add( "false" ); //$NON-NLS-1$
-      
       if( this.initDeleteFlag != null ) {
         int indexOfDelete = this.deleteOnTerminationCombo.indexOf( this.initDeleteFlag );
         this.deleteOnTerminationCombo.select( indexOfDelete );
@@ -285,7 +304,6 @@ public class DataStagingInDialog extends Dialog {
     return this.returnCreationFlag;
   }
 
-  
   @Override
   protected void okPressed() {
     this.returnName = this.nameText.getText();
@@ -293,8 +311,7 @@ public class DataStagingInDialog extends Dialog {
     if( this.dialogStyle == ADVANCED_DIALOG ) {
       this.returnCreationFlag = this.creationFlagCombo.getSelectionIndex();
       if( this.deleteOnTerminationCombo.getSelectionIndex() != -1 ) {
-        this.returnDeleteFlag = Boolean.valueOf( Boolean.parseBoolean( this.deleteOnTerminationCombo
-                                                                       .getItem( this.deleteOnTerminationCombo.getSelectionIndex() ) ));
+        this.returnDeleteFlag = Boolean.valueOf( Boolean.parseBoolean( this.deleteOnTerminationCombo.getItem( this.deleteOnTerminationCombo.getSelectionIndex() ) ) );
       }
     }
     super.okPressed();

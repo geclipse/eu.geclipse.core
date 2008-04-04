@@ -34,14 +34,14 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import eu.geclipse.ui.dialogs.GridFileDialog;
+import eu.geclipse.ui.dialogs.NewGridFileDialog;
 import eu.geclipse.ui.widgets.StoredCombo;
 
 /**
  * Class supports usage of {@link Dialog} with any number of text fields. This
  * class is similar to {@link MultipleInputDialog}, but it's suited to
  * g-Eclipse needs and uses widgets characteristic of g-Eclipse (e.g.
- * {@link GridFileDialog}}).
+ * {@link NewGridFileDialog}}).
  */
 public class InputDialog extends Dialog {
 
@@ -58,6 +58,11 @@ public class InputDialog extends Dialog {
   private List<StoredCombo> storedList = new ArrayList<StoredCombo>();
   private List<Combo> comboList = new ArrayList<Combo>();
 
+  /**
+   * Public constructor of this class
+   * 
+   * @param parentShell shell form parent of this dialog
+   */
   public InputDialog( final Shell parentShell ) {
     super( parentShell );
   }
@@ -90,6 +95,7 @@ public class InputDialog extends Dialog {
    * @param allowsEmpty indicates whether this field can be empty (if
    *            <code>false</code> dialog cannot be closed until this field
    *            holds some value)
+   * @param prefID probably not used. Left here for compatibility reasons.
    */
   public void addStoredComboField( final String labelText,
                                    final String initialValue,
@@ -135,6 +141,12 @@ public class InputDialog extends Dialog {
                              fieldSumm.allowsEmpty,
                              fieldSumm.allowLocal );
         break;
+        case STORED_COMBO:
+          // do nothing
+        break;
+        case COMBO:
+          // do nothing;
+        break;
       }
     }
     return mainComp;
@@ -172,7 +184,6 @@ public class InputDialog extends Dialog {
     text.setLayoutData( gData );
     this.textList.add( text );
     Button button = new Button( parent, SWT.PUSH );
-    
   }
 
   protected Button createButton( final Composite parent,
@@ -184,13 +195,13 @@ public class InputDialog extends Dialog {
     Button button = new Button( parent, SWT.PUSH );
     button.setText( label );
     button.setFont( JFaceResources.getDialogFont() );
-//    button.addSelectionListener( new SelectionAdapter() {
-//
-//      @Override
-//      public void widgetSelected( final SelectionEvent event ) {
-//        buttonPressed( ( ( Integer )event.widget.getData() ).intValue() );
-//      }
-//    } );
+    // button.addSelectionListener( new SelectionAdapter() {
+    //
+    // @Override
+    // public void widgetSelected( final SelectionEvent event ) {
+    // buttonPressed( ( ( Integer )event.widget.getData() ).intValue() );
+    // }
+    // } );
     if( defaultButton ) {
       Shell shell = parent.getShell();
       if( shell != null ) {
@@ -201,7 +212,6 @@ public class InputDialog extends Dialog {
     return button;
   }
 
-  
   @Override
   protected void okPressed() {
     for( Text textControl : this.textList ) {
@@ -346,7 +356,7 @@ public class InputDialog extends Dialog {
     TEXT,
     /**
      * Represents {@link Text} control with button that opens a
-     * {@link GridFileDialog} for choosing a file.
+     * {@link NewGridFileDialog} for choosing a file.
      */
     BROWSE,
     /**

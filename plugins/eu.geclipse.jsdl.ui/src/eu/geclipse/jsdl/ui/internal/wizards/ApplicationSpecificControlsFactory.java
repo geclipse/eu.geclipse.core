@@ -15,11 +15,12 @@
  *****************************************************************************/
 package eu.geclipse.jsdl.ui.internal.wizards;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
@@ -36,12 +37,10 @@ import org.eclipse.ui.PlatformUI;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import eu.geclipse.core.ICoreProblems;
-import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.wizards.specific.IApplicationSpecificPage;
-import eu.geclipse.ui.dialogs.GridFileDialog;
+import eu.geclipse.ui.dialogs.NewGridFileDialog;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 
 /**
@@ -356,25 +355,43 @@ public class ApplicationSpecificControlsFactory {
       @Override
       public void widgetSelected( final SelectionEvent e ) {
         String filename = null;
-        IGridConnectionElement connection = GridFileDialog.openFileDialog( PlatformUI.getWorkbench()
-                                                                             .getActiveWorkbenchWindow()
-                                                                             .getShell(),
-                                                                           Messages.getString( "ApplicationSpecificControlsFactory.choose_a_file_message" ), //$NON-NLS-1$
-                                                                           null,
-                                                                           true );
-        if( connection != null ) {
-          try {
-            filename = connection.getConnectionFileStore().toString();
-          } catch( CoreException cExc ) {
-            ProblemException exception = new ProblemException( ICoreProblems.NET_CONNECTION_FAILED,
-                                                               cExc,
-                                                               Activator.PLUGIN_ID );
-            ProblemDialog.openProblem( PlatformUI.getWorkbench()
-                                         .getActiveWorkbenchWindow()
-                                         .getShell(),
-                                       Messages.getString( "ApplicationSpecificControlsFactory.error_dialog_title" ), Messages.getString( "ApplicationSpecificControlsFactory.error_dialog_message" ), exception ); //$NON-NLS-1$ //$NON-NLS-2$
+        NewGridFileDialog dialog = new NewGridFileDialog( PlatformUI.getWorkbench()
+                                                            .getActiveWorkbenchWindow()
+                                                            .getShell(),
+                                                          NewGridFileDialog.STYLE_NONE );
+        if( dialog.open() == Window.OK ) {
+          URI[] uris = dialog.getSelectedURIs();
+          if( ( uris != null ) && ( uris.length > 0 ) ) {
+            filename = uris[ 0 ].toString();
           }
         }
+        // IGridConnectionElement connection = GridFileDialog.openFileDialog(
+        // PlatformUI.getWorkbench()
+        // .getActiveWorkbenchWindow()
+        // .getShell(),
+        // Messages.getString(
+        // "ApplicationSpecificControlsFactory.choose_a_file_message" ),
+        // //$NON-NLS-1$
+        // null,
+        // true );
+        // if( connection != null ) {
+        // try {
+        // filename = connection.getConnectionFileStore().toString();
+        // } catch( CoreException cExc ) {
+        // ProblemException exception = new ProblemException(
+        // ICoreProblems.NET_CONNECTION_FAILED,
+        // cExc,
+        // Activator.PLUGIN_ID );
+        // ProblemDialog.openProblem( PlatformUI.getWorkbench()
+        // .getActiveWorkbenchWindow()
+        // .getShell(),
+        // Messages.getString(
+        // "ApplicationSpecificControlsFactory.error_dialog_title" ),
+        // Messages.getString(
+        // "ApplicationSpecificControlsFactory.error_dialog_message" ),
+        // exception ); //$NON-NLS-1$ //$NON-NLS-2$
+        // }
+        // }
         if( filename != null ) {
           if( ApplicationSpecificControlsFactory.this.intFile == 1 ) {
             Text con = ( Text )ApplicationSpecificControlsFactory.this.parentStagingInControls.get( ApplicationSpecificControlsFactory.this.adapters.indexOf( this ) )
@@ -553,29 +570,50 @@ public class ApplicationSpecificControlsFactory {
 
       @Override
       public void widgetSelected( final SelectionEvent e ) {
-        IGridConnectionElement connection = GridFileDialog.openFileDialog( PlatformUI.getWorkbench()
-                                                                             .getActiveWorkbenchWindow()
-                                                                             .getShell(),
-                                                                           Messages.getString( "ApplicationSpecificControlsFactory.choose_a_file_message" ), //$NON-NLS-1$
-                                                                           null,
-                                                                           true );
-        if( connection != null ) {
-          try {
-            String filename = connection.getConnectionFileStore().toString();
-            if( filename != null ) {
-              ApplicationSpecificControlsFactory.this.textFieldsFromParent.get( ApplicationSpecificControlsFactory.this.adapters.indexOf( this ) )
-                .setText( filename );
-            }
-          } catch( CoreException cExc ) {
-            ProblemException exception = new ProblemException( ICoreProblems.NET_CONNECTION_FAILED,
-                                                               cExc,
-                                                               Activator.PLUGIN_ID );
-            ProblemDialog.openProblem( PlatformUI.getWorkbench()
-                                         .getActiveWorkbenchWindow()
-                                         .getShell(),
-                                       Messages.getString( "ApplicationSpecificControlsFactory.error_dialog_title" ), Messages.getString( "ApplicationSpecificControlsFactory.error_dialog_message" ), exception ); //$NON-NLS-1$ //$NON-NLS-2$
+        NewGridFileDialog dialog = new NewGridFileDialog( PlatformUI.getWorkbench()
+                                                            .getActiveWorkbenchWindow()
+                                                            .getShell(),
+                                                          NewGridFileDialog.STYLE_NONE );
+        if( dialog.open() == Window.OK ) {
+          URI[] uris = dialog.getSelectedURIs();
+          if ((uris != null) && (uris.length > 0)){
+            ApplicationSpecificControlsFactory.this.textFieldsFromParent.get( ApplicationSpecificControlsFactory.this.adapters.indexOf( this ) )
+            .setText( uris[0].toString() );
           }
         }
+        
+        // IGridConnectionElement connection = GridFileDialog.openFileDialog(
+        // PlatformUI.getWorkbench()
+        // .getActiveWorkbenchWindow()
+        // .getShell(),
+        // Messages.getString(
+        // "ApplicationSpecificControlsFactory.choose_a_file_message" ),
+        // //$NON-NLS-1$
+        // null,
+        // true );
+        // if( connection != null ) {
+        // try {
+        // String filename = connection.getConnectionFileStore().toString();
+        // if( filename != null ) {
+        // ApplicationSpecificControlsFactory.this.textFieldsFromParent.get(
+        // ApplicationSpecificControlsFactory.this.adapters.indexOf( this ) )
+        // .setText( filename );
+        // }
+        // } catch( CoreException cExc ) {
+        // ProblemException exception = new ProblemException(
+        // ICoreProblems.NET_CONNECTION_FAILED,
+        // cExc,
+        // Activator.PLUGIN_ID );
+        // ProblemDialog.openProblem( PlatformUI.getWorkbench()
+        // .getActiveWorkbenchWindow()
+        // .getShell(),
+        // Messages.getString(
+        // "ApplicationSpecificControlsFactory.error_dialog_title" ),
+        // Messages.getString(
+        // "ApplicationSpecificControlsFactory.error_dialog_message" ),
+        // exception ); //$NON-NLS-1$ //$NON-NLS-2$
+        // }
+        // }
       }
     } );
     fileButton.addSelectionListener( this.adapters.get( this.adapters.size() - 1 ) );
