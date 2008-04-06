@@ -280,7 +280,7 @@ public class CaCertPreferencePage
    * 
    * @see org.eclipse.jface.dialogs.IPageChangedListener
    */
-  class CertPageChangedListener implements IPageChangedListener {
+  static class CertPageChangedListener implements IPageChangedListener {
     
     /*
      * (non-Javadoc)

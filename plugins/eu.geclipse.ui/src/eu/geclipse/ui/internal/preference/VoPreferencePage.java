@@ -92,7 +92,7 @@ public class VoPreferencePage
   /**
    * Content provider for the {@link VoPreferencePage}.
    */
-  class VoContentProvider
+  static class VoContentProvider
       implements IStructuredContentProvider {
     
     /**
@@ -152,7 +152,7 @@ public class VoPreferencePage
   /**
    * Label provider for the {@link VoPreferencePage}.
    */
-  class VoLabelProvider
+  static class VoLabelProvider
       extends LabelProvider
       implements ITableLabelProvider {
 
