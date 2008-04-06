@@ -18,9 +18,6 @@ package eu.geclipse.ui.providers;
 import java.net.URL;
 
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.core.runtime.IStatus;
-import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
@@ -42,7 +39,7 @@ public class NewProgressTreeNode
   /**
    * Internal class that handles UI updates.
    */
-  private class ProgressNodeUpdater implements Runnable {
+  private static class ProgressNodeUpdater implements Runnable {
     
     /**
      * The progress tree node used to show the progress.
@@ -71,7 +68,7 @@ public class NewProgressTreeNode
      */
     public void run() {
       String progress = this.node.toString();
-      if ( ( progress != null ) && !progress.equals( this.lastProgress ) ) {
+      if ( ( progress != null ) && ! progress.equals( this.lastProgress ) ) {
         this.lastProgress = progress;
         this.node.getViewer().update( this.node, null );
       } else if ( this.node.isDone() && ! this.wasAlreadyDone ) {
@@ -95,9 +92,11 @@ public class NewProgressTreeNode
   private static Image fullProgress;
   
   static {
-    URL emptyURL = Activator.getDefault().getBundle().getEntry( "icons/extras/progress_bar_empty.gif" );
+    URL emptyURL = Activator.getDefault().getBundle()
+                    .getEntry( "icons/extras/progress_bar_empty.gif" ); //$NON-NLS-1$
     emptyProgress = ImageDescriptor.createFromURL( emptyURL ).createImage();
-    URL fullURL = Activator.getDefault().getBundle().getEntry( "icons/extras/progress_bar_full.gif" );
+    URL fullURL = Activator.getDefault().getBundle()
+                    .getEntry( "icons/extras/progress_bar_full.gif" ); //$NON-NLS-1$
     fullProgress = ImageDescriptor.createFromURL( fullURL ).createImage();
   }
   
