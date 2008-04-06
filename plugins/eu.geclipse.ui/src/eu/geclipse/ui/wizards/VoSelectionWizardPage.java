@@ -12,15 +12,15 @@
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
  *    Ariel Garcia      - switch to use a CheckboxTableViewer
+ *                      - make it a IGridModelListener
  *****************************************************************************/
 
 package eu.geclipse.ui.wizards;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
+import org.eclipse.jface.preference.PreferenceDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -33,9 +33,6 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.viewers.ViewerFilter;
-import org.eclipse.jface.window.Window;
-import org.eclipse.jface.wizard.Wizard;
-import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -47,17 +44,27 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.dialogs.PreferencesUtil;
 
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridInfoService;
+import eu.geclipse.core.model.IGridModelEvent;
+import eu.geclipse.core.model.IGridModelListener;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
-import eu.geclipse.ui.wizards.wizardselection.ExtPointWizardSelectionListPage;
 
-public class VoSelectionWizardPage extends WizardPage {
+
+/**
+ * A wizard page allowing to select a VO from the list of VOs registered
+ * in the VO manager. It also allows to edit the VOs on the fly by opening
+ * the VO preferences page.
+ */
+public class VoSelectionWizardPage extends WizardPage
+    implements IGridModelListener
+{
   
   CheckboxTableViewer tableViewer;
   java.util.List< IVirtualOrganization > voList;
@@ -66,7 +73,7 @@ public class VoSelectionWizardPage extends WizardPage {
   
   private Text infoText;
   
-  private List<IVirtualOrganization> selectedVOs = new ArrayList<IVirtualOrganization>();
+  private final String PREFERENCE_PAGE_ID = "eu.geclipse.ui.internal.preference.VOPreferencePage"; //$NON-NLS-1$
   
   
   public VoSelectionWizardPage( final boolean allowMultiSelection ) {
@@ -173,25 +180,35 @@ public class VoSelectionWizardPage extends WizardPage {
         setPageComplete( getSelectedVos() != null );
       }
     } );
-
+    
     updateVoList();
     this.tableViewer.setInput( this.voList );
-
-    Button newButton = new Button( voGroup, SWT.PUSH );
-    newButton.setText( "New &VO..." );
+    
+    // Listen on new VOs, this will update the tableViewer
+    GridModel.getVoManager().addGridModelListener( this );
+    
+    Button editVOsButton = new Button( voGroup, SWT.PUSH );
+    editVOsButton.setText( "Edit &VOs..." );
     gData = new GridData();
     gData.horizontalAlignment = GridData.BEGINNING;
     gData.verticalAlignment = GridData.BEGINNING;
-    newButton.setLayoutData( gData );
-    newButton.addSelectionListener( new SelectionAdapter() {
+    editVOsButton.setLayoutData( gData );
+    editVOsButton.addSelectionListener( new SelectionAdapter() {
       @Override
-      public void widgetSelected( final SelectionEvent e ) {
-        createNewVO();
-        updateVoList();
-        VoSelectionWizardPage.this.tableViewer.setInput( VoSelectionWizardPage.this.voList );
-        setInitialSelection();
-        showSelectedInfo();
-        setPageComplete( getSelectedVos() != null );
+      public void widgetSelected( final SelectionEvent e ) {        
+        PreferenceDialog dialog
+          = PreferencesUtil.createPreferenceDialogOn( getShell(),
+                VoSelectionWizardPage.this.PREFERENCE_PAGE_ID,
+                null,
+                null );
+        
+        /*
+         * Even if the user pressed 'Cancel' VOs might have been
+         * added/deleted, so ignore the dialog's return value.
+         */
+        dialog.open();
+        
+        setPageComplete( getSelectedVos() != null );        
       }
     } );
     
@@ -216,14 +233,57 @@ public class VoSelectionWizardPage extends WizardPage {
     setControl( mainComp );
     
   }
+
+  /*
+   * (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridModelListener#gridModelChanged(eu.geclipse.core.model.IGridModelEvent)
+   */
+  public void gridModelChanged( final IGridModelEvent event ) {
+    IGridElement[] elements = event.getElements();
+    
+    // We are a listener of the VoManager only
+    assert elements[ 0 ] instanceof IVirtualOrganization
+      : "VoSelectionWizardPage expects events whose source is an IVirtualOrganization."; //$NON-NLS-1$
+    
+    switch ( event.getType() ) {
+      case IGridModelEvent.ELEMENTS_ADDED:
+        updateVoList();
+        this.tableViewer.setInput( this.voList );
+        // Each event contains a single element
+        setSelection( elements[ 0 ] );
+        break;
+      case IGridModelEvent.ELEMENTS_REMOVED:
+        updateVoList();
+        this.tableViewer.setInput( this.voList );
+        break;
+      default:
+        // Do nothing in other cases
+    }
+    
+  }
   
+  /*
+   * (non-Javadoc)
+   * @see org.eclipse.jface.dialogs.DialogPage#dispose()
+   */
+  @Override
+  public void dispose() {
+    GridModel.getVoManager().removeGridModelListener( this );
+    super.dispose();
+  }
+  
+  /**
+   * Get the list of checked VOs
+   * 
+   * @return the array of VOs checked in the viewer
+   */
   public IVirtualOrganization[] getSelectedVos() {
     
     java.util.List< IVirtualOrganization > selectedVos
       = new ArrayList< IVirtualOrganization >();
 
     for ( Object vo : this.tableViewer.getCheckedElements() ) {
-      selectedVos.add( (IVirtualOrganization) vo );
+      selectedVos.add( ( IVirtualOrganization ) vo );
     }
     
     if ( selectedVos.size() == 0 ) {
@@ -234,55 +294,28 @@ public class VoSelectionWizardPage extends WizardPage {
     
     return
       selectedVos.size() == 0
-      ? null
-      : selectedVos.toArray( new IVirtualOrganization[ selectedVos.size() ] );
+        ? null
+        : selectedVos.toArray( new IVirtualOrganization[ selectedVos.size() ] );
   }
   
-  protected void createNewVO() {
-    URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/wizban/newtoken_wiz.gif" ); //$NON-NLS-1$
-    Wizard wizard = new Wizard() {
-      @Override
-      public void addPages() {
-        List<String> filterList = null;
-        if ( VoSelectionWizardPage.this.voType != null ) {
-          try {
-            filterList = new LinkedList<String>();
-            filterList.add( ((IVirtualOrganization)VoSelectionWizardPage.this.voType.newInstance()).getWizardId() );
-          } catch( InstantiationException exception ) {
-            Activator.logException( exception );
-          } catch( IllegalAccessException exception ) {
-            Activator.logException( exception );
-          }
-        }
-        ExtPointWizardSelectionListPage page = new ExtPointWizardSelectionListPage(
-            "pagename",
-            "eu.geclipse.ui.newVoWizards",
-            filterList,
-            false,
-            "Create a new VO",
-            "Create a new Virtual Organization of the selected type.",
-            "No VO providers registered." );
-        addPage( page );
-      }
-      
-      @Override
-      public boolean performFinish() {
-        return false;
-      }
-    };
-    wizard.setForcePreviousAndNextButtons( true );
-    wizard.setNeedsProgressMonitor( true );
-    wizard.setWindowTitle( "Create a new VO" );
-    wizard.setDefaultPageImageDescriptor( ImageDescriptor.createFromURL( imgUrl ) );
-    WizardDialog dialog = new WizardDialog( this.getShell(), wizard );
-    if ( dialog.open() == Window.OK ) {
-      try {
-        GridModel.getVoManager().saveElements();
-      } catch( GridModelException gmExc ) {
-        setErrorMessage( "Error while saving new element: "
-                         + gmExc.getLocalizedMessage() );
-      }
+  /**
+   * Select the given VOs by setting the checkboxes
+   * 
+   * @param vos an array of VOs to check on the viewer
+   */
+  public void setSelectedVos( final IGridElement[] vos ) {
+    if ( vos == null || vos.length == 0 ) {
+      return;
     }
+    
+    if ( VoSelectionWizardPage.this.allowMultiSelection ) {
+      this.tableViewer.setCheckedElements( vos );
+    } else {
+      assert vos.length == 1
+        : "VoSelectionWizardPage got more than one VO to select while allowMultiSelection=false."; //$NON-NLS-1$
+      this.tableViewer.setChecked( vos[ 0 ], true );
+    }
+    this.tableViewer.refresh();
   }
   
   protected void showSelectedInfo() {
@@ -332,14 +365,19 @@ public class VoSelectionWizardPage extends WizardPage {
     } else {
       this.infoText.setText( "" ); //$NON-NLS-1$
     }
+    // This is needed if the text is changed while the dialog is not focused
+    this.infoText.redraw();
   }
   
-  protected void updateVoList() {
+  /**
+   * Load the list of VOs from the manager.
+   */
+  private void updateVoList() {
     this.voList.clear();
     try {
       IGridElement[] vos = GridModel.getVoManager().getChildren( null );
       for ( IGridElement vo : vos ) {
-        this.voList.add( (IVirtualOrganization) vo );
+        this.voList.add( ( IVirtualOrganization ) vo );
       }
     } catch ( GridModelException gmExc ) {
       ProblemDialog.openProblem( getShell(),
@@ -349,13 +387,39 @@ public class VoSelectionWizardPage extends WizardPage {
     }
   }
   
-  protected void setInitialSelection() {
+  /**
+   * Set the specified VO as selected (clicked and checked) in the viewer.
+   * 
+   * @param vo the VO to set as checked/selected
+   */
+  private void setSelection( final IGridElement vo ) {
+    
+    // Do nothing if there is no VO to select
+    if ( vo == null || ! ( vo instanceof IVirtualOrganization ) ) {
+      return;
+    }
+    
+    // If allowMultiSelection is not set we implement a radio-button behavior
+    if ( VoSelectionWizardPage.this.allowMultiSelection ) {
+      this.tableViewer.setChecked( vo, true );
+    } else {
+      this.tableViewer.setCheckedElements( new Object[] { vo } );
+    }
+    this.tableViewer.refresh();
+    
+    StructuredSelection sel = new StructuredSelection( vo );
+    this.tableViewer.setSelection( sel, true );
+  }
+  
+  /**
+   * Determines which VO to select initially in the viewer.
+   */
+  private void setInitialSelection() {
     IGridElement defaultVo = GridModel.getVoManager().getDefault();
-    if (! this.selectedVOs.isEmpty()){
-      defaultVo = this.selectedVOs.get( 0 );
-    } else if ( defaultVo == null ) {
+    
+    if ( defaultVo == null ) {
       // No default VO, take the first entry if any, null otherwise
-      defaultVo = (IGridElement) this.tableViewer.getElementAt( 0 );
+      defaultVo = ( IGridElement ) this.tableViewer.getElementAt( 0 );
     } else {
       // Check if the default VO is of the requested voType
       boolean show = true;
@@ -364,27 +428,11 @@ public class VoSelectionWizardPage extends WizardPage {
       }
       // If it is not, then select the first of the list if any, null otherwise
       if ( ! show ) {
-        defaultVo = (IGridElement) this.tableViewer.getElementAt( 0 );
+        defaultVo = ( IGridElement ) this.tableViewer.getElementAt( 0 );
       }
     }
     
-    // Do nothing if there is no VO to select
-    if ( defaultVo == null ) {
-      return;
-    }
-    this.tableViewer.setChecked( defaultVo, true );
-    this.tableViewer.refresh();
-    
-    StructuredSelection sel = new StructuredSelection( defaultVo );
-    this.tableViewer.setSelection( sel, true );
-  }
-  
-  /**
-   * Set selection (and check checkbox) on the given VO
-   * @param selectedVO VO to select on the list
-   */
-  public void setSelectedVos( final List<IVirtualOrganization> selectedVos ) {
-    this.selectedVOs = selectedVos;
+    setSelection( defaultVo );
   }
 
 }
