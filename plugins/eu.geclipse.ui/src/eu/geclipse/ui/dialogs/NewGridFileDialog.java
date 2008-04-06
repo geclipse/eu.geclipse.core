@@ -115,7 +115,7 @@ public class NewGridFileDialog
    * provided {@link ToolItem}s, on the other hand it informs
    * listeners about mode changes. 
    */
-  private class ModeManager extends SelectionAdapter {
+  private static class ModeManager extends SelectionAdapter {
     
     /**
      * Mode constant for the remote mode.
@@ -229,7 +229,7 @@ public class NewGridFileDialog
   /**
    * {@link ViewerFilter} that filters out all non-folders.
    */
-  private class FolderFilter extends ViewerFilter {
+  private static class FolderFilter extends ViewerFilter {
     
     /**
      * Standard constructor.
@@ -266,7 +266,7 @@ public class NewGridFileDialog
   /**
    * {@link ViewerFilter} that filters out all non-remote elements.
    */
-  private class RemoteConnectionFilter extends ViewerFilter {
+  private static class RemoteConnectionFilter extends ViewerFilter {
     
     /**
      * Standard constructor.
@@ -294,7 +294,7 @@ public class NewGridFileDialog
    * {@link ViewerFilter} that filters out all files without a specific
    * file extension.
    */
-  private class FileTypeFilter extends ViewerFilter {
+  private static class FileTypeFilter extends ViewerFilter {
     
     /**
      * Constant for the wildcard filter.
