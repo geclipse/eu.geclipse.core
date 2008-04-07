@@ -72,8 +72,10 @@ public interface IVirtualOrganization
   public String getTypeName();
   
   /**
-   * Returns the id of the wizard which should be used to edit VOs of this type.
-   * @return if of the wizard to edit the VO
+   * Returns the ID of the wizard which should be used to edit VOs of this type.
+   * 
+   * @return ID of the wizard to edit the VO.
    */
   public String getWizardId();
+
 }
