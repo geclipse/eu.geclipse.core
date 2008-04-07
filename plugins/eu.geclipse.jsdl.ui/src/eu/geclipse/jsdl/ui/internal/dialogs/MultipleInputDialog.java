@@ -109,7 +109,7 @@ public class MultipleInputDialog extends Dialog {
 
   /**
    * Method for adding new text field to dialog. This field is connected with
-   * {@link GridFileDialog}
+   * {@link NewGridFileDialog}
    * 
    * @param labelText label for the filed
    * @param initialValue initial value to set field to
