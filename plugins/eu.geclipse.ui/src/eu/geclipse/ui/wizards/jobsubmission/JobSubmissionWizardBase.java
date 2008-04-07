@@ -146,7 +146,7 @@ public abstract class JobSubmissionWizardBase extends Wizard
   void createFolder( final IContainer folder ) throws CoreException {
     IContainer parent = folder.getParent();
     if( ( parent != null ) && ( parent instanceof IFolder ) ) {
-      createFolder( ( IFolder )parent );
+      createFolder( parent );
     }
     if( !( folder.exists() ) && ( folder instanceof IFolder ) ) {
       ( ( IFolder )folder ).create( true, true, null );
