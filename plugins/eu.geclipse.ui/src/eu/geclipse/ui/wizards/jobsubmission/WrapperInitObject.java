@@ -19,6 +19,7 @@ package eu.geclipse.ui.wizards.jobsubmission;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 
 import eu.geclipse.core.model.IGridJobDescription;

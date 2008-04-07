@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -53,7 +54,7 @@ import eu.geclipse.ui.internal.Activator;
 
 public class FolderSelectionWizardPage extends WizardPage {
 
-  private IGridProject project;
+  IGridProject project;
   private Tree tree;
   private Text jobNameText;
   private List<IGridJobDescription> jobDescriptions;
@@ -80,12 +81,11 @@ public class FolderSelectionWizardPage extends WizardPage {
     gd.horizontalSpan = 2;
     gd.heightHint = 300;
     gd.widthHint = 250;
-    treeViewer = new TreeViewer( mainComp, SWT.SINGLE | SWT.BORDER );
-    treeViewer.setContentProvider( new RProvider() );
-    // treeViewer.setContentProvider( new GridFileDialogContentProvider() );
-    treeViewer.setLabelProvider( WorkbenchLabelProvider.getDecoratingWorkbenchLabelProvider() );
-    treeViewer.setInput( this.project.getResource() );
-    this.setTree( treeViewer.getTree() );
+    this.treeViewer = new TreeViewer( mainComp, SWT.SINGLE | SWT.BORDER );
+    this.treeViewer.setContentProvider( new RProvider() );
+    this.treeViewer.setLabelProvider( WorkbenchLabelProvider.getDecoratingWorkbenchLabelProvider() );
+    this.treeViewer.setInput( this.project.getParent().getResource() );
+    this.setTree( this.treeViewer.getTree() );
     this.getTree().setLayoutData( gd );
     this.tree.addSelectionListener( new SelectionAdapter() {
 
@@ -111,15 +111,18 @@ public class FolderSelectionWizardPage extends WizardPage {
     if( this.jobDescriptions.size() > 1 ) {
       this.jobNameText.setEnabled( false );
       String longName = "";
-        for (IGridJobDescription jobDesc: this.jobDescriptions){
-          longName = longName + jobDesc.getName().substring( 0, jobDesc.getName().indexOf( "." ) ) + ", ";
-        }
+      for( IGridJobDescription jobDesc : this.jobDescriptions ) {
+        longName = longName
+                   + jobDesc.getName().substring( 0,
+                                                  jobDesc.getName()
+                                                    .indexOf( "." ) )
+                   + ", ";
+      }
       longName = longName.substring( 0, longName.lastIndexOf( "," ) );
       this.jobNameText.setText( longName );
-      }else{
-        this.jobNameText.setText( name );
-      }
-    
+    } else {
+      this.jobNameText.setText( name );
+    }
     this.jobNameText.addModifyListener( new ModifyListener() {
 
       public void modifyText( final ModifyEvent e ) {
@@ -130,17 +133,17 @@ public class FolderSelectionWizardPage extends WizardPage {
     this.jobNameText.setLayoutData( gd );
     IGridContainer jobFolder = this.project.getProjectFolder( IGridJob.class );
     IResource jobFolderResource = jobFolder.getResource();
-    for( TreeItem item : this.tree.getItems() ) {
-      if( item.getData() instanceof IContainer ) {
-        if( item.getData().equals( jobFolderResource ) ) {
-          this.tree.setSelection( item );
-          break;
+    this.treeViewer.expandToLevel( 2 );
+    if( this.tree.getItems().length > 0 ) {
+      for( TreeItem item : this.tree.getItems()[ 0 ].getItems() ) {
+        if( item.getData() instanceof IContainer ) {
+          if( item.getData().equals( jobFolderResource ) ) {
+            this.tree.setSelection( item );
+            break;
+          }
         }
       }
     }
-    // for (){
-    // jobFolder.getResource();
-    // }
     setControl( mainComp );
   }
 
@@ -181,8 +184,10 @@ public class FolderSelectionWizardPage extends WizardPage {
   public List<String> getJobNames() {
     List<String> result = new ArrayList<String>();
     if( this.jobDescriptions.size() > 1 ) {
-      for (IGridJobDescription jobDesc: this.jobDescriptions){
-        result.add( jobDesc.getName().substring( 0, jobDesc.getName().indexOf( "." ) ) );
+      for( IGridJobDescription jobDesc : this.jobDescriptions ) {
+        result.add( jobDesc.getName().substring( 0,
+                                                 jobDesc.getName()
+                                                   .indexOf( "." ) ) );
       }
     } else {
       String baseName = this.jobNameText.getText();
@@ -209,8 +214,14 @@ public class FolderSelectionWizardPage extends WizardPage {
           if( ( ( IContainer )parentElement ).members().length != 0 ) {
             for( IResource member : ( ( IContainer )parentElement ).members() )
             {
-              if( member instanceof IContainer
-                  && !( member.getName().startsWith( "." ) ) ) //$NON-NLS-1$
+              if( member instanceof IProject ) {
+                if( member.getName()
+                  .equals( FolderSelectionWizardPage.this.project.getName() ) )
+                {
+                  list.add( member );
+                }
+              } else if( member instanceof IContainer
+                         && !( member.getName().startsWith( "." ) ) ) //$NON-NLS-1$
               {
                 list.add( member );
               }
@@ -234,8 +245,15 @@ public class FolderSelectionWizardPage extends WizardPage {
       if( element instanceof IContainer ) {
         try {
           for( IResource member : ( ( IContainer )element ).members() ) {
-            if( member instanceof IContainer
-                && !( member.getName().startsWith( "." ) ) ) //$NON-NLS-1$
+            if( member instanceof IProject ) {
+              if( member.getName()
+                .equals( FolderSelectionWizardPage.this.project.getName() ) )
+              {
+                result = true;
+                break;
+              }
+            } else if( member instanceof IContainer
+                       && !( member.getName().startsWith( "." ) ) ) //$NON-NLS-1$
             {
               result = true;
               break;
@@ -255,8 +273,14 @@ public class FolderSelectionWizardPage extends WizardPage {
         try {
           if( ( ( IContainer )inputElement ).members().length != 0 ) {
             for( IResource member : ( ( IContainer )inputElement ).members() ) {
-              if( member instanceof IContainer
-                  && !( member.getName().startsWith( "." ) ) )
+              if( member instanceof IProject ) {
+                if( member.getName()
+                  .equals( FolderSelectionWizardPage.this.project.getName() ) )
+                {
+                  list.add( member );
+                }
+              } else if( member instanceof IContainer
+                         && !( member.getName().startsWith( "." ) ) )
               {
                 list.add( member );
               }

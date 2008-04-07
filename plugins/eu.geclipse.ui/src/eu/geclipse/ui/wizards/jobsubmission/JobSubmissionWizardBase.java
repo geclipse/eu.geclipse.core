@@ -23,6 +23,8 @@ import java.util.List;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -62,6 +64,7 @@ import eu.geclipse.ui.wizards.wizardselection.IInitalizableWizard;
 public abstract class JobSubmissionWizardBase extends Wizard
   implements IInitalizableWizard, IExecutableExtension
 {
+
   protected IGridJobCreator creator;
   protected List<IGridJobDescription> jobDescriptions;
   ArrayList<String> jobNames;
@@ -140,13 +143,13 @@ public abstract class JobSubmissionWizardBase extends Wizard
     return result;
   }
 
-  void createFolder( final IFolder folder ) throws CoreException {
+  void createFolder( final IContainer folder ) throws CoreException {
     IContainer parent = folder.getParent();
     if( ( parent != null ) && ( parent instanceof IFolder ) ) {
       createFolder( ( IFolder )parent );
     }
-    if( !folder.exists() ) {
-      folder.create( true, true, null );
+    if( !( folder.exists() ) && ( folder instanceof IFolder ) ) {
+      ( ( IFolder )folder ).create( true, true, null );
     }
   }
 
@@ -159,7 +162,7 @@ public abstract class JobSubmissionWizardBase extends Wizard
   public boolean init( final Object data ) {
     boolean result = false;
     if( data instanceof WrapperInitObject ) {
-      this.initObject = (WrapperInitObject)data;
+      this.initObject = ( WrapperInitObject )data;
       this.jobDescriptions = new ArrayList<IGridJobDescription>( this.initObject.getJobDescriptions() );
       this.jobNames = new ArrayList<String>( this.initObject.getJobNames() );
       result = true;
@@ -221,18 +224,21 @@ public abstract class JobSubmissionWizardBase extends Wizard
           IGridJobDescription description = iterator.next();
           betterMonitor.setTaskName( String.format( Messages.getString( "JobSubmissionWizardBase.taskNameSubmitting" ), description.getName() ) ); //$NON-NLS-1$
           if( JobSubmissionWizardBase.this.creator.canCreate( description ) ) {
-            IGridContainer parent = buildTargetFolder( description, (IFolder)JobSubmissionWizardBase.this.initObject.getDestinationFolder() );
+            IGridContainer parent = buildTargetFolder( description,
+                                                       JobSubmissionWizardBase.this.initObject.getDestinationFolder() );
             IGridJobID jobId = null;
             if( this.service != null ) {
               jobId = this.service.submitJob( description,
                                               betterMonitor.newChild( 1 ) );
             }
             testCancelled( betterMonitor );
-            JobSubmissionWizardBase.this.creator.create( parent, jobId, namesIterator.next() );
+            JobSubmissionWizardBase.this.creator.create( parent,
+                                                         jobId,
+                                                         namesIterator.next() );
             // don't submit this job again during again submission after error
             iterator.remove();
             namesIterator.remove();
-          }          
+          }
         }
       } catch( ProblemException pExc ) {
         showProblem( pExc );
@@ -250,23 +256,42 @@ public abstract class JobSubmissionWizardBase extends Wizard
     }
 
     private IGridContainer buildTargetFolder( final IGridJobDescription description,
-                                              final IFolder folder ) throws CoreException
+                                              final IResource folder )
+      throws CoreException
     {
-      IFolder targetFolder = folder;
+      IResource targetFolder = folder;
+      IContainer targetBuildFolder = null;
       IGridProject project = description.getProject();
       IPath descriptionPath = description.getPath().removeLastSegments( 1 );
-      IPath descriptionFolderPath = project.getProjectFolder( IGridJobDescription.class ).getPath();
-      // if jsdl is in subfolder of JsdlContainer, then build that subfolder structure also in JobContainer
+      IPath descriptionFolderPath = project.getProjectFolder( IGridJobDescription.class )
+        .getPath();
+      // if jsdl is in subfolder of JsdlContainer, then build that subfolder
+      // structure also in JobContainer
       if( descriptionFolderPath.isPrefixOf( descriptionPath )
-          && folder.getFullPath().equals( project.getProjectFolder( IGridJob.class ).getPath() ) ) {
+          && folder.getFullPath()
+            .equals( project.getProjectFolder( IGridJob.class ).getPath() ) )
+      {
         int matchingFirstSegments = descriptionPath.matchingFirstSegments( descriptionFolderPath );
         IPath appendedPath = descriptionPath.removeFirstSegments( matchingFirstSegments );
-        IWorkspaceRoot workspaceRoot = ( IWorkspaceRoot )GridModel.getRoot().getResource();
-        
-        targetFolder = workspaceRoot.getFolder( targetFolder.getFullPath().append( appendedPath ) ); 
-        createFolder( targetFolder );
+        IWorkspaceRoot workspaceRoot = ( IWorkspaceRoot )GridModel.getRoot()
+          .getResource();
+        // if (workspaceRoot.findContainersForLocation(
+        // targetFolder.getFullPath().append( appendedPath ) ));
+        if( targetFolder instanceof IProject
+            && appendedPath.toString().equals( "" ) )
+        {
+          targetBuildFolder = ( IContainer )targetFolder;
+        } else {
+          targetBuildFolder = workspaceRoot.getFolder( targetFolder.getFullPath()
+            .append( appendedPath ) );
+        }
+        createFolder( targetBuildFolder );
       }
-      return ( IGridContainer )GridModel.getRoot().findElement( targetFolder );
+      if( targetBuildFolder == null ) {
+        targetBuildFolder = ( IContainer )targetFolder;
+      }
+      return ( IGridContainer )GridModel.getRoot()
+        .findElement( targetBuildFolder );
     }
 
     private void testCancelled( final IProgressMonitor monitor ) {
