@@ -21,7 +21,7 @@
    <extension
          point="eu.geclipse.core.reporting.problemReporting">
       <problem
-            description="Authentification failed"
+            description="Authentication failed"
             id="eu.geclipse.terminal.ssh.problem.auth_failed">
          <reference
                referenceID="eu.geclipse.terminal.ssh.solution.check_username_and_passwd">
