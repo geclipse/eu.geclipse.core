@@ -3,5 +3,5 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: eu.geclipse.batch.test
 Bundle-Version: 1.0.0.qualifier
-Fragment-Host: eu.geclipse.batch;bundle-version="0.5.0"
+Fragment-Host: eu.geclipse.batch;bundle-version="1.0.0"
 Require-Bundle: org.junit4
