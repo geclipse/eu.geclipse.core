@@ -4,7 +4,7 @@ Bundle-Name: Test Fragment
 Bundle-SymbolicName: eu.geclipse.ui.test
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Eclipse.org
-Fragment-Host: eu.geclipse.ui;bundle-version="0.5.0"
+Fragment-Host: eu.geclipse.ui;bundle-version="1.0.0"
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
  org.junit4,
