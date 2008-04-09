@@ -32,6 +32,7 @@ import org.eclipse.ui.views.navigator.LocalSelectionTransfer;
 import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridJob;
 
 /**
  * Transfer drop adapter for selections specialised for the transfer of
@@ -108,7 +109,8 @@ public class SelectionTransferDropAdapter
    */
   public void drop( final DropTargetEvent event ) {
     
-    IGridContainer target = getTarget( event );
+    IGridContainer target = getTarget( event );    
+    
     IGridElement[] elements = getElements();
     GridElementTransferOperation op = null;
     
@@ -266,7 +268,8 @@ public class SelectionTransferDropAdapter
     int result = DND.DROP_COPY | DND.DROP_MOVE | DND.DROP_DEFAULT;
     if ( ( target == element )
         || ( target == element.getParent() )
-        || !target.canContain( element ) ) {
+        || !target.canContain( element )
+        || isGridJob( target ) ) {
       result = DND.DROP_NONE;
     } else if ( ! isLocal( target ) || ! isLocal( element ) ) {
       if ( ! isLocal( target ) && ! isLocal( element ) ) {
@@ -303,6 +306,18 @@ public class SelectionTransferDropAdapter
   
   private boolean isLocal( final IGridElement element ) {
     return element.isLocal() || ( element instanceof IGridConnection );
+  }
+
+  private boolean isGridJob( final IGridContainer element ) {
+    boolean isGridJob = false;
+    IGridContainer currentElement = element;
+    
+    while( currentElement != null && !isGridJob ) {
+      isGridJob = ( currentElement instanceof IGridJob );
+      currentElement = currentElement.getParent();
+    }
+    
+    return isGridJob;
   }
 
 }
