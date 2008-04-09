@@ -12,3 +12,4 @@ Export-Package: eu.geclipse.core,
  eu.geclipse.core.model,
  eu.geclipse.core.security,
  eu.geclipse.core.util.tar
+Bundle-Vendor: %Bundle-Vendor
