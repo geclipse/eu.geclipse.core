@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007, 2008 g-Eclipse Consortium 
+ * Copyright (c) 2006, 2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -18,16 +18,21 @@ import org.junit.Assert;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
-import eu.geclipse.core.ICoreSolutions;
 
-/**tests the methods in class {@link SolutionFactory}
+/**
+ * tests the methods in class {@link SolutionFactory}
+ * 
  * @author tao-j
- *
  */
 public class SolutionFactory_PDETest {
 
+  private static final String SOLUTION_ID 
+    = "eu.geclipse.core.reporting.test.ExampleSolution1"; //$NON-NLS-1$
   private static SolutionFactory factory;
-  /**initialization
+
+  /**
+   * initialization
+   * 
    * @throws Exception
    */
   @BeforeClass
@@ -48,24 +53,8 @@ public class SolutionFactory_PDETest {
    */
   @Test
   public void testGetSolution() {
-    Solution solution = factory.getSolution( ICoreSolutions.AUTH_CHECK_CA_CERTIFICATES, null );
-    Assert.assertNotNull( solution );
-    Assert.assertEquals( "Check your imported CA-certificates", solution.getDescription() ); //$NON-NLS-1$
-    Assert.assertNotNull( factory.getSolution( ICoreSolutions.AUTH_CHECK_DATA, null ) );
-    Assert.assertNotNull( factory.getSolution( ICoreSolutions.AUTH_CHECK_TOKENS, null ) );
-    Assert.assertNotNull( factory.getSolution( ICoreSolutions.AUTH_CHECK_VO_SETTINGS, null ) );
-    Assert.assertNotNull( factory.getSolution( ICoreSolutions.IO_DOWNLOAD_FILE_AGAIN, null ) );
-    Assert.assertNotNull( factory.getSolution( ICoreSolutions.IO_DOWNLOAD_FROM_ANOTHER_SOURCE, null ) );
-    Assert.assertNotNull( factory.getSolution( ICoreSolutions.NET_CHECK_FIREWALL, null ) );
-    Assert.assertNotNull( factory.getSolution( ICoreSolutions.NET_CHECK_HOSTNAME_MATCHES_IP_ADDRESS, null ) );
-    Assert.assertNotNull( factory.getSolution( ICoreSolutions.NET_CHECK_INTERNET_CONNECTION, null ) );
-    Assert.assertNotNull( factory.getSolution( ICoreSolutions.NET_CHECK_PORT_ALREADY_IN_USE, null ) );
-    Assert.assertNotNull( factory.getSolution( ICoreSolutions.NET_CHECK_PROXY_SETTINGS, null ) );
-    Assert.assertNotNull( factory.getSolution( ICoreSolutions.NET_CHECK_PUBLIC_IP_ADDRESS, null ) );
-    Assert.assertNotNull( factory.getSolution( ICoreSolutions.NET_CHECK_SERVER_URL, null ) );
-    Assert.assertNotNull( factory.getSolution( ICoreSolutions.NET_CHECK_TIMEOUT_SETTINGS, null ) );
-    Assert.assertNotNull( factory.getSolution( ICoreSolutions.NET_CONTACT_SERVER_ADMIN, null ) );
-    Assert.assertNotNull( factory.getSolution( ICoreSolutions.NET_USE_ANOTHER_PORT, null ) );
-    Assert.assertNotNull( factory.getSolution( ICoreSolutions.SYS_CHECK_SYSTEM_TIME, null ) );  
+    Solution solution = factory.getSolution( SOLUTION_ID, null );
+    String expectedSolutionMessage = "This is the Example Solution 1"; //$NON-NLS-1$
+    Assert.assertEquals( expectedSolutionMessage, solution.getDescription() );
   }
 }

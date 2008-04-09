@@ -4,8 +4,7 @@ Bundle-SymbolicName: eu.geclipse.core.reporting.test;singleton:=true
 Bundle-Version: 1.0.0.qualifier
 Bundle-Localization: plugin
 Fragment-Host: eu.geclipse.core.reporting;bundle-version="1.0.0"
-Require-Bundle: org.junit4,
- eu.geclipse.core
+Require-Bundle: org.junit4
 Bundle-Vendor: %Bundle-Vendor
 Bundle-Name: %Bundle-Name
 Bundle-RequiredExecutionEnvironment: J2SE-1.5

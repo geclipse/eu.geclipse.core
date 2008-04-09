@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007, 2008 g-Eclipse Consortium 
+ * Copyright (c) 2007, 2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -20,22 +20,22 @@ import org.junit.Assert;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import eu.geclipse.core.ICoreProblems;
-
 
 /**
+ * Tests the methods in class {@link ProblemFactory}
+ * 
  * @author tao-j
- *
- */
-/**tests the methods in class {@link ProblemFactory}
- * @author tao-j
- *
  */
 public class ProblemFactory_PDETest {
 
+  private static final String PROBLEM_ID 
+    = "eu.geclipse.core.reporting.test.ExampleProblem"; //$NON-NLS-1$
+ 
   private static ProblemFactory factory;
   
-  /**initialization
+  /**
+   * initialisation
+   * 
    * @throws Exception
    */
   @BeforeClass
@@ -49,15 +49,19 @@ public class ProblemFactory_PDETest {
   @Test
   public void testGetFactory() {
     Assert.assertNotNull( factory );
+    Assert.assertTrue( factory == ProblemFactory.getFactory() );
   }
 
   /**
-   * tests the method {@link ProblemFactory#getProblem(String, String, Throwable, String)}
+   * tests the method
+   * {@link ProblemFactory#getProblem(String, String, Throwable, String)}
    */
   @Test
   public void testGetProblem() {
-    Problem  problem = factory.getProblem( ICoreProblems.AUTH_CERTIFICATE_LOAD_FAILED, 
-        "test", null, "eu.geclipse.core.reporting.test" ); //$NON-NLS-1$ //$NON-NLS-2$
+    Problem problem = factory.getProblem( PROBLEM_ID,
+                                          "test",  //$NON-NLS-1$
+                                          null, 
+                                          "eu.geclipse.core.reporting.test" ); //$NON-NLS-1$
     Assert.assertNotNull( problem );
     Assert.assertEquals( "test", problem.getDescription() ); //$NON-NLS-1$
   }
