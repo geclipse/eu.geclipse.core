@@ -195,7 +195,7 @@ public class VoSelectionWizardPage extends WizardPage
     editVOsButton.setLayoutData( gData );
     editVOsButton.addSelectionListener( new SelectionAdapter() {
       @Override
-      public void widgetSelected( final SelectionEvent e ) {        
+      public void widgetSelected( final SelectionEvent e ) {
         PreferenceDialog dialog
           = PreferencesUtil.createPreferenceDialogOn( getShell(),
                 VoSelectionWizardPage.this.PREFERENCE_PAGE_ID,
@@ -207,8 +207,6 @@ public class VoSelectionWizardPage extends WizardPage
          * added/deleted, so ignore the dialog's return value.
          */
         dialog.open();
-        
-        setPageComplete( getSelectedVos() != null );        
       }
     } );
     
@@ -255,11 +253,16 @@ public class VoSelectionWizardPage extends WizardPage
       case IGridModelEvent.ELEMENTS_REMOVED:
         updateVoList();
         this.tableViewer.setInput( this.voList );
+        // If the selected VO has been deleted select the default one
+        IVirtualOrganization[] selectedVOs = getSelectedVos();
+        if ( selectedVOs == null ) {
+          setInitialSelection();
+        }
         break;
       default:
         // Do nothing in other cases
     }
-    
+    setPageComplete( getSelectedVos() != null );        
   }
   
   /*
