@@ -17,12 +17,15 @@
 package eu.geclipse.ui.wizards.deployment;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -41,10 +44,12 @@ import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridComputing;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridInfoService;
+import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.providers.DeploymentTargetTreeContentProvider;
 import eu.geclipse.ui.providers.GridModelLabelProvider;
+import eu.geclipse.ui.wizards.VoSelectionWizardPage;
 
 /**
  * @author Yifan Zhou
@@ -55,7 +60,9 @@ public class DeploymentTarget extends WizardPage {
   /**
    * Create a tree for listing computing element.
    */
+  //private static Iterator< ? > iter;
   private CheckboxTreeViewer ceTree;
+ 
   
   /**
    * Create a tree for listing storage element.
@@ -109,7 +116,7 @@ public class DeploymentTarget extends WizardPage {
         updatePageComplete();
       }
     });
-    Group seGroup = new Group( composite, SWT.NONE );
+    /*Group seGroup = new Group( composite, SWT.NONE );
     seGroup.setText( Messages.getString( "Deployment.deployment_target_se_group_label" ) ); //$NON-NLS-1$
     gridData = new GridData(GridData.FILL_BOTH | GridData.GRAB_HORIZONTAL | GridData.GRAB_VERTICAL );
     seGroup.setLayoutData( gridData );
@@ -143,7 +150,7 @@ public class DeploymentTarget extends WizardPage {
         getSETree().setAllChecked( false );
         updatePageComplete();
       }
-    });
+    });*/
     this.setControl( composite );
   }
 
@@ -171,6 +178,51 @@ public class DeploymentTarget extends WizardPage {
         return ( ( IGridElement ) e1 ).getName().compareToIgnoreCase( ( ( IGridElement ) e2 ).getName() );
       }
     });
+    IStructuredSelection selections = ( ( DeploymentWizard ) this.getWizard() ).getSelection();
+    IGridElement selected = ( IGridElement ) selections.getFirstElement();
+    if (selected instanceof IVirtualOrganization ) {
+     getCETree().setAllChecked( true );
+    }
+   if (selected instanceof IGridComputing) {
+  
+       this.ceTree.setAllChecked( true );
+       Object[] elements = this.ceTree.getCheckedElements();
+       this.ceTree.setAllChecked( false );
+       Iterator< ? > iter = selections.iterator();
+       while ( iter.hasNext() ) {
+         Object selectelement = iter.next();
+         IGridComputing cesel = (IGridComputing) selectelement;
+         String selname = cesel.getHostName();
+         for ( Object ceElement : elements ) 
+         {
+           IGridComputing cegrid = (IGridComputing) ceElement;
+           String cename = cegrid.getHostName();
+         if (cename.equals( selname )){
+           this.ceTree.setChecked( ceElement, true );
+         break;
+         }
+       }
+   }
+   
+    /*this.ceTree.addFilter (new ViewerFilter() {
+      @Override
+      public boolean select( final Viewer viewer,
+                             final Object parentElement,
+                             final Object element )
+      {
+        boolean ret = false;
+
+          while ( iter.hasNext() ) {
+            Object selectelement = iter.next();
+            IGridComputing onece = (IGridComputing) element;
+            if (onece.getHostName() == ((IGridComputing) selectelement).getHostName())
+            ret = true;
+          }
+        return ret;
+      }
+    } );*/
+    }
+ 
     this.ceTree.addCheckStateListener( new ICheckStateListener() {
       public void checkStateChanged( final CheckStateChangedEvent event ) {
 //        if ( getCETree().getChecked( event.getElement() ) ) {
@@ -182,7 +234,7 @@ public class DeploymentTarget extends WizardPage {
         updatePageComplete();
       }
     });
-    this.seTree.setContentProvider( new DeploymentTargetTreeContentProvider() );
+   /* this.seTree.setContentProvider( new DeploymentTargetTreeContentProvider() );
     this.seTree.setLabelProvider( new GridModelLabelProvider() );
     if ( ( ( DeploymentChooser ) this.getWizard().getStartingPage() )
         .getExecuteExt().getClass().getName().equals( "eu.geclipse.glite.deployment.JDLBasedApplicationDeployment" ) ) { //$NON-NLS-1$
@@ -209,12 +261,13 @@ public class DeploymentTarget extends WizardPage {
     });
     this.updatePageComplete();
     this.setMessage( null );
-    this.setErrorMessage( null );
+    this.setErrorMessage( null );*/
   }
   
   protected void updatePageComplete() {
     this.setPageComplete( false );
-    if ( this.ceTree.getCheckedElements().length == 0 && this.seTree.getCheckedElements().length == 0 ) {
+    //if ( this.ceTree.getCheckedElements().length == 0 && this.seTree.getCheckedElements().length == 0 ) {
+    if ( this.ceTree.getCheckedElements().length == 0){
       this.setMessage( null );
       this.setErrorMessage( Messages.getString( "Deployment.deployment_target_is_empty" ) ); //$NON-NLS-1$
       return;
@@ -228,8 +281,9 @@ public class DeploymentTarget extends WizardPage {
   public boolean canFlipToNextPage()
   {
     boolean next = false;
-    if ( this.ceTree.getCheckedElements().length > 0 || this.seTree.getCheckedElements().length > 0 ) {
-      next =  true;
+    //if ( this.ceTree.getCheckedElements().length > 0 || this.seTree.getCheckedElements().length > 0 ) {
+    if ( this.ceTree.getCheckedElements().length > 0 ){
+    next =  true;
     } 
     return next;
   }
@@ -250,7 +304,8 @@ public class DeploymentTarget extends WizardPage {
   
   protected IGridComputing[] getCERootElement() {
     IGridComputing[] elements = null;
-    IVirtualOrganization vo = ( ( DeploymentWizard ) this.getWizard() ).getGridProject().getProject().getVO();
+    IGridProject testpro = ( ( DeploymentWizard ) this.getWizard() ).getGridProject();
+    IVirtualOrganization vo = testpro.getVO();
     try {
       IGridInfoService infoService = vo.getInfoService();
       elements = infoService.fetchComputing( null, vo, null );

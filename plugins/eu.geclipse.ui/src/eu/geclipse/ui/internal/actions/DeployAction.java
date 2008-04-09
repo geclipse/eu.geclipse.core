@@ -11,16 +11,21 @@
  *
  * Contributors:
  *    Yifan Zhou - initial API and implementation
+ *    Jie Tao - extensions
  *****************************************************************************/
 
 package eu.geclipse.ui.internal.actions;
+
+import java.util.Iterator;
 
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.actions.SelectionListenerAction;
-import eu.geclipse.core.model.IGridProject;
+
+import eu.geclipse.core.model.IGridComputing;
+import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.ui.wizards.deployment.DeploymentWizard;
 
 /**
@@ -32,7 +37,11 @@ public class DeployAction extends SelectionListenerAction {
    * The workbench site this action belongs to.
    */
   private IWorkbenchSite site;
+
   
+  /**the deployment action
+   * @param site
+   */
   public DeployAction( final IWorkbenchSite site ) {
     super( Messages.getString( "DeployAction.deploy_action_name" ) ); //$NON-NLS-1$
     this.setEnabled( false );
@@ -41,9 +50,11 @@ public class DeployAction extends SelectionListenerAction {
 
   @Override
   public void run() {
-    Shell shell = this.site.getWorkbenchWindow().getShell();
+    //Shell shell = this.site.getWorkbenchWindow().getShell();
+    Shell shell = this.site.getShell();
     DeploymentWizard wizard = new DeploymentWizard( this.getStructuredSelection() );
     WizardDialog dialog = new WizardDialog( shell, wizard );
+    dialog.setBlockOnOpen( false );
     dialog.open();
   }
 
@@ -51,18 +62,26 @@ public class DeployAction extends SelectionListenerAction {
   protected boolean updateSelection( final IStructuredSelection structuredSelection ) {
     this.setEnabled( true );
     boolean enabled = super.updateSelection( structuredSelection );
-    boolean isGridProjectFlag = false;
+    boolean isComputingElementFlag = false;
+   /* boolean isGridProjectFlag = false;
     if ( structuredSelection.size() == 1 ) {
       Object object = structuredSelection.getFirstElement();
       if ( isGridProject( object ) ) {
         isGridProjectFlag = ( ( IGridProject ) object ).isGridProject();
       }
+    }*/
+    
+ 
+    Iterator< ? > iter = structuredSelection.iterator();
+    while ( iter.hasNext() && enabled ) {
+      Object element = iter.next();
+      if( element instanceof IGridComputing)
+        isComputingElementFlag = true;
+      if( element instanceof IVirtualOrganization)
+        isComputingElementFlag = true;
     }
-    return enabled & isGridProjectFlag;
-  }
-
-  private boolean isGridProject( final Object element ) {
-    return element instanceof eu.geclipse.core.model.IGridProject;
+      
+    return enabled && isComputingElementFlag;
   }
 
 }

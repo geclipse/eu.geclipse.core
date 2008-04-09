@@ -23,6 +23,7 @@ import java.util.List;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
@@ -39,6 +40,7 @@ import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.core.model.IGridJobCreator;
+import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.ui.internal.Activator;
 
 /**
@@ -75,10 +77,11 @@ public class DeploymentWizard extends Wizard {
    * Get the structured selection.
    */
   private IStructuredSelection selection;
+ 
   /**
    * The current grid project.
    */
-  private IGridElement trueGridProject;
+  private IGridProject gridproject;
   /**
    * All referenced projects.
    */
@@ -101,10 +104,10 @@ public class DeploymentWizard extends Wizard {
   public void addPages() {
     this.chooserPage = new DeploymentChooser( Messages.getString( "Deployment.deployment_wizard_chooser" ) ); //$NON-NLS-1$
     this.addPage( this.chooserPage );
-    this.sourcePage = new DeploymentSource( Messages.getString( "Deployment.deployment_wizard_source" ) ); //$NON-NLS-1$
-    this.addPage( this.sourcePage );
     this.targetPage = new DeploymentTarget( Messages.getString( "Deployment.deployment_wizard_target" ) ); //$NON-NLS-1$
     this.addPage( this.targetPage );
+    this.sourcePage = new DeploymentSource( Messages.getString( "Deployment.deployment_wizard_source" ) ); //$NON-NLS-1$
+    this.addPage( this.sourcePage );
     this.descriptionPage = new DeploymentDescription( Messages.getString( "Deployment.deployment_wizard_description" ) ); //$NON-NLS-1$
     this.addPage( this.descriptionPage );
   }
@@ -119,18 +122,17 @@ public class DeploymentWizard extends Wizard {
         sourceList.add( element );
       }
     }
-    String tarfile = this.sourcePage.getTarFile();
     
     IGridElement[] source = sourceList.toArray( new IGridElement[ sourceList.size() ] );
     List< Object > targetList = new ArrayList< Object >();
     Object[] ceObjects = this.targetPage.getCETree().getCheckedElements();
-    Object[] seObjects = this.targetPage.getSETree().getCheckedElements();
+    //Object[] seObjects = this.targetPage.getSETree().getCheckedElements();
     for ( Object ceObject : ceObjects ) {
       targetList.add( ceObject );
     }
-    for ( Object seObject : seObjects ) {
-      targetList.add( seObject );
-    }
+   // for ( Object seObject : seObjects ) {
+    //  targetList.add( seObject );
+   // }
     IGridElement[] target = targetList.toArray( new IGridElement[ targetList.size() ] );
     String tag = this.descriptionPage.getTag();
     IApplicationDeployment appDeployment = this.chooserPage.getExecuteExt();
@@ -159,8 +161,15 @@ public class DeploymentWizard extends Wizard {
     List< IGridElement > refProjects = new ArrayList< IGridElement >();
     IGridElement[] allProjects = null;
     IProject[] rProjects = null;
-    this.trueGridProject = ( IGridElement ) this.selection.getFirstElement();
-    IProject gProject = ( IProject ) this.trueGridProject.getResource();
+    IGridElement selected = ( IGridElement ) this.selection.getFirstElement();
+    this.gridproject = selected.getProject();
+    IResource resource = this.gridproject.getResource();
+    IProject gProject = resource.getProject();
+    //this.trueGridProject = ( IGridElement ) gridproject.getResource();
+    
+    //this.trueGridProject = ( IGridElement ) this.selection.getFirstElement();
+    //IProject gProject = ( IProject )this.trueGridProject.getProject();
+    
     try {
       rProjects = gProject.getReferencedProjects();
       allProjects = GridModel.getRoot().getChildren( null );
@@ -211,10 +220,17 @@ public class DeploymentWizard extends Wizard {
   }
 
   /** return the grid project
-   * @return IGridElement
+   * @return IGridProject
    */
-  public IGridElement getGridProject() {
-    return this.trueGridProject;
+  public IGridProject getGridProject() {
+    return this.gridproject;
+  }
+  
+  /**get the user selection of PEs or vo
+   * @return IStructuredSelection
+   */
+  public IStructuredSelection getSelection() {
+    return this.selection;
   }
   
 }

@@ -17,30 +17,24 @@
 package eu.geclipse.ui.wizards.deployment;
 
 import java.io.File;
-
-import org.eclipse.jface.preference.IPreferenceStore;
+import java.net.URI;
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerSorter;
+import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.ModifyEvent;
-import org.eclipse.swt.events.ModifyListener;
-import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Link;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.PreferencesUtil;
 
 import eu.geclipse.core.model.IGridContainer;
@@ -48,21 +42,26 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.ui.providers.DeploymentSourceTreeContentProvider;
 import eu.geclipse.ui.providers.GridModelLabelProvider;
 import eu.geclipse.ui.widgets.StoredCombo;
-import eu.geclipse.ui.internal.Activator;
+import eu.geclipse.ui.dialogs.NewGridFileDialog;
 
 /**
  * @author Yifan Zhou
  */
-public class DeploymentSource extends WizardPage {
+public class DeploymentSource extends WizardPage implements SelectionListener {
 
   /**
    * Create a tree for listing referenced projects of the grid project.
    */
-  private static String TAR_FILE_ID = "tar_file"; //$NON-NLS-1$
+  
+  private static Composite composite;
   //private static String TAR_SUFFIX = "tar"; //$NON-NLS-1$
   private CheckboxTreeViewer sourceTree;
+  private Label descriptionLabel;
   private StoredCombo tarCombo;
-
+  private Button tarButton;
+  private Button treebutton;
+  private IGridElement[] source;
+  private URI [] disksource;
   /**
    * Create a property link for the current grid project. 
    */
@@ -75,32 +74,31 @@ public class DeploymentSource extends WizardPage {
   }
 
   public void createControl( final Composite parent ) {
-    IPreferenceStore prefStore = Activator.getDefault().getPreferenceStore();
-    Composite composite = new Composite( parent, SWT.NONE );
+    //IPreferenceStore prefStore = Activator.getDefault().getPreferenceStore();
+    composite = new Composite( parent, SWT.NONE );
     composite.setLayout( new GridLayout( 1, false ) );
-    Label descriptionLabel = new Label ( composite, SWT.NONE );
-    descriptionLabel.setText( Messages.getString( "Deployment.deployment_source_available_referenced_projects" ) ); //$NON-NLS-1$
+    
+    this.treebutton = new Button( composite, SWT.RADIO);
+    this.treebutton.setText( "Choose from the referenced project" ); //$NON-NLS-1$
+   // this.tarButton.setImage( fileImage );
     GridData gridData = new GridData();
+    this.treebutton.setLayoutData( gridData );
+    
+    this.descriptionLabel = new Label ( composite, SWT.NONE );
+    this.descriptionLabel.setText( Messages.getString( "Deployment.deployment_source_available_referenced_projects" ) ); //$NON-NLS-1$
+    this.descriptionLabel.setVisible( false );
+    gridData = new GridData();
     gridData.horizontalAlignment = GridData.BEGINNING;
-    descriptionLabel.setLayoutData( gridData );
+    this.descriptionLabel.setLayoutData( gridData );
     this.linkForProperty = new Link( composite, SWT.NONE );
     this.linkForProperty.setText( Messages.getString( "Deployment.deployment_source_link_for_preference" ) ); //$NON-NLS-1$
     gridData = new GridData( GridData.BEGINNING );
     this.linkForProperty.setLayoutData( gridData );
-    this.linkForProperty.setEnabled( true );
-    this.linkForProperty.addSelectionListener( new SelectionAdapter() {
-      @Override
-      public void widgetSelected( final SelectionEvent event ) {
-        PreferencesUtil.createPropertyDialogOn( getShell(), getGridProject()
-                                                .getResource().getProject(), null, null, null ).open();
-        ( ( DeploymentWizard ) getWizard() ).initProjects();
-        initContents();
-      }
-    });
+    this.linkForProperty.setVisible( false ); 
     this.sourceTree = new CheckboxTreeViewer( composite, SWT.V_SCROLL | SWT.H_SCROLL | SWT.BORDER );
     gridData = new GridData( GridData.FILL_BOTH | GridData.GRAB_HORIZONTAL  | GridData.GRAB_VERTICAL );
     this.sourceTree.getTree().setLayoutData( gridData );
-    Composite bComposite = new Composite( composite, SWT.NONE );
+    /*Composite bComposite = new Composite( composite, SWT.NONE );
     ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
     gridData = new GridData();
     Image fileImage = sharedImages.getImage( ISharedImages.IMG_OBJ_FILE );
@@ -108,7 +106,7 @@ public class DeploymentSource extends WizardPage {
     bComposite.setLayoutData( gridData );
     RowLayout rowLayout = new RowLayout();
     rowLayout.spacing = 10;
-    bComposite.setLayout( rowLayout );
+    bComposite.setLayout( rowLayout );*/
     //Button selectAll = new Button( bComposite, SWT.NONE );
     //selectAll.setText( Messages.getString( "Deployment.deployment_source_select_all" ) ); //$NON-NLS-1$
     //selectAll.setLayoutData( new RowData( 85, 22 ) );
@@ -135,52 +133,11 @@ public class DeploymentSource extends WizardPage {
     gridData = new GridData( GridData.FILL_HORIZONTAL | GridData.GRAB_HORIZONTAL );
     seperator.setLayoutData( gridData );
     
-    // allow to choose the tar form disk
-    
-    Label tardesLabel = new Label ( composite, SWT.NONE );
-    tardesLabel.setText( Messages.getString( "Deployment.deployment_source_tar_select" ) ); //$NON-NLS-1$
+    this.tarButton = new Button( composite, SWT.RADIO);
+    this.tarButton.setText( Messages.getString("Deployment.deployment_source_tar_select") ); //$NON-NLS-1$
+ 
     gridData = new GridData();
-    gridData.horizontalAlignment = GridData.BEGINNING;
-    tardesLabel.setLayoutData( gridData );
-    
-    Label tarLabel = new Label( composite, SWT.LEFT );
-    tarLabel.setText( Messages.getString("Deployment.deployment_source_tar_file") ); //$NON-NLS-1$
-    gridData = new GridData();
-    gridData.horizontalAlignment = GridData.BEGINNING;
-    tarLabel.setLayoutData( gridData );
-    
-    this.tarCombo = new StoredCombo( composite, SWT.DROP_DOWN ) {
-      @Override
-      protected boolean isValidItem( final String item ) {
-        File file = new File( item );
-        return file.exists();
-      }
-    };
-    this.tarCombo.setPreferences( prefStore, TAR_FILE_ID );
-    gridData = new GridData( GridData.FILL_HORIZONTAL );
-    gridData.grabExcessHorizontalSpace = true;
-    this.tarCombo.setLayoutData( gridData );
-    
-    Button tarButton = new Button( composite, SWT.PUSH );
-    tarButton.setImage( fileImage );
-    gridData = new GridData();
-    tarButton.setLayoutData( gridData );
-    this.tarCombo.addModifyListener( new ModifyListener() {
-      public void modifyText( final ModifyEvent e ) {
-        updateUI();
-        validatePage();
-      }
-    } );
-    tarButton.addSelectionListener( new SelectionAdapter() {
-      @Override
-      public void widgetSelected( final SelectionEvent e ) {
-        String filename = DeploymentSource.this.tarCombo.getText();
-        filename = showFileDialog( filename, Messages.getString("Deployment.deployment_source_select_tar_file") ); //$NON-NLS-1$
-        if ( filename != null ) {
-          DeploymentSource.this.tarCombo.setText( filename );
-        }
-      }
-    } );
+    this.tarButton.setLayoutData( gridData );
     this.setControl( composite );
   }
 
@@ -193,31 +150,75 @@ public class DeploymentSource extends WizardPage {
   }
   
   protected void initContents() {
-    this.sourceTree.setContentProvider( new DeploymentSourceTreeContentProvider() );
-    this.sourceTree.setLabelProvider( new GridModelLabelProvider() );
-    this.sourceTree.setInput( this.getWizard() );
-    this.sourceTree.setSorter( new ViewerSorter() {
-      @Override
-      public int compare( final Viewer viewer, final Object e1, final Object e2 ) {
-        return ( ( IGridElement ) e1 ).getName().compareToIgnoreCase( ( ( IGridElement ) e2 ).getName() );
-      }
-     });
-    this.sourceTree.addCheckStateListener( new ICheckStateListener() {
-      public void checkStateChanged( final CheckStateChangedEvent event ) {
-        if ( getSourceTree().getChecked( event.getElement() ) ) {
-          getSourceTree().setSubtreeChecked( event.getElement(), true );
-        } else {
-          getSourceTree().setSubtreeChecked( event.getElement(), false );
-          recursionUnchecked( getSourceTree(), event.getElement() );
-        }
-        updatePageComplete();
-      }
-    });
-    this.updatePageComplete();
-    this.setMessage( null );
-    this.setErrorMessage( null );
+    this.treebutton.addSelectionListener( this);
+    
+    this.tarButton.addSelectionListener(this);
+    this.linkForProperty.addSelectionListener(this);
+//    this.updatePageComplete();
+  //  this.setMessage( null );
+  //  this.setErrorMessage( null );
   }
   
+  public void widgetDefaultSelected( final SelectionEvent e ) {
+    // empty implementation
+  }
+
+  public void widgetSelected( final SelectionEvent e ) {
+    if( e.getSource().equals( this.treebutton ) && this.treebutton.getSelection()) {
+      this.linkForProperty.setEnabled( true );
+      this.descriptionLabel.setVisible( true );
+      this.linkForProperty.setVisible( true );
+      
+      this.sourceTree.setContentProvider( new DeploymentSourceTreeContentProvider() );
+      this.sourceTree.setLabelProvider( new GridModelLabelProvider() );
+      this.sourceTree.setInput( getsourceWizard() );
+      this.sourceTree.setSorter( new ViewerSorter() {
+        @Override
+        public int compare( final Viewer viewer, final Object e1, final Object e2 ) {
+          return ( ( IGridElement ) e1 ).getName().compareToIgnoreCase( ( ( IGridElement ) e2 ).getName() );
+        }
+       });
+      this.sourceTree.addCheckStateListener( new ICheckStateListener() {
+        public void checkStateChanged( final CheckStateChangedEvent event ) {
+          if ( getSourceTree().getChecked( event.getElement() ) ) {
+            getSourceTree().setSubtreeChecked( event.getElement(), true );
+          } else {
+            getSourceTree().setSubtreeChecked( event.getElement(), false );
+            recursionUnchecked( getSourceTree(), event.getElement() );
+          }
+          IGridElement [] stores = null;
+          int i = 0;
+          if (getSourceTree().getCheckedElements().length != 0) {
+            stores = new IGridElement [getSourceTree().getCheckedElements().length];
+            for (Object element: getSourceTree().getCheckedElements()) {
+              stores [i++] = (IGridElement) element;
+            }           
+          }        
+          updatePageComplete(stores);
+        }
+      });
+      this.sourceTree.getCheckedElements();
+      this.sourceTree.expandAll();
+    }
+ 
+    if( e.getSource().equals( this.tarButton ) && this.tarButton.getSelection() ) {
+      this.descriptionLabel.setVisible( false ); 
+      this.linkForProperty.setVisible( false ); 
+      if (this.sourceTree.getInput() != null) this.sourceTree.setInput( null );
+      URI[] urls = NewGridFileDialog.openFileDialog( getShell(), NewGridFileDialog.STYLE_NONE );
+      //getSourceTree().collapseAll();
+      updatePagebuttonComplete(urls);
+    }
+ 
+    if( e.getSource().equals( this.linkForProperty )  ) {
+
+      PreferencesUtil.createPropertyDialogOn( getShell(), getGridProject()
+                                              .getResource().getProject(), null, null, null ).open();
+      ( ( DeploymentWizard ) getWizard() ).initProjects();
+      //initContents();
+    }
+    }
+      
   /**
    * Show a dialog for selecting a file. This is called by pressing the buttons
    * for defining the certificate and the key files.
@@ -238,22 +239,51 @@ public class DeploymentSource extends WizardPage {
     return selected;
   }
   
-  protected void updatePageComplete() {
-    this.setPageComplete( false );
-    if ( this.sourceTree.getCheckedElements().length == 0 ) {
+  protected void updatePagebuttonComplete(final URI[] urls) {
+    this.setPageComplete(false);
+    this.disksource = urls;
+    this.source = null;
+    if ( urls == null ) {
       this.setMessage( null );
       this.setErrorMessage( Messages.getString( "Deployment.deployment_source_is_empty" ) ); //$NON-NLS-1$
       return;
     }
+  
+ 
+    String sourcelabel = "The selected deployment source is (are): "; //$NON-NLS-1$
+    for (URI uri: urls)
+      sourcelabel += uri.toString() + "and "; //$NON-NLS-1$
+    sourcelabel = sourcelabel.substring( 0, sourcelabel.length()-4 );
+    this.setMessage( sourcelabel );
+
     this.setPageComplete( this.canFlipToNextPage() );
-    this.setMessage( null );
+    this.setErrorMessage( null );
+  }
+  
+  protected void updatePageComplete(final IGridElement [] urls) {
+    this.setPageComplete( false );
+    this.disksource = null;
+    if ( urls == null ) {
+      this.setMessage( null );
+      this.setErrorMessage( Messages.getString( "Deployment.deployment_source_is_empty" ) ); //$NON-NLS-1$
+      return;
+    }
+   
+    String sourcelabel = "The selected deployment source is (are): "; //$NON-NLS-1$
+    for (IGridElement uri: urls)
+      sourcelabel += uri.getName() + "and "; //$NON-NLS-1$
+    sourcelabel = sourcelabel.substring( 0, sourcelabel.length()-4 );
+    
+    this.source = urls;
+    this.setMessage( sourcelabel );
+    this.setPageComplete( this.canFlipToNextPage() );
     this.setErrorMessage( null );
   }
   
   @Override
   public boolean canFlipToNextPage() {
     boolean next = false;
-    if ( this.sourceTree.getCheckedElements().length > 0 ) {
+    if ( this.sourceTree.getCheckedElements().length >0 || this.disksource != null) {
       next = true;
     }
     return next; 
@@ -279,12 +309,25 @@ public class DeploymentSource extends WizardPage {
     return this.sourceTree;
   }
   
+  /** the wizard 
+   * @return IWizard
+   */
+  public IWizard getsourceWizard() {
+    return this.getWizard();
+  }
   /**the tar file that will be used for install
    * the software, including application source programs, must be packed in a tar file
    * @return String
    */
   public String getTarFile() {
     return this.tarCombo.getText();
+  }
+  
+  /**give back the chosen deployment source
+   * @return IFileStore[]
+   */
+  public IGridElement[] getSource() {
+    return this.source;
   }
   
   protected IGridElement[] getReferencedProjects() {
