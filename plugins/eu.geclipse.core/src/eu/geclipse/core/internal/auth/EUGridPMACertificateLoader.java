@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.GZIPInputStream;
 
+import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -131,6 +132,8 @@ public class EUGridPMACertificateLoader
   public String[] getCertificateList( final URI uri, final IProgressMonitor monitor )
       throws ProblemException {
     
+    boolean local = uri.getScheme().equals( EFS.getLocalFileSystem().getScheme() );
+    
     IProgressMonitor lMonitor
       = monitor == null
       ? new NullProgressMonitor()
@@ -158,26 +161,34 @@ public class EUGridPMACertificateLoader
       String line;
       StringBuffer buffer = new StringBuffer();
       while ( ( line = bReader.readLine() ) != null ) {
-        buffer.append( line );
+        if ( local
+            && ( line.toLowerCase().endsWith( ".tar.gz" ) //$NON-NLS-1$
+                || line.toLowerCase().endsWith( ".tgz" ) ) ) {
+          result.add( line );
+        } else {
+          buffer.append( line );
+        }
       }
       bReader.close();
-      lMonitor.done();
+      
+      if ( ! local ) {
 
-      lMonitor.subTask( Messages.getString("EUGridPMACertificateLoader.parse_list_task") ); //$NON-NLS-1$
-      String content = buffer.toString().replaceAll( " ", "" ); //$NON-NLS-1$ //$NON-NLS-2$
-      int index = -1;
-      while ( ( index = content.indexOf( "ahref=\"", index+1 ) ) > 0 ) { //$NON-NLS-1$
-        int endIndex = content.indexOf( "\">", index+7 ); //$NON-NLS-1$
-        if ( endIndex > 0 ) {
-          String file = content.substring( index+7, endIndex );
-          if ( file.toLowerCase().endsWith( ".tar.gz" ) //$NON-NLS-1$
-               || file.toLowerCase().endsWith( ".tgz" ) ) { //$NON-NLS-1$
-            result.add( file );
+        lMonitor.subTask( Messages.getString("EUGridPMACertificateLoader.parse_list_task") ); //$NON-NLS-1$
+        String content = buffer.toString().replaceAll( " ", "" ); //$NON-NLS-1$ //$NON-NLS-2$
+        int index = -1;
+        while ( ( index = content.indexOf( "ahref=\"", index+1 ) ) > 0 ) { //$NON-NLS-1$
+          int endIndex = content.indexOf( "\">", index+7 ); //$NON-NLS-1$
+          if ( endIndex > 0 ) {
+            String file = content.substring( index+7, endIndex );
+            if ( file.toLowerCase().endsWith( ".tar.gz" ) //$NON-NLS-1$
+                 || file.toLowerCase().endsWith( ".tgz" ) ) { //$NON-NLS-1$
+              result.add( file );
+            }
           }
+          index = endIndex;
         }
-        index = endIndex;
+        
       }
-      lMonitor.done();
       
     } catch ( IOException ioExc ) {
       throw new ProblemException( ICoreProblems.NET_CONNECTION_FAILED, ioExc, Activator.PLUGIN_ID );
