@@ -26,6 +26,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -90,14 +91,12 @@ public class PingTestDialog extends AbstractSimpleTestDialog  {
       this.itemStrings[ i ] [ 0 ] = this.hostNames.get( i ); 
   }
   
-  @Override
   protected void configureShell( final Shell newShell ) {
     super.configureShell( newShell );
     newShell.setMinimumSize( 500, 400 );
     newShell.setText( Messages.getString( "PingTestDialog.dialogTitle" ) ); //$NON-NLS-1$
   }
 
-  @Override
   public boolean close() {
     for ( PingHostJob job : PingTestDialog.this.pingJobs ) {
       job.cancel();
@@ -109,9 +108,9 @@ public class PingTestDialog extends AbstractSimpleTestDialog  {
   /* (non-Javadoc)
    * @see org.eclipse.jface.dialogs.Dialog#createDialogArea(org.eclipse.swt.widgets.Composite)
    */
-  @Override
   protected Control createDialogArea( final Composite parent ) {
     GridData gData;
+    
     
     Composite mainComp = new Composite( parent, SWT.NONE );
     mainComp.setLayout( new GridLayout( 1, false ) );
@@ -242,7 +241,13 @@ public class PingTestDialog extends AbstractSimpleTestDialog  {
     gData = new GridData( GridData.FILL_HORIZONTAL );
     gData.verticalAlignment = GridData.BEGINNING;
     stopButton.setLayoutData( gData );
-    
+
+    Button clearButton = new Button( outControls, SWT.PUSH );
+    clearButton.setText( Messages.getString( "PingTestDialog.clearButton" ) ); //$NON-NLS-1$
+    gData = new GridData( GridData.FILL_HORIZONTAL );
+    gData.verticalAlignment = GridData.BEGINNING;
+    stopButton.setLayoutData( gData );
+
     pingButton.addSelectionListener( new SelectionAdapter() {
       @Override
       public void widgetSelected( final SelectionEvent e) {
@@ -269,6 +274,23 @@ public class PingTestDialog extends AbstractSimpleTestDialog  {
         PingTestDialog.this.pingJobs.clear();
       }
     });
+
+    clearButton.addSelectionListener( new SelectionAdapter() {
+      @Override
+      public void widgetSelected( final SelectionEvent e) {
+        // Make sure the potential current pings are done
+        boolean done = true;
+        for ( PingHostJob job : PingTestDialog.this.pingJobs ) {
+          if ( null == job.getResult() )
+            done = false;
+        }
+        // At least one of the prev. jobs haven't finished yet
+        if ( done )
+          PingTestDialog.this.clearLogs();
+      }
+    });
+
+   // parent.getShell().setDefaultButton( pingButton );
     
     return mainComp;
   }
@@ -283,10 +305,6 @@ public class PingTestDialog extends AbstractSimpleTestDialog  {
     int delay = this.delaySpn.getSelection();
 
     if ( null != this.resources ) {
-      // Clear the text field 
-      this.outPut.selectAll();
-      this.outPut.clearSelection();
-
       // Clear the previous jobs
       this.hostAdrs.clear();
       this.pingJobs.clear();
@@ -314,7 +332,7 @@ public class PingTestDialog extends AbstractSimpleTestDialog  {
       
       this.outPut.append( this.outPut.getLineDelimiter() );
       
-      for ( int i = 0; i <  this.hostAdrs.size(); ++i ) {
+      for ( int i = 0; i < this.hostAdrs.size(); ++i ) {
         InetAddress tmpAdr = this.hostAdrs.get( i );
       
         if ( null != tmpAdr ) { 
@@ -341,5 +359,11 @@ public class PingTestDialog extends AbstractSimpleTestDialog  {
       }
     }
     this.tableOutPut.clearAll();
-   }
+  }
+  
+  protected void clearLogs() {
+    this.clearItemString();
+    this.outPut.setText( "" ); //$NON-NLS-1$
+  }
+
 }

@@ -18,17 +18,20 @@ package eu.geclipse.ui.dialogs;
 
 import java.util.List;
 
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.Dialog;
+import org.eclipse.jface.dialogs.IDialogSettings;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 
 import eu.geclipse.core.model.IGridResource;
 import eu.geclipse.core.simpleTest.ISimpleTest;
 
-
 /**
- * @author harald
- *
+ * The abstract base class for the simple tests.
+ * 
+ * @author hgjermund
  */
 public abstract class AbstractSimpleTestDialog extends Dialog {
 
@@ -49,13 +52,33 @@ public abstract class AbstractSimpleTestDialog extends Dialog {
    * @param resources The resources that this test should be applied to.
    * @param parentShell  The parent shell of this dialog.
    */
-  public AbstractSimpleTestDialog( final ISimpleTest test, final List< IGridResource > resources, final Shell parentShell ) {
+  public AbstractSimpleTestDialog( final ISimpleTest test, 
+                                   final List< IGridResource > resources, 
+                                   final Shell parentShell ) {
     super( parentShell );
     
-    setShellStyle( SWT.OK | SWT.TITLE | SWT.BORDER | SWT.APPLICATION_MODAL
+    setShellStyle( SWT.CLOSE | SWT.TITLE | SWT.BORDER | SWT.APPLICATION_MODAL
                    | SWT.RESIZE | SWT.MIN | SWT.MAX );
     
     this.test = test;
     this.resources = resources;
+  }
+  
+  /* (non-Javadoc)
+   * @see org.eclipse.jface.dialogs.Dialog#getDialogBoundsSettings()
+   */
+  @Override
+  protected IDialogSettings getDialogBoundsSettings() {
+    return eu.geclipse.ui.internal.Activator.getDefault().getDialogSettings();
+  }
+  
+  /* (non-Javadoc)
+   * @see org.eclipse.jface.dialogs.Dialog#createButtonsForButtonBar()
+   */
+  @Override
+  protected void createButtonsForButtonBar( final Composite parent) {
+    createButton(parent, IDialogConstants.CANCEL_ID,  
+                 Messages.getString( "PingTestDialog.closeButton" ), //$NON-NLS-1$ 
+                 false);
   }
 }

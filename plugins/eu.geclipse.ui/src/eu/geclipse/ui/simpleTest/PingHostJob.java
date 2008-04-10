@@ -144,12 +144,9 @@ public class PingHostJob extends Job {
             } );
           }      
         }
-        
-//        try {
-//          this.getThread().wait( this.timeOut * 1000 );
-//        } catch( InterruptedException e ) {
-//          // We just ignore this. 
-//        }
+
+//      // Sleep for the specified interval until we run again
+//      this.schedule( this.timeOut * 1000 );
       
       monitor.worked( 1 );
     }
@@ -168,7 +165,7 @@ public class PingHostJob extends Job {
                     + df.format( max ) + " ms"  //$NON-NLS-1$
                     + this.lineDelimiter + this.lineDelimiter );
     
-      this.itemString[ 1 ] = Integer.toString( this.numPing );
+      this.itemString[ 1 ] = Integer.toString( i );
       this.itemString[ 2 ] = Integer.toString( nOk ); 
       this.itemString[ 3 ] = df.format(  min );
       this.itemString[ 4 ] = df.format(  avg/nOk );
@@ -178,7 +175,7 @@ public class PingHostJob extends Job {
       this.summary = this.summary.concat( Messages.getString( "PingTestDialog.summaryFailed" )  //$NON-NLS-1$
                     + this.lineDelimiter + this.lineDelimiter );
 
-      this.itemString[ 1 ] = Integer.toString( this.numPing );
+      this.itemString[ 1 ] = Integer.toString( i );
       this.itemString[ 2 ] = Integer.toString( 0 ); 
       this.itemString[ 3 ] = Messages.getString( "PingTestDialog.n_a" ); //$NON-NLS-1$
       this.itemString[ 4 ] = Messages.getString( "PingTestDialog.n_a" ); //$NON-NLS-1$
