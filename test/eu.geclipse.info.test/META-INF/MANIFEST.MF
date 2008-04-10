@@ -1,6 +1,6 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: Test Fragment
+Bundle-Name: Info System Unit Tests
 Bundle-SymbolicName: eu.geclipse.info.test
 Bundle-Version: 1.0.0.qualifier
 Bundle-Vendor: Eclipse.org

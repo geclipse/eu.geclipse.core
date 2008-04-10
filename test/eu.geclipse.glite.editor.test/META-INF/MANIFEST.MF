@@ -7,3 +7,6 @@ Bundle-Vendor: Eclipse.org
 Fragment-Host: eu.geclipse.glite.editor;bundle-version="1.0.0"
 Require-Bundle: org.junit4
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Export-Package: eu.geclipse.glite.editor,
+ eu.geclipse.glite.editor.codeassist,
+ eu.geclipse.glite.editor.scanner
