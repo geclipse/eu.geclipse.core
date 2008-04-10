@@ -205,7 +205,7 @@ public class DeploymentSource extends WizardPage implements SelectionListener {
       this.descriptionLabel.setVisible( false ); 
       this.linkForProperty.setVisible( false ); 
       if (this.sourceTree.getInput() != null) this.sourceTree.setInput( null );
-      URI[] urls = NewGridFileDialog.openFileDialog( getShell(), NewGridFileDialog.STYLE_NONE );
+      URI[] urls = NewGridFileDialog.openFileDialog( getShell(), NewGridFileDialog.STYLE_MULTI_SELECTION );
       //getSourceTree().collapseAll();
       updatePagebuttonComplete(urls);
     }
@@ -252,8 +252,8 @@ public class DeploymentSource extends WizardPage implements SelectionListener {
  
     String sourcelabel = "The selected deployment source is (are): "; //$NON-NLS-1$
     for (URI uri: urls)
-      sourcelabel += uri.toString() + "and "; //$NON-NLS-1$
-    sourcelabel = sourcelabel.substring( 0, sourcelabel.length()-4 );
+      sourcelabel += uri.toString() + ", "; //$NON-NLS-1$
+    sourcelabel = sourcelabel.substring( 0, sourcelabel.length()-2 );
     this.setMessage( sourcelabel );
 
     this.setPageComplete( this.canFlipToNextPage() );
@@ -271,8 +271,8 @@ public class DeploymentSource extends WizardPage implements SelectionListener {
    
     String sourcelabel = "The selected deployment source is (are): "; //$NON-NLS-1$
     for (IGridElement uri: urls)
-      sourcelabel += uri.getName() + "and "; //$NON-NLS-1$
-    sourcelabel = sourcelabel.substring( 0, sourcelabel.length()-4 );
+      sourcelabel += uri.getName() + ", "; //$NON-NLS-1$
+    sourcelabel = sourcelabel.substring( 0, sourcelabel.length()-2 );
     
     this.source = urls;
     this.setMessage( sourcelabel );
