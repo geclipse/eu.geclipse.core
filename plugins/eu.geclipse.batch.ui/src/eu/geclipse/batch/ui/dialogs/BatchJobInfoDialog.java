@@ -16,6 +16,7 @@
  *****************************************************************************/
 package eu.geclipse.batch.ui.dialogs;
 
+import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IconAndMessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Image;
@@ -225,4 +226,13 @@ public class BatchJobInfoDialog extends IconAndMessageDialog {
                    + Messages.getString( "BatchJobInfoDialog.info_suffix" ) ); //$NON-NLS-1$
   }
 
+  /* (non-Javadoc)
+   * @see org.eclipse.jface.dialogs.Dialog#createButtonsForButtonBar()
+   */
+  @Override
+  protected void createButtonsForButtonBar( final Composite parent) {
+    createButton(parent, IDialogConstants.CANCEL_ID, 
+                 Messages.getString( "BatchJobInfoDialog.close" ),  //$NON-NLS-1$
+                 false);
+  }
 }
