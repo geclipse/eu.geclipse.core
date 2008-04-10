@@ -26,7 +26,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -91,12 +90,14 @@ public class PingTestDialog extends AbstractSimpleTestDialog  {
       this.itemStrings[ i ] [ 0 ] = this.hostNames.get( i ); 
   }
   
+  @Override
   protected void configureShell( final Shell newShell ) {
     super.configureShell( newShell );
     newShell.setMinimumSize( 500, 400 );
     newShell.setText( Messages.getString( "PingTestDialog.dialogTitle" ) ); //$NON-NLS-1$
   }
 
+  @Override
   public boolean close() {
     for ( PingHostJob job : PingTestDialog.this.pingJobs ) {
       job.cancel();
@@ -108,6 +109,7 @@ public class PingTestDialog extends AbstractSimpleTestDialog  {
   /* (non-Javadoc)
    * @see org.eclipse.jface.dialogs.Dialog#createDialogArea(org.eclipse.swt.widgets.Composite)
    */
+  @Override
   protected Control createDialogArea( final Composite parent ) {
     GridData gData;
     
