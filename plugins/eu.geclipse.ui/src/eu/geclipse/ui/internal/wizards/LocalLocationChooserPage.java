@@ -24,6 +24,7 @@ import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.filesystem.IFileSystem;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
@@ -38,6 +39,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Label;
 
+import eu.geclipse.core.auth.ICaCertificateLoader;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.widgets.StoredCombo;
 
@@ -54,6 +56,7 @@ public class LocalLocationChooserPage extends AbstractLocationChooserPage {
   }
 
   public void createControl( final Composite parent ) {
+    
     URL openFileIcon = Activator.getDefault().getBundle().getEntry( "icons/obj16/open_file.gif" ); //$NON-NLS-1$
     Image openFileImage = ImageDescriptor.createFromURL( openFileIcon ).createImage();
 
@@ -110,6 +113,14 @@ public class LocalLocationChooserPage extends AbstractLocationChooserPage {
     return store.toURI();
   }
   
+  @Override
+  public void setVisible( final boolean visible ) {
+    if ( visible ) {
+      populateLocationCombo();
+    }
+    super.setVisible( visible );
+  }
+  
   protected String openDirectoryDialog() {
     DirectoryDialog dialog = new DirectoryDialog( getShell(), SWT.OPEN );
     dialog.setText( "Select PEM file directory" );
@@ -134,6 +145,15 @@ public class LocalLocationChooserPage extends AbstractLocationChooserPage {
     setErrorMessage( errorMessage );
     setPageComplete( errorMessage == null );
     
+  }
+  
+  private void populateLocationCombo() {
+    ICaCertificateLoader loader = getLoader();
+    if ( loader != null ) {
+      IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+      String preferenceID = loader.getClass().toString() + "_local_import_locations";
+      this.combo.setPreferences( preferenceStore, preferenceID );
+    }
   }
 
 }

@@ -19,7 +19,9 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.util.Arrays;
 
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -29,6 +31,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
 import eu.geclipse.core.auth.ICaCertificateLoader;
+import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.widgets.StoredCombo;
 
 public class RemoteLocationChooserPage extends AbstractLocationChooserPage {
@@ -114,18 +117,30 @@ public class RemoteLocationChooserPage extends AbstractLocationChooserPage {
   }
   
   private void populateLocationCombo() {
+    
     ICaCertificateLoader loader = getLoader();
+    
     if ( loader != null ) {
+      
+      IPreferenceStore preferenceStore = Activator.getDefault().getPreferenceStore();
+      String preferenceID = loader.getClass().toString() + "_remote_import_locations";
+      this.combo.setPreferences( preferenceStore, preferenceID );
+      
       URI[] locations = loader.getPredefinedRemoteLocations();
       if ( locations != null ) {
         for ( URI location : locations ) {
-          if ( ( this.combo.getText() == null ) || ( this.combo.getText().length() == 0 ) ) {
-            this.combo.setText( location.toString() );
+          String lString = location.toString();
+          if ( ( lString.trim().length() > 0 ) && ( this.combo.indexOf( lString ) == -1 ) ) {
+            if ( ( this.combo.getText() == null ) || ( this.combo.getText().length() == 0 ) ) {
+              this.combo.setText( lString );
+            }
+            this.combo.add( lString );
           }
-          this.combo.add( location.toString() );
         }
       }
+      
     }
+    
   }
 
 }
