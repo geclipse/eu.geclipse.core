@@ -140,7 +140,9 @@ public class StoredCombo extends Combo {
       String itemList = this.prefStore.getString( this.prefID );
       String[] items = itemList.split( StoredCombo.prefSeparator );
       for( String item : items ) {
-        if ( isValidItem( item ) ) add( item );
+        if ( ( item.trim().length() > 0 ) && isValidItem( item ) ) {
+          add( item );
+        }
       }
       String lastItem = this.prefStore.getString( this.prefID + LAST_ITEM_PREFIX );
       if ( isValidItem( lastItem ) ) {
