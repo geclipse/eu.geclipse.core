@@ -239,7 +239,8 @@ public class GridFileDialog
     }
     
     /* (non-Javadoc)
-     * @see org.eclipse.jface.viewers.ViewerFilter#select(org.eclipse.jface.viewers.Viewer, java.lang.Object, java.lang.Object)
+     * @see org.eclipse.jface.viewers.ViewerFilter#select(org.eclipse.jface.viewers.Viewer,
+     *        java.lang.Object, java.lang.Object)
      */
     @Override
     public boolean select( final Viewer viewer,
@@ -339,7 +340,8 @@ public class GridFileDialog
     }
     
     /* (non-Javadoc)
-     * @see org.eclipse.jface.viewers.ViewerFilter#select(org.eclipse.jface.viewers.Viewer, java.lang.Object, java.lang.Object)
+     * @see org.eclipse.jface.viewers.ViewerFilter#select(org.eclipse.jface.viewers.Viewer,
+     *        java.lang.Object, java.lang.Object)
      */
     @Override
     public boolean select( final Viewer viewer,
@@ -533,7 +535,8 @@ public class GridFileDialog
     this.style = style;
     assertStyle();
     setShellStyle( SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL | SWT.RESIZE );
-    URL imgURL = Activator.getDefault().getBundle().getResource( "icons/wizban/newconn_wiz.gif" ); //$NON-NLS-1$
+    URL imgURL = Activator.getDefault().getBundle()
+                   .getResource( "icons/wizban/newconn_wiz.gif" ); //$NON-NLS-1$
     ImageDescriptor imgDesc = ImageDescriptor.createFromURL( imgURL );
     setTitleImage( imgDesc.createImage() );
   }
@@ -720,7 +723,7 @@ public class GridFileDialog
       uriComp.setLayoutData( gData );
       
       Label uriLabel = new Label( uriComp, SWT.NONE );
-      uriLabel.setText( "URI:" );
+      uriLabel.setText( Messages.getString("GridFileDialog.label_URI") ); //$NON-NLS-1$
       gData = new GridData();
       uriLabel.setLayoutData( gData );
       
@@ -742,40 +745,44 @@ public class GridFileDialog
       
       if ( ! hasStyle( STYLE_ALLOW_ONLY_LOCAL ) ) {
         
-        URL connURL = Activator.getDefault().getBundle().getResource( "icons/extras/grid_file_dialog_conn_mode.gif" ); //$NON-NLS-1$
+        URL connURL = Activator.getDefault().getBundle()
+                        .getResource( "icons/extras/grid_file_dialog_conn_mode.gif" ); //$NON-NLS-1$
         ImageDescriptor connDesc = ImageDescriptor.createFromURL( connURL );
         
         ToolItem connItem = new ToolItem( modeBar, SWT.CHECK );
         connItem.setImage( connDesc.createImage() );
-        connItem.setToolTipText( "Switch to connections" );
+        connItem.setToolTipText( Messages.getString("GridFileDialog.switch_to_connections") ); //$NON-NLS-1$
         this.modeManager.addModeItem( connItem, ModeManager.CONNECTION_MODE );
         
       }
       
       if ( ! hasStyle( STYLE_ALLOW_ONLY_CONNECTIONS | STYLE_ALLOW_ONLY_REMOTE_CONNECTIONS ) ) {
 
-        URL homeURL = Activator.getDefault().getBundle().getResource( "icons/extras/grid_file_dialog_home_mode.gif" ); //$NON-NLS-1$
+        URL homeURL = Activator.getDefault().getBundle()
+                        .getResource( "icons/extras/grid_file_dialog_home_mode.gif" ); //$NON-NLS-1$
         ImageDescriptor homeDesc = ImageDescriptor.createFromURL( homeURL );
         
         ToolItem homeItem = new ToolItem( modeBar, SWT.CHECK );
         homeItem.setImage( homeDesc.createImage() );
-        homeItem.setToolTipText( "Switch to home directory" );
+        homeItem.setToolTipText( Messages.getString("GridFileDialog.switch_to_home") ); //$NON-NLS-1$
         this.modeManager.addModeItem( homeItem, ModeManager.HOME_MODE );
         
-        URL wsURL = Activator.getDefault().getBundle().getResource( "icons/extras/grid_file_dialog_ws_mode.gif" ); //$NON-NLS-1$
+        URL wsURL = Activator.getDefault().getBundle()
+                      .getResource( "icons/extras/grid_file_dialog_ws_mode.gif" ); //$NON-NLS-1$
         ImageDescriptor wsDesc = ImageDescriptor.createFromURL( wsURL );
         
         ToolItem wsItem = new ToolItem( modeBar, SWT.CHECK );
         wsItem.setImage( wsDesc.createImage() );
-        wsItem.setToolTipText( "Switch to workspace" );
+        wsItem.setToolTipText( Messages.getString("GridFileDialog.switch_to_workspace") ); //$NON-NLS-1$
         this.modeManager.addModeItem( wsItem, ModeManager.WS_MODE );
         
-        URL rootURL = Activator.getDefault().getBundle().getResource( "icons/extras/grid_file_dialog_root_mode.gif" ); //$NON-NLS-1$
+        URL rootURL = Activator.getDefault().getBundle()
+                        .getResource( "icons/extras/grid_file_dialog_root_mode.gif" ); //$NON-NLS-1$
         ImageDescriptor rootDesc = ImageDescriptor.createFromURL( rootURL );
         
         ToolItem rootItem = new ToolItem( modeBar, SWT.CHECK );
         rootItem.setImage( rootDesc.createImage() );
-        rootItem.setToolTipText( "Switch to root directory" );
+        rootItem.setToolTipText( Messages.getString("GridFileDialog.switch_to_root") ); //$NON-NLS-1$
         this.modeManager.addModeItem( rootItem, ModeManager.ROOT_MODE );
       
       }
@@ -815,17 +822,17 @@ public class GridFileDialog
     tree.setLayoutData( gData );
     
     TreeColumn nameColumn = new TreeColumn( tree, SWT.NONE );
-    nameColumn.setText( "Name" );
+    nameColumn.setText( Messages.getString("GridFileDialog.column_title_name") ); //$NON-NLS-1$
     nameColumn.setAlignment( SWT.LEFT );
     nameColumn.setWidth( 300 );
     
     TreeColumn sizeColumn = new TreeColumn( tree, SWT.NONE );
-    sizeColumn.setText( "Size" );
+    sizeColumn.setText( Messages.getString("GridFileDialog.column_title_size") ); //$NON-NLS-1$
     sizeColumn.setAlignment( SWT.RIGHT );
     sizeColumn.setWidth( 100 );
     
     TreeColumn modColumn = new TreeColumn( tree, SWT.NONE );
-    modColumn.setText( "Last Modification" );
+    modColumn.setText( Messages.getString("GridFileDialog.column_title_last_modification") ); //$NON-NLS-1$
     modColumn.setAlignment( SWT.CENTER );
     modColumn.setWidth( 200 );
     
@@ -849,10 +856,10 @@ public class GridFileDialog
       Label filenameLabel = new Label( fileComp, SWT.NONE );
       filenameLabel.setText(
           hasStyle( STYLE_ALLOW_ONLY_FOLDERS )
-          ? "Foldername"
+          ? Messages.getString("GridFileDialog.label_foldername") //$NON-NLS-1$
               : hasStyle( STYLE_ALLOW_ONLY_FILES )
-              ? "Filename:"
-                  : "Name"
+              ? Messages.getString("GridFileDialog.label_filename") //$NON-NLS-1$
+                  : Messages.getString("GridFileDialog.label_name") //$NON-NLS-1$
       );
       gData = new GridData();
       gData.horizontalAlignment = GridData.BEGINNING;
@@ -869,7 +876,7 @@ public class GridFileDialog
     if ( ! hasStyle( STYLE_ALLOW_ONLY_FOLDERS ) ) {
     
       Label filetypeLabel = new Label( fileComp, SWT.NONE );
-      filetypeLabel.setText( "Filetype" );
+      filetypeLabel.setText( Messages.getString("GridFileDialog.label_filetype") ); //$NON-NLS-1$
       gData = new GridData();
       gData.horizontalAlignment = GridData.BEGINNING;
       filetypeLabel.setLayoutData( gData );
@@ -945,9 +952,10 @@ public class GridFileDialog
     
     GridModel.getRoot().addGridModelListener( this.modelListener );
     
-    setTitle( "Grid file dialog" );
-    setMessage( "Select your files and/or folders" );
-    addFileTypeFilter( new FileTypeFilter(), "All files (*.*)" );
+    setTitle( Messages.getString("GridFileDialog.title") ); //$NON-NLS-1$
+    setMessage( Messages.getString("GridFileDialog.message_select_your_files") ); //$NON-NLS-1$
+    addFileTypeFilter( new FileTypeFilter(),
+                       Messages.getString("GridFileDialog.label_all_files") ); //$NON-NLS-1$
     if ( this.filenameCombo != null ) {
       this.filetypeCombo.select( 0 );
     }
@@ -989,7 +997,8 @@ public class GridFileDialog
       validate();
     } catch ( URISyntaxException uriExc ) {
       this.filenameCombo.setText( EMPTY_STRING );
-      setErrorMessage( "Invalid URI - " + uriExc.getLocalizedMessage() );
+      setErrorMessage( Messages.getString("GridFileDialog.error_invalid_URI") //$NON-NLS-1$
+                       + uriExc.getLocalizedMessage() );
     }
     
   }
@@ -1030,7 +1039,9 @@ public class GridFileDialog
     this.currentSelection = selection;
     if ( ! this.currentSelection.isEmpty() ) {
       IFileStore[] stores = getSelectedFileStores();
-      setSelectedStore( ( ( stores != null ) && ( stores.length > 0 ) ) ? stores[ 0 ] : null, true, true );
+      setSelectedStore( ( ( stores != null ) && ( stores.length > 0 ) )
+                          ? stores[ 0 ]
+                          : null, true, true );
     }
     validate();
   }
@@ -1142,10 +1153,11 @@ public class GridFileDialog
         ( hasStyle( STYLE_ALLOW_ONLY_LOCAL ) && hasStyle( STYLE_ALLOW_ONLY_REMOTE_CONNECTIONS ) )
         ||
         ( hasStyle( STYLE_ALLOW_ONLY_CONNECTIONS ) && hasStyle( STYLE_ALLOW_ONLY_REMOTE_CONNECTIONS ) )
-    ), "Only one of STYLE_ALLOW_ONLY_LOCAL, STYLE_ALLOW_ONLY_CONNECTIONS and STYLE_ALLOW_ONLY_REMOTE_CONNECTIONS is allowed"
+    ), "Only one of STYLE_ALLOW_ONLY_LOCAL, STYLE_ALLOW_ONLY_CONNECTIONS" //$NON-NLS-1$
+         + " and STYLE_ALLOW_ONLY_REMOTE_CONNECTIONS is allowed" //$NON-NLS-1$
     );
     Assert.isTrue( ! ( hasStyle( STYLE_ALLOW_ONLY_FILES ) && hasStyle( STYLE_ALLOW_ONLY_FOLDERS ) ),
-        "Only one of STYLE_ALLOW_ONLY_FILES and STYLE_ALLOW_ONLY_FOLDERS is allowed"
+        "Only one of STYLE_ALLOW_ONLY_FILES and STYLE_ALLOW_ONLY_FOLDERS is allowed" //$NON-NLS-1$
     );
   }
   
@@ -1288,15 +1300,15 @@ public class GridFileDialog
         boolean isFile = ! info.isDirectory();
         
         if ( onlyExisting && ! exists ) {
-          errorMsg = "Only existing files/directories can be selected";
+          errorMsg = Messages.getString("GridFileDialog.error_only_existing"); //$NON-NLS-1$
         }
         
         else if ( onlyFiles && ! isFile ) {
-          errorMsg = "The dialog is in file-only-mode but at least one directory is selected";
+          errorMsg = Messages.getString("GridFileDialog.error_only_files"); //$NON-NLS-1$
         }
         
         else if ( onlyDirs && ! isDir ) {
-          errorMsg = "The dialog is in directory-only-mode but at least one file is selected";
+          errorMsg = Messages.getString("GridFileDialog.error_only_directories"); //$NON-NLS-1$
         }
 
       }
