@@ -57,7 +57,7 @@ import org.eclipse.swt.widgets.TableItem;
 import eu.geclipse.jsdl.JSDLModelFacade;
 import eu.geclipse.jsdl.model.DataStagingType;
 import eu.geclipse.jsdl.model.SourceTargetType;
-import eu.geclipse.ui.dialogs.NewGridFileDialog;
+import eu.geclipse.ui.dialogs.GridFileDialog;
 
 /**
  * Set of controls used to handle presentation of Data Staging In (see
@@ -208,7 +208,7 @@ public class DataStageInTable {
       @Override
       protected Object openDialogBox( final Control cellEditorWindow ) {
         String filename = ( String )doGetValue();
-        NewGridFileDialog dialog = new NewGridFileDialog(DataStageInTable.this.mainComp.getShell(), NewGridFileDialog.STYLE_ALLOW_ONLY_EXISTING | NewGridFileDialog.STYLE_ALLOW_ONLY_FILES);
+        GridFileDialog dialog = new GridFileDialog(DataStageInTable.this.mainComp.getShell(), GridFileDialog.STYLE_ALLOW_ONLY_EXISTING | GridFileDialog.STYLE_ALLOW_ONLY_FILES);
         
         if (dialog.open() == Window.OK){
           URI[] uris = dialog.getSelectedURIs();

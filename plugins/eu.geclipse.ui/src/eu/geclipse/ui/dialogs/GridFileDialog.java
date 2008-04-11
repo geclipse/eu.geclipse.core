@@ -92,7 +92,7 @@ import eu.geclipse.ui.widgets.StoredCombo;
  * or to specify even new files/directories. Last but not least multi-
  * selection may also be possible.
  */
-public class NewGridFileDialog
+public class GridFileDialog
     extends TitleAreaDialog {
   
   /**
@@ -528,7 +528,7 @@ public class NewGridFileDialog
    * @param style The dialog's style, i.e. a bitwise or of style
    * constants.
    */
-  public NewGridFileDialog( final Shell parent, final int style ) {
+  public GridFileDialog( final Shell parent, final int style ) {
     super( parent );
     this.style = style;
     assertStyle();
@@ -550,7 +550,7 @@ public class NewGridFileDialog
    */
   public static URI[] openFileDialog( final Shell parent, final int style ) {
     URI[] result = null;
-    NewGridFileDialog dialog = new NewGridFileDialog( parent, style );
+    GridFileDialog dialog = new GridFileDialog( parent, style );
     if ( dialog.open() == Window.OK ) {
       result = dialog.getSelectedURIs();
     }
@@ -1068,17 +1068,17 @@ public class NewGridFileDialog
       Display display = control.getDisplay();
       display.asyncExec( new Runnable() {
         public void run() {
-          if ( ! NewGridFileDialog.this.treeViewer.getControl().isDisposed() ) {
+          if ( ! GridFileDialog.this.treeViewer.getControl().isDisposed() ) {
             if ( element == null ) {
-              NewGridFileDialog.this.treeViewer.refresh( false );
+              GridFileDialog.this.treeViewer.refresh( false );
             } else {
               if ( element instanceof IGridContainer ) {
                 IGridContainer container = ( IGridContainer ) element;
                 if ( container.isLazy() && container.isDirty() ) {
-                  NewGridFileDialog.this.treeViewer.setChildCount( container, container.getChildCount() );
+                  GridFileDialog.this.treeViewer.setChildCount( container, container.getChildCount() );
                 }
               }
-              NewGridFileDialog.this.treeViewer.refresh( element, false );
+              GridFileDialog.this.treeViewer.refresh( element, false );
             }
           }
         }
@@ -1122,8 +1122,8 @@ public class NewGridFileDialog
       String[] keyArray = keySet.toArray( new String[ keySet.size() ] );
       Arrays.sort( keyArray, new Comparator< String >() {
         public int compare( final String s1, final String s2 ) {
-          String p1 = NewGridFileDialog.this.filetypeFilters.get( s1 ).getPrefix();
-          String p2 = NewGridFileDialog.this.filetypeFilters.get( s2 ).getPrefix();
+          String p1 = GridFileDialog.this.filetypeFilters.get( s1 ).getPrefix();
+          String p2 = GridFileDialog.this.filetypeFilters.get( s2 ).getPrefix();
           return p1.compareToIgnoreCase( p2 );
         }
       } );

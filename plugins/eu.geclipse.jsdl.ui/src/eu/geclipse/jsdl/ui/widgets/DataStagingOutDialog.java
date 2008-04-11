@@ -41,7 +41,7 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
 import eu.geclipse.jsdl.model.JsdlPackage;
-import eu.geclipse.ui.dialogs.NewGridFileDialog;
+import eu.geclipse.ui.dialogs.GridFileDialog;
 
 /**
  * @author nickl
@@ -172,7 +172,7 @@ public class DataStagingOutDialog extends Dialog {
       public void widgetSelected( final SelectionEvent e ) {
         String filename = null;
         
-        NewGridFileDialog dialog = new NewGridFileDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), NewGridFileDialog.STYLE_ALLOW_ONLY_FILES);
+        GridFileDialog dialog = new GridFileDialog(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell(), GridFileDialog.STYLE_ALLOW_ONLY_FILES);
         if (dialog.open() == Window.OK){
           URI[] uris = dialog.getSelectedURIs();
           if ((uris!=null)&&(uris.length > 0)){

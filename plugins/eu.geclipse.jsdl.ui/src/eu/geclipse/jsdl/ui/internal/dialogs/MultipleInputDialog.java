@@ -47,7 +47,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import eu.geclipse.jsdl.ui.internal.Activator;
-import eu.geclipse.ui.dialogs.NewGridFileDialog;
+import eu.geclipse.ui.dialogs.GridFileDialog;
 import eu.geclipse.ui.widgets.StoredCombo;
 
 /**
@@ -109,7 +109,7 @@ public class MultipleInputDialog extends Dialog {
 
   /**
    * Method for adding new text field to dialog. This field is connected with
-   * {@link NewGridFileDialog}
+   * {@link GridFileDialog}
    * 
    * @param labelText label for the filed
    * @param initialValue initial value to set field to
@@ -628,8 +628,8 @@ public class MultipleInputDialog extends Dialog {
       @Override
       public void widgetSelected( final SelectionEvent e ) {
         {
-          NewGridFileDialog dialog = new NewGridFileDialog( getShell(),
-                                                            NewGridFileDialog.STYLE_NONE );
+          GridFileDialog dialog = new GridFileDialog( getShell(),
+                                                            GridFileDialog.STYLE_NONE );
           
           if( dialog.open() == Window.OK ) {
             URI[] uris = dialog.getSelectedURIs();

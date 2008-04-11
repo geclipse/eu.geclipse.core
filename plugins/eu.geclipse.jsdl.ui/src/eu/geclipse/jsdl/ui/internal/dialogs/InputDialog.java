@@ -34,14 +34,14 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import eu.geclipse.ui.dialogs.NewGridFileDialog;
+import eu.geclipse.ui.dialogs.GridFileDialog;
 import eu.geclipse.ui.widgets.StoredCombo;
 
 /**
  * Class supports usage of {@link Dialog} with any number of text fields. This
  * class is similar to {@link MultipleInputDialog}, but it's suited to
  * g-Eclipse needs and uses widgets characteristic of g-Eclipse (e.g.
- * {@link NewGridFileDialog}}).
+ * {@link GridFileDialog}}).
  */
 public class InputDialog extends Dialog {
 
@@ -356,7 +356,7 @@ public class InputDialog extends Dialog {
     TEXT,
     /**
      * Represents {@link Text} control with button that opens a
-     * {@link NewGridFileDialog} for choosing a file.
+     * {@link GridFileDialog} for choosing a file.
      */
     BROWSE,
     /**

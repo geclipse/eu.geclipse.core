@@ -42,7 +42,7 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.ui.providers.DeploymentSourceTreeContentProvider;
 import eu.geclipse.ui.providers.GridModelLabelProvider;
 import eu.geclipse.ui.widgets.StoredCombo;
-import eu.geclipse.ui.dialogs.NewGridFileDialog;
+import eu.geclipse.ui.dialogs.GridFileDialog;
 
 /**
  * @author Yifan Zhou
@@ -205,7 +205,7 @@ public class DeploymentSource extends WizardPage implements SelectionListener {
       this.descriptionLabel.setVisible( false ); 
       this.linkForProperty.setVisible( false ); 
       if (this.sourceTree.getInput() != null) this.sourceTree.setInput( null );
-      URI[] urls = NewGridFileDialog.openFileDialog( getShell(), NewGridFileDialog.STYLE_MULTI_SELECTION );
+      URI[] urls = GridFileDialog.openFileDialog( getShell(), GridFileDialog.STYLE_MULTI_SELECTION );
       //getSourceTree().collapseAll();
       updatePagebuttonComplete(urls);
     }

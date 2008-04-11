@@ -40,7 +40,7 @@ import org.w3c.dom.NodeList;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.wizards.specific.IApplicationSpecificPage;
-import eu.geclipse.ui.dialogs.NewGridFileDialog;
+import eu.geclipse.ui.dialogs.GridFileDialog;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 
 /**
@@ -355,10 +355,10 @@ public class ApplicationSpecificControlsFactory {
       @Override
       public void widgetSelected( final SelectionEvent e ) {
         String filename = null;
-        NewGridFileDialog dialog = new NewGridFileDialog( PlatformUI.getWorkbench()
+        GridFileDialog dialog = new GridFileDialog( PlatformUI.getWorkbench()
                                                             .getActiveWorkbenchWindow()
                                                             .getShell(),
-                                                          NewGridFileDialog.STYLE_NONE );
+                                                          GridFileDialog.STYLE_NONE );
         if( dialog.open() == Window.OK ) {
           URI[] uris = dialog.getSelectedURIs();
           if( ( uris != null ) && ( uris.length > 0 ) ) {
@@ -570,10 +570,10 @@ public class ApplicationSpecificControlsFactory {
 
       @Override
       public void widgetSelected( final SelectionEvent e ) {
-        NewGridFileDialog dialog = new NewGridFileDialog( PlatformUI.getWorkbench()
+        GridFileDialog dialog = new GridFileDialog( PlatformUI.getWorkbench()
                                                             .getActiveWorkbenchWindow()
                                                             .getShell(),
-                                                          NewGridFileDialog.STYLE_NONE );
+                                                          GridFileDialog.STYLE_NONE );
         if( dialog.open() == Window.OK ) {
           URI[] uris = dialog.getSelectedURIs();
           if ((uris != null) && (uris.length > 0)){

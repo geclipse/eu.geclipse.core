@@ -65,7 +65,7 @@ import eu.geclipse.jsdl.ui.wizards.nodes.BasicWizardPart;
 import eu.geclipse.jsdl.ui.wizards.nodes.SpecificWizardPart;
 import eu.geclipse.jsdl.ui.wizards.specific.ApplicationSpecificPage;
 import eu.geclipse.jsdl.ui.wizards.specific.IApplicationSpecificPage;
-import eu.geclipse.ui.dialogs.NewGridFileDialog;
+import eu.geclipse.ui.dialogs.GridFileDialog;
 import eu.geclipse.ui.widgets.StoredCombo;
 
 /**
@@ -89,7 +89,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
   StoredCombo executableFile;
   Composite parentP;
   /**
-   * Button for opening {@link NewGridFileDialog} - a dialog for choosing local
+   * Button for opening {@link GridFileDialog} - a dialog for choosing local
    * or remote files
    */
   private Button gridFileDialogButton;
@@ -263,11 +263,11 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
 
       @Override
       public void widgetSelected( final SelectionEvent e ) {
-        NewGridFileDialog dialog = new NewGridFileDialog( getShell(),
-                                                          NewGridFileDialog.STYLE_NONE );
+        GridFileDialog dialog = new GridFileDialog( getShell(),
+                                                          GridFileDialog.STYLE_NONE );
         dialog.addFileTypeFilter( "jsdl", "Job Description Files (*.jsdl)" );
         dialog.addFileTypeFilter( "txt", "Text Files (*.txt)" );
-        if( dialog.open() == NewGridFileDialog.OK ) {
+        if( dialog.open() == GridFileDialog.OK ) {
           URI[] uris = dialog.getSelectedURIs();
           if( ( uris != null ) && ( uris.length > 0 ) ) {
             ExecutableNewJobWizardPage.this.executableFile.setText( uris[ 0 ].toString() );
@@ -327,9 +327,9 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
 
       @Override
       public void widgetSelected( final SelectionEvent e ) {
-        NewGridFileDialog dialog = new NewGridFileDialog( getShell(),
-                                                          NewGridFileDialog.STYLE_ALLOW_ONLY_FILES
-                                                              | NewGridFileDialog.STYLE_ALLOW_ONLY_EXISTING );
+        GridFileDialog dialog = new GridFileDialog( getShell(),
+                                                          GridFileDialog.STYLE_ALLOW_ONLY_FILES
+                                                              | GridFileDialog.STYLE_ALLOW_ONLY_EXISTING );
         if( dialog.open() == Window.OK ) {
           URI[] uris = dialog.getSelectedURIs();
           if( ( uris != null ) && ( uris.length > 0 ) ) {
@@ -374,8 +374,8 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
 
       @Override
       public void widgetSelected( final SelectionEvent e ) {
-        NewGridFileDialog dialog = new NewGridFileDialog( getShell(),
-                                                          NewGridFileDialog.STYLE_ALLOW_ONLY_FILES );
+        GridFileDialog dialog = new GridFileDialog( getShell(),
+                                                          GridFileDialog.STYLE_ALLOW_ONLY_FILES );
         if( dialog.open() == Window.OK ) {
           URI[] uris = dialog.getSelectedURIs();
           if( ( uris != null ) && ( ( uris.length > 0 ) ) ) {
@@ -421,7 +421,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       @Override
       public void widgetSelected( final SelectionEvent e ) {
         
-        NewGridFileDialog dialog = new NewGridFileDialog(getShell(), NewGridFileDialog.STYLE_ALLOW_ONLY_FILES);
+        GridFileDialog dialog = new GridFileDialog(getShell(), GridFileDialog.STYLE_ALLOW_ONLY_FILES);
         if (dialog.open() == Window.OK){
           URI[] uris = dialog.getSelectedURIs();
           if ((uris != null)&&(uris.length > 0)){
