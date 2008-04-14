@@ -62,6 +62,8 @@ public class DeploymentSource extends WizardPage implements SelectionListener {
   private Button treebutton;
   private IGridElement[] source;
   private URI [] disksource;
+  private URI [] sourceuris;
+  
   /**
    * Create a property link for the current grid project. 
    */
@@ -242,6 +244,7 @@ public class DeploymentSource extends WizardPage implements SelectionListener {
   protected void updatePagebuttonComplete(final URI[] urls) {
     this.setPageComplete(false);
     this.disksource = urls;
+    this.sourceuris = urls;
     this.source = null;
     if ( urls == null ) {
       this.setMessage( null );
@@ -273,8 +276,12 @@ public class DeploymentSource extends WizardPage implements SelectionListener {
     for (IGridElement uri: urls)
       sourcelabel += uri.getName() + ", "; //$NON-NLS-1$
     sourcelabel = sourcelabel.substring( 0, sourcelabel.length()-2 );
-    
     this.source = urls;
+    this.sourceuris = new URI[urls.length];
+    int i = 0;
+    for ( IGridElement element : urls ) {
+      this.sourceuris[i++] = element.getResource().getLocationURI();
+    }
     this.setMessage( sourcelabel );
     this.setPageComplete( this.canFlipToNextPage() );
     this.setErrorMessage( null );
@@ -329,6 +336,13 @@ public class DeploymentSource extends WizardPage implements SelectionListener {
   public IGridElement[] getSource() {
     return this.source;
   }
+  
+  /**return the source URIs
+   * @return URI[]
+   */
+  public URI[] getSourceURIs() {
+    return this.sourceuris;
+  } 
   
   protected IGridElement[] getReferencedProjects() {
     return ( ( DeploymentWizard ) this.getWizard() ).getReferencedProjects();

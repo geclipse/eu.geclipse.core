@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.jobs.Job;
 
 import eu.geclipse.core.IApplicationDeployment;
 import eu.geclipse.core.model.IGridElement;
+import java.net.URI;
 
 /**
  * @author Yifan Zhou
@@ -36,7 +37,7 @@ public class DeploymentJob extends Job {
   /**
    * The deployment source.
    */
-  private IGridElement[] source;
+  private URI[] source;
   
   /**
    * The deployment target.
@@ -50,7 +51,7 @@ public class DeploymentJob extends Job {
   
   public DeploymentJob( final String name, 
                         final IApplicationDeployment deployment,
-                        final IGridElement[] deploySource,
+                        final URI[] deploySource,
                         final IGridElement[] deployTarget,
                         final String deployTag ) {
     super( name );

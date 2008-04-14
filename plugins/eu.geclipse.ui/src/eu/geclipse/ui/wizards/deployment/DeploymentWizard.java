@@ -16,6 +16,7 @@
 
 package eu.geclipse.ui.wizards.deployment;
 
+import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -114,16 +115,17 @@ public class DeploymentWizard extends Wizard {
 
   @Override
   public boolean performFinish() {
-    Object[] sourceObjects = this.sourcePage.getSourceTree().getCheckedElements();
+    /* Object[] sourceObjects = this.sourcePage.getSourceTree().getCheckedElements();
     List< IGridElement > sourceList = new ArrayList< IGridElement >();
     for ( Object  object : sourceObjects ) {
       IGridElement element = ( IGridElement ) object;
       if ( !this.sourcePage.getSourceTree().getChecked( element.getParent() ) ) {
         sourceList.add( element );
       }
-    }
+    }*/
     
-    IGridElement[] source = sourceList.toArray( new IGridElement[ sourceList.size() ] );
+    // IGridElement[] source = sourceList.toArray( new IGridElement[ sourceList.size() ] );
+    URI [] source = this.sourcePage.getSourceURIs();
     List< Object > targetList = new ArrayList< Object >();
     Object[] ceObjects = this.targetPage.getCETree().getCheckedElements();
     //Object[] seObjects = this.targetPage.getSETree().getCheckedElements();

@@ -127,6 +127,7 @@ public class DeploymentDescription extends WizardPage
     setMessages();
     if ( e.getSource().equals( this.nameText ) ) {
       generateTag();
+      this.tagText.setText( generateTag() );
     }
   }
 
