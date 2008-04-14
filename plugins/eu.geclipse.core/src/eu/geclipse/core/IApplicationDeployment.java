@@ -15,6 +15,8 @@
 
 package eu.geclipse.core;
 
+import java.net.URI;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import eu.geclipse.core.model.IGridElement;
@@ -33,7 +35,7 @@ public interface IApplicationDeployment {
    * @param deploytag
    * @param monitor
    */
-  public void deploy( final IGridElement[] deploySource, 
+  public void deploy( final URI[] deploySource, 
                       final IGridElement[] deployTarget, 
                       final String deploytag, 
                       final IProgressMonitor monitor);
