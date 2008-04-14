@@ -37,12 +37,12 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import eu.geclipse.jsdl.model.BoundaryType;
-import eu.geclipse.jsdl.model.FileSystemType;
-import eu.geclipse.jsdl.model.FileSystemTypeEnumeration;
-import eu.geclipse.jsdl.model.JsdlFactory;
-import eu.geclipse.jsdl.model.JsdlPackage;
-import eu.geclipse.jsdl.model.RangeValueType;
+import eu.geclipse.jsdl.model.base.BoundaryType;
+import eu.geclipse.jsdl.model.base.FileSystemType;
+import eu.geclipse.jsdl.model.base.FileSystemTypeEnumeration;
+import eu.geclipse.jsdl.model.base.JsdlFactory;
+import eu.geclipse.jsdl.model.base.JsdlPackage;
+import eu.geclipse.jsdl.model.base.RangeValueType;
 import eu.geclipse.jsdl.ui.internal.Activator;
 
 
