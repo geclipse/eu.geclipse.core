@@ -33,8 +33,8 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ImageHyperlink;
 
 import eu.geclipse.jsdl.JSDLModelFacade;
-import eu.geclipse.jsdl.model.DataStagingType;
-import eu.geclipse.jsdl.model.SourceTargetType;
+import eu.geclipse.jsdl.model.base.DataStagingType;
+import eu.geclipse.jsdl.model.base.SourceTargetType;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.wizards.FileType;
 import eu.geclipse.jsdl.ui.widgets.DataStageInTable;
