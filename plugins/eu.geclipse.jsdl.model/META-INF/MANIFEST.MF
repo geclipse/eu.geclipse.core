@@ -6,8 +6,9 @@ Bundle-Version: 1.0.0.qualifier
 Bundle-ClassPath: .
 Bundle-Vendor: %Bundle-Vendor
 Bundle-Localization: plugin
-Export-Package: eu.geclipse.jsdl.model,
- eu.geclipse.jsdl.model.impl,
+Export-Package: eu.geclipse.jsdl.model.base,
+ eu.geclipse.jsdl.model.base.impl,
+ eu.geclipse.jsdl.model.base.util,
  eu.geclipse.jsdl.model.posix,
  eu.geclipse.jsdl.model.posix.impl,
  eu.geclipse.jsdl.model.posix.util,

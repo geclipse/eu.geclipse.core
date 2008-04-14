@@ -2,10 +2,12 @@
 <genmodel:GenModel xmi:version="2.0"
     xmlns:xmi="http://www.omg.org/XMI" xmlns:ecore="http://www.eclipse.org/emf/2002/Ecore"
     xmlns:genmodel="http://www.eclipse.org/emf/2002/GenModel" modelDirectory="/eu.geclipse.jsdl.model/src"
-    modelPluginID="eu.geclipse.jsdl.model" modelName="Jsdl" importerID="org.eclipse.xsd.ecore.importer">
-  <foreignModel>file:/home/emstamou/Desktop/jsdl.xsd</foreignModel>
-  <foreignModel>file:/home/emstamou/Desktop/jsdl-posix.xsd-6.xsd</foreignModel>
-  <genPackages prefix="Jsdl" basePackage="eu.geclipse" resource="XML" disposableProviderFactory="true"
+    modelPluginID="eu.geclipse.jsdl.model" modelName="Jsdl" importerID="org.eclipse.emf.importer.ecore">
+  <foreignModel>jsdl.ecore</foreignModel>
+  <foreignModel>posix.ecore</foreignModel>
+  <foreignModel>sweep.ecore</foreignModel>
+  <foreignModel>functions.ecore</foreignModel>
+  <genPackages prefix="Jsdl" basePackage="eu.geclipse.jsdl.model" resource="XML" disposableProviderFactory="true"
       ecorePackage="jsdl.ecore#/">
     <genEnums ecoreEnum="jsdl.ecore#//CreationFlagEnumeration">
       <genEnumLiterals ecoreEnumLiteral="jsdl.ecore#//CreationFlagEnumeration/overwrite"/>
@@ -241,10 +243,10 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute jsdl.ecore#//RangeType/anyAttribute"/>
     </genClasses>
     <genClasses ecoreClass="jsdl.ecore#//RangeValueType">
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference jsdl.ecore#//RangeValueType/upperBoundedRange"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference jsdl.ecore#//RangeValueType/lowerBoundedRange"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference jsdl.ecore#//RangeValueType/exact"/>
-      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference jsdl.ecore#//RangeValueType/range"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference jsdl.ecore#//RangeValueType/UpperBound"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference jsdl.ecore#//RangeValueType/LowerBound"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference jsdl.ecore#//RangeValueType/Exact"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference jsdl.ecore#//RangeValueType/Range"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute jsdl.ecore#//RangeValueType/anyAttribute"/>
     </genClasses>
     <genClasses ecoreClass="jsdl.ecore#//ResourcesType">
@@ -275,8 +277,8 @@
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute jsdl.ecore#//SourceTargetType/anyAttribute"/>
     </genClasses>
   </genPackages>
-  <genPackages prefix="Posix" basePackage="eu.geclipse.jsdl" resource="XML" disposableProviderFactory="true"
-      ecorePackage="posix.ecore#/">
+  <genPackages prefix="Posix" basePackage="eu.geclipse.jsdl.model" resource="XML"
+      disposableProviderFactory="true" ecorePackage="posix.ecore#/">
     <genClasses ecoreClass="posix.ecore#//ArgumentType">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute posix.ecore#//ArgumentType/value"/>
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute posix.ecore#//ArgumentType/filesystemName"/>
@@ -363,6 +365,49 @@
     <genClasses ecoreClass="posix.ecore#//UserNameType">
       <genFeatures createChild="false" ecoreFeature="ecore:EAttribute posix.ecore#//UserNameType/value"/>
       <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute posix.ecore#//UserNameType/anyAttribute"/>
+    </genClasses>
+  </genPackages>
+  <genPackages prefix="Sweep" basePackage="eu.geclipse.jsdl.model" resource="XML"
+      disposableProviderFactory="true" ecorePackage="sweep.ecore#/">
+    <genClasses ecoreClass="sweep.ecore#//AssignmentType">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sweep.ecore#//AssignmentType/parameter"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EAttribute sweep.ecore#//AssignmentType/functionGroup"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference sweep.ecore#//AssignmentType/function"/>
+    </genClasses>
+    <genClasses ecoreClass="sweep.ecore#//DocumentRoot">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EAttribute sweep.ecore#//DocumentRoot/mixed"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference sweep.ecore#//DocumentRoot/xMLNSPrefixMap"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference sweep.ecore#//DocumentRoot/xSISchemaLocation"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference sweep.ecore#//DocumentRoot/assignment"/>
+      <genFeatures property="None" children="true" createChild="false" ecoreFeature="ecore:EReference sweep.ecore#//DocumentRoot/function"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute sweep.ecore#//DocumentRoot/parameter"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference sweep.ecore#//DocumentRoot/sweep"/>
+    </genClasses>
+    <genClasses ecoreClass="sweep.ecore#//SweepType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference sweep.ecore#//SweepType/assignment"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference sweep.ecore#//SweepType/sweep"/>
+    </genClasses>
+  </genPackages>
+  <genPackages prefix="Functions" basePackage="eu.geclipse.jsdl.model" resource="XML"
+      disposableProviderFactory="true" ecorePackage="functions.ecore#/">
+    <genClasses ecoreClass="functions.ecore#//DocumentRoot">
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EAttribute functions.ecore#//DocumentRoot/mixed"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference functions.ecore#//DocumentRoot/xMLNSPrefixMap"/>
+      <genFeatures property="None" notify="false" createChild="false" ecoreFeature="ecore:EReference functions.ecore#//DocumentRoot/xSISchemaLocation"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference functions.ecore#//DocumentRoot/loop"/>
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference functions.ecore#//DocumentRoot/values"/>
+    </genClasses>
+    <genClasses ecoreClass="functions.ecore#//ExceptionType">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute functions.ecore#//ExceptionType/value"/>
+    </genClasses>
+    <genClasses ecoreClass="functions.ecore#//LoopType">
+      <genFeatures property="None" children="true" createChild="true" ecoreFeature="ecore:EReference functions.ecore#//LoopType/exception"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute functions.ecore#//LoopType/end"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute functions.ecore#//LoopType/start"/>
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute functions.ecore#//LoopType/step"/>
+    </genClasses>
+    <genClasses ecoreClass="functions.ecore#//ValuesType">
+      <genFeatures createChild="false" ecoreFeature="ecore:EAttribute functions.ecore#//ValuesType/value"/>
     </genClasses>
   </genPackages>
 </genmodel:GenModel>

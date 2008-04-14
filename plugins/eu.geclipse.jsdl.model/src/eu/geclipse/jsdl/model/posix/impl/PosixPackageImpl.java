@@ -10,7 +10,7 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributor(s):
- *    Mathias Stümpert
+ *    Mathias Stï¿½mpert
  *           
  *****************************************************************************/
 
@@ -18,8 +18,10 @@ package eu.geclipse.jsdl.model.posix.impl;
 
 
 
-import eu.geclipse.jsdl.model.JsdlPackage;
-import eu.geclipse.jsdl.model.impl.JsdlPackageImpl;
+import eu.geclipse.jsdl.model.base.JsdlPackage;
+import eu.geclipse.jsdl.model.base.impl.JsdlPackageImpl;
+import eu.geclipse.jsdl.model.functions.FunctionsPackage;
+import eu.geclipse.jsdl.model.functions.impl.FunctionsPackageImpl;
 import eu.geclipse.jsdl.model.posix.ArgumentType;
 import eu.geclipse.jsdl.model.posix.DirectoryNameType;
 import eu.geclipse.jsdl.model.posix.DocumentRoot;
@@ -32,6 +34,8 @@ import eu.geclipse.jsdl.model.posix.PosixFactory;
 import eu.geclipse.jsdl.model.posix.PosixPackage;
 import eu.geclipse.jsdl.model.posix.UserNameType;
 
+import eu.geclipse.jsdl.model.sweep.SweepPackage;
+import eu.geclipse.jsdl.model.sweep.impl.SweepPackageImpl;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
@@ -175,14 +179,20 @@ public class PosixPackageImpl extends EPackageImpl implements PosixPackage
 
     // Obtain or create and register interdependencies
     JsdlPackageImpl theJsdlPackage = (JsdlPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(JsdlPackage.eNS_URI) instanceof JsdlPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(JsdlPackage.eNS_URI) : JsdlPackage.eINSTANCE);
+    SweepPackageImpl theSweepPackage = (SweepPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(SweepPackage.eNS_URI) instanceof SweepPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(SweepPackage.eNS_URI) : SweepPackage.eINSTANCE);
+    FunctionsPackageImpl theFunctionsPackage = (FunctionsPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(FunctionsPackage.eNS_URI) instanceof FunctionsPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(FunctionsPackage.eNS_URI) : FunctionsPackage.eINSTANCE);
 
     // Create package meta-data objects
     thePosixPackage.createPackageContents();
     theJsdlPackage.createPackageContents();
+    theSweepPackage.createPackageContents();
+    theFunctionsPackage.createPackageContents();
 
     // Initialize created meta-data
     thePosixPackage.initializePackageContents();
     theJsdlPackage.initializePackageContents();
+    theSweepPackage.initializePackageContents();
+    theFunctionsPackage.initializePackageContents();
 
     // Mark meta-data to indicate it can't be changed
     thePosixPackage.freeze();

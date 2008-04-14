@@ -44,7 +44,7 @@ public interface PosixPackage extends EPackage
 	 * <!-- end-user-doc -->
    * @generated
    */
-	String eNAME = "model.posix";
+	String eNAME = "posix";
 
   /**
    * The package namespace URI.

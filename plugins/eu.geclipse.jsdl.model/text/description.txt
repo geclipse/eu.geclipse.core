@@ -6,10 +6,12 @@ code generator can be extended.
 This can be disabled with -vmargs -Dorg.eclipse.emf.examples.generator.validator=false.
 
 Contains packages:
-  jsdl.model <http://schemas.ggf.org/jsdl/2005/11/jsdl>
-  model.posix <http://schemas.ggf.org/jsdl/2005/11/jsdl-posix>
+  base <http://schemas.ggf.org/jsdl/2005/11/jsdl>
+  posix <http://schemas.ggf.org/jsdl/2005/11/jsdl-posix>
+  sweep <http://schemas.ogf.org/jsdl/2007/01/jsdl-sweep>
+  functions <http://schemas.ogf.org/jsdl/2007/01/jsdl-sweep/functions>
 
-Package jsdl.model <http://schemas.ggf.org/jsdl/2005/11/jsdl>
+Package base <http://schemas.ggf.org/jsdl/2005/11/jsdl>
 
   Class ApplicationType
     Attribute applicationName : String
@@ -283,7 +285,7 @@ Package jsdl.model <http://schemas.ggf.org/jsdl/2005/11/jsdl>
 
   DataType ProcessorArchitectureEnumerationObject <org.eclipse.emf.common.util.Enumerator>
 
-Package model.posix <http://schemas.ggf.org/jsdl/2005/11/jsdl-posix>
+Package posix <http://schemas.ggf.org/jsdl/2005/11/jsdl-posix>
 
   Class ArgumentType
     Attribute value : NormalizedString
@@ -371,3 +373,44 @@ Package model.posix <http://schemas.ggf.org/jsdl/2005/11/jsdl-posix>
   Class UserNameType
     Attribute value : String
     Attribute anyAttribute : EFeatureMapEntry<<0..*>>
+
+Package sweep <http://schemas.ogf.org/jsdl/2007/01/jsdl-sweep>
+
+  Class AssignmentType
+    Attribute parameter : String<<1..*>>
+    Attribute functionGroup : EFeatureMapEntry<<1..1>>
+    Reference /function : EObject<<1..1>>
+
+  Class DocumentRoot
+    Attribute mixed : EFeatureMapEntry<<0..*>>
+    Reference xMLNSPrefixMap : EStringToStringMapEntry<<0..*>>
+    Reference xSISchemaLocation : EStringToStringMapEntry<<0..*>>
+    Reference /assignment : AssignmentType<<0..?>>
+    Reference /function : EObject<<0..?>>
+    Attribute /parameter : String<<0..?>>
+    Reference /sweep : SweepType<<0..?>>
+
+  Class SweepType
+    Reference assignment : AssignmentType<<1..*>>
+    Reference sweep : SweepType<<0..*>>
+
+Package functions <http://schemas.ogf.org/jsdl/2007/01/jsdl-sweep/functions>
+
+  Class DocumentRoot
+    Attribute mixed : EFeatureMapEntry<<0..*>>
+    Reference xMLNSPrefixMap : EStringToStringMapEntry<<0..*>>
+    Reference xSISchemaLocation : EStringToStringMapEntry<<0..*>>
+    Reference /loop : LoopType<<0..?>>
+    Reference /values : ValuesType<<0..?>>
+
+  Class ExceptionType
+    Attribute value : Integer
+
+  Class LoopType
+    Reference exception : ExceptionType<<0..*>>
+    Attribute end : Integer<<1..1>>
+    Attribute start : Integer<<1..1>>
+    Attribute step : PositiveInteger
+
+  Class ValuesType
+    Attribute value : String<<1..*>>
