@@ -37,9 +37,9 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Text;
-import eu.geclipse.jsdl.model.JobIdentificationType;
-import eu.geclipse.jsdl.model.JsdlFactory;
-import eu.geclipse.jsdl.model.JsdlPackage;
+import eu.geclipse.jsdl.model.base.JobIdentificationType;
+import eu.geclipse.jsdl.model.base.JsdlFactory;
+import eu.geclipse.jsdl.model.base.JsdlPackage;
 
 
 

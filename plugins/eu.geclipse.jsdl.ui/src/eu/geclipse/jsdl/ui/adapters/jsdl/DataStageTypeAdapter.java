@@ -36,14 +36,14 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 
-import eu.geclipse.jsdl.model.CreationFlagEnumeration;
-import eu.geclipse.jsdl.model.DataStagingType;
-import eu.geclipse.jsdl.model.DocumentRoot;
-import eu.geclipse.jsdl.model.JobDefinitionType;
-import eu.geclipse.jsdl.model.JobDescriptionType;
-import eu.geclipse.jsdl.model.JsdlFactory;
-import eu.geclipse.jsdl.model.JsdlPackage;
-import eu.geclipse.jsdl.model.SourceTargetType;
+import eu.geclipse.jsdl.model.base.CreationFlagEnumeration;
+import eu.geclipse.jsdl.model.base.DataStagingType;
+import eu.geclipse.jsdl.model.base.DocumentRoot;
+import eu.geclipse.jsdl.model.base.JobDefinitionType;
+import eu.geclipse.jsdl.model.base.JobDescriptionType;
+import eu.geclipse.jsdl.model.base.JsdlFactory;
+import eu.geclipse.jsdl.model.base.JsdlPackage;
+import eu.geclipse.jsdl.model.base.SourceTargetType;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.pages.Messages;
 

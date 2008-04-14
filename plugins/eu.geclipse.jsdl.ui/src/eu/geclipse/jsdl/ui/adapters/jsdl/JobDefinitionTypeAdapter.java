@@ -27,9 +27,9 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Text;
 
-import eu.geclipse.jsdl.model.JobDefinitionType;
-import eu.geclipse.jsdl.model.JsdlFactory;
-import eu.geclipse.jsdl.model.JsdlPackage;
+import eu.geclipse.jsdl.model.base.JobDefinitionType;
+import eu.geclipse.jsdl.model.base.JsdlFactory;
+import eu.geclipse.jsdl.model.base.JsdlPackage;
 import eu.geclipse.jsdl.ui.internal.pages.JobDefinitionPage;
 
 

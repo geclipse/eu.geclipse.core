@@ -41,18 +41,21 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Text;
 
-import eu.geclipse.jsdl.model.CPUArchitectureType;
-import eu.geclipse.jsdl.model.CandidateHostsType;
-import eu.geclipse.jsdl.model.FileSystemType;
-import eu.geclipse.jsdl.model.JobDefinitionType;
-import eu.geclipse.jsdl.model.JobDescriptionType;
-import eu.geclipse.jsdl.model.JsdlFactory;
-import eu.geclipse.jsdl.model.JsdlPackage;
-import eu.geclipse.jsdl.model.OperatingSystemType;
-import eu.geclipse.jsdl.model.OperatingSystemTypeEnumeration;
-import eu.geclipse.jsdl.model.OperatingSystemTypeType;
-import eu.geclipse.jsdl.model.ProcessorArchitectureEnumeration;
-import eu.geclipse.jsdl.model.ResourcesType;
+import eu.geclipse.jsdl.model.base.BoundaryType;
+import eu.geclipse.jsdl.model.base.CPUArchitectureType;
+import eu.geclipse.jsdl.model.base.CandidateHostsType;
+import eu.geclipse.jsdl.model.base.ExactType;
+import eu.geclipse.jsdl.model.base.FileSystemType;
+import eu.geclipse.jsdl.model.base.JobDefinitionType;
+import eu.geclipse.jsdl.model.base.JobDescriptionType;
+import eu.geclipse.jsdl.model.base.JsdlFactory;
+import eu.geclipse.jsdl.model.base.JsdlPackage;
+import eu.geclipse.jsdl.model.base.OperatingSystemType;
+import eu.geclipse.jsdl.model.base.OperatingSystemTypeEnumeration;
+import eu.geclipse.jsdl.model.base.OperatingSystemTypeType;
+import eu.geclipse.jsdl.model.base.ProcessorArchitectureEnumeration;
+import eu.geclipse.jsdl.model.base.RangeValueType;
+import eu.geclipse.jsdl.model.base.ResourcesType;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.pages.JobDefinitionPage;
 
@@ -76,8 +79,19 @@ import eu.geclipse.jsdl.ui.internal.pages.JobDefinitionPage;
 
 
 public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
+
+  protected static final String LOWER_BOUND = JsdlPackage.Literals.RANGE_VALUE_TYPE__LOWER_BOUND.getName();
+  protected static final String UPPER_BOUND = JsdlPackage.Literals.RANGE_VALUE_TYPE__UPPER_BOUND.getName();
+  protected static final String EXACT = JsdlPackage.Literals.RANGE_VALUE_TYPE__EXACT.getName();
   
-  private static final String EMPTY_STRING = ""; //$NON-NLS-1$
+  
+  protected static final String[] RESOURCES_BOUNDARY_ITEMS = { "", //$NON-NLS-1$
+                                                            LOWER_BOUND,
+                                                            UPPER_BOUND,
+                                                            EXACT };
+  
+  private static final String EMPTY_STRING = ""; //$NON-NLS-1$   
+  
   protected Hashtable< Integer, Text > widgetFeaturesMap = new Hashtable< Integer, Text >();
   protected Hashtable< Integer, TableViewer > viewerFeaturesMap = new Hashtable< Integer, TableViewer >();
   protected Hashtable< Integer, Combo > comboFeaturesMap = new Hashtable< Integer, Combo >();
@@ -106,10 +120,15 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   protected CPUArchitectureType cpuArchitectureType = 
                               JsdlFactory.eINSTANCE.createCPUArchitectureType();
   
+  protected BoundaryType boundaryType = JsdlFactory.eINSTANCE.createBoundaryType();
   
-    
+  protected ExactType exactType = JsdlFactory.eINSTANCE.createExactType();
+  
+  protected RangeValueType rangeValueType = JsdlFactory.eINSTANCE.createRangeValueType();
+  
   private boolean adapterRefreshed = false;
   private boolean isNotifyAllowed = true;  
+  
   
   
   
@@ -120,7 +139,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
    * @param jobDefinitionRoot . The root element of a JSDL document ({@link JobDefinitionType}).
    */
   public ResourcesTypeAdapter( final JobDefinitionType jobDefinitionRoot ) {
-    
+        
     getTypeForAdapter( jobDefinitionRoot );
       
   } // End Class Constructor
@@ -795,6 +814,82 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
       } );   
         
   } // End attachToOSDescription()
+  
+  
+  /**
+   * The attach point that handles the {@link Text} widget which is responsible for the 
+   * Resources <b>IndividualCPUSpeed</b> element. This attach point provides a {@link ModifyListener}
+   * that listens to changes in the text box and commits this changes to the underlying
+   * model.
+   * 
+   * @param text The Text widget responsible for Resources IndividualCPUSpeed element.
+   * @param combo The Combo widget responsible for Resources IndividualCPUSpeed boundary.
+   */
+  public void attachToIndividualCPUSpeed(final Text text, final Combo combo){
+    
+    Integer featureID = Integer.valueOf(JsdlPackage.DOCUMENT_ROOT__INDIVIDUAL_CPU_SPEED);
+    this.widgetFeaturesMap.put( featureID , text );
+    this.comboFeaturesMap.put( featureID, combo );
+    
+    combo.setItems( RESOURCES_BOUNDARY_ITEMS );
+    
+    combo.addSelectionListener( new SelectionListener() {
+
+      public void widgetDefaultSelected( final SelectionEvent e ) {
+        // Auto-generated method stub
+        
+        
+      }
+
+      public void widgetSelected( final SelectionEvent e ) {
+        
+        if (combo.getItem( combo.getSelectionIndex() ) == EMPTY_STRING ) {
+          
+          ResourcesTypeAdapter.this.resourcesType.setIndividualCPUSpeed( null );
+                              
+        }
+        else if (combo.getItem( combo.getSelectionIndex() ) == UPPER_BOUND ) {
+          ResourcesTypeAdapter.this.boundaryType.setValue( Double.parseDouble( text.getText()) );
+          ResourcesTypeAdapter.this.rangeValueType.setUpperBound( ResourcesTypeAdapter.this.boundaryType );
+          ResourcesTypeAdapter.this.resourcesType.setIndividualCPUSpeed( ResourcesTypeAdapter.this.rangeValueType );
+        }
+        else if (combo.getItem( combo.getSelectionIndex() ) == LOWER_BOUND ) {
+          ResourcesTypeAdapter.this.boundaryType.setValue( Double.parseDouble( text.getText()) );
+          ResourcesTypeAdapter.this.rangeValueType.setLowerBound( ResourcesTypeAdapter.this.boundaryType );
+          ResourcesTypeAdapter.this.resourcesType.setIndividualCPUSpeed( ResourcesTypeAdapter.this.rangeValueType );
+        }
+        else if (combo.getItem( combo.getSelectionIndex() ) == EXACT ) {
+          ResourcesTypeAdapter.this.rangeValueType.setLowerBound( null );
+          ResourcesTypeAdapter.this.rangeValueType.setUpperBound( null );
+          ResourcesTypeAdapter.this.exactType.setValue( Double.parseDouble( text.getText()) );
+          ResourcesTypeAdapter.this.rangeValueType.getExact().add( ResourcesTypeAdapter.this.exactType );
+          ResourcesTypeAdapter.this.resourcesType.setIndividualCPUSpeed( ResourcesTypeAdapter.this.rangeValueType );
+        }
+        else {
+          
+        }
+      
+        contentChanged();
+      }
+    });
+    
+    text.addModifyListener( new ModifyListener() {
+      
+      public void modifyText( final ModifyEvent e ) {
+        checkOSElement();
+        
+        if (!text.getText().equals( EMPTY_STRING ) ) {
+          
+        }else{
+          ResourcesTypeAdapter.this.resourcesType.setIndividualCPUSpeed( null );
+        }
+          
+        contentChanged();
+          
+        }
+      } );   
+        
+  } // End attachToOSDescription()
  
   
   
@@ -849,6 +944,7 @@ public final class ResourcesTypeAdapter extends JsdlAdaptersFactory {
   } // End attachToFileSystemType()
   
   
+    
   
   /**
    * Method which populates the content of the underlying model to the widgets that are
