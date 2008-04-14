@@ -16,9 +16,9 @@
  *****************************************************************************/
 package eu.geclipse.jsdl;
 
-import eu.geclipse.jsdl.model.DataStagingType;
-import eu.geclipse.jsdl.model.JsdlPackage;
-import eu.geclipse.jsdl.model.SourceTargetType;
+import eu.geclipse.jsdl.model.base.DataStagingType;
+import eu.geclipse.jsdl.model.base.JsdlPackage;
+import eu.geclipse.jsdl.model.base.SourceTargetType;
 
 /**
  * This class is for obtaining instances of model's objects. It hides subsequent
