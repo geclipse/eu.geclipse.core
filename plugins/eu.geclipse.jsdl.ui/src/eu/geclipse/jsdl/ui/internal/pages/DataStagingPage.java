@@ -50,8 +50,8 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 
-import eu.geclipse.jsdl.model.DataStagingType;
-import eu.geclipse.jsdl.model.JobDefinitionType;
+import eu.geclipse.jsdl.model.base.DataStagingType;
+import eu.geclipse.jsdl.model.base.JobDefinitionType;
 import eu.geclipse.jsdl.ui.adapters.jsdl.DataStageTypeAdapter;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.providers.DataStageInLabelProvider;

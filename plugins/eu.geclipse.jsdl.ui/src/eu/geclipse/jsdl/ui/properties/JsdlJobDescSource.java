@@ -19,7 +19,7 @@ package eu.geclipse.jsdl.ui.properties;
 import java.util.ArrayList;
 import java.util.List;
 import eu.geclipse.jsdl.JSDLJobDescription;
-import eu.geclipse.jsdl.model.RangeValueType;
+import eu.geclipse.jsdl.model.base.RangeValueType;
 import eu.geclipse.ui.properties.AbstractProperty;
 import eu.geclipse.ui.properties.AbstractPropertySource;
 import eu.geclipse.ui.properties.IProperty;

@@ -26,7 +26,7 @@ import java.util.Collection;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.Viewer;
-import eu.geclipse.jsdl.model.CandidateHostsType;
+import eu.geclipse.jsdl.model.base.CandidateHostsType;
 
 
 /**

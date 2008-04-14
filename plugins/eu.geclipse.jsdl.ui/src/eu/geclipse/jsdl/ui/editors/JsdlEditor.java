@@ -75,13 +75,16 @@ import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.WorkspaceModifyOperation;
 import org.eclipse.ui.dialogs.SaveAsDialog;
+import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
+import org.eclipse.ui.forms.events.IHyperlinkListener;
+import org.eclipse.ui.forms.widgets.Form;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorSite;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
 
-import eu.geclipse.jsdl.model.DocumentRoot;
-import eu.geclipse.jsdl.model.JobDefinitionType;
+import eu.geclipse.jsdl.model.base.DocumentRoot;
+import eu.geclipse.jsdl.model.base.JobDefinitionType;
 import eu.geclipse.jsdl.ui.adapters.jsdl.JsdlAdaptersFactory;
 import eu.geclipse.jsdl.ui.adapters.posix.PosixAdaptersFactory;
 import eu.geclipse.jsdl.ui.internal.Activator;
@@ -122,6 +125,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
   protected ComposedAdapterFactory adapterFactory;
   protected JobDefinitionType jobDefType = null;
   protected DocumentRoot documentRoot = null;
+  
   
   
   /**
@@ -285,7 +289,6 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
         }
       };
     
-    
     private StructuredTextEditor editor = null;
     private int sourcePageIndex;
     private boolean refreshedModel = false;
@@ -294,7 +297,8 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
     private JobDefinitionPage jobDefPage = new JobDefinitionPage(this);
     private JobApplicationPage jobApplicationPage = new JobApplicationPage(this);
     private DataStagingPage dataStagingPage = new DataStagingPage(this);
-    private ResourcesPage resourcesPage = new ResourcesPage(this);    
+    private ResourcesPage resourcesPage = new ResourcesPage(this);
+    private IHyperlinkListener messageHyperLinkListener;
     
 
   
@@ -440,6 +444,65 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
       Activator.logException( e );      
    }
     
+  }
+  
+  
+  
+  /**
+  * Returns the header form of the JSDL editors Active Page
+  * 
+  * @return the header of the active page.
+  */
+
+ public IManagedForm getHeaderForm() {
+     return this.getActivePageInstance().getManagedForm();
+ }
+  
+  
+
+  private void setMessage( final String message,
+                          final int type,
+                          final IHyperlinkListener listener )
+  {
+    if( this.getHeaderForm() != null && this.getHeaderForm().getForm() != null )
+    {
+      if( !this.getHeaderForm().getForm().isDisposed() ) {
+        getTopForm().setMessage( message, type );
+        if( this.messageHyperLinkListener != null ) {
+          getTopForm().removeMessageHyperlinkListener( this.messageHyperLinkListener );
+        }
+        if( listener != null ) {
+          getTopForm().addMessageHyperlinkListener( listener );
+        }
+        this.messageHyperLinkListener = listener;
+      }
+    }
+  }
+
+  
+  
+  /**
+   * Used to define the message that will appear in the header of a page.
+   * This can be a message concerning a warning or an error that needs to 
+   * be displayed to the user.
+   * 
+   * @param message The message that needs to be displayed.
+   * @param type The type of the message. Possible message types are:<br> 
+   * IMessageProvider.WARNING,<br>
+   * IMessageProvider.ERROR,<br>
+   * IMessageProvider.INFORMATION
+   */
+  public void setMessage( final String message, final int type ) {
+    setMessage( message, type, null );    
+  }
+
+  
+  
+  /**
+   * @return the top Form
+   */
+  public Form getTopForm() {
+    return this.getHeaderForm().getForm().getForm();
   }
   
   
@@ -945,7 +1008,6 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
   public EditingDomain getEditingDomain() {
     return this.editingDomain;
   }
-
   
   
   protected boolean isPersisted( final Resource resource ) {

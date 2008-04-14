@@ -23,7 +23,7 @@ import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 
-import eu.geclipse.jsdl.model.DataStagingType;
+import eu.geclipse.jsdl.model.base.DataStagingType;
 import eu.geclipse.jsdl.ui.internal.Activator;
 
 

@@ -55,8 +55,8 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 import eu.geclipse.jsdl.JSDLModelFacade;
-import eu.geclipse.jsdl.model.DataStagingType;
-import eu.geclipse.jsdl.model.SourceTargetType;
+import eu.geclipse.jsdl.model.base.DataStagingType;
+import eu.geclipse.jsdl.model.base.SourceTargetType;
 import eu.geclipse.ui.dialogs.GridFileDialog;
 
 /**

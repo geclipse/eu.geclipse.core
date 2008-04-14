@@ -40,7 +40,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
-import eu.geclipse.jsdl.model.JsdlPackage;
+import eu.geclipse.jsdl.model.base.JsdlPackage;
 import eu.geclipse.ui.dialogs.GridFileDialog;
 
 /**
