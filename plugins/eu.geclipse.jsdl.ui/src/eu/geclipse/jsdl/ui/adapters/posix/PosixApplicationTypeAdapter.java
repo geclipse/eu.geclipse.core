@@ -42,10 +42,10 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Text;
 
-import eu.geclipse.jsdl.model.ApplicationType;
-import eu.geclipse.jsdl.model.JobDefinitionType;
-import eu.geclipse.jsdl.model.JobDescriptionType;
-import eu.geclipse.jsdl.model.JsdlFactory;
+import eu.geclipse.jsdl.model.base.ApplicationType;
+import eu.geclipse.jsdl.model.base.JobDefinitionType;
+import eu.geclipse.jsdl.model.base.JobDescriptionType;
+import eu.geclipse.jsdl.model.base.JsdlFactory;
 import eu.geclipse.jsdl.model.posix.ArgumentType;
 import eu.geclipse.jsdl.model.posix.DirectoryNameType;
 import eu.geclipse.jsdl.model.posix.DocumentRoot;
