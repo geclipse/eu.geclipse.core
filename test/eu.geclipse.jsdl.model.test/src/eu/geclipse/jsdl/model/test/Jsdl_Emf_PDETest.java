@@ -33,12 +33,12 @@ import org.eclipse.emf.ecore.xmi.impl.XMLMapImpl;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
-import eu.geclipse.jsdl.model.ApplicationType;
-import eu.geclipse.jsdl.model.DocumentRoot;
-import eu.geclipse.jsdl.model.JobDefinitionType;
-import eu.geclipse.jsdl.model.JobDescriptionType;
-import eu.geclipse.jsdl.model.JsdlFactory;
-import eu.geclipse.jsdl.model.JsdlPackage;
+import eu.geclipse.jsdl.model.base.ApplicationType;
+import eu.geclipse.jsdl.model.base.DocumentRoot;
+import eu.geclipse.jsdl.model.base.JobDefinitionType;
+import eu.geclipse.jsdl.model.base.JobDescriptionType;
+import eu.geclipse.jsdl.model.base.JsdlFactory;
+import eu.geclipse.jsdl.model.base.JsdlPackage;
 
 /**
  *
