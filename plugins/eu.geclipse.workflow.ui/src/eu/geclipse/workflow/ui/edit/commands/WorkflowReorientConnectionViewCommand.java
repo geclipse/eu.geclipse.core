@@ -27,8 +27,7 @@ import org.eclipse.gmf.runtime.notation.View;
 /**
  * @generated
  */
-public class WorkflowReorientConnectionViewCommand
-  extends AbstractTransactionalCommand
+public class WorkflowReorientConnectionViewCommand extends AbstractTransactionalCommand
 {
 
   /**
@@ -39,9 +38,7 @@ public class WorkflowReorientConnectionViewCommand
   /**
    * @generated
    */
-  public WorkflowReorientConnectionViewCommand( TransactionalEditingDomain editingDomain,
-                                                String label )
-  {
+  public WorkflowReorientConnectionViewCommand( TransactionalEditingDomain editingDomain, String label ) {
     super( editingDomain, label, null );
   }
 
@@ -75,8 +72,7 @@ public class WorkflowReorientConnectionViewCommand
    * @generated
    */
   @Override
-  protected CommandResult doExecuteWithResult( IProgressMonitor progressMonitor,
-                                               IAdaptable info )
+  protected CommandResult doExecuteWithResult( IProgressMonitor progressMonitor, IAdaptable info )
   {
     assert null != edgeAdaptor : "Null child in WorkflowReorientConnectionViewCommand"; //$NON-NLS-1$
     Edge edge = ( Edge )getEdgeAdaptor().getAdapter( Edge.class );

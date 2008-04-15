@@ -21,19 +21,18 @@ import org.eclipse.gmf.runtime.diagram.core.providers.AbstractViewProvider;
 import org.eclipse.gmf.runtime.emf.type.core.IElementType;
 import org.eclipse.gmf.runtime.emf.type.core.IHintedType;
 import org.eclipse.gmf.runtime.notation.View;
+
 import eu.geclipse.workflow.ui.edit.parts.InputPortEditPart;
 import eu.geclipse.workflow.ui.edit.parts.LinkEditPart;
 import eu.geclipse.workflow.ui.edit.parts.OutputPortEditPart;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowEditPart;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowJobEditPart;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowJobNameEditPart;
-import eu.geclipse.workflow.ui.edit.parts.WorkflowJobDescriptionEditPart;
 import eu.geclipse.workflow.ui.part.WorkflowVisualIDRegistry;
 import eu.geclipse.workflow.ui.view.factories.InputPortViewFactory;
 import eu.geclipse.workflow.ui.view.factories.LinkViewFactory;
 import eu.geclipse.workflow.ui.view.factories.OutputPortViewFactory;
 import eu.geclipse.workflow.ui.view.factories.WorkflowJobNameViewFactory;
-import eu.geclipse.workflow.ui.view.factories.WorkflowJobDescriptionViewFactory;
 import eu.geclipse.workflow.ui.view.factories.WorkflowJobViewFactory;
 import eu.geclipse.workflow.ui.view.factories.WorkflowViewFactory;
 

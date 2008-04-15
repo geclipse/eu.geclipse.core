@@ -19,6 +19,7 @@ import java.util.Iterator;
 import org.eclipse.emf.ecore.EAnnotation;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gef.commands.CompoundCommand;
+import org.eclipse.gmf.runtime.diagram.ui.requests.EditCommandRequestWrapper;
 import org.eclipse.gmf.runtime.emf.type.core.commands.DestroyElementCommand;
 import org.eclipse.gmf.runtime.emf.type.core.requests.CreateElementRequest;
 import org.eclipse.gmf.runtime.emf.type.core.requests.DestroyElementRequest;
@@ -27,6 +28,7 @@ import org.eclipse.gmf.runtime.notation.View;
 import eu.geclipse.workflow.IWorkflowPackage;
 import eu.geclipse.workflow.ui.edit.commands.InputPortCreateCommand;
 import eu.geclipse.workflow.ui.edit.commands.OutputPortCreateCommand;
+import eu.geclipse.workflow.ui.edit.commands.WorkflowJobEditCommand;
 import eu.geclipse.workflow.ui.edit.parts.InputPortEditPart;
 import eu.geclipse.workflow.ui.edit.parts.OutputPortEditPart;
 import eu.geclipse.workflow.ui.part.WorkflowVisualIDRegistry;
@@ -35,8 +37,7 @@ import eu.geclipse.workflow.ui.providers.WorkflowElementTypes;
 /**
  * @generated
  */
-public class WorkflowJobItemSemanticEditPolicy
-  extends WorkflowBaseItemSemanticEditPolicy
+public class WorkflowJobItemSemanticEditPolicy extends WorkflowBaseItemSemanticEditPolicy
 {
 
   /**
@@ -59,6 +60,16 @@ public class WorkflowJobItemSemanticEditPolicy
     return super.getCreateCommand( req );
   }
 
+  @Override
+  protected Command getEditCommand ( EditCommandRequestWrapper req ) {
+    View view = ( View )getHost().getModel();
+    if ( WorkflowElementTypes.IWorkflowJob_1001 == req.getType() )
+      return getGEFWrapper( new WorkflowJobEditCommand( "update jobDescription", view, req.getEditCommandRequest() ) ); //$NON-NLS-1$
+      
+    return null;
+    
+  }
+  
   /**
    * @generated
    */

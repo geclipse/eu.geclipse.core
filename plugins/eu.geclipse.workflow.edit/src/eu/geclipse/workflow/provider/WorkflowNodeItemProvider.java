@@ -81,10 +81,10 @@ public class WorkflowNodeItemProvider extends WorkflowElementItemProvider
   protected void addIsStartPropertyDescriptor( Object object ) {
     itemPropertyDescriptors.add( createItemPropertyDescriptor( ( ( ComposeableAdapterFactory )adapterFactory ).getRootAdapterFactory(),
                                                                getResourceLocator(),
-                                                               getString( "_UI_IWorkflowNode_isStart_feature" ),
-                                                               getString( "_UI_PropertyDescriptor_description",
-                                                                          "_UI_IWorkflowNode_isStart_feature",
-                                                                          "_UI_IWorkflowNode_type" ),
+                                                               getString( "_UI_IWorkflowNode_isStart_feature" ), //$NON-NLS-1$
+                                                               getString( "_UI_PropertyDescriptor_description", //$NON-NLS-1$
+                                                                          "_UI_IWorkflowNode_isStart_feature", //$NON-NLS-1$
+                                                                          "_UI_IWorkflowNode_type" ), //$NON-NLS-1$
                                                                IWorkflowPackage.Literals.IWORKFLOW_NODE__IS_START,
                                                                true,
                                                                false,
@@ -103,10 +103,10 @@ public class WorkflowNodeItemProvider extends WorkflowElementItemProvider
   protected void addIsFinishPropertyDescriptor( Object object ) {
     itemPropertyDescriptors.add( createItemPropertyDescriptor( ( ( ComposeableAdapterFactory )adapterFactory ).getRootAdapterFactory(),
                                                                getResourceLocator(),
-                                                               getString( "_UI_IWorkflowNode_isFinish_feature" ),
-                                                               getString( "_UI_PropertyDescriptor_description",
-                                                                          "_UI_IWorkflowNode_isFinish_feature",
-                                                                          "_UI_IWorkflowNode_type" ),
+                                                               getString( "_UI_IWorkflowNode_isFinish_feature" ), //$NON-NLS-1$
+                                                               getString( "_UI_PropertyDescriptor_description", //$NON-NLS-1$
+                                                                          "_UI_IWorkflowNode_isFinish_feature", //$NON-NLS-1$
+                                                                          "_UI_IWorkflowNode_type" ), //$NON-NLS-1$
                                                                IWorkflowPackage.Literals.IWORKFLOW_NODE__IS_FINISH,
                                                                true,
                                                                false,
@@ -162,9 +162,9 @@ public class WorkflowNodeItemProvider extends WorkflowElementItemProvider
   {
     String label = ( ( IWorkflowNode )object ).getName();
     return label == null || label.length() == 0
-                                               ? getString( "_UI_IWorkflowNode_type" )
-                                               : getString( "_UI_IWorkflowNode_type" )
-                                                 + " "
+                                               ? getString( "_UI_IWorkflowNode_type" ) //$NON-NLS-1$
+                                               : getString( "_UI_IWorkflowNode_type" ) //$NON-NLS-1$
+                                                 + " " //$NON-NLS-1$
                                                  + label;
   }
 

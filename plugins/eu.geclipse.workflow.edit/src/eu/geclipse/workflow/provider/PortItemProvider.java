@@ -75,9 +75,9 @@ public class PortItemProvider extends WorkflowElementItemProvider
   {
     String label = ( ( IPort )object ).getId();
     return label == null || label.length() == 0
-                                               ? getString( "_UI_IPort_type" )
-                                               : getString( "_UI_IPort_type" )
-                                                 + " "
+                                               ? getString( "_UI_IPort_type" ) //$NON-NLS-1$
+                                               : getString( "_UI_IPort_type" ) //$NON-NLS-1$
+                                                 + " " //$NON-NLS-1$
                                                  + label;
   }
 

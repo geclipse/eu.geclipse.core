@@ -81,10 +81,10 @@ public class WorkflowElementItemProvider extends ItemProviderAdapter
   protected void addNamePropertyDescriptor( Object object ) {
     itemPropertyDescriptors.add( createItemPropertyDescriptor( ( ( ComposeableAdapterFactory )adapterFactory ).getRootAdapterFactory(),
                                                                getResourceLocator(),
-                                                               getString( "_UI_IWorkflowElement_name_feature" ),
-                                                               getString( "_UI_PropertyDescriptor_description",
-                                                                          "_UI_IWorkflowElement_name_feature",
-                                                                          "_UI_IWorkflowElement_type" ),
+                                                               getString( "_UI_IWorkflowElement_name_feature" ), //$NON-NLS-1$
+                                                               getString( "_UI_PropertyDescriptor_description", //$NON-NLS-1$
+                                                                          "_UI_IWorkflowElement_name_feature", //$NON-NLS-1$
+                                                                          "_UI_IWorkflowElement_type" ), //$NON-NLS-1$
                                                                IWorkflowPackage.Literals.IWORKFLOW_ELEMENT__NAME,
                                                                true,
                                                                false,
@@ -103,10 +103,10 @@ public class WorkflowElementItemProvider extends ItemProviderAdapter
   protected void addIdPropertyDescriptor( Object object ) {
     itemPropertyDescriptors.add( createItemPropertyDescriptor( ( ( ComposeableAdapterFactory )adapterFactory ).getRootAdapterFactory(),
                                                                getResourceLocator(),
-                                                               getString( "_UI_IWorkflowElement_id_feature" ),
-                                                               getString( "_UI_PropertyDescriptor_description",
-                                                                          "_UI_IWorkflowElement_id_feature",
-                                                                          "_UI_IWorkflowElement_type" ),
+                                                               getString( "_UI_IWorkflowElement_id_feature" ), //$NON-NLS-1$
+                                                               getString( "_UI_PropertyDescriptor_description", //$NON-NLS-1$
+                                                                          "_UI_IWorkflowElement_id_feature", //$NON-NLS-1$
+                                                                          "_UI_IWorkflowElement_type" ), //$NON-NLS-1$
                                                                IWorkflowPackage.Literals.IWORKFLOW_ELEMENT__ID,
                                                                true,
                                                                false,
@@ -127,9 +127,9 @@ public class WorkflowElementItemProvider extends ItemProviderAdapter
   {
     String label = ( ( IWorkflowElement )object ).getName();
     return label == null || label.length() == 0
-                                               ? getString( "_UI_IWorkflowElement_type" )
-                                               : getString( "_UI_IWorkflowElement_type" )
-                                                 + " "
+                                               ? getString( "_UI_IWorkflowElement_type" ) //$NON-NLS-1$
+                                               : getString( "_UI_IWorkflowElement_type" ) //$NON-NLS-1$
+                                                 + " " //$NON-NLS-1$
                                                  + label;
   }
 

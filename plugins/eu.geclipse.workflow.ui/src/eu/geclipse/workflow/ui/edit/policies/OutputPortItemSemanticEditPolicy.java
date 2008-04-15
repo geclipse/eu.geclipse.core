@@ -29,8 +29,7 @@ import eu.geclipse.workflow.ui.providers.WorkflowElementTypes;
 /**
  * @generated
  */
-public class OutputPortItemSemanticEditPolicy
-  extends WorkflowBaseItemSemanticEditPolicy
+public class OutputPortItemSemanticEditPolicy extends WorkflowBaseItemSemanticEditPolicy
 {
 
   /**

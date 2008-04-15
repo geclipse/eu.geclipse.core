@@ -70,12 +70,9 @@ public class WorkflowNewDiagramFileWizard extends Wizard {
   /**
    * @generated NOT
    */
-  public WorkflowNewDiagramFileWizard( URI domainModelURI,
-                                       EObject diagramRoot,
-                                       TransactionalEditingDomain editingDomain )
-  {
+  public WorkflowNewDiagramFileWizard( URI domainModelURI, EObject diagramRoot, TransactionalEditingDomain editingDomain ) {
     assert domainModelURI != null : "Domain model uri must be specified"; //$NON-NLS-1$
-    assert diagramRoot != null : "Doagram root element must be specified"; //$NON-NLS-1$
+    assert diagramRoot != null : "Diagram root element must be specified"; //$NON-NLS-1$
     assert editingDomain != null : "Editing domain must be specified"; //$NON-NLS-1$
     myFileCreationPage = new WizardNewFileCreationPage( Messages.getString("WorkflowNewDiagramFileWizard_CreationPageName"), //$NON-NLS-1$
                                                         StructuredSelection.EMPTY );
@@ -85,8 +82,7 @@ public class WorkflowNewDiagramFileWizard extends Wizard {
     IPath filePath;
     String fileName = domainModelURI.trimFileExtension().lastSegment();
     if( domainModelURI.isPlatformResource() ) {
-      filePath = new Path( domainModelURI.trimSegments( 1 )
-        .toPlatformString( true ) );
+      filePath = new Path( domainModelURI.trimSegments( 1 ).toPlatformString( true ) );
     } else if( domainModelURI.isFile() ) {
       filePath = new Path( domainModelURI.trimSegments( 1 ).toFileString() );
     } else {
@@ -120,9 +116,7 @@ public class WorkflowNewDiagramFileWizard extends Wizard {
     IFile diagramFile = myFileCreationPage.createNewFile();
     WorkflowDiagramEditorUtil.setCharset( diagramFile );
     affectedFiles.add( diagramFile );
-    URI diagramModelURI = URI.createPlatformResourceURI( diagramFile.getFullPath()
-                                                           .toString(),
-                                                         true );
+    URI diagramModelURI = URI.createPlatformResourceURI( diagramFile.getFullPath().toString(), true );
     ResourceSet resourceSet = myEditingDomain.getResourceSet();
     final Resource diagramResource = resourceSet.createResource( diagramModelURI );
     AbstractTransactionalCommand command = new AbstractTransactionalCommand( myEditingDomain,
@@ -147,8 +141,7 @@ public class WorkflowNewDiagramFileWizard extends Wizard {
       }
     };
     try {
-      OperationHistoryFactory.getOperationHistory()
-        .execute( command, new NullProgressMonitor(), null );
+      OperationHistoryFactory.getOperationHistory().execute( command, new NullProgressMonitor(), null );
       diagramResource.save( WorkflowDiagramEditorUtil.getSaveOptions() );
       WorkflowDiagramEditorUtil.openDiagram( diagramResource );
     } catch( ExecutionException e ) {

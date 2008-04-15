@@ -150,10 +150,7 @@ public class WorkflowPaletteFactory {
     /**
      * @generated
      */
-    private LinkToolEntry( String title,
-                           String description,
-                           List relationshipTypes )
-    {
+    private LinkToolEntry( String title, String description, List relationshipTypes ) {
       super( title, description, null, null );
       this.relationshipTypes = relationshipTypes;
     }

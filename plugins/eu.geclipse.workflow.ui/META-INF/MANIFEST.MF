@@ -13,6 +13,7 @@ Export-Package: eu.geclipse.workflow.ui.edit.parts,
 Eclipse-LazyStart: true
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
 Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.core.filesystem,
  org.eclipse.gmf.runtime.notation,
  org.eclipse.gmf.runtime.diagram.ui,
  org.eclipse.emf.edit.ui,

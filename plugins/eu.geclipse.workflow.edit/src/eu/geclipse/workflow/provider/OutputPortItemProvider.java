@@ -81,10 +81,10 @@ public class OutputPortItemProvider extends PortItemProvider
   protected void addLinksPropertyDescriptor( Object object ) {
     itemPropertyDescriptors.add( createItemPropertyDescriptor( ( ( ComposeableAdapterFactory )adapterFactory ).getRootAdapterFactory(),
                                                                getResourceLocator(),
-                                                               getString( "_UI_IOutputPort_links_feature" ),
-                                                               getString( "_UI_PropertyDescriptor_description",
-                                                                          "_UI_IOutputPort_links_feature",
-                                                                          "_UI_IOutputPort_type" ),
+                                                               getString( "_UI_IOutputPort_links_feature" ), //$NON-NLS-1$
+                                                               getString( "_UI_PropertyDescriptor_description", //$NON-NLS-1$
+                                                                          "_UI_IOutputPort_links_feature", //$NON-NLS-1$
+                                                                          "_UI_IOutputPort_type" ), //$NON-NLS-1$
                                                                IWorkflowPackage.Literals.IOUTPUT_PORT__LINKS,
                                                                true,
                                                                false,
@@ -105,7 +105,7 @@ public class OutputPortItemProvider extends PortItemProvider
   public Object getImage( Object object )
   {
     return overlayImage( object,
-                         getResourceLocator().getImage( "full/obj16/OutputPort" ) );
+                         getResourceLocator().getImage( "full/obj16/OutputPort" ) ); //$NON-NLS-1$
   }
 
   /**
@@ -128,7 +128,7 @@ public class OutputPortItemProvider extends PortItemProvider
     return label == null || label.length() == 0
                                                ? getString( "_UI_IOutputPort_type" ) //$NON-NLS-1$
                                                : getString( "_UI_IOutputPort_type" ) //$NON-NLS-1$
-                                                 + " "
+                                                 + " " //$NON-NLS-1$
                                                  + label;
   }
 

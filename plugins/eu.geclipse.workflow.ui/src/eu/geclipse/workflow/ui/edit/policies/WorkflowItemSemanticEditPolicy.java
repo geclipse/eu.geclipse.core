@@ -28,8 +28,7 @@ import org.eclipse.gmf.runtime.emf.type.core.requests.CreateElementRequest;
 /**
  * @generated
  */
-public class WorkflowItemSemanticEditPolicy
-  extends WorkflowBaseItemSemanticEditPolicy
+public class WorkflowItemSemanticEditPolicy extends WorkflowBaseItemSemanticEditPolicy
 {
 
   /**

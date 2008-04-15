@@ -47,9 +47,7 @@ public class WorkflowJobCanonicalEditPolicy extends CanonicalEditPolicy {
   protected List getSemanticChildrenList() {
     View viewObject = ( View )getHost().getModel();
     List result = new LinkedList();
-    for( Iterator it = WorkflowDiagramUpdater.getIWorkflowJob_1001SemanticChildren( viewObject )
-      .iterator(); it.hasNext(); )
-    {
+    for( Iterator it = WorkflowDiagramUpdater.getIWorkflowJob_1001SemanticChildren( viewObject ).iterator(); it.hasNext(); ) {
       result.add( ( ( WorkflowNodeDescriptor )it.next() ).getModelElement() );
     }
     return result;
@@ -65,8 +63,7 @@ public class WorkflowJobCanonicalEditPolicy extends CanonicalEditPolicy {
       case OutputPortEditPart.VISUAL_ID:
       case InputPortEditPart.VISUAL_ID:
         return !semanticChildren.contains( view.getElement() )
-               || visualID != WorkflowVisualIDRegistry.getNodeVisualID( ( View )getHost().getModel(),
-                                                                        view.getElement() );
+               || visualID != WorkflowVisualIDRegistry.getNodeVisualID( ( View )getHost().getModel(), view.getElement() );
     }
     return false;
   }

@@ -75,10 +75,10 @@ public class WorkflowJobItemProvider extends WorkflowNodeItemProvider
   protected void addJobDescriptionPropertyDescriptor( Object object ) {
     itemPropertyDescriptors.add( createItemPropertyDescriptor( ( ( ComposeableAdapterFactory )adapterFactory ).getRootAdapterFactory(),
                                                                getResourceLocator(),
-                                                               getString( "_UI_IWorkflowJob_jobDescription_feature" ),
-                                                               getString( "_UI_PropertyDescriptor_description",
-                                                                          "_UI_IWorkflowJob_jobDescription_feature",
-                                                                          "_UI_IWorkflowJob_type" ),
+                                                               getString( "_UI_IWorkflowJob_jobDescription_feature" ), //$NON-NLS-1$
+                                                               getString( "_UI_PropertyDescriptor_description", //$NON-NLS-1$
+                                                                          "_UI_IWorkflowJob_jobDescription_feature", //$NON-NLS-1$
+                                                                          "_UI_IWorkflowJob_type" ), //$NON-NLS-1$
                                                                IWorkflowPackage.Literals.IWORKFLOW_JOB__JOB_DESCRIPTION,
                                                                true,
                                                                true,
@@ -96,7 +96,7 @@ public class WorkflowJobItemProvider extends WorkflowNodeItemProvider
   @Override
   public Object getImage( Object object )
   {
-    return overlayImage( object, getResourceLocator().getImage( "full/obj16/WorkflowJob" ) );
+    return overlayImage( object, getResourceLocator().getImage( "full/obj16/WorkflowJob" ) ); //$NON-NLS-1$
   }
 
   /**
@@ -109,9 +109,9 @@ public class WorkflowJobItemProvider extends WorkflowNodeItemProvider
   {
     String label = ( ( IWorkflowJob )object ).getName();
     return label == null || label.length() == 0
-                                               ? getString( "_UI_IWorkflowJob_type" )
-                                               : getString( "_UI_IWorkflowJob_type" )
-                                                 + " "
+                                               ? getString( "_UI_IWorkflowJob_type" ) //$NON-NLS-1$
+                                               : getString( "_UI_IWorkflowJob_type" ) //$NON-NLS-1$
+                                                 + " " //$NON-NLS-1$
                                                  + label;
   }
 

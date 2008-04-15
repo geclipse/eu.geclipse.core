@@ -15,14 +15,18 @@
  ******************************************************************************/
 package eu.geclipse.workflow.ui.edit.helpers;
 
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.gmf.runtime.common.core.command.CompositeCommand;
 import org.eclipse.gmf.runtime.common.core.command.ICommand;
+import org.eclipse.gmf.runtime.emf.type.core.commands.GetEditContextCommand;
 import org.eclipse.gmf.runtime.emf.type.core.edithelper.AbstractEditHelper;
 import org.eclipse.gmf.runtime.emf.type.core.requests.CreateElementRequest;
 import org.eclipse.gmf.runtime.emf.type.core.requests.CreateRelationshipRequest;
 import org.eclipse.gmf.runtime.emf.type.core.requests.DestroyElementRequest;
 import org.eclipse.gmf.runtime.emf.type.core.requests.DestroyReferenceRequest;
+import org.eclipse.gmf.runtime.emf.type.core.requests.GetEditContextRequest;
 import org.eclipse.gmf.runtime.emf.type.core.requests.IEditCommandRequest;
+import org.eclipse.gmf.runtime.notation.Diagram;
 
 /**
  * @generated
@@ -52,6 +56,38 @@ public class WorkflowBaseEditHelper extends AbstractEditHelper {
     command.add( epCommand );
     command.add( ehCommand );
     return command;
+  }
+  
+  /* (non-Javadoc)
+   * @see org.eclipse.gmf.runtime.emf.type.core.edithelper.AbstractEditHelper#getContainerCommand(org.eclipse.gmf.runtime.emf.type.core.requests.GetContainerRequest)
+   */
+  @Override
+  protected ICommand getEditContextCommand(GetEditContextRequest req) {
+
+      GetEditContextCommand result = null;
+      
+      IEditCommandRequest editRequest = req.getEditCommandRequest();
+      
+      if (editRequest instanceof CreateElementRequest) {
+          result = new GetEditContextCommand(req);
+          EObject container = ((CreateElementRequest) editRequest).getContainer();
+
+          if (container instanceof Diagram) {
+              EObject element = ((Diagram) container).getElement();
+  
+              if (element == null) {
+                  // Element is null if the diagram was created using the wizard
+                  EObject annotation = ((Diagram) container).eContainer();
+  
+                  if (annotation != null) {
+                      element = annotation.eContainer();
+                  }
+              }
+              container = element;
+          }
+          result.setEditContext(container);
+      }
+      return result;
   }
 
   /**

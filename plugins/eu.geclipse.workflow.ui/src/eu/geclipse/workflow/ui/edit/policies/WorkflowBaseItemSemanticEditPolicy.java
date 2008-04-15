@@ -79,11 +79,11 @@ public class WorkflowBaseItemSemanticEditPolicy extends SemanticEditPolicy {
    * 
    * @generated
    */
+  @SuppressWarnings("unchecked")
   @Override
   public Command getCommand( Request request ) {
     if( request instanceof ReconnectRequest ) {
-      Object view = ( ( ReconnectRequest )request ).getConnectionEditPart()
-        .getModel();
+      Object view = ( ( ReconnectRequest )request ).getConnectionEditPart().getModel();
       if( view instanceof View ) {
         Integer id = new Integer( WorkflowVisualIDRegistry.getVisualID( ( View )view ) );
         request.getExtendedData().put( VISUAL_ID_KEY, id );
@@ -121,10 +121,8 @@ public class WorkflowBaseItemSemanticEditPolicy extends SemanticEditPolicy {
     if( editHelperContext == null ) {
       editHelperContext = ViewUtil.resolveSemanticElement( ( View )getHost().getModel() );
     }
-    IElementType elementType = ElementTypeRegistry.getInstance()
-      .getElementType( editHelperContext );
-    if( elementType == ElementTypeRegistry.getInstance()
-      .getType( "org.eclipse.gmf.runtime.emf.type.core.default" ) ) { //$NON-NLS-1$ 
+    IElementType elementType = ElementTypeRegistry.getInstance().getElementType( editHelperContext );
+    if( elementType == ElementTypeRegistry.getInstance().getType( "org.eclipse.gmf.runtime.emf.type.core.default" ) ) { //$NON-NLS-1$ 
       elementType = null;
     }
     Command semanticCommand = getSemanticCommandSwitch( completedRequest );
@@ -132,8 +130,7 @@ public class WorkflowBaseItemSemanticEditPolicy extends SemanticEditPolicy {
       ICommand command = semanticCommand instanceof ICommandProxy
                                                                  ? ( ( ICommandProxy )semanticCommand ).getICommand()
                                                                  : new CommandProxy( semanticCommand );
-      completedRequest.setParameter( WorkflowBaseEditHelper.EDIT_POLICY_COMMAND,
-                                     command );
+      completedRequest.setParameter( WorkflowBaseEditHelper.EDIT_POLICY_COMMAND, command );
     }
     if( elementType != null ) {
       ICommand command = elementType.getEditCommand( completedRequest );
@@ -152,8 +149,7 @@ public class WorkflowBaseItemSemanticEditPolicy extends SemanticEditPolicy {
     if( shouldProceed ) {
       if( completedRequest instanceof DestroyRequest ) {
         TransactionalEditingDomain editingDomain = ( ( IGraphicalEditPart )getHost() ).getEditingDomain();
-        Command deleteViewCommand = new ICommandProxy( new DeleteCommand( editingDomain,
-                                                                          ( View )getHost().getModel() ) );
+        Command deleteViewCommand = new ICommandProxy( new DeleteCommand( editingDomain, ( View )getHost().getModel() ) );
         semanticCommand = semanticCommand == null
                                                  ? deleteViewCommand
                                                  : semanticCommand.chain( deleteViewCommand );
@@ -219,6 +215,10 @@ public class WorkflowBaseItemSemanticEditPolicy extends SemanticEditPolicy {
    * @generated
    */
   protected Command getSetCommand( SetRequest req ) {
+    return null;
+  }
+  
+  protected Command getEditCommand ( EditCommandRequestWrapper req ) {
     return null;
   }
 
@@ -302,13 +302,9 @@ public class WorkflowBaseItemSemanticEditPolicy extends SemanticEditPolicy {
    * @generated
    */
   protected Command getDestroyElementCommand( View view ) {
-    EditPart editPart = ( EditPart )getHost().getViewer()
-      .getEditPartRegistry()
-      .get( view );
-    DestroyElementRequest request = new DestroyElementRequest( getEditingDomain(),
-                                                               false );
-    return editPart.getCommand( new EditCommandRequestWrapper( request,
-                                                               Collections.EMPTY_MAP ) );
+    EditPart editPart = ( EditPart )getHost().getViewer().getEditPartRegistry().get( view );
+    DestroyElementRequest request = new DestroyElementRequest( getEditingDomain(),false );
+    return editPart.getCommand( new EditCommandRequestWrapper( request,Collections.EMPTY_MAP ) );
   }
 
   /**

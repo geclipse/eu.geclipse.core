@@ -129,21 +129,15 @@ public class WorkflowVisualIDRegistry {
     }
     switch( eu.geclipse.workflow.ui.part.WorkflowVisualIDRegistry.getVisualID( containerView ) ) {
       case WorkflowJobEditPart.VISUAL_ID:
-        if( IWorkflowPackage.eINSTANCE.getIOutputPort()
-          .isSuperTypeOf( domainElement.eClass() ) )
-        {
+        if( IWorkflowPackage.eINSTANCE.getIOutputPort().isSuperTypeOf( domainElement.eClass() ) ) {
           return OutputPortEditPart.VISUAL_ID;
         }
-        if( IWorkflowPackage.eINSTANCE.getIInputPort()
-          .isSuperTypeOf( domainElement.eClass() ) )
-        {
+        if( IWorkflowPackage.eINSTANCE.getIInputPort().isSuperTypeOf( domainElement.eClass() ) ) {
           return InputPortEditPart.VISUAL_ID;
         }
       break;
       case WorkflowEditPart.VISUAL_ID:
-        if( IWorkflowPackage.eINSTANCE.getIWorkflowJob()
-          .isSuperTypeOf( domainElement.eClass() ) )
-        {
+        if( IWorkflowPackage.eINSTANCE.getIWorkflowJob().isSuperTypeOf( domainElement.eClass() ) ) {
           return WorkflowJobEditPart.VISUAL_ID;
         }
       break;

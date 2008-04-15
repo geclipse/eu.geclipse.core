@@ -51,7 +51,7 @@
       <?gmfgen generated="true"?>
       <context
          description="%context.description"
-         id="eu.geclipse.workflow.ui.ui.diagramContext"
+         id="eu.geclipse.workflow.ui.diagramContext"
          name="%context.name"
          parentId="org.eclipse.gmf.runtime.diagram.ui.diagramContext">
       </context>
@@ -103,6 +103,22 @@
       </objectContribution>
    </extension>
 	
+   <extension point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="false"
+            id="eu.geclipse.workflow.ui.AddJobDescriptionfromJSDL"
+            objectClass="org.eclipse.gmf.runtime.diagram.ui.editparts.ShapeNodeEditPart">
+         <action 
+               class="eu.geclipse.workflow.ui.part.GetJobDescriptionFromFileAction"
+               definitionId="eu.geclipse.workflow.ui.addJobDescription"
+               enablesFor="1"
+               id="eu.geclipse.workflow.ui.popup.addJobDescriptionActionID"
+               label="%add.job.description"
+               menubarPath="additions">
+          </action>
+      </objectContribution>                    
+   </extension>
+	
    <extension point="org.eclipse.gmf.runtime.common.ui.services.action.globalActionHandlerProviders">
       <?gmfgen generated="true"?>
       <GlobalActionHandlerProvider
@@ -118,6 +134,7 @@
             </ElementType>
          </ViewId>
       </GlobalActionHandlerProvider>
+      
       <GlobalActionHandlerProvider
          class="org.eclipse.gmf.runtime.diagram.ui.providers.ide.providers.DiagramIDEGlobalActionHandlerProvider"
          id="WorkflowPresentationIDE">
@@ -128,6 +145,7 @@
             </ElementType>
          </ViewId>
       </GlobalActionHandlerProvider>
+      
       <GlobalActionHandlerProvider
             class="org.eclipse.gmf.runtime.diagram.ui.render.providers.DiagramUIRenderGlobalActionHandlerProvider"
             id="WorkflowRender">
@@ -483,7 +501,7 @@
       </actionProvider>
    </extension>
    
-	   <extension point="org.eclipse.ui.navigator.linkHelper">
+   <extension point="org.eclipse.ui.navigator.linkHelper">
       <?gmfgen generated="true"?>
       <linkHelper
             id="eu.geclipse.workflow.ui.navigatorLinkHelper"
@@ -499,6 +517,7 @@
          </selectionEnablement>
       </linkHelper>
    </extension>
+   
    <extension point="org.eclipse.ui.commands">
       <?gmfgen generated="true"?>
       <command
@@ -509,24 +528,47 @@
          name="%update.diagram.name"/>
    </extension>
    
+   <extension point="org.eclipse.ui.commands">
+	  <category 
+	     name="%add.job.description" 
+	     description="%addjobdescription.desc" 
+	     id="eu.geclipse.workflow.ui"/>
+	  <command 
+	     categoryId="org.eclipse.ui.category.edit" 
+	     description="%addjobdescription.desc" 
+	     id="eu.geclipse.workflow.ui.addJobDescription" 
+	     name="%add.job.description">
+      </command>
+   </extension>
+
    <extension point="org.eclipse.ui.bindings">
       <?gmfgen generated="true"?>
       <key 
          commandId="eu.geclipse.workflow.ui.updateDiagram"
-         contextId="eu.geclipse.workflow.ui.ui.diagramContext"
+         contextId="eu.geclipse.workflow.ui.diagramContext"
          schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
          sequence="F5"/>
    </extension>
+   
+   <extension point="org.eclipse.ui.bindings">
+      <key
+         commandId="eu.geclipse.workflow.ui.addJobDescription"
+         contextId="eu.geclipse.workflow.ui.diagramContext"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         sequence="M1+J"/>
+   </extension>
+   
    <extension point="org.eclipse.gmf.runtime.diagram.ui.paletteProviders">
          <paletteProvider class="org.eclipse.gmf.runtime.diagram.ui.providers.DefaultPaletteProvider">
            <Priority name="High"/>
-           <contribution>
-             <predefinedEntry id="standardGroup/noteStack/textTool" remove="true"/>
-           </contribution>
+            <contribution>
+              <predefinedEntry id="standardGroup/noteStack/textTool" remove="true"/>
+            </contribution>
            <editor id="eu.geclipse.workflow.ui.part.WorkflowDiagramEditorID">
            </editor>
          </paletteProvider>
    </extension>
+   
    <extension point="eu.geclipse.core.gridProjectFolder">
       <folder
             elementClass="eu.geclipse.core.model.IGridWorkflow"

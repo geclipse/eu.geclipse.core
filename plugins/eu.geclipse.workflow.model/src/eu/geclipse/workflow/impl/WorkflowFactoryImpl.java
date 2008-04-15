@@ -152,16 +152,5 @@ public class WorkflowFactoryImpl extends EFactoryImpl implements IWorkflowFactor
     return (IWorkflowPackage)getEPackage();
   }
 
-  /**
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @deprecated
-   * @generated
-   */
-  @Deprecated
-  public static IWorkflowPackage getPackage()
-  {
-    return IWorkflowPackage.eINSTANCE;
-  }
 
 } //WorkflowFactoryImpl

@@ -20,8 +20,7 @@ import org.eclipse.gmf.runtime.diagram.ui.parts.DiagramActionBarContributor;
 /**
  * @generated
  */
-public class WorkflowDiagramActionBarContributor
-  extends DiagramActionBarContributor
+public class WorkflowDiagramActionBarContributor extends DiagramActionBarContributor
 {
 
   /**

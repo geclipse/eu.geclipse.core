@@ -22,8 +22,7 @@ import org.eclipse.gmf.runtime.emf.type.core.requests.DestroyElementRequest;
 /**
  * @generated
  */
-public class LinkItemSemanticEditPolicy
-  extends WorkflowBaseItemSemanticEditPolicy
+public class LinkItemSemanticEditPolicy extends WorkflowBaseItemSemanticEditPolicy
 {
 
   /**

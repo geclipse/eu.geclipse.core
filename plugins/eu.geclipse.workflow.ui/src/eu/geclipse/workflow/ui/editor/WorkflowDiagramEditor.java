@@ -54,8 +54,7 @@ import eu.geclipse.workflow.ui.part.WorkflowPaletteFactory;
 /**
  * @generated
  */
-public class WorkflowDiagramEditor extends DiagramDocumentEditor
-  implements IGotoMarker
+public class WorkflowDiagramEditor extends DiagramDocumentEditor implements IGotoMarker
 {
 
   /**
@@ -65,7 +64,7 @@ public class WorkflowDiagramEditor extends DiagramDocumentEditor
   /**
    * @generated
    */
-  public static final String CONTEXT_ID = "eu.geclipse.workflow.ui.ui.diagramContext"; //$NON-NLS-1$
+  public static final String CONTEXT_ID = "eu.geclipse.workflow.ui.diagramContext"; //$NON-NLS-1$
 
   /**
    * @generated

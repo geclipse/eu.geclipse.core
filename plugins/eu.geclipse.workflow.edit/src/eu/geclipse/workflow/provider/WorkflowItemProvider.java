@@ -113,7 +113,7 @@ public class WorkflowItemProvider extends WorkflowElementItemProvider
   public Object getImage( Object object )
   {
     return overlayImage( object,
-                         getResourceLocator().getImage( "full/obj16/Workflow" ) );
+                         getResourceLocator().getImage( "full/obj16/Workflow" ) ); //$NON-NLS-1$
   }
 
   /**
@@ -127,9 +127,9 @@ public class WorkflowItemProvider extends WorkflowElementItemProvider
   {
     String label = ( ( IWorkflow )object ).getName();
     return label == null || label.length() == 0
-                                               ? getString( "_UI_IWorkflow_type" )
-                                               : getString( "_UI_IWorkflow_type" )
-                                                 + " "
+                                               ? getString( "_UI_IWorkflow_type" ) //$NON-NLS-1$
+                                               : getString( "_UI_IWorkflow_type" ) //$NON-NLS-1$
+                                                 + " " //$NON-NLS-1$
                                                  + label;
   }
 

@@ -41,10 +41,12 @@ import eu.geclipse.workflow.ui.edit.parts.WorkflowJobEditPart;
 import eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin;
 
 /**
+ * This class provides popup options when the mouse hovers over a Workflow or 
+ * WorkflowJob. The provided popups are Input & Output ports (in the case of
+ * WorkflowJobs) and WorkflowJobs (in the case of Workflows). 
  * @generated
  */
-public class WorkflowModelingAssistantProvider
-  extends ModelingAssistantProvider
+public class WorkflowModelingAssistantProvider extends ModelingAssistantProvider
 {
 
   /**
@@ -117,8 +119,7 @@ public class WorkflowModelingAssistantProvider
    * @generated
    */
   @Override
-  public List getTypesForSource( IAdaptable target,
-                                 IElementType relationshipType )
+  public List getTypesForSource( IAdaptable target, IElementType relationshipType )
   {
     IGraphicalEditPart targetEditPart = ( IGraphicalEditPart )target.getAdapter( IGraphicalEditPart.class );
     if( targetEditPart instanceof InputPortEditPart ) {
@@ -135,8 +136,7 @@ public class WorkflowModelingAssistantProvider
    * @generated
    */
   @Override
-  public List getTypesForTarget( IAdaptable source,
-                                 IElementType relationshipType )
+  public List getTypesForTarget( IAdaptable source, IElementType relationshipType )
   {
     IGraphicalEditPart sourceEditPart = ( IGraphicalEditPart )source.getAdapter( IGraphicalEditPart.class );
     if( sourceEditPart instanceof OutputPortEditPart ) {
@@ -153,22 +153,16 @@ public class WorkflowModelingAssistantProvider
    * @generated
    */
   @Override
-  public EObject selectExistingElementForSource( IAdaptable target,
-                                                 IElementType relationshipType )
-  {
-    return selectExistingElement( target, getTypesForSource( target,
-                                                             relationshipType ) );
+  public EObject selectExistingElementForSource( IAdaptable target, IElementType relationshipType ) {
+    return selectExistingElement( target, getTypesForSource( target, relationshipType ) );
   }
 
   /**
    * @generated
    */
   @Override
-  public EObject selectExistingElementForTarget( IAdaptable source,
-                                                 IElementType relationshipType )
-  {
-    return selectExistingElement( source, getTypesForTarget( source,
-                                                             relationshipType ) );
+  public EObject selectExistingElementForTarget( IAdaptable source, IElementType relationshipType ) {
+    return selectExistingElement( source, getTypesForTarget( source, relationshipType ) );
   }
 
   /**
@@ -200,8 +194,7 @@ public class WorkflowModelingAssistantProvider
    * @generated
    */
   protected boolean isApplicableElement( EObject element, Collection types ) {
-    IElementType type = ElementTypeRegistry.getInstance()
-      .getElementType( element );
+    IElementType type = ElementTypeRegistry.getInstance().getElementType( element );
     return types.contains( type );
   }
 
@@ -211,11 +204,10 @@ public class WorkflowModelingAssistantProvider
   protected EObject selectElement( EObject[] elements ) {
     Shell shell = Display.getCurrent().getActiveShell();
     ILabelProvider labelProvider = new AdapterFactoryLabelProvider( WorkflowDiagramEditorPlugin.getInstance()
-      .getItemProvidersAdapterFactory() );
-    ElementListSelectionDialog dialog = new ElementListSelectionDialog( shell,
-                                                                        labelProvider );
-    dialog.setMessage( "Available domain model elements:" );
-    dialog.setTitle( "Select domain model element" );
+                                                                    .getItemProvidersAdapterFactory() );
+    ElementListSelectionDialog dialog = new ElementListSelectionDialog( shell, labelProvider );
+    dialog.setMessage( "Available domain model elements:" ); //$NON-NLS-1$
+    dialog.setTitle( "Select domain model element" ); //$NON-NLS-1$
     dialog.setMultipleSelection( false );
     dialog.setElements( elements );
     EObject selected = null;
