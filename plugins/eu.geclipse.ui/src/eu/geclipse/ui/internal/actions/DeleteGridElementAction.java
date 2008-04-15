@@ -56,7 +56,7 @@ public class DeleteGridElementAction extends SelectionListenerAction {
   private DeleteResourceAction eclipseAction;
 
   protected DeleteGridElementAction(final Shell shell) {
-    super( "Delete element" );
+    super( "Delete" );
     
     this.shell = shell;
     this.eclipseAction = new DeleteResourceAction( shell );
