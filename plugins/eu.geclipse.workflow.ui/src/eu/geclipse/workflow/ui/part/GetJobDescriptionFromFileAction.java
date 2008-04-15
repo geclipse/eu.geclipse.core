@@ -19,14 +19,21 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import org.eclipse.core.commands.ExecutionException;
 
+import org.eclipse.core.commands.operations.OperationHistoryFactory;
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
+import org.eclipse.gmf.runtime.common.core.command.CommandResult;
+import org.eclipse.gmf.runtime.emf.commands.core.command.AbstractTransactionalCommand;
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -131,40 +138,40 @@ public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
     
     IStatus status = Status.OK_STATUS;
 
-    System.out.println( mySelectedElement.toString() );
-    System.out.println( mySelectedElement.getEditingDomain().toString() );
+//    System.out.println( mySelectedElement.toString() );
+//    System.out.println( mySelectedElement.getEditingDomain().toString() );
     
     TransactionalEditingDomain domain = mySelectedElement.getEditingDomain();
     ResourceSet resourceSet = domain.getResourceSet();
     
-    
-//
-//    AbstractTransactionalCommand command = new AbstractTransactionalCommand( domain,
-//                                                                             Messages.getString("GetJobDescriptionFromFileAction.updatingJobDescription"), //$NON-NLS-1$
-//                                                                             null )
-//    {
-//      @Override
-//      protected CommandResult doExecuteWithResult( IProgressMonitor monitor, IAdaptable info )
-//        throws ExecutionException
-//      {
+ 
+    AbstractTransactionalCommand command = new AbstractTransactionalCommand( domain,
+                                                                             Messages.getString("GetJobDescriptionFromFileAction.updatingJobDescription"), //$NON-NLS-1$
+                                                                             null )
+    {
+      @Override
+      protected CommandResult doExecuteWithResult( IProgressMonitor monitor, IAdaptable info )
+      {
         mySelectedElement.getNotationView().eSet( IWorkflowPackage.eINSTANCE.getIWorkflowJob_JobDescription(), jobDescriptionInJSDL );
-//        
-//        
-//        return CommandResult.newOKCommandResult();
-//      }
-//    };
-//    
-//    try {
-//      OperationHistoryFactory.getOperationHistory().execute( command, new NullProgressMonitor(), null );
-//    } catch( ExecutionException eE ) {
-//      status = new Status( IStatus.ERROR,
-//                           WorkflowDiagramEditorPlugin.ID,
-//                           IStatus.OK,
-//                           Messages.getString( "GetJobDescriptionFromFileAction.errorUpdatingJobDescription" ), //$NON-NLS-1$
-//                           eE );
-////      WorkflowDiagramEditorPlugin.getInstance()
-////        .logError( Messages.getString("GetJobDescriptionFromFileAction.errorUpdatingJobDescription"), e ); //$NON-NLS-1$
-//    }
+        
+        
+        return CommandResult.newOKCommandResult();
+      }
+
+
+    };
+    
+    try {
+      OperationHistoryFactory.getOperationHistory().execute( command, new NullProgressMonitor(), null );
+    } catch( ExecutionException eE ) {
+      status = new Status( IStatus.ERROR,
+                           WorkflowDiagramEditorPlugin.ID,
+                           IStatus.OK,
+                           Messages.getString( "GetJobDescriptionFromFileAction.errorUpdatingJobDescription" ), //$NON-NLS-1$
+                           eE );
+//      WorkflowDiagramEditorPlugin.getInstance()
+//        .logError( Messages.getString("GetJobDescriptionFromFileAction.errorUpdatingJobDescription"), e ); //$NON-NLS-1$
+    } 
     return true;
     
      
