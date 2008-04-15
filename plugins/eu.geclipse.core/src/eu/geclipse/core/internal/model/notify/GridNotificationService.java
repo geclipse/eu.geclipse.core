@@ -258,13 +258,15 @@ public class GridNotificationService {
       }
         
       for ( IGridModelEvent event : localCopy ) {
-        for ( IGridModelListener listener : this.listeners ) {
-          listener.gridModelChanged( event );
+        synchronized ( this.listeners ) {
+          for ( IGridModelListener listener : this.listeners ) {
+            listener.gridModelChanged( event );
+          }
         }
       }
       
     }
     
   }
-
+  
 }
