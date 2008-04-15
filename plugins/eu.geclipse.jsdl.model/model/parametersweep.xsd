@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema targetNamespace="http://schemas.ogf.org/jsdl/2007/01/jsdl-sweep" 
+    xmlns:sweep="http://schemas.ogf.org/jsdl/2007/01/jsdl-sweep"
+    xmlns:jsdl="http://schemas.ggf.org/jsdl/2005/11/jsdl"
+    xmlns:xs="http://www.w3.org/2001/XMLSchema"
+    elementFormDefault="qualified" version="1">
+    
+    <xs:element name="Function" abstract="true"/>
+    
+    <xs:element name="Parameter" type="xs:string"/>
+    
+    <xs:element name="Assignment">
+        <xs:complexType mixed="false">
+            <xs:sequence>
+                <xs:element ref="sweep:Parameter" minOccurs="1" maxOccurs="unbounded"/>
+                <xs:element ref="sweep:Function" minOccurs="1" maxOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="Sweep" type="sweep:Sweep_Type"/>
+    
+    <xs:complexType name="Sweep_Type" mixed="false">
+        <xs:sequence>
+            <xs:element ref="sweep:Assignment" minOccurs="1" maxOccurs="unbounded"/>
+            <xs:element ref="sweep:Sweep" minOccurs="0" maxOccurs="unbounded"/>
+        </xs:sequence>
+    </xs:complexType>
+    
+</xs:schema>
