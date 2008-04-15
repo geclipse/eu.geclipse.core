@@ -92,6 +92,7 @@ import eu.geclipse.jsdl.ui.internal.pages.DataStagingPage;
 import eu.geclipse.jsdl.ui.internal.pages.JobApplicationPage;
 import eu.geclipse.jsdl.ui.internal.pages.JobDefinitionPage;
 import eu.geclipse.jsdl.ui.internal.pages.OverviewPage;
+import eu.geclipse.jsdl.ui.internal.pages.ParametricJobPage;
 import eu.geclipse.jsdl.ui.internal.pages.ResourcesPage;
 
 
@@ -298,6 +299,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
     private JobApplicationPage jobApplicationPage = new JobApplicationPage(this);
     private DataStagingPage dataStagingPage = new DataStagingPage(this);
     private ResourcesPage resourcesPage = new ResourcesPage(this);
+    private ParametricJobPage parametricPage = new ParametricJobPage(this, "id", "Parametric job");
     private IHyperlinkListener messageHyperLinkListener;
     
 
@@ -435,6 +437,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
          addPage( this.jobApplicationPage );
          addPage( this.dataStagingPage );  
          addPage( this.resourcesPage );
+         addPage( this.parametricPage );
          pushContentToPages(); 
        }
       updateProblemIndication();
@@ -529,6 +532,9 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
     }
     if ( this.dataStagingPage != null ){
       this.dataStagingPage.setPageContent( this.jobDefType, isModelRefreshed() );
+    }
+    if (this.parametricPage != null){
+      this.parametricPage.setPageContent( this.jobDefType, isModelRefreshed() );
     }
     
   }
