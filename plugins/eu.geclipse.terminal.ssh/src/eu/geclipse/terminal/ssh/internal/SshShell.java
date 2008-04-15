@@ -68,7 +68,7 @@ public class SshShell implements IDropDownEntry<ITerminalView>, ITerminalListene
 
   /**
    * Creates a new SSH terminal session using the specified ssh connection 
-   * inforamtion in the specified terminal view.
+   * information in the specified terminal view.
    * @param terminalView the terminal view to add the ssh terminal session to.
    * @param sshConnectionInfo the connection information describing the ssh
    *                          session.
@@ -82,7 +82,7 @@ public class SshShell implements IDropDownEntry<ITerminalView>, ITerminalListene
       if (service == null) {
         Display.getDefault().asyncExec( new Runnable() {
           public void run() {
-            ProblemException problemException = new ProblemException( "eu.geclipse.terminal.ssh.problem.no_ssh_service", Activator.PLUGIN_ID );
+            ProblemException problemException = new ProblemException( "eu.geclipse.terminal.ssh.problem.no_ssh_service", Activator.PLUGIN_ID ); //$NON-NLS-1$
             ProblemDialog.openProblem( null,
                                        Messages.getString( "SshShell.sshTerminal" ), //$NON-NLS-1$
                                        Messages.getString( "SshShell.couldNotGetService" ), //$NON-NLS-1$
