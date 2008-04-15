@@ -87,7 +87,7 @@ import eu.geclipse.jsdl.model.posix.POSIXApplicationType;
 import eu.geclipse.jsdl.model.posix.PosixFactory;
 import eu.geclipse.jsdl.model.posix.PosixPackage;
 import eu.geclipse.jsdl.model.posix.impl.POSIXApplicationTypeImpl;
-import eu.geclipse.jsdl.model.util.JsdlResourceFactoryImpl;
+import eu.geclipse.jsdl.model.base.util.JsdlResourceFactoryImpl;
 
 /**
  * Concrete implementation of an {@link IGridJobDescription} for the JSDL
