@@ -32,10 +32,10 @@ import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
-import eu.geclipse.jsdl.model.util.JsdlAdapterFactory;
+import eu.geclipse.jsdl.model.base.util.JsdlAdapterFactory;
 
 /**
- * @author nickl
+ * @author nloulloud
  *
  */
 public class JsdlAdaptersFactory extends JsdlAdapterFactory implements ComposeableAdapterFactory,
