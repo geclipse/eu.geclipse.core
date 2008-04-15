@@ -16,7 +16,6 @@
 package eu.geclipse.ui.internal.actions;
 
 import org.eclipse.jface.action.IMenuManager;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.dnd.Clipboard;
@@ -25,7 +24,6 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionGroup;
-import org.eclipse.ui.actions.DeleteResourceAction;
 import org.eclipse.ui.actions.RenameResourceAction;
 import org.eclipse.ui.navigator.ICommonMenuConstants;
 
@@ -58,8 +56,8 @@ public class FileActions extends ActionGroup {
   
   /**
    * The action for deleting resources in the workspace.
-   */
-  private DeleteResourceAction deleteAction;
+   */  
+  private DeleteGridElementAction deleteElementAction;  
   
   /**
    * The action for renaming resources in the workspace.
@@ -82,17 +80,14 @@ public class FileActions extends ActionGroup {
     this.clipboard = new Clipboard( shell.getDisplay() );
     
     this.copyAction = new CopyAction( this.clipboard );
-    this.pasteAction = new PasteAction( view, this.clipboard );
-    this.deleteAction = new DeleteResourceAction( shell );
-    ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
-    ImageDescriptor deleteImage 
-        = sharedImages.getImageDescriptor( ISharedImages.IMG_TOOL_DELETE );
-    this.deleteAction.setImageDescriptor( deleteImage );
+    this.pasteAction = new PasteAction( view, this.clipboard );    
+    this.deleteElementAction = new DeleteGridElementAction( shell );
+    ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();    
     this.renameAction = new RenameResourceAction( shell );
     
     provider.addSelectionChangedListener( this.copyAction );
-    provider.addSelectionChangedListener( this.pasteAction );
-    provider.addSelectionChangedListener( this.deleteAction );
+    provider.addSelectionChangedListener( this.pasteAction );    
+    provider.addSelectionChangedListener( this.deleteElementAction );
     provider.addSelectionChangedListener( this.renameAction );
     
   }
@@ -104,8 +99,8 @@ public class FileActions extends ActionGroup {
   public void dispose() {
     ISelectionProvider provider = this.site.getSelectionProvider();
     provider.removeSelectionChangedListener( this.copyAction );
-    provider.removeSelectionChangedListener( this.pasteAction );
-    provider.removeSelectionChangedListener( this.deleteAction );
+    provider.removeSelectionChangedListener( this.pasteAction );    
+    provider.removeSelectionChangedListener( this.deleteElementAction );
     provider.removeSelectionChangedListener( this.renameAction );
     this.clipboard.dispose();
   }
@@ -115,13 +110,13 @@ public class FileActions extends ActionGroup {
    */
   @Override
   public void fillContextMenu( final IMenuManager menu ) {
-    if ( this.deleteAction.isEnabled() ) {
+    if ( this.deleteElementAction.isEnabled() ) {
       menu.appendToGroup( ICommonMenuConstants.GROUP_EDIT, 
                           this.copyAction );
       menu.appendToGroup( ICommonMenuConstants.GROUP_EDIT, 
                           this.pasteAction );
       menu.appendToGroup( ICommonMenuConstants.GROUP_EDIT, 
-                          this.deleteAction );
+                          this.deleteElementAction );
       menu.appendToGroup( ICommonMenuConstants.GROUP_EDIT,
                           this.renameAction );
     }
@@ -143,8 +138,8 @@ public class FileActions extends ActionGroup {
     }
     
     this.copyAction.selectionChanged( selection );
-    this.pasteAction.selectionChanged( selection );
-    this.deleteAction.selectionChanged( selection );
+    this.pasteAction.selectionChanged( selection );    
+    this.deleteElementAction.selectionChanged( selection );
     this.renameAction.selectionChanged( selection );
   }
   

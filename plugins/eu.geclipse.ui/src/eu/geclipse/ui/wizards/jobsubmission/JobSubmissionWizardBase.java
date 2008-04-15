@@ -49,7 +49,7 @@ import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobCreator;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridJobID;
-import eu.geclipse.core.model.IGridJobSubmissionService;
+import eu.geclipse.core.model.IGridJobService;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.reporting.IProblem;
 import eu.geclipse.core.reporting.ISolution;
@@ -99,7 +99,7 @@ public abstract class JobSubmissionWizardBase extends Wizard
    * 
    * @return
    */
-  protected abstract IGridJobSubmissionService getSubmissionService();
+  protected abstract IGridJobService getSubmissionService();
 
   IGridContainer buildPath( final IGridJobDescription description )
     throws CoreException
@@ -197,7 +197,7 @@ public abstract class JobSubmissionWizardBase extends Wizard
   private class JobSubmissionJob extends Job {
 
     // create the service for the job submission
-    final IGridJobSubmissionService service = getSubmissionService();
+    final IGridJobService service = getSubmissionService();
 
     JobSubmissionJob() {
       super( Messages.getString( "JobSubmissionWizardBase.jobName" ) ); //$NON-NLS-1$
@@ -234,6 +234,7 @@ public abstract class JobSubmissionWizardBase extends Wizard
             testCancelled( betterMonitor );
             JobSubmissionWizardBase.this.creator.create( parent,
                                                          jobId,
+                                                         service,
                                                          namesIterator.next() );
             // don't submit this job again during again submission after error
             iterator.remove();

@@ -286,6 +286,10 @@
             description="Enter date in correct format"
             id="eu.geclipse.solution.widget.DateTimeText.UseCorrectFormat">
       </solution>
+      <problem
+            description="Cannot remove job resources from local workspace"
+            id="eu.geclipse.problem.deleteGridElementAction.cannotDeleteResource">
+      </problem>
    </extension>
    <extension
          point="eu.geclipse.ui.efs">

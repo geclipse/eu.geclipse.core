@@ -60,7 +60,7 @@ public interface IVirtualOrganization
    * @throws GridModelException If an error occurs while retrieving
    * the services.
    */
-  public IGridJobSubmissionService[] getJobSubmissionServices( final IProgressMonitor monitor ) throws GridModelException;
+  public IGridJobService[] getJobSubmissionServices( final IProgressMonitor monitor ) throws GridModelException;
   
   /**
    * Get a string that denotes the type of this VO. This string

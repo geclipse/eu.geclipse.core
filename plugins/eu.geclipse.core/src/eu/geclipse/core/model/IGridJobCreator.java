@@ -38,6 +38,6 @@ public interface IGridJobCreator extends IGridElementCreator {
    * @param jobName - name under which job should be stored in the workspace
    * @throws GridModelException
    */
-  public void create( final IGridContainer parent, IGridJobID id, final String jobName )
+  public void create( final IGridContainer parent, IGridJobID id, final IGridJobService jobService, final String jobName )
     throws GridModelException;
 }

@@ -277,19 +277,6 @@ public class JobManager extends AbstractGridElementManager
     }
     return flag;
   }
-  
-  /*
-   * (non-Javadoc)
-   * 
-   * @see eu.geclipse.core.model.IGridJobManager#startUpdater(eu.geclipse.core.model.IGridJobID)
-   */
-  public void startUpdater( final IGridJobID id)
-    throws GridModelException
-  {
-    JobStatusUpdater updater = getUpdater( id );
-    updater.setSystem( true );
-    JobScheduler.getJobScheduler().scheduleNewUpdater( updater );
-  }
 
   public void pauseAllUpdaters(){
     JobScheduler.getJobScheduler().pauseAllUpdaters();
@@ -400,23 +387,6 @@ public class JobManager extends AbstractGridElementManager
   /*
    * (non-Javadoc)
    * 
-   * @see eu.geclipse.core.model.IGridJobManager#addJobStatusListener(java.util.List,
-   *      int, eu.geclipse.core.model.IGridJobStatusListener)
-   */
-  public void addJobStatusListener( final IGridJobID[] ids,
-                                    final int status,
-                                    final IGridJobStatusListener listener )
-  {
-    JobStatusUpdater updater;
-    for( IGridJobID id : ids ) {
-      updater = getUpdater( id );
-      updater.addJobStatusListener( status, listener );
-    }
-  }
-
-  /*
-   * (non-Javadoc)
-   * 
    * @see eu.geclipse.core.model.IGridJobManager#removeJobStatusListener(eu.geclipse.core.model.IGridJobStatusListener)
    */
   public void removeJobStatusListener( final IGridJobStatusListener listener ) {
@@ -479,23 +449,6 @@ public class JobManager extends AbstractGridElementManager
     throws InterruptedException, NoSuchElementException
   {
     JobStatusUpdater updater = getUpdater( job );
-    if( updater == null ) {
-      throw new NoSuchElementException();
-    }
-    updater.join();
-  }
-
-  /**
-   * Wait until updater for the given job finishes, which means that the job
-   * status is final and cannot be changed any more.
-   * @param job
-   * @throws InterruptedException
-   * @throws NoSuchElementException
-   */
-  void waitForJob( final IGridJobID id )
-    throws InterruptedException, NoSuchElementException
-  {
-    JobStatusUpdater updater = getUpdater( id );
     if( updater == null ) {
       throw new NoSuchElementException();
     }
@@ -585,26 +538,6 @@ public class JobManager extends AbstractGridElementManager
       }
     } else {
       result = this.updaters.get( job.getID() );
-    }
-    return result;
-  }
-  
-  /**
-   * Method gets updater for the job with specified id. If the updater doesn't exist, it is created
-   * and added to updaters list. This method shouldn't be used to check if updaters list 
-   * contains updater for the given job id - use this.updaters.contains( IGridJobID ) instead.
-   * 
-   * @param jobID Job for which updater should be recived.
-   * @return Updater form list of registered udpaters.
-   */
-  public JobStatusUpdater getUpdater( final IGridJobID jobID ) {
-    JobStatusUpdater result = null;
-    if ( !( this.updaters.contains( jobID ) ) ) {
-      JobStatusUpdater updater = new JobStatusUpdater( jobID );
-      this.updaters.put( jobID, updater );
-      result = updater;
-    } else {
-      result = this.updaters.get(  jobID );
     }
     return result;
   }

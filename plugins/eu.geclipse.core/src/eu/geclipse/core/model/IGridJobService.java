@@ -23,7 +23,7 @@ import eu.geclipse.core.reporting.ProblemException;
 /**
  * TODO pawel
  */
-public interface IGridJobSubmissionService extends IGridService{
+public interface IGridJobService extends IGridService{
 
   /**
    * TODO pawel
@@ -34,6 +34,23 @@ public interface IGridJobSubmissionService extends IGridService{
    */
   public IGridJobID submitJob( final IGridJobDescription parent, final IProgressMonitor monitor )
     throws ProblemException, GridModelException;
+  
+  /**
+   * Download job status from server
+   * 
+   * @param id of job, which status will be checked on server
+   * @return current job status
+   * @throws ProblemException thrown when status cannot be downloaded/checked
+   */
+  public IGridJobStatus getJobStatus( final IGridJobID id ) throws ProblemException;
+  
+  /**
+   * Deletes job from server and release resources on server
+   * @param job job identifier, which has to be deleted
+   * @param monitor 
+   * @throws ProblemException
+   */
+  public void deleteJob( final IGridJob job, IProgressMonitor monitor ) throws ProblemException;
 
 //  /**
 //   * TODO pawel

@@ -17,7 +17,6 @@ package eu.geclipse.core;
 
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -26,15 +25,10 @@ import org.eclipse.core.runtime.jobs.Job;
 
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.internal.model.JobManager;
-import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.GridModelException;
-import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobID;
 import eu.geclipse.core.model.IGridJobStatus;
 import eu.geclipse.core.model.IGridJobStatusListener;
-import eu.geclipse.core.model.IGridJobStatusService;
-import eu.geclipse.core.reporting.ProblemException;
 
 /**
  * The class for updating job status in the background. There is one JobStatusUpdater 
@@ -67,15 +61,6 @@ public class JobStatusUpdater extends Job {
     this.job = job;
   }
   
-  /**
-   * Constructor
-   * @param jobID of job for which this updater is created
-   */
-  public JobStatusUpdater( final IGridJobID jobID ) {
-    super( Messages.getString("JobStatusUpdater.name") ); //$NON-NLS-1$
-    this.jobID = jobID;
-  }
-  
   
   /**
    * @return Job for which this updater is running.
@@ -97,20 +82,6 @@ public class JobStatusUpdater extends Job {
           if( this.job != null ) {
             this.job.updateJobStatus();
             newStatus = this.job.getJobStatus();
-          } else {
-            List<IGridElementCreator> elementCreators = GridModel.getElementCreators( IGridJobStatusService.class );
-            for( IGridElementCreator creator : elementCreators ) {
-              if( creator.canCreate( this.jobID ) ) {
-                try {
-                  IGridJobStatusService service = ( IGridJobStatusService )creator.create( null );
-                  newStatus = service.getJobStatus( this.jobID );
-                } catch( GridModelException e ) {
-                  // empty implementation
-                } catch( ProblemException e ) {
-                  // empty implementation
-                }
-              }
-            }
           }
           if( newStatus != null ) {
             newType = newStatus.getType();

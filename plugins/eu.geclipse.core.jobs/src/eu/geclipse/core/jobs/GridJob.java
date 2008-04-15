@@ -51,7 +51,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import eu.geclipse.core.ExtensionManager;
-import eu.geclipse.core.GridJobStatusServiceFactoryManager;
 import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.filesystem.GEclipseURI;
 import eu.geclipse.core.jobs.internal.Activator;
@@ -64,8 +63,7 @@ import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridJobID;
 import eu.geclipse.core.model.IGridJobStatus;
-import eu.geclipse.core.model.IGridJobStatusService;
-import eu.geclipse.core.model.IGridJobStatusServiceFactory;
+import eu.geclipse.core.model.IGridJobService;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
 import eu.geclipse.core.model.impl.ResourceGridElement;
 import eu.geclipse.core.reporting.ProblemException;
@@ -75,7 +73,7 @@ import eu.geclipse.jsdl.JSDLJobDescription;
 /**
  * Class representing submitted job.
  */
-public class GridJob extends ResourceGridContainer implements IGridJob {  
+public class GridJob extends ResourceGridContainer implements IGridJob {
 
   /**
    * Name for folder containing output files for job
@@ -107,7 +105,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
   private IFile jobStatusFile=null;
   private IFile jobInfoFile=null;  
   private Date submissionTime;
-  private IGridJobStatusService statusService = null;   // don't use it directly! Use getJobStatusService()
+  private IGridJobService jobService; // Don't use it directly. Always use getJobService() instead this.jobService!
   private String jobName;
 
   /**
@@ -119,9 +117,8 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     this.jobIdFile = jobFolder.getFile( JOBID_FILENAME );
     this.jobInfoFile = jobFolder.getFile( JOBINFO_FILENAME );
     this.jobName = getName();
-    readJobInfo( jobFolder );
-    // gridJobFolder = new GridJobFolder( jobFolder, this );
     readJobID();
+    readJobInfo( jobFolder );
     readChildrenJobs();
     setJobFolderProperties( jobFolder );
     if( this.jobDescriptionFile != null ) {
@@ -148,25 +145,27 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
    */
   public static GridJob createJobStructure( final IFolder jobFolder,
                                          final GridJobID id,
+                                         final IGridJobService jobService,
                                          final IGridJobDescription description,
                                          final String uniqueJobName )
     throws GridModelException
   {
     GridJob job = new GridJob( jobFolder );
-    job.create( jobFolder, id, description, uniqueJobName );
+    job.create( jobFolder, id, jobService, description, uniqueJobName );
     return job;
   }
 
   /**
    * @param jobFolder
    * @param id
+   * @param jobSrvce
    * @param description
    * @param uniqueJobName 
    * @throws GridModelException
    */
   public void create( final IFolder jobFolder,
                       final GridJobID id,
-                      final IGridJobDescription description, final String uniqueJobName )
+                      final IGridJobService jobSrvce, final IGridJobDescription description, final String uniqueJobName )
     throws GridModelException
   {
     this.submissionTime = Calendar.getInstance().getTime(); 
@@ -174,6 +173,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     this.jobIdFile = jobFolder.getFile( JOBID_FILENAME );
     this.jobInfoFile = jobFolder.getFile( JOBINFO_FILENAME );
     this.jobID = id;
+    this.jobService = jobSrvce;
     this.jobDescription = description;
     this.jobStatus = new GridJobStatus( Messages.getString( "GridJob.jobStatusSubmitted" ), //$NON-NLS-1$
                                         IGridJobStatus.SUBMITTED );
@@ -224,6 +224,31 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
         }
       }
     }
+  }
+
+  /**
+   * @return job service or null if service doesn't exists for that job.<br>
+   * Service may not exists if middleware doesn't support it, or if job was created in g-eclipse old version  
+   */
+  private IGridJobService getJobService() {
+    if( this.jobService == null ) {
+      this.jobService = createJobService( this.jobID );
+    }
+    return this.jobService;
+  }
+  
+  private IGridJobService createJobService( final IGridJobID jobID ) {
+    IGridJobService service = null;
+    IGridElementCreator creator = GridModel.getElementCreator( jobID, IGridJobService.class );
+    if( creator != null ) {
+      try {
+        service = ( IGridJobService )creator.create( null );
+      } catch( GridModelException exception ) {
+        Activator.getDefault().logException( exception, "Cannot create job service" );
+      }
+    }
+    
+    return service;
   }
 
   public void cancel() {
@@ -313,13 +338,13 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
   }
 
   public IGridJobStatus updateJobStatus() {
-    IGridJobStatus newJobStatus = null;
-    IGridJobStatusService service = getJobStatusService();
+    IGridJobStatus newJobStatus = null;    
     
     try {
+      IGridJobService service = getJobService();
       if( service != null
           && this.jobID.getJobID() != GridJobID.UNKNOWN )
-      {
+      {        
         newJobStatus = service.getJobStatus( this.jobID );
       }
       if( newJobStatus != null && newJobStatus instanceof GridJobStatus ) {
@@ -800,20 +825,6 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
 
   }
 
-  /**
-   * JobStatusService has to be created as lazy, because of bug #209160
-   * @return service for checking current status of this job
-   */
-  private IGridJobStatusService getJobStatusService() {
-    if( this.statusService == null ) {
-      IGridJobStatusServiceFactory factory = GridJobStatusServiceFactoryManager.getFactory( this.jobID.getClass() );
-      if( factory != null ) {
-        this.statusService = factory.getGridJobStatusService( this );
-      }
-    }
-    return this.statusService;
-  }
-
   private void readChildrenJobs() {
     IFolder jobFolder = (IFolder)this.getResource();
     
@@ -864,6 +875,19 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
 
   public String getJobName() {
     return this.jobName;
+  }
+
+  public void deleteJob( final IProgressMonitor monitor ) throws ProblemException {
+    try {
+      IGridJobService service = getJobService();
+      
+      if( service != null ) {
+        service.deleteJob( this, monitor );
+      }
+    } finally {
+      monitor.done();
+    }
+    
   }
   
 }

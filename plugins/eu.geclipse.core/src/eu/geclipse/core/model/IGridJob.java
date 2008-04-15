@@ -18,6 +18,10 @@ package eu.geclipse.core.model;
 
 import java.util.Date;
 
+import org.eclipse.core.runtime.IProgressMonitor;
+
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * Base interface for all middleware specific implementations of
@@ -73,4 +77,10 @@ public interface IGridJob
    * @return name of job without additional decorations, file extensions etc
    */
   public String getJobName();
+  
+  /**
+   * Deletes job from the grid
+   * @throws ProblemException
+   */
+  public void deleteJob( IProgressMonitor monitor ) throws ProblemException;
 }

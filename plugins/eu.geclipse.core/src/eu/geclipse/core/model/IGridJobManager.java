@@ -28,18 +28,8 @@ public interface IGridJobManager
 
   public void addJobStatusListener(IGridJob[] jobs, int status, IGridJobStatusListener listener);
 
-  public void addJobStatusListener(IGridJobID[] jobIds, int status, IGridJobStatusListener listener);
-
   public void removeJobStatusListener(IGridJobStatusListener listener);
-  
-  /**
-   * Creates and starts job updater for the given jobID.
-   * It should be started for jobs that does not use IGridJobCreator.
-   * @param id
-   * @throws GridModelException
-   */
-  public void startUpdater( final IGridJobID id) throws GridModelException;
-  
+
   /**
    * Stops refreshing all job status updaters
    */

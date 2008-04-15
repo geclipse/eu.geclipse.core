@@ -35,6 +35,7 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridJobID;
+import eu.geclipse.core.model.IGridJobService;
 import eu.geclipse.core.model.IGridWorkflow;
 import eu.geclipse.core.model.IGridWorkflowJob;
 import eu.geclipse.core.model.IGridWorkflowJobID;
@@ -107,7 +108,7 @@ public class GridJobCreator extends AbstractGridJobCreator {
    * @see eu.geclipse.core.model.IGridJobCreator#create(eu.geclipse.core.model.IGridContainer,
    *      eu.geclipse.core.model.IGridJobID)
    */
-  public void create( final IGridContainer parent, final IGridJobID id, final String jobName )
+  public void create( final IGridContainer parent, final IGridJobID id, final IGridJobService jobService, final String jobName )
     throws GridModelException
   {
     if( !( id instanceof GridJobID ) ) {
@@ -127,11 +128,11 @@ public class GridJobCreator extends AbstractGridJobCreator {
       jobFolder.delete( true, null );
       jobFolder.create( true, true, null );
       
-      GridJob job = GridJob.createJobStructure( jobFolder, ( GridJobID )id, description, uniqueJobName );
+      GridJob job = GridJob.createJobStructure( jobFolder, ( GridJobID )id, jobService, description, uniqueJobName );
       
       if( description instanceof IGridWorkflow
           && id instanceof IGridWorkflowJobID ) {
-        createWorkflowJobStructure( job, jobFolder, (IGridWorkflowJobID)id, (IGridWorkflow)description );
+        createWorkflowJobStructure( job, jobFolder, (IGridWorkflowJobID)id, jobService, (IGridWorkflow)description );
       }
       
       this.canCreate( jobFolder );
@@ -174,6 +175,7 @@ public class GridJobCreator extends AbstractGridJobCreator {
   
   private void createWorkflowJobStructure( final GridJob workflowJob, final IFolder jobFolder,
                                            final IGridWorkflowJobID id,
+                                           final IGridJobService jobService,
                                            final IGridWorkflow workflowDescription ) throws GridModelException
   {
     List<IGridWorkflowJobID> childrenIds = id.getChildrenJobs();
@@ -186,7 +188,7 @@ public class GridJobCreator extends AbstractGridJobCreator {
           JSDLJobDescription childJobDescription = createChildJobDescription( jobFolder, childJob );
           
           if( this.canCreate( childJobDescription ) ) {
-            this.create( workflowJob, childId, childJobDescription.getPath().removeFileExtension().lastSegment() );
+            this.create( workflowJob, childId, jobService, childJobDescription.getPath().removeFileExtension().lastSegment() );
           }
           
           deleteTmpJobDescription( childJobDescription );

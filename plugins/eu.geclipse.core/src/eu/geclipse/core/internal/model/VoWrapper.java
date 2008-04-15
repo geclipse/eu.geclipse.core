@@ -26,8 +26,7 @@ import eu.geclipse.core.model.IGridComputing;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridInfoService;
-import eu.geclipse.core.model.IGridJobStatusService;
-import eu.geclipse.core.model.IGridJobSubmissionService;
+import eu.geclipse.core.model.IGridJobService;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IGridService;
 import eu.geclipse.core.model.IGridStorage;
@@ -98,16 +97,10 @@ public class VoWrapper
         new ClassTypeQueryFilter( IGridInfoService.class, true )
       );
       
-      QueryContainer jobStatusServiceContainer
-        = new QueryContainer( serviceContainer, Messages.getString( "VoWrapper.jobStatusServices" ) ); //$NON-NLS-1$
-      jobStatusServiceContainer.addFilter(
-        new ClassTypeQueryFilter( IGridJobStatusService.class, true )
-      );
-      
       QueryContainer jobSubmissionServiceContainer
         = new QueryContainer( serviceContainer, Messages.getString( "VoWrapper.jobSubmissionServices" ) ); //$NON-NLS-1$
       jobSubmissionServiceContainer.addFilter(
-        new ClassTypeQueryFilter( IGridJobSubmissionService.class, true )
+        new ClassTypeQueryFilter( IGridJobService.class, true )
       );
       
       QueryContainer otherServiceContainer
@@ -116,10 +109,7 @@ public class VoWrapper
         new ClassTypeQueryFilter( IGridInfoService.class, false )
       );
       otherServiceContainer.addFilter(
-        new ClassTypeQueryFilter( IGridJobStatusService.class, false )
-      );
-      otherServiceContainer.addFilter(
-        new ClassTypeQueryFilter( IGridJobSubmissionService.class, false )
+        new ClassTypeQueryFilter( IGridJobService.class, false )
       );
       
     } catch ( GridModelException gmExc ) {
@@ -200,7 +190,7 @@ public class VoWrapper
     return storage;
   }
   
-  public IGridJobSubmissionService[] getJobSubmissionServices( final IProgressMonitor monitor )
+  public IGridJobService[] getJobSubmissionServices( final IProgressMonitor monitor )
       throws GridModelException {
     return this.vo.getJobSubmissionServices( monitor );
   }
