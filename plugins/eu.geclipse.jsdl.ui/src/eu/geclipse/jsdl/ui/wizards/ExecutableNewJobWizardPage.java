@@ -265,8 +265,8 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       public void widgetSelected( final SelectionEvent e ) {
         GridFileDialog dialog = new GridFileDialog( getShell(),
                                                           GridFileDialog.STYLE_NONE );
-        dialog.addFileTypeFilter( "jsdl", "Job Description Files (*.jsdl)" );
-        dialog.addFileTypeFilter( "txt", "Text Files (*.txt)" );
+//        dialog.addFileTypeFilter( "jsdl", "Job Description Files (*.jsdl)" );
+//        dialog.addFileTypeFilter( "txt", "Text Files (*.txt)" );
         if( dialog.open() == GridFileDialog.OK ) {
           URI[] uris = dialog.getSelectedURIs();
           if( ( uris != null ) && ( uris.length > 0 ) ) {
