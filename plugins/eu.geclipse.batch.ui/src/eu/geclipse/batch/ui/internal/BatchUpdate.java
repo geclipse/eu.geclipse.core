@@ -113,11 +113,13 @@ public class BatchUpdate {
     this.firstTime = true;
     this.initProgress = new ProgressDialog( shell );
     String[] description = new String[]{
-      "Worker Node", //$NON-NLS-1$
+      "Worker Nodes", //$NON-NLS-1$
       "Queues", //$NON-NLS-1$
+      "Sort Queue", //$NON-NLS-1$
       "Computing Element", //$NON-NLS-1$
+      "Sort Worker Nodes", //$NON-NLS-1$
       "Connections"}; //$NON-NLS-1$
-    this.initProgress.initInformation( 4,
+    this.initProgress.initInformation( 6,
                                        description,
                                        Messages.getString( "BatchUpdate.ProgressDialogTitle" ) ); //$NON-NLS-1$
   }
