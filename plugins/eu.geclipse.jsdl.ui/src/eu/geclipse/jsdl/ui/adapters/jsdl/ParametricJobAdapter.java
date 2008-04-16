@@ -19,23 +19,16 @@ package eu.geclipse.jsdl.ui.adapters.jsdl;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.print.attribute.standard.JobName;
-
 import org.eclipse.emf.common.util.EList;
-import org.eclipse.emf.common.util.TreeIterator;
-import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.util.FeatureMap;
 import org.eclipse.emf.ecore.util.FeatureMap.Entry;
-import org.eclipse.swt.internal.cde.DtActionArg;
 
 import eu.geclipse.jsdl.model.base.ApplicationType;
 import eu.geclipse.jsdl.model.base.DataStagingType;
 import eu.geclipse.jsdl.model.base.JobDefinitionType;
 import eu.geclipse.jsdl.model.base.JobDescriptionType;
 import eu.geclipse.jsdl.model.base.JobIdentificationType;
-import eu.geclipse.jsdl.model.base.impl.JobDescriptionTypeImpl;
 import eu.geclipse.jsdl.model.posix.POSIXApplicationType;
-import eu.geclipse.jsdl.ui.internal.pages.JobApplicationPage;
 
 public class ParametricJobAdapter extends JsdlAdaptersFactory {
 
