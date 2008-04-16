@@ -57,6 +57,7 @@ public class DeploymentSource extends WizardPage implements SelectionListener {
   //private static String TAR_SUFFIX = "tar"; //$NON-NLS-1$
   private CheckboxTreeViewer sourceTree;
   private Label descriptionLabel;
+  private Label seletedinfo;
   private StoredCombo tarCombo;
   private Button tarButton;
   private Button treebutton;
@@ -140,6 +141,14 @@ public class DeploymentSource extends WizardPage implements SelectionListener {
  
     gridData = new GridData();
     this.tarButton.setLayoutData( gridData );
+    this.seletedinfo = new Label ( composite, SWT.NONE );
+    this.seletedinfo.setText( "The selected deployment source is (are):  " ); //$NON-NLS-1$
+    this.seletedinfo.setVisible( false );
+    gridData = new GridData(GridData.GRAB_HORIZONTAL);
+    gridData.horizontalAlignment = GridData.BEGINNING;
+    gridData.grabExcessHorizontalSpace = true;
+    gridData.minimumWidth = 700;
+    this.seletedinfo.setLayoutData( gridData );
     this.setControl( composite );
   }
 
@@ -190,8 +199,10 @@ public class DeploymentSource extends WizardPage implements SelectionListener {
           }
           IGridElement [] stores = null;
           int i = 0;
+          
           if (getSourceTree().getCheckedElements().length != 0) {
             stores = new IGridElement [getSourceTree().getCheckedElements().length];
+           
             for (Object element: getSourceTree().getCheckedElements()) {
               stores [i++] = (IGridElement) element;
             }           
@@ -253,11 +264,12 @@ public class DeploymentSource extends WizardPage implements SelectionListener {
     }
   
  
-    String sourcelabel = "The selected deployment source is (are): "; //$NON-NLS-1$
+    String sourcelabel = "The selected deployment source is (are): ";  //$NON-NLS-1$
     for (URI uri: urls)
       sourcelabel += uri.toString() + ", "; //$NON-NLS-1$
     sourcelabel = sourcelabel.substring( 0, sourcelabel.length()-2 );
-    this.setMessage( sourcelabel );
+    this.seletedinfo.setText( sourcelabel );
+    this.seletedinfo.setVisible( true );
 
     this.setPageComplete( this.canFlipToNextPage() );
     this.setErrorMessage( null );
@@ -277,12 +289,31 @@ public class DeploymentSource extends WizardPage implements SelectionListener {
       sourcelabel += uri.getName() + ", "; //$NON-NLS-1$
     sourcelabel = sourcelabel.substring( 0, sourcelabel.length()-2 );
     this.source = urls;
-    this.sourceuris = new URI[urls.length];
+   URI[] urlsnew = new URI[urls.length];
     int i = 0;
+    int position = 0;
     for ( IGridElement element : urls ) {
-      this.sourceuris[i++] = element.getResource().getLocationURI();
+      urlsnew[i++] = element.getResource().getLocationURI();
     }
+    if (urlsnew.length > 1) {
+      String parent = urlsnew[0].toString();
+      String child = urlsnew[1].toString();
+      if (child.contains( parent ))
+        position = 1;
+    }
+    
+    if (position == 1){
+      this.sourceuris = new URI[urlsnew.length-1];
+     for (int j=0; j<this.sourceuris.length; j++)
+       this.sourceuris[j]=urlsnew[j];
+    }
+    else {
+      this.sourceuris = new URI[urlsnew.length];
+      this.sourceuris = urlsnew;
+    }
+    
     this.setMessage( sourcelabel );
+    this.seletedinfo.setVisible( false );
     this.setPageComplete( this.canFlipToNextPage() );
     this.setErrorMessage( null );
   }

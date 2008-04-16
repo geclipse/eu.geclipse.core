@@ -44,9 +44,9 @@ public class DeploymentChooserTreeLabelProvider implements ILabelProvider {
   public Image getImage( final Object element ) {
     Image image = null;
     URL urlRootElementImage = Activator
-      .getDefault().getBundle().getEntry( "icons/deploy16/package_green.png" ); //$NON-NLS-1$
+      .getDefault().getBundle().getEntry( "icons/deploy16/flag_blue.gif" ); //$NON-NLS-1$
     URL urlTypeImage = Activator
-      .getDefault().getBundle().getEntry( "icons/deploy16/flag_pink.png" ); //$NON-NLS-1$
+      .getDefault().getBundle().getEntry( "icons/deploy16/flag_orange.gif" ); //$NON-NLS-1$
     String category = ( ( IConfigurationElement ) element )
       .getAttribute( DeploymentWizard.EXT_CATEGORY ); 
     if ( category == null || category.equals( "" ) ) { //$NON-NLS-1$

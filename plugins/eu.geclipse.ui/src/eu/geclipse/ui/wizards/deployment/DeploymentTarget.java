@@ -180,6 +180,7 @@ public class DeploymentTarget extends WizardPage {
     });
     IStructuredSelection selections = ( ( DeploymentWizard ) this.getWizard() ).getSelection();
     IGridElement selected = ( IGridElement ) selections.getFirstElement();
+  
     if (selected instanceof IVirtualOrganization ) {
      getCETree().setAllChecked( true );
     }
@@ -203,24 +204,6 @@ public class DeploymentTarget extends WizardPage {
          }
        }
    }
-   
-    /*this.ceTree.addFilter (new ViewerFilter() {
-      @Override
-      public boolean select( final Viewer viewer,
-                             final Object parentElement,
-                             final Object element )
-      {
-        boolean ret = false;
-
-          while ( iter.hasNext() ) {
-            Object selectelement = iter.next();
-            IGridComputing onece = (IGridComputing) element;
-            if (onece.getHostName() == ((IGridComputing) selectelement).getHostName())
-            ret = true;
-          }
-        return ret;
-      }
-    } );*/
     }
  
     this.ceTree.addCheckStateListener( new ICheckStateListener() {
@@ -259,6 +242,7 @@ public class DeploymentTarget extends WizardPage {
         updatePageComplete();
       }
     });
+    
     this.updatePageComplete();
     this.setMessage( null );
     this.setErrorMessage( null );*/
