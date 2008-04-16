@@ -46,22 +46,46 @@ import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 
 import eu.geclipse.core.reporting.IProblem;
 import eu.geclipse.ui.dialogs.GridFileDialog;
-import eu.geclipse.ui.dialogs.Messages;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 
+/**
+ * Dialog for reporting {@link IProblem}s. The dialog supports sending, saving
+ * and copying the problem report to the system clipboard.
+ */
 public class ProblemReportDialog extends TitleAreaDialog {
   
+  /**
+   * ID of the send button.
+   */
   private static final int SEND_ID = 0x01;
   
+  /**
+   * ID of the save button.
+   */
   private static final int SAVE_ID = 0x02;
   
+  /**
+   * ID of the copy button.
+   */
   private static final int COPY_ID = 0x03;
   
+  /**
+   * The problem to be reported.
+   */
   private IProblem problem;
   
+  /**
+   * The text holding the problem report.
+   */
   private Text reportText;
   
+  /**
+   * Create a new problem report dialog for the specified problem.
+   * 
+   * @param parentShell The dialog's parent {@link Shell}.
+   * @param problem The {@link IProblem} to be reported.
+   */
   public ProblemReportDialog( final Shell parentShell, final IProblem problem ) {
     super( parentShell );
     this.problem = problem;
@@ -72,6 +96,9 @@ public class ProblemReportDialog extends TitleAreaDialog {
     setTitleImage( imgDesc.createImage() );
   }
   
+  /* (non-Javadoc)
+   * @see org.eclipse.jface.dialogs.Dialog#buttonPressed(int)
+   */
   @Override
   protected void buttonPressed( final int buttonId ) {
     if ( buttonId == IDialogConstants.CLIENT_ID + SEND_ID ) {
@@ -87,6 +114,9 @@ public class ProblemReportDialog extends TitleAreaDialog {
     }
   }
   
+  /* (non-Javadoc)
+   * @see org.eclipse.jface.dialogs.Dialog#createButtonsForButtonBar(org.eclipse.swt.widgets.Composite)
+   */
   @Override
   protected void createButtonsForButtonBar( final Composite parent ) {
     createButton( parent, IDialogConstants.CLIENT_ID + SEND_ID, "Send", true );
@@ -95,6 +125,9 @@ public class ProblemReportDialog extends TitleAreaDialog {
     createButton( parent, IDialogConstants.CLOSE_ID, IDialogConstants.CLOSE_LABEL, false );
   }
   
+  /* (non-Javadoc)
+   * @see org.eclipse.jface.dialogs.TitleAreaDialog#createDialogArea(org.eclipse.swt.widgets.Composite)
+   */
   @Override
   protected Control createDialogArea( final Composite parent ) {
     
@@ -127,11 +160,17 @@ public class ProblemReportDialog extends TitleAreaDialog {
         
   }
   
+  /**
+   * Called when the close button is pressed.
+   */
   protected void closePressed() {
     setReturnCode( OK );
     close();
   }
   
+  /**
+   * Called when the copy button is pressed.
+   */
   protected void copyPressed() {
     
     Transfer[] dataTypes = new Transfer[] {
@@ -148,6 +187,9 @@ public class ProblemReportDialog extends TitleAreaDialog {
     
   }
   
+  /**
+   * Called when the save button is pressed.
+   */
   protected void savePressed() {
     
     GridFileDialog dialog = new GridFileDialog( getShell(), GridFileDialog.STYLE_ALLOW_ONLY_FILES );
@@ -183,6 +225,9 @@ public class ProblemReportDialog extends TitleAreaDialog {
     
   }
   
+  /**
+   * Called when the send button is pressed.
+   */
   protected void sendPressed() {
     
     try {
@@ -216,6 +261,13 @@ public class ProblemReportDialog extends TitleAreaDialog {
     
   }
   
+  /**
+   * Get the mailto link for the send action.
+   * 
+   * @param report The report to be send.
+   * @return The mailto link as {@link URL}.
+   * @throws MalformedURLException If the {@link URL} is malformed.
+   */
   private URL getMailToLink( final String report )
       throws MalformedURLException {
     return new URL(
@@ -225,6 +277,15 @@ public class ProblemReportDialog extends TitleAreaDialog {
     );
   }
   
+  /**
+   * Save the report to the specified {@link IFileStore}.
+   * 
+   * @param store The {@link IFileStore} to which to save the report.
+   * @param report The report to be saved.
+   * @throws CoreException If the output stream could not be opened.
+   * @throws IOException If writing to the output stream or closing the
+   * stream failed.
+   */
   private void saveReport( final IFileStore store, final String report )
       throws CoreException, IOException {
     OutputStream oStream = store.openOutputStream( EFS.NONE, null );
