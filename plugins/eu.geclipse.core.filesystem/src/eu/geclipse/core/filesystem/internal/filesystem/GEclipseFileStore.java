@@ -30,6 +30,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 import eu.geclipse.core.filesystem.GEclipseFileSystem;
 import eu.geclipse.core.filesystem.GEclipseURI;
+import eu.geclipse.core.filesystem.internal.Activator;
 import eu.geclipse.core.util.MasterMonitor;
 
 /**
@@ -355,30 +356,21 @@ public class GEclipseFileStore
   @Override
   public void move( final IFileStore destination,
                     final int options,
-                    final IProgressMonitor monitor ) throws CoreException
-  {
-    boolean done = false;
-    if( destination instanceof GEclipseFileStore ) {
-      IFileStore src = this.slave;
-      IFileStore dst = ( ( GEclipseFileStore )destination ).getSlave();
-
-      if( src.getFileSystem().getScheme().equalsIgnoreCase( dst.getFileSystem().getScheme() ) ) {
-        String srcHost = src.toURI().getHost();
-        
-        if( srcHost != null
-            && srcHost.equalsIgnoreCase( dst.toURI().getHost() ) ) {
-          src.move( dst, options, monitor );
-          done = true;
-        }
-      }
-    }
-    if (!done) {
-      super.move( destination, options, monitor( monitor ) );
-    }
+                    final IProgressMonitor monitor )
+      throws CoreException {
+    getSlave().move( slave( destination ), options, monitor( monitor ) );
   }
   
   private IProgressMonitor monitor( final IProgressMonitor monitor ) {
     return new MasterMonitor( monitor, this.externalMonitor );
+  }
+  
+  private IFileStore slave( final IFileStore store ) {
+    IFileStore result = store;
+    while ( ( result != null ) && ( result instanceof GEclipseFileStore ) ) {
+      result = ( ( GEclipseFileStore ) result ).getSlave();
+    }
+    return result;
   }
 
 }
