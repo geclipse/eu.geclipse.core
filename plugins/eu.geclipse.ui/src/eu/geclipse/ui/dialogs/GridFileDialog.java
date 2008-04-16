@@ -704,6 +704,9 @@ public class GridFileDialog
     
     GridData gData;
     
+    Label topRule = new Label( parent, SWT.HORIZONTAL | SWT.SEPARATOR );
+    topRule.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
+    
     Composite mainComp = new Composite( parent, SWT.NONE );
     mainComp.setLayout( new GridLayout( 2, false ) );
     gData = new GridData( GridData.FILL_BOTH );
@@ -712,6 +715,9 @@ public class GridFileDialog
     gData.widthHint = 400;
     gData.heightHint = 400;
     mainComp.setLayoutData( gData );
+    
+    Label bottomRule = new Label( parent, SWT.HORIZONTAL | SWT.SEPARATOR );
+    bottomRule.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
     
     if ( ! hasStyle( STYLE_MULTI_SELECTION ) ) {
       

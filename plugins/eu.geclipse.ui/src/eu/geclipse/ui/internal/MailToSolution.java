@@ -12,6 +12,7 @@
  * Contributors:
  *    Mathias Stuempert - initial API and implementation
  *****************************************************************************/
+
 package eu.geclipse.ui.internal;
 
 import java.io.PrintWriter;
@@ -19,6 +20,9 @@ import java.io.StringWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.browser.IWebBrowser;
@@ -26,6 +30,7 @@ import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 
 import eu.geclipse.core.reporting.IProblem;
 import eu.geclipse.core.reporting.ISolution;
+import eu.geclipse.ui.internal.dialogs.ProblemReportDialog;
 
 public class MailToSolution implements ISolution {
   
@@ -36,7 +41,7 @@ public class MailToSolution implements ISolution {
   }
 
   public String getDescription() {
-    return "Send error report";
+    return "Create problem report";
   }
   
   public String getID() {
@@ -48,78 +53,23 @@ public class MailToSolution implements ISolution {
   }
 
   public void solve() {
-    URL url = getMailToLink();
-    if ( url != null ) {
-      IWorkbenchBrowserSupport browserSupport
-        = PlatformUI.getWorkbench().getBrowserSupport();
-      try {
-        IWebBrowser externalBrowser
-          = browserSupport.getExternalBrowser();
-        externalBrowser.openURL( url );
-      } catch ( PartInitException piExc ) {
-        Activator.logException( piExc );
-      }
-    }
+    ProblemReportDialog dialog = new ProblemReportDialog( getShell(), this.problem );
+    dialog.open();
   }
   
-  private String getMailBody( final IProblem problem ) {
+  private Shell getShell() {
     
-    StringBuffer buffer = new StringBuffer();
+    Shell result = null;
     
-    buffer.append(
-        "Description: " + problem.getDescription() + "%0A%0A" + //$NON-NLS-2$
-        "Plugin: " + problem.getPluginID() + "%0A%0A" //$NON-NLS-2$
-    );
+    IWorkbench workbench = PlatformUI.getWorkbench();
+    IWorkbenchWindow window = workbench.getActiveWorkbenchWindow();
     
-    String[] reasons = problem.getReasons();
-    if ( ( reasons != null ) && ( reasons.length > 0 ) ) {
-      buffer.append( "Reasons:%0A" );
-      for ( String reason : reasons ) {
-        buffer.append( " - " + reason + "%0A" ); //$NON-NLS-1$ //$NON-NLS-2$
-      }
-      buffer.append( "%0A" ); //$NON-NLS-1$
+    if ( window != null ) { 
+      result = window.getShell();
     }
-    
-    ISolution[] solutions = problem.getSolutions();
-    if ( ( solutions != null ) && ( solutions.length > 0 ) ) {
-      buffer.append( "Solutions:%0A" );
-      for ( ISolution solution : solutions ) {
-        buffer.append( " - " + solution.getDescription() + "%0A" ); //$NON-NLS-1$ //$NON-NLS-2$
-      }
-      buffer.append( "%0A" ); //$NON-NLS-1$
-    }
-    
-    Throwable exc = problem.getException();
-    if ( exc != null ) {
-      buffer.append( "Stacktrace:%0A" );
-      StringWriter sWriter = new StringWriter();
-      PrintWriter pWriter = new PrintWriter( sWriter );
-      exc.printStackTrace( pWriter );
-      pWriter.flush();
-      buffer.append( sWriter.getBuffer() );
-      pWriter.close();
-    }
-    
-    String body = buffer.toString().replaceAll( "[\r\n]", "%0A" ); //$NON-NLS-1$ //$NON-NLS-2$
-    
-    return body;
-    
-  }
-  
-  private URL getMailToLink() {
-    URL result = null;
-    String mailTo = this.problem.getMailTo();
-    try {
-      result = new URL(
-          // TODO check if the spaces etc do not need to be escaped!!
-          "mailto:" + mailTo
-          + "?subject=Problem Report: " + this.problem.getDescription()
-          + "&body=" + getMailBody( this.problem )
-        );
-    } catch ( MalformedURLException murlExc ) {
-      Activator.logException( murlExc );
-    }
+
     return result;
+    
   }
 
 }
