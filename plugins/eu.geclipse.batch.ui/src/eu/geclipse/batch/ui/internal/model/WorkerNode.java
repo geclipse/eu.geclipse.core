@@ -28,12 +28,13 @@ import eu.geclipse.batch.BatchJobManager;
 import eu.geclipse.batch.IWorkerNodeInfo;
 import eu.geclipse.batch.IWorkerNodeInfo.WorkerNodeState;
 import eu.geclipse.batch.ui.internal.Activator;
+import eu.geclipse.batch.ui.internal.BatchUpdate;
 import eu.geclipse.batch.ui.internal.Messages;
 
 /**
  * Class that is a model for a Worker Node that is part of a GEF figure
  */
-public final class WorkerNode extends BatchResource {
+public final class WorkerNode extends BatchResource  {
   /**
    * The identifier for the fqdn
    */
@@ -307,8 +308,7 @@ public final class WorkerNode extends BatchResource {
    * @return Returns the icon.
    */
   @Override
-  public Image getIcon()
-  {
+  public Image getIcon() {
     return this.workerNodeIcon;
   }
 
@@ -336,5 +336,21 @@ public final class WorkerNode extends BatchResource {
   @Override
   public String getOutlineString() {
     return Messages.getString( "WorkerNode.WN" ) + this.fqdn; //$NON-NLS-1$
+  }
+
+  
+  public int compareTo(final Object o ) {
+    int value;
+    String tempName ;
+
+    if (BatchUpdate.sortedN==2 ) {
+      tempName = ((WorkerNode)o).getState().toString();
+      value = getState().toString().compareTo(tempName);
+    }
+    else {
+     tempName = ((WorkerNode)o).getFQDN();
+     value = getFQDN().compareTo(tempName);
+    }
+    return value;
   }
 }

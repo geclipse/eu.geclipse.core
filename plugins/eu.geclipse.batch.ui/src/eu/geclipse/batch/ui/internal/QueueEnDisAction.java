@@ -83,6 +83,7 @@ public class QueueEnDisAction extends SelectionAction {
           this.batchWrapper.enableQueue( strName );
         else
           this.batchWrapper.disableQueue( strName );
+        
       } catch( ProblemException excp ) {
         // Action could not be performed
         ProblemDialog.openProblem( this.getWorkbenchPart().getSite().getShell(),

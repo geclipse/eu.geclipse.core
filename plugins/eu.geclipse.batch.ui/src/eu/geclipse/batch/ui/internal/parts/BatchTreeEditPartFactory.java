@@ -20,6 +20,7 @@ import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPartFactory;
 import eu.geclipse.batch.ui.internal.model.BatchDiagram;
 import eu.geclipse.batch.ui.internal.model.BatchResource;
+import eu.geclipse.batch.ui.internal.model.Box;
 
 /**
  * Factory that maps model elements to TreeEditParts. TreeEditParts are used in
@@ -35,12 +36,18 @@ public class BatchTreeEditPartFactory implements EditPartFactory {
    */
   public EditPart createEditPart( final EditPart context, final Object model ) {
     EditPart editPart = null;
-
+  
     if ( model instanceof BatchResource ) {
       editPart = new BatchTreeEditPart( ( BatchResource )model );
+     
+    }  if ( model instanceof Box) {
+      
+      editPart = new BoxTreeEditPart( ( BatchResource   )model);
+     
     }
     else if ( model instanceof BatchDiagram ) {
       editPart = new DiagramTreeEditPart( ( BatchDiagram )model );
+     
     }
 
     return editPart; 

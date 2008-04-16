@@ -42,7 +42,6 @@ import org.eclipse.gef.ui.actions.GEFActionConstants;
 import org.eclipse.gef.ui.actions.ZoomInAction;
 import org.eclipse.gef.ui.actions.ZoomOutAction;
 import org.eclipse.jface.action.IAction;
-
 import eu.geclipse.batch.BatchConnectionInfo;
 import eu.geclipse.batch.BatchServiceManager;
 import eu.geclipse.batch.Extensions;
@@ -50,6 +49,8 @@ import eu.geclipse.batch.IBatchService;
 import eu.geclipse.batch.IBatchServiceDescription;
 import eu.geclipse.batch.ui.internal.Activator;
 import eu.geclipse.batch.ui.internal.BatchUpdate;
+import eu.geclipse.batch.ui.internal.BoxSortName;
+import eu.geclipse.batch.ui.internal.BoxSortState;
 import eu.geclipse.batch.ui.internal.ComputingElementAction;
 import eu.geclipse.batch.ui.internal.Messages;
 import eu.geclipse.batch.ui.internal.QueueEnDisAction;
@@ -264,6 +265,15 @@ public class BatchEditor extends GraphicalEditor {
     action = new ComputingElementAction( this, this.batchWrapper ); 
     registry.registerAction( action );
     getSelectionActions().add( action.getId() );
+    
+    action = new BoxSortName( this); 
+    registry.registerAction( action );
+    getSelectionActions().add( action.getId() );
+    
+    
+    action = new BoxSortState( this ); 
+    registry.registerAction( action );
+    getSelectionActions().add( action.getId() );
   }
 
   @Override
@@ -422,6 +432,12 @@ public class BatchEditor extends GraphicalEditor {
       bars.setGlobalActionHandler( id, registry.getAction( id ) );
       
       id = ComputingElementAction.PROPERTY_COMPUTINGELEMENT_ACTION_NEWQUEUE;
+      bars.setGlobalActionHandler( id, registry.getAction( id ) );
+      
+      id = BoxSortName.PROPERTY_SORT_BY_NAME;
+      bars.setGlobalActionHandler( id, registry.getAction( id ) );
+      
+      id = BoxSortState.PROPERTY_SORT_BY_STATE;
       bars.setGlobalActionHandler( id, registry.getAction( id ) );
       
       bars.updateActionBars();

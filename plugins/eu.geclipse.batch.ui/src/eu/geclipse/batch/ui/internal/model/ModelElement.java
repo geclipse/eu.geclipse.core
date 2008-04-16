@@ -25,7 +25,7 @@ import org.eclipse.ui.views.properties.IPropertySource;
 /**
  * Root of the model hierarchy
  */
-public abstract class ModelElement implements IPropertySource {
+public abstract class ModelElement implements IPropertySource, Comparable {
 
   /**
    * An empty property descriptor.
@@ -37,7 +37,7 @@ public abstract class ModelElement implements IPropertySource {
   /**
    * Delegate used to implement property-change-support.
    */
-  protected transient PropertyChangeSupport pcsDelegate = new PropertyChangeSupport(this);
+  protected /*transient*/ PropertyChangeSupport pcsDelegate = new PropertyChangeSupport(this);
 
   /**
    * Attach a non-null PropertyChangeListener to this object.

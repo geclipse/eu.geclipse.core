@@ -32,7 +32,7 @@ import eu.geclipse.batch.ui.internal.Messages;
 /**
  * Class that is a model for a Computing Element that is part of a GEF figure
  */
-public class ComputingElement extends BatchResource {
+public class ComputingElement extends BatchResource  {
   /**
    * The identifier for the fqdn
    */
@@ -113,7 +113,9 @@ public class ComputingElement extends BatchResource {
    * @param jobManager The manager of all the jobs residing in this batch service
    */
   public ComputingElement( final BatchJobManager jobManager ) {
-    super( jobManager );
+   
+    super( jobManager ); 
+    
   }
   
   /**
@@ -268,6 +270,7 @@ public class ComputingElement extends BatchResource {
    * @return Returns the running jobs.
    */
   public List< IBatchJobInfo > getJobs() {
+   
     return this.jobManager.getJobs();
   }
 
@@ -289,4 +292,13 @@ public class ComputingElement extends BatchResource {
   public String getOutlineString() {
     return Messages.getString( "ComputingElement.CE" ) + this.fqdn; //$NON-NLS-1$
   }
+
+  public int compareTo( Object o ) {
+    // TODO Auto-generated method stub
+    return 0;
+  }
+
+ 
+
+ 
 }

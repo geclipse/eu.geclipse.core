@@ -37,7 +37,7 @@ import eu.geclipse.batch.ui.internal.model.Connection;
 import eu.geclipse.batch.ui.internal.model.ModelElement;
 import eu.geclipse.batch.ui.internal.model.Queue;
 import eu.geclipse.batch.ui.internal.model.WorkerNode;
-
+import eu.geclipse.batch.ui.internal.model.Box;
 /**
  * EditPart used for BatchResource instances.
  */
@@ -105,11 +105,13 @@ public abstract class BatchEditPart extends AbstractGraphicalEditPart
         this.anchor = new EllipseAnchor( getFigure() );
       else if ( getModel() instanceof Queue )
         this.anchor = new EllipseAnchor( getFigure() );
+      else if ( getModel() instanceof Box )
+       {this.anchor = new EllipseAnchor( getFigure() );}
       else if ( getModel() instanceof ComputingElement )
-        this.anchor = new ChopboxAnchor( getFigure() );
-      else
+        {this.anchor = new ChopboxAnchor( getFigure() );}
+      else {
         // if BatchResource gets extended the conditions above must be updated
-        throw new IllegalArgumentException( Messages.getString( "BatchEditPart.Error.UnexpectedModel" ) ); //$NON-NLS-1$
+        throw new IllegalArgumentException( Messages.getString( "BatchEditPart.Error.UnexpectedModel" ) ); }//$NON-NLS-1$
     }
     return this.anchor;
   }
@@ -159,6 +161,7 @@ public abstract class BatchEditPart extends AbstractGraphicalEditPart
         @SuppressWarnings("synthetic-access")
         public void run() {  
           refreshSourceConnections();
+              
         }  
       } 
       ); 
@@ -168,6 +171,7 @@ public abstract class BatchEditPart extends AbstractGraphicalEditPart
         @SuppressWarnings("synthetic-access")
         public void run() {  
           refreshTargetConnections();
+          
         }  
       } 
       ); 

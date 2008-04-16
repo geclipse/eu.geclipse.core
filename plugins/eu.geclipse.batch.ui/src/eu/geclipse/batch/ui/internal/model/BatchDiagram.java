@@ -96,4 +96,9 @@ public class BatchDiagram extends ModelElement {
 
     return ret;
   }
+
+  public int compareTo(final Object o ) {
+    // TODO Auto-generated method stub
+    return 0;
+  }
 }

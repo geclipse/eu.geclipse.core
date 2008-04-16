@@ -27,7 +27,7 @@ import eu.geclipse.batch.BatchJobManager;
 /**
  * Base class for the various model classes that models a batch resource.
  */
-public abstract class BatchResource extends ModelElement {
+public abstract class BatchResource extends ModelElement implements Comparable{
 
   /**
    * Property ID to use when the location of this batch resource is modified.
@@ -47,12 +47,12 @@ public abstract class BatchResource extends ModelElement {
   public static final String TARGET_CONNECTIONS_PROP = "BatchResource.TargetConn"; //$NON-NLS-1$
   
   private static final long serialVersionUID = 1;
-
+  
+  
   /**
    * The manager that keeps track of all the jobs in the batch service
    */
   protected BatchJobManager jobManager; 
-
   private Point location = new Point( 0, 0 );
   private Dimension size = new Dimension( 50, 50 );
   private List<Connection> sourceConnections = new ArrayList<Connection>();
@@ -108,7 +108,7 @@ public abstract class BatchResource extends ModelElement {
     return this.size.getCopy();
   }
 
-  /**
+   /**
    * Return a List of outgoing Connections.
    * @return Returns a <code>List</code> of source connections.
    */

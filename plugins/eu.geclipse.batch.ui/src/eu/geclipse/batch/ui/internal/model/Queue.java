@@ -17,6 +17,7 @@
 package eu.geclipse.batch.ui.internal.model;
 
 import java.beans.PropertyChangeListener;
+import java.util.Comparator;
 import java.util.List;
 import org.eclipse.jface.viewers.ICellEditorValidator;
 import org.eclipse.swt.graphics.Image;
@@ -30,12 +31,13 @@ import eu.geclipse.batch.IQueueInfo;
 import eu.geclipse.batch.IQueueInfo.QueueRunState;
 import eu.geclipse.batch.IQueueInfo.QueueState;
 import eu.geclipse.batch.ui.internal.Activator;
+import eu.geclipse.batch.ui.internal.BatchUpdate;
 import eu.geclipse.batch.ui.internal.Messages;
 
 /**
  * Class that is a model for a Queue that is part of a GEF figure
  */
-public final class Queue extends BatchResource {
+public final class Queue extends BatchResource implements Comparable{
   /**
    * The identifier for the queue name
    */
@@ -344,30 +346,31 @@ public final class Queue extends BatchResource {
   {
     return this.queueIcon;
   }
-
+ 
   /**
    * Merge the state from the batch service with what we currently display.
    * @param queuei The updated info from the batch service.
    */
   public void updateState( final IQueueInfo queuei ) {
+  
     if ( queuei.getState() != this.state )
-      this.setState( queuei.getState() );
+      {this.setState( queuei.getState() );}
     if ( queuei.getRunState() != this.runState )
-      this.setRunState( queuei.getRunState() );
+      {this.setRunState( queuei.getRunState() );}
     if ( queuei.getMemory() != this.memory )
-      this.setMemory( queuei.getMemory() );
+      {this.setMemory( queuei.getMemory() );}
     if ( 0 != queuei.getTimeCPU().compareTo( this.timeCPU ) )
-      this.setTimeCPU( queuei.getTimeCPU() );
+      {this.setTimeCPU( queuei.getTimeCPU() );}
     if ( 0 != queuei.getTimeWall().compareTo( this.timeWall ) )
-      this.setTimeWall( queuei.getTimeWall() );
+      {this.setTimeWall( queuei.getTimeWall() );}
     if ( 0 != queuei.getNode().compareTo( this.node ) )
-      this.setNode( queuei.getNode() );
+      {this.setNode( queuei.getNode() );}
     if ( queuei.getRun() != this.run )
-      this.setRun( queuei.getRun() );
+      {this.setRun( queuei.getRun() );}
     if ( queuei.getQue() != this.que )
-      this.setQue( queuei.getQue() );
+    { this.setQue( queuei.getQue() );}
     if ( 0 != queuei.getLm().compareTo( this.lm ) )
-      this.setLm( queuei.getLm() );
+      {this.setLm( queuei.getLm() );}
   }
 
   /**
@@ -379,4 +382,22 @@ public final class Queue extends BatchResource {
   public String getOutlineString() {
     return Messages.getString( "Queue.Name" ) + this.queueName; //$NON-NLS-1$
   }
+
+  public int compareTo(final Object  o ) {
+    int value;
+    String tempName ;
+    if (BatchUpdate.sortedQ==2 ) 
+    {
+      tempName = ((Queue)o).state.toString();
+      value = getState().toString().compareTo(tempName);
+    }
+    else
+    {
+       tempName = ((Queue)o).getQueneName();
+       value = getQueneName().compareTo(tempName);
+    }
+
+    return value;// TODO Auto-generated method stub
+  }
+ 
 }

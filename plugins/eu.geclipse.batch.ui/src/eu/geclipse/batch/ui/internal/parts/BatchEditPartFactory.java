@@ -19,14 +19,13 @@ package eu.geclipse.batch.ui.internal.parts;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.EditPart;
 
-//import eu.geclipse.batch.ui.model.BatchDiagram;
-//import eu.geclipse.batch.ui.model.ComputingElement;
-//import eu.geclipse.batch.ui.model.WorkerNode;
 import eu.geclipse.batch.ui.internal.model.BatchDiagram;
 import eu.geclipse.batch.ui.internal.model.ComputingElement;
 import eu.geclipse.batch.ui.internal.model.Connection;
 import eu.geclipse.batch.ui.internal.model.Queue;
 import eu.geclipse.batch.ui.internal.model.WorkerNode;
+
+import eu.geclipse.batch.ui.internal.model.Box;
 
 /**
  *  Factory for creating BatchEditPart.
@@ -70,6 +69,9 @@ public class BatchEditPartFactory implements EditPartFactory {
     }
     else if ( modelElement instanceof Connection ) {
       part = new ConnectionEditPart();
+    }
+    else if ( modelElement instanceof Box ) {
+      part = new BoxEditPart();
     }
     else {
       throw new RuntimeException( "Can't create part for model element: " //$NON-NLS-1$

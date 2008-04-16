@@ -34,6 +34,7 @@ public final class ComputingElementEditPart extends BatchEditPart {
    */
   @Override
   protected Figure createFigure() {
+    
     ComputingElementFigure cef = new ComputingElementFigure();
 
     return cef;
@@ -44,6 +45,7 @@ public final class ComputingElementEditPart extends BatchEditPart {
    */
   @Override
   public void refreshVisuals() {
+    
     IComputingElementFigure ceFigure = ( IComputingElementFigure )getFigure();
     ComputingElement model = ( ComputingElement )getModel();
     ceFigure.setFQDN( model.getFQDN() );

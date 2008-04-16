@@ -37,20 +37,25 @@ public class ComputingElementFigure extends Figure implements IComputingElementF
    * The preferred size for this figure
    */
   private static final Dimension SIZE = new Dimension( 140, 90 );
-
+  
   private TitleBarBorder border;
+ 
   private Label labType;
   private Label labQueues;
   private Label labWNs;
   private Label labJobs;
-
+   
   /**
    * The default constructor.
    */
+  
+ 
   public ComputingElementFigure( ) {
+    
     setLayoutManager( new ToolbarLayout() );
 
     this.border = new TitleBarBorder(); 
+   
     this.border.setBackgroundColor( ColorConstants.menuBackground );
     this.border.setTextColor( ColorConstants.menuForeground );
 
@@ -58,12 +63,14 @@ public class ComputingElementFigure extends Figure implements IComputingElementF
     this.setBorder( new CompoundBorder( iBorder , this.border ) );    
     
     this.setOpaque( true );
-    this.setBackgroundColor( ColorConstants.blue );
+    this.setBackgroundColor( ColorConstants.blue);
     this.setForegroundColor( ColorConstants.yellow );
 
     this.labType = new Label();
     add( this.labType );
-
+ 
+   
+    
     this.labQueues = new Label();
     add( this.labQueues );
 
@@ -81,10 +88,10 @@ public class ComputingElementFigure extends Figure implements IComputingElementF
    * @return Returns the preferred dimensions.
    */
   @Override
-  public Dimension getPreferredSize( final int wHint, final int hHint ) {
+  public Dimension getPreferredSize(final int wHint,final int hHint ) {
     return SIZE;
   }
-
+ 
   /**
    * Sets the name of the computing element.
    * @param name The name of the computing element.

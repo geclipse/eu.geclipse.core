@@ -24,7 +24,7 @@ import org.eclipse.draw2d.Graphics;
 public class Connection extends ModelElement {
 
   /**
-   * Constant for a solid line.
+   * Constant for a solid line.//
    */
   public static final int SOLID_CONNECTION = Graphics.LINE_SOLID ;
   /**
@@ -123,5 +123,10 @@ public class Connection extends ModelElement {
     this.source = newSource;
     this.target = newTarget;
     reconnect();
+  }
+
+  public int compareTo( Object o ) {
+    // TODO Auto-generated method stub
+    return 0;
   }
 }

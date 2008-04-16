@@ -24,6 +24,8 @@ import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.ui.actions.ActionRegistry;
 import org.eclipse.gef.ui.actions.GEFActionConstants;
 
+import eu.geclipse.batch.ui.internal.BoxSortName;
+import eu.geclipse.batch.ui.internal.BoxSortState;
 import eu.geclipse.batch.ui.internal.ComputingElementAction;
 import eu.geclipse.batch.ui.internal.QueueEnDisAction;
 import eu.geclipse.batch.ui.internal.QueueDeleteAction;
@@ -106,6 +108,14 @@ class BatchEditorContextMenuProvider extends ContextMenuProvider {
       menu.appendToGroup( GEFActionConstants.GROUP_EDIT, action);
     
     action = getAction( ComputingElementAction.PROPERTY_COMPUTINGELEMENT_ACTION_NEWQUEUE );
+    if ( action.isEnabled() )
+      menu.appendToGroup( GEFActionConstants.GROUP_EDIT, action);
+
+    action = getAction(  BoxSortName.PROPERTY_SORT_BY_NAME );
+    if ( action.isEnabled() )
+      menu.appendToGroup( GEFActionConstants.GROUP_EDIT, action);
+    
+    action = getAction(  BoxSortState.PROPERTY_SORT_BY_STATE);
     if ( action.isEnabled() )
       menu.appendToGroup( GEFActionConstants.GROUP_EDIT, action);
   }

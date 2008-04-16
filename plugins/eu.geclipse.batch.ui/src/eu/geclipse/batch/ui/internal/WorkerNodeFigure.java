@@ -40,26 +40,26 @@ public final class WorkerNodeFigure extends Figure implements IWorkerNodeFigure 
 
   //private FrameBorder border;
   private TitleBarBorder border;
+  
+ 
   private Label labState;
-
+ 
   /**
    * The default constructor.
    */
   public WorkerNodeFigure(){
-    setLayoutManager( new ToolbarLayout() );
-
+   setLayoutManager( new ToolbarLayout() );
+    
     this.border = new TitleBarBorder();
-    this.border.setBackgroundColor( ColorConstants.menuBackground );
+    this.border.setBackgroundColor( ColorConstants.menuBackground  ); 
     this.border.setTextColor( ColorConstants.menuForeground );
-
     CompoundBorder iBorder = new CompoundBorder( new SimpleRaisedBorder(), new LineBorder( ColorConstants.white ) );
     this.setBorder( new CompoundBorder( iBorder, this.border ) );
-
     this.setOpaque( true );
     this.setBackgroundColor( ColorConstants.green );
     this.setForegroundColor( ColorConstants.black );
-
     this.labState = new Label();
+   
     add( this.labState );
   }
 
@@ -70,9 +70,12 @@ public final class WorkerNodeFigure extends Figure implements IWorkerNodeFigure 
    * @return Returns the preferred dimensions.
    */
   @Override
+  
   public Dimension getPreferredSize( final int wHint, final int hHint ) {
     return SIZE;
   }
+  
+
 
   /**
    * Sets the name of the worker node.

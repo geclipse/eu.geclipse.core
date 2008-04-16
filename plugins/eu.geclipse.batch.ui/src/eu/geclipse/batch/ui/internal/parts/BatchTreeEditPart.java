@@ -44,6 +44,7 @@ public class BatchTreeEditPart extends AbstractTreeEditPart
    */
   @Override
   public void activate() {
+    
     if ( !isActive() ) {
       super.activate();
       ( ( ModelElement )getModel() ).addPropertyChangeListener( this );

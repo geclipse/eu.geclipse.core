@@ -62,7 +62,7 @@ public final class QueueEditPart extends BatchEditPart {
       // Due to multiple threads accessing GEF which is not thread safe
       this.display.syncExec( new Runnable() {  
         public void run() {  
-          refreshVisuals(); 
+            refreshVisuals(); 
         }  
       } 
       ); 

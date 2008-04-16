@@ -19,13 +19,14 @@ package eu.geclipse.batch.ui.internal;
 import org.eclipse.draw2d.ColorConstants;
 import org.eclipse.draw2d.CompoundBorder;
 import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.FlowLayout;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.SimpleRaisedBorder;
 import org.eclipse.draw2d.TitleBarBorder;
 import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
-
+import org.eclipse.draw2d.geometry.Rectangle;
 import eu.geclipse.batch.IQueueInfo.QueueRunState;
 import eu.geclipse.batch.IQueueInfo.QueueState;
 import eu.geclipse.batch.ui.IQueueFigure;
@@ -47,15 +48,22 @@ public final class QueueFigure extends Figure implements IQueueFigure {
    * The default constructor.
    */
   public QueueFigure(){
-    setLayoutManager( new ToolbarLayout() );
-
+    setLayoutManager(new FlowLayout() );
+   // ToolbarLayout layout = new ToolbarLayout(true);
+    // ToolbarLayout.HORIZONTAL;
+    // layout.setMinorAlignment(ToolbarLayout.ALIGN_TOPLEFT);
+    
+    // layout.setStretchMinorAxis(false);
+    // layout.setSpacing(15);
+    // layout.setVertical(ToolbarLayout.HORIZONTAL );
+    
+    // setLayoutManager(layout);
     this.border = new TitleBarBorder(); 
-    this.border.setBackgroundColor( ColorConstants.menuBackground );
+    this.border.setBackgroundColor( ColorConstants.menuBackground);
     this.border.setTextColor( ColorConstants.menuForeground );
 
     CompoundBorder iBorder = new CompoundBorder( new SimpleRaisedBorder(), new LineBorder( ColorConstants.white ) );
     this.setBorder( new CompoundBorder( iBorder, this.border ) );
-        
     this.setOpaque( true );
     this.setBackgroundColor( ColorConstants.green );
     this.setForegroundColor( ColorConstants.black );

@@ -19,7 +19,6 @@ package eu.geclipse.batch.ui.internal.parts;
 import java.beans.PropertyChangeEvent;
 
 import org.eclipse.draw2d.Figure;
-
 import eu.geclipse.batch.ui.IWorkerNodeFigure;
 import eu.geclipse.batch.ui.internal.WorkerNodeFigure;
 import eu.geclipse.batch.ui.internal.model.WorkerNode;
@@ -46,7 +45,6 @@ public final class WorkerNodeEditPart extends BatchEditPart {
   @Override
   public void refreshVisuals() {
     int numJobs;
-
     IWorkerNodeFigure wnFigure = ( IWorkerNodeFigure )getFigure();
     WorkerNode model = ( WorkerNode )getModel();
 
@@ -66,7 +64,7 @@ public final class WorkerNodeEditPart extends BatchEditPart {
    */
    @Override
   public void propertyChange( final PropertyChangeEvent ev ) {
-     if ( ev.getPropertyName().equals( WorkerNode.PROPERTY_FQDN )
+    if ( ev.getPropertyName().equals( WorkerNode.PROPERTY_FQDN )
          || ev.getPropertyName().equals( WorkerNode.PROPERTY_STATE )
          || ev.getPropertyName().equals( WorkerNode.PROPERTY_TOTAL_WN_JOBS ) )
        // Due to multiple threads accessing GEF which is not thread safe
