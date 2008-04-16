@@ -68,6 +68,7 @@ public class DeploymentTarget extends WizardPage {
    * Create a tree for listing storage element.
    */  
   private CheckboxTreeViewer seTree;
+  private IVirtualOrganization deployVO;
 
   protected DeploymentTarget( final String pageName ) {
     super( pageName );
@@ -180,7 +181,7 @@ public class DeploymentTarget extends WizardPage {
     });
     IStructuredSelection selections = ( ( DeploymentWizard ) this.getWizard() ).getSelection();
     IGridElement selected = ( IGridElement ) selections.getFirstElement();
-  
+    this.deployVO = selected.getProject().getVO();
     if (selected instanceof IVirtualOrganization ) {
      getCETree().setAllChecked( true );
     }
@@ -193,11 +194,11 @@ public class DeploymentTarget extends WizardPage {
        while ( iter.hasNext() ) {
          Object selectelement = iter.next();
          IGridComputing cesel = (IGridComputing) selectelement;
-         String selname = cesel.getHostName();
+         String selname = cesel.getName();
          for ( Object ceElement : elements ) 
          {
            IGridComputing cegrid = (IGridComputing) ceElement;
-           String cename = cegrid.getHostName();
+           String cename = cegrid.getName();
          if (cename.equals( selname )){
            this.ceTree.setChecked( ceElement, true );
          break;
@@ -280,6 +281,13 @@ public class DeploymentTarget extends WizardPage {
 
   protected CheckboxTreeViewer getSETree() {
     return this.seTree;
+  }
+  
+  /**get the VO of the grid project
+   * @return IVirtualOrganization
+   */
+  public IVirtualOrganization getDeployVO() {
+    return this.deployVO;
   }
   
   protected CheckboxTreeViewer getCETree() {

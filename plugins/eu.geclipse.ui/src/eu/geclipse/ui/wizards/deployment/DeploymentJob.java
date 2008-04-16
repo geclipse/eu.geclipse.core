@@ -49,6 +49,13 @@ public class DeploymentJob extends Job {
    */
   private String tag;
   
+  /**This interface defines the job for deployment
+   * @param name the name of the deployment
+   * @param deployment the object
+   * @param deploySource the source
+   * @param deployTarget the target CEs
+   * @param deployTag the tag of the software
+   */
   public DeploymentJob( final String name, 
                         final IApplicationDeployment deployment,
                         final URI[] deploySource,

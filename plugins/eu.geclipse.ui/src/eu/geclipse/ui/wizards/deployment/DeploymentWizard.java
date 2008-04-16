@@ -42,6 +42,7 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.core.model.IGridJobCreator;
 import eu.geclipse.core.model.IGridProject;
+import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.ui.internal.Activator;
 
 /**
@@ -138,6 +139,7 @@ public class DeploymentWizard extends Wizard {
     IGridElement[] target = targetList.toArray( new IGridElement[ targetList.size() ] );
     String tag = this.descriptionPage.getTag();
     IApplicationDeployment appDeployment = this.chooserPage.getExecuteExt();
+    IVirtualOrganization vo = this.targetPage.getDeployVO();
     DeploymentJob job 
       = new DeploymentJob( Messages.getString( "Deployment.deployment_wizard_job" ),  //$NON-NLS-1$
                            appDeployment,
