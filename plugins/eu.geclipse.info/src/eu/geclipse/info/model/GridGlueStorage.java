@@ -59,7 +59,7 @@ public class GridGlueStorage extends GridGlueElement implements IGridStorage {
             for( int i = 0; i < protocolCount; i++ ) {
               GlueSEAccessProtocol ap = getGlueSe().glueSEAccessProtocolList.get( i );
               String scheme = null;
-              if( ap.Type.toLowerCase().startsWith( "srm" ) ) {
+              if( ap.Type.toLowerCase().startsWith( "srm" ) ) { //$NON-NLS-1$
                 scheme = ap.Type.toLowerCase();
               } else {
                 scheme = ap.Type;

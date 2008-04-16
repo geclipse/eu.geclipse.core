@@ -48,6 +48,7 @@ import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -77,9 +78,11 @@ import eu.geclipse.info.glue.GlueCE;
 import eu.geclipse.info.glue.GlueCEAccessControlBaseRule;
 import eu.geclipse.info.glue.GlueQuery;
 import eu.geclipse.info.internal.Activator;
+import eu.geclipse.info.internal.Messages;
 import eu.geclipse.info.model.FetchJob;
 import eu.geclipse.info.model.IExtentedGridInfoService;
 import eu.geclipse.info.model.IGlueStoreChangeListerner;
+import eu.geclipse.info.model.InfoViewFilterShowFilledElements;
 import eu.geclipse.info.model.InfoViewerFilter;
 
 /**
@@ -91,6 +94,7 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
   Action doubleClickAction;
   FetchJob fetchJob;
   TreeViewer viewer;
+  boolean showOnlyFilledInfoElements = false;
   
   private String currentVO = null;
   private DrillDownAdapter drillDownAdapter;
@@ -98,6 +102,8 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
   private boolean SHOW_VO_LIST=false;
   private Combo comboVOList;
   private Label label = null;
+  
+  
 
   /**
    * @author George Tsouloupas
@@ -294,7 +300,7 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
      * @return always true
      */
     public boolean hasChildren() {
-      boolean hc = true;
+      boolean  hc = true;
       return hc;
     }
 
@@ -494,10 +500,7 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
     
     Thread t=new Thread(){
       //wait for BDII and register listener
-      //TODO this should not require another thread, is there another way?
-      
       @Override
-      
       public void run() {
         
         ArrayList<IExtentedGridInfoService> infoServicesArray = InfoServiceFactory.getAllExistingInfoService();
@@ -523,6 +526,7 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
     t.start();
     
     this.fetchJob = new FetchJob(" Retrieving Information"); //$NON-NLS-1$
+    this.showOnlyFilledInfoElements = false;
   }
   
   /**
@@ -572,7 +576,14 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
     this.viewer.setSorter( new NameSorter() );
     this.viewer.setInput( getViewSite() );
     this.viewer.setComparer( new GlueInfoComparator() );
- 
+    
+    // The viewerFilter that is used consists of 2 filters. One to show all or only filled info
+    // elements and another to show all/glite/gria elements.
+    ViewerFilter[] initialFilters = new ViewerFilter[2];    
+    initialFilters[0] = new InfoViewerFilter();
+    initialFilters[1] = new InfoViewerFilter();
+    this.viewer.setFilters( initialFilters );
+    
     if(this.SHOW_VO_LIST){
     // Label filler = new Label(parent, SWT.NONE);
 
@@ -673,7 +684,7 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
     }
     
     // Add the default Filter
-    FilterAction filterAction = new FilterAction(null, GlueInfoViewer.this.viewer); 
+    FilterAction filterAction = new FilterAction(null, this.viewer); 
     filterAction.setText( "Show everything" ); //$NON-NLS-1$
     filterAction.setToolTipText( "Show everything" ); //$NON-NLS-1$
     filterAction.setImageDescriptor( PlatformUI.getWorkbench()
@@ -684,8 +695,7 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
     // Create an action for each filter and show it in the view
     for (int i=0; i<infoFilterArray.size(); i++)
     {
-      filterAction = new FilterAction(infoFilterArray.get( i ),
-                                      GlueInfoViewer.this.viewer);
+      filterAction = new FilterAction(infoFilterArray.get( i ), this.viewer);
       
       filterAction.setText( infoFilterArray.get( i ).getText());
       filterAction.setToolTipText( infoFilterArray.get( i ).getText() );
@@ -703,7 +713,6 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
     if ( obj instanceof TreeParent ){
       TreeParent tp = ( TreeParent ) obj;
       if ( tp.getAgt() instanceof GlueCE ) {
-        //manager.add( this.benchmarkAction );
         manager.add( new Separator() );
         
       }
@@ -715,9 +724,6 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
   }
 
   private void fillLocalToolBar( final IToolBarManager manager ) {
-    // manager.add( actionSetSourceRGMA );
-    // manager.add( actionSetSourceBDII );
-    // manager.add( new Separator() );
     
     IAction refreshAction = new Action() {
       @Override
@@ -726,10 +732,47 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
         GlueInfoViewer.this.fetchJob.schedule();
       }
     };
-    refreshAction.setToolTipText( "Refresh" );  //$NON-NLS-1$
+    refreshAction.setToolTipText( Messages.getString( "GlueInfoView.refresh" ) );  //$NON-NLS-1$
     URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/elcl16/refresh_nav.gif" ); //$NON-NLS-1$
     refreshAction.setImageDescriptor( ImageDescriptor.createFromURL( imgUrl ) );
     manager.add( refreshAction );
+    
+    IAction showFilledInfoElementsAction = new Action() {
+      @Override
+      public void run() {
+        URL imageURL = null;
+        
+        if (GlueInfoViewer.this.showOnlyFilledInfoElements == true)
+        {
+          GlueInfoViewer.this.showOnlyFilledInfoElements = false;
+          this.setToolTipText( Messages.getString( "GlueInfoView.showOnlyFilledInfoElements" ) ); //$NON-NLS-1$
+          imageURL = Activator.getDefault().getBundle().getEntry( "icons/elcl16/hide.png" ); //$NON-NLS-1$
+          this.setImageDescriptor( ImageDescriptor.createFromURL( imageURL ) );
+         
+          ViewerFilter[] myViewerFilter = GlueInfoViewer.this.viewer.getFilters();
+          myViewerFilter[0] = new InfoViewerFilter();
+          GlueInfoViewer.this.viewer.setFilters( myViewerFilter );
+        }
+        else
+        {
+          GlueInfoViewer.this.showOnlyFilledInfoElements = true;
+          this.setToolTipText( Messages.getString( "GlueInfoView.showAllInfoElements" )); //$NON-NLS-1$
+          imageURL = Activator.getDefault().getBundle().getEntry( "icons/elcl16/show_all.png" ); //$NON-NLS-1$
+          this.setImageDescriptor( ImageDescriptor.createFromURL( imageURL ) );
+          
+          ViewerFilter[] myViewerFilter = GlueInfoViewer.this.viewer.getFilters();
+          myViewerFilter[0] = new InfoViewFilterShowFilledElements();
+          GlueInfoViewer.this.viewer.setFilters( myViewerFilter );
+        }
+        
+        GlueInfoViewer.this.viewer.refresh();
+      }
+    };
+    imgUrl = Activator.getDefault().getBundle().getEntry( "icons/elcl16/hide.png" ); //$NON-NLS-1$
+    showFilledInfoElementsAction.setImageDescriptor( ImageDescriptor.createFromURL( imgUrl ) );
+    showFilledInfoElementsAction.setToolTipText( Messages.getString( "GlueInfoView.showOnlyFilledInfoElements" ) ); //$NON-NLS-1$
+    manager.add( showFilledInfoElementsAction );
+    
     this.drillDownAdapter.addNavigationActions( manager );
   }
 

@@ -29,8 +29,8 @@ import eu.geclipse.info.model.InfoViewerFilter;
 public class FilterAction extends Action {
   
   private InfoViewerFilter filter;
+  private ViewerFilter[] viewerFilter;
   private TreeViewer viewer;
-  
   /**
    * @param filter an InfoViewerFilter
    * @param viewer the TreeViewer to filter
@@ -40,6 +40,7 @@ public class FilterAction extends Action {
   {
     this.filter = filter;
     this.viewer = viewer;
+    this.viewerFilter = new ViewerFilter[2];
   }
   
   /**
@@ -53,19 +54,22 @@ public class FilterAction extends Action {
   
   @Override
   public void run() {
+    
+    // The viewerFilter that is used consists of 2 filters. One to show all or only filled info
+    // elements and another to show all/glite/gria elements.
+    
     if (this.filter != null)
     {
-      ViewerFilter[] myFilters = new ViewerFilter[1];
-      myFilters[0] = this.filter;
-      this.viewer.setFilters( myFilters );
-      this.viewer.refresh();
+      this.viewerFilter[1] = this.filter;
     }
     else
-    {
-      ViewerFilter[] myFilters = new ViewerFilter[1];
-      myFilters[0] = new InfoViewerFilter(); // Nothing is filtered
-      this.viewer.setFilters( myFilters );
-      this.viewer.refresh();
+    { 
+      this.viewerFilter[1] = new InfoViewerFilter(); // Nothing is filtered
     }
+    
+      this.viewerFilter[0] = this.viewer.getFilters()[0];
+    
+    this.viewer.setFilters( this.viewerFilter );
+    this.viewer.refresh();
   }
 }
