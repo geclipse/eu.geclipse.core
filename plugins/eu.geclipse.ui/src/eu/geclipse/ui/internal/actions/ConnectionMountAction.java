@@ -84,12 +84,17 @@ public class ConnectionMountAction extends SelectionListenerAction {
   @Override
   protected boolean updateSelection( final IStructuredSelection selection ) {
     
-    boolean enabled = super.updateSelection( selection );
+    boolean enabled = ! selection.isEmpty() && super.updateSelection( selection );
     
     if ( enabled ) {
       for ( Object o : selection.toList() ) {
-        if ( ! ( o instanceof IGridConnectionElement ) 
-            || ( o instanceof IGridConnection ) ) {
+        if ( ( o instanceof IGridConnectionElement )
+            && ! ( o instanceof IGridConnection ) ){
+          if ( ! ( ( IGridConnectionElement ) o ).isFolder() ) {
+            enabled = false;
+            break;
+          }
+        } else {
           enabled = false;
           break;
         }
