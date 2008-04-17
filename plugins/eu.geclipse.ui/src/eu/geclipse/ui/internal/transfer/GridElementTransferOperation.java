@@ -390,7 +390,7 @@ public class GridElementTransferOperation
       // Prepare copy operation
       if ( data.status.isOK() && ( inStream != null ) && ( outStream != null ) ) {
         
-        byte[] buffer = new byte[ 1024 * 64 ];
+        byte[] buffer = new byte[ 1024 * 1024 ];
         Integer totalKb = Integer.valueOf( (int) Math.ceil((double)length/1024) ) ;
         
         SubProgressMonitor subMonitor = new SubProgressMonitor( monitor, 84 );
