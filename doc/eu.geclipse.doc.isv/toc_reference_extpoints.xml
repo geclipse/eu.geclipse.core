@@ -34,10 +34,6 @@
     href="html/extension-points/eu_geclipse_core_gridElementCreator.html">
   </topic>
   <topic
-    label="eu.geclipse.core.gridJobStatusServiceManager"
-    href="html/extension-points/eu_geclipse_core_gridJobStatusServiceManager.html">
-  </topic>
-  <topic
     label="eu.geclipse.core.gridProjectFolder"
     href="html/extension-points/eu_geclipse_core_gridProjectFolder.html">
   </topic>

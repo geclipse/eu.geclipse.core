@@ -157,12 +157,6 @@ public class Extensions {
     = "fromRemote"; //$NON-NLS-1$
   
   /**
-   * The ID of the job status service manager point.
-   */
-  public static final String JOB_STATUS_SERVICE_MANAGER_POINT
-    = "eu.geclipse.core.gridJobStatusServiceManager"; //$NON-NLS-1$
-  
-  /**
    * The ID of the filesystems extension point.
    */
   public static final String FILESYSTEMS_POINT
