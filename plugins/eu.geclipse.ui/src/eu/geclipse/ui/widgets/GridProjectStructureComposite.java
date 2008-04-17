@@ -35,6 +35,7 @@ import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -159,6 +160,43 @@ public class GridProjectStructureComposite extends Composite {
       }
     } );
     
+    Composite buttonComp = new Composite( settingsComp, SWT.NONE );
+    GridLayout buttonLayout = new GridLayout( 3, false );
+    buttonLayout.marginHeight = 0;
+    buttonLayout.marginWidth = 0;
+    buttonComp.setLayout( buttonLayout );
+    buttonComp.setLayoutData( new GridData( SWT.BEGINNING, SWT.BEGINNING, false, false ) );
+    
+    Button selectAllButton = new Button( buttonComp, SWT.NONE );
+    selectAllButton.setText( "Select All" );
+    selectAllButton.setLayoutData( new GridData( SWT.BEGINNING, SWT.CENTER, false, false ) );
+    selectAllButton.addSelectionListener( new SelectionAdapter() {
+      @Override
+      public void widgetSelected( final SelectionEvent e ) {
+        selectAll();
+      }
+    } );
+    
+    Button deselectAllButton = new Button( buttonComp, SWT.NONE );
+    deselectAllButton.setText( "Deselect All" );
+    deselectAllButton.setLayoutData( new GridData( SWT.BEGINNING, SWT.CENTER, false, false ) );
+    deselectAllButton.addSelectionListener( new SelectionAdapter() {
+      @Override
+      public void widgetSelected( final SelectionEvent e ) {
+        deselectAll();
+      }
+    } );
+    
+    Button revertButton = new Button( buttonComp, SWT.NONE );
+    revertButton.setText( "Revert Selection" );
+    revertButton.setLayoutData( new GridData( SWT.BEGINNING, SWT.CENTER, false, false ) );
+    revertButton.addSelectionListener( new SelectionAdapter() {
+      @Override
+      public void widgetSelected( final SelectionEvent e ) {
+        revertSelection();
+      }
+    } );
+    
     loadProjectFolders();
     initialize();
     updateTree();
@@ -228,6 +266,25 @@ public class GridProjectStructureComposite extends Composite {
     
     updateTree();
     
+  }
+  
+  protected void selectAll() {
+    this.viewer.setAllChecked( true );
+    updateTree();
+  }
+  
+  protected void deselectAll() {
+    this.viewer.setAllChecked( false );
+    updateTree();
+  }
+  
+  protected void revertSelection() {
+    List< String[] > elements = ( List< String[] > ) this.viewer.getInput();
+    for ( String[] element : elements ) {
+      boolean state = this.viewer.getChecked( element );
+      this.viewer.setChecked( element, ! state );
+    }
+    updateTree();
   }
   
   protected void updateTree() {
