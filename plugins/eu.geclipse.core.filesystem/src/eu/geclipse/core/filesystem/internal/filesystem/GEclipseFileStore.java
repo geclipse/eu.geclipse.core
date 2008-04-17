@@ -30,7 +30,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 import eu.geclipse.core.filesystem.GEclipseFileSystem;
 import eu.geclipse.core.filesystem.GEclipseURI;
-import eu.geclipse.core.filesystem.internal.Activator;
 import eu.geclipse.core.util.MasterMonitor;
 
 /**
