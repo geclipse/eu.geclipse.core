@@ -177,9 +177,7 @@ public class ProblemDialog extends ErrorDialog {
       solutions.add( new LogExceptionSolution( this.exc ) );
     }
 
-    if ( ( problem != null ) && ( problem.getMailTo() != null ) ) {
-      solutions.add( new MailToSolution( problem ) );
-    }
+    solutions.add( new MailToSolution( problem ) );
 
     if ( solutions.size() != 0 ) {
 

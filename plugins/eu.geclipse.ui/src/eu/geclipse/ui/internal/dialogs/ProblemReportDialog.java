@@ -24,6 +24,7 @@ import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.jface.dialogs.IDialogConstants;
+import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.dialogs.TitleAreaDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
@@ -32,8 +33,11 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.TextTransfer;
 import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -74,6 +78,11 @@ public class ProblemReportDialog extends TitleAreaDialog {
    * The problem to be reported.
    */
   private IProblem problem;
+  
+  /**
+   * Text field for the email address.
+   */
+  private Text mailtoText;
   
   /**
    * The text holding the problem report.
@@ -123,6 +132,7 @@ public class ProblemReportDialog extends TitleAreaDialog {
     createButton( parent, IDialogConstants.CLIENT_ID + SAVE_ID, "Save", false );
     createButton( parent, IDialogConstants.CLIENT_ID + COPY_ID, "Copy", false );
     createButton( parent, IDialogConstants.CLOSE_ID, IDialogConstants.CLOSE_LABEL, false );
+    updateUI();
   }
   
   /* (non-Javadoc)
@@ -137,6 +147,15 @@ public class ProblemReportDialog extends TitleAreaDialog {
     Composite mainComp = new Composite( parent, SWT.NONE );
     mainComp.setLayout( new GridLayout( 1, false ) );
     mainComp.setLayoutData( new GridData( SWT.FILL, SWT.FILL, true, true ) );
+    
+    Label mailtoLabel = new Label( mainComp, SWT.NONE );
+    mailtoLabel.setText( "Email address:" );
+    mailtoLabel.setLayoutData( new GridData() );
+    
+    this.mailtoText = new Text( mainComp, SWT.BORDER );
+    String mailto = this.problem.getMailTo();
+    this.mailtoText.setText( mailto == null ? "" : mailto ); //$NON-NLS-1$
+    this.mailtoText.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false ) );
     
     Label reportLabel = new Label( mainComp, SWT.NONE );
     reportLabel.setText( "Problem Report:" );
@@ -153,8 +172,16 @@ public class ProblemReportDialog extends TitleAreaDialog {
     Label bottomRule = new Label( parent, SWT.HORIZONTAL | SWT.SEPARATOR );
     bottomRule.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
     
+    this.mailtoText.addModifyListener( new ModifyListener() {
+      public void modifyText( final ModifyEvent e ) {
+        updateUI();
+      }
+    } );
+    
     setTitle( "Problem Reporting Dialog" );
     setMessage( "A problem report was created, choose one of the options by pressing the appropriate button." );
+    
+    updateUI();
     
     return mainComp;
         
@@ -173,17 +200,25 @@ public class ProblemReportDialog extends TitleAreaDialog {
    */
   protected void copyPressed() {
     
-    Transfer[] dataTypes = new Transfer[] {
-        TextTransfer.getInstance()
-    };
-    Object[] data = new Object[] {
-        this.reportText.getText()
-    };
-    Clipboard clipboard = new Clipboard( getShell().getDisplay() );
-    clipboard.setContents( data, dataTypes );
-    clipboard.dispose();
+    try {
     
-    MessageDialog.openInformation( getShell(), "Report copied", "The problem report was copied to the system clipboard." );
+      Transfer[] dataTypes = new Transfer[] {
+          TextTransfer.getInstance()
+      };
+      Object[] data = new Object[] {
+          this.reportText.getText()
+      };
+      Clipboard clipboard = new Clipboard( getShell().getDisplay() );
+      clipboard.setContents( data, dataTypes );
+      clipboard.dispose();
+      
+      setMessage(
+          "The problem report was copied to the system clipboard",
+          IMessageProvider.INFORMATION );
+      
+    } catch ( Throwable t ) {
+      setErrorMessage( String.format( "Copy failed: %s", t.getLocalizedMessage() ) );
+    }
     
   }
   
@@ -192,35 +227,27 @@ public class ProblemReportDialog extends TitleAreaDialog {
    */
   protected void savePressed() {
     
-    GridFileDialog dialog = new GridFileDialog( getShell(), GridFileDialog.STYLE_ALLOW_ONLY_FILES );
+    try {
     
-    if ( dialog.open() == Window.OK ) {
+      GridFileDialog dialog = new GridFileDialog( getShell(), GridFileDialog.STYLE_ALLOW_ONLY_FILES );
       
-      IFileStore[] fsList = dialog.getSelectedFileStores();
-      
-      if ( ( fsList != null ) && ( fsList.length > 0 ) ) {
-       
-        try {
-          saveReport( fsList[ 0 ], this.reportText.getText() );
-          MessageDialog.openInformation( getShell(), "Report saved", "The problem report was saved to " + fsList[ 0 ].toString() );
-        } catch ( CoreException cExc ) {
+      if ( dialog.open() == Window.OK ) {
         
-          ProblemDialog.openProblem( getShell(),
-              "Save failed",
-              "Unable to save report",
-              cExc );
-          
-        } catch ( IOException ioExc ) {
-          
-          ProblemDialog.openProblem( getShell(),
-              "Save failed",
-              "Unable to save report",
-              ioExc );
+        IFileStore[] fsList = dialog.getSelectedFileStores();
+        
+        if ( ( fsList != null ) && ( fsList.length > 0 ) ) {
+         
+          saveReport( fsList[ 0 ], this.reportText.getText() );
+          setMessage(
+              String.format( "The problem report saved to %s", fsList[ 0 ].toString() ),
+              IMessageProvider.INFORMATION );
           
         }
         
       }
       
+    } catch ( Throwable t ) {
+      setErrorMessage( String.format( "Save failed: %s", t.getLocalizedMessage() ) );
     }
     
   }
@@ -232,31 +259,23 @@ public class ProblemReportDialog extends TitleAreaDialog {
     
     try {
       
-      URL link = getMailToLink( this.reportText.getText() );
+      String mailto = this.mailtoText.getText();
+      if ( ( mailto == null ) || ( mailto.length() == 0 ) ) {
+        throw new IllegalArgumentException( "The mailto address is empty" );
+      }
+      
+      URL link = getMailToLink( this.reportText.getText(), mailto );
       IWorkbenchBrowserSupport browserSupport
         = PlatformUI.getWorkbench().getBrowserSupport();
       IWebBrowser externalBrowser
         = browserSupport.getExternalBrowser();
       externalBrowser.openURL( link );
-      MessageDialog.openInformation(
-          getShell(),
-          "Report send",
-          "The problem report was send to your mail client. Please note that this is an OS specific functionality that may fail. So please make sure that the report arrived at your mail client." );
+      setMessage(
+          String.format( "An attempt was made to send to problem report to %s", mailto ),
+          IMessageProvider.INFORMATION );
       
-    } catch ( PartInitException piExc ) {
-      
-      ProblemDialog.openProblem( getShell(),
-          "Send failed",
-          "Unable to send report to " + this.problem.getMailTo(),
-          piExc );
-      
-    } catch ( MalformedURLException murlExc ) {
-      
-      ProblemDialog.openProblem( getShell(),
-          "Send failed",
-          "Unable to send report to " + this.problem.getMailTo(),
-          murlExc );
-      
+    } catch ( Throwable t ) {
+      setErrorMessage( String.format( "Send failed: %s", t.getLocalizedMessage() ) );
     }
     
   }
@@ -268,10 +287,13 @@ public class ProblemReportDialog extends TitleAreaDialog {
    * @return The mailto link as {@link URL}.
    * @throws MalformedURLException If the {@link URL} is malformed.
    */
-  private URL getMailToLink( final String report )
+  private URL getMailToLink( final String report, final String address )
       throws MalformedURLException {
+    if ( ( address == null ) || ( address.length() == 0 ) ) {
+      throw new IllegalArgumentException( "The mailto address is empty" );
+    }
     return new URL(
-        "mailto:" + this.problem.getMailTo()
+        "mailto:" + address
         + "?subject=Problem Report: " + this.problem.getDescription()
         + "&body=" + report
     );
@@ -291,6 +313,14 @@ public class ProblemReportDialog extends TitleAreaDialog {
     OutputStream oStream = store.openOutputStream( EFS.NONE, null );
     oStream.write( report.getBytes() );
     oStream.close();
+  }
+  
+  private void updateUI() {
+    Button sendButton = getButton( IDialogConstants.CLIENT_ID + SEND_ID );
+    if ( sendButton != null ) {
+      String mailto = this.mailtoText.getText();
+      sendButton.setEnabled( ( mailto != null ) && ( mailto.length() > 0 ) );
+    }
   }
   
 }

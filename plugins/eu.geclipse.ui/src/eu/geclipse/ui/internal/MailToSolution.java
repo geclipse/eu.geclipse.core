@@ -49,7 +49,7 @@ public class MailToSolution implements ISolution {
   }
 
   public boolean isActive() {
-    return ( this.problem != null ) && ( this.problem.getMailTo() != null );
+    return this.problem != null;
   }
 
   public void solve() {
