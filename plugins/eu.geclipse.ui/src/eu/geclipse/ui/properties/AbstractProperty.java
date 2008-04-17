@@ -111,9 +111,9 @@ abstract public class AbstractProperty<ESourceType>
     suffixList.add( "EB" );  //$NON-NLS-1$
     Iterator<String> iterator = suffixList.iterator();
     String suffixString = iterator.next();
-    while( iterator.hasNext() && smallerValue > 1024 ) {
+    while( iterator.hasNext() && smallerValue > 1000 ) {
       suffixString = iterator.next();
-      smallerValue /= 1024;
+      smallerValue /= 1000;
     }
     if( ( ( int )smallerValue ) == smallerValue ) {
       formattedString = String.format( "%d", Integer.valueOf( ( int )smallerValue ) );  //$NON-NLS-1$
