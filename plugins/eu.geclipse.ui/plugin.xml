@@ -8,6 +8,7 @@
    <extension-point id="authTokenUI" name="Authentication Token UI Contributions" schema="schema/authTokenUI.exsd"/>
    <extension-point id="eu.geclipse.ui.jobDetailsFactory" name="eu.geclipse.ui.jobDetailsFactory" schema="schema/eu.geclipse.ui.jobDetailsFactory.exsd"/>
    <extension-point id="simpleTestUI" name="Simple Test UI Contributions" schema="schema/simpleTestUI.exsd"/>
+   <extension-point id="wizardExtension" name="Wizard Extension" schema="schema/wizardExtension.exsd"/>
    <extension
          point="org.eclipse.ui.decorators">
       <decorator
