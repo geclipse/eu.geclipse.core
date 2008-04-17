@@ -44,6 +44,8 @@ public class ProblemReport {
   
   private static final String SOLUTION_FORMAT = "%s (ID=%s)"; //$NON-NLS-1$
   
+  private static final String NA_STRING = "N/A"; //$NON-NLS-1$
+  
   /**
    * The problem for which to create a report.
    */
@@ -91,11 +93,15 @@ public class ProblemReport {
   private void writeField( final PrintWriter writer,
                            final String header,
                            final Throwable t ) {
-    StringWriter sWriter = new StringWriter();
-    PrintWriter pWriter = new PrintWriter( sWriter );
-    t.printStackTrace( pWriter );
-    pWriter.close();
-    writeField( writer, header, sWriter.toString() );
+    if ( t == null ) {
+      writeField( writer, header, NA_STRING );
+    } else {
+      StringWriter sWriter = new StringWriter();
+      PrintWriter pWriter = new PrintWriter( sWriter );
+      t.printStackTrace( pWriter );
+      pWriter.close();
+      writeField( writer, header, sWriter.toString() );
+    }
   }
   
   /**
@@ -109,11 +115,15 @@ public class ProblemReport {
   private void writeField( final PrintWriter writer,
                            final String header,
                            final ISolution[] solutions ) {
-    String[] sols = new String[ solutions == null ? 0 : solutions.length ];
-    for ( int i = 0 ; i < sols.length ; i++ ) {
-      sols[i] = String.format( SOLUTION_FORMAT, solutions[i].getDescription(), solutions[i].getID() );
+    if ( ( solutions == null ) || ( solutions.length == 0 ) ) {
+      writeField( writer, header, NA_STRING );
+    } else {
+      String[] sols = new String[ solutions.length ];
+      for ( int i = 0 ; i < sols.length ; i++ ) {
+        sols[i] = String.format( SOLUTION_FORMAT, solutions[i].getDescription(), solutions[i].getID() );
+      }
+      writeField( writer, header, sols );
     }
-    writeField( writer, header, sols ); 
   }
   
   /**
@@ -126,7 +136,11 @@ public class ProblemReport {
   private void writeField( final PrintWriter writer,
                            final String header,
                            final String content ) {
-    writeField( writer, header, new String[] { content } );
+    if ( ( content == null ) || ( content.length() == 0 ) ) {
+      writeField( writer, header, NA_STRING );
+    } else {
+      writeField( writer, header, new String[] { content } );
+    }
   }
   
   /**
@@ -139,11 +153,15 @@ public class ProblemReport {
   private void writeField( final PrintWriter writer,
                            final String header,
                            final String[] content ) {
-    writer.println( header + HEADER_PREFIX );
-    for ( String s : content ) {
-      writer.println( FIELD_PREFIX + s );
+    if ( ( content == null ) || ( content.length == 0 ) ) {
+      writeField( writer, header, NA_STRING );
+    } else {
+      writer.println( header + HEADER_PREFIX );
+      for ( String s : content ) {
+        writer.println( FIELD_PREFIX + s );
+      }
+      writer.println();
     }
-    writer.println();
   }
 
 }
