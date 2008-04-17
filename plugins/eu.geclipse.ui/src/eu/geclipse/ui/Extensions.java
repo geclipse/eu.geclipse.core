@@ -29,6 +29,7 @@ import eu.geclipse.core.ExtensionManager;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.properties.IPropertiesFactory;
 import eu.geclipse.ui.views.jobdetails.IJobDetailsFactory;
+import eu.geclipse.ui.wizards.wizardselection.IInitalizableWizard;
 
 /**
  * This is a helper class that holds static fields and methods to easily access
@@ -136,6 +137,26 @@ public class Extensions {
    * configuration element.
    */
   public static final String SIMPLE_TEST_FACTORY_EXECUTABLE = "class"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the wizard extension extension point.
+   */
+  public static final String WIZARD_EXTENSION_POINT = "eu.geclipse.ui.wizardExtension"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the wizard extension wizard element.
+   */
+  public static final String WIZARD_EXTENSION_ELEMENT = "wizard"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the wizard extension wizard element's refid attribute.
+   */
+  public static final String WIZARD_EXTENSION_REFID_ATTRIBUTE = "refid"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the wizard extension wizard element's executable.
+   */
+  public static final String WIZARD_EXTENSION_EXECUTABLE = "class"; //$NON-NLS-1$
   
   
   private static final String PROPERTIES_FACTORY_POINT = "eu.geclipse.ui.propertiesFactory";  //$NON-NLS-1$
@@ -381,5 +402,31 @@ public class Extensions {
       }
     }
     return resultList;
+  }
+  
+  /**
+   * Get the wizard extension for the specified reference ID.
+   * 
+   * @param refID The reference ID of the wizard extensions.
+   * @return The wizard extension or <code>null</code> if no extension for the
+   * specified ID could be found.
+   */
+  public static IInitalizableWizard getWizardExtension( final String refID ) {
+    IInitalizableWizard result = null;
+    ExtensionManager browser = new ExtensionManager();
+    List< IConfigurationElement > elements
+      = browser.getConfigurationElements( WIZARD_EXTENSION_POINT, WIZARD_EXTENSION_ELEMENT );
+    for ( IConfigurationElement element : elements ) {
+      String rid = element.getAttribute( WIZARD_EXTENSION_REFID_ATTRIBUTE );
+      if ( refID.equals( rid ) ) {
+        try {
+          result = ( IInitalizableWizard ) element.createExecutableExtension( WIZARD_EXTENSION_EXECUTABLE );
+          break;
+        } catch ( CoreException cExc ) {
+          Activator.logException( cExc );
+        }
+      }
+    }
+    return result;
   }
 }
