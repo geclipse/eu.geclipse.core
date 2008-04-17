@@ -19,16 +19,20 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.OpenEvent;
+import org.eclipse.search.ui.IContextMenuConstants;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.KeyAdapter;
 import org.eclipse.swt.events.KeyEvent;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchSite;
+import org.eclipse.ui.actions.ActionContext;
 import org.eclipse.ui.actions.ActionGroup;
+import org.eclipse.ui.actions.OpenWithMenu;
 import org.eclipse.ui.navigator.ICommonMenuConstants;
 
 import eu.geclipse.ui.views.GridModelViewPart;
@@ -42,6 +46,8 @@ public class OpenActions extends ActionGroup {
    * Action for opening Grid model elements.
    */
   protected OpenElementAction openElementAction;
+  
+  protected OpenWithMenu openWithMenu;
   
   /**
    * The workbench site this action belongs to.
@@ -92,6 +98,15 @@ public class OpenActions extends ActionGroup {
     if ( this.openElementAction.isEnabled() ) {
       menu.appendToGroup( ICommonMenuConstants.GROUP_OPEN, 
                           this.openElementAction );
+      
+      IAdaptable adaptable = getSelectedAdaptable();
+      if ( adaptable != null ) {
+        OpenWithMenu openWith = new OpenWithMenu( this.site.getPage(), adaptable );
+        IMenuManager subMenu = new MenuManager( Messages.getString("OpenActions.open_with_menu_label") ); //$NON-NLS-1$
+        menu.appendToGroup( IContextMenuConstants.GROUP_OPEN, subMenu );
+        subMenu.add( openWith );
+      }
+      
     }
     super.fillContextMenu(menu);
   }
@@ -131,6 +146,28 @@ public class OpenActions extends ActionGroup {
     }
     
     this.openElementAction.selectionChanged( selection );
+    
+  }
+  
+  private IAdaptable getSelectedAdaptable() {
+    
+    IAdaptable result = null;
+    ActionContext context = getContext();
+    
+    if ( context != null ) {
+      ISelection selection = context.getSelection();
+      if ( ( selection != null ) && ( selection instanceof IStructuredSelection ) ) {
+        if ( ( ( IStructuredSelection ) selection ).size() == 1 ) {
+          Object element = ( ( IStructuredSelection ) selection ).getFirstElement();
+          if ( element instanceof IAdaptable ) {
+            result = ( IAdaptable ) element;
+          }
+        }
+      }
+    }
+    
+    return result;
+    
   }
 
 }
