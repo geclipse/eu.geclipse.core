@@ -25,6 +25,7 @@ import org.eclipse.core.net.proxy.IProxyData;
 import org.eclipse.core.net.proxy.IProxyService;
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.internal.PreferenceConstants;
+import eu.geclipse.core.security.Base64;
 import eu.geclipse.core.security.Base64Codec;
 
 /**
@@ -82,7 +83,7 @@ public class Preferences {
         if ( proxyData.isRequiresAuthentication() ) {
           String proxyAuthLogin = proxyData.getUserId();
           String proxyAuthPw = proxyData.getPassword();
-          String encoded = Base64Codec.encode( proxyAuthLogin + ":" + proxyAuthPw ); //$NON-NLS-1$
+          String encoded = new Base64().encode( proxyAuthLogin + ":" + proxyAuthPw ); //$NON-NLS-1$
           connection.setRequestProperty( "Proxy-Authorization", "Basic " + encoded ); //$NON-NLS-1$ //$NON-NLS-2$
         }
         
