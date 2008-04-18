@@ -18,11 +18,30 @@ package eu.geclipse.core.model;
 import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
  * Base interface for elements of a filesystem mount.
  */
 public interface IGridConnectionElement extends IGridResource, IGridContainer {
+  
+  /**
+   * Get a cached version of the {@link IFileStore} object corresponding to
+   * this connection. Cached means that this method opens the input stream
+   * of the file store and caches its content for later use. Cached file stores
+   * have to be release with {@link #releaseCachedConnectionFileStore(IFileStore)}
+   * when they are not needed any more. It is not recommended to cache very large
+   * files since the caching is done in memory and this may lead to
+   * {@link OutOfMemoryError}s or similar behaviour.
+   * 
+   * @param monitor Am {@link IProgressMonitor} used to monitor the caching
+   * procedure.
+   * @return The file store with a cached input stream.
+   * @throws CoreException If either opening the stream or caching the input
+   * fails for any reason.
+   * @see #releaseCachedConnectionFileStore(IFileStore)
+   */
+  public IFileStore getCachedConnectionFileStore( final IProgressMonitor monitor ) throws CoreException;
   
   /**
    * Get the {@link IFileStore} object corresponding to this connection.
@@ -67,5 +86,18 @@ public interface IGridConnectionElement extends IGridResource, IGridContainer {
    * @return True if this mount is valid and can be browsed.
    */
   public boolean isValid();
+  
+  /**
+   * Releases a cached file store that was formerly retrieved with
+   * {@link #getCachedConnectionFileStore(IProgressMonitor)}. This method
+   * frees all system resources used for caching. This method has to be called
+   * for every file store retrieved with
+   * {@link #getCachedConnectionFileStore(IProgressMonitor)} if they are not
+   * used any more. Otherwise the system may run out of resources.
+   * 
+   * @param fileStore The cached file store to be released. If this file store
+   * is not a cached one nothing is done.
+   */
+  public void releaseCachedConnectionFileStore( final IFileStore fileStore );
   
 }
