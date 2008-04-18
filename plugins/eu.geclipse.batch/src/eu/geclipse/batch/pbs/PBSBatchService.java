@@ -48,8 +48,6 @@ public final class PBSBatchService extends AbstractBatchService {
 
   private String pbsCmdPath;
   
-  private String qCmdPath;
-
   private String qmgrCmdPath;
   
   private List< IBatchJobInfo > tmpJobs = new ArrayList< IBatchJobInfo >();
@@ -64,7 +62,6 @@ public final class PBSBatchService extends AbstractBatchService {
   public PBSBatchService( final IBatchServiceDescription description, final String name ) {
     super( description, name );
     this.pbsCmdPath = null;
-    this.qCmdPath = null;
     this.qmgrCmdPath = null;
   }
 
@@ -368,29 +365,7 @@ public final class PBSBatchService extends AbstractBatchService {
     ret = super.connectToServer( sshConnectionInfo ); 
 
     if ( ret ) {
-      // Find out if the q... commands need to set the path explicitly
-      try {
-        this.qCmdPath = this.connection.execCommand( "qstat -q" ); //$NON-NLS-1$
-
-        // No path needed
-        this.qCmdPath = ""; //$NON-NLS-1$
-      } catch ( ProblemException bexp ) {
-//        if ( bexp.getProblem() == IBatchProblems.COMMAND_FAILED ){
-          String cmd = "find / -xdev -maxdepth 10 -type f -name qstat 2> /dev/null"; //$NON-NLS-1$
-          this.qCmdPath = this.connection.execCommand( cmd ); 
-
-          if ( null != this.qCmdPath ) {
-            int idx = this.qCmdPath.lastIndexOf( "qstat" ); //$NON-NLS-1$
-
-            // The path was found
-            if ( -1 != idx )
-              this.qCmdPath = this.qCmdPath.substring( 0, idx );
-          }
-//        } else // Something else went wrong 
-//          throw bexp;
-      }
-
-      // Find out if the qmgr command need to set the path explicitly
+      // Find out if the qmgr  command need to set the path explicitly
       try {
         this.qmgrCmdPath = this.connection.execCommand( "qmgr -c help" ); //$NON-NLS-1$
 
@@ -458,7 +433,7 @@ public final class PBSBatchService extends AbstractBatchService {
     IBatchJobInfo jobInfo;
     String line;
 
-    outPut = this.connection.execCommand( this.qCmdPath + "qstat" ); //$NON-NLS-1$
+    outPut = this.connection.execCommand( this.qmgrCmdPath + "qstat" ); //$NON-NLS-1$
     this.tmpJobs.clear(); // clear the old holder
 
     if ( null != outPut ) {
@@ -490,7 +465,7 @@ public final class PBSBatchService extends AbstractBatchService {
    */
   public synchronized void delJob( final String jobId ) throws ProblemException {
     if ( null != jobId )
-      this.connection.execCommand( this.qCmdPath + "qdel "+ jobId ); //$NON-NLS-1$
+      this.connection.execCommand( this.qmgrCmdPath + "qdel "+ jobId ); //$NON-NLS-1$
   }
 
   /**
@@ -502,8 +477,8 @@ public final class PBSBatchService extends AbstractBatchService {
    * @throws ProblemException If command is not executed successfully
    */
   public synchronized void moveJob( final String jobId, 
-                                       final String destQueue, 
-                                       final String destServer ) throws ProblemException {
+                                    final String destQueue, 
+                                    final String destServer ) throws ProblemException {
     String cmd = "qmove "; //$NON-NLS-1$
 
     if ( null != jobId ) {
@@ -516,7 +491,7 @@ public final class PBSBatchService extends AbstractBatchService {
       else
         assert false; // Not enough arguments 
 
-      this.connection.execCommand( this.qCmdPath + cmd + " " + jobId ); //$NON-NLS-1$
+      this.connection.execCommand( this.qmgrCmdPath + cmd + " " + jobId ); //$NON-NLS-1$
     }
   }
 
@@ -551,7 +526,7 @@ public final class PBSBatchService extends AbstractBatchService {
       if ( null != strJobs ) {
         strJobs = strJobs.trim();
     
-        this.connection.execCommand( this.qCmdPath + cmd + " " + strJobs ); //$NON-NLS-1$
+        this.connection.execCommand( this.qmgrCmdPath + cmd + " " + strJobs ); //$NON-NLS-1$
       }
     }
   }
@@ -566,7 +541,7 @@ public final class PBSBatchService extends AbstractBatchService {
     if ( null != jobId ) {
       String cmd = "qhold " + jobId; //$NON-NLS-1$
 
-      this.connection.execCommand( this.qCmdPath + cmd );
+      this.connection.execCommand( this.qmgrCmdPath + cmd );
     }
   }
   
@@ -587,7 +562,7 @@ public final class PBSBatchService extends AbstractBatchService {
     if ( null != strJobs ) {
       strJobs = strJobs.trim();
   
-      this.connection.execCommand( this.qCmdPath + cmd + " " + strJobs ); //$NON-NLS-1$
+      this.connection.execCommand( this.qmgrCmdPath + cmd + " " + strJobs ); //$NON-NLS-1$
     }
   }
   
@@ -601,7 +576,7 @@ public final class PBSBatchService extends AbstractBatchService {
     if ( null != jobId ) {
       String cmd = "qrls " + jobId; //$NON-NLS-1$
 
-      this.connection.execCommand( this.qCmdPath + cmd );
+      this.connection.execCommand( this.qmgrCmdPath + cmd );
     }
   }
 
@@ -622,7 +597,7 @@ public final class PBSBatchService extends AbstractBatchService {
     if ( null != strJobs ) {
       strJobs = strJobs.trim();
   
-      this.connection.execCommand( this.qCmdPath + cmd + " " + strJobs ); //$NON-NLS-1$
+      this.connection.execCommand( this.qmgrCmdPath + cmd + " " + strJobs ); //$NON-NLS-1$
     }
   }
   
@@ -676,7 +651,7 @@ public final class PBSBatchService extends AbstractBatchService {
    * Changes the state of a workernode to free, jobs will be placed on
    * this workernode.
    *
-   * @param nodeId The identifier of the node to be disabled.
+   * @param nodeId The identifier of the node to be enabled.
    * @throws ProblemException If command is not executed successfully
    */
   public synchronized void enableWN( final String nodeId ) throws ProblemException {
@@ -713,7 +688,7 @@ public final class PBSBatchService extends AbstractBatchService {
     String line;
     List<IQueueInfo> queues = null;
 
-    outPut = this.connection.execCommand( this.qCmdPath + "qstat -q" ); //$NON-NLS-1$
+    outPut = this.connection.execCommand( this.qmgrCmdPath + "qstat -q" ); //$NON-NLS-1$
 
     if ( null != outPut ) {
       queues = new ArrayList< IQueueInfo >();
@@ -748,7 +723,7 @@ public final class PBSBatchService extends AbstractBatchService {
    */
   public synchronized void disableQueue( final String queueId ) throws ProblemException {
     if ( null != queueId )
-      this.connection.execCommand( this.qCmdPath + "qdisable "+ queueId ); //$NON-NLS-1$
+      this.connection.execCommand( this.qmgrCmdPath + "qdisable "+ queueId ); //$NON-NLS-1$
   }
 
   /**
@@ -765,7 +740,7 @@ public final class PBSBatchService extends AbstractBatchService {
         for ( String str : queueIds )
           queues += str + " "; //$NON-NLS-1$
 
-        this.connection.execCommand( this.qCmdPath + "qdisable "+ queues ); //$NON-NLS-1$
+        this.connection.execCommand( this.qmgrCmdPath + "qdisable "+ queues ); //$NON-NLS-1$
       }
     }
   }
@@ -778,7 +753,7 @@ public final class PBSBatchService extends AbstractBatchService {
    */
   public synchronized void enableQueue( final String queueId ) throws ProblemException {
     if ( null != queueId )
-      this.connection.execCommand( this.qCmdPath + "qenable "+ queueId ); //$NON-NLS-1$
+      this.connection.execCommand( this.qmgrCmdPath + "qenable "+ queueId ); //$NON-NLS-1$
   }
 
   /**
@@ -795,7 +770,7 @@ public final class PBSBatchService extends AbstractBatchService {
         for ( String str : queueIds )
           queues += str + " "; //$NON-NLS-1$
 
-        this.connection.execCommand( this.qCmdPath + "qenable "+ queues ); //$NON-NLS-1$
+        this.connection.execCommand( this.qmgrCmdPath + "qenable "+ queues ); //$NON-NLS-1$
       }
     }
   }
@@ -808,7 +783,7 @@ public final class PBSBatchService extends AbstractBatchService {
    */
   public synchronized void startQueue( final String queueId ) throws ProblemException {
     if ( null != queueId )
-      this.connection.execCommand( this.qCmdPath + "qstart "+ queueId ); //$NON-NLS-1$
+      this.connection.execCommand( this.qmgrCmdPath + "qstart "+ queueId ); //$NON-NLS-1$
   }
 
   /**
@@ -825,7 +800,7 @@ public final class PBSBatchService extends AbstractBatchService {
         for ( String str : queueIds )
           queues += str + " "; //$NON-NLS-1$
 
-        this.connection.execCommand( this.qCmdPath + "qstart "+ queues ); //$NON-NLS-1$
+        this.connection.execCommand( this.qmgrCmdPath + "qstart "+ queues ); //$NON-NLS-1$
       }
     }
   }
@@ -838,7 +813,7 @@ public final class PBSBatchService extends AbstractBatchService {
    */
   public synchronized void stopQueue( final String queueId ) throws ProblemException {
     if ( null != queueId )
-      this.connection.execCommand( this.qCmdPath + "qstop "+ queueId ); //$NON-NLS-1$
+      this.connection.execCommand( this.qmgrCmdPath + "qstop "+ queueId ); //$NON-NLS-1$
   }
 
   /**
@@ -855,7 +830,7 @@ public final class PBSBatchService extends AbstractBatchService {
         for ( String str : queueIds )
           queues += str + " "; //$NON-NLS-1$
 
-        this.connection.execCommand( this.qCmdPath + "qstop "+ queues ); //$NON-NLS-1$
+        this.connection.execCommand( this.qmgrCmdPath + "qstop "+ queues ); //$NON-NLS-1$
       }
     }
   }
@@ -893,8 +868,8 @@ public final class PBSBatchService extends AbstractBatchService {
                                             Integer.valueOf( getMinutesFromDouble( newTimeCPUHours ) ) ); 
       
       
-      String cmd = "qmgr -c \"create queue "; //$NON-NLS-1$
-      String setAttr = " ; qmgr -c \"set queue " + queueName; //$NON-NLS-1$
+      String cmd = this.qmgrCmdPath + "qmgr -c \"create queue "; //$NON-NLS-1$
+      String setAttr = " ; " + this.qmgrCmdPath + "qmgr -c \"set queue " + queueName; //$NON-NLS-1$ //$NON-NLS-2$
     
       // Build up the command
       cmd += queueName;
@@ -917,7 +892,7 @@ public final class PBSBatchService extends AbstractBatchService {
       }
     
       // Try to create the queue on the batch service
-      this.connection.execCommand( this.qmgrCmdPath + cmd );
+      this.connection.execCommand( cmd );
     }  
   }
     
@@ -959,8 +934,8 @@ public final class PBSBatchService extends AbstractBatchService {
                                        Integer.valueOf( getMinutesFromDouble( timeCPU ) ) );
       
       
-      String cmd = "qmgr -c \"create queue "; //$NON-NLS-1$
-      String setAttr = " ; qmgr -c \"set queue " + queueName; //$NON-NLS-1$
+      String cmd = this.qmgrCmdPath + "qmgr -c \"create queue "; //$NON-NLS-1$
+      String setAttr = " ; " + this.qmgrCmdPath + "qmgr -c \"set queue " + queueName; //$NON-NLS-1$ //$NON-NLS-2$
 
       
       // Build up the command
@@ -996,9 +971,9 @@ public final class PBSBatchService extends AbstractBatchService {
         cmd += setAttr + " max_queuable=" + maxJobsInQueue + "\""; //$NON-NLS-1$ //$NON-NLS-2$
       }
 
-      if ( -1 !=assignedResources ){
-        cmd += setAttr + " resources_assigned.nodect=" + assignedResources+"\""; //$NON-NLS-1$ //$NON-NLS-2$
-      }
+//      if ( -1 !=assignedResources ){
+//        cmd += setAttr + " resources_assigned.nodect=" + assignedResources+"\""; //$NON-NLS-1$ //$NON-NLS-2$
+//      }
       
       // If access control on vos, add the allowed vos
       if ( null != vos ) {
@@ -1010,7 +985,7 @@ public final class PBSBatchService extends AbstractBatchService {
       }
     
       // Try to create the queue on the batch service
-      this.connection.execCommand( this.qCmdPath + cmd );
+      this.connection.execCommand( cmd );
     }
   }
   
@@ -1031,7 +1006,7 @@ public final class PBSBatchService extends AbstractBatchService {
       // Terminate the command
       cmd += "\""; //$NON-NLS-1$
     
-      this.connection.execCommand( this.qCmdPath + cmd );
+      this.connection.execCommand( this.qmgrCmdPath + cmd );
     }
   }
   

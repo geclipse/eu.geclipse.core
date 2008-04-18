@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2007 g-Eclipse consortium
+ * Copyright (c) 2008 g-Eclipse consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -14,7 +14,7 @@
  *      - Harald Gjermundrod (harald@cs.ucy.ac.cy)
  *
  *****************************************************************************/
-package eu.geclipse.batch.pbs;
+package eu.geclipse.batch.lsf;
 
 import eu.geclipse.batch.IBatchService;
 import eu.geclipse.batch.IBatchServiceDescription;
@@ -22,31 +22,31 @@ import eu.geclipse.batch.internal.Messages;
 import eu.geclipse.core.reporting.ProblemException;
 
 /**
- * A batch service description that is dedicated to pbs. 
+ * A batch service description that is dedicated to lsf. 
  * 
- * @author hgjermun
+ * @author hgjermund
  */
-public class PBSBatchServiceDescription implements IBatchServiceDescription {
+public class LSFBatchServiceDescription implements IBatchServiceDescription {
 
   /**
-   * Create a {@link PBSBatchService} from this description.
+   * Create a {@link LSFBatchService} from this description.
    *
    * @param name batch service name, i.e. the configuration file that were 
    *             used to instantiate this service
-   * @return A pbs batch service that can safely be casted to {@link PBSBatchService}.
+   * @return A lsf batch service that can safely be casted to {@link LSFBatchService}.
    */
   public IBatchService createService( final String name ) throws ProblemException {
-    return new PBSBatchService( this, name );
+    return new LSFBatchService( this, name );
   }
 
   /* (non-Javadoc)
    * @see eu.geclipse.batch.IBatchServiceDescription#getServiceTypeName()
    */
   public String getServiceTypeName() {
-    return Messages.getString( "PBSBatchServiceDescription.serviceTypeName" ); //$NON-NLS-1$
+    return Messages.getString( "LSFBatchServiceDescription.serviceTypeName" ); //$NON-NLS-1$
   }
 
   public boolean supportsService( final String service ) {
-    return ( 0 == Messages.getString( "PBSBatchServiceDescription.serviceTypeName" ).compareTo( service ) ) ; //$NON-NLS-1$
+    return ( 0 == Messages.getString( "LSFBatchServiceDescription.serviceTypeName" ).compareTo( service ) ) ; //$NON-NLS-1$
   }
 }
