@@ -68,11 +68,18 @@ public class ProblemDialog extends ErrorDialog {
   }
 
   /**
-   * @param parent
-   * @param dialogTitle
-   * @param message
-   * @param exc
-   * @return
+   * Convenience static method for opening a {@link ProblemDialog}. This
+   * method has to be called from the UI thread. The parent {@link Shell}
+   * may be <code>null</code>. In this case a default {@link Shell} is
+   * chosen. Nevertheless it is recommended to not call this method
+   * without a valid {@link Shell}. 
+   * 
+   * @param parent The parent {@link Shell} of the dialog.
+   * @param dialogTitle The dialog's title.
+   * @param message A short message displayed as description of the problem.
+   * @param exc An optional exception. If this is a {@link ProblemException}
+   * the corresponding reasons and solutions are displayed.
+   * @return The dialog's return status.
    */
   public static int openProblem( final Shell parent,
                                  final String dialogTitle,
