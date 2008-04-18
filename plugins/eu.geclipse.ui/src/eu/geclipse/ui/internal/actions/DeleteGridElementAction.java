@@ -248,6 +248,7 @@ public class DeleteGridElementAction extends SelectionListenerAction {
             testCancel( submonitor );
             deleteJob( submonitor.newChild( 1 ), job );
           } catch( ProblemException exception ) {
+            // TODO mariusz add solution "Delete job only from workspace"
             ProblemDialog.openProblem( shell,
                                        "Problem with deleting job",
                                        String.format( "Cannot delete job '%s'", job.getJobName() ),
