@@ -84,6 +84,28 @@ public class ConnectionElement
   public IFileInfo getConnectionFileInfo() throws CoreException {
     return getConnectionFileStore().fetchInfo();
   }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridConnectionElement#getCachedConnectionFileStore(org.eclipse.core.runtime.IProgressMonitor)
+   */
+  public IFileStore getCachedConnectionFileStore( final IProgressMonitor monitor )
+      throws CoreException {
+    
+    IFileStore result = null;
+    SubMonitor sMonitor = SubMonitor.convert( monitor, 10 );
+    
+    try {
+      result = getConnectionFileStore();
+      sMonitor.worked( 1 );
+      ( ( GEclipseFileStore ) result ).cacheInputStream( monitor );
+      sMonitor.worked( 9 );
+    } finally {
+      sMonitor.done();
+    }
+    
+    return result;
+    
+  }
 
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridConnectionElement#getConnectionFileStore()
@@ -198,6 +220,12 @@ public class ConnectionElement
    */
   public boolean isValid() {
     return getError() == null;
+  }
+  
+  public void releaseCachedConnectionFileStore( final IFileStore fileStore ) {
+    if ( fileStore instanceof GEclipseFileStore ) {
+      ( ( GEclipseFileStore ) fileStore ).discardCachedInputStream();
+    }
   }
   
   /* (non-Javadoc)

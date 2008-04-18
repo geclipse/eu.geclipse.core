@@ -15,6 +15,7 @@
 
 package eu.geclipse.core.filesystem.internal.filesystem;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
@@ -27,9 +28,13 @@ import org.eclipse.core.filesystem.provider.FileStore;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 
+import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.filesystem.GEclipseFileSystem;
 import eu.geclipse.core.filesystem.GEclipseURI;
+import eu.geclipse.core.filesystem.internal.Activator;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.core.util.MasterMonitor;
 
 /**
@@ -68,6 +73,8 @@ public class GEclipseFileStore
    * External progress monitor used to show progress information.
    */
   private IProgressMonitor externalMonitor;
+  
+  private CachedInputStream ciStream;
   
   /**
    * Create a new master store from the specified slave store. The
@@ -118,6 +125,46 @@ public class GEclipseFileStore
   public void activate() {
     setActive( true );
   }
+  
+  /**
+   * Caches the input stream of this file store. This method creates a
+   * {@link CachedInputStream} and calls its cache method. Therefore the
+   * content of this file store is fetched to the local memory. Whenever
+   * {@link #openInputStream(int, IProgressMonitor)} is called after caching
+   * the input stream the cached stream is returned instead of the normal
+   * one. To release the cache consumers have to call {@link #discardCachedInputStream()}
+   * in order to free the used system resources.
+   * 
+   * @param monitor A {@link IProgressMonitor} used to monitor the caching
+   * procedure.
+   * @throws CoreException If the caching fails.
+   * @see #discardCachedInputStream()
+   */
+  public void cacheInputStream( final IProgressMonitor monitor )
+      throws CoreException {
+    
+    SubMonitor sMonitor = SubMonitor.convert( monitor( monitor ), Messages.getString("GEclipseFileStore.caching_progress"), 10 ); //$NON-NLS-1$
+
+    try {
+      InputStream siStream = openInputStream( EFS.NONE, sMonitor.newChild( 1 ) );
+      IFileInfo info = fetchInfo( EFS.NONE, sMonitor.newChild( 1 ) );
+      this.ciStream = new CachedInputStream( siStream, ( int ) info.getLength() );
+  
+      try {
+        this.ciStream.cache( sMonitor.newChild( 8 ) );
+      } catch ( IOException ioExc ) {
+        throw new ProblemException(
+            ICoreProblems.IO_UNSPECIFIED_PROBLEM,
+            String.format( Messages.getString("GEclipseFileStore.caching_error"), getName() ), //$NON-NLS-1$
+            ioExc,
+            Activator.PLUGIN_ID );
+      }
+      
+    } finally {
+      sMonitor.done();
+    }
+    
+  }
 
   /* (non-Javadoc)
    * @see org.eclipse.core.filesystem.provider.FileStore#childNames(int, org.eclipse.core.runtime.IProgressMonitor)
@@ -160,6 +207,22 @@ public class GEclipseFileStore
     getSlave().delete( options, monitor( monitor ) );
     FileStoreRegistry registry = FileStoreRegistry.getInstance();
     registry.removeStore( this );
+  }
+  
+  /**
+   * If the input stream of this file store was formerly cached with
+   * {@link #cacheInputStream(IProgressMonitor)} this method releases
+   * the cache and frees all used system resources. Subsequent calls to
+   * {@link #openInputStream(int, IProgressMonitor)} return the original
+   * stream of the slave instead of a cached one.
+   * 
+   * @see #cacheInputStream(IProgressMonitor)
+   */
+  public void discardCachedInputStream() {
+    if ( this.ciStream != null ) {
+      this.ciStream.discard();
+      this.ciStream = null;
+    }
   }
 
   /* (non-Javadoc)
@@ -270,7 +333,7 @@ public class GEclipseFileStore
   public InputStream openInputStream( final int options,
                                       final IProgressMonitor monitor )
       throws CoreException {
-    return getSlave().openInputStream( options, monitor( monitor ) );
+    return this.ciStream != null ? this.ciStream : getSlave().openInputStream( options, monitor( monitor ) );
   }
   
   /* (non-Javadoc)
