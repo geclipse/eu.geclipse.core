@@ -131,6 +131,16 @@ public class DeploymentDescription extends WizardPage
     }
   }
 
+  /*@Override
+  public boolean canFlipToNextPage() {
+    return true; 
+  }
+  
+  @Override
+  public boolean isPageComplete() {
+    return false;
+  }*/
+  
   public void widgetDefaultSelected( final SelectionEvent e ) {
     // empty implementation
   }

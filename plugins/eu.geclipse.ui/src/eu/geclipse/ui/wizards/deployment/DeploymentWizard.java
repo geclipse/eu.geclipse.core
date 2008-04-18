@@ -18,8 +18,10 @@ package eu.geclipse.ui.wizards.deployment;
 
 import java.net.URI;
 import java.net.URL;
+import java.security.acl.LastOwnerException;
 import java.util.ArrayList;
 import java.util.List;
+
 
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
@@ -33,6 +35,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 
 import eu.geclipse.core.IApplicationDeployment;
@@ -44,6 +47,7 @@ import eu.geclipse.core.model.IGridJobCreator;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.ui.internal.Activator;
+import eu.geclipse.ui.wizards.wizardselection.IInitalizableWizard;
 
 /**
  * @author Yifan Zhou
@@ -62,19 +66,19 @@ public class DeploymentWizard extends Wizard {
   /**
    * The chooser page ( first page ) in deployment wizard.
    */
-  private DeploymentChooser chooserPage;
+  public DeploymentChooser chooserPage;
   /**
    * The source page ( two page ) in deployment wizard.
    */
-  private DeploymentSource sourcePage;
+  public DeploymentSource sourcePage;
   /**
    * The target page ( three page ) in deployment wizard.
    */
-  private DeploymentTarget targetPage;
+  public DeploymentTarget targetPage;
   /**
    * The description page ( four page ) in deployment wizard.
    */
-  private DeploymentDescription descriptionPage;
+  public DeploymentDescription descriptionPage;
   /**
    * Get the structured selection.
    */
@@ -89,7 +93,7 @@ public class DeploymentWizard extends Wizard {
    */
   private IGridElement[] referencedProjects;
   
-  /**the wizard for acquring source files and target CEs
+  /**the wizard for acquiring source files and target CEs
    * @param structuredSelection
    */
   public DeploymentWizard( final IStructuredSelection structuredSelection ) {
@@ -126,6 +130,9 @@ public class DeploymentWizard extends Wizard {
     }*/
     
     // IGridElement[] source = sourceList.toArray( new IGridElement[ sourceList.size() ] );
+    /*String refid = this.chooserPage.getExecuteExt().getClass().getName();
+    IInitalizableWizard extrapage = Extensions.getWizardExtension( refid );
+    if (extrapage != null) this.addPage( extrapage );*/
     URI [] source = this.sourcePage.getSourceURIs();
     List< Object > targetList = new ArrayList< Object >();
     Object[] ceObjects = this.targetPage.getCETree().getCheckedElements();
@@ -136,7 +143,7 @@ public class DeploymentWizard extends Wizard {
    // for ( Object seObject : seObjects ) {
     //  targetList.add( seObject );
    // }
-    IGridElement[] target = targetList.toArray( new IGridElement[ targetList.size() ] );
+   IGridElement[] target = targetList.toArray( new IGridElement[ targetList.size() ] );
     String tag = this.descriptionPage.getTag();
     IApplicationDeployment appDeployment = this.chooserPage.getExecuteExt();
     IVirtualOrganization vo = this.targetPage.getDeployVO();
@@ -161,7 +168,10 @@ public class DeploymentWizard extends Wizard {
     return finished;
   }
 
-  protected void initProjects() {
+  /**
+   * set the reference to a grid project
+   */
+  public void initProjects() {
     List< IGridElement > refProjects = new ArrayList< IGridElement >();
     IGridElement[] allProjects = null;
     IProject[] rProjects = null;
@@ -169,11 +179,7 @@ public class DeploymentWizard extends Wizard {
     this.gridproject = selected.getProject();
     IResource resource = this.gridproject.getResource();
     IProject gProject = resource.getProject();
-    //this.trueGridProject = ( IGridElement ) gridproject.getResource();
-    
-    //this.trueGridProject = ( IGridElement ) this.selection.getFirstElement();
-    //IProject gProject = ( IProject )this.trueGridProject.getProject();
-    
+  
     try {
       rProjects = gProject.getReferencedProjects();
       allProjects = GridModel.getRoot().getChildren( null );
@@ -230,6 +236,12 @@ public class DeploymentWizard extends Wizard {
     return this.gridproject;
   }
   
+  /**
+   * @return IApplicationDeployment
+   */
+  public IApplicationDeployment getexecuteExt() {
+    return this.chooserPage.getExecuteExt();
+  }
   /**get the user selection of PEs or vo
    * @return IStructuredSelection
    */

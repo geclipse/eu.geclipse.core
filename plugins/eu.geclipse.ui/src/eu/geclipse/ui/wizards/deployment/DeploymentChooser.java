@@ -133,7 +133,7 @@ public class DeploymentChooser extends WizardPage {
     this.executeExt = applicationDeployment;
   }
 
-  protected IApplicationDeployment getExecuteExt() {
+  public IApplicationDeployment getExecuteExt() {
     return this.executeExt;
   }
 

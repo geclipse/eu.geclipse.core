@@ -290,7 +290,7 @@ public class DeploymentTarget extends WizardPage {
     return this.deployVO;
   }
   
-  protected CheckboxTreeViewer getCETree() {
+  public CheckboxTreeViewer getCETree() {
     return this.ceTree;
   }
   
