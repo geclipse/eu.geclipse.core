@@ -27,7 +27,6 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.BaseSelectionListenerAction;
-import org.eclipse.ui.actions.OpenFileAction;
 
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridJob;
