@@ -159,6 +159,14 @@ public class BatchJobInfo implements IBatchJobInfo {
   }
 
   /**
+   * Can this job be reRun.
+   * @return Returns <code>true<\code> if this job can be reRun, <code>false</code> otherwise.
+   */
+  public boolean isReRunnable() {
+    return  null != this.batchWrapper && JobState.R == this.status;
+  }
+
+  /**
    * Deletes this job from the batch service.
    * @throws ProblemException If command is not executed successfully
    */
@@ -199,6 +207,17 @@ public class BatchJobInfo implements IBatchJobInfo {
   public void releaseJob() throws ProblemException {
     if ( isReleasable() ) {
       this.batchWrapper.releaseJob( this.jobId );
+    }
+  }
+
+  /**
+   * ReRun the currently executing job in the batch system.
+   *
+   * @throws ProblemException If command is not executed successfully
+   */
+  public void reRunJob() throws ProblemException {
+    if ( isReRunnable() ) {
+      this.batchWrapper.reRunJob( this.jobId );
     }
   }
 

@@ -180,6 +180,12 @@ public interface IBatchJobInfo {
   public boolean isReleasable();
 
   /**
+   * Can this job be reRun.
+   * @return Returns <code>true<\code> if this job can be reRun, <code>false</code> otherwise.
+   */
+  public boolean isReRunnable();
+
+  /**
    * Deletes this job from the batch service.
    * @throws ProblemException If command is not executed successfully
    */
@@ -206,7 +212,14 @@ public interface IBatchJobInfo {
    * @throws ProblemException If command is not executed successfully
    */
   public void releaseJob() throws ProblemException;
-  
+
+  /**
+   * ReRun the currently executing job in the batch system.
+   *
+   * @throws ProblemException If command is not executed successfully
+   */
+  public void reRunJob() throws ProblemException;
+
   /**
    * Return the type of batch service name that handles this batch job.
    *

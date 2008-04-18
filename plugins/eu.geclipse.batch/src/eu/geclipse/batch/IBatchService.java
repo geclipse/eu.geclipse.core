@@ -132,7 +132,23 @@ public interface IBatchService {
    * @throws ProblemException If command is not executed successfully
    */
   public abstract void releaseJobs( final String[] jobIds ) throws ProblemException;
-  
+
+  /**
+   * Rerun a currently running job.
+   *
+   * @param jobId The identifier of the job to be rerun.
+   * @throws ProblemException If command is not executed successfully
+   */
+  public abstract void reRunJob( final String jobId ) throws ProblemException;
+
+  /**
+   * Rerun one or more currently running jobs.
+   *
+   * @param jobIds The identifiers of the jobs to be rerun.
+   * @throws ProblemException If command is not executed successfully
+   */
+  public abstract void reRunJobs( final String[] jobIds ) throws ProblemException;
+
   /**
    * Executes pbsnodes on the PBS server and returns a list of the workernodes as
    * {@link WorkerNodeInfo}. If no workernodes or error parsing the output then

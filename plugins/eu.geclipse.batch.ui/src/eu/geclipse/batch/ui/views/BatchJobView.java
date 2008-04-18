@@ -276,7 +276,12 @@ public class BatchJobView extends ViewPart implements IContentChangeListener {
    * Action for refreshing the token list.
    */
   private Action refreshAction;
-  
+
+  /**
+   * Action for refreshing the token list.
+   */
+  private Action reRunAction;
+
   /**
    * Action for holding a job.
    */
@@ -654,6 +659,33 @@ public class BatchJobView extends ViewPart implements IContentChangeListener {
   }
   
   /**
+   * Re-run the currently selected job.
+   * 
+   * @see #getSelectedJob()
+   */
+  protected void reRunJobs() {
+    List< IBatchJobInfo > jobs = getSelectedJobs();
+    if ( !jobs.isEmpty() ) {
+      for ( IBatchJobInfo job : jobs ) {
+        try {
+          if ( null != this.jobManager ) {
+            this.jobManager.reRunJob( job );
+            //this.jobList.refresh(); 
+          }
+        } catch( ProblemException excp ) {
+          // Action could not be performed
+          ProblemDialog.openProblem( getSite().getShell(),
+                                     Messages.getString( "BatchJobView.error_rerun_title" ), //$NON-NLS-1$
+                                     Messages.getString( "BatchJobView.error_rerun_message" ), //$NON-NLS-1$
+                                     excp );      
+        }
+
+        updateActions();
+      }
+    }
+  }
+
+  /**
    * Update the enabled state of the actions according to the current content of this view and
    * the content's state.
    */
@@ -665,6 +697,7 @@ public class BatchJobView extends ViewPart implements IContentChangeListener {
     boolean movable = true;
     boolean holdable = true;
     boolean releasable = true;
+    boolean reRunnable = true;
     
     for ( IBatchJobInfo job : jobs) {
       if ( !job.isDeletable() )
@@ -675,12 +708,15 @@ public class BatchJobView extends ViewPart implements IContentChangeListener {
         holdable = false;
       if ( !job.isReleasable() )
         releasable = false;
+      if ( !job.isReRunnable() )
+        reRunnable = false;
     }
     
     this.deleteAction.setEnabled( selected && deletable );
     this.moveAction.setEnabled( selected && movable );
     this.holdAction.setEnabled( selected && holdable );
     this.releaseAction.setEnabled( selected && releasable );
+    this.reRunAction.setEnabled( selected && reRunnable );
   }
   
   /**
@@ -701,6 +737,9 @@ public class BatchJobView extends ViewPart implements IContentChangeListener {
     if ( this.releaseAction.isEnabled() )
       mgr.add( this.releaseAction );
 
+    if ( this.reRunAction.isEnabled() )
+      mgr.add( this.reRunAction );
+      
     if ( this.refreshAction.isEnabled() ) {
       mgr.add( new Separator() );
       mgr.add( this.refreshAction );
@@ -732,6 +771,9 @@ public class BatchJobView extends ViewPart implements IContentChangeListener {
     image = imgReg.get( Activator.IMG_RELEASEJOB ); 
     ImageDescriptor releaseImage = ImageDescriptor.createFromImage( image );
 
+    image = imgReg.get( Activator.IMG_BUSY_ARROW2 ); 
+    ImageDescriptor reRunImage = ImageDescriptor.createFromImage( image );
+    
     this.refreshAction = new Action() {
       @Override
       public void run() {
@@ -788,6 +830,17 @@ public class BatchJobView extends ViewPart implements IContentChangeListener {
     this.releaseAction.setToolTipText( Messages.getString( "BatchJobView.release_tooltip" ) ); //$NON-NLS-1$
     this.releaseAction.setImageDescriptor( releaseImage );
     
+    this.reRunAction = new Action() {
+      @Override
+      public void run() {
+        reRunJobs();
+      }
+    };
+
+    this.reRunAction.setText( Messages.getString( "BatchJobView.reRun_text" ) ); //$NON-NLS-1$
+    this.reRunAction.setToolTipText( Messages.getString( "BatchJobView.reRun_tooltip" ) ); //$NON-NLS-1$
+    this.reRunAction.setImageDescriptor( reRunImage );
+    
     updateActions();
   }
   
@@ -801,6 +854,7 @@ public class BatchJobView extends ViewPart implements IContentChangeListener {
     mgr.add( this.moveAction );
     mgr.add( this.holdAction );
     mgr.add( this.releaseAction );
+    mgr.add( this.reRunAction );
     mgr.add( new Separator() );
     mgr.add( this.refreshAction );
   }

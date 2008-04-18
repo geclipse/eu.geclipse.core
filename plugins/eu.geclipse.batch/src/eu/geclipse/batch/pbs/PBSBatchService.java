@@ -602,6 +602,41 @@ public final class PBSBatchService extends AbstractBatchService {
   }
   
   /**
+   * Rerun a currently running job.
+   *
+   * @param jobId The identifier of the job to be rerun.
+   * @throws ProblemException If command is not executed successfully
+   */
+  public synchronized void reRunJob( final String jobId ) throws ProblemException {
+    if ( null != jobId ) {
+      String cmd = "qrerun " + jobId; //$NON-NLS-1$
+
+      this.connection.execCommand( this.qmgrCmdPath + cmd );
+    }
+  }
+
+  /**
+   * Rerun one or more currently running jobs.
+   *
+   * @param jobIds The identifiers of the jobs to be rerun.
+   * @throws ProblemException If command is not executed successfully
+   */
+  public synchronized void reRunJobs( final String[] jobIds ) throws ProblemException {
+    String strJobs = null;
+    String cmd = "qrerun "; //$NON-NLS-1$
+
+    // Add the jobIds 
+    for ( String str : jobIds )
+      strJobs = str + " "; //$NON-NLS-1$
+  
+    if ( null != strJobs ) {
+      strJobs = strJobs.trim();
+  
+      this.connection.execCommand( this.qmgrCmdPath + cmd + " " + strJobs ); //$NON-NLS-1$
+    }
+  }
+
+  /**
    * Executes pbsnodes on the PBS server and returns a list of the workernodes as
    * {@link WorkerNodeInfo}. If no workernodes or error parsing the output then
    * this method will return <code>null</code>. The output of pbsnodes are as

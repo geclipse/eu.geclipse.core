@@ -253,7 +253,7 @@ public class BatchJobManager implements IContentChangeNotifier {
    * @param job The job to be removed.
    * @return True if the job was contained in the list of managed jobs.
    */
-  protected synchronized boolean removeJob( final IBatchJobInfo job ) {
+  protected /*synchronized */boolean removeJob( final IBatchJobInfo job ) {
     IBatchJobInfo removedJob = this.jobs.remove( job.getJobId() );
     
 //    if ( null != removedJob ) { 
@@ -270,7 +270,7 @@ public class BatchJobManager implements IContentChangeNotifier {
    * @param job The {@link IBatchJobInfo} to be deleted.
    * @throws ProblemException If the job could not be successfully deleted.
    */
-  public synchronized void deleteJob( final IBatchJobInfo job ) throws ProblemException {
+  public /*synchronized */void deleteJob( final IBatchJobInfo job ) throws ProblemException {
     if ( job.isDeletable() ) {
       job.deleteJob();
       removeJob( job );
@@ -286,7 +286,7 @@ public class BatchJobManager implements IContentChangeNotifier {
    * @param destServer The destination server.
    * @throws ProblemException If the job could not be successfully moved.
    */
-  public synchronized void moveJob( final IBatchJobInfo job, final String destQueue, 
+  public /*synchronized */void moveJob( final IBatchJobInfo job, final String destQueue, 
                        final String destServer ) throws ProblemException {
     if ( job.isMovable() ) {
       job.moveJob( destQueue, destServer );
@@ -300,7 +300,7 @@ public class BatchJobManager implements IContentChangeNotifier {
    * @param job The {@link IBatchJobInfo} to be put on hold.
    * @throws ProblemException If command is not executed successfully
    */
-  public synchronized void holdJob( final IBatchJobInfo job ) throws ProblemException {
+  public /*synchronized */void holdJob( final IBatchJobInfo job ) throws ProblemException {
     if ( job.isHoldable() ) {
       job.holdJob();
       job.setStatus( IBatchJobInfo.JobState.H );
@@ -314,10 +314,23 @@ public class BatchJobManager implements IContentChangeNotifier {
    * @param job The {@link IBatchJobInfo} to be released.
    * @throws ProblemException If command is not executed successfully
    */
-  public synchronized void releaseJob( final IBatchJobInfo job ) throws ProblemException {
+  public /*synchronized */void releaseJob( final IBatchJobInfo job ) throws ProblemException {
     if ( job.isReleasable() ) {
       job.releaseJob();
       job.setStatus( IBatchJobInfo.JobState.Q );
+//      fireContentChanged();
+    }
+  }
+
+  /**
+   * ReRun the specified {@link IBatchJobInfo}.
+   *
+   * @param job The {@link IBatchJobInfo} to be reRun.
+   * @throws ProblemException If command is not executed successfully
+   */
+  public /*synchronized */void reRunJob( final IBatchJobInfo job ) throws ProblemException {
+    if ( job.isReRunnable() ) {
+      job.reRunJob();
 //      fireContentChanged();
     }
   }

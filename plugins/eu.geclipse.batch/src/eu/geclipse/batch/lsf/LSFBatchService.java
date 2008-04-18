@@ -308,4 +308,26 @@ public class LSFBatchService extends AbstractBatchService {
     // TODO Auto-generated method stub
     
   }
+
+  /**
+   * Rerun a currently running job.
+   *
+   * @param jobId The identifier of the job to be rerun.
+   * @throws ProblemException If command is not executed successfully
+   */
+  public void reRunJob( final String jobId ) throws ProblemException {
+    // TODO Auto-generated method stub
+   
+  }
+
+  /**
+   * Rerun one or more currently running jobs.
+   *
+   * @param jobIds The identifiers of the jobs to be rerun.
+   * @throws ProblemException If command is not executed successfully
+   */
+  public void reRunJobs( final String[] jobIds ) throws ProblemException {
+    // TODO Auto-generated method stub
+    
+  }
 }
