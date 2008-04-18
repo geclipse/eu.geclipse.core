@@ -39,24 +39,22 @@ public class InfoServiceFactory {
    * Returns an information service for a specific VO type.
    * @param voType The type of the VO. It can be "GRIA VO" or "Voms VO"
    * @param vo The vo to pass to the information service
-   * @return An infoservice implementing IExtentedGridInfoService interface or null
+   * @return An infoservice implementing IGridInfoService interface or null
    */
   public static IGridInfoService getInfoService(final String voType, final IVirtualOrganization vo)
   {
-    IExtentedGridInfoService infoService = null;
-    IExtentedGridInfoService tempInfoService = null;
+    IGridInfoService infoService = null;
+    IGridInfoService tempInfoService = null;
     ArrayList<IGridInfoService> infoServicesArray = getAllExistingInfoService();
     
-    for (int i=0; infoService == null && i<infoServicesArray.size(); i++)
-    {  
-      
-      if (infoServicesArray.get( i ) instanceof IExtentedGridInfoService)
+    for (int i=0; infoService == null && i<infoServicesArray.size(); i++) {  
+      tempInfoService = infoServicesArray.get( i );
+      if (tempInfoService instanceof IExtentedGridInfoService)
       {
-        tempInfoService = ( IExtentedGridInfoService )infoServicesArray.get( i );
-        if (voType.equals( tempInfoService.getVoType() ))
+        if (voType.equals( ( ( IExtentedGridInfoService )tempInfoService ).getVoType() ))
         {
-          infoService = ( IExtentedGridInfoService )infoServicesArray.get( i );
-          infoService.setVO( vo );
+          infoService = infoServicesArray.get( i );
+          ( ( IExtentedGridInfoService )tempInfoService ).setVO( vo );
         }
       }
     }
@@ -73,7 +71,7 @@ public class InfoServiceFactory {
   public static ArrayList<IGridInfoService> getAllExistingInfoService()
   {
     ArrayList<IGridInfoService> infoServiceArray = new ArrayList<IGridInfoService>();
-    IExtentedGridInfoService infoService = null;
+    IGridInfoService infoService = null;
     IExtensionRegistry myRegistry = Platform.getExtensionRegistry();
     IExtensionPoint extensionPoint = myRegistry.getExtensionPoint( "eu.geclipse.info.infoService"); //$NON-NLS-1$
     IExtension[] extensions = extensionPoint.getExtensions();
@@ -86,7 +84,7 @@ public class InfoServiceFactory {
       for( IConfigurationElement element : elements ) {
         
         try {
-          infoService = (IExtentedGridInfoService) element.createExecutableExtension( "class" ); //$NON-NLS-1$
+          infoService =  ( IGridInfoService )element.createExecutableExtension( "class" ); //$NON-NLS-1$
           if (infoService != null)
           {
             infoServiceArray.add( infoService );
