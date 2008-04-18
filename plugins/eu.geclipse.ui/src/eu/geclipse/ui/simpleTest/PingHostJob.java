@@ -27,7 +27,6 @@ import org.eclipse.swt.widgets.Text;
 
 import eu.geclipse.core.simpleTest.PingTest;
 
-
 /**
  * A Job class that is used to ping a host a number of times
  * 
@@ -92,7 +91,7 @@ public class PingHostJob extends Job {
     this.itemString = itemString;
     this.index = index;
   }
-
+  
   @Override
   protected IStatus run( final IProgressMonitor monitor ) {
     double min = Long.MAX_VALUE; 
@@ -103,6 +102,7 @@ public class PingHostJob extends Job {
     int i;
     
     IStatus result = Status.CANCEL_STATUS;
+    
     monitor.beginTask( Messages.getString( "PingTestDialog.pingMsg" ) + this.hostName //$NON-NLS-1$ 
                        + " " + this.numPing //$NON-NLS-1$
                        + Messages.getString( "PingTestDialog.spacePlusTimes" ), this.numPing ); //$NON-NLS-1$
@@ -145,9 +145,26 @@ public class PingHostJob extends Job {
           }      
         }
 
-//      // Sleep for the specified interval until we run again
-//      this.schedule( this.timeOut * 1000 );
+      try {
+        Thread.sleep( this.timeOut * 1000 );
+      } catch (InterruptedException e) {
+        // Don't need to do anything
+      }
       
+      this.itemString[ 1 ] = Integer.toString( i + 1 );
+
+      if ( !this.display.isDisposed() ) {   
+        this.display.syncExec( new Runnable() {
+          public void run() {
+            // Write the summary
+            if ( !PingHostJob.this.table.isDisposed() ) { 
+              PingHostJob.this.table.clear( PingHostJob.this.index );
+
+            }
+          }
+        } );
+      }
+
       monitor.worked( 1 );
     }
     
