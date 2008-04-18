@@ -503,22 +503,24 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
       @Override
       public void run() {
         
-        ArrayList<IExtentedGridInfoService> infoServicesArray = InfoServiceFactory.getAllExistingInfoService();
+        ArrayList<IGridInfoService> infoServicesArray = InfoServiceFactory.getAllExistingInfoService();
         for (int i=0; i<infoServicesArray.size(); i++)
         {
-          IExtentedGridInfoService infoService = infoServicesArray.get( i );
-          while (infoService != null && infoService.getStore()==null)
+          if ( infoServicesArray.get( i ) instanceof IExtentedGridInfoService)
           {
-            try {
-              sleep(1000);
-            } catch( InterruptedException e ) {
-              //ignore interrupted exception
+            IExtentedGridInfoService infoService = ( IExtentedGridInfoService )infoServicesArray.get( i );
+            while (infoService != null && infoService.getStore()==null)
+            {
+              try {
+                sleep(1000);
+              } catch( InterruptedException e ) {
+                //ignore interrupted exception
+              }
             }
-          }
-          
-          if (infoService != null && infoService.getStore()!=null)
-            infoService.getStore().addListener( GlueInfoViewer.this, null );
-           
+            
+            if (infoService != null && infoService.getStore()!=null)
+              infoService.getStore().addListener( GlueInfoViewer.this, null );
+          } 
         }
       }
       

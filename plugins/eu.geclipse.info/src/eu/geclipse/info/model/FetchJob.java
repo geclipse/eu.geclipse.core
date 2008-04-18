@@ -24,6 +24,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridInfoService;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.info.InfoServiceFactory;
 import eu.geclipse.info.glue.GlueIndex;
@@ -55,7 +56,7 @@ public class FetchJob extends Job {
                                 "eu.geclipse.glite.info", //$NON-NLS-1$
                                 "BDII fetch from " //$NON-NLS-1$
                                     + " Failed" ); //$NON-NLS-1$
-    ArrayList<IExtentedGridInfoService> infoServicesArray = null;
+    ArrayList<IGridInfoService> infoServicesArray = null;
     infoServicesArray = InfoServiceFactory.getAllExistingInfoService();
     
     // Get the number of projects. The number is used in the monitor.
@@ -80,20 +81,26 @@ public class FetchJob extends Job {
     // Get the information from the info systems to file the glue view.
     for (int i=0; infoServicesArray!= null && i<infoServicesArray.size(); i++)
     {
-      IExtentedGridInfoService infoService = infoServicesArray.get( i );
-      if (infoService != null)
+      if (infoServicesArray.get( i ) instanceof IExtentedGridInfoService)
       {
-        infoService.scheduleFetch(monitor);
+        IExtentedGridInfoService infoService = ( IExtentedGridInfoService )infoServicesArray.get( i );
+        if (infoService != null)
+        {
+          infoService.scheduleFetch(monitor);
+        }
       }
     }
     
     // Notify the listeners that the info has changed.
     for (int i=0; infoServicesArray != null && i<infoServicesArray.size(); i++)
     {
-      IExtentedGridInfoService infoService = infoServicesArray.get( i );
-      if (infoService != null && infoService.getStore() != null)
+      if ( infoServicesArray.get( i ) instanceof IExtentedGridInfoService)
       {
-        infoService.getStore().notifyListeners( null );
+        IExtentedGridInfoService infoService = ( IExtentedGridInfoService )infoServicesArray.get( i );
+        if (infoService != null && infoService.getStore() != null)
+        {
+          infoService.getStore().notifyListeners( null );
+        }
       }
     }
     

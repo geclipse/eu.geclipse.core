@@ -23,6 +23,7 @@ import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 
+import eu.geclipse.core.model.IGridInfoService;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.info.model.IExtentedGridInfoService;
 
@@ -40,18 +41,23 @@ public class InfoServiceFactory {
    * @param vo The vo to pass to the information service
    * @return An infoservice implementing IExtentedGridInfoService interface or null
    */
-  public static IExtentedGridInfoService getInfoService(final String voType, final IVirtualOrganization vo)
+  public static IGridInfoService getInfoService(final String voType, final IVirtualOrganization vo)
   {
-    IExtentedGridInfoService infoService = null, tempInfoService = null;
-    ArrayList<IExtentedGridInfoService> infoServicesArray = getAllExistingInfoService();
+    IExtentedGridInfoService infoService = null;
+    IExtentedGridInfoService tempInfoService = null;
+    ArrayList<IGridInfoService> infoServicesArray = getAllExistingInfoService();
     
     for (int i=0; infoService == null && i<infoServicesArray.size(); i++)
     {  
-      tempInfoService = infoServicesArray.get( i );
-      if (voType.equals( tempInfoService.getVoType() ))
+      
+      if (infoServicesArray.get( i ) instanceof IExtentedGridInfoService)
       {
-        infoService = infoServicesArray.get( i );
-        infoService.setVO( vo );
+        tempInfoService = ( IExtentedGridInfoService )infoServicesArray.get( i );
+        if (voType.equals( tempInfoService.getVoType() ))
+        {
+          infoService = ( IExtentedGridInfoService )infoServicesArray.get( i );
+          infoService.setVO( vo );
+        }
       }
     }
     
@@ -64,9 +70,9 @@ public class InfoServiceFactory {
    * no information services that extend the extension point "eu.geclipse.info.infoService"
    * exist.
    */
-  public static ArrayList<IExtentedGridInfoService> getAllExistingInfoService()
+  public static ArrayList<IGridInfoService> getAllExistingInfoService()
   {
-    ArrayList<IExtentedGridInfoService> infoServiceArray = new ArrayList<IExtentedGridInfoService>();
+    ArrayList<IGridInfoService> infoServiceArray = new ArrayList<IGridInfoService>();
     IExtentedGridInfoService infoService = null;
     IExtensionRegistry myRegistry = Platform.getExtensionRegistry();
     IExtensionPoint extensionPoint = myRegistry.getExtensionPoint( "eu.geclipse.info.infoService"); //$NON-NLS-1$
