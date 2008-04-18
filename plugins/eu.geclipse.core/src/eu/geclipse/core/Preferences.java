@@ -21,12 +21,13 @@ import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
+
 import org.eclipse.core.net.proxy.IProxyData;
 import org.eclipse.core.net.proxy.IProxyService;
+
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.internal.PreferenceConstants;
 import eu.geclipse.core.security.Base64;
-import eu.geclipse.core.security.Base64Codec;
 
 /**
  * This class gives easy access to the core preferences of g-Eclipse.
