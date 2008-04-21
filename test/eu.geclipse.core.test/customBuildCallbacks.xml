@@ -9,9 +9,9 @@
 	</target>
 	
 	<!-- Special chars which cannot be entered in messages directly -->
-    <property name="q" value='"' />
-    <property name="lt" value="&lt;" />
-    <property name="gt" value="&gt;" />
+	<property name="q" value='"' />
+	<property name="lt" value="&lt;" />
+	<property name="gt" value="&gt;" />
 	
 	<!-- A simplified version of the ant-contrib 'foreach' task  -->
 	<taskdef name="foreach"
