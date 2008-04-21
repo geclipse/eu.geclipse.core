@@ -97,7 +97,7 @@
     <mkdir dir="html/api_reference" />
 
     <exec dir="." executable="${javadoc}" output="doc.bin.log">
-      <arg line="@${basedir}/${optionsFile} -J-Xmx1000M" />
+      <arg line="@${basedir}/${optionsFile} -J-Xmx512M" />
     </exec>
     
   </target>
