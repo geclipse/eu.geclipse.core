@@ -1,4 +1,4 @@
-/* Copyright (c) 2006, 2007 g-Eclipse Consortium 
+/* Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -14,7 +14,6 @@
 
 package eu.geclipse.core.project;
 
-import org.eclipse.core.internal.resources.NatureManager;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IWorkspaceRoot;
