@@ -38,6 +38,7 @@ import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.impl.AbstractGridContainer;
 import eu.geclipse.core.model.impl.ContainerMarker;
 
@@ -259,9 +260,9 @@ public class ConnectionElement
       GEclipseFileStore fileStore = ( GEclipseFileStore ) getConnectionFileStore();
 
       // Step 1: Reset and Refresh
-      fileStore.reset();
+      /*fileStore.reset();
       fileStore.setExternalMonitor( sMonitor.newChild( 10 ) );
-      res.refreshLocal( IResource.DEPTH_INFINITE, null );
+      res.refreshLocal( IResource.DEPTH_INFINITE, null );*/
       
       // Step 2: Activate and fetch children remotely
       fileStore.activate();
@@ -276,6 +277,10 @@ public class ConnectionElement
         IResource[] members = ( ( IContainer ) res ).members();
         if ( ( members == null ) || ( members.length == 0 ) ) {
           addElement( ContainerMarker.getEmptyFolderMarker( this ) );
+        } else {
+          for ( IResource member : members ) {
+            addElement( new ConnectionElement( member ) );
+          }
         }
       }
       
