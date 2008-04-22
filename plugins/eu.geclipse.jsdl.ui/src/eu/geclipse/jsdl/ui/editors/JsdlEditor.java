@@ -437,7 +437,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
          addPage( this.jobApplicationPage );
          addPage( this.dataStagingPage );  
          addPage( this.resourcesPage );
-         addPage( this.parametricPage );
+//         addPage( this.parametricPage );
          pushContentToPages(); 
        }
       updateProblemIndication();
@@ -533,9 +533,9 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
     if ( this.dataStagingPage != null ){
       this.dataStagingPage.setPageContent( this.jobDefType, isModelRefreshed() );
     }
-    if (this.parametricPage != null){
-      this.parametricPage.setPageContent( this.jobDefType, isModelRefreshed() );
-    }
+//    if (this.parametricPage != null){
+//      this.parametricPage.setPageContent( this.jobDefType, isModelRefreshed() );
+//    }
     
   }
   
