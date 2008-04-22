@@ -44,7 +44,7 @@ import eu.geclipse.jsdl.model.base.JsdlPackage;
 import eu.geclipse.ui.dialogs.GridFileDialog;
 
 /**
- * @author nickl
+ * @author nloulloud
  */
 public class DataStagingInDialog extends Dialog {
 
@@ -162,8 +162,10 @@ public class DataStagingInDialog extends Dialog {
         GridFileDialog dialog = new GridFileDialog( PlatformUI.getWorkbench()
                                                             .getActiveWorkbenchWindow()
                                                             .getShell(),
-                                                          GridFileDialog.STYLE_ALLOW_ONLY_EXISTING
-                                                              | GridFileDialog.STYLE_ALLOW_ONLY_FILES );
+                                                          GridFileDialog.STYLE_ALLOW_ONLY_EXISTING 
+                                                          | GridFileDialog.STYLE_ALLOW_ONLY_FILES 
+                                                          | GridFileDialog.STYLE_MULTI_SELECTION
+                                                              );
         if( dialog.open() == Window.OK ) {
           URI[] uris = dialog.getSelectedURIs();
           if ((uris != null)&&(uris.length > 0)){
