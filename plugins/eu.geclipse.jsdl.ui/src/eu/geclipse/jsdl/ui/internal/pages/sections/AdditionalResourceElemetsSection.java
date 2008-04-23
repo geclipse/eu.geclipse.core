@@ -178,17 +178,18 @@ public class AdditionalResourceElemetsSection extends JsdlAdaptersFactory {
       
       public void modifyText( final ModifyEvent e ) {    
         
-        if (!AdditionalResourceElemetsSection.this.txtIndCPUSp.getText().equals( EMPTY_STRING ) ) {
-          
-          AdditionalResourceElemetsSection.this.boundaryType.setValue( Double.parseDouble( AdditionalResourceElemetsSection.this.txtIndCPUSp.getText()) );
-          AdditionalResourceElemetsSection.this.rangeValueType.setLowerBound( AdditionalResourceElemetsSection.this.boundaryType );
-          AdditionalResourceElemetsSection.this.resourcesType.setIndividualCPUSpeed( AdditionalResourceElemetsSection.this.rangeValueType );
-        }else{
-          AdditionalResourceElemetsSection.this.resourcesType.setIndividualCPUSpeed( null );
-        }
-          
-        contentChanged();
-          
+//        if (!AdditionalResourceElemetsSection.this.txtIndCPUSp.getText().equals( EMPTY_STRING ) ) {
+//          
+//          AdditionalResourceElemetsSection.this.boundaryType.setValue( Double.parseDouble( AdditionalResourceElemetsSection.
+//                                                                                           this.txtIndCPUSp.getText()) );
+//          AdditionalResourceElemetsSection.this.rangeValueType.setLowerBound( AdditionalResourceElemetsSection.this.boundaryType );
+//          AdditionalResourceElemetsSection.this.resourcesType.setIndividualCPUSpeed( AdditionalResourceElemetsSection.this.rangeValueType );
+//        }else{
+//          AdditionalResourceElemetsSection.this.resourcesType.setIndividualCPUSpeed( null );
+//        }
+//          
+//        contentChanged();
+//          
         }
       } );   
 //    this.txtIndCPUSp.addListener( SWT.Verify, new NumberVerifier() );
