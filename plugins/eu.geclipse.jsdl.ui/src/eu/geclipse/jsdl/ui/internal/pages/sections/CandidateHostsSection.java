@@ -282,16 +282,22 @@ public class CandidateHostsSection extends JsdlAdaptersFactory {
       newInputList.add( (String)innerValue[i] );  
     }
 
-    tableViewer.setInput( newInputList  );
+//    tableViewer.setInput( newInputList  );
     
     
-    for ( int i=0; i<tableViewer.getTable().getItemCount(); i++ ) {      
-      collection.add( (String) tableViewer.getElementAt( i ) );
+//    for ( int i=0; i<tableViewer.getTable().getItemCount(); i++ ) {      
+//      collection.add( (String) tableViewer.getElementAt( i ) );
+//    }
+    
+    for ( int i=0; i<newInputList.size(); i++ ) {      
+      collection.add( newInputList.get( i ) );
     }
     
     checkCandidateHostsElement();
     this.candidateHosts.getHostName().clear();
     this.candidateHosts.getHostName().addAll( collection );
+    tableViewer.setInput( this.candidateHosts.getHostName()  );
+    
 
 
     this.contentChanged();
