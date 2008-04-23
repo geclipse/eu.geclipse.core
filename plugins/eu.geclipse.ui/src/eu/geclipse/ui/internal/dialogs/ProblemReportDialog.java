@@ -161,7 +161,7 @@ public class ProblemReportDialog extends TitleAreaDialog {
     reportLabel.setText( "Problem Report:" );
     reportLabel.setLayoutData( new GridData() );
     
-    this.reportText = new Text( mainComp, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER | SWT.READ_ONLY );
+    this.reportText = new Text( mainComp, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER );
     ProblemReport factory = new ProblemReport( this.problem );
     this.reportText.setText( factory.createReport() );
     GridData gData = new GridData( SWT.FILL, SWT.FILL, true, true );
@@ -280,6 +280,14 @@ public class ProblemReportDialog extends TitleAreaDialog {
     
   }
   
+  protected void updateUI() {
+    Button sendButton = getButton( IDialogConstants.CLIENT_ID + SEND_ID );
+    if ( sendButton != null ) {
+      String mailto = this.mailtoText.getText();
+      sendButton.setEnabled( ( mailto != null ) && ( mailto.length() > 0 ) );
+    }
+  }
+  
   /**
    * Get the mailto link for the send action.
    * 
@@ -313,14 +321,6 @@ public class ProblemReportDialog extends TitleAreaDialog {
     OutputStream oStream = store.openOutputStream( EFS.NONE, null );
     oStream.write( report.getBytes() );
     oStream.close();
-  }
-  
-  private void updateUI() {
-    Button sendButton = getButton( IDialogConstants.CLIENT_ID + SEND_ID );
-    if ( sendButton != null ) {
-      String mailto = this.mailtoText.getText();
-      sendButton.setEnabled( ( mailto != null ) && ( mailto.length() > 0 ) );
-    }
   }
   
 }
