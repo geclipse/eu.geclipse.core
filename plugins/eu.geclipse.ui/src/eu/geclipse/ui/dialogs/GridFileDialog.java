@@ -25,6 +25,7 @@ import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileInfo;
@@ -42,7 +43,6 @@ import org.eclipse.jface.viewers.IDoubleClickListener;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
-import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
@@ -52,9 +52,10 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.VerifyEvent;
+import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -462,6 +463,8 @@ public class GridFileDialog
    */
   private static final String ROOT_FOLDER = "/"; //$NON-NLS-1$
   
+  private static final Pattern POSIX_FILENAME = Pattern.compile( "^[\\w\\.][\\w\\.-]*" ); //$NON-NLS-1$
+  
   /**
    * The dialog's tree viewer.
    */
@@ -506,7 +509,7 @@ public class GridFileDialog
   /**
    * Listener used to listen to modifications in the filename combo.
    */
-  private ModifyListener filenameListener;
+  private VerifyListener filenameListener;
   
   /**
    * Listener used to listen to selections in the tree viewer.
@@ -521,7 +524,7 @@ public class GridFileDialog
   /**
    * The current selection of the tree viewer.
    */
-  private IStructuredSelection currentSelection;
+  private IFileStore[] currentSelection;
   
   /**
    * Create a new dialog with the specified style constant.
@@ -591,7 +594,6 @@ public class GridFileDialog
   @Override
   public void create() {
     super.create();
-    validate();
   }
   
   /**
@@ -602,32 +604,7 @@ public class GridFileDialog
    * or <code>null</code> if no selection is available.
    */
   public IFileStore[] getSelectedFileStores() {
-    
-    IFileStore[] result = null;
-    
-    IFileStore[] stores = internalGetSelectedFileStores();
-    
-    if ( ( stores != null ) && ( stores.length > 0 ) ) {
-      
-      List< IFileStore > list = new ArrayList< IFileStore >();
-      
-      for ( IFileStore store : stores ) {
-        if ( ( store.fetchInfo().exists() || ! hasStyle( STYLE_ALLOW_ONLY_EXISTING ) ) 
-            && ( ( ! hasStyle( STYLE_ALLOW_ONLY_FILES ) && ! hasStyle( STYLE_ALLOW_ONLY_FOLDERS ) )
-                || ( hasStyle( STYLE_ALLOW_ONLY_FILES ) && ! store.fetchInfo().isDirectory() )
-                || ( hasStyle( STYLE_ALLOW_ONLY_FOLDERS ) && store.fetchInfo().isDirectory() ) ) ) {
-          list.add( store );
-        }
-      }
-      
-      if ( ! list.isEmpty() ) {
-        result = list.toArray( new IFileStore[ list.size() ] );
-      }
-      
-    }
-    
-    return result;
-    
+    return this.currentSelection;
   }
   
   /**
@@ -712,7 +689,7 @@ public class GridFileDialog
     gData = new GridData( GridData.FILL_BOTH );
     gData.grabExcessHorizontalSpace = true;
     gData.grabExcessVerticalSpace = true;
-    gData.widthHint = 400;
+    gData.widthHint = 500;
     gData.heightHint = 400;
     mainComp.setLayoutData( gData );
     
@@ -910,7 +887,7 @@ public class GridFileDialog
     this.selectionListener = new ISelectionChangedListener() {
       public void selectionChanged( final SelectionChangedEvent event ) {
         setNotificationEnabled( false );
-        handleSelectionChanged( ( IStructuredSelection ) event.getSelection() );
+        handleSelectionChanged();
         setNotificationEnabled( true );
       }
     };
@@ -928,14 +905,15 @@ public class GridFileDialog
     }
     
     if ( this.filenameCombo != null ) {
-      this.filenameListener = new ModifyListener() {
-        public void modifyText( final ModifyEvent e ) {
+      
+      this.filenameListener = new VerifyListener() {
+        public void verifyText( final VerifyEvent e ) {
           setNotificationEnabled( false );
-          handleFilenameChanged();
+          handleFilenameChanged( e );
           setNotificationEnabled( true );
         }
       };
-      this.filenameCombo.addModifyListener( this.filenameListener );
+      this.filenameCombo.addVerifyListener( this.filenameListener );
     }
     
     if ( this.filetypeCombo != null ) {
@@ -983,11 +961,132 @@ public class GridFileDialog
       boolean state = this.treeViewer.getExpandedState( object );
       this.treeViewer.setExpandedState( object, ! state );
     } else {
-      if ( validate() ) {
-        setReturnCode( IDialogConstants.OK_ID );
-        close();
+      setReturnCode( IDialogConstants.OK_ID );
+      close();
+    }
+  }
+  
+  /**
+   * Handler that handles changes in the filename combo.
+   */
+  protected void handleFilenameChanged( final VerifyEvent e ) {
+    
+    String errMsg = null;
+    URI uri = getURI();
+    
+    if ( uri != null ) {
+      
+      IPath path = new Path( uri.getPath() );
+      String lastSegment = path.lastSegment();
+      
+      String filename = getFilename();
+      if ( filename == null ) {
+        filename = EMPTY_STRING;
+      }
+      
+      if ( ( lastSegment != null ) && lastSegment.equals( filename ) ) {
+        path = path.removeLastSegments( 1 );
+      }
+      
+      String newFilename = filename.substring( 0, e.start ) + e.text + filename.substring( e.end );
+      if ( ! validateFilename( newFilename ) ) {
+        e.doit = false;
+      } else {
+        path = path.append( newFilename );
+        String spath = path.toString();
+        if ( ! spath.startsWith( PATH_SEPARATOR ) ) {
+          spath = PATH_SEPARATOR + spath;
+        }
+        
+        try {
+          
+          uri = new URI(
+              uri.getScheme(),
+              uri.getUserInfo(),
+              uri.getHost(),
+              uri.getPort(),
+              spath,
+              uri.getQuery(),
+              uri.getFragment()
+          );
+          setURI( uri );
+          
+          try {
+            
+            IFileStore fileStore = EFS.getStore( uri );
+            IFileInfo fileInfo = fileStore.fetchInfo();
+            
+            if ( hasStyle( STYLE_ALLOW_ONLY_FILES ) && fileInfo.isDirectory() ) {
+              errMsg = "Dialog is in file-only-mode but at least one folder is selected";
+            } else if ( hasStyle( STYLE_ALLOW_ONLY_FOLDERS ) && ! fileInfo.isDirectory() ) {
+              errMsg = "Dialog is in folder-only-mode but at least one file is selected";
+            } else {
+              setCurrentSelection( new IFileStore[] { fileStore } );
+            }
+            
+          } catch ( CoreException cExc ) {
+            errMsg = String.format( "Unable to create file store - %s", cExc.getLocalizedMessage() );
+          }
+          
+        } catch ( URISyntaxException uriExc ) {
+          errMsg = String.format( "Invalid filename - ", newFilename );
+        }
+        
+      }
+      
+    }
+    
+    if ( errMsg != null ) {
+      setCurrentSelection( null );
+    }
+    
+    setErrorMessage( errMsg );
+    
+  }
+  
+  protected void handleSelectionChanged() {
+    
+    String errMsg = null;
+    IFileStore[] selection = getSelection();
+    
+    if ( ( selection == null ) || ( selection.length == 0 ) ) {
+      setFilename( null );
+      setURI( null );
+    }
+    
+    else if ( hasStyle( STYLE_ALLOW_ONLY_FILES ) || hasStyle( STYLE_ALLOW_ONLY_FOLDERS ) ) {
+      for ( IFileStore store : selection ) {
+        IFileInfo info = store.fetchInfo();
+        if ( hasStyle( STYLE_ALLOW_ONLY_FILES ) && info.isDirectory() ) {
+          errMsg = "Dialog is in file-only-mode but at least one folder is selected";
+          break;
+        } else if ( hasStyle( STYLE_ALLOW_ONLY_FOLDERS ) && ! info.isDirectory() ) {
+          errMsg = "Dialog is in folder-only-mode but at least one file is selected";
+          break;
+        }
       }
     }
+    
+    if ( ( selection != null ) && ( selection.length == 1 ) ) {
+      setURI( selection[ 0 ].toURI() );
+      if ( errMsg == null ) {
+        setFilename( selection[ 0 ].getName() );
+      } else {
+        setFilename( null );
+      }
+    } else {
+      setURI( null );
+      setFilename( null );
+    }
+    
+    if ( errMsg == null ) {
+      setCurrentSelection( selection );
+    } else {
+      setCurrentSelection( null );
+    }
+    
+    setErrorMessage( errMsg );
+     
   }
   
   /**
@@ -995,61 +1094,42 @@ public class GridFileDialog
    */
   protected void handleUriChanged() {
     
-    setErrorMessage( null );
+    URI uri = getURI();
     
-    try {
-      URI uri = new URI( this.uriCombo.getText() );
-      setSelectedURI( uri, false, true );
-      validate();
-    } catch ( URISyntaxException uriExc ) {
-      this.filenameCombo.setText( EMPTY_STRING );
-      setErrorMessage( Messages.getString("GridFileDialog.error_invalid_URI") //$NON-NLS-1$
-                       + uriExc.getLocalizedMessage() );
-    }
-    
-  }
-
-  /**
-   * Handler that handles changes in the filename combo.
-   */
-  protected void handleFilenameChanged() {
-
-    setErrorMessage( null );
-    
-    try {
-      URI uri = new URI( this.uriCombo.getText() );
-      IPath path = new Path( uri.getPath() );
-      path = path.removeLastSegments( 1 ).append( this.filenameCombo.getText() );
-      String spath = path.toString();
-      if ( ! spath.startsWith( PATH_SEPARATOR ) ) {
-        spath = PATH_SEPARATOR + spath;
+    if ( uri != null ) {
+      
+      String errMsg = null;
+      
+      try {
+        
+        IFileStore fileStore = EFS.getStore( uri );
+        IFileInfo fileInfo = fileStore.fetchInfo();
+        
+        if ( hasStyle( STYLE_ALLOW_ONLY_FILES ) && fileInfo.isDirectory() ) {
+          errMsg = "Dialog is in file-only-mode but at least one folder is selected";
+        } else if ( hasStyle( STYLE_ALLOW_ONLY_FOLDERS ) && ! fileInfo.isDirectory() ) {
+          errMsg = "Dialog is in folder-only-mode but at least one file is selected";
+        } else {
+          setFilename( fileInfo.getName() );
+          setCurrentSelection( new IFileStore[] { fileStore } );
+        }
+        
+      } catch ( CoreException cExc ) {
+        errMsg = String.format( "Unable to create file store - %s", cExc.getLocalizedMessage() );
       }
-      uri = new URI(
-          uri.getScheme(),
-          uri.getUserInfo(),
-          uri.getHost(),
-          uri.getPort(),
-          spath,
-          uri.getQuery(),
-          uri.getFragment()
-      );
-      setSelectedURI( uri, true, false );
-      validate();
-    } catch ( URISyntaxException uriExc ) {
-      setErrorMessage( "Invalid URI - " + uriExc.getLocalizedMessage() ); //$NON-NLS-1$
+      
+      if ( errMsg != null ) {
+        setFilename( null );
+        setCurrentSelection( null );
+      }
+      
+      setErrorMessage( errMsg );
+      
+    } else {
+      setFilename( null );
+      setCurrentSelection( null );
     }
-
-  }
-  
-  protected void handleSelectionChanged( final IStructuredSelection selection ) {
-    this.currentSelection = selection;
-    if ( ! this.currentSelection.isEmpty() ) {
-      IFileStore[] stores = getSelectedFileStores();
-      setSelectedStore( ( ( stores != null ) && ( stores.length > 0 ) )
-                          ? stores[ 0 ]
-                          : null, true, true );
-    }
-    validate();
+    
   }
   
   protected void setMode( final int mode ) {
@@ -1068,7 +1148,6 @@ public class GridFileDialog
         this.treeViewer.setInput( GridModel.getRoot() );
         break;
     }
-    validate();
   }
   
   /**
@@ -1167,20 +1246,27 @@ public class GridFileDialog
     );
   }
   
-  /**
-   * Get all currently selected {@link IFileStore}s.
-   * 
-   * @return Array containing the {@link IFileStore}s of all selected elements
-   * or <code>null</code> if no selection is available.
-   */
-  private IFileStore[] internalGetSelectedFileStores() {
+  private String getFilename() {
+    
+    String result = null;
+    
+    if ( ( this.filenameCombo != null ) && ! this.filenameCombo.isDisposed() ) {
+      result = this.filenameCombo.getText();
+    }
+    
+    return result;
+    
+  }
+  
+  private IFileStore[] getSelection() {
     
     IFileStore[] result = null;
     
-    if ( ( this.currentSelection != null ) && ! this.currentSelection.isEmpty() ) {
+    if ( ( this.treeViewer != null ) && ! this.treeViewer.getTree().isDisposed() ) {
       
       List< IFileStore > list = new ArrayList< IFileStore >();
-      Iterator< ? > iterator = this.currentSelection.iterator();
+      IStructuredSelection selection = ( IStructuredSelection ) this.treeViewer.getSelection();
+      Iterator< ? > iterator = selection.iterator();
       
       while ( iterator.hasNext() ) {
         
@@ -1212,127 +1298,54 @@ public class GridFileDialog
     
   }
   
-  /**
-   * Set the specified {@link IFileStore} as selected. This method
-   * updates the uri and the filename combo if the corresponding flags
-   * are <code>true</code>.
-   * 
-   * @param store The store to the selected.
-   * @param updateURI If <code>true</code> the uri combo is updated.
-   * @param updateFilename If <code>true</code> the filename combo is updated.
-   */
-  private void setSelectedStore( final IFileStore store,
-                                 final boolean updateURI,
-                                 final boolean updateFilename ) {
+  private URI getURI() {
     
-    URI uri = null;
+    URI result = null;
+    setErrorMessage( null );
     
-    if ( store != null ) {
-      uri = store.toURI();
-      GEclipseURI guri = new GEclipseURI( uri );
-      uri = guri.toSlaveURI();
+    if ( ( this.uriCombo != null ) && ! this.uriCombo.isDisposed() ) {
+      String text = this.uriCombo.getText();
+      try {
+        result = new URI( text );
+      } catch ( URISyntaxException uriExc ) {
+        setErrorMessage( String.format( "Invalid URI - %s", uriExc.getLocalizedMessage() ) );
+      }
     }
     
-    if ( updateURI && ( this.uriCombo != null ) ) {
+    return result;
+    
+  }
+  
+  private void setCurrentSelection( final IFileStore[] selection ) {
+    if ( ( selection != null ) && ( selection.length > 0 ) ){
+      this.currentSelection = new IFileStore[ selection.length ];
+      System.arraycopy( selection, 0, this.currentSelection, 0, selection.length );
+      getButton( IDialogConstants.OK_ID ).setEnabled( true );
+    } else {
+      this.currentSelection = null;
+      getButton( IDialogConstants.OK_ID ).setEnabled( false );
+    }
+  }
+  
+  private void setFilename( final String filename ) {
+    if ( ( this.filenameCombo != null ) && ! this.filenameCombo.isDisposed() ) {
+      if ( filename == null ) {
+        this.filenameCombo.setText( EMPTY_STRING );
+      } else {
+        this.filenameCombo.setText( filename );
+      }
+    }
+  }
+  
+  private void setURI( final URI uri ) {
+    if ( ( this.uriCombo != null ) && ! this.uriCombo.isDisposed() ) {
       if ( uri == null ) {
         this.uriCombo.setText( EMPTY_STRING );
       } else {
-        this.uriCombo.setText( uri.toString() );
+        GEclipseURI geclURI = new GEclipseURI( uri );
+        this.uriCombo.setText( geclURI.toSlaveURI().toString() );
       }
     }
-    
-    if ( updateFilename && ( this.filenameCombo != null ) ) {
-      if ( ( uri == null )
-          || ( ( store != null )
-          && ( ( hasStyle( STYLE_ALLOW_ONLY_FILES ) && store.fetchInfo().isDirectory() )
-              || ( hasStyle( STYLE_ALLOW_ONLY_FOLDERS ) && ! store.fetchInfo().isDirectory() ) ) ) ) {
-        this.filenameCombo.setText( EMPTY_STRING );
-      } else {
-        IPath path = new Path( uri.getPath() );
-        String fd = path.lastSegment();
-        this.filenameCombo.setText( fd == null ? EMPTY_STRING : fd );
-      }
-    }
-    
-  }
-  
-  /**
-   * Set the specified {@link URI} as selected. This method
-   * updates the uri and the filename combo if the corresponding flags
-   * are <code>true</code>.
-   * 
-   * @param uri The uri to the selected.
-   * @param updateURI If <code>true</code> the uri combo is updated.
-   * @param updateFilename If <code>true</code> the filename combo is updated.
-   */
-  private void setSelectedURI( final URI uri,
-                               final boolean updateURI,
-                               final boolean updateFilename ) {
-    
-    setErrorMessage( null );
-    
-    try {
-      IFileStore store = EFS.getStore( uri );
-      this.currentSelection = new StructuredSelection( store );
-      setSelectedStore( store, updateURI, updateFilename );
-    } catch ( CoreException cExc ) {
-      setErrorMessage( "Invalid URI - " + cExc.getLocalizedMessage() ); //$NON-NLS-1$
-    }
-    
-  }
-  
-  private boolean validate() {
-
-    boolean valid = true;
-    String errorMsg = null;
-    setErrorMessage( null );
-    IFileStore[] stores = internalGetSelectedFileStores();
-    
-    if ( ( stores == null ) || ( stores.length == 0 ) ) {
-      valid = false;
-    }
-    
-    else {
-      
-      for ( IFileStore store : stores ) {
-        
-        IFileInfo info = store.fetchInfo();
-        
-        boolean onlyExisting = hasStyle( STYLE_ALLOW_ONLY_EXISTING );
-        boolean onlyDirs = hasStyle( STYLE_ALLOW_ONLY_FOLDERS );
-        boolean onlyFiles = hasStyle( STYLE_ALLOW_ONLY_FILES );
-        boolean exists = info.exists();
-        boolean isDir = info.isDirectory();
-        boolean isFile = ! info.isDirectory();
-        
-        if ( onlyExisting && ! exists ) {
-          errorMsg = Messages.getString("GridFileDialog.error_only_existing"); //$NON-NLS-1$
-        }
-        
-        else if ( onlyFiles && ! isFile ) {
-          errorMsg = Messages.getString("GridFileDialog.error_only_files"); //$NON-NLS-1$
-        }
-        
-        else if ( onlyDirs && ! isDir ) {
-          errorMsg = Messages.getString("GridFileDialog.error_only_directories"); //$NON-NLS-1$
-        }
-
-      }
-      
-    }
-    
-    if ( errorMsg != null ) {
-      valid = false;
-      setErrorMessage( errorMsg );
-    }
-    
-    Button button = getButton( IDialogConstants.OK_ID );
-    if ( button != null ) {
-      button.setEnabled( valid );
-    }
-    
-    return valid;
-    
   }
   
   /**
@@ -1351,7 +1364,7 @@ public class GridFileDialog
       }
       
       if ( this.filenameCombo != null ) {
-        this.filenameCombo.addModifyListener( this.filenameListener );
+        this.filenameCombo.addVerifyListener( this.filenameListener );
       }
       
       this.treeViewer.addSelectionChangedListener( this.selectionListener );
@@ -1365,13 +1378,17 @@ public class GridFileDialog
       }
       
       if ( this.filenameCombo != null ) {
-        this.filenameCombo.removeModifyListener( this.filenameListener );
+        this.filenameCombo.removeVerifyListener( this.filenameListener );
       }
       
       this.treeViewer.removeSelectionChangedListener( this.selectionListener );
       
     }
     
+  }
+  
+  private boolean validateFilename( final String filename ) {
+    return POSIX_FILENAME.matcher( filename ).matches();
   }
   
 }
