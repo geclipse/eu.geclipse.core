@@ -201,8 +201,17 @@ public class OperatingSystemSection extends JsdlAdaptersFactory {
       
       public void modifyText( final ModifyEvent e ) {
         checkOSElement();
-        OperatingSystemSection.this.operatingSystemType
-                                 .setOperatingSystemVersion( OperatingSystemSection.this.txtOperSystVer.getText() );
+        
+        if ( !OperatingSystemSection.this.txtOperSystVer.getText().equals( "" ) ) { //$NON-NLS-1$
+          checkResourcesElement();          
+          OperatingSystemSection.this.operatingSystemType
+          .setOperatingSystemVersion( OperatingSystemSection.this.txtOperSystVer.getText() );
+        }
+        else{
+          OperatingSystemSection.this.operatingSystemType
+          .setOperatingSystemVersion( null );
+        }
+        
         contentChanged();
           
         }
@@ -338,7 +347,7 @@ public class OperatingSystemSection extends JsdlAdaptersFactory {
       this.txtOSDescr.setText( EMPTY_STRING );
     }
     
-    this.isNotifyAllowed = false;
+    this.isNotifyAllowed = true;
     
     if ( this.adapterRefreshed ) {
       this.adapterRefreshed = false;

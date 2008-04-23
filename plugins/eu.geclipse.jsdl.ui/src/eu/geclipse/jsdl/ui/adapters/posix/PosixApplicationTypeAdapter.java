@@ -46,6 +46,7 @@ import eu.geclipse.jsdl.model.base.ApplicationType;
 import eu.geclipse.jsdl.model.base.JobDefinitionType;
 import eu.geclipse.jsdl.model.base.JobDescriptionType;
 import eu.geclipse.jsdl.model.base.JsdlFactory;
+import eu.geclipse.jsdl.model.base.JsdlPackage;
 import eu.geclipse.jsdl.model.posix.ArgumentType;
 import eu.geclipse.jsdl.model.posix.DirectoryNameType;
 import eu.geclipse.jsdl.model.posix.DocumentRoot;
@@ -160,13 +161,41 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
   
   
   
+  protected void checkApplicationElement() {
+    
+    EStructuralFeature eStructuralFeature = this.jobDescriptionType.eClass()
+          .getEStructuralFeature( JsdlPackage.JOB_DESCRIPTION_TYPE__APPLICATION );
+    
+    /*
+     * Check if the Application element is not set. If not set then set it to its 
+     * container (JobDescriptionType).
+     */
+    if (!this.jobDescriptionType.eIsSet( eStructuralFeature )) {      
+      this.jobDescriptionType.eSet( eStructuralFeature, this.applicationType );
+    }
+    /* 
+     * If the Application Element is set, check for any possible contents which may
+     * be set. If none of the above are true, then delete the Resources Element from it's
+     * container (JobDescriptionType).
+     */
+    else {
+      if ( this.applicationType.eContents().size() == 0) {
+        EcoreUtil.remove( this.applicationType );
+      }
+    }
+  }
+
+  
+  
   protected void checkPosixApplicationElement() {
     
     EStructuralFeature eStructuralFeature = this.documentRoot.eClass()
     .getEStructuralFeature( PosixPackage.DOCUMENT_ROOT__POSIX_APPLICATION );
     
+    
     Collection<POSIXApplicationType> collection = 
                                           new ArrayList<POSIXApplicationType>();
+    checkApplicationElement();
     collection.add( this.posixApplicationType);
         
     if ( !this.applicationType.eIsSet( eStructuralFeature ) ){      
@@ -212,7 +241,16 @@ public class PosixApplicationTypeAdapter extends PosixAdaptersFactory {
       
       public void modifyText( final ModifyEvent e ) {
         checkPosixApplicationElement();
-        PosixApplicationTypeAdapter.this.posixApplicationType.setName( widget.getText() );
+                
+        if (!widget.getText().equals( "" )){ //$NON-NLS-1$
+                            
+          PosixApplicationTypeAdapter.this.posixApplicationType.setName( widget.getText() );
+        }
+        else{
+          
+          PosixApplicationTypeAdapter.this.posixApplicationType
+                                                            .setName( null );
+        }
         contentChanged();
         
       }
