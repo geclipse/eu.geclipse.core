@@ -452,6 +452,7 @@ public final class JobApplicationPage extends FormPage implements INotifyChanged
       }
     } );
     
+    this.btnArgEdit.setEnabled( false );
     this.btnArgEdit.setLayoutData( gd );
     /* Create "Remove" Button */
     gd = new GridData();
@@ -600,6 +601,7 @@ public final class JobApplicationPage extends FormPage implements INotifyChanged
       }
     } );
     
+    this.btnEnVarEdit.setEnabled( false );
     this.btnEnVarEdit.setLayoutData( gd );
     /* Create "Remove" Button */
     gd = new GridData();
@@ -819,8 +821,9 @@ public final class JobApplicationPage extends FormPage implements INotifyChanged
     this.posixApplicationTypeAdapter.attachToGroupName( this.txtGroupName );
     this.lblUnits = toolkit.createLabel( client,
                                          Messages.getString( "JobApplicationPage_empty" ) ); //$NON-NLS-1$
-        
+    
     toolkit.paintBordersFor( client );
+    
   }
 
   
