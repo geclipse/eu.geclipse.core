@@ -143,7 +143,12 @@ public class GEclipseFileStore
   public void cacheInputStream( final IProgressMonitor monitor )
       throws CoreException {
     
-    SubMonitor sMonitor = SubMonitor.convert( monitor( monitor ), Messages.getString("GEclipseFileStore.caching_progress"), 10 ); //$NON-NLS-1$
+    SubMonitor sMonitor
+      = SubMonitor.convert(
+          monitor( monitor ),
+          Messages.getString("GEclipseFileStore.caching_progress"), //$NON-NLS-1$
+          10
+      );
 
     try {
       InputStream siStream = openInputStream( EFS.NONE, sMonitor.newChild( 1 ) );

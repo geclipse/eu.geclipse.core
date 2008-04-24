@@ -91,7 +91,11 @@ public class CachedInputStream extends InputStream {
   public void cache( final IProgressMonitor monitor )
       throws IOException {
     
-    SubMonitor sMonitor = SubMonitor.convert( monitor, Messages.getString("CachedInputStream.caching_progress"), this.bufferSize / BUFFER_SIZE ); //$NON-NLS-1$
+    SubMonitor sMonitor
+      = SubMonitor.convert(
+          monitor,
+          Messages.getString("CachedInputStream.caching_progress"), this.bufferSize / BUFFER_SIZE //$NON-NLS-1$
+      );
     
     sMonitor.subTask( Messages.getString("CachedInputStream.allocating_progress") ); //$NON-NLS-1$
     this.buffer = ByteBuffer.allocate( this.bufferSize );
