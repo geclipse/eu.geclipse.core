@@ -53,6 +53,7 @@ public class ConnectionMountAction extends SelectionListenerAction {
   protected ConnectionMountAction( final Shell shell ) {
     super( Messages.getString("ConnectionMountAction.name") ); //$NON-NLS-1$
     this.shell = shell;
+    setEnabled( false );
   }
   
   /* (non-Javadoc)
