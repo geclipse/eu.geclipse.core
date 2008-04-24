@@ -16,12 +16,15 @@
 <h1>Testing Grid Resources</h1>
 
 <h2>Introduction</h2>
-<p>Using g-Eclipse administrator can control state of resources
+<p>Using g-Eclipse user can control state of resources
 available in Virtual Organization, by performing different kinds of
 tests on them. In g-Eclipse those tests can be delivered by
 contributors, but built in in this release comes:</p>
 <ol>
 	Certificate lifetime test
+</ol>
+<ol>
+    gLite version test
 </ol>
 <p>The main place form where all tests can be created, run and
 managed is Tests view (Window > Show view > Other... > g-Eclipse >
@@ -42,6 +45,13 @@ test you want to create (be aware that in case only one type of test is
 available this page may not be displayed). The content of wizard depends
 on the kind of test chosen on the first page. Different kind of tests'
 wizards are described below.</p>
+<p>Another option to create a test is to select resource(-s) you 
+want to test under Virtual Organization node in Grid Project View.
+Then from the context menu select <b>"Test ..."</b>. The "New Test Wizard"
+will be opened. Some of the wizard pages may be omitted if you choose this
+way of starting a test. For example common "Project Selection Page" and 
+"Resource Selection Page" will not be shown, because all the data can be 
+read from the selection.</p>
 <h4>Certificate Lifetime Test</h4>
 <p>Perform this kind of test if you want to check certificates
 validity of services in your Virtual Organization. On the next page of
@@ -64,6 +74,22 @@ certificates</a> imported.</p>
 <p>That was the last page of Certificate Lifetime Test's wizard.
 Press finish and your test will appear in Tests view. Now you have to
 run it.</p>
+<h4>gLite version test</h4>
+This test should be run by a user, when he wants to test if selected Computing
+Element(s) support specified gLite version. 
+<p>Pages of the gLite Version Test wizard are similar to the Certificate 
+Lifetime Test wizard. You will need to :
+<ol>1. Specify project.</ol>
+<ol>2. Choose which resources of the selected project's Virtual Organization 
+you want to test.</ol>
+<ol>3. Select test name and version of the gLite.</ol></p>
+<img border="0" src="images/testgLiteVersion.png" alt="Tests view"> 
+<p>This test is a job-based test. In principle it creates proper jsdl (one 
+for each node selected for testing) and scripts, which will be run on the grid. 
+When user perform run action (see <i>Running a test</i> below) on the created 
+test, jsdl is submitted to the selected node. Status of the job is refreshed 
+every minute in background. When job finishes, output of the job is evaluated
+and status of the test is displayed to the user. </p>
 <h2>Running a test</h2>
 <p>To run a test you simply choose Run from its context menu in
 Tests view.</p>
@@ -77,6 +103,9 @@ running your test open Eclipse's Progress view.</p>
 Tests View, Tests History View and standard Eclipse Properties view.</p>
 <h4>Tests view</h4>
 In corresponding columns:
+<ul>
+    Project - project, for which the test was created
+</ul>
 <ul>
 	Status - overal test result
 </ul>
