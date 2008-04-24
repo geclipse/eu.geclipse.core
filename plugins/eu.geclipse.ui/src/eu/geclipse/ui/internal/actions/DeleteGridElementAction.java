@@ -140,7 +140,7 @@ public class DeleteGridElementAction extends SelectionListenerAction {
       IGridJob job = selectedJobs.iterator().next();
       question = String.format( "Are you sure you want to delete job '%s' from workspace?", job.getJobName() );
       if( job.getJobStatus().canChange() ) {
-        warning = String.format( "Warning! '%s' has not finished yet!", job.getJobName(), job.getJobStatus().getName() );
+        warning = String.format( "Warning! '%s' has not finished yet!", job.getJobName() );
       }
     } else {
       question = String.format( "Are you sure you want to delete %d jobs from workspace?", Integer.valueOf( selectedJobs.size() ) );

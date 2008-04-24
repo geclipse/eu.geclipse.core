@@ -80,7 +80,7 @@ public class FileActions extends ActionGroup {
     this.clipboard = new Clipboard( shell.getDisplay() );
     
     this.copyAction = new CopyAction( this.clipboard );
-    this.pasteAction = new PasteAction( view, this.clipboard );    
+    this.pasteAction = new PasteAction( this.clipboard );    
     this.deleteElementAction = new DeleteGridElementAction( shell );
     ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();    
     this.renameAction = new RenameResourceAction( shell );

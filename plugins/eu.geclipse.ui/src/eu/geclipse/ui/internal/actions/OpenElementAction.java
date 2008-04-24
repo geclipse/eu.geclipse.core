@@ -119,15 +119,21 @@ public class OpenElementAction
     
     this.activeAction = null;
     
-    if ( isGridJob( selection ) ) {
-      this.activeAction = this.openJobAction;
-    } else if( !selection.isEmpty() ) {
-      this.activeAction = this.openFileAction;
-    }
+    if ( selection != null ) {
     
-    if ( this.activeAction != null ) {
-      this.activeAction.selectionChanged( selection );
-      setEnabled( this.activeAction.isEnabled() );
+      if ( isGridJob( selection ) ) {
+        this.activeAction = this.openJobAction;
+      } else if( !selection.isEmpty() ) {
+        this.activeAction = this.openFileAction;
+      }
+      
+      if ( this.activeAction != null ) {
+        this.activeAction.selectionChanged( selection );
+        setEnabled( this.activeAction.isEnabled() );
+      } else {
+        setEnabled( false );
+      }
+      
     } else {
       setEnabled( false );
     }

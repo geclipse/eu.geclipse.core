@@ -131,7 +131,7 @@ public class FileStoreLabelProvider
     if ( this.columnMap == null ) {
       this.columnMap = new Hashtable< Integer, String >();
     }
-    this.columnMap.put( new Integer( index ), type );
+    this.columnMap.put( Integer.valueOf( index ), type );
   }
 
   /* (non-Javadoc)
@@ -254,7 +254,7 @@ public class FileStoreLabelProvider
     String result = null;
     
     if ( this.columnMap != null ) {
-      result = this.columnMap.get( new Integer( columnIndex ) );
+      result = this.columnMap.get( Integer.valueOf( columnIndex ) );
     }
     
     return result;

@@ -111,15 +111,6 @@ public class GridElementTransferOperation
   }
   
   /**
-   * Get the elements that should be transfered.
-   * 
-   * @return The source elements of this transfer.
-   */
-  public IGridElement[] getElements() {
-    return this.elements;
-  }
-  
-  /**
    * Get the destination of this transfer.
    * 
    * @return This transfer's target.
@@ -434,8 +425,8 @@ public class GridElementTransferOperation
           subMonitor.worked( bytesRead );
           subMonitor.subTask( String.format( Messages.getString("GridElementTransferOperation.transfer_progress_format"),  //$NON-NLS-1$
                                              data.sourceFileInfo.getName(),
-                                             new Integer( (int)(100.* byteCounter / length ) ),
-                                             new Integer( (int)(byteCounter/1024) ),
+                                             Integer.valueOf( (int)(100.* byteCounter / length ) ),
+                                             Integer.valueOf( (int)(byteCounter/1024) ),
                                              totalKb ) );
           
         }

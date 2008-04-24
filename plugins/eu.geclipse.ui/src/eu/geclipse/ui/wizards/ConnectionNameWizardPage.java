@@ -35,8 +35,6 @@ public class ConnectionNameWizardPage extends WizardPage {
   
   private Text nameText;
   
-  private URI initialContent;
-  
   public ConnectionNameWizardPage() {
     super( Messages.getString("ConnectionNameWizardPage.name"), //$NON-NLS-1$
            Messages.getString("ConnectionNameWizardPage.title"), //$NON-NLS-1$

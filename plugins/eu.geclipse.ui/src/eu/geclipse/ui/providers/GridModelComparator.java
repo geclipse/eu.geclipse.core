@@ -15,6 +15,7 @@
 
 package eu.geclipse.ui.providers;
 
+import java.io.Serializable;
 import java.util.Comparator;
 
 import eu.geclipse.core.model.IGridConnectionElement;
@@ -27,8 +28,10 @@ import eu.geclipse.core.model.IVirtualOrganization;
  * the Grid model.
  */
 public class GridModelComparator
-    implements Comparator< Object > {
+    implements Comparator< Object >, Serializable {
   
+  private static final long serialVersionUID = -8103675385948860987L;
+
   /* (non-Javadoc)
    * @see java.util.Comparator#compare(java.lang.Object, java.lang.Object)
    */

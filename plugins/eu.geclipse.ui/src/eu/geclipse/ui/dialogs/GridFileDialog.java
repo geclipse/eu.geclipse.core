@@ -182,7 +182,7 @@ public class GridFileDialog
      * @param mode The mode that refers to the specified item.
      */
     public void addModeItem( final ToolItem item, final int mode ) {
-      item.setData( MODE_KEY, new Integer( mode ) );
+      item.setData( MODE_KEY, Integer.valueOf( mode ) );
       this.modeItems.add( item );
       item.addSelectionListener( this );
     }
@@ -604,7 +604,16 @@ public class GridFileDialog
    * or <code>null</code> if no selection is available.
    */
   public IFileStore[] getSelectedFileStores() {
-    return this.currentSelection;
+    
+    IFileStore[] result = null;
+    
+    if ( ( this.currentSelection != null ) && ( this.currentSelection.length > 0 ) ) {
+      result = new IFileStore[ this.currentSelection.length ];
+      System.arraycopy( this.currentSelection, 0, result, 0, result.length );
+    }
+    
+    return result;
+    
   }
   
   /**

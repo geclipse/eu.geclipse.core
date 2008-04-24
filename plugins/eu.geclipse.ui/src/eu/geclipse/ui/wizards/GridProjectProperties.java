@@ -88,16 +88,27 @@ public class GridProjectProperties {
   }
   
   /**
-   * get the list of reference projects
-   * @return
+   * Get the list of reference projects
+   * 
+   * @return The referenced projects or <code>null</code>.
    */
   public IProject[] getReferencesProjects() {
-    return this.referencesProjects;
+    
+    IProject[] result = null;
+    
+    if ( ( this.referencesProjects != null ) && ( this.referencesProjects.length > 0 ) ) {
+      result = new IProject[ this.referencesProjects.length ];
+      System.arraycopy( this.referencesProjects, 0, result, 0, result.length );
+    }
+    
+    return result;
+    
   }
 
   /**
-   * set the list of references projects
-   * @param referencesProjects
+   * Set the list of references projects.
+   * 
+   * @param referencesProjects The referenced projects.
    */
   public void setReferencesProjects( final IProject[] referencesProjects ) {
     this.referencesProjects = referencesProjects;
@@ -125,11 +136,12 @@ public class GridProjectProperties {
   }
   
   /** 
-   * adds a list of project folders 
-   * @return
+   * Get the list of project folders.
+   *  
+   * @return The list of project folders.
    */
   public Hashtable< String, String > getProjectFolders() {
-    return this.projectFolders;
+    return new Hashtable< String, String >( this.projectFolders );
   }
 
 }

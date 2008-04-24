@@ -34,25 +34,17 @@ import eu.geclipse.ui.views.GridModelViewPart;
 public class PasteAction extends TransferAction {
   
   /**
-   * The {@link GridModelViewPart} this action belongs to.
-   */
-  GridModelViewPart view;
-  
-  /**
    * Create a new paste action for the specified view using the specified
    * clipboard.
    * 
-   * @param view The {@link GridModelViewPart} for which to create this action.
    * @param clipboard The {@link Clipboard} used for the copy/paste operation.
    */
-  public PasteAction( final GridModelViewPart view,
-                      final Clipboard clipboard ) {
+  public PasteAction( final Clipboard clipboard ) {
     super( Messages.getString("PasteAction.paste_action_text"), clipboard ); //$NON-NLS-1$
     ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
     ImageDescriptor pasteImage 
         = sharedImages.getImageDescriptor( ISharedImages.IMG_TOOL_PASTE );
     setImageDescriptor( pasteImage );
-    this.view = view;
   }
   
   /* (non-Javadoc)

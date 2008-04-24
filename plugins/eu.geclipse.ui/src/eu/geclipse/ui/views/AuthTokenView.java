@@ -108,7 +108,7 @@ public class AuthTokenView
    * @author stuempert-m
    * @see AuthenticationTokenLabelProvider
    */
-  class AuthenticationTokenContentProvider implements IStructuredContentProvider {
+  static class AuthenticationTokenContentProvider implements IStructuredContentProvider {
     
     /* (non-Javadoc)
      * @see org.eclipse.jface.viewers.IStructuredContentProvider#getElements(java.lang.Object)
@@ -148,7 +148,7 @@ public class AuthTokenView
    * @author stuempert-m
    * @see AuthenticationTokenContentProvider
    */
-  class AuthenticationTokenLabelProvider extends LabelProvider implements ITableLabelProvider, ITableFontProvider {
+  static class AuthenticationTokenLabelProvider extends LabelProvider implements ITableLabelProvider, ITableFontProvider {
     
     /**
      * The font that is used to draw activated tokens.

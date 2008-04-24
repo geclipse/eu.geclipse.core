@@ -48,7 +48,7 @@ public class VoImportWizard extends Wizard {
   
   private VoChooserPage chooserPage;
   
-  private class VoImportOperation implements IRunnableWithProgress {
+  private static class VoImportOperation implements IRunnableWithProgress {
     
     private IVoLoader loader;
     
