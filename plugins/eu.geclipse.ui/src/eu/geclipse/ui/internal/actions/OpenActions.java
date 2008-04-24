@@ -95,7 +95,9 @@ public class OpenActions extends ActionGroup {
    */
   @Override
   public void fillContextMenu( final IMenuManager menu ) {
+    
     if ( this.openElementAction.isEnabled() ) {
+      
       menu.appendToGroup( ICommonMenuConstants.GROUP_OPEN, 
                           this.openElementAction );
       
@@ -108,7 +110,9 @@ public class OpenActions extends ActionGroup {
       }
       
     }
+    
     super.fillContextMenu(menu);
+    
   }
   
   /**

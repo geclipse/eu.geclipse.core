@@ -1,3 +1,18 @@
+/*****************************************************************************
+ * Copyright (c) 2008 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.ui.providers;
 
 import java.net.URL;
@@ -20,18 +35,37 @@ import org.eclipse.ui.PlatformUI;
 
 import eu.geclipse.ui.internal.Activator;
 
+/**
+ * Label provider for tables that handles {@link IFileStore}s. The columns are
+ * configurable.
+ */
 public class FileStoreLabelProvider
     extends LabelProvider
     implements ITableLabelProvider {
   
+  /**
+   * Type field for the name column.
+   */
   public static final String COLUMN_TYPE_NAME = "NAME"; //$NON-NLS-1$
   
+  /**
+   * Type field for the size column.
+   */
   public static final String COLUMN_TYPE_SIZE = "SIZE"; //$NON-NLS-1$
   
+  /**
+   * Type field for the modification date column.
+   */
   public static final String COLUMN_TYPE_MOD_DATE = "MOD_DATE"; //$NON-NLS-1$
   
+  /**
+   * Empty string definition.
+   */
   protected static final String EMPTY_STRING = ""; //$NON-NLS-1$
   
+  /**
+   * Not available definition.
+   */
   protected static final String NA_STRING = "N/A"; //$NON-NLS-1$
   
   /**
@@ -57,6 +91,9 @@ public class FileStoreLabelProvider
    */
   private static final String FILE_SIZE_FORMAT = "0.#"; //$NON-NLS-1$
   
+  /**
+   * Cache for all used images.
+   */
   private static Hashtable< String, Image > images;
   
   /**
@@ -69,6 +106,9 @@ public class FileStoreLabelProvider
    */
   private DecimalFormat sizeFormat;
   
+  /**
+   * Column configuration map.
+   */
   private Hashtable< Integer, String > columnMap;
   
   /**
@@ -79,6 +119,14 @@ public class FileStoreLabelProvider
     this.sizeFormat = new DecimalFormat( FILE_SIZE_FORMAT );
   }
   
+  /**
+   * Add a new column of the specified type to this provider. Any former
+   * column at the specified index is discarded.
+   * 
+   * @param index The index of the new column.
+   * @param type The type of the new column, i.e. one of the
+   * COLUMN_TYPE_* fields.
+   */
   public void addColumn( final int index, final String type ) {
     if ( this.columnMap == null ) {
       this.columnMap = new Hashtable< Integer, String >();
@@ -86,6 +134,9 @@ public class FileStoreLabelProvider
     this.columnMap.put( new Integer( index ), type );
   }
 
+  /* (non-Javadoc)
+   * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnImage(java.lang.Object, int)
+   */
   public Image getColumnImage( final Object element,
                                final int columnIndex ) {
 
@@ -104,6 +155,9 @@ public class FileStoreLabelProvider
     
   }
 
+  /* (non-Javadoc)
+   * @see org.eclipse.jface.viewers.ITableLabelProvider#getColumnText(java.lang.Object, int)
+   */
   public String getColumnText( final Object element,
                                final int columnIndex ) {
 
@@ -122,16 +176,29 @@ public class FileStoreLabelProvider
     
   }
   
+  /* (non-Javadoc)
+   * @see org.eclipse.jface.viewers.LabelProvider#getImage(java.lang.Object)
+   */
   @Override
   public Image getImage( final Object element ) {
     return getColumnImage( element, 0 );
   }
   
+  /* (non-Javadoc)
+   * @see org.eclipse.jface.viewers.LabelProvider#getText(java.lang.Object)
+   */
   @Override
   public String getText( final Object element ) {
     return getColumnText( element, 0 );
   }
   
+  /**
+   * Get the image for the specified file store and column.
+   * 
+   * @param fileStore The file store.
+   * @param columnIndex The 0-based column index.
+   * @return The image or <code>null</code>.
+   */
   protected Image getColumnImage( final IFileStore fileStore,
                                   final int columnIndex ) {
     
@@ -150,6 +217,13 @@ public class FileStoreLabelProvider
     
   }
   
+  /**
+   * Get the text for the specified file store and column.
+   * 
+   * @param fileStore The file store.
+   * @param columnIndex The 0-based column index.
+   * @return The text that may be an empty string.
+   */
   protected String getColumnText( final IFileStore fileStore,
                                   final int columnIndex ) {
     
@@ -168,6 +242,13 @@ public class FileStoreLabelProvider
     
   }
   
+  /**
+   * Get the type of the specified column or <code>null</code> if no
+   * such column is defined.
+   * 
+   * @param columnIndex The 0-based column index.
+   * @return The column's type or <code>null</code>.
+   */
   protected String getColumnType( final int columnIndex ) {
     
     String result = null;
@@ -180,6 +261,12 @@ public class FileStoreLabelProvider
     
   }
   
+  /**
+   * Convert the specified time to a readable string.
+   * 
+   * @param time Seconds since 1.1.1970, i.e. Unix time.
+   * @return A string representation of the date.
+   */
   protected String convertTimeToString( final long time ) {
     
     String result = NA_STRING;
@@ -193,6 +280,12 @@ public class FileStoreLabelProvider
     
   }
   
+  /**
+   * Convert the specified size to a readable string.
+   * 
+   * @param size The size in byte.
+   * @return A string representation of the size.
+   */
   protected String convertSizeToString( final long size ) {
     
     String result = NA_STRING;
@@ -238,6 +331,13 @@ public class FileStoreLabelProvider
     
   }
   
+  /**
+   * Get a user-friendly name for the specified file store. May be overwritten
+   * by sub classes.
+   * 
+   * @param fileStore The file store.
+   * @return A name for the file store.
+   */
   protected String getName( final IFileStore fileStore ) {
     return fileStore.getName();
   }
@@ -246,7 +346,7 @@ public class FileStoreLabelProvider
    * Get the properly formatted string representing the file size
    * for the specified {@link IFileStore}.
    * 
-   * @param fileInfo The {@link IFileStore} for which to create a
+   * @param fileStore The {@link IFileStore} for which to create a
    * file size string.
    * @return The properly formatted file size string.
    */
@@ -266,14 +366,32 @@ public class FileStoreLabelProvider
     
   }
   
+  /**
+   * Get a standard image for files.
+   * 
+   * @return {@link ISharedImages#IMG_OBJ_FILE}
+   */
   protected static Image getFileImage() {
     return PlatformUI.getWorkbench().getSharedImages().getImage( ISharedImages.IMG_OBJ_FILE );
   }
   
+  /**
+   * Get a standard image for folders.
+   * 
+   * @return {@link ISharedImages#IMG_OBJ_FOLDER}
+   */
   protected static Image getFolderImage() {
     return PlatformUI.getWorkbench().getSharedImages().getImage( ISharedImages.IMG_OBJ_FOLDER );
   }
   
+  /**
+   * Get the image at the specified path. The image is cached internally and
+   * when requested again the cached image is returned.
+   * 
+   * @param path The path of the image.
+   * @return The image itself or <code>null</code> if no image could be found
+   * at the specified path.
+   */
   protected static Image getImage( final String path ) {
     
     Image result = null;
@@ -293,6 +411,13 @@ public class FileStoreLabelProvider
     
   }
   
+  /**
+   * Load the image from the specified path.
+   * 
+   * @param path The path of the image.
+   * @return The image or <code>null</code> if no image could be found
+   * at the specified path.
+   */
   protected static Image loadImage( final String path ) {
     URL url = Activator.getDefault().getBundle().getEntry( path );
     ImageDescriptor descriptor = ImageDescriptor.createFromURL( url );

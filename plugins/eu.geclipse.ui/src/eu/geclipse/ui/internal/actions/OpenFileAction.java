@@ -1,3 +1,18 @@
+/*****************************************************************************
+ * Copyright (c) 2008 g-Eclipse Consortium 
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for the
+ * g-Eclipse project founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributors:
+ *    Mathias Stuempert - initial API and implementation
+ *****************************************************************************/
+
 package eu.geclipse.ui.internal.actions;
 
 import java.util.Iterator;
@@ -19,35 +34,58 @@ import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.SelectionListenerAction;
 import org.eclipse.ui.ide.IDE;
-import org.eclipse.ui.internal.ide.IDEWorkbenchMessages;
 import org.eclipse.ui.part.FileEditorInput;
 
-import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridConnectionElement;
-import eu.geclipse.core.model.IGridElement;
-import eu.geclipse.core.model.IGridRoot;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 
+/**
+ * This action provides support for opening connections with progress monitoring
+ * and cancelation.
+ */
 public class OpenFileAction
     extends SelectionListenerAction {
+
+  /**
+   * File size limit for which to show a confirmation dialog.
+   */
+  private static long SIZE_LIMIT_MB = 10;
   
+  /**
+   * The workbench page.
+   */
   protected IWorkbenchPage workbenchPage;
   
+  /**
+   * Optional editor descriptor. 
+   */
   private IEditorDescriptor editorDescriptor;
   
-  private long SIZE_LIMIT_MB = 10;
-  
+  /**
+   * Create a new action without a dedicated editor descriptor.
+   * 
+   * @param page The workbench page.
+   */
   public OpenFileAction( final IWorkbenchPage page ) {
     this( page, null );
   }
 
+  /**
+   * Create a new action with the specified editor descriptor.
+   * 
+   * @param page The workbench page.
+   * @param descriptor The editor descriptor.
+   */
   public OpenFileAction( final IWorkbenchPage page, final IEditorDescriptor descriptor ) {
-    super( IDEWorkbenchMessages.OpenSystemEditorAction_text );
+    super( Messages.getString("OpenFileAction.action_label") ); //$NON-NLS-1$
     this.workbenchPage = page;
     this.editorDescriptor = descriptor;
   }
   
+  /* (non-Javadoc)
+   * @see org.eclipse.jface.action.Action#run()
+   */
   @Override
   public void run() {
     Iterator< ? > iter = getStructuredSelection().iterator();
@@ -59,8 +97,8 @@ public class OpenFileAction
         } catch ( CoreException cExc ) {
           ProblemDialog.openProblem(
               this.workbenchPage.getWorkbenchWindow().getShell(),
-              "Open failed",
-              String.format( "Error while opening file %s", ( ( IGridConnectionElement ) next ).getName() ),
+              Messages.getString("OpenFileAction.open_failed_title"), //$NON-NLS-1$
+              String.format( Messages.getString("OpenFileAction.open_failed_text"), ( ( IGridConnectionElement ) next ).getName() ), //$NON-NLS-1$
               cExc
           );
         }
@@ -73,6 +111,11 @@ public class OpenFileAction
     }
   }
   
+  /**
+   * Open the specified file.
+   * 
+   * @param file The file to open.
+   */
   protected void openFile( final IFile file ) {
     try {
       boolean activate = OpenStrategy.activateOnOpen();
@@ -88,14 +131,21 @@ public class OpenFileAction
     } catch ( PartInitException piExc ) {
       ProblemDialog.openProblem(
           this.workbenchPage.getWorkbenchWindow().getShell(),
-          "Open failed",
-          String.format( "Error while opening file %s", file.getName() ),
+          Messages.getString("OpenFileAction.open_failed_title"), //$NON-NLS-1$
+          String.format( Messages.getString("OpenFileAction.open_failed_text"), file.getName() ), //$NON-NLS-1$
           piExc
       );
     }
   }
   
-  protected void openConnection( final IGridConnectionElement element ) throws CoreException {
+  /**
+   * Open the specified connection.
+   * 
+   * @param element The connection to be opened.
+   * @throws CoreException If opening fails.
+   */
+  protected void openConnection( final IGridConnectionElement element )
+      throws CoreException {
     
     boolean confirm = true;
     long lengthMB = element.getConnectionFileInfo().getLength()/(1024*1024);
@@ -103,21 +153,23 @@ public class OpenFileAction
     if ( lengthMB > SIZE_LIMIT_MB ) {
       confirm = MessageDialog.openConfirm(
           this.workbenchPage.getWorkbenchWindow().getShell(),
-          "Should the file really be opened?",
-          String.format( "You are trying to open a large file of %d MB. It is not recommended to directly open files larger than %d MB since this may fail. Please consider to download this file and edit it locally.", lengthMB, SIZE_LIMIT_MB )
+          Messages.getString("OpenFileAction.open_confirm_title"), //$NON-NLS-1$
+          String.format( Messages.getString("OpenFileAction.open_confirm_text"), //$NON-NLS-1$
+              Long.valueOf( lengthMB ),
+              Long.valueOf( SIZE_LIMIT_MB ) )
       );
     }
     
     if ( confirm ) {
     
-      Job job = new Job( String.format( "Opening %s", element.getName() ) ) {
+      Job job = new Job( String.format( Messages.getString("OpenFileAction.opening_progress"), element.getName() ) ) { //$NON-NLS-1$
         @Override
         protected IStatus run( final IProgressMonitor monitor ) {
-          SubMonitor sMonitor = SubMonitor.convert( monitor, String.format( "Opening %s", element.getName() ), 10 );
+          SubMonitor sMonitor = SubMonitor.convert( monitor, String.format( Messages.getString("OpenFileAction.opening_progress"), element.getName() ), 10 ); //$NON-NLS-1$
           try {
-            sMonitor.subTask( "Establishing connection..." );
+            sMonitor.subTask( Messages.getString("OpenFileAction.connecting_progress") ); //$NON-NLS-1$
             IFileStore cfs = element.getCachedConnectionFileStore( sMonitor.newChild( 9 ) );
-            sMonitor.subTask( "Opening editor..." );
+            sMonitor.subTask( Messages.getString("OpenFileAction.opening_editor_progress") ); //$NON-NLS-1$
             try {
               if ( ! sMonitor.isCanceled() ) {
                 OpenFileAction.this.workbenchPage.getWorkbenchWindow().getShell().getDisplay().syncExec( new Runnable() {
@@ -142,21 +194,6 @@ public class OpenFileAction
       job.schedule();
       
     }
-    
-  }
-  
-  private IGridConnectionElement getConnectionElement( final IFile file ) {
-    
-    IGridConnectionElement result = null;
-    
-    IGridRoot gridRoot = GridModel.getRoot();
-    IGridElement element = gridRoot.findElement( file );
-    
-    if ( ( element != null ) && ( element instanceof IGridConnectionElement ) ) {
-      result = ( IGridConnectionElement ) element;
-    }
-    
-    return result;
     
   }
 
