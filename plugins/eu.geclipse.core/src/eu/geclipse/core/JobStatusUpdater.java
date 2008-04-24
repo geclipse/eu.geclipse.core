@@ -87,15 +87,23 @@ public class JobStatusUpdater extends Job {
             newType = newStatus.getType();
             this.lastStatus = newStatus;
           }
-          if( oldType != newType )
+          if( oldType != newType ){
             for( Enumeration<IGridJobStatusListener> e = this.listeners.keys(); e.hasMoreElements(); )
             {
               IGridJobStatusListener listener = e.nextElement();
               int trigger = this.listeners.get( listener ).intValue();
               if( ( newType & trigger ) > 0 ) {
                 listener.statusChanged( this.job );
+                listener.statusUpdated( this.job );
               }
             }
+          } else {
+            for( Enumeration<IGridJobStatusListener> e = this.listeners.keys(); e.hasMoreElements(); )
+            {
+              IGridJobStatusListener listener = e.nextElement();
+              listener.statusUpdated( this.job );
+            }
+          }
         } catch( RuntimeException e ) {
           Activator.logException( e );
         }
