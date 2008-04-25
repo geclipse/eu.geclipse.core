@@ -16,7 +16,6 @@
  *****************************************************************************/
 package eu.geclipse.ui.wizards.jobsubmission;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,9 +23,6 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.viewers.ILabelProvider;
-import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
@@ -36,7 +32,6 @@ import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
@@ -229,7 +224,7 @@ public class FolderSelectionWizardPage extends WizardPage {
           }
         } catch( CoreException e ) {
           // TODO Auto-generated catch block
-          e.printStackTrace();
+          Activator.logException( e );
         }
       }
       return list.toArray();
@@ -261,7 +256,7 @@ public class FolderSelectionWizardPage extends WizardPage {
           }
         } catch( CoreException e ) {
           // TODO Auto-generated catch block
-          e.printStackTrace();
+          Activator.logException( e );
         }
       }
       return result;
@@ -288,7 +283,7 @@ public class FolderSelectionWizardPage extends WizardPage {
           }
         } catch( CoreException e ) {
           // TODO Auto-generated catch block
-          e.printStackTrace();
+          Activator.logException( e );
         }
       }
       return list.toArray();
