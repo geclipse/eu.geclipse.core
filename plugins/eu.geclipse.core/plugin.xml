@@ -277,6 +277,9 @@
             description="Unsupported entry type found in tarball"
             id="eu.geclipse.core.problem.tar.unsupportedEntryType"
             mailto="bugreports@geclipse.eu">
+         <reference
+               referenceID="eu.geclipse.core.solution.sys.unsupportedFeature">
+         </reference>
       </problem>
       <problem
             description="Internal error, wrong tar entry header length"
@@ -373,6 +376,10 @@
             description="Check your system&apos;s time"
             id="eu.geclipse.core.solution.sys.checkSystemTime"
             solver="eu.geclipse.ui.problems.CheckSystemTimeSolution">
+      </solution>
+      <solution
+            description="The needed features are currently not supported in this implementation"
+            id="eu.geclipse.core.solution.sys.unsupportedFeature">
       </solution>
    </extension>
    <extension
