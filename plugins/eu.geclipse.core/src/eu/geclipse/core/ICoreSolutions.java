@@ -64,5 +64,7 @@ public interface ICoreSolutions {
   // Sys
   public static final String SYS_CHECK_SYSTEM_TIME
     = "eu.geclipse.core.solution.sys.checkSystemTime"; //$NON-NLS-1$
+  public static final String SYS_UNSUPPORTED_FEATURE
+    = "eu.geclipse.core.solution.sys.unsupportedFeature"; //$NON-NLS-1$
 
 }
