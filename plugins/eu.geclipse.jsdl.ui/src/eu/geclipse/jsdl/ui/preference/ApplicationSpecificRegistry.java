@@ -133,7 +133,7 @@ public class ApplicationSpecificRegistry implements IContentChangeNotifier {
           }
         } catch( IOException e ) {
           // TODO Auto-generated catch block
-          e.printStackTrace();
+          Activator.logException( e );
         }
       }
     }

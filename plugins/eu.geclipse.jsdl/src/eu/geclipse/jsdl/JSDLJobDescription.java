@@ -1333,7 +1333,6 @@ public class JSDLJobDescription extends ResourceGridContainer
       doc = factory.newDocumentBuilder().parse( ( ( IFile )getResource() ).getContents() );
     } catch( SAXException exception ) {
       Activator.logException( exception );
-      exception.printStackTrace();
     } catch( IOException exception ) {
       Activator.logException( exception );
     } catch( ParserConfigurationException exception ) {
