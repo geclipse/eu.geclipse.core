@@ -69,17 +69,6 @@ public class Activator extends Plugin {
   }
 
   /**
-   * Helper method that enables debug logging to the console window
-   * 
-   * @param message String that will be written to the console
-   */
-  public static void consoleLog( final String message ) {
-    if( Activator.getDefault().isDebugging() ) {
-      System.out.println( message );
-    }
-  }
-
-  /**
    * Logs an exception with custom messago to the eclipse logger.
    * 
    * @param exc The exception to be logged.

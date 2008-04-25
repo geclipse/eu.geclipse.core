@@ -536,7 +536,6 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
                                     Activator.PLUGIN_ID );
     }
     String xml = ( ( GridJobID )id ).getXML();
-    Activator.consoleLog( xml );
     try {
       byte[] byteArray = xml.getBytes( XML_CHARSET ); // choose a charset
       // //$NON-NLS-1$
@@ -570,8 +569,6 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     ByteArrayInputStream baos;
     // create jobStatus file
     xml = this.jobStatus.getXML();
-    // TODO - pawelw - remove it
-    Activator.consoleLog( xml );
     try {
       byteArray = xml.getBytes( XML_CHARSET ); // choose a charset
       baos = new ByteArrayInputStream( byteArray );
@@ -636,7 +633,6 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
           + "</" //$NON-NLS-1$
           + JOBINFO_XMLNODENAME
           + ">"; //$NON-NLS-1$
-    Activator.consoleLog( xml );
     try {
       byteArray = xml.getBytes( XML_CHARSET ); // choose a charset
       // //$NON-NLS-1$
