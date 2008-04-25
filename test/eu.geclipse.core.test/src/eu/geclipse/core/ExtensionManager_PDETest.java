@@ -124,8 +124,8 @@ public class ExtensionManager_PDETest {
   }
 
   /** test the method {@link ExtensionManager#getExecutableExtensions(String, String, String)}
-   * the sample extension point is problemProvider
-   * the first executable of its extensions must be class CoreProblems.
+   * the sample extension point is applicationDeployment
+   * the first executable of its extensions must be class JDLBasedApplicationDeployment.
    */
   
   @Test
