@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials 
  * are made available under the terms of the Eclipse Public License v1.0 
  * which accompanies this distribution, and is available at 
@@ -33,7 +33,6 @@ public class WorkflowJobEditCommand extends EditElementCommand {
   public WorkflowJobEditCommand( String label, EObject elementToEdit, IEditCommandRequest request )
   {
     super( label, elementToEdit, request );
-
   }
 
   /* (non-Javadoc)
@@ -42,8 +41,6 @@ public class WorkflowJobEditCommand extends EditElementCommand {
   @Override
   protected CommandResult doExecuteWithResult( IProgressMonitor arg0, IAdaptable arg1 ) throws ExecutionException
   {
-    System.out.println( arg1.toString() );
-   
     return null;
   }
 }
