@@ -43,7 +43,7 @@ public class OpenElementAction
   /**
    * Ordinary open file action.
    */
-  private OpenFileAction openFileAction;
+  private org.eclipse.ui.actions.OpenFileAction openFileAction;
     
   /**
    * Specialised action to open Grid jobs.
@@ -65,7 +65,7 @@ public class OpenElementAction
     
     super( Messages.getString("OpenElementAction.open_element_action_text") ); //$NON-NLS-1$
     
-    this.openFileAction = new OpenFileAction( page );
+    this.openFileAction = new org.eclipse.ui.actions.OpenFileAction( page );
     this.openJobAction = new OpenJobAction( page );
     
   }
