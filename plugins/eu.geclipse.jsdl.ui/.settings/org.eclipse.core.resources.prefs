@@ -1,7 +1,0 @@
-#Thu Aug 09 15:58:39 EEST 2007
-eclipse.preferences.version=1
-encoding//src/eu/geclipse/jsdl/ui/editors/messages.properties=8859_1
-encoding//src/eu/geclipse/jsdl/ui/internal/dialogs/messages.properties=8859_1
-encoding//src/eu/geclipse/jsdl/ui/preference/messages.properties=8859_1
-encoding//src/eu/geclipse/jsdl/ui/properties/messages.properties=8859_1
-instance/org.eclipse.core.net/org.eclipse.core.net.hasMigrated=true
