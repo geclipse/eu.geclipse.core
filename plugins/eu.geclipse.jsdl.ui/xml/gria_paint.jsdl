@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<JobDefinition xmlns="http://schemas.ggf.org/jsdl/2005/11/jsdl">
+	<JobDescription>
+		<JobIdentification>
+			<JobName>paint2</JobName>
+		</JobIdentification>
+		<Application>
+			<ApplicationName>http://it-innovation.soton.ac.uk/grid/imagemagick/paint</ApplicationName>
+		</Application>
+		<DataStaging name="inputImage">
+			<FileName>inputImage</FileName>
+			<CreationFlag>overwrite</CreationFlag>
+			<DeleteOnTermination>true</DeleteOnTermination>
+			<Source><URI/></Source>
+		</DataStaging>
+		<DataStaging name="outputImage">
+			<FileName>outputImage</FileName>
+			<CreationFlag>overwrite</CreationFlag>
+			<DeleteOnTermination>true</DeleteOnTermination>
+			<Target><URI/></Target>
+		</DataStaging>
+	</JobDescription>
+</JobDefinition>

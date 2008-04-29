@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension-point id="eu.geclipse.jsdl.ui.applicationParameters" name="JSDL Application Parameters" schema="schema/eu.geclipse.jsdl.ui.applicationParameters.exsd"/>
+        
+   <extension
+         id="org.eclipse.core.contenttype.contentTypes"
+         name="JSDL"
+         point="org.eclipse.core.contenttype.contentTypes">
+      <file-association
+            content-type="org.eclipse.core.runtime.xml"
+            file-extensions="jsdl"
+            />
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.editors">     
+ 	  <editor
+          class="eu.geclipse.jsdl.ui.editors.JsdlEditor"
+          default="true"
+          extensions="jsdl"
+          icon="icons/jsdlfile.gif"
+          id="eu.geclipse.jsdl.ui.JsdlEditor"
+          name="JSDL Editor"/> 
+    </extension>
+    
+   
+   <extension
+         point="org.eclipse.ui.newWizards">
+      <wizard
+            canFinishEarly="false"
+            category="eu.geclipse.ui.newResourceCategory"
+            class="eu.geclipse.jsdl.ui.wizards.NewJobWizard"
+            finalPerspective="eu.geclipse.ui.gEclipsePerspective"
+            hasPages="true"
+            icon="icons/etool16/newjob_wiz.gif"
+            id="eu.geclipse.jsdl.ui.newFileWizard"
+            name="%wizard.jsdl"
+            preferredPerspectives="eu.geclipse.ui.gEclipsePerspective">
+         <description>
+            %wizard.jsdl.createJobDescription
+         </description>
+      </wizard>
+   </extension>
+   <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="eu.geclipse.ui.userPerspective">
+         <newWizardShortcut
+               id="eu.geclipse.jsdl.ui.newFileWizard">
+         </newWizardShortcut>
+      </perspectiveExtension>
+      <perspectiveExtension
+            targetID="eu.geclipse.ui.operatorPerspective">
+         <newWizardShortcut
+               id="eu.geclipse.jsdl.ui.newFileWizard">
+         </newWizardShortcut>
+      </perspectiveExtension>
+      <perspectiveExtension
+            targetID="eu.geclipse.ui.developerPerspective">
+         <newWizardShortcut
+               id="eu.geclipse.jsdl.ui.newFileWizard">
+         </newWizardShortcut>
+      </perspectiveExtension>
+   </extension>
+   
+   
+
+   
+   <extension
+         point="org.eclipse.ui.preferencePages">
+      <page
+            category="eu.geclipse.ui.internal.preference.GEclipsePreferencePage"
+            class="eu.geclipse.jsdl.ui.preference.ApplicationSpecificPreferencePage"
+            id="eu.geclipse.jsdl.ui.applicationParameters"
+            name="Application Parameters"/>
+   </extension>
+   <extension
+         point="eu.geclipse.ui.propertiesFactory">
+      <PropertiesFactory
+            class="eu.geclipse.jsdl.ui.properties.PropertiesFactory"
+            id="eu.geclipse.jsdl.ui.PropertiesFactory"
+            sourceObjectClass="eu.geclipse.jsdl.JSDLJobDescription"/>
+   </extension>
+   <extension
+         point="eu.geclipse.core.reporting.problemReporting">
+      <problem
+            description="XML parsing problem - malformed application specific information."
+            id="eu.geclipse.jsdl.ui.applicationSpecificPages.XMLProblem">
+      </problem>
+   </extension>
+
+</plugin>

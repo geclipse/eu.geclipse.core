@@ -1,0 +1,12 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Test Fragment
+Bundle-SymbolicName: eu.geclipse.glite.editor.test
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: Eclipse.org
+Fragment-Host: eu.geclipse.glite.editor;bundle-version="1.0.0"
+Require-Bundle: org.junit4
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Export-Package: eu.geclipse.glite.editor,
+ eu.geclipse.glite.editor.codeassist,
+ eu.geclipse.glite.editor.scanner

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cheatsheet title="Creating an Authentication Token">
+   <intro href="/eu.geclipse.doc.user/html/concepts/gridauthentication/creating.html">
+      <description>
+         This cheat sheet will show you how to create an Authentication Token.<br/>
+      </description>
+   </intro>
+   <item title="Open the g-Eclipse User perspective" dialog="true" skip="true">
+      <description>If you are not already in the g-Eclipse User perspective, in the main menu select<b>Window &gt; Open Perspective &gt; Other...</b> and select
+          <b>g-Eclipse (User)</b>. Alternatively, click on the &quot;Click to Perform&quot; link below.</description>
+      <action class="org.eclipse.ui.internal.cheatsheets.actions.OpenPerspective" pluginId="org.eclipse.ui.cheatsheets" confirm="false" param1="eu.geclipse.ui.userPerspective">
+      </action>
+   </item>
+   <item title="Select the Authentication Tokens View" dialog="true" skip="true">
+      <description>
+         Select the <b>Authentication Tokens</b> tab in the bottom panel view.<br/>
+      </description>
+      <command serialization="org.eclipse.ui.views.showView(org.eclipse.ui.views.showView.viewId=eu.geclipse.ui.views.authenticationTokenView)" confirm="false">
+      </command>
+   </item>
+   <item title="Open the Authentication Token Wizard" dialog="true" skip="false">
+      <description>
+         Open the <b>New Authentication Token</b> wizard by clicking
+          <b>Click to Perform</b>.<br/>
+          This action bypasses the need to click the <b>New</b>button located in the top right corner of the<b>Authentication Tokens</b>panel view and allows you to continue to follow this cheat sheet while working with the wizard.<br/>
+      </description>
+      <action class="eu.geclipse.ui.cheatsheets.OpenAuthTokenDialogAction" pluginId="eu.geclipse.ui" confirm="true" param1="Grid Proxy">
+      </action>
+   </item>
+   <item title="Select the Authentication Token Type" dialog="true" skip="false">
+      <description>Choose from the list of available token types and click.<b>Next</b>.
+      </description>
+   </item>
+   <item title="Enter Authentication Information" dialog="true" skip="false">
+      <description>
+         Follow these simple steps to create your authentication token.
+      </description>
+      <conditional-subitem condition="${startingPageName}">
+         <subitem label="Specify the location of your key and certificate files and enter your key passphrase." skip="false" when="eu.geclipse.globus.ui.certAndKeyPage"></subitem>
+         <subitem label="Select a VO from the list of available VOs and press 'Next'. If no VO is yet specified choose 'New VO...' to create a new VO." skip="false" when="eu.geclipse.ui.voSelectionWizardPage"></subitem>
+         <subitem label="Specify the location of your key store file or create a new key store by clicking on the appropriate button at the very right." skip="false" when="eu.geclipse.gria.griaKeyStoreWizardPage"></subitem>
+         <subitem label="Specify your access key ID. You can find this at aws.amazon.com by login in to your AWS account." skip="false" when="eu.geclipse.amazon.auth.wizardpage"></subitem>
+         <subitem label="Please follow the former steps to specify a token type before continuing with this cheatsheet." skip="false" when="none"></subitem>
+      </conditional-subitem>
+      <conditional-subitem condition="${startingPageName}">
+         <subitem label="Adjust the lifetime of your proxy." skip="false" when="eu.geclipse.globus.ui.certAndKeyPage"></subitem>
+         <subitem label="Specify the location of your key and certificate files, the key passphrase, the proxies lifetime and press 'Next'." skip="false" when="eu.geclipse.ui.voSelectionWizardPage"></subitem>
+         <subitem label="Specify your keystore's passphrase." skip="false" when="eu.geclipse.gria.griaKeyStoreWizardPage"></subitem>
+         <subitem label="Specify your secret access key." skip="false" when="eu.geclipse.amazon.auth.wizardpage"></subitem>
+         <subitem label="Please follow the former steps to specify a token type before continuing with this cheatsheet." skip="false" when="none"></subitem>
+      </conditional-subitem>
+      <conditional-subitem condition="${startingPageName}">
+         <subitem label="Click 'Finish' to create and validate the proxy." skip="false" when="eu.geclipse.globus.ui.certAndKeyPage"></subitem>
+         <subitem label="If you would like to encode VOMS groups and roles into your proxy enable them by selecting the check box and query your VOMS server for available groups and roles. Afterwards select the groups and roles you would like to add to your proxy, change their ordering and press 'Finish'." skip="true" when="eu.geclipse.ui.voSelectionWizardPage"></subitem>
+         <subitem label="Click 'Finish' to create and validate your GRIA token." skip="false" when="eu.geclipse.gria.griaKeyStoreWizardPage"></subitem>
+         <subitem label="Click 'Finish' to create and validate your AWS credential." skip="false" when="eu.geclipse.amazon.auth.wizardpage"></subitem>
+         <subitem label="Please follow the former steps to specify a token type before continuing with this cheatsheet." skip="false" when="none"></subitem>
+      </conditional-subitem>
+   </item>
+   <item title="Activate Your Token" dialog="true" skip="false">
+      <description>
+         Highlight your newly created token listed in the <b>Authentication Tokens</b> panel view and click the <b>Activation</b> button.<br/>
+      </description>
+      <subitem label="Click on the token entry to make the activation button (a padlock) in the top right part of this panel view visible." skip="false">
+      </subitem>
+      <subitem label="Click this padlock to initiate the activation of your token." skip="false">
+      </subitem>
+   </item>
+</cheatsheet>

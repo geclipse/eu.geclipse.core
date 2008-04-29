@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.editors">
+      <editor
+            class="eu.geclipse.glite.editor.JdlEditor"
+            contributorClass="eu.geclipse.glite.editor.JdlEditorContributor"
+            default="false"
+            extensions="jdl"
+            icon="icons/obj16/jdl_file_obj.gif"
+            id="eu.geclipse.glite.editor.jdleditor"
+            name="eu.geclipse.glite.editor.jdleditor"/>
+   </extension>
+
+</plugin>

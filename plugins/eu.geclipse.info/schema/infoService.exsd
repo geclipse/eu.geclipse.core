@@ -1,0 +1,134 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="eu.geclipse.info">
+<annotation>
+      <appInfo>
+         <meta.schema plugin="eu.geclipse.info" id="infoService" name="InfoService"/>
+      </appInfo>
+      <documentation>
+         This extension is used to add info services.
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <complexType>
+         <sequence>
+            <element ref="infoService"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute translatable="true"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="infoService">
+      <complexType>
+         <attribute name="class" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn=":eu.geclipse.info.model.IExtentedGridInfoService"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="since"/>
+      </appInfo>
+      <documentation>
+         [Enter the first release in which this extension point appears.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="examples"/>
+      </appInfo>
+      <documentation>
+         The following is an example of an information service extension point:
+&lt;p&gt;
+&lt;pre&gt;
+ &lt;extension
+         point=&quot;eu.geclipse.info.infoService&quot;&gt;
+      &lt;infoService
+            class=&quot;eu.geclipse.glite.info.bdii.BDIIService&quot;
+            id=&quot;eu.geclipse.glite.info.bdii.BDIIService&quot;
+            name=&quot;BDII Info Service&quot;&gt;&lt;/infoService&gt;
+   &lt;/extension&gt;
+&lt;/pre&gt;
+&lt;/p&gt;
+&lt;p&gt;
+The class attribute must be a class implementing eu.geclipse.core.model.IGridInfoService interface.
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="apiInfo"/>
+      </appInfo>
+      <documentation>
+         [Enter API information here.]
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="implementation"/>
+      </appInfo>
+      <documentation>
+         The classes that are usefull to check are eu.geclipse.glite.info.bdii.BDIIService and eu.geclipse.gria.info.GriaInfoService.
+
+You should also check eu.geclipse.info.InfoServiceFactory and eu.geclipse.info.views.GlueInfoViewer.
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="copyright"/>
+      </appInfo>
+      <documentation>
+         
+      </documentation>
+   </annotation>
+
+</schema>
