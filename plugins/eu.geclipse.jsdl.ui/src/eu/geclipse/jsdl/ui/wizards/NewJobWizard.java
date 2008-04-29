@@ -29,15 +29,16 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.WizardNewFileCreationPage;
 import org.eclipse.ui.ide.IDE;
 
@@ -52,6 +53,7 @@ import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.wizards.FileType;
 import eu.geclipse.jsdl.ui.preference.ApplicationSpecificRegistry;
 import eu.geclipse.jsdl.ui.wizards.specific.IApplicationSpecificPage;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 
 /**
  * Wizard for creating new JSDL file
@@ -113,10 +115,15 @@ public class NewJobWizard extends Wizard implements INewWizard {
       openFile();
     } catch( InterruptedException e ) {
       result = false;
-    } catch( InvocationTargetException e ) {
-      Throwable realException = e.getTargetException();
-      MessageDialog.openError( getShell(),
-                               Messages.getString( "NewJobWizard.error_title" ), realException.getMessage() ); //$NON-NLS-1$
+    } catch( InvocationTargetException iTExc ) {
+      Throwable realException = iTExc.getCause();
+      Shell shell = PlatformUI.getWorkbench()
+        .getActiveWorkbenchWindow()
+        .getShell();
+      ProblemDialog.openProblem( shell,
+                                 Messages.getString( "NewJobWizard.invocation_error_title" ), //$NON-NLS-1$
+                                 Messages.getString( "NewJobWizard.invocation_title_message" ), //$NON-NLS-1$
+                                 realException );
       result = false;
     }
     return result;
@@ -189,10 +196,10 @@ public class NewJobWizard extends Wizard implements INewWizard {
       }
     }
     String applicationName = this.executablePage.getApplicationName();
-    if( applicationName.equals( "" ) ) {
+    if( applicationName.equals( "" ) ) { //$NON-NLS-1$
       applicationName = this.file.getName();
       applicationName = applicationName.substring( 0,
-                                                   applicationName.indexOf( "." ) );
+                                                   applicationName.indexOf( "." ) ); //$NON-NLS-1$
     }
     jsdl.addJobIdentification( applicationName, null );
     String appName1 = ""; //$NON-NLS-1$
@@ -214,10 +221,10 @@ public class NewJobWizard extends Wizard implements INewWizard {
     if( in.equals( "" ) ) { //$NON-NLS-1$
       in = null;
     } else {
-      if( in.lastIndexOf( "/" ) != -1 ) {
+      if( in.lastIndexOf( "/" ) != -1 ) { //$NON-NLS-1$
         inName = in.substring( in.lastIndexOf( "/" ) + 1 ); //$NON-NLS-1$
       } else {
-        inName = "stdIn";
+        inName = "stdIn"; //$NON-NLS-1$
       }
     }
     if( out.equals( "" ) ) { //$NON-NLS-1$
@@ -370,7 +377,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
   class FirstPage extends WizardNewFileCreationPage {
 
     private IStructuredSelection iniSelection;
-    private final String initFileName = Messages.getString( "NewJobWizard.first_page_default_new_file_name" );
+    private final String initFileName = Messages.getString( "NewJobWizard.first_page_default_new_file_name" ); //$NON-NLS-1$
 
     /**
      * Creates new instance of {@link FirstPage}
@@ -394,7 +401,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
     public String getUniqueFileName() {
       IPath containerFullPath = getContainerFullPath();
       String fileName = this.initFileName;
-      String extension = "jsdl";
+      String extension = "jsdl"; //$NON-NLS-1$
       if( containerFullPath == null ) {
         containerFullPath = new Path( "" ); //$NON-NLS-1$
       }
