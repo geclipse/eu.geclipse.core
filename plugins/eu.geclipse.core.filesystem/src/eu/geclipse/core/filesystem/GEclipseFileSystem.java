@@ -48,6 +48,13 @@ public class GEclipseFileSystem
    */
   private IFileSystem slave;
   
+  public static IFileStore assureFileStoreIsActive( final IFileStore fileStore ) {
+    if ( fileStore instanceof GEclipseFileStore ) {
+      ( ( GEclipseFileStore ) fileStore ).activate();
+    }
+    return fileStore;
+  }
+  
   /* (non-Javadoc)
    * @see org.eclipse.core.filesystem.provider.FileSystem#attributes()
    */

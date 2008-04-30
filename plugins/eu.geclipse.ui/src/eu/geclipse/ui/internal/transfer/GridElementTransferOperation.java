@@ -25,6 +25,7 @@ import java.util.Date;
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -34,6 +35,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.MultiStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.core.runtime.jobs.Job;
@@ -42,6 +44,7 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
+import eu.geclipse.core.filesystem.GEclipseFileSystem;
 import eu.geclipse.core.filesystem.GEclipseURI;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridConnection;
@@ -231,6 +234,7 @@ public class GridElementTransferOperation
       
       IFileStore[] children = null;
       try {
+        GEclipseFileSystem.assureFileStoreIsActive( from );
         children = from.childStores( EFS.NONE, new SubProgressMonitor( monitor, 1 ) );
       } catch( CoreException cExc ) {
         status = new Status( IStatus.ERROR,
@@ -528,8 +532,8 @@ public class GridElementTransferOperation
       
         URI uri = ( ( IGridConnection ) element ).getConnectionFileStore().toURI();
         IResource sResource = element.getResource();
-        IFolder tFolder = ( IFolder ) target.getResource();
-        IFolder folder = tFolder.getFolder( sResource.getName() );      
+        IContainer tFolder = ( IContainer ) target.getResource();
+        IFolder folder = tFolder.getFolder( new Path( sResource.getName() ) );      
         
         folder.createLink( uri, IResource.NONE, new SubProgressMonitor( monitor, 5 ) );
         
