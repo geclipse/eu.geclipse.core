@@ -23,15 +23,23 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.KeyListener;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.VerifyEvent;
+import org.eclipse.swt.events.VerifyListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.Text;
 
 import eu.geclipse.core.model.IVoLoader;
 import eu.geclipse.core.reporting.ProblemException;
@@ -40,10 +48,38 @@ import eu.geclipse.ui.dialogs.ProblemDialog;
 
 public class VoChooserPage extends WizardPage {
   
-protected CheckboxTableViewer viewer;
+  protected CheckboxTableViewer viewer;
+
+  private static class VoFilter extends ViewerFilter {
+    
+    private String filterText;
+    
+    public VoFilter() {
+      super();
+    }
+    
+    public void setFilterText( final String text ) {
+      this.filterText = text;
+    }
+
+    @Override
+    public boolean select( final Viewer viewer,
+                           final Object parentElement,
+                           final Object element ) {
+      return ( filterText == null )
+        || ( filterText.trim().length() == 0)
+        || ( ( String ) element ).toLowerCase().startsWith( filterText.toLowerCase() );
+    }
+    
+  }
   
+  
+  protected Text filterText;
+  
+  protected VoFilter voFilter;
+
   private VoImportLocationChooserPage locationChooserPage;
-  
+
   public VoChooserPage( final VoImportLocationChooserPage locationChooserPage ) {
     super( "voChooserPage",
            "Choose VOs",
@@ -61,6 +97,11 @@ protected CheckboxTableViewer viewer;
     gData = new GridData( GridData.FILL_BOTH );
     mainComp.setLayoutData( gData );
     
+    this.filterText = new Text( mainComp, SWT.BORDER );
+    this.filterText.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false ) );
+    this.filterText.setText( "type filter text" );
+    this.filterText.selectAll();
+    
     Table table = new Table( mainComp, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CHECK );
     gData = new GridData( GridData.FILL_BOTH );
     gData.grabExcessHorizontalSpace = true;
@@ -69,6 +110,8 @@ protected CheckboxTableViewer viewer;
     
     this.viewer = new CheckboxTableViewer( table );
     this.viewer.setContentProvider( new ArrayContentProvider() );
+    this.voFilter = new VoFilter();
+    this.viewer.addFilter( this.voFilter );
     
     Composite buttonComp = new Composite( mainComp, SWT.NULL );
     buttonComp.setLayout( new GridLayout( 3, false ) );
@@ -89,6 +132,13 @@ protected CheckboxTableViewer viewer;
     revertButton.setText( "&Revert Selection" );
     gData = new GridData();
     revertButton.setLayoutData( gData );
+    
+    this.filterText.addModifyListener( new ModifyListener() {
+      public void modifyText( final ModifyEvent e ) {
+        VoChooserPage.this.voFilter.setFilterText( VoChooserPage.this.filterText.getText() );
+        VoChooserPage.this.viewer.refresh();
+      }
+    } );
     
     selectAllButton.addSelectionListener( new SelectionAdapter() {
       @Override
@@ -136,6 +186,7 @@ protected CheckboxTableViewer viewer;
     super.setVisible( visible );
     if ( visible ) {
       loadVoList();
+      this.filterText.setFocus();
     }
   }
   
