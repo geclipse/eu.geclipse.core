@@ -21,8 +21,12 @@ import java.util.Collections;
 import java.util.List;
 
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.Platform;
+import org.osgi.framework.Bundle;
 
 import eu.geclipse.core.auth.IAuthenticationTokenDescription;
+import eu.geclipse.core.internal.Activator;
+import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
 
 /**
@@ -208,6 +212,12 @@ public class Extensions {
    */
   public static final String GRID_ELEMENT_CREATOR_ELEMENT
     = "creator"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the Grid element creator's name attribute.
+   */
+  public static final String GRID_ELEMENT_CREATOR_NAME_ATTRIBUTE
+    = "name"; //$NON-NLS-1$
   
   /**
    * The ID of the source configuration element
@@ -434,6 +444,66 @@ public class Extensions {
       elementCreators = resultList;
     }
     return elementCreators;
+  }
+  
+  public static List< IConfigurationElement > getRegisteredElementCreatorConfigurations(
+      final Class< ? extends Object > source,
+      final Class< ? extends IGridElement > target ) {
+    
+    List< IConfigurationElement > resultList = new ArrayList< IConfigurationElement >();
+    
+    ExtensionManager manager = new ExtensionManager();
+    List< IConfigurationElement > elements
+      = manager.getConfigurationElements( GRID_ELEMENT_CREATOR_POINT, GRID_ELEMENT_CREATOR_ELEMENT );
+    
+    for ( IConfigurationElement element : elements ) {
+      
+      if ( source != null ) {
+        String srcname = source.getName();
+        IConfigurationElement[] sources = element.getChildren( GRID_ELEMENT_CREATOR_SOURCE_ELEMENT );
+        boolean srcfound = false;
+        for ( IConfigurationElement src : sources ) {
+          String srccls = src.getAttribute( GRID_ELEMENT_CREATOR_SOURCE_CLASS_ATTRIBUTE );
+          if ( srcname.equals( srccls ) ) {
+            srcfound = true;
+            break;
+          }
+        }
+        if ( ! srcfound ) {
+          continue;
+        }
+      }
+      
+      if ( target != null ) {
+        IConfigurationElement[] targets = element.getChildren( GRID_ELEMENT_CREATOR_TARGET_ELEMENT );
+        boolean trgtfound = false;
+        for ( IConfigurationElement trgt : targets ) {
+          String trgtclsatt = trgt.getAttribute( GRID_ELEMENT_CREATOR_TARGET_CLASS_ATTRIBUTE );
+          String trgtcntr = trgt.getContributor().getName();
+          Bundle bundle = Platform.getBundle( trgtcntr );
+          if ( bundle != null ) {
+            try {
+              Class< ? > trgtcls = bundle.loadClass( trgtclsatt );
+              if ( target.isAssignableFrom( trgtcls ) ) {
+                trgtfound = true;
+                break;
+              }
+            } catch ( ClassNotFoundException cnfExc ) {
+              Activator.logException( cnfExc );
+            }
+          }
+        }
+        if ( ! trgtfound ) {
+          continue;
+        }
+      }
+      
+      resultList.add( element );
+      
+    }
+    
+    return resultList;
+    
   }
   
   /**
