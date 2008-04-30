@@ -45,6 +45,7 @@ import eu.geclipse.ui.internal.actions.ProjectActions;
 import eu.geclipse.ui.internal.actions.SimpleTestActions;
 import eu.geclipse.ui.internal.actions.SubmitJobActions;
 import eu.geclipse.ui.internal.actions.TransferJsdl2JdlActions;
+import eu.geclipse.ui.internal.actions.TransformActions;
 import eu.geclipse.ui.internal.actions.VisualisationActions;
 import eu.geclipse.ui.providers.GridModelContentProvider;
 import eu.geclipse.ui.providers.GridModelLabelProvider;
@@ -127,6 +128,9 @@ public class GridProjectView
     
     TransferJsdl2JdlActions transferJsdl2JdlActions = new TransferJsdl2JdlActions(site) ; 
     groups.addGroup( transferJsdl2JdlActions ) ; 
+    
+    TransformActions transformActions = new TransformActions( site );
+    groups.addGroup( transformActions );
     
     MountActions mountActions = new MountActions( site );
     groups.addGroup( mountActions );
