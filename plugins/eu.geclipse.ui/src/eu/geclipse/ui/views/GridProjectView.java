@@ -44,7 +44,6 @@ import eu.geclipse.ui.internal.actions.NewWizardActions;
 import eu.geclipse.ui.internal.actions.ProjectActions;
 import eu.geclipse.ui.internal.actions.SimpleTestActions;
 import eu.geclipse.ui.internal.actions.SubmitJobActions;
-import eu.geclipse.ui.internal.actions.TransferJsdl2JdlActions;
 import eu.geclipse.ui.internal.actions.TransformActions;
 import eu.geclipse.ui.internal.actions.VisualisationActions;
 import eu.geclipse.ui.providers.GridModelContentProvider;
@@ -125,9 +124,6 @@ public class GridProjectView
     
     SubmitJobActions submitJobActions = new SubmitJobActions( site );
     groups.addGroup( submitJobActions );
-    
-    TransferJsdl2JdlActions transferJsdl2JdlActions = new TransferJsdl2JdlActions(site) ; 
-    groups.addGroup( transferJsdl2JdlActions ) ; 
     
     TransformActions transformActions = new TransformActions( site );
     groups.addGroup( transformActions );
