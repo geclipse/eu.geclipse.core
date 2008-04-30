@@ -28,6 +28,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 public interface IVirtualOrganization
     extends IGridContainer, IStorableElement {
   
+  public IGridApplicationManager getApplicationManager();
+  
   public IGridComputing[] getComputing( final IProgressMonitor monitor ) throws GridModelException;
   
   /**

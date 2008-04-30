@@ -32,6 +32,7 @@ import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.internal.model.VoManager;
 import eu.geclipse.core.model.GridModelException;
+import eu.geclipse.core.model.IGridApplicationManager;
 import eu.geclipse.core.model.IGridComputing;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
@@ -74,6 +75,10 @@ public abstract class AbstractVirtualOrganization
     } catch( CoreException cExc ) {
       Activator.logException( cExc );
     }
+  }
+  
+  public IGridApplicationManager getApplicationManager() {
+    return null;
   }
   
   public IGridComputing[] getComputing( final IProgressMonitor monitor ) throws GridModelException {

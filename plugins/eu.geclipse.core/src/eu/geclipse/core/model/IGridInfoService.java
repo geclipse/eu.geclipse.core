@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -22,6 +22,28 @@ import org.eclipse.core.runtime.IProgressMonitor;
  * to a grid-related information database.
  */
 public interface IGridInfoService extends IGridService {
+  
+  /**
+   * Fetch the applications from the underlying database that
+   * are available for the specified virtual organization.
+   * 
+   * @param parent The parent of this element.
+   * @param vo The virtual organization for which to fetch the
+   * computing elements. This may be <code>null</code>. In that
+   * case all available applications should be returned.
+   * @param computing The computing for which to fetch the applications.
+   * This may be <code>null</code>. In that case all available applications
+   * should be returned.
+   * @param monitor An {@link IProgressMonitor} to monitor the
+   * progress of the operation. 
+   * @return The available applications for the specified VO and
+   * computings. Both Vo and computings are not used for filtering
+   * if they are <code>null</code>.
+   */
+  public IGridApplication[] fetchApplications( final IGridContainer parent,
+                                               final IVirtualOrganization vo,
+                                               final IGridComputing computing,
+                                               final IProgressMonitor monitor );
   
   /**
    * Fetch the computing elements from the underlying database that
@@ -56,8 +78,8 @@ public interface IGridInfoService extends IGridService {
    * VO is <code>null</code>.
    */
   public IGridStorage[] fetchStorage( final IGridContainer parent,
-          final IVirtualOrganization vo,
-          final IProgressMonitor monitor );
+                                      final IVirtualOrganization vo,
+                                      final IProgressMonitor monitor );
   
   /**
    * Fetch all available services from the underlying database

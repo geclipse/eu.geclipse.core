@@ -28,7 +28,7 @@ import eu.geclipse.core.reporting.ProblemException;
  * jobs for the Grid.
  */
 public interface IGridJob
-    extends IGridContainer, IGridResource, IManageable {
+    extends IGridContainer, IManageable {
   
   /**
    * Cancel this job if it is already running.
