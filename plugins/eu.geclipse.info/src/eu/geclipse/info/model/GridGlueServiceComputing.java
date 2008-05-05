@@ -62,8 +62,15 @@ public class GridGlueServiceComputing extends GridGlueElement implements IGridCo
    * @see eu.geclipse.core.model.IGridResource#getHostName()
    */
   public String getHostName() {
-    // This is not a physical machine, but the application name
-    return null;
+    String str = null;
+    URI myURI = null;
+    try {
+      myURI = new URI(this.getGlueService().endpoint);
+      str = myURI.getHost();
+    } catch( URISyntaxException e ) {
+      //do nothing
+    }
+    return str;
   }
   
   /**
