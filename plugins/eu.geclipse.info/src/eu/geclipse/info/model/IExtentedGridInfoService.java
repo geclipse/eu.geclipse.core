@@ -21,7 +21,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 import eu.geclipse.core.model.IGridInfoService;
 import eu.geclipse.core.model.IVirtualOrganization;
-import eu.geclipse.info.views.GlueInfoTopTreeElement;
 
 
 /**
@@ -68,5 +67,5 @@ public interface IExtentedGridInfoService extends IGridInfoService {
    * info view.
    * @return An ArrayList<String[]> or an empty ArrayList.
    */
-  public ArrayList<GlueInfoTopTreeElement> getTopTreeElements();
+  public ArrayList<InfoTopTreeElement> getTopTreeElements();
 }

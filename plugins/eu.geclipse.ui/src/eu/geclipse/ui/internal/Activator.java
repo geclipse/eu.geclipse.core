@@ -69,7 +69,7 @@ public class Activator extends AbstractUIPlugin {
    * The id of the GlueInfoViewer.
    */
   public static final String ID_GLUE_INFO_VIEW
-    = "eu.geclipse.info.views.GlueInfoViewer"; //$NON-NLS-1$
+    = "eu.geclipse.info.ui.GlueInfoViewer"; //$NON-NLS-1$
   
   /**
    * The id of the Grid3DView.

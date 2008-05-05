@@ -15,14 +15,14 @@
  *
  *****************************************************************************/
 
-package eu.geclipse.info.views;
+package eu.geclipse.info.model;
 
 /**
  * A category of a GlueInfoTopTreeElement
  * @author tnikos
  *
  */
-public class GlueInfoTopTreeCategory {
+public class InfoTopTreeCategory {
   String glueObjectName = ""; //$NON-NLS-1$
   String objectTableName = ""; //$NON-NLS-1$
  
@@ -83,7 +83,7 @@ public class GlueInfoTopTreeCategory {
       return false;
     if( getClass() != obj.getClass() )
       return false;
-    final GlueInfoTopTreeCategory other = ( GlueInfoTopTreeCategory )obj;
+    final InfoTopTreeCategory other = ( InfoTopTreeCategory )obj;
     if( this.glueObjectName == null ) {
       if( other.glueObjectName != null )
         return false;

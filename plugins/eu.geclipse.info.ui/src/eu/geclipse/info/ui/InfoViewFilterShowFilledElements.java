@@ -19,7 +19,7 @@ package eu.geclipse.info.ui;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 
-import eu.geclipse.info.views.GlueInfoTopTreeElement;
+import eu.geclipse.info.model.InfoTopTreeElement;
 import eu.geclipse.info.ui.GlueInfoViewer.TreeObject;
 import eu.geclipse.info.ui.GlueInfoViewer.TreeParent;
 
@@ -38,7 +38,7 @@ public class InfoViewFilterShowFilledElements extends ViewerFilter {
     if ( element instanceof TreeParent )
     {
       TreeParent treeParent = ((TreeParent)element);
-      GlueInfoTopTreeElement topTreeElement = treeParent.getQuery();
+      InfoTopTreeElement topTreeElement = treeParent.getQuery();
       
       // Show the top level tree elements
       if ( topTreeElement != null && topTreeElement.getDisplayName() != null)

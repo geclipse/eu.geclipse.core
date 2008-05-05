@@ -79,11 +79,11 @@ import eu.geclipse.info.glue.GlueCEAccessControlBaseRule;
 import eu.geclipse.info.glue.GlueQuery;
 import eu.geclipse.info.ui.internal.Activator;
 import eu.geclipse.info.ui.internal.Messages;
-import eu.geclipse.info.views.GlueInfoTopTreeElement;
 import eu.geclipse.info.model.FetchJob;
+import eu.geclipse.info.model.InfoTopTreeCategory;
+import eu.geclipse.info.model.InfoTopTreeElement;
 import eu.geclipse.info.model.IExtentedGridInfoService;
 import eu.geclipse.info.model.IGlueStoreChangeListerner;
-import eu.geclipse.info.views.GlueInfoTopTreeCategory;
 /**
  * @author George Tsouloupas
  */
@@ -168,8 +168,8 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
     private AbstractGlueTable agt;
     
     private ArrayList<AbstractGlueTable> agtList;
-    private ArrayList<GlueInfoTopTreeElement> queries;
-    private GlueInfoTopTreeElement query;
+    private ArrayList<InfoTopTreeElement> queries;
+    private InfoTopTreeElement query;
     
 
     /**
@@ -186,7 +186,7 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
      * @param query
      * @param agtList
      */
-    public TreeParent( final String name, final GlueInfoTopTreeElement query,
+    public TreeParent( final String name, final InfoTopTreeElement query,
                        final ArrayList<AbstractGlueTable> agtList )
     {
       super( name,null );
@@ -208,7 +208,7 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
     /**
      * @param queries
      */
-    public TreeParent( final ArrayList<GlueInfoTopTreeElement> queries) {
+    public TreeParent( final ArrayList<InfoTopTreeElement> queries) {
       super( "",null  ); //$NON-NLS-1$
       this.queries = queries;
     }
@@ -217,7 +217,7 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
      * Gets the query
      * @return a GlueInfoTopTreeElement object or null
      */
-    public GlueInfoTopTreeElement getQuery()
+    public InfoTopTreeElement getQuery()
     {
       return this.query;
     }
@@ -231,7 +231,7 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
       
       // Create the tree parents that will be the top level tree elements
       if ( this.queries != null ) {
-        for ( GlueInfoTopTreeElement s : this.queries ) {
+        for ( InfoTopTreeElement s : this.queries ) {
           toList.add( new TreeParent( s.getDisplayName(), s, null ) );
         }
       } 
@@ -380,20 +380,20 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
     }
     
 
-    private void addObjectTablename(final HashSet<GlueInfoTopTreeElement> uniqueList,
-                                    final GlueInfoTopTreeElement otherElement)
+    private void addObjectTablename(final HashSet<InfoTopTreeElement> uniqueList,
+                                    final InfoTopTreeElement otherElement)
     {
       if (uniqueList != null && otherElement != null)
       {
-        Iterator<GlueInfoTopTreeElement> it = uniqueList.iterator();
+        Iterator<InfoTopTreeElement> it = uniqueList.iterator();
         while (it.hasNext()) {
-          GlueInfoTopTreeElement currentElement = it.next();
+          InfoTopTreeElement currentElement = it.next();
           if ( currentElement != null 
               && currentElement.getGlueInfoTopTreeCategory() != null
               && otherElement.getGlueInfoTopTreeCategory() != null
               && currentElement.equals( otherElement ))
           {
-            ArrayList<GlueInfoTopTreeCategory> currentGlueInfoTopTreeCategory = 
+            ArrayList<InfoTopTreeCategory> currentGlueInfoTopTreeCategory = 
               currentElement.getGlueInfoTopTreeCategory();
             for (int i=0; i < otherElement.getGlueInfoTopTreeCategory().size(); i++)
             {
@@ -408,8 +408,8 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
     }
     
     private void buildTopLevel() {
-      ArrayList<GlueInfoTopTreeElement> list = new ArrayList<GlueInfoTopTreeElement>();
-      HashSet<GlueInfoTopTreeElement> uniqueList = new HashSet<GlueInfoTopTreeElement>();
+      ArrayList<InfoTopTreeElement> list = new ArrayList<InfoTopTreeElement>();
+      HashSet<InfoTopTreeElement> uniqueList = new HashSet<InfoTopTreeElement>();
       
       // We build the top level elements according to the existing projects
       IGridElement[] projectElements;
@@ -420,10 +420,10 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
           if(igp.isOpen() && igp.getVO()!=null){
             IGridInfoService infoService = igp.getVO().getInfoService();
             if ( infoService != null && infoService instanceof IExtentedGridInfoService) {
-              ArrayList<GlueInfoTopTreeElement> result = ((IExtentedGridInfoService)infoService).getTopTreeElements();
+              ArrayList<InfoTopTreeElement> result = ((IExtentedGridInfoService)infoService).getTopTreeElements();
               for (int i=0; i<result.size(); i++)
               {
-                GlueInfoTopTreeElement currentElement = result.get( i );
+                InfoTopTreeElement currentElement = result.get( i );
                 if (!uniqueList.contains( currentElement ))
                   uniqueList.add( currentElement );
                 else
@@ -438,7 +438,7 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
         Activator.logException( e );
       }
       
-      Iterator<GlueInfoTopTreeElement> it = uniqueList.iterator();
+      Iterator<InfoTopTreeElement> it = uniqueList.iterator();
       while (it.hasNext()) {
         list.add( it.next() );
       }

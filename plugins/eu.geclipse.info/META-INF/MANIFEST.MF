@@ -10,11 +10,9 @@ Require-Bundle: org.eclipse.core.filesystem,
  org.eclipse.core.resources,
  org.eclipse.core.runtime,
  eu.geclipse.core,
- eu.geclipse.core.reporting,
- org.eclipse.ui
+ eu.geclipse.core.reporting
 Eclipse-LazyStart: true
 Export-Package: eu.geclipse.info,
  eu.geclipse.info.glue,
- eu.geclipse.info.model,
- eu.geclipse.info.views
+ eu.geclipse.info.model
 Bundle-RequiredExecutionEnvironment: J2SE-1.5

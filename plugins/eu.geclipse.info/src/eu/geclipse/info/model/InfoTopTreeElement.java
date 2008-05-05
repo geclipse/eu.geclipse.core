@@ -15,7 +15,7 @@
  *
  *****************************************************************************/
 
-package eu.geclipse.info.views;
+package eu.geclipse.info.model;
 
 import java.util.ArrayList;
 
@@ -25,21 +25,21 @@ import java.util.ArrayList;
  * @author tnikos
  *
  */
-public class GlueInfoTopTreeElement {
+public class InfoTopTreeElement {
   
   private String displayName;
-  private ArrayList<GlueInfoTopTreeCategory> glueInfoTopTreeCategory;
+  private ArrayList<InfoTopTreeCategory> glueInfoTopTreeCategory;
   
   /**
    * 
    * @param glueInfoTopTreeCategory a GlueInfoTopTreeCategory
    * @param displayName The name to display in the info view
    */
-  public GlueInfoTopTreeElement(final ArrayList<GlueInfoTopTreeCategory> glueInfoTopTreeCategory,
+  public InfoTopTreeElement(final ArrayList<InfoTopTreeCategory> glueInfoTopTreeCategory,
                                 final String displayName)
   { 
     if (glueInfoTopTreeCategory == null)
-      this.glueInfoTopTreeCategory = new ArrayList<GlueInfoTopTreeCategory>();
+      this.glueInfoTopTreeCategory = new ArrayList<InfoTopTreeCategory>();
     else
       this.glueInfoTopTreeCategory = glueInfoTopTreeCategory;
     
@@ -54,7 +54,7 @@ public class GlueInfoTopTreeElement {
    * Get the GlueInfoTopTreeCategory.
    * @return a GlueInfoTopTreeCategory or null
    */
-  public ArrayList<GlueInfoTopTreeCategory> getGlueInfoTopTreeCategory() {
+  public ArrayList<InfoTopTreeCategory> getGlueInfoTopTreeCategory() {
     return this.glueInfoTopTreeCategory;
   }
   
@@ -86,7 +86,7 @@ public class GlueInfoTopTreeElement {
       return false;
     if( getClass() != obj.getClass() )
       return false;
-    final GlueInfoTopTreeElement other = ( GlueInfoTopTreeElement )obj;
+    final InfoTopTreeElement other = ( InfoTopTreeElement )obj;
     if( this.displayName == null ) {
       if( other.displayName != null )
         return false;
