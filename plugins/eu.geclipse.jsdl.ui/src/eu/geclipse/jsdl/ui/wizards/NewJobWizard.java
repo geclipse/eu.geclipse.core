@@ -95,11 +95,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
                                     this.selection );
     this.firstPage.setTitle( Messages.getString( "NewJobWizard.first_page_title" ) ); //$NON-NLS-1$
     this.firstPage.setDescription( Messages.getString( "NewJobWizard.first_page_description" ) ); //$NON-NLS-1$
-    // this.firstPage.setFileName( this.firstPage.getUniqueFileName() );
-    // this.firstPage.setFileName( Messages.getString(
-    // "NewJobWizard.first_page_default_new_file_name" ) ); //$NON-NLS-1$
     addPage( this.firstPage );
-    // this.firstPage.setFileName( this.firstPage.getUniqueFileName() );
     ArrayList<WizardPage> internal = new ArrayList<WizardPage>();
     this.outputFilesPage = new DataStagingNewJobWizardPage( Messages.getString( "NewJobWizard.files_output_new_job_page_name" ) ); //$NON-NLS-1$;
     internal.add( this.outputFilesPage );
@@ -262,7 +258,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
     jsdl.addJobIdentification( applicationName, null );
     String appName1 = ""; //$NON-NLS-1$
     if( this.executablePage.getApplicationName().equals( "" ) ) { //$NON-NLS-1$
-      appName1 = applicationName; //$NON-NLS-1$
+      appName1 = applicationName; 
     } else {
       appName1 = this.executablePage.getApplicationName();
     }
@@ -288,12 +284,20 @@ public class NewJobWizard extends Wizard implements INewWizard {
     if( out.equals( "" ) ) { //$NON-NLS-1$
       out = null;
     } else {
-      outName = "stdOut"; //$NON-NLS-1$
+      if( out.lastIndexOf( "/" ) != -1 ) { //$NON-NLS-1$
+        outName = out.substring( out.lastIndexOf( "/" ) + 1 ); //$NON-NLS-1$
+      } else {
+        outName = "stdOut"; //$NON-NLS-1$
+      }
     }
     if( err.equals( "" ) ) { //$NON-NLS-1$
       err = null;
     } else {
-      errName = "stdErr"; //$NON-NLS-1$
+      if( err.lastIndexOf( "/" ) != -1 ) { //$NON-NLS-1$
+        errName = err.substring( err.lastIndexOf( "/" ) + 1 ); //$NON-NLS-1$
+      } else {
+        errName = "stdErr"; //$NON-NLS-1$
+      }
     }
     String execName = this.executablePage.getExecutableFile();
     jsdl.setApplicationName( appName1 );
