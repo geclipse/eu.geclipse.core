@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+	<extension
+         point="org.eclipse.ui.views">
+      <view
+            category="eu.geclipse.ui.viewcategory"
+            class="eu.geclipse.info.ui.GlueInfoViewer"
+            icon="icons/eview16/glueinfo.gif"
+            id="eu.geclipse.info.ui.GlueInfoViewer"
+            name="Glue Information Viewer"/>
+   </extension>
+
+</plugin>
