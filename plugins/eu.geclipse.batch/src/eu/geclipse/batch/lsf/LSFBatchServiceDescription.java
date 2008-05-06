@@ -47,6 +47,14 @@ public class LSFBatchServiceDescription implements IBatchServiceDescription {
   }
 
   public boolean supportsService( final String service ) {
-    return ( 0 == Messages.getString( "LSFBatchServiceDescription.serviceTypeName" ).compareTo( service ) ) ; //$NON-NLS-1$
+    boolean ret = true;
+    String str = Messages.getString( "LSFBatchServiceDescription.serviceTypeName" ); //$NON-NLS-1$
+    
+    if ( null != str ) {
+      if ( 0 != str.compareTo( service ) )
+        ret = false;
+    }
+    
+    return ret; 
   }
 }

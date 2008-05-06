@@ -47,6 +47,13 @@ public class PBSBatchServiceDescription implements IBatchServiceDescription {
   }
 
   public boolean supportsService( final String service ) {
-    return ( 0 == Messages.getString( "PBSBatchServiceDescription.serviceTypeName" ).compareTo( service ) ) ; //$NON-NLS-1$
+    boolean ret = true;
+    String str = Messages.getString( "PBSBatchServiceDescription.serviceTypeName" ); //$NON-NLS-1$
+    
+    if ( null != str ) {
+      if ( 0 != str.compareTo( service ) )
+        ret = false;
+    }
+    return ret;  
   }
 }

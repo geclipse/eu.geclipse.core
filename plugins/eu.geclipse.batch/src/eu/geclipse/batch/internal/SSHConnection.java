@@ -234,7 +234,8 @@ public class SSHConnection {
                           .getSolution( ICoreSolutions.NET_CHECK_INTERNET_CONNECTION, null );
       problem.addSolution( solution );
 
-      solution = ReportingPlugin.getReportingService().getSolution( IBatchSolutions.CHECK_USERNAME_AND_PASSWORD, null );
+      solution = ReportingPlugin.getReportingService().getSolution( 
+                                                       IBatchSolutions.CHECK_USERNAME_AND_PASSWORD, null );
       problem.addSolution( solution );
       
       solution = ReportingPlugin.getReportingService()
