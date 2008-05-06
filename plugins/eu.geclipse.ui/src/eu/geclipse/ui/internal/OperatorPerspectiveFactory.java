@@ -36,11 +36,15 @@ public class OperatorPerspectiveFactory implements IPerspectiveFactory {
     topLeftFolder.addPlaceholder( IPageLayout.ID_RES_NAV );
 
     IFolderLayout bottomLeftFolder
-     = layout.createFolder( "bottomleft", IPageLayout.BOTTOM, 0.5f, eu.geclipse.ui.internal.Activator.ID_GPROJECT_VIEW ); //$NON-NLS-1$
+     = layout.createFolder( "bottomleft", //$NON-NLS-1$
+                            IPageLayout.BOTTOM, 0.5f, 
+                            eu.geclipse.ui.internal.Activator.ID_GPROJECT_VIEW ); 
     bottomLeftFolder.addView( eu.geclipse.ui.internal.Activator.ID_GLUE_INFO_VIEW );
 
     IFolderLayout rightFolder
-      = layout.createFolder( "right", IPageLayout.RIGHT, 0.5f, eu.geclipse.ui.internal.Activator.ID_TERMINAL_VIEW ); //$NON-NLS-1$
+      = layout.createFolder( "right", IPageLayout.RIGHT,   //$NON-NLS-1$
+                             0.5f, 
+                             eu.geclipse.ui.internal.Activator.ID_TERMINAL_VIEW );
     rightFolder.addView( eu.geclipse.ui.internal.Activator.ID_TERMINAL_VIEW );
     rightFolder.addView( IPageLayout.ID_OUTLINE );
 
@@ -50,7 +54,7 @@ public class OperatorPerspectiveFactory implements IPerspectiveFactory {
     // TODO This should have been the following identifier.
     // eu.geclipse.batch.ui.internal.Activator.ID_BATCH_JOB_VIEW
     // Due to batch.ui plugin location have to do this hack
-    // Leve as Warning to remember
+    // Leave as Warning to remember
     bottomFolder.addView( "eu.geclipse.batch.ui.views.BatchJobView" ); //$NON-NLS-1$
     bottomFolder.addView( eu.geclipse.ui.internal.Activator.ID_AUTH_VIEW );
 
@@ -70,7 +74,7 @@ public class OperatorPerspectiveFactory implements IPerspectiveFactory {
     // TODO This should have been the following identifier.
     // eu.geclipse.batch.ui.internal.Activator.ID_BATCH_WIZARD
     // Due to batch.ui plugin location have to do this hack
-    // Leve as Warning to remember
+    // Leave as Warning to remember
     layout.addNewWizardShortcut( "eu.geclipse.batch.ui.wizards.BatchCreationWizard" ); //$NON-NLS-1$
     layout.addNewWizardShortcut( eu.geclipse.ui.internal.Activator.ID_PROJECT_WIZARD );
     layout.addNewWizardShortcut( eu.geclipse.ui.internal.Activator.ID_CONNECTION_WIZARD );

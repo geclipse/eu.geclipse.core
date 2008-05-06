@@ -63,7 +63,8 @@ public class SimpleTestAction extends SelectionListenerAction {
       ISimpleTestDescription description = this.factory.getSupportedDescription();
       ISimpleTest test = description.createSimpleTest();
       
-      AbstractSimpleTestDialog infoDialog = this.factory.getSimpleTestDialog( test, this.resources, this.site.getShell() );
+      AbstractSimpleTestDialog infoDialog = 
+        this.factory.getSimpleTestDialog( test, this.resources, this.site.getShell() );
       infoDialog.open();
     }
   }
