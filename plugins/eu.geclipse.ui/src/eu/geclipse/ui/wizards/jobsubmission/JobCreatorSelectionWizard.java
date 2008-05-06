@@ -105,6 +105,11 @@ public class JobCreatorSelectionWizard extends Wizard {
     addPage( this.selectionPage );
   }
 
+  @Override
+  public boolean canFinish() {
+    return super.canFinish() & this.getSubmissionService()!=null;
+  }
+
   // @Override
   // public boolean performFinish() {
   // return false;
