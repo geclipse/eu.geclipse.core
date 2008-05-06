@@ -154,11 +154,11 @@ public class FolderSelectionWizardPage extends WizardPage {
     {
       result = true;
     }
-    if( result ) {
-      if( getWizard() instanceof JobCreatorSelectionWizard ) {
-        ( ( JobCreatorSelectionWizard )getWizard() ).changeInitData();
-      }
-    }
+//    if( result ) {
+//      if( getWizard() instanceof JobCreatorSelectionWizard ) {
+//        ( ( JobCreatorSelectionWizard )getWizard() ).changeInitData();
+//      }
+//    }
     return result;
   }
 

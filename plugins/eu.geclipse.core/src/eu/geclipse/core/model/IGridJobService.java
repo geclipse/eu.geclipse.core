@@ -52,6 +52,8 @@ public interface IGridJobService extends IGridService{
    */
   public void deleteJob( final IGridJob job, IProgressMonitor monitor ) throws ProblemException;
 
+  public boolean canSubmit(final IGridJobDescription desc);
+
 //  /**
 //   * TODO pawel
 //   * 

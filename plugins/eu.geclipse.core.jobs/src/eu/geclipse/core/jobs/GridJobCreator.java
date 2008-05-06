@@ -86,8 +86,10 @@ public class GridJobCreator extends AbstractGridJobCreator {
    */
   @Override
   protected boolean internalCanCreate( final IGridJobDescription description ) {
-    return ( description instanceof JSDLJobDescription 
-        || description instanceof IGridWorkflow);
+    //TODO pawelw check if it is possible to find supported job description from wizards
+    return true;
+//    return ( description instanceof JSDLJobDescription 
+//        || description instanceof IGridWorkflow);
   }
 
   /*
