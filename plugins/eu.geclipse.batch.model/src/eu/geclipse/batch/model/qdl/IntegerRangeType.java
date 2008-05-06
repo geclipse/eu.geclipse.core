@@ -10,10 +10,10 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributor(s):
- *     UCY (http://www.ucy.cs.ac.cy)
+ *     UCY (http://www.cs.ucy.ac.cy)
  *      - Nicholas Loulloudes (loulloudes.n@cs.ucy.ac.cy)
  *
- *****************************************************************************/
+  *****************************************************************************/
 package eu.geclipse.batch.model.qdl;
 
 import org.eclipse.emf.ecore.EObject;

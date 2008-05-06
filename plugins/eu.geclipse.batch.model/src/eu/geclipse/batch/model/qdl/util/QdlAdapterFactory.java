@@ -10,7 +10,7 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributor(s):
- *     UCY (http://www.ucy.cs.ac.cy)
+ *     UCY (http://www.cs.ucy.ac.cy)
  *      - Nicholas Loulloudes (loulloudes.n@cs.ucy.ac.cy)
  *
   *****************************************************************************/
@@ -60,7 +60,8 @@ public class QdlAdapterFactory extends AdapterFactoryImpl
   /**
    * Returns whether this factory is applicable for the type of the object.
    * <!-- begin-user-doc -->
-   * This implementation returns <code>true</code> if the object is either the model's package or is an instance object of the model.
+   * This implementation returns <code>true</code> if the object is either the model's 
+   * package or is an instance object of the model.
    * <!-- end-user-doc -->
    * @return whether this factory is applicable for the type of the object.
    * @generated
