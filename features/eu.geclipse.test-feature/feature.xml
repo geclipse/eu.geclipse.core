@@ -29,25 +29,25 @@ project number: FP5-IST-034327  http://www.geclipse.eu/
    </url>
 
    <requires>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.emf"/>
+      <import plugin="org.eclipse.emf.common"/>
+      <import plugin="org.eclipse.emf.ecore.xmi"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.ui.views"/>
       <import plugin="org.junit4"/>
       <import plugin="eu.geclipse.batch" version="1.0.0" match="greaterOrEqual"/>
       <import plugin="eu.geclipse.core.reporting" version="1.0.0" match="greaterOrEqual"/>
       <import plugin="eu.geclipse.core" version="1.0.0" match="greaterOrEqual"/>
       <import plugin="eu.geclipse.glite.editor" version="1.0.0" match="greaterOrEqual"/>
       <import plugin="eu.geclipse.gvid" version="1.0.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.ui"/>
-      <import plugin="org.eclipse.core.runtime"/>
       <import plugin="eu.geclipse.gvid.codec.uncompressed"/>
       <import plugin="eu.geclipse.info" version="1.0.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.core.resources"/>
-      <import plugin="org.eclipse.emf"/>
-      <import plugin="org.eclipse.emf.common"/>
       <import plugin="eu.geclipse.jsdl.model"/>
       <import plugin="eu.geclipse.jsdl.ui" version="1.0.0" match="greaterOrEqual"/>
-      <import plugin="org.eclipse.ui.views"/>
       <import plugin="eu.geclipse.ui" version="1.0.0" match="greaterOrEqual"/>
       <import plugin="eu.geclipse.workflow.model"/>
-      <import plugin="org.eclipse.emf.ecore.xmi"/>
    </requires>
 
    <plugin
@@ -55,84 +55,73 @@ project number: FP5-IST-034327  http://www.geclipse.eu/
          download-size="0"
          install-size="0"
          version="0.0.0"
-         fragment="true"
-         unpack="false"/>
+         fragment="true"/>
 
    <plugin
          id="eu.geclipse.core.reporting.test"
          download-size="0"
          install-size="0"
          version="0.0.0"
-         fragment="true"
-         unpack="false"/>
+         fragment="true"/>
 
    <plugin
          id="eu.geclipse.core.test"
          download-size="0"
          install-size="0"
          version="0.0.0"
-         fragment="true"
-         unpack="false"/>
+         fragment="true"/>
 
    <plugin
          id="eu.geclipse.glite.editor.test"
          download-size="0"
          install-size="0"
          version="0.0.0"
-         fragment="true"
-         unpack="false"/>
+         fragment="true"/>
 
    <plugin
          id="eu.geclipse.gvid.test"
          download-size="0"
          install-size="0"
          version="0.0.0"
-         fragment="true"
-         unpack="false"/>
+         fragment="true"/>
 
    <plugin
          id="eu.geclipse.gvid.uncompressed.test"
          download-size="0"
          install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
    <plugin
          id="eu.geclipse.info.test"
          download-size="0"
          install-size="0"
          version="0.0.0"
-         fragment="true"
-         unpack="false"/>
+         fragment="true"/>
 
    <plugin
          id="eu.geclipse.jsdl.model.test"
          download-size="0"
          install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
    <plugin
          id="eu.geclipse.jsdl.ui.test"
          download-size="0"
          install-size="0"
          version="0.0.0"
-         fragment="true"
-         unpack="false"/>
+         fragment="true"/>
 
    <plugin
          id="eu.geclipse.ui.test"
          download-size="0"
          install-size="0"
          version="0.0.0"
-         fragment="true"
-         unpack="false"/>
+         fragment="true"/>
 
    <plugin
          id="eu.geclipse.workflow.model.test"
          download-size="0"
          install-size="0"
-         version="0.0.0"
-         unpack="false"/>
+         version="0.0.0"/>
 
 </feature>
