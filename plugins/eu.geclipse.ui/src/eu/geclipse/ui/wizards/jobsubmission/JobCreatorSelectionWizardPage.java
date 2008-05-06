@@ -65,13 +65,13 @@ public class JobCreatorSelectionWizardPage
     
     // TODO mariusz Get only job creators for selected VO (if it's possible)
     
-    for( IGridJobCreator jobCreator : parent.getJobCreators() ) {
-      for( JobSubmissionWizard wizard : allWizards ) {
-        if( wizard.creatorId.equals( jobCreator.getClass().getName() ) ) {
-          filteredWizardsList.add( wizard.wizardId );
-        }
-      }      
-    }
+//    for( IGridJobCreator jobCreator : parent.getJobCreators() ) {
+//      for( JobSubmissionWizard wizard : allWizards ) {
+//        if( wizard.creatorId.equals( jobCreator.getClass().getName() ) ) {
+//          filteredWizardsList.add( wizard.wizardId );
+//        }
+//      }      
+//    }
     
     return filteredWizardsList;
   }
