@@ -42,7 +42,11 @@ public class WorkerNodeInfo_Test {
   }
 
   /**
-   * Test method for {@link eu.geclipse.batch.internal.WorkerNodeInfo#WorkerNodeInfo(java.lang.String, eu.geclipse.batch.IWorkerNodeInfo.WorkerNodeState, int, java.lang.String, java.lang.String, java.lang.String, java.util.List)}.
+   * Test method for 
+   * {@link eu.geclipse.batch.internal.WorkerNodeInfo#WorkerNodeInfo(java.lang.String, 
+   * eu.geclipse.batch.IWorkerNodeInfo.WorkerNodeState, int, 
+   * java.lang.String, java.lang.String, 
+   * java.lang.String, java.util.List)}.
    */
   @Test
   public void testWorkerNodeInfo() {
@@ -104,7 +108,8 @@ public class WorkerNodeInfo_Test {
   }
 
   /**
-   * Test method for {@link eu.geclipse.batch.internal.WorkerNodeInfo#setState(eu.geclipse.batch.IWorkerNodeInfo.WorkerNodeState)}.
+   * Test method for 
+   * {@link eu.geclipse.batch.internal.WorkerNodeInfo#setState(eu.geclipse.batch.IWorkerNodeInfo.WorkerNodeState)}.
    */
   @Test
   public void testSetState() {
