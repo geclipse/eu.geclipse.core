@@ -22,6 +22,12 @@ package eu.geclipse.core.model;
 public interface IGridApplication
     extends IGridResource {
 
-  // Currently this is just a declarative interface
+  /** get the tag of the installed application
+   * must return a string which represents the tag
+   * this tag is given by the deployer in the process of install and is published
+   * on the info system
+   * @return String
+   */
+  public String getTag ();
 
 }
