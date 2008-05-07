@@ -153,7 +153,8 @@ public class DeploymentWizard extends Wizard {
                            source, 
                            target,
                            tag );
-    job.setPriority( Job.SHORT );
+    //job.setPriority( Job.SHORT );
+    job.setUser( true );
     job.schedule();
     return true;
   }

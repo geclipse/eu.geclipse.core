@@ -17,11 +17,16 @@ package eu.geclipse.ui.wizards.deployment;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 
 import eu.geclipse.core.IApplicationDeployment;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.ui.wizards.jobsubmission.JobSubmissionWizardBase;
+import eu.geclipse.ui.wizards.jobsubmission.Messages;
+
 import java.net.URI;
 
 /**
@@ -71,11 +76,20 @@ public class DeploymentJob extends Job {
   @Override
   protected IStatus run( final IProgressMonitor monitor ) {
     IStatus status = Status.OK_STATUS;
-    this.appDeployment.deploy( this.source, this.target, this.tag, monitor );
-    if ( monitor.isCanceled() ) status =  Status.CANCEL_STATUS;
+    SubMonitor betterMonitor = SubMonitor.convert( monitor,
+                                                   this.target.length );
+    testCancelled( betterMonitor );
+    betterMonitor.setTaskName( "Starting deployment" ); //$NON-NLS-1$
+    this.appDeployment.deploy( this.source, this.target, this.tag, betterMonitor.newChild( 1 ) );
+    testCancelled( betterMonitor );
+    betterMonitor.done();
     return status;
   }
   
-  
+  private void testCancelled( final IProgressMonitor monitor ) {
+    if( monitor.isCanceled() ) {
+      throw new OperationCanceledException();
+    }
+  }
   
 }
