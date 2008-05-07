@@ -191,13 +191,13 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
               JsdlEditor.this.removedResources.addAll( visitor.getRemovedResources() );
               
               if ( !isDirty() ) {
-                getSite().getShell().getDisplay().asyncExec
+                getSite().getShell().getDisplay().syncExec
                   (new Runnable()
                    {
                      public void run()
                      {
                        getSite().getPage().closeEditor( JsdlEditor.this, false );
-                       JsdlEditor.this.dispose();
+                       // close editor also disposes editor             
                      }
                    });
               }

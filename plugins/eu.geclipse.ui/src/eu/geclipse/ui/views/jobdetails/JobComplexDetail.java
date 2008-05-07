@@ -30,6 +30,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IPersistableElement;
 import org.eclipse.ui.IStorageEditorInput;
 import org.eclipse.ui.PartInitException;
@@ -123,8 +124,8 @@ abstract public class JobComplexDetail extends JobTextDetail {
               IDE.openEditor( PlatformUI.getWorkbench()
                                 .getActiveWorkbenchWindow()
                                 .getActivePage(),
-                              new EditorInput( inputJob, getName(), value ),
-                              JobComplexDetail.this.editorId );
+                                createEditorInput( inputJob, value ),
+                              getEditorId() );
             }
           }
         } catch( PartInitException exception ) {
@@ -135,6 +136,10 @@ abstract public class JobComplexDetail extends JobTextDetail {
     return createdButton;
   }
   
+  protected IEditorInput createEditorInput( final IGridJob inputJob, final String value ) {
+    return new EditorInput( inputJob, getName(), value );
+  }
+
   private class EditorInput implements IStorageEditorInput {
 
     private IGridJob inputJob;
@@ -261,5 +266,9 @@ abstract public class JobComplexDetail extends JobTextDetail {
       image = imageDescriptor.createImage();
     }
     return image;
+  }
+
+  protected String getEditorId() {
+    return JobComplexDetail.this.editorId;
   }
 }
