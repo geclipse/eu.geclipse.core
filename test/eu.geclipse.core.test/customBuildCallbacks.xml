@@ -1,8 +1,24 @@
+<!--
+###############################################################################
+# Copyright (c) 2008 g-Eclipse Consortium
+# All rights reserved. This program and the accompanying materials
+# are made available under the terms of the Eclipse Public License v1.0
+# which accompanies this distribution, and is available at
+# http://www.eclipse.org/legal/epl-v10.html
+#
+# Initial development of the original code was made for the
+# g-Eclipse project founded by European Union
+# project number: FP6-IST-034327  http://www.geclipse.eu/
+#
+# Contributors:
+#    Ariel Garcia - initial implementation
+###############################################################################
+-->
 <!-- ===================================================================== -->
 <!-- Custom targets called from a project's generated build.xml            -->
 <!-- Set customBuildCallbacks=<path/to/this/file> in your build.properties.-->
 <!-- ===================================================================== -->
-<project name="eu.geclipse.core.test" default="noDefault">
+<project name="plugin.custom.build" default="noDefault">
 	
 	<target name="noDefault">
 		<echo message="This file must be called with explicit targets" />
@@ -13,13 +29,25 @@
 	<property name="lt" value="&lt;" />
 	<property name="gt" value="&gt;" />
 	
+	
+	<!-- Search for the 'foreach' task -->
+	<property name="cp.builder"
+			  value="${builder}/lib/eu.geclipse.releng.tools.jar"
+	/>
+	<property name="cp.plugin"
+			  value="${basedir}/../eu.geclipse.releng/lib/eu.geclipse.releng.tools.jar"
+	/>
+	<available file="${cp.plugin}" property="cp" value="${cp.plugin}" />
+	<property name="cp" value="${cp.builder}"/>
+	
 	<!-- A simplified version of the ant-contrib 'foreach' task  -->
 	<taskdef name="foreach"
 			 classname="eu.geclipse.releng.tools.ForeachTask"
-			 classpath="${basedir}/../eu.geclipse.releng/lib/eu.geclipse.releng.tools.jar"
+			 classpath="${cp}"
 	/>
 	
-	<!-- All the test classes -->
+	
+	<!-- Find all the test classes -->
 	<fileset dir="."
 			id="allTestClassFiles">
 		<include name="**/*_Test.java" />
@@ -34,25 +62,22 @@
 		<mapper type="regexp" from="^(.*)/([^/]*).java$$" to="\2"/>
 	</pathconvert>
 
-	<!-- Run the test in a given plugin -->
+
+	<!-- Add a single test class to the list -->
 	<target name="appendTestClass">
-		<echo file="${build.result.folder}/tests.xml" append="true">
+		<echo file="${tests.file}" append="true">
           ${lt}ant target=${q}core-test${q} antfile=${q}$${library-file}${q} dir=${q}$${output-dir}${q} ${gt}
             ${lt}property name=${q}classname${q} value=${q}${testClass}${q} /${gt}
           ${lt}/ant${gt}
 		</echo>
 	</target>
 	
-	
-	<!-- ===================================================================== -->
-	<!-- Steps to do before the target build.sources                           -->
-	<!-- Available parameters :                                                -->
-	<!--   build.result.folder - folder to contain the build results           -->
-	<!-- ===================================================================== -->
-	<target name="pre.build.sources" depends="pre.clean">
+	<!-- Generate the test.xml file -->
+	<target name="createTestFile">
 		<echo message="Building tests.xml..." />
 		
-		<echo file="${build.result.folder}/tests.xml" append="false"
+		<touch file="${tests.file}" mkdirs="true" />
+		<echo file="${tests.file}" append="false"
 			message="${lt}project name=${q}testsuite${q}${gt}${line.separator}
 				${lt}target name=${q}suite${q}${gt}${line.separator}"
 		/>
@@ -64,35 +89,41 @@
 				 inheritAll="true"
 		/>
 		
-		<echo file="${build.result.folder}/tests.xml" append="true"
+		<echo file="${tests.file}" append="true"
 			message="${line.separator}
 					 ${lt}/target${gt}${line.separator}
 				${lt}/project${gt}${line.separator}"
 		/>
-		
 	</target>
-
+	
+	
+	<!-- ===================================================================== -->
+	<!-- Targets available to hook on                                          -->
+	<!-- ===================================================================== -->
+	<target name="pre.build.sources" />
 	<target name="post.build.sources" />
 	<target name="pre.build.jars" />
 	<target name="post.build.jars" />
 	<target name="pre.@dot" />
 	<target name="post.compile.@dot" />
-	<target name="post.@dot" />
+
+	<!-- ===================================================================== -->
+	<!-- Steps to do after the compilation target @dot                         -->
+	<!-- Available parameters :                                                -->
+	<!--   jar.Location - the location of the compilation results              -->
+	<!-- ===================================================================== -->
+	<target name="post.@dot" depends="pre.clean">
+		<property name="tests.file" value="${jar.Location}/tests.xml" />
+		<antcall target="createTestFile"/>
+	</target>
+	
 	<target name="pre.gather.bin.parts" />
 	<target name="post.gather.bin.parts" />
 	<target name="pre.gather.sources" />
 	<target name="post.gather.sources" />
 	<target name="pre.gather.logs" />
 	<target name="post.gather.logs" />
-
-	<!-- ===================================================================== -->
-	<!-- Steps to do before the target clean                                   -->
-	<!-- Available parameters :                                                -->
-	<!--   destination.temp.folder - destination folder                        -->
-	<!-- ===================================================================== -->
-	<target name="pre.clean">
-		<delete file="${destination.temp.folder}/tests.xml" />
-	</target>
-
+	<target name="pre.clean" />
 	<target name="post.clean" />
+	
 </project>
