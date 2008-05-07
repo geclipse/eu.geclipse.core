@@ -1215,10 +1215,9 @@ public class JSDLJobDescription extends ResourceGridContainer
       if( stagingsMap != null ) {
         String currentFilename = filename;
         // if current uri is local, then check again if it's staged-out
-        for( String currentUriString = stagingsMap.get( currentFilename ); uri == null
-                                                                           && currentUriString != null;
-                                                                           currentUriString = stagingsMap.get( currentFilename ) )
-        {
+        for( String currentUriString = stagingsMap.get( currentFilename ); 
+             uri == null && currentUriString != null; 
+             currentUriString = stagingsMap.get( currentFilename ) ) {
           java.net.URI currentUri = new java.net.URI( currentUriString );
           String pathString = currentUri.getPath();
           if( pathString != null ) {
