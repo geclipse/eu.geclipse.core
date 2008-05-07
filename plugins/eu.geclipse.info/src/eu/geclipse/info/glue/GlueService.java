@@ -19,11 +19,6 @@ package eu.geclipse.info.glue;
 
 import java.util.ArrayList;
 
-import javax.naming.NamingEnumeration;
-import javax.naming.NamingException;
-import javax.naming.directory.Attribute;
-import javax.naming.directory.Attributes;
-
 /**
  * 
  * @author George Tsouloupas
@@ -89,39 +84,42 @@ public class GlueService extends AbstractGlueTable
   /**
    * 
    */
-  public ArrayList<GlueService> glueServiceList = new ArrayList<GlueService>();
+  public ArrayList< GlueService > glueServiceList = new ArrayList< GlueService >();
   
   /**
    * 
    */
-  public ArrayList<GlueServiceAccessControlRule> glueServiceAccessControlRuleList = new ArrayList<GlueServiceAccessControlRule>();
+  public ArrayList< GlueServiceAccessControlRule > glueServiceAccessControlRuleList = 
+    new ArrayList< GlueServiceAccessControlRule >();
 
   /**
    * 
    */
-  public ArrayList<GlueServiceAssociation> glueServiceAssociationList = new ArrayList<GlueServiceAssociation>();
+  public ArrayList< GlueServiceAssociation > glueServiceAssociationList = new ArrayList< GlueServiceAssociation >();
 
   /**
    * 
    */
-  //public ArrayList<GlueServiceAssociation> glueServiceAssociationList1 = new ArrayList<GlueServiceAssociation>();
+  //public ArrayList< GlueServiceAssociation > glueServiceAssociationList1 = 
+  // new ArrayList< GlueServiceAssociation >();
 
   /**
    * 
    */
-  public ArrayList<GlueServiceData> glueServiceDataList = new ArrayList<GlueServiceData>();
+  public ArrayList< GlueServiceData > glueServiceDataList = new ArrayList< GlueServiceData >();
 
   /**
    * 
    */
-  public ArrayList<GlueServiceOwner> glueServiceOwnerList = new ArrayList<GlueServiceOwner>();
+  public ArrayList< GlueServiceOwner > glueServiceOwnerList = new ArrayList< GlueServiceOwner >();
 
   /**
    * 
    */
-  public ArrayList<GlueServiceStatus> glueServiceStatusList = new ArrayList<GlueServiceStatus>();
+  public ArrayList< GlueServiceStatus > glueServiceStatusList = new ArrayList< GlueServiceStatus >();
 
   protected boolean isSupported = false;
+  
   /* (non-Javadoc)
    * @see eu.geclipse.info.glue.AbstractGlueTable#getID()
    */
@@ -142,8 +140,7 @@ public class GlueService extends AbstractGlueTable
    * Checks if the current service is supported by g-eclipse 
    * @return true if it is supported and false otherwise.
    */
-  public boolean isSupported()
-  {
+  public boolean isSupported() {
     return this.isSupported;
   }
 }

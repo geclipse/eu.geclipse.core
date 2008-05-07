@@ -262,7 +262,8 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
             } else if ( value instanceof AbstractGlueTable ) { 
               AbstractGlueTable agt1 = ( AbstractGlueTable ) value;
               toList.add( new TreeParent(agt1,agt1.tableName) );
-            } else if ( !( ( fieldName.equals( "byRefOnly" ) || fieldName.equals( "key" )  //$NON-NLS-1$  //$NON-NLS-2$
+            } else if ( !( ( fieldName.equals( "byRefOnly" ) //$NON-NLS-1$ 
+                || fieldName.equals( "key" )  //$NON-NLS-1$
                 || fieldName.equals( "keyName" ) || fieldName.equals( "tableName" ) //$NON-NLS-1$  //$NON-NLS-2$
                 || fieldName.equals( "glueIndex" ) || fieldName.equals( "glueService" ) //$NON-NLS-1$ //$NON-NLS-2$
                 || fieldName.equals( "displayName" ))) ){//$NON-NLS-1$
@@ -771,7 +772,8 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
     };
     imgUrl = Activator.getDefault().getBundle().getEntry( "icons/elcl16/hide.png" ); //$NON-NLS-1$
     showFilledInfoElementsAction.setImageDescriptor( ImageDescriptor.createFromURL( imgUrl ) );
-    showFilledInfoElementsAction.setToolTipText( Messages.getString( "GlueInfoView.showOnlyFilledInfoElements" ) ); //$NON-NLS-1$
+    showFilledInfoElementsAction.setToolTipText( 
+                                    Messages.getString( "GlueInfoView.showOnlyFilledInfoElements" ) ); //$NON-NLS-1$
     manager.add( showFilledInfoElementsAction );
     
     this.drillDownAdapter.addNavigationActions( manager );
