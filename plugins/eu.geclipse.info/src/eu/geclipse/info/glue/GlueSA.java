@@ -121,7 +121,8 @@ public class GlueSA extends AbstractGlueTable implements java.io.Serializable {
   /**
    * 
    */
-  public ArrayList<GlueSAAccessControlBaseRule> glueSAAccessControlBaseRuleList = new ArrayList<GlueSAAccessControlBaseRule>();
+  public ArrayList< GlueSAAccessControlBaseRule > glueSAAccessControlBaseRuleList = 
+    new ArrayList< GlueSAAccessControlBaseRule >();
 
   /**
    * 
@@ -156,20 +157,34 @@ public class GlueSA extends AbstractGlueTable implements java.io.Serializable {
     this.UniqueID = this.UniqueID.substring( this.UniqueID.indexOf( '=' ) + 1 );
     this.byRefOnly = false;
    
-    this.keyName = GlueUtility.getStringAttribute( "GlueChunkKey", attributes ); //$NON-NLS-1$
-    this.LocalID = GlueUtility.getStringAttribute( "GlueSALocalID", attributes ); //$NON-NLS-1$
-    this.Path = GlueUtility.getStringAttribute( "GlueSAPath", attributes ); //$NON-NLS-1$
-    this.PolicyFileLifeTime = GlueUtility.getStringAttribute( "GlueSAPolicyFileLifeTime", attributes ); //$NON-NLS-1$
-    this.PolicyMaxData = GlueUtility.getLongAttribute( "GlueSAPolicyMaxData", attributes ); //$NON-NLS-1$
-    this.PolicyMaxFileSize = GlueUtility.getLongAttribute( "GlueSAPolicyMaxFileSize", attributes ); //$NON-NLS-1$
-    this.PolicyMaxNumFiles = GlueUtility.getLongAttribute( "GlueSAPolicyMaxNumFiles", attributes ); //$NON-NLS-1$
-    this.PolicyMaxPinDuration = GlueUtility.getLongAttribute( "GlueSAPolicyMaxPinDuration", attributes );  //$NON-NLS-1$
-    this.PolicyMinFileSize = GlueUtility.getLongAttribute( "GlueSAPolicyMinFileSize", attributes ); //$NON-NLS-1$
-    this.PolicyQuota = GlueUtility.getLongAttribute( "GlueSAPolicyQuota", attributes ); //$NON-NLS-1$
-    this.Root = GlueUtility.getStringAttribute( "GlueSARoot", attributes ); //$NON-NLS-1$
-    this.StateAvailableSpace = GlueUtility.getLongAttribute( "GlueSAStateAvailableSpace", attributes ); //$NON-NLS-1$
-    this.StateUsedSpace = GlueUtility.getLongAttribute( "GlueSAStateUsedSpace", attributes ); //$NON-NLS-1$
-    this.Type = GlueUtility.getStringAttribute( "GlueSAType", attributes ); //$NON-NLS-1$
+    this.keyName = 
+      GlueUtility.getStringAttribute( "GlueChunkKey", attributes ); //$NON-NLS-1$
+    this.LocalID = 
+      GlueUtility.getStringAttribute( "GlueSALocalID", attributes ); //$NON-NLS-1$
+    this.Path = 
+      GlueUtility.getStringAttribute( "GlueSAPath", attributes ); //$NON-NLS-1$
+    this.PolicyFileLifeTime = 
+      GlueUtility.getStringAttribute( "GlueSAPolicyFileLifeTime", attributes ); //$NON-NLS-1$
+    this.PolicyMaxData = 
+      GlueUtility.getLongAttribute( "GlueSAPolicyMaxData", attributes ); //$NON-NLS-1$
+    this.PolicyMaxFileSize = 
+      GlueUtility.getLongAttribute( "GlueSAPolicyMaxFileSize", attributes ); //$NON-NLS-1$
+    this.PolicyMaxNumFiles = 
+      GlueUtility.getLongAttribute( "GlueSAPolicyMaxNumFiles", attributes ); //$NON-NLS-1$
+    this.PolicyMaxPinDuration = 
+      GlueUtility.getLongAttribute( "GlueSAPolicyMaxPinDuration", attributes );  //$NON-NLS-1$
+    this.PolicyMinFileSize = 
+      GlueUtility.getLongAttribute( "GlueSAPolicyMinFileSize", attributes ); //$NON-NLS-1$
+    this.PolicyQuota = 
+      GlueUtility.getLongAttribute( "GlueSAPolicyQuota", attributes ); //$NON-NLS-1$
+    this.Root = 
+      GlueUtility.getStringAttribute( "GlueSARoot", attributes ); //$NON-NLS-1$
+    this.StateAvailableSpace = 
+      GlueUtility.getLongAttribute( "GlueSAStateAvailableSpace", attributes ); //$NON-NLS-1$
+    this.StateUsedSpace = 
+      GlueUtility.getLongAttribute( "GlueSAStateUsedSpace", attributes ); //$NON-NLS-1$
+    this.Type = 
+      GlueUtility.getStringAttribute( "GlueSAType", attributes ); //$NON-NLS-1$
     
     try {
       Attribute attr=attributes.get( "GlueSAAccessControlBaseRule" ); //$NON-NLS-1$

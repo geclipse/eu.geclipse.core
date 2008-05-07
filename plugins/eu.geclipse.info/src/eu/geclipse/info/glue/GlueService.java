@@ -95,7 +95,8 @@ public class GlueService extends AbstractGlueTable
   /**
    * 
    */
-  public ArrayList< GlueServiceAssociation > glueServiceAssociationList = new ArrayList< GlueServiceAssociation >();
+  public ArrayList< GlueServiceAssociation > glueServiceAssociationList = 
+    new ArrayList< GlueServiceAssociation >();
 
   /**
    * 
