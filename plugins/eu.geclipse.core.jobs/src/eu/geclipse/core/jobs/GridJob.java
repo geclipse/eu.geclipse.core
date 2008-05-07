@@ -327,13 +327,18 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
               this.jobStatus = ( GridJobStatus )element.createExecutableExtension( "class" ); //$NON-NLS-1$
               this.jobStatus.setXMLNode( rootElement );
             } catch( CoreException e ) {
-              // TODO Auto-generated catch block
+              Activator.logException( e );
+              this.jobStatus = null;// instead not initialized middleware status, rather use GridJobStatus
             }
           }
         }
       }
       if( this.jobStatus == null )
-        this.jobStatus = new GridJobStatus( rootElement );
+        try {
+          this.jobStatus = new GridJobStatus( rootElement );
+        } catch( ProblemException exception ) {
+          // ignore errors
+        }
     }
   }
 

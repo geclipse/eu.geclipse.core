@@ -26,6 +26,7 @@ import org.w3c.dom.NodeList;
 
 import eu.geclipse.core.model.IGridJobID;
 import eu.geclipse.core.model.IGridJobStatus;
+import eu.geclipse.core.reporting.ProblemException;
 
 public class GridJobStatus implements IGridJobStatus {
 
@@ -70,12 +71,12 @@ public class GridJobStatus implements IGridJobStatus {
     // Empty implementation
   }
 
-  public GridJobStatus( final Node statusNode ) {
+  public GridJobStatus( final Node statusNode ) throws ProblemException {
     this();
     setXMLNode( statusNode );
   }
 
-  public void setXMLNode( final Node statusNode ) {
+  public void setXMLNode( final Node statusNode ) throws ProblemException {
     int i;
     Node node;
     NodeList childNodes = statusNode.getChildNodes();
@@ -220,8 +221,8 @@ public class GridJobStatus implements IGridJobStatus {
     return null;
   }
 
-  protected void setData( @SuppressWarnings("unused")
-  final String data )
+  @SuppressWarnings("unused")
+  protected void setData( final String data ) throws ProblemException
   {
     // Empty implementation
   }
