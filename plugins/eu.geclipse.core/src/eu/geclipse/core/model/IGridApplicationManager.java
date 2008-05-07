@@ -79,7 +79,7 @@ public interface IGridApplicationManager {
    * @throws ProblemException If an error occurs while uninstalling the
    * application.
    */
-  public void unistall( final IGridApplication application,
+  public void uninstall( final IGridApplication application,
                         final IProgressMonitor monitor )
       throws ProblemException;
   

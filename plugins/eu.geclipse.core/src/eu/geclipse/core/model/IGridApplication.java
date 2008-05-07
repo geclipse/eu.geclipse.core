@@ -15,6 +15,8 @@
 
 package eu.geclipse.core.model;
 
+import java.net.URI;
+
 /**
  * An <code>IGridApplication</code> represents VO- and Computing specific
  * applications that are accessible to the user.
@@ -29,5 +31,20 @@ public interface IGridApplication
    * @return String
    */
   public String getTag ();
+  
+  /** get the tag of the installed application
+   * must return a URI which represents the script
+   * this script is given by the user in the uninstall wizard
+   * on the info system
+   * @return URI
+   */
+  public URI getScript ();
+  
+  /**set the script to the deployed application
+   * this method is called by the uninstall wizard, so that the script can be 
+   * delivered to the uninstall method
+   * @param script
+   */
+  public void setScript (URI script);
 
 }
