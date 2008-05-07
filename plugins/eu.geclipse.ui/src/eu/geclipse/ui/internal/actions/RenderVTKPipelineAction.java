@@ -64,19 +64,19 @@ public class RenderVTKPipelineAction extends SelectionListenerAction {
       try {
         ( ( IGridVisualisation )element ).validate();
         IViewPart view = this.site.getPage().showView( "eu.geclipse.ui.views.visualisationview" ); //$NON-NLS-1$
-        view.setFocus();
         ( ( VisualisationView )view ).setPipeline( ( IGridVisualisation )element );
         ( ( VisualisationView )view ).render();
-      } catch( PartInitException e ) {
+        view.setFocus();
+      } catch( PartInitException pie ) {
         ProblemDialog.openProblem( null,
                                    Messages.getString( "RenderVTKPipelineAction.errorDialogTitle" ), //$NON-NLS-1$
                                    Messages.getString( "RenderVTKPipelineAction.errorOpeningView" ), //$NON-NLS-1$
-                                   e );
-      } catch( ProblemException pipelineExc ) {
+                                   pie );
+      } catch( ProblemException pe ) {
         ProblemDialog.openProblem( null,
                                    Messages.getString( "RenderVTKPipelineAction.errorDialogTitle" ), //$NON-NLS-1$
-                                   Messages.getString( "RenderVTKPipelineAction.errorInfo" ), //$NON-NLS-1$
-                                   pipelineExc );
+                                   Messages.getString( "RenderVTKPipelineAction.elementNotVisualizable" ), //$NON-NLS-1$
+                                   pe );
       }
     }
   }

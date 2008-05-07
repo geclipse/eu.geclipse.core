@@ -34,6 +34,7 @@ public class VisualisationView extends ViewPart {
 
   private CTabFolder cTabFolder;
   private IGridVisualisation vtkPipeline = null;
+//  private final VisViewDropDownAction fileDropDownAction = null;
 
   /* (non-Javadoc)
    * @see org.eclipse.ui.part.WorkbenchPart#createPartControl(org.eclipse.swt.widgets.Composite)
@@ -59,7 +60,44 @@ public class VisualisationView extends ViewPart {
         }
       }
     } );
+
+//    this.fileDropDownAction =
+//      new VisViewDropDownAction( getSite().getWorkbenchWindow() );
+//    hookContextMenu();
+//    contributeToActionBars();
   }
+
+//  @SuppressWarnings("unused")
+//  private void contributeToActionBars() {
+//    IActionBars bars = getViewSite().getActionBars();
+//    fillLocalToolBar( bars.getToolBarManager() );
+//  }
+//
+//  @SuppressWarnings("unused")
+//  private void fillLocalToolBar( final IToolBarManager manager ) {
+//    if( this.fileDropDownAction != null ) {
+//      manager.add( this.fileDropDownAction );
+//    }
+//  }
+//
+//  @SuppressWarnings("unused")
+//  private void hookContextMenu() {
+//    MenuManager menuMgr = new MenuManager( "#PopupMenu" ); //$NON-NLS-1$
+//    menuMgr.setRemoveAllWhenShown( true );
+//    menuMgr.addMenuListener( new IMenuListener() {
+//
+//      public void menuAboutToShow( final IMenuManager manager ) {
+//        VisualisationView.this.fillContextMenu( manager );
+//      }
+//    } );
+//  }
+//
+//  void fillContextMenu( final IMenuManager manager ) {
+//    if( this.fileDropDownAction != null ) {
+//      manager.add( this.fileDropDownAction );
+//    }
+//    manager.add( new Separator( IWorkbenchActionConstants.MB_ADDITIONS ) );
+//  }
 
   /**
    * Passing the focus request to the viewer's control.
