@@ -114,7 +114,8 @@ public class AddQueueWizardOptionalPage extends WizardPage {
     
     
     this.assignedResourcesLabel = new Label ( this.mainComp, SWT.NONE );
-    this.assignedResourcesLabel.setText( Messages.getString( "AddQueueOptionalPage.AssignedResources" ) ); //$NON-NLS-1$
+    this.assignedResourcesLabel.setText( 
+                                       Messages.getString( "AddQueueOptionalPage.AssignedResources" ) ); //$NON-NLS-1$
     
     this.assignedResourcesSpin = new Spinner( this.mainComp, SWT.NONE );
     this.assignedResourcesSpin.setValues( 2, 0, Integer.MAX_VALUE, 0, 1, 1 );

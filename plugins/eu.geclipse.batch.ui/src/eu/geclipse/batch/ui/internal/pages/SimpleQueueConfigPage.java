@@ -63,6 +63,8 @@ public class SimpleQueueConfigPage extends FormPage
 {
 
   protected static final String PAGE_ID = "SIMPLE_PAGE";  //$NON-NLS-1$
+  private static final int WIDGET_HEIGHT = 100;
+
   protected Composite composite = null;
   protected Composite body = null;  
   protected Label lblQueueName = null;
@@ -89,10 +91,9 @@ public class SimpleQueueConfigPage extends FormPage
   protected Button btnDel = null; 
   protected QueueAdapter queueAdapter = null;
   protected Object value = null;
-  
+
   private boolean contentRefreshed = false;
   private boolean dirtyFlag = false;
-  private static final int WIDGET_HEIGHT = 100;
    
   
   
@@ -282,8 +283,8 @@ public class SimpleQueueConfigPage extends FormPage
      gd = new GridData();
      gd.horizontalSpan = 1;
 
-     this.lblMaxCPUTime  = toolkit.createLabel( client,
-                                               Messages.getString( "SimpleQueueConfigPage_MaxCPUTime" ) ); //$NON-NLS-1$
+     this.lblMaxCPUTime = 
+       toolkit.createLabel( client, Messages.getString( "SimpleQueueConfigPage_MaxCPUTime" ) ); //$NON-NLS-1$
      
      timeComp = new Composite( client, SWT.NONE );
      timeComp.setLayout( new GridLayout( 3, false ) );
@@ -306,8 +307,8 @@ public class SimpleQueueConfigPage extends FormPage
      gd = new GridData();
      gd.horizontalSpan = 1;
 
-     this.lblMaxWallTime  = toolkit.createLabel( client,
-                                               Messages.getString( "SimpleQueueConfigPage_MaxWallTime" ) ); //$NON-NLS-1$
+     this.lblMaxWallTime = 
+       toolkit.createLabel( client, Messages.getString( "SimpleQueueConfigPage_MaxWallTime" ) ); //$NON-NLS-1$
      
      timeComp = new Composite( client, SWT.NONE );
      timeComp.setLayout( new GridLayout( 3, false ) );
@@ -329,8 +330,8 @@ public class SimpleQueueConfigPage extends FormPage
      gd.verticalSpan = 3;
      gd.horizontalSpan = 1;
      gd.verticalAlignment = GridData.BEGINNING;
-     this.lblVOS = toolkit.createLabel( client,
-                                                Messages.getString( "SimpleQueueConfigPage_AllowedVOs" ) ); //$NON-NLS-1$
+     this.lblVOS = 
+       toolkit.createLabel( client, Messages.getString( "SimpleQueueConfigPage_AllowedVOs" ) ); //$NON-NLS-1$
      this.lblVOS.setLayoutData( gd );
      gd = new GridData();
      gd.horizontalAlignment = GridData.FILL;

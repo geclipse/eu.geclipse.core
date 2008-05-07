@@ -48,7 +48,8 @@ public class BatchServiceTreeLabelProvider extends LabelProvider {
   }
     
     protected RuntimeException unknownElement(final Object element) {
-      return new RuntimeException("Unknown type of element in tree of type " + element.getClass().getName()); //$NON-NLS-1$
+      return new RuntimeException( "Unknown type of element in tree of type " +  //$NON-NLS-1$ 
+                                   element.getClass().getName());
   }
   
 }

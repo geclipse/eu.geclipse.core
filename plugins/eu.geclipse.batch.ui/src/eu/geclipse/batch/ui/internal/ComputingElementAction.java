@@ -34,7 +34,8 @@ public class ComputingElementAction extends SelectionAction {
   /**
    * The identifier for the action
    */
-  public static final String PROPERTY_COMPUTINGELEMENT_ACTION_NEWQUEUE = "ComputingElementAction.NewQueue"; //$NON-NLS-1$
+  public static final String PROPERTY_COMPUTINGELEMENT_ACTION_NEWQUEUE = 
+    "ComputingElementAction.NewQueue"; //$NON-NLS-1$
 
   private IBatchService batchWrapper;
 
@@ -65,7 +66,8 @@ public class ComputingElementAction extends SelectionAction {
 
     for ( @SuppressWarnings("unused") Object o : getSelectedObjects() ) {
       AddQueueWizard wizard = new AddQueueWizard( this.batchWrapper );
-      wizard.init( this.getWorkbenchPart().getSite().getWorkbenchWindow().getWorkbench(), ( IStructuredSelection )this.getSelection() );
+      wizard.init( this.getWorkbenchPart().getSite().getWorkbenchWindow().getWorkbench(), 
+                   ( IStructuredSelection )this.getSelection() );
      
       WizardDialog dialog = new WizardDialog ( this.getWorkbenchPart().getSite().getShell(), wizard );
       dialog.create();

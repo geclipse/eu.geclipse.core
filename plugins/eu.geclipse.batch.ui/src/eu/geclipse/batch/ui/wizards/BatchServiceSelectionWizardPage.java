@@ -199,15 +199,15 @@ public class BatchServiceSelectionWizardPage extends WizardPage {
                   try {
                     betterMonitor.setTaskName( 
                               String.format( 
-                                  Messages.getString( "BatchServiceSelectionDialog.task.Configuration" ), //$NON-NLS-1$ 
+                                Messages.getString( "BatchServiceSelectionDialog.task.Configuration" ), //$NON-NLS-1$ 
                               queueDescription.getResource().getName() ) ); 
                     batchWrapper.createQueue( batchQueue.getRoot() );
                     testCanceled( betterMonitor ); 
                   } catch( ProblemException e ) {
                     ProblemDialog.openProblem( getShell(),
-                                               Messages.getString( "AddQueueWizard.error_manipulate_title" ),  //$NON-NLS-1$
-                                               Messages.getString( "AddQueueWizard.error_manipulate_message" ), //$NON-NLS-1$
-                                               e );
+                                        Messages.getString( "AddQueueWizard.error_manipulate_title" ),  //$NON-NLS-1$
+                                        Messages.getString( "AddQueueWizard.error_manipulate_message" ), //$NON-NLS-1$
+                                        e );
                   } 
 //                } catch( GridModelException e ) {
 //                  Activator.logException( e );

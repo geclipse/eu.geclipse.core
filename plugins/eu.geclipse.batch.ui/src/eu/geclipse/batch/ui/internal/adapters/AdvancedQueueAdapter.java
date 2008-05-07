@@ -393,7 +393,8 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
                break;
                case QdlPackage.QUEUE_TYPE__ASSIGNED_RESOURCES: {
                  if (this.queue.getCPUTimeLimit() != null ){
-                   spinner = this.spinnerWidgetMap.get( Integer.valueOf(QdlPackage.QUEUE_TYPE__ASSIGNED_RESOURCES) );                      
+                   spinner = 
+                     this.spinnerWidgetMap.get( Integer.valueOf( QdlPackage.QUEUE_TYPE__ASSIGNED_RESOURCES ) );                      
                    integerRangeValueType = this.queue.getAssignedResources();                   
                    if ( integerRangeValueType.getUpperBoundedRange() != null ) {
                      integerBoundaryType = integerRangeValueType.getUpperBoundedRange();

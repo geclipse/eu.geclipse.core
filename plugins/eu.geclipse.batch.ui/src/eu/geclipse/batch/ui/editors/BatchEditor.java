@@ -169,7 +169,8 @@ public class BatchEditor extends GraphicalEditor {
 
       try {
         if ( this.batchWrapper.connectToServer( sshInfo ) ) {
-          this.updateJob = new BatchUpdate( getSite().getShell(), this.diagram, this.batchWrapper, this.batchInfo.getBatchName(), 
+          this.updateJob = new BatchUpdate( getSite().getShell(), this.diagram, 
+                                            this.batchWrapper, this.batchInfo.getBatchName(), 
                                             this.batchInfo.getBatchType(), this.batchInfo.getUpdateInterval() );
           this.updateJob.startUpdate();
         }
@@ -358,7 +359,8 @@ public class BatchEditor extends GraphicalEditor {
         getViewer().setEditDomain( getEditDomain() );
         getViewer().setEditPartFactory( new BatchTreeEditPartFactory() );
         // Configure & add context menu to viewer
-        BatchEditorContextMenuProvider cmProvider = new BatchEditorContextMenuProvider( getViewer(), getActionRegistry() );
+        BatchEditorContextMenuProvider cmProvider = 
+          new BatchEditorContextMenuProvider( getViewer(), getActionRegistry() );
         
         getViewer().setContextMenu( cmProvider );
         getSite().registerContextMenu( Activator.ID_BATCH_CONTEXT,

@@ -24,12 +24,6 @@ import org.eclipse.gef.ui.actions.ActionBarContributor;
 import org.eclipse.gef.ui.actions.RedoRetargetAction;
 import org.eclipse.gef.ui.actions.UndoRetargetAction;
 import org.eclipse.gef.ui.actions.ZoomComboContributionItem;
-//import org.eclipse.gef.ui.actions.ZoomInAction;
-//import eu.geclipse.batch.ui.internal.Messages;
-//import org.eclipse.gef.ui.actions.GEFActionConstants;
-//import org.eclipse.jface.action.IMenuManager;
-//import org.eclipse.jface.action.MenuManager;
-//import org.eclipse.ui.IWorkbenchActionConstants;
 
 /**
  * Contributes actions to a toolbar.
@@ -63,16 +57,6 @@ public class BatchEditorActionBarContributor extends ActionBarContributor {
     toolBarManager.add( new ZoomComboContributionItem( getPage(), zoomStrings ) );
   }
 
-//  @Override
-/*  public void contributeToMenu( final IMenuManager menubar ) {
-    super.contributeToMenu( menubar );
-
-    MenuManager viewMenu = new MenuManager( Messages.getString( "BatchEditorActionBarContributor.Zoom" ) );//$NON-NLS-1$
-    viewMenu.add( getAction( GEFActionConstants.ZOOM_IN ) );
-    viewMenu.add( getAction( GEFActionConstants.ZOOM_OUT ) );
-    menubar.insertAfter( IWorkbenchActionConstants.M_EDIT, viewMenu );  
-  }
-*/  
   /*
    * (non-Javadoc)
    * @see org.eclipse.gef.ui.actions.ActionBarContributor#declareGlobalActionKeys()

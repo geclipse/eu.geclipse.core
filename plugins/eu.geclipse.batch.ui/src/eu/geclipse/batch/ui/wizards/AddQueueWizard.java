@@ -98,8 +98,10 @@ public class AddQueueWizard extends Wizard implements INewWizard {
    */
   public void createQueue() {
     IQueueInfo.QueueType type;
+    String str;
     
-    if ( this.requiredPage.typeCombo.getText().equals( Messages.getString( "AddQueueRequiredPage.Type_Execution" ) ) ) //$NON-NLS-1$
+    str = this.requiredPage.typeCombo.getText(); 
+    if ( str.equals( Messages.getString( "AddQueueRequiredPage.Type_Execution" ) ) ) //$NON-NLS-1$
       type = IQueueInfo.QueueType.execution;
     else
       type = IQueueInfo.QueueType.route;
@@ -125,8 +127,10 @@ public class AddQueueWizard extends Wizard implements INewWizard {
    */
   public void createAdvQueue() {
     IQueueInfo.QueueType type;    
+    String str;
     
-    if ( this.requiredPage.typeCombo.getText().equals( Messages.getString( "AddQueueRequiredPage.Type_Execution" ) ) ) //$NON-NLS-1$
+    str = this.requiredPage.typeCombo.getText();
+    if ( str.equals( Messages.getString( "AddQueueRequiredPage.Type_Execution" ) ) ) //$NON-NLS-1$
       type = IQueueInfo.QueueType.execution;
     else
       type = IQueueInfo.QueueType.route;

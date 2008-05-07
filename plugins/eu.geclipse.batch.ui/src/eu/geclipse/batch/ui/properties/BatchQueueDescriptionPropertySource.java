@@ -65,7 +65,8 @@ public class BatchQueueDescriptionPropertySource extends AbstractPropertySource<
   
   static private List< IProperty< BatchQueueDescription > > createProperties() {
     
-    List< IProperty< BatchQueueDescription > > propertiesList = new ArrayList< IProperty< BatchQueueDescription > >( 1 );
+    List< IProperty< BatchQueueDescription > > propertiesList = 
+      new ArrayList< IProperty< BatchQueueDescription > >( 1 );
     
     propertiesList.add( createAllowedVOs() );
     propertiesList.add( createMaxWallTime() );

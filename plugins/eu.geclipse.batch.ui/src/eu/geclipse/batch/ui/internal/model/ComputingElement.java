@@ -62,7 +62,8 @@ public class ComputingElement extends BatchResource  {
   private static IPropertyDescriptor[] descriptors;
 
   /** A computer element shape. */
-  private final Image computingElementIcon = Activator.getDefault().getImageRegistry().get( Activator.IMG_COMPUTING_ELEMENT );
+  private final Image computingElementIcon = 
+    Activator.getDefault().getImageRegistry().get( Activator.IMG_COMPUTING_ELEMENT );
 
   private String fqdn;
   private String type;
@@ -293,12 +294,9 @@ public class ComputingElement extends BatchResource  {
     return Messages.getString( "ComputingElement.CE" ) + this.fqdn; //$NON-NLS-1$
   }
 
-  public int compareTo( Object o ) {
+  public int compareTo( final Object o ) {
     // TODO Auto-generated method stub
     return 0;
   }
-
- 
-
  
 }

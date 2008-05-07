@@ -227,10 +227,11 @@ public class AddQueueWizardRequiredPage extends WizardPage {
       @SuppressWarnings("unqualified-field-access")
       @Override
       public void widgetSelected (final SelectionEvent e ){
-        InputDialog voNameDialog = new InputDialog( getShell(),
-                                                    Messages.getString( "AddQueueRequiredPage.AddNewVOTitle" ) , //$NON-NLS-1$
-                                                    Messages.getString( "AddQueueRequiredPage.AddNewVOAddName" ),  //$NON-NLS-1$
-                                                    null, null );
+        InputDialog voNameDialog = 
+          new InputDialog( getShell(),
+                           Messages.getString( "AddQueueRequiredPage.AddNewVOTitle" ) , //$NON-NLS-1$
+                           Messages.getString( "AddQueueRequiredPage.AddNewVOAddName" ),  //$NON-NLS-1$
+                           null, null );
         if ( voNameDialog.open() == Window.OK && !voNameDialog.getValue().equals( "" ) ) //$NON-NLS-1$
           new TableItem( allowedVoTable, SWT.NONE ).setText( voNameDialog.getValue() );
       }
@@ -245,11 +246,12 @@ public class AddQueueWizardRequiredPage extends WizardPage {
       public void widgetSelected( final SelectionEvent e ){
         TableItem [] selectedItems = allowedVoTable.getSelection();
         if ( selectedItems.length == 1 ){
-          InputDialog voNameDialog = new InputDialog( getShell(),
-                                                      Messages.getString( "AddQueueRequiredPage.AddNewVOTitle" ) , //$NON-NLS-1$
-                                                      Messages.getString( "AddQueueRequiredPage.AddNewVOAddName" ),  //$NON-NLS-1$
-                                                      selectedItems[0].getText(),
-                                                      null );
+          InputDialog voNameDialog = 
+            new InputDialog( getShell(),
+                             Messages.getString( "AddQueueRequiredPage.AddNewVOTitle" ) , //$NON-NLS-1$
+                             Messages.getString( "AddQueueRequiredPage.AddNewVOAddName" ),  //$NON-NLS-1$
+                             selectedItems[0].getText(),
+                             null );
           if ( voNameDialog.open() == Window.OK )
             selectedItems[0].setText( voNameDialog.getValue() );
         }
@@ -346,54 +348,50 @@ public class AddQueueWizardRequiredPage extends WizardPage {
   protected boolean finish(final IFile qdlFile) {
 
     boolean ret = false;
-    
+    String str;
     BatchQueueDescription batchQueueDescription = new BatchQueueDescription(qdlFile);
     try {
-   
-          batchQueueDescription.setQueueName( this.nameText.getText().trim());
+      batchQueueDescription.setQueueName( this.nameText.getText().trim());
           
-       
-        if ( this.typeCombo.getText().equals( Messages.getString( "AddQueueRequiredPage.Type_Execution" ) ) ) //$NON-NLS-1$
+      str = this.typeCombo.getText(); 
+      if ( str.equals( Messages.getString( "AddQueueRequiredPage.Type_Execution" ) ) ) //$NON-NLS-1$
+        batchQueueDescription.queueType( QueueTypeEnumeration.EXECUTION );
+      else
+        batchQueueDescription.queueType( QueueTypeEnumeration.ROUTE );
 
-          batchQueueDescription.queueType( QueueTypeEnumeration.EXECUTION );
-        else
-          batchQueueDescription.queueType( QueueTypeEnumeration.ROUTE );
-
-        if ( this.enabledButton.getSelection() == true) {
-          batchQueueDescription.enableQueue( true );
-        }
-        else {
-          batchQueueDescription.enableQueue( false );
-        }
+      if ( this.enabledButton.getSelection() == true) {
+        batchQueueDescription.enableQueue( true );
+      }
+      else {
+        batchQueueDescription.enableQueue( false );
+      }
         
-        /* Set Max CPU Time Limit */
-        RangeValueType rangeValueType = QdlFactory.eINSTANCE.createRangeValueType();
-        BoundaryType boundaryType = QdlFactory.eINSTANCE.createBoundaryType();
-        boundaryType.setValue( getTimeCPU() );
-        rangeValueType.setUpperBoundedRange( boundaryType );        
+      /* Set Max CPU Time Limit */
+      RangeValueType rangeValueType = QdlFactory.eINSTANCE.createRangeValueType();
+      BoundaryType boundaryType = QdlFactory.eINSTANCE.createBoundaryType();
+      boundaryType.setValue( getTimeCPU() );
+      rangeValueType.setUpperBoundedRange( boundaryType );        
         
-        batchQueueDescription.getRoot().getQueue().setCPUTimeLimit( rangeValueType );
+      batchQueueDescription.getRoot().getQueue().setCPUTimeLimit( rangeValueType );
                 
-        /* Set Max Time Wall Limit */
-        rangeValueType = QdlFactory.eINSTANCE.createRangeValueType();
-        boundaryType = QdlFactory.eINSTANCE.createBoundaryType();
-        boundaryType.setValue( getTimeWall() );
+      /* Set Max Time Wall Limit */
+      rangeValueType = QdlFactory.eINSTANCE.createRangeValueType();
+      boundaryType = QdlFactory.eINSTANCE.createBoundaryType();
+      boundaryType.setValue( getTimeWall() );
         
-        rangeValueType.setUpperBoundedRange( boundaryType );              
-        batchQueueDescription.getRoot().getQueue().setWallTimeLimit( rangeValueType );
+      rangeValueType.setUpperBoundedRange( boundaryType );              
+      batchQueueDescription.getRoot().getQueue().setWallTimeLimit( rangeValueType );
         
-        if (this.allowedVoTable.getItemCount() > 0 ) {
-          Collection <String> allowedVoList = new ArrayList<String>();
-          for(int i=0; i < this.allowedVoTable.getItemCount(); i++) {
-            allowedVoList.add( this.allowedVoTable.getItem( i ).getText() );
-          }
-          batchQueueDescription.setAllowedVirtualOrganizations( allowedVoList );
-          
+      if (this.allowedVoTable.getItemCount() > 0 ) {
+        Collection <String> allowedVoList = new ArrayList<String>();
+        for(int i=0; i < this.allowedVoTable.getItemCount(); i++) {
+          allowedVoList.add( this.allowedVoTable.getItem( i ).getText() );
         }
-        batchQueueDescription.save(qdlFile);
-        ret = true;
-        
-       
+        batchQueueDescription.setAllowedVirtualOrganizations( allowedVoList );
+          
+      }
+      batchQueueDescription.save(qdlFile);
+      ret = true;
     } catch( Exception excp ) {
       // Display error dialog
       ProblemDialog.openProblem( this.getShell(),

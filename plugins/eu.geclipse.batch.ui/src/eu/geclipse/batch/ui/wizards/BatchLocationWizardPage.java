@@ -79,7 +79,8 @@ public class BatchLocationWizardPage extends WizardNewFileCreationPage {
     if ( null != getFileName() && getFileName().endsWith( DEFAULT_EXTENSION ) )
       ret = true;
     else
-      setErrorMessage( Messages.getString( "BatchLocationWizardPage.Error.FileName" ) + DEFAULT_EXTENSION ); //$NON-NLS-1$
+      setErrorMessage( Messages.getString( "BatchLocationWizardPage.Error.FileName" ) //$NON-NLS-1$ 
+                       + DEFAULT_EXTENSION ); 
     return ret;
   }
 

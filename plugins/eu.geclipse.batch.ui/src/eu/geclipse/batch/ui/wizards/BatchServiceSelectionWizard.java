@@ -54,7 +54,8 @@ public class BatchServiceSelectionWizard extends Wizard implements INewWizard {
   
   @Override
   public void addPages() {
-    this.wizardPage = new BatchServiceSelectionWizardPage(Messages.getString("BatchServiceSelectionDialog.page")); //$NON-NLS-1$
+    this.wizardPage = 
+      new BatchServiceSelectionWizardPage( Messages.getString( "BatchServiceSelectionDialog.page" ) ); //$NON-NLS-1$
     this.wizardPage.setInitialData( this.queueDescriptions );
     addPage( this.wizardPage );    
 
@@ -76,7 +77,8 @@ public class BatchServiceSelectionWizard extends Wizard implements INewWizard {
       }
     }
     else {      
-      this.wizardPage.setErrorMessage( Messages.getString( "BatchServiceSelectionDialog.NoRunningServices.Error") ); //$NON-NLS-1$
+      this.wizardPage.setErrorMessage( 
+                         Messages.getString( "BatchServiceSelectionDialog.NoRunningServices.Error" ) ); //$NON-NLS-1$
     }
     return result;
   }  

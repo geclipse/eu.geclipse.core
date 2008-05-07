@@ -107,8 +107,9 @@ public class BatchDefinitionWizardPage extends WizardPage {
     } );
     
     this.accountUserNameLabel = new Label( this.mainComp, SWT.NONE );
-    this.accountUserNameText = createEditorField( this.mainComp, this.accountUserNameLabel, 
-                                                  Messages.getString( "BatchDefinitionWizardPage.UserName" ) ); //$NON-NLS-1$
+    this.accountUserNameText = createEditorField( this.mainComp, 
+                                           this.accountUserNameLabel, 
+                                           Messages.getString( "BatchDefinitionWizardPage.UserName" ) ); //$NON-NLS-1$
     this.accountUserNameText.addModifyListener( new ModifyListener() {
       public void modifyText( final ModifyEvent e ) {
         updateUI();

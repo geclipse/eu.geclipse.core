@@ -212,8 +212,8 @@ public class AdvancedQueueConfigPage extends FormPage
     gd = new GridData();
     gd.horizontalSpan = 1;
 
-    this.lblMaxJobs = toolkit.createLabel( client,
-                                            Messages.getString( "AdvancedQueueConfigPage_MaxRunningJobs" ) ); //$NON-NLS-1$
+    this.lblMaxJobs = 
+      toolkit.createLabel( client, Messages.getString( "AdvancedQueueConfigPage_MaxRunningJobs" ) ); //$NON-NLS-1$
    
     runningJobsComp = new Composite( client, SWT.NONE );
     runningJobsComp.setLayout( new GridLayout( 1, false ) );
@@ -230,8 +230,8 @@ public class AdvancedQueueConfigPage extends FormPage
     this.btnUnlimitedRunningJobs.addSelectionListener( new SelectionAdapter(){      
       @Override
       public void widgetSelected( final SelectionEvent e ) {
-        AdvancedQueueConfigPage.this.maxJobsSpin
-                                    .setEnabled( !( AdvancedQueueConfigPage.this.btnUnlimitedRunningJobs.getSelection() ) );
+        AdvancedQueueConfigPage.this.maxJobsSpin.setEnabled( 
+                                          !( AdvancedQueueConfigPage.this.btnUnlimitedRunningJobs.getSelection() ) );
         AdvancedQueueConfigPage.this.advancedQueueAdapter.setUnlimitedRunningJobs();
       }     
     } );
@@ -248,8 +248,8 @@ public class AdvancedQueueConfigPage extends FormPage
     gd = new GridData();
     gd.horizontalSpan = 1;
 
-    this.lblJobsinQueue = toolkit.createLabel( client,
-                                            Messages.getString( "AdvancedQueueConfigPage_MaxJobsInQueue" ) ); //$NON-NLS-1$
+    this.lblJobsinQueue = 
+      toolkit.createLabel( client, Messages.getString( "AdvancedQueueConfigPage_MaxJobsInQueue" ) ); //$NON-NLS-1$
    
     maxJobsComp = new Composite( client, SWT.NONE );
     maxJobsComp.setLayout( new GridLayout( 3, false ) );
@@ -267,8 +267,8 @@ public class AdvancedQueueConfigPage extends FormPage
     this.btnUnlimitedJobsInQueue.addSelectionListener( new SelectionAdapter() {
       @Override
       public void widgetSelected( final SelectionEvent e ) {
-        AdvancedQueueConfigPage.this.jobsInQueueSpin
-                                    .setEnabled( !( AdvancedQueueConfigPage.this.btnUnlimitedJobsInQueue.getSelection() ) );
+        AdvancedQueueConfigPage.this.jobsInQueueSpin.setEnabled( 
+                                           !( AdvancedQueueConfigPage.this.btnUnlimitedJobsInQueue.getSelection() ) );
         AdvancedQueueConfigPage.this.advancedQueueAdapter.setUnlimitedJobsInQueue();        
       }     
     } );
@@ -285,8 +285,8 @@ public class AdvancedQueueConfigPage extends FormPage
     gd = new GridData();
     gd.horizontalSpan = 1;
 
-    this.lblAssignedResources = toolkit.createLabel( client,
-                                            Messages.getString( "AdvancedQueueConfigPage_AssignedResources" ) ); //$NON-NLS-1$
+    this.lblAssignedResources = 
+      toolkit.createLabel( client, Messages.getString( "AdvancedQueueConfigPage_AssignedResources" ) ); //$NON-NLS-1$
    
     resourcesComp = new Composite( client, SWT.NONE );
     resourcesComp.setLayout( new GridLayout( 3, false ) );

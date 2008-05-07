@@ -71,9 +71,10 @@ public class QueueDeleteAction extends SelectionAction {
     Queue q;
     
     // This is a none reversible action 
-    boolean confirm = !MessageDialog.openConfirm( this.getWorkbenchPart().getSite().getShell(),
-                                                  Messages.getString( "QueueDeleteAction.confirm_delete_title" ), //$NON-NLS-1$
-                                                  Messages.getString( "QueueDeleteAction.confirm_delete_message" ) );  //$NON-NLS-1$
+    boolean confirm = 
+      !MessageDialog.openConfirm( this.getWorkbenchPart().getSite().getShell(),
+                                  Messages.getString( "QueueDeleteAction.confirm_delete_title" ), //$NON-NLS-1$
+                                  Messages.getString( "QueueDeleteAction.confirm_delete_message" ) );  //$NON-NLS-1$
     if ( !confirm ) {
       for ( Object o : getSelectedObjects() ) {
         if ( o instanceof BatchTreeEditPart ) {

@@ -101,7 +101,8 @@ public class ProgressDialog extends Dialog {
         this.taskDescriptions[ i ] = Messages.getString( "ProgressDialog.WorkOnTask" ) + i; //$NON-NLS-1$ 
     } else {
       for ( int i = 0; i < this.majorTasks; ++i )
-        this.taskDescriptions[ i ] = Messages.getString( "ProgressDialog.WorkOnTask" ) + descriptions[ i ]; //$NON-NLS-1$ 
+        this.taskDescriptions[ i ] = 
+          Messages.getString( "ProgressDialog.WorkOnTask" ) + descriptions[ i ]; //$NON-NLS-1$ 
     }
   }
   

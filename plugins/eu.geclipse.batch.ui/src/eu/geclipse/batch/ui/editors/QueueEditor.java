@@ -125,8 +125,8 @@ public class QueueEditor extends FormEditor implements IEditingDomainProvider {
                     &&
                     deltaIn.getResource().getType() == IResource.FILE ) {
                   if ( ( deltaIn.getKind() & ( IResourceDelta.CHANGED | IResourceDelta.REMOVED ) ) != 0 ) {
-                    Resource resource = this.resourceSet.getResource( URI.createURI( deltaIn.getFullPath().toString() ), 
-                                                                      false );
+                    Resource resource = 
+                      this.resourceSet.getResource( URI.createURI( deltaIn.getFullPath().toString() ), false );
                     if ( resource != null ) {
                       if ( ( deltaIn.getKind() & IResourceDelta.REMOVED) != 0 ) {
                         this.removedRes.add( resource );
