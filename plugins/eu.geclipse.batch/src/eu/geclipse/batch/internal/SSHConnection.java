@@ -44,7 +44,7 @@ import eu.geclipse.batch.ISSHConnectionInfo;
  * Class used to establish an ssh connection to a remote server.
  */
 public class SSHConnection {
-  private Session session;
+  private Session session = null;
   private ISSHConnectionInfo userInfo;
 
   /**

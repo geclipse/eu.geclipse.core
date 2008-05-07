@@ -80,8 +80,6 @@ public interface IWorkerNodeInfo {
           str = Messages.getString( "IWorkerNodeInfo.WNStateBusy" ); //$NON-NLS-1$
           break;
         case unknown:
-          str = Messages.getString( "IWorkerNodeInfo.WNStateUnknown" ); //$NON-NLS-1$
-          break;
         default:
           str = Messages.getString( "IWorkerNodeInfo.WNStateUnknown" ); //$NON-NLS-1$
           break;

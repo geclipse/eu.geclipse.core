@@ -158,9 +158,10 @@ public class AllowedVOsDialog extends Dialog {
   
   
   protected void validateFields() {
-    if ( this.txtVOName.getText() != "" ) { //$NON-NLS-1$
+    if ( 0 < this.txtVOName.getText().length() )
       enableOKButton( true );
-    }
+    else
+      enableOKButton( false );
   }
   
   

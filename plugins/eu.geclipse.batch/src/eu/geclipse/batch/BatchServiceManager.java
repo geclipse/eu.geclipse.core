@@ -40,7 +40,7 @@ public class BatchServiceManager implements IContentChangeNotifier {
    * The singleton that holds the instance of this
    * <code>BatchServiceManager</code>.
    */
-  static private BatchServiceManager singleton = null;
+  static private volatile BatchServiceManager singleton = null;
   
   /**
    * The internal list of managed services.
