@@ -26,7 +26,8 @@ import eu.geclipse.core.reporting.ProblemException;
  * implementations should rather extend {@link AbstractApplicationManager}
  * than implementing this interface-
  */
-public interface IGridApplicationManager {
+public interface IGridApplicationManager
+    extends IGridElement {
 
   /**
    * Get all known applications for the specified {@link IGridComputing}.

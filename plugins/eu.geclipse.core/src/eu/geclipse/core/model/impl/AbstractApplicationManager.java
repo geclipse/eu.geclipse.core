@@ -15,11 +15,15 @@
 
 package eu.geclipse.core.model.impl;
 
+import org.eclipse.core.filesystem.IFileStore;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import eu.geclipse.core.model.IGridApplication;
 import eu.geclipse.core.model.IGridApplicationManager;
 import eu.geclipse.core.model.IGridComputing;
+import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridInfoService;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.reporting.ProblemException;
@@ -31,6 +35,7 @@ import eu.geclipse.core.reporting.ProblemException;
  * manager.
  */
 public abstract class AbstractApplicationManager
+    extends AbstractGridElement
     implements IGridApplicationManager {
   
   /**
@@ -60,12 +65,47 @@ public abstract class AbstractApplicationManager
     }
     return result;
   }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridElement#getFileStore()
+   */
+  public IFileStore getFileStore() {
+    return getParent().getFileStore().getChild( getName() );
+  }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridElement#getParent()
+   */
+  public IGridContainer getParent() {
+    return getVo();
+  }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridElement#getPath()
+   */
+  public IPath getPath() {
+    return getParent().getPath().append( getName() );
+  }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridElement#getResource()
+   */
+  public IResource getResource() {
+    return null;
+  }
 
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridApplicationManager#getVo()
    */
   public IVirtualOrganization getVo() {
     return this.vo;
+  }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridElement#isLocal()
+   */
+  public boolean isLocal() {
+    return true;
   }
   
 }
