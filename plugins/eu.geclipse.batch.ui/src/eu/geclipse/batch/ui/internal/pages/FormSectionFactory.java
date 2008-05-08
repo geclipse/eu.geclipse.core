@@ -40,32 +40,32 @@ public class FormSectionFactory {
    * @return Section with Composite
    */
   
-  public static Composite createStaticSection(final FormToolkit toolkit, 
-                                              final Composite parent, 
-                                              final String sectionTitle, 
-                                              final String sectionDescription, 
-                                              final int numOfColumns ) {
+  public static Composite createStaticSection( final FormToolkit toolkit, 
+                                               final Composite parent, 
+                                               final String sectionTitle, 
+                                               final String sectionDescription, 
+                                               final int numOfColumns ) {
     
     Section section;
     
       
-    section = toolkit.createSection(parent, ExpandableComposite.TITLE_BAR
-                                              |Section.DESCRIPTION                                              
-                                              | SWT.WRAP);
+    section = toolkit.createSection( parent, ExpandableComposite.TITLE_BAR
+                                              | Section.DESCRIPTION                                              
+                                              | SWT.WRAP );
     
     
-    section.setText(sectionTitle);    
+    section.setText( sectionTitle );    
     section.setDescription( sectionDescription );
-    toolkit.createCompositeSeparator(section);
-    section.setLayout(FormLayoutFactory.createClearTableWrapLayout(false, 1));
+    toolkit.createCompositeSeparator( section );
+    section.setLayout( FormLayoutFactory.createClearTableWrapLayout( false, 1 ) );
     
-    TableWrapData data = new TableWrapData(TableWrapData.FILL_GRAB);
-    section.setLayoutData(data);
+    TableWrapData data = new TableWrapData( TableWrapData.FILL_GRAB );
+    section.setLayoutData( data );
     
-    Composite client = toolkit.createComposite(section);
-    client.setLayout(FormLayoutFactory.createSectionClientTableWrapLayout(false,
-                                                                 numOfColumns));
-    section.setClient(client);
+    Composite client = toolkit.createComposite( section );
+    client.setLayout( FormLayoutFactory.createSectionClientTableWrapLayout( false,
+                                                                 numOfColumns ) );
+    section.setClient( client );
     return client;
     
   }
@@ -84,37 +84,37 @@ public class FormSectionFactory {
                                                    final Composite parent, 
                                                    final String sectionTitle, 
                                                    final String sectionDescription, 
-                                                   final int numOfColumns,                                             
+                                                   final int numOfColumns,
                                                    final boolean isInitialyExpanded ) {
     Section section;
          
     if ( isInitialyExpanded ) {
               
       section = toolkit.createSection( parent, ExpandableComposite.TITLE_BAR
-                                              |Section.DESCRIPTION
-                                              |ExpandableComposite.TWISTIE
+                                              | Section.DESCRIPTION
+                                              | ExpandableComposite.TWISTIE
                                               | SWT.WRAP );
     }
     else {
-      section = toolkit.createSection(parent, ExpandableComposite.TITLE_BAR
-                                              |Section.DESCRIPTION
-                                              |ExpandableComposite.TWISTIE );
+      section = toolkit.createSection( parent, ExpandableComposite.TITLE_BAR
+                                              | Section.DESCRIPTION
+                                              | ExpandableComposite.TWISTIE );
   
     }
             
           
-    section.setText(sectionTitle);    
+    section.setText( sectionTitle );    
     section.setDescription( sectionDescription );
-    toolkit.createCompositeSeparator(section);
-    section.setLayout(FormLayoutFactory.createClearTableWrapLayout(false, 1));
+    toolkit.createCompositeSeparator( section );
+    section.setLayout(FormLayoutFactory.createClearTableWrapLayout( false, 1 ) );
           
-    TableWrapData data = new TableWrapData(TableWrapData.FILL_GRAB);
-    section.setLayoutData(data);
+    TableWrapData data = new TableWrapData( TableWrapData.FILL_GRAB );
+    section.setLayoutData( data );
           
-    Composite client = toolkit.createComposite(section);
-    client.setLayout(FormLayoutFactory.createSectionClientTableWrapLayout(false,
-                                                                 numOfColumns));
-    section.setClient(client);
+    Composite client = toolkit.createComposite( section );
+    client.setLayout( FormLayoutFactory.createSectionClientTableWrapLayout( false,
+                                                                 numOfColumns ) );
+    section.setClient( client );
     return client;
           
  }
@@ -129,33 +129,33 @@ public class FormSectionFactory {
    * @param numOfColumns
    * @return Section with Composite
    */
-  public static Composite createGridStaticSection(final FormToolkit toolkit,
-                                                  final Composite parent,
-                                                  final String sectionTitle,
-                                                  final String sectionDescription,
-                                                  final int numOfColumns
+  public static Composite createGridStaticSection( final FormToolkit toolkit,
+                                                   final Composite parent,
+                                                   final String sectionTitle,
+                                                   final String sectionDescription,
+                                                   final int numOfColumns
                                                   ) {
     
    Section section;
     
     
      
-    section = toolkit.createSection(parent, ExpandableComposite.TITLE_BAR
-                                              |Section.DESCRIPTION                                              
-                                              | SWT.WRAP);
+    section = toolkit.createSection( parent, ExpandableComposite.TITLE_BAR
+                                              | Section.DESCRIPTION                                              
+                                              | SWT.WRAP );
            
-    section.setText(sectionTitle);
+    section.setText( sectionTitle );
     section.setDescription( sectionDescription );
-    toolkit.createCompositeSeparator(section);
-    section.setLayout(FormLayoutFactory.createClearTableWrapLayout(false, 1));
+    toolkit.createCompositeSeparator( section );
+    section.setLayout( FormLayoutFactory.createClearTableWrapLayout( false, 1 ) );
   
-    TableWrapData data = new TableWrapData(TableWrapData.FILL_GRAB);
-    section.setLayoutData(data);
+    TableWrapData data = new TableWrapData( TableWrapData.FILL_GRAB );
+    section.setLayoutData( data );
    
-    Composite client = toolkit.createComposite(section);
-    client.setLayout(FormLayoutFactory.createSectionClientGridLayout(false,
-                                                                 numOfColumns));
-    section.setClient(client);
+    Composite client = toolkit.createComposite( section );
+    client.setLayout( FormLayoutFactory.createSectionClientGridLayout( false,
+                                                                 numOfColumns ) );
+    section.setClient( client );
     return client;
   
   }
@@ -172,7 +172,7 @@ public class FormSectionFactory {
    * 
    * @return composite
    */
-  public static Composite createGridExpandableSection(final FormToolkit toolkit,
+  public static Composite createGridExpandableSection( final FormToolkit toolkit,
                                                   final Composite parent,
                                                   final String sectionTitle,
                                                   final String sectionDescription,
@@ -185,31 +185,31 @@ public class FormSectionFactory {
     
     if (isInitialyExpanded) {
      
-      section = toolkit.createSection(parent, ExpandableComposite.TITLE_BAR
-                                           |Section.DESCRIPTION
-                                           |ExpandableComposite.TWISTIE
+      section = toolkit.createSection( parent, ExpandableComposite.TITLE_BAR
+                                           | Section.DESCRIPTION
+                                           | ExpandableComposite.TWISTIE
                                            | SWT.WRAP);
     }
     else {
-      section = toolkit.createSection(parent, ExpandableComposite.TITLE_BAR
-                                     |Section.DESCRIPTION
-                                     |ExpandableComposite.TWISTIE
+      section = toolkit.createSection( parent, ExpandableComposite.TITLE_BAR
+                                     | Section.DESCRIPTION
+                                     | ExpandableComposite.TWISTIE
                                      );
  
     }
      
-    section.setText(sectionTitle);
+    section.setText( sectionTitle );
     section.setDescription( sectionDescription );
-    toolkit.createCompositeSeparator(section);
-    section.setLayout(FormLayoutFactory.createClearTableWrapLayout(false, 1));
+    toolkit.createCompositeSeparator( section );
+    section.setLayout( FormLayoutFactory.createClearTableWrapLayout( false, 1 ) );
   
-    TableWrapData data = new TableWrapData(TableWrapData.FILL_GRAB);
-    section.setLayoutData(data);
+    TableWrapData data = new TableWrapData( TableWrapData.FILL_GRAB );
+    section.setLayoutData( data );
    
-    Composite client = toolkit.createComposite(section);
-    client.setLayout(FormLayoutFactory.createSectionClientGridLayout(false,
-                                                                 numOfColumns));
-    section.setClient(client);
+    Composite client = toolkit.createComposite( section );
+    client.setLayout( FormLayoutFactory.createSectionClientGridLayout( false,
+                                                                 numOfColumns ) );
+    section.setClient( client );
     return client;
   
   }

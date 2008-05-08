@@ -111,7 +111,9 @@ public abstract class BatchEditPart extends AbstractGraphicalEditPart
         {this.anchor = new ChopboxAnchor( getFigure() );}
       else {
         // if BatchResource gets extended the conditions above must be updated
-        throw new IllegalArgumentException( Messages.getString( "BatchEditPart.Error.UnexpectedModel" ) ); }//$NON-NLS-1$
+        throw new IllegalArgumentException( 
+                                     Messages.getString( "BatchEditPart.Error.UnexpectedModel" ) ); //$NON-NLS-1$
+      }
     }
     return this.anchor;
   }

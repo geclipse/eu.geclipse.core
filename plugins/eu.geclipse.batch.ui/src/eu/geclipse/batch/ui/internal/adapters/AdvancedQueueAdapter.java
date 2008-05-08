@@ -81,7 +81,7 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
    * 
    * @param q
    */
-  public void setContent(final QueueType q){
+  public void setContent( final QueueType q ){
     
     getTypeForAdapter( q );
     
@@ -92,7 +92,7 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
   /*
    * Get the Queue Element from the QDL Element.
    */
-   private void  getTypeForAdapter(final QueueType q) {
+   private void  getTypeForAdapter( final QueueType q ) {
      
         this.queue = q;
         
@@ -100,7 +100,7 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
    
    
    
-   protected EObject checkProxy(final EObject refEObject) {
+   protected EObject checkProxy( final EObject refEObject ) {
      
      EObject eObject = refEObject;
      
@@ -124,7 +124,7 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
     */
    public void attachPrioritySpinner( final Spinner spinner ){
      
-     Integer featureID = Integer.valueOf (QdlPackage.QUEUE_TYPE__PRIORITY);
+     Integer featureID = Integer.valueOf ( QdlPackage.QUEUE_TYPE__PRIORITY );
      this.spinnerWidgetMap.put( featureID,spinner );
      
      spinner.addModifyListener( new ModifyListener(){
@@ -134,8 +134,8 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
       public void modifyText( final ModifyEvent e ) {
         
         this.integerBoundaryType.setValue( Integer.valueOf( spinner.getSelection() ) );
-        this.integerBoundaryType = (IntegerBoundaryType) checkProxy( this.integerBoundaryType );
-        this.integerRangeValueType = (IntegerRangeValueType) checkProxy( this.integerRangeValueType );
+        this.integerBoundaryType = ( IntegerBoundaryType ) checkProxy( this.integerBoundaryType );
+        this.integerRangeValueType = ( IntegerRangeValueType ) checkProxy( this.integerRangeValueType );
         this.integerRangeValueType.setUpperBoundedRange( this.integerBoundaryType );
         AdvancedQueueAdapter.this.queue.setPriority( this.integerRangeValueType );
         contentChanged();
@@ -171,8 +171,8 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
         
         
         this.integerBoundaryType.setValue( Integer.valueOf( spinner.getSelection() ) );
-        this.integerBoundaryType = (IntegerBoundaryType) checkProxy( this.integerBoundaryType );
-        this.integerRangeValueTupe = (IntegerRangeValueType) checkProxy( this.integerRangeValueTupe );
+        this.integerBoundaryType = ( IntegerBoundaryType ) checkProxy( this.integerBoundaryType );
+        this.integerRangeValueTupe = ( IntegerRangeValueType ) checkProxy( this.integerRangeValueTupe );
         this.integerRangeValueTupe.setUpperBoundedRange( this.integerBoundaryType );
         AdvancedQueueAdapter.this.queue.setRunningJobs( this.integerRangeValueTupe );
         contentChanged();
@@ -207,8 +207,8 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
       public void modifyText( final ModifyEvent e ) {
         
         this.boundaryType.setValue( Integer.valueOf( spinner.getSelection() ) );
-        this.boundaryType = (IntegerBoundaryType) checkProxy( this.boundaryType );
-        this.integerRangeValueTupe = (IntegerRangeValueType) checkProxy( this.integerRangeValueTupe );
+        this.boundaryType = ( IntegerBoundaryType ) checkProxy( this.boundaryType );
+        this.integerRangeValueTupe = ( IntegerRangeValueType ) checkProxy( this.integerRangeValueTupe );
         this.integerRangeValueTupe.setUpperBoundedRange( this.boundaryType );
         AdvancedQueueAdapter.this.queue.setJobsInQueue( this.integerRangeValueTupe );
         contentChanged();
@@ -239,8 +239,8 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
       public void modifyText( final ModifyEvent e ) {
         
         this.exactType.setValue( Integer.valueOf( spinner.getSelection() ) );
-        this.exactType = (IntegerExactType) checkProxy( this.exactType );
-        this.integerRangeValueTupe = (IntegerRangeValueType) checkProxy( this.integerRangeValueTupe );
+        this.exactType = ( IntegerExactType ) checkProxy( this.exactType );
+        this.integerRangeValueTupe = ( IntegerRangeValueType ) checkProxy( this.integerRangeValueTupe );
         this.integerRangeValueTupe.getExact().add( this.exactType );
         AdvancedQueueAdapter.this.queue.setAssignedResources( this.integerRangeValueTupe );
         contentChanged();
@@ -265,8 +265,8 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
      IntegerBoundaryType integerBoundaryType = QdlFactory.eINSTANCE.createIntegerBoundaryType();
      
      integerBoundaryType.setValue( Integer.valueOf( Integer.MAX_VALUE ) );
-     integerBoundaryType = (IntegerBoundaryType) checkProxy( integerBoundaryType );
-     integerRangeValueTupe = (IntegerRangeValueType) checkProxy( integerRangeValueTupe );
+     integerBoundaryType = ( IntegerBoundaryType ) checkProxy( integerBoundaryType );
+     integerRangeValueTupe = ( IntegerRangeValueType ) checkProxy( integerRangeValueTupe );
      integerRangeValueTupe.setUpperBoundedRange( integerBoundaryType );
      AdvancedQueueAdapter.this.queue.setRunningJobs( integerRangeValueTupe );
      contentChanged();
@@ -286,8 +286,8 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
      IntegerBoundaryType integerBoundaryType = QdlFactory.eINSTANCE.createIntegerBoundaryType();
      
      integerBoundaryType.setValue( Integer.valueOf( Integer.MAX_VALUE ) );
-     integerBoundaryType = (IntegerBoundaryType) checkProxy( integerBoundaryType );
-     integerRangeValueType = (IntegerRangeValueType) checkProxy( integerRangeValueType );
+     integerBoundaryType = ( IntegerBoundaryType ) checkProxy( integerBoundaryType );
+     integerRangeValueType = ( IntegerRangeValueType ) checkProxy( integerRangeValueType );
      integerRangeValueType.setUpperBoundedRange( integerBoundaryType );
      AdvancedQueueAdapter.this.queue.setJobsInQueue( integerRangeValueType );
      contentChanged();
@@ -323,12 +323,12 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
 
          if ( this.queue.eIsSet( eStructuralFeature ) ){
          
-           if (eStructuralFeature instanceof EReference) {
+           if ( eStructuralFeature instanceof EReference ) {
              
              switch( featureID ) {
                case QdlPackage.QUEUE_TYPE__PRIORITY: {
                  if (this.queue.getCPUTimeLimit() != null ){
-                   spinner = this.spinnerWidgetMap.get( Integer.valueOf(QdlPackage.QUEUE_TYPE__PRIORITY) );
+                   spinner = this.spinnerWidgetMap.get( Integer.valueOf( QdlPackage.QUEUE_TYPE__PRIORITY ) );
                    
                    integerRangeValueType = this.queue.getPriority();
                    if ( integerRangeValueType.getUpperBoundedRange() != null ) {
@@ -343,7 +343,7 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
                }                  
                break;
                case QdlPackage.QUEUE_TYPE__RUNNING_JOBS: {
-                 if (this.queue.getCPUTimeLimit() != null ){
+                 if ( this.queue.getCPUTimeLimit() != null ){
                    spinner = this.spinnerWidgetMap.get( Integer.valueOf(QdlPackage.QUEUE_TYPE__RUNNING_JOBS) );
                    button = this.buttonWidgetMap.get( Integer.valueOf(QdlPackage.QUEUE_TYPE__RUNNING_JOBS) );
                    
@@ -357,7 +357,7 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
                    int value = integerBoundaryType.getValue();
                    spinner.setSelection( value );
                    
-                   if ( value == Integer.MAX_VALUE) {
+                   if ( value == Integer.MAX_VALUE ) {
                      spinner.setEnabled( false );
                      button.setSelection( true );
                      
@@ -369,8 +369,8 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
                break;
                case QdlPackage.QUEUE_TYPE__JOBS_IN_QUEUE: {
                  if (this.queue.getCPUTimeLimit() != null ){
-                   spinner = this.spinnerWidgetMap.get( Integer.valueOf(QdlPackage.QUEUE_TYPE__JOBS_IN_QUEUE) );
-                   button = this.buttonWidgetMap.get( Integer.valueOf(QdlPackage.QUEUE_TYPE__JOBS_IN_QUEUE) );
+                   spinner = this.spinnerWidgetMap.get( Integer.valueOf( QdlPackage.QUEUE_TYPE__JOBS_IN_QUEUE ) );
+                   button = this.buttonWidgetMap.get( Integer.valueOf( QdlPackage.QUEUE_TYPE__JOBS_IN_QUEUE ) );
                    
                    integerRangeValueType = this.queue.getJobsInQueue();
                    if ( integerRangeValueType.getUpperBoundedRange() != null ) {
@@ -383,7 +383,7 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
                    int value = integerBoundaryType.getValue();
                    spinner.setSelection( value );
                    
-                   if ( value == Integer.MAX_VALUE) {
+                   if ( value == Integer.MAX_VALUE ) {
                      spinner.setEnabled( false );
                      button.setSelection( true );
                    }                     
@@ -392,10 +392,10 @@ public class AdvancedQueueAdapter extends QdlAdaptersFactory {
                }                  
                break;
                case QdlPackage.QUEUE_TYPE__ASSIGNED_RESOURCES: {
-                 if (this.queue.getCPUTimeLimit() != null ){
+                 if ( this.queue.getCPUTimeLimit() != null ){
                    spinner = 
-                     this.spinnerWidgetMap.get( Integer.valueOf( QdlPackage.QUEUE_TYPE__ASSIGNED_RESOURCES ) );                      
-                   integerRangeValueType = this.queue.getAssignedResources();                   
+                     this.spinnerWidgetMap.get( Integer.valueOf( QdlPackage.QUEUE_TYPE__ASSIGNED_RESOURCES ) );
+                   integerRangeValueType = this.queue.getAssignedResources();
                    if ( integerRangeValueType.getUpperBoundedRange() != null ) {
                      integerBoundaryType = integerRangeValueType.getUpperBoundedRange();
                      spinner.setSelection( integerBoundaryType.getValue() );
