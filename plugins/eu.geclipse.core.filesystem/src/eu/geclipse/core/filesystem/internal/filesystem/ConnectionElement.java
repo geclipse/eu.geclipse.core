@@ -16,6 +16,7 @@
 package eu.geclipse.core.filesystem.internal.filesystem;
 
 import java.net.URI;
+import java.util.List;
 
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileInfo;
@@ -25,12 +26,14 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
 
+import eu.geclipse.core.Extensions;
 import eu.geclipse.core.filesystem.GEclipseFileSystem;
 import eu.geclipse.core.filesystem.internal.Activator;
 import eu.geclipse.core.model.GridModel;
@@ -38,7 +41,7 @@ import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
-import eu.geclipse.core.model.IGridModelEvent;
+import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.core.model.impl.AbstractGridContainer;
 import eu.geclipse.core.model.impl.ContainerMarker;
 
@@ -77,6 +80,42 @@ public class ConnectionElement
   @Override
   public boolean canContain( final IGridElement element ) {
     return isFolder();// && ( element instanceof IGridConnectionElement );
+  }
+  
+  @SuppressWarnings({ "unchecked", "cast" })
+  @Override
+  public Object getAdapter( final Class adapter ) {
+    
+    Object result = null;
+    
+    if ( IGridElement.class.isAssignableFrom( adapter ) ) {
+      IResource source = getResource();
+      List< IConfigurationElement > elements
+        = Extensions.getRegisteredElementCreatorConfigurations( source.getClass(), ( Class< ? extends IGridElement > ) adapter );
+      if ( elements != null ) {
+        for ( IConfigurationElement element : elements ) {
+          try {
+            IGridElementCreator creator
+              = ( IGridElementCreator ) element.createExecutableExtension( Extensions.GRID_ELEMENT_CREATOR_EXECUTABLE );
+            if ( creator.canCreate( source ) ) {
+              result = creator.create( getParent() );
+              if ( result != null ) {
+                break;
+              }
+            }
+          } catch (CoreException e) {
+            // Do nothing, just catch and have another try
+          }
+        }
+      }
+    }
+    
+    if ( result == null ) {
+      result = super.getAdapter( adapter );
+    }
+    
+    return result;
+    
   }
 
   /* (non-Javadoc)
