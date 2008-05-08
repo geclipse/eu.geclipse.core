@@ -55,73 +55,84 @@ project number: FP5-IST-034327  http://www.geclipse.eu/
          download-size="0"
          install-size="0"
          version="0.0.0"
-         fragment="true"/>
+         fragment="true"
+         unpack="false"/>
 
    <plugin
          id="eu.geclipse.core.reporting.test"
          download-size="0"
          install-size="0"
          version="0.0.0"
-         fragment="true"/>
+         fragment="true"
+         unpack="false"/>
 
    <plugin
          id="eu.geclipse.core.test"
          download-size="0"
          install-size="0"
          version="0.0.0"
-         fragment="true"/>
+         fragment="true"
+         unpack="false"/>
 
    <plugin
          id="eu.geclipse.glite.editor.test"
          download-size="0"
          install-size="0"
          version="0.0.0"
-         fragment="true"/>
+         fragment="true"
+         unpack="false"/>
 
    <plugin
          id="eu.geclipse.gvid.test"
          download-size="0"
          install-size="0"
          version="0.0.0"
-         fragment="true"/>
+         fragment="true"
+         unpack="false"/>
 
    <plugin
          id="eu.geclipse.gvid.uncompressed.test"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
+         version="0.0.0"
+         unpack="false"/>
 
    <plugin
          id="eu.geclipse.info.test"
          download-size="0"
          install-size="0"
          version="0.0.0"
-         fragment="true"/>
+         fragment="true"
+         unpack="false"/>
 
    <plugin
          id="eu.geclipse.jsdl.model.test"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
+         version="0.0.0"
+         unpack="false"/>
 
    <plugin
          id="eu.geclipse.jsdl.ui.test"
          download-size="0"
          install-size="0"
          version="0.0.0"
-         fragment="true"/>
+         fragment="true"
+         unpack="false"/>
 
    <plugin
          id="eu.geclipse.ui.test"
          download-size="0"
          install-size="0"
          version="0.0.0"
-         fragment="true"/>
+         fragment="true"
+         unpack="false"/>
 
    <plugin
          id="eu.geclipse.workflow.model.test"
          download-size="0"
          install-size="0"
-         version="0.0.0"/>
+         version="0.0.0"
+         unpack="false"/>
 
 </feature>
