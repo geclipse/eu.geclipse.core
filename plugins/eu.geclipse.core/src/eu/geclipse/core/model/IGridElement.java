@@ -71,7 +71,7 @@ public interface IGridElement
   /**
    * Get the path of this element relative to the grid root element.
    * If this element is not virtual this has to be the path of
-   * the coresponding <code>@IResource</code>.
+   * the corresponding <code>@IResource</code>.
    * 
    * @return The path of this element relative to the grid root.
    */
