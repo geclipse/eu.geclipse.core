@@ -19,7 +19,6 @@ package eu.geclipse.ui.simpleTest;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
 
 import org.eclipse.swt.widgets.Shell;
@@ -27,7 +26,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
@@ -44,12 +42,10 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Button;
 
-import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridResource;
 import eu.geclipse.core.simpleTest.ISimpleTest;
 import eu.geclipse.core.simpleTest.PingTest;
 import eu.geclipse.ui.dialogs.AbstractSimpleTestDialog;
-import eu.geclipse.ui.providers.NewProgressTreeNode;
 
 
 /**
@@ -68,8 +64,8 @@ public class PingTestDialog extends AbstractSimpleTestDialog  {
   private ArrayList< InetAddress > hostAdrs = new ArrayList< InetAddress >();  
   private ArrayList< String > hostNames = new ArrayList< String >();
   
-  private Hashtable< PingHostJob, NewProgressTreeNode > progressNodes
-  = new Hashtable< PingHostJob, NewProgressTreeNode >();
+//  private Hashtable< PingHostJob, NewProgressTreeNode > progressNodes
+//  = new Hashtable< PingHostJob, NewProgressTreeNode >();
   
   /**
    * Construct a new dialog from the specified test.

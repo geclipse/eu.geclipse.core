@@ -332,4 +332,12 @@
             name="Ping Test UI Factory">
       </factory>
    </extension>
+   <extension
+         point="eu.geclipse.ui.simpleTestUI">
+      <factory
+            class="eu.geclipse.ui.simpleTest.DNSLookUpUIFactory"
+            id="eu.geclipse.ui.simpleTest.dnsLookUpUIFactory"
+            name="DNS LookUp UI Factory">
+      </factory>
+   </extension>
 </plugin>
