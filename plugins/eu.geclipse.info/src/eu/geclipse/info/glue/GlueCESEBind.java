@@ -17,6 +17,9 @@
 
 package eu.geclipse.info.glue;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import javax.naming.directory.Attributes;
 
 /**
@@ -84,6 +87,10 @@ public class GlueCESEBind extends AbstractGlueTable
    */
   public void processGlueRecord(final Attributes attributes)
   {
+    final String DATE_FORMAT_NOW = "yyyy-MM-dd HH:mm:ss"; //$NON-NLS-1$
+    Calendar cal = Calendar.getInstance();
+    SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);
+    
     this.byRefOnly = false;
     this.Accesspoint = GlueUtility.getStringAttribute( "GlueCESEBindCEAccesspoint", attributes ); //$NON-NLS-1$
     this.setKey( GlueUtility.getStringAttribute( "GlueCESEBindSEUniqueID", attributes ) ); //$NON-NLS-1$
@@ -92,5 +99,6 @@ public class GlueCESEBind extends AbstractGlueTable
     this.tableName = "GlueCESEBind"; //$NON-NLS-1$
     this.Weight = GlueUtility.getLongAttribute( "GlueCESEBindWeight", attributes );//$NON-NLS-1$
     this.setVoType( "glite" ); //$NON-NLS-1$
+    this.setRetrievalTime( sdf.format(cal.getTime()) );
   }
 }

@@ -17,6 +17,9 @@
 
 package eu.geclipse.info.glue;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 import javax.naming.directory.Attributes;
 
 /**
@@ -147,6 +150,10 @@ public class GlueCEVOView extends AbstractGlueTable
    */
   public void processGlueRecord(final Attributes attributes)
   {
+    final String DATE_FORMAT_NOW = "yyyy-MM-dd HH:mm:ss"; //$NON-NLS-1$
+    Calendar cal = Calendar.getInstance();
+    SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);
+    
     this.byRefOnly = false;
     this.ApplicationDir = 
       GlueUtility.getStringAttribute( "GlueCEInfoApplicationDir", attributes ); //$NON-NLS-1$
@@ -176,5 +183,6 @@ public class GlueCEVOView extends AbstractGlueTable
     this.WorstResponseTime = 
       GlueUtility.getLongAttribute( "GlueCEStateWorstResponseTime", attributes ); //$NON-NLS-1$
     this.setVoType( "glite" ); //$NON-NLS-1$
+    this.setRetrievalTime( sdf.format(cal.getTime()) );
   }
 }

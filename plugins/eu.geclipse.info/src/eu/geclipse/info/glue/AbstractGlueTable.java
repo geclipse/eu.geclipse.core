@@ -40,9 +40,14 @@ public abstract class AbstractGlueTable implements Serializable{
    * 
    */
   public boolean byRefOnly = true;
+  /**
+   * The date and time that this object was retrieved and stored
+   */
+  public String retrievalTime = ""; //$NON-NLS-1$
   protected String keyName;
   private String key;
   private String voType = ""; //$NON-NLS-1$
+  
   
   
   /**
@@ -170,6 +175,16 @@ public abstract class AbstractGlueTable implements Serializable{
    */
   public String getKey() {
     return this.key;
+  }
+
+  // Get the date time that this object was retrieved and stored
+  public String getRetrievalTime() {
+    return this.retrievalTime;
+  }
+
+  // Set the date time that this object was retrieved and stored
+  public void setRetrievalTime( final String retrievalTime ) {
+    this.retrievalTime = retrievalTime;
   }
   
 }

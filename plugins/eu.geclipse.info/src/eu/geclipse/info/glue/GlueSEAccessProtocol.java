@@ -17,7 +17,9 @@
 
 package eu.geclipse.info.glue;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 import javax.naming.directory.Attributes;
 
@@ -127,14 +129,18 @@ public class GlueSEAccessProtocol extends AbstractGlueTable
    */
   public void processGlueRecord( final Attributes attributes )
   {
+    final String DATE_FORMAT_NOW = "yyyy-MM-dd HH:mm:ss"; //$NON-NLS-1$
+    Calendar cal = Calendar.getInstance();
+    SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT_NOW);
+    
     this.UniqueID = GlueUtility.getStringAttribute( "GlueChunkKey", attributes ); //$NON-NLS-1$
     this.UniqueID = this.UniqueID.substring( this.UniqueID.indexOf( '=' ) + 1 );
     
-    //this.AccessTime
     this.Endpoint = GlueUtility.getStringAttribute( "GlueSEAccessProtocolEndpoint", attributes ); //$NON-NLS-1$
     this.Port = GlueUtility.getLongAttribute( "GlueSEAccessProtocolPort", attributes ); //$NON-NLS-1$
     this.Type = GlueUtility.getStringAttribute( "GlueSEAccessProtocolType", attributes ); //$NON-NLS-1$
     this.Version = GlueUtility.getStringAttribute( "GlueSEAccessProtocolVersion", attributes ); //$NON-NLS-1$
+    this.setRetrievalTime( sdf.format(cal.getTime()) );
   }
   
   /**
