@@ -38,7 +38,7 @@
 			  value="${basedir}/../eu.geclipse.releng/lib/eu.geclipse.releng.tools.jar"
 	/>
 	<available file="${cp.plugin}" property="cp" value="${cp.plugin}" />
-	<property name="cp" value="${cp.builder}"/>
+	<property name="cp" value="${cp.builder}" />
 	
 	<!-- A simplified version of the ant-contrib 'foreach' task  -->
 	<taskdef name="foreach"
@@ -48,7 +48,7 @@
 	
 	
 	<!-- Find all the test classes -->
-	<fileset dir="."
+	<fileset dir="src"
 			id="allTestClassFiles">
 		<include name="**/*_Test.java" />
 		<include name="**/*_PDETest.java" />
@@ -59,7 +59,10 @@
 		<rcmp:name />
 	</sort>
 	<pathconvert pathsep="," property="sortedTestClasses" refid="sortedTestClassFiles">
-		<mapper type="regexp" from="^(.*)/([^/]*).java$$" to="\2"/>
+		<chainedmapper>
+			<mapper type="regexp" from="^${basedir}/src/(.*)" to="\1" />
+			<mapper type="package" from="*.java" to="*" />
+		</chainedmapper>
 	</pathconvert>
 
 
@@ -114,7 +117,7 @@
 	<!-- ===================================================================== -->
 	<target name="post.@dot" depends="pre.clean">
 		<property name="tests.file" value="${jar.Location}/tests.xml" />
-		<antcall target="createTestFile"/>
+		<antcall target="createTestFile" />
 	</target>
 	
 	<target name="pre.gather.bin.parts" />
