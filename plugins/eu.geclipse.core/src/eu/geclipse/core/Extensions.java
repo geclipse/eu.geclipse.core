@@ -459,14 +459,22 @@ public class Extensions {
     for ( IConfigurationElement element : elements ) {
       
       if ( source != null ) {
-        String srcname = source.getName();
         IConfigurationElement[] sources = element.getChildren( GRID_ELEMENT_CREATOR_SOURCE_ELEMENT );
         boolean srcfound = false;
         for ( IConfigurationElement src : sources ) {
-          String srccls = src.getAttribute( GRID_ELEMENT_CREATOR_SOURCE_CLASS_ATTRIBUTE );
-          if ( srcname.equals( srccls ) ) {
-            srcfound = true;
-            break;
+          String srcclsatt = src.getAttribute( GRID_ELEMENT_CREATOR_SOURCE_CLASS_ATTRIBUTE );
+          String srccntr = src.getContributor().getName();
+          Bundle bundle = Platform.getBundle( srccntr );
+          if ( bundle != null ) {
+            try {
+              Class< ? > srccls = bundle.loadClass( srcclsatt );
+              if ( srccls.isAssignableFrom( source ) ) {
+                srcfound = true;
+                break;
+              }
+            } catch ( ClassNotFoundException cnfExc ) {
+              Activator.logException( cnfExc );
+            }
           }
         }
         if ( ! srcfound ) {
