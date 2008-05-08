@@ -242,17 +242,18 @@ public class JSDLJobDescription extends ResourceGridContainer
    * 
    * @return The content of the file as a String.
    * @throws IOException If an error occurs when loading the content.
+   * @throws CoreException in case content of resource associated with JSDL is
+   *             not accessible
    */
-  public String getJSDLString() throws IOException {
+  public String getJSDLString() throws IOException, CoreException {
     String jsdl = null;
-    File jsdlFile = this.getPath().toFile();
-    FileInputStream jsdlStream = null;
-    jsdlStream = new FileInputStream( jsdlFile );
+    InputStream jsdlStream = null;
+    jsdlStream = ( ( IFile )getResource() ).getContents();
     Reader reader = new InputStreamReader( jsdlStream );
     BufferedReader jsdlReader = new BufferedReader( reader );
     String line;
     while( null != ( line = jsdlReader.readLine() ) ) {
-      jsdl += line;
+      jsdl += "\n" + line; //$NON-NLS-1$
     }
     return jsdl;
   }
@@ -1215,9 +1216,9 @@ public class JSDLJobDescription extends ResourceGridContainer
       if( stagingsMap != null ) {
         String currentFilename = filename;
         // if current uri is local, then check again if it's staged-out
-        for( String currentUriString = stagingsMap.get( currentFilename ); 
-             uri == null && currentUriString != null; 
-             currentUriString = stagingsMap.get( currentFilename ) ) {
+        for( String currentUriString = stagingsMap.get( currentFilename ); uri == null
+                                                                           && currentUriString != null; currentUriString = stagingsMap.get( currentFilename ) )
+        {
           java.net.URI currentUri = new java.net.URI( currentUriString );
           String pathString = currentUri.getPath();
           if( pathString != null ) {
@@ -1232,8 +1233,8 @@ public class JSDLJobDescription extends ResourceGridContainer
       }
     } catch( URISyntaxException exception ) {
       throw new ProblemException( "eu.geclipse.core.problem.net.malformedURL", //$NON-NLS-1$
-                               exception,
-                               String.format( Messages.getString( "errWrongUri" ), filename ) ); //$NON-NLS-1$
+                                  exception,
+                                  String.format( Messages.getString( "errWrongUri" ), filename ) ); //$NON-NLS-1$
     }
     return uri;
   }
@@ -1308,7 +1309,7 @@ public class JSDLJobDescription extends ResourceGridContainer
       }
     }
   }
-  
+
   public void removeAllTargetElements() {
     DocumentRoot dRoot = getDocumentRoot();
     if( getJobDescription( dRoot ) != null ) {
@@ -1322,14 +1323,14 @@ public class JSDLJobDescription extends ResourceGridContainer
       }
     }
   }
-  
+
   public Document getXml() {
     Document doc = null;
-
     try {
       DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
       factory.setNamespaceAware( true );
-      doc = factory.newDocumentBuilder().parse( ( ( IFile )getResource() ).getContents() );
+      doc = factory.newDocumentBuilder()
+        .parse( ( ( IFile )getResource() ).getContents() );
     } catch( SAXException exception ) {
       Activator.logException( exception );
     } catch( IOException exception ) {
@@ -1339,7 +1340,6 @@ public class JSDLJobDescription extends ResourceGridContainer
     } catch( CoreException exception ) {
       Activator.logException( exception );
     }
-
     return doc;
   }
 }
