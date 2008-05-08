@@ -18,55 +18,30 @@ package eu.geclipse.ui.wizards.deployment;
 
 import java.net.URI;
 import java.net.URL;
-import java.security.acl.LastOwnerException;
 import java.util.ArrayList;
 import java.util.List;
 
-
-import org.eclipse.core.filesystem.IFileStore;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
-import org.eclipse.jface.wizard.WizardPage;
-import org.eclipse.ui.internal.ide.IDEWorkbenchPlugin;
 
-import eu.geclipse.core.IApplicationDeployment;
 import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.IGridConnection;
+import eu.geclipse.core.model.IGridComputing;
 import eu.geclipse.core.model.IGridElement;
-import eu.geclipse.core.model.IGridElementCreator;
-import eu.geclipse.core.model.IGridJobCreator;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.ui.internal.Activator;
-import eu.geclipse.ui.wizards.wizardselection.IInitalizableWizard;
+
 
 /**
  * @author Yifan Zhou
  */
 public class DeploymentWizard extends Wizard {
   
- 
-  public static final String EXT_CLASS = "class"; //$NON-NLS-1$
-  
-  public static final String EXT_NAME = "name"; //$NON-NLS-1$
-  
-  public static final String EXT_ID = "id"; //$NON-NLS-1$
-  
-  public static final String EXT_CATEGORY = "category"; //$NON-NLS-1$
-
-  /**
-   * The chooser page ( first page ) in deployment wizard.
-   */
-  public DeploymentChooser chooserPage;
   /**
    * The source page ( two page ) in deployment wizard.
    */
@@ -108,8 +83,8 @@ public class DeploymentWizard extends Wizard {
 
   @Override
   public void addPages() {
-    this.chooserPage = new DeploymentChooser( Messages.getString( "Deployment.deployment_wizard_chooser" ) ); //$NON-NLS-1$
-    this.addPage( this.chooserPage );
+    //this.chooserPage = new DeploymentChooser( Messages.getString( "Deployment.deployment_wizard_chooser" ) ); //$NON-NLS-1$
+    //this.addPage( this.chooserPage );
     this.targetPage = new DeploymentTarget( Messages.getString( "Deployment.deployment_wizard_target" ) ); //$NON-NLS-1$
     this.addPage( this.targetPage );
     this.sourcePage = new DeploymentSource( Messages.getString( "Deployment.deployment_wizard_source" ) ); //$NON-NLS-1$
@@ -120,36 +95,21 @@ public class DeploymentWizard extends Wizard {
 
   @Override
   public boolean performFinish() {
-    /* Object[] sourceObjects = this.sourcePage.getSourceTree().getCheckedElements();
-    List< IGridElement > sourceList = new ArrayList< IGridElement >();
-    for ( Object  object : sourceObjects ) {
-      IGridElement element = ( IGridElement ) object;
-      if ( !this.sourcePage.getSourceTree().getChecked( element.getParent() ) ) {
-        sourceList.add( element );
-      }
-    }*/
-    
-    // IGridElement[] source = sourceList.toArray( new IGridElement[ sourceList.size() ] );
-    /*String refid = this.chooserPage.getExecuteExt().getClass().getName();
-    IInitalizableWizard extrapage = Extensions.getWizardExtension( refid );
-    if (extrapage != null) this.addPage( extrapage );*/
+   
     URI [] source = this.sourcePage.getSourceURIs();
     List< Object > targetList = new ArrayList< Object >();
     Object[] ceObjects = this.targetPage.getCETree().getCheckedElements();
-    //Object[] seObjects = this.targetPage.getSETree().getCheckedElements();
+    IVirtualOrganization vo = this.gridproject.getVO();
+    
     for ( Object ceObject : ceObjects ) {
       targetList.add( ceObject );
     }
-   // for ( Object seObject : seObjects ) {
-    //  targetList.add( seObject );
-   // }
-   IGridElement[] target = targetList.toArray( new IGridElement[ targetList.size() ] );
+ 
+   IGridComputing[] target = targetList.toArray( new IGridComputing[ targetList.size() ] );
     String tag = this.descriptionPage.getTag();
-    IApplicationDeployment appDeployment = this.chooserPage.getExecuteExt();
-    IVirtualOrganization vo = this.targetPage.getDeployVO();
     DeploymentJob job 
       = new DeploymentJob( Messages.getString( "Deployment.deployment_wizard_job" ),  //$NON-NLS-1$
-                           appDeployment,
+                           vo,
                            source, 
                            target,
                            tag );
@@ -200,27 +160,6 @@ public class DeploymentWizard extends Wizard {
       this.referencedProjects = new IGridElement[ 0 ];
     }
   }
-  
-//  private IFileStore createFileStoreByTag( final IGridElement element,
-//                                           final String tag )
-//    throws CoreException
-//  {
-//    IFileStore fileStore;
-//    if ( element instanceof IGridConnectionElement ) {
-//      fileStore = ( ( IGridConnectionElement )element ).getConnectionFileStore();
-//    } else {
-//      fileStore = element.getFileStore();
-//    }
-//    IFileStore newFolder = fileStore.getChild( tag );
-//    IFileInfo newFolderInfo = newFolder.fetchInfo();
-//    boolean isExist = newFolderInfo.exists();
-//    NullProgressMonitor monitor = new NullProgressMonitor();
-//    SubProgressMonitor subMonitor = new SubProgressMonitor( monitor, 9 );
-//    if ( !isExist ) {
-//      newFolder.mkdir( EFS.NONE, new SubProgressMonitor( subMonitor, 1 ) );
-//    }
-//    return newFolder;
-//  }
 
   /**get the referenced project. A project to be deployed 
    * must be combined with a grid project
@@ -237,12 +176,6 @@ public class DeploymentWizard extends Wizard {
     return this.gridproject;
   }
   
-  /**
-   * @return IApplicationDeployment
-   */
-  public IApplicationDeployment getexecuteExt() {
-    return this.chooserPage.getExecuteExt();
-  }
   /**get the user selection of PEs or vo
    * @return IStructuredSelection
    */

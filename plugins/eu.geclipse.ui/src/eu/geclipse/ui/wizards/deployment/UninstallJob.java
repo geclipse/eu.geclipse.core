@@ -66,7 +66,7 @@ public class UninstallJob  extends Job {
                                    .getActiveWorkbenchWindow()
                                    .getShell(),
                                    "Application uninstall error", //$NON-NLS-1$
-                                   "Error when installing the software", //$NON-NLS-1$
+                                   "Error when removing the software", //$NON-NLS-1$
                                    e);
       }
     testCancelled( betterMonitor );
