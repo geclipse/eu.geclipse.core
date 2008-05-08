@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IWorkbenchSite;
@@ -144,6 +145,8 @@ public class SubmitJobAction extends SelectionListenerAction {
     } else if( element instanceof IGridJob ) {
       IGridJob job = ( IGridJob )element;
       description = job.getJobDescription();
+    } else if ( element instanceof IAdaptable ) {
+      description = ( IGridJobDescription ) ( ( IAdaptable ) element ).getAdapter( IGridJobDescription.class );
     }
     return description;
   }
