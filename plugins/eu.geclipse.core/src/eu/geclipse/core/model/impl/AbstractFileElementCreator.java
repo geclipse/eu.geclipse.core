@@ -37,7 +37,7 @@ public abstract class AbstractFileElementCreator
   protected boolean internalCanCreate( final Object fromObject ) {
     boolean result = false;
     if ( fromObject instanceof IFile ) {
-      IPath location = ( ( IFile ) fromObject ).getLocation();
+      IPath location = ( ( IFile ) fromObject ).getFullPath();
       String fileExtension = location == null ? EMPTY_STRING : location.getFileExtension();
       result = internalCanCreate( fileExtension );
     }
