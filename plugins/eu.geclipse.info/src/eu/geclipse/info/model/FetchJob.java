@@ -50,6 +50,7 @@ public class FetchJob extends Job {
   @Override
   protected IStatus run( final IProgressMonitor monitor ) {
    
+    GlueIndex.getInstance(); // Initialize the glue index and set the listener.
     GlueIndex.drop(); // Clear the glue index.
     
     Status status = new Status( IStatus.ERROR,
