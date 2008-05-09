@@ -21,6 +21,7 @@ import org.eclipse.debug.ui.IDebugUIConstants;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IDialogSettings;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -30,11 +31,14 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.swt.widgets.Text;
 
 import eu.geclipse.batch.model.qdl.AllowedVirtualOrganizationsType;
 import eu.geclipse.batch.ui.internal.Activator;
 import eu.geclipse.batch.ui.internal.Messages;
+import eu.geclipse.core.model.GridModel;
+import eu.geclipse.core.model.GridModelException;
+import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.ui.widgets.StoredCombo;
 
 
 
@@ -45,14 +49,14 @@ import eu.geclipse.batch.ui.internal.Messages;
 public class AllowedVOsDialog extends Dialog {
     
 //  protected AllowedVirtualOrganizationsType allowedVO = QdlFactory.eINSTANCE.createAllowedVirtualOrganizationsType();
+  private static final String VONAME_STRINGS = "voname_string"; //$NON-NLS-1$
+  
   protected String newVO = null;
   protected boolean editMode = false;
   protected Composite panel = null;
   protected Label lblVOName = null;
-  protected Text txtVOName = null;
-  
-  
-  
+  protected StoredCombo txtVOName = null;
+
   private String title = null;
   
 
@@ -70,8 +74,8 @@ public class AllowedVOsDialog extends Dialog {
     
     super( parentShell );
     this.title = title;    
-    setShellStyle( getShellStyle() | SWT.RESIZE |SWT.APPLICATION_MODAL  );
-
+    setShellStyle( SWT.CLOSE | SWT.TITLE | SWT.BORDER | SWT.APPLICATION_MODAL
+                   | SWT.RESIZE | SWT.MIN | SWT.MAX );
   }
   
   
@@ -79,9 +83,10 @@ public class AllowedVOsDialog extends Dialog {
   @Override
   protected void configureShell( final Shell shell ) {
     
-    shell.setSize( 300 , 100 );
-    
     super.configureShell( shell );
+    
+    shell.setMinimumSize( 300, 130 );
+    
     if( this.title != null ) {
       shell.setText( this.title );
     }
@@ -124,32 +129,38 @@ public class AllowedVOsDialog extends Dialog {
     gd.grabExcessHorizontalSpace = true;
     gd.horizontalSpan = 2;
 
+    GridData gData = new GridData( GridData.FILL_HORIZONTAL );
+    gData.grabExcessHorizontalSpace = true;
+    
     this.lblVOName = new Label( this.panel, SWT.NONE );
     this.lblVOName.setText( Messages.getString( "AllowedVODialog_VOName" ) ); //$NON-NLS-1$
     
-    
-    this.txtVOName = new Text( this.panel , SWT.SINGLE | SWT.BORDER);
+    Activator activator = Activator.getDefault();
+    IPreferenceStore preferenceStore = activator.getPreferenceStore();
+    this.txtVOName = new StoredCombo( this.panel, SWT.DROP_DOWN );
+    this.txtVOName.setPreferences( preferenceStore, VONAME_STRINGS );
+    this.txtVOName.setLayoutData( gData );
     
     /* Initial Values for Edit Operation */
     if ( this.editMode ) {
       this.txtVOName.setText( this.newVO );
     }
-
     
     this.txtVOName.addModifyListener( new ModifyListener() {
 
       public void modifyText( final ModifyEvent e ) {
 
-        AllowedVOsDialog.this.newVO =  AllowedVOsDialog.this.txtVOName.getText(); 
+        AllowedVOsDialog.this.newVO = AllowedVOsDialog.this.txtVOName.getText(); 
         validateFields();
       }
       
     });
     
-    this.txtVOName.setLayoutData( gd );
-    
+    //this.txtVOName.setLayoutData( gd );
     
     Dialog.applyDialogFont( container );
+
+    addVONames();
     
     return parent;
     
@@ -158,7 +169,7 @@ public class AllowedVOsDialog extends Dialog {
   
   
   protected void validateFields() {
-    if ( 0 < this.txtVOName.getText().length() )
+    if ( 0 < this.txtVOName.getText().trim().length() )
       enableOKButton( true );
     else
       enableOKButton( false );
@@ -169,9 +180,9 @@ public class AllowedVOsDialog extends Dialog {
   /**
    * @param dialogInput
    */
-  public void setInput( final Object dialogInput ) {
+  public void setInput( final String dialogInput ) {
     
-    this.newVO = ( String ) dialogInput;
+    this.newVO = dialogInput;
     this.editMode = true;
     
   }
@@ -189,9 +200,9 @@ public class AllowedVOsDialog extends Dialog {
    * 
    * @return The new {@link AllowedVirtualOrganizationsType}
    */
-  public Object getValue() {
+  public String getValue() {
               
-    return this.newVO;
+    return this.newVO.trim();
   }
   
   
@@ -230,6 +241,26 @@ public class AllowedVOsDialog extends Dialog {
     return section;
     
   } // end IDialogSetting getDialogBoundsSettings()
-  
+
+  /**
+   * Provides a default list of VO names in the VO name field.
+   */
+  private void addVONames() {
+    IGridElement[] gridElements = null;
+    try {
+      gridElements = GridModel.getVoManager().getChildren( null );
+    } catch( GridModelException e ) {
+      // Nothing to do
+    }
+    
+    if ( null != gridElements ) {
+      for ( IGridElement element : gridElements ) {
+        String name = element.getName();
+        if ( name != null && this.txtVOName.indexOf( name ) == -1 ) {
+          this.txtVOName.add( name );
+        }
+      }
+    }
+  }
   
 }// end class AllowedVOsDialog

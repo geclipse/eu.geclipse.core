@@ -21,7 +21,6 @@ import java.util.Collection;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
-import org.eclipse.jface.dialogs.InputDialog;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -45,6 +44,7 @@ import eu.geclipse.batch.model.qdl.BoundaryType;
 import eu.geclipse.batch.model.qdl.QdlFactory;
 import eu.geclipse.batch.model.qdl.QueueTypeEnumeration;
 import eu.geclipse.batch.model.qdl.RangeValueType;
+import eu.geclipse.batch.ui.dialogs.AllowedVOsDialog;
 import eu.geclipse.batch.ui.internal.Messages;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 
@@ -227,13 +227,11 @@ public class AddQueueWizardRequiredPage extends WizardPage {
       @SuppressWarnings("unqualified-field-access")
       @Override
       public void widgetSelected (final SelectionEvent e ){
-        InputDialog voNameDialog = 
-          new InputDialog( getShell(),
-                           Messages.getString( "AddQueueRequiredPage.AddNewVOTitle" ) , //$NON-NLS-1$
-                           Messages.getString( "AddQueueRequiredPage.AddNewVOAddName" ),  //$NON-NLS-1$
-                           null, null );
-        if ( voNameDialog.open() == Window.OK && !voNameDialog.getValue().equals( "" ) ) //$NON-NLS-1$
-          new TableItem( allowedVoTable, SWT.NONE ).setText( voNameDialog.getValue() );
+        AllowedVOsDialog dialog = 
+          new AllowedVOsDialog( getShell(),
+                                Messages.getString( "AddQueueRequiredPage.AddNewVOTitle" ) ); //$NON-NLS-1$
+        if ( dialog.open() == Window.OK )
+          new TableItem( allowedVoTable, SWT.NONE ).setText( dialog.getValue() );
       }
     });
     
@@ -246,6 +244,17 @@ public class AddQueueWizardRequiredPage extends WizardPage {
       public void widgetSelected( final SelectionEvent e ){
         TableItem [] selectedItems = allowedVoTable.getSelection();
         if ( selectedItems.length == 1 ){
+          AllowedVOsDialog dialog = 
+            new AllowedVOsDialog( getShell(),
+                                  Messages.getString( "AddQueueRequiredPage.AddNewVOTitle" ) ); //$NON-NLS-1$
+
+          dialog.setInput( selectedItems[0].getText() );
+
+          if ( dialog.open() == Window.OK )
+            selectedItems[0].setText( dialog.getValue() );
+
+          
+          /*
           InputDialog voNameDialog = 
             new InputDialog( getShell(),
                              Messages.getString( "AddQueueRequiredPage.AddNewVOTitle" ) , //$NON-NLS-1$
@@ -254,6 +263,7 @@ public class AddQueueWizardRequiredPage extends WizardPage {
                              null );
           if ( voNameDialog.open() == Window.OK )
             selectedItems[0].setText( voNameDialog.getValue() );
+         */
         }
       }
     });
