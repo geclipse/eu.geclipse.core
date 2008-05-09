@@ -64,7 +64,8 @@ public abstract class AbstractVirtualOrganization
    */
   @Override
   public boolean canContain( final IGridElement element ) {
-    return element instanceof IGridService;
+    return ( element instanceof IGridService )
+      || ( element instanceof IGridApplicationManager );
   }
   
   @Override
