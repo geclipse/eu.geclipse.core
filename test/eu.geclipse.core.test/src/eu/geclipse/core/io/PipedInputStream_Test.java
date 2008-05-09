@@ -39,45 +39,52 @@ public class PipedInputStream_Test {
     input = new eu.geclipse.core.io.PipedInputStream();
   }
 
-  @Test
-  public void testReadByteArrayIntInt() throws IOException {
-    byte[] b = {12,34,56};
-    int result = input.read( b, 0, 3 );
-    Assert.assertEquals( new Integer(3), new Integer(result) );
-  }
+  /*
+   * What is this useful for?? It completely hangs the tests for hours waiting for input!! 
+   */
+//  @Test
+//  public void testReadByteArrayIntInt() throws IOException {
+//    byte[] b = {12,34,56};
+//    int result = input.read( b, 0, 3 );
+//    Assert.assertEquals( new Integer(3), new Integer(result) );
+//  }
 
+  /*
+   * And all these empty tests?
+   */
   @Test
   public void testAvailable() {
     
   }
 
-  @Test
-  public void testClose() {
-  
-  }
+//  @Test
+//  public void testClose() {
+//  
+//  }
+//
+//  @Test
+//  public void testPipedInputStreamPipedOutputStream() {
+//   
+//  }
+//
+//  @Test
+//  public void testPipedInputStream() {
+//    
+//  }
+//
+//  @Test
+//  public void testConnect() {
+//    
+//  }
+//
+//  @Test
+//  public void testWriteInt() {
+//  
+//  }
+//
+//  @Test
+//  public void testWriteByteArrayIntInt() {
+//   
+//  }
 
-  @Test
-  public void testPipedInputStreamPipedOutputStream() {
-   
-  }
-
-  @Test
-  public void testPipedInputStream() {
-    
-  }
-
-  @Test
-  public void testConnect() {
-    
-  }
-
-  @Test
-  public void testWriteInt() {
-  
-  }
-
-  @Test
-  public void testWriteByteArrayIntInt() {
-   
-  }
 }
