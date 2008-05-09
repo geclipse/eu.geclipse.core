@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -17,6 +17,7 @@ package eu.geclipse.gvid.internal.views;
 
 import java.awt.Frame;
 import java.io.IOException;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.awt.SWT_AWT;
 import org.eclipse.swt.custom.CTabItem;
@@ -26,20 +27,21 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
+
 import eu.geclipse.core.IBidirectionalConnection;
-import eu.geclipse.gvid.IGVidPage;
 import eu.geclipse.gvid.IGVidStatsListener;
 import eu.geclipse.gvid.internal.GVidClient;
 import eu.geclipse.gvid.internal.GVidStatsEvent;
+import eu.geclipse.ui.views.IVisualisationPage;
 
-class GVidPage extends Composite implements IGVidStatsListener, IGVidPage {
+class GVidPage extends Composite implements IGVidStatsListener, IVisualisationPage {
   Label statsLabel;
   GVidClient gvidClient;
   Thread gvidThread;
   IBidirectionalConnection connection;
-  private Frame awtFrame;
+  private final Frame awtFrame;
   private Composite SWT_AWT_container;
-  private CTabItem tabItem;
+  private final CTabItem tabItem;
 
   GVidPage( final Composite parent, final int style,  final CTabItem cTabItem ) {
     super( parent, style );
@@ -63,11 +65,11 @@ class GVidPage extends Composite implements IGVidStatsListener, IGVidPage {
     gridData.grabExcessHorizontalSpace = true;
     gridData.verticalAlignment = GridData.CENTER;
     gridData.horizontalAlignment = GridData.FILL;
-    this.setLayout(gridLayout);
+    setLayout(gridLayout);
     GridLayout layout = new GridLayout( 1, false );
     layout.marginWidth = 0;
     layout.marginHeight = 0;
-    
+
     this.statsLabel = new Label( this, SWT.NONE );
     this.statsLabel.setLayoutData(gridData);
     this.SWT_AWT_container = new Composite( this, SWT.EMBEDDED );
@@ -87,7 +89,10 @@ class GVidPage extends Composite implements IGVidStatsListener, IGVidPage {
     this.gvidThread.start();
   }
 
-  void stopClient() {
+  /* (non-Javadoc)
+   * @see eu.geclipse.ui.views.IVisualisationPage#stopClient()
+   */
+  public void stopClient() {
     if( this.gvidClient != null ) {
       this.gvidClient.stop();
       try {
@@ -102,14 +107,14 @@ class GVidPage extends Composite implements IGVidStatsListener, IGVidPage {
   }
 
   public void statsUpdated( final GVidStatsEvent event ) {
-    final String transferStats = 
+    final String transferStats =
       Messages.formatMessage( "GVidView.statsLine", //$NON-NLS-1$
                               Integer.valueOf( event.getFps() ),
                               Double.valueOf( ( int )( event.getSendSpeed() / 102.4 ) / 10.0 ),
                               Double.valueOf( ( int )( event.getRecvSpeed() / 102.4 ) / 10.0 ) );
     Display.getDefault().syncExec(new Runnable() {
       public void run () {
-        GVidPage.this.statsLabel.setText( transferStats );        
+        GVidPage.this.statsLabel.setText( transferStats );
       }
     } );
   }

@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -16,6 +16,7 @@
 package eu.geclipse.gvid.internal.views;
 
 import java.io.IOException;
+
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
@@ -28,9 +29,10 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.part.ViewPart;
+
 import eu.geclipse.core.IBidirectionalConnection;
-import eu.geclipse.gvid.IGVidPage;
 import eu.geclipse.gvid.IGVidView;
+import eu.geclipse.ui.views.IVisualisationPage;
 
 /**
  * View for displaying the output of remote visualisation applications.
@@ -38,7 +40,7 @@ import eu.geclipse.gvid.IGVidView;
 public class GVidView extends ViewPart implements IGVidView {
   private CTabFolder cTabFolder;
   private NewGVidDropDownAction newGVidAction;
-  
+
   private void contributeToActionBars() {
     IActionBars bars = getViewSite().getActionBars();
     fillLocalToolBar( bars.getToolBarManager() );
@@ -47,8 +49,8 @@ public class GVidView extends ViewPart implements IGVidView {
   private void fillLocalToolBar( final IToolBarManager manager ) {
     manager.add( this.newGVidAction );
 
-// TODO maybe move TCP implemenation into a seperate class or remove it 
-/*    manager.add( new Action() {   
+// TODO maybe move TCP implemenation into a seperate class or remove it
+/*    manager.add( new Action() {
       @Override
       public String getToolTipText() {
         return "Create TCP/IP connection";
@@ -111,7 +113,7 @@ public class GVidView extends ViewPart implements IGVidView {
       }
     } );*/
   }
-  
+
   /**
    * This is a callback that will allow us to create the viewer and initialize
    * it.
@@ -132,7 +134,7 @@ public class GVidView extends ViewPart implements IGVidView {
       public void focusGained( final FocusEvent event ) {
         CTabFolder folder = (CTabFolder) event.widget;
         CTabItem item = folder.getSelection();
-        if( item != null && item.getControl() != null ) {
+        if( ( item != null ) && ( item.getControl() != null ) ) {
           item.getControl().setFocus();
         }
       }
@@ -150,10 +152,12 @@ public class GVidView extends ViewPart implements IGVidView {
    */
   @Override
   public void setFocus() {
-    this.cTabFolder.setFocus();
+    if ( this.cTabFolder != null ) {
+      this.cTabFolder.setFocus();
+    }
   }
 
-  public IGVidPage addGVidPage( final IBidirectionalConnection connection ) throws IOException {
+  public IVisualisationPage addGVidPage( final IBidirectionalConnection connection ) throws IOException {
     CTabItem cTabItem = new CTabItem( this.cTabFolder, SWT.CLOSE );
     final GVidPage page = new GVidPage( this.cTabFolder, SWT.NONE, cTabItem );
     page.startClient( connection );

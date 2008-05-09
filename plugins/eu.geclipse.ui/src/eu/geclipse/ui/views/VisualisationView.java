@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium
+ * Copyright (c) 2007, 2008 g-Eclipse Consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -16,6 +16,8 @@ package eu.geclipse.ui.views;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
+import org.eclipse.swt.custom.CTabFolder2Adapter;
+import org.eclipse.swt.custom.CTabFolderEvent;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
@@ -58,6 +60,12 @@ public class VisualisationView extends ViewPart {
         if( ( item != null ) && ( item.getControl() != null ) ) {
           item.getControl().setFocus();
         }
+      }
+    } );
+    this.cTabFolder.addCTabFolder2Listener( new CTabFolder2Adapter() {
+      @Override
+      public void close( final CTabFolderEvent event ) {
+        ((IVisualisationPage)((CTabItem)event.item).getControl()).stopClient();
       }
     } );
 
