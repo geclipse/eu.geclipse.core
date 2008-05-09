@@ -15,7 +15,9 @@
  *****************************************************************************/
 package eu.geclipse.ui.internal.actions;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.resources.IResource;
@@ -43,6 +45,8 @@ import org.eclipse.ui.actions.SelectionListenerAction;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridJob;
+import eu.geclipse.core.reporting.IProblem;
+import eu.geclipse.core.reporting.ISolution;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
@@ -52,11 +56,11 @@ import eu.geclipse.ui.internal.Activator;
  *
  */
 public class DeleteGridElementAction extends SelectionListenerAction {
-  private Shell shell;
+  Shell shell;
   private DeleteResourceAction eclipseAction;
 
   protected DeleteGridElementAction(final Shell shell) {
-    super( "Delete" );
+    super( Messages.getString("DeleteGridElementAction.actionNameDelete") ); //$NON-NLS-1$
     
     this.shell = shell;
     this.eclipseAction = new DeleteResourceAction( shell );
@@ -138,16 +142,16 @@ public class DeleteGridElementAction extends SelectionListenerAction {
     
     if( selectedJobs.size() == 1 ) {
       IGridJob job = selectedJobs.iterator().next();
-      question = String.format( "Are you sure you want to delete job '%s' from workspace?", job.getJobName() );
+      question = String.format( Messages.getString("DeleteGridElementAction.confirmationOne"), job.getJobName() ); //$NON-NLS-1$
       if( job.getJobStatus().canChange() ) {
-        warning = String.format( "Warning! '%s' has not finished yet!", job.getJobName() );
+        warning = String.format( Messages.getString("DeleteGridElementAction.warningOne"), job.getJobName() ); //$NON-NLS-1$
       }
     } else {
-      question = String.format( "Are you sure you want to delete %d jobs from workspace?", Integer.valueOf( selectedJobs.size() ) );
+      question = String.format( Messages.getString("DeleteGridElementAction.confirmationMany"), Integer.valueOf( selectedJobs.size() ) ); //$NON-NLS-1$
       
       for( IGridJob job : selectedJobs ) {
         if( job.getJobStatus().canChange() ) {
-          warning = "Warning! Some of these jobs have not finished yet!";
+          warning = Messages.getString("DeleteGridElementAction.warningMany"); //$NON-NLS-1$
           break;
         }
       }
@@ -156,7 +160,7 @@ public class DeleteGridElementAction extends SelectionListenerAction {
     String msg = question;
     
     if( warning != null ) {
-      msg += "\n\n" + warning;
+      msg += "\n\n" + warning; //$NON-NLS-1$
     }
     
     ConfirmDialog dialog = new ConfirmDialog( msg, warning == null ? MessageDialog.QUESTION : MessageDialog.WARNING );
@@ -180,8 +184,8 @@ public class DeleteGridElementAction extends SelectionListenerAction {
                           final int dialogImageType                          
                            )
     {
-      super( shell,
-             "Confirm Job Delete",
+      super( DeleteGridElementAction.this.shell,
+             Messages.getString("DeleteGridElementAction.confirmationTitle"), //$NON-NLS-1$
              null,
              dialogMessage,
              dialogImageType,
@@ -194,9 +198,9 @@ public class DeleteGridElementAction extends SelectionListenerAction {
      */
     @Override
     protected Control createCustomArea( final Composite parent ) {
-      deleteFromGridCheckbox = new Button( parent, SWT.CHECK );
-      deleteFromGridCheckbox.setText( "Also delete jobs from Grid" );
-      deleteFromGridCheckbox.setSelection( true );      
+      this.deleteFromGridCheckbox = new Button( parent, SWT.CHECK );
+      this.deleteFromGridCheckbox.setText( Messages.getString("DeleteGridElementAction.alsoDeleteFromGrid") ); //$NON-NLS-1$
+      this.deleteFromGridCheckbox.setSelection( true );      
       
       return super.createCustomArea( parent );
     }
@@ -220,17 +224,17 @@ public class DeleteGridElementAction extends SelectionListenerAction {
  
   private class DeleteJobsJob extends Job {    
     private List<IGridJob> selectedJobs;
-    private ConfirmChoice userChoice;    
+    private ConfirmChoice userChoice;
+    boolean forceDeleteLocal = false;
 
     /**
-     * @param name
      * @param selectedJobs
      * @param userChoice
      */
     public DeleteJobsJob( final List<IGridJob> selectedJobs,
                           final ConfirmChoice userChoice )
     {
-      super( "Deleting jobs" );
+      super( Messages.getString("DeleteGridElementAction.deleteJobName") ); //$NON-NLS-1$
       this.selectedJobs = selectedJobs;
       this.userChoice = userChoice;
     }
@@ -243,15 +247,20 @@ public class DeleteGridElementAction extends SelectionListenerAction {
       submonitor.setWorkRemaining( this.selectedJobs.size() );
       
       try {
-        for( IGridJob job : this.selectedJobs ) {
-          try {
+        Iterator<IGridJob> iterator = this.selectedJobs.iterator();
+        IGridJob job = null;
+        while( iterator.hasNext() ) {
+          try {            
             testCancel( submonitor );
+            job = iterator.next();
+            
             deleteJob( submonitor.newChild( 1 ), job );
+            iterator.remove();  // if succesful deleted, then don't delete it again during eventually next try
           } catch( ProblemException exception ) {
-            // TODO mariusz add solution "Delete job only from workspace"
-            ProblemDialog.openProblem( shell,
-                                       "Problem with deleting job",
-                                       String.format( "Cannot delete job '%s'", job.getJobName() ),
+            addSolutionOnlyLocalDel( exception );
+            ProblemDialog.openProblem( DeleteGridElementAction.this.shell,
+                                       Messages.getString("DeleteGridElementAction.deleteProblemTitle"), //$NON-NLS-1$
+                                       String.format( Messages.getString("DeleteGridElementAction.problemDescription"), job.getJobName() ), //$NON-NLS-1$
                                        exception );
             break;
           }      
@@ -266,17 +275,26 @@ public class DeleteGridElementAction extends SelectionListenerAction {
     private void deleteJob( final SubMonitor monitor, final IGridJob job )
       throws ProblemException
     {
-      monitor.setTaskName( String.format( "Deleting job '%s'", job.getJobName() ) );
+      monitor.setTaskName( String.format( Messages.getString("DeleteGridElementAction.taskNameDeleting"), job.getJobName() ) ); //$NON-NLS-1$
       monitor.setWorkRemaining( this.userChoice == ConfirmChoice.deleteFromGrid ? 2 : 1 );
       if( this.userChoice == ConfirmChoice.deleteFromGrid ) {
-        job.deleteJob( monitor.newChild( 1 ) );
+        try {
+          job.deleteJob( monitor.newChild( 1 ) );
+        } catch( ProblemException exception ) {
+          if( this.forceDeleteLocal ) {
+            Activator.logException( exception );
+          }
+          else {
+            throw exception;
+          }
+        }
       }
 
       try {
         testCancel( monitor );
         job.getResource().delete( true, monitor.newChild( 1 ) );
       } catch( CoreException exception ) {
-        throw new ProblemException( "eu.geclipse.problem.deleteGridElementAction.cannotDeleteResource",
+        throw new ProblemException( "eu.geclipse.problem.deleteGridElementAction.cannotDeleteResource", //$NON-NLS-1$
                                     exception,
                                     Activator.PLUGIN_ID );
       }
@@ -287,9 +305,36 @@ public class DeleteGridElementAction extends SelectionListenerAction {
         throw new OperationCanceledException();
       }      
     }
-    
+
+    void addSolutionOnlyLocalDel( final ProblemException exception ) {
+      if( this.userChoice == ConfirmChoice.deleteFromGrid
+          && !this.forceDeleteLocal ) {
+        IProblem problem = exception.getProblem();
+        problem.addSolution( new ISolution() {
+
+          public String getDescription() {
+            return Messages.getString("DeleteGridElementAction.forceDeleteLocal"); //$NON-NLS-1$
+          }
+
+          public String getID() {
+            return null;
+          }
+
+          public boolean isActive() {
+            return true;
+          }
+
+          public void solve() throws InvocationTargetException {
+            DeleteJobsJob.this.forceDeleteLocal = true;
+            DeleteJobsJob.this.schedule();            
+          }} );
+      }
+      
+    }
     
   }
+
+
 
   
 }
