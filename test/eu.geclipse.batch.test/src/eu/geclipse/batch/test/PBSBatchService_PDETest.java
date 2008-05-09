@@ -25,7 +25,7 @@ import org.junit.Test;
 import eu.geclipse.batch.Extensions;
 import eu.geclipse.batch.IBatchService;
 import eu.geclipse.batch.IBatchServiceDescription;
-import eu.geclipse.batch.ui.BatchServiceManager;
+//import eu.geclipse.batch.ui.BatchServiceManager;
 import eu.geclipse.core.reporting.ProblemException;
 
 /**
@@ -47,11 +47,11 @@ public class PBSBatchService_PDETest {
     // Do we have an implementation to open this batch service
     for ( IBatchServiceDescription description : services ) {
       if ( description.supportsService( "pbs" ) ) { //$NON-NLS-1$
-        try {
-          this.pbsWrapper = BatchServiceManager.getManager().createService( description, "test.batch" ); //$NON-NLS-1$
-        } catch( ProblemException e ) {
+//        try {
+//          this.pbsWrapper = BatchServiceManager.getManager().createService( description, "test.batch" ); //$NON-NLS-1$
+//        } catch( ProblemException e ) {
           // No code needed
-        }
+//        }
       }
     }
     //this.pbsWrapper = new PBSBatchService( new PBSBatchServiceDescription(), "test.batch" ); //$NON-NLS-1$
@@ -68,7 +68,8 @@ public class PBSBatchService_PDETest {
     boolean except = false;
     
     try {
-      this.pbsWrapper.enableQueue( "test" ); //$NON-NLS-1$
+      if ( null != this.pbsWrapper )
+        this.pbsWrapper.enableQueue( "test" ); //$NON-NLS-1$
     } catch( ProblemException e ) {
       except = true; 
     } 
@@ -78,7 +79,8 @@ public class PBSBatchService_PDETest {
     except = false;
     
     try {
-      this.pbsWrapper.disableQueue( "test" ); //$NON-NLS-1$
+      if ( null != this.pbsWrapper )
+        this.pbsWrapper.disableQueue( "test" ); //$NON-NLS-1$
     } catch( ProblemException e ) {
       except = true; 
     } 

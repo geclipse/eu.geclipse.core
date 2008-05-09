@@ -25,7 +25,6 @@ import org.eclipse.core.runtime.ListenerList;
 
 import eu.geclipse.batch.IBatchService;
 import eu.geclipse.batch.IBatchServiceDescription;
-import eu.geclipse.batch.IBatchServiceProvider;
 import eu.geclipse.core.reporting.ProblemException;
 
 
