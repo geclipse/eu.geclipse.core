@@ -36,6 +36,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
@@ -87,8 +88,6 @@ public class AddQueueWizardRequiredPage extends WizardPage {
   
   private Label timeWallLabel;
   
-  private Label allowedVos;
-    
   private Composite statusComp;
 
   private Composite tableButtonsComp;
@@ -114,7 +113,7 @@ public class AddQueueWizardRequiredPage extends WizardPage {
    */
   public void createControl( final Composite parent ) {
     
-    GridData longData, statusData, voTableData, voButtonData;
+    GridData longData, statusData, voButtonData;
     Composite timeComp;
     
     this.mainComp = new Composite( parent, SWT.NONE );
@@ -136,7 +135,6 @@ public class AddQueueWizardRequiredPage extends WizardPage {
         updateUI();
       }
     } );
-        
     
     // Queue Type ComboBox
     this.typeLabel = new Label( this.mainComp, SWT.NONE );
@@ -199,19 +197,24 @@ public class AddQueueWizardRequiredPage extends WizardPage {
 //    this.timeWallMinSpin = new Spinner( timeComp, SWT.NONE );
 //    this.timeWallMinSpin.setValues( 0, 0, 59, 0, 1, 2 );
     
-    // Add the VO names
-    voTableData = new GridData( 100, 100, true, true );
-    voTableData.horizontalSpan = 2;
-    voTableData.widthHint = 300;
-    voTableData.heightHint = 150;
-    
-    this.allowedVos = new Label( this.mainComp, SWT.NONE );
-    this.allowedVos.setText( Messages.getString( "AddQueueRequiredPage.AllowedVos" ) ); //$NON-NLS-1$
-    
-    new Label( this.mainComp,SWT.NONE ).setLayoutData( longData ); // Empty Label
-    
-    this.allowedVoTable = new Table( this.mainComp, SWT.NONE );
-    this.allowedVoTable.setLayoutData( voTableData );
+    Composite tableComp = new Composite( this.mainComp, SWT.NONE );
+    // Create the table that holds the result
+    this.allowedVoTable = new Table( tableComp, SWT.MULTI | SWT.H_SCROLL | SWT.V_SCROLL | SWT.BORDER );
+    this.allowedVoTable.setHeaderVisible( true );
+    this.allowedVoTable.setLinesVisible( true );    
+
+    GridData gd = new GridData( SWT.FILL, SWT.FILL, true, true );
+    this.allowedVoTable.setLayoutData( gd );
+
+    GridData gridData = new GridData( SWT.BEGINNING, SWT.BEGINNING, true, true );
+    gridData.widthHint = 300;
+    gridData.heightHint = 150;
+    tableComp.setLayout( new GridLayout( 1, false ) );
+    tableComp.setLayoutData( gridData );
+
+    TableColumn hostColumn = new TableColumn( this.allowedVoTable, SWT.LEFT );
+    hostColumn.setText( Messages.getString( "AddQueueRequiredPage.AllowedVos" ) );//$NON-NLS-1$
+    hostColumn.setWidth( 250 );
     
     this.tableButtonsComp = new Composite( this.mainComp, SWT.NONE );
     this.tableButtonsComp.setLayout( new GridLayout() );
@@ -230,8 +233,10 @@ public class AddQueueWizardRequiredPage extends WizardPage {
         AllowedVOsDialog dialog = 
           new AllowedVOsDialog( getShell(),
                                 Messages.getString( "AddQueueRequiredPage.AddNewVOTitle" ) ); //$NON-NLS-1$
-        if ( dialog.open() == Window.OK )
+        if ( dialog.open() == Window.OK ) {
           new TableItem( allowedVoTable, SWT.NONE ).setText( dialog.getValue() );
+          //allowedVoTable.clearAll();
+        }
       }
     });
     
@@ -252,18 +257,6 @@ public class AddQueueWizardRequiredPage extends WizardPage {
 
           if ( dialog.open() == Window.OK )
             selectedItems[0].setText( dialog.getValue() );
-
-          
-          /*
-          InputDialog voNameDialog = 
-            new InputDialog( getShell(),
-                             Messages.getString( "AddQueueRequiredPage.AddNewVOTitle" ) , //$NON-NLS-1$
-                             Messages.getString( "AddQueueRequiredPage.AddNewVOAddName" ),  //$NON-NLS-1$
-                             selectedItems[0].getText(),
-                             null );
-          if ( voNameDialog.open() == Window.OK )
-            selectedItems[0].setText( voNameDialog.getValue() );
-         */
         }
       }
     });
