@@ -422,7 +422,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
   private void tabulator() {
     int oldCol = this.cursor.col;
     Integer cursorCol = Integer.valueOf( this.cursor.col + 1 );
-    Integer[] tabArray = this.tabulatorPositons.toArray( new Integer[0] );
+    Integer[] tabArray = this.tabulatorPositons.toArray( new Integer[this.tabulatorPositons.size()] );
     int pos = Arrays.binarySearch( tabArray, cursorCol );
     if ( pos < 0 ) {
       pos = (-pos) - 1;  // get insertion point
@@ -855,6 +855,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
         cursorForward( params );
         break;
       case 'H': // CUP - Cursor Position
+      case 'f': // HVP - Horizontal and Vertical Position
         cursorPosition( params );
         break;
       case 'A': // CUU - Cursor Up
@@ -884,9 +885,6 @@ public class Terminal extends Canvas implements ISelectionProvider {
         break;
       case 'K': // EL - Erase In Line
         eraseInLine( params );
-        break;
-      case 'f': // HVP - Horizontal and Vertical Position
-        cursorPosition( params );  // same as CUP - Cursor Position
         break;
       case 'l': // RM - Reset Mode
         resetMode( params );
@@ -1123,7 +1121,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
       default:
         Activator.logMessage( IStatus.WARNING,
                               Messages.formatMessage( "Terminal.unknownTabClearParam", //$NON-NLS-1$
-                                                      new Integer( val ) ) );
+                                                      Integer.valueOf( val ) ) );
         break;
     }
   }
