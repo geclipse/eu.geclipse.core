@@ -148,8 +148,6 @@ public class Events implements IEvents {
       event = new Event();
       event.type = this.connection.readByte();
       switch( event.type ) {
-        case QUIT_EVENT:
-          break;
         case VIDEO_RESIZE_EVENT:
           event.resize.w = this.connection.readUint16();
           event.resize.h = this.connection.readUint16();
@@ -184,8 +182,8 @@ public class Events implements IEvents {
           // encoder.setDecoderFrameNumber(event.frame_finished.frame_num,
           // event.frame_finished.enc_time, event.frame_finished.comp_time);
           break;
+        case QUIT_EVENT:
         case REDRAW:
-          break;
         case NO_EVENT:
           break;
         default:
@@ -229,8 +227,6 @@ public class Events implements IEvents {
       int pos = 0;
       sendBuffer[ pos++ ] = event.type;
       switch( event.type ) {
-        case QUIT_EVENT:
-          break;
         case VIDEO_RESIZE_EVENT:
           pos = putUint16( pos, sendBuffer, event.resize.w );
           pos = putUint16( pos, sendBuffer, event.resize.h );
@@ -261,8 +257,8 @@ public class Events implements IEvents {
           pos = putUint32( pos, sendBuffer, event.frame_finished.enc_time );
           pos = putUint32( pos, sendBuffer, event.frame_finished.comp_time );
           break;
+        case QUIT_EVENT:
         case REDRAW:
-          break;
         case NO_EVENT:
           break;
         default:
