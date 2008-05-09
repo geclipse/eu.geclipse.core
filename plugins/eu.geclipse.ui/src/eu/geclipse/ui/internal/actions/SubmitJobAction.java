@@ -25,8 +25,10 @@ import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.actions.SelectionListenerAction;
 
+import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridJob;
+import eu.geclipse.core.model.IGridJobCreator;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridJobService;
 import eu.geclipse.core.model.IGridProject;
@@ -59,7 +61,6 @@ public class SubmitJobAction extends SelectionListenerAction {
    */
   @Override
   public void run() {
-    oldUpdateSelection( this.lastselection );
     JobCreatorSelectionWizard wizard = new JobCreatorSelectionWizard( this.jobDescriptions,
                                                                       this.jobServices );
     WizardDialog dialog = new WizardDialog( this.site.getShell(), wizard );
@@ -67,20 +68,13 @@ public class SubmitJobAction extends SelectionListenerAction {
     dialog.open();
   }
 
-  private IStructuredSelection lastselection;
-  // TODO mariusz rollback it:
-  protected boolean updateSelection( final IStructuredSelection selection ) {
-    lastselection = selection;
-    return true;
-  }
-
   /*
    * (non-Javadoc)
    * 
    * @see org.eclipse.ui.actions.BaseSelectionListenerAction#updateSelection(org.eclipse.jface.viewers.IStructuredSelection)
    */
-  
-  protected boolean oldUpdateSelection( final IStructuredSelection selection ) {
+  @Override
+  protected boolean updateSelection( final IStructuredSelection selection ) {
 
     boolean enabled = super.updateSelection( selection );
     this.jobServices.clear();
