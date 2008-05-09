@@ -77,7 +77,7 @@ public class PingHostJob extends Job {
   public PingHostJob( final InetAddress hostAdr, final int nPing, final long timeOut, 
                       final Text outPut, final Table table, final String[] itemString, 
                       final int index, final PingTest pingTest ) {
-    super( Messages.getString( "PingTestDialog.pingMsg" ) + hostAdr.getHostName() ); //$NON-NLS-1$
+    super( Messages.getString( "PingHostJob.pingMsg" ) + hostAdr.getHostName() ); //$NON-NLS-1$
     
     this.hostName = hostAdr.getHostName();
     this.hostAdr = hostAdr;

@@ -16,14 +16,16 @@
  *****************************************************************************/
 package eu.geclipse.ui.simpleTest;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Event;
@@ -52,9 +54,9 @@ public class DNSLookUpDialog extends AbstractSimpleTestDialog  {
 //  protected TableViewer tableList;
   
   protected String[][] itemStrings;
-//  protected Button lookUpButton;
-//  protected Button stopButton;
-  protected boolean stop;
+  protected Button lookUpButton;
+  protected Button stopButton;
+  protected DNSLookUpJob lookUpJob;
   private ArrayList< String > hostNames = new ArrayList< String >();
   
   /**
@@ -66,7 +68,6 @@ public class DNSLookUpDialog extends AbstractSimpleTestDialog  {
   public DNSLookUpDialog( final List< IGridResource > resources, final Shell parentShell ) {
     super( null, resources, parentShell );
     
-    this.stop = false;
     // First we gather the host name of all the resources
     String name;
     for ( int i = 0; i < this.resources.size(); ++i ) {
@@ -77,13 +78,25 @@ public class DNSLookUpDialog extends AbstractSimpleTestDialog  {
     }
   
     // Then we prepare the datastructure for the table of results with the hostnames 
-    this.itemStrings = new String [ this.hostNames.size() ] [ 6 ];  
+    this.itemStrings = new String [ this.hostNames.size() ] [ 2 ];  
     
     for ( int i = 0; i < this.hostNames.size(); ++i )
-      this.itemStrings[ i ] [ 0 ] = this.hostNames.get( i ); 
-    
+      this.itemStrings[ i ] [ 0 ] = this.hostNames.get( i );
   }
 
+  @Override
+  protected void configureShell( final Shell newShell ) {
+    super.configureShell( newShell );
+    newShell.setMinimumSize( 560, 320 );
+    newShell.setText( Messages.getString( "DNSLookUpDialog.dialogTitle" ) ); //$NON-NLS-1$
+  }
+
+  @Override
+  public boolean close() {
+    return super.close(); 
+  }
+  
+  
   /* (non-Javadoc)
    * @see org.eclipse.jface.dialogs.Dialog#createDialogArea(org.eclipse.swt.widgets.Composite)
    */
@@ -93,21 +106,30 @@ public class DNSLookUpDialog extends AbstractSimpleTestDialog  {
     
     Composite mainComp = new Composite( parent, SWT.NONE );
     mainComp.setLayout( new GridLayout( 1, false ) );
-    gData = new GridData( SWT.FILL, SWT.FILL, true, true);
+    gData = new GridData( SWT.BEGINNING, SWT.BEGINNING, false, false );
     mainComp.setLayoutData( gData );
 
     Group outPutGroup = new Group( mainComp, SWT.NONE );
-    outPutGroup.setLayout( new GridLayout( /*3*/1, false ) );
+    outPutGroup.setLayout( new GridLayout( 2, false ) );
     outPutGroup.setText( Messages.getString( "DNSLookUpDialog.output_group" ) ); //$NON-NLS-1$
-    gData = new GridData( GridData.FILL_BOTH );
-    gData.grabExcessHorizontalSpace = true;
-    gData.grabExcessVerticalSpace = true;
+    gData = new GridData( SWT.BEGINNING, SWT.BEGINNING, true, true );
     outPutGroup.setLayoutData( gData );
+
     
+    Composite tableComp = new Composite( outPutGroup, SWT.NONE );
     // Create the table that holds the result
-    this.tableOutPut = new Table( outPutGroup, SWT.MULTI | SWT.VIRTUAL | SWT.BORDER );
+    this.tableOutPut = new Table( tableComp, SWT.MULTI | SWT.VIRTUAL | SWT.BORDER );
     this.tableOutPut.setHeaderVisible( true );
     this.tableOutPut.setLinesVisible( true );    
+
+    GridData gd = new GridData( SWT.FILL, SWT.FILL, true, true );
+    this.tableOutPut.setLayoutData( gd );
+
+    GridData gridData = new GridData( SWT.BEGINNING, SWT.BEGINNING, true, true );
+    gridData.heightHint = 200;
+    tableComp.setLayout( new GridLayout( 2, false ) );
+    tableComp.setLayoutData( gridData );
+    
     
 //    this.tableList = new TableViewer( this.tableOutPut );
 //    this.tableList.setLabelProvider( new JobLabelProvider() );
@@ -115,22 +137,21 @@ public class DNSLookUpDialog extends AbstractSimpleTestDialog  {
     
     //TableColumnListener columnListener = new TableColumnListener( this.tableList );
 
-    TableColumn hostColumn = new TableColumn( this.tableOutPut, SWT.NONE );
+    TableColumn hostColumn = new TableColumn( this.tableOutPut, SWT.LEFT );
     hostColumn.setText( Messages.getString( "DNSLookUpDialog.hostName" ) ); //$NON-NLS-1$
     hostColumn.setWidth( 250 );    
-    hostColumn.setAlignment( SWT.LEFT );
+//    hostColumn.setAlignment( SWT.LEFT );
 //    hostColumn.addSelectionListener( columnListener );
 
-    TableColumn ipAdrColumn = new TableColumn( this.tableOutPut, SWT.CENTER );
+    TableColumn ipAdrColumn = new TableColumn( this.tableOutPut, SWT.LEFT );
     ipAdrColumn.setText( Messages.getString( "DNSLookUpDialog.ipAddress" ) ); //$NON-NLS-1$
-    ipAdrColumn.setWidth( 200 );    
-    ipAdrColumn.setAlignment( SWT.CENTER );
+    ipAdrColumn.setWidth( 150 );    
+//    ipAdrColumn.setAlignment( SWT.LEFT );
 //    ipAdrColumn.addSelectionListener( columnListener );
     
 //    TableColumn dnsColumn = new TableColumn( this.tableOutPut, SWT.CENTER );
 //    dnsColumn.setText( Messages.getString( "DNSLookUpDialog.dnsServer" ) ); //$NON-NLS-1$
 //    dnsColumn.setWidth( 200 );    
-//    dnsColumn.setAlignment( SWT.CENTER );
 //    dnsColumn.addSelectionListener( columnListener );
     
     // Initially we sort the jobs by ID, ascending
@@ -149,12 +170,9 @@ public class DNSLookUpDialog extends AbstractSimpleTestDialog  {
     });
 
     this.tableOutPut.setItemCount( this.hostNames.size() );
+    this.lookUpJob = new DNSLookUpJob( this.tableOutPut, this.itemStrings );
     
-    gData = new GridData( SWT.FILL, SWT.FILL, true, true );
-    gData.grabExcessHorizontalSpace = true;
-    gData.grabExcessVerticalSpace = true;
-    
-/*    Composite outControls = new Composite( outPutGroup, SWT.NONE );
+    Composite outControls = new Composite( outPutGroup, SWT.NONE );
     GridLayout gLayout = new GridLayout( 1, false );
     gLayout.marginHeight = 0;
     gLayout.marginWidth = 0;
@@ -178,62 +196,24 @@ public class DNSLookUpDialog extends AbstractSimpleTestDialog  {
     this.lookUpButton.addSelectionListener( new SelectionAdapter() {
       @Override
       public void widgetSelected( final SelectionEvent e) {
-        DNSLookUpDialog.this.stopButton.setEnabled( true );
-        DNSLookUpDialog.this.lookUpButton.setEnabled( false );
-        runLookup();
-        DNSLookUpDialog.this.stopButton.setEnabled( false );
-        DNSLookUpDialog.this.lookUpButton.setEnabled( true );
+
+        if ( Job.NONE == DNSLookUpDialog.this.lookUpJob.getState()  ) {
+          DNSLookUpDialog.this.lookUpJob.schedule(); 
+          DNSLookUpDialog.this.stopButton.setEnabled( true );
+        }
       }
     });
     
     this.stopButton.addSelectionListener( new SelectionAdapter() {
       @Override
       public void widgetSelected( final SelectionEvent e) {
-        DNSLookUpDialog.this.stop = true; 
+        DNSLookUpDialog.this.lookUpJob.cancel();
       }
     });
 
     parent.getShell().setDefaultButton( this.lookUpButton );
-    */
-    runLookup();
+    
     
     return mainComp;
   }
-  
-  /**
-   * Method that looks up the IP for each of the hosts. 
-   */
-  protected void runLookup() {
-    InetAddress adr = null;
-
-//    clearItemString();
-    
-    for ( int i = 0; i < this.hostNames.size() && !this.stop; ++i ) {
-      try {
-        adr = InetAddress.getByName( this.hostNames.get( i ) );
-          
-        if ( null != adr ) 
-          this.itemStrings[ i ][ 1 ] = adr.getHostAddress();
-        else
-          this.itemStrings[ i ][ 1 ] = Messages.getString( "DNSLookUpDialog.n_a" ); //$NON-NLS-1$
-      } catch( UnknownHostException e ) {
-        this.itemStrings[ i ][ 1 ] = Messages.getString( "DNSLookUpDialog.n_a" ); //$NON-NLS-1$
-      }
-      this.tableOutPut.clear( i );
-    }
-      
-    // If the end of the look were due to the stop we reset it
-    this.stop = false;
-  }
-  
- /* private void clearItemString() {
-    for ( int i = 0; i < this.hostNames.size(); ++i ) {
-      for ( int j = 1; j < 2; ++j ) {
-        this.itemStrings[ i ][ j ] = null;
-      }
-    }
-    this.tableOutPut.clearAll();
-  }
-*/
-  
 }
