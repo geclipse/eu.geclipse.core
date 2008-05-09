@@ -34,8 +34,8 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 
 import eu.geclipse.batch.BatchQueueDescription;
-import eu.geclipse.batch.BatchServiceManager;
 import eu.geclipse.batch.IBatchService;
+import eu.geclipse.batch.ui.BatchServiceManager;
 import eu.geclipse.batch.ui.internal.Messages;
 import eu.geclipse.batch.ui.internal.providers.BatchServiceTreeContentProvider;
 import eu.geclipse.batch.ui.internal.providers.BatchServiceTreeLabelProvider;

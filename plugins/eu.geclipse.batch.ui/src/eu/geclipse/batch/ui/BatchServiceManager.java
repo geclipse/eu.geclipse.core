@@ -14,7 +14,7 @@
  *      - Harald Gjermundrod (harald@cs.ucy.ac.cy)
  *
  *****************************************************************************/
-package eu.geclipse.batch;
+package eu.geclipse.batch.ui;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +22,10 @@ import java.util.List;
 import org.eclipse.compare.IContentChangeListener;
 import org.eclipse.compare.IContentChangeNotifier;
 import org.eclipse.core.runtime.ListenerList;
+
+import eu.geclipse.batch.IBatchService;
+import eu.geclipse.batch.IBatchServiceDescription;
+import eu.geclipse.batch.IBatchServiceProvider;
 import eu.geclipse.core.reporting.ProblemException;
 
 

@@ -23,8 +23,8 @@ import org.eclipse.jface.viewers.IStructuredContentProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 
-import eu.geclipse.batch.BatchServiceManager;
 import eu.geclipse.batch.IBatchService;
+import eu.geclipse.batch.ui.BatchServiceManager;
 
 
 /**

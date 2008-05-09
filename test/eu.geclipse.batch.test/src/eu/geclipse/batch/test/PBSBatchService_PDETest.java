@@ -22,10 +22,10 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import eu.geclipse.batch.BatchServiceManager;
 import eu.geclipse.batch.Extensions;
 import eu.geclipse.batch.IBatchService;
 import eu.geclipse.batch.IBatchServiceDescription;
+import eu.geclipse.batch.ui.BatchServiceManager;
 import eu.geclipse.core.reporting.ProblemException;
 
 /**

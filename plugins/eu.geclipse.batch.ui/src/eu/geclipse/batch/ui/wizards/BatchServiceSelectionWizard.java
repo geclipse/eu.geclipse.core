@@ -23,7 +23,7 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 
-import eu.geclipse.batch.BatchServiceManager;
+import eu.geclipse.batch.ui.BatchServiceManager;
 import eu.geclipse.batch.ui.internal.Messages;
 import eu.geclipse.core.model.IGridBatchQueueDescription;
 
