@@ -37,7 +37,9 @@ project number: FP5-IST-034327  http://www.geclipse.eu/
       <import plugin="org.eclipse.ui"/>
       <import plugin="org.eclipse.ui.views"/>
       <import plugin="org.junit4"/>
+<!--
       <import plugin="eu.geclipse.batch" version="1.0.0" match="greaterOrEqual"/>
+-->
       <import plugin="eu.geclipse.core.reporting" version="1.0.0" match="greaterOrEqual"/>
       <import plugin="eu.geclipse.core" version="1.0.0" match="greaterOrEqual"/>
       <import plugin="eu.geclipse.glite.editor" version="1.0.0" match="greaterOrEqual"/>
@@ -50,6 +52,7 @@ project number: FP5-IST-034327  http://www.geclipse.eu/
       <import plugin="eu.geclipse.workflow.model"/>
    </requires>
 
+<!--
    <plugin
          id="eu.geclipse.batch.test"
          download-size="0"
@@ -57,7 +60,7 @@ project number: FP5-IST-034327  http://www.geclipse.eu/
          version="0.0.0"
          fragment="true"
          unpack="false"/>
-
+-->
    <plugin
          id="eu.geclipse.core.reporting.test"
          download-size="0"
