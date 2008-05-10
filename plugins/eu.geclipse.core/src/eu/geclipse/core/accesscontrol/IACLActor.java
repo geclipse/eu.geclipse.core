@@ -80,26 +80,26 @@ public interface IACLActor {
   public void setActorType( final ActorType type ) throws ProblemException;
   
   /**
-   * Gets the CA subject of this actor, if the type is CA_*.
+   * Gets the CA subject of this actor, if the type requires it.
    * 
-   * @return the CA subject of this actor. Must return <code>null</code>
-   *         if the type is not CA_*, i.e., it doesn't require a CA.
+   * @return the issuer subject of this actor. Must return <code>null</code>
+   *         if the type doesn't require an authority.
    */
   public String getCA();
   
   /**
-   * Sets the CA subject of this actor, if the type is CA_*.
+   * Sets the CA subject of this actor, if the type requires it.
    * 
    * @param caName the CA subject to set
-   * @throws ProblemException if the type is not CA_* (i.e., it doesn't
-   *         require a CA), or if the argument is <code>null</code> but
-   *         the type requires a CA
+   * @throws ProblemException if the type doesn't require a CA, or if
+   *         the argument is <code>null</code> but the type requires it
    */
   public void setCA( final String caName ) throws ProblemException;
   
   /**
    * Gets the actor's ID. Depending on the {@link ActorType} this
-   * means the X509's DN, a group name, or a SAML attribute.
+   * means the X509's DN, a group name, or a SAML attribute in the
+   * format <code>"attr_name=value"</code>.
    * 
    * @return the actor's ID
    */
@@ -107,7 +107,8 @@ public interface IACLActor {
   
   /**
    * Sets the actor's ID. Depending on the {@link ActorType} this
-   * means the X509's DN, a group name, or a SAML attribute.
+   * means the X509's DN, a group name, or a SAML attribute in the
+   * format <code>"attr_name=value"</code>.
    * 
    * @param actorId the ID to set for this actor
    * @throws ProblemException if the argument is <code>null</code>
