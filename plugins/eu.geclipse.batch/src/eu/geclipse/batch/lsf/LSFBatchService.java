@@ -20,8 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.geclipse.batch.AbstractBatchService;
-import eu.geclipse.batch.BatchJobManager;
 import eu.geclipse.batch.IBatchJobInfo;
+import eu.geclipse.batch.IBatchJobManager;
 import eu.geclipse.batch.IBatchServiceDescription;
 import eu.geclipse.batch.IQueueInfo;
 import eu.geclipse.batch.IWorkerNodeInfo;
@@ -165,7 +165,7 @@ public class LSFBatchService extends AbstractBatchService {
     }
   }
 
-  public void getJobs( final BatchJobManager manager ) throws ProblemException {
+  public void getJobs( final IBatchJobManager manager ) throws ProblemException {
     // TODO Auto-generated method stub
     
   }

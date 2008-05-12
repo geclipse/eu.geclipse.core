@@ -67,7 +67,7 @@ public interface IBatchService {
    * @param manager The manager where the jobs will be merged into. 
    * @throws ProblemException If command is not executed successfully
    */
-  public abstract void getJobs( final BatchJobManager manager ) throws ProblemException;
+  public abstract void getJobs( final IBatchJobManager manager ) throws ProblemException;
 
   /**
    * Deletes a job in the queues of the batch service.

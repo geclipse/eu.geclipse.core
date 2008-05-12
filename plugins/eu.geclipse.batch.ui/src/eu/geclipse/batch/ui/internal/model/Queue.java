@@ -25,12 +25,12 @@ import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
 
-import eu.geclipse.batch.BatchJobManager;
 import eu.geclipse.batch.IBatchJobInfo;
 import eu.geclipse.batch.IQueueInfo;
 import eu.geclipse.batch.IQueueInfo.QueueRunState;
 import eu.geclipse.batch.IQueueInfo.QueueState;
 import eu.geclipse.batch.ui.internal.Activator;
+import eu.geclipse.batch.ui.internal.BatchJobManager;
 import eu.geclipse.batch.ui.internal.BatchUpdate;
 import eu.geclipse.batch.ui.internal.Messages;
 

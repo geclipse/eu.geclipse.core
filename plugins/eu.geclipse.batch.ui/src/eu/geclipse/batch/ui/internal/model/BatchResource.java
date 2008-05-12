@@ -22,7 +22,7 @@ import org.eclipse.swt.graphics.Image;
 import org.eclipse.draw2d.geometry.Dimension;
 import org.eclipse.draw2d.geometry.Point;
 
-import eu.geclipse.batch.BatchJobManager;
+import eu.geclipse.batch.ui.internal.BatchJobManager;
 
 /**
  * Base class for the various model classes that models a batch resource.

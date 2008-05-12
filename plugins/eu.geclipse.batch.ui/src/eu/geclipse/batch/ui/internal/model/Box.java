@@ -16,8 +16,8 @@ import java.util.List;
 
 import org.eclipse.swt.graphics.Image;
 
-import eu.geclipse.batch.BatchJobManager;
 import eu.geclipse.batch.ui.internal.Activator;
+import eu.geclipse.batch.ui.internal.BatchJobManager;
 import eu.geclipse.batch.ui.internal.Messages;
 
 public class Box extends BatchResource {

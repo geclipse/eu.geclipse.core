@@ -14,7 +14,7 @@
  *      - Harald Gjermundrod (harald@cs.ucy.ac.cy)
  *
  *****************************************************************************/
-package eu.geclipse.batch;
+package eu.geclipse.batch.ui.internal;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -25,16 +25,18 @@ import org.eclipse.compare.IContentChangeListener;
 import org.eclipse.compare.IContentChangeNotifier;
 import org.eclipse.core.runtime.ListenerList;
 
+import eu.geclipse.batch.BatchJobInfo;
 import eu.geclipse.batch.IBatchJobInfo;
+import eu.geclipse.batch.IBatchJobManager;
+import eu.geclipse.batch.IBatchService;
 import eu.geclipse.batch.IBatchJobInfo.JobState;
-import eu.geclipse.batch.internal.BatchJobInfo;
 import eu.geclipse.core.reporting.ProblemException;
 
 /**
  * The <code>BatchJobManager</code> manages all types of jobs present in the 
  * batch system.
  */
-public class BatchJobManager implements IContentChangeNotifier {
+public class BatchJobManager implements IBatchJobManager, IContentChangeNotifier {
   /**
    * The internal list of managed jobs.
    */

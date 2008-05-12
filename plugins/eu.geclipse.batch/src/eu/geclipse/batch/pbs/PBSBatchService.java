@@ -22,8 +22,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.geclipse.batch.AbstractBatchService;
-import eu.geclipse.batch.BatchJobManager;
+import eu.geclipse.batch.BatchJobInfo;
 import eu.geclipse.batch.IBatchJobInfo;
+import eu.geclipse.batch.IBatchJobManager;
 import eu.geclipse.batch.IBatchServiceDescription;
 import eu.geclipse.batch.IQueueInfo;
 import eu.geclipse.batch.ISSHConnectionInfo;
@@ -33,7 +34,6 @@ import eu.geclipse.batch.IQueueInfo.QueueRunState;
 import eu.geclipse.batch.IQueueInfo.QueueState;
 import eu.geclipse.batch.IQueueInfo.QueueType;
 import eu.geclipse.batch.IWorkerNodeInfo.WorkerNodeState;
-import eu.geclipse.batch.internal.BatchJobInfo;
 import eu.geclipse.batch.internal.QueueInfo;
 import eu.geclipse.batch.internal.WorkerNodeInfo;
 import eu.geclipse.batch.model.qdl.DocumentRoot;
@@ -73,7 +73,7 @@ public final class PBSBatchService extends AbstractBatchService {
    * @param jobLine The string containing the information about the specific job.
    * @return A job {@link BatchJobInfo} or <code>null</code>.
    */
-  private IBatchJobInfo parseJobLine( final String jobLine, final BatchJobManager manager ) {
+  private IBatchJobInfo parseJobLine( final String jobLine, final IBatchJobManager manager ) {
     IBatchJobInfo jobInfo = null;
     String jobId, jobName, queueName;
     String userAccount, timeUse;
@@ -428,7 +428,7 @@ public final class PBSBatchService extends AbstractBatchService {
    * @param manager The manager where the jobs will be merged into. 
    * @throws ProblemException If command is not executed successfully
    */
-  public synchronized void getJobs( final BatchJobManager manager ) throws ProblemException {
+  public synchronized void getJobs( final IBatchJobManager manager ) throws ProblemException {
     String outPut;
     IBatchJobInfo jobInfo;
     String line;

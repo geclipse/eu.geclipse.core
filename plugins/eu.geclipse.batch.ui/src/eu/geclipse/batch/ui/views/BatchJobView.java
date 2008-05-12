@@ -65,10 +65,10 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.wizard.WizardDialog;
 
 import eu.geclipse.core.reporting.ProblemException;
-import eu.geclipse.batch.BatchJobManager;
 import eu.geclipse.batch.IBatchJobInfo;
 import eu.geclipse.batch.ui.dialogs.BatchJobInfoDialog;
 import eu.geclipse.batch.ui.internal.Activator;
+import eu.geclipse.batch.ui.internal.BatchJobManager;
 import eu.geclipse.batch.ui.internal.Messages;
 import eu.geclipse.batch.ui.internal.parts.BatchTreeEditPart;
 import eu.geclipse.batch.ui.internal.parts.ComputingElementEditPart;

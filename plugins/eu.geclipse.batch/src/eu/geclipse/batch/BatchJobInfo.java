@@ -15,10 +15,8 @@
  *
  *****************************************************************************/
 
-package eu.geclipse.batch.internal;
+package eu.geclipse.batch;
 
-import eu.geclipse.batch.IBatchJobInfo;
-import eu.geclipse.batch.IBatchService;
 import eu.geclipse.core.reporting.ProblemException;
 
 /**
