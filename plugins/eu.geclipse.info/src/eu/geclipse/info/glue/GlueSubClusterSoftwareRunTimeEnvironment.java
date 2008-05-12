@@ -17,7 +17,6 @@
 
 package eu.geclipse.info.glue;
 
-import java.util.Date;
 
 /**
  * @author George Tsouloupas
@@ -39,20 +38,11 @@ public class GlueSubClusterSoftwareRunTimeEnvironment extends AbstractGlueTable
    */
   public String Value; // PK
 
+  public String GlueLocactionPath;
   /**
    * 
    */
   public GlueSubCluster glueSubCluster; // GlueSubClusterUniqueID
-
-  /**
-   * 
-   */
-  public Date MeasurementDate;
-
-  /**
-   * 
-   */
-  public Date MeasurementTime;
 
   /* (non-Javadoc)
    * @see eu.geclipse.info.glue.AbstractGlueTable#getID()

@@ -19,11 +19,6 @@ package eu.geclipse.info.glue;
 
 import java.util.ArrayList;
 
-import javax.naming.NamingEnumeration;
-import javax.naming.NamingException;
-import javax.naming.directory.Attribute;
-import javax.naming.directory.Attributes;
-
 /**
  * @author George Tsouloupas
  * TODO Write Comments
@@ -65,11 +60,7 @@ public class GlueCE extends AbstractGlueTable implements java.io.Serializable{
    * 
    */
   public String LRMSType;
-
-  /**
-   * 
-   */
-
+  
   /**
    * 
    */
