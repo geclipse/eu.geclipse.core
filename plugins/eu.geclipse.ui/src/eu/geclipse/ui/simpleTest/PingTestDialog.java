@@ -237,21 +237,24 @@ public class PingTestDialog extends AbstractSimpleTestDialog  {
     
     Button pingButton = new Button( outControls, SWT.PUSH );
     pingButton.setText( Messages.getString( "PingTestDialog.pingButton" ) ); //$NON-NLS-1$
+    pingButton.setToolTipText( Messages.getString( "PingTestDialog.pingButtonToolTip" ) ); //$NON-NLS-1$
     gData = new GridData( GridData.FILL_HORIZONTAL );
     gData.verticalAlignment = GridData.BEGINNING;
     pingButton.setLayoutData( gData );
 
     Button stopButton = new Button( outControls, SWT.PUSH );
     stopButton.setText( Messages.getString( "PingTestDialog.stopButton" ) ); //$NON-NLS-1$
+    stopButton.setToolTipText( Messages.getString( "PingTestDialog.stopButtonToolTip" ) ); //$NON-NLS-1$
     gData = new GridData( GridData.FILL_HORIZONTAL );
     gData.verticalAlignment = GridData.BEGINNING;
     stopButton.setLayoutData( gData );
 
     Button clearButton = new Button( outControls, SWT.PUSH );
     clearButton.setText( Messages.getString( "PingTestDialog.clearButton" ) ); //$NON-NLS-1$
+    clearButton.setToolTipText( Messages.getString( "PingTestDialog.clearButtonToolTip" ) ); //$NON-NLS-1$
     gData = new GridData( GridData.FILL_HORIZONTAL );
     gData.verticalAlignment = GridData.BEGINNING;
-    stopButton.setLayoutData( gData );
+    clearButton.setLayoutData( gData );
 
     pingButton.addSelectionListener( new SelectionAdapter() {
       @Override

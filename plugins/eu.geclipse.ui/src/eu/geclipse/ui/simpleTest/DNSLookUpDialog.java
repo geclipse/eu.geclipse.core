@@ -182,12 +182,14 @@ public class DNSLookUpDialog extends AbstractSimpleTestDialog  {
     
     this.lookUpButton = new Button( outControls, SWT.PUSH );
     this.lookUpButton.setText( Messages.getString( "DNSLookUpDialog.lookUpButton" ) ); //$NON-NLS-1$
+    this.lookUpButton.setToolTipText( Messages.getString( "DNSLookUpDialog.lookUpButtonToolTip" ) ); //$NON-NLS-1$
     gData = new GridData( GridData.FILL_HORIZONTAL );
     gData.verticalAlignment = GridData.BEGINNING;
     this.lookUpButton.setLayoutData( gData );
 
     this.stopButton = new Button( outControls, SWT.PUSH );
     this.stopButton.setText( Messages.getString( "DNSLookUpDialog.stopButton" ) ); //$NON-NLS-1$
+    this.stopButton.setToolTipText( Messages.getString( "DNSLookUpDialog.stopButtonToolTip" ) ); //$NON-NLS-1$
     gData = new GridData( GridData.FILL_HORIZONTAL );
     gData.verticalAlignment = GridData.BEGINNING;
     this.stopButton.setLayoutData( gData );
