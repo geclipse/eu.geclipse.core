@@ -22,8 +22,8 @@ import static org.junit.Assert.*;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import eu.geclipse.batch.BatchJobInfo;
 import eu.geclipse.batch.IBatchJobInfo;
-import eu.geclipse.batch.internal.BatchJobInfo;
 
 /**
  * @author cs05ce1
@@ -41,7 +41,7 @@ public class BatchJobInfo_Test {
   }
 
   /**
-   * Test method for {@link eu.geclipse.batch.internal.BatchJobInfo#getQueueName()}.
+   * Test method for {@link eu.geclipse.batch.BatchJobInfo#getQueueName()}.
    */
   @Test
   public void testGetQueueName() {
@@ -50,7 +50,7 @@ public class BatchJobInfo_Test {
   }
 
   /**
-   * Test method for {@link eu.geclipse.batch.internal.BatchJobInfo#getStatus()}.
+   * Test method for {@link eu.geclipse.batch.BatchJobInfo#getStatus()}.
    */
   @Test
   public void testGetStatus() {
@@ -59,7 +59,7 @@ public class BatchJobInfo_Test {
   }
 
   /**
-   * Test method for {@link eu.geclipse.batch.internal.BatchJobInfo#getTimeUse()}.
+   * Test method for {@link eu.geclipse.batch.BatchJobInfo#getTimeUse()}.
    */
   @Test
   public void testGetTimeUse() {
@@ -68,7 +68,7 @@ public class BatchJobInfo_Test {
   }
 
   /**
-   * Test method for {@link eu.geclipse.batch.internal.BatchJobInfo#getUserAccount()}.
+   * Test method for {@link eu.geclipse.batch.BatchJobInfo#getUserAccount()}.
    */
   @Test
   public void testGetUserAccount() {
@@ -77,7 +77,7 @@ public class BatchJobInfo_Test {
   }
 
   /**
-   * Test method for {@link eu.geclipse.batch.internal.BatchJobInfo#getJobId()}.
+   * Test method for {@link eu.geclipse.batch.BatchJobInfo#getJobId()}.
    */
   @Test
   public void testGetJobId() {
@@ -85,7 +85,7 @@ public class BatchJobInfo_Test {
   }
 
   /**
-   * Test method for {@link eu.geclipse.batch.internal.BatchJobInfo#getJobName()}.
+   * Test method for {@link eu.geclipse.batch.BatchJobInfo#getJobName()}.
    */
   @Test
   public void testGetJobName() {
