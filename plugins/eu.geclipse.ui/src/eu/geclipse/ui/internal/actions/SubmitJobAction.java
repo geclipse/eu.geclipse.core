@@ -42,13 +42,10 @@ public class SubmitJobAction extends SelectionListenerAction {
    */
   private IWorkbenchSite site;
   private List<IGridJobDescription> jobDescriptions;
-  // private List< IGridJobCreator > jobCreators;
-  private List<IGridJobService> jobServices;
 
   protected SubmitJobAction( final IWorkbenchSite site ) {
     super( Messages.getString( "SubmitJobAction.title" ) ); //$NON-NLS-1$
     this.site = site;
-    this.jobServices = new ArrayList<IGridJobService>();
     this.jobDescriptions = new ArrayList<IGridJobDescription>();
   }
 
@@ -59,31 +56,22 @@ public class SubmitJobAction extends SelectionListenerAction {
    */
   @Override
   public void run() {
-    oldUpdateSelection( this.lastselection );
-    JobCreatorSelectionWizard wizard = new JobCreatorSelectionWizard( this.jobDescriptions,
-                                                                      this.jobServices );
+    JobCreatorSelectionWizard wizard = new JobCreatorSelectionWizard( this.jobDescriptions);
     WizardDialog dialog = new WizardDialog( this.site.getShell(), wizard );
     dialog.setBlockOnOpen( false );
     dialog.open();
   }
 
-  private IStructuredSelection lastselection;
-  // TODO mariusz rollback it:
-  protected boolean updateSelection( final IStructuredSelection selection ) {
-    lastselection = selection;
-    return true;
-  }
 
   /*
    * (non-Javadoc)
    * 
    * @see org.eclipse.ui.actions.BaseSelectionListenerAction#updateSelection(org.eclipse.jface.viewers.IStructuredSelection)
    */
-  
-  protected boolean oldUpdateSelection( final IStructuredSelection selection ) {
+  @Override
+  protected boolean updateSelection( final IStructuredSelection selection ) {
 
     boolean enabled = super.updateSelection( selection );
-    this.jobServices.clear();
     this.jobDescriptions.clear();
     IGridProject project = null;
     Iterator<?> iter = selection.iterator();
@@ -91,60 +79,21 @@ public class SubmitJobAction extends SelectionListenerAction {
       Object element = iter.next();
       IGridJobDescription jobDescription = getJobDescription( element );
       enabled &= ( jobDescription != null );
-      IGridJobService[] allServices = null;
       if( jobDescription != null ) {
         if( project == null ) {
-          //check project and initiate list of services
           project = jobDescription.getProject();
-          try {
-            allServices = project.getVO().getJobSubmissionServices( null );
-            for( IGridJobService service : allServices ) {
-              this.jobServices.add( service );
-            }
-          } catch( GridModelException e ) {
-            //TODO pawelw - handle error
-            return false;
-          }
         }
         if(project!=jobDescription.getProject()){
           //job description from different projects cannot be submitted together
           return false;
         }
         this.jobDescriptions.add( jobDescription );
-        for( int i=this.jobServices.size()-1;i>=0;i--) {
-          IGridJobService service=this.jobServices.get( i );
-          if( !service.canSubmit( jobDescription ) )
-            this.jobServices.remove( service );
-        }
       }
     }
-    return enabled && ( this.jobServices != null );
+    return enabled && ( this.jobDescriptions != null );
   }
 
-  // @Override
-  // protected boolean updateSelection( final IStructuredSelection selection ) {
-  // this.jobCreators = null;
-  // this.jobDescriptions = new ArrayList< IGridJobDescription >();
-  // boolean enabled = super.updateSelection( selection );
-  // Iterator< ? > iter = selection.iterator();
-  // while ( iter.hasNext() && enabled ) {
-  // Object element = iter.next();
-  // IGridJobDescription jobDescription = getJobDescription( element );
-  // enabled &= ( jobDescription != null );
-  // if ( jobDescription != null ) {
-  // this.jobDescriptions.add( jobDescription );
-  // List< IGridJobCreator > creators
-  // = GridModel.getJobCreators( ( IGridJobDescription ) jobDescription );
-  // if ( this.jobCreators == null ) {
-  // this.jobCreators = creators;
-  // } else {
-  // this.jobCreators = mergeCreators( this.jobCreators, creators );
-  // }
-  // }
-  // }
-  // return enabled && ( this.jobCreators != null );
-  // }
-  private IGridJobDescription getJobDescription( final Object element ) {
+private IGridJobDescription getJobDescription( final Object element ) {
     IGridJobDescription description = null;
     if( element instanceof IGridJobDescription ) {
       description = ( IGridJobDescription )element;
@@ -156,23 +105,4 @@ public class SubmitJobAction extends SelectionListenerAction {
     }
     return description;
   }
-  // private List< IGridJobCreator > mergeCreators( final List< IGridJobCreator
-  // > orig,
-  // final List< IGridJobCreator > merge ) {
-  // List< IGridJobCreator > result = new ArrayList< IGridJobCreator >();
-  // for ( IGridJobCreator oCreator : orig ) {
-  // boolean found = false;
-  // for ( IGridJobCreator mCreator : merge ) {
-  // if ( oCreator.getClass().equals( mCreator.getClass() ) ) {
-  // found = true;
-  // break;
-  //        }
-  //      }
-  //      if ( found ) {
-  //        result.add( oCreator );
-  //      }
-  //    }
-  //    return result;
-  //  }
-  //  
 }
