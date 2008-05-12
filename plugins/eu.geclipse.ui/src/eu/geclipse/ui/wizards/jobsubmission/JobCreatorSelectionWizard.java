@@ -19,6 +19,8 @@ package eu.geclipse.ui.wizards.jobsubmission;
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -45,6 +47,7 @@ import org.eclipse.ui.PlatformUI;
 
 import eu.geclipse.core.jobs.GridJobCreator;
 import eu.geclipse.core.model.GridModel;
+import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobCreator;
@@ -61,15 +64,13 @@ import eu.geclipse.ui.internal.Activator;
 public class JobCreatorSelectionWizard extends Wizard {
 
   protected List<IGridJobDescription> jobDescriptions;
-  private final List<IGridJobService> jobServices;
+  private List<IGridJobService> jobServices;
   private JobServiceSelectionWizardPage selectionPage;
   private FolderSelectionWizardPage folderSelection;
 
-  public JobCreatorSelectionWizard( final List<IGridJobDescription> jobDescriptions,
-                                    final List<IGridJobService> jobServices )
+  public JobCreatorSelectionWizard( final List<IGridJobDescription> jobDescriptions )
   {
     this.jobDescriptions = jobDescriptions;
-    this.jobServices = jobServices;
     setNeedsProgressMonitor( true );
     setForcePreviousAndNextButtons( true );
     setWindowTitle( Messages.getString( "JobCreatorSelectionWizard.title" ) ); //$NON-NLS-1$
@@ -77,10 +78,6 @@ public class JobCreatorSelectionWizard extends Wizard {
       .getBundle()
       .getEntry( "icons/wizban/jobsubmit_wiz.gif" ); //$NON-NLS-1$
     setDefaultPageImageDescriptor( ImageDescriptor.createFromURL( imgUrl ) );
-  }
-
-  List<IGridJobService> getJobServices() {
-    return this.jobServices;
   }
 
   public IResource getDestinationFolder() {
@@ -99,15 +96,60 @@ public class JobCreatorSelectionWizard extends Wizard {
                                                           this.jobDescriptions );
     addPage( this.folderSelection );
     this.selectionPage = new JobServiceSelectionWizardPage( "Job Service Selection",
-                                                            this.jobDescriptions,
-                                                            this.jobServices );
-    // this.selectionPage.setInitData( this.jobDescriptions );
+                                                            this.jobDescriptions );
+    // start job for retrieving list of services
+    jobServices = new ArrayList<IGridJobService>();
+    Job job = new Job( "Retrieving list of job services" ) {
+
+      @Override
+      protected IStatus run( IProgressMonitor monitor ) {
+        assert jobDescriptions != null;
+        assert jobDescriptions.get( 0 ) != null;
+        IGridJobService[] allServices = null;
+        IGridProject project = jobDescriptions.get( 0 ).getProject();
+        assert project != null;
+        assert project.getVO() != null;
+        try {
+          allServices = project.getVO().getJobSubmissionServices( null );
+          boolean valid;
+          for( IGridJobService service : allServices ) {
+            Iterator<IGridJobDescription> iter = jobDescriptions.iterator();
+            valid = true;
+            while( iter.hasNext() ) {
+              IGridJobDescription jobDescription = iter.next();
+              if( !service.canSubmit( jobDescription ) )
+                valid = false;
+            }
+            if(valid==true){
+              jobServices.add( service );
+            }
+          }
+          IWorkbench workbench = PlatformUI.getWorkbench();
+          Display display = workbench.getDisplay();
+          display.syncExec( new Runnable() {
+
+            public void run() {
+//              List<IGridJobService> synchronizedList = Collections.synchronizedList( jobServices );
+              JobCreatorSelectionWizard.this.selectionPage.setServices( jobServices ) ;
+            }
+          } );
+        } catch( GridModelException e ) {
+          // TODO pawelw - handle error
+          return Status.CANCEL_STATUS;
+        }
+        
+
+        return Status.OK_STATUS;
+      }
+    };
+    job.setUser( true );
+    job.schedule();
     addPage( this.selectionPage );
   }
 
   @Override
   public boolean canFinish() {
-    return super.canFinish() & this.getSubmissionService()!=null;
+    return super.canFinish() & this.getSubmissionService() != null;
   }
 
   // @Override
@@ -124,10 +166,10 @@ public class JobCreatorSelectionWizard extends Wizard {
   public boolean performFinish() {
     {
       JobSubmissionJob job = new JobSubmissionJob();
-      //needs to be stored, because JobSubmissionJob cannot access GUI fields 
+      // needs to be stored, because JobSubmissionJob cannot access GUI fields
       // from folderSelectionWizardPage
-      job.setJobNames(this.folderSelection.getJobNames());
-      job.setDestinationFolder(this.folderSelection.getDestinationFolder());
+      job.setJobNames( this.folderSelection.getJobNames() );
+      job.setDestinationFolder( this.folderSelection.getDestinationFolder() );
       job.setUser( true );
       Shell shell = getWizardShell();
       if( shell != null ) {
@@ -241,15 +283,14 @@ public class JobCreatorSelectionWizard extends Wizard {
       super( Messages.getString( "JobSubmissionWizardBase.jobName" ) ); //$NON-NLS-1$
     }
 
-    void setJobNames(List<String> _jobNames){
-      this.jobNames=_jobNames;
-      
+    void setJobNames( final List<String> _jobNames ) {
+      this.jobNames = _jobNames;
     }
-    
-    void setDestinationFolder(IResource folder){
-      this.destinationFolder=folder;
+
+    void setDestinationFolder( final IResource folder ) {
+      this.destinationFolder = folder;
     }
-    
+
     /**
      * the run method for the Background job create the JobSubmissionWizard and
      * call the service
@@ -271,15 +312,16 @@ public class JobCreatorSelectionWizard extends Wizard {
           testCancelled( betterMonitor );
           IGridJobDescription description = iterator.next();
           betterMonitor.setTaskName( String.format( Messages.getString( "JobSubmissionWizardBase.taskNameSubmitting" ), description.getName() ) ); //$NON-NLS-1$
-          IGridContainer parent = buildTargetFolder( description, destinationFolder );
+          IGridContainer parent = buildTargetFolder( description,
+                                                     destinationFolder );
           IGridJobID jobId = null;
           if( this.service != null ) {
             jobId = this.service.submitJob( description,
                                             betterMonitor.newChild( 1 ) );
           }
           testCancelled( betterMonitor );
-          //needed to pass jobDescription to creator
-          //maybe will change some day...
+          // needed to pass jobDescription to creator
+          // maybe will change some day...
           creator.canCreate( description );
           creator.create( parent, jobId, service, namesIterator.next() );
           // don't submit this job again during again submission after error

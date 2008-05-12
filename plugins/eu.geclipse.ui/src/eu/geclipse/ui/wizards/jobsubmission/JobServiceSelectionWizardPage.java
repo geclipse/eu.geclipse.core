@@ -35,19 +35,26 @@ public class JobServiceSelectionWizardPage extends WizardPage {
   IGridProject project;
   private List<IGridJobDescription> jobDescriptions;
   private List<IGridJobService> jobServices;
+
   private org.eclipse.swt.widgets.List list;
 
   public JobServiceSelectionWizardPage( final String pageName,
-                                    final List<IGridJobDescription> jobDescriptions,
-                                    final List<IGridJobService> jobServices )
+                                    final List<IGridJobDescription> _jobDescriptions)
   {
     super( pageName );
     super.setTitle( "Submit job description" );
-    super.setDescription( "Choose service for submitting jobs" );
-    this.jobDescriptions = jobDescriptions;
-    this.jobServices = jobServices;
+    super.setDescription( "Retrieving list of services, please wait a while..." );
+    this.jobDescriptions = _jobDescriptions;
   }
 
+  public void setServices(final List<IGridJobService> _jobServices){
+    super.setDescription( "Choose service for submitting jobs" );
+    this.jobServices = _jobServices;
+    for(Iterator<IGridJobService> i=jobServices.iterator(); i.hasNext();){
+      list.add( i.next().getName() );
+    }
+  }
+  
   public void createControl( final Composite parent ) {
     Composite mainComp = new Composite( parent, SWT.NONE );
     mainComp.setLayout( new GridLayout( 2, false ) );
@@ -62,9 +69,6 @@ public class JobServiceSelectionWizardPage extends WizardPage {
                                | SWT.SINGLE
                                | SWT.H_SCROLL
                                | SWT.V_SCROLL );
-    for(Iterator<IGridJobService> i=jobServices.iterator(); i.hasNext();){
-      list.add( i.next().getName() );
-    }
     
     this.list.setLayoutData( gd );
     this.list.addSelectionListener( new SelectionAdapter() {
