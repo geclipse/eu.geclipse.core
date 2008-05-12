@@ -75,12 +75,12 @@ public abstract class AbstractGridViewerFilter extends ViewerFilter
    * @return formatter used to store and read data into {@link IMemento}
    */
   private DateFormat getDateTimeFormatter() {
-    DateFormat formatter = DateFormat.getDateTimeInstance( DateFormat.SHORT,
-                                                           DateFormat.SHORT,
+    DateFormat formatter = DateFormat.getDateTimeInstance( DateFormat.MEDIUM,
+                                                           DateFormat.MEDIUM,
                                                            new Locale( "Locale.US" ) ); //$NON-NLS-1$
     if( formatter == null ) {
-      formatter = DateFormat.getDateTimeInstance( DateFormat.SHORT,
-                                                  DateFormat.SHORT );
+      formatter = DateFormat.getDateTimeInstance( DateFormat.MEDIUM,
+                                                  DateFormat.MEDIUM );
     }
     return formatter;
   }

@@ -211,7 +211,13 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
               
               if( textContent != null 
                   && textContent.length() > 0 ) {
-                this.submissionTime = getXmlDateFormatter().parse( textContent );
+                try {
+                  this.submissionTime = getXmlDateFormatter().parse( textContent );
+                } catch( ParseException exception ) {
+                  this.submissionTime = DateFormat.getDateTimeInstance( DateFormat.SHORT,
+                                                  DateFormat.SHORT,
+                                                  new Locale( "Locale.US" ) ).parse( textContent ); //$NON-NLS-1$
+                }                
               }
             } catch( DOMException e ) {
               // empty implementation
@@ -815,13 +821,15 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
   
   
   private DateFormat getXmlDateFormatter() {
-    DateFormat formatter = DateFormat.getDateTimeInstance( DateFormat.SHORT,
-                                                           DateFormat.SHORT,
+    DateFormat formatter = DateFormat.getDateTimeInstance( DateFormat.MEDIUM,
+                                                           DateFormat.MEDIUM,
                                                            new Locale( "Locale.US" ) ); //$NON-NLS-1$
     if( formatter == null ) {
-      formatter = DateFormat.getDateTimeInstance( DateFormat.SHORT,
-                                                  DateFormat.SHORT );
+      formatter = DateFormat.getDateTimeInstance( DateFormat.MEDIUM,
+                                                  DateFormat.MEDIUM );
     }
+    
+    formatter.setLenient( true );
     return formatter;
 
   }

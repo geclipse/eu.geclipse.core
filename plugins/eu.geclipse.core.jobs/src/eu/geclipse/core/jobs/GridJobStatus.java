@@ -190,12 +190,12 @@ public class GridJobStatus implements IGridJobStatus {
   }
 
   private DateFormat getXmlDateFormatter() {
-    DateFormat formatter = DateFormat.getDateTimeInstance( DateFormat.SHORT,
-                                                           DateFormat.SHORT,
+    DateFormat formatter = DateFormat.getDateTimeInstance( DateFormat.MEDIUM,
+                                                           DateFormat.MEDIUM,
                                                            new Locale( "Locale.US" ) ); //$NON-NLS-1$
     if( formatter == null ) {
-      formatter = DateFormat.getDateTimeInstance( DateFormat.SHORT,
-                                                  DateFormat.SHORT );
+      formatter = DateFormat.getDateTimeInstance( DateFormat.MEDIUM,
+                                                  DateFormat.MEDIUM );
     }
     return formatter;
   }
