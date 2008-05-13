@@ -70,7 +70,7 @@ public class JobCreatorSelectionWizard extends Wizard {
 
   public JobCreatorSelectionWizard( final List<IGridJobDescription> jobDescriptions )
   {
-    this.jobDescriptions = jobDescriptions;
+    this.jobDescriptions = new ArrayList<IGridJobDescription>(jobDescriptions);
     setNeedsProgressMonitor( true );
     setForcePreviousAndNextButtons( true );
     setWindowTitle( Messages.getString( "JobCreatorSelectionWizard.title" ) ); //$NON-NLS-1$
