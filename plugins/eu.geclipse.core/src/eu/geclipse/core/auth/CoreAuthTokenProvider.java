@@ -32,7 +32,8 @@ public class CoreAuthTokenProvider extends AbstractAuthTokenProvider {
    * @see eu.geclipse.core.auth.IAuthTokenProvider#requestToken()
    */
   public IAuthenticationToken requestToken() {
-    return requestToken( new AuthTokenRequest( null, null, null ) );
+    //return requestToken( new AuthTokenRequest( null, null, null ) );
+    return requestToken( null);
   }
   
   /* (non-Javadoc)
