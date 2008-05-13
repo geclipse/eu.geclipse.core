@@ -236,7 +236,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
    * @return job service or null if service doesn't exists for that job.<br>
    * Service may not exists if middleware doesn't support it, or if job was created in g-eclipse old version  
    */
-  private IGridJobService getJobService() {
+  public IGridJobService getJobService() {
     if( this.jobService == null ) {
       this.jobService = createJobService( this.jobID );
     }
