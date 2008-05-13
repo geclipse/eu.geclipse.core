@@ -21,9 +21,27 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 /**
- * Base interface for elements of a filesystem mount.
+ * Base interface for elements of a file system mount.
  */
 public interface IGridConnectionElement extends IGridResource, IGridContainer {
+  
+  /**
+   * Determine if an adapter exists for adapting this connection element
+   * to an element of the specified type.
+   * 
+   * @param type The type of the target element.
+   * @return <code>true</code> if an adapter could be found.
+   */
+  public boolean canAdaptToElement( final Class< ? extends IGridElement > type );
+  
+  /**
+   * Adapt this connection element to an element of the specified type if
+   * a corresponding adapter is available.
+   * 
+   * @param type The type of the target element.
+   * @return The target element or <code>null</code> if no adapter could be found.
+   */
+  public IGridElement getElementAdapter( final Class< ? extends IGridElement > type );
   
   /**
    * Get a cached version of the {@link IFileStore} object corresponding to

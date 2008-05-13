@@ -16,6 +16,8 @@
 package eu.geclipse.core.filesystem.internal.filesystem;
 
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
 
 import org.eclipse.core.filesystem.EFS;
@@ -53,6 +55,11 @@ public class ConnectionElement
     implements IGridConnectionElement {
   
   /**
+   * Table used for caching all available adapters.
+   */
+  private static Hashtable< Class< ? extends IGridElement >, List< IGridElementCreator > > adapters;
+  
+  /**
    * The corresponding resource.
    */
   private IResource resource;
@@ -75,6 +82,14 @@ public class ConnectionElement
   }
   
   /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridConnectionElement#canAdaptToElement(java.lang.Class)
+   */
+  public boolean canAdaptToElement( final Class< ? extends IGridElement > type ) {
+    List< IGridElementCreator > elementAdapters = getElementAdapters( this, type );
+    return ! elementAdapters.isEmpty();
+  }
+  
+  /* (non-Javadoc)
    * @see eu.geclipse.core.model.impl.AbstractGridContainer#canContain(eu.geclipse.core.model.IGridElement)
    */
   @Override
@@ -82,36 +97,25 @@ public class ConnectionElement
     return isFolder();// && ( element instanceof IGridConnectionElement );
   }
   
-  @SuppressWarnings({ "unchecked", "cast" })
-  @Override
-  public Object getAdapter( final Class adapter ) {
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IGridConnectionElement#getElementAdapter(java.lang.Class)
+   */
+  public IGridElement getElementAdapter( final Class< ? extends IGridElement > type ) {
     
-    Object result = null;
+    IGridElement result = null;
     
-    if ( IGridElement.class.isAssignableFrom( adapter ) ) {
-      IResource source = getResource();
-      List< IConfigurationElement > elements
-        = Extensions.getRegisteredElementCreatorConfigurations( source.getClass(), ( Class< ? extends IGridElement > ) adapter );
-      if ( elements != null ) {
-        for ( IConfigurationElement element : elements ) {
-          try {
-            IGridElementCreator creator
-              = ( IGridElementCreator ) element.createExecutableExtension( Extensions.GRID_ELEMENT_CREATOR_EXECUTABLE );
-            if ( creator.canCreate( source ) ) {
-              result = creator.create( getParent() );
-              if ( result != null ) {
-                break;
-              }
-            }
-          } catch (CoreException e) {
-            // Do nothing, just catch and have another try
-          }
+    List< IGridElementCreator > elementAdapters = getElementAdapters( this, type );
+    IResource res = getResource();
+    
+    for ( IGridElementCreator adapter : elementAdapters ) {
+      if ( adapter.canCreate( res ) ) {
+        try {
+          result = adapter.create( getParent() );
+          break;
+        } catch ( GridModelException gmExc ) {
+          // Just ignore and have a try with the next creator
         }
       }
-    }
-    
-    if ( result == null ) {
-      result = super.getAdapter( adapter );
     }
     
     return result;
@@ -386,5 +390,56 @@ public class ConnectionElement
   public IResource getResource() {
     return this.resource;
   }
+  
+  /**
+   * Get all registered adapters for the specified grid element type. This method will
+   * cached any found adapter for later use.
+   * 
+   * @param source The connection element to be adapted.
+   * @param target The type to which to adapt this connection element.
+   * @return A possibly empty list of adapters.
+   * @see Extensions#getRegisteredElementCreatorConfigurations(Class, Class)
+   */
+  private static List< IGridElementCreator > getElementAdapters( final IGridConnectionElement source,
+                                                                 final Class< ? extends IGridElement > target ) {
+    
+    List< IGridElementCreator > result = null;
+    
+    if ( adapters != null ) {
+      result = adapters.get( target );
+    }
+    
+    
+    if ( result == null ) {
+      
+      result = new ArrayList< IGridElementCreator >();
+      IResource resource = source.getResource();
+      
+      List< IConfigurationElement > elements
+        = Extensions.getRegisteredElementCreatorConfigurations( resource.getClass(), target );
+      
+      if ( elements != null ) {
+        for ( IConfigurationElement element : elements ) {
+          try {
+            IGridElementCreator creator
+              = ( IGridElementCreator ) element.createExecutableExtension( Extensions.GRID_ELEMENT_CREATOR_EXECUTABLE );
+            if ( creator.canCreate( resource ) ) {
+              result.add( creator );
+            }
+          } catch ( Throwable exc ) {
+            // Do nothing, just catch and ignore this creator for being as failsafe as possible
+          }
+        }
+      }
+      
+      if ( ! result.isEmpty() ) {
+        adapters.put( target, result );
+      }
+      
+    }
+    
+    return result;
 
+  }
+  
 }
