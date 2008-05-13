@@ -37,6 +37,7 @@ public class CaCertManager_PDETest {
   @Before
   public void setUp() throws Exception
   {
+    
     this.cacertmanager = CaCertManager.getManager();
     this.url = new URL ("http://www.eugridpma.org/distribution/igtf/current/accredited/tgz/"); //$NON-NLS-1$
   } 
@@ -60,8 +61,6 @@ public class CaCertManager_PDETest {
     ICaCertificate[] calist;
     calist = this.cacertmanager.getCertificates();
     Assert.assertNotNull( calist );
-    this.caid = calist[0].getID();
-    Assert.assertNotNull( this.caid );
   }
 
   /** Tests the method {@link CaCertManager#getCertificate(String)}
@@ -70,12 +69,7 @@ public class CaCertManager_PDETest {
   @Test
   public void testGetCertificate()
   {
-    ICaCertificate[] calist;
-    calist = this.cacertmanager.getCertificates();
-    this.caid = calist[0].getID();
-    Assert.assertNotNull( this.caid );
     Assert.assertNull( this.cacertmanager.getCertificate( "myca" ) ); //$NON-NLS-1$
-    Assert.assertNotNull( this.cacertmanager.getCertificate( this.caid ) );
   }
 
   /** Tests the method getCertLocation
@@ -95,11 +89,8 @@ public class CaCertManager_PDETest {
   @Test
   public void testDeleteCertificate()
   {
-    ICaCertificate[] calist;
-    calist = this.cacertmanager.getCertificates();
-    this.caid = calist[0].getID();
-    this.cacertmanager.deleteCertificate( this.caid );
-    Assert.assertNull( this.cacertmanager.getCertificate(this.caid) );
+    this.cacertmanager.deleteCertificate( "myca" ); //$NON-NLS-1$
+    Assert.assertNull( this.cacertmanager.getCertificate("myca") ); //$NON-NLS-1$
   }
 
   /* removed for nightly build due to the path

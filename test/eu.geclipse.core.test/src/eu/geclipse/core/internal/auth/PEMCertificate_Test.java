@@ -68,12 +68,13 @@ public class PEMCertificate_Test {
    * @throws IOException 
    * 
    */
-  @Test
+  // can not be tested for nightly build due to absolute path; can not be moved to eu.geclipse.test duto private feature
+ /* @Test
   public void testReadFromFile() throws IOException {
     IPath certpath = new Path( "C:\\Dokumente und Einstellungen\\Tao-j\\Eigene Dateien\\usercert.pem" ); //$NON-NLS-1$
     PEMCertificate gridcert = PEMCertificate.readFromFile( certpath );
     Assert.assertEquals( "usercert", gridcert.getID() ); //$NON-NLS-1$
-  }
+  }*/
 
   /**tests the method {@link PEMCertificate#write(IPath)}
    * @throws IOException 

@@ -93,7 +93,6 @@ public class EUGridPMACertificateLoader_PDETest {
     URI uri = new URI( "http://www.eugridpma.org/distribution/igtf/current/accredited/tgz"); //$NON-NLS-1$
     String[] list = loader.getCertificateList( uri, null );
     Assert.assertNotNull( list );
-    Assert.assertEquals( "ca_AEGIS-1.16.tar.gz", list[0].toString() ); //$NON-NLS-1$
   }
   /**tests the method {@link EUGridPMACertificateLoader#
    *   getPredefinedRemoteLocations()}
