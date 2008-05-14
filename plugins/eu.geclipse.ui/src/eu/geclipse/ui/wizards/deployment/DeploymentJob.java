@@ -22,6 +22,7 @@ import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 
 import eu.geclipse.core.model.IGridApplicationManager;
@@ -85,6 +86,20 @@ public class DeploymentJob extends Job {
     this.installparameters.setTargets( this.target );
     this.installparameters.setTag( this.tag );
     IGridApplicationManager installmanager = this.vo.getApplicationManager();
+    if (installmanager == null)
+    {
+      final Throwable e = new Throwable();
+      Display.getDefault().asyncExec( new Runnable() {
+        public void run() {
+          
+          ProblemDialog.openProblem( null,
+                                     "Deployment error", //$NON-NLS-1$
+                                     "The middleware does not support application deployment", //$NON-NLS-1$
+                                     e );
+        }
+      } );
+    }
+    else {
     SubMonitor betterMonitor = SubMonitor.convert( monitor,
                                                    this.target.length );
     testCancelled( betterMonitor );
@@ -101,6 +116,7 @@ public class DeploymentJob extends Job {
     }
     testCancelled( betterMonitor );
     betterMonitor.done();
+    }
     return status;
   }
   
