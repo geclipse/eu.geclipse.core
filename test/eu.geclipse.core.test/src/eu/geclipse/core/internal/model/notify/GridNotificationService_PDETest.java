@@ -28,7 +28,7 @@ import eu.geclipse.core.model.IGridModelListener;
  * @author tao-j
  *
  */
-public class GridNotificationService_Test {
+public class GridNotificationService_PDETest {
 
   private static GridNotificationService service;
   
@@ -66,22 +66,13 @@ public class GridNotificationService_Test {
   }
 
   /**
-   * tests the methods {@link GridNotificationService#lock()}
-   * and {@link GridNotificationService#unlock()}
+   * tests the methods GridNotificationService#lock()
+   * and GridNotificationService#unlock()
    */
   @Test
   public void testLockUnlock() {
     service.lock( GridModel.getRoot() );
     service.unlock( GridModel.getRoot() );
-  }
-
-  /**
-   * tests the methods {@link GridNotificationService#
-   * queueEvent(eu.geclipse.core.model.IGridModelEvent)}
-   */
-  @Test
-  public void testQueueEvent() {
-    service.queueEvent( new GridModelEvent(IGridModelEvent.ELEMENTS_REMOVED,null,null) );
   }
 
 }

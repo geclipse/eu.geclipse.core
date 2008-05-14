@@ -22,6 +22,7 @@ import org.junit.Test;
 
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
+import eu.geclipse.core.model.IVoManager;
 
 
 /**this class tests all methods in the class {@link GenericVirtualOrganization}
@@ -37,7 +38,10 @@ public class GenericVirtualOrganization_PDETest {
    */
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
+    IVoManager vomanager = GridModel.getVoManager();
     creator = new GenericVoCreator();
+    creator.setVoName( "test" ) ; //$NON-NLS-1$  
+    vomanager.create( creator);
     gvo = new GenericVirtualOrganization(creator);
   }
 
@@ -104,7 +108,7 @@ public class GenericVirtualOrganization_PDETest {
    */
   @Test
   public void testGetName() {
-    Assert.assertNull( gvo.getName() );
+    Assert.assertEquals( "test", gvo.getName() ); //$NON-NLS-1$
   }
 
   /**

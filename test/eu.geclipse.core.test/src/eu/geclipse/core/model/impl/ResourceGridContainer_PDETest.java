@@ -43,7 +43,7 @@ public class ResourceGridContainer_PDETest {
   @BeforeClass
   public static void setUpBeforeClass() throws Exception {
  // create a project as an IResource
-    String projectName = "test"; //$NON-NLS-1$
+    String projectName = "jietest"; //$NON-NLS-1$
     IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
     project = workspaceRoot.getProject( projectName );
     IProjectDescription desc = project.getWorkspace().newProjectDescription( projectName );
@@ -92,7 +92,7 @@ public class ResourceGridContainer_PDETest {
    */
   @Test
   public void testGetName() {
-    Assert.assertEquals( "test", container.getName() ); //$NON-NLS-1$
+    Assert.assertEquals( "jietest", container.getName() ); //$NON-NLS-1$
   }
 
   /**
@@ -108,7 +108,7 @@ public class ResourceGridContainer_PDETest {
    */
   @Test
   public void testGetPath() {
-  Assert.assertEquals( "/test", container.getPath().toString() ); //$NON-NLS-1$
+  Assert.assertEquals( "/jietest", container.getPath().toString() ); //$NON-NLS-1$
   }
 
   /**
@@ -116,7 +116,7 @@ public class ResourceGridContainer_PDETest {
    */
   @Test
   public void testGetResource() {
-    Assert.assertEquals( "test", container.getResource().getName() ); //$NON-NLS-1$
+    Assert.assertEquals( "jietest", container.getResource().getName() ); //$NON-NLS-1$
   }
 
   /**

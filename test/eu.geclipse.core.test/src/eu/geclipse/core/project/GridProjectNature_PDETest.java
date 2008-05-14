@@ -42,7 +42,7 @@ public class GridProjectNature_PDETest {
   public static void setUpBeforeClass() throws Exception {
     nature = new GridProjectNature();
  // create a project as an IResource
-    String projectName = "test"; //$NON-NLS-1$
+    String projectName = "jietest"; //$NON-NLS-1$
     IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
     project = workspaceRoot.getProject( projectName );
     IProjectDescription desc = project.getWorkspace().newProjectDescription( projectName );
