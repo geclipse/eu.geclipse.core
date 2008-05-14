@@ -62,7 +62,7 @@ public class Jsdl_Emf_PDETest {
   {
     IWorkspace workspace = ResourcesPlugin.getWorkspace();
     IWorkspaceRoot workspaceRoot = workspace.getRoot();
-    this.testProject = workspaceRoot.getProject( "test" ); //$NON-NLS-1$
+    this.testProject = workspaceRoot.getProject( "junittest" ); //$NON-NLS-1$
     this.testProject.create( new NullProgressMonitor() );
     this.testProject.open( new NullProgressMonitor() );
   }
