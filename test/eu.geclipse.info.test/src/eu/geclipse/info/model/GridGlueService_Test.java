@@ -45,7 +45,7 @@ public class GridGlueService_Test {
    */
   @Test
   public void testGetName() {
-  Assert.assertEquals( "processGlueCERows", service.getName() );  //$NON-NLS-1$
+  Assert.assertTrue( service.getName().contains( "processGlueCERows" ) );  //$NON-NLS-1$
   }
 
   /**tests the method {@link GridGlueService#
