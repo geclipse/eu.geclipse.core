@@ -13,7 +13,7 @@
  *    Thomas Koeckerbauer GUP, JKU - initial API and implementation
  *****************************************************************************/
 
-package eu.geclipse.gvid.uncompressed.internal;
+package eu.geclipse.gvid.uncompressed;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
