@@ -17,21 +17,19 @@
 package eu.geclipse.batch.ui.internal.model;
 
 import java.beans.PropertyChangeListener;
-import java.util.Comparator;
 import java.util.List;
 import org.eclipse.jface.viewers.ICellEditorValidator;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
 import org.eclipse.ui.views.properties.TextPropertyDescriptor;
-
 import eu.geclipse.batch.IBatchJobInfo;
 import eu.geclipse.batch.IQueueInfo;
 import eu.geclipse.batch.IQueueInfo.QueueRunState;
 import eu.geclipse.batch.IQueueInfo.QueueState;
+import eu.geclipse.batch.ui.editors.BatchEditor;
 import eu.geclipse.batch.ui.internal.Activator;
 import eu.geclipse.batch.ui.internal.BatchJobManager;
-import eu.geclipse.batch.ui.internal.BatchUpdate;
 import eu.geclipse.batch.ui.internal.Messages;
 
 /**
@@ -95,6 +93,7 @@ public final class Queue extends BatchResource implements Comparable{
   /** A queue shape. */
   private final Image queueIcon = Activator.getDefault().getImageRegistry().get( Activator.IMG_QUEUE ); 
 
+  private BatchEditor editor;
   private String queueName;
   private QueueState state;
   private QueueRunState runState;
@@ -105,7 +104,7 @@ public final class Queue extends BatchResource implements Comparable{
   private int run;
   private int que;
   private String lm;
-
+  
   /*
    * Initializes the property descriptors array.
    */
@@ -148,8 +147,9 @@ public final class Queue extends BatchResource implements Comparable{
    * 
    * @param jobManager The manager of all the jobs residing in this batch service
    */
-  public Queue( final BatchJobManager jobManager ) {
-    super( jobManager );
+  public Queue( final BatchJobManager jobManager, final BatchEditor editor ) {
+   super( jobManager );
+   this.editor=editor;
   }
   
   /**
@@ -386,18 +386,16 @@ public final class Queue extends BatchResource implements Comparable{
   public int compareTo(final Object  o ) {
     int value;
     String tempName ;
-    if (BatchUpdate.sortedQ==2 ) 
-    {
-      tempName = ((Queue)o).state.toString();
-      value = getState().toString().compareTo(tempName);
+    if ( this.editor.sortedQ == 2 ) {
+      tempName = ( ( Queue ) o ).state.toString();
+      value = getState().toString().compareTo( tempName );
     }
-    else
-    {
-       tempName = ((Queue)o).getQueneName();
-       value = getQueneName().compareTo(tempName);
+    else {
+       tempName = ( ( Queue ) o ).getQueneName();
+       value = getQueneName().compareTo( tempName );
     }
 
-    return value;// TODO Auto-generated method stub
+    return value;
   }
  
 }

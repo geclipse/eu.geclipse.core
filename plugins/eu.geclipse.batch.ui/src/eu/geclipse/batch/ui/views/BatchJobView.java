@@ -626,6 +626,7 @@ public class BatchJobView extends ViewPart implements IContentChangeListener {
    * @see #getSelectedJobs()
    */
   protected void moveSelectedJobs() {
+
     List< IBatchJobInfo > jobs = getSelectedJobs();
     if ( !jobs.isEmpty() ) {
       if ( null != this.jobManager ) {
@@ -798,6 +799,7 @@ public class BatchJobView extends ViewPart implements IContentChangeListener {
       
       @Override
       public void run() {
+
         moveSelectedJobs();
       }
     };

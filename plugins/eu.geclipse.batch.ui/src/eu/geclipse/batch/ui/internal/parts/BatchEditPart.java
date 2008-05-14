@@ -61,6 +61,7 @@ public abstract class BatchEditPart extends AbstractGraphicalEditPart
     }
   }
 
+
   /**
    * Upon deactivation, detach from the model element as a property change
    * listener.
@@ -185,9 +186,12 @@ public abstract class BatchEditPart extends AbstractGraphicalEditPart
    */
   @Override
   protected void refreshVisuals() {
-    // Notify parent container of changed position & location
+
+    
     Rectangle bounds = new Rectangle( getCastedModel().getLocation(),
                                       getCastedModel().getSize() );
+  
+    
     ( ( GraphicalEditPart )getParent() ).setLayoutConstraint( this, getFigure(), bounds );
   }
 }

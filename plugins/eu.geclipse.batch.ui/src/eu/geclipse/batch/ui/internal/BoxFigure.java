@@ -16,12 +16,10 @@ import org.eclipse.draw2d.Figure;
 import org.eclipse.draw2d.FlowLayout;
 import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.LineBorder;
-import org.eclipse.draw2d.ScrollPane;
 import org.eclipse.draw2d.SimpleRaisedBorder;
 import org.eclipse.draw2d.TitleBarBorder;
 import org.eclipse.draw2d.geometry.Dimension;
 
-// Figure
 import eu.geclipse.batch.ui.IBoxFigure;
 
 
@@ -32,21 +30,16 @@ public class BoxFigure extends Figure implements IBoxFigure {
   private Label labBox;
 
   public BoxFigure() {
-    FlowLayout layout = new FlowLayout( FlowLayout.VERTICAL );
+    
+    FlowLayout layout = new FlowLayout( FlowLayout.VERTICAL);
     layout.setHorizontal( FlowLayout.HORIZONTAL );
-    layout.setMajorSpacing( 10 );
-    layout.setMinorSpacing( 10 );
-    // layout.setMajorSpacing(getMapMode().DPtoLP(5));
-    // layout.setMinorSpacing(getMapMode().DPtoLP(5));
     this.setLayoutManager( layout );
-    // this.setLayoutManager(new XYLayout());
-    ScrollPane scrollpane = new ScrollPane();
-    add( scrollpane );
     this.border = new TitleBarBorder(); // menuBackground
     this.border.setBackgroundColor( ColorConstants.gray );
     this.border.setTextColor( ColorConstants.menuForeground );
     CompoundBorder iBorder = new CompoundBorder( new SimpleRaisedBorder(),
                                                  new LineBorder( ColorConstants.darkGreen ) );
+    
     this.setBorder( new CompoundBorder( iBorder, this.border ) );
     this.setOpaque( true );
     this.setBackgroundColor( ColorConstants.lightGray );

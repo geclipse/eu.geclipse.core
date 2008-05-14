@@ -70,4 +70,6 @@ public final class QueueEditPart extends BatchEditPart {
       super.propertyChange( ev );
   }
 
+
+
 }

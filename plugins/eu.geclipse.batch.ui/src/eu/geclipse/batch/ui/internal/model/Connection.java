@@ -125,7 +125,7 @@ public class Connection extends ModelElement {
     reconnect();
   }
 
-  public int compareTo( Object o ) {
+  public int compareTo(final Object o ) {
     // TODO Auto-generated method stub
     return 0;
   }

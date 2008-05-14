@@ -48,6 +48,12 @@ public class Box extends BatchResource {
     this.pcsDelegate.removePropertyChangeListener( listener );
   }
 
+  /**
+   * Set the name of the Box.
+   * <p>Set the name of the Box </p>
+   * @param The name of the Box.
+   * 
+   */
   public void setName( final String name ) {
     this.name = name;
   }
@@ -69,11 +75,20 @@ public class Box extends BatchResource {
     }
     return ret;
   }
-
+  
+  /**
+   * Set true if this box is a nodes box
+   *  @param True if is a node box.
+  **/
   public void setIsNodes( final boolean v ) {
     this.IsNodes = v;
   }
 
+  /**
+   * Returns if this Box is a node box.
+   * <p>Return true if this box is a node box or false </p>
+   * @return Return true if this box is a node box or else false .
+   */
   public boolean getIsNodes() {
     return this.IsNodes;
   }

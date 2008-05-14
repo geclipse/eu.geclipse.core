@@ -19,8 +19,9 @@ package eu.geclipse.batch.ui.internal.parts;
 import java.beans.PropertyChangeEvent;
 
 import org.eclipse.draw2d.Figure;
-
+import org.eclipse.draw2d.geometry.Rectangle;
 import eu.geclipse.batch.ui.IComputingElementFigure;
+import eu.geclipse.batch.ui.editors.BatchEditor;
 import eu.geclipse.batch.ui.internal.ComputingElementFigure;
 import eu.geclipse.batch.ui.internal.model.ComputingElement;
 
@@ -28,10 +29,19 @@ import eu.geclipse.batch.ui.internal.model.ComputingElement;
  * Class that connects together the Figure and Model of Computing Element.
  */
 public final class ComputingElementEditPart extends BatchEditPart {
+
+  public static  Rectangle CE ;
+  public BatchEditor editor;
+  private boolean firstTime=false;
   /**
    * Creates the figure that represents this modeled object.
    * @return Returns the created Figure
    */
+  
+ /* public ComputingElementEditPart(BatchEditor editor)
+  {
+    this.editor=editor;
+  }*/
   @Override
   protected Figure createFigure() {
     
@@ -53,7 +63,28 @@ public final class ComputingElementEditPart extends BatchEditPart {
     ceFigure.setNumWNs( model.getNumWNs() );
     ceFigure.setNumQueues( model.getNumQueues() );
     ceFigure.setNumJobs( model.getNumJobs() );
-    super.refreshVisuals();
+ 
+    try
+    {  
+      CE  = new Rectangle( model.getLocation(),model.getSize() );
+
+     if(!(CE.intersects(BoxEditPart.queues)||BoxEditPart.queues.intersects(CE)))
+      {
+       super.refreshVisuals();
+     }
+
+     this.firstTime=true;
+     
+    }
+    catch(Exception z)
+    { 
+      System.out.println(z);
+    } 
+    if(!this.firstTime)
+   super.refreshVisuals();
+    this.firstTime = true;
+    
+   
   }
 
  /**
@@ -78,4 +109,6 @@ public final class ComputingElementEditPart extends BatchEditPart {
     else
       super.propertyChange( ev );
   }
+
+
 }

@@ -12,6 +12,8 @@ package eu.geclipse.batch.ui.internal;
 
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
+
+import eu.geclipse.batch.ui.editors.BatchEditor;
 import eu.geclipse.batch.ui.internal.model.Box;
 import eu.geclipse.batch.ui.internal.parts.BoxEditPart;
 import eu.geclipse.batch.ui.internal.parts.BoxTreeEditPart;
@@ -19,19 +21,23 @@ import eu.geclipse.batch.ui.internal.parts.BoxTreeEditPart;
 public class BoxSortName extends SelectionAction {
 
   public static final String PROPERTY_SORT_BY_NAME = "BoxSortByName"; //$NON-NLS-1$
-  // private IBatchService batchWrapper;
-  // private BatchUpdate update;
+  public BatchEditor editor;
   private boolean flag = false;
-
-  public BoxSortName( final IWorkbenchPart part ) {
+  private final int Value = 1; //
+ 
+  
+  public BoxSortName( final IWorkbenchPart part,final BatchEditor editor ) {
     super( part );
     // this.batchWrapper = batchWrapper;
+    //IMG_START   //IMG_NEWQUEUE
+    
     this.setId( BoxSortName.PROPERTY_SORT_BY_NAME );
     this.setToolTipText( Messages.getString( "BoxSortByName" ) );//$NON-NLS-1$
     this.setImageDescriptor( Activator.getDefault()
       .getImageRegistry()
-      .getDescriptor( Activator.IMG_NEWQUEUE ) );
+      .getDescriptor( Activator.IMG_ENABLE ) );
     this.setText( Messages.getString( "BoxSortByName" ) ); //$NON-NLS-1$
+    this.editor =editor;
   }
 
   @Override
@@ -64,13 +70,19 @@ public class BoxSortName extends SelectionAction {
   }
 
   @Override
-  public void run() {
+  /*
+   * 
+   * 
+   * 
+   */
+  public  void  run() {
     if( !this.flag ) {
-      BatchUpdate.sortedQ = 1;
-      BatchUpdate.Qbyname = 1;
+    this.editor.Qbyname = this.Value;
+      this.editor.sortedQ = this.Value;
+  
     } else {
-      BatchUpdate.sortedN = 1;
-      BatchUpdate.Nbyname = true;
+      this.editor.sortedN = this.Value;
+      this.editor.Nbyname = this.Value;
     }
   }
 }

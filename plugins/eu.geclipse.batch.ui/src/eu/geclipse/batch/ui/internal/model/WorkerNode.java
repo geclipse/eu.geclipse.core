@@ -23,12 +23,11 @@ import org.eclipse.jface.viewers.ICellEditorValidator;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.PropertyDescriptor;
-
 import eu.geclipse.batch.IWorkerNodeInfo;
 import eu.geclipse.batch.IWorkerNodeInfo.WorkerNodeState;
+import eu.geclipse.batch.ui.editors.BatchEditor;
 import eu.geclipse.batch.ui.internal.Activator;
 import eu.geclipse.batch.ui.internal.BatchJobManager;
-import eu.geclipse.batch.ui.internal.BatchUpdate;
 import eu.geclipse.batch.ui.internal.Messages;
 
 /**
@@ -72,13 +71,14 @@ public final class WorkerNode extends BatchResource  {
   /** A worker node shape. */
   private final Image workerNodeIcon = Activator.getDefault().getImageRegistry().get( Activator.IMG_WORKER_NODE );
 
+  private BatchEditor editor;
   private String fqdn;
   private String kernelVersion;
   private WorkerNodeState state;
   private int numProcessors;
   private String totalMem;
   private List<String> jobIds;
-
+  
   /*
    * Initializes the property descriptors array.
    */
@@ -124,8 +124,9 @@ public final class WorkerNode extends BatchResource  {
    * 
    * @param jobManager The manager of all the jobs residing in this batch service
    */
-  public WorkerNode( final BatchJobManager jobManager ) {
+  public WorkerNode( final BatchJobManager jobManager, final BatchEditor editor ) {
     super( jobManager );
+    this.editor=editor;
     
     this.jobIds = new ArrayList<String>();
   }
@@ -339,17 +340,17 @@ public final class WorkerNode extends BatchResource  {
   }
 
   
-  public int compareTo(final Object o ) {
+  public int compareTo( final Object o ) {
     int value;
     String tempName ;
 
-    if (BatchUpdate.sortedN==2 ) {
-      tempName = ((WorkerNode)o).getState().toString();
+    if ( this.editor.sortedN == 2  ) {
+      tempName = ( ( WorkerNode ) o ).getState().toString();
       value = getState().toString().compareTo(tempName);
     }
     else {
-     tempName = ((WorkerNode)o).getFQDN();
-     value = getFQDN().compareTo(tempName);
+     tempName = ( ( WorkerNode ) o ).getFQDN();
+     value = getFQDN().compareTo( tempName );
     }
     return value;
   }

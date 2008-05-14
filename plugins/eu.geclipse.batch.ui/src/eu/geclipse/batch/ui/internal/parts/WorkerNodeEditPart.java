@@ -17,7 +17,6 @@
 package eu.geclipse.batch.ui.internal.parts;
 
 import java.beans.PropertyChangeEvent;
-
 import org.eclipse.draw2d.Figure;
 import eu.geclipse.batch.ui.IWorkerNodeFigure;
 import eu.geclipse.batch.ui.internal.WorkerNodeFigure;
@@ -79,4 +78,6 @@ public final class WorkerNodeEditPart extends BatchEditPart {
      else
        super.propertyChange( ev );
    }
+
+  
 }

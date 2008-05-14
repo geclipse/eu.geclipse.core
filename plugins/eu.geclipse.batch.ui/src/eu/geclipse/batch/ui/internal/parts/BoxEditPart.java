@@ -11,9 +11,9 @@
 package eu.geclipse.batch.ui.internal.parts;
 
 import java.beans.PropertyChangeEvent;
-
 import java.util.List;
 import org.eclipse.draw2d.Figure;
+import org.eclipse.draw2d.geometry.Rectangle;
 import org.eclipse.gef.EditPart;
 import org.eclipse.gef.EditPolicy;
 import org.eclipse.gef.commands.Command;
@@ -24,23 +24,71 @@ import eu.geclipse.batch.ui.IBoxFigure;
 import eu.geclipse.batch.ui.internal.BoxFigure;
 import eu.geclipse.batch.ui.internal.model.BatchResource;
 import eu.geclipse.batch.ui.internal.model.Box;
+import eu.geclipse.batch.ui.internal.model.ComputingElement;
 
-final public class BoxEditPart extends BatchEditPart {
+final public class BoxEditPart extends BatchEditPart  {
+  
+  public static Rectangle nodes ;
+  public static  Rectangle queues ;
+  private boolean firstTime=false;
 
   @Override
   protected Figure createFigure() {
     BoxFigure box = new BoxFigure();
+ 
     return box;
   }
 
   @Override
   public void refreshVisuals() {
+ 
     IBoxFigure ceFigure = ( IBoxFigure )getFigure();
     Box model = ( Box )getModel();
     ceFigure.setName( model.getName() );
-    super.refreshVisuals();
-  }
+   try
+   {
+    
+     queues = new Rectangle( model.getLocation(),model.getSize() );
 
+    if (model.getIsNodes())
+    {
+      if (model.getLocation()!=null && model.getLocation()!=null)
+      {
+        nodes = new Rectangle( model.getLocation(),model.getSize() );
+
+      }
+
+    }
+ 
+     if (!model.getIsNodes())
+    {
+   
+       if(!(nodes.intersects(queues)||ComputingElementEditPart.CE.intersects( queues )))
+       {
+         super.refreshVisuals();
+       }
+
+   
+    }
+     else if(!(queues.intersects(ComputingElementEditPart.CE)))
+     {
+      super.refreshVisuals();
+ 
+    }
+    
+  
+   }
+   catch(Exception z)
+   { 
+     
+   } 
+   
+   if(!this.firstTime){
+  super.refreshVisuals();}
+   this.firstTime = true;
+    
+  }
+ 
   @Override
   public void activate() {
     if( !isActive() ) {
@@ -60,7 +108,7 @@ final public class BoxEditPart extends BatchEditPart {
     // Handles constraint changes (e.g. moving and/or resizing) of model
     // elements
     try {
-      installEditPolicy( EditPolicy.LAYOUT_ROLE, new BatchXYLayoutEditPolicy() );
+      installEditPolicy( EditPolicy.LAYOUT_ROLE, new BatchLayoutEditPolicy() );
     } catch( Exception z ) {
     }
   }
@@ -74,16 +122,31 @@ final public class BoxEditPart extends BatchEditPart {
   }
 
   @Override
-  public void propertyChange( final PropertyChangeEvent ev ) {
-    // if (ev.getPropertyName().equals(B.CHILD_REMOVED_PROP)) refreshChildren();
-    this.display.syncExec( new Runnable() {
+  public void propertyChange( final PropertyChangeEvent ev ){
+    
+    if ( ev.getPropertyName().equals( ComputingElement.PROPERTY_FQDN )
+        || ev.getPropertyName().equals( ComputingElement.PROPERTY_TYPE )
+        || ev.getPropertyName().equals( ComputingElement.PROPERTY_NUM_WN )
+        || ev.getPropertyName().equals( ComputingElement.PROPERTY_NUM_QUEUE )
+        || ev.getPropertyName().equals( ComputingElement.PROPERTY_NUM_JOBS ) )
+      // Due to multiple threads accessing GEF which is not thread safe
+      this.display.syncExec( new Runnable() {  
+        public void run() {  
+          refreshVisuals(); 
+        }  
+      } 
+      ); 
 
-      public void run() {
-        refreshVisuals();
-      }
-    } );
+    else
+      super.propertyChange( ev );
   }
-  protected static class BatchXYLayoutEditPolicy extends FlowLayoutEditPolicy {
+  
+ 
+  
+  
+  
+  
+  protected static class BatchLayoutEditPolicy extends FlowLayoutEditPolicy {
 
     /**
      * Sets the constrains for moving the figures within the component.
@@ -97,7 +160,8 @@ final public class BoxEditPart extends BatchEditPart {
     protected Command createAddCommand( final EditPart child,
                                         final EditPart after )
     {
-      return null;
+
+    return null;
     }
 
     @Override
@@ -112,4 +176,10 @@ final public class BoxEditPart extends BatchEditPart {
       return null;
     }
   }
+
+
+
+
+
+ 
 }

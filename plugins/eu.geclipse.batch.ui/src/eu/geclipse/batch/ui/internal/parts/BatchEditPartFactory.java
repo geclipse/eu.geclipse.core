@@ -19,6 +19,7 @@ package eu.geclipse.batch.ui.internal.parts;
 import org.eclipse.gef.EditPartFactory;
 import org.eclipse.gef.EditPart;
 
+
 import eu.geclipse.batch.ui.internal.model.BatchDiagram;
 import eu.geclipse.batch.ui.internal.model.ComputingElement;
 import eu.geclipse.batch.ui.internal.model.Connection;
@@ -37,6 +38,15 @@ public class BatchEditPartFactory implements EditPartFactory {
    * @param modelElement The element
    * @return Returns the EditPart.
    */
+ 
+  
+ /* public BatchEditPartFactory (BatchEditor editor)
+  {
+    this.editor = editor;
+  }*/
+  
+  
+  
   public EditPart createEditPart( final EditPart context, final Object modelElement ) {
     // Get EditPart for model element
     EditPart part = getPartForElement( modelElement );

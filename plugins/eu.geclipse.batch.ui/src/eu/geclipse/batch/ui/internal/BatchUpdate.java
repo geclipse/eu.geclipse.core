@@ -29,13 +29,14 @@ import eu.geclipse.batch.IQueueInfo;
 import eu.geclipse.batch.IWorkerNodeInfo;
 import eu.geclipse.batch.ui.internal.model.BatchDiagram;
 import eu.geclipse.batch.ui.internal.model.BatchResource;
-import eu.geclipse.batch.ui.internal.model.ComputingElement; //
+import eu.geclipse.batch.ui.internal.model.ComputingElement;
 import eu.geclipse.batch.ui.internal.model.Box;
-import java.util.Collections; //
+import java.util.Collections;
 import eu.geclipse.batch.ui.internal.model.Connection;
 import eu.geclipse.batch.ui.internal.model.Queue;
 import eu.geclipse.batch.ui.internal.model.WorkerNode;
 import eu.geclipse.batch.ui.dialogs.*;
+import eu.geclipse.batch.ui.editors.BatchEditor;
 import eu.geclipse.core.reporting.ProblemException;
 
 /**
@@ -44,10 +45,6 @@ import eu.geclipse.core.reporting.ProblemException;
  */
 public class BatchUpdate {
 
-  public static int sortedQ = 0;
-  public static int sortedN = 0;
-  public static int Qbyname = 0;
-  public static boolean Nbyname = false;
   protected Job updateJob;
   private List<BatchResource> Qlist = new ArrayList<BatchResource>();
   private List<BatchResource> Nlist = new ArrayList<BatchResource>();
@@ -61,28 +58,34 @@ public class BatchUpdate {
   private BatchJobManager jobManager;
   private ComputingElement computingElement;
   private Box box_queue;
-  private Box box_notes;
-  private int N = 5;
+  private Box box_nodes;
+  private int N = 5; // how many queues or nodes to draw at each line
   private LinkedHashMap<String, WorkerNode> workerNodes = new LinkedHashMap<String, WorkerNode>();
   private LinkedHashMap<String, Queue> queues = new LinkedHashMap<String, Queue>();
-  // private List<BatchResource> newResources = new ArrayList<BatchResource>();
   private List<BatchResource> removedResources = new ArrayList<BatchResource>();
   private boolean firstTime;
   private ProgressDialog initProgress;
   private int checkX = 0;
   private int checkY = 0;
-  int count = 0;
-  int startx;
-  int starty;
-  int tempx;
-  int tempy;
-  int[] queue_dim = {
+  private int count = 0;
+  private int EnableQ = 0;
+  private int DisabledQ = 0;
+  private int freeN = 0;
+  private int job_exclusiveN = 0;
+  private int busyN = 0;
+  private int downN = 0;
+  private BatchEditor editor;
+  private int[] queue_dim = { // queue_dim[0] keeps the first x coordinate of
+                              // the fist child
     -1, -1, -1
-  };
-  int[] notes_dim = {
+  // queue_dim[1] keeps the max x coordinate
+  }; // queue_dim[2] keeps the max y coordinate
+  private int[] nodes_dim = {
     -1, -1, -1
-  };
+  // nodes_dim[0] keeps the first x coordinate of the fist child
+  }; // nodes_dim[1] keeps the max x coordinate
 
+  // nodes_dim[2] keeps the max y coordinate
   /**
    * Default constructor.
    * 
@@ -98,7 +101,8 @@ public class BatchUpdate {
                       final IBatchService batchWrapper,
                       final String batchName,
                       final String batchType,
-                      final int updateInterval )
+                      final int updateInterval,
+                      final BatchEditor editor )
   {
     this.diagram = diagram;
     this.batchWrapper = batchWrapper;
@@ -110,6 +114,7 @@ public class BatchUpdate {
     this.jobManager = new BatchJobManager();
     this.executor = Executors.newSingleThreadScheduledExecutor();
     this.firstTime = true;
+    this.editor = editor;
     this.initProgress = new ProgressDialog( shell );
     String[] description = new String[]{
       "Worker Nodes", //$NON-NLS-1$
@@ -143,8 +148,8 @@ public class BatchUpdate {
       wn.updateState( wni );
       wn = null;
     } else {
-      final Dimension dimWN = new Dimension( 100, 40 );//
-      wn = new WorkerNode( this.jobManager );
+      final Dimension dimWN = new Dimension( 100, 40 );
+      wn = new WorkerNode( this.jobManager, this.editor );
       wn.setFQDN( wni.getWnFQN() );
       wn.setKernelVersion( wni.getKernelVersion() );
       wn.setNumProcessors( wni.getNp() );
@@ -181,7 +186,7 @@ public class BatchUpdate {
       queue = null;
     } else {
       final Dimension dimQ = new Dimension( 100, 55 );//
-      queue = new Queue( this.jobManager );
+      queue = new Queue( this.jobManager, this.editor );
       queue.setQueueName( queuei.getQueueName() );
       queue.setState( queuei.getState() );
       queue.setRunState( queuei.getRunState() );
@@ -271,11 +276,11 @@ public class BatchUpdate {
     Dimension dimCE;
     Point pointCE, pointWN, pointQ;
     Dimension dimBox_queue = null;
-    Dimension dimBox_notes = null;
-    Point pointBox_queue, pointBox_notes;
+    Dimension dimBox_nodes = null;
+    Point pointBox_queue, pointBox_nodes;
     dimCE = new Dimension( 140, 90 );
     pointBox_queue = new Point( 100, 55 );
-    pointBox_notes = new Point( 100, 400 );
+    pointBox_nodes = new Point( 100, 400 );
     pointCE = new Point( 200, 100 );
     pointWN = new Point( 400, 10 );
     pointQ = new Point( 100, 1000 );
@@ -289,51 +294,80 @@ public class BatchUpdate {
       if( this.firstTime )
         this.initProgress.moveNextMajorTask( wnis.size() );
       int loc_y = 15;
+      int newfreeN = 0;
+      int newjob_exclusiveN = 0;
+      int newbusyN = 0;
+      int newdownN = 0;
+      boolean changeN = false;
       boolean flag_notes = true;
       int j = 0;
       for( int i = 0; i < wnis.size(); ++i ) {
         wni = wnis.get( i );
         wn = this.updateWN( wni );
+        // checking if some of the nodes have changed their state
+        if( wni.getState().toString().equals( "free" ) ) //$NON-NLS-1$
+        {
+          newfreeN++;
+        } else if( wni.getState().toString().equals( "job_exclusive" ) ) //$NON-NLS-1$
+        {
+          newjob_exclusiveN++;
+        } else if( wni.getState().toString().equals( "busy" ) ) //$NON-NLS-1$
+        {
+          newbusyN++;
+        } else {
+          newdownN++;
+        }
+        if( this.firstTime ) {
+          this.freeN = newfreeN;
+          this.job_exclusiveN = newjob_exclusiveN;
+          this.busyN = newbusyN;
+          this.downN = newdownN;
+        }
+        if( ( this.freeN != newfreeN
+              || this.job_exclusiveN != newjob_exclusiveN
+              || this.busyN != newbusyN || this.downN != newdownN )
+            && i == wnis.size() - 1 )
+        {
+          changeN = true;
+          this.freeN = newfreeN;
+          this.job_exclusiveN = newjob_exclusiveN;
+          this.busyN = newbusyN;
+          this.downN = newdownN;
+        }
+        // drawing algorithm
         if( null != wn ) {
-          int loc = 30 + ( 120 * ( j ) );
+          int loc = 10 + ( 120 * ( j ) );
           j++;
           if( i == 0 )
-            notes_dim[ 0 ] = loc;
-          if( i >= this.N && i % this.N == 1 ) {
+            this.nodes_dim[ 0 ] = loc;
+          if( i >= this.N && i % ( this.N ) == 1 ) {
             loc_y = loc_y + 50;
-            loc = notes_dim[ 0 ];
-            notes_dim[ 2 ] = loc_y;
+            loc = this.nodes_dim[ 0 ];
+            this.nodes_dim[ 2 ] = loc_y;
             j = 1;
           }
-          // pointWN = pointWN.setLocation( 100 , 100 );
           if( i == this.N - 1 ) {
-            notes_dim[ 1 ] = loc + 150; // take the x;
+            this.nodes_dim[ 1 ] = loc + 150;
             flag_notes = false;
           }
-          if( i == wnis.size() - 1 )// teleftaio stoixeio
-          {
+          if( i == wnis.size() - 1 ) {
             if( flag_notes ) {
-              notes_dim[ 1 ] = loc + 150;
+              this.nodes_dim[ 1 ] = loc + 130;
             }
-            notes_dim[ 2 ] = loc_y + 30;// 150
-            // notes_dim[2]+=100;//150
           }
-          pointWN = pointWN.setLocation( loc, loc_y );// 100,loc
+          pointWN = pointWN.setLocation( loc, loc_y );
           wn.setLocation( pointWN );
           this.Nlist.add( wn );
-          // Collections.sort(Nlist );
-          // this.newResources.add( wn );
           if( this.firstTime )
             this.initProgress.moveNextMinor();
-          if( this.Qbyname == 1 ) {
-            BatchUpdate.sortedQ = 1;
-            Qbyname = 0;
-          } else if( this.Qbyname == 2 ) {
-            BatchUpdate.sortedQ = 2;
-            Qbyname = 0;
-          }
-          Sort( this.sortedN, 1, 2, this.Nlist, this.box_notes, false );
         }
+      }
+      // Sorting because at least one node changed its state
+      if( changeN && this.editor.Nbyname != 1 ) {
+        this.editor.sortedN = 2;
+        this.editor.Nbystate = 2;
+        // Sort( this.editor.sortedN,this.Nlist, this.box_nodes, false );
+        changeN = false;
       }
     }
     try {
@@ -345,6 +379,9 @@ public class BatchUpdate {
       Activator.logException( exc );
     }
     int loc_y = 15;
+    int newenabledQ = 0;
+    int newdisabledQ = 0;
+    boolean changeQ = false;
     if( null != queueis ) {
       if( this.firstTime )
         this.initProgress.moveNextMajorTask( queueis.size() );
@@ -354,20 +391,38 @@ public class BatchUpdate {
       for( int i = 0; i < queueis.size(); ++i ) {
         queuei = queueis.get( i );
         queue = this.updateQueue( queuei, jobis );
-        tempy = queue_dim[ 2 ];
+        // checking if some of the queues have changed their state
+        if( queuei.getState().toString().equals( "enabled" ) ) //$NON-NLS-1$ 
+        {
+          newenabledQ++;
+        } else {
+          newdisabledQ++;
+        }
+        if( this.firstTime ) {
+          this.EnableQ = newenabledQ;
+          this.DisabledQ = newdisabledQ;
+        }
+        if( ( this.EnableQ != newenabledQ || this.DisabledQ != newdisabledQ )
+            && i == queueis.size() - 1 )
+        {
+          changeQ = true;
+          this.EnableQ = newenabledQ;
+          this.DisabledQ = newdisabledQ;
+        }
+        // drawing algorithm
         if( null != queue ) {
-          count = queueis.size();
+          this.count = queueis.size();
           if( !this.firstTime ) {
             add = true;
           }
-          int loc_x = 50 + ( 120 * ( j ) );// 50 120
+          int loc_x = 50 + ( 120 * ( j ) );
           j++;
           if( i == 0 )
-            queue_dim[ 0 ] = loc_x;// krataei to x tou protou stoixeiou
+            this.queue_dim[ 0 ] = loc_x;
           if( i >= this.N && i % ( this.N ) == 1 ) {
             loc_y = loc_y + 60;
-            loc_x = queue_dim[ 0 ];
-            queue_dim[ 2 ] = loc_y + 20;
+            loc_x = this.queue_dim[ 0 ];
+            this.queue_dim[ 2 ] = loc_y;// + 20;
             j = 1;
           }
           if( this.checkX < loc_x )
@@ -375,16 +430,13 @@ public class BatchUpdate {
           if( this.checkY <= loc_y )
             this.checkY = loc_y;
           if( i == this.N - 1 ) {
-            queue_dim[ 1 ] = loc_x + 150;
+            this.queue_dim[ 1 ] = loc_x + 150;
             flag_queue = false;
           }
-
-          if( i == queueis.size() - 1 )// teleftaio stoixeio
-          {
+          if( i == queueis.size() - 1 ) {
             if( flag_queue ) {
-              queue_dim[ 1 ] = loc_x + 150;
+              this.queue_dim[ 1 ] = loc_x + 150;
             }
-            queue_dim[ 2 ] = queue_dim[ 2 ] + 70;// 150
           }
           pointQ = pointQ.setLocation( loc_x, loc_y );
           queue.setLocation( pointQ );
@@ -393,43 +445,48 @@ public class BatchUpdate {
             this.initProgress.moveNextMinor();
         }
       }
-      // / tempx=checkX+50;
-      tempy = queue_dim[ 2 ];
-      if( !this.firstTime )// case of add a new queue
-      {
+      boolean Values = true;
+      // Sorting because at least one node changed its state
+      if( changeQ && this.editor.Qbyname != 1 ) {
+        this.editor.Qbystate = 2;
+        this.editor.sortedQ = 2;
+        // this.Sort( this.editor.sortedQ, this.Qlist, this.box_queue, true );
+        changeQ = false;
+        Values = false;
+      }
+      // case of add a new queue
+      if( !this.firstTime ) {
         try {
           if( add ) {
             this.box_queue.removeChildren( this.Qlist );
             this.diagram.removeChild( this.box_queue );
             this.box_queue.addChildren( this.Qlist );
-            int oldX = checkX;
             boolean newsize = false;
-
-            if( ( count ) % ( N + 1 ) == 1 ) {
-              checkY = checkY + 95;
-              count = 0;
-              if( tempy - checkY > 50 ) {
-                checkY = checkY + 30;
-              }
-              Dimension dimBox_new = new Dimension( checkX + 20, checkY );
+            if( ( this.count ) % ( this.N + 1 ) == 1 ) {
+              this.checkY = this.checkY + 95;
+              this.count = 0;
+              Dimension dimBox_new = new Dimension( this.checkX
+                                                    + this.queue_dim[ 0 ]
+                                                    - 60, this.checkY );
               this.box_queue.setSize( dimBox_new );
               this.diagram.addChild( this.box_queue );
               newsize = true;
-            } else
-              checkY = checkY;
-            // Dimension dimBox_new = new Dimension(checkX+20 ,checkY );
+            }
             if( !newsize ) {
               this.box_queue.setSize( dimBox_queue );
               this.diagram.addChild( this.box_queue );
             }
-            if( this.Qbyname == 1 ) {
-              BatchUpdate.sortedQ = 1;
-              Qbyname = 0;
-            } else if( this.Qbyname == 2 ) {
-              BatchUpdate.sortedQ = 2;
-              Qbyname = 0;
+           
+              if( this.editor.Qbyname == 1 && Values ) {
+              this.editor.sortedQ = 1;
+              this.editor.Qbyname = 0;
+            } else if( this.editor.Qbystate == 2 && Values ) {
+              this.editor.sortedQ = 2;
+              this.editor.Qbyname = 0;
+            } else {
+              this.editor.sortedQ = 0;
             }
-            Sort( this.sortedQ, 1, 2, this.Qlist, this.box_queue, true );
+            // Sort( this.editor.sortedQ, this.Qlist, this.box_queue, true );
           }
         } catch( Exception Z ) {
         }
@@ -450,24 +507,24 @@ public class BatchUpdate {
         }
       }
     }
-    Sort( this.sortedQ, 1, 2, this.Qlist, this.box_queue, true );
-    Sort( this.sortedN, 1, 2, this.Nlist, this.box_notes, false );
-    if( null == this.box_queue ) // queue box
-    {
-      startx = queue_dim[ 1 ];
-      starty = queue_dim[ 2 ];
+    // sorting methods
+    Sort( this.editor.sortedQ, this.Qlist, this.box_queue, true );
+    Sort( this.editor.sortedN, this.Nlist, this.box_nodes, false );
+    // create at first time a queue box
+    if( null == this.box_queue ) {
+      int startx = this.queue_dim[ 1 ] - this.queue_dim[ 0 ];
+      int starty = this.queue_dim[ 2 ];
       if( this.firstTime )
         this.initProgress.moveNextMajorTask( 1 );
-      // / dimBox_queue = new Dimension(queue_dim[1]-85, queue_dim[2]-190);
-      if( queueis.size() <= N )
+      // case of one line queues only
+      if( queueis.size() <= this.N )
         dimBox_queue = new Dimension( startx, starty + 50 );
       else
-        dimBox_queue = new Dimension( startx, starty );
-      // dimBox_queue = new Dimension(startx, checkY);
+        dimBox_queue = new Dimension( startx, starty + 65 );
       this.box_queue = new Box( this.jobManager ); // new object
       this.box_queue.setSize( dimBox_queue );
       this.box_queue.setName( Messages.getString( "BoxElementQueues" ) ); //$NON-NLS-1$
-      pointBox_queue = pointBox_queue.setLocation( 25, 25 );// 200 loc
+      pointBox_queue = pointBox_queue.setLocation( 25, 25 );
       this.box_queue.setLocation( pointBox_queue );
       this.box_queue.addChildren( this.Qlist );
       if( null == newReses )
@@ -476,8 +533,8 @@ public class BatchUpdate {
       if( this.firstTime )
         this.initProgress.moveNextMinor();
     }
-    int X = queue_dim[ 0 ];// proto stoixieo
-    int Y = queue_dim[ 2 ] + 150;//
+    int X = this.queue_dim[ 0 ];
+    int Y = this.queue_dim[ 2 ] + 150;//
     if( null == this.computingElement ) // Create the ce
     {
       if( this.firstTime )
@@ -494,30 +551,32 @@ public class BatchUpdate {
       if( this.firstTime )
         this.initProgress.moveNextMinor();
     }
-    if( null == this.box_notes ) // node box
-    {
+    // case of nodes box
+    if( null == this.box_nodes ) {
       if( this.firstTime )
         this.initProgress.moveNextMajorTask( 1 );
-      if( wnis.size() <= N )
-        dimBox_notes = new Dimension( notes_dim[ 1 ] - 4, notes_dim[ 2 ] + 50 );
+      int startx = this.nodes_dim[ 1 ];
+      int starty = this.nodes_dim[ 2 ] - 15;
+      if( wnis.size() <= this.N )
+        dimBox_nodes = new Dimension( startx - 4, starty + 80 );
       else
-        dimBox_notes = new Dimension( notes_dim[ 1 ] - 4, notes_dim[ 2 ] - 15 );
-      this.box_notes = new Box( this.jobManager );
-      this.box_notes.setSize( dimBox_notes );
-      this.box_notes.setName( Messages.getString( "BoxElementNodes" ) );//$NON-NLS-1$
-      this.box_notes.setIsNodes( true );
-      pointBox_notes = pointBox_notes.setLocation( X, Y + 200 );
-      this.box_notes.setLocation( pointBox_notes );
+        dimBox_nodes = new Dimension( startx - 4, starty );
+      this.box_nodes = new Box( this.jobManager );
+      this.box_nodes.setSize( dimBox_nodes );
+      this.box_nodes.setName( Messages.getString( "BoxElementNodes" ) );//$NON-NLS-1$
+      this.box_nodes.setIsNodes( true );
+      pointBox_nodes = pointBox_nodes.setLocation( X, Y + 200 );
+      this.box_nodes.setLocation( pointBox_nodes );
       if( null == newReses )
         newReses = new ArrayList<BatchResource>();
-      newReses.add( this.box_notes );
-      this.box_notes.addChildren( this.Nlist );
+      newReses.add( this.box_nodes );
+      this.box_nodes.addChildren( this.Nlist );
       if( this.firstTime )
         this.initProgress.moveNextMinor();
       if( this.firstTime )
         this.initProgress.moveNextMajorTask( 2 );
       Connection conn = new Connection( this.computingElement,
-                                        this.box_notes,
+                                        this.box_nodes,
                                         Connection.SOLID_CONNECTION );
       conn.reconnect();
       Connection conn1 = new Connection( this.box_queue,
@@ -553,10 +612,11 @@ public class BatchUpdate {
         } else
           assert false;
       }
-      this.diagram.removeChild( this.box_queue );// //////////////
+      this.diagram.removeChild( this.box_queue );
       this.box_queue.addChildren( this.Qlist );
       this.diagram.addChild( this.box_queue );
       this.removedResources.clear();
+      this.editor.sortedQ = 0;
     }
     // Only show the progress bar the first time
     if( this.firstTime ) {
@@ -565,39 +625,50 @@ public class BatchUpdate {
     }
   }
 
-  void Sort( final int cont,
-             final int sortArg1,
-             final int sortArg2,
-             final List list,
-             final Box box,
-             final boolean x )
+  /*
+   * Making the sorting in queues or nodes. if cont is 1 it sorts by name else
+   * by state, if x is true it sorts the Queues box else the Nodes box
+   */
+  @SuppressWarnings("unchecked")
+  private void Sort( final int cont,
+                     final List list,
+                     final Box box,
+                     final boolean x )
   {
-    if( cont == sortArg1 ) {
+    
+    if( cont == 1 ) {
       Collections.sort( list );
       if( x ) {
         box.setName( Messages.getString( "BoxQueue.SortedByName" ) );//$NON-NLS-1$
       } else {
         box.setName( Messages.getString( "BoxNode.SortedByName" ) );//$NON-NLS-1$
       }
-      box.removeChildren( list );
-      this.diagram.removeChild( box );
-      box.addChildren( list );
-      this.diagram.addChild( box );
-      this.sortedQ = 0;
-      this.sortedN = 0;
-    } else if( cont == sortArg2 ) {
+      Refresh( box, list );
+      ResetValues();
+    } else if( cont == 2 ) {
       Collections.sort( list );
       if( x ) {
         box.setName( Messages.getString( "BoxQueue.SortedByState" ) );//$NON-NLS-1$
       } else {
         box.setName( Messages.getString( "BoxNode.SortedByState" ) );//$NON-NLS-1$
       }
-      box.removeChildren( list );
-      this.diagram.removeChild( box );
-      box.addChildren( list );
-      this.diagram.addChild( box );
-      this.sortedQ = 0;
-      this.sortedN = 0;
+      Refresh( box, list );
+      ResetValues();
     }
+  }
+
+  // refreshing the display
+  @SuppressWarnings("unchecked")
+  private void Refresh( final Box box, final List list ) {
+    box.removeChildren( list );
+    this.diagram.removeChild( box );
+    box.addChildren( list );
+    this.diagram.addChild( box );
+  }
+
+  // reseting values
+  private void ResetValues() {
+    this.editor.sortedQ = 0;
+    this.editor.sortedN = 0;
   }
 }

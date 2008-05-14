@@ -74,7 +74,12 @@ public class BatchEditor extends GraphicalEditor {
 
   protected BatchUpdate updateJob;
   protected BatchConnectionInfo batchInfo = null;
-
+  public  int Qbyname=0;
+  public int sortedQ =0;
+  public int sortedN = 0;
+  public int Nbyname = 0;
+  public int Qbystate=0;
+  public int Nbystate=0;
   private BatchDiagram diagram;
   private IBatchService batchWrapper;
 
@@ -169,9 +174,10 @@ public class BatchEditor extends GraphicalEditor {
 
       try {
         if ( this.batchWrapper.connectToServer( sshInfo ) ) {
+        
           this.updateJob = new BatchUpdate( getSite().getShell(), this.diagram, 
                                             this.batchWrapper, this.batchInfo.getBatchName(), 
-                                            this.batchInfo.getBatchType(), this.batchInfo.getUpdateInterval() );
+                                            this.batchInfo.getBatchType(), this.batchInfo.getUpdateInterval(), BatchEditor.this );
           this.updateJob.startUpdate();
         }
       } catch ( ProblemException gExc ) {
@@ -267,12 +273,12 @@ public class BatchEditor extends GraphicalEditor {
     registry.registerAction( action );
     getSelectionActions().add( action.getId() );
     
-    action = new BoxSortName( this); 
+    action = new BoxSortName( this, BatchEditor.this ); 
     registry.registerAction( action );
     getSelectionActions().add( action.getId() );
     
     
-    action = new BoxSortState( this ); 
+    action = new BoxSortState( this,BatchEditor.this ); 
     registry.registerAction( action );
     getSelectionActions().add( action.getId() );
   }

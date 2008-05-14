@@ -4,15 +4,15 @@
  * Public License v1.0 which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html Initial development of the original
  * code was made for project g-Eclipse founded by European Union project number:
- * FP6-IST-034327 http://www.geclipse.eu/ 
- *    Contributor(s): UCY (http://www.cs.ucy.ac.cy) 
- *        - Kyriakos Katsaris (kykatsar@gmail.com)
+ * FP6-IST-034327 http://www.geclipse.eu/ Contributor(s): UCY
+ * (http://www.cs.ucy.ac.cy) - Kyriakos Katsaris (kykatsar@gmail.com)
  ******************************************************************************/
 package eu.geclipse.batch.ui.internal;
 
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
 
+import eu.geclipse.batch.ui.editors.BatchEditor;
 import eu.geclipse.batch.ui.internal.model.Box;
 import eu.geclipse.batch.ui.internal.parts.BoxEditPart;
 import eu.geclipse.batch.ui.internal.parts.BoxTreeEditPart;
@@ -20,16 +20,20 @@ import eu.geclipse.batch.ui.internal.parts.BoxTreeEditPart;
 public class BoxSortState extends SelectionAction {
 
   public static final String PROPERTY_SORT_BY_STATE = "BoxSortByState";//$NON-NLS-1$
+  public BatchEditor editor;
   private boolean flag = false;
+  private final int ValueTwo = 2;
+  private final int ValueReset = 0;
 
-  public BoxSortState( final IWorkbenchPart part ) {
+  public BoxSortState( final IWorkbenchPart part, final BatchEditor editor ) {
     super( part );
     this.setId( BoxSortState.PROPERTY_SORT_BY_STATE );
     this.setToolTipText( Messages.getString( "BoxSortByState" ) ); //$NON-NLS-1$
     this.setImageDescriptor( Activator.getDefault()
       .getImageRegistry()
-      .getDescriptor( Activator.IMG_NEWQUEUE ) );
+      .getDescriptor( Activator.IMG_ENABLE ) );
     this.setText( Messages.getString( "BoxSortByState" ) ); //$NON-NLS-1$
+    this.editor = editor;
   }
 
   @Override
@@ -64,10 +68,13 @@ public class BoxSortState extends SelectionAction {
   @Override
   public void run() {
     if( !this.flag ) {
-      BatchUpdate.sortedQ = 2;
-      BatchUpdate.Qbyname = 2;
+      this.editor.sortedQ = this.ValueTwo;
+      this.editor.Qbyname = this.ValueReset;
+      this.editor.Qbystate = this.ValueTwo;
     } else {
-      BatchUpdate.sortedN = 2;
+      this.editor.sortedN = this.ValueTwo;
+      this.editor.Nbyname = this.ValueReset;
+      this.editor.Nbystate = this.ValueTwo;
     }
   }
 }
