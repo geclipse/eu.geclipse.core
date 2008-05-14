@@ -17,6 +17,8 @@ package eu.geclipse.ui.wizards;
 
 import java.net.URL;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -26,9 +28,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
-import eu.geclipse.core.model.IVoManager;
 import eu.geclipse.core.model.impl.GenericVirtualOrganization;
 import eu.geclipse.core.model.impl.GenericVoCreator;
 import eu.geclipse.ui.internal.Activator;
@@ -80,6 +80,21 @@ public class GenericVoWizardPage
     
   }
   
+  public IStatus apply( final GenericVoCreator creator ) {
+    
+    IStatus result = Status.OK_STATUS;
+    
+    String name = this.nameText.getText();
+    if ( ( name == null ) || ( name.length() == 0 ) ) {
+      result = new Status( IStatus.ERROR, Activator.PLUGIN_ID, "You have to specify a valid VO name" );
+    } else {
+      creator.setVoName( name );
+    }
+    
+    return result;
+    
+  }
+  /*
   protected boolean createVo() {
     
     String errorMessage = null;
@@ -118,7 +133,7 @@ public class GenericVoWizardPage
     return errorMessage == null;
     
   }
-  
+  */
   /**
    * Initializes the controls of this wizard page with the attributes
    * of the specified VO.
@@ -140,29 +155,6 @@ public class GenericVoWizardPage
    */
   protected void setInitialVo( final GenericVirtualOrganization vo ) {
     this.initialVo = vo;
-  }
-  
-  private GenericVoCreator getVoCreator() {
-    
-    GenericVoCreator creator = new GenericVoCreator();
-    
-    String name = this.nameText.getText();
-    creator.setVoName( name );
-    
-    return creator;
-    
-  }
-  
-  /**
-   * Tests if the specified {@link String} is either <code>null</code>
-   * or empty.
-   * 
-   * @param s The string to be tested.
-   * @return True if the string is either <code>null</code>
-   * or empty.
-   */
-  private boolean isEmpty( final String s ) {
-    return ( s == null ) || ( s.length() == 0 ); 
   }
 
 }

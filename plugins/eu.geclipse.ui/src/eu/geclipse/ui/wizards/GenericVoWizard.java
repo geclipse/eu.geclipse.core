@@ -15,9 +15,17 @@
 
 package eu.geclipse.ui.wizards;
 
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.wizard.Wizard;
+import org.eclipse.jface.wizard.WizardPage;
 
+import eu.geclipse.core.model.GridModel;
+import eu.geclipse.core.model.GridModelException;
+import eu.geclipse.core.model.IVoManager;
 import eu.geclipse.core.model.impl.GenericVirtualOrganization;
+import eu.geclipse.core.model.impl.GenericVoCreator;
+import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.wizards.wizardselection.IInitalizableWizard;
 
 public class GenericVoWizard
@@ -26,18 +34,25 @@ public class GenericVoWizard
   
   private GenericVirtualOrganization initialVo;
   
-  private GenericVoWizardPage page;
+  private GenericVoWizardPage voPage;
+  
+  private VoServiceSelectionPage servicePage;
   
   /* (non-Javadoc)
    * @see org.eclipse.jface.wizard.Wizard#addPages()
    */
   @Override
   public void addPages() {
-    this.page = new GenericVoWizardPage();
+    
+    this.voPage = new GenericVoWizardPage();
     if ( this.initialVo != null ) {
-      this.page.setInitialVo( this.initialVo );
+      this.voPage.setInitialVo( this.initialVo );
     }
-    addPage( this.page );
+    addPage( this.voPage );
+    
+    this.servicePage = new VoServiceSelectionPage();
+    addPage( this.servicePage );
+    
   }
   
   /* (non-Javadoc)
@@ -62,7 +77,54 @@ public class GenericVoWizard
    */
   @Override
   public boolean performFinish() {
-    return this.page.createVo();
+    
+    GenericVoCreator creator = new GenericVoCreator();
+    
+    IStatus result = this.voPage.apply( creator );
+    
+    if ( result.isOK() ) {
+      result = this.servicePage.apply( creator );
+    }
+    
+    if ( result.isOK() ) {
+      result = createVo( creator );
+    }
+    
+    if ( ! result.isOK() ) {
+      ( ( WizardPage ) getContainer().getCurrentPage() ).setErrorMessage( result.getMessage() );
+    }
+    
+    return result.isOK();
+    
+  }
+  
+  private IStatus createVo( final GenericVoCreator creator ) {
+    
+    IStatus result = Status.OK_STATUS;
+    
+    GenericVirtualOrganization vo = null;
+    IVoManager manager = GridModel.getVoManager();
+    
+    try {
+      if ( this.initialVo != null ) {
+        creator.apply( this.initialVo );
+      } else {
+        vo = ( GenericVirtualOrganization ) manager.create( creator );
+      }
+    } catch( GridModelException gmExc ) {
+      result = new Status( IStatus.ERROR, Activator.PLUGIN_ID, gmExc.getLocalizedMessage(), gmExc );
+    }
+    
+    if ( ! result.isOK() && ( vo != null ) ) {
+      try {
+        manager.delete( vo );
+      } catch( GridModelException gmExc ) {
+        Activator.logException( gmExc );
+      }
+    }
+    
+    return result;
+    
   }
   
 }
