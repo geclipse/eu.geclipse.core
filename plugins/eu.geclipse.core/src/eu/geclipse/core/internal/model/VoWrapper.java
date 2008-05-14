@@ -34,6 +34,7 @@ import eu.geclipse.core.model.IGridStorage;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.IWrappedElement;
 import eu.geclipse.core.model.impl.AbstractGridContainer;
+import eu.geclipse.core.reporting.ProblemException;
 
 /**
  * Wrapper of a VO in order to map the VO from the manager to a
@@ -56,13 +57,24 @@ public class VoWrapper
     this.vo = vo;
     
     try {
+      
+      QueryContainer applicationContainer
+        = new QueryContainer(
+            this,
+            "Applications",
+            new IQueryInputProvider() {
+              public IGridElement[] getInput( final IProgressMonitor monitor ) throws ProblemException {
+                return getApplicationManager().getApplications( null, monitor );
+              }
+            } );
+      addElement( applicationContainer );
     
       QueryContainer computingContainer
         = new QueryContainer(
             this,
             Messages.getString( "VoWrapper.computing" ), //$NON-NLS-1$
             new IQueryInputProvider() {
-              public IGridElement[] getInput( final IProgressMonitor monitor ) throws GridModelException {
+              public IGridElement[] getInput( final IProgressMonitor monitor ) throws ProblemException {
                 return getComputing( monitor );
               }
             } );

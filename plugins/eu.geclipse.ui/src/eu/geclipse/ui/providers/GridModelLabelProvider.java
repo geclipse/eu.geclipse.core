@@ -26,6 +26,7 @@ import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 
+import eu.geclipse.core.model.IGridApplication;
 import eu.geclipse.core.model.IGridComputing;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
@@ -49,6 +50,8 @@ public class GridModelLabelProvider
   public static final String INFO_MARKER = "icons/obj16/info_obj.gif"; //$NON-NLS-1$
 
   public static final String ERROR_MARKER = "icons/obj16/ihigh_obj.gif"; //$NON-NLS-1$
+  
+  private static final String APPLICATION_ELEMENT = "icons/obj16/application_obj.gif"; //$NON-NLS-1$
   
   private static Hashtable< String, Image > images
     = new Hashtable< String, Image >();
@@ -157,6 +160,8 @@ public class GridModelLabelProvider
     
     if( element instanceof IVirtualOrganization ) {
       result = getVoImage();
+    } else if ( element instanceof IGridApplication ) {
+      result = result = getImage( APPLICATION_ELEMENT );
     } else if( element instanceof IGridComputing ) {
       result = getComputingImage();
     } else if( element instanceof IGridStorage ) {
@@ -282,7 +287,7 @@ public class GridModelLabelProvider
     }
     return this.storageImage;
   }
-
+  
   /**
    * Get an image that represents an {@link IGridComputing}.
    * 

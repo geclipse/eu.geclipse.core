@@ -26,6 +26,7 @@ import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.impl.ContainerMarker;
+import eu.geclipse.core.reporting.ProblemException;
 
 public class QueryContainer
     extends VirtualGridContainer
@@ -86,7 +87,13 @@ public class QueryContainer
 
     if ( this.queryAsChildren ) {
     
-      IGridElement[] query = query( monitor );
+      IGridElement[] query = null;
+      
+      try {
+        query = query( monitor );
+      } catch ( ProblemException pExc ) {
+        throw new GridModelException( pExc.getProblem() );
+      }
   
       // Add the children to the container
       if ( ( query != null ) && ( query.length > 0 ) ) {
@@ -111,7 +118,7 @@ public class QueryContainer
   }
 
   protected IGridElement[] query( final IProgressMonitor monitor )
-      throws GridModelException {
+      throws ProblemException {
     IGridElement[] input = getInput( monitor );
     for ( IQueryFilter filter : this.filters ) {
       input = filter.filter( input );
@@ -120,7 +127,7 @@ public class QueryContainer
   }
 
   public IGridElement[] getInput( final IProgressMonitor monitor )
-      throws GridModelException {
+      throws ProblemException {
     return this.inputProvider instanceof QueryContainer
     ? ( ( QueryContainer ) this.inputProvider ).query( monitor )
         : this.inputProvider.getInput( monitor );
