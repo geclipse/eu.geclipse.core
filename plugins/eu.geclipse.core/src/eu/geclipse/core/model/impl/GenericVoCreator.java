@@ -15,13 +15,21 @@
 
 package eu.geclipse.core.model.impl;
 
+import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
 
+import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridElementCreator;
+import eu.geclipse.core.model.IGridService;
 import eu.geclipse.core.model.IStorableElementCreator;
+import eu.geclipse.core.reporting.ProblemException;
 
 /**
  * Grid element creator for the {@link GenericVirtualOrganization}.
@@ -40,6 +48,30 @@ public class GenericVoCreator
   private Object object;
   
   private String voName;
+  
+  private List< IGridElementCreator > serviceCreators
+    = new ArrayList< IGridElementCreator >();
+  
+  public void addServiceCreator( final IGridElementCreator creator,
+                                 final URI fromURI )
+      throws ProblemException {
+    
+    
+    if ( ! creator.canCreate( IGridService.class ) ) {
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED, "Cannot create a service from the specified creator" );
+    }
+    
+    if ( ! creator.canCreate( fromURI ) ) {
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED, "Cannot create a service from the specified URI" );
+    }
+    
+    this.serviceCreators.add( creator );
+    
+  }
+  
+  public List< IGridElementCreator > getServiceCreators() {
+    return this.serviceCreators;
+  }
   
   /**
    * Apply this creators settings to the specified VO.

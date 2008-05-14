@@ -15,11 +15,14 @@
 
 package eu.geclipse.core.model.impl;
 
+import java.util.List;
+
 import org.eclipse.core.filesystem.IFileStore;
 
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.core.model.IVirtualOrganization;
 
 /**
@@ -110,6 +113,11 @@ public class GenericVirtualOrganization
     
     GenericVoProperties properties = new GenericVoProperties( this );
     addElement( properties );
+    
+    List< IGridElementCreator > serviceCreators = creator.getServiceCreators();
+    for ( IGridElementCreator serviceCreator : serviceCreators ) {
+      create( serviceCreator );
+    }
     
   }
   
