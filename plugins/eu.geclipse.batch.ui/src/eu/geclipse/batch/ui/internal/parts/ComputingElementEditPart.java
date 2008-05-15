@@ -32,16 +32,12 @@ public final class ComputingElementEditPart extends BatchEditPart {
 
   public static  Rectangle CE ;
   public BatchEditor editor;
-  private boolean firstTime=false;
+  private boolean firstTime = false;
+
   /**
    * Creates the figure that represents this modeled object.
    * @return Returns the created Figure
    */
-  
- /* public ComputingElementEditPart(BatchEditor editor)
-  {
-    this.editor=editor;
-  }*/
   @Override
   protected Figure createFigure() {
     
@@ -64,27 +60,23 @@ public final class ComputingElementEditPart extends BatchEditPart {
     ceFigure.setNumQueues( model.getNumQueues() );
     ceFigure.setNumJobs( model.getNumJobs() );
  
-    try
-    {  
-      CE  = new Rectangle( model.getLocation(),model.getSize() );
+    try {  
+      CE  = new Rectangle( model.getLocation(), model.getSize() );
 
-     if(!(CE.intersects(BoxEditPart.queues)||BoxEditPart.queues.intersects(CE)))
-      {
-       super.refreshVisuals();
-     }
+      if( !( CE.intersects( BoxEditPart.queues ) || BoxEditPart.queues.intersects( CE ) ) ) {
+        super.refreshVisuals();
+      }
 
-     this.firstTime=true;
-     
+      this.firstTime = true;
     }
-    catch(Exception z)
-    { 
-      System.out.println(z);
-    } 
-    if(!this.firstTime)
-   super.refreshVisuals();
-    this.firstTime = true;
+    catch(Exception z) { 
+      // TODO what should we do? 
+    }
     
-   
+    if( !this.firstTime )
+      super.refreshVisuals();
+
+    this.firstTime = true;
   }
 
  /**
