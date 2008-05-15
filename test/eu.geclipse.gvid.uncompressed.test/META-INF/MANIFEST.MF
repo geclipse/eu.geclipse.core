@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: %Bundle-Name
 Bundle-SymbolicName: eu.geclipse.gvid.uncompressed.test
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: eu.geclipse.gvid.uncompressed.Activator
+Bundle-Activator: eu.geclipse.gvid.uncompressed.test.Activator
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime,
