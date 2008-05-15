@@ -453,11 +453,6 @@ public class Terminal extends Canvas implements ISelectionProvider {
     int colsToUpdate = 0;
 
     while ( ch >= ' ' ) {
-      Char scrCh = this.screenBuffer[ this.cursor.line + this.historySize ][ this.cursor.col ];
-      scrCh.ch = (char)ch;
-      scrCh.setToCursorFormat( this.cursor );
-      this.cursor.col++;
-      colsToUpdate++;
       if ( this.cursor.col >= numColsInLine( this.cursor.line ) ) {
         if ( this.wraparound ) {
           this.cursor.col = 0;
@@ -475,6 +470,11 @@ public class Terminal extends Canvas implements ISelectionProvider {
           this.cursor.col = numColsInLine( this.cursor.line ) - 1;
         }
       }
+      Char scrCh = this.screenBuffer[ this.cursor.line + this.historySize ][ this.cursor.col ];
+      scrCh.ch = (char)ch;
+      scrCh.setToCursorFormat( this.cursor );
+      this.cursor.col++;
+      colsToUpdate++;
       if ( this.input.available() == 0 ) {
         if (colsToUpdate != 0) {
           triggerRedraw( startCol, line, colsToUpdate, 1 );
@@ -1533,7 +1533,9 @@ public class Terminal extends Canvas implements ISelectionProvider {
     int oldCol = this.cursor.col;
     this.cursor.line = line;
     this.cursor.col = col;
-    triggerRedraw( oldCol, oldLine, 1, 1 );
+    if (oldLine < this.numLines && oldCol < this.numCols) {
+      triggerRedraw( oldCol, oldLine, 1, 1 );
+    }
     triggerRedraw( this.cursor.col, this.cursor.line, 1, 1 );
   }
 
