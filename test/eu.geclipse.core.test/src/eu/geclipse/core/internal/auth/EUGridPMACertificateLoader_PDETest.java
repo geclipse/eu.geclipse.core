@@ -78,7 +78,7 @@ public class EUGridPMACertificateLoader_PDETest {
   @Test
   public void testGetCertificateURIStringIProgressMonitor() throws URISyntaxException, ProblemException {
     URI uri = new URI( "http://www.eugridpma.org/distribution/igtf/current/accredited/tgz"); //$NON-NLS-1$
-    Assert.assertEquals( "AEGIS",loader.getCertificate( uri, "ca_AEGIS-1.16.tar.gz", new NullProgressMonitor() ).getID()); //$NON-NLS-1$ //$NON-NLS-2$
+    Assert.assertEquals( "AEGIS",loader.getCertificate( uri, "ca_AEGIS-1.20.tar.gz", new NullProgressMonitor() ).getID()); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
   /**tests the method {@link EUGridPMACertificateLoader#getCertificateList
