@@ -24,9 +24,7 @@ import org.eclipse.draw2d.Label;
 import org.eclipse.draw2d.LineBorder;
 import org.eclipse.draw2d.SimpleRaisedBorder;
 import org.eclipse.draw2d.TitleBarBorder;
-import org.eclipse.draw2d.ToolbarLayout;
 import org.eclipse.draw2d.geometry.Dimension;
-import org.eclipse.draw2d.geometry.Rectangle;
 import eu.geclipse.batch.IQueueInfo.QueueRunState;
 import eu.geclipse.batch.IQueueInfo.QueueState;
 import eu.geclipse.batch.ui.IQueueFigure;
@@ -38,7 +36,7 @@ public final class QueueFigure extends Figure implements IQueueFigure {
   /**
    * The preferred size for this figure
    */
-  private static final Dimension SIZE = new Dimension( 100, 55 );
+  private static final Dimension SIZE = new Dimension( 100, 65 );
 
   private TitleBarBorder border;
   private Label labState;
@@ -48,7 +46,7 @@ public final class QueueFigure extends Figure implements IQueueFigure {
    * The default constructor.
    */
   public QueueFigure(){
-    setLayoutManager(new FlowLayout() );
+    setLayoutManager( new FlowLayout( false ) );
    // ToolbarLayout layout = new ToolbarLayout(true);
     // ToolbarLayout.HORIZONTAL;
     // layout.setMinorAlignment(ToolbarLayout.ALIGN_TOPLEFT);
@@ -59,7 +57,7 @@ public final class QueueFigure extends Figure implements IQueueFigure {
     
     // setLayoutManager(layout);
     this.border = new TitleBarBorder(); 
-    this.border.setBackgroundColor( ColorConstants.menuBackground);
+    this.border.setBackgroundColor( ColorConstants.menuBackground );
     this.border.setTextColor( ColorConstants.menuForeground );
 
     CompoundBorder iBorder = new CompoundBorder( new SimpleRaisedBorder(), new LineBorder( ColorConstants.white ) );

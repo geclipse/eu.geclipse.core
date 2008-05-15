@@ -46,6 +46,8 @@ import eu.geclipse.core.reporting.ProblemException;
 public class BatchUpdate {
 
   protected Job updateJob;
+  private final int nMaxElements = 6; // how many queues or nodes to draw at each line
+  
   private List<BatchResource> Qlist = new ArrayList<BatchResource>();
   private List<BatchResource> Nlist = new ArrayList<BatchResource>();
   private ScheduledExecutorService executor;
@@ -59,7 +61,6 @@ public class BatchUpdate {
   private ComputingElement computingElement;
   private Box box_queue;
   private Box box_nodes;
-  private int N = 5; // how many queues or nodes to draw at each line
   private LinkedHashMap<String, WorkerNode> workerNodes = new LinkedHashMap<String, WorkerNode>();
   private LinkedHashMap<String, Queue> queues = new LinkedHashMap<String, Queue>();
   private List<BatchResource> removedResources = new ArrayList<BatchResource>();
@@ -95,6 +96,7 @@ public class BatchUpdate {
    * @param batchName The name FQDN of the machine hosting the batch service
    * @param batchType The type of the batch service.
    * @param updateInterval The interval between each update.
+   * @param editor The editor that connects the sorting order
    */
   public BatchUpdate( final Shell shell,
                       final BatchDiagram diagram,
@@ -293,7 +295,7 @@ public class BatchUpdate {
     if( null != wnis ) {
       if( this.firstTime )
         this.initProgress.moveNextMajorTask( wnis.size() );
-      int loc_y = 15;
+      int loc_y = 0;
       int newfreeN = 0;
       int newjob_exclusiveN = 0;
       int newbusyN = 0;
@@ -340,20 +342,18 @@ public class BatchUpdate {
           j++;
           if( i == 0 )
             this.nodes_dim[ 0 ] = loc;
-          if( i >= this.N && i % ( this.N ) == 1 ) {
-            loc_y = loc_y + 50;
+          if( i % this.nMaxElements == 0 && i > 0 ) {
+            loc_y = loc_y + 45;
             loc = this.nodes_dim[ 0 ];
             this.nodes_dim[ 2 ] = loc_y;
-            j = 1;
+            j = 0;
           }
-          if( i == this.N - 1 ) {
-            this.nodes_dim[ 1 ] = loc + 150;
+          if( i == this.nMaxElements - 1 ) {
+            this.nodes_dim[ 1 ] = loc + 40;
             flag_notes = false;
           }
-          if( i == wnis.size() - 1 ) {
-            if( flag_notes ) {
-              this.nodes_dim[ 1 ] = loc + 130;
-            }
+          if( i == wnis.size() - 1 && flag_notes ) {
+            this.nodes_dim[ 1 ] = loc + 100;
           }
           pointWN = pointWN.setLocation( loc, loc_y );
           wn.setLocation( pointWN );
@@ -378,7 +378,7 @@ public class BatchUpdate {
     } catch( ProblemException exc ) {
       Activator.logException( exc );
     }
-    int loc_y = 15;
+    int loc_y = 0;
     int newenabledQ = 0;
     int newdisabledQ = 0;
     boolean changeQ = false;
@@ -419,24 +419,22 @@ public class BatchUpdate {
           j++;
           if( i == 0 )
             this.queue_dim[ 0 ] = loc_x;
-          if( i >= this.N && i % ( this.N ) == 1 ) {
-            loc_y = loc_y + 60;
+          if( i % this.nMaxElements == 0 && i > 0 ) {
+            loc_y = loc_y + 70;
             loc_x = this.queue_dim[ 0 ];
-            this.queue_dim[ 2 ] = loc_y;// + 20;
-            j = 1;
+            this.queue_dim[ 2 ] = loc_y;
+            j = 0;
           }
           if( this.checkX < loc_x )
             this.checkX = loc_x;
           if( this.checkY <= loc_y )
             this.checkY = loc_y;
-          if( i == this.N - 1 ) {
-            this.queue_dim[ 1 ] = loc_x + 150;
+          if( i == this.nMaxElements - 1 ) {
+            this.queue_dim[ 1 ] = loc_x + 50;
             flag_queue = false;
           }
-          if( i == queueis.size() - 1 ) {
-            if( flag_queue ) {
-              this.queue_dim[ 1 ] = loc_x + 150;
-            }
+          if( i == queueis.size() - 1 && flag_queue ) {
+              this.queue_dim[ 1 ] = loc_x + 50;
           }
           pointQ = pointQ.setLocation( loc_x, loc_y );
           queue.setLocation( pointQ );
@@ -462,7 +460,7 @@ public class BatchUpdate {
             this.diagram.removeChild( this.box_queue );
             this.box_queue.addChildren( this.Qlist );
             boolean newsize = false;
-            if( ( this.count ) % ( this.N + 1 ) == 1 ) {
+            if( ( this.count ) % ( this.nMaxElements ) == 0 ) {
               this.checkY = this.checkY + 95;
               this.count = 0;
               Dimension dimBox_new = new Dimension( this.checkX
@@ -489,6 +487,7 @@ public class BatchUpdate {
             // Sort( this.editor.sortedQ, this.Qlist, this.box_queue, true );
           }
         } catch( Exception Z ) {
+          // No code needed 
         }
       }
       // Check if any of the queues were removed
@@ -516,19 +515,15 @@ public class BatchUpdate {
       int starty = this.queue_dim[ 2 ];
       if( this.firstTime )
         this.initProgress.moveNextMajorTask( 1 );
-      // case of one line queues only
-      if( queueis.size() <= this.N )
-        dimBox_queue = new Dimension( startx, starty + 50 );
-      else
-        dimBox_queue = new Dimension( startx, starty + 65 );
+      dimBox_queue = new Dimension( startx, starty + 95 );
       this.box_queue = new Box( this.jobManager ); // new object
       this.box_queue.setSize( dimBox_queue );
       this.box_queue.setName( Messages.getString( "BoxElementQueues" ) ); //$NON-NLS-1$
       pointBox_queue = pointBox_queue.setLocation( 25, 25 );
       this.box_queue.setLocation( pointBox_queue );
       this.box_queue.addChildren( this.Qlist );
-      if( null == newReses )
-        newReses = new ArrayList<BatchResource>();
+
+      newReses = new ArrayList<BatchResource>();
       newReses.add( this.box_queue );
       if( this.firstTime )
         this.initProgress.moveNextMinor();
@@ -555,12 +550,10 @@ public class BatchUpdate {
     if( null == this.box_nodes ) {
       if( this.firstTime )
         this.initProgress.moveNextMajorTask( 1 );
-      int startx = this.nodes_dim[ 1 ];
-      int starty = this.nodes_dim[ 2 ] - 15;
-      if( wnis.size() <= this.N )
-        dimBox_nodes = new Dimension( startx - 4, starty + 80 );
-      else
-        dimBox_nodes = new Dimension( startx - 4, starty );
+      int startx = this.nodes_dim[ 1 ] - this.nodes_dim[ 0 ];
+      int starty = this.nodes_dim[ 2 ];
+
+      dimBox_nodes = new Dimension( startx, starty + 70 );
       this.box_nodes = new Box( this.jobManager );
       this.box_nodes.setSize( dimBox_nodes );
       this.box_nodes.setName( Messages.getString( "BoxElementNodes" ) );//$NON-NLS-1$
