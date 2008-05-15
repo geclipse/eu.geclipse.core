@@ -78,6 +78,7 @@ public class DeploymentDescription extends WizardPage
     this.nameText = new Text( tag, SWT.BORDER );
     this.nameText.setLayoutData( new GridData( GridData.FILL_HORIZONTAL ) );
     this.nameText.addModifyListener( this );
+    this.nameText.setEnabled( false );
     this.createdByDate = new Button( tag, SWT.CHECK );
     this.createdByDate.setText( Messages.getString( "Deployment.deployment_description_tag_by_date" ) ); //$NON-NLS-1$
     this.createdByDate.addSelectionListener( this );
@@ -153,6 +154,8 @@ public class DeploymentDescription extends WizardPage
     if( e.getSource().equals( this.automatic ) && this.automatic.getSelection() ) {
       setWidgets( true );
     }
+    if( e.getSource().equals( this.createdByName ))
+        this.nameText.setEnabled( true );
     if( e.getSource().equals( this.createdByName )
         || e.getSource().equals( this.createdByDate ) 
         || e.getSource().equals( this.createdByTime ) 
@@ -172,7 +175,7 @@ public class DeploymentDescription extends WizardPage
     this.createdByTime.setEnabled( b );
     this.createdByVersion.setEnabled( b );
     this.date.setEnabled( b );
-    this.nameText.setEnabled( b );
+    //this.nameText.setEnabled( b );
     this.tagText.setEnabled( !b );
   }
   

@@ -105,6 +105,7 @@ public class UninstallWizardPage extends WizardPage {
     }
   }*/
 
+ 
   protected void updatePagebuttonComplete(final URI[] urls) {
     this.setPageComplete(false);
     if ( urls == null ) {
