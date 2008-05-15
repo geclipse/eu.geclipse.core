@@ -15,9 +15,13 @@
 
 package eu.geclipse.core.auth;
 
+import java.util.Arrays;
+import java.util.Hashtable;
 import java.util.List;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
+
 import eu.geclipse.core.ExtensionManager;
 import eu.geclipse.core.Extensions;
 
@@ -73,28 +77,30 @@ public abstract class AbstractAuthTokenProvider implements IAuthTokenProvider {
    */
   static private IAuthTokenProvider getHighestPriorityProvider() {
     
-    IConfigurationElement element = null;
-    int priority = Integer.MIN_VALUE;
     ExtensionManager extensionBrowser = new ExtensionManager();
     List< IConfigurationElement > providers
       = extensionBrowser.getConfigurationElements( Extensions.AUTH_TOKEN_PROVIDER_POINT,
                                                    Extensions.AUTH_TOKEN_PROVIDER_ELEMENT );
     
-    for ( IConfigurationElement e : providers ) {
-      String prioString = e.getAttribute( Extensions.AUTH_TOKEN_PROVIDER_PRIORITY_ATTRIBUTE );
+    Hashtable< Integer, IConfigurationElement > providerMap
+      = new Hashtable< Integer, IConfigurationElement >();
+    
+    for ( IConfigurationElement element : providers ) {
+      String prioString = element.getAttribute( Extensions.AUTH_TOKEN_PROVIDER_PRIORITY_ATTRIBUTE );
       try {
-        int p = Integer.parseInt( prioString );
-        if ( p > priority ) {
-          element = e;
-          priority = p;
-        }
+        Integer prio = Integer.valueOf( prioString );
+        providerMap.put( prio, element );
       } catch ( NumberFormatException nfExc ) {
         eu.geclipse.core.internal.Activator.logException( nfExc );
       }
     }
     
     IAuthTokenProvider provider = null;
-    if ( element != null ) {
+    Integer[] keys = providerMap.keySet().toArray( new Integer[ providerMap.size() ] );
+    Arrays.sort( keys );
+    
+    for ( int i = keys.length - 1 ; ( i >= 0 ) && ( provider == null ) ; i-- ) {
+      IConfigurationElement element = providerMap.get( keys[ i ] );
       try {
         provider = ( IAuthTokenProvider ) element.createExecutableExtension( Extensions.AUTH_TOKEN_PROVIDER_EXECUTABLE );
       } catch( CoreException cExc ) {
