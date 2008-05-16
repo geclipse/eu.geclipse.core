@@ -393,7 +393,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
         int ch = read();
         if ( ch == BEL ) bell(); 
         else if ( ch == SWT.CR ) carriageReturn();
-        else if ( ch == SWT.LF ) nextLine();
+        else if ( ch == SWT.LF ) nextLine( false );
         else if ( ch == SI ) this.cursor.charSet = this.charSetG[0];
         else if ( ch == SO ) this.cursor.charSet = this.charSetG[1];
         else if ( ch == SWT.TAB ) tabulator();
@@ -580,7 +580,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
         index();
         break;
       case 'E': // NEL - Next Line
-        nextLine();
+        nextLine( true );
         break;
       case 'M': // RI - Reverse Index
         reverseIndex();
@@ -672,9 +672,9 @@ public class Terminal extends Canvas implements ISelectionProvider {
     this.charSetG[charSetNr] = charSet;
   }
 
-  private void nextLine() {
+  private void nextLine( final boolean returnToColZero) {
     int oldCol = this.cursor.col; 
-    this.cursor.col = 0;
+    if (returnToColZero) this.cursor.col = 0;
     triggerRedraw( oldCol, this.cursor.line, 1, 1 );
     index();
   }
@@ -1084,7 +1084,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
           this.wraparound = false;
           break;
         case 8: // Auto repeat Off
-          // XXX check of auto repeat keyboard events in SWT possible?
+          // XXX check if auto repeat keyboard events in SWT possible?
           Activator.logMessage( IStatus.WARNING,
                                 Messages.getString("Terminal.autoRepeatOffNotSupported") ); //$NON-NLS-1$
           break;
@@ -1431,7 +1431,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
     int oldLine = this.cursor.line;
     if ( params.length != 0 ) val = params[ 0 ];
     if ( val == 0 ) val = 1;
-    if ( this.reverseWraparound /*|| cursor.col == 0*/ ) { // XXX I'am not so sure if this is correct behavior
+    if ( this.reverseWraparound /*|| cursor.col == 0*/ ) { // XXX I'm not so sure if this is correct behavior
       while ( this.cursor.col - val < 0 ) {
         if (this.cursor.line != 0 ) {
           val -= this.cursor.col + 1;
