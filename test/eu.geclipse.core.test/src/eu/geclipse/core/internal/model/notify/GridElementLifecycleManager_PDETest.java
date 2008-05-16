@@ -40,8 +40,8 @@ public class GridElementLifecycleManager_PDETest {
  // create a project as an IResource for the next tests
     String projectName = "test"; //$NON-NLS-1$
     IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
-    if (workspaceRoot.findMember( "test" ) == null) { //$NON-NLS-1$
     project = workspaceRoot.getProject( projectName );
+    if (workspaceRoot.findMember( "test" ) == null) { //$NON-NLS-1$
     IProjectDescription desc = project.getWorkspace().newProjectDescription( projectName );
     project.create( desc, null );
     }

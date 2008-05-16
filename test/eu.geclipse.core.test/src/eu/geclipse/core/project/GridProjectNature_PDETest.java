@@ -44,13 +44,14 @@ public class GridProjectNature_PDETest {
  // create a project as an IResource
     String projectName = "jietest"; //$NON-NLS-1$
     IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
-    if (workspaceRoot.findMember( "jietest" ) == null ) { //$NON-NLS-1$
     project = workspaceRoot.getProject( projectName );
+    if (workspaceRoot.findMember( projectName ) == null ) { 
     IProjectDescription desc = project.getWorkspace().newProjectDescription( projectName );
     project.create( desc, null );
+    }
     project.open( new NullProgressMonitor() );
     nature.setProject( project ); //this is needed for configure, otherwise nullpointerExeption
-    }
+    
   }
 
   /**

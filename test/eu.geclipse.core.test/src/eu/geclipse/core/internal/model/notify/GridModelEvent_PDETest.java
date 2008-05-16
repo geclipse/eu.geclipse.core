@@ -64,7 +64,7 @@ public class GridModelEvent_PDETest {
    */
   @Test
   public void testGetSource() {
-    Assert.assertEquals( GridModel.getRoot(), event.getSource() );
+    Assert.assertEquals( GridModel.getRoot().getName(), event.getSource().getName() );
   }
 
   /**

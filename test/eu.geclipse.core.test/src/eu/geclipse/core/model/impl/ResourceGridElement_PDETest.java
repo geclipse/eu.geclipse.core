@@ -43,12 +43,11 @@ public class ResourceGridElement_PDETest {
  // create a project as an IResource
     String projectName = "jietest"; //$NON-NLS-1$
     IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
-    if (workspaceRoot.findMember( "jietest" ) == null ) { //$NON-NLS-1$
     IProject project = workspaceRoot.getProject( projectName );
+    if (workspaceRoot.findMember( "jietest" ) == null ) { //$NON-NLS-1$
     IProjectDescription desc = project.getWorkspace().newProjectDescription( projectName );
-    project.create( desc, null );
+    project.create( desc, null );}
     element = new ResourceGridElement(project);
-    }
   }
 
   /**
