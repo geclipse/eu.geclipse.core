@@ -214,6 +214,12 @@ public class Extensions {
     = "creator"; //$NON-NLS-1$
   
   /**
+   * The ID of the Grid element creator's id attribute.
+   */
+  public static final String GRID_ELEMENT_CREATOR_ID_ATTRIBUTE
+    = "id"; //$NON-NLS-1$
+  
+  /**
    * The ID of the Grid element creator's name attribute.
    */
   public static final String GRID_ELEMENT_CREATOR_NAME_ATTRIBUTE
@@ -239,6 +245,13 @@ public class Extensions {
    */
   public static final String GRID_ELEMENT_CREATOR_SOURCE_PATTERN_ATTRIBUTE
     = "pattern"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the default attribute of the source configuration element
+   * contained in the Grid element creator extension point.
+   */
+  public static final String GRID_ELEMENT_CREATOR_SOURCE_DEFAULT_ATTRIBUTE
+    = "default"; //$NON-NLS-1$
   
   /**
    * The ID of the target configuration element

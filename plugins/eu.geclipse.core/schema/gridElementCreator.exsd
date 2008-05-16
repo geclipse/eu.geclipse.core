@@ -48,6 +48,23 @@
             <element ref="source" minOccurs="1" maxOccurs="unbounded"/>
             <element ref="target"/>
          </sequence>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  A unique ID that is used to reference to this element creator extension.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string" use="required">
+            <annotation>
+               <documentation>
+                  A name of the creator that may be used to represent the creator in the UI, e.g. in wizard pages.
+               </documentation>
+               <appInfo>
+                  <meta.attribute translatable="true"/>
+               </appInfo>
+            </annotation>
+         </attribute>
          <attribute name="class" type="string" use="required">
             <annotation>
                <documentation>
@@ -63,16 +80,6 @@
                <documentation>
                   An optional wizard ID that may be used by the UI to specify initial arguments for a new Grid element.
                </documentation>
-            </annotation>
-         </attribute>
-         <attribute name="name" type="string" use="required">
-            <annotation>
-               <documentation>
-                  A name of the creator that may be used to represent the creator in the UI, e.g. in wizard pages.
-               </documentation>
-               <appInfo>
-                  <meta.attribute translatable="true"/>
-               </appInfo>
             </annotation>
          </attribute>
       </complexType>
@@ -98,7 +105,14 @@
          <attribute name="pattern" type="string">
             <annotation>
                <documentation>
-                  An optional regular expression that may be used to further restrict the sources. If the source itself is for instance a &lt;code&gt;java.io.File&lt;/code&gt; the pattern may be used to match the filename of the file.
+                  An optional regular expression that may be used to further restrict the sources. If the source itself is for instance a &lt;code&gt;java.io.File&lt;/code&gt; the pattern may be used to match the filename of the file. The pattern therefore is applied to the toString() method of the source. If this source element is declared to be the default source the pattern attribute may be interpreted as default value of the source, e.g. if this is a String or URI source.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="default" type="boolean">
+            <annotation>
+               <documentation>
+                  A boolean element determining if this is the default source for the element creator. There should either be no default source or exactly one default source. Specifying more than one default sources may result in undetermined behaviour. If this is the default resource the pattern attribute may be interpreted as default value, e.g. for a URI source.
                </documentation>
             </annotation>
          </attribute>

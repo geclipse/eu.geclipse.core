@@ -7,6 +7,7 @@
          point="eu.geclipse.core.gridElementCreator">
       <creator
             class="eu.geclipse.jsdl.JSDLJobDescriptionCreator"
+            id="eu.geclipse.jsdl.creator"
             name="JSDL - Job Submission Description Language (OGF Standard)">
          <source
                class="org.eclipse.core.resources.IFile">

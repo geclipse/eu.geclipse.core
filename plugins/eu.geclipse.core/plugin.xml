@@ -73,6 +73,7 @@
          point="eu.geclipse.core.gridElementCreator">
       <creator
             class="eu.geclipse.core.model.impl.GenericVoCreator"
+            id="eu.geclipse.core.genericVoCreator"
             name="Generic VO"
             wizard="eu.geclipse.ui.wizards.GenericVoWizard">
          <source

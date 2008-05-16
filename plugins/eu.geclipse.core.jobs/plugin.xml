@@ -9,6 +9,7 @@
          point="eu.geclipse.core.gridElementCreator">
       <creator
             class="eu.geclipse.core.jobs.GridJobCreator"
+            id="eu.geclipse.core.jobs.gridJobCreator"
             name="Grid Job Creator">
          <target
                class="eu.geclipse.core.jobs.GridJob"

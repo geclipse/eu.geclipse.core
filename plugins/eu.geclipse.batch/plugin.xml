@@ -9,6 +9,7 @@
          point="eu.geclipse.core.gridElementCreator">
       <creator
             class="eu.geclipse.batch.BatchConnectionInfoCreator"
+            id="eu.geclipse.batch.batchConnectionInfoCreator"
             name="Batch Service">
          <target
                class="eu.geclipse.batch.BatchConnectionInfo"
@@ -17,6 +18,7 @@
       </creator>
       <creator
             class="eu.geclipse.batch.BatchQueueDescriptionCreator"
+            id="eu.geclipse.batch.batchQueueDescriptionCreator"
             name="Batch Queue Configuration">
          <target
                class="eu.geclipse.batch.BatchQueueDescriptionCreator"
