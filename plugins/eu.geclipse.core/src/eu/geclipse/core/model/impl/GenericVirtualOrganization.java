@@ -15,14 +15,18 @@
 
 package eu.geclipse.core.model.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.filesystem.IFileStore;
+import org.eclipse.core.runtime.IProgressMonitor;
 
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
+import eu.geclipse.core.model.IGridService;
+import eu.geclipse.core.model.IStorableElement;
 import eu.geclipse.core.model.IVirtualOrganization;
 
 /**
@@ -88,6 +92,32 @@ public class GenericVirtualOrganization
     return this.name.hashCode();
   }
   
+  @Override
+  public IGridService[] getServices( final IProgressMonitor monitor )
+      throws GridModelException {
+    
+    List< IGridService > results = new ArrayList< IGridService >();
+    
+    IGridService[] services = super.getServices( monitor );
+    if ( services != null ) {
+      for ( IGridService service : services ) {
+        results.add( service );
+      }
+    }
+    
+    IGridElement[] children = getChildren( null );
+    if ( children != null ) {
+      for ( IGridElement child : children ) {
+        if ( child instanceof IGridService ) {
+          results.add( ( IGridService ) child );
+        }
+      }
+    }
+    
+    return results.toArray( new IGridService[ results.size() ] );
+    
+  }
+  
   public String getTypeName() {
     return VO_TYPE_NAME;
   }
@@ -98,6 +128,20 @@ public class GenericVirtualOrganization
 
   public String getName() {
     return this.name;
+  }
+  
+  @Override
+  public void save() throws GridModelException {
+    IGridElement[] children = getChildren( null );
+    for ( IGridElement child : children ) {
+      if ( child instanceof IGridService ) {
+        // Do nothing, services are handled by the GenericVoProperties
+      } else if ( child instanceof IStorableElement ) {
+        ( ( IStorableElement ) child ).save();
+      } else {
+        saveChild( child );
+      }
+    }
   }
   
   /**
@@ -148,4 +192,5 @@ public class GenericVirtualOrganization
   public String getWizardId() {
     return "eu.geclipse.ui.wizards.GenericVoWizard"; //$NON-NLS-1$
   }
+  
 }
