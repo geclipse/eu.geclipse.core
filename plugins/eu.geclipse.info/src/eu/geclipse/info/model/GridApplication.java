@@ -18,15 +18,9 @@ package eu.geclipse.info.model;
 
 import java.net.URI;
 
-import org.eclipse.core.filesystem.IFileStore;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.IPath;
-
 import eu.geclipse.core.model.IGridApplication;
+import eu.geclipse.core.model.IGridComputing;
 import eu.geclipse.core.model.IGridContainer;
-import eu.geclipse.core.model.IGridProject;
-import eu.geclipse.info.glue.AbstractGlueTable;
-import eu.geclipse.info.glue.GlueSubCluster;
 import eu.geclipse.info.glue.GlueSubClusterSoftwareRunTimeEnvironment;
 
 
@@ -34,9 +28,17 @@ public class GridApplication extends GridGlueElement implements IGridApplication
 
   private URI script = null;
   
+  private IGridComputing[] computing;
+  
   public GridApplication( final IGridContainer parent, 
+                          final IGridComputing[] computing,
                           final GlueSubClusterSoftwareRunTimeEnvironment software ) {
     super( parent, software );
+    this.computing = computing;
+  }
+  
+  public IGridComputing[] getComputing() {
+    return this.computing;
   }
 
   public URI getScript() {
