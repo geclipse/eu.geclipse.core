@@ -158,10 +158,11 @@ public class OperatingSystemSection extends JsdlAdaptersFactory {
         if ( selectedOSName == EMPTY_STRING ) { 
           
           deleteElement( OperatingSystemSection.this.operatingSystemType );
-          OperatingSystemSection.this.operatingSystemType = null;
+          
           /* Clear also the O/S Version and O/S Description */
           OperatingSystemSection.this.txtOperSystVer.setText( EMPTY_STRING );
           OperatingSystemSection.this.txtOSDescr.setText( EMPTY_STRING );
+          OperatingSystemSection.this.operatingSystemType = null;
                     
         }
         else {
@@ -200,10 +201,10 @@ public class OperatingSystemSection extends JsdlAdaptersFactory {
     this.txtOperSystVer.addModifyListener( new ModifyListener() {
       
       public void modifyText( final ModifyEvent e ) {
-        checkOSElement();
+
         
         if ( !OperatingSystemSection.this.txtOperSystVer.getText().equals( "" ) ) { //$NON-NLS-1$
-          checkResourcesElement();          
+        checkOSElement();          
           OperatingSystemSection.this.operatingSystemType
           .setOperatingSystemVersion( OperatingSystemSection.this.txtOperSystVer.getText() );
         }
@@ -234,9 +235,10 @@ public class OperatingSystemSection extends JsdlAdaptersFactory {
     this.txtOSDescr.addModifyListener( new ModifyListener() {
       
       public void modifyText( final ModifyEvent e ) {
-        checkOSElement();
+        
         
         if (!OperatingSystemSection.this.txtOSDescr.getText().equals( EMPTY_STRING ) ) {
+          checkOSElement();
           OperatingSystemSection.this.operatingSystemType
                                             .setDescription( OperatingSystemSection.this.txtOSDescr.getText() );
         }else{
@@ -309,7 +311,8 @@ public class OperatingSystemSection extends JsdlAdaptersFactory {
   protected void deleteElement( final EObject eStructuralFeature ) {
    
     try {
-      EcoreUtil.remove( eStructuralFeature );  
+      EcoreUtil.remove( eStructuralFeature ); 
+      checkResourcesElement();
     } catch( Exception e ) {
       Activator.logException( e );
     }
@@ -322,29 +325,26 @@ public class OperatingSystemSection extends JsdlAdaptersFactory {
     
     this.isNotifyAllowed = false; 
     
-    if ( null != this.resourcesType.getOperatingSystem() ) {
-      this.operatingSystemType = this.resourcesType.getOperatingSystem();
-    }
-    
-    if( null != this.operatingSystemType.getOperatingSystemType() ) {
-       this.cmbOperSystType.setText( this.operatingSystemType.getOperatingSystemType()
-                                     .getOperatingSystemName()
-                                     .getLiteral() );
-    }
-    
-    if(  null != this.operatingSystemType.getOperatingSystemVersion() ) {
+    if( null != this.resourcesType.getOperatingSystem() ) {
       
-      this.txtOperSystVer.setText( this.operatingSystemType.getOperatingSystemVersion() );
-    }
-    else {
-      this.txtOperSystVer.setText( EMPTY_STRING );
-    }
-    
-    if( null != this.operatingSystemType.getDescription() ) {      
-      this.txtOSDescr.setText( this.operatingSystemType.getDescription() );
-    }
-    else {
-      this.txtOSDescr.setText( EMPTY_STRING );
+      this.operatingSystemType = this.resourcesType.getOperatingSystem();
+      
+      if( null != this.operatingSystemType.getOperatingSystemType() ) {
+        
+        this.cmbOperSystType.setText( this.operatingSystemType.getOperatingSystemType()
+          .getOperatingSystemName()
+          .getLiteral() );
+      }
+      if( null != this.operatingSystemType.getOperatingSystemVersion() ) {
+        this.txtOperSystVer.setText( this.operatingSystemType.getOperatingSystemVersion() );
+      } else {
+        this.txtOperSystVer.setText( EMPTY_STRING );
+      }
+      if( null != this.operatingSystemType.getDescription() ) {
+        this.txtOSDescr.setText( this.operatingSystemType.getDescription() );
+      } else {
+        this.txtOSDescr.setText( EMPTY_STRING );
+      }
     }
     
     this.isNotifyAllowed = true;
