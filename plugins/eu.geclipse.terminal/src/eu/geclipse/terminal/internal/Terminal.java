@@ -352,9 +352,9 @@ public class Terminal extends Canvas implements ISelectionProvider {
   }
 
   private void bell() {
-    Display.getDefault().syncExec(new Runnable() {
+    getDisplay().syncExec(new Runnable() {
       public void run () {
-        Display.getDefault().beep();
+        getDisplay().beep();
       }
     });
     // TODO visible bell?
@@ -501,14 +501,14 @@ public class Terminal extends Canvas implements ISelectionProvider {
   void triggerRedraw( final int col, final int line, final int cols, final int lines ) {
     int fontWidthMult = 1;
     for ( int i = line; i < line + lines
-                        && i < this.lineWidthMode.length ; i++ ) {
+                        && i + Terminal.this.historySize < this.lineWidthMode.length; i++ ) {
       if ( this.lineWidthMode[ i + Terminal.this.historySize ] == LineWidthMode.DOUBLE ) {
         fontWidthMult = 2;
         break;
       }
     }
     final int finalFontWidthMult = fontWidthMult;
-    Display.getDefault().syncExec( new Runnable() {
+    getDisplay().syncExec( new Runnable() {
       public void run () {
         if ( !isDisposed() ) {
           redraw( col * getFontWidth() * finalFontWidthMult,
@@ -522,7 +522,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
   }
 
   void triggerRedraw() {
-    Display.getDefault().syncExec( new Runnable() {
+    getDisplay().syncExec( new Runnable() {
       public void run () {
         redraw();
       }
@@ -815,7 +815,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
         int r = Integer.parseInt( tokenizer.nextToken(), 16 );
         int g = Integer.parseInt( tokenizer.nextToken(), 16 );
         int b = Integer.parseInt( tokenizer.nextToken(), 16 );
-        color = new Color( Display.getDefault(), r, g, b );
+        color = new Color( getDisplay(), r, g, b );
       }
     } 
     if (color == null) {
@@ -871,7 +871,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
         requestTerminalParameters( params );
         break;
       case 'r': // DECSTBM - Set Top and Bottom Margins
-        setTopAndBottomMargins( params );
+        setTopAndBottomMargins( params, false );
         break;
       case 'y': // DECTST - Invoke Confidence Test
         Activator.logMessage( IStatus.WARNING,
@@ -1005,7 +1005,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
           this.cursor.reset( this.defaultFgColor, this.defaultBgColor );
           this.tabulatorPositons.clear();
           eraseScreen(); 
-          Display.getDefault().syncExec(new Runnable() {
+          getDisplay().syncExec(new Runnable() {
             public void run () {
               setSize( 132 * getFontWidth() + getVerticalBar().getSize().x , 24 * getFontHeigth() );
             }
@@ -1061,7 +1061,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
                                 Messages.getString("Terminal.vt52ModeNotSupported") ); //$NON-NLS-1$
           break;
         case 3: // 80 Column Mode
-          Display.getDefault().syncExec(new Runnable() {
+          getDisplay().syncExec(new Runnable() {
             public void run () {
               setSize( 80 * getFontWidth() + getVerticalBar().getSize().x, 24 * getFontHeigth() );
             }
@@ -1084,7 +1084,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
           this.wraparound = false;
           break;
         case 8: // Auto repeat Off
-          // XXX check if auto repeat keyboard events in SWT possible?
+          // XXX check if auto repeat keyboard events in SWT are possible?
           Activator.logMessage( IStatus.WARNING,
                                 Messages.getString("Terminal.autoRepeatOffNotSupported") ); //$NON-NLS-1$
           break;
@@ -1173,11 +1173,11 @@ public class Terminal extends Canvas implements ISelectionProvider {
     eraseLine( this.bottomMargin );
     this.lineWidthMode[ this.bottomMargin + this.historySize ] = LineWidthMode.NORMAL;
     this.lineHeightMode[ this.bottomMargin + this.historySize ] = LineHeightMode.NORMAL;
-    Display.getDefault().syncExec(new Runnable() {
+    getDisplay().syncExec(new Runnable() {
       public void run () {
         Terminal.this.terminalPainter.scrollUp( Terminal.this.topMargin,
                                                 Terminal.this.bottomMargin );
-        Display.getDefault().update();
+        getDisplay().update();
       }
     });
     triggerRedraw( 0, this.bottomMargin, this.numCols, 1 );
@@ -1206,11 +1206,11 @@ public class Terminal extends Canvas implements ISelectionProvider {
     eraseLine( this.topMargin );
     this.lineWidthMode[ this.topMargin + this.historySize ] = LineWidthMode.NORMAL;
     this.lineHeightMode[ this.topMargin + this.historySize ] = LineHeightMode.NORMAL;
-    Display.getDefault().syncExec(new Runnable() {
+    getDisplay().syncExec(new Runnable() {
       public void run () {
         Terminal.this.terminalPainter.scrollDown( Terminal.this.topMargin,
                                                   Terminal.this.bottomMargin );
-        Display.getDefault().update();
+        getDisplay().update();
       }
     });
     triggerRedraw( 0, this.topMargin, this.numCols, 1 );
@@ -1218,7 +1218,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
     triggerRedraw( this.cursor.col, this.cursor.line + 1, 1, 1 );
   }
 
-  private void setTopAndBottomMargins( final int[] params ) {
+  private void setTopAndBottomMargins( final int[] params, boolean skipCursorReset ) {
     int top = 0;
     int bottom = this.numLines;
     
@@ -1237,7 +1237,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
     } else {
       this.topMargin = top;
       this.bottomMargin = bottom;
-      cursorPosition( new int[0] );
+      if (!skipCursorReset) cursorPosition( new int[0] );
     }
   }
 
@@ -1573,9 +1573,9 @@ public class Terminal extends Canvas implements ISelectionProvider {
   }
 
   private void initSystemColorTable() {
-    Display dpy = Display.getDefault();
-    this.defaultBgColor = Display.getDefault().getSystemColor( SWT.COLOR_BLACK );
-    this.defaultFgColor = Display.getDefault().getSystemColor( SWT.COLOR_GRAY );
+    Display dpy = getDisplay();
+    this.defaultBgColor = dpy.getSystemColor( SWT.COLOR_BLACK );
+    this.defaultFgColor = dpy.getSystemColor( SWT.COLOR_GRAY );
     this.systemColors = new Color[256];
     this.systemColors[ 0 ] = dpy.getSystemColor( SWT.COLOR_BLACK );
     this.systemColors[ 1 ] = dpy.getSystemColor( SWT.COLOR_DARK_RED );
@@ -1600,6 +1600,8 @@ public class Terminal extends Canvas implements ISelectionProvider {
 
   void changeScreenSize() {
     Char[][] newScreenBuffer;
+    LineHeightMode[] newLineHeightMode;
+    LineWidthMode[] newLineWidthMode;
     Font font = getFont();
     Point widgetSize = getSize();
     GC gc = new GC(this);
@@ -1612,28 +1614,38 @@ public class Terminal extends Canvas implements ISelectionProvider {
     if ( this.numCols < 2 ) this.numCols = 80;
     if ( this.numLines < 2 ) this.numLines = 24;
     newScreenBuffer = new Char[ this.numLines + this.historySize ][];
+    newLineHeightMode = new LineHeightMode[ this.numLines  + this.historySize ];
+    newLineWidthMode = new LineWidthMode[ this.numLines + this.historySize ];
+    int linesDiff = newScreenBuffer.length - this.screenBuffer.length;
+    if ( linesDiff < 0 && this.cursor.line + this.historySize >= newScreenBuffer.length ) {
+      linesDiff = newScreenBuffer.length - (this.cursor.line + this.historySize) - 1;
+    } else if ( linesDiff < 0 ) {
+      linesDiff = 0;
+    }
     for( int i = 0; i < newScreenBuffer.length; i++ ) {
       newScreenBuffer[ i ] = new Char[ this.numCols ];
-      // TODO copy old linemodes;
-      // TODO copy contents of old screenbuffer to right location after resize (to smaller window)
       // copy contents of old screenbuffer
-      if ( i < this.screenBuffer.length ) {
+      int oldIndex = i - linesDiff;
+      if ( oldIndex >= 0 && oldIndex < this.screenBuffer.length ) {
         int len = newScreenBuffer[ i ].length;
-        if ( this.screenBuffer[ i ].length < len ) len = this.screenBuffer[ i ].length;
-        for( int j = 0; j < len; j++ ) newScreenBuffer[ i ][ j ] = this.screenBuffer[ i ][ j ];
+        if ( this.screenBuffer[ oldIndex ].length < len ) len = this.screenBuffer[ oldIndex ].length;
+        for( int j = 0; j < len; j++ ) newScreenBuffer[ i ][ j ] = this.screenBuffer[ oldIndex ][ j ];
+        newLineHeightMode[ i ] = this.lineHeightMode[ oldIndex ];
+        newLineWidthMode[ i ] = this.lineWidthMode[ oldIndex ];
       }
       for( int j = 0; j < newScreenBuffer[ i ].length; j++ ) {
         if ( newScreenBuffer[ i ][ j ] == null ) {
           newScreenBuffer[ i ][ j ] = new Char( this.defaultFgColor, this.defaultBgColor );
         }
       }
+      if ( newLineHeightMode[ i ] == null ) newLineHeightMode[ i ] = LineHeightMode.NORMAL;
+      if ( newLineWidthMode[ i ] == null ) newLineWidthMode[ i ] = LineWidthMode.NORMAL;
     }
     this.screenBuffer = newScreenBuffer;
-    this.lineHeightMode = new LineHeightMode[ this.numLines  + this.historySize ];
-    this.lineWidthMode = new LineWidthMode[ this.numLines + this.historySize ];
-    resetLineModes();
-    setTopAndBottomMargins( new int[0] );
-    if ( this.cursor.line >= this.numLines ) this.cursor.line = this.numLines - 1;
+    this.lineHeightMode = newLineHeightMode;
+    this.lineWidthMode = newLineWidthMode;
+    setTopAndBottomMargins( new int[0], true );
+    this.cursor.line += linesDiff;
     if ( this.cursor.col >= this.numCols ) this.cursor.col = this.numCols - 1;
     if ( this.numCols != 0 && this.numLines !=0 ) {
       for ( ITerminalListener listener : this.terminalListeners ) {
@@ -1740,7 +1752,6 @@ public class Terminal extends Canvas implements ISelectionProvider {
 
   public void setSelection( final ISelection selection ) {
     // TODO Auto-generated method stub
-    
   }
 
   void fireSelectionChanged() {
