@@ -45,12 +45,14 @@ public class GenericVoWizard
   public void addPages() {
     
     this.voPage = new GenericVoWizardPage();
+    this.servicePage = new VoServiceSelectionPage();
+    
     if ( this.initialVo != null ) {
       this.voPage.setInitialVo( this.initialVo );
+      this.servicePage.setInitialVo( this.initialVo );
     }
-    addPage( this.voPage );
     
-    this.servicePage = new VoServiceSelectionPage();
+    addPage( this.voPage );
     addPage( this.servicePage );
     
   }

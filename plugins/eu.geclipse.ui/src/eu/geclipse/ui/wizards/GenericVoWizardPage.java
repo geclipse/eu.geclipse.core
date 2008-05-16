@@ -94,46 +94,7 @@ public class GenericVoWizardPage
     return result;
     
   }
-  /*
-  protected boolean createVo() {
-    
-    String errorMessage = null;
-    GenericVirtualOrganization vo = null;
-    IVoManager manager = GridModel.getVoManager();
-    
-    setErrorMessage( errorMessage );
-    
-    GenericVoCreator creator = getVoCreator();
-    
-    if ( isEmpty( creator.getVoName() ) ) {
-      errorMessage = "You have to specify a valid name";
-    } else {
-      try {
-        if ( this.initialVo != null ) {
-          creator.apply( this.initialVo );
-        } else {
-          vo = ( GenericVirtualOrganization ) manager.create( creator );
-        }
-      } catch( GridModelException gmExc ) {
-        errorMessage = gmExc.getLocalizedMessage();
-      }
-    }
-    
-    if ( errorMessage != null ) {
-      setErrorMessage( errorMessage );
-      if ( vo != null ) {
-        try {
-          manager.delete( vo );
-        } catch( GridModelException gmExc ) {
-          // TODO mathias
-        }
-      }
-    }
-    
-    return errorMessage == null;
-    
-  }
-  */
+  
   /**
    * Initializes the controls of this wizard page with the attributes
    * of the specified VO.

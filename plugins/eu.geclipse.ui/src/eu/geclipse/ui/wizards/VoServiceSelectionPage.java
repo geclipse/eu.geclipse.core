@@ -22,12 +22,18 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 import eu.geclipse.core.Extensions;
+import eu.geclipse.core.model.GridModelException;
+import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
+import eu.geclipse.core.model.IGridService;
+import eu.geclipse.core.model.impl.GenericVirtualOrganization;
 import eu.geclipse.core.model.impl.GenericVoCreator;
 import eu.geclipse.ui.dialogs.ServiceDialog;
 import eu.geclipse.ui.internal.Activator;
 
 public class VoServiceSelectionPage extends WizardPage {
+  
+  private GenericVirtualOrganization initialVo;
   
   private Table serviceTable;
   
@@ -109,8 +115,48 @@ public class VoServiceSelectionPage extends WizardPage {
       }
     } );
     
+    if ( this.initialVo != null ) {
+      initVo( this.initialVo );
+    }
+    
     setControl( mainComp );
     
+  }
+  
+  /**
+   * Initializes the controls of this wizard page with the attributes
+   * of the specified VO.
+   * 
+   * @param vo The VO whose attributes should be set to the page's controls.
+   * @throws GridModelException If any error occurs.
+   */
+  protected void initVo( final GenericVirtualOrganization vo ) {
+    try {
+      IGridElement[] children = vo.getChildren( null );
+      for ( IGridElement child : children ) {
+        if ( child instanceof IGridService ) {
+          IGridService service = ( IGridService ) child;
+          TableItem item = new TableItem( this.serviceTable, SWT.NONE );
+          item.setText( 0, service.getClass().getName() );
+          item.setText( 1, service.getURI().toString() );
+          //item.setData( "configuration", selectedElement );
+          //item.setData( "uri", selectedURI );
+        }
+      }
+    } catch ( GridModelException gmExc ) {
+      Activator.logException( gmExc );
+    }
+  }
+  
+  /**
+   * Set the specified VO as initial VO. This means that the controls
+   * of the page will be initialized with the attributes of the specified
+   * VO.
+   * 
+   * @param vo The initial VO.
+   */
+  protected void setInitialVo( final GenericVirtualOrganization vo ) {
+    this.initialVo = vo;
   }
   
   protected void showServiceDialog() {
