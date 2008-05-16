@@ -806,7 +806,14 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
   
   protected void doTextEditorSave(){
     
-    this.editor.doSave( null );
+    try {
+      this.editor.doSave( null );
+    } catch( Exception e ) {
+      Activator.logException( e );
+    }
+    
+    
+    
     
   }
 
