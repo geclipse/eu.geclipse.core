@@ -363,9 +363,9 @@ public class BatchUpdate {
         }
       }
       // Sorting because at least one node changed its state
-      if( changeN && this.editor.Nbyname != 1 ) {
+      if( changeN && this.editor.workerNodeByName != 1 ) {
         this.editor.sortedN = 2;
-        this.editor.Nbystate = 2;
+        this.editor.workerNodeByState = 2;
         // Sort( this.editor.sortedN,this.Nlist, this.box_nodes, false );
         changeN = false;
       }
@@ -445,8 +445,8 @@ public class BatchUpdate {
       }
       boolean Values = true;
       // Sorting because at least one node changed its state
-      if( changeQ && this.editor.Qbyname != 1 ) {
-        this.editor.Qbystate = 2;
+      if( changeQ && this.editor.queueByName != 1 ) {
+        this.editor.queueByState = 2;
         this.editor.sortedQ = 2;
         // this.Sort( this.editor.sortedQ, this.Qlist, this.box_queue, true );
         changeQ = false;
@@ -475,12 +475,12 @@ public class BatchUpdate {
               this.diagram.addChild( this.box_queue );
             }
            
-              if( this.editor.Qbyname == 1 && Values ) {
+              if( this.editor.queueByName == 1 && Values ) {
               this.editor.sortedQ = 1;
-              this.editor.Qbyname = 0;
-            } else if( this.editor.Qbystate == 2 && Values ) {
+              this.editor.queueByName = 0;
+            } else if( this.editor.queueByState == 2 && Values ) {
               this.editor.sortedQ = 2;
-              this.editor.Qbyname = 0;
+              this.editor.queueByName = 0;
             } else {
               this.editor.sortedQ = 0;
             }

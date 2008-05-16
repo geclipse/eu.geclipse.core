@@ -69,12 +69,12 @@ public class BoxSortState extends SelectionAction {
   public void run() {
     if( !this.flag ) {
       this.editor.sortedQ = this.ValueTwo;
-      this.editor.Qbyname = this.ValueReset;
-      this.editor.Qbystate = this.ValueTwo;
+      this.editor.queueByName = this.ValueReset;
+      this.editor.queueByState = this.ValueTwo;
     } else {
       this.editor.sortedN = this.ValueTwo;
-      this.editor.Nbyname = this.ValueReset;
-      this.editor.Nbystate = this.ValueTwo;
+      this.editor.workerNodeByName = this.ValueReset;
+      this.editor.workerNodeByState = this.ValueTwo;
     }
   }
 }

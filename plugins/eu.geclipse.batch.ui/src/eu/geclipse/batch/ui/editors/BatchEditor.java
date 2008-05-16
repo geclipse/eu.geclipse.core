@@ -71,15 +71,15 @@ import eu.geclipse.ui.dialogs.ProblemDialog;
  * plugin.xml
  */
 public class BatchEditor extends GraphicalEditor {
+  public int queueByName = 0;
+  public int sortedQ = 0;
+  public int sortedN = 0;
+  public int workerNodeByName = 0;
+  public int queueByState = 0;
+  public int workerNodeByState = 0;
 
   protected BatchUpdate updateJob;
   protected BatchConnectionInfo batchInfo = null;
-  public  int Qbyname=0;
-  public int sortedQ =0;
-  public int sortedN = 0;
-  public int Nbyname = 0;
-  public int Qbystate=0;
-  public int Nbystate=0;
   private BatchDiagram diagram;
   private IBatchService batchWrapper;
 
@@ -177,7 +177,8 @@ public class BatchEditor extends GraphicalEditor {
         
           this.updateJob = new BatchUpdate( getSite().getShell(), this.diagram, 
                                             this.batchWrapper, this.batchInfo.getBatchName(), 
-                                            this.batchInfo.getBatchType(), this.batchInfo.getUpdateInterval(), BatchEditor.this );
+                                            this.batchInfo.getBatchType(), this.batchInfo.getUpdateInterval(), 
+                                            BatchEditor.this );
           this.updateJob.startUpdate();
         }
       } catch ( ProblemException gExc ) {

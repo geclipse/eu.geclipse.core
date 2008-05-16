@@ -77,12 +77,12 @@ public class BoxSortName extends SelectionAction {
    */
   public  void  run() {
     if( !this.flag ) {
-    this.editor.Qbyname = this.Value;
+    this.editor.queueByName = this.Value;
       this.editor.sortedQ = this.Value;
   
     } else {
       this.editor.sortedN = this.Value;
-      this.editor.Nbyname = this.Value;
+      this.editor.workerNodeByName = this.Value;
     }
   }
 }
