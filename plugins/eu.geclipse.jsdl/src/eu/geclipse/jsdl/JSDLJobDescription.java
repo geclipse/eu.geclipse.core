@@ -15,8 +15,6 @@
 package eu.geclipse.jsdl;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -81,13 +79,13 @@ import eu.geclipse.jsdl.model.base.RangeType;
 import eu.geclipse.jsdl.model.base.RangeValueType;
 import eu.geclipse.jsdl.model.base.ResourcesType;
 import eu.geclipse.jsdl.model.base.SourceTargetType;
+import eu.geclipse.jsdl.model.base.util.JsdlResourceFactoryImpl;
 import eu.geclipse.jsdl.model.posix.ArgumentType;
 import eu.geclipse.jsdl.model.posix.FileNameType;
 import eu.geclipse.jsdl.model.posix.POSIXApplicationType;
 import eu.geclipse.jsdl.model.posix.PosixFactory;
 import eu.geclipse.jsdl.model.posix.PosixPackage;
 import eu.geclipse.jsdl.model.posix.impl.POSIXApplicationTypeImpl;
-import eu.geclipse.jsdl.model.base.util.JsdlResourceFactoryImpl;
 
 /**
  * Concrete implementation of an {@link IGridJobDescription} for the JSDL
