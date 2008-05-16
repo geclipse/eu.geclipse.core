@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -50,12 +50,14 @@ public class GenericVoCreator
   private String voName;
   
   private List< IGridElementCreator > serviceCreators
-    = new ArrayList< IGridElementCreator >();
+  = new ArrayList< IGridElementCreator >();
   
-  public void addServiceCreator( final IGridElementCreator creator,
-                                 final URI fromURI )
+  private List< IGridService > serviceMaintainers
+    = new ArrayList< IGridService >();
+  
+  public void createService( final IGridElementCreator creator,
+                              final URI fromURI )
       throws ProblemException {
-    
     
     if ( ! creator.canCreate( IGridService.class ) ) {
       throw new ProblemException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED, "Cannot create a service from the specified creator" );
@@ -69,8 +71,8 @@ public class GenericVoCreator
     
   }
   
-  public List< IGridElementCreator > getServiceCreators() {
-    return this.serviceCreators;
+  public void maintainService( final IGridService service ) {
+    this.serviceMaintainers.add( service );
   }
   
   /**
@@ -78,9 +80,22 @@ public class GenericVoCreator
    * 
    * @param vo The {@link GenericVirtualOrganization} to which to
    * apply this creators settings.
+   * @throws GridModelException 
    */
-  public void apply( final GenericVirtualOrganization vo ) {
-    // currently empty implementation
+  public void apply( final GenericVirtualOrganization vo ) throws GridModelException {
+    
+    IGridElement[] children = vo.getChildren( null );
+    
+    for ( IGridElement child : children ) {
+      if ( ( child instanceof IGridService ) && ! this.serviceMaintainers.contains( child ) ) {
+        vo.delete( child );
+      }
+    }
+    
+    for ( IGridElementCreator serviceCreator : this.serviceCreators ) {
+      vo.create( serviceCreator );
+    }
+
   }
 
   public boolean canCreate( final Class<? extends IGridElement> elementType ) {
