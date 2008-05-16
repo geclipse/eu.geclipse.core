@@ -12,6 +12,7 @@
  * Contributor(s):
  *     PSNC: 
  *      - Katarzyna Bylec (katis@man.poznan.pl)
+ *      - Nicholas Loulloudes (loulloudes@cs.ucy.ac.cy)
  *           
  *****************************************************************************/
 package eu.geclipse.jsdl.ui.widgets;
@@ -57,6 +58,7 @@ import org.eclipse.swt.widgets.TableItem;
 import eu.geclipse.jsdl.JSDLModelFacade;
 import eu.geclipse.jsdl.model.base.DataStagingType;
 import eu.geclipse.jsdl.model.base.SourceTargetType;
+import eu.geclipse.jsdl.ui.internal.dialogs.DataStagingInDialog;
 import eu.geclipse.ui.dialogs.GridFileDialog;
 
 /**
@@ -380,8 +382,7 @@ public class DataStageInTable {
       dialog = new DataStagingInDialog( this.mainComp.getShell(),
                                         DataStagingInDialog.SIMPLE_DIALOG );
       if( dialog.open() == Window.OK ) {
-        DataStagingType newData = getNewDataStagingType( dialog.getName(),
-                                                         dialog.getPath() );
+        DataStagingType newData = getNewDataStagingType( dialog.getDataStageInList() );
         if( !isDataInInput( newData ) ) {
           this.input.add( newData );
           this.tableViewer.refresh();
@@ -394,11 +395,9 @@ public class DataStageInTable {
     } else {
       dialog = new DataStagingInDialog( this.mainComp.getShell(),
                                         DataStagingInDialog.SIMPLE_DIALOG,
-                                        selectedObject.getFileName(),
-                                        selectedObject.getSource().getURI() );
+                                        selectedObject );
       if( dialog.open() == Window.OK ) {
-        DataStagingType newData = getNewDataStagingType( dialog.getName(),
-                                                         dialog.getPath() );
+        DataStagingType newData = getNewDataStagingType( dialog.getDataStageInList() );
         // DataStagingType newData = selectedObject;
         // newData.setFileName( dialog.getName() );
         // SourceTargetType source = JSDLModelFacade.getSourceTargetType();
@@ -449,6 +448,20 @@ public class DataStageInTable {
     return result;
   }
 
+  DataStagingType getNewDataStagingType( final ArrayList<DataStagingType> dataStageList )
+  {
+    
+    DataStagingType result = JSDLModelFacade.getDataStagingType();
+    SourceTargetType source = JSDLModelFacade.getSourceTargetType();
+    for (int i=0; i<dataStageList.size(); i++){
+      DataStagingType temp = dataStageList.get( i );      
+      result.setFileName( temp.getFileName() );    
+      source.setURI( temp.getSource().getURI() );
+      result.setSource( source );
+    }
+    return result;
+  }
+  
   DataStagingType getNewDataStagingType( final String name, final String path )
   {
     DataStagingType result = JSDLModelFacade.getDataStagingType();
