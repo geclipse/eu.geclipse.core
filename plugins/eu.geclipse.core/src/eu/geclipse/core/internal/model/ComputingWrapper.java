@@ -107,7 +107,7 @@ public class ComputingWrapper
       IGridApplicationManager manager = vo.getApplicationManager();
       if ( manager != null ) {
         try {
-          IGridApplication[] applications = manager.getApplications( this.computing, monitor );
+          IGridApplication[] applications = manager.getApplications( this, monitor );
           for ( IGridApplication app : applications ) {
             addElement( app );
           }

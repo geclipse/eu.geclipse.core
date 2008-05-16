@@ -61,7 +61,11 @@ public abstract class AbstractApplicationManager
     IGridApplication[] result = null;
     IGridInfoService infoService = this.vo.getInfoService();
     if ( infoService != null ) {
-      result = infoService.fetchApplications( this.vo, this.vo, computing, null );
+      IGridContainer parent = this.vo;
+      if ( computing instanceof IGridContainer ) {
+        parent = ( IGridContainer ) computing;
+      }
+      result = infoService.fetchApplications( parent, this.vo, computing, null );
     }
     return result;
   }

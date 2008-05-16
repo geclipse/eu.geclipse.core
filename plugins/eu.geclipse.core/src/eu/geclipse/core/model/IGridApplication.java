@@ -23,6 +23,13 @@ import java.net.URI;
  */
 public interface IGridApplication
     extends IGridResource {
+  
+  /**
+   * The computings on which this application is installed.
+   * 
+   * @return The {@link IGridComputing}s.
+   */
+  public IGridComputing[] getComputing();
 
   /** get the tag of the installed application
    * must return a string which represents the tag
@@ -30,7 +37,7 @@ public interface IGridApplication
    * on the info system
    * @return String
    */
-  public String getTag ();
+  public String getTag();
   
   /** get the tag of the installed application
    * must return a URI which represents the script
@@ -38,13 +45,13 @@ public interface IGridApplication
    * on the info system
    * @return URI
    */
-  public URI getScript ();
+  public URI getScript();
   
   /**set the script to the deployed application
    * this method is called by the uninstall wizard, so that the script can be 
    * delivered to the uninstall method
    * @param script
    */
-  public void setScript (URI script);
+  public void setScript( URI script );
 
 }
