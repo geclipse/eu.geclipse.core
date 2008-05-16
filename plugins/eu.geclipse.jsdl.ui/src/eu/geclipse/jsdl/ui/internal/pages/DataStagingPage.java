@@ -17,6 +17,7 @@
 package eu.geclipse.jsdl.ui.internal.pages;
 
 import java.net.URL;
+import java.util.ArrayList;
 
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
@@ -54,12 +55,12 @@ import eu.geclipse.jsdl.model.base.DataStagingType;
 import eu.geclipse.jsdl.model.base.JobDefinitionType;
 import eu.geclipse.jsdl.ui.adapters.jsdl.DataStageTypeAdapter;
 import eu.geclipse.jsdl.ui.internal.Activator;
+import eu.geclipse.jsdl.ui.internal.dialogs.DataStagingInDialog;
+import eu.geclipse.jsdl.ui.internal.dialogs.DataStagingOutDialog;
 import eu.geclipse.jsdl.ui.providers.DataStageInLabelProvider;
 import eu.geclipse.jsdl.ui.providers.DataStageOutLabelProvider;
 import eu.geclipse.jsdl.ui.providers.FeatureContentProvider;
 import eu.geclipse.jsdl.ui.providers.FeatureLabelProvider;
-import eu.geclipse.jsdl.ui.widgets.DataStagingInDialog;
-import eu.geclipse.jsdl.ui.widgets.DataStagingOutDialog;
 
 /**
  * This class provides the Data Staging page that appears in the JSDL editor.
@@ -101,11 +102,13 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
   protected DataStageTypeAdapter dataStageTypeAdapter;    
   protected FeatureContentProvider featureContentProvider = new FeatureContentProvider();
   protected FeatureLabelProvider featureLabelProvider = new FeatureLabelProvider();
-  
+  protected ArrayList<DataStagingType>dataStageList = new ArrayList<DataStagingType>();
+    
   private ImageDescriptor helpDesc = null;
   private TableColumn column;
   private boolean contentRefreshed = false;
   private boolean dirtyFlag = false;
+  
   
   
   /**
@@ -343,7 +346,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
                 handleEventDialog( DataStagingPage.this.stageInViewer, null );
                 DataStagingPage.this.dataStageTypeAdapter
                                .performAdd( DataStagingPage.this.stageInViewer ,
-                                                   DataStagingPage.this.value );
+                                                   DataStagingPage.this.dataStageList );
      }
 
       public void widgetDefaultSelected( final SelectionEvent event ) {
@@ -368,7 +371,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
                getViewerSelectionObject( DataStagingPage.this.stageInViewer ) );
        DataStagingPage.this.dataStageTypeAdapter
                                .performEdit( DataStagingPage.this.stageInViewer,
-                                                   DataStagingPage.this.value );
+                                                   DataStagingPage.this.dataStageList );
      }
 
       public void widgetDefaultSelected( final SelectionEvent event ) {
@@ -488,7 +491,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
        handleEventDialog( DataStagingPage.this.stageOutViewer, null );
        DataStagingPage.this.dataStageTypeAdapter
                                .performAdd( DataStagingPage.this.stageOutViewer ,
-                                                   DataStagingPage.this.value );
+                                            DataStagingPage.this.dataStageList );
      }
 
       public void widgetDefaultSelected( final SelectionEvent event ) {
@@ -513,7 +516,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
                          getViewerSelectionObject( DataStagingPage.this.stageOutViewer ) );
                  DataStagingPage.this.dataStageTypeAdapter
                               .performEdit( DataStagingPage.this.stageOutViewer,
-                                                   DataStagingPage.this.value );
+                                            DataStagingPage.this.dataStageList );
                  }
 
       public void widgetDefaultSelected( final SelectionEvent event ) {
@@ -638,10 +641,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
          dialog = new DataStagingInDialog( this.body.getShell(), 
                                            DataStagingInDialog.ADVANCED_DIALOG);
          if( dialog.open() == Window.OK ) {         
-           this.value[0] = dialog.getPath();
-           this.value[1] = dialog.getName();
-           this.value[2] = dialog.getCreationFlag();
-           this.value[3] = dialog.getDeleteOnTermination();
+           this.dataStageList = dialog.getDataStageInList();
       
          }
 
@@ -649,18 +649,11 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
        
          dialog = new DataStagingInDialog( this.body.getShell(),
                                            DataStagingInDialog.ADVANCED_DIALOG,
-                                           selectedObject.getFileName(),
-                                           selectedObject.getSource().getURI(),
-                                           selectedObject.getCreationFlag().toString(),
-                                           selectedObject.isDeleteOnTermination() );
+                                           selectedObject );
          
          
          if( dialog.open() == Window.OK ) {        
-           
-           this.value[0] = dialog.getPath();
-           this.value[1] = dialog.getName();
-           this.value[2] = dialog.getCreationFlag();
-           this.value[3] = dialog.getDeleteOnTermination();
+           this.dataStageList = dialog.getDataStageInList();
            
          }
 
@@ -675,26 +668,17 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
          dialog = new DataStagingOutDialog( this.body.getShell(),
                                             DataStagingInDialog.ADVANCED_DIALOG);
          if( dialog.open() == Window.OK ) {         
-           this.value[0] = dialog.getName();
-           this.value[1] = dialog.getPath();  
-           this.value[2] = dialog.getCreationFlag();
-           this.value[3] = dialog.getDeleteOnTermination();
+           this.dataStageList = dialog.getDataStageInList();
          }
 
        } else {
        
          dialog = new DataStagingOutDialog( this.body.getShell(),
                                             DataStagingInDialog.ADVANCED_DIALOG,
-                                            selectedObject.getFileName(),
-                                            selectedObject.getTarget().getURI(),
-                                            selectedObject.getCreationFlag().toString(),
-                                            selectedObject.isDeleteOnTermination() );
+                                            selectedObject);
          
          if( dialog.open() == Window.OK ) {         
-           this.value[0] = dialog.getName();
-           this.value[1] = dialog.getPath();         
-           this.value[2] = dialog.getCreationFlag();
-           this.value[3] = dialog.getDeleteOnTermination();
+           this.dataStageList = dialog.getDataStageInList();
          }
 
        }
