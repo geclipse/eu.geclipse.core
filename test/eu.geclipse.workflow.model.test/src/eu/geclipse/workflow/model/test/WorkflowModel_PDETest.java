@@ -63,11 +63,11 @@ public class WorkflowModel_PDETest {
   {
     IWorkspace workspace = ResourcesPlugin.getWorkspace();
     IWorkspaceRoot workspaceRoot = workspace.getRoot();
-    if (workspaceRoot.findMember( "junittest" ) == null ) { //$NON-NLS-1$
     this.testProject = workspaceRoot.getProject( "junittest" ); //$NON-NLS-1$
+    if (workspaceRoot.findMember( "junittest" ) == null ) { //$NON-NLS-1$ 
     this.testProject.create( new NullProgressMonitor() );
-    this.testProject.open( new NullProgressMonitor() );
     }
+    this.testProject.open( new NullProgressMonitor() );
   }
   
   /**
