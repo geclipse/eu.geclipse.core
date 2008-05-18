@@ -179,8 +179,8 @@ public abstract class AbstractVirtualOrganization
     List< IGridJobService > jsServices
       = new ArrayList< IGridJobService >();
     IGridService[] services = getServices( monitor );
-    if (services == null){
-      services = new IGridService[0];
+    if ( services == null ) {
+      services = new IGridService[ 0 ];
     }
     for ( IGridService service : services ) {
       if ( service instanceof IGridJobService ) {
