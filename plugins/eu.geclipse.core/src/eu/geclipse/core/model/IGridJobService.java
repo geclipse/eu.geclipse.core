@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -28,11 +28,12 @@ public interface IGridJobService extends IGridService{
   /**
    * TODO pawel
    * 
-   * @param parent TODO pawel
+   * @param description TODO pawel
    * @return TODO pawel
    * @throws ProblemException TODO pawel
    */
-  public IGridJobID submitJob( final IGridJobDescription parent, final IProgressMonitor monitor )
+  public IGridJobID submitJob( final IGridJobDescription description,
+                               final IProgressMonitor monitor )
     throws ProblemException, GridModelException;
   
   /**
@@ -57,12 +58,12 @@ public interface IGridJobService extends IGridService{
 //  /**
 //   * TODO pawel
 //   * 
-//   * @param parent TODO pawel
+//   * @param description TODO pawel
 //   * @param destination TODO pawel
 //   * @return TODO pawel
 //   * @throws GridModelException TODO pawel
 //   */
-//  public IGridJobID submitJob( final IGridJobDescription parent, final String destination )
+//  public IGridJobID submitJob( final IGridJobDescription description, final String destination )
 //    throws GridException;
   
 }
