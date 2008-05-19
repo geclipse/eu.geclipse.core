@@ -107,12 +107,15 @@ public class DeploymentJob extends Job {
     try {
       installmanager.install( this.installparameters, betterMonitor.newChild( 1 ));
     } catch( ProblemException e ) {
-      ProblemDialog.openProblem( PlatformUI.getWorkbench()
-                                 .getActiveWorkbenchWindow()
-                                 .getShell(),
-                                 "Application install error", //$NON-NLS-1$
-                                 "Error when installing the software", //$NON-NLS-1$
-                                 e);
+      final Throwable e1 = e;
+      Display.getDefault().asyncExec( new Runnable() {
+        public void run() {
+          ProblemDialog.openProblem( null,
+                                     "Application install error", //$NON-NLS-1$
+                                     "Error when installing the software", //$NON-NLS-1$
+                                     e1);
+        }
+      } );
     }
     testCancelled( betterMonitor );
     betterMonitor.done();
