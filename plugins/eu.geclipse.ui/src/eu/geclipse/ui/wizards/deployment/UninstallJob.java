@@ -55,7 +55,7 @@ public class UninstallJob  extends Job {
   protected IStatus run( final IProgressMonitor monitor ) {
     IStatus status = Status.OK_STATUS;
     SubMonitor betterMonitor = SubMonitor.convert( monitor,
-                                                   this.uninstallapllications.length );
+                                                   2 );
     testCancelled( betterMonitor );
     betterMonitor.setTaskName( "Starting to remove the software" ); //$NON-NLS-1$
     IGridApplicationManager appmanager = this.vo.getApplicationManager();
@@ -67,7 +67,7 @@ public class UninstallJob  extends Job {
           
           ProblemDialog.openProblem( null,
                                      "Deployment error", //$NON-NLS-1$
-                                     "The middleware does not support application deployment", //$NON-NLS-1$
+                                     "The middleware does not support software uninstall", //$NON-NLS-1$
                                      e );
         }
       } );
@@ -77,12 +77,15 @@ public class UninstallJob  extends Job {
       try {
         appmanager.uninstall( one, betterMonitor.newChild( 1 ) );
       } catch( ProblemException e ) {
-        ProblemDialog.openProblem( PlatformUI.getWorkbench()
-                                   .getActiveWorkbenchWindow()
-                                   .getShell(),
-                                   "Application uninstall error", //$NON-NLS-1$
-                                   "Error when removing the software", //$NON-NLS-1$
-                                   e);
+        final Throwable e1 = e;
+        Display.getDefault().asyncExec( new Runnable() {
+          public void run() {
+            ProblemDialog.openProblem( null,
+                                       "Error report", //$NON-NLS-1$
+                                       "Software uninstall failed", //$NON-NLS-1$
+                                       e1 );
+          }
+        } );
       }
     testCancelled( betterMonitor );
     betterMonitor.done();
