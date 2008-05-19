@@ -60,7 +60,7 @@ public class GenericVirtualOrganization_PDETest {
   @Test
   public void testLoadChild() {
    String name = ".generic_vo_properties"; //$NON-NLS-1$
-   Assert.assertNotNull( gvo.loadChild( name ));
+   Assert.assertNull( gvo.loadChild( name ));
   }
 
   /**
