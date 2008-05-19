@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2007 g-Eclipse consortium 
+ * Copyright (c) 2008 g-Eclipse consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -15,28 +15,33 @@
  *****************************************************************************/
 package eu.geclipse.ui.properties;
 
+import static org.junit.Assert.fail;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import junit.framework.TestCase;
+
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 
 /**
- * This test check how class eu.geclipse.ui.properties.PropertiesAdapterFactory implements interface IPropertySource
+ *
  */
-public class PropertiesAdapterFactory_PDETest extends TestCase {
-  private URI uri;  
+public class PropertiesAdapterFactory_PDETest {
+  private URI uri;
 
   /**
-   * @param name
+   * @throws java.lang.Exception
    */
-  public PropertiesAdapterFactory_PDETest( final String name ) {
-    super( name );
+  @Before
+  public void setUp() throws Exception {
     try {
       this.uri = new URI( "ftp://hydra.gup.uni-linz.ac.at:2811/home/local/agrid/geclipse/" ); //$NON-NLS-1$
     } catch( URISyntaxException exception ) {
@@ -44,20 +49,21 @@ public class PropertiesAdapterFactory_PDETest extends TestCase {
     }    
   }
 
-  /* (non-Javadoc)
-   * @see junit.framework.TestCase#setUp()
+  /**
+   * Test method for {@link eu.geclipse.ui.properties.PropertiesAdapterFactory#getAdapter(java.lang.Object, java.lang.Class)}.
    */
-  @Override
-  protected void setUp() throws Exception {
-    super.setUp(); 
+  @Test
+  public void testGetAdapter() {
+    Object adapter = Platform.getAdapterManager().getAdapter( this.uri, IPropertySource.class );
+    Assert.assertNotNull( adapter );
+    Assert.assertTrue( adapter instanceof IPropertySource );
   }
   
   private IPropertySource getPropertySource() {
     IPropertySource source = null;
     Object adapterObject = Platform.getAdapterManager().getAdapter( this.uri, IPropertySource.class );
     
-    assertTrue( adapterObject != null );
-    assertTrue( adapterObject instanceof IPropertySource );
+    Assert.assertTrue( adapterObject instanceof IPropertySource );
     
     if( adapterObject instanceof IPropertySource ) {
       source = ( IPropertySource ) adapterObject;
@@ -65,41 +71,36 @@ public class PropertiesAdapterFactory_PDETest extends TestCase {
     return source;
   }
 
-  /* (non-Javadoc)
-   * @see junit.framework.TestCase#tearDown()
-   */
-  @Override
-  protected void tearDown() throws Exception {
-    super.tearDown();
-  }
-
   /**
    * Test method for {@link IPropertySource#getEditableValue()}.
    */
+  @Test
   public void testGetEditableValue() {
     IPropertySource propertySource = getPropertySource();
     
     if( propertySource != null ) {      
-      assertEquals( propertySource.getEditableValue(), this.uri );
+      Assert.assertEquals( propertySource.getEditableValue(), this.uri );
     }
   }
-
+  
   /**
    * Test method for {@link IPropertySource#getPropertyDescriptors()}.
    */
+  @Test
   public void testGetPropertyDescriptors() {    
     IPropertySource propertySource = getPropertySource();
     
     if( propertySource != null ) {
       IPropertyDescriptor[] descriptors = propertySource.getPropertyDescriptors();
-      assertNotNull( descriptors );
-      assertTrue( descriptors.length > 0 );
+      Assert.assertNotNull( descriptors );
+      Assert.assertTrue( descriptors.length > 0 );
     }
-  }
-
+  }  
+  
   /**
    * Test method for {@link IPropertySource#getPropertyValue(java.lang.Object)}.
    */
+  @Test
   public void testGetPropertyValue() {
     IPropertySource propertySource = getPropertySource();
     List<String> valuesList = new ArrayList<String>();
@@ -116,8 +117,8 @@ public class PropertiesAdapterFactory_PDETest extends TestCase {
       }
     }
     
-    assertTrue( valuesList.contains( this.uri.getHost() ) );
-    assertTrue( valuesList.contains( this.uri.getPath() ) );    
-    assertTrue( valuesList.contains( this.uri.getScheme() ) );
-  }
+    Assert.assertTrue( valuesList.contains( this.uri.getHost() ) );
+    Assert.assertTrue( valuesList.contains( this.uri.getPath() ) );    
+    Assert.assertTrue( valuesList.contains( this.uri.getScheme() ) );
+  }  
 }
