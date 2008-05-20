@@ -43,14 +43,35 @@ import eu.geclipse.jsdl.ui.internal.Activator;
 public class FeatureLabelProvider extends LabelProvider implements
                                                            ITableLabelProvider {
   
+  /**
+   * String Type Constant for Default strings.
+   */
+  public static final int STRING_TYPE_DEFAULT = 1;
+  /**
+   * String Type Constant for Job Annotation strings.
+   */
+  public static final int STRING_TYPE_ANNOTATION = 2;
+  /**
+   * String Type Constant for Job Project strings.
+   */
+  public static final int STRING_TYPE_PROJECT = 3;
+  /**
+   * String Type Constant for Candidate Hosts string.
+   */
+  public static final int STRING_TYPE_CANDIDATE_HOSTS = 4;
+  
   private Image argsImage;
   private Image candHostsImage;
+  private Image projectsImage;
+  private Image annotationImage;
+  private int stringType;
   
   /**
    * Class Constructor
    */
   public FeatureLabelProvider(){
     loadImages();
+    this.stringType = STRING_TYPE_DEFAULT;
   }
   
   
@@ -64,7 +85,20 @@ public class FeatureLabelProvider extends LabelProvider implements
           image = this.argsImage;
         }
         else if (element instanceof String) {
-          image = this.candHostsImage;
+          switch( this.stringType ) {
+            case STRING_TYPE_ANNOTATION:
+              image = this.annotationImage;
+            break;
+            case STRING_TYPE_PROJECT:
+              image = this.projectsImage;
+              break;
+            case STRING_TYPE_CANDIDATE_HOSTS:
+              image = this.candHostsImage;    
+              break;
+            default:
+            break;
+          }
+          
         }
                         
         break;
@@ -166,14 +200,31 @@ public class FeatureLabelProvider extends LabelProvider implements
   }// End String getColumnText()
   
   
+  
+  /**
+   * @param type The FeatureLabelProvide String Type. If not specified the 
+   * default string Type is used.
+   * 
+   */
+  public void setStringType(final int type) {
+    this.stringType = type;
+  }
+  
+  
   void loadImages(){
     
     URL argsURL = Activator.getDefault().getBundle().getEntry( "icons/args.gif" ); //$NON-NLS-1$
     URL candHostsURL = Activator.getDefault().getBundle().getEntry( "icons/computing_obj.gif" ); //$NON-NLS-1$
+    URL projectsURL = Activator.getDefault().getBundle().getEntry( "icons/gridprojects.gif" ); //$NON-NLS-1$
+    URL annotationURL = Activator.getDefault().getBundle().getEntry( "icons/annotation_obj.gif" ); //$NON-NLS-1$
     ImageDescriptor argsDesc = ImageDescriptor.createFromURL( argsURL ) ;
     ImageDescriptor candHostsDesc = ImageDescriptor.createFromURL( candHostsURL ) ;
+    ImageDescriptor projectsDesc = ImageDescriptor.createFromURL( projectsURL ) ;
+    ImageDescriptor annotDesc = ImageDescriptor.createFromURL( annotationURL ) ;
     this.argsImage = argsDesc.createImage();
     this.candHostsImage = candHostsDesc.createImage();
+    this.projectsImage = projectsDesc.createImage();
+    this.annotationImage = annotDesc.createImage();
     
     
   }

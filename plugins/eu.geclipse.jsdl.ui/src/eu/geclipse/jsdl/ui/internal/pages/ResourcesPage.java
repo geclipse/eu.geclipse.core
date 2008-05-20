@@ -27,23 +27,14 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
-import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
-import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
-import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.IManagedForm;
@@ -70,9 +61,6 @@ import eu.geclipse.jsdl.ui.internal.pages.sections.CpuArchitectureSection;
 import eu.geclipse.jsdl.ui.internal.pages.sections.ExclusiveExecutionSection;
 import eu.geclipse.jsdl.ui.internal.pages.sections.FileSystemSection;
 import eu.geclipse.jsdl.ui.internal.pages.sections.OperatingSystemSection;
-import eu.geclipse.jsdl.ui.providers.FeatureContentProvider;
-import eu.geclipse.jsdl.ui.providers.FeatureLabelProvider;
-import eu.geclipse.ui.widgets.NumberVerifier;
 
 
 /**
@@ -82,12 +70,6 @@ public final class ResourcesPage extends FormPage implements INotifyChangedListe
   
    
   protected static final String PAGE_ID = "RESOURCES";  //$NON-NLS-1$
-  private static final int TXT_LENGTH = 300;
-  private static final int WIDGET_HEIGHT = 100;
-  private static final String[] RESOURCES_BOUNDARY_ITEMS = { "", //$NON-NLS-1$
-                             Messages.getString( "ResourcesPage_LowBoundRange" ).trim(),  //$NON-NLS-1$
-                             Messages.getString( "ResourcesPage_UpBoundRange" ).trim(), //$NON-NLS-1$
-                             Messages.getString( "ResourcesPage_Exact" ).trim()}; //$NON-NLS-1$ 
   
   protected JobDefinitionType jobDefinitionType;
   protected ResourcesTypeAdapter resourcesTypeAdapter;
@@ -141,27 +123,8 @@ public final class ResourcesPage extends FormPage implements INotifyChangedListe
   protected TableViewer hostsViewer = null;
   protected TableViewer fileSystemsViewer = null; 
 
-  private Text txtOperSystVer = null;
-  private Text txtOSDescr = null;  
-  private Text txtIndCPUSp = null;
-  private Text txtIndCPUTime = null;
-  private Text txtIndCPUCount = null;
-  private Text txtIndNetBand = null;
-  private Text txtVirtMem = null;
-  private Text txtPhysMem = null;
-  private Text txtIndDiskSpac = null;
-  private Text txtCPUTime = null;
-  private Text txtCPUCount = null;
-  private Text txtTotPhMem = null;
-  private Text txtTotVirtMem = null;
-  private Text txtTotDiskSp = null;
-  private Text txtTotResCount = null;  
-  private Combo cmbOperSystType = null;
-  private Combo cmbCPUArchName = null;  
-  private Combo cmbExclExec = null;  
-  private ImageDescriptor helpDesc = null; 
-  private Table tblFileSystems = null;
-  private TableColumn column = null;
+   
+  private ImageDescriptor helpDesc = null;
   private boolean contentRefreshed = false;
   private boolean dirtyFlag = false;
   private AdditionalResourceElemetsSection additionalResourceElemetsSection = null;
@@ -207,7 +170,6 @@ public final class ResourcesPage extends FormPage implements INotifyChangedListe
     
     if ( active ){
       if ( isContentRefreshed() ) {    
-//        this.resourcesTypeAdapter.load();
         this.candidateHostsSection.setInput( this.jobDefinitionType );
         this.additionalResourceElemetsSection.setInput( this.jobDefinitionType );
         this.operatingSystemSection.setInput( this.jobDefinitionType );
@@ -219,7 +181,6 @@ public final class ResourcesPage extends FormPage implements INotifyChangedListe
     } //  end_if (active)
     
   } // End void setActive()
-  
   
   
   /*
@@ -255,20 +216,12 @@ public final class ResourcesPage extends FormPage implements INotifyChangedListe
 
    if ( refreshStatus ) {
       this.contentRefreshed = true;
-      this.jobDefinitionType = jobDefinitionRoot;
-//      this.resourcesTypeAdapter.setContent( jobDefinitionRoot );
-//      this.additionalResourceElemetsSection.setInput( jobDefinitionRoot );
-    }
-   else{
-      this.jobDefinitionType = jobDefinitionRoot;
-//      this.resourcesTypeAdapter = new ResourcesTypeAdapter(jobDefinitionRoot);  
-//      this.resourcesTypeAdapter.addListener( this );
    }
+   this.jobDefinitionType = jobDefinitionRoot;   
           
   } // End void getPageContent() 
   
-  
-  
+    
   @Override
   public boolean isDirty() {
     
@@ -276,8 +229,7 @@ public final class ResourcesPage extends FormPage implements INotifyChangedListe
     
   }
 
-  
-  
+    
   /**
    * This method set's the dirty status of the page.
    * 
@@ -294,7 +246,6 @@ public final class ResourcesPage extends FormPage implements INotifyChangedListe
   }
 
  
-  
   @Override
   /*
    * This method is used to create the Forms content by
@@ -322,44 +273,36 @@ public final class ResourcesPage extends FormPage implements INotifyChangedListe
     this.right.setLayoutData( new TableWrapData( TableWrapData.FILL_GRAB ) );
     
     /* Create the Candidate Hosts Section */
-//    createCandidateHostsSection ( this.left , toolkit );
     this.candidateHostsSection = new CandidateHostsSection(this, this.left, toolkit);
     this.candidateHostsSection.setInput( this.jobDefinitionType );
     this.candidateHostsSection.addListener( this );
-//   
-//    /* Create the Operating System Section */
-//    createOSSection( this.left , toolkit  );
-      this.operatingSystemSection = new OperatingSystemSection(this.left, toolkit);
-      this.operatingSystemSection.setInput( this.jobDefinitionType );
-      this.operatingSystemSection.addListener( this );
-//    
-//    /* Create the File System Section */
-//    createFileSystemSection( this.left, toolkit );
-      
-      this.fileSystemSection = new FileSystemSection(this.left, toolkit);
-      this.fileSystemSection.setInput( this.jobDefinitionType );
-      this.fileSystemSection.addListener( this );
-//    
-//    /* Create the CPU Architecture Section */
-//    createCPUArch( this.right, toolkit );
-      this.cpuArchitectureSection = new CpuArchitectureSection(this.right, toolkit);
-      this.cpuArchitectureSection.setInput( this.jobDefinitionType );
-      this.cpuArchitectureSection.addListener( this );
-//    
-//    /* Create the Exclusive Execution Section */
-//    createExclusiveExecutionSection( this.right, toolkit );
-      this.exclusiveExecutionSection = new ExclusiveExecutionSection(this.right, toolkit);
-      this.exclusiveExecutionSection.setInput( this.jobDefinitionType );
-      this.exclusiveExecutionSection.addListener( this );
+
+    /* Create the Operating System Section */
+    this.operatingSystemSection = new OperatingSystemSection(this.left, toolkit);
+    this.operatingSystemSection.setInput( this.jobDefinitionType );
+    this.operatingSystemSection.addListener( this );
+
+    /* Create the File System Section */    
+    this.fileSystemSection = new FileSystemSection(this.left, toolkit);
+    this.fileSystemSection.setInput( this.jobDefinitionType );
+    this.fileSystemSection.addListener( this );
+   
+    /* Create the CPU Architecture Section */
+    this.cpuArchitectureSection = new CpuArchitectureSection(this.right, toolkit);
+    this.cpuArchitectureSection.setInput( this.jobDefinitionType );
+    this.cpuArchitectureSection.addListener( this );
+
+    /* Create the Exclusive Execution Section */
+    this.exclusiveExecutionSection = new ExclusiveExecutionSection(this.right, toolkit);
+    this.exclusiveExecutionSection.setInput( this.jobDefinitionType );
+    this.exclusiveExecutionSection.addListener( this );
       
       
     
     /* Create the Additional Elements Section */
-//    createAddElementsSection( this.right, toolkit );
     this.additionalResourceElemetsSection = new AdditionalResourceElemetsSection(this.right, toolkit);
     this.additionalResourceElemetsSection.setInput( this.jobDefinitionType );
     this.additionalResourceElemetsSection.addListener( this );
-//   this.resourcesTypeAdapter.load();
    
    /* Set Form Background */
    form.setBackgroundImage( Activator.getDefault().
@@ -369,569 +312,6 @@ public final class ResourcesPage extends FormPage implements INotifyChangedListe
    addFormPageHelp( form );
    
   }
-  
-
-  
-  /*
-   * Private Method that creates the Candidate Hosts Sub-Section
-   */
-  private void createCandidateHostsSection ( final Composite parent,
-                                             final FormToolkit toolkit)
-  
-  {
-    String sectionTitle = Messages.getString( "ResourcesPage_CanHost" ); //$NON-NLS-1$txtFileSystemName
-    String sectionDescription = Messages.getString( "ResourcesPage_CandHostDesc" ); //$NON-NLS-1$
-    
-    GridData gd;
-       
-    Composite client = FormSectionFactory.createGridStaticSection( toolkit,
-                                           parent,
-                                           sectionTitle,
-                                           sectionDescription,
-                                           2 );
-    
-    gd = new GridData();
-    
-    /* ========================= Host Name Widgets ===========================*/
-   
-    
-    Table tblHosts = new Table( client, SWT.BORDER | SWT.H_SCROLL 
-                                      | SWT.V_SCROLL | SWT.MULTI );
-    gd = new GridData( GridData.FILL_BOTH );
-    gd.grabExcessHorizontalSpace = true;
-    gd.grabExcessVerticalSpace = true;
-    gd.verticalSpan = 5;
-    gd.horizontalSpan = 1;
-    gd.heightHint = ResourcesPage.WIDGET_HEIGHT;
-    gd.widthHint = ResourcesPage.TXT_LENGTH;
-
-    tblHosts.setLayoutData( gd );
-    
-    //FIXME This is a work-around for the Bug#: 201705 for Windows.
-    this.hostsViewer = new TableViewer( tblHosts );
-    tblHosts = this.hostsViewer.getTable();    
-    this.hostsViewer.setContentProvider( new FeatureContentProvider() );
-    this.hostsViewer.setLabelProvider( new FeatureLabelProvider() );
-        
-    this.hostsViewer.addSelectionChangedListener( new ISelectionChangedListener()
-    {
-
-      public void selectionChanged( final SelectionChangedEvent event ) {
-        updateButtons( ( TableViewer )event.getSource() );
-      }
-    } );
-    
-    
-    tblHosts.setData(  FormToolkit.KEY_DRAW_BORDER );
-
-
-    this.resourcesTypeAdapter.attachToHostName( this.hostsViewer );
-    
-    /* Create the Add button */
-    gd = new GridData();
-    gd.verticalSpan = 2;
-    gd.verticalAlignment = GridData.END;
-    gd.horizontalAlignment = GridData.FILL;
-    this.btnHostsAdd = toolkit.createButton( client,
-                                        Messages.getString( "JsdlEditor_AddButton" ), //$NON-NLS-1$
-                                        SWT.BUTTON1);  
-    
-    this.btnHostsAdd.addSelectionListener( new SelectionListener() {
-      public void widgetSelected( final SelectionEvent event ) {
-        handleAddDialog(Messages.getString( "ResourcesPage_NewHostNameDialog" ) ); //$NON-NLS-1$
-                                                    
-        ResourcesPage.this.resourcesTypeAdapter.addCandidateHosts(ResourcesPage.this.hostsViewer,                                                          
-                                                           ResourcesPage.this.value );
-      }
-
-       public void widgetDefaultSelected( final SelectionEvent event ) {
-           // Do Nothing - Required method
-       }
-     });
-    
-    this.btnHostsAdd.setLayoutData( gd);
-    
-    
-    /* Create the Remove button */
-    gd = new GridData();
-    gd.verticalSpan = 1;
-    gd.verticalAlignment = GridData.BEGINNING;
-    gd.horizontalAlignment = GridData.FILL;
-    this.btnHostsDel = toolkit.createButton(client, 
-                                 Messages.getString( "JsdlEditor_RemoveButton" ), //$NON-NLS-1$
-                                 SWT.BUTTON1 );
-    
-    this.btnHostsDel.setEnabled( false );
-    
-    this.resourcesTypeAdapter.attachToDelete( this.btnHostsDel, this.hostsViewer );
-    this.btnHostsDel.setLayoutData( gd);
-        
-    toolkit.paintBordersFor( client );
-    
-    updateButtons( this.hostsViewer );
-    
-  } //End void CandidateHostsSubSection()
-  
- 
-   
-  private void createFileSystemSection  ( final Composite parent,
-                                          final FormToolkit toolkit ) {
-    
-    String sectionTitle = Messages.getString( "ResourcesPage_FileSystem") ;  //$NON-NLS-1$
-    String sectionDescription = Messages.getString( "ResourcesPage_FileSystemDesc" ); //$NON-NLS-1$
-    
-
-       
-    Composite client = FormSectionFactory.createGridStaticSection( toolkit,
-                                                               parent,
-                                                               sectionTitle,
-                                                               sectionDescription,
-                                                               2 );
-    GridData gd;
-    gd = new GridData();
-    
-    /* ========================= File System Widgets ===========================*/
-    
-   
-    
-    this.tblFileSystems = new Table( client, SWT.BORDER | SWT.H_SCROLL 
-                                            | SWT.V_SCROLL | SWT.MULTI );
-    gd = new GridData( GridData.FILL_BOTH );
-    gd.grabExcessHorizontalSpace = true;
-    gd.grabExcessVerticalSpace = true;
-    gd.verticalSpan = 5;
-    gd.horizontalSpan = 1;
-    gd.heightHint = ResourcesPage.WIDGET_HEIGHT;
-    gd.widthHint = ResourcesPage.TXT_LENGTH;
-    
-    this.tblFileSystems.setLayoutData( gd );
-    
-    //FIXME This is a work-around for the Bug#: 201705 for Windows.
-    this.fileSystemsViewer = new TableViewer( this.tblFileSystems );
-    this.tblFileSystems = this.fileSystemsViewer.getTable();    
-    this.fileSystemsViewer.setContentProvider( new FeatureContentProvider() );
-    this.fileSystemsViewer.setLabelProvider( new FeatureLabelProvider() );
-    this.tblFileSystems.setHeaderVisible( true );
-    this.column = new TableColumn( this.tblFileSystems, SWT.NONE );
-    this.column.setText( "Name" ); //$NON-NLS-1$
-    this.column.setWidth( 150 );
-    this.column = new TableColumn( this.tblFileSystems, SWT.NONE );
-    this.column.setText( "Type" ); //$NON-NLS-1$
-    this.column.setWidth( 60 );
-    this.column = new TableColumn( this.tblFileSystems, SWT.NONE );
-    this.column.setText( "Mount Point" ); //$NON-NLS-1$
-    this.column.setWidth( 60 );
-        
-    this.fileSystemsViewer.addSelectionChangedListener( new ISelectionChangedListener()
-    {
-
-      public void selectionChanged( final SelectionChangedEvent event ) {
-        updateButtons( ( TableViewer )event.getSource() );
-      }
-    } );
-    
-    
-
-    this.tblFileSystems.setData(  FormToolkit.KEY_DRAW_BORDER );
-
-
-    this.resourcesTypeAdapter.attachToFileSystems( this.fileSystemsViewer );
-    
-    /* Create the Add button */
-    gd = new GridData();
-    gd.verticalSpan = 2;
-    gd.verticalAlignment = GridData.END;
-    gd.horizontalAlignment = GridData.FILL;
-    
-    this.btnFileSystemAdd = toolkit.createButton( client,
-                                        Messages.getString( "JsdlEditor_AddButton" ), //$NON-NLS-1$
-                                        SWT.BUTTON1);  
-    
-    this.btnFileSystemAdd.addSelectionListener( new SelectionListener() {
-      public void widgetSelected( final SelectionEvent event ) {
-        handleAddFsDialog(Messages.getString( "ResourcesPage_NewFileSystemsDialog" ), //$NON-NLS-1$
-                                                 ( Button ) event.getSource() ); 
-                
-        ResourcesPage.this.resourcesTypeAdapter.addFileSystem(ResourcesPage.this.fileSystemsViewer,                                                          
-                                                           ResourcesPage.this.value );
-      }
-
-       public void widgetDefaultSelected( final SelectionEvent event ) {
-           // Do Nothing - Required method
-       }
-     });
-    
-    this.btnFileSystemAdd.setLayoutData( gd );
-    
-    //FIXME Un-comment for Edit Functionality
-    
-    /* Create the Edit button */
-    gd = new GridData();
-    gd.verticalSpan = 2;
-    gd.verticalAlignment = GridData.END;
-    gd.horizontalAlignment = GridData.FILL;
-    this.btnFileSystemEdit = toolkit.createButton(client,
-                                    Messages.getString("JsdlEditor_EditButton"), //$NON-NLS-1$
-                                    SWT.BUTTON1);  
-    
-    this.btnFileSystemEdit.addSelectionListener(new SelectionListener() {
-      public void widgetSelected(final SelectionEvent event) {
-        handleAddFsDialog( Messages.getString( "ResourcesPage_EditHostNameDialog" ), //$NON-NLS-1$
-                                                    (Button) event.getSource()); 
-        
-//        ResourcesPage.this.resourcesTypeAdapter.performEdit(ResourcesPage.this.fileSystemsViewer,                                                          
-//                                                           ResourcesPage.this.value[0]);
-      }
-
-       public void widgetDefaultSelected(final SelectionEvent event) {
-           // Do Nothing - Required method
-       }
-     });
-    this.btnFileSystemEdit.setEnabled( false );
-    this.btnFileSystemEdit.setLayoutData( gd );
-    
-    
-    /* Create the Remove button */
-    gd = new GridData();
-    gd.verticalSpan = 1;
-    gd.verticalAlignment = GridData.BEGINNING;
-    gd.horizontalAlignment = GridData.FILL;
-    
-    this.btnFileSystemDel = toolkit.createButton(client, 
-                                 Messages.getString( "JsdlEditor_RemoveButton" ), //$NON-NLS-1$
-                                 SWT.BUTTON1 );
-    
-    this.btnFileSystemDel.setEnabled( false );
-//    this.resourcesTypeAdapter.attachToDelete( this.btnFileSystemDel, this.fileSystemsViewer );
-    this.btnFileSystemDel.setLayoutData( gd );
-        
-    toolkit.paintBordersFor( client );
-    
-  } //End void FileSystemsSection()
-   
-  
-  
-  /*
-   * Private Method that creates the Operating System Sub-Section
-   */
-  private void createOSSection ( final Composite parent,
-                                 final FormToolkit toolkit ) {
-    
-    String sectionTitle = Messages.getString( "ResourcesPage_OperSyst" ); //$NON-NLS-1$
-    String sectionDescription = Messages.getString( "ResourcesPage_OperSystDescr" ); //$NON-NLS-1$
-    
-    GridData gd;
-       
-    Composite client = FormSectionFactory.createGridStaticSection( toolkit,
-                                           parent,
-                                           sectionTitle,
-                                           sectionDescription,
-                                           2 );
-          
-    gd = new GridData();
-    gd.widthHint = 280;    
-
-    /*==================== Operating System Type Widgets =====================*/
-    this.lblOperSystType = toolkit.createLabel( client,
-                              Messages.getString( "ResourcesPage_OperSystType" ) ); //$NON-NLS-1$
-    this.cmbOperSystType = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
-    this.cmbOperSystType.setData( FormToolkit.KEY_DRAW_BORDER );
-//    this.resourcesTypeAdapter.attachToOSType( this.cmbOperSystType );
-    this.cmbOperSystType.setLayoutData( gd );
-    
-    /*================= Operating System Version Widgets =====================*/
-    
-    this.lblOperSystVer = toolkit.createLabel( client,
-                           Messages.getString( "ResourcesPage_OperSystVersion" ) ); //$NON-NLS-1$
-    this.txtOperSystVer = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
-//    this.resourcesTypeAdapter.attachToOSVersion( this.txtOperSystVer );
-    this.txtOperSystVer.setLayoutData( gd );
-    
-    /*========================== Description Widgets =========================*/
-    
-    gd = new GridData();
-    gd.verticalAlignment = GridData.BEGINNING;
-    this.lblOSDescr = toolkit.createLabel(client,
-                                     Messages.getString("ResourcesPage_DEscr")); //$NON-NLS-1$
-    this.lblOSDescr.setLayoutData( gd );
-    gd = new GridData();
-    this.txtOSDescr = toolkit.createText(client, "", SWT.NONE//$NON-NLS-1$
-                      |SWT.H_SCROLL |SWT.V_SCROLL | SWT.WRAP);
-//    this.resourcesTypeAdapter.attachToOSDescription( this.txtOSDescr );
-
-    gd.widthHint = 265;
-    gd.heightHint=ResourcesPage.WIDGET_HEIGHT;
-    this.txtOSDescr.setLayoutData(gd);
-    
-    toolkit.paintBordersFor( client);
-  
-  } // End void osSubSection()
-  
-
- 
-  /*
-   * Private Method that creates the CPU Architecture Sub-Section
-   */
-  private void createCPUArch ( final Composite parent,
-                               final FormToolkit toolkit ) {
-    
-    String sectionTitle = Messages.getString( "ResourcesPage_CPUArch" ); //$NON-NLS-1$
-    String sectionDescription = Messages.getString( "ResourcesPage_CPUArchDescr" ); //$NON-NLS-1$
-
-    TableWrapData td;
-       
-    Composite client = FormSectionFactory.createStaticSection( toolkit,
-                                           parent,
-                                           sectionTitle,
-                                           sectionDescription,
-                                           2 );
-     
-
-
-     td = new TableWrapData( TableWrapData.FILL_GRAB );
-    
-    /*========================== CPU Architecture Widgets ====================*/
-    
-    this.lblCPUArchName = toolkit.createLabel( client,
-                             Messages.getString( "ResourcesPage_CPUArchName" ) ); //$NON-NLS-1$
-    
-    this.cmbCPUArchName = new Combo( client, SWT.SIMPLE 
-                                              | SWT.DROP_DOWN | SWT.READ_ONLY );
-    
-    this.cmbCPUArchName.setData( FormToolkit.KEY_DRAW_BORDER );    
-//    this.resourcesTypeAdapter.attachToCPUArchitecture( this.cmbCPUArchName );
-    this.cmbCPUArchName.setLayoutData( td );
-    
-    toolkit.paintBordersFor( client);    
-    
-  } //End void cPUArch()
-  
-  
-  
-  /*
-   * Private Method that creates the CPU Architecture Sub-Section
-   */
-  private void createExclusiveExecutionSection ( final Composite parent,
-                                                 final FormToolkit toolkit ) {
-    
-    String sectionTitle = Messages.getString( "ResourcesPage_ExclExecSection" ); //$NON-NLS-1$
-    String sectionDescription = Messages.getString( "ResourcesPage_ExclExecDescr" ); //$NON-NLS-1$
-
-    TableWrapData td;
-       
-    Composite client = FormSectionFactory.createStaticSection( toolkit,
-                                           parent,
-                                           sectionTitle,
-                                           sectionDescription,
-                                           2 );
-     
-     td = new TableWrapData( TableWrapData.FILL_GRAB );
-    
-    /*======================= Exclusive Execution Widgets ====================*/
-    
-    this.lblExclExecution = toolkit.createLabel( client,
-                             Messages.getString( "ResourcesPage_ExclExec" ) ); //$NON-NLS-1$
-    
-    this.cmbExclExec = new Combo( client, SWT.SIMPLE 
-                                              | SWT.DROP_DOWN | SWT.READ_ONLY );
-    
-    this.cmbExclExec.setData( FormToolkit.KEY_DRAW_BORDER );    
-//    this.resourcesTypeAdapter.attachToExclusiveExecution( this.cmbExclExec );
-    this.cmbExclExec.setLayoutData( td );
-    
-    toolkit.paintBordersFor( client);    
-
-  } //End void cPUArch()
-  
-  
-  
-  /*
-   * Private Method that creates the Additional Elements Sub-Section
-   */
-  private void createAddElementsSection (final Composite parent,
-                                         final FormToolkit toolkit )
-  {
-   
-    String sectionTitle = Messages.getString( "ResourcesPage_AddElementRangeVal" ); //$NON-NLS-1$
-    String sectionDescription = Messages.getString( "ResourcesPage_AddElementsRangeValueDescr" ); //$NON-NLS-1$
-
-    TableWrapData td;
-       
-    Composite client = FormSectionFactory.createStaticSection( toolkit,
-                                                               parent,
-                                                               sectionTitle,
-                                                               sectionDescription,
-                                                               3
-                                                               );
-    
-    td = new TableWrapData( TableWrapData.FILL_GRAB );
-    td.colspan = 1;
-
-    /*=====================Individual CPU Speed Widgets ======================*/
-    
-    
-    this.lblIndCPUSpl = toolkit.createLabel( client,
-                               Messages.getString( "ResourcesPage_IndCPUSpeed" ) ); //$NON-NLS-1$
-
-    this.cmbIndividualCPUSpeed = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
-    this.cmbIndividualCPUSpeed.setData( FormToolkit.KEY_DRAW_BORDER );
-    this.txtIndCPUSp = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
-    this.txtIndCPUSp.addListener( SWT.Verify, new NumberVerifier() );    
-//    this.resourcesTypeAdapter.attachToIndividualCPUSpeed( this.txtIndCPUSp, this.cmbIndividualCPUSpeed );
-    this.txtIndCPUSp.setLayoutData( td );    
-   
-    
-    /*=====================Individual CPU Time Widgets =======================*/
-        
-    td = new TableWrapData( TableWrapData.FILL_GRAB );
-    this.lblIndCPUTime = toolkit.createLabel( client,
-                              Messages.getString( "ResourcesPage_IndCPUTime" ) ); //$NON-NLS-1$
-    this.cmbIndividualCPUTime = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
-    this.cmbIndividualCPUTime.setData( FormToolkit.KEY_DRAW_BORDER );
-    this.cmbIndividualCPUTime.setItems( RESOURCES_BOUNDARY_ITEMS );        
-    this.txtIndCPUTime = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$    
-    this.txtIndCPUTime.setLayoutData( td );
-
-    /*=====================Individual CPU Count Widgets ======================*/
-    
-    td = new TableWrapData( TableWrapData.FILL_GRAB );
-    this.lblIndCPUCount = toolkit.createLabel( client,
-                            Messages.getString( "ResourcesPage_IndCPUCount" ) ); //$NON-NLS-1$
-    
-    this.cmbIndividualCPUCount = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
-    this.cmbIndividualCPUCount.setData( FormToolkit.KEY_DRAW_BORDER );
-    this.cmbIndividualCPUCount.setItems( RESOURCES_BOUNDARY_ITEMS );
-    this.txtIndCPUCount = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
-
-    this.txtIndCPUCount.setLayoutData( td );
-
-    /*===============Individual Network Bandwidth Widgets ====================*/
-    
-    td = new TableWrapData( TableWrapData.FILL_GRAB );
-    this.lblIndNetBand = toolkit.createLabel( client,
-                       Messages.getString( "ResourcesPage_IndNetwBandwidth" ) ); //$NON-NLS-1$
-    
-    this.cmbIndividualNetworkBandwidth = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
-    this.cmbIndividualNetworkBandwidth.setData( FormToolkit.KEY_DRAW_BORDER );
-    this.cmbIndividualNetworkBandwidth.setItems( RESOURCES_BOUNDARY_ITEMS );      
-    
-    this.txtIndNetBand = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
-    this.txtIndNetBand.setLayoutData( td );
-    
-    /*===============Individual Physical Memory Widgets ======================*/
-    
-    td = new TableWrapData( TableWrapData.FILL_GRAB );
-    this.lblPhysMem = toolkit.createLabel( client,
-                                 Messages.getString( "ResourcesPage_PhysMem" ) ); //$NON-NLS-1$
-    
-    this.cmbIndividualPhysicalMemory = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
-    this.cmbIndividualPhysicalMemory.setData( FormToolkit.KEY_DRAW_BORDER );
-    this.cmbIndividualPhysicalMemory.setItems( RESOURCES_BOUNDARY_ITEMS ); 
-    this.txtPhysMem = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
-
-    this.txtPhysMem.setLayoutData( td );
-    
-    /*================Individual Virtual Memory Widgets ======================*/
-    
-    td = new TableWrapData( TableWrapData.FILL_GRAB );
-    this.lblVirtMem = toolkit.createLabel( client,
-                                Messages.getString( "ResourcesPage_VirtualMem" ) ); //$NON-NLS-1$
-    
-    this.cmbIndividualVirtualMesmory = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
-    this.cmbIndividualVirtualMesmory.setData( FormToolkit.KEY_DRAW_BORDER );
-    this.cmbIndividualVirtualMesmory.setItems( RESOURCES_BOUNDARY_ITEMS ); 
-    this.txtVirtMem = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
-
-    this.txtVirtMem.setLayoutData( td );
-    
-    /*================Individual Disk Space Widgets ==========================*/
-    
-    td = new TableWrapData( TableWrapData.FILL_GRAB );
-    this.lblIndDiskSpac = toolkit.createLabel( client,
-                              Messages.getString( "ResourcesPage_IndDiskSpace" ) ); //$NON-NLS-1$
-    
-    this.cmbIndividualDiskSpace = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
-    this.cmbIndividualDiskSpace.setData( FormToolkit.KEY_DRAW_BORDER );
-    this.cmbIndividualDiskSpace.setItems( RESOURCES_BOUNDARY_ITEMS ); 
-    this.txtIndDiskSpac = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
-    this.txtIndDiskSpac.setLayoutData( td );
-
-    /*=========================Total CPU Time Widgets ========================*/
-    
-    td = new TableWrapData( TableWrapData.FILL_GRAB );
-    this.lblCPUTime = toolkit.createLabel( client,
-                                   Messages.getString( "ResourcesPage_CPUTime" ) ); //$NON-NLS-1$
-    
-    this.cmbTotalCPUTime = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
-    this.cmbTotalCPUTime.setData( FormToolkit.KEY_DRAW_BORDER );
-    this.cmbTotalCPUTime.setItems( RESOURCES_BOUNDARY_ITEMS ); 
-    this.txtCPUTime = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
-    this.txtCPUTime.setLayoutData( td );
-    
-    /*========================Total CPU Count Widgets ========================*/
-     
-    td = new TableWrapData( TableWrapData.FILL_GRAB );
-    this.lblCPUCount = toolkit.createLabel( client,
-                               Messages.getString( "ResourcesPage_TotCPUCount" ) ); //$NON-NLS-1$
-
-    this.cmbTotalCPUCount = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
-    this.cmbTotalCPUCount.setData( FormToolkit.KEY_DRAW_BORDER );
-    this.cmbTotalCPUCount.setItems( RESOURCES_BOUNDARY_ITEMS ); 
-    this.txtCPUCount = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
-    this.txtCPUCount.setLayoutData( td );
-    
-    /*=====================Total Physical Memory Widgets =====================*/
-    
-    td = new TableWrapData( TableWrapData.FILL_GRAB );
-    this.lblTotPhMem = toolkit.createLabel( client,
-                                Messages.getString( "ResourcesPage_TotPhysMem" ) ); //$NON-NLS-1$
-    
-    this.cmbTotalPhysicalMemory = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
-    this.cmbTotalPhysicalMemory.setData( FormToolkit.KEY_DRAW_BORDER );
-    this.cmbTotalPhysicalMemory.setItems( RESOURCES_BOUNDARY_ITEMS ); 
-    this.txtTotPhMem = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
-    this.txtTotPhMem.setLayoutData( td );
-
-    /*======================Total Virtual Memory Widgets =====================*/
-    
-    td = new TableWrapData(TableWrapData.FILL_GRAB);
-    this.lblTotVirtMem = toolkit.createLabel(client,
-                             Messages.getString("ResourcesPage_TotVirtualMem")); //$NON-NLS-1$
-    
-    this.cmbTotalVirtualMemory = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
-    this.cmbTotalVirtualMemory.setData( FormToolkit.KEY_DRAW_BORDER );
-    this.cmbTotalVirtualMemory.setItems( RESOURCES_BOUNDARY_ITEMS ); 
-    this.txtTotVirtMem = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$    
-    this.txtTotVirtMem.setLayoutData( td );
-   
-    /*========================Total Disk Space Widgets =======================*/
-    
-    td = new TableWrapData( TableWrapData.FILL_GRAB );
-    this.lblTotDiskSp = toolkit.createLabel( client,
-                           Messages.getString( "ResourcesPage_TotDiskSpace" ) ); //$NON-NLS-1$
-    
-    this.cmbTotalDiskSpace = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
-    this.cmbTotalDiskSpace.setData( FormToolkit.KEY_DRAW_BORDER );
-    this.cmbTotalDiskSpace.setItems( RESOURCES_BOUNDARY_ITEMS );
-    this.txtTotDiskSp = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
-    this.txtTotDiskSp.setLayoutData( td );
-
-    /*====================Total Resource Count Widgets =======================*/
-    
-    td = new TableWrapData( TableWrapData.FILL_GRAB );
-    this.lblTotResCount = toolkit.createLabel( client,
-                             Messages.getString( "ResourcesPage_TotRescCount" ) ); //$NON-NLS-1$
-    
-    this.cmbTotalResourceCount = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
-    this.cmbTotalResourceCount.setData( FormToolkit.KEY_DRAW_BORDER );
-    this.cmbTotalResourceCount.setItems( RESOURCES_BOUNDARY_ITEMS );
-    this.txtTotResCount = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
-    this.txtTotResCount.setLayoutData( td );
-
-    toolkit.paintBordersFor( client );
-    
-  }
-
   
   
   private void addFormPageHelp( final ScrolledForm form ) {
@@ -958,8 +338,7 @@ public final class ResourcesPage extends FormPage implements INotifyChangedListe
     }
     
   }
-  
-  
+    
   
   /*
    * Method which opens a Dialog for selecting Candidate Hosts for Job Submission.
@@ -983,8 +362,7 @@ public final class ResourcesPage extends FormPage implements INotifyChangedListe
     }    
       this.value = hostsDialog.getValue();
     
-  }
-  
+  }  
   
   
   /*
@@ -1014,7 +392,6 @@ public final class ResourcesPage extends FormPage implements INotifyChangedListe
   }
   
   
-
   public void notifyChanged( final Notification notification ) {
     setDirty( true );    
   }

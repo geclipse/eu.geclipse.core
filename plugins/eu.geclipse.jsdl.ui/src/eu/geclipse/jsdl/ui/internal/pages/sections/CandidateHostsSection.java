@@ -159,7 +159,9 @@ public class CandidateHostsSection extends JsdlAdaptersFactory {
     this.hostsViewer = new TableViewer( tblHosts );
     tblHosts = this.hostsViewer.getTable();    
     this.hostsViewer.setContentProvider( new FeatureContentProvider() );
-    this.hostsViewer.setLabelProvider( new FeatureLabelProvider() );
+    FeatureLabelProvider hostsLabelProvider = new FeatureLabelProvider();
+    hostsLabelProvider.setStringType( FeatureLabelProvider.STRING_TYPE_CANDIDATE_HOSTS );
+    this.hostsViewer.setLabelProvider( hostsLabelProvider );
         
     this.hostsViewer.addSelectionChangedListener( new ISelectionChangedListener()
     {
@@ -281,13 +283,6 @@ public class CandidateHostsSection extends JsdlAdaptersFactory {
       
       newInputList.add( (String)innerValue[i] );  
     }
-
-//    tableViewer.setInput( newInputList  );
-    
-    
-//    for ( int i=0; i<tableViewer.getTable().getItemCount(); i++ ) {      
-//      collection.add( (String) tableViewer.getElementAt( i ) );
-//    }
     
     for ( int i=0; i<newInputList.size(); i++ ) {      
       collection.add( newInputList.get( i ) );

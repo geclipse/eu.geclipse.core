@@ -151,7 +151,9 @@ public class CandidateHostsDialog extends Dialog {
     this.hostsViewer = new CheckboxTableViewer( table );
     
     this.hostsViewer.setContentProvider( new FeatureContentProvider() );
-    this.hostsViewer.setLabelProvider( new FeatureLabelProvider() );
+    FeatureLabelProvider hostsLabelProvider = new FeatureLabelProvider();
+    hostsLabelProvider.setStringType( FeatureLabelProvider.STRING_TYPE_CANDIDATE_HOSTS );
+    this.hostsViewer.setLabelProvider( hostsLabelProvider );
     
     this.hostsViewer.addCheckStateListener( new ICheckStateListener () {
 

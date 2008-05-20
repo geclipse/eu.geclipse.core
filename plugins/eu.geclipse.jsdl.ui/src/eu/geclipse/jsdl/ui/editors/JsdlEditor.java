@@ -574,7 +574,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
   private StructuredTextEditor getSourceEditor() {  
     
      if ( this.editor == null ) {
-       this.editor = new StructuredTextEditor();   
+       this.editor = new StructuredTextEditor();
        this.editor.setEditorPart( this );
       }
       return this.editor;
