@@ -40,9 +40,19 @@ import eu.geclipse.info.model.FetchJob;
  * @author George Tsouloupas
  *
  */
-public abstract class GlueIndex  
+public class GlueIndex  
 implements IGridModelListener, java.io.Serializable {
 
+  /**
+   * 
+   */
+  private static final long serialVersionUID = 1L;
+
+  private GlueIndex()
+  {
+    // private constructor.  
+  }
+  
   @SuppressWarnings("nls")
   private static final String[] tableList = {
     "GlueHost",
@@ -326,7 +336,9 @@ implements IGridModelListener, java.io.Serializable {
   public Hashtable<String, AbstractGlueTable> fullIndex
     = new Hashtable<String, AbstractGlueTable>();
   
-  protected abstract String getTag();
+  protected String getTag() {
+    return "basis";
+  }
 
   public void gridModelChanged( final IGridModelEvent event ) {
     
@@ -339,7 +351,7 @@ implements IGridModelListener, java.io.Serializable {
 
         for( IGridElement gridElement : event.getElements() ) {
           if(gridElement instanceof IGridProject){
-            FetchJob fetchJob = new FetchJob(" Retrieving Information"); //$NON-NLS-1$
+            FetchJob fetchJob = FetchJob.getInstance(" Retrieving Information"); //$NON-NLS-1$
             fetchJob.schedule(); // Getting the information from the info services.
             break;
           }
@@ -356,33 +368,12 @@ implements IGridModelListener, java.io.Serializable {
   public static GlueIndex getInstance() {
     boolean errorFound = false;
     
-    if( glueIndexInstance == null ) {
+    if (glueIndexInstance == null)
+    {          
+      glueIndexInstance = new GlueIndex();
       
-      IPath serPath = getGridInfoLocation();
-      if(serPath!=null && serPath.toFile().length() > 0)
-      {
-        try {
-          glueIndexInstance = loadInstance();
-        } catch( IOException e ) {
-            errorFound = true;
-        }
-      }
-      
-      if (glueIndexInstance == null || errorFound)
-      {
-        glueIndexInstance = new GlueIndex() {
-  
-          private static final long serialVersionUID = 1L;
-  
-          @Override
-          protected String getTag()
-          {
-            return "basis"; //$NON-NLS-1$
-          }
-        };
-        
-        GridModel.getRoot().addGridModelListener( glueIndexInstance );
-      }
+      GridModel.getRoot().addGridModelListener( glueIndexInstance );
+     
     }
     return glueIndexInstance;
   }
@@ -393,6 +384,7 @@ implements IGridModelListener, java.io.Serializable {
    */
   public static void drop(){
     
+    GridModel.getRoot().removeGridModelListener( glueIndexInstance );
     glueIndexInstance=null;
    
     IPath serPath = getGridInfoLocation();

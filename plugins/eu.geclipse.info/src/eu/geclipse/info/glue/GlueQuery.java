@@ -92,7 +92,7 @@ public class GlueQuery {
       
       result = outArray;
     }
-    
+        
     return result;
   }
 

@@ -42,10 +42,10 @@ public class Activator extends Plugin {
   public Activator() {
     plugin = this;
     
-    // Fetch the glue information for the existing grid projects
-    Job storeInitializeJob=new FetchJob("Retrieving information"); //$NON-NLS-1$
+    // Fetch the glue information for the existing grid projects    
+    Job storeInitializeJob=FetchJob.getInstance("Retrieving information"); //$NON-NLS-1$
       
-    storeInitializeJob.schedule( );
+    storeInitializeJob.schedule( );    
   }
 
   /*

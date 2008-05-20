@@ -39,14 +39,24 @@ import eu.geclipse.info.internal.Activator;
  */
 public class FetchJob extends Job {
 
+  private static FetchJob instance = null;
   /**
    * The constructor of the FetchJob
    * @param name The name to be displayed in the progress view
    */
-  public FetchJob( final String name ) {
+  private FetchJob( final String name ) {
     super( name );
   }
 
+  public static FetchJob getInstance(final String name)
+  {
+    if (instance == null)
+      instance = new FetchJob(name);
+    
+    return instance;
+    
+  }
+  
   @Override
   protected IStatus run( final IProgressMonitor monitor ) {
    
