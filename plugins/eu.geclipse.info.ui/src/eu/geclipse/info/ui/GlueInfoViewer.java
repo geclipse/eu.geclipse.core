@@ -16,6 +16,9 @@
  *****************************************************************************/
 package eu.geclipse.info.ui;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.ArrayList;
@@ -241,6 +244,7 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
         {
           String myObjectTableName = this.query.getGlueInfoTopTreeCategory().get( i ).getObjectTableName();
           String myGlueObjectName = this.query.getGlueInfoTopTreeCategory().get( i ).getGlueObjectName();
+
           this.agtList.addAll( GlueQuery.getGlueTable( myGlueObjectName, 
                                                        myObjectTableName, 
                                                        getCurrentVO() ) );
@@ -527,7 +531,7 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
     };
     t.start();
     
-    this.fetchJob = new FetchJob(" Retrieving Information"); //$NON-NLS-1$
+    this.fetchJob = FetchJob.getInstance(" Retrieving Information"); //$NON-NLS-1$
     this.showOnlyFilledInfoElements = false;
   }
   
