@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -107,7 +107,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
 
   /**
    * Creates a new terminal widget.
-   * 
+   *
    * @param parent parent widget.
    * @param style widget style.
    * @param initFgColor default foreground color.
@@ -138,14 +138,14 @@ public class Terminal extends Canvas implements ISelectionProvider {
         changeScreenSize();
       }
     });
-    
+
     getVerticalBar().addSelectionListener( new SelectionAdapter() {
       @Override
       public void widgetSelected( final SelectionEvent event ) {
         triggerRedraw();
       }
     } );
-    
+
     addMouseListener( new MouseAdapter() {
       @Override
       public void mouseDown( final MouseEvent event ) {
@@ -154,8 +154,8 @@ public class Terminal extends Canvas implements ISelectionProvider {
         }
       }
     } );
-    
-    addListener(SWT.KeyDown, new Listener() { 
+
+    addListener(SWT.KeyDown, new Listener() {
       public void handleEvent( final Event event ) {
         // index 0 = keypad numeric mode, index 1 = keypad application mode
         // vt100
@@ -238,7 +238,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
               Activator.logMessage( IStatus.WARNING,
                                     Messages.formatMessage( "Terminal.unhandledKeycode", //$NON-NLS-1$
                                                             Integer.valueOf( event.keyCode ),
-                                                            Integer.valueOf( event.character) ) ); 
+                                                            Integer.valueOf( event.character) ) );
             }
             out.flush();
           }
@@ -276,7 +276,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
     final MenuItem copyItem = new MenuItem( popUpMenu, SWT.PUSH );
     copyItem.setText( Messages.getString("Terminal.copy") ); //$NON-NLS-1$
     // TODO disable menu if selection is empty
-    ImageDescriptor copyImage 
+    ImageDescriptor copyImage
         = sharedImages.getImageDescriptor( ISharedImages.IMG_TOOL_COPY );
     copyItem.setImage( copyImage.createImage() );
     copyItem.addSelectionListener( new SelectionAdapter() {
@@ -287,7 +287,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
     } );
     MenuItem pasteItem = new MenuItem( popUpMenu, SWT.PUSH );
     pasteItem.setText( Messages.getString( "Terminal.paste" ) ); //$NON-NLS-1$
-    ImageDescriptor pasteImage 
+    ImageDescriptor pasteImage
         = sharedImages.getImageDescriptor( ISharedImages.IMG_TOOL_PASTE );
     pasteItem.setImage( pasteImage.createImage() );
     pasteItem.addSelectionListener( new SelectionAdapter() {
@@ -302,7 +302,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
         copyItem.setEnabled( !getSelection().isEmpty() );
       }
     } );
-    setMenu( popUpMenu );    
+    setMenu( popUpMenu );
   }
 
   /**
@@ -314,17 +314,17 @@ public class Terminal extends Canvas implements ISelectionProvider {
     this.clipboard.setContents( new String[] { text },
                                 new Transfer[] { plainTextTransfer } );
   }
-  
+
   private Object getClipboardContent( final  int clipboardType ) {
     TextTransfer plainTextTransfer = TextTransfer.getInstance();
     return this.clipboard.getContents(plainTextTransfer, clipboardType);
   }
-  
+
   /**
    * Triggers paste from the clipboard into the terminal.
    */
   public void paste() {
-    checkWidget();  
+    checkWidget();
     String text = (String) getClipboardContent( DND.CLIPBOARD );
     if ( text != null && text.length() > 0 ) {
       for ( int i = 0; i < text.length(); i++ ) {
@@ -385,20 +385,20 @@ public class Terminal extends Canvas implements ISelectionProvider {
     }, "Terminal" ); //$NON-NLS-1$
     thread.start();
   }
-  
+
   void readerMainLoop() {
     try {
       this.running = true;
       while( this.running ) {
         int ch = read();
-        if ( ch == BEL ) bell(); 
+        if ( ch == BEL ) bell();
         else if ( ch == SWT.CR ) carriageReturn();
         else if ( ch == SWT.LF ) nextLine( false );
         else if ( ch == SI ) this.cursor.charSet = this.charSetG[0];
         else if ( ch == SO ) this.cursor.charSet = this.charSetG[1];
         else if ( ch == SWT.TAB ) tabulator();
         else if ( ch == FF ) eraseScreen();
-        else if ( ch == SWT.BS ) backspace(); 
+        else if ( ch == SWT.BS ) backspace();
         else if ( ch == SWT.ESC ) parseEscSequence();
         else if ( ch == -1 ) continue;
         else if ( ch < ' ' ) {
@@ -432,7 +432,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
       if ( nextTabStop < numColsInLine( this.cursor.line ) ) {
         this.cursor.col = nextTabStop;
       } else {
-        Activator.logMessage( IStatus.WARNING, 
+        Activator.logMessage( IStatus.WARNING,
                               Messages.getString( "Terminal.tabStopOutsideDisplay" ) ); //$NON-NLS-1$
       }
     } else {
@@ -456,14 +456,14 @@ public class Terminal extends Canvas implements ISelectionProvider {
       if ( this.cursor.col >= numColsInLine( this.cursor.line ) ) {
         if ( this.wraparound ) {
           this.cursor.col = 0;
+          triggerRedraw( startCol, line, colsToUpdate, 1 );
+          startCol = 0;
+          colsToUpdate = 0;
           if ( this.cursor.line < this.numLines - 1 ) {
             this.cursor.line++;
-            triggerRedraw( startCol, line, colsToUpdate, 1 );
-            startCol = 0;
             line = this.cursor.line;
-            colsToUpdate = 0;
           } else {
-            triggerRedraw( numColsInLine( this.cursor.line ) - 1, this.cursor.line, 1, 1 );
+//            triggerRedraw( numColsInLine( this.cursor.line ) - 1, this.cursor.line, 1, 1 );
             scrollUp();
           }
         } else {
@@ -497,7 +497,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
     }
     return numColsInLine;
   }
-  
+
   void triggerRedraw( final int col, final int line, final int cols, final int lines ) {
     int fontWidthMult = 1;
     for ( int i = line; i < line + lines
@@ -673,7 +673,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
   }
 
   private void nextLine( final boolean returnToColZero) {
-    int oldCol = this.cursor.col; 
+    int oldCol = this.cursor.col;
     if (returnToColZero) this.cursor.col = 0;
     triggerRedraw( oldCol, this.cursor.line, 1, 1 );
     index();
@@ -738,7 +738,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
         screenAlignmentDisplay();
         break;
       default:
-        Activator.logMessage( IStatus.WARNING, 
+        Activator.logMessage( IStatus.WARNING,
                               Messages.formatMessage( "Terminal.unknownDecCommand", //$NON-NLS-1$
                                                       Character.valueOf( (char) ch ) ) );
     }
@@ -780,7 +780,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
     Color color;
 
     if (read() != ';') {
-      Activator.logMessage( IStatus.WARNING, 
+      Activator.logMessage( IStatus.WARNING,
                             Messages.getString( "Terminal.invalidOsCommand" ) ); //$NON-NLS-1$
     } else switch (commandNr) {
       case 0: // Set Window Title
@@ -817,7 +817,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
         int b = Integer.parseInt( tokenizer.nextToken(), 16 );
         color = new Color( getDisplay(), r, g, b );
       }
-    } 
+    }
     if (color == null) {
       color = this.defaultFgColor;
       Activator.logMessage( IStatus.WARNING,
@@ -921,7 +921,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
 
   private void deviceStatusReport( final int[] params ) throws IOException {
     final byte[] response = { SWT.ESC, '[', '0', 'n' }; // terminal ok
-    
+
     int val = 0;
     if (params.length != 0) val = params[0];
     switch ( val ) {
@@ -938,7 +938,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
         break;
     }
   }
-  
+
   private void reportCursorPosition() throws IOException {
     this.output.write( SWT.ESC );
     this.output.write( '[' );
@@ -1004,7 +1004,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
         case 3: // 132 Column Mode
           this.cursor.reset( this.defaultFgColor, this.defaultBgColor );
           this.tabulatorPositons.clear();
-          eraseScreen(); 
+          eraseScreen();
           getDisplay().syncExec(new Runnable() {
             public void run () {
               setSize( 132 * getFontWidth() + getVerticalBar().getSize().x , 24 * getFontHeigth() );
@@ -1068,7 +1068,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
           });
           this.cursor.reset( this.defaultFgColor, this.defaultBgColor );
           this.tabulatorPositons.clear();
-          eraseScreen(); 
+          eraseScreen();
           break;
         case 4:
           this.scrollMode = ScrollMode.JUMP;
@@ -1139,7 +1139,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
     this.bottomMargin = this.numLines - 1;
     for ( int i = 0; i < this.leds.length; i++ ) this.leds[i] = false;
     setOriginMode( OriginMode.ABSOLUTE );
-    eraseScreen(); 
+    eraseScreen();
   }
 
   private void setOriginMode( final OriginMode mode ) {
@@ -1150,14 +1150,14 @@ public class Terminal extends Canvas implements ISelectionProvider {
       this.cursor.line = 0;
     } else {
       this.cursor.col = 0;
-      this.cursor.line = this.topMargin;      
+      this.cursor.line = this.topMargin;
     }
     this.originMode = mode;
     triggerRedraw( oldCol, oldLine, 1, 1 );
     triggerRedraw( this.cursor.col, this.cursor.line, 1, 1 );
   }
 
-  private void scrollUp() {
+  void scrollUpCopy() {
     Char[] tmp;
     if ( this.topMargin == 0 ) {
       tmp = scrollHistory();
@@ -1173,11 +1173,14 @@ public class Terminal extends Canvas implements ISelectionProvider {
     eraseLine( this.bottomMargin );
     this.lineWidthMode[ this.bottomMargin + this.historySize ] = LineWidthMode.NORMAL;
     this.lineHeightMode[ this.bottomMargin + this.historySize ] = LineHeightMode.NORMAL;
+  }
+
+  private void scrollUp() {
     getDisplay().syncExec(new Runnable() {
       public void run () {
+        scrollUpCopy();
         Terminal.this.terminalPainter.scrollUp( Terminal.this.topMargin,
                                                 Terminal.this.bottomMargin );
-        getDisplay().update();
       }
     });
     triggerRedraw( 0, this.bottomMargin, this.numCols, 1 );
@@ -1194,8 +1197,8 @@ public class Terminal extends Canvas implements ISelectionProvider {
     }
     return tmp;
   }
-  
-  private void scrollDown() {
+
+  void scrollDownCopy() {
     Char[] tmp = this.screenBuffer[ this.bottomMargin + this.historySize ];
     for( int i = this.bottomMargin; i > this.topMargin; i-- ) {
       this.lineHeightMode[ i + this.historySize ] = this.lineHeightMode[ i + this.historySize - 1 ];
@@ -1206,11 +1209,14 @@ public class Terminal extends Canvas implements ISelectionProvider {
     eraseLine( this.topMargin );
     this.lineWidthMode[ this.topMargin + this.historySize ] = LineWidthMode.NORMAL;
     this.lineHeightMode[ this.topMargin + this.historySize ] = LineHeightMode.NORMAL;
+  }
+
+  private void scrollDown() {
     getDisplay().syncExec(new Runnable() {
       public void run () {
+        scrollDownCopy();
         Terminal.this.terminalPainter.scrollDown( Terminal.this.topMargin,
                                                   Terminal.this.bottomMargin );
-        getDisplay().update();
       }
     });
     triggerRedraw( 0, this.topMargin, this.numCols, 1 );
@@ -1218,10 +1224,10 @@ public class Terminal extends Canvas implements ISelectionProvider {
     triggerRedraw( this.cursor.col, this.cursor.line + 1, 1, 1 );
   }
 
-  private void setTopAndBottomMargins( final int[] params, boolean skipCursorReset ) {
+  private void setTopAndBottomMargins( final int[] params, final boolean skipCursorReset ) {
     int top = 0;
     int bottom = this.numLines;
-    
+
     if ( params.length > 0 ) top = params[ 0 ];
     if ( params.length > 1 ) bottom = params[ 1 ];
     if ( top > 0 ) top--;
@@ -1328,7 +1334,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
           break;
       }
       idx++;
-    } while ( idx < params.length ); 
+    } while ( idx < params.length );
   }
 
   private void eraseScreen() {
@@ -1352,7 +1358,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
         eraseInLine( params );
         for( int i = this.cursor.line+1; i < this.numLines; i++ ) {
           eraseLine( i );
-        }    
+        }
         triggerRedraw( 0, this.cursor.line+1, this.numCols,
                        this.numLines - this.cursor.line-1 );
         break;
@@ -1360,7 +1366,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
         eraseInLine( params );
         for( int i = 0; i < this.cursor.line; i++) {
           eraseLine( i );
-        }    
+        }
         triggerRedraw( 0, 0, this.numCols, this.cursor.line );
         break;
       case 2: // Entire screen
@@ -1437,7 +1443,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
           val -= this.cursor.col + 1;
           this.cursor.line--;
           this.cursor.col = numColsInLine( this.cursor.line ) - 1;
-        } else { 
+        } else {
           this.cursor.col = 0;
           val = 0;
           break;
@@ -1526,7 +1532,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
     }
     if ( col >= this.numCols ) {
       col = this.numCols - 1;
-      Activator.logMessage( IStatus.WARNING, 
+      Activator.logMessage( IStatus.WARNING,
                             Messages.getString( "Terminal.cursorPosOutOfRangeCol" ) ); //$NON-NLS-1$
     }
     int oldLine = this.cursor.line;
@@ -1541,7 +1547,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
 
   private void deviceAttributes( final int[] params) throws IOException {
     final byte[] response = { SWT.ESC, '[', '?', '1', ';', '2', 'c' };  // 2 = VT100 with AVO
-    
+
     if ( params.length > 0 && params[ 0 ] != 0 ) {
       Activator.logMessage( IStatus.WARNING,
                             Messages.getString( "Terminal.unknownDevAttribReq" ) ); //$NON-NLS-1$
@@ -1679,33 +1685,33 @@ public class Terminal extends Canvas implements ISelectionProvider {
     this.terminalPainter.setFont( font );
     super.setFont( font );
   }
-  
+
   @Override
   public Color getForeground() {
     return this.defaultFgColor;
   }
-  
+
   @Override
   public Color getBackground() {
     return this.defaultBgColor;
   }
-  
+
   boolean isInReverseScreenMode() {
     return this.reverseScreenMode;
   }
-  
+
   int getFontHeigth() {
     return this.fontHeight;
   }
-  
+
   int getFontWidth() {
     return this.fontWidth;
   }
-  
+
   Char[][] getScreenBuffer() {
     return this.screenBuffer;
   }
-  
+
   LineHeightMode[] getLineHeightMode() {
     return this.lineHeightMode;
   }
@@ -1721,7 +1727,7 @@ public class Terminal extends Canvas implements ISelectionProvider {
   int getCursorCol() {
     return this.cursor.col;
   }
-  
+
   int getScrollbarPosLine() {
     return getVerticalBar().getSelection();
   }
@@ -1729,11 +1735,11 @@ public class Terminal extends Canvas implements ISelectionProvider {
   int getNumLines() {
     return this.numLines;
   }
-  
+
   int getNumCols() {
     return this.numCols;
   }
-  
+
   int getHistorySize() {
     return this.historySize;
   }
