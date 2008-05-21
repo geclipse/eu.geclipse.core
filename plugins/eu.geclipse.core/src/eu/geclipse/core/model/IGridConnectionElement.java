@@ -15,6 +15,8 @@
 
 package eu.geclipse.core.model;
 
+import java.net.URI;
+
 import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.runtime.CoreException;
@@ -23,7 +25,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 /**
  * Base interface for elements of a file system mount.
  */
-public interface IGridConnectionElement extends IGridResource, IGridContainer {
+public interface IGridConnectionElement extends IGridContainer {
   
   /**
    * Determine if an adapter exists for adapting this connection element
@@ -86,6 +88,13 @@ public interface IGridConnectionElement extends IGridResource, IGridContainer {
    * @return An error string.
    */
   public String getError();
+  
+  /**
+   * Get the URI corresponding to the connection.
+   * 
+   * @return The connection URI.
+   */
+  public URI getURI();
   
   
   /**

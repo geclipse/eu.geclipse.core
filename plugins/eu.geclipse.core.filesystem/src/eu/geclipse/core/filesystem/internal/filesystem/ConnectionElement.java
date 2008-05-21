@@ -191,25 +191,6 @@ public class ConnectionElement
     }
     return result;
   }
-
-  /*
-   * (non-Javadoc)
-   * 
-   * @see eu.geclipse.core.model.IGridResource#getHostName()
-   */
-  public String getHostName() {
-    String str = null;
-    URI uri = getURI();
-    
-    if ( null != uri ) {
-      str = uri.getHost();
-
-      if ( null == str )
-        str = uri.getScheme();
-    }
-    
-    return str;
-  }
   
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.impl.AbstractGridContainer#hasChildren()
