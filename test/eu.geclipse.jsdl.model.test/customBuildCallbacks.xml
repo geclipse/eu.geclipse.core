@@ -69,7 +69,7 @@
 	<!-- Add a single test class to the list -->
 	<target name="appendTestClass">
 		<echo file="${tests.file}" append="true">
-          ${lt}ant target=${q}core-test${q} antfile=${q}$${library-file}${q} dir=${q}$${output-dir}${q} ${gt}
+          ${lt}ant target=${q}ui-test${q} antfile=${q}$${library-file}${q} dir=${q}$${output-dir}${q} ${gt}
             ${lt}property name=${q}classname${q} value=${q}${testClass}${q} /${gt}
           ${lt}/ant${gt}
 		</echo>
