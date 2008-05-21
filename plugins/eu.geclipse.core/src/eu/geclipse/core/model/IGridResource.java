@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -25,14 +25,6 @@ import java.net.URI;
 public interface IGridResource extends IGridElement {
   
   /**
-   * Get the <code>URI</code> that corresponds to this grid resource.
-   * 
-   * @return The resource's contact string. May be <code>null</code>
-   * if the resource may not be represented by a <code>URI</code>.
-   */
-  public URI getURI();
-  
-  /**
    * Get the host name of the machine (physical or virtual) that represent
    * this resource. This name should either be the DNS entry or IP address
    * of this host. 
@@ -41,4 +33,13 @@ public interface IGridResource extends IGridElement {
    * if the resource cannot provide its hostname.
    */
   public String getHostName();
+  
+  /**
+   * Get the <code>URI</code> that corresponds to this grid resource.
+   * 
+   * @return The resource's contact string. May be <code>null</code>
+   * if the resource may not be represented by a <code>URI</code>.
+   */
+  public URI getURI();
+  
 }
