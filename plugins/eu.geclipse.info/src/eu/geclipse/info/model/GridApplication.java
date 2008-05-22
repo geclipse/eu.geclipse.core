@@ -29,12 +29,14 @@ public class GridApplication extends GridGlueElement implements IGridApplication
   private URI script = null;
   
   private IGridComputing[] computing;
+  private IGridContainer parent;
   
   public GridApplication( final IGridContainer parent, 
                           final IGridComputing[] computing,
                           final GlueSubClusterSoftwareRunTimeEnvironment software ) {
     super( parent, software );
     this.computing = computing;
+    this.parent = parent;
   }
   
   public IGridComputing[] getComputing() {
@@ -47,8 +49,8 @@ public class GridApplication extends GridGlueElement implements IGridApplication
 
   public String getTag() {
     String tag = null;
-    if (getGlueElement() != null && getGlueElement() instanceof GlueSubClusterSoftwareRunTimeEnvironment)
-      tag = ((GlueSubClusterSoftwareRunTimeEnvironment)getGlueElement()).GlueLocactionPath;
+    if ( getGlueElement() != null && getGlueElement() instanceof GlueSubClusterSoftwareRunTimeEnvironment )
+      tag = ( ( GlueSubClusterSoftwareRunTimeEnvironment ) getGlueElement() ).GlueLocactionPath;
     
     return tag;
   }
@@ -59,7 +61,11 @@ public class GridApplication extends GridGlueElement implements IGridApplication
   }
 
   public String getHostName() {
-    return null;
+    String result = null;
+    if ( getGlueElement() != null && getGlueElement() instanceof GlueSubClusterSoftwareRunTimeEnvironment )
+      result = ( ( GlueSubClusterSoftwareRunTimeEnvironment ) getGlueElement() ).SubClusterUniqueID;
+    
+    return result;
   }
 
   public URI getURI() {
