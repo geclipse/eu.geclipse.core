@@ -506,8 +506,8 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
       //wait for BDII and register listener
       @Override
       public void run() {
-        
-        ArrayList<IGridInfoService> infoServicesArray = InfoServiceFactory.getAllExistingInfoService();
+        InfoServiceFactory myInfoServiceFactory = new InfoServiceFactory();
+        ArrayList<IGridInfoService> infoServicesArray = myInfoServiceFactory.getAllExistingInfoService();
         for (int i=0; i<infoServicesArray.size(); i++)
         {
           if ( infoServicesArray.get( i ) instanceof IExtentedGridInfoService)

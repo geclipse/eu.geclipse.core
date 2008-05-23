@@ -68,7 +68,8 @@ public class FetchJob extends Job {
                                 "BDII fetch from " //$NON-NLS-1$
                                     + " Failed" ); //$NON-NLS-1$
     ArrayList<IGridInfoService> infoServicesArray = null;
-    infoServicesArray = InfoServiceFactory.getAllExistingInfoService();
+    InfoServiceFactory myInfoServiceFactory = new InfoServiceFactory();
+    infoServicesArray = myInfoServiceFactory.getAllExistingInfoService();
     
     // Get the number of projects. The number is used in the monitor.
     int gridProjectNumbers = 0;
@@ -114,7 +115,6 @@ public class FetchJob extends Job {
         }
       }
     }
-    
     
     monitor.done();
     status = new Status( IStatus.OK,

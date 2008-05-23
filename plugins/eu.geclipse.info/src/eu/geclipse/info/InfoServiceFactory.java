@@ -23,78 +23,65 @@ import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 
+import eu.geclipse.core.model.GridModel;
+import eu.geclipse.core.model.GridModelException;
+import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridInfoService;
+import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IVirtualOrganization;
+import eu.geclipse.info.internal.Activator;
 import eu.geclipse.info.model.IExtentedGridInfoService;
 
 /**
- * This class is responsible to query the extension point registry in order to
- * get a specific information service or all the existing ones.
+ * This class is responsible for returning existing information services.
  * @author tnikos
  *
  */
 public class InfoServiceFactory {
   
-  /**
-   * Returns an information service for a specific VO type.
-   * @param voType The type of the VO. It can be "GRIA VO" or "Voms VO"
-   * @param vo The vo to pass to the information service
-   * @return An infoservice implementing IGridInfoService interface or null
-   */
-  public static IGridInfoService getInfoService(final String voType, final IVirtualOrganization vo)
-  {
-    IGridInfoService infoService = null;
-    IGridInfoService tempInfoService = null;
-    ArrayList<IGridInfoService> infoServicesArray = getAllExistingInfoService();
-    
-    for (int i=0; infoService == null && i<infoServicesArray.size(); i++) {  
-      tempInfoService = infoServicesArray.get( i );
-      if (tempInfoService instanceof IExtentedGridInfoService)
-      {
-        if (voType.equals( ( ( IExtentedGridInfoService )tempInfoService ).getVoType() ))
-        {
-          infoService = infoServicesArray.get( i );
-          ( ( IExtentedGridInfoService )tempInfoService ).setVO( vo );
-        }
-      }
-    }
-    
-    return infoService;
-  }
   
   /**
-   * Returns all the existing information services.
-   * @return An array with all the information services or an empty array if 
-   * no information services that extend the extension point "eu.geclipse.info.infoService"
-   * exist.
+   * Returns existing information services.
+   * @return An array with all the information services found in the projects. Only one of 
+   * each type is returned. 
    */
-  public static ArrayList<IGridInfoService> getAllExistingInfoService()
+  public ArrayList<IGridInfoService> getAllExistingInfoService()
   {
     ArrayList<IGridInfoService> infoServiceArray = new ArrayList<IGridInfoService>();
     IGridInfoService infoService = null;
-    IExtensionRegistry myRegistry = Platform.getExtensionRegistry();
-    IExtensionPoint extensionPoint = myRegistry.getExtensionPoint( "eu.geclipse.info.infoService"); //$NON-NLS-1$
-    IExtension[] extensions = extensionPoint.getExtensions();
-    
-    for (int i = 0; i < extensions.length; i++)
-    {
-      IExtension extension = extensions[i];
  
-      IConfigurationElement[] elements = extension.getConfigurationElements();
-      for( IConfigurationElement element : elements ) {
-        
-        try {
-          infoService =  ( IGridInfoService )element.createExecutableExtension( "class" ); //$NON-NLS-1$
-          if (infoService != null)
-          {
+    IGridElement[] projectElements;
+    try {
+      projectElements = GridModel.getRoot().getChildren( null );
+      for (int i=0; projectElements != null && i<projectElements.length; i++)
+      {
+        IGridProject igp = (IGridProject)projectElements[i];
+        if (igp != null && !igp.isHidden() && igp.getVO() != null)
+        {
+          infoService = igp.getVO().getInfoService();
+          if (infoService != null && !exists(infoServiceArray, infoService))
             infoServiceArray.add( infoService );
-          }
-        } catch( CoreException e ) {
-          // do nothing
         }
       }
+    } catch( GridModelException e ) {
+      Activator.logException( e );
     }
     
     return infoServiceArray;
+  }
+  
+  private boolean exists(final ArrayList<IGridInfoService> infoServiceArray,
+                         final IGridInfoService infoService)
+  {
+    boolean result = false;
+    for (int i=0; infoServiceArray!= null 
+                  && i<infoServiceArray.size()
+                  && !result; i++)
+    {
+      if (infoServiceArray.get( i ).getClass().equals( infoService.getClass() ))
+        result = true;
+    }
+    
+    return result;
   }
 }
