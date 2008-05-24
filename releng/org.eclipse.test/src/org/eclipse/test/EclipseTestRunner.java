@@ -10,27 +10,26 @@
  *******************************************************************************/
 package org.eclipse.test;
 
+import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintStream;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.Dictionary;
-import java.lang.reflect.Modifier;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.Properties;
 import java.util.Vector;
 
 import junit.framework.AssertionFailedError;
+import junit.framework.JUnit4TestAdapter;
 import junit.framework.Test;
 import junit.framework.TestListener;
 import junit.framework.TestResult;
-import junit.framework.TestSuite;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Project;
@@ -85,7 +84,7 @@ public class EclipseTestRunner implements TestListener {
 	/**
      * The corresponding testsuite.
      */
-    private Test fSuite;
+    private Test testClass;
     /**
      * Formatters from the command line.
      */
@@ -121,7 +120,11 @@ public class EclipseTestRunner implements TestListener {
     /**
      * Returncode
      */
-    private int fRetCode= SUCCESS;	
+    private int fRetCode= SUCCESS;
+    /**
+     * The name of the class passed into EclipseTestRunner
+     */
+    private static String className;
     
 	/** 
 	 * The main entry point (the parameters are not yet consistent with
@@ -141,7 +144,6 @@ public class EclipseTestRunner implements TestListener {
 		System.exit(run(args));
 	}
 	public static int run(String[] args) throws IOException {
-		String className= null;
 		String testPluginName= null;
 		
         boolean haltError = false;
@@ -217,7 +219,7 @@ public class EclipseTestRunner implements TestListener {
         fHaltOnFailure= haltOnFailure;
         
         try {
-            fSuite= getTest(test.getName());
+            testClass= getTest(fJunitTest.getName());
         } catch(Exception e) {
             fRetCode = ERRORS;
             fException = e;
@@ -229,53 +231,25 @@ public class EclipseTestRunner implements TestListener {
 	 */
 	protected Test getTest(String suiteClassName) throws TestFailedException {
 		if (suiteClassName.length() <= 0) {
-			clearStatus();
 			return null;
 		}
-		Class testClass= null;
+		Class theTestClass= null;
 		try {
-			testClass= loadSuiteClass(suiteClassName);
+		  theTestClass = loadSuiteClass(suiteClassName);
 		} catch (ClassNotFoundException e) {
-		    if (e.getCause() != null) {
-		        runFailed(e.getCause());
-		    }
-			String clazz= e.getMessage();
-			if (clazz == null) 
-				clazz= suiteClassName;
-			runFailed("Class not found \""+clazz+"\"");
-			return null;
-		} catch(Exception e) {
-		    runFailed(e);
-			return null;
+		  if (e.getCause() != null) {
+		    runFailed(e.getCause());
+		  }
+		  String clazz = e.getMessage();
+		  if (clazz == null)
+		    clazz = suiteClassName;
+		  runFailed("Class not found \"" + clazz + "\"");
+		  return null;
+		} catch (Exception e) {
+		  runFailed(e);
+		  return null;
 		}
-		Method suiteMethod= null;
-		try {
-			suiteMethod= testClass.getMethod(SUITE_METHODNAME, new Class[0]);
-	 	} catch(Exception e) {
-	 		// try to extract a test suite automatically
-			clearStatus();			
-			return new TestSuite(testClass);
-		}
-	 	if (!Modifier.isStatic(suiteMethod.getModifiers())) {
-	 		runFailed("suite() method must be static");
-	 		return null;
-	 	}
-		Test test= null;
-		try {
-			test= (Test)suiteMethod.invoke(null, new Class[0]); // static method
-			if (test == null)
-				return test;
-		} 
-		catch (InvocationTargetException e) {
-			runFailed("Failed to invoke suite():" + e.getTargetException().toString());
-			return null;
-		}
-		catch (IllegalAccessException e) {
-			runFailed("Failed to invoke suite():" + e.toString());
-			return null;
-		}
-		clearStatus();
-		return test;
+		return new JUnit4TestAdapter(theTestClass);
 	}
 
 	protected void runFailed(String message) throws TestFailedException {
@@ -351,7 +325,7 @@ public class EclipseTestRunner implements TestListener {
 
             try {
 //            	pm.snapshot(1); // before
-                fSuite.run(fTestResult);
+                testClass.run(fTestResult);
             } finally {
  //           	pm.snapshot(2); // after  	
                 fSystemError.close();
