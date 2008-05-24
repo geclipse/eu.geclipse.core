@@ -63,10 +63,10 @@
 		<property name="vmargs" value=" -Xms40m -Xmx256m"/>
 	  	
 	  	<!--set default jvm to use for testing-->
-	   	<property name="jvm" value="${java.home}/bin/java" />
-  	
+	   	<property name="jvm" value="${java.home}/bin/java" />  	
+	
 		<echo message="Running ${classname}. Result file: ${junit-report-output}/${classname}.xml."/>
-
+		
 		<java fork="true" dir="." timeout="${timeout}" jvm="${jvm}" logError="true"
 			classname="org.eclipse.core.launcher.Main" output="${junit-report-output}/${classname}.txt">
 	        <classpath>
@@ -122,7 +122,7 @@
 			<arg line="-testPluginName ${plugin-name}"/>
 			<arg line="-className ${classname}"/>
 			<arg line="-nosplash"/>
-			<arg line="-suppressErrors"/>
+			<arg line="--launcher.suppressErrors"/>
 			<arg line="${consolelog}"/>
 			<arg line="-vmargs ${vmargs} ${extraVMargs} -DPLUGIN_PATH=${plugin-path}"/>
 		</exec>
@@ -138,7 +138,7 @@
 			</fileset>
 		</junitreport>
 
-		<style style="${eclipse-home}/plugins/org.eclipse.test/JUNIT.XSL"
+		<style style="${eclipse-home}/dropins/eclipse/plugins/org.eclipse.test/JUNIT.XSL"
 			basedir="${junit-report-output}"
 			includes="${classname}.result.xml"
 			destdir="${junit-report-output}" />
