@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -99,7 +99,6 @@ public class GridModelLabelProvider
     }
     
     return result;
-    
   }
   
   /* (non-Javadoc)
@@ -110,17 +109,15 @@ public class GridModelLabelProvider
     
     String resultText = null;
     
-    if( element instanceof IGridJob ) {
-      resultText = ((IGridJob)element).getJobName();
-    }
-    else if( element instanceof IGridElement ) {
-      resultText = ( ( IGridElement )element ).getName();
+    if ( element instanceof IGridJob ) {
+      resultText = ( ( IGridJob ) element ).getJobName();
+    } else if ( element instanceof IGridElement ) {
+      resultText = ( ( IGridElement ) element ).getName();
     } else {
       resultText = element.toString();
     }
     
     return resultText;
-    
   }
   
   private Image getImage( final IGridElement element ) {
@@ -134,7 +131,6 @@ public class GridModelLabelProvider
     }
     
     return result;
-    
   }
   
   private Image getRealElementImage( final IGridElement element ) {
@@ -151,25 +147,24 @@ public class GridModelLabelProvider
     }
     
     return result;
-    
   }
   
   private Image getVirtualElementImage( final IGridElement element ) {
     
     Image result = null;
     
-    if( element instanceof IVirtualOrganization ) {
+    if ( element instanceof IVirtualOrganization ) {
       result = getVoImage();
     } else if ( element instanceof IGridApplication ) {
-      result = result = getImage( APPLICATION_ELEMENT );
-    } else if( element instanceof IGridComputing ) {
+      result = getImage( APPLICATION_ELEMENT );
+    } else if ( element instanceof IGridComputing ) {
       result = getComputingImage();
-    } else if( element instanceof IGridStorage ) {
+    } else if ( element instanceof IGridStorage ) {
       result = getStorageImage();
-    } else if( element instanceof IGridService ) {
+    } else if ( element instanceof IGridService ) {
       if ( element instanceof IWrappedElement ) {
-        IGridElement wrappedElement = ((IWrappedElement) element ).getWrappedElement();
-        if (wrappedElement instanceof GridGlueService)
+        IGridElement wrappedElement = ( ( IWrappedElement ) element ).getWrappedElement();
+        if ( wrappedElement instanceof GridGlueService )
         {
           boolean isSupported = ( ( GridGlueService ) wrappedElement ).getGlueService().isSupported();
           if ( isSupported ) {
@@ -193,7 +188,6 @@ public class GridModelLabelProvider
     }
     
     return result;
-    
   }
   
   private Image getContainerMarkerImage( final ContainerMarker marker ) {
@@ -208,7 +202,6 @@ public class GridModelLabelProvider
     }
     
     return result;
-    
   }
   
   private Image getJobImage() {
@@ -219,21 +212,21 @@ public class GridModelLabelProvider
   }
   
   private Image getJobDescriptionImage() {
-    if( this.jobDescriptionImage == null ) {
+    if ( this.jobDescriptionImage == null ) {
       this.jobDescriptionImage = Activator.getDefault().getImageRegistry().get( "jobdescription" ); //$NON-NLS-1$
     }
     return this.jobDescriptionImage;
   }
   
   private Image getVirtualContainerImage() {
-    if( this.virtualContainerImage == null ) {
+    if ( this.virtualContainerImage == null ) {
       this.virtualContainerImage = Activator.getDefault().getImageRegistry().get( "virtualfolder" ); //$NON-NLS-1$
     }
     return this.virtualContainerImage;
   }
   
   private Image getVirtualElementImage() {
-    if( this.virtualElementImage == null ) {
+    if ( this.virtualElementImage == null ) {
       this.virtualElementImage = Activator.getDefault().getImageRegistry().get( "virtualfile" ); //$NON-NLS-1$
     }
     return this.virtualElementImage;
@@ -245,7 +238,7 @@ public class GridModelLabelProvider
    * @return The image for a VO.
    */
   private Image getVoImage() {
-    if( this.voImage == null ) {
+    if ( this.voImage == null ) {
       this.voImage = Activator.getDefault().getImageRegistry().get( "vo" ); //$NON-NLS-1$
     }
     return this.voImage;
@@ -266,7 +259,7 @@ public class GridModelLabelProvider
   }
   
   private Image getUnsupportedServiceImage() {
-    if( this.serviceUnsupportedImage == null ) {
+    if ( this.serviceUnsupportedImage == null ) {
       this.serviceUnsupportedImage = Activator.getDefault()
         .getImageRegistry()
         .get( "service_unsupported" ); //$NON-NLS-1$
@@ -280,7 +273,7 @@ public class GridModelLabelProvider
    * @return The image for a Grid storage.
    */
   private Image getStorageImage() {
-    if( this.storageImage == null ) {
+    if ( this.storageImage == null ) {
       this.storageImage = Activator.getDefault()
         .getImageRegistry()
         .get( "storage" ); //$NON-NLS-1$
@@ -294,7 +287,7 @@ public class GridModelLabelProvider
    * @return The image for a Grid computing.
    */
   private Image getComputingImage() {
-    if( this.computingImage == null ) {
+    if ( this.computingImage == null ) {
       this.computingImage = Activator.getDefault()
         .getImageRegistry()
         .get( "computing" ); //$NON-NLS-1$
@@ -312,7 +305,6 @@ public class GridModelLabelProvider
     }
     
     return image;
-    
   }
   
   private static Image loadImage( final String path ) {
