@@ -5,9 +5,7 @@ import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.ActionContributionItem;
-import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IContributionItem;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -39,7 +37,7 @@ public class TransformMenu
     if ( ( this.actions != null ) && ( this.actions.size() > 0 ) ) {
       result = new IContributionItem[ this.actions.size() ];
       for ( int i = 0 ; i < this.actions.size() ; i++ ) {
-        result[ i ] = new ActionContributionItem( actions.get( i ) );
+        result[ i ] = new ActionContributionItem( this.actions.get( i ) );
       }
     }
     
