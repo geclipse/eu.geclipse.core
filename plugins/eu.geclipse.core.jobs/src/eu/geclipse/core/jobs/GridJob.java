@@ -164,7 +164,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
    * @throws GridModelException
    */
   public void create( final IFolder jobFolder,
-                      final GridJobID id,
+                      final IGridJobID id,
                       final IGridJobService jobSrvce, final IGridJobDescription description, final String uniqueJobName )
     throws GridModelException
   {
@@ -172,7 +172,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     this.jobStatusFile = jobFolder.getFile( JOBSTATUS_FILENAME );
     this.jobIdFile = jobFolder.getFile( JOBID_FILENAME );
     this.jobInfoFile = jobFolder.getFile( JOBINFO_FILENAME );
-    this.jobID = id;
+    this.jobID = (GridJobID)id;
     this.jobService = jobSrvce;
     this.jobDescription = description;
     this.jobStatus = new GridJobStatus( Messages.getString( "GridJob.jobStatusSubmitted" ), //$NON-NLS-1$
