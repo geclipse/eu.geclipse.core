@@ -31,6 +31,7 @@ import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.IWrappedElement;
+import eu.geclipse.core.model.impl.ContainerMarker;
 import eu.geclipse.core.reporting.ProblemException;
 
 public class ComputingWrapper
@@ -54,7 +55,7 @@ public class ComputingWrapper
    * @see eu.geclipse.core.model.impl.AbstractGridContainer#canContain(eu.geclipse.core.model.IGridElement)
    */
   public boolean canContain( final IGridElement element ) {
-    return element instanceof IGridApplication;
+    return (element instanceof IGridApplication || element instanceof ContainerMarker);
   }
 
   /*
@@ -108,9 +109,16 @@ public class ComputingWrapper
       if ( manager != null ) {
         try {
           IGridApplication[] applications = manager.getApplications( this, monitor );
+          if ((applications != null) && (applications.length>0)) {
           for ( IGridApplication app : applications ) {
             addElement( app );
           }
+          }
+            else {
+              addElement( new ContainerMarker( this,
+                                               ContainerMarker.MarkerType.INFO,
+                                               "No matching elements found" ) ); //$NON-NLS-1$
+            }
         } catch ( ProblemException pExc ) {
           throw new GridModelException( pExc.getProblem() );
         }
