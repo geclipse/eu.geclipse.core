@@ -377,7 +377,7 @@ public class PosixApplicationSection extends JsdlAdaptersFactory {
       FileNameType fileName = null;
       public void modifyText( final ModifyEvent e ) {
         checkPosixApplicationElement();
-        if ( !PosixApplicationSection.this.txtOutput.getText().equals( "" ) ) { //$NON-NLS-1$
+        if ( !PosixApplicationSection.this.txtOutput.getText().equals( EMPTY_STRING ) ) { 
           if (null == this.fileName) {
             this.fileName = PosixFactory.eINSTANCE.createFileNameType();
           }

@@ -1,0 +1,540 @@
+/**
+ * 
+ */
+package eu.geclipse.jsdl.ui.internal.pages.sections;
+
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Collection;
+
+import org.eclipse.emf.common.util.TreeIterator;
+import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
+import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.forms.widgets.FormToolkit;
+import org.eclipse.ui.forms.widgets.TableWrapData;
+
+import eu.geclipse.jsdl.model.base.ApplicationType;
+import eu.geclipse.jsdl.model.base.JobDefinitionType;
+import eu.geclipse.jsdl.model.base.JobDescriptionType;
+import eu.geclipse.jsdl.model.base.JsdlPackage;
+import eu.geclipse.jsdl.model.posix.DirectoryNameType;
+import eu.geclipse.jsdl.model.posix.DocumentRoot;
+import eu.geclipse.jsdl.model.posix.LimitsType;
+import eu.geclipse.jsdl.model.posix.POSIXApplicationType;
+import eu.geclipse.jsdl.model.posix.PosixFactory;
+import eu.geclipse.jsdl.model.posix.PosixPackage;
+import eu.geclipse.jsdl.ui.adapters.jsdl.JsdlAdaptersFactory;
+import eu.geclipse.jsdl.ui.internal.pages.FormSectionFactory;
+import eu.geclipse.jsdl.ui.internal.pages.Messages;
+
+
+/**
+ * @author nloulloud
+ *
+ */
+public class AdditionalPosixElementSection extends JsdlAdaptersFactory {
+  
+  private static final String EMPTY_STRING = ""; //$NON-NLS-1$ 
+  protected Label lblWallTimeLimit = null;
+  protected Label lblFileSizeLimit = null;
+  protected Label lblCoreDumpLimit = null;
+  protected Label lblDataSegmentLimit = null;
+  protected Label lblLockedMemoryLimit = null;
+  protected Label lblMemoryLimit = null;
+  protected Label lblOpenDescriptorsLimit = null;
+  protected Label lblPipeSizeLimit = null;
+  protected Label lblStackSizeLimit = null;
+  protected Label lblCPUTimeLimit = null;
+  protected Label lblProcessCountLimit = null;
+  protected Label lblVirtualMemoryLimit = null;
+  protected Label lblThreadCountLimit = null;
+  protected Label lblUserName = null;
+  protected Label lblGroupName = null;
+  protected Label lblUnits = null;
+  protected Label lblWorkingDirectory = null;
+  protected Text txtWorkingDirectory = null;
+  protected Text txtWallTimeLimit = null;
+  protected Text txtFileSizeLimit = null;
+  protected Text txtCoreDumpLimit = null;
+  protected Text txtDataSegmentLimit = null;
+  protected Text txtLockedMemoryLimit = null;
+  protected Text txtMemoryLimit = null;
+  protected Text txtOpenDescriptorsLimit = null;
+  protected Text txtPipeSizeLimit = null;
+  protected Text txtStackSizeLimit = null;
+  protected Text txtCPUTimeLimit = null;
+  protected Text txtProcessCountLimit = null;
+  protected Text txtVirtualMemoryLimit = null;
+  protected Text txtThreadCountLimit = null;
+  protected Text txtUserName = null;
+  protected Text txtGroupName = null;
+  protected JobDefinitionType jobDefinitionType = null;
+  protected JobDescriptionType jobDescriptionType = null;
+  protected ApplicationType applicationType = null;
+  protected DocumentRoot documentRoot = PosixFactory.eINSTANCE.createDocumentRoot();
+  protected POSIXApplicationType posixApplicationType = null;
+  
+  private boolean isNotifyAllowed = true;
+  private boolean adapterRefreshed = false;
+  
+  
+  
+  public AdditionalPosixElementSection( final Composite parent, final FormToolkit toolkit ) {
+
+    createSection( parent, toolkit );
+    
+  }
+  
+  
+  private void createSection( final Composite parent, final FormToolkit toolkit ) {
+    
+    String sectionTitle = Messages.getString( "JobApplicationPage_additionalPosixApplElementTitle" ); //$NON-NLS-1$
+    String sectionDescripiton = Messages.getString( "JobApplicationPage_additionalPosixApplDescr" ); //$NON-NLS-1$
+    TableWrapData td;
+    Composite client = FormSectionFactory.createExpandableSection( toolkit,
+                                                                   parent,
+                                                                   sectionTitle,
+                                                                   sectionDescripiton,
+                                                                   3,
+                                                                   true );
+    
+    
+    /* ========================= Working Directory =========================== */
+    this.lblWorkingDirectory = toolkit.createLabel( client,
+                                                    Messages.getString(
+                                                               "JobApplicationPage_WorkingDirectory" ) ); //$NON-NLS-1$
+    
+    this.txtWorkingDirectory = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    td = new TableWrapData( TableWrapData.FILL_GRAB );
+    this.txtWorkingDirectory.setLayoutData( td );
+    
+    this.txtWorkingDirectory.addModifyListener( new ModifyListener() {
+      DirectoryNameType directoryNameType;
+
+      public void modifyText( final ModifyEvent e ) {
+        
+        if ( !AdditionalPosixElementSection.this.txtWorkingDirectory.getText().equals( EMPTY_STRING ) ){
+          if (null == this.directoryNameType) {
+            this.directoryNameType = PosixFactory.eINSTANCE.createDirectoryNameType();
+          }
+          checkPosixApplicationElement();          
+          this. directoryNameType.setValue( AdditionalPosixElementSection.this.txtWorkingDirectory.getText() );
+          this.directoryNameType = (DirectoryNameType) checkProxy( this.directoryNameType );
+          AdditionalPosixElementSection.this.posixApplicationType.setWorkingDirectory( this.directoryNameType );
+        }
+        else{
+          if (null != this.directoryNameType) {
+            this.directoryNameType = (DirectoryNameType) checkProxy( this.directoryNameType );
+            this.directoryNameType = null;
+            AdditionalPosixElementSection.this.posixApplicationType.setWorkingDirectory (null );
+          }
+
+        }
+        contentChanged();
+        
+     }
+      
+      
+    });
+    this.lblUnits = toolkit.createLabel( client, Messages.getString( "JobApplicationPage_empty" ) ); //$NON-NLS-1$
+    
+    
+    /* ============================ Wall Time Limit ========================= */
+    this.lblWallTimeLimit = toolkit.createLabel( client,
+                                              Messages.getString( "JobApplicationPage_WallTimeLimit" ) ); //$NON-NLS-1$
+    this.txtWallTimeLimit = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$-NLS-1$
+    td = new TableWrapData( TableWrapData.FILL_GRAB );
+    this.txtWallTimeLimit.setLayoutData( td );
+    this.txtWallTimeLimit.addModifyListener( new ModifyListener() {
+    LimitsType limitsType ;
+    BigInteger bigInteger ;
+
+      public void modifyText( final ModifyEvent e ) {
+        
+        if ( !AdditionalPosixElementSection.this.txtWallTimeLimit.getText().equals( EMPTY_STRING ) ){
+          if ( null == this.limitsType) {
+            this.limitsType = PosixFactory.eINSTANCE.createLimitsType();
+          }
+         
+          checkPosixApplicationElement();          
+          this.bigInteger = new BigInteger(AdditionalPosixElementSection.this.txtWallTimeLimit.getText());
+          this.limitsType.setValue( this.bigInteger );
+          this.limitsType = (LimitsType) checkProxy( this.limitsType );
+          AdditionalPosixElementSection.this.posixApplicationType.setWallTimeLimit( this.limitsType );
+        }
+        else{
+          if (null != this.limitsType) {
+            this.limitsType = (LimitsType) checkProxy( this.limitsType );
+            this.limitsType = null;
+            AdditionalPosixElementSection.this.posixApplicationType.setWallTimeLimit (null );
+          }
+
+        }
+        contentChanged();
+        
+     }
+      
+      
+    });
+    this.lblUnits = toolkit.createLabel( client, Messages.getString( "JobApplicationPage_time" ) ); //$NON-NLS-1$
+
+    
+    /* ============================ File Size Limit ========================== */
+    this.lblFileSizeLimit = toolkit.createLabel( client,
+                                                 Messages.getString( 
+                                                                  "JobApplicationPage_FileSizeLimit" ) ); //$NON-NLS-1$
+    this.txtFileSizeLimit = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    td = new TableWrapData( TableWrapData.FILL_GRAB );
+    this.txtFileSizeLimit.setLayoutData( td );
+//    this.posixApplicationTypeAdapter.attachToFileSizeLimit( this.txtFileSizeLimit );
+    this.lblUnits = toolkit.createLabel( client, Messages.getString( "JobApplicationPage_size" ) ); //$NON-NLS-1$
+
+    
+     
+    /* ============================ Core Dump Limit ========================== */
+    this.lblCoreDumpLimit = toolkit.createLabel( client,
+                                                 Messages.getString( 
+                                                                  "JobApplicationPage_CoreDumpLimit" ) ); //$NON-NLS-1$
+    this.txtCoreDumpLimit = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    td = new TableWrapData( TableWrapData.FILL_GRAB );
+    this.txtCoreDumpLimit.setLayoutData( td );
+//    this.posixApplicationTypeAdapter.attachToCoreDumpLimit( this.txtCoreDumpLimit );
+    this.lblUnits = toolkit.createLabel( client, Messages.getString( "JobApplicationPage_size" ) ); //$NON-NLS-1$
+     
+     
+    /* ==========================Data Segment Limit ========================== */
+    this.lblDataSegmentLimit = toolkit.createLabel( client,
+                                                    Messages.getString( 
+                                                               "JobApplicationPage_DataSegmentLimit" ) ); //$NON-NLS-1$
+    
+    this.txtDataSegmentLimit = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    td = new TableWrapData( TableWrapData.FILL_GRAB );
+    this.txtDataSegmentLimit.setLayoutData( td );
+//    this.posixApplicationTypeAdapter.attachToDataSegmentLimit( this.txtDataSegmentLimit );
+    this.lblUnits = toolkit.createLabel( client, Messages.getString( "JobApplicationPage_size" ) ); //$NON-NLS-1$
+    
+    
+    /* ======================== Locked Memory Limit ========================== */
+    this.lblLockedMemoryLimit = toolkit.createLabel( client,
+                                                     Messages.getString( 
+                                                              "JobApplicationPage_LockedMemoryLimit" ) ); //$NON-NLS-1$
+    this.txtLockedMemoryLimit = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    td = new TableWrapData( TableWrapData.FILL_GRAB );
+    this.txtLockedMemoryLimit.setLayoutData( td );
+//    this.posixApplicationTypeAdapter.attachToLockedMemoryLimit( this.txtLockedMemoryLimit );
+    this.lblUnits = toolkit.createLabel( client,  Messages.getString( "JobApplicationPage_size" ) ); //$NON-NLS-1$
+    
+    
+    /* =============================== Memory Limit ========================== */
+    this.lblMemoryLimit = toolkit.createLabel( client,
+                                               Messages.getString( "JobApplicationPage_MemoryLimit" ) ); //$NON-NLS-1$
+    this.txtMemoryLimit = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    td = new TableWrapData( TableWrapData.FILL_GRAB );
+    this.txtMemoryLimit.setLayoutData( td );
+//    this.posixApplicationTypeAdapter.attachToMemoryLimit( this.txtMemoryLimit );
+    this.lblUnits = toolkit.createLabel( client, Messages.getString( "JobApplicationPage_size" ) ); //$NON-NLS-1$
+    
+    
+    /* ====================== Open Descriptors Limit ========================= */
+    this.lblOpenDescriptorsLimit = toolkit.createLabel( client,
+                                                        Messages.getString( 
+                                                           "JobApplicationPage_OpenDescriptorsLimit" ) ); //$NON-NLS-1$
+    this.txtOpenDescriptorsLimit = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    td = new TableWrapData( TableWrapData.FILL_GRAB );
+    this.txtOpenDescriptorsLimit.setLayoutData( td );
+//    this.posixApplicationTypeAdapter.attachToOpenDesciptorsLimit( this.txtOpenDescriptorsLimit );
+    this.lblUnits = toolkit.createLabel( client, Messages.getString( "JobApplicationPage_empty" ) ); //$NON-NLS-1$
+    
+    
+    /* ============================ Pipe Size Limit ========================== */
+    this.lblPipeSizeLimit = toolkit.createLabel( client,
+                                                 Messages.getString( 
+                                                                  "JobApplicationPage_PipeSizeLimit" ) ); //$NON-NLS-1$
+    this.txtPipeSizeLimit = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    td = new TableWrapData( TableWrapData.FILL_GRAB );
+    this.txtPipeSizeLimit.setLayoutData( td );
+//    this.posixApplicationTypeAdapter.attachToPipeSizeLimit( this.txtPipeSizeLimit );
+    this.lblUnits = toolkit.createLabel( client, Messages.getString( "JobApplicationPage_size" ) ); //$NON-NLS-1$
+    
+    /* =========================== Stack Size Limit ========================== */
+    this.lblStackSizeLimit = toolkit.createLabel( client,
+                                                  Messages.getString( 
+                                                                 "JobApplicationPage_StackSizeLimit" ) ); //$NON-NLS-1$
+    this.txtStackSizeLimit = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    td = new TableWrapData( TableWrapData.FILL_GRAB );
+    this.txtStackSizeLimit.setLayoutData( td );
+//    this.posixApplicationTypeAdapter.attachToStackSizeLimit( this.txtStackSizeLimit );
+    this.lblUnits = toolkit.createLabel( client, Messages.getString( "JobApplicationPage_size" ) ); //$NON-NLS-1$
+    
+    /* ============================= CPU Time Limit ========================== */
+    this.lblCPUTimeLimit = toolkit.createLabel( client,
+                                                Messages.getString( "JobApplicationPage_CPUTimeLimit" ) ); //$NON-NLS-1$
+    this.txtCPUTimeLimit = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    td = new TableWrapData( TableWrapData.FILL_GRAB );
+    this.txtCPUTimeLimit.setLayoutData( td );
+//    this.posixApplicationTypeAdapter.attachToCPUTimeLimit( this.txtCPUTimeLimit );
+    this.lblUnits = toolkit.createLabel( client, Messages.getString( "JobApplicationPage_time" ) ); //$NON-NLS-1$
+    
+    
+    /* ====================== Process Count Limit============================ */
+    this.lblProcessCountLimit = toolkit.createLabel( client,
+                                                     Messages.getString( 
+                                                             "JobApplicationPage_ProcessCountLimit" ) ); //$NON-NLS-1$
+    this.txtProcessCountLimit = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    td = new TableWrapData( TableWrapData.FILL_GRAB );
+    this.txtProcessCountLimit.setLayoutData( td );
+//    this.posixApplicationTypeAdapter.attachToProcessCountLimit( this.txtProcessCountLimit );
+    this.lblUnits = toolkit.createLabel( client, Messages.getString( "JobApplicationPage_process" ) ); //$NON-NLS-1$
+    
+    
+    /* ============================= Virtual Memory Limit ==================== */
+    this.lblVirtualMemoryLimit = toolkit.createLabel( client,
+                                                      Messages.getString( 
+                                                             "JobApplicationPage_VirtualMemoryLimit" ) ); //$NON-NLS-1$
+    this.txtVirtualMemoryLimit = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    td = new TableWrapData( TableWrapData.FILL_GRAB );
+    this.txtVirtualMemoryLimit.setLayoutData( td );
+//    this.posixApplicationTypeAdapter.attachToVirtualMemoryLimit( this.txtVirtualMemoryLimit );
+    this.lblUnits = toolkit.createLabel( client, Messages.getString( "JobApplicationPage_size" ) ); //$NON-NLS-1$
+    
+    
+    /* ========================= Thread Count Limit ========================== */
+    this.lblThreadCountLimit = toolkit.createLabel( client,
+                                                    Messages.getString( 
+                                                                        "JobApplicationPage_ThreadCountLimit" ) ); //$NON-NLS-1$
+    this.txtThreadCountLimit = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    td = new TableWrapData( TableWrapData.FILL_GRAB );
+    this.txtThreadCountLimit.setLayoutData( td );
+//    this.posixApplicationTypeAdapter.attachToThreadCountLimit( this.txtThreadCountLimit );
+    this.lblUnits = toolkit.createLabel( client, Messages.getString( "JobApplicationPage_threads" ) ); //$NON-NLS-1$
+    
+    /* ============================= User Name Limit ======================== */
+    this.lblUserName = toolkit.createLabel( client,
+                                            Messages.getString( "JobApplicationPage_UserName" ) ); //$NON-NLS-1$
+    this.txtUserName = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    td = new TableWrapData( TableWrapData.FILL_GRAB );
+    this.txtUserName.setLayoutData( td );
+//    this.posixApplicationTypeAdapter.attachToUserName( this.txtUserName );
+    this.lblUnits = toolkit.createLabel( client, Messages.getString( "JobApplicationPage_empty" ) ); //$NON-NLS-1$
+    
+    /* ============================= Group Name Limit ======================== */
+    this.lblGroupName = toolkit.createLabel( client,
+                                             Messages.getString( "JobApplicationPage_GroupName" ) ); //$NON-NLS-1$
+    this.txtGroupName = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    td = new TableWrapData( TableWrapData.FILL_GRAB );
+    this.txtGroupName.setLayoutData( td );
+//    this.posixApplicationTypeAdapter.attachToGroupName( this.txtGroupName );
+    this.lblUnits = toolkit.createLabel( client, Messages.getString( "JobApplicationPage_empty" ) ); //$NON-NLS-1$
+    
+    toolkit.paintBordersFor( client );
+    
+  }
+  
+  
+  protected void contentChanged() {
+    
+    if ( this.isNotifyAllowed ){
+      fireNotifyChanged( null );
+    }
+    
+  }
+  
+  
+  /**
+   * @param jobDefinition The JSDL Job Definition element.
+   */
+  public void setInput( final JobDefinitionType jobDefinition ) {
+    
+    this.adapterRefreshed = true;
+    if( null != jobDefinition ) {
+      this.jobDefinitionType = jobDefinition;
+      
+      TreeIterator<EObject> iterator = this.jobDefinitionType.eAllContents();
+      
+      while ( iterator.hasNext (  )  )  {  
+        
+        EObject testType = iterator.next();         
+        
+        if (testType instanceof JobDescriptionType) {
+          this.jobDescriptionType = (JobDescriptionType) testType;
+        }
+        else if (testType instanceof ApplicationType) {
+          this.applicationType = (ApplicationType) testType;
+        }
+        else if ( testType instanceof POSIXApplicationType ) {
+          this.posixApplicationType = (POSIXApplicationType) testType;  
+         
+        } 
+        
+      }
+      
+      fillFields();
+    }
+    
+  }
+  
+  
+  protected void checkApplicationElement() {
+    
+    EStructuralFeature eStructuralFeature = this.jobDescriptionType.eClass()
+          .getEStructuralFeature( JsdlPackage.JOB_DESCRIPTION_TYPE__APPLICATION );
+    
+    /*
+     * Check if the Application element is not set. If not set then set it to its 
+     * container (JobDescriptionType).
+     */
+    if (!this.jobDescriptionType.eIsSet( eStructuralFeature )) {      
+      this.jobDescriptionType.eSet( eStructuralFeature, this.applicationType );
+    }
+    /* 
+     * If the Application Element is set, check for any possible contents which may
+     * be set. If none of the above are true, then delete the Resources Element from it's
+     * container (JobDescriptionType).
+     */
+    else {
+      if ( this.applicationType.eContents().size() == 0) {
+        EcoreUtil.remove( this.applicationType );
+      }
+    }
+  }
+
+  
+  
+  protected void checkPosixApplicationElement() {
+    
+    EStructuralFeature eStructuralFeature = this.documentRoot.eClass()
+    .getEStructuralFeature( PosixPackage.DOCUMENT_ROOT__POSIX_APPLICATION );
+    
+    
+    Collection<POSIXApplicationType> collection = new ArrayList<POSIXApplicationType>();
+    checkApplicationElement();
+    collection.add( this.posixApplicationType);
+        
+    if ( !this.applicationType.eIsSet( eStructuralFeature ) ){      
+      this.applicationType.eSet( eStructuralFeature, collection );
+
+
+    }
+  }
+  
+  
+  private void fillFields() {
+    
+    this.isNotifyAllowed = false;
+    
+    if( null != this.posixApplicationType ) {
+      if( null != this.posixApplicationType.getWorkingDirectory() ){
+        this.txtWorkingDirectory.setText( this.posixApplicationType.getWorkingDirectory().getValue() );
+      }else{
+        this.txtWorkingDirectory.setText( EMPTY_STRING );
+      }
+      if ( null != this.posixApplicationType.getWallTimeLimit() ) {
+        this.txtWallTimeLimit.setText( this.posixApplicationType.getWallTimeLimit().getValue().toString() );
+      }else{
+        this.txtWallTimeLimit.setText( EMPTY_STRING );
+      }
+      if ( null != this.posixApplicationType.getFileSizeLimit() ) {
+        this.txtFileSizeLimit.setText( this.posixApplicationType.getInput().getValue() );
+      }else{
+        this.txtFileSizeLimit.setText( EMPTY_STRING );
+      }
+      if ( null != this.posixApplicationType.getCoreDumpLimit() ) {
+        this.txtCoreDumpLimit.setText( this.posixApplicationType.getCoreDumpLimit().getValue().toString() );
+      }else{
+        this.txtCoreDumpLimit.setText( EMPTY_STRING );
+      }
+      if ( null != this.posixApplicationType.getDataSegmentLimit() ) {
+        this.txtDataSegmentLimit.setText( this.posixApplicationType.getDataSegmentLimit().getValue().toString() );
+      }else{
+        this.txtDataSegmentLimit.setText( EMPTY_STRING );
+      }
+      if ( null != this.posixApplicationType.getLockedMemoryLimit() ) {
+        this.txtLockedMemoryLimit.setText( this.posixApplicationType.getLockedMemoryLimit().getValue().toString() );
+      }else{
+        this.txtLockedMemoryLimit.setText( EMPTY_STRING );
+      }
+      if ( null != this.posixApplicationType.getMemoryLimit() ) {
+        this.txtMemoryLimit.setText( this.posixApplicationType.getMemoryLimit().getValue().toString() );
+      }else{
+        this.txtMemoryLimit.setText( EMPTY_STRING );
+      }
+      if ( null != this.posixApplicationType.getOpenDescriptorsLimit() ) {
+        this.txtOpenDescriptorsLimit.setText(this.posixApplicationType.getOpenDescriptorsLimit().getValue().toString());
+      }else{
+        this.txtOpenDescriptorsLimit.setText( EMPTY_STRING );
+      }
+      if ( null != this.posixApplicationType.getPipeSizeLimit() ) {
+        this.txtPipeSizeLimit.setText(this.posixApplicationType.getPipeSizeLimit().getValue().toString() );
+      }else{
+        this.txtPipeSizeLimit.setText( EMPTY_STRING );
+      }
+      if ( null != this.posixApplicationType.getStackSizeLimit() ) {
+        this.txtStackSizeLimit.setText( this.posixApplicationType.getStackSizeLimit().getValue().toString() );
+      }else{
+        this.txtStackSizeLimit.setText( EMPTY_STRING );
+      }
+      if ( null != this.posixApplicationType.getCPUTimeLimit() ) {
+        this.txtCPUTimeLimit.setText( this.posixApplicationType.getCPUTimeLimit().getValue().toString() );
+      }else{
+        this.txtCPUTimeLimit.setText( EMPTY_STRING );
+      }
+      if ( null != this.posixApplicationType.getProcessCountLimit() ) {
+        this.txtProcessCountLimit.setText( this.posixApplicationType.getProcessCountLimit().getValue().toString() );
+      }else{
+        this.txtProcessCountLimit.setText( EMPTY_STRING );
+      }
+      if ( null != this.posixApplicationType.getVirtualMemoryLimit() ) {
+        this.txtVirtualMemoryLimit.setText( this.posixApplicationType.getVirtualMemoryLimit().getValue().toString() );
+      }else{
+        this.txtVirtualMemoryLimit.setText( EMPTY_STRING );
+      }
+      if ( null != this.posixApplicationType.getThreadCountLimit() ) {
+        this.txtThreadCountLimit.setText( this.posixApplicationType.getThreadCountLimit().getValue().toString() );
+      }else{
+        this.txtThreadCountLimit.setText( EMPTY_STRING );
+      }
+      if ( null != this.posixApplicationType.getGroupName() ) {
+        this.txtGroupName.setText( this.posixApplicationType.getGroupName().getValue() );
+      }else{
+        this.txtGroupName.setText( EMPTY_STRING );
+      }
+      if ( null != this.posixApplicationType.getUserName() ) {
+        this.txtUserName.setText( this.posixApplicationType.getUserName().getValue() );
+      }else{
+        this.txtUserName.setText( EMPTY_STRING );
+      }
+      
+    }
+    this.isNotifyAllowed = true;
+    
+    if( this.adapterRefreshed ) {
+      this.adapterRefreshed = false;
+    }
+    
+  }
+  
+  
+  /*
+   * Check if the EObject is lazy loaded.
+   */
+  protected EObject checkProxy( final EObject refEObject ) {
+    
+    EObject eObject = refEObject;
+    
+    if (eObject != null && eObject.eIsProxy() ) {
+     
+      eObject =  EcoreUtil.resolve( eObject, this.posixApplicationType );
+    }
+        
+    return eObject;
+    
+  }
+  
+}
