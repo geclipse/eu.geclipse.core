@@ -25,7 +25,7 @@ import org.junit.Test;
  * Test for the <code>eu.geclipse.gvid.internal.Connection</code>
  * class.
  */
-public class Connection_Test {
+public class Connection_Unusedtest {
   private PipedInputStream inIn;
   private PipedOutputStream inOut;
   private PipedInputStream outIn;
