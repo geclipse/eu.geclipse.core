@@ -98,7 +98,11 @@
 	      <topic
 	        label="Manually updating Job Status"
 	        href="html/concepts/jobmanagement/submittedJobManagement/manualStatusUpdate.html">
-	      </topic>    
+	      </topic>
+	      <topic
+	        label="Deleteting job / Releasing job resources"
+	        href="html/concepts/jobmanagement/submittedJobManagement/deleteJob.html">
+	      </topic>
     </topic>
     <topic 
       label="Creating a Grid Workflow"
