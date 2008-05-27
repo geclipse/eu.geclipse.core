@@ -386,7 +386,45 @@ implements IGridModelListener, java.io.Serializable {
     
     GridModel.getRoot().removeGridModelListener( glueIndexInstance );
     glueIndexInstance=null;
-   
+    /*
+    glueIndexInstance.glueBatchJob.clear();
+    glueIndexInstance.glueBatchJob.clear();
+    glueIndexInstance.glueBatchQueue.clear();
+    glueIndexInstance.glueBatchSystem.clear();
+    glueIndexInstance.glueCE.clear();
+    glueIndexInstance.glueCEAccessControlBaseRule.clear();
+    glueIndexInstance.glueCEContactString.clear();
+    glueIndexInstance.glueCESEBind.clear();
+    glueIndexInstance.glueCEVOView.clear();
+    glueIndexInstance.glueCEVOViewAccessControlBaseRule.clear();
+    glueIndexInstance.glueCluster.clear();
+    glueIndexInstance.glueHost.clear();
+    glueIndexInstance.glueHostLocalFileSystem.clear();
+    glueIndexInstance.glueHostNetworkAdapter.clear();
+    glueIndexInstance.glueHostPoolAccount.clear();
+    glueIndexInstance.glueHostProcess.clear();
+    glueIndexInstance.glueHostRemoteFileSystem.clear();
+    glueIndexInstance.glueHostRole.clear();
+    glueIndexInstance.glueSA.clear();
+    glueIndexInstance.glueSAAccessControlBaseRule.clear();
+    glueIndexInstance.glueSE.clear();
+    glueIndexInstance.glueSEAccessProtocol.clear();
+    glueIndexInstance.glueSEAccessProtocolCapability.clear();
+    glueIndexInstance.glueService.clear();
+    glueIndexInstance.glueServiceAccessControlRule.clear();
+    glueIndexInstance.glueServiceAssociation.clear();
+    glueIndexInstance.glueServiceData.clear();
+    glueIndexInstance.glueServiceOwner.clear();
+    glueIndexInstance.glueServiceStatus.clear();
+    glueIndexInstance.glueSite.clear();
+    glueIndexInstance.glueSiteInfo.clear();
+    glueIndexInstance.glueSiteSponsor.clear();
+    glueIndexInstance.glueSL.clear();
+    glueIndexInstance.glueSubCluster.clear();
+    glueIndexInstance.glueSubClusterLocation.clear();
+    glueIndexInstance.glueSubClusterSoftwareRunTimeEnvironment.clear();
+    glueIndexInstance.glueVO.clear();
+   */
     IPath serPath = getGridInfoLocation();
     serPath.toFile().delete(); 
     

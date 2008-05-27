@@ -27,6 +27,7 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridInfoService;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.info.InfoServiceFactory;
+import eu.geclipse.info.glue.AbstractGlueTable;
 import eu.geclipse.info.glue.GlueIndex;
 import eu.geclipse.info.internal.Activator;
 
@@ -37,9 +38,11 @@ import eu.geclipse.info.internal.Activator;
  * @author tnikos
  *
  */
-public class FetchJob extends Job {
+public class FetchJob extends Job implements IGlueInfoStore{
 
   private static FetchJob instance = null;
+  private ArrayList<IGlueStoreChangeListerner> listeners = new ArrayList<IGlueStoreChangeListerner>();
+  
   /**
    * The constructor of the FetchJob
    * @param name The name to be displayed in the progress view
@@ -48,6 +51,11 @@ public class FetchJob extends Job {
     super( name );
   }
 
+  /**
+   * Get a singleton instance of FetchJob
+   * @param name the name that will be displayed in the progress view
+   * @return a FetchJob
+   */
   public static FetchJob getInstance(final String name)
   {
     if (instance == null)
@@ -60,8 +68,9 @@ public class FetchJob extends Job {
   @Override
   protected IStatus run( final IProgressMonitor monitor ) {
    
-    GlueIndex.getInstance(); // Initialize the glue index and set the listener.
     GlueIndex.drop(); // Clear the glue index.
+    GlueIndex.getInstance(); // Initialize the glue index and set the listener.
+    boolean hasNotified = false;
     
     Status status = new Status( IStatus.ERROR,
                                 "eu.geclipse.glite.info", //$NON-NLS-1$
@@ -111,15 +120,70 @@ public class FetchJob extends Job {
         IExtentedGridInfoService infoService = ( IExtentedGridInfoService )infoServicesArray.get( i );
         if (infoService != null && infoService.getStore() != null)
         {
+          hasNotified = true;
           infoService.getStore().notifyListeners( null );
         }
       }
     }
+    
+    // If no other info service has been notified that the glue store has changed we send a 
+    // notification to the listeners of FetchJob. 
+    if (!hasNotified)
+      this.notifyListeners( null );
     
     monitor.done();
     status = new Status( IStatus.OK,
                          "eu.geclipse.glite.info", //$NON-NLS-1$
                          "Information data fetched successfully." ); //$NON-NLS-1$
     return status;
+  }
+
+  /**
+   * Adds a listener that will be notified when no info service has been notified which happens
+   * when no projects are created.
+   */
+  public void addListener( final IGlueStoreChangeListerner listener, final String objectName )
+  {
+    this.listeners.add( listener );
+    
+  }
+
+  public void addStateListener( IGlueStoreStateChangeListerner listener ) {
+    // TODO Auto-generated method stub
+    
+  }
+
+  /**
+   * 
+   */
+  public void notifyListeners( ArrayList<AbstractGlueTable> agtList ) {
+    for( IGlueStoreChangeListerner listener : this.listeners ) {
+      listener.infoChanged( agtList );
+    }
+    
+  }
+
+  public void removeAllListeners() {
+    // TODO Auto-generated method stub
+    
+  }
+
+  public void removeAllStateListeners() {
+    // TODO Auto-generated method stub
+    
+  }
+
+  public synchronized void removeListener( IGlueStoreChangeListerner listener,
+                              String resourceTypeName )
+  {
+    if(this.listeners.contains( listener )){
+      this.listeners.remove( listener );
+    }
+    
+  }
+
+  public void removeStateListener( IGlueStoreStateChangeListerner listener ) {
+    // TODO Auto-generated method stub
+    
   }
 }

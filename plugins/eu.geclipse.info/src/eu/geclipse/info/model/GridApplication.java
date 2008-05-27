@@ -17,6 +17,7 @@
 package eu.geclipse.info.model;
 
 import java.net.URI;
+import java.util.ArrayList;
 
 import eu.geclipse.core.model.IGridApplication;
 import eu.geclipse.core.model.IGridComputing;
@@ -28,19 +29,24 @@ public class GridApplication extends GridGlueElement implements IGridApplication
 
   private URI script = null;
   
-  private IGridComputing[] computing;
+  private ArrayList<IGridComputing> computing = new ArrayList<IGridComputing>();
   private IGridContainer parent;
   
-  public GridApplication( final IGridContainer parent, 
-                          final IGridComputing[] computing,
+  public GridApplication( final IGridContainer parent,
                           final GlueSubClusterSoftwareRunTimeEnvironment software ) {
     super( parent, software );
-    this.computing = computing;
+    //this.computing = computing;
     this.parent = parent;
   }
   
+  public void addComputing(final IGridComputing computing)
+  {
+    if (computing != null)
+      this.computing.add( computing );
+  }
+  
   public IGridComputing[] getComputing() {
-    return this.computing;
+    return this.computing.toArray( new IGridComputing[this.computing.size()] );
   }
 
   public URI getScript() {

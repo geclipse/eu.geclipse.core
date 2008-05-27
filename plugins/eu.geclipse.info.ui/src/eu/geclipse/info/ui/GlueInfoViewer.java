@@ -16,9 +16,6 @@
  *****************************************************************************/
 package eu.geclipse.info.ui;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.ArrayList;
@@ -74,11 +71,14 @@ import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridInfoService;
+import eu.geclipse.core.model.IGridModelEvent;
+import eu.geclipse.core.model.IGridModelListener;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.info.InfoServiceFactory;
 import eu.geclipse.info.glue.AbstractGlueTable;
 import eu.geclipse.info.glue.GlueCE;
 import eu.geclipse.info.glue.GlueCEAccessControlBaseRule;
+import eu.geclipse.info.glue.GlueIndex;
 import eu.geclipse.info.glue.GlueQuery;
 import eu.geclipse.info.ui.internal.Activator;
 import eu.geclipse.info.ui.internal.Messages;
@@ -91,7 +91,7 @@ import eu.geclipse.info.model.IGlueStoreChangeListerner;
  * @author George Tsouloupas
  */
 public class GlueInfoViewer extends ViewPart
-implements ISelectionProvider, IGlueStoreChangeListerner {
+implements ISelectionProvider, IGridModelListener, IGlueStoreChangeListerner {
 
   Action doubleClickAction;
   FetchJob fetchJob;
@@ -329,7 +329,7 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
   {
 
     private TreeParent glueRoot;
-
+    
     public void inputChanged( final Viewer v,
                               final Object oldInput,
                               final Object newInput )
@@ -502,6 +502,8 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
    */
   public GlueInfoViewer() {
     
+    GridModel.addGridModelListener( this );
+    
     Thread t=new Thread(){
       //wait for BDII and register listener
       @Override
@@ -513,6 +515,7 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
           if ( infoServicesArray.get( i ) instanceof IExtentedGridInfoService)
           {
             IExtentedGridInfoService infoService = ( IExtentedGridInfoService )infoServicesArray.get( i );
+            
             while (infoService != null && infoService.getStore()==null)
             {
               try {
@@ -523,7 +526,10 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
             }
             
             if (infoService != null && infoService.getStore()!=null)
+            {
+              infoService.getStore().removeListener( GlueInfoViewer.this, null );
               infoService.getStore().addListener( GlueInfoViewer.this, null );
+            }
           } 
         }
       }
@@ -532,6 +538,8 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
     t.start();
     
     this.fetchJob = FetchJob.getInstance(" Retrieving Information"); //$NON-NLS-1$
+    this.fetchJob.removeListener( GlueInfoViewer.this, null );
+    this.fetchJob.addListener( GlueInfoViewer.this, null );
     this.showOnlyFilledInfoElements = false;
   }
   
@@ -847,5 +855,55 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
     MessageDialog.openInformation( this.viewer.getControl().getShell(),
                                    "Grid Information View",  //$NON-NLS-1$
                                    message );
+  }
+
+  public void gridModelChanged( IGridModelEvent event ) {
+   
+    int type=event.getType();    
+    switch( type ) {
+      case IGridModelEvent.ELEMENTS_ADDED:
+
+        for( IGridElement gridElement : event.getElements() ) {
+          if(gridElement instanceof IGridProject)
+          { 
+            Thread t=new Thread(){
+              //wait for BDII and register listener
+              @Override
+              public void run() {
+                InfoServiceFactory myInfoServiceFactory = new InfoServiceFactory();
+                ArrayList<IGridInfoService> infoServicesArray = myInfoServiceFactory.getAllExistingInfoService();
+                for (int i=0; i<infoServicesArray.size(); i++)
+                {
+                  if ( infoServicesArray.get( i ) instanceof IExtentedGridInfoService)
+                  {
+                    IExtentedGridInfoService infoService = ( IExtentedGridInfoService )infoServicesArray.get( i );
+                    while (infoService != null && infoService.getStore()==null)
+                    {
+                      try {
+                        sleep(1000);
+                      } catch( InterruptedException e ) {
+                        //ignore interrupted exception
+                      }
+                    }
+                    
+                    if (infoService != null && infoService.getStore()!=null)
+                    {
+                      infoService.getStore().removeListener( GlueInfoViewer.this, null );
+                      infoService.getStore().addListener( GlueInfoViewer.this, null );
+                    }
+                  } 
+                }
+              }
+              
+            };
+            t.start();
+            break;
+          }
+        }
+        break;
+      default:
+        break;
+    }
+    
   }
 }
