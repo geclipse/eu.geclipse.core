@@ -46,8 +46,10 @@ public class ResourceGridContainer_PDETest {
     String projectName = "jietest"; //$NON-NLS-1$
     IWorkspaceRoot workspaceRoot = ResourcesPlugin.getWorkspace().getRoot();
     project = workspaceRoot.getProject( projectName );
+    if (workspaceRoot.findMember( "jietest" ) == null) { //$NON-NLS-1$
     IProjectDescription desc = project.getWorkspace().newProjectDescription( projectName );
     project.create( desc, null );
+    }
     container = new ResourceGridContainer(project);
   }
 
