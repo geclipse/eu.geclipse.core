@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -44,51 +44,57 @@ import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.widgets.StoredCombo;
 
 public class LocalLocationChooserPage extends AbstractLocationChooserPage {
-  
   protected StoredCombo combo;
-  
-  public LocalLocationChooserPage( final CertificateLoaderSelectionPage loaderSelectionPage ) {
+  protected IPreferenceStore prefStore;
+  protected String comboPerfId;
+
+  public LocalLocationChooserPage( final CertificateLoaderSelectionPage loaderSelectionPage,
+                                   final IPreferenceStore prefStore,
+                                   final String comboPerfId ) {
     super( "localLocationChooserPage",
            "Import Location",
            null,
            loaderSelectionPage );
     setDescription( "Choose the local location from which you want to import certificates" );
+    this.prefStore = prefStore;
+    this.comboPerfId = comboPerfId;
   }
 
   public void createControl( final Composite parent ) {
-    
+
     URL openFileIcon = Activator.getDefault().getBundle().getEntry( "icons/obj16/open_file.gif" ); //$NON-NLS-1$
     Image openFileImage = ImageDescriptor.createFromURL( openFileIcon ).createImage();
 
     GridData gData;
-    
+
     Composite mainComp = new Composite( parent, SWT.NULL );
     mainComp.setLayout( new GridLayout( 2, false ) );
     gData = new GridData( GridData.FILL_BOTH );
     mainComp.setLayoutData( gData );
-    
+
     Label label = new Label( mainComp, SWT.NONE );
     label.setText( "&Local File or Directory:" );
     gData = new GridData();
     gData.horizontalSpan = 2;
     label.setLayoutData( gData );
-    
+
     this.combo = new StoredCombo( mainComp, SWT.NONE );
+    this.combo.setPreferences( this.prefStore, this.comboPerfId );
     gData = new GridData( GridData.FILL_HORIZONTAL );
     gData.grabExcessHorizontalSpace = true;
     this.combo.setLayoutData( gData );
-    
+
     Button button = new Button( mainComp, SWT.PUSH );
     button.setImage( openFileImage );
     gData = new GridData();
     button.setLayoutData( gData );
-    
+
     this.combo.addModifyListener( new ModifyListener() {
       public void modifyText( final ModifyEvent e ) {
         validatePage();
       }
     } );
-    
+
     button.addSelectionListener( new SelectionAdapter() {
       @Override
       public void widgetSelected( final SelectionEvent e ) {
@@ -98,12 +104,12 @@ public class LocalLocationChooserPage extends AbstractLocationChooserPage {
         }
       }
     } );
-    
+
     validatePage();
     setControl( mainComp );
-    
+
   }
-  
+
   @Override
   public URI getSelectedLocation() {
     String pathString = this.combo.getText();
@@ -112,7 +118,7 @@ public class LocalLocationChooserPage extends AbstractLocationChooserPage {
     IFileStore store = localFileSystem.getStore( path );
     return store.toURI();
   }
-  
+
   @Override
   public void setVisible( final boolean visible ) {
     if ( visible ) {
@@ -120,19 +126,19 @@ public class LocalLocationChooserPage extends AbstractLocationChooserPage {
     }
     super.setVisible( visible );
   }
-  
+
   protected String openDirectoryDialog() {
     DirectoryDialog dialog = new DirectoryDialog( getShell(), SWT.OPEN );
     dialog.setText( "Select PEM file directory" );
     String dir = dialog.open();
     return dir;
   }
-  
+
   protected void validatePage() {
-    
+
     String errorMessage = null;
     String location = this.combo.getText();
-    
+
     if ( ( location != null ) && ( location.length() != 0 ) ) {
       File file = new File( location );
       if ( ! file.exists() ) {
@@ -141,12 +147,12 @@ public class LocalLocationChooserPage extends AbstractLocationChooserPage {
     } else {
       errorMessage = "Please specify a valid file or directory";
     }
-    
+
     setErrorMessage( errorMessage );
     setPageComplete( errorMessage == null );
-    
+
   }
-  
+
   private void populateLocationCombo() {
     ICaCertificateLoader loader = getLoader();
     if ( loader != null ) {
