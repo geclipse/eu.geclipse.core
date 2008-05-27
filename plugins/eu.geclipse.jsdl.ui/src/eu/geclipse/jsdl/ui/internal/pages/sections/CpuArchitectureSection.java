@@ -134,8 +134,8 @@ public class CpuArchitectureSection extends JsdlAdaptersFactory {
      * Add an EMPTY item value so that the user can disable the specific 
      * feature 
      */
-    this.cmbCPUArchName.add(""); //$NON-NLS-1$
-    
+    this.cmbCPUArchName.add(""); //$NON-NLS-1$ 
+        
     /*
      * Add the CPUArchitecture Enumeration Literals to the 
      * appropriate SWT Combo widget.
@@ -148,9 +148,6 @@ public class CpuArchitectureSection extends JsdlAdaptersFactory {
     String[] sortedTypes = this.cmbCPUArchName.getItems();
     Arrays.sort( sortedTypes );
     this.cmbCPUArchName.setItems( sortedTypes );    
-    
-    
-          
         
     this.cmbCPUArchName.addSelectionListener(new SelectionListener() {
       public void widgetSelected(final SelectionEvent e) {
@@ -169,10 +166,7 @@ public class CpuArchitectureSection extends JsdlAdaptersFactory {
                                               ProcessorArchitectureEnumeration
                                              .get( selectedCPUArch ) );
           
-          CpuArchitectureSection.this.cpuArchitectureType = (CPUArchitectureType) checkProxy( CpuArchitectureSection.this.cpuArchitectureType );
-          
-          CpuArchitectureSection.this.resourcesType
-              .setCPUArchitecture( CpuArchitectureSection.this.cpuArchitectureType );
+          CpuArchitectureSection.this.resourcesType.setCPUArchitecture(CpuArchitectureSection.this.cpuArchitectureType);
 
         }
         contentChanged();

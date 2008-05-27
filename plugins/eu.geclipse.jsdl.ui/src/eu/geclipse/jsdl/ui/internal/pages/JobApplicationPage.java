@@ -87,7 +87,7 @@ public final class JobApplicationPage extends FormPage implements INotifyChanged
       if( isContentRefreshed() ) {
         this.applicationSection.setInput( this.jobDefinitionType );
         this.posixApplicationSection.setInput( this.jobDefinitionType );
-        this.additionalPosixElementSection.setInput( this.jobDefinitionType );
+        this.additionalPosixElementSection.setInput( this.jobDefinitionType );        
       }// end_if isContentRefreshed
     } // end_if active
   } // End void setActive()
@@ -186,7 +186,6 @@ public final class JobApplicationPage extends FormPage implements INotifyChanged
     this.additionalPosixElementSection = new AdditionalPosixElementSection(this.apS, toolkit);
     this.additionalPosixElementSection.setInput( this.jobDefinitionType );
     this.additionalPosixElementSection.addListener( this );
-
     
     this.posixApplicationSection = new PosixApplicationSection(this, this.applicationSectionComposit, toolkit);
     this.posixApplicationSection.setInput( this.jobDefinitionType );

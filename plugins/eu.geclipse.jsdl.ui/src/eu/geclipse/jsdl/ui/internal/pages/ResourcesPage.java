@@ -20,22 +20,13 @@ package eu.geclipse.jsdl.ui.internal.pages;
 
 import java.net.URL;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.viewers.TableViewer;
-import org.eclipse.jface.window.Window;
 import org.eclipse.swt.custom.BusyIndicator;
-import org.eclipse.swt.widgets.Button;
-import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.IFileEditorInput;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
@@ -44,17 +35,12 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 
-import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.IGridElement;
-import eu.geclipse.core.model.IGridRoot;
 import eu.geclipse.jsdl.model.base.JobDefinitionType;
 import eu.geclipse.jsdl.ui.adapters.jsdl.JobDefinitionTypeAdapter;
 import eu.geclipse.jsdl.ui.adapters.jsdl.JobIdentificationTypeAdapter;
 import eu.geclipse.jsdl.ui.adapters.jsdl.ResourcesTypeAdapter;
 import eu.geclipse.jsdl.ui.editors.JsdlEditor;
 import eu.geclipse.jsdl.ui.internal.Activator;
-import eu.geclipse.jsdl.ui.internal.dialogs.CandidateHostsDialog;
-import eu.geclipse.jsdl.ui.internal.dialogs.FileSystemsDialog;
 import eu.geclipse.jsdl.ui.internal.pages.sections.AdditionalResourceElemetsSection;
 import eu.geclipse.jsdl.ui.internal.pages.sections.CandidateHostsSection;
 import eu.geclipse.jsdl.ui.internal.pages.sections.CpuArchitectureSection;
@@ -78,52 +64,7 @@ public final class ResourcesPage extends FormPage implements INotifyChangedListe
   protected Composite jobRescComposite = null;
   protected Composite left = null;
   protected Composite right = null; 
-  protected Label lblMountPoint = null;
-  protected Label lblMountSource = null;
-  protected Label lblDiskSpace = null;
-  protected Label lblFileSystemType = null;
-  protected Label lblFileSystemDescr = null;
-  protected Label lblOperSystType = null;
-  protected Label lblOperSystVer = null;
-  protected Label lblOSDescr = null;
-  protected Label lblCPUArchName = null;
-  protected Label lblIndCPUSpl = null;
-  protected Label lblIndCPUTime = null;
-  protected Label lblIndCPUCount = null;
-  protected Label lblIndNetBand = null;
-  protected Label lblPhysMem = null;
-  protected Label lblVirtMem = null;
-  protected Label lblIndDiskSpac = null;
-  protected Label lblCPUTime = null;
-  protected Label lblCPUCount = null;
-  protected Label lblTotPhMem = null;
-  protected Label lblTotVirtMem = null;
-  protected Label lblTotDiskSp = null;
-  protected Label lblTotResCount = null;
-  protected Label lblFileSystemName = null;
-  protected Label lblExclExecution = null;
-  protected Combo cmbIndividualCPUSpeed = null;
-  protected Combo cmbIndividualCPUTime = null;
-  protected Combo cmbIndividualCPUCount = null;
-  protected Combo cmbIndividualNetworkBandwidth = null;
-  protected Combo cmbIndividualPhysicalMemory = null;
-  protected Combo cmbIndividualVirtualMesmory = null;
-  protected Combo cmbIndividualDiskSpace = null;
-  protected Combo cmbTotalCPUTime = null;
-  protected Combo cmbTotalCPUCount = null;
-  protected Combo cmbTotalPhysicalMemory = null;
-  protected Combo cmbTotalVirtualMemory = null;
-  protected Combo cmbTotalDiskSpace = null;
-  protected Combo cmbTotalResourceCount = null;  
-  protected Button btnHostsAdd = null;
-  protected Button btnHostsDel = null;
-  protected Button btnFileSystemAdd = null;
-  protected Button btnFileSystemDel = null;
-  protected Button btnFileSystemEdit = null;  
-  protected TableViewer hostsViewer = null;
-  protected TableViewer fileSystemsViewer = null; 
-
-   
+  
   private ImageDescriptor helpDesc = null;
   private boolean contentRefreshed = false;
   private boolean dirtyFlag = false;
@@ -296,8 +237,6 @@ public final class ResourcesPage extends FormPage implements INotifyChangedListe
     this.exclusiveExecutionSection = new ExclusiveExecutionSection(this.right, toolkit);
     this.exclusiveExecutionSection.setInput( this.jobDefinitionType );
     this.exclusiveExecutionSection.addListener( this );
-      
-      
     
     /* Create the Additional Elements Section */
     this.additionalResourceElemetsSection = new AdditionalResourceElemetsSection(this.right, toolkit);
@@ -340,92 +279,14 @@ public final class ResourcesPage extends FormPage implements INotifyChangedListe
   }
     
   
-  /*
-   * Method which opens a Dialog for selecting Candidate Hosts for Job Submission.
-   */
-  @SuppressWarnings("unchecked")
-  protected void handleAddDialog( final String dialogTitle ) {
-    
-    this.value = null;
-    
-    CandidateHostsDialog hostsDialog = new CandidateHostsDialog( this.body.getShell(), dialogTitle );
-    
-    IFile file = ( (IFileEditorInput) this.getEditor().getEditorInput() ).getFile();
-    IGridRoot root = GridModel.getRoot();
-    IGridElement element = root.findElement( file );
-    hostsDialog.setDialogInput( element );
-    hostsDialog.setExistingCandidateHosts( this.hostsViewer.getInput() );
- 
-    if( hostsDialog.open() != Window.OK ) {
-      return;
-        
-    }    
-      this.value = hostsDialog.getValue();
-    
-  }  
-  
-  
-  /*
-   * Method which opens a Dialog for adding new File Systems.
-   */
-  protected void handleAddFsDialog( final String dialogTitle, final Button button ){
-    
-    this.value = null;
-    
-    FileSystemsDialog fileSystemDialog = new FileSystemsDialog( this.body.getShell(), dialogTitle );
-
-    /* Edit Element */ 
-    if (button != this.btnFileSystemAdd ) {
-       IStructuredSelection structSelection 
-                   = ( IStructuredSelection ) this.fileSystemsViewer.getSelection();
-       
-       fileSystemDialog.setInput( structSelection.getFirstElement() );
-
-    }  
- 
-    if( fileSystemDialog.open() != Window.OK ) {
-      return;        
-    }
-    
-      this.value = fileSystemDialog.getValue();
-    
-  }
-  
-  
   public void notifyChanged( final Notification notification ) {
     setDirty( true );    
-  }
-  
+  }  
   
   
   protected String getHelpResource() {
     return "/eu.geclipse.doc.user/html/concepts/jobmanagement/editorpages/resources.html"; //$NON-NLS-1$
   }
   
-  /*
-   * This function updates the status of the buttons related to
-   * the respective Stage-In and Stage-Out Table Viewers. The Status of the 
-   * buttons is adjusted according to the selection and content of the respective
-   * table viewer.
-   * 
-   */ 
-    protected void updateButtons( final TableViewer tableViewer ) {
-    
-    ISelection selection = tableViewer.getSelection();
-    boolean selectionAvailable = !selection.isEmpty();    
-    
-    if (tableViewer == this.fileSystemsViewer) {
-    
-      this.btnFileSystemAdd.setEnabled( true );
-      this.btnFileSystemEdit.setEnabled( selectionAvailable );
-      this.btnFileSystemDel.setEnabled( selectionAvailable );
-    }
-    else {     
-      this.btnHostsAdd.setEnabled( true );
-      this.btnHostsDel.setEnabled( selectionAvailable );
-    }
-    
-  } // End updateButtons    
-
-
+  
 } // end ResourcesPage class

@@ -17,6 +17,7 @@ import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 
@@ -26,10 +27,12 @@ import eu.geclipse.jsdl.model.base.JobDescriptionType;
 import eu.geclipse.jsdl.model.base.JsdlPackage;
 import eu.geclipse.jsdl.model.posix.DirectoryNameType;
 import eu.geclipse.jsdl.model.posix.DocumentRoot;
+import eu.geclipse.jsdl.model.posix.GroupNameType;
 import eu.geclipse.jsdl.model.posix.LimitsType;
 import eu.geclipse.jsdl.model.posix.POSIXApplicationType;
 import eu.geclipse.jsdl.model.posix.PosixFactory;
 import eu.geclipse.jsdl.model.posix.PosixPackage;
+import eu.geclipse.jsdl.model.posix.UserNameType;
 import eu.geclipse.jsdl.ui.adapters.jsdl.JsdlAdaptersFactory;
 import eu.geclipse.jsdl.ui.internal.pages.FormSectionFactory;
 import eu.geclipse.jsdl.ui.internal.pages.Messages;
@@ -91,7 +94,7 @@ public class AdditionalPosixElementSection extends JsdlAdaptersFactory {
     createSection( parent, toolkit );
     
   }
-  
+    
   
   private void createSection( final Composite parent, final FormToolkit toolkit ) {
     
@@ -158,27 +161,29 @@ public class AdditionalPosixElementSection extends JsdlAdaptersFactory {
 
       public void modifyText( final ModifyEvent e ) {
         
-        if ( !AdditionalPosixElementSection.this.txtWallTimeLimit.getText().equals( EMPTY_STRING ) ){
-          if ( null == this.limitsType) {
-            this.limitsType = PosixFactory.eINSTANCE.createLimitsType();
-          }
-         
-          checkPosixApplicationElement();          
-          this.bigInteger = new BigInteger(AdditionalPosixElementSection.this.txtWallTimeLimit.getText());
-          this.limitsType.setValue( this.bigInteger );
-          this.limitsType = (LimitsType) checkProxy( this.limitsType );
-          AdditionalPosixElementSection.this.posixApplicationType.setWallTimeLimit( this.limitsType );
-        }
-        else{
-          if (null != this.limitsType) {
-            this.limitsType = (LimitsType) checkProxy( this.limitsType );
-            this.limitsType = null;
-            AdditionalPosixElementSection.this.posixApplicationType.setWallTimeLimit (null );
-          }
-
-        }
-        contentChanged();
         
+        
+//        if ( !AdditionalPosixElementSection.this.txtWallTimeLimit.getText().equals( EMPTY_STRING ) ){
+//          if ( null == this.limitsType) {
+//            this.limitsType = PosixFactory.eINSTANCE.createLimitsType();
+//          }
+//         
+//          checkPosixApplicationElement();          
+//          this.bigInteger = new BigInteger(AdditionalPosixElementSection.this.txtWallTimeLimit.getText());
+//          this.limitsType.setValue( this.bigInteger );
+//          this.limitsType = (LimitsType) checkProxy( this.limitsType );
+//          AdditionalPosixElementSection.this.posixApplicationType.setWallTimeLimit( this.limitsType );
+//        }
+//        else{
+//          if (null != this.limitsType) {
+//            this.limitsType = (LimitsType) checkProxy( this.limitsType );
+//            this.limitsType = null;
+//            AdditionalPosixElementSection.this.posixApplicationType.setWallTimeLimit (null );
+//          }
+//
+//        }
+//        contentChanged();
+//        
      }
       
       
@@ -193,7 +198,37 @@ public class AdditionalPosixElementSection extends JsdlAdaptersFactory {
     this.txtFileSizeLimit = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
     td = new TableWrapData( TableWrapData.FILL_GRAB );
     this.txtFileSizeLimit.setLayoutData( td );
-//    this.posixApplicationTypeAdapter.attachToFileSizeLimit( this.txtFileSizeLimit );
+    this.txtFileSizeLimit.addModifyListener( new ModifyListener() {
+      LimitsType limitsType ;
+      BigInteger bigInteger ;
+
+        public void modifyText( final ModifyEvent e ) {
+          
+          if ( !AdditionalPosixElementSection.this.txtFileSizeLimit.getText().equals( EMPTY_STRING ) ){
+            if ( null == this.limitsType) {
+              this.limitsType = PosixFactory.eINSTANCE.createLimitsType();
+            }
+           
+            checkPosixApplicationElement();          
+            this.bigInteger = new BigInteger(AdditionalPosixElementSection.this.txtFileSizeLimit.getText());
+            this.limitsType.setValue( this.bigInteger );
+            this.limitsType = (LimitsType) checkProxy( this.limitsType );
+            AdditionalPosixElementSection.this.posixApplicationType.setFileSizeLimit( this.limitsType );
+          }
+          else{
+            if (null != this.limitsType) {
+              this.limitsType = (LimitsType) checkProxy( this.limitsType );
+              this.limitsType = null;
+              AdditionalPosixElementSection.this.posixApplicationType.setFileSizeLimit (null );
+            }
+
+          }
+          contentChanged();
+          
+       }
+        
+        
+      });
     this.lblUnits = toolkit.createLabel( client, Messages.getString( "JobApplicationPage_size" ) ); //$NON-NLS-1$
 
     
@@ -205,7 +240,37 @@ public class AdditionalPosixElementSection extends JsdlAdaptersFactory {
     this.txtCoreDumpLimit = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
     td = new TableWrapData( TableWrapData.FILL_GRAB );
     this.txtCoreDumpLimit.setLayoutData( td );
-//    this.posixApplicationTypeAdapter.attachToCoreDumpLimit( this.txtCoreDumpLimit );
+    this.txtCoreDumpLimit.addModifyListener( new ModifyListener() {
+      LimitsType limitsType ;
+      BigInteger bigInteger ;
+
+        public void modifyText( final ModifyEvent e ) {
+          
+          if ( !AdditionalPosixElementSection.this.txtCoreDumpLimit.getText().equals( EMPTY_STRING ) ){
+            if ( null == this.limitsType) {
+              this.limitsType = PosixFactory.eINSTANCE.createLimitsType();
+            }
+           
+            checkPosixApplicationElement();          
+            this.bigInteger = new BigInteger(AdditionalPosixElementSection.this.txtCoreDumpLimit.getText());
+            this.limitsType.setValue( this.bigInteger );
+            this.limitsType = (LimitsType) checkProxy( this.limitsType );
+            AdditionalPosixElementSection.this.posixApplicationType.setCoreDumpLimit( this.limitsType );
+          }
+          else{
+            if (null != this.limitsType) {
+              this.limitsType = (LimitsType) checkProxy( this.limitsType );
+              this.limitsType = null;
+              AdditionalPosixElementSection.this.posixApplicationType.setCoreDumpLimit (null );
+            }
+
+          }
+          contentChanged();
+          
+       }
+        
+        
+      });
     this.lblUnits = toolkit.createLabel( client, Messages.getString( "JobApplicationPage_size" ) ); //$NON-NLS-1$
      
      
@@ -217,7 +282,37 @@ public class AdditionalPosixElementSection extends JsdlAdaptersFactory {
     this.txtDataSegmentLimit = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
     td = new TableWrapData( TableWrapData.FILL_GRAB );
     this.txtDataSegmentLimit.setLayoutData( td );
-//    this.posixApplicationTypeAdapter.attachToDataSegmentLimit( this.txtDataSegmentLimit );
+    this.txtDataSegmentLimit.addModifyListener( new ModifyListener() {
+      LimitsType limitsType ;
+      BigInteger bigInteger ;
+
+        public void modifyText( final ModifyEvent e ) {
+          
+          if ( !AdditionalPosixElementSection.this.txtDataSegmentLimit.getText().equals( EMPTY_STRING ) ){
+            if ( null == this.limitsType) {
+              this.limitsType = PosixFactory.eINSTANCE.createLimitsType();
+            }
+           
+            checkPosixApplicationElement();          
+            this.bigInteger = new BigInteger(AdditionalPosixElementSection.this.txtDataSegmentLimit.getText());
+            this.limitsType.setValue( this.bigInteger );
+            this.limitsType = (LimitsType) checkProxy( this.limitsType );
+            AdditionalPosixElementSection.this.posixApplicationType.setDataSegmentLimit( this.limitsType );
+          }
+          else{
+            if (null != this.limitsType) {
+              this.limitsType = (LimitsType) checkProxy( this.limitsType );
+              this.limitsType = null;
+              AdditionalPosixElementSection.this.posixApplicationType.setDataSegmentLimit (null );
+            }
+
+          }
+          contentChanged();
+          
+       }
+        
+        
+      });
     this.lblUnits = toolkit.createLabel( client, Messages.getString( "JobApplicationPage_size" ) ); //$NON-NLS-1$
     
     
@@ -228,7 +323,36 @@ public class AdditionalPosixElementSection extends JsdlAdaptersFactory {
     this.txtLockedMemoryLimit = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
     td = new TableWrapData( TableWrapData.FILL_GRAB );
     this.txtLockedMemoryLimit.setLayoutData( td );
-//    this.posixApplicationTypeAdapter.attachToLockedMemoryLimit( this.txtLockedMemoryLimit );
+    this.txtLockedMemoryLimit.addModifyListener( new ModifyListener() {
+      LimitsType limitsType ;
+      BigInteger bigInteger ;
+
+        public void modifyText( final ModifyEvent e ) {
+          
+          if ( !AdditionalPosixElementSection.this.txtLockedMemoryLimit.getText().equals( EMPTY_STRING ) ){
+            if ( null == this.limitsType) {
+              this.limitsType = PosixFactory.eINSTANCE.createLimitsType();
+            }
+           
+            checkPosixApplicationElement();          
+            this.bigInteger = new BigInteger(AdditionalPosixElementSection.this.txtLockedMemoryLimit.getText());
+            this.limitsType.setValue( this.bigInteger );
+            this.limitsType = (LimitsType) checkProxy( this.limitsType );
+            AdditionalPosixElementSection.this.posixApplicationType.setLockedMemoryLimit( this.limitsType );
+          }
+          else{
+            if (null != this.limitsType) {
+              this.limitsType = (LimitsType) checkProxy( this.limitsType );
+              this.limitsType = null;
+              AdditionalPosixElementSection.this.posixApplicationType.setLockedMemoryLimit (null );
+            }
+
+          }
+          contentChanged();
+          
+       }       
+        
+      });
     this.lblUnits = toolkit.createLabel( client,  Messages.getString( "JobApplicationPage_size" ) ); //$NON-NLS-1$
     
     
@@ -238,7 +362,36 @@ public class AdditionalPosixElementSection extends JsdlAdaptersFactory {
     this.txtMemoryLimit = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
     td = new TableWrapData( TableWrapData.FILL_GRAB );
     this.txtMemoryLimit.setLayoutData( td );
-//    this.posixApplicationTypeAdapter.attachToMemoryLimit( this.txtMemoryLimit );
+    this.txtMemoryLimit.addModifyListener( new ModifyListener() {
+      LimitsType limitsType ;
+      BigInteger bigInteger ;
+
+        public void modifyText( final ModifyEvent e ) {
+          
+          if ( !AdditionalPosixElementSection.this.txtMemoryLimit.getText().equals( EMPTY_STRING ) ){
+            if ( null == this.limitsType) {
+              this.limitsType = PosixFactory.eINSTANCE.createLimitsType();
+            }
+           
+            checkPosixApplicationElement();          
+            this.bigInteger = new BigInteger(AdditionalPosixElementSection.this.txtMemoryLimit.getText());
+            this.limitsType.setValue( this.bigInteger );
+            this.limitsType = (LimitsType) checkProxy( this.limitsType );
+            AdditionalPosixElementSection.this.posixApplicationType.setMemoryLimit( this.limitsType );
+          }
+          else{
+            if (null != this.limitsType) {
+              this.limitsType = (LimitsType) checkProxy( this.limitsType );
+              this.limitsType = null;
+              AdditionalPosixElementSection.this.posixApplicationType.setMemoryLimit (null );
+            }
+
+          }
+          contentChanged();
+          
+       }       
+        
+      });
     this.lblUnits = toolkit.createLabel( client, Messages.getString( "JobApplicationPage_size" ) ); //$NON-NLS-1$
     
     
@@ -249,7 +402,36 @@ public class AdditionalPosixElementSection extends JsdlAdaptersFactory {
     this.txtOpenDescriptorsLimit = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
     td = new TableWrapData( TableWrapData.FILL_GRAB );
     this.txtOpenDescriptorsLimit.setLayoutData( td );
-//    this.posixApplicationTypeAdapter.attachToOpenDesciptorsLimit( this.txtOpenDescriptorsLimit );
+    this.txtOpenDescriptorsLimit.addModifyListener( new ModifyListener() {
+      LimitsType limitsType ;
+      BigInteger bigInteger ;
+
+        public void modifyText( final ModifyEvent e ) {
+          
+          if ( !AdditionalPosixElementSection.this.txtOpenDescriptorsLimit.getText().equals( EMPTY_STRING ) ){
+            if ( null == this.limitsType) {
+              this.limitsType = PosixFactory.eINSTANCE.createLimitsType();
+            }
+           
+            checkPosixApplicationElement();          
+            this.bigInteger = new BigInteger(AdditionalPosixElementSection.this.txtOpenDescriptorsLimit.getText());
+            this.limitsType.setValue( this.bigInteger );
+            this.limitsType = (LimitsType) checkProxy( this.limitsType );
+            AdditionalPosixElementSection.this.posixApplicationType.setOpenDescriptorsLimit( this.limitsType );
+          }
+          else{
+            if (null != this.limitsType) {
+              this.limitsType = (LimitsType) checkProxy( this.limitsType );
+              this.limitsType = null;
+              AdditionalPosixElementSection.this.posixApplicationType.setOpenDescriptorsLimit (null );
+            }
+
+          }
+          contentChanged();
+          
+       }       
+        
+      });
     this.lblUnits = toolkit.createLabel( client, Messages.getString( "JobApplicationPage_empty" ) ); //$NON-NLS-1$
     
     
@@ -260,7 +442,36 @@ public class AdditionalPosixElementSection extends JsdlAdaptersFactory {
     this.txtPipeSizeLimit = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
     td = new TableWrapData( TableWrapData.FILL_GRAB );
     this.txtPipeSizeLimit.setLayoutData( td );
-//    this.posixApplicationTypeAdapter.attachToPipeSizeLimit( this.txtPipeSizeLimit );
+    this.txtPipeSizeLimit.addModifyListener( new ModifyListener() {
+      LimitsType limitsType ;
+      BigInteger bigInteger ;
+
+        public void modifyText( final ModifyEvent e ) {
+          
+          if ( !AdditionalPosixElementSection.this.txtPipeSizeLimit.getText().equals( EMPTY_STRING ) ){
+            if ( null == this.limitsType) {
+              this.limitsType = PosixFactory.eINSTANCE.createLimitsType();
+            }
+           
+            checkPosixApplicationElement();          
+            this.bigInteger = new BigInteger(AdditionalPosixElementSection.this.txtPipeSizeLimit.getText());
+            this.limitsType.setValue( this.bigInteger );
+            this.limitsType = (LimitsType) checkProxy( this.limitsType );
+            AdditionalPosixElementSection.this.posixApplicationType.setPipeSizeLimit( this.limitsType );
+          }
+          else{
+            if (null != this.limitsType) {
+              this.limitsType = (LimitsType) checkProxy( this.limitsType );
+              this.limitsType = null;
+              AdditionalPosixElementSection.this.posixApplicationType.setPipeSizeLimit (null );
+            }
+
+          }
+          contentChanged();
+          
+       }       
+        
+      });
     this.lblUnits = toolkit.createLabel( client, Messages.getString( "JobApplicationPage_size" ) ); //$NON-NLS-1$
     
     /* =========================== Stack Size Limit ========================== */
@@ -270,7 +481,36 @@ public class AdditionalPosixElementSection extends JsdlAdaptersFactory {
     this.txtStackSizeLimit = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
     td = new TableWrapData( TableWrapData.FILL_GRAB );
     this.txtStackSizeLimit.setLayoutData( td );
-//    this.posixApplicationTypeAdapter.attachToStackSizeLimit( this.txtStackSizeLimit );
+    this.txtStackSizeLimit.addModifyListener( new ModifyListener() {
+      LimitsType limitsType ;
+      BigInteger bigInteger ;
+
+        public void modifyText( final ModifyEvent e ) {
+          
+          if ( !AdditionalPosixElementSection.this.txtStackSizeLimit.getText().equals( EMPTY_STRING ) ){
+            if ( null == this.limitsType) {
+              this.limitsType = PosixFactory.eINSTANCE.createLimitsType();
+            }
+           
+            checkPosixApplicationElement();          
+            this.bigInteger = new BigInteger(AdditionalPosixElementSection.this.txtStackSizeLimit.getText());
+            this.limitsType.setValue( this.bigInteger );
+            this.limitsType = (LimitsType) checkProxy( this.limitsType );
+            AdditionalPosixElementSection.this.posixApplicationType.setStackSizeLimit( this.limitsType );
+          }
+          else{
+            if (null != this.limitsType) {
+              this.limitsType = (LimitsType) checkProxy( this.limitsType );
+              this.limitsType = null;
+              AdditionalPosixElementSection.this.posixApplicationType.setStackSizeLimit (null );
+            }
+
+          }
+          contentChanged();
+          
+       }       
+        
+      });
     this.lblUnits = toolkit.createLabel( client, Messages.getString( "JobApplicationPage_size" ) ); //$NON-NLS-1$
     
     /* ============================= CPU Time Limit ========================== */
@@ -279,7 +519,36 @@ public class AdditionalPosixElementSection extends JsdlAdaptersFactory {
     this.txtCPUTimeLimit = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
     td = new TableWrapData( TableWrapData.FILL_GRAB );
     this.txtCPUTimeLimit.setLayoutData( td );
-//    this.posixApplicationTypeAdapter.attachToCPUTimeLimit( this.txtCPUTimeLimit );
+    this.txtCPUTimeLimit.addModifyListener( new ModifyListener() {
+      LimitsType limitsType ;
+      BigInteger bigInteger ;
+
+        public void modifyText( final ModifyEvent e ) {
+          
+          if ( !AdditionalPosixElementSection.this.txtCPUTimeLimit.getText().equals( EMPTY_STRING ) ){
+            if ( null == this.limitsType) {
+              this.limitsType = PosixFactory.eINSTANCE.createLimitsType();
+            }
+           
+            checkPosixApplicationElement();          
+            this.bigInteger = new BigInteger(AdditionalPosixElementSection.this.txtCPUTimeLimit.getText());
+            this.limitsType.setValue( this.bigInteger );
+            this.limitsType = (LimitsType) checkProxy( this.limitsType );
+            AdditionalPosixElementSection.this.posixApplicationType.setCPUTimeLimit( this.limitsType );
+          }
+          else{
+            if (null != this.limitsType) {
+              this.limitsType = (LimitsType) checkProxy( this.limitsType );
+              this.limitsType = null;
+              AdditionalPosixElementSection.this.posixApplicationType.setCPUTimeLimit (null );
+            }
+
+          }
+          contentChanged();
+          
+       }       
+        
+      });
     this.lblUnits = toolkit.createLabel( client, Messages.getString( "JobApplicationPage_time" ) ); //$NON-NLS-1$
     
     
@@ -290,7 +559,36 @@ public class AdditionalPosixElementSection extends JsdlAdaptersFactory {
     this.txtProcessCountLimit = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
     td = new TableWrapData( TableWrapData.FILL_GRAB );
     this.txtProcessCountLimit.setLayoutData( td );
-//    this.posixApplicationTypeAdapter.attachToProcessCountLimit( this.txtProcessCountLimit );
+    this.txtProcessCountLimit.addModifyListener( new ModifyListener() {
+      LimitsType limitsType ;
+      BigInteger bigInteger ;
+
+        public void modifyText( final ModifyEvent e ) {
+          
+          if ( !AdditionalPosixElementSection.this.txtProcessCountLimit.getText().equals( EMPTY_STRING ) ){
+            if ( null == this.limitsType) {
+              this.limitsType = PosixFactory.eINSTANCE.createLimitsType();
+            }
+           
+            checkPosixApplicationElement();          
+            this.bigInteger = new BigInteger(AdditionalPosixElementSection.this.txtProcessCountLimit.getText());
+            this.limitsType.setValue( this.bigInteger );
+            this.limitsType = (LimitsType) checkProxy( this.limitsType );
+            AdditionalPosixElementSection.this.posixApplicationType.setProcessCountLimit( this.limitsType );
+          }
+          else{
+            if (null != this.limitsType) {
+              this.limitsType = (LimitsType) checkProxy( this.limitsType );
+              this.limitsType = null;
+              AdditionalPosixElementSection.this.posixApplicationType.setProcessCountLimit (null );
+            }
+
+          }
+          contentChanged();
+          
+       }       
+        
+      });
     this.lblUnits = toolkit.createLabel( client, Messages.getString( "JobApplicationPage_process" ) ); //$NON-NLS-1$
     
     
@@ -301,7 +599,36 @@ public class AdditionalPosixElementSection extends JsdlAdaptersFactory {
     this.txtVirtualMemoryLimit = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
     td = new TableWrapData( TableWrapData.FILL_GRAB );
     this.txtVirtualMemoryLimit.setLayoutData( td );
-//    this.posixApplicationTypeAdapter.attachToVirtualMemoryLimit( this.txtVirtualMemoryLimit );
+    this.txtVirtualMemoryLimit.addModifyListener( new ModifyListener() {
+      LimitsType limitsType ;
+      BigInteger bigInteger ;
+
+        public void modifyText( final ModifyEvent e ) {
+          
+          if ( !AdditionalPosixElementSection.this.txtVirtualMemoryLimit.getText().equals( EMPTY_STRING ) ){
+            if ( null == this.limitsType) {
+              this.limitsType = PosixFactory.eINSTANCE.createLimitsType();
+            }
+           
+            checkPosixApplicationElement();          
+            this.bigInteger = new BigInteger(AdditionalPosixElementSection.this.txtVirtualMemoryLimit.getText());
+            this.limitsType.setValue( this.bigInteger );
+            this.limitsType = (LimitsType) checkProxy( this.limitsType );
+            AdditionalPosixElementSection.this.posixApplicationType.setVirtualMemoryLimit( this.limitsType );
+          }
+          else{
+            if (null != this.limitsType) {
+              this.limitsType = (LimitsType) checkProxy( this.limitsType );
+              this.limitsType = null;
+              AdditionalPosixElementSection.this.posixApplicationType.setVirtualMemoryLimit (null );
+            }
+
+          }
+          contentChanged();
+          
+       }       
+        
+      });
     this.lblUnits = toolkit.createLabel( client, Messages.getString( "JobApplicationPage_size" ) ); //$NON-NLS-1$
     
     
@@ -312,7 +639,36 @@ public class AdditionalPosixElementSection extends JsdlAdaptersFactory {
     this.txtThreadCountLimit = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
     td = new TableWrapData( TableWrapData.FILL_GRAB );
     this.txtThreadCountLimit.setLayoutData( td );
-//    this.posixApplicationTypeAdapter.attachToThreadCountLimit( this.txtThreadCountLimit );
+    this.txtThreadCountLimit.addModifyListener( new ModifyListener() {
+      LimitsType limitsType ;
+      BigInteger bigInteger ;
+
+        public void modifyText( final ModifyEvent e ) {
+          
+          if ( !AdditionalPosixElementSection.this.txtThreadCountLimit.getText().equals( EMPTY_STRING ) ){
+            if ( null == this.limitsType) {
+              this.limitsType = PosixFactory.eINSTANCE.createLimitsType();
+            }
+           
+            checkPosixApplicationElement();          
+            this.bigInteger = new BigInteger(AdditionalPosixElementSection.this.txtThreadCountLimit.getText());
+            this.limitsType.setValue( this.bigInteger );
+            this.limitsType = (LimitsType) checkProxy( this.limitsType );
+            AdditionalPosixElementSection.this.posixApplicationType.setThreadCountLimit( this.limitsType );
+          }
+          else{
+            if (null != this.limitsType) {
+              this.limitsType = (LimitsType) checkProxy( this.limitsType );
+              this.limitsType = null;
+              AdditionalPosixElementSection.this.posixApplicationType.setThreadCountLimit (null );
+            }
+
+          }
+          contentChanged();
+          
+       }       
+        
+      });
     this.lblUnits = toolkit.createLabel( client, Messages.getString( "JobApplicationPage_threads" ) ); //$NON-NLS-1$
     
     /* ============================= User Name Limit ======================== */
@@ -321,7 +677,34 @@ public class AdditionalPosixElementSection extends JsdlAdaptersFactory {
     this.txtUserName = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
     td = new TableWrapData( TableWrapData.FILL_GRAB );
     this.txtUserName.setLayoutData( td );
-//    this.posixApplicationTypeAdapter.attachToUserName( this.txtUserName );
+    this.txtUserName.addModifyListener( new ModifyListener() {
+      UserNameType userNameType;
+
+        public void modifyText( final ModifyEvent e ) {
+          
+          if ( !AdditionalPosixElementSection.this.txtUserName.getText().equals( EMPTY_STRING ) ){
+            if ( null == this.userNameType) {
+              this.userNameType = PosixFactory.eINSTANCE.createUserNameType();
+            }
+           
+            checkPosixApplicationElement();          
+            this.userNameType.setValue( AdditionalPosixElementSection.this.txtUserName.getText());
+            this.userNameType = (UserNameType) checkProxy( this.userNameType );
+            AdditionalPosixElementSection.this.posixApplicationType.setUserName( this.userNameType );
+          }
+          else{
+            if (null != this.userNameType) {
+              this.userNameType = (UserNameType) checkProxy( this.userNameType );
+              this.userNameType = null;
+              AdditionalPosixElementSection.this.posixApplicationType.setUserName (null );
+            }
+
+          }
+          contentChanged();
+          
+       }       
+        
+      });
     this.lblUnits = toolkit.createLabel( client, Messages.getString( "JobApplicationPage_empty" ) ); //$NON-NLS-1$
     
     /* ============================= Group Name Limit ======================== */
@@ -330,7 +713,34 @@ public class AdditionalPosixElementSection extends JsdlAdaptersFactory {
     this.txtGroupName = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
     td = new TableWrapData( TableWrapData.FILL_GRAB );
     this.txtGroupName.setLayoutData( td );
-//    this.posixApplicationTypeAdapter.attachToGroupName( this.txtGroupName );
+    this.txtGroupName.addModifyListener( new ModifyListener() {
+      GroupNameType groupNameType;
+
+        public void modifyText( final ModifyEvent e ) {
+          
+          if ( !AdditionalPosixElementSection.this.txtGroupName.getText().equals( EMPTY_STRING ) ){
+            if ( null == this.groupNameType) {
+              this.groupNameType = PosixFactory.eINSTANCE.createGroupNameType();
+            }
+           
+            checkPosixApplicationElement();          
+            this.groupNameType.setValue( AdditionalPosixElementSection.this.txtGroupName.getText());
+            this.groupNameType = (GroupNameType) checkProxy( this.groupNameType );
+            AdditionalPosixElementSection.this.posixApplicationType.setGroupName( this.groupNameType );
+          }
+          else{
+            if (null != this.groupNameType) {
+              this.groupNameType = (GroupNameType) checkProxy( this.groupNameType );
+              this.groupNameType = null;
+              AdditionalPosixElementSection.this.posixApplicationType.setGroupName (null );
+            }
+
+          }
+          contentChanged();
+          
+       }       
+        
+      });
     this.lblUnits = toolkit.createLabel( client, Messages.getString( "JobApplicationPage_empty" ) ); //$NON-NLS-1$
     
     toolkit.paintBordersFor( client );
@@ -441,7 +851,7 @@ public class AdditionalPosixElementSection extends JsdlAdaptersFactory {
         this.txtWallTimeLimit.setText( EMPTY_STRING );
       }
       if ( null != this.posixApplicationType.getFileSizeLimit() ) {
-        this.txtFileSizeLimit.setText( this.posixApplicationType.getInput().getValue() );
+        this.txtFileSizeLimit.setText( this.posixApplicationType.getFileSizeLimit().getValue().toString() );
       }else{
         this.txtFileSizeLimit.setText( EMPTY_STRING );
       }
