@@ -81,18 +81,21 @@ public interface IGridApplicationManager
    * application.
    */
   public void uninstall( final IGridApplication application,
-                        final IProgressMonitor monitor )
+                         final IProgressMonitor monitor )
       throws ProblemException;
   
   
-  /**validate the installed software
-   * @param application The application to validate
-   * @param monitor A {@link IProgressMonitor} to monitor the progress of
-   * this operations.
-   * @throws ProblemException ProblemException If an error occurs while validating the
+  /**
+   * Validate the installed software.
+   * 
+   * @param application The application to validate.
+   * @param monitor An {@link IProgressMonitor} to monitor the progress of
+   * this operation.
+   * @throws ProblemException If an error occurs while validating the
    * application.
    */
   public void validate( final IGridApplication application,
-                         final IProgressMonitor monitor )
-       throws ProblemException;
+                        final IProgressMonitor monitor )
+      throws ProblemException;
+
 }
