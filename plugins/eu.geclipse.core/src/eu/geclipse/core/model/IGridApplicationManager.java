@@ -84,4 +84,15 @@ public interface IGridApplicationManager
                         final IProgressMonitor monitor )
       throws ProblemException;
   
+  
+  /**validate the installed software
+   * @param application The application to validate
+   * @param monitor A {@link IProgressMonitor} to monitor the progress of
+   * this operations.
+   * @throws ProblemException ProblemException If an error occurs while validating the
+   * application.
+   */
+  public void validate( final IGridApplication application,
+                         final IProgressMonitor monitor )
+       throws ProblemException;
 }
