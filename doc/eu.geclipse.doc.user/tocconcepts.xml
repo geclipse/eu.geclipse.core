@@ -139,6 +139,11 @@
       label="VO Management"
       href="html/concepts/siteadministration/voManagement.html">
     </topic>
+    <topic 
+      label="Gria Site Editor"
+      href="html/concepts/siteadministration/griaSiteEditor.html">
+    </topic>
+
 <!--
     <topic 
       label="Monitoring Grid Resources"
