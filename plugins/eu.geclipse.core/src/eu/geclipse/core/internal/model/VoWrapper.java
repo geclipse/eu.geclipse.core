@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -58,18 +58,18 @@ public class VoWrapper
     
     try {
       if (getApplicationManager() != null) {
-      QueryContainer applicationContainer
-        = new QueryContainer(
-            this,
-            "Applications", //$NON-NLS-1$
-            new IQueryInputProvider() {
-              public IGridElement[] getInput( final IProgressMonitor monitor ) throws ProblemException {
-                return getApplicationManager().getApplications( null, monitor );
-              }
-            } );
-      addElement( applicationContainer );
+        QueryContainer applicationContainer
+          = new QueryContainer(
+              this,
+              "Applications", //$NON-NLS-1$
+              new IQueryInputProvider() {
+                public IGridElement[] getInput( final IProgressMonitor monitor ) throws ProblemException {
+                  return getApplicationManager().getApplications( null, monitor );
+                }
+              } );
+        addElement( applicationContainer );
       }
-    
+      
       QueryContainer computingContainer
         = new QueryContainer(
             this,
