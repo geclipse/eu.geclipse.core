@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.eclipse.emf.common.notify.Notification;
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -51,6 +52,7 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import eu.geclipse.jsdl.model.base.ApplicationType;
 import eu.geclipse.jsdl.model.base.JobDefinitionType;
 import eu.geclipse.jsdl.model.base.JobDescriptionType;
+import eu.geclipse.jsdl.model.base.JsdlFactory;
 import eu.geclipse.jsdl.model.base.JsdlPackage;
 import eu.geclipse.jsdl.model.posix.ArgumentType;
 import eu.geclipse.jsdl.model.posix.DocumentRoot;
@@ -104,7 +106,7 @@ public class PosixApplicationSection extends JsdlAdaptersFactory {
   protected JobDescriptionType jobDescriptionType = null;
   protected ApplicationType applicationType = null;
   protected DocumentRoot documentRoot = PosixFactory.eINSTANCE.createDocumentRoot();
-  protected POSIXApplicationType posixApplicationType = null;
+  protected POSIXApplicationType posixApplicationType ;
   protected EnvironmentType environmentType = PosixFactory.eINSTANCE.createEnvironmentType();
   protected ArgumentType argumentType = PosixFactory.eINSTANCE.createArgumentType();
   
@@ -190,7 +192,7 @@ public class PosixApplicationSection extends JsdlAdaptersFactory {
       FileNameType fileName = null;
       public void modifyText( final ModifyEvent e ) {
         checkPosixApplicationElement();
-        if ( !PosixApplicationSection.this.txtExecutable.getText().equals( "" ) ) { //$NON-NLS-1$
+        if ( !PosixApplicationSection.this.txtExecutable.getText().equals( EMPTY_STRING ) ) { 
           if (null == this.fileName) {
             this.fileName = PosixFactory.eINSTANCE.createFileNameType();
           }
@@ -661,9 +663,11 @@ public class PosixApplicationSection extends JsdlAdaptersFactory {
         }
         else if (testType instanceof ApplicationType) {
           this.applicationType = (ApplicationType) testType;
+           
         }
         else if ( testType instanceof POSIXApplicationType ) {
-          this.posixApplicationType = (POSIXApplicationType) testType;  
+          this.posixApplicationType = (POSIXApplicationType) testType;
+          this.posixApplicationType.eAdapters().add( this );
          
         } 
         
@@ -672,6 +676,22 @@ public class PosixApplicationSection extends JsdlAdaptersFactory {
       fillFields();
     }
     
+  }
+  
+  
+  
+  /* 
+   * If the POSIX Application Element is set, check for any possible contents which may
+   * be set. If none of the above are true, then delete the Resources Element from it's
+   * container (JobDescriptionType).
+   */
+  @Override
+  public void notifyChanged(final Notification msg){
+     
+    if ( null != this.posixApplicationType && this.posixApplicationType.eContents().size() == 0) {
+        EcoreUtil.remove( this.posixApplicationType );
+        this.posixApplicationType = null;
+    }
   }
   
   
@@ -747,17 +767,10 @@ public class PosixApplicationSection extends JsdlAdaptersFactory {
      * container (JobDescriptionType).
      */
     if (!this.jobDescriptionType.eIsSet( eStructuralFeature )) {      
-      this.jobDescriptionType.eSet( eStructuralFeature, this.applicationType );
-    }
-    /* 
-     * If the Application Element is set, check for any possible contents which may
-     * be set. If none of the above are true, then delete the Resources Element from it's
-     * container (JobDescriptionType).
-     */
-    else {
-      if ( this.applicationType.eContents().size() == 0) {
-        EcoreUtil.remove( this.applicationType );
+      if ( null == this.applicationType ) {
+        this.applicationType = JsdlFactory.eINSTANCE.createApplicationType();
       }
+      this.jobDescriptionType.eSet( eStructuralFeature, this.applicationType );
     }
   }
 
@@ -768,18 +781,19 @@ public class PosixApplicationSection extends JsdlAdaptersFactory {
     EStructuralFeature eStructuralFeature = this.documentRoot.eClass()
     .getEStructuralFeature( PosixPackage.DOCUMENT_ROOT__POSIX_APPLICATION );
     
-    
-    Collection<POSIXApplicationType> collection = 
-                                          new ArrayList<POSIXApplicationType>();
     checkApplicationElement();
-    collection.add( this.posixApplicationType);
         
-    if ( !this.applicationType.eIsSet( eStructuralFeature ) ){      
-      this.applicationType.eSet( eStructuralFeature, collection );
+    if ( !this.applicationType.eIsSet( eStructuralFeature ) ){  
+      if ( null == this.posixApplicationType){
+        this.posixApplicationType = PosixFactory.eINSTANCE.createPOSIXApplicationType();
+        Collection<POSIXApplicationType> collection = new ArrayList<POSIXApplicationType>();
+        collection.add( this.posixApplicationType );
+        this.applicationType.eSet( eStructuralFeature, collection );
+      }      
 
-
-    }
+    } 
   }
+  
   
   
   /**

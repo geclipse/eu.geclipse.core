@@ -20,7 +20,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.emf.common.notify.Adapter;
 import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.notify.Notifier;
+import org.eclipse.emf.common.notify.impl.AdapterImpl;
 import org.eclipse.emf.edit.provider.ComposeableAdapterFactory;
 import org.eclipse.emf.edit.provider.ComposedAdapterFactory;
 import org.eclipse.emf.edit.provider.IChangeNotifier;
@@ -32,13 +35,13 @@ import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.emf.edit.provider.IStructuredItemContentProvider;
 import org.eclipse.emf.edit.provider.ITreeItemContentProvider;
 
-import eu.geclipse.jsdl.model.base.util.JsdlAdapterFactory;
+
 
 /**
  * @author nloulloud
  *
  */
-public class JsdlAdaptersFactory extends JsdlAdapterFactory implements ComposeableAdapterFactory,
+public class JsdlAdaptersFactory extends AdapterImpl implements ComposeableAdapterFactory,
                                                                 IChangeNotifier,
                                                                 IDisposable  {
   
@@ -89,6 +92,43 @@ public class JsdlAdaptersFactory extends JsdlAdapterFactory implements Composeab
   public void dispose() {
     //  Auto-generated method stub
     
+  }
+
+
+  public Object adapt( final Object object, final Object type ) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+
+  public Adapter adapt( final Notifier targ, final Object type ) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+
+  public void adaptAllNew( final Notifier notifier ) {
+    // TODO Auto-generated method stub
+    
+  }
+
+
+  public Adapter adaptNew( final Notifier targ, final Object type ) {
+    // TODO Auto-generated method stub
+    return null;
+  }
+
+
+  public boolean isFactoryForType( final Object type ) {
+    // TODO Auto-generated method stub
+    return false;
+  }
+
+
+  @Override
+  public void notifyChanged( final Notification msg ) {
+    // TODO Auto-generated method stub
+    return;
   }
   
 }

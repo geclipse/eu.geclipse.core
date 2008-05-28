@@ -16,6 +16,9 @@
  *****************************************************************************/
 package eu.geclipse.jsdl.ui.internal.pages.sections;
 
+import org.eclipse.emf.common.notify.Notification;
+import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
@@ -165,7 +168,8 @@ public class ApplicationSection extends JsdlAdaptersFactory {
     this.adapterRefreshed = true;
     if( null != jobDefinition ) {
       this.jobDefinitionType = jobDefinition;
-      this.applicationType = this.jobDefinitionType.getJobDescription().getApplication();        
+      this.applicationType = this.jobDefinitionType.getJobDescription().getApplication();
+      this.applicationType.eAdapters().add( this );
       fillFields();
     }
     

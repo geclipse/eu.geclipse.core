@@ -183,7 +183,7 @@ public final class JobApplicationPage extends FormPage implements INotifyChanged
     this.apS.setLayout( FormLayoutFactory.createFormPaneTableWrapLayout( false, 1 ) );
     this.apS.setLayoutData( new TableWrapData( TableWrapData.FILL_GRAB ) );
 
-    this.additionalPosixElementSection = new AdditionalPosixElementSection(this.apS, toolkit);
+    this.additionalPosixElementSection = new AdditionalPosixElementSection(this, this.apS, toolkit);
     this.additionalPosixElementSection.setInput( this.jobDefinitionType );
     this.additionalPosixElementSection.addListener( this );
     

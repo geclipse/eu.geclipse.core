@@ -317,7 +317,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
      */        
     List<AdapterFactoryImpl> factories = new ArrayList<AdapterFactoryImpl>();
     factories.add( new ResourceItemProviderAdapterFactory() );
-    factories.add( new JsdlAdaptersFactory() );
+//    factories.add( new JsdlAdaptersFactory() );
     factories.add( new PosixAdaptersFactory() );
     factories.add( new ReflectiveItemProviderAdapterFactory() );
 
