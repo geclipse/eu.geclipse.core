@@ -32,6 +32,7 @@ public class Box extends BatchResource {
   private List<BatchResource> resources = new ArrayList<BatchResource>();
   private boolean IsNodes = false;
 
+
   public Box( final BatchJobManager jobManager ) {
     super( jobManager );
   }
@@ -92,6 +93,9 @@ public class Box extends BatchResource {
   public boolean getIsNodes() {
     return this.IsNodes;
   }
+  
+
+  
 
   public boolean removeChild( final BatchResource resource ) {
     boolean ret = false;

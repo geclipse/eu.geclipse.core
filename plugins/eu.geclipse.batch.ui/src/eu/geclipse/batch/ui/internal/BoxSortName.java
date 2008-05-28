@@ -10,6 +10,7 @@
  ******************************************************************************/
 package eu.geclipse.batch.ui.internal;
 
+
 import org.eclipse.gef.ui.actions.SelectionAction;
 import org.eclipse.ui.IWorkbenchPart;
 
@@ -23,14 +24,14 @@ public class BoxSortName extends SelectionAction {
   public static final String PROPERTY_SORT_BY_NAME = "BoxSortByName"; //$NON-NLS-1$
   public BatchEditor editor;
   private boolean flag = false;
-  private final int Value = 1; //
+  private final int value = 1; 
  
   
   public BoxSortName( final IWorkbenchPart part,final BatchEditor editor ) {
     super( part );
     // this.batchWrapper = batchWrapper;
     //IMG_START   //IMG_NEWQUEUE
-    
+ 
     this.setId( BoxSortName.PROPERTY_SORT_BY_NAME );
     this.setToolTipText( Messages.getString( "BoxSortByName" ) );//$NON-NLS-1$
     this.setImageDescriptor( Activator.getDefault()
@@ -42,6 +43,7 @@ public class BoxSortName extends SelectionAction {
 
   @Override
   protected boolean calculateEnabled() {
+   
     boolean result;
     result = !getSelectedObjects().isEmpty();
     if( result ) {
@@ -61,6 +63,10 @@ public class BoxSortName extends SelectionAction {
           } else if( ( o instanceof BoxEditPart ) ) {
             BoxEditPart boxpart = ( BoxEditPart )o;
             Box boxtemp = boxpart.getMod();
+            boxpart.refreshVisuals();
+       
+        
+          
             this.flag = boxtemp.getIsNodes();
           }
         }
@@ -77,12 +83,13 @@ public class BoxSortName extends SelectionAction {
    */
   public  void  run() {
     if( !this.flag ) {
-    this.editor.queueByName = this.Value;
-      this.editor.sortedQ = this.Value;
+    this.editor.queueByName = this.value;
+      this.editor.sortedQ = this.value;
+     
   
     } else {
-      this.editor.sortedN = this.Value;
-      this.editor.workerNodeByName = this.Value;
+      this.editor.sortedN = this.value;
+      this.editor.workerNodeByName = this.value;
     }
   }
 }

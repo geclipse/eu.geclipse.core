@@ -22,8 +22,8 @@ public class BoxSortState extends SelectionAction {
   public static final String PROPERTY_SORT_BY_STATE = "BoxSortByState";//$NON-NLS-1$
   public BatchEditor editor;
   private boolean flag = false;
-  private final int ValueTwo = 2;
-  private final int ValueReset = 0;
+  private final int valueTwo = 2;
+  private final int valueReset = 0;
 
   public BoxSortState( final IWorkbenchPart part, final BatchEditor editor ) {
     super( part );
@@ -68,13 +68,13 @@ public class BoxSortState extends SelectionAction {
   @Override
   public void run() {
     if( !this.flag ) {
-      this.editor.sortedQ = this.ValueTwo;
-      this.editor.queueByName = this.ValueReset;
-      this.editor.queueByState = this.ValueTwo;
+      this.editor.sortedQ = this.valueTwo;
+      this.editor.queueByName = this.valueReset;
+      this.editor.queueByState = this.valueTwo;
     } else {
-      this.editor.sortedN = this.ValueTwo;
-      this.editor.workerNodeByName = this.ValueReset;
-      this.editor.workerNodeByState = this.ValueTwo;
+      this.editor.sortedN = this.valueTwo;
+      this.editor.workerNodeByName = this.valueReset;
+      this.editor.workerNodeByState = this.valueTwo;
     }
   }
 }

@@ -66,8 +66,8 @@ public class BatchUpdate {
   private List<BatchResource> removedResources = new ArrayList<BatchResource>();
   private boolean firstTime;
   private ProgressDialog initProgress;
-  private int checkX = 0;
-  private int checkY = 0;
+  private int maxX = 0;
+  private int maxY = 0;
   private int count = 0;
   private int EnableQ = 0;
   private int DisabledQ = 0;
@@ -280,7 +280,7 @@ public class BatchUpdate {
     Dimension dimBox_queue = null;
     Dimension dimBox_nodes = null;
     Point pointBox_queue, pointBox_nodes;
-    dimCE = new Dimension( 140, 90 );
+    dimCE = new Dimension( 140, 110 );
     pointBox_queue = new Point( 100, 55 );
     pointBox_nodes = new Point( 100, 400 );
     pointCE = new Point( 200, 100 );
@@ -366,7 +366,6 @@ public class BatchUpdate {
       if( changeN && this.editor.workerNodeByName != 1 ) {
         this.editor.sortedN = 2;
         this.editor.workerNodeByState = 2;
-        // Sort( this.editor.sortedN,this.Nlist, this.box_nodes, false );
         changeN = false;
       }
     }
@@ -415,6 +414,7 @@ public class BatchUpdate {
           if( !this.firstTime ) {
             add = true;
           }
+        
           int loc_x = 50 + ( 120 * ( j ) );
           j++;
           if( i == 0 )
@@ -425,10 +425,10 @@ public class BatchUpdate {
             this.queue_dim[ 2 ] = loc_y;
             j = 0;
           }
-          if( this.checkX < loc_x )
-            this.checkX = loc_x;
-          if( this.checkY <= loc_y )
-            this.checkY = loc_y;
+          if( this.maxX < loc_x )
+            this.maxX = loc_x;
+          if( this.maxY <= loc_y )
+            this.maxY = loc_y;
           if( i == this.nMaxElements - 1 ) {
             this.queue_dim[ 1 ] = loc_x + 50;
             flag_queue = false;
@@ -443,48 +443,21 @@ public class BatchUpdate {
             this.initProgress.moveNextMinor();
         }
       }
-      boolean Values = true;
+      boolean values = true;
       // Sorting because at least one node changed its state
       if( changeQ && this.editor.queueByName != 1 ) {
         this.editor.queueByState = 2;
         this.editor.sortedQ = 2;
         // this.Sort( this.editor.sortedQ, this.Qlist, this.box_queue, true );
         changeQ = false;
-        Values = false;
+        values = false;
       }
       // case of add a new queue
       if( !this.firstTime ) {
         try {
           if( add ) {
-            this.box_queue.removeChildren( this.Qlist );
-            this.diagram.removeChild( this.box_queue );
-            this.box_queue.addChildren( this.Qlist );
-            boolean newsize = false;
-            if( ( this.count ) % ( this.nMaxElements ) == 0 ) {
-              this.checkY = this.checkY + 95;
-              this.count = 0;
-              Dimension dimBox_new = new Dimension( this.checkX
-                                                    + this.queue_dim[ 0 ]
-                                                    - 60, this.checkY );
-              this.box_queue.setSize( dimBox_new );
-              this.diagram.addChild( this.box_queue );
-              newsize = true;
-            }
-            if( !newsize ) {
-              this.box_queue.setSize( dimBox_queue );
-              this.diagram.addChild( this.box_queue );
-            }
-           
-              if( this.editor.queueByName == 1 && Values ) {
-              this.editor.sortedQ = 1;
-              this.editor.queueByName = 0;
-            } else if( this.editor.queueByState == 2 && Values ) {
-              this.editor.sortedQ = 2;
-              this.editor.queueByName = 0;
-            } else {
-              this.editor.sortedQ = 0;
-            }
-            // Sort( this.editor.sortedQ, this.Qlist, this.box_queue, true );
+            
+           addQueue(values,dimBox_queue );
           }
         } catch( Exception Z ) {
           // No code needed 
@@ -522,14 +495,13 @@ public class BatchUpdate {
       pointBox_queue = pointBox_queue.setLocation( 25, 25 );
       this.box_queue.setLocation( pointBox_queue );
       this.box_queue.addChildren( this.Qlist );
-
       newReses = new ArrayList<BatchResource>();
       newReses.add( this.box_queue );
       if( this.firstTime )
         this.initProgress.moveNextMinor();
     }
     int X = this.queue_dim[ 0 ];
-    int Y = this.queue_dim[ 2 ] + 150;//
+    int Y = this.queue_dim[ 2 ] + 200;//
     if( null == this.computingElement ) // Create the ce
     {
       if( this.firstTime )
@@ -538,7 +510,7 @@ public class BatchUpdate {
       this.computingElement.setSize( dimCE );
       this.computingElement.setFQDN( this.batchName );
       this.computingElement.setType( this.batchType );
-      pointCE = pointCE.setLocation( X + 205, Y );// 200 loc
+      pointCE = pointCE.setLocation( X + 205, Y );
       this.computingElement.setLocation( pointCE );
       if( null == newReses )
         newReses = new ArrayList<BatchResource>();
@@ -617,6 +589,39 @@ public class BatchUpdate {
       this.firstTime = false;
     }
   }
+  
+  private void addQueue(final boolean values,final Dimension dimBox_queue)
+  {
+      this.box_queue.removeChildren( this.Qlist );
+      this.diagram.removeChild( this.box_queue );
+      this.box_queue.addChildren( this.Qlist );
+    //  this.box_queue.setIsDimentionChanged( true );
+      boolean newsize = false;
+    
+      if( ( this.count ) % ( this.nMaxElements ) == 1 ) {
+      this.maxY = this.maxY + 160;
+      this.count = 0;
+      Dimension dimBox_new = new Dimension( this.maxX, this.maxY );
+      this.box_queue.setSize( dimBox_new );
+      this.diagram.addChild( this.box_queue );
+      newsize = true;
+      }
+      if( !newsize ) {
+      this.box_queue.setSize( dimBox_queue );
+      this.diagram.addChild( this.box_queue );
+      }
+   
+      if( this.editor.queueByName == 1 && values ) {
+      this.editor.sortedQ = 1;
+      this.editor.queueByName = 0;
+      } else if( this.editor.queueByState == 2 && values ) {
+      this.editor.sortedQ = 2;
+      this.editor.queueByName = 0;
+      } else {
+      this.editor.sortedQ = 0;
+    }
+  }
+  
 
   /*
    * Making the sorting in queues or nodes. if cont is 1 it sorts by name else

@@ -36,7 +36,7 @@ public class ComputingElementFigure extends Figure implements IComputingElementF
   /**
    * The preferred size for this figure
    */
-  private static final Dimension SIZE = new Dimension( 140, 90 );
+  private static final Dimension SIZE = new Dimension( 200,200 );
   
   private TitleBarBorder border;
  
