@@ -120,9 +120,13 @@
     <anchor id="geclipse_concepts_infosystem" />
   </topic>
 
-  <topic 
-    label="Application Development">
-    <anchor id="geclipse_concepts_applicationdevelopment" />
+   <topic 
+    label="Application Deployment">
+    <topic 
+      label="Install/Uninstall a software"
+      href="html/concepts/applicationdeployment/install.html">
+    </topic>
+    <anchor id="geclipse_concepts_applicationdeployment" />
   </topic>
 
   <topic 

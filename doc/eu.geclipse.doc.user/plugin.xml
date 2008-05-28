@@ -73,6 +73,16 @@
       </cheatsheet>
       <cheatsheet
             category="eu.geclipse.doc.user.gEclipseCheatSheets"
+            composite="false"
+            contentFile="cheatsheets/ApplicationDeployment.xml"
+            id="eu.geclipse.doc.user.ApplicationDeployment"
+            name="Application Deployment">
+         <description>
+            This cheat sheet will show you how to install/uninstall a software.
+         </description>
+      </cheatsheet>
+      <cheatsheet
+            category="eu.geclipse.doc.user.gEclipseCheatSheets"
             composite="true"
             contentFile="cheatsheets/GettingStartedWithgEclipse.xml"
             id="eu.geclipse.doc.user.gettingStarted"
