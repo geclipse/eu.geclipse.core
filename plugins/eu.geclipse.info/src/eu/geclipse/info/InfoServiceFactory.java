@@ -66,6 +66,9 @@ public class InfoServiceFactory {
     } catch( GridModelException e ) {
       Activator.logException( e );
     }
+    catch (Exception e) {
+      Activator.logException( e );
+    }
     
     return infoServiceArray;
   }
