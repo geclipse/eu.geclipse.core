@@ -46,6 +46,7 @@ import eu.geclipse.ui.internal.actions.SimpleTestActions;
 import eu.geclipse.ui.internal.actions.SubmitJobActions;
 import eu.geclipse.ui.internal.actions.TransformActions;
 import eu.geclipse.ui.internal.actions.UninstallActions;
+import eu.geclipse.ui.internal.actions.ValidateActions;
 import eu.geclipse.ui.internal.actions.VisualisationActions;
 import eu.geclipse.ui.providers.GridModelContentProvider;
 import eu.geclipse.ui.providers.GridModelLabelProvider;
@@ -137,6 +138,9 @@ public class GridProjectView
     
     UninstallActions uninstallActions = new UninstallActions (site);
     groups.addGroup( uninstallActions );
+    
+    ValidateActions validateActions = new ValidateActions(site);
+    groups.addGroup( validateActions );
     
     ProjectActions projectActions = new ProjectActions( site );
     groups.addGroup( projectActions );

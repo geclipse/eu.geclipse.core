@@ -23,11 +23,13 @@ import org.eclipse.ui.navigator.ICommonMenuConstants;
 
  
 
-/**define an action for the uninstall of a software
+
+
+/**an action for validating the deployed software
  * @author tao-j
  *
  */
-public class UninstallActions extends ActionGroup {
+public class ValidateActions extends ActionGroup {
 
   /**
    * The workbench this action group belongs to.
@@ -36,31 +38,33 @@ public class UninstallActions extends ActionGroup {
   /**
    * The deploy action itself.
    */
-  private UninstallAction uninstallAction;
+  private ValidateAction validateAction;
 
   /**define the actions for uninstall a software
    * @param site
    */
-  public UninstallActions( final IWorkbenchPartSite site ) {
+  public ValidateActions( final IWorkbenchPartSite site ) {
     this.site = site;
     ISelectionProvider selectionProvider = site.getSelectionProvider();
-    this.uninstallAction = new UninstallAction( site );
-    selectionProvider.addSelectionChangedListener( this.uninstallAction );
+    this.validateAction = new ValidateAction( site );
+    selectionProvider.addSelectionChangedListener( this.validateAction );
   }
 
   @Override
   public void dispose() {
     ISelectionProvider selectionProvider = this.site.getSelectionProvider();
-    selectionProvider.removeSelectionChangedListener( this.uninstallAction );
+    selectionProvider.removeSelectionChangedListener( this.validateAction );
   }
 
   @Override
   public void fillContextMenu( final IMenuManager mgr ) {
-    if ( this.uninstallAction.isEnabled() ) {
-      mgr.appendToGroup( ICommonMenuConstants.GROUP_BUILD, this.uninstallAction );
+    if ( this.validateAction.isEnabled() ) {
+      mgr.appendToGroup( ICommonMenuConstants.GROUP_BUILD, this.validateAction );
     }
     super.fillContextMenu( mgr );
   }
   
 }
+
+
 
