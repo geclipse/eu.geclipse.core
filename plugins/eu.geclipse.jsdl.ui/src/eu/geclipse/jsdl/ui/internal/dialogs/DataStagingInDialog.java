@@ -175,14 +175,18 @@ public class DataStagingInDialog extends Dialog {
             for (int i=0; i<DataStagingInDialog.this.uris.length; i++) {
               
               currentURI = DataStagingInDialog.this.uris[i].toString();
-              DataStagingInDialog.this.filename[i] = currentURI.substring( currentURI.lastIndexOf( "/" ) + 1, currentURI.length() ); //$NON-NLS-1$
+              DataStagingInDialog.this.filename[i] = currentURI.substring( currentURI.lastIndexOf( "/" ) //$NON-NLS-1$
+                                                                           + 1, currentURI.length() ); 
               
               if (i==0){
                 DataStagingInDialog.this.pathText.setText(DataStagingInDialog.this.uris[i].toString());
                 DataStagingInDialog.this.nameText.setText( DataStagingInDialog.this.filename[i] );
               }else{
-                DataStagingInDialog.this.pathText.setText( DataStagingInDialog.this.pathText.getText()+ ", " + DataStagingInDialog.this.uris[i].toString()); //$NON-NLS-1$
-                DataStagingInDialog.this.nameText.setText( DataStagingInDialog.this.nameText.getText()+ ", " + DataStagingInDialog.this.filename[i] ); //$NON-NLS-1$
+                DataStagingInDialog.this.pathText.setText( DataStagingInDialog.this.pathText.getText() 
+                                                  + ", " + DataStagingInDialog.this.uris[i].toString()); //$NON-NLS-1$
+                
+                DataStagingInDialog.this.nameText.setText( DataStagingInDialog.this.nameText.getText()
+                                                  + ", " + DataStagingInDialog.this.filename[i] ); //$NON-NLS-1$
               }               
             }
 
@@ -252,7 +256,9 @@ public class DataStagingInDialog extends Dialog {
       
       gd = new GridData();
       Label deleteOnTerminationLabel = new Label( panel, SWT.LEAD );
-      deleteOnTerminationLabel.setText( Messages.getString( "DataStageInTable.DeleteOnTermination_field_label" ) ); //$NON-NLS-1$
+      deleteOnTerminationLabel.setText( Messages
+                                      .getString( "DataStageInTable.DeleteOnTermination_field_label" ) ); //$NON-NLS-1$
+      
       deleteOnTerminationLabel.setLayoutData( gd );
       this.deleteOnTerminationCombo = new Combo( panel, SWT.BORDER
                                                         | SWT.SIMPLE
@@ -264,7 +270,9 @@ public class DataStagingInDialog extends Dialog {
       this.deleteOnTerminationCombo.add( "false" ); //$NON-NLS-1$
    
       if( this.dataStagingType != null ) {
-        int indexOfDelete = this.deleteOnTerminationCombo.indexOf( Boolean.toString(this.dataStagingType.isDeleteOnTermination()));
+        int indexOfDelete = this.deleteOnTerminationCombo
+                                            .indexOf( Boolean.toString(this.dataStagingType.isDeleteOnTermination()));
+        
         this.deleteOnTerminationCombo.select( indexOfDelete );
       } else {
         this.deleteOnTerminationCombo.select( 0 );
@@ -300,19 +308,41 @@ public class DataStagingInDialog extends Dialog {
   @Override
   protected void okPressed() {
    
-    for (int i=0; i<this.uris.length; i++){
+    if ( null != this.uris) {
+      for (int i=0; i<this.uris.length; i++){
+        this.dataStagingType = JsdlFactory.eINSTANCE.createDataStagingType();
+        this.sourceTargetType = JsdlFactory.eINSTANCE.createSourceTargetType();    
+        this.sourceTargetType.setURI( this.uris[i].toString() );
+        this.dataStagingType.setName(this.filename[i] );
+        this.dataStagingType.setSource( this.sourceTargetType );
+        this.dataStagingType.setTarget(null);      
+        this.dataStagingType.setFileName( this.filename[i] );          
+  //      newDataStagingType.setFilesystemName( value[0].toString() );
+        if( this.dialogStyle == ADVANCED_DIALOG ) {
+          this.dataStagingType.setCreationFlag(CreationFlagEnumeration.get( this.creationFlagCombo.getSelectionIndex() ));
+          if( this.deleteOnTerminationCombo.getSelectionIndex() != -1 ) {
+            this.dataStagingType.setDeleteOnTermination( Boolean
+                                                         .valueOf( Boolean.parseBoolean( this.deleteOnTerminationCombo
+                                                       .getItem( this.deleteOnTerminationCombo.getSelectionIndex()))));
+          }
+        }
+        this.dataStageList.add( this.dataStagingType );
+      }
+    } else {
       this.dataStagingType = JsdlFactory.eINSTANCE.createDataStagingType();
       this.sourceTargetType = JsdlFactory.eINSTANCE.createSourceTargetType();    
-      this.sourceTargetType.setURI( this.uris[i].toString() );
-      this.dataStagingType.setName(this.filename[i] );
+      this.sourceTargetType.setURI( this.pathText.getText() );
+      this.dataStagingType.setName(this.nameText.getText() );
       this.dataStagingType.setSource( this.sourceTargetType );
       this.dataStagingType.setTarget(null);      
-      this.dataStagingType.setFileName( this.filename[i] );          
+      this.dataStagingType.setFileName( this.nameText.getText() );          
 //      newDataStagingType.setFilesystemName( value[0].toString() );
       if( this.dialogStyle == ADVANCED_DIALOG ) {
         this.dataStagingType.setCreationFlag(CreationFlagEnumeration.get( this.creationFlagCombo.getSelectionIndex() ));
         if( this.deleteOnTerminationCombo.getSelectionIndex() != -1 ) {
-          this.dataStagingType.setDeleteOnTermination( Boolean.valueOf( Boolean.parseBoolean( this.deleteOnTerminationCombo.getItem( this.deleteOnTerminationCombo.getSelectionIndex())) ));
+          this.dataStagingType.setDeleteOnTermination( Boolean
+                                                       .valueOf( Boolean.parseBoolean( this.deleteOnTerminationCombo
+                                                       .getItem( this.deleteOnTerminationCombo.getSelectionIndex()))));
         }
       }
       this.dataStageList.add( this.dataStagingType );
