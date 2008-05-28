@@ -154,6 +154,12 @@
       label="Testing Grid Resources"
       href="html/concepts/siteadministration/testing.html">
     </topic>
+    
+    <topic 
+      label="Simple Physical Resource Tests"
+      href="html/concepts/siteadministration/simpleTests.html">
+    </topic>
+    
 <!-- 
     <topic 
       label="Benchmarking Grid Resources"
