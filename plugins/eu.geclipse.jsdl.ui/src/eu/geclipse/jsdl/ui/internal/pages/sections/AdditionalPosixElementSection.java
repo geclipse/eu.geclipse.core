@@ -1,6 +1,19 @@
-/**
- * 
- */
+/******************************************************************************
+ * Copyright (c) 2008 g-Eclipse consortium
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ *
+ * Initial development of the original code was made for
+ * project g-Eclipse founded by European Union
+ * project number: FP6-IST-034327  http://www.geclipse.eu/
+ *
+ * Contributor(s):
+ *     UCY (http://www.ucy.cs.ac.cy)
+ *      - Nicholas Loulloudes (loulloudes.n@cs.ucy.ac.cy)
+ *
+ *****************************************************************************/
 package eu.geclipse.jsdl.ui.internal.pages.sections;
 
 import java.math.BigInteger;
@@ -536,7 +549,7 @@ public class AdditionalPosixElementSection extends JsdlAdaptersFactory {
     
     /* ============================= CPU Time Limit ========================== */
     this.lblCPUTimeLimit = toolkit.createLabel( client,
-                                                Messages.getString( "JobApplicationPage_CPUTimeLimit" ) ); //$NON-NLS-1$
+                                                Messages.getString( "JobApplicationPage_CPUTimeLimit" )); //$NON-NLS-1$
     this.txtCPUTimeLimit = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
     td = new TableWrapData( TableWrapData.FILL_GRAB );
     this.txtCPUTimeLimit.setLayoutData( td );
@@ -658,8 +671,8 @@ public class AdditionalPosixElementSection extends JsdlAdaptersFactory {
     
     /* ========================= Thread Count Limit ========================== */
     this.lblThreadCountLimit = toolkit.createLabel( client,
-                                                    Messages.getString( 
-                                                                        "JobApplicationPage_ThreadCountLimit" ) ); //$NON-NLS-1$
+                                            Messages.getString("JobApplicationPage_ThreadCountLimit" ) ); //$NON-NLS-1$
+    
     this.txtThreadCountLimit = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
     td = new TableWrapData( TableWrapData.FILL_GRAB );
     this.txtThreadCountLimit.setLayoutData( td );

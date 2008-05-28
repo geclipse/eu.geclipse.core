@@ -165,7 +165,7 @@ public class PosixApplicationSection extends JsdlAdaptersFactory {
       public void modifyText( final ModifyEvent e ) {
         checkPosixApplicationElement();
                 
-        if (!PosixApplicationSection.this.txtPosixName.getText().equals( "" )){ //$NON-NLS-1$
+        if (!PosixApplicationSection.this.txtPosixName.getText().equals( EMPTY_STRING )){
                             
           PosixApplicationSection.this.posixApplicationType.setName( PosixApplicationSection
                                                                                         .this.txtPosixName.getText() );
@@ -347,7 +347,7 @@ public class PosixApplicationSection extends JsdlAdaptersFactory {
       public void modifyText( final ModifyEvent e ) {
       
         checkPosixApplicationElement();
-        if ( !PosixApplicationSection.this.txtInput.getText().equals( "" ) ) { //$NON-NLS-1$
+        if ( !PosixApplicationSection.this.txtInput.getText().equals( EMPTY_STRING ) ) {
           if (null == this.fileName) {
             this.fileName = PosixFactory.eINSTANCE.createFileNameType();
           }
@@ -419,7 +419,7 @@ public class PosixApplicationSection extends JsdlAdaptersFactory {
       FileNameType fileName = null;
       public void modifyText( final ModifyEvent e ) {
         checkPosixApplicationElement();
-        if ( !PosixApplicationSection.this.txtError.getText().equals( "" ) ) { //$NON-NLS-1$
+        if ( !PosixApplicationSection.this.txtError.getText().equals( EMPTY_STRING ) ) {
           if (null == this.fileName) {
             this.fileName = PosixFactory.eINSTANCE.createFileNameType();
           }
