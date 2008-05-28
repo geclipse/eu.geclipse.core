@@ -123,6 +123,11 @@ public class ComputingWrapper
           throw new GridModelException( pExc.getProblem() );
         }
       }
+      else {
+        addElement( new ContainerMarker( this,
+                                         ContainerMarker.MarkerType.INFO,
+                                         "No matching elements found" ) ); //$NON-NLS-1$
+      }
     }
     return status;
   }
