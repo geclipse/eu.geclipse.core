@@ -57,17 +57,18 @@ public class VoWrapper
     this.vo = vo;
     
     try {
-      
+      if (getApplicationManager() != null) {
       QueryContainer applicationContainer
         = new QueryContainer(
             this,
-            "Applications",
+            "Applications", //$NON-NLS-1$
             new IQueryInputProvider() {
               public IGridElement[] getInput( final IProgressMonitor monitor ) throws ProblemException {
                 return getApplicationManager().getApplications( null, monitor );
               }
             } );
       addElement( applicationContainer );
+      }
     
       QueryContainer computingContainer
         = new QueryContainer(
