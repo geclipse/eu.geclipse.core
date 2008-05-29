@@ -13,7 +13,7 @@
  *    Jie Tao - test class (Plug-in test)
  *****************************************************************************/
 
-package eu.geclipse.core.internal.auth;
+package eu.geclipse.core.auth;
 
 import org.eclipse.core.net.proxy.IProxyData;
 import org.eclipse.core.net.proxy.IProxyService;
@@ -27,17 +27,18 @@ import org.junit.Test;
 import eu.geclipse.core.auth.ICaCertificate;
 import eu.geclipse.core.reporting.ProblemException;
 
-/**this class tests the methods in {@link PEMCertificateLoader}
+/**
+ * Tests the methods in {@link PEMCertificateLoader}
+ * 
  * @author tao-j
- *
  */
-
 public class PEMCertificateLoader_PDETest {
 
-
   private static PEMCertificateLoader loader;
-  /**initialization with a PEMCertificateLoader object
-   * and set proxy
+  
+  /**
+   * Initialization with a PEMCertificateLoader object and set proxy
+   * 
    * @throws Exception
    */
   @BeforeClass
@@ -57,24 +58,26 @@ public class PEMCertificateLoader_PDETest {
     proxyservice.setProxyData( proxies );
   }
 
-  /**tests the method {@link PEMCertificateLoader#getCertificate(IPath)}
+  /**
+   * Tests the method {@link PEMCertificateLoader#getCertificate(IPath)}
+   * 
    * @throws GridException 
    * @throws ProblemException 
-   * 
    */
   @Test
   public void testGetCertificateIPath() throws ProblemException {
-      IPath certpath = new Path( "file:///d:/geclipsetest/"); //$NON-NLS-1$
-      ICaCertificate cert = loader.getCertificate( certpath );
-      Assert.assertNull( cert );
+    IPath certpath = new Path( "file:///d:/geclipsetest/"); //$NON-NLS-1$
+    ICaCertificate cert = loader.getCertificate( certpath );
+    Assert.assertNull( cert );
   }
 
-  /**tests the method {@link PEMCertificateLoader#getCertificate
+  /**
+   * Tests the method {@link PEMCertificateLoader#getCertificate
    *   (URI, String, org.eclipse.core.runtime.IProgressMonitor)}
+   * 
    * @throws URISyntaxException 
    * @throws GridException 
    */
-
   //commented due to automatic test
   /*@Test
   public void testGetCertificateURIStringIProgressMonitor() throws URISyntaxException, GridException {
@@ -85,14 +88,13 @@ public class PEMCertificateLoader_PDETest {
     ( "AEGIS",loader.getCertificate( uri, "AEGIS.info", new NullProgressMonitor() ).getID()); //$NON-NLS-1$ //$NON-NLS-2$
   }*/
 
-
-  /**tests the method {@link PEMCertificateLoader#getCertificateList
+  /**
+   * Tests the method {@link PEMCertificateLoader#getCertificateList
    *   (URI, org.eclipse.core.runtime.IProgressMonitor)}
+   * 
    * @throws URISyntaxException 
    * @throws GridException 
-   * 
    */
-  
   //commented due to automatic test
   /*@Test
   public void testGetCertificateList() throws URISyntaxException, GridException {
@@ -104,12 +106,12 @@ public class PEMCertificateLoader_PDETest {
     Assert.assertEquals( "ca_AEGIS-1.16.tar.gz", list[0].toString() ); //$NON-NLS-1$
   }*/
   
-  /**tests the method {@link PEMCertificateLoader#
-   *   getPredefinedRemoteLocations()}
-   * 
+  /**
+   * Tests the method {@link PEMCertificateLoader#getPredefinedRemoteLocations()}
    */
   @Test
   public void testGetPredefinedRemoteLocations() {
-     Assert.assertNull( loader.getPredefinedRemoteLocations() );
+    Assert.assertNull( loader.getPredefinedRemoteLocations() );
   }
+
 }

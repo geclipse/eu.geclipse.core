@@ -13,14 +13,13 @@
  *    Jie Tao - test class (Plug-in test)
  *****************************************************************************/
 
-package eu.geclipse.core.internal.auth;
+package eu.geclipse.core.auth;
 
 import java.net.URI;
 import java.net.URISyntaxException;
 
 import org.eclipse.core.net.proxy.IProxyData;
 import org.eclipse.core.net.proxy.IProxyService;
-import org.eclipse.core.runtime.NullProgressMonitor;
 import org.junit.Assert;
 
 import org.junit.BeforeClass;
@@ -29,15 +28,18 @@ import org.junit.Test;
 import eu.geclipse.core.reporting.ProblemException;
 
 
-/**this class tests the methods in {@link EUGridPMACertificateLoader}
+/**
+ * Tests the methods in {@link EUGridPMACertificateLoader}
+ * 
  * @author tao-j
- *
  */
-
 public class EUGridPMACertificateLoader_PDETest {
 
   private static EUGridPMACertificateLoader loader;
-  /**initialization with an UGridPMACertificateLoader object
+  
+  /**
+   * Initialization with an UGridPMACertificateLoader object
+   * 
    * @throws Exception
    */
   @BeforeClass
@@ -57,9 +59,10 @@ public class EUGridPMACertificateLoader_PDETest {
     proxyservice.setProxyData( proxies );
   }
 
-  /**tests the method {@link EUGridPMACertificateLoader#getCertificate(IPath)}
-   * @throws GridException 
+  /**
+   * Tests the method {@link EUGridPMACertificateLoader#getCertificate(IPath)}
    * 
+   * @throws GridException
    */
   // commented for automatic building
   /*@Test
@@ -69,8 +72,10 @@ public class EUGridPMACertificateLoader_PDETest {
     Assert.assertNull( cert );
   }*/
 
-  /**tests the method {@link EUGridPMACertificateLoader#getCertificate
+  /**
+   * Tests the method {@link EUGridPMACertificateLoader#getCertificate
    *   (URI, String, org.eclipse.core.runtime.IProgressMonitor)}
+   * 
    * @throws URISyntaxException 
    * @throws GridException 
    * @throws ProblemException 
@@ -81,12 +86,13 @@ public class EUGridPMACertificateLoader_PDETest {
     //Assert.assertEquals( "AEGIS",loader.getCertificate( uri, "ca_AEGIS-1.20.tar.gz", new NullProgressMonitor() ).getID()); //$NON-NLS-1$ //$NON-NLS-2$
   }
 
-  /**tests the method {@link EUGridPMACertificateLoader#getCertificateList
+  /**
+   * Tests the method {@link EUGridPMACertificateLoader#getCertificateList
    *   (URI, org.eclipse.core.runtime.IProgressMonitor)}
+   * 
    * @throws URISyntaxException 
    * @throws GridException 
    * @throws ProblemException 
-   * 
    */
   @Test
   public void testGetCertificateList() throws URISyntaxException, ProblemException {
@@ -94,10 +100,12 @@ public class EUGridPMACertificateLoader_PDETest {
     String[] list = loader.getCertificateList( uri, null );
     Assert.assertNotNull( list );
   }
-  /**tests the method {@link EUGridPMACertificateLoader#
+  
+  /**
+   * Tests the method {@link EUGridPMACertificateLoader#
    *   getPredefinedRemoteLocations()}
-   * @throws URISyntaxException 
    * 
+   * @throws URISyntaxException 
    */
   @Test
   public void testGetPredefinedRemoteLocations() throws URISyntaxException {
