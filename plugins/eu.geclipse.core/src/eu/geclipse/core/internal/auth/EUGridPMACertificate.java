@@ -34,7 +34,7 @@ import org.eclipse.core.runtime.Path;
 public class EUGridPMACertificate
     extends PEMCertificate {
   
-  static final String INFO_FILE_EXTENSION
+  public static final String INFO_FILE_EXTENSION
     = "info"; //$NON-NLS-1$
   
   private static final String LIST_FILE_EXTENSION
@@ -44,14 +44,14 @@ public class EUGridPMACertificate
   
   private byte[] infoData;
   
-  EUGridPMACertificate( final byte[] certificateData,
+  public EUGridPMACertificate( final byte[] certificateData,
                         final byte[] infoData ) {
     super( getIDFromInfo( infoData ), certificateData );
     Assert.isNotNull( infoData );
     this.infoData = infoData;
   }
   
-  static EUGridPMACertificate readFromFile( final IPath filePath )
+  public static EUGridPMACertificate readFromFile( final IPath filePath )
       throws IOException {
     
     EUGridPMACertificate result = null;

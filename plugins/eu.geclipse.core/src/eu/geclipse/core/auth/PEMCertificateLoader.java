@@ -13,7 +13,7 @@
  *    Mathias Stuempert - initial API and implementation
  *****************************************************************************/
 
-package eu.geclipse.core.internal.auth;
+package eu.geclipse.core.auth;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -26,9 +26,9 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
 
 import eu.geclipse.core.ICoreProblems;
-import eu.geclipse.core.auth.ICaCertificate;
-import eu.geclipse.core.auth.ICaCertificateLoader;
 import eu.geclipse.core.internal.Activator;
+import eu.geclipse.core.internal.auth.Messages;
+import eu.geclipse.core.internal.auth.PEMCertificate;
 import eu.geclipse.core.reporting.ProblemException;
 
 /**

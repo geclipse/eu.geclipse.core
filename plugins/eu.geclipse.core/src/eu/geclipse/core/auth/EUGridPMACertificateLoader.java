@@ -13,7 +13,7 @@
  *    Mathias Stuempert - initial API and implementation
  *****************************************************************************/
 
-package eu.geclipse.core.internal.auth;
+package eu.geclipse.core.auth;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -37,9 +37,10 @@ import org.eclipse.core.runtime.NullProgressMonitor;
 
 import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.Preferences;
-import eu.geclipse.core.auth.ICaCertificate;
-import eu.geclipse.core.auth.ICaCertificateLoader;
 import eu.geclipse.core.internal.Activator;
+import eu.geclipse.core.internal.auth.EUGridPMACertificate;
+import eu.geclipse.core.internal.auth.Messages;
+import eu.geclipse.core.internal.auth.PEMCertificate;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.core.util.tar.TarEntry;
 import eu.geclipse.core.util.tar.TarInputStream;

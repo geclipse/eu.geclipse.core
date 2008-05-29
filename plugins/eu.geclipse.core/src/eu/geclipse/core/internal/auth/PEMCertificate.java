@@ -40,21 +40,21 @@ import eu.geclipse.core.auth.AbstractCaCertificate;
 public class PEMCertificate
     extends AbstractCaCertificate {
   
-  static final String PEM_FILE_EXTENSION
+  public static final String PEM_FILE_EXTENSION
     = "pem"; //$NON-NLS-1$
   
-  static final String CERT_FILE_EXTENSION
+  public static final String CERT_FILE_EXTENSION
     = "0"; //$NON-NLS-1$
 
-  private static final String LIST_FILE_EXTENSION
+  public static final String LIST_FILE_EXTENSION
     = "pemcert"; //$NON-NLS-1$
   
-  PEMCertificate( final String id,
+  public PEMCertificate( final String id,
                   final byte[] certificateData ) {
     super( id, certificateData );
   }
   
-  static PEMCertificate readFromFile( final IPath filePath )
+  public static PEMCertificate readFromFile( final IPath filePath )
       throws IOException {
     
     PEMCertificate result = null;
