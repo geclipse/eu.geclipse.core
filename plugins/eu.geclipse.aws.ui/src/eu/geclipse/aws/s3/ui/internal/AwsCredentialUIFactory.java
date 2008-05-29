@@ -13,10 +13,11 @@
  *    Thomas Koeckerbauer - initial API and implementation
  *****************************************************************************/
 
-package eu.geclipse.aws.ui.internal;
+package eu.geclipse.aws.s3.ui.internal;
 
 import org.eclipse.swt.widgets.Shell;
-import eu.geclipse.aws.auth.AwsCredentialDescription;
+
+import eu.geclipse.aws.s3.auth.AwsCredentialDescription;
 import eu.geclipse.core.auth.IAuthenticationToken;
 import eu.geclipse.core.auth.IAuthenticationTokenDescription;
 import eu.geclipse.ui.AbstractAuthTokenUIFactory;

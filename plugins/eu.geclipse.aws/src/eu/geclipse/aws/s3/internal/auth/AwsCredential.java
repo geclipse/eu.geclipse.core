@@ -13,12 +13,12 @@
  *    Mathias Stuempert - initial API and implementation
  *****************************************************************************/
 
-package eu.geclipse.aws.internal.auth;
+package eu.geclipse.aws.s3.internal.auth;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.jets3t.service.security.AWSCredentials;
 
-import eu.geclipse.aws.auth.AwsCredentialDescription;
+import eu.geclipse.aws.s3.auth.AwsCredentialDescription;
 import eu.geclipse.core.auth.AbstractAuthenticationToken;
 import eu.geclipse.core.auth.IAuthenticationToken;
 import eu.geclipse.core.auth.IAuthenticationTokenDescription;

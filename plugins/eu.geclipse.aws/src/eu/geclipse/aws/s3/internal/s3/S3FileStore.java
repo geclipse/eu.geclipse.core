@@ -13,7 +13,7 @@
  *    Mathias Stuempert - initial API and implementation
  *****************************************************************************/
 
-package eu.geclipse.aws.internal.s3;
+package eu.geclipse.aws.s3.internal.s3;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -34,9 +34,9 @@ import org.jets3t.service.S3ServiceException;
 import org.jets3t.service.model.S3Bucket;
 import org.jets3t.service.model.S3Object;
 
-import eu.geclipse.aws.internal.Activator;
-import eu.geclipse.aws.internal.IAwsProblems;
-import eu.geclipse.aws.internal.ServiceRegistry;
+import eu.geclipse.aws.s3.internal.Activator;
+import eu.geclipse.aws.s3.internal.IAwsProblems;
+import eu.geclipse.aws.s3.internal.ServiceRegistry;
 import eu.geclipse.core.reporting.ProblemException;
 
 /**

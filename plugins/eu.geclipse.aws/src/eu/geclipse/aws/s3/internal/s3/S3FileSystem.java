@@ -13,7 +13,7 @@
  *    Mathias Stuempert - initial API and implementation
  *****************************************************************************/
 
-package eu.geclipse.aws.internal.s3;
+package eu.geclipse.aws.s3.internal.s3;
 
 import java.net.URI;
 

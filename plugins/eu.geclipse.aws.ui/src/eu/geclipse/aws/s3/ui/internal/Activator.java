@@ -13,7 +13,7 @@
  *    Mathias Stuempert - initial API and implementation
  *****************************************************************************/
 
-package eu.geclipse.aws.ui.internal;
+package eu.geclipse.aws.s3.ui.internal;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -24,7 +24,7 @@ import org.osgi.framework.BundleContext;
 public class Activator extends AbstractUIPlugin {
 
   /** The plug-in ID */
-  public static final String PLUGIN_ID = "eu.geclipse.aws.ui"; //$NON-NLS-1$
+  public static final String PLUGIN_ID = "eu.geclipse.aws.s3.ui"; //$NON-NLS-1$
 
   // The shared instance
   private static Activator plugin;

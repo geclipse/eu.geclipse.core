@@ -13,7 +13,7 @@
  *    Mathias Stuempert - initial API and implementation
  *****************************************************************************/
 
-package eu.geclipse.aws.internal;
+package eu.geclipse.aws.s3.internal;
 
 import java.util.Hashtable;
 
@@ -21,9 +21,9 @@ import org.jets3t.service.S3Service;
 import org.jets3t.service.S3ServiceException;
 import org.jets3t.service.impl.rest.httpclient.RestS3Service;
 
-import eu.geclipse.aws.auth.AwsCredentialDescription;
-import eu.geclipse.aws.internal.auth.AwsCredential;
-import eu.geclipse.aws.internal.s3.IS3Constants;
+import eu.geclipse.aws.s3.auth.AwsCredentialDescription;
+import eu.geclipse.aws.s3.internal.auth.AwsCredential;
+import eu.geclipse.aws.s3.internal.s3.IS3Constants;
 import eu.geclipse.core.auth.AbstractAuthTokenProvider;
 import eu.geclipse.core.auth.AuthTokenRequest;
 import eu.geclipse.core.auth.IAuthenticationTokenDescription;

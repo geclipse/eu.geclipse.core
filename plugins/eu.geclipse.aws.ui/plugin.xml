@@ -4,14 +4,14 @@
    <extension
          point="eu.geclipse.ui.authTokenUI">
       <wizard
-            class="eu.geclipse.aws.ui.internal.wizards.AwsCredentialWizard"
-            id="eu.geclipse.aws.ui.wizards.AwsCredentialWizard"
+            class="eu.geclipse.aws.s3.ui.internal.wizards.AwsCredentialWizard"
+            id="eu.geclipse.aws.s3.ui.wizards.AwsCredentialWizard"
             icon="icons/obj16/credential.gif"
             name="AWS Credential">
       </wizard>
       <factory
-            class="eu.geclipse.aws.ui.internal.AwsCredentialUIFactory"
-            id="eu.geclipse.aws.ui.awsCredentialUIFactory"
+            class="eu.geclipse.aws.s3.ui.internal.AwsCredentialUIFactory"
+            id="eu.geclipse.aws.s3.ui.awsCredentialUIFactory"
             name="AWS Credential UI Factory">
       </factory>
    </extension>
@@ -19,7 +19,7 @@
          point="eu.geclipse.ui.efs">
       <filesystem
             scheme="s3"
-            validator="eu.geclipse.aws.ui.internal.S3TokenValidator">
+            validator="eu.geclipse.aws.s3.ui.internal.S3TokenValidator">
          <hierarchical
                authority="Access Key ID"
                path="Bucket Name">

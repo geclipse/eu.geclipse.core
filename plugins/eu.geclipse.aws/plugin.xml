@@ -4,7 +4,7 @@
    <extension
          point="eu.geclipse.core.authTokens">
       <token
-            description="eu.geclipse.aws.auth.AwsCredentialDescription"
+            description="eu.geclipse.aws.s3.auth.AwsCredentialDescription"
             id="eu.geclipse.amazon.auth.credential"
             name="AWS Credential"
             wizard="eu.geclipse.aws.ui.wizards.AwsCredentialWizard">
@@ -15,7 +15,7 @@
       <filesystem
             scheme="s3">
          <run
-               class="eu.geclipse.aws.internal.s3.S3FileSystem">
+               class="eu.geclipse.aws.s3.internal.s3.S3FileSystem">
          </run>
       </filesystem>
    </extension>

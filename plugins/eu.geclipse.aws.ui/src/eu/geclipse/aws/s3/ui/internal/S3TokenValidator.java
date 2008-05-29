@@ -13,7 +13,7 @@
  *    Mathias Stuempert - initial API and implementation
  *****************************************************************************/
 
-package eu.geclipse.aws.ui.internal;
+package eu.geclipse.aws.s3.ui.internal;
 
 import eu.geclipse.ui.wizards.GenericConnectionTokenValidator;
 

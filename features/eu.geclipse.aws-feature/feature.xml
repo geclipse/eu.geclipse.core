@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="eu.geclipse.aws"
-      label="g-Eclipse Amazon S3 Webservice Integration"
+      label="g-Eclipse Amazon Webservice Integration"
       version="1.0.0.qualifier"
       provider-name="g-Eclipse Consortium">
 
@@ -31,14 +31,14 @@
    </requires>
 
    <plugin
-         id="eu.geclipse.aws"
+         id="eu.geclipse.aws.s3"
          download-size="0"
          install-size="0"
          version="0.0.0"
          unpack="false"/>
 
    <plugin
-         id="eu.geclipse.aws.ui"
+         id="eu.geclipse.aws.s3.ui"
          download-size="0"
          install-size="0"
          version="0.0.0"

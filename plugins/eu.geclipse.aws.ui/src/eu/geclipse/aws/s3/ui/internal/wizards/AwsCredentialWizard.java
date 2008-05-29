@@ -13,11 +13,11 @@
  *    Mathias Stuempert - initial API and implementation
  *****************************************************************************/
 
-package eu.geclipse.aws.ui.internal.wizards;
+package eu.geclipse.aws.s3.ui.internal.wizards;
 
 import org.eclipse.jface.wizard.Wizard;
 
-import eu.geclipse.aws.auth.AwsCredentialDescription;
+import eu.geclipse.aws.s3.auth.AwsCredentialDescription;
 import eu.geclipse.core.auth.AuthenticationTokenManager;
 import eu.geclipse.core.auth.IAuthenticationToken;
 import eu.geclipse.core.reporting.ProblemException;

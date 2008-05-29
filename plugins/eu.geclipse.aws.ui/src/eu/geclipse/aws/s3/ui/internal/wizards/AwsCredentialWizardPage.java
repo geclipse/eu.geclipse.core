@@ -13,7 +13,7 @@
  *    Mathias Stuempert - initial API and implementation
  *****************************************************************************/
 
-package eu.geclipse.aws.ui.internal.wizards;
+package eu.geclipse.aws.s3.ui.internal.wizards;
 
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -27,8 +27,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import eu.geclipse.aws.auth.AwsCredentialDescription;
-import eu.geclipse.aws.ui.internal.Activator;
+import eu.geclipse.aws.s3.auth.AwsCredentialDescription;
+import eu.geclipse.aws.s3.ui.internal.Activator;
 import eu.geclipse.core.auth.PasswordManager;
 import eu.geclipse.ui.widgets.StoredCombo;
 

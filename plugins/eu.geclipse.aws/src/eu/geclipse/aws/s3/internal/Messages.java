@@ -13,7 +13,7 @@
  *    Mathias Stuempert - initial API and implementation
  *****************************************************************************/
 
-package eu.geclipse.aws.ui.internal;
+package eu.geclipse.aws.s3.internal;
 
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
@@ -22,7 +22,7 @@ import java.util.ResourceBundle;
  * Returns the localized messages for this package.
  */
 public class Messages {
-  private static final String BUNDLE_NAME = "eu.geclipse.aws.ui.internal.messages"; //$NON-NLS-1$
+  private static final String BUNDLE_NAME = "eu.geclipse.aws.s3.internal.messages"; //$NON-NLS-1$
 
   private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle
       .getBundle(BUNDLE_NAME);
@@ -46,5 +46,4 @@ public class Messages {
     }
     return result;
   }
-  
 }

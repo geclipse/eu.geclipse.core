@@ -13,7 +13,7 @@
  *    Mathias Stuempert - initial API and implementation
  *****************************************************************************/
 
-package eu.geclipse.aws.internal;
+package eu.geclipse.aws.s3.internal;
 
 import java.util.Properties;
 
@@ -34,7 +34,7 @@ import org.osgi.util.tracker.ServiceTracker;
 public class Activator extends Plugin implements IProxyChangeListener {
 
   /** The plug-in ID */
-  public static final String PLUGIN_ID = "eu.geclipse.aws"; //$NON-NLS-1$
+  public static final String PLUGIN_ID = "eu.geclipse.aws.s3"; //$NON-NLS-1$
 
   private static final String HTTP_RETRY_COUNT_KEY = "httpclient.retry-max"; //$NON-NLS-1$
 
