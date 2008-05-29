@@ -70,7 +70,7 @@ public class ValidateAction extends SelectionListenerAction {
       Object element = iter.next();
       if( element instanceof IGridApplication) {
         String tag = ((IGridApplication) element).getName();
-        if (tag.contains( "to-be-validated" ) || tag.contains( "aborted-validate" )) //$NON-NLS-1$ //$NON-NLS-2$
+        if (tag.contains( "to-be-validated" )) //$NON-NLS-1$
         isGridApplicationFlag = true;
       }
     }
