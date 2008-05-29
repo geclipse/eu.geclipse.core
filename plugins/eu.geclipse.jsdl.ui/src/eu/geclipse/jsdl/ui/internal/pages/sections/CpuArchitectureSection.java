@@ -50,9 +50,10 @@ import eu.geclipse.jsdl.ui.internal.pages.Messages;
  */
 public class CpuArchitectureSection extends JsdlAdaptersFactory {
   
+  private static final String EMPTY_STRING = ""; //$NON-NLS-1$
   protected JobDescriptionType jobDescriptionType = JsdlFactory.eINSTANCE.createJobDescriptionType();
   protected ResourcesType resourcesType = JsdlFactory.eINSTANCE.createResourcesType();  
-  protected CPUArchitectureType cpuArchitectureType = JsdlFactory.eINSTANCE.createCPUArchitectureType();
+  protected CPUArchitectureType cpuArchitectureType;
   protected Label lblCPUArchName = null;
   protected Combo cmbCPUArchName = null;
       
@@ -134,7 +135,7 @@ public class CpuArchitectureSection extends JsdlAdaptersFactory {
      * Add an EMPTY item value so that the user can disable the specific 
      * feature 
      */
-    this.cmbCPUArchName.add(""); //$NON-NLS-1$ 
+    this.cmbCPUArchName.add( EMPTY_STRING );
         
     /*
      * Add the CPUArchitecture Enumeration Literals to the 
@@ -154,9 +155,8 @@ public class CpuArchitectureSection extends JsdlAdaptersFactory {
         
         String selectedCPUArch = CpuArchitectureSection.this.cmbCPUArchName
                                             .getItem( CpuArchitectureSection.this.cmbCPUArchName.getSelectionIndex() );
-        
-        if (CpuArchitectureSection.this.cmbCPUArchName
-                      .getItem( CpuArchitectureSection.this.cmbCPUArchName.getSelectionIndex() ) == "") { //$NON-NLS-1$
+
+        if ( selectedCPUArch.equals( EMPTY_STRING ) ){
           
           deleteElement( CpuArchitectureSection.this.cpuArchitectureType );
           CpuArchitectureSection.this.cpuArchitectureType = null;
@@ -178,7 +178,7 @@ public class CpuArchitectureSection extends JsdlAdaptersFactory {
        // Do Nothing 
       }
     });
-
+        
     this.cmbCPUArchName.setLayoutData( td );
     
     toolkit.paintBordersFor( client);    

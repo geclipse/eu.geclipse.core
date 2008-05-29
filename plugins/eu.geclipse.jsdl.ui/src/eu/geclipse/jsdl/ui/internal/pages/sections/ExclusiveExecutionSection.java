@@ -137,7 +137,7 @@ public class ExclusiveExecutionSection extends JsdlAdaptersFactory {
          * element has to be unset.
          */
         if (ExclusiveExecutionSection.this.cmbExclExec.getItem( ExclusiveExecutionSection
-                                                        .this.cmbExclExec.getSelectionIndex() ) == "") { //$NON-NLS-1$
+                                                      .this.cmbExclExec.getSelectionIndex() ).equals( EMPTY_STRING )) {
           
           ExclusiveExecutionSection.this.resourcesType.unsetExclusiveExecution();
                               

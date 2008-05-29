@@ -156,7 +156,8 @@ public class OperatingSystemSection extends JsdlAdaptersFactory {
           
         String selectedOSName = OperatingSystemSection.this.cmbOperSystType
                                           .getItem( OperatingSystemSection.this.cmbOperSystType.getSelectionIndex() );
-        if ( selectedOSName == EMPTY_STRING ) { 
+        
+        if ( selectedOSName.equals( EMPTY_STRING ) ) { 
           
           deleteElement( OperatingSystemSection.this.operatingSystemType );
           
