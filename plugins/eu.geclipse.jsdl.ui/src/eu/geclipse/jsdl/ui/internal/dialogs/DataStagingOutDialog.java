@@ -205,7 +205,13 @@ public class DataStagingOutDialog extends Dialog {
               
               if (i==0){
                 DataStagingOutDialog.this.pathText.setText(DataStagingOutDialog.this.uris[i].toString());
-                DataStagingOutDialog.this.nameText.setText( DataStagingOutDialog.this.filename[i] );
+                /*
+                 * If in edit mode , then change only the source location and not the Stage-in Name.
+                 * 
+                 */
+                if ( ( !DataStagingOutDialog.this.editMode) ) {
+                  DataStagingOutDialog.this.nameText.setText( DataStagingOutDialog.this.filename[i] );
+                }
               }else{
                 DataStagingOutDialog.this.pathText.setText( DataStagingOutDialog.this.pathText.getText()
                                                   + ", " + DataStagingOutDialog.this.uris[i].toString()); //$NON-NLS-1$
@@ -300,7 +306,7 @@ public class DataStagingOutDialog extends Dialog {
   protected void okPressed() {
     
  
-    if( null != this.uris ){
+    if( ( null != this.uris ) && ( this.uris.length > 1 ) ){
       for (int i=0; i<this.uris.length; i++){
         this.dataStagingType = JsdlFactory.eINSTANCE.createDataStagingType();
         this.sourceTargetType = JsdlFactory.eINSTANCE.createSourceTargetType();    

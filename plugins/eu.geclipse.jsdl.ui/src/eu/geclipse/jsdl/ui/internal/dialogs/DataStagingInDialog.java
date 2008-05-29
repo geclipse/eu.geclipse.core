@@ -71,8 +71,8 @@ public class DataStagingInDialog extends Dialog {
   protected URI[] uris;
   protected Text nameText;
   protected boolean editMode = false;
-  private int dialogStyle;
-  private DataStagingType dataStagingType;
+  protected DataStagingType dataStagingType;
+  private int dialogStyle;  
   private ArrayList<DataStagingType>dataStageList = new ArrayList<DataStagingType>();
   private SourceTargetType sourceTargetType;
   
@@ -171,8 +171,8 @@ public class DataStagingInDialog extends Dialog {
           DataStagingInDialog.this.filename = new String[DataStagingInDialog.this.uris.length];
           
           
-          if ((DataStagingInDialog.this.uris != null)&&(DataStagingInDialog.this.uris.length > 0)){
-            for (int i=0; i<DataStagingInDialog.this.uris.length; i++) {
+          if ( ( DataStagingInDialog.this.uris != null ) && ( DataStagingInDialog.this.uris.length > 0 ) ){
+            for ( int i=0; i<DataStagingInDialog.this.uris.length; i++ ) {
               
               currentURI = DataStagingInDialog.this.uris[i].toString();
               DataStagingInDialog.this.filename[i] = currentURI.substring( currentURI.lastIndexOf( "/" ) //$NON-NLS-1$
@@ -180,7 +180,13 @@ public class DataStagingInDialog extends Dialog {
               
               if (i==0){
                 DataStagingInDialog.this.pathText.setText(DataStagingInDialog.this.uris[i].toString());
-                DataStagingInDialog.this.nameText.setText( DataStagingInDialog.this.filename[i] );
+                /*
+                 * If in edit mode , then change only the source location and not the Stage-in Name.
+                 * 
+                 */
+                if ( ( !DataStagingInDialog.this.editMode) ) {
+                  DataStagingInDialog.this.nameText.setText( DataStagingInDialog.this.filename[i] ); 
+                }
               }else{
                 DataStagingInDialog.this.pathText.setText( DataStagingInDialog.this.pathText.getText() 
                                                   + ", " + DataStagingInDialog.this.uris[i].toString()); //$NON-NLS-1$
@@ -308,18 +314,21 @@ public class DataStagingInDialog extends Dialog {
   @Override
   protected void okPressed() {
    
-    if ( null != this.uris) {
+    if ( ( null != this.uris ) && ( this.uris.length > 1 ) ) {
       for (int i=0; i<this.uris.length; i++){
         this.dataStagingType = JsdlFactory.eINSTANCE.createDataStagingType();
         this.sourceTargetType = JsdlFactory.eINSTANCE.createSourceTargetType();    
         this.sourceTargetType.setURI( this.uris[i].toString() );
         this.dataStagingType.setName(this.filename[i] );
         this.dataStagingType.setSource( this.sourceTargetType );
-        this.dataStagingType.setTarget(null);      
-        this.dataStagingType.setFileName( this.filename[i] );          
+        this.dataStagingType.setTarget(null);
+//        if (this.nameText.getText() == "" ){ //$NON-NLS-1$
+          this.dataStagingType.setFileName( this.filename[i] );
+//        }
   //      newDataStagingType.setFilesystemName( value[0].toString() );
         if( this.dialogStyle == ADVANCED_DIALOG ) {
-          this.dataStagingType.setCreationFlag(CreationFlagEnumeration.get( this.creationFlagCombo.getSelectionIndex() ));
+          this.dataStagingType.setCreationFlag(
+                                              CreationFlagEnumeration.get( this.creationFlagCombo.getSelectionIndex()));
           if( this.deleteOnTerminationCombo.getSelectionIndex() != -1 ) {
             this.dataStagingType.setDeleteOnTermination( Boolean
                                                          .valueOf( Boolean.parseBoolean( this.deleteOnTerminationCombo
@@ -332,10 +341,10 @@ public class DataStagingInDialog extends Dialog {
       this.dataStagingType = JsdlFactory.eINSTANCE.createDataStagingType();
       this.sourceTargetType = JsdlFactory.eINSTANCE.createSourceTargetType();    
       this.sourceTargetType.setURI( this.pathText.getText() );
-      this.dataStagingType.setName(this.nameText.getText() );
+      this.dataStagingType.setName(this.nameText.getText() );      
       this.dataStagingType.setSource( this.sourceTargetType );
-      this.dataStagingType.setTarget(null);      
-      this.dataStagingType.setFileName( this.nameText.getText() );          
+      this.dataStagingType.setTarget(null);
+      this.dataStagingType.setFileName( this.nameText.getText() );
 //      newDataStagingType.setFilesystemName( value[0].toString() );
       if( this.dialogStyle == ADVANCED_DIALOG ) {
         this.dataStagingType.setCreationFlag(CreationFlagEnumeration.get( this.creationFlagCombo.getSelectionIndex() ));

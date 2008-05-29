@@ -154,7 +154,8 @@ public class OperatingSystemSection extends JsdlAdaptersFactory {
     this.cmbOperSystType.addSelectionListener(new SelectionListener() {
       public void widgetSelected(final SelectionEvent e) {
           
-        String selectedOSName = OperatingSystemSection.this.cmbOperSystType.getItem( OperatingSystemSection.this.cmbOperSystType.getSelectionIndex() );
+        String selectedOSName = OperatingSystemSection.this.cmbOperSystType
+                                          .getItem( OperatingSystemSection.this.cmbOperSystType.getSelectionIndex() );
         if ( selectedOSName == EMPTY_STRING ) { 
           
           deleteElement( OperatingSystemSection.this.operatingSystemType );

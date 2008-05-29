@@ -136,7 +136,8 @@ public class ExclusiveExecutionSection extends JsdlAdaptersFactory {
          * If the EMPTY item is selected then the ExclusiveExecution
          * element has to be unset.
          */
-        if (ExclusiveExecutionSection.this.cmbExclExec.getItem( ExclusiveExecutionSection.this.cmbExclExec.getSelectionIndex() ) == "") { //$NON-NLS-1$
+        if (ExclusiveExecutionSection.this.cmbExclExec.getItem( ExclusiveExecutionSection
+                                                        .this.cmbExclExec.getSelectionIndex() ) == "") { //$NON-NLS-1$
           
           ExclusiveExecutionSection.this.resourcesType.unsetExclusiveExecution();
                               

@@ -428,7 +428,7 @@ public class DataStageOutTable {
     for (int i=0; i<dataStageList.size(); i++){
       DataStagingType temp = dataStageList.get( i );      
       result.setFileName( temp.getFileName() );    
-      target.setURI( temp.getSource().getURI() );
+      target.setURI( temp.getTarget().getURI() );
       result.setTarget( target );
     }
     return result;

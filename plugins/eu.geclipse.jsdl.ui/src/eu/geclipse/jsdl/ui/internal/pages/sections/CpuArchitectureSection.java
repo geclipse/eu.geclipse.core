@@ -152,9 +152,11 @@ public class CpuArchitectureSection extends JsdlAdaptersFactory {
     this.cmbCPUArchName.addSelectionListener(new SelectionListener() {
       public void widgetSelected(final SelectionEvent e) {
         
-        String selectedCPUArch = CpuArchitectureSection.this.cmbCPUArchName.getItem( CpuArchitectureSection.this.cmbCPUArchName.getSelectionIndex() );
+        String selectedCPUArch = CpuArchitectureSection.this.cmbCPUArchName
+                                            .getItem( CpuArchitectureSection.this.cmbCPUArchName.getSelectionIndex() );
         
-        if (CpuArchitectureSection.this.cmbCPUArchName.getItem( CpuArchitectureSection.this.cmbCPUArchName.getSelectionIndex() ) == "") { //$NON-NLS-1$
+        if (CpuArchitectureSection.this.cmbCPUArchName
+                      .getItem( CpuArchitectureSection.this.cmbCPUArchName.getSelectionIndex() ) == "") { //$NON-NLS-1$
           
           deleteElement( CpuArchitectureSection.this.cpuArchitectureType );
           CpuArchitectureSection.this.cpuArchitectureType = null;

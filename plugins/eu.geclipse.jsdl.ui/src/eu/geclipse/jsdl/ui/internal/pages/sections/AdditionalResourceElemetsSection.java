@@ -353,8 +353,7 @@ public class AdditionalResourceElemetsSection extends JsdlAdaptersFactory {
     
     if (eObject != null && eObject.eIsProxy() ) {
      
-      eObject =  EcoreUtil.resolve( eObject, 
-                                  AdditionalResourceElemetsSection.this.resourcesType );
+      eObject =  EcoreUtil.resolve( eObject, AdditionalResourceElemetsSection.this.resourcesType );
     }
         
     return eObject;

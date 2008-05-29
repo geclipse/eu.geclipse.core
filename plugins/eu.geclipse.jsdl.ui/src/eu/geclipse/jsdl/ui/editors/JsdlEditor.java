@@ -85,7 +85,6 @@ import org.eclipse.wst.sse.ui.StructuredTextEditor;
 
 import eu.geclipse.jsdl.model.base.DocumentRoot;
 import eu.geclipse.jsdl.model.base.JobDefinitionType;
-import eu.geclipse.jsdl.ui.adapters.jsdl.JsdlAdaptersFactory;
 import eu.geclipse.jsdl.ui.adapters.posix.PosixAdaptersFactory;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.pages.DataStagingPage;
@@ -156,7 +155,8 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
                   
                   if ( ( visitDelta.getKind() & ( IResourceDelta.CHANGED | IResourceDelta.REMOVED ) ) != 0 ) {
                     
-                    Resource resource = this.resourceSet.getResource( URI.createURI( visitDelta.getFullPath().toString() ), false );
+                    Resource resource = this.resourceSet.getResource( URI.createURI( 
+                                                                         visitDelta.getFullPath().toString() ), false );
                     
                     if ( resource != null ) {
                       if ( ( visitDelta.getKind() & IResourceDelta.REMOVED ) != 0 ) {
@@ -299,7 +299,9 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
     private JobApplicationPage jobApplicationPage = new JobApplicationPage(this);
     private DataStagingPage dataStagingPage = new DataStagingPage(this);
     private ResourcesPage resourcesPage = new ResourcesPage(this);
-    private ParametricJobPage parametricPage = new ParametricJobPage(this, "id", "Parametric job");
+    private ParametricJobPage parametricPage = new ParametricJobPage(this, 
+                                                                     "id",  //$NON-NLS-1$
+                                                                     "Parametric job"); //$NON-NLS-1$
     private IHyperlinkListener messageHyperLinkListener;
     
 
@@ -994,8 +996,8 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
       basicDiagnostic = new BasicDiagnostic(Diagnostic.ERROR,
                                             Activator.PLUGIN_ID,
                                             0,
-                                            String.format( Messages.getString( "JsdlEditor.CreateModelErrorMessage" ), //$NON-NLS-1$
-                                                           resource.getURI() ),
+                               String.format( Messages.getString( "JsdlEditor.CreateModelErrorMessage" ), //$NON-NLS-1$
+                                            resource.getURI() ),
                                             new Object [] { exception == null ? ( Object )resource : exception } );
       
       ( ( BasicDiagnostic ) basicDiagnostic ).merge( EcoreUtil.computeDiagnostic( resource, true ) );
@@ -1006,7 +1008,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
           basicDiagnostic =  new BasicDiagnostic( Diagnostic.ERROR,
                                                   Activator.PLUGIN_ID,
                                                   0,
-                                                  Messages.getString("JsdlMultiPageEditor.CreateModelErrorMessage"),  //$NON-NLS-1$
+                                      Messages.getString("JsdlMultiPageEditor.CreateModelErrorMessage"),  //$NON-NLS-1$
                                                   new Object[] { exception } );
         }
         else { 
@@ -1028,7 +1030,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
     boolean result = false;
     try {
       
-      InputStream stream = this.editingDomain.getResourceSet().getURIConverter().createInputStream( resource.getURI() );
+      InputStream stream = this.editingDomain.getResourceSet().getURIConverter().createInputStream(resource.getURI());
       if ( stream != null ) {
         result = true;
         stream.close();
