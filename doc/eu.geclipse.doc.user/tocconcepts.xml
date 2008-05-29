@@ -5,65 +5,65 @@
   label="Concepts"
   link_to="toc.xml#geclipse_concepts">
 
-  <topic 
+  <topic
     label="g-Eclipse Setup">
     <anchor id="geclipse_concepts_setup" />
-    <topic 
+    <topic
       label="VO Settings"
       href="html/concepts/setup/vosettings.html">
     </topic>
-    <topic 
+    <topic
       label="CA Certificates"
       href="html/concepts/setup/cacertificates.html">
     </topic>
   </topic>
 
-  <topic 
+  <topic
     label="The Grid Project">
-    <topic 
+    <topic
       label="Creating a Grid Project"
       href="html/concepts/gridproject/creating.html">
     </topic>
-    <topic 
+    <topic
       label="The Grid Project View"
       href="html/concepts/gridproject/projectview.html">
     </topic>
     <anchor id="geclipse_concepts_gridproject" />
   </topic>
 
-  <topic 
+  <topic
     label="Grid Authentication">
-    <topic 
+    <topic
       label="Creating an Authentication Token"
       href="html/concepts/gridauthentication/creating.html">
     </topic>
-    <topic 
+    <topic
       label="Managing Authentication Tokens"
       href="html/concepts/gridauthentication/managing.html">
     </topic>
     <anchor id="geclipse_concepts_gridauthentication" />
   </topic>
 
-  <topic 
+  <topic
     label="Connections">
-    <topic 
+    <topic
       label="Creating a Connection"
       href="html/concepts/connections/creating.html">
     </topic>
-    <topic 
+    <topic
       label="Browsing Remote Sites"
       href="html/concepts/connections/browsing.html">
     </topic>
-    <topic 
+    <topic
       label="Managing Connections"
       href="html/concepts/connections/managing.html">
     </topic>
     <anchor id="geclipse_concepts_connections" />
   </topic>
 
-  <topic 
+  <topic
     label="Job Management">
-    <topic 
+    <topic
       label="Creating a JSDL Job Description"
       href="html/concepts/jobmanagement/creatingJSDL.html">
     </topic>
@@ -75,105 +75,110 @@
         href="html/concepts/jobmanagement/editorpages/jobdefinition.html">
       </topic>
       <topic
-      	href="html/concepts/jobmanagement/editorpages/application.html"
-      	label="Application Page">
+          href="html/concepts/jobmanagement/editorpages/application.html"
+          label="Application Page">
       </topic>
       <topic
-      	href="html/concepts/jobmanagement/editorpages/datastaging.html"
-      	label="Data Staging Page">
+          href="html/concepts/jobmanagement/editorpages/datastaging.html"
+          label="Data Staging Page">
       </topic>
       <topic href="html/concepts/jobmanagement/editorpages/resources.html" label="Resources Page"></topic>
     </topic>
-    <topic 
+    <topic
       label="Submitting a Job"
       href="html/concepts/jobmanagement/jobsubmit.html">
     </topic>
-    <topic 
+    <topic
       label="Managing Jobs"
       href="html/concepts/jobmanagement/jobmanagement.html">
-	      <topic
-	        label="Checking Job Details"
-	        href="html/concepts/jobmanagement/submittedJobManagement/jobDetails.html">
-	      </topic>
-	      <topic
-	        label="Manually updating Job Status"
-	        href="html/concepts/jobmanagement/submittedJobManagement/manualStatusUpdate.html">
-	      </topic>
-	      <topic
-	        label="Deleteting job / Releasing job resources"
-	        href="html/concepts/jobmanagement/submittedJobManagement/deleteJob.html">
-	      </topic>
+          <topic
+            label="Checking Job Details"
+            href="html/concepts/jobmanagement/submittedJobManagement/jobDetails.html">
+          </topic>
+          <topic
+            label="Manually updating Job Status"
+            href="html/concepts/jobmanagement/submittedJobManagement/manualStatusUpdate.html">
+          </topic>
+          <topic
+            label="Deleteting job / Releasing job resources"
+            href="html/concepts/jobmanagement/submittedJobManagement/deleteJob.html">
+          </topic>
     </topic>
-    <topic 
+    <topic
       label="Creating a Grid Workflow"
       href="html/concepts/jobmanagement/creatingWorkflows.html">
     </topic>
     <anchor id="geclipse_concepts_jobmanagement" />
   </topic>
 
-  <topic 
+  <topic
     label="Info System">
-    <topic 
+    <topic
       label="Browsing the Info System"
       href="html/concepts/infosystem/browsing.html">
     </topic>
     <anchor id="geclipse_concepts_infosystem" />
   </topic>
 
-   <topic 
+  <topic
+    label="Application Development">
+    <anchor id="geclipse_concepts_applicationdevelopment" />
+  </topic>
+
+   <topic
     label="Application Deployment">
-    <topic 
+    <topic
       label="Install/Uninstall a software"
       href="html/concepts/applicationdeployment/install.html">
     </topic>
     <anchor id="geclipse_concepts_applicationdeployment" />
   </topic>
 
-  <topic 
+  <topic
     label="Site Administration">
-    <topic 
+    <topic
       label="Batch System Configuration"
       href="html/concepts/siteadministration/batchSystemConfiguration.html">
     </topic>
-    <topic 
+    <topic
       label="VO Management"
       href="html/concepts/siteadministration/voManagement.html">
     </topic>
-    <topic 
+    <topic
       label="Gria Site Editor"
       href="html/concepts/siteadministration/griaSiteEditor.html">
     </topic>
 
 <!--
-    <topic 
+    <topic
       label="Monitoring Grid Resources"
       href="html/concepts/siteadministration/monitoring.html">
     </topic>
 -->
-    <topic 
+    <topic
       label="Testing Grid Resources"
       href="html/concepts/siteadministration/testing.html">
     </topic>
-    
-    <topic 
+
+    <topic
       label="Simple Physical Resource Tests"
       href="html/concepts/siteadministration/simpleTests.html">
     </topic>
-    
-<!-- 
-    <topic 
+
+<!--
+    <topic
       label="Benchmarking Grid Resources"
       href="html/concepts/siteadministration/benchmarking.html">
     </topic>
 -->
-    <topic 
+    <topic
       label="The Terminal View"
       href="html/concepts/siteadministration/terminalView.html">
     </topic>
     <anchor id="geclipse_concepts_siteadministration" />
   </topic>
 
-  <topic 
+  <topic
     label="Visualisation">
     <anchor id="geclipse_concepts_visualisation" />
   </topic>
