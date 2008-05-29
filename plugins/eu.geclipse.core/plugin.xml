@@ -9,6 +9,7 @@
    <extension-point id="gridProjectFolder" name="Grid Project Folder" schema="schema/gridProjectFolder.exsd"/>
    <extension-point id="simpleTests" name="Simple Tests" schema="schema/simpleTests.exsd"/>
    <extension-point id="voLoader" name="VO Loader" schema="schema/voLoader.exsd"/>
+   <extension-point id="gridResourceCategory" name="Grid Resource Category" schema="schema/gridResourceCategory.exsd"/>
    <extension
          point="org.eclipse.core.expressions.propertyTesters">
       <propertyTester
@@ -57,13 +58,13 @@
    <extension
          point="eu.geclipse.core.caCertificateLoader">
       <loader
-            class="eu.geclipse.core.internal.auth.EUGridPMACertificateLoader"
+            class="eu.geclipse.core.auth.EUGridPMACertificateLoader"
             fromLocal="true"
             fromRemote="true"
             name="European Policy Management Authority for Grid Authentication">
       </loader>
       <loader
-            class="eu.geclipse.core.internal.auth.PEMCertificateLoader"
+            class="eu.geclipse.core.auth.PEMCertificateLoader"
             fromLocal="true"
             fromRemote="false"
             name="PEM Based Certificate Loader">
@@ -390,5 +391,44 @@
             id="eu.geclipse.core.simpleTest.pingTest"
             name="Ping Test">
       </test>
+   </extension>
+   <extension
+         point="eu.geclipse.core.gridResourceCategory">
+      <category
+            id="eu.geclipse.core.model.category.applications"
+            name="Applications">
+      </category>
+      <category
+            id="eu.geclipse.core.model.category.computing"
+            name="Computing">
+      </category>
+      <category
+            id="eu.geclipse.core.model.category.services"
+            name="Services">
+      </category>
+      <category
+            id="eu.geclipse.core.model.category.services.data"
+            name="Data Services"
+            parent="eu.geclipse.core.model.category.services">
+      </category>
+      <category
+            id="eu.geclipse.core.model.category.services.info"
+            name="Info Services"
+            parent="eu.geclipse.core.model.category.services">
+      </category>
+      <category
+            id="eu.geclipse.core.model.category.services.jobs"
+            name="Job Services"
+            parent="eu.geclipse.core.model.category.services">
+      </category>
+      <category
+            id="eu.geclipse.core.model.category.services.others"
+            name="Other Services"
+            parent="eu.geclipse.core.model.category.services">
+      </category>
+      <category
+            id="eu.geclipse.core.model.category.storage"
+            name="Storage">
+      </category>
    </extension>
 </plugin>
