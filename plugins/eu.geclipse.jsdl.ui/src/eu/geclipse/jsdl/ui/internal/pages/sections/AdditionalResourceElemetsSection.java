@@ -39,6 +39,7 @@ import eu.geclipse.jsdl.model.base.ResourcesType;
 import eu.geclipse.jsdl.ui.adapters.jsdl.JsdlAdaptersFactory;
 import eu.geclipse.jsdl.ui.internal.pages.FormSectionFactory;
 import eu.geclipse.jsdl.ui.internal.pages.Messages;
+import eu.geclipse.ui.widgets.DoubleNumberVerifier;
 
 
 /**
@@ -174,25 +175,28 @@ public class AdditionalResourceElemetsSection extends JsdlAdaptersFactory {
     this.cmbIndividualCPUSpeed.setData( FormToolkit.KEY_DRAW_BORDER );
     this.cmbIndividualCPUSpeed.setItems( RESOURCES_BOUNDARY_ITEMS );  
     this.txtIndCPUSp = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
-    this.txtIndCPUSp.addModifyListener( new ModifyListener() {
-      
-      public void modifyText( final ModifyEvent e ) {    
-        
+//    this.txtIndCPUSp.addModifyListener( new ModifyListener() {
+//      
+//      public void modifyText( final ModifyEvent e ) {    
+//        
 //        if (!AdditionalResourceElemetsSection.this.txtIndCPUSp.getText().equals( EMPTY_STRING ) ) {
 //          
-//          AdditionalResourceElemetsSection.this.boundaryType.setValue( Double.parseDouble( AdditionalResourceElemetsSection.
-//                                                                                           this.txtIndCPUSp.getText()) );
-//          AdditionalResourceElemetsSection.this.rangeValueType.setLowerBound( AdditionalResourceElemetsSection.this.boundaryType );
-//          AdditionalResourceElemetsSection.this.resourcesType.setIndividualCPUSpeed( AdditionalResourceElemetsSection.this.rangeValueType );
+//          AdditionalResourceElemetsSection.this.boundaryType.setValue( 
+//                                      Double.parseDouble( AdditionalResourceElemetsSection.this.txtIndCPUSp.getText()));
+//          
+//          AdditionalResourceElemetsSection.this.rangeValueType
+//                                                  .setLowerBound( AdditionalResourceElemetsSection.this.boundaryType );
+//          AdditionalResourceElemetsSection.this.resourcesType
+//                                         .setIndividualCPUSpeed( AdditionalResourceElemetsSection.this.rangeValueType );
 //        }else{
 //          AdditionalResourceElemetsSection.this.resourcesType.setIndividualCPUSpeed( null );
 //        }
 //          
 //        contentChanged();
 //          
-        }
-      } );   
-//    this.txtIndCPUSp.addListener( SWT.Verify, new NumberVerifier() );
+//        }
+//      } );   
+    this.txtIndCPUSp.addListener( SWT.Verify, new DoubleNumberVerifier() );
     this.txtIndCPUSp.setLayoutData( td );    
    
     
@@ -204,7 +208,8 @@ public class AdditionalResourceElemetsSection extends JsdlAdaptersFactory {
     this.cmbIndividualCPUTime = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
     this.cmbIndividualCPUTime.setData( FormToolkit.KEY_DRAW_BORDER );
     this.cmbIndividualCPUTime.setItems( RESOURCES_BOUNDARY_ITEMS );        
-    this.txtIndCPUTime = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$    
+    this.txtIndCPUTime = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    this.txtIndCPUTime.addListener( SWT.Verify, new DoubleNumberVerifier() );
     this.txtIndCPUTime.setLayoutData( td );
 
     /*=====================Individual CPU Count Widgets ======================*/
@@ -217,7 +222,7 @@ public class AdditionalResourceElemetsSection extends JsdlAdaptersFactory {
     this.cmbIndividualCPUCount.setData( FormToolkit.KEY_DRAW_BORDER );
     this.cmbIndividualCPUCount.setItems( RESOURCES_BOUNDARY_ITEMS );
     this.txtIndCPUCount = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
-
+    this.txtIndCPUCount.addListener( SWT.Verify, new DoubleNumberVerifier() );
     this.txtIndCPUCount.setLayoutData( td );
 
     /*===============Individual Network Bandwidth Widgets ====================*/
@@ -231,6 +236,7 @@ public class AdditionalResourceElemetsSection extends JsdlAdaptersFactory {
     this.cmbIndividualNetworkBandwidth.setItems( RESOURCES_BOUNDARY_ITEMS );      
     
     this.txtIndNetBand = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    this.txtIndNetBand.addListener( SWT.Verify, new DoubleNumberVerifier() );
     this.txtIndNetBand.setLayoutData( td );
     
     /*===============Individual Physical Memory Widgets ======================*/
@@ -243,7 +249,7 @@ public class AdditionalResourceElemetsSection extends JsdlAdaptersFactory {
     this.cmbIndividualPhysicalMemory.setData( FormToolkit.KEY_DRAW_BORDER );
     this.cmbIndividualPhysicalMemory.setItems( RESOURCES_BOUNDARY_ITEMS ); 
     this.txtPhysMem = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
-
+    this.txtPhysMem.addListener( SWT.Verify, new DoubleNumberVerifier() );
     this.txtPhysMem.setLayoutData( td );
     
     /*================Individual Virtual Memory Widgets ======================*/
@@ -256,7 +262,7 @@ public class AdditionalResourceElemetsSection extends JsdlAdaptersFactory {
     this.cmbIndividualVirtualMesmory.setData( FormToolkit.KEY_DRAW_BORDER );
     this.cmbIndividualVirtualMesmory.setItems( RESOURCES_BOUNDARY_ITEMS ); 
     this.txtVirtMem = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
-
+    this.txtVirtMem.addListener( SWT.Verify, new DoubleNumberVerifier() );
     this.txtVirtMem.setLayoutData( td );
     
     /*================Individual Disk Space Widgets ==========================*/
@@ -269,6 +275,7 @@ public class AdditionalResourceElemetsSection extends JsdlAdaptersFactory {
     this.cmbIndividualDiskSpace.setData( FormToolkit.KEY_DRAW_BORDER );
     this.cmbIndividualDiskSpace.setItems( RESOURCES_BOUNDARY_ITEMS ); 
     this.txtIndDiskSpac = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    this.txtIndDiskSpac.addListener( SWT.Verify, new DoubleNumberVerifier() );
     this.txtIndDiskSpac.setLayoutData( td );
 
     /*=========================Total CPU Time Widgets ========================*/
@@ -281,6 +288,7 @@ public class AdditionalResourceElemetsSection extends JsdlAdaptersFactory {
     this.cmbTotalCPUTime.setData( FormToolkit.KEY_DRAW_BORDER );
     this.cmbTotalCPUTime.setItems( RESOURCES_BOUNDARY_ITEMS ); 
     this.txtCPUTime = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    this.txtCPUTime.addListener( SWT.Verify, new DoubleNumberVerifier() );
     this.txtCPUTime.setLayoutData( td );
     
     /*========================Total CPU Count Widgets ========================*/
@@ -293,6 +301,7 @@ public class AdditionalResourceElemetsSection extends JsdlAdaptersFactory {
     this.cmbTotalCPUCount.setData( FormToolkit.KEY_DRAW_BORDER );
     this.cmbTotalCPUCount.setItems( RESOURCES_BOUNDARY_ITEMS ); 
     this.txtCPUCount = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    this.txtCPUCount.addListener( SWT.Verify, new DoubleNumberVerifier() );
     this.txtCPUCount.setLayoutData( td );
     
     /*=====================Total Physical Memory Widgets =====================*/
@@ -305,6 +314,7 @@ public class AdditionalResourceElemetsSection extends JsdlAdaptersFactory {
     this.cmbTotalPhysicalMemory.setData( FormToolkit.KEY_DRAW_BORDER );
     this.cmbTotalPhysicalMemory.setItems( RESOURCES_BOUNDARY_ITEMS ); 
     this.txtTotPhMem = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    this.txtTotPhMem.addListener( SWT.Verify, new DoubleNumberVerifier() );
     this.txtTotPhMem.setLayoutData( td );
 
     /*======================Total Virtual Memory Widgets =====================*/
@@ -316,7 +326,8 @@ public class AdditionalResourceElemetsSection extends JsdlAdaptersFactory {
     this.cmbTotalVirtualMemory = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
     this.cmbTotalVirtualMemory.setData( FormToolkit.KEY_DRAW_BORDER );
     this.cmbTotalVirtualMemory.setItems( RESOURCES_BOUNDARY_ITEMS ); 
-    this.txtTotVirtMem = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$    
+    this.txtTotVirtMem = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    this.txtTotVirtMem.addListener( SWT.Verify, new DoubleNumberVerifier() );
     this.txtTotVirtMem.setLayoutData( td );
    
     /*========================Total Disk Space Widgets =======================*/
@@ -329,6 +340,7 @@ public class AdditionalResourceElemetsSection extends JsdlAdaptersFactory {
     this.cmbTotalDiskSpace.setData( FormToolkit.KEY_DRAW_BORDER );
     this.cmbTotalDiskSpace.setItems( RESOURCES_BOUNDARY_ITEMS );
     this.txtTotDiskSp = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    this.txtTotDiskSp.addListener( SWT.Verify, new DoubleNumberVerifier() );
     this.txtTotDiskSp.setLayoutData( td );
 
     /*====================Total Resource Count Widgets =======================*/
@@ -341,6 +353,7 @@ public class AdditionalResourceElemetsSection extends JsdlAdaptersFactory {
     this.cmbTotalResourceCount.setData( FormToolkit.KEY_DRAW_BORDER );
     this.cmbTotalResourceCount.setItems( RESOURCES_BOUNDARY_ITEMS );
     this.txtTotResCount = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    this.txtTotResCount.addListener( SWT.Verify, new DoubleNumberVerifier() );
     this.txtTotResCount.setLayoutData( td );
 
     toolkit.paintBordersFor( client );
