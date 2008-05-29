@@ -66,7 +66,7 @@ public class MultipleArgumentList extends TabComponent<String> {
   protected void handleAddButtonSelected()
   {
     MultipleInputDialog dialog = new MultipleInputDialog( getShell(),
-                                                          Messages.getString("MultipleArgumentList.new_value") ); //$NON-NLS-1$
+                                                  Messages.getString("MultipleArgumentList.new_value") ); //$NON-NLS-1$
     dialog.addTextField( Messages.getString("MultipleArgumentList.new_value"), null, false ); //$NON-NLS-1$
     if( dialog.open() != Window.OK ) {
       return;
@@ -90,7 +90,7 @@ public class MultipleArgumentList extends TabComponent<String> {
     } else {
       String originalName = var;
       MultipleInputDialog dialog = new MultipleInputDialog( getShell(),
-                                                            Messages.getString("MultipleArgumentList.edit_title") ); //$NON-NLS-1$
+                                                 Messages.getString("MultipleArgumentList.edit_title") ); //$NON-NLS-1$
       dialog.addTextField( Messages.getString("MultipleArgumentList.new_value"), originalName, false );  //$NON-NLS-1$
       if( dialog.open() != Window.OK ) {
         // do nothing;

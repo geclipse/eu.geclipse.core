@@ -394,13 +394,17 @@ public class ApplicationSpecificControlsFactory {
         // }
         if( filename != null ) {
           if( ApplicationSpecificControlsFactory.this.intFile == 1 ) {
-            Text con = ( Text )ApplicationSpecificControlsFactory.this.parentStagingInControls.get( ApplicationSpecificControlsFactory.this.adapters.indexOf( this ) )
+            Text con = ( Text )ApplicationSpecificControlsFactory.this.parentStagingInControls
+            .get( ApplicationSpecificControlsFactory.this.adapters.indexOf( this ) )
               .getURIControl();
+            
             con.setText( filename );
             // fileButton.setText( filename );
           } else {
-            Text con = ( Text )ApplicationSpecificControlsFactory.this.parentStagingOutControls.get( ApplicationSpecificControlsFactory.this.adapters.indexOf( this ) )
+            Text con = ( Text )ApplicationSpecificControlsFactory.this.parentStagingOutControls
+            .get( ApplicationSpecificControlsFactory.this.adapters.indexOf( this ) )
               .getURIControl();
+            
             con.setText( filename );
           }
         }
@@ -577,7 +581,8 @@ public class ApplicationSpecificControlsFactory {
         if( dialog.open() == Window.OK ) {
           URI[] uris = dialog.getSelectedURIs();
           if ((uris != null) && (uris.length > 0)){
-            ApplicationSpecificControlsFactory.this.textFieldsFromParent.get( ApplicationSpecificControlsFactory.this.adapters.indexOf( this ) )
+            ApplicationSpecificControlsFactory.this.textFieldsFromParent.get( ApplicationSpecificControlsFactory
+                                                                              .this.adapters.indexOf( this ) )
             .setText( uris[0].toString() );
           }
         }

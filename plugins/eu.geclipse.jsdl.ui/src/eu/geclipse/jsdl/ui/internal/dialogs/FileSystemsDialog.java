@@ -290,7 +290,8 @@ public class FileSystemsDialog extends Dialog {
     
     public void modifyText( final ModifyEvent e ) {
       
-      if ( !FileSystemsDialog.this.txtDiskSpace.getText().equals( "" ) && !FileSystemsDialog.this.editMode ) { //$NON-NLS-1$ 
+      if ( !FileSystemsDialog.this.txtDiskSpace.getText().equals( "" )  //$NON-NLS-1$
+          && !FileSystemsDialog.this.editMode ) {
         
         
         this.boundaryType.setValue( Double.parseDouble( FileSystemsDialog.this.txtDiskSpace.getText() ) );        

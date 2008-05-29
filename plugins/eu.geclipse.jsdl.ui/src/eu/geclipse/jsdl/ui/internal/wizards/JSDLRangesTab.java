@@ -58,7 +58,7 @@ public class JSDLRangesTab extends TabComponent
   protected void handleAddButtonSelected()
   {
     MultipleInputDialog dialog = new MultipleInputDialog( getShell(),
-                                                          Messages.getString( "JSDLRangesTab.new_value" ) ); //$NON-NLS-1$
+                                                       Messages.getString( "JSDLRangesTab.new_value" ) ); //$NON-NLS-1$
     dialog.addTextField( Messages.getString( "JSDLRangesTab.range_start" ), null, false ); //$NON-NLS-1$
     dialog.addTextField( Messages.getString( "JSDLRangesTab.range_end" ), null, false ); //$NON-NLS-1$
     if( dialog.open() != Window.OK ) {
@@ -72,7 +72,8 @@ public class JSDLRangesTab extends TabComponent
       addVariable( range );
     } catch( IllegalArgumentException exc ) {
       MessageDialog.openError( getShell(),
-                               Messages.getString( "JSDLRangesTab.bad_range_format" ), Messages.getString( "JSDLRangesTab.bad_range_format" ) ); //$NON-NLS-1$ //$NON-NLS-2$
+                               Messages.getString( "JSDLRangesTab.bad_range_format" ),  //$NON-NLS-1$
+                               Messages.getString( "JSDLRangesTab.bad_range_format" ) ); //$NON-NLS-1$
     }
   }
 
@@ -87,7 +88,8 @@ public class JSDLRangesTab extends TabComponent
       String oldStart = Double.valueOf( var.getStart() ).toString();
       String oldEnd = Double.valueOf( var.getEnd() ).toString();
       MultipleInputDialog dialog = new MultipleInputDialog( getShell(),
-                                                            Messages.getString( "OutputFilesTab.edit_output_file_settings_dialog_title" ) ); //$NON-NLS-1$
+                         Messages.getString( "OutputFilesTab.edit_output_file_settings_dialog_title" ) ); //$NON-NLS-1$
+      
       ArrayList<String> comboData = new ArrayList<String>();
       for( FileType fileType : FileType.values() ) {
         comboData.add( fileType.toString() );
@@ -114,7 +116,8 @@ public class JSDLRangesTab extends TabComponent
           }
         } catch( IllegalArgumentException exc ) {
           MessageDialog.openError( getShell(),
-                                   Messages.getString( "JSDLRangesTab.bad_range_format" ), Messages.getString( "JSDLRangesTab.bad_range_format" ) ); //$NON-NLS-1$ //$NON-NLS-2$
+                                   Messages.getString( "JSDLRangesTab.bad_range_format" ), //$NON-NLS-1$
+                                  Messages.getString( "JSDLRangesTab.bad_range_format" ) ); //$NON-NLS-1$
         }
       }
     }

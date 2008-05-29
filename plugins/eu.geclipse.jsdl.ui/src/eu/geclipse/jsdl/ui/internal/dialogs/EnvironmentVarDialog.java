@@ -221,7 +221,8 @@ public class EnvironmentVarDialog extends Dialog {
 
       public void widgetSelected( final SelectionEvent e ) {
         EnvironmentVarDialog.this.environmentType.setFilesystemName( EnvironmentVarDialog.this.cmbFileSystemName
-                                                             .getItem(EnvironmentVarDialog.this.cmbFileSystemName.getSelectionIndex() ) );
+                                                             .getItem(EnvironmentVarDialog.this.cmbFileSystemName
+                                                                      .getSelectionIndex() ) );
         validateFields();
         
       }

@@ -60,20 +60,19 @@ import eu.geclipse.jsdl.ui.adapters.jsdl.DataStageTypeAdapter;
 import eu.geclipse.jsdl.ui.adapters.jsdl.ParametricJobAdapter;
 
 public class ParametricJobPage extends FormPage
-  implements INotifyChangedListener
-{
+  implements INotifyChangedListener {
 
+  protected List<String> jsdlElementsList = new ArrayList<String>();
+  protected Map<String, String> assignmentContent = new HashMap<String, String>();
+  protected Map<String, String> sweepContent = new HashMap<String, String>();
+  protected List<String> sweepRules = new ArrayList<String>();
   private Composite body;
   private Composite assignmentSection;
   private Composite valuesSection;
   private Composite sweepSection;
   private boolean dirtyFlag;
   private boolean contentRefreshed;
-  private ParametricJobAdapter adapter;
-  List<String> jsdlElementsList = new ArrayList<String>();
-  Map<String, String> assignmentContent = new HashMap<String, String>();
-  Map<String, String> sweepContent = new HashMap<String, String>();
-  List<String> sweepRules = new ArrayList<String>();
+  private ParametricJobAdapter adapter;  
   private TableViewer sweepTableViewer;
 
   public ParametricJobPage( final FormEditor editor,
@@ -81,8 +80,8 @@ public class ParametricJobPage extends FormPage
                             final String title )
   {
     super( editor, id, title );
-    this.sweepRules.add( "changes with" );
-    this.sweepRules.add( "changes after" );
+    this.sweepRules.add( "changes with" ); //$NON-NLS-1$
+    this.sweepRules.add( "changes after" ); //$NON-NLS-1$
   }
 
   @Override
@@ -138,19 +137,19 @@ public class ParametricJobPage extends FormPage
   {
     Composite client = FormSectionFactory.createGridStaticSection( toolkit,
                                                                    parent,
-                                                                   "Parameters assignment",
-                                                                   "Define parameters and assign them to JSDL fields.",
+                                                                   "Parameters assignment", //$NON-NLS-1$
+                                                    "Define parameters and assign them to JSDL fields.", //$NON-NLS-1$
                                                                    3 );
     // assignment table
     Table assignmentTable = new Table( client, SWT.MULTI | SWT.FULL_SELECTION );
     TableColumn parameterColumn = new TableColumn( assignmentTable, SWT.NONE );
-    parameterColumn.setText( "Parameter" );
+    parameterColumn.setText( "Parameter" ); //$NON-NLS-1$
     parameterColumn.setWidth( 150 );
     TableColumn jsdlElementsColumn = new TableColumn( assignmentTable, SWT.NONE );
-    jsdlElementsColumn.setText( "JSDL elements" );
+    jsdlElementsColumn.setText( "JSDL elements" ); //$NON-NLS-1$
     jsdlElementsColumn.setWidth( 300 );
     TableColumn valuesColumn = new TableColumn( assignmentTable, SWT.NONE );
-    valuesColumn.setText( "Values" );
+    valuesColumn.setText( "Values" ); //$NON-NLS-1$
     valuesColumn.setWidth( 160 );
     GridData gData = new GridData( GridData.FILL_BOTH );
     gData.grabExcessHorizontalSpace = true;
@@ -166,39 +165,40 @@ public class ParametricJobPage extends FormPage
     assignmentTable.setLinesVisible( true );
     // add button
     Button assignmentAddButton = new Button( client, SWT.PUSH );
-    assignmentAddButton.setText( "Add..." );
+    assignmentAddButton.setText( "Add..." ); //$NON-NLS-1$
     final Shell shell = client.getShell();
     this.jsdlElementsList = this.adapter.getElementsList();
-    final TableViewer tempViewer = sweepTableViewer; 
+    final TableViewer tempViewer = this.sweepTableViewer; 
     assignmentAddButton.addSelectionListener( new SelectionAdapter() {
     
       @Override
       public void widgetSelected( final SelectionEvent e ) {
         EditDialog dialog = null;
-        if( assignmentContent != null && assignmentContent.size() > 0 ) {
+        if( ParametricJobPage.this.assignmentContent != null && ParametricJobPage.this.assignmentContent.size() > 0 ) {
           List<String> connectedToTemp = new ArrayList<String>();
-          for( String connEl : assignmentContent.keySet()){
+          for( String connEl : ParametricJobPage.this.assignmentContent.keySet()){
             connectedToTemp.add( connEl );
           }
           dialog = new EditDialog( shell,
-                                   "",
+                                   "", //$NON-NLS-1$
                                    ParametricJobPage.this.jsdlElementsList,
                                    connectedToTemp,
-                                   sweepRules );
+                                   ParametricJobPage.this.sweepRules );
         } else {
           dialog = new EditDialog( shell,
-                                   "",
+                                   "", //$NON-NLS-1$
                                    ParametricJobPage.this.jsdlElementsList );
         }
         if( dialog.open() == Window.OK ) {
           ParametricJobPage.this.assignmentContent.put( dialog.getNameReturn(),
                                                         dialog.getElementReturn() );
           if (!"".equals(dialog.getConnectedTo()) && !"".equals(dialog.getSweepRule())){ //$NON-NLS-1$ //$NON-NLS-2$
-            ParametricJobPage.this.sweepContent.put( dialog.getNameReturn(), dialog.getSweepRule() + " " + dialog.getConnectedTo() );
+            ParametricJobPage.this.sweepContent.put( dialog.getNameReturn(), dialog.getSweepRule() + " "  //$NON-NLS-1$
+                                                     + dialog.getConnectedTo() );
             shell.getDisplay().asyncExec( new Runnable(){
 
               public void run() {
-                sweepTableViewer.refresh();
+                ParametricJobPage.this.sweepTableViewer.refresh();
                 
               }
               
@@ -226,16 +226,18 @@ public class ParametricJobPage extends FormPage
   {
     Composite client = FormSectionFactory.createGridStaticSection( toolkit,
                                                                    parent,
-                                                                   "Values assignment",
-                                                                   "Decide how should parameters' values change. This will result in different number of JSDL files to submit.",
+                                                                   "Values assignment", //$NON-NLS-1$
+                                                                   "Decide how should parameters' values change." +
+                                                                   " This will result in different number of JSDL" +
+                                                                   " files to submit.",
                                                                    3 );
     // assignment table
     Table sweepTable = new Table( client, SWT.MULTI | SWT.FULL_SELECTION );
     TableColumn parameterColumn = new TableColumn( sweepTable, SWT.NONE );
-    parameterColumn.setText( "Parameter" );
+    parameterColumn.setText( "Parameter" ); //$NON-NLS-1$
     parameterColumn.setWidth( 150 );
     TableColumn sweepColumn = new TableColumn( sweepTable, SWT.NONE );
-    sweepColumn.setText( "Sweep rule" );
+    sweepColumn.setText( "Sweep rule" ); //$NON-NLS-1$
     sweepColumn.setWidth( 300 );
     GridData gData = new GridData( GridData.FILL_BOTH );
     gData.grabExcessHorizontalSpace = true;
@@ -243,10 +245,10 @@ public class ParametricJobPage extends FormPage
     gData.verticalSpan = 4;
     gData.heightHint = 150;
     sweepTable.setLayoutData( gData );
-    sweepTableViewer = new TableViewer( sweepTable );
-    sweepTableViewer.setContentProvider( new CSProvider() );
-    sweepTableViewer.setLabelProvider( new SweepLabelProvider() );
-    sweepTableViewer.setInput( this.sweepContent );
+    this.sweepTableViewer = new TableViewer( sweepTable );
+    this.sweepTableViewer.setContentProvider( new CSProvider() );
+    this.sweepTableViewer.setLabelProvider( new SweepLabelProvider() );
+    this.sweepTableViewer.setInput( this.sweepContent );
     sweepTable.setHeaderVisible( true );
     sweepTable.setLinesVisible( true );
     toolkit.paintBordersFor( client );
@@ -274,7 +276,7 @@ public class ParametricJobPage extends FormPage
     }
 
     public String getSweepRule() {
-      return sweepRuleReturn;
+      return this.sweepRuleReturn;
     }
 
     public String getConnectedTo() {
@@ -321,10 +323,11 @@ public class ParametricJobPage extends FormPage
         super.getButton( IDialogConstants.OK_ID ).setEnabled( true );
         this.nameReturn = this.parameterControl.getText();
         this.elementReturn = this.elementsListControl.getText();
-        this.sweepConnectedToReturn = "";
-        this.sweepRuleReturn = "";
+        this.sweepConnectedToReturn = ""; //$NON-NLS-1$
+        this.sweepRuleReturn = ""; //$NON-NLS-1$
         } else {
-          if (!this.sweepConnectedToList.getText().equals( "" ) && !this.sweepRuleList.getText().equals( "" )){
+          if (!this.sweepConnectedToList.getText().equals( "" )  //$NON-NLS-1$
+              && !this.sweepRuleList.getText().equals( "" )){ //$NON-NLS-1$
             super.getButton( IDialogConstants.OK_ID ).setEnabled( true );
             this.nameReturn = this.parameterControl.getText();
             this.elementReturn = this.elementsListControl.getText();
@@ -341,7 +344,7 @@ public class ParametricJobPage extends FormPage
 
     @Override
     protected Control createDialogArea( final Composite parent ) {
-      getShell().setText( "Define parameter" );
+      getShell().setText( "Define parameter" ); //$NON-NLS-1$
       Composite composite = ( Composite )super.createDialogArea( parent );
       composite.setLayout( new GridLayout( 1, false ) );
       composite.setLayoutData( new GridData( GridData.FILL_BOTH ) );

@@ -186,7 +186,8 @@ public class ArgumentsDialog extends Dialog {
 
       public void widgetSelected( final SelectionEvent e ) {
         ArgumentsDialog.this.argumentType.setFilesystemName( ArgumentsDialog.this.cmbFileSystemName
-                                                             .getItem(ArgumentsDialog.this.cmbFileSystemName.getSelectionIndex() ) );
+                                                             .getItem(ArgumentsDialog.this.cmbFileSystemName
+                                                                      .getSelectionIndex() ) );
         validateFields();
         
       }

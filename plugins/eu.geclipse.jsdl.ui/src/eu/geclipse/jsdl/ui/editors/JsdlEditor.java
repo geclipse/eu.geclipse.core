@@ -367,6 +367,7 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
     this.editingDomain = new AdapterFactoryEditingDomain( this.adapterFactory,
                                                           commandStack,
                                                           new HashMap<Resource, Boolean>() ); 
+    
         
   }
   

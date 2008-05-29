@@ -178,8 +178,9 @@ public class CandidateHostsDialog extends Dialog {
          * Finish to the indexOf ":" character to remove any trailing characters.
          * 
          */
-        hostnameOnly = gridComputings[i].getName().substring( gridComputings[i].getName().lastIndexOf( " " )+1 //$NON-NLS-1$
-                                                             , gridComputings[i].getName().indexOf( ":" ) ); //$NON-NLS-1$
+        hostnameOnly = gridComputings[i].getName().substring( 
+                                                         gridComputings[i].getName().lastIndexOf( " " )+1 //$NON-NLS-1$
+                                                         , gridComputings[i].getName().indexOf( ":" ) ); //$NON-NLS-1$
       
         /*
          * If there are elements in the Candidate Hosts Table Viewer then

@@ -457,7 +457,7 @@ public final class OverviewPage extends FormPage
     
     this.sectionContent = this.toolkit.createFormText( client, true );
      try {
-       this.sectionContent.setText( Messages.getString( "OverviewPage_DataStagingContent" ), true, false ); //$NON-NLS-1$
+       this.sectionContent.setText( Messages.getString( "OverviewPage_DataStagingContent" ),true,false ); //$NON-NLS-1$
      } catch ( SWTException e ) {
        this.sectionContent.setText( e.getMessage(),false, false );
      }
