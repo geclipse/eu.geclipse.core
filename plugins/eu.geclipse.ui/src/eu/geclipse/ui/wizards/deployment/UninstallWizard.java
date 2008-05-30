@@ -66,6 +66,7 @@ public class UninstallWizard extends Wizard {
     boolean finished = false;
     IWizardPage currentPage = this.getContainer().getCurrentPage();
     if ( currentPage == this.firstpage ) {
+      if (this.firstpage.getScript() != null)
       finished = true;
     }
     return finished;

@@ -42,8 +42,9 @@ public class ValidateWizardPage extends WizardPage {
   private static Composite composite;
   //private static String TAR_SUFFIX = "tar"; //$NON-NLS-1$
   private Button filebutton;
-  private URI scripturi;
+  private URI scripturi = null;
   private Label seletedinfo;
+  private Label buttontext;
   
   protected ValidateWizardPage( final String pageName ) {
   super( pageName );
@@ -57,7 +58,8 @@ public class ValidateWizardPage extends WizardPage {
     ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
     Image fileimage = sharedImages.getImage( ISharedImages.IMG_OBJ_FILE );
     this.filebutton = new Button(composite,SWT.PUSH);
-    this.filebutton.setText( "Select a script file for validate the deployed software" ); //$NON-NLS-1$
+    this.buttontext = new Label ( composite, SWT.NONE );
+    this.buttontext.setText( "Select a script file for validating the deployed software" ); //$NON-NLS-1$
     this.filebutton.setImage( fileimage );
     this.seletedinfo = new Label ( composite, SWT.NONE );
     this.seletedinfo.setText( "The selected script is:  here is the position" ); //$NON-NLS-1$
