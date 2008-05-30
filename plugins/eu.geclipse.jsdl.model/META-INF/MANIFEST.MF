@@ -9,9 +9,15 @@ Bundle-Localization: plugin
 Export-Package: eu.geclipse.jsdl.model.base,
  eu.geclipse.jsdl.model.base.impl,
  eu.geclipse.jsdl.model.base.util,
+ eu.geclipse.jsdl.model.functions,
+ eu.geclipse.jsdl.model.functions.impl,
+ eu.geclipse.jsdl.model.functions.util,
  eu.geclipse.jsdl.model.posix,
  eu.geclipse.jsdl.model.posix.impl,
- eu.geclipse.jsdl.model.posix.util
+ eu.geclipse.jsdl.model.posix.util,
+ eu.geclipse.jsdl.model.sweep,
+ eu.geclipse.jsdl.model.sweep.impl,
+ eu.geclipse.jsdl.model.sweep.util
 Require-Bundle: org.eclipse.emf.ecore.xmi;visibility:=reexport
 Eclipse-LazyStart: true
 Bundle-RequiredExecutionEnvironment: J2SE-1.5
