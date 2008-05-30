@@ -313,8 +313,12 @@ public class CandidateHostsDialog extends Dialog {
    * @return The selected Candidate Host(s).
    */
   public Object[] getValue() {
-              
-    return this.selectedHosts;
+    
+    String[] returnHosts = new String[this.selectedHosts.length];
+    
+    System.arraycopy( this.selectedHosts, 0,  returnHosts, 0, this.selectedHosts.length );
+
+    return returnHosts;
   }
 
 
