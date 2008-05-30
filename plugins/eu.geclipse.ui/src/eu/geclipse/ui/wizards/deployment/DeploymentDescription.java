@@ -150,6 +150,7 @@ public class DeploymentDescription extends WizardPage
     setMessages();
     if( e.getSource().equals( this.custom ) && this.custom.getSelection() ) {
       setWidgets( false );
+      this.tagText.setEnabled( false );
     }
     if( e.getSource().equals( this.automatic ) && this.automatic.getSelection() ) {
       setWidgets( true );
@@ -182,9 +183,22 @@ public class DeploymentDescription extends WizardPage
   private String generateTag() {
     String blank = ""; //$NON-NLS-1$
     if ( this.createdByName.getSelection() ) { blank += this.nameText.getText(); }
-    if ( this.createdByDate.getSelection() ) { blank += " " + this.date.getText(); } //$NON-NLS-1$
-    if ( this.createdByTime.getSelection() ) { blank += " " + this.time; } //$NON-NLS-1$
-    if ( this.createdByVersion.getSelection() ) { blank += " " + this.DEFAULTVERSION; } //$NON-NLS-1$
+    if ( this.createdByDate.getSelection() ) { 
+      if (blank == "") //$NON-NLS-1$
+        blank += this.date.getText(); 
+    else
+      blank += "-" + this.date.getText();  //$NON-NLS-1$
+    } 
+    if ( this.createdByTime.getSelection() ) { 
+      if (blank == "") //$NON-NLS-1$
+        blank += this.time;
+      else
+        blank += "-" + this.time; } //$NON-NLS-1$
+    if ( this.createdByVersion.getSelection() ) { 
+      if (blank == "") //$NON-NLS-1$
+        blank += this.DEFAULTVERSION;
+      else
+        blank += "-" + this.DEFAULTVERSION; } //$NON-NLS-1$
     return blank;
   }
   
