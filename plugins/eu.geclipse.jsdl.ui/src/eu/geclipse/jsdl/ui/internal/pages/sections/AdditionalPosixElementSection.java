@@ -838,11 +838,14 @@ public class AdditionalPosixElementSection extends JsdlAdaptersFactory {
    */
   @Override
   public void notifyChanged(final Notification msg){
-
-    if ( null != this.posixApplicationType && this.posixApplicationType.eContents().size() == 0 ) {
-        EcoreUtil.remove( this.posixApplicationType );
-        this.posixApplicationType = null;
+    
+    if ( this.isNotifyAllowed ){
+      if ( null != this.posixApplicationType && this.posixApplicationType.eContents().size() == 0) {
+          EcoreUtil.remove( this.posixApplicationType );
+          this.posixApplicationType = null;
+      }
     }
+
   }
   
   

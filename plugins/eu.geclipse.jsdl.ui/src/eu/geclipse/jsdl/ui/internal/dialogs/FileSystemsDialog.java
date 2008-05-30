@@ -71,7 +71,7 @@ public class FileSystemsDialog extends Dialog {
   protected Combo cmbFileSystemType = null;
   protected Combo cmbDiskSpaceRange = null;
   private String title = null;
-  private FileSystemType[] newFileSystem = null;
+  private FileSystemType newFileSystem = null;
   
   
   
@@ -191,7 +191,7 @@ public class FileSystemsDialog extends Dialog {
   gd.heightHint = FileSystemsDialog.WIDGET_HEIGHT;
   
   /* Initial Values for Edit Operation */
-  if ( this.editMode ) {
+  if ( (this.editMode) && (this.fileSystemType.getDescription() != null) ) {
     this.txtFileSystemDescr.setText( this.fileSystemType.getDescription() );
   }
   
@@ -216,7 +216,7 @@ public class FileSystemsDialog extends Dialog {
 
   this.txtMountPoint = new Text (this.panel, SWT.SINGLE | SWT.BORDER );
   /* Initial Values for Edit Operation */
-  if ( this.editMode ) {
+  if ( (this.editMode) && (this.fileSystemType.getMountPoint() != null) ) {
     if ( this.fileSystemType.getMountPoint() != null ) {
       this.txtMountPoint.setText( this.fileSystemType.getMountPoint() );
     }
@@ -453,7 +453,16 @@ public class FileSystemsDialog extends Dialog {
    */
   public void setInput( final Object dialogInput ) {
     
-    this.fileSystemType = ( FileSystemType ) dialogInput;
+    FileSystemType tempFs = JsdlFactory.eINSTANCE.createFileSystemType();
+    tempFs = ( FileSystemType ) dialogInput;
+    
+    this.fileSystemType.setName( tempFs.getName() );
+    this.fileSystemType.setDescription( tempFs.getDescription() );
+    this.fileSystemType.setFileSystemType( tempFs.getFileSystemType() );
+    this.fileSystemType.setMountPoint( tempFs.getMountPoint() );
+    this.fileSystemType.setDiskSpace( tempFs.getDiskSpace() );
+    
+    tempFs = null;
     this.editMode = true;
     
   }
@@ -464,7 +473,7 @@ public class FileSystemsDialog extends Dialog {
    * 
    * @return The new File System
    */
-  public Object[] getValue() {
+  public Object getValue() {
               
     return this.newFileSystem;
   }
@@ -474,8 +483,7 @@ public class FileSystemsDialog extends Dialog {
   protected void okPressed() {
     try {
       
-      this.newFileSystem = new FileSystemType[1];
-      this.newFileSystem[0] = this.fileSystemType;
+      this.newFileSystem = this.fileSystemType;
       
     } catch( Exception e ) {
       Activator.logException( e );

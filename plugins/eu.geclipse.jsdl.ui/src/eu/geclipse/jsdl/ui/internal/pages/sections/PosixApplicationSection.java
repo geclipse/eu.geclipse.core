@@ -688,10 +688,13 @@ public class PosixApplicationSection extends JsdlAdaptersFactory {
   @Override
   public void notifyChanged(final Notification msg){
      
-    if ( null != this.posixApplicationType && this.posixApplicationType.eContents().size() == 0) {
-        EcoreUtil.remove( this.posixApplicationType );
-        this.posixApplicationType = null;
+    if ( this.isNotifyAllowed ){
+      if ( null != this.posixApplicationType && this.posixApplicationType.eContents().size() == 0) {
+          EcoreUtil.remove( this.posixApplicationType );
+          this.posixApplicationType = null;
+      }
     }
+
   }
   
   
@@ -829,7 +832,7 @@ public class PosixApplicationSection extends JsdlAdaptersFactory {
     
     Iterator<ArgumentType> iter = newInputList.iterator();
     
-    while ( iter.hasNext() ){
+    while ( iter.hasNext() && !elementExists ){
       elementExists = iter.next().getValue().equals( newElement );
     }    
      
@@ -883,7 +886,7 @@ public class PosixApplicationSection extends JsdlAdaptersFactory {
         
     Iterator<EnvironmentType> iter = newInputList.iterator();
     
-    while ( iter.hasNext() ){
+    while ( iter.hasNext() && !elementExists ){
       elementExists = iter.next().getValue().equals( newElement );
     }    
      
@@ -971,6 +974,8 @@ public class PosixApplicationSection extends JsdlAdaptersFactory {
   @SuppressWarnings("unchecked")
   public void performEdit( final TableViewer tableViewer, final Object innerValue ) {
     
+    boolean elementExists = false;
+    String newElement;
         
     int featureID;
     
@@ -991,8 +996,18 @@ public class PosixApplicationSection extends JsdlAdaptersFactory {
     
       Object feature = structSelection.getFirstElement();
       
-    
+       
+      
+
       if ( tableViewer == this.argumentViewer ) {
+      
+        EList <ArgumentType> newInputList = ( EList<ArgumentType> )tableViewer.getInput();
+        
+        if (newInputList == null ) {
+          newInputList = new BasicEList<ArgumentType>();
+        }
+        
+        Iterator<ArgumentType> iter = newInputList.iterator();
     
         featureID = PosixPackage.POSIX_APPLICATION_TYPE__ARGUMENT;
         
@@ -1011,17 +1026,42 @@ public class PosixApplicationSection extends JsdlAdaptersFactory {
          */
         this.argumentType = PosixFactory.eINSTANCE.createArgumentType();
         this.argumentType = (ArgumentType) innerValue;
+        newElement = this.argumentType.getValue();
         
         
         /* Change the element. The element is located through it's index position
          *   in the list.
          */
+        while ( iter.hasNext() && !elementExists ){
+          
+          ArgumentType tempArgumentType = iter.next();
+          if( ( tempArgumentType.getValue().equals( newElement ) ) 
+              && ( !tempArgumentType.equals( feature )) ){
+            elementExists = true;          
+          } 
+        } 
         
-        (( java.util.List<Object> )this.posixApplicationType
-                   .eGet( eStructuralFeature )).set( index, this.argumentType );
+        if (!elementExists){
+          
+          (( java.util.List<Object> )this.posixApplicationType
+                     .eGet( eStructuralFeature )).set( index, this.argumentType );
+          contentChanged();
+        }else {
+          MessageDialog.openError( tableViewer.getControl().getShell(),
+                                   Messages.getString( "Arguments_DuplicateEntryDialog_Title" ), //$NON-NLS-1$
+                                   Messages.getString( "Arguments_New_DuplicateEntryDialog_Message" ) ); //$NON-NLS-1$
+         }
         
       } 
       else {
+        
+        EList <EnvironmentType> newInputList = ( EList<EnvironmentType> )tableViewer.getInput();
+        
+        if (newInputList == null ) {
+          newInputList = new BasicEList<EnvironmentType>();
+        }
+        
+        Iterator<EnvironmentType> iter = newInputList.iterator();
         
         featureID = PosixPackage.POSIX_APPLICATION_TYPE__ENVIRONMENT;
         
@@ -1039,20 +1079,39 @@ public class PosixApplicationSection extends JsdlAdaptersFactory {
          */
         this.environmentType = PosixFactory.eINSTANCE.createEnvironmentType();
         this.environmentType = ( EnvironmentType ) innerValue;
+        newElement = this.environmentType.getName();
        
-        
+
         /* Change the element. The element is located through it's index position
          *   in the list.
          */
+        while ( iter.hasNext() && !elementExists ){
+          
+          EnvironmentType tempEnvironmentType = iter.next();
+          if( (tempEnvironmentType.getName().equals( newElement )) 
+              && (!tempEnvironmentType.equals( feature )) ){
+            elementExists = true;          
+          } 
+        }
         
-        (( java.util.List<Object> )this.posixApplicationType
-                .eGet( eStructuralFeature )).set( index, this.environmentType );
-
+        if (!elementExists){
+          
+          (( java.util.List<Object> )this.posixApplicationType
+                  .eGet( eStructuralFeature )).set( index, this.environmentType );
+          contentChanged();
+          
+        }else {
+          MessageDialog.openError( tableViewer.getControl().getShell(),
+                              Messages.getString("EnvironmentalVar_DuplicateEntryDialog_Title" ), //$NON-NLS-1$
+                              Messages.getString("EnvironmentalVar_New_DuplicateEntryDialog_Message" ) ); //$NON-NLS-1$
+         }
             
       }
+        
+      feature = null;
       eStructuralFeature = null;
       tableViewer.refresh();
-      contentChanged();
+      
     }
   }
  

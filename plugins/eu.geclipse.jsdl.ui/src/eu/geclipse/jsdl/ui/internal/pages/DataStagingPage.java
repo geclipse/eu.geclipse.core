@@ -205,15 +205,15 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
     
     
     this.stageInSection = toolkit.createComposite( this.body );
-    this.stageInSection.setLayout(FormLayoutFactory.createFormPaneTableWrapLayout(false, 1));
-    this.stageInSection.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
+    this.stageInSection.setLayout( FormLayoutFactory.createFormPaneTableWrapLayout( false, 1) );
+    this.stageInSection.setLayoutData( new TableWrapData(TableWrapData.FILL_GRAB) );
 
     /* Create the Stage-In Section */
     createStageInSection( this.stageInSection , toolkit );
    
     this.stageOutSection = toolkit.createComposite( this.body );
-    this.stageOutSection.setLayout(FormLayoutFactory.createFormPaneTableWrapLayout(false, 1));
-    this.stageOutSection.setLayoutData(new TableWrapData(TableWrapData.FILL_GRAB));
+    this.stageOutSection.setLayout( FormLayoutFactory.createFormPaneTableWrapLayout(false, 1) );
+    this.stageOutSection.setLayoutData( new TableWrapData(TableWrapData.FILL_GRAB ));
 
     /* Create the Stage-Out Section */
     createStageOutSection( this.stageInSection, toolkit );    
@@ -287,10 +287,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    gd.widthHint = 600;
    gd.heightHint = DataStagingPage.WIDGET_HEIGHT;
    
-   //FIXME nloulloud - This is a work-around for the Bug#: 201705 for Windows.
-   this.stageInViewer = new TableViewer( client, SWT.BORDER                                                                            
-                                        | SWT.FULL_SELECTION
-                                        | SWT.MULTI);
+   this.stageInViewer = new TableViewer( client, SWT.BORDER| SWT.FULL_SELECTION | SWT.MULTI);
    
    this.tblStageIn = this.stageInViewer.getTable();
    this.tblStageIn .setHeaderVisible( true);   

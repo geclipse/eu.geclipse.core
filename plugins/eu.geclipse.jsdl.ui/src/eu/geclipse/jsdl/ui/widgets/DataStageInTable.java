@@ -210,7 +210,9 @@ public class DataStageInTable {
       @Override
       protected Object openDialogBox( final Control cellEditorWindow ) {
         String filename = ( String )doGetValue();
-        GridFileDialog dialog = new GridFileDialog(DataStageInTable.this.mainComp.getShell(), GridFileDialog.STYLE_ALLOW_ONLY_EXISTING | GridFileDialog.STYLE_ALLOW_ONLY_FILES);
+        GridFileDialog dialog = new GridFileDialog(DataStageInTable.this.mainComp.getShell(), 
+                                                   GridFileDialog.STYLE_ALLOW_ONLY_EXISTING 
+                                                   | GridFileDialog.STYLE_ALLOW_ONLY_FILES);
         
         if (dialog.open() == Window.OK){
           URI[] uris = dialog.getSelectedURIs();
@@ -305,8 +307,8 @@ public class DataStageInTable {
                 DataStageInTable.this.tableViewer.refresh();
               } else {
                 MessageDialog.openError( DataStageInTable.this.mainComp.getShell(),
-                                         Messages.getString( "DataStageInTable.edit_dialog_title" ), //$NON-NLS-1$
-                                         Messages.getString( "DataStageInTable.value_exists_dialog_message" ) ); //$NON-NLS-1$
+                                Messages.getString( "DataStageInTable.edit_dialog_title" ), //$NON-NLS-1$
+                                Messages.getString( "DataStageInTable.value_exists_dialog_message" ) ); //$NON-NLS-1$
               }
             }
           break;
@@ -326,8 +328,8 @@ public class DataStageInTable {
                 DataStageInTable.this.tableViewer.refresh();
               } else {
                 MessageDialog.openError( DataStageInTable.this.mainComp.getShell(),
-                                         Messages.getString( "DataStageInTable.edit_dialog_title" ), //$NON-NLS-1$
-                                         Messages.getString( "DataStageInTable.value_exists_dialog_message" ) ); //$NON-NLS-1$
+                                 Messages.getString( "DataStageInTable.edit_dialog_title" ), //$NON-NLS-1$
+                                 Messages.getString( "DataStageInTable.value_exists_dialog_message" ) ); //$NON-NLS-1$
               }
             }
           break;
@@ -388,8 +390,8 @@ public class DataStageInTable {
           this.tableViewer.refresh();
         } else {
           MessageDialog.openError( this.mainComp.getShell(),
-                                   Messages.getString( "DataStageInTable.value_exists_dialog_title" ), //$NON-NLS-1$
-                                   Messages.getString( "DataStagingPage_New_DuplicateEntryDialog_Message" ) ); //$NON-NLS-1$
+                              Messages.getString( "DataStageInTable.value_exists_dialog_title" ), //$NON-NLS-1$
+                              Messages.getString( "DataStagingPage_New_DuplicateEntryDialog_Message" ) ); //$NON-NLS-1$
         }
       }
     } else {
@@ -420,8 +422,8 @@ public class DataStageInTable {
             this.tableViewer.refresh();
           } else {
             MessageDialog.openError( this.mainComp.getShell(),
-                                     Messages.getString( "DataStageInTable.edit_dialog_title" ), //$NON-NLS-1$
-                                     Messages.getString( "DataStageInTable.value_exists_dialog_message" ) ); //$NON-NLS-1$
+                                Messages.getString( "DataStageInTable.edit_dialog_title" ), //$NON-NLS-1$
+                                Messages.getString( "DataStageInTable.value_exists_dialog_message" ) ); //$NON-NLS-1$
           }
         }
       }

@@ -279,11 +279,19 @@ public class EnvironmentVarDialog extends Dialog {
   
   
   /**
-   * @param dialogInput
+   * Set the Dialog Input for editing.
+   * @param dialogInput - The object that will be edited.
    */
   public void setInput( final Object dialogInput ) {
     
-    this.environmentType = ( EnvironmentType ) dialogInput;
+    EnvironmentType tempEnvironmentType = PosixFactory.eINSTANCE.createEnvironmentType();
+    tempEnvironmentType = ( EnvironmentType ) dialogInput;
+    
+    this.environmentType.setFilesystemName( tempEnvironmentType.getFilesystemName() );
+    this.environmentType.setName( tempEnvironmentType.getName() );
+    this.environmentType.setValue( tempEnvironmentType.getValue() );
+    
+    tempEnvironmentType = null;
     this.editMode = true;
     
   }

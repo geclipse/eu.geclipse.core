@@ -72,7 +72,7 @@ public class ApplicationSection extends JsdlAdaptersFactory {
    */
   private void createSection( final Composite parent, final FormToolkit toolkit ) {
     
-    String sectionTitle = Messages.getString( "JobApplicationPage_Applicationtitle" ); //$NON-NLS-1$
+    String sectionTitle = Messages.getString( "JobApplicationPage_ApplicationSectionTitle" ); //$NON-NLS-1$
     String sectionDescription = Messages.getString( "JobApplicationPage_ApplicationDescription" ); //$NON-NLS-1$
     GridData gd;
     Composite client = FormSectionFactory.createGridStaticSection( toolkit,

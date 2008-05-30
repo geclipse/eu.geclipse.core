@@ -36,7 +36,6 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 
-import eu.geclipse.jsdl.model.base.CreationFlagEnumeration;
 import eu.geclipse.jsdl.model.base.DataStagingType;
 import eu.geclipse.jsdl.model.base.DocumentRoot;
 import eu.geclipse.jsdl.model.base.JobDefinitionType;

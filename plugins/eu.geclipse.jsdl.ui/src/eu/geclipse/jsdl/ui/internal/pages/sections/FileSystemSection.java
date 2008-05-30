@@ -24,6 +24,7 @@ import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -47,6 +48,7 @@ import eu.geclipse.jsdl.model.base.JsdlFactory;
 import eu.geclipse.jsdl.model.base.JsdlPackage;
 import eu.geclipse.jsdl.model.base.ResourcesType;
 import eu.geclipse.jsdl.ui.adapters.jsdl.JsdlAdaptersFactory;
+import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.dialogs.FileSystemsDialog;
 import eu.geclipse.jsdl.ui.internal.pages.FormSectionFactory;
 import eu.geclipse.jsdl.ui.internal.pages.Messages;
@@ -65,12 +67,12 @@ public class FileSystemSection extends JsdlAdaptersFactory {
   private static final int WIDGET_HEIGHT = 100;
   protected JobDescriptionType jobDescriptionType = JsdlFactory.eINSTANCE.createJobDescriptionType();
   protected ResourcesType resourcesType = JsdlFactory.eINSTANCE.createResourcesType();
-  protected FileSystemType fileSystemType = JsdlFactory.eINSTANCE.createFileSystemType();
+  protected FileSystemType fileSystemType;
   protected Button btnFileSystemAdd = null;
   protected Button btnFileSystemDel = null;
   protected Button btnFileSystemEdit = null;  
   protected TableViewer fileSystemsViewer = null;
-  protected Object[] value = null;
+  protected Object value = null;
     
   private Table tblFileSystems = null;
   private TableColumn column = null;
@@ -139,8 +141,7 @@ public class FileSystemSection extends JsdlAdaptersFactory {
     gd.widthHint = TXT_LENGTH;
     
     this.tblFileSystems.setLayoutData( gd );
-    
-    //FIXME This is a work-around for the Bug#: 201705 for Windows.
+        
     this.fileSystemsViewer = new TableViewer( this.tblFileSystems );
     this.tblFileSystems = this.fileSystemsViewer.getTable();    
     this.fileSystemsViewer.setContentProvider( new FeatureContentProvider() );
@@ -195,7 +196,6 @@ public class FileSystemSection extends JsdlAdaptersFactory {
     
     this.btnFileSystemAdd.setLayoutData( gd );
     
-    //FIXME Un-comment for Edit Functionality
     
     /* Create the Edit button */
     gd = new GridData();
@@ -209,10 +209,8 @@ public class FileSystemSection extends JsdlAdaptersFactory {
     this.btnFileSystemEdit.addSelectionListener(new SelectionListener() {
       public void widgetSelected(final SelectionEvent event) {
         handleAddFsDialog( Messages.getString( "ResourcesPage_EditHostNameDialog" ), //$NON-NLS-1$
-                                                    (Button) event.getSource()); 
-        
-//        ResourcesPage.this.resourcesTypeAdapter.performEdit(ResourcesPage.this.fileSystemsViewer,                                                          
-//                                                           ResourcesPage.this.value[0]);
+                                                    (Button) event.getSource());
+        performEdit( FileSystemSection.this.fileSystemsViewer, FileSystemSection.this.value );
       }
 
        public void widgetDefaultSelected(final SelectionEvent event) {
@@ -234,7 +232,19 @@ public class FileSystemSection extends JsdlAdaptersFactory {
                                  SWT.BUTTON1 );
     
     this.btnFileSystemDel.setEnabled( false );
-//    this.resourcesTypeAdapter.attachToDelete( this.btnFileSystemDel, this.fileSystemsViewer );
+    this.btnFileSystemDel.addSelectionListener( new SelectionListener(){
+
+      public void widgetDefaultSelected( final SelectionEvent e ) {
+        // Auto-generated method stub
+        
+      }
+
+      public void widgetSelected( final SelectionEvent e ) {
+        performDelete( FileSystemSection.this.fileSystemsViewer );
+        
+      }
+      
+    });
     this.btnFileSystemDel.setLayoutData( gd );
         
     toolkit.paintBordersFor( client );
@@ -289,13 +299,14 @@ public class FileSystemSection extends JsdlAdaptersFactory {
    * @param innerValue The list of File Systems.
    */
   @SuppressWarnings("unchecked")
-  public void addFileSystem( final TableViewer tableViewer, final Object[] innerValue ) {
+  public void addFileSystem( final TableViewer tableViewer, final Object innerValue ) {
+    
+    boolean elementExists = false;
+    String newElement;
     
     if (innerValue == null) {
       return;
     }
-
-    Collection<FileSystemType> collection = new ArrayList<FileSystemType>();
 
      
     EList <FileSystemType> newInputList = ( EList<FileSystemType> )tableViewer.getInput(); 
@@ -305,30 +316,167 @@ public class FileSystemSection extends JsdlAdaptersFactory {
       newInputList = new BasicEList<FileSystemType>();
     }
     
-    for (int i=0; i < innerValue.length; i++) {
+    
+    this.fileSystemType = JsdlFactory.eINSTANCE.createFileSystemType();
+    this.fileSystemType = (FileSystemType) innerValue;
+    newElement = this.fileSystemType.getName();
+    
+    Iterator<FileSystemType> iter = newInputList.iterator();
+    
+    while ( iter.hasNext() && !elementExists ){
+      elementExists = iter.next().getName().equals( newElement );
+    }    
+    
+    
+    if (!elementExists){
+      newInputList.add( this.fileSystemType );
+        
+      /* Add the Argument to PosixApplication */
+      this.resourcesType.getFileSystem().addAll( newInputList );
+      tableViewer.setInput( this.resourcesType.getFileSystem() );
+    
+      tableViewer.refresh();   
+      contentChanged();
       
-      newInputList.add( (FileSystemType) innerValue[i] );  
+    } else {
+      MessageDialog.openError( tableViewer.getControl().getShell(),
+                              Messages.getString( "FileSystem_DuplicateEntryDialog_Title" ), //$NON-NLS-1$
+                              Messages.getString( "FileSystem_New_DuplicateEntryDialog_Message" ) ); //$NON-NLS-1$
     }
-
-    tableViewer.setInput( newInputList  );
-    
-    
-    for ( int i=0; i<tableViewer.getTable().getItemCount(); i++ ) {      
-      collection.add( (FileSystemType) tableViewer.getElementAt( i ) );
-    }
-    
-    checkFileSystemElement();
-    this.resourcesType.getFileSystem().clear();
-    this.resourcesType.getFileSystem().addAll( collection );
-  
-
-
-    this.contentChanged();
-    
-
-    collection = null;
     
   } // end addFileSystem()
+  
+  
+  
+  /**
+   * Edit an element that appears in a Table Viewers.
+   * 
+   * @param tableViewer The {@link TableViewer} in which the new element appears.
+   * @param innerValue The new value of the element.
+   */
+  @SuppressWarnings("unchecked")
+  public void performEdit( final TableViewer tableViewer, final Object innerValue ) {
+
+    boolean elementExists = false;
+    String newElement;
+        
+    int featureID;
+    
+    if (innerValue == null) {
+      return;
+    }
+        
+    EStructuralFeature eStructuralFeature;
+    
+    /*
+     * Get the TableViewer Selection
+     */
+    IStructuredSelection structSelection 
+                              = ( IStructuredSelection ) tableViewer.getSelection();
+    
+    /* If the selection is not null then Change the selected element */
+    if (structSelection != null) {
+      
+      EList <FileSystemType> newInputList = ( EList<FileSystemType> )tableViewer.getInput(); 
+      
+      if (newInputList == null ) {
+        newInputList = new BasicEList<FileSystemType>();
+      }
+    
+      Object feature = structSelection.getFirstElement();
+      
+    
+      
+    
+      featureID = JsdlPackage.RESOURCES_TYPE__FILE_SYSTEM;
+        
+      eStructuralFeature = this.resourcesType.eClass()
+                                            .getEStructuralFeature( featureID );
+
+        
+
+      /* Get the Index of the Element that needs to be changed */
+      int index = (( java.util.List<Object> )this.resourcesType
+                                 .eGet(eStructuralFeature)).indexOf( feature  );
+
+      /* 
+       * Create a new Argument Type EObject with the new values that will 
+       * substitute the old EObject.
+       */
+      this.fileSystemType = JsdlFactory.eINSTANCE.createFileSystemType();
+      this.fileSystemType = (FileSystemType) innerValue;
+      newElement = this.fileSystemType.getName();
+      
+      Iterator<FileSystemType> iter = newInputList.iterator();
+      
+      while ( iter.hasNext() && !elementExists ){
+        FileSystemType tempFileSystemType = iter.next();
+
+        if( ( tempFileSystemType.getName().equals( newElement )) 
+            && (!tempFileSystemType.equals( feature )) ){
+          elementExists = true;          
+        } 
+
+      } 
+        
+        
+      /* Change the element. The element is located through it's index position
+       *   in the list.
+       *   
+       *   If an element with the same name exists then an appropriate warning is 
+       *   shown.
+       */
+        
+      if (!elementExists){
+        
+        (( java.util.List<Object> )this.resourcesType
+                   .eGet( eStructuralFeature )).set( index, this.fileSystemType );
+        tableViewer.refresh();
+        contentChanged();
+        
+      }else{
+        MessageDialog.openError( tableViewer.getControl().getShell(),
+                                 Messages.getString( "FileSystem_DuplicateEntryDialog_Title" ), //$NON-NLS-1$
+                                 Messages.getString( "FileSystem_New_DuplicateEntryDialog_Message" ) ); //$NON-NLS-1$
+      }
+
+      eStructuralFeature = null;
+    }
+  }
+  
+  
+  protected void performDelete(final TableViewer viewer ) {
+    
+    IStructuredSelection structSelection 
+                               = ( IStructuredSelection ) viewer.getSelection();
+    
+    Iterator<?> it = structSelection.iterator();
+
+    /*
+     * Iterate over the selections and delete them from the model.
+     */
+    while ( it.hasNext() ) {
+    
+      Object feature = it.next();
+        
+      if (feature instanceof FileSystemType) {
+      
+        FileSystemType argument = (FileSystemType) feature;    
+
+        try {
+          EcoreUtil.remove( argument);
+        
+        } catch( Exception e ) {
+          Activator.logException( e );
+        }
+        
+      } //end ArgumentType
+    }
+    
+    viewer.refresh();
+    contentChanged();
+    
+  } // End void performDelete()
   
   
   

@@ -247,7 +247,13 @@ public class ArgumentsDialog extends Dialog {
    */
   public void setInput( final Object dialogInput ) {
     
-    this.argumentType = ( ArgumentType ) dialogInput;
+    ArgumentType tempArgumentsDialog = PosixFactory.eINSTANCE.createArgumentType();   
+    tempArgumentsDialog = ( ArgumentType ) dialogInput;
+    
+    this.argumentType.setFilesystemName( tempArgumentsDialog.getFilesystemName() );
+    this.argumentType.setValue( tempArgumentsDialog.getValue() );
+    
+    tempArgumentsDialog = null;
     this.editMode = true;
     
   }
