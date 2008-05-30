@@ -14,7 +14,6 @@
  *     Mathias Stuempert - Added transformation to other job descriptions
  *           
  *****************************************************************************/
-
 package eu.geclipse.jsdl.ui.wizards;
 
 import java.lang.reflect.InvocationTargetException;
@@ -146,10 +145,15 @@ public class NewJobWizard extends Wizard implements INewWizard {
 
   private void openFile() {
     try {
-      IDE.openEditor( Activator.getDefault()
-        .getWorkbench()
-        .getActiveWorkbenchWindow()
-        .getActivePage(), this.file, true );
+      // if (this.file.getFileExtension().equals( "jsdl" ) ){
+      //        
+      // }
+      if( this.file.exists() ) {
+        IDE.openEditor( Activator.getDefault()
+          .getWorkbench()
+          .getActiveWorkbenchWindow()
+          .getActivePage(), this.file, true );
+      }
     } catch( PartInitException partInitException ) {
       Activator.logException( partInitException );
     }
@@ -160,19 +164,18 @@ public class NewJobWizard extends Wizard implements INewWizard {
   }
 
   protected void createFile( final IProgressMonitor monitor ) {
-    
     monitor.beginTask( Messages.getString( "NewJobWizard.creating_task" ) + this.firstPage.getFileName(), 2 ); //$NON-NLS-1$
-    
     IGridElementCreator creator = this.firstPage.getCreator();
-    boolean translate = ( creator != null ) && ! ( creator instanceof JSDLJobDescriptionCreator );
-    
-    if ( translate ) {
+    boolean translate = ( creator != null )
+                        && !( creator instanceof JSDLJobDescriptionCreator );
+    if( translate ) {
       String fileName = this.firstPage.getFileName();
       IPath path = new Path( fileName );
-      fileName = path.removeFileExtension().addFileExtension( "jsdl" ).lastSegment();
+      fileName = path.removeFileExtension()
+        .addFileExtension( "jsdl" )
+        .lastSegment();
       this.firstPage.setFileName( fileName );
     }
-    
     this.file = this.firstPage.createNewFile();
     JSDLJobDescription jsdlJobDescription = null;
     IGridElement element = GridModel.getRoot().findElement( this.file );
@@ -186,34 +189,27 @@ public class NewJobWizard extends Wizard implements INewWizard {
       setInitialModel( jsdlJobDescription );
       jsdlJobDescription.save( this.file );
     }
-    
-    if ( translate && creator.canCreate( jsdlJobDescription ) ) {
+    if( translate && creator.canCreate( jsdlJobDescription ) ) {
       try {
         IGridElement newElement = creator.create( jsdlJobDescription.getParent() );
-        this.file = ( IFile ) newElement.getResource();
-      } catch ( GridModelException gmExc ) {
-        ProblemDialog.openProblem(
-            getShell(),
-            "Creation failed",
-            "Error while creating job description",
-            gmExc 
-        );
+        this.file = ( IFile )newElement.getResource();
+      } catch( GridModelException gmExc ) {
+        ProblemDialog.openProblem( getShell(),
+                                   "Creation failed",
+                                   "Error while creating job description",
+                                   gmExc );
       } finally {
         try {
           jsdlJobDescription.getResource().delete( true, null );
-        } catch ( CoreException cExc ) {
-          ProblemDialog.openProblem(
-              getShell(),
-              "Deletion failed",
-              "Unable to delete temporary JSDL file",
-              cExc 
-          );
+        } catch( CoreException cExc ) {
+          ProblemDialog.openProblem( getShell(),
+                                     "Deletion failed",
+                                     "Unable to delete temporary JSDL file",
+                                     cExc );
         }
       }
     }
-    
     monitor.worked( 1 );
-    
   }
 
   @SuppressWarnings("unchecked")
@@ -258,7 +254,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
     jsdl.addJobIdentification( applicationName, null );
     String appName1 = ""; //$NON-NLS-1$
     if( this.executablePage.getApplicationName().equals( "" ) ) { //$NON-NLS-1$
-      appName1 = applicationName; 
+      appName1 = applicationName;
     } else {
       appName1 = this.executablePage.getApplicationName();
     }
@@ -437,16 +433,13 @@ public class NewJobWizard extends Wizard implements INewWizard {
     return super.canFinish();
   }
   class FirstPage extends WizardNewFileCreationPage {
-    
-    private static final String JSDL_STANDARD
-      = "JSDL - Job Submission Description Language (OGF Standard)";
 
+    private static final String JSDL_STANDARD = "JSDL - Job Submission Description Language (OGF Standard)";
     private IStructuredSelection iniSelection;
     private final String initFileName = Messages.getString( "NewJobWizard.first_page_default_new_file_name" );
     private Combo typeCombo;
-    private Hashtable< String, IGridElementCreator > creators
-      = new Hashtable< String, IGridElementCreator >();
-    
+    private Hashtable<String, IGridElementCreator> creators = new Hashtable<String, IGridElementCreator>();
+
     /**
      * Creates new instance of {@link FirstPage}
      * 
@@ -462,59 +455,58 @@ public class NewJobWizard extends Wizard implements INewWizard {
 
     @Override
     public void createControl( final Composite parent ) {
-      
       Composite mainComp = new Composite( parent, SWT.NONE );
       mainComp.setLayout( new GridLayout( 1, false ) );
-      
       Label typeLabel = new Label( mainComp, SWT.NONE );
       typeLabel.setText( "Job Description Type:" );
-      typeLabel.setLayoutData( new GridData( SWT.BEGINNING, SWT.CENTER, false, false ) );
-      
+      typeLabel.setLayoutData( new GridData( SWT.BEGINNING,
+                                             SWT.CENTER,
+                                             false,
+                                             false ) );
       this.typeCombo = new Combo( mainComp, SWT.READ_ONLY );
-      this.typeCombo.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false ) );
+      this.typeCombo.setLayoutData( new GridData( SWT.FILL,
+                                                  SWT.CENTER,
+                                                  true,
+                                                  false ) );
       this.typeCombo.addSelectionListener( new SelectionAdapter() {
+
         @Override
         public void widgetSelected( final SelectionEvent e ) {
           updateFilename();
         }
       } );
-      
       super.createControl( mainComp );
       Control control = getControl();
-      if ( control instanceof Composite ) {
-        Layout layout = ( ( Composite ) control ).getLayout();
-        if ( layout instanceof GridLayout ) {
-          GridLayout gLayout = ( GridLayout ) layout;
+      if( control instanceof Composite ) {
+        Layout layout = ( ( Composite )control ).getLayout();
+        if( layout instanceof GridLayout ) {
+          GridLayout gLayout = ( GridLayout )layout;
           gLayout.marginHeight = 0;
           gLayout.marginWidth = 0;
         }
       }
-      
       setControl( mainComp );
-      
       initTypeCombo( this.typeCombo );
-      
       setFileName( getUniqueFileName() );
-      
     }
-    
+
     public IGridElementCreator getCreator() {
       String type = this.typeCombo.getText();
       return this.creators.get( type );
     }
-    
+
     public String getDescriptionSuffix() {
       String result = "jsdl";
       String text = this.typeCombo.getText();
-      if ( text != null ) {
+      if( text != null ) {
         int index = text.trim().indexOf( " " );
-        if ( index != -1 ) {
+        if( index != -1 ) {
           result = text.substring( 0, index ).toLowerCase();
         }
       }
       return result;
     }
-    
+
     public String getUniqueFileName() {
       IPath containerFullPath = getContainerFullPath();
       String fileName = this.initFileName;
@@ -542,15 +534,17 @@ public class NewJobWizard extends Wizard implements INewWizard {
       }
       return filePath.lastSegment();
     }
-    
+
     protected void updateFilename() {
       String filename = getFileName();
       String extension = getDescriptionSuffix();
-      if ( filename == null ) {
+      if( filename == null ) {
         filename = getUniqueFileName();
       }
       IPath path = new Path( filename );
-      setFileName( path.removeFileExtension().addFileExtension( extension ).lastSegment() );
+      setFileName( path.removeFileExtension()
+        .addFileExtension( extension )
+        .lastSegment() );
       validatePage();
     }
 
@@ -563,7 +557,9 @@ public class NewJobWizard extends Wizard implements INewWizard {
       String extension = getDescriptionSuffix();
       IPath path = new Path( getFileName() );
       String currentExtension = path.getFileExtension();
-      if( ( currentExtension == null ) || ! currentExtension.toLowerCase().endsWith( extension ) ) { //$NON-NLS-1$
+      if( ( currentExtension == null )
+          || !currentExtension.toLowerCase().endsWith( extension ) )
+      { //$NON-NLS-1$
         setErrorMessage( String.format( Messages.getString( "NewJobWizard.wrong_file_extension_error_message" ), extension ) ); //$NON-NLS-1$
         result = false;
       }
@@ -611,37 +607,28 @@ public class NewJobWizard extends Wizard implements INewWizard {
         // setFileName( getUniqueFileName() );
       }
     }
-    
+
     private void initTypeCombo( final Combo combo ) {
-      
-      List< IConfigurationElement > elements
-        = Extensions.getRegisteredElementCreatorConfigurations( JSDLJobDescription.class, IGridJobDescription.class );
-      
-      List< String > names = new ArrayList< String >();
-      
-      for ( IConfigurationElement element : elements ) {
+      List<IConfigurationElement> elements = Extensions.getRegisteredElementCreatorConfigurations( JSDLJobDescription.class,
+                                                                                                   IGridJobDescription.class );
+      List<String> names = new ArrayList<String>();
+      for( IConfigurationElement element : elements ) {
         try {
-          IGridElementCreator creator
-            = ( IGridElementCreator ) element.createExecutableExtension( Extensions.GRID_ELEMENT_CREATOR_EXECUTABLE );
+          IGridElementCreator creator = ( IGridElementCreator )element.createExecutableExtension( Extensions.GRID_ELEMENT_CREATOR_EXECUTABLE );
           String name = element.getAttribute( Extensions.GRID_ELEMENT_CREATOR_NAME_ATTRIBUTE );
           this.creators.put( name, creator );
           names.add( name );
-        } catch (CoreException e) {
+        } catch( CoreException e ) {
           // TODO Auto-generated catch block
           e.printStackTrace();
         }
       }
-      
       names.add( JSDL_STANDARD );
       Collections.sort( names );
-      for ( String name : names ) {
+      for( String name : names ) {
         combo.add( name );
       }
-      
       combo.setText( JSDL_STANDARD );
-      
     }
-    
   }
-  
 }
