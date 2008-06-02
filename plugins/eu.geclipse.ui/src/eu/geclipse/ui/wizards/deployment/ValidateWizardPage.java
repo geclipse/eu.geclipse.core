@@ -128,7 +128,7 @@ public class ValidateWizardPage extends WizardPage {
   }
   
   void setscript() {
-    String input = "file://" + this.buttontext.getText(); //$NON-NLS-1$
+    String input = this.buttontext.getText(); 
     try {
       this.scripturi = new URI (input);
     } catch( URISyntaxException e ) {

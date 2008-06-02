@@ -50,6 +50,12 @@ public class DeploymentWizard extends Wizard {
    * The target page ( three page ) in deployment wizard.
    */
   public DeploymentTarget targetPage;
+  
+  /**
+   * The script page ( three page ) in deployment wizard.
+   */
+  public DeploymentScript scriptPage;
+  
   /**
    * The description page ( four page ) in deployment wizard.
    */
@@ -89,6 +95,8 @@ public class DeploymentWizard extends Wizard {
     this.addPage( this.targetPage );
     this.sourcePage = new DeploymentSource( Messages.getString( "Deployment.deployment_wizard_source" ) ); //$NON-NLS-1$
     this.addPage( this.sourcePage );
+    this.scriptPage = new DeploymentScript("Install script"); //$NON-NLS-1$
+    this.addPage( this.scriptPage );
     this.descriptionPage = new DeploymentDescription( Messages.getString( "Deployment.deployment_wizard_description" ) ); //$NON-NLS-1$
     this.addPage( this.descriptionPage );
   }
@@ -97,6 +105,7 @@ public class DeploymentWizard extends Wizard {
   public boolean performFinish() {
    
     URI [] source = this.sourcePage.getSourceURIs();
+    URI script = this.scriptPage.getScript();
     List< Object > targetList = new ArrayList< Object >();
     Object[] ceObjects = this.targetPage.getCETree().getCheckedElements();
     IVirtualOrganization vo = this.gridproject.getVO();
@@ -112,6 +121,7 @@ public class DeploymentWizard extends Wizard {
                            vo,
                            source, 
                            target,
+                           script,
                            tag );
     //job.setPriority( Job.SHORT );
     job.setUser( true );

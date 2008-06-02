@@ -18,49 +18,47 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 
-import org.eclipse.core.runtime.Path;
+
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
-import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.ui.ISharedImages;
-import org.eclipse.ui.PlatformUI;
 
-import eu.geclipse.ui.dialogs.GridFileDialog;
+
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.widgets.StoredCombo;
+import eu.geclipse.ui.dialogs.GridFileDialog;
 
 
-/**get the script
+/**the page for inputing the validate script
  * @author tao-j
  *
  */
-public class UninstallWizardPage extends WizardPage {
+public class DeploymentScript extends WizardPage {
 
-  private static String INPUT_EXE_ID = "executable_file"; //$NON-NLS-1$
+  
   private static Composite composite;
+  private static String INPUT_EXE_ID = "executable_file"; //$NON-NLS-1$
   StoredCombo buttontext;
   //private static String TAR_SUFFIX = "tar"; //$NON-NLS-1$
   private Button filebutton;
   private URI scripturi = null;
+
  
-  
-  protected UninstallWizardPage( final String pageName ) {
+  protected DeploymentScript( final String pageName ) {
   super( pageName );
-  this.setDescription( "Choose the uninstall script file" ); //$NON-NLS-1$
-  this.setTitle( "Application Uninstall" ); //$NON-NLS-1$
+  this.setDescription( "Choose the install script file" ); //$NON-NLS-1$
+  this.setTitle( "Deployment script" ); //$NON-NLS-1$
 }
 
   public void createControl( final Composite parent ) {
@@ -92,7 +90,7 @@ public class UninstallWizardPage extends WizardPage {
     this.buttontext.addModifyListener( new ModifyListener() {
 
       public void modifyText( final ModifyEvent event ) {
-        if( UninstallWizardPage.this.buttontext.getText()
+        if( DeploymentScript.this.buttontext.getText()
           .equals( "" ) ) { //$NON-NLS-1$
           removescript();
         } else {
@@ -118,6 +116,7 @@ public class UninstallWizardPage extends WizardPage {
     this.filebutton.setLayoutData( gridData );
     
     this.setControl( composite );
+    //initContents();
   }
   
   @Override
@@ -135,15 +134,13 @@ public class UninstallWizardPage extends WizardPage {
     } catch( URISyntaxException e ) {
       this.setErrorMessage( "The file path is incorrect" ); //$NON-NLS-1$
     }
- 
-    this.setPageComplete(true);
+    this.setPageComplete( this.canFlipToNextPage() );
     this.setErrorMessage( null );
   }
   
   void removescript() {
     this.scripturi = null;
-    this.setPageComplete(false);
-    this.setErrorMessage( Messages.getString( "Uninstall.script_empty" ) ); //$NON-NLS-1$
+    this.setErrorMessage( Messages.getString( "Deployment.deployment_script_is_empty" ) ); //$NON-NLS-1$
   }
   
   protected void initContents() {
@@ -153,9 +150,9 @@ public class UninstallWizardPage extends WizardPage {
       public void widgetSelected( final SelectionEvent e ) {
        URI[] urls = GridFileDialog.openFileDialog( getShell(), GridFileDialog.STYLE_ALLOW_ONLY_FILES );
        if( ( urls != null ) && ( urls.length > 0 ) ) {
-         UninstallWizardPage.this.buttontext.setText( urls[ 0 ].toString() );
+         DeploymentScript.this.buttontext.setText( urls[ 0 ].toString() );
        } else {
-         UninstallWizardPage.this.buttontext.setText( "" ); //$NON-NLS-1$
+         DeploymentScript.this.buttontext.setText( "" ); //$NON-NLS-1$
        }
        updatePagebuttonComplete(urls);
       }
@@ -163,19 +160,29 @@ public class UninstallWizardPage extends WizardPage {
   
   }
   
- 
-  protected void updatePagebuttonComplete(final URI[] urls) {
-    this.setPageComplete(false);
-    if ( urls == null ) {
+  @Override
+  public boolean canFlipToNextPage() {
+    boolean next = false;
+    if ( this.scripturi == null ) {
       this.setMessage( null );
-      this.setErrorMessage( Messages.getString( "Uninstall.script_empty" ) ); //$NON-NLS-1$
-      return;
+      this.setErrorMessage( Messages.getString( "Validate.script_empty" ) ); //$NON-NLS-1$
+      next = false;
     }
-    
-    this.scripturi = urls[0];
-    this.setPageComplete( true );
-    this.setErrorMessage( null );
+    else {
+   this.setErrorMessage( null );
+      next = true;
+    }
+    return next; 
   }
+  
+  @Override
+  public boolean isPageComplete() {
+    return false;
+  }
+  protected void updatePagebuttonComplete(final URI[] urls) {
+    if (( urls != null ) && (urls.length > 0))
+    this.scripturi = urls[0];
+   }
   
  
   /** the selected script
