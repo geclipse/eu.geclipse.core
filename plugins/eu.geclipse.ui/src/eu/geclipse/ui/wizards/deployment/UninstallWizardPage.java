@@ -15,11 +15,17 @@
 package eu.geclipse.ui.wizards.deployment;
 
 import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 
 import org.eclipse.core.runtime.Path;
+import org.eclipse.jface.preference.IPreferenceStore;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.window.Window;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -33,6 +39,8 @@ import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 
 import eu.geclipse.ui.dialogs.GridFileDialog;
+import eu.geclipse.ui.internal.Activator;
+import eu.geclipse.ui.widgets.StoredCombo;
 
 
 /**get the script
@@ -41,12 +49,13 @@ import eu.geclipse.ui.dialogs.GridFileDialog;
  */
 public class UninstallWizardPage extends WizardPage {
 
+  private static String INPUT_EXE_ID = "executable_file"; //$NON-NLS-1$
   private static Composite composite;
+  StoredCombo buttontext;
   //private static String TAR_SUFFIX = "tar"; //$NON-NLS-1$
   private Button filebutton;
   private URI scripturi = null;
-  private Label seletedinfo;
-  private Label buttontext;
+ 
   
   protected UninstallWizardPage( final String pageName ) {
   super( pageName );
@@ -57,23 +66,58 @@ public class UninstallWizardPage extends WizardPage {
   public void createControl( final Composite parent ) {
     composite = new Composite( parent, SWT.NONE );
     composite.setLayout( new GridLayout( 1, false ) );
-    ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();
-    Image fileimage = sharedImages.getImage( ISharedImages.IMG_OBJ_FILE );
-    this.filebutton = new Button(composite,SWT.PUSH);
-    this.buttontext = new Label ( composite, SWT.NONE );
-    this.buttontext.setText( "Select a script file for remove the deployed software" ); //$NON-NLS-1$
-    this.filebutton.setImage( fileimage );
-    this.seletedinfo = new Label ( composite, SWT.NONE );
-    this.seletedinfo.setText( "The selected script is:  here is the position" ); //$NON-NLS-1$
-    this.seletedinfo.setVisible( false );
+    IPreferenceStore prefs = Activator.getDefault().getPreferenceStore();
+    URL openFileIcon = Activator.getDefault()
+    .getBundle()
+    .getEntry( "icons/obj16/open_file.gif" ); //$NON-NLS-1$
+    Image openFileImage = ImageDescriptor.createFromURL( openFileIcon )
+    .createImage();
+
+    GridLayout gLayout = new GridLayout( 3, false );
+    gLayout.horizontalSpacing = 10;
+    gLayout.verticalSpacing = 12;
+    composite.setLayout( gLayout );
+    
+    Label inputLabel = new Label( composite, GridData.HORIZONTAL_ALIGN_BEGINNING
+                                  | GridData.VERTICAL_ALIGN_CENTER );
+    inputLabel.setText("Script file"); //$NON-NLS-1$
     GridData gridData;
-    gridData = new GridData(GridData.GRAB_HORIZONTAL);
-    gridData.horizontalAlignment = GridData.BEGINNING;
-    gridData.grabExcessHorizontalSpace = true;
-    //gridData.minimumWidth = 700;
-    this.seletedinfo.setLayoutData( gridData );
+    gridData = new GridData();
+    gridData.horizontalAlignment = GridData.FILL;
+    inputLabel.setLayoutData( gridData );
+    
+    this.buttontext = new StoredCombo( composite, SWT.DROP_DOWN );
+    this.buttontext.setPreferences( prefs, INPUT_EXE_ID );
+    this.buttontext.setText( "" ); //$NON-NLS-1$
+    this.buttontext.addModifyListener( new ModifyListener() {
+
+      public void modifyText( final ModifyEvent event ) {
+        if( UninstallWizardPage.this.buttontext.getText()
+          .equals( "" ) ) { //$NON-NLS-1$
+          removescript();
+        } else {
+          setscript();
+        }
+      }
+    } );
+    
+    
+    
+   gridData = new GridData( GridData.FILL_HORIZONTAL
+                           | GridData.GRAB_HORIZONTAL
+                           | GridData.VERTICAL_ALIGN_CENTER );
+    this.buttontext.setLayoutData( gridData );
+    
+    
+    // Button - browsing for executable file
+    this.filebutton = new Button( composite, SWT.PUSH );
+    this.filebutton.setImage( openFileImage );
+    gridData = new GridData( GridData.HORIZONTAL_ALIGN_FILL
+                           | GridData.VERTICAL_ALIGN_FILL
+                           | GridData.VERTICAL_ALIGN_CENTER );
+    this.filebutton.setLayoutData( gridData );
+    
     this.setControl( composite );
-    //initContents();
   }
   
   @Override
@@ -84,46 +128,51 @@ public class UninstallWizardPage extends WizardPage {
     super.setVisible( visible );
   }
   
+  void setscript() {
+    String input = "file://" + this.buttontext.getText(); //$NON-NLS-1$
+    try {
+      this.scripturi = new URI (input);
+    } catch( URISyntaxException e ) {
+      this.setErrorMessage( "The file path is incorrect" ); //$NON-NLS-1$
+    }
+ 
+    this.setPageComplete(true);
+    this.setErrorMessage( null );
+  }
+  
+  void removescript() {
+    this.scripturi = null;
+    this.setPageComplete(false);
+    this.setErrorMessage( Messages.getString( "Uninstall.script_empty" ) ); //$NON-NLS-1$
+  }
+  
   protected void initContents() {
     this.filebutton.addSelectionListener(new SelectionAdapter() {
 
       @Override
       public void widgetSelected( final SelectionEvent e ) {
        URI[] urls = GridFileDialog.openFileDialog( getShell(), GridFileDialog.STYLE_ALLOW_ONLY_FILES );
+       if( ( urls != null ) && ( urls.length > 0 ) ) {
+         UninstallWizardPage.this.buttontext.setText( urls[ 0 ].toString() );
+       } else {
+         UninstallWizardPage.this.buttontext.setText( "" ); //$NON-NLS-1$
+       }
        updatePagebuttonComplete(urls);
       }
   } );
   
   }
   
- /* public void widgetDefaultSelected( final SelectionEvent e ) {
-    // empty implementation
-    
-  }*/
-
-  /*public void widgetSelected( final SelectionEvent e ) {
-    if( e.getSource().equals( this.filebutton )) {
-      if (this.filebutton.getSelection()){
-      URI[] urls = GridFileDialog.openFileDialog( getShell(), GridFileDialog.STYLE_ALLOW_ONLY_FILES );
-      //getSourceTree().collapseAll();
-      updatePagebuttonComplete(urls);
-  }
-    }
-  }*/
-
  
   protected void updatePagebuttonComplete(final URI[] urls) {
     this.setPageComplete(false);
     if ( urls == null ) {
       this.setMessage( null );
       this.setErrorMessage( Messages.getString( "Uninstall.script_empty" ) ); //$NON-NLS-1$
-      this.seletedinfo.setVisible( false );
       return;
     }
     
     this.scripturi = urls[0];
-    this.seletedinfo.setText( "The selected script is: " + (new Path (this.scripturi.getPath())).lastSegment() ); //$NON-NLS-1$
-    this.seletedinfo.setVisible( true );
     this.setPageComplete( true );
     this.setErrorMessage( null );
   }
