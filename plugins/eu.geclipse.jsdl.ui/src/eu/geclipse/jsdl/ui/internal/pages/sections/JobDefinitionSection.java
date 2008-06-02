@@ -26,7 +26,6 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import eu.geclipse.jsdl.model.base.JobDefinitionType;
-import eu.geclipse.jsdl.model.base.JsdlFactory;
 import eu.geclipse.jsdl.ui.adapters.jsdl.JsdlAdaptersFactory;
 import eu.geclipse.jsdl.ui.internal.pages.FormSectionFactory;
 import eu.geclipse.jsdl.ui.internal.pages.Messages;
@@ -39,7 +38,7 @@ import eu.geclipse.jsdl.ui.internal.pages.Messages;
 public class JobDefinitionSection extends JsdlAdaptersFactory {
   
   private static final String EMPTY_STRING = ""; //$NON-NLS-1$   
-  protected JobDefinitionType jobDefinitionType = JsdlFactory.eINSTANCE.createJobDefinitionType();
+  protected JobDefinitionType jobDefinitionType;
   protected Text txtId = null;
   protected Label lblJobId = null;
   private boolean adapterRefreshed = false;
@@ -80,11 +79,18 @@ public class JobDefinitionSection extends JsdlAdaptersFactory {
     this.txtId = toolkit.createText( client, "", SWT.NONE );     //$NON-NLS-1$
     this.txtId.addModifyListener( new ModifyListener(){
 
-      public void modifyText( final ModifyEvent e ) {
+      public void modifyText( final ModifyEvent e ) {        
         
+        if ( !JobDefinitionSection.this.txtId.getText().equals( EMPTY_STRING ) ){
+                            
           JobDefinitionSection.this.jobDefinitionType.setId( JobDefinitionSection.this.txtId.getText() );
-          contentChanged();
-                
+        }
+        else{
+          
+          JobDefinitionSection.this.jobDefinitionType.setId( null );
+        }
+        contentChanged();
+        
       }
       
     });

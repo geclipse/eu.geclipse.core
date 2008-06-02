@@ -31,11 +31,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.custom.BusyIndicator;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.List;
-import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormPage;
@@ -68,19 +64,7 @@ public final class JobDefinitionPage extends FormPage implements INotifyChangedL
   
   protected static final String PAGE_ID = "JOB_DEFINITION";  //$NON-NLS-1$
 
-  protected Object value = null;
-  protected Text txtId = null;
-  protected Text txtDescription = null;
-  protected Text txtJobName = null;  
-  protected List lstJobProject = null;
-  protected List lstJobAnnotation = null;  
-  protected Label lblJobId = null;
-  protected Label lblJobDescripiton = null;
-  protected Label lblJobAnnotation = null;
-  protected Label lblJobProject = null;  
-  protected Button btnAdd = null;
-  protected Button btnDel = null;
-  protected Button btnTest = null;  
+  protected Object value = null;    
   protected Composite body = null;
   protected Composite jobDefComposite = null;
   protected Composite jobIdentComposite = null;
