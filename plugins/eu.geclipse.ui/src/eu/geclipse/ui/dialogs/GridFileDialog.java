@@ -998,7 +998,7 @@ public class GridFileDialog
       }
       
       String newFilename = filename.substring( 0, e.start ) + e.text + filename.substring( e.end );
-      if ( ! validateFilename( newFilename ) ) {
+      if ( ( ! newFilename.isEmpty() ) && ( ! validateFilename( newFilename ) ) ) {
         e.doit = false;
       } else {
         path = path.append( newFilename );
