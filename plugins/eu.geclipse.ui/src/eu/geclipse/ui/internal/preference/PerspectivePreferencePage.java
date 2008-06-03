@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006-2008 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -10,7 +10,7 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributors:
- * Pawel Wolniewicz 
+ * Pawel Wolniewicz
  *****************************************************************************/
 
 package eu.geclipse.ui.internal.preference;
@@ -57,7 +57,7 @@ public class PerspectivePreferencePage extends FieldEditorPreferencePage
     ImageDescriptor developerPerspectiveImage=null;
 
     RadioGroupFieldEditor editor = new RadioGroupFieldEditor( KEY_REMEMBER_SWITCHING,
-                                                              "Open g-Eclipse perspective after creating Grid Project",
+                                                              "Open a g-Eclipse perspective after creating a Grid Project",
                                                               3,
                                                               new String[][]{
                                                                 {
@@ -111,7 +111,7 @@ public class PerspectivePreferencePage extends FieldEditorPreferencePage
     }
 
     editor = new RadioGroupFieldEditor( KEY_DEFAULT_PERSPECTIVE,
-                                        "Choose perspective to open for new Grid Project",
+                                        "Choose perspective to open for new Grid Projects",
                                         1,
                                         labels,
                                         getFieldEditorParent(),
@@ -130,8 +130,8 @@ public class PerspectivePreferencePage extends FieldEditorPreferencePage
       ((Button)children[2]).setImage( developerPerspectiveImage.createImage() );
     }
 
-    
-    BooleanFieldEditor bfe=new BooleanFieldEditor(KEY_NOT_SWITCH_FROM_GECLIPSE_PERSPECTIVE, "Do not switch from g-Eclipse perspective (User, Operator or Developer)",getFieldEditorParent());
+
+    BooleanFieldEditor bfe=new BooleanFieldEditor(KEY_NOT_SWITCH_FROM_GECLIPSE_PERSPECTIVE, "Do not switch from other g-Eclipse perspectives (User, Operator or Developer)",getFieldEditorParent());
     addField(bfe);
   }
 
