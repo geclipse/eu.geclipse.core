@@ -83,9 +83,15 @@ public class GenericConnectionTokenValidator implements
     return null;
   }
   
-  protected String validateHost( @SuppressWarnings("unused")
-                                 final String host ) {
-    return null;
+  protected String validateHost( final String host ) {
+    String error = null;
+    if (  !host.matches( "[a-zA-Z0-9-_.]+" )  //$NON-NLS-1$
+        || host.startsWith( "." )  //$NON-NLS-1$
+        || host.endsWith( "." )) { //$NON-NLS-1$
+      error = Messages.getString("GenericConnectionTokenValidator.hostname"); //$NON-NLS-1$
+    }
+    
+    return error;
   }
   
   protected String validatePort( final String port ) {
