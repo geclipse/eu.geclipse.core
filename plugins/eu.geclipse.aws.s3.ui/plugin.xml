@@ -7,12 +7,12 @@
             class="eu.geclipse.aws.s3.ui.internal.wizards.AwsCredentialWizard"
             id="eu.geclipse.aws.s3.ui.wizards.AwsCredentialWizard"
             icon="icons/obj16/credential.gif"
-            name="AWS Credential">
+            name="AWS S3 Credential">
       </wizard>
       <factory
             class="eu.geclipse.aws.s3.ui.internal.AwsCredentialUIFactory"
             id="eu.geclipse.aws.s3.ui.awsCredentialUIFactory"
-            name="AWS Credential UI Factory">
+            name="AWS S3 Credential UI Factory">
       </factory>
    </extension>
    <extension

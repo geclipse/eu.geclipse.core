@@ -6,7 +6,7 @@
       <token
             description="eu.geclipse.aws.s3.auth.AwsCredentialDescription"
             id="eu.geclipse.amazon.auth.credential"
-            name="AWS Credential"
+            name="AWS S3 Credential"
             wizard="eu.geclipse.aws.ui.wizards.AwsCredentialWizard">
       </token>
    </extension>
