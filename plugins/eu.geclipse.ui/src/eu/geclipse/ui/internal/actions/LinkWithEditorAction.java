@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006, 2007 g-Eclipse Consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -37,35 +37,36 @@ import eu.geclipse.ui.views.GridModelViewPart;
  * Links an editor with a viewer.
  */
 public class LinkWithEditorAction extends Action {
-  
+
   private GridModelViewPart view;
-  
+
   protected LinkWithEditorAction( final GridModelViewPart view ) {
     super( Messages.getString("LinkWithEditorAction.link_with_editor_action_text"), IAction.AS_CHECK_BOX ); //$NON-NLS-1$
     this.view = view;
     URL imgUrl = Activator.getDefault().getBundle().getEntry( "icons/elcl16/synced.gif" ); //$NON-NLS-1$
     setImageDescriptor( ImageDescriptor.createFromURL( imgUrl ) );
   }
-  
+
   @Override
   public void run() {
     if ( isChecked() ) {
       IWorkbenchPage workbenchPage = this.view.getViewSite().getPage();
       if ( workbenchPage.isPartVisible( this.view ) ) {
         IEditorPart editor = workbenchPage.getActiveEditor();
-        IEditorInput input = editor.getEditorInput();
-        IFile file = ResourceUtil.getFile(input);
-        if (file != null) {
-          IGridRoot gridRoot = GridModel.getRoot();
-          IGridElement gridElement = gridRoot.findElement( file );
-          if ( gridElement != null ) {
-            StructuredViewer viewer = this.view.getViewer();
-            ISelection selection = new StructuredSelection( gridElement );
-            viewer.setSelection( selection );
+        if ( editor != null ) {
+          IEditorInput input = editor.getEditorInput();
+          IFile file = ResourceUtil.getFile(input);
+          if (file != null) {
+            IGridRoot gridRoot = GridModel.getRoot();
+            IGridElement gridElement = gridRoot.findElement( file );
+            if ( gridElement != null ) {
+              StructuredViewer viewer = this.view.getViewer();
+              ISelection selection = new StructuredSelection( gridElement );
+              viewer.setSelection( selection );
+            }
           }
         }
       }
     }
   }
-  
 }
