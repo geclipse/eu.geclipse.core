@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.SubProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.preference.IPreferenceStore;
@@ -130,7 +131,7 @@ public class CaCertificateImportWizard extends Wizard {
 
     try {
 
-      getContainer().run( false, false, new IRunnableWithProgress() {
+      getContainer().run( true, true, new IRunnableWithProgress() {
         public void run( final IProgressMonitor monitor )
             throws InvocationTargetException, InterruptedException {
 
@@ -139,11 +140,17 @@ public class CaCertificateImportWizard extends Wizard {
 
           try {
             for ( String certID : certificates ) {
+              
+              if ( monitor.isCanceled() ) {
+                throw new OperationCanceledException();
+              }
+              
               SubProgressMonitor subMonitor = new SubProgressMonitor( monitor, 1 );
               ICaCertificate certificate = loader.getCertificate( location, certID, subMonitor );
               if ( certificate != null ) {
                 certList.add( certificate );
               }
+              
             }
           } catch ( ProblemException pExc ) {
             throw new InvocationTargetException( pExc );
