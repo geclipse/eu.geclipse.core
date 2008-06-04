@@ -56,6 +56,8 @@ import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridProject;
+import eu.geclipse.core.model.IGridResource;
+import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.providers.ArrayTableLabelProvider;
 
@@ -362,7 +364,10 @@ public class GridProjectStructureComposite extends Composite {
             if ( bundle != null ) {
               try {
                 Class< ? > cls = bundle.loadClass( className );
-                this.creatorTargets.put( name, cls );
+                if ( ! IGridResource.class.isAssignableFrom( cls )
+                    && ! IVirtualOrganization.class.isAssignableFrom( cls ) ) {
+                  this.creatorTargets.put( name, cls );
+                }
               } catch ( ClassNotFoundException cnfExc ) {
                 Activator.logException( cnfExc );
               }
