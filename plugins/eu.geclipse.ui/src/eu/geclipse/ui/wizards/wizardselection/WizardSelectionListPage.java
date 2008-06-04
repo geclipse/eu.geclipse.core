@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -14,14 +14,12 @@
  *****************************************************************************/
 package eu.geclipse.ui.wizards.wizardselection;
 
-import org.eclipse.jface.dialogs.IPageChangeProvider;
 import org.eclipse.jface.dialogs.IPageChangedListener;
 import org.eclipse.jface.dialogs.PageChangedEvent;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.IWizard;
-import org.eclipse.jface.wizard.IWizardContainer;
 import org.eclipse.jface.wizard.IWizardNode;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -230,12 +228,12 @@ public class WizardSelectionListPage
 
       @SuppressWarnings("synthetic-access")
       public void run() {
-        if( WizardSelectionListPage.this.preselectedNode != null
-            && event.getSelectedPage() == WizardSelectionListPage.this )
+        if ( WizardSelectionListPage.this.preselectedNode != null
+             && event.getSelectedPage() == WizardSelectionListPage.this )
         {
           setSelectedNode( WizardSelectionListPage.this.preselectedNode );
           getContainer().showPage( getNextPage() );
-          if( WizardSelectionListPage.this.hidePrev ) {
+          if ( WizardSelectionListPage.this.hidePrev ) {
             getContainer().getCurrentPage().setPreviousPage( null );
           }
           getContainer().updateButtons();
