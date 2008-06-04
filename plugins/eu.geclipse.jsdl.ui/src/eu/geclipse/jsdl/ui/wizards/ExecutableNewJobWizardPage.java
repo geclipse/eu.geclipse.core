@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse consortium 
+ * Copyright (c) 2006-2008 g-Eclipse consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -264,12 +264,12 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
       @Override
       public void widgetSelected( final SelectionEvent e ) {
         GridFileDialog dialog = new GridFileDialog( getShell(),
-                                                          GridFileDialog.STYLE_ALLOW_ONLY_EXISTING | GridFileDialog.STYLE_ALLOW_ONLY_FILES);
+            GridFileDialog.STYLE_ALLOW_ONLY_EXISTING | GridFileDialog.STYLE_ALLOW_ONLY_FILES );
 //        dialog.addFileTypeFilter( "jsdl", "Job Description Files (*.jsdl)" );
 //        dialog.addFileTypeFilter( "txt", "Text Files (*.txt)" );
-        if( dialog.open() == GridFileDialog.OK ) {
+        if ( dialog.open() == GridFileDialog.OK ) {
           URI[] uris = dialog.getSelectedURIs();
-          if( ( uris != null ) && ( uris.length > 0 ) ) {
+          if ( ( uris != null ) && ( uris.length > 0 ) ) {
             ExecutableNewJobWizardPage.this.executableFile.setText( uris[ 0 ].toString() );
           } else {
             ExecutableNewJobWizardPage.this.executableFile.setText( "" );
@@ -443,7 +443,7 @@ public class ExecutableNewJobWizardPage extends WizardSelectionPage
         // }
       }
     } );
-    if( this.basicNode == null ) {
+    if ( this.basicNode == null ) {
       this.basicNode = new BasicWizardPart( this.internalPages,
                                             this.getWizard() );
     }
