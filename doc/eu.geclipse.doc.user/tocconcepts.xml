@@ -120,9 +120,12 @@
     <anchor id="geclipse_concepts_infosystem" />
   </topic>
 
-  <topic
-    label="Application Development">
-    <anchor id="geclipse_concepts_applicationdevelopment" />
+  <topic label="Application Development">
+  	<anchor id="geclipse_concepts_applicationdevelopment" />
+  	<topic label="Web Services"
+  		href="html/concepts/applicationdevelopment/webservices/webservices.html">
+  		<anchor id="geclipse_webservices" />
+  	</topic>
   </topic>
 
    <topic
