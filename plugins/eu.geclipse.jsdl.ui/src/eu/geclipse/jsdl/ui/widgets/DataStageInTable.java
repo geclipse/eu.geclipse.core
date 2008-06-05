@@ -210,18 +210,16 @@ public class DataStageInTable {
       @Override
       protected Object openDialogBox( final Control cellEditorWindow ) {
         String filename = ( String )doGetValue();
-        GridFileDialog dialog = new GridFileDialog(DataStageInTable.this.mainComp.getShell(), 
-                                                   GridFileDialog.STYLE_ALLOW_ONLY_EXISTING 
-                                                   | GridFileDialog.STYLE_ALLOW_ONLY_FILES);
-        
-        if (dialog.open() == Window.OK){
+        GridFileDialog dialog = new GridFileDialog( DataStageInTable.this.mainComp.getShell(),
+                                                    GridFileDialog.STYLE_ALLOW_ONLY_EXISTING
+                                                        | GridFileDialog.STYLE_ALLOW_ONLY_FILES );
+        if( dialog.open() == Window.OK ) {
           URI[] uris = dialog.getSelectedURIs();
-          if ((uris != null)&&(uris.length > 0)){
-            filename = uris[0].toString();
+          if( ( uris != null ) && ( uris.length > 0 ) ) {
+            filename = uris[ 0 ].toString();
           }
         }
-        
-// IGridConnectionElement connection = GridFileDialog.openFileDialog(
+        // IGridConnectionElement connection = GridFileDialog.openFileDialog(
         // DataStageInTable.this.mainComp.getShell(),
         // Messages.getString( "DataStageInTable.grid_file_dialog_title" ),
         // //$NON-NLS-1$
@@ -307,8 +305,8 @@ public class DataStageInTable {
                 DataStageInTable.this.tableViewer.refresh();
               } else {
                 MessageDialog.openError( DataStageInTable.this.mainComp.getShell(),
-                                Messages.getString( "DataStageInTable.edit_dialog_title" ), //$NON-NLS-1$
-                                Messages.getString( "DataStageInTable.value_exists_dialog_message" ) ); //$NON-NLS-1$
+                                         Messages.getString( "DataStageInTable.edit_dialog_title" ), //$NON-NLS-1$
+                                         Messages.getString( "DataStageInTable.value_exists_dialog_message" ) ); //$NON-NLS-1$
               }
             }
           break;
@@ -328,8 +326,8 @@ public class DataStageInTable {
                 DataStageInTable.this.tableViewer.refresh();
               } else {
                 MessageDialog.openError( DataStageInTable.this.mainComp.getShell(),
-                                 Messages.getString( "DataStageInTable.edit_dialog_title" ), //$NON-NLS-1$
-                                 Messages.getString( "DataStageInTable.value_exists_dialog_message" ) ); //$NON-NLS-1$
+                                         Messages.getString( "DataStageInTable.edit_dialog_title" ), //$NON-NLS-1$
+                                         Messages.getString( "DataStageInTable.value_exists_dialog_message" ) ); //$NON-NLS-1$
               }
             }
           break;
@@ -386,13 +384,12 @@ public class DataStageInTable {
       if( dialog.open() == Window.OK ) {
         DataStagingType newData = getNewDataStagingType( dialog.getDataStageInList() );
         if( !isDataInInput( newData ) ) {
-          
           this.input.add( newData );
           this.tableViewer.refresh();
         } else {
           MessageDialog.openError( this.mainComp.getShell(),
-                              Messages.getString( "DataStageInTable.value_exists_dialog_title" ), //$NON-NLS-1$
-                              Messages.getString( "DataStagingPage_New_DuplicateEntryDialog_Message" ) ); //$NON-NLS-1$
+                                   Messages.getString( "DataStageInTable.value_exists_dialog_title" ), //$NON-NLS-1$
+                                   Messages.getString( "DataStagingPage_New_DuplicateEntryDialog_Message" ) ); //$NON-NLS-1$
         }
       }
     } else {
@@ -423,8 +420,8 @@ public class DataStageInTable {
             this.tableViewer.refresh();
           } else {
             MessageDialog.openError( this.mainComp.getShell(),
-                                Messages.getString( "DataStageInTable.edit_dialog_title" ), //$NON-NLS-1$
-                                Messages.getString( "DataStageInTable.value_exists_dialog_message" ) ); //$NON-NLS-1$
+                                     Messages.getString( "DataStageInTable.edit_dialog_title" ), //$NON-NLS-1$
+                                     Messages.getString( "DataStageInTable.value_exists_dialog_message" ) ); //$NON-NLS-1$
           }
         }
       }
@@ -453,24 +450,23 @@ public class DataStageInTable {
 
   DataStagingType getNewDataStagingType( final ArrayList<DataStagingType> dataStageList )
   {
-    
     DataStagingType result = JSDLModelFacade.getDataStagingType();
     SourceTargetType source = JSDLModelFacade.getSourceTargetType();
-    for (int i=0; i<dataStageList.size(); i++){
-      DataStagingType temp = dataStageList.get( i );      
-      result.setFileName( temp.getFileName() );    
+    for( int i = 0; i < dataStageList.size(); i++ ) {
+      DataStagingType temp = dataStageList.get( i );
+      result.setFileName( temp.getFileName() );
       source.setURI( temp.getSource().getURI() );
       result.setSource( source );
-      if (!result.isSetCreationFlag()){
-        result.setCreationFlag( JSDLModelFacade.getDefaultCreationFlag() );
-      }
-      if (!result.isDeleteOnTermination()){
-        result.setDeleteOnTermination( true );
-      }
+      // if (!result.isSetCreationFlag()){
+      result.setCreationFlag( JSDLModelFacade.getDefaultCreationFlag() );
+      // }
+      // if (!result.isDeleteOnTermination()){
+      result.setDeleteOnTermination( true );
+      // }
     }
     return result;
   }
-  
+
   DataStagingType getNewDataStagingType( final String name, final String path )
   {
     DataStagingType result = JSDLModelFacade.getDataStagingType();

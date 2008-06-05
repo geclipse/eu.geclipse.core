@@ -213,30 +213,34 @@ public class DataStageOutTable {
         String filename = ( String )doGetValue();
         cellEditorWindow.getData();
         GridFileDialog dialog = new GridFileDialog( DataStageOutTable.this.mainComp.getShell(),
-                                                          GridFileDialog.STYLE_ALLOW_ONLY_FILES );
+                                                    GridFileDialog.STYLE_ALLOW_ONLY_FILES );
         if( dialog.open() == Window.OK ) {
           URI[] uris = dialog.getSelectedURIs();
           if( ( uris != null ) && ( uris.length > 0 ) ) {
-            filename = uris[0].toString();
+            filename = uris[ 0 ].toString();
           }
         }
-//        IGridConnectionElement connection = GridFileDialog.openFileDialog( DataStageOutTable.this.mainComp.getShell(),
-//                                                                           Messages.getString( "DataStageOutTable.grid_file_dialog_title" ), //$NON-NLS-1$
-//                                                                           null,
-//                                                                           true );
-//        if( connection != null ) {
-//          try {
-//            filename = connection.getConnectionFileStore().toString();
-//          } catch( CoreException cExc ) {
-//            ProblemException exception = new ProblemException( ICoreProblems.NET_CONNECTION_FAILED,
-//                                                               cExc,
-//                                                               Activator.PLUGIN_ID );
-//            ProblemDialog.openProblem( DataStageOutTable.this.mainComp.getShell(),
-//                                       Messages.getString( "DataStageOutTable.error" ), //$NON-NLS-1$
-//                                       Messages.getString( "DataStageOutTable.error" ), //$NON-NLS-1$
-//                                       exception );
-//          }
-//        }
+        // IGridConnectionElement connection = GridFileDialog.openFileDialog(
+        // DataStageOutTable.this.mainComp.getShell(),
+        // Messages.getString( "DataStageOutTable.grid_file_dialog_title" ),
+        // //$NON-NLS-1$
+        // null,
+        // true );
+        // if( connection != null ) {
+        // try {
+        // filename = connection.getConnectionFileStore().toString();
+        // } catch( CoreException cExc ) {
+        // ProblemException exception = new ProblemException(
+        // ICoreProblems.NET_CONNECTION_FAILED,
+        // cExc,
+        // Activator.PLUGIN_ID );
+        // ProblemDialog.openProblem(
+        // DataStageOutTable.this.mainComp.getShell(),
+        // Messages.getString( "DataStageOutTable.error" ), //$NON-NLS-1$
+        // Messages.getString( "DataStageOutTable.error" ), //$NON-NLS-1$
+        // exception );
+        // }
+        // }
         return filename;
       }
     };
@@ -422,26 +426,23 @@ public class DataStageOutTable {
 
   DataStagingType getNewDataStagingType( final ArrayList<DataStagingType> dataStageList )
   {
-    
     DataStagingType result = JSDLModelFacade.getDataStagingType();
     SourceTargetType target = JSDLModelFacade.getSourceTargetType();
-    for (int i=0; i<dataStageList.size(); i++){
-      DataStagingType temp = dataStageList.get( i );      
-      result.setFileName( temp.getFileName() );    
+    for( int i = 0; i < dataStageList.size(); i++ ) {
+      DataStagingType temp = dataStageList.get( i );
+      result.setFileName( temp.getFileName() );
       target.setURI( temp.getTarget().getURI() );
       result.setTarget( target );
-      if (!result.isSetCreationFlag()){
-        result.setCreationFlag( JSDLModelFacade.getDefaultCreationFlag() );
-      }
-      if (!result.isDeleteOnTermination()){
-        result.setDeleteOnTermination( false );
-      }
+      // if (!result.isSetCreationFlag()){
+      result.setCreationFlag( JSDLModelFacade.getDefaultCreationFlag() );
+      // }
+      // if (!result.isDeleteOnTermination()){
+      result.setDeleteOnTermination( false );
+      // }
     }
     return result;
   }
-  
-  
-  
+
   DataStagingType getNewDataStagingType( final String name, final String path )
   {
     DataStagingType result = JSDLModelFacade.getDataStagingType();
