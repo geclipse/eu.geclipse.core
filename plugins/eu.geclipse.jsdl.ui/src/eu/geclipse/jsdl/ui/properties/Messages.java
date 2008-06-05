@@ -30,27 +30,6 @@ public class Messages extends NLS {
   /**
    * 
    */
-  public static String JsdlJobDescSource_DiskSpace;
-  /**
-   * 
-   */
-  public static String JsdlJobDescSource_FileSystem;
-  /**
-   * 
-   */
-  public static String JsdlJobDescSource_Max;
-  /**
-   * 
-   */
-  public static String JsdlJobDescSource_Min;
-  
-  /**
-   * 
-   */
-  public static String JsdlJobDescSource_MountPoint;
-  /**
-   * 
-   */
   public static String JsdlJobDescSource_OS;
   /**
    * 
@@ -63,11 +42,25 @@ public class Messages extends NLS {
   /**
    * 
    */
-  public static String JsdlJobDescSource_RequirementsFS;
+  public static String JsdlJobDescSource_RequirementsOS;
   /**
    * 
    */
-  public static String JsdlJobDescSource_RequirementsOS;
+  public static String JsdlJobDescSource_CandidateHosts;
+  /**
+   * 
+   */
+  public static String JsdlJobDescSource_NetworkBandwidth;
+  
+  /**
+   * 
+   */
+  public static String JsdlJobDescSource_Min;
+  
+  /**
+   * 
+   */
+  public static String JsdlJobDescSource_Max;
   
   private static final String BUNDLE_NAME = "eu.geclipse.jsdl.ui.properties.messages"; //$NON-NLS-1$
   

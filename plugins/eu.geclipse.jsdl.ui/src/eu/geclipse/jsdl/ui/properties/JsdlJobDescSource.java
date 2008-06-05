@@ -13,7 +13,6 @@
  *     PSNC - Mariusz Wojtysiak
  *           
  *****************************************************************************/
-
 package eu.geclipse.jsdl.ui.properties;
 
 import java.util.ArrayList;
@@ -24,18 +23,18 @@ import eu.geclipse.ui.properties.AbstractProperty;
 import eu.geclipse.ui.properties.AbstractPropertySource;
 import eu.geclipse.ui.properties.IProperty;
 
-
 /**
  * Properties for {@link JSDLJobDescription}
  */
 public class JsdlJobDescSource
   extends AbstractPropertySource<JSDLJobDescription>
-{  
+{
+
   static private List<IProperty<JSDLJobDescription>> staticProperties;
 
   /**
    * @param sourceObject - job description object, for which properties will be
-   *          displayed
+   *            displayed
    */
   public JsdlJobDescSource( final JSDLJobDescription sourceObject ) {
     super( sourceObject );
@@ -47,12 +46,13 @@ public class JsdlJobDescSource
     return JsdlJobDescSource.class;
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see eu.geclipse.ui.properties.AbstractPropertySource#getStaticDescriptors()
    */
   @Override
-  protected List<IProperty<JSDLJobDescription>> getStaticProperties()
-  {
+  protected List<IProperty<JSDLJobDescription>> getStaticProperties() {
     if( staticProperties == null ) {
       staticProperties = createProperties();
     }
@@ -62,101 +62,103 @@ public class JsdlJobDescSource
   static private List<IProperty<JSDLJobDescription>> createProperties() {
     List<IProperty<JSDLJobDescription>> propertiesList = new ArrayList<IProperty<JSDLJobDescription>>( 10 );
     propertiesList.add( createCpuArchitecture() );
-    propertiesList.add( createFSMountPoint() );
-    propertiesList.add( createFSDiskSpace() );
-    propertiesList.add( createFSFileSystemType() );
     propertiesList.add( createOSType() );
     propertiesList.add( createOSVersion() );
+    propertiesList.add( createCandidateHost() );
+//    propertiesList.add( createNetworkBandwidth() );
     return propertiesList;
   }
 
-  static private IProperty<JSDLJobDescription> createCpuArchitecture() {
-    return new AbstractProperty<JSDLJobDescription>( Messages.JsdlJobDescSource_CpuArchitecture, 
-                                                     Messages.JsdlJobDescSource_Requirements, false ) { 
+//  static private IProperty<JSDLJobDescription> createNetworkBandwidth() {
+//    return new AbstractProperty<JSDLJobDescription>( Messages.JsdlJobDescSource_NetworkBandwidth,
+//                                                     Messages.JsdlJobDescSource_Requirements,
+//                                                     false )
+//    {
+//
+//      @Override
+//      public Object getValue( final JSDLJobDescription sourceObject ) {
+//        StringBuilder stringBuilder = new StringBuilder();
+//        RangeValueType diskSpaceRange = sourceObject.getNetworkBandwidth();
+//        if( diskSpaceRange != null ) {
+//          if( diskSpaceRange.getLowerBound() != null ) {
+//            stringBuilder.append( Messages.JsdlJobDescSource_Min );
+//            stringBuilder.append( getBytesFormattedString( diskSpaceRange.getLowerBound()
+//              .getValue() ) );
+//          }
+//          if( diskSpaceRange.getUpperBound() != null ) {
+//            if( stringBuilder.length() > 0 ) {
+//              stringBuilder.append( " - " ); //$NON-NLS-1$
+//            }
+//            stringBuilder.append( Messages.JsdlJobDescSource_Max );
+//            stringBuilder.append( getBytesFormattedString( diskSpaceRange.getUpperBound()
+//              .getValue() ) );
+//          }
+//        }
+//        return stringBuilder.length() > 0
+//                                         ? stringBuilder.toString()
+//                                         : null;
+//      }
+//    };
+//  }
+
+  static private IProperty<JSDLJobDescription> createCandidateHost() {
+    return new AbstractProperty<JSDLJobDescription>( Messages.JsdlJobDescSource_CandidateHosts,
+                                                     Messages.JsdlJobDescSource_Requirements,
+                                                     false )
+    {
 
       @Override
-      public Object getValue( final JSDLJobDescription source )
-      {
+      public Object getValue( final JSDLJobDescription source ) {
+        String result = "";
+        for( String host : source.getCandidateHostsNames() ) {
+          result = result + ", " + host;
+        }
+        if( !result.equals( "" ) ) {
+          result = result.substring( 2 );
+        } else {
+          result = null;
+        }
+        return result;
+      }
+    };
+  }
+
+  static private IProperty<JSDLJobDescription> createCpuArchitecture() {
+    return new AbstractProperty<JSDLJobDescription>( Messages.JsdlJobDescSource_CpuArchitecture,
+                                                     Messages.JsdlJobDescSource_Requirements,
+                                                     false )
+    {
+
+      @Override
+      public Object getValue( final JSDLJobDescription source ) {
         return source.getCpuArchitectureName();
       }
     };
   }
 
-  static private IProperty<JSDLJobDescription> createFSMountPoint() {
-    return new AbstractProperty<JSDLJobDescription>( Messages.JsdlJobDescSource_MountPoint, 
-                                                     Messages.JsdlJobDescSource_RequirementsFS, false ) { 
-
-      @Override
-      public Object getValue( final JSDLJobDescription sourceObject )
-      {
-        return sourceObject.getFilesystemMountPoint();
-      }
-    };
-  }
-
-  static private IProperty<JSDLJobDescription> createFSDiskSpace() {
-    return new AbstractProperty<JSDLJobDescription>( Messages.JsdlJobDescSource_DiskSpace, 
-        Messages.JsdlJobDescSource_RequirementsFS, false ) { 
-
-      @Override
-      public Object getValue( final JSDLJobDescription sourceObject )
-      {
-        StringBuilder stringBuilder = new StringBuilder();
-        RangeValueType diskSpaceRange = sourceObject.getFilesystemDiskSpace();
-        if( diskSpaceRange != null ) {
-          if( diskSpaceRange.getLowerBound() != null ) {
-            stringBuilder.append( Messages.JsdlJobDescSource_Min ); 
-            stringBuilder.append( getBytesFormattedString( diskSpaceRange.getLowerBound()
-              .getValue() ) );
-          }
-          if( diskSpaceRange.getUpperBound() != null ) {
-            if( stringBuilder.length() > 0 ) {
-              stringBuilder.append( " - " );  //$NON-NLS-1$
-            }
-            stringBuilder.append( Messages.JsdlJobDescSource_Max ); 
-            stringBuilder.append( getBytesFormattedString( diskSpaceRange.getUpperBound()
-              .getValue() ) );
-          }
-        }
-        return stringBuilder.length() > 0 ?  stringBuilder.toString() : null;
-      }
-    };
-  }
-
-  static private IProperty<JSDLJobDescription> createFSFileSystemType() {
-    return new AbstractProperty<JSDLJobDescription>( Messages.JsdlJobDescSource_FileSystem, 
-        Messages.JsdlJobDescSource_RequirementsFS, false ) { 
-
-      @Override
-      public Object getValue( final JSDLJobDescription source )
-      {
-        return source.getFilesystemType();
-      }
-    };
-  }
-
   static private IProperty<JSDLJobDescription> createOSType() {
-    return new AbstractProperty<JSDLJobDescription>( Messages.JsdlJobDescSource_OS, 
-                                                     Messages.JsdlJobDescSource_RequirementsOS, false ) { 
+    return new AbstractProperty<JSDLJobDescription>( Messages.JsdlJobDescSource_OS,
+                                                     Messages.JsdlJobDescSource_RequirementsOS,
+                                                     false )
+    {
 
       @Override
-      public Object getValue( final JSDLJobDescription source )
-      {
+      public Object getValue( final JSDLJobDescription source ) {
         return source.getOSTypeName();
       }
     };
   }
 
   static private IProperty<JSDLJobDescription> createOSVersion() {
-    return new AbstractProperty<JSDLJobDescription>( Messages.JsdlJobDescSource_OSVersion, 
-                                                     Messages.JsdlJobDescSource_RequirementsOS, false ) { 
+    return new AbstractProperty<JSDLJobDescription>( Messages.JsdlJobDescSource_OSVersion,
+                                                     Messages.JsdlJobDescSource_RequirementsOS,
+                                                     false )
+    {
 
       @Override
-      public Object getValue( final JSDLJobDescription source )
-      {
+      public Object getValue( final JSDLJobDescription source ) {
         return source.getOSVersion();
       }
     };
   }
-
 }
