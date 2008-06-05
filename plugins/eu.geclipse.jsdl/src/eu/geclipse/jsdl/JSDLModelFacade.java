@@ -16,6 +16,7 @@
  *****************************************************************************/
 package eu.geclipse.jsdl;
 
+import eu.geclipse.jsdl.model.base.CreationFlagEnumeration;
 import eu.geclipse.jsdl.model.base.DataStagingType;
 import eu.geclipse.jsdl.model.base.JsdlPackage;
 import eu.geclipse.jsdl.model.base.SourceTargetType;
@@ -46,4 +47,12 @@ public class JSDLModelFacade {
   public static SourceTargetType getSourceTargetType() {
     return JsdlPackage.eINSTANCE.getJsdlFactory().createSourceTargetType();
   }
+  
+  public static CreationFlagEnumeration getDefaultCreationFlag(){
+    return CreationFlagEnumeration.OVERWRITE_LITERAL;
+  }
+  
+//  public static CreationFlagEnumeration getDefaultCreationFlag(){
+//    return JsdlPackage.eINSTANCE.getJsdlFactory().createDocumentRoot().getCreationFlag();
+//  }
 }

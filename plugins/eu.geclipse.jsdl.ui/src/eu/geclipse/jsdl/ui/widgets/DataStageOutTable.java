@@ -430,6 +430,12 @@ public class DataStageOutTable {
       result.setFileName( temp.getFileName() );    
       target.setURI( temp.getTarget().getURI() );
       result.setTarget( target );
+      if (!result.isSetCreationFlag()){
+        result.setCreationFlag( JSDLModelFacade.getDefaultCreationFlag() );
+      }
+      if (!result.isDeleteOnTermination()){
+        result.setDeleteOnTermination( false );
+      }
     }
     return result;
   }

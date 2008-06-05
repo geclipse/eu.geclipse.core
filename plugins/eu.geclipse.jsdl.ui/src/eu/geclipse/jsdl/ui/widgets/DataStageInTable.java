@@ -386,6 +386,7 @@ public class DataStageInTable {
       if( dialog.open() == Window.OK ) {
         DataStagingType newData = getNewDataStagingType( dialog.getDataStageInList() );
         if( !isDataInInput( newData ) ) {
+          
           this.input.add( newData );
           this.tableViewer.refresh();
         } else {
@@ -460,6 +461,12 @@ public class DataStageInTable {
       result.setFileName( temp.getFileName() );    
       source.setURI( temp.getSource().getURI() );
       result.setSource( source );
+      if (!result.isSetCreationFlag()){
+        result.setCreationFlag( JSDLModelFacade.getDefaultCreationFlag() );
+      }
+      if (!result.isDeleteOnTermination()){
+        result.setDeleteOnTermination( true );
+      }
     }
     return result;
   }
