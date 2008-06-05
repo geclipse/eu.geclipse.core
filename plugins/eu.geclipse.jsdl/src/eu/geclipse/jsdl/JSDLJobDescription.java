@@ -666,6 +666,21 @@ public class JSDLJobDescription extends ResourceGridContainer
   public void addArgument( final String argName ) {
     POSIXApplicationType posixApp = getPosixApplication();
     ArgumentType arg;
+    if( posixApp == null ) {
+      try {
+        posixApp = this.posixFactory.createPOSIXApplicationType();
+        ApplicationType app = this.jobDescription.getApplication();
+        if( app != null ) {
+          EClass eClass = ExtendedMetaData.INSTANCE.getDocumentRoot( this.posixPackage );
+          Entry e = FeatureMapUtil.createEntry( eClass.getEStructuralFeature( "pOSIXApplication" ), //$NON-NLS-1$
+                                                posixApp );
+          app.getAny().add( e );
+          posixApp = getPosixApplication();
+        }
+      } catch( Exception exc ) {
+        // ignore
+      }
+    }
     if( posixApp != null ) {
       EList<ArgumentType> argumentList = posixApp.getArgument();
       if( argName != null && !argName.equals( "" ) ) { //$NON-NLS-1$
