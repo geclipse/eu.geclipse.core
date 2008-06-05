@@ -22,6 +22,7 @@ import java.io.Reader;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -563,42 +564,6 @@ public class JSDLJobDescription extends ResourceGridContainer
         .getName();
     }
     return architectureNameString;
-  }
-
-  /**
-   * @return name of required filesystem
-   */
-  public String getFilesystemType() {
-    String typeString = null;
-    DocumentRoot dRoot = getDocumentRoot();
-    if( dRoot != null && dRoot.getFileSystemType() != null ) {
-      typeString = dRoot.getFileSystemType().getName();
-    }
-    return typeString;
-  }
-
-  /**
-   * @return requirements for filesystem mount point
-   */
-  public String getFilesystemMountPoint() {
-    String mountPointString = null;
-    DocumentRoot dRoot = getDocumentRoot();
-    if( dRoot != null ) {
-      mountPointString = getDocumentRoot().getMountPoint();
-    }
-    return mountPointString;
-  }
-
-  /**
-   * @return requirements for diskspace
-   */
-  public RangeValueType getFilesystemDiskSpace() {
-    RangeValueType diskSpaceValue = null;
-    DocumentRoot dRoot = getDocumentRoot();
-    if( dRoot != null && dRoot.getFileSystem() != null ) {
-      diskSpaceValue = dRoot.getFileSystem().getDiskSpace();
-    }
-    return diskSpaceValue;
   }
 
   /**
@@ -1339,5 +1304,56 @@ public class JSDLJobDescription extends ResourceGridContainer
       Activator.logException( exception );
     }
     return doc;
+  }
+
+  /**
+   * Method to access list of candidate hosts.
+   * 
+   * @return List of Strings with names of candidate hosts
+   */
+  public List<String> getCandidateHostsNames() {
+    List<String> result = new ArrayList<String>();
+    DocumentRoot dRoot = getDocumentRoot();
+    if( dRoot != null
+        && dRoot.getJobDefinition() != null
+        && dRoot.getJobDefinition().getJobDescription() != null
+        && dRoot.getJobDefinition().getJobDescription().getResources() != null
+        && dRoot.getJobDefinition()
+          .getJobDescription()
+          .getResources()
+          .getCandidateHosts() != null )
+    {
+      EList list = dRoot.getJobDefinition()
+        .getJobDescription()
+        .getResources()
+        .getCandidateHosts()
+        .getHostName();
+      Iterator iterator = list.iterator();
+      while( iterator.hasNext() ) {
+        result.add( ( String )iterator.next() );
+      }
+    }
+    return result;
+  }
+
+  /**
+   * Method to access IndividualNetworkBandWidth defined for JSDL
+   * 
+   * @return range of network bandwidth
+   */
+  public RangeValueType getNetworkBandwidth() {
+    RangeValueType result = null;
+    DocumentRoot dRoot = getDocumentRoot();
+    if( dRoot != null
+        && dRoot.getJobDefinition() != null
+        && dRoot.getJobDefinition().getJobDescription() != null
+        && dRoot.getJobDefinition().getJobDescription().getResources() != null )
+    {
+      result = dRoot.getJobDefinition()
+        .getJobDescription()
+        .getResources()
+        .getIndividualNetworkBandwidth();
+    }
+    return result;
   }
 }
