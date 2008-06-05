@@ -450,6 +450,10 @@ public class DataStageOutTable {
     SourceTargetType target = JSDLModelFacade.getSourceTargetType();
     target.setURI( path );
     result.setTarget( target );
+    result.setCreationFlag( JSDLModelFacade.getDefaultCreationFlag() );
+    // }
+    // if (!result.isDeleteOnTermination()){
+    result.setDeleteOnTermination( false );
     return result;
   }
 
