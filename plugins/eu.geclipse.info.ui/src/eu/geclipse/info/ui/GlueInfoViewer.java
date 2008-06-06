@@ -78,15 +78,14 @@ import eu.geclipse.info.InfoServiceFactory;
 import eu.geclipse.info.glue.AbstractGlueTable;
 import eu.geclipse.info.glue.GlueCE;
 import eu.geclipse.info.glue.GlueCEAccessControlBaseRule;
-import eu.geclipse.info.glue.GlueIndex;
 import eu.geclipse.info.glue.GlueQuery;
-import eu.geclipse.info.ui.internal.Activator;
-import eu.geclipse.info.ui.internal.Messages;
 import eu.geclipse.info.model.FetchJob;
-import eu.geclipse.info.model.InfoTopTreeCategory;
-import eu.geclipse.info.model.InfoTopTreeElement;
 import eu.geclipse.info.model.IExtentedGridInfoService;
 import eu.geclipse.info.model.IGlueStoreChangeListerner;
+import eu.geclipse.info.model.InfoTopTreeCategory;
+import eu.geclipse.info.model.InfoTopTreeElement;
+import eu.geclipse.info.ui.internal.Activator;
+import eu.geclipse.info.ui.internal.Messages;
 /**
  * @author George Tsouloupas
  */
@@ -426,14 +425,14 @@ implements ISelectionProvider, IGridModelListener, IGlueStoreChangeListerner {
             IGridInfoService infoService = igp.getVO().getInfoService();
             if ( infoService != null && infoService instanceof IExtentedGridInfoService) {
               ArrayList<InfoTopTreeElement> result = ((IExtentedGridInfoService)infoService).getTopTreeElements();
-              for (int i=0; i<result.size(); i++)
+              for ( int i = 0; result != null && i < result.size(); i++ )
               {
                 InfoTopTreeElement currentElement = result.get( i );
-                if (!uniqueList.contains( currentElement ))
+                if ( !uniqueList.contains( currentElement ) ) {
                   uniqueList.add( currentElement );
-                else
+                } else {
                   addObjectTablename(uniqueList, currentElement);
-                  
+                }
               }
             }
           }
