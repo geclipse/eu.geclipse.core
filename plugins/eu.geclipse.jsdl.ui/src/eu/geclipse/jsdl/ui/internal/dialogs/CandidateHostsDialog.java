@@ -178,6 +178,7 @@ public class CandidateHostsDialog extends Dialog {
          * Finish to the indexOf ":" character to remove any trailing characters.
          * 
          */
+        if (gridComputings[i].getName().indexOf( ":" ) != -1){
         hostnameOnly = gridComputings[i].getName().substring( 
                                                          gridComputings[i].getName().lastIndexOf( " " )+1 //$NON-NLS-1$
                                                          , gridComputings[i].getName().indexOf( ":" ) ); //$NON-NLS-1$
@@ -204,6 +205,7 @@ public class CandidateHostsDialog extends Dialog {
             computingElements.add( hostnameOnly );
         }
       } // end 
+    }
       this.hostsViewer.setInput( computingElements );
     } catch( Exception e ) {
       Activator.logException( e );
