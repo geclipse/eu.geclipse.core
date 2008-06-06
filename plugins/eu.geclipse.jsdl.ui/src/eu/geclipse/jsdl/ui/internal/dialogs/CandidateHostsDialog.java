@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.debug.ui.IDebugUIConstants;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -167,7 +168,7 @@ public class CandidateHostsDialog extends Dialog {
     try {
       
       Collection <String> computingElements =  new ArrayList<String>();
-      IGridComputing[] gridComputings =  this.jobDescription.getProject().getVO().getComputing( null ) ;
+      IGridComputing[] gridComputings =  this.jobDescription.getProject().getVO().getComputing( new NullProgressMonitor() ) ;
       String hostnameOnly;
           
       for (int i=0; i < gridComputings.length; i++){        
