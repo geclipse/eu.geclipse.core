@@ -185,8 +185,7 @@ public class DataStagingOutDialog extends Dialog {
         GridFileDialog dialog = new GridFileDialog( PlatformUI.getWorkbench()
                                                     .getActiveWorkbenchWindow()
                                                     .getShell(),
-                                                  GridFileDialog.STYLE_ALLOW_ONLY_EXISTING 
-                                                  | GridFileDialog.STYLE_ALLOW_ONLY_FILES 
+                                                   GridFileDialog.STYLE_ALLOW_ONLY_FILES 
                                                   | GridFileDialog.STYLE_MULTI_SELECTION
                                                       );
 
