@@ -24,7 +24,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
-import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.core.model.IGridService;
 import eu.geclipse.core.model.IStorableElement;
 import eu.geclipse.core.model.IVirtualOrganization;
