@@ -1046,6 +1046,7 @@ public class PosixApplicationSection extends JsdlAdaptersFactory {
           (( java.util.List<Object> )this.posixApplicationType
                      .eGet( eStructuralFeature )).set( index, this.argumentType );
           contentChanged();
+          
         }else {
           MessageDialog.openError( tableViewer.getControl().getShell(),
                                    Messages.getString( "Arguments_DuplicateEntryDialog_Title" ), //$NON-NLS-1$
