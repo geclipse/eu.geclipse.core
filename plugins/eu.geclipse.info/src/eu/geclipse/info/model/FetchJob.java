@@ -26,8 +26,8 @@ import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridInfoService;
 import eu.geclipse.core.model.IGridProject;
+import eu.geclipse.info.InfoCacheListenerHandler;
 import eu.geclipse.info.InfoServiceFactory;
-import eu.geclipse.info.glue.AbstractGlueTable;
 import eu.geclipse.info.glue.GlueIndex;
 import eu.geclipse.info.internal.Activator;
 
@@ -38,7 +38,7 @@ import eu.geclipse.info.internal.Activator;
  * @author tnikos
  *
  */
-public class FetchJob extends Job implements IGlueInfoStore{
+public class FetchJob extends Job{
 
   private static FetchJob instance = null;
   private ArrayList<IGlueStoreChangeListerner> listeners = new ArrayList<IGlueStoreChangeListerner>();
@@ -70,12 +70,13 @@ public class FetchJob extends Job implements IGlueInfoStore{
    
     GlueIndex.drop(); // Clear the glue index.
     GlueIndex.getInstance(); // Initialize the glue index and set the listener.
-    boolean hasNotified = false;
     
+    /*
     Status status = new Status( IStatus.ERROR,
                                 "eu.geclipse.glite.info", //$NON-NLS-1$
                                 "BDII fetch from " //$NON-NLS-1$
                                     + " Failed" ); //$NON-NLS-1$
+    */
     ArrayList<IGridInfoService> infoServicesArray = null;
     InfoServiceFactory myInfoServiceFactory = new InfoServiceFactory();
     infoServicesArray = myInfoServiceFactory.getAllExistingInfoService();
@@ -112,6 +113,7 @@ public class FetchJob extends Job implements IGlueInfoStore{
       }
     }
     
+    /*
     // Notify the listeners that the info has changed.
     for (int i=0; infoServicesArray != null && i<infoServicesArray.size(); i++)
     {
@@ -130,60 +132,14 @@ public class FetchJob extends Job implements IGlueInfoStore{
     // notification to the listeners of FetchJob. 
     if (!hasNotified)
       this.notifyListeners( null );
+    */
+    
+    InfoCacheListenerHandler.getInstance().notifyListeners( );
     
     monitor.done();
-    status = new Status( IStatus.OK,
+    Status status = new Status( IStatus.OK,
                          "eu.geclipse.glite.info", //$NON-NLS-1$
                          "Information data fetched successfully." ); //$NON-NLS-1$
     return status;
-  }
-
-  /**
-   * Adds a listener that will be notified when no info service has been notified which happens
-   * when no projects are created.
-   */
-  public void addListener( final IGlueStoreChangeListerner listener, final String objectName )
-  {
-    this.listeners.add( listener );
-    
-  }
-
-  public void addStateListener( IGlueStoreStateChangeListerner listener ) {
-    // TODO Auto-generated method stub
-    
-  }
-
-  /**
-   * 
-   */
-  public void notifyListeners( ArrayList<AbstractGlueTable> agtList ) {
-    for( IGlueStoreChangeListerner listener : this.listeners ) {
-      listener.infoChanged( agtList );
-    }
-    
-  }
-
-  public void removeAllListeners() {
-    // TODO Auto-generated method stub
-    
-  }
-
-  public void removeAllStateListeners() {
-    // TODO Auto-generated method stub
-    
-  }
-
-  public synchronized void removeListener( IGlueStoreChangeListerner listener,
-                              String resourceTypeName )
-  {
-    if(this.listeners.contains( listener )){
-      this.listeners.remove( listener );
-    }
-    
-  }
-
-  public void removeStateListener( IGlueStoreStateChangeListerner listener ) {
-    // TODO Auto-generated method stub
-    
   }
 }

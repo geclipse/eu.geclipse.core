@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import eu.geclipse.core.model.IGridApplication;
 import eu.geclipse.core.model.IGridComputing;
 import eu.geclipse.core.model.IGridContainer;
+import eu.geclipse.info.glue.GlueLocation;
 import eu.geclipse.info.glue.GlueSubClusterSoftwareRunTimeEnvironment;
 
 
@@ -30,13 +31,10 @@ public class GridApplication extends GridGlueElement implements IGridApplication
   private URI script = null;
   
   private ArrayList<IGridComputing> computing = new ArrayList<IGridComputing>();
-  private IGridContainer parent;
   
   public GridApplication( final IGridContainer parent,
-                          final GlueSubClusterSoftwareRunTimeEnvironment software ) {
+                          final GlueLocation software ) {
     super( parent, software );
-    //this.computing = computing;
-    this.parent = parent;
   }
   
   public void addComputing(final IGridComputing computing)
@@ -55,8 +53,8 @@ public class GridApplication extends GridGlueElement implements IGridApplication
 
   public String getTag() {
     String tag = null;
-    if ( getGlueElement() != null && getGlueElement() instanceof GlueSubClusterSoftwareRunTimeEnvironment )
-      tag = ( ( GlueSubClusterSoftwareRunTimeEnvironment ) getGlueElement() ).GlueLocactionPath;
+    if ( getGlueElement() != null && getGlueElement() instanceof GlueLocation )
+      tag = ( ( GlueLocation ) getGlueElement() ).locationPath;
     
     return tag;
   }
@@ -68,8 +66,8 @@ public class GridApplication extends GridGlueElement implements IGridApplication
 
   public String getHostName() {
     String result = null;
-    if ( getGlueElement() != null && getGlueElement() instanceof GlueSubClusterSoftwareRunTimeEnvironment )
-      result = ( ( GlueSubClusterSoftwareRunTimeEnvironment ) getGlueElement() ).SubClusterUniqueID;
+    if ( getGlueElement() != null && getGlueElement() instanceof GlueLocation )
+      result = ( ( GlueLocation ) getGlueElement() ).subCluster.UniqueID;
     
     return result;
   }

@@ -57,11 +57,11 @@ public class GlueUtility {
   public static Integer getIntegerAttribute( final String attribute,
                                    final Attributes attributes )
   {
-    Integer result = new Integer(-1);
+    Integer result = Integer.valueOf(-1);
     Attribute attr = attributes.get( attribute );
     if( attr != null ) {
       try {
-        result =  new Integer(Integer.parseInt( attr.get().toString() ));
+        result =  Integer.parseInt( attr.get().toString() );
       } catch( NamingException e ) {
         // ignore missing fields
       } catch( NumberFormatException e ) {
@@ -80,11 +80,11 @@ public class GlueUtility {
   public static Long getLongAttribute( final String attribute,
                                        final Attributes attributes )
   {
-    Long result = new Long(-1);
+    Long result = Long.valueOf(-1);
     Attribute attr = attributes.get( attribute );
     if( attr != null ) {
       try {
-        result =  new Long(Long.parseLong( attr.get().toString() ));
+        result =  Long.parseLong( attr.get().toString() );
       } catch( NamingException e ) {
         // ignore missing fields
       } catch( NumberFormatException e ) {

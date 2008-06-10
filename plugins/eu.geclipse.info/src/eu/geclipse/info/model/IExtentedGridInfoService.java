@@ -39,9 +39,9 @@ public interface IExtentedGridInfoService extends IGridInfoService {
    * Returns the store that holds all the glue information for sites, computing elements
    * and storage elements
    * @see eu.geclipse.glite.info.bdii.BDIIStore
-   * @return an eu.geclipse.info.IGlueInfoStore or <code> null </code>
+   * @return an eu.geclipse.info.model.AbstractGlueStore or <code> null </code>
    */
-  public IGlueInfoStore getStore();
+  public AbstractGlueStore getStore();
   
   /**
    * This method begins the procedure to store the glue information in the glue store 

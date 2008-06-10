@@ -28,6 +28,7 @@ import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IPropertiesProvider;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.IWrappedElement;
+import eu.geclipse.info.model.GridApplication;
 import eu.geclipse.info.model.GridGlueComputing;
 import eu.geclipse.info.model.GridGlueService;
 import eu.geclipse.info.model.GridGlueStorage;
@@ -97,6 +98,11 @@ public class PropertiesFactory implements IPropertiesFactory {
         GridGlueService gridGlueService = (GridGlueService)myElement;
         sourcesList.add( new GridGlueServiceSource(gridGlueService) );
       }
+    }
+    
+    if ( sourceObject instanceof GridApplication)
+    {
+      sourcesList.add( new GridApplicationSource(( GridApplication )sourceObject) );
     }
     
     return sourcesList;

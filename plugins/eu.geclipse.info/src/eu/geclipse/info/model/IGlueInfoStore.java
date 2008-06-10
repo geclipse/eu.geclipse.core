@@ -16,57 +16,35 @@
  *****************************************************************************/
 package eu.geclipse.info.model;
 
-import java.util.ArrayList;
-
-import eu.geclipse.info.glue.AbstractGlueTable;
 
 /**
- * Interface that all Information stores should implement
+ * 
  * @author George Tsouloupas
  * 
  */
 public interface IGlueInfoStore {
 
   /**
-   * Add a listenet
+   * Add a listener
    * @param listener an IGlueStoreChangeListerner
-   * @param objectName
    */
-  public void addListener(IGlueStoreChangeListerner listener, String objectName);
+  public void addListener(IGlueStoreChangeListerner listener);
 
   /**
    * Remove a specific listener
    * @param listener
-   * @param resourceTypeName
    */
-  public void removeListener(IGlueStoreChangeListerner listener, String resourceTypeName);
+  public void removeListener(IGlueStoreChangeListerner listener);
 
   /**
    * Remove all the listeners
    */
   public void removeAllListeners();
 
-  /**
-   * Add a state listener
-   * @param listener
-   */
-  public void addStateListener(IGlueStoreStateChangeListerner listener);
-
-  /**
-   * Remove a state listener
-   * @param listener
-   */
-  public void removeStateListener(IGlueStoreStateChangeListerner listener);
-
-  /**
-   * Remove all state listeners
-   */
-  public void removeAllStateListeners();
   
   /**
    * Notify that a change has been made.
-   * @param agtList
    */
-  public void notifyListeners( final ArrayList<AbstractGlueTable> agtList );
+  public void notifyListeners( );
     
 }

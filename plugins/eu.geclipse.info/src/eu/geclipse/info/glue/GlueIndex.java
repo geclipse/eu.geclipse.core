@@ -94,7 +94,8 @@ implements IGridModelListener, java.io.Serializable {
     "GlueSubClusterLocation",
     "GlueSubClusterSoftwareRunTimeEnvironment",
     "GlueVO",
-    "GriaService"
+    "GriaService",
+    "GlueLocation"
   };
   
   private static GlueIndex glueIndexInstance;
@@ -330,6 +331,8 @@ implements IGridModelListener, java.io.Serializable {
   public Hashtable<String, GlueVO> glueVO
     = new Hashtable<String, GlueVO>();
 
+  public Hashtable<String, GlueLocation> glueLocation = new Hashtable<String, GlueLocation>();
+  
   /**
    * 
    */
@@ -365,7 +368,7 @@ implements IGridModelListener, java.io.Serializable {
   /**
    * @return the singleton instance to the Glue information datastructure
    */
-  public static GlueIndex getInstance() {
+  public synchronized static GlueIndex getInstance() {
     boolean errorFound = false;
     
     if (glueIndexInstance == null)
@@ -425,8 +428,8 @@ implements IGridModelListener, java.io.Serializable {
     glueIndexInstance.glueSubClusterSoftwareRunTimeEnvironment.clear();
     glueIndexInstance.glueVO.clear();
    */
-    IPath serPath = getGridInfoLocation();
-    serPath.toFile().delete(); 
+    //IPath serPath = getGridInfoLocation();
+    //serPath.toFile().delete(); 
     
     //serializeInstance(); Commented out for the bug 204787
   }
@@ -467,12 +470,14 @@ implements IGridModelListener, java.io.Serializable {
   /**
    * Delete the file where the glue infomation is stored. 
    */
+  /*
   public static void dropCachePersistenceFile(){
     IPath serPath = getGridInfoLocation();
     serPath.toFile().delete();
   }
+  */
   
-  @SuppressWarnings("unused")
+  /*
   private static GlueIndex loadInstance() throws IOException {
     IPath serPath = getGridInfoLocation();
     GlueIndex gi=null;
@@ -496,9 +501,11 @@ implements IGridModelListener, java.io.Serializable {
       throw new IOException("Could not load cache."); //$NON-NLS-1$
     }
     */
+  /*
     return gi;
   }
-
+  */
+  
   /**
    * @param objectName String representing the name of the Glue Object 
    * such as "GlueSite", "GlueCE", "GlueSE" ...
@@ -599,6 +606,23 @@ implements IGridModelListener, java.io.Serializable {
   private void putInFullIndex( final String key,final AbstractGlueTable agt ) {
     //String newKey = agt.getClass().getName() + key;
     //AbstractGlueTable previous = this.fullIndex.put( newKey, agt );
+  }
+  
+  public GlueLocation getGlueLocation( final String key ) {
+    GlueLocation result = null;
+    
+    if( key != null ) 
+    {      
+      result = this.glueLocation.get( key );
+      if( result == null ) {
+        result = new GlueLocation();
+  
+        result.setID( key );
+        this.glueLocation.put( key, result );
+        putInFullIndex( key, result );
+      }
+    }
+    return result;
   }
   
   /**

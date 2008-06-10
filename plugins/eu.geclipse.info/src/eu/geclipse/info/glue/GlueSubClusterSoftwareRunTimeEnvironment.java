@@ -38,9 +38,6 @@ public class GlueSubClusterSoftwareRunTimeEnvironment extends AbstractGlueTable
    */
   public String Value; // PK
 
-  public String GlueLocactionPath;
-  public String SubClusterUniqueID;
-
   /**
    * 
    */

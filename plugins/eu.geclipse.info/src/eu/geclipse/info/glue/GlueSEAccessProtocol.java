@@ -143,13 +143,7 @@ public class GlueSEAccessProtocol extends AbstractGlueTable
     this.setRetrievalTime( sdf.format(cal.getTime()) );
   }
   
-  /**
-   * It compares two GlueSE
-   * @param otherObject the object to compare the current object with
-   * @return Returns true if both objects have the same values in the following 
-   * fields: Endpoint, Port, Type and Version. False otherwise or 
-   * if otherObject=null.
-   */
+  /*
   public boolean equals(final GlueSEAccessProtocol otherObject)
   {
     boolean result = false;
@@ -161,5 +155,64 @@ public class GlueSEAccessProtocol extends AbstractGlueTable
       result = true;
     
     return result;
+  }
+  */
+  
+  @Override
+  public int hashCode() {
+    final int prime = 31;
+    int result = 1;
+    result = prime * result + ( ( Endpoint == null )
+                                                    ? 0
+                                                    : Endpoint.hashCode() );
+    result = prime * result + ( ( Port == null )
+                                                ? 0
+                                                : Port.hashCode() );
+    result = prime * result + ( ( Type == null )
+                                                ? 0
+                                                : Type.hashCode() );
+    result = prime * result + ( ( Version == null )
+                                                   ? 0
+                                                   : Version.hashCode() );
+    return result;
+  }
+
+  /**
+   * It compares two GlueSE
+   * @param otherObject the object to compare the current object with
+   * @return Returns true if both objects have the same values in the following 
+   * fields: Endpoint, Port, Type and Version. False otherwise or 
+   * if otherObject=null.
+   */
+  @Override
+  public boolean equals( Object obj ) {
+    if( this == obj )
+      return true;
+    if( obj == null )
+      return false;
+    if( getClass() != obj.getClass() )
+      return false;
+    final GlueSEAccessProtocol other = ( GlueSEAccessProtocol )obj;
+    if( Endpoint == null ) {
+      if( other.Endpoint != null )
+        return false;
+    } else if( !Endpoint.equals( other.Endpoint ) )
+      return false;
+    if( Port == null ) {
+      if( other.Port != null )
+        return false;
+    } else if( !Port.equals( other.Port ) )
+      return false;
+    if( Type == null ) {
+      if( other.Type != null )
+        return false;
+    } else if( !Type.equals( other.Type ) )
+      return false;
+    if( Version == null ) {
+      if( other.Version != null )
+        return false;
+    } else if( !Version.equals( other.Version ) )
+      return false;
+    return true;
   }
 }

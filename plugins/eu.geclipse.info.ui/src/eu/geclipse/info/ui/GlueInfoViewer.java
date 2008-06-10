@@ -71,10 +71,8 @@ import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridInfoService;
-import eu.geclipse.core.model.IGridModelEvent;
-import eu.geclipse.core.model.IGridModelListener;
 import eu.geclipse.core.model.IGridProject;
-import eu.geclipse.info.InfoServiceFactory;
+import eu.geclipse.info.InfoCacheListenerHandler;
 import eu.geclipse.info.glue.AbstractGlueTable;
 import eu.geclipse.info.glue.GlueCE;
 import eu.geclipse.info.glue.GlueCEAccessControlBaseRule;
@@ -90,9 +88,8 @@ import eu.geclipse.info.ui.internal.Messages;
  * @author George Tsouloupas
  */
 public class GlueInfoViewer extends ViewPart
-implements ISelectionProvider, IGridModelListener, IGlueStoreChangeListerner {
+implements ISelectionProvider, IGlueStoreChangeListerner {
 
-  Action doubleClickAction;
   FetchJob fetchJob;
   TreeViewer viewer;
   boolean showOnlyFilledInfoElements = false;
@@ -425,7 +422,8 @@ implements ISelectionProvider, IGridModelListener, IGlueStoreChangeListerner {
             IGridInfoService infoService = igp.getVO().getInfoService();
             if ( infoService != null && infoService instanceof IExtentedGridInfoService) {
               ArrayList<InfoTopTreeElement> result = ((IExtentedGridInfoService)infoService).getTopTreeElements();
-              for ( int i = 0; result != null && i < result.size(); i++ )
+
+              for (int i=0; result!=null && i<result.size(); i++)
               {
                 InfoTopTreeElement currentElement = result.get( i );
                 if ( !uniqueList.contains( currentElement ) ) {
@@ -449,7 +447,8 @@ implements ISelectionProvider, IGridModelListener, IGlueStoreChangeListerner {
       this.glueRoot = new TreeParent( list );
     }
   }
-  class ViewLabelProvider extends LabelProvider {
+  
+  static class ViewLabelProvider extends LabelProvider {
 
     @Override
     public String getText( final Object obj ) {
@@ -471,7 +470,7 @@ implements ISelectionProvider, IGridModelListener, IGlueStoreChangeListerner {
       return PlatformUI.getWorkbench().getSharedImages().getImage( imageKey );
     }
   }
-  class NameSorter extends ViewerSorter {
+  static class NameSorter extends ViewerSorter {
     @Override
     public int compare(final Viewer myViewer, final Object p1, final Object p2)
     {
@@ -501,8 +500,9 @@ implements ISelectionProvider, IGridModelListener, IGlueStoreChangeListerner {
    */
   public GlueInfoViewer() {
     
-    GridModel.addGridModelListener( this );
+    //GridModel.addGridModelListener( this );
     
+    /*
     Thread t=new Thread(){
       //wait for BDII and register listener
       @Override
@@ -526,8 +526,8 @@ implements ISelectionProvider, IGridModelListener, IGlueStoreChangeListerner {
             
             if (infoService != null && infoService.getStore()!=null)
             {
-              infoService.getStore().removeListener( GlueInfoViewer.this, null );
-              infoService.getStore().addListener( GlueInfoViewer.this, null );
+              infoService.getStore().removeListener( GlueInfoViewer.this );
+              infoService.getStore().addListener( GlueInfoViewer.this );
             }
           } 
         }
@@ -535,10 +535,13 @@ implements ISelectionProvider, IGridModelListener, IGlueStoreChangeListerner {
       
     };
     t.start();
+    */
+    InfoCacheListenerHandler.getInstance().removeListener( GlueInfoViewer.this );
+    InfoCacheListenerHandler.getInstance().addListener( GlueInfoViewer.this );
     
     this.fetchJob = FetchJob.getInstance(" Retrieving Information"); //$NON-NLS-1$
-    this.fetchJob.removeListener( GlueInfoViewer.this, null );
-    this.fetchJob.addListener( GlueInfoViewer.this, null );
+    //this.fetchJob.removeListener( GlueInfoViewer.this, null );
+    //this.fetchJob.addListener( GlueInfoViewer.this, null );
     this.showOnlyFilledInfoElements = false;
   }
   
@@ -830,7 +833,7 @@ implements ISelectionProvider, IGridModelListener, IGlueStoreChangeListerner {
     this.viewer.setSelection( arg0 );
   }
 
-  public void infoChanged( final ArrayList<AbstractGlueTable> modifiedGlueEntries ) {
+  public void infoChanged( ) {
     getSite().getShell().getDisplay().syncExec( new Runnable( ){
       @SuppressWarnings("synthetic-access")
       public void run() {
@@ -856,6 +859,7 @@ implements ISelectionProvider, IGridModelListener, IGlueStoreChangeListerner {
                                    message );
   }
 
+  /*
   public void gridModelChanged( IGridModelEvent event ) {
    
     int type=event.getType();    
@@ -905,4 +909,5 @@ implements ISelectionProvider, IGridModelListener, IGlueStoreChangeListerner {
     }
     
   }
+  */
 }

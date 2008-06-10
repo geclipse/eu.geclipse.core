@@ -16,9 +16,6 @@
  *****************************************************************************/
 package eu.geclipse.info.model;
 
-import java.util.ArrayList;
-
-import eu.geclipse.info.glue.AbstractGlueTable;
 
 /**
  * @author George Tsouloupas
@@ -30,5 +27,5 @@ public interface IGlueStoreChangeListerner {
    * Notify that the glue info has changed
    * @param modifiedGlueEntries The modified glue entries
    */
-  public void infoChanged( final ArrayList<AbstractGlueTable> modifiedGlueEntries );
+  public void infoChanged( );
 }

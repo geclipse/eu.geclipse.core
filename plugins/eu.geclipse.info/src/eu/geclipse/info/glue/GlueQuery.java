@@ -46,7 +46,7 @@ public class GlueQuery {
                                                           final String vo){
     ArrayList<AbstractGlueTable> inArray=GlueIndex.getInstance().getList(glueObjectName, objectTableName);
     ArrayList<AbstractGlueTable> outArray=new ArrayList<AbstractGlueTable>();
-    ArrayList<AbstractGlueTable> result = new ArrayList<AbstractGlueTable>();
+    ArrayList<AbstractGlueTable> result = null;
     if(vo==null || vo.equals("none")){ //$NON-NLS-1$
        result = inArray;
     }
