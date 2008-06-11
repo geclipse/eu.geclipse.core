@@ -24,7 +24,6 @@ import org.w3c.dom.DOMException;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import eu.geclipse.core.model.IGridJobID;
 import eu.geclipse.core.model.IGridJobStatus;
 import eu.geclipse.core.reporting.ProblemException;
 
@@ -45,30 +44,15 @@ public class GridJobStatus implements IGridJobStatus {
   private String data = null;
 
   public GridJobStatus() {
-    this.name = Messages.getString( "GridJobStatus.unknown" ); //$NON-NLS-1$
-    this.type = UNKNOWN;
-    this.reason = ""; //$NON-NLS-1$
-    this.data = null;
-    this.updateDate = Calendar.getInstance().getTime();
-  }
-
-  public GridJobStatus( final String aReason ) {
-    this.name = Messages.getString( "GridJobStatus.unknown" ); //$NON-NLS-1$
-    this.type = UNKNOWN;
-    this.reason = aReason;
-    this.data = null;
+    this( Messages.getString( "GridJobStatus.unknown" ), UNKNOWN );
   }
 
   public GridJobStatus( final String name, final int type ) {
     this.name = name;
     this.type = type;
+    this.reason = ""; //$NON-NLS-1$
     this.data = null;
-  }
-
-  public GridJobStatus( @SuppressWarnings("unused")
-  final IGridJobID id )
-  {
-    // Empty implementation
+    this.updateDate = Calendar.getInstance().getTime();
   }
 
   public GridJobStatus( final Node statusNode ) throws ProblemException {
