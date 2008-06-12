@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.core.resources.IProject;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.IWizardPage;
@@ -28,6 +29,7 @@ import org.eclipse.jface.wizard.Wizard;
 import eu.geclipse.core.model.IGridApplication;
 import eu.geclipse.core.model.IGridComputing;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.ui.internal.Activator;
 
@@ -77,7 +79,11 @@ public class UninstallWizard extends Wizard {
 
    IGridElement selected = ( IGridElement ) this.selection.getFirstElement();
    IGridComputing[] computings = ( ( IGridApplication ) selected ).getComputing();
-   IVirtualOrganization vo = selected.getProject().getVO();
+   IGridProject proj = selected.getProject();
+   IVirtualOrganization vo;
+   if (proj != null)
+   vo = proj.getVO();
+   else vo = ( IVirtualOrganization )computings[0].getParent();
    Iterator< ? > iter = this.selection.iterator();
    List< IGridApplication > uninstallList = new ArrayList< IGridApplication >();
    while ( iter.hasNext() ) {
