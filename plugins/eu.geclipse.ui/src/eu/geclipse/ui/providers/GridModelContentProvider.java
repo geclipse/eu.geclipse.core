@@ -45,8 +45,8 @@ public class GridModelContentProvider
    */
   protected TreeViewer treeViewer;
   
-  private Hashtable< IGridContainer, NewProgressTreeNode > progressNodes
-    = new Hashtable< IGridContainer, NewProgressTreeNode >();
+  private Hashtable< IGridContainer, ProgressTreeNode > progressNodes
+    = new Hashtable< IGridContainer, ProgressTreeNode >();
   
   /**
    * The comparator used for sorting the children of a node.
@@ -136,12 +136,12 @@ public class GridModelContentProvider
     
     if ( container.isLazy() && container.isDirty() ) {
       
-      NewProgressTreeNode monitor = this.progressNodes.get( container );
+      ProgressTreeNode monitor = this.progressNodes.get( container );
       
       if ( monitor == null ) {
       
         FetchChildrenJob fetcher = new FetchChildrenJob( container, this.treeViewer.getControl().getShell() );
-        monitor = new NewProgressTreeNode( this.treeViewer );
+        monitor = new ProgressTreeNode( this.treeViewer );
         this.progressNodes.put( container, monitor );
         fetcher.setExternalMonitor( monitor );
         fetcher.setSystem( true );

@@ -64,8 +64,8 @@ public class PingTestDialog extends AbstractSimpleTestDialog  {
   private ArrayList< InetAddress > hostAdrs = new ArrayList< InetAddress >();  
   private ArrayList< String > hostNames = new ArrayList< String >();
   
-//  private Hashtable< PingHostJob, NewProgressTreeNode > progressNodes
-//  = new Hashtable< PingHostJob, NewProgressTreeNode >();
+//  private Hashtable< PingHostJob, ProgressTreeNode > progressNodes
+//  = new Hashtable< PingHostJob, ProgressTreeNode >();
   
   /**
    * Construct a new dialog from the specified test.

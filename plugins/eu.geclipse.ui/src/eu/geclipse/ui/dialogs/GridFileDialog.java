@@ -80,7 +80,7 @@ import eu.geclipse.ui.listeners.TreeColumnListener;
 import eu.geclipse.ui.providers.FileStoreLabelProvider;
 import eu.geclipse.ui.providers.GridFileDialogContentProvider;
 import eu.geclipse.ui.providers.NewGridModelLabelProvider;
-import eu.geclipse.ui.providers.NewProgressTreeNode;
+import eu.geclipse.ui.providers.ProgressTreeNode;
 import eu.geclipse.ui.widgets.StoredCombo;
 
 /**
@@ -257,7 +257,7 @@ public class GridFileDialog
       } else if ( element instanceof IFileStore ) {
         IFileInfo info = ( ( IFileStore ) element ).fetchInfo();
         result = info.isDirectory();
-      } else if ( element instanceof NewProgressTreeNode ) {
+      } else if ( element instanceof ProgressTreeNode ) {
         result = true;
       }
       return result;
@@ -284,7 +284,7 @@ public class GridFileDialog
       boolean result = false;
       if ( element instanceof IGridConnectionElement ) {
         result = ! ( ( IGridConnectionElement ) element ).isLocal();
-      } else if ( element instanceof NewProgressTreeNode ) {
+      } else if ( element instanceof ProgressTreeNode ) {
         result = true;
       }
       return result;
@@ -380,7 +380,7 @@ public class GridFileDialog
           result = name.endsWith( PREFIX_SEPARATOR + this.prefix );
         }
         
-        else if ( element instanceof NewProgressTreeNode ){
+        else if ( element instanceof ProgressTreeNode ){
           result = true;
         }
         

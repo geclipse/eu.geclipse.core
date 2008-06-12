@@ -30,7 +30,7 @@ import org.eclipse.swt.widgets.Combo;
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.impl.ContainerMarker;
-import eu.geclipse.ui.providers.NewProgressTreeNode;
+import eu.geclipse.ui.providers.ProgressTreeNode;
 
 /**
  * Implementation of a {@link ViewerFilter} that may be used in conjunction
@@ -170,7 +170,7 @@ public class GridConnectionFilter extends ViewerFilter {
     if ( element instanceof IGridConnectionElement ) {
       result = select( ( IGridConnectionElement  ) element );
     } else if ( ( element instanceof IGridContainer )
-        || ( element instanceof NewProgressTreeNode )
+        || ( element instanceof ProgressTreeNode )
         || ( element instanceof ContainerMarker ) ) {
       result = true;
     }

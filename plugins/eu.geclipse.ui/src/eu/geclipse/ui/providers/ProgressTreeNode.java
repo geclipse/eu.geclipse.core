@@ -1,43 +1,45 @@
-/*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+/******************************************************************************
+ * Copyright (c) 2008 g-Eclipse consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  *
- * Initial development of the original code was made for the
- * g-Eclipse project founded by European Union
+ * Initial development of the original code was made for
+ * project g-Eclipse founded by European Union
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
- * Contributors:
- *    Mathias Stuempert - initial API and implementation
+ * Contributor(s):
+ *     Mathias Stuempert - initial API and implementation
  *****************************************************************************/
 
 package eu.geclipse.ui.providers;
 
+import java.net.URL;
+
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.GC;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
-import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 
-/**
- * A progress monitor implementation to be used within {@link TreeViewer}s.
- */
+import eu.geclipse.ui.internal.Activator;
+
 public class ProgressTreeNode
     implements IProgressMonitor, Listener {
+  
   
   /**
    * Internal class that handles UI updates.
    */
-  private class ProgressNodeUpdater implements Runnable {
+  private static class ProgressNodeUpdater implements Runnable {
     
     /**
      * The progress tree node used to show the progress.
@@ -49,6 +51,8 @@ public class ProgressTreeNode
      */
     private String lastProgress;
     
+    private boolean wasAlreadyDone;
+    
     /**
      * Construct a new updater for the specified {@link ProgressTreeNode}.
      * 
@@ -56,6 +60,7 @@ public class ProgressTreeNode
      */
     public ProgressNodeUpdater( final ProgressTreeNode node ) {
       this.node = node;
+      this.wasAlreadyDone = false;
     }
     
     /* (non-Javadoc)
@@ -63,9 +68,12 @@ public class ProgressTreeNode
      */
     public void run() {
       String progress = this.node.toString();
-      if ( ( progress != null ) && !progress.equals( this.lastProgress ) ) {
+      if ( ( progress != null ) && ! progress.equals( this.lastProgress ) ) {
         this.lastProgress = progress;
-        this.node.getTreeViewer().update( ProgressTreeNode.this, null );
+        this.node.getViewer().update( this.node, null );
+      } else if ( this.node.isDone() && ! this.wasAlreadyDone ) {
+        this.wasAlreadyDone = true;
+        this.node.getViewer().getTree().redraw();
       }
     }
     
@@ -78,144 +86,79 @@ public class ProgressTreeNode
     
   }
   
-  /**
-   * The default width of the progress bar. 
-   */
-  private static final int DEFAULT_PROGRESS_BAR_WIDTH = 50;
   
-  /**
-   * The default margin between the percentage and the progress bar ends.
-   */
-  private static final int DEFAULT_PROGRESS_BAR_MARGIN = 5;
+  private static Image emptyProgress;
   
-  /**
-   * The default gap between the progress bar and the task text.
-   */
-  private static final int DEFAULT_TEXT_GAP = 5;
+  private static Image fullProgress;
   
-  /**
-   * The amount of work already done.
-   */
-  protected double worked;
+  static {
+    URL emptyURL = Activator.getDefault().getBundle()
+                    .getEntry( "icons/extras/progress_bar_empty.gif" ); //$NON-NLS-1$
+    emptyProgress = ImageDescriptor.createFromURL( emptyURL ).createImage();
+    URL fullURL = Activator.getDefault().getBundle()
+                    .getEntry( "icons/extras/progress_bar_full.gif" ); //$NON-NLS-1$
+    fullProgress = ImageDescriptor.createFromURL( fullURL ).createImage();
+  }
   
-  /**
-   * The name of the current task.
-   */
-  protected String taskName;
+  protected boolean done;
   
-  /**
-   * The total number of work steps. 
-   */
   private int tWork;
   
-  private String errorString;
+  private double worked;
   
-  /**
-   * The canceled flag.
-   */
+  private String taskName;
+  
   private boolean canceled;
   
-  private boolean done;
-  
-  private TreeViewer treeViewer;
+  private TreeViewer viewer;
   
   private ProgressNodeUpdater updater;
   
-  protected ProgressTreeNode( final TreeViewer treeViewer ) {
-    this.treeViewer = treeViewer;
+  public ProgressTreeNode( final TreeViewer viewer ) {
+    
+    this.tWork = 100;
+    this.worked = 0;
+    this.done = false;
+    this.canceled = false;
+    this.taskName = "Pending...";
     this.updater = new ProgressNodeUpdater( this );
+    this.viewer = viewer;
+    
+    final Tree tree = viewer.getTree();
+    if ( ! tree.isDisposed() ) {
+      Display display = tree.getDisplay();
+      display.syncExec( new Runnable() {
+        public void run() {
+          if ( !tree.isDisposed() ) {
+            tree.addListener( SWT.MeasureItem, ProgressTreeNode.this );
+            tree.addListener( SWT.EraseItem, ProgressTreeNode.this );
+            tree.addListener( SWT.PaintItem, ProgressTreeNode.this );
+          }
+        }
+      } );
+    }
+    
   }
   
-  /**
-   * Get the {@link TreeViewer} associated with this {@link ProgressTreeNode}.
-   * 
-   * @return The associated {@link TreeViewer}.
-   */
-  public TreeViewer getTreeViewer() {
-    return this.treeViewer;
-  }
-
-  /* (non-Javadoc)
-   * @see org.eclipse.core.runtime.IProgressMonitor#beginTask(java.lang.String, int)
-   */
-  public void beginTask( final String name,
-                         final int totalWork ) {
-    synchronized ( this ) {
-      this.taskName = name;
-      this.tWork = totalWork;
-      this.worked = 0;
-      this.canceled = false;
-      this.done = false;
-    }
+  public void beginTask( final String name, final int totalWork ) {
+    this.taskName = name;
+    this.tWork = totalWork;
+    this.worked = 0;
+    this.done = false;
+    this.canceled = false;
     update();
   }
 
-  /* (non-Javadoc)
-   * @see org.eclipse.core.runtime.IProgressMonitor#done()
-   */
   public void done() {
     this.worked = this.tWork;
     this.done = true;
     update();
   }
-
-  /* (non-Javadoc)
-   * @see org.eclipse.core.runtime.IProgressMonitor#internalWorked(double)
-   */
-  public void internalWorked( final double work ) {
-    this.worked += work;
-    update();
-  }
-
-  /* (non-Javadoc)
-   * @see org.eclipse.core.runtime.IProgressMonitor#isCanceled()
-   */
-  public boolean isCanceled() {
-    return this.canceled;
+  
+  public TreeViewer getViewer() {
+    return this.viewer;
   }
   
-  /**
-   * Determine if the job is done.
-   * 
-   * @return True if the job is done.
-   */
-  public boolean isDone() {
-    return this.done;
-  }
-
-  /* (non-Javadoc)
-   * @see org.eclipse.core.runtime.IProgressMonitor#setCanceled(boolean)
-   */
-  public void setCanceled( final boolean value ) {
-    this.canceled = value;
-    update();
-  }
-  
-  /**
-   * Set the error string for this tree node. The error string
-   * is shown as part of the nodes text.
-   * 
-   * @param error The error string to be set.
-   */
-  public void setError( final String error ) {
-    this.errorString = error;
-  }
-
-  public void setTaskName( final String name ) {
-    synchronized ( this.taskName ) {
-      this.taskName = name;
-    }
-    update();
-  }
-
-  public void subTask( final String name ) {
-    setTaskName( name );
-  }
-
-  public void worked( final int work ) {
-    internalWorked( work );
-  }
-
   public void handleEvent( final Event event ) {
     if ( ( event.item instanceof TreeItem ) && ( event.index == 0 ) ) {
       Object data = ( ( TreeItem ) event.item ).getData();
@@ -234,6 +177,34 @@ public class ProgressTreeNode
       }
     }
   }
+
+  public void internalWorked( final double work ) {
+    this.worked += work;
+    update();
+  }
+
+  public boolean isCanceled() {
+    return this.canceled;
+  }
+  
+  /**
+   * Determine if the job is done.
+   * 
+   * @return True if the job is done.
+   */
+  public boolean isDone() {
+    return this.done;
+  }
+
+  public void setCanceled( final boolean value ) {
+    this.canceled = value;
+    update();
+  }
+
+  public void setTaskName( final String name ) {
+    this.taskName = name;
+    update();
+  }
   
   @Override
   public String toString() {
@@ -243,28 +214,22 @@ public class ProgressTreeNode
                         + ")"; //$NON-NLS-1$
     return resultString;
   }
+
+  public void subTask( final String name ) {
+    setTaskName( name );
+  }
+
+  public void worked( final int work ) {
+    internalWorked( work );
+  }
   
   /**
    * Get the current progress in percent.
    * 
    * @return The current progress.
    */
-  protected long getProgressPercent() {
-    return Math.round( 100.*this.worked/this.tWork );
-  }
-  
-  /**
-   * Convenience method for the SWT.MeasureItem event.
-   * 
-   * @param event The event triggering this measurement.
-   */
-  protected void measureItem( final Event event ) {
-    event.height = event.gc.getFontMetrics().getHeight();
-    event.width = getProgressBarWidth( event.gc ) + 3;
-    if ( this.taskName != null ) {
-      event.width += DEFAULT_TEXT_GAP
-                  + event.gc.textExtent( this.taskName ).x;
-    }
+  private int getProgressPercent() {
+    return ( int ) Math.round( 100.*this.worked/this.tWork );
   }
   
   /**
@@ -272,9 +237,29 @@ public class ProgressTreeNode
    * 
    * @param event The event triggering this erasure.
    */
-  protected void eraseItem( @SuppressWarnings("unused")
+  private void eraseItem( @SuppressWarnings("unused")
                             final Event event ) {
     // empty implementation
+  }
+  
+  /**
+   * Convenience method for the SWT.MeasureItem event.
+   * 
+   * @param event The event triggering this measurement.
+   */
+  private void measureItem( final Event event ) {
+    
+    int textHeight = event.gc.getFontMetrics().getHeight();
+    int imageWidth = emptyProgress.getBounds().width;
+    int imageHeight = emptyProgress.getBounds().height;
+    int textWidth
+      = this.taskName == null
+      ? 0
+      : event.gc.textExtent( this.taskName ).x;
+    
+    event.height = Math.max( textHeight, imageHeight );
+    event.width = textWidth + imageWidth + 2;
+    
   }
   
   /**
@@ -284,84 +269,47 @@ public class ProgressTreeNode
    */
   protected void paintItem( final Event event ) {
     
-    String tName;
-    synchronized ( this ) {
-      tName = this.taskName;
-    }
-        
-    Display display = this.treeViewer.getTree().getDisplay();
+    Display display = this.viewer.getTree().getDisplay();
     Color black = display.getSystemColor( SWT.COLOR_BLACK );
-    Color white = display.getSystemColor( SWT.COLOR_WHITE );
-    Color red = display.getSystemColor( SWT.COLOR_RED );
-    Color yellow = display.getSystemColor( SWT.COLOR_YELLOW );
-    Color blue = display.getSystemColor( SWT.COLOR_BLUE );
-    Color bg = event.gc.getBackground();
-    
-    long progress = getProgressPercent();
-    int progBarWidth = getProgressBarWidth( event.gc );
     event.gc.fillRectangle( event.x, event.y, event.width, event.height );
     
-    event.gc.setForeground( black );
-    event.gc.setBackground( isDone() ?  blue : bg );
-    event.gc.drawRectangle( event.x + 1, event.y + 1, progBarWidth + 1, event.height - 3 );
-    if ( isDone() ) {
-      event.gc.fillRectangle( event.x + 1, event.y + 1, progBarWidth + 1, event.height - 3 );
-    }
-    event.gc.drawRectangle( event.x + 1, event.y + 1, progBarWidth + 1, event.height - 3 );
-    if ( !isDone() ) {
-      event.gc.setClipping( event.x + 2, event.y + 2,
-                            ( int )( progBarWidth * progress / 100. ),
-                            event.height-4 );
-      event.gc.setForeground( red );
-      event.gc.setBackground( yellow );
-      event.gc.fillGradientRectangle( event.x + 2, event.y + 2, progBarWidth, event.height - 4, false );
-      event.gc.setClipping( ( Rectangle ) null );
-    }
-    
-    String progressString = isDone() ? "done" : String.valueOf( progress )+"%"; //$NON-NLS-1$ //$NON-NLS-2$
-    Point progressExtend = event.gc.textExtent( progressString );
-    int progressX = event.x + 2 + ( progBarWidth - progressExtend.x ) / 2;
+    Color white = display.getSystemColor( SWT.COLOR_WHITE );
+
+    int progress = getProgressPercent();
+
+    int barwidth = fullProgress.getBounds().width;
+    int barheight = fullProgress.getBounds().height;
+    int bary = event.y + ( event.height - barheight ) / 2;
+    int barp = barwidth * progress / 100;
+
+    event.gc.drawImage( emptyProgress, barp, 0, barwidth-barp, barheight, event.x+barp+2, bary, barwidth-barp, barheight );
+    event.gc.drawImage( fullProgress, 0, 0, barp, barheight, event.x+2, bary, barp, barheight );
+
+    String progressString = String.valueOf( progress )+"%"; //$NON-NLS-1$ //$NON-NLS-2$
+    Point textExtend = event.gc.textExtent( progressString );
+    int progressX = event.x + 2 + ( barwidth - textExtend.x ) / 2;
     event.gc.setForeground( white );
     event.gc.drawText( progressString, progressX+1, event.y + 2, true );
     event.gc.setForeground( black );
     event.gc.drawText( progressString, progressX, event.y + 1, true );
 
-    int textX = event.x + 2 + progBarWidth + DEFAULT_TEXT_GAP;
-    if ( this.errorString != null ) {
-      event.gc.setForeground( red );
-      event.gc.drawText( this.errorString, textX, event.y + 1, true );
-    } else if ( tName != null ) {
+    int textX = event.x + 6 + barwidth;
+    if ( this.taskName != null ) {
       event.gc.setForeground( black );
-      event.gc.drawText( tName, textX, event.y + 1, true );
+      event.gc.drawText( this.taskName, textX, event.y + 1, true );
     }
-    
-  }
-  
-  /**
-   * Compute the optimal with of the progress bar.
-   * 
-   * @param gc The graphical context used to render the progress bar.
-   * @return The width of the progress bar as it is rendered.
-   */
-  private int getProgressBarWidth( final GC gc ) {
-    Point maxProgExtend = gc.textExtent( "100%" ); //$NON-NLS-1$
-    int progBarWidth = DEFAULT_PROGRESS_BAR_WIDTH;
-    int maxProgBarWidth = maxProgExtend.x + 2 * DEFAULT_PROGRESS_BAR_MARGIN;
-    if ( progBarWidth < maxProgBarWidth ) {
-      progBarWidth = maxProgBarWidth;
-    }
-    return progBarWidth;
+
   }
   
   /**
    * Update the tree in order to repaint this node.
    */
-  private void update() {
-    Tree tree = this.treeViewer.getTree();
+  protected void update() {
+    Tree tree = getViewer().getTree();
     if ( !tree.isDisposed() ) {
       Display display = tree.getDisplay();
       display.asyncExec( this.updater );
     }
   }
-  
+
 }

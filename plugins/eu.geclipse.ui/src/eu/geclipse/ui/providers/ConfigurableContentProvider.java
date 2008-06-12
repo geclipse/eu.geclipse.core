@@ -252,7 +252,7 @@ public class ConfigurableContentProvider
         if( !isOnList( elements, parent ) ) {
           result.add( object );
         }
-      } else if ( object instanceof NewProgressTreeNode ) {
+      } else if ( object instanceof ProgressTreeNode ) {
         result.add( object );
       }
       
