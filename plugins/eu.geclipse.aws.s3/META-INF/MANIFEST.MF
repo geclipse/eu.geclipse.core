@@ -13,7 +13,9 @@ Require-Bundle: org.eclipse.core.runtime,
  eu.geclipse.core,
  eu.geclipse.core.reporting,
  org.jets3t;bundle-version="0.6.0",
- org.apache.commons.httpclient;bundle-version="3.1.0"
+ org.apache.commons.httpclient;bundle-version="3.1.0",
+ eu.geclipse.aws,
+ org.eclipse.core.resources
 Eclipse-LazyStart: true
-Export-Package: eu.geclipse.aws.s3.auth
+Export-Package: eu.geclipse.aws.s3
 

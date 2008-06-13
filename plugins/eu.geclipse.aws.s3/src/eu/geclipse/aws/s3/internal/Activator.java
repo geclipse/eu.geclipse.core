@@ -36,19 +36,28 @@ public class Activator extends Plugin implements IProxyChangeListener {
   /** The plug-in ID */
   public static final String PLUGIN_ID = "eu.geclipse.aws.s3"; //$NON-NLS-1$
 
+  /**
+   * HttpClient property for the number of retries before the connection is
+   * process is canceled.
+   */
   private static final String HTTP_RETRY_COUNT_KEY = "httpclient.retry-max"; //$NON-NLS-1$
 
+  /** HttpClient property for automatically detecting the proxy key. */
   private static final String HTTP_PROXY_AUTO_DETECT_KEY = "httpclient.proxy-autodetect"; //$NON-NLS-1$
 
+  /** HttpClient property for the host key of the proxy. */
   private static final String HTTP_PROXY_HOST_KEY = "httpclient.proxy-host"; //$NON-NLS-1$
 
+  /** HttpClient property for the port of the proxy. */
   private static final String HTTP_PROXY_PORT_KEY = "httpclient.proxy-port"; //$NON-NLS-1$
 
+  /** A key for jets3t properties. */
   private static final String JETS3T_PROPERTIES = "jets3t.properties"; //$NON-NLS-1$
 
-  // The shared instance
+  /** The shared instance. */
   private static Activator plugin;
 
+  /** The service tracker for the {@link IProxyService}. */
   private ServiceTracker tracker;
 
   /**
@@ -56,8 +65,8 @@ public class Activator extends Plugin implements IProxyChangeListener {
    */
   public Activator() {
     Jets3tProperties props = getJets3tProperties();
-    props.setProperty(HTTP_RETRY_COUNT_KEY, "2"); //$NON-NLS-1$
-    props.setProperty(HTTP_PROXY_AUTO_DETECT_KEY, "false"); //$NON-NLS-1$
+    props.setProperty( Activator.HTTP_RETRY_COUNT_KEY, "2" ); //$NON-NLS-1$
+    props.setProperty( Activator.HTTP_PROXY_AUTO_DETECT_KEY, "false" ); //$NON-NLS-1$
   }
 
   /**
@@ -66,55 +75,44 @@ public class Activator extends Plugin implements IProxyChangeListener {
    * @return The jets3t properties.
    */
   public Jets3tProperties getJets3tProperties() {
-    return Jets3tProperties.getInstance(JETS3T_PROPERTIES);
+    return Jets3tProperties.getInstance( Activator.JETS3T_PROPERTIES );
   }
 
   /*
    * (non-Javadoc)
+   * 
    * @see org.eclipse.core.runtime.Plugins#start(org.osgi.framework.BundleContext)
    */
   @Override
-  public void start(final BundleContext context) throws Exception {
-    super.start(context);
-    plugin = this;
-    this.tracker = new ServiceTracker(getBundle().getBundleContext(),
-        IProxyService.class.getName(), null);
+  public void start( final BundleContext context ) throws Exception {
+    super.start( context );
+    Activator.plugin = this;
+    this.tracker = new ServiceTracker( getBundle().getBundleContext(),
+                                       IProxyService.class.getName(),
+                                       null );
     this.tracker.open();
-    getProxyService().addProxyChangeListener(this);
+    getProxyService().addProxyChangeListener( this );
     updateProxySettings();
   }
 
   /*
    * (non-Javadoc)
+   * 
    * @see org.eclipse.core.runtime.Plugin#stop(org.osgi.framework.BundleContext)
    */
   @Override
-  public void stop(final BundleContext context) throws Exception {
-    plugin = null;
-    super.stop(context);
+  public void stop( final BundleContext context ) throws Exception {
+    Activator.plugin = null;
+    super.stop( context );
   }
 
   /**
    * Returns the shared instance.
-   *
+   * 
    * @return the shared instance.
    */
   public static Activator getDefault() {
-    return plugin;
-  }
-
-  /**
-   * Logs an exception to the eclipse logger.
-   * 
-   * @param exc The exception to be logged.
-   */
-  public static void logException(final Throwable exc) {
-    String message = exc.getLocalizedMessage();
-    if (message == null)
-      message = exc.getClass().getName();
-    IStatus status = new Status(IStatus.ERROR, PLUGIN_ID, IStatus.OK, message,
-        exc);
-    logStatus(status);
+    return Activator.plugin;
   }
 
   /**
@@ -122,8 +120,35 @@ public class Activator extends Plugin implements IProxyChangeListener {
    * 
    * @param status The status to be logged.
    */
-  public static void logStatus(final IStatus status) {
-    getDefault().getLog().log(status);
+  public static void logStatus( final IStatus status ) {
+    Activator.getDefault().getLog().log( status );
+  }
+
+  /**
+   * Log the exception via an {@link IStatus}.
+   * 
+   * @param e the exception to log
+   */
+  public static void log( final Exception e ) {
+    Activator.log( e.getLocalizedMessage(), e );
+  }
+
+  /**
+   * Create a log entry with the given description and exception.
+   * 
+   * @param description a more descriptive text of the exception
+   * @param e the exception to log
+   */
+  public static void log( String description, final Exception e ) {
+    if( description == null ) {
+      description = e.getClass().getName();
+    }
+    IStatus status = new Status( IStatus.ERROR,
+                                 Activator.PLUGIN_ID,
+                                 IStatus.OK,
+                                 description,
+                                 e );
+    Activator.getDefault().getLog().log( status );
   }
 
   /**
@@ -133,10 +158,12 @@ public class Activator extends Plugin implements IProxyChangeListener {
    * @return the {@link IProxyService} or <code>null</code>
    */
   public IProxyService getProxyService() {
-    return (IProxyService) this.tracker.getService();
+    return ( IProxyService )this.tracker.getService();
   }
 
-  /* (non-Javadoc)
+  /*
+   * (non-Javadoc)
+   * 
    * @see org.eclipse.core.net.proxy.IProxyChangeListener#proxyInfoChanged(org.eclipse.core.net.proxy.IProxyChangeEvent)
    */
   public void proxyInfoChanged( final IProxyChangeEvent event ) {
@@ -152,20 +179,19 @@ public class Activator extends Plugin implements IProxyChangeListener {
     boolean enabled = proxyService.isProxiesEnabled();
     Jets3tProperties jets3tProperties = getJets3tProperties();
 
-    if (enabled) {
-      IProxyData proxyData = proxyService
-          .getProxyData(IProxyData.HTTP_PROXY_TYPE);
+    if( enabled ) {
+      IProxyData proxyData = proxyService.getProxyData( IProxyData.HTTP_PROXY_TYPE );
       String host = proxyData.getHost();
-      String port = String.valueOf(proxyData.getPort());
-      jets3tProperties.setProperty(HTTP_PROXY_HOST_KEY, host);
-      jets3tProperties.setProperty(HTTP_PROXY_PORT_KEY, port);
+      String port = String.valueOf( proxyData.getPort() );
+      jets3tProperties.setProperty( Activator.HTTP_PROXY_HOST_KEY, host );
+      jets3tProperties.setProperty( Activator.HTTP_PROXY_PORT_KEY, port );
     } else {
       Properties properties = jets3tProperties.getProperties();
-      properties.remove(HTTP_PROXY_HOST_KEY);
-      properties.remove(HTTP_PROXY_PORT_KEY);
+      properties.remove( Activator.HTTP_PROXY_HOST_KEY );
+      properties.remove( Activator.HTTP_PROXY_PORT_KEY );
     }
-    
-    ServiceRegistry.getRegistry().clear();
+
+    S3ServiceRegistry.getRegistry().clear();
 
   }
 

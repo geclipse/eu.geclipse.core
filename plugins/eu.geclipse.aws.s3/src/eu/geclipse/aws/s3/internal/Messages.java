@@ -10,7 +10,7 @@
  * project number: FP6-IST-034327  http://www.geclipse.eu/
  *
  * Contributors:
- *    Mathias Stuempert - initial API and implementation
+ *    Moritz Post - initial API and implementation
  *****************************************************************************/
 
 package eu.geclipse.aws.s3.internal;
@@ -19,31 +19,37 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 /**
- * Returns the localized messages for this package.
+ * This class uses the bundle mechanism with the message.properties file located
+ * in the root of the project for i18n.
+ * 
+ * @author Moritz Post
  */
 public class Messages {
+
+  /** Name of the bundle file in the project root */
   private static final String BUNDLE_NAME = "eu.geclipse.aws.s3.internal.messages"; //$NON-NLS-1$
 
-  private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle
-      .getBundle(BUNDLE_NAME);
+  /** Bundle to work with. */
+  private static final ResourceBundle RESOURCE_BUNDLE = ResourceBundle.getBundle( Messages.BUNDLE_NAME );
 
+  /**
+   * Hidden constructor
+   */
   private Messages() {
-    // empty implementation
+    // nothing to do here
   }
 
   /**
-   * Returns a localized version of a message.
+   * Get the value for the string key.
    * 
-   * @param key key for the message.
-   * @return the localized string.
+   * @param key the key for the value
+   * @return the value
    */
   public static String getString( final String key ) {
-    String result;
     try {
-      result = RESOURCE_BUNDLE.getString(key);
-    } catch (MissingResourceException e) {
-      result = '!' + key + '!';
+      return Messages.RESOURCE_BUNDLE.getString( key );
+    } catch( MissingResourceException e ) {
+      return '!' + key + '!';
     }
-    return result;
   }
 }

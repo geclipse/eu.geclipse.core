@@ -2,22 +2,27 @@
 <?eclipse version="3.2"?>
 <plugin>
    <extension
-         point="eu.geclipse.core.authTokens">
-      <token
-            description="eu.geclipse.aws.s3.auth.AwsCredentialDescription"
-            id="eu.geclipse.amazon.auth.credential"
-            name="AWS S3 Credential"
-            wizard="eu.geclipse.aws.ui.wizards.AwsCredentialWizard">
-      </token>
-   </extension>
-   <extension
          point="org.eclipse.core.filesystem.filesystems">
-      <filesystem
-            scheme="s3">
+      <filesystem scheme="s3">
          <run
-               class="eu.geclipse.aws.s3.internal.s3.S3FileSystem">
+               class="eu.geclipse.aws.s3.internal.fileSystem.S3FileSystem">
          </run>
       </filesystem>
+   </extension>
+   <extension
+         point="eu.geclipse.core.gridElementCreator" 
+         id="eu.geclipse.aws.s3.service.s3AWSServiceCreator">
+      <creator
+            class="eu.geclipse.aws.s3.service.S3AWSServiceCreator"
+            name="%s3ServiceCreator.service.name"
+            id="eu.geclipse.aws.s3.service.s3AWSServiceCreator">
+         <target
+               class="eu.geclipse.aws.IAWSService"
+               name="AWS Service">
+         </target>
+         <source class="java.net.URL" pattern="%s3ServiceCreator.source.pattern" default="true">
+         </source>
+      </creator>
    </extension>
    <extension
          point="eu.geclipse.core.reporting.problemReporting">
@@ -54,5 +59,4 @@
             id="eu.geclipse.aws.problem.s3.bucketInBucketFailed">
       </problem>
    </extension>
-
 </plugin>

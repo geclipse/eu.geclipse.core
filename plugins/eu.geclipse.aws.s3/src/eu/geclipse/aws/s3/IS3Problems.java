@@ -13,12 +13,12 @@
  *    Mathias Stuempert - initial API and implementation
  *****************************************************************************/
 
-package eu.geclipse.aws.s3.internal;
+package eu.geclipse.aws.s3;
 
 /**
  * Problem IDs for AWS problems.
  */
-public interface IAwsProblems {
+public interface IS3Problems {
   
   /**
    * ID for the service creation failed problem.
