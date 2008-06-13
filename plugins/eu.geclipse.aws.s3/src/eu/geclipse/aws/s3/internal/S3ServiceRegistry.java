@@ -145,7 +145,6 @@ public class S3ServiceRegistry implements ISecurityManagerListener {
         found = false;
 
         for( IAuthenticationToken authToken : tokens ) {
-          System.out.println( entry.getKey() + " - " + authToken );
           if( entry.getKey() == authToken ) {
             found = true;
           }
