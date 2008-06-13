@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2007 g-Eclipse consortium
+ * Copyright (c) 2007-2008 g-Eclipse consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -38,18 +38,15 @@ import eu.geclipse.info.model.FetchJob;
 /**
  * 
  * @author George Tsouloupas
- *
  */
-public class GlueIndex  
-implements IGridModelListener, java.io.Serializable {
+public class GlueIndex implements IGridModelListener, java.io.Serializable {
 
   /**
    * 
    */
   private static final long serialVersionUID = 1L;
 
-  private GlueIndex()
-  {
+  private GlueIndex() {
     // private constructor.  
   }
   
@@ -345,15 +342,15 @@ implements IGridModelListener, java.io.Serializable {
 
   public void gridModelChanged( final IGridModelEvent event ) {
     
-    int type=event.getType();    
-    switch( type ) {
+    int type = event.getType();    
+    switch ( type ) {
       case IGridModelEvent.ELEMENTS_ADDED:
       case IGridModelEvent.ELEMENTS_REMOVED:
       case IGridModelEvent.PROJECT_CLOSED:
       case IGridModelEvent.PROJECT_OPENED:
 
-        for( IGridElement gridElement : event.getElements() ) {
-          if(gridElement instanceof IGridProject){
+        for ( IGridElement gridElement : event.getElements() ) {
+          if (gridElement instanceof IGridProject){
             FetchJob fetchJob = FetchJob.getInstance(" Retrieving Information"); //$NON-NLS-1$
             fetchJob.schedule(); // Getting the information from the info services.
             break;
@@ -371,12 +368,10 @@ implements IGridModelListener, java.io.Serializable {
   public synchronized static GlueIndex getInstance() {
     boolean errorFound = false;
     
-    if (glueIndexInstance == null)
-    {          
+    if ( glueIndexInstance == null ) {          
       glueIndexInstance = new GlueIndex();
       
       GridModel.getRoot().addGridModelListener( glueIndexInstance );
-     
     }
     return glueIndexInstance;
   }
@@ -385,10 +380,10 @@ implements IGridModelListener, java.io.Serializable {
    * Delete the file where the glue information is stored and set 
    * glueIndexInstance to null.
    */
-  public static void drop(){
+  public static void drop() {
     
     GridModel.getRoot().removeGridModelListener( glueIndexInstance );
-    glueIndexInstance=null;
+    glueIndexInstance = null;
     /*
     glueIndexInstance.glueBatchJob.clear();
     glueIndexInstance.glueBatchJob.clear();
@@ -513,7 +508,6 @@ implements IGridModelListener, java.io.Serializable {
    * @param onlyIfExists 
    * @return The Glue object with the specified key, null otherwise
    */
-  @SuppressWarnings("unchecked")
   public AbstractGlueTable get( final String objectName, final String key, final boolean onlyIfExists ) {
     AbstractGlueTable result = null;
     
@@ -523,13 +517,15 @@ implements IGridModelListener, java.io.Serializable {
     
     try {
       boolean returnIt=true;
-      if(onlyIfExists){
+      if ( onlyIfExists ) {
         String fieldName = objectName.substring( 0, 1 ).toLowerCase()
-        + objectName.substring( 1 );
+          + objectName.substring( 1 );
+
+        @SuppressWarnings("unchecked")
         Hashtable<String, String> ht=(Hashtable<String, String>) this.getClass().getField( fieldName ).get( this );
         returnIt=ht.containsKey( key );
       }
-      if(returnIt){
+      if ( returnIt ) {
         m = GlueIndex.class.getMethod( "get" + objectName, c ); //$NON-NLS-1$
         Object[] o = new Object[ 1 ];
         o[ 0 ] = key;
@@ -564,7 +560,6 @@ implements IGridModelListener, java.io.Serializable {
    * 
    * @see eu.geclipse.info.glue.AbstractGlueTable
    */
-  @SuppressWarnings("unchecked")
   public ArrayList<AbstractGlueTable> getList( final String glueObjectName, final String objectTableName ) {
     ArrayList<AbstractGlueTable> agtList = new ArrayList<AbstractGlueTable>();
     try {
@@ -572,7 +567,8 @@ implements IGridModelListener, java.io.Serializable {
                          + glueObjectName.substring( 1 );
       Field f = GlueIndex.class.getField( fieldName );
       Object o = f.get( this );
-      if (o instanceof Hashtable ) {
+      if ( o instanceof Hashtable ) {
+        @SuppressWarnings("unchecked")
         Hashtable<String, AbstractGlueTable> ht=( Hashtable<String, AbstractGlueTable> )o;
         Enumeration<AbstractGlueTable> enAgt = ht.elements();
         while( enAgt.hasMoreElements() ) {
@@ -611,12 +607,11 @@ implements IGridModelListener, java.io.Serializable {
   public GlueLocation getGlueLocation( final String key ) {
     GlueLocation result = null;
     
-    if( key != null ) 
-    {      
+    if ( key != null ) {      
       result = this.glueLocation.get( key );
-      if( result == null ) {
+      if ( result == null ) {
         result = new GlueLocation();
-  
+        
         result.setID( key );
         this.glueLocation.put( key, result );
         putInFullIndex( key, result );
@@ -633,10 +628,10 @@ implements IGridModelListener, java.io.Serializable {
   public GlueHost getGlueHost( final String key ) {
     GlueHost result = null;
     
-    if( key != null ) {
+    if ( key != null ) {
       
       result = this.glueHost.get( key );
-      if( result == null ) {
+      if ( result == null ) {
         result = new GlueHost();
   
         result.setID( key );
@@ -656,8 +651,7 @@ implements IGridModelListener, java.io.Serializable {
   public GlueSite getGlueSite( final String key ) {
     GlueSite result = null;
     
-    if( key != null ) 
-    {      
+    if ( key != null ) {
       result = this.glueSite.get( key );
       if( result == null ) {
         result = new GlueSite();
@@ -678,10 +672,9 @@ implements IGridModelListener, java.io.Serializable {
   public GlueSE getGlueSE( final String key ) {
     GlueSE result = null;
     
-    if( key != null ) {
-       
+    if ( key != null ) {
       result = this.glueSE.get( key );
-      if( result == null ) {
+      if ( result == null ) {
         result = new GlueSE();
   
         result.setID( key );
@@ -701,10 +694,10 @@ implements IGridModelListener, java.io.Serializable {
   public GlueSL getGlueSL( final String key ) {
     GlueSL result = null;
     
-    if( key != null ) {
+    if ( key != null ) {
       
       result = this.glueSL.get( key );
-      if( result == null ) {
+      if ( result == null ) {
         result = new GlueSL();
   
         result.setID( key );
@@ -768,10 +761,10 @@ implements IGridModelListener, java.io.Serializable {
   public GlueCE getGlueCE( final String key ) {
     GlueCE result = null;
     
-    if( key != null ) {
+    if ( key != null ) {
       
       result = this.glueCE.get( key );
-      if( result == null ) {
+      if ( result == null ) {
         result = new GlueCE();
   
         result.setID( key );
@@ -790,7 +783,7 @@ implements IGridModelListener, java.io.Serializable {
   public GlueBatchJob getGlueBatchJob( final String key ) {
     GlueBatchJob result = null;
     
-    if( key != null ) {
+    if ( key != null ) {
       
       result = this.glueBatchJob.get( key );
       if( result == null ) {
@@ -812,7 +805,7 @@ implements IGridModelListener, java.io.Serializable {
   public GlueBatchQueue getGlueBatchQueue( final String key ) {
     GlueBatchQueue result = null;
     
-    if( key != null ) {
+    if ( key != null ) {
       
       result = this.glueBatchQueue.get( key );
       if( result == null ) {
@@ -834,7 +827,7 @@ implements IGridModelListener, java.io.Serializable {
   public GlueBatchSystem getGlueBatchSystem( final String key ) {
     GlueBatchSystem result = null;
     
-    if( key != null ) {
+    if ( key != null ) {
       
       result = this.glueBatchSystem.get( key );
       if( result == null ) {
@@ -857,7 +850,7 @@ implements IGridModelListener, java.io.Serializable {
   {
     GlueCEAccessControlBaseRule result = null;
     
-    if( key != null ) {
+    if ( key != null ) {
       
       result = this.glueCEAccessControlBaseRule.get( key );
       if( result == null ) {
@@ -880,10 +873,10 @@ implements IGridModelListener, java.io.Serializable {
   public GlueCEContactString getGlueCEContactString( final String key ) {
     GlueCEContactString result = null;
     
-    if( key != null ) {
+    if ( key != null ) {
     
       result = this.glueCEContactString.get( key );
-      if( result == null ) {
+      if ( result == null ) {
         result = new GlueCEContactString();
   
         result.setID( key );
@@ -902,7 +895,7 @@ implements IGridModelListener, java.io.Serializable {
   public GlueCESEBind getGlueCESEBind( final String key ) {
     GlueCESEBind result = null;
     
-    if( key != null ) {
+    if ( key != null ) {
       result = this.glueCESEBind.get( key );
       if( result == null ) {
         result = new GlueCESEBind();
@@ -922,7 +915,7 @@ implements IGridModelListener, java.io.Serializable {
   public GlueCEVOView getGlueCEVOView( final String key ) {
     GlueCEVOView result = null;
     
-    if( key != null ) {
+    if ( key != null ) {
       
       result = this.glueCEVOView.get( key );
       if( result == null ) {
@@ -945,7 +938,7 @@ implements IGridModelListener, java.io.Serializable {
   {
     GlueCEVOViewAccessControlBaseRule result = null;
     
-    if( key != null ) {
+    if ( key != null ) {
       
       result = this.glueCEVOViewAccessControlBaseRule.get( key );
       if( result == null ) {
@@ -967,7 +960,7 @@ implements IGridModelListener, java.io.Serializable {
   public GlueHostLocalFileSystem getGlueHostLocalFileSystem( final String key ) {
     GlueHostLocalFileSystem result = null;
     
-    if( key != null ) {
+    if ( key != null ) {
       
       result = this.glueHostLocalFileSystem.get( key );
       if( result == null ) {
@@ -989,7 +982,7 @@ implements IGridModelListener, java.io.Serializable {
   public GlueHostNetworkAdapter getGlueHostNetworkAdapter( final String key ) {
     GlueHostNetworkAdapter result = null;
     
-    if( key != null ) {
+    if ( key != null ) {
       
       result = this.glueHostNetworkAdapter.get( key );
       if( result == null ) {
@@ -1010,7 +1003,7 @@ implements IGridModelListener, java.io.Serializable {
    */
   public GlueHostPoolAccount getGlueHostPoolAccount( final String key ) {
     GlueHostPoolAccount result = null;
-    if( key != null ) {
+    if ( key != null ) {
       result = this.glueHostPoolAccount.get( key );
       if( result == null ) {
         result = new GlueHostPoolAccount();
@@ -1031,10 +1024,10 @@ implements IGridModelListener, java.io.Serializable {
   public GlueHostProcess getGlueHostProcess( final String key ) {
     GlueHostProcess result = null;
     
-    if( key != null ) {
+    if ( key != null ) {
       
       result = this.glueHostProcess.get( key );
-      if( result == null ) {
+      if ( result == null ) {
         result = new GlueHostProcess();
   
         result.setID( key );
@@ -1052,10 +1045,10 @@ implements IGridModelListener, java.io.Serializable {
    */
   public GlueHostRemoteFileSystem getGlueHostRemoteFileSystem( final String key ) {
     GlueHostRemoteFileSystem result = null;
-    if( key != null ) {
+    if ( key != null ) {
       
       result = this.glueHostRemoteFileSystem.get( key );
-      if( result == null ) {
+      if ( result == null ) {
         result = new GlueHostRemoteFileSystem();
   
         result.setID( key );
@@ -1074,10 +1067,10 @@ implements IGridModelListener, java.io.Serializable {
   public GlueHostRole getGlueHostRole( final String key ) {
     GlueHostRole result = null;
     
-    if( key != null ) {
+    if ( key != null ) {
       
       result = this.glueHostRole.get( key );
-      if( result == null ) {
+      if ( result == null ) {
         result = new GlueHostRole();
   
         result.setID( key );
