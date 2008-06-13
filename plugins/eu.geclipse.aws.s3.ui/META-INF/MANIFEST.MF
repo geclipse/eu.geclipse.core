@@ -12,5 +12,7 @@ Require-Bundle: eu.geclipse.aws.s3,
  eu.geclipse.core.reporting,
  eu.geclipse.ui,
  org.eclipse.core.runtime,
- org.eclipse.ui
+ org.eclipse.ui,
+ org.eclipse.core.resources,
+ eu.geclipse.core.filesystem
 Eclipse-LazyStart: true

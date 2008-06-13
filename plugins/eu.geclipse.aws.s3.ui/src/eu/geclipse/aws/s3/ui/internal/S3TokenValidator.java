@@ -18,25 +18,21 @@ package eu.geclipse.aws.s3.ui.internal;
 import eu.geclipse.ui.wizards.GenericConnectionTokenValidator;
 
 /**
- * Validator for S3 connection.
+ * Validator for the bucket path
+ * 
+ * @author Moritz Post
  */
-public class S3TokenValidator
-    extends GenericConnectionTokenValidator {
-  
-  /**
-   * the prefix of a bucket.
-   */
+public class S3TokenValidator extends GenericConnectionTokenValidator {
+
+  /** The path prefix. */
   public static final String PATH_PREFIX = "/"; //$NON-NLS-1$
-  
-  /* (non-Javadoc)
-   * @see eu.geclipse.ui.wizards.GenericConnectionTokenValidator#validatePath(java.lang.String)
-   */
+
   @Override
-  protected String validatePath( final String path )   {
+  protected String validatePath( final String path ) {
     String error = super.validatePath( path );
     if( error == null ) {
-      if( !path.startsWith( PATH_PREFIX ) ) {
-        error = String.format( Messages.getString("S3TokenValidator.prefix_missing_error"), PATH_PREFIX ); //$NON-NLS-1$
+      if( !path.startsWith( S3TokenValidator.PATH_PREFIX ) ) {
+        error = String.format( Messages.getString( "S3TokenValidator.prefix_missing_error" ), S3TokenValidator.PATH_PREFIX ); //$NON-NLS-1$
       }
     }
     return error;
