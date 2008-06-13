@@ -168,7 +168,8 @@ public class CandidateHostsDialog extends Dialog {
     try {
       
       Collection <String> computingElements =  new ArrayList<String>();
-      IGridComputing[] gridComputings =  this.jobDescription.getProject().getVO().getComputing( new NullProgressMonitor() ) ;
+      IGridComputing[] gridComputings =  this.jobDescription.getProject().getVO()
+                                                                            .getComputing( new NullProgressMonitor() ) ;
       String hostnameOnly;
           
       for (int i=0; i < gridComputings.length; i++){        
@@ -179,7 +180,7 @@ public class CandidateHostsDialog extends Dialog {
          * Finish to the indexOf ":" character to remove any trailing characters.
          * 
          */
-        if (gridComputings[i].getName().indexOf( ":" ) != -1){
+        if (gridComputings[i].getName().indexOf( ":" ) != -1){ //$NON-NLS-1$
         hostnameOnly = gridComputings[i].getName().substring( 
                                                          gridComputings[i].getName().lastIndexOf( " " )+1 //$NON-NLS-1$
                                                          , gridComputings[i].getName().indexOf( ":" ) ); //$NON-NLS-1$
