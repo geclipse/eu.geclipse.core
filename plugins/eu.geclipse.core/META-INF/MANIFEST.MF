@@ -15,6 +15,7 @@ Require-Bundle: org.apache.log4j,
  eu.geclipse.core.reporting
 Eclipse-LazyStart: true
 Export-Package: eu.geclipse.core,
+ eu.geclipse.core.accesscontrol,
  eu.geclipse.core.auth,
  eu.geclipse.core.io,
  eu.geclipse.core.model,
