@@ -180,7 +180,7 @@ class TerminalPainter implements PaintListener {
         startCol /= 2;
         endCol = ( endCol + 1 ) / 2;
       }
-      for ( int col = startCol; col < endCol; col ++) {
+      for ( int col = startCol; col < endCol; col++ ) {
         Char ch = screenBuffer[ line + this.terminal.getScrollbarPosLine() ][ col ];
         if ( this.startChar == null ) {
           resetStartChar( ch, line, col );
@@ -198,8 +198,10 @@ class TerminalPainter implements PaintListener {
           resetStartChar( ch, line, col );
         }
       }
-      paintBufferedArea( paintEvent.gc );
-      this.startChar = null;
+      if ( this.startChar != null ) {
+        paintBufferedArea( paintEvent.gc );
+        this.startChar = null;
+      }
       if ( line + this.terminal.getScrollbarPosLine() == this.terminal.getCursorLine() + this.terminal.getHistorySize() ) {
         int widthMult = 1;
         if ( this.lineWidthMode[ line + this.terminal.getScrollbarPosLine() ] == LineWidthMode.DOUBLE ) widthMult = 2; 
