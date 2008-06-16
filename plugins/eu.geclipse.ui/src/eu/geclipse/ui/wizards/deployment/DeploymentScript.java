@@ -165,7 +165,7 @@ public class DeploymentScript extends WizardPage {
     boolean next = false;
     if ( this.scripturi == null ) {
       this.setMessage( null );
-      this.setErrorMessage( Messages.getString( "Validate.script_empty" ) ); //$NON-NLS-1$
+      this.setErrorMessage( Messages.getString( "Deployment.deployment_script_is_empty" ) ); //$NON-NLS-1$
       next = false;
     }
     else {
