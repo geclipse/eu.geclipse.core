@@ -18,6 +18,7 @@ package eu.geclipse.ui.wizards.deployment;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.OperationCanceledException;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
@@ -25,13 +26,16 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PlatformUI;
 
+import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridApplicationManager;
 import eu.geclipse.core.model.IGridComputing;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.impl.GenericGridInstallParameters;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.dialogs.ProblemDialog;
+import eu.geclipse.ui.internal.Activator;
 
 
 import java.net.URI;
@@ -55,6 +59,8 @@ public class DeploymentJob extends Job {
   
   private URI installscript;
   
+  private IGridProject gridproject;
+  
   /**
    * The deployment tag.
    */
@@ -68,19 +74,22 @@ public class DeploymentJob extends Job {
    * @param deployTarget the target CEs
    * @param deployscript the install script
    * @param deployTag the tag of the software
+   * @param project the container for refresching
    */
   public DeploymentJob( final String name, 
                         final IVirtualOrganization vo,
                         final URI[] deploySource,
                         final IGridComputing[] deployTarget,
                         final URI deployscript,
-                        final String deployTag ) {
+                        final String deployTag, 
+                        final IGridProject project) {
     super( name );
     this.source = deploySource;
     this.target = deployTarget;
     this.installscript = deployscript;
     this.tag = deployTag;
     this.vo = vo;
+    this.gridproject = project;
   }
 
   @Override
@@ -132,6 +141,11 @@ public class DeploymentJob extends Job {
     }
     testCancelled( betterMonitor );
     betterMonitor.done();
+    try {
+      this.gridproject.refresh( new NullProgressMonitor() );
+    } catch( GridModelException e ) {
+      Activator.logException( e );
+    }
     }
     return status;
   }
