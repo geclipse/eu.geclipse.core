@@ -5,5 +5,7 @@ public interface IGridResourceCategory {
   public String getName();
 
   public IGridResourceCategory getParent();
+  
+  public boolean isActive();
 
 }
