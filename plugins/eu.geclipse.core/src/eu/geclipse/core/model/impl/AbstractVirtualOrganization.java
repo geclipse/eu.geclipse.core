@@ -31,6 +31,7 @@ import org.eclipse.core.runtime.Path;
 import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.internal.model.VoManager;
+import eu.geclipse.core.internal.model.ProjectVo;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridApplicationManager;
 import eu.geclipse.core.model.IGridComputing;
@@ -38,10 +39,13 @@ import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridInfoService;
 import eu.geclipse.core.model.IGridJobService;
+import eu.geclipse.core.model.IGridResource;
+import eu.geclipse.core.model.IGridResourceCategory;
 import eu.geclipse.core.model.IGridService;
 import eu.geclipse.core.model.IGridStorage;
 import eu.geclipse.core.model.IStorableElement;
 import eu.geclipse.core.model.IVirtualOrganization;
+import eu.geclipse.core.reporting.ProblemException;
 
 
 /**
@@ -80,6 +84,14 @@ public abstract class AbstractVirtualOrganization
   
   public IGridApplicationManager getApplicationManager() {
     return null;
+  }
+  
+  public IGridResource[] getAvailableResources( final IGridResourceCategory category,
+                                                final boolean exclusive,
+                                                final IProgressMonitor monitor )
+      throws ProblemException {
+    IGridInfoService infoService = getInfoService();
+    return infoService.fetchResources( this, this, category, false, null, monitor );
   }
   
   public IGridComputing[] getComputing( final IProgressMonitor monitor ) throws GridModelException {
@@ -175,6 +187,10 @@ public abstract class AbstractVirtualOrganization
     return storage;
   }
   
+  public IGridResourceCategory[] getSupportedResources() {
+    return ProjectVo.standardResources;
+  }
+  
   public IGridJobService[] getJobSubmissionServices( final IProgressMonitor monitor ) throws GridModelException {
     List< IGridJobService > jsServices
       = new ArrayList< IGridJobService >();
@@ -230,6 +246,23 @@ public abstract class AbstractVirtualOrganization
         saveChild( child );
       }
     }
+  }
+  
+  protected IGridService[] filterServices( final IGridService[] services,
+                                           final Class< ? extends IGridService > type,
+                                           final boolean remove ) {
+    
+    List< IGridService > resultList = new ArrayList< IGridService >();
+    
+    for ( IGridService service : services ) {
+      boolean isType = type.isAssignableFrom( service.getClass() );
+      if ( ( remove && ! isType ) || ( ! remove && isType ) ) {
+        resultList.add( service );
+      }
+    }
+    
+    return resultList.toArray( new IGridService[ resultList.size() ] );
+    
   }
   
   /**

@@ -24,6 +24,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridInfoService;
 import eu.geclipse.core.model.IGridService;
 import eu.geclipse.core.model.IStorableElement;
 import eu.geclipse.core.model.IVirtualOrganization;
@@ -91,7 +92,7 @@ public class GenericVirtualOrganization
     return this.name.hashCode();
   }
   
-  @Override
+  /*@Override
   public IGridService[] getServices( final IProgressMonitor monitor )
       throws GridModelException {
     
@@ -115,7 +116,7 @@ public class GenericVirtualOrganization
     
     return results.toArray( new IGridService[ results.size() ] );
     
-  }
+  }*/
   
   public String getTypeName() {
     return VO_TYPE_NAME;

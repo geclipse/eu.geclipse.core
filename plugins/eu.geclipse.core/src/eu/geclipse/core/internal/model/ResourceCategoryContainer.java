@@ -54,31 +54,34 @@ public class ResourceCategoryContainer extends VirtualGridContainer {
     for ( IGridElement permantenChild : this.permanentChildren ) {
       addElement( permantenChild );
     }
+    
+    if ( this.category.isActive() ) {
 
-    // TODO reenable when IVirtualOrganization changes are committed
-//    try {
-//      
-//      IGridResource[] resources
-//        = getProject().getVO().getAvailableResources( this.category, monitor);
-//      
-//      if ( ( resources != null ) && ( resources.length > 0 ) ) {
-//        lock();
-//        try {
-//          for ( IGridElement resource : resources ) {
-//            addElement( resource );
-//          }
-//        } finally {
-//          unlock();
-//        }
-//      } else {
-//        addElement( new ContainerMarker( this,
-//                                         ContainerMarker.MarkerType.INFO,
-//                                         "No matching elements found" ) );
-//      }
-//      
-//    } catch ( ProblemException pExc ) {
-//      throw new GridModelException( pExc.getProblem() );
-//    }
+      try {
+        
+        IGridResource[] resources
+          = getProject().getVO().getAvailableResources( this.category, true, monitor);
+        
+        if ( ( resources != null ) && ( resources.length > 0 ) ) {
+          lock();
+          try {
+            for ( IGridElement resource : resources ) {
+              addElement( resource );
+            }
+          } finally {
+            unlock();
+          }
+        } else {
+          addElement( new ContainerMarker( this,
+                                           ContainerMarker.MarkerType.INFO,
+                                           "No matching elements found" ) );
+        }
+        
+      } catch ( ProblemException pExc ) {
+        throw new GridModelException( pExc.getProblem() );
+      }
+      
+    }
     
     return Status.OK_STATUS;
     

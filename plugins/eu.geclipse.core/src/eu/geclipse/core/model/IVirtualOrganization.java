@@ -17,6 +17,8 @@ package eu.geclipse.core.model;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 
+import eu.geclipse.core.reporting.ProblemException;
+
 /**
  * This is the base interface that all implementations of
  * virtual organizations have to implement. It is basically
@@ -27,6 +29,13 @@ import org.eclipse.core.runtime.IProgressMonitor;
  */
 public interface IVirtualOrganization
     extends IGridContainer, IStorableElement {
+  
+  public IGridResourceCategory[] getSupportedResources();
+  
+  public IGridResource[] getAvailableResources( final IGridResourceCategory category,
+                                                final boolean exclusive,
+                                                final IProgressMonitor monitor )
+      throws ProblemException;
   
   public IGridApplicationManager getApplicationManager();
   

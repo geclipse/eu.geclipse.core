@@ -29,26 +29,40 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridInfoService;
 import eu.geclipse.core.model.IGridJobService;
 import eu.geclipse.core.model.IGridProject;
+import eu.geclipse.core.model.IGridResource;
+import eu.geclipse.core.model.IGridResourceCategory;
 import eu.geclipse.core.model.IGridService;
 import eu.geclipse.core.model.IGridStorage;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.IWrappedElement;
 import eu.geclipse.core.model.impl.AbstractGridContainer;
+import eu.geclipse.core.model.impl.GridResourceCategoryFactory;
 import eu.geclipse.core.reporting.ProblemException;
 
 /**
  * Wrapper of a VO in order to map the VO from the manager to a
  * project.
  */
-public class VoWrapper
+public class ProjectVo
     extends AbstractGridContainer
     implements IVirtualOrganization, IWrappedElement {
+  
+  public static IGridResourceCategory[] standardResources
+    = new IGridResourceCategory[] {
+      GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_APPLICATIONS ),
+      GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_COMPUTING ),
+      GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_DATA_SERVICES ),
+      GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_INFO_SERVICES ),
+      GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_JOB_SERVICES ),
+      GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_OTHER_SERVICES ),
+      GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_STORAGE )
+  };
   
   private IGridProject project;
   
   private IVirtualOrganization vo;
   
-  protected VoWrapper( final IGridProject project,
+  protected ProjectVo( final IGridProject project,
                        final IVirtualOrganization vo ) {
     
     super();
@@ -56,85 +70,35 @@ public class VoWrapper
     this.project = project;
     this.vo = vo;
     
-    try {
-      if (getApplicationManager() != null) {
-        QueryContainer applicationContainer
-          = new QueryContainer(
-              this,
-              "Applications", //$NON-NLS-1$
-              new IQueryInputProvider() {
-                public IGridElement[] getInput( final IProgressMonitor monitor ) throws ProblemException {
-                  return getApplicationManager().getApplications( null, monitor );
-                }
-              } );
-        addElement( applicationContainer );
-      }
-      
-      QueryContainer computingContainer
-        = new QueryContainer(
-            this,
-            Messages.getString( "VoWrapper.computing" ), //$NON-NLS-1$
-            new IQueryInputProvider() {
-              public IGridElement[] getInput( final IProgressMonitor monitor ) throws ProblemException {
-                return getComputing( monitor );
-              }
-            } );
-      addElement( computingContainer );
+    IGridResourceCategory[] supportedResources = vo.getSupportedResources();
     
-      QueryContainer storageContainer
-      = new QueryContainer(
-          this,
-          Messages.getString( "VoWrapper.storage" ), //$NON-NLS-1$
-          new IQueryInputProvider() {
-            public IGridElement[] getInput( final IProgressMonitor monitor )
-                throws GridModelException {
-              return getStorage( monitor );
-            }
-          } );
-      addElement( storageContainer );
-      
-      QueryContainer serviceContainer
-      = new QueryContainer(
-          this,
-          Messages.getString( "VoWrapper.services" ), //$NON-NLS-1$
-          new IQueryInputProvider() {
-            public IGridElement[] getInput( final IProgressMonitor monitor ) throws GridModelException {
-              return getServices( monitor );
-            }
-          } );
-      serviceContainer.setQueryAsChildren( false );
-      addElement( serviceContainer );
-      
-      QueryContainer infoServiceContainer
-        = new QueryContainer( serviceContainer, Messages.getString( "VoWrapper.infoServices" ) ); //$NON-NLS-1$
-      infoServiceContainer.addFilter(
-        new ClassTypeQueryFilter( IGridInfoService.class, true )
-      );
-      
-      QueryContainer jobSubmissionServiceContainer
-        = new QueryContainer( serviceContainer, Messages.getString( "VoWrapper.jobSubmissionServices" ) ); //$NON-NLS-1$
-      jobSubmissionServiceContainer.addFilter(
-        new ClassTypeQueryFilter( IGridJobService.class, true )
-      );
-      
-      QueryContainer otherServiceContainer
-      = new QueryContainer( serviceContainer, Messages.getString( "VoWrapper.otherServices" ) ); //$NON-NLS-1$
-      otherServiceContainer.addFilter(
-        new ClassTypeQueryFilter( IGridInfoService.class, false )
-      );
-      otherServiceContainer.addFilter(
-        new ClassTypeQueryFilter( IGridJobService.class, false )
-      );
-      
-    } catch ( GridModelException gmExc ) {
-      Activator.logException( gmExc );
+    for ( IGridResourceCategory category : supportedResources ) {
+      try {
+        getResourceContainer( category );
+      } catch ( GridModelException gmExc ) {
+        Activator.logException( gmExc );
+      }
     }
     
   }
   
   @Override
   public boolean canContain( final IGridElement element ) {
-    return element instanceof QueryContainer;
+    return element instanceof ResourceCategoryContainer;// QueryContainer;
+  }
+  
+  public ResourceCategoryContainer findResourceContainer( final IGridResourceCategory category ) {
+    
+    IGridContainer parent = this;
+    
+    if ( category.getParent() != null ) {
+      parent = findResourceContainer( category.getParent() );
+    }
+    
+    ResourceCategoryContainer result = ( ResourceCategoryContainer ) parent.findChild( category.getName() );
+    
+    return result;
+    
   }
 
   public String getTypeName() {
@@ -143,6 +107,18 @@ public class VoWrapper
   
   public IGridApplicationManager getApplicationManager() {
     return this.vo.getApplicationManager();
+  }
+  
+  public IGridResource[] getAvailableResources( final IGridResourceCategory category,
+                                                final boolean exclusive,
+                                                final IProgressMonitor monitor )
+      throws ProblemException {
+    IGridResource[] result = null;
+    if ( this.vo != null ) {
+      IGridInfoService infoService = this.vo.getInfoService();
+      result = infoService.fetchResources( this, this.vo, category, false, null, monitor );
+    }
+    return result;
   }
 
   public IGridComputing[] getComputing( final IProgressMonitor monitor )
@@ -208,6 +184,10 @@ public class VoWrapper
     return storage;
   }
   
+  public IGridResourceCategory[] getSupportedResources() {
+    return this.vo != null ? this.vo.getSupportedResources() : standardResources;
+  }
+  
   public IGridJobService[] getJobSubmissionServices( final IProgressMonitor monitor )
       throws GridModelException {
     return this.vo.getJobSubmissionServices( monitor );
@@ -259,4 +239,35 @@ public class VoWrapper
   public String getWizardId() {
     return this.vo.getWizardId();
   }
+  
+  private ResourceCategoryContainer getResourceContainer( final IGridResourceCategory category )
+      throws GridModelException {
+    
+    ResourceCategoryContainer result = null;
+    
+    String name = category.getName();
+    IGridResourceCategory parentCategory = category.getParent();
+    
+    IGridContainer parentContainer
+      = parentCategory == null
+      ? this
+      : getResourceContainer( parentCategory );
+    
+    IGridElement child = parentContainer.findChild( name );
+    
+    if ( ( child == null ) || ! ( child instanceof ResourceCategoryContainer ) ) {
+      result = new ResourceCategoryContainer( parentContainer, category );
+      if ( parentContainer == this ) {
+        addElement( result );
+      } else {
+        ( ( ResourceCategoryContainer ) parentContainer ).addChild( result );
+      }
+    } else {
+      result = ( ResourceCategoryContainer ) child;
+    }
+    
+    return result;
+    
+  }
+  
 }

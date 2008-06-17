@@ -39,7 +39,7 @@ import eu.geclipse.core.model.IGridInfoService;
 import eu.geclipse.core.model.IGridService;
 import eu.geclipse.core.model.IGridStorage;
 import eu.geclipse.core.model.IVirtualOrganization;
-import eu.geclipse.core.model.impl.AbstractGridElement;
+import eu.geclipse.core.model.impl.AbstractGridInfoService;
 import eu.geclipse.core.reporting.ProblemException;
 
 /**
@@ -50,7 +50,7 @@ import eu.geclipse.core.reporting.ProblemException;
  * @author Moritz Post
  * @see AWSInfoService
  */
-public class S3InfoService extends AbstractGridElement
+public class S3InfoService extends AbstractGridInfoService
   implements IGridInfoService
 {
 

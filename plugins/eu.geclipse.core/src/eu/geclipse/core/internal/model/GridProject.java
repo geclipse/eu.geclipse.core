@@ -56,8 +56,14 @@ public class GridProject
     extends ResourceGridContainer
     implements IGridProject {
   
+  /**
+   * ID of the preference node for grid projects.
+   */
   public static final String PROJECT_NODE = "eu.geclipse.core"; //$NON-NLS-1$
   
+  /**
+   * ID of the preference folder node for grid projects.
+   */
   public static final String PROJECT_FOLDER_NODE = "eu.geclipse.core.folders"; //$NON-NLS-1$
   
   private static final String VO_ATTRIBUTE = "vo"; //$NON-NLS-1$
@@ -65,7 +71,7 @@ public class GridProject
   private static final QualifiedName PROJECT_FOLDER_ID_QN
     = new QualifiedName( Activator.PLUGIN_ID, "grid.project.folder.id" ); //$NON-NLS-1$
   
-  private IVirtualOrganization vo;
+  private ProjectVo vo;
   
   /**
    * Default constructor that constructs a grid project out of an
@@ -288,7 +294,7 @@ public class GridProject
   private boolean hasVo( final IGridElement[] children ) {
     boolean result = false;
     for ( IGridElement child : children ) {
-      if ( child instanceof VoWrapper ) {
+      if ( child instanceof ProjectVo ) {
         result = true;
         break;
       }
@@ -308,9 +314,10 @@ public class GridProject
       this.vo = null;
       VoManager voManager = VoManager.getManager();
       if ( voName != null ) {
-        this.vo = ( IVirtualOrganization ) voManager.findChild( voName );
-        if ( this.vo != null ) {
-          addElement( new VoWrapper( this, this.vo ) );
+        IVirtualOrganization globalVo = ( IVirtualOrganization ) voManager.findChild( voName );
+        if ( globalVo != null ) {
+          this.vo = new ProjectVo( this, globalVo );
+          addElement( this.vo );
         }
       }
       

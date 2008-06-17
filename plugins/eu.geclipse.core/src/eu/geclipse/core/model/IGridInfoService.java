@@ -23,6 +23,13 @@ import org.eclipse.core.runtime.IProgressMonitor;
  */
 public interface IGridInfoService extends IGridService {
   
+  public IGridResource[] fetchResources( final IGridContainer parent,
+                                         final IVirtualOrganization vo,
+                                         final IGridResourceCategory category,
+                                         final boolean exclusive,
+                                         final Class< ? extends IGridResource > typeFilter,
+                                         final IProgressMonitor monitor );
+  
   /**
    * Fetch the applications from the underlying database that
    * are available for the specified virtual organization.
