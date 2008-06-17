@@ -86,20 +86,6 @@ public class ProjectVo
   public boolean canContain( final IGridElement element ) {
     return element instanceof ResourceCategoryContainer;// QueryContainer;
   }
-  
-  public ResourceCategoryContainer findResourceContainer( final IGridResourceCategory category ) {
-    
-    IGridContainer parent = this;
-    
-    if ( category.getParent() != null ) {
-      parent = findResourceContainer( category.getParent() );
-    }
-    
-    ResourceCategoryContainer result = ( ResourceCategoryContainer ) parent.findChild( category.getName() );
-    
-    return result;
-    
-  }
 
   public String getTypeName() {
     return this.vo.getTypeName();
