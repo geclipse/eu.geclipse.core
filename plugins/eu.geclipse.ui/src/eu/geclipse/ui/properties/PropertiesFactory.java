@@ -78,26 +78,22 @@ public class PropertiesFactory implements IPropertiesFactory {
       sourcesList.add( new PropertiesProviderSource( (IPropertiesProvider) sourceObject ) );
     }
     
-    if( sourceObject instanceof IWrappedElement ) {
-      
-      IGridElement myElement = ((IWrappedElement)sourceObject).getWrappedElement();
-      if (myElement instanceof GridGlueComputing)
-      {
-        GridGlueComputing gridGlueComputing = null;
-        gridGlueComputing = (GridGlueComputing)myElement;
-        sourcesList.add( new GridGlueComputingSource(gridGlueComputing) );
-      }
-      else if (myElement instanceof GridGlueStorage)
-      {
-        GridGlueStorage gridGlueStorage = null;
-        gridGlueStorage = (GridGlueStorage)myElement;
-        sourcesList.add( new GridGlueStorageSource(gridGlueStorage));
-      }
-      else if (myElement instanceof GridGlueService)
-      {
-        GridGlueService gridGlueService = (GridGlueService)myElement;
-        sourcesList.add( new GridGlueServiceSource(gridGlueService) );
-      }
+    if (sourceObject instanceof GridGlueComputing)
+    {
+      GridGlueComputing gridGlueComputing = (GridGlueComputing)sourceObject;
+      sourcesList.add( new GridGlueComputingSource(gridGlueComputing) );
+    }
+    
+    if (sourceObject instanceof GridGlueStorage)
+    {
+      GridGlueStorage gridGlueStorage = (GridGlueStorage)sourceObject;
+      sourcesList.add( new GridGlueStorageSource(gridGlueStorage));
+    }
+    
+    if (sourceObject instanceof GridGlueService)
+    {
+      GridGlueService gridGlueService = (GridGlueService)sourceObject;
+      sourcesList.add( new GridGlueServiceSource(gridGlueService) );
     }
     
     if ( sourceObject instanceof GridApplication)
