@@ -64,6 +64,13 @@
                </documentation>
             </annotation>
          </attribute>
+         <attribute name="active" type="boolean">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 

@@ -43,14 +43,24 @@ public class GridResourceCategoryFactory {
       for ( IConfigurationElement element : elements ) {
         String extid = element.getAttribute( "id" );
         if ( id.equals( extid ) ) {
+          
           String name = element.getAttribute( "name" );
           String parent = element.getAttribute( "parent" );
+          String active = element.getAttribute( "active" );
+          
           IGridResourceCategory parentCategory = null;
           if ( parent != null ) {
             parentCategory = getCategory( parent );
           }
-          result = new ResourceCategory( name, parentCategory );
+          
+          boolean isActive = true;
+          if ( active != null ) {
+            isActive = Boolean.parseBoolean( active );
+          }
+          
+          result = new ResourceCategory( name, parentCategory, isActive );
           categories.put( id, result );
+          
         }
       }
     }
