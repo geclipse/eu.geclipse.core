@@ -500,48 +500,9 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
    */
   public GlueInfoViewer() {
     
-    //GridModel.addGridModelListener( this );
-    
-    /*
-    Thread t=new Thread(){
-      //wait for BDII and register listener
-      @Override
-      public void run() {
-        InfoServiceFactory myInfoServiceFactory = new InfoServiceFactory();
-        ArrayList<IGridInfoService> infoServicesArray = myInfoServiceFactory.getAllExistingInfoService();
-        for (int i=0; i<infoServicesArray.size(); i++)
-        {
-          if ( infoServicesArray.get( i ) instanceof IExtentedGridInfoService)
-          {
-            IExtentedGridInfoService infoService = ( IExtentedGridInfoService )infoServicesArray.get( i );
-            
-            while (infoService != null && infoService.getStore()==null)
-            {
-              try {
-                sleep(1000);
-              } catch( InterruptedException e ) {
-                //ignore interrupted exception
-              }
-            }
-            
-            if (infoService != null && infoService.getStore()!=null)
-            {
-              infoService.getStore().removeListener( GlueInfoViewer.this );
-              infoService.getStore().addListener( GlueInfoViewer.this );
-            }
-          } 
-        }
-      }
-      
-    };
-    t.start();
-    */
-    InfoCacheListenerHandler.getInstance().removeListener( GlueInfoViewer.this );
     InfoCacheListenerHandler.getInstance().addListener( GlueInfoViewer.this );
     
     this.fetchJob = FetchJob.getInstance(" Retrieving Information"); //$NON-NLS-1$
-    //this.fetchJob.removeListener( GlueInfoViewer.this, null );
-    //this.fetchJob.addListener( GlueInfoViewer.this, null );
     this.showOnlyFilledInfoElements = false;
   }
   
@@ -859,55 +820,10 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
                                    message );
   }
 
-  /*
-  public void gridModelChanged( IGridModelEvent event ) {
-   
-    int type=event.getType();    
-    switch( type ) {
-      case IGridModelEvent.ELEMENTS_ADDED:
-
-        for( IGridElement gridElement : event.getElements() ) {
-          if(gridElement instanceof IGridProject)
-          { 
-            Thread t=new Thread(){
-              //wait for BDII and register listener
-              @Override
-              public void run() {
-                InfoServiceFactory myInfoServiceFactory = new InfoServiceFactory();
-                ArrayList<IGridInfoService> infoServicesArray = myInfoServiceFactory.getAllExistingInfoService();
-                for (int i=0; i<infoServicesArray.size(); i++)
-                {
-                  if ( infoServicesArray.get( i ) instanceof IExtentedGridInfoService)
-                  {
-                    IExtentedGridInfoService infoService = ( IExtentedGridInfoService )infoServicesArray.get( i );
-                    while (infoService != null && infoService.getStore()==null)
-                    {
-                      try {
-                        sleep(1000);
-                      } catch( InterruptedException e ) {
-                        //ignore interrupted exception
-                      }
-                    }
-                    
-                    if (infoService != null && infoService.getStore()!=null)
-                    {
-                      infoService.getStore().removeListener( GlueInfoViewer.this, null );
-                      infoService.getStore().addListener( GlueInfoViewer.this, null );
-                    }
-                  } 
-                }
-              }
-              
-            };
-            t.start();
-            break;
-          }
-        }
-        break;
-      default:
-        break;
-    }
+  @Override
+  public void dispose() {
     
+    // Remove the listener that is added in the constructor.
+    InfoCacheListenerHandler.getInstance().removeListener( GlueInfoViewer.this );
   }
-  */
 }

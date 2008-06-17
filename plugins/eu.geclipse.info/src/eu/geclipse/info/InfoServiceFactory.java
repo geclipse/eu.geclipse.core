@@ -16,21 +16,12 @@ package eu.geclipse.info;
 
 import java.util.ArrayList;
 
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.IConfigurationElement;
-import org.eclipse.core.runtime.IExtension;
-import org.eclipse.core.runtime.IExtensionPoint;
-import org.eclipse.core.runtime.IExtensionRegistry;
-import org.eclipse.core.runtime.Platform;
-
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridInfoService;
 import eu.geclipse.core.model.IGridProject;
-import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.info.internal.Activator;
-import eu.geclipse.info.model.IExtentedGridInfoService;
 
 /**
  * This class is responsible for returning existing information services.
@@ -42,8 +33,8 @@ public class InfoServiceFactory {
   
   /**
    * Returns existing information services.
-   * @return An array with all the information services found in the projects. Only one of 
-   * each type is returned. 
+   * @return An array with all the diffrent kind of information services found in the projects. Only one of 
+   * each type is returned, the first that is found by browsing the grid projects. 
    */
   public ArrayList<IGridInfoService> getAllExistingInfoService()
   {

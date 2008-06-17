@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
@@ -71,6 +72,11 @@ public class FetchJob extends Job{
     GlueIndex.drop(); // Clear the glue index.
     GlueIndex.getInstance(); // Initialize the glue index and set the listener.
     
+    IProgressMonitor localMonitor
+    = ( monitor != null )
+      ? monitor
+      : new NullProgressMonitor();
+    
     /*
     Status status = new Status( IStatus.ERROR,
                                 "eu.geclipse.glite.info", //$NON-NLS-1$
@@ -98,17 +104,17 @@ public class FetchJob extends Job{
       Activator.logException( e );
     }
     
-    monitor.beginTask( "Retrieving information", gridProjectNumbers * 10 ); //$NON-NLS-1$
+    localMonitor.beginTask( "Retrieving information", gridProjectNumbers * 10 ); //$NON-NLS-1$
     
     // Get the information from the info systems to file the glue view.
-    for (int i=0; infoServicesArray!= null && i<infoServicesArray.size(); i++)
+    for (int i=0; infoServicesArray!= null && !localMonitor.isCanceled() && i<infoServicesArray.size() ; i++)
     {
       if (infoServicesArray.get( i ) instanceof IExtentedGridInfoService)
       {
         IExtentedGridInfoService infoService = ( IExtentedGridInfoService )infoServicesArray.get( i );
         if (infoService != null)
         {
-          infoService.scheduleFetch(monitor);
+          infoService.scheduleFetch(localMonitor);
         }
       }
     }
@@ -136,7 +142,7 @@ public class FetchJob extends Job{
     
     InfoCacheListenerHandler.getInstance().notifyListeners( );
     
-    monitor.done();
+    localMonitor.done();
     Status status = new Status( IStatus.OK,
                          "eu.geclipse.glite.info", //$NON-NLS-1$
                          "Information data fetched successfully." ); //$NON-NLS-1$
