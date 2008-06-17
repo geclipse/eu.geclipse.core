@@ -44,7 +44,9 @@ public abstract class AbstractGridElement
   @SuppressWarnings("unchecked")
   public Object getAdapter( final Class adapter ) {
     Object result = null;
-    if ( adapter.isAssignableFrom( IResource.class ) ) {
+    if ( adapter.isAssignableFrom( getClass() ) ) {
+      result = this;
+    } else if ( adapter.isAssignableFrom( IResource.class ) ) {
       result = getResource();
     }
     if ( result == null ) {
