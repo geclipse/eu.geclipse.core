@@ -24,6 +24,7 @@ import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.filesystem.IFileSystem;
+import org.eclipse.core.filesystem.provider.FileInfo;
 import org.eclipse.core.filesystem.provider.FileStore;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
@@ -58,6 +59,11 @@ public class GEclipseFileStore
    * The slave store.
    */
   private IFileStore slave;
+  
+  /**
+   * The slave store's file info.
+   */
+  private IFileInfo fileInfo;
   
   /**
    * Determines if this store is active.
@@ -152,6 +158,7 @@ public class GEclipseFileStore
 
     try {
       InputStream siStream = openInputStream( EFS.NONE, sMonitor.newChild( 1 ) );
+      setActive( true );
       IFileInfo info = fetchInfo( EFS.NONE, sMonitor.newChild( 1 ) );
       this.ciStream = new CachedInputStream( siStream, ( int ) info.getLength() );
   
@@ -237,8 +244,21 @@ public class GEclipseFileStore
   public IFileInfo fetchInfo( final int options,
                               final IProgressMonitor monitor )
       throws CoreException {
-    IFileInfo fileInfo = getSlave().fetchInfo( options, monitor( monitor ) );
-    return fileInfo; 
+    
+    IFileInfo result = this.fileInfo;
+    
+    if ( isActive() || result == null ) {
+      setActive( false );
+      result = getSlave().fetchInfo( options, monitor( monitor ) );
+      this.fileInfo = result;
+    }
+    
+    if ( result == null ) {
+      result = new FileInfo();
+    }
+    
+    return result;
+     
   }
 
   /* (non-Javadoc)
