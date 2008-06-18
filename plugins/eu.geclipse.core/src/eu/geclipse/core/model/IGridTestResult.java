@@ -16,6 +16,7 @@
  *****************************************************************************/
 package eu.geclipse.core.model;
 
+import java.io.InputStream;
 import java.util.Date;
 
 /**
@@ -27,12 +28,33 @@ import java.util.Date;
 public interface IGridTestResult {
 
   /**
-   * Method to access String representation of test result (e.g OK, FAILED,
-   * etc.).
+   * Method to access specific test result. This may be just text, image, audio,
+   * video or application. See also {@link IGridTestResult#getResultType()},
+   * {@link IGridTestResult#getResultInputStream()} and
+   * {@link IGridTestResult#getStringResult()}.
    * 
    * @return test result
    */
-  String getResult();
+  Object getResult();
+
+  /**
+   * Method to access specific test result in form of InputStream. This input
+   * may be used to show results in specific editor. This method may return
+   * null.
+   * 
+   * @return test result's input stream
+   */
+  InputStream getResultInputStream();
+
+  /**
+   * Method to access type of result's data. Preferably this should be file
+   * extension that will determine Eclipse editor in which data should be
+   * opened. See also {@link IGridTestResult#getResult()} and
+   * {@link IGridTestResult#getResultInputStream()}.
+   * 
+   * @return extension of file to which test result's input stream may be saved
+   */
+  String getResultType();
 
   /**
    * Method to access name of the tested resource (e.g. host's URL).
@@ -46,7 +68,7 @@ public interface IGridTestResult {
    * 
    * @return date of test's run
    */
-  Date getDate();
+  Date getRunDate();
 
   /**
    * In case of complex tests this method returns sub-test name. If test was
@@ -55,6 +77,12 @@ public interface IGridTestResult {
    * @return sub-test name
    */
   String getSubTestName();
-  
-  String toString();
+
+  /**
+   * Textual interpretation of test's result (see
+   * {@link IGridTestResult#getResult()}).
+   * 
+   * @return String representing human-readable summary of test's result
+   */
+  String getStringResult();
 }

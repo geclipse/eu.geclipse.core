@@ -103,10 +103,10 @@ public class GridTestManager
       for (IGridElement element: changedElements){
         if( element instanceof IGridTest ) {
           IGridTest test = ( IGridTest )element;
-          test.update();       
+//          test.update();       
         }
       }
-    }
+    } 
   }
 
   public boolean canManage( final IGridElement element ) {
