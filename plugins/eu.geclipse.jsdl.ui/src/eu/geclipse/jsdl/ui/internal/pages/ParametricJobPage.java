@@ -21,8 +21,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.edit.provider.INotifyChangedListener;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.viewers.ILabelProviderListener;
@@ -50,7 +48,6 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
-import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.TableWrapData;
@@ -59,9 +56,9 @@ import eu.geclipse.jsdl.model.base.JobDefinitionType;
 import eu.geclipse.jsdl.ui.adapters.jsdl.DataStageTypeAdapter;
 import eu.geclipse.jsdl.ui.adapters.jsdl.ParametricJobAdapter;
 
-public class ParametricJobPage extends FormPage
-  implements INotifyChangedListener {
+public class ParametricJobPage extends JsdlFormPage {
 
+  protected static final String PAGE_ID = "PARAMETRIC";  //$NON-NLS-1$
   protected List<String> jsdlElementsList = new ArrayList<String>();
   protected Map<String, String> assignmentContent = new HashMap<String, String>();
   protected Map<String, String> sweepContent = new HashMap<String, String>();
@@ -70,16 +67,12 @@ public class ParametricJobPage extends FormPage
   private Composite assignmentSection;
   private Composite valuesSection;
   private Composite sweepSection;
-  private boolean dirtyFlag;
-  private boolean contentRefreshed;
   private ParametricJobAdapter adapter;  
   private TableViewer sweepTableViewer;
 
-  public ParametricJobPage( final FormEditor editor,
-                            final String id,
-                            final String title )
-  {
-    super( editor, id, title );
+  public ParametricJobPage( final FormEditor editor )  {
+    
+    super( editor, PAGE_ID, Messages.getString("ParametersPage_PageTitle") ); //$NON-NLS-1$
     this.sweepRules.add( "changes with" ); //$NON-NLS-1$
     this.sweepRules.add( "changes after" ); //$NON-NLS-1$
   }
@@ -419,22 +412,22 @@ public class ParametricJobPage extends FormPage
     }
   }
 
-  public void notifyChanged( final Notification notification ) {
-    setDirty( true );
-  }
+//  public void notifyChanged( final Notification notification ) {
+//    setDirty( true );
+//  }
 
-  /**
-   * This method set's the dirty status of the page.
-   * 
-   * @param dirty TRUE when the page is Dirty (content has been changed) and
-   *            hence a Save operation is needed.
-   */
-  public void setDirty( final boolean dirty ) {
-    if( this.dirtyFlag != dirty ) {
-      this.dirtyFlag = dirty;
-      this.getEditor().editorDirtyStateChanged();
-    }
-  }
+//  /**
+//   * This method set's the dirty status of the page.
+//   * 
+//   * @param dirty TRUE when the page is Dirty (content has been changed) and
+//   *            hence a Save operation is needed.
+//   */
+//  public void setDirty( final boolean dirty ) {
+//    if( this.dirtyFlag != dirty ) {
+//      this.dirtyFlag = dirty;
+//      this.getEditor().editorDirtyStateChanged();
+//    }
+//  }
   class CProvider implements IStructuredContentProvider {
 
     public Object[] getElements( final Object inputElement ) {
@@ -459,18 +452,18 @@ public class ParametricJobPage extends FormPage
       // TODO Auto-generated method stub
     }
 
-    public void inputChanged( Viewer viewer, Object oldInput, Object newInput )
+    public void inputChanged( final Viewer viewer, final Object oldInput, final Object newInput )
     {
       // empty implementation
     }
   }
   class AssignmentLabelProvider implements ITableLabelProvider {
 
-    public Image getColumnImage( Object element, int columnIndex ) {
+    public Image getColumnImage( final Object element, final int columnIndex ) {
       return null;
     }
 
-    public String getColumnText( Object element, int columnIndex ) {
+    public String getColumnText( final Object element, final int columnIndex ) {
       String result = "";
       if( element instanceof List ) {
         List<String> list = ( List<String> )element;
@@ -489,7 +482,7 @@ public class ParametricJobPage extends FormPage
       return result;
     }
 
-    public void addListener( ILabelProviderListener listener ) {
+    public void addListener( final ILabelProviderListener listener ) {
       // TODO Auto-generated method stub
     }
 
@@ -497,22 +490,22 @@ public class ParametricJobPage extends FormPage
       // TODO Auto-generated method stub
     }
 
-    public boolean isLabelProperty( Object element, String property ) {
+    public boolean isLabelProperty( final Object element,final String property ) {
       // TODO Auto-generated method stub
       return false;
     }
 
-    public void removeListener( ILabelProviderListener listener ) {
+    public void removeListener( final ILabelProviderListener listener ) {
       // TODO Auto-generated method stub
     }
   }
   class SweepLabelProvider implements ITableLabelProvider {
 
-    public Image getColumnImage( Object element, int columnIndex ) {
+    public Image getColumnImage( final Object element, final int columnIndex ) {
       return null;
     }
 
-    public String getColumnText( Object element, int columnIndex ) {
+    public String getColumnText( final Object element, final int columnIndex ) {
       String result = "";
       if( element instanceof List ) {
         List<String> list = ( List<String> )element;
@@ -531,7 +524,7 @@ public class ParametricJobPage extends FormPage
       return result;
     }
 
-    public void addListener( ILabelProviderListener listener ) {
+    public void addListener( final ILabelProviderListener listener ) {
       // TODO Auto-generated method stub
     }
 
@@ -539,12 +532,12 @@ public class ParametricJobPage extends FormPage
       // TODO Auto-generated method stub
     }
 
-    public boolean isLabelProperty( Object element, String property ) {
+    public boolean isLabelProperty( final Object element, final String property ) {
       // TODO Auto-generated method stub
       return false;
     }
 
-    public void removeListener( ILabelProviderListener listener ) {
+    public void removeListener( final ILabelProviderListener listener ) {
       // TODO Auto-generated method stub
     }
   }
@@ -572,7 +565,7 @@ public class ParametricJobPage extends FormPage
       // TODO Auto-generated method stub
     }
 
-    public void inputChanged( Viewer viewer, Object oldInput, Object newInput )
+    public void inputChanged( final Viewer viewer, final Object oldInput, final Object newInput )
     {
       // empty implementation
     }

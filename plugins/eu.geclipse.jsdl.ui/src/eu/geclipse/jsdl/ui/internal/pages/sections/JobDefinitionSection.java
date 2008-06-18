@@ -26,7 +26,6 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import eu.geclipse.jsdl.model.base.JobDefinitionType;
-import eu.geclipse.jsdl.ui.adapters.jsdl.JsdlAdaptersFactory;
 import eu.geclipse.jsdl.ui.internal.pages.FormSectionFactory;
 import eu.geclipse.jsdl.ui.internal.pages.Messages;
 
@@ -35,15 +34,12 @@ import eu.geclipse.jsdl.ui.internal.pages.Messages;
  * @author nloulloud
  *
  */
-public class JobDefinitionSection extends JsdlAdaptersFactory {
+public class JobDefinitionSection extends 
+JsdlFormPageSection {
   
-  private static final String EMPTY_STRING = ""; //$NON-NLS-1$   
   protected JobDefinitionType jobDefinitionType;
   protected Text txtId = null;
   protected Label lblJobId = null;
-  private boolean adapterRefreshed = false;
-  private boolean isNotifyAllowed = true;
-  
   /**
    * Constructs a new <code> JobDefinitionSection </code> for the JSDLEditor. This section allows to manipulate
    * the <b>Job Definition </b> element through the Job Definition Page of the JSDL editor. 
@@ -108,14 +104,14 @@ public class JobDefinitionSection extends JsdlAdaptersFactory {
   }
   
   
-  protected void contentChanged() {
-    
-    if ( this.isNotifyAllowed ) { 
-      
-      fireNotifyChanged( null);
-    }
-    
-  } // End void contentChanged()
+//  protected void contentChanged() {
+//    
+//    if ( this.isNotifyAllowed ) { 
+//      
+//      fireNotifyChanged( null);
+//    }
+//    
+//  } // End void contentChanged()
   
   
   /**

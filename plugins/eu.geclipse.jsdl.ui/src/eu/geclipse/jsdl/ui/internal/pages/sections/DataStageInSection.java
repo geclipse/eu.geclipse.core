@@ -47,7 +47,6 @@ import eu.geclipse.jsdl.model.base.JobDefinitionType;
 import eu.geclipse.jsdl.model.base.JobDescriptionType;
 import eu.geclipse.jsdl.model.base.JsdlFactory;
 import eu.geclipse.jsdl.model.base.JsdlPackage;
-import eu.geclipse.jsdl.ui.adapters.jsdl.JsdlAdaptersFactory;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.dialogs.DataStagingInDialog;
 import eu.geclipse.jsdl.ui.internal.pages.FormSectionFactory;
@@ -60,7 +59,8 @@ import eu.geclipse.jsdl.ui.providers.FeatureContentProvider;
  * @author nloulloud
  *
  */
-public class DataStageInSection extends JsdlAdaptersFactory {
+public class DataStageInSection extends 
+JsdlFormPageSection {
   
   
   private static final int WIDGET_HEIGHT = 170;
@@ -73,8 +73,6 @@ public class DataStageInSection extends JsdlAdaptersFactory {
   
   private TableColumn column;  
   private Composite containerComposite = null;
-  private boolean adapterRefreshed = false;
-  private boolean isNotifyAllowed = true;
   private DataStagingType dataStagingType = JsdlFactory.eINSTANCE.createDataStagingType();
   private JobDescriptionType jobDescriptionType = null;
   private EList<DataStagingType> dataStageInputList = null;
@@ -558,12 +556,12 @@ public class DataStageInSection extends JsdlAdaptersFactory {
   } // End boolean doesElementExists()
   
   
-  protected void contentChanged() {
-    
-    if ( this.isNotifyAllowed )  {
-      fireNotifyChanged( null);
-    }
-  } // End void contenctChanged()
+//  protected void contentChanged() {
+//    
+//    if ( this.isNotifyAllowed )  {
+//      fireNotifyChanged( null);
+//    }
+//  } // End void contenctChanged()
   
   
   /**

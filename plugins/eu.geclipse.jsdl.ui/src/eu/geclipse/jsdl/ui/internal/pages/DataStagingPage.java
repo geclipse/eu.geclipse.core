@@ -16,24 +16,15 @@
  *****************************************************************************/
 package eu.geclipse.jsdl.ui.internal.pages;
 
-import java.net.URL;
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.edit.provider.INotifyChangedListener;
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
-import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.TableWrapData;
+
 import eu.geclipse.jsdl.model.base.JobDefinitionType;
 import eu.geclipse.jsdl.ui.adapters.jsdl.DataStageTypeAdapter;
-import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.pages.sections.DataStageInSection;
 import eu.geclipse.jsdl.ui.internal.pages.sections.DataStageOutSection;
 
@@ -42,16 +33,13 @@ import eu.geclipse.jsdl.ui.internal.pages.sections.DataStageOutSection;
  * It provides a graphical user interface to the DataStage elements of a JSDL
  * document. 
  */
-public class DataStagingPage extends FormPage implements INotifyChangedListener {
+public class DataStagingPage extends JsdlFormPage {
 
   protected static final String PAGE_ID = "DATA_STAGING"; //$NON-NLS-1$
   protected Composite body = null;
   protected Composite dataStageSection = null;
   protected JobDefinitionType jobDefinitionType = null;
     
-  private ImageDescriptor helpDesc = null;
-  private boolean contentRefreshed = false;
-  private boolean dirtyFlag = false;
   private DataStageInSection dataStageInSection;
   private DataStageOutSection dataStageOutSection;
   
@@ -82,36 +70,6 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
    }
    
   
-  public void notifyChanged( final Notification arg0 ) {
-    setDirty( true );
-  }
-    
-  
-  /**
-   * This method set's the dirty status of the page.
-   * 
-   * @param dirty TRUE when the page is Dirty (content has been changed) and hence a 
-   * Save operation is needed.
-   * 
-   */
-  public void setDirty( final boolean dirty ) {
-    
-    if ( this.dirtyFlag != dirty ) {
-      this.dirtyFlag = dirty;     
-      this.getEditor().editorDirtyStateChanged();  
-    }
-    
-  }
-    
-  
-  @Override
-  public boolean isDirty() {
-    
-    return this.dirtyFlag;
-    
-  }  
-  
-    
   @Override
   public void setActive( final boolean active ) {
     
@@ -123,14 +81,6 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
     } // end_if active
     
   } //End void setActive()
-  
-  
-  
-  private boolean isContentRefreshed() {
-    
-    return this.contentRefreshed;
-    
-  } //End boolean isContentRefreshed()
   
   
   
@@ -197,32 +147,7 @@ public class DataStagingPage extends FormPage implements INotifyChangedListener 
   } // End void getPageContent()
 
     
-  private void addFormPageHelp( final ScrolledForm form ) {
-    
-    final String href = getHelpResource();
-    if ( href != null ) {
-        IToolBarManager manager = form.getToolBarManager();
-        Action helpAction = new Action( "help" ) { //$NON-NLS-1$
-            @Override
-            public void run() {
-                BusyIndicator.showWhile(form.getDisplay(), new Runnable() {
-                    public void run() {
-                        PlatformUI.getWorkbench().getHelpSystem().displayHelpResource( href );
-                    }
-                });
-            }
-        };
-        helpAction.setToolTipText( Messages.getString( "DataStagingPage_Help" ) );  //$NON-NLS-1$
-        URL stageInURL = Activator.getDefault().getBundle().getEntry( "icons/help.gif" ); //$NON-NLS-1$       
-        this.helpDesc = ImageDescriptor.createFromURL( stageInURL ) ;   
-        helpAction.setImageDescriptor( this.helpDesc );
-        manager.add( helpAction );
-        form.updateToolBar();
-    }
-    
-  }
-  
-    
+  @Override
   protected String getHelpResource() {
     return "/eu.geclipse.doc.user/html/concepts/jobmanagement/editorpages/datastaging.html"; //$NON-NLS-1$
   }

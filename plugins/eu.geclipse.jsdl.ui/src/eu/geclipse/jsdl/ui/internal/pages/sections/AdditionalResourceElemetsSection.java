@@ -34,7 +34,6 @@ import eu.geclipse.jsdl.model.base.JsdlFactory;
 import eu.geclipse.jsdl.model.base.JsdlPackage;
 import eu.geclipse.jsdl.model.base.RangeValueType;
 import eu.geclipse.jsdl.model.base.ResourcesType;
-import eu.geclipse.jsdl.ui.adapters.jsdl.JsdlAdaptersFactory;
 import eu.geclipse.jsdl.ui.internal.pages.FormSectionFactory;
 import eu.geclipse.jsdl.ui.internal.pages.Messages;
 import eu.geclipse.ui.widgets.DoubleNumberVerifier;
@@ -44,13 +43,12 @@ import eu.geclipse.ui.widgets.DoubleNumberVerifier;
  * @author nloulloud
  *
  */
-public class AdditionalResourceElemetsSection extends JsdlAdaptersFactory {
+public class AdditionalResourceElemetsSection extends 
+JsdlFormPageSection {
   
   protected static final String LOWER_BOUND = JsdlPackage.Literals.RANGE_VALUE_TYPE__LOWER_BOUND.getName();
   protected static final String UPPER_BOUND = JsdlPackage.Literals.RANGE_VALUE_TYPE__UPPER_BOUND.getName();
   protected static final String EXACT = JsdlPackage.Literals.RANGE_VALUE_TYPE__EXACT.getName();
-  protected static final String EMPTY_STRING = ""; //$NON-NLS-1$
-  
   protected static final String[] RESOURCES_BOUNDARY_ITEMS = { EMPTY_STRING,
                                                                LOWER_BOUND,
                                                                UPPER_BOUND,
@@ -104,12 +102,7 @@ public class AdditionalResourceElemetsSection extends JsdlAdaptersFactory {
   private Text txtTotVirtMem = null;
   private Text txtTotDiskSp = null;
   private Text txtTotResCount = null;  
-  private boolean isNotifyAllowed = true;
-  private boolean adapterRefreshed = false;
-  
-  
-  
- /**
+  /**
  * @param parent
  * @param toolkit
  */
@@ -138,13 +131,13 @@ public class AdditionalResourceElemetsSection extends JsdlAdaptersFactory {
   }
   
   
-  protected void contentChanged() {
-    
-    if (this.isNotifyAllowed){
-      fireNotifyChanged( null);
-    }
-    
-  }
+//  protected void contentChanged() {
+//    
+//    if (this.isNotifyAllowed){
+//      fireNotifyChanged( null);
+//    }
+//    
+//  }
   
   
   private void createSection(final Composite parent, final FormToolkit toolkit) {

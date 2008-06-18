@@ -19,19 +19,9 @@ package eu.geclipse.jsdl.ui.internal.pages;
 /**
  * @author nloulloud
  */
-import java.net.URL;
-
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.edit.provider.INotifyChangedListener;
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
-import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.TableWrapData;
@@ -39,7 +29,6 @@ import org.eclipse.ui.forms.widgets.TableWrapData;
 import eu.geclipse.jsdl.model.base.JobDefinitionType;
 import eu.geclipse.jsdl.ui.adapters.jsdl.ApplicationTypeAdapter;
 import eu.geclipse.jsdl.ui.adapters.posix.PosixApplicationTypeAdapter;
-import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.pages.sections.AdditionalPosixElementSection;
 import eu.geclipse.jsdl.ui.internal.pages.sections.ApplicationSection;
 import eu.geclipse.jsdl.ui.internal.pages.sections.PosixApplicationSection;
@@ -49,7 +38,7 @@ import eu.geclipse.jsdl.ui.internal.pages.sections.PosixApplicationSection;
  * It provides a graphical user interface to the generic and POSIX elements of a JSDL
  * document. 
  */
-public final class JobApplicationPage extends FormPage implements INotifyChangedListener {
+public final class JobApplicationPage extends JsdlFormPage  {
 
   protected static final String PAGE_ID = "APPLICATION";   //$NON-NLS-1$
   protected Composite body = null;
@@ -61,14 +50,6 @@ public final class JobApplicationPage extends FormPage implements INotifyChanged
   private ApplicationSection applicationSection = null;
   private PosixApplicationSection posixApplicationSection = null;
   private AdditionalPosixElementSection additionalPosixElementSection = null;
-  private ImageDescriptor helpDesc = null;
-  private boolean contentRefreshed = false;
-  private boolean dirtyFlag = false;
-  
-
-
-  
-  
   /**
    * <code>JobApplicationPage</code> class constructor. Creates the page by
    * passing as an argument the container JSDL editor.
@@ -95,42 +76,13 @@ public final class JobApplicationPage extends FormPage implements INotifyChanged
   
   
   @Override
-  public boolean isDirty() {
-    return this.dirtyFlag;
-  } // End boolean isDirty()
-  
-
-  @Override
   public void dispose() {
     
     super.dispose();
     this.jobDefinitionType = null;      
     
   }
-
   
-  
-  /**
-   * This method set's the dirty status of the page.
-   * 
-   * @param dirty TRUE when the page is Dirty (content has been changed) and hence a 
-   * Save operation is needed.
-   * 
-   */
-  public void setDirty( final boolean dirty ) {
-    if( this.dirtyFlag != dirty ) {
-      this.dirtyFlag = dirty;
-      this.getEditor().editorDirtyStateChanged();
-    }
-  } // End void setDirty()
-
-  
-  
-  private boolean isContentRefreshed() {
-    return this.contentRefreshed;
-  }
-
-    
   
   /**
    * Method that set's the JobApplication Page content. The content is the root
@@ -196,39 +148,8 @@ public final class JobApplicationPage extends FormPage implements INotifyChanged
     
   }
 
- 
-  public void notifyChanged( final Notification notification ) {
-    setDirty( true );
-  }
   
-  
-  
-  private void addFormPageHelp( final ScrolledForm form ) {
-    
-    final String href = getHelpResource();
-    if ( href != null ) {
-        IToolBarManager manager = form.getToolBarManager();
-        Action helpAction = new Action( "help" ) { //$NON-NLS-1$
-            @Override
-            public void run() {
-                BusyIndicator.showWhile( form.getDisplay(), new Runnable() {
-                    public void run() {
-                        PlatformUI.getWorkbench().getHelpSystem().displayHelpResource(href);
-                    }
-                } );
-            }
-        };
-        helpAction.setToolTipText( Messages.getString( "JobApplicationPage_Help" ) );  //$NON-NLS-1$
-        URL stageInURL = Activator.getDefault().getBundle().getEntry( "icons/help.gif" ); //$NON-NLS-1$       
-        this.helpDesc = ImageDescriptor.createFromURL( stageInURL ) ;   
-        helpAction.setImageDescriptor( this.helpDesc );
-        manager.add( helpAction );
-        form.updateToolBar();
-    }
-    
-  }
-  
-  
+  @Override
   protected String getHelpResource() {
     return "/eu.geclipse.doc.user/html/concepts/jobmanagement/editorpages/application.html"; //$NON-NLS-1$
   }

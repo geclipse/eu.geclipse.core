@@ -38,7 +38,6 @@ import eu.geclipse.jsdl.model.base.JsdlFactory;
 import eu.geclipse.jsdl.model.base.JsdlPackage;
 import eu.geclipse.jsdl.model.base.ProcessorArchitectureEnumeration;
 import eu.geclipse.jsdl.model.base.ResourcesType;
-import eu.geclipse.jsdl.ui.adapters.jsdl.JsdlAdaptersFactory;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.pages.FormSectionFactory;
 import eu.geclipse.jsdl.ui.internal.pages.Messages;
@@ -48,19 +47,15 @@ import eu.geclipse.jsdl.ui.internal.pages.Messages;
  * @author nloulloud
  *
  */
-public class CpuArchitectureSection extends JsdlAdaptersFactory {
+public class CpuArchitectureSection extends 
+JsdlFormPageSection {
   
-  private static final String EMPTY_STRING = ""; //$NON-NLS-1$
   protected JobDescriptionType jobDescriptionType = JsdlFactory.eINSTANCE.createJobDescriptionType();
   protected ResourcesType resourcesType = JsdlFactory.eINSTANCE.createResourcesType();  
   protected CPUArchitectureType cpuArchitectureType;
   protected Label lblCPUArchName = null;
   protected Combo cmbCPUArchName = null;
       
-  private boolean adapterRefreshed = false;
-  private boolean isNotifyAllowed = true;
-  
-  
   /**
    * @param parent
    * @param toolkit
@@ -91,13 +86,13 @@ public class CpuArchitectureSection extends JsdlAdaptersFactory {
     
   
   
-  protected void contentChanged() {
-    
-    if (this.isNotifyAllowed){
-      fireNotifyChanged( null);
-    }
-    
-  }
+//  protected void contentChanged() {
+//    
+//    if (this.isNotifyAllowed){
+//      fireNotifyChanged( null);
+//    }
+//    
+//  }
   
   
   

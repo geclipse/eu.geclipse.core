@@ -61,7 +61,6 @@ import eu.geclipse.jsdl.model.posix.FileNameType;
 import eu.geclipse.jsdl.model.posix.POSIXApplicationType;
 import eu.geclipse.jsdl.model.posix.PosixFactory;
 import eu.geclipse.jsdl.model.posix.PosixPackage;
-import eu.geclipse.jsdl.ui.adapters.jsdl.JsdlAdaptersFactory;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.dialogs.ArgumentsDialog;
 import eu.geclipse.jsdl.ui.internal.dialogs.EnvironmentVarDialog;
@@ -75,9 +74,9 @@ import eu.geclipse.jsdl.ui.providers.FeatureLabelProvider;
  * @author nloulloud
  *
  */
-public class PosixApplicationSection extends JsdlAdaptersFactory {
+public class PosixApplicationSection extends 
+JsdlFormPageSection {
   
-  private static final String EMPTY_STRING = ""; //$NON-NLS-1$ 
   private static final int WIDGET_HEIGHT = 100;
   protected Text txtExecutable = null;
   protected Text txtPosixName = null;
@@ -111,8 +110,6 @@ public class PosixApplicationSection extends JsdlAdaptersFactory {
   protected ArgumentType argumentType = PosixFactory.eINSTANCE.createArgumentType();
   
   private TableColumn column;
-  private boolean isNotifyAllowed = true;
-  private boolean adapterRefreshed = false;
   private Composite containerComposite = null;
   
   
@@ -635,12 +632,12 @@ public class PosixApplicationSection extends JsdlAdaptersFactory {
   } // end void handleArguments
   
   
-  protected void contentChanged() {
-    
-    if( this.isNotifyAllowed ) {
-      fireNotifyChanged( null );
-    }
-  }
+//  protected void contentChanged() {
+//    
+//    if( this.isNotifyAllowed ) {
+//      fireNotifyChanged( null );
+//    }
+//  }
   
   
   /**

@@ -42,7 +42,6 @@ import eu.geclipse.jsdl.model.base.OperatingSystemType;
 import eu.geclipse.jsdl.model.base.OperatingSystemTypeEnumeration;
 import eu.geclipse.jsdl.model.base.OperatingSystemTypeType;
 import eu.geclipse.jsdl.model.base.ResourcesType;
-import eu.geclipse.jsdl.ui.adapters.jsdl.JsdlAdaptersFactory;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.pages.FormSectionFactory;
 import eu.geclipse.jsdl.ui.internal.pages.Messages;
@@ -52,9 +51,9 @@ import eu.geclipse.jsdl.ui.internal.pages.Messages;
  * @author nloulloud
  *
  */
-public class OperatingSystemSection extends JsdlAdaptersFactory {
+public class OperatingSystemSection extends 
+JsdlFormPageSection {
   
-  private static final String EMPTY_STRING = ""; //$NON-NLS-1$   
   private static final int WIDGET_HEIGHT = 100;
   protected JobDescriptionType jobDescriptionType = JsdlFactory.eINSTANCE.createJobDescriptionType();
   protected ResourcesType resourcesType = JsdlFactory.eINSTANCE.createResourcesType();  
@@ -67,11 +66,6 @@ public class OperatingSystemSection extends JsdlAdaptersFactory {
   protected Text txtOSDescr = null;  
   protected Text txtOperSystVer = null;
     
-  
-  private boolean adapterRefreshed = false;
-  private boolean isNotifyAllowed = true;
-  
-  
   
   /**
    * @param parent
@@ -103,13 +97,13 @@ public class OperatingSystemSection extends JsdlAdaptersFactory {
     
   
   
-  protected void contentChanged() {
-    
-    if (this.isNotifyAllowed){
-      fireNotifyChanged( null);
-    }
-    
-  }
+//  protected void contentChanged() {
+//    
+//    if (this.isNotifyAllowed){
+//      fireNotifyChanged( null);
+//    }
+//    
+//  }
   
   
   

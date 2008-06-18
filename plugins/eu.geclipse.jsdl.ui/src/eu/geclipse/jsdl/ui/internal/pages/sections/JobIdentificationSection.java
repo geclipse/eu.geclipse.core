@@ -48,7 +48,6 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import eu.geclipse.jsdl.model.base.JobDefinitionType;
 import eu.geclipse.jsdl.model.base.JobIdentificationType;
 import eu.geclipse.jsdl.model.base.JsdlFactory;
-import eu.geclipse.jsdl.ui.adapters.jsdl.JsdlAdaptersFactory;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.dialogs.MultipleInputDialog;
 import eu.geclipse.jsdl.ui.internal.pages.FormSectionFactory;
@@ -59,7 +58,8 @@ import eu.geclipse.jsdl.ui.providers.FeatureLabelProvider;
 /**
  * @author nloulloud
  */
-public class JobIdentificationSection extends JsdlAdaptersFactory {
+public class JobIdentificationSection extends 
+JsdlFormPageSection {
 
   private static final int WIDGET_HEIGHT = 100;
   protected JobDefinitionType jobDefinitionType = JsdlFactory.eINSTANCE.createJobDefinitionType();
@@ -80,8 +80,6 @@ public class JobIdentificationSection extends JsdlAdaptersFactory {
   protected Button btnProjectsDel = null;
   protected Composite body = null;
   
-  private boolean isNotifyAllowed = true;
-  private boolean adapterRefreshed = false;
   private Composite containerComposite = null;
 
   /**
@@ -494,11 +492,11 @@ public class JobIdentificationSection extends JsdlAdaptersFactory {
   } // End updateButtons
 
   
-  protected void contentChanged() {
-    
-    if( this.isNotifyAllowed ) {
-      fireNotifyChanged( null );
-    }
-  }
+//  protected void contentChanged() {
+//    
+//    if( this.isNotifyAllowed ) {
+//      fireNotifyChanged( null );
+//    }
+//  }
   
 }

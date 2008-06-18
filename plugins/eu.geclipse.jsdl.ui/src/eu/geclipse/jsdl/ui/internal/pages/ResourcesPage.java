@@ -18,19 +18,9 @@
 package eu.geclipse.jsdl.ui.internal.pages;
 
 
-import java.net.URL;
-
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.edit.provider.INotifyChangedListener;
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
-import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.TableWrapData;
@@ -52,7 +42,7 @@ import eu.geclipse.jsdl.ui.internal.pages.sections.OperatingSystemSection;
 /**
  * This class provides the Resources page that appears in the JSDL editor.
  */
-public final class ResourcesPage extends FormPage implements INotifyChangedListener {
+public final class ResourcesPage extends JsdlFormPage {
   
    
   protected static final String PAGE_ID = "RESOURCES";  //$NON-NLS-1$
@@ -65,9 +55,6 @@ public final class ResourcesPage extends FormPage implements INotifyChangedListe
   protected Composite left = null;
   protected Composite right = null; 
   
-  private ImageDescriptor helpDesc = null;
-  private boolean contentRefreshed = false;
-  private boolean dirtyFlag = false;
   private AdditionalResourceElemetsSection additionalResourceElemetsSection = null;
   private CandidateHostsSection candidateHostsSection = null;
   private OperatingSystemSection operatingSystemSection = null;
@@ -88,8 +75,7 @@ public final class ResourcesPage extends FormPage implements INotifyChangedListe
            Messages.getString("ResourcesPage_PageTitle") ); //$NON-NLS-1$
         
   } // End Class Constructor.
-  
-  
+    
   
   /**
    * Returns the instance of the JSDL Editor that contains this page  
@@ -99,7 +85,6 @@ public final class ResourcesPage extends FormPage implements INotifyChangedListe
   public JsdlEditor getParentEditor() {
     return ( JsdlEditor )getEditor();
   }
-
   
   
   /*
@@ -122,16 +107,6 @@ public final class ResourcesPage extends FormPage implements INotifyChangedListe
     } //  end_if (active)
     
   } // End void setActive()
-  
-  
-  /*
-   * Checks if the Page Content has been refreshed. 
-   */
-  private boolean isContentRefreshed() {
-    
-    return this.contentRefreshed;
-  }
-  
   
   
   /**
@@ -161,30 +136,6 @@ public final class ResourcesPage extends FormPage implements INotifyChangedListe
    this.jobDefinitionType = jobDefinitionRoot;   
           
   } // End void getPageContent() 
-  
-    
-  @Override
-  public boolean isDirty() {
-    
-    return this.dirtyFlag;
-    
-  }
-
-    
-  /**
-   * This method set's the dirty status of the page.
-   * 
-   * @param dirty TRUE when the page is Dirty (content has been changed) and hence a 
-   * Save operation is needed.
-   * 
-   */
-  public void setDirty( final boolean dirty ) {
-    if ( this.dirtyFlag != dirty ) {
-      this.dirtyFlag = dirty;     
-      this.getEditor().editorDirtyStateChanged();  
-    }
-    
-  }
 
  
   @Override
@@ -253,37 +204,7 @@ public final class ResourcesPage extends FormPage implements INotifyChangedListe
   }
   
   
-  private void addFormPageHelp( final ScrolledForm form ) {
-    
-    final String href = getHelpResource();
-    if ( href != null ) {
-        IToolBarManager manager = form.getToolBarManager();
-        Action helpAction = new Action( "help" ) { //$NON-NLS-1$
-            @Override
-            public void run() {
-                BusyIndicator.showWhile( form.getDisplay(), new Runnable() {
-                    public void run() {
-                        PlatformUI.getWorkbench().getHelpSystem().displayHelpResource( href );
-                    }
-                } );
-            }
-        };
-        helpAction.setToolTipText( Messages.getString( "ResourcesPage_Help" ) );  //$NON-NLS-1$
-        URL stageInURL = Activator.getDefault().getBundle().getEntry( "icons/help.gif" ); //$NON-NLS-1$       
-        this.helpDesc = ImageDescriptor.createFromURL( stageInURL ) ;   
-        helpAction.setImageDescriptor( this.helpDesc);
-        manager.add( helpAction );
-        form.updateToolBar();
-    }
-    
-  }
-    
-  
-  public void notifyChanged( final Notification notification ) {
-    setDirty( true );    
-  }  
-  
-  
+  @Override
   protected String getHelpResource() {
     return "/eu.geclipse.doc.user/html/concepts/jobmanagement/editorpages/resources.html"; //$NON-NLS-1$
   }

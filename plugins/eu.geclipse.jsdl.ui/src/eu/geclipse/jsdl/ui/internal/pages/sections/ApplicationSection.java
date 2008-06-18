@@ -28,7 +28,6 @@ import org.eclipse.ui.forms.widgets.FormToolkit;
 import eu.geclipse.jsdl.model.base.ApplicationType;
 import eu.geclipse.jsdl.model.base.JobDefinitionType;
 import eu.geclipse.jsdl.model.base.JsdlFactory;
-import eu.geclipse.jsdl.ui.adapters.jsdl.JsdlAdaptersFactory;
 import eu.geclipse.jsdl.ui.internal.pages.FormSectionFactory;
 import eu.geclipse.jsdl.ui.internal.pages.Messages;
 
@@ -37,7 +36,7 @@ import eu.geclipse.jsdl.ui.internal.pages.Messages;
  * @author nloulloud
  *
  */
-public class ApplicationSection extends JsdlAdaptersFactory {
+public class ApplicationSection extends JsdlFormPageSection {
   
   
   private static final int WIDGET_HEIGHT = 100;  
@@ -49,10 +48,6 @@ public class ApplicationSection extends JsdlAdaptersFactory {
   protected Text txtDescription = null;
   protected JobDefinitionType jobDefinitionType = JsdlFactory.eINSTANCE.createJobDefinitionType();  
   protected ApplicationType applicationType = JsdlFactory.eINSTANCE.createApplicationType();
-  
-  private boolean isNotifyAllowed = true;
-  private boolean adapterRefreshed = false;
-  
   
   /**
    * @param parent The parent composite.
@@ -91,8 +86,15 @@ public class ApplicationSection extends JsdlAdaptersFactory {
     this.txtApplicationName.addModifyListener( new ModifyListener(){
 
       public void modifyText( final ModifyEvent e ) {
-        ApplicationSection.this.applicationType
-                                          .setApplicationName( ApplicationSection.this.txtApplicationName.getText() );
+        
+        if (!ApplicationSection.this.txtApplicationName.getText().equals( EMPTY_STRING )){
+          ApplicationSection.this.applicationType.setApplicationName( 
+                                                                ApplicationSection.this.txtApplicationName.getText() );
+        }else{
+          ApplicationSection.this.applicationType.setApplicationName( null );
+        }
+        
+        
         contentChanged();
         
       }
@@ -111,8 +113,13 @@ public class ApplicationSection extends JsdlAdaptersFactory {
     this.txtApplicationVersion.addModifyListener( new ModifyListener() {
       
       public void modifyText( final ModifyEvent e ) {
-        ApplicationSection.this.applicationType
-                                     .setApplicationVersion( ApplicationSection.this.txtApplicationVersion.getText() );
+        
+        if (!ApplicationSection.this.txtApplicationVersion.getText().equals( EMPTY_STRING )){
+          ApplicationSection.this.applicationType.setApplicationVersion( 
+                                                             ApplicationSection.this.txtApplicationVersion.getText() );
+        }else {
+          ApplicationSection.this.applicationType.setApplicationVersion( null );
+        }
         contentChanged();
         
       }
@@ -135,8 +142,13 @@ public class ApplicationSection extends JsdlAdaptersFactory {
     this.txtDescription.addModifyListener( new ModifyListener(){
 
       public void modifyText( final ModifyEvent e ) {
-        ApplicationSection.this.applicationType
-                                     .setDescription( ApplicationSection.this.txtDescription.getText() );
+        
+        if (!ApplicationSection.this.txtDescription.getText().equals( EMPTY_STRING )){
+          ApplicationSection.this.applicationType.setDescription( ApplicationSection.this.txtDescription.getText() );
+        }else{
+          ApplicationSection.this.applicationType.setDescription( null);
+        }
+        
         contentChanged();
         
       }
@@ -146,15 +158,6 @@ public class ApplicationSection extends JsdlAdaptersFactory {
     toolkit.paintBordersFor( client );
     
   } // End void createApplicationSection()
-  
-  
-  protected void contentChanged() {
-    
-    if ( this.isNotifyAllowed ){
-      fireNotifyChanged( null );
-    }
-    
-  }
   
   
   /**

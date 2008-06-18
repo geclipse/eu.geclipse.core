@@ -47,7 +47,6 @@ import eu.geclipse.jsdl.model.base.JobDescriptionType;
 import eu.geclipse.jsdl.model.base.JsdlFactory;
 import eu.geclipse.jsdl.model.base.JsdlPackage;
 import eu.geclipse.jsdl.model.base.ResourcesType;
-import eu.geclipse.jsdl.ui.adapters.jsdl.JsdlAdaptersFactory;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.dialogs.FileSystemsDialog;
 import eu.geclipse.jsdl.ui.internal.pages.FormSectionFactory;
@@ -60,7 +59,8 @@ import eu.geclipse.jsdl.ui.providers.FeatureLabelProvider;
  * @author nloulloud
  *
  */
-public class FileSystemSection extends JsdlAdaptersFactory {
+public class FileSystemSection extends 
+JsdlFormPageSection {
   
   
   private static final int TXT_LENGTH = 300;
@@ -76,8 +76,6 @@ public class FileSystemSection extends JsdlAdaptersFactory {
     
   private Table tblFileSystems = null;
   private TableColumn column = null;
-  private boolean adapterRefreshed = false;
-  private boolean isNotifyAllowed = true;
   private Composite containerComposite = null;
   
   /**
@@ -253,13 +251,13 @@ public class FileSystemSection extends JsdlAdaptersFactory {
     
   
   
-  protected void contentChanged() {
-    
-    if (this.isNotifyAllowed){
-      fireNotifyChanged( null);
-    }
-    
-  }
+//  protected void contentChanged() {
+//    
+//    if (this.isNotifyAllowed){
+//      fireNotifyChanged( null);
+//    }
+//    
+//  }
   
   
   

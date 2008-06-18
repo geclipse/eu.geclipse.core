@@ -51,7 +51,6 @@ import eu.geclipse.jsdl.model.base.JobDescriptionType;
 import eu.geclipse.jsdl.model.base.JsdlFactory;
 import eu.geclipse.jsdl.model.base.JsdlPackage;
 import eu.geclipse.jsdl.model.base.ResourcesType;
-import eu.geclipse.jsdl.ui.adapters.jsdl.JsdlAdaptersFactory;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.dialogs.CandidateHostsDialog;
 import eu.geclipse.jsdl.ui.internal.pages.FormSectionFactory;
@@ -64,7 +63,8 @@ import eu.geclipse.jsdl.ui.providers.FeatureLabelProvider;
  * @author nloulloud
  *
  */
-public class CandidateHostsSection extends JsdlAdaptersFactory {
+public class CandidateHostsSection extends 
+JsdlFormPageSection {
   
   private static final int TXT_LENGTH = 300;
   private static final int WIDGET_HEIGHT = 100;
@@ -76,8 +76,6 @@ public class CandidateHostsSection extends JsdlAdaptersFactory {
   protected JobDescriptionType jobDescriptionType = JsdlFactory.eINSTANCE.createJobDescriptionType();
   protected ResourcesType resourcesType = JsdlFactory.eINSTANCE.createResourcesType();
   protected CandidateHostsType candidateHosts = JsdlFactory.eINSTANCE.createCandidateHostsType();
-  private boolean adapterRefreshed = false;
-  private boolean isNotifyAllowed = true;
   private FormPage containerPage = null; 
   private Composite containerComposite = null;
   
@@ -116,13 +114,13 @@ public class CandidateHostsSection extends JsdlAdaptersFactory {
   
   
   
-  protected void contentChanged() {
-    
-    if (this.isNotifyAllowed){
-      fireNotifyChanged( null);
-    }
-    
-  }
+//  protected void contentChanged() {
+//    
+//    if (this.isNotifyAllowed){
+//      fireNotifyChanged( null);
+//    }
+//    
+//  }
     
   private void createSection (final Composite parent,
                               final FormToolkit toolkit ) {

@@ -21,23 +21,13 @@ package eu.geclipse.jsdl.ui.internal.pages;
  *
  */
 
-import java.net.URL;
-
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.edit.provider.INotifyChangedListener;
-import org.eclipse.jface.action.Action;
 import org.eclipse.jface.action.IStatusLineManager;
-import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
-import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.IManagedForm;
-import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.events.HyperlinkEvent;
 import org.eclipse.ui.forms.events.IHyperlinkListener;
 import org.eclipse.ui.forms.widgets.ExpandableComposite;
@@ -52,16 +42,13 @@ import eu.geclipse.jsdl.model.base.JobDefinitionType;
 import eu.geclipse.jsdl.ui.adapters.jsdl.ApplicationTypeAdapter;
 import eu.geclipse.jsdl.ui.adapters.posix.PosixApplicationTypeAdapter;
 import eu.geclipse.jsdl.ui.editors.JsdlEditor;
-import eu.geclipse.jsdl.ui.internal.Activator;
 
 /**
  * 
  * This class provides the Overview page that appears in the JSDL editor.
  *  
  */ 
-public final class OverviewPage extends FormPage 
-                                            implements INotifyChangedListener,
-                                            IHyperlinkListener{
+public final class OverviewPage extends JsdlFormPage implements IHyperlinkListener{
   
   protected static final String PAGE_ID = "OVERVIEW";  //$NON-NLS-1$
   private static final int WIDGET_MAX_WIDTH = 100;
@@ -81,10 +68,6 @@ public final class OverviewPage extends FormPage
   protected Text txtError = null;
   
   private FormToolkit toolkit;     
-  private boolean contentRefreshed = false;
-  private boolean dirtyFlag = false;
-  private ImageDescriptor helpDesc; 
-  
   /**
    * OverviewPage class constructor.
    * @param editor
@@ -96,14 +79,6 @@ public final class OverviewPage extends FormPage
          
     
   } //End Class Constructor
-
-
-  
-  public void notifyChanged( final Notification arg0 ) {
-    
-    setDirty( true );
-    
-  }//End void notifyChanged()
   
   
   @Override
@@ -119,26 +94,7 @@ public final class OverviewPage extends FormPage
     } // end_if active
     
   } // End void setActive()
-  
-  
-  
-  /**
-   * This method set's the dirty status of the page.
-   * 
-   * @param dirty
-   * If TRUE then the page is Dirty and a Save operation is needed.
-   * 
-   */
-  public void setDirty( final boolean dirty ) {
-    
-    if ( this.dirtyFlag != dirty ) {
-      this.dirtyFlag = dirty;     
-      this.getEditor().editorDirtyStateChanged();  
-    }
-    
-  } // End void setDirty()
-  
-  
+ 
   
   /**
    * Method that set's the Overview Page content. The content is the root 
@@ -178,25 +134,6 @@ public final class OverviewPage extends FormPage
    }
           
   } // End void setPageContent()   
-  
-  
-  /*
-   *  Checks if the content of the model for this page is refreshed.
-   */
-  private boolean isContentRefreshed(){
-    
-    return this.contentRefreshed;
-    
-  }
-  
-  
-  @Override
-  public boolean isDirty() {
-    
-    return this.dirtyFlag;
-    
-  } // End boolean isDirty()
-
   
   
   @Override
@@ -241,15 +178,12 @@ public final class OverviewPage extends FormPage
     this.composite = createDataStageSection(managedForm,
                                  Messages.getString("OverviewPage_DataStagingTitle"),  //$NON-NLS-1$
                           Messages.getString("OverviewPage_DataStagingDescription")); //$NON-NLS-1$
-/*
- * Un-comment for Context-Sensitive Help system
- */
-// PlatformUI.getWorkbench().getHelpSystem()
-//    .setHelp(form.getBody(), "/eu.geclipse.doc.user/html/concepts/jobmanagement/creatingJSDL.html");
+    
     addFormPageHelp( form );
    
   }
   
+  @Override
   protected String getHelpResource() {
     return "/eu.geclipse.doc.user/html/concepts/jobmanagement/editingJSDL.html"; //$NON-NLS-1$
   }
@@ -495,34 +429,6 @@ public final class OverviewPage extends FormPage
     mng.setMessage( null );
     
   } // End void linkExited()
-  
-  
-  private void addFormPageHelp(final ScrolledForm form ) {
-    
-    final String href = getHelpResource();
-    if (href != null) {
-        IToolBarManager manager = form.getToolBarManager();
-        Action helpAction = new Action("help") { //$NON-NLS-1$
-            @Override
-            public void run() {
-                BusyIndicator.showWhile(form.getDisplay(), new Runnable() {
-                    public void run() {
-                        PlatformUI.getWorkbench().getHelpSystem().displayHelpResource(href);
-                    }
-                });
-            }
-        };
-        
-        helpAction.setToolTipText(Messages.getString( "OverviewPage_Help" ));  //$NON-NLS-1$
-        URL stageInURL = Activator.getDefault().getBundle().getEntry( "icons/help.gif" ); //$NON-NLS-1$       
-        this.helpDesc = ImageDescriptor.createFromURL( stageInURL ) ;   
-        helpAction.setImageDescriptor(this.helpDesc);
-        manager.add(helpAction);
-        form.updateToolBar();
-    }
-    
-  }
-  
-  
+ 
   
 } // End OverviewPage Class

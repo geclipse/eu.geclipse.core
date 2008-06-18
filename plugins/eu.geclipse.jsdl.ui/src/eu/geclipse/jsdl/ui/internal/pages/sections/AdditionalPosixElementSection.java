@@ -48,7 +48,6 @@ import eu.geclipse.jsdl.model.posix.POSIXApplicationType;
 import eu.geclipse.jsdl.model.posix.PosixFactory;
 import eu.geclipse.jsdl.model.posix.PosixPackage;
 import eu.geclipse.jsdl.model.posix.UserNameType;
-import eu.geclipse.jsdl.ui.adapters.jsdl.JsdlAdaptersFactory;
 import eu.geclipse.jsdl.ui.internal.pages.FormSectionFactory;
 import eu.geclipse.jsdl.ui.internal.pages.Messages;
 import eu.geclipse.ui.widgets.NumberVerifier;
@@ -58,9 +57,9 @@ import eu.geclipse.ui.widgets.NumberVerifier;
  * @author nloulloud
  *
  */
-public class AdditionalPosixElementSection extends JsdlAdaptersFactory {
+public class AdditionalPosixElementSection extends 
+JsdlFormPageSection {
   
-  private static final String EMPTY_STRING = ""; //$NON-NLS-1$ 
   protected Label lblWallTimeLimit = null;
   protected Label lblFileSizeLimit = null;
   protected Label lblCoreDumpLimit = null;
@@ -99,14 +98,6 @@ public class AdditionalPosixElementSection extends JsdlAdaptersFactory {
   protected ApplicationType applicationType = null;
   protected DocumentRoot documentRoot = PosixFactory.eINSTANCE.createDocumentRoot();
   protected POSIXApplicationType posixApplicationType;
-  protected FormPage parentPage;
-  
-  private boolean isNotifyAllowed = true;
-  private boolean adapterRefreshed = false;
-  
-  
-  
-  
   public AdditionalPosixElementSection( final FormPage formPage, final Composite parent, final FormToolkit toolkit ) {
 
     this.parentPage = formPage;
@@ -782,15 +773,6 @@ public class AdditionalPosixElementSection extends JsdlAdaptersFactory {
     this.lblUnits = toolkit.createLabel( client, Messages.getString( "JobApplicationPage_empty" ) ); //$NON-NLS-1$
     
     toolkit.paintBordersFor( client );
-    
-  }
-  
-  
-  protected void contentChanged() {
-    
-    if ( this.isNotifyAllowed ){
-      fireNotifyChanged( null );
-    }
     
   }
   

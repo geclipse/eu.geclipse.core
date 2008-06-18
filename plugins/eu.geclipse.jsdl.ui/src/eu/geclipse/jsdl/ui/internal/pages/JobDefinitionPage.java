@@ -23,18 +23,8 @@ package eu.geclipse.jsdl.ui.internal.pages;
  */
 
 
-import java.net.URL;
-
-import org.eclipse.emf.common.notify.Notification;
-import org.eclipse.emf.edit.provider.INotifyChangedListener;
-import org.eclipse.jface.action.Action;
-import org.eclipse.jface.action.IToolBarManager;
-import org.eclipse.jface.resource.ImageDescriptor;
-import org.eclipse.swt.custom.BusyIndicator;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.forms.IManagedForm;
-import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.ScrolledForm;
 import org.eclipse.ui.forms.widgets.TableWrapData;
@@ -44,7 +34,6 @@ import eu.geclipse.jsdl.model.base.JobIdentificationType;
 import eu.geclipse.jsdl.ui.adapters.jsdl.JobDefinitionTypeAdapter;
 import eu.geclipse.jsdl.ui.adapters.jsdl.JobIdentificationTypeAdapter;
 import eu.geclipse.jsdl.ui.editors.JsdlEditor;
-import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.pages.sections.JobDefinitionSection;
 import eu.geclipse.jsdl.ui.internal.pages.sections.JobIdentificationSection;
 
@@ -60,7 +49,7 @@ import eu.geclipse.jsdl.ui.internal.pages.sections.JobIdentificationSection;
  * - Job Project
  * 
  */
-public final class JobDefinitionPage extends FormPage implements INotifyChangedListener {
+public final class JobDefinitionPage extends JsdlFormPage {
   
   protected static final String PAGE_ID = "JOB_DEFINITION";  //$NON-NLS-1$
 
@@ -71,9 +60,6 @@ public final class JobDefinitionPage extends FormPage implements INotifyChangedL
   protected JobDefinitionType jobDefinitionType;
   protected JobIdentificationType jobIdentificationType;
     
-  private ImageDescriptor helpDesc = null; 
-  private boolean contentRefreshed = false;
-  private boolean dirtyFlag = false;
   private JobDefinitionSection jobDefinitionSection = null;
   private JobIdentificationSection jobIdentificationSection = null;
    
@@ -105,17 +91,7 @@ public final class JobDefinitionPage extends FormPage implements INotifyChangedL
     } // end_if active
     
   } // end void setActive()
-  
-    
-  /*
-   *  Checks if the content of the model for this page is refreshed.
-   */
-  private boolean isContentRefreshed() {
-    
-    return this.contentRefreshed;
-    
-  }
-  
+ 
   
   @Override
   public void dispose() {
@@ -156,31 +132,6 @@ public final class JobDefinitionPage extends FormPage implements INotifyChangedL
   } // End void setPageContent()   
   
   
-  @Override
-  public boolean isDirty() {
-    
-    return this.dirtyFlag;
-    
-  }
-    
-  
-  /**
-   * This method set's the dirty status of the page.
-   * 
-   * @param dirty TRUE when the page is Dirty (content has been changed) and hence a 
-   * Save operation is needed.
-   * 
-   */
-  public void setDirty( final boolean dirty ) {
-    
-    if (this.dirtyFlag != dirty) {
-      this.dirtyFlag = dirty;     
-      this.getEditor().editorDirtyStateChanged();  
-    }
-    
-  } // end void setDirty()
-
-  
   /* This method is used to create the Forms content by
   * creating the form layout and then creating the form
   * sub sections.
@@ -218,45 +169,13 @@ public final class JobDefinitionPage extends FormPage implements INotifyChangedL
     addFormPageHelp( form );
 
   }
+
   
-   
-  private void addFormPageHelp(final ScrolledForm form ) {
-    
-    final String href = getHelpResource();
-    if (href != null) {
-        IToolBarManager manager = form.getToolBarManager();
-        Action helpAction = new Action("help") { //$NON-NLS-1$
-            @Override
-            public void run() {
-                BusyIndicator.showWhile(form.getDisplay(), new Runnable() {
-                    public void run() {
-                        PlatformUI.getWorkbench().getHelpSystem().displayHelpResource(href);
-                    }
-                });
-            }
-        };
-        helpAction.setToolTipText( Messages.getString( "JobDefinitionPage_Help" ) );  //$NON-NLS-1$
-        URL stageInURL = Activator.getDefault().getBundle().getEntry( "icons/help.gif" ); //$NON-NLS-1$
-        this.helpDesc = ImageDescriptor.createFromURL( stageInURL ) ;   
-        helpAction.setImageDescriptor( this.helpDesc );
-        manager.add(helpAction);
-        form.updateToolBar();
-    }
-    
-  }
-  
-  
+  @Override
   protected String getHelpResource() {
     return "/eu.geclipse.doc.user/html/concepts/jobmanagement/editorpages/jobdefinition.html"; //$NON-NLS-1$
   }
-  
-  
-  public void notifyChanged( final Notification notification ) {
-    
-    setDirty( true );
-    
-  }
-    
+   
 
  } // End Class JobDefinitionPage
   
