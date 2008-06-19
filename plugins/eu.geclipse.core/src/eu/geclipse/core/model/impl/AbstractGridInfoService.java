@@ -21,6 +21,7 @@ import java.util.List;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 
+import eu.geclipse.core.model.IGridComputing;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridInfoService;
 import eu.geclipse.core.model.IGridJobService;
@@ -63,7 +64,11 @@ public abstract class AbstractGridInfoService
       : monitor;
       
     if ( category.equals( GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_APPLICATIONS ) ) ) {
-      result = fetchApplications( parent, vo, null, lMonitor );
+      if ( parent instanceof IGridComputing ) {
+        result = fetchApplications( parent, vo, ( IGridComputing ) parent, lMonitor );
+      } else {
+        result = fetchApplications( parent, vo, null, lMonitor );
+      }
     }
 
     else if ( category.equals( GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_COMPUTING ) ) ) {
