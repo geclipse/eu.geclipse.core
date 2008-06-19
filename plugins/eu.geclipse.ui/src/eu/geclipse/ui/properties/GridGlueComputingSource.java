@@ -21,10 +21,17 @@ import java.util.List;
 import eu.geclipse.info.model.GridGlueComputing;
 
 
+/**
+ * @author tnikos
+ *
+ */
 public class GridGlueComputingSource extends AbstractPropertySource<GridGlueComputing>{
 
   static private List<IProperty<GridGlueComputing>> staticDescriptors;
   
+  /**
+   * @param gridGlueComputing
+   */
   public GridGlueComputingSource(final GridGlueComputing gridGlueComputing)
   {
     super(gridGlueComputing);

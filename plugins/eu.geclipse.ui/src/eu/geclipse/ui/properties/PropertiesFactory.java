@@ -21,13 +21,11 @@ import java.util.List;
 
 import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridConnectionElement;
-import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IPropertiesProvider;
 import eu.geclipse.core.model.IVirtualOrganization;
-import eu.geclipse.core.model.IWrappedElement;
 import eu.geclipse.info.model.GridApplication;
 import eu.geclipse.info.model.GridGlueComputing;
 import eu.geclipse.info.model.GridGlueService;

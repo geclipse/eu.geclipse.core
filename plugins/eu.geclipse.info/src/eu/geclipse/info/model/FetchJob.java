@@ -42,7 +42,6 @@ import eu.geclipse.info.internal.Activator;
 public class FetchJob extends Job{
 
   private static FetchJob instance = null;
-  private ArrayList<IGlueStoreChangeListerner> listeners = new ArrayList<IGlueStoreChangeListerner>();
   
   /**
    * The constructor of the FetchJob

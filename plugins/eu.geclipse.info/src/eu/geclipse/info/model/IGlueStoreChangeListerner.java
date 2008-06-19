@@ -25,7 +25,6 @@ public interface IGlueStoreChangeListerner {
 
   /**
    * Notify that the glue info has changed
-   * @param modifiedGlueEntries The modified glue entries
    */
   public void infoChanged( );
 }

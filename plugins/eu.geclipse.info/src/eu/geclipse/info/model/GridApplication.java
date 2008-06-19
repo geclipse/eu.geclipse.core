@@ -23,24 +23,35 @@ import eu.geclipse.core.model.IGridApplication;
 import eu.geclipse.core.model.IGridComputing;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.info.glue.GlueLocation;
-import eu.geclipse.info.glue.GlueSubClusterSoftwareRunTimeEnvironment;
 
 
+/**
+ * @author tnikos
+ *
+ */
 public class GridApplication extends GridGlueElement implements IGridApplication {
 
   private URI script = null;
   
   private ArrayList<IGridComputing> computing = new ArrayList<IGridComputing>();
   
+  /**
+   * @param parent an IGridContainer
+   * @param software a GlueLocation that describes the software
+   */
   public GridApplication( final IGridContainer parent,
                           final GlueLocation software ) {
     super( parent, software );
   }
   
-  public void addComputing(final IGridComputing computing)
+  /**
+   * Add a computing resource
+   * @param computing an IGridComputing where this application is installed
+   */
+  public void addComputing(final IGridComputing myComputing)
   {
-    if (computing != null)
-      this.computing.add( computing );
+    if (myComputing != null)
+      this.computing.add( myComputing );
   }
   
   public IGridComputing[] getComputing() {
