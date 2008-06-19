@@ -11,4 +11,12 @@
          </hierarchical>
       </filesystem>
    </extension>
+      <extension
+         point="eu.geclipse.ui.propertiesFactory">
+      <PropertiesFactory
+            class="eu.geclipse.aws.s3.ui.properties.S3PropertiesFactory"
+            id="eu.geclipse.aws.s3.ui.properties.propertiesFactory"
+            sourceObjectClass="eu.geclipse.core.model.IGridStorage">
+      </PropertiesFactory>
+   </extension>
 </plugin>

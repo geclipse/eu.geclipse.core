@@ -14,5 +14,6 @@ Require-Bundle: eu.geclipse.aws.s3,
  org.eclipse.core.runtime,
  org.eclipse.ui,
  org.eclipse.core.resources,
- eu.geclipse.core.filesystem
+ eu.geclipse.core.filesystem,
+ org.eclipse.ui.views
 Eclipse-LazyStart: true
