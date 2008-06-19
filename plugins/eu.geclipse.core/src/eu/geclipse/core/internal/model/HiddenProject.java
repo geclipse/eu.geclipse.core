@@ -260,7 +260,8 @@ public class HiddenProject extends ResourceGridContainer
     return folder;
   }
 
-  protected IFolder getTemporaryFolder() throws CoreException {
+  public IFolder getTemporaryFolder() throws CoreException {
+    // TODO mariusz add GridModelException instead of CoreException
     IFolder folder = getProjectFolder( DIR_TEMP );
     return folder;
   }

@@ -46,10 +46,11 @@ public interface IGridJob
   /**
    * Update job status. implementation of this method should
    * ask middleware for the fresh job status
+   * @param progressMonitor may be <code>null</code>
    * 
    * @return This job's current status.
    */
-  public IGridJobStatus updateJobStatus();
+  public IGridJobStatus updateJobStatus( IProgressMonitor progressMonitor );
   
   /**
    * Get the unique id of this job. This id may be used to query
@@ -80,6 +81,7 @@ public interface IGridJob
   
   /**
    * Deletes job from the grid
+   * @param monitor 
    * @throws ProblemException
    */
   public void deleteJob( IProgressMonitor monitor ) throws ProblemException;

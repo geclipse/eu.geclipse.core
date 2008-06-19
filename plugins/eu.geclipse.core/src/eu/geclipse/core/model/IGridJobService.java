@@ -29,8 +29,10 @@ public interface IGridJobService extends IGridService{
    * TODO pawel
    * 
    * @param description TODO pawel
+   * @param monitor progress monitor
    * @return TODO pawel
    * @throws ProblemException TODO pawel
+   * @throws GridModelException 
    */
   public IGridJobID submitJob( final IGridJobDescription description,
                                final IProgressMonitor monitor )
@@ -40,10 +42,11 @@ public interface IGridJobService extends IGridService{
    * Download job status from server
    * 
    * @param id of job, which status will be checked on server
+   * @param progressMonitor may be <code>null</code>
    * @return current job status
    * @throws ProblemException thrown when status cannot be downloaded/checked
    */
-  public IGridJobStatus getJobStatus( final IGridJobID id ) throws ProblemException;
+  public IGridJobStatus getJobStatus( final IGridJobID id, final IProgressMonitor progressMonitor ) throws ProblemException;
   
   /**
    * Deletes job from server and release resources on server
@@ -53,6 +56,10 @@ public interface IGridJobService extends IGridService{
    */
   public void deleteJob( final IGridJob job, IProgressMonitor monitor ) throws ProblemException;
 
+  /**
+   * @param desc
+   * @return true if passed job description may be submitted to grid using <code>this</code> service
+   */
   public boolean canSubmit(final IGridJobDescription desc);
 
 //  /**

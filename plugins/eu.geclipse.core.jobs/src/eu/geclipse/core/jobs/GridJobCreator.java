@@ -29,6 +29,7 @@ import org.eclipse.core.runtime.Path;
 
 import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.jobs.internal.Activator;
+import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
@@ -110,7 +111,7 @@ public class GridJobCreator extends AbstractGridJobCreator {
    * @see eu.geclipse.core.model.IGridJobCreator#create(eu.geclipse.core.model.IGridContainer,
    *      eu.geclipse.core.model.IGridJobID)
    */
-  public void create( final IGridContainer parent, final IGridJobID id, final IGridJobService jobService, final String jobName )
+  public IGridJob create( final IGridContainer parent, final IGridJobID id, final IGridJobService jobService, final String jobName )
     throws GridModelException
   {
     if( !( id instanceof GridJobID ) ) {
@@ -139,6 +140,8 @@ public class GridJobCreator extends AbstractGridJobCreator {
       
       this.canCreate( jobFolder );
       parent.create( this );
+      
+      return ( IGridJob )GridModel.getRoot().findElement( jobFolder );
     } catch( CoreException cExc ) {
       throw new GridModelException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
                                     Messages.getString( "GridJobCreator.problemCreatingFolder" ) //$NON-NLS-1$

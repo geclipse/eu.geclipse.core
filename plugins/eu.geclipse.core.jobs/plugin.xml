@@ -15,7 +15,35 @@
                class="eu.geclipse.core.jobs.GridJob"
                name="Grid Job">
          </target>
+         <source
+               class="org.eclipse.core.resources.IFolder">
+         </source>
       </creator>
+      <creator
+            class="eu.geclipse.core.jobs.internal.ParametricJobServiceCreator"
+            id="eu.geclipse.core.jobs.ParametricJobServiceCreator"
+            name="Parametric job service creator">
+         <source
+               class="eu.geclipse.core.jobs.internal.ParametricJobID">
+         </source>
+         <target
+               class="eu.geclipse.core.jobs.internal.ParametricJobServiceCreator"
+               name="eu.geclipse.core.jobs.target1">
+         </target>
+      </creator>
+   </extension>
+   <extension
+         point="eu.geclipse.core.jobs.jobID">
+      <JobID
+            class="eu.geclipse.core.jobs.internal.ParametricJobID">
+      </JobID>
+   </extension>
+   <extension
+         point="eu.geclipse.core.reporting.problemReporting">
+      <problem
+            description="Cannot delete temporary folder for generated jsdl"
+            id="eu.geclipse.core.jobs.problem.cleanupSubmissionFailed">
+      </problem>
    </extension>
 
 </plugin>

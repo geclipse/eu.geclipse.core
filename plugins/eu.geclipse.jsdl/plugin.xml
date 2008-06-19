@@ -18,5 +18,12 @@
          </target>
       </creator>
    </extension>
+   <extension
+         point="eu.geclipse.core.reporting.problemReporting">
+      <problem
+            description="Cannot create XPath query"
+            id="eu.geclipse.jsdl.problem.createXPathQueryFailed">
+      </problem>
+   </extension>
 
 </plugin>

@@ -43,6 +43,7 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubMonitor;
 import org.w3c.dom.DOMException;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -139,7 +140,9 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
    * Creates files and folders for job
    * @param jobFolder folder, in which structure for job will be created
    * @param id job id
+   * @param jobService 
    * @param description job description
+   * @param uniqueJobName 
    * @return created job
    * @throws GridModelException
    */
@@ -243,14 +246,14 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     return this.jobService;
   }
   
-  private IGridJobService createJobService( final IGridJobID jobID ) {
+  private IGridJobService createJobService( final IGridJobID jobId ) {
     IGridJobService service = null;
-    IGridElementCreator creator = GridModel.getElementCreator( jobID, IGridJobService.class );
+    IGridElementCreator creator = GridModel.getElementCreator( jobId, IGridJobService.class );
     if( creator != null ) {
       try {
         service = ( IGridJobService )creator.create( null );
       } catch( GridModelException exception ) {
-        Activator.getDefault().logException( exception, "Cannot create job service" );
+        Activator.logException( exception, Messages.getString("GridJob.createJobServiceFailederr") ); //$NON-NLS-1$
       }
     }
     
@@ -274,6 +277,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     Document document = createXmlDocument( this.jobIdFile );
     if( document == null ) {
       this.jobID = new GridJobID();
+      this.jobID.setJob( this );
     } else {
       Element rootElement = document.getDocumentElement();
       if( !GridJobID.XML_ROOT.equals( rootElement.getNodeName() ) ) {
@@ -290,14 +294,17 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
             try {
               this.jobID = ( GridJobID )element.createExecutableExtension( "class" ); //$NON-NLS-1$
               this.jobID.setXMLNode( rootElement );
+              this.jobID.setJob( this );
             } catch( CoreException e ) {
               // TODO Auto-generated catch block
             }
           }
         }
       }
-      if( this.jobID == null )
+      if( this.jobID == null ) {
         this.jobID = new GridJobID( rootElement );
+        this.jobID.setJob( this );
+      }
     }
   }
 
@@ -348,15 +355,16 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     }
   }
 
-  public IGridJobStatus updateJobStatus() {
-    IGridJobStatus newJobStatus = null;    
+  public IGridJobStatus updateJobStatus( final IProgressMonitor progressMonitor ) {
+    SubMonitor subMonitor = SubMonitor.convert( progressMonitor );
+    IGridJobStatus newJobStatus = null;
     
     try {
       IGridJobService service = getJobService();
       if( service != null
           && this.jobID.getJobID() != GridJobID.UNKNOWN )
       {        
-        newJobStatus = service.getJobStatus( this.jobID );
+        newJobStatus = service.getJobStatus( this.jobID, subMonitor );
       }
       if( newJobStatus != null && newJobStatus instanceof GridJobStatus ) {
         this.jobStatus = ( GridJobStatus )newJobStatus;
@@ -640,7 +648,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
           + "</" //$NON-NLS-1$
           + JOBINFO_SUBMISSIONTIME_XMLNODENAME
           + ">" //$NON-NLS-1$
-          + "<" + JOBINFO_JOBNAME + ">" + this.jobName + "</" + JOBINFO_JOBNAME + ">" 
+          + "<" + JOBINFO_JOBNAME + ">" + this.jobName + "</" + JOBINFO_JOBNAME + ">"   //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$ //$NON-NLS-4$
           + "</" //$NON-NLS-1$
           + JOBINFO_XMLNODENAME
           + ">"; //$NON-NLS-1$
@@ -804,6 +812,9 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
    * 
    * @see eu.geclipse.core.model.getURI#getURI()
    */
+  /**
+   * @return uri
+   */
   public URI getURI() {
     // TODO pawelw is there something like a contact string?
     return null;
@@ -813,6 +824,9 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
    * (non-Javadoc)
    * 
    * @see eu.geclipse.core.model.IGridResource#getHostName()
+   */
+  /**
+   * @return hostname
    */
   public String getHostName() {
     // A job is not a physical resource so we will always return null

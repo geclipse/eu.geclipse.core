@@ -4,7 +4,7 @@ Bundle-Name: %Bundle-Name
 Bundle-Vendor: %Bundle-Vendor
 Bundle-SymbolicName: eu.geclipse.jsdl;singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: eu.geclipse.jsdl.internal.JsdlAdaptersPlugin
+Bundle-Activator: eu.geclipse.jsdl.internal.Activator
 Bundle-Localization: plugin
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.emf.edit,

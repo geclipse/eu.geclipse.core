@@ -58,7 +58,6 @@ import eu.geclipse.core.model.IGridModelListener;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.jsdl.internal.Activator;
-import eu.geclipse.jsdl.internal.JsdlAdaptersPlugin;
 import eu.geclipse.jsdl.model.base.ApplicationType;
 import eu.geclipse.jsdl.model.base.BoundaryType;
 import eu.geclipse.jsdl.model.base.CPUArchitectureType;
@@ -87,6 +86,7 @@ import eu.geclipse.jsdl.model.posix.POSIXApplicationType;
 import eu.geclipse.jsdl.model.posix.PosixFactory;
 import eu.geclipse.jsdl.model.posix.PosixPackage;
 import eu.geclipse.jsdl.model.posix.impl.POSIXApplicationTypeImpl;
+import eu.geclipse.jsdl.model.sweep.impl.SweepTypeImpl;
 
 /**
  * Concrete implementation of an {@link IGridJobDescription} for the JSDL
@@ -198,7 +198,7 @@ public class JSDLJobDescription extends ResourceGridContainer
       this.jobDescription = this.jobDefinition.getJobDescription();
       this.jobIdentification = this.documentRoot.getJobIdentification();
     } catch( IOException ioEx ) {
-      JsdlAdaptersPlugin.logException( ioEx );
+      Activator.logException( ioEx );
     }
   }
 
@@ -283,7 +283,7 @@ public class JSDLJobDescription extends ResourceGridContainer
     try {
       this.resource.save( options );
     } catch( IOException ioEx ) {
-      JsdlAdaptersPlugin.logException( ioEx );
+      Activator.logException( ioEx );
     }
   }
 
@@ -1371,4 +1371,23 @@ public class JSDLJobDescription extends ResourceGridContainer
     }
     return result;
   }
+  
+  /**
+   * @return true if this job has parametric extension (sweep)
+   */
+  public boolean isParametric() {
+    boolean parametric = false;
+    FeatureMap featureMap = this.jobDefinition.getAny();    
+    
+    for( Entry entry : featureMap ) {
+      if( entry.getValue() instanceof SweepTypeImpl ) {
+        parametric = true;
+        break;
+      }
+    }      
+
+    return parametric;
+  }
+  
+  
 }

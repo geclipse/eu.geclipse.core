@@ -20,7 +20,6 @@ package eu.geclipse.ui.wizards.jobsubmission;
 import java.lang.reflect.InvocationTargetException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -46,11 +45,11 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PlatformUI;
 
 import eu.geclipse.core.jobs.GridJobCreator;
+import eu.geclipse.core.jobs.ParametricJobService;
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridJob;
-import eu.geclipse.core.model.IGridJobCreator;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridJobID;
 import eu.geclipse.core.model.IGridJobService;
@@ -58,6 +57,7 @@ import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.reporting.IProblem;
 import eu.geclipse.core.reporting.ISolution;
 import eu.geclipse.core.reporting.ProblemException;
+import eu.geclipse.jsdl.JSDLJobDescription;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 
@@ -98,22 +98,22 @@ public class JobCreatorSelectionWizard extends Wizard {
     this.selectionPage = new JobServiceSelectionWizardPage( "Job Service Selection",
                                                             this.jobDescriptions );
     // start job for retrieving list of services
-    jobServices = new ArrayList<IGridJobService>();
+    this.jobServices = new ArrayList<IGridJobService>();
     Job job = new Job( "Retrieving list of job services" ) {
 
       @Override
       protected IStatus run( IProgressMonitor monitor ) {
-        assert jobDescriptions != null;
-        assert jobDescriptions.get( 0 ) != null;
+        assert JobCreatorSelectionWizard.this.jobDescriptions != null;
+        assert JobCreatorSelectionWizard.this.jobDescriptions.get( 0 ) != null;
         IGridJobService[] allServices = null;
-        IGridProject project = jobDescriptions.get( 0 ).getProject();
+        IGridProject project = JobCreatorSelectionWizard.this.jobDescriptions.get( 0 ).getProject();
         assert project != null;
         assert project.getVO() != null;
         try {
           allServices = project.getVO().getJobSubmissionServices( null );
           boolean valid;
           for( IGridJobService service : allServices ) {
-            Iterator<IGridJobDescription> iter = jobDescriptions.iterator();
+            Iterator<IGridJobDescription> iter = JobCreatorSelectionWizard.this.jobDescriptions.iterator();
             valid = true;
             while( iter.hasNext() ) {
               IGridJobDescription jobDescription = iter.next();
@@ -121,7 +121,7 @@ public class JobCreatorSelectionWizard extends Wizard {
                 valid = false;
             }
             if(valid==true){
-              jobServices.add( service );
+              JobCreatorSelectionWizard.this.jobServices.add( service );
             }
           }
           IWorkbench workbench = PlatformUI.getWorkbench();
@@ -130,7 +130,7 @@ public class JobCreatorSelectionWizard extends Wizard {
 
             public void run() {
 //              List<IGridJobService> synchronizedList = Collections.synchronizedList( jobServices );
-              JobCreatorSelectionWizard.this.selectionPage.setServices( jobServices ) ;
+              JobCreatorSelectionWizard.this.selectionPage.setServices( JobCreatorSelectionWizard.this.jobServices ) ;
             }
           } );
         } catch( GridModelException e ) {
@@ -306,24 +306,32 @@ public class JobCreatorSelectionWizard extends Wizard {
          * we loop over all selected jobs in the workspace yes, we can submit
          * more than one job at a time
          */
-        Iterator<IGridJobDescription> iterator = jobDescriptions.iterator();
-        Iterator<String> namesIterator = jobNames.iterator();
+        Iterator<IGridJobDescription> iterator = JobCreatorSelectionWizard.this.jobDescriptions.iterator();
+        Iterator<String> namesIterator = this.jobNames.iterator();
         while( iterator.hasNext() ) {
           testCancelled( betterMonitor );
           IGridJobDescription description = iterator.next();
           betterMonitor.setTaskName( String.format( Messages.getString( "JobSubmissionWizardBase.taskNameSubmitting" ), description.getName() ) ); //$NON-NLS-1$
           IGridContainer parent = buildTargetFolder( description,
-                                                     destinationFolder );
+                                                     this.destinationFolder );
           IGridJobID jobId = null;
-          if( this.service != null ) {
+          
+          // TODO mariusz check if middleware may handle parametric jobs itself
+          
+          if( description instanceof JSDLJobDescription
+              && ((JSDLJobDescription)description).isParametric() ) {            
+            ParametricJobService paramService = new ParametricJobService( this.service );
+            paramService.submitJob( description, betterMonitor.newChild( 1 ), parent, namesIterator.next() );
+          } else {
             jobId = this.service.submitJob( description,
                                             betterMonitor.newChild( 1 ) );
+            // needed to pass jobDescription to creator
+            // maybe will change some day...
+            creator.canCreate( description );
+            creator.create( parent, jobId, this.service, namesIterator.next() );
           }
+
           testCancelled( betterMonitor );
-          // needed to pass jobDescription to creator
-          // maybe will change some day...
-          creator.canCreate( description );
-          creator.create( parent, jobId, service, namesIterator.next() );
           // don't submit this job again during again submission after error
           iterator.remove();
           namesIterator.remove();

@@ -20,7 +20,7 @@ import java.util.Iterator;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.SubProgressMonitor;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -66,21 +66,20 @@ public class UpdateJobStatusAction extends SelectionListenerAction {
 
           @Override
           protected IStatus run( final IProgressMonitor monitor ) {
-            monitor.beginTask( Messages.getString( "UpdateJobStatusAction.manual_update_task_name" ), //$NON-NLS-1$
+            SubMonitor subMonitor = SubMonitor.convert( monitor );
+            subMonitor.beginTask( Messages.getString( "UpdateJobStatusAction.manual_update_task_name" ), //$NON-NLS-1$
                                jobsToUpdate.size() );
             for( IGridJob jobToUpdate : jobsToUpdate )
             {
-              if( !monitor.isCanceled() ) {
-                monitor.subTask( Messages.getString( "UpdateJobStatusAction.manual_update_subtask_name" ) //$NON-NLS-1$
-                                 + jobToUpdate.getID().getJobID() );
-                new SubProgressMonitor( monitor, 1 );
-                jobToUpdate.updateJobStatus();
+              if( !subMonitor.isCanceled() ) {
+                subMonitor.subTask( Messages.getString( "UpdateJobStatusAction.manual_update_subtask_name" ) //$NON-NLS-1$
+                                 + " " + jobToUpdate.getID().getJobID() );                 //$NON-NLS-1$
+                jobToUpdate.updateJobStatus( subMonitor.newChild( 1 ) );
                 GridModel.getJobManager().jobStatusChanged( jobToUpdate );
-                GridModel.getJobManager().jobStatusUpdated( jobToUpdate );
-                monitor.worked( 1 );
+                GridModel.getJobManager().jobStatusUpdated( jobToUpdate );                
               }
             }
-            monitor.done();
+            subMonitor.done();
             return Status.OK_STATUS;
           }
         };

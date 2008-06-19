@@ -30,6 +30,7 @@ public class GridJobID implements IGridJobID {
   final static private String XML_NAMENODE = "Name"; //$NON-NLS-1$
   final static private String XML_DATANODE = "Data"; //$NON-NLS-1$
   protected String jobID = UNKNOWN;
+  private GridJob job;  // warning! May be null if GridJob wasn't created for submitted job
 
   /**
    * Empty constructor for JobId created in past g-Eclipse sessions
@@ -90,5 +91,20 @@ public class GridJobID implements IGridJobID {
 
   protected String getData() {
     return "<test>XML</test>"; //$NON-NLS-1$
+  }
+  
+  /**
+   * @param job created in local workspace for after submission
+   */
+  public void setJob( final GridJob job ) {
+    this.job = job;
+  }
+  
+  /**
+   * @return job created within the workspace<br>
+   * May be <b>null</b> if GridJob wasn't created for submitted job
+   */
+  public GridJob getJob() {
+    return this.job;
   }
 }

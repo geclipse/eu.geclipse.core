@@ -21,6 +21,7 @@ import java.util.Hashtable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 
 import eu.geclipse.core.internal.Activator;
@@ -71,6 +72,7 @@ public class JobStatusUpdater extends Job {
 
   @Override
   protected IStatus run( final IProgressMonitor monitor ) {
+    SubMonitor subMonitor = SubMonitor.convert( monitor );
       if( Preferences.getUpdateJobsStatus() ) {
         int oldType = -1;
         if( this.lastStatus != null ) {
@@ -80,7 +82,7 @@ public class JobStatusUpdater extends Job {
         IGridJobStatus newStatus = null;
         try {
           if( this.job != null ) {
-            this.job.updateJobStatus();
+            this.job.updateJobStatus( subMonitor );
             newStatus = this.job.getJobStatus();
           }
           if( newStatus != null ) {

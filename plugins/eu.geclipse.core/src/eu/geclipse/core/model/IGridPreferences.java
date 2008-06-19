@@ -16,6 +16,9 @@ package eu.geclipse.core.model;
 
 import java.net.URI;
 
+import org.eclipse.core.resources.IFolder;
+import org.eclipse.core.runtime.CoreException;
+
 /**
  * This interface defines some global access points for preferences that are not
  * stored in the metadata area of the workspace.
@@ -46,4 +49,10 @@ public interface IGridPreferences {
    */
   public IGridConnection createTemporaryConnection( final URI uri )
     throws GridModelException;
+  
+  /**
+   * @return temporary folder in hidden project
+   * @throws CoreException
+   */
+  public IFolder getTemporaryFolder() throws CoreException;
 }
