@@ -153,7 +153,8 @@
       <page
             adaptable="false"
             class="eu.geclipse.ui.properties.GridConnectionPropertiesPage"
-            id="eu.geclipse.ui.gridConnections"            name="Grid Connections">
+            id="eu.geclipse.ui.gridConnections"
+            name="Grid Connections">
          <enabledWhen>
             <test
                   property="eu.geclipse.core.isGridConnection">
@@ -330,6 +331,14 @@
             class="eu.geclipse.ui.simpleTest.PingTestUIFactory"
             id="eu.geclipse.ui.simpleTest.pingTestUIFactory"
             name="Ping Test UI Factory">
+      </factory>
+   </extension>
+   <extension
+         point="eu.geclipse.ui.simpleTestUI">
+      <factory
+            class="eu.geclipse.ui.simpleTest.PortScanUIFactory"
+            id="eu.geclipse.ui.simpleTest.PortScanUIFactory"
+            name="Port Scan UI Factory">
       </factory>
    </extension>
    <extension
