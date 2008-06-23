@@ -295,4 +295,14 @@ public class S3AWSService_PDETest {
     Assert.assertEquals( S3ServiceTestUtil.S3_SERVICE_NAME,
                          this.s3AWSService.getProperties().getServiceName() );
   }
+
+  /**
+   * Test method for
+   * {@link eu.geclipse.aws.s3.service.S3AWSService#getSupportedResources()}.
+   */
+  @Test
+  public void testGetSupportedResources() {
+    Assert.assertNull( this.s3AWSService.getSupportedResources() );
+  }
+
 }
