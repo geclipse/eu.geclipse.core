@@ -33,11 +33,16 @@ import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridInfoService;
+import eu.geclipse.core.model.IGridResourceCategory;
 import eu.geclipse.core.model.IStorableElement;
 import eu.geclipse.core.model.impl.AbstractGridContainer;
 
 /**
+ * The {@link S3AWSService} serves as the entry point to the s3 infrastructure.
+ * Most importantly it provides the {@link S3InfoService}.
+ * 
  * @author Moritz Post
+ * @see S3InfoService
  */
 public class S3AWSService extends AbstractGridContainer
   implements IAWSService, IStorableElement
@@ -110,6 +115,10 @@ public class S3AWSService extends AbstractGridContainer
                                                               serviceCreator );
     // add properties to this service, replacing the existing properties
     addElement( properties );
+  }
+
+  public IGridResourceCategory[] getSupportedResources() {
+    return null;
   }
 
   public String getHostName() {

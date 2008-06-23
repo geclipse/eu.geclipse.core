@@ -28,6 +28,7 @@ import org.jets3t.service.S3ServiceException;
 import org.jets3t.service.model.S3Bucket;
 
 import eu.geclipse.aws.AWSInfoService;
+import eu.geclipse.aws.IAWSCategories;
 import eu.geclipse.aws.s3.S3BucketStorage;
 import eu.geclipse.aws.s3.internal.Activator;
 import eu.geclipse.aws.s3.internal.S3ServiceRegistry;
@@ -36,10 +37,13 @@ import eu.geclipse.core.model.IGridApplication;
 import eu.geclipse.core.model.IGridComputing;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridInfoService;
+import eu.geclipse.core.model.IGridResource;
+import eu.geclipse.core.model.IGridResourceCategory;
 import eu.geclipse.core.model.IGridService;
 import eu.geclipse.core.model.IGridStorage;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.impl.AbstractGridInfoService;
+import eu.geclipse.core.model.impl.GridResourceCategoryFactory;
 import eu.geclipse.core.reporting.ProblemException;
 
 /**
@@ -68,6 +72,22 @@ public class S3InfoService extends AbstractGridInfoService
    */
   public S3InfoService( final S3AWSService s3Service ) {
     this.s3Service = s3Service;
+  }
+
+  @Override
+  public IGridResource[] fetchResources( final IGridContainer parent,
+                                         final IVirtualOrganization vo,
+                                         final IGridResourceCategory category,
+                                         final boolean exclusive,
+                                         final Class<? extends IGridResource> typeFilter,
+                                         final IProgressMonitor monitor )
+  {
+    IGridResource[] result = null;
+    if( category.equals( GridResourceCategoryFactory.getCategory( IAWSCategories.CATEGORY_AWS_STORAGE ) ) )
+    {
+      result = fetchStorage( parent, vo, monitor );
+    }
+    return result;
   }
 
   public IGridApplication[] fetchApplications( final IGridContainer parent,
