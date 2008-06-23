@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2007 g-Eclipse consortium 
+ * Copyright (c) 2007 - 2008 g-Eclipse consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -16,9 +16,12 @@
  *****************************************************************************/
 package eu.geclipse.core.model;
 
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+
+import org.eclipse.core.resources.IFile;
 
 /**
  * Interface for structural tests and simple tests.
@@ -27,15 +30,17 @@ public interface IGridTest extends IGridElement, IManageable {
 
   /**
    * This method is used to initialize instance just after it was created with
-   * some data. This method existing seperately from class' constructor, because
+   * some data. This method existing separately from class' constructor, because
    * its instances are created through extension points, which require - for
    * simplicity - constructors without parameters.
    * 
    * @param initInputData object with information to initialize new (and most
    *            likely empty) instance of class
    */
-  public void init( final Object initInputData );
+  public void internalInit( final IFile initInputData );
 
+  public void init();
+  
   /**
    * Method to access all single tests that are run as a one IGridTest
    * implementation.
@@ -51,14 +56,14 @@ public interface IGridTest extends IGridElement, IManageable {
    */
   public List<String> getTestedResourcesNames();
 
-  /**
-   * Method to access dates of all submissions for given resource for this test
-   * 
-   * @param resourceName name of the tested resources
-   * @return List of dates of test submission
-   */
-  public List<Date> getTestSubmissionDates( final String resourceName );
-
+  // /**
+  // * Method to access dates of all submissions for given resource for this
+  // test
+  // *
+  // * @param resourceName name of the tested resources
+  // * @return List of dates of test submission
+  // */
+  // public List<Date> getTestSubmissionDates( final String resourceName );
   /**
    * Method to access text interpretation of single test for given single test's
    * name, tested resources and date of this test.
@@ -68,7 +73,6 @@ public interface IGridTest extends IGridElement, IManageable {
    * @param date date of test submission
    * @return String that is representation of single test result
    */
-  // instancja IGridTestResult
   public IGridTestResult getSingleTestResult( final String testName,
                                               final String resourceName,
                                               final Date date );
@@ -94,25 +98,21 @@ public interface IGridTest extends IGridElement, IManageable {
    */
   public Map<String, String> getProperties();
 
-  
-
-  // ///////////nowe - do wykorzystania
+  /**
+   * Method to access list of single tests results
+   * 
+   * @return List of single test results
+   */
   public List<IGridTestResult> getResults();
 
+  /**
+   * Method to run a test
+   */
   public void run();
 
-  /**
-   * czy sie wykonal, czy nie
-   * TODO Szymon
-   * 
-   * @return
-   */
+  // TODO Szymon
   public Object getStatus();
 
-  // ////////////????????
-  /*
-   * Those are helpers methods - not needed for basic functionality
-   */
   /**
    * Method returning result of the test - as a summary of single tests.
    * 
@@ -131,8 +131,8 @@ public interface IGridTest extends IGridElement, IManageable {
    * The same as {@link IGridTest#getLastUpdate()}, but should be used in case
    * there can be difference in number of test runs for each tested resource.
    * 
-   * @param singleTest
-   * @return
+   * @param testedResourceName name of a tested resource
+   * @return date of last successful test run for given resource
    */
   public Date getLastUpdate( final String testedResourceName );
 
@@ -151,11 +151,25 @@ public interface IGridTest extends IGridElement, IManageable {
    * @return List of List of
    */
   public List<List<IGridTestResult>> getTestResultsForResourceForDate( final String resourceName );
-  
-  //usunięte
-//
-//  * Does an object update. Should be called if e.g. XML file describing this
-//  * object was changed, etc.
-//  */
-// public void update();
+
+  /**
+   * This method should be called each time when test was run and new results
+   * are available. Calling this method results in serialization of new results -
+   * they are written to test's GTDL file - this is how exemplary implementation
+   * available in test framework works.
+   * 
+   * @param newResults list of new results that should be added to set of
+   *            results maintained by this test's class
+   */
+  public void addTestResult( final List<IGridTestResult> newResults );
+
+  /**
+   * Given the instance of {@link IGridTestResult} class should return input
+   * stream of result's specific data (the type of data is determined by method
+   * {@link IGridTestResult#getResultType()}
+   * 
+   * @param result single test result
+   * @return input stream for result's data
+   */
+  public InputStream getInputStreamForResult( final IGridTestResult result );
 }

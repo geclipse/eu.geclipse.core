@@ -16,7 +16,6 @@
  *****************************************************************************/
 package eu.geclipse.core.model;
 
-import java.io.InputStream;
 import java.util.Date;
 
 /**
@@ -28,33 +27,11 @@ import java.util.Date;
 public interface IGridTestResult {
 
   /**
-   * Method to access specific test result. This may be just text, image, audio,
-   * video or application. See also {@link IGridTestResult#getResultType()},
-   * {@link IGridTestResult#getResultInputStream()} and
-   * {@link IGridTestResult#getStringResult()}.
+   * Method to access information when this test was run.
    * 
-   * @return test result
+   * @return date of test's run
    */
-  Object getResult();
-
-  /**
-   * Method to access specific test result in form of InputStream. This input
-   * may be used to show results in specific editor. This method may return
-   * null.
-   * 
-   * @return test result's input stream
-   */
-  InputStream getResultInputStream();
-
-  /**
-   * Method to access type of result's data. Preferably this should be file
-   * extension that will determine Eclipse editor in which data should be
-   * opened. See also {@link IGridTestResult#getResult()} and
-   * {@link IGridTestResult#getResultInputStream()}.
-   * 
-   * @return extension of file to which test result's input stream may be saved
-   */
-  String getResultType();
+  Date getRunDate();
 
   /**
    * Method to access name of the tested resource (e.g. host's URL).
@@ -62,13 +39,6 @@ public interface IGridTestResult {
    * @return name of tested resource in form of String
    */
   String getResourceName();
-
-  /**
-   * Method to access information when this test was run.
-   * 
-   * @return date of test's run
-   */
-  Date getRunDate();
 
   /**
    * In case of complex tests this method returns sub-test name. If test was
@@ -79,10 +49,38 @@ public interface IGridTestResult {
   String getSubTestName();
 
   /**
-   * Textual interpretation of test's result (see
-   * {@link IGridTestResult#getResult()}).
+   * Method to access type of result's data. Preferably this should be file
+   * extension that will determine Eclipse editor in which data should be
+   * opened. See also {@link IGridTest#getInputStreamForResult(IGridTestResult)}
+   * and {@link IGridTestResult#getResultRawData()}.
+   * 
+   * @return extension of file to which test result's input stream may be saved
+   *         (preferably without "." at the beginning, e.g. "TXT", not ".TXT")
+   */
+  String getResultType();
+
+  /**
+   * Method to access content of Output > Result > ResultData GTDL element
+   * corresponding to this test result instance. Returned String is unmodified
+   * content taken from GTDL file.
+   * 
+   * @return string content of Output > Result > ResultData GTDL element
+   */
+  String getResultRawData();
+
+  /**
+   * Textual interpretation of test's result.
    * 
    * @return String representing human-readable summary of test's result
    */
-  String getStringResult();
+  String getResultSummary();
+
+  /**
+   * Human-readable test's result. Represents either the state in which test is
+   * (pending, running...) or - in case when test was finished - test's result
+   * in form of String (OK, ERROR, WARRNING...).
+   * 
+   * @return String representing human-readable summary of test's result
+   */
+  String getResultEnum();
 }
