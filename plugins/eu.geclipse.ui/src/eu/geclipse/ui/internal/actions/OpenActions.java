@@ -66,7 +66,7 @@ public class OpenActions extends ActionGroup {
     IWorkbenchPage page = this.site.getPage();
     ISelectionProvider provider = this.site.getSelectionProvider();
     
-    this.openElementAction = new OpenElementAction( page );
+    this.openElementAction = new OpenElementAction( this.site );
     
     provider.addSelectionChangedListener( this.openElementAction );
     

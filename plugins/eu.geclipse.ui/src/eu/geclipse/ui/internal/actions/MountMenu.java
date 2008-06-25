@@ -58,6 +58,7 @@ public class MountMenu
    * Standard constructor.
    */
   protected MountMenu( final Shell shell ) {
+    super( "eu.geclipse.ui.actions.mount" );
     this.shell = shell;
     checkVisible();
   }

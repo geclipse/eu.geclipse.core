@@ -31,6 +31,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
@@ -87,6 +88,11 @@ public class DeleteGridElementAction extends SelectionListenerAction {
       if( !selectedResources.isEmpty() ) {
         deleteOtherResources( selectedResources );
       }    
+  }
+  
+  @Override
+  protected boolean updateSelection( final IStructuredSelection selection ) {
+    return ! getSelectedResources().isEmpty();
   }
 
   private void dispatchSelectedElements( final List<IGridJob> selectedJobs, final List<IResource> otherSelectedResources ) {   

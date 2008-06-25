@@ -16,13 +16,13 @@
 package eu.geclipse.ui.internal.actions;
 
 import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.widgets.Shell;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchSite;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.ActionGroup;
 import org.eclipse.ui.actions.RenameResourceAction;
 import org.eclipse.ui.navigator.ICommonMenuConstants;
@@ -82,13 +82,23 @@ public class FileActions extends ActionGroup {
     this.copyAction = new CopyAction( this.clipboard );
     this.pasteAction = new PasteAction( this.clipboard );    
     this.deleteElementAction = new DeleteGridElementAction( shell );
-    ISharedImages sharedImages = PlatformUI.getWorkbench().getSharedImages();    
     this.renameAction = new RenameResourceAction( shell );
     
     provider.addSelectionChangedListener( this.copyAction );
     provider.addSelectionChangedListener( this.pasteAction );    
     provider.addSelectionChangedListener( this.deleteElementAction );
     provider.addSelectionChangedListener( this.renameAction );
+    
+    ISelection selection = provider.getSelection();
+    
+    if ( ( selection == null ) || ! ( selection instanceof IStructuredSelection ) ) {
+      selection = StructuredSelection.EMPTY;
+    }
+    
+    this.copyAction.selectionChanged( ( IStructuredSelection ) selection );
+    this.pasteAction.selectionChanged( ( IStructuredSelection ) selection );
+    this.deleteElementAction.selectionChanged( ( IStructuredSelection ) selection );
+    this.renameAction.selectionChanged( ( IStructuredSelection ) selection );
     
   }
   

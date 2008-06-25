@@ -16,8 +16,10 @@
 package eu.geclipse.ui.internal.actions;
 
 import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.actions.ActionGroup;
 import org.eclipse.ui.navigator.ICommonMenuConstants;
@@ -48,6 +50,13 @@ public class SubmitJobActions extends ActionGroup {
     ISelectionProvider provider = site.getSelectionProvider();
     this.submitAction = new SubmitJobAction( site );
     provider.addSelectionChangedListener( this.submitAction );
+    
+    ISelection selection = provider.getSelection();
+    if ( ( selection == null ) || ! ( selection instanceof IStructuredSelection ) ) {
+      selection = StructuredSelection.EMPTY;
+    }
+    this.submitAction.selectionChanged( ( IStructuredSelection ) selection );
+    
   }
   
   /* (non-Javadoc)

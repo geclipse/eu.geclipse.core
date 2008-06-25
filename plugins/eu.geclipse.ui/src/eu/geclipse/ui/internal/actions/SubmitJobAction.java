@@ -20,6 +20,8 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IWorkbenchSite;
@@ -74,26 +76,31 @@ public class SubmitJobAction extends SelectionListenerAction {
   @Override
   protected boolean updateSelection( final IStructuredSelection selection ) {
 
-    boolean enabled = super.updateSelection( selection );
-    this.jobDescriptions.clear();
-    IGridProject project = null;
-    Iterator<?> iter = selection.iterator();
-    while( iter.hasNext() && enabled ) {
-      Object element = iter.next();
-      IGridJobDescription jobDescription = getJobDescription( element );
-      enabled &= ( jobDescription != null );
-      if( jobDescription != null ) {
-        if( project == null ) {
-          project = jobDescription.getProject();
+    boolean enabled = ! selection.isEmpty() && super.updateSelection( selection );
+    
+    if ( enabled ) {
+      this.jobDescriptions.clear();
+      IGridProject project = null;
+      Iterator<?> iter = selection.iterator();
+      while( iter.hasNext() && enabled ) {
+        Object element = iter.next();
+        IGridJobDescription jobDescription = getJobDescription( element );
+        enabled &= ( jobDescription != null );
+        if( jobDescription != null ) {
+          if( project == null ) {
+            project = jobDescription.getProject();
+          }
+          if(project!=jobDescription.getProject()){
+            //job description from different projects cannot be submitted together
+            return false;
+          }
+          this.jobDescriptions.add( jobDescription );
         }
-        if(project!=jobDescription.getProject()){
-          //job description from different projects cannot be submitted together
-          return false;
-        }
-        this.jobDescriptions.add( jobDescription );
       }
     }
+    
     return enabled && ( this.jobDescriptions != null );
+    
   }
 
 private IGridJobDescription getJobDescription( final Object element ) {

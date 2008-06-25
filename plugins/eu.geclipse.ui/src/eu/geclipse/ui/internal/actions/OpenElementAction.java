@@ -18,12 +18,14 @@ package eu.geclipse.ui.internal.actions;
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.actions.BaseSelectionListenerAction;
@@ -43,7 +45,7 @@ public class OpenElementAction
   /**
    * Ordinary open file action.
    */
-  private org.eclipse.ui.actions.OpenFileAction openFileAction;
+  private OpenFileAction openFileAction;
     
   /**
    * Specialised action to open Grid jobs.
@@ -61,12 +63,22 @@ public class OpenElementAction
    * @param page The {@link IWorkbenchPage} for which to create this
    * action.
    */
-  protected OpenElementAction( final IWorkbenchPage page ) {
+  protected OpenElementAction( final IWorkbenchSite site ) {
     
     super( Messages.getString("OpenElementAction.open_element_action_text") ); //$NON-NLS-1$
     
-    this.openFileAction = new org.eclipse.ui.actions.OpenFileAction( page );
+    IWorkbenchPage page = site.getPage();
+    
+    this.openFileAction = new OpenFileAction( page );
     this.openJobAction = new OpenJobAction( page );
+    
+    ISelectionProvider provider = site.getSelectionProvider();
+    if ( provider != null ) {
+      ISelection selection = provider.getSelection();
+      if ( selection instanceof IStructuredSelection ) {
+        selectionChanged( ( IStructuredSelection ) selection );
+      }
+    }
     
   }
   

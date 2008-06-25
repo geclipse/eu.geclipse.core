@@ -63,7 +63,7 @@ public class GridElementSelectionAdapter
   public ISelection getSelection() {
     return
       this.currentSelection == null
-      ? new EmptySelection()
+      ? StructuredSelection.EMPTY
       : this.currentSelection;
   }
 
