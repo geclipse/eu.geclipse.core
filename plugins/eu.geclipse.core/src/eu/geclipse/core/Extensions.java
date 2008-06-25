@@ -282,6 +282,47 @@ public class Extensions {
     = "class"; //$NON-NLS-1$
   
   /**
+   * The ID of the resource category extension point.
+   */
+  public static final String GRID_RESOURCE_CATEGORY_POINT
+    = "eu.geclipse.core.gridResourceCategory"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the category element of the resource category
+   * extension point.
+   */
+  public static final String GRID_RESOURCE_CATEGORY_ELEMENT
+    = "category"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the id attribute of the category element
+   * of the resource category extension point.
+   */
+  public static final String GRID_RESOURCE_CATEGORY_ID_ATTRIBUTE
+    = "id"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the name attribute of the category element
+   * of the resource category extension point.
+   */
+  public static final String GRID_RESOURCE_CATEGORY_NAME_ATTRIBUTE
+    = "name"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the parent attribute of the category element
+   * of the resource category extension point.
+   */
+  public static final String GRID_RESOURCE_CATEGORY_PARENT_ATTRIBUTE
+    = "parent"; //$NON-NLS-1$
+  
+  /**
+   * The ID of the active attribute of the category element
+   * of the resource category extension point.
+   */
+  public static final String GRID_RESOURCE_CATEGORY_ACTIVE_ATTRIBUTE
+    = "active"; //$NON-NLS-1$
+  
+  /**
    * The ID of the project folder extension point.
    */
   public static final String PROJECT_FOLDER_POINT
@@ -459,6 +500,20 @@ public class Extensions {
     return elementCreators;
   }
   
+  /**
+   * Get all registered extensions of the grid element creator extension point that are
+   * able to create a grid element of the specified target type from the specified
+   * source type.
+   * 
+   * @param source The source type from which to create a grid element. May be
+   * <code>null</code>. In that case the creators are not filtered for the source
+   * type.
+   * @param target The target type of the elements to be created. May be
+   * <code>null</code>. In that case the creators are not filtered for the target
+   * type. 
+   * @return A list of all registered element creator extensions that are able to create
+   * elements of the specified target type from objects of the specified source type.
+   */
   public static List< IConfigurationElement > getRegisteredElementCreatorConfigurations(
       final Class< ? extends Object > source,
       final Class< ? extends IGridElement > target ) {

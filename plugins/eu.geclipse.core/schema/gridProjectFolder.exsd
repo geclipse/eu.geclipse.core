@@ -6,7 +6,7 @@
          <meta.schema plugin="eu.geclipse.core" id="gridProjectFolder" name="Grid Project Folder"/>
       </appInfo>
       <documentation>
-         [Enter description of this extension point.]
+         This extension point is used to provide local folders within a grid project. These folders may be used as default locations for specific grid model elements.
       </documentation>
    </annotation>
 
@@ -47,21 +47,21 @@
          <attribute name="id" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  Unique id for the project folder.
                </documentation>
             </annotation>
          </attribute>
          <attribute name="name" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  Descriptive name of the project folder that will be shown in the project&apos;s properties.
                </documentation>
             </annotation>
          </attribute>
          <attribute name="label" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  Default label of the project folder that will be shown in the project tree. This name may be changed by the user by renaming the folder.
                </documentation>
                <appInfo>
                   <meta.attribute translatable="true"/>
@@ -71,7 +71,7 @@
          <attribute name="elementClass" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  Type of elements that should reside in this project folder.
                </documentation>
                <appInfo>
                   <meta.attribute kind="java" basedOn=":eu.geclipse.core.model.IGridElement"/>
@@ -81,14 +81,14 @@
          <attribute name="preset" type="boolean">
             <annotation>
                <documentation>
-                  
+                  Determines if this folder should be active by default for new grid projects.
                </documentation>
             </annotation>
          </attribute>
          <attribute name="icon" type="string">
             <annotation>
                <documentation>
-                  
+                  An icon that is displayed together with the project folder within the project tree.
                </documentation>
             </annotation>
          </attribute>
@@ -100,7 +100,7 @@
          <meta.section type="since"/>
       </appInfo>
       <documentation>
-         [Enter the first release in which this extension point appears.]
+         1.0
       </documentation>
    </annotation>
 
@@ -109,7 +109,16 @@
          <meta.section type="examples"/>
       </appInfo>
       <documentation>
-         [Enter extension point usage example here.]
+         &lt;extension point=&quot;eu.geclipse.core.gridProjectFolder&quot;&gt;
+  &lt;folder
+    elementClass=&quot;eu.geclipse.core.model.IGridConnection&quot;
+    icon=&quot;icons/ovr16/connection_ovr.gif&quot;
+    id=&quot;eu.geclipse.core.projectfolder.connections&quot;
+    label=&quot;Connections&quot;
+    name=&quot;Grid Connection Folder&quot;
+    preset=&quot;true&quot;&gt;
+  &lt;/folder&gt;
+&lt;/extension&gt;
       </documentation>
    </annotation>
 
@@ -118,7 +127,7 @@
          <meta.section type="apiInfo"/>
       </appInfo>
       <documentation>
-         [Enter API information here.]
+         See the &lt;code&gt;eu.geclipse.core.model.IGridProject&lt;/code&gt; interfaces.
       </documentation>
    </annotation>
 
@@ -127,7 +136,7 @@
          <meta.section type="implementation"/>
       </appInfo>
       <documentation>
-         [Enter information about supplied implementation of this extension point.]
+         The g-Eclipse UI parts provide support for various project folders, e.g. the connections and the jobs folders.
       </documentation>
    </annotation>
 
@@ -136,7 +145,11 @@
          <meta.section type="copyright"/>
       </appInfo>
       <documentation>
-         
+         Copyright (c) 2006, 2007 g-Eclipse Consortium
+&lt;br&gt;&lt;br&gt;
+All rights reserved. This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at &lt;a href=&quot;http://www.eclipse.org/legal/epl-v10.html&quot;&gt;http://www.eclipse.org/legal/epl-v10.html&lt;/a&gt;.
+&lt;br&gt;&lt;br&gt;
+Initial development of the original code was made for the g-Eclipse project founded by European Union project number: FP6-IST-034327 &lt;a href=&quot;http://www.geclipse.eu&quot;&gt;http://www.geclipse.eu&lt;/a&gt;.
       </documentation>
    </annotation>
 

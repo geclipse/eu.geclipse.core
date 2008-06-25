@@ -49,6 +49,14 @@ public interface IGridProject extends IGridContainer {
    */
   public IGridContainer getProjectFolder( final IGridElement element );
   
+  /**
+   * Get the project folder ID of the specified {@link IGridContainer}
+   * or return <code>null</code> if the specified container is not a
+   * project folder.
+   * 
+   * @param folder The folder for which to return the ID.
+   * @return Either the ID or <code>null</code>.
+   */
   public String getProjectFolderID( final IGridContainer folder );
   
   /**

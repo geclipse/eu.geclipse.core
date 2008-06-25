@@ -37,7 +37,7 @@ public class GridModelException extends ProblemException {
    * @param problemID   The ID of the problem that should be reported.
    * @param pluginID    The ID of the plug-in where the problem happened.
    * 
-   * @see #ProblemException(String,String)
+   * @see ProblemException#ProblemException(String, String)
    */
   public GridModelException( final String problemID,
                              final String pluginID ) {
@@ -52,7 +52,7 @@ public class GridModelException extends ProblemException {
    * @param exception   A {@link Throwable} that caused this problem (may be null).
    * @param pluginID    The ID of the plug-in where the problem happened.
    * 
-   * @see #ProblemException(String,Throwable,String)
+   * @see ProblemException#ProblemException(String,Throwable,String)
    */
   public GridModelException( final String problemID,
                              final Throwable exception,
@@ -69,7 +69,7 @@ public class GridModelException extends ProblemException {
    *                    problems' standard description (may be null).
    * @param pluginID    The ID of the plug-in where the problem happened.
    * 
-   * @see #ProblemException(String,String,String)
+   * @see ProblemException#ProblemException(String,String,String)
    */
   public GridModelException( final String problemID,
                              final String description,
@@ -87,7 +87,7 @@ public class GridModelException extends ProblemException {
    * @param exception   A {@link Throwable} that caused this problem (may be null).
    * @param pluginID    The ID of the plug-in where the problem happened.
    * 
-   * @see #ProblemException(String,String,Throwable,String)
+   * @see ProblemException#ProblemException(String,String,Throwable,String)
    */
   public GridModelException( final String problemID,
                              final String description,
@@ -97,11 +97,11 @@ public class GridModelException extends ProblemException {
   }
 
   /**
-   * Create a new Authentication Exception with the specified associated problem.
+   * Create a new Grid Model Exception with the specified associated problem.
    * 
    * @param problem The problem associated to this exception.
    * 
-   * @see #ProblemException(IProblem)
+   * @see ProblemException#ProblemException(IProblem)
    */
   public GridModelException( final IProblem problem ) {
     super( problem );
