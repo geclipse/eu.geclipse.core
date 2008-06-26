@@ -1,0 +1,187 @@
+<?xml version="1.0"?>
+<project name="Library" default="usage" basedir=".">
+
+	<target name="usage">
+		<echo message="Please refer to the testframework.html in org.eclipse.test for instructions on usage." />
+	</target>
+
+	<target name="init">
+		<!-- 
+			Parameters:
+				(Mandatory)
+				eclipse-home	- the Eclipse location
+				data-dir		- the directory for Eclipse to write its data (workspace)
+				plugin-name		- the name of the plugin to test
+				classname		- the name of the test class
+				
+				(Optional - overrides defaults set in script)
+				vmargs			- a string containing arguments to pass to the VM.
+				extraVMargs		- allows separate setting of VM args from separate caller.
+				timeout			- overrides default test timeout value (in milliseconds).
+				useEclipseExe	- property setting forces test to launch via eclipse executable.
+				plugin-path		- path to root of plug-in
+				xslt-stylesheet	- overrides default xslt stylesheet location
+							  (default: ${eclipse-home}/plugins/org.eclipse.test/JUNIT.XSL).
+				output-dir		- overrides default output directory (default: ${eclipse-home}).
+				test-output-dir	- overrides default output directory for storing intermediate
+							  test outputs (default: ${output-dir}/out).
+				junit-report-dir - overrides default output directory for junit reports produced
+							  for specified classname (default: ${output-dir}/results).
+		-->
+
+		<tstamp>
+			<format property="TIMENOW" pattern="HHmmssSSSS"/>
+		</tstamp>
+
+		<!-- Property setting useEclipseExe launches tests using the eclipse executable -->
+		<condition property="launchTarget" value="eclipse-test">
+			<isset property="useEclipseExe" />
+		</condition>
+		<!-- Default launch target for launching tests -->
+		<property name="launchTarget" value="java-test" />
+		<property name="formatter" value="org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter"/>
+	    
+		<!-- Default heap sizes when running performance tests -->
+		<condition property="vmargs" value=" -Xms256M -Xmx256M">
+			<equals arg1="${test.target}" arg2="performance" />
+		</condition>
+		<property name="extraVMargs" value=""/>
+		<property name="timeout" value="7200000" />
+
+		<!-- Default paths -->
+		<property name="plugin-path" value="" />
+		<property name="xslt-stylesheet" value="${eclipse-home}/plugins/org.eclipse.test/JUNIT.XSL" />
+		<property name="output-dir" value="${eclipse-home}" />
+		<property name="test-output-dir" value="${output-dir}/out" />
+		<property name="junit-report-dir" value="${output-dir}/results" />
+		<mkdir dir="${test-output-dir}" />
+		<mkdir dir="${junit-report-dir}" />
+	</target>
+
+	<target name="core-test" description="Eclipse application used to launch HEADLESS plugin tests." depends="init">
+		<antcall target="${launchTarget}">
+			<param name="application" value="org.eclipse.test.coretestapplication"/>
+		</antcall>
+	</target>
+
+	<target name="ui-test" description="Eclipse application used to launch UI plugin tests." depends="init">
+		<antcall target="${launchTarget}">
+			<param name="application" value="org.eclipse.test.uitestapplication"/>
+		</antcall>
+	</target>
+
+	<target name="java-test">
+		<!-- Set default vm args -->
+		<property name="vmargs" value=" -Xms40m -Xmx256m"/>
+		
+		<!-- Set default jvm to use for testing -->
+		<property name="jvm" value="${java.home}/bin/java" />  	
+		
+		<echo message="Running ${classname}."/>
+		<echo message="    Test file:   ${test-output-dir}/${classname}.xml."/>
+		<echo message="    Result file: ${junit-report-dir}/${classname}.xml."/>
+		
+		<java fork="true" dir="." timeout="${timeout}" jvm="${jvm}" logError="true"
+				classname="org.eclipse.equinox.launcher.Main"
+				output="${output-dir}/${classname}.txt">
+			<classpath>
+				<fileset dir="${eclipse-home}/plugins">
+					<include name="org.eclipse.equinox.launcher_*.jar"/>
+				</fileset>
+			</classpath>
+			<arg line="-application ${application}"/>
+			<arg line="-data ${data-dir}"/>
+			<arg line="formatter=${formatter},${test-output-dir}/${classname}.xml"/>
+			<arg line="-testPluginName ${plugin-name}"/>
+			<arg line="-className ${classname}"/>
+			<arg line="-os ${os}"/>
+			<arg line="-ws ${ws}"/>
+			<arg line="-arch ${arch}"/>
+			<arg line="-consolelog"/>
+			<jvmarg line="${vmargs} ${extraVMargs}"/>
+			<sysproperty key="PLUGIN_PATH" value="${plugin-path}"/> 
+		</java>
+		<antcall target="collect-results" />
+	</target>
+	
+	<target name="eclipse-test" description="Runs the specified classname as a plug-in test.">		
+		<property name="vmargs" value="-Xms256m -Xmx512m"/>
+		
+		<!-- Use -consolelog if launching a headless test -->
+		<condition property="consolelog" value="-consolelog">
+			<equals arg1="${application}" arg2="org.eclipse.test.coretestapplication"/>
+		</condition>
+		<property name="consolelog" value="" />
+
+		<!--
+			vm selection priority:
+			1.  user-specified java executable via outer Ant property setting of "jvm".
+			2.  java executable on path.
+		-->
+		<condition property="test-vm" value="-vm ${jvm}">
+			<isset property="jvm" />
+		</condition>
+		<property name="test-vm" value="" />
+		
+		<!-- Ensure executable has execute permission -->
+		<chmod file="${eclipse-home}/eclipse" perm="ugo+rx"/>
+		
+		<echo message="Running ${classname}."/>
+		<echo message="    Test file:   ${test-output-dir}/${classname}.xml."/>
+		<echo message="    Result file: ${junit-report-dir}/${classname}.xml."/>
+
+		<exec executable="${eclipse-home}/eclipse" dir="${eclipse-home}" timeout="${timeout}"
+				logError="true" failonerror="false"
+				output="${junit-report-dir}/${classname}.txt">
+			<arg line="-data ${data-dir}"/>
+			<arg line="${test-vm}"/>
+			<arg line="-application ${application}"/>
+			<arg line="formatter=${formatter},${test-output-dir}/${classname}.xml"/>
+			<arg line="-testPluginName ${plugin-name}"/>
+			<arg line="-className ${classname}"/>
+			<arg line="-nosplash"/>
+			<arg line="--launcher.suppressErrors"/>
+			<arg line="${consolelog}"/>
+			<arg line="-vmargs ${vmargs} ${extraVMargs} -DPLUGIN_PATH=${plugin-path}"/>
+		</exec>
+		<antcall target="collect-results" />
+	</target>
+	
+	<target name="collect-results">
+		<junitreport todir="${junit-report-dir}" tofile="${classname}.xml">
+			<fileset dir="${test-output-dir}">
+				<include name="${classname}.xml"/>
+			</fileset>
+		</junitreport>
+
+		<xslt style="${xslt-stylesheet}"
+			basedir="${junit-report-dir}"
+			includes="${classname}.xml"
+			destdir="${junit-report-dir}/shtml" />
+
+		<!--save .log content and *.log content from configuration directory-->
+		<concat destfile="${junit-report-dir}/${classname}.log">
+			<fileset dir="${data-dir}" includes=".metadata/*.log"/>
+			<fileset dir="${eclipse-home}" includes="configuration/*.log"/>
+		</concat>
+	</target>
+
+	<target name="collect"
+		description="This target can be used to aggregate results from multiple test suites into a single report."
+		depends="init">
+		<!--
+			Parameters:
+			includes		- the names of the files to include (from folder given by the 'dir' attribute)
+			output-file		- the name of the output file to produce (can be an absolute path)
+		-->
+		<echo message="Collecting results from: ${basedir}/${includes}"/>
+		<echo message="              into file: ${junit-report-dir}/${output-file}."/>
+		<junitreport todir="${junit-report-dir}" tofile="${output-file}">
+			<fileset dir=".">
+				<include name="${includes}"/>
+			</fileset>
+			<report format="frames" todir="${junit-report-dir}/html"/>
+		</junitreport>
+	</target>
+
+</project>
