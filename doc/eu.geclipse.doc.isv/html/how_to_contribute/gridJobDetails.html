@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+<head>
+<meta
+  http-equiv="Content-Type"
+  content="text/html; charset=UTF-8">
+<META
+  HTTP-EQUIV="Content-Style-Type"
+  CONTENT="text/css">
+<LINK
+  REL="STYLESHEET"
+  HREF="PLUGINS_ROOT/eu.geclipse.doc.user/book.css"
+  CHARSET="UTF-8"
+  TYPE="text/css">
+<title>g-Eclipse - Job Details View</title>
+</head>
+
+<body BGCOLOR="#ffffff">
+<h1>Job Details View</h1>
+<p>How to implement MY details shown in view Job Details?</p>
+<p>Every submitted job can have information describing the job
+status on the Grid like current status, used resources, credentials etc.</p>
+<p>This data is grouped into:</p>
+<ul>
+  <li>General (common) job details</li>
+  <li>Middleware specific job details</li>
+</ul>
+
+<h2>UI Components</h2>
+<p>General (common) details:</p>
+<img src="images/jobDetailsGeneral.png" />
+<p>Middleware specific details:</p>
+<img src="images/jobDetailsMiddleware.png" />
+
+<h2>Important Extension points</h2>
+<h3>UI extension point</h3>
+<p>For new implementing middleware, the Job Details view shows only
+General details. To show details that are specific to a new middleware,
+implement the following extension point:</p>
+
+<h3>eu.geclipse.ui.jobDetailsFactory( jobClass, jobStatusClass )</h3>
+<ul>
+  <li>jobClass - name of class, which implements IGridJob for the new
+  middleware</li>
+  <li>jobStatusClass - optional name of a class, which implements
+  IGridJobStatus for the new middleware</li>
+</ul>
+<p>If job with specified jobClass and specified jobStatusClass is
+selected in views 'Grid Projects' or 'Jobs', then this extension point
+will be used to show job details.</p>
+
+<h2>Interfaces to implement</h2>
+<dl>
+  <dt><code>eu.geclipse.ui.views.jobdetails.IJobDetailsFactory</code></dt>
+  <dd>Implement this interface to generate details for job selected
+  in view</dd>
+  <dt><code>eu.geclipse.ui.views.jobdetails.IJobDetailsSection</code></dt>
+  <dd>Objects implementing this interface return one detail for the
+  selected job. For simple pairs: (detail-name,detail-value) you can
+  just use the class <code>JobTextDetail</code>.</dd>
+</dl>
+
+</body>
+
+</html>

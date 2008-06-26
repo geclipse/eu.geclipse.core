@@ -1,0 +1,78 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+<head>
+<meta
+  http-equiv="Content-Type"
+  content="text/html; charset=UTF-8">
+<META
+  HTTP-EQUIV="Content-Style-Type"
+  CONTENT="text/css">
+<LINK
+  REL="STYLESHEET"
+  HREF="PLUGINS_ROOT/eu.geclipse.doc.user/book.css"
+  CHARSET="UTF-8"
+  TYPE="text/css">
+<title>g-Eclipse - Concepts</title>
+</head>
+
+<body BGCOLOR="#ffffff">
+<h1>Grid Job Management</h1>
+<p>How to implement MY Grid Job management system?</p>
+
+<ul>
+  <li>The execution of Jobs and their monitoring is performed by
+  services on the Grid. Current implementations for</li>
+  <ul>
+    <li>gLite WMS 3.1 and gLite L&B 3.1</li>
+    <li>GRIA services</li>
+  </ul>
+</ul>
+
+<h2>UI Components</h2>
+
+<p>The Grid Job submission Wizard allows to submit jobs to the specific middleware.</p>
+<img
+  src="images/jobSubmission.png" />
+
+
+<h2>Important Extension points</h2>
+<h3>Core extension point</h3>
+
+<dl>
+  <dt><code>eu.geclipse.core.gridElementCreator</code></dt>
+  <dd>This extension point can be used to define middleware
+  specific Job Service creator.<br>
+</dl>
+
+<dl>
+  <dt><code>eu.geclipse.core.jobs.jobID</code></dt>
+  <dd>The specific jobID implementation can be provided with this extention point</dd>
+</dl>
+
+<dl>
+  <dt><code>eu.geclipse.core.jobs.jobStatus</code></dt>
+  <dd>The specific jobStatus implementation can be provided with this extention point</dd>
+</dl>
+
+<h2>Interfaces to implement</h2>
+<dl>
+  <dt><code>eu.geclipse.core.model.IGridJobCreator</code></dt>
+  <dd>Implement this to represent middleware specific Grid Job Creator. This is not required as the general eu.geclipse.core.jobs.GridJobCreator can be used</dd>
+  <dt><code>eu.geclipse.core.model.IGridJobService</code></dt>
+  <dd>Implement this to provide middleware specific job service</dd>
+</dl>
+
+<h2>Classes to extend</h2>
+<dl>
+  <dt><code>eu.geclipse.core.jobs.GridJobID</code></dt>
+  <dd>Extend this class to implement middleware specific implementation of job id which can be handled by eu.geclipse.core.jobs.GridJob </dd>
+  <dt><code>eu.geclipse.core.jobs.GridJobStatus</code></dt>
+  <dd>Extend this class to implement middleware specific implementation of job status which can be handled by eu.geclipse.core.jobs.GridJob </dd>
+</dl>
+
+
+
+</body>
+
+</html>

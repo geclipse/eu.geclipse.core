@@ -1,0 +1,147 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+<meta
+  http-equiv="Content-Type"
+  content="text/html; charset=iso-8859-1">
+<META
+  HTTP-EQUIV="Content-Style-Type"
+  CONTENT="text/css">
+<LINK
+  REL="STYLESHEET"
+  HREF="PLUGINS_ROOT/eu.geclipse.doc.user/book.css"
+  CHARSET="ISO-8859-1"
+  TYPE="text/css">
+<title>CA Certificates</title>
+<script
+  language="JavaScript"
+  src="PLUGINS_ROOT/org.eclipse.help/livehelp.js"> </script>
+</head>
+
+<body BGCOLOR="#ffffff">
+
+<h1>CA Certificates</h1>
+
+<p>
+Certification Authority (CA) certificates are used to verify the identity
+of a CA on the client side. The g-Eclipse framework currently comes
+with support for PEM-encoded certificates. In order to access the Grid, it is
+often needed to import these certificates into g-Eclipse. This help section
+describes how such certificates can be imported.</p>
+
+<ul>
+<li><a href="#fromRepository">Import from a Repository</a></li>
+<li><a href="#fromDirectory">Import from a Directory</a></li>
+<li><a href="#deleteCert">Delete Certificates</a></li>
+</ul>
+
+<h2><a name="fromRepository">Import from a Repository</a></h2>
+
+<p>
+The easiest way to import CA certificates is from a remote repository.
+Currently, g-Eclipse supports the EUGridPMA repository that can be found
+at <a href="http://www.eugridpma.org">http://www.eugridpma.org</a>. To import
+certificates from such a repository you have to open the
+<a class="command-link" href='javascript:executeCommand("org.eclipse.ui.window.preferences(preferencePageId=eu.geclipse.ui.internal.preference.CaCertPreferencePage)")'>
+<img src="PLUGINS_ROOT/org.eclipse.help/command_link.png">
+<b>g-Eclipse &gt; CA Certificates</b></a> preference page.
+This page contains a list of all currently available CA certificates.</p>
+
+<p>
+<img border="0" src="images/CACertPreferencePage.png" alt="The g-Eclipse CA Certificate Preference Page">
+</p>
+
+<p>
+To import more certificates from a remote repository, click
+<b>Add from Repository...</b>. This will open the <b>CA Certificate Import Wizard</b>.
+</p>
+
+<p>
+<img border="0" src="images/CACertWizard.png" alt="The g-Eclipse CA Certificate Import Wizard">
+</p>
+
+<p>
+On the first page of this wizard, you can select a certificate loader that
+is used to import certificates. By default, g-Eclipse comes with a certificate
+loader for certificates hosted by the European Policy Management Authority
+for Grid Authentication (EUGridPMA). After selecting a loader and clicking
+<b>Next</b>, a wizard page for specifying a repository URL will open.</p>
+
+<p>
+<img border="0" src="images/CACertURLWizardPage.png" alt="The g-Eclipse CA Certificate URL Wizard Page">
+</p>
+
+<p>
+In the <b>Repository URL Wizard Page</b> you have to specify a valid URL
+pointing to a location where the CA certificates can be found. Depending on the
+certificate loader you have chosen on the previous wizard page, this field
+may already be initialized with a vaild URL. On clicking <b>Next</b>,
+the certificate loader is triggered to query the given URL for available
+certificates. If no error occurs while contacting the specified URL, the
+next wizard page will appear with a list of all certificates that are
+ready to be imported.</p>
+
+<p>
+<img border="0" src="images/CACertListWizardPage.png" alt="The g-Eclipse CA Certificate List Wizard Page">
+</p>
+
+<p>
+Now you can simply select the check box for each certificate you would like
+to import and click <b>Finish</b>. After that the selected certificates are
+downloaded, decompressed and imported into g-Eclipse. The preference page
+will now display the newly imported certificates.</p>
+
+<h2><a name="fromDirectory">Import from a Directory</a></h2>
+
+<p>To import certificates from a local directory, click
+<b>Add from Directory...</b>. This will open the <b>CA Certificate Import Wizard</b>.</p>
+
+<p>
+<img border="0" src="images/CACertDirWizard.png" alt="The g-Eclipse CA Certificate Import Wizard">
+</p>
+
+<p>
+On the first page of this wizard you can select a certificate loader that
+is used to import certificates. By default, g-Eclipse comes with a certificate
+loader for certificates hosted by the European Policy Management Authority
+for Grid Authentication (EUGridPMA) as well as a certificate loader for simple PEM-based
+certificates. After selecting a loader and clicking
+<b>Next</b>, a wizard page for specifying a local directory will appear.</p>
+
+<p>
+<img border="0" src="images/CACertDirWizardPage.png" alt="The g-Eclipse CA Certificate Directory Wizard Page">
+</p>
+
+<p>
+In the <b>Local Directory Wizard Page</b> you have to specify a valid directory
+pointing to a location where CA certificates can be found. On clicking <b>Next</b>,
+the certificate loader is triggered to query the given directory for available
+certificates. If no error occurs while listing the certificates contained in the
+directory, the next wizard page will appear with a list of all certificates that can 
+be imported.</p>
+
+<p>
+<img border="0" src="images/CACertDirListWizardPage.png" alt="The g-Eclipse CA Certificate List Wizard Page">
+</p>
+
+<p>
+Now you can simply select the check box for each certificate you would like
+to import and click <b>Finish</b>. After that the selected certificates are
+imported into g-Eclipse. The preference page will then display the newly
+imported certificates.</p>
+
+<h2><a name="deleteCert">Delete Certificates</a></h2>
+
+<p>
+To delete one or more certificates, simply open the
+<a class="command-link" href='javascript:executeCommand("org.eclipse.ui.window.preferences(preferencePageId=eu.geclipse.ui.internal.preference.CaCertPreferencePage)")'>
+<img src="PLUGINS_ROOT/org.eclipse.help/command_link.png">
+<b>g-Eclipse &gt; CA Certificates</b></a> preference page,
+select the certificates you would like to delete and click
+<b>Delete</b>. A dialog will then appear where you have to confirm that
+you really would like to delete the selected certificates. After that,
+the selected certificates are permanently removed from the certificate list.</p>
+
+</body>
+</html>

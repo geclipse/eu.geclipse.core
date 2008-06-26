@@ -1,0 +1,64 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+<meta
+  http-equiv="Content-Type"
+  content="text/html; charset=iso-8859-1">
+<META
+  HTTP-EQUIV="Content-Style-Type"
+  CONTENT="text/css">
+<LINK
+  REL="STYLESHEET"
+  HREF="PLUGINS_ROOT/eu.geclipse.doc.user/book.css"
+  CHARSET="ISO-8859-1"
+  TYPE="text/css">
+<title>Browsing the Info System</title>
+<script
+  language="JavaScript"
+  src="PLUGINS_ROOT/org.eclipse.help/livehelp.js"> </script>
+</head>
+
+<body BGCOLOR="#ffffff">
+
+<h1>Browsing the Info System</h1>
+<p>The Glue Information View presents the information obtained from
+the information systems of the existing grid projects. Each grid project has a VO. 
+When defining a VO, the user can define the services that the information system can query.
+For example, in a glite VO the user can define the bdii server that will be used 
+(e.g. ldap://iwrbdii.fzk.de:2170) and in a GRIA VO the user can define the GRIA services.
+The data contained in the information view is obtained from the defined BDII services 
+of the glite projects and from the defined GRIA services for the GRIA projects.
+<br><br>
+<img border="0" src="images/infoview.png" alt="Refresh">
+</p>
+<br>
+<p>
+The Glue Information Viewer provides filters that can constrain the information
+that is presented to the user. Currently, there are three filters available.
+<ul>
+<li> It can show information concerning all the grid middlewares </li>
+<li> It can show information only about glite middlewares</li>
+<li> It can show information only about GRIA middlewares</li>
+</ul>
+<br>
+<img border="0" src="images/filters.png" alt="Filters">
+<br>
+<p>
+The user can also choose to present only the glue elements that are filled by the
+information services.
+<img border="0" src="images/show_filled.png" alt="ShowFilled">
+</p>
+<br>
+<p>
+Data is refreshed on four occasions: 
+<ul><li>g-Eclipse startup</li>
+<li>Adding, deleting, opening or closing a project</li>
+<li>by manually refreshing the information by clicking</li>
+<li> and when the user expands "Computing", "Service", "Storage" sub-trees under the
+VO tree in the grid project view.</li>
+<br><br> 
+</ul>
+<img border="0" src="images/refresh.png" alt="Refresh">
+</body>
+</html>

@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+
+<html>
+<head>
+<meta
+  http-equiv="Content-Type"
+  content="text/html; charset=UTF-8">
+<META
+  HTTP-EQUIV="Content-Style-Type"
+  CONTENT="text/css">
+<LINK
+  REL="STYLESHEET"
+  HREF="PLUGINS_ROOT/eu.geclipse.doc.user/book.css"
+  CHARSET="UTF-8"
+  TYPE="text/css">
+<title>g-Eclipse - How to contribute</title>
+</head>
+
+<body BGCOLOR="#ffffff">
+<h1>Concepts</h1>
+<h2>Abstract</h2>
+<ul>
+  <li>With the help of this document, the integration of a new
+  middleware implementation within the g-Eclipse framework will be much
+  easier.</li>
+  <li>The integration of the main components of a Grid
+  infrastructure will be described.</li>
+  <li>The integration should be done according to the order of
+  guidelines.</li>
+</ul>
+
+<h2>General</h2>
+<ul>
+  <li>g-Eclipse is an open framework to enable Grid users, Grid
+  operators and Grid developers to interact with an existing Grid
+  infrastructure.</li>
+  <li>g-Eclipse is built on top of Eclipse</li>
+  <li>g-Eclipse relies on a model which is designed to manage all
+  Grid related features within the Eclipse framework. Changes to this
+  model should not be necessary.</li>
+  <li>g-Eclipse is built for extension for other middleware.
+  Therefore extension points will be provided. These extension points
+  are described in this section.</li>
+</ul>
+
+<h2>Main Grid Services</h2>
+<p>Every Grid infrastructure has services for</p>
+<ul>
+  <li><a href="gridAuthentication.html">Authentication</a></li>
+<!--
+  <li><a href="gridInformationSystem.html">Information retrieval</a></li>
+-->
+  <li><a href="gridDataAccess.html">Data management</a></li>
+  <li><a href="gridJobManagement.html">Job management</a></li>
+</ul>
+<p>g-Eclipse offers already the UI components to interact with these
+types of services. These components should be reused.</p>
+
+ 
+
+</body>
+
+</html>

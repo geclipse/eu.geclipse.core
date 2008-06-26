@@ -1,0 +1,111 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+
+<html>
+<head>
+<meta
+  http-equiv="Content-Type"
+  content="text/html; charset=iso-8859-1">
+<META
+  HTTP-EQUIV="Content-Style-Type"
+  CONTENT="text/css">
+<LINK
+  REL="STYLESHEET"
+  HREF="PLUGINS_ROOT/eu.geclipse.doc.user/book.css"
+  CHARSET="ISO-8859-1"
+  TYPE="text/css">
+<title>Creating a Connection</title>
+<script
+  language="JavaScript"
+  src="PLUGINS_ROOT/org.eclipse.help/livehelp.js"> </script>
+</head>
+
+<body BGCOLOR="#ffffff">
+
+<h1>Creating a Connection</h1>
+
+<ul>
+<li><a href="#overview">Overview</a></li>
+<li><a href="#local">Local Connections</a></li>
+<li><a href="#global">Global Connections</a></li>
+</ul>
+
+<h2><a name="overview">Overview</a></h2>
+
+<p>
+Connections in terms of g-Eclipse are meant to be links to local or remote
+file systems. Such connections are seemlessly integrated into the Grid model
+views. You can browse them, drag'n'drop data to or from them, create or delete
+files and folders. In fact the g-Eclipse connection management is based on
+EFS. That means that every EFS implementation is supported from scratch and
+can therefore be used to create connections.
+
+<p>
+Connections are divided into local and global connections. Local connections
+are located in the user's workspace and are therefore part of a project.
+Local connections can be created by the appropriate context menu action
+(see <a href="#local">Local Connections</a>). Global connections do not
+exist within a project and can therefore also be created without even
+having a project in your workspace (see <a href="#global">Global Connections</a>). 
+
+<h2><a name="local">Local Connections</a></h2>
+
+<p>
+To create a new connection select the <b>New -> Grid Connection</b> action from
+the Grid project view's context menu or select <b>File -> New -> Grid Connection</b>.
+This will open the <b>New Connection Wizard</b>.
+
+<p>
+<img border="0" src="images/ConnectionWizardFirstPage.png" alt="The Grid Connection Wizard">
+
+<p>
+On the first page of the connection wizard you can choose the workspace location where
+your new connection should be created and the name of the new connection. After clicking
+<b>Next</b> you are directed to the second page of the connection wizard. Here you can
+choose a protocol for which you want to create a new connection. The controls of the
+second wizard page change with the protocol you select. For instance when selecting
+a GSIFTP connection the page looks like this:
+
+<p>
+<img border="0" src="images/ConnectionWizardSecondPageGftp.png" alt="The Grid Connection Wizard">
+
+<p>
+Whereas for a LFN connection it looks slightly different:
+
+<p>
+<img border="0" src="images/ConnectionWizardSecondPageLfn.png" alt="The Grid Connection Wizard">
+
+<p>
+The controls therefore depend on the connection type, i.e. the scheme you are selecting.
+Most often you will be asked for a host name, a host port and a path on that host.
+Concerning the remote path the connection wizard offers the opportunity to create
+a temporary connection to the specified host starting from the host's root directory.
+To do so just click <b>create a temporary connection</b>. Now you are able to browse
+the remote server and to select a directory you would like to connect to. When selecting
+a directory you may notice that the path field changes its value to the selected
+directory. If you finalized your settings just click <b>Finish</b> and the new 
+connection will be created afterwards.
+
+<h2><a name="global">Global Connections</a></h2>
+
+<p>
+Global connection can be created from the connection view.
+
+<p>
+<img border="0" src="images/ConnectionView.png" alt="The Connection View">
+
+<p>
+There you either choose <b>New Connection</b> from the context menu or click
+the appropriate button
+(<img border="0" src="PLUGINS_ROOT/eu.geclipse.ui/icons/etool16/newconn_wiz.gif" alt="New Connection Button">)
+in the views tool bar. This will open the <b>New Connection Wizard</b>. On the first
+wizard page you are asked for a name for your new connection.
+
+<p>
+<img border="0" src="images/ConnectionWizardNamePage.png" alt="The Connection View">
+
+<p>
+When entering the name and clicking <b>Next</b> you will be directed to the second
+wizard page that is actually the same as for <a href="#local">local connections</a>.
+
+</body>
+</html>
