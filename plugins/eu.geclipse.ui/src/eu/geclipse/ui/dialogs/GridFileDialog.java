@@ -749,15 +749,6 @@ public class GridFileDialog
       }
       
       if ( ! hasStyle( STYLE_ALLOW_ONLY_CONNECTIONS | STYLE_ALLOW_ONLY_REMOTE_CONNECTIONS ) ) {
-
-        URL homeURL = Activator.getDefault().getBundle()
-                        .getResource( "icons/extras/grid_file_dialog_home_mode.gif" ); //$NON-NLS-1$
-        ImageDescriptor homeDesc = ImageDescriptor.createFromURL( homeURL );
-        
-        ToolItem homeItem = new ToolItem( modeBar, SWT.CHECK );
-        homeItem.setImage( homeDesc.createImage() );
-        homeItem.setToolTipText( Messages.getString("GridFileDialog.switch_to_home") ); //$NON-NLS-1$
-        this.modeManager.addModeItem( homeItem, ModeManager.HOME_MODE );
         
         URL wsURL = Activator.getDefault().getBundle()
                       .getResource( "icons/extras/grid_file_dialog_ws_mode.gif" ); //$NON-NLS-1$
@@ -767,6 +758,15 @@ public class GridFileDialog
         wsItem.setImage( wsDesc.createImage() );
         wsItem.setToolTipText( Messages.getString("GridFileDialog.switch_to_workspace") ); //$NON-NLS-1$
         this.modeManager.addModeItem( wsItem, ModeManager.WS_MODE );
+        
+        URL homeURL = Activator.getDefault().getBundle()
+                        .getResource( "icons/extras/grid_file_dialog_home_mode.gif" ); //$NON-NLS-1$
+        ImageDescriptor homeDesc = ImageDescriptor.createFromURL( homeURL );
+        
+        ToolItem homeItem = new ToolItem( modeBar, SWT.CHECK );
+        homeItem.setImage( homeDesc.createImage() );
+        homeItem.setToolTipText( Messages.getString("GridFileDialog.switch_to_home") ); //$NON-NLS-1$
+        this.modeManager.addModeItem( homeItem, ModeManager.HOME_MODE );
         
         URL rootURL = Activator.getDefault().getBundle()
                         .getResource( "icons/extras/grid_file_dialog_root_mode.gif" ); //$NON-NLS-1$
@@ -883,7 +883,7 @@ public class GridFileDialog
     int mode
       = ! hasStyle( STYLE_ALLOW_ONLY_LOCAL )
       ? ModeManager.CONNECTION_MODE
-      : ModeManager.HOME_MODE; 
+      : ModeManager.WS_MODE; 
     this.modeManager.setMode( mode );
     setMode( mode );
     
@@ -951,8 +951,7 @@ public class GridFileDialog
                        Messages.getString("GridFileDialog.label_all_files") ); //$NON-NLS-1$
     if ( this.filenameCombo != null ) {
       this.filetypeCombo.select( 0 );
-    }
-    
+    }    
     return mainComp;
     
   }
