@@ -8,10 +8,15 @@
   <topic
     label="g-Eclipse Setup">
     <anchor id="geclipse_concepts_setup" />
-    <topic
-      label="VO Settings"
-      href="html/concepts/setup/vosettings.html">
-    </topic>
+	<topic label="VO Settings"
+  			href="html/concepts/setup/vosettings/vosettings.html">
+  			<topic label="Creating a new VO"
+  				href="html/concepts/setup/vosettings/createVO.html"/>
+  			<topic label="Editing a VO"
+  				href="html/concepts/setup/vosettings/editVO.html"/>
+  			<topic label="Deleting VOs"
+  				href="html/concepts/setup/vosettings/deleteVO.html"/>
+  		</topic>
     <topic
       label="CA Certificates"
       href="html/concepts/setup/cacertificates.html">
@@ -146,10 +151,6 @@
     <topic
       label="VO Management"
       href="html/concepts/siteadministration/voManagement.html">
-    </topic>
-    <topic
-      label="Gria Site Editor"
-      href="html/concepts/siteadministration/griaSiteEditor.html">
     </topic>
 
 <!--

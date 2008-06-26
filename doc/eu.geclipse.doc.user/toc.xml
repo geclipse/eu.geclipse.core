@@ -12,6 +12,11 @@
   <topic label="Concepts">
     <anchor id="geclipse_concepts" />
   </topic>
+  
+  <topic label="Middlewares">
+    <anchor id="middlewares" />
+  </topic>
+  
 
   <anchor id="geclipse_additionalinformation" />
 
