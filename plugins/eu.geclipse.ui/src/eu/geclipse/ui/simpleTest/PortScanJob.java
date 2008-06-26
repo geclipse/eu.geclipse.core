@@ -28,8 +28,10 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
+import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.swt.widgets.TreeItem;
 
 /**
  * A Job class that is used to port scan a selected host.
@@ -41,6 +43,8 @@ public class PortScanJob extends Job {
 
   protected TreeMap<Integer, Boolean> portMap;
   protected Display display;
+  protected Display display2;
+  protected TreeItem treeItem;
   
   InetAddress ia;
 
@@ -49,6 +53,7 @@ public class PortScanJob extends Job {
 
   
   int portsScanned,portsOpen,portsClosed;
+  int serverPort;
   
   /**
    * The Default constructor
@@ -57,28 +62,35 @@ public class PortScanJob extends Job {
    * @param map The TreeMap which contains the ports to scan.
    * @param results The text field where the output is printed.
    */
-  public PortScanJob( final InetAddress address, final TreeMap<Integer, Boolean> map, final StyledText results ) {
+  public PortScanJob( final InetAddress address, final TreeMap<Integer, Boolean> map, final StyledText results, final TreeItem treeItem ) {
     super( "Port Scan Job" );
     
     this.ia = address;
     this.portMap=map;
     this.results=results;
-    this.display = this.results.getDisplay();
+    this.treeItem = treeItem;
     
+
+    this.display = this.treeItem.getDisplay();
+    
+    this.display2 = this.results.getDisplay();
     
   }
 
   @Override
   protected IStatus run( final IProgressMonitor monitor ) {
     
-    IStatus result = Status.CANCEL_STATUS;
+
     long timeBefore;
     long timeAfter;
     final long resultTime;
+    int p = 0;
     
     final Integer[] ports = new Integer[portMap.keySet().size()];
     
     portMap.keySet().toArray(ports);
+    
+    IStatus result = Status.CANCEL_STATUS;
     
     monitor.beginTask("Port Scan",ports.length);
     
@@ -88,31 +100,39 @@ public class PortScanJob extends Job {
     
     timeBefore = System.currentTimeMillis();
 
-     for (int p = 0; p < ports.length; p++) {
-        
-       
-       
-       if(monitor.isCanceled()){
-         result =  Status.CANCEL_STATUS;
-       }
+    
+    
+     for (p = 0; p < ports.length && !monitor.isCanceled(); p++) {
 
          try {
 
-           int serverPort = ports[p].intValue();
+           serverPort = ports[p].intValue();
           
             s = new Socket();
 
                //set the socket to timeout
-            s.connect(new InetSocketAddress(ia, serverPort), 
-                         10);
+            s.connect(new InetSocketAddress(ia, serverPort), 100);
             s.close();
 
             portMap.put(ports[p],true);
             portsOpen++;
+            
+            if ( !this.display.isDisposed() ) {   
+                this.display.syncExec( new Runnable() {
+                  public void run() {
+                    if ( !PortScanJob.this.treeItem.isDisposed() ){
+                         PortScanJob.this.treeItem.setText(new String[]{ia.getHostName(),"OK"});
+                               TreeItem portItem = new TreeItem(treeItem, SWT.NONE);
+                               portItem.setText(new String[] { "" + serverPort, "Open"});    
+                    }
+                   }
+                } );
+            }
 
           }
           catch (IOException ex) {
               portsClosed++;
+
                 try {
                     if(s!=null)
                         s.close();
@@ -121,62 +141,31 @@ public class PortScanJob extends Job {
                     //e.printStackTrace();
                 }
           }
-      
+          
           monitor.worked( 1 );
      }
      timeAfter = System.currentTimeMillis();
-
+     
      resultTime = timeAfter - timeBefore;
      
-    portsScanned = ports.length;
+    portsScanned = p;
+    
+    final Iterator<Integer> keys = portMap.keySet().iterator();
      
-    if ( !this.display.isDisposed() ) {   
-     this.display.syncExec( new Runnable() {
+  if ( !this.display2.isDisposed() ) {   
+     this.display2.syncExec( new Runnable() {
         public void run() {
           if ( !PortScanJob.this.results.isDisposed() ){
-            PortScanJob.this.results.setText("");
-            PortScanJob.this.results.append("Results for " + ia + "\n");
-            PortScanJob.this.results.append("========================\n");
-            PortScanJob.this.results.append("Openned Ports:\n");
+            PortScanJob.this.results.append("Statistics for " + ia + "\n" 
+                    + "Ports scanned:\t\t"+ portsScanned + "\n" 
+                    + "Ports openned:\t"+ portsOpen + "\n" 
+                    + "Ports closed:\t\t"+ portsClosed + "\n" 
+                    + "Total Processing time: " + resultTime + " ms\n\n");
           }
         }
       });
     }
-
-     final Iterator<Integer> keys = portMap.keySet().iterator();
      
-     
-     if ( !this.display.isDisposed() ) {   
-       this.display.syncExec( new Runnable() {
-         public void run() {
-           if ( !PortScanJob.this.results.isDisposed() ){
-             while(keys.hasNext()){
-               final Object currentKey = keys.next();
-               
-               if(portMap.get(currentKey)==true){
-                 PortScanJob.this.results.append(currentKey + "\n");
-               }
-             }
-           }
-         }
-       } );
-     }      
-     
-
-     if ( !this.display.isDisposed() ) {   
-       this.display.syncExec( new Runnable() {
-         public void run() {
-           if ( !PortScanJob.this.results.isDisposed() ){
-             PortScanJob.this.results.append("\nStatistics:\n\n");
-             PortScanJob.this.results.append("Ports scanned:\t\t"+ portsScanned + "\n");
-             PortScanJob.this.results.append("Ports openned:\t"+ portsOpen + "\n");
-             PortScanJob.this.results.append("Ports closed:\t\t"+ portsClosed + "\n\n");
-             PortScanJob.this.results.append("Total Processing time: " + resultTime + " milliseconds\n");
-           }
-          }
-       } );
-     }
-
      portMap.clear();
      portsScanned=0;
      portsOpen=0;

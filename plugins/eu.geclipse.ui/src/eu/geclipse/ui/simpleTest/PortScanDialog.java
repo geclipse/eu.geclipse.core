@@ -35,6 +35,13 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Layout;
+import org.eclipse.swt.widgets.TabFolder;
+import org.eclipse.swt.widgets.TabItem;
+import org.eclipse.swt.widgets.Tree;
+import org.eclipse.swt.widgets.TreeColumn;
+import org.eclipse.swt.widgets.TreeItem;
 
 import org.eclipse.swt.widgets.Text;
 
@@ -74,6 +81,8 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
   
   protected ArrayList<PortRange> list;
   
+
+  
   protected int portsScanned = 0;
   protected int portsOpen = 0;
   protected int portsClosed = 0;
@@ -96,7 +105,11 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
   private Composite mainComp;
   
   private Composite portComp,  resultsComp, listComp;
+  private ArrayList< String > hostNames = new ArrayList< String >();
   
+  private ArrayList< PortScanJob > scanJobs = new ArrayList < PortScanJob >();
+  
+  private ArrayList<TreeItem> treeItem = new ArrayList<TreeItem>();
   
   /**
    * Construct a new dialog from the specified test.
@@ -120,7 +133,12 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
     //get the hostname (ip) from the selected resources
     for ( int i = 0; i < this.resources.size(); ++i ) {
       ip = this.resources.get( i ).getHostName();
+      
+      if ( ip != null )
+          this.hostNames.add( ip );
     }
+    
+
     
     list = new ArrayList<PortRange>();
     portMap = new TreeMap<Integer,Boolean>();
@@ -140,6 +158,9 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
     GridData gridData4 = new GridData(GridData.HORIZONTAL_ALIGN_END);
     gridData4.horizontalSpan = 4;
     
+    GridData gridData5 = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING);
+    gridData5.horizontalSpan = 2;
+    
     GridData listData = new GridData( GridData.HORIZONTAL_ALIGN_CENTER );
     listData.horizontalSpan = 3;
     listData.verticalSpan = 7;
@@ -147,10 +168,17 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
     listData.heightHint = 150;
     
     mainComp = new Composite( parent, SWT.NONE );
-    mainComp.setLayout( new GridLayout( 2, false ) );
+    mainComp.setLayout( new GridLayout( 1, false ) );
     
+    Group settingsGroup = new Group( mainComp, SWT.NONE );
+    settingsGroup.setLayout( new GridLayout( 2, false ) );
+    settingsGroup.setText( "Port Selection" ); 
+    
+    Group resultsGroup = new Group( mainComp, SWT.NONE );
+    resultsGroup.setLayout( new GridLayout( 2, false ) );
+    resultsGroup.setText( "Results" ); 
 
-    portComp = new Composite( this.mainComp, SWT.NONE );
+    portComp = new Composite( settingsGroup, SWT.NONE );
     this.portComp.setLayout( new GridLayout( 4, false ) );
     this.wellKnownPortsLbl = new Label( this.portComp, 0 );
     
@@ -252,34 +280,34 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
         }
     });
     
-    listComp = new Composite( this.mainComp, SWT.NONE );
-    this.listComp.setLayout( new GridLayout( 2, false ) );
-    
-
+    listComp = new Composite( settingsGroup, SWT.NONE );
+    this.listComp.setLayout( new GridLayout( 4, false ) );
     
     this.rangeLbl = new Label( this.listComp, 0 );
     this.rangeLbl.setText("Add a range of ports");
     this.rangeLbl.setLayoutData(gridData3);
     
     this.from = new Text( this.listComp, 0 );
-    this.dashlbl = new Label( this.listComp, SWT.HORIZONTAL );
-    this.dashlbl.setText("To:");
-    this.dashlbl.setLayoutData(gridData3);
+    
+    this.dashlbl = new Label( this.listComp, 0 );
+    this.dashlbl.setText("-");
+
+    //this.dashlbl.setLayoutData(gridData3);
     
     this.to = new Text( this.listComp, 0 );
     
     this.addRange= new Button( this.listComp, SWT.Activate );
     this.addRange.setText("Add Range");
-    
+    this.dashlbl = new Label( this.listComp, SWT.HORIZONTAL );
     //add range of ports to the list
     addRange.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
         public void widgetSelected(final org.eclipse.swt.events.SelectionEvent e) {
-            System.out.println("widgetRangeSelected()"); 
+          //  System.out.println("widgetRangeSelected()"); 
   
             //if(!(from.getSelectionText().matches("\\d") || to.getSelectionText().matches("\\d"))){
             //  return;
             //}
-            
+            String toBeAdded="";
             boolean toExit = false;
             
             int fromInt=0, toInt=0;
@@ -294,16 +322,19 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
               toExit = true;
             }
             
-            String toBeAdded = from.getText() + " - " + to.getText();
+            if(!toExit){
+            
+           toBeAdded = from.getText() + " - " + to.getText();
             if(portList.getItemCount()==0){
-                portList.add(toBeAdded);
-                
-                list.add( new PortRange(Integer.parseInt(from.getText()), Integer.parseInt(to.getText()) ) );
-
-                toExit = true;
+            portList.add(toBeAdded);
+            
+            list.add( new PortRange(Integer.parseInt(from.getText()), Integer.parseInt(to.getText()) ) );
+            
+            toExit = true;
+            }
             }
             
-            if(toExit){
+            else{
               return;
             }
             
@@ -328,9 +359,11 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
     this.specificLbl.setLayoutData(gridData3);
     
     this.specificTxt = new Text( this.listComp, 0 );
+    this.specificTxt.setLayoutData(gridData5);
     
     this.addSpecific = new Button(this.listComp, SWT.Activate);
     this.addSpecific.setText("Add Port");
+    
     
     //add the specific port to the list
     addSpecific.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
@@ -375,16 +408,57 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
     new Label( this.listComp, SWT.HORIZONTAL );
     new Label( this.listComp, SWT.HORIZONTAL );
     
-    this.resultsComp = new Composite( this.mainComp, SWT.NONE );
+    this.resultsComp = new Composite( resultsGroup, SWT.NONE );
     this.resultsComp.setLayout( new GridLayout( 2, false ) );
-    GridData resultsData = new GridData( 100, 100, false, false);
-    resultsData.horizontalSpan = 2;
+    GridData resultsData = new GridData( GridData.FILL_BOTH );
+    resultsData.horizontalSpan = 3;
     resultsData.verticalSpan = 1;
-    resultsData.widthHint =270;
-    resultsData.heightHint = 200;
-    this.results = new StyledText(this.resultsComp, SWT.H_SCROLL | SWT.V_SCROLL);
-    this.results.setLayoutData(resultsData);
+    resultsData.grabExcessHorizontalSpace = true;
+    resultsData.grabExcessVerticalSpace = true;
+    resultsData.heightHint = 300;
 
+    resultsGroup.setLayoutData(resultsData);
+    this.resultsComp.setLayoutData(resultsData);
+    
+    // Create the tabbed panel with the results 
+    TabFolder tabFolder = new TabFolder (  this.resultsComp, SWT.NONE );
+    tabFolder.setLayoutData(resultsData);
+    
+  
+    
+    TabItem itemTree = new TabItem ( tabFolder, SWT.NULL );
+    itemTree.setText ( "Results List" );
+    
+    
+    
+    Tree tree = new Tree(tabFolder, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
+    tree.setHeaderVisible(true);
+    tree.setLayoutData(resultsData);
+    
+    TreeColumn hostColumn = new TreeColumn(tree, SWT.LEFT);
+    hostColumn.setText("Host");
+    hostColumn.setWidth(200);
+    TreeColumn statusColumn = new TreeColumn(tree, SWT.CENTER);
+    statusColumn.setText("Status");
+    statusColumn.setWidth(70);
+    
+    for( int i = 0; i<hostNames.size(); i++ ){
+         treeItem.add(new TreeItem(tree,SWT.NONE));
+         treeItem.get(i).setText(new String[]{hostNames.get(i), "N/A"});
+    }
+
+    itemTree.setControl(tree);
+    
+    
+    TabItem itemResults = new TabItem ( tabFolder, SWT.NULL );
+    itemResults.setText ( "Log File" );
+
+    this.results = new StyledText(tabFolder, SWT.H_SCROLL | SWT.V_SCROLL);
+    this.results.setLayoutData(resultsData);
+    
+    itemResults.setControl(this.results);
+    
+    
     this.scan = new Button(this.resultsComp, SWT.Activate);
     this.scan.setText("Scan");
     //this.scan.setLayoutData(GridData.HORIZONTAL_ALIGN_CENTER);
@@ -394,24 +468,27 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
     //stop the running job
     stop.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
         public void widgetSelected(final org.eclipse.swt.events.SelectionEvent e) {
-            //portsScannedLabel.setText("Scanning Stopped");
-            
-          if(job!=null){
-            job.cancel();
-            results.setText("Job cancelled");
-            job=null;
-          }
-         
+
+  
+        for(int i = 0; i<scanJobs.size(); i++){
+            if(scanJobs.get(i)!=null){
+                scanJobs.get(i).cancel();
+            }
+        }
+        
+        scanJobs.clear();
+        results.append("Scanning Stopped.\n\n");  
         }
     });     
     
     //calls the portScan() method to initiate the job for Port Scan
     scan.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
         public void widgetSelected(final org.eclipse.swt.events. SelectionEvent e) {
-            
+           // scan.setEnabled(false);
             generatePortList();
 
-            portScan(ip);
+            
+            portScan();
             
      //       portMap.clear();
 //            portsScanned=0;
@@ -425,19 +502,36 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
   }
 
   //initiates the job to Port Scan the selected host
-protected void portScan(final String ipToScan) {
+protected void portScan() {
 
     InetAddress ia = null;
-    try {
-        ia = InetAddress.getByName(ipToScan);
-    } catch (UnknownHostException e) {
-        results.setText( "Cannot connect to " + ipToScan );
-        return;
+
+    results.setText("");
+    this.results.append("Scanning the following hosts:\n");
+    
+    for ( int i=0; i<this.hostNames.size(); i++ ) {
+        try {
+            
+            ia = InetAddress.getByName(this.hostNames.get(i));
+
+            if(ia != null){
+                this.results.append(this.hostNames.get(i) + "\n");
+                this.treeItem.get(i).removeAll();
+                job = new PortScanJob(ia,portMap,results, this.treeItem.get(i));
+                job.schedule();
+            
+                scanJobs.add(job);
+            }
+            else{
+            ///
+            }
+        } catch (UnknownHostException e) {
+            results.append( "Cannot connect to " + this.hostNames.get(i) );
+           // return;
+        }
     }
     
-    job = new PortScanJob(ia,portMap,results);
-    job.schedule();
-    
+    this.results.append("\n");
 }
 
 protected void generatePortList() {
