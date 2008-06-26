@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="eu.geclipse.test"
+      label="g-Eclipse Tests"
+      version="1.0.0.qualifier"
+      provider-name="g-Eclipse Consortium">
+
+   <description url="http://www.eclipse.org/geclipse">
+      The g-Eclipse JUnit tests.
+   </description>
+
+   <copyright url="http://www.eclipse.org/legal/epl-v10.html">
+      Copyright (c) 2006, 2008 g-Eclipse consortium
+All rights reserved. This program and the accompanying materials
+are made available under the terms of the Eclipse Public License
+v1.0 which accompanies this distribution, and is available at
+http://www.eclipse.org/legal/epl-v10.html
+Initial development of the original code was made for the
+g-Eclipse project founded by European Union
+project number: FP5-IST-034327  http://www.geclipse.eu/
+   </copyright>
+
+   <license url="http://www.eclipse.org/legal/epl-v10.html">
+      %license
+   </license>
+
+   <url>
+      <update label="g-Eclipse (Incubation) Update Site for additional components." url="http://www.geclipse.eu/update-pre/site.xml"/>
+   </url>
+
+   <requires>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.emf"/>
+      <import plugin="org.eclipse.emf.common"/>
+      <import plugin="org.eclipse.emf.ecore.xmi"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.ui.views"/>
+      <import plugin="org.junit4"/>
+      <import plugin="eu.geclipse.batch" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="eu.geclipse.core.reporting" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="eu.geclipse.core" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="eu.geclipse.glite.editor" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="eu.geclipse.gvid" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="eu.geclipse.gvid.codec.uncompressed"/>
+      <import plugin="eu.geclipse.info" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="eu.geclipse.jsdl.model"/>
+      <import plugin="eu.geclipse.jsdl.ui" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="eu.geclipse.ui" version="1.0.0" match="greaterOrEqual"/>
+      <import plugin="eu.geclipse.workflow.model"/>
+   </requires>
+
+
+   <plugin
+         id="eu.geclipse.batch.test"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
+
+   <plugin
+         id="eu.geclipse.core.reporting.test"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
+
+   <plugin
+         id="eu.geclipse.core.test"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
+
+   <plugin
+         id="eu.geclipse.glite.editor.test"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
+
+   <plugin
+         id="eu.geclipse.gvid.test"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
+
+   <plugin
+         id="eu.geclipse.gvid.uncompressed.test"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="eu.geclipse.info.test"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
+
+   <plugin
+         id="eu.geclipse.jsdl.model.test"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="eu.geclipse.jsdl.ui.test"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
+
+   <plugin
+         id="eu.geclipse.ui.test"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
+
+   <plugin
+         id="eu.geclipse.workflow.model.test"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.ant.optional.junit"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         fragment="true"
+         unpack="false"/>
+
+   <plugin
+         id="org.eclipse.test"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
+
+</feature>
