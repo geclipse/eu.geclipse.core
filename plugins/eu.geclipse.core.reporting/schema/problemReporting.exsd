@@ -1,0 +1,344 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!-- Schema file written by PDE -->
+<schema targetNamespace="eu.geclipse.core.reporting">
+<annotation>
+      <appInfo>
+         <meta.schema plugin="eu.geclipse.core.reporting" id="problemReporting" name="Problem Reporting"/>
+      </appInfo>
+      <documentation>
+         This extension point is used to define problems, solutions and their interconnections within the problem reporting mechanism. It is the base of the declarative part of the problem reporting.
+      </documentation>
+   </annotation>
+
+   <element name="extension">
+      <complexType>
+         <sequence>
+            <element ref="problem" minOccurs="0" maxOccurs="unbounded"/>
+            <element ref="solution" minOccurs="0" maxOccurs="unbounded"/>
+         </sequence>
+         <attribute name="point" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="id" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="name" type="string">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+               <appInfo>
+                  <meta.attribute translatable="true"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="problem">
+      <annotation>
+         <documentation>
+            Definition of a problem within the problem reporting mechanism. This problem afterwards corresponds to an &lt;code&gt;IProblem&lt;/code&gt;-implementation.
+         </documentation>
+      </annotation>
+      <complexType>
+         <sequence>
+            <element ref="reference" minOccurs="0" maxOccurs="unbounded"/>
+         </sequence>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The unique ID of the problem. This should normally consist of the plug-in ID followed by the word &lt;code&gt;problem&lt;/code&gt;, followed by the domain of the problem, followed by a name for the problem. An example would be &lt;code&gt;eu.geclipse.core.problem.net.connectionFailed&lt;/code&gt; or &lt;code&gt;eu.geclipse.core.problem.auth.authenticationFailed&lt;/code&gt;. This ID is also used in the reference tags of a solution for back-referencing problems.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="description" type="string" use="required">
+            <annotation>
+               <documentation>
+                  A descriptive text that gives a short explanation of the problem.
+               </documentation>
+               <appInfo>
+                  <meta.attribute translatable="true"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="mailto" type="string">
+            <annotation>
+               <documentation>
+                  An email-address that may be used to send the problem as a report to the developer team.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="solution">
+      <annotation>
+         <documentation>
+            Definition of a solution within the problem reporting mechanism. This problem afterwards corresponds to an &lt;code&gt;ISolution&lt;/code&gt;-implementation. If neither a solver nor a solving tag is present the solution will be passive and will only consist of a descriptive text. If both a solver and a solving tag are present the tag is ignored in favour of the solver.
+         </documentation>
+      </annotation>
+      <complexType>
+         <sequence>
+            <choice minOccurs="0" maxOccurs="1">
+               <element ref="cheatsheetTag"/>
+               <element ref="helpTag"/>
+               <element ref="preferenceTag"/>
+               <element ref="urlTag"/>
+               <element ref="viewTag"/>
+               <element ref="wizardTag"/>
+            </choice>
+            <element ref="reference" minOccurs="0" maxOccurs="unbounded"/>
+         </sequence>
+         <attribute name="id" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The unique ID of the solution. This should normally consist of the plug-in ID followed by the word &lt;code&gt;solution&lt;/code&gt;, followed by the domain of the solution, followed by a name for the solution. An example would be &lt;code&gt;eu.geclipse.core.solution.net.checkProxySettings&lt;/code&gt; or &lt;code&gt;eu.geclipse.core.solution.auth.checkCertificateLifetime&lt;/code&gt;. This ID is also used in the reference tags of a problem for referencing solutions.
+               </documentation>
+            </annotation>
+         </attribute>
+         <attribute name="description" type="string" use="required">
+            <annotation>
+               <documentation>
+                  A descriptive text that gives a short explanation of the solution. This text is both used for passive and active solutions to give the user hints how to solve a problem.
+               </documentation>
+               <appInfo>
+                  <meta.attribute translatable="true"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+         <attribute name="solver" type="string">
+            <annotation>
+               <documentation>
+                  An optional field that allows the specification of a &lt;code&gt;ISolver&lt;/code&gt; in order to provide dedicated problem solving strategies. If a solver is specified any existing solving tag will be ignored.
+               </documentation>
+               <appInfo>
+                  <meta.attribute kind="java" basedOn=":eu.geclipse.core.reporting.ISolver"/>
+               </appInfo>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="reference">
+      <annotation>
+         <documentation>
+            A reference element that may either be used to reference attached solutions from within a problem or to back-reference problems from within a solution. Therefore it is both possible to provide problems with dedicated solutions and to provide additional solutions for already existing problems, even for third-party plug-ins.
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="referenceID" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The unique ID of either a problem (if the reference is used within a solution definition) or a solution (if the reference is used within a problem definition).
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="cheatsheetTag">
+      <annotation>
+         <documentation>
+            Tag denoting a cheatsheet page solution. This tag is used for a solution that should open a specific cheatsheet page.
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="cheatsheetID" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The unique ID of a cheatsheet page that should be opened.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="helpTag">
+      <annotation>
+         <documentation>
+            Tag denoting a help page solution. This tag is used for a solution that should open a specific help page.
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="pagePath" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The resource path of the help page that should be opened.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="preferenceTag">
+      <annotation>
+         <documentation>
+            Tag denoting a preference page solution. This tag is used for a solution that should open a specific preference page.
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="pageID" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The unique ID of a properties page that should be opened.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="urlTag">
+      <annotation>
+         <documentation>
+            Tag denoting an URL solution. This tag is used for a solution that should open a specific web page in the web browser.
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="url" type="string" use="required">
+            <annotation>
+               <documentation>
+                  
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="viewTag">
+      <annotation>
+         <documentation>
+            Tag denoting a view solution. This tag is used for a solution that should open a specific view.
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="viewID" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The unique ID of a view that should be opened.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="wizardTag">
+      <annotation>
+         <documentation>
+            Tag denoting a wizard solution. This tag is used for a solution that should open a specific page of an already open wizard.
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="pageID" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The unique ID of a wizard page that should be opened.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="since"/>
+      </appInfo>
+      <documentation>
+         1.0
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="examples"/>
+      </appInfo>
+      <documentation>
+         &lt;pre&gt;
+&lt;extension point=&quot;eu.geclipse.core.reporting.problemReporting&quot;&gt;
+  &lt;problem
+    description=&quot;Failed to establish internet connection&quot;
+    id=&quot;eu.geclipse.problem.net.connectionFailed&quot;
+    mailto=&quot;bugreports@geclipse.eu&quot;&gt;
+    &lt;reference
+      referenceID=&quot;eu.geclipse.solution.net.checkInternetConnection&quot;&gt;
+    &lt;/reference&gt;
+    &lt;reference
+      referenceID=&quot;eu.geclipse.solution.net.checkProxySettings&quot;&gt;
+    &lt;/reference&gt;
+    &lt;reference
+      referenceID=&quot;eu.geclipse.solution.net.followGettingStarted&quot;&gt;
+    &lt;/reference&gt;
+    &lt;reference
+      referenceID=&quot;eu.geclipse.solution.net.openPrerequisitesHelp&quot;&gt;
+    &lt;/reference&gt;
+  &lt;/problem&gt;
+  &lt;solution
+    description=&quot;Check your internet connection&quot;
+    id=&quot;eu.geclipse.solution.net.checkInternetConnection&quot;&gt;
+  &lt;/solution&gt;
+  &lt;solution
+    description=&quot;Check your proxy settings&quot;
+    id=&quot;eu.geclipse.solution.net.checkProxySettings&quot;&gt;
+    &lt;propertiesTag
+      pageID=&quot;org.eclipse.ui.net.NetPreferences&quot;&gt;
+    &lt;/propertiesTag&gt;
+  &lt;/solution&gt;
+  &lt;solution
+    description=&quot;Follow the &apos;Getting started&apos; tutorial&quot;
+    id=&quot;eu.geclipse.solution.net.followGettingStarted&quot;&gt;
+    &lt;cheatsheetTag
+      cheatsheetID=&quot;eu.geclipse.doc.user.gettingStarted&quot;&gt;
+    &lt;/cheatsheetTag&gt;
+  &lt;/solution&gt;
+  &lt;solution
+    description=&quot;Read the introductory help&quot;
+    id=&quot;eu.geclipse.solution.net.openPrerequisitesHelp&quot;&gt;
+    &lt;helpTag
+      pagePath=&quot;/eu.geclipse.doc.user/html/gettingstarted/prerequisites.html&quot;&gt;
+    &lt;/helpTag&gt;
+  &lt;/solution&gt;
+&lt;/extension&gt;
+&lt;/pre&gt;
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="apiInfo"/>
+      </appInfo>
+      <documentation>
+         Related API classes/interfaces are &lt;code&gt;eu.geclipse.core.reporting.IProblem&lt;/code&gt;, &lt;code&gt;eu.geclipse.core.reporting.ISolution&lt;/code&gt;, &lt;code&gt;eu.geclipse.core.reporting.ISolver&lt;/code&gt; and the &lt;code&gt;eu.geclipse.core.reporting.ProblemException&lt;/code&gt;.
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="implementation"/>
+      </appInfo>
+      <documentation>
+         There are a lot of core implementations within g-Eclipse that cover topics like network or security issues.
+      </documentation>
+   </annotation>
+
+   <annotation>
+      <appInfo>
+         <meta.section type="copyright"/>
+      </appInfo>
+      <documentation>
+         Copyright (c) 2006, 2007 g-Eclipse Consortium
+&lt;br&gt;&lt;br&gt;
+All rights reserved. This program and the accompanying materials are made available under the terms of the Eclipse Public License v1.0 which accompanies this distribution, and is available at &lt;a href=&quot;http://www.eclipse.org/legal/epl-v10.html&quot;&gt;http://www.eclipse.org/legal/epl-v10.html&lt;/a&gt;.
+&lt;br&gt;&lt;br&gt;
+Initial development of the original code was made for the g-Eclipse project founded by European Union project number: FP6-IST-034327 &lt;a href=&quot;http://www.geclipse.eu&quot;&gt;http://www.geclipse.eu&lt;/a&gt;.
+      </documentation>
+   </annotation>
+
+</schema>

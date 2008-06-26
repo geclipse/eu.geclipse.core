@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="eu.geclipse.ui.efs">
+      <filesystem
+            scheme="s3"
+            validator="eu.geclipse.aws.s3.ui.internal.S3TokenValidator">
+         <hierarchical
+               path="Bucket Name">
+         </hierarchical>
+      </filesystem>
+   </extension>
+      <extension
+         point="eu.geclipse.ui.propertiesFactory">
+      <PropertiesFactory
+            class="eu.geclipse.aws.s3.ui.properties.S3PropertiesFactory"
+            id="eu.geclipse.aws.s3.ui.properties.propertiesFactory"
+            sourceObjectClass="eu.geclipse.core.model.IGridStorage">
+      </PropertiesFactory>
+   </extension>
+</plugin>

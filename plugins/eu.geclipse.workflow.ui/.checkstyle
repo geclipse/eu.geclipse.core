@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fileset-config file-format-version="1.2.0" simple-config="true">
+    <fileset name="all" enabled="true" check-config-name="geclipse" local="false">
+        <file-match-pattern match-pattern="." include-pattern="true"/>
+    </fileset>
+    <filter name="FilesFromPackage" enabled="true">
+        <filter-data value="src/eu/geclipse/workflow/ui/edit"/>
+        <filter-data value="src/eu/geclipse/workflow/ui/edit/commands"/>
+        <filter-data value="src/eu/geclipse/workflow/ui/edit/helpers"/>
+        <filter-data value="src/eu/geclipse/workflow/ui/edit/parts"/>
+        <filter-data value="src/eu/geclipse/workflow/ui/edit/policies"/>
+        <filter-data value="src/eu/geclipse/workflow/ui/navigator"/>
+        <filter-data value="src/eu/geclipse/workflow/ui/parsers"/>
+        <filter-data value="src/eu/geclipse/workflow/ui/part"/>
+        <filter-data value="src/eu/geclipse/workflow/ui/preferences"/>
+        <filter-data value="src/eu/geclipse/workflow/ui/providers"/>
+        <filter-data value="src/eu/geclipse/workflow/ui/sheet"/>
+        <filter-data value="src/eu/geclipse/workflow/ui/view"/>
+        <filter-data value="src/eu/geclipse/workflow/ui/view/factories"/>
+    </filter>
+</fileset-config>

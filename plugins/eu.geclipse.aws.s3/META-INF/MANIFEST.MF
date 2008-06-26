@@ -1,0 +1,21 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: %Bundle-Name
+Bundle-SymbolicName: eu.geclipse.aws.s3;singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: eu.geclipse.aws.s3.internal.Activator
+Bundle-Vendor: %Bundle-Vendor
+Bundle-Localization: plugin
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.core.net,
+ org.eclipse.core.filesystem,
+ eu.geclipse.core,
+ eu.geclipse.core.reporting,
+ org.jets3t;bundle-version="0.6.0",
+ org.apache.commons.httpclient;bundle-version="3.1.0",
+ eu.geclipse.aws,
+ org.eclipse.core.resources
+Eclipse-LazyStart: true
+Export-Package: eu.geclipse.aws.s3
+

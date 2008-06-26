@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.2"?>
+<plugin>
+   <extension
+         point="org.eclipse.core.filesystem.filesystems">
+      <filesystem
+            scheme="gecl">
+         <run
+               class="eu.geclipse.core.filesystem.GEclipseFileSystem">
+         </run>
+      </filesystem>
+   </extension>
+   <extension
+         point="eu.geclipse.core.gridElementCreator">
+      <creator
+            class="eu.geclipse.core.filesystem.FileSystemCreator"
+            id="eu.geclipse.core.filesystem.creator"
+            name="File System">
+         <source
+               class="org.eclipse.core.resources.IResource">
+         </source>
+         <target
+               class="eu.geclipse.core.model.IGridConnection"
+               name="Grid Connection">
+         </target>
+      </creator>
+   </extension>
+   <extension
+         point="eu.geclipse.core.reporting.problemReporting">
+      <problem
+            description="Specified path does not exist"
+            id="eu.geclipse.core.filesystem.problem.invalidPath">
+         <reference
+               referenceID="eu.geclipse.core.filesystem.solution.checkConnectionURL">
+         </reference>
+      </problem>
+      <problem
+            description="Access denied"
+            id="eu.geclipse.core.filesystem.problem.accessDenied">
+         <reference
+               referenceID="eu.geclipse.core.filesystem.solution.improveAccessRights">
+         </reference>
+      </problem>
+      <solution
+            description="Use higher access rights"
+            id="eu.geclipse.core.filesystem.solution.improveAccessRights">
+      </solution>
+      <solution
+            description="Check if the connection URL is correct"
+            id="eu.geclipse.core.filesystem.solution.checkConnectionURL">
+      </solution>
+   </extension>
+
+</plugin>
