@@ -135,7 +135,7 @@
   	</topic>
   </topic>
 
-   <topic
+  <topic
     label="Application Deployment">
     <topic
       label="Install/Uninstall a software"
@@ -149,10 +149,6 @@
     <topic
       label="Batch System Configuration"
       href="html/concepts/siteadministration/batchSystemConfiguration.html">
-    </topic>
-    <topic
-      label="VO Management"
-      href="html/concepts/siteadministration/voManagement.html">
     </topic>
 
 <!--
@@ -181,12 +177,9 @@
       label="The Terminal View"
       href="html/concepts/siteadministration/terminalView.html">
     </topic>
-    <anchor id="geclipse_concepts_siteadministration" />
+    <anchor id="geclipse_concepts_siteadministration" />        
   </topic>
-
-  <topic
-    label="Visualisation">
-    <anchor id="geclipse_concepts_visualisation" />
-  </topic>
+  
+  <anchor id="geclipse_concepts_visualisation" />
 
 </toc>
