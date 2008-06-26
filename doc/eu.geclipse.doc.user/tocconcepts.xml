@@ -12,6 +12,8 @@
   			href="html/concepts/setup/vosettings/vosettings.html">
   			<topic label="Creating a new VO"
   				href="html/concepts/setup/vosettings/createVO.html"/>
+  			<topic label="Importing VO"
+  				href="html/concepts/setup/vosettings/importVO.html"/>  				
   			<topic label="Editing a VO"
   				href="html/concepts/setup/vosettings/editVO.html"/>
   			<topic label="Deleting VOs"
