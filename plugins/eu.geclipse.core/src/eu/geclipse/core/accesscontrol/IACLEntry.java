@@ -37,7 +37,9 @@ public interface IACLEntry {
    * Also known as 'effect' in the XACML standard.
    */
   public static enum Policy {
+    /** Allow access policy */
     ALLOW,
+    /** Deny access policy */
     DENY
   }
   
