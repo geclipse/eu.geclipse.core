@@ -70,10 +70,6 @@
     href="html/extension-points/eu_geclipse_gvid_newGVidWizards.html">
   </topic>
   <topic
-    label="eu.geclipse.info.infoService"
-    href="html/extension-points/eu_geclipse_info_infoService.html">
-  </topic>
-  <topic
     label="eu.geclipse.jsdl.ui.applicationParameters"
     href="html/extension-points/eu_geclipse_jsdl_ui_applicationParameters.html">
   </topic>
