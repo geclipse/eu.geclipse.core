@@ -14,6 +14,8 @@
  *****************************************************************************/
 package eu.geclipse.ui.views;
 
+import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabFolder2Adapter;
@@ -22,10 +24,12 @@ import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
 import eu.geclipse.core.model.IGridVisualisation;
+import eu.geclipse.ui.dialogs.ProblemDialog;
 
 
 /**
@@ -34,8 +38,10 @@ import eu.geclipse.core.model.IGridVisualisation;
  */
 public class VisualisationView extends ViewPart {
 
+  IAction checkBtnAction = null;
   private CTabFolder cTabFolder;
   private IGridVisualisation vtkPipeline = null;
+  private int allowedNumOfTabs = 10;
 //  private final VisViewDropDownAction fileDropDownAction = null;
 
   /* (non-Javadoc)
@@ -71,9 +77,54 @@ public class VisualisationView extends ViewPart {
 
 //    this.fileDropDownAction =
 //      new VisViewDropDownAction( getSite().getWorkbenchWindow() );
+//    this.multipleTabsCheckBtn = new Button( parent, SWT.CHECK );
+//    this.multipleTabsCheckBtn
+//    .setText( Messages.getString( "VisualisationView.allowUpdatesIntoTheSameTab" ) ); //$NON-NLS-1$
+//    this.multipleTabsCheckBtn
+//    .setToolTipText( Messages.getString( "VisualisationView.allowUpdatesIntoTheSameTabTooltip" ) ); //$NON-NLS-1$
+//    this.multipleTabsCheckBtn.addSelectionListener( new SelectionAdapter() {
+//    
+//      @Override
+//      public void widgetSelected( SelectionEvent e ) {
+////        super.widgetSelected( e );
+//        if ( VisualisationView.this.multipleTabsCheckBtn.isEnabled() ) {
+//          VisualisationView.this.multipleTabsCheckBtn.setEnabled( false );
+//        }
+//        else {
+//          VisualisationView.this.multipleTabsCheckBtn.setEnabled( true );
+//        }
+//      }
+//    } );
+    
 //    hookContextMenu();
 //    contributeToActionBars();
+    createToolBar();
   }
+
+private void createToolBar() {
+  this.checkBtnAction = 
+    new org.eclipse.jface.action.Action( 
+               Messages.getString( "VisualisationView.allowUpdatesIntoTheSameTab" ), SWT.CHECK ) { //$NON-NLS-1$
+    @Override
+    public int getStyle() {
+      return IAction.AS_CHECK_BOX;
+    }
+    @Override
+    public void run() {
+      if ( VisualisationView.this.checkBtnAction.isEnabled() ) {
+        VisualisationView.this.checkBtnAction.setEnabled( false );
+      }
+      else {
+        VisualisationView.this.checkBtnAction.setEnabled( true );
+      }
+    }
+  };
+  this.checkBtnAction
+  .setToolTipText( Messages.getString( "VisualisationView.allowUpdatesIntoTheSameTabTooltip" ) ); //$NON-NLS-1$
+
+  IToolBarManager mgr = getViewSite().getActionBars().getToolBarManager();
+  mgr.add( this.checkBtnAction );
+}
 
 //  @SuppressWarnings("unused")
 //  private void contributeToActionBars() {
@@ -99,13 +150,14 @@ public class VisualisationView extends ViewPart {
 //      }
 //    } );
 //  }
-//
+
 //  void fillContextMenu( final IMenuManager manager ) {
 //    if( this.fileDropDownAction != null ) {
 //      manager.add( this.fileDropDownAction );
 //    }
 //    manager.add( new Separator( IWorkbenchActionConstants.MB_ADDITIONS ) );
 //  }
+
 
   /**
    * Passing the focus request to the viewer's control.
@@ -122,13 +174,24 @@ public class VisualisationView extends ViewPart {
    */
   public CTabItem getCTabItem() {
     CTabItem cTabItem = this.cTabFolder
-    != null ? makeNewTab() : null;
+    != null ? getTab() : null;
     return cTabItem;
   }
 
-  private CTabItem makeNewTab() {
-    CTabItem tabItem = new CTabItem( this.cTabFolder, SWT.CLOSE );
-    this.cTabFolder.setSelection( tabItem );
+  private CTabItem getTab() {
+    CTabItem tabItem = null;
+    if ( this.checkBtnAction.isEnabled() ) {
+      if ( this.cTabFolder.getItemCount() < this.allowedNumOfTabs ) {
+        tabItem = new CTabItem( this.cTabFolder, SWT.CLOSE );
+        this.cTabFolder.setSelection( tabItem );
+      }
+      else {
+//        TODO - "tell to user to close some tabs"
+      }
+    }
+    else {
+      tabItem = this.cTabFolder.getSelection();
+    }
     return tabItem;
   }
 
