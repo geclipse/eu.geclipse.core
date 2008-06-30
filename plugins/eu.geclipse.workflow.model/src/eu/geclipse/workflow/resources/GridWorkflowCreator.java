@@ -16,32 +16,44 @@
 package eu.geclipse.workflow.resources;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
-import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridWorkflow;
-import eu.geclipse.core.model.impl.AbstractFileElementCreator;
+import eu.geclipse.core.model.impl.AbstractGridElementCreator;
 
-public class GridWorkflowCreator extends AbstractFileElementCreator {
+public class GridWorkflowCreator extends AbstractGridElementCreator {
   
   private static final String FILE_EXTENSION = "workflow"; //$NON-NLS-1$
 
   public boolean canCreate( final Class<? extends IGridElement> elementType ) {
-    return IGridJobDescription.class.isAssignableFrom( elementType );
+    return IGridWorkflow.class.isAssignableFrom( elementType );
   }
 
   public IGridElement create( final IGridContainer parent )
       throws GridModelException {
-    IFile file = ( IFile ) getObject();
-    GridWorkflow workflow = new GridWorkflow( file );
+    IFolder folder = ( IFolder ) getObject();
+    GridWorkflow workflow = new GridWorkflow( folder );
     return workflow;
   }
-  
-  @Override
-  protected boolean internalCanCreate( final String fileExtension ) {
-    return FILE_EXTENSION.equals( fileExtension );
-  }
 
+  @Override
+  protected boolean internalCanCreate( final Object fromObject ) {
+    
+    boolean result = false;
+    
+    if ( fromObject instanceof IFolder ) {
+      String extension = ( ( IFolder ) fromObject ).getFileExtension();
+      if ( FILE_EXTENSION.equalsIgnoreCase( extension ) ) {
+        result = true;
+      }
+    }
+    
+    return result;
+    
+  }
+  
 }
+ 

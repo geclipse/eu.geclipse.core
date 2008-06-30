@@ -29,9 +29,12 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 
+import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridWorkflow;
 import eu.geclipse.core.model.IGridWorkflowJob;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
+import eu.geclipse.core.model.impl.ResourceGridElement;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.workflow.IWorkflowJob;
 import eu.geclipse.workflow.IWorkflowNode;
@@ -50,6 +53,12 @@ public class GridWorkflow
 
   protected GridWorkflow( final IResource resource ) {
     super( resource );
+  }
+  
+  @Override
+  public boolean canContain( final IGridElement element ) {
+    return ( element instanceof IGridJobDescription )
+      || ( element instanceof ResourceGridElement );
   }
 
   public String getDescription() {

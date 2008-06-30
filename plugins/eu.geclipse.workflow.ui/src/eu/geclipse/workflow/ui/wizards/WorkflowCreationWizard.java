@@ -16,8 +16,12 @@
 package eu.geclipse.workflow.ui.wizards;
 
 import java.lang.reflect.InvocationTargetException;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.operation.IRunnableWithProgress;
@@ -128,7 +132,10 @@ public class WorkflowCreationWizard extends Wizard implements INewWizard {
       protected void execute( IProgressMonitor monitor )
         throws CoreException, InterruptedException
       {
-        WorkflowCreationWizard.this.diagram = WorkflowDiagramEditorUtil.createDiagram( WorkflowCreationWizard.this.diagramModelFilePage.getURI(),
+        IFolder folder = WorkflowCreationWizard.this.diagramModelFilePage.createNewFolder();
+        IFile file = folder.getFile( folder.getName() );
+        URI uri = URI.createPlatformResourceURI( file.getFullPath().toString(), false );
+        WorkflowCreationWizard.this.diagram = WorkflowDiagramEditorUtil.createDiagram( uri,
                                                                                        monitor );
         if( isOpenNewlyCreatedDiagramEditor() && WorkflowCreationWizard.this.diagram != null ) {
           try {
