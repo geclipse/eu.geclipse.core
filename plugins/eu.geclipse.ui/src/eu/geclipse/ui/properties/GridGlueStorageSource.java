@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006, 2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -50,7 +50,7 @@ public class GridGlueStorageSource extends AbstractPropertySource<GridGlueStorag
 
     for (int i=0; i<this.gridGlueStorage.getGlueSe().glueSEAccessProtocolList.size(); i++)
     {
-      list.add( createEndpoint( "Endpont", 
+      list.add( createEndpoint( "Endpoint", 
                                 this.gridGlueStorage.getGlueSe().glueSEAccessProtocolList.get(i).Endpoint,
                                 i));
       list.add( createType( "Type", 
