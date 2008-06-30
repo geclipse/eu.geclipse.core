@@ -36,14 +36,12 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
-import org.eclipse.swt.widgets.Layout;
+import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
-
-import org.eclipse.swt.widgets.Text;
 
 import org.eclipse.swt.widgets.Button;
 
@@ -72,7 +70,7 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
   protected Label specificLbl;
   protected Label portsScannedLabel;
   
-  protected Text from, to, specificTxt;
+  protected Spinner from, to, specificTxt;
   protected Label dashlbl;
 
   protected org.eclipse.swt.widgets.List portList;
@@ -156,7 +154,7 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
     gridData3.horizontalSpan = 4;
     
     GridData gridData4 = new GridData(GridData.HORIZONTAL_ALIGN_END);
-    gridData4.horizontalSpan = 4;
+    gridData4.horizontalSpan = 3;
     
     GridData gridData5 = new GridData(GridData.HORIZONTAL_ALIGN_BEGINNING);
     gridData5.horizontalSpan = 2;
@@ -190,7 +188,7 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
     this.port21chk = new Button( this.portComp, SWT.CHECK );
    // this.port21chk.setLayoutData(gridData);
     
-    this.portList = new org.eclipse.swt.widgets.List(this.portComp, SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI);
+    this.portList = new org.eclipse.swt.widgets.List(this.portComp, SWT.V_SCROLL | SWT.H_SCROLL | SWT.MULTI | SWT.BORDER);
     ( ( Control )this.portList ).setLayoutData(listData);
 
 
@@ -254,10 +252,14 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
    // new Label( this.portComp, SWT.NONE ).setLayoutData(gridData); //$NON-NLS-1$
    // gridData.horizontalSpan = 4;
     
+
+    new Label( this.portComp, SWT.HORIZONTAL );
+    new Label( this.portComp, SWT.HORIZONTAL );
+    //new Label( this.portComp, SWT.HORIZONTAL );
     
     Button removeButton = new Button(this.portComp,0);
     removeButton.setText("Remove Port");
-    removeButton.setLayoutData(gridData4);
+    //removeButton.setLayoutData(gridData4);
     //remove selected port(s) from the list
     removeButton.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
         public void widgetSelected(final org.eclipse.swt.events.SelectionEvent e) {
@@ -280,6 +282,29 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
         }
     });
     
+    Button removeAll = new Button(this.portComp,0);
+    removeAll.setText("Remove All");
+    
+    removeAll.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
+        public void widgetSelected(final org.eclipse.swt.events.SelectionEvent e) {
+            if(!list.isEmpty()){
+
+                port21_entered = false;
+                port22_entered = false;
+                port23_entered = false;
+                port25_entered = false;
+                port80_entered = false;  
+              
+                list.clear();
+
+                portList.removeAll();
+
+                
+            }
+            
+        }
+    });
+    
     listComp = new Composite( settingsGroup, SWT.NONE );
     this.listComp.setLayout( new GridLayout( 4, false ) );
     
@@ -287,14 +312,16 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
     this.rangeLbl.setText("Add a range of ports");
     this.rangeLbl.setLayoutData(gridData3);
     
-    this.from = new Text( this.listComp, 0 );
+    this.from = new Spinner( this.listComp, SWT.LEFT | SWT.SINGLE | SWT.BORDER );
+    this.from.setValues(1, 1, 65535, 0, 1, 65535);
     
     this.dashlbl = new Label( this.listComp, 0 );
     this.dashlbl.setText("-");
 
     //this.dashlbl.setLayoutData(gridData3);
     
-    this.to = new Text( this.listComp, 0 );
+    this.to = new Spinner( this.listComp, SWT.LEFT | SWT.SINGLE | SWT.BORDER );
+    this.to.setValues(65535, 1, 65535, 0, 1, 65535);
     
     this.addRange= new Button( this.listComp, SWT.Activate );
     this.addRange.setText("Add Range");
@@ -302,18 +329,14 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
     //add range of ports to the list
     addRange.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
         public void widgetSelected(final org.eclipse.swt.events.SelectionEvent e) {
-          //  System.out.println("widgetRangeSelected()"); 
-  
-            //if(!(from.getSelectionText().matches("\\d") || to.getSelectionText().matches("\\d"))){
-            //  return;
-            //}
+
             String toBeAdded="";
             boolean toExit = false;
             
             int fromInt=0, toInt=0;
             try{
-                fromInt = Integer.parseInt(from.getText());
-                toInt = Integer.parseInt(to.getText());
+                fromInt = from.getSelection();
+                toInt = to.getSelection();
             }catch(NumberFormatException ex){
               toExit = true;
             }
@@ -324,11 +347,11 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
             
             if(!toExit){
             
-           toBeAdded = from.getText() + " - " + to.getText();
+           toBeAdded = from.getSelection() + " - " + to.getSelection();
             if(portList.getItemCount()==0){
             portList.add(toBeAdded);
             
-            list.add( new PortRange(Integer.parseInt(from.getText()), Integer.parseInt(to.getText()) ) );
+            list.add( new PortRange(from.getSelection(), to.getSelection() ) );
             
             toExit = true;
             }
@@ -347,7 +370,7 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
             if(count==0){
                 
                 portList.add(toBeAdded);
-                list.add( new PortRange(Integer.parseInt(from.getText()), Integer.parseInt(to.getText())) );
+                list.add( new PortRange(from.getSelection(), to.getSelection() ) );
 
             }
             
@@ -358,9 +381,9 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
     this.specificLbl.setText("Add specific Port");
     this.specificLbl.setLayoutData(gridData3);
     
-    this.specificTxt = new Text( this.listComp, 0 );
+    this.specificTxt = new Spinner( this.listComp, SWT.LEFT | SWT.SINGLE | SWT.BORDER );
     this.specificTxt.setLayoutData(gridData5);
-    
+    this.specificTxt.setValues(1, 1, 65535, 0, 1, 65535);
     this.addSpecific = new Button(this.listComp, SWT.Activate);
     this.addSpecific.setText("Add Port");
     
@@ -370,37 +393,21 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
         public void widgetSelected(final org.eclipse.swt.events.SelectionEvent e) {
             int portInt=0;
             int counter = 0;
- 
-            boolean toExit = false;
-            
-            try{
-                portInt = Integer.parseInt(specificTxt.getText());
-                
-            }catch(NumberFormatException ex){
-              toExit = true;
-            }
-            
-            if(!toExit){
-              if(portInt<=0 || portInt>65535){
-                toExit = true;
-              }
-            
-              if(!toExit){
-                for(int i=0; i<list.size(); i++){
-                  if(list.get(i).getStart()==portInt && list.get(i).getFinish()==0){
-                    counter++;
-                  }
-                }
-              
-                if(!toExit){
-                  if(counter>0){
-                    toExit = true;
-                  }
-                  list.add( new PortRange(portInt, 0 ) );
-                  portList.add(""+portInt);
-                }
+
+            portInt = specificTxt.getSelection();
+      
+            for(int i=0; i<list.size(); i++){
+              if(list.get(i).getStart()==portInt && list.get(i).getFinish()==0){
+                counter++;
               }
             }
+
+            if(counter>0){
+                return;
+            }
+            list.add( new PortRange(portInt, 0 ) );
+            portList.add(""+portInt);
+
         }
     });
     
@@ -424,12 +431,8 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
     TabFolder tabFolder = new TabFolder (  this.resultsComp, SWT.NONE );
     tabFolder.setLayoutData(resultsData);
     
-  
-    
     TabItem itemTree = new TabItem ( tabFolder, SWT.NULL );
     itemTree.setText ( "Results List" );
-    
-    
     
     Tree tree = new Tree(tabFolder, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL);
     tree.setHeaderVisible(true);
@@ -475,25 +478,29 @@ public class PortScanDialog extends AbstractSimpleTestDialog{
                 scanJobs.get(i).cancel();
             }
         }
+        if(scanJobs.size()>0)
+            results.append("Scanning Stopped.\n\n");  
         
         scanJobs.clear();
-        results.append("Scanning Stopped.\n\n");  
+
         }
     });     
     
     //calls the portScan() method to initiate the job for Port Scan
     scan.addSelectionListener(new org.eclipse.swt.events.SelectionAdapter() {
         public void widgetSelected(final org.eclipse.swt.events. SelectionEvent e) {
-           // scan.setEnabled(false);
-            generatePortList();
-
-            
-            portScan();
-            
-     //       portMap.clear();
-//            portsScanned=0;
- //           portsOpen=0;
-   //         portsClosed=0;
+          
+            // Make sure the potential current pings are done
+            boolean done = true;
+            for ( PortScanJob portJob : scanJobs ) {
+              if ( null == portJob.getResult() )
+                done = false;
+            }
+            // At least one of the prev. jobs haven't finished yet
+            if ( done ){
+                generatePortList();
+                portScan();
+            }
 
         }
     });
