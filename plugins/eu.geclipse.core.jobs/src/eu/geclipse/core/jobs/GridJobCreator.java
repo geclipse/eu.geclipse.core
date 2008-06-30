@@ -141,7 +141,14 @@ public class GridJobCreator extends AbstractGridJobCreator {
       this.canCreate( jobFolder );
       parent.create( this );
       
-      return ( IGridJob )GridModel.getRoot().findElement( jobFolder );
+      IGridElement jobElement = GridModel.getRoot().findElement( jobFolder );
+
+      IGridJob result = null;
+      if( jobElement instanceof IGridJob ) {
+        result = ( IGridJob )jobElement;
+      }
+      
+      return result;
     } catch( CoreException cExc ) {
       throw new GridModelException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
                                     Messages.getString( "GridJobCreator.problemCreatingFolder" ) //$NON-NLS-1$
