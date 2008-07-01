@@ -50,7 +50,7 @@ public class GEclipseFileSystem
   
   public static IFileStore assureFileStoreIsActive( final IFileStore fileStore ) {
     if ( fileStore instanceof GEclipseFileStore ) {
-      ( ( GEclipseFileStore ) fileStore ).activate();
+      ( ( GEclipseFileStore ) fileStore ).setActive( GEclipseFileStore.FETCH_CHILDREN_ACTIVE_POLICY | GEclipseFileStore.FETCH_INFO_ACTIVE_POLICY );
     }
     return fileStore;
   }

@@ -289,7 +289,7 @@ public class ConnectionElement
       res.refreshLocal( IResource.DEPTH_INFINITE, null );*/
       
       // Step 2: Activate and fetch children remotely
-      fileStore.activate();
+      fileStore.setActive( GEclipseFileStore.FETCH_CHILDREN_ACTIVE_POLICY );
       fileStore.childNames( EFS.NONE, sMonitor.newChild( 80 ) );
       
       // Step 3: Refresh again

@@ -45,6 +45,10 @@ public class GEclipseFileStore
     extends FileStore
     implements IFileStore {
   
+  public static final int FETCH_CHILDREN_ACTIVE_POLICY = 0x01;
+  
+  public static final int FETCH_INFO_ACTIVE_POLICY = 0x02;
+  
   /**
    * The file system.
    */
@@ -68,7 +72,7 @@ public class GEclipseFileStore
   /**
    * Determines if this store is active.
    */
-  private boolean isActive;
+  private int active;
   
   /**
    * The names of the children if yet fetched.
@@ -102,7 +106,8 @@ public class GEclipseFileStore
       this.parent = null;
     }
     this.slave = slave;
-    setActive( false );
+    this.fileInfo = new FileInfo();
+    clearActive( FETCH_CHILDREN_ACTIVE_POLICY | FETCH_INFO_ACTIVE_POLICY );
   }
 
   /**
@@ -119,17 +124,21 @@ public class GEclipseFileStore
     this.fileSystem = ( GEclipseFileSystem ) parent.getFileSystem();
     this.parent = parent;
     this.slave = slave;
-    setActive( false );
+    this.fileInfo = slave.fetchInfo();
+    clearActive( FETCH_CHILDREN_ACTIVE_POLICY | FETCH_INFO_ACTIVE_POLICY );
   }
   
-  /**
+  /*
    * Activate this store. After a store is activated the
    * {@link #childNames(int, IProgressMonitor)} method will delegate its
    * work to the slave store. If {@link #childNames(int, IProgressMonitor)}
    * is called without activating the store the cached names are returned.
    */
-  public void activate() {
+  /*public void activate() {
     setActive( true );
+  }*/
+  public void setActive( final int policy ) {
+    this.active |= policy;
   }
   
   /**
@@ -158,7 +167,7 @@ public class GEclipseFileStore
 
     try {
       InputStream siStream = openInputStream( EFS.NONE, sMonitor.newChild( 1 ) );
-      setActive( true );
+      setActive( FETCH_INFO_ACTIVE_POLICY );
       IFileInfo info = fetchInfo( EFS.NONE, sMonitor.newChild( 1 ) );
       this.ciStream = new CachedInputStream( siStream, ( int ) info.getLength() );
   
@@ -188,8 +197,8 @@ public class GEclipseFileStore
     
     String[] result = this.childNames;
     
-    if ( isActive() ) {
-      setActive( false );
+    if ( isActive( FETCH_CHILDREN_ACTIVE_POLICY ) ) {
+      clearActive( FETCH_CHILDREN_ACTIVE_POLICY );
       if ( result != null ) {
         FileStoreRegistry registry = FileStoreRegistry.getInstance();
         for ( String name : result ) {
@@ -245,19 +254,16 @@ public class GEclipseFileStore
                               final IProgressMonitor monitor )
       throws CoreException {
     
-    IFileInfo result = this.fileInfo;
-    
-    if ( isActive() || result == null ) {
-      setActive( false );
-      result = getSlave().fetchInfo( options, monitor( monitor ) );
-      this.fileInfo = result;
+    if ( isActive( FETCH_INFO_ACTIVE_POLICY ) ) {
+      clearActive( FETCH_INFO_ACTIVE_POLICY );
+      this.fileInfo = getSlave().fetchInfo( options, monitor( monitor ) );
     }
     
-    if ( result == null ) {
-      result = new FileInfo();
+    if ( this.fileInfo == null ) {
+      this.fileInfo = new FileInfo();
     }
     
-    return result;
+    return this.fileInfo;
      
   }
 
@@ -424,8 +430,8 @@ public class GEclipseFileStore
    * {@link #childNames(int, IProgressMonitor)} is called this call will
    * be delegated to the slave store.
    */
-  private boolean isActive() {
-    return this.isActive;
+  private boolean isActive( final int policy ) {
+    return ( this.active & policy ) != 0;
   }
   
   /**
@@ -433,8 +439,8 @@ public class GEclipseFileStore
    * 
    * @param active True if the store should be active.
    */
-  private void setActive( final boolean active ) {
-    this.isActive = active;
+  private void clearActive( final int policy ) {
+    this.active &= ~policy;
   }
 
   /* (non-Javadoc)

@@ -114,10 +114,8 @@ public class FileSystemCreator
         IFileInfo info = connection.getConnectionFileInfo();
         if ( info instanceof FileInfo ) {
           FileInfo fileInfo = (FileInfo)info;
-          ( ( FileInfo ) info ).setExists( true );
-          if( resource instanceof IFile ) {
-            fileInfo.setDirectory( false );
-          }
+          fileInfo.setExists( true );
+          fileInfo.setDirectory( resource instanceof IFolder );
         }
       } catch ( CoreException cExc ) {
         // Should never happen, if it does just log it
