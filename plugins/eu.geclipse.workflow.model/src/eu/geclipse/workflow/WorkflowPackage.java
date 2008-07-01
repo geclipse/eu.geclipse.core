@@ -22,11 +22,11 @@ import org.eclipse.emf.ecore.EReference;
  *   <li>and each data type</li>
  * </ul>
  * <!-- end-user-doc -->
- * @see eu.geclipse.workflow.IWorkflowFactory
+ * @see eu.geclipse.workflow.WorkflowFactory
  * @model kind="package"
  * @generated
  */
-public interface IWorkflowPackage extends EPackage
+public interface WorkflowPackage extends EPackage
 {
   /**
    * The package name.
@@ -831,7 +831,7 @@ public interface IWorkflowPackage extends EPackage
    * @return the factory that creates the instances of the model.
    * @generated
    */
-  IWorkflowFactory getWorkflowFactory();
+  WorkflowFactory getWorkflowFactory();
 
   /**
    * <!-- begin-user-doc -->
