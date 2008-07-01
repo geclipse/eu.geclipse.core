@@ -48,6 +48,10 @@ import eu.geclipse.workflow.IWorkflowJob;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowJobEditPart;
 import eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin;
 
+/**
+ * @author athandava
+ *
+ */
 public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
 
   /**
@@ -59,6 +63,7 @@ public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
    */
   private Shell myShell;
   String jobDescriptionInJSDL = null;
+  String fileName = null;
 
   public void setActivePart( IAction action, IWorkbenchPart targetPart ) {
     this.myShell = targetPart.getSite().getShell();
@@ -81,8 +86,7 @@ public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
       IFileStore[] result = dialog.getSelectedFileStores();
       if( ( result != null ) && ( result.length > 0 ) ) {
         try {
-          System.out.println(result[0].toURI().toString());
-          
+          this.fileName= result[0].getName();          
           
           inStream = result[ 0 ].openInputStream( EFS.NONE, null );
         } catch( CoreException cE ) {
@@ -126,6 +130,7 @@ public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
 
   /**
    * This method updates the JobDescription field in the WorkflowJob.
+   * @return true or false
    */
   public boolean updateWorkflowJobDescription() {
     IStatus status = Status.OK_STATUS;
@@ -142,6 +147,7 @@ public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
       {
         IWorkflowJob job = ( IWorkflowJob )GetJobDescriptionFromFileAction.this.mySelectedElement.resolveSemanticElement();
         job.setJobDescription( GetJobDescriptionFromFileAction.this.jobDescriptionInJSDL );
+        job.setJobDescriptionFileName( GetJobDescriptionFromFileAction.this.fileName );
         return CommandResult.newOKCommandResult();
       }
     };
