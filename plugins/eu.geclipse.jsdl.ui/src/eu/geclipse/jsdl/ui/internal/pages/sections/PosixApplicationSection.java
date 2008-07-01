@@ -770,7 +770,7 @@ public class PosixApplicationSection extends JsdlFormPageSection {
     }
   }
 
-  
+
   
   protected void checkPosixApplicationElement() {
     
@@ -784,6 +784,7 @@ public class PosixApplicationSection extends JsdlFormPageSection {
         this.posixApplicationType = PosixFactory.eINSTANCE.createPOSIXApplicationType();
         Collection<POSIXApplicationType> collection = new ArrayList<POSIXApplicationType>();
         collection.add( this.posixApplicationType );
+//        this.applicationType = (ApplicationType) checkProxy( this.applicationType );
         this.applicationType.eSet( eStructuralFeature, collection );
       }      
 
