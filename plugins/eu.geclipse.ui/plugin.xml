@@ -292,6 +292,24 @@
             description="Cannot remove job resources from local workspace"
             id="eu.geclipse.problem.deleteGridElementAction.cannotDeleteResource">
       </problem>
+      <problem
+            description="The number of opened tabs exceeded the allowed maximum."
+            id="eu.geclipse.ui.reachedMaximumAllowedOpenedTabsProblem">
+         <reference
+               referenceID="eu.geclipse.ui.closeTabSolution">
+         </reference>
+         <reference
+               referenceID="eu.geclipse.ui.allowRedrawInTheSameTabSolution">
+         </reference>
+      </problem>
+      <solution
+            description="Close the currently opened tab"
+            id="eu.geclipse.ui.closeTabSolution">
+      </solution>
+      <solution
+            description="Allow redrawing into the currently opened tab"
+            id="eu.geclipse.ui.allowRedrawInTheSameTabSolution">
+      </solution>
    </extension>
    <extension
          point="eu.geclipse.ui.efs">

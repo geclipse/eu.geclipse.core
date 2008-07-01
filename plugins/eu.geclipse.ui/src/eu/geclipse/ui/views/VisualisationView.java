@@ -16,6 +16,8 @@ package eu.geclipse.ui.views;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.CTabFolder;
 import org.eclipse.swt.custom.CTabFolder2Adapter;
@@ -23,13 +25,15 @@ import org.eclipse.swt.custom.CTabFolderEvent;
 import org.eclipse.swt.custom.CTabItem;
 import org.eclipse.swt.events.FocusAdapter;
 import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.GridData;
-import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
 import eu.geclipse.core.model.IGridVisualisation;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.dialogs.ProblemDialog;
+import eu.geclipse.ui.internal.Activator;
 
 
 /**
@@ -38,10 +42,11 @@ import eu.geclipse.ui.dialogs.ProblemDialog;
  */
 public class VisualisationView extends ViewPart {
 
+  protected boolean newTabOn = false;
   IAction checkBtnAction = null;
   private CTabFolder cTabFolder;
   private IGridVisualisation vtkPipeline = null;
-  private int allowedNumOfTabs = 10;
+  private int allowedNumOfTabs = 5;
 //  private final VisViewDropDownAction fileDropDownAction = null;
 
   /* (non-Javadoc)
@@ -76,55 +81,55 @@ public class VisualisationView extends ViewPart {
     } );
 
 //    this.fileDropDownAction =
-//      new VisViewDropDownAction( getSite().getWorkbenchWindow() );
-//    this.multipleTabsCheckBtn = new Button( parent, SWT.CHECK );
-//    this.multipleTabsCheckBtn
-//    .setText( Messages.getString( "VisualisationView.allowUpdatesIntoTheSameTab" ) ); //$NON-NLS-1$
-//    this.multipleTabsCheckBtn
-//    .setToolTipText( Messages.getString( "VisualisationView.allowUpdatesIntoTheSameTabTooltip" ) ); //$NON-NLS-1$
-//    this.multipleTabsCheckBtn.addSelectionListener( new SelectionAdapter() {
-//    
-//      @Override
-//      public void widgetSelected( SelectionEvent e ) {
-////        super.widgetSelected( e );
-//        if ( VisualisationView.this.multipleTabsCheckBtn.isEnabled() ) {
-//          VisualisationView.this.multipleTabsCheckBtn.setEnabled( false );
-//        }
-//        else {
-//          VisualisationView.this.multipleTabsCheckBtn.setEnabled( true );
-//        }
-//      }
-//    } );
-    
+//      new VisViewDropDownAction( getSite().getWorkbenchWindow() );    
 //    hookContextMenu();
 //    contributeToActionBars();
+    createActions();
     createToolBar();
   }
 
-private void createToolBar() {
-  this.checkBtnAction = 
-    new org.eclipse.jface.action.Action( 
-               Messages.getString( "VisualisationView.allowUpdatesIntoTheSameTab" ), SWT.CHECK ) { //$NON-NLS-1$
-    @Override
-    public int getStyle() {
-      return IAction.AS_CHECK_BOX;
-    }
-    @Override
-    public void run() {
-      if ( VisualisationView.this.checkBtnAction.isEnabled() ) {
-        VisualisationView.this.checkBtnAction.setEnabled( false );
-      }
-      else {
-        VisualisationView.this.checkBtnAction.setEnabled( true );
-      }
-    }
-  };
-  this.checkBtnAction
-  .setToolTipText( Messages.getString( "VisualisationView.allowUpdatesIntoTheSameTabTooltip" ) ); //$NON-NLS-1$
+  private void createActions() {
 
-  IToolBarManager mgr = getViewSite().getActionBars().getToolBarManager();
-  mgr.add( this.checkBtnAction );
-}
+    ImageRegistry imgReg = Activator.getDefault().getImageRegistry();
+    Image image = imgReg.get( "toggleTabBtn" ); //$NON-NLS-1$
+    ImageDescriptor toggleTabBtnImage = ImageDescriptor.createFromImage( image );
+
+    this.checkBtnAction = 
+        new org.eclipse.jface.action.Action( 
+                   Messages.getString( "VisualisationView.switchToUpdatesIntoTheSameTab" ), //$NON-NLS-1$
+                   IAction.AS_CHECK_BOX ) {
+    
+        @Override
+        public boolean isChecked() {
+          return VisualisationView.this.newTabOn;
+        }
+        
+        @Override
+        public void run() {
+          if ( !VisualisationView.this.checkBtnAction.isChecked() ) {
+            VisualisationView.this.newTabOn = true;
+            VisualisationView.this.checkBtnAction
+            .setToolTipText( Messages.getString( "VisualisationView.switchToNewTabWhenUpdating" ) ); //$NON-NLS-1$
+            VisualisationView.this.checkBtnAction.setChecked( false );
+          }
+          else {
+            VisualisationView.this.newTabOn = false;
+            VisualisationView.this.checkBtnAction
+            .setToolTipText( Messages.getString( "VisualisationView.switchToUpdatesIntoTheSameTab" ) ); //$NON-NLS-1$
+            VisualisationView.this.checkBtnAction.setChecked( true );
+          }
+        }
+      };
+    this.checkBtnAction.setToolTipText( Messages.getString("VisualisationView.switchToUpdatesIntoTheSameTab") ); //$NON-NLS-1$
+    this.checkBtnAction.setImageDescriptor( toggleTabBtnImage );
+
+  }
+  
+  private void createToolBar() {
+    IToolBarManager mgr = getViewSite().getActionBars().getToolBarManager();
+    mgr.add( this.checkBtnAction );
+  }
+
 
 //  @SuppressWarnings("unused")
 //  private void contributeToActionBars() {
@@ -180,17 +185,25 @@ private void createToolBar() {
 
   private CTabItem getTab() {
     CTabItem tabItem = null;
-    if ( this.checkBtnAction.isEnabled() ) {
+    if ( !this.checkBtnAction.isChecked() ) {
       if ( this.cTabFolder.getItemCount() < this.allowedNumOfTabs ) {
         tabItem = new CTabItem( this.cTabFolder, SWT.CLOSE );
         this.cTabFolder.setSelection( tabItem );
       }
       else {
-//        TODO - "tell to user to close some tabs"
+        ProblemException pe = 
+          new ProblemException( "eu.geclipse.ui.reachedMaximumAllowedOpenedTabsProblem",  //$NON-NLS-1$
+                                Activator.PLUGIN_ID );
+        ProblemDialog.openProblem( null, 
+                                   Messages.getString( "VisualisationView.dialogTitle" ),  //$NON-NLS-1$
+                                   Messages.getString( "VisualisationView.maxNumOfTabsOpenedErrorMessage" ), //$NON-NLS-1$
+                                   pe );
       }
     }
     else {
-      tabItem = this.cTabFolder.getSelection();
+      tabItem = this.cTabFolder.getSelection() != null 
+      ? this.cTabFolder.getSelection() : new CTabItem( this.cTabFolder, SWT.CLOSE );
+      this.cTabFolder.setSelection( tabItem );
     }
     return tabItem;
   }
