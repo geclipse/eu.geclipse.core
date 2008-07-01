@@ -25,10 +25,11 @@ package eu.geclipse.workflow;
  * The following features are supported:
  * <ul>
  *   <li>{@link eu.geclipse.workflow.IWorkflowJob#getJobDescription <em>Job Description</em>}</li>
+ *   <li>{@link eu.geclipse.workflow.IWorkflowJob#getJobDescriptionFileName <em>Job Description File Name</em>}</li>
  * </ul>
  * </p>
  *
- * @see eu.geclipse.workflow.IWorkflowPackage#getIWorkflowJob()
+ * @see eu.geclipse.workflow.WorkflowPackage#getIWorkflowJob()
  * @model
  * @generated
  */
@@ -44,7 +45,7 @@ public interface IWorkflowJob extends IWorkflowNode
    * <!-- end-user-doc -->
    * @return the value of the '<em>Job Description</em>' attribute.
    * @see #setJobDescription(String)
-   * @see eu.geclipse.workflow.IWorkflowPackage#getIWorkflowJob_JobDescription()
+   * @see eu.geclipse.workflow.WorkflowPackage#getIWorkflowJob_JobDescription()
    * @model required="true"
    * @generated
    */
@@ -59,5 +60,31 @@ public interface IWorkflowJob extends IWorkflowNode
    * @generated
    */
   void setJobDescription(String value);
+
+  /**
+   * Returns the value of the '<em><b>Job Description File Name</b></em>' attribute.
+   * <!-- begin-user-doc -->
+   * <p>
+   * If the meaning of the '<em>Job Description File Name</em>' attribute isn't clear,
+   * there really should be more of a description here...
+   * </p>
+   * <!-- end-user-doc -->
+   * @return the value of the '<em>Job Description File Name</em>' attribute.
+   * @see #setJobDescriptionFileName(String)
+   * @see eu.geclipse.workflow.WorkflowPackage#getIWorkflowJob_JobDescriptionFileName()
+   * @model required="true"
+   * @generated
+   */
+  String getJobDescriptionFileName();
+
+  /**
+   * Sets the value of the '{@link eu.geclipse.workflow.IWorkflowJob#getJobDescriptionFileName <em>Job Description File Name</em>}' attribute.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @param value the new value of the '<em>Job Description File Name</em>' attribute.
+   * @see #getJobDescriptionFileName()
+   * @generated
+   */
+  void setJobDescriptionFileName(String value);
 
 } // IWorkflowJob

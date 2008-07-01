@@ -1,18 +1,9 @@
-/*******************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License v1.0 
- * which accompanies this distribution, and is available at 
- * http://www.eclipse.org/legal/epl-v10.html 
- * 
- * Initial development of the original code was made for the g-Eclipse project 
- * funded by European Union project number: FP6-IST-034327 
- * http://www.geclipse.eu/
- *  
- * Contributors:
- *     RUR (http://acet.rdg.ac.uk/)
- *     - Ashish Thandavan - initial API and implementation
- ******************************************************************************/
+/**
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
+ */
 package eu.geclipse.workflow;
 
 import org.eclipse.emf.ecore.EFactory;
@@ -22,7 +13,7 @@ import org.eclipse.emf.ecore.EFactory;
  * The <b>Factory</b> for the model.
  * It provides a create method for each non-abstract class of the model.
  * <!-- end-user-doc -->
- * @see eu.geclipse.workflow.IWorkflowPackage
+ * @see eu.geclipse.workflow.WorkflowPackage
  * @generated
  */
 public interface IWorkflowFactory extends EFactory
@@ -33,7 +24,7 @@ public interface IWorkflowFactory extends EFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  IWorkflowFactory eINSTANCE = eu.geclipse.workflow.impl.WorkflowFactoryImpl.init();
+  IWorkflowFactory eINSTANCE = ( IWorkflowFactory )eu.geclipse.workflow.impl.WorkflowFactoryImpl.init();
 
   /**
    * Returns a new object of class '<em>ILink</em>'.
@@ -87,6 +78,6 @@ public interface IWorkflowFactory extends EFactory
    * @return the package supported by this factory.
    * @generated
    */
-  IWorkflowPackage getWorkflowPackage();
+  WorkflowPackage getWorkflowPackage();
 
 } //WorkflowFactory

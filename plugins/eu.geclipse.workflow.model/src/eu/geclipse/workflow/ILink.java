@@ -30,7 +30,7 @@ package eu.geclipse.workflow;
  * </ul>
  * </p>
  *
- * @see eu.geclipse.workflow.IWorkflowPackage#getILink()
+ * @see eu.geclipse.workflow.WorkflowPackage#getILink()
  * @model
  * @generated
  */
@@ -47,9 +47,9 @@ public interface ILink extends IWorkflowElement
    * <!-- end-user-doc -->
    * @return the value of the '<em>Workflow</em>' container reference.
    * @see #setWorkflow(IWorkflow)
-   * @see eu.geclipse.workflow.IWorkflowPackage#getILink_Workflow()
+   * @see eu.geclipse.workflow.WorkflowPackage#getILink_Workflow()
    * @see eu.geclipse.workflow.IWorkflow#getLinks
-   * @model opposite="links" required="true"
+   * @model opposite="links" required="true" transient="false"
    * @generated
    */
   IWorkflow getWorkflow();
@@ -75,7 +75,7 @@ public interface ILink extends IWorkflowElement
    * <!-- end-user-doc -->
    * @return the value of the '<em>Target</em>' reference.
    * @see #setTarget(IInputPort)
-   * @see eu.geclipse.workflow.IWorkflowPackage#getILink_Target()
+   * @see eu.geclipse.workflow.WorkflowPackage#getILink_Target()
    * @see eu.geclipse.workflow.IInputPort#getLinks
    * @model opposite="links" required="true"
    * @generated
@@ -103,7 +103,7 @@ public interface ILink extends IWorkflowElement
    * <!-- end-user-doc -->
    * @return the value of the '<em>Source</em>' reference.
    * @see #setSource(IOutputPort)
-   * @see eu.geclipse.workflow.IWorkflowPackage#getILink_Source()
+   * @see eu.geclipse.workflow.WorkflowPackage#getILink_Source()
    * @see eu.geclipse.workflow.IOutputPort#getLinks
    * @model opposite="links" required="true"
    * @generated

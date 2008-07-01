@@ -30,7 +30,7 @@ import org.eclipse.emf.common.util.EList;
  * </ul>
  * </p>
  *
- * @see eu.geclipse.workflow.IWorkflowPackage#getIInputPort()
+ * @see eu.geclipse.workflow.WorkflowPackage#getIInputPort()
  * @model
  * @generated
  */
@@ -47,9 +47,9 @@ public interface IInputPort extends IPort
    * <!-- end-user-doc -->
    * @return the value of the '<em>Node</em>' container reference.
    * @see #setNode(IWorkflowNode)
-   * @see eu.geclipse.workflow.IWorkflowPackage#getIInputPort_Node()
+   * @see eu.geclipse.workflow.WorkflowPackage#getIInputPort_Node()
    * @see eu.geclipse.workflow.IWorkflowNode#getInputs
-   * @model opposite="inputs" required="true"
+   * @model opposite="inputs" required="true" transient="false"
    * @generated
    */
   IWorkflowNode getNode();
@@ -75,9 +75,9 @@ public interface IInputPort extends IPort
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Links</em>' reference list.
-   * @see eu.geclipse.workflow.IWorkflowPackage#getIInputPort_Links()
+   * @see eu.geclipse.workflow.WorkflowPackage#getIInputPort_Links()
    * @see eu.geclipse.workflow.ILink#getTarget
-   * @model type="eu.geclipse.workflow.ILink" opposite="target"
+   * @model opposite="target"
    * @generated
    */
   EList<ILink> getLinks();

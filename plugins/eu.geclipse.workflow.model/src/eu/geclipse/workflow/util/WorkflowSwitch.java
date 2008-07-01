@@ -32,7 +32,7 @@ import org.eclipse.emf.ecore.EObject;
  * until a non-null result is returned,
  * which is the result of the switch.
  * <!-- end-user-doc -->
- * @see eu.geclipse.workflow.IWorkflowPackage
+ * @see eu.geclipse.workflow.WorkflowPackage
  * @generated
  */
 public class WorkflowSwitch<T>
@@ -43,7 +43,7 @@ public class WorkflowSwitch<T>
    * <!-- end-user-doc -->
    * @generated
    */
-  protected static IWorkflowPackage modelPackage;
+  protected static WorkflowPackage modelPackage;
 
   /**
    * Creates an instance of the switch.
@@ -55,7 +55,7 @@ public class WorkflowSwitch<T>
   {
     if (modelPackage == null)
     {
-      modelPackage = IWorkflowPackage.eINSTANCE;
+      modelPackage = WorkflowPackage.eINSTANCE;
     }
   }
 
@@ -105,7 +105,7 @@ public class WorkflowSwitch<T>
   {
     switch (classifierID)
     {
-      case IWorkflowPackage.IPORT:
+      case WorkflowPackage.IPORT:
       {
         IPort iPort = (IPort)theEObject;
         T result = caseIPort(iPort);
@@ -113,7 +113,7 @@ public class WorkflowSwitch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case IWorkflowPackage.ILINK:
+      case WorkflowPackage.ILINK:
       {
         ILink iLink = (ILink)theEObject;
         T result = caseILink(iLink);
@@ -121,7 +121,7 @@ public class WorkflowSwitch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case IWorkflowPackage.IINPUT_PORT:
+      case WorkflowPackage.IINPUT_PORT:
       {
         IInputPort iInputPort = (IInputPort)theEObject;
         T result = caseIInputPort(iInputPort);
@@ -130,7 +130,7 @@ public class WorkflowSwitch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case IWorkflowPackage.IOUTPUT_PORT:
+      case WorkflowPackage.IOUTPUT_PORT:
       {
         IOutputPort iOutputPort = (IOutputPort)theEObject;
         T result = caseIOutputPort(iOutputPort);
@@ -139,7 +139,7 @@ public class WorkflowSwitch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case IWorkflowPackage.IWORKFLOW:
+      case WorkflowPackage.IWORKFLOW:
       {
         IWorkflow iWorkflow = (IWorkflow)theEObject;
         T result = caseIWorkflow(iWorkflow);
@@ -147,7 +147,7 @@ public class WorkflowSwitch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case IWorkflowPackage.IWORKFLOW_JOB:
+      case WorkflowPackage.IWORKFLOW_JOB:
       {
         IWorkflowJob iWorkflowJob = (IWorkflowJob)theEObject;
         T result = caseIWorkflowJob(iWorkflowJob);
@@ -156,14 +156,14 @@ public class WorkflowSwitch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case IWorkflowPackage.IWORKFLOW_ELEMENT:
+      case WorkflowPackage.IWORKFLOW_ELEMENT:
       {
         IWorkflowElement iWorkflowElement = (IWorkflowElement)theEObject;
         T result = caseIWorkflowElement(iWorkflowElement);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case IWorkflowPackage.IWORKFLOW_NODE:
+      case WorkflowPackage.IWORKFLOW_NODE:
       {
         IWorkflowNode iWorkflowNode = (IWorkflowNode)theEObject;
         T result = caseIWorkflowNode(iWorkflowNode);
@@ -176,13 +176,13 @@ public class WorkflowSwitch<T>
   }
 
   /**
-   * Returns the result of interpretting the object as an instance of '<em>IPort</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>IPort</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpretting the object as an instance of '<em>IPort</em>'.
+   * @return the result of interpreting the object as an instance of '<em>IPort</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
@@ -192,13 +192,13 @@ public class WorkflowSwitch<T>
   }
 
   /**
-   * Returns the result of interpretting the object as an instance of '<em>ILink</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>ILink</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpretting the object as an instance of '<em>ILink</em>'.
+   * @return the result of interpreting the object as an instance of '<em>ILink</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
@@ -208,13 +208,13 @@ public class WorkflowSwitch<T>
   }
 
   /**
-   * Returns the result of interpretting the object as an instance of '<em>IInput Port</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>IInput Port</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpretting the object as an instance of '<em>IInput Port</em>'.
+   * @return the result of interpreting the object as an instance of '<em>IInput Port</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
@@ -224,13 +224,13 @@ public class WorkflowSwitch<T>
   }
 
   /**
-   * Returns the result of interpretting the object as an instance of '<em>IOutput Port</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>IOutput Port</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpretting the object as an instance of '<em>IOutput Port</em>'.
+   * @return the result of interpreting the object as an instance of '<em>IOutput Port</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
@@ -240,13 +240,13 @@ public class WorkflowSwitch<T>
   }
 
   /**
-   * Returns the result of interpretting the object as an instance of '<em>IWorkflow</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>IWorkflow</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpretting the object as an instance of '<em>IWorkflow</em>'.
+   * @return the result of interpreting the object as an instance of '<em>IWorkflow</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
@@ -256,13 +256,13 @@ public class WorkflowSwitch<T>
   }
 
   /**
-   * Returns the result of interpretting the object as an instance of '<em>IWorkflow Job</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>IWorkflow Job</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpretting the object as an instance of '<em>IWorkflow Job</em>'.
+   * @return the result of interpreting the object as an instance of '<em>IWorkflow Job</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
@@ -272,13 +272,13 @@ public class WorkflowSwitch<T>
   }
 
   /**
-   * Returns the result of interpretting the object as an instance of '<em>IWorkflow Element</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>IWorkflow Element</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpretting the object as an instance of '<em>IWorkflow Element</em>'.
+   * @return the result of interpreting the object as an instance of '<em>IWorkflow Element</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
@@ -288,13 +288,13 @@ public class WorkflowSwitch<T>
   }
 
   /**
-   * Returns the result of interpretting the object as an instance of '<em>IWorkflow Node</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>IWorkflow Node</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpretting the object as an instance of '<em>IWorkflow Node</em>'.
+   * @return the result of interpreting the object as an instance of '<em>IWorkflow Node</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject) doSwitch(EObject)
    * @generated
    */
@@ -304,13 +304,13 @@ public class WorkflowSwitch<T>
   }
 
   /**
-   * Returns the result of interpretting the object as an instance of '<em>EObject</em>'.
+   * Returns the result of interpreting the object as an instance of '<em>EObject</em>'.
    * <!-- begin-user-doc -->
    * This implementation returns null;
    * returning a non-null result will terminate the switch, but this is the last case anyway.
    * <!-- end-user-doc -->
    * @param object the target of the switch.
-   * @return the result of interpretting the object as an instance of '<em>EObject</em>'.
+   * @return the result of interpreting the object as an instance of '<em>EObject</em>'.
    * @see #doSwitch(org.eclipse.emf.ecore.EObject)
    * @generated
    */

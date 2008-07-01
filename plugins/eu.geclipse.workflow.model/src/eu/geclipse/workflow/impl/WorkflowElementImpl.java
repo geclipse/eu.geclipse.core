@@ -1,22 +1,14 @@
-/*******************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
- * All rights reserved. This program and the accompanying materials 
- * are made available under the terms of the Eclipse Public License v1.0 
- * which accompanies this distribution, and is available at 
- * http://www.eclipse.org/legal/epl-v10.html 
- * 
- * Initial development of the original code was made for the g-Eclipse project 
- * funded by European Union project number: FP6-IST-034327 
- * http://www.geclipse.eu/
- *  
- * Contributors:
- *     RUR (http://acet.rdg.ac.uk/)
- *     - Ashish Thandavan - initial API and implementation
- ******************************************************************************/
+/**
+ * <copyright>
+ * </copyright>
+ *
+ * $Id$
+ */
 package eu.geclipse.workflow.impl;
 
 import eu.geclipse.workflow.IWorkflowElement;
 import eu.geclipse.workflow.IWorkflowPackage;
+import eu.geclipse.workflow.WorkflowPackage;
 
 import org.eclipse.emf.common.notify.Notification;
 
@@ -32,8 +24,8 @@ import org.eclipse.emf.ecore.impl.EObjectImpl;
  * <p>
  * The following features are implemented:
  * <ul>
- *   <li>{@link eu.geclipse.workflow.impl.WorkflowElementImpl#getName <em>Name</em>}</li>
- *   <li>{@link eu.geclipse.workflow.impl.WorkflowElementImpl#getId <em>Id</em>}</li>
+ *   <li>{@link eu.geclipse.workflow.impl.IWorkflowElementImpl#getName <em>Name</em>}</li>
+ *   <li>{@link eu.geclipse.workflow.impl.IWorkflowElementImpl#getId <em>Id</em>}</li>
  * </ul>
  * </p>
  *
@@ -71,6 +63,7 @@ public abstract class WorkflowElementImpl extends EObjectImpl implements IWorkfl
    */
   protected static final String ID_EDEFAULT = null;
 
+
   /**
    * The cached value of the '{@link #getId() <em>Id</em>}' attribute.
    * <!-- begin-user-doc -->
@@ -106,7 +99,7 @@ public abstract class WorkflowElementImpl extends EObjectImpl implements IWorkfl
   @Override
   protected EClass eStaticClass()
   {
-    return IWorkflowPackage.Literals.IWORKFLOW_ELEMENT;
+    return WorkflowPackage.Literals.IWORKFLOW_ELEMENT;
   }
 
   /**
@@ -116,7 +109,7 @@ public abstract class WorkflowElementImpl extends EObjectImpl implements IWorkfl
    */
   public String getName()
   {
-    return this.name;
+    return name;
   }
 
   /**
@@ -126,10 +119,10 @@ public abstract class WorkflowElementImpl extends EObjectImpl implements IWorkfl
    */
   public void setName(String newName)
   {
-    String oldName = this.name;
-    this.name = newName;
+    String oldName = name;
+    name = newName;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, IWorkflowPackage.IWORKFLOW_ELEMENT__NAME, oldName, this.name));
+      eNotify(new ENotificationImpl(this, Notification.SET, WorkflowPackage.IWORKFLOW_ELEMENT__NAME, oldName, name));
   }
 
   /**
@@ -155,7 +148,7 @@ public abstract class WorkflowElementImpl extends EObjectImpl implements IWorkfl
     long currentTime = System.currentTimeMillis();
     return idPrefix + currentTime + aCounter++;
   }
-  
+
   /**
    * <!-- begin-user-doc -->
    * This method sets an id.
@@ -186,9 +179,9 @@ public abstract class WorkflowElementImpl extends EObjectImpl implements IWorkfl
   {
     switch (featureID)
     {
-      case IWorkflowPackage.IWORKFLOW_ELEMENT__NAME:
+      case WorkflowPackage.IWORKFLOW_ELEMENT__NAME:
         return getName();
-      case IWorkflowPackage.IWORKFLOW_ELEMENT__ID:
+      case WorkflowPackage.IWORKFLOW_ELEMENT__ID:
         return getId();
     }
     return super.eGet(featureID, resolve, coreType);
@@ -204,10 +197,10 @@ public abstract class WorkflowElementImpl extends EObjectImpl implements IWorkfl
   {
     switch (featureID)
     {
-      case IWorkflowPackage.IWORKFLOW_ELEMENT__NAME:
+      case WorkflowPackage.IWORKFLOW_ELEMENT__NAME:
         setName((String)newValue);
         return;
-      case IWorkflowPackage.IWORKFLOW_ELEMENT__ID:
+      case WorkflowPackage.IWORKFLOW_ELEMENT__ID:
         setId((String)newValue);
         return;
     }
@@ -224,10 +217,10 @@ public abstract class WorkflowElementImpl extends EObjectImpl implements IWorkfl
   {
     switch (featureID)
     {
-      case IWorkflowPackage.IWORKFLOW_ELEMENT__NAME:
+      case WorkflowPackage.IWORKFLOW_ELEMENT__NAME:
         setName(NAME_EDEFAULT);
         return;
-      case IWorkflowPackage.IWORKFLOW_ELEMENT__ID:
+      case WorkflowPackage.IWORKFLOW_ELEMENT__ID:
         setId(ID_EDEFAULT);
         return;
     }
@@ -244,9 +237,9 @@ public abstract class WorkflowElementImpl extends EObjectImpl implements IWorkfl
   {
     switch (featureID)
     {
-      case IWorkflowPackage.IWORKFLOW_ELEMENT__NAME:
-        return NAME_EDEFAULT == null ? this.name != null : !NAME_EDEFAULT.equals(this.name);
-      case IWorkflowPackage.IWORKFLOW_ELEMENT__ID:
+      case WorkflowPackage.IWORKFLOW_ELEMENT__NAME:
+        return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
+      case WorkflowPackage.IWORKFLOW_ELEMENT__ID:
         return ID_EDEFAULT == null ? getId() != null : !ID_EDEFAULT.equals(getId());
     }
     return super.eIsSet(featureID);
@@ -264,7 +257,7 @@ public abstract class WorkflowElementImpl extends EObjectImpl implements IWorkfl
 
     StringBuffer result = new StringBuffer(super.toString());
     result.append(" (name: "); //$NON-NLS-1$
-    result.append(this.name);
+    result.append(name);
     result.append(')');
     return result.toString();
   }

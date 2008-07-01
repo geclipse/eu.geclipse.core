@@ -33,7 +33,7 @@ import org.eclipse.emf.common.util.EList;
  * </ul>
  * </p>
  *
- * @see eu.geclipse.workflow.IWorkflowPackage#getIWorkflowNode()
+ * @see eu.geclipse.workflow.WorkflowPackage#getIWorkflowNode()
  * @model abstract="true"
  * @generated
  */
@@ -50,9 +50,9 @@ public interface IWorkflowNode extends IWorkflowElement
    * <!-- end-user-doc -->
    * @return the value of the '<em>Workflow</em>' container reference.
    * @see #setWorkflow(IWorkflow)
-   * @see eu.geclipse.workflow.IWorkflowPackage#getIWorkflowNode_Workflow()
+   * @see eu.geclipse.workflow.WorkflowPackage#getIWorkflowNode_Workflow()
    * @see eu.geclipse.workflow.IWorkflow#getNodes
-   * @model opposite="nodes" required="true"
+   * @model opposite="nodes" required="true" transient="false"
    * @generated
    */
   IWorkflow getWorkflow();
@@ -78,9 +78,9 @@ public interface IWorkflowNode extends IWorkflowElement
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Outputs</em>' containment reference list.
-   * @see eu.geclipse.workflow.IWorkflowPackage#getIWorkflowNode_Outputs()
+   * @see eu.geclipse.workflow.WorkflowPackage#getIWorkflowNode_Outputs()
    * @see eu.geclipse.workflow.IOutputPort#getNode
-   * @model type="eu.geclipse.workflow.IOutputPort" opposite="node" containment="true" required="true"
+   * @model opposite="node" containment="true" required="true"
    * @generated
    */
   EList<IOutputPort> getOutputs();
@@ -96,9 +96,9 @@ public interface IWorkflowNode extends IWorkflowElement
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Inputs</em>' containment reference list.
-   * @see eu.geclipse.workflow.IWorkflowPackage#getIWorkflowNode_Inputs()
+   * @see eu.geclipse.workflow.WorkflowPackage#getIWorkflowNode_Inputs()
    * @see eu.geclipse.workflow.IInputPort#getNode
-   * @model type="eu.geclipse.workflow.IInputPort" opposite="node" containment="true" required="true"
+   * @model opposite="node" containment="true" required="true"
    * @generated
    */
   EList<IInputPort> getInputs();
@@ -114,7 +114,7 @@ public interface IWorkflowNode extends IWorkflowElement
    * <!-- end-user-doc -->
    * @return the value of the '<em>Is Start</em>' attribute.
    * @see #setIsStart(boolean)
-   * @see eu.geclipse.workflow.IWorkflowPackage#getIWorkflowNode_IsStart()
+   * @see eu.geclipse.workflow.WorkflowPackage#getIWorkflowNode_IsStart()
    * @model default="false" required="true"
    * @generated
    */
@@ -141,7 +141,7 @@ public interface IWorkflowNode extends IWorkflowElement
    * <!-- end-user-doc -->
    * @return the value of the '<em>Is Finish</em>' attribute.
    * @see #setIsFinish(boolean)
-   * @see eu.geclipse.workflow.IWorkflowPackage#getIWorkflowNode_IsFinish()
+   * @see eu.geclipse.workflow.WorkflowPackage#getIWorkflowNode_IsFinish()
    * @model default="false" required="true"
    * @generated
    */

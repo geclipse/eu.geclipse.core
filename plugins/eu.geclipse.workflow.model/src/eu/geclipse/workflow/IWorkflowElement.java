@@ -30,7 +30,7 @@ import org.eclipse.emf.ecore.EObject;
  * </ul>
  * </p>
  *
- * @see eu.geclipse.workflow.IWorkflowPackage#getIWorkflowElement()
+ * @see eu.geclipse.workflow.WorkflowPackage#getIWorkflowElement()
  * @model abstract="true"
  * @generated
  */
@@ -46,7 +46,7 @@ public interface IWorkflowElement extends EObject
    * <!-- end-user-doc -->
    * @return the value of the '<em>Name</em>' attribute.
    * @see #setName(String)
-   * @see eu.geclipse.workflow.IWorkflowPackage#getIWorkflowElement_Name()
+   * @see eu.geclipse.workflow.WorkflowPackage#getIWorkflowElement_Name()
    * @model
    * @generated
    */
@@ -72,7 +72,7 @@ public interface IWorkflowElement extends EObject
    * <!-- end-user-doc -->
    * @return the value of the '<em>Id</em>' attribute.
    * @see #setId(String)
-   * @see eu.geclipse.workflow.IWorkflowPackage#getIWorkflowElement_Id()
+   * @see eu.geclipse.workflow.WorkflowPackage#getIWorkflowElement_Id()
    * @model id="true" required="true" volatile="true"
    * @generated
    */

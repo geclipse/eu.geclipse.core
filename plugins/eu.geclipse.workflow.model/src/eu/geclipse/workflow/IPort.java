@@ -22,7 +22,7 @@ package eu.geclipse.workflow;
  * <!-- end-user-doc -->
  *
  *
- * @see eu.geclipse.workflow.IWorkflowPackage#getIPort()
+ * @see eu.geclipse.workflow.WorkflowPackage#getIPort()
  * @model abstract="true"
  * @generated
  */

@@ -30,7 +30,7 @@ import org.eclipse.emf.common.util.EList;
  * </ul>
  * </p>
  *
- * @see eu.geclipse.workflow.IWorkflowPackage#getIWorkflow()
+ * @see eu.geclipse.workflow.WorkflowPackage#getIWorkflow()
  * @model
  * @generated
  */
@@ -47,9 +47,9 @@ public interface IWorkflow extends IWorkflowElement
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Nodes</em>' containment reference list.
-   * @see eu.geclipse.workflow.IWorkflowPackage#getIWorkflow_Nodes()
+   * @see eu.geclipse.workflow.WorkflowPackage#getIWorkflow_Nodes()
    * @see eu.geclipse.workflow.IWorkflowNode#getWorkflow
-   * @model type="eu.geclipse.workflow.IWorkflowNode" opposite="workflow" containment="true"
+   * @model opposite="workflow" containment="true"
    * @generated
    */
   EList<IWorkflowNode> getNodes();
@@ -65,9 +65,9 @@ public interface IWorkflow extends IWorkflowElement
    * </p>
    * <!-- end-user-doc -->
    * @return the value of the '<em>Links</em>' containment reference list.
-   * @see eu.geclipse.workflow.IWorkflowPackage#getIWorkflow_Links()
+   * @see eu.geclipse.workflow.WorkflowPackage#getIWorkflow_Links()
    * @see eu.geclipse.workflow.ILink#getWorkflow
-   * @model type="eu.geclipse.workflow.ILink" opposite="workflow" containment="true"
+   * @model opposite="workflow" containment="true"
    * @generated
    */
   EList<ILink> getLinks();
