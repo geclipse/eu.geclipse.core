@@ -12,6 +12,7 @@
  * Contributors:
  *     FZK (http://www.fzk.de)
  *     - Mathias Stumpert - initial API and implementation
+ *     - David Johnson - added GridModelListener to correctly refresh changes
  ******************************************************************************/
 package eu.geclipse.workflow.resources;
 
@@ -29,8 +30,11 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.xmi.XMLResource;
 
+import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridJobDescription;
+import eu.geclipse.core.model.IGridModelEvent;
+import eu.geclipse.core.model.IGridModelListener;
 import eu.geclipse.core.model.IGridWorkflow;
 import eu.geclipse.core.model.IGridWorkflowJob;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
@@ -50,6 +54,9 @@ public class GridWorkflow
 
   private WorkflowImpl rootImpl;
   private List<IGridWorkflowJob> jobs;
+  static {
+    GridModel.addGridModelListener( createGridModelListener() );
+  }  
 
   protected GridWorkflow( final IResource resource ) {
     super( resource );
@@ -142,8 +149,42 @@ public class GridWorkflow
     try {
       resource.load( options );
       this.rootImpl = (WorkflowImpl)resource.getContents().get( 0 );
+      this.jobs = new ArrayList<IGridWorkflowJob>();      
+      for( IWorkflowNode node : rootImpl.getNodes() ) {
+        if( node instanceof IWorkflowJob ) {
+          this.jobs.add( new GridWorkflowJob( ( IWorkflowJob )node ) );        
+        }        
+      }
     } catch( IOException ioEx ) {
       Activator.logException( ioEx );
     }
   }
+  
+  private static IGridModelListener createGridModelListener() {
+    return new IGridModelListener() {
+
+      public void gridModelChanged( final IGridModelEvent event ) {
+        switch( event.getType() ) {
+          case IGridModelEvent.ELEMENTS_CHANGED:
+            if( event.getElements().length > 0 ) {
+              IGridElement element = event.getElements()[ 0 ];
+              if( element instanceof GridWorkflow ) {
+                onWorkflowChanged( event.getElements() );
+              }
+            }
+          break;
+        }
+      }
+
+      private void onWorkflowChanged( final IGridElement[] elements ) {
+        for( IGridElement gridElement : elements ) {
+          if( gridElement instanceof GridWorkflow ) {
+            GridWorkflow workflowDescription = ( GridWorkflow )gridElement;
+            workflowDescription.loadModel( ( IFile )workflowDescription.getResource() );
+          }
+        }
+      }
+    };
+  }  
+  
 }
