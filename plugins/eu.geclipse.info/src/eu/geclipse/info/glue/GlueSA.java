@@ -155,6 +155,8 @@ public class GlueSA extends AbstractGlueTable implements java.io.Serializable {
   {
     this.UniqueID = GlueUtility.getStringAttribute( "GlueChunkKey", attributes ); //$NON-NLS-1$
     this.UniqueID = this.UniqueID.substring( this.UniqueID.indexOf( '=' ) + 1 );
+    this.UniqueID = GlueUtility.getStringAttribute( "GlueSALocalID", attributes ) + "@" 
+                    + this.UniqueID.substring( this.UniqueID.indexOf( '=' ) + 1 );
     this.byRefOnly = false;
    
     this.keyName = 
