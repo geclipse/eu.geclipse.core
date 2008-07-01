@@ -190,7 +190,7 @@ public final class ResourcesPage extends JsdlFormPage {
     this.exclusiveExecutionSection.addListener( this );
     
     /* Create the Additional Elements Section */
-    this.additionalResourceElemetsSection = new AdditionalResourceElemetsSection(this.right, toolkit);
+    this.additionalResourceElemetsSection = new AdditionalResourceElemetsSection(this, this.right, toolkit);
     this.additionalResourceElemetsSection.setInput( this.jobDefinitionType );
     this.additionalResourceElemetsSection.addListener( this );
    

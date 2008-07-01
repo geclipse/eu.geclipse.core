@@ -98,6 +98,9 @@ JsdlFormPageSection {
   protected ApplicationType applicationType = null;
   protected DocumentRoot documentRoot = PosixFactory.eINSTANCE.createDocumentRoot();
   protected POSIXApplicationType posixApplicationType;
+  
+  
+  
   public AdditionalPosixElementSection( final FormPage formPage, final Composite parent, final FormToolkit toolkit ) {
 
     this.parentPage = formPage;

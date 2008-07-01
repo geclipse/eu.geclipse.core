@@ -16,13 +16,24 @@
  *****************************************************************************/
 package eu.geclipse.jsdl.ui.internal.pages.sections;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
+import org.eclipse.core.internal.localstore.IsSynchronizedVisitor;
 import org.eclipse.emf.ecore.EObject;
+import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
+import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 import org.eclipse.ui.forms.widgets.TableWrapData;
 
@@ -34,6 +45,7 @@ import eu.geclipse.jsdl.model.base.JsdlFactory;
 import eu.geclipse.jsdl.model.base.JsdlPackage;
 import eu.geclipse.jsdl.model.base.RangeValueType;
 import eu.geclipse.jsdl.model.base.ResourcesType;
+import eu.geclipse.jsdl.ui.editors.JsdlEditor;
 import eu.geclipse.jsdl.ui.internal.pages.FormSectionFactory;
 import eu.geclipse.jsdl.ui.internal.pages.Messages;
 import eu.geclipse.ui.widgets.DoubleNumberVerifier;
@@ -43,8 +55,7 @@ import eu.geclipse.ui.widgets.DoubleNumberVerifier;
  * @author nloulloud
  *
  */
-public class AdditionalResourceElemetsSection extends 
-JsdlFormPageSection {
+public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
   
   protected static final String LOWER_BOUND = JsdlPackage.Literals.RANGE_VALUE_TYPE__LOWER_BOUND.getName();
   protected static final String UPPER_BOUND = JsdlPackage.Literals.RANGE_VALUE_TYPE__UPPER_BOUND.getName();
@@ -56,9 +67,6 @@ JsdlFormPageSection {
   
   protected JobDescriptionType jobDescriptionType = JsdlFactory.eINSTANCE.createJobDescriptionType();
   protected ResourcesType resourcesType = JsdlFactory.eINSTANCE.createResourcesType();  
-  protected BoundaryType boundaryType = JsdlFactory.eINSTANCE.createBoundaryType();  
-  protected ExactType exactType = JsdlFactory.eINSTANCE.createExactType();  
-  protected RangeValueType rangeValueType = JsdlFactory.eINSTANCE.createRangeValueType();
 
   protected Label lblIndCPUSpl = null;
   protected Label lblIndCPUTime = null;
@@ -102,13 +110,17 @@ JsdlFormPageSection {
   private Text txtTotVirtMem = null;
   private Text txtTotDiskSp = null;
   private Text txtTotResCount = null;  
+//  private FormPage parentPage = null;
+  
   /**
  * @param parent
  * @param toolkit
  */
-  public AdditionalResourceElemetsSection( final Composite parent,
+  public AdditionalResourceElemetsSection( final FormPage formPage,
+                                           final Composite parent,
                                            final FormToolkit toolkit ) {
         
+    this.parentPage = formPage;
     createSection( parent, toolkit );
     
   }
@@ -129,15 +141,6 @@ JsdlFormPageSection {
     fillFields();
     
   }
-  
-  
-//  protected void contentChanged() {
-//    
-//    if (this.isNotifyAllowed){
-//      fireNotifyChanged( null);
-//    }
-//    
-//  }
   
   
   private void createSection(final Composite parent, final FormToolkit toolkit) {
@@ -164,29 +167,38 @@ JsdlFormPageSection {
 
     this.cmbIndividualCPUSpeed = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
     this.cmbIndividualCPUSpeed.setData( FormToolkit.KEY_DRAW_BORDER );
-    this.cmbIndividualCPUSpeed.setItems( RESOURCES_BOUNDARY_ITEMS );  
+    this.cmbIndividualCPUSpeed.setItems( RESOURCES_BOUNDARY_ITEMS );
+    this.cmbIndividualCPUSpeed.addSelectionListener( new SelectionListener(){
+
+      public void widgetDefaultSelected( final SelectionEvent e ) {
+        // TODO Auto-generated method stub
+        
+      }
+
+      public void widgetSelected( final SelectionEvent e ) {
+        
+        setResourceElement( AdditionalResourceElemetsSection.this.txtIndCPUSp.getText(),
+                            AdditionalResourceElemetsSection.this.cmbIndividualCPUSpeed.getText(),
+                            JsdlPackage.RESOURCES_TYPE__INDIVIDUAL_CPU_SPEED );
+        
+      }
+      
+    });
+    
+    
     this.txtIndCPUSp = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
-//    this.txtIndCPUSp.addModifyListener( new ModifyListener() {
-//      
-//      public void modifyText( final ModifyEvent e ) {    
-//        
-//        if (!AdditionalResourceElemetsSection.this.txtIndCPUSp.getText().equals( EMPTY_STRING ) ) {
-//          
-//          AdditionalResourceElemetsSection.this.boundaryType.setValue( 
-//                                      Double.parseDouble( AdditionalResourceElemetsSection.this.txtIndCPUSp.getText()));
-//          
-//          AdditionalResourceElemetsSection.this.rangeValueType
-//                                                  .setLowerBound( AdditionalResourceElemetsSection.this.boundaryType );
-//          AdditionalResourceElemetsSection.this.resourcesType
-//                                         .setIndividualCPUSpeed( AdditionalResourceElemetsSection.this.rangeValueType );
-//        }else{
-//          AdditionalResourceElemetsSection.this.resourcesType.setIndividualCPUSpeed( null );
-//        }
-//          
-//        contentChanged();
-//          
-//        }
-//      } );   
+    this.txtIndCPUSp.addModifyListener( new ModifyListener() {
+      
+     
+      public void modifyText( final ModifyEvent e ) {    
+        
+        
+        setResourceElement( AdditionalResourceElemetsSection.this.txtIndCPUSp.getText(),
+                            AdditionalResourceElemetsSection.this.cmbIndividualCPUSpeed.getText(),
+                            JsdlPackage.RESOURCES_TYPE__INDIVIDUAL_CPU_SPEED );
+          
+        }
+      } );   
     this.txtIndCPUSp.addListener( SWT.Verify, new DoubleNumberVerifier() );
     this.txtIndCPUSp.setLayoutData( td );    
    
@@ -368,22 +380,23 @@ JsdlFormPageSection {
   private void fillFields() {
     
     this.isNotifyAllowed = false;
+    RangeValueType rangeValueType = JsdlFactory.eINSTANCE.createRangeValueType();
+    BoundaryType boundaryType = JsdlFactory.eINSTANCE.createBoundaryType();
  
-    this.rangeValueType = this.resourcesType.getIndividualCPUSpeed();
-    
-    this.rangeValueType = (RangeValueType) checkProxy( this.rangeValueType );
+    rangeValueType = this.resourcesType.getIndividualCPUSpeed();    
+    rangeValueType = (RangeValueType) checkProxy( rangeValueType );
     
     
     if (this.resourcesType.getIndividualCPUSpeed() != null ){
     
       if (this.resourcesType.getIndividualCPUSpeed().getLowerBound() != null ) {
     
-        this.boundaryType = this.resourcesType.getIndividualCPUSpeed().getLowerBound();
+        boundaryType = this.resourcesType.getIndividualCPUSpeed().getLowerBound();
         
-        /* check for Lazy Loading */
-        this.boundaryType = (BoundaryType) checkProxy( this.boundaryType );
+        /* check for Lazy Loading */  
+        boundaryType = (BoundaryType) checkProxy( boundaryType );
     
-        this.txtIndCPUSp.setText( Double.toString( this.boundaryType.getValue() ) );
+        this.txtIndCPUSp.setText( Double.toString( boundaryType.getValue() ) );
     
 
       }
@@ -395,6 +408,104 @@ JsdlFormPageSection {
       this.adapterRefreshed = false;
     }
   }
+  
+  protected void checkResourcesElement() {
+    
+    EStructuralFeature eStructuralFeature = this.jobDescriptionType.eClass()
+          .getEStructuralFeature( JsdlPackage.JOB_DESCRIPTION_TYPE__RESOURCES );
+    
+    /*
+     * Check if the Resources element is not set. If not set then set it to its 
+     * container (JobDescriptionType).
+     */
+    if (!this.jobDescriptionType.eIsSet( eStructuralFeature )) {      
+      this.jobDescriptionType.eSet( eStructuralFeature, this.resourcesType );
+    }
+    /* 
+     * If the Resources Element is set, check for any possible contents which may
+     * be set. Also check if the Exclusive Execution attribute is set.
+     * If none of the above are true, then delete the Resources Element from it's
+     * container (JobDescriptionType).
+     */
+    else {
+      if ( !this.resourcesType.isExclusiveExecution() && this.resourcesType.eContents().size() == 0) {
+        EcoreUtil.remove( this.resourcesType );
+      }
+    }
+    
+  } // end void checkResourcesElement()
+  
+  
+  @SuppressWarnings("unchecked")
+  protected void setResourceElement(final String value, final String type, final int feature ){
+    RangeValueType rangeValueType = null;
+    BoundaryType boundaryType = null;
+    ExactType exactType = null;
+    EStructuralFeature eFeature = this.resourcesType.eClass().getEStructuralFeature( feature );
+    
+    
+    if (!AdditionalResourceElemetsSection.this.txtIndCPUSp.getText().equals( EMPTY_STRING ) ) {
+    
+      checkResourcesElement();
+      
+      boundaryType = JsdlFactory.eINSTANCE.createBoundaryType();
+      boundaryType.setValue( Double.parseDouble( value ) );    
+       
+      if ( type.equals( LOWER_BOUND ) ){
+        clearErrorMessage();
+        rangeValueType = JsdlFactory.eINSTANCE.createRangeValueType();
+        rangeValueType.setLowerBound( boundaryType );
+        contentChanged();
+      } else if ( type.equals( UPPER_BOUND )  ){
+        clearErrorMessage();
+        rangeValueType = JsdlFactory.eINSTANCE.createRangeValueType();
+        rangeValueType.setUpperBound( boundaryType );
+        contentChanged();
+      } else if ( type.equals( EXACT )  ){
+        clearErrorMessage();
+        rangeValueType = JsdlFactory.eINSTANCE.createRangeValueType();
+        exactType = JsdlFactory.eINSTANCE.createExactType();
+        exactType.setValue( Double.parseDouble( value )  );
+        Collection<ExactType> collection = new ArrayList<ExactType>();
+        collection.add( exactType );
+        rangeValueType.getExact().addAll( collection );
+        contentChanged();
+      } else{
+        setMessage( "Please select Boundary !!!!", IMessageProvider.ERROR );
+      }
+      
+      
+      this.resourcesType.eSet( eFeature, rangeValueType );
+    
+    }else{
+      this.resourcesType.eSet( eFeature, null );
+      contentChanged();
+    }  
+    
+  }
+  
+  private void clearErrorMessage(){
+    if (!getMessage().equals( EMPTY_STRING )){
+    setMessage( EMPTY_STRING, IMessageProvider.NONE);
+    }
+  }
+  
+  
+  protected void setMessage(final String message, final int type) {
+    
+    this.parentPage.getManagedForm().getForm().setMessage( message, type );
+    
+//    if (type == IMessageProvider.ERROR){
+//     final JsdlEditor jsdlEditor = (JsdlEditor)this.parentPage.getEditor();
+//     jsdlEditor.setDirty( false );
+//    }
+  }
+  
+  protected String getMessage() {
+    
+    return this.parentPage.getManagedForm().getForm().getMessage();
+  }
+  
   
    
 }
