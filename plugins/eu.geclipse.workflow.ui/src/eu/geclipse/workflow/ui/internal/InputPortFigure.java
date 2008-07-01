@@ -15,8 +15,15 @@
  ******************************************************************************/
 package eu.geclipse.workflow.ui.internal;
 
+import java.net.URL;
+
 import org.eclipse.draw2d.ColorConstants;
+import org.eclipse.draw2d.GridLayout;
 import org.eclipse.draw2d.RectangleFigure;
+import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.swt.graphics.Image;
+
+import eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin;
 
 
 /**
@@ -25,6 +32,19 @@ import org.eclipse.draw2d.RectangleFigure;
 public class InputPortFigure extends RectangleFigure {
 
   private boolean myUseLocalCoordinates = false;
+  
+  private Image img;
+  
+  public ImageDescriptor getImageDescriptor( final Object resource ) {
+    URL imgUrl = WorkflowDiagramEditorPlugin.getDefault().getBundle().getEntry( "icons/obj16/InputPort.gif" ); //$NON-NLS-1$
+    return ImageDescriptor.createFromURL( imgUrl );
+  }
+
+/*  public InputPortFigure() {    
+    ImageDescriptor imgdesc = getImageDescriptor( null );
+    img = imgdesc.createImage();
+    this.add( img );
+  }*/
 
   /**
    * Default Constructor

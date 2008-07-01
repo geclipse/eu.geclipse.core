@@ -33,6 +33,7 @@ import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+
 import eu.geclipse.workflow.provider.WorkflowItemProviderAdapterFactory;
 import eu.geclipse.workflow.ui.part.WorkflowDocumentProvider;
 
@@ -50,6 +51,7 @@ public class WorkflowDiagramEditorPlugin extends AbstractUIPlugin {
    */
   public static final PreferencesHint DIAGRAM_PREFERENCES_HINT = new PreferencesHint( ID );
   /**
+   * The shared instance
    * @generated
    */
   private static WorkflowDiagramEditorPlugin instance;
@@ -66,6 +68,7 @@ public class WorkflowDiagramEditorPlugin extends AbstractUIPlugin {
    * Constructor
    */
   public WorkflowDiagramEditorPlugin() {
+    instance = this;
   }
 
   /**
@@ -77,7 +80,7 @@ public class WorkflowDiagramEditorPlugin extends AbstractUIPlugin {
     instance = this;
     PreferencesHint.registerPreferenceStore( DIAGRAM_PREFERENCES_HINT,
                                              getPreferenceStore() );
-    adapterFactory = createAdapterFactory();
+    this.adapterFactory = createAdapterFactory();
   }
 
   /**
@@ -85,8 +88,8 @@ public class WorkflowDiagramEditorPlugin extends AbstractUIPlugin {
    */
   @Override
   public void stop( BundleContext context ) throws Exception {
-    adapterFactory.dispose();
-    adapterFactory = null;
+    this.adapterFactory.dispose();
+    this.adapterFactory = null;
     instance = null;
     super.stop( context );
   }
@@ -117,17 +120,26 @@ public class WorkflowDiagramEditorPlugin extends AbstractUIPlugin {
   }
 
   /**
+   * Returns the shared instance
+   *
+   * @return the shared instance
+   */
+  public static WorkflowDiagramEditorPlugin getDefault() {
+    return instance;
+  }
+  
+  /**
    * @generated
    */
   public AdapterFactory getItemProvidersAdapterFactory() {
-    return adapterFactory;
+    return this.adapterFactory;
   }
 
   /**
    * @generated
    */
   public ImageDescriptor getItemImageDescriptor( Object item ) {
-    IItemLabelProvider labelProvider = ( IItemLabelProvider )adapterFactory.adapt( item, IItemLabelProvider.class );
+    IItemLabelProvider labelProvider = ( IItemLabelProvider )this.adapterFactory.adapt( item, IItemLabelProvider.class );
     if( labelProvider != null ) {
       return ExtendedImageRegistry.getInstance().getImageDescriptor( labelProvider.getImage( item ) );
     }
@@ -193,13 +205,14 @@ public class WorkflowDiagramEditorPlugin extends AbstractUIPlugin {
   }
 
   /**
+   * @return 
    * @generated
    */
   public WorkflowDocumentProvider getDocumentProvider() {
-    if( myDocumentProvider == null ) {
-      myDocumentProvider = new WorkflowDocumentProvider();
+    if( this.myDocumentProvider == null ) {
+      this.myDocumentProvider = new WorkflowDocumentProvider();
     }
-    return myDocumentProvider;
+    return this.myDocumentProvider;
   }
 
   /**
@@ -226,6 +239,23 @@ public class WorkflowDiagramEditorPlugin extends AbstractUIPlugin {
   }
 
   /**
+   * Logs an exception to the eclipse logger.
+   * 
+   * @param exc The exception to be logged.
+   */
+  public static void logException( final Throwable exc ) {
+    String message = exc.getLocalizedMessage();
+    if( message == null )
+      message = exc.getClass().getName();
+    IStatus status = new Status( IStatus.ERROR,
+                                 ID,
+                                 IStatus.OK,
+                                 message,
+                                 exc );
+    logStatus( status );
+  }
+  
+  /**
    * @generated
    */
   public void logInfo( String message ) {
@@ -246,6 +276,15 @@ public class WorkflowDiagramEditorPlugin extends AbstractUIPlugin {
                               message,
                               throwable ) );
 //    debug( message, throwable );
+  }
+  
+  /**
+   * Logs a status object to the eclipse logger.
+   * 
+   * @param status The status to be logged.
+   */
+  public static void logStatus( final IStatus status ) {
+    getDefault().getLog().log( status );
   }
 
 //  private void debug( String message, Throwable throwable ) {

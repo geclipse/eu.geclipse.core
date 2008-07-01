@@ -86,7 +86,8 @@ public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
       IFileStore[] result = dialog.getSelectedFileStores();
       if( ( result != null ) && ( result.length > 0 ) ) {
         try {
-          this.fileName= result[0].getName();          
+          System.out.println("ADDs: "+ result[0].toURI().toString());
+          this.fileName= result[0].toURI().toString();          
           
           inStream = result[ 0 ].openInputStream( EFS.NONE, null );
         } catch( CoreException cE ) {

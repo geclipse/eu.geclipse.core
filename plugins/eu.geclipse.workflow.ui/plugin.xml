@@ -119,7 +119,23 @@
       </objectContribution>                    
    </extension>
 	
-   <extension point="org.eclipse.gmf.runtime.common.ui.services.action.globalActionHandlerProviders">
+   <extension point="org.eclipse.ui.popupMenus">
+      <objectContribution
+            adaptable="false"
+            id="eu.geclipse.workflow.ui.OpenJSDLEditor"
+            objectClass="org.eclipse.gmf.runtime.diagram.ui.editparts.ShapeNodeEditPart">
+         <action 
+               class="eu.geclipse.workflow.ui.part.OpenWorkflowJobWithJSDLEditor"
+               definitionId="eu.geclipse.workflow.ui.openJSDLEditor"
+               enablesFor="1"
+               id="eu.geclipse.workflow.ui.popup.openJSDLEditor"
+               label="%open.jsdl.editor"
+               menubarPath="additions">
+          </action>
+      </objectContribution>                    
+   </extension>
+   
+      <extension point="org.eclipse.gmf.runtime.common.ui.services.action.globalActionHandlerProviders">
       <?gmfgen generated="true"?>
       <GlobalActionHandlerProvider
          class="org.eclipse.gmf.runtime.diagram.ui.providers.DiagramGlobalActionHandlerProvider"
@@ -541,7 +557,20 @@
       </command>
    </extension>
 
-   <extension point="org.eclipse.ui.bindings">
+   <extension point="org.eclipse.ui.commands">
+	  <category 
+	     name="%open.jsdl.editor" 
+	     description="%open.jsdl.editor.desc" 
+	     id="eu.geclipse.workflow.ui"/>
+	  <command 
+	     categoryId="org.eclipse.ui.category.edit" 
+	     description="%open.jsdl.editor.desc" 
+	     id="eu.geclipse.workflow.ui.openJSDLEditor" 
+	     name="%open.jsdl.editor">
+      </command>
+   </extension>
+   
+      <extension point="org.eclipse.ui.bindings">
       <?gmfgen generated="true"?>
       <key 
          commandId="eu.geclipse.workflow.ui.updateDiagram"
@@ -558,6 +587,14 @@
          sequence="M1+J"/>
    </extension>
    
+   <extension point="org.eclipse.ui.bindings">
+      <key
+         commandId="eu.geclipse.workflow.ui.openJSDLEditor"
+         contextId="eu.geclipse.workflow.ui.diagramContext"
+         schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+         sequence="M1+J"/>
+   </extension>
+
    <extension point="org.eclipse.gmf.runtime.diagram.ui.paletteProviders">
          <paletteProvider class="org.eclipse.gmf.runtime.diagram.ui.providers.DefaultPaletteProvider">
            <Priority name="High"/>
