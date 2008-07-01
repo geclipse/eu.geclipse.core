@@ -73,8 +73,7 @@ import eu.geclipse.jsdl.ui.providers.FeatureLabelProvider;
  * @author nloulloud
  *
  */
-public class PosixApplicationSection extends 
-JsdlFormPageSection {
+public class PosixApplicationSection extends JsdlFormPageSection {
   
   private static final int WIDGET_HEIGHT = 100;
   protected Text txtExecutable = null;

@@ -172,7 +172,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
       String fileName = this.firstPage.getFileName();
       IPath path = new Path( fileName );
       fileName = path.removeFileExtension()
-        .addFileExtension( "jsdl" )
+        .addFileExtension( "jsdl" ) //$NON-NLS-1$
         .lastSegment();
       this.firstPage.setFileName( fileName );
     }
@@ -195,16 +195,16 @@ public class NewJobWizard extends Wizard implements INewWizard {
         this.file = ( IFile )newElement.getResource();
       } catch( GridModelException gmExc ) {
         ProblemDialog.openProblem( getShell(),
-                                   "Creation failed",
-                                   "Error while creating job description",
+                                   Messages.getString("NewJobWizard.CreationFailed"), //$NON-NLS-1$
+                                   Messages.getString("NewJobWizard.ErrorCreatingJobDescription"), //$NON-NLS-1$
                                    gmExc );
       } finally {
         try {
           jsdlJobDescription.getResource().delete( true, null );
         } catch( CoreException cExc ) {
           ProblemDialog.openProblem( getShell(),
-                                     "Deletion failed",
-                                     "Unable to delete temporary JSDL file",
+                                     Messages.getString("NewJobWizard.DeletionFailed"), //$NON-NLS-1$
+                                     Messages.getString("NewJobWizard.UnableToDelete"), //$NON-NLS-1$
                                      cExc );
         }
       }
@@ -212,7 +212,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
     monitor.worked( 1 );
   }
 
-  @SuppressWarnings("unchecked")
+  
   void setInitialModel( final JSDLJobDescription jsdl ) {
     this.executablePage.getApplicationSpecificPage();
     if( getContainer().getCurrentPage() != this.outputFilesPage ) {
@@ -434,9 +434,9 @@ public class NewJobWizard extends Wizard implements INewWizard {
   }
   class FirstPage extends WizardNewFileCreationPage {
 
-    private static final String JSDL_STANDARD = "JSDL - Job Submission Description Language (OGF Standard)";
+    private static final String JSDL_STANDARD = "JSDL - Job Submission Description Language (OGF Standard)"; //$NON-NLS-1$
     private IStructuredSelection iniSelection;
-    private final String initFileName = Messages.getString( "NewJobWizard.first_page_default_new_file_name" );
+    private final String initFileName = Messages.getString( Messages.getString("NewJobWizard.DefaultFileName") ); //$NON-NLS-1$
     private Combo typeCombo;
     private Hashtable<String, IGridElementCreator> creators = new Hashtable<String, IGridElementCreator>();
 
@@ -458,7 +458,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
       Composite mainComp = new Composite( parent, SWT.NONE );
       mainComp.setLayout( new GridLayout( 1, false ) );
       Label typeLabel = new Label( mainComp, SWT.NONE );
-      typeLabel.setText( "Job Description Type:" );
+      typeLabel.setText( Messages.getString("NewJobWizard.JobDescriptionType") ); //$NON-NLS-1$
       typeLabel.setLayoutData( new GridData( SWT.BEGINNING,
                                              SWT.CENTER,
                                              false,
@@ -496,10 +496,10 @@ public class NewJobWizard extends Wizard implements INewWizard {
     }
 
     public String getDescriptionSuffix() {
-      String result = "jsdl";
+      String result = Messages.getString("NewJobWizard.JSDL"); //$NON-NLS-1$
       String text = this.typeCombo.getText();
       if( text != null ) {
-        int index = text.trim().indexOf( " " );
+        int index = text.trim().indexOf( " " ); //$NON-NLS-1$
         if( index != -1 ) {
           result = text.substring( 0, index ).toLowerCase();
         }
@@ -558,8 +558,7 @@ public class NewJobWizard extends Wizard implements INewWizard {
       IPath path = new Path( getFileName() );
       String currentExtension = path.getFileExtension();
       if( ( currentExtension == null )
-          || !currentExtension.toLowerCase().endsWith( extension ) )
-      { //$NON-NLS-1$
+          || !currentExtension.toLowerCase().endsWith( extension ) ) { 
         setErrorMessage( String.format( Messages.getString( "NewJobWizard.wrong_file_extension_error_message" ), extension ) ); //$NON-NLS-1$
         result = false;
       }
