@@ -19,7 +19,6 @@ package eu.geclipse.jsdl.ui.internal.pages.sections;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import org.eclipse.core.internal.localstore.IsSynchronizedVisitor;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -45,7 +44,6 @@ import eu.geclipse.jsdl.model.base.JsdlFactory;
 import eu.geclipse.jsdl.model.base.JsdlPackage;
 import eu.geclipse.jsdl.model.base.RangeValueType;
 import eu.geclipse.jsdl.model.base.ResourcesType;
-import eu.geclipse.jsdl.ui.editors.JsdlEditor;
 import eu.geclipse.jsdl.ui.internal.pages.FormSectionFactory;
 import eu.geclipse.jsdl.ui.internal.pages.Messages;
 import eu.geclipse.ui.widgets.DoubleNumberVerifier;

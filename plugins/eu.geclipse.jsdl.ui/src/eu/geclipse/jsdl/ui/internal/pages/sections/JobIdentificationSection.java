@@ -42,7 +42,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.List;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import eu.geclipse.jsdl.model.base.JobDefinitionType;
@@ -83,13 +82,10 @@ JsdlFormPageSection {
   private Composite containerComposite = null;
 
   /**
-   * @param formPage The FormPage that contains this Section
    * @param parent The parent composite.
    * @param toolkit The parent Form Toolkit.
    */
-  public JobIdentificationSection( final FormPage formPage,
-                                   final Composite parent,
-                                   final FormToolkit toolkit ) {
+  public JobIdentificationSection( final Composite parent, final FormToolkit toolkit ) {
     
     this.containerComposite = parent;
     createSection( parent, toolkit );

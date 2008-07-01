@@ -46,7 +46,6 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
-import org.eclipse.ui.forms.editor.FormPage;
 import org.eclipse.ui.forms.widgets.FormToolkit;
 
 import eu.geclipse.jsdl.model.base.ApplicationType;
@@ -118,9 +117,7 @@ JsdlFormPageSection {
    * @param parent The parent composite.
    * @param toolkit The parent Form Toolkit.
    */
-  public PosixApplicationSection( final FormPage formPage,
-                                  final Composite parent,
-                                  final FormToolkit toolkit ){    
+  public PosixApplicationSection( final Composite parent, final FormToolkit toolkit ){    
     
     this.containerComposite = parent;
     createSection( parent, toolkit );
@@ -679,8 +676,8 @@ JsdlFormPageSection {
   
   /* 
    * If the POSIX Application Element is set, check for any possible contents which may
-   * be set. If none of the above are true, then delete the Resources Element from it's
-   * container (JobDescriptionType).
+   * be set. If none of the above are true, then delete the Posix Application elemet from it's
+   * container (ApplicationType).
    */
   @Override
   public void notifyChanged(final Notification msg){

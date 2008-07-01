@@ -139,7 +139,7 @@ public final class JobApplicationPage extends JsdlFormPage  {
     this.additionalPosixElementSection.setInput( this.jobDefinitionType );
     this.additionalPosixElementSection.addListener( this );
     
-    this.posixApplicationSection = new PosixApplicationSection(this, this.applicationSectionComposit, toolkit);
+    this.posixApplicationSection = new PosixApplicationSection( this.applicationSectionComposit, toolkit);
     this.posixApplicationSection.setInput( this.jobDefinitionType );
     this.posixApplicationSection.addListener( this );
     

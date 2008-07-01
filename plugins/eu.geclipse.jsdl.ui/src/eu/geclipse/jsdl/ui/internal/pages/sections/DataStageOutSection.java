@@ -21,6 +21,8 @@ import java.util.Iterator;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.TreeIterator;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -47,6 +49,7 @@ import eu.geclipse.jsdl.model.base.JobDefinitionType;
 import eu.geclipse.jsdl.model.base.JobDescriptionType;
 import eu.geclipse.jsdl.model.base.JsdlFactory;
 import eu.geclipse.jsdl.model.base.JsdlPackage;
+import eu.geclipse.jsdl.model.posix.POSIXApplicationType;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.dialogs.DataStagingInDialog;
 import eu.geclipse.jsdl.ui.internal.dialogs.DataStagingOutDialog;
@@ -75,6 +78,7 @@ JsdlFormPageSection {
   private Composite containerComposite = null;
   private DataStagingType dataStagingType = JsdlFactory.eINSTANCE.createDataStagingType();
   private JobDescriptionType jobDescriptionType = null;
+  private JobDefinitionType jobDefinitionType = null;
   private EList<DataStagingType> dataStageInputList = null;
   
   public DataStageOutSection( final Composite parent, final FormToolkit toolkit ){
@@ -455,6 +459,27 @@ JsdlFormPageSection {
     IStructuredSelection structSelection 
                                = ( IStructuredSelection ) viewer.getSelection();
      
+    
+    /*
+     * Get the JSDL Posix Element in order to check if the staged item to be deleted has any association with
+     * it - that is if the staged item to be deleted is reported in one of the Input | Output | Error elements. 
+     */
+
+    POSIXApplicationType posixApplicationType = null;
+    TreeIterator<EObject> iterator = this.jobDefinitionType.eAllContents();
+    
+    while ( iterator.hasNext (  )  )  {  
+      
+      EObject testType = iterator.next();         
+      
+      if ( testType instanceof POSIXApplicationType ) {
+        posixApplicationType = (POSIXApplicationType) testType;      
+       
+      } 
+      
+    }
+    
+    
   
     Iterator<?> it = structSelection.iterator();
 
@@ -471,6 +496,21 @@ JsdlFormPageSection {
 
         /* Remove the selected DataStage object from it's container (JobDescription) */
         try {
+          if ( null != posixApplicationType ){
+            if ( ( null != posixApplicationType.getOutput() ) 
+                && (posixApplicationType.getOutput().getValue().equals( selectedDataStage.getFileName() ) ) ){
+              posixApplicationType.setOutput( null );
+            }
+            else if ( ( null != posixApplicationType.getInput() ) 
+                   && ( posixApplicationType.getInput().getValue().equals( selectedDataStage.getFileName() ) ) ) {
+              posixApplicationType.setInput( null );
+            }
+            else {
+              if ( null != posixApplicationType.getError() ){
+                posixApplicationType.setError( null );
+              }
+            }
+          }
           EcoreUtil.remove( selectedDataStage );
         } catch( Exception e ) {
           Activator.logException( e );
@@ -569,7 +609,8 @@ JsdlFormPageSection {
   public void setInput( final JobDefinitionType jobDefinition ) {
     
     this.adapterRefreshed = true;
-    if( null != jobDefinition ) {
+    if( null != jobDefinition ) { 
+      this.jobDefinitionType = jobDefinition;
       this.jobDescriptionType = jobDefinition.getJobDescription();
       if (null != this.jobDescriptionType ) {
         if ( null != this.jobDescriptionType.getDataStaging() ){

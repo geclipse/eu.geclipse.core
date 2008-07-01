@@ -56,7 +56,7 @@ JsdlFormPageSection {
   
   private void createSection( final Composite parent, final FormToolkit toolkit )  {
     
-    String sectionTitle =  Messages.getString( "JobDefinitionPage_JobDefinitionTitle" );  //$NON-NLS-1$
+    String sectionTitle =  Messages.getString("OverviewPage_GeneralInfoTitle");  //$NON-NLS-1$
     String sectionDescription = Messages.getString( "JobDefinitionPage_JobDefinitionDescr" );   //$NON-NLS-1$
         
     

@@ -21,6 +21,8 @@ import java.util.Iterator;
 
 import org.eclipse.emf.common.util.BasicEList;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.common.util.TreeIterator;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -47,6 +49,7 @@ import eu.geclipse.jsdl.model.base.JobDefinitionType;
 import eu.geclipse.jsdl.model.base.JobDescriptionType;
 import eu.geclipse.jsdl.model.base.JsdlFactory;
 import eu.geclipse.jsdl.model.base.JsdlPackage;
+import eu.geclipse.jsdl.model.posix.POSIXApplicationType;
 import eu.geclipse.jsdl.ui.internal.Activator;
 import eu.geclipse.jsdl.ui.internal.dialogs.DataStagingInDialog;
 import eu.geclipse.jsdl.ui.internal.pages.FormSectionFactory;
@@ -75,6 +78,7 @@ JsdlFormPageSection {
   private Composite containerComposite = null;
   private DataStagingType dataStagingType = JsdlFactory.eINSTANCE.createDataStagingType();
   private JobDescriptionType jobDescriptionType = null;
+  private JobDefinitionType jobDefinitionType = null;
   private EList<DataStagingType> dataStageInputList = null;
   
   
@@ -211,9 +215,9 @@ JsdlFormPageSection {
    gd.widthHint = 60;
    gd.verticalAlignment = GridData.BEGINNING;
    
-   this.btnStageInDel = toolkit.createButton( client,
-                                   Messages.getString( "JsdlEditor_RemoveButton" ) //$NON-NLS-1$
-                                   , SWT.PUSH );   
+   this.btnStageInDel = toolkit.createButton( client, 
+                                              Messages.getString( "JsdlEditor_RemoveButton" ), //$NON-NLS-1$
+                                              SWT.PUSH );   
   
    this.btnStageInDel.addSelectionListener( new SelectionListener() {
 
@@ -256,8 +260,7 @@ JsdlFormPageSection {
      
      if( selectedObject == null ) {
        
-       dialog = new DataStagingInDialog( this.containerComposite.getShell(), 
-                                           DataStagingInDialog.ADVANCED_DIALOG);
+       dialog = new DataStagingInDialog( this.containerComposite.getShell(), DataStagingInDialog.ADVANCED_DIALOG);
        if( dialog.open() == Window.OK ) {         
          this.dataStageList = dialog.getDataStageInList();      
        }
@@ -359,15 +362,35 @@ JsdlFormPageSection {
    * Delete the selected Element in the TableViewer. The selected element must
    * be of type: {@link DataStagingType}
    * 
+   * If the selected DataStage element is a data-staged POSIX Input / Output / Error element, then 
+   * the respective element in the POSIX Application section will also be deleted. 
    */
-  protected void performDelete(final TableViewer viewer ) {
+  protected void performDelete( final TableViewer viewer ) {
     
     /* Get the table viewer selection.  */
-    IStructuredSelection structSelection 
-                               = ( IStructuredSelection ) viewer.getSelection();
+    IStructuredSelection structSelection = ( IStructuredSelection ) viewer.getSelection();
      
   
     Iterator<?> it = structSelection.iterator();
+    
+    /*
+     * Get the JSDL Posix Element in order to check if the staged item to be deleted has any association with
+     * it - that is if the staged item to be deleted is reported in one of the Input | Output | Error elements. 
+     */
+
+    POSIXApplicationType posixApplicationType = null;
+    TreeIterator<EObject> iterator = this.jobDefinitionType.eAllContents();
+    
+    while ( iterator.hasNext (  )  )  {  
+      
+      EObject testType = iterator.next();         
+      
+      if ( testType instanceof POSIXApplicationType ) {
+        posixApplicationType = (POSIXApplicationType) testType;      
+       
+      } 
+      
+    }
 
     /*
      * Iterate over the selections and delete them from the model.
@@ -381,7 +404,22 @@ JsdlFormPageSection {
         DataStagingType selectedDataStage = ( DataStagingType ) feature;    
 
         /* Remove the selected DataStage object from it's container (JobDescription) */
-        try {
+        try {        
+          if ( null != posixApplicationType ){
+            if ( ( null != posixApplicationType.getOutput() ) 
+                && (posixApplicationType.getOutput().getValue().equals( selectedDataStage.getFileName() ) ) ){
+              posixApplicationType.setOutput( null );
+            }
+            else if ( ( null != posixApplicationType.getInput() ) 
+                   && ( posixApplicationType.getInput().getValue().equals( selectedDataStage.getFileName() ) ) ) {
+              posixApplicationType.setInput( null );
+            }
+            else {
+              if ( null != posixApplicationType.getError() ){
+                posixApplicationType.setError( null );
+              }
+            }
+          }
           EcoreUtil.remove( selectedDataStage );
         } catch( Exception e ) {
           Activator.logException( e );
@@ -399,7 +437,7 @@ JsdlFormPageSection {
   
   
   /**
-   * Edit the attributes of the selected object in the TableViewer. 
+   * Edit the attribute values of the selected object in the TableViewer. 
    * 
    * @param tableViewer The SWT TableViewer that contains the Structural Features
    * @param innerDataStageList The list containing the selected DataStage elements.
@@ -408,10 +446,7 @@ JsdlFormPageSection {
   @SuppressWarnings({
     "unchecked", "boxing"
   })
-  public void performEdit( final TableViewer tableViewer, 
-                           final ArrayList<DataStagingType> innerDataStageList) {
-    
-
+  public void performEdit( final TableViewer tableViewer, final ArrayList<DataStagingType> innerDataStageList) {
 
     /* Check if the values from the dialog are null. */
     if (innerDataStageList.isEmpty()) {
@@ -434,8 +469,7 @@ JsdlFormPageSection {
     /* If the selection is not null then Change the selected element */
     if (structSelection != null) {
       for (int i=0; i<innerDataStageList.size(); i++){
-      eStructuralFeature = this.jobDescriptionType.eClass()
-                                            .getEStructuralFeature( featureID );
+      eStructuralFeature = this.jobDescriptionType.eClass().getEStructuralFeature( featureID );
 
       Object oldDataStageElement = structSelection.getFirstElement();
     
@@ -452,8 +486,7 @@ JsdlFormPageSection {
       /* Check if the new Data Stage element is not already in the table viewer's
        * input
        */        
-      if (!doesElementExists( ( DataStagingType ) oldDataStageElement,
-                              this.dataStagingType, newInputList )) {  
+      if (!doesElementExists( ( DataStagingType ) oldDataStageElement, this.dataStagingType, newInputList )) {  
       
         /* Change the element. The element is located through it's index position
          * in the list.
@@ -554,15 +587,7 @@ JsdlFormPageSection {
     return result;
     
   } // End boolean doesElementExists()
-  
-  
-//  protected void contentChanged() {
-//    
-//    if ( this.isNotifyAllowed )  {
-//      fireNotifyChanged( null);
-//    }
-//  } // End void contenctChanged()
-  
+
   
   /**
    * @param jobDefinition The JSDL Job Definition element.
@@ -571,7 +596,9 @@ JsdlFormPageSection {
   public void setInput( final JobDefinitionType jobDefinition ) {
     
     this.adapterRefreshed = true;
+    
     if( null != jobDefinition ) {
+      this.jobDefinitionType = jobDefinition;
       this.jobDescriptionType = jobDefinition.getJobDescription();
       if (null != this.jobDescriptionType ) {
         if ( null != this.jobDescriptionType.getDataStaging() ){

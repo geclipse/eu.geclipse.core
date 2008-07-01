@@ -161,7 +161,7 @@ public final class JobDefinitionPage extends JsdlFormPage {
     this.jobIdentComposite.setLayoutData( new TableWrapData(TableWrapData.FILL_GRAB ) );
     
     /* Create Job Identification Section */
-    this.jobIdentificationSection = new JobIdentificationSection( this, this.jobIdentComposite, toolkit );
+    this.jobIdentificationSection = new JobIdentificationSection( this.jobIdentComposite, toolkit );
     this.jobIdentificationSection.setInput( this.jobDefinitionType );
     this.jobIdentificationSection.addListener( this );  
     

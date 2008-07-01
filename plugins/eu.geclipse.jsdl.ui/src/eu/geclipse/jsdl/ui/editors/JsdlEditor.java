@@ -877,14 +877,6 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
     }
     
   }
-  
-  
-//  private void disposePages(){
-//    if (this.jobDefPage != null){
-//      this.jobDefPage.dispose();
-//    }
-//  }
-  
  
     
   /**
