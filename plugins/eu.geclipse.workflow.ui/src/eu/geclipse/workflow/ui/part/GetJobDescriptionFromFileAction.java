@@ -45,7 +45,6 @@ import org.eclipse.ui.IWorkbenchPart;
 
 import eu.geclipse.ui.dialogs.GridFileDialog;
 import eu.geclipse.workflow.IWorkflowJob;
-import eu.geclipse.workflow.IWorkflowPackage;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowJobEditPart;
 import eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin;
 
@@ -54,7 +53,7 @@ public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
   /**
    * The WorkflowJobEditPart that has been selected.
    */
-  private WorkflowJobEditPart mySelectedElement;
+  protected WorkflowJobEditPart mySelectedElement;
   /**
    * 
    */
@@ -62,7 +61,7 @@ public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
   String jobDescriptionInJSDL = null;
 
   public void setActivePart( IAction action, IWorkbenchPart targetPart ) {
-    myShell = targetPart.getSite().getShell();
+    this.myShell = targetPart.getSite().getShell();
   }
 
   /**
@@ -72,14 +71,19 @@ public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
   public void run( IAction action ) {
     InputStream inStream = null;
     IStatus status = Status.OK_STATUS;
-    GridFileDialog dialog = new GridFileDialog( myShell,
+    GridFileDialog dialog = new GridFileDialog( this.myShell,
                                                 GridFileDialog.STYLE_ALLOW_ONLY_LOCAL
                                                     | GridFileDialog.STYLE_ALLOW_ONLY_EXISTING );
-    dialog.addFileTypeFilter( "jsdl", Messages.getString( "GetJobDescriptionFromFileAction.filterTypeDesc" ) ); //$NON-NLS-1$//$NON-NLS-2$
+    dialog.addFileTypeFilter( "jsdl",  //$NON-NLS-1$
+                              Messages.getString( "GetJobDescriptionFromFileAction.filterTypeDesc" ) ); //$NON-NLS-1$
+    
     if( dialog.open() == Window.OK ) {
       IFileStore[] result = dialog.getSelectedFileStores();
       if( ( result != null ) && ( result.length > 0 ) ) {
         try {
+          System.out.println(result[0].toURI().toString());
+          
+          
           inStream = result[ 0 ].openInputStream( EFS.NONE, null );
         } catch( CoreException cE ) {
           status = new Status( IStatus.ERROR,
@@ -104,7 +108,7 @@ public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
                                  Messages.getString( "GetJobDescriptionFromFileAction.errorReadingFromFile" ), //$NON-NLS-1$
                                  iOE );
           }
-          jobDescriptionInJSDL = buffer.toString();
+          this.jobDescriptionInJSDL = buffer.toString();
         }
         try {
           inStream.close();
@@ -125,7 +129,7 @@ public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
    */
   public boolean updateWorkflowJobDescription() {
     IStatus status = Status.OK_STATUS;
-    TransactionalEditingDomain domain = mySelectedElement.getEditingDomain();
+    TransactionalEditingDomain domain = this.mySelectedElement.getEditingDomain();
     ResourceSet resourceSet = domain.getResourceSet();
     AbstractTransactionalCommand command = new AbstractTransactionalCommand( domain,
                                                                              Messages.getString( "GetJobDescriptionFromFileAction.updatingJobDescription" ), //$NON-NLS-1$
@@ -136,8 +140,8 @@ public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
       protected CommandResult doExecuteWithResult( IProgressMonitor monitor,
                                                    IAdaptable info )
       {
-        IWorkflowJob job = ( IWorkflowJob )mySelectedElement.resolveSemanticElement();
-        job.setJobDescription( jobDescriptionInJSDL );
+        IWorkflowJob job = ( IWorkflowJob )GetJobDescriptionFromFileAction.this.mySelectedElement.resolveSemanticElement();
+        job.setJobDescription( GetJobDescriptionFromFileAction.this.jobDescriptionInJSDL );
         return CommandResult.newOKCommandResult();
       }
     };
@@ -159,19 +163,19 @@ public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
   }
 
   public void selectionChanged( IAction action, ISelection selection ) {
-    mySelectedElement = null;
+    this.mySelectedElement = null;
     if( selection instanceof IStructuredSelection ) {
       IStructuredSelection structuredSelection = ( IStructuredSelection )selection;
       if( structuredSelection.size() == 1
           && structuredSelection.getFirstElement() instanceof WorkflowJobEditPart )
       {
-        mySelectedElement = ( WorkflowJobEditPart )structuredSelection.getFirstElement();
+        this.mySelectedElement = ( WorkflowJobEditPart )structuredSelection.getFirstElement();
       }
     }
     action.setEnabled( isEnabled() );
   }
 
   private boolean isEnabled() {
-    return mySelectedElement != null;
+    return this.mySelectedElement != null;
   }
 }
