@@ -202,7 +202,7 @@ public class GEclipseFileStore
       if ( result != null ) {
         FileStoreRegistry registry = FileStoreRegistry.getInstance();
         for ( String name : result ) {
-          IFileStore child = getChild( name );
+          IFileStore child = getSlave().getChild( name.trim() );
           registry.removeStore( child );
         }
       }
@@ -452,6 +452,16 @@ public class GEclipseFileStore
                     final IProgressMonitor monitor )
       throws CoreException {
     getSlave().move( slave( destination ), options, monitor( monitor ) );
+  }
+
+  /* (non-Javadoc)
+   * @see org.eclipse.core.filesystem.provider.FileStore#childInfos(int, org.eclipse.core.runtime.IProgressMonitor)
+   */
+  @Override
+  public IFileInfo[] childInfos( final int options, final IProgressMonitor monitor )
+    throws CoreException
+  {
+    return getSlave().childInfos( options, monitor );
   }
   
   private IProgressMonitor monitor( final IProgressMonitor monitor ) {
