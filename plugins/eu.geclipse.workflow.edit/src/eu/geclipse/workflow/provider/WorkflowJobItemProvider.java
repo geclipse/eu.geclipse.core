@@ -17,6 +17,8 @@ package eu.geclipse.workflow.provider;
 
 import eu.geclipse.workflow.IWorkflowJob;
 import eu.geclipse.workflow.IWorkflowPackage;
+import eu.geclipse.workflow.WorkflowPackage;
+
 import java.util.Collection;
 import java.util.List;
 import org.eclipse.emf.common.notify.AdapterFactory;
@@ -86,6 +88,29 @@ public class WorkflowJobItemProvider extends WorkflowNodeItemProvider
                                                                ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
                                                                null,
                                                                null ) );
+  }
+
+  /**
+   * This adds a property descriptor for the Job Description File Name feature.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  protected void addJobDescriptionFileNamePropertyDescriptor(Object object)
+  {
+    this.itemPropertyDescriptors.add
+      (createItemPropertyDescriptor
+        (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+         getResourceLocator(),
+         getString("_UI_IWorkflowJob_jobDescriptionFileName_feature"),
+         getString("_UI_PropertyDescriptor_description", "_UI_IWorkflowJob_jobDescriptionFileName_feature", "_UI_IWorkflowJob_type"),
+         WorkflowPackage.Literals.IWORKFLOW_JOB__JOB_DESCRIPTION_FILE_NAME,
+         true,
+         false,
+         false,
+         ItemPropertyDescriptor.GENERIC_VALUE_IMAGE,
+         null,
+         null));
   }
 
   /**

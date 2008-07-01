@@ -48,7 +48,10 @@ public final class WorkflowEditPlugin extends EMFPlugin {
    * @generated
    */
   public WorkflowEditPlugin() {
-    super( new ResourceLocator[]{} );
+    super
+      (new ResourceLocator [] 
+       {
+       });
   }
 
   /**
@@ -90,6 +93,7 @@ public final class WorkflowEditPlugin extends EMFPlugin {
      */
     public Implementation() {
       super();
+
       // Remember the static instance.
       //
       plugin = this;
