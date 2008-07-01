@@ -165,6 +165,9 @@ public class GlueSA extends AbstractGlueTable implements java.io.Serializable {
       GlueUtility.getStringAttribute( "GlueSALocalID", attributes ); //$NON-NLS-1$
     this.Path = 
       GlueUtility.getStringAttribute( "GlueSAPath", attributes ); //$NON-NLS-1$
+    if (!this.Path.endsWith( "/" )) { //$NON-NLS-1$
+      this.Path = this.Path + "/"; //$NON-NLS-1$
+    }
     this.PolicyFileLifeTime = 
       GlueUtility.getStringAttribute( "GlueSAPolicyFileLifeTime", attributes ); //$NON-NLS-1$
     this.PolicyMaxData = 
@@ -200,8 +203,9 @@ public class GlueSA extends AbstractGlueTable implements java.io.Serializable {
           boolean exists = false;
           for (int i=0; i<this.glueSAAccessControlBaseRuleList.size(); i++)
           {
-            if (this.glueSAAccessControlBaseRuleList.get( i ).Value.equalsIgnoreCase( vo ))
+            if (this.glueSAAccessControlBaseRuleList.get( i ).Value.equalsIgnoreCase( vo )) {
               exists = true;
+            }
           }
           if (!exists){
             this.glueSAAccessControlBaseRuleList.add(rule);
