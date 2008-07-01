@@ -40,6 +40,8 @@ import org.eclipse.ui.XMLMemento;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 import eu.geclipse.core.model.GridModel;
+import eu.geclipse.core.model.IGridConnectionElement;
+import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementManager;
 import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobManager;
@@ -348,6 +350,10 @@ public class GridJobView extends ElementManagerViewPart
     super.saveState( mem );
   }
   
+  @Override
+  public boolean isDragSource( final IGridElement element ) {
+    return element instanceof IGridConnectionElement;
+  }
   
   
 }
