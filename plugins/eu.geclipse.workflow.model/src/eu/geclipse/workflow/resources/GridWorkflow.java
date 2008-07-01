@@ -16,6 +16,7 @@
  ******************************************************************************/
 package eu.geclipse.workflow.resources;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.ArrayList;
@@ -185,6 +186,11 @@ public class GridWorkflow
         }
       }
     };
-  }  
+  }
   
+  public File getWorkflowFilePath() {
+    File workflowFilePath = new File (this.getResource().getLocation().toFile().toString() + "/" + this.getResource().getLocation().toFile().getName());
+    return workflowFilePath;
+  }
+
 }
