@@ -45,6 +45,7 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridInfoService;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IVirtualOrganization;
+import eu.geclipse.core.model.impl.AbstractVirtualOrganization;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.providers.DeploymentTargetTreeContentProvider;
 import eu.geclipse.ui.providers.GridModelLabelProvider;
@@ -295,7 +296,7 @@ public class DeploymentTarget extends WizardPage {
   protected IGridComputing[] getCERootElement() {
     IGridComputing[] elements = null;
     IGridProject testpro = ( ( DeploymentWizard ) this.getWizard() ).getGridProject();
-    IVirtualOrganization vo = testpro.getVO();
+    IVirtualOrganization vo = ( IVirtualOrganization )testpro.getVO().getAdapter( AbstractVirtualOrganization.class );
     try {
       IGridInfoService infoService = vo.getInfoService();
       elements = infoService.fetchComputing( null, vo, null );

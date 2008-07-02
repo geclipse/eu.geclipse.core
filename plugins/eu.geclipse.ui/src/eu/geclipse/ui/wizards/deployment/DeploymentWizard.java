@@ -51,15 +51,11 @@ public class DeploymentWizard extends Wizard {
    */
   public DeploymentTarget targetPage;
   
-  /**
-   * The script page ( three page ) in deployment wizard.
-   */
-  public DeploymentScript scriptPage;
   
   /**
    * The description page ( four page ) in deployment wizard.
    */
-  public DeploymentDescription descriptionPage;
+  public DeploymentLastPage descriptionPage;
   /**
    * Get the structured selection.
    */
@@ -87,6 +83,12 @@ public class DeploymentWizard extends Wizard {
     this.initProjects();
   }
 
+  IVirtualOrganization getVo() {
+    IStructuredSelection selections = getSelection();
+    IGridElement selected = ( IGridElement ) selections.getFirstElement();
+    return selected.getProject().getVO();
+  }
+  
   @Override
   public void addPages() {
     //this.chooserPage = new DeploymentChooser( Messages.getString( "Deployment.deployment_wizard_chooser" ) ); //$NON-NLS-1$
@@ -95,17 +97,19 @@ public class DeploymentWizard extends Wizard {
     this.addPage( this.targetPage );
     this.sourcePage = new DeploymentSource( Messages.getString( "Deployment.deployment_wizard_source" ) ); //$NON-NLS-1$
     this.addPage( this.sourcePage );
-    this.scriptPage = new DeploymentScript("Install script"); //$NON-NLS-1$
-    this.addPage( this.scriptPage );
-    this.descriptionPage = new DeploymentDescription( Messages.getString( "Deployment.deployment_wizard_description" ) ); //$NON-NLS-1$
+    //this.scriptPage = new DeploymentScript("Install script"); //$NON-NLS-1$
+    //this.addPage( this.scriptPage );
+    //this.descriptionPage = new DeploymentDescription( Messages.getString( "Deployment.deployment_wizard_description" ) ); //$NON-NLS-1$
+    this.descriptionPage = new DeploymentLastPage( Messages.getString( "Deployment.deployment_wizard_description" ) ); //$NON-NLS-1$
     this.addPage( this.descriptionPage );
   }
 
+  
+  
   @Override
   public boolean performFinish() {
    
     URI [] source = this.sourcePage.getSourceURIs();
-    URI script = this.scriptPage.getScript();
     List< Object > targetList = new ArrayList< Object >();
     Object[] ceObjects = this.targetPage.getCETree().getCheckedElements();
     IVirtualOrganization vo = this.gridproject.getVO();
@@ -121,7 +125,6 @@ public class DeploymentWizard extends Wizard {
                            vo,
                            source, 
                            target,
-                           script,
                            tag, 
                            this.gridproject);
     //job.setPriority( Job.SHORT );
@@ -130,15 +133,15 @@ public class DeploymentWizard extends Wizard {
     return true;
   }
 
-  @Override
+ /* @Override
   public boolean canFinish() {
     boolean finished = false;
     IWizardPage currentPage = this.getContainer().getCurrentPage();
     if ( currentPage == this.descriptionPage ) {
       finished = true;
-    }
+    } 
     return finished;
-  }
+  }*/
 
   /**
    * set the reference to a grid project

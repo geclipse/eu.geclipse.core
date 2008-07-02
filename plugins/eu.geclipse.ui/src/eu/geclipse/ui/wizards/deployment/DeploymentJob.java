@@ -54,8 +54,6 @@ public class DeploymentJob extends Job {
   
   private IVirtualOrganization vo;
   
-  private URI installscript;
-  
   private IGridProject gridproject;
   
   /**
@@ -69,7 +67,6 @@ public class DeploymentJob extends Job {
    * @param vo the project vo
    * @param deploySource the source
    * @param deployTarget the target CEs
-   * @param deployscript the install script
    * @param deployTag the tag of the software
    * @param project the container for refresching
    */
@@ -77,13 +74,11 @@ public class DeploymentJob extends Job {
                         final IVirtualOrganization vo,
                         final URI[] deploySource,
                         final IGridComputing[] deployTarget,
-                        final URI deployscript,
                         final String deployTag, 
                         final IGridProject project) {
     super( name );
     this.source = deploySource;
     this.target = deployTarget;
-    this.installscript = deployscript;
     this.tag = deployTag;
     this.vo = vo;
     this.gridproject = project;
@@ -92,16 +87,9 @@ public class DeploymentJob extends Job {
   @Override
   protected IStatus run( final IProgressMonitor monitor ) {
     IStatus status = Status.OK_STATUS;
-    URI[] surcescript = new URI[this.source.length + 1];
-    
-    int i = 0;
-    for (i=0; i<this.source.length; i++)
-      surcescript[i] = this.source [i];
-    surcescript[i] = this.installscript;
-    
-      
+          
     this.installparameters = new GenericGridInstallParameters();
-    this.installparameters.setSources( surcescript );
+    this.installparameters.setSources( this.source );
     this.installparameters.setTargets( this.target );
     this.installparameters.setTag( this.tag );
     IGridApplicationManager installmanager = this.vo.getApplicationManager();
