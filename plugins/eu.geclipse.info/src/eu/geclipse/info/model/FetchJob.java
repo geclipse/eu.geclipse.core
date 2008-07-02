@@ -36,10 +36,10 @@ import eu.geclipse.info.internal.Activator;
 /**
  * This job calls all the infoservices of the existing projects and fetch the data
  * that are going to be displayed in the glue info view.
+ * 
  * @author tnikos
- *
  */
-public class FetchJob extends Job{
+public class FetchJob extends Job {
 
   private static FetchJob instance = null;
   
@@ -56,10 +56,10 @@ public class FetchJob extends Job{
    * @param name the name that will be displayed in the progress view
    * @return a FetchJob
    */
-  public static FetchJob getInstance(final String name)
-  {
-    if (instance == null)
-      instance = new FetchJob(name);
+  public static FetchJob getInstance( final String name ) {
+    if ( instance == null ) {
+      instance = new FetchJob( name );
+    }
     
     return instance;
     
