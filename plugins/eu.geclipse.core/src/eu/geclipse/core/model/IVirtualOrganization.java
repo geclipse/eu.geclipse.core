@@ -109,4 +109,5 @@ public interface IVirtualOrganization
    */
   public String getWizardId();
 
+  public String getId();
 }
