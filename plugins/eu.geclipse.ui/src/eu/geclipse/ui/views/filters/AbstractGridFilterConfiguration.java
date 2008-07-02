@@ -18,6 +18,7 @@ package eu.geclipse.ui.views.filters;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+
 import org.eclipse.ui.IMemento;
 
 /**

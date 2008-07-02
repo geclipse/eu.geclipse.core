@@ -25,7 +25,6 @@ import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -49,7 +48,6 @@ import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.providers.DeploymentTargetTreeContentProvider;
 import eu.geclipse.ui.providers.GridModelLabelProvider;
-import eu.geclipse.ui.wizards.VoSelectionWizardPage;
 
 /**
  * @author Yifan Zhou

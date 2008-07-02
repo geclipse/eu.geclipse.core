@@ -25,7 +25,6 @@ import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
 
-import eu.geclipse.core.model.IGridJobCreator;
 import eu.geclipse.ui.wizards.wizardselection.ExtPointWizardSelectionListPage;
 
 /**

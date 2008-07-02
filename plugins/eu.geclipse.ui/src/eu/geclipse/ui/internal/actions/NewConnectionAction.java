@@ -16,6 +16,7 @@
 package eu.geclipse.ui.internal.actions;
 
 import java.net.URL;
+
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
@@ -23,6 +24,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.actions.BaseSelectionListenerAction;
+
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.wizards.ConnectionWizard;
 

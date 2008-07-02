@@ -20,6 +20,7 @@ import org.eclipse.jface.action.Action;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.cheatsheets.ICheatSheetAction;
 import org.eclipse.ui.cheatsheets.ICheatSheetManager;
+
 import eu.geclipse.ui.UIAuthTokenProvider;
 
 /**

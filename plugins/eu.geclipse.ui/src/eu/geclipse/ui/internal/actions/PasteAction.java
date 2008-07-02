@@ -23,10 +23,10 @@ import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.navigator.LocalSelectionTransfer;
+
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.ui.internal.transfer.GridElementTransferOperation;
-import eu.geclipse.ui.views.GridModelViewPart;
 
 /**
  * Paste action for the copy/paste machanism.

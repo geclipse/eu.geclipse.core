@@ -17,6 +17,7 @@ package eu.geclipse.ui.wizards.portforward;
 
 import java.util.LinkedList;
 import java.util.List;
+
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.window.Window;
 import org.eclipse.swt.SWT;
@@ -28,6 +29,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
+
 import eu.geclipse.core.portforward.IForward;
 
 class PortForwardingOptionsComposite extends Composite {

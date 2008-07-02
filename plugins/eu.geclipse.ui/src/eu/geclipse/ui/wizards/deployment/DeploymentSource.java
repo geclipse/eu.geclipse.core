@@ -18,6 +18,7 @@ package eu.geclipse.ui.wizards.deployment;
 
 import java.io.File;
 import java.net.URI;
+
 import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
@@ -39,10 +40,10 @@ import org.eclipse.ui.dialogs.PreferencesUtil;
 
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.ui.dialogs.GridFileDialog;
 import eu.geclipse.ui.providers.DeploymentSourceTreeContentProvider;
 import eu.geclipse.ui.providers.GridModelLabelProvider;
 import eu.geclipse.ui.widgets.StoredCombo;
-import eu.geclipse.ui.dialogs.GridFileDialog;
 
 /**
  * @author Yifan Zhou

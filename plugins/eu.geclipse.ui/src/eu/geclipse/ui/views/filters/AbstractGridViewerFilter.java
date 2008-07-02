@@ -19,8 +19,10 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
 import java.util.Locale;
+
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.ui.IMemento;
+
 import eu.geclipse.ui.dialogs.ConfigureFiltersDialog;
 
 /**

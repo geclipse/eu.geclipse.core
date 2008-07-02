@@ -16,10 +16,12 @@
 package eu.geclipse.ui.internal.actions;
 
 import java.net.URL;
+
 import org.eclipse.jface.action.Action;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.swt.widgets.Display;
+
 import eu.geclipse.ui.internal.Activator;
 
 /**

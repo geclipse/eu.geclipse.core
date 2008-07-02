@@ -21,9 +21,6 @@ import java.util.List;
 
 import eu.geclipse.info.glue.GlueSEAccessProtocol;
 import eu.geclipse.info.model.GridGlueStorage;
-import eu.geclipse.ui.properties.AbstractProperty;
-import eu.geclipse.ui.properties.AbstractPropertySource;
-import eu.geclipse.ui.properties.IProperty;
 
 public class GridGlueStorageSource extends AbstractPropertySource<GridGlueStorage>
 {

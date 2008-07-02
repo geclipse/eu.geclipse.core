@@ -16,6 +16,7 @@ package eu.geclipse.ui.wizards.wizardselection;
 
 import java.util.List;
 import java.util.Vector;
+
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;

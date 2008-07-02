@@ -17,6 +17,7 @@ package eu.geclipse.ui.widgets;
 
 import java.util.LinkedList;
 import java.util.List;
+
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -32,6 +33,7 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+
 import eu.geclipse.ui.internal.Activator;
 
 /**

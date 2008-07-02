@@ -17,6 +17,7 @@ package eu.geclipse.ui.internal.actions;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.actions.ActionContext;

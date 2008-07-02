@@ -18,6 +18,7 @@ package eu.geclipse.ui.dialogs;
 import java.io.File;
 import java.net.MalformedURLException;
 import java.net.URL;
+
 import org.eclipse.jface.dialogs.IconAndMessageDialog;
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.swt.SWT;
@@ -34,6 +35,7 @@ import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
+
 import eu.geclipse.ui.widgets.StoredCombo;
 
 /**

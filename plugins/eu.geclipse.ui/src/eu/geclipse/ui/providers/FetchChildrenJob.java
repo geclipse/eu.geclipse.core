@@ -24,7 +24,6 @@ import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.util.MasterMonitor;
 import eu.geclipse.ui.dialogs.ProblemDialog;
-import eu.geclipse.ui.internal.Activator;
 
 public class FetchChildrenJob extends Job {
   

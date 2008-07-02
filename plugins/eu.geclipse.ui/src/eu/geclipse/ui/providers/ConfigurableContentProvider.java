@@ -17,7 +17,9 @@ package eu.geclipse.ui.providers;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.eclipse.core.runtime.IPath;
+
 import eu.geclipse.core.model.GridModel;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;

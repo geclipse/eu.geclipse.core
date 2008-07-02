@@ -18,6 +18,7 @@ package eu.geclipse.ui.views;
 import org.eclipse.ui.IEditorPart;
 import org.eclipse.ui.IPartListener2;
 import org.eclipse.ui.IWorkbenchPartReference;
+
 import eu.geclipse.ui.internal.actions.EditorActions;
 
 public class GridProjectPartListener implements IPartListener2 {

@@ -20,17 +20,13 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.runtime.IAdaptable;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.actions.SelectionListenerAction;
 
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobDescription;
-import eu.geclipse.core.model.IGridJobService;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.ui.wizards.jobsubmission.JobCreatorSelectionWizard;
 

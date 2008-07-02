@@ -18,6 +18,7 @@ package eu.geclipse.ui.views.filters;
 import org.eclipse.jface.viewers.StructuredViewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.ui.IMemento;
+
 import eu.geclipse.ui.dialogs.ConfigureFiltersDialog;
 
 

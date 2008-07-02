@@ -24,9 +24,6 @@ import org.eclipse.ui.IWorkbenchSite;
 import org.eclipse.ui.actions.SelectionListenerAction;
 
 import eu.geclipse.core.model.IGridApplication;
-import eu.geclipse.core.model.IGridComputing;
-import eu.geclipse.core.model.IVirtualOrganization;
-import eu.geclipse.ui.wizards.deployment.DeploymentWizard;
 import eu.geclipse.ui.wizards.deployment.UninstallWizard;
 
 

@@ -16,8 +16,10 @@
 package eu.geclipse.ui.views.filters;
 
 import java.util.Date;
+
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.ui.IMemento;
+
 import eu.geclipse.core.model.IGridJob;
 
 /**

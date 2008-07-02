@@ -28,7 +28,6 @@ import eu.geclipse.core.model.IGridResource;
 import eu.geclipse.core.simpleTest.ISimpleTest;
 import eu.geclipse.core.simpleTest.ISimpleTestDescription;
 import eu.geclipse.ui.ISimpleTestUIFactory;
-
 import eu.geclipse.ui.dialogs.AbstractSimpleTestDialog;
 
 

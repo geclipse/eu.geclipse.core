@@ -20,6 +20,7 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.jface.wizard.IWizard;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.graphics.Point;
+
 import eu.geclipse.ui.internal.Activator;
 
 class ExtPointWizardSelectionNode implements IWizardSelectionNode {

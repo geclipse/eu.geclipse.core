@@ -18,6 +18,7 @@ package eu.geclipse.ui.properties;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.ui.views.properties.IPropertyDescriptor;
 import org.eclipse.ui.views.properties.IPropertySource;

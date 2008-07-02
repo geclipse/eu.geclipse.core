@@ -16,6 +16,8 @@
 
 package eu.geclipse.ui.wizards.deployment;
 
+import java.net.URI;
+
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
@@ -24,21 +26,16 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Display;
-import org.eclipse.ui.PlatformUI;
 
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridApplicationManager;
 import eu.geclipse.core.model.IGridComputing;
-import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.impl.GenericGridInstallParameters;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
-
-
-import java.net.URI;
 
 /**
  * @author Yifan Zhou

@@ -18,6 +18,7 @@ package eu.geclipse.ui.internal.actions;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.actions.ActionGroup;
+
 import eu.geclipse.ui.providers.ConfigurableContentProvider;
 import eu.geclipse.ui.views.ElementManagerViewPart;
 

@@ -40,11 +40,9 @@ import org.eclipse.swt.widgets.TableItem;
 
 import eu.geclipse.core.Extensions;
 import eu.geclipse.core.model.GridModelException;
-import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.core.model.IGridService;
-import eu.geclipse.core.model.impl.AbstractGridElementCreator;
 import eu.geclipse.core.model.impl.GenericVirtualOrganization;
 import eu.geclipse.core.model.impl.GenericVoCreator;
 import eu.geclipse.ui.dialogs.ServiceDialog;

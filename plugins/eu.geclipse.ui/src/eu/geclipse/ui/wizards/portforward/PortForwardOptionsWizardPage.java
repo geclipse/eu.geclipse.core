@@ -16,9 +16,11 @@
 package eu.geclipse.ui.wizards.portforward;
 
 import java.util.List;
+
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Composite;
+
 import eu.geclipse.core.portforward.IForward;
 
 /**

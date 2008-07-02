@@ -14,10 +14,8 @@
  *****************************************************************************/
 package eu.geclipse.ui.internal.wizards;
 
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 
 import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.wizard.WizardPage;

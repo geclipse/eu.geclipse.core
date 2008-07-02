@@ -27,6 +27,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
+
 import eu.geclipse.core.portforward.ForwardType;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.widgets.NumberVerifier;

@@ -22,6 +22,7 @@ import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.views.navigator.LocalSelectionTransfer;
+
 import eu.geclipse.core.model.IGridElement;
 
 /**

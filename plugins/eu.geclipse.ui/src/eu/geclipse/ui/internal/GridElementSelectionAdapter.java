@@ -17,6 +17,7 @@ package eu.geclipse.ui.internal;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.jface.viewers.ISelection;
@@ -25,6 +26,7 @@ import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
+
 import eu.geclipse.core.model.IGridElement;
 
 /**

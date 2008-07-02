@@ -16,6 +16,7 @@
 package eu.geclipse.ui;
 
 import java.util.List;
+
 import eu.geclipse.core.auth.IAuthenticationToken;
 import eu.geclipse.core.auth.IAuthenticationTokenDescription;
 

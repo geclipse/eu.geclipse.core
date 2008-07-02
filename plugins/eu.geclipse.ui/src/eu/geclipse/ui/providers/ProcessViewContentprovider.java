@@ -19,6 +19,7 @@ import java.util.HashSet;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
+
 import eu.geclipse.core.monitoring.GridProcess;
 import eu.geclipse.core.monitoring.GridProcessMonitor;
 

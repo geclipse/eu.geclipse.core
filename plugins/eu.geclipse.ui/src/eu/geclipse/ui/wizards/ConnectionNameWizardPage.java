@@ -15,8 +15,6 @@
 
 package eu.geclipse.ui.wizards;
 
-import java.net.URI;
-
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ModifyEvent;

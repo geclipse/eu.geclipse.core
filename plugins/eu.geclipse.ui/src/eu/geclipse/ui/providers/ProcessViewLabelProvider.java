@@ -16,9 +16,11 @@
 package eu.geclipse.ui.providers;
 
 import java.net.URL;
+
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.LabelProvider;
 import org.eclipse.swt.graphics.Image;
+
 import eu.geclipse.core.monitoring.GridProcessMonitor;
 import eu.geclipse.ui.internal.Activator;
 

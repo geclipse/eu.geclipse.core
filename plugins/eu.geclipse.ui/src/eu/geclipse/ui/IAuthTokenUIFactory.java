@@ -16,6 +16,7 @@
 package eu.geclipse.ui;
 
 import org.eclipse.swt.widgets.Shell;
+
 import eu.geclipse.core.auth.IAuthenticationToken;
 import eu.geclipse.core.auth.IAuthenticationTokenDescription;
 import eu.geclipse.ui.dialogs.AuthTokenInfoDialog;

@@ -18,6 +18,7 @@ package eu.geclipse.ui.widgets;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.eclipse.debug.core.ILaunchConfiguration;
 import org.eclipse.debug.core.ILaunchConfigurationWorkingCopy;
 import org.eclipse.debug.ui.AbstractLaunchConfigurationTab;

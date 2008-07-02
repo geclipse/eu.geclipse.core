@@ -16,6 +16,7 @@
 package eu.geclipse.ui.internal.transfer; 
 
 import java.util.Iterator;
+
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.jface.util.TransferDragSourceListener;
 import org.eclipse.jface.viewers.ISelection;
@@ -23,6 +24,7 @@ import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.dnd.DragSourceEvent;
 import org.eclipse.swt.dnd.Transfer;
 import org.eclipse.ui.views.navigator.LocalSelectionTransfer;
+
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.ui.views.GridModelViewPart;
 

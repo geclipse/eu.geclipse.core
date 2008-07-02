@@ -17,8 +17,10 @@ package eu.geclipse.ui.properties;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
+
 import eu.geclipse.core.model.IVirtualOrganization;
 
 

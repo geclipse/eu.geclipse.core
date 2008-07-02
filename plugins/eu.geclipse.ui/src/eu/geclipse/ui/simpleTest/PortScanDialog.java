@@ -18,24 +18,21 @@ package eu.geclipse.ui.simpleTest;
 
 
 import java.net.InetAddress;
-
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-
 import java.util.List;
 import java.util.TreeMap;
 
-
-import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StyledText;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.custom.StyledText;
-
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Spinner;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
@@ -43,11 +40,8 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeColumn;
 import org.eclipse.swt.widgets.TreeItem;
 
-import org.eclipse.swt.widgets.Button;
-
 import eu.geclipse.core.model.IGridResource;
 import eu.geclipse.core.simpleTest.ISimpleTest;
-
 import eu.geclipse.ui.dialogs.AbstractSimpleTestDialog;
 
 

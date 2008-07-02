@@ -17,6 +17,7 @@ package eu.geclipse.ui.providers;
 
 import org.eclipse.jface.viewers.ITableLabelProvider;
 import org.eclipse.swt.graphics.Image;
+
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementManager;
 import eu.geclipse.core.model.IGridProject;
