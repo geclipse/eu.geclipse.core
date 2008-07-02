@@ -17,6 +17,7 @@
 package eu.geclipse.core.jobs;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
@@ -63,8 +64,9 @@ import eu.geclipse.core.model.IGridElementManager;
 import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridJobID;
-import eu.geclipse.core.model.IGridJobStatus;
 import eu.geclipse.core.model.IGridJobService;
+import eu.geclipse.core.model.IGridJobStatus;
+import eu.geclipse.core.model.IGridWorkflow;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
 import eu.geclipse.core.model.impl.ResourceGridElement;
 import eu.geclipse.core.reporting.ProblemException;
@@ -515,8 +517,14 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
                                     final IFolder jobFolder )
     throws GridModelException
   {
+    IFile sourceDescriptionFile = null;
+    if (description.getResource() instanceof IFolder) {
+      IFolder sourceDescriptionFolder = (IFolder) description.getResource();
+       sourceDescriptionFile =  sourceDescriptionFolder.getFile( sourceDescriptionFolder.getName() );
+    } else {
+       sourceDescriptionFile = (IFile) description.getResource();
+    }  
     // create job description file
-    IFile sourceDescriptionFile = ( IFile )description.getResource();
     this.jobDescriptionFile = jobFolder.getFile( sourceDescriptionFile.getName() );
     try {
       InputStream is = sourceDescriptionFile.getContents( true );
@@ -627,7 +635,13 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     ByteArrayInputStream baos;
     // create jobInfo file
     file = jobFolder.getFile( GridJob.JOBINFO_FILENAME );
-    IFile descFile = ( IFile )description.getResource();
+    IFile descFile = null;
+    if (description.getResource() instanceof IFolder) {
+      IFolder sourceDescriptionFolder = (IFolder) description.getResource();
+      descFile =  sourceDescriptionFolder.getFile( sourceDescriptionFolder.getName() );
+    } else {
+      descFile = (IFile) description.getResource();
+    } 
     // TODO pawelw - move it to GridJob
     xml = "<" //$NON-NLS-1$
           + JOBINFO_XMLNODENAME

@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
@@ -134,7 +135,12 @@ public class GridWorkflow
   
   private WorkflowImpl getRoot() {
     if( this.rootImpl == null ) {
-      loadModel( (IFile)getResource() );
+      IFile root = null;
+      if (getResource() instanceof IFolder) {
+        IFolder rootFolder = (IFolder)getResource();
+        root = rootFolder.getFile( rootFolder.getName() );
+      }
+      loadModel( root );
     }
     
     return this.rootImpl;
@@ -181,7 +187,9 @@ public class GridWorkflow
         for( IGridElement gridElement : elements ) {
           if( gridElement instanceof GridWorkflow ) {
             GridWorkflow workflowDescription = ( GridWorkflow )gridElement;
-            workflowDescription.loadModel( ( IFile )workflowDescription.getResource() );
+            IFolder workflowDescriptionFolder = ( IFolder )workflowDescription.getResource();
+            IFile workflowDescriptionFile = workflowDescriptionFolder.getFile( workflowDescriptionFolder.getName() );
+            workflowDescription.loadModel( workflowDescriptionFile );
           }
         }
       }
