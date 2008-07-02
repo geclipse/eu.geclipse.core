@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2007,2008 g-Eclipse consortium
+ * Copyright (c) 2007, 2008 g-Eclipse consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -84,11 +84,12 @@ import eu.geclipse.info.model.InfoTopTreeCategory;
 import eu.geclipse.info.model.InfoTopTreeElement;
 import eu.geclipse.info.ui.internal.Activator;
 import eu.geclipse.info.ui.internal.Messages;
+
 /**
  * @author George Tsouloupas
  */
 public class GlueInfoViewer extends ViewPart
-implements ISelectionProvider, IGlueStoreChangeListerner {
+    implements ISelectionProvider, IGlueStoreChangeListerner {
 
   FetchJob fetchJob;
   TreeViewer viewer;
@@ -102,10 +103,8 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
   private Label label = null;
   
   
-
   /**
    * @author George Tsouloupas
-   *
    */
   public class TreeObject implements IAdaptable {
 
@@ -158,9 +157,9 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
       return null;
     }
   }
+  
   /**
    * @author George Tsouloupas
-   *
    */
   public class TreeParent extends TreeObject {
 
@@ -321,7 +320,7 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
   }
   
   class ViewContentProvider
-  implements IStructuredContentProvider, ITreeContentProvider
+      implements IStructuredContentProvider, ITreeContentProvider
   {
 
     private TreeParent glueRoot;
@@ -502,8 +501,11 @@ implements ISelectionProvider, IGlueStoreChangeListerner {
     
     InfoCacheListenerHandler.getInstance().addListener( GlueInfoViewer.this );
     
-    this.fetchJob = FetchJob.getInstance(" Retrieving Information"); //$NON-NLS-1$
+    this.fetchJob = FetchJob.getInstance( " Retrieving Information" ); //$NON-NLS-1$
     this.showOnlyFilledInfoElements = false;
+    
+    // Fill in the InfoSystem info when this view is opened
+    this.fetchJob.schedule( );
   }
   
   /**

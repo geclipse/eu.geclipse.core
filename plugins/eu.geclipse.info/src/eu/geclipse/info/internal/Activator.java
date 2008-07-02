@@ -20,10 +20,7 @@ package eu.geclipse.info.internal;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Plugin;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.core.runtime.jobs.Job;
 import org.osgi.framework.BundleContext;
-
-import eu.geclipse.info.model.FetchJob;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -41,11 +38,6 @@ public class Activator extends Plugin {
    */
   public Activator() {
     plugin = this;
-    
-    // Fetch the glue information for the existing grid projects    
-    Job storeInitializeJob=FetchJob.getInstance("Retrieving information"); //$NON-NLS-1$
-      
-    storeInitializeJob.schedule( );    
   }
 
   /*
