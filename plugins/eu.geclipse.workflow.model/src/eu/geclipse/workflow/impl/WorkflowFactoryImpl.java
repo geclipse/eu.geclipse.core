@@ -37,6 +37,7 @@ public class WorkflowFactoryImpl extends EFactoryImpl implements WorkflowFactory
    * Creates the default factory implementation.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
+   * @return 
    * @generated
    */
   public static WorkflowFactory init()

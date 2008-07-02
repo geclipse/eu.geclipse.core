@@ -24,7 +24,7 @@ public interface IWorkflowFactory extends EFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  IWorkflowFactory eINSTANCE = ( IWorkflowFactory )eu.geclipse.workflow.impl.WorkflowFactoryImpl.init();
+  WorkflowFactory eINSTANCE = eu.geclipse.workflow.impl.WorkflowFactoryImpl.init();
 
   /**
    * Returns a new object of class '<em>ILink</em>'.
