@@ -41,7 +41,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class InputPortImpl extends IPortImpl implements IInputPort
+public class InputPortImpl extends PortImpl implements IInputPort
 {
   /**
    * The cached value of the '{@link #getLinks() <em>Links</em>}' reference list.

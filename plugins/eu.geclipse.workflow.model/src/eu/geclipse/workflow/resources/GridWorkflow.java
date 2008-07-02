@@ -148,6 +148,7 @@ public class GridWorkflow
  
   private void loadModel( final IFile file ) {
     String filePath = file.getFullPath().toString();
+    // System.out.println( filePath );
     org.eclipse.emf.common.util.URI uri = org.eclipse.emf.common.util.URI.createPlatformResourceURI( filePath, false );
     ResourceSet resourceSet = new ResourceSetImpl();
     Resource resource = resourceSet.createResource( uri );
@@ -157,7 +158,7 @@ public class GridWorkflow
       resource.load( options );
       this.rootImpl = (WorkflowImpl)resource.getContents().get( 0 );
       this.jobs = new ArrayList<IGridWorkflowJob>();      
-      for( IWorkflowNode node : rootImpl.getNodes() ) {
+      for( IWorkflowNode node : this.rootImpl.getNodes() ) {
         if( node instanceof IWorkflowJob ) {
           this.jobs.add( new GridWorkflowJob( ( IWorkflowJob )node ) );        
         }        
@@ -196,6 +197,9 @@ public class GridWorkflow
     };
   }
   
+  /**
+   * @return
+   */
   public File getWorkflowFilePath() {
     File workflowFilePath = new File (this.getResource().getLocation().toFile().toString() + "/" + this.getResource().getLocation().toFile().getName());
     return workflowFilePath;

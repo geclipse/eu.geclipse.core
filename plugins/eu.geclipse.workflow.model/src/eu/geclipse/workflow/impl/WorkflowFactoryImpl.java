@@ -95,7 +95,7 @@ public class WorkflowFactoryImpl extends EFactoryImpl implements WorkflowFactory
    */
   public ILink createILink()
   {
-    ILinkImpl iLink = new ILinkImpl();
+    LinkImpl iLink = new LinkImpl();
     return iLink;
   }
 
@@ -106,7 +106,7 @@ public class WorkflowFactoryImpl extends EFactoryImpl implements WorkflowFactory
    */
   public IInputPort createIInputPort()
   {
-    IInputPortImpl iInputPort = new IInputPortImpl();
+    InputPortImpl iInputPort = new InputPortImpl();
     return iInputPort;
   }
 
@@ -117,7 +117,7 @@ public class WorkflowFactoryImpl extends EFactoryImpl implements WorkflowFactory
    */
   public IOutputPort createIOutputPort()
   {
-    IOutputPortImpl iOutputPort = new IOutputPortImpl();
+    OutputPortImpl iOutputPort = new OutputPortImpl();
     return iOutputPort;
   }
 
@@ -128,7 +128,7 @@ public class WorkflowFactoryImpl extends EFactoryImpl implements WorkflowFactory
    */
   public IWorkflow createIWorkflow()
   {
-    IWorkflowImpl iWorkflow = new IWorkflowImpl();
+    WorkflowImpl iWorkflow = new WorkflowImpl();
     return iWorkflow;
   }
 
@@ -139,7 +139,7 @@ public class WorkflowFactoryImpl extends EFactoryImpl implements WorkflowFactory
    */
   public IWorkflowJob createIWorkflowJob()
   {
-    IWorkflowJobImpl iWorkflowJob = new IWorkflowJobImpl();
+    WorkflowJobImpl iWorkflowJob = new WorkflowJobImpl();
     return iWorkflowJob;
   }
 

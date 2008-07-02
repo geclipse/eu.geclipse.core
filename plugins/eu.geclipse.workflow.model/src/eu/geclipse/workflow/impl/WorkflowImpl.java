@@ -37,7 +37,7 @@ import org.eclipse.emf.ecore.util.InternalEList;
  *
  * @generated
  */
-public class WorkflowImpl extends IWorkflowElementImpl implements IWorkflow
+public class WorkflowImpl extends WorkflowElementImpl implements IWorkflow
 {
   /**
    * The cached value of the '{@link #getNodes() <em>Nodes</em>}' containment reference list.

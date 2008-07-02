@@ -30,7 +30,7 @@ import org.eclipse.emf.ecore.impl.ENotificationImpl;
  *
  * @generated
  */
-public class WorkflowJobImpl extends IWorkflowNodeImpl implements IWorkflowJob
+public class WorkflowJobImpl extends WorkflowNodeImpl implements IWorkflowJob
 {
   /**
    * The default value of the '{@link #getJobDescription() <em>Job Description</em>}' attribute.

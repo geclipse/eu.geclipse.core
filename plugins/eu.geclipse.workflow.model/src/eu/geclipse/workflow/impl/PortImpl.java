@@ -20,7 +20,7 @@ import org.eclipse.emf.ecore.EClass;
  *
  * @generated
  */
-public abstract class PortImpl extends IWorkflowElementImpl implements IPort
+public abstract class PortImpl extends WorkflowElementImpl implements IPort
 {
   /**
    * <!-- begin-user-doc -->

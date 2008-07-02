@@ -37,7 +37,7 @@ import org.eclipse.emf.ecore.util.EcoreUtil;
  *
  * @generated
  */
-public class LinkImpl extends IWorkflowElementImpl implements ILink
+public class LinkImpl extends WorkflowElementImpl implements ILink
 {
   /**
    * The cached value of the '{@link #getTarget() <em>Target</em>}' reference.

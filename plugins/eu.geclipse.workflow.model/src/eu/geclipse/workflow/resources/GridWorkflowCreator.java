@@ -15,7 +15,6 @@
  ******************************************************************************/
 package eu.geclipse.workflow.resources;
 
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 
 import eu.geclipse.core.model.GridModelException;
@@ -24,6 +23,10 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridWorkflow;
 import eu.geclipse.core.model.impl.AbstractGridElementCreator;
 
+/**
+ * @author ash
+ *
+ */
 public class GridWorkflowCreator extends AbstractGridElementCreator {
   
   private static final String FILE_EXTENSION = "workflow"; //$NON-NLS-1$
