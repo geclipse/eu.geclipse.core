@@ -255,5 +255,9 @@ public class ProjectVo
     return result;
     
   }
+
+  public String getId() {
+    return this.vo.getId();
+  }
   
 }

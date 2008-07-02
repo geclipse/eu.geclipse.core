@@ -189,5 +189,9 @@ public class GenericVirtualOrganization
   public String getWizardId() {
     return "eu.geclipse.ui.wizards.GenericVoWizard"; //$NON-NLS-1$
   }
+
+  public String getId() {
+    return this.getClass().getName();
+  }
   
 }
