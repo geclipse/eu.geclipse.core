@@ -50,6 +50,12 @@ public interface IACLActor {
     GROUP_PATTERN,
     /** Members of the given access group */
     GROUP_NAME,
+    /** The users satisfying the given user name pattern */
+    USER_PATTERN,
+    /** The user with the given user name */
+    USER_NAME,
+    /** The user identified by the given email address */
+    USER_EMAIL,
     /** Users carrying the given SAML attribute */
     SAML_ATTRIBUTE,
     /** Other kind of actor, for implementation specific extensions */
@@ -107,10 +113,10 @@ public interface IACLActor {
   
   /**
    * Sets the actor's ID. Depending on the {@link ActorType} this
-   * means the X509's DN, a group name, or a SAML attribute in the
-   * format <code>"attr_name=value"</code>.
+   * means the X509's DN, a group name, a user name, or a SAML attribute
+   * in the format <code>"attr_name=value"</code>. Might also be a pattern.
    * 
-   * @param actorId the ID to set for this actor
+   * @param actorId the ID (resp. a pattern) to set for this actor
    * @throws ProblemException if the argument is <code>null</code>
    *         or invalid for the selected actor type
    */
