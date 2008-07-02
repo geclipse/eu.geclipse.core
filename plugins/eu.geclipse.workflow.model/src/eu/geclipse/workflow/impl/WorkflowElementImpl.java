@@ -8,7 +8,7 @@ package eu.geclipse.workflow.impl;
 
 import eu.geclipse.workflow.IWorkflowElement;
 import eu.geclipse.workflow.IWorkflowPackage;
-import eu.geclipse.workflow.WorkflowPackage;
+import eu.geclipse.workflow.IWorkflowPackage;
 
 import org.eclipse.emf.common.notify.Notification;
 
@@ -99,7 +99,7 @@ public abstract class WorkflowElementImpl extends EObjectImpl implements IWorkfl
   @Override
   protected EClass eStaticClass()
   {
-    return WorkflowPackage.Literals.IWORKFLOW_ELEMENT;
+    return IWorkflowPackage.Literals.IWORKFLOW_ELEMENT;
   }
 
   /**
@@ -122,7 +122,7 @@ public abstract class WorkflowElementImpl extends EObjectImpl implements IWorkfl
     String oldName = name;
     name = newName;
     if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, WorkflowPackage.IWORKFLOW_ELEMENT__NAME, oldName, name));
+      eNotify(new ENotificationImpl(this, Notification.SET, IWorkflowPackage.IWORKFLOW_ELEMENT__NAME, oldName, name));
   }
 
   /**
@@ -179,9 +179,9 @@ public abstract class WorkflowElementImpl extends EObjectImpl implements IWorkfl
   {
     switch (featureID)
     {
-      case WorkflowPackage.IWORKFLOW_ELEMENT__NAME:
+      case IWorkflowPackage.IWORKFLOW_ELEMENT__NAME:
         return getName();
-      case WorkflowPackage.IWORKFLOW_ELEMENT__ID:
+      case IWorkflowPackage.IWORKFLOW_ELEMENT__ID:
         return getId();
     }
     return super.eGet(featureID, resolve, coreType);
@@ -197,10 +197,10 @@ public abstract class WorkflowElementImpl extends EObjectImpl implements IWorkfl
   {
     switch (featureID)
     {
-      case WorkflowPackage.IWORKFLOW_ELEMENT__NAME:
+      case IWorkflowPackage.IWORKFLOW_ELEMENT__NAME:
         setName((String)newValue);
         return;
-      case WorkflowPackage.IWORKFLOW_ELEMENT__ID:
+      case IWorkflowPackage.IWORKFLOW_ELEMENT__ID:
         setId((String)newValue);
         return;
     }
@@ -217,10 +217,10 @@ public abstract class WorkflowElementImpl extends EObjectImpl implements IWorkfl
   {
     switch (featureID)
     {
-      case WorkflowPackage.IWORKFLOW_ELEMENT__NAME:
+      case IWorkflowPackage.IWORKFLOW_ELEMENT__NAME:
         setName(NAME_EDEFAULT);
         return;
-      case WorkflowPackage.IWORKFLOW_ELEMENT__ID:
+      case IWorkflowPackage.IWORKFLOW_ELEMENT__ID:
         setId(ID_EDEFAULT);
         return;
     }
@@ -237,9 +237,9 @@ public abstract class WorkflowElementImpl extends EObjectImpl implements IWorkfl
   {
     switch (featureID)
     {
-      case WorkflowPackage.IWORKFLOW_ELEMENT__NAME:
+      case IWorkflowPackage.IWORKFLOW_ELEMENT__NAME:
         return NAME_EDEFAULT == null ? name != null : !NAME_EDEFAULT.equals(name);
-      case WorkflowPackage.IWORKFLOW_ELEMENT__ID:
+      case IWorkflowPackage.IWORKFLOW_ELEMENT__ID:
         return ID_EDEFAULT == null ? getId() != null : !ID_EDEFAULT.equals(getId());
     }
     return super.eIsSet(featureID);

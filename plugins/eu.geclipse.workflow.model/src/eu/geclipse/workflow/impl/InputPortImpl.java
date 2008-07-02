@@ -9,8 +9,7 @@ package eu.geclipse.workflow.impl;
 import eu.geclipse.workflow.IInputPort;
 import eu.geclipse.workflow.ILink;
 import eu.geclipse.workflow.IWorkflowNode;
-import eu.geclipse.workflow.WorkflowPackage;
-
+import eu.geclipse.workflow.IWorkflowPackage;
 import java.util.Collection;
 
 import org.eclipse.emf.common.notify.Notification;
@@ -71,7 +70,7 @@ public class InputPortImpl extends PortImpl implements IInputPort
   @Override
   protected EClass eStaticClass()
   {
-    return WorkflowPackage.Literals.IINPUT_PORT;
+    return IWorkflowPackage.Literals.IINPUT_PORT;
   }
 
   /**
@@ -81,7 +80,7 @@ public class InputPortImpl extends PortImpl implements IInputPort
    */
   public IWorkflowNode getNode()
   {
-    if (eContainerFeatureID != WorkflowPackage.IINPUT_PORT__NODE) return null;
+    if (eContainerFeatureID != IWorkflowPackage.IINPUT_PORT__NODE) return null;
     return (IWorkflowNode)eContainer();
   }
 
@@ -92,7 +91,7 @@ public class InputPortImpl extends PortImpl implements IInputPort
    */
   public NotificationChain basicSetNode(IWorkflowNode newNode, NotificationChain msgs)
   {
-    msgs = eBasicSetContainer((InternalEObject)newNode, WorkflowPackage.IINPUT_PORT__NODE, msgs);
+    msgs = eBasicSetContainer((InternalEObject)newNode, IWorkflowPackage.IINPUT_PORT__NODE, msgs);
     return msgs;
   }
 
@@ -103,7 +102,7 @@ public class InputPortImpl extends PortImpl implements IInputPort
    */
   public void setNode(IWorkflowNode newNode)
   {
-    if (newNode != eInternalContainer() || (eContainerFeatureID != WorkflowPackage.IINPUT_PORT__NODE && newNode != null))
+    if (newNode != eInternalContainer() || (eContainerFeatureID != IWorkflowPackage.IINPUT_PORT__NODE && newNode != null))
     {
       if (EcoreUtil.isAncestor(this, newNode))
         throw new IllegalArgumentException("Recursive containment not allowed for " + toString()); //$NON-NLS-1$
@@ -111,12 +110,12 @@ public class InputPortImpl extends PortImpl implements IInputPort
       if (eInternalContainer() != null)
         msgs = eBasicRemoveFromContainer(msgs);
       if (newNode != null)
-        msgs = ((InternalEObject)newNode).eInverseAdd(this, WorkflowPackage.IWORKFLOW_NODE__INPUTS, IWorkflowNode.class, msgs);
+        msgs = ((InternalEObject)newNode).eInverseAdd(this, IWorkflowPackage.IWORKFLOW_NODE__INPUTS, IWorkflowNode.class, msgs);
       msgs = basicSetNode(newNode, msgs);
       if (msgs != null) msgs.dispatch();
     }
     else if (eNotificationRequired())
-      eNotify(new ENotificationImpl(this, Notification.SET, WorkflowPackage.IINPUT_PORT__NODE, newNode, newNode));
+      eNotify(new ENotificationImpl(this, Notification.SET, IWorkflowPackage.IINPUT_PORT__NODE, newNode, newNode));
   }
 
   /**
@@ -128,7 +127,7 @@ public class InputPortImpl extends PortImpl implements IInputPort
   {
     if (links == null)
     {
-      links = new EObjectWithInverseResolvingEList<ILink>(ILink.class, this, WorkflowPackage.IINPUT_PORT__LINKS, WorkflowPackage.ILINK__TARGET);
+      links = new EObjectWithInverseResolvingEList<ILink>(ILink.class, this, IWorkflowPackage.IINPUT_PORT__LINKS, IWorkflowPackage.ILINK__TARGET);
     }
     return links;
   }
@@ -144,11 +143,11 @@ public class InputPortImpl extends PortImpl implements IInputPort
   {
     switch (featureID)
     {
-      case WorkflowPackage.IINPUT_PORT__NODE:
+      case IWorkflowPackage.IINPUT_PORT__NODE:
         if (eInternalContainer() != null)
           msgs = eBasicRemoveFromContainer(msgs);
         return basicSetNode((IWorkflowNode)otherEnd, msgs);
-      case WorkflowPackage.IINPUT_PORT__LINKS:
+      case IWorkflowPackage.IINPUT_PORT__LINKS:
         return ((InternalEList<InternalEObject>)(InternalEList<?>)getLinks()).basicAdd(otherEnd, msgs);
     }
     return super.eInverseAdd(otherEnd, featureID, msgs);
@@ -164,9 +163,9 @@ public class InputPortImpl extends PortImpl implements IInputPort
   {
     switch (featureID)
     {
-      case WorkflowPackage.IINPUT_PORT__NODE:
+      case IWorkflowPackage.IINPUT_PORT__NODE:
         return basicSetNode(null, msgs);
-      case WorkflowPackage.IINPUT_PORT__LINKS:
+      case IWorkflowPackage.IINPUT_PORT__LINKS:
         return ((InternalEList<?>)getLinks()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -182,8 +181,8 @@ public class InputPortImpl extends PortImpl implements IInputPort
   {
     switch (eContainerFeatureID)
     {
-      case WorkflowPackage.IINPUT_PORT__NODE:
-        return eInternalContainer().eInverseRemove(this, WorkflowPackage.IWORKFLOW_NODE__INPUTS, IWorkflowNode.class, msgs);
+      case IWorkflowPackage.IINPUT_PORT__NODE:
+        return eInternalContainer().eInverseRemove(this, IWorkflowPackage.IWORKFLOW_NODE__INPUTS, IWorkflowNode.class, msgs);
     }
     return super.eBasicRemoveFromContainerFeature(msgs);
   }
@@ -198,9 +197,9 @@ public class InputPortImpl extends PortImpl implements IInputPort
   {
     switch (featureID)
     {
-      case WorkflowPackage.IINPUT_PORT__NODE:
+      case IWorkflowPackage.IINPUT_PORT__NODE:
         return getNode();
-      case WorkflowPackage.IINPUT_PORT__LINKS:
+      case IWorkflowPackage.IINPUT_PORT__LINKS:
         return getLinks();
     }
     return super.eGet(featureID, resolve, coreType);
@@ -217,10 +216,10 @@ public class InputPortImpl extends PortImpl implements IInputPort
   {
     switch (featureID)
     {
-      case WorkflowPackage.IINPUT_PORT__NODE:
+      case IWorkflowPackage.IINPUT_PORT__NODE:
         setNode((IWorkflowNode)newValue);
         return;
-      case WorkflowPackage.IINPUT_PORT__LINKS:
+      case IWorkflowPackage.IINPUT_PORT__LINKS:
         getLinks().clear();
         getLinks().addAll((Collection<? extends ILink>)newValue);
         return;
@@ -238,10 +237,10 @@ public class InputPortImpl extends PortImpl implements IInputPort
   {
     switch (featureID)
     {
-      case WorkflowPackage.IINPUT_PORT__NODE:
+      case IWorkflowPackage.IINPUT_PORT__NODE:
         setNode((IWorkflowNode)null);
         return;
-      case WorkflowPackage.IINPUT_PORT__LINKS:
+      case IWorkflowPackage.IINPUT_PORT__LINKS:
         getLinks().clear();
         return;
     }
@@ -258,9 +257,9 @@ public class InputPortImpl extends PortImpl implements IInputPort
   {
     switch (featureID)
     {
-      case WorkflowPackage.IINPUT_PORT__NODE:
+      case IWorkflowPackage.IINPUT_PORT__NODE:
         return getNode() != null;
-      case WorkflowPackage.IINPUT_PORT__LINKS:
+      case IWorkflowPackage.IINPUT_PORT__LINKS:
         return links != null && !links.isEmpty();
     }
     return super.eIsSet(featureID);

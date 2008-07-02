@@ -36,7 +36,7 @@ public class WorkflowAdapterFactory extends AdapterFactoryImpl
    * The cached model package.
    * @generated
    */
-  protected static WorkflowPackage modelPackage;
+  protected static IWorkflowPackage modelPackage;
 
   /**
    * Creates an instance of the adapter factory.
@@ -46,7 +46,7 @@ public class WorkflowAdapterFactory extends AdapterFactoryImpl
   {
     if (modelPackage == null)
     {
-      modelPackage = WorkflowPackage.eINSTANCE;
+      modelPackage = IWorkflowPackage.eINSTANCE;
     }
   }
 

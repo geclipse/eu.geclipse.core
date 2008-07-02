@@ -51,21 +51,21 @@ public class WorkflowPaletteFactory {
     paletteContainer.add( createLinkCreationTool() );
     paletteContainer.add( createInputPortCreationTool() );
     paletteContainer.add( createOutputPortCreationTool() );
-    paletteContainer.add( createWorkflowJobDescriptionTool() );
+ //   paletteContainer.add( createWorkflowJobDescriptionTool() );
     paletteContainer.add( createWorkflowJobCreationTool() );
     return paletteContainer;
   }
 
-  private PaletteEntry createWorkflowJobDescriptionTool() {
-    List/*<IElementType>*/types = new ArrayList/*<IElementType>*/( 1 );
-    types.add( WorkflowElementTypes.WorkflowJobDescription_4002 );
-    NodeToolEntry entry = new NodeToolEntry( Messages.getString("WorkflowJobDescriptionCreationTool_title"), //$NON-NLS-1$
-                                             Messages.getString("WorkflowJobDescriptionCreationTool_desc"), //$NON-NLS-1$
-                                             types );
-    entry.setSmallIcon( WorkflowDiagramEditorPlugin.findImageDescriptor( "/eu.geclipse.workflow.edit/icons/full/obj16/JSDLFile.gif" ) ); //$NON-NLS-1$
-    entry.setLargeIcon( entry.getSmallIcon() );
-    return entry;
-  }
+//  private PaletteEntry createWorkflowJobDescriptionTool() {
+//    List/*<IElementType>*/types = new ArrayList/*<IElementType>*/( 1 );
+//    types.add( WorkflowElementTypes.WorkflowJobDescription_4002 );
+//    NodeToolEntry entry = new NodeToolEntry( Messages.getString("WorkflowJobDescriptionCreationTool_title"), //$NON-NLS-1$
+//                                             Messages.getString("WorkflowJobDescriptionCreationTool_desc"), //$NON-NLS-1$
+//                                             types );
+//    entry.setSmallIcon( WorkflowDiagramEditorPlugin.findImageDescriptor( "/eu.geclipse.workflow.edit/icons/full/obj16/JSDLFile.gif" ) ); //$NON-NLS-1$
+//    entry.setLargeIcon( entry.getSmallIcon() );
+//    return entry;
+//  }
 
   /**
    * @generated NOT

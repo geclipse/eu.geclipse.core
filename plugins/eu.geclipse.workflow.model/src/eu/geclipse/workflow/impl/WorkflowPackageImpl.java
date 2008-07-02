@@ -21,10 +21,11 @@ import eu.geclipse.workflow.IOutputPort;
 import eu.geclipse.workflow.IPort;
 import eu.geclipse.workflow.IWorkflow;
 import eu.geclipse.workflow.IWorkflowElement;
+import eu.geclipse.workflow.IWorkflowFactory;
 import eu.geclipse.workflow.IWorkflowJob;
 import eu.geclipse.workflow.IWorkflowNode;
-import eu.geclipse.workflow.WorkflowFactory;
-import eu.geclipse.workflow.WorkflowPackage;
+import eu.geclipse.workflow.IWorkflowPackage;
+
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EPackage;
@@ -38,7 +39,7 @@ import org.eclipse.emf.ecore.impl.EPackageImpl;
  * <!-- end-user-doc -->
  * @generated
  */
-public class WorkflowPackageImpl extends EPackageImpl implements WorkflowPackage
+public class WorkflowPackageImpl extends EPackageImpl implements IWorkflowPackage
 {
   /**
    * <!-- begin-user-doc -->
@@ -113,7 +114,7 @@ public class WorkflowPackageImpl extends EPackageImpl implements WorkflowPackage
    */
   private WorkflowPackageImpl()
   {
-    super(eNS_URI, WorkflowFactory.eINSTANCE);
+    super(eNS_URI, IWorkflowFactory.eINSTANCE);
   }
 
   /**
@@ -145,9 +146,9 @@ public class WorkflowPackageImpl extends EPackageImpl implements WorkflowPackage
    * @see #initializePackageContents()
    * @generated
    */
-  public static WorkflowPackage init()
+  public static IWorkflowPackage init()
   {
-    if (isInited) return (WorkflowPackage)EPackage.Registry.INSTANCE.getEPackage(WorkflowPackage.eNS_URI);
+    if (isInited) return (IWorkflowPackage)EPackage.Registry.INSTANCE.getEPackage(IWorkflowPackage.eNS_URI);
 
     // Obtain or create and register package
     WorkflowPackageImpl theWorkflowPackage = (WorkflowPackageImpl)(EPackage.Registry.INSTANCE.getEPackage(eNS_URI) instanceof WorkflowPackageImpl ? EPackage.Registry.INSTANCE.getEPackage(eNS_URI) : new WorkflowPackageImpl());
@@ -431,9 +432,9 @@ public class WorkflowPackageImpl extends EPackageImpl implements WorkflowPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  public WorkflowFactory getWorkflowFactory()
+  public IWorkflowFactory getWorkflowFactory()
   {
-    return (WorkflowFactory)getEFactoryInstance();
+    return (IWorkflowFactory)getEFactoryInstance();
   }
 
   /**

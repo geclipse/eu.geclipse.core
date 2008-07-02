@@ -248,7 +248,7 @@ public class WorkflowNavigatorContentProvider implements ICommonContentProvider
     switch( WorkflowVisualIDRegistry.getVisualID( view ) ) {
       case WorkflowEditPart.VISUAL_ID: {
         Collection result = new ArrayList();
-        WorkflowNavigatorGroup links = new WorkflowNavigatorGroup( Messages.getString("NavigatorGroupName_IWorkflow_79_links"),
+        WorkflowNavigatorGroup links = new WorkflowNavigatorGroup( Messages.getString("NavigatorGroupName_IWorkflow_79_links"), //$NON-NLS-1$
                                                                    "icons/obj16/LinksNavigatorGroup.gif", parentElement ); //$NON-NLS-1$
         Collection connectedViews = getChildrenByType( Collections.singleton( view ),
                                                        WorkflowJobEditPart.VISUAL_ID );
@@ -279,7 +279,7 @@ public class WorkflowNavigatorContentProvider implements ICommonContentProvider
       }
       case OutputPortEditPart.VISUAL_ID: {
         Collection result = new ArrayList();
-        WorkflowNavigatorGroup outgoinglinks = new WorkflowNavigatorGroup( Messages.getString("NavigatorGroupName_IOutputPort_2001_outgoinglinks"),
+        WorkflowNavigatorGroup outgoinglinks = new WorkflowNavigatorGroup( Messages.getString("NavigatorGroupName_IOutputPort_2001_outgoinglinks"), //$NON-NLS-1$
                                                                            "icons/obj16/OutputLinks.gif", parentElement ); //$NON-NLS-1$
         Collection connectedViews = getOutgoingLinksByType( Collections.singleton( view ),
                                                             LinkEditPart.VISUAL_ID );
@@ -293,7 +293,7 @@ public class WorkflowNavigatorContentProvider implements ICommonContentProvider
       }
       case InputPortEditPart.VISUAL_ID: {
         Collection result = new ArrayList();
-        WorkflowNavigatorGroup incominglinks = new WorkflowNavigatorGroup( Messages.getString("NavigatorGroupName_IInputPort_2002_incominglinks"),
+        WorkflowNavigatorGroup incominglinks = new WorkflowNavigatorGroup( Messages.getString("NavigatorGroupName_IInputPort_2002_incominglinks"), //$NON-NLS-1$
                                                                            "icons/obj16/InputLinks.gif", parentElement ); //$NON-NLS-1$
         Collection connectedViews = getIncomingLinksByType( Collections.singleton( view ),
                                                             LinkEditPart.VISUAL_ID );
@@ -307,9 +307,9 @@ public class WorkflowNavigatorContentProvider implements ICommonContentProvider
       }
       case LinkEditPart.VISUAL_ID: {
         Collection result = new ArrayList();
-        WorkflowNavigatorGroup target = new WorkflowNavigatorGroup( Messages.getString("NavigatorGroupName_ILink_3001_target"),
+        WorkflowNavigatorGroup target = new WorkflowNavigatorGroup( Messages.getString("NavigatorGroupName_ILink_3001_target"), //$NON-NLS-1$
                                                                     "icons/obj16/LinkTarget.gif", parentElement ); //$NON-NLS-1$
-        WorkflowNavigatorGroup source = new WorkflowNavigatorGroup( Messages.getString("NavigatorGroupName_ILink_3001_source"),
+        WorkflowNavigatorGroup source = new WorkflowNavigatorGroup( Messages.getString("NavigatorGroupName_ILink_3001_source"), //$NON-NLS-1$
                                                                     "icons/obj16/LinkSource.gif", parentElement ); //$NON-NLS-1$
         Collection connectedViews = getLinksTargetByType( Collections.singleton( view ),
                                                           InputPortEditPart.VISUAL_ID );

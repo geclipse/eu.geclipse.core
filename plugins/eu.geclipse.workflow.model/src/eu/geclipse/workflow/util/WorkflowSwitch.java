@@ -21,6 +21,7 @@ import java.util.List;
 
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
+import eu.geclipse.workflow.IWorkflowPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -32,7 +33,7 @@ import org.eclipse.emf.ecore.EObject;
  * until a non-null result is returned,
  * which is the result of the switch.
  * <!-- end-user-doc -->
- * @see eu.geclipse.workflow.WorkflowPackage
+ * @see eu.geclipse.workflow.IWorkflowPackage
  * @generated
  */
 public class WorkflowSwitch<T>
@@ -43,7 +44,7 @@ public class WorkflowSwitch<T>
    * <!-- end-user-doc -->
    * @generated
    */
-  protected static WorkflowPackage modelPackage;
+  protected static IWorkflowPackage modelPackage;
 
   /**
    * Creates an instance of the switch.
@@ -55,7 +56,7 @@ public class WorkflowSwitch<T>
   {
     if (modelPackage == null)
     {
-      modelPackage = WorkflowPackage.eINSTANCE;
+      modelPackage = IWorkflowPackage.eINSTANCE;
     }
   }
 
@@ -105,7 +106,7 @@ public class WorkflowSwitch<T>
   {
     switch (classifierID)
     {
-      case WorkflowPackage.IPORT:
+      case IWorkflowPackage.IPORT:
       {
         IPort iPort = (IPort)theEObject;
         T result = caseIPort(iPort);
@@ -113,7 +114,7 @@ public class WorkflowSwitch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case WorkflowPackage.ILINK:
+      case IWorkflowPackage.ILINK:
       {
         ILink iLink = (ILink)theEObject;
         T result = caseILink(iLink);
@@ -121,7 +122,7 @@ public class WorkflowSwitch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case WorkflowPackage.IINPUT_PORT:
+      case IWorkflowPackage.IINPUT_PORT:
       {
         IInputPort iInputPort = (IInputPort)theEObject;
         T result = caseIInputPort(iInputPort);
@@ -130,7 +131,7 @@ public class WorkflowSwitch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case WorkflowPackage.IOUTPUT_PORT:
+      case IWorkflowPackage.IOUTPUT_PORT:
       {
         IOutputPort iOutputPort = (IOutputPort)theEObject;
         T result = caseIOutputPort(iOutputPort);
@@ -139,7 +140,7 @@ public class WorkflowSwitch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case WorkflowPackage.IWORKFLOW:
+      case IWorkflowPackage.IWORKFLOW:
       {
         IWorkflow iWorkflow = (IWorkflow)theEObject;
         T result = caseIWorkflow(iWorkflow);
@@ -147,7 +148,7 @@ public class WorkflowSwitch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case WorkflowPackage.IWORKFLOW_JOB:
+      case IWorkflowPackage.IWORKFLOW_JOB:
       {
         IWorkflowJob iWorkflowJob = (IWorkflowJob)theEObject;
         T result = caseIWorkflowJob(iWorkflowJob);
@@ -156,14 +157,14 @@ public class WorkflowSwitch<T>
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case WorkflowPackage.IWORKFLOW_ELEMENT:
+      case IWorkflowPackage.IWORKFLOW_ELEMENT:
       {
         IWorkflowElement iWorkflowElement = (IWorkflowElement)theEObject;
         T result = caseIWorkflowElement(iWorkflowElement);
         if (result == null) result = defaultCase(theEObject);
         return result;
       }
-      case WorkflowPackage.IWORKFLOW_NODE:
+      case IWorkflowPackage.IWORKFLOW_NODE:
       {
         IWorkflowNode iWorkflowNode = (IWorkflowNode)theEObject;
         T result = caseIWorkflowNode(iWorkflowNode);

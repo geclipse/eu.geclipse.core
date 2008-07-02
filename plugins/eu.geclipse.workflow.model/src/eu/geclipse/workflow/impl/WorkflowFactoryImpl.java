@@ -24,6 +24,7 @@ import org.eclipse.emf.ecore.EPackage;
 import org.eclipse.emf.ecore.impl.EFactoryImpl;
 
 import org.eclipse.emf.ecore.plugin.EcorePlugin;
+import eu.geclipse.workflow.IWorkflowPackage;
 
 /**
  * <!-- begin-user-doc -->
@@ -31,20 +32,20 @@ import org.eclipse.emf.ecore.plugin.EcorePlugin;
  * <!-- end-user-doc -->
  * @generated
  */
-public class WorkflowFactoryImpl extends EFactoryImpl implements WorkflowFactory
+public class WorkflowFactoryImpl extends EFactoryImpl implements IWorkflowFactory
 {
   /**
    * Creates the default factory implementation.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return 
+   * @return WorkflowFactoryImpl
    * @generated
    */
-  public static WorkflowFactory init()
+  public static IWorkflowFactory init()
   {
     try
     {
-      WorkflowFactory theWorkflowFactory = (WorkflowFactory)EPackage.Registry.INSTANCE.getEFactory("http:///eu/geclipse/workflow.ecore"); //$NON-NLS-1$ 
+      IWorkflowFactory theWorkflowFactory = (IWorkflowFactory)EPackage.Registry.INSTANCE.getEFactory("http:///eu/geclipse/workflow.ecore"); //$NON-NLS-1$ 
       if (theWorkflowFactory != null)
       {
         return theWorkflowFactory;
@@ -78,11 +79,11 @@ public class WorkflowFactoryImpl extends EFactoryImpl implements WorkflowFactory
   {
     switch (eClass.getClassifierID())
     {
-      case WorkflowPackage.ILINK: return createILink();
-      case WorkflowPackage.IINPUT_PORT: return createIInputPort();
-      case WorkflowPackage.IOUTPUT_PORT: return createIOutputPort();
-      case WorkflowPackage.IWORKFLOW: return createIWorkflow();
-      case WorkflowPackage.IWORKFLOW_JOB: return createIWorkflowJob();
+      case IWorkflowPackage.ILINK: return createILink();
+      case IWorkflowPackage.IINPUT_PORT: return createIInputPort();
+      case IWorkflowPackage.IOUTPUT_PORT: return createIOutputPort();
+      case IWorkflowPackage.IWORKFLOW: return createIWorkflow();
+      case IWorkflowPackage.IWORKFLOW_JOB: return createIWorkflowJob();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier"); //$NON-NLS-1$ //$NON-NLS-2$
     }
@@ -148,9 +149,9 @@ public class WorkflowFactoryImpl extends EFactoryImpl implements WorkflowFactory
    * <!-- end-user-doc -->
    * @generated
    */
-  public WorkflowPackage getWorkflowPackage()
+  public IWorkflowPackage getWorkflowPackage()
   {
-    return (WorkflowPackage)getEPackage();
+    return (IWorkflowPackage)getEPackage();
   }
 
   /**
@@ -160,9 +161,9 @@ public class WorkflowFactoryImpl extends EFactoryImpl implements WorkflowFactory
    * @generated
    */
   @Deprecated
-  public static WorkflowPackage getPackage()
+  public static IWorkflowPackage getPackage()
   {
-    return WorkflowPackage.eINSTANCE;
+    return IWorkflowPackage.eINSTANCE;
   }
 
 

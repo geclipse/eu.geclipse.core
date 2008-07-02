@@ -7,7 +7,7 @@
 package eu.geclipse.workflow.impl;
 
 import eu.geclipse.workflow.IPort;
-import eu.geclipse.workflow.WorkflowPackage;
+import eu.geclipse.workflow.IWorkflowPackage;
 
 import org.eclipse.emf.ecore.EClass;
 
@@ -40,7 +40,7 @@ public abstract class PortImpl extends WorkflowElementImpl implements IPort
   @Override
   protected EClass eStaticClass()
   {
-    return WorkflowPackage.Literals.IPORT;
+    return IWorkflowPackage.Literals.IPORT;
   }
 
 } //IPortImpl

@@ -29,7 +29,7 @@ package eu.geclipse.workflow;
  * </ul>
  * </p>
  *
- * @see eu.geclipse.workflow.WorkflowPackage#getIWorkflowJob()
+ * @see eu.geclipse.workflow.IWorkflowPackage#getIWorkflowJob()
  * @model
  * @generated
  */
@@ -45,7 +45,7 @@ public interface IWorkflowJob extends IWorkflowNode
    * <!-- end-user-doc -->
    * @return the value of the '<em>Job Description</em>' attribute.
    * @see #setJobDescription(String)
-   * @see eu.geclipse.workflow.WorkflowPackage#getIWorkflowJob_JobDescription()
+   * @see eu.geclipse.workflow.IWorkflowPackage#getIWorkflowJob_JobDescription()
    * @model required="true"
    * @generated
    */
@@ -71,7 +71,7 @@ public interface IWorkflowJob extends IWorkflowNode
    * <!-- end-user-doc -->
    * @return the value of the '<em>Job Description File Name</em>' attribute.
    * @see #setJobDescriptionFileName(String)
-   * @see eu.geclipse.workflow.WorkflowPackage#getIWorkflowJob_JobDescriptionFileName()
+   * @see eu.geclipse.workflow.IWorkflowPackage#getIWorkflowJob_JobDescriptionFileName()
    * @model required="true"
    * @generated
    */

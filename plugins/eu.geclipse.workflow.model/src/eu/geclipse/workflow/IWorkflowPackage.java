@@ -58,7 +58,7 @@ public interface IWorkflowPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  WorkflowPackage eINSTANCE = eu.geclipse.workflow.impl.WorkflowPackageImpl.init();
+  IWorkflowPackage eINSTANCE = eu.geclipse.workflow.impl.WorkflowPackageImpl.init();
 
   /**
    * The meta object id for the '{@link eu.geclipse.workflow.impl.IWorkflowElementImpl <em>IWorkflow Element</em>}' class.

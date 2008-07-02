@@ -79,7 +79,7 @@ public class WorkflowElementTypes extends ElementInitializers {
   /**
    * 
    */
-  public static final IElementType WorkflowJobDescription_4002 = getElementType( "eu.geclipse.workflow.ui.WorkflowJobDescription_4002" ); //$NON-NLS-1$
+//  public static final IElementType WorkflowJobDescription_4002 = getElementType( "eu.geclipse.workflow.ui.WorkflowJobDescription_4002" ); //$NON-NLS-1$
 
   /**
    * @generated
@@ -195,7 +195,7 @@ public class WorkflowElementTypes extends ElementInitializers {
       elements.put( IWorkflowJob_1001, IWorkflowPackage.eINSTANCE.getIWorkflowJob() );
       elements.put( IOutputPort_2001, IWorkflowPackage.eINSTANCE.getIOutputPort() );
       elements.put( IInputPort_2002, IWorkflowPackage.eINSTANCE.getIInputPort() );
-      elements.put( WorkflowJobDescription_4002, IWorkflowPackage.eINSTANCE.getIWorkflowJob_JobDescription() );      
+//      elements.put( WorkflowJobDescription_4002, IWorkflowPackage.eINSTANCE.getIWorkflowJob_JobDescription() );      
       elements.put( ILink_3001, IWorkflowPackage.eINSTANCE.getILink() );
     }
     return ( ENamedElement )elements.get( type );
@@ -218,7 +218,7 @@ public class WorkflowElementTypes extends ElementInitializers {
       KNOWN_ELEMENT_TYPES.add( IWorkflowJob_1001 );
       KNOWN_ELEMENT_TYPES.add( IOutputPort_2001 );
       KNOWN_ELEMENT_TYPES.add( IInputPort_2002 );
-      KNOWN_ELEMENT_TYPES.add( WorkflowJobDescription_4002 );
+ //     KNOWN_ELEMENT_TYPES.add( WorkflowJobDescription_4002 );
       KNOWN_ELEMENT_TYPES.add( ILink_3001 );
     }
     return KNOWN_ELEMENT_TYPES.contains( elementType );

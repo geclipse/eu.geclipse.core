@@ -8,7 +8,7 @@ package eu.geclipse.workflow.impl;
 
 import eu.geclipse.workflow.IWorkflowJob;
 import eu.geclipse.workflow.IWorkflowPackage;
-import eu.geclipse.workflow.WorkflowPackage;
+import eu.geclipse.workflow.IWorkflowPackage;
 
 import org.eclipse.emf.common.notify.Notification;
 
@@ -90,7 +90,7 @@ public class WorkflowJobImpl extends WorkflowNodeImpl implements IWorkflowJob
   @Override
   protected EClass eStaticClass()
   {
-    return WorkflowPackage.Literals.IWORKFLOW_JOB;
+    return IWorkflowPackage.Literals.IWORKFLOW_JOB;
   }
 
   /**
@@ -142,7 +142,7 @@ public class WorkflowJobImpl extends WorkflowNodeImpl implements IWorkflowJob
     if (eNotificationRequired())
       eNotify( new ENotificationImpl( this, 
                                       Notification.SET, 
-                                      WorkflowPackage.IWORKFLOW_JOB__JOB_DESCRIPTION_FILE_NAME, 
+                                      IWorkflowPackage.IWORKFLOW_JOB__JOB_DESCRIPTION_FILE_NAME, 
                                       oldJobDescriptionFileName, 
                                       this.jobDescriptionFileName));
   }
@@ -157,9 +157,9 @@ public class WorkflowJobImpl extends WorkflowNodeImpl implements IWorkflowJob
   {
     switch (featureID)
     {
-      case WorkflowPackage.IWORKFLOW_JOB__JOB_DESCRIPTION:
+      case IWorkflowPackage.IWORKFLOW_JOB__JOB_DESCRIPTION:
         return getJobDescription();
-      case WorkflowPackage.IWORKFLOW_JOB__JOB_DESCRIPTION_FILE_NAME:
+      case IWorkflowPackage.IWORKFLOW_JOB__JOB_DESCRIPTION_FILE_NAME:
         return getJobDescriptionFileName();
     }
     return super.eGet(featureID, resolve, coreType);
@@ -175,10 +175,10 @@ public class WorkflowJobImpl extends WorkflowNodeImpl implements IWorkflowJob
   {
     switch (featureID)
     {
-      case WorkflowPackage.IWORKFLOW_JOB__JOB_DESCRIPTION:
+      case IWorkflowPackage.IWORKFLOW_JOB__JOB_DESCRIPTION:
         setJobDescription((String)newValue);
         return;
-      case WorkflowPackage.IWORKFLOW_JOB__JOB_DESCRIPTION_FILE_NAME:
+      case IWorkflowPackage.IWORKFLOW_JOB__JOB_DESCRIPTION_FILE_NAME:
         setJobDescriptionFileName((String)newValue);
         return;
     }
@@ -195,10 +195,10 @@ public class WorkflowJobImpl extends WorkflowNodeImpl implements IWorkflowJob
   {
     switch (featureID)
     {
-      case WorkflowPackage.IWORKFLOW_JOB__JOB_DESCRIPTION:
+      case IWorkflowPackage.IWORKFLOW_JOB__JOB_DESCRIPTION:
         setJobDescription(JOB_DESCRIPTION_EDEFAULT);
         return;
-      case WorkflowPackage.IWORKFLOW_JOB__JOB_DESCRIPTION_FILE_NAME:
+      case IWorkflowPackage.IWORKFLOW_JOB__JOB_DESCRIPTION_FILE_NAME:
         setJobDescriptionFileName(JOB_DESCRIPTION_FILE_NAME_EDEFAULT);
         return;
     }
@@ -215,9 +215,9 @@ public class WorkflowJobImpl extends WorkflowNodeImpl implements IWorkflowJob
   {
     switch (featureID)
     {
-      case WorkflowPackage.IWORKFLOW_JOB__JOB_DESCRIPTION:
+      case IWorkflowPackage.IWORKFLOW_JOB__JOB_DESCRIPTION:
         return JOB_DESCRIPTION_EDEFAULT == null ? this.jobDescription != null : !JOB_DESCRIPTION_EDEFAULT.equals(this.jobDescription);
-      case WorkflowPackage.IWORKFLOW_JOB__JOB_DESCRIPTION_FILE_NAME:
+      case IWorkflowPackage.IWORKFLOW_JOB__JOB_DESCRIPTION_FILE_NAME:
         return JOB_DESCRIPTION_FILE_NAME_EDEFAULT == null ? this.jobDescriptionFileName != null : !JOB_DESCRIPTION_FILE_NAME_EDEFAULT.equals(this.jobDescriptionFileName);
     }
     return super.eIsSet(featureID);

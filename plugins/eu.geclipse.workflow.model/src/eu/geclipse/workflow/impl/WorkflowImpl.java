@@ -9,7 +9,7 @@ package eu.geclipse.workflow.impl;
 import eu.geclipse.workflow.ILink;
 import eu.geclipse.workflow.IWorkflow;
 import eu.geclipse.workflow.IWorkflowNode;
-import eu.geclipse.workflow.WorkflowPackage;
+import eu.geclipse.workflow.IWorkflowPackage;
 
 import java.util.Collection;
 
@@ -77,7 +77,7 @@ public class WorkflowImpl extends WorkflowElementImpl implements IWorkflow
   @Override
   protected EClass eStaticClass()
   {
-    return WorkflowPackage.Literals.IWORKFLOW;
+    return IWorkflowPackage.Literals.IWORKFLOW;
   }
 
   /**
@@ -89,7 +89,7 @@ public class WorkflowImpl extends WorkflowElementImpl implements IWorkflow
   {
     if (nodes == null)
     {
-      nodes = new EObjectContainmentWithInverseEList<IWorkflowNode>(IWorkflowNode.class, this, WorkflowPackage.IWORKFLOW__NODES, WorkflowPackage.IWORKFLOW_NODE__WORKFLOW);
+      nodes = new EObjectContainmentWithInverseEList<IWorkflowNode>(IWorkflowNode.class, this, IWorkflowPackage.IWORKFLOW__NODES, IWorkflowPackage.IWORKFLOW_NODE__WORKFLOW);
     }
     return nodes;
   }
@@ -103,7 +103,7 @@ public class WorkflowImpl extends WorkflowElementImpl implements IWorkflow
   {
     if (links == null)
     {
-      links = new EObjectContainmentWithInverseEList<ILink>(ILink.class, this, WorkflowPackage.IWORKFLOW__LINKS, WorkflowPackage.ILINK__WORKFLOW);
+      links = new EObjectContainmentWithInverseEList<ILink>(ILink.class, this, IWorkflowPackage.IWORKFLOW__LINKS, IWorkflowPackage.ILINK__WORKFLOW);
     }
     return links;
   }
@@ -119,9 +119,9 @@ public class WorkflowImpl extends WorkflowElementImpl implements IWorkflow
   {
     switch (featureID)
     {
-      case WorkflowPackage.IWORKFLOW__NODES:
+      case IWorkflowPackage.IWORKFLOW__NODES:
         return ((InternalEList<InternalEObject>)(InternalEList<?>)getNodes()).basicAdd(otherEnd, msgs);
-      case WorkflowPackage.IWORKFLOW__LINKS:
+      case IWorkflowPackage.IWORKFLOW__LINKS:
         return ((InternalEList<InternalEObject>)(InternalEList<?>)getLinks()).basicAdd(otherEnd, msgs);
     }
     return super.eInverseAdd(otherEnd, featureID, msgs);
@@ -137,9 +137,9 @@ public class WorkflowImpl extends WorkflowElementImpl implements IWorkflow
   {
     switch (featureID)
     {
-      case WorkflowPackage.IWORKFLOW__NODES:
+      case IWorkflowPackage.IWORKFLOW__NODES:
         return ((InternalEList<?>)getNodes()).basicRemove(otherEnd, msgs);
-      case WorkflowPackage.IWORKFLOW__LINKS:
+      case IWorkflowPackage.IWORKFLOW__LINKS:
         return ((InternalEList<?>)getLinks()).basicRemove(otherEnd, msgs);
     }
     return super.eInverseRemove(otherEnd, featureID, msgs);
@@ -155,9 +155,9 @@ public class WorkflowImpl extends WorkflowElementImpl implements IWorkflow
   {
     switch (featureID)
     {
-      case WorkflowPackage.IWORKFLOW__NODES:
+      case IWorkflowPackage.IWORKFLOW__NODES:
         return getNodes();
-      case WorkflowPackage.IWORKFLOW__LINKS:
+      case IWorkflowPackage.IWORKFLOW__LINKS:
         return getLinks();
     }
     return super.eGet(featureID, resolve, coreType);
@@ -174,11 +174,11 @@ public class WorkflowImpl extends WorkflowElementImpl implements IWorkflow
   {
     switch (featureID)
     {
-      case WorkflowPackage.IWORKFLOW__NODES:
+      case IWorkflowPackage.IWORKFLOW__NODES:
         getNodes().clear();
         getNodes().addAll((Collection<? extends IWorkflowNode>)newValue);
         return;
-      case WorkflowPackage.IWORKFLOW__LINKS:
+      case IWorkflowPackage.IWORKFLOW__LINKS:
         getLinks().clear();
         getLinks().addAll((Collection<? extends ILink>)newValue);
         return;
@@ -196,10 +196,10 @@ public class WorkflowImpl extends WorkflowElementImpl implements IWorkflow
   {
     switch (featureID)
     {
-      case WorkflowPackage.IWORKFLOW__NODES:
+      case IWorkflowPackage.IWORKFLOW__NODES:
         getNodes().clear();
         return;
-      case WorkflowPackage.IWORKFLOW__LINKS:
+      case IWorkflowPackage.IWORKFLOW__LINKS:
         getLinks().clear();
         return;
     }
@@ -216,9 +216,9 @@ public class WorkflowImpl extends WorkflowElementImpl implements IWorkflow
   {
     switch (featureID)
     {
-      case WorkflowPackage.IWORKFLOW__NODES:
+      case IWorkflowPackage.IWORKFLOW__NODES:
         return nodes != null && !nodes.isEmpty();
-      case WorkflowPackage.IWORKFLOW__LINKS:
+      case IWorkflowPackage.IWORKFLOW__LINKS:
         return links != null && !links.isEmpty();
     }
     return super.eIsSet(featureID);
