@@ -108,6 +108,21 @@ public class GeneralInfoSection extends JsdlFormPageSection {
     td.maxWidth = WIDGET_MAX_WIDTH;
     
     this.txtApplicationName = toolkit.createText( client,"", SWT.NONE );     //$NON-NLS-1$
+    this.txtApplicationName.addModifyListener( new ModifyListener(){
+
+      public void modifyText( final ModifyEvent e ) {
+        
+        if (!GeneralInfoSection.this.txtApplicationName.getText().equals( EMPTY_STRING )){
+          GeneralInfoSection.this.applicationType.setApplicationName( 
+                                                                 GeneralInfoSection.this.txtApplicationName.getText() );
+        }else{
+          GeneralInfoSection.this.applicationType.setApplicationName( null );
+        }        
+        
+        contentChanged();        
+      }
+      
+    });
         
     this.txtApplicationName.setLayoutData( td );
         
@@ -263,6 +278,14 @@ public class GeneralInfoSection extends JsdlFormPageSection {
   private void fillFields() {
     
     this.isNotifyAllowed = false;
+    
+    if (null != this.applicationType) {
+      if ( null != this.applicationType.getApplicationName() ) {
+        this.txtApplicationName.setText( this.applicationType.getApplicationName() );
+      }else{
+        this.txtApplicationName.setText( EMPTY_STRING );
+      }
+    }
     
     if( null != this.posixApplicationType ) {      
       if ( null != this.posixApplicationType.getExecutable() ) {
