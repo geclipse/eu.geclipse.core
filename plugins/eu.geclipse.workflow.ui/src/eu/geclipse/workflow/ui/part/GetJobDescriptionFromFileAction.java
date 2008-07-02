@@ -50,6 +50,7 @@ import eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin;
 
 /**
  * @author athandava
+ *
  */
 public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
 
@@ -57,7 +58,9 @@ public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
    * The WorkflowJobEditPart that has been selected.
    */
   protected WorkflowJobEditPart mySelectedElement;
-  
+  /**
+   * 
+   */
   private Shell myShell;
   String jobDescriptionInJSDL = null;
   String fileName = null;
@@ -79,30 +82,30 @@ public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
     dialog.addFileTypeFilter( "jsdl",  //$NON-NLS-1$
                               Messages.getString( "GetJobDescriptionFromFileAction.filterTypeDesc" ) ); //$NON-NLS-1$
     
-    if ( dialog.open() == Window.OK ) {
+    if( dialog.open() == Window.OK ) {
       IFileStore[] result = dialog.getSelectedFileStores();
-      if ( ( result != null ) && ( result.length > 0 ) ) {
+      if( ( result != null ) && ( result.length > 0 ) ) {
         try {
           this.fileName= result[0].toURI().toString();          
           
           inStream = result[ 0 ].openInputStream( EFS.NONE, null );
-        } catch ( CoreException cE ) {
+        } catch( CoreException cE ) {
           status = new Status( IStatus.ERROR,
                                WorkflowDiagramEditorPlugin.ID,
                                IStatus.OK,
                                Messages.getString( "GetJobDescriptionFromFileAction.errorOpeningInputStream" ), //$NON-NLS-1$
                                cE );
         }
-        if ( status.isOK() ) {
+        if( status.isOK() ) {
           // Read in contents of the JSDL file
           BufferedReader in = new BufferedReader( new InputStreamReader( inStream ) );
           StringBuffer buffer = new StringBuffer();
           String line = null;
           try {
-            while ( ( line = in.readLine() ) != null ) {
+            while( ( line = in.readLine() ) != null ) {
               buffer.append( line );
             }
-          } catch ( IOException iOE ) {
+          } catch( IOException iOE ) {
             status = new Status( IStatus.ERROR,
                                  WorkflowDiagramEditorPlugin.ID,
                                  IStatus.OK,
@@ -113,7 +116,7 @@ public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
         }
         try {
           inStream.close();
-        } catch ( IOException iOE ) {
+        } catch( IOException iOE ) {
           status = new Status( IStatus.ERROR,
                                WorkflowDiagramEditorPlugin.ID,
                                IStatus.OK,
@@ -151,7 +154,7 @@ public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
     try {
       OperationHistoryFactory.getOperationHistory()
         .execute( command, new NullProgressMonitor(), null );
-    } catch ( ExecutionException eE ) {
+    } catch( ExecutionException eE ) {
       status = new Status( IStatus.ERROR,
                            WorkflowDiagramEditorPlugin.ID,
                            IStatus.OK,
@@ -167,10 +170,10 @@ public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
 
   public void selectionChanged( IAction action, ISelection selection ) {
     this.mySelectedElement = null;
-    if ( selection instanceof IStructuredSelection ) {
+    if( selection instanceof IStructuredSelection ) {
       IStructuredSelection structuredSelection = ( IStructuredSelection )selection;
-      if ( structuredSelection.size() == 1
-           && structuredSelection.getFirstElement() instanceof WorkflowJobEditPart )
+      if( structuredSelection.size() == 1
+          && structuredSelection.getFirstElement() instanceof WorkflowJobEditPart )
       {
         this.mySelectedElement = ( WorkflowJobEditPart )structuredSelection.getFirstElement();
       }

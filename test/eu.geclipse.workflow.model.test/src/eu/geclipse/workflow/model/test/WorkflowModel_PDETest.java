@@ -39,6 +39,7 @@ import eu.geclipse.workflow.IWorkflow;
 import eu.geclipse.workflow.IWorkflowFactory;
 import eu.geclipse.workflow.IWorkflowJob;
 import eu.geclipse.workflow.IWorkflowPackage;
+import eu.geclipse.workflow.WorkflowFactory;
 
 
 
@@ -110,7 +111,7 @@ public class WorkflowModel_PDETest {
    *         element in a JSDL file)
    */
   private EObject createModel() {
-    IWorkflowFactory workflowFactory = IWorkflowFactory.eINSTANCE;
+    WorkflowFactory workflowFactory = WorkflowFactory.eINSTANCE;
     
     IWorkflow workflow = workflowFactory.createIWorkflow();
     workflow.setName( TEST_WORKFLOW );
