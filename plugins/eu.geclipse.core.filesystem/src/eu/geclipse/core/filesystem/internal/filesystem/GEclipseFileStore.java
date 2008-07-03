@@ -78,16 +78,13 @@ public class GEclipseFileStore
   private int active;
   
   /**
-   * The names of the children if yet fetched.
-   */
-  private String[] childNames;
-  
-  /**
    * External progress monitor used to show progress information.
    */
   private IProgressMonitor externalMonitor;
   
   private CachedInputStream ciStream;
+
+  private IFileInfo[] cachedInfos;
   
   /**
    * Create a new master store from the specified slave store. The
@@ -215,37 +212,32 @@ public class GEclipseFileStore
   public String[] childNames( final int options,
                               final IProgressMonitor monitor )
       throws CoreException {
-    
-    String[] result = this.childNames;
+    IFileInfo[] infos = FileStore.EMPTY_FILE_INFO_ARRAY;
+    String[] result = FileStore.EMPTY_STRING_ARRAY;
     
     if ( isActive( FETCH_CHILDREN_ACTIVE_POLICY ) ) {
       clearActive( FETCH_CHILDREN_ACTIVE_POLICY );
-      if ( result != null ) {
+      if ( this.cachedInfos != null ) {
         FileStoreRegistry registry = FileStoreRegistry.getInstance();
-        for ( String name : result ) {
-          IFileStore child = getSlave().getChild( name.trim() );
+        for ( IFileInfo info : this.cachedInfos ) {
+          IFileStore child = getSlave().getChild( info.getName().trim() );
           registry.removeStore( child );
         }
       }
-      IFileStore[] stores = getSlave().childStores( options, monitor( monitor ) );
-      IFileInfo[] infos = getSlave().childInfos( options, monitor( monitor ) );
+
+      infos  = getSlave().childInfos( options, monitor( monitor ) );
+      this.cachedInfos = infos;
       
-      ArrayList<String> names = new ArrayList<String>( stores.length );
+      ArrayList<String> names = new ArrayList<String>( infos.length );
       FileStoreRegistry registry = FileStoreRegistry.getInstance();
       
-      for ( int i=0; i<stores.length; i++ ) {
-        names.add( infos[i].getName() );
-        registry.putStore( new GEclipseFileStore( this, stores[i], infos[i] ) );
+      for ( IFileInfo info : infos ) {
+        names.add( info.getName() );
+        registry.putStore( new GEclipseFileStore( this, getSlave().getChild( info.getName() ), info ) );
       }
       
       result = names.toArray( new String[ names.size() ] );
-      this.childNames = result;
     }
-    
-    if ( result == null ) {
-      result = FileStore.EMPTY_STRING_ARRAY;
-    }
-    
     return result;
     
   }
@@ -276,6 +268,23 @@ public class GEclipseFileStore
       this.ciStream.discard();
       this.ciStream = null;
     }
+  }
+
+  /* (non-Javadoc)
+   * @see org.eclipse.core.filesystem.provider.FileStore#childInfos(int, org.eclipse.core.runtime.IProgressMonitor)
+   */
+  @Override
+  public IFileInfo[] childInfos( final int options, final IProgressMonitor monitor )
+  throws CoreException
+  {
+    if ( isActive( FETCH_CHILDREN_ACTIVE_POLICY ) ) {
+      clearActive( FETCH_CHILDREN_ACTIVE_POLICY );
+      this.cachedInfos = getSlave().childInfos( options, monitor );
+    }
+    if ( this.cachedInfos == null ) {
+      this.cachedInfos = FileStore.EMPTY_FILE_INFO_ARRAY;
+    }
+    return this.cachedInfos;
   }
 
   /* (non-Javadoc)
@@ -425,7 +434,7 @@ public class GEclipseFileStore
    * child names.
    */
   public void reset() {
-    this.childNames = null;
+    this.cachedInfos = null;
   }
   
   /**
@@ -486,15 +495,6 @@ public class GEclipseFileStore
     getSlave().move( slave( destination ), options, monitor( monitor ) );
   }
 
-  /* (non-Javadoc)
-   * @see org.eclipse.core.filesystem.provider.FileStore#childInfos(int, org.eclipse.core.runtime.IProgressMonitor)
-   */
-  @Override
-  public IFileInfo[] childInfos( final int options, final IProgressMonitor monitor )
-    throws CoreException
-  {
-    return getSlave().childInfos( options, monitor );
-  }
   
   private IProgressMonitor monitor( final IProgressMonitor monitor ) {
     return new MasterMonitor( monitor, this.externalMonitor );
