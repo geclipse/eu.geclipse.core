@@ -16,6 +16,7 @@ package eu.geclipse.ui.views;
 
 import org.eclipse.jface.action.IAction;
 import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.resource.ImageRegistry;
 import org.eclipse.swt.SWT;
@@ -45,7 +46,7 @@ public class VisualisationView extends ViewPart {
   protected boolean newTabOn = false;
   IAction checkBtnAction = null;
   private CTabFolder cTabFolder;
-  private IGridVisualisation vtkPipeline = null;
+  private IGridVisualisation visPipeline = null;
   private int allowedNumOfTabs = 5;
 //  private final VisViewDropDownAction fileDropDownAction = null;
 
@@ -216,10 +217,10 @@ public class VisualisationView extends ViewPart {
   }
 
   /**
-   * @param vtkPipeline
+   * @param pipeline
    */
-  public void setPipeline( final IGridVisualisation vtkPipeline ) {
-      this.vtkPipeline = vtkPipeline;
+  public void setPipeline( final IGridVisualisation pipeline ) {
+      this.visPipeline = pipeline;
   }
 
   /**
@@ -227,9 +228,19 @@ public class VisualisationView extends ViewPart {
    */
   public void render() {
 
-    if ( this.vtkPipeline == null ) {
+    if ( this.visPipeline == null ) {
       return;
     }
-    this.vtkPipeline.render();
+
+    IPreferenceStore store = eu.geclipse.ui.internal.Activator.getDefault().getPreferenceStore();
+    String renderOption = store
+    .getString( eu.geclipse.ui.visualisation.preferences.PreferenceConstants.P_RENDERING_OPTION );
+
+    if ( renderOption.compareTo( "local" ) == 0 ) {
+      this.visPipeline.renderLocal();
+    }
+    else {
+      this.visPipeline.renderRemote();
+    }
   }
 }

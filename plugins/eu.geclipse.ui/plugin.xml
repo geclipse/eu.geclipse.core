@@ -137,6 +137,12 @@
             class="eu.geclipse.ui.internal.preference.PerspectivePreferencePage"
             id="eu.geclipse.ui.internal.preference.PerspectivePreferencePage"
             name="%page.perspectives">
+      </page>      
+      <page
+            category="eu.geclipse.ui.internal.preference.GEclipsePreferencePage"
+            class="eu.geclipse.ui.visualisation.preferences.VisualisationPreferencePage"
+            id="eu.geclipse.ui.visualisation.preferences.VisualisationPreferencePage"
+            name="%page.visualisation">
       </page>
    </extension>
    <extension
@@ -367,5 +373,11 @@
             id="eu.geclipse.ui.simpleTest.dnsLookUpUIFactory"
             name="DNS LookUp UI Factory">
       </factory>
+   </extension>
+   <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="eu.geclipse.ui.visualisation.preferences.PreferenceInitializer">
+      </initializer>
    </extension>
 </plugin>
