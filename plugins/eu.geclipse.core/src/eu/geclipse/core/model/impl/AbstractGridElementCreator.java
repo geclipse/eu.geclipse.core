@@ -18,7 +18,7 @@ package eu.geclipse.core.model.impl;
 import eu.geclipse.core.model.IGridElementCreator;
 
 /**
- * Abstract imlementation of the {@link IGridElementCreator}
+ * Abstract implementation of the {@link IGridElementCreator}
  * interface. This implementation mainly delegates the
  * {@link #canCreate(Object)} method to an internal one and
  * sets the internal object to the argument if the internal
