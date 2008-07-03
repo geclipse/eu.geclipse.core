@@ -27,6 +27,7 @@ import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.filesystem.IFileSystem;
 import org.eclipse.core.filesystem.provider.FileInfo;
 import org.eclipse.core.filesystem.provider.FileStore;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
@@ -36,6 +37,7 @@ import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.filesystem.GEclipseFileSystem;
 import eu.geclipse.core.filesystem.GEclipseURI;
 import eu.geclipse.core.filesystem.internal.Activator;
+import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.core.util.MasterMonitor;
 
@@ -173,7 +175,7 @@ public class GEclipseFileStore
    * @throws CoreException If the caching fails.
    * @see #discardCachedInputStream()
    */
-  public void cacheInputStream( final IProgressMonitor monitor )
+  public void cacheInputStream( final IGridConnectionElement cElement, final IProgressMonitor monitor )
       throws CoreException {
     
     SubMonitor sMonitor
@@ -187,6 +189,7 @@ public class GEclipseFileStore
       InputStream siStream = openInputStream( EFS.NONE, sMonitor.newChild( 1 ) );
       setActive( FETCH_INFO_ACTIVE_POLICY );
       IFileInfo info = fetchInfo( EFS.NONE, sMonitor.newChild( 1 ) );
+      cElement.getResource().refreshLocal( IResource.DEPTH_ZERO, monitor );
       this.ciStream = new CachedInputStream( siStream, ( int ) info.getLength() );
   
       try {
