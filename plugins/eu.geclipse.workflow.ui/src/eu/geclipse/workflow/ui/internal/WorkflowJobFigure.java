@@ -62,14 +62,42 @@ public class WorkflowJobFigure extends RoundedRectangle {
 
       createContents();
     }
-
+ 
     
+    public WorkflowJobFigure(final String text) {
+      FlowLayout layoutThis = new FlowLayout();
+      
+      layoutThis.setStretchMinorAxis( false );
+      layoutThis.setMajorAlignment( FlowLayout.ALIGN_CENTER );
+      layoutThis.setMinorAlignment( FlowLayout.ALIGN_LEFTTOP );
+      layoutThis.setMajorSpacing( 5 );
+      
+      this.setLayoutManager( layoutThis );
+      this.setPreferredSize( SIZE );
+      this.setCornerDimensions( new Dimension( 15, 15 ) );
+      this.setForegroundColor( THIS_FORE );
+      this.setOpaque( true );
+
+      createContents(text);
+    }
+
     /**
      * Creates the contents of the WorkflowJob figure
      */
     private void createContents() {
       Label workflowJobNameFigure = new Label();
       workflowJobNameFigure.setText( "<...>" );
+      workflowJobNameFigure.setBackgroundColor( JOB_NAME_BACK );
+      this.add( workflowJobNameFigure );
+      this.figWorkflowJobName = workflowJobNameFigure;
+    }
+    
+    /**
+     * Creates the contents of the WorkflowJob figure
+     */
+    private void createContents(final String text) {
+      Label workflowJobNameFigure = new Label();
+      workflowJobNameFigure.setText( text );
       workflowJobNameFigure.setBackgroundColor( JOB_NAME_BACK );
       this.add( workflowJobNameFigure );
       this.figWorkflowJobName = workflowJobNameFigure;

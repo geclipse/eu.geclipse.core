@@ -49,6 +49,7 @@ import org.eclipse.ui.ide.IGotoMarker;
 import org.eclipse.ui.part.FileEditorInput;
 
 import eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin;
+import eu.geclipse.workflow.ui.listeners.FileTransferDropTargetListener;
 import eu.geclipse.workflow.ui.part.WorkflowPaletteFactory;
 
 /**
@@ -90,6 +91,15 @@ public class WorkflowDiagramEditor extends DiagramDocumentEditor implements IGot
     new WorkflowPaletteFactory().fillPalette( root );
     return root;
   }
+  
+  protected void initializeGraphicalViewer() {
+    super.initializeGraphicalViewer();
+    
+        
+    getGraphicalViewer().addDropTargetListener( new FileTransferDropTargetListener(getGraphicalViewer()));
+    
+}
+
 
   /**
    * @generated

@@ -86,6 +86,7 @@ public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
       IFileStore[] result = dialog.getSelectedFileStores();
       if( ( result != null ) && ( result.length > 0 ) ) {
         try {
+          System.out.println(result[0].toURI() + " ADDING REAL URI");
           this.fileName= result[0].toURI().toString();          
           
           inStream = result[ 0 ].openInputStream( EFS.NONE, null );

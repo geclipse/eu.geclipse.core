@@ -49,4 +49,5 @@ public class WorkflowEditPart extends DiagramEditPart {
                        new WorkflowCanonicalEditPolicy() );
     // removeEditPolicy(org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.POPUPBAR_ROLE);
   }
+    
 }
