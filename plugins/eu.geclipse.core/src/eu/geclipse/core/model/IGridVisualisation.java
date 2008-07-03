@@ -29,10 +29,16 @@ public interface IGridVisualisation extends IGridContainer {
   String getDescription();
 
   /**
-   * Runs the rendering of the VTK pipeline either locally or
-   * remotely based on what is described in the vtkpipeline model.
+   * Runs the rendering of the visualisation pipeline locally
+   * with the settings from the vis pipeline model.
    */
-  void render();
+  void renderLocal();
+
+  /**
+   * Runs the rendering of the visualisation pipeline remotely
+   * with the settings from the vis pipeline model.
+   */
+  void renderRemote();
 
   /**
    * @throws ProblemException
