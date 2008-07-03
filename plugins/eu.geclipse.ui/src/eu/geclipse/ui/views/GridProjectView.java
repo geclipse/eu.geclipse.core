@@ -133,14 +133,14 @@ public class GridProjectView
     MountActions mountActions = new MountActions( site );
     groups.addGroup( mountActions );
     
-    DeployActions deployActions = new DeployActions( site );
-    groups.addGroup(  deployActions );
+    //DeployActions deployActions = new DeployActions( site );
+    //groups.addGroup(  deployActions );
     
-    UninstallActions uninstallActions = new UninstallActions (site);
-    groups.addGroup( uninstallActions );
+    //UninstallActions uninstallActions = new UninstallActions (site);
+    //groups.addGroup( uninstallActions );
     
-    ValidateActions validateActions = new ValidateActions(site);
-    groups.addGroup( validateActions );
+    //ValidateActions validateActions = new ValidateActions(site);
+    //groups.addGroup( validateActions );
     
     ProjectActions projectActions = new ProjectActions( site );
     groups.addGroup( projectActions );
