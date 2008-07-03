@@ -69,7 +69,7 @@ public class FileStoreRegistry {
   void putStore( final GEclipseFileStore gEclipseStore ) {
     GEclipseURI uri = new GEclipseURI( gEclipseStore.toURI() );
     String key = getKey( uri.toSlaveURI() );
-    System.out.println("PUT STORE: " + key );
+//    System.out.println("PUT STORE: " + key );
     this.registeredStores.put( key, gEclipseStore );
   }
   
@@ -83,7 +83,7 @@ public class FileStoreRegistry {
    */
   GEclipseFileStore getStore( final GEclipseURI gEclipseUri ) {
     String key = getKey( gEclipseUri.toSlaveURI() );
-    System.out.println("\tGET STORE: " + key );
+//    System.out.println("\tGET STORE: " + key );
     GEclipseFileStore fileStore = this.registeredStores.get( key );
     return fileStore;
   }
@@ -102,7 +102,7 @@ public class FileStoreRegistry {
   
   GEclipseFileStore removeStore( final GEclipseURI uri ) {
     String key = getKey( uri.toSlaveURI() );
-    System.out.println("\t\tREMOVE STORE: " + key );
+//    System.out.println("\t\tREMOVE STORE: " + key );
     return this.registeredStores.remove( key );
   }
   
