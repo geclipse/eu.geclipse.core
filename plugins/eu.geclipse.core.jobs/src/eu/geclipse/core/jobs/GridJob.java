@@ -65,6 +65,7 @@ import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridJobID;
 import eu.geclipse.core.model.IGridJobService;
 import eu.geclipse.core.model.IGridJobStatus;
+import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
 import eu.geclipse.core.model.impl.ResourceGridElement;
 import eu.geclipse.core.reporting.ProblemException;
@@ -249,7 +250,8 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     IGridElementCreator creator = GridModel.getElementCreator( jobId, IGridJobService.class );
     if ( creator != null ) {
       try {
-        service = ( IGridJobService )creator.create( null );
+        IVirtualOrganization vo = getProject().getVO();
+        service = ( IGridJobService )creator.create( vo );
       } catch ( GridModelException exception ) {
         Activator.logException( exception, Messages.getString("GridJob.createJobServiceFailederr") ); //$NON-NLS-1$
       }
