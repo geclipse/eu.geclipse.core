@@ -9,8 +9,7 @@ Bundle-Localization: plugin
 Require-Bundle: org.eclipse.core.filesystem,
  org.eclipse.core.resources,
  org.eclipse.core.runtime,
- eu.geclipse.core,
- eu.geclipse.core.reporting
+ eu.geclipse.core
 Eclipse-LazyStart: true
 Export-Package: eu.geclipse.info,
  eu.geclipse.info.glue,
