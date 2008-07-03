@@ -141,7 +141,7 @@ public class ConnectionElement
     try {
       result = getConnectionFileStore();
       sMonitor.worked( 1 );
-      ( ( GEclipseFileStore ) result ).cacheInputStream( monitor );
+      ( ( GEclipseFileStore ) result ).cacheInputStream( this, monitor );
       sMonitor.worked( 9 );
     } finally {
       sMonitor.done();
@@ -290,11 +290,13 @@ public class ConnectionElement
       
       // Step 2: Activate and fetch children remotely
       fileStore.setActive( GEclipseFileStore.FETCH_CHILDREN_ACTIVE_POLICY );
-      fileStore.childNames( EFS.NONE, sMonitor.newChild( 80 ) );
+      fileStore.childNames( EFS.NONE, sMonitor.newChild( 90 ) );
       
       // Step 3: Refresh again
-      fileStore.setExternalMonitor( sMonitor.newChild( 10 ) );
-      res.refreshLocal( IResource.DEPTH_ONE, null );
+      SubMonitor ssMonitor = sMonitor.newChild( 10 );
+      ssMonitor.subTask( "Refreshing..." );
+      fileStore.setExternalMonitor( ssMonitor );
+      res.refreshLocal( IResource.DEPTH_ONE, ssMonitor );
       result = Status.OK_STATUS;
       
       if ( res instanceof IContainer ) {
