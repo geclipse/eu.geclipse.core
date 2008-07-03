@@ -19,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URI;
+import java.util.ArrayList;
 
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileInfo;
@@ -127,7 +128,24 @@ public class GEclipseFileStore
     this.fileInfo = slave.fetchInfo();
     clearActive( FETCH_CHILDREN_ACTIVE_POLICY | FETCH_INFO_ACTIVE_POLICY );
   }
-  
+  /**
+   * Create a new master store from the specified slave store. The
+   * file store will be a child store.
+   * 
+   * @param parent The parent store of this file store.
+   * @param slave The slave store for which to create the master store.
+   */
+  private GEclipseFileStore( final GEclipseFileStore parent,
+                             final IFileStore slave,
+                             final IFileInfo info ) {
+    Assert.isNotNull( parent );
+    Assert.isNotNull( slave );
+    this.fileSystem = ( GEclipseFileSystem ) parent.getFileSystem();
+    this.parent = parent;
+    this.slave = slave;
+    this.fileInfo = info;
+    clearActive( FETCH_CHILDREN_ACTIVE_POLICY | FETCH_INFO_ACTIVE_POLICY );
+  }
   /*
    * Activate this store. After a store is activated the
    * {@link #childNames(int, IProgressMonitor)} method will delegate its
@@ -206,7 +224,18 @@ public class GEclipseFileStore
           registry.removeStore( child );
         }
       }
-      result = getSlave().childNames( options, monitor( monitor ) );
+      IFileStore[] stores = getSlave().childStores( options, monitor( monitor ) );
+      IFileInfo[] infos = getSlave().childInfos( options, monitor( monitor ) );
+      
+      ArrayList<String> names = new ArrayList<String>( stores.length );
+      FileStoreRegistry registry = FileStoreRegistry.getInstance();
+      
+      for ( int i=0; i<stores.length; i++ ) {
+        names.add( infos[i].getName() );
+        registry.putStore( new GEclipseFileStore( this, stores[i], infos[i] ) );
+      }
+      
+      result = names.toArray( new String[ names.size() ] );
       this.childNames = result;
     }
     

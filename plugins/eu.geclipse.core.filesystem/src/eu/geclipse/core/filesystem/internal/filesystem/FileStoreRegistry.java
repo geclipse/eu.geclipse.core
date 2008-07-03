@@ -64,24 +64,26 @@ public class FileStoreRegistry {
   /**
    * Put a store in the registry.
    * 
-   * @param store The store to be cached.
+   * @param gEclipseStore The store to be cached.
    */
-  void putStore( final GEclipseFileStore store ) {
-    GEclipseURI uri = new GEclipseURI( store.toURI() );
+  void putStore( final GEclipseFileStore gEclipseStore ) {
+    GEclipseURI uri = new GEclipseURI( gEclipseStore.toURI() );
     String key = getKey( uri.toSlaveURI() );
-    this.registeredStores.put( key, store );
+    System.out.println("PUT STORE: " + key );
+    this.registeredStores.put( key, gEclipseStore );
   }
   
   /**
    * Get a master store from the registry.
    * 
-   * @param uri The URI of the store. This may be a master or
+   * @param gEclipseUri The URI of the store. This may be a master or
    * a slave URI.
    * @return The corresponding store or <code>null</code> if no such
    * store is yet registered.
    */
-  GEclipseFileStore getStore( final GEclipseURI uri ) {
-    String key = getKey( uri.toSlaveURI() );
+  GEclipseFileStore getStore( final GEclipseURI gEclipseUri ) {
+    String key = getKey( gEclipseUri.toSlaveURI() );
+    System.out.println("\tGET STORE: " + key );
     GEclipseFileStore fileStore = this.registeredStores.get( key );
     return fileStore;
   }
@@ -100,6 +102,7 @@ public class FileStoreRegistry {
   
   GEclipseFileStore removeStore( final GEclipseURI uri ) {
     String key = getKey( uri.toSlaveURI() );
+    System.out.println("\t\tREMOVE STORE: " + key );
     return this.registeredStores.remove( key );
   }
   
