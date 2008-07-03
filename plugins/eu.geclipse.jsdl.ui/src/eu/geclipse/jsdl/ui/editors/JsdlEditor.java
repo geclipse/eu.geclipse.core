@@ -79,6 +79,7 @@ import org.eclipse.ui.forms.IManagedForm;
 import org.eclipse.ui.forms.editor.FormEditor;
 import org.eclipse.ui.forms.events.IHyperlinkListener;
 import org.eclipse.ui.forms.widgets.Form;
+import org.eclipse.ui.ide.FileStoreEditorInput;
 import org.eclipse.ui.part.FileEditorInput;
 import org.eclipse.ui.part.MultiPageEditorSite;
 import org.eclipse.wst.sse.ui.StructuredTextEditor;
@@ -889,10 +890,21 @@ public final class JsdlEditor extends FormEditor implements IEditingDomainProvid
     
     boolean result = false;
     
+    URI resourceURI = null;
+    IFile[] files = null;
+    
     // Assumes that the input is a file object.
-    //
-    IFileEditorInput modelFile = ( IFileEditorInput )getEditorInput();
-    URI resourceURI = URI.createPlatformResourceURI( modelFile.getFile().getFullPath().toString(), false );
+    if (getEditorInput() instanceof IFileEditorInput){
+      IFileEditorInput modelFile = ( IFileEditorInput )getEditorInput();
+      resourceURI = URI.createPlatformResourceURI( modelFile.getFile().getFullPath().toString(), false );
+    }else if( getEditorInput() instanceof FileStoreEditorInput){
+      FileStoreEditorInput modelFile = ( FileStoreEditorInput )getEditorInput();
+      resourceURI = URI.createFileURI( modelFile.getURI().getPath() );
+      System.out.println(resourceURI+ "   - IN EDITOR URI");
+//      resourceURI = URI.createPlatformResourceURI( modelFile.getURI().getPath(), false);
+      
+   }
+
     Exception exception = null;
     Resource resource = null;
     

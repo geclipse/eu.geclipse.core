@@ -18,7 +18,9 @@ package eu.geclipse.jsdl.ui.internal.pages.sections;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.EStructuralFeature;
 import org.eclipse.emf.ecore.util.EcoreUtil;
@@ -96,18 +98,18 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
   protected Text txtIndCPUSp = null;
   
   
-  private Text txtIndCPUTime = null;
-  private Text txtIndCPUCount = null;
-  private Text txtIndNetBand = null;
-  private Text txtVirtMem = null;
-  private Text txtPhysMem = null;
-  private Text txtIndDiskSpac = null;
-  private Text txtCPUTime = null;
-  private Text txtCPUCount = null;
-  private Text txtTotPhMem = null;
-  private Text txtTotVirtMem = null;
-  private Text txtTotDiskSp = null;
-  private Text txtTotResCount = null;  
+  protected Text txtIndCPUTime = null;
+  protected Text txtIndCPUCount = null;
+  protected Text txtIndNetBand = null;
+  protected Text txtVirtMem = null;
+  protected Text txtPhysMem = null;
+  protected Text txtIndDiskSpac = null;
+  protected Text txtCPUTime = null;
+  protected Text txtCPUCount = null;
+  protected Text txtTotPhMem = null;
+  protected Text txtTotVirtMem = null;
+  protected Text txtTotDiskSp = null;
+  protected Text txtTotResCount = null;  
 //  private FormPage parentPage = null;
   
   /**
@@ -175,8 +177,8 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
 
       public void widgetSelected( final SelectionEvent e ) {
         
-        setResourceElement( AdditionalResourceElemetsSection.this.txtIndCPUSp.getText(),
-                            AdditionalResourceElemetsSection.this.cmbIndividualCPUSpeed.getText(),
+        setResourceElement( AdditionalResourceElemetsSection.this.txtIndCPUSp,
+                            AdditionalResourceElemetsSection.this.cmbIndividualCPUSpeed,
                             JsdlPackage.RESOURCES_TYPE__INDIVIDUAL_CPU_SPEED );
         
       }
@@ -184,15 +186,15 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
     });
     
     
-    this.txtIndCPUSp = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    this.txtIndCPUSp = toolkit.createText( client, EMPTY_STRING, SWT.NONE ); 
     this.txtIndCPUSp.addModifyListener( new ModifyListener() {
       
      
       public void modifyText( final ModifyEvent e ) {    
         
         
-        setResourceElement( AdditionalResourceElemetsSection.this.txtIndCPUSp.getText(),
-                            AdditionalResourceElemetsSection.this.cmbIndividualCPUSpeed.getText(),
+        setResourceElement( AdditionalResourceElemetsSection.this.txtIndCPUSp,
+                            AdditionalResourceElemetsSection.this.cmbIndividualCPUSpeed,
                             JsdlPackage.RESOURCES_TYPE__INDIVIDUAL_CPU_SPEED );
           
         }
@@ -208,8 +210,38 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
                               Messages.getString( "ResourcesPage_IndCPUTime" ) ); //$NON-NLS-1$
     this.cmbIndividualCPUTime = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
     this.cmbIndividualCPUTime.setData( FormToolkit.KEY_DRAW_BORDER );
-    this.cmbIndividualCPUTime.setItems( RESOURCES_BOUNDARY_ITEMS );        
-    this.txtIndCPUTime = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    this.cmbIndividualCPUTime.setItems( RESOURCES_BOUNDARY_ITEMS );
+    this.cmbIndividualCPUTime.addSelectionListener( new SelectionListener(){
+
+      public void widgetDefaultSelected( final SelectionEvent e ) {
+        // TODO Auto-generated method stub
+        
+      }
+
+      public void widgetSelected( final SelectionEvent e ) {
+        
+        setResourceElement( AdditionalResourceElemetsSection.this.txtIndCPUTime,
+                            AdditionalResourceElemetsSection.this.cmbIndividualCPUTime,
+                            JsdlPackage.RESOURCES_TYPE__INDIVIDUAL_CPU_TIME );
+        
+      }
+      
+    });
+    
+    
+    this.txtIndCPUTime = toolkit.createText( client, EMPTY_STRING , SWT.NONE ); 
+    this.txtIndCPUTime.addModifyListener( new ModifyListener() {
+      
+      
+      public void modifyText( final ModifyEvent e ) {    
+        
+        
+        setResourceElement( AdditionalResourceElemetsSection.this.txtIndCPUTime,
+                            AdditionalResourceElemetsSection.this.cmbIndividualCPUTime,
+                            JsdlPackage.RESOURCES_TYPE__INDIVIDUAL_CPU_TIME );
+          
+        }
+      } );   
     this.txtIndCPUTime.addListener( SWT.Verify, new DoubleNumberVerifier() );
     this.txtIndCPUTime.setLayoutData( td );
 
@@ -222,7 +254,37 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
     this.cmbIndividualCPUCount = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
     this.cmbIndividualCPUCount.setData( FormToolkit.KEY_DRAW_BORDER );
     this.cmbIndividualCPUCount.setItems( RESOURCES_BOUNDARY_ITEMS );
-    this.txtIndCPUCount = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    this.cmbIndividualCPUCount.addSelectionListener( new SelectionListener(){
+
+      public void widgetDefaultSelected( final SelectionEvent e ) {
+        // TODO Auto-generated method stub
+        
+      }
+
+      public void widgetSelected( final SelectionEvent e ) {
+        
+        setResourceElement( AdditionalResourceElemetsSection.this.txtIndCPUCount,
+                            AdditionalResourceElemetsSection.this.cmbIndividualCPUCount,
+                            JsdlPackage.RESOURCES_TYPE__INDIVIDUAL_CPU_COUNT );
+        
+      }
+      
+    });
+    
+    this.txtIndCPUCount = toolkit.createText( client, EMPTY_STRING, SWT.NONE );
+    this.txtIndCPUCount.addModifyListener( new ModifyListener() {
+      
+      
+      public void modifyText( final ModifyEvent e ) {    
+        
+        
+        setResourceElement( AdditionalResourceElemetsSection.this.txtIndCPUCount,
+                            AdditionalResourceElemetsSection.this.cmbIndividualCPUCount,
+                            JsdlPackage.RESOURCES_TYPE__INDIVIDUAL_CPU_COUNT );
+          
+        }
+      } );  
+    
     this.txtIndCPUCount.addListener( SWT.Verify, new DoubleNumberVerifier() );
     this.txtIndCPUCount.setLayoutData( td );
 
@@ -234,9 +296,37 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
     
     this.cmbIndividualNetworkBandwidth = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
     this.cmbIndividualNetworkBandwidth.setData( FormToolkit.KEY_DRAW_BORDER );
-    this.cmbIndividualNetworkBandwidth.setItems( RESOURCES_BOUNDARY_ITEMS );      
+    this.cmbIndividualNetworkBandwidth.setItems( RESOURCES_BOUNDARY_ITEMS );
+    this.cmbIndividualNetworkBandwidth.addSelectionListener( new SelectionListener(){
+
+      public void widgetDefaultSelected( final SelectionEvent e ) {
+        // TODO Auto-generated method stub
+        
+      }
+
+      public void widgetSelected( final SelectionEvent e ) {
+        
+        setResourceElement( AdditionalResourceElemetsSection.this.txtIndNetBand,
+                            AdditionalResourceElemetsSection.this.cmbIndividualNetworkBandwidth,
+                            JsdlPackage.RESOURCES_TYPE__INDIVIDUAL_NETWORK_BANDWIDTH );
+        
+      }
+      
+    });
     
-    this.txtIndNetBand = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    this.txtIndNetBand = toolkit.createText( client, EMPTY_STRING, SWT.NONE );
+    this.txtIndNetBand.addModifyListener( new ModifyListener() {
+      
+      
+      public void modifyText( final ModifyEvent e ) {    
+        
+        
+        setResourceElement( AdditionalResourceElemetsSection.this.txtIndNetBand,
+                            AdditionalResourceElemetsSection.this.cmbIndividualNetworkBandwidth,
+                            JsdlPackage.RESOURCES_TYPE__INDIVIDUAL_NETWORK_BANDWIDTH );
+          
+        }
+      } );  
     this.txtIndNetBand.addListener( SWT.Verify, new DoubleNumberVerifier() );
     this.txtIndNetBand.setLayoutData( td );
     
@@ -249,7 +339,7 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
     this.cmbIndividualPhysicalMemory = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
     this.cmbIndividualPhysicalMemory.setData( FormToolkit.KEY_DRAW_BORDER );
     this.cmbIndividualPhysicalMemory.setItems( RESOURCES_BOUNDARY_ITEMS ); 
-    this.txtPhysMem = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    this.txtPhysMem = toolkit.createText( client, EMPTY_STRING, SWT.NONE );
     this.txtPhysMem.addListener( SWT.Verify, new DoubleNumberVerifier() );
     this.txtPhysMem.setLayoutData( td );
     
@@ -262,7 +352,7 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
     this.cmbIndividualVirtualMesmory = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
     this.cmbIndividualVirtualMesmory.setData( FormToolkit.KEY_DRAW_BORDER );
     this.cmbIndividualVirtualMesmory.setItems( RESOURCES_BOUNDARY_ITEMS ); 
-    this.txtVirtMem = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    this.txtVirtMem = toolkit.createText( client, EMPTY_STRING, SWT.NONE );
     this.txtVirtMem.addListener( SWT.Verify, new DoubleNumberVerifier() );
     this.txtVirtMem.setLayoutData( td );
     
@@ -275,7 +365,7 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
     this.cmbIndividualDiskSpace = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
     this.cmbIndividualDiskSpace.setData( FormToolkit.KEY_DRAW_BORDER );
     this.cmbIndividualDiskSpace.setItems( RESOURCES_BOUNDARY_ITEMS ); 
-    this.txtIndDiskSpac = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    this.txtIndDiskSpac = toolkit.createText( client, EMPTY_STRING, SWT.NONE );
     this.txtIndDiskSpac.addListener( SWT.Verify, new DoubleNumberVerifier() );
     this.txtIndDiskSpac.setLayoutData( td );
 
@@ -288,7 +378,7 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
     this.cmbTotalCPUTime = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
     this.cmbTotalCPUTime.setData( FormToolkit.KEY_DRAW_BORDER );
     this.cmbTotalCPUTime.setItems( RESOURCES_BOUNDARY_ITEMS ); 
-    this.txtCPUTime = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    this.txtCPUTime = toolkit.createText( client, EMPTY_STRING, SWT.NONE );
     this.txtCPUTime.addListener( SWT.Verify, new DoubleNumberVerifier() );
     this.txtCPUTime.setLayoutData( td );
     
@@ -301,7 +391,7 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
     this.cmbTotalCPUCount = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
     this.cmbTotalCPUCount.setData( FormToolkit.KEY_DRAW_BORDER );
     this.cmbTotalCPUCount.setItems( RESOURCES_BOUNDARY_ITEMS ); 
-    this.txtCPUCount = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    this.txtCPUCount = toolkit.createText( client, EMPTY_STRING, SWT.NONE );
     this.txtCPUCount.addListener( SWT.Verify, new DoubleNumberVerifier() );
     this.txtCPUCount.setLayoutData( td );
     
@@ -314,7 +404,7 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
     this.cmbTotalPhysicalMemory = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
     this.cmbTotalPhysicalMemory.setData( FormToolkit.KEY_DRAW_BORDER );
     this.cmbTotalPhysicalMemory.setItems( RESOURCES_BOUNDARY_ITEMS ); 
-    this.txtTotPhMem = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    this.txtTotPhMem = toolkit.createText( client, EMPTY_STRING, SWT.NONE );
     this.txtTotPhMem.addListener( SWT.Verify, new DoubleNumberVerifier() );
     this.txtTotPhMem.setLayoutData( td );
 
@@ -327,7 +417,7 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
     this.cmbTotalVirtualMemory = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
     this.cmbTotalVirtualMemory.setData( FormToolkit.KEY_DRAW_BORDER );
     this.cmbTotalVirtualMemory.setItems( RESOURCES_BOUNDARY_ITEMS ); 
-    this.txtTotVirtMem = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    this.txtTotVirtMem = toolkit.createText( client, EMPTY_STRING, SWT.NONE );
     this.txtTotVirtMem.addListener( SWT.Verify, new DoubleNumberVerifier() );
     this.txtTotVirtMem.setLayoutData( td );
    
@@ -340,7 +430,7 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
     this.cmbTotalDiskSpace = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
     this.cmbTotalDiskSpace.setData( FormToolkit.KEY_DRAW_BORDER );
     this.cmbTotalDiskSpace.setItems( RESOURCES_BOUNDARY_ITEMS );
-    this.txtTotDiskSp = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    this.txtTotDiskSp = toolkit.createText( client, EMPTY_STRING, SWT.NONE );
     this.txtTotDiskSp.addListener( SWT.Verify, new DoubleNumberVerifier() );
     this.txtTotDiskSp.setLayoutData( td );
 
@@ -353,7 +443,7 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
     this.cmbTotalResourceCount = new Combo( client, SWT.SIMPLE | SWT.DROP_DOWN | SWT.READ_ONLY );
     this.cmbTotalResourceCount.setData( FormToolkit.KEY_DRAW_BORDER );
     this.cmbTotalResourceCount.setItems( RESOURCES_BOUNDARY_ITEMS );
-    this.txtTotResCount = toolkit.createText( client, "", SWT.NONE ); //$NON-NLS-1$
+    this.txtTotResCount = toolkit.createText( client, EMPTY_STRING, SWT.NONE );
     this.txtTotResCount.addListener( SWT.Verify, new DoubleNumberVerifier() );
     this.txtTotResCount.setLayoutData( td );
 
@@ -373,38 +463,139 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
     return eObject;
     
   } // end EObject checkProxy()
-  
+    
   
   private void fillFields() {
     
     this.isNotifyAllowed = false;
-    RangeValueType rangeValueType = JsdlFactory.eINSTANCE.createRangeValueType();
+
     BoundaryType boundaryType = JsdlFactory.eINSTANCE.createBoundaryType();
- 
-    rangeValueType = this.resourcesType.getIndividualCPUSpeed();    
-    rangeValueType = (RangeValueType) checkProxy( rangeValueType );
-    
+    EList<?> exactTypeList;
+    ExactType exactType;
     
     if (this.resourcesType.getIndividualCPUSpeed() != null ){
-    
-      if (this.resourcesType.getIndividualCPUSpeed().getLowerBound() != null ) {
-    
-        boundaryType = this.resourcesType.getIndividualCPUSpeed().getLowerBound();
-        
+      if (this.resourcesType.getIndividualCPUSpeed().getLowerBound() != null ) {    
+        boundaryType = this.resourcesType.getIndividualCPUSpeed().getLowerBound();        
         /* check for Lazy Loading */  
-        boundaryType = (BoundaryType) checkProxy( boundaryType );
-    
+        boundaryType = (BoundaryType) checkProxy( boundaryType );    
         this.txtIndCPUSp.setText( Double.toString( boundaryType.getValue() ) );
+        this.cmbIndividualCPUSpeed.setText( LOWER_BOUND );
+      } else if ( this.resourcesType.getIndividualCPUSpeed().getUpperBound() != null ) {        
+          boundaryType = this.resourcesType.getIndividualCPUSpeed().getUpperBound();        
+          /* check for Lazy Loading */  
+          boundaryType = (BoundaryType) checkProxy( boundaryType );    
+          this.txtIndCPUSp.setText( Double.toString( boundaryType.getValue() ) );
+          this.cmbIndividualCPUSpeed.setText( UPPER_BOUND );        
+      } else {
+          exactTypeList  = this.resourcesType.getIndividualCPUSpeed().getExact();
+          Iterator<?> it = exactTypeList.iterator();
+          
+          while (it.hasNext()) {
+            Object testType = it.next();
+            if (testType instanceof ExactType){
+              exactType = (ExactType)testType;          
+              this.txtIndCPUSp.setText( Double.toString( exactType.getValue() ) );
+              this.cmbIndividualCPUSpeed.setText( EXACT );
+            }          
+        }       
+          
+    }   
     
-
-      }
-    }
-   
-    this.isNotifyAllowed = true;
+  } 
+  if (this.resourcesType.getIndividualCPUTime() != null ){
+    if (this.resourcesType.getIndividualCPUTime().getLowerBound() != null ) {    
+      boundaryType = this.resourcesType.getIndividualCPUTime().getLowerBound();        
+      /* check for Lazy Loading */  
+      boundaryType = (BoundaryType) checkProxy( boundaryType );    
+      this.txtIndCPUTime.setText( Double.toString( boundaryType.getValue() ) );
+      this.cmbIndividualCPUTime.setText( LOWER_BOUND );
+    } else if ( this.resourcesType.getIndividualCPUTime().getUpperBound() != null ) {        
+      boundaryType = this.resourcesType.getIndividualCPUTime().getUpperBound();        
+      /* check for Lazy Loading */  
+      boundaryType = (BoundaryType) checkProxy( boundaryType );    
+      this.txtIndCPUTime.setText( Double.toString( boundaryType.getValue() ) );
+      this.cmbIndividualCPUTime.setText( UPPER_BOUND );        
+    } else {
+      exactTypeList  = this.resourcesType.getIndividualCPUSpeed().getExact();
+      Iterator<?> it = exactTypeList.iterator();
+      while (it.hasNext()) {
+        Object testType = it.next();
+        if (testType instanceof ExactType){
+          exactType = (ExactType)testType;          
+          this.txtIndCPUTime.setText( Double.toString( exactType.getValue() ) );
+          this.cmbIndividualCPUTime.setText( EXACT );
+        }
+      }       
+     }
+   }
     
-    if ( this.adapterRefreshed ) {
-      this.adapterRefreshed = false;
+  if (this.resourcesType.getIndividualCPUCount() != null ){
+      
+    if (this.resourcesType.getIndividualCPUCount().getLowerBound() != null ) {    
+      boundaryType = this.resourcesType.getIndividualCPUCount().getLowerBound();        
+      /* check for Lazy Loading */  
+      boundaryType = (BoundaryType) checkProxy( boundaryType );    
+      this.txtIndCPUCount.setText( Double.toString( boundaryType.getValue() ) );
+      this.cmbIndividualCPUCount.setText( LOWER_BOUND );
+    } else if ( this.resourcesType.getIndividualCPUCount().getUpperBound() != null ) {        
+        boundaryType = this.resourcesType.getIndividualCPUCount().getUpperBound();        
+        /* check for Lazy Loading */  
+        boundaryType = (BoundaryType) checkProxy( boundaryType );    
+        this.txtIndCPUCount.setText( Double.toString( boundaryType.getValue() ) );
+        this.cmbIndividualCPUCount.setText( UPPER_BOUND );        
+    } else {
+        exactTypeList  = this.resourcesType.getIndividualCPUCount().getExact();
+        Iterator<?> it = exactTypeList.iterator();
+          
+        while (it.hasNext()) {
+          Object testType = it.next();
+          if (testType instanceof ExactType){
+            exactType = (ExactType)testType;          
+            this.txtIndCPUCount.setText( Double.toString( exactType.getValue() ) );
+            this.cmbIndividualCPUCount.setText( EXACT );
+          }          
+        }       
+        
     }
+  }
+  
+  if (this.resourcesType.getIndividualNetworkBandwidth() != null ){
+    
+    if (this.resourcesType.getIndividualNetworkBandwidth().getLowerBound() != null ) {    
+      boundaryType = this.resourcesType.getIndividualNetworkBandwidth().getLowerBound();        
+      /* check for Lazy Loading */  
+      boundaryType = (BoundaryType) checkProxy( boundaryType );    
+      this.txtIndNetBand.setText( Double.toString( boundaryType.getValue() ) );
+      this.cmbIndividualNetworkBandwidth.setText( LOWER_BOUND );
+    } else if ( this.resourcesType.getIndividualNetworkBandwidth().getUpperBound() != null ) {        
+        boundaryType = this.resourcesType.getIndividualNetworkBandwidth().getUpperBound();        
+        /* check for Lazy Loading */  
+        boundaryType = (BoundaryType) checkProxy( boundaryType );    
+        this.txtIndNetBand.setText( Double.toString( boundaryType.getValue() ) );
+        this.cmbIndividualNetworkBandwidth.setText( UPPER_BOUND );        
+    } else {
+        exactTypeList  = this.resourcesType.getIndividualNetworkBandwidth().getExact();
+        Iterator<?> it = exactTypeList.iterator();
+          
+        while (it.hasNext()) {
+          Object testType = it.next();
+          if (testType instanceof ExactType){
+            exactType = (ExactType)testType;          
+            this.txtIndNetBand.setText( Double.toString( exactType.getValue() ) );
+            this.cmbIndividualNetworkBandwidth.setText( EXACT );
+          }          
+        }       
+        
+    }
+  }
+    
+  boundaryType = null;
+  this.isNotifyAllowed = true;
+    
+  if ( this.adapterRefreshed ) {
+    this.adapterRefreshed = false;
+  }
+  
   }
   
   protected void checkResourcesElement() {
@@ -426,6 +617,7 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
      * container (JobDescriptionType).
      */
     else {
+      this.resourcesType = (ResourcesType) checkProxy( this.resourcesType );
       if ( !this.resourcesType.isExclusiveExecution() && this.resourcesType.eContents().size() == 0) {
         EcoreUtil.remove( this.resourcesType );
       }
@@ -435,14 +627,18 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
   
   
   @SuppressWarnings("unchecked")
-  protected void setResourceElement(final String value, final String type, final int feature ){
+  protected void setResourceElement(final Text text, final Combo combo, final int feature ){
+    
     RangeValueType rangeValueType = null;
     BoundaryType boundaryType = null;
     ExactType exactType = null;
+    String value =  text.getText();
+    String type = combo.getText();
+    this.resourcesType = (ResourcesType)checkProxy( this.resourcesType );
     EStructuralFeature eFeature = this.resourcesType.eClass().getEStructuralFeature( feature );
     
     
-    if (!AdditionalResourceElemetsSection.this.txtIndCPUSp.getText().equals( EMPTY_STRING ) ) {
+    if ( !text.getText().equals( EMPTY_STRING ) ) {
     
       checkResourcesElement();
       
@@ -468,35 +664,42 @@ public class AdditionalResourceElemetsSection extends JsdlFormPageSection {
         collection.add( exactType );
         rangeValueType.getExact().addAll( collection );
         contentChanged();
-      } else{
-        setMessage( "Please select Boundary !!!!", IMessageProvider.ERROR );
+      } else{       
+          setMessage( "Please select Boundary !!!!", IMessageProvider.ERROR );        
       }
       
       
       this.resourcesType.eSet( eFeature, rangeValueType );
     
     }else{
-      this.resourcesType.eSet( eFeature, null );
-      contentChanged();
+      if( this.resourcesType.eIsSet( eFeature )) {
+        this.resourcesType.eSet( eFeature, null );
+        contentChanged();
+      }
+      
     }  
     
   }
   
   private void clearErrorMessage(){
-    if (!getMessage().equals( EMPTY_STRING )){
-    setMessage( EMPTY_STRING, IMessageProvider.NONE);
+    if ( null != getMessage() ) {
+      if ( !getMessage().equals( EMPTY_STRING ) ){
+        setMessage( EMPTY_STRING, IMessageProvider.NONE);
+    }
     }
   }
   
   
   protected void setMessage(final String message, final int type) {
     
-    this.parentPage.getManagedForm().getForm().setMessage( message, type );
+    if ( null == getMessage() ) {
+      this.parentPage.getManagedForm().getForm().setMessage( EMPTY_STRING, IMessageProvider.NONE);
+    }
     
-//    if (type == IMessageProvider.ERROR){
-//     final JsdlEditor jsdlEditor = (JsdlEditor)this.parentPage.getEditor();
-//     jsdlEditor.setDirty( false );
-//    }
+    if ( !getMessage().equals( message ) ) {
+      this.parentPage.getManagedForm().getForm().setMessage( message, type );
+    }   
+    
   }
   
   protected String getMessage() {
