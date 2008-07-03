@@ -64,21 +64,28 @@ public class InputPortEditPart extends ShapeNodeEditPart {
   @Override
   protected void createDefaultEditPolicies() {
     super.createDefaultEditPolicies();
-    installEditPolicy( EditPolicy.PRIMARY_DRAG_ROLE,
-                       new NonResizableEditPolicy() {
+    installEditPolicy( EditPolicyRoles.SEMANTIC_ROLE,
+                       new InputPortItemSemanticEditPolicy() );
+    installEditPolicy( EditPolicy.LAYOUT_ROLE, createLayoutEditPolicy() );
 
-                         @Override
-                         public Command getCommand( Request request )
-                         {
-                           return null;
-                         }
+    removeEditPolicy(org.eclipse.gmf.runtime.diagram.ui.editpolicies.EditPolicyRoles.CONNECTION_HANDLES_ROLE);
 
-                         @Override
-                         public boolean understandsRequest( Request request )
-                         {
-                           return false;
-                         }
-                       } );  }
+//    installEditPolicy( EditPolicy.PRIMARY_DRAG_ROLE,
+//                       new NonResizableEditPolicy() {
+//
+//                         @Override
+//                         public Command getCommand( Request request )
+//                         {
+//                           return null;
+//                         }
+//
+//                         @Override
+//                         public boolean understandsRequest( Request request )
+//                         {
+//                           return false;
+//                         }
+//                       } );  
+    }
 
   /**
    * @generated

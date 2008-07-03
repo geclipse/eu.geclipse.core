@@ -25,6 +25,7 @@ import org.eclipse.gmf.runtime.diagram.core.util.ViewUtil;
 import org.eclipse.gmf.runtime.diagram.ui.view.factories.AbstractShapeViewFactory;
 import org.eclipse.gmf.runtime.emf.core.util.EObjectAdapter;
 import org.eclipse.gmf.runtime.notation.NotationFactory;
+import org.eclipse.gmf.runtime.notation.ShapeStyle;
 import org.eclipse.gmf.runtime.notation.View;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowEditPart;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowJobDescriptionEditPart;
@@ -41,8 +42,8 @@ public class WorkflowJobViewFactory extends AbstractShapeViewFactory {
    * @generated
    */
   @Override
-  protected List createStyles( View view ) {
-    List styles = new ArrayList();
+  protected List<ShapeStyle> createStyles( View view ) {
+    List<ShapeStyle> styles = new ArrayList<ShapeStyle>();
     styles.add( NotationFactory.eINSTANCE.createShapeStyle() );
     return styles;
   }
@@ -72,8 +73,7 @@ public class WorkflowJobViewFactory extends AbstractShapeViewFactory {
     {
       EAnnotation shortcutAnnotation = EcoreFactory.eINSTANCE.createEAnnotation();
       shortcutAnnotation.setSource( "Shortcut" ); //$NON-NLS-1$
-      shortcutAnnotation.getDetails()
-        .put( "modelID", WorkflowEditPart.MODEL_ID ); //$NON-NLS-1$
+      shortcutAnnotation.getDetails().put( "modelID", WorkflowEditPart.MODEL_ID ); //$NON-NLS-1$
       view.getEAnnotations().add( shortcutAnnotation );
     }
     IAdaptable eObjectAdapter = null;

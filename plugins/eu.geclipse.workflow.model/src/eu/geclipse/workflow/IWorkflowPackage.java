@@ -50,7 +50,7 @@ public interface IWorkflowPackage extends EPackage
    * <!-- end-user-doc -->
    * @generated
    */
-  String eNS_PREFIX = "eu.geclipse.workflow.model"; //$NON-NLS-1$
+  String eNS_PREFIX = "eu.geclipse.workflow"; //$NON-NLS-1$
 
   /**
    * The singleton instance of the package.
@@ -61,10 +61,10 @@ public interface IWorkflowPackage extends EPackage
   IWorkflowPackage eINSTANCE = eu.geclipse.workflow.impl.WorkflowPackageImpl.init();
 
   /**
-   * The meta object id for the '{@link eu.geclipse.workflow.impl.IWorkflowElementImpl <em>IWorkflow Element</em>}' class.
+   * The meta object id for the '{@link eu.geclipse.workflow.impl.WorkflowElementImpl <em>IWorkflow Element</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see eu.geclipse.workflow.impl.IWorkflowElementImpl
+   * @see eu.geclipse.workflow.impl.WorkflowElementImpl
    * @see eu.geclipse.workflow.impl.WorkflowPackageImpl#getIWorkflowElement()
    * @generated
    */
@@ -98,10 +98,10 @@ public interface IWorkflowPackage extends EPackage
   int IWORKFLOW_ELEMENT_FEATURE_COUNT = 2;
 
   /**
-   * The meta object id for the '{@link eu.geclipse.workflow.impl.IPortImpl <em>IPort</em>}' class.
+   * The meta object id for the '{@link eu.geclipse.workflow.impl.PortImpl <em>IPort</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see eu.geclipse.workflow.impl.IPortImpl
+   * @see eu.geclipse.workflow.impl.PortImpl
    * @see eu.geclipse.workflow.impl.WorkflowPackageImpl#getIPort()
    * @generated
    */
@@ -135,10 +135,10 @@ public interface IWorkflowPackage extends EPackage
   int IPORT_FEATURE_COUNT = IWORKFLOW_ELEMENT_FEATURE_COUNT + 0;
 
   /**
-   * The meta object id for the '{@link eu.geclipse.workflow.impl.ILinkImpl <em>ILink</em>}' class.
+   * The meta object id for the '{@link eu.geclipse.workflow.impl.LinkImpl <em>ILink</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see eu.geclipse.workflow.impl.ILinkImpl
+   * @see eu.geclipse.workflow.impl.LinkImpl
    * @see eu.geclipse.workflow.impl.WorkflowPackageImpl#getILink()
    * @generated
    */
@@ -199,10 +199,10 @@ public interface IWorkflowPackage extends EPackage
   int ILINK_FEATURE_COUNT = IWORKFLOW_ELEMENT_FEATURE_COUNT + 3;
 
   /**
-   * The meta object id for the '{@link eu.geclipse.workflow.impl.IInputPortImpl <em>IInput Port</em>}' class.
+   * The meta object id for the '{@link eu.geclipse.workflow.impl.InputPortImpl <em>IInput Port</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see eu.geclipse.workflow.impl.IInputPortImpl
+   * @see eu.geclipse.workflow.impl.InputPortImpl
    * @see eu.geclipse.workflow.impl.WorkflowPackageImpl#getIInputPort()
    * @generated
    */
@@ -254,10 +254,10 @@ public interface IWorkflowPackage extends EPackage
   int IINPUT_PORT_FEATURE_COUNT = IPORT_FEATURE_COUNT + 2;
 
   /**
-   * The meta object id for the '{@link eu.geclipse.workflow.impl.IOutputPortImpl <em>IOutput Port</em>}' class.
+   * The meta object id for the '{@link eu.geclipse.workflow.impl.OutputPortImpl <em>IOutput Port</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see eu.geclipse.workflow.impl.IOutputPortImpl
+   * @see eu.geclipse.workflow.impl.OutputPortImpl
    * @see eu.geclipse.workflow.impl.WorkflowPackageImpl#getIOutputPort()
    * @generated
    */
@@ -309,10 +309,10 @@ public interface IWorkflowPackage extends EPackage
   int IOUTPUT_PORT_FEATURE_COUNT = IPORT_FEATURE_COUNT + 2;
 
   /**
-   * The meta object id for the '{@link eu.geclipse.workflow.impl.IWorkflowImpl <em>IWorkflow</em>}' class.
+   * The meta object id for the '{@link eu.geclipse.workflow.impl.WorkflowImpl <em>IWorkflow</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see eu.geclipse.workflow.impl.IWorkflowImpl
+   * @see eu.geclipse.workflow.impl.WorkflowImpl
    * @see eu.geclipse.workflow.impl.WorkflowPackageImpl#getIWorkflow()
    * @generated
    */
@@ -364,10 +364,10 @@ public interface IWorkflowPackage extends EPackage
   int IWORKFLOW_FEATURE_COUNT = IWORKFLOW_ELEMENT_FEATURE_COUNT + 2;
 
   /**
-   * The meta object id for the '{@link eu.geclipse.workflow.impl.IWorkflowNodeImpl <em>IWorkflow Node</em>}' class.
+   * The meta object id for the '{@link eu.geclipse.workflow.impl.WorkflowNodeImpl <em>IWorkflow Node</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see eu.geclipse.workflow.impl.IWorkflowNodeImpl
+   * @see eu.geclipse.workflow.impl.WorkflowNodeImpl
    * @see eu.geclipse.workflow.impl.WorkflowPackageImpl#getIWorkflowNode()
    * @generated
    */
@@ -446,10 +446,10 @@ public interface IWorkflowPackage extends EPackage
   int IWORKFLOW_NODE_FEATURE_COUNT = IWORKFLOW_ELEMENT_FEATURE_COUNT + 5;
 
   /**
-   * The meta object id for the '{@link eu.geclipse.workflow.impl.IWorkflowJobImpl <em>IWorkflow Job</em>}' class.
+   * The meta object id for the '{@link eu.geclipse.workflow.impl.WorkflowJobImpl <em>IWorkflow Job</em>}' class.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @see eu.geclipse.workflow.impl.IWorkflowJobImpl
+   * @see eu.geclipse.workflow.impl.WorkflowJobImpl
    * @see eu.geclipse.workflow.impl.WorkflowPackageImpl#getIWorkflowJob()
    * @generated
    */
@@ -848,20 +848,20 @@ public interface IWorkflowPackage extends EPackage
   interface Literals
   {
     /**
-     * The meta object literal for the '{@link eu.geclipse.workflow.impl.IPortImpl <em>IPort</em>}' class.
+     * The meta object literal for the '{@link eu.geclipse.workflow.impl.PortImpl <em>IPort</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see eu.geclipse.workflow.impl.IPortImpl
+     * @see eu.geclipse.workflow.impl.PortImpl
      * @see eu.geclipse.workflow.impl.WorkflowPackageImpl#getIPort()
      * @generated
      */
     EClass IPORT = eINSTANCE.getIPort();
 
     /**
-     * The meta object literal for the '{@link eu.geclipse.workflow.impl.ILinkImpl <em>ILink</em>}' class.
+     * The meta object literal for the '{@link eu.geclipse.workflow.impl.LinkImpl <em>ILink</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see eu.geclipse.workflow.impl.ILinkImpl
+     * @see eu.geclipse.workflow.impl.LinkImpl
      * @see eu.geclipse.workflow.impl.WorkflowPackageImpl#getILink()
      * @generated
      */
@@ -892,10 +892,10 @@ public interface IWorkflowPackage extends EPackage
     EReference ILINK__SOURCE = eINSTANCE.getILink_Source();
 
     /**
-     * The meta object literal for the '{@link eu.geclipse.workflow.impl.IInputPortImpl <em>IInput Port</em>}' class.
+     * The meta object literal for the '{@link eu.geclipse.workflow.impl.InputPortImpl <em>IInput Port</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see eu.geclipse.workflow.impl.IInputPortImpl
+     * @see eu.geclipse.workflow.impl.InputPortImpl
      * @see eu.geclipse.workflow.impl.WorkflowPackageImpl#getIInputPort()
      * @generated
      */
@@ -918,10 +918,10 @@ public interface IWorkflowPackage extends EPackage
     EReference IINPUT_PORT__LINKS = eINSTANCE.getIInputPort_Links();
 
     /**
-     * The meta object literal for the '{@link eu.geclipse.workflow.impl.IOutputPortImpl <em>IOutput Port</em>}' class.
+     * The meta object literal for the '{@link eu.geclipse.workflow.impl.OutputPortImpl <em>IOutput Port</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see eu.geclipse.workflow.impl.IOutputPortImpl
+     * @see eu.geclipse.workflow.impl.OutputPortImpl
      * @see eu.geclipse.workflow.impl.WorkflowPackageImpl#getIOutputPort()
      * @generated
      */
@@ -944,10 +944,10 @@ public interface IWorkflowPackage extends EPackage
     EReference IOUTPUT_PORT__LINKS = eINSTANCE.getIOutputPort_Links();
 
     /**
-     * The meta object literal for the '{@link eu.geclipse.workflow.impl.IWorkflowImpl <em>IWorkflow</em>}' class.
+     * The meta object literal for the '{@link eu.geclipse.workflow.impl.WorkflowImpl <em>IWorkflow</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see eu.geclipse.workflow.impl.IWorkflowImpl
+     * @see eu.geclipse.workflow.impl.WorkflowImpl
      * @see eu.geclipse.workflow.impl.WorkflowPackageImpl#getIWorkflow()
      * @generated
      */
@@ -970,10 +970,10 @@ public interface IWorkflowPackage extends EPackage
     EReference IWORKFLOW__LINKS = eINSTANCE.getIWorkflow_Links();
 
     /**
-     * The meta object literal for the '{@link eu.geclipse.workflow.impl.IWorkflowJobImpl <em>IWorkflow Job</em>}' class.
+     * The meta object literal for the '{@link eu.geclipse.workflow.impl.WorkflowJobImpl <em>IWorkflow Job</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see eu.geclipse.workflow.impl.IWorkflowJobImpl
+     * @see eu.geclipse.workflow.impl.WorkflowJobImpl
      * @see eu.geclipse.workflow.impl.WorkflowPackageImpl#getIWorkflowJob()
      * @generated
      */
@@ -996,10 +996,10 @@ public interface IWorkflowPackage extends EPackage
     EAttribute IWORKFLOW_JOB__JOB_DESCRIPTION_FILE_NAME = eINSTANCE.getIWorkflowJob_JobDescriptionFileName();
 
     /**
-     * The meta object literal for the '{@link eu.geclipse.workflow.impl.IWorkflowElementImpl <em>IWorkflow Element</em>}' class.
+     * The meta object literal for the '{@link eu.geclipse.workflow.impl.WorkflowElementImpl <em>IWorkflow Element</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see eu.geclipse.workflow.impl.IWorkflowElementImpl
+     * @see eu.geclipse.workflow.impl.WorkflowElementImpl
      * @see eu.geclipse.workflow.impl.WorkflowPackageImpl#getIWorkflowElement()
      * @generated
      */
@@ -1022,10 +1022,10 @@ public interface IWorkflowPackage extends EPackage
     EAttribute IWORKFLOW_ELEMENT__ID = eINSTANCE.getIWorkflowElement_Id();
 
     /**
-     * The meta object literal for the '{@link eu.geclipse.workflow.impl.IWorkflowNodeImpl <em>IWorkflow Node</em>}' class.
+     * The meta object literal for the '{@link eu.geclipse.workflow.impl.WorkflowNodeImpl <em>IWorkflow Node</em>}' class.
      * <!-- begin-user-doc -->
      * <!-- end-user-doc -->
-     * @see eu.geclipse.workflow.impl.IWorkflowNodeImpl
+     * @see eu.geclipse.workflow.impl.WorkflowNodeImpl
      * @see eu.geclipse.workflow.impl.WorkflowPackageImpl#getIWorkflowNode()
      * @generated
      */

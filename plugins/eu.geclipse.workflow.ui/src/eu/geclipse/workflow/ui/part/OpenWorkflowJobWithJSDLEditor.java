@@ -48,14 +48,14 @@ public class OpenWorkflowJobWithJSDLEditor implements IObjectActionDelegate {
     IWorkflowJob job = ( IWorkflowJob )OpenWorkflowJobWithJSDLEditor.this.mySelectedElement.resolveSemanticElement();
     String filename = job.getJobDescriptionFileName();
     URI fileNameURI = URIUtil.toURI( filename );
-    System.out.println( fileNameURI );
-
+    
     //IPath location = new Path("/Users/ash/Documents/work/g-Eclipse/runtime-g-Eclipse-S3Test/AnotherPrject/Job%2520Descriptions/ps.jsdl");
-    IFile[] file = ResourcesPlugin.getWorkspace().getRoot()
+    IFile[] file = ResourcesPlugin.getWorkspace().getRoot().findFilesForLocationURI( fileNameURI );
       //.getRoot().findFilesForLocation( location );
-      .findFilesForLocationURI( fileNameURI );
+    System.out.print( file.length );
+    
     try {
-      if( file[ 0 ].exists() ) {
+      if( (file.length != 0) && file[ 0 ].exists() ) {
         IDE.openEditor( WorkflowDiagramEditorPlugin.getDefault()
           .getWorkbench()
           .getActiveWorkbenchWindow()

@@ -61,11 +61,11 @@ public class WorkflowJobItemProvider extends WorkflowNodeItemProvider
   @Override
   public List<IItemPropertyDescriptor> getPropertyDescriptors( Object object )
   {
-    if( itemPropertyDescriptors == null ) {
+    if( this.itemPropertyDescriptors == null ) {
       super.getPropertyDescriptors( object );
       addJobDescriptionPropertyDescriptor( object );
     }
-    return itemPropertyDescriptors;
+    return this.itemPropertyDescriptors;
   }
 
   /**
@@ -74,7 +74,7 @@ public class WorkflowJobItemProvider extends WorkflowNodeItemProvider
    * @generated NOT
    */
   protected void addJobDescriptionPropertyDescriptor( Object object ) {
-    itemPropertyDescriptors.add( createItemPropertyDescriptor( ( ( ComposeableAdapterFactory )adapterFactory ).getRootAdapterFactory(),
+    this.itemPropertyDescriptors.add( createItemPropertyDescriptor( ( ( ComposeableAdapterFactory )this.adapterFactory ).getRootAdapterFactory(),
                                                                getResourceLocator(),
                                                                getString( "_UI_IWorkflowJob_jobDescription_feature" ), //$NON-NLS-1$
                                                                getString( "_UI_PropertyDescriptor_description", //$NON-NLS-1$
@@ -99,7 +99,7 @@ public class WorkflowJobItemProvider extends WorkflowNodeItemProvider
   {
     this.itemPropertyDescriptors.add
       (createItemPropertyDescriptor
-        (((ComposeableAdapterFactory)adapterFactory).getRootAdapterFactory(),
+        (((ComposeableAdapterFactory)this.adapterFactory).getRootAdapterFactory(),
          getResourceLocator(),
          getString("_UI_IWorkflowJob_jobDescriptionFileName_feature"), //$NON-NLS-1$
          getString("_UI_PropertyDescriptor_description", "_UI_IWorkflowJob_jobDescriptionFileName_feature", "_UI_IWorkflowJob_type"), //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
