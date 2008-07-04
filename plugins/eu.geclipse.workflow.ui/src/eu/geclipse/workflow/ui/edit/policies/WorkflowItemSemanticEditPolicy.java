@@ -16,6 +16,7 @@
 package eu.geclipse.workflow.ui.edit.policies;
 
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
+import org.eclipse.gef.Request;
 import org.eclipse.gef.commands.Command;
 import org.eclipse.gmf.runtime.diagram.ui.editparts.IGraphicalEditPart;
 import org.eclipse.gmf.runtime.emf.commands.core.commands.DuplicateEObjectsCommand;
@@ -30,6 +31,13 @@ import org.eclipse.gmf.runtime.emf.type.core.requests.CreateElementRequest;
  */
 public class WorkflowItemSemanticEditPolicy extends WorkflowBaseItemSemanticEditPolicy
 {
+ 
+  
+  @Override
+  public Command getCommand( Request request ) {
+        
+    return super.getCommand( request );
+  }
 
   /**
    * @generated

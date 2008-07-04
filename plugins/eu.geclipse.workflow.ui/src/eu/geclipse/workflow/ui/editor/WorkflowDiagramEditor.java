@@ -15,9 +15,6 @@
  ******************************************************************************/
 package eu.geclipse.workflow.ui.editor;
 
-import org.eclipse.gef.palette.PaletteRoot;
-import org.eclipse.gmf.runtime.diagram.ui.resources.editor.parts.DiagramDocumentEditor;
-import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IWorkspaceRoot;
@@ -28,11 +25,14 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.emf.common.ui.URIEditorInput;
+import org.eclipse.emf.transaction.TransactionalEditingDomain;
+import org.eclipse.gef.palette.PaletteRoot;
 import org.eclipse.gmf.runtime.common.ui.services.marker.MarkerNavigationService;
 import org.eclipse.gmf.runtime.diagram.core.preferences.PreferencesHint;
 import org.eclipse.gmf.runtime.diagram.ui.resources.editor.document.IDiagramDocument;
 import org.eclipse.gmf.runtime.diagram.ui.resources.editor.document.IDocument;
 import org.eclipse.gmf.runtime.diagram.ui.resources.editor.document.IDocumentProvider;
+import org.eclipse.gmf.runtime.diagram.ui.resources.editor.parts.DiagramDocumentEditor;
 import org.eclipse.jface.dialogs.ErrorDialog;
 import org.eclipse.jface.dialogs.IMessageProvider;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -86,17 +86,16 @@ public class WorkflowDiagramEditor extends DiagramDocumentEditor implements IGot
    * @generated
    */
   @Override
-  protected PaletteRoot createPaletteRoot( PaletteRoot existingPaletteRoot ) {
+  protected PaletteRoot createPaletteRoot( final PaletteRoot existingPaletteRoot ) {
     PaletteRoot root = super.createPaletteRoot( existingPaletteRoot );
     new WorkflowPaletteFactory().fillPalette( root );
     return root;
   }
   
+  @Override
   protected void initializeGraphicalViewer() {
-    super.initializeGraphicalViewer();
-    
-        
     getGraphicalViewer().addDropTargetListener( new FileTransferDropTargetListener(getGraphicalViewer()));
+    super.initializeGraphicalViewer();
     
 }
 
@@ -121,7 +120,7 @@ public class WorkflowDiagramEditor extends DiagramDocumentEditor implements IGot
    * @generated
    */
   @Override
-  protected IDocumentProvider getDocumentProvider( IEditorInput input ) {
+  protected IDocumentProvider getDocumentProvider( final IEditorInput input ) {
     if( input instanceof IFileEditorInput || input instanceof URIEditorInput ) {
       return WorkflowDiagramEditorPlugin.getInstance().getDocumentProvider();
     }
@@ -146,7 +145,7 @@ public class WorkflowDiagramEditor extends DiagramDocumentEditor implements IGot
    * @generated
    */
   @Override
-  protected void setDocumentProvider( IEditorInput input ) {
+  protected void setDocumentProvider( final IEditorInput input ) {
     if( input instanceof IFileEditorInput || input instanceof URIEditorInput ) {
       setDocumentProvider( WorkflowDiagramEditorPlugin.getInstance()
         .getDocumentProvider() );
@@ -158,7 +157,7 @@ public class WorkflowDiagramEditor extends DiagramDocumentEditor implements IGot
   /**
    * @generated
    */
-  public void gotoMarker( IMarker marker ) {
+  public void gotoMarker( final IMarker marker ) {
     MarkerNavigationService.getInstance().gotoMarker( this, marker );
   }
 
@@ -182,7 +181,7 @@ public class WorkflowDiagramEditor extends DiagramDocumentEditor implements IGot
    * @generated
    */
   @Override
-  protected void performSaveAs( IProgressMonitor progressMonitor ) {
+  protected void performSaveAs( final IProgressMonitor progressMonitor ) {
     Shell shell = getSite().getShell();
     IEditorInput input = getEditorInput();
     SaveAsDialog dialog = new SaveAsDialog( shell );

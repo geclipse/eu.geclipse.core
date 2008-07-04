@@ -17,6 +17,7 @@ package eu.geclipse.workflow.ui.edit.policies;
 
 import java.util.Collections;
 import java.util.Iterator;
+
 import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.gef.EditPart;
@@ -52,6 +53,7 @@ import org.eclipse.gmf.runtime.emf.type.core.requests.ReorientRelationshipReques
 import org.eclipse.gmf.runtime.emf.type.core.requests.SetRequest;
 import org.eclipse.gmf.runtime.notation.Edge;
 import org.eclipse.gmf.runtime.notation.View;
+
 import eu.geclipse.workflow.IInputPort;
 import eu.geclipse.workflow.IOutputPort;
 import eu.geclipse.workflow.IWorkflow;

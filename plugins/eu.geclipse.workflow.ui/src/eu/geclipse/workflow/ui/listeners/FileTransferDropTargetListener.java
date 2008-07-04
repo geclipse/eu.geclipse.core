@@ -16,56 +16,48 @@
  *****************************************************************************/
 package eu.geclipse.workflow.ui.listeners;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.gef.EditPartViewer;
-import org.eclipse.gef.Request;
-import org.eclipse.gef.dnd.AbstractTransferDropTargetListener;
-import org.eclipse.gef.requests.CreateRequest;
-import org.eclipse.swt.dnd.DND;
-import org.eclipse.swt.dnd.FileTransfer;
-import org.eclipse.swt.dnd.Transfer;
+import org.eclipse.gmf.runtime.diagram.ui.parts.DiagramDropTargetListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.swt.dnd.TransferData;
+import org.eclipse.ui.views.navigator.LocalSelectionTransfer;
+
+import eu.geclipse.core.model.IGridElement;
 
 
 /**
  * @author nloulloud
  *
  */
-public class FileTransferDropTargetListener extends AbstractTransferDropTargetListener {
-  
-  private WorkflowJsdlSetFactory factory = new WorkflowJsdlSetFactory();
+public class FileTransferDropTargetListener extends DiagramDropTargetListener {
 
-  public FileTransferDropTargetListener( final EditPartViewer viewer, final Transfer xfer )  {
-    super( viewer, xfer );
+  public FileTransferDropTargetListener( final EditPartViewer viewer ) {
+    super( viewer,  LocalSelectionTransfer.getInstance());
+    // TODO Auto-generated constructor stub
+  }
+ 
+
+  @Override
+  protected List<IGridElement> getObjectsBeingDropped() {
+    List<IGridElement> result = new ArrayList<IGridElement>();   
+    if (getTransfer() instanceof LocalSelectionTransfer) {
+      LocalSelectionTransfer transfer = (LocalSelectionTransfer) getTransfer();
+      IStructuredSelection selection = (IStructuredSelection) transfer.getSelection();
+      Object object = selection.getFirstElement();
+      if(object instanceof IGridElement) {
+        result.add( (IGridElement) object );
+      }
+    }
+    return result;
   }
 
-  public FileTransferDropTargetListener(final EditPartViewer viewer) {
-    super(viewer, FileTransfer.getInstance());
- }
 
-  @Override
-  protected void updateTargetRequest() {
-    ((CreateRequest)getTargetRequest()).setLocation(getDropLocation());
+  protected Object getJavaObject(final TransferData data) {
+    return LocalSelectionTransfer.getInstance().nativeToJava(data);
   }
   
-  @Override
-  protected Request createTargetRequest() {
-    CreateRequest request = new CreateRequest();
-    request.setFactory(this.factory);
-    return request;
- }
-  
-  @Override
-  protected void handleDragOver() {
-    getCurrentEvent().detail = DND.DROP_COPY;
-    super.handleDragOver(); 
- }
-  
-  @Override
-  protected void handleDrop() {
-    String s = ((String[])getCurrentEvent().data)[0];
-    String separator = System.getProperty("file.separator"); //$NON-NLS-1$
-    s = s.substring(s.lastIndexOf(separator) + 1);
-    this.factory.setText(s);
-    super.handleDrop();
- }
-  
+    
 }
