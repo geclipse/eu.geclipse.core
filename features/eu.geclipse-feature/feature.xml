@@ -111,20 +111,6 @@ http://www.geclipse.eu/
          version="0.0.0"/>
 
    <plugin
-         id="eu.geclipse.gvid"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
-         id="eu.geclipse.gvid.codec.uncompressed"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
-
-   <plugin
          id="eu.geclipse.info"
          download-size="0"
          install-size="0"
