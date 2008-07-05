@@ -16,14 +16,12 @@
  ******************************************************************************/
 package eu.geclipse.workflow.ui.part;
 
-import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.OperationHistoryFactory;
 import org.eclipse.core.filesystem.EFS;
+import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
@@ -31,6 +29,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.emf.common.util.URI;
+import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.transaction.TransactionalEditingDomain;
 import org.eclipse.gmf.runtime.common.core.command.CommandResult;
@@ -43,6 +43,7 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
+import eu.geclipse.core.model.GridModel;
 import eu.geclipse.ui.dialogs.GridFileDialog;
 import eu.geclipse.workflow.IWorkflowJob;
 import eu.geclipse.workflow.ui.edit.parts.WorkflowJobEditPart;
@@ -85,45 +86,31 @@ public class GetJobDescriptionFromFileAction implements IObjectActionDelegate {
     if( dialog.open() == Window.OK ) {
       IFileStore[] result = dialog.getSelectedFileStores();
       if( ( result != null ) && ( result.length > 0 ) ) {
+        // find the root directory of the workflow
+        TransactionalEditingDomain domain = this.mySelectedElement.getEditingDomain();
+        ResourceSet resourceSet = domain.getResourceSet();
+        Resource res = resourceSet.getResources().get( 0 );
+        URI wfRootUri = res.getURI();
+        String wfRootPath = wfRootUri.path();
+        String[] dirs = wfRootPath.split( "/" ); //$NON-NLS-1$
+        String projectName = dirs[2];
+        IFileStore wfRootFileStore = GridModel.getRoot().getFileStore().getChild( projectName ).getChild( dirs[3]).getChild( wfRootUri.lastSegment() );
+        IFileStore jsdlSource = result[0];
+        IFileStore jsdlTarget = wfRootFileStore.getChild( result[0].getName() );
+        IFileInfo jsdlInfo = jsdlTarget.fetchInfo();
         try {
-          System.out.println(result[0].toURI() + " ADDING REAL URI");
-          this.fileName= result[0].toURI().toString();          
-          
-          inStream = result[ 0 ].openInputStream( EFS.NONE, null );
-        } catch( CoreException cE ) {
-          status = new Status( IStatus.ERROR,
-                               WorkflowDiagramEditorPlugin.ID,
-                               IStatus.OK,
-                               Messages.getString( "GetJobDescriptionFromFileAction.errorOpeningInputStream" ), //$NON-NLS-1$
-                               cE );
-        }
-        if( status.isOK() ) {
-          // Read in contents of the JSDL file
-          BufferedReader in = new BufferedReader( new InputStreamReader( inStream ) );
-          StringBuffer buffer = new StringBuffer();
-          String line = null;
-          try {
-            while( ( line = in.readLine() ) != null ) {
-              buffer.append( line );
-            }
-          } catch( IOException iOE ) {
-            status = new Status( IStatus.ERROR,
-                                 WorkflowDiagramEditorPlugin.ID,
-                                 IStatus.OK,
-                                 Messages.getString( "GetJobDescriptionFromFileAction.errorReadingFromFile" ), //$NON-NLS-1$
-                                 iOE );
+          if ( jsdlInfo.exists() ) {
+            // deal with existing files somehow?
+            jsdlSource.copy( wfRootFileStore, EFS.OVERWRITE, null );
+          } else {
+            jsdlSource.copy( jsdlTarget, EFS.OVERWRITE, null );
           }
-          this.jobDescriptionInJSDL = buffer.toString();
+        } catch ( CoreException ex ) {
+          // ignore for now. naughty!
         }
-        try {
-          inStream.close();
-        } catch( IOException iOE ) {
-          status = new Status( IStatus.ERROR,
-                               WorkflowDiagramEditorPlugin.ID,
-                               IStatus.OK,
-                               Messages.getString( "GetJobDescriptionFromFileAction.errorClosingInputStream" ), //$NON-NLS-1$
-                               iOE );
-        }
+        this.jobDescriptionInJSDL = jsdlTarget.toString(); // is now the file name
+        // now check if it exists in workflow directory, and copy it from source if not
+        
       }
     }
     updateWorkflowJobDescription();
