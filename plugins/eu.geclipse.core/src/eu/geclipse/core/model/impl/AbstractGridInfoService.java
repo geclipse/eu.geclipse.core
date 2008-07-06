@@ -77,6 +77,7 @@ public abstract class AbstractGridInfoService
 
     else if ( category.equals( GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_JOB_SERVICES ) ) ) {
       IGridResource[] services = fetchServices( parent, vo, lMonitor );
+      // TODO ariel Uh? next line doesn't add anything, right?
       services = checkThisInfoService( services );
       result = filterResources( services, IGridJobService.class, false );
     }
@@ -103,7 +104,6 @@ public abstract class AbstractGridInfoService
     }
     
     return result;
-    
   }
   
   protected IGridResource[] filterResources( final IGridResource[] resources,
@@ -120,7 +120,6 @@ public abstract class AbstractGridInfoService
     }
 
     return resultList.toArray( new IGridResource[ resultList.size() ] );
-
   }
   
   private IGridResource[] checkThisInfoService( final IGridResource[] resources ) {
@@ -150,45 +149,5 @@ public abstract class AbstractGridInfoService
     return result;
     
   }
-/*
-  public String getHostName() {
-    // TODO Auto-generated method stub
-    return null;
-  }
 
-  public URI getURI() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  public IFileStore getFileStore() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  public String getName() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  public IGridContainer getParent() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  public IPath getPath() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  public IResource getResource() {
-    // TODO Auto-generated method stub
-    return null;
-  }
-
-  public boolean isLocal() {
-    // TODO Auto-generated method stub
-    return false;
-  }
-*/
 }
