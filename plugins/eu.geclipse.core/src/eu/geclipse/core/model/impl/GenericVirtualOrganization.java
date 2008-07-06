@@ -15,16 +15,11 @@
 
 package eu.geclipse.core.model.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.core.filesystem.IFileStore;
-import org.eclipse.core.runtime.IProgressMonitor;
 
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
-import eu.geclipse.core.model.IGridInfoService;
 import eu.geclipse.core.model.IGridService;
 import eu.geclipse.core.model.IStorableElement;
 import eu.geclipse.core.model.IVirtualOrganization;
