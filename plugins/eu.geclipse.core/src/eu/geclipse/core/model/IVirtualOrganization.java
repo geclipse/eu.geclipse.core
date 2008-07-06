@@ -74,6 +74,7 @@ public interface IVirtualOrganization
   /**
    * Get all services that are registered within this VO.
    * 
+   * @param monitor Use to monitor the progress.
    * @return All services that are currently available for
    * this VO.
    * @throws GridModelException If an error occurs while the services
@@ -87,6 +88,7 @@ public interface IVirtualOrganization
    * Get a list of all job submission services that are available for
    * this virtual organization.
    * 
+   * @param monitor Use to monitor the progress.
    * @return A list of all currently available job submission services.
    * @throws GridModelException If an error occurs while retrieving
    * the services.
