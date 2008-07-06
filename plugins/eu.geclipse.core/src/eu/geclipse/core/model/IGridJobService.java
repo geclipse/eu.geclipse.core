@@ -20,18 +20,31 @@ import org.eclipse.core.runtime.IProgressMonitor;
 
 import eu.geclipse.core.reporting.ProblemException;
 
+
 /**
- * TODO pawel
+ * A job service is an {@link IGridService} that provides job
+ * submission and status querying functionality. It is the interface
+ * to the grid computing resources.
  */
-public interface IGridJobService extends IGridService{
+public interface IGridJobService extends IGridService {
 
   /**
-   * TODO pawel
+   * Tests if a given job description can be handled (i.e., submitted) by
+   * this job service.
    * 
-   * @param description TODO pawel
-   * @param monitor progress monitor
-   * @return TODO pawel
-   * @throws ProblemException TODO pawel
+   * @param desc the job description to be tested.
+   * @return true if the given job description can be submitted to the grid
+   * using <code>this</code> service, false otherwise.
+   */
+  public boolean canSubmit( final IGridJobDescription desc );
+  
+  /**
+   * Submits the given job description to the grid.
+   * 
+   * @param description the job description to be submitted.
+   * @param monitor Use to monitor progress. May be <code>null</code>.
+   * @return The id of the submitted job.
+   * @throws ProblemException if submitting the job failed.
    * @throws GridModelException 
    */
   public IGridJobID submitJob( final IGridJobDescription description,
@@ -39,38 +52,24 @@ public interface IGridJobService extends IGridService{
     throws ProblemException, GridModelException;
   
   /**
-   * Download job status from server
+   * Queries the service about the job's status.
    * 
-   * @param id of job, which status will be checked on server
-   * @param progressMonitor may be <code>null</code>
-   * @return current job status
-   * @throws ProblemException thrown when status cannot be downloaded/checked
+   * @param id The id of the job whose status has to be queried.
+   * @param monitor Use to monitor progress. May be <code>null</code>.
+   * @return IGridJobStatus the current status of the job.
+   * @throws ProblemException if the status query failed.
    */
-  public IGridJobStatus getJobStatus( final IGridJobID id, final IProgressMonitor progressMonitor ) throws ProblemException;
+  public IGridJobStatus getJobStatus( final IGridJobID id, final IProgressMonitor monitor )
+    throws ProblemException;
   
   /**
-   * Deletes job from server and release resources on server
-   * @param job job identifier, which has to be deleted
-   * @param monitor 
-   * @throws ProblemException
+   * Deletes the given job from the server and releases resources on it.
+   * 
+   * @param job the identifier of the job which has to be deleted.
+   * @param monitor Use to monitor progress. May be <code>null</code>.
+   * @throws ProblemException if deleting the job failed.
    */
-  public void deleteJob( final IGridJob job, IProgressMonitor monitor ) throws ProblemException;
+  public void deleteJob( final IGridJob job, IProgressMonitor monitor )
+    throws ProblemException;
 
-  /**
-   * @param desc
-   * @return true if passed job description may be submitted to grid using <code>this</code> service
-   */
-  public boolean canSubmit(final IGridJobDescription desc);
-
-//  /**
-//   * TODO pawel
-//   * 
-//   * @param description TODO pawel
-//   * @param destination TODO pawel
-//   * @return TODO pawel
-//   * @throws GridModelException TODO pawel
-//   */
-//  public IGridJobID submitJob( final IGridJobDescription description, final String destination )
-//    throws GridException;
-  
 }
