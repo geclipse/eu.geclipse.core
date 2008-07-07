@@ -18,11 +18,15 @@ package eu.geclipse.ui.internal.wizards;
 
 import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.jface.operation.IRunnableWithProgress;
 import org.eclipse.jface.viewers.ArrayContentProvider;
+import org.eclipse.jface.viewers.CheckStateChangedEvent;
 import org.eclipse.jface.viewers.CheckboxTableViewer;
+import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.jface.wizard.WizardPage;
@@ -36,13 +40,16 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
 import eu.geclipse.core.model.IVoLoader;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 
-
+/**
+ * Wizard page for selection VOs to be imported.
+ */
 public class VoChooserPage extends WizardPage {
   
   protected CheckboxTableViewer viewer;
@@ -51,10 +58,18 @@ public class VoChooserPage extends WizardPage {
     
     private String filterText;
     
+    /**
+     * This filters's default constructor.
+     */
     public VoFilter() {
       super();
     }
     
+    /**
+     * Set the filter's text that is used to filter the view's content.
+     * 
+     * @param text The text that has to match the beginning of the VO name.
+     */
     public void setFilterText( final String text ) {
       this.filterText = text;
     }
@@ -63,9 +78,9 @@ public class VoChooserPage extends WizardPage {
     public boolean select( final Viewer viewer,
                            final Object parentElement,
                            final Object element ) {
-      return ( filterText == null )
-        || ( filterText.trim().length() == 0)
-        || ( ( String ) element ).toLowerCase().startsWith( filterText.toLowerCase() );
+      return ( this.filterText == null )
+        || ( this.filterText.trim().length() == 0)
+        || ( ( String ) element ).toLowerCase().startsWith( this.filterText.toLowerCase() );
     }
     
   }
@@ -75,13 +90,21 @@ public class VoChooserPage extends WizardPage {
   
   protected VoFilter voFilter;
 
+  protected List< Object > selection = new ArrayList< Object >();
+  
   private VoImportLocationChooserPage locationChooserPage;
+  
 
+  /**
+   * Construct a new chooser page.
+   * 
+   * @param locationChooserPage The location chooser page of the same wizard.
+   */
   public VoChooserPage( final VoImportLocationChooserPage locationChooserPage ) {
-    super( "voChooserPage",
-           "Choose VOs",
+    super( "voChooserPage", //$NON-NLS-1$
+           Messages.getString("VoChooserPage.title"), //$NON-NLS-1$
            null );
-    setDescription( "Choose the VOs you would like to import" );
+    setDescription( Messages.getString("VoChooserPage.description") ); //$NON-NLS-1$
     this.locationChooserPage = locationChooserPage;
   }
 
@@ -96,7 +119,7 @@ public class VoChooserPage extends WizardPage {
     
     this.filterText = new Text( mainComp, SWT.BORDER );
     this.filterText.setLayoutData( new GridData( SWT.FILL, SWT.CENTER, true, false ) );
-    this.filterText.setText( "type filter text" );
+    this.filterText.setText( Messages.getString("VoChooserPage.initial_filter_text") ); //$NON-NLS-1$
     this.filterText.selectAll();
     
     Table table = new Table( mainComp, SWT.BORDER | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CHECK );
@@ -116,24 +139,31 @@ public class VoChooserPage extends WizardPage {
     buttonComp.setLayoutData( gData );
     
     Button selectAllButton = new Button( buttonComp, SWT.PUSH );
-    selectAllButton.setText( "&Select All" );
+    selectAllButton.setText( Messages.getString("VoChooserPage.select_all_button") ); //$NON-NLS-1$
     gData = new GridData();
     selectAllButton.setLayoutData( gData );
     
     Button deselectAllButton = new Button( buttonComp, SWT.PUSH );
-    deselectAllButton.setText( "&Deselect All" );
+    deselectAllButton.setText( Messages.getString("VoChooserPage.deselect_all_button") ); //$NON-NLS-1$
     gData = new GridData();
     deselectAllButton.setLayoutData( gData );
     
     Button revertButton = new Button( buttonComp, SWT.PUSH );
-    revertButton.setText( "&Revert Selection" );
+    revertButton.setText( Messages.getString("VoChooserPage.revert_selection_button") ); //$NON-NLS-1$
     gData = new GridData();
     revertButton.setLayoutData( gData );
+    
+    this.viewer.addCheckStateListener( new ICheckStateListener() {
+      public void checkStateChanged( final CheckStateChangedEvent event ) {
+        handleCheckStateChanged( event );
+      }
+    } );
     
     this.filterText.addModifyListener( new ModifyListener() {
       public void modifyText( final ModifyEvent e ) {
         VoChooserPage.this.voFilter.setFilterText( VoChooserPage.this.filterText.getText() );
         VoChooserPage.this.viewer.refresh();
+        VoChooserPage.this.viewer.setCheckedElements( VoChooserPage.this.selection.toArray( new Object[ VoChooserPage.this.selection.size() ] ) );
       }
     } );
     
@@ -162,16 +192,18 @@ public class VoChooserPage extends WizardPage {
     
   }
   
+  /**
+   * Get all selected VOs.
+   * 
+   * @return A list containing the names of all selected VOs.
+   */
   public String[] getSelectedVos() {
     
     String[] result = null;
     
-    Object[] checkedElements = this.viewer.getCheckedElements();
-    if ( checkedElements != null ) {
-      result = new String[ checkedElements.length ];
-      for ( int i = 0 ; i < checkedElements.length ; i++ ) {
-        result[ i ] = ( String ) checkedElements[ i ];
-      }
+    result = new String[ this.selection.size() ];
+    for ( int i = 0 ; i < this.selection.size() ; i++ ) {
+      result[ i ] = ( String ) this.selection.get( i );
     }
     
     return result;
@@ -187,19 +219,52 @@ public class VoChooserPage extends WizardPage {
     }
   }
   
+  protected void handleCheckStateChanged( final CheckStateChangedEvent event ) {
+    Object element = event.getElement();
+    if ( event.getChecked() ) {
+      addToSelection( new Object[] { element } );
+    } else if ( ! event.getChecked() ) {
+      removeFromSelection( new Object[] { element } );
+    }
+  }
+  
   protected void selectAll() {
     this.viewer.setAllChecked( true );
+    addToSelection( this.viewer.getCheckedElements() );
   }
   
   protected void deselectAll() {
+    removeFromSelection( this.viewer.getCheckedElements() );
     this.viewer.setAllChecked( false );
   }
   
   protected void revertSelection() {
-    String[] elements = ( String[] ) this.viewer.getInput();
-    for ( String element : elements ) {
+    TableItem[] items = this.viewer.getTable().getItems();
+    for ( TableItem item : items ) {
+      String element = ( String ) item.getData();
       boolean state = this.viewer.getChecked( element );
       this.viewer.setChecked( element, ! state );
+      if ( state ) {
+        removeFromSelection( new Object[] { element } );
+      } else {
+        addToSelection( new Object[] { element } );
+      }
+    }
+  }
+  
+  private void addToSelection( final Object[] elements ) {
+    for ( Object element : elements ) {
+      if ( ! this.selection.contains( element ) ) {
+        this.selection.add( element );
+      }
+    }
+  }
+  
+  private void removeFromSelection( final Object[] elements ) {
+    for ( Object element : elements ) {
+      if ( this.selection.contains( element ) ) {
+        this.selection.remove( element );
+      }
     }
   }
   
@@ -213,8 +278,14 @@ public class VoChooserPage extends WizardPage {
         public void run( final IProgressMonitor monitor )
             throws InvocationTargetException, InterruptedException {
           try {
-            String[] certificateList = loader.getVoList( uri, monitor );
-            VoChooserPage.this.viewer.setInput( certificateList );
+            String[] voArray = loader.getVoList( uri, monitor );
+            List< String > voList = new ArrayList< String >();
+            for ( String vo : voArray ) {
+              if ( ! voList.contains( vo ) ) {
+                voList.add( vo );
+              }
+            }
+            VoChooserPage.this.viewer.setInput( voList );
           } catch ( ProblemException pExc ) {
             throw new InvocationTargetException( pExc );
           }
@@ -223,8 +294,8 @@ public class VoChooserPage extends WizardPage {
     } catch ( InvocationTargetException itExc ) {
       Throwable cause = itExc.getCause();
       ProblemDialog.openProblem( getShell(),
-                                 "Import Failed",
-                                 "Unable to load VO list",
+                                 Messages.getString("VoChooserPage.import_failed_title"), //$NON-NLS-1$
+                                 Messages.getString("VoChooserPage.import_failed_error"), //$NON-NLS-1$
                                  cause );
       setErrorMessage( cause.getLocalizedMessage() );
     } catch ( InterruptedException intExc ) {
