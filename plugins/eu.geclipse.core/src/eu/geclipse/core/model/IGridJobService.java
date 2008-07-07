@@ -65,7 +65,7 @@ public interface IGridJobService extends IGridService {
   /**
    * Deletes the given job from the server and releases resources on it.
    * 
-   * @param job the identifier of the job which has to be deleted.
+   * @param job The job which has to be deleted.
    * @param monitor Use to monitor progress. May be <code>null</code>.
    * @throws ProblemException if deleting the job failed.
    */
