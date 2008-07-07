@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -16,16 +16,16 @@
 package eu.geclipse.core.model;
 
 
-
-
 /**
- * TODO pawel
+ * The job ID is (for each middleware) a unique identifier for a job running
+ * on the Grid.
  */
 public interface IGridJobID {
 
   /**
-   * TODO pawel
-   * @return TODO pawel
+   * Gets the job's unique ID.
+   * 
+   * @return A string containing the unique identifier for a job. 
    */
   String getJobID();
 
