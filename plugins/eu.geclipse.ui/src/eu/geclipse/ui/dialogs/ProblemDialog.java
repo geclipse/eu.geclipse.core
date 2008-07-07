@@ -49,6 +49,13 @@ import eu.geclipse.ui.internal.LogExceptionSolution;
 import eu.geclipse.ui.internal.MailToSolution;
 
 
+/**
+ * The ProblemDialog is the user-friendly way of g-Eclipse of reporting
+ * problems to the user. It displays not only the description of the problem
+ * but also the registered solutions that could potentially solve the problem.
+ * The active solutions are clickable and perform some action, like generating
+ * a problem report or logging the exception.
+ */
 public class ProblemDialog extends ErrorDialog {
 
   /**
