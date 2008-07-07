@@ -41,6 +41,9 @@ import eu.geclipse.core.model.impl.AbstractGridElement;
 public class S3BucketStorage extends AbstractGridElement
   implements IGridStorage
 {
+  
+  private static MountPointID MOUNT_ID
+    = new MountPointID( "Simple Storage Service (S3)", "s3" ); //$NON-NLS-1$ //$NON-NLS-2$
 
   /** This {@link IAWSService} provides the connection details required. */
   private S3AWSService s3AWSService;
@@ -140,6 +143,29 @@ public class S3BucketStorage extends AbstractGridElement
 
   public boolean isLocal() {
     return false;
+  }
+
+  public MountPoint getMountPoint( final MountPointID mountID ) {
+    
+    MountPoint result = null;
+    
+    if ( MOUNT_ID.equals( mountID ) ) {
+      String suri = String.format( "s3://root/%s", getName() );
+      try {
+        URI uri = new URI( suri );
+        String name = String.format( "S3 @ %s", getName() );
+        result = new MountPoint( name, uri );
+      } catch ( URISyntaxException uriExc ) {
+        // Just ignore and return null
+      }
+    }
+    
+    return result;
+    
+  }
+
+  public MountPointID[] getMountPointIDs() {
+    return new MountPointID[] { MOUNT_ID };
   }
 
 }
