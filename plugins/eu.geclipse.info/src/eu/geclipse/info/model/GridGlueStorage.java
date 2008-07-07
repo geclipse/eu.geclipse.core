@@ -153,4 +153,111 @@ public class GridGlueStorage extends GridGlueElement implements IGridStorage {
     }
     return str;
   }
+
+  public MountPoint getMountPoint( final MountPointID mountID ) {
+    
+    MountPoint result = null;
+    
+    List< GlueSEAccessProtocol > apList = getGlueSe().glueSEAccessProtocolList;
+    
+    if( apList != null ) {
+      for ( GlueSEAccessProtocol ap : apList ) {
+        String uid = getAccessProtocolUID( ap );
+        if ( mountID.getUID().equals( uid ) ) {
+          result = getMountPoint( ap );
+          break;
+        }
+      }
+    }
+    
+    return result;
+    
+  }
+
+  public MountPointID[] getMountPointIDs() {
+
+    List< MountPointID > mountIDs = new ArrayList< MountPointID >();
+    List< GlueSEAccessProtocol > apList = getGlueSe().glueSEAccessProtocolList;
+
+    if( apList != null ) {
+      for ( GlueSEAccessProtocol ap : apList ) {
+        String uid = getAccessProtocolUID( ap );
+        String scheme = getAccessProtocolScheme( ap );
+        MountPointID mountID = new MountPointID( uid, scheme );
+        mountIDs.add( mountID );
+      }
+    }
+
+    return mountIDs.toArray( new MountPointID[ mountIDs.size() ] );
+    
+  }
+  
+  protected MountPoint getSrmMountPoint( final GridGlueService srmService ) {
+    
+    MountPoint result = null;
+    
+    ArrayList< GlueSEAccessProtocol > apList = getGlueSe().glueSEAccessProtocolList;
+    if( apList != null ) {
+      for ( GlueSEAccessProtocol ap : apList ) {
+        String scheme = getAccessProtocolScheme( ap );
+        if ( "srm".equals( scheme ) ) {
+          result = getMountPoint( ap );
+          break;
+        }
+      }
+    }
+    
+    return result;
+    
+  }
+  
+  private String getAccessProtocolUID( final GlueSEAccessProtocol ap ) {
+    String scheme = getAccessProtocolScheme( ap );
+    return String.format( "%s:%d", scheme, ap.Port );
+  }
+  
+  private String getAccessProtocolScheme( final GlueSEAccessProtocol ap ) {
+    return ap.Type.toLowerCase();
+  }
+  
+  private MountPoint getMountPoint( final GlueSEAccessProtocol ap ) {
+    
+    MountPoint result = null;
+    
+    String scheme = getAccessProtocolScheme( ap );
+    String host = getGlueSe().UniqueID;
+    int port = ap.Port.intValue();
+    String path = getMountPath();
+    
+    try {
+      URI uri = new URI( scheme, null, host, port, path, null, null );
+      String name = String.format( "%s @ %s.%d", scheme, host, port );
+      result = new MountPoint( name, uri );
+    } catch ( URISyntaxException uriExc ) {
+      // Just catch and ignore
+    }
+    
+    return result;
+    
+  }
+  
+  private String getMountPath() {
+   
+    String path = null;
+    IVirtualOrganization vo = getVo();
+
+    for ( GlueSA sa : getGlueSe().glueSAList ) {
+      if( ( vo == null ) || GlueQuery.saSupportsVO( sa, vo.getName() ) ) {
+        path = sa.Path;
+        if ( ! path.endsWith( "/" ) ) {
+          path += "/";
+        }
+        break;
+      }
+    }
+    
+    return path;
+    
+  }
+
 }

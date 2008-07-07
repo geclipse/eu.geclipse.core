@@ -16,11 +16,21 @@
 package eu.geclipse.info.model;
 
  import java.net.URI;
- import java.net.URISyntaxException;
+import java.net.URISyntaxException;
+import java.util.ArrayList;
+import java.util.List;
 
- import eu.geclipse.core.model.IGridContainer;
- import eu.geclipse.core.model.IGridService;
+import eu.geclipse.core.model.GridModelException;
+import eu.geclipse.core.model.IGridContainer;
+import eu.geclipse.core.model.IGridInfoService;
+import eu.geclipse.core.model.IGridResource;
+import eu.geclipse.core.model.IGridService;
+import eu.geclipse.core.model.IGridStorage;
+import eu.geclipse.core.model.IMountable;
+import eu.geclipse.core.model.IVirtualOrganization;
+import eu.geclipse.core.model.impl.GridResourceCategoryFactory;
 import eu.geclipse.info.glue.GlueService;
+import eu.geclipse.info.internal.Activator;
 
  /**
   * Implementation of the {@link eu.geclipse.core.model.IGridElement}
@@ -28,7 +38,13 @@ import eu.geclipse.info.glue.GlueService;
   */
  public class GridGlueService
  extends GridGlueElement
- implements IGridService {
+ implements IGridService, IMountable {
+   
+   private static final MountPointID LFC_MOUNT_ID
+     = new MountPointID( "LCG File Catalog (LFC)", "lfn" );
+   
+   private static final MountPointID SRM_MOUNT_ID
+     = new MountPointID( "Storage Resource Manager (SRM)", "srm" );
 
    /**
     * Construct a new <code>GridGlueService</code> for the specified
@@ -99,8 +115,90 @@ import eu.geclipse.info.glue.GlueService;
    * @return GlueService
    */
   public GlueService getGlueService(){
-     return (GlueService)getGlueElement();
-   }
+    return (GlueService)getGlueElement();
+  }
+  
+  public MountPointID[] getMountPointIDs() {
+    
+    List< MountPointID > result = new ArrayList< MountPointID >();
+    
+    if ( isLfcService() ) {
+      result.add( LFC_MOUNT_ID );
+    }
+    
+    else if ( isSrmService() ) {
+      result.add( SRM_MOUNT_ID );
+    }
+    
+    return result.toArray( new MountPointID[ result.size() ] );
+    
+  }
+  
+  public MountPoint getMountPoint( final MountPointID mountID ) {
+    
+    MountPoint result = null;
+    
+    if ( SRM_MOUNT_ID.equals( mountID ) ) {
+      
+      try {
+      
+        IVirtualOrganization vo = getProject().getVO();
+        IGridInfoService infoService = vo.getInfoService();
+        IGridResource[] resources = infoService.fetchResources(
+            vo,
+            vo,
+            GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_STORAGE ),
+            true,
+            IGridStorage.class,
+            null );
+        
+        for ( IGridResource resource : resources ) {
+          if ( resource instanceof GridGlueStorage ) {
+            GridGlueStorage ggs = ( GridGlueStorage ) resource;
+            if ( ggs.getHostName().equals( getHostName() ) ) {
+              result = ggs.getSrmMountPoint( this );
+            }
+          }
+        }
+        
+      } catch ( GridModelException gmExc ) {
+        Activator.logException( gmExc );
+      }
+      
+    }
+    
+    else if ( LFC_MOUNT_ID.equals( mountID ) ) {
+      String name = String.format( "lfc @ %s", getURI().toString() );
+      String suri = String.format(
+          "lfn://%s:5010/grid/%s/",
+          getURI(),
+          getProject().getVO().getName()
+      );
+      try {
+        URI uri = new URI( suri );
+        result = new MountPoint( name, uri );
+      } catch ( URISyntaxException uriExc ) {
+        Activator.logException( uriExc );
+      }
+    }
+    
+    return result;
+    
+  }
+  
+  public String getType() {
+    return getGlueService().type;
+  }
+  
+  public boolean isLfcService() {
+    String type = getType();
+    return "lcg-file-catalog".equalsIgnoreCase( type )
+      || "lcg-local-file-catalog".equalsIgnoreCase( type );
+  }
+  
+  public boolean isSrmService() {
+    return "srm".equalsIgnoreCase( getType() );
+  }
   
   private String validateEndpoint( final String endpoint ) {
     String result = endpoint;
@@ -109,5 +207,5 @@ import eu.geclipse.info.glue.GlueService;
     }
     return result;
   }
-  
+
 }
