@@ -144,6 +144,7 @@ public class GridJobCreator extends AbstractGridJobCreator {
       
       IGridElement jobElement = GridModel.getRoot().findElement( jobFolder );
 
+      // TODO mariusz check, why findElement() returns null for workflows
       IGridJob result = null;
       if( jobElement instanceof IGridJob ) {
         result = ( IGridJob )jobElement;
