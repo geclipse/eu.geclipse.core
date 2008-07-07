@@ -36,9 +36,7 @@ public class MountActions extends ActionGroup {
   /**
    * The mount action menu.
    */
-  private MountMenu mountMenu;
-  
-  private ConnectionMountAction connectionMount;
+  private MountMenu newMountMenu;
   
   /**
    * Construct a new mount action group for the specified workbench part site.
@@ -53,11 +51,9 @@ public class MountActions extends ActionGroup {
     ISelectionProvider selectionProvider
       = this.site.getSelectionProvider();
     
-    this.mountMenu = new MountMenu( shell );
-    this.connectionMount = new ConnectionMountAction( shell );
+    this.newMountMenu = new MountMenu( shell );
     
-    selectionProvider.addSelectionChangedListener( this.mountMenu );
-    selectionProvider.addSelectionChangedListener( this.connectionMount );
+    selectionProvider.addSelectionChangedListener( this.newMountMenu );
     
   }
   
@@ -66,15 +62,10 @@ public class MountActions extends ActionGroup {
    */
   @Override
   public void dispose() {
-    
     ISelectionProvider selectionProvider
       = this.site.getSelectionProvider();
-    
-    selectionProvider.removeSelectionChangedListener( this.mountMenu );
-    selectionProvider.removeSelectionChangedListener( this.connectionMount );
-    
-    this.mountMenu.dispose();
-
+    selectionProvider.removeSelectionChangedListener( this.newMountMenu );
+    this.newMountMenu.dispose();
   }
   
   /* (non-Javadoc)
@@ -82,24 +73,12 @@ public class MountActions extends ActionGroup {
    */
   @Override
   public void fillContextMenu( final IMenuManager menu ) {
-    
-    if ( this.connectionMount.isEnabled() || this.mountMenu.isVisible() ) {
-      
+    if ( this.newMountMenu.isVisible() ) {
       IMenuManager subMenu = new MenuManager( Messages.getString("MountActions.mount_actions_text") ); //$NON-NLS-1$
       menu.appendToGroup( IContextMenuConstants.GROUP_OPEN, subMenu );
-      
-      if ( this.connectionMount.isEnabled() ) {
-        subMenu.add( this.connectionMount );
-      }
-      
-      if ( this.mountMenu.isVisible() ) {
-        subMenu.add( this.mountMenu );
-      }
-      
+      subMenu.add( this.newMountMenu );
     }
-    
     super.fillContextMenu( menu );
-    
   }
   
 }
