@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -36,53 +36,57 @@ public interface IGridJob
   public void cancel();
   
   /**
-   * Get the current status of this job.
+   * Deletes the job from the grid.
    * 
-   * @return This job's current status.
+   * @param monitor Use to monitor the progress. May be <code>null</code>.
+   * @throws ProblemException if an error occurs while deleting the job.
    */
-  public IGridJobStatus getJobStatus();
-  
+  public void deleteJob( IProgressMonitor monitor ) throws ProblemException;
 
   /**
-   * Update job status. implementation of this method should
-   * ask middleware for the fresh job status
-   * @param progressMonitor may be <code>null</code>
+   * Gets the current status of this job, without contacting the services.
    * 
+   * @return This job's latest known status.
+   */
+  public IGridJobStatus getJobStatus();
+
+  /**
+   * Updates the job status. The implementation of this method should
+   * ask the middleware for the up-to-date job status.
+   * 
+   * @param monitor Use to monitor the progress. May be <code>null</code>.
    * @return This job's current status.
    */
-  public IGridJobStatus updateJobStatus( IProgressMonitor progressMonitor );
+  public IGridJobStatus updateJobStatus( IProgressMonitor monitor );
   
   /**
-   * Get the unique id of this job. This id may be used to query
-   * job information.
+   * Gets the unique id of this job. This id may be used to query
+   * for job information.
    * 
    * @return The unique id of this job.
    */
   public IGridJobID getID();
 
   /**
-   * Get the job description used to create the job.
+   * Gets the job name.
    * 
-   * @return The unique id of this job.
+   * @return The name of this job without additional decorations,
+   *         file extensions, etc.
+   */
+  public String getJobName();
+
+  /**
+   * Gets the job description used to create the job.
+   * 
+   * @return The job description used to create this job.
    */
   public IGridJobDescription getJobDescription();
 
   /**
-   * Returns the date of submission. 
+   * Gets the date and time of submission. 
    * 
-   * @return time of last update
+   * @return A <code>Date</code> object with the submission time.
    */
   public Date getSubmissionTime();
-  
-  /**
-   * @return name of job without additional decorations, file extensions etc
-   */
-  public String getJobName();
-  
-  /**
-   * Deletes job from the grid
-   * @param monitor 
-   * @throws ProblemException
-   */
-  public void deleteJob( IProgressMonitor monitor ) throws ProblemException;
+
 }
