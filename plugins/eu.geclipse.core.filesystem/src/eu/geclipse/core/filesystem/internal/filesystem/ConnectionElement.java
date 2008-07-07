@@ -60,6 +60,11 @@ public class ConnectionElement
   private static Hashtable< Class< ? extends IGridElement >, List< IGridElementCreator > > adapters;
   
   /**
+   * UID used for the IMountable implementation.
+   */
+  private static String MOUNT_UID = Messages.getString("ConnectionElement.mount_uid"); //$NON-NLS-1$
+
+  /**
    * The corresponding resource.
    */
   private IResource resource;
@@ -174,6 +179,32 @@ public class ConnectionElement
       error = this.fetchError.getLocalizedMessage();
     }
     return error;
+  }
+  
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IMountable#getMountPoint(eu.geclipse.core.model.IMountable.MountPointID)
+   */
+  public MountPoint getMountPoint( final MountPointID mountID ) {
+    
+    MountPoint result = null;
+    
+    if ( MOUNT_UID.equals( mountID.getUID() ) ) {
+      result = new MountPoint( getName(), getURI() );
+    }
+    
+    return result;
+    
+  }
+
+  /* (non-Javadoc)
+   * @see eu.geclipse.core.model.IMountable#getMountPointIDs()
+   */
+  public MountPointID[] getMountPointIDs() {
+    MountPointID[] result = null;
+    if ( isFolder() ) {
+      result = new MountPointID[] { new MountPointID( MOUNT_UID, getURI().getScheme() ) };  
+    }
+    return result;
   }
 
   /*
@@ -294,7 +325,7 @@ public class ConnectionElement
       
       // Step 3: Refresh again
       SubMonitor ssMonitor = sMonitor.newChild( 10 );
-      ssMonitor.subTask( "Refreshing..." );
+      ssMonitor.subTask( Messages.getString("ConnectionElement.task_refreshing") ); //$NON-NLS-1$
       fileStore.setExternalMonitor( ssMonitor );
       res.refreshLocal( IResource.DEPTH_ONE, ssMonitor );
       result = Status.OK_STATUS;
@@ -424,5 +455,5 @@ public class ConnectionElement
     return result;
 
   }
-  
+
 }
