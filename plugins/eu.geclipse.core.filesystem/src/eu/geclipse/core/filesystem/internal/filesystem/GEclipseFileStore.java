@@ -116,15 +116,16 @@ public class GEclipseFileStore
    * 
    * @param parent The parent store of this file store.
    * @param slave The slave store for which to create the master store.
+   * @param name 
    */
   private GEclipseFileStore( final GEclipseFileStore parent,
-                             final IFileStore slave ) {
+                             final IFileStore slave, final String name ) {
     Assert.isNotNull( parent );
     Assert.isNotNull( slave );
     this.fileSystem = ( GEclipseFileSystem ) parent.getFileSystem();
     this.parent = parent;
     this.slave = slave;
-    this.fileInfo = slave.fetchInfo();
+    this.fileInfo = new FileInfo( name );
     clearActive( FETCH_CHILDREN_ACTIVE_POLICY | FETCH_INFO_ACTIVE_POLICY );
   }
   /**
@@ -322,7 +323,7 @@ public class GEclipseFileStore
       FileStoreRegistry registry = FileStoreRegistry.getInstance();
       result = registry.getStore( child );
       if ( result == null ) {
-        result = new GEclipseFileStore( this, child );
+        result = new GEclipseFileStore( this, child, name );
         registry.putStore( result );
       }
     }
@@ -391,7 +392,7 @@ public class GEclipseFileStore
       FileStoreRegistry registry = FileStoreRegistry.getInstance();
       result = registry.getStore( dir );
       if ( result == null ) {
-        result = new GEclipseFileStore( this, dir );
+        result = new GEclipseFileStore( this, dir, dir.getName() );
         registry.putStore( result );
       }
     }
