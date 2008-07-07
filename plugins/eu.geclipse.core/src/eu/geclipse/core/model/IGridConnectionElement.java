@@ -25,7 +25,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 /**
  * Base interface for elements of a file system mount.
  */
-public interface IGridConnectionElement extends IGridContainer {
+public interface IGridConnectionElement
+    extends IGridContainer, IMountable {
   
   /**
    * Determine if an adapter exists for adapting this connection element

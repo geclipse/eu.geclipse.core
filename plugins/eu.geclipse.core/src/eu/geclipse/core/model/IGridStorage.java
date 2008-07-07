@@ -21,7 +21,8 @@ import java.net.URI;
  * An {@link IGridResource} that represents storage elements in the
  * Grid.
  */
-public interface IGridStorage extends IGridResource, ITestable {
+public interface IGridStorage
+    extends IGridResource, IMountable, ITestable {
   
   /**
    * Get tokens that offer ways to access this storage in the form of
