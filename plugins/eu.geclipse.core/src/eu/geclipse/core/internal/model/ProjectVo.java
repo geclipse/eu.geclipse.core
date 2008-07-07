@@ -109,13 +109,31 @@ public class ProjectVo
 
   public IGridComputing[] getComputing( final IProgressMonitor monitor )
       throws GridModelException {
-    IGridComputing[] computing = this.vo.getComputing( monitor );
-    if ( computing != null ) {
-      for ( int i = 0 ; i < computing.length ; i++ ) {
-        computing[ i ] = new ComputingWrapper( this, computing[ i ] );
+    
+    IGridComputing[] result = null;
+    
+    if ( this.vo != null ) {
+      
+      IGridInfoService infoService = this.vo.getInfoService();
+      IGridResource[] resources = infoService.fetchResources(
+          this,
+          this.vo,
+          GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_COMPUTING ),
+          false,
+          IGridComputing.class,
+          monitor );
+      
+      if ( resources != null ) {
+        result = new IGridComputing[ resources.length ];
+        for ( int i = 0 ; i < resources.length ; i++ ) {
+          result[ i ] = ( IGridComputing ) resources[ i ];
+        }
       }
+      
     }
-    return computing;
+    
+    return result;
+    
   }
 
   public IFileStore getFileStore() {
@@ -150,24 +168,60 @@ public class ProjectVo
   
   public IGridService[] getServices( final IProgressMonitor monitor )
       throws GridModelException {
-    IGridService[] services = this.vo.getServices( monitor );
-    if ( services != null ) {
-      for ( int i = 0 ; i < services.length ; i++ ) {
-        services[ i ] = new ServiceWrapper( this, services[ i ] );
+    
+    IGridService[] result = null;
+    
+    if ( this.vo != null ) {
+      
+      IGridInfoService infoService = this.vo.getInfoService();
+      IGridResource[] resources = infoService.fetchResources(
+          this,
+          this.vo,
+          GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_SERVICES ),
+          false,
+          IGridService.class,
+          monitor );
+      
+      if ( resources != null ) {
+        result = new IGridService[ resources.length ];
+        for ( int i = 0 ; i < resources.length ; i++ ) {
+          result[ i ] = ( IGridService ) resources[ i ];
+        }
       }
+      
     }
-    return services;
+    
+    return result;
+    
   }
   
   public IGridStorage[] getStorage( final IProgressMonitor monitor )
       throws GridModelException {
-    IGridStorage[] storage = this.vo.getStorage( monitor );
-    if ( storage != null ) {
-      for ( int i = 0 ; i < storage.length ; i++ ) {
-        storage[ i ] = new StorageWrapper( this, storage[ i ] );
+    
+    IGridStorage[] result = null;
+    
+    if ( this.vo != null ) {
+      
+      IGridInfoService infoService = this.vo.getInfoService();
+      IGridResource[] resources = infoService.fetchResources(
+          this,
+          this.vo,
+          GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_STORAGE ),
+          false,
+          IGridStorage.class,
+          monitor );
+      
+      if ( resources != null ) {
+        result = new IGridStorage[ resources.length ];
+        for ( int i = 0 ; i < resources.length ; i++ ) {
+          result[ i ] = ( IGridStorage ) resources[ i ];
+        }
       }
+      
     }
-    return storage;
+    
+    return result;
+    
   }
   
   public IGridResourceCategory[] getSupportedResources() {
