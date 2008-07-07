@@ -42,12 +42,6 @@ import eu.geclipse.ui.dialogs.ProblemDialog;
  */
 public class CheckSystemTimeSolution implements ISolver {
   
-  /* (non-Javadoc)
-   * @see eu.geclipse.core.reporting.ISolution#getDescription()
-   */
-  public String getDescription() {
-    return Messages.getString("CheckSystemTimeSolution.description"); //$NON-NLS-1$
-  }
   
   /* (non-Javadoc)
    * @see eu.geclipse.core.reporting.ISolver#solve()
@@ -83,7 +77,7 @@ public class CheckSystemTimeSolution implements ISolver {
     } catch ( InterruptedException ie ) {
       // The user interrupted the operation
       timeCheckValid = false;
-    } catch( InvocationTargetException ite ) {
+    } catch ( InvocationTargetException ite ) {
       // The system time check failed, inform the user
       Throwable cause = ite.getCause();
       if ( cause instanceof ProblemException ) {
@@ -124,20 +118,6 @@ public class CheckSystemTimeSolution implements ISolver {
     } else {
       MessageDialog.openError( parent, title, message );
     }
-  }
-  
-  /* (non-Javadoc)
-   * @see eu.geclipse.core.reporting.ISolution#getID()
-   */
-  public String getID() {
-    return null;
-  }
-  
-  /* (non-Javadoc)
-   * @see eu.geclipse.core.reporting.ISolution#isActive()
-   */
-  public boolean isActive() {
-    return true;
   }
 
 }
