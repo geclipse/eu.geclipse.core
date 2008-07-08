@@ -69,7 +69,7 @@ public interface IGridJobService extends IGridService {
    * @param monitor Use to monitor progress. May be <code>null</code>.
    * @throws ProblemException if deleting the job failed.
    */
-  public void deleteJob( final IGridJob job, IProgressMonitor monitor )
+  public void deleteJob( final IGridJobID id, IProgressMonitor monitor )
     throws ProblemException;
 
 }

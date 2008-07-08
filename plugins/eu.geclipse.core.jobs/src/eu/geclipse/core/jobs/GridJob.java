@@ -917,7 +917,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
       IGridJobService service = getJobService();
       
       if( service != null ) {
-        service.deleteJob( this, monitor );
+        service.deleteJob( this.getID(), monitor );
       }
     } finally {
       monitor.done();

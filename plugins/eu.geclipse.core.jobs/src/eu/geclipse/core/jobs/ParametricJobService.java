@@ -83,7 +83,7 @@ public class ParametricJobService implements IGridJobService {
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridJobService#deleteJob(eu.geclipse.core.model.IGridJob, org.eclipse.core.runtime.IProgressMonitor)
    */
-  public void deleteJob( final IGridJob dummyJob, final IProgressMonitor monitor )
+  public void deleteJob( final IGridJobID dummyJobId, final IProgressMonitor monitor )
     throws ProblemException
   {
     SubMonitor subMonitor = SubMonitor.convert( monitor );
