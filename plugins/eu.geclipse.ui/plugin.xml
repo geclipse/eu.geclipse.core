@@ -11,6 +11,12 @@
    <extension-point id="wizardExtension" name="Wizard Extension" schema="schema/wizardExtension.exsd"/>
    <extension-point id="deploymentWizard" name="eu.geclipse.ui.deploymentWizard" schema="schema/deploymentWizard.exsd"/>
    <extension
+         point="org.eclipse.core.runtime.preferences">
+      <initializer
+            class="eu.geclipse.ui.visualisation.preferences.PreferenceInitializer">
+      </initializer>
+   </extension>
+   <extension
          point="org.eclipse.ui.decorators">
       <decorator
             adaptable="false"
@@ -353,31 +359,19 @@
    <extension
          point="eu.geclipse.ui.simpleTestUI">
       <factory
+            class="eu.geclipse.ui.simpleTest.DNSLookUpUIFactory"
+            id="eu.geclipse.ui.simpleTest.dnsLookUpUIFactory"
+            name="DNS LookUp UI Factory">
+      </factory>
+      <factory
             class="eu.geclipse.ui.simpleTest.PingTestUIFactory"
             id="eu.geclipse.ui.simpleTest.pingTestUIFactory"
             name="Ping Test UI Factory">
       </factory>
-   </extension>
-   <extension
-         point="eu.geclipse.ui.simpleTestUI">
       <factory
             class="eu.geclipse.ui.simpleTest.PortScanUIFactory"
             id="eu.geclipse.ui.simpleTest.PortScanUIFactory"
             name="Port Scan UI Factory">
       </factory>
-   </extension>
-   <extension
-         point="eu.geclipse.ui.simpleTestUI">
-      <factory
-            class="eu.geclipse.ui.simpleTest.DNSLookUpUIFactory"
-            id="eu.geclipse.ui.simpleTest.dnsLookUpUIFactory"
-            name="DNS LookUp UI Factory">
-      </factory>
-   </extension>
-   <extension
-         point="org.eclipse.core.runtime.preferences">
-      <initializer
-            class="eu.geclipse.ui.visualisation.preferences.PreferenceInitializer">
-      </initializer>
    </extension>
 </plugin>
