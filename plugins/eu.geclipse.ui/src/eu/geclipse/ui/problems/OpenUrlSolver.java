@@ -11,6 +11,7 @@
  *
  * Contributor(s):
  *    Mathias Stuempert
+ *    Ariel Garcia      - extended for multiple URLs
  *****************************************************************************/
 
 package eu.geclipse.ui.problems;
@@ -37,21 +38,35 @@ public class OpenUrlSolver implements IConfigurableSolver {
   
   private static final String URL_ATTRIBUTE = "url"; //$NON-NLS-1$
   
-  private String url;
+  private static final String MULTIPLE_URL_SEPARATOR = ","; //$NON-NLS-1$
+  
+  private static final int BROWSER_OPEN_DELAY = 3000;
+
+  private String[] urls;
 
   public void solve() throws InvocationTargetException {
     try {
-      URL u
-        = new URL( this.url );
       IWorkbenchBrowserSupport browserSupport
         = PlatformUI.getWorkbench().getBrowserSupport();
       IWebBrowser browser
         = browserSupport.createBrowser( IWorkbenchBrowserSupport.AS_EXTERNAL, BROWSER_ID, null, null );
-      browser.openURL( u );
+      
+      for ( String url : this.urls ) {
+        URL u = new URL( url );
+        browser.openURL( u );
+        /*
+         * Firefox (at least v2.x under Linux) doesn't open all the
+         * URLs if the requests come with a short delay, several seconds
+         * seem to be needed!
+         */
+        Thread.sleep( BROWSER_OPEN_DELAY );
+      }
     } catch ( MalformedURLException urlExc ) {
       throw new InvocationTargetException( urlExc );
     } catch ( PartInitException piExc ) {
       throw new InvocationTargetException( piExc );
+    } catch ( InterruptedException e ) {
+      // Nothing to do
     }
   }
 
@@ -59,7 +74,11 @@ public class OpenUrlSolver implements IConfigurableSolver {
                                      final String propertyName,
                                      final Object data)
       throws CoreException {
-    this.url = config.getAttribute( URL_ATTRIBUTE );
+    
+    String addresses = config.getAttribute( URL_ATTRIBUTE );
+    if ( addresses != null ) {
+      this.urls = addresses.split( MULTIPLE_URL_SEPARATOR );
+    }
   }
 
 }

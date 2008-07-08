@@ -199,14 +199,14 @@
    <element name="urlTag">
       <annotation>
          <documentation>
-            Tag denoting an URL solution. This tag is used for a solution that should open a specific web page in the web browser.
+            Tag denoting an URL solution. This tag is used for a solution that should open a specific web page in the web browser. Multiple URLs are accepted separated by commas, openening all the given URLs at the same time.
          </documentation>
       </annotation>
       <complexType>
          <attribute name="url" type="string" use="required">
             <annotation>
                <documentation>
-                  
+                  The URL or URLs to open. Separate multiple URLs with a comma and no spaces, e.g. &quot;http://url.net/,http://url.org&quot;.
                </documentation>
             </annotation>
          </attribute>
