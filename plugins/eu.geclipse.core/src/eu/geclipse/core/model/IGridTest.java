@@ -172,4 +172,7 @@ public interface IGridTest extends IGridElement, IManageable {
    * @return input stream for result's data
    */
   public InputStream getInputStreamForResult( final IGridTestResult result );
+  
+  public int getColumnWidth( final String singleTestName );
+
 }
