@@ -253,6 +253,10 @@ public class GEclipseFileStore
     getSlave().delete( options, monitor( monitor ) );
     FileStoreRegistry registry = FileStoreRegistry.getInstance();
     registry.removeStore( this );
+    
+    if( this.parent != null ) {
+      this.parent.setActive( FETCH_CHILDREN_ACTIVE_POLICY );
+    }
   }
   
   /**
