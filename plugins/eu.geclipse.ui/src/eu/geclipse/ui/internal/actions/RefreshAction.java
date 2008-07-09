@@ -20,13 +20,19 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.WorkspaceJob;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.IStatus;
+import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.actions.BaseSelectionListenerAction;
 
-import eu.geclipse.core.model.IGridConnectionElement;
+import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 
 /**
@@ -43,6 +49,8 @@ public class RefreshAction extends BaseSelectionListenerAction {
    */
   private org.eclipse.ui.actions.RefreshAction resourcesRefresh;
   
+  private List< IGridElement > virtualElements;
+  
   /**
    * Construct a new refresh action.
    * 
@@ -58,11 +66,15 @@ public class RefreshAction extends BaseSelectionListenerAction {
    */
   @Override
   public void run() {
+    
     if ( this.resourcesRefresh.isEnabled() ) {
-      IStructuredSelection selection = getStructuredSelection();
-      activateConnections( selection );
       this.resourcesRefresh.run();
     }
+    
+    if ( ! this.virtualElements.isEmpty() ) {
+      refreshElements( this.virtualElements );
+    }
+    
   }
   
   /* (non-Javadoc)
@@ -73,15 +85,70 @@ public class RefreshAction extends BaseSelectionListenerAction {
     
     boolean result = false;
     
-    IStructuredSelection resources = filterResources( selection );
-    IStructuredSelection virtualElements = filterVirtualElements( selection );
+    List< IResource > resources = new ArrayList< IResource >();
+    this.virtualElements = new ArrayList< IGridElement >();
+    result = filterSelection( selection, resources, this.virtualElements );
     
-    if ( resources.size() + virtualElements.size() == selection.size() ) {
-      this.resourcesRefresh.selectionChanged( resources );
-      result = this.resourcesRefresh.isEnabled();
+    if ( result ) {
+      
+      if ( ! resources.isEmpty() || ( resources.isEmpty() && this.virtualElements.isEmpty() ) ) {
+        this.resourcesRefresh.selectionChanged( new StructuredSelection( resources ) );
+        result = this.resourcesRefresh.isEnabled();
+      }
+      
+      result |= resources.isEmpty() && ! this.virtualElements.isEmpty();
+      
     }
     
     return result;
+    
+  }
+  
+  private boolean filterSelection( final IStructuredSelection selection,
+                                   final List< IResource > resources,
+                                   final List< IGridElement > elements ) {
+    
+    Iterator< ? > iter = selection.iterator();
+    
+    while ( iter.hasNext() ) {
+      Object o = iter.next();
+      IResource resource = getResource( o );
+      if ( resource != null ) {
+        resources.add( resource );
+      } else if ( o instanceof IGridElement ) {
+        elements.add( ( IGridElement ) o );
+      }
+    }
+    
+    return ( resources.size() + elements.size() ) == selection.size();
+    
+  }
+  
+  private void refreshElements( final List< IGridElement > elements ) {
+    
+    WorkspaceJob job = new WorkspaceJob( "Element Refresh" ) {
+     
+      @Override
+      public IStatus runInWorkspace( final IProgressMonitor monitor )
+          throws CoreException {
+        
+        SubMonitor sMonitor = SubMonitor.convert( monitor, "Refreshing virtual grid elements", elements.size() );
+          
+        for ( IGridElement element : elements ) {
+          if ( element instanceof IGridContainer ) {
+            IGridContainer container = ( IGridContainer ) element;
+            container.setDirty();
+            container.refresh( sMonitor.newChild( 1 ) );
+          }
+        }
+        
+        return Status.OK_STATUS;
+        
+      }
+      
+    };
+    
+    job.schedule();
     
   }
   
@@ -91,7 +158,7 @@ public class RefreshAction extends BaseSelectionListenerAction {
    * 
    * @param selection The selection to be searched for connection elements.
    */
-  private void activateConnections( final IStructuredSelection selection ) {
+  /*private void activateConnections( final IStructuredSelection selection ) {
     Iterator< ? > iter = selection.iterator();
     while ( iter.hasNext() ) {
       Object obj = iter.next();
@@ -101,7 +168,7 @@ public class RefreshAction extends BaseSelectionListenerAction {
         connection.setDirty();
       }
     }
-  }
+  }*/
   
   /**
    * Get all resources in the specified selection.
@@ -109,7 +176,7 @@ public class RefreshAction extends BaseSelectionListenerAction {
    * @param selection The selection to be searched for resources.
    * @return A selection containing the selected resources.
    */
-  private IStructuredSelection filterResources( final IStructuredSelection selection ) {
+  /*private IStructuredSelection filterResources( final IStructuredSelection selection ) {
     List< IResource > resources = new ArrayList< IResource >();
     Iterator< ? > iter = selection.iterator();
     while ( iter.hasNext() ) {
@@ -120,7 +187,7 @@ public class RefreshAction extends BaseSelectionListenerAction {
       }
     }
     return new StructuredSelection( resources );
-  }
+  }*/
   
   /**
    * Get all virtual elements in the specified selection.
@@ -128,7 +195,7 @@ public class RefreshAction extends BaseSelectionListenerAction {
    * @param selection The selection to be searched for virtual elements.
    * @return A selection containing the selected virtual elements.
    */
-  private IStructuredSelection filterVirtualElements( final IStructuredSelection selection ) {
+  /*private IStructuredSelection filterVirtualElements( final IStructuredSelection selection ) {
     List< IGridElement > elements = new ArrayList< IGridElement >();
     Iterator< ? > iter = selection.iterator();
     while ( iter.hasNext() ) {
@@ -141,7 +208,7 @@ public class RefreshAction extends BaseSelectionListenerAction {
       }
     }
     return new StructuredSelection( elements );
-  }
+  }*/
   
   /**
    * Try to obtain an {@link IResource} from the specified object.
