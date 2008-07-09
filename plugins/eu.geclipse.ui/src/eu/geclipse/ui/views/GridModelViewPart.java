@@ -51,6 +51,7 @@ import eu.geclipse.ui.decorators.GridProjectFolderDecorator;
 import eu.geclipse.ui.internal.actions.ActionGroupManager;
 import eu.geclipse.ui.internal.actions.CommonActions;
 import eu.geclipse.ui.internal.actions.FileActions;
+import eu.geclipse.ui.internal.actions.MountActions;
 import eu.geclipse.ui.internal.actions.OpenActions;
 import eu.geclipse.ui.internal.actions.TreeViewerActions;
 import eu.geclipse.ui.internal.transfer.SelectionTransferDragAdapter;
@@ -233,6 +234,9 @@ public abstract class GridModelViewPart
     FileActions fileActions = new FileActions( this );
     groups.addGroup( fileActions );
     
+    MountActions mountActions = new MountActions( getSite() );
+    groups.addGroup( mountActions );
+     
     CommonActions commonActions = new CommonActions( this );
     groups.addGroup( commonActions );
     

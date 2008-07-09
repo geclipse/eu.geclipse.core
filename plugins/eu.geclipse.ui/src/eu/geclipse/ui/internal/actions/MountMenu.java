@@ -1,6 +1,7 @@
 package eu.geclipse.ui.internal.actions;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import org.eclipse.jface.action.ActionContributionItem;
@@ -10,6 +11,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.actions.CompoundContributionItem;
 
@@ -23,6 +25,8 @@ public class MountMenu
   
   private Shell shell;
   
+  private boolean mountAs;
+  
   /**
    * The elements to be mounted.
    */
@@ -32,10 +36,11 @@ public class MountMenu
   private List< MountPointID > mergedIDs
     = new ArrayList< MountPointID >();
   
-  public MountMenu( final Shell shell ) {
-    super( "eu.geclipse.ui.actions.newmount" );
+  public MountMenu( final Shell shell, final boolean mountAs ) {
+    super( "eu.geclipse.ui.actions.newmount" ); //$NON-NLS-1$
     this.shell = shell;
-    checkVisible();
+    this.mountAs = mountAs;
+    checkVisible( StructuredSelection.EMPTY, this.mergedIDs );
   }
 
   @Override
@@ -56,12 +61,15 @@ public class MountMenu
     this.mountables.clear();
     this.mergedIDs.clear();
     ISelection selection = event.getSelection();
+    IStructuredSelection sSelection = StructuredSelection.EMPTY;
     
     if ( selection instanceof IStructuredSelection ) {
     
-      List< ? > selectionList = ( ( IStructuredSelection ) selection ).toList();
+      sSelection = ( IStructuredSelection ) selection;
+      Iterator< ? > iter = sSelection.iterator();
       
-      for ( Object obj : selectionList ) {
+      while ( iter.hasNext() ) {
+        Object obj = iter.next();
         if ( obj instanceof IMountable ) {
           IMountable mount = ( IMountable ) obj;
           this.mountables.add( mount );
@@ -72,7 +80,7 @@ public class MountMenu
     
     this.mergedIDs = getMergedIDs( this.mountables );
     
-    checkVisible();
+    checkVisible( sSelection, this.mergedIDs );
     
   }
   
@@ -131,7 +139,7 @@ public class MountMenu
   protected IAction getAction( final MountPointID mountID ) {
     IMountable[] srcArray
       = this.mountables.toArray( new IMountable[ this.mountables.size() ] );
-    MountAction action = new MountAction( this.shell, srcArray, mountID );
+    MountAction action = new MountAction( this.shell, srcArray, mountID, this.mountAs );
     return action;
   }
   
@@ -139,8 +147,11 @@ public class MountMenu
    * Test if this menu should be visible and set the visibility property
    * accordingly.
    */
-  private void checkVisible() {
-    setVisible( ! this.mergedIDs.isEmpty() );
+  private void checkVisible( final IStructuredSelection selection,
+                             final List< MountPointID > ids ) {
+    int selCount = selection.size();
+    int idCount = ids.size();
+    setVisible( ( idCount > 0 ) && ( this.mountAs && ( selCount == 1 ) ) || ( ! this.mountAs && ( selCount > 0 ) ) );
   }
   
   private boolean isSupported( final MountPointID mountID ) {

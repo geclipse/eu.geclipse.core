@@ -28,6 +28,7 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementManager;
 import eu.geclipse.ui.internal.actions.ActionGroupManager;
 import eu.geclipse.ui.internal.actions.ConnectionViewActions;
+import eu.geclipse.ui.internal.actions.MountActions;
 import eu.geclipse.ui.internal.actions.NewWizardActions;
 import eu.geclipse.ui.providers.ConfigurableContentProvider;
 import eu.geclipse.ui.providers.ConnectionViewContentProvider;
@@ -46,7 +47,7 @@ public class GridConnectionView extends ElementManagerViewPart {
     
     ConnectionViewActions cActions = new ConnectionViewActions( site );
     groups.addGroup( cActions );
-     
+    
     super.contributeAdditionalActions( groups );
     
   }

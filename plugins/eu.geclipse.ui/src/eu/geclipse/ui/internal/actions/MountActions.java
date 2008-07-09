@@ -36,7 +36,9 @@ public class MountActions extends ActionGroup {
   /**
    * The mount action menu.
    */
-  private MountMenu newMountMenu;
+  private MountMenu mountMenu;
+  
+  private MountMenu mountAsMenu;
   
   /**
    * Construct a new mount action group for the specified workbench part site.
@@ -51,9 +53,11 @@ public class MountActions extends ActionGroup {
     ISelectionProvider selectionProvider
       = this.site.getSelectionProvider();
     
-    this.newMountMenu = new MountMenu( shell );
+    this.mountMenu = new MountMenu( shell, false );
+    this.mountAsMenu = new MountMenu( shell, true );
     
-    selectionProvider.addSelectionChangedListener( this.newMountMenu );
+    selectionProvider.addSelectionChangedListener( this.mountMenu );
+    selectionProvider.addSelectionChangedListener( this.mountAsMenu );
     
   }
   
@@ -64,8 +68,10 @@ public class MountActions extends ActionGroup {
   public void dispose() {
     ISelectionProvider selectionProvider
       = this.site.getSelectionProvider();
-    selectionProvider.removeSelectionChangedListener( this.newMountMenu );
-    this.newMountMenu.dispose();
+    selectionProvider.removeSelectionChangedListener( this.mountMenu );
+    selectionProvider.removeSelectionChangedListener( this.mountAsMenu );
+    this.mountMenu.dispose();
+    this.mountAsMenu.dispose();
   }
   
   /* (non-Javadoc)
@@ -73,12 +79,21 @@ public class MountActions extends ActionGroup {
    */
   @Override
   public void fillContextMenu( final IMenuManager menu ) {
-    if ( this.newMountMenu.isVisible() ) {
+    
+    if ( this.mountMenu.isVisible() ) {
       IMenuManager subMenu = new MenuManager( Messages.getString("MountActions.mount_actions_text") ); //$NON-NLS-1$
       menu.appendToGroup( IContextMenuConstants.GROUP_OPEN, subMenu );
-      subMenu.add( this.newMountMenu );
+      subMenu.add( this.mountMenu );
     }
+    
+    if ( this.mountAsMenu.isVisible() ) {
+      IMenuManager subMenu = new MenuManager( Messages.getString("MountActions.mount_as_actions_text") ); //$NON-NLS-1$
+      menu.appendToGroup( IContextMenuConstants.GROUP_OPEN, subMenu );
+      subMenu.add( this.mountAsMenu );
+    }
+    
     super.fillContextMenu( menu );
+    
   }
   
 }

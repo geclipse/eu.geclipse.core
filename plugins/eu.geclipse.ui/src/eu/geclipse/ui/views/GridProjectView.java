@@ -127,9 +127,6 @@ public class GridProjectView
     TransformActions transformActions = new TransformActions( site );
     groups.addGroup( transformActions );
     
-    MountActions mountActions = new MountActions( site );
-    groups.addGroup( mountActions );
-    
     //DeployActions deployActions = new DeployActions( site );
     //groups.addGroup(  deployActions );
     

@@ -33,14 +33,17 @@ public class ConnectionNameWizardPage extends WizardPage {
   
   private Text nameText;
   
-  public ConnectionNameWizardPage() {
+  private String initialName;
+  
+  public ConnectionNameWizardPage( final String initialName ) {
     super( Messages.getString("ConnectionNameWizardPage.name"), //$NON-NLS-1$
            Messages.getString("ConnectionNameWizardPage.title"), //$NON-NLS-1$
            null
     );
+    this.initialName = initialName;
     setDescription( Messages.getString("ConnectionNameWizardPage.description") ); //$NON-NLS-1$
   }
-
+  
   public void createControl( final Composite parent ) {
     
     GridData gData;
@@ -65,6 +68,10 @@ public class ConnectionNameWizardPage extends WizardPage {
         validatePage();
       }
     } );
+    
+    if ( this.initialName != null ) {
+      this.nameText.setText( this.initialName );
+    }
     
     setControl( mainComp );
     validatePage();

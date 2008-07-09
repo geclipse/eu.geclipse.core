@@ -51,6 +51,7 @@ import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.internal.actions.ActionGroupManager;
 import eu.geclipse.ui.internal.actions.FilterActions;
 import eu.geclipse.ui.internal.actions.JobViewActions;
+import eu.geclipse.ui.internal.actions.MountActions;
 import eu.geclipse.ui.providers.JobViewLabelProvider;
 import eu.geclipse.ui.views.filters.GridFilterConfigurationsManager;
 import eu.geclipse.ui.views.filters.IFilterConfigurationListener;
@@ -167,7 +168,6 @@ public class GridJobView extends ElementManagerViewPart
     groups.addGroup( this.jobActions );
     groups.addGroup( new FilterActions( getSite(),
                                         this.filterConfigurationsManager ) );
-        
     super.contributeAdditionalActions( groups );
   }
 

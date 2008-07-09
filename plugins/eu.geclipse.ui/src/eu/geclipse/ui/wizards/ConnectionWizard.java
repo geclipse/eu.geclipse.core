@@ -18,14 +18,21 @@ package eu.geclipse.ui.wizards;
 import java.net.URI;
 import java.net.URL;
 
+import org.eclipse.core.filesystem.EFS;
+import org.eclipse.core.filesystem.IFileInfo;
+import org.eclipse.core.filesystem.IFileStore;
+import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.IWizardContainer;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
@@ -56,6 +63,10 @@ public class ConnectionWizard
   private boolean createGlobalConnection;
   
   private ISelection initialSelection;
+  
+  private URI initialURI;
+  
+  private String initialName;
     
   private ConnectionDefinitionWizardPage definitionPage;
   
@@ -63,7 +74,12 @@ public class ConnectionWizard
    * Create a new connection wizard for local connections.
    */
   public ConnectionWizard() {
-    this( false );
+    this( null, null, false );
+  }
+  
+  public ConnectionWizard( final URI initialURI,
+                           final String initialName ) {
+    this( initialURI, initialName, false );
   }
   
   /**
@@ -73,27 +89,42 @@ public class ConnectionWizard
    * the creation of global connections will be initialized.
    */
   public ConnectionWizard( final boolean createGlobalConnection ) {
+    this( null, null, createGlobalConnection );
+  }
+  
+  public ConnectionWizard( final URI initialURI,
+                           final String initialName,
+                           final boolean createGlobalConnection ) {
     URL imgURL = Activator.getDefault().getBundle().getResource( "icons/wizban/newconn_wiz.gif" ); //$NON-NLS-1$
     setDefaultPageImageDescriptor( ImageDescriptor.createFromURL( imgURL ) );
     setNeedsProgressMonitor( true );
     this.createGlobalConnection = createGlobalConnection;
+    this.initialURI = initialURI;
+    this.initialName = initialName;
   }
   
   @Override
   public void addPages() {
     
+    if ( this.initialSelection == null ) {
+      this.initialSelection = StructuredSelection.EMPTY;
+    }
+    
     if ( this.createGlobalConnection ) {
-      this.firstPage = new ConnectionNameWizardPage();
+      this.firstPage = new ConnectionNameWizardPage( this.initialName );
     } else {
       this.firstPage
         = new ConnectionLocationWizardPage( Messages.getString("ConnectionWizard.location_page_name"), //$NON-NLS-1$
                                             ( IStructuredSelection ) this.initialSelection );
       this.firstPage.setTitle( Messages.getString("ConnectionWizard.location_page_title") ); //$NON-NLS-1$
       this.firstPage.setDescription( Messages.getString("ConnectionWizard.location_page_description") ); //$NON-NLS-1$
+      if ( this.initialName != null ) {
+        ( ( ConnectionLocationWizardPage ) this.firstPage ).setFileName( this.initialName );
+      }
     }
     addPage( this.firstPage );
     
-    this.definitionPage = new ConnectionDefinitionWizardPage();
+    this.definitionPage = new ConnectionDefinitionWizardPage( this.initialURI );
     addPage( this.definitionPage );
     
   }
@@ -104,7 +135,7 @@ public class ConnectionWizard
     IWizardContainer container = getContainer();
     IWizardPage currentPage = container.getCurrentPage();
     
-    return ( currentPage != this.firstPage ) && super.canFinish();
+    return ( ( currentPage != this.firstPage ) || ( this.initialURI != null ) ) && super.canFinish();
     
   }
 
@@ -180,16 +211,27 @@ public class ConnectionWizard
 
       IPath path = page.getContainerFullPath();
       path = path.append( page.getFileName() );
-      IFolder folder = ResourcesPlugin.getWorkspace().getRoot().getFolder( path );
       
       try {
+        
         GEclipseURI geclURI = new GEclipseURI( slaveURI );
-        folder.createLink( geclURI.toMasterURI(), IResource.ALLOW_MISSING_LOCAL, null );
+        URI masterURI = geclURI.toMasterURI();
+        IFileStore fileStore = EFS.getStore( masterURI );
+        IFileInfo fileInfo = fileStore.fetchInfo();
+        
+        if ( fileInfo.isDirectory() ) {
+          IFolder folder = ResourcesPlugin.getWorkspace().getRoot().getFolder( path );
+          folder.createLink( masterURI, IResource.ALLOW_MISSING_LOCAL, null );
+        } else {
+          IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile( path );
+          file.createLink( masterURI, IResource.ALLOW_MISSING_LOCAL, null );
+        }
+
+        result = true;
+        
       } catch ( CoreException cExc ) {
         Activator.logException( cExc );
       }
-      
-      result = ( folder != null ) && folder.exists();
       
     }
     

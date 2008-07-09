@@ -76,7 +76,7 @@ public class ConnectionLocationWizardPage
     
     IGridElement element = null;
     
-    if ( ! this.initialSelection.isEmpty() ) {
+    if ( ( this.initialSelection != null ) && ! this.initialSelection.isEmpty() ) {
       for ( Object o : this.initialSelection.toList() ) {
         if ( o instanceof IGridElement ) {
           IGridProject project = ( ( IGridElement ) o ).getProject();
@@ -90,13 +90,6 @@ public class ConnectionLocationWizardPage
           if ( element == null ) {
             element = mountDir;
           }
-          /*IGridProject project = ( ( IGridElement ) o ).getProject();
-          if ( project != null ) {
-            element = project.findChild( IGridProject.DIR_MOUNTS );
-            if ( element != null ) {
-              break;
-            }
-          }*/
         }
       }
     }

@@ -4,7 +4,11 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.core.filesystem.EFS;
+import org.eclipse.core.filesystem.IFileInfo;
+import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
@@ -17,8 +21,11 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 
+import eu.geclipse.core.filesystem.GEclipseFileSystem;
 import eu.geclipse.core.filesystem.GEclipseURI;
 import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridContainer;
@@ -26,8 +33,9 @@ import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IMountable;
 import eu.geclipse.core.model.IMountable.MountPoint;
 import eu.geclipse.core.model.IMountable.MountPointID;
-import eu.geclipse.ui.dialogs.ProblemDialog;
+import eu.geclipse.ui.dialogs.GridFileDialog;
 import eu.geclipse.ui.internal.Activator;
+import eu.geclipse.ui.wizards.ConnectionWizard;
 
 public class MountAction extends Action {
 
@@ -36,6 +44,8 @@ public class MountAction extends Action {
   private MountPointID mountID;
   
   private Shell shell;
+  
+  private boolean mountAs;
   
   /**
    * Construct a new <code>MountAction</code> for the specified
@@ -47,11 +57,13 @@ public class MountAction extends Action {
    */
   protected MountAction( final Shell shell,
                          final IMountable[] mountables,
-                         final MountPointID mountID ) {
+                         final MountPointID mountID,
+                         final boolean mountAs ) {
     super( mountID.getUID() );
     this.shell = shell;
     this.mountables = mountables;
     this.mountID = mountID;
+    this.mountAs = mountAs;
   }
   
   /* (non-Javadoc)
@@ -137,16 +149,47 @@ public class MountAction extends Action {
     IGridContainer mountFolder = project.getProjectFolder( IGridConnection.class );
     
     if ( mountFolder != null ) {
-      IContainer mountContainer = ( IContainer ) mountFolder.getResource();
+      
       MountPoint mountPoint = mountable.getMountPoint( this.mountID );
+      String mountName = mountPoint.getName();
+      
       if ( mountPoint != null ) {
-        IPath path = new Path( mountPoint.getName() );
-        IFolder folder = mountContainer.getFolder( path );
+        
         URI uri = mountPoint.getURI();
-        GEclipseURI geclURI = new GEclipseURI( uri );
-        URI masterURI = geclURI.toMasterURI();
-        folder.createLink( masterURI, IResource.ALLOW_MISSING_LOCAL, null );
+        
+        if ( this.mountAs ) {
+          ConnectionWizard wizard = new ConnectionWizard( uri, mountName );
+          wizard.init( null, new StructuredSelection( mountFolder.getResource() ) );
+          final WizardDialog dialog = new WizardDialog( this.shell, wizard );
+          this.shell.getDisplay().syncExec( new Runnable() {
+            public void run() {
+              dialog.open();
+            }
+          } );
+        }
+        
+        else {
+        
+          IContainer mountContainer = ( IContainer ) mountFolder.getResource();
+          IPath path = new Path( mountName );
+          
+          GEclipseURI geclURI = new GEclipseURI( uri );
+          URI masterURI = geclURI.toMasterURI();
+          IFileStore fileStore = EFS.getStore( masterURI );
+          IFileInfo fileInfo = fileStore.fetchInfo();
+          
+          if ( fileInfo.isDirectory() ) {
+            IFolder folder = mountContainer.getFolder( path );
+            folder.createLink( masterURI, IResource.ALLOW_MISSING_LOCAL, null );
+          } else {
+            IFile file = mountContainer.getFile( path );
+            file.createLink( masterURI, IResource.ALLOW_MISSING_LOCAL, null );
+          }
+          
+        }
+        
       }
+      
     }
     
   }

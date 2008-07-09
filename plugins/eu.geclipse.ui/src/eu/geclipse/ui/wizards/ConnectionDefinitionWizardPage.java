@@ -28,22 +28,33 @@ import eu.geclipse.ui.widgets.GridConnectionDefinitionComposite;
 public class ConnectionDefinitionWizardPage extends WizardPage {
   
   private GridConnectionDefinitionComposite connectionDefinitionComp;
+  
+  private URI initialURI;
     
-  public ConnectionDefinitionWizardPage() {
+  public ConnectionDefinitionWizardPage( final URI uri ) {
     super( Messages.getString("ConnectionDefinitionWizardPage.name"), //$NON-NLS-1$
            Messages.getString("ConnectionDefinitionWizardPage.title"), //$NON-NLS-1$
            null );
+    this.initialURI = uri;
     setDescription( Messages.getString("ConnectionDefinitionWizardPage.description") ); //$NON-NLS-1$
   }
 
   public void createControl( final Composite parent ) {
+    
     this.connectionDefinitionComp = new GridConnectionDefinitionComposite( parent, SWT.NULL );
+    
+    if ( this.initialURI != null ) {
+      this.connectionDefinitionComp.setURI( this.initialURI );
+    }
+    
     this.connectionDefinitionComp.addModifyListener( new ModifyListener () {
       public void modifyText( final ModifyEvent e ) {
         validatePage();
       }
     } );
+    
     setControl( this.connectionDefinitionComp );
+    
   }
   
   public URI getURI() {
