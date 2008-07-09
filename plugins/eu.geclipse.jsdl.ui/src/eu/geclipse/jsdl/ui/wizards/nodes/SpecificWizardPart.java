@@ -38,8 +38,6 @@ import eu.geclipse.jsdl.ui.wizards.NewJobWizard;
 public class SpecificWizardPart extends Wizard implements IWizardNode {
 
   private IWizardNode nextWizardIner;
-//  private IWizard parentWizard;
-//  private String extensionPointId;
   private boolean isCreated;
   private List<WizardPage> pages;
 
@@ -47,20 +45,17 @@ public class SpecificWizardPart extends Wizard implements IWizardNode {
    * Creates an instance of {@link SpecificWizardPart}
    * 
    * @param nextWizard wizard that will be shown after this wizard (as a
-   *            subwizard of {@link NewJobWizard})
+   *            sub-wizard of {@link NewJobWizard})
    * @param xmlPath path to file containing information of page's
    * @throws SAXException in case of SAX problems
    * @throws ParserConfigurationException in case of bad parser configuration
    * @throws IOException in case of problems with files
    */
-  public SpecificWizardPart( final IWizardNode nextWizard,
-//                             final IWizard parentWizard,
-                             final Path xmlPath )
+  public SpecificWizardPart( final IWizardNode nextWizard, final Path xmlPath )
     throws SAXException, ParserConfigurationException, IOException
   {
     super();
     this.nextWizardIner = nextWizard;
-//    this.parentWizard = parentWizard;
     this.pages = ApplicationSpecificPageFactory.getPagesFromXML( xmlPath,
                                                                  this.nextWizardIner );
     this.addPages();
@@ -69,7 +64,6 @@ public class SpecificWizardPart extends Wizard implements IWizardNode {
 
   @Override
   public boolean performFinish() {
-//    return this.parentWizard.performFinish();
     return true;
   }
 
