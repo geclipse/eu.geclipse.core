@@ -19,6 +19,8 @@ package eu.geclipse.ui.problems;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
@@ -29,6 +31,7 @@ import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 
 import eu.geclipse.core.reporting.IConfigurableSolver;
 
+
 /**
  * Solver for opening the system browser for a specified URL.
  */
@@ -36,13 +39,14 @@ public class OpenUrlSolver implements IConfigurableSolver {
   
   private static final String BROWSER_ID = "URL_SOLUTION_BROWSER_ID"; //$NON-NLS-1$
   
-  private static final String URL_ATTRIBUTE = "url"; //$NON-NLS-1$
+  private static final String URL_SUB_ELEMENT = "url"; //$NON-NLS-1$
   
-  private static final String MULTIPLE_URL_SEPARATOR = ","; //$NON-NLS-1$
+  private static final String URL_ATTRIBUTE = "value"; //$NON-NLS-1$
   
   private static final int BROWSER_OPEN_DELAY = 3000;
 
   private String[] urls;
+
 
   public void solve() throws InvocationTargetException {
     try {
@@ -74,11 +78,18 @@ public class OpenUrlSolver implements IConfigurableSolver {
                                      final String propertyName,
                                      final Object data)
       throws CoreException {
-    
-    String addresses = config.getAttribute( URL_ATTRIBUTE );
-    if ( addresses != null ) {
-      this.urls = addresses.split( MULTIPLE_URL_SEPARATOR );
+
+    List< String > urlsList = new ArrayList< String >( 0 );
+    IConfigurationElement[] subelements = config.getChildren( URL_SUB_ELEMENT );
+
+    for ( IConfigurationElement subelement : subelements ) {
+      String url = subelement.getAttribute( URL_ATTRIBUTE );
+      if ( url != null ) {
+        urlsList.add( url );
+      }
     }
+    
+    this.urls = urlsList.toArray( new String[ 0 ] );  
   }
 
 }

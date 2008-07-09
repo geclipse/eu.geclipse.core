@@ -199,17 +199,13 @@
    <element name="urlTag">
       <annotation>
          <documentation>
-            Tag denoting an URL solution. This tag is used for a solution that should open a specific web page in the web browser. Multiple URLs are accepted separated by commas, openening all the given URLs at the same time.
+            Tag denoting an URL solution. This tag is used for a solution that should open a specific web page in the web browser. Multiple URLs can be opened by using several &apos;url&apos; sub-elements.
          </documentation>
       </annotation>
       <complexType>
-         <attribute name="url" type="string" use="required">
-            <annotation>
-               <documentation>
-                  The URL or URLs to open. Separate multiple URLs with a comma and no spaces, e.g. &quot;http://url.net/,http://url.org&quot;.
-               </documentation>
-            </annotation>
-         </attribute>
+         <sequence>
+            <element ref="url" minOccurs="1" maxOccurs="unbounded"/>
+         </sequence>
       </complexType>
    </element>
 
@@ -241,6 +237,23 @@
             <annotation>
                <documentation>
                   The unique ID of a wizard page that should be opened.
+               </documentation>
+            </annotation>
+         </attribute>
+      </complexType>
+   </element>
+
+   <element name="url">
+      <annotation>
+         <documentation>
+            An element denoting a single webpage to open. Repeat it multiple times to open several URLs at once.
+         </documentation>
+      </annotation>
+      <complexType>
+         <attribute name="value" type="string" use="required">
+            <annotation>
+               <documentation>
+                  The URL to open.
                </documentation>
             </annotation>
          </attribute>
