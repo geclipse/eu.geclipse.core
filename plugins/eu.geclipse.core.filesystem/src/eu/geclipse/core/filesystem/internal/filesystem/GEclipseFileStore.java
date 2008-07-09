@@ -126,7 +126,8 @@ public class GEclipseFileStore
     this.parent = parent;
     this.slave = slave;
     this.fileInfo = new FileInfo( name );
-    clearActive( FETCH_CHILDREN_ACTIVE_POLICY | FETCH_INFO_ACTIVE_POLICY );
+    clearActive( FETCH_CHILDREN_ACTIVE_POLICY );
+    setActive( FETCH_INFO_ACTIVE_POLICY );  // file info is not correct now, so fetch it during next occasion
   }
   /**
    * Create a new master store from the specified slave store. The
