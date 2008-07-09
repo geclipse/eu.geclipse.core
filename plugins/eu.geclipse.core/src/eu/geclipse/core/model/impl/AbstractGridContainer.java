@@ -285,7 +285,7 @@ public abstract class AbstractGridContainer
   public void refresh( final IProgressMonitor monitor )
       throws GridModelException {
 
-    if ( isLocal() ) {
+    if ( ! isVirtual() ) {
       IContainer container = ( IContainer ) getResource();
       try {
         lock();
