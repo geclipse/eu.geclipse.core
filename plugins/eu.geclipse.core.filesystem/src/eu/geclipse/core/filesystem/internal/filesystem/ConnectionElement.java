@@ -201,9 +201,9 @@ public class ConnectionElement
    */
   public MountPointID[] getMountPointIDs() {
     MountPointID[] result = null;
-    if ( isFolder() ) {
+    //if ( isFolder() ) {
       result = new MountPointID[] { new MountPointID( MOUNT_UID, getURI().getScheme() ) };  
-    }
+    //}
     return result;
   }
 
