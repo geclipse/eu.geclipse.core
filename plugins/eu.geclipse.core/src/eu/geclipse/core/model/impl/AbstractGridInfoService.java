@@ -58,50 +58,7 @@ public abstract class AbstractGridInfoService
     
     IGridResource[] result = null;
     
-    IProgressMonitor lMonitor
-      = monitor == null
-      ? new NullProgressMonitor()
-      : monitor;
-      
-    if ( category.equals( GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_APPLICATIONS ) ) ) {
-      if ( parent instanceof IGridComputing ) {
-        result = fetchApplications( parent, vo, ( IGridComputing ) parent, lMonitor );
-      } else {
-        result = fetchApplications( parent, vo, null, lMonitor );
-      }
-    }
-
-    else if ( category.equals( GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_COMPUTING ) ) ) {
-      result = fetchComputing( parent, vo, lMonitor );
-    }
-
-    else if ( category.equals( GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_JOB_SERVICES ) ) ) {
-      IGridResource[] services = fetchServices( parent, vo, lMonitor );
-      // TODO ariel Uh? next line doesn't add anything, right?
-      services = checkThisInfoService( services );
-      result = filterResources( services, IGridJobService.class, false );
-    }
-
-    else if ( category.equals( GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_INFO_SERVICES ) ) ) {
-      IGridResource[] services = fetchServices( parent, vo, lMonitor );
-      services = checkThisInfoService( services );
-      result = filterResources( services, IGridInfoService.class, false );
-    }
-
-    else if ( category.equals( GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_OTHER_SERVICES ) ) ) {
-      IGridResource[] services = fetchServices( parent, vo, lMonitor );
-      services = checkThisInfoService( services );
-      services = filterResources( services, IGridJobService.class, true );
-      result = filterResources( services, IGridInfoService.class, true );
-    }
-
-    else if ( category.equals( GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_STORAGE ) ) ) {
-      result = fetchStorage( parent, vo, monitor );
-    }
     
-    if ( ( result != null ) && ( typeFilter != null ) ) {
-      result = filterResources( result, typeFilter, false );
-    }
     
     return result;
   }

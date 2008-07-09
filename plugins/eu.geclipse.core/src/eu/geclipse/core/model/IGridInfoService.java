@@ -98,7 +98,9 @@ public interface IGridInfoService extends IGridService {
    * @return The available applications for the specified VO and
    * computings. Both Vo and computings are not used for filtering
    * if they are <code>null</code>.
+   * @deprecated method fetchResources should be used instead 
    */
+  @Deprecated
   public IGridApplication[] fetchApplications( final IGridContainer parent,
                                                final IVirtualOrganization vo,
                                                final IGridComputing computing,
@@ -117,7 +119,9 @@ public interface IGridInfoService extends IGridService {
    * @return The available computing elements for the
    * specified VO or all available elements if the specified
    * VO is <code>null</code>.
+   * @deprecated method fetchResources should be used instead 
    */
+  @Deprecated
   public IGridComputing[] fetchComputing( final IGridContainer parent,
                                           final IVirtualOrganization vo,
                                           final IProgressMonitor monitor );
@@ -135,7 +139,9 @@ public interface IGridInfoService extends IGridService {
    * @return The available storage elements for the
    * specified VO or all available elements if the specified
    * VO is <code>null</code>.
+   * @deprecated method fetchResources should be used instead 
    */
+  @Deprecated
   public IGridStorage[] fetchStorage( final IGridContainer parent,
                                       final IVirtualOrganization vo,
                                       final IProgressMonitor monitor );
@@ -153,7 +159,9 @@ public interface IGridInfoService extends IGridService {
    * @return The available services for the
    * specified VO or all available services if the specified
    * VO is <code>null</code>.
+   * @deprecated method fetchResources should be used instead 
    */
+  @Deprecated
   public IGridService[] fetchServices( final IGridContainer parent,
                                        final IVirtualOrganization vo,
                                        final IProgressMonitor monitor );
