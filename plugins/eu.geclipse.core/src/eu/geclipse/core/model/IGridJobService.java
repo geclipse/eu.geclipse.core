@@ -45,11 +45,10 @@ public interface IGridJobService extends IGridService {
    * @param monitor Use to monitor progress. May be <code>null</code>.
    * @return The id of the submitted job.
    * @throws ProblemException if submitting the job failed.
-   * @throws GridModelException 
    */
   public IGridJobID submitJob( final IGridJobDescription description,
                                final IProgressMonitor monitor )
-    throws ProblemException, GridModelException;
+    throws ProblemException;
   
   /**
    * Queries the service about the job's status.

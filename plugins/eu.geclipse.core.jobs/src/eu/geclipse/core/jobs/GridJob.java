@@ -361,19 +361,17 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     
     try {
       IGridJobService service = getJobService();
-      if( service != null
+      if ( service != null
           && this.jobID.getJobID() != GridJobID.UNKNOWN )
       {        
         newJobStatus = service.getJobStatus( this.jobID, subMonitor );
       }
-      if( newJobStatus != null && newJobStatus instanceof GridJobStatus ) {
+      if ( newJobStatus != null && newJobStatus instanceof GridJobStatus ) {
         this.jobStatus = ( GridJobStatus )newJobStatus;
         writeJobStatus( this.jobStatusFile );
       }
-    }catch (GridModelException gmex){
-      Activator.logException( gmex );
     }
-    catch( ProblemException e ) {
+    catch ( ProblemException e ) {
       Activator.logException( e );
     }
     // jobStatus = new GridJobStatus( jobID );
