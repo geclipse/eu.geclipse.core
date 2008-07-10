@@ -456,4 +456,23 @@ public class ConnectionElement
 
   }
 
+  @Override
+  public void refresh( final IProgressMonitor monitor ) throws GridModelException {
+    
+    try {
+      IFileStore fileStore = getConnectionFileStore();
+      
+      if( fileStore instanceof GEclipseFileStore ) {
+        GEclipseFileStore geclFS = ( GEclipseFileStore )fileStore;
+        geclFS.setActive( GEclipseFileStore.FETCH_CHILDREN_ACTIVE_POLICY );      
+      }      
+    } catch( CoreException exception ) {
+      // TODO mariusz Auto-generated catch block
+      exception.printStackTrace();
+    }
+    
+ 
+    super.refresh( monitor );
+  }
+
 }
