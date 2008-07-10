@@ -467,10 +467,8 @@ public class ConnectionElement
         geclFS.setActive( GEclipseFileStore.FETCH_CHILDREN_ACTIVE_POLICY );      
       }      
     } catch( CoreException exception ) {
-      // TODO mariusz Auto-generated catch block
-      exception.printStackTrace();
-    }
-    
+      Activator.logException( exception );
+    }    
  
     super.refresh( monitor );
   }
