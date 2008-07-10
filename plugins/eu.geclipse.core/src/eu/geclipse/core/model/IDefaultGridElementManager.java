@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -14,6 +14,9 @@
  *****************************************************************************/
 
 package eu.geclipse.core.model;
+
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * An {@link IGridElementManager} that supports the management of
@@ -31,11 +34,11 @@ public interface IDefaultGridElementManager
    * If the element is not yet contained in the manager it will be
    * added to the managers children.
    * 
-   * @throws GridModelException If this manager can not handle the
+   * @throws ProblemException If this manager can not handle the
    * specified element.
    * @see IGridElementManager#canManage(IGridElement)
    */
-  public void setDefault( final IGridElement defaultElement ) throws GridModelException;
+  public void setDefault( final IGridElement defaultElement ) throws ProblemException;
   
   /**
    * The current default element of this manager.
