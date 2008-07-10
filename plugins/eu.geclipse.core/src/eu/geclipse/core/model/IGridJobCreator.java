@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -14,6 +14,9 @@
  *    Pawel Wolniewicz
  *****************************************************************************/
 package eu.geclipse.core.model;
+
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * Specialised interface for the creation of jobs for the grid. Offers also the
@@ -31,15 +34,16 @@ public interface IGridJobCreator extends IGridElementCreator {
 
   /**
    * Creates GridJob and add this to GridProjectView. This method is called
-   * after successfull job submission.
+   * after successful job submission.
    * 
-   * @param parent - The porent node in GridProjectView
+   * @param parent - The parent node in GridProjectView
    * @param id - Identifier of job
    * @param jobService 
    * @param jobName - name under which job should be stored in the workspace
    * @return created job
-   * @throws GridModelException
+   * @throws ProblemException
    */
   public IGridJob create( final IGridContainer parent, IGridJobID id, final IGridJobService jobService, final String jobName )
-    throws GridModelException;
+    throws ProblemException;
+
 }
