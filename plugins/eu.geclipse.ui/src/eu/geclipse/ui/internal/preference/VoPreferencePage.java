@@ -60,19 +60,20 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
 import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridModelListener;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.IVoManager;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.comparators.TableColumnComparator;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.internal.wizards.VoImportWizard;
 import eu.geclipse.ui.listeners.TableColumnListener;
 import eu.geclipse.ui.wizards.wizardselection.ExtPointWizardSelectionListPage;
+
 
 public class VoPreferencePage
     extends PreferencePage
@@ -104,14 +105,14 @@ public class VoPreferencePage
               return vo1.getName().compareTo( vo2.getName() );
             }
           } );
-        } catch ( GridModelException gmExc ) {
+        } catch ( ProblemException pExc ) {
           if ( this.shell != null ) {
             ProblemDialog.openProblem( this.shell,
                                        Messages.getString("VoPreferencePage.content_provider_problem"), //$NON-NLS-1$
                                        Messages.getString("VoPreferencePage.query_vo_failed"), //$NON-NLS-1$
-                                       gmExc );
+                                       pExc );
           } else {
-            Activator.logException( gmExc );
+            Activator.logException( pExc );
           }
         }
       }
@@ -322,9 +323,9 @@ public class VoPreferencePage
               VoPreferencePage.this.voViewer.refresh();
               manager.setDefault( vo );
             }
-          } catch ( GridModelException gmExc ) {
+          } catch ( ProblemException pExc ) {
             // TODO mathias
-            Activator.logException( gmExc );
+            Activator.logException( pExc );
           }
         }
       }
@@ -504,7 +505,7 @@ public class VoPreferencePage
         // Collect a list of children of the GridRoot
         try {
           projectElements = GridModel.getRoot().getChildren( null );
-        } catch ( GridModelException gme ) {
+        } catch ( ProblemException pExc ) {
           // GridRoot is not a lazy container
         }
         
@@ -531,12 +532,12 @@ public class VoPreferencePage
           } else {
             try {
               manager.delete( vo );
-            } catch ( GridModelException gmExc ) {
+            } catch ( ProblemException pExc ) {
               ProblemDialog.openProblem( this.getShell(),
                                          Messages.getString("VoPreferencePage.error"), //$NON-NLS-1$
                                          Messages.getString("VoPreferencePage.delete_vo_failed") //$NON-NLS-1$
                                            + " " + vo.getName(), //$NON-NLS-1$
-                                         gmExc );
+                                         pExc );
             }
           }
         }
@@ -598,9 +599,9 @@ public class VoPreferencePage
   public boolean performOk() {
     try {
       GridModel.getVoManager().saveElements();
-    } catch ( GridModelException gmExc ) {
+    } catch ( ProblemException pExc ) {
       // TODO mathias
-      Activator.logException( gmExc );
+      Activator.logException( pExc );
     }
     return super.performOk();
   }
@@ -612,9 +613,9 @@ public class VoPreferencePage
   protected void performDefaults() {
     try {
       GridModel.getVoManager().loadElements();
-    } catch ( GridModelException gmExc ) {
+    } catch ( ProblemException pExc ) {
       // TODO mathias
-      Activator.logException( gmExc );
+      Activator.logException( pExc );
     }
     super.performDefaults();
   }

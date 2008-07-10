@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -14,6 +14,9 @@
  *****************************************************************************/
 
 package eu.geclipse.core.model;
+
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * An {@link IGridElementManager} that is able to save its
@@ -30,11 +33,11 @@ public interface IStorableElementManager
    * elements should be saved (one per file or all in one big
    * file...).
    * 
-   * @throws GridModelException If an error occurs during the
+   * @throws ProblemException If an error occurs during the
    * save operation. This may for example be due to an
    * <code>IOException</code>.
    */
-  public void saveElements() throws GridModelException;
+  public void saveElements() throws ProblemException;
   
   /**
    * Load the state of this manager from a predefined location.
@@ -45,10 +48,10 @@ public interface IStorableElementManager
    * formerly contained elements are deleted before the managers loads
    * the new elements.
    * 
-   * @throws GridModelException If an error occurs during the
+   * @throws ProblemException If an error occurs during the
    * load operation. This may for example be due to an
    * <code>IOException</code>.
    */
-  public void loadElements() throws GridModelException;
+  public void loadElements() throws ProblemException;
   
 }
