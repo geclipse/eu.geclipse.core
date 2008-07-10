@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -16,6 +16,9 @@
 package eu.geclipse.core.model;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * Base interface for all element managers. A manager is a virtual
@@ -55,11 +58,11 @@ public interface IGridElementManager
    * @param element The element to be added.
    * @return True if the element could be added successfully,
    * false otherwise.
-   * @throws GridModelException If the element could not be added
+   * @throws ProblemException If the element could not be added
    * due to a problem, e.g. the element could not be managed by
    * this manager.
    */
-  public boolean addElement( final IGridElement element ) throws GridModelException;
+  public boolean addElement( final IGridElement element ) throws ProblemException;
   
   /**
    * Remove the specified element from the list of managed elements.

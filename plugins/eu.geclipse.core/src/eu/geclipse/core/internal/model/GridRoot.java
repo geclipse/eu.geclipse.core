@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -23,7 +23,6 @@ import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.internal.model.notify.GridNotificationService;
 import eu.geclipse.core.internal.model.notify.ResourceNotificationService;
 import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementManager;
@@ -33,6 +32,8 @@ import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IGridRoot;
 import eu.geclipse.core.model.IManageable;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * Core implementation of the {@link IGridRoot} interface.
@@ -190,9 +191,9 @@ public final class GridRoot
         = ( ( IManageable ) element ).getManager();
       try {
         manager.addElement( element );
-      } catch( GridModelException gmExc ) {
+      } catch ( ProblemException pExc ) {
         // Should never happen, therefore take no special measures
-        Activator.logException( gmExc );
+        Activator.logException( pExc );
       }
     }
   }
