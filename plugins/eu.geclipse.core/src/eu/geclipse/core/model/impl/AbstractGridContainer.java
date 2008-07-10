@@ -41,6 +41,7 @@ import eu.geclipse.core.model.IGridElementManager;
 import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridModelListener;
 import eu.geclipse.core.model.IManageable;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.core.util.MasterMonitor;
 
 
@@ -175,7 +176,13 @@ public abstract class AbstractGridContainer
    */
   public IGridElement create( final IGridElementCreator creator )
       throws GridModelException {
-    IGridElement element = creator.create( this );
+    // Temporarily add catch for GME removal in steps
+    IGridElement element = null;
+    try {
+    element = creator.create( this );
+    } catch ( ProblemException pe ) {
+      //
+    }
     element = addElement( element ); 
     return element;
   }

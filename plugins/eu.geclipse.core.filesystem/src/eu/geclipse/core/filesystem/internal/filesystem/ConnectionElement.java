@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -47,6 +47,7 @@ import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.core.model.impl.AbstractGridContainer;
 import eu.geclipse.core.model.impl.ContainerMarker;
 import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * Internal implementation of the {@link IGridConnectionElement}.
@@ -100,7 +101,7 @@ public class ConnectionElement
    */
   @Override
   public boolean canContain( final IGridElement element ) {
-    return isFolder();// && ( element instanceof IGridConnectionElement );
+    return isFolder(); // && ( element instanceof IGridConnectionElement );
   }
   
   /* (non-Javadoc)
@@ -118,7 +119,7 @@ public class ConnectionElement
         try {
           result = adapter.create( getParent() );
           break;
-        } catch ( GridModelException gmExc ) {
+        } catch ( ProblemException pExc ) {
           // Just ignore and have a try with the next creator
         }
       }

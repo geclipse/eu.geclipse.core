@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -14,6 +14,9 @@
  *****************************************************************************/
 
 package eu.geclipse.core.model;
+
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * Base interface for all classes that implement functionality for
@@ -66,15 +69,15 @@ public interface IGridElementCreator {
    * Create an element and set it to be a child of the specified
    * {@link IGridContainer}. The element is created from the
    * object that is returned by the {@link #getObject()} method.
-   * If the creation fails a {@link GridModelException} will be
+   * If the creation fails a {@link ProblemException} will be
    * thrown.
    * 
    * @param parent The parent of the newly created element.
    * @return The newly created element.
-   * @throws GridModelException If any problem occurs during the
+   * @throws ProblemException If any problem occurs while the
    * new element is created.
    */
-  public IGridElement create( final IGridContainer parent ) throws GridModelException;
+  public IGridElement create( final IGridContainer parent ) throws ProblemException;
   
   /**
    * Get the argument of the last successful call of any of the

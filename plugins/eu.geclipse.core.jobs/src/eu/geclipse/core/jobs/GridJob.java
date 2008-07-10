@@ -251,8 +251,8 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     if ( creator != null ) {
       try {
         IVirtualOrganization vo = getProject().getVO();
-        service = ( IGridJobService )creator.create( vo );
-      } catch ( GridModelException exception ) {
+        service = ( IGridJobService ) creator.create( vo );
+      } catch ( ProblemException exception ) {
         Activator.logException( exception, Messages.getString("GridJob.createJobServiceFailederr") ); //$NON-NLS-1$
       }
     }

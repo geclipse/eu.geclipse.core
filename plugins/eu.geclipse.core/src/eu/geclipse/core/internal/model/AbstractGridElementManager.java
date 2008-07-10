@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
 import java.util.List;
+
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
@@ -43,6 +44,7 @@ import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridModelListener;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.impl.AbstractGridElement;
+import eu.geclipse.core.reporting.ProblemException;
 
 
 /**
@@ -98,7 +100,13 @@ public abstract class AbstractGridElementManager
    * @see eu.geclipse.core.model.IGridContainer#create(eu.geclipse.core.model.IGridElementCreator)
    */
   public IGridElement create( final IGridElementCreator creator ) throws GridModelException {
-    IGridElement newElement = creator.create( this );
+    // Temporarily add catch for GME removal in steps
+    IGridElement newElement = null;
+    try {
+    newElement = creator.create( this );
+    } catch ( ProblemException pe ) {
+      //
+    }
     if ( newElement != null ) {
       addElement( newElement );
     }

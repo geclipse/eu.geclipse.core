@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse consortium 
+ * Copyright (c) 2006-2008 g-Eclipse consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -12,8 +12,8 @@
  * Contributor(s):
  *     PSNC - Katarzyna Bylec
  *     Mathias Stuempert - Added transformation to other job descriptions
- *           
  *****************************************************************************/
+
 package eu.geclipse.jsdl.ui.wizards;
 
 import java.lang.reflect.InvocationTargetException;
@@ -58,12 +58,12 @@ import org.eclipse.ui.ide.IDE;
 
 import eu.geclipse.core.Extensions;
 import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.IGridProject;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.jsdl.JSDLJobDescription;
 import eu.geclipse.jsdl.JSDLJobDescriptionCreator;
 import eu.geclipse.jsdl.model.base.DataStagingType;
@@ -72,6 +72,7 @@ import eu.geclipse.jsdl.ui.internal.wizards.FileType;
 import eu.geclipse.jsdl.ui.preference.ApplicationSpecificRegistry;
 import eu.geclipse.jsdl.ui.wizards.specific.IApplicationSpecificPage;
 import eu.geclipse.ui.dialogs.ProblemDialog;
+
 
 /**
  * Wizard for creating new JSDL file
@@ -193,11 +194,11 @@ public class NewJobWizard extends Wizard implements INewWizard {
       try {
         IGridElement newElement = creator.create( jsdlJobDescription.getParent() );
         this.file = ( IFile )newElement.getResource();
-      } catch( GridModelException gmExc ) {
+      } catch( ProblemException pExc ) {
         ProblemDialog.openProblem( getShell(),
                                    Messages.getString("NewJobWizard.CreationFailed"), //$NON-NLS-1$
                                    Messages.getString("NewJobWizard.ErrorCreatingJobDescription"), //$NON-NLS-1$
-                                   gmExc );
+                                   pExc );
       } finally {
         try {
           jsdlJobDescription.getResource().delete( true, null );
