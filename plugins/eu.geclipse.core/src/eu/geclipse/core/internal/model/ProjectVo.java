@@ -39,6 +39,7 @@ import eu.geclipse.core.model.impl.AbstractGridContainer;
 import eu.geclipse.core.model.impl.GridResourceCategoryFactory;
 import eu.geclipse.core.reporting.ProblemException;
 
+
 /**
  * Wrapper of a VO in order to map the VO from the manager to a
  * project.
@@ -108,7 +109,7 @@ public class ProjectVo
   }
 
   public IGridComputing[] getComputing( final IProgressMonitor monitor )
-      throws GridModelException {
+      throws ProblemException {
     
     IGridComputing[] result = null;
     
@@ -141,7 +142,7 @@ public class ProjectVo
   }
   
   public IGridInfoService getInfoService()
-      throws GridModelException {
+      throws ProblemException {
     return this.vo.getInfoService();
   }
 
@@ -167,7 +168,7 @@ public class ProjectVo
   }
   
   public IGridService[] getServices( final IProgressMonitor monitor )
-      throws GridModelException {
+      throws ProblemException {
     
     IGridService[] result = null;
     
@@ -196,7 +197,7 @@ public class ProjectVo
   }
   
   public IGridStorage[] getStorage( final IProgressMonitor monitor )
-      throws GridModelException {
+      throws ProblemException {
     
     IGridStorage[] result = null;
     
@@ -229,7 +230,7 @@ public class ProjectVo
   }
   
   public IGridJobService[] getJobSubmissionServices( final IProgressMonitor monitor )
-      throws GridModelException {
+      throws ProblemException {
     return this.vo.getJobSubmissionServices( monitor );
   }
   

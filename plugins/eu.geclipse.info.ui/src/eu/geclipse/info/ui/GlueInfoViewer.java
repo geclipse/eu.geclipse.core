@@ -72,6 +72,7 @@ import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridInfoService;
 import eu.geclipse.core.model.IGridProject;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.info.InfoCacheListenerHandler;
 import eu.geclipse.info.glue.AbstractGlueTable;
 import eu.geclipse.info.glue.GlueCE;
@@ -84,6 +85,7 @@ import eu.geclipse.info.model.InfoTopTreeCategory;
 import eu.geclipse.info.model.InfoTopTreeElement;
 import eu.geclipse.info.ui.internal.Activator;
 import eu.geclipse.info.ui.internal.Messages;
+
 
 /**
  * @author George Tsouloupas
@@ -435,7 +437,7 @@ public class GlueInfoViewer extends ViewPart
           }
         }
           
-      } catch( GridModelException e ) {
+      } catch ( ProblemException e ) {
         Activator.logException( e );
       }
       

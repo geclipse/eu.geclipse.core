@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007, 2008 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -46,9 +46,11 @@ import eu.geclipse.core.model.IGridInfoService;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.impl.AbstractVirtualOrganization;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.providers.DeploymentTargetTreeContentProvider;
 import eu.geclipse.ui.providers.GridModelLabelProvider;
+
 
 /**
  * @author Yifan Zhou
@@ -300,7 +302,7 @@ public class DeploymentTarget extends WizardPage {
     try {
       IGridInfoService infoService = vo.getInfoService();
       elements = infoService.fetchComputing( null, vo, null );
-    } catch( GridModelException e ) {
+    } catch ( ProblemException e ) {
       Activator.logException( e );
     }
     return ( elements == null ) ? null : elements;

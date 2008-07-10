@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -27,6 +27,8 @@ import eu.geclipse.core.model.IGridInfoService;
 import eu.geclipse.core.model.IGridService;
 import eu.geclipse.core.model.IGridStorage;
 import eu.geclipse.core.model.IVirtualOrganization;
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * This class represents a virtual grid container that holds
@@ -136,12 +138,16 @@ public class VoResourceContainer
     IGridElement[] children = null;
     
     // Fetch the information
+    try { // Temporarily add catch for GME removal in steps
     if ( this.type == ResourceType.Service ) {
       children = getVo().getServices( monitor );
     } else if ( this.type == ResourceType.Computing ) {
       children = getVo().getComputing( monitor );
     } else if ( this.type == ResourceType.Storage ) {
       children = getVo().getStorage( monitor );
+    }
+    } catch ( ProblemException e ) {
+      // Temporarily add catch for GME removal in steps
     }
     
     // Add children to the container

@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006 - 2008 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -18,6 +18,7 @@ package eu.geclipse.core.model;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * This is the base interface that all implementations of
@@ -59,17 +60,17 @@ public interface IVirtualOrganization
   
   public IGridApplicationManager getApplicationManager();
   
-  public IGridComputing[] getComputing( final IProgressMonitor monitor ) throws GridModelException;
+  public IGridComputing[] getComputing( final IProgressMonitor monitor ) throws ProblemException;
   
   /**
    * Get the info service of this VO.
    * 
    * @return The info service that can be queried for VO related
    * information. 
-   * @throws GridModelException If an error occurs while the service
+   * @throws ProblemException If an error occurs while the service
    * is fetched.
    */
-  public IGridInfoService getInfoService() throws GridModelException;
+  public IGridInfoService getInfoService() throws ProblemException;
   
   /**
    * Get all services that are registered within this VO.
@@ -77,12 +78,11 @@ public interface IVirtualOrganization
    * @param monitor Use to monitor the progress.
    * @return All services that are currently available for
    * this VO.
-   * @throws GridModelException If an error occurs while the services
-   * are fetched.
+   * @throws ProblemException If an error occurs while retrieving the services.
    */
-  public IGridService[] getServices( final IProgressMonitor monitor ) throws GridModelException;
+  public IGridService[] getServices( final IProgressMonitor monitor ) throws ProblemException;
   
-  public IGridStorage[] getStorage( final IProgressMonitor monitor ) throws GridModelException;
+  public IGridStorage[] getStorage( final IProgressMonitor monitor ) throws ProblemException;
   
   /**
    * Get a list of all job submission services that are available for
@@ -90,10 +90,10 @@ public interface IVirtualOrganization
    * 
    * @param monitor Use to monitor the progress.
    * @return A list of all currently available job submission services.
-   * @throws GridModelException If an error occurs while retrieving
+   * @throws ProblemException If an error occurs while retrieving
    * the services.
    */
-  public IGridJobService[] getJobSubmissionServices( final IProgressMonitor monitor ) throws GridModelException;
+  public IGridJobService[] getJobSubmissionServices( final IProgressMonitor monitor ) throws ProblemException;
   
   /**
    * Get a string that denotes the type of this VO. This string

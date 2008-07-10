@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -37,8 +37,10 @@ import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.impl.AbstractGridContainer;
 import eu.geclipse.core.model.impl.ContainerMarker;
 import eu.geclipse.core.model.impl.GridResourceCategoryFactory;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.info.glue.AbstractGlueTable;
 import eu.geclipse.info.glue.GlueCE;
+
 
 /**
  * Implementation of the {@link eu.geclipse.core.model.IGridElement}
@@ -159,6 +161,7 @@ public class GridGlueComputing
     IStatus status = Status.OK_STATUS;
     
     IVirtualOrganization vo = getProject().getVO();
+    try {      // Temporarily add catch for GME removal in steps
     IGridInfoService infoService = vo.getInfoService();
     
     IGridResourceCategory category
@@ -175,6 +178,7 @@ public class GridGlueComputing
           ContainerMarker.MarkerType.INFO,
           "No matching elements found" ) ); //$NON-NLS-1$
     }
+    } catch ( ProblemException pe ) { }
       
     return status;
     

@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -15,12 +15,11 @@
  *****************************************************************************/
 package eu.geclipse.info.model;
 
- import java.net.URI;
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridInfoService;
 import eu.geclipse.core.model.IGridResource;
@@ -29,8 +28,10 @@ import eu.geclipse.core.model.IGridStorage;
 import eu.geclipse.core.model.IMountable;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.impl.GridResourceCategoryFactory;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.info.glue.GlueService;
 import eu.geclipse.info.internal.Activator;
+
 
  /**
   * Implementation of the {@link eu.geclipse.core.model.IGridElement}
@@ -161,8 +162,8 @@ import eu.geclipse.info.internal.Activator;
           }
         }
         
-      } catch ( GridModelException gmExc ) {
-        Activator.logException( gmExc );
+      } catch ( ProblemException pExc ) {
+        Activator.logException( pExc );
       }
       
     }

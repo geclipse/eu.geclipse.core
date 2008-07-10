@@ -53,6 +53,7 @@ import eu.geclipse.core.model.IGridInfoService;
 import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridModelListener;
 import eu.geclipse.core.model.IVirtualOrganization;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 
@@ -359,11 +360,11 @@ public class VoSelectionWizardPage extends WizardPage
         }
         */
         this.infoText.setText( text );
-      } catch ( GridModelException gmExc ) {
+      } catch ( ProblemException pExc ) {
         ProblemDialog.openProblem( getShell(),
                                    "VO info problem",
                                    "Unable to query services for VO " + vo.getName(),
-                                   gmExc );
+                                   pExc );
       }
     } else {
       this.infoText.setText( "" ); //$NON-NLS-1$

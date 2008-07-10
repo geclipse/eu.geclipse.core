@@ -61,6 +61,7 @@ import eu.geclipse.jsdl.JSDLJobDescription;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 
+
 public class JobCreatorSelectionWizard extends Wizard {
 
   protected List<IGridJobDescription> jobDescriptions;
@@ -102,7 +103,7 @@ public class JobCreatorSelectionWizard extends Wizard {
     Job job = new Job( "Retrieving list of job services" ) {
 
       @Override
-      protected IStatus run( IProgressMonitor monitor ) {
+      protected IStatus run( final IProgressMonitor monitor ) {
         assert JobCreatorSelectionWizard.this.jobDescriptions != null;
         assert JobCreatorSelectionWizard.this.jobDescriptions.get( 0 ) != null;
         IGridJobService[] allServices = null;
@@ -112,15 +113,15 @@ public class JobCreatorSelectionWizard extends Wizard {
         try {
           allServices = project.getVO().getJobSubmissionServices( null );
           boolean valid;
-          for( IGridJobService service : allServices ) {
+          for ( IGridJobService service : allServices ) {
             Iterator<IGridJobDescription> iter = JobCreatorSelectionWizard.this.jobDescriptions.iterator();
             valid = true;
-            while( iter.hasNext() ) {
+            while ( iter.hasNext() ) {
               IGridJobDescription jobDescription = iter.next();
-              if( !service.canSubmit( jobDescription ) )
+              if ( ! service.canSubmit( jobDescription ) )
                 valid = false;
             }
-            if(valid==true){
+            if ( valid == true ) {
               JobCreatorSelectionWizard.this.jobServices.add( service );
             }
           }
@@ -133,7 +134,7 @@ public class JobCreatorSelectionWizard extends Wizard {
               JobCreatorSelectionWizard.this.selectionPage.setServices( JobCreatorSelectionWizard.this.jobServices ) ;
             }
           } );
-        } catch( GridModelException e ) {
+        } catch ( ProblemException e ) {
           // TODO pawelw - handle error
           return Status.CANCEL_STATUS;
         }
@@ -152,11 +153,6 @@ public class JobCreatorSelectionWizard extends Wizard {
     return super.canFinish() & this.getSubmissionService() != null;
   }
 
-  // @Override
-  // public boolean performFinish() {
-  // return false;
-  // }
-  //
   /*
    * This it the routine were the sub-submission is started. (non-Javadoc)
    * 
@@ -240,12 +236,6 @@ public class JobCreatorSelectionWizard extends Wizard {
     return shell;
   }
 
-  // public void changeInitData() {
-  // WrapperInitObject initObject = new WrapperInitObject(this.jobDescriptions,
-  // this.folderSelection.getJobNames(),
-  // this.folderSelection.getDestinationFolder());
-  // this.selectionPage.setInitData( initObject );
-  // }
   protected void addShowWizardSolution( final Throwable exc ) {
     if( exc instanceof ProblemException ) {
       ProblemException problemExc = ( ProblemException )exc;
