@@ -16,15 +16,12 @@
 package eu.geclipse.core.jobs.internal;
 
 import eu.geclipse.core.jobs.ParametricJobService;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.impl.AbstractGridElementCreator;
+import eu.geclipse.core.reporting.ProblemException;
 
 
-/**
- *
- */
 public class ParametricJobServiceCreator extends AbstractGridElementCreator {
 
   /* (non-Javadoc)
@@ -45,7 +42,7 @@ public class ParametricJobServiceCreator extends AbstractGridElementCreator {
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridElementCreator#create(eu.geclipse.core.model.IGridContainer)
    */
-  public IGridElement create( final IGridContainer parent ) throws GridModelException
+  public IGridElement create( final IGridContainer parent ) throws ProblemException
   {
     IGridElement result = null;
     Object object = getObject();

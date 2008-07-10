@@ -24,12 +24,13 @@ import org.eclipse.core.filesystem.IFileStore;
 import eu.geclipse.aws.IAWSServiceCreator;
 import eu.geclipse.aws.vo.AWSVirtualOrganization;
 import eu.geclipse.aws.vo.AWSVoCreator;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.core.model.IStorableElementCreator;
 import eu.geclipse.core.model.impl.AbstractGridElementCreator;
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * This element creator is able to construct {@link S3AWSService} objects.
@@ -73,7 +74,7 @@ public class S3AWSServiceCreator extends AbstractGridElementCreator
   }
 
   public IGridElement create( final IGridContainer parent )
-    throws GridModelException
+    throws ProblemException
   {
     S3AWSService s3awsService = null;
     if( parent instanceof AWSVirtualOrganization ) {

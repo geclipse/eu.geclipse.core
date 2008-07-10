@@ -41,6 +41,7 @@ import eu.geclipse.core.model.IGridWorkflow;
 import eu.geclipse.core.model.IGridWorkflowJob;
 import eu.geclipse.core.model.IGridWorkflowJobID;
 import eu.geclipse.core.model.impl.AbstractGridJobCreator;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.jsdl.JSDLJobDescription;
 
 
@@ -113,12 +114,12 @@ public class GridJobCreator extends AbstractGridJobCreator {
    *      eu.geclipse.core.model.IGridJobID)
    */
   public IGridJob create( final IGridContainer parent, final IGridJobID id, final IGridJobService jobService, final String jobName )
-    throws GridModelException
+    throws ProblemException
   {
-    if( !( id instanceof GridJobID ) ) {
-      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
-                                    Messages.getString( "GridJobCreator.cannotCreateJobFromID" ), //$NON-NLS-1$
-                                    Activator.PLUGIN_ID );
+    if ( ! ( id instanceof GridJobID ) ) {
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
+                                  Messages.getString( "GridJobCreator.cannotCreateJobFromID" ), //$NON-NLS-1$
+                                  Activator.PLUGIN_ID );
     }
     IContainer container = ( IContainer )parent.getResource();
     IGridJobDescription description = getDescription();
@@ -151,12 +152,12 @@ public class GridJobCreator extends AbstractGridJobCreator {
       }
       
       return result;
-    } catch( CoreException cExc ) {
-      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
-                                    Messages.getString( "GridJobCreator.problemCreatingFolder" ) //$NON-NLS-1$
-                                      + jobFolder.getName(),
-                                    cExc,
-                                    Activator.PLUGIN_ID );
+    } catch ( CoreException cExc ) {
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
+                                  Messages.getString( "GridJobCreator.problemCreatingFolder" ) //$NON-NLS-1$
+                                    + jobFolder.getName(),
+                                  cExc,
+                                  Activator.PLUGIN_ID );
     }
   }
 
@@ -190,7 +191,8 @@ public class GridJobCreator extends AbstractGridJobCreator {
   private void createWorkflowJobStructure( final GridJob workflowJob, final IFolder jobFolder,
                                            final IGridWorkflowJobID id,
                                            final IGridJobService jobService,
-                                           final IGridWorkflow workflowDescription ) throws GridModelException
+                                           final IGridWorkflow workflowDescription )
+      throws ProblemException
   {
     List<IGridWorkflowJobID> childrenIds = id.getChildrenJobs();
     
@@ -201,8 +203,11 @@ public class GridJobCreator extends AbstractGridJobCreator {
         if( childJob != null ) {          
           JSDLJobDescription childJobDescription = createChildJobDescription( jobFolder, childJob );
           
-          if( this.canCreate( childJobDescription ) ) {
-            this.create( workflowJob, childId, jobService, childJobDescription.getPath().removeFileExtension().lastSegment() );
+          if ( this.canCreate( childJobDescription ) ) {
+            this.create( workflowJob,
+                         childId,
+                         jobService,
+                         childJobDescription.getPath().removeFileExtension().lastSegment() );
           }
           
           deleteTmpJobDescription( childJobDescription );
@@ -224,7 +229,7 @@ public class GridJobCreator extends AbstractGridJobCreator {
   }
 
   private IGridWorkflowJob findJob( final IGridWorkflow workflowDescription,
-                                   final String jobName )
+                                    final String jobName )
   {
     IGridWorkflowJob job = null;    
     
@@ -238,7 +243,8 @@ public class GridJobCreator extends AbstractGridJobCreator {
     return job;
   }
   
-  private JSDLJobDescription createChildJobDescription( final IFolder jobFolder, final IGridWorkflowJob childJob ) {
+  private JSDLJobDescription createChildJobDescription( final IFolder jobFolder,
+                                                        final IGridWorkflowJob childJob ) {
     JSDLJobDescription description = null;
     ByteArrayInputStream inputStream = new ByteArrayInputStream( childJob.getDescription().getBytes() );
     String tmpJsdlFileName = String.format( "%s.jsdl", childJob.getName() ); //$NON-NLS-1$
@@ -247,10 +253,11 @@ public class GridJobCreator extends AbstractGridJobCreator {
     try {
       outputFile.create( inputStream, true, null );
       description = new JSDLJobDescription( outputFile );
-      } catch( CoreException exception ) {
-        Activator.logException( exception, "Cannot create jsdl job description for child job." ); //$NON-NLS-1$
+      } catch ( CoreException exception ) {
+        Activator.logException( exception,
+                                "Cannot create jsdl job description for child job." ); //$NON-NLS-1$
       } finally {
-      if( inputStream != null ) {
+      if ( inputStream != null ) {
         try {
           inputStream.close();
         } catch( IOException exception ) {

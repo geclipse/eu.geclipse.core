@@ -163,9 +163,13 @@ public class ParametricJobService implements IGridJobService {
    * @param parent
    * @param jobName
    * @return created job
-   * @throws GridModelException
+   * @throws ProblemException
    */
-  public IGridJob createParamJobStructure( final JSDLJobDescription jsdl, final IGridContainer parent, final String jobName ) throws GridModelException {
+  public IGridJob createParamJobStructure( final JSDLJobDescription jsdl,
+                                           final IGridContainer parent,
+                                           final String jobName )
+      throws ProblemException
+  {
     ParametricJobID jobId = new ParametricJobID(); 
     GridJobCreator creator = new GridJobCreator();
     creator.canCreate( jsdl );

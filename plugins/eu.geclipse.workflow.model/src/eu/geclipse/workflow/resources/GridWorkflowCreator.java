@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials 
  * are made available under the terms of the Eclipse Public License v1.0 
  * which accompanies this distribution, and is available at 
@@ -17,11 +17,12 @@ package eu.geclipse.workflow.resources;
 
 import org.eclipse.core.resources.IFolder;
 
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridWorkflow;
 import eu.geclipse.core.model.impl.AbstractGridElementCreator;
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * @author ash
@@ -36,7 +37,7 @@ public class GridWorkflowCreator extends AbstractGridElementCreator {
   }
 
   public IGridElement create( final IGridContainer parent )
-      throws GridModelException {
+      throws ProblemException {
     IFolder folder = ( IFolder ) getObject();
     GridWorkflow workflow = new GridWorkflow( folder );
     return workflow;

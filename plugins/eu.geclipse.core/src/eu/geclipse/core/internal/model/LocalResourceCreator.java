@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -18,10 +18,11 @@ package eu.geclipse.core.internal.model;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.impl.AbstractGridElementCreator;
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * Creator for local resources like files and folders.
@@ -40,7 +41,7 @@ public class LocalResourceCreator
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridElementCreator#create(eu.geclipse.core.model.IGridContainer)
    */
-  public IGridElement create( final IGridContainer parent ) throws GridModelException {
+  public IGridElement create( final IGridContainer parent ) throws ProblemException {
     IGridElement result = null;
     Object obj = getObject();
     if ( isFile( obj ) ) {

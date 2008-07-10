@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -18,12 +18,13 @@ package eu.geclipse.core.internal.model;
 import org.eclipse.core.resources.IProject;
 
 import eu.geclipse.core.internal.Activator;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.impl.AbstractGridElementCreator;
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * Implementation of the {@link IGridElementCreator} interface
@@ -46,8 +47,8 @@ public class GridProjectCreator
     if ( name.equals( HiddenProject.NAME ) ) {
       try {
         result = HiddenProject.getInstance( project );
-      } catch ( GridModelException gmExc ) {
-        Activator.logException( gmExc );
+      } catch ( ProblemException pExc ) {
+        Activator.logException( pExc );
       }
     } else {
       result = new GridProject( project );
