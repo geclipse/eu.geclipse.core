@@ -46,6 +46,7 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.core.model.impl.AbstractGridContainer;
 import eu.geclipse.core.model.impl.ContainerMarker;
+import eu.geclipse.core.reporting.ProblemException;
 
 /**
  * Internal implementation of the {@link IGridConnectionElement}.

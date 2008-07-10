@@ -124,16 +124,4 @@ public class GEclipseFileSystem
   public boolean isCaseSensitive() {
     return this.slave != null ? this.slave.isCaseSensitive() : super.isCaseSensitive();
   }  
-  
-  /**
-   * Called when filestore for given uri was changed (e.g. user fetchChildren()
-   * was called to force refreshing)
-   * 
-   * @param uri of file, which was changed
-   * @param fileStore filestore for changed file
-   */
-  public static void onFileChanged( final URI uri, final IFileStore fileStore ) {
-    FileSystemManager.getInstance().onFileChanged( uri, fileStore );
-  }
-  
 }
