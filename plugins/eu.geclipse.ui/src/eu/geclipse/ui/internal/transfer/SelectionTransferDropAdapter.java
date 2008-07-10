@@ -19,6 +19,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.eclipse.core.filesystem.EFS;
+import org.eclipse.core.filesystem.IFileStore;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.jface.util.TransferDropTargetListener;
 import org.eclipse.jface.viewers.ISelection;
@@ -305,7 +308,26 @@ public class SelectionTransferDropAdapter
   }
   
   private boolean isLocal( final IGridElement element ) {
-    return element.isLocal() || ( element instanceof IGridConnection );
+    boolean local = false;
+    
+    if( element.isLocal() ) {
+      local = true;
+    } else {
+      if( element instanceof IGridConnection ) {
+        IGridConnection connection = ( IGridConnection )element;        
+        try {
+          IFileStore fileStore = connection.getConnectionFileStore();
+          if( fileStore != null ) {
+            local = EFS.SCHEME_FILE.equals( fileStore.getFileSystem().getScheme() );
+          }
+        } catch( CoreException exception ) {
+          // ignore exceptions
+        }
+        
+      }
+    }
+    
+    return local;    
   }
 
   private boolean isGridJob( final IGridContainer element ) {
