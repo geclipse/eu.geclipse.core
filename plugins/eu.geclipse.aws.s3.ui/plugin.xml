@@ -7,11 +7,12 @@
             scheme="s3"
             validator="eu.geclipse.aws.s3.ui.internal.S3TokenValidator">
          <hierarchical
-               path="Bucket Name">
+               path="Bucket Name"
+               authority="AWS access id">
          </hierarchical>
       </filesystem>
    </extension>
-      <extension
+   <extension
          point="eu.geclipse.ui.propertiesFactory">
       <PropertiesFactory
             class="eu.geclipse.aws.s3.ui.properties.S3PropertiesFactory"

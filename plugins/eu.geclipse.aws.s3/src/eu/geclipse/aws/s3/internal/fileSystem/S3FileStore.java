@@ -441,7 +441,8 @@ public class S3FileStore extends FileStore implements IFileStore {
    *             its creation failed.
    */
   private S3Service getService() throws ProblemException {
-    S3Service service = S3ServiceRegistry.getRegistry().getService();
+    S3Service service = S3ServiceRegistry.getRegistry()
+      .getService( getAccessKeyID() );
     return service;
   }
 

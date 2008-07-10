@@ -32,6 +32,7 @@ import eu.geclipse.aws.IAWSCategories;
 import eu.geclipse.aws.s3.S3BucketStorage;
 import eu.geclipse.aws.s3.internal.Activator;
 import eu.geclipse.aws.s3.internal.S3ServiceRegistry;
+import eu.geclipse.aws.vo.AWSVirtualOrganization;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridApplication;
 import eu.geclipse.core.model.IGridComputing;
@@ -131,7 +132,10 @@ public class S3InfoService extends AbstractGridInfoService
     monitor.worked( 1 );
 
     try {
-      S3Service service = s3ServiceRegistry.getService();
+
+      AWSVirtualOrganization awsVo = ( AWSVirtualOrganization )vo;
+      S3Service service = s3ServiceRegistry.getService( awsVo.getProperties()
+        .getAwsAccessId() );
 
       if( service != null ) {
         S3Bucket[] buckets = service.listAllBuckets();
@@ -141,7 +145,8 @@ public class S3InfoService extends AbstractGridInfoService
           s3BucketStorages = new S3BucketStorage[ buckets.length ];
 
           for( int i = 0; i < buckets.length; i++ ) {
-            s3BucketStorages[ i ] = new S3BucketStorage( this.s3Service,
+            s3BucketStorages[ i ] = new S3BucketStorage( parent,
+                                                         this.s3Service,
                                                          buckets[ i ] );
           }
         }

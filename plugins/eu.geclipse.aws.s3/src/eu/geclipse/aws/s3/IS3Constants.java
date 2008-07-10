@@ -29,7 +29,7 @@ public interface IS3Constants {
   /** The application tag used when accessing the S3 service. */
   public static final String APP_TAG = "g-Eclipse/1.0"; //$NON-NLS-1$
 
-  /** A root element for the S3 EFS implementation. */
-  public static final String S3_ROOT = "root"; //$NON-NLS-1$
+  // /** A root element for the S3 EFS implementation. */
+  // public static final String S3_ROOT = "root"; //$NON-NLS-1$
 
 }

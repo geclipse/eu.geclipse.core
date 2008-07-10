@@ -17,6 +17,7 @@
 
 package eu.geclipse.aws.s3.internal;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Set;
@@ -64,14 +65,14 @@ public class S3ServiceRegistry implements ISecurityManagerListener {
     return SingletonHolder.instance;
   }
 
-  /** The mapping table for the auth token to service. */
-  private Hashtable<AWSAuthToken, S3Service> services;
+  /** The mapping table for the aws access id to service. */
+  private Hashtable<String, S3Service> services;
 
   /**
    * Private constructor to refuse public instantiation.
    */
   private S3ServiceRegistry() {
-    this.services = new Hashtable<AWSAuthToken, S3Service>();
+    this.services = new Hashtable<String, S3Service>();
     AuthenticationTokenManager.getManager().addListener( this );
   }
 
@@ -87,15 +88,18 @@ public class S3ServiceRegistry implements ISecurityManagerListener {
    * access key ID. If the service is not yet in the cache it is created and
    * cached afterwards.
    * 
+   * @param awsAccessId the access id to bind and {@link S3Service} to
    * @return The service to make operations on the account with the specified
    *         access key ID or <code>null</code> if no service could be created
    * @throws ProblemException If the service was not yet in the cache and its
    *             creation failed
    */
-  public S3Service getService() throws ProblemException {
+  public S3Service getService( final String awsAccessId )
+    throws ProblemException
+  {
 
     // get the auth token
-    AWSAuthTokenDescription awsAuthTokenDesc = new AWSAuthTokenDescription();
+    AWSAuthTokenDescription awsAuthTokenDesc = new AWSAuthTokenDescription( awsAccessId );
 
     AuthTokenRequest request = new AuthTokenRequest( awsAuthTokenDesc,
                                                      Messages.getString( "S3ServiceRegistry.auth_requester" ), //$NON-NLS-1$
@@ -122,7 +126,9 @@ public class S3ServiceRegistry implements ISecurityManagerListener {
         }
 
         // put new service into the map
-        this.services.put( awsAuthToken, service );
+        AWSAuthTokenDescription activeAuthDesc = ( AWSAuthTokenDescription )awsAuthToken.getDescription();
+
+        this.services.put( activeAuthDesc.getAwsAccessId(), service );
         return service;
       }
       return existingService;
@@ -135,24 +141,30 @@ public class S3ServiceRegistry implements ISecurityManagerListener {
       AuthenticationTokenManager authTokenManager = ( AuthenticationTokenManager )manager;
 
       List<IAuthenticationToken> tokens = authTokenManager.getTokens();
-      Set<Entry<AWSAuthToken, S3Service>> entrySet = this.services.entrySet();
-
+      Set<Entry<String, S3Service>> entrySet = this.services.entrySet();
+      List<String> elementsToRemove = new ArrayList<String>( this.services.size() );
       boolean found;
 
       // remove authtoken/s3service mappings if not existing in the authtoken
       // manager list
-      for( Entry<AWSAuthToken, S3Service> entry : entrySet ) {
+      for( Entry<String, S3Service> entry : entrySet ) {
         found = false;
 
         for( IAuthenticationToken authToken : tokens ) {
-          if( entry.getKey() == authToken ) {
+          AWSAuthTokenDescription awsAuthTokenDesc = ( AWSAuthTokenDescription )authToken.getDescription();
+
+          if( entry.getKey() == awsAuthTokenDesc.getAwsAccessId() ) {
             found = true;
           }
         }
 
         if( !found ) {
-          this.services.remove( entry.getKey() );
+          elementsToRemove.add( entry.getKey() );
         }
+      }
+
+      for( String awsAccessId : elementsToRemove ) {
+        this.services.remove( awsAccessId );
       }
 
     }

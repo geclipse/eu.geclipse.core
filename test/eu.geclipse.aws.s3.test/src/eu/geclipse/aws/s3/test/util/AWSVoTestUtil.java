@@ -34,6 +34,9 @@ public class AWSVoTestUtil {
   /** A default name for the Amazon AWS VO. */
   public static final String VO_NAME = "Amazon AWS VO"; //$NON-NLS-1$
 
+  /** A dummy access Id for the Amazon EC2 services. */
+  public static final String AWS_ACCESS_ID = "awsAccessId"; //$NON-NLS-1$
+
   /**
    * Fetches the {@link AWSVoCreator} from the GridModel and returns it. If not
    * {@link AWSVoCreator} could be found, <code>null</code> is returned.
@@ -52,6 +55,7 @@ public class AWSVoTestUtil {
     }
     if( awsVoCreator != null ) {
       awsVoCreator.setVoName( AWSVoTestUtil.VO_NAME );
+      awsVoCreator.setAwsAccessId( AWSVoTestUtil.AWS_ACCESS_ID );
     }
     return awsVoCreator;
   }
@@ -64,7 +68,7 @@ public class AWSVoTestUtil {
    * @throws GridModelException when the vo could not be created
    */
   public static AWSVirtualOrganization getAwsVo() throws GridModelException {
-    AWSVoCreator awsVoCreator = getAwsVoCreator();
+    AWSVoCreator awsVoCreator = AWSVoTestUtil.getAwsVoCreator();
     AWSVirtualOrganization awsVo = ( AWSVirtualOrganization )awsVoCreator.create( null );
     awsVoCreator.setVoName( AWSVoTestUtil.VO_NAME );
     awsVoCreator.apply( awsVo );

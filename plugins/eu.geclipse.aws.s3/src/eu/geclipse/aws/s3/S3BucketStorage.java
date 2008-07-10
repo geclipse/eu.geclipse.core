@@ -27,9 +27,12 @@ import org.jets3t.service.model.S3Bucket;
 
 import eu.geclipse.aws.IAWSService;
 import eu.geclipse.aws.s3.internal.Activator;
+import eu.geclipse.aws.s3.internal.Messages;
 import eu.geclipse.aws.s3.service.S3AWSService;
+import eu.geclipse.aws.vo.AWSVirtualOrganization;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
+import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridStorage;
 import eu.geclipse.core.model.impl.AbstractGridElement;
 
@@ -41,9 +44,10 @@ import eu.geclipse.core.model.impl.AbstractGridElement;
 public class S3BucketStorage extends AbstractGridElement
   implements IGridStorage
 {
-  
-  private static MountPointID MOUNT_ID
-    = new MountPointID( "Simple Storage Service (S3)", "s3" ); //$NON-NLS-1$ //$NON-NLS-2$
+
+  /** The id of the s3 mount point. */
+  public static final MountPointID MOUNT_ID = new MountPointID( Messages.getString( "S3BucketStorage.mount_action_title" ), //$NON-NLS-1$
+                                                                IS3Constants.S3_SCHEME );
 
   /** This {@link IAWSService} provides the connection details required. */
   private S3AWSService s3AWSService;
@@ -51,23 +55,55 @@ public class S3BucketStorage extends AbstractGridElement
   /** The {@link S3Bucket} contains the bucket data from the S3 system. */
   private S3Bucket s3Bucket;
 
+  /** The parent of this {@link IGridElement} in the vo tree. */
+  private IGridContainer parent;
+
   /**
    * Create a new {@link S3BucketStorage} with the given {@link S3AWSService} as
    * the host and the {@link S3Bucket} as meta data provider.
    * 
+   * @param parent the parent of this {@link S3BucketStorage} in the vo tree
    * @param s3AWSService the housing service
    * @param bucket the bucket to fetch data from
    */
-  public S3BucketStorage( final S3AWSService s3AWSService, final S3Bucket bucket )
+  public S3BucketStorage( final IGridContainer parent,
+                          final S3AWSService s3AWSService,
+                          final S3Bucket bucket )
   {
+    this.parent = parent;
     this.s3AWSService = s3AWSService;
     this.s3Bucket = bucket;
   }
 
   public URI[] getAccessTokens() {
-    StringBuilder sb = new StringBuilder( "s3://" ); //$NON-NLS-1$
-    sb.append( IS3Constants.S3_ROOT );
-    sb.append( "/" ); //$NON-NLS-1$
+    URI accessToken = getMountURI();
+    return new URI[]{
+      accessToken
+    };
+  }
+
+  /**
+   * Creates an {@link URI} complying to the general mount paradigm of geclipse.
+   * The created URI has the form:
+   * <p>
+   * <code>s3://&lt;awsAccessId&gt;/&lt;bucketName&gt;</code>
+   * 
+   * @return the {@link URI} to use for mount actions
+   */
+  private URI getMountURI() {
+    StringBuilder sb = new StringBuilder( IS3Constants.S3_SCHEME );
+    sb.append( "://" ); //$NON-NLS-1$
+    AWSVirtualOrganization awsVo = ( AWSVirtualOrganization )this.s3AWSService.getParent();
+    String awsAccessId = null;
+    try {
+      awsAccessId = awsVo.getProperties().getAwsAccessId();
+    } catch( GridModelException gridModelEx ) {
+      Activator.log( "Could not obtain aws properties", gridModelEx ); //$NON-NLS-1$
+    }
+    if( awsAccessId != null ) {
+      sb.append( awsAccessId );
+    }
+    sb.append( IS3Constants.S3_PATH_SEPARATOR );
     sb.append( getName() );
 
     URI accessToken = null;
@@ -76,9 +112,7 @@ public class S3BucketStorage extends AbstractGridElement
     } catch( URISyntaxException exc ) {
       Activator.log( exc );
     }
-    return new URI[]{
-      accessToken
-    };
+    return accessToken;
   }
 
   public String getName() {
@@ -130,7 +164,7 @@ public class S3BucketStorage extends AbstractGridElement
   }
 
   public IGridContainer getParent() {
-    return this.s3AWSService;
+    return this.parent;
   }
 
   public IPath getPath() {
@@ -146,26 +180,21 @@ public class S3BucketStorage extends AbstractGridElement
   }
 
   public MountPoint getMountPoint( final MountPointID mountID ) {
-    
     MountPoint result = null;
-    
-    if ( MOUNT_ID.equals( mountID ) ) {
-      String suri = String.format( "s3://root/%s", getName() );
-      try {
-        URI uri = new URI( suri );
-        String name = String.format( "S3 @ %s", getName() );
-        result = new MountPoint( name, uri );
-      } catch ( URISyntaxException uriExc ) {
-        // Just ignore and return null
+
+    if( S3BucketStorage.MOUNT_ID.equals( mountID ) ) {
+      URI uri = getMountURI();
+      if( uri != null ) {
+        result = new MountPoint( this.s3Bucket.getName(), uri );
       }
     }
-    
+
     return result;
-    
   }
 
   public MountPointID[] getMountPointIDs() {
-    return new MountPointID[] { MOUNT_ID };
+    return new MountPointID[]{
+      S3BucketStorage.MOUNT_ID
+    };
   }
-
 }

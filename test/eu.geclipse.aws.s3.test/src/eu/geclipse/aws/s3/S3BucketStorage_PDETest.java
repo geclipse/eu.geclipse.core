@@ -26,8 +26,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import eu.geclipse.aws.s3.service.S3AWSService;
+import eu.geclipse.aws.s3.test.util.AWSVoTestUtil;
 import eu.geclipse.aws.s3.test.util.S3ServiceTestUtil;
 import eu.geclipse.core.model.GridModelException;
+import eu.geclipse.core.model.IMountable.MountPoint;
+import eu.geclipse.core.model.IMountable.MountPointID;
 
 /**
  * Test class for the {@link S3BucketStorage} class.
@@ -55,7 +58,9 @@ public class S3BucketStorage_PDETest {
   public void setUp() throws Exception {
     this.service = S3ServiceTestUtil.getS3AWSService();
     this.bucket = new S3Bucket( S3BucketStorage_PDETest.BUCKET_NAME );
-    this.bucketStorage = new S3BucketStorage( this.service, this.bucket );
+    this.bucketStorage = new S3BucketStorage( AWSVoTestUtil.getAwsVo(),
+                                              this.service,
+                                              this.bucket );
   }
 
   /**
@@ -68,7 +73,9 @@ public class S3BucketStorage_PDETest {
   public void testS3BucketStorage() throws GridModelException {
     S3AWSService s3AWSService = S3ServiceTestUtil.getS3AWSService();
     S3Bucket bucket = new S3Bucket( S3BucketStorage_PDETest.BUCKET_NAME );
-    S3BucketStorage bucketStorage = new S3BucketStorage( s3AWSService, bucket );
+    S3BucketStorage bucketStorage = new S3BucketStorage( null,
+                                                         s3AWSService,
+                                                         bucket );
     Assert.assertNotNull( bucketStorage );
   }
 
@@ -80,7 +87,7 @@ public class S3BucketStorage_PDETest {
   public void testGetAccessTokens() {
     URI[] accessTokens = this.bucketStorage.getAccessTokens();
     String expectedName = "s3://" //$NON-NLS-1$
-                          + IS3Constants.S3_ROOT
+                          + AWSVoTestUtil.AWS_ACCESS_ID
                           + "/" //$NON-NLS-1$
                           + this.bucketStorage.getName();
     Assert.assertEquals( expectedName, accessTokens[ 0 ].toString() );
@@ -127,10 +134,13 @@ public class S3BucketStorage_PDETest {
 
   /**
    * Test method for {@link eu.geclipse.aws.s3.S3BucketStorage#getParent()}.
+   * 
+   * @throws GridModelException
    */
   @Test
-  public void testGetParent() {
-    Assert.assertEquals( this.service, this.bucketStorage.getParent() );
+  public void testGetParent() throws GridModelException {
+    Assert.assertEquals( AWSVoTestUtil.getAwsVo(),
+                         this.bucketStorage.getParent() );
   }
 
   /**
@@ -157,4 +167,31 @@ public class S3BucketStorage_PDETest {
     Assert.assertFalse( this.bucketStorage.isLocal() );
   }
 
+  /**
+   * Test method for
+   * {@link S3BucketStorage#getMountPoint(eu.geclipse.core.model.IMountable.MountPointID)}.
+   * 
+   * @throws Exception
+   */
+  @Test
+  public void testGetMountPoint() throws Exception {
+    MountPoint mountPoint = this.bucketStorage.getMountPoint( S3BucketStorage.MOUNT_ID );
+    Assert.assertNotNull( mountPoint );
+    Assert.assertTrue( mountPoint.getName().equals( this.bucket.getName() ) );
+    mountPoint = this.bucketStorage.getMountPoint( null );
+    Assert.assertNull( mountPoint );
+  }
+
+  /**
+   * Test method for {@link S3BucketStorage#getMountPointIDs()}.
+   * 
+   * @throws Exception
+   */
+  @Test
+  public void testGetMountPointIDs() throws Exception {
+    MountPointID[] mountPointIDs = this.bucketStorage.getMountPointIDs();
+    Assert.assertTrue( mountPointIDs.length == 1 );
+
+    Assert.assertEquals( S3BucketStorage.MOUNT_ID, mountPointIDs[ 0 ] );
+  }
 }

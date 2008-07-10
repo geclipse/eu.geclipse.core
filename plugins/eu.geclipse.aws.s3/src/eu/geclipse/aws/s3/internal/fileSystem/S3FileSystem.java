@@ -45,6 +45,7 @@ public class S3FileSystem extends FileSystem implements IFileSystem {
     S3FileStore result;
 
     String bucketName = uri.getPath();
+    String awsAccessId = uri.getAuthority();
 
     if( bucketName != null
         && bucketName.startsWith( IS3Constants.S3_PATH_SEPARATOR ) )
@@ -53,9 +54,9 @@ public class S3FileSystem extends FileSystem implements IFileSystem {
     }
 
     if( bucketName == null || bucketName.length() == 0 ) {
-      result = new S3FileStore( IS3Constants.S3_ROOT );
+      result = new S3FileStore( awsAccessId );
     } else {
-      S3FileStore parent = new S3FileStore( IS3Constants.S3_ROOT );
+      S3FileStore parent = new S3FileStore( awsAccessId );
       result = ( S3FileStore )parent.getChild( bucketName );
     }
 
