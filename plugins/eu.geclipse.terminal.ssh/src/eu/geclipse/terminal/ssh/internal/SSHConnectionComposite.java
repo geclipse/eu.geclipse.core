@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -32,13 +32,14 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 
 import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.core.util.TokenValidator;
 import eu.geclipse.info.glue.AbstractGlueTable;
 import eu.geclipse.info.glue.GlueQuery;
 import eu.geclipse.ui.widgets.NumberVerifier;
 import eu.geclipse.ui.widgets.StoredCombo;
+
 
 class SSHConnectionComposite extends Composite {
   private static final String sshDefaultPort = "22"; //$NON-NLS-1$
@@ -87,16 +88,16 @@ class SSHConnectionComposite extends Composite {
             if ( hostname != null && this.hostnameCombo.indexOf( hostname ) == -1 ) {
               this.hostnameCombo.add( hostname );
             }
-          } catch( RuntimeException exception ) {
+          } catch ( RuntimeException exception ) {
             Activator.logException( exception );
-          } catch( IllegalAccessException exception ) {
+          } catch ( IllegalAccessException exception ) {
             Activator.logException( exception );
-          } catch( NoSuchFieldException exception ) {
+          } catch ( NoSuchFieldException exception ) {
             Activator.logException( exception );
           }
         }
       }
-    } catch( GridModelException exception ) {
+    } catch( ProblemException exception ) {
       Activator.logException( exception );
     }
   }
@@ -150,7 +151,7 @@ class SSHConnectionComposite extends Composite {
 
     try {
       port = new Integer( this.portText.getText() );
-    } catch (NumberFormatException exception) {
+    } catch ( NumberFormatException exception ) {
       // ignore
     }
     if ( port == null || port.intValue() < 1 || port.intValue() > 0xffff ) {
