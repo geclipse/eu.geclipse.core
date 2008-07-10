@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007, 2008 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -21,14 +21,12 @@ import java.net.URL;
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -42,9 +40,10 @@ import org.eclipse.ui.IWorkbench;
 
 import eu.geclipse.core.filesystem.GEclipseURI;
 import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridPreferences;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.internal.Activator;
+
 
 /**
  * Wizard for the creation of new connections. Can both create local
@@ -185,8 +184,8 @@ public class ConnectionWizard
         IGridPreferences preferences = GridModel.getPreferences();
         preferences.createGlobalConnection( name, geclURI.toMasterURI() );
         result = true;
-      } catch ( GridModelException gmExc ) {
-        page.setErrorMessage( gmExc.getMessage() );
+      } catch ( ProblemException pExc ) {
+        page.setErrorMessage( pExc.getMessage() );
       }
     }
     

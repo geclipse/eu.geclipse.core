@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -30,6 +30,8 @@ import eu.geclipse.core.internal.model.JobManager;
 import eu.geclipse.core.internal.model.LocalResourceCreator;
 import eu.geclipse.core.internal.model.VoManager;
 import eu.geclipse.core.internal.model.notify.GridNotificationService;
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * The <code>GridModel</code> class is mainly a helper class for dealing
@@ -276,10 +278,10 @@ public class GridModel {
    * Get the grid preferences.
    * 
    * @return An instance of {@link IGridPreferences}.
-   * @throws GridModelException If the preferences could not be found
+   * @throws ProblemException If the preferences could not be found
    * or the creation of the preferences failed.
    */
-  public static IGridPreferences getPreferences() throws GridModelException {
+  public static IGridPreferences getPreferences() throws ProblemException {
     return HiddenProject.getInstance();
   }
 

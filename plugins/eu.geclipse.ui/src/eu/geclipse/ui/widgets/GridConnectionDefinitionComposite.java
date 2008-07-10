@@ -55,7 +55,6 @@ import org.eclipse.swt.widgets.Tree;
 
 import eu.geclipse.core.filesystem.GEclipseURI;
 import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridContainer;
@@ -63,12 +62,14 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridModelListener;
 import eu.geclipse.core.model.IGridPreferences;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.Extensions;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.providers.ConnectionViewContentProvider;
 import eu.geclipse.ui.providers.GridModelLabelProvider;
 import eu.geclipse.ui.wizards.IConnectionTokenValidator;
+
 
 /**
  * A composite for specifying the settings of a new connection. In fact
@@ -688,13 +689,13 @@ public class GridConnectionDefinitionComposite extends Composite {
               = preferences.createTemporaryConnection( masterURI );
             GridConnectionDefinitionComposite.this.viewer.setInput( connection );
 
-          } catch ( GridModelException gmExc ) {
+          } catch ( ProblemException pExc ) {
             GridConnectionDefinitionComposite.this.errorMessage = eu.geclipse.ui.widgets.Messages.getString("GridConnectionDefinitionComposite.invalid_temp_conn_error"); //$NON-NLS-1$
             fireModifyEvent();
             ProblemDialog.openProblem( getShell(),
                                        eu.geclipse.ui.widgets.Messages.getString("GridConnectionDefinitionComposite.conn_error"), //$NON-NLS-1$
                                        eu.geclipse.ui.widgets.Messages.getString("GridConnectionDefinitionComposite.invalid_temp_conn_error"), //$NON-NLS-1$
-                                       gmExc );
+                                       pExc );
           } finally {
             GridConnectionDefinitionComposite.this.pathLink.setEnabled( true );
           }
