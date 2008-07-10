@@ -31,6 +31,8 @@ import eu.geclipse.core.model.IStorableElement;
 import eu.geclipse.core.model.IStorableElementCreator;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.IVoManager;
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * Internal implementation of the
@@ -152,7 +154,7 @@ public class VoManager
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IStorableElementManager#saveElements()
    */
-  public void saveElements() throws GridModelException {
+  public void saveElements() throws ProblemException {
     
     IGridElement[] elements = getChildren( null );
     for ( IGridElement element : elements ) {

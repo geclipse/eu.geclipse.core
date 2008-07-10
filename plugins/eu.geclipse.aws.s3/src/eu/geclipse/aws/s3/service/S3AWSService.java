@@ -36,6 +36,8 @@ import eu.geclipse.core.model.IGridInfoService;
 import eu.geclipse.core.model.IGridResourceCategory;
 import eu.geclipse.core.model.IStorableElement;
 import eu.geclipse.core.model.impl.AbstractGridContainer;
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * The {@link S3AWSService} serves as the entry point to the s3 infrastructure.
@@ -263,7 +265,7 @@ public class S3AWSService extends AbstractGridContainer
     }
   }
 
-  public void save() throws GridModelException {
+  public void save() throws ProblemException {
     // create own storage directory
     IFileStore fileStore = getFileStore();
     if( !fileStore.fetchInfo().exists() ) {

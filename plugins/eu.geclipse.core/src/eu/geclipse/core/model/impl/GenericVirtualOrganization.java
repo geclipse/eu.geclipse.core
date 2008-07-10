@@ -23,6 +23,8 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridService;
 import eu.geclipse.core.model.IStorableElement;
 import eu.geclipse.core.model.IVirtualOrganization;
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * This is the g-Eclipse default implementation for the
@@ -126,7 +128,7 @@ public class GenericVirtualOrganization
   }
   
   @Override
-  public void save() throws GridModelException {
+  public void save() throws ProblemException {
     IGridElement[] children = getChildren( null );
     for ( IGridElement child : children ) {
       if ( child instanceof IGridService ) {

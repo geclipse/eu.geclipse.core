@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -14,6 +14,8 @@
  *****************************************************************************/
 
 package eu.geclipse.core.model;
+
+import eu.geclipse.core.reporting.ProblemException;
 
 
 /**
@@ -31,18 +33,18 @@ public interface IStorableElement extends IGridElement {
    * loaded properties. The element itself has to know from
    * where to load itself.
    * 
-   * @throws GridModelException If an error occurs while loading
+   * @throws ProblemException If an error occurs while loading
    * this element. This is mainly due to <code>IOException</code>s.
    */
-  public void load() throws GridModelException;
+  public void load() throws ProblemException;
   
   /**
    * Write the properties of this element. The element itself has
    * to know where to save itself. 
    * 
-   * @throws GridModelException If an error occurs while saving
+   * @throws ProblemException If an error occurs while saving
    * this element. This is mainly due to <code>IOException</code>s.
    */
-  public void save() throws GridModelException;
+  public void save() throws ProblemException;
   
 }

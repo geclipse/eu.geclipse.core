@@ -30,8 +30,8 @@ import org.eclipse.core.runtime.Path;
 
 import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.internal.Activator;
-import eu.geclipse.core.internal.model.VoManager;
 import eu.geclipse.core.internal.model.ProjectVo;
+import eu.geclipse.core.internal.model.VoManager;
 import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridApplicationManager;
 import eu.geclipse.core.model.IGridComputing;
@@ -250,7 +250,7 @@ public abstract class AbstractVirtualOrganization
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IStorableElement#save()
    */
-  public void save() throws GridModelException {
+  public void save() throws ProblemException {
     IGridElement[] children = getChildren( null );
     for ( IGridElement child : children ) {
       if ( child instanceof IStorableElement ) {
