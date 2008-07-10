@@ -59,7 +59,7 @@ public class GenericVoProperties
    */
   public static final String NAME = ".generic_vo_properties"; //$NON-NLS-1$
 
-  private static final String FIELD_SEPARATOR = " ";
+  private static final String FIELD_SEPARATOR = " "; //$NON-NLS-1$
   
   private GenericVirtualOrganization vo;
   
