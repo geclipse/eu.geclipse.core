@@ -15,6 +15,15 @@
 
 package eu.geclipse.core;
 
+
+/**
+ * This interface contains the SolutionID strings for accessing the core's
+ * solutions. These solution-ID's cover the solutions expected to be common to
+ * different plug-ins or middlewares, which can (and should) therefore be
+ * reused by the whole g-Eclipse framework and specific implementations.
+ * The middleware dependent or the plug-in specific solutions should be
+ * declared by the affected plug-in.
+ */
 public interface ICoreSolutions {
   
   /*

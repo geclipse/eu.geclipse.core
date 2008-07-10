@@ -16,6 +16,15 @@
  *****************************************************************************/
 package eu.geclipse.core;
 
+
+/**
+ * This interface contains the ProblemID strings for accessing the core's
+ * problems. These problem-ID's cover the issues expected to be common to
+ * different plug-ins or middlewares, which can (and should) therefore be
+ * reused by the whole g-Eclipse framework and specific implementations.
+ * The middleware dependent or the plug-in specific problems should be
+ * declared by the affected plug-in.
+ */
 public interface ICoreProblems {
 
   /*
