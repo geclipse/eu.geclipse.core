@@ -98,7 +98,11 @@ public abstract class AbstractVirtualOrganization
     IGridComputing[] computing = null;
     IGridInfoService infoService = getInfoService();
     if ( infoService != null ) {
-      computing = infoService.fetchComputing( this, this, monitor );
+      computing = ( IGridComputing[] )infoService.fetchResources( this,
+                                              this,
+                                              GridResourceCategoryFactory.
+                                              getCategory( GridResourceCategoryFactory.ID_COMPUTING ),
+                                              monitor );
     }
     return computing;
   }
@@ -165,7 +169,12 @@ public abstract class AbstractVirtualOrganization
     IGridService[] result = null;
     IGridInfoService infoService = getInfoService();
     if ( infoService != null ) {
-      IGridService[] services = infoService.fetchServices( this, this, monitor );
+      IGridService[] services = ( IGridService[] )infoService.
+                                      fetchResources( this,
+                                                      this,
+                                                      GridResourceCategoryFactory.
+                                                      getCategory( GridResourceCategoryFactory.ID_SERVICES ),
+                                                      monitor );
       if ( ( services != null ) && ( services.length > 0 ) ) {
         result = new IGridService[ services.length + 1 ];
         System.arraycopy( services, 0, result, 0, services.length );
@@ -182,7 +191,11 @@ public abstract class AbstractVirtualOrganization
     IGridStorage[] storage = null;
     IGridInfoService infoService = getInfoService();
     if ( infoService != null ) {
-      storage = infoService.fetchStorage( this, this, monitor );
+      storage = ( IGridStorage[] )infoService.fetchResources( this,
+                                                              this,
+                                                              GridResourceCategoryFactory.
+                                                              getCategory( GridResourceCategoryFactory.ID_STORAGE ),
+                                                              monitor );
     }
     return storage;
   }
