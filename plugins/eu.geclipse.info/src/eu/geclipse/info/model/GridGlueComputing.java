@@ -25,7 +25,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridApplication;
 import eu.geclipse.core.model.IGridComputing;
 import eu.geclipse.core.model.IGridContainer;
@@ -156,12 +155,11 @@ public class GridGlueComputing
   
   @Override
   protected IStatus fetchChildren( final IProgressMonitor monitor )
-      throws GridModelException {
+      throws ProblemException {
     
     IStatus status = Status.OK_STATUS;
     
     IVirtualOrganization vo = getProject().getVO();
-    try {      // Temporarily add catch for GME removal in steps
     IGridInfoService infoService = vo.getInfoService();
     
     IGridResourceCategory category
@@ -169,7 +167,7 @@ public class GridGlueComputing
     IGridResource[] applications
       = infoService.fetchResources( this, vo, category, false, IGridApplication.class, monitor );
     
-    if ((applications != null) && (applications.length>0)) {
+    if ( ( applications != null ) && ( applications.length > 0 ) ) {
       for ( IGridResource app : applications ) {
         addElement( app );
       }
@@ -178,7 +176,6 @@ public class GridGlueComputing
           ContainerMarker.MarkerType.INFO,
           "No matching elements found" ) ); //$NON-NLS-1$
     }
-    } catch ( ProblemException pe ) { }
       
     return status;
     
