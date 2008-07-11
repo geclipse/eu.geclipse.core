@@ -175,13 +175,7 @@ public abstract class AbstractGridContainer
    */
   public IGridElement create( final IGridElementCreator creator )
       throws ProblemException {
-    // Temporarily add catch for GME removal in steps
-    IGridElement element = null;
-    try {
-    element = creator.create( this );
-    } catch ( ProblemException pe ) {
-      //
-    }
+    IGridElement element = creator.create( this );
     element = addElement( element ); 
     return element;
   }
