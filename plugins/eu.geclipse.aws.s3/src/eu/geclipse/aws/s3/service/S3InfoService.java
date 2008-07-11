@@ -33,7 +33,6 @@ import eu.geclipse.aws.s3.S3BucketStorage;
 import eu.geclipse.aws.s3.internal.Activator;
 import eu.geclipse.aws.s3.internal.S3ServiceRegistry;
 import eu.geclipse.aws.vo.AWSVirtualOrganization;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridApplication;
 import eu.geclipse.core.model.IGridComputing;
 import eu.geclipse.core.model.IGridContainer;
@@ -46,6 +45,7 @@ import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.impl.AbstractGridInfoService;
 import eu.geclipse.core.model.impl.GridResourceCategoryFactory;
 import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * The {@link S3InfoService}is used to provide S3 specific input to the
@@ -168,8 +168,8 @@ public class S3InfoService extends AbstractGridInfoService
       if( properties != null ) {
         return properties.getS3Url();
       }
-    } catch( GridModelException gridModelEx ) {
-      Activator.log( "Could not load properties from s3AWSService", gridModelEx ); //$NON-NLS-1$
+    } catch ( ProblemException problemEx ) {
+      Activator.log( "Could not load properties from s3AWSService", problemEx ); //$NON-NLS-1$
     }
     return null;
   }

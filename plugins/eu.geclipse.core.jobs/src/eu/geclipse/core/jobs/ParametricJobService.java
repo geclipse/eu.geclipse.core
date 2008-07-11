@@ -49,9 +49,6 @@ import eu.geclipse.jsdl.JSDLJobDescription;
 import eu.geclipse.jsdl.ParametricJsdlGenerator;
 
 
-/**
- *
- */
 public class ParametricJobService implements IGridJobService {
   private IGridJobService jobService;   // this service is valid only for job submission and may be null. Other methods delegates call to children of parametric job
   private GridJob job; // parametric job, to which children all calls will be delegated 
@@ -147,7 +144,7 @@ public class ParametricJobService implements IGridJobService {
     return new GridJobStatus( statusNames.toString(), statusType );
   }
 
-  private List<GridJob> getChildrenJobs() throws GridModelException {
+  private List<GridJob> getChildrenJobs() throws ProblemException {
     IGridElement[] children = this.job.getChildren( new NullProgressMonitor() );
     List<GridJob> childrenJobs = new ArrayList<GridJob>( children.length );
     for( IGridElement gridElement : children ) {

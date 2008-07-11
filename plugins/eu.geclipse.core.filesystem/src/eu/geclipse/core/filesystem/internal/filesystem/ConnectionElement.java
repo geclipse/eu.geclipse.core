@@ -39,7 +39,6 @@ import eu.geclipse.core.Extensions;
 import eu.geclipse.core.filesystem.GEclipseFileSystem;
 import eu.geclipse.core.filesystem.internal.Activator;
 import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
@@ -350,8 +349,8 @@ public class ConnectionElement
       
       try {
         addElement( ContainerMarker.getErrorMarker( this, t ) );
-      } catch ( GridModelException gmExc ) {
-        Activator.logException( gmExc );
+      } catch ( ProblemException pExc ) {
+        Activator.logException( pExc );
       }
       
     } finally {
@@ -459,7 +458,7 @@ public class ConnectionElement
   }
 
   @Override
-  public void refresh( final IProgressMonitor monitor ) throws GridModelException {
+  public void refresh( final IProgressMonitor monitor ) throws ProblemException {
     
     try {
       IFileStore fileStore = getConnectionFileStore();

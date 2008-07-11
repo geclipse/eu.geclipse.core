@@ -56,7 +56,6 @@ import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.filesystem.GEclipseURI;
 import eu.geclipse.core.jobs.internal.Activator;
 import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.core.model.IGridElementManager;
@@ -127,7 +126,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
       readJobDescription();
       try {
         addElement( this.jobDescription );
-      } catch ( GridModelException e ) {
+      } catch ( ProblemException e ) {
         Activator.logException( e, Messages.getString("GridJob.errLoadJobDescription") //$NON-NLS-1$
                                    + jobFolder.getName() );
       }
@@ -145,14 +144,14 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
    * @param description job description
    * @param uniqueJobName 
    * @return created job
-   * @throws GridModelException
+   * @throws ProblemException
    */
   public static GridJob createJobStructure( final IFolder jobFolder,
-                                         final GridJobID id,
-                                         final IGridJobService jobService,
-                                         final IGridJobDescription description,
-                                         final String uniqueJobName )
-    throws GridModelException
+                                            final GridJobID id,
+                                            final IGridJobService jobService,
+                                            final IGridJobDescription description,
+                                            final String uniqueJobName )
+    throws ProblemException
   {
     GridJob job = new GridJob( jobFolder );
     job.create( jobFolder, id, jobService, description, uniqueJobName );
@@ -165,12 +164,12 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
    * @param jobSrvce
    * @param description
    * @param uniqueJobName 
-   * @throws GridModelException
+   * @throws ProblemException
    */
   public void create( final IFolder jobFolder,
                       final IGridJobID id,
                       final IGridJobService jobSrvce, final IGridJobDescription description, final String uniqueJobName )
-    throws GridModelException
+    throws ProblemException
   {
     this.submissionTime = Calendar.getInstance().getTime(); 
     this.jobStatusFile = jobFolder.getFile( JOBSTATUS_FILENAME );
@@ -295,13 +294,13 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
               this.jobID = ( GridJobID )element.createExecutableExtension( "class" ); //$NON-NLS-1$
               this.jobID.setXMLNode( rootElement );
               this.jobID.setJob( this );
-            } catch( CoreException e ) {
+            } catch ( CoreException e ) {
               // TODO Auto-generated catch block
             }
           }
         }
       }
-      if( this.jobID == null ) {
+      if ( this.jobID == null ) {
         this.jobID = new GridJobID( rootElement );
         this.jobID.setJob( this );
       }
@@ -397,10 +396,6 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     return GridModel.getJobManager();
   }
 
-  // public JSDLJobDescription getJsdlDescription() {
-  // new JSDLJobDescription(jobDescriptionFile);
-  // return jsdlDescription;
-  // }
   public IGridJobDescription getJobDescription() {
     if( this.jobDescription == null ) {
       if( this.jobDescriptionFile != null ) {
@@ -463,15 +458,10 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
                             final Throwable exception )
   {
     IResource resource = getResource();
-    // Activator.logStatus( new Status( severity,
-    // Activator.PLUGIN_ID,
-    // IStatus.OK,
-    // errorString + " " + resource.getFullPath(), //$NON-NLS-1$
-    // exception ) );
     StringBuilder messageStringBuilder = new StringBuilder( errorString == null
                                                                                ? "null" //$NON-NLS-1$
                                                                                : errorString );
-    if( resource != null && resource.getFullPath() != null ) {
+    if ( resource != null && resource.getFullPath() != null ) {
       messageStringBuilder.append( " File: " ); //$NON-NLS-1$
       messageStringBuilder.append( resource.getFullPath() );
     }
@@ -482,7 +472,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
                                      exception ) );
   }
 
-  // Commented this out (temporarily?) since this does not work with
+  // TODO Commented this out (temporarily?) since this does not work with
   // IGridContainer#findChild(String name) and IGridRoot#findElement(IPath path)
   /*
    * public String getName() { // return "Job ("+super.getName()+")"; String
@@ -507,11 +497,11 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
    * 
    * @param description - Job description
    * @param jobFolder - Folder to which file should be written
-   * @throws GridModelException
+   * @throws ProblemException
    */
   private void writeJobDescription( final IGridJobDescription description,
                                     final IFolder jobFolder )
-    throws GridModelException
+    throws ProblemException
   {
     IFile sourceDescriptionFile = null;
     if (description.getResource() instanceof IFolder) {
@@ -526,16 +516,16 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
       InputStream is = sourceDescriptionFile.getContents( true );
       this.jobDescriptionFile.create( is, true, null );
       is.close();
-    } catch( CoreException cExc ) {
-      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
-                                    "Problem while creating job description file", //$NON-NLS-1$
-                                    cExc,
-                                    Activator.PLUGIN_ID );
-    } catch( IOException ioExc ) {
-      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
-                                    "Problem while creating job description file", //$NON-NLS-1$
-                                    ioExc,
-                                    Activator.PLUGIN_ID );
+    } catch ( CoreException cExc ) {
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
+                                  "Problem while creating job description file", //$NON-NLS-1$
+                                  cExc,
+                                  Activator.PLUGIN_ID );
+    } catch ( IOException ioExc ) {
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
+                                  "Problem while creating job description file", //$NON-NLS-1$
+                                  ioExc,
+                                  Activator.PLUGIN_ID );
     }
   }
 
@@ -544,19 +534,19 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
    * 
    * @param id - JobID
    * @param jobFolder - Folder to which file should be written
-   * @throws GridModelException
+   * @throws ProblemException
    */
   private void writeJobID( final IGridJobID id, final IFolder jobFolder )
-    throws GridModelException
+    throws ProblemException
   {
     IFile file;
     // create jobID file
     file = jobFolder.getFile( GridJob.JOBID_FILENAME );
-    if( !( id instanceof GridJobID ) ) {
-      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_SAVE_FAILED,
-                                    "GridJobID was expected instead of " //$NON-NLS-1$
-                                        + id.getClass(),
-                                    Activator.PLUGIN_ID );
+    if ( ! ( id instanceof GridJobID ) ) {
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_SAVE_FAILED,
+                                  "GridJobID was expected instead of " //$NON-NLS-1$
+                                      + id.getClass(),
+                                  Activator.PLUGIN_ID );
     }
     String xml = ( ( GridJobID )id ).getXML();
     try {
@@ -565,16 +555,16 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
       ByteArrayInputStream baos = new ByteArrayInputStream( byteArray );
       file.create( baos, true, null );
     } catch ( CoreException cExc ) {
-      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
-                                    "Problem while creating job ID file " //$NON-NLS-1$
-                                        + file.getName(),
-                                    cExc,
-                                    Activator.PLUGIN_ID );
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
+                                  "Problem while creating job ID file " //$NON-NLS-1$
+                                      + file.getName(),
+                                  cExc,
+                                  Activator.PLUGIN_ID );
     } catch ( UnsupportedEncodingException e ) {
-      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
-                                    "Problem while creating job ID file ", //$NON-NLS-1$
-                                    e,
-                                    Activator.PLUGIN_ID );
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
+                                  "Problem while creating job ID file ", //$NON-NLS-1$
+                                  e,
+                                  Activator.PLUGIN_ID );
     }
   }
 
@@ -582,10 +572,10 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
    * Writes job status XML to job folder
    * 
    * @param jobFolder - Folder to which file should be written
-   * @throws GridModelException
+   * @throws ProblemException
    */
   private void writeJobStatus( final IFile _jobStatusFile )
-    throws GridModelException
+    throws ProblemException
   {
     String xml;
     byte[] byteArray;
@@ -601,16 +591,16 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
         _jobStatusFile.create( baos, true, null );
       }
     } catch ( CoreException cExc ) {
-      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
-                                    "Problem while writing job status file " //$NON-NLS-1$
-                                        + _jobStatusFile.getName(),
-                                    cExc,
-                                    Activator.PLUGIN_ID );
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
+                                  "Problem while writing job status file " //$NON-NLS-1$
+                                      + _jobStatusFile.getName(),
+                                  cExc,
+                                  Activator.PLUGIN_ID );
     } catch ( UnsupportedEncodingException e ) {
-      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
-                                    "Problem while creating job status file ", //$NON-NLS-1$
-                                    e,
-                                    Activator.PLUGIN_ID );
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
+                                  "Problem while creating job status file ", //$NON-NLS-1$
+                                  e,
+                                  Activator.PLUGIN_ID );
     }
   }
 
@@ -619,11 +609,11 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
    * 
    * @param description - JobDescription
    * @param jobFolder - Folder to which file should be written
-   * @throws GridModelException
+   * @throws ProblemException
    */
   private void writeJobInfo( final IGridJobDescription description,
                              final IFolder jobFolder )
-    throws GridModelException
+    throws ProblemException
   {
     IFile file;
     String xml;
@@ -664,38 +654,25 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
           + ">"; //$NON-NLS-1$
     try {
       byteArray = xml.getBytes( XML_CHARSET ); // choose a charset
-      // //$NON-NLS-1$
       baos = new ByteArrayInputStream( byteArray );
       file.create( baos, true, null );
-    } catch( CoreException cExc ) {
-      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
-                                    "Problem while creating job information file " //$NON-NLS-1$
-                                        + file.getName(),
-                                    cExc,
-                                    Activator.PLUGIN_ID );
-    } catch( UnsupportedEncodingException e ) {
-      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
-                                    "Problem while creating job information file ", //$NON-NLS-1$
-                                    e,
-                                    Activator.PLUGIN_ID );
+    } catch ( CoreException cExc ) {
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
+                                  "Problem while creating job information file " //$NON-NLS-1$
+                                      + file.getName(),
+                                  cExc,
+                                  Activator.PLUGIN_ID );
+    } catch ( UnsupportedEncodingException e ) {
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
+                                  "Problem while creating job information file ", //$NON-NLS-1$
+                                  e,
+                                  Activator.PLUGIN_ID );
     }
   }
 
   public Date getSubmissionTime() {
     return this.submissionTime;
   }
-
-  // public Object getAdapter(Class cl){
-  // Object adapter=null;
-  // // adapter=Platform.getAdapterManager().getAdapter(this, cl);
-  // // if(adapter==null){
-  // adapter=super.getAdapter( cl );
-  // // }
-  // return adapter;
-  // }
-  // public IResource getResource() {
-  // return gridJobFolder;
-  // }
 
   /**
    * Check if a job can be created from this folder. Currently it checks only if
@@ -722,35 +699,35 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     return Status.OK_STATUS;
   }
   
-  private void createStagingFolders( final IFolder jobFolder ) throws GridModelException {
+  private void createStagingFolders( final IFolder jobFolder ) throws ProblemException {
     if( this.jobDescription instanceof JSDLJobDescription ) {
       JSDLJobDescription jsdlDesc = ( JSDLJobDescription )this.jobDescription;
       Map<String, String> inStagingMap = jsdlDesc.getDataStagingInStrings();
       Map<String, String> outStagingMap = jsdlDesc.getDataStagingOutStrings();
       
-      if( inStagingMap != null
-          && !inStagingMap.isEmpty() ) { 
+      if ( inStagingMap != null
+          && ! inStagingMap.isEmpty() ) { 
         try {
           IFolder inputFolder = createStagingFilesFolder( jobFolder, FOLDERNAME_INPUT_FILES );
           createStagingFilesLinks( inputFolder, inStagingMap );
-        } catch( CoreException exception ) {
-          throw new GridModelException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
-                                        Messages.getString("GridJob.errCreateInputFolder"), //$NON-NLS-1$
-                                        exception,
-                                        Activator.PLUGIN_ID );
-        }        
-      }      
+        } catch ( CoreException exception ) {
+          throw new ProblemException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
+                                      Messages.getString("GridJob.errCreateInputFolder"), //$NON-NLS-1$
+                                      exception,
+                                      Activator.PLUGIN_ID );
+        }
+      }
 
-      if( outStagingMap != null
-          && !outStagingMap.isEmpty() ) {
+      if ( outStagingMap != null
+           && ! outStagingMap.isEmpty() ) {
         try {
           IFolder outputFolder  = createStagingFilesFolder( jobFolder, FOLDERNAME_OUTPUT_FILES );
           createStagingFilesLinks( outputFolder, outStagingMap );
         } catch( CoreException exception ) {
-          throw new GridModelException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
-                                        Messages.getString("GridJob.errCreateOutputFolder"), //$NON-NLS-1$
-                                        exception,
-                                        Activator.PLUGIN_ID );
+          throw new ProblemException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
+                                      Messages.getString("GridJob.errCreateOutputFolder"), //$NON-NLS-1$
+                                      exception,
+                                      Activator.PLUGIN_ID );
         }        
       }
       
@@ -795,7 +772,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     }
   }
 
-  private IGridElement createModelElement( final IResource resource ) throws GridModelException {
+  private IGridElement createModelElement( final IResource resource ) throws ProblemException {
     IGridElement element = null;
     IGridElementCreator creator = findCreator( resource );
     if ( creator != null ) {
@@ -811,7 +788,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     if( folder.exists() ) {
       try {
         createModelElement( folder );
-      } catch( GridModelException exception ) {        
+      } catch ( ProblemException exception ) {        
         Activator.logException( exception, String.format( Messages.getString("GridJob.errAddFolder"), folderName ) ); //$NON-NLS-1$
       }
     }    
@@ -848,7 +825,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     DateFormat formatter = DateFormat.getDateTimeInstance( DateFormat.MEDIUM,
                                                            DateFormat.MEDIUM,
                                                            new Locale( "Locale.US" ) ); //$NON-NLS-1$
-    if( formatter == null ) {
+    if ( formatter == null ) {
       formatter = DateFormat.getDateTimeInstance( DateFormat.MEDIUM,
                                                   DateFormat.MEDIUM );
     }
@@ -862,8 +839,8 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     IFolder jobFolder = (IFolder)this.getResource();
     
     try {
-      for( IResource child : jobFolder.members( true ) ) {
-        if( child instanceof IFolder
+      for ( IResource child : jobFolder.members( true ) ) {
+        if ( child instanceof IFolder
             && child.getName().endsWith( JOBFILE_EXTENSION ) ) {
           createModelElement( child );
         }
@@ -878,7 +855,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
       jobFolder.setSessionProperty( new QualifiedName( FOLDER_PROPERTIES_QUALIFIER,
                                                        FOLDER_PROPERTY_JOBID_CLASS ),
                                     this.jobID.getClass().getName() );
-    } catch( CoreException exception ) {
+    } catch ( CoreException exception ) {
       Activator.logException( exception,
                               String.format( "Cannot set property for job folder " //$NON-NLS-1$
                                              + jobFolder.getName() ) );
@@ -895,10 +872,10 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     try {
       Object property = jobFolder.getSessionProperty( new QualifiedName( FOLDER_PROPERTIES_QUALIFIER,
                                                                          FOLDER_PROPERTY_JOBID_CLASS ) );
-      if( property instanceof String ) {
+      if ( property instanceof String ) {
         jobIdClass = ( String )property;
       }
-    } catch( CoreException exception ) {
+    } catch ( CoreException exception ) {
       Activator.logException( exception,
                               String.format( "Cannot get property for job folder " //$NON-NLS-1$
                                              + jobFolder.getName() ) );
@@ -914,7 +891,7 @@ public class GridJob extends ResourceGridContainer implements IGridJob {
     try {
       IGridJobService service = getJobService();
       
-      if( service != null ) {
+      if ( service != null ) {
         service.deleteJob( this.getID(), monitor );
       }
     } finally {

@@ -76,8 +76,8 @@ public class ProjectVo
     for ( IGridResourceCategory category : supportedResources ) {
       try {
         getResourceContainer( category );
-      } catch ( GridModelException gmExc ) {
-        Activator.logException( gmExc );
+      } catch ( ProblemException pExc ) {
+        Activator.logException( pExc );
       }
     }
     
@@ -268,9 +268,9 @@ public class ProjectVo
           ( ( IGridContainer ) child ).setDirty();
         }
       }
-    } catch ( GridModelException gmExc ) {
+    } catch ( ProblemException pExc ) {
       // Should never happen, if it does we will at least log it
-      Activator.logException( gmExc );
+      Activator.logException( pExc );
     }
   }
 
@@ -282,7 +282,7 @@ public class ProjectVo
   }
   
   private ResourceCategoryContainer getResourceContainer( final IGridResourceCategory category )
-      throws GridModelException {
+      throws ProblemException {
     
     ResourceCategoryContainer result = null;
     

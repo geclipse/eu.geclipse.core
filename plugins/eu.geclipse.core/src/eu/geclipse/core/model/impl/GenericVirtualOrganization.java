@@ -18,7 +18,6 @@ package eu.geclipse.core.model.impl;
 import org.eclipse.core.filesystem.IFileStore;
 
 import eu.geclipse.core.internal.Activator;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridService;
 import eu.geclipse.core.model.IStorableElement;
@@ -55,8 +54,8 @@ public class GenericVirtualOrganization
     this.name = fileStore.getName();
     try {
       load();
-    } catch( GridModelException gmExc ) {
-      Activator.logException( gmExc );
+    } catch ( ProblemException pExc ) {
+      Activator.logException( pExc );
     }
   }
   
@@ -67,7 +66,7 @@ public class GenericVirtualOrganization
   public boolean canContain( final IGridElement element ) {
     return
       super.canContain( element )
-      || ( element instanceof GenericVoProperties );
+        || ( element instanceof GenericVoProperties );
   }
   
   @Override
@@ -172,8 +171,8 @@ public class GenericVirtualOrganization
         child = properties;
       }
     
-    } catch( GridModelException gmExc ) {
-      Activator.logException( gmExc );
+    } catch ( ProblemException pExc ) {
+      Activator.logException( pExc );
     }
     
     return child;

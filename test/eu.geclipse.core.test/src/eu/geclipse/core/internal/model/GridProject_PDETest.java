@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -20,12 +20,12 @@ import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.junit.Assert;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**this class tests the methods in {@link GridProject}
  * @author tao-j
@@ -80,10 +80,10 @@ public class GridProject_PDETest {
   /**tests the method {@link GridProject#
    * getChildren(org.eclipse.core.runtime.IProgressMonitor)}
    * the second child must be output
-   * @throws GridModelException 
+   * @throws ProblemException 
    */
   @Test
-  public void testGetChildren() throws GridModelException {
+  public void testGetChildren() throws ProblemException {
     IGridElement[] children = gridproject.getChildren( null ) ;
     Assert.assertEquals( "output", children[1].getName() ); //$NON-NLS-1$
   }

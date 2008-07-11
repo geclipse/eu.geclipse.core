@@ -7,13 +7,13 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridResource;
 import eu.geclipse.core.model.IGridResourceCategory;
 import eu.geclipse.core.model.impl.ContainerMarker;
 import eu.geclipse.core.reporting.ProblemException;
+
 
 public class ResourceCategoryContainer extends VirtualGridContainer {
   
@@ -32,7 +32,7 @@ public class ResourceCategoryContainer extends VirtualGridContainer {
   }
   
   public void addChild( final ResourceCategoryContainer child )
-      throws GridModelException {
+      throws ProblemException {
     addElement( child );
   }
   
@@ -49,7 +49,7 @@ public class ResourceCategoryContainer extends VirtualGridContainer {
   
   @Override
   protected IStatus fetchChildren( final IProgressMonitor monitor )
-      throws GridModelException {
+      throws ProblemException {
   
     for ( IGridElement permantenChild : this.permanentChildren ) {
       addElement( permantenChild );
@@ -57,34 +57,26 @@ public class ResourceCategoryContainer extends VirtualGridContainer {
     
     if ( this.category.isActive() ) {
 
-      try {
-        
-        IGridResource[] resources
-          = getProject().getVO().getAvailableResources( this.category, true, monitor);
-        
-        if ( ( resources != null ) && ( resources.length > 0 ) ) {
-          lock();
-          try {
-            for ( IGridElement resource : resources ) {
-              addElement( resource );
-            }
-          } finally {
-            unlock();
+      IGridResource[] resources
+        = getProject().getVO().getAvailableResources( this.category, true, monitor);
+
+      if ( ( resources != null ) && ( resources.length > 0 ) ) {
+        lock();
+        try {
+          for ( IGridElement resource : resources ) {
+            addElement( resource );
           }
-        } else {
-          addElement( new ContainerMarker( this,
-                                           ContainerMarker.MarkerType.INFO,
-                                           "No matching elements found" ) );
+        } finally {
+          unlock();
         }
-        
-      } catch ( ProblemException pExc ) {
-        throw new GridModelException( pExc.getProblem() );
+      } else {
+        addElement( new ContainerMarker( this,
+                                         ContainerMarker.MarkerType.INFO,
+                                         "No matching elements found" ) );
       }
-      
     }
     
     return Status.OK_STATUS;
-    
   }
 
 }

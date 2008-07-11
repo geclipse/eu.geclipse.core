@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -16,13 +16,12 @@
 package eu.geclipse.core.model.impl;
 
 import org.junit.Assert;
-
 import org.junit.BeforeClass;
 import org.junit.Test;
 
 import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IVoManager;
+import eu.geclipse.core.reporting.ProblemException;
 
 
 /**this class tests the methods in the class {@link GenericVoProperties}
@@ -115,10 +114,10 @@ public class GenericVoProperties_PDETest {
 
   /**
    * tests the method {@link GenericVoProperties#save()}
-   * @throws GridModelException 
+   * @throws ProblemException 
    */
   @Test
-  public void testSave() throws GridModelException {
+  public void testSave() throws ProblemException {
     property.save();
   }
 }

@@ -39,14 +39,15 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 
 import eu.geclipse.core.Extensions;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.core.model.IGridService;
 import eu.geclipse.core.model.impl.GenericVirtualOrganization;
 import eu.geclipse.core.model.impl.GenericVoCreator;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.dialogs.ServiceDialog;
 import eu.geclipse.ui.internal.Activator;
+
 
 public class VoServiceSelectionPage extends WizardPage {
   
@@ -186,7 +187,7 @@ public class VoServiceSelectionPage extends WizardPage {
    * of the specified VO.
    * 
    * @param vo The VO whose attributes should be set to the page's controls.
-   * @throws GridModelException If any error occurs.
+   * @throws ProblemException If any error occurs.
    */
   protected void initVo( final GenericVirtualOrganization vo ) {
     
@@ -205,8 +206,8 @@ public class VoServiceSelectionPage extends WizardPage {
         }
       }
       
-    } catch ( GridModelException gmExc ) {
-      Activator.logException( gmExc );
+    } catch ( ProblemException pExc ) {
+      Activator.logException( pExc );
     }
     
   }

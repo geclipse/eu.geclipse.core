@@ -29,7 +29,6 @@ import eu.geclipse.aws.IAWSService;
 import eu.geclipse.aws.s3.internal.Activator;
 import eu.geclipse.aws.vo.AWSVirtualOrganization;
 import eu.geclipse.core.ICoreProblems;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridInfoService;
@@ -70,7 +69,7 @@ public class S3AWSService extends AbstractGridContainer
     try {
       apply( serviceCreator );
       addElement( new S3InfoService( this ) );
-    } catch( GridModelException e ) {
+    } catch ( ProblemException e ) {
       Activator.log( "Could not populate S3AWSAService with data from provided S3 service creator", //$NON-NLS-1$
                      e );
     }
@@ -80,7 +79,7 @@ public class S3AWSService extends AbstractGridContainer
    * Creates a new {@link S3AWSService} where the properties are loaded from the
    * local storage.
    * 
-   * @param vo the Vo to use for authentication
+   * @param vo the VO to use for authentication
    */
   public S3AWSService( final AWSVirtualOrganization vo ) {
     this.awsVo = vo;
@@ -90,7 +89,7 @@ public class S3AWSService extends AbstractGridContainer
       addElement( serviceProperties );
 
       addElement( new S3InfoService( this ) );
-    } catch( GridModelException e ) {
+    } catch ( ProblemException e ) {
       Activator.log( "Could not load the s3 service details from the filestore", //$NON-NLS-1$
                      e );
     }
@@ -108,10 +107,10 @@ public class S3AWSService extends AbstractGridContainer
    * 
    * @param serviceCreator the {@link S3AWSServiceCreator} to apply the data
    *            from
-   * @throws GridModelException
+   * @throws ProblemException
    */
   public void apply( final S3AWSServiceCreator serviceCreator )
-    throws GridModelException
+    throws ProblemException
   {
     S3ServiceProperties properties = new S3ServiceProperties( this,
                                                               serviceCreator );
@@ -127,10 +126,10 @@ public class S3AWSService extends AbstractGridContainer
     S3ServiceProperties properties = null;
     try {
       properties = getProperties();
-    } catch( GridModelException e ) {
+    } catch ( ProblemException e ) {
       Activator.log( "Could not load the properties of the s3 service", e ); //$NON-NLS-1$
     }
-    if( properties != null ) {
+    if ( properties != null ) {
       return properties.getS3Url();
     }
     return null;
@@ -139,10 +138,10 @@ public class S3AWSService extends AbstractGridContainer
   public URI getURI() {
     String hostName = getHostName();
     try {
-      if( hostName != null ) {
+      if ( hostName != null ) {
         return new URI( hostName );
       }
-    } catch( URISyntaxException e ) {
+    } catch ( URISyntaxException e ) {
       Activator.log( "Could not create S3 service URI from " + hostName, e ); //$NON-NLS-1$
     }
     return null;
@@ -156,10 +155,10 @@ public class S3AWSService extends AbstractGridContainer
     S3ServiceProperties properties = null;
     try {
       properties = getProperties();
-    } catch( GridModelException gridModelEx ) {
-      Activator.log( "Could not load the properties of the s3 service", gridModelEx ); //$NON-NLS-1$
+    } catch ( ProblemException problemEx ) {
+      Activator.log( "Could not load the properties of the s3 service", problemEx ); //$NON-NLS-1$
     }
-    if( properties != null ) {
+    if ( properties != null ) {
       return properties.getServiceName();
     }
     return null;
@@ -188,7 +187,7 @@ public class S3AWSService extends AbstractGridContainer
   @Override
   public boolean equals( final Object obj ) {
     boolean result = false;
-    if( obj instanceof S3AWSService ) {
+    if ( obj instanceof S3AWSService ) {
       result = equals( ( S3AWSService )obj );
     }
     return result;
@@ -211,10 +210,10 @@ public class S3AWSService extends AbstractGridContainer
    * 
    * @return this services properties or <code>null</code> if no properties
    *         could be retrieved
-   * @throws GridModelException Thrown if an error occurs while fetching the
+   * @throws ProblemException Thrown if an error occurs while fetching the
    *             properties.
    */
-  public S3ServiceProperties getProperties() throws GridModelException {
+  public S3ServiceProperties getProperties() throws ProblemException {
     S3ServiceProperties properties = null;
     IGridElement[] children = getChildren( null );
 
@@ -237,41 +236,41 @@ public class S3AWSService extends AbstractGridContainer
           break;
         }
       }
-    } catch( GridModelException gridModelEx ) {
-      Activator.log( "Could not get info service from EC2Service", gridModelEx ); //$NON-NLS-1$
+    } catch ( ProblemException problemEx ) {
+      Activator.log( "Could not get info service from EC2Service", problemEx ); //$NON-NLS-1$
     }
     return infoService;
   }
 
-  public void load() throws GridModelException {
+  public void load() throws ProblemException {
     deleteAll();
 
     addElement( new S3InfoService( this ) );
     IFileStore fileStore = getFileStore();
     try {
       IFileStore[] childStores = fileStore.childStores( EFS.NONE, null );
-      for( IFileStore child : childStores ) {
+      for ( IFileStore child : childStores ) {
 
-        if( child.getName().equals( S3ServiceProperties.STORAGE_NAME ) ) {
+        if ( child.getName().equals( S3ServiceProperties.STORAGE_NAME ) ) {
           S3ServiceProperties serviceProperties = new S3ServiceProperties( this );
           serviceProperties.load();
           addElement( serviceProperties );
         }
       }
-    } catch( CoreException cExc ) {
-      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_LOAD_FAILED,
-                                    cExc,
-                                    Activator.PLUGIN_ID );
+    } catch ( CoreException cExc ) {
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_LOAD_FAILED,
+                                  cExc,
+                                  Activator.PLUGIN_ID );
     }
   }
 
   public void save() throws ProblemException {
     // create own storage directory
     IFileStore fileStore = getFileStore();
-    if( !fileStore.fetchInfo().exists() ) {
+    if ( ! fileStore.fetchInfo().exists() ) {
       try {
         fileStore.mkdir( EFS.NONE, new NullProgressMonitor() );
-      } catch( CoreException e ) {
+      } catch ( CoreException e ) {
         Activator.log( "Could not create storage dir for s3Service", e ); //$NON-NLS-1$
         return;
       }
@@ -279,8 +278,8 @@ public class S3AWSService extends AbstractGridContainer
 
     // save children
     IGridElement[] children = getChildren( null );
-    for( IGridElement child : children ) {
-      if( child instanceof IStorableElement ) {
+    for ( IGridElement child : children ) {
+      if ( child instanceof IStorableElement ) {
         ( ( IStorableElement )child ).save();
       }
     }

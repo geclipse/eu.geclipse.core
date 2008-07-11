@@ -45,6 +45,7 @@ import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.core.model.IGridService;
 import eu.geclipse.core.model.IStorableElement;
+import eu.geclipse.core.reporting.ProblemException;
 
 
 /**
@@ -91,7 +92,7 @@ public class GenericVoProperties
     return true;
   }
   
-  public void load() throws GridModelException {
+  public void load() throws ProblemException {
     
     IFileStore fileStore = getFileStore();
     List< IConfigurationElement > elements
@@ -154,22 +155,22 @@ public class GenericVoProperties
       }
       
     } catch ( CoreException cExc ) {
-      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_LOAD_FAILED,
-                                    cExc,
-                                    Activator.PLUGIN_ID );
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_LOAD_FAILED,
+                                  cExc,
+                                  Activator.PLUGIN_ID );
     } catch ( IOException ioExc ) {
-      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_LOAD_FAILED,
-                                    ioExc,
-                                    Activator.PLUGIN_ID );
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_LOAD_FAILED,
+                                  ioExc,
+                                  Activator.PLUGIN_ID );
     } catch ( URISyntaxException uriExc ) {
-      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_LOAD_FAILED,
-                                    uriExc,
-                                    Activator.PLUGIN_ID );
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_LOAD_FAILED,
+                                  uriExc,
+                                  Activator.PLUGIN_ID );
     }
     
   }
 
-  public void save() throws GridModelException {
+  public void save() throws ProblemException {
     
     IFileStore fileStore = getFileStore();
     IGridElement[] children = this.vo.getChildren( null );
@@ -193,13 +194,13 @@ public class GenericVoProperties
       bWriter.close();
       
     } catch ( CoreException cExc ) {
-      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_SAVE_FAILED,
-                                    cExc,
-                                    Activator.PLUGIN_ID );
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_SAVE_FAILED,
+                                  cExc,
+                                  Activator.PLUGIN_ID );
     } catch ( IOException ioExc ) {
-      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_SAVE_FAILED,
-                                    ioExc,
-                                    Activator.PLUGIN_ID );
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_SAVE_FAILED,
+                                  ioExc,
+                                  Activator.PLUGIN_ID );
     }
     
   }

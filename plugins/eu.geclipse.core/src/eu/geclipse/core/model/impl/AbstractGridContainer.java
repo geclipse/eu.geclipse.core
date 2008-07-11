@@ -33,7 +33,6 @@ import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.internal.model.GridRoot;
 import eu.geclipse.core.internal.model.notify.GridModelEvent;
 import eu.geclipse.core.internal.model.notify.GridNotificationService;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
@@ -175,7 +174,7 @@ public abstract class AbstractGridContainer
    * @see eu.geclipse.core.model.IGridContainer#create(eu.geclipse.core.model.IGridElementCreator)
    */
   public IGridElement create( final IGridElementCreator creator )
-      throws GridModelException {
+      throws ProblemException {
     // Temporarily add catch for GME removal in steps
     IGridElement element = null;
     try {
@@ -191,7 +190,7 @@ public abstract class AbstractGridContainer
    * @see eu.geclipse.core.model.IGridContainer#delete(eu.geclipse.core.model.IGridElement)
    */
   public void delete( final IGridElement child )
-      throws GridModelException {
+      throws ProblemException {
     removeElement( child );
     unregisterFromManager( child );
     child.dispose();
@@ -231,15 +230,15 @@ public abstract class AbstractGridContainer
    * @see eu.geclipse.core.model.IGridContainer#getChildren(org.eclipse.core.runtime.IProgressMonitor)
    */
   public IGridElement[] getChildren( final IProgressMonitor monitor )
-      throws GridModelException {
+      throws ProblemException {
     if ( isLazy() && isDirty() ) {
       try {
         startFetch( monitor );
       } catch ( Throwable t ) {
-        if ( t instanceof GridModelException ) {
-          throw ( GridModelException ) t;
+        if ( t instanceof ProblemException ) {
+          throw ( ProblemException ) t;
         }
-        throw new GridModelException( ICoreProblems.MODEL_FETCH_CHILDREN_FAILED, t, Activator.PLUGIN_ID );
+        throw new ProblemException( ICoreProblems.MODEL_FETCH_CHILDREN_FAILED, t, Activator.PLUGIN_ID );
       }
     }
     return this.children.toArray( new IGridElement[ this.children.size() ] );
@@ -290,7 +289,7 @@ public abstract class AbstractGridContainer
   }
   
   public void refresh( final IProgressMonitor monitor )
-      throws GridModelException {
+      throws ProblemException {
 
     if ( ! isVirtual() ) {
       IContainer container = ( IContainer ) getResource();
@@ -298,7 +297,7 @@ public abstract class AbstractGridContainer
         lock();
         container.refreshLocal( IResource.DEPTH_INFINITE, monitor );
       } catch( CoreException cExc ) {
-        throw new GridModelException( ICoreProblems.MODEL_REFRESH_FAILED,
+        throw new ProblemException( ICoreProblems.MODEL_REFRESH_FAILED,
             cExc,
             Activator.PLUGIN_ID );
       } finally {
@@ -311,10 +310,10 @@ public abstract class AbstractGridContainer
       try {
         startFetch( monitor );
       } catch ( Throwable t ) {
-        if ( t instanceof GridModelException ) {
-          throw ( GridModelException ) t;
+        if ( t instanceof ProblemException ) {
+          throw ( ProblemException ) t;
         }
-        throw new GridModelException( ICoreProblems.MODEL_REFRESH_FAILED,
+        throw new ProblemException( ICoreProblems.MODEL_REFRESH_FAILED,
             t,
             Activator.PLUGIN_ID );
       }
@@ -339,7 +338,7 @@ public abstract class AbstractGridContainer
    * @return The newly added element.
    */
   protected IGridElement addElement( final IGridElement element )
-      throws GridModelException {
+      throws ProblemException {
     
     if ( element != null ) {
     
@@ -398,12 +397,12 @@ public abstract class AbstractGridContainer
   @SuppressWarnings("unused")
   protected IStatus fetchChildren( @SuppressWarnings("unused")
                                    final IProgressMonitor monitor )
-      throws GridModelException {
+      throws ProblemException {
     return Status.OK_STATUS;
   }
   
   protected void removeElement( final IGridElement element )
-      throws GridModelException {
+      throws ProblemException {
     boolean result = this.children.remove( element );
     if ( result ) {
       fireGridModelEvent( IGridModelEvent.ELEMENTS_REMOVED, element );
@@ -502,17 +501,17 @@ public abstract class AbstractGridContainer
   
   /**
    * Test if this container can contain the specified element
-   * and throw a {@link GridModelException} if this is not the
+   * and throw a {@link ProblemException} if this is not the
    * case.
    * 
    * @param element The element to be tested.
-   * @throws GridModelException Thrown if {@link #canContain(IGridElement)}
+   * @throws ProblemException Thrown if {@link #canContain(IGridElement)}
    * returns false for the specified element.
    */
   private void testCanContain( final IGridElement element )
-      throws GridModelException {
-    if ( !canContain( element ) ) {
-      throw new GridModelException( ICoreProblems.MODEL_CONTAINER_CAN_NOT_CONTAIN,
+      throws ProblemException {
+    if ( ! canContain( element ) ) {
+      throw new ProblemException( ICoreProblems.MODEL_CONTAINER_CAN_NOT_CONTAIN,
           String.format(
               Messages.getString("AbstractGridContainer.can_not_contain_error"), //$NON-NLS-1$
               getClass().getName(), element.getClass().getName() ),

@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -37,7 +37,6 @@ import eu.geclipse.core.Extensions;
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.internal.model.notify.GridModelEvent;
 import eu.geclipse.core.internal.model.notify.GridNotificationService;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridModelEvent;
@@ -45,6 +44,8 @@ import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
 import eu.geclipse.core.project.GridProjectNature;
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * This is the grid model class that represents any project in the
@@ -98,11 +99,11 @@ public class GridProject
    */
   @Override
   public IGridElement[] getChildren( final IProgressMonitor monitor )
-      throws GridModelException {
+      throws ProblemException {
     IGridElement[] children = new IGridElement[0];
     if ( isOpen() ) {
       children = super.getChildren( monitor );
-      if ( !hasVo( children ) ) {
+      if ( ! hasVo( children ) ) {
         loadProjectProperties( ( IProject ) getResource() );
         children = super.getChildren( monitor );
       }
@@ -256,7 +257,7 @@ public class GridProject
   }
   
   @Override
-  protected IGridElement addElement( final IGridElement element ) throws GridModelException {
+  protected IGridElement addElement( final IGridElement element ) throws ProblemException {
     
     IGridElement result = super.addElement( element );
     
@@ -321,10 +322,10 @@ public class GridProject
         }
       }
       
-    } catch( BackingStoreException bsExc ) {
+    } catch ( BackingStoreException bsExc ) {
       Activator.logException( bsExc );
-    } catch ( GridModelException gmExc ) {
-      Activator.logException( gmExc );
+    } catch ( ProblemException pExc ) {
+      Activator.logException( pExc );
     }
     
   }

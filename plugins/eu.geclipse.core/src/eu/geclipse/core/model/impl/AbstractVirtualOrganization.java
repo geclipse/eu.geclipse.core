@@ -32,7 +32,6 @@ import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.internal.model.ProjectVo;
 import eu.geclipse.core.internal.model.VoManager;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridApplicationManager;
 import eu.geclipse.core.model.IGridComputing;
 import eu.geclipse.core.model.IGridContainer;
@@ -94,7 +93,7 @@ public abstract class AbstractVirtualOrganization
     return infoService.fetchResources( this, this, category, false, null, monitor );
   }
   
-  public IGridComputing[] getComputing( final IProgressMonitor monitor ) throws GridModelException {
+  public IGridComputing[] getComputing( final IProgressMonitor monitor ) throws ProblemException {
     IGridComputing[] computing = null;
     IGridInfoService infoService = getInfoService();
     IGridResource[] myComputingResources = null;
@@ -137,7 +136,7 @@ public abstract class AbstractVirtualOrganization
    * @see eu.geclipse.core.model.IVirtualOrganization#getInfoService()
    */
   public IGridInfoService getInfoService()
-      throws GridModelException {
+      throws ProblemException {
     IGridInfoService infoService = null;
     IGridElement[] children = getChildren( null );
     for ( IGridElement child : children ) {
@@ -175,7 +174,7 @@ public abstract class AbstractVirtualOrganization
    * @see eu.geclipse.core.model.IVirtualOrganization#getServices()
    */
   public IGridService[] getServices( final IProgressMonitor monitor )
-      throws GridModelException {
+      throws ProblemException {
     IGridService[] result = null;
     IGridResource[] myGridResources = null;
     IGridInfoService infoService = getInfoService();
@@ -203,7 +202,7 @@ public abstract class AbstractVirtualOrganization
     return result;
   }
   
-  public IGridStorage[] getStorage( final IProgressMonitor monitor ) throws GridModelException {
+  public IGridStorage[] getStorage( final IProgressMonitor monitor ) throws ProblemException {
     IGridStorage[] storage = null;
     IGridResource[] myGridStorage = null;
     IGridInfoService infoService = getInfoService();
@@ -231,7 +230,7 @@ public abstract class AbstractVirtualOrganization
     return ProjectVo.standardResources;
   }
   
-  public IGridJobService[] getJobSubmissionServices( final IProgressMonitor monitor ) throws GridModelException {
+  public IGridJobService[] getJobSubmissionServices( final IProgressMonitor monitor ) throws ProblemException {
     List< IGridJobService > jsServices
       = new ArrayList< IGridJobService >();
     IGridService[] services = getServices( monitor );
@@ -256,7 +255,7 @@ public abstract class AbstractVirtualOrganization
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IStorableElement#load()
    */
-  public void load() throws GridModelException {
+  public void load() throws ProblemException {
     deleteAll();
     IFileStore fileStore = getFileStore();
     try {
@@ -268,15 +267,15 @@ public abstract class AbstractVirtualOrganization
         }
       }
     } catch ( CoreException cExc ) {
-      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_LOAD_FAILED,
-                                    cExc,
-                                    Activator.PLUGIN_ID );
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_LOAD_FAILED,
+                                  cExc,
+                                  Activator.PLUGIN_ID );
     }
   }
   
   public void refreshResources( final IGridResourceCategory category,
                                 final IProgressMonitor monitor )
-      throws GridModelException {
+      throws ProblemException {
     // TODO mathias may this stay to be a noop?
   }
   
