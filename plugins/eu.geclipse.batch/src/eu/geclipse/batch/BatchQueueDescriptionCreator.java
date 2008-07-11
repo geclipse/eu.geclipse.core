@@ -18,11 +18,11 @@ package eu.geclipse.batch;
 
 import org.eclipse.core.resources.IFile;
 
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridBatchQueueDescription;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.impl.AbstractFileElementCreator;
+import eu.geclipse.core.reporting.ProblemException;
 
 
 /**
@@ -50,7 +50,7 @@ public class BatchQueueDescriptionCreator extends AbstractFileElementCreator {
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridElementCreator#create(eu.geclipse.core.model.IGridContainer)
    */
-  public IGridElement create( final IGridContainer parent ) throws GridModelException
+  public IGridElement create( final IGridContainer parent ) throws ProblemException
   {
     IGridElement result = null;
     IFile file = ( IFile ) getObject();

@@ -23,13 +23,13 @@ import org.eclipse.core.filesystem.IFileInfo;
 import org.eclipse.core.filesystem.IFileStore;
 
 import eu.geclipse.core.ICoreProblems;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.core.model.IGridService;
 import eu.geclipse.core.model.IStorableElementCreator;
 import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * Grid element creator for the {@link GenericVirtualOrganization}.
@@ -80,9 +80,9 @@ public class GenericVoCreator
    * 
    * @param vo The {@link GenericVirtualOrganization} to which to
    * apply this creators settings.
-   * @throws GridModelException 
+   * @throws ProblemException 
    */
-  public void apply( final GenericVirtualOrganization vo ) throws GridModelException {
+  public void apply( final GenericVirtualOrganization vo ) throws ProblemException {
     
     IGridElement[] children = vo.getChildren( null );
     
@@ -116,7 +116,7 @@ public class GenericVoCreator
     return result;
   }
 
-  public IGridElement create( final IGridContainer parent ) throws GridModelException {
+  public IGridElement create( final IGridContainer parent ) throws ProblemException {
     GenericVirtualOrganization vo = null;
     if ( this.object == null ) {
       vo = new GenericVirtualOrganization( this );

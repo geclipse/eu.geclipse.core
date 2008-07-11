@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2007 g-Eclipse consortium
+ * Copyright (c) 2007-2008 g-Eclipse consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -16,13 +16,14 @@
  *****************************************************************************/
 package eu.geclipse.batch;
 
-
 import org.eclipse.core.resources.IFile;
-import eu.geclipse.core.model.GridModelException;
+
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridJobDescription;
 import eu.geclipse.core.model.impl.AbstractFileElementCreator;
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * Creator for batch service connection descriptions. Creates
@@ -40,7 +41,7 @@ public class BatchConnectionInfoCreator extends AbstractFileElementCreator {
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridElementCreator#create(eu.geclipse.core.model.IGridContainer)
    */
-  public IGridElement create( final IGridContainer parent ) throws GridModelException {
+  public IGridElement create( final IGridContainer parent ) throws ProblemException {
     IGridElement result = null;
     IFile file = ( IFile ) getObject();
     if ( file != null ) {

@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2007 g-Eclipse consortium
+ * Copyright (c) 2007-2008 g-Eclipse consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -17,11 +17,12 @@
 
 package eu.geclipse.info;
 
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.impl.AbstractGridElementCreator;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.info.glue.AbstractGlueTable;
+
 
 /**
  * @author George Tsouloupas
@@ -34,8 +35,7 @@ public class GlueElementCreator extends AbstractGridElementCreator {
     return ( fromObject instanceof AbstractGlueTable );
   }
 
-  public IGridElement create( final IGridContainer parent ) throws GridModelException
-  {
+  public IGridElement create( final IGridContainer parent ) throws ProblemException {
     return null;
   }
 

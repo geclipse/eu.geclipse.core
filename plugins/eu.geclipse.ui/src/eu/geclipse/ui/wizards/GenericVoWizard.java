@@ -25,8 +25,10 @@ import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IVoManager;
 import eu.geclipse.core.model.impl.GenericVirtualOrganization;
 import eu.geclipse.core.model.impl.GenericVoCreator;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.wizards.wizardselection.IInitalizableWizard;
+
 
 public class GenericVoWizard
     extends Wizard
@@ -113,8 +115,8 @@ public class GenericVoWizard
       } else {
         vo = ( GenericVirtualOrganization ) manager.create( creator );
       }
-    } catch( GridModelException gmExc ) {
-      result = new Status( IStatus.ERROR, Activator.PLUGIN_ID, gmExc.getLocalizedMessage(), gmExc );
+    } catch ( ProblemException pExc ) {
+      result = new Status( IStatus.ERROR, Activator.PLUGIN_ID, pExc.getLocalizedMessage(), pExc );
     }
     
     if ( ! result.isOK() && ( vo != null ) ) {

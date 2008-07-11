@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -16,12 +16,10 @@
 package eu.geclipse.info;
 
 import org.junit.Assert;
-
 import org.junit.Before;
 import org.junit.Test;
 
-import eu.geclipse.core.model.GridModelException;
-
+import eu.geclipse.core.reporting.ProblemException;
 
 
 /**test class for {@link GlueElementCreator}
@@ -48,11 +46,11 @@ public class GlueElementCreator_Test {
   }
 
   /**tests the method {@link GlueElementCreator#create(eu.geclipse.core.model.IGridContainer)}
-   * @throws GridModelException 
+   * @throws ProblemException 
    * 
    */
   @Test
-  public void testCreate() throws GridModelException {
+  public void testCreate() throws ProblemException {
     Assert.assertNull( this.creator.create( null ) );
   }
 

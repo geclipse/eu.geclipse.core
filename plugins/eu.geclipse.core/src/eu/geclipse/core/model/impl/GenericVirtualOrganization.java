@@ -46,7 +46,7 @@ public class GenericVirtualOrganization
   GenericVirtualOrganization( final GenericVoCreator creator ) {
     try {
       apply( creator );
-    } catch ( GridModelException gmExc ) {
+    } catch ( ProblemException gmExc ) {
       Activator.logException( gmExc );
     }
   }
@@ -146,9 +146,9 @@ public class GenericVirtualOrganization
    * this VO.
    * 
    * @param creator The creator to be applied to this VO.
-   * @throws GridModelException 
+   * @throws ProblemException 
    */
-  protected void apply( final GenericVoCreator creator ) throws GridModelException {
+  protected void apply( final GenericVoCreator creator ) throws ProblemException {
     
     this.name = creator.getVoName();
     
