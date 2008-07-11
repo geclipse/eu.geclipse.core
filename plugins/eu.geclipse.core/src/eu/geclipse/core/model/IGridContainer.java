@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -16,6 +16,9 @@
 package eu.geclipse.core.model;
 
 import org.eclipse.core.runtime.IProgressMonitor;
+
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * An <code>IGridContainer</code> is an {@link IGridElement} that
@@ -59,9 +62,9 @@ public interface IGridContainer extends IGridElement {
    * @return The element itself or the old element if the specified
    * element is <code>null</code> and there was such an old element
    * found. <code>null</code> in all other cases. 
-   * @throws GridModelException
+   * @throws ProblemException
    */
-  public IGridElement create( final IGridElementCreator creator ) throws GridModelException;
+  public IGridElement create( final IGridElementCreator creator ) throws ProblemException;
   
   /**
    * Delete the specified child. Deletion in the terms of an
@@ -70,10 +73,10 @@ public interface IGridContainer extends IGridElement {
    * method.
    * 
    * @param child The element to be deleted.
-   * @throws GridModelException If a problem occurs during the deletion.
+   * @throws ProblemException If a problem occurs during the deletion.
    * @see IGridElement#dispose()
    */
-  public void delete( final IGridElement child ) throws GridModelException;
+  public void delete( final IGridElement child ) throws ProblemException;
   
   /**
    * Search for a child with the specified name and return it.
@@ -109,10 +112,10 @@ public interface IGridContainer extends IGridElement {
    * @param monitor A progress monitor that is used to indicate progress
    * for lazy containers. May be null. 
    * @return This container's children.
-   * @throws GridModelException If this is a lazy container it may be
+   * @throws ProblemException If this is a lazy container it may be
    * possible that an exception occurs while the children are fetched.
    */
-  public IGridElement[] getChildren( final IProgressMonitor monitor ) throws GridModelException;
+  public IGridElement[] getChildren( final IProgressMonitor monitor ) throws ProblemException;
   
   /**
    * Determine if this container contains any children.
@@ -159,10 +162,10 @@ public interface IGridContainer extends IGridElement {
    * 
    * @param monitor A progress monitor used to give the caller feedback about
    * the progress of the operation.
-   * @throws GridModelException If a problem occurs during the refresh
+   * @throws ProblemException If a problem occurs during the refresh
    * operation.
    */
-  public void refresh( final IProgressMonitor monitor ) throws GridModelException;
+  public void refresh( final IProgressMonitor monitor ) throws ProblemException;
   
   /**
    * Mark this container as dirty. A dirty and lazy container will

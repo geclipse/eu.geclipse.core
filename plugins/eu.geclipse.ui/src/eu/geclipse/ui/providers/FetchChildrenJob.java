@@ -20,10 +20,11 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Shell;
 
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.core.util.MasterMonitor;
 import eu.geclipse.ui.dialogs.ProblemDialog;
+
 
 public class FetchChildrenJob extends Job {
   
@@ -53,11 +54,11 @@ public class FetchChildrenJob extends Job {
       this.container.setDirty();
       this.container.getChildren( mMonitor );
       result = Status.OK_STATUS;
-    } catch ( GridModelException gmExc ) {
+    } catch ( ProblemException pExc ) {
       ProblemDialog.openProblem( this.shell,
                                  "Fetch Error",
                                  "Error while fetching children of " + this.container.getName(),
-                                 gmExc );
+                                 pExc );
     } finally {
       mMonitor.done();
     }

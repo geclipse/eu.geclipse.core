@@ -23,10 +23,10 @@ import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 
 import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridInfoService;
 import eu.geclipse.core.model.IGridProject;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.info.InfoCacheListenerHandler;
 import eu.geclipse.info.InfoServiceFactory;
 import eu.geclipse.info.glue.GlueIndex;
@@ -99,7 +99,7 @@ public class FetchJob extends Job {
           gridProjectNumbers++;
         }
       }
-    } catch( GridModelException e ) {
+    } catch ( ProblemException e ) {
       Activator.logException( e );
     }
     

@@ -21,7 +21,6 @@ import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.jface.wizard.WizardPage;
 
 import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IVoManager;
 import eu.geclipse.core.model.impl.GenericVirtualOrganization;
 import eu.geclipse.core.model.impl.GenericVoCreator;
@@ -122,8 +121,8 @@ public class GenericVoWizard
     if ( ! result.isOK() && ( vo != null ) ) {
       try {
         manager.delete( vo );
-      } catch( GridModelException gmExc ) {
-        Activator.logException( gmExc );
+      } catch ( ProblemException pExc ) {
+        Activator.logException( pExc );
       }
     }
     

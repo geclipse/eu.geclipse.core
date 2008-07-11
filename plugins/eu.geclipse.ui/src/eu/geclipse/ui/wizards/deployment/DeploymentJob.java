@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007, 2008 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -27,7 +27,6 @@ import org.eclipse.core.runtime.SubMonitor;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Display;
 
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridApplicationManager;
 import eu.geclipse.core.model.IGridComputing;
 import eu.geclipse.core.model.IGridProject;
@@ -36,6 +35,7 @@ import eu.geclipse.core.model.impl.GenericGridInstallParameters;
 import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
+
 
 /**
  * @author Yifan Zhou
@@ -107,30 +107,30 @@ public class DeploymentJob extends Job {
       } );
     }
     else {
-    SubMonitor betterMonitor = SubMonitor.convert( monitor,
-                                                   this.target.length );
-    testCancelled( betterMonitor );
-    betterMonitor.setTaskName( "Starting deployment" ); //$NON-NLS-1$
-    try {
-      installmanager.install( this.installparameters, betterMonitor.newChild( 1 ));
-    } catch( ProblemException e ) {
-      final Throwable e1 = e;
-      Display.getDefault().asyncExec( new Runnable() {
-        public void run() {
-          ProblemDialog.openProblem( null,
-                                     "Application install error", //$NON-NLS-1$
-                                     "Error when installing the software", //$NON-NLS-1$
-                                     e1);
-        }
-      } );
-    }
-    testCancelled( betterMonitor );
-    betterMonitor.done();
-    try {
-      this.gridproject.refresh( new NullProgressMonitor() );
-    } catch( GridModelException e ) {
-      Activator.logException( e );
-    }
+      SubMonitor betterMonitor = SubMonitor.convert( monitor,
+                                                     this.target.length );
+      testCancelled( betterMonitor );
+      betterMonitor.setTaskName( "Starting deployment" ); //$NON-NLS-1$
+      try {
+        installmanager.install( this.installparameters, betterMonitor.newChild( 1 ));
+      } catch( ProblemException e ) {
+        final Throwable e1 = e;
+        Display.getDefault().asyncExec( new Runnable() {
+          public void run() {
+            ProblemDialog.openProblem( null,
+                                       "Application install error", //$NON-NLS-1$
+                                       "Error when installing the software", //$NON-NLS-1$
+                                       e1 );
+          }
+        } );
+      }
+      testCancelled( betterMonitor );
+      betterMonitor.done();
+      try {
+        this.gridproject.refresh( new NullProgressMonitor() );
+      } catch ( ProblemException e ) {
+        Activator.logException( e );
+      }
     }
     return status;
   }

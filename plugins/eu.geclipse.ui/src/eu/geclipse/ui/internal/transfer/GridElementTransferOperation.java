@@ -46,12 +46,13 @@ import org.eclipse.ui.PlatformUI;
 
 import eu.geclipse.core.filesystem.GEclipseFileSystem;
 import eu.geclipse.core.filesystem.GEclipseURI;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridConnectionElement;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.internal.Activator;
+
 
 /**
  * Job for transferring elements from local to local, local to remote,
@@ -168,8 +169,8 @@ public class GridElementTransferOperation
           try {
             // TODO mathias progress monitoring
             parent.refresh( null );
-          } catch ( GridModelException gmExc ) {
-            status.merge( gmExc.getStatus() );
+          } catch ( ProblemException pExc ) {
+            status.merge( pExc.getStatus() );
           }
         }
       }
@@ -178,8 +179,8 @@ public class GridElementTransferOperation
     
     try {
       this.globalTarget.refresh( new SubProgressMonitor( localMonitor, 1 ) );
-    } catch ( GridModelException gmExc ) {
-      status.merge( gmExc.getStatus() );
+    } catch ( ProblemException pExc ) {
+      status.merge( pExc.getStatus() );
     }
    
     return status;
@@ -598,7 +599,6 @@ public class GridElementTransferOperation
           }
           /*
           if ( status.isOK() ) {
-            
             startRefresh( target );
             
             if ( monitor.isCanceled() ) {
@@ -606,27 +606,20 @@ public class GridElementTransferOperation
             }
             
             if ( this.move ) {
-              
               status = delete( inStore, new SubProgressMonitor( monitor, 3 ) );
-              
               if ( status.isOK() ) {
                 startRefresh( element.getParent() );
               }
-              
             }
-            
           }
           */
         } finally {
           monitor.done();
         }
-        
       }
-      
     }
     
     return status;
-    
   }
   
   /**

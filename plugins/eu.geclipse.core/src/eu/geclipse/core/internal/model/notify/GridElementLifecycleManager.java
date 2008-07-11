@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -28,12 +28,13 @@ import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.internal.model.GridRoot;
 import eu.geclipse.core.internal.model.LocalFile;
 import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
 import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridProject;
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * The <code>GridElementLifecycleManager</code> is an implementation
@@ -167,8 +168,8 @@ public class GridElementLifecycleManager
           if ( parentElement != null ) {
             try {
               parentElement.create( creator );
-            } catch ( GridModelException gmExc ) {
-              Activator.logException( gmExc );
+            } catch ( ProblemException pExc ) {
+              Activator.logException( pExc );
             }
           }
         }
@@ -210,8 +211,8 @@ public class GridElementLifecycleManager
         if ( parent != null ) {
           try {
             parent.delete( element );
-          } catch( GridModelException gmExc ) {
-            Activator.logException( gmExc );
+          } catch ( ProblemException pExc ) {
+            Activator.logException( pExc );
           }
         }
       }

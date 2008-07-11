@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2007 g-Eclipse consortium
+ * Copyright (c) 2007-2008 g-Eclipse consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -36,15 +36,13 @@ import eu.geclipse.batch.model.qdl.AllowedVirtualOrganizationsType;
 import eu.geclipse.batch.ui.internal.Activator;
 import eu.geclipse.batch.ui.internal.Messages;
 import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.widgets.StoredCombo;
-
 
 
 /**
  * @author nloulloud
- *
  */
 public class AllowedVOsDialog extends Dialog {
     
@@ -249,7 +247,7 @@ public class AllowedVOsDialog extends Dialog {
     IGridElement[] gridElements = null;
     try {
       gridElements = GridModel.getVoManager().getChildren( null );
-    } catch( GridModelException e ) {
+    } catch ( ProblemException e ) {
       // Nothing to do
     }
     

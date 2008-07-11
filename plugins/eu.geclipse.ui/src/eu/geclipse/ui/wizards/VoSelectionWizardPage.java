@@ -47,7 +47,6 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.PreferencesUtil;
 
 import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridInfoService;
 import eu.geclipse.core.model.IGridModelEvent;
@@ -383,11 +382,11 @@ public class VoSelectionWizardPage extends WizardPage
       for ( IGridElement vo : vos ) {
         this.voList.add( ( IVirtualOrganization ) vo );
       }
-    } catch ( GridModelException gmExc ) {
+    } catch ( ProblemException pExc ) {
       ProblemDialog.openProblem( getShell(),
                                  "VO list problem",
                                  "Unable to query registered VOs",
-                                 gmExc );
+                                 pExc );
     }
   }
   

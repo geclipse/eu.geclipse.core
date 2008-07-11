@@ -39,7 +39,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Group;
 
 import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridComputing;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridInfoService;
@@ -275,8 +274,7 @@ public class DeploymentTarget extends WizardPage {
   }
 
   @Override
-  public boolean isPageComplete()
-  {
+  public boolean isPageComplete() {
     return false;
   }
 
@@ -318,10 +316,12 @@ public class DeploymentTarget extends WizardPage {
           connections.add( connection );
         }
       }
-    } catch( GridModelException e ) {
+    } catch ( ProblemException e ) {
       Activator.logException( e );
     }
-    return ( allConnections == null ) ? null : connections.toArray( new IGridElement[ connections.size() ]);  
+    return ( allConnections == null )
+             ? null
+             : connections.toArray( new IGridElement[ connections.size() ] );
   }
   
 }

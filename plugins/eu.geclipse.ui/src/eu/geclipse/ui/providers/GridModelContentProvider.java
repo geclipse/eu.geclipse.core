@@ -27,9 +27,9 @@ import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Shell;
 
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.dialogs.ProblemDialog;
 import eu.geclipse.ui.internal.Activator;
 
@@ -164,15 +164,15 @@ public class GridModelContentProvider
           }
         }
         children = visibleChildren.toArray( new IGridElement[ visibleChildren.size() ] );
-      } catch( GridModelException gmExc ) {
+      } catch ( ProblemException pExc ) {
         if ( this.treeViewer != null ) {
           Shell shell = this.treeViewer.getControl().getShell();
           ProblemDialog.openProblem( shell,
                                      Messages.getString("GridModelContentProvider.problem_title"), //$NON-NLS-1$
                                      Messages.getString("GridModelContentProvider.problem_text") + container.getName(), //$NON-NLS-1$
-                                     gmExc );
+                                     pExc );
         } else {
-          Activator.logException( gmExc );
+          Activator.logException( pExc );
         }
       }
       
