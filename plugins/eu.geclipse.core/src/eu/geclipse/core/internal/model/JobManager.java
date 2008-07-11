@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -28,7 +28,6 @@ import java.util.NoSuchElementException;
 import org.eclipse.core.runtime.jobs.Job;
 
 import eu.geclipse.core.JobStatusUpdater;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobID;
@@ -37,6 +36,7 @@ import eu.geclipse.core.model.IGridJobStatus;
 import eu.geclipse.core.model.IGridJobStatusListener;
 import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridModelListener;
+import eu.geclipse.core.reporting.ProblemException;
 
 
 /**
@@ -72,7 +72,7 @@ public class JobManager extends AbstractGridElementManager
 
   @Override
   public boolean addElement( final IGridElement element )
-    throws GridModelException
+    throws ProblemException
   {
     // fast workaround.
     // TODO pawelw -correct it

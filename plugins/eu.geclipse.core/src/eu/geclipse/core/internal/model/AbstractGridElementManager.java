@@ -35,7 +35,6 @@ import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.internal.model.notify.GridModelEvent;
 import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;
@@ -99,14 +98,8 @@ public abstract class AbstractGridElementManager
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IGridContainer#create(eu.geclipse.core.model.IGridElementCreator)
    */
-  public IGridElement create( final IGridElementCreator creator ) throws GridModelException {
-    // Temporarily add catch for GME removal in steps
-    IGridElement newElement = null;
-    try {
-    newElement = creator.create( this );
-    } catch ( ProblemException pe ) {
-      //
-    }
+  public IGridElement create( final IGridElementCreator creator ) throws ProblemException {
+    IGridElement newElement = creator.create( this );
     if ( newElement != null ) {
       addElement( newElement );
     }
@@ -303,9 +296,9 @@ public abstract class AbstractGridElementManager
    * 
    * @param element The element to be added.
    * @return True if the operation was successful. 
-   * @throws GridModelException If an error occurs.
+   * @throws ProblemException If an error occurs.
    */
-  public boolean addElement( final IGridElement element ) throws GridModelException {
+  public boolean addElement( final IGridElement element ) throws ProblemException {
     boolean result = false;
     testCanManage( element );
     IPath path = element.getPath();
@@ -361,12 +354,13 @@ public abstract class AbstractGridElementManager
    * Throw an exception if this is not the case.
    * 
    * @param element The element to be tested.
-   * @throws GridModelException If the tested element can not be
+   * @throws ProblemException If the tested element can not be
    * managed by this manager.
    */
-  protected void testCanManage( final IGridElement element ) throws GridModelException {
-    if ( !canManage( element ) ) {
-      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_NOT_MANAGEABLE, Activator.PLUGIN_ID );
+  protected void testCanManage( final IGridElement element ) throws ProblemException {
+    if ( ! canManage( element ) ) {
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_NOT_MANAGEABLE,
+                                  Activator.PLUGIN_ID );
     }
   }
   

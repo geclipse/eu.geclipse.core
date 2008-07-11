@@ -25,7 +25,6 @@ import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.Preferences;
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IStorableElement;
 import eu.geclipse.core.model.IStorableElementCreator;
@@ -64,8 +63,8 @@ public class VoManager
   private VoManager() {
     try {
       loadElements();
-    } catch ( GridModelException gmExc ) {
-      Activator.logException( gmExc );
+    } catch ( ProblemException pExc ) {
+      Activator.logException( pExc );
     }
   }
   
@@ -118,17 +117,17 @@ public class VoManager
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IStorableElementManager#loadElements()
    */
-  public void loadElements() throws GridModelException {
+  public void loadElements() throws ProblemException {
     
     IFileStore fileStore = getFileStore();
     
     IFileStore[] childStores;
     try {
       childStores = fileStore.childStores( EFS.NONE, null );
-    } catch( CoreException cExc ) {
-      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_LOAD_FAILED,
-                                    cExc,
-                                    Activator.PLUGIN_ID );
+    } catch ( CoreException cExc ) {
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_LOAD_FAILED,
+                                  cExc,
+                                  Activator.PLUGIN_ID );
     }
     
     for ( IFileStore childStore : childStores ) {

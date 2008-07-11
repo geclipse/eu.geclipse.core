@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -15,9 +15,10 @@
 
 package eu.geclipse.core.internal.model;
 
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IDefaultGridElementManager;
 import eu.geclipse.core.model.IGridElement;
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * Internal abstract implementation of an {@link IDefaultGridElementManager}.  
@@ -41,7 +42,7 @@ public abstract class AbstractDefaultGridElementManager
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IDefaultGridElementManager#setDefault(eu.geclipse.core.model.IGridElement)
    */
-  public void setDefault( final IGridElement element ) throws GridModelException {
+  public void setDefault( final IGridElement element ) throws ProblemException {
     if ( ( element != null ) && ( element != this.defaultElement ) ) {
       addElement( element );
       this.defaultElement = element;
@@ -53,7 +54,7 @@ public abstract class AbstractDefaultGridElementManager
    * @see eu.geclipse.core.internal.model.AbstractGridElementManager#addElement(eu.geclipse.core.model.IGridElement)
    */
   @Override
-  public boolean addElement( final IGridElement element ) throws GridModelException {
+  public boolean addElement( final IGridElement element ) throws ProblemException {
     boolean result = super.addElement( element );
     if ( result ) {
       updateDefault();

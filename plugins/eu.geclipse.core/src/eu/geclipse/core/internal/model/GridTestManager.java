@@ -19,8 +19,6 @@ package eu.geclipse.core.internal.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import eu.geclipse.core.internal.model.AbstractGridElementManager;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridModelEvent;
 import eu.geclipse.core.model.IGridModelListener;
@@ -28,6 +26,8 @@ import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IGridTest;
 import eu.geclipse.core.model.IGridTestManager;
 import eu.geclipse.core.model.IGridTestStatusListener;
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * Abstract class that makes some core's internal interfaces available for
@@ -56,7 +56,7 @@ public class GridTestManager
   }
   
   @Override
-  public boolean addElement( final IGridElement element ) throws GridModelException {
+  public boolean addElement( final IGridElement element ) throws ProblemException {
     boolean flag;
     flag = super.addElement( element );
     if ( element instanceof IGridTest ) {
