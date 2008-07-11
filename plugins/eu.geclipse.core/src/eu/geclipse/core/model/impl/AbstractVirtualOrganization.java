@@ -97,13 +97,23 @@ public abstract class AbstractVirtualOrganization
   public IGridComputing[] getComputing( final IProgressMonitor monitor ) throws GridModelException {
     IGridComputing[] computing = null;
     IGridInfoService infoService = getInfoService();
+    IGridResource[] myComputingResources = null;
     if ( infoService != null ) {
-      computing = ( IGridComputing[] )infoService.fetchResources( this,
-                                              this,
-                                              GridResourceCategoryFactory.
-                                              getCategory( GridResourceCategoryFactory.ID_COMPUTING ),
-                                              monitor );
+      myComputingResources = infoService.fetchResources( this,
+                                                         this,
+                                                         GridResourceCategoryFactory.
+                                                         getCategory( GridResourceCategoryFactory.ID_COMPUTING ),
+                                                         false,
+                                                         IGridComputing.class,
+                                                         monitor );
     }
+    
+    if (myComputingResources != null)
+    {
+      computing = new IGridComputing[myComputingResources.length];
+      System.arraycopy( myComputingResources, 0, computing, 0, myComputingResources.length );
+    }
+    
     return computing;
   }
   
@@ -167,36 +177,53 @@ public abstract class AbstractVirtualOrganization
   public IGridService[] getServices( final IProgressMonitor monitor )
       throws GridModelException {
     IGridService[] result = null;
+    IGridResource[] myGridResources = null;
     IGridInfoService infoService = getInfoService();
+    
     if ( infoService != null ) {
-      IGridService[] services = ( IGridService[] )infoService.
-                                      fetchResources( this,
-                                                      this,
-                                                      GridResourceCategoryFactory.
-                                                      getCategory( GridResourceCategoryFactory.ID_SERVICES ),
-                                                      monitor );
-      if ( ( services != null ) && ( services.length > 0 ) ) {
-        result = new IGridService[ services.length + 1 ];
-        System.arraycopy( services, 0, result, 0, services.length );
-        result[ services.length ] = infoService;
-      } else {
-        result = new IGridService[ 1 ];
-        result[ 0 ] = infoService;
-      }
+      myGridResources = infoService.fetchResources( this,
+                                                    this,
+                                                    GridResourceCategoryFactory.
+                                                    getCategory( GridResourceCategoryFactory.ID_SERVICES ),
+                                                    false,
+                                                    IGridService.class,
+                                                    monitor );
     }
+    
+    if (myGridResources != null)
+    {
+      result = new IGridService[ myGridResources.length + 1 ];
+      System.arraycopy( myGridResources, 0, result, 0, myGridResources.length );
+      result[ myGridResources.length ] = infoService;
+    } else {
+      result = new IGridService[ 1 ];
+      result[ 0 ] = infoService;
+    }
+    
     return result;
   }
   
   public IGridStorage[] getStorage( final IProgressMonitor monitor ) throws GridModelException {
     IGridStorage[] storage = null;
+    IGridResource[] myGridStorage = null;
     IGridInfoService infoService = getInfoService();
+    
     if ( infoService != null ) {
-      storage = ( IGridStorage[] )infoService.fetchResources( this,
-                                                              this,
-                                                              GridResourceCategoryFactory.
-                                                              getCategory( GridResourceCategoryFactory.ID_STORAGE ),
-                                                              monitor );
+      myGridStorage = infoService.fetchResources( this,
+                                                  this,
+                                                  GridResourceCategoryFactory.
+                                                  getCategory( GridResourceCategoryFactory.ID_STORAGE ),
+                                                  false,
+                                                  IGridStorage.class,
+                                                  monitor );
     }
+    
+    if (myGridStorage != null)
+    {
+      storage = new IGridStorage[myGridStorage.length];
+      System.arraycopy( myGridStorage, 0, storage, 0, myGridStorage.length );
+    }
+    
     return storage;
   }
   
@@ -247,10 +274,17 @@ public abstract class AbstractVirtualOrganization
     }
   }
   
+  public void refreshResources( final IGridResourceCategory category,
+                                final IProgressMonitor monitor )
+      throws GridModelException {
+    // TODO mathias may this stay to be a noop?
+  }
+  
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IStorableElement#save()
    */
   public void save() throws ProblemException {
+    
     IGridElement[] children = getChildren( null );
     for ( IGridElement child : children ) {
       if ( child instanceof IStorableElement ) {
@@ -259,6 +293,84 @@ public abstract class AbstractVirtualOrganization
         saveChild( child );
       }
     }
+    
+    // Below is experimental code for saving VOs in XML format
+    /*
+    try {
+      
+      IFileStore fileStore = getFileStore();
+      IFileStore voIdFile = fileStore.getChild( ".id" );
+      OutputStream voIdOStream = voIdFile.openOutputStream( EFS.NONE, null );
+      voIdOStream.write( getClass().getName().getBytes() );
+      voIdOStream.close();
+      
+      DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+      factory.setValidating( true );
+      factory.setNamespaceAware( true );
+      
+      DocumentBuilder builder = factory.newDocumentBuilder();
+      
+      Document document = builder.newDocument();
+      
+      Element voNode = document.createElement( "vo" );
+      voNode.setAttribute( "name", getName() );
+      voNode.setAttribute( "id", getId() );
+      document.appendChild( voNode );
+      
+      Hashtable< String, String > props = getStaticProperties();
+      if ( ( props != null ) && ! props.isEmpty() ) {
+        Element propsNode = document.createElement( "properties" );
+        voNode.appendChild( propsNode );
+        for ( String key : props.keySet() ) {
+          String value = props.get( key );
+          Element keyNode = document.createElement( "property" );
+          keyNode.setAttribute( "key", key );
+          keyNode.setAttribute( "value", value );
+          propsNode.appendChild( keyNode );
+        }
+      }
+      
+      List< IGridService > services = getStaticServices();
+      if ( ( services != null ) && ! services.isEmpty() ) {
+        Element servicesNode = document.createElement( "services" );
+        voNode.appendChild( servicesNode );
+        for ( IGridService service : services ) {
+          Element serviceNode = document.createElement( "service" );
+          serviceNode.setAttribute( "type", service.getClass().getName() );
+          serviceNode.setAttribute( "endpoint", service.getURI().toString() );
+          servicesNode.appendChild( serviceNode );
+        }
+      }
+      
+      Element specElement = document.createElement( "specific" );
+      if ( createSpecificPart( specElement ) ) {
+        voNode.appendChild( specElement );
+      }
+
+      File file = fileStore.getChild( "vo.xml" ).toLocalFile( EFS.NONE, null );
+      FileOutputStream foStream = new FileOutputStream( file );
+      
+      DOMSource domSource = new DOMSource( document );
+      StreamResult streamResult = new StreamResult( foStream );
+      
+      TransformerFactory tFactory = TransformerFactory.newInstance();
+      Transformer transformer = tFactory.newTransformer();
+      transformer.setOutputProperty( OutputKeys.INDENT, "yes" );
+      transformer.transform( domSource, streamResult );
+      
+    } catch ( ParserConfigurationException pcExc ) {
+      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_SAVE_FAILED, pcExc, Activator.PLUGIN_ID );
+    } catch ( CoreException cExc ) {
+      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_SAVE_FAILED, cExc, Activator.PLUGIN_ID );
+    } catch ( IOException ioExc ) {
+      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_SAVE_FAILED, ioExc, Activator.PLUGIN_ID );
+    } catch ( TransformerConfigurationException tcExc ) {
+      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_SAVE_FAILED, tcExc, Activator.PLUGIN_ID );
+    } catch ( TransformerException tExc ) {
+      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_SAVE_FAILED, tExc, Activator.PLUGIN_ID );
+      
+    }
+    */
   }
   
   protected IGridService[] filterServices( final IGridService[] services,
@@ -277,7 +389,19 @@ public abstract class AbstractVirtualOrganization
     return resultList.toArray( new IGridService[ resultList.size() ] );
     
   }
+  /*
+  protected boolean createSpecificPart( final Element specElement ) {
+    return false;
+  }
   
+  protected Hashtable< String, String > getStaticProperties() {
+    return null;
+  }
+  
+  protected List< IGridService > getStaticServices() {
+    return null;
+  }
+  */
   /**
    * Load a child with the given name.
    * 
