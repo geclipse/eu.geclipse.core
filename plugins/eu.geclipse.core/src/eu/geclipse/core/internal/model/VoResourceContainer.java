@@ -137,16 +137,12 @@ public class VoResourceContainer
     IGridElement[] children = null;
     
     // Fetch the information
-    try { // Temporarily add catch for GME removal in steps
     if ( this.type == ResourceType.Service ) {
       children = getVo().getServices( monitor );
     } else if ( this.type == ResourceType.Computing ) {
       children = getVo().getComputing( monitor );
     } else if ( this.type == ResourceType.Storage ) {
       children = getVo().getStorage( monitor );
-    }
-    } catch ( ProblemException e ) {
-      // Temporarily add catch for GME removal in steps
     }
     
     // Add children to the container
