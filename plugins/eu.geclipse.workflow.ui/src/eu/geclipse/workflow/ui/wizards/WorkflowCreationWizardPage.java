@@ -15,15 +15,12 @@
  ******************************************************************************/
 package eu.geclipse.workflow.ui.wizards;
 
+
 import org.eclipse.core.runtime.IPath;
-import org.eclipse.core.runtime.Path;
 import org.eclipse.emf.common.util.URI;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.osgi.util.NLS;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.dialogs.WizardNewFolderMainPage;
-
-import eu.geclipse.workflow.ui.editor.WorkflowDiagramEditorUtil;
 
 /**
  * @generated
@@ -34,6 +31,7 @@ public class WorkflowCreationWizardPage extends WizardNewFolderMainPage {
    * @generated
    */
   private final String fileExtension;
+
 
   /**
    * @generated
@@ -52,20 +50,20 @@ public class WorkflowCreationWizardPage extends WizardNewFolderMainPage {
    * @generated
    */
   protected String getExtension() {
-    return fileExtension;
+    return this.fileExtension;
   }
 
   /**
    * @generated
    */
-  /*public URI getURI() {
-    return URI.createPlatformResourceURI( getFilePath().toString(), false );
+/*  public URI getURI() {
+    return URI.createPlatformResourceURI( getFolderPath().toString(), false );
   }*/
 
   /**
    * @generated
    */
-  /*protected IPath getFilePath() {
+/*  protected IPath getFolderPath() {
     IPath path = getContainerFullPath();
     if( path == null ) {
       path = new Path( "" ); //$NON-NLS-1$
@@ -80,21 +78,19 @@ public class WorkflowCreationWizardPage extends WizardNewFolderMainPage {
   /**
    * @generated
    */
-  @Override
-  public void createControl( Composite parent ) {
+/*  public void createControl( Composite parent ) {
     super.createControl( parent );
-    /*setFileName( WorkflowDiagramEditorUtil.getUniqueFileName( getContainerFullPath(),
+    setFileName( WorkflowDiagramEditorUtil.getUniqueFolderName( getContainerFullPath(),
                                                               getFileName(),
-                                                              getExtension() ) );*/
+                                                              getExtension() ) );
     setPageComplete( validatePage() );
-  }
+  }*/
 
   /**
    * @generated
    */
-  @Override
-  protected boolean validatePage() {
-    /*if( !super.validatePage() ) {
+/*  protected boolean validatePage() {
+    if( !super.validatePage() ) {
       return false;
     }
     String extension = getExtension();
@@ -104,7 +100,7 @@ public class WorkflowCreationWizardPage extends WizardNewFolderMainPage {
       setErrorMessage( NLS.bind( "File name should have ''{0}'' extension.", //$NON-NLS-1$
                                  extension ) );
       return false;
-    }*/
+    }
     return true;
-  }
+  }*/
 }

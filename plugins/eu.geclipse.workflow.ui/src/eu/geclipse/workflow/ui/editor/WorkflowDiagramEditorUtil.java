@@ -117,6 +117,36 @@ public class WorkflowDiagramEditorUtil {
     }
   }
 
+  
+  public static String getUniqueFolderName( IPath containerFullPath,
+                                           String folderName,
+                                           String extension )
+  {
+    if( containerFullPath == null ) {
+      containerFullPath = new Path( "" ); //$NON-NLS-1$
+    }
+    if( folderName == null || folderName.trim().length() == 0 ) {
+      folderName = "default"; //$NON-NLS-1$
+    }
+    IPath folderPath = containerFullPath.append( folderName );
+    if( extension != null && !extension.equals( folderPath.getFileExtension() ) )
+    {
+      folderPath = folderPath.addFileExtension( extension );
+    }
+    extension = folderPath.getFileExtension();
+    folderName = folderPath.removeFileExtension().lastSegment();
+    int i = 1;
+    while( ResourcesPlugin.getWorkspace().getRoot().exists( folderPath ) ) {
+      i++;
+      folderPath = containerFullPath.append( folderName + i );
+      if( extension != null ) {
+        folderPath = folderPath.addFileExtension( extension );
+      }
+    }
+    return folderPath.lastSegment();
+    
+  }
+  
   /**
    * @generated
    */

@@ -34,6 +34,7 @@ import org.eclipse.ui.actions.WorkspaceModifyOperation;
 
 import eu.geclipse.workflow.ui.editor.WorkflowDiagramEditorUtil;
 import eu.geclipse.workflow.ui.internal.WorkflowDiagramEditorPlugin;
+import eu.geclipse.workflow.ui.part.Messages;
 
 /**
  * @generated
@@ -103,8 +104,8 @@ public class WorkflowCreationWizard extends Wizard implements INewWizard {
   public void init( final IWorkbench workbench1, final IStructuredSelection selection1 ) {
     this.workbench = workbench1;
     this.selection = selection1;
-    setWindowTitle( "New Workflow Diagram" ); //$NON-NLS-1$
-    setDefaultPageImageDescriptor( WorkflowDiagramEditorPlugin.getBundledImageDescriptor( "icons/wizban/NewWorkflowWizard.gif" ) ); //$NON-NLS-1$
+    setWindowTitle( Messages.getString("WorkflowCreationWizard_WindowTitle") ); //$NON-NLS-1$
+    setDefaultPageImageDescriptor( WorkflowDiagramEditorPlugin.getBundledImageDescriptor( "icons/wizban/NewWorkflowWizard.gif" ) );
     setNeedsProgressMonitor( true );
   }
 
@@ -113,11 +114,11 @@ public class WorkflowCreationWizard extends Wizard implements INewWizard {
    */
   @Override
   public void addPages() {
-    this.diagramModelFilePage = new WorkflowCreationWizardPage( "DiagramModelFile",  //$NON-NLS-1$
+    this.diagramModelFilePage = new WorkflowCreationWizardPage( Messages.getString( "WorkflowCreationWizard_PageName" ),  //$NON-NLS-1$
                                                                 getSelection(), 
                                                                 "workflow" );  //$NON-NLS-1$
-    this.diagramModelFilePage.setTitle( "Create Workflow Diagram" ); //$NON-NLS-1$
-    this.diagramModelFilePage.setDescription( "Select file that will contain diagram and domain models." ); //$NON-NLS-1$
+    this.diagramModelFilePage.setTitle( Messages.getString( "WorkflowCreationWizard_Title" ) ); //$NON-NLS-1$
+    this.diagramModelFilePage.setDescription( Messages.getString( "WorkflowCreationWizard_Description" ) ); //$NON-NLS-1$
     addPage( this.diagramModelFilePage );
   }
 
@@ -142,7 +143,7 @@ public class WorkflowCreationWizard extends Wizard implements INewWizard {
             WorkflowDiagramEditorUtil.openDiagram( WorkflowCreationWizard.this.diagram );
           } catch( PartInitException e ) {
             ErrorDialog.openError( getContainer().getShell(),
-                                   "Error opening diagram editor", //$NON-NLS-1$
+                                   Messages.getString( "WorkflowCreationWizard_ErrorOpeningDiagramEditor" ), //$NON-NLS-1$
                                    null,
                                    e.getStatus() );
           }
@@ -156,12 +157,12 @@ public class WorkflowCreationWizard extends Wizard implements INewWizard {
     } catch( InvocationTargetException e ) {
       if( e.getTargetException() instanceof CoreException ) {
         ErrorDialog.openError( getContainer().getShell(),
-                               "Creation Problems", //$NON-NLS-1$
+                               Messages.getString( "WorkflowCreationWizard_CreationProblems" ), //$NON-NLS-1$
                                null,
                                ( ( CoreException )e.getTargetException() ).getStatus() );
       } else {
         WorkflowDiagramEditorPlugin.getInstance()
-          .logError( "Error creating diagram", e.getTargetException() ); //$NON-NLS-1$
+          .logError( Messages.getString( "WorkflowCreationWizard_ErrorCreatingDiagram" ), e.getTargetException() ); //$NON-NLS-1$
       }
       return false;
     }
