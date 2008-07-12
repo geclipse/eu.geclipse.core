@@ -22,21 +22,24 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.URL;
 
 import org.eclipse.core.filesystem.EFS;
 import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IPath;
+import org.jets3t.service.S3Service;
 
 import eu.geclipse.aws.IAWSService;
 import eu.geclipse.aws.s3.internal.Activator;
 import eu.geclipse.core.ICoreProblems;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IStorableElement;
 import eu.geclipse.core.model.impl.AbstractGridElement;
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * The {@link S3ServiceProperties} hold the various properties specific to the
@@ -93,7 +96,7 @@ public class S3ServiceProperties extends AbstractGridElement
     this.serviceName = serviceCreator.getServiceName();
   }
 
-  public void load() throws GridModelException {
+  public void load() throws ProblemException {
     BufferedReader bufferedReader = null;
     try {
       IFileStore fileStore = getFileStore();
@@ -102,36 +105,36 @@ public class S3ServiceProperties extends AbstractGridElement
       bufferedReader = new BufferedReader( iReader );
 
       String serviceName = bufferedReader.readLine();
-      if( serviceName != null && serviceName.trim().length() != 0 ) {
+      if ( serviceName != null && serviceName.trim().length() != 0 ) {
         this.serviceName = serviceName;
       }
 
       String url = bufferedReader.readLine();
-      if( url != null && url.trim().length() != 0 ) {
+      if ( url != null && url.trim().length() != 0 ) {
         this.s3Url = url;
       }
-    } catch( IOException ioExc ) {
-      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_LOAD_FAILED,
-                                    ioExc,
-                                    Activator.PLUGIN_ID );
-    } catch( CoreException cExc ) {
-      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_LOAD_FAILED,
-                                    cExc,
-                                    Activator.PLUGIN_ID );
+    } catch ( IOException ioExc ) {
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_LOAD_FAILED,
+                                  ioExc,
+                                  Activator.PLUGIN_ID );
+    } catch ( CoreException cExc ) {
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_LOAD_FAILED,
+                                  cExc,
+                                  Activator.PLUGIN_ID );
     } finally {
-      if( bufferedReader != null ) {
+      if ( bufferedReader != null ) {
         try {
           bufferedReader.close();
-        } catch( IOException ioExc ) {
-          throw new GridModelException( ICoreProblems.MODEL_ELEMENT_LOAD_FAILED,
-                                        ioExc,
-                                        Activator.PLUGIN_ID );
+        } catch ( IOException ioExc ) {
+          throw new ProblemException( ICoreProblems.MODEL_ELEMENT_LOAD_FAILED,
+                                      ioExc,
+                                      Activator.PLUGIN_ID );
         }
       }
     }
   }
 
-  public void save() throws GridModelException {
+  public void save() throws ProblemException {
     IFileStore fileStore = getFileStore();
     BufferedWriter bWriter = null;
     try {
@@ -139,32 +142,32 @@ public class S3ServiceProperties extends AbstractGridElement
       OutputStreamWriter osWriter = new OutputStreamWriter( oStream );
       bWriter = new BufferedWriter( osWriter );
 
-      if( this.serviceName != null ) {
+      if ( this.serviceName != null ) {
         bWriter.write( this.serviceName );
       }
       bWriter.write( '\n' );
 
-      if( this.s3Url != null ) {
+      if ( this.s3Url != null ) {
         bWriter.write( this.s3Url );
       }
       bWriter.write( '\n' );
-    } catch( IOException ioExc ) {
-      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_LOAD_FAILED,
-                                    ioExc,
-                                    Activator.PLUGIN_ID );
-    } catch( CoreException cExc ) {
-      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_SAVE_FAILED,
-                                    cExc,
-                                    Activator.PLUGIN_ID );
+    } catch ( IOException ioExc ) {
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_LOAD_FAILED,
+                                  ioExc,
+                                  Activator.PLUGIN_ID );
+    } catch ( CoreException cExc ) {
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_SAVE_FAILED,
+                                  cExc,
+                                  Activator.PLUGIN_ID );
     } finally {
       try {
-        if( bWriter != null ) {
+        if ( bWriter != null ) {
           bWriter.close();
         }
-      } catch( IOException ioExc ) {
-        throw new GridModelException( ICoreProblems.MODEL_ELEMENT_SAVE_FAILED,
-                                      ioExc,
-                                      Activator.PLUGIN_ID );
+      } catch ( IOException ioExc ) {
+        throw new ProblemException( ICoreProblems.MODEL_ELEMENT_SAVE_FAILED,
+                                    ioExc,
+                                    Activator.PLUGIN_ID );
       }
     }
   }
