@@ -45,8 +45,8 @@ public class GenericVirtualOrganization
   GenericVirtualOrganization( final GenericVoCreator creator ) {
     try {
       apply( creator );
-    } catch ( ProblemException gmExc ) {
-      Activator.logException( gmExc );
+    } catch ( ProblemException pExc ) {
+      Activator.logException( pExc );
     }
   }
   
