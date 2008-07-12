@@ -778,8 +778,8 @@ public class GridElementTransferOperation
       protected IStatus run( final IProgressMonitor monitor ) {
         try {
           container.refresh( new SubProgressMonitor( monitor, 1 ) );
-        } catch ( GridModelException gmExc ) {
-          Activator.logException( gmExc );
+        } catch ( ProblemException pExc ) {
+          Activator.logException( pExc );
         }
         return Status.OK_STATUS;
       }
