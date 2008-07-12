@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2007 g-Eclipse consortium
+ * Copyright (c) 2007-2008 g-Eclipse consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -25,9 +25,10 @@ import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.ide.IDE;
 
-import eu.geclipse.batch.ui.internal.Messages;
 import eu.geclipse.batch.ui.internal.Activator;
-import eu.geclipse.core.model.GridModelException;
+import eu.geclipse.batch.ui.internal.Messages;
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * Create new .batch-file. Those files can be used with the BatchEditor
@@ -125,7 +126,7 @@ public class BatchCreationWizard extends Wizard implements INewWizard {
           this.openFile();
           ret = true;
         }
-      } catch( GridModelException e ) {
+      } catch ( ProblemException e ) {
         // TODO Harald look into
       }
     }

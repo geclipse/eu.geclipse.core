@@ -31,9 +31,10 @@ import org.eclipse.core.runtime.CoreException;
 
 import eu.geclipse.batch.internal.Activator;
 import eu.geclipse.core.ICoreProblems;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridSiteConfig;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * Holder object for the necessary information to connect to a batch service.
@@ -102,7 +103,7 @@ public class BatchConnectionInfo extends ResourceGridContainer implements IGridS
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IStoreableElement#load()
    */ 
-  public void load() throws GridModelException {
+  public void load() throws ProblemException {
     BufferedReader bReader = null;
     try {
       IFileStore fileStore = getFileStore();
@@ -114,27 +115,29 @@ public class BatchConnectionInfo extends ResourceGridContainer implements IGridS
       this.batchType = bReader.readLine();
 
       String str = bReader.readLine();
-      if ( null == str )
-        throw new GridModelException( ICoreProblems.MODEL_ELEMENT_LOAD_FAILED, Activator.PLUGIN_ID );
+      if ( null == str ) {
+        throw new ProblemException( ICoreProblems.MODEL_ELEMENT_LOAD_FAILED, Activator.PLUGIN_ID );
+      }
       this.updateInterval = Integer.parseInt( str );
     } catch ( IOException ioExc ) {
-      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_LOAD_FAILED, ioExc, Activator.PLUGIN_ID );
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_LOAD_FAILED, ioExc, Activator.PLUGIN_ID );
     } catch ( CoreException cExc ) {
-      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_LOAD_FAILED, cExc, Activator.PLUGIN_ID );
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_LOAD_FAILED, cExc, Activator.PLUGIN_ID );
     } finally {
-      if ( null != bReader )
+      if ( null != bReader ) {
         try {
           bReader.close();
         } catch( IOException e ) {
           // Ignore this exception
         }
+      }
     }
   }
 
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IStorableElement#save()
    */
-  public void save() throws GridModelException {
+  public void save() throws ProblemException {
     IFileStore fileStore = getFileStore();
     try {
       OutputStream oStream = fileStore.openOutputStream( EFS.NONE, null );
@@ -149,9 +152,9 @@ public class BatchConnectionInfo extends ResourceGridContainer implements IGridS
       bWriter.write( String.valueOf( this.updateInterval ) );
       bWriter.close();
     } catch ( CoreException cExc ) {
-      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_SAVE_FAILED, cExc, Activator.PLUGIN_ID );
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_SAVE_FAILED, cExc, Activator.PLUGIN_ID );
     } catch ( IOException ioExc ) {
-      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_SAVE_FAILED, ioExc, Activator.PLUGIN_ID );
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_SAVE_FAILED, ioExc, Activator.PLUGIN_ID );
     }
   }
 }

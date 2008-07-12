@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2007 g-Eclipse consortium
+ * Copyright (c) 2007-2008 g-Eclipse consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -36,10 +36,11 @@ import org.eclipse.swt.widgets.Text;
 import eu.geclipse.batch.BatchConnectionInfo;
 import eu.geclipse.batch.ui.internal.Activator;
 import eu.geclipse.batch.ui.internal.Messages;
-import eu.geclipse.core.model.GridModelException;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.info.glue.AbstractGlueTable;
 import eu.geclipse.info.glue.GlueQuery;
 import eu.geclipse.ui.widgets.StoredCombo;
+
 
 /**
  * Dialog for the user to fill in the necessary information to connect to a
@@ -213,7 +214,7 @@ public class BatchDefinitionWizardPage extends WizardPage {
    *
    * @see BatchCreationWizard#performFinish()
    */
-  protected boolean finish( final IFile file ) throws GridModelException{
+  protected boolean finish( final IFile file ) throws ProblemException{
     BatchConnectionInfo info = null;
     boolean ret = false;
     String batchName;

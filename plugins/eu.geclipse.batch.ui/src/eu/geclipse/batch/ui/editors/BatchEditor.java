@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2007 g-Eclipse consortium
+ * Copyright (c) 2007-2008 g-Eclipse consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -18,30 +18,32 @@ package eu.geclipse.batch.ui.editors;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Control;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
-import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.IEditorInput;
-import org.eclipse.ui.IFileEditorInput;
-import org.eclipse.ui.actions.ActionFactory;
-import org.eclipse.ui.part.IPageSite;
-import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
 import org.eclipse.gef.DefaultEditDomain;
 import org.eclipse.gef.EditPartViewer;
 import org.eclipse.gef.GraphicalViewer;
 import org.eclipse.gef.editparts.ScalableFreeformRootEditPart;
 import org.eclipse.gef.editparts.ZoomManager;
 import org.eclipse.gef.ui.actions.ActionRegistry;
+import org.eclipse.gef.ui.actions.GEFActionConstants;
+import org.eclipse.gef.ui.actions.ZoomInAction;
+import org.eclipse.gef.ui.actions.ZoomOutAction;
 import org.eclipse.gef.ui.parts.ContentOutlinePage;
 import org.eclipse.gef.ui.parts.GraphicalEditor;
 import org.eclipse.gef.ui.parts.GraphicalViewerKeyHandler;
 import org.eclipse.gef.ui.parts.TreeViewer;
-import org.eclipse.gef.ui.actions.GEFActionConstants;
-import org.eclipse.gef.ui.actions.ZoomInAction;
-import org.eclipse.gef.ui.actions.ZoomOutAction;
 import org.eclipse.jface.action.IAction;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
+import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.IEditorInput;
+import org.eclipse.ui.IFileEditorInput;
+import org.eclipse.ui.actions.ActionFactory;
+import org.eclipse.ui.part.IPageSite;
+import org.eclipse.ui.views.contentoutline.IContentOutlinePage;
+
 import eu.geclipse.batch.BatchConnectionInfo;
 import eu.geclipse.batch.Extensions;
 import eu.geclipse.batch.IBatchService;
@@ -53,8 +55,8 @@ import eu.geclipse.batch.ui.internal.BoxSortName;
 import eu.geclipse.batch.ui.internal.BoxSortState;
 import eu.geclipse.batch.ui.internal.ComputingElementAction;
 import eu.geclipse.batch.ui.internal.Messages;
-import eu.geclipse.batch.ui.internal.QueueEnDisAction;
 import eu.geclipse.batch.ui.internal.QueueDeleteAction;
+import eu.geclipse.batch.ui.internal.QueueEnDisAction;
 import eu.geclipse.batch.ui.internal.QueueStartStopAction;
 import eu.geclipse.batch.ui.internal.SSHConnectionInfo;
 import eu.geclipse.batch.ui.internal.WorkerNodeAction;
@@ -62,8 +64,8 @@ import eu.geclipse.batch.ui.internal.model.BatchDiagram;
 import eu.geclipse.batch.ui.internal.parts.BatchEditPartFactory;
 import eu.geclipse.batch.ui.internal.parts.BatchTreeEditPartFactory;
 import eu.geclipse.core.reporting.ProblemException;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.ui.dialogs.ProblemDialog;
+
 
 /**
  * A graphical editor that can edit .batch files. The
@@ -205,7 +207,7 @@ public class BatchEditor extends GraphicalEditor {
       
     try {
       this.batchInfo.load();
-    } catch( GridModelException e ) {
+    } catch ( ProblemException e ) {
       error = true;
       ProblemDialog.openProblem( getSite().getShell(),
                                  Messages.getString( "BatchEditor.Error.LoadConfFileTitle" ), //$NON-NLS-1$

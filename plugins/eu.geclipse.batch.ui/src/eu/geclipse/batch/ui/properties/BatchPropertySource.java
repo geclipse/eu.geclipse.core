@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (c) 2007 g-Eclipse consortium
+ * Copyright (c) 2007-2008 g-Eclipse consortium
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -20,15 +20,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 import eu.geclipse.batch.BatchConnectionInfo;
-import eu.geclipse.batch.ui.properties.Messages;
-import eu.geclipse.core.model.GridModelException;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.ui.properties.AbstractProperty;
 import eu.geclipse.ui.properties.AbstractPropertySource;
 import eu.geclipse.ui.properties.IProperty;
 
+
 /**
  * @author harald
- *
  */
 public class BatchPropertySource extends AbstractPropertySource< BatchConnectionInfo >
 {
@@ -75,7 +74,7 @@ public class BatchPropertySource extends AbstractPropertySource< BatchConnection
         if ( null == source.getBatchType() )
           try {
             source.load();
-          } catch( GridModelException e ) {
+          } catch ( ProblemException e ) {
             // Ignore for now
           }
         return source.getBatchName();
@@ -93,7 +92,7 @@ public class BatchPropertySource extends AbstractPropertySource< BatchConnection
         if ( null == source.getBatchType() )
           try {
             source.load();
-          } catch( GridModelException e ) {
+          } catch ( ProblemException e ) {
             // Ignore for now
           }
         return source.getAccount();
@@ -111,7 +110,7 @@ public class BatchPropertySource extends AbstractPropertySource< BatchConnection
         if ( null == source.getBatchType() )
           try {
             source.load();
-          } catch( GridModelException e ) {
+          } catch ( ProblemException e ) {
             // Ignore for now
           }
         return source.getBatchType();
@@ -129,7 +128,7 @@ public class BatchPropertySource extends AbstractPropertySource< BatchConnection
         if ( null == source.getBatchType() )
           try {
             source.load();
-          } catch( GridModelException e ) {
+          } catch ( ProblemException e ) {
             // Ignore for now
           }
         return Integer.toString( source.getUpdateInterval() );
