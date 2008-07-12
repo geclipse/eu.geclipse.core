@@ -47,7 +47,6 @@ import eu.geclipse.core.model.impl.ResourceGridContainer;
 
 /**
  * @author nloulloud
- *
  */
 public class BatchQueueDescription extends ResourceGridContainer
   implements IGridBatchQueueDescription {
@@ -326,7 +325,7 @@ public class BatchQueueDescription extends ResourceGridContainer
   /**
    * @param path
    */
-  public void load( final String path ) /*throws GridModelException*/ {
+  public void load( final String path ) /* throws ProblemException */ {
     String filePath = path;
     URI uri = URI.createPlatformResourceURI( filePath, false );
     ResourceSet resourceSet = new ResourceSetImpl();
@@ -341,7 +340,7 @@ public class BatchQueueDescription extends ResourceGridContainer
       this.documentRoot = ( DocumentRoot )resourceA.getContents().get( 0 );
       this.queueType = this.documentRoot.getQueue();
       this.allowedVOs = this.queueType.getAllowedVirtualOrganizations();
-    } catch( IOException ioEx ) {
+    } catch ( IOException ioEx ) {
       Activator.logException( ioEx );
     }
   }
