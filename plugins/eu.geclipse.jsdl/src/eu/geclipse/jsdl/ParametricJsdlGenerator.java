@@ -50,7 +50,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridPreferences;
 import eu.geclipse.core.reporting.ProblemException;
@@ -115,22 +114,22 @@ public class ParametricJsdlGenerator {
       createTargetFolder( targetFolder );
       NodeList sweeps = findSweeps( parametricXml.getDocumentElement() );
       processSweeps( sweeps, generationParams );
-    } catch( ProblemException exc ) {
+    } catch ( ProblemException exc ) {
       // TODO mariusz 
-      exc.printStackTrace();
+      Activator.logException( exc );
     }
     
     return generatedJsdlList;
   }
   
   private void deleteTargetFolder( final IFolder targetFolder ) {
-    if( targetFolder.exists() ) {
+    if ( targetFolder.exists() ) {
       // TODO mariusz add progress monitor
       try {
         targetFolder.delete( true, null );
-      } catch( CoreException exception ) {
+      } catch ( CoreException exception ) {
         // TODO mariusz Auto-generated catch block
-        exception.printStackTrace();
+        Activator.logException( exception );
       }
     }
     
@@ -140,22 +139,22 @@ public class ParametricJsdlGenerator {
     List<IFolder> parentList = new ArrayList<IFolder>();
     IContainer container = targetFolder;
         
-    while( container instanceof IFolder ) {
+    while ( container instanceof IFolder ) {
       parentList.add( (IFolder)container );
       container = container.getParent();
     }
     
     ListIterator<IFolder> iterator = parentList.listIterator( parentList.size() );
     
-    while( iterator.hasPrevious() ) {
+    while ( iterator.hasPrevious() ) {
       IFolder folder = iterator.previous();
       
-      if( !folder.exists() ) {
+      if ( !folder.exists() ) {
         try {
           folder.create( true, true, null );
-        } catch( CoreException exception ) {
+        } catch ( CoreException exception ) {
           // TODO mariusz Auto-generated catch block
-          exception.printStackTrace();
+          Activator.logException( exception );
         }
       }      
     }
@@ -174,12 +173,12 @@ public class ParametricJsdlGenerator {
       
       targetFolder = temporaryFolder.getFolder( name );
       
-    } catch( GridModelException exception ) {
+    } catch ( ProblemException exception ) {
       // TODO mariusz Auto-generated catch block
-      exception.printStackTrace();
-    } catch( CoreException exception ) {
+      Activator.logException( exception );
+    } catch ( CoreException exception ) {
       // TODO mariusz Auto-generated catch block
-      exception.printStackTrace();
+      Activator.logException( exception );
     }
     
     return targetFolder;    
@@ -303,22 +302,22 @@ public class ParametricJsdlGenerator {
       
       Assert.isNotNull( gridElement );
       
-      if( gridElement != null ) {      
+      if ( gridElement != null ) {      
         generationParams.generatedJsdlList.add( (JSDLJobDescription)gridElement );
       }
-    } catch( TransformerException exception ) {
+    } catch ( TransformerException exception ) {
       // TODO mariusz Auto-generated catch block
-      exception.printStackTrace();
+      Activator.logException( exception );
     }
-    catch( FileNotFoundException exception ) {
+    catch ( FileNotFoundException exception ) {
       // TODO mariusz Auto-generated catch block
-      exception.printStackTrace();
-    } catch( IOException exception ) {
+      Activator.logException( exception );
+    } catch ( IOException exception ) {
       // TODO mariusz Auto-generated catch block
-      exception.printStackTrace();
-    } catch( CoreException exception ) {
+      Activator.logException( exception );
+    } catch ( CoreException exception ) {
       // TODO mariusz Auto-generated catch block
-      exception.printStackTrace();
+      Activator.logException( exception );
     }
   }
 
@@ -387,8 +386,8 @@ public class ParametricJsdlGenerator {
     Transformer transformer = TransformerFactory.newInstance().newTransformer();
     transformer.transform( new DOMSource( document ), new StreamResult( outputStream ) );
     System.out.println( outputStream.toString() );
-    } catch( Exception e) {
-      e.printStackTrace();
+    } catch ( Exception e) {
+      Activator.logException( e );
     }
     
   }

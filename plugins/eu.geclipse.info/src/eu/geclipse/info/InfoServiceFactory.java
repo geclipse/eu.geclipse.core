@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -17,24 +17,26 @@ package eu.geclipse.info;
 import java.util.ArrayList;
 
 import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridInfoService;
 import eu.geclipse.core.model.IGridProject;
+import eu.geclipse.core.reporting.ProblemException;
 import eu.geclipse.info.internal.Activator;
+
 
 /**
  * This class is responsible for returning existing information services.
+ * 
  * @author tnikos
- *
  */
 public class InfoServiceFactory {
   
   
   /**
    * Returns existing information services.
-   * @return An array with all the diffrent kind of information services found in the projects. Only one of 
-   * each type is returned, the first that is found by browsing the grid projects. 
+   * @return An array with all the different kind of information services found
+   * in the projects. Only one of each type is returned, the first that is found
+   * by browsing the grid projects. 
    */
   public ArrayList<IGridInfoService> getAllExistingInfoService()
   {
@@ -54,10 +56,9 @@ public class InfoServiceFactory {
             infoServiceArray.add( infoService );
         }
       }
-    } catch( GridModelException e ) {
+    } catch ( ProblemException e ) {
       Activator.logException( e );
-    }
-    catch (Exception e) {
+    } catch ( Exception e ) {
       Activator.logException( e );
     }
     

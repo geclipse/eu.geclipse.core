@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -28,10 +28,10 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.impl.GenericVirtualOrganization;
 import eu.geclipse.core.model.impl.GenericVoCreator;
 import eu.geclipse.ui.internal.Activator;
+
 
 /**
  * Wizard page for the {@link GenericVirtualOrganization}.
@@ -100,7 +100,6 @@ public class GenericVoWizardPage
    * of the specified VO.
    * 
    * @param vo The VO whose attributes should be set to the page's controls.
-   * @throws GridModelException If any error occurs.
    */
   protected void initVo( final GenericVirtualOrganization vo ) {
     this.nameText.setText( vo != null ? vo.getName() : "" ); //$NON-NLS-1$
