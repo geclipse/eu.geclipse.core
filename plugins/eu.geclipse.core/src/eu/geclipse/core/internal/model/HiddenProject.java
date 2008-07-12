@@ -33,7 +33,6 @@ import org.eclipse.core.runtime.Status;
 import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.internal.Activator;
 import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
@@ -42,6 +41,8 @@ import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IGridRoot;
 import eu.geclipse.core.model.IVirtualOrganization;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * The hidden project is a project that is not visible in the Grid model views.
@@ -82,9 +83,9 @@ public class HiddenProject extends ResourceGridContainer
    * Get the singleton instance of the hidden project.
    * 
    * @return The singleton. If not yet happened the singleton will be created.
-   * @throws GridModelException If the creation of the singleton fails.
+   * @throws ProblemException If the creation of the singleton fails.
    */
-  public static HiddenProject getInstance() throws GridModelException {
+  public static HiddenProject getInstance() throws ProblemException {
     IGridRoot gridRoot = GridModel.getRoot();
     HiddenProject result = ( HiddenProject )gridRoot.findChild( NAME );
     if( result == null ) {
@@ -101,31 +102,31 @@ public class HiddenProject extends ResourceGridContainer
    * 
    * @param project The {@link IProject} from which to create the singleton.
    * @return The hidden project.
-   * @throws GridModelException If the creation of the project fails.
+   * @throws ProblemException If the creation of the project fails.
    */
   static HiddenProject getInstance( final IProject project )
-    throws GridModelException
+    throws ProblemException
   {
-    if( !project.exists() ) {
+    if ( !project.exists() ) {
       String projectName = project.getName();
       IPath projectPath = null;
       IStatus status = ResourcesPlugin.getWorkspace()
         .validateProjectLocation( project, projectPath );
-      if( status.getSeverity() != IStatus.OK ) {
-        throw new GridModelException( ICoreProblems.MODEL_PREFERENCE_CREATION_FAILED,
-                                      status.getMessage(),
-                                      status.getException(),
-                                      Activator.PLUGIN_ID );
+      if ( status.getSeverity() != IStatus.OK ) {
+        throw new ProblemException( ICoreProblems.MODEL_PREFERENCE_CREATION_FAILED,
+                                    status.getMessage(),
+                                    status.getException(),
+                                    Activator.PLUGIN_ID );
       }
       IProjectDescription desc = project.getWorkspace()
         .newProjectDescription( projectName );
       desc.setLocation( projectPath );
       try {
         project.create( desc, null );
-      } catch( CoreException cExc ) {
-        throw new GridModelException( ICoreProblems.MODEL_PREFERENCE_CREATION_FAILED,
-                                      cExc,
-                                      Activator.PLUGIN_ID );
+      } catch ( CoreException cExc ) {
+        throw new ProblemException( ICoreProblems.MODEL_PREFERENCE_CREATION_FAILED,
+                                    cExc,
+                                    Activator.PLUGIN_ID );
       }
     }
     return new HiddenProject( project );
@@ -148,16 +149,16 @@ public class HiddenProject extends ResourceGridContainer
    *      java.net.URI)
    */
   public void createGlobalConnection( final String name, final URI masterURI )
-    throws GridModelException
+    throws ProblemException
   {
     try {
       IFolder folder = getGlobalConnectionsFolder();
       IFolder connection = folder.getFolder( name );
       connection.createLink( masterURI, IResource.ALLOW_MISSING_LOCAL, null );
     } catch( CoreException cExc ) {
-      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
-                                    cExc,
-                                    Activator.PLUGIN_ID );
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
+                                  cExc,
+                                  Activator.PLUGIN_ID );
     }
   }
 
@@ -167,23 +168,23 @@ public class HiddenProject extends ResourceGridContainer
    * @see eu.geclipse.core.model.IGridPreferences#createTemporaryConnection(java.net.URI)
    */
   public IGridConnection createTemporaryConnection( final URI masterURI )
-    throws GridModelException
+    throws ProblemException
   {
     IGridConnection result = null;
     try {
       IFolder folder = getTemporaryFolder();
       IFolder connection = folder.getFolder( TEMP_CONNECTION_NAME );
-      if( connection.exists() ) {
+      if ( connection.exists() ) {
         connection.delete( true, null );
       }
       connection.createLink( masterURI, IResource.ALLOW_MISSING_LOCAL
                                         | IResource.REPLACE, null );
       result = ( IGridConnection )GridModel.getConnectionManager()
         .findChild( TEMP_CONNECTION_NAME );
-    } catch( CoreException cExc ) {
-      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
-                                    cExc,
-                                    Activator.PLUGIN_ID );
+    } catch ( CoreException cExc ) {
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
+                                  cExc,
+                                  Activator.PLUGIN_ID );
     }
     return result;
   }
@@ -261,7 +262,7 @@ public class HiddenProject extends ResourceGridContainer
   }
 
   public IFolder getTemporaryFolder() throws CoreException {
-    // TODO mariusz add GridModelException instead of CoreException
+    // TODO mariusz add ProblemException instead of CoreException
     IFolder folder = getProjectFolder( DIR_TEMP );
     return folder;
   }
@@ -275,7 +276,7 @@ public class HiddenProject extends ResourceGridContainer
   private IFolder getProjectFolder( final String name ) throws CoreException {
     IProject project = getAccessibleProject();
     IFolder folder = project.getFolder( new Path( name ) );
-    if( !folder.exists() ) {
+    if ( !folder.exists() ) {
       folder.create( IResource.FORCE, true, null );
     }
     return folder;

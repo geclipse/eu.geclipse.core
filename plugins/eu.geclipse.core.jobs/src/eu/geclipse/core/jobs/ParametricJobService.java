@@ -35,7 +35,6 @@ import org.eclipse.core.runtime.SubMonitor;
 import eu.geclipse.core.jobs.internal.Activator;
 import eu.geclipse.core.jobs.internal.ParametricJobID;
 import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridJob;
@@ -184,11 +183,10 @@ public class ParametricJobService implements IGridJobService {
    * @param jobName
    * @return submitted job
    * @throws ProblemException
-   * @throws GridModelException
    */
   public IGridJobID submitJob( final IGridJobDescription description,
                                final SubMonitor monitor, final IGridContainer parent, final String jobName )
-    throws ProblemException, GridModelException
+    throws ProblemException
   {
     SubMonitor subMonitor = SubMonitor.convert( monitor );
     subMonitor.setWorkRemaining( 2 );
@@ -216,20 +214,20 @@ public class ParametricJobService implements IGridJobService {
   private void cleanupSubmission( final IFolder generationTargetfolder ) throws ProblemException {
     try {
       generationTargetfolder.delete( true, null );
-    } catch( CoreException exception ) {
+    } catch ( CoreException exception ) {
       throw new ProblemException( "eu.geclipse.core.jobs.problem.cleanupSubmissionFailed", exception, Activator.PLUGIN_ID ); //$NON-NLS-1$
     }    
   }
 
   private List<IGridJobID> submitGeneratedJsdl( final IGridJob parametricJob, final List<JSDLJobDescription> generatedJsdls,
-                                    final SubMonitor monitor, final String jobName ) throws GridModelException, ProblemException
+                                    final SubMonitor monitor, final String jobName ) throws ProblemException
   {
     List<IGridJobID> submittedJobs = new ArrayList<IGridJobID>( generatedJsdls.size() );
     GridJobCreator jobCreator = new GridJobCreator();
     monitor.setWorkRemaining( generatedJsdls.size() );
     
     int iteration = 0;
-    for( JSDLJobDescription jobDescription : generatedJsdls ) {
+    for ( JSDLJobDescription jobDescription : generatedJsdls ) {
       String subjobName = String.format( Messages.getString("ParametricJobService.formatIteration"), jobName, Integer.valueOf( iteration++ ) ); //$NON-NLS-1$
       testCancelled( monitor );
       
@@ -351,9 +349,9 @@ public class ParametricJobService implements IGridJobService {
 
   public IGridJobID submitJob( final IGridJobDescription description,
                                final IProgressMonitor monitor )
-    throws ProblemException, GridModelException
-  {// TODO mariusz operation not supported - add exception
-
+    throws ProblemException
+  {
+    // TODO mariusz operation not supported - add exception
     return null;
   }
 }

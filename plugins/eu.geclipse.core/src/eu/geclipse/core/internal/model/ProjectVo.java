@@ -21,7 +21,6 @@ import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import eu.geclipse.core.internal.Activator;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridApplicationManager;
 import eu.geclipse.core.model.IGridComputing;
 import eu.geclipse.core.model.IGridContainer;
@@ -252,11 +251,11 @@ public class ProjectVo
     return this.vo.getAdapter( adapter );
   }
 
-  public void load() throws GridModelException {
+  public void load() throws ProblemException {
     // TODO mathias
   }
 
-  public void save() throws GridModelException {
+  public void save() throws ProblemException {
     // TODO mathias
   }
   

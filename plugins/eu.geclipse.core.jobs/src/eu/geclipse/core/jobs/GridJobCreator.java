@@ -30,7 +30,6 @@ import org.eclipse.core.runtime.Path;
 import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.jobs.internal.Activator;
 import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridJob;
@@ -68,16 +67,16 @@ public class GridJobCreator extends AbstractGridJobCreator {
    * @see eu.geclipse.core.model.IGridElementCreator#create(eu.geclipse.core.model.IGridContainer)
    */
   public IGridElement create( final IGridContainer parent )
-    throws GridModelException
+    throws ProblemException
   {
     IResource resource = ( IResource )getObject();
     if( resource == null ) {
-      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
-                                    Activator.PLUGIN_ID );
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
+                                  Activator.PLUGIN_ID );
     }
     if( !( resource instanceof IFolder ) ) {
-      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
-                                    Activator.PLUGIN_ID );
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_CREATE_FAILED,
+                                  Activator.PLUGIN_ID );
     }
     return new GridJob( ( IFolder )resource );
   }

@@ -1,5 +1,5 @@
 /*****************************************************************************
- * Copyright (c) 2006, 2007 g-Eclipse Consortium 
+ * Copyright (c) 2006-2008 g-Eclipse Consortium 
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
@@ -19,10 +19,11 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IFolder;
 
 import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridElementManager;
 import eu.geclipse.core.model.IGridProject;
+import eu.geclipse.core.reporting.ProblemException;
+
 
 /**
  * Internal implementation of the {@link IGridConnection}.
@@ -76,17 +77,15 @@ public class ConnectionRoot
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IStorableElement#load()
    */
-  public void load() throws GridModelException {
+  public void load() throws ProblemException {
     // TODO Auto-generated method stub
-
   }
 
   /* (non-Javadoc)
    * @see eu.geclipse.core.model.IStorableElement#save()
    */
-  public void save() throws GridModelException {
+  public void save() throws ProblemException {
     // TODO Auto-generated method stub
-
   }
 
 }
