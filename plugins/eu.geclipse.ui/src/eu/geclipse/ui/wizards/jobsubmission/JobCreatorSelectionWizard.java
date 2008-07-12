@@ -47,7 +47,6 @@ import org.eclipse.ui.PlatformUI;
 import eu.geclipse.core.jobs.GridJobCreator;
 import eu.geclipse.core.jobs.ParametricJobService;
 import eu.geclipse.core.model.GridModel;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridJob;
 import eu.geclipse.core.model.IGridJobDescription;

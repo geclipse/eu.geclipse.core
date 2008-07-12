@@ -45,10 +45,9 @@ import eu.geclipse.ui.dialogs.ProblemDialog;
 
 
 /**
- * @author nloulloud
- * 
  * The Batch Service Selection Wizard Page.
- *
+ * 
+ * @author nloulloud
  */
 public class BatchServiceSelectionWizardPage extends WizardPage {
   
@@ -209,7 +208,7 @@ public class BatchServiceSelectionWizardPage extends WizardPage {
                                         Messages.getString( "AddQueueWizard.error_manipulate_message" ), //$NON-NLS-1$
                                         e );
                   } 
-//                } catch( GridModelException e ) {
+//                } catch( ProblemException e ) {
 //                  Activator.logException( e );
 //                }
               } // end for

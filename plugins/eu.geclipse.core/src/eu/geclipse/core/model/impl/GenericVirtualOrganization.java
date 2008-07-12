@@ -90,7 +90,7 @@ public class GenericVirtualOrganization
   
   /*@Override
   public IGridService[] getServices( final IProgressMonitor monitor )
-      throws GridModelException {
+      throws ProblemException {
     
     List< IGridService > results = new ArrayList< IGridService >();
     

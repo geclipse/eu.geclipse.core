@@ -358,15 +358,15 @@ public abstract class AbstractVirtualOrganization
       transformer.transform( domSource, streamResult );
       
     } catch ( ParserConfigurationException pcExc ) {
-      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_SAVE_FAILED, pcExc, Activator.PLUGIN_ID );
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_SAVE_FAILED, pcExc, Activator.PLUGIN_ID );
     } catch ( CoreException cExc ) {
-      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_SAVE_FAILED, cExc, Activator.PLUGIN_ID );
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_SAVE_FAILED, cExc, Activator.PLUGIN_ID );
     } catch ( IOException ioExc ) {
-      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_SAVE_FAILED, ioExc, Activator.PLUGIN_ID );
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_SAVE_FAILED, ioExc, Activator.PLUGIN_ID );
     } catch ( TransformerConfigurationException tcExc ) {
-      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_SAVE_FAILED, tcExc, Activator.PLUGIN_ID );
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_SAVE_FAILED, tcExc, Activator.PLUGIN_ID );
     } catch ( TransformerException tExc ) {
-      throw new GridModelException( ICoreProblems.MODEL_ELEMENT_SAVE_FAILED, tExc, Activator.PLUGIN_ID );
+      throw new ProblemException( ICoreProblems.MODEL_ELEMENT_SAVE_FAILED, tExc, Activator.PLUGIN_ID );
       
     }
     */

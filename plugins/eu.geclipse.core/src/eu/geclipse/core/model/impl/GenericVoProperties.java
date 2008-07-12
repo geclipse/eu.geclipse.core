@@ -39,7 +39,6 @@ import org.osgi.framework.Bundle;
 import eu.geclipse.core.Extensions;
 import eu.geclipse.core.ICoreProblems;
 import eu.geclipse.core.internal.Activator;
-import eu.geclipse.core.model.GridModelException;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.IGridElementCreator;

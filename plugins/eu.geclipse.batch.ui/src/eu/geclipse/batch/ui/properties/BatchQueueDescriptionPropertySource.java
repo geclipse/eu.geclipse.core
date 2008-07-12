@@ -27,9 +27,9 @@ import eu.geclipse.ui.properties.IProperty;
 
 /**
  * @author nickl
- *
  */
-public class BatchQueueDescriptionPropertySource extends AbstractPropertySource<BatchQueueDescription>
+public class BatchQueueDescriptionPropertySource
+    extends AbstractPropertySource<BatchQueueDescription>
 {
   
   static private List< IProperty< BatchQueueDescription > > staticProperties;
@@ -90,7 +90,7 @@ public class BatchQueueDescriptionPropertySource extends AbstractPropertySource<
                 
          // try {
             source.load(source.getResource().getFullPath().toString());
-         // } catch( GridModelException e ) {
+         // } catch ( ProblemException e ) {
             // Ignore for now
          // }
         }
@@ -110,7 +110,7 @@ public class BatchQueueDescriptionPropertySource extends AbstractPropertySource<
                 
          // try {
             source.load(source.getResource().getFullPath().toString());
-         // } catch( GridModelException e ) {
+         // } catch ( ProblemException e ) {
             // Ignore for now
          // }
         }
@@ -130,7 +130,7 @@ public class BatchQueueDescriptionPropertySource extends AbstractPropertySource<
                 
         //  try {
             source.load(source.getResource().getFullPath().toString());
-        //  } catch( GridModelException e ) {
+        //  } catch( ProblemException e ) {
             // Ignore for now
         //  }
         }
@@ -149,7 +149,7 @@ public class BatchQueueDescriptionPropertySource extends AbstractPropertySource<
                 
         //  try {
             source.load(source.getResource().getFullPath().toString());
-        //  } catch( GridModelException e ) {
+        //  } catch ( ProblemException e ) {
             // Ignore for now
         //  }
         }
@@ -169,9 +169,9 @@ public class BatchQueueDescriptionPropertySource extends AbstractPropertySource<
                 
          // try {
             source.load(source.getResource().getFullPath().toString());
-         // } catch( GridModelException e ) {
+         // } catch ( ProblemException e ) {
             // Ignore for now
-          //}
+         // }
         }
         return new Double(source.getQueueMaxCPUTimeValue());
       }
@@ -189,7 +189,7 @@ public class BatchQueueDescriptionPropertySource extends AbstractPropertySource<
                 
           //try {
             source.load(source.getResource().getFullPath().toString());
-         // } catch( GridModelException e ) {
+         // } catch ( ProblemException e ) {
             // Ignore for now
          // }
         }
