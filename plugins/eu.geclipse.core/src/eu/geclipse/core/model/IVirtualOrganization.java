@@ -58,10 +58,6 @@ public interface IVirtualOrganization
                                                 final IProgressMonitor monitor )
       throws ProblemException;
   
-  public IGridApplicationManager getApplicationManager();
-  
-  public IGridComputing[] getComputing( final IProgressMonitor monitor ) throws ProblemException;
-  
   /**
    * Get the info service of this VO.
    * 
@@ -73,18 +69,6 @@ public interface IVirtualOrganization
   public IGridInfoService getInfoService() throws ProblemException;
   
   /**
-   * Get all services that are registered within this VO.
-   * 
-   * @param monitor Use to monitor the progress.
-   * @return All services that are currently available for
-   * this VO.
-   * @throws ProblemException If an error occurs while retrieving the services.
-   */
-  public IGridService[] getServices( final IProgressMonitor monitor ) throws ProblemException;
-  
-  public IGridStorage[] getStorage( final IProgressMonitor monitor ) throws ProblemException;
-  
-  /**
    * Get a list of all job submission services that are available for
    * this virtual organization.
    * 
@@ -94,6 +78,22 @@ public interface IVirtualOrganization
    * the services.
    */
   public IGridJobService[] getJobSubmissionServices( final IProgressMonitor monitor ) throws ProblemException;
+  
+  /**
+   * Get all services that are registered within this VO.
+   * 
+   * @param monitor Use to monitor the progress.
+   * @return All services that are currently available for
+   * this VO.
+   * @throws ProblemException If an error occurs while retrieving the services.
+   */
+  public IGridService[] getServices( final IProgressMonitor monitor ) throws ProblemException;
+  
+  public IGridComputing[] getComputing( final IProgressMonitor monitor ) throws ProblemException;
+  
+  public IGridStorage[] getStorage( final IProgressMonitor monitor ) throws ProblemException;
+  
+  public IGridApplicationManager getApplicationManager();
   
   /**
    * Get a string that denotes the type of this VO. This string
