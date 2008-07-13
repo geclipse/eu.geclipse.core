@@ -32,7 +32,7 @@ public interface IVirtualOrganization
     extends IGridContainer, IStorableElement {
   
   /**
-   * Get the resource categories that are supported by this VO.
+   * Gets the resource categories that are supported by this VO.
    * 
    * @return The {@link IGridResourceCategory} instances supported by
    * this VO.
@@ -40,7 +40,7 @@ public interface IVirtualOrganization
   public IGridResourceCategory[] getSupportedResources();
   
   /**
-   * Get all available resources of the specified resource category.
+   * Gets all available resources of the specified resource category.
    *  
    * @param category The resource category.
    * @param exclusive If <code>true<code> only resources are returned that
@@ -59,7 +59,7 @@ public interface IVirtualOrganization
       throws ProblemException;
   
   /**
-   * Get the info service of this VO.
+   * Gets the info service of this VO.
    * 
    * @return The info service that can be queried for VO related
    * information. 
@@ -69,7 +69,7 @@ public interface IVirtualOrganization
   public IGridInfoService getInfoService() throws ProblemException;
   
   /**
-   * Get a list of all job submission services that are available for
+   * Gets a list of all job submission services that are available for
    * this virtual organization.
    * 
    * @param monitor Use to monitor the progress.
@@ -80,7 +80,7 @@ public interface IVirtualOrganization
   public IGridJobService[] getJobSubmissionServices( final IProgressMonitor monitor ) throws ProblemException;
   
   /**
-   * Get all services that are registered within this VO.
+   * Gets all services that are registered within this VO.
    * 
    * @param monitor Use to monitor the progress.
    * @return All services that are currently available for
@@ -96,11 +96,12 @@ public interface IVirtualOrganization
   public IGridApplicationManager getApplicationManager();
   
   /**
-   * Get a string that denotes the type of this VO. This string
+   * Returns a user-friendly string denoting the type of this VO. This string
    * has to be a singleton for each implementation. So each object
    * of a specific implementation has to return the same type name.
    * 
    * @return An implementation-specific type name.
+   * @see #getId()
    */
   public String getTypeName();
   
@@ -111,5 +112,11 @@ public interface IVirtualOrganization
    */
   public String getWizardId();
 
+  /**
+   * Returns a unique identifier for the type of this VO.
+   * 
+   * @return The name of the class implementing this interface.
+   * @see #getTypeName() 
+   */
   public String getId();
 }
