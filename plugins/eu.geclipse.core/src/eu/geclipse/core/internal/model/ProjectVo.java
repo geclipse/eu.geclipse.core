@@ -111,6 +111,7 @@ public class ProjectVo
     
     IGridComputing[] result = null;
     
+    // Query the underlying IVirtualOrganization, not its InfoService directly
     if ( this.vo != null ) {
       result = this.vo.getComputing( monitor );
     }
@@ -154,6 +155,7 @@ public class ProjectVo
     
     IGridService[] result = null;
     
+    // Query the underlying IVirtualOrganization, not its InfoService directly
     if ( this.vo != null ) {
       result = this.vo.getServices( monitor );
     }
@@ -167,6 +169,7 @@ public class ProjectVo
     
     IGridStorage[] result = null;
     
+    // Query the underlying IVirtualOrganization, not its InfoService directly
     if ( this.vo != null ) {
       result = this.vo.getStorage( monitor );
     }
