@@ -89,8 +89,14 @@ public abstract class AbstractVirtualOrganization
                                                 final boolean exclusive,
                                                 final IProgressMonitor monitor )
       throws ProblemException {
+    
+    IGridResource[] resources = null;
     IGridInfoService infoService = getInfoService();
-    return infoService.fetchResources( this, this, category, false, null, monitor );
+    if ( infoService != null ) {
+      resources = infoService.fetchResources( this, this, category, false, null, monitor );
+    }
+    
+    return resources;
   }
   
   public IGridComputing[] getComputing( final IProgressMonitor monitor ) throws ProblemException {
@@ -107,9 +113,8 @@ public abstract class AbstractVirtualOrganization
                                                          monitor );
     }
     
-    if (myComputingResources != null)
-    {
-      computing = new IGridComputing[myComputingResources.length];
+    if ( myComputingResources != null ) {
+      computing = new IGridComputing[ myComputingResources.length ];
       System.arraycopy( myComputingResources, 0, computing, 0, myComputingResources.length );
     }
     
@@ -125,7 +130,7 @@ public abstract class AbstractVirtualOrganization
     if ( !fileInfo.exists() ) {
       try {
         fileStore.mkdir( EFS.NONE, null );
-      } catch( CoreException cExc ) {
+      } catch ( CoreException cExc ) {
         Activator.logException( cExc );
       }
     }
@@ -217,7 +222,7 @@ public abstract class AbstractVirtualOrganization
     }
     
     if ( myGridStorage != null ) {
-      storage = new IGridStorage[myGridStorage.length];
+      storage = new IGridStorage[ myGridStorage.length ];
       System.arraycopy( myGridStorage, 0, storage, 0, myGridStorage.length );
     }
     
