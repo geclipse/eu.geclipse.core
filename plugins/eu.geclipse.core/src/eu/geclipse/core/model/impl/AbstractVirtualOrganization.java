@@ -76,7 +76,7 @@ public abstract class AbstractVirtualOrganization
     IFileStore fileStore = getFileStore();
     try {
       fileStore.delete( EFS.NONE, null );
-    } catch( CoreException cExc ) {
+    } catch ( CoreException cExc ) {
       Activator.logException( cExc );
     }
   }
@@ -100,8 +100,8 @@ public abstract class AbstractVirtualOrganization
     if ( infoService != null ) {
       myComputingResources = infoService.fetchResources( this,
                                                          this,
-                                                         GridResourceCategoryFactory.
-                                                         getCategory( GridResourceCategoryFactory.ID_COMPUTING ),
+                                                         GridResourceCategoryFactory
+                                                           .getCategory( GridResourceCategoryFactory.ID_COMPUTING ),
                                                          false,
                                                          IGridComputing.class,
                                                          monitor );
@@ -182,15 +182,14 @@ public abstract class AbstractVirtualOrganization
     if ( infoService != null ) {
       myGridResources = infoService.fetchResources( this,
                                                     this,
-                                                    GridResourceCategoryFactory.
-                                                    getCategory( GridResourceCategoryFactory.ID_SERVICES ),
+                                                    GridResourceCategoryFactory
+                                                      .getCategory( GridResourceCategoryFactory.ID_SERVICES ),
                                                     false,
                                                     IGridService.class,
                                                     monitor );
     }
     
-    if (myGridResources != null)
-    {
+    if ( myGridResources != null ) {
       result = new IGridService[ myGridResources.length + 1 ];
       System.arraycopy( myGridResources, 0, result, 0, myGridResources.length );
       result[ myGridResources.length ] = infoService;
@@ -210,15 +209,14 @@ public abstract class AbstractVirtualOrganization
     if ( infoService != null ) {
       myGridStorage = infoService.fetchResources( this,
                                                   this,
-                                                  GridResourceCategoryFactory.
-                                                  getCategory( GridResourceCategoryFactory.ID_STORAGE ),
+                                                  GridResourceCategoryFactory
+                                                    .getCategory( GridResourceCategoryFactory.ID_STORAGE ),
                                                   false,
                                                   IGridStorage.class,
                                                   monitor );
     }
     
-    if (myGridStorage != null)
-    {
+    if ( myGridStorage != null ) {
       storage = new IGridStorage[myGridStorage.length];
       System.arraycopy( myGridStorage, 0, storage, 0, myGridStorage.length );
     }
@@ -388,6 +386,7 @@ public abstract class AbstractVirtualOrganization
     return resultList.toArray( new IGridService[ resultList.size() ] );
     
   }
+  
   /*
   protected boolean createSpecificPart( final Element specElement ) {
     return false;
@@ -401,6 +400,7 @@ public abstract class AbstractVirtualOrganization
     return null;
   }
   */
+  
   /**
    * Load a child with the given name.
    * 
