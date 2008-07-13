@@ -71,7 +71,7 @@ public class MountAction extends Action {
    */
   @Override
   public void run() {
-    Job mountJob = new Job( "mountjob" ) {
+    Job mountJob = new Job( "Storage mount job" ) {
       @Override
       protected IStatus run( final IProgressMonitor monitor ) {
         return mountOperation( monitor );
