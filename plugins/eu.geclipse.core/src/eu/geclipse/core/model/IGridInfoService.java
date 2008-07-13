@@ -68,7 +68,7 @@ public interface IGridInfoService extends IGridService {
    * resource category will be returned (<code>exclusive == true</code>) or if also
    * resources of child categories will be returned (<code>exclusive == false</code>).
    * @param typeFilter A filter that is applied to the returned resources. If such
-   * a filter is specified callers may savely cast the elements of the result array
+   * a filter is specified callers may safely cast the elements of the result array
    * to the filtered type. This parameter may be <code>null</code>.
    * @param monitor A progress monitor used to monitor this operation.
    * @return An array of Grid resources that apply to the specified arguments.
