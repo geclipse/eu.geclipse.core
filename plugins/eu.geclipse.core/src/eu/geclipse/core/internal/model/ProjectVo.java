@@ -84,7 +84,7 @@ public class ProjectVo
   
   @Override
   public boolean canContain( final IGridElement element ) {
-    return element instanceof ResourceCategoryContainer;// QueryContainer;
+    return element instanceof ResourceCategoryContainer; // QueryContainer;
   }
 
   public String getTypeName() {
@@ -101,8 +101,7 @@ public class ProjectVo
       throws ProblemException {
     IGridResource[] result = null;
     if ( this.vo != null ) {
-      IGridInfoService infoService = this.vo.getInfoService();
-      result = infoService.fetchResources( this, this.vo, category, false, null, monitor );
+      result = this.vo.getAvailableResources( category, exclusive, monitor );
     }
     return result;
   }
@@ -113,23 +112,7 @@ public class ProjectVo
     IGridComputing[] result = null;
     
     if ( this.vo != null ) {
-      
-      IGridInfoService infoService = this.vo.getInfoService();
-      IGridResource[] resources = infoService.fetchResources(
-          this,
-          this.vo,
-          GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_COMPUTING ),
-          false,
-          IGridComputing.class,
-          monitor );
-      
-      if ( resources != null ) {
-        result = new IGridComputing[ resources.length ];
-        for ( int i = 0 ; i < resources.length ; i++ ) {
-          result[ i ] = ( IGridComputing ) resources[ i ];
-        }
-      }
-      
+      result = this.vo.getComputing( monitor );
     }
     
     return result;
@@ -172,23 +155,7 @@ public class ProjectVo
     IGridService[] result = null;
     
     if ( this.vo != null ) {
-      
-      IGridInfoService infoService = this.vo.getInfoService();
-      IGridResource[] resources = infoService.fetchResources(
-          this,
-          this.vo,
-          GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_SERVICES ),
-          false,
-          IGridService.class,
-          monitor );
-      
-      if ( resources != null ) {
-        result = new IGridService[ resources.length ];
-        for ( int i = 0 ; i < resources.length ; i++ ) {
-          result[ i ] = ( IGridService ) resources[ i ];
-        }
-      }
-      
+      result = this.vo.getServices( monitor );
     }
     
     return result;
@@ -201,23 +168,7 @@ public class ProjectVo
     IGridStorage[] result = null;
     
     if ( this.vo != null ) {
-      
-      IGridInfoService infoService = this.vo.getInfoService();
-      IGridResource[] resources = infoService.fetchResources(
-          this,
-          this.vo,
-          GridResourceCategoryFactory.getCategory( GridResourceCategoryFactory.ID_STORAGE ),
-          false,
-          IGridStorage.class,
-          monitor );
-      
-      if ( resources != null ) {
-        result = new IGridStorage[ resources.length ];
-        for ( int i = 0 ; i < resources.length ; i++ ) {
-          result[ i ] = ( IGridStorage ) resources[ i ];
-        }
-      }
-      
+      result = this.vo.getStorage( monitor );
     }
     
     return result;

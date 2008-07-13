@@ -1,7 +1,6 @@
 package eu.geclipse.core.model;
 
 import java.net.URI;
-import java.util.Hashtable;
 
 public interface IMountable extends IGridElement {
   
