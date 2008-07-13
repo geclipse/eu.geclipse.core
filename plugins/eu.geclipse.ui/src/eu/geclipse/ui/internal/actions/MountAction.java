@@ -25,7 +25,6 @@ import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.wizard.WizardDialog;
 import org.eclipse.swt.widgets.Shell;
 
-import eu.geclipse.core.filesystem.GEclipseFileSystem;
 import eu.geclipse.core.filesystem.GEclipseURI;
 import eu.geclipse.core.model.IGridConnection;
 import eu.geclipse.core.model.IGridContainer;
@@ -33,7 +32,6 @@ import eu.geclipse.core.model.IGridProject;
 import eu.geclipse.core.model.IMountable;
 import eu.geclipse.core.model.IMountable.MountPoint;
 import eu.geclipse.core.model.IMountable.MountPointID;
-import eu.geclipse.ui.dialogs.GridFileDialog;
 import eu.geclipse.ui.internal.Activator;
 import eu.geclipse.ui.wizards.ConnectionWizard;
 
@@ -104,7 +102,7 @@ public class MountAction extends Action {
         createMount( mountable );
         lMonitor.worked( 1 );
         
-      } catch( CoreException cExc ) {
+      } catch ( CoreException cExc ) {
         IStatus status = new Status(
             IStatus.ERROR,
             Activator.PLUGIN_ID,
