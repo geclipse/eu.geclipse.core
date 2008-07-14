@@ -403,11 +403,8 @@ public class GEclipseFileStore
     if ( ! fetchInfo().exists() ) {
       IFileStore dir = getSlave().mkdir( options, monitor( monitor ) );
       FileStoreRegistry registry = FileStoreRegistry.getInstance();
-      result = registry.getStore( dir );
-      if ( result == null ) {
-        result = new GEclipseFileStore( this, dir, dir.getName() );
-        registry.putStore( result );
-      }
+      result = new GEclipseFileStore( this, dir, dir.getName() );
+      registry.putStore( result );
     }
     return result;
   }
