@@ -138,8 +138,12 @@
   <topic
     label="Application Deployment">
     <topic
-      label="Install/Uninstall a software"
+      label="Install a software"
       href="html/concepts/applicationdeployment/install.html">
+    </topic>
+    <topic
+      label="Remove a software"
+      href="html/concepts/applicationdeployment/uninstall.html">
     </topic>
     <anchor id="geclipse_concepts_applicationdeployment" />
   </topic>
