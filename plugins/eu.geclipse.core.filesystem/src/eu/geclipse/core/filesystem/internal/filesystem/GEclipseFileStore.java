@@ -219,23 +219,14 @@ public class GEclipseFileStore
     
     if ( isActive( FETCH_CHILDREN_ACTIVE_POLICY ) ) {
       clearActive( FETCH_CHILDREN_ACTIVE_POLICY );
-      if ( this.cachedInfos != null ) {
-        FileStoreRegistry registry = FileStoreRegistry.getInstance();
-        for ( IFileInfo info : this.cachedInfos ) {
-          IFileStore child = getSlave().getChild( info.getName().trim() );
-          registry.removeStore( child );
-        }
-      }
-
-      infos  = getSlave().childInfos( options, monitor( monitor ) );
-      this.cachedInfos = infos;
+            
+      infos = getSlave().childInfos( options, monitor( monitor ) );
+      setCachedInfos( infos );
       
       ArrayList<String> names = new ArrayList<String>( infos.length );
-      FileStoreRegistry registry = FileStoreRegistry.getInstance();
       
       for ( IFileInfo info : infos ) {
-        names.add( info.getName() );
-        registry.putStore( new GEclipseFileStore( this, getSlave().getChild( info.getName() ), info ) );
+        names.add( info.getName() );        
       }
       
       result = names.toArray( new String[ names.size() ] );
@@ -243,6 +234,23 @@ public class GEclipseFileStore
     return result;
     
   }
+
+  private void setCachedInfos( final IFileInfo[] infos ) {
+    if ( this.cachedInfos != null ) {
+      FileStoreRegistry registry = FileStoreRegistry.getInstance();
+      for ( IFileInfo info : this.cachedInfos ) {
+        IFileStore child = getSlave().getChild( info.getName().trim() );
+        registry.removeStore( child );
+      }
+    }
+    
+    this.cachedInfos = infos;
+
+    FileStoreRegistry registry = FileStoreRegistry.getInstance();
+    for( IFileInfo info : this.cachedInfos ) {
+      registry.putStore( new GEclipseFileStore( this, getSlave().getChild( info.getName() ), info ) );
+    }    
+  }  
   
   /* (non-Javadoc)
    * @see org.eclipse.core.filesystem.provider.FileStore#delete(int, org.eclipse.core.runtime.IProgressMonitor)
@@ -284,8 +292,8 @@ public class GEclipseFileStore
   throws CoreException
   {
     if ( isActive( FETCH_CHILDREN_ACTIVE_POLICY ) ) {
-      clearActive( FETCH_CHILDREN_ACTIVE_POLICY );
-      this.cachedInfos = getSlave().childInfos( options, monitor );
+      clearActive( FETCH_CHILDREN_ACTIVE_POLICY );      
+      setCachedInfos( getSlave().childInfos( options, monitor ) );      
     }
     if ( this.cachedInfos == null ) {
       this.cachedInfos = FileStore.EMPTY_FILE_INFO_ARRAY;
@@ -433,14 +441,6 @@ public class GEclipseFileStore
                        final IProgressMonitor monitor)
       throws CoreException {
     getSlave().putInfo( info, options, monitor( monitor ) );
-  }
-  
-  /**
-   * Reset this file store. Resetting a file store means deleting the cached
-   * child names.
-   */
-  public void reset() {
-    this.cachedInfos = null;
   }
   
   /**
