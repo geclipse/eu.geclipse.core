@@ -18,7 +18,6 @@ package eu.geclipse.batch;
 
 import org.eclipse.core.resources.IFile;
 
-import eu.geclipse.core.model.IGridBatchQueueDescription;
 import eu.geclipse.core.model.IGridContainer;
 import eu.geclipse.core.model.IGridElement;
 import eu.geclipse.core.model.impl.AbstractFileElementCreator;

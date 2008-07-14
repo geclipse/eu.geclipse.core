@@ -86,7 +86,7 @@
        point="org.eclipse.ui.popupMenus">
        <objectContribution
             id="eu.geclipse.batch.ui.ApplyQueueObjectContribution"
-            objectClass="eu.geclipse.core.model.IGridBatchQueueDescription">
+            objectClass="eu.geclipse.batch.IGridBatchQueueDescription">
          <action
                class="eu.geclipse.batch.ui.actions.ApplyQueueConfigurationAction"
                enablesFor="?"

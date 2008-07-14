@@ -41,7 +41,6 @@ import eu.geclipse.batch.model.qdl.QueueType;
 import eu.geclipse.batch.model.qdl.QueueTypeEnumeration;
 import eu.geclipse.batch.model.qdl.RangeValueType;
 import eu.geclipse.batch.model.qdl.util.QdlResourceFactoryImpl;
-import eu.geclipse.core.model.IGridBatchQueueDescription;
 import eu.geclipse.core.model.impl.ResourceGridContainer;
 
 

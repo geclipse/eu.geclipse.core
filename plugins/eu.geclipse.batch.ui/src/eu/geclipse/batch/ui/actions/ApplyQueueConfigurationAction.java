@@ -28,8 +28,8 @@ import org.eclipse.ui.IObjectActionDelegate;
 import org.eclipse.ui.IWorkbenchPart;
 
 import eu.geclipse.batch.BatchQueueDescription;
+import eu.geclipse.batch.IGridBatchQueueDescription;
 import eu.geclipse.batch.ui.wizards.BatchServiceSelectionWizard;
-import eu.geclipse.core.model.IGridBatchQueueDescription;
 
 
 /**

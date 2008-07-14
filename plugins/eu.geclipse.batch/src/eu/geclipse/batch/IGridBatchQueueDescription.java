@@ -14,9 +14,11 @@
  *      - Nicholas Loulloudes (loulloudes.n@cs.ucy.ac.cy)
  *
  *****************************************************************************/
-package eu.geclipse.core.model;
+package eu.geclipse.batch;
 
 import java.util.Collection;
+
+import eu.geclipse.core.model.IGridContainer;
 
 
 /**
