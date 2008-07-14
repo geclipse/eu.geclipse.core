@@ -87,10 +87,13 @@ public interface IVirtualOrganization
    * this VO.
    * @throws ProblemException If an error occurs while retrieving the services.
    */
+  @Deprecated
   public IGridService[] getServices( final IProgressMonitor monitor ) throws ProblemException;
   
+  @Deprecated
   public IGridComputing[] getComputing( final IProgressMonitor monitor ) throws ProblemException;
   
+  @Deprecated
   public IGridStorage[] getStorage( final IProgressMonitor monitor ) throws ProblemException;
   
   public IGridApplicationManager getApplicationManager();
